@@ -7,17 +7,12 @@ module.exports = function({ $bucket }) {
     async $inflight_init()  {
     }
     async handle(message)  {
-      (await $bucket.put("wing.txt",`Hello, ${message}`));
+      (await $bucket.put("wing.txt",String.raw({ raw: ["Hello, ", ""] }, message)));
     }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
-    }
-    async $inflight_init()  {
-    }
-    async handle(message)  {
-      (await bucket.put("wing.txt",String.raw({ raw: ["Hello, ", ""] }, message)));
     }
   }
   return $Closure1;
@@ -233,7 +228,7 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const $bucket = context._lift(bucket, ["put"]);
+        const $bucket = context._lift(bucket);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure1.js")({ 
             $bucket: ${$bucket},

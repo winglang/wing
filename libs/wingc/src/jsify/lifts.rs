@@ -1,6 +1,7 @@
 use itertools::Itertools;
 use std::collections::{BTreeMap, BTreeSet};
 
+#[derive(Default)]
 pub struct Lifts {
 	lifts: BTreeMap<String, LiftedObject>,
 }
@@ -26,13 +27,7 @@ impl LiftedObject {
 	}
 }
 
-impl Default for Lifts {
-	fn default() -> Self {
-		Self {
-			lifts: Default::default(),
-		}
-	}
-}
+
 
 impl Lifts {
 	pub fn add(&mut self, method_name: String, is_field: bool, preflight_code: String, op: Option<String>) -> String {

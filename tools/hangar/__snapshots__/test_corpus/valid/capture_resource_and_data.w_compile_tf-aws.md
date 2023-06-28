@@ -7,23 +7,15 @@ module.exports = function({ $data_size, $queue, $res }) {
     async $inflight_init()  {
     }
     async handle()  {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '($data_size === 3)'`)})(($data_size === 3))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: data.size == 3")})(($data_size === 3))};
       (await $res.put("file.txt","world"));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await $res.get("file.txt")) === "world")'`)})(((await $res.get("file.txt")) === "world"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: res.get(\"file.txt\") == \"world\"")})(((await $res.get("file.txt")) === "world"))};
       (await $queue.push("spirulina"));
     }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
-    }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      {((cond) => {if (!cond) throw new Error("assertion failed: data.size == 3")})((data.size === 3))};
-      (await res.put("file.txt","world"));
-      {((cond) => {if (!cond) throw new Error("assertion failed: res.get(\"file.txt\") == \"world\"")})(((await res.get("file.txt")) === "world"))};
-      (await queue.push("spirulina"));
     }
   }
   return $Closure1;
@@ -227,9 +219,9 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const $data_size = context._lift(data.size, []);
-        const $queue = context._lift(queue, ["push"]);
-        const $res = context._lift(res, ["put", "get"]);
+        const $data_size = context._lift(data.size);
+        const $queue = context._lift(queue);
+        const $res = context._lift(res);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure1.js")({ 
             $data_size: ${$data_size},
@@ -252,7 +244,7 @@ class $Root extends $stdlib.std.Resource {
         if (ops.includes("handle")) {
           $Closure1._registerBindObject(data.size, host, []);
           $Closure1._registerBindObject(queue, host, ["push"]);
-          $Closure1._registerBindObject(res, host, ["put", "get"]);
+          $Closure1._registerBindObject(res, host, ["get", "put"]);
         }
         super._registerBind(host, ops);
       }

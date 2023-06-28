@@ -2,20 +2,20 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ a, s, m, aCloned }) {
+module.exports = function({ $Object_keys_m__length, $aCloned_length, $a_length, $s_size }) {
   class $Closure1 {
+    async $inflight_init()  {
+    }
+    async handle()  {
+      {((cond) => {if (!cond) throw new Error("assertion failed: a.length == 1")})(($a_length === 1))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: s.size == 1")})(($s_size === 1))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: m.size() == 1")})(($Object_keys_m__length === 1))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: aCloned.length == 1")})(($aCloned_length === 1))};
+    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
-    }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      {((cond) => {if (!cond) throw new Error("assertion failed: a.length == 1")})((a.length === 1))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: s.size == 1")})((s.size === 1))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: m.size() == 1")})((Object.keys(m).length === 1))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: aCloned.length == 1")})((aCloned.length === 1))};
     }
   }
   return $Closure1;
@@ -25,17 +25,17 @@ module.exports = function({ a, s, m, aCloned }) {
 
 ## inflight.$Closure2.js
 ```js
-module.exports = function({ handler }) {
+module.exports = function({  }) {
   class $Closure2 {
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
-    }
     async $inflight_init()  {
     }
     async handle()  {
       (await handler());
+    }
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
   }
   return $Closure2;
@@ -181,25 +181,23 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const a_client = context._lift(a);
-        const s_client = context._lift(s);
-        const m_client = context._lift(m);
-        const aCloned_client = context._lift(aCloned);
+        const $Object_keys_m__length = context._lift(Object.keys(m).length);
+        const $aCloned_length = context._lift(aCloned.length);
+        const $a_length = context._lift(a.length);
+        const $s_size = context._lift(s.size);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            a: ${a_client},
-            s: ${s_client},
-            m: ${m_client},
-            aCloned: ${aCloned_client},
+          require("./inflight.$Closure1.js")({ 
+            $Object_keys_m__length: ${$Object_keys_m__length},
+            $aCloned_length: ${$aCloned_length},
+            $a_length: ${$a_length},
+            $s_size: ${$s_size},
           })
         `);
       }
       _toInflight() {
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType(this).text};
-            const client = new $Closure1Client({
+            const client = new (${$Closure1._toInflightType(this).text})({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -207,17 +205,11 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure1._registerBindObject(a, host, []);
-          $Closure1._registerBindObject(aCloned, host, []);
-          $Closure1._registerBindObject(m, host, []);
-          $Closure1._registerBindObject(s, host, []);
-        }
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(a, host, ["length"]);
-          $Closure1._registerBindObject(aCloned, host, ["length"]);
-          $Closure1._registerBindObject(m, host, ["size"]);
-          $Closure1._registerBindObject(s, host, ["size"]);
+          $Closure1._registerBindObject(Object.keys(m).length, host, []);
+          $Closure1._registerBindObject(aCloned.length, host, []);
+          $Closure1._registerBindObject(a.length, host, []);
+          $Closure1._registerBindObject(s.size, host, []);
         }
         super._registerBind(host, ops);
       }
@@ -229,33 +221,20 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure2.js";
-        const handler_client = context._lift(handler);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            handler: ${handler_client},
+          require("./inflight.$Closure2.js")({ 
           })
         `);
       }
       _toInflight() {
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const $Closure2Client = ${$Closure2._toInflightType(this).text};
-            const client = new $Closure2Client({
+            const client = new (${$Closure2._toInflightType(this).text})({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
         `);
-      }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure2._registerBindObject(handler, host, []);
-        }
-        if (ops.includes("handle")) {
-          $Closure2._registerBindObject(handler, host, ["handle"]);
-        }
-        super._registerBind(host, ops);
       }
     }
     const a = ["hello"];

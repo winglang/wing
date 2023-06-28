@@ -27,19 +27,13 @@ module.exports = function({ $api_url, $url, MyResource }) {
     async $inflight_init()  {
     }
     async handle()  {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(await MyResource.isValidUrl($url))'`)})((await MyResource.isValidUrl($url)))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(await MyResource.isValidUrl($api_url))'`)})((await MyResource.isValidUrl($api_url)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: MyResource.isValidUrl(url)")})((await MyResource.isValidUrl($url)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: MyResource.isValidUrl(api.url)")})((await MyResource.isValidUrl($api_url)))};
     }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
-    }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      {((cond) => {if (!cond) throw new Error("assertion failed: MyResource.isValidUrl(url)")})((await MyResource.isValidUrl(url)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: MyResource.isValidUrl(api.url)")})((await MyResource.isValidUrl(api.url)))};
     }
   }
   return $Closure2;
@@ -57,8 +51,12 @@ module.exports = function({  }) {
       return (require("<ABSOLUTE_PATH>/url_utils.js")["isValidUrl"])(url)
     }
     async foo()  {
-      {((cond) => {if (!cond) throw new Error("assertion failed: MyResource.isValidUrl(this.url)")})((await MyResource.isValidUrl(this.url)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: MyResource.isValidUrl(this.api.url)")})((await MyResource.isValidUrl(this.api.url)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: MyResource.isValidUrl(this.url)")})((await MyResource.isValidUrl(this.$this_url)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: MyResource.isValidUrl(this.api.url)")})((await MyResource.isValidUrl(this.$this_api_url)))};
+    }
+    constructor({ $this_api_url, $this_url }) {
+      this.$this_api_url = $this_api_url;
+      this.$this_url = $this_url;
     }
   }
   return MyResource;
@@ -375,8 +373,8 @@ class $Root extends $stdlib.std.Resource {
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
             const client = new (${MyResource._toInflightType(this).text})({
-              $this_api_url: ${this._lift(this.api.url, [])},
-              $this_url: ${this._lift(this.url, [])},
+              $this_api_url: ${this._lift(this.api.url)},
+              $this_url: ${this._lift(this.url)},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -398,7 +396,7 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const $r = context._lift(r, ["foo"]);
+        const $r = context._lift(r);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure1.js")({ 
             $r: ${$r},
@@ -429,8 +427,8 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const $api_url = context._lift(api.url, []);
-        const $url = context._lift(url, []);
+        const $api_url = context._lift(api.url);
+        const $url = context._lift(url);
         const lifted_MyResource = MyResource._toInflightType(context).text;
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure2.js")({ 

@@ -7,23 +7,15 @@ module.exports = function({ $c }) {
     async $inflight_init()  {
     }
     async handle()  {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await $c.peek()) === 0)'`)})(((await $c.peek()) === 0))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await $c.peek()) === 0)'`)})(((await $c.peek()) === 0))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: c.peek() == 0")})(((await $c.peek()) === 0))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: c.peek() == 0")})(((await $c.peek()) === 0))};
       (await $c.inc());
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await $c.peek()) === 1)'`)})(((await $c.peek()) === 1))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: c.peek() == 1")})(((await $c.peek()) === 1))};
     }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
-    }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      {((cond) => {if (!cond) throw new Error("assertion failed: c.peek() == 0")})(((await c.peek()) === 0))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: c.peek() == 0")})(((await c.peek()) === 0))};
-      (await c.inc());
-      {((cond) => {if (!cond) throw new Error("assertion failed: c.peek() == 1")})(((await c.peek()) === 1))};
     }
   }
   return $Closure1;
@@ -39,10 +31,15 @@ module.exports = function({ $c }) {
     }
     async handle()  {
       const key = "my-key";
-      {((cond) => {if (!cond) throw new Error("assertion failed: c.peek(key) == 0")})(((await c.peek(key)) === 0))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: c.peek(key) == 0")})(((await c.peek(key)) === 0))};
-      (await c.inc(undefined,key));
-      {((cond) => {if (!cond) throw new Error("assertion failed: c.peek(key) == 1")})(((await c.peek(key)) === 1))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: c.peek(key) == 0")})(((await $c.peek(key)) === 0))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: c.peek(key) == 0")})(((await $c.peek(key)) === 0))};
+      (await $c.inc(undefined,key));
+      {((cond) => {if (!cond) throw new Error("assertion failed: c.peek(key) == 1")})(((await $c.peek(key)) === 1))};
+    }
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
   }
   return $Closure2;
@@ -276,7 +273,7 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const $c = context._lift(c, ["peek", "peek", "inc", "peek"]);
+        const $c = context._lift(c);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure1.js")({ 
             $c: ${$c},
@@ -295,7 +292,7 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(c, host, ["peek", "peek", "inc", "peek"]);
+          $Closure1._registerBindObject(c, host, ["inc", "peek"]);
         }
         super._registerBind(host, ops);
       }
@@ -307,7 +304,7 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const $c = context._lift(c, ["peek", "peek", "inc", "peek"]);
+        const $c = context._lift(c);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure2.js")({ 
             $c: ${$c},
@@ -326,7 +323,7 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure2._registerBindObject(c, host, ["peek", "peek", "inc", "peek"]);
+          $Closure2._registerBindObject(c, host, ["inc", "peek"]);
         }
         super._registerBind(host, ops);
       }

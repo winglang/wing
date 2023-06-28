@@ -7,17 +7,22 @@ module.exports = function({ $b }) {
     async $inflight_init()  {
     }
     async handle()  {
-      (await b.put("foo","text"));
-      (await b.put("foo/","text"));
-      (await b.put("foo/bar","text"));
-      (await b.put("foo/bar/","text"));
-      (await b.put("foo/bar/baz","text"));
-      const objs = (await b.list());
+      (await $b.put("foo","text"));
+      (await $b.put("foo/","text"));
+      (await $b.put("foo/bar","text"));
+      (await $b.put("foo/bar/","text"));
+      (await $b.put("foo/bar/baz","text"));
+      const objs = (await $b.list());
       {((cond) => {if (!cond) throw new Error("assertion failed: objs.at(0) == \"foo\"")})(((await objs.at(0)) === "foo"))};
       {((cond) => {if (!cond) throw new Error("assertion failed: objs.at(1) == \"foo/\"")})(((await objs.at(1)) === "foo/"))};
       {((cond) => {if (!cond) throw new Error("assertion failed: objs.at(2) == \"foo/bar\"")})(((await objs.at(2)) === "foo/bar"))};
       {((cond) => {if (!cond) throw new Error("assertion failed: objs.at(3) == \"foo/bar/\"")})(((await objs.at(3)) === "foo/bar/"))};
       {((cond) => {if (!cond) throw new Error("assertion failed: objs.at(4) == \"foo/bar/baz\"")})(((await objs.at(4)) === "foo/bar/baz"))};
+    }
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
   }
   return $Closure1;
@@ -209,7 +214,7 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const $b = context._lift(b, ["put", "put", "put", "put", "put", "list"]);
+        const $b = context._lift(b);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure1.js")({ 
             $b: ${$b},
@@ -228,7 +233,7 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(b, host, ["put", "put", "put", "put", "put", "list"]);
+          $Closure1._registerBindObject(b, host, ["list", "put"]);
         }
         super._registerBind(host, ops);
       }

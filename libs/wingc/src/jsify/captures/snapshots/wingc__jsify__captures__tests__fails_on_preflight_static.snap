@@ -1,0 +1,109 @@
+---
+source: libs/wingc/src/jsify/captures/tests.rs
+expression: "capture_fail(r#\"\n    class MyType {\n      static staticMethod(): str {}\n    }\n\n    test \"test\" {\n      log(MyType.staticMethod());\n    }\n    \"#)"
+---
+======================================================
+Errors:
+ - at 6:10 | Cannot call into preflight phase while inflight
+======================================================
+Files:
+
+main.w
+------------------------------------------------------
+
+    class MyType {
+      static staticMethod(): str {}
+    }
+
+    test "test" {
+      log(MyType.staticMethod());
+    }
+    
+preflight.js
+------------------------------------------------------
+class MyType extends $stdlib.std.Resource {
+  constructor(scope, id, ) {
+    super(scope, id);
+  }
+  static staticMethod()  {
+  }
+  static _toInflightType(context) {
+    return $stdlib.core.NodeJsCode.fromInline(`
+      require("./inflight.MyType.js")({ 
+      })
+    `);
+  }
+  _toInflight() {
+    return $stdlib.core.NodeJsCode.fromInline(`
+      (await (async () => {
+        const client = new (${MyType._toInflightType(this).text})({
+        });
+        if (client.$inflight_init) { await client.$inflight_init(); }
+        return client;
+      })())
+    `);
+  }
+}
+class $Closure1 extends $stdlib.std.Resource {
+  constructor(scope, id, ) {
+    super(scope, id);
+    this._addInflightOps("handle");
+    this.display.hidden = true;
+  }
+  static _toInflightType(context) {
+    const $_MyType_staticMethod___ = context._lift((MyType.staticMethod()));
+    return $stdlib.core.NodeJsCode.fromInline(`
+      require("./inflight.$Closure1.js")({ 
+        $_MyType_staticMethod___: ${$_MyType_staticMethod___},
+      })
+    `);
+  }
+  _toInflight() {
+    return $stdlib.core.NodeJsCode.fromInline(`
+      (await (async () => {
+        const client = new (${$Closure1._toInflightType(this).text})({
+        });
+        if (client.$inflight_init) { await client.$inflight_init(); }
+        return client;
+      })())
+    `);
+  }
+  _registerBind(host, ops) {
+    if (ops.includes("handle")) {
+      $Closure1._registerBindObject((MyType.staticMethod()), host, []);
+    }
+    super._registerBind(host, ops);
+  }
+}
+this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:test",new $Closure1(this,"$Closure1"));
+
+inflight.$Closure1.js
+------------------------------------------------------
+module.exports = function({ $_MyType_staticMethod___ }) {
+  class $Closure1 {
+    async $inflight_init()  {
+    }
+    async handle()  {
+      {console.log($_MyType_staticMethod___)};
+    }
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+  }
+  return $Closure1;
+}
+
+inflight.MyType.js
+------------------------------------------------------
+module.exports = function({  }) {
+  class MyType {
+    async $inflight_init()  {
+    }
+    constructor({  }) {
+    }
+  }
+  return MyType;
+}
+

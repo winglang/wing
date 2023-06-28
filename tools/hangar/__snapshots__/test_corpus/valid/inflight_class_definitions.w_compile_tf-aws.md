@@ -11,6 +11,11 @@ module.exports = function({  }) {
       const c = new C();
       {((cond) => {if (!cond) throw new Error("assertion failed: c.foo() == \"c1\"")})(((await c.foo()) === "c1"))};
     }
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
   }
   return $Closure1;
 }
@@ -44,27 +49,17 @@ module.exports = function({ $a, $d, B }) {
     async $inflight_init()  {
     }
     async handle()  {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await $a.goo()) === "a2")'`)})(((await $a.goo()) === "a2"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: a.goo() == \"a2\"")})(((await $a.goo()) === "a2"))};
       const b = new B();
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await b.foo()) === "b1")'`)})(((await b.foo()) === "b1"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: b.foo() == \"b1\"")})(((await b.foo()) === "b1"))};
       (await fn());
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await $d.callInner()) === "f1")'`)})(((await $d.callInner()) === "f1"))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await innerD()) === "f1")'`)})(((await innerD()) === "f1"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: d.callInner() == \"f1\"")})(((await $d.callInner()) === "f1"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: innerD() == \"f1\"")})(((await innerD()) === "f1"))};
     }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
-    }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      {((cond) => {if (!cond) throw new Error("assertion failed: a.goo() == \"a2\"")})(((await a.goo()) === "a2"))};
-      const b = new B();
-      {((cond) => {if (!cond) throw new Error("assertion failed: b.foo() == \"b1\"")})(((await b.foo()) === "b1"))};
-      (await fn());
-      {((cond) => {if (!cond) throw new Error("assertion failed: d.callInner() == \"f1\"")})(((await d.callInner()) === "f1"))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: innerD() == \"f1\"")})(((await innerD()) === "f1"))};
     }
   }
   return $Closure3;
@@ -473,8 +468,8 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const $a = context._lift(a, ["goo"]);
-        const $d = context._lift(d, ["callInner"]);
+        const $a = context._lift(a);
+        const $d = context._lift(d);
         const lifted_B = B._toInflightType(context).text;
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure3.js")({ 

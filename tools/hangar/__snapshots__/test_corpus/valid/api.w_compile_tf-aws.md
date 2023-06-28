@@ -39,18 +39,12 @@ module.exports = function({ $api_url }) {
     }
     async handle()  {
       const url = $api_url;
-      {((cond) => {if (!cond) throw new Error(`assertion failed: 'url.startsWith("http")'`)})(url.startsWith("http"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: url.startsWith(\"http\")")})(url.startsWith("http"))};
     }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
-    }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      const url = api.url;
-      {((cond) => {if (!cond) throw new Error("assertion failed: url.startsWith(\"http\")")})(url.startsWith("http"))};
     }
   }
   return $Closure2;
@@ -65,7 +59,7 @@ module.exports = function({ $__parent_this_3_api_url }) {
     async $inflight_init()  {
     }
     async handle(req)  {
-      const text = String.raw({ raw: ["", "/endpoint2"] }, __parent_this_3.api.url);
+      const text = String.raw({ raw: ["", "/endpoint2"] }, $__parent_this_3_api_url);
       return {
       "status": 200,
       "body": text,}
@@ -507,7 +501,7 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const $counter = context._lift(counter, ["inc"]);
+        const $counter = context._lift(counter);
         const lifted_std_Json = std.Json._toInflightType(context).text;
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure1.js")({ 
@@ -540,7 +534,7 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const $api_url = context._lift(api.url, []);
+        const $api_url = context._lift(api.url);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure2.js")({ 
             $api_url: ${$api_url},
@@ -576,7 +570,7 @@ class $Root extends $stdlib.std.Resource {
             this.display.hidden = true;
           }
           static _toInflightType(context) {
-            const $__parent_this_3_api_url = context._lift(__parent_this_3.api.url, []);
+            const $__parent_this_3_api_url = context._lift(__parent_this_3.api.url);
             return $stdlib.core.NodeJsCode.fromInline(`
               require("./inflight.$Closure3.js")({ 
                 $__parent_this_3_api_url: ${$__parent_this_3_api_url},

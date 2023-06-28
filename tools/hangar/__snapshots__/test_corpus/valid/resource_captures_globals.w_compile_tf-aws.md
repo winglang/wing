@@ -34,11 +34,6 @@ module.exports = function({ Another }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      {((cond) => {if (!cond) throw new Error("assertion failed: Another.myStaticMethod() == 0")})(((await Another.myStaticMethod()) === 0))};
-    }
   }
   return $Closure2;
 }
@@ -50,7 +45,7 @@ module.exports = function({ Another }) {
 module.exports = function({ $globalCounter }) {
   class Another {
     async $inflight_init()  {
-      {((cond) => {if (!cond) throw new Error("assertion failed: globalCounter.peek() == 0")})(((await globalCounter.peek()) === 0))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: globalCounter.peek() == 0")})(((await $globalCounter.peek()) === 0))};
     }
     async myMethod()  {
       (await $globalCounter.inc());
@@ -88,18 +83,21 @@ module.exports = function({ $_globalArrayOfStr_at_0__, $_globalMapOfNum___a__, $
     async $inflight_init()  {
     }
     async myPut()  {
-      (await this.localTopic.publish("hello"));
-      (await globalBucket.put("key","value"));
-      {((cond) => {if (!cond) throw new Error("assertion failed: globalStr == \"hello\"")})((globalStr === "hello"))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: globalBool == true")})((globalBool === true))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: globalNum == 42")})((globalNum === 42))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: globalArrayOfStr.at(0) == \"hello\"")})(((await globalArrayOfStr.at(0)) === "hello"))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: globalMapOfNum.get(\"a\") == -5")})(((globalMapOfNum)["a"] === (-5)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: globalSetOfStr.has(\"a\")")})((await globalSetOfStr.has("a")))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: globalAnother.myField == \"hello!\"")})((globalAnother.myField === "hello!"))};
-      (await globalAnother.first.myResource.put("key","value"));
-      {((cond) => {if (!cond) throw new Error("assertion failed: globalAnother.myMethod() > 0")})(((await globalAnother.myMethod()) > 0))};
+      (await this.$this_localTopic.publish("hello"));
+      (await $globalBucket.put("key","value"));
+      {((cond) => {if (!cond) throw new Error("assertion failed: globalStr == \"hello\"")})(($globalStr === "hello"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: globalBool == true")})(($globalBool === true))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: globalNum == 42")})(($globalNum === 42))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: globalArrayOfStr.at(0) == \"hello\"")})(($_globalArrayOfStr_at_0__ === "hello"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: globalMapOfNum.get(\"a\") == -5")})(($_globalMapOfNum___a__ === (-5)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: globalSetOfStr.has(\"a\")")})($_globalSetOfStr_has__a___)};
+      {((cond) => {if (!cond) throw new Error("assertion failed: globalAnother.myField == \"hello!\"")})(($globalAnother_myField === "hello!"))};
+      (await $globalAnother_first_myResource.put("key","value"));
+      {((cond) => {if (!cond) throw new Error("assertion failed: globalAnother.myMethod() > 0")})(((await $globalAnother.myMethod()) > 0))};
       {((cond) => {if (!cond) throw new Error("assertion failed: Another.myStaticMethod() > 0")})(((await Another.myStaticMethod()) > 0))};
+    }
+    constructor({ $this_localTopic }) {
+      this.$this_localTopic = $this_localTopic;
     }
   }
   return MyResource;
@@ -231,7 +229,7 @@ module.exports = function({ $_parentThis_localCounter, $globalCounter }) {
             "uniqueId": "root_MyResource_cloudTopicOnMessagef10eb240_IamRolePolicy_389E9A62"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.root_cloudCounter_E0AC1263.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:GetItem\"],\"Resource\":[\"${aws_dynamodb_table.root_cloudCounter_E0AC1263.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.root_MyResource_cloudCounter_B6FF7B6A.arn}\"],\"Effect\":\"Allow\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.root_cloudCounter_E0AC1263.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.root_MyResource_cloudCounter_B6FF7B6A.arn}\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.root_MyResource_cloudTopicOnMessagef10eb240_IamRole_4BDB9A54.name}"
       },
       "root_testaccesscloudresourcethroughstaticmethodsonly_Handler_IamRolePolicy_2AD210AF": {
@@ -241,7 +239,7 @@ module.exports = function({ $_parentThis_localCounter, $globalCounter }) {
             "uniqueId": "root_testaccesscloudresourcethroughstaticmethodsonly_Handler_IamRolePolicy_2AD210AF"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:GetItem\"],\"Resource\":[\"${aws_dynamodb_table.root_cloudCounter_E0AC1263.arn}\"],\"Effect\":\"Allow\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
         "role": "${aws_iam_role.root_testaccesscloudresourcethroughstaticmethodsonly_Handler_IamRole_6B8CBEFD.name}"
       },
       "root_testtest_Handler_IamRolePolicy_65A1D8BE": {
@@ -297,13 +295,8 @@ module.exports = function({ $_parentThis_localCounter, $globalCounter }) {
         },
         "environment": {
           "variables": {
-            "BUCKET_NAME_ae5b06c6": "${aws_s3_bucket.root_Another_First_cloudBucket_B4A67079.bucket}",
-            "BUCKET_NAME_ae5b06c6_IS_PUBLIC": "false",
-            "BUCKET_NAME_d755b447": "${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
-            "BUCKET_NAME_d755b447_IS_PUBLIC": "false",
             "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.root_cloudCounter_E0AC1263.name}",
             "DYNAMODB_TABLE_NAME_5afed199": "${aws_dynamodb_table.root_MyResource_cloudCounter_B6FF7B6A.name}",
-            "TOPIC_ARN_53de52bf": "${aws_sns_topic.root_MyResource_cloudTopic_F71B23B1.arn}",
             "WING_FUNCTION_NAME": "cloud-Topic-OnMessage-f10eb240-c8df2c86",
             "WING_TARGET": "tf-aws"
           }
@@ -330,7 +323,6 @@ module.exports = function({ $_parentThis_localCounter, $globalCounter }) {
         },
         "environment": {
           "variables": {
-            "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.root_cloudCounter_E0AC1263.name}",
             "WING_FUNCTION_NAME": "Handler-c8de1ef1",
             "WING_TARGET": "tf-aws"
           }
@@ -362,7 +354,6 @@ module.exports = function({ $_parentThis_localCounter, $globalCounter }) {
             "BUCKET_NAME_d755b447": "${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
             "BUCKET_NAME_d755b447_IS_PUBLIC": "false",
             "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.root_cloudCounter_E0AC1263.name}",
-            "DYNAMODB_TABLE_NAME_5afed199": "${aws_dynamodb_table.root_MyResource_cloudCounter_B6FF7B6A.name}",
             "TOPIC_ARN_53de52bf": "${aws_sns_topic.root_MyResource_cloudTopic_F71B23B1.arn}",
             "WING_FUNCTION_NAME": "Handler-c8f4f2a1",
             "WING_TARGET": "tf-aws"
@@ -593,7 +584,7 @@ class $Root extends $stdlib.std.Resource {
         this.first = new First(this,"First");
       }
       static _toInflightType(context) {
-        const $globalCounter = context._lift(globalCounter, ["peek", "inc", "peek", "peek"]);
+        const $globalCounter = context._lift(globalCounter);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.Another.js")({ 
             $globalCounter: ${$globalCounter},
@@ -612,7 +603,7 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          Another._registerBindObject(globalCounter, host, ["peek", "inc", "peek", "peek"]);
+          Another._registerBindObject(globalCounter, host, ["inc", "peek"]);
         }
         super._registerBind(host, ops);
       }
@@ -630,8 +621,8 @@ class $Root extends $stdlib.std.Resource {
             this._addInflightOps("handle");
           }
           static _toInflightType(context) {
-            const $_parentThis_localCounter = context._lift($parentThis.localCounter, ["inc"]);
-            const $globalCounter = context._lift(globalCounter, ["inc"]);
+            const $_parentThis_localCounter = context._lift($parentThis.localCounter);
+            const $globalCounter = context._lift(globalCounter);
             return $stdlib.core.NodeJsCode.fromInline(`
               require("./inflight.R.js")({ 
                 $_parentThis_localCounter: ${$_parentThis_localCounter},
@@ -660,16 +651,16 @@ class $Root extends $stdlib.std.Resource {
         (this.localTopic.onMessage(new R(this,"R")));
       }
       static _toInflightType(context) {
-        const $_globalArrayOfStr_at_0__ = context._lift((globalArrayOfStr.at(0)), []);
-        const $_globalMapOfNum___a__ = context._lift((globalMapOfNum)["a"], []);
-        const $_globalSetOfStr_has__a___ = context._lift((globalSetOfStr.has("a")), []);
-        const $globalAnother = context._lift(globalAnother, ["myMethod"]);
-        const $globalAnother_first_myResource = context._lift(globalAnother.first.myResource, ["put"]);
-        const $globalAnother_myField = context._lift(globalAnother.myField, []);
-        const $globalBool = context._lift(globalBool, []);
-        const $globalBucket = context._lift(globalBucket, ["put"]);
-        const $globalNum = context._lift(globalNum, []);
-        const $globalStr = context._lift(globalStr, []);
+        const $_globalArrayOfStr_at_0__ = context._lift((globalArrayOfStr.at(0)));
+        const $_globalMapOfNum___a__ = context._lift((globalMapOfNum)["a"]);
+        const $_globalSetOfStr_has__a___ = context._lift((globalSetOfStr.has("a")));
+        const $globalAnother = context._lift(globalAnother);
+        const $globalAnother_first_myResource = context._lift(globalAnother.first.myResource);
+        const $globalAnother_myField = context._lift(globalAnother.myField);
+        const $globalBool = context._lift(globalBool);
+        const $globalBucket = context._lift(globalBucket);
+        const $globalNum = context._lift(globalNum);
+        const $globalStr = context._lift(globalStr);
         const lifted_Another = Another._toInflightType(context).text;
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.MyResource.js")({ 
@@ -691,7 +682,7 @@ class $Root extends $stdlib.std.Resource {
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
             const client = new (${MyResource._toInflightType(this).text})({
-              $this_localTopic: ${this._lift(this.localTopic, ["publish"])},
+              $this_localTopic: ${this._lift(this.localTopic)},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -722,7 +713,7 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const $res = context._lift(res, ["myPut"]);
+        const $res = context._lift(res);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure1.js")({ 
             $res: ${$res},

@@ -37,10 +37,14 @@ export function createBundle(entrypoint: string, outputDir?: string): Bundle {
 
   if (esbuild.errors.length > 0) {
     let formatError = (m: Message) => {
-      return `${m.location?.file ?? "<file>"}:${m.location?.line ?? "<line>"}:${m.location?.column ?? "<col>"}: ${m.text}`
+      return `${m.location?.file ?? "<file>"}:${m.location?.line ?? "<line>"}:${
+        m.location?.column ?? "<col>"
+      }: ${m.text}`;
     };
 
-    throw new Error(`Failed to bundle function: ${esbuild.errors.map(formatError).join("\n")}`);
+    throw new Error(
+      `Failed to bundle function: ${esbuild.errors.map(formatError).join("\n")}`
+    );
   }
 
   // the bundled contains line comments with file paths, which are not useful for us, especially

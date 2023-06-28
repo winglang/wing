@@ -7,17 +7,12 @@ module.exports = function({ $s }) {
     async $inflight_init()  {
     }
     async handle()  {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '($s === "inner")'`)})(($s === "inner"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: s == \"inner\"")})(($s === "inner"))};
     }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
-    }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      {((cond) => {if (!cond) throw new Error("assertion failed: s == \"inner\"")})((s === "inner"))};
     }
   }
   return $Closure1;
@@ -32,17 +27,12 @@ module.exports = function({ $s }) {
     async $inflight_init()  {
     }
     async handle()  {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '($s === "inResource")'`)})(($s === "inResource"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: s == \"inResource\"")})(($s === "inResource"))};
     }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
-    }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      {((cond) => {if (!cond) throw new Error("assertion failed: s == \"inResource\"")})((s === "inResource"))};
     }
   }
   return $Closure2;
@@ -57,17 +47,12 @@ module.exports = function({ $s }) {
     async $inflight_init()  {
     }
     async handle()  {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '($s === "top")'`)})(($s === "top"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: s == \"top\"")})(($s === "top"))};
     }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
-    }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      {((cond) => {if (!cond) throw new Error("assertion failed: s == \"top\"")})((s === "top"))};
     }
   }
   return $Closure3;
@@ -84,6 +69,11 @@ module.exports = function({  }) {
     async handle()  {
       const s = "insideInflight";
       {((cond) => {if (!cond) throw new Error("assertion failed: s == \"insideInflight\"")})((s === "insideInflight"))};
+    }
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
   }
   return $Closure4;
@@ -448,7 +438,7 @@ class $Root extends $stdlib.std.Resource {
             this.display.hidden = true;
           }
           static _toInflightType(context) {
-            const $s = context._lift(s, []);
+            const $s = context._lift(s);
             return $stdlib.core.NodeJsCode.fromInline(`
               require("./inflight.$Closure2.js")({ 
                 $s: ${$s},
@@ -498,7 +488,7 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const $s = context._lift(s, []);
+        const $s = context._lift(s);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure3.js")({ 
             $s: ${$s},
@@ -556,7 +546,7 @@ class $Root extends $stdlib.std.Resource {
           this.display.hidden = true;
         }
         static _toInflightType(context) {
-          const $s = context._lift(s, []);
+          const $s = context._lift(s);
           return $stdlib.core.NodeJsCode.fromInline(`
             require("./inflight.$Closure1.js")({ 
               $s: ${$s},

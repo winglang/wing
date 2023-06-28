@@ -41,6 +41,11 @@ module.exports = function({  }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: result.at(1) == \"world\"")})(((await result.at(1)) === "world"))};
       {((cond) => {if (!cond) throw new Error("assertion failed: result.at(2) == \"bang\"")})(((await result.at(2)) === "bang"))};
     }
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
   }
   return $Closure2;
 }
@@ -186,7 +191,7 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const $bar = context._lift(bar, []);
+        const $bar = context._lift(bar);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure1.js")({ 
             $bar: ${$bar},

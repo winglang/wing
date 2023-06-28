@@ -1,0 +1,82 @@
+---
+source: libs/wingc/src/jsify/captures/tests.rs
+expression: "capture_ok(r#\"\n    bring cloud;\n    let b = new cloud.Bucket();\n\n    class Foo {\n      name: str;\n      \n      init() {\n        this.name = \"my_object\";\n      }\n    \n      inflight method() {\n        b.put(this.name, \"value\");\n      }\n    }\n    \"#)"
+---
+======================================================
+Captured by Foo:
+
+======================================================
+Files:
+
+inflight.Foo.js
+------------------------------------------------------
+module.exports = function({ $b }) {
+  class Foo {
+    async $inflight_init()  {
+    }
+    async method()  {
+      (await $b.put(this.$this_name,"value"));
+    }
+    constructor({ $this_name }) {
+      this.$this_name = $this_name;
+    }
+  }
+  return Foo;
+}
+
+main.w
+------------------------------------------------------
+
+    bring cloud;
+    let b = new cloud.Bucket();
+
+    class Foo {
+      name: str;
+      
+      init() {
+        this.name = "my_object";
+      }
+    
+      inflight method() {
+        b.put(this.name, "value");
+      }
+    }
+    
+preflight.js
+------------------------------------------------------
+const cloud = require('@winglang/sdk').cloud;
+class Foo extends $stdlib.std.Resource {
+  constructor(scope, id, ) {
+    super(scope, id);
+    this._addInflightOps("method");
+    this.name = "my_object";
+  }
+  static _toInflightType(context) {
+    const $b = context._lift(b);
+    return $stdlib.core.NodeJsCode.fromInline(`
+      require("./inflight.Foo.js")({ 
+        $b: ${$b},
+      })
+    `);
+  }
+  _toInflight() {
+    return $stdlib.core.NodeJsCode.fromInline(`
+      (await (async () => {
+        const client = new (${Foo._toInflightType(this).text})({
+          $this_name: ${this._lift(this.name)},
+        });
+        if (client.$inflight_init) { await client.$inflight_init(); }
+        return client;
+      })())
+    `);
+  }
+  _registerBind(host, ops) {
+    if (ops.includes("method")) {
+      Foo._registerBindObject(b, host, ["put"]);
+      Foo._registerBindObject(this.name, host, []);
+    }
+    super._registerBind(host, ops);
+  }
+}
+const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
+

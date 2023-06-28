@@ -48,18 +48,12 @@ module.exports = function({ $func1, $globalBucket }) {
     }
     async handle()  {
       (await $func1.invoke("hi1"));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await $globalBucket.get("file1")) === "hi1")'`)})(((await $globalBucket.get("file1")) === "hi1"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: globalBucket.get(\"file1\") == \"hi1\"")})(((await $globalBucket.get("file1")) === "hi1"))};
     }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
-    }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      (await func1.invoke("hi1"));
-      {((cond) => {if (!cond) throw new Error("assertion failed: globalBucket.get(\"file1\") == \"hi1\"")})(((await globalBucket.get("file1")) === "hi1"))};
     }
   }
   return $Closure3;
@@ -96,18 +90,12 @@ module.exports = function({ $x }) {
     }
     async handle()  {
       const val = (await $x.foo());
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(val === "hello")'`)})((val === "hello"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: val == \"hello\"")})((val === "hello"))};
     }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
-    }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      const val = (await x.foo());
-      {((cond) => {if (!cond) throw new Error("assertion failed: val == \"hello\"")})((val === "hello"))};
     }
   }
   return $Closure5;
@@ -449,7 +437,7 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const $globalBucket = context._lift(globalBucket, ["put"]);
+        const $globalBucket = context._lift(globalBucket);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure1.js")({ 
             $globalBucket: ${$globalBucket},
@@ -503,8 +491,8 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const $func1 = context._lift(func1, ["invoke"]);
-        const $globalBucket = context._lift(globalBucket, ["get"]);
+        const $func1 = context._lift(func1);
+        const $globalBucket = context._lift(globalBucket);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure3.js")({ 
             $func1: ${$func1},
@@ -542,7 +530,7 @@ class $Root extends $stdlib.std.Resource {
             this.display.hidden = true;
           }
           static _toInflightType(context) {
-            const $globalBucket = context._lift(globalBucket, ["list"]);
+            const $globalBucket = context._lift(globalBucket);
             return $stdlib.core.NodeJsCode.fromInline(`
               require("./inflight.$Closure4.js")({ 
                 $globalBucket: ${$globalBucket},
@@ -592,7 +580,7 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const $x = context._lift(x, ["foo"]);
+        const $x = context._lift(x);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure5.js")({ 
             $x: ${$x},

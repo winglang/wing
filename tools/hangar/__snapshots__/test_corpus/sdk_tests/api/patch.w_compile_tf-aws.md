@@ -2,25 +2,29 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ api_PATCH, _id, body, std_Json }) {
+module.exports = function({ $_id, $api_PATCH, $body, std_Json }) {
+  const std = {
+    Json: std_Json,
+  };
+  
   class $Closure1 {
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
-    }
     async $inflight_init()  {
     }
     async handle(req)  {
-      {((cond) => {if (!cond) throw new Error("assertion failed: req.method == api_PATCH")})((req.method === api_PATCH))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: req.vars?.get(\"id\") == _id")})(((req.vars)["id"] === _id))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: req.path == \"/path/\"+ _id")})((req.path === ("/path/" + _id)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: req.body == Json.stringify(body)")})((req.body === ((args) => { return JSON.stringify(args[0], null, args[1]) })([body])))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: req.method == api_PATCH")})((req.method === $api_PATCH))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: req.vars?.get(\"id\") == _id")})(((req.vars)["id"] === $_id))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: req.path == \"/path/\"+ _id")})((req.path === ("/path/" + $_id)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: req.body == Json.stringify(body)")})((req.body === ((args) => { return JSON.stringify(args[0], null, args[1]) })([$body])))};
       {((cond) => {if (!cond) throw new Error("assertion failed: req.headers?.get(\"content-type\") == \"application/json\"")})(((req.headers)["content-type"] === "application/json"))};
       return {
       "status": 200,
       "body": (req.vars)["id"],}
       ;
+    }
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
   }
   return $Closure1;
@@ -30,32 +34,39 @@ module.exports = function({ api_PATCH, _id, body, std_Json }) {
 
 ## inflight.$Closure2.js
 ```js
-module.exports = function({ api, _id, body, http_PATCH, http_Util, std_Json }) {
+module.exports = function({ $_id, $api_url, $body, $http_PATCH, http_Util, std_Json }) {
+  const http = {
+    Util: http_Util,
+  };
+  const std = {
+    Json: std_Json,
+  };
+  
   class $Closure2 {
+    async $inflight_init()  {
+    }
+    async handle()  {
+      const url = String.raw({ raw: ["", "/path/", ""] }, $api_url, $_id);
+      const response = (await http.Util.patch(url,{
+      "headers": Object.freeze({"content-type":"application/json"}),
+      "body": ((args) => { return JSON.stringify(args[0], null, args[1]) })([$body]),}
+      ));
+      const fetchResponse = (await http.Util.patch(url,{
+      "method": $http_PATCH,
+      "headers": Object.freeze({"content-type":"application/json"}),
+      "body": ((args) => { return JSON.stringify(args[0], null, args[1]) })([$body]),}
+      ));
+      {((cond) => {if (!cond) throw new Error("assertion failed: response.body == _id")})((response.body === $_id))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: response.status == 200")})((response.status === 200))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: response.url == url")})((response.url === url))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: fetchResponse.body == _id")})((fetchResponse.body === $_id))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: fetchResponse.status == 200")})((fetchResponse.status === 200))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: fetchResponse.url == url")})((fetchResponse.url === url))};
+    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
-    }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      const url = String.raw({ raw: ["", "/path/", ""] }, api.url, _id);
-      const response = (await http_Util.patch(url,{
-      "headers": Object.freeze({"content-type":"application/json"}),
-      "body": ((args) => { return JSON.stringify(args[0], null, args[1]) })([body]),}
-      ));
-      const fetchResponse = (await http_Util.patch(url,{
-      "method": http_PATCH,
-      "headers": Object.freeze({"content-type":"application/json"}),
-      "body": ((args) => { return JSON.stringify(args[0], null, args[1]) })([body]),}
-      ));
-      {((cond) => {if (!cond) throw new Error("assertion failed: response.body == _id")})((response.body === _id))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: response.status == 200")})((response.status === 200))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: response.url == url")})((response.url === url))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: fetchResponse.body == _id")})((fetchResponse.body === _id))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: fetchResponse.status == 200")})((fetchResponse.status === 200))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: fetchResponse.url == url")})((fetchResponse.url === url))};
     }
   }
   return $Closure2;
@@ -247,7 +258,6 @@ module.exports = function({ api, _id, body, http_PATCH, http_Util, std_Json }) {
         },
         "environment": {
           "variables": {
-            "CLOUD_API_C82DF3A5": "${aws_api_gateway_stage.root_cloudApi_api_stage_57D6284A.invoke_url}",
             "WING_FUNCTION_NAME": "Handler-c89df580",
             "WING_TARGET": "tf-aws",
             "WING_TOKEN_TFTOKEN_TOKEN_21": "${jsonencode(aws_api_gateway_stage.root_cloudApi_api_stage_57D6284A.invoke_url)}"
@@ -340,25 +350,23 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const api_PATCH_client = context._lift(api_PATCH);
-        const _id_client = context._lift(_id);
-        const body_client = context._lift(body);
-        const std_JsonClient = std.Json._toInflightType(context);
+        const $_id = context._lift(_id);
+        const $api_PATCH = context._lift(api_PATCH);
+        const $body = context._lift(body);
+        const lifted_std_Json = std.Json._toInflightType(context).text;
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            api_PATCH: ${api_PATCH_client},
-            _id: ${_id_client},
-            body: ${body_client},
-            std_Json: ${std_JsonClient.text},
+          require("./inflight.$Closure1.js")({ 
+            $_id: ${$_id},
+            $api_PATCH: ${$api_PATCH},
+            $body: ${$body},
+            std_Json: ${lifted_std_Json},
           })
         `);
       }
       _toInflight() {
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType(this).text};
-            const client = new $Closure1Client({
+            const client = new (${$Closure1._toInflightType(this).text})({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -366,11 +374,6 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure1._registerBindObject(_id, host, []);
-          $Closure1._registerBindObject(api_PATCH, host, []);
-          $Closure1._registerBindObject(body, host, []);
-        }
         if (ops.includes("handle")) {
           $Closure1._registerBindObject(_id, host, []);
           $Closure1._registerBindObject(api_PATCH, host, []);
@@ -386,29 +389,27 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure2.js";
-        const api_client = context._lift(api);
-        const _id_client = context._lift(_id);
-        const body_client = context._lift(body);
-        const http_PATCH_client = context._lift(http_PATCH);
-        const http_UtilClient = http.Util._toInflightType(context);
-        const std_JsonClient = std.Json._toInflightType(context);
+        const $_id = context._lift(_id);
+        const $api_url = context._lift(api.url);
+        const $body = context._lift(body);
+        const $http_PATCH = context._lift(http_PATCH);
+        const lifted_http_Util = http.Util._toInflightType(context).text;
+        const lifted_std_Json = std.Json._toInflightType(context).text;
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            api: ${api_client},
-            _id: ${_id_client},
-            body: ${body_client},
-            http_PATCH: ${http_PATCH_client},
-            http_Util: ${http_UtilClient.text},
-            std_Json: ${std_JsonClient.text},
+          require("./inflight.$Closure2.js")({ 
+            $_id: ${$_id},
+            $api_url: ${$api_url},
+            $body: ${$body},
+            $http_PATCH: ${$http_PATCH},
+            http_Util: ${lifted_http_Util},
+            std_Json: ${lifted_std_Json},
           })
         `);
       }
       _toInflight() {
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const $Closure2Client = ${$Closure2._toInflightType(this).text};
-            const client = new $Closure2Client({
+            const client = new (${$Closure2._toInflightType(this).text})({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -416,12 +417,6 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure2._registerBindObject(_id, host, []);
-          $Closure2._registerBindObject(api, host, []);
-          $Closure2._registerBindObject(body, host, []);
-          $Closure2._registerBindObject(http_PATCH, host, []);
-        }
         if (ops.includes("handle")) {
           $Closure2._registerBindObject(_id, host, []);
           $Closure2._registerBindObject(api.url, host, []);

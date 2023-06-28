@@ -9,11 +9,11 @@ module.exports = function({ $b }) {
     async handle()  {
       let error = "";
       const jsonObj1 = Object.freeze({"key1":"value1"});
-      (await b.putJson("file1.json",jsonObj1));
-      (await b.delete("file1.txt"));
-      {((cond) => {if (!cond) throw new Error("assertion failed: b.exists(\"file1.json\")")})((await b.exists("file1.json")))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: b.exists(\"file2.txt\")")})((await b.exists("file2.txt")))};
-      (await b.delete("file1.json",Object.freeze({"mustExist":true})));
+      (await $b.putJson("file1.json",jsonObj1));
+      (await $b.delete("file1.txt"));
+      {((cond) => {if (!cond) throw new Error("assertion failed: b.exists(\"file1.json\")")})((await $b.exists("file1.json")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: b.exists(\"file2.txt\")")})((await $b.exists("file2.txt")))};
+      (await $b.delete("file1.json",Object.freeze({"mustExist":true})));
       try {
         (await $b.delete("file1.json",Object.freeze({"mustExist":true})));
       }
@@ -22,9 +22,14 @@ module.exports = function({ $b }) {
         error = e;
       }
       {((cond) => {if (!cond) throw new Error("assertion failed: error == \"Object does not exist (key=file1.json).\"")})((error === "Object does not exist (key=file1.json)."))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: b.exists(\"file2.txt\")")})((await b.exists("file2.txt")))};
-      (await b.delete("file2.txt"));
-      {((cond) => {if (!cond) throw new Error("assertion failed: !b.exists(\"file2.txt\")")})((!(await b.exists("file2.txt"))))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: b.exists(\"file2.txt\")")})((await $b.exists("file2.txt")))};
+      (await $b.delete("file2.txt"));
+      {((cond) => {if (!cond) throw new Error("assertion failed: !b.exists(\"file2.txt\")")})((!(await $b.exists("file2.txt"))))};
+    }
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
   }
   return $Closure1;
@@ -227,7 +232,7 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const $b = context._lift(b, ["putJson", "delete", "exists", "exists", "delete", "delete", "exists", "delete", "exists"]);
+        const $b = context._lift(b);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure1.js")({ 
             $b: ${$b},
@@ -246,7 +251,7 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(b, host, ["putJson", "delete", "exists", "exists", "delete", "delete", "exists", "delete", "exists"]);
+          $Closure1._registerBindObject(b, host, ["delete", "exists", "putJson"]);
         }
         super._registerBind(host, ops);
       }

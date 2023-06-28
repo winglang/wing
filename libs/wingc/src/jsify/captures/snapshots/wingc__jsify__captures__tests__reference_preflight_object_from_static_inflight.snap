@@ -1,0 +1,73 @@
+---
+source: libs/wingc/src/jsify/captures/tests.rs
+expression: "capture_ok(r#\"\n    bring cloud;\n\n    let q = new cloud.Queue();\n\n    class MyType {\n      static inflight addToQueue(m: str) {\n        q.push(m);\n      }\n    }\n    \"#)"
+---
+======================================================
+Captured by MyType:
+
+======================================================
+Files:
+
+main.w
+------------------------------------------------------
+
+    bring cloud;
+
+    let q = new cloud.Queue();
+
+    class MyType {
+      static inflight addToQueue(m: str) {
+        q.push(m);
+      }
+    }
+    
+preflight.js
+------------------------------------------------------
+const cloud = require('@winglang/sdk').cloud;
+class MyType extends $stdlib.std.Resource {
+  constructor(scope, id, ) {
+    super(scope, id);
+    this._addInflightOps("addToQueue");
+  }
+  static _toInflightType(context) {
+    const $q = context._lift(q);
+    return $stdlib.core.NodeJsCode.fromInline(`
+      require("./inflight.MyType.js")({ 
+        $q: ${$q},
+      })
+    `);
+  }
+  _toInflight() {
+    return $stdlib.core.NodeJsCode.fromInline(`
+      (await (async () => {
+        const client = new (${MyType._toInflightType(this).text})({
+        });
+        if (client.$inflight_init) { await client.$inflight_init(); }
+        return client;
+      })())
+    `);
+  }
+  static _registerTypeBind(host, ops) {
+    if (ops.includes("addToQueue")) {
+      MyType._registerBindObject(q, host, ["push"]);
+    }
+    super._registerTypeBind(host, ops);
+  }
+}
+const q = this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this,"cloud.Queue");
+
+inflight.MyType.js
+------------------------------------------------------
+module.exports = function({ $q }) {
+  class MyType {
+    async $inflight_init()  {
+    }
+    static async addToQueue(m)  {
+      (await $q.push(m));
+    }
+    constructor({  }) {
+    }
+  }
+  return MyType;
+}
+

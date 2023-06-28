@@ -8,20 +8,13 @@ module.exports = function({ $bucket, $counter }) {
     }
     async handle(body)  {
       const next = (await $counter.inc());
-      const key = `myfile-${"hi"}.txt`;
+      const key = String.raw({ raw: ["myfile-", ".txt"] }, "hi");
       (await $bucket.put(key,body));
     }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
-    }
-    async $inflight_init()  {
-    }
-    async handle(body)  {
-      const next = (await counter.inc());
-      const key = String.raw({ raw: ["myfile-", ".txt"] }, "hi");
-      (await bucket.put(key,body));
     }
   }
   return $Closure1;
@@ -258,8 +251,8 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const $bucket = context._lift(bucket, ["put"]);
-        const $counter = context._lift(counter, ["inc"]);
+        const $bucket = context._lift(bucket);
+        const $counter = context._lift(counter);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure1.js")({ 
             $bucket: ${$bucket},

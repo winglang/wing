@@ -13,15 +13,20 @@ module.exports = function({ $b, std_Json }) {
     async handle()  {
       const jsonObj1 = Object.freeze({"key1":"value1"});
       const jsonObj2 = Object.freeze({"key2":"value2"});
-      (await b.putJson("file1.json",jsonObj1));
-      {((cond) => {if (!cond) throw new Error("assertion failed: Json.stringify(b.tryGetJson(\"file1.json\")) == Json.stringify(jsonObj1)")})((((args) => { return JSON.stringify(args[0], null, args[1]) })([(await b.tryGetJson("file1.json"))]) === ((args) => { return JSON.stringify(args[0], null, args[1]) })([jsonObj1])))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: b.tryGetJson(\"file2.json\") == nil")})(((await b.tryGetJson("file2.json")) === undefined))};
-      (await b.putJson("file2.json",jsonObj2));
-      {((cond) => {if (!cond) throw new Error("assertion failed: Json.stringify(b.tryGetJson(\"file2.json\")) == Json.stringify(jsonObj2)")})((((args) => { return JSON.stringify(args[0], null, args[1]) })([(await b.tryGetJson("file2.json"))]) === ((args) => { return JSON.stringify(args[0], null, args[1]) })([jsonObj2])))};
-      (await b.delete("file1.json"));
-      (await b.delete("file2.json"));
-      {((cond) => {if (!cond) throw new Error("assertion failed: b.tryGetJson(\"file1.json\") == nil")})(((await b.tryGetJson("file1.json")) === undefined))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: b.tryGetJson(\"file2.json\") == nil")})(((await b.tryGetJson("file2.json")) === undefined))};
+      (await $b.putJson("file1.json",jsonObj1));
+      {((cond) => {if (!cond) throw new Error("assertion failed: Json.stringify(b.tryGetJson(\"file1.json\")) == Json.stringify(jsonObj1)")})((((args) => { return JSON.stringify(args[0], null, args[1]) })([(await $b.tryGetJson("file1.json"))]) === ((args) => { return JSON.stringify(args[0], null, args[1]) })([jsonObj1])))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: b.tryGetJson(\"file2.json\") == nil")})(((await $b.tryGetJson("file2.json")) === undefined))};
+      (await $b.putJson("file2.json",jsonObj2));
+      {((cond) => {if (!cond) throw new Error("assertion failed: Json.stringify(b.tryGetJson(\"file2.json\")) == Json.stringify(jsonObj2)")})((((args) => { return JSON.stringify(args[0], null, args[1]) })([(await $b.tryGetJson("file2.json"))]) === ((args) => { return JSON.stringify(args[0], null, args[1]) })([jsonObj2])))};
+      (await $b.delete("file1.json"));
+      (await $b.delete("file2.json"));
+      {((cond) => {if (!cond) throw new Error("assertion failed: b.tryGetJson(\"file1.json\") == nil")})(((await $b.tryGetJson("file1.json")) === undefined))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: b.tryGetJson(\"file2.json\") == nil")})(((await $b.tryGetJson("file2.json")) === undefined))};
+    }
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
   }
   return $Closure1;
@@ -213,7 +218,7 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const $b = context._lift(b, ["putJson", "tryGetJson", "tryGetJson", "putJson", "tryGetJson", "delete", "delete", "tryGetJson", "tryGetJson"]);
+        const $b = context._lift(b);
         const lifted_std_Json = std.Json._toInflightType(context).text;
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure1.js")({ 
@@ -234,7 +239,7 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(b, host, ["putJson", "tryGetJson", "tryGetJson", "putJson", "tryGetJson", "delete", "delete", "tryGetJson", "tryGetJson"]);
+          $Closure1._registerBindObject(b, host, ["delete", "putJson", "tryGetJson"]);
         }
         super._registerBind(host, ops);
       }

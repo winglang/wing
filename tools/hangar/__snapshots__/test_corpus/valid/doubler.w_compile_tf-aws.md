@@ -14,11 +14,6 @@ module.exports = function({  }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
-    async handle(m)  {
-      return String.raw({ raw: ["Hello ", "!"] }, m);
-    }
   }
   return $Closure1;
 }
@@ -81,18 +76,12 @@ module.exports = function({ $f }) {
     }
     async handle()  {
       const result = (await $f.invoke("2"));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(result === "8")'`)})((result === "8"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: result == \"8\"")})((result === "8"))};
     }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
-    }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      const result = (await f.invoke("2"));
-      {((cond) => {if (!cond) throw new Error("assertion failed: result == \"8\"")})((result === "8"))};
     }
   }
   return $Closure4;
@@ -348,7 +337,7 @@ class $Root extends $stdlib.std.Resource {
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
             const client = new (${Doubler._toInflightType(this).text})({
-              $this_func: ${this._lift(this.func, ["handle", "handle"])},
+              $this_func: ${this._lift(this.func)},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -357,7 +346,7 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("invoke")) {
-          Doubler._registerBindObject(this.func, host, ["handle", "handle"]);
+          Doubler._registerBindObject(this.func, host, ["handle"]);
         }
         super._registerBind(host, ops);
       }
@@ -467,7 +456,7 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const $f = context._lift(f, ["invoke"]);
+        const $f = context._lift(f);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure4.js")({ 
             $f: ${$f},

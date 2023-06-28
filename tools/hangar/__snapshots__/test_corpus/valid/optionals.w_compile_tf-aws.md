@@ -7,7 +7,7 @@ module.exports = function({ $__payloadWithBucket_c_____null_, $__payloadWithoutO
     async $inflight_init()  {
     }
     async handle()  {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '($__payloadWithoutOptions_b_____null_ === false)'`)})(($__payloadWithoutOptions_b_____null_ === false))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: payloadWithoutOptions.b? == false")})(($__payloadWithoutOptions_b_____null_ === false))};
       if ($__payloadWithBucket_c_____null_) {
         (await $payloadWithBucket_c.put("x.txt","something"));
       }
@@ -16,14 +16,6 @@ module.exports = function({ $__payloadWithBucket_c_____null_, $__payloadWithoutO
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
-    }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      {((cond) => {if (!cond) throw new Error("assertion failed: payloadWithoutOptions.b? == false")})((((payloadWithoutOptions.b) != null) === false))};
-      if (((payloadWithBucket.c) != null)) {
-        (await payloadWithBucket.c.put("x.txt","something"));
-      }
     }
   }
   return $Closure1;
@@ -365,9 +357,9 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const $__payloadWithBucket_c_____null_ = context._lift(((payloadWithBucket.c) != null), []);
-        const $__payloadWithoutOptions_b_____null_ = context._lift(((payloadWithoutOptions.b) != null), []);
-        const $payloadWithBucket_c = context._lift(payloadWithBucket.c, ["put"]);
+        const $__payloadWithBucket_c_____null_ = context._lift(((payloadWithBucket.c) != null));
+        const $__payloadWithoutOptions_b_____null_ = context._lift(((payloadWithoutOptions.b) != null));
+        const $payloadWithBucket_c = context._lift(payloadWithBucket.c);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure1.js")({ 
             $__payloadWithBucket_c_____null_: ${$__payloadWithBucket_c_____null_},

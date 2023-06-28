@@ -1,0 +1,86 @@
+---
+source: libs/wingc/src/jsify/captures/tests.rs
+expression: "capture_ok(r#\"\n    test \"test\" {\n      let x = \"hello\";\n\n      class A {\n        init() {\n          log(x);\n        }\n      }\n    }\n    \"#)"
+---
+======================================================
+Captured by $Closure1:
+
+======================================================
+Captured by A:
+Variables:
+  $inflight_init():
+    x => []
+
+======================================================
+Files:
+
+inflight.A.js
+------------------------------------------------------
+module.exports = function({ x }) {
+  class A {
+     constructor()  {
+      {console.log(x)};
+    }
+  }
+  return A;
+}
+
+main.w
+------------------------------------------------------
+
+    test "test" {
+      let x = "hello";
+
+      class A {
+        init() {
+          log(x);
+        }
+      }
+    }
+    
+preflight.js
+------------------------------------------------------
+class $Closure1 extends $stdlib.std.Resource {
+  constructor(scope, id, ) {
+    super(scope, id);
+    this._addInflightOps("handle");
+    this.display.hidden = true;
+  }
+  static _toInflightType(context) {
+    return $stdlib.core.NodeJsCode.fromInline(`
+      require("./inflight.$Closure1.js")({ 
+      })
+    `);
+  }
+  _toInflight() {
+    return $stdlib.core.NodeJsCode.fromInline(`
+      (await (async () => {
+        const client = new (${$Closure1._toInflightType(this).text})({
+        });
+        if (client.$inflight_init) { await client.$inflight_init(); }
+        return client;
+      })())
+    `);
+  }
+}
+this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:test",new $Closure1(this,"$Closure1"));
+
+inflight.$Closure1.js
+------------------------------------------------------
+module.exports = function({  }) {
+  class $Closure1 {
+    async $inflight_init()  {
+    }
+    async handle()  {
+      const x = "hello";
+      const A = require("./inflight.A.js")({x});
+    }
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+  }
+  return $Closure1;
+}
+

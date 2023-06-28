@@ -8,20 +8,13 @@ module.exports = function({ $b, $x }) {
     }
     async handle()  {
       (await $b.put("file","foo"));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await $b.get("file")) === "foo")'`)})(((await $b.get("file")) === "foo"))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(12 === $x)'`)})((12 === $x))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: b.get(\"file\") == \"foo\"")})(((await $b.get("file")) === "foo"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: 12 == x")})((12 === $x))};
     }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
-    }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      (await b.put("file","foo"));
-      {((cond) => {if (!cond) throw new Error("assertion failed: b.get(\"file\") == \"foo\"")})(((await b.get("file")) === "foo"))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: 12 == x")})((12 === x))};
     }
   }
   return $Closure1;
@@ -213,8 +206,8 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const $b = context._lift(b, ["put", "get"]);
-        const $x = context._lift(x, []);
+        const $b = context._lift(b);
+        const $x = context._lift(x);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure1.js")({ 
             $b: ${$b},
@@ -234,7 +227,7 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(b, host, ["put", "get"]);
+          $Closure1._registerBindObject(b, host, ["get", "put"]);
           $Closure1._registerBindObject(x, host, []);
         }
         super._registerBind(host, ops);

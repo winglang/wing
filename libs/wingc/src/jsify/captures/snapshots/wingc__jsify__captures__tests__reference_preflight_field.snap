@@ -1,0 +1,74 @@
+---
+source: libs/wingc/src/jsify/captures/tests.rs
+expression: "capture_ok(r#\"\n    class Foo {\n      x: str;\n      \n      init() {\n        this.x = \"world\";\n      }\n    \n      inflight method() {\n        this.x;\n      }\n    }\n    \"#)"
+---
+======================================================
+Captured by Foo:
+
+======================================================
+Files:
+
+inflight.Foo.js
+------------------------------------------------------
+module.exports = function({  }) {
+  class Foo {
+    async $inflight_init()  {
+    }
+    async method()  {
+      this.$this_x;
+    }
+    constructor({ $this_x }) {
+      this.$this_x = $this_x;
+    }
+  }
+  return Foo;
+}
+
+main.w
+------------------------------------------------------
+
+    class Foo {
+      x: str;
+      
+      init() {
+        this.x = "world";
+      }
+    
+      inflight method() {
+        this.x;
+      }
+    }
+    
+preflight.js
+------------------------------------------------------
+class Foo extends $stdlib.std.Resource {
+  constructor(scope, id, ) {
+    super(scope, id);
+    this._addInflightOps("method");
+    this.x = "world";
+  }
+  static _toInflightType(context) {
+    return $stdlib.core.NodeJsCode.fromInline(`
+      require("./inflight.Foo.js")({ 
+      })
+    `);
+  }
+  _toInflight() {
+    return $stdlib.core.NodeJsCode.fromInline(`
+      (await (async () => {
+        const client = new (${Foo._toInflightType(this).text})({
+          $this_x: ${this._lift(this.x)},
+        });
+        if (client.$inflight_init) { await client.$inflight_init(); }
+        return client;
+      })())
+    `);
+  }
+  _registerBind(host, ops) {
+    if (ops.includes("method")) {
+      Foo._registerBindObject(this.x, host, []);
+    }
+    super._registerBind(host, ops);
+  }
+}
+

@@ -47,25 +47,16 @@ module.exports = function({ $c1, $c2, Utils }) {
     async $inflight_init()  {
     }
     async handle()  {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await $c1.peek()) === 0)'`)})(((await $c1.peek()) === 0))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await $c2.peek()) === 0)'`)})(((await $c2.peek()) === 0))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: c1.peek() == 0")})(((await $c1.peek()) === 0))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: c2.peek() == 0")})(((await $c2.peek()) === 0))};
       (await Utils.sleep(((60 * 1000) * 1.1)));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await $c1.peek()) >= 1)'`)})(((await $c1.peek()) >= 1))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await $c2.peek()) >= 1)'`)})(((await $c2.peek()) >= 1))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: c1.peek() >= 1")})(((await $c1.peek()) >= 1))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: c2.peek() >= 1")})(((await $c2.peek()) >= 1))};
     }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
-    }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      {((cond) => {if (!cond) throw new Error("assertion failed: c1.peek() == 0")})(((await c1.peek()) === 0))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: c2.peek() == 0")})(((await c2.peek()) === 0))};
-      (await Utils.sleep(((60 * 1000) * 1.1)));
-      {((cond) => {if (!cond) throw new Error("assertion failed: c1.peek() >= 1")})(((await c1.peek()) >= 1))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: c2.peek() >= 1")})(((await c2.peek()) >= 1))};
     }
   }
   return $Closure3;
@@ -473,7 +464,7 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const $c1 = context._lift(c1, ["inc"]);
+        const $c1 = context._lift(c1);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure1.js")({ 
             $c1: ${$c1},
@@ -504,7 +495,7 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const $c2 = context._lift(c2, ["inc"]);
+        const $c2 = context._lift(c2);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure2.js")({ 
             $c2: ${$c2},
@@ -557,8 +548,8 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const $c1 = context._lift(c1, ["peek", "peek"]);
-        const $c2 = context._lift(c2, ["peek", "peek"]);
+        const $c1 = context._lift(c1);
+        const $c2 = context._lift(c2);
         const lifted_Utils = Utils._toInflightType(context).text;
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure3.js")({ 
@@ -580,8 +571,8 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure3._registerBindObject(c1, host, ["peek", "peek"]);
-          $Closure3._registerBindObject(c2, host, ["peek", "peek"]);
+          $Closure3._registerBindObject(c1, host, ["peek"]);
+          $Closure3._registerBindObject(c2, host, ["peek"]);
         }
         super._registerBind(host, ops);
       }

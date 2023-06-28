@@ -7,17 +7,12 @@ module.exports = function({ $greeting }) {
     async $inflight_init()  {
     }
     async handle()  {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '($greeting === "Hello, wingnuts")'`)})(($greeting === "Hello, wingnuts"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: greeting == \"Hello, wingnuts\"")})(($greeting === "Hello, wingnuts"))};
     }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
-    }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      {((cond) => {if (!cond) throw new Error("assertion failed: greeting == \"Hello, wingnuts\"")})((greeting === "Hello, wingnuts"))};
     }
   }
   return $Closure1;
@@ -165,7 +160,7 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const $greeting = context._lift(greeting, []);
+        const $greeting = context._lift(greeting);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure1.js")({ 
             $greeting: ${$greeting},

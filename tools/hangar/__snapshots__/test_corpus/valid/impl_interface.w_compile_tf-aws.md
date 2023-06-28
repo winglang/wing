@@ -146,7 +146,7 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const $x = context._lift(x, ["handle"]);
+        const $x = context._lift(x);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure1.js")({ 
             $x: ${$x},

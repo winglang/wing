@@ -8,28 +8,17 @@ module.exports = function({ $b }) {
     }
     async handle()  {
       (await $b.put("test1.txt","Foo"));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await $b.tryGet("test1.txt")) === "Foo")'`)})(((await $b.tryGet("test1.txt")) === "Foo"))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await $b.tryGet("test2.txt")) === undefined)'`)})(((await $b.tryGet("test2.txt")) === undefined))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: b.tryGet(\"test1.txt\") == \"Foo\"")})(((await $b.tryGet("test1.txt")) === "Foo"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: b.tryGet(\"test2.txt\") == nil")})(((await $b.tryGet("test2.txt")) === undefined))};
       (await $b.put("test2.txt","Bar"));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await $b.tryGet("test2.txt")) === "Bar")'`)})(((await $b.tryGet("test2.txt")) === "Bar"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: b.tryGet(\"test2.txt\") == \"Bar\"")})(((await $b.tryGet("test2.txt")) === "Bar"))};
       (await $b.delete("test1.txt"));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await $b.tryGet("test1.txt")) === undefined)'`)})(((await $b.tryGet("test1.txt")) === undefined))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: b.tryGet(\"test1.txt\") == nil")})(((await $b.tryGet("test1.txt")) === undefined))};
     }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
-    }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      (await b.put("test1.txt","Foo"));
-      {((cond) => {if (!cond) throw new Error("assertion failed: b.tryGet(\"test1.txt\") == \"Foo\"")})(((await b.tryGet("test1.txt")) === "Foo"))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: b.tryGet(\"test2.txt\") == nil")})(((await b.tryGet("test2.txt")) === undefined))};
-      (await b.put("test2.txt","Bar"));
-      {((cond) => {if (!cond) throw new Error("assertion failed: b.tryGet(\"test2.txt\") == \"Bar\"")})(((await b.tryGet("test2.txt")) === "Bar"))};
-      (await b.delete("test1.txt"));
-      {((cond) => {if (!cond) throw new Error("assertion failed: b.tryGet(\"test1.txt\") == nil")})(((await b.tryGet("test1.txt")) === undefined))};
     }
   }
   return $Closure1;
@@ -221,7 +210,7 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const $b = context._lift(b, ["put", "tryGet", "tryGet", "put", "tryGet", "delete", "tryGet"]);
+        const $b = context._lift(b);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure1.js")({ 
             $b: ${$b},
@@ -240,7 +229,7 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(b, host, ["put", "tryGet", "tryGet", "put", "tryGet", "delete", "tryGet"]);
+          $Closure1._registerBindObject(b, host, ["delete", "put", "tryGet"]);
         }
         super._registerBind(host, ops);
       }

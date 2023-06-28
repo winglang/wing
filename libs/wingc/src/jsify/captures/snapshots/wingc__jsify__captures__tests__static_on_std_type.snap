@@ -1,0 +1,76 @@
+---
+source: libs/wingc/src/jsify/captures/tests.rs
+expression: "capture_ok(r#\"\n    test \"test\" {\n      log(str.fromJson(\"hello\"));\n      assert(Json.values(Json {}).length == 0);\n    }\n    \"#)"
+---
+======================================================
+Captured by $Closure1:
+Types:
+  std.String = String
+  std.Json = Json
+
+======================================================
+Files:
+
+main.w
+------------------------------------------------------
+
+    test "test" {
+      log(str.fromJson("hello"));
+      assert(Json.values(Json {}).length == 0);
+    }
+    
+preflight.js
+------------------------------------------------------
+class $Closure1 extends $stdlib.std.Resource {
+  constructor(scope, id, ) {
+    super(scope, id);
+    this._addInflightOps("handle");
+    this.display.hidden = true;
+  }
+  static _toInflightType(context) {
+    const lifted_std_Json = std.Json._toInflightType(context).text;
+    const lifted_std_String = std.String._toInflightType(context).text;
+    return $stdlib.core.NodeJsCode.fromInline(`
+      require("./inflight.$Closure1.js")({ 
+        std_Json: ${lifted_std_Json},
+        std_String: ${lifted_std_String},
+      })
+    `);
+  }
+  _toInflight() {
+    return $stdlib.core.NodeJsCode.fromInline(`
+      (await (async () => {
+        const client = new (${$Closure1._toInflightType(this).text})({
+        });
+        if (client.$inflight_init) { await client.$inflight_init(); }
+        return client;
+      })())
+    `);
+  }
+}
+this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:test",new $Closure1(this,"$Closure1"));
+
+inflight.$Closure1.js
+------------------------------------------------------
+module.exports = function({ std_Json, std_String }) {
+  const std = {
+    Json: std_Json,
+    String: std_String,
+  };
+  
+  class $Closure1 {
+    async $inflight_init()  {
+    }
+    async handle()  {
+      {console.log(((args) => { if (typeof args !== "string") {throw new Error("unable to parse " + typeof args + " " + args + " as a string")}; return JSON.parse(JSON.stringify(args)) })("hello"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: Json.values(Json {}).length == 0")})(((Object.values(Object.freeze({}))).length === 0))};
+    }
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+  }
+  return $Closure1;
+}
+

@@ -8,9 +8,9 @@ module.exports = function({ $privateBucket, $publicBucket }) {
     }
     async handle()  {
       let error = "";
-      (await publicBucket.put("file1.txt","Foo"));
-      (await privateBucket.put("file2.txt","Bar"));
-      {((cond) => {if (!cond) throw new Error("assertion failed: publicBucket.publicUrl(\"file1.txt\") != \"\"")})(((await publicBucket.publicUrl("file1.txt")) !== ""))};
+      (await $publicBucket.put("file1.txt","Foo"));
+      (await $privateBucket.put("file2.txt","Bar"));
+      {((cond) => {if (!cond) throw new Error("assertion failed: publicBucket.publicUrl(\"file1.txt\") != \"\"")})(((await $publicBucket.publicUrl("file1.txt")) !== ""))};
       try {
         (await $privateBucket.publicUrl("file2.txt"));
       }
@@ -19,6 +19,11 @@ module.exports = function({ $privateBucket, $publicBucket }) {
         error = e;
       }
       {((cond) => {if (!cond) throw new Error("assertion failed: error == \"Cannot provide public url for a non-public bucket\"")})((error === "Cannot provide public url for a non-public bucket"))};
+    }
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
   }
   return $Closure1;
@@ -263,8 +268,8 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const $privateBucket = context._lift(privateBucket, ["put", "publicUrl"]);
-        const $publicBucket = context._lift(publicBucket, ["put", "publicUrl"]);
+        const $privateBucket = context._lift(privateBucket);
+        const $publicBucket = context._lift(publicBucket);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure1.js")({ 
             $privateBucket: ${$privateBucket},
@@ -284,8 +289,8 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(privateBucket, host, ["put", "publicUrl"]);
-          $Closure1._registerBindObject(publicBucket, host, ["put", "publicUrl"]);
+          $Closure1._registerBindObject(privateBucket, host, ["publicUrl", "put"]);
+          $Closure1._registerBindObject(publicBucket, host, ["publicUrl", "put"]);
         }
         super._registerBind(host, ops);
       }

@@ -7,33 +7,20 @@ module.exports = function({ $Object_keys_myMap__length, $__bang__in___arrOfMap_a
     async $inflight_init()  {
     }
     async handle()  {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '($_arr_at_0__ === "hello")'`)})(($_arr_at_0__ === "hello"))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '($_arr_at_1__ === "world")'`)})(($_arr_at_1__ === "world"))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '($arr_length === 2)'`)})(($arr_length === 2))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '$_mySet_has__my___'`)})($_mySet_has__my___)};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '($mySet_size === 2)'`)})(($mySet_size === 2))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '$__world__in__myMap__'`)})($__world__in__myMap__)};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '($Object_keys_myMap__length === 2)'`)})(($Object_keys_myMap__length === 2))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '$__bang__in___arrOfMap_at_0____'`)})($__bang__in___arrOfMap_at_0____)};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '($_j___b__ === "world")'`)})(($_j___b__ === "world"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: arr.at(0) == \"hello\"")})(($_arr_at_0__ === "hello"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: arr.at(1) == \"world\"")})(($_arr_at_1__ === "world"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: arr.length == 2")})(($arr_length === 2))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: mySet.has(\"my\")")})($_mySet_has__my___)};
+      {((cond) => {if (!cond) throw new Error("assertion failed: mySet.size == 2")})(($mySet_size === 2))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: myMap.has(\"world\")")})($__world__in__myMap__)};
+      {((cond) => {if (!cond) throw new Error("assertion failed: myMap.size() == 2")})(($Object_keys_myMap__length === 2))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: arrOfMap.at(0).has(\"bang\")")})($__bang__in___arrOfMap_at_0____)};
+      {((cond) => {if (!cond) throw new Error("assertion failed: j.get(\"b\") == \"world\"")})(($_j___b__ === "world"))};
     }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
-    }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      {((cond) => {if (!cond) throw new Error("assertion failed: arr.at(0) == \"hello\"")})(((await arr.at(0)) === "hello"))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: arr.at(1) == \"world\"")})(((await arr.at(1)) === "world"))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: arr.length == 2")})((arr.length === 2))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: mySet.has(\"my\")")})((await mySet.has("my")))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: mySet.size == 2")})((mySet.size === 2))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: myMap.has(\"world\")")})(("world" in (myMap)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: myMap.size() == 2")})((Object.keys(myMap).length === 2))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: arrOfMap.at(0).has(\"bang\")")})(("bang" in ((await arrOfMap.at(0)))))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: j.get(\"b\") == \"world\"")})(((j)["b"] === "world"))};
     }
   }
   return $Closure1;
@@ -180,15 +167,15 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const $Object_keys_myMap__length = context._lift(Object.keys(myMap).length, []);
-        const $__bang__in___arrOfMap_at_0____ = context._lift(("bang" in ((arrOfMap.at(0)))), []);
-        const $__world__in__myMap__ = context._lift(("world" in (myMap)), []);
-        const $_arr_at_0__ = context._lift((arr.at(0)), []);
-        const $_arr_at_1__ = context._lift((arr.at(1)), []);
-        const $_j___b__ = context._lift((j)["b"], []);
-        const $_mySet_has__my___ = context._lift((mySet.has("my")), []);
-        const $arr_length = context._lift(arr.length, []);
-        const $mySet_size = context._lift(mySet.size, []);
+        const $Object_keys_myMap__length = context._lift(Object.keys(myMap).length);
+        const $__bang__in___arrOfMap_at_0____ = context._lift(("bang" in ((arrOfMap.at(0)))));
+        const $__world__in__myMap__ = context._lift(("world" in (myMap)));
+        const $_arr_at_0__ = context._lift((arr.at(0)));
+        const $_arr_at_1__ = context._lift((arr.at(1)));
+        const $_j___b__ = context._lift((j)["b"]);
+        const $_mySet_has__my___ = context._lift((mySet.has("my")));
+        const $arr_length = context._lift(arr.length);
+        const $mySet_size = context._lift(mySet.size);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure1.js")({ 
             $Object_keys_myMap__length: ${$Object_keys_myMap__length},

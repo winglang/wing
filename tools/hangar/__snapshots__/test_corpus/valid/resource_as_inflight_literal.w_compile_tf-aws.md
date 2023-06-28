@@ -7,17 +7,12 @@ module.exports = function({ $fn }) {
     async $inflight_init()  {
     }
     async handle()  {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await $fn.invoke("test")) === "hello world!")'`)})(((await $fn.invoke("test")) === "hello world!"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: fn.invoke(\"test\") == \"hello world!\"")})(((await $fn.invoke("test")) === "hello world!"))};
     }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
-    }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      {((cond) => {if (!cond) throw new Error("assertion failed: fn.invoke(\"test\") == \"hello world!\"")})(((await fn.invoke("test")) === "hello world!"))};
     }
   }
   return $Closure1;
@@ -273,7 +268,7 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const $fn = context._lift(fn, ["invoke"]);
+        const $fn = context._lift(fn);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure1.js")({ 
             $fn: ${$fn},

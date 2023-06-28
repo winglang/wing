@@ -1,0 +1,114 @@
+---
+source: libs/wingc/src/jsify/captures/tests.rs
+expression: "capture_ok(r#\"\n    class A {\n      inflight hello() {}\n    }\n    let pf_obj = new A();\n    test \"test\" {\n      pf_obj.hello();\n    }\n    \"#)"
+---
+======================================================
+Captured by A:
+
+======================================================
+Captured by $Closure1:
+
+======================================================
+Files:
+
+inflight.A.js
+------------------------------------------------------
+module.exports = function({  }) {
+  class A {
+    async $inflight_init()  {
+    }
+    async hello()  {
+    }
+    constructor({  }) {
+    }
+  }
+  return A;
+}
+
+main.w
+------------------------------------------------------
+
+    class A {
+      inflight hello() {}
+    }
+    let pf_obj = new A();
+    test "test" {
+      pf_obj.hello();
+    }
+    
+preflight.js
+------------------------------------------------------
+class A extends $stdlib.std.Resource {
+  constructor(scope, id, ) {
+    super(scope, id);
+    this._addInflightOps("hello");
+  }
+  static _toInflightType(context) {
+    return $stdlib.core.NodeJsCode.fromInline(`
+      require("./inflight.A.js")({ 
+      })
+    `);
+  }
+  _toInflight() {
+    return $stdlib.core.NodeJsCode.fromInline(`
+      (await (async () => {
+        const client = new (${A._toInflightType(this).text})({
+        });
+        if (client.$inflight_init) { await client.$inflight_init(); }
+        return client;
+      })())
+    `);
+  }
+}
+class $Closure1 extends $stdlib.std.Resource {
+  constructor(scope, id, ) {
+    super(scope, id);
+    this._addInflightOps("handle");
+    this.display.hidden = true;
+  }
+  static _toInflightType(context) {
+    const $pf_obj = context._lift(pf_obj);
+    return $stdlib.core.NodeJsCode.fromInline(`
+      require("./inflight.$Closure1.js")({ 
+        $pf_obj: ${$pf_obj},
+      })
+    `);
+  }
+  _toInflight() {
+    return $stdlib.core.NodeJsCode.fromInline(`
+      (await (async () => {
+        const client = new (${$Closure1._toInflightType(this).text})({
+        });
+        if (client.$inflight_init) { await client.$inflight_init(); }
+        return client;
+      })())
+    `);
+  }
+  _registerBind(host, ops) {
+    if (ops.includes("handle")) {
+      $Closure1._registerBindObject(pf_obj, host, ["hello"]);
+    }
+    super._registerBind(host, ops);
+  }
+}
+const pf_obj = new A(this,"A");
+this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:test",new $Closure1(this,"$Closure1"));
+
+inflight.$Closure1.js
+------------------------------------------------------
+module.exports = function({ $pf_obj }) {
+  class $Closure1 {
+    async $inflight_init()  {
+    }
+    async handle()  {
+      (await $pf_obj.hello());
+    }
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+  }
+  return $Closure1;
+}
+

@@ -7,17 +7,12 @@ module.exports = function({ $a_field }) {
     async $inflight_init()  {
     }
     async handle()  {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '("hey" === $a_field)'`)})(("hey" === $a_field))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: \"hey\" == a.field")})(("hey" === $a_field))};
     }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
-    }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      {((cond) => {if (!cond) throw new Error("assertion failed: \"hey\" == a.field")})(("hey" === a.field))};
     }
   }
   return $Closure1;
@@ -200,7 +195,7 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const $a_field = context._lift(a.field, []);
+        const $a_field = context._lift(a.field);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure1.js")({ 
             $a_field: ${$a_field},

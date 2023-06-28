@@ -1,0 +1,22 @@
+---
+source: libs/wingc/src/jsify/mangling/tests.rs
+expression: result.to_string()
+---
+keys: MyClass,a_b_c,a_b_d,a_b_e,b_myBucket,hello,hello_world,std_Json,std_Number
+
+const a = {
+  b: {
+    c: a_b_c,
+    d: a_b_d,
+    e: a_b_e,
+  },
+};
+const b = {
+  myBucket: b_myBucket,
+};
+const std = {
+  Json: std_Json,
+  Number: std_Number,
+};
+
+

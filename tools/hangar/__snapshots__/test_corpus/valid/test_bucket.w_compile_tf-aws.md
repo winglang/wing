@@ -7,21 +7,14 @@ module.exports = function({ $b }) {
     async $inflight_init()  {
     }
     async handle()  {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await $b.list()).length === 0)'`)})(((await $b.list()).length === 0))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: b.list().length == 0")})(((await $b.list()).length === 0))};
       (await $b.put("hello.txt","world"));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await $b.list()).length === 1)'`)})(((await $b.list()).length === 1))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: b.list().length == 1")})(((await $b.list()).length === 1))};
     }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
-    }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      {((cond) => {if (!cond) throw new Error("assertion failed: b.list().length == 0")})(((await b.list()).length === 0))};
-      (await b.put("hello.txt","world"));
-      {((cond) => {if (!cond) throw new Error("assertion failed: b.list().length == 1")})(((await b.list()).length === 1))};
     }
   }
   return $Closure1;
@@ -37,18 +30,12 @@ module.exports = function({ $b }) {
     }
     async handle()  {
       (await $b.put("hello.txt","world"));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await $b.get("hello.txt")) === "world")'`)})(((await $b.get("hello.txt")) === "world"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: b.get(\"hello.txt\") == \"world\"")})(((await $b.get("hello.txt")) === "world"))};
     }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
-    }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      (await b.put("hello.txt","world"));
-      {((cond) => {if (!cond) throw new Error("assertion failed: b.get(\"hello.txt\") == \"world\"")})(((await b.get("hello.txt")) === "world"))};
     }
   }
   return $Closure2;
@@ -308,7 +295,7 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const $b = context._lift(b, ["list", "put", "list"]);
+        const $b = context._lift(b);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure1.js")({ 
             $b: ${$b},
@@ -327,7 +314,7 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(b, host, ["list", "put", "list"]);
+          $Closure1._registerBindObject(b, host, ["list", "put"]);
         }
         super._registerBind(host, ops);
       }
@@ -339,7 +326,7 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const $b = context._lift(b, ["put", "get"]);
+        const $b = context._lift(b);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure2.js")({ 
             $b: ${$b},
@@ -358,7 +345,7 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure2._registerBindObject(b, host, ["put", "get"]);
+          $Closure2._registerBindObject(b, host, ["get", "put"]);
         }
         super._registerBind(host, ops);
       }

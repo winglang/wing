@@ -7,17 +7,12 @@ module.exports = function({ $idsCounter, $table }) {
     async $inflight_init()  {
     }
     async handle(key, operation, source)  {
-      (await $table.insert(`${(await $idsCounter.inc())}`,Object.freeze({"key":key,"operation":operation,"source":`${source}`})));
+      (await $table.insert(String.raw({ raw: ["", ""] }, (await $idsCounter.inc())),Object.freeze({"key":key,"operation":operation,"source":String.raw({ raw: ["", ""] }, source)})));
     }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
-    }
-    async $inflight_init()  {
-    }
-    async handle(key, operation, source)  {
-      (await table.insert(String.raw({ raw: ["", ""] }, (await idsCounter.inc())),Object.freeze({"key":key,"operation":operation,"source":String.raw({ raw: ["", ""] }, source)})));
     }
   }
   return $Closure1;
@@ -99,11 +94,6 @@ module.exports = function({ Source }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
-    async handle(key, event)  {
-      (await logHistory(key,String.raw({ raw: ["", ""] }, event),Source.onEvent));
-    }
   }
   return $Closure5;
 }
@@ -147,7 +137,7 @@ module.exports = function({ $table }) {
     async handle(opts)  {
       return async () =>  {
         let count = 0;
-        for (const u of (await table.list())) {
+        for (const u of (await $table.list())) {
           if (((((u)["key"] === opts.key) && ((u)["operation"] === opts.type)) && ((u)["source"] === String.raw({ raw: ["", ""] }, opts.source)))) {
             count = (count + 1);
           }
@@ -174,11 +164,11 @@ module.exports = function({ $b, Source }) {
     async $inflight_init()  {
     }
     async handle()  {
-      (await b.put("a","1"));
-      (await b.put("b","1"));
-      (await b.put("c","1"));
-      (await b.put("b","100"));
-      (await b.delete("c"));
+      (await $b.put("a","1"));
+      (await $b.put("b","1"));
+      (await $b.put("c","1"));
+      (await $b.put("b","100"));
+      (await $b.delete("c"));
       {((cond) => {if (!cond) throw new Error("assertion failed: wait(checkHitCount(key: \"a\", type: \"CREATE\", source: Source.anyEvent, count: 1))")})((await wait((await checkHitCount({ key: "a", type: "CREATE", source: Source.anyEvent, count: 1 })))))};
       {((cond) => {if (!cond) throw new Error("assertion failed: wait(checkHitCount(key: \"b\", type: \"CREATE\", source: Source.anyEvent, count: 1))")})((await wait((await checkHitCount({ key: "b", type: "CREATE", source: Source.anyEvent, count: 1 })))))};
       {((cond) => {if (!cond) throw new Error("assertion failed: wait(checkHitCount(key: \"c\", type: \"CREATE\", source: Source.anyEvent, count: 1))")})((await wait((await checkHitCount({ key: "c", type: "CREATE", source: Source.anyEvent, count: 1 })))))};
@@ -189,6 +179,11 @@ module.exports = function({ $b, Source }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: wait(checkHitCount(key: \"c\", type: \"DELETE\", source: Source.anyEvent, count: 1))")})((await wait((await checkHitCount({ key: "c", type: "DELETE", source: Source.anyEvent, count: 1 })))))};
       {((cond) => {if (!cond) throw new Error("assertion failed: wait(checkHitCount(key: \"b\", type: \"UPDATE\", source: Source.onEvent, count: 1))")})((await wait((await checkHitCount({ key: "b", type: "UPDATE", source: Source.onEvent, count: 1 })))))};
       {((cond) => {if (!cond) throw new Error("assertion failed: wait(checkHitCount(key: \"c\", type: \"DELETE\", source: Source.onEvent, count: 1))")})((await wait((await checkHitCount({ key: "c", type: "DELETE", source: Source.onEvent, count: 1 })))))};
+    }
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
   }
   return $Closure8;
@@ -1093,8 +1088,8 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const $idsCounter = context._lift(idsCounter, ["inc"]);
-        const $table = context._lift(table, ["insert"]);
+        const $idsCounter = context._lift(idsCounter);
+        const $table = context._lift(table);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure1.js")({ 
             $idsCounter: ${$idsCounter},
@@ -1276,7 +1271,7 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const $table = context._lift(table, ["list"]);
+        const $table = context._lift(table);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure7.js")({ 
             $table: ${$table},
@@ -1307,7 +1302,7 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const $b = context._lift(b, ["put", "put", "put", "put", "delete"]);
+        const $b = context._lift(b);
         const lifted_Source = `
           Object.freeze((function (tmp) {
             tmp[tmp["anyEvent"] = 0] = "anyEvent";
@@ -1334,7 +1329,7 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure8._registerBindObject(b, host, ["put", "put", "put", "put", "delete"]);
+          $Closure8._registerBindObject(b, host, ["delete", "put"]);
         }
         super._registerBind(host, ops);
       }

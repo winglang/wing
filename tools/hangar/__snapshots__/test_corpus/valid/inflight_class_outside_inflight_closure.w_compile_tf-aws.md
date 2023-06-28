@@ -10,6 +10,11 @@ module.exports = function({ BinaryOperation }) {
       const op = new BinaryOperation(10,20);
       {((cond) => {if (!cond) throw new Error("assertion failed: op.add() == 30")})(((await op.add()) === 30))};
     }
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
   }
   return $Closure1;
 }

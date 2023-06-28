@@ -12,20 +12,13 @@ module.exports = function({ util_Util }) {
     }
     async handle(input)  {
       const target = (await util.Util.tryEnv("WING_TARGET"));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((target) != null)'`)})(((target) != null))};
-      return `${input}-response`;
+      {((cond) => {if (!cond) throw new Error("assertion failed: target?")})(((target) != null))};
+      return String.raw({ raw: ["", "-response"] }, input);
     }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
-    }
-    async $inflight_init()  {
-    }
-    async handle(input)  {
-      const target = (await util_Util.tryEnv("WING_TARGET"));
-      {((cond) => {if (!cond) throw new Error("assertion failed: target?")})(((target) != null))};
-      return String.raw({ raw: ["", "-response"] }, input);
     }
   }
   return $Closure1;
@@ -41,18 +34,12 @@ module.exports = function({ $f }) {
     }
     async handle()  {
       const x = (await $f.invoke("hello"));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(x === "hello-response")'`)})((x === "hello-response"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: x == \"hello-response\"")})((x === "hello-response"))};
     }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
-    }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      const x = (await f.invoke("hello"));
-      {((cond) => {if (!cond) throw new Error("assertion failed: x == \"hello-response\"")})((x === "hello-response"))};
     }
   }
   return $Closure2;
@@ -292,7 +279,7 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const $f = context._lift(f, ["invoke"]);
+        const $f = context._lift(f);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure2.js")({ 
             $f: ${$f},

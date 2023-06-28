@@ -10,26 +10,15 @@ module.exports = function({ $r, $r2 }) {
       const connection = (await $r.rawClient());
       (await connection.set("wing","does redis"));
       const value = (await connection.get("wing"));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(value === "does redis")'`)})((value === "does redis"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: value == \"does redis\"")})((value === "does redis"))};
       (await $r2.set("wing","does redis again"));
       const value2 = (await $r2.get("wing"));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(value2 === "does redis again")'`)})((value2 === "does redis again"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: value2 == \"does redis again\"")})((value2 === "does redis again"))};
     }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
-    }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      const connection = (await r.rawClient());
-      (await connection.set("wing","does redis"));
-      const value = (await connection.get("wing"));
-      {((cond) => {if (!cond) throw new Error("assertion failed: value == \"does redis\"")})((value === "does redis"))};
-      (await r2.set("wing","does redis again"));
-      const value2 = (await r2.get("wing"));
-      {((cond) => {if (!cond) throw new Error("assertion failed: value2 == \"does redis again\"")})((value2 === "does redis again"))};
     }
   }
   return $Closure1;
@@ -500,8 +489,8 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const $r = context._lift(r, ["rawClient"]);
-        const $r2 = context._lift(r2, ["set", "get"]);
+        const $r = context._lift(r);
+        const $r2 = context._lift(r2);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure1.js")({ 
             $r: ${$r},
@@ -522,7 +511,7 @@ class $Root extends $stdlib.std.Resource {
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
           $Closure1._registerBindObject(r, host, ["rawClient"]);
-          $Closure1._registerBindObject(r2, host, ["set", "get"]);
+          $Closure1._registerBindObject(r2, host, ["get", "set"]);
         }
         super._registerBind(host, ops);
       }

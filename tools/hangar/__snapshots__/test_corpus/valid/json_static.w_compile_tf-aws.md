@@ -12,18 +12,12 @@ module.exports = function({ $jj, std_Json }) {
     }
     async handle()  {
       const ss = ((args) => { return JSON.stringify(args[0], null, args[1]) })([$jj]);
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(ss === "{\"a\":123,\"b\":{\"c\":456,\"d\":789}}")'`)})((ss === "{\"a\":123,\"b\":{\"c\":456,\"d\":789}}"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: ss == \"{\\\"a\\\":123,\\\"b\\\":{\\\"c\\\":456,\\\"d\\\":789}}\"")})((ss === "{\"a\":123,\"b\":{\"c\":456,\"d\":789}}"))};
     }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
-    }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      const ss = ((args) => { return JSON.stringify(args[0], null, args[1]) })([jj]);
-      {((cond) => {if (!cond) throw new Error("assertion failed: ss == \"{\\\"a\\\":123,\\\"b\\\":{\\\"c\\\":456,\\\"d\\\":789}}\"")})((ss === "{\"a\":123,\"b\":{\"c\":456,\"d\":789}}"))};
     }
   }
   return $Closure1;
@@ -45,6 +39,11 @@ module.exports = function({ std_Json }) {
       const hasCheck = Object.freeze({"a":"hello","b":"wing"});
       {((cond) => {if (!cond) throw new Error("assertion failed: Json.has(hasCheck, \"a\") == true")})((((args) => { return args[0].hasOwnProperty(args[1]); })([hasCheck,"a"]) === true))};
       {((cond) => {if (!cond) throw new Error("assertion failed: Json.has(hasCheck, \"c\") == false")})((((args) => { return args[0].hasOwnProperty(args[1]); })([hasCheck,"c"]) === false))};
+    }
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
   }
   return $Closure2;
@@ -257,7 +256,7 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const $jj = context._lift(jj, []);
+        const $jj = context._lift(jj);
         const lifted_std_Json = std.Json._toInflightType(context).text;
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure1.js")({ 

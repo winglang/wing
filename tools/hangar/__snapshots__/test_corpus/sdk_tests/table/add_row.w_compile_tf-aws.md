@@ -11,19 +11,13 @@ module.exports = function({ $marioInfo, $peachInfo, $table, std_Json }) {
     async $inflight_init()  {
     }
     async handle()  {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(((args) => { return JSON.stringify(args[0], null, args[1]) })([(await $table.get("mario"))]) === ((args) => { return JSON.stringify(args[0], null, args[1]) })([$marioInfo]))'`)})((((args) => { return JSON.stringify(args[0], null, args[1]) })([(await $table.get("mario"))]) === ((args) => { return JSON.stringify(args[0], null, args[1]) })([$marioInfo])))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(((args) => { return JSON.stringify(args[0], null, args[1]) })([(await $table.get("peach"))]) === ((args) => { return JSON.stringify(args[0], null, args[1]) })([$peachInfo]))'`)})((((args) => { return JSON.stringify(args[0], null, args[1]) })([(await $table.get("peach"))]) === ((args) => { return JSON.stringify(args[0], null, args[1]) })([$peachInfo])))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: Json.stringify(table.get(\"mario\")) == Json.stringify(marioInfo)")})((((args) => { return JSON.stringify(args[0], null, args[1]) })([(await $table.get("mario"))]) === ((args) => { return JSON.stringify(args[0], null, args[1]) })([$marioInfo])))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: Json.stringify(table.get(\"peach\")) == Json.stringify(peachInfo)")})((((args) => { return JSON.stringify(args[0], null, args[1]) })([(await $table.get("peach"))]) === ((args) => { return JSON.stringify(args[0], null, args[1]) })([$peachInfo])))};
     }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
-    }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      {((cond) => {if (!cond) throw new Error("assertion failed: Json.stringify(table.get(\"mario\")) == Json.stringify(marioInfo)")})((((args) => { return JSON.stringify(args[0], null, args[1]) })([(await table.get("mario"))]) === ((args) => { return JSON.stringify(args[0], null, args[1]) })([marioInfo])))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: Json.stringify(table.get(\"peach\")) == Json.stringify(peachInfo)")})((((args) => { return JSON.stringify(args[0], null, args[1]) })([(await table.get("peach"))]) === ((args) => { return JSON.stringify(args[0], null, args[1]) })([peachInfo])))};
     }
   }
   return $Closure1;
@@ -216,9 +210,9 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const $marioInfo = context._lift(marioInfo, []);
-        const $peachInfo = context._lift(peachInfo, []);
-        const $table = context._lift(table, ["get", "get"]);
+        const $marioInfo = context._lift(marioInfo);
+        const $peachInfo = context._lift(peachInfo);
+        const $table = context._lift(table);
         const lifted_std_Json = std.Json._toInflightType(context).text;
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure1.js")({ 
@@ -243,7 +237,7 @@ class $Root extends $stdlib.std.Resource {
         if (ops.includes("handle")) {
           $Closure1._registerBindObject(marioInfo, host, []);
           $Closure1._registerBindObject(peachInfo, host, []);
-          $Closure1._registerBindObject(table, host, ["get", "get"]);
+          $Closure1._registerBindObject(table, host, ["get"]);
         }
         super._registerBind(host, ops);
       }

@@ -11,37 +11,20 @@ module.exports = function({ $b }) {
       (await $b.put("test2.txt","Bar"));
       const first = (await $b.get("test1.txt"));
       const second = (await $b.get("test2.txt"));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(first === "Foo")'`)})((first === "Foo"))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(second === "Bar")'`)})((second === "Bar"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: first == \"Foo\"")})((first === "Foo"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: second == \"Bar\"")})((second === "Bar"))};
       (await $b.delete("test1.txt"));
       const files = (await $b.list());
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(files.includes("test1.txt") === false)'`)})((files.includes("test1.txt") === false))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(files.includes("test2.txt") === true)'`)})((files.includes("test2.txt") === true))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: files.contains(\"test1.txt\") == false")})((files.includes("test1.txt") === false))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: files.contains(\"test2.txt\") == true")})((files.includes("test2.txt") === true))};
       (await $b.put("test2.txt","Baz"));
       const third = (await $b.get("test2.txt"));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(third === "Baz")'`)})((third === "Baz"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: third == \"Baz\"")})((third === "Baz"))};
     }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
-    }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      (await b.put("test1.txt","Foo"));
-      (await b.put("test2.txt","Bar"));
-      const first = (await b.get("test1.txt"));
-      const second = (await b.get("test2.txt"));
-      {((cond) => {if (!cond) throw new Error("assertion failed: first == \"Foo\"")})((first === "Foo"))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: second == \"Bar\"")})((second === "Bar"))};
-      (await b.delete("test1.txt"));
-      const files = (await b.list());
-      {((cond) => {if (!cond) throw new Error("assertion failed: files.contains(\"test1.txt\") == false")})((files.includes("test1.txt") === false))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: files.contains(\"test2.txt\") == true")})((files.includes("test2.txt") === true))};
-      (await b.put("test2.txt","Baz"));
-      const third = (await b.get("test2.txt"));
-      {((cond) => {if (!cond) throw new Error("assertion failed: third == \"Baz\"")})((third === "Baz"))};
     }
   }
   return $Closure1;
@@ -233,7 +216,7 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const $b = context._lift(b, ["put", "put", "get", "get", "delete", "list", "put", "get"]);
+        const $b = context._lift(b);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure1.js")({ 
             $b: ${$b},
@@ -252,7 +235,7 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(b, host, ["put", "put", "get", "get", "delete", "list", "put", "get"]);
+          $Closure1._registerBindObject(b, host, ["delete", "get", "list", "put"]);
         }
         super._registerBind(host, ops);
       }

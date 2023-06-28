@@ -14,11 +14,6 @@ module.exports = function({  }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
-    async handle(key)  {
-      {console.log(String.raw({ raw: ["deleted ", ""] }, key))};
-    }
   }
   return $Closure1;
 }
@@ -38,11 +33,6 @@ module.exports = function({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
-    }
-    async $inflight_init()  {
-    }
-    async handle(key)  {
-      {console.log(String.raw({ raw: ["updated ", ""] }, key))};
     }
   }
   return $Closure2;
@@ -64,11 +54,6 @@ module.exports = function({  }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
-    async handle(key)  {
-      {console.log(String.raw({ raw: ["created ", ""] }, key))};
-    }
   }
   return $Closure3;
 }
@@ -82,17 +67,12 @@ module.exports = function({ $other }) {
     async $inflight_init()  {
     }
     async handle(key, event)  {
-      (await $other.put(`last_${event}_key`,key));
+      (await $other.put(String.raw({ raw: ["last_", "_key"] }, event),key));
     }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
-    }
-    async $inflight_init()  {
-    }
-    async handle(key, event)  {
-      (await other.put(String.raw({ raw: ["last_", "_key"] }, event),key));
     }
   }
   return $Closure4;
@@ -1441,7 +1421,7 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const $other = context._lift(other, ["put"]);
+        const $other = context._lift(other);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure4.js")({ 
             $other: ${$other},
@@ -1495,7 +1475,7 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const $b = context._lift(b, ["put", "put", "put", "put", "delete"]);
+        const $b = context._lift(b);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure6.js")({ 
             $b: ${$b},
@@ -1514,7 +1494,7 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure6._registerBindObject(b, host, ["put", "put", "put", "put", "delete"]);
+          $Closure6._registerBindObject(b, host, ["delete", "put"]);
         }
         super._registerBind(host, ops);
       }

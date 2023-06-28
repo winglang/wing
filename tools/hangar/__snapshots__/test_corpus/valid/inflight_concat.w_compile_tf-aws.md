@@ -77,7 +77,7 @@ class $Root extends $stdlib.std.Resource {
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
             const client = new (${R._toInflightType(this).text})({
-              $_this_s1_concat___world___: ${this._lift((this.s1.concat(" world")), [])},
+              $_this_s1_concat___world___: ${this._lift((this.s1.concat(" world")))},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;

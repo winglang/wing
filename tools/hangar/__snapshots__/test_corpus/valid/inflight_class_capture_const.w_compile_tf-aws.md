@@ -8,7 +8,12 @@ module.exports = function({ $myConst, Foo }) {
     }
     async handle()  {
       const x = new Foo();
-      {((cond) => {if (!cond) throw new Error("assertion failed: x.getValue() == myConst")})(((await x.getValue()) === myConst))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: x.getValue() == myConst")})(((await x.getValue()) === $myConst))};
+    }
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
   }
   return $Closure1;
@@ -169,7 +174,7 @@ class $Root extends $stdlib.std.Resource {
         this._addInflightOps("getValue");
       }
       static _toInflightType(context) {
-        const $myConst = context._lift(myConst, []);
+        const $myConst = context._lift(myConst);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.Foo.js")({ 
             $myConst: ${$myConst},
@@ -200,7 +205,7 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const $myConst = context._lift(myConst, []);
+        const $myConst = context._lift(myConst);
         const lifted_Foo = Foo._toInflightType(context).text;
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure1.js")({ 

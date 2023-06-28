@@ -4,25 +4,17 @@
 ```log
 fail ┌ inflight_class_as_struct_members.wsim » root/env0/test:test
      │ ReferenceError: getBar is not defined
-     │     at $Closure2.handle (/var/folders/vm/cm444l3124j_vh_8rkhz6kqm0000gn/T/wing-bundles-iu3uFb/index.js:14:23)
-     │     at exports.handler (/var/folders/vm/cm444l3124j_vh_8rkhz6kqm0000gn/T/wing-bundles-iu3uFb/index.js:41:9)
-     │     at async Object.withTrace (/Users/eladb/code/wing2/libs/wingsdk/lib/testing/simulator.js:72:38)
-     │     at async TestRunnerClient.runTest (/Users/eladb/code/wing2/libs/wingsdk/lib/target-sim/test-runner.inflight.js:31:13)
-     │     at async testSimulator (/Users/eladb/code/wing2/apps/wing/dist/commands/test.js:199:22)
-     │     at async testOne (/Users/eladb/code/wing2/apps/wing/dist/commands/test.js:114:20)
-     └     at async test (/Users/eladb/code/wing2/apps/wing/dist/commands/test.js:55:29)
-ReferenceError: getBar is not defined
-    at $Closure2.handle (/var/folders/vm/cm444l3124j_vh_8rkhz6kqm0000gn/T/wing-bundles-iu3uFb/index.js:14:23)
-    at exports.handler (/var/folders/vm/cm444l3124j_vh_8rkhz6kqm0000gn/T/wing-bundles-iu3uFb/index.js:41:9)
-    at async Object.withTrace (/Users/eladb/code/wing2/libs/wingsdk/lib/testing/simulator.js:72:38)
-    at async TestRunnerClient.runTest (/Users/eladb/code/wing2/libs/wingsdk/lib/target-sim/test-runner.inflight.js:31:13)
-    at async testSimulator (/Users/eladb/code/wing2/apps/wing/dist/commands/test.js:199:22)
-    at async testOne (/Users/eladb/code/wing2/apps/wing/dist/commands/test.js:114:20)
-    at async test (/Users/eladb/code/wing2/apps/wing/dist/commands/test.js:55:29)
+     │     at $Closure2.handle (/tmp/wing-bundles-17DOL6/index.js:14:23)
+     │     at exports.handler (/tmp/wing-bundles-17DOL6/index.js:41:9)
+     │     at async Object.withTrace (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/@winglang/sdk/lib/testing/simulator.js:72:38)
+     │     at async TestRunnerClient.runTest (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/@winglang/sdk/lib/target-sim/test-runner.inflight.js:31:13)
+     │     at async testSimulator (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/commands/test.js:199:22)
+     │     at async testOne (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/commands/test.js:114:20)
+     └     at async test (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/commands/test.js:55:39)
  
  
-Tests 1 passed (1)
-Test Files 1 passed (1)
+Tests 1 failed (1)
+Test Files 1 failed (1)
 Duration <DURATION>
 ```
 

@@ -13,6 +13,11 @@ module.exports = function({ NotGoo }) {
       const x = new NotGoo();
       {((cond) => {if (!cond) throw new Error("assertion failed: x.handle() == 123")})(((await x.handle()) === 123))};
     }
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
   }
   return $Closure1;
 }

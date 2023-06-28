@@ -76,7 +76,7 @@ class $Root extends $stdlib.std.Resource {
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
             const client = new (${Foo._toInflightType(this).text})({
-              $this_data_field0: ${this._lift(this.data.field0, [])},
+              $this_data_field0: ${this._lift(this.data.field0)},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;

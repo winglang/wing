@@ -7,21 +7,26 @@ module.exports = function({ $myBool, $myDur_hours, $myDur_minutes, $myDur_second
     async $inflight_init()  {
     }
     async handle(s)  {
-      {console.log(myStr)};
-      const n = myNum;
+      {console.log($myStr)};
+      const n = $myNum;
       {console.log(String.raw({ raw: ["", ""] }, n))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: mySecondBool == false")})((mySecondBool === false))};
-      if (myBool) {
+      {((cond) => {if (!cond) throw new Error("assertion failed: mySecondBool == false")})(($mySecondBool === false))};
+      if ($myBool) {
         {console.log("bool=true")};
       }
       else {
         {console.log("bool=false")};
       }
-      const min = myDur.minutes;
-      const sec = myDur.seconds;
-      const hr = myDur.hours;
+      const min = $myDur_minutes;
+      const sec = $myDur_seconds;
+      const hr = $myDur_hours;
       const split = (await String.raw({ raw: ["min=", " sec=", " hr=", ""] }, min, sec, hr).split(" "));
       {((cond) => {if (!cond) throw new Error("assertion failed: split.length == 3")})((split.length === 3))};
+    }
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
   }
   return $Closure1;
@@ -168,13 +173,13 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const $myBool = context._lift(myBool, []);
-        const $myDur_hours = context._lift(myDur.hours, []);
-        const $myDur_minutes = context._lift(myDur.minutes, []);
-        const $myDur_seconds = context._lift(myDur.seconds, []);
-        const $myNum = context._lift(myNum, []);
-        const $mySecondBool = context._lift(mySecondBool, []);
-        const $myStr = context._lift(myStr, []);
+        const $myBool = context._lift(myBool);
+        const $myDur_hours = context._lift(myDur.hours);
+        const $myDur_minutes = context._lift(myDur.minutes);
+        const $myDur_seconds = context._lift(myDur.seconds);
+        const $myNum = context._lift(myNum);
+        const $mySecondBool = context._lift(mySecondBool);
+        const $myStr = context._lift(myStr);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure1.js")({ 
             $myBool: ${$myBool},

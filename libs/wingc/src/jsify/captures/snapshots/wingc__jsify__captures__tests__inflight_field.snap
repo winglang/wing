@@ -1,0 +1,65 @@
+---
+source: libs/wingc/src/jsify/captures/tests.rs
+expression: "capture_ok(r#\"\n    class A {\n      inflight x: str;\n      inflight init() {\n        this.x = \"hello\";\n      }\n\n      inflight method() {\n        log(this.x);\n      }\n    }\n    \"#)"
+---
+======================================================
+Captured by A:
+
+======================================================
+Files:
+
+inflight.A.js
+------------------------------------------------------
+module.exports = function({  }) {
+  class A {
+    async $inflight_init()  {
+      this.x = "hello";
+    }
+    async method()  {
+      {console.log(this.x)};
+    }
+    constructor({  }) {
+    }
+  }
+  return A;
+}
+
+main.w
+------------------------------------------------------
+
+    class A {
+      inflight x: str;
+      inflight init() {
+        this.x = "hello";
+      }
+
+      inflight method() {
+        log(this.x);
+      }
+    }
+    
+preflight.js
+------------------------------------------------------
+class A extends $stdlib.std.Resource {
+  constructor(scope, id, ) {
+    super(scope, id);
+    this._addInflightOps("method", "x");
+  }
+  static _toInflightType(context) {
+    return $stdlib.core.NodeJsCode.fromInline(`
+      require("./inflight.A.js")({ 
+      })
+    `);
+  }
+  _toInflight() {
+    return $stdlib.core.NodeJsCode.fromInline(`
+      (await (async () => {
+        const client = new (${A._toInflightType(this).text})({
+        });
+        if (client.$inflight_init) { await client.$inflight_init(); }
+        return client;
+      })())
+    `);
+  }
+}
+

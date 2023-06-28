@@ -11,21 +11,14 @@ module.exports = function({ $NIL, $RANDOM, util_Util }) {
     async $inflight_init()  {
     }
     async handle()  {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await util.Util.env("WING_TARGET")).length > 0)'`)})(((await util.Util.env("WING_TARGET")).length > 0))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: util.env(\"WING_TARGET\").length > 0")})(((await util.Util.env("WING_TARGET")).length > 0))};
       const noValue = ((await util.Util.tryEnv($RANDOM)) ?? $NIL);
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(noValue === $NIL)'`)})((noValue === $NIL))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: noValue == NIL")})((noValue === $NIL))};
     }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
-    }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      {((cond) => {if (!cond) throw new Error("assertion failed: util.env(\"WING_TARGET\").length > 0")})(((await util_Util.env("WING_TARGET")).length > 0))};
-      const noValue = ((await util_Util.tryEnv(RANDOM)) ?? NIL);
-      {((cond) => {if (!cond) throw new Error("assertion failed: noValue == NIL")})((noValue === NIL))};
     }
   }
   return $Closure1;
@@ -172,8 +165,8 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const $NIL = context._lift(NIL, []);
-        const $RANDOM = context._lift(RANDOM, []);
+        const $NIL = context._lift(NIL);
+        const $RANDOM = context._lift(RANDOM);
         const lifted_util_Util = util.Util._toInflightType(context).text;
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure1.js")({ 

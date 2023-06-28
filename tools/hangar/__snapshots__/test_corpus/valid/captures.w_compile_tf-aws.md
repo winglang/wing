@@ -480,9 +480,9 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const $bucket1 = context._lift(bucket1, ["put", "list", "publicUrl"]);
-        const $bucket2 = context._lift(bucket2, ["get", "get", "publicUrl"]);
-        const $bucket3 = context._lift(bucket3, ["get"]);
+        const $bucket1 = context._lift(bucket1);
+        const $bucket2 = context._lift(bucket2);
+        const $bucket3 = context._lift(bucket3);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure1.js")({ 
             $bucket1: ${$bucket1},
@@ -503,8 +503,8 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(bucket1, host, ["put", "list", "publicUrl"]);
-          $Closure1._registerBindObject(bucket2, host, ["get", "get", "publicUrl"]);
+          $Closure1._registerBindObject(bucket1, host, ["list", "publicUrl", "put"]);
+          $Closure1._registerBindObject(bucket2, host, ["get", "publicUrl"]);
           $Closure1._registerBindObject(bucket3, host, ["get"]);
         }
         super._registerBind(host, ops);

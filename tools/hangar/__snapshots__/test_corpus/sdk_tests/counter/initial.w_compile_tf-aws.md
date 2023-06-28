@@ -7,17 +7,12 @@ module.exports = function({ $counterA }) {
     async $inflight_init()  {
     }
     async handle()  {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await $counterA.peek()) === 0)'`)})(((await $counterA.peek()) === 0))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: counterA.peek() == 0")})(((await $counterA.peek()) === 0))};
     }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
-    }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      {((cond) => {if (!cond) throw new Error("assertion failed: counterA.peek() == 0")})(((await counterA.peek()) === 0))};
     }
   }
   return $Closure1;
@@ -32,17 +27,12 @@ module.exports = function({ $counterB }) {
     async $inflight_init()  {
     }
     async handle()  {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await $counterB.peek()) === 500)'`)})(((await $counterB.peek()) === 500))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: counterB.peek() == 500")})(((await $counterB.peek()) === 500))};
     }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
-    }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      {((cond) => {if (!cond) throw new Error("assertion failed: counterB.peek() == 500")})(((await counterB.peek()) === 500))};
     }
   }
   return $Closure2;
@@ -57,17 +47,12 @@ module.exports = function({ $counterC }) {
     async $inflight_init()  {
     }
     async handle()  {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await $counterC.peek()) === (-198))'`)})(((await $counterC.peek()) === (-198)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: counterC.peek() == -198")})(((await $counterC.peek()) === (-198)))};
     }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
-    }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      {((cond) => {if (!cond) throw new Error("assertion failed: counterC.peek() == -198")})(((await counterC.peek()) === (-198)))};
     }
   }
   return $Closure3;
@@ -402,7 +387,7 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const $counterA = context._lift(counterA, ["peek"]);
+        const $counterA = context._lift(counterA);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure1.js")({ 
             $counterA: ${$counterA},
@@ -433,7 +418,7 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const $counterB = context._lift(counterB, ["peek"]);
+        const $counterB = context._lift(counterB);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure2.js")({ 
             $counterB: ${$counterB},
@@ -464,7 +449,7 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const $counterC = context._lift(counterC, ["peek"]);
+        const $counterC = context._lift(counterC);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure3.js")({ 
             $counterC: ${$counterC},

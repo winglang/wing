@@ -48,7 +48,7 @@ module.exports = function({ $oneSecond, JSHelper, util_Util }) {
       if ((await util.Util.waitUntil(async () =>  {
         return false;
       }
-      ,{ timeout: oneSecond }))) {
+      ,{ timeout: $oneSecond }))) {
         {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
       }
       else {
@@ -83,8 +83,8 @@ module.exports = function({ $invokeCounter, $oneSecond, JSHelper, util_Util }) {
         return (((await JSHelper.getTime()) - start) > (3 * 1000));
       }
       ;
-      if ((await util_Util.waitUntil(returnTrueAfter3Seconds,{ interval: oneSecond }))) {
-        const invocations = (await invokeCounter.peek());
+      if ((await util.Util.waitUntil(returnTrueAfter3Seconds,{ interval: $oneSecond }))) {
+        const invocations = (await $invokeCounter.peek());
         {((cond) => {if (!cond) throw new Error("assertion failed:  invocations > 1 && invocations < 10 ")})(((invocations > 1) && (invocations < 10)))};
       }
       else {
@@ -119,11 +119,11 @@ module.exports = function({ $fiveSeconds, $invokeCounter, $oneSecond, JSHelper, 
         return false;
       }
       ;
-      if ((await util_Util.waitUntil(returnFalse,{ interval: oneSecond, timeout: fiveSeconds }))) {
+      if ((await util.Util.waitUntil(returnFalse,{ interval: $oneSecond, timeout: $fiveSeconds }))) {
         {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
       }
       else {
-        const invokeCount = (await invokeCounter.peek());
+        const invokeCount = (await $invokeCounter.peek());
         {((cond) => {if (!cond) throw new Error("assertion failed: invokeCount > 3 && invokeCount < 7")})(((invokeCount > 3) && (invokeCount < 7)))};
       }
     }
@@ -158,7 +158,7 @@ module.exports = function({ $invokeCounter, util_Util }) {
         {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
       }
       catch {
-        {((cond) => {if (!cond) throw new Error("assertion failed: invokeCounter.peek() == 1")})(((await invokeCounter.peek()) === 1))};
+        {((cond) => {if (!cond) throw new Error("assertion failed: invokeCounter.peek() == 1")})(((await $invokeCounter.peek()) === 1))};
       }
     }
     constructor({  }) {
@@ -664,7 +664,7 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const $oneSecond = context._lift(oneSecond, []);
+        const $oneSecond = context._lift(oneSecond);
         const lifted_JSHelper = JSHelper._toInflightType(context).text;
         const lifted_util_Util = util.Util._toInflightType(context).text;
         return $stdlib.core.NodeJsCode.fromInline(`
@@ -699,8 +699,8 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const $invokeCounter = context._lift(invokeCounter, ["inc", "peek"]);
-        const $oneSecond = context._lift(oneSecond, []);
+        const $invokeCounter = context._lift(invokeCounter);
+        const $oneSecond = context._lift(oneSecond);
         const lifted_JSHelper = JSHelper._toInflightType(context).text;
         const lifted_util_Util = util.Util._toInflightType(context).text;
         return $stdlib.core.NodeJsCode.fromInline(`
@@ -737,9 +737,9 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const $fiveSeconds = context._lift(fiveSeconds, []);
-        const $invokeCounter = context._lift(invokeCounter, ["inc", "peek"]);
-        const $oneSecond = context._lift(oneSecond, []);
+        const $fiveSeconds = context._lift(fiveSeconds);
+        const $invokeCounter = context._lift(invokeCounter);
+        const $oneSecond = context._lift(oneSecond);
         const lifted_JSHelper = JSHelper._toInflightType(context).text;
         const lifted_util_Util = util.Util._toInflightType(context).text;
         return $stdlib.core.NodeJsCode.fromInline(`
@@ -778,7 +778,7 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const $invokeCounter = context._lift(invokeCounter, ["inc", "peek"]);
+        const $invokeCounter = context._lift(invokeCounter);
         const lifted_util_Util = util.Util._toInflightType(context).text;
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure5.js")({ 

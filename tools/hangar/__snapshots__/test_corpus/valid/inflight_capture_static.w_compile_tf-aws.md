@@ -14,11 +14,6 @@ module.exports = function({ Preflight }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      {((cond) => {if (!cond) throw new Error("assertion failed: Preflight.staticMethod(123) == \"foo-123\"")})(((await Preflight.staticMethod(123)) === "foo-123"))};
-    }
   }
   return $Closure1;
 }
@@ -39,11 +34,6 @@ module.exports = function({ OuterInflight }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      {((cond) => {if (!cond) throw new Error("assertion failed: OuterInflight.staticMethod(\"hello\") == 5")})(((await OuterInflight.staticMethod("hello")) === 5))};
-    }
   }
   return $Closure2;
 }
@@ -59,6 +49,11 @@ module.exports = function({  }) {
     async handle()  {
       const InnerInflight = require("./inflight.InnerInflight.js")({});
       {((cond) => {if (!cond) throw new Error("assertion failed: InnerInflight.staticMethod() == \"hello\"")})(((await InnerInflight.staticMethod()) === "hello"))};
+    }
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
   }
   return $Closure3;
@@ -137,6 +132,8 @@ module.exports = function({  }) {
     }
     static async staticMethod(a)  {
       return String.raw({ raw: ["foo-", ""] }, a);
+    }
+    constructor({  }) {
     }
   }
   return Preflight;

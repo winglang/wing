@@ -47,25 +47,16 @@ module.exports = function({ $c, $f1, $f2 }) {
     async $inflight_init()  {
     }
     async handle()  {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await $c.peek()) === 0)'`)})(((await $c.peek()) === 0))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: c.peek() == 0")})(((await $c.peek()) === 0))};
       (await $f1.invoke(""));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await $c.peek()) === 1)'`)})(((await $c.peek()) === 1))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: c.peek() == 1")})(((await $c.peek()) === 1))};
       (await $f2.invoke(""));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await $c.peek()) === 2)'`)})(((await $c.peek()) === 2))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: c.peek() == 2")})(((await $c.peek()) === 2))};
     }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
-    }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      {((cond) => {if (!cond) throw new Error("assertion failed: c.peek() == 0")})(((await c.peek()) === 0))};
-      (await f1.invoke(""));
-      {((cond) => {if (!cond) throw new Error("assertion failed: c.peek() == 1")})(((await c.peek()) === 1))};
-      (await f2.invoke(""));
-      {((cond) => {if (!cond) throw new Error("assertion failed: c.peek() == 2")})(((await c.peek()) === 2))};
     }
   }
   return $Closure3;
@@ -415,7 +406,7 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const $c = context._lift(c, ["inc"]);
+        const $c = context._lift(c);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure1.js")({ 
             $c: ${$c},
@@ -446,7 +437,7 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const $c = context._lift(c, ["inc"]);
+        const $c = context._lift(c);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure2.js")({ 
             $c: ${$c},
@@ -477,9 +468,9 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const $c = context._lift(c, ["peek", "peek", "peek"]);
-        const $f1 = context._lift(f1, ["invoke"]);
-        const $f2 = context._lift(f2, ["invoke"]);
+        const $c = context._lift(c);
+        const $f1 = context._lift(f1);
+        const $f2 = context._lift(f2);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure3.js")({ 
             $c: ${$c},
@@ -500,7 +491,7 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure3._registerBindObject(c, host, ["peek", "peek", "peek"]);
+          $Closure3._registerBindObject(c, host, ["peek"]);
           $Closure3._registerBindObject(f1, host, ["invoke"]);
           $Closure3._registerBindObject(f2, host, ["invoke"]);
         }

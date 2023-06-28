@@ -7,23 +7,15 @@ module.exports = function({ $c5, $c5_x, $c5_y }) {
     async $inflight_init()  {
     }
     async handle()  {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '($c5_x === 123)'`)})(($c5_x === 123))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '($c5_y === 321)'`)})(($c5_y === 321))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: c5.x == 123")})(($c5_x === 123))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: c5.y == 321")})(($c5_y === 321))};
       (await $c5.set(111));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '($c5_y === 111)'`)})(($c5_y === 111))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: c5.y == 111")})(($c5_y === 111))};
     }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
-    }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      {((cond) => {if (!cond) throw new Error("assertion failed: c5.x == 123")})((c5.x === 123))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: c5.y == 321")})((c5.y === 321))};
-      (await c5.set(111));
-      {((cond) => {if (!cond) throw new Error("assertion failed: c5.y == 111")})((c5.y === 111))};
     }
   }
   return $Closure1;
@@ -38,21 +30,14 @@ module.exports = function({ $student_hrlyWage, $student_major, $student_name }) 
     async $inflight_init()  {
     }
     async handle()  {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '($student_name === "Tom")'`)})(($student_name === "Tom"))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '($student_major === "MySpace")'`)})(($student_major === "MySpace"))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '($student_hrlyWage === 38)'`)})(($student_hrlyWage === 38))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: student.name == \"Tom\"")})(($student_name === "Tom"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: student.major == \"MySpace\"")})(($student_major === "MySpace"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: student.hrlyWage == 38")})(($student_hrlyWage === 38))};
     }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
-    }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      {((cond) => {if (!cond) throw new Error("assertion failed: student.name == \"Tom\"")})((student.name === "Tom"))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: student.major == \"MySpace\"")})((student.major === "MySpace"))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: student.hrlyWage == 38")})((student.hrlyWage === 38))};
     }
   }
   return $Closure2;
@@ -67,17 +52,12 @@ module.exports = function({ $ta_hrlyWage }) {
     async $inflight_init()  {
     }
     async handle()  {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '($ta_hrlyWage === 10)'`)})(($ta_hrlyWage === 10))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: ta.hrlyWage == 10")})(($ta_hrlyWage === 10))};
     }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
-    }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      {((cond) => {if (!cond) throw new Error("assertion failed: ta.hrlyWage == 10")})((ta.hrlyWage === 10))};
     }
   }
   return $Closure3;
@@ -94,6 +74,11 @@ module.exports = function({ B }) {
     async handle()  {
       const b = new B("ba");
       {((cond) => {if (!cond) throw new Error("assertion failed: b.sound == \"ba\"")})((b.sound === "ba"))};
+    }
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
   }
   return $Closure4;
@@ -712,9 +697,9 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const $c5 = context._lift(c5, ["set"]);
-        const $c5_x = context._lift(c5.x, []);
-        const $c5_y = context._lift(c5.y, []);
+        const $c5 = context._lift(c5);
+        const $c5_x = context._lift(c5.x);
+        const $c5_y = context._lift(c5.y);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure1.js")({ 
             $c5: ${$c5},
@@ -819,9 +804,9 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const $student_hrlyWage = context._lift(student.hrlyWage, []);
-        const $student_major = context._lift(student.major, []);
-        const $student_name = context._lift(student.name, []);
+        const $student_hrlyWage = context._lift(student.hrlyWage);
+        const $student_major = context._lift(student.major);
+        const $student_name = context._lift(student.name);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure2.js")({ 
             $student_hrlyWage: ${$student_hrlyWage},
@@ -880,7 +865,7 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const $ta_hrlyWage = context._lift(ta.hrlyWage, []);
+        const $ta_hrlyWage = context._lift(ta.hrlyWage);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure3.js")({ 
             $ta_hrlyWage: ${$ta_hrlyWage},

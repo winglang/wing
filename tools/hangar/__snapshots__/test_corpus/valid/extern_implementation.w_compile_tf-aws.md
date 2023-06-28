@@ -64,6 +64,8 @@ module.exports = function({  }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: uuid.length == 36")})((uuid.length === 36))};
       {((cond) => {if (!cond) throw new Error("assertion failed: Foo.getData() == \"Cool data!\"")})(((await Foo.getData()) === "Cool data!"))};
     }
+    constructor({  }) {
+    }
   }
   return Foo;
 }
@@ -303,7 +305,7 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const $f = context._lift(f, ["call"]);
+        const $f = context._lift(f);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure1.js")({ 
             $f: ${$f},
@@ -334,7 +336,7 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const $f = context._lift(f, ["print"]);
+        const $f = context._lift(f);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure2.js")({ 
             $f: ${$f},

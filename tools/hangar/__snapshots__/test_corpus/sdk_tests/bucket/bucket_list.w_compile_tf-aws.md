@@ -8,12 +8,12 @@ module.exports = function({ $b }) {
     }
     async handle()  {
       const jsonObj1 = Object.freeze({"key1":"value1"});
-      {((cond) => {if (!cond) throw new Error("assertion failed: b.list().length == 1")})(((await b.list()).length === 1))};
-      (await b.putJson("file1.json",jsonObj1));
-      (await b.put("file2.txt","Bar"));
-      (await b.put("random","Buz"));
-      const objs = (await b.list());
-      const objs2 = (await b.list("file"));
+      {((cond) => {if (!cond) throw new Error("assertion failed: b.list().length == 1")})(((await $b.list()).length === 1))};
+      (await $b.putJson("file1.json",jsonObj1));
+      (await $b.put("file2.txt","Bar"));
+      (await $b.put("random","Buz"));
+      const objs = (await $b.list());
+      const objs2 = (await $b.list("file"));
       {((cond) => {if (!cond) throw new Error("assertion failed: objs.contains(\"file1.json\")")})(objs.includes("file1.json"))};
       {((cond) => {if (!cond) throw new Error("assertion failed: objs.contains(\"file2.txt\")")})(objs.includes("file2.txt"))};
       {((cond) => {if (!cond) throw new Error("assertion failed: objs.contains(\"file3.txt\")")})(objs.includes("file3.txt"))};
@@ -24,6 +24,11 @@ module.exports = function({ $b }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: !objs2.contains(\"random\")")})((!objs2.includes("random")))};
       {((cond) => {if (!cond) throw new Error("assertion failed: objs.length == 4")})((objs.length === 4))};
       {((cond) => {if (!cond) throw new Error("assertion failed: objs2.length == 3")})((objs2.length === 3))};
+    }
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
   }
   return $Closure1;
@@ -226,7 +231,7 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const $b = context._lift(b, ["list", "putJson", "put", "put", "list", "list"]);
+        const $b = context._lift(b);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure1.js")({ 
             $b: ${$b},
@@ -245,7 +250,7 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(b, host, ["list", "putJson", "put", "put", "list", "list"]);
+          $Closure1._registerBindObject(b, host, ["list", "put", "putJson"]);
         }
         super._registerBind(host, ops);
       }

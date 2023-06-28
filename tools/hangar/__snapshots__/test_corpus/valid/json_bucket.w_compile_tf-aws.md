@@ -8,18 +8,12 @@ module.exports = function({ $b, $fileName }) {
     }
     async handle(msg)  {
       const x = (await $b.getJson($fileName));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(((((x)["persons"])[0])["fears"])[1] === "failure")'`)})((((((x)["persons"])[0])["fears"])[1] === "failure"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: x.get(\"persons\").getAt(0).get(\"fears\").getAt(1) == \"failure\"")})((((((x)["persons"])[0])["fears"])[1] === "failure"))};
     }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
-    }
-    async $inflight_init()  {
-    }
-    async handle(msg)  {
-      const x = (await b.getJson(fileName));
-      {((cond) => {if (!cond) throw new Error("assertion failed: x.get(\"persons\").getAt(0).get(\"fears\").getAt(1) == \"failure\"")})((((((x)["persons"])[0])["fears"])[1] === "failure"))};
     }
   }
   return $Closure1;
@@ -301,8 +295,8 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const $b = context._lift(b, ["getJson"]);
-        const $fileName = context._lift(fileName, []);
+        const $b = context._lift(b);
+        const $fileName = context._lift(fileName);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure1.js")({ 
             $b: ${$b},
@@ -335,10 +329,10 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const $b = context._lift(b, ["putJson"]);
-        const $fileName = context._lift(fileName, []);
-        const $getJson = context._lift(getJson, ["invoke"]);
-        const $j = context._lift(j, []);
+        const $b = context._lift(b);
+        const $fileName = context._lift(fileName);
+        const $getJson = context._lift(getJson);
+        const $j = context._lift(j);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure2.js")({ 
             $b: ${$b},

@@ -56,6 +56,11 @@ module.exports = function({  }) {
       const y = (await foo.getX());
       {((cond) => {if (!cond) throw new Error("assertion failed: y == 12")})((y === 12))};
     }
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
   }
   return $Closure3;
 }
@@ -431,7 +436,7 @@ class $Root extends $stdlib.std.Resource {
             this.display.hidden = true;
           }
           static _toInflightType(context) {
-            const $__parent_this_1_b = context._lift(__parent_this_1.b, ["put"]);
+            const $__parent_this_1_b = context._lift(__parent_this_1.b);
             return $stdlib.core.NodeJsCode.fromInline(`
               require("./inflight.$Closure1.js")({ 
                 $__parent_this_1_b: ${$__parent_this_1_b},
@@ -482,7 +487,7 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const $f = context._lift(f, ["invoke"]);
+        const $f = context._lift(f);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure2.js")({ 
             $f: ${$f},

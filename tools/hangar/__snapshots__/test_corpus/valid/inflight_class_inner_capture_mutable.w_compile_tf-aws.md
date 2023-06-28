@@ -9,10 +9,15 @@ module.exports = function({  }) {
     async handle()  {
       const y = [1];
       let i = 10;
-      const Inner = require("./inflight.Inner.js")({y, i});
+      const Inner = require("./inflight.Inner.js")({i, y});
       {((cond) => {if (!cond) throw new Error("assertion failed: new Inner().dang() == 11")})(((await new Inner().dang()) === 11))};
       {((cond) => {if (!cond) throw new Error("assertion failed: y.at(1) == 2")})(((await y.at(1)) === 2))};
       {((cond) => {if (!cond) throw new Error("assertion failed: i == 10")})((i === 10))};
+    }
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
   }
   return $Closure1;

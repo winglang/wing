@@ -12,6 +12,11 @@ module.exports = function({  }) {
       const y = (x)["b"];
       {((cond) => {if (!cond) throw new Error("assertion failed: y == 2")})((y === 2))};
     }
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
   }
   return $Closure1;
 }
@@ -30,6 +35,11 @@ module.exports = function({  }) {
       ((obj, args) => { obj[args[0]] = args[1]; })(x, [2,a]);
       const d = (x)[2];
       {((cond) => {if (!cond) throw new Error("assertion failed: d.get(\"c\") == 3")})(((d)["c"] === 3))};
+    }
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
   }
   return $Closure2;

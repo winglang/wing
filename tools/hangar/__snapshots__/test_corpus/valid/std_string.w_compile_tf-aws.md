@@ -7,7 +7,7 @@ module.exports = function({ $__s1_split_______at_1__, $_s1_concat_s2__, $s1_inde
     async $inflight_init()  {
     }
     async handle()  {
-      {console.log(`index of \"s\" in s1 is ${$s1_indexOf__s__}`)};
+      {console.log(String.raw({ raw: ["index of \"s\" in s1 is ", ""] }, $s1_indexOf__s__))};
       {console.log($__s1_split_______at_1__)};
       {console.log($_s1_concat_s2__)};
     }
@@ -15,13 +15,6 @@ module.exports = function({ $__s1_split_______at_1__, $_s1_concat_s2__, $s1_inde
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
-    }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      {console.log(String.raw({ raw: ["index of \"s\" in s1 is ", ""] }, s1.indexOf("s")))};
-      {console.log((await (await s1.split(" ")).at(1)))};
-      {console.log((await s1.concat(s2)))};
     }
   }
   return $Closure1;
@@ -167,9 +160,9 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const $__s1_split_______at_1__ = context._lift(((s1.split(" ")).at(1)), []);
-        const $_s1_concat_s2__ = context._lift((s1.concat(s2)), []);
-        const $s1_indexOf__s__ = context._lift(s1.indexOf("s"), []);
+        const $__s1_split_______at_1__ = context._lift(((s1.split(" ")).at(1)));
+        const $_s1_concat_s2__ = context._lift((s1.concat(s2)));
+        const $s1_indexOf__s__ = context._lift(s1.indexOf("s"));
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure1.js")({ 
             $__s1_split_______at_1__: ${$__s1_split_______at_1__},

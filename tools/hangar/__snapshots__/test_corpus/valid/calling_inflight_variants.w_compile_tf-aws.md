@@ -27,21 +27,14 @@ module.exports = function({ $foo }) {
     async $inflight_init()  {
     }
     async handle()  {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await $foo.callFn(true)) === 1)'`)})(((await $foo.callFn(true)) === 1))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await $foo.callFn(false)) === 2)'`)})(((await $foo.callFn(false)) === 2))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: foo.callFn(true) == 1")})(((await $foo.callFn(true)) === 1))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: foo.callFn(false) == 2")})(((await $foo.callFn(false)) === 2))};
       (await $foo.callFn2());
     }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
-    }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      {((cond) => {if (!cond) throw new Error("assertion failed: foo.callFn(true) == 1")})(((await foo.callFn(true)) === 1))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: foo.callFn(false) == 2")})(((await foo.callFn(false)) === 2))};
-      (await foo.callFn2());
     }
   }
   return $Closure2;
@@ -78,6 +71,9 @@ module.exports = function({  }) {
       const two = (await this.inflight2());
       {((cond) => {if (!cond) throw new Error("assertion failed: one == 1")})((one === 1))};
       {((cond) => {if (!cond) throw new Error("assertion failed: two == 2")})((two === 2))};
+    }
+    constructor({ $this_inflight1 }) {
+      this.$this_inflight1 = $this_inflight1;
     }
   }
   return Foo;
@@ -257,7 +253,7 @@ class $Root extends $stdlib.std.Resource {
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
             const client = new (${Foo._toInflightType(this).text})({
-              $this_inflight1: ${this._lift(this.inflight1, [])},
+              $this_inflight1: ${this._lift(this.inflight1)},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -278,7 +274,7 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const $foo = context._lift(foo, ["callFn", "callFn", "callFn2"]);
+        const $foo = context._lift(foo);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure2.js")({ 
             $foo: ${$foo},
@@ -297,7 +293,7 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure2._registerBindObject(foo, host, ["callFn", "callFn", "callFn2"]);
+          $Closure2._registerBindObject(foo, host, ["callFn", "callFn2"]);
         }
         super._registerBind(host, ops);
       }

@@ -8,24 +8,15 @@ module.exports = function({ $bucket, $res, $res_foo_inflightField }) {
     }
     async handle()  {
       const s = (await $res.myMethod());
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(s === "counter is: 101")'`)})((s === "counter is: 101"))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await $bucket.list()).length === 1)'`)})(((await $bucket.list()).length === 1))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '($res_foo_inflightField === 123)'`)})(($res_foo_inflightField === 123))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: s == \"counter is: 101\"")})((s === "counter is: 101"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: bucket.list().length == 1")})(((await $bucket.list()).length === 1))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: res.foo.inflightField == 123")})(($res_foo_inflightField === 123))};
       (await $res.testTypeAccess());
     }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
-    }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      const s = (await res.myMethod());
-      {((cond) => {if (!cond) throw new Error("assertion failed: s == \"counter is: 101\"")})((s === "counter is: 101"))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: bucket.list().length == 1")})(((await bucket.list()).length === 1))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: res.foo.inflightField == 123")})((res.foo.inflightField === 123))};
-      (await res.testTypeAccess());
     }
   }
   return $Closure1;
@@ -126,14 +117,14 @@ module.exports = function({ Foo, MyEnum }) {
     async myMethod()  {
       (await this.$this_foo.fooInc());
       const s = (await Foo.fooStatic());
-      (await this.b.put("foo",String.raw({ raw: ["counter is: ", ""] }, (await this.foo.fooGet()))));
-      return (await this.b.get("foo"));
+      (await this.$this_b.put("foo",String.raw({ raw: ["counter is: ", ""] }, (await this.$this_foo.fooGet()))));
+      return (await this.$this_b.get("foo"));
     }
     async testTypeAccess()  {
       if (true) {
         {((cond) => {if (!cond) throw new Error("assertion failed: Bar.barStatic() == \"bar static\"")})(((await Bar.barStatic()) === "bar static"))};
         {((cond) => {if (!cond) throw new Error("assertion failed: Foo.fooStatic() == \"foo static\"")})(((await Foo.fooStatic()) === "foo static"))};
-        {((cond) => {if (!cond) throw new Error("assertion failed: this.e == MyEnum.B")})((this.e === MyEnum.B))};
+        {((cond) => {if (!cond) throw new Error("assertion failed: this.e == MyEnum.B")})((this.$this_e === MyEnum.B))};
       }
     }
     constructor({ $this_b, $this_e, $this_foo }) {
@@ -451,12 +442,7 @@ module.exports = function({  }) {
         },
         "environment": {
           "variables": {
-            "BUCKET_NAME_584271ad": "${aws_s3_bucket.root_BigPublisher_b2_48CEFEE6.bucket}",
-            "BUCKET_NAME_584271ad_IS_PUBLIC": "false",
-            "BUCKET_NAME_7ef741f5": "${aws_s3_bucket.root_BigPublisher_cloudBucket_7AC8CA7E.bucket}",
-            "BUCKET_NAME_7ef741f5_IS_PUBLIC": "false",
             "QUEUE_URL_b0ba884c": "${aws_sqs_queue.root_BigPublisher_cloudQueue_0E439190.url}",
-            "TOPIC_ARN_eb0072ec": "${aws_sns_topic.root_BigPublisher_cloudTopic_B7FD0C9E.arn}",
             "WING_FUNCTION_NAME": "b2-on_create-OnMessage-a6a70fca-c87e0778",
             "WING_TARGET": "tf-aws"
           }
@@ -511,12 +497,8 @@ module.exports = function({  }) {
         },
         "environment": {
           "variables": {
-            "BUCKET_NAME_584271ad": "${aws_s3_bucket.root_BigPublisher_b2_48CEFEE6.bucket}",
-            "BUCKET_NAME_584271ad_IS_PUBLIC": "false",
             "BUCKET_NAME_7ef741f5": "${aws_s3_bucket.root_BigPublisher_cloudBucket_7AC8CA7E.bucket}",
             "BUCKET_NAME_7ef741f5_IS_PUBLIC": "false",
-            "QUEUE_URL_b0ba884c": "${aws_sqs_queue.root_BigPublisher_cloudQueue_0E439190.url}",
-            "TOPIC_ARN_eb0072ec": "${aws_sns_topic.root_BigPublisher_cloudTopic_B7FD0C9E.arn}",
             "WING_FUNCTION_NAME": "cloud-Topic-OnMessage-113c9059-c81d1d09",
             "WING_TARGET": "tf-aws"
           }
@@ -932,7 +914,7 @@ class $Root extends $stdlib.std.Resource {
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
             const client = new (${Foo._toInflightType(this).text})({
-              $this_c: ${this._lift(this.c, ["inc", "dec", "peek", "inc"])},
+              $this_c: ${this._lift(this.c)},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -941,7 +923,7 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          Foo._registerBindObject(this.c, host, ["inc", "dec", "peek", "inc"]);
+          Foo._registerBindObject(this.c, host, ["dec", "inc", "peek"]);
         }
         super._registerBind(host, ops);
       }
@@ -976,9 +958,9 @@ class $Root extends $stdlib.std.Resource {
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
             const client = new (${Bar._toInflightType(this).text})({
-              $this_b: ${this._lift(this.b, ["put", "get"])},
-              $this_e: ${this._lift(this.e, [])},
-              $this_foo: ${this._lift(this.foo, ["fooInc", "fooGet"])},
+              $this_b: ${this._lift(this.b)},
+              $this_e: ${this._lift(this.e)},
+              $this_foo: ${this._lift(this.foo)},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -987,8 +969,8 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("myMethod")) {
-          Bar._registerBindObject(this.b, host, ["put", "get"]);
-          Bar._registerBindObject(this.foo, host, ["fooInc", "fooGet"]);
+          Bar._registerBindObject(this.b, host, ["get", "put"]);
+          Bar._registerBindObject(this.foo, host, ["fooGet", "fooInc"]);
         }
         if (ops.includes("testTypeAccess")) {
           Bar._registerBindObject(this.e, host, []);
@@ -1003,9 +985,9 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const $bucket = context._lift(bucket, ["list"]);
-        const $res = context._lift(res, ["myMethod", "testTypeAccess"]);
-        const $res_foo_inflightField = context._lift(res.foo.inflightField, []);
+        const $bucket = context._lift(bucket);
+        const $res = context._lift(res);
+        const $res_foo_inflightField = context._lift(res.foo.inflightField);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure1.js")({ 
             $bucket: ${$bucket},
@@ -1049,7 +1031,7 @@ class $Root extends $stdlib.std.Resource {
             this.display.hidden = true;
           }
           static _toInflightType(context) {
-            const $__parent_this_2_b = context._lift(__parent_this_2.b, ["put"]);
+            const $__parent_this_2_b = context._lift(__parent_this_2.b);
             return $stdlib.core.NodeJsCode.fromInline(`
               require("./inflight.$Closure2.js")({ 
                 $__parent_this_2_b: ${$__parent_this_2_b},
@@ -1082,7 +1064,7 @@ class $Root extends $stdlib.std.Resource {
             this.display.hidden = true;
           }
           static _toInflightType(context) {
-            const $__parent_this_3_b = context._lift(__parent_this_3.b, ["put"]);
+            const $__parent_this_3_b = context._lift(__parent_this_3.b);
             return $stdlib.core.NodeJsCode.fromInline(`
               require("./inflight.$Closure3.js")({ 
                 $__parent_this_3_b: ${$__parent_this_3_b},
@@ -1115,7 +1097,7 @@ class $Root extends $stdlib.std.Resource {
             this.display.hidden = true;
           }
           static _toInflightType(context) {
-            const $__parent_this_4_q = context._lift(__parent_this_4.q, ["push"]);
+            const $__parent_this_4_q = context._lift(__parent_this_4.q);
             return $stdlib.core.NodeJsCode.fromInline(`
               require("./inflight.$Closure4.js")({ 
                 $__parent_this_4_q: ${$__parent_this_4_q},
@@ -1151,10 +1133,10 @@ class $Root extends $stdlib.std.Resource {
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
             const client = new (${BigPublisher._toInflightType(this).text})({
-              $this_b: ${this._lift(this.b, ["list"])},
-              $this_b2: ${this._lift(this.b2, ["put"])},
-              $this_q: ${this._lift(this.q, ["push"])},
-              $this_t: ${this._lift(this.t, ["publish"])},
+              $this_b: ${this._lift(this.b)},
+              $this_b2: ${this._lift(this.b2)},
+              $this_q: ${this._lift(this.q)},
+              $this_t: ${this._lift(this.t)},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -1180,7 +1162,7 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const $bigOlPublisher = context._lift(bigOlPublisher, ["publish", "getObjectCount"]);
+        const $bigOlPublisher = context._lift(bigOlPublisher);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure5.js")({ 
             $bigOlPublisher: ${$bigOlPublisher},
@@ -1199,7 +1181,7 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure5._registerBindObject(bigOlPublisher, host, ["publish", "getObjectCount"]);
+          $Closure5._registerBindObject(bigOlPublisher, host, ["getObjectCount", "publish"]);
         }
         super._registerBind(host, ops);
       }

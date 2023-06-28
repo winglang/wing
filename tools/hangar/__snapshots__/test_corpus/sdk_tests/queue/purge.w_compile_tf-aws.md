@@ -23,12 +23,12 @@ module.exports = function({ $js, $q }) {
       }
       ;
       {((cond) => {if (!cond) throw new Error("assertion failed: wait(inflight (): bool => { \n    return q.approxSize() == 3;\n  })")})((await wait(async () =>  {
-        return ((await q.approxSize()) === 3);
+        return ((await $q.approxSize()) === 3);
       }
       )))};
-      (await q.purge());
+      (await $q.purge());
       {((cond) => {if (!cond) throw new Error("assertion failed: wait(inflight (): bool => {\n    return q.approxSize() == 0;\n  })")})((await wait(async () =>  {
-        return ((await q.approxSize()) === 0);
+        return ((await $q.approxSize()) === 0);
       }
       )))};
     }
@@ -233,8 +233,8 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const $js = context._lift(js, ["sleep"]);
-        const $q = context._lift(q, ["push", "push", "push", "approxSize", "purge", "approxSize"]);
+        const $js = context._lift(js);
+        const $q = context._lift(q);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure1.js")({ 
             $js: ${$js},
@@ -255,7 +255,7 @@ class $Root extends $stdlib.std.Resource {
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
           $Closure1._registerBindObject(js, host, ["sleep"]);
-          $Closure1._registerBindObject(q, host, ["push", "push", "push", "approxSize", "purge", "approxSize"]);
+          $Closure1._registerBindObject(q, host, ["approxSize", "purge", "push"]);
         }
         super._registerBind(host, ops);
       }

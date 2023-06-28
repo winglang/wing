@@ -11,21 +11,14 @@ module.exports = function({ $b, $jsonObj1, std_Json }) {
     async $inflight_init()  {
     }
     async handle()  {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await $b.list()).length === 2)'`)})(((await $b.list()).length === 2))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(((args) => { return JSON.stringify(args[0], null, args[1]) })([(await $b.getJson("file1.json"))]) === ((args) => { return JSON.stringify(args[0], null, args[1]) })([$jsonObj1]))'`)})((((args) => { return JSON.stringify(args[0], null, args[1]) })([(await $b.getJson("file1.json"))]) === ((args) => { return JSON.stringify(args[0], null, args[1]) })([$jsonObj1])))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await $b.get("file2.txt")) === "Bar")'`)})(((await $b.get("file2.txt")) === "Bar"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: b.list().length == 2")})(((await $b.list()).length === 2))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: Json.stringify(b.getJson(\"file1.json\")) == Json.stringify(jsonObj1)")})((((args) => { return JSON.stringify(args[0], null, args[1]) })([(await $b.getJson("file1.json"))]) === ((args) => { return JSON.stringify(args[0], null, args[1]) })([$jsonObj1])))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: b.get(\"file2.txt\") == \"Bar\"")})(((await $b.get("file2.txt")) === "Bar"))};
     }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
-    }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      {((cond) => {if (!cond) throw new Error("assertion failed: b.list().length == 2")})(((await b.list()).length === 2))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: Json.stringify(b.getJson(\"file1.json\")) == Json.stringify(jsonObj1)")})((((args) => { return JSON.stringify(args[0], null, args[1]) })([(await b.getJson("file1.json"))]) === ((args) => { return JSON.stringify(args[0], null, args[1]) })([jsonObj1])))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: b.get(\"file2.txt\") == \"Bar\"")})(((await b.get("file2.txt")) === "Bar"))};
     }
   }
   return $Closure1;
@@ -239,8 +232,8 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const $b = context._lift(b, ["list", "getJson", "get"]);
-        const $jsonObj1 = context._lift(jsonObj1, []);
+        const $b = context._lift(b);
+        const $jsonObj1 = context._lift(jsonObj1);
         const lifted_std_Json = std.Json._toInflightType(context).text;
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure1.js")({ 
@@ -262,7 +255,7 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(b, host, ["list", "getJson", "get"]);
+          $Closure1._registerBindObject(b, host, ["get", "getJson", "list"]);
           $Closure1._registerBindObject(jsonObj1, host, []);
         }
         super._registerBind(host, ops);
