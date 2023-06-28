@@ -40,19 +40,12 @@ export class Util {
    * @param arr The set of numbers.
    */
   public static min(arr: any): number {
-    let minValue: number | undefined;
-
-    for (const num of arr) {
-      if (minValue === undefined || num < minValue) {
-        minValue = num;
-      }
+    if (arr instanceof Set) {
+      const arrAsArray = Array.from(arr);
+      return Math.min(...arrAsArray);
     }
 
-    if (minValue === undefined) {
-      throw new Error("The set is empty.");
-    }
-
-    return minValue;
+    throw new Error('The argument is not a Set');
   }
 
   /**
@@ -60,20 +53,15 @@ export class Util {
    * @param arr The set of numbers.
    */
   public static max(arr: any): number {
-    let maxValue: number | undefined;
-
-    for (const value of arr) {
-      if (maxValue === undefined || value > maxValue) {
-        maxValue = value;
-      }
+    if (arr instanceof Set) {
+      // Convert the Set to an array
+      const arrAsArray = Array.from(arr);
+      // Find the maximum value in the array
+      return Math.max(...arrAsArray);
     }
 
-    if (maxValue === undefined) {
-      throw new Error("The set is empty.");
-    }
-
-    return maxValue;
+    throw new Error('The argument is not a Set');
   }
 
-  private constructor() {}
+  private constructor() { }
 }
