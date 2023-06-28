@@ -37,21 +37,16 @@ Object {
 `;
 
 exports[`csharp snapshot 2`] = `
-" \`Inspect\` <a name=\\"Inspect\\" id=\\"@aws-cdk/aws-ecr.CfnPublicRepository.inspect\\"></a>
-
+"**<code>Inspect</code>**
 \`\`\`csharp
 private void Inspect(TreeInspector Inspector)
 \`\`\`
 
 Examines the CloudFormation resource and discloses attributes.
 
-# \`Inspector\`<sup>Required</sup> <a name=\\"Inspector\\" id=\\"@aws-cdk/aws-ecr.CfnPublicRepository.inspect.parameter.inspector\\"></a>
-
-- *Type:* Amazon.CDK.TreeInspector
-
-tree inspector to collect and process attributes.
-
----
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>Inspector</code> | <code>Amazon.CDK.TreeInspector</code> | - tree inspector to collect and process attributes. |
 "
 `;
 
@@ -92,21 +87,16 @@ Object {
 `;
 
 exports[`go snapshot 2`] = `
-" \`Inspect\` <a name=\\"Inspect\\" id=\\"@aws-cdk/aws-ecr.CfnPublicRepository.inspect\\"></a>
-
+"**<code>Inspect</code>**
 \`\`\`go
 func Inspect(inspector TreeInspector)
 \`\`\`
 
 Examines the CloudFormation resource and discloses attributes.
 
-# \`inspector\`<sup>Required</sup> <a name=\\"inspector\\" id=\\"@aws-cdk/aws-ecr.CfnPublicRepository.inspect.parameter.inspector\\"></a>
-
-- *Type:* github.com/aws/aws-cdk-go/awscdk/awscdkcore.TreeInspector
-
-tree inspector to collect and process attributes.
-
----
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>inspector</code> | <code>github.com/aws/aws-cdk-go/awscdk/awscdkcore.TreeInspector</code> | - tree inspector to collect and process attributes. |
 "
 `;
 
@@ -147,21 +137,16 @@ Object {
 `;
 
 exports[`java snapshot 2`] = `
-" \`inspect\` <a name=\\"inspect\\" id=\\"@aws-cdk/aws-ecr.CfnPublicRepository.inspect\\"></a>
-
+"**<code>inspect</code>**
 \`\`\`java
 public void inspect(TreeInspector inspector)
 \`\`\`
 
 Examines the CloudFormation resource and discloses attributes.
 
-# \`inspector\`<sup>Required</sup> <a name=\\"inspector\\" id=\\"@aws-cdk/aws-ecr.CfnPublicRepository.inspect.parameter.inspector\\"></a>
-
-- *Type:* software.amazon.awscdk.core.TreeInspector
-
-tree inspector to collect and process attributes.
-
----
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>inspector</code> | <code>software.amazon.awscdk.core.TreeInspector</code> | - tree inspector to collect and process attributes. |
 "
 `;
 
@@ -204,8 +189,7 @@ Object {
 `;
 
 exports[`python snapshot 2`] = `
-" \`inspect\` <a name=\\"inspect\\" id=\\"@aws-cdk/aws-ecr.CfnPublicRepository.inspect\\"></a>
-
+"**<code>inspect</code>**
 \`\`\`python
 def inspect(
   inspector: TreeInspector
@@ -214,13 +198,9 @@ def inspect(
 
 Examines the CloudFormation resource and discloses attributes.
 
-# \`inspector\`<sup>Required</sup> <a name=\\"inspector\\" id=\\"@aws-cdk/aws-ecr.CfnPublicRepository.inspect.parameter.inspector\\"></a>
-
-- *Type:* aws_cdk.core.TreeInspector
-
-tree inspector to collect and process attributes.
-
----
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>inspector</code> | <code>aws_cdk.core.TreeInspector</code> | - tree inspector to collect and process attributes. |
 "
 `;
 
@@ -261,21 +241,16 @@ Object {
 `;
 
 exports[`typescript snapshot 2`] = `
-" \`inspect\` <a name=\\"inspect\\" id=\\"@aws-cdk/aws-ecr.CfnPublicRepository.inspect\\"></a>
-
+"**<code>inspect</code>**
 \`\`\`typescript
 public inspect(inspector: TreeInspector): void
 \`\`\`
 
 Examines the CloudFormation resource and discloses attributes.
 
-# \`inspector\`<sup>Required</sup> <a name=\\"inspector\\" id=\\"@aws-cdk/aws-ecr.CfnPublicRepository.inspect.parameter.inspector\\"></a>
-
-- *Type:* @aws-cdk/core.TreeInspector
-
-tree inspector to collect and process attributes.
-
----
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>inspector</code> | <code>@aws-cdk/core.TreeInspector</code> | - tree inspector to collect and process attributes. |
 "
 `;
 
@@ -316,20 +291,15 @@ Object {
 `;
 
 exports[`wing snapshot 2`] = `
-" \`inspect\` <a name=\\"inspect\\" id=\\"@aws-cdk/aws-ecr.CfnPublicRepository.inspect\\"></a>
-
+"**<code>inspect</code>**
 \`\`\`wing
 inspect(inspector: TreeInspector): void
 \`\`\`
 
 Examines the CloudFormation resource and discloses attributes.
 
-# \`inspector\`<sup>Required</sup> <a name=\\"inspector\\" id=\\"@aws-cdk/aws-ecr.CfnPublicRepository.inspect.parameter.inspector\\"></a>
-
-- *Type:* @aws-cdk/core.TreeInspector
-
-tree inspector to collect and process attributes.
-
----
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>inspector</code> | <code>@aws-cdk/core.TreeInspector</code> | - tree inspector to collect and process attributes. |
 "
 `;

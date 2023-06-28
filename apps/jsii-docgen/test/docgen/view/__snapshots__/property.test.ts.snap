@@ -21,13 +21,12 @@ Object {
 `;
 
 exports[`csharp snapshot 2`] = `
-" \`RepositoryCatalogData\`<sup>Optional</sup> <a name=\\"RepositoryCatalogData\\" id=\\"@aws-cdk/aws-ecr.CfnPublicRepositoryProps.property.repositoryCatalogData\\"></a>
-
+"**<code>RepositoryCatalogData</code>**
 \`\`\`csharp
 public object RepositoryCatalogData { get; set; }
 \`\`\`
 
-- *Type:* object
+- *Type:* <code>object</code>
 
 \`AWS::ECR::PublicRepository.RepositoryCatalogData\`.
 
@@ -58,13 +57,12 @@ Object {
 `;
 
 exports[`go snapshot 2`] = `
-" \`RepositoryCatalogData\`<sup>Optional</sup> <a name=\\"RepositoryCatalogData\\" id=\\"@aws-cdk/aws-ecr.CfnPublicRepositoryProps.property.repositoryCatalogData\\"></a>
-
+"**<code>RepositoryCatalogData</code>**
 \`\`\`go
 RepositoryCatalogData interface{}
 \`\`\`
 
-- *Type:* interface{}
+- *Type:* <code>interface{}</code>
 
 \`AWS::ECR::PublicRepository.RepositoryCatalogData\`.
 
@@ -95,13 +93,12 @@ Object {
 `;
 
 exports[`java snapshot 2`] = `
-" \`repositoryCatalogData\`<sup>Optional</sup> <a name=\\"repositoryCatalogData\\" id=\\"@aws-cdk/aws-ecr.CfnPublicRepositoryProps.property.repositoryCatalogData\\"></a>
-
+"**<code>repositoryCatalogData</code>**
 \`\`\`java
 public java.lang.Object getRepositoryCatalogData();
 \`\`\`
 
-- *Type:* java.lang.Object
+- *Type:* <code>java.lang.Object</code>
 
 \`AWS::ECR::PublicRepository.RepositoryCatalogData\`.
 
@@ -132,13 +129,12 @@ Object {
 `;
 
 exports[`python snapshot 2`] = `
-" \`repository_catalog_data\`<sup>Optional</sup> <a name=\\"repository_catalog_data\\" id=\\"@aws-cdk/aws-ecr.CfnPublicRepositoryProps.property.repositoryCatalogData\\"></a>
-
+"**<code>repository_catalog_data</code>**
 \`\`\`python
 repository_catalog_data: typing.Any
 \`\`\`
 
-- *Type:* typing.Any
+- *Type:* <code>typing.Any</code>
 
 \`AWS::ECR::PublicRepository.RepositoryCatalogData\`.
 
@@ -169,13 +165,12 @@ Object {
 `;
 
 exports[`typescript snapshot 2`] = `
-" \`repositoryCatalogData\`<sup>Optional</sup> <a name=\\"repositoryCatalogData\\" id=\\"@aws-cdk/aws-ecr.CfnPublicRepositoryProps.property.repositoryCatalogData\\"></a>
-
+"**<code>repositoryCatalogData</code>**
 \`\`\`typescript
 public readonly repositoryCatalogData: any;
 \`\`\`
 
-- *Type:* any
+- *Type:* <code>any</code>
 
 \`AWS::ECR::PublicRepository.RepositoryCatalogData\`.
 
@@ -206,13 +201,12 @@ Object {
 `;
 
 exports[`wing snapshot 2`] = `
-" \`repositoryCatalogData\`<sup>Optional</sup> <a name=\\"repositoryCatalogData\\" id=\\"@aws-cdk/aws-ecr.CfnPublicRepositoryProps.property.repositoryCatalogData\\"></a>
-
+"**<code>repositoryCatalogData</code>**
 \`\`\`wing
 repositoryCatalogData: any;
 \`\`\`
 
-- *Type:* any
+- *Type:* <code>any</code>
 
 \`AWS::ECR::PublicRepository.RepositoryCatalogData\`.
 

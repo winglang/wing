@@ -62,16 +62,15 @@ Authorization token to access private ECR repositories in the current environmen
 > [https://docs.aws.amazon.com/AmazonECR/latest/userguide/registry_auth.html](https://docs.aws.amazon.com/AmazonECR/latest/userguide/registry_auth.html)
 
 
-# Static Functions <a name=\\"Static Functions\\" id=\\"Static Functions\\"></a>
+# Static Methods <a name=\\"Static Methods\\" id=\\"Static Methods\\"></a>
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href=\\"#@aws-cdk/aws-ecr.AuthorizationToken.grantRead\\">GrantRead</a></code> | Grant access to retrieve an authorization token. |
+| <code>GrantRead</code> | Grant access to retrieve an authorization token. |
 
 ---
 
-## \`GrantRead\` <a name=\\"GrantRead\\" id=\\"@aws-cdk/aws-ecr.AuthorizationToken.grantRead\\"></a>
-
+**<code>GrantRead</code>**
 \`\`\`csharp
 using Amazon.CDK.AWS.ECR;
 
@@ -80,11 +79,9 @@ AuthorizationToken.GrantRead(IGrantable Grantee);
 
 Grant access to retrieve an authorization token.
 
-### \`Grantee\`<sup>Required</sup> <a name=\\"Grantee\\" id=\\"@aws-cdk/aws-ecr.AuthorizationToken.grantRead.parameter.grantee\\"></a>
-
-- *Type:* Amazon.CDK.AWS.IAM.IGrantable
-
----
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>Grantee</code> | <code>Amazon.CDK.AWS.IAM.IGrantable</code> | *No description.* |
 
 
 "
@@ -152,16 +149,15 @@ Authorization token to access private ECR repositories in the current environmen
 > [https://docs.aws.amazon.com/AmazonECR/latest/userguide/registry_auth.html](https://docs.aws.amazon.com/AmazonECR/latest/userguide/registry_auth.html)
 
 
-# Static Functions <a name=\\"Static Functions\\" id=\\"Static Functions\\"></a>
+# Static Methods <a name=\\"Static Methods\\" id=\\"Static Methods\\"></a>
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href=\\"#@aws-cdk/aws-ecr.AuthorizationToken.grantRead\\">GrantRead</a></code> | Grant access to retrieve an authorization token. |
+| <code>GrantRead</code> | Grant access to retrieve an authorization token. |
 
 ---
 
-## \`GrantRead\` <a name=\\"GrantRead\\" id=\\"@aws-cdk/aws-ecr.AuthorizationToken.grantRead\\"></a>
-
+**<code>GrantRead</code>**
 \`\`\`go
 import \\"github.com/aws/aws-cdk-go/awscdkawsecr\\"
 
@@ -170,11 +166,9 @@ awscdkawsecr.AuthorizationToken_GrantRead(grantee IGrantable)
 
 Grant access to retrieve an authorization token.
 
-### \`grantee\`<sup>Required</sup> <a name=\\"grantee\\" id=\\"@aws-cdk/aws-ecr.AuthorizationToken.grantRead.parameter.grantee\\"></a>
-
-- *Type:* github.com/aws/aws-cdk-go/awscdk/awsiam/awscdkawsiam.IGrantable
-
----
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>grantee</code> | <code>github.com/aws/aws-cdk-go/awscdk/awsiam/awscdkawsiam.IGrantable</code> | *No description.* |
 
 
 "
@@ -242,16 +236,15 @@ Authorization token to access private ECR repositories in the current environmen
 > [https://docs.aws.amazon.com/AmazonECR/latest/userguide/registry_auth.html](https://docs.aws.amazon.com/AmazonECR/latest/userguide/registry_auth.html)
 
 
-# Static Functions <a name=\\"Static Functions\\" id=\\"Static Functions\\"></a>
+# Static Methods <a name=\\"Static Methods\\" id=\\"Static Methods\\"></a>
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href=\\"#@aws-cdk/aws-ecr.AuthorizationToken.grantRead\\">grantRead</a></code> | Grant access to retrieve an authorization token. |
+| <code>grantRead</code> | Grant access to retrieve an authorization token. |
 
 ---
 
-## \`grantRead\` <a name=\\"grantRead\\" id=\\"@aws-cdk/aws-ecr.AuthorizationToken.grantRead\\"></a>
-
+**<code>grantRead</code>**
 \`\`\`java
 import software.amazon.awscdk.services.ecr.AuthorizationToken;
 
@@ -260,11 +253,9 @@ AuthorizationToken.grantRead(IGrantable grantee)
 
 Grant access to retrieve an authorization token.
 
-### \`grantee\`<sup>Required</sup> <a name=\\"grantee\\" id=\\"@aws-cdk/aws-ecr.AuthorizationToken.grantRead.parameter.grantee\\"></a>
-
-- *Type:* software.amazon.awscdk.services.iam.IGrantable
-
----
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>grantee</code> | <code>software.amazon.awscdk.services.iam.IGrantable</code> | *No description.* |
 
 
 "
@@ -334,16 +325,15 @@ Authorization token to access private ECR repositories in the current environmen
 > [https://docs.aws.amazon.com/AmazonECR/latest/userguide/registry_auth.html](https://docs.aws.amazon.com/AmazonECR/latest/userguide/registry_auth.html)
 
 
-# Static Functions <a name=\\"Static Functions\\" id=\\"Static Functions\\"></a>
+# Static Methods <a name=\\"Static Methods\\" id=\\"Static Methods\\"></a>
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href=\\"#@aws-cdk/aws-ecr.AuthorizationToken.grantRead\\">grant_read</a></code> | Grant access to retrieve an authorization token. |
+| <code>grant_read</code> | Grant access to retrieve an authorization token. |
 
 ---
 
-## \`grant_read\` <a name=\\"grant_read\\" id=\\"@aws-cdk/aws-ecr.AuthorizationToken.grantRead\\"></a>
-
+**<code>grant_read</code>**
 \`\`\`python
 import aws_cdk.aws_ecr
 
@@ -354,11 +344,9 @@ aws_cdk.aws_ecr.AuthorizationToken.grant_read(
 
 Grant access to retrieve an authorization token.
 
-### \`grantee\`<sup>Required</sup> <a name=\\"grantee\\" id=\\"@aws-cdk/aws-ecr.AuthorizationToken.grantRead.parameter.grantee\\"></a>
-
-- *Type:* aws_cdk.aws_iam.IGrantable
-
----
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>grantee</code> | <code>aws_cdk.aws_iam.IGrantable</code> | *No description.* |
 
 
 "
@@ -426,16 +414,15 @@ Authorization token to access private ECR repositories in the current environmen
 > [https://docs.aws.amazon.com/AmazonECR/latest/userguide/registry_auth.html](https://docs.aws.amazon.com/AmazonECR/latest/userguide/registry_auth.html)
 
 
-# Static Functions <a name=\\"Static Functions\\" id=\\"Static Functions\\"></a>
+# Static Methods <a name=\\"Static Methods\\" id=\\"Static Methods\\"></a>
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href=\\"#@aws-cdk/aws-ecr.AuthorizationToken.grantRead\\">grantRead</a></code> | Grant access to retrieve an authorization token. |
+| <code>grantRead</code> | Grant access to retrieve an authorization token. |
 
 ---
 
-## \`grantRead\` <a name=\\"grantRead\\" id=\\"@aws-cdk/aws-ecr.AuthorizationToken.grantRead\\"></a>
-
+**<code>grantRead</code>**
 \`\`\`typescript
 import { AuthorizationToken } from '@aws-cdk/aws-ecr'
 
@@ -444,11 +431,9 @@ AuthorizationToken.grantRead(grantee: IGrantable)
 
 Grant access to retrieve an authorization token.
 
-### \`grantee\`<sup>Required</sup> <a name=\\"grantee\\" id=\\"@aws-cdk/aws-ecr.AuthorizationToken.grantRead.parameter.grantee\\"></a>
-
-- *Type:* @aws-cdk/aws-iam.IGrantable
-
----
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>grantee</code> | <code>@aws-cdk/aws-iam.IGrantable</code> | *No description.* |
 
 
 "
@@ -516,16 +501,15 @@ Authorization token to access private ECR repositories in the current environmen
 > [https://docs.aws.amazon.com/AmazonECR/latest/userguide/registry_auth.html](https://docs.aws.amazon.com/AmazonECR/latest/userguide/registry_auth.html)
 
 
-# Static Functions <a name=\\"Static Functions\\" id=\\"Static Functions\\"></a>
+# Static Methods <a name=\\"Static Methods\\" id=\\"Static Methods\\"></a>
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href=\\"#@aws-cdk/aws-ecr.AuthorizationToken.grantRead\\">grantRead</a></code> | Grant access to retrieve an authorization token. |
+| <code>grantRead</code> | Grant access to retrieve an authorization token. |
 
 ---
 
-## \`grantRead\` <a name=\\"grantRead\\" id=\\"@aws-cdk/aws-ecr.AuthorizationToken.grantRead\\"></a>
-
+**<code>grantRead</code>**
 \`\`\`wing
 bring { AuthorizationToken } from \\"@aws-cdk/aws-ecr\\"
 
@@ -534,11 +518,9 @@ AuthorizationToken.grantRead(grantee: IGrantable)
 
 Grant access to retrieve an authorization token.
 
-### \`grantee\`<sup>Required</sup> <a name=\\"grantee\\" id=\\"@aws-cdk/aws-ecr.AuthorizationToken.grantRead.parameter.grantee\\"></a>
-
-- *Type:* @aws-cdk/aws-iam.IGrantable
-
----
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>grantee</code> | <code>@aws-cdk/aws-iam.IGrantable</code> | *No description.* |
 
 
 "

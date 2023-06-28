@@ -128,22 +128,21 @@ new CfnPublicRepositoryProps {
 
 # Properties <a name=\\"Properties\\" id=\\"Properties\\"></a>
 
-| **Name** | **Type** | **Description** |
+| **Property** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href=\\"#@aws-cdk/aws-ecr.CfnPublicRepositoryProps.property.repositoryCatalogData\\">RepositoryCatalogData</a></code> | <code>object</code> | \`AWS::ECR::PublicRepository.RepositoryCatalogData\`. |
-| <code><a href=\\"#@aws-cdk/aws-ecr.CfnPublicRepositoryProps.property.repositoryName\\">RepositoryName</a></code> | <code>string</code> | \`AWS::ECR::PublicRepository.RepositoryName\`. |
-| <code><a href=\\"#@aws-cdk/aws-ecr.CfnPublicRepositoryProps.property.repositoryPolicyText\\">RepositoryPolicyText</a></code> | <code>object</code> | \`AWS::ECR::PublicRepository.RepositoryPolicyText\`. |
-| <code><a href=\\"#@aws-cdk/aws-ecr.CfnPublicRepositoryProps.property.tags\\">Tags</a></code> | <code>Amazon.CDK.CfnTag[]</code> | \`AWS::ECR::PublicRepository.Tags\`. |
+| <code>RepositoryCatalogData</code> | <code>object</code> | \`AWS::ECR::PublicRepository.RepositoryCatalogData\`. |
+| <code>RepositoryName</code> | <code>string</code> | \`AWS::ECR::PublicRepository.RepositoryName\`. |
+| <code>RepositoryPolicyText</code> | <code>object</code> | \`AWS::ECR::PublicRepository.RepositoryPolicyText\`. |
+| <code>Tags</code> | <code>Amazon.CDK.CfnTag[]</code> | \`AWS::ECR::PublicRepository.Tags\`. |
 
 ---
 
-## \`RepositoryCatalogData\`<sup>Optional</sup> <a name=\\"RepositoryCatalogData\\" id=\\"@aws-cdk/aws-ecr.CfnPublicRepositoryProps.property.repositoryCatalogData\\"></a>
-
+**<code>RepositoryCatalogData</code>**
 \`\`\`csharp
 public object RepositoryCatalogData { get; set; }
 \`\`\`
 
-- *Type:* object
+- *Type:* <code>object</code>
 
 \`AWS::ECR::PublicRepository.RepositoryCatalogData\`.
 
@@ -151,13 +150,12 @@ public object RepositoryCatalogData { get; set; }
 
 ---
 
-## \`RepositoryName\`<sup>Optional</sup> <a name=\\"RepositoryName\\" id=\\"@aws-cdk/aws-ecr.CfnPublicRepositoryProps.property.repositoryName\\"></a>
-
+**<code>RepositoryName</code>**
 \`\`\`csharp
 public string RepositoryName { get; set; }
 \`\`\`
 
-- *Type:* string
+- *Type:* <code>string</code>
 
 \`AWS::ECR::PublicRepository.RepositoryName\`.
 
@@ -165,13 +163,12 @@ public string RepositoryName { get; set; }
 
 ---
 
-## \`RepositoryPolicyText\`<sup>Optional</sup> <a name=\\"RepositoryPolicyText\\" id=\\"@aws-cdk/aws-ecr.CfnPublicRepositoryProps.property.repositoryPolicyText\\"></a>
-
+**<code>RepositoryPolicyText</code>**
 \`\`\`csharp
 public object RepositoryPolicyText { get; set; }
 \`\`\`
 
-- *Type:* object
+- *Type:* <code>object</code>
 
 \`AWS::ECR::PublicRepository.RepositoryPolicyText\`.
 
@@ -179,13 +176,12 @@ public object RepositoryPolicyText { get; set; }
 
 ---
 
-## \`Tags\`<sup>Optional</sup> <a name=\\"Tags\\" id=\\"@aws-cdk/aws-ecr.CfnPublicRepositoryProps.property.tags\\"></a>
-
+**<code>Tags</code>**
 \`\`\`csharp
 public CfnTag[] Tags { get; set; }
 \`\`\`
 
-- *Type:* Amazon.CDK.CfnTag[]
+- *Type:* <code>Amazon.CDK.CfnTag[]</code>
 
 \`AWS::ECR::PublicRepository.Tags\`.
 
@@ -323,22 +319,21 @@ import \\"github.com/aws/aws-cdk-go/awscdkawsecr\\"
 
 # Properties <a name=\\"Properties\\" id=\\"Properties\\"></a>
 
-| **Name** | **Type** | **Description** |
+| **Property** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href=\\"#@aws-cdk/aws-ecr.CfnPublicRepositoryProps.property.repositoryCatalogData\\">RepositoryCatalogData</a></code> | <code>interface{}</code> | \`AWS::ECR::PublicRepository.RepositoryCatalogData\`. |
-| <code><a href=\\"#@aws-cdk/aws-ecr.CfnPublicRepositoryProps.property.repositoryName\\">RepositoryName</a></code> | <code>*string</code> | \`AWS::ECR::PublicRepository.RepositoryName\`. |
-| <code><a href=\\"#@aws-cdk/aws-ecr.CfnPublicRepositoryProps.property.repositoryPolicyText\\">RepositoryPolicyText</a></code> | <code>interface{}</code> | \`AWS::ECR::PublicRepository.RepositoryPolicyText\`. |
-| <code><a href=\\"#@aws-cdk/aws-ecr.CfnPublicRepositoryProps.property.tags\\">Tags</a></code> | <code>*[]github.com/aws/aws-cdk-go/awscdk/awscdkcore.CfnTag</code> | \`AWS::ECR::PublicRepository.Tags\`. |
+| <code>RepositoryCatalogData</code> | <code>interface{}</code> | \`AWS::ECR::PublicRepository.RepositoryCatalogData\`. |
+| <code>RepositoryName</code> | <code>*string</code> | \`AWS::ECR::PublicRepository.RepositoryName\`. |
+| <code>RepositoryPolicyText</code> | <code>interface{}</code> | \`AWS::ECR::PublicRepository.RepositoryPolicyText\`. |
+| <code>Tags</code> | <code>*[]github.com/aws/aws-cdk-go/awscdk/awscdkcore.CfnTag</code> | \`AWS::ECR::PublicRepository.Tags\`. |
 
 ---
 
-## \`RepositoryCatalogData\`<sup>Optional</sup> <a name=\\"RepositoryCatalogData\\" id=\\"@aws-cdk/aws-ecr.CfnPublicRepositoryProps.property.repositoryCatalogData\\"></a>
-
+**<code>RepositoryCatalogData</code>**
 \`\`\`go
 RepositoryCatalogData interface{}
 \`\`\`
 
-- *Type:* interface{}
+- *Type:* <code>interface{}</code>
 
 \`AWS::ECR::PublicRepository.RepositoryCatalogData\`.
 
@@ -346,13 +341,12 @@ RepositoryCatalogData interface{}
 
 ---
 
-## \`RepositoryName\`<sup>Optional</sup> <a name=\\"RepositoryName\\" id=\\"@aws-cdk/aws-ecr.CfnPublicRepositoryProps.property.repositoryName\\"></a>
-
+**<code>RepositoryName</code>**
 \`\`\`go
 RepositoryName *string
 \`\`\`
 
-- *Type:* *string
+- *Type:* <code>*string</code>
 
 \`AWS::ECR::PublicRepository.RepositoryName\`.
 
@@ -360,13 +354,12 @@ RepositoryName *string
 
 ---
 
-## \`RepositoryPolicyText\`<sup>Optional</sup> <a name=\\"RepositoryPolicyText\\" id=\\"@aws-cdk/aws-ecr.CfnPublicRepositoryProps.property.repositoryPolicyText\\"></a>
-
+**<code>RepositoryPolicyText</code>**
 \`\`\`go
 RepositoryPolicyText interface{}
 \`\`\`
 
-- *Type:* interface{}
+- *Type:* <code>interface{}</code>
 
 \`AWS::ECR::PublicRepository.RepositoryPolicyText\`.
 
@@ -374,13 +367,12 @@ RepositoryPolicyText interface{}
 
 ---
 
-## \`Tags\`<sup>Optional</sup> <a name=\\"Tags\\" id=\\"@aws-cdk/aws-ecr.CfnPublicRepositoryProps.property.tags\\"></a>
-
+**<code>Tags</code>**
 \`\`\`go
 Tags *[]CfnTag
 \`\`\`
 
-- *Type:* *[]github.com/aws/aws-cdk-go/awscdk/awscdkcore.CfnTag
+- *Type:* <code>*[]github.com/aws/aws-cdk-go/awscdk/awscdkcore.CfnTag</code>
 
 \`AWS::ECR::PublicRepository.Tags\`.
 
@@ -518,22 +510,21 @@ CfnPublicRepositoryProps.builder()
 
 # Properties <a name=\\"Properties\\" id=\\"Properties\\"></a>
 
-| **Name** | **Type** | **Description** |
+| **Property** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href=\\"#@aws-cdk/aws-ecr.CfnPublicRepositoryProps.property.repositoryCatalogData\\">repositoryCatalogData</a></code> | <code>java.lang.Object</code> | \`AWS::ECR::PublicRepository.RepositoryCatalogData\`. |
-| <code><a href=\\"#@aws-cdk/aws-ecr.CfnPublicRepositoryProps.property.repositoryName\\">repositoryName</a></code> | <code>java.lang.String</code> | \`AWS::ECR::PublicRepository.RepositoryName\`. |
-| <code><a href=\\"#@aws-cdk/aws-ecr.CfnPublicRepositoryProps.property.repositoryPolicyText\\">repositoryPolicyText</a></code> | <code>java.lang.Object</code> | \`AWS::ECR::PublicRepository.RepositoryPolicyText\`. |
-| <code><a href=\\"#@aws-cdk/aws-ecr.CfnPublicRepositoryProps.property.tags\\">tags</a></code> | <code>java.util.List<software.amazon.awscdk.core.CfnTag></code> | \`AWS::ECR::PublicRepository.Tags\`. |
+| <code>repositoryCatalogData</code> | <code>java.lang.Object</code> | \`AWS::ECR::PublicRepository.RepositoryCatalogData\`. |
+| <code>repositoryName</code> | <code>java.lang.String</code> | \`AWS::ECR::PublicRepository.RepositoryName\`. |
+| <code>repositoryPolicyText</code> | <code>java.lang.Object</code> | \`AWS::ECR::PublicRepository.RepositoryPolicyText\`. |
+| <code>tags</code> | <code>java.util.List<software.amazon.awscdk.core.CfnTag></code> | \`AWS::ECR::PublicRepository.Tags\`. |
 
 ---
 
-## \`repositoryCatalogData\`<sup>Optional</sup> <a name=\\"repositoryCatalogData\\" id=\\"@aws-cdk/aws-ecr.CfnPublicRepositoryProps.property.repositoryCatalogData\\"></a>
-
+**<code>repositoryCatalogData</code>**
 \`\`\`java
 public java.lang.Object getRepositoryCatalogData();
 \`\`\`
 
-- *Type:* java.lang.Object
+- *Type:* <code>java.lang.Object</code>
 
 \`AWS::ECR::PublicRepository.RepositoryCatalogData\`.
 
@@ -541,13 +532,12 @@ public java.lang.Object getRepositoryCatalogData();
 
 ---
 
-## \`repositoryName\`<sup>Optional</sup> <a name=\\"repositoryName\\" id=\\"@aws-cdk/aws-ecr.CfnPublicRepositoryProps.property.repositoryName\\"></a>
-
+**<code>repositoryName</code>**
 \`\`\`java
 public java.lang.String getRepositoryName();
 \`\`\`
 
-- *Type:* java.lang.String
+- *Type:* <code>java.lang.String</code>
 
 \`AWS::ECR::PublicRepository.RepositoryName\`.
 
@@ -555,13 +545,12 @@ public java.lang.String getRepositoryName();
 
 ---
 
-## \`repositoryPolicyText\`<sup>Optional</sup> <a name=\\"repositoryPolicyText\\" id=\\"@aws-cdk/aws-ecr.CfnPublicRepositoryProps.property.repositoryPolicyText\\"></a>
-
+**<code>repositoryPolicyText</code>**
 \`\`\`java
 public java.lang.Object getRepositoryPolicyText();
 \`\`\`
 
-- *Type:* java.lang.Object
+- *Type:* <code>java.lang.Object</code>
 
 \`AWS::ECR::PublicRepository.RepositoryPolicyText\`.
 
@@ -569,13 +558,12 @@ public java.lang.Object getRepositoryPolicyText();
 
 ---
 
-## \`tags\`<sup>Optional</sup> <a name=\\"tags\\" id=\\"@aws-cdk/aws-ecr.CfnPublicRepositoryProps.property.tags\\"></a>
-
+**<code>tags</code>**
 \`\`\`java
 public java.util.List<CfnTag> getTags();
 \`\`\`
 
-- *Type:* java.util.List<software.amazon.awscdk.core.CfnTag>
+- *Type:* <code>java.util.List<software.amazon.awscdk.core.CfnTag></code>
 
 \`AWS::ECR::PublicRepository.Tags\`.
 
@@ -713,22 +701,21 @@ aws_cdk.aws_ecr.CfnPublicRepositoryProps(
 
 # Properties <a name=\\"Properties\\" id=\\"Properties\\"></a>
 
-| **Name** | **Type** | **Description** |
+| **Property** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href=\\"#@aws-cdk/aws-ecr.CfnPublicRepositoryProps.property.repositoryCatalogData\\">repository_catalog_data</a></code> | <code>typing.Any</code> | \`AWS::ECR::PublicRepository.RepositoryCatalogData\`. |
-| <code><a href=\\"#@aws-cdk/aws-ecr.CfnPublicRepositoryProps.property.repositoryName\\">repository_name</a></code> | <code>str</code> | \`AWS::ECR::PublicRepository.RepositoryName\`. |
-| <code><a href=\\"#@aws-cdk/aws-ecr.CfnPublicRepositoryProps.property.repositoryPolicyText\\">repository_policy_text</a></code> | <code>typing.Any</code> | \`AWS::ECR::PublicRepository.RepositoryPolicyText\`. |
-| <code><a href=\\"#@aws-cdk/aws-ecr.CfnPublicRepositoryProps.property.tags\\">tags</a></code> | <code>typing.List[aws_cdk.core.CfnTag]</code> | \`AWS::ECR::PublicRepository.Tags\`. |
+| <code>repository_catalog_data</code> | <code>typing.Any</code> | \`AWS::ECR::PublicRepository.RepositoryCatalogData\`. |
+| <code>repository_name</code> | <code>str</code> | \`AWS::ECR::PublicRepository.RepositoryName\`. |
+| <code>repository_policy_text</code> | <code>typing.Any</code> | \`AWS::ECR::PublicRepository.RepositoryPolicyText\`. |
+| <code>tags</code> | <code>typing.List[aws_cdk.core.CfnTag]</code> | \`AWS::ECR::PublicRepository.Tags\`. |
 
 ---
 
-## \`repository_catalog_data\`<sup>Optional</sup> <a name=\\"repository_catalog_data\\" id=\\"@aws-cdk/aws-ecr.CfnPublicRepositoryProps.property.repositoryCatalogData\\"></a>
-
+**<code>repository_catalog_data</code>**
 \`\`\`python
 repository_catalog_data: typing.Any
 \`\`\`
 
-- *Type:* typing.Any
+- *Type:* <code>typing.Any</code>
 
 \`AWS::ECR::PublicRepository.RepositoryCatalogData\`.
 
@@ -736,13 +723,12 @@ repository_catalog_data: typing.Any
 
 ---
 
-## \`repository_name\`<sup>Optional</sup> <a name=\\"repository_name\\" id=\\"@aws-cdk/aws-ecr.CfnPublicRepositoryProps.property.repositoryName\\"></a>
-
+**<code>repository_name</code>**
 \`\`\`python
 repository_name: str
 \`\`\`
 
-- *Type:* str
+- *Type:* <code>str</code>
 
 \`AWS::ECR::PublicRepository.RepositoryName\`.
 
@@ -750,13 +736,12 @@ repository_name: str
 
 ---
 
-## \`repository_policy_text\`<sup>Optional</sup> <a name=\\"repository_policy_text\\" id=\\"@aws-cdk/aws-ecr.CfnPublicRepositoryProps.property.repositoryPolicyText\\"></a>
-
+**<code>repository_policy_text</code>**
 \`\`\`python
 repository_policy_text: typing.Any
 \`\`\`
 
-- *Type:* typing.Any
+- *Type:* <code>typing.Any</code>
 
 \`AWS::ECR::PublicRepository.RepositoryPolicyText\`.
 
@@ -764,13 +749,12 @@ repository_policy_text: typing.Any
 
 ---
 
-## \`tags\`<sup>Optional</sup> <a name=\\"tags\\" id=\\"@aws-cdk/aws-ecr.CfnPublicRepositoryProps.property.tags\\"></a>
-
+**<code>tags</code>**
 \`\`\`python
 tags: typing.List[CfnTag]
 \`\`\`
 
-- *Type:* typing.List[aws_cdk.core.CfnTag]
+- *Type:* <code>typing.List[aws_cdk.core.CfnTag]</code>
 
 \`AWS::ECR::PublicRepository.Tags\`.
 
@@ -898,22 +882,21 @@ const cfnPublicRepositoryProps: CfnPublicRepositoryProps = { ... }
 
 # Properties <a name=\\"Properties\\" id=\\"Properties\\"></a>
 
-| **Name** | **Type** | **Description** |
+| **Property** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href=\\"#@aws-cdk/aws-ecr.CfnPublicRepositoryProps.property.repositoryCatalogData\\">repositoryCatalogData</a></code> | <code>any</code> | \`AWS::ECR::PublicRepository.RepositoryCatalogData\`. |
-| <code><a href=\\"#@aws-cdk/aws-ecr.CfnPublicRepositoryProps.property.repositoryName\\">repositoryName</a></code> | <code>string</code> | \`AWS::ECR::PublicRepository.RepositoryName\`. |
-| <code><a href=\\"#@aws-cdk/aws-ecr.CfnPublicRepositoryProps.property.repositoryPolicyText\\">repositoryPolicyText</a></code> | <code>any</code> | \`AWS::ECR::PublicRepository.RepositoryPolicyText\`. |
-| <code><a href=\\"#@aws-cdk/aws-ecr.CfnPublicRepositoryProps.property.tags\\">tags</a></code> | <code>@aws-cdk/core.CfnTag[]</code> | \`AWS::ECR::PublicRepository.Tags\`. |
+| <code>repositoryCatalogData</code> | <code>any</code> | \`AWS::ECR::PublicRepository.RepositoryCatalogData\`. |
+| <code>repositoryName</code> | <code>string</code> | \`AWS::ECR::PublicRepository.RepositoryName\`. |
+| <code>repositoryPolicyText</code> | <code>any</code> | \`AWS::ECR::PublicRepository.RepositoryPolicyText\`. |
+| <code>tags</code> | <code>@aws-cdk/core.CfnTag[]</code> | \`AWS::ECR::PublicRepository.Tags\`. |
 
 ---
 
-## \`repositoryCatalogData\`<sup>Optional</sup> <a name=\\"repositoryCatalogData\\" id=\\"@aws-cdk/aws-ecr.CfnPublicRepositoryProps.property.repositoryCatalogData\\"></a>
-
+**<code>repositoryCatalogData</code>**
 \`\`\`typescript
 public readonly repositoryCatalogData: any;
 \`\`\`
 
-- *Type:* any
+- *Type:* <code>any</code>
 
 \`AWS::ECR::PublicRepository.RepositoryCatalogData\`.
 
@@ -921,13 +904,12 @@ public readonly repositoryCatalogData: any;
 
 ---
 
-## \`repositoryName\`<sup>Optional</sup> <a name=\\"repositoryName\\" id=\\"@aws-cdk/aws-ecr.CfnPublicRepositoryProps.property.repositoryName\\"></a>
-
+**<code>repositoryName</code>**
 \`\`\`typescript
 public readonly repositoryName: string;
 \`\`\`
 
-- *Type:* string
+- *Type:* <code>string</code>
 
 \`AWS::ECR::PublicRepository.RepositoryName\`.
 
@@ -935,13 +917,12 @@ public readonly repositoryName: string;
 
 ---
 
-## \`repositoryPolicyText\`<sup>Optional</sup> <a name=\\"repositoryPolicyText\\" id=\\"@aws-cdk/aws-ecr.CfnPublicRepositoryProps.property.repositoryPolicyText\\"></a>
-
+**<code>repositoryPolicyText</code>**
 \`\`\`typescript
 public readonly repositoryPolicyText: any;
 \`\`\`
 
-- *Type:* any
+- *Type:* <code>any</code>
 
 \`AWS::ECR::PublicRepository.RepositoryPolicyText\`.
 
@@ -949,13 +930,12 @@ public readonly repositoryPolicyText: any;
 
 ---
 
-## \`tags\`<sup>Optional</sup> <a name=\\"tags\\" id=\\"@aws-cdk/aws-ecr.CfnPublicRepositoryProps.property.tags\\"></a>
-
+**<code>tags</code>**
 \`\`\`typescript
 public readonly tags: CfnTag[];
 \`\`\`
 
-- *Type:* @aws-cdk/core.CfnTag[]
+- *Type:* <code>@aws-cdk/core.CfnTag[]</code>
 
 \`AWS::ECR::PublicRepository.Tags\`.
 
@@ -1062,7 +1042,7 @@ Object {
   ],
   "usage": "bring { CfnPublicRepositoryProps } from \\"@aws-cdk/aws-ecr\\"
 
-let CfnPublicRepositoryProps = CfnPublicRepositoryProps{ ... }",
+let cfnPublicRepositoryProps = CfnPublicRepositoryProps { ... }",
 }
 `;
 
@@ -1078,27 +1058,26 @@ Properties for defining a \`AWS::ECR::PublicRepository\`.
 \`\`\`wing
 bring { CfnPublicRepositoryProps } from \\"@aws-cdk/aws-ecr\\"
 
-let CfnPublicRepositoryProps = CfnPublicRepositoryProps{ ... }
+let cfnPublicRepositoryProps = CfnPublicRepositoryProps { ... }
 \`\`\`
 
 # Properties <a name=\\"Properties\\" id=\\"Properties\\"></a>
 
-| **Name** | **Type** | **Description** |
+| **Property** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href=\\"#@aws-cdk/aws-ecr.CfnPublicRepositoryProps.property.repositoryCatalogData\\">repositoryCatalogData</a></code> | <code>any</code> | \`AWS::ECR::PublicRepository.RepositoryCatalogData\`. |
-| <code><a href=\\"#@aws-cdk/aws-ecr.CfnPublicRepositoryProps.property.repositoryName\\">repositoryName</a></code> | <code>str</code> | \`AWS::ECR::PublicRepository.RepositoryName\`. |
-| <code><a href=\\"#@aws-cdk/aws-ecr.CfnPublicRepositoryProps.property.repositoryPolicyText\\">repositoryPolicyText</a></code> | <code>any</code> | \`AWS::ECR::PublicRepository.RepositoryPolicyText\`. |
-| <code><a href=\\"#@aws-cdk/aws-ecr.CfnPublicRepositoryProps.property.tags\\">tags</a></code> | <code>MutArray&lt;@aws-cdk/core.CfnTag&gt;</code> | \`AWS::ECR::PublicRepository.Tags\`. |
+| <code>repositoryCatalogData</code> | <code>any</code> | \`AWS::ECR::PublicRepository.RepositoryCatalogData\`. |
+| <code>repositoryName</code> | <code>str</code> | \`AWS::ECR::PublicRepository.RepositoryName\`. |
+| <code>repositoryPolicyText</code> | <code>any</code> | \`AWS::ECR::PublicRepository.RepositoryPolicyText\`. |
+| <code>tags</code> | <code>MutArray&lt;@aws-cdk/core.CfnTag&gt;</code> | \`AWS::ECR::PublicRepository.Tags\`. |
 
 ---
 
-## \`repositoryCatalogData\`<sup>Optional</sup> <a name=\\"repositoryCatalogData\\" id=\\"@aws-cdk/aws-ecr.CfnPublicRepositoryProps.property.repositoryCatalogData\\"></a>
-
+**<code>repositoryCatalogData</code>**
 \`\`\`wing
 repositoryCatalogData: any;
 \`\`\`
 
-- *Type:* any
+- *Type:* <code>any</code>
 
 \`AWS::ECR::PublicRepository.RepositoryCatalogData\`.
 
@@ -1106,13 +1085,12 @@ repositoryCatalogData: any;
 
 ---
 
-## \`repositoryName\`<sup>Optional</sup> <a name=\\"repositoryName\\" id=\\"@aws-cdk/aws-ecr.CfnPublicRepositoryProps.property.repositoryName\\"></a>
-
+**<code>repositoryName</code>**
 \`\`\`wing
 repositoryName: str;
 \`\`\`
 
-- *Type:* str
+- *Type:* <code>str</code>
 
 \`AWS::ECR::PublicRepository.RepositoryName\`.
 
@@ -1120,13 +1098,12 @@ repositoryName: str;
 
 ---
 
-## \`repositoryPolicyText\`<sup>Optional</sup> <a name=\\"repositoryPolicyText\\" id=\\"@aws-cdk/aws-ecr.CfnPublicRepositoryProps.property.repositoryPolicyText\\"></a>
-
+**<code>repositoryPolicyText</code>**
 \`\`\`wing
 repositoryPolicyText: any;
 \`\`\`
 
-- *Type:* any
+- *Type:* <code>any</code>
 
 \`AWS::ECR::PublicRepository.RepositoryPolicyText\`.
 
@@ -1134,13 +1111,12 @@ repositoryPolicyText: any;
 
 ---
 
-## \`tags\`<sup>Optional</sup> <a name=\\"tags\\" id=\\"@aws-cdk/aws-ecr.CfnPublicRepositoryProps.property.tags\\"></a>
-
+**<code>tags</code>**
 \`\`\`wing
 tags: MutArray<CfnTag>;
 \`\`\`
 
-- *Type:* MutArray&lt;@aws-cdk/core.CfnTag&gt;
+- *Type:* <code>MutArray&lt;@aws-cdk/core.CfnTag&gt;</code>
 
 \`AWS::ECR::PublicRepository.Tags\`.
 

@@ -37,8 +37,7 @@ AuthorizationToken.GrantRead(IGrantable Grantee);",
 `;
 
 exports[`csharp snapshot 2`] = `
-" \`GrantRead\` <a name=\\"GrantRead\\" id=\\"@aws-cdk/aws-ecr.AuthorizationToken.grantRead\\"></a>
-
+"**<code>GrantRead</code>**
 \`\`\`csharp
 using Amazon.CDK.AWS.ECR;
 
@@ -47,11 +46,9 @@ AuthorizationToken.GrantRead(IGrantable Grantee);
 
 Grant access to retrieve an authorization token.
 
-# \`Grantee\`<sup>Required</sup> <a name=\\"Grantee\\" id=\\"@aws-cdk/aws-ecr.AuthorizationToken.grantRead.parameter.grantee\\"></a>
-
-- *Type:* Amazon.CDK.AWS.IAM.IGrantable
-
----
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>Grantee</code> | <code>Amazon.CDK.AWS.IAM.IGrantable</code> | *No description.* |
 "
 `;
 
@@ -92,8 +89,7 @@ awscdkawsecr.AuthorizationToken_GrantRead(grantee IGrantable)",
 `;
 
 exports[`go snapshot 2`] = `
-" \`GrantRead\` <a name=\\"GrantRead\\" id=\\"@aws-cdk/aws-ecr.AuthorizationToken.grantRead\\"></a>
-
+"**<code>GrantRead</code>**
 \`\`\`go
 import \\"github.com/aws/aws-cdk-go/awscdkawsecr\\"
 
@@ -102,11 +98,9 @@ awscdkawsecr.AuthorizationToken_GrantRead(grantee IGrantable)
 
 Grant access to retrieve an authorization token.
 
-# \`grantee\`<sup>Required</sup> <a name=\\"grantee\\" id=\\"@aws-cdk/aws-ecr.AuthorizationToken.grantRead.parameter.grantee\\"></a>
-
-- *Type:* github.com/aws/aws-cdk-go/awscdk/awsiam/awscdkawsiam.IGrantable
-
----
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>grantee</code> | <code>github.com/aws/aws-cdk-go/awscdk/awsiam/awscdkawsiam.IGrantable</code> | *No description.* |
 "
 `;
 
@@ -147,8 +141,7 @@ AuthorizationToken.grantRead(IGrantable grantee)",
 `;
 
 exports[`java snapshot 2`] = `
-" \`grantRead\` <a name=\\"grantRead\\" id=\\"@aws-cdk/aws-ecr.AuthorizationToken.grantRead\\"></a>
-
+"**<code>grantRead</code>**
 \`\`\`java
 import software.amazon.awscdk.services.ecr.AuthorizationToken;
 
@@ -157,11 +150,9 @@ AuthorizationToken.grantRead(IGrantable grantee)
 
 Grant access to retrieve an authorization token.
 
-# \`grantee\`<sup>Required</sup> <a name=\\"grantee\\" id=\\"@aws-cdk/aws-ecr.AuthorizationToken.grantRead.parameter.grantee\\"></a>
-
-- *Type:* software.amazon.awscdk.services.iam.IGrantable
-
----
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>grantee</code> | <code>software.amazon.awscdk.services.iam.IGrantable</code> | *No description.* |
 "
 `;
 
@@ -204,8 +195,7 @@ aws_cdk.aws_ecr.AuthorizationToken.grant_read(
 `;
 
 exports[`python snapshot 2`] = `
-" \`grant_read\` <a name=\\"grant_read\\" id=\\"@aws-cdk/aws-ecr.AuthorizationToken.grantRead\\"></a>
-
+"**<code>grant_read</code>**
 \`\`\`python
 import aws_cdk.aws_ecr
 
@@ -216,11 +206,9 @@ aws_cdk.aws_ecr.AuthorizationToken.grant_read(
 
 Grant access to retrieve an authorization token.
 
-# \`grantee\`<sup>Required</sup> <a name=\\"grantee\\" id=\\"@aws-cdk/aws-ecr.AuthorizationToken.grantRead.parameter.grantee\\"></a>
-
-- *Type:* aws_cdk.aws_iam.IGrantable
-
----
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>grantee</code> | <code>aws_cdk.aws_iam.IGrantable</code> | *No description.* |
 "
 `;
 
@@ -261,8 +249,7 @@ AuthorizationToken.grantRead(grantee: IGrantable)",
 `;
 
 exports[`typescript snapshot 2`] = `
-" \`grantRead\` <a name=\\"grantRead\\" id=\\"@aws-cdk/aws-ecr.AuthorizationToken.grantRead\\"></a>
-
+"**<code>grantRead</code>**
 \`\`\`typescript
 import { AuthorizationToken } from '@aws-cdk/aws-ecr'
 
@@ -271,11 +258,9 @@ AuthorizationToken.grantRead(grantee: IGrantable)
 
 Grant access to retrieve an authorization token.
 
-# \`grantee\`<sup>Required</sup> <a name=\\"grantee\\" id=\\"@aws-cdk/aws-ecr.AuthorizationToken.grantRead.parameter.grantee\\"></a>
-
-- *Type:* @aws-cdk/aws-iam.IGrantable
-
----
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>grantee</code> | <code>@aws-cdk/aws-iam.IGrantable</code> | *No description.* |
 "
 `;
 
@@ -316,8 +301,7 @@ AuthorizationToken.grantRead(grantee: IGrantable)",
 `;
 
 exports[`wing snapshot 2`] = `
-" \`grantRead\` <a name=\\"grantRead\\" id=\\"@aws-cdk/aws-ecr.AuthorizationToken.grantRead\\"></a>
-
+"**<code>grantRead</code>**
 \`\`\`wing
 bring { AuthorizationToken } from \\"@aws-cdk/aws-ecr\\"
 
@@ -326,10 +310,8 @@ AuthorizationToken.grantRead(grantee: IGrantable)
 
 Grant access to retrieve an authorization token.
 
-# \`grantee\`<sup>Required</sup> <a name=\\"grantee\\" id=\\"@aws-cdk/aws-ecr.AuthorizationToken.grantRead.parameter.grantee\\"></a>
-
-- *Type:* @aws-cdk/aws-iam.IGrantable
-
----
+| **Parameter** | **Type** | **Description** |
+| --- | --- | --- |
+| <code>grantee</code> | <code>@aws-cdk/aws-iam.IGrantable</code> | *No description.* |
 "
 `;
