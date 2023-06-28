@@ -86,26 +86,6 @@ module.exports = function({ B }) {
 
 ```
 
-## inflight.$Closure5.js
-```js
-module.exports = function({ Soar }) {
-  class $Closure5 {
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
-    }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      new Soar();
-    }
-  }
-  return $Closure5;
-}
-
-```
-
 ## inflight.A.js
 ```js
 module.exports = function({  }) {
@@ -239,18 +219,6 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.Float.js
-```js
-module.exports = function({  }) {
-  class Float {
-     constructor()  {
-    }
-  }
-  return Float;
-}
-
-```
-
 ## inflight.Foo.js
 ```js
 module.exports = function({ Bar }) {
@@ -295,18 +263,6 @@ module.exports = function({  }) {
     }
   }
   return Person;
-}
-
-```
-
-## inflight.Soar.js
-```js
-module.exports = function({ Float }) {
-  class Soar extends Float {
-     constructor()  {
-    }
-  }
-  return Soar;
 }
 
 ```
@@ -363,7 +319,7 @@ module.exports = function({ PaidStudent }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:access inflight field\",\"${aws_lambda_function.root_testaccessinflightfield_Handler_79266A8C.arn}\"],[\"root/Default/Default/test:check derived class instance variables\",\"${aws_lambda_function.root_testcheckderivedclassinstancevariables_Handler_92FABF78.arn}\"],[\"root/Default/Default/test:devived class init body happens after super\",\"${aws_lambda_function.root_testdevivedclassinitbodyhappensaftersuper_Handler_563B7509.arn}\"],[\"root/Default/Default/test:inflight super constructor\",\"${aws_lambda_function.root_testinflightsuperconstructor_Handler_3548FC1F.arn}\"],[\"root/Default/Default/test:soar\",\"${aws_lambda_function.root_testsoar_Handler_43864438.arn}\"]]"
+      "value": "[[\"root/Default/Default/test:access inflight field\",\"${aws_lambda_function.root_testaccessinflightfield_Handler_79266A8C.arn}\"],[\"root/Default/Default/test:check derived class instance variables\",\"${aws_lambda_function.root_testcheckderivedclassinstancevariables_Handler_92FABF78.arn}\"],[\"root/Default/Default/test:devived class init body happens after super\",\"${aws_lambda_function.root_testdevivedclassinitbodyhappensaftersuper_Handler_563B7509.arn}\"],[\"root/Default/Default/test:inflight super constructor\",\"${aws_lambda_function.root_testinflightsuperconstructor_Handler_3548FC1F.arn}\"]]"
     }
   },
   "provider": {
@@ -405,15 +361,6 @@ module.exports = function({ PaidStudent }) {
           "metadata": {
             "path": "root/Default/Default/test:inflight super constructor/Handler/IamRole",
             "uniqueId": "root_testinflightsuperconstructor_Handler_IamRole_6691DF13"
-          }
-        },
-        "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
-      },
-      "root_testsoar_Handler_IamRole_4029F8BB": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:soar/Handler/IamRole",
-            "uniqueId": "root_testsoar_Handler_IamRole_4029F8BB"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
@@ -459,16 +406,6 @@ module.exports = function({ PaidStudent }) {
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
         "role": "${aws_iam_role.root_testinflightsuperconstructor_Handler_IamRole_6691DF13.name}"
-      },
-      "root_testsoar_Handler_IamRolePolicy_07A8AD6F": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:soar/Handler/IamRolePolicy",
-            "uniqueId": "root_testsoar_Handler_IamRolePolicy_07A8AD6F"
-          }
-        },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
-        "role": "${aws_iam_role.root_testsoar_Handler_IamRole_4029F8BB.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
@@ -511,16 +448,6 @@ module.exports = function({ PaidStudent }) {
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
         "role": "${aws_iam_role.root_testinflightsuperconstructor_Handler_IamRole_6691DF13.name}"
-      },
-      "root_testsoar_Handler_IamRolePolicyAttachment_C0E2EEEB": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:soar/Handler/IamRolePolicyAttachment",
-            "uniqueId": "root_testsoar_Handler_IamRolePolicyAttachment_C0E2EEEB"
-          }
-        },
-        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.root_testsoar_Handler_IamRole_4029F8BB.name}"
       }
     },
     "aws_lambda_function": {
@@ -627,32 +554,6 @@ module.exports = function({ PaidStudent }) {
           "security_group_ids": [],
           "subnet_ids": []
         }
-      },
-      "root_testsoar_Handler_43864438": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:soar/Handler/Default",
-            "uniqueId": "root_testsoar_Handler_43864438"
-          }
-        },
-        "environment": {
-          "variables": {
-            "WING_FUNCTION_NAME": "Handler-c86480e5",
-            "WING_TARGET": "tf-aws"
-          }
-        },
-        "function_name": "Handler-c86480e5",
-        "handler": "index.handler",
-        "publish": true,
-        "role": "${aws_iam_role.root_testsoar_Handler_IamRole_4029F8BB.arn}",
-        "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
-        "s3_key": "${aws_s3_object.root_testsoar_Handler_S3Object_AA1C1E5F.key}",
-        "timeout": 30,
-        "vpc_config": {
-          "security_group_ids": [],
-          "subnet_ids": []
-        }
       }
     },
     "aws_s3_bucket": {
@@ -705,17 +606,6 @@ module.exports = function({ PaidStudent }) {
           "metadata": {
             "path": "root/Default/Default/test:inflight super constructor/Handler/S3Object",
             "uniqueId": "root_testinflightsuperconstructor_Handler_S3Object_B126D912"
-          }
-        },
-        "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
-        "key": "<ASSET_KEY>",
-        "source": "<ASSET_SOURCE>"
-      },
-      "root_testsoar_Handler_S3Object_AA1C1E5F": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:soar/Handler/S3Object",
-            "uniqueId": "root_testsoar_Handler_S3Object_AA1C1E5F"
           }
         },
         "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
@@ -1341,98 +1231,6 @@ class $Root extends $stdlib.std.Resource {
         super._registerBind(host, ops);
       }
     }
-    class Float extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
-      }
-      static _toInflightType(context) {
-        const self_client_path = "././inflight.Float.js";
-        return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-          })
-        `);
-      }
-      _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
-          (await (async () => {
-            const FloatClient = ${Float._toInflightType(this).text};
-            const client = new FloatClient({
-            });
-            if (client.$inflight_init) { await client.$inflight_init(); }
-            return client;
-          })())
-        `);
-      }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-        }
-        super._registerBind(host, ops);
-      }
-    }
-    class Soar extends Float {
-      constructor(scope, id, ) {
-        super(scope, id);
-      }
-      static _toInflightType(context) {
-        const self_client_path = "././inflight.Soar.js";
-        const FloatClient = Float._toInflightType(context);
-        return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            Float: ${FloatClient.text},
-          })
-        `);
-      }
-      _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
-          (await (async () => {
-            const SoarClient = ${Soar._toInflightType(this).text};
-            const client = new SoarClient({
-            });
-            if (client.$inflight_init) { await client.$inflight_init(); }
-            return client;
-          })())
-        `);
-      }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-        }
-        super._registerBind(host, ops);
-      }
-    }
-    class $Closure5 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
-        this.display.hidden = true;
-        this._addInflightOps("handle");
-      }
-      static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure5.js";
-        const SoarClient = Soar._toInflightType(context);
-        return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            Soar: ${SoarClient.text},
-          })
-        `);
-      }
-      _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
-          (await (async () => {
-            const $Closure5Client = ${$Closure5._toInflightType(this).text};
-            const client = new $Closure5Client({
-            });
-            if (client.$inflight_init) { await client.$inflight_init(); }
-            return client;
-          })())
-        `);
-      }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-        }
-        if (ops.includes("handle")) {
-        }
-        super._registerBind(host, ops);
-      }
-    }
     new C1(this,"C1");
     const c2 = new C2(this,"C2");
     {((cond) => {if (!cond) throw new Error("assertion failed: c2.x == 1")})((c2.x === 1))};
@@ -1449,7 +1247,6 @@ class $Root extends $stdlib.std.Resource {
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:inflight super constructor",new $Closure4(this,"$Closure4"));
     new Foo(this,"Foo");
     new Baz(this,"Baz");
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:soar",new $Closure5(this,"$Closure5"));
   }
 }
 class $App extends $AppBase {

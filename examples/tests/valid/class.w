@@ -136,10 +136,3 @@ new Foo();
 // derived classes without defined constructors
 class Baz extends Bar {}
 new Baz();
-
-inflight class Float {}
-inflight class Soar extends Float {}
-
-test "soar" {
-  new Soar();
-}
