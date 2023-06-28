@@ -425,6 +425,15 @@ jobs:
         working-directory: wingcompiler
         run: npm publish *.tgz --access public
 
+      - name: Publish Wing Console Design System
+        if: ${{ steps.wingconsoledesignsystem-version.outputs.version != needs.build.outputs.version }}
+        working-directory: wingconsoledesignsystem
+        run: npm publish *.tgz --access public
+
+      - name: Check published Wing Console Design System version
+        id: wingconsoledesignsystem-version
+        run: echo "version=$(npm view @wingconsole/design-system version)" >> $GITHUB_OUTPUT
+
       - name: Check published Wing Console UI version
         id: wingconsoleui-version
         run: echo "version=$(npm view @wingconsole/ui version)" >> $GITHUB_OUTPUT
@@ -437,15 +446,6 @@ jobs:
       - name: Check published Wing Console Server version
         id: wingconsoleserver-version
         run: echo "version=$(npm view @wingconsole/server version)" >> $GITHUB_OUTPUT
-
-      - name: Publish Wing Console Design System
-        if: ${{ steps.wingconsoledesignsystem-version.outputs.version != needs.build.outputs.version }}
-        working-directory: wingconsoledesignsystem
-        run: npm publish *.tgz --access public
-
-      - name: Check published Wing Console Design System version
-        id: wingconsoledesignsystem-version
-        run: echo "version=$(npm view @wingconsole/design-system version)" >> $GITHUB_OUTPUT
 
       - name: Publish Wing Console Server
         if: ${{ steps.wingconsoleserver-version.outputs.version != needs.build.outputs.version }}
