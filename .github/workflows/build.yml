@@ -417,6 +417,15 @@ jobs:
         working-directory: wingcompiler
         run: npm publish *.tgz --access public
 
+      - name: Check published Wing Console UI version
+        id: wingconsoleui-version
+        run: echo "version=$(npm view @wingconsole/ui version)" >> $GITHUB_OUTPUT
+
+      - name: Publish Wing Console UI
+        if: ${{ steps.wingconsoleui-version.outputs.version != needs.build.outputs.version }}
+        working-directory: wingconsoleui
+        run: npm publish *.tgz --access public
+
       - name: Check published Wing Console Server version
         id: wingconsoleserver-version
         run: echo "version=$(npm view @wingconsole/server version)" >> $GITHUB_OUTPUT
