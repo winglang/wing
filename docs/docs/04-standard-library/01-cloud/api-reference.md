@@ -1091,7 +1091,7 @@ Options for Api patch endpoint.
 ```wing
 bring cloud;
 
-let apiconnectprops = cloud.ApiConnectProps { ... }
+let apiConnectProps = cloud.ApiConnectProps { ... }
 ```
 
 
@@ -1104,7 +1104,7 @@ Options for Api put endpoint.
 ```wing
 bring cloud;
 
-let apideleteprops = cloud.ApiDeleteProps { ... }
+let apiDeleteProps = cloud.ApiDeleteProps { ... }
 ```
 
 
@@ -1117,7 +1117,7 @@ Options for Api get endpoint.
 ```wing
 bring cloud;
 
-let apigetprops = cloud.ApiGetProps { ... }
+let apiGetProps = cloud.ApiGetProps { ... }
 ```
 
 
@@ -1130,7 +1130,7 @@ Options for Api patch endpoint.
 ```wing
 bring cloud;
 
-let apiheadprops = cloud.ApiHeadProps { ... }
+let apiHeadProps = cloud.ApiHeadProps { ... }
 ```
 
 
@@ -1143,7 +1143,7 @@ Options for Api patch endpoint.
 ```wing
 bring cloud;
 
-let apioptionsprops = cloud.ApiOptionsProps { ... }
+let apiOptionsProps = cloud.ApiOptionsProps { ... }
 ```
 
 
@@ -1156,7 +1156,7 @@ Options for Api patch endpoint.
 ```wing
 bring cloud;
 
-let apipatchprops = cloud.ApiPatchProps { ... }
+let apiPatchProps = cloud.ApiPatchProps { ... }
 ```
 
 
@@ -1169,7 +1169,7 @@ Options for Api post endpoint.
 ```wing
 bring cloud;
 
-let apipostprops = cloud.ApiPostProps { ... }
+let apiPostProps = cloud.ApiPostProps { ... }
 ```
 
 
@@ -1182,7 +1182,7 @@ Properties for `Api`.
 ```wing
 bring cloud;
 
-let apiprops = cloud.ApiProps { ... }
+let apiProps = cloud.ApiProps { ... }
 ```
 
 
@@ -1195,7 +1195,7 @@ Options for Api put endpoint.
 ```wing
 bring cloud;
 
-let apiputprops = cloud.ApiPutProps { ... }
+let apiPutProps = cloud.ApiPutProps { ... }
 ```
 
 
@@ -1208,7 +1208,7 @@ Shape of a request to an inflight handler.
 ```wing
 bring cloud;
 
-let apirequest = cloud.ApiRequest { ... }
+let apiRequest = cloud.ApiRequest { ... }
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -1299,7 +1299,7 @@ Shape of a response from a inflight handler.
 ```wing
 bring cloud;
 
-let apiresponse = cloud.ApiResponse { ... }
+let apiResponse = cloud.ApiResponse { ... }
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -1354,7 +1354,7 @@ Interface for delete method inside `Bucket`.
 ```wing
 bring cloud;
 
-let bucketdeleteoptions = cloud.BucketDeleteOptions { ... }
+let bucketDeleteOptions = cloud.BucketDeleteOptions { ... }
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -1386,7 +1386,7 @@ on_event notification payload- will be in use after solving issue: https://githu
 ```wing
 bring cloud;
 
-let bucketevent = cloud.BucketEvent { ... }
+let bucketEvent = cloud.BucketEvent { ... }
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -1429,7 +1429,7 @@ on create event options.
 ```wing
 bring cloud;
 
-let bucketoncreateprops = cloud.BucketOnCreateProps { ... }
+let bucketOnCreateProps = cloud.BucketOnCreateProps { ... }
 ```
 
 
@@ -1442,7 +1442,7 @@ on delete event options.
 ```wing
 bring cloud;
 
-let bucketondeleteprops = cloud.BucketOnDeleteProps { ... }
+let bucketOnDeleteProps = cloud.BucketOnDeleteProps { ... }
 ```
 
 
@@ -1455,7 +1455,7 @@ on any event options.
 ```wing
 bring cloud;
 
-let bucketoneventprops = cloud.BucketOnEventProps { ... }
+let bucketOnEventProps = cloud.BucketOnEventProps { ... }
 ```
 
 
@@ -1468,7 +1468,7 @@ on update event options.
 ```wing
 bring cloud;
 
-let bucketonupdateprops = cloud.BucketOnUpdateProps { ... }
+let bucketOnUpdateProps = cloud.BucketOnUpdateProps { ... }
 ```
 
 
@@ -1481,7 +1481,7 @@ Properties for `Bucket`.
 ```wing
 bring cloud;
 
-let bucketprops = cloud.BucketProps { ... }
+let bucketProps = cloud.BucketProps { ... }
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -1513,7 +1513,7 @@ Properties for `Counter`.
 ```wing
 bring cloud;
 
-let counterprops = cloud.CounterProps { ... }
+let counterProps = cloud.CounterProps { ... }
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -1547,7 +1547,7 @@ This is the type users see when constructing a cloud.Function instance.
 ```wing
 bring cloud;
 
-let functionprops = cloud.FunctionProps { ... }
+let functionProps = cloud.FunctionProps { ... }
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -1605,7 +1605,7 @@ Options when getting a secret value.
 ```wing
 bring cloud;
 
-let getsecretvalueoptions = cloud.GetSecretValueOptions { ... }
+let getSecretValueOptions = cloud.GetSecretValueOptions { ... }
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -1637,7 +1637,7 @@ Properties for `Queue`.
 ```wing
 bring cloud;
 
-let queueprops = cloud.QueueProps { ... }
+let queueProps = cloud.QueueProps { ... }
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -1695,7 +1695,7 @@ Options for Queue.setConsumer.
 ```wing
 bring cloud;
 
-let queuesetconsumerprops = cloud.QueueSetConsumerProps { ... }
+let queueSetConsumerProps = cloud.QueueSetConsumerProps { ... }
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -1766,7 +1766,7 @@ Options for Schedule.onTick.
 ```wing
 bring cloud;
 
-let scheduleontickprops = cloud.ScheduleOnTickProps { ... }
+let scheduleOnTickProps = cloud.ScheduleOnTickProps { ... }
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -1824,7 +1824,7 @@ Properties for `Schedule`.
 ```wing
 bring cloud;
 
-let scheduleprops = cloud.ScheduleProps { ... }
+let scheduleProps = cloud.ScheduleProps { ... }
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -1885,7 +1885,7 @@ Properties for `Secret`.
 ```wing
 bring cloud;
 
-let secretprops = cloud.SecretProps { ... }
+let secretProps = cloud.SecretProps { ... }
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -1921,7 +1921,7 @@ Options for Service.onStart.
 ```wing
 bring cloud;
 
-let serviceonstartprops = cloud.ServiceOnStartProps { ... }
+let serviceOnStartProps = cloud.ServiceOnStartProps { ... }
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -1979,7 +1979,7 @@ Properties for `Service`.
 ```wing
 bring cloud;
 
-let serviceprops = cloud.ServiceProps { ... }
+let serviceProps = cloud.ServiceProps { ... }
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -2036,7 +2036,7 @@ Properties for `Table`.
 ```wing
 bring cloud;
 
-let tableprops = cloud.TableProps { ... }
+let tableProps = cloud.TableProps { ... }
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -2110,7 +2110,7 @@ A result of a single test.
 ```wing
 bring cloud;
 
-let testresult = cloud.TestResult { ... }
+let testResult = cloud.TestResult { ... }
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -2177,7 +2177,7 @@ Properties for `TestRunner`.
 ```wing
 bring cloud;
 
-let testrunnerprops = cloud.TestRunnerProps { ... }
+let testRunnerProps = cloud.TestRunnerProps { ... }
 ```
 
 
@@ -2190,7 +2190,7 @@ Options for `Topic.onMessage`.
 ```wing
 bring cloud;
 
-let topiconmessageprops = cloud.TopicOnMessageProps { ... }
+let topicOnMessageProps = cloud.TopicOnMessageProps { ... }
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -2248,7 +2248,7 @@ Properties for `Topic`.
 ```wing
 bring cloud;
 
-let topicprops = cloud.TopicProps { ... }
+let topicProps = cloud.TopicProps { ... }
 ```
 
 
@@ -2347,7 +2347,7 @@ website props.
 ```wing
 bring cloud;
 
-let websiteprops = cloud.WebsiteProps { ... }
+let websiteProps = cloud.WebsiteProps { ... }
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -3477,6 +3477,26 @@ bucket events to subscribe to.
 | <code>DELETE</code> | delete. |
 | <code>UPDATE</code> | update. |
 
+---
+
+**<code>CREATE</code>**
+create.
+
+---
+
+
+**<code>DELETE</code>**
+delete.
+
+---
+
+
+**<code>UPDATE</code>**
+update.
+
+---
+
+
 ### ColumnType <a name="ColumnType" id="@winglang/sdk.cloud.ColumnType"></a>
 
 Table column types.
@@ -3490,6 +3510,38 @@ Table column types.
 | <code>BOOLEAN</code> | bool type. |
 | <code>DATE</code> | date type. |
 | <code>JSON</code> | json type. |
+
+---
+
+**<code>STRING</code>**
+string type.
+
+---
+
+
+**<code>NUMBER</code>**
+number type.
+
+---
+
+
+**<code>BOOLEAN</code>**
+bool type.
+
+---
+
+
+**<code>DATE</code>**
+date type.
+
+---
+
+
+**<code>JSON</code>**
+json type.
+
+---
+
 
 ### HttpMethod <a name="HttpMethod" id="@winglang/sdk.cloud.HttpMethod"></a>
 
@@ -3508,6 +3560,56 @@ Allowed HTTP methods for a endpoint.
 | <code>OPTIONS</code> | Options. |
 | <code>PATCH</code> | Patch. |
 
+---
+
+**<code>GET</code>**
+Get.
+
+---
+
+
+**<code>HEAD</code>**
+Head.
+
+---
+
+
+**<code>POST</code>**
+Post.
+
+---
+
+
+**<code>PUT</code>**
+Put.
+
+---
+
+
+**<code>DELETE</code>**
+Delete.
+
+---
+
+
+**<code>CONNECT</code>**
+Connect.
+
+---
+
+
+**<code>OPTIONS</code>**
+Options.
+
+---
+
+
+**<code>PATCH</code>**
+Patch.
+
+---
+
+
 ### TraceType <a name="TraceType" id="@winglang/sdk.cloud.TraceType"></a>
 
 The type of a trace.
@@ -3518,3 +3620,17 @@ The type of a trace.
 | --- | --- |
 | <code>RESOURCE</code> | A trace representing a resource activity. |
 | <code>LOG</code> | A trace representing a message emitted by the logger. |
+
+---
+
+**<code>RESOURCE</code>**
+A trace representing a resource activity.
+
+---
+
+
+**<code>LOG</code>**
+A trace representing a message emitted by the logger.
+
+---
+

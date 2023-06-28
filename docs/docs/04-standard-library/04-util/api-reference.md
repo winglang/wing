@@ -23,7 +23,7 @@ Properties for `util.waitUntil`.
 ```wing
 bring util;
 
-let waituntilprops = util.WaitUntilProps { ... }
+let waitUntilProps = util.WaitUntilProps { ... }
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>

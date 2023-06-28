@@ -23,7 +23,7 @@ An object containing any custom settings that you want to apply to the request.
 ```wing
 bring http;
 
-let requestoptions = http.RequestOptions { ... }
+let requestOptions = http.RequestOptions { ... }
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -342,6 +342,38 @@ The request's method.
 | <code>PATCH</code> | PATCH. |
 | <code>POST</code> | POST. |
 
+---
+
+**<code>GET</code>**
+GET.
+
+---
+
+
+**<code>PUT</code>**
+PUT.
+
+---
+
+
+**<code>DELETE</code>**
+DELETE.
+
+---
+
+
+**<code>PATCH</code>**
+PATCH.
+
+---
+
+
+**<code>POST</code>**
+POST.
+
+---
+
+
 ### RequestCache <a name="RequestCache" id="@winglang/sdk.http.RequestCache"></a>
 
 The cache mode of the request.
@@ -358,6 +390,51 @@ It controls how a request will interact with the system's HTTP cache.
 | <code>NO_CACHE</code> | The runtime environment looks for a matching request in its HTTP cache. |
 | <code>FORCE_CACHE</code> | The runtime environment looks for a matching request in its HTTP cache. |
 
+---
+
+**<code>DEFAULT</code>**
+The runtime environment looks for a matching request in its HTTP cache.
+
+* If there is a match and it is fresh, it will be returned from the cache.
+* If there is a match but it is stale, the runtime environment will make a conditional request to the remote server.
+* If the server indicates that the resource has not changed, it will be returned from the cache.
+* Otherwise the resource will be downloaded from the server and the cache will be updated.
+* If there is no match, the runtime environment will make a normal request, and will update the cache with the downloaded resource.
+
+---
+
+
+**<code>NO_STORE</code>**
+The runtime environment fetches the resource from the remote server without first looking in the cache, and will not update the cache with the downloaded resource.
+
+---
+
+
+**<code>RELOAD</code>**
+The runtime environment fetches the resource from the remote server without first looking in the cache, but then will update the cache with the downloaded resource.
+
+---
+
+
+**<code>NO_CACHE</code>**
+The runtime environment looks for a matching request in its HTTP cache.
+
+* If there is a match, fresh or stale, the runtime environment will make a conditional request to the remote server.
+* If the server indicates that the resource has not changed, it will be returned from the cache. Otherwise the resource will be downloaded from the server and the cache will be updated.
+* If there is no match, the runtime environment will make a normal request, and will update the cache with the downloaded resource.
+
+---
+
+
+**<code>FORCE_CACHE</code>**
+The runtime environment looks for a matching request in its HTTP cache.
+
+* If there is a match, fresh or stale, it will be returned from the cache.
+* If there is no match, the runtime environment will make a normal request, and will update the cache with the downloaded resource.
+
+---
+
+
 ### RequestRedirect <a name="RequestRedirect" id="@winglang/sdk.http.RequestRedirect"></a>
 
 The redirect read-only property that contains the mode for how redirects are handled.
@@ -368,3 +445,17 @@ The redirect read-only property that contains the mode for how redirects are han
 | --- | --- |
 | <code>FOLLOW</code> | Follow all redirects incurred when fetching a resource. |
 | <code>ERROR</code> | Return a network error when a request is met with a redirect. |
+
+---
+
+**<code>FOLLOW</code>**
+Follow all redirects incurred when fetching a resource.
+
+---
+
+
+**<code>ERROR</code>**
+Return a network error when a request is met with a redirect.
+
+---
+

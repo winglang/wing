@@ -16,7 +16,8 @@ const typeToString: TranspiledTypeReferenceToStringOptions = {
 
 const formatStructInitialization = (type: transpile.TranspiledType) => {
   const target = type.submodule ? `${type.namespace}.${type.name}` : type.name;
-  return `let ${type.name.toLowerCase()} = ${target} { ... }`;
+  let typeName = type.name[0].toLowerCase() + type.name.slice(1);
+  return `let ${typeName} = ${target} { ... }`;
 };
 
 const formatClassInitialization = (

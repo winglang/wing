@@ -131,7 +131,7 @@ Props for `Resource.addConnection`.
 ```wing
 bring std;
 
-let addconnectionprops = std.AddConnectionProps { ... }
+let addConnectionProps = std.AddConnectionProps { ... }
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -266,7 +266,7 @@ Properties for the Display class.
 ```wing
 bring std;
 
-let displayprops = std.DisplayProps { ... }
+let displayProps = std.DisplayProps { ... }
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -326,7 +326,7 @@ This is the type users see when constructing a std.Test instance.
 ```wing
 bring std;
 
-let testprops = std.TestProps { ... }
+let testProps = std.TestProps { ... }
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -2051,3 +2051,17 @@ the arrow would point from A to B, and vice versa for inbound connections.
 | --- | --- |
 | <code>OUTBOUND</code> | Indicates that this resource calls, triggers, or references the resource it is connected to. |
 | <code>INBOUND</code> | Indicates that this resource is called, triggered, or referenced by the resource it is connected to. |
+
+---
+
+**<code>OUTBOUND</code>**
+Indicates that this resource calls, triggers, or references the resource it is connected to.
+
+---
+
+
+**<code>INBOUND</code>**
+Indicates that this resource is called, triggered, or referenced by the resource it is connected to.
+
+---
+

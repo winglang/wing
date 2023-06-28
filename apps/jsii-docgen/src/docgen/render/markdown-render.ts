@@ -373,6 +373,11 @@ export class MarkdownRenderer {
     const md = new MarkdownDocument({ header: { title: "Members" } });
 
     md.table(this.createTable(enus, false));
+    md.split();
+
+    for (const enu of enus) {
+      md.section(this.visitEnumMember(enu));
+    }
 
     return md;
   }
@@ -470,19 +475,9 @@ export class MarkdownRenderer {
   }
 
   public visitEnumMember(em: EnumMemberSchema): MarkdownDocument {
-    const md = new MarkdownDocument({
-      id: this.anchorFormatter({
-        id: em.id,
-        displayName: em.displayName,
-        fqn: em.fqn,
-        ...this.metadata,
-      }),
-      header: {
-        title: em.displayName,
-        pre: true,
-        strike: em.docs.deprecated,
-      },
-    });
+    const md = new MarkdownDocument();
+
+    md.lines(MarkdownDocument.bold(MarkdownDocument.pre(em.displayName)));
 
     if (em.docs.deprecated) {
       md.bullet(
@@ -545,22 +540,11 @@ export class MarkdownRenderer {
   }
 
   public visitParameter(parameter: ParameterSchema): MarkdownDocument {
-    const optionality = parameter.optional ? "Optional" : "Required";
+    const md = new MarkdownDocument();
 
-    const md = new MarkdownDocument({
-      id: this.anchorFormatter({
-        id: parameter.id,
-        displayName: parameter.displayName,
-        fqn: parameter.fqn,
-        ...this.metadata,
-      }),
-      header: {
-        title: parameter.displayName,
-        sup: optionality,
-        pre: true,
-        strike: parameter.docs.deprecated,
-      },
-    });
+    md.lines(
+      MarkdownDocument.bold(MarkdownDocument.pre(parameter.displayName))
+    );
 
     if (parameter.docs.deprecated) {
       md.bullet(
