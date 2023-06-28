@@ -143,7 +143,7 @@ let testKv = inflight (kv: IKVStore):void => {
     value: "v" 
   });
   let result = kv.get("k");
-  log(result.get("value"));
+  log("${result.get("value")}");
   assert("v" == str.fromJson(result.get("value")));
 };
 
