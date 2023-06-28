@@ -120,3 +120,26 @@ test "inflight super constructor" {
   let b = new B("ba");
   assert(b.sound == "ba");
 }
+
+// derived preflight class with inflight methods
+class Bar {}
+class Foo extends Bar  {
+  init() {
+    super();
+  }
+
+  inflight doStuff(h: num) {}
+}
+
+new Foo();
+
+// derived classes without defined constructors
+class Baz extends Bar {}
+new Baz();
+
+inflight class Float {}
+inflight class Soar extends Float {}
+
+test "soar" {
+  new Soar();
+}
