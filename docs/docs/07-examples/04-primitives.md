@@ -16,7 +16,7 @@ let s3 = "Concat: " + s1; // string concatenation
 log(s3); // prints Concat: Hello Wing String
 ```
 
-### Kitchen Sink
+### Str methods
 ```ts playground
 let s = "Hello to a new Wing world";
 
