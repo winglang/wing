@@ -7,14 +7,14 @@ keywords: [Wing example]
 ### Using Json literal
 ```js playground
 let j = Json {
-    k1: 1,
-    k2: "hello",
-    k3: true,
-    k4: {
-      k1: [1, "a", true, {} ]
-    }
-  };
-  log(j);
+  k1: 1,
+  k2: "hello",
+  k3: true,
+  k4: {
+    k1: [1, "a", true, {} ]
+  }
+};
+log(j);
 ```
 ### From `str`
 ```js playground
@@ -36,22 +36,7 @@ log(jsonBoolValue);
 let jsonHomogeneousArrayValue = Json Array<str> ["a", "b"];
 log(jsonHomogeneousArrayValue);
 ```
-----------
-```js playground
-test "json" {
-  
-}
 
-test "parsing a json string" {
-  let jsonFromParse = Json.parse("{\"k1\":\"v\"}");
-  log(jsonFromParse);
-}
-test "try parsing a json string" {
-  if let jsonFromTryParse = Json.tryParse("{\"k1\":\"v\"}") {
-    log(jsonFromTryParse);
-  }
-}
-```
 ### Parsing `str`
 ```js playground
 let jsonFromParse = Json.parse("{\"k1\":\"v\"}");
@@ -62,8 +47,8 @@ if let jsonFromTryParse = Json.tryParse("{\"k1\":\"v\"}") {
 } else {
   log("failed to parse string to JSON");
 }
-
 ```
+
 ## Enumerating 
 ### Over keys
 ```js playground
@@ -94,29 +79,30 @@ for v in Json.values(arrayValue) {
   log(str.fromJson(v));
 }
 ```
-### To Primitives
-#### To `str`
+
+## To Primitives
+### To `str`
 ```js playground
 let j = Json {
-    k1: "hello"
+    k: "hello"
 };
 
-let jsonStringValue = j.get("k1");
-let s = str.fromJson(jsonStringValue);
-assert(jsonStringValue == Json "hello");
-assert("hello" == s);
+log(j.get("k").asStr());
 ```
 
-test "converting to num" {
-  let jsonNumValue = j.get("k2");
-  let n = num.fromJson(jsonNumValue);
-  assert(jsonNumValue == Json 42);
-  assert(n == 42);
-}
+### To `num`
+```js playground
+let j = Json {
+    k: 12
+};
+log(j.get("k").asNum());
+```
 
-test "converting to bool" {
-  let jsonBoolValue = j.get("k3");
-  let b = bool.fromJson(jsonBoolValue);
-  assert(jsonBoolValue == Json true);
-  assert(b);
-}
+### To `bool`
+
+```js playground
+let j = Json {
+    k:true
+};
+log(j.get("k").asBool());
+```

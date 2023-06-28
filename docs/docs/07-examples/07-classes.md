@@ -4,37 +4,48 @@ id: classes
 keywords: [Wing example]
 ---
 
-### Preflight class 
+### Preflight class
 ```ts playground
 bring cloud;
+bring util;
 
-class KeyValueStore {
-  bucket: cloud.Bucket;
-  init(store: cloud.Bucket) {
-    this.bucket = store;
+class Foo  {
+  field1: str;     // <-- readonly
+  var field2: num; // <-- reassignable
+  inflight field3: Array<str>;
+
+  init() {
+    this.field1 = "hello";
+    this.field2 = 123;
   }
 
-  inflight get(key: str): Json {
-    return this.bucket.getJson(key);
+  setField2(value: num): void {
+    this.field2 = value;
   }
-  inflight set(key: str, value: Json): void {
-    this.bucket.putJson(key, value);
+
+  inflight init() {
+    this.field3 = ["value created on inflight init"];
+    log("at inflight init");
+  }
+
+  inflight doStuff() {
+    // all code is async and runs on the cloud
+    log("field3[0]='${this.field3.at(0)}'");
+    util.sleep(1s);
+    log("done");
   }
 }
 
-let kv = new KeyValueStore(new cloud.Bucket());
+let f = new Foo();
+log("field1=${f.field1}");
+log("field2=${f.field2}");
 
-test "main" {
-  kv.set("k", Json { 
-    value: "v" 
-  });
-  let result = kv.get("k");
-  log("${result}");
-  assert("v" == str.fromJson(result.get("value")));
-}
-
+new cloud.Function(inflight () => {
+  f.doStuff();
+});
 
 ```
+
 ### Inflight interface
 ```js playground
 bring cloud;
@@ -63,7 +74,7 @@ new cloud.Function(inflight () => {
 /**
  * Preflight Interface
  **/ 
-interface IKVStore extends std.IResource {
+interface IKVStore extends std.IResource { // https://github.com/winglang/wing/issues/1961
   inflight get(key: str): Json;
   inflight set(key: str, value: Json): void;
 }
@@ -87,7 +98,7 @@ class BucketBasedKeyValueStore impl IKVStore {
 ```js playground
 bring cloud;
 
-interface IKVStore extends std.IResource {
+interface IKVStore extends std.IResource { 
   inflight get(key: str): Json;
   inflight set(key: str, value: Json): void;
 }
@@ -127,20 +138,19 @@ class TableBasedKeyValueStore impl IKVStore {
 let bucketBased: IKVStore = new BucketBasedKeyValueStore();
 let tableBased: IKVStore = new TableBasedKeyValueStore();
 
-test "get and set on bucketBased" {
-  bucketBased.set("k", Json { 
+let testKv = inflight (kv: IKVStore):void => {
+  kv.set("k", Json { 
     value: "v" 
   });
-  let result = bucketBased.get("k");
+  let result = kv.get("k");
+  log(result.get("value"));
   assert("v" == str.fromJson(result.get("value")));
-}
+};
 
-test "get and set on tableBased" {
-  tableBased.set("k", Json { 
-    value: "v" 
-  });
-  let result = tableBased.get("k");
-  log("${result}");
-  assert("v" == str.fromJson(result.get("value")));
-}
+new cloud.Function(inflight () => {
+  log("testing bucketBased KVStore");
+  testKv(bucketBased);
+  log("testing tableBased KVStore");
+  testKv(tableBased);
+});
 ```

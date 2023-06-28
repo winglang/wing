@@ -19,6 +19,14 @@ for value in iterable {
   }
   log(value);
 }
+/** 
+ * prints
+ a
+ c
+ d
+ e
+ f
+**/
 ```
 
 ### For through a range
@@ -49,11 +57,11 @@ let grade = (score: num): str => {
     }
 };
 
-log("54 is ${grade(54)}");
-log("62 is ${grade(62)}");
-log("68 is ${grade(68)}");
-log("99 is ${grade(99)}");
-log("101 is ${grade(101)}");
+log("54 is ${grade(54)}"); // 54 is F
+log("62 is ${grade(62)}"); // 62 is C
+log("68 is ${grade(68)}"); // 68 is B
+log("99 is ${grade(99)}"); // 99 is A
+log("101 is ${grade(101)}"); // 101 is Invalid grade
 ```
 
 ### While 
@@ -72,4 +80,18 @@ while i < 100 {
   }
   log("${i}");
 }
+/** 
+ * prints
+  1
+  3
+  5
+  7
+  9
+  11
+  13
+  15
+  17
+  19
+**/
 ```
+
