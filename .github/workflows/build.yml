@@ -298,7 +298,7 @@ jobs:
       HANGAR_WING_SPEC: "file:${{ github.workspace }}/target/wing/winglang-${{ needs.build.outputs.version }}.tgz"
       HANGAR_WINGCONSOLE_APP_SPEC: "file:${{ github.workspace }}/target/wingconsoleapp/wingconsole-app-${{ needs.build.outputs.version }}.tgz"
       HANGAR_WINGCONSOLE_SERVER_SPEC: "file:${{ github.workspace }}/target/wingconsoleserver/wingconsole-server-${{ needs.build.outputs.version }}.tgz"
-      HANGAR_WINGCONSOLE_DESIGN_SYSTEM_SPEC: "file:${{ github.workspace }}/wingconsoledesignsystem/wingconsole-design-system-${{ needs.build.outputs.version }}.tgz"
+      HANGAR_WINGCONSOLE_DESIGN_SYSTEM_SPEC: "file:${{ github.workspace }}/target/wingconsoledesignsystem/wingconsole-design-system-${{ needs.build.outputs.version }}.tgz"
       HANGAR_WINGCONSOLE_UI_SPEC: "file:${{ github.workspace }}/target/wingconsoleui/wingconsole-ui-${{ needs.build.outputs.version }}.tgz"
       HANGAR_WINGCOMPILER_SPEC: "file:${{ github.workspace }}/target/wingcompiler/winglang-compiler-${{ needs.build.outputs.version }}.tgz"
       HANGAR_WINGSDK_SPEC: "file:${{ github.workspace }}/target/wingsdk/winglang-sdk-${{ needs.build.outputs.version }}.tgz"
