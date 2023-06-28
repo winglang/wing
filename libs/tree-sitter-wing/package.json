@@ -19,10 +19,10 @@
     "nan": "^2.12.1"
   },
   "scripts": {
-    "test": "npx -y tree-sitter-cli@0.20.6 test",
-    "test:update": "npx -y tree-sitter-cli@0.20.6 test --update",
+    "test": "npx -y tree-sitter-cli test",
+    "test:update": "npx -y tree-sitter-cli test --update",
     "test:watch": "npx -y nodemon --watch grammar.js --watch src/scanner.c --exec \"npm run test\"",
-    "build": "npx -y tree-sitter-cli@0.20.6 generate",
+    "build": "npx -y tree-sitter-cli generate",
     "build:watch": "npx -y nodemon --watch grammar.js --watch src/scanner.c --exec \"npm run build\"",
     "build:wasm": "npm run build && npx -y tree-sitter-cli@0.20.6 build-wasm --docker",
     "playground": "npm run build:wasm && npx -y tree-sitter-cli@0.20.6 playground",
