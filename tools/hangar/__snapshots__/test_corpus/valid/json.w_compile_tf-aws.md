@@ -141,7 +141,7 @@ class $Root extends $stdlib.std.Resource {
     {((cond) => {if (!cond) throw new Error("assertion failed: unestedJsonArr.getAt(0) == 1")})(((unestedJsonArr)[0] === 1))};
     const jsonElements = Object.freeze({"strings":{"single":"Hello","array":["Hello", "World", "!"]},"numbers":{"one":1,"two":2,"three":3},"bools":{"t":true,"f":false}});
     {
-      const $IF_LET_VALUE = ((arg) => { return (typeof arg === "string") ? JSON.parse(JSON.stringify(arg)) : undefined })(((jsonElements)["strings"])["single"]);
+      const $IF_LET_VALUE = ((arg) => { return (typeof arg === "string") ? JSON.parse(JSON.stringify(arg)) : undefined })(((jsonElements)?.["strings"])?.["single"]);
       if ($IF_LET_VALUE != undefined) {
         const val = $IF_LET_VALUE;
         {((cond) => {if (!cond) throw new Error("assertion failed: val == \"Hello\"")})((val === "Hello"))};
@@ -151,11 +151,11 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     {
-      const $IF_LET_VALUE = ((jsonElements)["strings"])["array"];
+      const $IF_LET_VALUE = ((jsonElements)?.["strings"])?.["array"];
       if ($IF_LET_VALUE != undefined) {
         const vals = $IF_LET_VALUE;
         {
-          const $IF_LET_VALUE = (vals)[0];
+          const $IF_LET_VALUE = (vals)?.[0];
           if ($IF_LET_VALUE != undefined) {
             const hello = $IF_LET_VALUE;
             {((cond) => {if (!cond) throw new Error("assertion failed: hello == \"Hello\"")})((hello === "Hello"))};
@@ -170,7 +170,7 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     {
-      const $IF_LET_VALUE = ((arg) => { return (typeof arg === "number") ? JSON.parse(JSON.stringify(arg)) : undefined })(((jsonElements)["numbers"])["two"]);
+      const $IF_LET_VALUE = ((arg) => { return (typeof arg === "number") ? JSON.parse(JSON.stringify(arg)) : undefined })(((jsonElements)?.["numbers"])?.["two"]);
       if ($IF_LET_VALUE != undefined) {
         const two = $IF_LET_VALUE;
         {((cond) => {if (!cond) throw new Error("assertion failed: two + 2 == 4")})(((two + 2) === 4))};
@@ -180,12 +180,26 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     {
-      const $IF_LET_VALUE = ((arg) => { return (typeof arg === "boolean") ? JSON.parse(JSON.stringify(arg)) : undefined })(((jsonElements)["bools"])["t"]);
+      const $IF_LET_VALUE = ((arg) => { return (typeof arg === "boolean") ? JSON.parse(JSON.stringify(arg)) : undefined })(((jsonElements)?.["bools"])?.["t"]);
       if ($IF_LET_VALUE != undefined) {
         const truth = $IF_LET_VALUE;
         {((cond) => {if (!cond) throw new Error("assertion failed: truth")})(truth)};
       }
       else {
+        {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
+      }
+    }
+    {
+      const $IF_LET_VALUE = ((((jsonElements)?.["strings"])?.["non"])?.["existant"])?.["element"];
+      if ($IF_LET_VALUE != undefined) {
+        const val = $IF_LET_VALUE;
+        {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
+      }
+    }
+    {
+      const $IF_LET_VALUE = (((jsonElements)?.["cant"])?.[1000])?.[42];
+      if ($IF_LET_VALUE != undefined) {
+        const val = $IF_LET_VALUE;
         {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
       }
     }

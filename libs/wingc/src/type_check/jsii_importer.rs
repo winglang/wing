@@ -200,7 +200,7 @@ impl<'a> JsiiImporter<'a> {
 		} else {
 			let ns = self.wing_types.add_namespace(Namespace {
 				name: type_name.assembly().to_string(),
-				env: SymbolEnv::new(None, self.wing_types.void(), false, Phase::Preflight, 0),
+				env: SymbolEnv::new(None, self.wing_types.void(), false, false, Phase::Preflight, 0),
 				loaded: false,
 			});
 			self
@@ -242,7 +242,7 @@ impl<'a> JsiiImporter<'a> {
 			} else {
 				let ns = self.wing_types.add_namespace(Namespace {
 					name: namespace_name.to_string(),
-					env: SymbolEnv::new(None, self.wing_types.void(), false, Phase::Preflight, 0),
+					env: SymbolEnv::new(None, self.wing_types.void(), false, false, Phase::Preflight, 0),
 					loaded: false,
 				});
 				parent_ns
@@ -311,6 +311,7 @@ impl<'a> JsiiImporter<'a> {
 			None,
 			self.wing_types.void(),
 			false,
+			false,
 			Phase::Preflight,
 			self.jsii_spec.import_statement_idx,
 		);
@@ -324,6 +325,7 @@ impl<'a> JsiiImporter<'a> {
 					None,
 					self.wing_types.void(),
 					false,
+					false,
 					iface_env.phase,
 					self.jsii_spec.import_statement_idx,
 				), // Dummy env, will be replaced below
@@ -335,6 +337,7 @@ impl<'a> JsiiImporter<'a> {
 				env: SymbolEnv::new(
 					None,
 					self.wing_types.void(),
+					false,
 					false,
 					iface_env.phase,
 					self.jsii_spec.import_statement_idx,
@@ -609,7 +612,7 @@ impl<'a> JsiiImporter<'a> {
 		};
 
 		// Create environment representing this class, for now it'll be empty just so we can support referencing ourselves from the class definition.
-		let dummy_env = SymbolEnv::new(None, self.wing_types.void(), false, class_phase, 0);
+		let dummy_env = SymbolEnv::new(None, self.wing_types.void(), false, false, class_phase, 0);
 		let new_type_symbol = Self::jsii_name_to_symbol(type_name, &jsii_class.location_in_module);
 		// Create the new resource/class type and add it to the current environment.
 		// When adding the class methods below we'll be able to reference this type.
@@ -661,7 +664,7 @@ impl<'a> JsiiImporter<'a> {
 		self.register_jsii_type(&jsii_class_fqn, &new_type_symbol, new_type);
 
 		// Create class's actual environment before we add properties and methods to it
-		let mut class_env = SymbolEnv::new(base_class_env, self.wing_types.void(), false, class_phase, 0);
+		let mut class_env = SymbolEnv::new(base_class_env, self.wing_types.void(), false, false, class_phase, 0);
 
 		// Add constructor to the class environment
 		let jsii_initializer = jsii_class.initializer.as_ref();
@@ -894,7 +897,7 @@ impl<'a> JsiiImporter<'a> {
 			{
 				let ns = self.wing_types.add_namespace(Namespace {
 					name: assembly.name.clone(),
-					env: SymbolEnv::new(None, self.wing_types.void(), false, Phase::Preflight, 0),
+					env: SymbolEnv::new(None, self.wing_types.void(), false, false, Phase::Preflight, 0),
 					loaded: false,
 				});
 				self
