@@ -7,6 +7,9 @@ import {
   targetWingSDKSpec,
   targetWingCompilerSpec,
   targetWingSpec,
+  targetWingConsoleAppSpec,
+  targetWingConsoleServerSpec,
+  targetWingConsoleUiSpec,
   tmpDir,
   wingBin,
 } from "./paths";
@@ -44,6 +47,9 @@ export default async function () {
     targetWingSDKSpec,
     targetWingCompilerSpec,
     targetWingSpec,
+    targetWingConsoleAppSpec,
+    targetWingConsoleServerSpec,
+    targetWingConsoleUiSpec,
   ];
   const installResult = await execa(npmBin, installArgs, {
     cwd: tmpDir,

@@ -21,14 +21,7 @@ export interface Compiler {
   ): void;
 }
 
-const deduceSimfile = (wingfile: string): string => {
-  const dirname = path.dirname(wingfile);
-  const basename = path.basename(wingfile, ".w");
-  return path.resolve(dirname, "target", `${basename}.wsim`);
-};
-
 export const createCompiler = (wingfile: string): Compiler => {
-  const simfile = deduceSimfile(wingfile);
   const events = new Emittery<CompilerEvents>();
   let isCompiling = false;
   let shouldCompileAgain = false;
@@ -41,7 +34,7 @@ export const createCompiler = (wingfile: string): Compiler => {
     try {
       isCompiling = true;
       await events.emit("compiling");
-      const outdir = await wing.compile(wingfile, {
+      const simfile = await wing.compile(wingfile, {
         target: wing.Target.SIM,
       });
       await events.emit("compiled", { simfile });

@@ -29,6 +29,7 @@ test("create a table", async () => {
         age: cloud.ColumnType.NUMBER,
       },
       primaryKey: "id",
+      initialRows: {},
     },
     type: "wingsdk.cloud.Table",
   });
@@ -65,6 +66,7 @@ test("insert row", async () => {
         age: cloud.ColumnType.NUMBER,
       },
       primaryKey: "id",
+      initialRows: {},
     },
     type: "wingsdk.cloud.Table",
   });
@@ -104,6 +106,7 @@ test("get row", async () => {
         age: cloud.ColumnType.NUMBER,
       },
       primaryKey: "id",
+      initialRows: {},
     },
     type: "wingsdk.cloud.Table",
   });
@@ -146,6 +149,7 @@ test("update row", async () => {
         age: cloud.ColumnType.NUMBER,
       },
       primaryKey: "id",
+      initialRows: {},
     },
     type: "wingsdk.cloud.Table",
   });
@@ -187,6 +191,7 @@ test("list table", async () => {
         age: cloud.ColumnType.NUMBER,
       },
       primaryKey: "id",
+      initialRows: {},
     },
     type: "wingsdk.cloud.Table",
   });
@@ -253,4 +258,51 @@ test("deleting non-existent item", async () => {
   await expect(() => client.delete("joe-id")).rejects.toThrow(
     `The primary key "joe-id" not found in the "my_delete_non_existent_table" table.`
   );
+});
+
+test("can add row in preflight", async () => {
+  // GIVEN
+  const KEY = "joe-id";
+  const ROW = { name: "Joe Doe", age: 50 };
+
+  const app = new SimApp();
+  const table = cloud.Table._newTable(app, "my_table", {
+    name: "my_addrow_table",
+    columns: {
+      name: cloud.ColumnType.STRING,
+      age: cloud.ColumnType.NUMBER,
+    },
+    primaryKey: "id",
+    initialRows: {},
+  });
+  table.addRow(KEY, ROW as any);
+
+  const s = await app.startSimulator();
+  const client = s.getResource("/my_table") as ITableClient;
+
+  const joe = await client.get("joe-id");
+  expect(joe).toEqual({ name: "Joe Doe", age: 50 });
+
+  expect(s.getResourceConfig("/my_table")).toEqual({
+    attrs: {
+      handle: expect.any(String),
+    },
+    path: "root/my_table",
+    props: {
+      name: "my_addrow_table",
+      columns: {
+        name: cloud.ColumnType.STRING,
+        age: cloud.ColumnType.NUMBER,
+      },
+      primaryKey: "id",
+      initialRows: {
+        "joe-id": { name: "Joe Doe", age: 50 },
+      },
+    },
+    type: "wingsdk.cloud.Table",
+  });
+  await s.stop();
+
+  expect(listMessages(s)).toMatchSnapshot();
+  expect(app.snapshot()).toMatchSnapshot();
 });
