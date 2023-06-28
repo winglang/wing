@@ -1,6 +1,6 @@
 ---
-title: Using javascript code
-id: using-javascript-code
+title: Using javascript
+id: using-javascript
 keywords: [Wing example]
 ---
 
