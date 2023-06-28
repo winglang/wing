@@ -3,6 +3,7 @@ import {
   DeleteObjectCommand,
   GetBucketLocationCommand,
   GetObjectCommand,
+  GetPublicAccessBlockCommand,
   ListObjectsV2Command,
   PutObjectCommand,
   S3Client,
@@ -173,10 +174,14 @@ test("Given a non public bucket when reaching to a key public url it should thro
   const BUCKET_NAME = "BUCKET_NAME";
   const KEY = "KEY";
 
-  s3Mock
-    .on(GetBucketLocationCommand, { Bucket: BUCKET_NAME })
-    .resolves({ LocationConstraint: "us-east-2" });
-
+  s3Mock.on(GetPublicAccessBlockCommand, { Bucket: BUCKET_NAME }).resolves({
+    PublicAccessBlockConfiguration: {
+      BlockPublicAcls: true,
+      BlockPublicPolicy: true,
+      RestrictPublicBuckets: true,
+      IgnorePublicAcls: true,
+    },
+  });
   // WHEN
   const client = new BucketClient(BUCKET_NAME);
 
@@ -197,6 +202,14 @@ test("Given a public bucket when reaching to a non existent key, public url it s
   const BUCKET_NAME = "BUCKET_NAME";
   const KEY = "KEY";
 
+  s3Mock.on(GetPublicAccessBlockCommand, { Bucket: BUCKET_NAME }).resolves({
+    PublicAccessBlockConfiguration: {
+      BlockPublicAcls: false,
+      BlockPublicPolicy: false,
+      RestrictPublicBuckets: false,
+      IgnorePublicAcls: false,
+    },
+  });
   s3Mock
     .on(GetBucketLocationCommand, { Bucket: BUCKET_NAME })
     .resolves({ LocationConstraint: "us-east-2" });
@@ -205,7 +218,7 @@ test("Given a public bucket when reaching to a non existent key, public url it s
     .resolves({ Contents: [] });
 
   //WHEN
-  const client = new BucketClient(BUCKET_NAME, true);
+  const client = new BucketClient(BUCKET_NAME);
   try {
     await client.publicUrl(KEY);
   } catch (err) {
@@ -223,6 +236,14 @@ test("Given a public bucket, when giving one of its keys, we should get it's pub
   const KEY = "KEY";
   const REGION = "us-east-2";
 
+  s3Mock.on(GetPublicAccessBlockCommand, { Bucket: BUCKET_NAME }).resolves({
+    PublicAccessBlockConfiguration: {
+      BlockPublicAcls: false,
+      BlockPublicPolicy: false,
+      RestrictPublicBuckets: false,
+      IgnorePublicAcls: false,
+    },
+  });
   s3Mock
     .on(GetBucketLocationCommand, { Bucket: BUCKET_NAME })
     .resolves({ LocationConstraint: REGION });
@@ -231,7 +252,7 @@ test("Given a public bucket, when giving one of its keys, we should get it's pub
     .resolves({ Contents: [{}] });
 
   // WHEN
-  const client = new BucketClient(BUCKET_NAME, true);
+  const client = new BucketClient(BUCKET_NAME);
   const response = await client.publicUrl(KEY);
 
   // THEN
