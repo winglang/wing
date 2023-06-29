@@ -3,7 +3,8 @@ title: Json
 id: json
 keywords: [Wing example]
 ---
-## Creation
+## Create Json values
+
 ### Using Json literal
 ```js playground
 let j = Json {
@@ -15,26 +16,33 @@ let j = Json {
   }
 };
 log(j);
-```
-### From `str`
-```js playground
+
 let jsonStrValue = Json "Hello";
 log(jsonStrValue);
-```
-### From `num`
-```js playground
+
 let jsonNumValue = Json 42;
 log(jsonNumValue);
-```
-### From `bool`
-```js playground
+
 let jsonBoolValue = Json true;
 log(jsonBoolValue);
-```
-### From `array`
-```js playground
-let jsonHomogeneousArrayValue = Json Array<str> ["a", "b"];
+
+let jsonHomogeneousArrayValue = Json ["a", "b"];
 log(jsonHomogeneousArrayValue);
+```
+
+### From existing variables
+
+```js playground
+let x: num = 42;
+let jsonNum = Json x;
+log(j); // 42
+
+let chars = Array<str>["a", "b"];
+let jsonChars = Json chars;
+log(chars); // ["a","b"]
+
+let jsonComplex = Json { "first": x, "second": chars };
+log(jsonComplex); // {"first": 42, "second": ["a","b"]}
 ```
 
 ### Parsing `str`
