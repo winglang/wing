@@ -43,7 +43,7 @@ module.exports = function({ myConst }) {
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.2"
+      "version": "0.17.0"
     },
     "outputs": {
       "root": {
@@ -57,7 +57,7 @@ module.exports = function({ myConst }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:inflight class captures const\",\"${aws_lambda_function.root_testinflightclasscapturesconst_Handler_E42B6854.arn}\"]]"
+      "value": "[[\"root/Default/Default/test:inflight class captures const\",\"${aws_lambda_function.testinflightclasscapturesconst_Handler_17207FA8.arn}\"]]"
     }
   },
   "provider": {
@@ -67,46 +67,46 @@ module.exports = function({ myConst }) {
   },
   "resource": {
     "aws_iam_role": {
-      "root_testinflightclasscapturesconst_Handler_IamRole_23E263B8": {
+      "testinflightclasscapturesconst_Handler_IamRole_1218DA8A": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:inflight class captures const/Handler/IamRole",
-            "uniqueId": "root_testinflightclasscapturesconst_Handler_IamRole_23E263B8"
+            "uniqueId": "testinflightclasscapturesconst_Handler_IamRole_1218DA8A"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
-      "root_testinflightclasscapturesconst_Handler_IamRolePolicy_627696DB": {
+      "testinflightclasscapturesconst_Handler_IamRolePolicy_7A96DC9C": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:inflight class captures const/Handler/IamRolePolicy",
-            "uniqueId": "root_testinflightclasscapturesconst_Handler_IamRolePolicy_627696DB"
+            "uniqueId": "testinflightclasscapturesconst_Handler_IamRolePolicy_7A96DC9C"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
-        "role": "${aws_iam_role.root_testinflightclasscapturesconst_Handler_IamRole_23E263B8.name}"
+        "role": "${aws_iam_role.testinflightclasscapturesconst_Handler_IamRole_1218DA8A.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
-      "root_testinflightclasscapturesconst_Handler_IamRolePolicyAttachment_35054A30": {
+      "testinflightclasscapturesconst_Handler_IamRolePolicyAttachment_C7CD4A0F": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:inflight class captures const/Handler/IamRolePolicyAttachment",
-            "uniqueId": "root_testinflightclasscapturesconst_Handler_IamRolePolicyAttachment_35054A30"
+            "uniqueId": "testinflightclasscapturesconst_Handler_IamRolePolicyAttachment_C7CD4A0F"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.root_testinflightclasscapturesconst_Handler_IamRole_23E263B8.name}"
+        "role": "${aws_iam_role.testinflightclasscapturesconst_Handler_IamRole_1218DA8A.name}"
       }
     },
     "aws_lambda_function": {
-      "root_testinflightclasscapturesconst_Handler_E42B6854": {
+      "testinflightclasscapturesconst_Handler_17207FA8": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:inflight class captures const/Handler/Default",
-            "uniqueId": "root_testinflightclasscapturesconst_Handler_E42B6854"
+            "uniqueId": "testinflightclasscapturesconst_Handler_17207FA8"
           }
         },
         "environment": {
@@ -118,10 +118,10 @@ module.exports = function({ myConst }) {
         "function_name": "Handler-c8e53a58",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.root_testinflightclasscapturesconst_Handler_IamRole_23E263B8.arn}",
+        "role": "${aws_iam_role.testinflightclasscapturesconst_Handler_IamRole_1218DA8A.arn}",
         "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
-        "s3_key": "${aws_s3_object.root_testinflightclasscapturesconst_Handler_S3Object_AF634718.key}",
+        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
+        "s3_key": "${aws_s3_object.testinflightclasscapturesconst_Handler_S3Object_30E91D8B.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -130,25 +130,25 @@ module.exports = function({ myConst }) {
       }
     },
     "aws_s3_bucket": {
-      "root_Code_02F3C603": {
+      "Code": {
         "//": {
           "metadata": {
             "path": "root/Default/Code",
-            "uniqueId": "root_Code_02F3C603"
+            "uniqueId": "Code"
           }
         },
         "bucket_prefix": "code-c84a50b1-"
       }
     },
     "aws_s3_object": {
-      "root_testinflightclasscapturesconst_Handler_S3Object_AF634718": {
+      "testinflightclasscapturesconst_Handler_S3Object_30E91D8B": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:inflight class captures const/Handler/S3Object",
-            "uniqueId": "root_testinflightclasscapturesconst_Handler_S3Object_AF634718"
+            "uniqueId": "testinflightclasscapturesconst_Handler_S3Object_30E91D8B"
           }
         },
-        "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
+        "bucket": "${aws_s3_bucket.Code.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       }

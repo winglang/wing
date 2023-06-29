@@ -4,25 +4,25 @@ exports[`bucket is public 1`] = `
 "{
   \\"resource\\": {
     \\"azurerm_resource_group\\": {
-      \\"root_ResourceGroup_72A9AFB6\\": {
+      \\"ResourceGroup\\": {
         \\"location\\": \\"East US\\",
         \\"name\\": \\"Default-c82bf964\\"
       }
     },
     \\"azurerm_storage_account\\": {
-      \\"root_StorageAccount_3B92EC74\\": {
+      \\"StorageAccount\\": {
         \\"account_replication_type\\": \\"LRS\\",
         \\"account_tier\\": \\"Standard\\",
-        \\"location\\": \\"\${azurerm_resource_group.root_ResourceGroup_72A9AFB6.location}\\",
+        \\"location\\": \\"\${azurerm_resource_group.ResourceGroup.location}\\",
         \\"name\\": \\"defaultc82bf964\\",
-        \\"resource_group_name\\": \\"\${azurerm_resource_group.root_ResourceGroup_72A9AFB6.name}\\"
+        \\"resource_group_name\\": \\"\${azurerm_resource_group.ResourceGroup.name}\\"
       }
     },
     \\"azurerm_storage_container\\": {
-      \\"root_mybucket_Bucket_10512A98\\": {
+      \\"my_bucket_Bucket_50609D70\\": {
         \\"container_access_type\\": \\"public\\",
         \\"name\\": \\"my-bucket-c8045fcc\\",
-        \\"storage_account_name\\": \\"\${azurerm_storage_account.root_StorageAccount_3B92EC74.name}\\"
+        \\"storage_account_name\\": \\"\${azurerm_storage_account.StorageAccount.name}\\"
       }
     }
   }
@@ -40,7 +40,7 @@ exports[`bucket is public 2`] = `
               "ResourceGroup": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.15.2",
+                  "version": "0.17.0",
                 },
                 "id": "ResourceGroup",
                 "path": "root/Default/ResourceGroup",
@@ -48,7 +48,7 @@ exports[`bucket is public 2`] = `
               "StorageAccount": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.15.2",
+                  "version": "0.17.0",
                 },
                 "id": "StorageAccount",
                 "path": "root/Default/StorageAccount",
@@ -56,7 +56,7 @@ exports[`bucket is public 2`] = `
               "azure": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.15.2",
+                  "version": "0.17.0",
                 },
                 "id": "azure",
                 "path": "root/Default/azure",
@@ -69,7 +69,7 @@ exports[`bucket is public 2`] = `
                   "Bucket": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.15.2",
+                      "version": "0.17.0",
                     },
                     "id": "Bucket",
                     "path": "root/Default/my_bucket/Bucket",
@@ -97,7 +97,7 @@ exports[`bucket is public 2`] = `
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.15.2",
+              "version": "0.17.0",
             },
             "id": "backend",
             "path": "root/backend",
@@ -105,7 +105,7 @@ exports[`bucket is public 2`] = `
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.15.2",
+          "version": "0.17.0",
         },
         "id": "root",
         "path": "root",
@@ -113,7 +113,7 @@ exports[`bucket is public 2`] = `
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.15.2",
+      "version": "0.17.0",
     },
     "id": "App",
     "path": "",
@@ -126,25 +126,25 @@ exports[`bucket name valid 1`] = `
 "{
   \\"resource\\": {
     \\"azurerm_resource_group\\": {
-      \\"root_ResourceGroup_72A9AFB6\\": {
+      \\"ResourceGroup\\": {
         \\"location\\": \\"East US\\",
         \\"name\\": \\"Default-c82bf964\\"
       }
     },
     \\"azurerm_storage_account\\": {
-      \\"root_StorageAccount_3B92EC74\\": {
+      \\"StorageAccount\\": {
         \\"account_replication_type\\": \\"LRS\\",
         \\"account_tier\\": \\"Standard\\",
-        \\"location\\": \\"\${azurerm_resource_group.root_ResourceGroup_72A9AFB6.location}\\",
+        \\"location\\": \\"\${azurerm_resource_group.ResourceGroup.location}\\",
         \\"name\\": \\"defaultc82bf964\\",
-        \\"resource_group_name\\": \\"\${azurerm_resource_group.root_ResourceGroup_72A9AFB6.name}\\"
+        \\"resource_group_name\\": \\"\${azurerm_resource_group.ResourceGroup.name}\\"
       }
     },
     \\"azurerm_storage_container\\": {
-      \\"root_TheUncannyBucket_DDA021FB\\": {
+      \\"The-Uncanny-Bucket_61E10229\\": {
         \\"container_access_type\\": \\"private\\",
         \\"name\\": \\"the-uncanny-bucket-c8ac4720\\",
-        \\"storage_account_name\\": \\"\${azurerm_storage_account.root_StorageAccount_3B92EC74.name}\\"
+        \\"storage_account_name\\": \\"\${azurerm_storage_account.StorageAccount.name}\\"
       }
     }
   }
@@ -162,7 +162,7 @@ exports[`bucket name valid 2`] = `
               "ResourceGroup": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.15.2",
+                  "version": "0.17.0",
                 },
                 "id": "ResourceGroup",
                 "path": "root/Default/ResourceGroup",
@@ -170,7 +170,7 @@ exports[`bucket name valid 2`] = `
               "StorageAccount": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.15.2",
+                  "version": "0.17.0",
                 },
                 "id": "StorageAccount",
                 "path": "root/Default/StorageAccount",
@@ -183,7 +183,7 @@ exports[`bucket name valid 2`] = `
                   "Bucket": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.15.2",
+                      "version": "0.17.0",
                     },
                     "id": "Bucket",
                     "path": "root/Default/The-Uncanny-Bucket/Bucket",
@@ -203,7 +203,7 @@ exports[`bucket name valid 2`] = `
               "azure": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.15.2",
+                  "version": "0.17.0",
                 },
                 "id": "azure",
                 "path": "root/Default/azure",
@@ -219,7 +219,7 @@ exports[`bucket name valid 2`] = `
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.15.2",
+              "version": "0.17.0",
             },
             "id": "backend",
             "path": "root/backend",
@@ -227,7 +227,7 @@ exports[`bucket name valid 2`] = `
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.15.2",
+          "version": "0.17.0",
         },
         "id": "root",
         "path": "root",
@@ -235,7 +235,7 @@ exports[`bucket name valid 2`] = `
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.15.2",
+      "version": "0.17.0",
     },
     "id": "App",
     "path": "",
@@ -248,41 +248,41 @@ exports[`bucket with two preflight objects 1`] = `
 "{
   \\"resource\\": {
     \\"azurerm_resource_group\\": {
-      \\"root_ResourceGroup_72A9AFB6\\": {
+      \\"ResourceGroup\\": {
         \\"location\\": \\"East US\\",
         \\"name\\": \\"Default-c82bf964\\"
       }
     },
     \\"azurerm_storage_account\\": {
-      \\"root_StorageAccount_3B92EC74\\": {
+      \\"StorageAccount\\": {
         \\"account_replication_type\\": \\"LRS\\",
         \\"account_tier\\": \\"Standard\\",
-        \\"location\\": \\"\${azurerm_resource_group.root_ResourceGroup_72A9AFB6.location}\\",
+        \\"location\\": \\"\${azurerm_resource_group.ResourceGroup.location}\\",
         \\"name\\": \\"defaultc82bf964\\",
-        \\"resource_group_name\\": \\"\${azurerm_resource_group.root_ResourceGroup_72A9AFB6.name}\\"
+        \\"resource_group_name\\": \\"\${azurerm_resource_group.ResourceGroup.name}\\"
       }
     },
     \\"azurerm_storage_blob\\": {
-      \\"root_mybucket_Blobfile1txt_5100BBF1\\": {
+      \\"my_bucket_Blob-file1txt_2FA447D8\\": {
         \\"name\\": \\"file1.txt\\",
         \\"source_content\\": \\"hello world\\",
-        \\"storage_account_name\\": \\"\${azurerm_storage_account.root_StorageAccount_3B92EC74.name}\\",
-        \\"storage_container_name\\": \\"\${azurerm_storage_container.root_mybucket_Bucket_10512A98.name}\\",
+        \\"storage_account_name\\": \\"\${azurerm_storage_account.StorageAccount.name}\\",
+        \\"storage_container_name\\": \\"\${azurerm_storage_container.my_bucket_Bucket_50609D70.name}\\",
         \\"type\\": \\"Block\\"
       },
-      \\"root_mybucket_Blobfile2txt_D2544996\\": {
+      \\"my_bucket_Blob-file2txt_8F904E31\\": {
         \\"name\\": \\"file2.txt\\",
         \\"source_content\\": \\"boom bam\\",
-        \\"storage_account_name\\": \\"\${azurerm_storage_account.root_StorageAccount_3B92EC74.name}\\",
-        \\"storage_container_name\\": \\"\${azurerm_storage_container.root_mybucket_Bucket_10512A98.name}\\",
+        \\"storage_account_name\\": \\"\${azurerm_storage_account.StorageAccount.name}\\",
+        \\"storage_container_name\\": \\"\${azurerm_storage_container.my_bucket_Bucket_50609D70.name}\\",
         \\"type\\": \\"Block\\"
       }
     },
     \\"azurerm_storage_container\\": {
-      \\"root_mybucket_Bucket_10512A98\\": {
+      \\"my_bucket_Bucket_50609D70\\": {
         \\"container_access_type\\": \\"public\\",
         \\"name\\": \\"my-bucket-c8045fcc\\",
-        \\"storage_account_name\\": \\"\${azurerm_storage_account.root_StorageAccount_3B92EC74.name}\\"
+        \\"storage_account_name\\": \\"\${azurerm_storage_account.StorageAccount.name}\\"
       }
     }
   }
@@ -300,7 +300,7 @@ exports[`bucket with two preflight objects 2`] = `
               "ResourceGroup": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.15.2",
+                  "version": "0.17.0",
                 },
                 "id": "ResourceGroup",
                 "path": "root/Default/ResourceGroup",
@@ -308,7 +308,7 @@ exports[`bucket with two preflight objects 2`] = `
               "StorageAccount": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.15.2",
+                  "version": "0.17.0",
                 },
                 "id": "StorageAccount",
                 "path": "root/Default/StorageAccount",
@@ -316,7 +316,7 @@ exports[`bucket with two preflight objects 2`] = `
               "azure": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.15.2",
+                  "version": "0.17.0",
                 },
                 "id": "azure",
                 "path": "root/Default/azure",
@@ -329,7 +329,7 @@ exports[`bucket with two preflight objects 2`] = `
                   "Blob-file1.txt": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.15.2",
+                      "version": "0.17.0",
                     },
                     "id": "Blob-file1.txt",
                     "path": "root/Default/my_bucket/Blob-file1.txt",
@@ -337,7 +337,7 @@ exports[`bucket with two preflight objects 2`] = `
                   "Blob-file2.txt": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.15.2",
+                      "version": "0.17.0",
                     },
                     "id": "Blob-file2.txt",
                     "path": "root/Default/my_bucket/Blob-file2.txt",
@@ -345,7 +345,7 @@ exports[`bucket with two preflight objects 2`] = `
                   "Bucket": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.15.2",
+                      "version": "0.17.0",
                     },
                     "id": "Bucket",
                     "path": "root/Default/my_bucket/Bucket",
@@ -373,7 +373,7 @@ exports[`bucket with two preflight objects 2`] = `
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.15.2",
+              "version": "0.17.0",
             },
             "id": "backend",
             "path": "root/backend",
@@ -381,7 +381,7 @@ exports[`bucket with two preflight objects 2`] = `
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.15.2",
+          "version": "0.17.0",
         },
         "id": "root",
         "path": "root",
@@ -389,7 +389,7 @@ exports[`bucket with two preflight objects 2`] = `
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.15.2",
+      "version": "0.17.0",
     },
     "id": "App",
     "path": "",
@@ -402,25 +402,25 @@ exports[`create a bucket 1`] = `
 "{
   \\"resource\\": {
     \\"azurerm_resource_group\\": {
-      \\"root_ResourceGroup_72A9AFB6\\": {
+      \\"ResourceGroup\\": {
         \\"location\\": \\"East US\\",
         \\"name\\": \\"Default-c82bf964\\"
       }
     },
     \\"azurerm_storage_account\\": {
-      \\"root_StorageAccount_3B92EC74\\": {
+      \\"StorageAccount\\": {
         \\"account_replication_type\\": \\"LRS\\",
         \\"account_tier\\": \\"Standard\\",
-        \\"location\\": \\"\${azurerm_resource_group.root_ResourceGroup_72A9AFB6.location}\\",
+        \\"location\\": \\"\${azurerm_resource_group.ResourceGroup.location}\\",
         \\"name\\": \\"defaultc82bf964\\",
-        \\"resource_group_name\\": \\"\${azurerm_resource_group.root_ResourceGroup_72A9AFB6.name}\\"
+        \\"resource_group_name\\": \\"\${azurerm_resource_group.ResourceGroup.name}\\"
       }
     },
     \\"azurerm_storage_container\\": {
-      \\"root_mybucket_Bucket_10512A98\\": {
+      \\"my_bucket_Bucket_50609D70\\": {
         \\"container_access_type\\": \\"private\\",
         \\"name\\": \\"my-bucket-c8045fcc\\",
-        \\"storage_account_name\\": \\"\${azurerm_storage_account.root_StorageAccount_3B92EC74.name}\\"
+        \\"storage_account_name\\": \\"\${azurerm_storage_account.StorageAccount.name}\\"
       }
     }
   }
@@ -438,7 +438,7 @@ exports[`create a bucket 2`] = `
               "ResourceGroup": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.15.2",
+                  "version": "0.17.0",
                 },
                 "id": "ResourceGroup",
                 "path": "root/Default/ResourceGroup",
@@ -446,7 +446,7 @@ exports[`create a bucket 2`] = `
               "StorageAccount": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.15.2",
+                  "version": "0.17.0",
                 },
                 "id": "StorageAccount",
                 "path": "root/Default/StorageAccount",
@@ -454,7 +454,7 @@ exports[`create a bucket 2`] = `
               "azure": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.15.2",
+                  "version": "0.17.0",
                 },
                 "id": "azure",
                 "path": "root/Default/azure",
@@ -467,7 +467,7 @@ exports[`create a bucket 2`] = `
                   "Bucket": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.15.2",
+                      "version": "0.17.0",
                     },
                     "id": "Bucket",
                     "path": "root/Default/my_bucket/Bucket",
@@ -495,7 +495,7 @@ exports[`create a bucket 2`] = `
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.15.2",
+              "version": "0.17.0",
             },
             "id": "backend",
             "path": "root/backend",
@@ -503,7 +503,7 @@ exports[`create a bucket 2`] = `
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.15.2",
+          "version": "0.17.0",
         },
         "id": "root",
         "path": "root",
@@ -511,7 +511,7 @@ exports[`create a bucket 2`] = `
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.15.2",
+      "version": "0.17.0",
     },
     "id": "App",
     "path": "",
@@ -524,30 +524,30 @@ exports[`create multiple buckets 1`] = `
 "{
   \\"resource\\": {
     \\"azurerm_resource_group\\": {
-      \\"root_ResourceGroup_72A9AFB6\\": {
+      \\"ResourceGroup\\": {
         \\"location\\": \\"East US\\",
         \\"name\\": \\"Default-c82bf964\\"
       }
     },
     \\"azurerm_storage_account\\": {
-      \\"root_StorageAccount_3B92EC74\\": {
+      \\"StorageAccount\\": {
         \\"account_replication_type\\": \\"LRS\\",
         \\"account_tier\\": \\"Standard\\",
-        \\"location\\": \\"\${azurerm_resource_group.root_ResourceGroup_72A9AFB6.location}\\",
+        \\"location\\": \\"\${azurerm_resource_group.ResourceGroup.location}\\",
         \\"name\\": \\"defaultc82bf964\\",
-        \\"resource_group_name\\": \\"\${azurerm_resource_group.root_ResourceGroup_72A9AFB6.name}\\"
+        \\"resource_group_name\\": \\"\${azurerm_resource_group.ResourceGroup.name}\\"
       }
     },
     \\"azurerm_storage_container\\": {
-      \\"root_mybucket2_Bucket_C2147F5F\\": {
+      \\"my_bucket2_Bucket_9E34665C\\": {
         \\"container_access_type\\": \\"private\\",
         \\"name\\": \\"my-bucket2-c87f4817\\",
-        \\"storage_account_name\\": \\"\${azurerm_storage_account.root_StorageAccount_3B92EC74.name}\\"
+        \\"storage_account_name\\": \\"\${azurerm_storage_account.StorageAccount.name}\\"
       },
-      \\"root_mybucket_Bucket_10512A98\\": {
+      \\"my_bucket_Bucket_50609D70\\": {
         \\"container_access_type\\": \\"private\\",
         \\"name\\": \\"my-bucket-c8045fcc\\",
-        \\"storage_account_name\\": \\"\${azurerm_storage_account.root_StorageAccount_3B92EC74.name}\\"
+        \\"storage_account_name\\": \\"\${azurerm_storage_account.StorageAccount.name}\\"
       }
     }
   }
@@ -565,7 +565,7 @@ exports[`create multiple buckets 2`] = `
               "ResourceGroup": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.15.2",
+                  "version": "0.17.0",
                 },
                 "id": "ResourceGroup",
                 "path": "root/Default/ResourceGroup",
@@ -573,7 +573,7 @@ exports[`create multiple buckets 2`] = `
               "StorageAccount": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.15.2",
+                  "version": "0.17.0",
                 },
                 "id": "StorageAccount",
                 "path": "root/Default/StorageAccount",
@@ -581,7 +581,7 @@ exports[`create multiple buckets 2`] = `
               "azure": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.15.2",
+                  "version": "0.17.0",
                 },
                 "id": "azure",
                 "path": "root/Default/azure",
@@ -594,7 +594,7 @@ exports[`create multiple buckets 2`] = `
                   "Bucket": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.15.2",
+                      "version": "0.17.0",
                     },
                     "id": "Bucket",
                     "path": "root/Default/my_bucket/Bucket",
@@ -619,7 +619,7 @@ exports[`create multiple buckets 2`] = `
                   "Bucket": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.15.2",
+                      "version": "0.17.0",
                     },
                     "id": "Bucket",
                     "path": "root/Default/my_bucket2/Bucket",
@@ -647,7 +647,7 @@ exports[`create multiple buckets 2`] = `
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.15.2",
+              "version": "0.17.0",
             },
             "id": "backend",
             "path": "root/backend",
@@ -655,7 +655,7 @@ exports[`create multiple buckets 2`] = `
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.15.2",
+          "version": "0.17.0",
         },
         "id": "root",
         "path": "root",
@@ -663,7 +663,7 @@ exports[`create multiple buckets 2`] = `
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.15.2",
+      "version": "0.17.0",
     },
     "id": "App",
     "path": "",

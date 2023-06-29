@@ -21,7 +21,7 @@ concurrency:
 env:
   RUST_VERSION: "1.67.1"
   NODE_VERSION: "18.16.0"
-  NPM_VERSION: "8.19.3"
+  PNPM_VERSION: "8.6.3"
 
 jobs:
   build:
@@ -45,10 +45,16 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
+          cache: "pnpm"
           node-version: ${{ env.NODE_VERSION }}
 
-      - name: Setup NPM
-        run: npm install -g npm@${{ env.NPM_VERSION }}
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2.2.4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+          run_install: |
+            - recursive: true
+              args: [--frozen-lockfile]
 
       - name: Install Rust
         uses: dtolnay/rust-toolchain@master
@@ -184,10 +190,16 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
+          cache: "pnpm"
           node-version: ${{ env.NODE_VERSION }}
 
-      - name: Setup NPM
-        run: npm install -g npm@${{ env.NPM_VERSION }}
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2.2.4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+          run_install: |
+            - recursive: true
+              args: [--frozen-lockfile]
 
       - name: Install Rust
         uses: dtolnay/rust-toolchain@master
@@ -247,10 +259,16 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
+          cache: "pnpm"
           node-version: ${{ env.NODE_VERSION }}
 
-      - name: Setup NPM
-        run: npm install -g npm@${{ env.NPM_VERSION }}
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2.2.4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+          run_install: |
+            - recursive: true
+              args: [--frozen-lockfile]
 
       - name: Install Dependencies
         uses: bahmutov/npm-install@v1

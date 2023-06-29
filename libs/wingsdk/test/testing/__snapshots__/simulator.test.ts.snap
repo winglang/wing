@@ -148,8 +148,13 @@ exports[`run single test > test failure 1`] = `
 <sanitized>
 <sanitized>
 <sanitized>
+<<<<<<< HEAD
+    at Script.runInContext (node:vm:134:12)
+    at Object.runInContext (node:vm:282:6)
+=======
     at Script.runInContext (node:vm:<sanitized>)
     at Object.runInContext (node:vm:<sanitized>)
+>>>>>>> e65e61b6f133e9791aa3e3a46ed4dc4909de89c3
 <sanitized>
     at new Promise (<anonymous>)
 <sanitized>

@@ -2,7 +2,7 @@
   "dependencies": [
     {
       "name": "@cdktf/provider-aws",
-      "version": "^12.0.1",
+      "version": "^15.0.0",
       "type": "build"
     },
     {
@@ -23,7 +23,7 @@
     },
     {
       "name": "@types/node",
-      "version": "^16",
+      "version": "^18",
       "type": "build"
     },
     {
@@ -50,12 +50,12 @@
     },
     {
       "name": "@winglang/jsii-docgen",
-      "version": "file:../../apps/jsii-docgen",
+      "version": "workspace:../../apps/jsii-docgen",
       "type": "build"
     },
     {
       "name": "@winglang/wing-api-checker",
-      "version": "file:../../apps/wing-api-checker",
+      "version": "workspace:../../apps/wing-api-checker",
       "type": "build"
     },
     {
@@ -68,7 +68,12 @@
     },
     {
       "name": "cdktf-cli",
-      "version": "0.15.2",
+      "version": "0.17.0",
+      "type": "build"
+    },
+    {
+      "name": "constructs",
+      "version": "~10.1.314",
       "type": "build"
     },
     {
@@ -236,7 +241,7 @@
     },
     {
       "name": "cdktf",
-      "version": "0.15.2",
+      "version": "0.17.0",
       "type": "bundled"
     },
     {
@@ -273,12 +278,12 @@
     },
     {
       "name": "constructs",
-      "version": "~10.1.228",
+      "version": "~10.1.314",
       "type": "peer"
     },
     {
       "name": "constructs",
-      "version": "~10.1.228",
+      "version": "~10.1.314",
       "type": "runtime"
     }
   ],

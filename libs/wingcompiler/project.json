@@ -17,20 +17,20 @@
     "build": {
       "dependsOn": ["^build", "copy"],
       "options": {
-        "command": "npm run build",
+        "command": "pnpm run build",
         "cwd": "libs/wingcompiler"
       }
     },
     "test": {
       "dependsOn": ["copy"],
       "options": {
-        "command": "npm run test",
+        "command": "pnpm run test",
         "cwd": "libs/wingcompiler"
       }
     },
     "package": {
       "options": {
-        "commands": ["npx patch-package", "npm run package"],
+        "commands": ["npx patch-package", "pnpm run package"],
         "cwd": "libs/wingcompiler",
         "parallel": false
       }

@@ -1,8 +1,8 @@
 import { JsonFile, cdk, javascript } from "projen";
 import rootPackageJson from "../../package.json";
 
-const JSII_DEPS = ["constructs@~10.1.228"];
-const CDKTF_VERSION = "0.15.2";
+const JSII_DEPS = ["constructs@~10.1.314"];
+const CDKTF_VERSION = "0.17.0";
 
 const CDKTF_PROVIDERS = [
   "aws@~>4.65.0",
@@ -36,6 +36,11 @@ const project = new cdk.JsiiProject({
   defaultReleaseBranch: "main",
   peerDeps: [...JSII_DEPS],
   deps: [...JSII_DEPS],
+  tsconfig: {
+    compilerOptions: {
+      lib: ["es2020", "dom", "dom.iterable"],
+    },
+  },
   bundledDeps: [
     `cdktf@${CDKTF_VERSION}`,
     ...sideLoad,
@@ -71,8 +76,8 @@ const project = new cdk.JsiiProject({
     "ioredis",
   ],
   devDeps: [
-    `@cdktf/provider-aws@^12.0.1`, // only for testing Wing plugins
-    "@winglang/wing-api-checker@file:../../apps/wing-api-checker",
+    `@cdktf/provider-aws@^15.0.0`, // only for testing Wing plugins
+    "@winglang/wing-api-checker@workspace:../../apps/wing-api-checker",
     "@types/aws-lambda",
     "@types/fs-extra",
     "@types/mime-types",
@@ -88,12 +93,13 @@ const project = new cdk.JsiiProject({
     "@types/uuid",
     "@vitest/coverage-v8",
     "nanoid", // for ESM import test in target-sim/function.test.ts
+    ...JSII_DEPS,
   ],
   jest: false,
   prettier: true,
   npmignoreEnabled: false,
-  minNodeVersion: "16.16.0",
-  packageManager: javascript.NodePackageManager.NPM,
+  minNodeVersion: "18.13.0",
+  packageManager: javascript.NodePackageManager.PNPM,
   codeCov: true,
   codeCovTokenSecret: "CODECOV_TOKEN",
   github: false,
@@ -111,7 +117,7 @@ project.eslint?.addOverride({
 
 // use fork of jsii-docgen with wing-ish support
 project.deps.removeDependency("jsii-docgen");
-project.addDevDeps("@winglang/jsii-docgen@file:../../apps/jsii-docgen");
+project.addDevDeps("@winglang/jsii-docgen@workspace:../../apps/jsii-docgen");
 
 enum Zone {
   PREFLIGHT = "preflight",
@@ -181,11 +187,11 @@ project.postCompileTask.prependSpawn(apiCheck);
 
 project.tasks
   .tryFind("bump")!
-  .reset("npm version ${PROJEN_BUMP_VERSION:-0.0.0} --allow-same-version");
+  .reset("pnpm version ${PROJEN_BUMP_VERSION:-0.0.0} --allow-same-version");
 
 project.tasks
   .tryFind("unbump")!
-  .reset("npm version 0.0.0 --allow-same-version");
+  .reset("pnpm version 0.0.0 --allow-same-version");
 
 project.preCompileTask.exec("patch-package");
 
@@ -276,8 +282,6 @@ restoreBundleDeps.exec(`mv ${packageJsonBack} package.json`);
 project.tasks.tryFind("bump")?.spawn(removeBundledDeps);
 project.tasks.tryFind("unbump")?.spawn(restoreBundleDeps);
 
-// We use symlinks between several projects but we do not use workspaces
-project.npmrc.addConfig("install-links", "false");
-project.npmrc.addConfig("fund", "false");
+project.package.file.addDeletionOverride("pnpm");
 
 project.synth();

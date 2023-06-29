@@ -5,7 +5,7 @@
     "build": {
       "options": {
         "cwd": "apps/wing-api-checker",
-        "command": "npm run compile"
+        "command": "pnpm run compile"
       }
     }
   }

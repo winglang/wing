@@ -1,8 +1,8 @@
 {
   "name": "Wing Development",
 	"image": "mcr.microsoft.com/devcontainers/base:jammy",
-  "postCreateCommand": "npm install -g npm@8.19.3",
-  "updateContentCommand": "npm install",
+  "postCreateCommand": "npm install -g pnpm",
+  "updateContentCommand": "pnpm install",
   "features": {
     "ghcr.io/devcontainers/features/node:1": {
       "version": "18.16.0"
@@ -11,6 +11,8 @@
     "ghcr.io/devcontainers/features/terraform:1": {},
     "ghcr.io/devcontainers/features/docker-in-docker:2": {},
     "ghcr.io/devcontainers/features/rust:1": {},
+    // install pnpm
+    "ghcr.io/devcontainers/features/pnpm:1": {},
   },
   "hostRequirements": {
     "cpus": 4,

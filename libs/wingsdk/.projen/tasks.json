@@ -52,7 +52,7 @@
       },
       "steps": [
         {
-          "exec": "npm version ${PROJEN_BUMP_VERSION:-0.0.0} --allow-same-version"
+          "exec": "pnpm version ${PROJEN_BUMP_VERSION:-0.0.0} --allow-same-version"
         },
         {
           "spawn": "remove-bundled-deps"
@@ -217,7 +217,7 @@
       "description": "Install project dependencies and update lockfile (non-frozen)",
       "steps": [
         {
-          "exec": "npm install"
+          "exec": "pnpm i --no-frozen-lockfile"
         }
       ]
     },
@@ -226,7 +226,7 @@
       "description": "Install project dependencies using frozen lockfile",
       "steps": [
         {
-          "exec": "npm ci"
+          "exec": "pnpm i --frozen-lockfile"
         }
       ]
     },
@@ -361,7 +361,7 @@
       },
       "steps": [
         {
-          "exec": "npm version 0.0.0 --allow-same-version"
+          "exec": "pnpm version 0.0.0 --allow-same-version"
         },
         {
           "spawn": "restore-bundled-deps"
@@ -376,28 +376,28 @@
       },
       "steps": [
         {
-          "exec": "npm update npm-check-updates"
+          "exec": "pnpm update npm-check-updates"
         },
         {
-          "exec": "npm-check-updates --dep dev --upgrade --target=minor --reject='@winglang/jsii-docgen,@winglang/wing-api-checker,cdktf-cli,jsii,@aws-sdk/client-cloudwatch-logs,@aws-sdk/client-dynamodb,@aws-sdk/client-elasticache,@aws-sdk/client-lambda,@aws-sdk/client-s3,@aws-sdk/client-secrets-manager,@aws-sdk/client-sns,@aws-sdk/client-sqs,@aws-sdk/types,@aws-sdk/util-dynamodb,@aws-sdk/util-stream-node,@aws-sdk/util-utf8-node,@azure/identity,@azure/storage-blob,cdktf,constructs'"
+          "exec": "npm-check-updates --dep dev --upgrade --target=minor --reject='@winglang/jsii-docgen,@winglang/wing-api-checker,cdktf-cli,constructs,jsii,@aws-sdk/client-cloudwatch-logs,@aws-sdk/client-dynamodb,@aws-sdk/client-elasticache,@aws-sdk/client-lambda,@aws-sdk/client-s3,@aws-sdk/client-secrets-manager,@aws-sdk/client-sns,@aws-sdk/client-sqs,@aws-sdk/types,@aws-sdk/util-dynamodb,@aws-sdk/util-stream-node,@aws-sdk/util-utf8-node,@azure/identity,@azure/storage-blob,cdktf'"
         },
         {
-          "exec": "npm-check-updates --dep optional --upgrade --target=minor --reject='@winglang/jsii-docgen,@winglang/wing-api-checker,cdktf-cli,jsii,@aws-sdk/client-cloudwatch-logs,@aws-sdk/client-dynamodb,@aws-sdk/client-elasticache,@aws-sdk/client-lambda,@aws-sdk/client-s3,@aws-sdk/client-secrets-manager,@aws-sdk/client-sns,@aws-sdk/client-sqs,@aws-sdk/types,@aws-sdk/util-dynamodb,@aws-sdk/util-stream-node,@aws-sdk/util-utf8-node,@azure/identity,@azure/storage-blob,cdktf,constructs'"
+          "exec": "npm-check-updates --dep optional --upgrade --target=minor --reject='@winglang/jsii-docgen,@winglang/wing-api-checker,cdktf-cli,constructs,jsii,@aws-sdk/client-cloudwatch-logs,@aws-sdk/client-dynamodb,@aws-sdk/client-elasticache,@aws-sdk/client-lambda,@aws-sdk/client-s3,@aws-sdk/client-secrets-manager,@aws-sdk/client-sns,@aws-sdk/client-sqs,@aws-sdk/types,@aws-sdk/util-dynamodb,@aws-sdk/util-stream-node,@aws-sdk/util-utf8-node,@azure/identity,@azure/storage-blob,cdktf'"
         },
         {
-          "exec": "npm-check-updates --dep peer --upgrade --target=minor --reject='@winglang/jsii-docgen,@winglang/wing-api-checker,cdktf-cli,jsii,@aws-sdk/client-cloudwatch-logs,@aws-sdk/client-dynamodb,@aws-sdk/client-elasticache,@aws-sdk/client-lambda,@aws-sdk/client-s3,@aws-sdk/client-secrets-manager,@aws-sdk/client-sns,@aws-sdk/client-sqs,@aws-sdk/types,@aws-sdk/util-dynamodb,@aws-sdk/util-stream-node,@aws-sdk/util-utf8-node,@azure/identity,@azure/storage-blob,cdktf,constructs'"
+          "exec": "npm-check-updates --dep peer --upgrade --target=minor --reject='@winglang/jsii-docgen,@winglang/wing-api-checker,cdktf-cli,constructs,jsii,@aws-sdk/client-cloudwatch-logs,@aws-sdk/client-dynamodb,@aws-sdk/client-elasticache,@aws-sdk/client-lambda,@aws-sdk/client-s3,@aws-sdk/client-secrets-manager,@aws-sdk/client-sns,@aws-sdk/client-sqs,@aws-sdk/types,@aws-sdk/util-dynamodb,@aws-sdk/util-stream-node,@aws-sdk/util-utf8-node,@azure/identity,@azure/storage-blob,cdktf'"
         },
         {
-          "exec": "npm-check-updates --dep prod --upgrade --target=minor --reject='@winglang/jsii-docgen,@winglang/wing-api-checker,cdktf-cli,jsii,@aws-sdk/client-cloudwatch-logs,@aws-sdk/client-dynamodb,@aws-sdk/client-elasticache,@aws-sdk/client-lambda,@aws-sdk/client-s3,@aws-sdk/client-secrets-manager,@aws-sdk/client-sns,@aws-sdk/client-sqs,@aws-sdk/types,@aws-sdk/util-dynamodb,@aws-sdk/util-stream-node,@aws-sdk/util-utf8-node,@azure/identity,@azure/storage-blob,cdktf,constructs'"
+          "exec": "npm-check-updates --dep prod --upgrade --target=minor --reject='@winglang/jsii-docgen,@winglang/wing-api-checker,cdktf-cli,constructs,jsii,@aws-sdk/client-cloudwatch-logs,@aws-sdk/client-dynamodb,@aws-sdk/client-elasticache,@aws-sdk/client-lambda,@aws-sdk/client-s3,@aws-sdk/client-secrets-manager,@aws-sdk/client-sns,@aws-sdk/client-sqs,@aws-sdk/types,@aws-sdk/util-dynamodb,@aws-sdk/util-stream-node,@aws-sdk/util-utf8-node,@azure/identity,@azure/storage-blob,cdktf'"
         },
         {
-          "exec": "npm-check-updates --dep bundle --upgrade --target=minor --reject='@winglang/jsii-docgen,@winglang/wing-api-checker,cdktf-cli,jsii,@aws-sdk/client-cloudwatch-logs,@aws-sdk/client-dynamodb,@aws-sdk/client-elasticache,@aws-sdk/client-lambda,@aws-sdk/client-s3,@aws-sdk/client-secrets-manager,@aws-sdk/client-sns,@aws-sdk/client-sqs,@aws-sdk/types,@aws-sdk/util-dynamodb,@aws-sdk/util-stream-node,@aws-sdk/util-utf8-node,@azure/identity,@azure/storage-blob,cdktf,constructs'"
+          "exec": "npm-check-updates --dep bundle --upgrade --target=minor --reject='@winglang/jsii-docgen,@winglang/wing-api-checker,cdktf-cli,constructs,jsii,@aws-sdk/client-cloudwatch-logs,@aws-sdk/client-dynamodb,@aws-sdk/client-elasticache,@aws-sdk/client-lambda,@aws-sdk/client-s3,@aws-sdk/client-secrets-manager,@aws-sdk/client-sns,@aws-sdk/client-sqs,@aws-sdk/types,@aws-sdk/util-dynamodb,@aws-sdk/util-stream-node,@aws-sdk/util-utf8-node,@azure/identity,@azure/storage-blob,cdktf'"
         },
         {
-          "exec": "npm install"
+          "exec": "pnpm i --no-frozen-lockfile"
         },
         {
-          "exec": "npm update"
+          "exec": "pnpm update"
         },
         {
           "exec": "npx projen"
@@ -418,7 +418,7 @@
     }
   },
   "env": {
-    "PATH": "$(npx -c \"node --print process.env.PATH\")"
+    "PATH": "$(pnpm -c exec \"node -e \\\"console.log(process.env.PATH)\\\"\")"
   },
   "//": "~~ Generated by projen. To modify, edit .projenrc.ts and run \"npx projen\"."
 }

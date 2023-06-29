@@ -29,7 +29,7 @@ const project = new TypeScriptAppProject({
   ],
   license: "MIT",
 
-  packageManager: NodePackageManager.NPM,
+  packageManager: NodePackageManager.PNPM,
   projenrcTs: true,
   package: false,
   buildWorkflow: false,
@@ -141,12 +141,14 @@ project.compileTask.exec(esbuildComment);
 project.watchTask.reset(`${esbuildComment} --watch`);
 
 project.packageTask.reset(
-  "npm version ${PROJEN_BUMP_VERSION:-0.0.0} --allow-same-version"
+  "pnpm version ${PROJEN_BUMP_VERSION:-0.0.0} --allow-same-version"
 );
 project.packageTask.exec("vsce package -o vscode-wing.vsix");
 
 project.addFields({
   volta: rootPackageJson.volta,
 });
+
+project.package.file.addDeletionOverride("pnpm");
 
 project.synth();

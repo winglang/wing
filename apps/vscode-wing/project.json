@@ -6,13 +6,13 @@
     "build": {
       "options": {
         "cwd": "apps/vscode-wing",
-        "command": "npm run build"
+        "command": "pnpm run build"
       }
     },
     "package": {
       "options": {
         "cwd": "apps/vscode-wing",
-        "command": "npm run package"
+        "command": "pnpm run package"
       }
     },
     "dev": {

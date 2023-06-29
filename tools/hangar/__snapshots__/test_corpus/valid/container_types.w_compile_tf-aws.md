@@ -7,7 +7,7 @@
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.2"
+      "version": "0.17.0"
     },
     "outputs": {
       "root": {
@@ -31,31 +31,31 @@
   },
   "resource": {
     "aws_s3_bucket": {
-      "root_bucket1_3A77B9B4": {
+      "bucket1": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/bucket1/Default",
-            "uniqueId": "root_bucket1_3A77B9B4"
+            "uniqueId": "bucket1"
           }
         },
         "bucket_prefix": "bucket1-c81ed215-",
         "force_destroy": false
       },
-      "root_bucket2_E39F70EE": {
+      "bucket2": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/bucket2/Default",
-            "uniqueId": "root_bucket2_E39F70EE"
+            "uniqueId": "bucket2"
           }
         },
         "bucket_prefix": "bucket2-c83a0be6-",
         "force_destroy": false
       },
-      "root_bucket3_A0C568EA": {
+      "bucket3": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/bucket3/Default",
-            "uniqueId": "root_bucket3_A0C568EA"
+            "uniqueId": "bucket3"
           }
         },
         "bucket_prefix": "bucket3-c8b6c706-",
@@ -63,55 +63,55 @@
       }
     },
     "aws_s3_bucket_public_access_block": {
-      "root_bucket1_PublicAccessBlock_6C5071C0": {
+      "bucket1_PublicAccessBlock_01FA69AD": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/bucket1/PublicAccessBlock",
-            "uniqueId": "root_bucket1_PublicAccessBlock_6C5071C0"
+            "uniqueId": "bucket1_PublicAccessBlock_01FA69AD"
           }
         },
         "block_public_acls": true,
         "block_public_policy": true,
-        "bucket": "${aws_s3_bucket.root_bucket1_3A77B9B4.bucket}",
+        "bucket": "${aws_s3_bucket.bucket1.bucket}",
         "ignore_public_acls": true,
         "restrict_public_buckets": true
       },
-      "root_bucket2_PublicAccessBlock_BC328E84": {
+      "bucket2_PublicAccessBlock_063D91B9": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/bucket2/PublicAccessBlock",
-            "uniqueId": "root_bucket2_PublicAccessBlock_BC328E84"
+            "uniqueId": "bucket2_PublicAccessBlock_063D91B9"
           }
         },
         "block_public_acls": true,
         "block_public_policy": true,
-        "bucket": "${aws_s3_bucket.root_bucket2_E39F70EE.bucket}",
+        "bucket": "${aws_s3_bucket.bucket2.bucket}",
         "ignore_public_acls": true,
         "restrict_public_buckets": true
       },
-      "root_bucket3_PublicAccessBlock_CF2593D4": {
+      "bucket3_PublicAccessBlock_D66B79BF": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/bucket3/PublicAccessBlock",
-            "uniqueId": "root_bucket3_PublicAccessBlock_CF2593D4"
+            "uniqueId": "bucket3_PublicAccessBlock_D66B79BF"
           }
         },
         "block_public_acls": true,
         "block_public_policy": true,
-        "bucket": "${aws_s3_bucket.root_bucket3_A0C568EA.bucket}",
+        "bucket": "${aws_s3_bucket.bucket3.bucket}",
         "ignore_public_acls": true,
         "restrict_public_buckets": true
       }
     },
     "aws_s3_bucket_server_side_encryption_configuration": {
-      "root_bucket1_Encryption_33CABC1A": {
+      "bucket1_Encryption_4417F366": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/bucket1/Encryption",
-            "uniqueId": "root_bucket1_Encryption_33CABC1A"
+            "uniqueId": "bucket1_Encryption_4417F366"
           }
         },
-        "bucket": "${aws_s3_bucket.root_bucket1_3A77B9B4.bucket}",
+        "bucket": "${aws_s3_bucket.bucket1.bucket}",
         "rule": [
           {
             "apply_server_side_encryption_by_default": {
@@ -120,14 +120,14 @@
           }
         ]
       },
-      "root_bucket2_Encryption_A83E82F9": {
+      "bucket2_Encryption_6F02F3D7": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/bucket2/Encryption",
-            "uniqueId": "root_bucket2_Encryption_A83E82F9"
+            "uniqueId": "bucket2_Encryption_6F02F3D7"
           }
         },
-        "bucket": "${aws_s3_bucket.root_bucket2_E39F70EE.bucket}",
+        "bucket": "${aws_s3_bucket.bucket2.bucket}",
         "rule": [
           {
             "apply_server_side_encryption_by_default": {
@@ -136,14 +136,14 @@
           }
         ]
       },
-      "root_bucket3_Encryption_A2A51E22": {
+      "bucket3_Encryption_43A64F29": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/bucket3/Encryption",
-            "uniqueId": "root_bucket3_Encryption_A2A51E22"
+            "uniqueId": "bucket3_Encryption_43A64F29"
           }
         },
-        "bucket": "${aws_s3_bucket.root_bucket3_A0C568EA.bucket}",
+        "bucket": "${aws_s3_bucket.bucket3.bucket}",
         "rule": [
           {
             "apply_server_side_encryption_by_default": {

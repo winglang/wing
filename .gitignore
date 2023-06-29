@@ -6,7 +6,7 @@ node_modules/
 .history
 *.vsix
 
-# WASI SDK (insalled by "npm install")
+# WASI SDK (insalled by "pnpm install")
 .cargo/wasi-sdk-*/
 
 # Generated wing output
