@@ -981,15 +981,9 @@ importers:
 
   libs/wingcompiler:
     dependencies:
-      '@cowasm/memfs':
-        specifier: ^3.5.1
-        version: 3.5.1
       '@winglang/sdk':
         specifier: workspace:../../libs/wingsdk
         version: link:../wingsdk
-      fflate:
-        specifier: ^0.8.0
-        version: 0.8.0
       wasi-js:
         specifier: ^1.7.3
         version: 1.7.3(patch_hash=rmwvp46j2ligfusbdx5dzh4a3q)
@@ -13269,10 +13263,6 @@ packages:
 
   /fflate@0.7.4:
     resolution: {integrity: sha512-5u2V/CDW15QM1XbbgS+0DfPxVB+jUKhWEKuuFuHncbk3tEEqzmoXL+2KyOFuKGqOnmdIy0/davWF1CkuwtibCw==}
-    dev: false
-
-  /fflate@0.8.0:
-    resolution: {integrity: sha512-FAdS4qMuFjsJj6XHbBaZeXOgaypXp8iw/Tpyuq/w3XA41jjLHT8NPA+n7czH/DDhdncq0nAyDZmPeWXh2qmdIg==}
     dev: false
 
   /figures@3.2.0:
