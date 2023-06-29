@@ -15,19 +15,19 @@ let j = Json {
     k1: [1, "a", true, {} ]
   }
 };
-log(j);
+log("${j}");
 
 let jsonStrValue = Json "Hello";
-log(jsonStrValue);
+log("${jsonStrValue}");
 
 let jsonNumValue = Json 42;
-log(jsonNumValue);
+log("${jsonNumValue}");
 
 let jsonBoolValue = Json true;
-log(jsonBoolValue);
+log("${jsonBoolValue}");
 
 let jsonHomogeneousArrayValue = Json ["a", "b"];
-log(jsonHomogeneousArrayValue);
+log("${jsonHomogeneousArrayValue}");
 ```
 
 ### From existing variables
@@ -35,23 +35,23 @@ log(jsonHomogeneousArrayValue);
 ```js playground
 let x: num = 42;
 let jsonNum = Json x;
-log(j); // 42
+log("${j}"); // 42
 
 let chars = Array<str>["a", "b"];
 let jsonChars = Json chars;
-log(chars); // ["a","b"]
+log("${chars}"); // ["a","b"]
 
 let jsonComplex = Json { "first": x, "second": chars };
-log(jsonComplex); // {"first": 42, "second": ["a","b"]}
+log("${jsonComplex}"); // {"first": 42, "second": ["a","b"]}
 ```
 
 ### Parsing `str`
 ```js playground
 let jsonFromParse = Json.parse("{\"k1\":\"v\"}");
-log(jsonFromParse);
+log("${jsonFromParse}");
 
 if let jsonFromTryParse = Json.tryParse("{\"k1\":\"v\"}") {
-  log(jsonFromTryParse);
+  log("${jsonFromTryParse}");
 } else {
   log("failed to parse string to JSON");
 }
@@ -115,4 +115,4 @@ let j = Json {
 log(j.get("k").asBool());
 ```
 
-Future support for converting to structs and other types: (link to issue)
+Future support for converting to structs and other types: [#2188](https://github.com/winglang/wing/issues/2118)
