@@ -2,6 +2,7 @@
 // They should not be consumed directly by users.
 // TODO: These should be interfaces, currently Wing does not support interface JSII imports
 
+import { Array } from "./array";
 import { T1 } from "./generics";
 import { Code, InflightClient } from "../core";
 
@@ -46,6 +47,17 @@ export class Set {
    * @returns a MutableSet with the same values as this set
    */
   public copyMut(): MutSet {
+    throw new Error("Macro");
+  }
+
+  /**
+   * Create an immutable array shallow copy of this set
+   *
+   * @macro Object.freeze([...($self$)])
+   *
+   * @returns an ImmutableArray with the same values as this set
+   */
+  public toArray(): Array {
     throw new Error("Macro");
   }
 }
@@ -119,5 +131,16 @@ export class MutSet {
   public has(value: T1): boolean {
     value;
     throw new Error("Abstract");
+  }
+
+  /**
+   * Create an immutable array shallow copy of this set
+   *
+   * @macro Object.freeze([...($self$)])
+   *
+   * @returns an ImmutableArray with the same values as this set
+   */
+  public toArray(): Array {
+    throw new Error("Macro");
   }
 }
