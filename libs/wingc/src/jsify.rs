@@ -1067,23 +1067,14 @@ impl<'a> JSifier<'a> {
 
 		if !no_parent {
 			// Check if the first statement is a super constructor call, if not we need to add one
-			let first_statement = if init_statements.statements.len() > 0 {
-				Some(&init_statements.statements[0])
+			let super_call = if let Some(s) = init_statements.statements.first() {
+				matches!(s.kind, StmtKind::SuperConstructor { .. })
 			} else {
-				None
+				false
 			};
 
-			match first_statement {
-				Some(s) => {
-					match s.kind {
-						StmtKind::SuperConstructor { arg_list: _ } => {} // Already has super do nothing
-						_ => code.line("super(scope, id);"),
-					}
-				}
-				None => {
-					// no statements so we implicitly call super since we know there is a parent
-					code.line("super(scope, id);")
-				}
+			if !super_call {
+				code.line("super(scope, id);");
 			}
 		}
 
