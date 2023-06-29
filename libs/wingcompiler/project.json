@@ -30,7 +30,7 @@
     },
     "package": {
       "options": {
-        "commands": ["npx patch-package", "pnpm run package"],
+        "command": "pnpm run package",
         "cwd": "libs/wingcompiler",
         "parallel": false
       }
