@@ -70,5 +70,7 @@ let join_str = (a: Array<str>, opts: Options):str => {
 
 log(join_str(["hello", "world"], delim: ", ")); //  "!hello.world"
 
-log(join_str(["hello", "world"], prefix: "!!", delim: "/")); // "!!hello/world");
+// also OK to pass an object
+let opts = Options { delim: "," };
+log(join_str(["hello", "world"], opts)); // "!!hello/world");
 ```
