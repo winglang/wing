@@ -15,7 +15,7 @@ struct Example {
 }
 
 let example = Example { a: "a", b:0, c: false };
-log(example.a); // prints a
+log(example.a); // prints "a"
 ```
 
 ### Optional fields
