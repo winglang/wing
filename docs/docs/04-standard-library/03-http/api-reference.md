@@ -403,6 +403,8 @@ The request's method.
 | <code><a href="#@winglang/sdk.http.HttpMethod.DELETE">DELETE</a></code> | DELETE. |
 | <code><a href="#@winglang/sdk.http.HttpMethod.PATCH">PATCH</a></code> | PATCH. |
 | <code><a href="#@winglang/sdk.http.HttpMethod.POST">POST</a></code> | POST. |
+| <code><a href="#@winglang/sdk.http.HttpMethod.OPTIONS">OPTIONS</a></code> | OPTIONS. |
+| <code><a href="#@winglang/sdk.http.HttpMethod.HEAD">HEAD</a></code> | HEAD. |
 
 ---
 
@@ -437,6 +439,20 @@ PATCH.
 ##### `POST` <a name="POST" id="@winglang/sdk.http.HttpMethod.POST"></a>
 
 POST.
+
+---
+
+
+##### `OPTIONS` <a name="OPTIONS" id="@winglang/sdk.http.HttpMethod.OPTIONS"></a>
+
+OPTIONS.
+
+---
+
+
+##### `HEAD` <a name="HEAD" id="@winglang/sdk.http.HttpMethod.HEAD"></a>
+
+HEAD.
 
 ---
 
