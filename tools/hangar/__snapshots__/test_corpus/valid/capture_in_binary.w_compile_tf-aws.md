@@ -204,12 +204,10 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const $b = context._lift(b);
-        const $x = context._lift(x);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure1.js")({ 
-            $b: ${$b},
-            $x: ${$x},
+            $b: ${context._lift(b)},
+            $x: ${context._lift(x)},
           })
         `);
       }

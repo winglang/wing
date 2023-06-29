@@ -7,7 +7,10 @@ Files:
 
 inflight.$Closure1.js
 ------------------------------------------------------
-module.exports = function({ $jsonObj1, $std_Json }) {
+module.exports = function({ $jsonObj1, $std_Json, std_Json }) {
+  const std = {
+    Json: std_Json,
+  };
   class $Closure1 {
     async handle()  {
       {console.log(((args) => { return JSON.stringify(args[0], null, args[1]) })([$jsonObj1]))};

@@ -478,14 +478,11 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const $bucket1 = context._lift(bucket1);
-        const $bucket2 = context._lift(bucket2);
-        const $bucket3 = context._lift(bucket3);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure1.js")({ 
-            $bucket1: ${$bucket1},
-            $bucket2: ${$bucket2},
-            $bucket3: ${$bucket3},
+            $bucket1: ${context._lift(bucket1)},
+            $bucket2: ${context._lift(bucket2)},
+            $bucket3: ${context._lift(bucket3)},
           })
         `);
       }

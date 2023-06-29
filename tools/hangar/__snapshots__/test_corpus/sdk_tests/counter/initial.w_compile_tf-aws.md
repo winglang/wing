@@ -381,10 +381,9 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const $counterA = context._lift(counterA);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure1.js")({ 
-            $counterA: ${$counterA},
+            $counterA: ${context._lift(counterA)},
           })
         `);
       }
@@ -412,10 +411,9 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const $counterB = context._lift(counterB);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure2.js")({ 
-            $counterB: ${$counterB},
+            $counterB: ${context._lift(counterB)},
           })
         `);
       }
@@ -443,10 +441,9 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const $counterC = context._lift(counterC);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure3.js")({ 
-            $counterC: ${$counterC},
+            $counterC: ${context._lift(counterC)},
           })
         `);
       }

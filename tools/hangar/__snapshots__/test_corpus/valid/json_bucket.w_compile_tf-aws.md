@@ -291,12 +291,10 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const $b = context._lift(b);
-        const $fileName = context._lift(fileName);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure1.js")({ 
-            $b: ${$b},
-            $fileName: ${$fileName},
+            $b: ${context._lift(b)},
+            $fileName: ${context._lift(fileName)},
           })
         `);
       }
@@ -325,16 +323,12 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const $b = context._lift(b);
-        const $fileName = context._lift(fileName);
-        const $getJson = context._lift(getJson);
-        const $j = context._lift(j);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure2.js")({ 
-            $b: ${$b},
-            $fileName: ${$fileName},
-            $getJson: ${$getJson},
-            $j: ${$j},
+            $b: ${context._lift(b)},
+            $fileName: ${context._lift(fileName)},
+            $getJson: ${context._lift(getJson)},
+            $j: ${context._lift(j)},
           })
         `);
       }

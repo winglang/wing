@@ -381,10 +381,9 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const $c = context._lift(c);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure1.js")({ 
-            $c: ${$c},
+            $c: ${context._lift(c)},
           })
         `);
       }
@@ -412,14 +411,11 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const $js = context._lift(js);
-        const $predicate = context._lift(predicate);
-        const $q = context._lift(q);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure2.js")({ 
-            $js: ${$js},
-            $predicate: ${$predicate},
-            $q: ${$q},
+            $js: ${context._lift(js)},
+            $predicate: ${context._lift(predicate)},
+            $q: ${context._lift(q)},
           })
         `);
       }

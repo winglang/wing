@@ -165,26 +165,17 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const $Object_keys_myMap__length = context._lift(Object.keys(myMap).length);
-        const $__bang__in___arrOfMap_at_0____ = context._lift(("bang" in ((arrOfMap.at(0)))));
-        const $__world__in__myMap__ = context._lift(("world" in (myMap)));
-        const $_arr_at_0__ = context._lift((arr.at(0)));
-        const $_arr_at_1__ = context._lift((arr.at(1)));
-        const $_j___b__ = context._lift((j)["b"]);
-        const $_mySet_has__my___ = context._lift((mySet.has("my")));
-        const $arr_length = context._lift(arr.length);
-        const $mySet_size = context._lift(mySet.size);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure1.js")({ 
-            $Object_keys_myMap__length: ${$Object_keys_myMap__length},
-            $__bang__in___arrOfMap_at_0____: ${$__bang__in___arrOfMap_at_0____},
-            $__world__in__myMap__: ${$__world__in__myMap__},
-            $_arr_at_0__: ${$_arr_at_0__},
-            $_arr_at_1__: ${$_arr_at_1__},
-            $_j___b__: ${$_j___b__},
-            $_mySet_has__my___: ${$_mySet_has__my___},
-            $arr_length: ${$arr_length},
-            $mySet_size: ${$mySet_size},
+            $Object_keys_myMap__length: ${context._lift(Object.keys(myMap).length)},
+            $__bang__in___arrOfMap_at_0____: ${context._lift(("bang" in ((arrOfMap.at(0)))))},
+            $__world__in__myMap__: ${context._lift(("world" in (myMap)))},
+            $_arr_at_0__: ${context._lift((arr.at(0)))},
+            $_arr_at_1__: ${context._lift((arr.at(1)))},
+            $_j___b__: ${context._lift((j)["b"])},
+            $_mySet_has__my___: ${context._lift((mySet.has("my")))},
+            $arr_length: ${context._lift(arr.length)},
+            $mySet_size: ${context._lift(mySet.size)},
           })
         `);
       }

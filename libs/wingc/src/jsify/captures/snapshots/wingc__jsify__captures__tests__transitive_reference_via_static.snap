@@ -36,7 +36,7 @@ module.exports = function({ $b }) {
 
 inflight.YourType.js
 ------------------------------------------------------
-module.exports = function({ $MyType }) {
+module.exports = function({ $MyType, MyType }) {
   class YourType {
     async putIndirect()  {
       (await $MyType.putInBucket());

@@ -276,10 +276,9 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const $strToStr = context._lift(strToStr);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure2.js")({ 
-            $strToStr: ${$strToStr},
+            $strToStr: ${context._lift(strToStr)},
           })
         `);
       }

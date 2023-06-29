@@ -7,7 +7,7 @@ Files:
 
 inflight.$Closure1.js
 ------------------------------------------------------
-module.exports = function({ $MyInflightClass }) {
+module.exports = function({ $MyInflightClass, MyInflightClass }) {
   class $Closure1 {
     async handle()  {
       const obj = new $MyInflightClass();

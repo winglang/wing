@@ -7,7 +7,7 @@ Files:
 
 inflight.$Closure1.js
 ------------------------------------------------------
-module.exports = function({ $A }) {
+module.exports = function({ $A, A }) {
   class $Closure1 {
     async handle()  {
       (await $A.myop());

@@ -217,14 +217,11 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const $data_size = context._lift(data.size);
-        const $queue = context._lift(queue);
-        const $res = context._lift(res);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure1.js")({ 
-            $data_size: ${$data_size},
-            $queue: ${$queue},
-            $res: ${$res},
+            $data_size: ${context._lift(data.size)},
+            $queue: ${context._lift(queue)},
+            $res: ${context._lift(res)},
           })
         `);
       }

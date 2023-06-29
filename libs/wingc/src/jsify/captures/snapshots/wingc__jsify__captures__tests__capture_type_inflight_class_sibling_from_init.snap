@@ -24,10 +24,10 @@ module.exports = function({  }) {
 
 inflight.Bar.js
 ------------------------------------------------------
-module.exports = function({ Foo }) {
+module.exports = function({ $Foo, Foo }) {
   class Bar {
     constructor()  {
-      new Foo();
+      new $Foo();
     }
   }
   return Bar;

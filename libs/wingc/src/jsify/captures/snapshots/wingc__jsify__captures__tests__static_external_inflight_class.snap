@@ -7,10 +7,10 @@ Files:
 
 inflight.$Closure1.js
 ------------------------------------------------------
-module.exports = function({ $A }) {
+module.exports = function({ $A, A }) {
   class $Closure1 {
     async handle()  {
-      const B = require("./inflight.B.js")({});
+      const B = require("./inflight.B.js")({A});
       (await $A.foo());
     }
     constructor({  }) {
@@ -35,7 +35,7 @@ module.exports = function({  }) {
 
 inflight.B.js
 ------------------------------------------------------
-module.exports = function({ $A }) {
+module.exports = function({ $A, A }) {
   class B {
     constructor()  {
       (await $A.foo());

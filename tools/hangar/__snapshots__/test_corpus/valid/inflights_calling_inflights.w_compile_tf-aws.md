@@ -426,10 +426,9 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const $globalBucket = context._lift(globalBucket);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure1.js")({ 
-            $globalBucket: ${$globalBucket},
+            $globalBucket: ${context._lift(globalBucket)},
           })
         `);
       }
@@ -457,10 +456,9 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const $storeInBucket = context._lift(storeInBucket);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure2.js")({ 
-            $storeInBucket: ${$storeInBucket},
+            $storeInBucket: ${context._lift(storeInBucket)},
           })
         `);
       }
@@ -488,12 +486,10 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const $func1 = context._lift(func1);
-        const $globalBucket = context._lift(globalBucket);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure3.js")({ 
-            $func1: ${$func1},
-            $globalBucket: ${$globalBucket},
+            $func1: ${context._lift(func1)},
+            $globalBucket: ${context._lift(globalBucket)},
           })
         `);
       }
@@ -527,10 +523,9 @@ class $Root extends $stdlib.std.Resource {
             this.display.hidden = true;
           }
           static _toInflightType(context) {
-            const $globalBucket = context._lift(globalBucket);
             return $stdlib.core.NodeJsCode.fromInline(`
               require("./inflight.$Closure4.js")({ 
-                $globalBucket: ${$globalBucket},
+                $globalBucket: ${context._lift(globalBucket)},
               })
             `);
           }
@@ -584,10 +579,9 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const $x = context._lift(x);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure5.js")({ 
-            $x: ${$x},
+            $x: ${context._lift(x)},
           })
         `);
       }

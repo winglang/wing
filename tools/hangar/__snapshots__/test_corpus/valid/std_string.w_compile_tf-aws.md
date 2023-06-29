@@ -158,14 +158,11 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const $__s1_split_______at_1__ = context._lift(((s1.split(" ")).at(1)));
-        const $_s1_concat_s2__ = context._lift((s1.concat(s2)));
-        const $s1_indexOf__s__ = context._lift(s1.indexOf("s"));
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure1.js")({ 
-            $__s1_split_______at_1__: ${$__s1_split_______at_1__},
-            $_s1_concat_s2__: ${$_s1_concat_s2__},
-            $s1_indexOf__s__: ${$s1_indexOf__s__},
+            $__s1_split_______at_1__: ${context._lift(((s1.split(" ")).at(1)))},
+            $_s1_concat_s2__: ${context._lift((s1.concat(s2)))},
+            $s1_indexOf__s__: ${context._lift(s1.indexOf("s"))},
           })
         `);
       }

@@ -171,22 +171,15 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const $myBool = context._lift(myBool);
-        const $myDur_hours = context._lift(myDur.hours);
-        const $myDur_minutes = context._lift(myDur.minutes);
-        const $myDur_seconds = context._lift(myDur.seconds);
-        const $myNum = context._lift(myNum);
-        const $mySecondBool = context._lift(mySecondBool);
-        const $myStr = context._lift(myStr);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure1.js")({ 
-            $myBool: ${$myBool},
-            $myDur_hours: ${$myDur_hours},
-            $myDur_minutes: ${$myDur_minutes},
-            $myDur_seconds: ${$myDur_seconds},
-            $myNum: ${$myNum},
-            $mySecondBool: ${$mySecondBool},
-            $myStr: ${$myStr},
+            $myBool: ${context._lift(myBool)},
+            $myDur_hours: ${context._lift(myDur.hours)},
+            $myDur_minutes: ${context._lift(myDur.minutes)},
+            $myDur_seconds: ${context._lift(myDur.seconds)},
+            $myNum: ${context._lift(myNum)},
+            $mySecondBool: ${context._lift(mySecondBool)},
+            $myStr: ${context._lift(myStr)},
           })
         `);
       }

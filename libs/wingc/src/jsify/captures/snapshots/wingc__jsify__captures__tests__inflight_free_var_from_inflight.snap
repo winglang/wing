@@ -1,17 +1,17 @@
 ---
 source: libs/wingc/src/jsify/captures/tests.rs
-expression: "capture_ok(r#\"\n    test \"test\" {\n      class Foo { }\n      new Foo();\n    }\n    \"#)"
+expression: "capture_ok(r#\"\n    test \"test\" {\n      let s = \"hello\";\n      \n      class A {\n        init() {\n          log(s);\n        }\n      }\n    }\n    \"#)"
 ---
 ======================================================
 Files:
 
 inflight.$Closure1.js
 ------------------------------------------------------
-module.exports = function({ $Foo }) {
+module.exports = function({  }) {
   class $Closure1 {
     async handle()  {
-      const Foo = require("./inflight.Foo.js")({});
-      new $Foo();
+      const s = "hello";
+      const A = require("./inflight.A.js")({s});
     }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -22,12 +22,15 @@ module.exports = function({ $Foo }) {
   return $Closure1;
 }
 
-inflight.Foo.js
+inflight.A.js
 ------------------------------------------------------
-module.exports = function({  }) {
-  class Foo {
+module.exports = function({ s }) {
+  class A {
+    constructor()  {
+      {console.log(s)};
+    }
   }
-  return Foo;
+  return A;
 }
 
 preflight.js
@@ -41,7 +44,6 @@ class $Closure1 extends $stdlib.std.Resource {
   static _toInflightType(context) {
     return $stdlib.core.NodeJsCode.fromInline(`
       require("./inflight.$Closure1.js")({ 
-        $Foo: ${context._lift(Foo)},
       })
     `);
   }
@@ -54,12 +56,6 @@ class $Closure1 extends $stdlib.std.Resource {
         return client;
       })())
     `);
-  }
-  _registerBind(host, ops) {
-    if (ops.includes("handle")) {
-      $Closure1._registerBindObject(Foo, host, []);
-    }
-    super._registerBind(host, ops);
   }
 }
 this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:test",new $Closure1(this,"$Closure1"));

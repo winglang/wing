@@ -177,16 +177,12 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const $Object_keys_m__length = context._lift(Object.keys(m).length);
-        const $aCloned_length = context._lift(aCloned.length);
-        const $a_length = context._lift(a.length);
-        const $s_size = context._lift(s.size);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure1.js")({ 
-            $Object_keys_m__length: ${$Object_keys_m__length},
-            $aCloned_length: ${$aCloned_length},
-            $a_length: ${$a_length},
-            $s_size: ${$s_size},
+            $Object_keys_m__length: ${context._lift(Object.keys(m).length)},
+            $aCloned_length: ${context._lift(aCloned.length)},
+            $a_length: ${context._lift(a.length)},
+            $s_size: ${context._lift(s.size)},
           })
         `);
       }
@@ -217,10 +213,9 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const $handler = context._lift(handler);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure2.js")({ 
-            $handler: ${$handler},
+            $handler: ${context._lift(handler)},
           })
         `);
       }

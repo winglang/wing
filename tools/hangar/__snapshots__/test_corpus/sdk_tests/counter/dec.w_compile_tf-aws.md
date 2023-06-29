@@ -275,10 +275,9 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const $counter = context._lift(counter);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure1.js")({ 
-            $counter: ${$counter},
+            $counter: ${context._lift(counter)},
           })
         `);
       }
@@ -306,10 +305,9 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const $counter = context._lift(counter);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure2.js")({ 
-            $counter: ${$counter},
+            $counter: ${context._lift(counter)},
           })
         `);
       }

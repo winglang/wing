@@ -275,10 +275,8 @@ class $Root extends $stdlib.std.Resource {
         this.name = "Sub";
       }
       static _toInflightType(context) {
-        const lifted_Super = Super._toInflightType(context).text;
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.Sub.js")({ 
-            Super: ${lifted_Super},
           })
         `);
       }
@@ -298,10 +296,8 @@ class $Root extends $stdlib.std.Resource {
         this.name = "Sub";
       }
       static _toInflightType(context) {
-        const lifted_Super = Super._toInflightType(context).text;
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.Sub1.js")({ 
-            Super: ${lifted_Super},
           })
         `);
       }
@@ -347,14 +343,11 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const $__payloadWithBucket_c_____null_ = context._lift(((payloadWithBucket.c) != null));
-        const $__payloadWithoutOptions_b_____null_ = context._lift(((payloadWithoutOptions.b) != null));
-        const $payloadWithBucket_c = context._lift(payloadWithBucket.c);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure1.js")({ 
-            $__payloadWithBucket_c_____null_: ${$__payloadWithBucket_c_____null_},
-            $__payloadWithoutOptions_b_____null_: ${$__payloadWithoutOptions_b_____null_},
-            $payloadWithBucket_c: ${$payloadWithBucket_c},
+            $__payloadWithBucket_c_____null_: ${context._lift(((payloadWithBucket.c) != null))},
+            $__payloadWithoutOptions_b_____null_: ${context._lift(((payloadWithoutOptions.b) != null))},
+            $payloadWithBucket_c: ${context._lift(payloadWithBucket.c)},
           })
         `);
       }

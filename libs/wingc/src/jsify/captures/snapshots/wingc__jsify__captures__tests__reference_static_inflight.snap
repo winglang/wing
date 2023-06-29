@@ -7,7 +7,7 @@ Files:
 
 inflight.$Closure1.js
 ------------------------------------------------------
-module.exports = function({ $MyType }) {
+module.exports = function({ $MyType, MyType }) {
   class $Closure1 {
     async handle()  {
       {console.log((await $MyType.staticMethod()))};
