@@ -156,8 +156,8 @@ Return type is optional for closures.
 
 #### 1.1.4 Json type
 
-🚧 Json support is still a work in progress 🚧
-Check out the [roadmap](#1149-roadmap) section below, to see what parts are still not implemented.
+> 🚧 Json support is still a work in progress 🚧<br/>
+> Check out the [roadmap](#1149-roadmap) section below, to see what parts are still not implemented.
 
 Wing has a primitive data type called `Json`. This type represents an immutable untyped [JSON
 value](https://www.json.org/json-en.html), including JSON primitives (`string`, `number`,
@@ -188,6 +188,7 @@ for e in employees {
 ```
 In the above example, the `http.get` function returns a `Json` object from the server that has a
 single field `items`, with a JSON array of JSON objects, each with an `id` and `name` fields.
+
 The expression `response.get("items")` returns a `Json` array, and we use `Array<T>.fromJson` to 
 convert this array from `Json` to an `Array<Employee>`. Note that by default `fromJson` will 
 perform schema validation on the array and on each item (based on the declaration of the `Employee`
