@@ -131,5 +131,5 @@ export class Util {
     throw new Error("The argument is not a Set");
   }
 
-  private constructor() { }
+  private constructor() {}
 }
