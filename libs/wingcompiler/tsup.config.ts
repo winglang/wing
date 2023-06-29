@@ -5,4 +5,5 @@ export default defineConfig({
   dts: true,
   splitting: false,
   clean: true,
+  noExternal: [/wasi-js/],
 });
