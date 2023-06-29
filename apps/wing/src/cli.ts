@@ -37,7 +37,7 @@ async function main() {
   });
 
   program
-    .option("--no-progress", "Hide show compilation progress");
+    .option("--no-progress", "Hide show compilation progress")
     .option("--no-update-check", "Skip checking for toolchain updates")
     .hook("preAction", async (cmd) => {
       const updateCheck = cmd.opts().updateCheck;
@@ -46,6 +46,14 @@ async function main() {
         void checkForUpdates();
       }
     });
+
+  async function progressHook(cmd: Command) {
+    const target = cmd.opts().target;
+    const progress = program.opts().progress;
+    if (progress !== false && target !== "sim") {
+      process.env.PROGRESS = "1";
+    }
+  }
 
   program
     .command("run")
@@ -66,13 +74,7 @@ async function main() {
         .default("sim")
     )
     .option("-p, --plugins [plugin...]", "Compiler plugins")
-    .hook("preAction", async (cmd) => {
-      const target = cmd.opts().target;
-      const progress = program.opts().progress;
-      if (progress !== false && target !== "sim") {
-        process.env.PROGRESS = "1";
-      }
-    })
+    .hook("preAction", progressHook)
     .action(actionErrorHandler(compile));
 
   program
@@ -87,13 +89,7 @@ async function main() {
         .default("sim")
     )
     .option("-p, --plugins [plugin...]", "Compiler plugins")
-    .hook("preAction", async (cmd) => {
-      const target = cmd.opts().target;
-      const progress = program.opts().progress;
-      if (progress !== false && target !== "sim") {
-        process.env.PROGRESS = "1";
-      }
-    })
+    .hook("preAction", progressHook)
     .action(actionErrorHandler(test));
 
   program.command("docs").description("Open the Wing documentation").action(docs);
