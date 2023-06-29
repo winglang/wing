@@ -1732,7 +1732,7 @@ f(1, 2, field1: 3, field2: 4);
 
 The following features are not yet implemented, but we are planning to add them in the future:
 
-* Variadic arguments ()`...args`) - see https://github.com/winglang/wing/issues/125 to track.
+* Variadic arguments (`...args`) - see https://github.com/winglang/wing/issues/125 to track.
 
 [`▲ top`][top]
 
