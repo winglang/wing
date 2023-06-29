@@ -56,7 +56,7 @@ log(data.c.hello); // prints two
 ```
 
 
-## Struct Expansion in function calls
+## Struct expansion in function calls
 ```ts playground
 struct Options {
   prefix: str?;
