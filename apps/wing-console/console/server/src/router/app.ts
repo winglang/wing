@@ -1,11 +1,9 @@
 import { TRPCError } from "@trpc/server";
 import { observable } from "@trpc/server/observable";
 import { Trace } from "@winglang/sdk/lib/cloud/test-runner.js";
-import { ConstructTree } from "@winglang/sdk/lib/core";
-import { ConstructInfo, DisplayInfo } from "@winglang/sdk/lib/core/tree";
 import uniqby from "lodash.uniqby";
 import { z } from "zod";
-
+import open from "open";
 import { ConstructTreeNode } from "../utils/construct-tree.js";
 import {
   Node,
@@ -409,7 +407,11 @@ export const createAppRouter = () => {
         }),
       )
       .mutation(async ({ ctx, input }) => {
-        await ctx.hostUtils?.openExternal(input.url);
+        if(ctx.hostUtils?.openExternal) {
+          await ctx.hostUtils.openExternal(input.url);
+        } else {
+            await open(input.url);
+        }
       }),
   });
 
