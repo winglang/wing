@@ -54,11 +54,17 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 		);
 		let node_to_complete_kind = node_to_complete.kind();
 
+		let file_id = file.to_str().expect("File path must be valid utf8");
 		let mut scope_visitor = ScopeVisitor::new(
+			node_to_complete.parent().map(|parent| WingSpan {
+				start: parent.start_position().into(),
+				end: parent.end_position().into(),
+				file_id: file_id.to_string(),
+			}),
 			WingSpan {
 				start: node_to_complete.start_position().into(),
 				end: node_to_complete.end_position().into(),
-				file_id: file.to_str().expect("File path must be valid utf8").to_string(),
+				file_id: file_id.to_string(),
 			},
 			&root_scope,
 		);
@@ -603,8 +609,10 @@ fn should_exclude_symbol(symbol: &str) -> bool {
 /// This visitor is used to find the scope
 /// and relevant expression that contains a given location.
 pub struct ScopeVisitor<'a> {
+	/// The area surrounding the location we're looking for
+	pub parent_span: Option<WingSpan>,
 	/// The target location we're looking for
-	pub location: WingSpan,
+	pub target_span: WingSpan,
 	/// The index of the statement that contains the target location
 	/// or, the last valid statement before the target location
 	pub found_stmt_index: Option<usize>,
@@ -617,9 +625,10 @@ pub struct ScopeVisitor<'a> {
 }
 
 impl<'a> ScopeVisitor<'a> {
-	pub fn new(location: WingSpan, starting_scope: &'a Scope) -> Self {
+	pub fn new(parent_span: Option<WingSpan>, target_span: WingSpan, starting_scope: &'a Scope) -> Self {
 		Self {
-			location,
+			parent_span,
+			target_span,
 			found_stmt_index: None,
 			nearest_expr: None,
 			found_scope: starting_scope,
@@ -634,11 +643,11 @@ impl<'a> ScopeVisitor<'a> {
 
 impl<'a> Visit<'a> for ScopeVisitor<'a> {
 	fn visit_scope(&mut self, node: &'a Scope) {
-		if node.span.file_id != "" && node.span.contains(&self.location.start.into()) {
+		if node.span.file_id != "" && node.span.contains(&self.target_span.start.into()) {
 			self.found_scope = node;
 
 			for (i, statement) in node.statements.iter().enumerate() {
-				if statement.span <= self.location {
+				if statement.span <= self.target_span {
 					self.visit_stmt(&statement);
 				} else if self.found_stmt_index.is_none() {
 					self.found_stmt_index = Some(max(i as i64 - 1, 0) as usize);
@@ -654,16 +663,23 @@ impl<'a> Visit<'a> for ScopeVisitor<'a> {
 	fn visit_expr(&mut self, node: &'a Expr) {
 		// We want to find the nearest expression to our target location
 		// i.e we want the expression that is to the left of it
-		if node.span.end == self.location.start {
+		if node.span.end == self.target_span.start {
 			self.nearest_expr = Some(node);
-		} else if node.span.end <= self.location.start {
-			if let Some(nearest_expr) = self.nearest_expr {
-				// If we already have a nearest expression, we want to find the one that is closest to our target location
-				if node.span.end > nearest_expr.span.end {
-					self.nearest_expr = Some(node);
+		}
+		// if we can't get an exact match, we want to find the nearest expression within the same node-ish
+		// (this is for cases like `(Json 5).`, since parentheses are not part of the span)
+		else if node.span.end <= self.target_span.start {
+			if let Some(parent) = &self.parent_span {
+				if parent.contains(&node.span.end.into()) {
+					if let Some(nearest_expr) = self.nearest_expr {
+						// If we already have a nearest expression, we want to find the one that is closest to our target location
+						if node.span.end > nearest_expr.span.end {
+							self.nearest_expr = Some(node);
+						}
+					} else {
+						self.nearest_expr = Some(node);
+					}
 				}
-			} else {
-				self.nearest_expr = Some(node);
 			}
 		}
 
@@ -676,7 +692,7 @@ impl<'a> Visit<'a> for ScopeVisitor<'a> {
 	}
 
 	fn visit_type_annotation(&mut self, node: &'a TypeAnnotation) {
-		if node.span.end == self.location.end {
+		if node.span.end == self.target_span.end {
 			self.nearest_type_annotation = Some(node);
 		}
 
@@ -930,6 +946,36 @@ let x: cloud.
            //^
 "#,
 		assert!(!variable_type_annotation_namespace.is_empty())
+	);
+
+	test_completion_list!(
+		parentheses_expression,
+		r#"
+(Json {}).tryGet("t")?.
+                     //^
+"#,
+		assert!(!parentheses_expression.is_empty())
+	);
+
+	test_completion_list!(
+		static_json_after_expression,
+		r#"
+bring cloud;
+let b = new cloud.Bucket();
+Json.
+   //^
+"#,
+		assert!(!static_json_after_expression.is_empty())
+	);
+
+	test_completion_list!(
+		static_json_after_expression_statement,
+		r#"
+bring cloud;
+let b = new cloud.Bucket();Json.
+                              //^
+"#,
+		assert!(!static_json_after_expression_statement.is_empty())
 	);
 
 	test_completion_list!(
