@@ -136,3 +136,8 @@ new Foo();
 // derived classes without defined constructors
 class Baz extends Bar {}
 new Baz();
+
+class Boom {
+  init() { }
+}
+class Bam extends Boom {}

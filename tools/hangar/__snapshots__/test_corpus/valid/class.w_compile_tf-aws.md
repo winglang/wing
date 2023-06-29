@@ -112,6 +112,21 @@ module.exports = function({ A }) {
 
 ```
 
+## inflight.Bam.js
+```js
+module.exports = function({ Boom }) {
+  class Bam extends Boom {
+    constructor({  }) {
+      super({});
+    }
+    async $inflight_init()  {
+    }
+  }
+  return Bam;
+}
+
+```
+
 ## inflight.Bar.js
 ```js
 module.exports = function({  }) {
@@ -137,6 +152,20 @@ module.exports = function({ Bar }) {
     }
   }
   return Baz;
+}
+
+```
+
+## inflight.Boom.js
+```js
+module.exports = function({  }) {
+  class Boom {
+    constructor({  }) {
+    }
+    async $inflight_init()  {
+    }
+  }
+  return Boom;
 }
 
 ```
@@ -1219,6 +1248,64 @@ class $Root extends $stdlib.std.Resource {
           (await (async () => {
             const BazClient = ${Baz._toInflightType(this).text};
             const client = new BazClient({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+        }
+        super._registerBind(host, ops);
+      }
+    }
+    class Boom extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+      }
+      static _toInflightType(context) {
+        const self_client_path = "././inflight.Boom.js";
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const BoomClient = ${Boom._toInflightType(this).text};
+            const client = new BoomClient({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+        }
+        super._registerBind(host, ops);
+      }
+    }
+    class Bam extends Boom {
+      constructor(scope, id, ) {
+        super(scope, id);
+      }
+      static _toInflightType(context) {
+        const self_client_path = "././inflight.Bam.js";
+        const BoomClient = Boom._toInflightType(context);
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+            Boom: ${BoomClient.text},
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const BamClient = ${Bam._toInflightType(this).text};
+            const client = new BamClient({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
