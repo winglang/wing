@@ -15,6 +15,7 @@ exports.isValidUrl = function(url) {
     return false;
   }
 };
+```
 
 ### Preflight static function
 ```ts 

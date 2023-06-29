@@ -6,9 +6,13 @@ keywords: [Wing example]
 
 ### Assignment
 
-```ts playground
+```ts 
 let x = 12;
 x = 77; // ERROR: x is non reassignable
+
+let var y = "hello";
+y = "world"; // OK (y is reassignable)
+```
 
 ### Inferred typing
 ```ts playground
