@@ -6,7 +6,6 @@ import type { Application as ExpressApplication } from "express";
 import type { Config } from "./config.js";
 import { type ConsoleLogger, createConsoleLogger } from "./consoleLogger.js";
 import { createExpressServer } from "./expressServer.js";
-import type { HostUtils } from "./hostUtils.js";
 import type { Router } from "./router/index.js";
 import type { State } from "./types.js";
 import type { Updater } from "./updater.js";
@@ -23,7 +22,6 @@ export type { WingSimulatorSchema, BaseResourceSchema } from "./wingsdk.js";
 export type { Updater, UpdaterStatus } from "./updater.js";
 export type { Config } from "./config.js";
 export type { Router } from "./router/index.js";
-export type { HostUtils } from "./hostUtils.js";
 export type { RouterContext } from "./utils/createRouter.js";
 export type { MapNode, MapEdge } from "./router/app.js";
 export type { InternalTestResult } from "./router/test.js";
@@ -38,7 +36,6 @@ export interface CreateConsoleServerOptions {
   updater?: Updater;
   config: Config;
   requestedPort?: number;
-  hostUtils?: HostUtils;
   onTrace?: (trace: Trace) => void;
   onExpressCreated?: (app: ExpressApplication) => void;
 }
@@ -49,7 +46,6 @@ export const createConsoleServer = async ({
   updater,
   config,
   requestedPort,
-  hostUtils,
   onTrace,
   onExpressCreated,
 }: CreateConsoleServerOptions) => {
@@ -173,7 +169,6 @@ export const createConsoleServer = async ({
     appState() {
       return appState;
     },
-    hostUtils,
     onExpressCreated,
   });
 

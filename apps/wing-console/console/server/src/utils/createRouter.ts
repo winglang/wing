@@ -5,7 +5,6 @@ import Emittery from "emittery";
 
 import { Config } from "../config.js";
 import { ConsoleLogger } from "../consoleLogger.js";
-import { HostUtils } from "../hostUtils.js";
 import { State } from "../types.js";
 import { Updater } from "../updater.js";
 
@@ -38,7 +37,6 @@ export interface RouterContext {
   logger: ConsoleLogger;
   updater?: Updater;
   config?: Config;
-  hostUtils?: HostUtils;
 }
 
 const t = initTRPC.context<RouterContext>().create();

@@ -4,7 +4,6 @@ import {
   LogInterface,
   Updater,
   Config,
-  HostUtils,
   Trace,
 } from "@wingconsole/server";
 import express from "express";
@@ -13,7 +12,6 @@ export type {
   LogInterface,
   Updater,
   Config,
-  HostUtils,
   UpdaterStatus,
   Trace,
 } from "@wingconsole/server";
@@ -24,7 +22,6 @@ export interface CreateConsoleAppOptions {
   updater?: Updater;
   config?: Config;
   requestedPort?: number;
-  hostUtils?: HostUtils;
   onTrace?: (trace: Trace) => void;
   onExpressCreated?: CreateConsoleServerOptions["onExpressCreated"];
 }

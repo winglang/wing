@@ -1,8 +1,6 @@
 import { TRPCError } from "@trpc/server";
 import { observable } from "@trpc/server/observable";
 import { Trace } from "@winglang/sdk/lib/cloud/test-runner.js";
-import { ConstructTree } from "@winglang/sdk/lib/core";
-import { ConstructInfo, DisplayInfo } from "@winglang/sdk/lib/core/tree";
 import uniqby from "lodash.uniqby";
 import { z } from "zod";
 
@@ -402,15 +400,6 @@ export const createAppRouter = () => {
     "app.state": createProcedure.query(async ({ ctx }) => {
       return ctx.appState();
     }),
-    "app.openExternal": createProcedure
-      .input(
-        z.object({
-          url: z.string(),
-        }),
-      )
-      .mutation(async ({ ctx, input }) => {
-        await ctx.hostUtils?.openExternal(input.url);
-      }),
   });
 
   return { router };
