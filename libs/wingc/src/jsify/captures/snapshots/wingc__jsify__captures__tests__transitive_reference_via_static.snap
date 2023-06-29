@@ -3,25 +3,41 @@ source: libs/wingc/src/jsify/captures/tests.rs
 expression: "capture_ok(r#\"\n    bring cloud;\n\n    let b = new cloud.Bucket();\n    \n\t\tclass MyType {\n      static inflight putInBucket() {\n        b.put(\"in\", \"bucket\");\n      }\n    }\n\n    class YourType {\n      inflight putIndirect() {\n        MyType.putInBucket();\n      }\n    }\n\n    let t = new YourType();\n    test \"test\" {\n      t.putIndirect();\n    }\n\t\t\"#)"
 ---
 ======================================================
-Captured by MyType:
-
-======================================================
-Captured by YourType:
-Types:
-  MyType = MyType
-
-======================================================
-Captured by $Closure1:
-
-======================================================
 Files:
+
+inflight.$Closure1.js
+------------------------------------------------------
+module.exports = function({ $t }) {
+  class $Closure1 {
+    async handle()  {
+      (await $t.putIndirect());
+    }
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+  }
+  return $Closure1;
+}
+
+inflight.MyType.js
+------------------------------------------------------
+module.exports = function({ $b }) {
+  class MyType {
+    static async putInBucket()  {
+      (await $b.put("in","bucket"));
+    }
+    constructor({  }) {
+    }
+  }
+  return MyType;
+}
 
 inflight.YourType.js
 ------------------------------------------------------
 module.exports = function({ MyType }) {
   class YourType {
-    async $inflight_init()  {
-    }
     async putIndirect()  {
       (await MyType.putInBucket());
     }
@@ -31,30 +47,6 @@ module.exports = function({ MyType }) {
   return YourType;
 }
 
-main.w
-------------------------------------------------------
-
-    bring cloud;
-
-    let b = new cloud.Bucket();
-    
-    class MyType {
-      static inflight putInBucket() {
-        b.put("in", "bucket");
-      }
-    }
-
-    class YourType {
-      inflight putIndirect() {
-        MyType.putInBucket();
-      }
-    }
-
-    let t = new YourType();
-    test "test" {
-      t.putIndirect();
-    }
-    
 preflight.js
 ------------------------------------------------------
 const cloud = require('@winglang/sdk').cloud;
@@ -146,37 +138,4 @@ class $Closure1 extends $stdlib.std.Resource {
 const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
 const t = new YourType(this,"YourType");
 this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:test",new $Closure1(this,"$Closure1"));
-
-inflight.$Closure1.js
-------------------------------------------------------
-module.exports = function({ $t }) {
-  class $Closure1 {
-    async $inflight_init()  {
-    }
-    async handle()  {
-      (await $t.putIndirect());
-    }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
-    }
-  }
-  return $Closure1;
-}
-
-inflight.MyType.js
-------------------------------------------------------
-module.exports = function({ $b }) {
-  class MyType {
-    async $inflight_init()  {
-    }
-    static async putInBucket()  {
-      (await $b.put("in","bucket"));
-    }
-    constructor({  }) {
-    }
-  }
-  return MyType;
-}
 

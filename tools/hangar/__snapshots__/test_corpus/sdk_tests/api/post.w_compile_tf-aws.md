@@ -6,10 +6,7 @@ module.exports = function({ $api_POST, $body, std_Json }) {
   const std = {
     Json: std_Json,
   };
-  
   class $Closure1 {
-    async $inflight_init()  {
-    }
     async handle(req)  {
       {((cond) => {if (!cond) throw new Error("assertion failed: req.method == api_POST")})((req.method === $api_POST))};
       {((cond) => {if (!cond) throw new Error("assertion failed: req.path == \"/path\"")})((req.path === "/path"))};
@@ -40,10 +37,7 @@ module.exports = function({ $api_url, $body, $http_POST, http_Util, std_Json }) 
   const std = {
     Json: std_Json,
   };
-  
   class $Closure2 {
-    async $inflight_init()  {
-    }
     async handle()  {
       const url = ($api_url + "/path");
       const response = (await http.Util.post(url,{

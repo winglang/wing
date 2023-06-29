@@ -4,8 +4,6 @@
 ```js
 module.exports = function({ $__payloadWithBucket_c_____null_, $__payloadWithoutOptions_b_____null_, $payloadWithBucket_c }) {
   class $Closure1 {
-    async $inflight_init()  {
-    }
     async handle()  {
       {((cond) => {if (!cond) throw new Error("assertion failed: payloadWithoutOptions.b? == false")})(($__payloadWithoutOptions_b_____null_ === false))};
       if ($__payloadWithBucket_c_____null_) {
@@ -27,8 +25,6 @@ module.exports = function({ $__payloadWithBucket_c_____null_, $__payloadWithoutO
 ```js
 module.exports = function({  }) {
   class Node {
-    async $inflight_init()  {
-    }
     constructor({  }) {
     }
   }
@@ -41,8 +37,6 @@ module.exports = function({  }) {
 ```js
 module.exports = function({ Super }) {
   class Sub extends Super {
-    async $inflight_init()  {
-    }
     constructor({  }) {
       super({});
     }
@@ -56,8 +50,6 @@ module.exports = function({ Super }) {
 ```js
 module.exports = function({ Super }) {
   class Sub1 extends Super {
-    async $inflight_init()  {
-    }
     constructor({  }) {
       super({});
     }
@@ -71,8 +63,6 @@ module.exports = function({ Super }) {
 ```js
 module.exports = function({  }) {
   class Super {
-    async $inflight_init()  {
-    }
     constructor({  }) {
     }
   }
@@ -418,7 +408,7 @@ class $Root extends $stdlib.std.Resource {
         {((cond) => {if (!cond) throw new Error("assertion failed: true")})(true)};
       }
     }
-    const tryParseName =  (fullName) =>  {
+    const tryParseName = ((fullName) =>  {
       const parts = (fullName.split(" "));
       if ((parts.length < 1)) {
         return undefined;
@@ -427,8 +417,7 @@ class $Root extends $stdlib.std.Resource {
       "first": (parts.at(0)),
       "last": (parts.at(1)),}
       ;
-    }
-    ;
+    });
     {
       const $IF_LET_VALUE = (tryParseName("Good Name"));
       if ($IF_LET_VALUE != undefined) {
@@ -490,7 +479,7 @@ class $Root extends $stdlib.std.Resource {
         }
       }
     }
-    const fun =  (a) =>  {
+    const fun = ((a) =>  {
       {
         const $IF_LET_VALUE = a;
         if ($IF_LET_VALUE != undefined) {
@@ -501,8 +490,7 @@ class $Root extends $stdlib.std.Resource {
           return "default";
         }
       }
-    }
-    ;
+    });
     {((cond) => {if (!cond) throw new Error("assertion failed: fun(\"hello\") == \"hello\"")})(((fun("hello")) === "hello"))};
     {((cond) => {if (!cond) throw new Error("assertion failed: fun(nil) == \"default\"")})(((fun(undefined)) === "default"))};
     const tree = new Node(this,"eight",8,new Node(this,"three",3,new Node(this,"one",1,undefined,undefined),new Node(this,"six",6,undefined,undefined)),new Node(this,"ten",10,undefined,new Node(this,"fourteen",14,new Node(this,"thirteen",13,undefined,undefined),undefined)));

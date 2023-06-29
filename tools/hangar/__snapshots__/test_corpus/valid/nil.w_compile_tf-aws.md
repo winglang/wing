@@ -4,8 +4,6 @@
 ```js
 module.exports = function({ $foo }) {
   class $Closure1 {
-    async $inflight_init()  {
-    }
     async handle()  {
       {((cond) => {if (!cond) throw new Error("assertion failed: foo.returnNil(true)? == true")})(((((await $foo.returnNil(true))) != null) === true))};
       {((cond) => {if (!cond) throw new Error("assertion failed: foo.returnNil(false)? == false")})(((((await $foo.returnNil(false))) != null) === false))};
@@ -25,8 +23,6 @@ module.exports = function({ $foo }) {
 ```js
 module.exports = function({ $foo }) {
   class $Closure2 {
-    async $inflight_init()  {
-    }
     async handle()  {
       {((cond) => {if (!cond) throw new Error("assertion failed: foo.getOptionalValue()? == false")})(((((await $foo.getOptionalValue())) != null) === false))};
       (await $foo.setOptionalValue("hello"));

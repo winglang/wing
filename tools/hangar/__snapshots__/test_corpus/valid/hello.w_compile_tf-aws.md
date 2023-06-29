@@ -4,8 +4,6 @@
 ```js
 module.exports = function({ $bucket }) {
   class $Closure1 {
-    async $inflight_init()  {
-    }
     async handle(message)  {
       (await $bucket.put("wing.txt",String.raw({ raw: ["Hello, ", ""] }, message)));
     }

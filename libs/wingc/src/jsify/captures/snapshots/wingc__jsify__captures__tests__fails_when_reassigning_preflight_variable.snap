@@ -1,17 +1,19 @@
 ---
 source: libs/wingc/src/jsify/captures/tests.rs
-expression: "capture_ok(r#\"\n    test \"test\" {\n      class Foo { }\n      new Foo();\n    }\n    \"#)"
+expression: "capture_fail(r#\"\n    let var a = \"hello\";\n    inflight () => {\n      a = \"world\";\n    };\n    \"#)"
 ---
+======================================================
+Errors:
+ - at 3:6 | Variable cannot be reassigned from inflight
 ======================================================
 Files:
 
 inflight.$Closure1.js
 ------------------------------------------------------
-module.exports = function({  }) {
+module.exports = function({ $a }) {
   class $Closure1 {
     async handle()  {
-      const Foo = require("./inflight.Foo.js")({});
-      new Foo();
+      $a = "world";
     }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -20,14 +22,6 @@ module.exports = function({  }) {
     }
   }
   return $Closure1;
-}
-
-inflight.Foo.js
-------------------------------------------------------
-module.exports = function({  }) {
-  class Foo {
-  }
-  return Foo;
 }
 
 preflight.js
@@ -39,8 +33,10 @@ class $Closure1 extends $stdlib.std.Resource {
     this.display.hidden = true;
   }
   static _toInflightType(context) {
+    const $a = context._lift(a);
     return $stdlib.core.NodeJsCode.fromInline(`
       require("./inflight.$Closure1.js")({ 
+        $a: ${$a},
       })
     `);
   }
@@ -54,6 +50,13 @@ class $Closure1 extends $stdlib.std.Resource {
       })())
     `);
   }
+  _registerBind(host, ops) {
+    if (ops.includes("handle")) {
+      $Closure1._registerBindObject(a, host, []);
+    }
+    super._registerBind(host, ops);
+  }
 }
-this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:test",new $Closure1(this,"$Closure1"));
+let a = "hello";
+new $Closure1(this,"$Closure1");
 

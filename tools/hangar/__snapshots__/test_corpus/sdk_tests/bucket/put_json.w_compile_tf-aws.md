@@ -4,8 +4,6 @@
 ```js
 module.exports = function({ $b }) {
   class $Closure1 {
-    async $inflight_init()  {
-    }
     async handle()  {
       const jsonObj1 = Object.freeze({"test":"test1"});
       const jsonObj2 = Object.freeze({"test":"test2"});

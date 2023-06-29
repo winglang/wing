@@ -4,8 +4,6 @@
 ```js
 module.exports = function({  }) {
   class $Closure1 {
-    async $inflight_init()  {
-    }
     async handle(m)  {
       return String.raw({ raw: ["Hello ", "!"] }, m);
     }
@@ -22,19 +20,16 @@ module.exports = function({  }) {
 
 ## inflight.$Closure2.js
 ```js
-module.exports = function({ std_Json, std_Number }) {
+module.exports = function({ $handler, std_Json, std_Number }) {
   const std = {
     Json: std_Json,
     Number: std_Number,
   };
-  
   class $Closure2 {
-    async $inflight_init()  {
-    }
     async handle(x)  {
       const xStr = ((args) => { if (isNaN(args)) {throw new Error("unable to parse \"" + args + "\" as a number")}; return parseInt(args) })(x);
-      const y = (await handler(xStr));
-      const z = (await handler(y));
+      const y = (await $handler(xStr));
+      const z = (await $handler(y));
       return ((args) => { return JSON.stringify(args[0], null, args[1]) })([z]);
     }
     constructor({  }) {
@@ -52,8 +47,6 @@ module.exports = function({ std_Json, std_Number }) {
 ```js
 module.exports = function({  }) {
   class $Closure3 {
-    async $inflight_init()  {
-    }
     async handle(x)  {
       return (x * 2);
     }
@@ -72,8 +65,6 @@ module.exports = function({  }) {
 ```js
 module.exports = function({ $f }) {
   class $Closure4 {
-    async $inflight_init()  {
-    }
     async handle()  {
       const result = (await $f.invoke("2"));
       {((cond) => {if (!cond) throw new Error("assertion failed: result == \"8\"")})((result === "8"))};
@@ -93,8 +84,6 @@ module.exports = function({ $f }) {
 ```js
 module.exports = function({  }) {
   class Doubler {
-    async $inflight_init()  {
-    }
     async invoke(message)  {
       (await this.$this_func.handle(message));
       (await this.$this_func.handle(message));
@@ -112,8 +101,6 @@ module.exports = function({  }) {
 ```js
 module.exports = function({  }) {
   class Doubler2 {
-    async $inflight_init()  {
-    }
     constructor({  }) {
     }
   }
@@ -378,7 +365,7 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
       }
-       makeFunc(handler)  {
+      makeFunc(handler)  {
         const __parent_this_2 = this;
         class $Closure2 extends $stdlib.std.Resource {
           constructor(scope, id, ) {
@@ -387,10 +374,12 @@ class $Root extends $stdlib.std.Resource {
             this.display.hidden = true;
           }
           static _toInflightType(context) {
+            const $handler = context._lift(handler);
             const lifted_std_Json = std.Json._toInflightType(context).text;
             const lifted_std_Number = std.Number._toInflightType(context).text;
             return $stdlib.core.NodeJsCode.fromInline(`
               require("./inflight.$Closure2.js")({ 
+                $handler: ${$handler},
                 std_Json: ${lifted_std_Json},
                 std_Number: ${lifted_std_Number},
               })
@@ -405,6 +394,12 @@ class $Root extends $stdlib.std.Resource {
                 return client;
               })())
             `);
+          }
+          _registerBind(host, ops) {
+            if (ops.includes("handle")) {
+              $Closure2._registerBindObject(handler, host, []);
+            }
+            super._registerBind(host, ops);
           }
         }
         return this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"cloud.Function",new $Closure2(this,"$Closure2"));

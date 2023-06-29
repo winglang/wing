@@ -6,10 +6,7 @@ module.exports = function({ $counter, std_Json }) {
   const std = {
     Json: std_Json,
   };
-  
   class $Closure1 {
-    async $inflight_init()  {
-    }
     async handle(request)  {
       const count = (await $counter.inc());
       const bodyResponse = Object.freeze({"count":count});
@@ -35,8 +32,6 @@ module.exports = function({ $counter, std_Json }) {
 ```js
 module.exports = function({ $api_url }) {
   class $Closure2 {
-    async $inflight_init()  {
-    }
     async handle()  {
       const url = $api_url;
       {((cond) => {if (!cond) throw new Error("assertion failed: url.startsWith(\"http\")")})(url.startsWith("http"))};
@@ -56,8 +51,6 @@ module.exports = function({ $api_url }) {
 ```js
 module.exports = function({ $__parent_this_3_api_url }) {
   class $Closure3 {
-    async $inflight_init()  {
-    }
     async handle(req)  {
       const text = String.raw({ raw: ["", "/endpoint2"] }, $__parent_this_3_api_url);
       return {
@@ -80,8 +73,6 @@ module.exports = function({ $__parent_this_3_api_url }) {
 ```js
 module.exports = function({  }) {
   class A {
-    async $inflight_init()  {
-    }
     constructor({  }) {
     }
   }

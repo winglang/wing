@@ -4,8 +4,6 @@
 ```js
 module.exports = function({ $js, $q }) {
   class $Closure1 {
-    async $inflight_init()  {
-    }
     async handle()  {
       (await $q.push("foo"));
       (await $q.push("bar"));
@@ -47,8 +45,6 @@ module.exports = function({ $js, $q }) {
 ```js
 module.exports = function({  }) {
   class TestHelper {
-    async $inflight_init()  {
-    }
     async sleep(milli)  {
       return (require("<ABSOLUTE_PATH>/sleep.js")["sleep"])(milli)
     }

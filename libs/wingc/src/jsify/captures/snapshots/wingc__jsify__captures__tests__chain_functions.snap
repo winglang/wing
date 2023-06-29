@@ -3,20 +3,28 @@ source: libs/wingc/src/jsify/captures/tests.rs
 expression: "capture_ok(r#\"\n    bring cloud;\n\n    class Foo {\n      b: cloud.Bucket;\n\n      init() {\n        this.b = new cloud.Bucket();\n      }\n\n      inflight getBucket(): cloud.Bucket {\n        return this.b;\n      }\n    }\n\n    let f = new Foo();\n    let b = new cloud.Bucket();\n\n    test \"test\" {\n      f.getBucket().put(\"hello\", \"world\");\n    }\n    \"#)"
 ---
 ======================================================
-Captured by Foo:
-
-======================================================
-Captured by $Closure1:
-
-======================================================
 Files:
+
+inflight.$Closure1.js
+------------------------------------------------------
+module.exports = function({ $f }) {
+  class $Closure1 {
+    async handle()  {
+      (await (await $f.getBucket()).put("hello","world"));
+    }
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+  }
+  return $Closure1;
+}
 
 inflight.Foo.js
 ------------------------------------------------------
 module.exports = function({  }) {
   class Foo {
-    async $inflight_init()  {
-    }
     async getBucket()  {
       return this.$this_b;
     }
@@ -27,30 +35,6 @@ module.exports = function({  }) {
   return Foo;
 }
 
-main.w
-------------------------------------------------------
-
-    bring cloud;
-
-    class Foo {
-      b: cloud.Bucket;
-
-      init() {
-        this.b = new cloud.Bucket();
-      }
-
-      inflight getBucket(): cloud.Bucket {
-        return this.b;
-      }
-    }
-
-    let f = new Foo();
-    let b = new cloud.Bucket();
-
-    test "test" {
-      f.getBucket().put("hello", "world");
-    }
-    
 preflight.js
 ------------------------------------------------------
 const cloud = require('@winglang/sdk').cloud;
@@ -118,22 +102,4 @@ class $Closure1 extends $stdlib.std.Resource {
 const f = new Foo(this,"Foo");
 const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
 this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:test",new $Closure1(this,"$Closure1"));
-
-inflight.$Closure1.js
-------------------------------------------------------
-module.exports = function({ $f }) {
-  class $Closure1 {
-    async $inflight_init()  {
-    }
-    async handle()  {
-      (await (await $f.getBucket()).put("hello","world"));
-    }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
-    }
-  }
-  return $Closure1;
-}
 

@@ -4,8 +4,6 @@
 ```js
 module.exports = function({  }) {
   class $Closure1 {
-    async $inflight_init()  {
-    }
     async handle()  {
       {console.log("hello, world")};
     }
@@ -24,8 +22,6 @@ module.exports = function({  }) {
 ```js
 module.exports = function({  }) {
   class $Closure2 {
-    async $inflight_init()  {
-    }
     async handle()  {
       {console.log("hello, world")};
     }

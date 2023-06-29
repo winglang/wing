@@ -3,22 +3,21 @@ source: libs/wingc/src/jsify/captures/tests.rs
 expression: "capture_ok(r#\"\n    let s = \"hello\";\n\n    class MyType {\n      static inflight staticMethod(): str {\n        return s;\n      }\n    }\n    \"#)"
 ---
 ======================================================
-Captured by MyType:
-
-======================================================
 Files:
 
-main.w
+inflight.MyType.js
 ------------------------------------------------------
-
-    let s = "hello";
-
-    class MyType {
-      static inflight staticMethod(): str {
-        return s;
-      }
+module.exports = function({ $s }) {
+  class MyType {
+    static async staticMethod()  {
+      return $s;
     }
-    
+    constructor({  }) {
+    }
+  }
+  return MyType;
+}
+
 preflight.js
 ------------------------------------------------------
 class MyType extends $stdlib.std.Resource {
@@ -52,19 +51,4 @@ class MyType extends $stdlib.std.Resource {
   }
 }
 const s = "hello";
-
-inflight.MyType.js
-------------------------------------------------------
-module.exports = function({ $s }) {
-  class MyType {
-    async $inflight_init()  {
-    }
-    static async staticMethod()  {
-      return $s;
-    }
-    constructor({  }) {
-    }
-  }
-  return MyType;
-}
 

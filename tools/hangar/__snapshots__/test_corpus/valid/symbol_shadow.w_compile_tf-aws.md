@@ -4,8 +4,6 @@
 ```js
 module.exports = function({ $s }) {
   class $Closure1 {
-    async $inflight_init()  {
-    }
     async handle()  {
       {((cond) => {if (!cond) throw new Error("assertion failed: s == \"inner\"")})(($s === "inner"))};
     }
@@ -24,8 +22,6 @@ module.exports = function({ $s }) {
 ```js
 module.exports = function({ $s }) {
   class $Closure2 {
-    async $inflight_init()  {
-    }
     async handle()  {
       {((cond) => {if (!cond) throw new Error("assertion failed: s == \"inResource\"")})(($s === "inResource"))};
     }
@@ -44,8 +40,6 @@ module.exports = function({ $s }) {
 ```js
 module.exports = function({ $s }) {
   class $Closure3 {
-    async $inflight_init()  {
-    }
     async handle()  {
       {((cond) => {if (!cond) throw new Error("assertion failed: s == \"top\"")})(($s === "top"))};
     }
@@ -64,8 +58,6 @@ module.exports = function({ $s }) {
 ```js
 module.exports = function({  }) {
   class $Closure4 {
-    async $inflight_init()  {
-    }
     async handle()  {
       const s = "insideInflight";
       {((cond) => {if (!cond) throw new Error("assertion failed: s == \"insideInflight\"")})((s === "insideInflight"))};
@@ -85,8 +77,6 @@ module.exports = function({  }) {
 ```js
 module.exports = function({  }) {
   class A {
-    async $inflight_init()  {
-    }
     constructor({  }) {
     }
   }

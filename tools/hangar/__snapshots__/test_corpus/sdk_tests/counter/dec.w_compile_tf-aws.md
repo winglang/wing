@@ -4,8 +4,6 @@
 ```js
 module.exports = function({ $counter }) {
   class $Closure1 {
-    async $inflight_init()  {
-    }
     async handle()  {
       {((cond) => {if (!cond) throw new Error("assertion failed: counter.peek() == 1")})(((await $counter.peek()) === 1))};
       const dec1 = (await $counter.dec());
@@ -30,8 +28,6 @@ module.exports = function({ $counter }) {
 ```js
 module.exports = function({ $counter }) {
   class $Closure2 {
-    async $inflight_init()  {
-    }
     async handle()  {
       const key = "my-key";
       {((cond) => {if (!cond) throw new Error("assertion failed: counter.peek(key) == 0")})(((await $counter.peek(key)) === 0))};

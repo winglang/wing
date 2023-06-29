@@ -3,23 +3,22 @@ source: libs/wingc/src/jsify/captures/tests.rs
 expression: "capture_ok(r#\"\n    inflight class MyType {\n      field: str;\n      init() { this.field = \"hi\"; }\n  \n      getField(): str {\n        return this.field;\n      }\n    }\n  \"#)"
 ---
 ======================================================
-Captured by MyType:
-
-======================================================
 Files:
 
-main.w
+inflight.MyType.js
 ------------------------------------------------------
-
-    inflight class MyType {
-      field: str;
-      init() { this.field = "hi"; }
-  
-      getField(): str {
-        return this.field;
-      }
+module.exports = function({  }) {
+  class MyType {
+    constructor()  {
+      this.field = "hi";
     }
-  
+    async getField()  {
+      return this.field;
+    }
+  }
+  return MyType;
+}
+
 preflight.js
 ------------------------------------------------------
 class MyType extends $stdlib.std.Resource {
@@ -43,19 +42,5 @@ class MyType extends $stdlib.std.Resource {
       })())
     `);
   }
-}
-
-inflight.MyType.js
-------------------------------------------------------
-module.exports = function({  }) {
-  class MyType {
-     constructor()  {
-      this.field = "hi";
-    }
-    async getField()  {
-      return this.field;
-    }
-  }
-  return MyType;
 }
 

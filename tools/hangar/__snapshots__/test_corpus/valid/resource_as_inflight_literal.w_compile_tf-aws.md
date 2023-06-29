@@ -4,8 +4,6 @@
 ```js
 module.exports = function({ $fn }) {
   class $Closure1 {
-    async $inflight_init()  {
-    }
     async handle()  {
       {((cond) => {if (!cond) throw new Error("assertion failed: fn.invoke(\"test\") == \"hello world!\"")})(((await $fn.invoke("test")) === "hello world!"))};
     }
@@ -24,8 +22,6 @@ module.exports = function({ $fn }) {
 ```js
 module.exports = function({  }) {
   class Foo {
-    async $inflight_init()  {
-    }
     async handle(message)  {
       return "hello world!";
     }

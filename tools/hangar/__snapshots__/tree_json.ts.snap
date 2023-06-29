@@ -82,6 +82,12 @@ exports[`tree.json for an app with many resources 1`] = `
                               "relationship": "fooInc",
                               "resource": "root/Default/Default/test:test/Handler",
                             },
+                            {
+                              "direction": "inbound",
+                              "implicit": false,
+                              "relationship": "inflightField",
+                              "resource": "root/Default/Default/test:test/Handler",
+                            },
                           ],
                         },
                         "children": {
@@ -1161,6 +1167,12 @@ exports[`tree.json for an app with many resources 1`] = `
                               "implicit": false,
                               "relationship": "testTypeAccess",
                               "resource": "root/Default/Default/Bar",
+                            },
+                            {
+                              "direction": "outbound",
+                              "implicit": false,
+                              "relationship": "inflightField",
+                              "resource": "root/Default/Default/Bar/Foo",
                             },
                           ],
                         },

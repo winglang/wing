@@ -4,8 +4,6 @@
 ```js
 module.exports = function({ $greeting }) {
   class $Closure1 {
-    async $inflight_init()  {
-    }
     async handle()  {
       {((cond) => {if (!cond) throw new Error("assertion failed: greeting == \"Hello, wingnuts\"")})(($greeting === "Hello, wingnuts"))};
     }

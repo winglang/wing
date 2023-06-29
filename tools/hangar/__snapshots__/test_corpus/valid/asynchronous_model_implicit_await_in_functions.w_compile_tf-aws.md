@@ -4,8 +4,6 @@
 ```js
 module.exports = function({  }) {
   class $Closure1 {
-    async $inflight_init()  {
-    }
     async handle(s)  {
     }
     constructor({  }) {
@@ -23,8 +21,6 @@ module.exports = function({  }) {
 ```js
 module.exports = function({ $strToStr }) {
   class $Closure2 {
-    async $inflight_init()  {
-    }
     async handle(s)  {
       (await $strToStr.invoke("one"));
       {console.log((await $strToStr.invoke("two")))};

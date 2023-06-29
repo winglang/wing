@@ -4,8 +4,6 @@
 ```js
 module.exports = function({ $f }) {
   class $Closure1 {
-    async $inflight_init()  {
-    }
     async handle()  {
       (await $f.call());
     }
@@ -24,8 +22,6 @@ module.exports = function({ $f }) {
 ```js
 module.exports = function({ $f }) {
   class $Closure2 {
-    async $inflight_init()  {
-    }
     async handle()  {
       (await $f.print("hey there"));
     }
@@ -44,8 +40,6 @@ module.exports = function({ $f }) {
 ```js
 module.exports = function({  }) {
   class Foo {
-    async $inflight_init()  {
-    }
     static async regexInflight(pattern, text)  {
       return (require("<ABSOLUTE_PATH>/external_js.js")["regexInflight"])(pattern, text)
     }

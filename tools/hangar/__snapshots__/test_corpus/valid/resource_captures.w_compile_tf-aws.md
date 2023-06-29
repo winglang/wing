@@ -4,8 +4,6 @@
 ```js
 module.exports = function({ $r }) {
   class $Closure1 {
-    async $inflight_init()  {
-    }
     async handle()  {
       (await $r.testNoCapture());
       (await $r.testCaptureCollectionsOfData());
@@ -34,8 +32,6 @@ module.exports = function({ $r }) {
 ```js
 module.exports = function({  }) {
   class Another {
-    async $inflight_init()  {
-    }
     async meaningOfLife()  {
       return 42;
     }
@@ -54,8 +50,6 @@ module.exports = function({  }) {
 ```js
 module.exports = function({  }) {
   class First {
-    async $inflight_init()  {
-    }
     constructor({  }) {
     }
   }
@@ -503,7 +497,7 @@ class $Root extends $stdlib.std.Resource {
         this.extNum = externalNum;
         this.unusedResource = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"cloud.Counter");
       }
-       helloPreflight()  {
+      helloPreflight()  {
         return this.another;
       }
       static _toInflightType(context) {

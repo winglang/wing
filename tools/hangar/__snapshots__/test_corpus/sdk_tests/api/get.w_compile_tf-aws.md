@@ -4,8 +4,6 @@
 ```js
 module.exports = function({ $api_GET, $body }) {
   class $Closure1 {
-    async $inflight_init()  {
-    }
     async handle(req)  {
       {((cond) => {if (!cond) throw new Error("assertion failed: req.method == api_GET")})((req.method === $api_GET))};
       {((cond) => {if (!cond) throw new Error("assertion failed: req.path == \"/path\"")})((req.path === "/path"))};
@@ -32,10 +30,7 @@ module.exports = function({ $api_url, $body, $http_GET, http_Util }) {
   const http = {
     Util: http_Util,
   };
-  
   class $Closure2 {
-    async $inflight_init()  {
-    }
     async handle()  {
       const url = ($api_url + "/path");
       const getResponse = (await http.Util.get(url,Object.freeze({"headers":Object.freeze({"content-type":"application/json"})})));

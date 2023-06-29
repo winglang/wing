@@ -4,8 +4,6 @@
 ```js
 module.exports = function({ $Object_keys_myMap__length, $__bang__in___arrOfMap_at_0____, $__world__in__myMap__, $_arr_at_0__, $_arr_at_1__, $_j___b__, $_mySet_has__my___, $arr_length, $mySet_size }) {
   class $Closure1 {
-    async $inflight_init()  {
-    }
     async handle()  {
       {((cond) => {if (!cond) throw new Error("assertion failed: arr.at(0) == \"hello\"")})(($_arr_at_0__ === "hello"))};
       {((cond) => {if (!cond) throw new Error("assertion failed: arr.at(1) == \"world\"")})(($_arr_at_1__ === "world"))};

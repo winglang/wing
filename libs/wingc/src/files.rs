@@ -73,6 +73,10 @@ impl Files {
 		}
 		Ok(())
 	}
+
+	pub fn all_files(&self) -> HashMap<PathBuf, String> {
+		self.data.clone()
+	}
 }
 
 #[cfg(test)]

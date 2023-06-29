@@ -3,36 +3,28 @@ source: libs/wingc/src/jsify/captures/tests.rs
 expression: "capture_ok(r#\"\n    bring cloud;\n    \n\t\tclass MyType {\n      s: str;\n      b: cloud.Bucket;\n\n      init() { \n        this.s = \"hello\"; \n        this.b = new cloud.Bucket();\n      }\n\n      inflight boom() {\n        assert(this.s.length > 0);\n        assert(this.b.list().length > 0);\n      }\n\n      inflight bam() {\n        this.b.put(\"hello\", \"world\");\n        this.b.get(\"aaa\");\n      }\n    }\n\t\t\"#)"
 ---
 ======================================================
-Captured by MyType:
-
-======================================================
 Files:
 
-main.w
+inflight.MyType.js
 ------------------------------------------------------
-
-    bring cloud;
-    
-    class MyType {
-      s: str;
-      b: cloud.Bucket;
-
-      init() { 
-        this.s = "hello"; 
-        this.b = new cloud.Bucket();
-      }
-
-      inflight boom() {
-        assert(this.s.length > 0);
-        assert(this.b.list().length > 0);
-      }
-
-      inflight bam() {
-        this.b.put("hello", "world");
-        this.b.get("aaa");
-      }
+module.exports = function({  }) {
+  class MyType {
+    async boom()  {
+      {((cond) => {if (!cond) throw new Error("assertion failed: this.s.length > 0")})((this.$this_s_length > 0))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: this.b.list().length > 0")})(((await this.$this_b.list()).length > 0))};
     }
-    
+    async bam()  {
+      (await this.$this_b.put("hello","world"));
+      (await this.$this_b.get("aaa"));
+    }
+    constructor({ $this_b, $this_s_length }) {
+      this.$this_b = $this_b;
+      this.$this_s_length = $this_s_length;
+    }
+  }
+  return MyType;
+}
+
 preflight.js
 ------------------------------------------------------
 const cloud = require('@winglang/sdk').cloud;
@@ -70,27 +62,5 @@ class MyType extends $stdlib.std.Resource {
     }
     super._registerBind(host, ops);
   }
-}
-
-inflight.MyType.js
-------------------------------------------------------
-module.exports = function({  }) {
-  class MyType {
-    async $inflight_init()  {
-    }
-    async boom()  {
-      {((cond) => {if (!cond) throw new Error("assertion failed: this.s.length > 0")})((this.$this_s_length > 0))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: this.b.list().length > 0")})(((await this.$this_b.list()).length > 0))};
-    }
-    async bam()  {
-      (await this.$this_b.put("hello","world"));
-      (await this.$this_b.get("aaa"));
-    }
-    constructor({ $this_b, $this_s_length }) {
-      this.$this_b = $this_b;
-      this.$this_s_length = $this_s_length;
-    }
-  }
-  return MyType;
 }
 

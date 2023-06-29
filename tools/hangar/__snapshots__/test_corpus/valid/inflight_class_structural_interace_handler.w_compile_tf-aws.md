@@ -4,8 +4,6 @@
 ```js
 module.exports = function({ NotGoo }) {
   class $Closure1 {
-    async $inflight_init()  {
-    }
     async handle()  {
       const YesGoo = require("./inflight.YesGoo.js")({});
       const y = new YesGoo();
@@ -28,8 +26,6 @@ module.exports = function({ NotGoo }) {
 ```js
 module.exports = function({  }) {
   class NotGoo {
-     constructor()  {
-    }
     async handle()  {
       return 123;
     }
@@ -43,8 +39,6 @@ module.exports = function({  }) {
 ```js
 module.exports = function({  }) {
   class YesGoo {
-     constructor()  {
-    }
     async handle()  {
       return 456;
     }

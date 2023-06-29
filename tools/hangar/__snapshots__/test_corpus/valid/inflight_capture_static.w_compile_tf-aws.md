@@ -4,8 +4,6 @@
 ```js
 module.exports = function({ Preflight }) {
   class $Closure1 {
-    async $inflight_init()  {
-    }
     async handle()  {
       {((cond) => {if (!cond) throw new Error("assertion failed: Preflight.staticMethod(123) == \"foo-123\"")})(((await Preflight.staticMethod(123)) === "foo-123"))};
     }
@@ -24,8 +22,6 @@ module.exports = function({ Preflight }) {
 ```js
 module.exports = function({ OuterInflight }) {
   class $Closure2 {
-    async $inflight_init()  {
-    }
     async handle()  {
       {((cond) => {if (!cond) throw new Error("assertion failed: OuterInflight.staticMethod(\"hello\") == 5")})(((await OuterInflight.staticMethod("hello")) === 5))};
     }
@@ -44,8 +40,6 @@ module.exports = function({ OuterInflight }) {
 ```js
 module.exports = function({  }) {
   class $Closure3 {
-    async $inflight_init()  {
-    }
     async handle()  {
       const InnerInflight = require("./inflight.InnerInflight.js")({});
       {((cond) => {if (!cond) throw new Error("assertion failed: InnerInflight.staticMethod() == \"hello\"")})(((await InnerInflight.staticMethod()) === "hello"))};
@@ -67,10 +61,7 @@ module.exports = function({ util_Util }) {
   const util = {
     Util: util_Util,
   };
-  
   class $Closure4 {
-    async $inflight_init()  {
-    }
     async handle()  {
       {
         const $IF_LET_VALUE = (await util.Util.tryEnv("WING_TARGET"));
@@ -98,8 +89,6 @@ module.exports = function({ util_Util }) {
 ```js
 module.exports = function({  }) {
   class InnerInflight {
-     constructor()  {
-    }
     static async staticMethod()  {
       return "hello";
     }
@@ -113,8 +102,6 @@ module.exports = function({  }) {
 ```js
 module.exports = function({  }) {
   class OuterInflight {
-     constructor()  {
-    }
     static async staticMethod(b)  {
       return b.length;
     }
@@ -128,8 +115,6 @@ module.exports = function({  }) {
 ```js
 module.exports = function({  }) {
   class Preflight {
-    async $inflight_init()  {
-    }
     static async staticMethod(a)  {
       return String.raw({ raw: ["foo-", ""] }, a);
     }

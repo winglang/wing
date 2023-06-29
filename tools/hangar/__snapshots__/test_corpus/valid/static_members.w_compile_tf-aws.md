@@ -4,8 +4,6 @@
 ```js
 module.exports = function({  }) {
   class $Closure1 {
-    async $inflight_init()  {
-    }
     async handle()  {
       const InflightClass = require("./inflight.InflightClass.js")({});
       const inflightClass = new InflightClass();
@@ -27,8 +25,6 @@ module.exports = function({  }) {
 ```js
 module.exports = function({  }) {
   class Foo {
-    async $inflight_init()  {
-    }
     static async get123()  {
       return 123;
     }
@@ -44,8 +40,6 @@ module.exports = function({  }) {
 ```js
 module.exports = function({  }) {
   class InflightClass {
-     constructor()  {
-    }
     async inflightMethod()  {
       return "Inflight method";
     }

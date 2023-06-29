@@ -4,8 +4,6 @@
 ```js
 module.exports = function({ $bucket1, $bucket2, $bucket3 }) {
   class $Closure1 {
-    async $inflight_init()  {
-    }
     async handle(event)  {
       (await $bucket1.put("file.txt","data"));
       (await $bucket2.get("file.txt"));

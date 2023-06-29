@@ -8,15 +8,19 @@ Errors:
 ======================================================
 Files:
 
-main.w
+inflight.MyType.js
 ------------------------------------------------------
-
-    class MyType {
-      static inflight hello() {
-        this.print();
-      }
+module.exports = function({  }) {
+  class MyType {
+    static async hello()  {
+      (await this.print());
     }
-    
+    constructor({  }) {
+    }
+  }
+  return MyType;
+}
+
 preflight.js
 ------------------------------------------------------
 class MyType extends $stdlib.std.Resource {
@@ -40,20 +44,5 @@ class MyType extends $stdlib.std.Resource {
       })())
     `);
   }
-}
-
-inflight.MyType.js
-------------------------------------------------------
-module.exports = function({  }) {
-  class MyType {
-    async $inflight_init()  {
-    }
-    static async hello()  {
-      (await this.print());
-    }
-    constructor({  }) {
-    }
-  }
-  return MyType;
 }
 

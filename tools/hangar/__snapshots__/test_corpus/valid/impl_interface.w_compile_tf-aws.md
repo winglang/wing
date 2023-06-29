@@ -4,8 +4,6 @@
 ```js
 module.exports = function({ $x }) {
   class $Closure1 {
-    async $inflight_init()  {
-    }
     async handle()  {
       (await $x.handle("hello world!"));
     }
@@ -24,8 +22,6 @@ module.exports = function({ $x }) {
 ```js
 module.exports = function({  }) {
   class A {
-    async $inflight_init()  {
-    }
     async handle(msg)  {
       return;
     }
@@ -44,8 +40,6 @@ module.exports = function({  }) {
 ```js
 module.exports = function({  }) {
   class Dog {
-    async $inflight_init()  {
-    }
     async eat()  {
       return;
     }
@@ -61,8 +55,6 @@ module.exports = function({  }) {
 ```js
 module.exports = function({  }) {
   class r {
-    async $inflight_init()  {
-    }
     async method2(x)  {
       return x;
     }
@@ -175,10 +167,10 @@ class $Root extends $stdlib.std.Resource {
         super(scope, id);
         this._addInflightOps("method2");
       }
-       method1(x)  {
+      method1(x)  {
         return x;
       }
-       method3(x)  {
+      method3(x)  {
         return x;
       }
       static _toInflightType(context) {

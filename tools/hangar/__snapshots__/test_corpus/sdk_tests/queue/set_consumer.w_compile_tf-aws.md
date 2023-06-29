@@ -4,8 +4,6 @@
 ```js
 module.exports = function({ $c }) {
   class $Closure1 {
-    async $inflight_init()  {
-    }
     async handle(msg)  {
       (await $c.inc());
     }
@@ -24,8 +22,6 @@ module.exports = function({ $c }) {
 ```js
 module.exports = function({ $js, $predicate, $q }) {
   class $Closure2 {
-    async $inflight_init()  {
-    }
     async handle()  {
       (await $q.push("hello"));
       (await $q.push("world"));
@@ -55,8 +51,6 @@ module.exports = function({ $js, $predicate, $q }) {
 ```js
 module.exports = function({  }) {
   class Predicate {
-    async $inflight_init()  {
-    }
     async test()  {
       return ((await this.$this_c.peek()) === 2);
     }
@@ -73,8 +67,6 @@ module.exports = function({  }) {
 ```js
 module.exports = function({  }) {
   class TestHelper {
-    async $inflight_init()  {
-    }
     async sleep(milli)  {
       return (require("<ABSOLUTE_PATH>/sleep.js")["sleep"])(milli)
     }

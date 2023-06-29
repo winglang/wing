@@ -12,26 +12,16 @@ inflight.MyInflightClass.js
 ------------------------------------------------------
 module.exports = function({  }) {
   class MyInflightClass {
-    async $inflight_init()  {
-    }
     async putInBucket()  {
-      (await this.b.put("in","bucket"));
+      (await this.$this_b.put("in","bucket"));
     }
-    constructor({  }) {
+    constructor({ $this_b }) {
+      this.$this_b = $this_b;
     }
   }
   return MyInflightClass;
 }
 
-main.w
-------------------------------------------------------
-
-    class MyInflightClass {
-      inflight putInBucket() {
-        this.b.put("in", "bucket");
-      }
-    }
-    
 preflight.js
 ------------------------------------------------------
 class MyInflightClass extends $stdlib.std.Resource {
@@ -49,11 +39,18 @@ class MyInflightClass extends $stdlib.std.Resource {
     return $stdlib.core.NodeJsCode.fromInline(`
       (await (async () => {
         const client = new (${MyInflightClass._toInflightType(this).text})({
+          $this_b: ${this._lift(this.b)},
         });
         if (client.$inflight_init) { await client.$inflight_init(); }
         return client;
       })())
     `);
+  }
+  _registerBind(host, ops) {
+    if (ops.includes("putInBucket")) {
+      MyInflightClass._registerBindObject(this.b, host, ["put"]);
+    }
+    super._registerBind(host, ops);
   }
 }
 

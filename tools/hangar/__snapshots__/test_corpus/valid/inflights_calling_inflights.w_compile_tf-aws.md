@@ -4,8 +4,6 @@
 ```js
 module.exports = function({ $globalBucket }) {
   class $Closure1 {
-    async $inflight_init()  {
-    }
     async handle(event, file)  {
       (await $globalBucket.put(file,event));
     }
@@ -22,12 +20,10 @@ module.exports = function({ $globalBucket }) {
 
 ## inflight.$Closure2.js
 ```js
-module.exports = function({  }) {
+module.exports = function({ $storeInBucket }) {
   class $Closure2 {
-    async $inflight_init()  {
-    }
     async handle(event)  {
-      (await storeInBucket(event,"file1"));
+      (await $storeInBucket(event,"file1"));
     }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -44,8 +40,6 @@ module.exports = function({  }) {
 ```js
 module.exports = function({ $func1, $globalBucket }) {
   class $Closure3 {
-    async $inflight_init()  {
-    }
     async handle()  {
       (await $func1.invoke("hi1"));
       {((cond) => {if (!cond) throw new Error("assertion failed: globalBucket.get(\"file1\") == \"hi1\"")})(((await $globalBucket.get("file1")) === "hi1"))};
@@ -65,8 +59,6 @@ module.exports = function({ $func1, $globalBucket }) {
 ```js
 module.exports = function({ $globalBucket }) {
   class $Closure4 {
-    async $inflight_init()  {
-    }
     async handle(s)  {
       (await $globalBucket.list());
       return "hello";
@@ -86,8 +78,6 @@ module.exports = function({ $globalBucket }) {
 ```js
 module.exports = function({ $x }) {
   class $Closure5 {
-    async $inflight_init()  {
-    }
     async handle()  {
       const val = (await $x.foo());
       {((cond) => {if (!cond) throw new Error("assertion failed: val == \"hello\"")})((val === "hello"))};
@@ -107,12 +97,11 @@ module.exports = function({ $x }) {
 ```js
 module.exports = function({  }) {
   class MyResource {
-    async $inflight_init()  {
-    }
     async foo()  {
-      return (await this.closure("anything"));
+      return (await this.$this_closure("anything"));
     }
-    constructor({  }) {
+    constructor({ $this_closure }) {
+      this.$this_closure = $this_closure;
     }
   }
   return MyResource;
@@ -468,8 +457,10 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
+        const $storeInBucket = context._lift(storeInBucket);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure2.js")({ 
+            $storeInBucket: ${$storeInBucket},
           })
         `);
       }
@@ -482,6 +473,12 @@ class $Root extends $stdlib.std.Resource {
             return client;
           })())
         `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("handle")) {
+          $Closure2._registerBindObject(storeInBucket, host, []);
+        }
+        super._registerBind(host, ops);
       }
     }
     class $Closure3 extends $stdlib.std.Resource {
@@ -566,11 +563,18 @@ class $Root extends $stdlib.std.Resource {
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
             const client = new (${MyResource._toInflightType(this).text})({
+              $this_closure: ${this._lift(this.closure)},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
         `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("foo")) {
+          MyResource._registerBindObject(this.closure, host, []);
+        }
+        super._registerBind(host, ops);
       }
     }
     class $Closure5 extends $stdlib.std.Resource {

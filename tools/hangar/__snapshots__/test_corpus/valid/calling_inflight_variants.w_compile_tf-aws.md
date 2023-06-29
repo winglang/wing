@@ -4,8 +4,6 @@
 ```js
 module.exports = function({  }) {
   class $Closure1 {
-    async $inflight_init()  {
-    }
     async handle()  {
       return 1;
     }
@@ -24,8 +22,6 @@ module.exports = function({  }) {
 ```js
 module.exports = function({ $foo }) {
   class $Closure2 {
-    async $inflight_init()  {
-    }
     async handle()  {
       {((cond) => {if (!cond) throw new Error("assertion failed: foo.callFn(true) == 1")})(((await $foo.callFn(true)) === 1))};
       {((cond) => {if (!cond) throw new Error("assertion failed: foo.callFn(false) == 2")})(((await $foo.callFn(false)) === 2))};
@@ -67,7 +63,7 @@ module.exports = function({  }) {
       return (await partialFn());
     }
     async callFn2()  {
-      const one = (await this.inflight1());
+      const one = (await this.$this_inflight1());
       const two = (await this.inflight2());
       {((cond) => {if (!cond) throw new Error("assertion failed: one == 1")})((one === 1))};
       {((cond) => {if (!cond) throw new Error("assertion failed: two == 2")})((two === 2))};
@@ -261,7 +257,7 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("makeFn")) {
+        if (ops.includes("callFn2")) {
           Foo._registerBindObject(this.inflight1, host, []);
         }
         super._registerBind(host, ops);

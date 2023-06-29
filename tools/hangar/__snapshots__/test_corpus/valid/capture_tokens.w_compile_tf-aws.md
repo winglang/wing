@@ -4,8 +4,6 @@
 ```js
 module.exports = function({ $r }) {
   class $Closure1 {
-    async $inflight_init()  {
-    }
     async handle()  {
       (await $r.foo());
     }
@@ -24,8 +22,6 @@ module.exports = function({ $r }) {
 ```js
 module.exports = function({ $api_url, $url, MyResource }) {
   class $Closure2 {
-    async $inflight_init()  {
-    }
     async handle()  {
       {((cond) => {if (!cond) throw new Error("assertion failed: MyResource.isValidUrl(url)")})((await MyResource.isValidUrl($url)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: MyResource.isValidUrl(api.url)")})((await MyResource.isValidUrl($api_url)))};
@@ -45,8 +41,6 @@ module.exports = function({ $api_url, $url, MyResource }) {
 ```js
 module.exports = function({  }) {
   class MyResource {
-    async $inflight_init()  {
-    }
     static async isValidUrl(url)  {
       return (require("<ABSOLUTE_PATH>/url_utils.js")["isValidUrl"])(url)
     }

@@ -3,19 +3,24 @@ source: libs/wingc/src/jsify/captures/tests.rs
 expression: "capture_ok(r#\"\n    let a = \"hello\";\n    test \"test\" {\n      log(a);\n    }\n    \"#)"
 ---
 ======================================================
-Captured by $Closure1:
-
-======================================================
 Files:
 
-main.w
+inflight.$Closure1.js
 ------------------------------------------------------
-
-    let a = "hello";
-    test "test" {
-      log(a);
+module.exports = function({ $a }) {
+  class $Closure1 {
+    async handle()  {
+      {console.log($a)};
     }
-    
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+  }
+  return $Closure1;
+}
+
 preflight.js
 ------------------------------------------------------
 class $Closure1 extends $stdlib.std.Resource {
@@ -51,22 +56,4 @@ class $Closure1 extends $stdlib.std.Resource {
 }
 const a = "hello";
 this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:test",new $Closure1(this,"$Closure1"));
-
-inflight.$Closure1.js
-------------------------------------------------------
-module.exports = function({ $a }) {
-  class $Closure1 {
-    async $inflight_init()  {
-    }
-    async handle()  {
-      {console.log($a)};
-    }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
-    }
-  }
-  return $Closure1;
-}
 

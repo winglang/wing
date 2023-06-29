@@ -4,7 +4,7 @@
 ```js
 module.exports = function({  }) {
   class C {
-     constructor()  {
+    constructor()  {
       this.field = 12;
     }
     async method()  {

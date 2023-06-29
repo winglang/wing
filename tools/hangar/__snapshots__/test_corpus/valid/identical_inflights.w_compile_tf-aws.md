@@ -4,8 +4,6 @@
 ```js
 module.exports = function({  }) {
   class $Closure1 {
-    async $inflight_init()  {
-    }
     async handle()  {
     }
     constructor({  }) {
@@ -23,8 +21,6 @@ module.exports = function({  }) {
 ```js
 module.exports = function({  }) {
   class $Closure2 {
-    async $inflight_init()  {
-    }
     async handle()  {
     }
     constructor({  }) {

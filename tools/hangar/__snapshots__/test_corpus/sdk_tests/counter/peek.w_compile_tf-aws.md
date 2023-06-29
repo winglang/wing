@@ -4,8 +4,6 @@
 ```js
 module.exports = function({ $c }) {
   class $Closure1 {
-    async $inflight_init()  {
-    }
     async handle()  {
       {((cond) => {if (!cond) throw new Error("assertion failed: c.peek() == 0")})(((await $c.peek()) === 0))};
       {((cond) => {if (!cond) throw new Error("assertion failed: c.peek() == 0")})(((await $c.peek()) === 0))};
@@ -27,8 +25,6 @@ module.exports = function({ $c }) {
 ```js
 module.exports = function({ $c }) {
   class $Closure2 {
-    async $inflight_init()  {
-    }
     async handle()  {
       const key = "my-key";
       {((cond) => {if (!cond) throw new Error("assertion failed: c.peek(key) == 0")})(((await $c.peek(key)) === 0))};

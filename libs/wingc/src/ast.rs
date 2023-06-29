@@ -373,7 +373,7 @@ pub enum StmtKind {
 	Return(Option<Expr>),
 	Expression(Expr),
 	Assignment {
-		variable: Reference,
+		variable: Expr,
 		value: Expr,
 	},
 	Scope(Scope),

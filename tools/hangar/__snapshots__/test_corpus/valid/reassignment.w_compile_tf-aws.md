@@ -4,8 +4,6 @@
 ```js
 module.exports = function({  }) {
   class R {
-    async $inflight_init()  {
-    }
     constructor({  }) {
     }
   }
@@ -64,7 +62,7 @@ class $Root extends $stdlib.std.Resource {
           this.f1 = 0;
         }
       }
-       inc()  {
+      inc()  {
         this.f = (this.f + 1);
       }
       static _toInflightType(context) {
@@ -91,11 +89,10 @@ class $Root extends $stdlib.std.Resource {
     const r = new R(this,"R");
     (r.inc());
     {((cond) => {if (!cond) throw new Error("assertion failed: r.f == 2")})((r.f === 2))};
-    const f =  (arg) =>  {
+    const f = ((arg) =>  {
       arg = 0;
       return arg;
-    }
-    ;
+    });
     const y = 1;
     {((cond) => {if (!cond) throw new Error("assertion failed: f(y) == 0")})(((f(y)) === 0))};
     {((cond) => {if (!cond) throw new Error("assertion failed: y == 1")})((y === 1))};

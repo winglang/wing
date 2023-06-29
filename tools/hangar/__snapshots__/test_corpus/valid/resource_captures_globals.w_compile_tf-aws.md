@@ -4,8 +4,6 @@
 ```js
 module.exports = function({ $res }) {
   class $Closure1 {
-    async $inflight_init()  {
-    }
     async handle()  {
       (await $res.myPut());
     }
@@ -24,8 +22,6 @@ module.exports = function({ $res }) {
 ```js
 module.exports = function({ Another }) {
   class $Closure2 {
-    async $inflight_init()  {
-    }
     async handle()  {
       {((cond) => {if (!cond) throw new Error("assertion failed: Another.myStaticMethod() == 0")})(((await Another.myStaticMethod()) === 0))};
     }
@@ -66,8 +62,6 @@ module.exports = function({ $globalCounter }) {
 ```js
 module.exports = function({  }) {
   class First {
-    async $inflight_init()  {
-    }
     constructor({  }) {
     }
   }
@@ -80,8 +74,6 @@ module.exports = function({  }) {
 ```js
 module.exports = function({ $_globalArrayOfStr_at_0__, $_globalMapOfNum___a__, $_globalSetOfStr_has__a___, $globalAnother, $globalAnother_first_myResource, $globalAnother_myField, $globalBool, $globalBucket, $globalNum, $globalStr, Another }) {
   class MyResource {
-    async $inflight_init()  {
-    }
     async myPut()  {
       (await this.$this_localTopic.publish("hello"));
       (await $globalBucket.put("key","value"));
@@ -109,8 +101,6 @@ module.exports = function({ $_globalArrayOfStr_at_0__, $_globalMapOfNum___a__, $
 ```js
 module.exports = function({ $_parentThis_localCounter, $globalCounter }) {
   class R {
-    async $inflight_init()  {
-    }
     async handle()  {
       (await $globalCounter.inc());
       (await $_parentThis_localCounter.inc());

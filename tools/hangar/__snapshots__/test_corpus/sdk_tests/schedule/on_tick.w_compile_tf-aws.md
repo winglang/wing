@@ -4,8 +4,6 @@
 ```js
 module.exports = function({ $c1 }) {
   class $Closure1 {
-    async $inflight_init()  {
-    }
     async handle()  {
       (await $c1.inc());
     }
@@ -24,8 +22,6 @@ module.exports = function({ $c1 }) {
 ```js
 module.exports = function({ $c2 }) {
   class $Closure2 {
-    async $inflight_init()  {
-    }
     async handle()  {
       (await $c2.inc());
     }
@@ -44,8 +40,6 @@ module.exports = function({ $c2 }) {
 ```js
 module.exports = function({ $c1, $c2, Utils }) {
   class $Closure3 {
-    async $inflight_init()  {
-    }
     async handle()  {
       {((cond) => {if (!cond) throw new Error("assertion failed: c1.peek() == 0")})(((await $c1.peek()) === 0))};
       {((cond) => {if (!cond) throw new Error("assertion failed: c2.peek() == 0")})(((await $c2.peek()) === 0))};
@@ -68,8 +62,6 @@ module.exports = function({ $c1, $c2, Utils }) {
 ```js
 module.exports = function({  }) {
   class Utils {
-    async $inflight_init()  {
-    }
     static async sleep(milli)  {
       return (require("<ABSOLUTE_PATH>/sleep.js")["sleep"])(milli)
     }

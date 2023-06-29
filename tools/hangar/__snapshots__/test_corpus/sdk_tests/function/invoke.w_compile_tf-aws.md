@@ -6,10 +6,7 @@ module.exports = function({ util_Util }) {
   const util = {
     Util: util_Util,
   };
-  
   class $Closure1 {
-    async $inflight_init()  {
-    }
     async handle(input)  {
       const target = (await util.Util.tryEnv("WING_TARGET"));
       {((cond) => {if (!cond) throw new Error("assertion failed: target?")})(((target) != null))};
@@ -30,8 +27,6 @@ module.exports = function({ util_Util }) {
 ```js
 module.exports = function({ $f }) {
   class $Closure2 {
-    async $inflight_init()  {
-    }
     async handle()  {
       const x = (await $f.invoke("hello"));
       {((cond) => {if (!cond) throw new Error("assertion failed: x == \"hello-response\"")})((x === "hello-response"))};

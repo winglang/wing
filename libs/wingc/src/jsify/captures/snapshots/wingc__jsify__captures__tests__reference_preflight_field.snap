@@ -3,17 +3,12 @@ source: libs/wingc/src/jsify/captures/tests.rs
 expression: "capture_ok(r#\"\n    class Foo {\n      x: str;\n      \n      init() {\n        this.x = \"world\";\n      }\n    \n      inflight method() {\n        this.x;\n      }\n    }\n    \"#)"
 ---
 ======================================================
-Captured by Foo:
-
-======================================================
 Files:
 
 inflight.Foo.js
 ------------------------------------------------------
 module.exports = function({  }) {
   class Foo {
-    async $inflight_init()  {
-    }
     async method()  {
       this.$this_x;
     }
@@ -24,21 +19,6 @@ module.exports = function({  }) {
   return Foo;
 }
 
-main.w
-------------------------------------------------------
-
-    class Foo {
-      x: str;
-      
-      init() {
-        this.x = "world";
-      }
-    
-      inflight method() {
-        this.x;
-      }
-    }
-    
 preflight.js
 ------------------------------------------------------
 class Foo extends $stdlib.std.Resource {

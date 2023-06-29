@@ -4,8 +4,6 @@
 ```js
 module.exports = function({  }) {
   class CdkDockerImageFunction {
-    async $inflight_init()  {
-    }
     constructor({  }) {
     }
   }

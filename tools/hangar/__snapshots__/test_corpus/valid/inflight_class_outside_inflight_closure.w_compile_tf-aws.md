@@ -4,8 +4,6 @@
 ```js
 module.exports = function({ BinaryOperation }) {
   class $Closure1 {
-    async $inflight_init()  {
-    }
     async handle()  {
       const op = new BinaryOperation(10,20);
       {((cond) => {if (!cond) throw new Error("assertion failed: op.add() == 30")})(((await op.add()) === 30))};
@@ -25,7 +23,7 @@ module.exports = function({ BinaryOperation }) {
 ```js
 module.exports = function({  }) {
   class BinaryOperation {
-     constructor(lhs, rhs)  {
+    constructor(lhs, rhs)  {
       this.lhs = lhs;
       this.rhs = rhs;
     }

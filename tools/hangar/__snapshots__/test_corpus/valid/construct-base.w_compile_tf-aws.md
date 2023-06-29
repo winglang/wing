@@ -4,8 +4,6 @@
 ```js
 module.exports = function({  }) {
   class WingResource {
-    async $inflight_init()  {
-    }
     constructor({  }) {
     }
   }
@@ -93,14 +91,12 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
     }
-    const getPath =  (c) =>  {
+    const getPath = ((c) =>  {
       return c.node.path;
-    }
-    ;
-    const getDisplayName =  (r) =>  {
+    });
+    const getDisplayName = ((r) =>  {
       return r.display.title;
-    }
-    ;
+    });
     const q = this.node.root.new("@cdktf/provider-aws.sqsQueue.SqsQueue",aws.sqsQueue.SqsQueue,this,"aws.sqsQueue.SqsQueue");
     const wr = new WingResource(this,"WingResource");
     const another_resource = wr;

@@ -4,8 +4,6 @@
 ```js
 module.exports = function({ $privateBucket, $publicBucket }) {
   class $Closure1 {
-    async $inflight_init()  {
-    }
     async handle()  {
       let error = "";
       (await $publicBucket.put("file1.txt","Foo"));

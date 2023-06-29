@@ -4,8 +4,6 @@
 ```js
 module.exports = function({ $s1, $s2 }) {
   class $Closure1 {
-    async $inflight_init()  {
-    }
     async handle()  {
       {((cond) => {if (!cond) throw new Error("assertion failed: \"\" == \"\"")})(("" === ""))};
       {((cond) => {if (!cond) throw new Error("assertion failed: \"\'\" == \"\'\"")})(("'" === "'"))};

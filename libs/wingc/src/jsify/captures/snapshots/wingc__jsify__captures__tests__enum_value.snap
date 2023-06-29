@@ -3,22 +3,24 @@ source: libs/wingc/src/jsify/captures/tests.rs
 expression: "capture_ok(r#\"\n    enum MyEnum { B, C }\n\n    test \"test\" {\n      assert(MyEnum.B != MyEnum.C);\n    }\n    \"#)"
 ---
 ======================================================
-Captured by $Closure1:
-Types:
-  MyEnum = MyEnum
-
-======================================================
 Files:
 
-main.w
+inflight.$Closure1.js
 ------------------------------------------------------
-
-    enum MyEnum { B, C }
-
-    test "test" {
-      assert(MyEnum.B != MyEnum.C);
+module.exports = function({ MyEnum }) {
+  class $Closure1 {
+    async handle()  {
+      {((cond) => {if (!cond) throw new Error("assertion failed: MyEnum.B != MyEnum.C")})((MyEnum.B !== MyEnum.C))};
     }
-    
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+  }
+  return $Closure1;
+}
+
 preflight.js
 ------------------------------------------------------
 class $Closure1 extends $stdlib.std.Resource {
@@ -60,22 +62,4 @@ const MyEnum =
   })({}))
 ;
 this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:test",new $Closure1(this,"$Closure1"));
-
-inflight.$Closure1.js
-------------------------------------------------------
-module.exports = function({ MyEnum }) {
-  class $Closure1 {
-    async $inflight_init()  {
-    }
-    async handle()  {
-      {((cond) => {if (!cond) throw new Error("assertion failed: MyEnum.B != MyEnum.C")})((MyEnum.B !== MyEnum.C))};
-    }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
-    }
-  }
-  return $Closure1;
-}
 

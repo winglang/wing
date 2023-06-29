@@ -6,10 +6,7 @@ module.exports = function({ $b, $jsonObj1, std_Json }) {
   const std = {
     Json: std_Json,
   };
-  
   class $Closure1 {
-    async $inflight_init()  {
-    }
     async handle()  {
       {((cond) => {if (!cond) throw new Error("assertion failed: b.list().length == 2")})(((await $b.list()).length === 2))};
       {((cond) => {if (!cond) throw new Error("assertion failed: Json.stringify(b.getJson(\"file1.json\")) == Json.stringify(jsonObj1)")})((((args) => { return JSON.stringify(args[0], null, args[1]) })([(await $b.getJson("file1.json"))]) === ((args) => { return JSON.stringify(args[0], null, args[1]) })([$jsonObj1])))};

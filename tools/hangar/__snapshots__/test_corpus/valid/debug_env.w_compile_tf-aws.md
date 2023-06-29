@@ -4,8 +4,6 @@
 ```js
 module.exports = function({  }) {
   class A {
-    async $inflight_init()  {
-    }
     constructor({  }) {
     }
   }

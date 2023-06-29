@@ -6,10 +6,7 @@ module.exports = function({ JSHelper, util_Util }) {
   const util = {
     Util: util_Util,
   };
-  
   class $Closure1 {
-    async $inflight_init()  {
-    }
     async handle()  {
       const start = (await JSHelper.getTime());
       if ((await util.Util.waitUntil(async () =>  {
@@ -39,10 +36,7 @@ module.exports = function({ $oneSecond, JSHelper, util_Util }) {
   const util = {
     Util: util_Util,
   };
-  
   class $Closure2 {
-    async $inflight_init()  {
-    }
     async handle()  {
       const start = (await JSHelper.getTime());
       if ((await util.Util.waitUntil(async () =>  {
@@ -72,10 +66,7 @@ module.exports = function({ $invokeCounter, $oneSecond, JSHelper, util_Util }) {
   const util = {
     Util: util_Util,
   };
-  
   class $Closure3 {
-    async $inflight_init()  {
-    }
     async handle()  {
       const start = (await JSHelper.getTime());
       const returnTrueAfter3Seconds = async () =>  {
@@ -108,10 +99,7 @@ module.exports = function({ $fiveSeconds, $invokeCounter, $oneSecond, JSHelper, 
   const util = {
     Util: util_Util,
   };
-  
   class $Closure4 {
-    async $inflight_init()  {
-    }
     async handle()  {
       const start = (await JSHelper.getTime());
       const returnFalse = async () =>  {
@@ -144,10 +132,7 @@ module.exports = function({ $invokeCounter, util_Util }) {
   const util = {
     Util: util_Util,
   };
-  
   class $Closure5 {
-    async $inflight_init()  {
-    }
     async handle()  {
       try {
         (await util.Util.waitUntil(async () =>  {
@@ -176,8 +161,6 @@ module.exports = function({ $invokeCounter, util_Util }) {
 ```js
 module.exports = function({  }) {
   class JSHelper {
-    async $inflight_init()  {
-    }
     static async getTime()  {
       return (require("<ABSOLUTE_PATH>/sleep-helper.js")["getTime"])()
     }

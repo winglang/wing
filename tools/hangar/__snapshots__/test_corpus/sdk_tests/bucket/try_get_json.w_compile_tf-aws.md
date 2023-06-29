@@ -6,10 +6,7 @@ module.exports = function({ $b, std_Json }) {
   const std = {
     Json: std_Json,
   };
-  
   class $Closure1 {
-    async $inflight_init()  {
-    }
     async handle()  {
       const jsonObj1 = Object.freeze({"key1":"value1"});
       const jsonObj2 = Object.freeze({"key2":"value2"});

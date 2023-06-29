@@ -4,8 +4,6 @@
 ```js
 module.exports = function({  }) {
   class R {
-    async $inflight_init()  {
-    }
     constructor({  }) {
     }
   }
@@ -61,12 +59,12 @@ class $Root extends $stdlib.std.Resource {
         super(scope, id);
         this.f = "Hello World!!!";
       }
-       method2()  {
+      method2()  {
         (this.method1());
         {console.log(String.raw({ raw: ["", ""] }, this.f))};
         (this.method2());
       }
-       method1()  {
+      method1()  {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`

@@ -3,27 +3,36 @@ source: libs/wingc/src/jsify/captures/tests.rs
 expression: "capture_ok(r#\"\n    class MyType {\n      static inflight staticMethod(): str {}\n    }\n\n    test \"test\" {\n      log(MyType.staticMethod());\n    }\n    \"#)"
 ---
 ======================================================
-Captured by MyType:
-
-======================================================
-Captured by $Closure1:
-Types:
-  MyType = MyType
-
-======================================================
 Files:
 
-main.w
+inflight.$Closure1.js
 ------------------------------------------------------
-
-    class MyType {
-      static inflight staticMethod(): str {}
+module.exports = function({ MyType }) {
+  class $Closure1 {
+    async handle()  {
+      {console.log((await MyType.staticMethod()))};
     }
-
-    test "test" {
-      log(MyType.staticMethod());
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
-    
+  }
+  return $Closure1;
+}
+
+inflight.MyType.js
+------------------------------------------------------
+module.exports = function({  }) {
+  class MyType {
+    static async staticMethod()  {
+    }
+    constructor({  }) {
+    }
+  }
+  return MyType;
+}
+
 preflight.js
 ------------------------------------------------------
 class MyType extends $stdlib.std.Resource {
@@ -74,36 +83,4 @@ class $Closure1 extends $stdlib.std.Resource {
   }
 }
 this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:test",new $Closure1(this,"$Closure1"));
-
-inflight.$Closure1.js
-------------------------------------------------------
-module.exports = function({ MyType }) {
-  class $Closure1 {
-    async $inflight_init()  {
-    }
-    async handle()  {
-      {console.log((await MyType.staticMethod()))};
-    }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
-    }
-  }
-  return $Closure1;
-}
-
-inflight.MyType.js
-------------------------------------------------------
-module.exports = function({  }) {
-  class MyType {
-    async $inflight_init()  {
-    }
-    static async staticMethod()  {
-    }
-    constructor({  }) {
-    }
-  }
-  return MyType;
-}
 

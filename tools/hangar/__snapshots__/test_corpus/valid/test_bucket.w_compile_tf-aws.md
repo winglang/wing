@@ -4,8 +4,6 @@
 ```js
 module.exports = function({ $b }) {
   class $Closure1 {
-    async $inflight_init()  {
-    }
     async handle()  {
       {((cond) => {if (!cond) throw new Error("assertion failed: b.list().length == 0")})(((await $b.list()).length === 0))};
       (await $b.put("hello.txt","world"));
@@ -26,8 +24,6 @@ module.exports = function({ $b }) {
 ```js
 module.exports = function({ $b }) {
   class $Closure2 {
-    async $inflight_init()  {
-    }
     async handle()  {
       (await $b.put("hello.txt","world"));
       {((cond) => {if (!cond) throw new Error("assertion failed: b.get(\"hello.txt\") == \"world\"")})(((await $b.get("hello.txt")) === "world"))};

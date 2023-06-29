@@ -3,22 +3,27 @@ source: libs/wingc/src/jsify/captures/tests.rs
 expression: "capture_ok(r#\"\n    let jsonObj1 = Json { key1: \"value1\" };\n \n    test \"test\" {\n      log(Json.stringify(jsonObj1));\n    }  \n    \"#)"
 ---
 ======================================================
-Captured by $Closure1:
-Types:
-  std.Json = Json
-
-======================================================
 Files:
 
-main.w
+inflight.$Closure1.js
 ------------------------------------------------------
+module.exports = function({ $jsonObj1, std_Json }) {
+  const std = {
+    Json: std_Json,
+  };
+  class $Closure1 {
+    async handle()  {
+      {console.log(((args) => { return JSON.stringify(args[0], null, args[1]) })([$jsonObj1]))};
+    }
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+  }
+  return $Closure1;
+}
 
-    let jsonObj1 = Json { key1: "value1" };
- 
-    test "test" {
-      log(Json.stringify(jsonObj1));
-    }  
-    
 preflight.js
 ------------------------------------------------------
 class $Closure1 extends $stdlib.std.Resource {
@@ -56,26 +61,4 @@ class $Closure1 extends $stdlib.std.Resource {
 }
 const jsonObj1 = Object.freeze({"key1":"value1"});
 this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:test",new $Closure1(this,"$Closure1"));
-
-inflight.$Closure1.js
-------------------------------------------------------
-module.exports = function({ $jsonObj1, std_Json }) {
-  const std = {
-    Json: std_Json,
-  };
-  
-  class $Closure1 {
-    async $inflight_init()  {
-    }
-    async handle()  {
-      {console.log(((args) => { return JSON.stringify(args[0], null, args[1]) })([$jsonObj1]))};
-    }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
-    }
-  }
-  return $Closure1;
-}
 

@@ -8,17 +8,32 @@ Errors:
 ======================================================
 Files:
 
-main.w
+inflight.$Closure1.js
 ------------------------------------------------------
-
-    class MyType {
-      static staticMethod(): str {}
+module.exports = function({ $_MyType_staticMethod___ }) {
+  class $Closure1 {
+    async handle()  {
+      {console.log($_MyType_staticMethod___)};
     }
-
-    test "test" {
-      log(MyType.staticMethod());
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
-    
+  }
+  return $Closure1;
+}
+
+inflight.MyType.js
+------------------------------------------------------
+module.exports = function({  }) {
+  class MyType {
+    constructor({  }) {
+    }
+  }
+  return MyType;
+}
+
 preflight.js
 ------------------------------------------------------
 class MyType extends $stdlib.std.Resource {
@@ -76,34 +91,4 @@ class $Closure1 extends $stdlib.std.Resource {
   }
 }
 this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:test",new $Closure1(this,"$Closure1"));
-
-inflight.$Closure1.js
-------------------------------------------------------
-module.exports = function({ $_MyType_staticMethod___ }) {
-  class $Closure1 {
-    async $inflight_init()  {
-    }
-    async handle()  {
-      {console.log($_MyType_staticMethod___)};
-    }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
-    }
-  }
-  return $Closure1;
-}
-
-inflight.MyType.js
-------------------------------------------------------
-module.exports = function({  }) {
-  class MyType {
-    async $inflight_init()  {
-    }
-    constructor({  }) {
-    }
-  }
-  return MyType;
-}
 

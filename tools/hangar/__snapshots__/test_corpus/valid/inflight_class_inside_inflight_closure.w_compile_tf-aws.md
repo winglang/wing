@@ -4,8 +4,6 @@
 ```js
 module.exports = function({ $__parent_this_1_b }) {
   class $Closure1 {
-    async $inflight_init()  {
-    }
     async handle(payload)  {
       (await $__parent_this_1_b.put("k","v"));
       const InflightClass = require("./inflight.InflightClass.js")({});
@@ -27,8 +25,6 @@ module.exports = function({ $__parent_this_1_b }) {
 ```js
 module.exports = function({ $f }) {
   class $Closure2 {
-    async $inflight_init()  {
-    }
     async handle()  {
       (await $f.invoke("text"));
     }
@@ -47,8 +43,6 @@ module.exports = function({ $f }) {
 ```js
 module.exports = function({  }) {
   class $Closure3 {
-    async $inflight_init()  {
-    }
     async handle()  {
       const x = 12;
       const Foo = require("./inflight.Foo.js")({x});
@@ -71,8 +65,6 @@ module.exports = function({  }) {
 ```js
 module.exports = function({ x }) {
   class Foo {
-     constructor()  {
-    }
     async getX()  {
       return x;
     }
@@ -86,7 +78,7 @@ module.exports = function({ x }) {
 ```js
 module.exports = function({  }) {
   class InflightClass {
-     constructor()  {
+    constructor()  {
       this.field = "value";
     }
     async method()  {
@@ -102,8 +94,6 @@ module.exports = function({  }) {
 ```js
 module.exports = function({  }) {
   class PreflightClass {
-    async $inflight_init()  {
-    }
     constructor({  }) {
     }
   }
@@ -427,7 +417,7 @@ class $Root extends $stdlib.std.Resource {
         super(scope, id);
         this.b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
       }
-       preflight_method()  {
+      preflight_method()  {
         const __parent_this_1 = this;
         class $Closure1 extends $stdlib.std.Resource {
           constructor(scope, id, ) {

@@ -6,10 +6,7 @@ module.exports = function({ $config, $indexFile, $otherFile, $w_url, Util, std_J
   const std = {
     Json: std_Json,
   };
-  
   class $Closure1 {
-    async $inflight_init()  {
-    }
     async handle()  {
       {((cond) => {if (!cond) throw new Error("assertion failed: Json.stringify(Util.http(w.url).get(\"body\")) == Json.stringify(indexFile)")})((((args) => { return JSON.stringify(args[0], null, args[1]) })([((await Util.http($w_url)))["body"]]) === ((args) => { return JSON.stringify(args[0], null, args[1]) })([$indexFile])))};
       {((cond) => {if (!cond) throw new Error("assertion failed: Json.stringify(Util.http(w.url + \"/inner-folder/other.html\").get(\"body\")) == Json.stringify(otherFile)")})((((args) => { return JSON.stringify(args[0], null, args[1]) })([((await Util.http(($w_url + "/inner-folder/other.html"))))["body"]]) === ((args) => { return JSON.stringify(args[0], null, args[1]) })([$otherFile])))};
@@ -30,8 +27,6 @@ module.exports = function({ $config, $indexFile, $otherFile, $w_url, Util, std_J
 ```js
 module.exports = function({  }) {
   class Util {
-    async $inflight_init()  {
-    }
     static async http(url)  {
       return (require("<ABSOLUTE_PATH>/http.js")["http"])(url)
     }

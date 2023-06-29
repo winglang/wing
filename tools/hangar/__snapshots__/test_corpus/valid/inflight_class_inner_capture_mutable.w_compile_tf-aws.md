@@ -4,8 +4,6 @@
 ```js
 module.exports = function({  }) {
   class $Closure1 {
-    async $inflight_init()  {
-    }
     async handle()  {
       const y = [1];
       let i = 10;
@@ -29,8 +27,6 @@ module.exports = function({  }) {
 ```js
 module.exports = function({ i, y }) {
   class Inner {
-     constructor()  {
-    }
     async dang()  {
       (await y.push(2));
       i = (i + 1);

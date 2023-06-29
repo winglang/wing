@@ -3,43 +3,34 @@ source: libs/wingc/src/jsify/captures/tests.rs
 expression: "capture_ok(r#\"\n    bring cloud;\n    let b = new cloud.Bucket();\n    class A {\n      bucky: cloud.Bucket;\n      init() {\n        this.bucky = b;\n      }\n    }\n\n    let a = new A();\n    test \"test\" {\n      a.bucky.list();\n    } \n    \"#)"
 ---
 ======================================================
-Captured by A:
-
-======================================================
-Captured by $Closure1:
-
-======================================================
 Files:
+
+inflight.$Closure1.js
+------------------------------------------------------
+module.exports = function({ $a_bucky }) {
+  class $Closure1 {
+    async handle()  {
+      (await $a_bucky.list());
+    }
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+  }
+  return $Closure1;
+}
 
 inflight.A.js
 ------------------------------------------------------
 module.exports = function({  }) {
   class A {
-    async $inflight_init()  {
-    }
     constructor({  }) {
     }
   }
   return A;
 }
 
-main.w
-------------------------------------------------------
-
-    bring cloud;
-    let b = new cloud.Bucket();
-    class A {
-      bucky: cloud.Bucket;
-      init() {
-        this.bucky = b;
-      }
-    }
-
-    let a = new A();
-    test "test" {
-      a.bucky.list();
-    } 
-    
 preflight.js
 ------------------------------------------------------
 const cloud = require('@winglang/sdk').cloud;
@@ -99,22 +90,4 @@ class $Closure1 extends $stdlib.std.Resource {
 const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
 const a = new A(this,"A");
 this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:test",new $Closure1(this,"$Closure1"));
-
-inflight.$Closure1.js
-------------------------------------------------------
-module.exports = function({ $a_bucky }) {
-  class $Closure1 {
-    async $inflight_init()  {
-    }
-    async handle()  {
-      (await $a_bucky.list());
-    }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
-    }
-  }
-  return $Closure1;
-}
 

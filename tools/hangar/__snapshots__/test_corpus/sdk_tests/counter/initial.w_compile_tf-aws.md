@@ -4,8 +4,6 @@
 ```js
 module.exports = function({ $counterA }) {
   class $Closure1 {
-    async $inflight_init()  {
-    }
     async handle()  {
       {((cond) => {if (!cond) throw new Error("assertion failed: counterA.peek() == 0")})(((await $counterA.peek()) === 0))};
     }
@@ -24,8 +22,6 @@ module.exports = function({ $counterA }) {
 ```js
 module.exports = function({ $counterB }) {
   class $Closure2 {
-    async $inflight_init()  {
-    }
     async handle()  {
       {((cond) => {if (!cond) throw new Error("assertion failed: counterB.peek() == 500")})(((await $counterB.peek()) === 500))};
     }
@@ -44,8 +40,6 @@ module.exports = function({ $counterB }) {
 ```js
 module.exports = function({ $counterC }) {
   class $Closure3 {
-    async $inflight_init()  {
-    }
     async handle()  {
       {((cond) => {if (!cond) throw new Error("assertion failed: counterC.peek() == -198")})(((await $counterC.peek()) === (-198)))};
     }

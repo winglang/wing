@@ -4,8 +4,6 @@
 ```js
 module.exports = function({  }) {
   class $Closure1 {
-    async $inflight_init()  {
-    }
     async handle()  {
       const C = require("./inflight.C.js")({});
       const c = new C();
@@ -26,8 +24,6 @@ module.exports = function({  }) {
 ```js
 module.exports = function({ F }) {
   class $Closure2 {
-    async $inflight_init()  {
-    }
     async handle()  {
       return (await new F().foo());
     }
@@ -44,17 +40,15 @@ module.exports = function({ F }) {
 
 ## inflight.$Closure3.js
 ```js
-module.exports = function({ $a, $d, B }) {
+module.exports = function({ $a, $d, $fn, $innerD, B }) {
   class $Closure3 {
-    async $inflight_init()  {
-    }
     async handle()  {
       {((cond) => {if (!cond) throw new Error("assertion failed: a.goo() == \"a2\"")})(((await $a.goo()) === "a2"))};
       const b = new B();
       {((cond) => {if (!cond) throw new Error("assertion failed: b.foo() == \"b1\"")})(((await b.foo()) === "b1"))};
-      (await fn());
+      (await $fn());
       {((cond) => {if (!cond) throw new Error("assertion failed: d.callInner() == \"f1\"")})(((await $d.callInner()) === "f1"))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: innerD() == \"f1\"")})(((await innerD()) === "f1"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: innerD() == \"f1\"")})(((await $innerD()) === "f1"))};
     }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -71,8 +65,6 @@ module.exports = function({ $a, $d, B }) {
 ```js
 module.exports = function({  }) {
   class A {
-    async $inflight_init()  {
-    }
     async goo()  {
       return "a2";
     }
@@ -88,8 +80,6 @@ module.exports = function({  }) {
 ```js
 module.exports = function({  }) {
   class B {
-     constructor()  {
-    }
     async foo()  {
       return "b1";
     }
@@ -103,8 +93,6 @@ module.exports = function({  }) {
 ```js
 module.exports = function({  }) {
   class C {
-     constructor()  {
-    }
     async foo()  {
       return "c1";
     }
@@ -118,12 +106,11 @@ module.exports = function({  }) {
 ```js
 module.exports = function({  }) {
   class D {
-    async $inflight_init()  {
-    }
     async callInner()  {
-      return (await this.inner());
+      return (await this.$this_inner());
     }
-    constructor({  }) {
+    constructor({ $this_inner }) {
+      this.$this_inner = $this_inner;
     }
   }
   return D;
@@ -135,8 +122,6 @@ module.exports = function({  }) {
 ```js
 module.exports = function({  }) {
   class E {
-    async $inflight_init()  {
-    }
     constructor({  }) {
     }
   }
@@ -149,8 +134,6 @@ module.exports = function({  }) {
 ```js
 module.exports = function({  }) {
   class F {
-     constructor()  {
-    }
     async foo()  {
       return "f1";
     }
@@ -296,7 +279,7 @@ class $Root extends $stdlib.std.Resource {
         super(scope, id);
         this._addInflightOps("goo");
       }
-       foo()  {
+      foo()  {
         return "a1";
       }
       static _toInflightType(context) {
@@ -369,7 +352,7 @@ class $Root extends $stdlib.std.Resource {
           constructor(scope, id, ) {
             super(scope, id);
           }
-           foo()  {
+          foo()  {
             return "e1";
           }
           static _toInflightType(context) {
@@ -441,7 +424,7 @@ class $Root extends $stdlib.std.Resource {
         }
         this.inner = new $Closure2(this,"$Closure2");
       }
-       getInner()  {
+      getInner()  {
         return this.inner;
       }
       static _toInflightType(context) {
@@ -454,11 +437,18 @@ class $Root extends $stdlib.std.Resource {
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
             const client = new (${D._toInflightType(this).text})({
+              $this_inner: ${this._lift(this.inner)},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
         `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("callInner")) {
+          D._registerBindObject(this.inner, host, []);
+        }
+        super._registerBind(host, ops);
       }
     }
     class $Closure3 extends $stdlib.std.Resource {
@@ -470,11 +460,15 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         const $a = context._lift(a);
         const $d = context._lift(d);
+        const $fn = context._lift(fn);
+        const $innerD = context._lift(innerD);
         const lifted_B = B._toInflightType(context).text;
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure3.js")({ 
             $a: ${$a},
             $d: ${$d},
+            $fn: ${$fn},
+            $innerD: ${$innerD},
             B: ${lifted_B},
           })
         `);
@@ -493,6 +487,8 @@ class $Root extends $stdlib.std.Resource {
         if (ops.includes("handle")) {
           $Closure3._registerBindObject(a, host, ["goo"]);
           $Closure3._registerBindObject(d, host, ["callInner"]);
+          $Closure3._registerBindObject(fn, host, []);
+          $Closure3._registerBindObject(innerD, host, []);
         }
         super._registerBind(host, ops);
       }

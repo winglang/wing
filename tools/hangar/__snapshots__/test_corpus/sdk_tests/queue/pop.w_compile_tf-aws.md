@@ -4,8 +4,6 @@
 ```js
 module.exports = function({ $NIL, $q }) {
   class $Closure1 {
-    async $inflight_init()  {
-    }
     async handle()  {
       const msgs = Object.freeze(["Foo", "Bar"]);
       for (const msg of msgs) {

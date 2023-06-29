@@ -4,8 +4,6 @@
 ```js
 module.exports = function({ $myConst, Foo }) {
   class $Closure1 {
-    async $inflight_init()  {
-    }
     async handle()  {
       const x = new Foo();
       {((cond) => {if (!cond) throw new Error("assertion failed: x.getValue() == myConst")})(((await x.getValue()) === $myConst))};
@@ -25,8 +23,6 @@ module.exports = function({ $myConst, Foo }) {
 ```js
 module.exports = function({ $myConst }) {
   class Foo {
-     constructor()  {
-    }
     async getValue()  {
       return $myConst;
     }

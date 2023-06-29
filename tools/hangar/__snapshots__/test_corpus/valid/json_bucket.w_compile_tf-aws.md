@@ -4,8 +4,6 @@
 ```js
 module.exports = function({ $b, $fileName }) {
   class $Closure1 {
-    async $inflight_init()  {
-    }
     async handle(msg)  {
       const x = (await $b.getJson($fileName));
       {((cond) => {if (!cond) throw new Error("assertion failed: x.get(\"persons\").getAt(0).get(\"fears\").getAt(1) == \"failure\"")})((((((x)["persons"])[0])["fears"])[1] === "failure"))};
@@ -25,8 +23,6 @@ module.exports = function({ $b, $fileName }) {
 ```js
 module.exports = function({ $b, $fileName, $getJson, $j }) {
   class $Closure2 {
-    async $inflight_init()  {
-    }
     async handle()  {
       (await $b.putJson($fileName,$j));
       (await $getJson.invoke(""));

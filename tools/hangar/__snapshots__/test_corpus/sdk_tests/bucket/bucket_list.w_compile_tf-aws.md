@@ -4,8 +4,6 @@
 ```js
 module.exports = function({ $b }) {
   class $Closure1 {
-    async $inflight_init()  {
-    }
     async handle()  {
       const jsonObj1 = Object.freeze({"key1":"value1"});
       {((cond) => {if (!cond) throw new Error("assertion failed: b.list().length == 1")})(((await $b.list()).length === 1))};

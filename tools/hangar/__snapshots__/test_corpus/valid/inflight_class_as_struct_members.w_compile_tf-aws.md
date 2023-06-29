@@ -4,8 +4,6 @@
 ```js
 module.exports = function({ Foo }) {
   class $Closure1 {
-    async $inflight_init()  {
-    }
     async handle()  {
       return {
       "foo": new Foo(),}
@@ -24,12 +22,10 @@ module.exports = function({ Foo }) {
 
 ## inflight.$Closure2.js
 ```js
-module.exports = function({  }) {
+module.exports = function({ $getBar }) {
   class $Closure2 {
-    async $inflight_init()  {
-    }
     async handle()  {
-      const bar = (await getBar());
+      const bar = (await $getBar());
       {((cond) => {if (!cond) throw new Error("assertion failed: bar.foo.get() == 42")})(((await bar.foo.get()) === 42))};
     }
     constructor({  }) {
@@ -47,8 +43,6 @@ module.exports = function({  }) {
 ```js
 module.exports = function({  }) {
   class Foo {
-     constructor()  {
-    }
     async get()  {
       return 42;
     }
@@ -243,8 +237,10 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
+        const $getBar = context._lift(getBar);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure2.js")({ 
+            $getBar: ${$getBar},
           })
         `);
       }
@@ -257,6 +253,12 @@ class $Root extends $stdlib.std.Resource {
             return client;
           })())
         `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("handle")) {
+          $Closure2._registerBindObject(getBar, host, []);
+        }
+        super._registerBind(host, ops);
       }
     }
     const getBar = new $Closure1(this,"$Closure1");

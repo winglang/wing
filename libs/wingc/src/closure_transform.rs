@@ -177,21 +177,24 @@ impl Fold for ClosureTransformer {
 				let class_init_body = vec![Stmt {
 					idx: 0,
 					kind: StmtKind::Assignment {
-						variable: Reference::InstanceMember {
-							object: Box::new(Expr::new(
-								ExprKind::Reference(Reference::InstanceMember {
-									object: Box::new(Expr::new(
-										ExprKind::Reference(Reference::Identifier(Symbol::new("this", WingSpan::default()))),
-										WingSpan::default(),
-									)),
-									property: Symbol::new("display", WingSpan::default()),
-									optional_accessor: false,
-								}),
-								WingSpan::default(),
-							)),
-							property: Symbol::new("hidden", WingSpan::default()),
-							optional_accessor: false,
-						},
+						variable: Expr::new(
+							ExprKind::Reference(Reference::InstanceMember {
+								object: Box::new(Expr::new(
+									ExprKind::Reference(Reference::InstanceMember {
+										object: Box::new(Expr::new(
+											ExprKind::Reference(Reference::Identifier(Symbol::new("this", WingSpan::default()))),
+											WingSpan::default(),
+										)),
+										property: Symbol::new("display", WingSpan::default()),
+										optional_accessor: false,
+									}),
+									WingSpan::default(),
+								)),
+								property: Symbol::new("hidden", WingSpan::default()),
+								optional_accessor: false,
+							}),
+							WingSpan::default(),
+						),
 						value: Expr::new(ExprKind::Literal(Literal::Boolean(true)), WingSpan::default()),
 					},
 					span: WingSpan::default(),

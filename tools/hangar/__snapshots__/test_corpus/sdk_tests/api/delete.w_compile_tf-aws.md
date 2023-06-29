@@ -4,8 +4,6 @@
 ```js
 module.exports = function({ $api_DELETE }) {
   class $Closure1 {
-    async $inflight_init()  {
-    }
     async handle(req)  {
       {((cond) => {if (!cond) throw new Error("assertion failed: req.method == api_DELETE")})((req.method === $api_DELETE))};
       {((cond) => {if (!cond) throw new Error("assertion failed: req.query?.get(\"all\") == \"true\"")})(((req.query)["all"] === "true"))};
@@ -33,10 +31,7 @@ module.exports = function({ $api_url, $http_DELETE, http_Util }) {
   const http = {
     Util: http_Util,
   };
-  
   class $Closure2 {
-    async $inflight_init()  {
-    }
     async handle()  {
       const url = String.raw({ raw: ["", "/path?all=true&page=6"] }, $api_url);
       const response = (await http.Util.delete(url));

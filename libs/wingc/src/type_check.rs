@@ -2330,11 +2330,22 @@ impl<'a> TypeChecker<'a> {
 			}
 			StmtKind::Assignment { variable, value } => {
 				let (exp_type, _) = self.type_check_exp(value, env);
-				let (var_info, _) = self.resolve_reference(variable, env);
-				if !var_info.type_.is_unresolved() && !var_info.reassignable {
-					self.spanned_error(stmt, format!("Variable {} is not reassignable ", variable));
+				let (var_type, var_phase) = self.type_check_exp(variable, env);
+
+				// check if the variable can be reassigned
+
+				if let ExprKind::Reference(r) = &variable.kind {
+					let (var, _) = self.resolve_reference(&r, env);
+					if var_phase == Phase::Preflight && env.phase == Phase::Inflight {
+						self.spanned_error(stmt, format!("Variable cannot be reassigned from inflight"));
+					} else {
+						if !var_type.is_unresolved() && !var.reassignable {
+							self.spanned_error(stmt, format!("Variable is not reassignable"));
+						}
+					}
 				}
-				self.validate_type(exp_type, var_info.type_, value);
+
+				self.validate_type(exp_type, var_type, value);
 			}
 			StmtKind::Bring {
 				module_name,
@@ -3513,11 +3524,8 @@ impl<'a> TypeChecker<'a> {
 				// Special case: if the object expression is a simple reference to `this` and we're inside the init function then
 				// we'll consider all properties as reassignable regardless of whether they're `var`.
 				let mut force_reassignable = false;
-				let mut this_object = false;
 				if let ExprKind::Reference(Reference::Identifier(symb)) = &object.kind {
 					if symb.name == "this" {
-						this_object = true;
-
 						if let LookupResult::Found(kind, info) = env.lookup_ext(&symb, Some(self.statement_idx)) {
 							// `this` reserved symbol should always be a variable
 							assert!(matches!(kind, SymbolKind::Variable(_)));
@@ -3536,10 +3544,10 @@ impl<'a> TypeChecker<'a> {
 				let property_variable = self.resolve_variable_from_instance_type(instance_type, property, env, object);
 
 				// if the object is `this`, then use the property's phase instead of the object phase
-				let instance_phase = if this_object {
-					property_variable.phase
-				} else {
+				let property_phase = if property_variable.phase == Phase::Independent {
 					instance_phase
+				} else {
+					property_variable.phase
 				};
 
 				// Check if the object is an optional type. If it is ensure the use of optional chaining.
@@ -3562,10 +3570,10 @@ impl<'a> TypeChecker<'a> {
 							reassignable: true,
 							..property_variable
 						},
-						instance_phase,
+						property_phase,
 					)
 				} else {
-					(property_variable, instance_phase)
+					(property_variable, property_phase)
 				}
 			}
 			Reference::TypeMember { type_, property } => {

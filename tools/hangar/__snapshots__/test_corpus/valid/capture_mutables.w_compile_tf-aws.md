@@ -4,8 +4,6 @@
 ```js
 module.exports = function({ $Object_keys_m__length, $aCloned_length, $a_length, $s_size }) {
   class $Closure1 {
-    async $inflight_init()  {
-    }
     async handle()  {
       {((cond) => {if (!cond) throw new Error("assertion failed: a.length == 1")})(($a_length === 1))};
       {((cond) => {if (!cond) throw new Error("assertion failed: s.size == 1")})(($s_size === 1))};
@@ -25,12 +23,10 @@ module.exports = function({ $Object_keys_m__length, $aCloned_length, $a_length, 
 
 ## inflight.$Closure2.js
 ```js
-module.exports = function({  }) {
+module.exports = function({ $handler }) {
   class $Closure2 {
-    async $inflight_init()  {
-    }
     async handle()  {
-      (await handler());
+      (await $handler());
     }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -221,8 +217,10 @@ class $Root extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
+        const $handler = context._lift(handler);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure2.js")({ 
+            $handler: ${$handler},
           })
         `);
       }
@@ -235,6 +233,12 @@ class $Root extends $stdlib.std.Resource {
             return client;
           })())
         `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("handle")) {
+          $Closure2._registerBindObject(handler, host, []);
+        }
+        super._registerBind(host, ops);
       }
     }
     const a = ["hello"];

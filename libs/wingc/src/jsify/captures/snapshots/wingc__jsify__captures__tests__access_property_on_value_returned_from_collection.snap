@@ -3,20 +3,24 @@ source: libs/wingc/src/jsify/captures/tests.rs
 expression: "capture_ok(r#\"\n    let s = { \"hello\": \"123\" };\n\n    test \"test\" {\n      assert(s.get(\"hello\").length == 3);\n    }\n    \"#)"
 ---
 ======================================================
-Captured by $Closure1:
-
-======================================================
 Files:
 
-main.w
+inflight.$Closure1.js
 ------------------------------------------------------
-
-    let s = { "hello": "123" };
-
-    test "test" {
-      assert(s.get("hello").length == 3);
+module.exports = function({ $_s___hello___length }) {
+  class $Closure1 {
+    async handle()  {
+      {((cond) => {if (!cond) throw new Error("assertion failed: s.get(\"hello\").length == 3")})(($_s___hello___length === 3))};
     }
-    
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+  }
+  return $Closure1;
+}
+
 preflight.js
 ------------------------------------------------------
 class $Closure1 extends $stdlib.std.Resource {
@@ -52,22 +56,4 @@ class $Closure1 extends $stdlib.std.Resource {
 }
 const s = Object.freeze({"hello":"123"});
 this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:test",new $Closure1(this,"$Closure1"));
-
-inflight.$Closure1.js
-------------------------------------------------------
-module.exports = function({ $_s___hello___length }) {
-  class $Closure1 {
-    async $inflight_init()  {
-    }
-    async handle()  {
-      {((cond) => {if (!cond) throw new Error("assertion failed: s.get(\"hello\").length == 3")})(($_s___hello___length === 3))};
-    }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
-    }
-  }
-  return $Closure1;
-}
 

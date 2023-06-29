@@ -6,10 +6,7 @@ module.exports = function({ $NIL, $RANDOM, util_Util }) {
   const util = {
     Util: util_Util,
   };
-  
   class $Closure1 {
-    async $inflight_init()  {
-    }
     async handle()  {
       {((cond) => {if (!cond) throw new Error("assertion failed: util.env(\"WING_TARGET\").length > 0")})(((await util.Util.env("WING_TARGET")).length > 0))};
       const noValue = ((await util.Util.tryEnv($RANDOM)) ?? $NIL);

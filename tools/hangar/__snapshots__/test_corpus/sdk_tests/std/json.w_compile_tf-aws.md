@@ -4,8 +4,6 @@
 ```js
 module.exports = function({  }) {
   class $Closure1 {
-    async $inflight_init()  {
-    }
     async handle()  {
       const x = {"a":1};
       ((obj, args) => { obj[args[0]] = args[1]; })(x, ["b",2]);
@@ -27,8 +25,6 @@ module.exports = function({  }) {
 ```js
 module.exports = function({  }) {
   class $Closure2 {
-    async $inflight_init()  {
-    }
     async handle()  {
       const x = {"a":1};
       const a = {"c":3};

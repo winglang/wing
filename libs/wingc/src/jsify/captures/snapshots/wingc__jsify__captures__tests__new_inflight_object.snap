@@ -3,35 +3,32 @@ source: libs/wingc/src/jsify/captures/tests.rs
 expression: "capture_ok(r#\"\n    inflight class Foo {}\n\n    test \"test\" {\n      new Foo();\n    }\n    \"#)"
 ---
 ======================================================
-Captured by Foo:
-
-======================================================
-Captured by $Closure1:
-Types:
-  Foo = Foo
-
-======================================================
 Files:
+
+inflight.$Closure1.js
+------------------------------------------------------
+module.exports = function({ Foo }) {
+  class $Closure1 {
+    async handle()  {
+      new Foo();
+    }
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+  }
+  return $Closure1;
+}
 
 inflight.Foo.js
 ------------------------------------------------------
 module.exports = function({  }) {
   class Foo {
-     constructor()  {
-    }
   }
   return Foo;
 }
 
-main.w
-------------------------------------------------------
-
-    inflight class Foo {}
-
-    test "test" {
-      new Foo();
-    }
-    
 preflight.js
 ------------------------------------------------------
 class Foo extends $stdlib.std.Resource {
@@ -81,22 +78,4 @@ class $Closure1 extends $stdlib.std.Resource {
   }
 }
 this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:test",new $Closure1(this,"$Closure1"));
-
-inflight.$Closure1.js
-------------------------------------------------------
-module.exports = function({ Foo }) {
-  class $Closure1 {
-    async $inflight_init()  {
-    }
-    async handle()  {
-      new Foo();
-    }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
-    }
-  }
-  return $Closure1;
-}
 

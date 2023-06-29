@@ -6,10 +6,7 @@ module.exports = function({ $oneHundredMiliseconds, JSHelper, util_Util }) {
   const util = {
     Util: util_Util,
   };
-  
   class $Closure1 {
-    async $inflight_init()  {
-    }
     async handle()  {
       const start = (await JSHelper.getTime());
       (await util.Util.sleep($oneHundredMiliseconds));
@@ -32,8 +29,6 @@ module.exports = function({ $oneHundredMiliseconds, JSHelper, util_Util }) {
 ```js
 module.exports = function({  }) {
   class JSHelper {
-    async $inflight_init()  {
-    }
     static async getTime()  {
       return (require("<ABSOLUTE_PATH>/sleep-helper.js")["getTime"])()
     }

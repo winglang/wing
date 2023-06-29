@@ -4,8 +4,6 @@
 ```js
 module.exports = function({ $a_field }) {
   class $Closure1 {
-    async $inflight_init()  {
-    }
     async handle()  {
       {((cond) => {if (!cond) throw new Error("assertion failed: \"hey\" == a.field")})(("hey" === $a_field))};
     }
@@ -24,8 +22,6 @@ module.exports = function({ $a_field }) {
 ```js
 module.exports = function({  }) {
   class A {
-    async $inflight_init()  {
-    }
     constructor({  }) {
     }
   }

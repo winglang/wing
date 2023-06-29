@@ -6,10 +6,7 @@ module.exports = function({ $table, std_String }) {
   const std = {
     String: std_String,
   };
-  
   class $Closure1 {
-    async $inflight_init()  {
-    }
     async handle()  {
       (await $table.insert("eyal",Object.freeze({"gender":"male"})));
       (await $table.insert("revital",Object.freeze({"gender":"female"})));

@@ -6,10 +6,7 @@ module.exports = function({ $_id, $api_PATCH, $body, std_Json }) {
   const std = {
     Json: std_Json,
   };
-  
   class $Closure1 {
-    async $inflight_init()  {
-    }
     async handle(req)  {
       {((cond) => {if (!cond) throw new Error("assertion failed: req.method == api_PATCH")})((req.method === $api_PATCH))};
       {((cond) => {if (!cond) throw new Error("assertion failed: req.vars?.get(\"id\") == _id")})(((req.vars)["id"] === $_id))};
@@ -41,10 +38,7 @@ module.exports = function({ $_id, $api_url, $body, $http_PATCH, http_Util, std_J
   const std = {
     Json: std_Json,
   };
-  
   class $Closure2 {
-    async $inflight_init()  {
-    }
     async handle()  {
       const url = String.raw({ raw: ["", "/path/", ""] }, $api_url, $_id);
       const response = (await http.Util.patch(url,{

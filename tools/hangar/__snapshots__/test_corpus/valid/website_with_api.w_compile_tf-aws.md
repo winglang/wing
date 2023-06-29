@@ -6,10 +6,7 @@ module.exports = function({ $usersTable, std_Json }) {
   const std = {
     Json: std_Json,
   };
-  
   class $Closure1 {
-    async $inflight_init()  {
-    }
     async handle(req)  {
       return {
       "body": ((args) => { return JSON.stringify(args[0], null, args[1]) })([Object.freeze({"users":(await $usersTable.list())})]),
@@ -33,10 +30,7 @@ module.exports = function({ $usersTable, std_Json }) {
   const std = {
     Json: std_Json,
   };
-  
   class $Closure2 {
-    async $inflight_init()  {
-    }
     async handle(req)  {
       const body = (JSON.parse((req.body ?? ((args) => { return JSON.stringify(args[0], null, args[1]) })([Object.freeze({"name":"","age":"","id":""})]))));
       if (((((body)["name"] === "") || ((body)["age"] === "")) || ((body)["id"] === ""))) {
@@ -66,8 +60,6 @@ module.exports = function({ $usersTable, std_Json }) {
 ```js
 module.exports = function({  }) {
   class $Closure3 {
-    async $inflight_init()  {
-    }
     async handle(req)  {
       return {
       "headers": Object.freeze({"Access-Control-Allow-Headers":"Content-Type","Access-Control-Allow-Origin":"*","Access-Control-Allow-Methods":"OPTIONS,POST,GET"}),

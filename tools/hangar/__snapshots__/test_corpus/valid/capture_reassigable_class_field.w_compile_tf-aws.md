@@ -4,8 +4,6 @@
 ```js
 module.exports = function({  }) {
   class $Closure1 {
-    async $inflight_init()  {
-    }
     async handle(k)  {
     }
     constructor({  }) {
@@ -23,8 +21,6 @@ module.exports = function({  }) {
 ```js
 module.exports = function({ $counter }) {
   class $Closure2 {
-    async $inflight_init()  {
-    }
     async handle(key)  {
       (await $counter.inc(1,key));
     }
@@ -45,10 +41,7 @@ module.exports = function({ $counter, $kv, util_Util }) {
   const util = {
     Util: util_Util,
   };
-  
   class $Closure3 {
-    async $inflight_init()  {
-    }
     async handle()  {
       (await $kv.set("k",Object.freeze({"value":"v"})));
       (await $kv.set("k2",Object.freeze({"value":"v"})));
@@ -79,17 +72,16 @@ module.exports = function({ $counter, $kv, util_Util }) {
 ```js
 module.exports = function({  }) {
   class KeyValueStore {
-    async $inflight_init()  {
-    }
     async get(key)  {
-      (await this.onUpdateCallback(key));
+      (await this.$this_onUpdateCallback(key));
       return (await this.$this_bucket.getJson(key));
     }
     async set(key, value)  {
       (await this.$this_bucket.putJson(key,value));
     }
-    constructor({ $this_bucket }) {
+    constructor({ $this_bucket, $this_onUpdateCallback }) {
       this.$this_bucket = $this_bucket;
+      this.$this_onUpdateCallback = $this_onUpdateCallback;
     }
   }
   return KeyValueStore;
@@ -326,7 +318,7 @@ class $Root extends $stdlib.std.Resource {
         }
         this.onUpdateCallback = new $Closure1(this,"$Closure1");
       }
-       onUpdate(fn)  {
+      onUpdate(fn)  {
         this.onUpdateCallback = fn;
       }
       static _toInflightType(context) {
@@ -340,6 +332,7 @@ class $Root extends $stdlib.std.Resource {
           (await (async () => {
             const client = new (${KeyValueStore._toInflightType(this).text})({
               $this_bucket: ${this._lift(this.bucket)},
+              $this_onUpdateCallback: ${this._lift(this.onUpdateCallback)},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -349,6 +342,7 @@ class $Root extends $stdlib.std.Resource {
       _registerBind(host, ops) {
         if (ops.includes("get")) {
           KeyValueStore._registerBindObject(this.bucket, host, ["getJson", "putJson"]);
+          KeyValueStore._registerBindObject(this.onUpdateCallback, host, []);
         }
         super._registerBind(host, ops);
       }

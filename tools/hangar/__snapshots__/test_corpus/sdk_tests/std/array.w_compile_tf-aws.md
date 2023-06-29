@@ -4,8 +4,6 @@
 ```js
 module.exports = function({  }) {
   class $Closure1 {
-    async $inflight_init()  {
-    }
     async handle()  {
       {((cond) => {if (!cond) throw new Error("assertion failed: [\"hello\"].length == 1")})((Object.freeze(["hello"]).length === 1))};
       {((cond) => {if (!cond) throw new Error("assertion failed: MutArray<str>[\"hello\"].length == 1")})((["hello"].length === 1))};
@@ -25,8 +23,6 @@ module.exports = function({  }) {
 ```js
 module.exports = function({  }) {
   class $Closure10 {
-    async $inflight_init()  {
-    }
     async handle()  {
       const i = ["hello", "wing"];
       const separator = ",";
@@ -49,8 +45,6 @@ module.exports = function({  }) {
 ```js
 module.exports = function({  }) {
   class $Closure11 {
-    async $inflight_init()  {
-    }
     async handle()  {
       const o = ["hello", "wing"];
       const p = Object.freeze([...(o)]);
@@ -72,8 +66,6 @@ module.exports = function({  }) {
 ```js
 module.exports = function({  }) {
   class $Closure12 {
-    async $inflight_init()  {
-    }
     async handle()  {
       const q = Object.freeze(["hello", "wing"]);
       const r = [...(q)];
@@ -95,8 +87,6 @@ module.exports = function({  }) {
 ```js
 module.exports = function({  }) {
   class $Closure13 {
-    async $inflight_init()  {
-    }
     async handle()  {
       const lastStr = "wing";
       const s = ["hello", lastStr, lastStr];
@@ -118,8 +108,6 @@ module.exports = function({  }) {
 ```js
 module.exports = function({  }) {
   class $Closure2 {
-    async $inflight_init()  {
-    }
     async handle()  {
       {((cond) => {if (!cond) throw new Error("assertion failed: [\"hello\"].at(0) == \"hello\"")})(((await Object.freeze(["hello"]).at(0)) === "hello"))};
       {((cond) => {if (!cond) throw new Error("assertion failed: MutArray<str>[\"hello\", \"world\"].at(1) == \"world\"")})(((await ["hello", "world"].at(1)) === "world"))};
@@ -139,8 +127,6 @@ module.exports = function({  }) {
 ```js
 module.exports = function({  }) {
   class $Closure3 {
-    async $inflight_init()  {
-    }
     async handle()  {
       const a = ["hello"];
       {((cond) => {if (!cond) throw new Error("assertion failed: a.length == 1")})((a.length === 1))};
@@ -168,8 +154,6 @@ module.exports = function({  }) {
 ```js
 module.exports = function({  }) {
   class $Closure4 {
-    async $inflight_init()  {
-    }
     async handle()  {
       const b = ["hello"];
       {((cond) => {if (!cond) throw new Error("assertion failed: b.length == 1")})((b.length === 1))};
@@ -193,8 +177,6 @@ module.exports = function({  }) {
 ```js
 module.exports = function({  }) {
   class $Closure5 {
-    async $inflight_init()  {
-    }
     async handle()  {
       const array = Object.freeze(["hello"]);
       {((cond) => {if (!cond) throw new Error("assertion failed: array.length == 1")})((array.length === 1))};
@@ -220,8 +202,6 @@ module.exports = function({  }) {
 ```js
 module.exports = function({  }) {
   class $Closure6 {
-    async $inflight_init()  {
-    }
     async handle()  {
       const e = ["hello", "wing"];
       {((cond) => {if (!cond) throw new Error("assertion failed: e.contains(\"wing\")")})(e.includes("wing"))};
@@ -245,8 +225,6 @@ module.exports = function({  }) {
 ```js
 module.exports = function({  }) {
   class $Closure7 {
-    async $inflight_init()  {
-    }
     async handle()  {
       const g = ["hello", "wing"];
       {((cond) => {if (!cond) throw new Error("assertion failed: g.indexOf(\"wing\") == 1")})((g.indexOf("wing") === 1))};
@@ -267,8 +245,6 @@ module.exports = function({  }) {
 ```js
 module.exports = function({  }) {
   class $Closure8 {
-    async $inflight_init()  {
-    }
     async handle()  {
       const g = Object.freeze(["hello", "wing"]);
       {((cond) => {if (!cond) throw new Error("assertion failed: g.indexOf(\"wing\") == 1")})((g.indexOf("wing") === 1))};
@@ -289,8 +265,6 @@ module.exports = function({  }) {
 ```js
 module.exports = function({  }) {
   class $Closure9 {
-    async $inflight_init()  {
-    }
     async handle()  {
       const i = ["hello", "wing"];
       const separator = ";";

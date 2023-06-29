@@ -4,8 +4,6 @@
 ```js
 module.exports = function({ $bucket, $counter }) {
   class $Closure1 {
-    async $inflight_init()  {
-    }
     async handle(body)  {
       const next = (await $counter.inc());
       const key = String.raw({ raw: ["myfile-", ".txt"] }, "hi");

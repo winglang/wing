@@ -6,10 +6,7 @@ module.exports = function({ std_Json }) {
   const std = {
     Json: std_Json,
   };
-  
   class $Closure1 {
-    async $inflight_init()  {
-    }
     async handle(req)  {
       return {
       "body": ((args) => { return JSON.stringify(args[0], null, args[1]) })([Object.freeze({"user":(req.vars)["name"]})]),
@@ -37,10 +34,7 @@ module.exports = function({ $api_url, http_Util, std_Json }) {
   const std = {
     Json: std_Json,
   };
-  
   class $Closure2 {
-    async $inflight_init()  {
-    }
     async handle()  {
       const username = "tsuf";
       const res = (await http.Util.get(String.raw({ raw: ["", "/users/", ""] }, $api_url, username)));

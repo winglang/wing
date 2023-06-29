@@ -2,15 +2,13 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ $bucket, $res, $res_foo_inflightField }) {
+module.exports = function({ $bucket, $res, $res_foo }) {
   class $Closure1 {
-    async $inflight_init()  {
-    }
     async handle()  {
       const s = (await $res.myMethod());
       {((cond) => {if (!cond) throw new Error("assertion failed: s == \"counter is: 101\"")})((s === "counter is: 101"))};
       {((cond) => {if (!cond) throw new Error("assertion failed: bucket.list().length == 1")})(((await $bucket.list()).length === 1))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: res.foo.inflightField == 123")})(($res_foo_inflightField === 123))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: res.foo.inflightField == 123")})(($res_foo.inflightField === 123))};
       (await $res.testTypeAccess());
     }
     constructor({  }) {
@@ -28,8 +26,6 @@ module.exports = function({ $bucket, $res, $res_foo_inflightField }) {
 ```js
 module.exports = function({ $__parent_this_2_b }) {
   class $Closure2 {
-    async $inflight_init()  {
-    }
     async handle()  {
       (await $__parent_this_2_b.put("foo1.txt","bar"));
     }
@@ -48,8 +44,6 @@ module.exports = function({ $__parent_this_2_b }) {
 ```js
 module.exports = function({ $__parent_this_3_b }) {
   class $Closure3 {
-    async $inflight_init()  {
-    }
     async handle()  {
       (await $__parent_this_3_b.put("foo2.txt","bar"));
     }
@@ -68,8 +62,6 @@ module.exports = function({ $__parent_this_3_b }) {
 ```js
 module.exports = function({ $__parent_this_4_q }) {
   class $Closure4 {
-    async $inflight_init()  {
-    }
     async handle()  {
       (await $__parent_this_4_q.push("foo"));
     }
@@ -88,8 +80,6 @@ module.exports = function({ $__parent_this_4_q }) {
 ```js
 module.exports = function({ $bigOlPublisher }) {
   class $Closure5 {
-    async $inflight_init()  {
-    }
     async handle()  {
       (await $bigOlPublisher.publish("foo"));
       const count = (await $bigOlPublisher.getObjectCount());
@@ -109,8 +99,6 @@ module.exports = function({ $bigOlPublisher }) {
 ```js
 module.exports = function({ Foo, MyEnum }) {
   class Bar {
-    async $inflight_init()  {
-    }
     static async barStatic()  {
       return "bar static";
     }
@@ -142,8 +130,6 @@ module.exports = function({ Foo, MyEnum }) {
 ```js
 module.exports = function({  }) {
   class BigPublisher {
-    async $inflight_init()  {
-    }
     async publish(s)  {
       (await this.$this_t.publish(s));
       (await this.$this_q.push(s));
@@ -168,8 +154,6 @@ module.exports = function({  }) {
 ```js
 module.exports = function({  }) {
   class Dummy {
-    async $inflight_init()  {
-    }
     constructor({  }) {
     }
   }
@@ -209,8 +193,6 @@ module.exports = function({  }) {
 ```js
 module.exports = function({  }) {
   class ScopeAndIdTestClass {
-    async $inflight_init()  {
-    }
     constructor({  }) {
     }
   }
@@ -987,12 +969,12 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         const $bucket = context._lift(bucket);
         const $res = context._lift(res);
-        const $res_foo_inflightField = context._lift(res.foo.inflightField);
+        const $res_foo = context._lift(res.foo);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure1.js")({ 
             $bucket: ${$bucket},
             $res: ${$res},
-            $res_foo_inflightField: ${$res_foo_inflightField},
+            $res_foo: ${$res_foo},
           })
         `);
       }
@@ -1010,7 +992,7 @@ class $Root extends $stdlib.std.Resource {
         if (ops.includes("handle")) {
           $Closure1._registerBindObject(bucket, host, ["list"]);
           $Closure1._registerBindObject(res, host, ["myMethod", "testTypeAccess"]);
-          $Closure1._registerBindObject(res.foo.inflightField, host, []);
+          $Closure1._registerBindObject(res.foo, host, ["inflightField"]);
         }
         super._registerBind(host, ops);
       }

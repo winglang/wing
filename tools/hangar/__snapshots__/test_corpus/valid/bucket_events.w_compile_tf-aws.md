@@ -4,8 +4,6 @@
 ```js
 module.exports = function({  }) {
   class $Closure1 {
-    async $inflight_init()  {
-    }
     async handle(key)  {
       {console.log(String.raw({ raw: ["deleted ", ""] }, key))};
     }
@@ -24,8 +22,6 @@ module.exports = function({  }) {
 ```js
 module.exports = function({  }) {
   class $Closure2 {
-    async $inflight_init()  {
-    }
     async handle(key)  {
       {console.log(String.raw({ raw: ["updated ", ""] }, key))};
     }
@@ -44,8 +40,6 @@ module.exports = function({  }) {
 ```js
 module.exports = function({  }) {
   class $Closure3 {
-    async $inflight_init()  {
-    }
     async handle(key)  {
       {console.log(String.raw({ raw: ["created ", ""] }, key))};
     }
@@ -64,8 +58,6 @@ module.exports = function({  }) {
 ```js
 module.exports = function({ $other }) {
   class $Closure4 {
-    async $inflight_init()  {
-    }
     async handle(key, event)  {
       (await $other.put(String.raw({ raw: ["last_", "_key"] }, event),key));
     }
@@ -84,8 +76,6 @@ module.exports = function({ $other }) {
 ```js
 module.exports = function({  }) {
   class $Closure5 {
-    async $inflight_init()  {
-    }
     async handle(key)  {
       {console.log("other bucket event called!")};
     }
@@ -104,8 +94,6 @@ module.exports = function({  }) {
 ```js
 module.exports = function({ $b }) {
   class $Closure6 {
-    async $inflight_init()  {
-    }
     async handle()  {
       (await $b.put("a","1"));
       (await $b.put("b","1"));

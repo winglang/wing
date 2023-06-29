@@ -3,44 +3,34 @@ source: libs/wingc/src/jsify/captures/tests.rs
 expression: "capture_ok(r#\"\n    bring cloud;\n    class Foo {\n      b: cloud.Bucket;\n      q: cloud.Queue;\n\n      init() {\n        this.b = new cloud.Bucket();\n        this.q = new cloud.Queue();\n\n        this.q.setConsumer(inflight () => {\n          this.b.put(\"in\", \"bucket\");\n        });\n      }\n    }\n    \"#)"
 ---
 ======================================================
-Captured by Foo:
-
-======================================================
-Captured by $Closure1:
-
-======================================================
 Files:
+
+inflight.$Closure1.js
+------------------------------------------------------
+module.exports = function({ $__parent_this_1_b }) {
+  class $Closure1 {
+    async handle()  {
+      (await $__parent_this_1_b.put("in","bucket"));
+    }
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+  }
+  return $Closure1;
+}
 
 inflight.Foo.js
 ------------------------------------------------------
 module.exports = function({  }) {
   class Foo {
-    async $inflight_init()  {
-    }
     constructor({  }) {
     }
   }
   return Foo;
 }
 
-main.w
-------------------------------------------------------
-
-    bring cloud;
-    class Foo {
-      b: cloud.Bucket;
-      q: cloud.Queue;
-
-      init() {
-        this.b = new cloud.Bucket();
-        this.q = new cloud.Queue();
-
-        this.q.setConsumer(inflight () => {
-          this.b.put("in", "bucket");
-        });
-      }
-    }
-    
 preflight.js
 ------------------------------------------------------
 const cloud = require('@winglang/sdk').cloud;
@@ -99,23 +89,5 @@ class Foo extends $stdlib.std.Resource {
       })())
     `);
   }
-}
-
-inflight.$Closure1.js
-------------------------------------------------------
-module.exports = function({ $__parent_this_1_b }) {
-  class $Closure1 {
-    async $inflight_init()  {
-    }
-    async handle()  {
-      (await $__parent_this_1_b.put("in","bucket"));
-    }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
-    }
-  }
-  return $Closure1;
 }
 

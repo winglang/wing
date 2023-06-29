@@ -4,8 +4,6 @@
 ```js
 module.exports = function({ $c }) {
   class $Closure1 {
-    async $inflight_init()  {
-    }
     async handle()  {
       (await $c.inc());
     }
@@ -24,8 +22,6 @@ module.exports = function({ $c }) {
 ```js
 module.exports = function({ $c }) {
   class $Closure2 {
-    async $inflight_init()  {
-    }
     async handle()  {
       (await $c.inc());
     }
@@ -44,8 +40,6 @@ module.exports = function({ $c }) {
 ```js
 module.exports = function({ $predicate, $t, TestHelper }) {
   class $Closure3 {
-    async $inflight_init()  {
-    }
     async handle()  {
       for (const i of ((s,e,i) => { function* iterator(start,end,inclusive) { let i = start; let limit = inclusive ? ((end < start) ? end - 1 : end + 1) : end; while (i < limit) yield i++; while (i > limit) yield i--; }; return iterator(s,e,i); })(0,5,false)) {
         (await $t.publish("msg"));
@@ -76,8 +70,6 @@ module.exports = function({ $predicate, $t, TestHelper }) {
 ```js
 module.exports = function({  }) {
   class Predicate {
-    async $inflight_init()  {
-    }
     async test()  {
       return ((await this.$this_c.peek()) === 10);
     }
@@ -94,8 +86,6 @@ module.exports = function({  }) {
 ```js
 module.exports = function({  }) {
   class TestHelper {
-    async $inflight_init()  {
-    }
     static async sleep(milli)  {
       return (require("<ABSOLUTE_PATH>/sleep.js")["sleep"])(milli)
     }

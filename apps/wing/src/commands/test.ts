@@ -25,7 +25,7 @@ const generateTestName = (path: string) => path.split(sep).slice(-2).join("/");
 /**
  * Options for the `test` command.
  */
-export interface TestOptions extends CompileOptions {}
+export interface TestOptions extends CompileOptions { }
 
 export async function test(entrypoints: string[], options: TestOptions) {
   const startTime = Date.now();
@@ -36,20 +36,33 @@ export async function test(entrypoints: string[], options: TestOptions) {
       const singleTestResults: sdk.cloud.TestResult[] | void = await testOne(entrypoint, options);
       results.push({ testName, results: singleTestResults ?? [] });
     } catch (error) {
-      console.log((error as Error).message);
+      console.error((error as Error).message);
       results.push({
         testName: generateTestName(entrypoint),
         results: [{ pass: false, path: "", error: (error as Error).message, traces: [] }],
       });
     }
   }
-  printResults(results, Date.now() - startTime);
+
+  const output = renderResults(results, Date.now() - startTime);
+
+  // if we have any failures, throw an error.
+  for (const test of results) {
+    for (const r of test.results) {
+      if (r.error) {
+        console.error(output);
+        throw new Error("One or more tests failed");
+      }
+    }
+  }
+
+  console.log(output);
 }
 
-function printResults(
+function renderResults(
   testResults: { testName: string; results: sdk.cloud.TestResult[] }[],
   duration: number
-) {
+): string {
   const durationInSeconds = duration / 1000;
   const totalSum = testResults.length;
   const failing = testResults.filter(({ results }) => results.some(({ pass }) => !pass));
@@ -92,16 +105,14 @@ function printResults(
   // prints a summary of how many tests passed and failed
   results.push(" ");
   results.push(
-    `${chalk.dim("Tests")}${failingTestsNumber ? chalk.red(` ${failingTestsNumber} failed`) : ""}${
-      failingTestsNumber && passingTestsNumber ? chalk.dim(" |") : ""
+    `${chalk.dim("Tests")}${failingTestsNumber ? chalk.red(` ${failingTestsNumber} failed`) : ""}${failingTestsNumber && passingTestsNumber ? chalk.dim(" |") : ""
     }${passingTestsNumber ? chalk.green(` ${passingTestsNumber} passed`) : ""} ${chalk.dim(
       `(${failingTestsNumber + passingTestsNumber})`
     )}`
   );
   // prints a summary of how many tests files passed and failed
   results.push(
-    `${chalk.dim("Test Files")}${failing.length ? chalk.red(` ${failing.length} failed`) : ""}${
-      failing.length && passing.length ? chalk.dim(" |") : ""
+    `${chalk.dim("Test Files")}${failing.length ? chalk.red(` ${failing.length} failed`) : ""}${failing.length && passing.length ? chalk.dim(" |") : ""
     }${passing.length ? chalk.green(` ${passing.length} passed`) : ""} ${chalk.dim(
       `(${totalSum})`
     )}`
@@ -114,7 +125,7 @@ function printResults(
     ).toFixed(2)}s`
   );
 
-  console.log(results.filter((value) => !!value).join("\n"));
+  return results.filter((value) => !!value).join("\n");
 }
 
 async function testOne(entrypoint: string, options: TestOptions) {

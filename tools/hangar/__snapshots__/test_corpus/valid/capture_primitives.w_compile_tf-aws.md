@@ -4,8 +4,6 @@
 ```js
 module.exports = function({ $myBool, $myDur_hours, $myDur_minutes, $myDur_seconds, $myNum, $mySecondBool, $myStr }) {
   class $Closure1 {
-    async $inflight_init()  {
-    }
     async handle(s)  {
       {console.log($myStr)};
       const n = $myNum;

@@ -1,17 +1,11 @@
-use super::ClassCaptures;
 use crate::{
-	ast::{Class, Scope},
 	diagnostic::{found_errors, get_diagnostics},
 	jsify::JSifier,
 	partial_compile,
-	visit::{self, Visit},
 };
 use insta::assert_snapshot;
-use std::{
-	env,
-	fs::{self, File},
-	io::Write,
-};
+use itertools::Itertools;
+use std::{env, fs::File, io::Write};
 
 #[test]
 fn free_preflight_object_from_preflight() {
@@ -125,6 +119,18 @@ fn preflight_primitive_value() {
     test "test" {
       log(a);
     }
+    "#,
+	));
+}
+
+#[test]
+fn fails_when_reassigning_preflight_variable() {
+	assert_snapshot!(capture_fail(
+		r#"
+    let var a = "hello";
+    inflight () => {
+      a = "world";
+    };
     "#,
 	));
 }
@@ -347,9 +353,18 @@ fn reference_preflight_free_variable_with_this_in_the_expression() {
 	));
 }
 
-// >>
-// STOPPING POINT
-////////////////////////////////////////////////////////////////////////////////
+#[test]
+fn lift_inflight_closure() {
+	assert_snapshot!(capture_ok(
+		r#"
+    let f = inflight () => {};
+
+    inflight () => {
+      f();
+    };
+    "#
+	));
+}
 
 // -----------------------------------------------------------------------------
 // type references
@@ -1156,16 +1171,6 @@ fn capture_report(code: &str) -> String {
 
 	let mut snap = vec![];
 
-	if !found_errors() {
-		let classes = find_classes(&scope);
-		for class in classes {
-			snap.push("======================================================".into());
-			snap.push(format!("Captured by {}:", class.name.name));
-			let captures = ClassCaptures::scan(&class, &types);
-			snap.push(captures.to_string());
-		}
-	}
-
 	if found_errors() {
 		snap.push("======================================================".into());
 		snap.push("Errors:".into());
@@ -1186,37 +1191,11 @@ fn capture_report(code: &str) -> String {
 	snap.push("Files:".into());
 	snap.push("".into());
 
-	for entry in fs::read_dir(workdir.path()).unwrap() {
-		let Ok(entry) = entry else {
-      continue;
-    };
-
-		let contents = fs::read_to_string(entry.path()).unwrap();
-		let x = entry.file_name().as_os_str().to_string_lossy().to_string();
-
-		snap.push(x);
+	for (path, contents) in jsify.emitted_files.all_files().iter().sorted_by_key(|f| f.0) {
+		snap.push(path.file_name().unwrap().to_string_lossy().into_owned());
 		snap.push("------------------------------------------------------".into());
-		snap.push(contents);
+		snap.push(contents.into());
 	}
 
 	return snap.join("\n");
-}
-
-fn find_classes(scope: &Scope) -> Vec<&Class> {
-	// find the "myMethod" scope
-	struct FindClassVisitor<'a> {
-		results: Vec<&'a Class>,
-	}
-
-	impl<'a> Visit<'a> for FindClassVisitor<'a> {
-		fn visit_class(&mut self, node: &'a Class) {
-			self.results.push(&node);
-			visit::visit_class(self, node);
-		}
-	}
-
-	let mut visitor = FindClassVisitor { results: vec![] };
-
-	visitor.visit_scope(scope);
-	return visitor.results;
 }

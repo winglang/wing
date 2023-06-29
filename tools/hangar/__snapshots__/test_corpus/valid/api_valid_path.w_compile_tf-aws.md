@@ -4,8 +4,6 @@
 ```js
 module.exports = function({  }) {
   class $Closure1 {
-    async $inflight_init()  {
-    }
     async handle(req)  {
       return {
       "body": "ok",
@@ -301,7 +299,7 @@ class $Root extends $stdlib.std.Resource {
     }
     const api = this.node.root.newAbstract("@winglang/sdk.cloud.Api",this,"cloud.Api");
     const handler = new $Closure1(this,"$Closure1");
-    const testInvalidPath =  (path) =>  {
+    const testInvalidPath = ((path) =>  {
       let error = "";
       const expected = String.raw({ raw: ["Invalid path ", ". Url cannot contain \":\", params contains only alpha-numeric chars or \"_\"."] }, path);
       try {
@@ -312,9 +310,8 @@ class $Root extends $stdlib.std.Resource {
         error = e;
       }
       {((cond) => {if (!cond) throw new Error("assertion failed: error == expected")})((error === expected))};
-    }
-    ;
-    const testValidPath =  (path) =>  {
+    });
+    const testValidPath = ((path) =>  {
       let error = "";
       try {
         (api.get(path,handler));
@@ -324,8 +321,7 @@ class $Root extends $stdlib.std.Resource {
         error = e;
       }
       {((cond) => {if (!cond) throw new Error("assertion failed: error == \"\"")})((error === ""))};
-    }
-    ;
+    });
     (testInvalidPath("/test/{sup:er/:annoying//path}"));
     (testInvalidPath("/test/{::another:annoying:path}"));
     (testInvalidPath("/test/n0t_alphanumer1cPa:th"));

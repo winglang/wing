@@ -3,50 +3,42 @@ source: libs/wingc/src/jsify/captures/tests.rs
 expression: "capture_ok(r#\"\n    test \"test\" {\n      class Foo { }\n      class Bar {\n        init() {\n          new Foo();\n        }\n      }\n    }\n    \"#)"
 ---
 ======================================================
-Captured by $Closure1:
-
-======================================================
-Captured by Foo:
-
-======================================================
-Captured by Bar:
-Types:
-  Foo = Foo
-
-======================================================
 Files:
+
+inflight.$Closure1.js
+------------------------------------------------------
+module.exports = function({  }) {
+  class $Closure1 {
+    async handle()  {
+      const Foo = require("./inflight.Foo.js")({});
+      const Bar = require("./inflight.Bar.js")({Foo});
+    }
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+  }
+  return $Closure1;
+}
+
+inflight.Bar.js
+------------------------------------------------------
+module.exports = function({ Foo }) {
+  class Bar {
+    constructor()  {
+      new Foo();
+    }
+  }
+  return Bar;
+}
 
 inflight.Foo.js
 ------------------------------------------------------
 module.exports = function({  }) {
   class Foo {
-     constructor()  {
-    }
   }
   return Foo;
-}
-
-main.w
-------------------------------------------------------
-
-    test "test" {
-      class Foo { }
-      class Bar {
-        init() {
-          new Foo();
-        }
-      }
-    }
-    
-inflight.Bar.js
-------------------------------------------------------
-module.exports = function({ Foo }) {
-  class Bar {
-     constructor()  {
-      new Foo();
-    }
-  }
-  return Bar;
 }
 
 preflight.js
@@ -75,23 +67,4 @@ class $Closure1 extends $stdlib.std.Resource {
   }
 }
 this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:test",new $Closure1(this,"$Closure1"));
-
-inflight.$Closure1.js
-------------------------------------------------------
-module.exports = function({  }) {
-  class $Closure1 {
-    async $inflight_init()  {
-    }
-    async handle()  {
-      const Foo = require("./inflight.Foo.js")({});
-      const Bar = require("./inflight.Bar.js")({Foo});
-    }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
-    }
-  }
-  return $Closure1;
-}
 

@@ -2,15 +2,13 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ $c5, $c5_x, $c5_y }) {
+module.exports = function({ $c5 }) {
   class $Closure1 {
-    async $inflight_init()  {
-    }
     async handle()  {
-      {((cond) => {if (!cond) throw new Error("assertion failed: c5.x == 123")})(($c5_x === 123))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: c5.y == 321")})(($c5_y === 321))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: c5.x == 123")})(($c5.x === 123))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: c5.y == 321")})(($c5.y === 321))};
       (await $c5.set(111));
-      {((cond) => {if (!cond) throw new Error("assertion failed: c5.y == 111")})(($c5_y === 111))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: c5.y == 111")})(($c5.y === 111))};
     }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -27,8 +25,6 @@ module.exports = function({ $c5, $c5_x, $c5_y }) {
 ```js
 module.exports = function({ $student_hrlyWage, $student_major, $student_name }) {
   class $Closure2 {
-    async $inflight_init()  {
-    }
     async handle()  {
       {((cond) => {if (!cond) throw new Error("assertion failed: student.name == \"Tom\"")})(($student_name === "Tom"))};
       {((cond) => {if (!cond) throw new Error("assertion failed: student.major == \"MySpace\"")})(($student_major === "MySpace"))};
@@ -49,8 +45,6 @@ module.exports = function({ $student_hrlyWage, $student_major, $student_name }) 
 ```js
 module.exports = function({ $ta_hrlyWage }) {
   class $Closure3 {
-    async $inflight_init()  {
-    }
     async handle()  {
       {((cond) => {if (!cond) throw new Error("assertion failed: ta.hrlyWage == 10")})(($ta_hrlyWage === 10))};
     }
@@ -69,8 +63,6 @@ module.exports = function({ $ta_hrlyWage }) {
 ```js
 module.exports = function({ B }) {
   class $Closure4 {
-    async $inflight_init()  {
-    }
     async handle()  {
       const b = new B("ba");
       {((cond) => {if (!cond) throw new Error("assertion failed: b.sound == \"ba\"")})((b.sound === "ba"))};
@@ -90,7 +82,7 @@ module.exports = function({ B }) {
 ```js
 module.exports = function({  }) {
   class A {
-     constructor(sound)  {
+    constructor(sound)  {
       this.sound = sound;
     }
   }
@@ -103,7 +95,7 @@ module.exports = function({  }) {
 ```js
 module.exports = function({ A }) {
   class B extends A {
-     constructor(sound)  {
+    constructor(sound)  {
       super(sound);
     }
   }
@@ -116,8 +108,6 @@ module.exports = function({ A }) {
 ```js
 module.exports = function({  }) {
   class C1 {
-    async $inflight_init()  {
-    }
     constructor({  }) {
     }
   }
@@ -130,8 +120,6 @@ module.exports = function({  }) {
 ```js
 module.exports = function({  }) {
   class C2 {
-    async $inflight_init()  {
-    }
     constructor({  }) {
     }
   }
@@ -144,8 +132,6 @@ module.exports = function({  }) {
 ```js
 module.exports = function({  }) {
   class C3 {
-    async $inflight_init()  {
-    }
     constructor({  }) {
     }
   }
@@ -158,8 +144,6 @@ module.exports = function({  }) {
 ```js
 module.exports = function({  }) {
   class C4 {
-    async $inflight_init()  {
-    }
     constructor({  }) {
     }
   }
@@ -191,8 +175,6 @@ module.exports = function({  }) {
 ```js
 module.exports = function({ Student }) {
   class PaidStudent extends Student {
-    async $inflight_init()  {
-    }
     constructor({  }) {
       super({});
     }
@@ -206,8 +188,6 @@ module.exports = function({ Student }) {
 ```js
 module.exports = function({  }) {
   class Person {
-    async $inflight_init()  {
-    }
     constructor({  }) {
     }
   }
@@ -220,8 +200,6 @@ module.exports = function({  }) {
 ```js
 module.exports = function({ Person }) {
   class Student extends Person {
-    async $inflight_init()  {
-    }
     constructor({  }) {
       super({});
     }
@@ -235,8 +213,6 @@ module.exports = function({ Person }) {
 ```js
 module.exports = function({ PaidStudent }) {
   class TeacherAid extends PaidStudent {
-    async $inflight_init()  {
-    }
     constructor({  }) {
       super({});
     }
@@ -698,13 +674,9 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         const $c5 = context._lift(c5);
-        const $c5_x = context._lift(c5.x);
-        const $c5_y = context._lift(c5.y);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure1.js")({ 
             $c5: ${$c5},
-            $c5_x: ${$c5_x},
-            $c5_y: ${$c5_y},
           })
         `);
       }
@@ -720,9 +692,7 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(c5, host, ["set"]);
-          $Closure1._registerBindObject(c5.x, host, []);
-          $Closure1._registerBindObject(c5.y, host, []);
+          $Closure1._registerBindObject(c5, host, ["set", "x", "y"]);
         }
         super._registerBind(host, ops);
       }

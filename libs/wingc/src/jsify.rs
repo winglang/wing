@@ -454,11 +454,7 @@ impl<'a> JSifier<'a> {
 			ExprKind::Call { callee, arg_list } => {
 				let function_type = self.get_expr_type(callee);
 				let function_sig = function_type.as_function_sig();
-
-				let expr_string = match &callee.kind {
-					ExprKind::Reference(reference) => self.jsify_reference(reference, ctx),
-					_ => format!("({})", self.jsify_expression(callee, None, ctx)),
-				};
+				let expr_string = self.jsify_expression(callee, None, ctx);
 				let args_string = self.jsify_arg_list(&arg_list, None, None, ctx);
 				let mut args_text_string = lookup_span(&arg_list.span, &self.source_files);
 				if args_text_string.len() > 0 {
@@ -772,7 +768,7 @@ impl<'a> JSifier<'a> {
 			StmtKind::Expression(e) => CodeMaker::one_line(format!("{};", self.jsify_expression(e, None, ctx))),
 			StmtKind::Assignment { variable, value } => CodeMaker::one_line(format!(
 				"{} = {};",
-				self.jsify_reference(&variable, ctx),
+				self.jsify_expression(&variable, None, ctx),
 				self.jsify_expression(value, None, ctx)
 			)),
 			StmtKind::Scope(scope) => {
@@ -871,7 +867,7 @@ impl<'a> JSifier<'a> {
 		func_def: &FunctionDefinition,
 		is_class_member: bool,
 		ctx: &mut JSifyContext,
-	) -> CodeMaker {
+	) -> String {
 		let mut parameter_list = vec![];
 
 		for p in &func_def.signature.parameters {
@@ -916,25 +912,34 @@ impl<'a> JSifier<'a> {
 				))
 			}
 		};
-		let mut modifiers = vec![];
+		let mut prefix = vec![];
 
 		if func_def.is_static && is_class_member {
-			modifiers.push("static")
+			prefix.push("static")
 		}
 
 		// if this is "constructor" it cannot be async
 		if name != JS_CONSTRUCTOR && matches!(func_def.signature.phase, Phase::Inflight) {
-			modifiers.push("async")
+			prefix.push("async")
 		}
 
-		let modifiers = modifiers.join(" ");
+		if !name.is_empty() {
+			prefix.push(name);
+		} else if !prefix.is_empty() {
+			prefix.push("");
+		}
 
 		let mut code = CodeMaker::default();
-		code.open(format!("{modifiers} {name}({parameters}) {arrow} {{"));
+		code.open(format!("{}({parameters}) {arrow} {{", prefix.join(" ")));
 		code.add_code(body);
 		code.close("}");
 
-		code
+		// is prefix is empty it means this is a closure, so we need to wrap it in `(`, `)`.
+		if prefix.is_empty() {
+			format!("({})", code.to_string().trim().to_string())
+		} else {
+			code.to_string()
+		}
 	}
 
 	/// Jsify a class
@@ -1035,7 +1040,7 @@ impl<'a> JSifier<'a> {
 				.collect_vec();
 
 			for (n, m) in preflight_methods {
-				code.add_code(self.jsify_function(Some(&n.name), m, true, ctx));
+				code.line(self.jsify_function(Some(&n.name), m, true, ctx));
 			}
 
 			// emit the `_toInflight()` and `_toInflightType()` static methods
@@ -1244,26 +1249,30 @@ impl<'a> JSifier<'a> {
 
 		let mut lifts = Lifts::default();
 
-		let inflight_init_name = if class.phase == Phase::Preflight {
-			CLASS_INFLIGHT_INIT_NAME
-		} else {
-			JS_CONSTRUCTOR
-		};
+		if let FunctionBody::Statements(s) = &class.inflight_initializer.body {
+			if !s.statements.is_empty() {
+				let inflight_init_name = if class.phase == Phase::Preflight {
+					CLASS_INFLIGHT_INIT_NAME
+				} else {
+					JS_CONSTRUCTOR
+				};
 
-		class_code.add_code(self.jsify_function(
-			Some(inflight_init_name),
-			&class.inflight_initializer,
-			true,
-			&mut JSifyContext {
-				in_json: ctx.in_json,
-				phase: class.inflight_initializer.signature.phase,
-				lifts: &mut lifts,
-				current_method_name: Some(inflight_init_name.to_string()),
-			},
-		));
+				class_code.line(self.jsify_function(
+					Some(inflight_init_name),
+					&class.inflight_initializer,
+					true,
+					&mut JSifyContext {
+						in_json: ctx.in_json,
+						phase: class.inflight_initializer.signature.phase,
+						lifts: &mut lifts,
+						current_method_name: Some(inflight_init_name.to_string()),
+					},
+				));
+			}
+		}
 
 		for (name, def) in inflight_methods {
-			class_code.add_code(self.jsify_function(
+			class_code.line(self.jsify_function(
 				Some(&name.name),
 				def,
 				true,

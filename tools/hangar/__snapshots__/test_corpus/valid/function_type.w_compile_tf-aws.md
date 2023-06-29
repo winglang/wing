@@ -4,8 +4,6 @@
 ```js
 module.exports = function({  }) {
   class $Closure1 {
-    async $inflight_init()  {
-    }
     async handle(x)  {
     }
     constructor({  }) {
@@ -23,8 +21,6 @@ module.exports = function({  }) {
 ```js
 module.exports = function({  }) {
   class $Closure2 {
-    async $inflight_init()  {
-    }
     async handle(x)  {
     }
     constructor({  }) {
@@ -42,8 +38,6 @@ module.exports = function({  }) {
 ```js
 module.exports = function({  }) {
   class C {
-    async $inflight_init()  {
-    }
     async my_method3(x)  {
     }
     async my_method4(x)  {
@@ -149,9 +143,9 @@ class $Root extends $stdlib.std.Resource {
         super(scope, id);
         this._addInflightOps("my_method3", "my_method4");
       }
-       my_method(x)  {
+      my_method(x)  {
       }
-       my_method2(x)  {
+      my_method2(x)  {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
@@ -170,18 +164,14 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
     }
-    const my_func =  (callback) =>  {
-    }
-    ;
-    const my_func2 =  (callback) =>  {
-    }
-    ;
-    const my_func3 =  (x) =>  {
-    }
-    ;
-    const my_func4 =  (x) =>  {
-    }
-    ;
+    const my_func = ((callback) =>  {
+    });
+    const my_func2 = ((callback) =>  {
+    });
+    const my_func3 = ((x) =>  {
+    });
+    const my_func4 = ((x) =>  {
+    });
     const my_func5 = new $Closure1(this,"$Closure1");
     const my_func6 = new $Closure2(this,"$Closure2");
   }

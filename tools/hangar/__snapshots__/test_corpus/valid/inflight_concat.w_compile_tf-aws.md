@@ -4,8 +4,6 @@
 ```js
 module.exports = function({  }) {
   class R {
-    async $inflight_init()  {
-    }
     async foo()  {
       {console.log(this.$_this_s1_concat___world___)};
     }

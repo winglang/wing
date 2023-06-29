@@ -3,20 +3,28 @@ source: libs/wingc/src/jsify/captures/tests.rs
 expression: "capture_ok(r#\"\n    class A {\n      inflight hello() {}\n    }\n    let pf_obj = new A();\n    test \"test\" {\n      pf_obj.hello();\n    }\n    \"#)"
 ---
 ======================================================
-Captured by A:
-
-======================================================
-Captured by $Closure1:
-
-======================================================
 Files:
+
+inflight.$Closure1.js
+------------------------------------------------------
+module.exports = function({ $pf_obj }) {
+  class $Closure1 {
+    async handle()  {
+      (await $pf_obj.hello());
+    }
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+  }
+  return $Closure1;
+}
 
 inflight.A.js
 ------------------------------------------------------
 module.exports = function({  }) {
   class A {
-    async $inflight_init()  {
-    }
     async hello()  {
     }
     constructor({  }) {
@@ -25,17 +33,6 @@ module.exports = function({  }) {
   return A;
 }
 
-main.w
-------------------------------------------------------
-
-    class A {
-      inflight hello() {}
-    }
-    let pf_obj = new A();
-    test "test" {
-      pf_obj.hello();
-    }
-    
 preflight.js
 ------------------------------------------------------
 class A extends $stdlib.std.Resource {
@@ -93,22 +90,4 @@ class $Closure1 extends $stdlib.std.Resource {
 }
 const pf_obj = new A(this,"A");
 this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:test",new $Closure1(this,"$Closure1"));
-
-inflight.$Closure1.js
-------------------------------------------------------
-module.exports = function({ $pf_obj }) {
-  class $Closure1 {
-    async $inflight_init()  {
-    }
-    async handle()  {
-      (await $pf_obj.hello());
-    }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
-    }
-  }
-  return $Closure1;
-}
 

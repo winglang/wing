@@ -6,10 +6,7 @@ module.exports = function({ std_Duration }) {
   const std = {
     Duration: std_Duration,
   };
-  
   class $Closure1 {
-    async $inflight_init()  {
-    }
     async handle()  {
       {((cond) => {if (!cond) throw new Error("assertion failed: 12ms.seconds == 12 / 1000")})(((await std.Duration.fromSeconds(0.012)).seconds === (12 / 1000)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: 12s.seconds == 12")})(((await std.Duration.fromSeconds(12)).seconds === 12))};

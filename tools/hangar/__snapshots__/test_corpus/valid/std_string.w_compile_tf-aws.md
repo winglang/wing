@@ -4,8 +4,6 @@
 ```js
 module.exports = function({ $__s1_split_______at_1__, $_s1_concat_s2__, $s1_indexOf__s__ }) {
   class $Closure1 {
-    async $inflight_init()  {
-    }
     async handle()  {
       {console.log(String.raw({ raw: ["index of \"s\" in s1 is ", ""] }, $s1_indexOf__s__))};
       {console.log($__s1_split_______at_1__)};

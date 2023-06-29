@@ -4,8 +4,6 @@
 ```js
 module.exports = function({ $data_size, $queue, $res }) {
   class $Closure1 {
-    async $inflight_init()  {
-    }
     async handle()  {
       {((cond) => {if (!cond) throw new Error("assertion failed: data.size == 3")})(($data_size === 3))};
       (await $res.put("file.txt","world"));

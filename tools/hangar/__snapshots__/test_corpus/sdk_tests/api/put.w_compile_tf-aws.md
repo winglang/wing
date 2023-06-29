@@ -6,10 +6,7 @@ module.exports = function({ $_id, $api_PUT, $body, $user, std_Json }) {
   const std = {
     Json: std_Json,
   };
-  
   class $Closure1 {
-    async $inflight_init()  {
-    }
     async handle(req)  {
       const path = String.raw({ raw: ["/path/", "/nn/", ""] }, $_id, $user);
       {((cond) => {if (!cond) throw new Error("assertion failed: req.method == api_PUT")})((req.method === $api_PUT))};
@@ -43,10 +40,7 @@ module.exports = function({ $_id, $api_url, $body, $http_PUT, $user, http_Util, 
   const std = {
     Json: std_Json,
   };
-  
   class $Closure2 {
-    async $inflight_init()  {
-    }
     async handle()  {
       const url = String.raw({ raw: ["", "/path/", "/nn/", ""] }, $api_url, $_id, $user);
       const response = (await http.Util.put(url,{

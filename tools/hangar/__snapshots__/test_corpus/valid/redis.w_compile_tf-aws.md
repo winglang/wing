@@ -4,8 +4,6 @@
 ```js
 module.exports = function({ $r, $r2 }) {
   class $Closure1 {
-    async $inflight_init()  {
-    }
     async handle()  {
       const connection = (await $r.rawClient());
       (await connection.set("wing","does redis"));

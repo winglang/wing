@@ -4,8 +4,6 @@
 ```js
 module.exports = function({ $b }) {
   class $Closure1 {
-    async $inflight_init()  {
-    }
     async handle()  {
       const jsonObj2 = Object.freeze({"key2":"value2"});
       (await $b.put("file1.txt","Foo"));

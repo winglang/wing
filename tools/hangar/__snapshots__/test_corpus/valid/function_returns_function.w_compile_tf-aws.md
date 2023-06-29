@@ -4,8 +4,6 @@
 ```js
 module.exports = function({  }) {
   class $Closure1 {
-    async $inflight_init()  {
-    }
     async handle()  {
       const iFn = async (s) =>  {
         return async () =>  {
@@ -185,13 +183,11 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
     }
-    const fn =  (s) =>  {
-      return  () =>  {
+    const fn = ((s) =>  {
+      return (() =>  {
         return (s === "wing");
-      }
-      ;
-    }
-    ;
+      });
+    });
     const wingFn = (fn("wing"));
     const dingFn = (fn("ding"));
     {((cond) => {if (!cond) throw new Error("assertion failed: wingFn()")})((wingFn()))};

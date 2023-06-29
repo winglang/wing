@@ -4,8 +4,6 @@
 ```js
 module.exports = function({  }) {
   class Foo {
-    async $inflight_init()  {
-    }
     constructor({  }) {
     }
   }
@@ -90,10 +88,9 @@ class $Root extends $stdlib.std.Resource {
     const jj = someNumber;
     const jj1 = Object.freeze({"foo":someNumber});
     const jj2 = [someNumber, {"bar":someNumber}];
-    const getStr =  () =>  {
+    const getStr = (() =>  {
       return "hello";
-    }
-    ;
+    });
     const jj3 = (getStr());
     {((cond) => {if (!cond) throw new Error("assertion failed: jj3 == Json \"hello\"")})((jj3 === "hello"))};
     const f = new Foo(this,"Foo");

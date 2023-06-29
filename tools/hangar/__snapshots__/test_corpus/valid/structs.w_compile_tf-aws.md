@@ -4,8 +4,6 @@
 ```js
 module.exports = function({  }) {
   class Foo {
-    async $inflight_init()  {
-    }
     async getStuff()  {
       return this.$this_data_field0;
     }

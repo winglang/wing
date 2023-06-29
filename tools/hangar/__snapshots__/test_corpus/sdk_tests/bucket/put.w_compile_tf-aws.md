@@ -4,8 +4,6 @@
 ```js
 module.exports = function({ $b }) {
   class $Closure1 {
-    async $inflight_init()  {
-    }
     async handle()  {
       (await $b.put("test1.txt","Foo"));
       (await $b.put("test2.txt","Bar"));

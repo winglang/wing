@@ -3,21 +3,27 @@ source: libs/wingc/src/jsify/captures/tests.rs
 expression: "capture_ok(r#\"\n    bring util;\n    test \"test\" {\n      util.tryEnv(\"PATH\");\n    }\n    \"#)"
 ---
 ======================================================
-Captured by $Closure1:
-Types:
-  util.Util = Util
-
-======================================================
 Files:
 
-main.w
+inflight.$Closure1.js
 ------------------------------------------------------
-
-    bring util;
-    test "test" {
-      util.tryEnv("PATH");
+module.exports = function({ util_Util }) {
+  const util = {
+    Util: util_Util,
+  };
+  class $Closure1 {
+    async handle()  {
+      (await util.Util.tryEnv("PATH"));
     }
-    
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+  }
+  return $Closure1;
+}
+
 preflight.js
 ------------------------------------------------------
 const util = require('@winglang/sdk').util;
@@ -47,26 +53,4 @@ class $Closure1 extends $stdlib.std.Resource {
   }
 }
 this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:test",new $Closure1(this,"$Closure1"));
-
-inflight.$Closure1.js
-------------------------------------------------------
-module.exports = function({ util_Util }) {
-  const util = {
-    Util: util_Util,
-  };
-  
-  class $Closure1 {
-    async $inflight_init()  {
-    }
-    async handle()  {
-      (await util.Util.tryEnv("PATH"));
-    }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
-    }
-  }
-  return $Closure1;
-}
 

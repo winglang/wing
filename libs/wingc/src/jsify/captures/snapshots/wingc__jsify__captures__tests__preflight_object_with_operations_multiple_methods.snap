@@ -3,17 +3,12 @@ source: libs/wingc/src/jsify/captures/tests.rs
 expression: "capture_ok(r#\"\n    bring cloud;\n    let b = new cloud.Bucket();\n\n    class Foo {\n      inflight put() {\n        b.put(\"hello1\", \"world\");\n      }\n\n      inflight list() {\n        b.list();\n      }\n    }\n    \"#)"
 ---
 ======================================================
-Captured by Foo:
-
-======================================================
 Files:
 
 inflight.Foo.js
 ------------------------------------------------------
 module.exports = function({ $b }) {
   class Foo {
-    async $inflight_init()  {
-    }
     async put()  {
       (await $b.put("hello1","world"));
     }
@@ -26,22 +21,6 @@ module.exports = function({ $b }) {
   return Foo;
 }
 
-main.w
-------------------------------------------------------
-
-    bring cloud;
-    let b = new cloud.Bucket();
-
-    class Foo {
-      inflight put() {
-        b.put("hello1", "world");
-      }
-
-      inflight list() {
-        b.list();
-      }
-    }
-    
 preflight.js
 ------------------------------------------------------
 const cloud = require('@winglang/sdk').cloud;
