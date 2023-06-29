@@ -73,6 +73,8 @@ jobs:
 
       - name: Build
         run: npm run build:ci
+        env:
+          SEGMENT_WRITE_KEY: ${{ secrets.SEGMENT_WRITE_KEY }}
 
       - name: Package
         run: npm run package:ci
@@ -88,6 +90,12 @@ jobs:
         with:
           name: wingconsoleserver
           path: apps/wing-console/console/server/*.tgz
+
+      - name: Upload Wing Console Design System
+        uses: actions/upload-artifact@v3
+        with:
+          name: wingconsoledesignsystem
+          path: apps/wing-console/console/design-system/*.tgz
 
       - name: Upload Wing Console UI
         uses: actions/upload-artifact@v3
@@ -225,6 +233,7 @@ jobs:
       HANGAR_WING_SPEC: "file:${{ github.workspace }}/wing/winglang-${{ needs.build.outputs.version }}.tgz"
       HANGAR_WINGCONSOLE_APP_SPEC: "file:${{ github.workspace }}/wingconsoleapp/wingconsole-app-${{ needs.build.outputs.version }}.tgz"
       HANGAR_WINGCONSOLE_SERVER_SPEC: "file:${{ github.workspace }}/wingconsoleserver/wingconsole-server-${{ needs.build.outputs.version }}.tgz"
+      HANGAR_WINGCONSOLE_DESIGN_SYSTEM_SPEC: "file:${{ github.workspace }}/wingconsoledesignsystem/wingconsole-design-system-${{ needs.build.outputs.version }}.tgz"
       HANGAR_WINGCONSOLE_UI_SPEC: "file:${{ github.workspace }}/wingconsoleui/wingconsole-ui-${{ needs.build.outputs.version }}.tgz"
       HANGAR_WINGCOMPILER_SPEC: "file:${{ github.workspace }}/wingcompiler/winglang-compiler-${{ needs.build.outputs.version }}.tgz"
       HANGAR_WINGSDK_SPEC: "file:${{ github.workspace }}/wingsdk/winglang-sdk-${{ needs.build.outputs.version }}.tgz"
@@ -291,6 +300,7 @@ jobs:
       HANGAR_WING_SPEC: "file:${{ github.workspace }}/target/wing/winglang-${{ needs.build.outputs.version }}.tgz"
       HANGAR_WINGCONSOLE_APP_SPEC: "file:${{ github.workspace }}/target/wingconsoleapp/wingconsole-app-${{ needs.build.outputs.version }}.tgz"
       HANGAR_WINGCONSOLE_SERVER_SPEC: "file:${{ github.workspace }}/target/wingconsoleserver/wingconsole-server-${{ needs.build.outputs.version }}.tgz"
+      HANGAR_WINGCONSOLE_DESIGN_SYSTEM_SPEC: "file:${{ github.workspace }}/target/wingconsoledesignsystem/wingconsole-design-system-${{ needs.build.outputs.version }}.tgz"
       HANGAR_WINGCONSOLE_UI_SPEC: "file:${{ github.workspace }}/target/wingconsoleui/wingconsole-ui-${{ needs.build.outputs.version }}.tgz"
       HANGAR_WINGCOMPILER_SPEC: "file:${{ github.workspace }}/target/wingcompiler/winglang-compiler-${{ needs.build.outputs.version }}.tgz"
       HANGAR_WINGSDK_SPEC: "file:${{ github.workspace }}/target/wingsdk/winglang-sdk-${{ needs.build.outputs.version }}.tgz"
@@ -415,6 +425,24 @@ jobs:
       - name: Publish Wing Compiler
         if: ${{ steps.wingcompiler-version.outputs.version != needs.build.outputs.version }}
         working-directory: wingcompiler
+        run: npm publish *.tgz --access public
+
+      - name: Publish Wing Console Design System
+        if: ${{ steps.wingconsoledesignsystem-version.outputs.version != needs.build.outputs.version }}
+        working-directory: wingconsoledesignsystem
+        run: npm publish *.tgz --access public
+
+      - name: Check published Wing Console Design System version
+        id: wingconsoledesignsystem-version
+        run: echo "version=$(npm view @wingconsole/design-system version)" >> $GITHUB_OUTPUT
+
+      - name: Check published Wing Console UI version
+        id: wingconsoleui-version
+        run: echo "version=$(npm view @wingconsole/ui version)" >> $GITHUB_OUTPUT
+
+      - name: Publish Wing Console UI
+        if: ${{ steps.wingconsoleui-version.outputs.version != needs.build.outputs.version }}
+        working-directory: wingconsoleui
         run: npm publish *.tgz --access public
 
       - name: Check published Wing Console Server version
