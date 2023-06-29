@@ -14,7 +14,7 @@ struct Example {
   c: bool;
 }
 
-let example = Example { a: "a", b:0, c: false };
+let example = Example { a: "a", b: 0, c: false };
 log(example.a); // prints "a"
 ```
 
