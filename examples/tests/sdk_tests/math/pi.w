@@ -6,8 +6,8 @@ let circumference = inflight (radius: num): num => {
   return 2 * math.PI * radius;
 };
 
-assert(math.round(math.PI, 3) == 3.142);
+assert(math.round(math.PI, decimalPlaces: 3) == 3.142);
 
 test "PI" {
-  assert(math.round(circumference(r), 2) == 62.83);
+  assert(math.round(circumference(r), decimalPlaces: 2) == 62.83);
 }

@@ -1,6 +1,16 @@
 import { Code, InflightClient } from "../core";
 
 /**
+ * Options for rounding a number.
+ */
+export interface RoundingOptions {
+  /**
+   * The number of decimal places to round to.
+   */
+  readonly decimalPlaces?: number;
+}
+
+/**
  * Utility class for mathematical operations.
  */
 export class Util {
@@ -11,13 +21,29 @@ export class Util {
   /**
    * Euler's number, a mathematical constant approximately equal to 2.71828.
    */
-  public static readonly E = 2.718281828459045;
+  public static readonly E = Math.E;
 
   /**
    * @internal
    */
   public static _toInflightType(): Code {
     return InflightClient.forType(__filename, this.name);
+  }
+
+  /**
+   * Checks if a number is prime.
+   * @param n The number to check for primality.
+   */
+  public static isPrime(n: number): boolean {
+    if (n <= 1) {
+      return false;
+    }
+    for (let i = 2; i <= Math.sqrt(n); i++) {
+      if (n % i === 0) {
+        return false;
+      }
+    }
+    return true;
   }
 
   /**
@@ -77,7 +103,10 @@ export class Util {
    */
   public static geometricMean(arr: number[]): number {
     const product = arr.reduce((acc, num) => acc * num, 1);
-    return this.round(Math.pow(product, 1 / arr.length), 6);
+    return this.round(
+      Math.pow(product, 1 / arr.length), {
+      decimalPlaces: 6
+    });
   }
 
   /**
@@ -109,37 +138,65 @@ export class Util {
    * Rounds the given number to the nearest integer.
    * @param value - The number to be rounded.
    */
-  public static round(value: number, decimalPlaces?: number): number {
-    if (decimalPlaces) {
-      const multiplier = Math.pow(10, decimalPlaces);
+  public static round(value: number, options?: RoundingOptions): number {
+    if (options && options.decimalPlaces) {
+      const multiplier = Math.pow(10, options.decimalPlaces);
       return Math.round(value * multiplier) / multiplier;
     }
     return Math.round(value);
   }
 
   /**
-   * Returns the minimum value from an set of numbers.
-   * @param arr The set of numbers.
+   * Returns the minimum value from an array of numbers.
+   * @param arr The array of numbers.
    */
-  public static min(arr: any): number {
-    if (arr instanceof Set) {
-      return Math.min(...arr);
-    }
-
-    throw new Error("The argument is not a Set");
+  public static min(arr: number[]): number {
+    return Math.min(...arr);
   }
 
   /**
-   * Returns the maximum value from an set of numbers.
-   * @param arr The set of numbers.
+   * Returns the maximum value from an array of numbers.
+   * @param arr The array of numbers.
    */
-  public static max(arr: any): number {
-    if (arr instanceof Set) {
-      return Math.max(...arr);
-    }
-
-    throw new Error("The argument is not a Set");
+  public static max(arr: number[]): number {
+    return Math.max(...arr);
   }
 
-  private constructor() {}
+  /**
+   * Calculates the nth Fibonacci number.
+   * @param n - The position of the Fibonacci number to calculate.
+   */
+  public static fibonacci(n: number): number {
+    if (n === 0 || n === 1) {
+      return n;
+    }
+    return this.fibonacci(n - 1) + this.fibonacci(n - 2);
+  }
+
+  /**
+   * Calculates the factorial of a given number.
+   * @param n - The number to calculate the factorial for.
+   */
+  public static factorial(n: number): number {
+    if (n === 0 || n === 1) {
+      return 1;
+    }
+    return n * this.factorial(n - 1);
+  }
+
+  /**
+   * Calculates the number of combinations for choosing r items from a total of n items.
+   * @param n - The total number of items.
+   * @param r - The number of items to be chosen.
+   */
+  public static combinations(n: number, r: number): number {
+    if (r > n) {
+      return 0;
+    }
+    const numerator = this.factorial(n);
+    const denominator = this.factorial(r) * this.factorial(n - r);
+    return numerator / denominator;
+  }
+
+  private constructor() { }
 }
