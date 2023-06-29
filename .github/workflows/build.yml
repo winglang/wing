@@ -423,6 +423,7 @@ jobs:
           pat: ${{ secrets.VS_MARKETPLACE_TOKEN }}
           registryUrl: "https://marketplace.visualstudio.com"
           extensionFile: "vscode-wing/vscode-wing.vsix"
+          dependencies: false
 
       - name: Login to NPM registry
         run: npm set //registry.npmjs.org/:_authToken ${{ secrets.NPM_PUBLISH_TOKEN }}

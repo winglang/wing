@@ -143,7 +143,7 @@ project.watchTask.reset(`${esbuildComment} --watch`);
 project.packageTask.reset(
   "pnpm version ${PROJEN_BUMP_VERSION:-0.0.0} --allow-same-version"
 );
-project.packageTask.exec("vsce package -o vscode-wing.vsix");
+project.packageTask.exec("vsce package --no-dependencies -o vscode-wing.vsix");
 
 project.addFields({
   volta: rootPackageJson.volta,

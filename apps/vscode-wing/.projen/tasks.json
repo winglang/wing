@@ -121,7 +121,7 @@
           "exec": "pnpm version ${PROJEN_BUMP_VERSION:-0.0.0} --allow-same-version"
         },
         {
-          "exec": "vsce package -o vscode-wing.vsix"
+          "exec": "vsce package --no-dependencies -o vscode-wing.vsix"
         }
       ]
     },
