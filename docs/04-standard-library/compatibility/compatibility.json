@@ -14,35 +14,35 @@
       "tf-gcp": {"implemented": false},
       "aws-cdk": {"implemented": true}
     },
-    "onUpload": {
+    "on_upload": {
       "sim": {"implemented": true},
       "tf-aws": {"implemented": true},
       "tf-azure": {"implemented": false, "issue": 1954},
       "tf-gcp": {"implemented": false},
-      "aws-cdk": {"implemented": true}
+      "aws-cdk": {"implemented": false}
     },
-    "onDelete": {
+    "on_delete": {
       "sim": {"implemented": true},
       "tf-aws": {"implemented": true},
       "tf-azure": {"implemented": false, "issue": 1954},
       "tf-gcp": {"implemented": false},
-      "aws-cdk": {"implemented": true}
+      "aws-cdk": {"implemented": false}
     },
-    "onUpdate": {
+    "on_update": {
       "sim": {"implemented": true},
       "tf-aws": {"implemented": true},
       "tf-azure": {"implemented": false, "issue": 1954},
       "tf-gcp": {"implemented": false},
-      "aws-cdk": {"implemented": true}
+      "aws-cdk": {"implemented": false}
     },
-    "onEvent": {
+    "on_event": {
       "sim": {"implemented": true},
       "tf-aws": {"implemented": true},
       "tf-azure": {"implemented": false, "issue": 1954},
       "tf-gcp": {"implemented": false},
-      "aws-cdk": {"implemented": true}
+      "aws-cdk": {"implemented": false}
     },
-    "addObject": {
+    "add_object": {
       "sim": {"implemented": true},
       "tf-aws": {"implemented": true},
       "tf-azure": {"implemented": true},
@@ -56,7 +56,7 @@
       "tf-gcp": {"implemented": false, "issue": 1282},
       "aws-cdk": {"implemented": true}
     },
-    "putJson": {
+    "put_json": {
       "sim": {"implemented": true},
       "tf-aws": {"implemented": true},
       "tf-azure": {"implemented": true},
@@ -70,21 +70,21 @@
       "tf-gcp": {"implemented": false, "issue": 1282},
       "aws-cdk": {"implemented": true}
     },
-    "tryGet": {
+    "try_get": {
       "sim": {"implemented": true},
       "tf-aws": {"implemented": true},
       "tf-azure": {"implemented": true},
       "tf-gcp": {"implemented": false},
       "aws-cdk": {"implemented": false}
     },
-    "getJson": {
+    "get_json": {
       "sim": {"implemented": true},
       "tf-aws": {"implemented": true},
       "tf-azure": {"implemented": true},
       "tf-gcp": {"implemented": false},
       "aws-cdk": {"implemented": false}
     },
-    "tryGetJson": {
+    "try_get_json": {
       "sim": {"implemented": true},
       "tf-aws": {"implemented": true},
       "tf-azure": {"implemented": true},
@@ -98,7 +98,7 @@
       "tf-gcp": {"implemented": false, "issue": 1282},
       "aws-cdk": {"implemented": true}
     },
-    "tryDelete": {
+    "try_delete": {
       "sim": {"implemented": true},
       "tf-aws": {"implemented": true},
       "tf-azure": {"implemented": true},
@@ -140,14 +140,14 @@
       "tf-gcp": {"implemented": false},
       "aws-cdk": {"implemented": true}
     },
-    "publicUrl": {
+    "public_url": {
       "sim": {"implemented": true},
       "tf-aws": {"implemented": true},
       "tf-azure": {"implemented": false, "issue": 1805},
       "tf-gcp": {"implemented": false, "issue": 1282},
       "aws-cdk": {"implemented": true}
     },
-    "signedUrl": {
+    "signed_url": {
       "sim": {"implemented": false, "issue": 1383},
       "tf-aws": {"implemented": false, "issue": 1383},
       "tf-azure": {"implemented": false},
@@ -184,14 +184,14 @@
       "tf-gcp": {"implemented": false},
       "aws-cdk": {"implemented": true}
     },
-    "setConsumer": {
+    "add_consumer": {
       "sim": {"implemented": true},
       "tf-aws": {"implemented": true},
       "tf-azure": {"implemented": false},
       "tf-gcp": {"implemented": false},
       "aws-cdk": {"implemented": true}
     },
-    "approxSize": {
+    "approx_size": {
       "sim": {"implemented": true},
       "tf-aws": {"implemented": true},
       "tf-azure": {"implemented": false},
@@ -270,7 +270,7 @@
       "tf-gcp": {"implemented": false},
       "aws-cdk": {"implemented": false}
     },
-    "addEnv": {
+    "add_env": {
       "sim": {"implemented": false},
       "tf-aws": {"implemented": false},
       "tf-azure": {"implemented": false},
@@ -284,7 +284,7 @@
       "tf-gcp": {"implemented": false, "issue": 614},
       "aws-cdk": {"implemented": true}
     },
-    "invokeAsync": {
+    "invoke_async": {
       "sim": {"implemented": false},
       "tf-aws": {"implemented": false},
       "tf-azure": {"implemented": false},
@@ -337,7 +337,7 @@
       "tf-gcp": {"implemented": false, "issue": 620},
       "aws-cdk": {"implemented": true}
     },
-    "onMessage": {
+    "on_message": {
       "sim": {"implemented": true},
       "tf-aws": {"implemented": true},
       "tf-azure": {"implemented": false, "issue": 621},
@@ -346,21 +346,21 @@
     }
   },
   "Schedule": {
-    "fromCron": {
+    "from_cron": {
       "sim": {"implemented": false},
       "tf-aws": {"implemented": false},
       "tf-azure": {"implemented": false, "issue": 1291},
       "tf-gcp": {"implemented": false, "issue": 1292},
       "aws-cdk": {"implemented": false}
     },
-    "fromRate": {
+    "from_rate": {
       "sim": {"implemented": false},
       "tf-aws": {"implemented": false},
       "tf-azure": {"implemented": false, "issue": 1291},
       "tf-gcp": {"implemented": false, "issue": 1292},
       "aws-cdk": {"implemented": false}
     },
-    "onTick": {
+    "on_tick": {
       "sim": {"implemented": true},
       "tf-aws": {"implemented": true},
       "tf-azure": {"implemented": false, "issue": 1291},
@@ -486,7 +486,7 @@
       "tf-gcp": {"implemented": false, "issue": 2179},
       "aws-cdk": {"implemented": true}
     },
-    "SecretProps.valueJson": {
+    "SecretProps.value_json": {
       "sim": {"implemented": true},
       "tf-aws": {"implemented": true},
       "tf-azure": {"implemented": false, "issue": 2178},
@@ -495,7 +495,7 @@
     }
   },
   "Service": {
-    "ServiceProps.buildpackPath": {
+    "ServiceProps.buildpack_path": {
       "sim": {"implemented": false, "issue": 1305},
       "tf-aws": {"implemented": false, "issue": 1306},
       "tf-azure": {"implemented": false, "issue": 1307},
@@ -544,7 +544,7 @@
       "tf-gcp": {"implemented": false, "issue": 1308},
       "aws-cdk": {"implemented": false}
     },
-    "buildpackPath": {
+    "buildpack_path": {
       "sim": {"implemented": false, "issue": 1305},
       "tf-aws": {"implemented": false, "issue": 1306},
       "tf-azure": {"implemented": false, "issue": 1307},
@@ -586,7 +586,7 @@
       "tf-gcp": {"implemented": false, "issue": 1308},
       "aws-cdk": {"implemented": false}
     },
-    "addEnv": {
+    "add_env": {
       "sim": {"implemented": false, "issue": 1305},
       "tf-aws": {"implemented": false, "issue": 1306},
       "tf-azure": {"implemented": false, "issue": 1307},
@@ -616,7 +616,7 @@
       "tf-gcp": {"implemented": false, "issue": 1316},
       "aws-cdk": {"implemented": false}
     },
-    "TableProps.primaryKey": {
+    "TableProps.primary_key": {
       "sim": {"implemented": true},
       "tf-aws": {"implemented": true},
       "tf-azure": {"implemented": false, "issue": 1315},
@@ -637,18 +637,11 @@
       "tf-gcp": {"implemented": false, "issue": 1316},
       "aws-cdk": {"implemented": false}
     },
-    "primaryKey": {
+    "primary_key": {
       "sim": {"implemented": true},
       "tf-aws": {"implemented": true},
       "tf-azure": {"implemented": false, "issue": 1315},
       "tf-gcp": {"implemented": false, "issue": 1316},
-      "aws-cdk": {"implemented": false}
-    },
-    "addRow": {
-      "sim": {"implemented": true},
-      "tf-aws": {"implemented": true},
-      "tf-azure": {"implemented": false},
-      "tf-gcp": {"implemented": false},
       "aws-cdk": {"implemented": false}
     },
     "insert": {
