@@ -7,7 +7,7 @@ export class Util {
   /**
    * The mathematical constant representing the ratio of a circle's circumference to its diameter.
    */
-  public static readonly PI = 3.141592653589793;
+  public static readonly PI = Math.PI;
   /**
    * Euler's number, a mathematical constant approximately equal to 2.71828.
    */
