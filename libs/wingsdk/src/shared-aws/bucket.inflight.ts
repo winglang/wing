@@ -139,6 +139,10 @@ export class BucketClient implements IBucketClient {
   public async delete(key: string, opts?: BucketDeleteOptions): Promise<void> {
     const mustExist = opts?.mustExist ?? false;
 
+    if (mustExist && !(await this.exists(key))) {
+      throw new Error(`Object does not exist (key=${key}).`);
+    }
+
     const command = new DeleteObjectCommand({
       Key: key,
       Bucket: this.bucketName,
@@ -152,7 +156,7 @@ export class BucketClient implements IBucketClient {
         return;
       }
 
-      throw Error(`unable to delete "${key}": ${error.message}`);
+      throw new Error(`Unable to delete "${key}": ${error.message}`);
     }
   }
 
