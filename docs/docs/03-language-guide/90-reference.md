@@ -227,7 +227,7 @@ To access a field within an object, use `.get("{field name}")`:
 let boom: Json = jsonObj.get("boom");
 ```
 
-Trying to access a non-existent field will fail at compile time. For example:
+Trying to access a non-existent field will fail at runtime. For example:
 
 ```TS
 log("${jsonObj.get("boom").get("dude").get("world")}");
