@@ -28,9 +28,9 @@ The toolchain includes three tools:
 To install Wing, you will need the following setup:
 
 * [Node.js](https://nodejs.org/en/) (v18 or later)
-  * We recommend [volta](https://volta.sh) to manage node tools
+    * We recommend [volta](https://volta.sh) to manage node tools
 * [VSCode]
-  * Not required, but currently supported with an [extension](#wing-ide-extension)
+    * Not required, but currently supported with an [extension](#wing-ide-extension)
 
 ## Wing CLI
 
