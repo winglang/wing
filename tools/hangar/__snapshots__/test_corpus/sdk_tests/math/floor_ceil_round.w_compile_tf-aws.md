@@ -18,11 +18,11 @@ module.exports = function({ x, y, math_Util }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: math.round(y) == 6")})(((await math_Util.round(y)) === 6))};
       {((cond) => {if (!cond) throw new Error("assertion failed: math.round(-x) == -5")})(((await math_Util.round((-x))) === (-5)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: math.round(-y) == -6")})(((await math_Util.round((-y))) === (-6)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.E, 1) == 2.7")})(((await math_Util.round(math_Util.E,1)) === 2.7))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.E, 2) == 2.72")})(((await math_Util.round(math_Util.E,2)) === 2.72))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.E, 3) == 2.718")})(((await math_Util.round(math_Util.E,3)) === 2.718))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.E, 4) == 2.7183")})(((await math_Util.round(math_Util.E,4)) === 2.7183))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.E, 5) == 2.71828")})(((await math_Util.round(math_Util.E,5)) === 2.71828))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.E, decimalPlaces: 1) == 2.7")})(((await math_Util.round(math_Util.E,{ decimalPlaces: 1 })) === 2.7))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.E, decimalPlaces: 2) == 2.72")})(((await math_Util.round(math_Util.E,{ decimalPlaces: 2 })) === 2.72))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.E, decimalPlaces: 3) == 2.718")})(((await math_Util.round(math_Util.E,{ decimalPlaces: 3 })) === 2.718))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.E, decimalPlaces: 4) == 2.7183")})(((await math_Util.round(math_Util.E,{ decimalPlaces: 4 })) === 2.7183))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.E, decimalPlaces: 5) == 2.71828")})(((await math_Util.round(math_Util.E,{ decimalPlaces: 5 })) === 2.71828))};
     }
   }
   return $Closure1;
@@ -213,11 +213,11 @@ class $Root extends $stdlib.std.Resource {
     {((cond) => {if (!cond) throw new Error("assertion failed: math.round(-x) == -5")})(((math.Util.round((-x))) === (-5)))};
     {((cond) => {if (!cond) throw new Error("assertion failed: math.round(-y) == -6")})(((math.Util.round((-y))) === (-6)))};
     {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.E) == 3")})(((math.Util.round(math.Util.E)) === 3))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.E, 1) == 2.7")})(((math.Util.round(math.Util.E,1)) === 2.7))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.E, 2) == 2.72")})(((math.Util.round(math.Util.E,2)) === 2.72))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.E, 3) == 2.718")})(((math.Util.round(math.Util.E,3)) === 2.718))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.E, 4) == 2.7183")})(((math.Util.round(math.Util.E,4)) === 2.7183))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.E, 5) == 2.71828")})(((math.Util.round(math.Util.E,5)) === 2.71828))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.E, decimalPlaces: 1) == 2.7")})(((math.Util.round(math.Util.E,{ decimalPlaces: 1 })) === 2.7))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.E, decimalPlaces: 2) == 2.72")})(((math.Util.round(math.Util.E,{ decimalPlaces: 2 })) === 2.72))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.E, decimalPlaces: 3) == 2.718")})(((math.Util.round(math.Util.E,{ decimalPlaces: 3 })) === 2.718))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.E, decimalPlaces: 4) == 2.7183")})(((math.Util.round(math.Util.E,{ decimalPlaces: 4 })) === 2.7183))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.E, decimalPlaces: 5) == 2.71828")})(((math.Util.round(math.Util.E,{ decimalPlaces: 5 })) === 2.71828))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:inflight floor/ceil/round",new $Closure1(this,"$Closure1"));
   }
 }
