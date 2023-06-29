@@ -29,7 +29,7 @@ module.exports = grammar({
   precedences: ($) => [
     // Handle ambiguity in case of empty literal: `a = {}`
     // In this case tree-sitter doesn't know if it's a set or a map literal so just assume its a map
-    [$.map_literal, $.set_literal],
+    [$.json_map_literal, $.map_literal, $.set_literal],
     [$.json_literal, $.structured_access_expression],
   ],
 
@@ -653,13 +653,19 @@ module.exports = grammar({
       ),
 
     map_literal_member: ($) =>
-      seq(choice($.identifier, $.string), ":", $.expression),
+      seq(choice($.string), "=>", $.expression),
     struct_literal_member: ($) => seq($.identifier, ":", $.expression),
     structured_access_expression: ($) =>
       prec.right(seq($.expression, "[", $.expression, "]")),
 
     json_literal: ($) =>
-      seq(field("type", $.json_container_type), field("element", $.expression)),
+      choice(
+        seq(field("type", $.json_container_type), field("element", $.expression)),
+        field("element", $.json_map_literal)
+      ),
+
+    json_map_literal: ($) => braced(commaSep(field("member", $.json_literal_member))),
+    json_literal_member: ($) => seq(choice($.identifier, $.string), ":", $.expression),
 
     json_container_type: ($) => $._json_types,
 

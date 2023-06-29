@@ -39,7 +39,7 @@ module.exports = function({ api, http_GET, body, http_Util }) {
     }
     async handle()  {
       const url = (api.url + "/path");
-      const getResponse = (await http_Util.get(url,Object.freeze({"headers":Object.freeze({"content-type":"application/json"})})));
+      const getResponse = (await http_Util.get(url,{ headers: Object.freeze({"content-type":"application/json"}) }));
       const fetchResponse = (await http_Util.fetch(url,{
       "method": http_GET,
       "headers": Object.freeze({"content-type":"application/json"}),}

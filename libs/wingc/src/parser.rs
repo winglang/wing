@@ -20,6 +20,9 @@ pub struct Parser<'a> {
 	pub source: &'a [u8],
 	pub source_name: String,
 	pub error_nodes: RefCell<HashSet<usize>>,
+	// Nesting level within JSON literals, a value larger than 0 means we're currently in a JSON literal
+	in_json: RefCell<u64>,
+	is_in_mut_json: RefCell<bool>,
 	is_in_loop: RefCell<bool>,
 }
 
@@ -45,6 +48,12 @@ impl<'s> Parser<'s> {
 			source_name,
 			error_nodes: RefCell::new(HashSet::new()),
 			is_in_loop: RefCell::new(false),
+			// This is similar to what we do in the type_checker, but we need to know 2 things when
+			// parsing Json. 1) Are we nested in a Json literal? 2) Are we nested in a mutable Json literal?
+			// thus in_json and is_in_mut_json will track the depth of the nesting and whether we should inherit
+			// mutability from the root of the Json literal.
+			in_json: RefCell::new(0),
+			is_in_mut_json: RefCell::new(false),
 		}
 	}
 
@@ -1346,6 +1355,10 @@ impl<'s> Parser<'s> {
 					expression_span,
 				))
 			}
+			"json_map_literal" => {
+				let fields = self.build_map_fields(expression_node, phase)?;
+				Ok(Expr::new(ExprKind::JsonMapLiteral { fields }, expression_span))
+			}
 			"map_literal" => {
 				let map_type = if let Some(type_node) = expression_node.child_by_field_name("type") {
 					Some(self.build_type_annotation(&type_node, phase)?)
@@ -1353,29 +1366,7 @@ impl<'s> Parser<'s> {
 					None
 				};
 
-				let mut fields = IndexMap::new();
-				let mut cursor = expression_node.walk();
-				for field_node in expression_node.children_by_field_name("member", &mut cursor) {
-					if field_node.is_extra() {
-						continue;
-					}
-					let key_node = field_node.named_child(0).unwrap();
-					let key = match key_node.kind() {
-						"string" => {
-							let s = self.node_text(&key_node);
-							// Remove quotes, we assume this is a valid key for a map
-							s[1..s.len() - 1].to_string()
-						}
-						"identifier" => self.node_text(&key_node).to_string(),
-						other => panic!("Unexpected map key type {} at {:?}", other, key_node),
-					};
-					let value_node = field_node.named_child(1).unwrap();
-					if fields.contains_key(&key) {
-						_ = self.add_error::<()>(format!("Duplicate key {} in map literal", key), &key_node);
-					} else {
-						fields.insert(key, self.build_expression(&value_node, phase)?);
-					}
-				}
+				let fields = self.build_map_fields(expression_node, phase)?;
 
 				// Special case: empty {} (which is detected as map by tree-sitter) -
 				// if it is annotated as a Set/MutSet we should treat it as a set literal
@@ -1394,13 +1385,20 @@ impl<'s> Parser<'s> {
 				))
 			}
 			"json_literal" => {
-				let type_node = expression_node
-					.child_by_field_name("type")
-					.expect("Json literal should always have type node");
-				let is_mut = match self.node_text(&type_node) {
-					"MutJson" => true,
-					_ => false,
-				};
+				let type_node = expression_node.child_by_field_name("type");
+				*self.in_json.borrow_mut() += 1;
+
+				let mut is_mut = *self.is_in_mut_json.borrow();
+
+				if let Some(type_node) = type_node {
+					is_mut = match self.node_text(&type_node) {
+						"MutJson" => {
+							*self.is_in_mut_json.borrow_mut() = true;
+							true
+						}
+						_ => false,
+					};
+				}
 
 				let element_node = expression_node
 					.child_by_field_name("element")
@@ -1419,6 +1417,13 @@ impl<'s> Parser<'s> {
 				};
 
 				let element = Box::new(exp);
+
+				*self.in_json.borrow_mut() -= 1;
+
+				// Only set mutability back to false if we are no longer parsing nested json
+				if *self.in_json.borrow() == 0 {
+					*self.is_in_mut_json.borrow_mut() = false;
+				}
 
 				Ok(Expr::new(ExprKind::JsonLiteral { is_mut, element }, expression_span))
 			}
@@ -1465,6 +1470,33 @@ impl<'s> Parser<'s> {
 			}
 			other => self.report_unimplemented_grammar(other, "expression", expression_node),
 		}
+	}
+
+	fn build_map_fields(&self, expression_node: &Node<'_>, phase: Phase) -> Result<IndexMap<String, Expr>, ()> {
+		let mut fields = IndexMap::new();
+		let mut cursor = expression_node.walk();
+		for field_node in expression_node.children_by_field_name("member", &mut cursor) {
+			if field_node.is_extra() {
+				continue;
+			}
+			let key_node = field_node.named_child(0).unwrap();
+			let key = match key_node.kind() {
+				"string" => {
+					let s = self.node_text(&key_node);
+					// Remove quotes, we assume this is a valid key for a map
+					s[1..s.len() - 1].to_string()
+				}
+				"identifier" => self.node_text(&key_node).to_string(),
+				other => panic!("Unexpected map key type {} at {:?}", other, key_node),
+			};
+			let value_node = field_node.named_child(1).unwrap();
+			if fields.contains_key(&key) {
+				_ = self.add_error::<()>(format!("Duplicate key {} in map literal", key), &key_node);
+			} else {
+				fields.insert(key, self.build_expression(&value_node, phase)?);
+			}
+		}
+		Ok(fields)
 	}
 
 	fn build_set_literal(&self, expression_node: &Node, phase: Phase) -> Result<Expr, ()> {
