@@ -114,3 +114,5 @@ let j = Json {
 };
 log(j.get("k").asBool());
 ```
+
+Future support for converting to structs and other types: (link to issue)
