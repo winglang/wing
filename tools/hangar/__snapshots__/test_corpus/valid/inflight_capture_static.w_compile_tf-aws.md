@@ -12,7 +12,7 @@ module.exports = function({ Preflight }) {
     async $inflight_init()  {
     }
     async handle()  {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await Preflight.staticMethod(123)) === "foo-123")'`)})(((await Preflight.staticMethod(123)) === "foo-123"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: Preflight.staticMethod(123) == \"foo-123\"")})(((await Preflight.staticMethod(123)) === "foo-123"))};
     }
   }
   return $Closure1;
@@ -32,7 +32,7 @@ module.exports = function({ OuterInflight }) {
     async $inflight_init()  {
     }
     async handle()  {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await OuterInflight.staticMethod("hello")) === 5)'`)})(((await OuterInflight.staticMethod("hello")) === 5))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: OuterInflight.staticMethod(\"hello\") == 5")})(((await OuterInflight.staticMethod("hello")) === 5))};
     }
   }
   return $Closure2;
@@ -53,7 +53,7 @@ module.exports = function({  }) {
     }
     async handle()  {
       const InnerInflight = require("./inflight.InnerInflight.js")({});
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await InnerInflight.staticMethod()) === "hello")'`)})(((await InnerInflight.staticMethod()) === "hello"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: InnerInflight.staticMethod() == \"hello\"")})(((await InnerInflight.staticMethod()) === "hello"))};
     }
   }
   return $Closure3;
@@ -77,10 +77,10 @@ module.exports = function({ util_Util }) {
         const $IF_LET_VALUE = (await util_Util.tryEnv("WING_TARGET"));
         if ($IF_LET_VALUE != undefined) {
           const target = $IF_LET_VALUE;
-          {console.log(`WING_TARGET=${target}`)};
+          {console.log(String.raw({ raw: ["WING_TARGET=", ""] }, target))};
         }
         else {
-          {((cond) => {if (!cond) throw new Error(`assertion failed: 'false'`)})(false)};
+          {((cond) => {if (!cond) throw new Error("assertion failed: false /* target not defined*/")})(false)};
         }
       }
     }
@@ -129,7 +129,7 @@ module.exports = function({  }) {
     async $inflight_init()  {
     }
     static async staticMethod(a)  {
-      return `foo-${a}`;
+      return String.raw({ raw: ["foo-", ""] }, a);
     }
   }
   return Preflight;

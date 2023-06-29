@@ -4,12 +4,9 @@
 ```log
 pass ─ doubler.wsim » root/env0/test:f(2) == 8
  
-
-
-
-
-Tests 1 passed (1) 
+ 
+Tests 1 passed (1)
+Test Files 1 passed (1)
 Duration <DURATION>
-
 ```
 

@@ -1,6 +1,6 @@
 import React from "react";
 
-export type AppMode = "webapp" | "electron";
+export type AppMode = "remote" | "local";
 
 export interface AppContextValue {
   appMode: AppMode;
@@ -8,6 +8,6 @@ export interface AppContextValue {
 }
 
 export const AppContext = React.createContext<AppContextValue>({
-  appMode: "electron",
+  appMode: "local",
   title: "Wing Console",
 });
