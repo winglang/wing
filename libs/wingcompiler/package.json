@@ -27,6 +27,9 @@
     "wasi-js": "^1.7.3",
     "@winglang/sdk": "workspace:../../libs/wingsdk"
   },
+  "bundledDependencies": [
+    "wasi-js"
+  ],
   "devDependencies": {
     "@types/node": "^18.11.18",
     "bump-pack": "workspace:../../tools/bump-pack",
