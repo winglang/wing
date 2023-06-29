@@ -25,73 +25,96 @@ const generateTestName = (path: string) => path.split(sep).slice(-2).join("/");
 /**
  * Options for the `test` command.
  */
-export interface TestOptions extends CompileOptions { }
+export interface TestOptions extends CompileOptions {}
 
 export async function test(entrypoints: string[], options: TestOptions) {
   const startTime = Date.now();
-  const passing: string[] = [];
-  const failing: { testName: string; error: Error }[] = [];
+  const results: { testName: string; results: sdk.cloud.TestResult[] }[] = [];
   for (const entrypoint of entrypoints) {
+    const testName = generateTestName(entrypoint);
     try {
-      const results: sdk.cloud.TestResult[] | void = await testOne(entrypoint, options);
-      if (results?.some(({ pass }) => !pass)) {
-        failing.push(
-          ...results
-            ?.filter(({ pass }) => !pass)
-            .map((item) => ({
-              testName: generateTestName(entrypoint),
-              error: new Error(item.error),
-            }))
-        );
-      } else {
-        passing.push(generateTestName(entrypoint));
-      }
+      const singleTestResults: sdk.cloud.TestResult[] | void = await testOne(entrypoint, options);
+      results.push({ testName, results: singleTestResults ?? [] });
     } catch (error) {
       console.log((error as Error).message);
-      failing.push({ testName: generateTestName(entrypoint), error: error as Error });
+      results.push({
+        testName: generateTestName(entrypoint),
+        results: [{ pass: false, path: "", error: (error as Error).message, traces: [] }],
+      });
     }
   }
-  printResults(passing, failing, Date.now() - startTime);
+  printResults(results, Date.now() - startTime);
 }
 
 function printResults(
-  passing: string[],
-  failing: { testName: string; error: Error }[],
+  testResults: { testName: string; results: sdk.cloud.TestResult[] }[],
   duration: number
 ) {
   const durationInSeconds = duration / 1000;
-  const totalSum = failing.length + passing.length;
+  const totalSum = testResults.length;
+  const failing = testResults.filter(({ results }) => results.some(({ pass }) => !pass));
+  const passing = testResults.filter(({ results }) => results.every(({ pass }) => !!pass));
+  const failingTestsNumber = failing.reduce(
+    (acc, { results }) => acc + results.filter(({ pass }) => !pass).length,
+    0
+  );
+  const passingTestsNumber = testResults.reduce(
+    (acc, { results }) => acc + results.filter(({ pass }) => !!pass).length,
+    0
+  );
   console.log(" "); // for getting a new line- \n does't seem to work :(
-  console.log(`
-${totalSum > 1
-      ? `Tests Results:
-${passing.map((testName) => `    ${chalk.green("✓")} ${testName}`).join("\n")}
-${failing.map(({ testName }) => `    ${chalk.red("×")} ${testName}`).join("\n")}
-${" "}
-`
-      : ""
-    }
-${failing.length && totalSum > 1
-      ? `
-${" "}
-Errors:` +
-      failing
-        .map(
-          ({ testName, error }) => `
+  const areErrors = failing.length > 0 && totalSum > 1;
+  const showTitle = totalSum > 1;
 
-At ${testName}\n ${chalk.red(error.message)}
-        `
-        )
-        .join("\n\n")
-      : ""
-    }
+  const results = [];
 
-${chalk.dim("Tests")}${failing.length ? chalk.red(` ${failing.length} failed`) : ""}${failing.length && passing.length ? chalk.dim(" |") : ""
-    }${passing.length ? chalk.green(` ${passing.length} passed`) : ""} ${chalk.dim(`(${totalSum})`)} 
-${chalk.dim("Duration")} ${Math.floor(durationInSeconds / 60)}m${(durationInSeconds % 60).toFixed(
-      2
-    )}s
-`);
+  if (showTitle) {
+    // prints a list of the tests names with an icon
+    results.push(`Results:`);
+    results.push(...passing.map(({ testName }) => `    ${chalk.green("✓")} ${testName}`));
+    results.push(...failing.map(({ testName }) => `    ${chalk.red("×")} ${testName}`));
+  }
+
+  if (areErrors) {
+    // prints error messages form failed tests
+    results.push(" ");
+    results.push("Errors:");
+    results.push(
+      ...failing.map(({ testName, results }) =>
+        [
+          `At ${testName}`,
+          results.filter(({ pass }) => !pass).map(({ error }) => chalk.red(error)),
+        ].join("\n")
+      )
+    );
+  }
+
+  // prints a summary of how many tests passed and failed
+  results.push(" ");
+  results.push(
+    `${chalk.dim("Tests")}${failingTestsNumber ? chalk.red(` ${failingTestsNumber} failed`) : ""}${
+      failingTestsNumber && passingTestsNumber ? chalk.dim(" |") : ""
+    }${passingTestsNumber ? chalk.green(` ${passingTestsNumber} passed`) : ""} ${chalk.dim(
+      `(${failingTestsNumber + passingTestsNumber})`
+    )}`
+  );
+  // prints a summary of how many tests files passed and failed
+  results.push(
+    `${chalk.dim("Test Files")}${failing.length ? chalk.red(` ${failing.length} failed`) : ""}${
+      failing.length && passing.length ? chalk.dim(" |") : ""
+    }${passing.length ? chalk.green(` ${passing.length} passed`) : ""} ${chalk.dim(
+      `(${totalSum})`
+    )}`
+  );
+
+  // prints the test duration
+  results.push(
+    `${chalk.dim("Duration")} ${Math.floor(durationInSeconds / 60)}m${(
+      durationInSeconds % 60
+    ).toFixed(2)}s`
+  );
+
+  console.log(results.filter((value) => !!value).join("\n"));
 }
 
 async function testOne(entrypoint: string, options: TestOptions) {
@@ -224,9 +247,7 @@ async function testSimulator(synthDir: string) {
 
   rmSync(synthDir, { recursive: true, force: true });
 
-  if (testResultsContainsFailure(results)) {
-    throw Error(results.map(({ error }) => error).join("\n"));
-  }
+  return results;
 }
 
 async function testAwsCdk(synthDir: string): Promise<sdk.cloud.TestResult[]> {
@@ -236,7 +257,11 @@ async function testAwsCdk(synthDir: string): Promise<sdk.cloud.TestResult[]> {
     await withSpinner("cdk deploy", () => awsCdkDeploy(synthDir));
 
     const [testRunner, tests] = await withSpinner("Setting up test runner...", async () => {
-      const testArns = await awsCdkOutput(synthDir, ENV_WING_TEST_RUNNER_FUNCTION_ARNS_AWSCDK, process.env.CDK_STACK_NAME!);
+      const testArns = await awsCdkOutput(
+        synthDir,
+        ENV_WING_TEST_RUNNER_FUNCTION_ARNS_AWSCDK,
+        process.env.CDK_STACK_NAME!
+      );
       const testRunner = new TestRunnerClient(testArns);
 
       const tests = await testRunner.listTests();
@@ -283,7 +308,9 @@ async function isAwsCdkInstalled(synthDir: string) {
 }
 
 export async function awsCdkDeploy(synthDir: string) {
-  await execCapture("cdk deploy --require-approval never --ci true -O ./output.json --app . ", { cwd: synthDir });
+  await execCapture("cdk deploy --require-approval never --ci true -O ./output.json --app . ", {
+    cwd: synthDir,
+  });
 }
 
 export async function awsCdkDestroy(synthDir: string) {

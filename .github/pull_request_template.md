@@ -1,6 +1,6 @@
 ## Checklist
 
-- [ ] Title matches [Winglang's style guide](https://docs.winglang.io/contributors/pull_requests#how-are-pull-request-titles-formatted)
+- [ ] Title matches [Winglang's style guide](https://docs.winglang.io/contributing/pull_requests#how-are-pull-request-titles-formatted)
 - [ ] Description explains motivation and solution
 - [ ] Tests added (always)
 - [ ] Docs updated (only required for features)

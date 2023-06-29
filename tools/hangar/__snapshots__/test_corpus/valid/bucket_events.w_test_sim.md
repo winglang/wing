@@ -14,12 +14,9 @@ pass ┌ bucket_events.wsim » root/env0/test:putting and deleting from a bucket
      │ deleted c
      └ other bucket event called!
  
-
-
-
-
-Tests 1 passed (1) 
+ 
+Tests 1 passed (1)
+Test Files 1 passed (1)
 Duration <DURATION>
-
 ```
 

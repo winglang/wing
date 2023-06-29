@@ -1,17 +1,6 @@
 ---
 source: libs/wingc/src/lsp/completions.rs
 ---
-- label: hello
-  kind: 2
-  documentation:
-    kind: markdown
-    value: "```wing\nstatic preflight hello: preflight (): void\n```\n---"
-  sortText: ff|hello
-  insertText: hello($0)
-  insertTextFormat: 2
-  command:
-    title: triggerParameterHints
-    command: editor.action.triggerParameterHints
 - label: addConnection
   kind: 2
   documentation:
@@ -19,6 +8,17 @@ source: libs/wingc/src/lsp/completions.rs
     value: "```wing\nstatic preflight addConnection: preflight (props: AddConnectionProps): void\n```\n---\nAdds a connection between two resources.\n\n### Remarks\nA connection is a piece of\nmetadata describing how one resource is related to another resource. This\nmetadata is recorded in the tree.json file."
   sortText: ff|addConnection
   insertText: addConnection($0)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: hello
+  kind: 2
+  documentation:
+    kind: markdown
+    value: "```wing\nstatic preflight hello: preflight (): void\n```\n---"
+  sortText: ff|hello
+  insertText: hello($0)
   insertTextFormat: 2
   command:
     title: triggerParameterHints

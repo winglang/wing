@@ -12,7 +12,7 @@ module.exports = function({ table, idsCounter }) {
     async $inflight_init()  {
     }
     async handle(key, operation, source)  {
-      (await table.insert(`${(await idsCounter.inc())}`,Object.freeze({"key":key,"operation":operation,"source":`${source}`})));
+      (await table.insert(String.raw({ raw: ["", ""] }, (await idsCounter.inc())),Object.freeze({"key":key,"operation":operation,"source":String.raw({ raw: ["", ""] }, source)})));
     }
   }
   return $Closure1;
@@ -92,7 +92,7 @@ module.exports = function({ logHistory, Source }) {
     async $inflight_init()  {
     }
     async handle(key, event)  {
-      (await logHistory(key,`${event}`,Source.onEvent));
+      (await logHistory(key,String.raw({ raw: ["", ""] }, event),Source.onEvent));
     }
   }
   return $Closure5;
@@ -143,7 +143,7 @@ module.exports = function({ table }) {
       return async () =>  {
         let count = 0;
         for (const u of (await table.list())) {
-          if (((((u)["key"] === opts.key) && ((u)["operation"] === opts.type)) && ((u)["source"] === `${opts.source}`))) {
+          if (((((u)["key"] === opts.key) && ((u)["operation"] === opts.type)) && ((u)["source"] === String.raw({ raw: ["", ""] }, opts.source)))) {
             count = (count + 1);
           }
         }
@@ -174,16 +174,16 @@ module.exports = function({ b, wait, checkHitCount, Source }) {
       (await b.put("c","1"));
       (await b.put("b","100"));
       (await b.delete("c"));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(await wait((await checkHitCount({ key: "a", type: "CREATE", source: Source.anyEvent, count: 1 }))))'`)})((await wait((await checkHitCount({ key: "a", type: "CREATE", source: Source.anyEvent, count: 1 })))))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(await wait((await checkHitCount({ key: "b", type: "CREATE", source: Source.anyEvent, count: 1 }))))'`)})((await wait((await checkHitCount({ key: "b", type: "CREATE", source: Source.anyEvent, count: 1 })))))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(await wait((await checkHitCount({ key: "c", type: "CREATE", source: Source.anyEvent, count: 1 }))))'`)})((await wait((await checkHitCount({ key: "c", type: "CREATE", source: Source.anyEvent, count: 1 })))))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(await wait((await checkHitCount({ key: "a", type: "CREATE", source: Source.onEvent, count: 1 }))))'`)})((await wait((await checkHitCount({ key: "a", type: "CREATE", source: Source.onEvent, count: 1 })))))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(await wait((await checkHitCount({ key: "b", type: "CREATE", source: Source.onEvent, count: 1 }))))'`)})((await wait((await checkHitCount({ key: "b", type: "CREATE", source: Source.onEvent, count: 1 })))))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(await wait((await checkHitCount({ key: "c", type: "CREATE", source: Source.onEvent, count: 1 }))))'`)})((await wait((await checkHitCount({ key: "c", type: "CREATE", source: Source.onEvent, count: 1 })))))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(await wait((await checkHitCount({ key: "b", type: "UPDATE", source: Source.anyEvent, count: 1 }))))'`)})((await wait((await checkHitCount({ key: "b", type: "UPDATE", source: Source.anyEvent, count: 1 })))))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(await wait((await checkHitCount({ key: "c", type: "DELETE", source: Source.anyEvent, count: 1 }))))'`)})((await wait((await checkHitCount({ key: "c", type: "DELETE", source: Source.anyEvent, count: 1 })))))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(await wait((await checkHitCount({ key: "b", type: "UPDATE", source: Source.onEvent, count: 1 }))))'`)})((await wait((await checkHitCount({ key: "b", type: "UPDATE", source: Source.onEvent, count: 1 })))))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(await wait((await checkHitCount({ key: "c", type: "DELETE", source: Source.onEvent, count: 1 }))))'`)})((await wait((await checkHitCount({ key: "c", type: "DELETE", source: Source.onEvent, count: 1 })))))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: wait(checkHitCount(key: \"a\", type: \"CREATE\", source: Source.anyEvent, count: 1))")})((await wait((await checkHitCount({ key: "a", type: "CREATE", source: Source.anyEvent, count: 1 })))))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: wait(checkHitCount(key: \"b\", type: \"CREATE\", source: Source.anyEvent, count: 1))")})((await wait((await checkHitCount({ key: "b", type: "CREATE", source: Source.anyEvent, count: 1 })))))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: wait(checkHitCount(key: \"c\", type: \"CREATE\", source: Source.anyEvent, count: 1))")})((await wait((await checkHitCount({ key: "c", type: "CREATE", source: Source.anyEvent, count: 1 })))))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: wait(checkHitCount(key: \"a\", type: \"CREATE\", source: Source.onEvent, count: 1))")})((await wait((await checkHitCount({ key: "a", type: "CREATE", source: Source.onEvent, count: 1 })))))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: wait(checkHitCount(key: \"b\", type: \"CREATE\", source:  Source.onEvent, count: 1))")})((await wait((await checkHitCount({ key: "b", type: "CREATE", source: Source.onEvent, count: 1 })))))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: wait(checkHitCount(key: \"c\", type: \"CREATE\", source:  Source.onEvent, count: 1))")})((await wait((await checkHitCount({ key: "c", type: "CREATE", source: Source.onEvent, count: 1 })))))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: wait(checkHitCount(key: \"b\", type: \"UPDATE\", source: Source.anyEvent, count: 1))")})((await wait((await checkHitCount({ key: "b", type: "UPDATE", source: Source.anyEvent, count: 1 })))))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: wait(checkHitCount(key: \"c\", type: \"DELETE\", source: Source.anyEvent, count: 1))")})((await wait((await checkHitCount({ key: "c", type: "DELETE", source: Source.anyEvent, count: 1 })))))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: wait(checkHitCount(key: \"b\", type: \"UPDATE\", source: Source.onEvent, count: 1))")})((await wait((await checkHitCount({ key: "b", type: "UPDATE", source: Source.onEvent, count: 1 })))))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: wait(checkHitCount(key: \"c\", type: \"DELETE\", source: Source.onEvent, count: 1))")})((await wait((await checkHitCount({ key: "c", type: "DELETE", source: Source.onEvent, count: 1 })))))};
     }
   }
   return $Closure8;
