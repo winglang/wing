@@ -2,10 +2,10 @@
   "name": "monowingo",
   "devDependencies": {
     "@nrwl/devkit": "15.7.2",
+    "bump-pack": "workspace:./tools/bump-pack",
     "changelogen": "^0.5.3",
     "nx": "15.7.2",
-    "semver": "^7.3.8",
-    "bump-pack": "workspace:./tools/bump-pack"
+    "semver": "^7.3.8"
   },
   "scripts": {
     "nx": "nx",
@@ -22,5 +22,10 @@
   "volta": {
     "node": "18.16.0",
     "npm": "8.19.3"
+  },
+  "pnpm": {
+    "patchedDependencies": {
+      "wasi-js@1.7.3": "patches/wasi-js@1.7.3.patch"
+    }
   }
 }

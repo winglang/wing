@@ -4,6 +4,11 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+patchedDependencies:
+  wasi-js@1.7.3:
+    hash: rmwvp46j2ligfusbdx5dzh4a3q
+    path: patches/wasi-js@1.7.3.patch
+
 importers:
 
   .:
@@ -981,7 +986,7 @@ importers:
         version: link:../wingsdk
       wasi-js:
         specifier: ^1.7.3
-        version: 1.7.3
+        version: 1.7.3(patch_hash=rmwvp46j2ligfusbdx5dzh4a3q)
     devDependencies:
       '@types/node':
         specifier: ^18.11.18
@@ -21522,7 +21527,7 @@ packages:
       loose-envify: 1.4.0
     dev: false
 
-  /wasi-js@1.7.3:
+  /wasi-js@1.7.3(patch_hash=rmwvp46j2ligfusbdx5dzh4a3q):
     resolution: {integrity: sha512-4oq6iVdY4nlsqFviS98ltEdWnhYQoeZwz3/5AxQ3bs0fd/YBzBMS162p/n0DHEIJFev1Jvk3gnJwck1s4a8mVQ==}
     hasBin: true
     requiresBuild: true
@@ -21537,6 +21542,7 @@ packages:
     transitivePeerDependencies:
       - supports-color
     dev: false
+    patched: true
 
   /watchpack@2.4.0:
     resolution: {integrity: sha512-Lcvm7MGST/4fup+ifyKi2hjyIAwcdI4HRgtvTpIUxBRhB+RFtUh8XtDOxUfctVCnhVi+QQj49i91OyvzkJl6cg==}
