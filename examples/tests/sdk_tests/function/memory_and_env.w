@@ -11,7 +11,7 @@ let f1 = new cloud.Function(inflight () => {
 let f2 = new cloud.Function(inflight () => {
     c.inc();
     // TODO: add assertion to the env here- when util.env could be called inflight
-}, env: { catName => "Tion" }) as "env fn";
+}, env: { "catName" => "Tion" }) as "env fn";
 
 f2.addEnvironment("catAge", "2");
 assert(f2.env.get("catAge") == "2");

@@ -653,7 +653,7 @@ module.exports = grammar({
       ),
 
     map_literal_member: ($) =>
-      seq(choice($.identifier, $.string), "=>", $.expression),
+      seq(choice($.string), "=>", $.expression),
     struct_literal_member: ($) => seq($.identifier, ":", $.expression),
     structured_access_expression: ($) =>
       prec.right(seq($.expression, "[", $.expression, "]")),

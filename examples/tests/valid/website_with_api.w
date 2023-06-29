@@ -9,9 +9,9 @@ let usersTable = new cloud.Table(
   name: "users-table",
   primaryKey: "id",
   columns: {
-    id => cloud.ColumnType.STRING,
-    name => cloud.ColumnType.STRING,
-    age => cloud.ColumnType.NUMBER,
+    "id" => cloud.ColumnType.STRING,
+    "name" => cloud.ColumnType.STRING,
+    "age" => cloud.ColumnType.NUMBER,
   }
 );
 
