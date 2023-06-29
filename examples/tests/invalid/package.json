@@ -1,7 +1,7 @@
 {
   "dependencies": {
     "cdktf": "0.17.0",
-    "constructs": "^10.2.63",
+    "constructs": "^10",
     "jsii-code-samples": "1.7.0"
   },
   "volta": {

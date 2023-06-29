@@ -927,10 +927,10 @@ importers:
     dependencies:
       cdktf:
         specifier: 0.17.0
-        version: 0.17.0(constructs@10.2.63)
+        version: 0.17.0(constructs@10.2.51)
       constructs:
-        specifier: ^10.2.63
-        version: 10.2.63
+        specifier: ^10
+        version: 10.2.51
       jsii-code-samples:
         specifier: 1.7.0
         version: 1.7.0
@@ -947,14 +947,14 @@ importers:
         specifier: ^2.0.165
         version: 2.0.165
       '@cdktf/provider-aws':
-        specifier: 12.0.5
-        version: 12.0.5(cdktf@0.15.5)(constructs@10.1.314)
+        specifier: ^15.0.0
+        version: 15.0.0(cdktf@0.17.0)(constructs@10.1.314)
       aws-cdk-lib:
-        specifier: ^2.77.0
+        specifier: ^2.64.0
         version: 2.77.0(constructs@10.1.314)
       cdktf:
-        specifier: 0.15.5
-        version: 0.15.5(constructs@10.1.314)
+        specifier: 0.17.0
+        version: 0.17.0(constructs@10.1.314)
       constructs:
         specifier: ^10
         version: 10.1.314
@@ -5377,17 +5377,6 @@ packages:
       prebuild-install: 7.1.1
     dev: true
 
-  /@cdktf/provider-aws@12.0.5(cdktf@0.15.5)(constructs@10.1.314):
-    resolution: {integrity: sha512-voDpYyXn1DomBA3HqezV0DquWwlNcCijJJ7M2YaOA31LtQ9emHNXf/jN2qmHwl59RsIH7NQKcq/+zcdqUusfEA==}
-    engines: {node: '>= 14.17.0'}
-    peerDependencies:
-      cdktf: ^0.15.0
-      constructs: ^10.0.0
-    dependencies:
-      cdktf: 0.15.5(constructs@10.1.314)
-      constructs: 10.1.314
-    dev: false
-
   /@cdktf/provider-aws@15.0.0(cdktf@0.17.0)(constructs@10.1.314):
     resolution: {integrity: sha512-GeXpsU8+TsXhFFowjos+7bYv2CDAMHjOlKxXTx6aaqEO7BTlyqXBM/Qetw6y/6MxwIcyEf5siduBeT6T3lg3Dg==}
     engines: {node: '>= 16.14.0'}
@@ -5397,7 +5386,6 @@ packages:
     dependencies:
       cdktf: 0.17.0(constructs@10.1.314)
       constructs: 10.1.314
-    dev: true
 
   /@cdktf/provider-generator@0.17.0:
     resolution: {integrity: sha512-/Ei9uVuLT6xjJIn6hvGepmS7tOjOAYsUplpc3J2jS1US85aO7oMASgjjgISvDC7saddLqhYCfysSWrYU5zUp0g==}
@@ -10717,21 +10705,6 @@ packages:
       - utf-8-validate
     dev: true
 
-  /cdktf@0.15.5(constructs@10.1.314):
-    resolution: {integrity: sha512-fcamLs7SKz+kTbQFf+fOXDGvmwT5bH4bHwp+jkVKjGTRsu6C8z5oFVAjKYm+aP1tC7sSWG967+ihSx6+uPNAGw==}
-    peerDependencies:
-      constructs: ^10.0.25
-    dependencies:
-      archiver: 5.3.1
-      constructs: 10.1.314
-      json-stable-stringify: 1.0.2
-      semver: 7.5.2
-    dev: false
-    bundledDependencies:
-      - archiver
-      - json-stable-stringify
-      - semver
-
   /cdktf@0.17.0(constructs@10.1.314):
     resolution: {integrity: sha512-4R57uBLBqeb8NgfKZdn/az8UE3yXxGHyzH6Xjsz1Oo9kNvSkPibX7YqNLUpuCgdYNVgU2fdaNoHj9h4LXc6iCw==}
     peerDependencies:
@@ -10746,6 +10719,21 @@ packages:
       - json-stable-stringify
       - semver
 
+  /cdktf@0.17.0(constructs@10.2.51):
+    resolution: {integrity: sha512-4R57uBLBqeb8NgfKZdn/az8UE3yXxGHyzH6Xjsz1Oo9kNvSkPibX7YqNLUpuCgdYNVgU2fdaNoHj9h4LXc6iCw==}
+    peerDependencies:
+      constructs: ^10.0.25
+    dependencies:
+      archiver: 5.3.1
+      constructs: 10.2.51
+      json-stable-stringify: 1.0.2
+      semver: 7.5.2
+    dev: false
+    bundledDependencies:
+      - archiver
+      - json-stable-stringify
+      - semver
+
   /cdktf@0.17.0(constructs@10.2.63):
     resolution: {integrity: sha512-4R57uBLBqeb8NgfKZdn/az8UE3yXxGHyzH6Xjsz1Oo9kNvSkPibX7YqNLUpuCgdYNVgU2fdaNoHj9h4LXc6iCw==}
     peerDependencies:
@@ -10755,6 +10743,7 @@ packages:
       constructs: 10.2.63
       json-stable-stringify: 1.0.2
       semver: 7.5.2
+    dev: true
     bundledDependencies:
       - archiver
       - json-stable-stringify
@@ -11276,11 +11265,11 @@ packages:
   /constructs@10.2.51:
     resolution: {integrity: sha512-vB96JQJzno7k0e+dX7Y9UmV4NDxqdr+2qnD5izDi552u7uFSpRF88GAEJjtv2eAWHG4WCDNu9+lV59Z3fYHlRQ==}
     engines: {node: '>= 16.14.0'}
-    dev: true
 
   /constructs@10.2.63:
     resolution: {integrity: sha512-WoQCPWTpqAJA6fLH2wFhP642ECrtFyV9Sdw5lFOsfoem/GDfQilnBSWQyJxT9cFq2yd4J1O/7oBl0GgtpZgbSg==}
     engines: {node: '>= 16.14.0'}
+    dev: true
 
   /constructs@3.3.69:
     resolution: {integrity: sha512-mfU72Bb1N57UVwdxDzdhSFAt6DIFnPHSkeAMtTlCUpBYOfSPS3iK6Kh06RvpESM4x9m1x0PZP7k00ZjaAkjSyg==}
