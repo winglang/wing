@@ -334,7 +334,7 @@ class $Root extends $stdlib.std.Resource {
     const invalidJson = "invalid";
     const tryParsed = (((args) => { try { return JSON.parse(args); } catch (err) { return undefined; } })(invalidJson) ?? Object.freeze({"key":"value"}));
     {((cond) => {if (!cond) throw new Error("assertion failed: tryParsed.get(\"key\") == \"value\"")})(((tryParsed)["key"] === "value"))};
-    const jj = Object.freeze({"a":123,"b":{"c":456,"d":789}});
+    const jj = Object.freeze({"a":123,"b":Object.freeze({"c":456,"d":789})});
     const ss = ((args) => { return JSON.stringify(args[0], null, args[1]) })([jj]);
     {((cond) => {if (!cond) throw new Error("assertion failed: ss == \"{\\\"a\\\":123,\\\"b\\\":{\\\"c\\\":456,\\\"d\\\":789}}\"")})((ss === "{\"a\":123,\"b\":{\"c\":456,\"d\":789}}"))};
     const ss2 = ((args) => { return JSON.stringify(args[0], null, args[1]) })([jj,2]);

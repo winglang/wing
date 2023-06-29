@@ -3,7 +3,7 @@ bring cloud;
 let table = new cloud.Table( 
     name: "users", 
     primaryKey: "name", 
-    columns: { gender: cloud.ColumnType.STRING } 
+    columns: { gender => cloud.ColumnType.STRING } 
 );
 
 let marioInfo = Json { gender: "male", role: "plumber" };
