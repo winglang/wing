@@ -83,11 +83,14 @@ test "indexOf()" {
 assert("BOOM".lowercase() == "boom");
 assert("BooM".lowercase() == "boom");
 assert("boom".lowercase() == "boom");
+assert("123#@".lowercase() == "123#@");
 
 test "lowercase()" {
   assert("BOOM".lowercase() == "boom");
   assert("BooM".lowercase() == "boom");
   assert("boom".lowercase() == "boom");
+  assert("123#@".lowercase() == "123#@");
+
 }
 
 //-----------------------------------------------------------------------------
@@ -96,11 +99,13 @@ test "lowercase()" {
 assert("BOOM".uppercase() == "BOOM");
 assert("BooM".uppercase() == "BOOM");
 assert("boom".uppercase() == "BOOM");
+assert("123#@".uppercase() == "123#@");
 
 test "uppercase()" {
   assert("BOOM".uppercase() == "BOOM");
   assert("BooM".uppercase() == "BOOM");
   assert("boom".uppercase() == "BOOM");
+  assert("123#@".uppercase() == "123#@");
 }
 
 //-----------------------------------------------------------------------------
@@ -120,10 +125,12 @@ test "split()" {
 // startsWith()
 
 assert("hello wing".startsWith("h"));
+assert(!"hello wing".startsWith("H"));
 assert(!"hello wing".startsWith("w"));
 
 test "startsWith()" {
   assert("hello wing".startsWith("h"));
+  assert(!"hello wing".startsWith("H"));
   assert(!"hello wing".startsWith("w"));
 }
 
@@ -143,9 +150,13 @@ test "substring()" {
 
 assert("hello wing         ".trim() == "hello wing");
 assert("hello wing".trim() == "hello wing");
+assert("".trim() == "");
+assert("\thello wing\n".trim() == "hello wing");
 
 test "trim()" {
   assert("hello wing         ".trim() == "hello wing");
   assert("hello wing".trim() == "hello wing");
+  assert("".trim() == "");
+  assert("\thello wing\n".trim() == "hello wing");
 }
 
