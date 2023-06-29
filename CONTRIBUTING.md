@@ -18,10 +18,10 @@ the [Wing Slack].
 Here is a curated list of topics from the [Wing Contributor's Handbook]:
 
 * [How can I help?](https://docs.winglang.io/contributing/)
-* [How do I submit a bug report?](https://docs.winglang.io/contributing/bugs)
-* [How do I submit a pull request?](https://docs.winglang.io/contributing/pull_requests)
-* [How to build Wing locally?](https://docs.winglang.io/contributing/development)
-* [How do I add a resource to the SDK?](https://docs.winglang.io/contributing/wingsdk)
+* [How do I submit a bug report?](https://docs.winglang.io/contributing/start-here/bugs)
+* [How do I submit a pull request?](https://docs.winglang.io/contributing/start-here/pull_requests)
+* [How to build Wing locally?](https://docs.winglang.io/contributing/start-here/development)
+* [How do I add a resource to the SDK?](https://docs.winglang.io/contributing/start-here/wingsdk)
 
 ## Code of Conduct
 
