@@ -24,9 +24,14 @@
     "package": "bump-pack -b"
   },
   "dependencies": {
+    "@cowasm/memfs": "^3.5.1",
+    "fflate": "^0.8.0",
     "wasi-js": "^1.7.3",
     "@winglang/sdk": "workspace:../../libs/wingsdk"
   },
+  "bundledDependencies": [
+    "wasi-js"
+  ],
   "devDependencies": {
     "@types/node": "^18.11.18",
     "bump-pack": "workspace:../../tools/bump-pack",
