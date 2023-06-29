@@ -21,6 +21,7 @@ module.exports = function({ _id, user, api_PUT, body, std_Json }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: req.headers?.get(\"content-type\") == \"application/json\"")})(((req.headers)["content-type"] === "application/json"))};
       return {
       "status": 200,
+      "headers": Object.freeze({"content-type":"application/json; charset=utf-8"}),
       "body": (req.vars)["id"],}
       ;
     }
@@ -52,9 +53,11 @@ module.exports = function({ api, _id, user, body, http_PUT, http_Util, std_Json 
       "headers": Object.freeze({"content-type":"application/json"}),
       "body": ((args) => { return JSON.stringify(args[0], null, args[1]) })([body]),}
       ));
+      {((cond) => {if (!cond) throw new Error("assertion failed: response.headers.get(\"content-type\") == \"application/json; charset=utf-8\"")})(((response.headers)["content-type"] === "application/json; charset=utf-8"))};
       {((cond) => {if (!cond) throw new Error("assertion failed: response.body == _id")})((response.body === _id))};
       {((cond) => {if (!cond) throw new Error("assertion failed: response.status == 200")})((response.status === 200))};
       {((cond) => {if (!cond) throw new Error("assertion failed: response.url == url")})((response.url === url))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: fetchResponse.headers.get(\"content-type\") == \"application/json; charset=utf-8\"")})(((fetchResponse.headers)["content-type"] === "application/json; charset=utf-8"))};
       {((cond) => {if (!cond) throw new Error("assertion failed: fetchResponse.body == _id")})((fetchResponse.body === _id))};
       {((cond) => {if (!cond) throw new Error("assertion failed: fetchResponse.status == 200")})((fetchResponse.status === 200))};
       {((cond) => {if (!cond) throw new Error("assertion failed: fetchResponse.url == url")})((fetchResponse.url === url))};
