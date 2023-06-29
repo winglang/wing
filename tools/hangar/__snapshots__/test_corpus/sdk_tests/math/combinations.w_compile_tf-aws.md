@@ -1,8 +1,8 @@
-# [min_max.w](../../../../../../examples/tests/sdk_tests/math/min_max.w) | compile | tf-aws
+# [combinations.w](../../../../../../examples/tests/sdk_tests/math/combinations.w) | compile | tf-aws
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ myArray, math_Util }) {
+module.exports = function({ population, subset, math_Util }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -12,8 +12,7 @@ module.exports = function({ myArray, math_Util }) {
     async $inflight_init()  {
     }
     async handle()  {
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.min(myArray) == 1")})(((await math_Util.min(myArray)) === 1))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.max(myArray) == 5")})(((await math_Util.max(myArray)) === 5))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.combinations(population, subset) == 10")})(((await math_Util.combinations(population,subset)) === 10))};
     }
   }
   return $Closure1;
@@ -42,7 +41,7 @@ module.exports = function({ myArray, math_Util }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:inflight min--max\",\"${aws_lambda_function.root_testinflightminmax_Handler_79DF9911.arn}\"]]"
+      "value": "[[\"root/Default/Default/test:inflight combinations\",\"${aws_lambda_function.root_testinflightcombinations_Handler_86BAD671.arn}\"]]"
     }
   },
   "provider": {
@@ -52,61 +51,61 @@ module.exports = function({ myArray, math_Util }) {
   },
   "resource": {
     "aws_iam_role": {
-      "root_testinflightminmax_Handler_IamRole_20604403": {
+      "root_testinflightcombinations_Handler_IamRole_67AA0E2E": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:inflight min--max/Handler/IamRole",
-            "uniqueId": "root_testinflightminmax_Handler_IamRole_20604403"
+            "path": "root/Default/Default/test:inflight combinations/Handler/IamRole",
+            "uniqueId": "root_testinflightcombinations_Handler_IamRole_67AA0E2E"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
-      "root_testinflightminmax_Handler_IamRolePolicy_5A201378": {
+      "root_testinflightcombinations_Handler_IamRolePolicy_026A37F2": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:inflight min--max/Handler/IamRolePolicy",
-            "uniqueId": "root_testinflightminmax_Handler_IamRolePolicy_5A201378"
+            "path": "root/Default/Default/test:inflight combinations/Handler/IamRolePolicy",
+            "uniqueId": "root_testinflightcombinations_Handler_IamRolePolicy_026A37F2"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
-        "role": "${aws_iam_role.root_testinflightminmax_Handler_IamRole_20604403.name}"
+        "role": "${aws_iam_role.root_testinflightcombinations_Handler_IamRole_67AA0E2E.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
-      "root_testinflightminmax_Handler_IamRolePolicyAttachment_167D5323": {
+      "root_testinflightcombinations_Handler_IamRolePolicyAttachment_AA23CC42": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:inflight min--max/Handler/IamRolePolicyAttachment",
-            "uniqueId": "root_testinflightminmax_Handler_IamRolePolicyAttachment_167D5323"
+            "path": "root/Default/Default/test:inflight combinations/Handler/IamRolePolicyAttachment",
+            "uniqueId": "root_testinflightcombinations_Handler_IamRolePolicyAttachment_AA23CC42"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.root_testinflightminmax_Handler_IamRole_20604403.name}"
+        "role": "${aws_iam_role.root_testinflightcombinations_Handler_IamRole_67AA0E2E.name}"
       }
     },
     "aws_lambda_function": {
-      "root_testinflightminmax_Handler_79DF9911": {
+      "root_testinflightcombinations_Handler_86BAD671": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:inflight min--max/Handler/Default",
-            "uniqueId": "root_testinflightminmax_Handler_79DF9911"
+            "path": "root/Default/Default/test:inflight combinations/Handler/Default",
+            "uniqueId": "root_testinflightcombinations_Handler_86BAD671"
           }
         },
         "environment": {
           "variables": {
-            "WING_FUNCTION_NAME": "Handler-c88f3f4b",
+            "WING_FUNCTION_NAME": "Handler-c8a6ff13",
             "WING_TARGET": "tf-aws"
           }
         },
-        "function_name": "Handler-c88f3f4b",
+        "function_name": "Handler-c8a6ff13",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.root_testinflightminmax_Handler_IamRole_20604403.arn}",
+        "role": "${aws_iam_role.root_testinflightcombinations_Handler_IamRole_67AA0E2E.arn}",
         "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
-        "s3_key": "${aws_s3_object.root_testinflightminmax_Handler_S3Object_B973747E.key}",
+        "s3_key": "${aws_s3_object.root_testinflightcombinations_Handler_S3Object_52DC9AA0.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -126,11 +125,11 @@ module.exports = function({ myArray, math_Util }) {
       }
     },
     "aws_s3_object": {
-      "root_testinflightminmax_Handler_S3Object_B973747E": {
+      "root_testinflightcombinations_Handler_S3Object_52DC9AA0": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:inflight min--max/Handler/S3Object",
-            "uniqueId": "root_testinflightminmax_Handler_S3Object_B973747E"
+            "path": "root/Default/Default/test:inflight combinations/Handler/S3Object",
+            "uniqueId": "root_testinflightcombinations_Handler_S3Object_52DC9AA0"
           }
         },
         "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
@@ -161,11 +160,13 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.$Closure1.js";
-        const myArray_client = context._lift(myArray);
+        const population_client = context._lift(population);
+        const subset_client = context._lift(subset);
         const math_UtilClient = math.Util._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
-            myArray: ${myArray_client},
+            population: ${population_client},
+            subset: ${subset_client},
             math_Util: ${math_UtilClient.text},
           })
         `);
@@ -183,23 +184,25 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          $Closure1._registerBindObject(myArray, host, []);
+          $Closure1._registerBindObject(population, host, []);
+          $Closure1._registerBindObject(subset, host, []);
         }
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(myArray, host, []);
+          $Closure1._registerBindObject(population, host, []);
+          $Closure1._registerBindObject(subset, host, []);
         }
         super._registerBind(host, ops);
       }
     }
-    const myArray = Object.freeze([1, 2, 3, 4, 5]);
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.min(myArray) == 1")})(((math.Util.min(myArray)) === 1))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.max(myArray) == 5")})(((math.Util.max(myArray)) === 5))};
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:inflight min/max",new $Closure1(this,"$Closure1"));
+    const population = 5;
+    const subset = 3;
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.combinations(population, subset) == 10")})(((math.Util.combinations(population,subset)) === 10))};
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:inflight combinations",new $Closure1(this,"$Closure1"));
   }
 }
 class $App extends $AppBase {
   constructor() {
-    super({ outdir: $outdir, name: "min_max", plugins: $plugins, isTestEnvironment: $wing_is_test });
+    super({ outdir: $outdir, name: "combinations", plugins: $plugins, isTestEnvironment: $wing_is_test });
     if ($wing_is_test) {
       new $Root(this, "env0");
       const $test_runner = this.testRunner;

@@ -1,8 +1,8 @@
-# [min_max.w](../../../../../../examples/tests/sdk_tests/math/min_max.w) | compile | tf-aws
+# [factorial.w](../../../../../../examples/tests/sdk_tests/math/factorial.w) | compile | tf-aws
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ myArray, math_Util }) {
+module.exports = function({ math_Util }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -12,8 +12,12 @@ module.exports = function({ myArray, math_Util }) {
     async $inflight_init()  {
     }
     async handle()  {
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.min(myArray) == 1")})(((await math_Util.min(myArray)) === 1))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.max(myArray) == 5")})(((await math_Util.max(myArray)) === 5))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.factorial(0) == 1")})(((await math_Util.factorial(0)) === 1))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.factorial(1) == 1")})(((await math_Util.factorial(1)) === 1))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.factorial(2) == 2")})(((await math_Util.factorial(2)) === 2))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.factorial(3) == 6")})(((await math_Util.factorial(3)) === 6))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.factorial(4) == 24")})(((await math_Util.factorial(4)) === 24))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.factorial(5) == 120")})(((await math_Util.factorial(5)) === 120))};
     }
   }
   return $Closure1;
@@ -42,7 +46,7 @@ module.exports = function({ myArray, math_Util }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:inflight min--max\",\"${aws_lambda_function.root_testinflightminmax_Handler_79DF9911.arn}\"]]"
+      "value": "[[\"root/Default/Default/test:inflight factorial\",\"${aws_lambda_function.root_testinflightfactorial_Handler_8BCF64D0.arn}\"]]"
     }
   },
   "provider": {
@@ -52,61 +56,61 @@ module.exports = function({ myArray, math_Util }) {
   },
   "resource": {
     "aws_iam_role": {
-      "root_testinflightminmax_Handler_IamRole_20604403": {
+      "root_testinflightfactorial_Handler_IamRole_9D27D5FF": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:inflight min--max/Handler/IamRole",
-            "uniqueId": "root_testinflightminmax_Handler_IamRole_20604403"
+            "path": "root/Default/Default/test:inflight factorial/Handler/IamRole",
+            "uniqueId": "root_testinflightfactorial_Handler_IamRole_9D27D5FF"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
-      "root_testinflightminmax_Handler_IamRolePolicy_5A201378": {
+      "root_testinflightfactorial_Handler_IamRolePolicy_BED966C4": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:inflight min--max/Handler/IamRolePolicy",
-            "uniqueId": "root_testinflightminmax_Handler_IamRolePolicy_5A201378"
+            "path": "root/Default/Default/test:inflight factorial/Handler/IamRolePolicy",
+            "uniqueId": "root_testinflightfactorial_Handler_IamRolePolicy_BED966C4"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
-        "role": "${aws_iam_role.root_testinflightminmax_Handler_IamRole_20604403.name}"
+        "role": "${aws_iam_role.root_testinflightfactorial_Handler_IamRole_9D27D5FF.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
-      "root_testinflightminmax_Handler_IamRolePolicyAttachment_167D5323": {
+      "root_testinflightfactorial_Handler_IamRolePolicyAttachment_6B41E48A": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:inflight min--max/Handler/IamRolePolicyAttachment",
-            "uniqueId": "root_testinflightminmax_Handler_IamRolePolicyAttachment_167D5323"
+            "path": "root/Default/Default/test:inflight factorial/Handler/IamRolePolicyAttachment",
+            "uniqueId": "root_testinflightfactorial_Handler_IamRolePolicyAttachment_6B41E48A"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.root_testinflightminmax_Handler_IamRole_20604403.name}"
+        "role": "${aws_iam_role.root_testinflightfactorial_Handler_IamRole_9D27D5FF.name}"
       }
     },
     "aws_lambda_function": {
-      "root_testinflightminmax_Handler_79DF9911": {
+      "root_testinflightfactorial_Handler_8BCF64D0": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:inflight min--max/Handler/Default",
-            "uniqueId": "root_testinflightminmax_Handler_79DF9911"
+            "path": "root/Default/Default/test:inflight factorial/Handler/Default",
+            "uniqueId": "root_testinflightfactorial_Handler_8BCF64D0"
           }
         },
         "environment": {
           "variables": {
-            "WING_FUNCTION_NAME": "Handler-c88f3f4b",
+            "WING_FUNCTION_NAME": "Handler-c818ed07",
             "WING_TARGET": "tf-aws"
           }
         },
-        "function_name": "Handler-c88f3f4b",
+        "function_name": "Handler-c818ed07",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.root_testinflightminmax_Handler_IamRole_20604403.arn}",
+        "role": "${aws_iam_role.root_testinflightfactorial_Handler_IamRole_9D27D5FF.arn}",
         "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
-        "s3_key": "${aws_s3_object.root_testinflightminmax_Handler_S3Object_B973747E.key}",
+        "s3_key": "${aws_s3_object.root_testinflightfactorial_Handler_S3Object_645DEE08.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -126,11 +130,11 @@ module.exports = function({ myArray, math_Util }) {
       }
     },
     "aws_s3_object": {
-      "root_testinflightminmax_Handler_S3Object_B973747E": {
+      "root_testinflightfactorial_Handler_S3Object_645DEE08": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:inflight min--max/Handler/S3Object",
-            "uniqueId": "root_testinflightminmax_Handler_S3Object_B973747E"
+            "path": "root/Default/Default/test:inflight factorial/Handler/S3Object",
+            "uniqueId": "root_testinflightfactorial_Handler_S3Object_645DEE08"
           }
         },
         "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
@@ -161,11 +165,9 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.$Closure1.js";
-        const myArray_client = context._lift(myArray);
         const math_UtilClient = math.Util._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
-            myArray: ${myArray_client},
             math_Util: ${math_UtilClient.text},
           })
         `);
@@ -183,23 +185,24 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          $Closure1._registerBindObject(myArray, host, []);
         }
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(myArray, host, []);
         }
         super._registerBind(host, ops);
       }
     }
-    const myArray = Object.freeze([1, 2, 3, 4, 5]);
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.min(myArray) == 1")})(((math.Util.min(myArray)) === 1))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.max(myArray) == 5")})(((math.Util.max(myArray)) === 5))};
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:inflight min/max",new $Closure1(this,"$Closure1"));
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.factorial(0) == 1")})(((math.Util.factorial(0)) === 1))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.factorial(1) == 1")})(((math.Util.factorial(1)) === 1))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.factorial(2) == 2")})(((math.Util.factorial(2)) === 2))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.factorial(3) == 6")})(((math.Util.factorial(3)) === 6))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.factorial(4) == 24")})(((math.Util.factorial(4)) === 24))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.factorial(5) == 120")})(((math.Util.factorial(5)) === 120))};
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:inflight factorial",new $Closure1(this,"$Closure1"));
   }
 }
 class $App extends $AppBase {
   constructor() {
-    super({ outdir: $outdir, name: "min_max", plugins: $plugins, isTestEnvironment: $wing_is_test });
+    super({ outdir: $outdir, name: "factorial", plugins: $plugins, isTestEnvironment: $wing_is_test });
     if ($wing_is_test) {
       new $Root(this, "env0");
       const $test_runner = this.testRunner;

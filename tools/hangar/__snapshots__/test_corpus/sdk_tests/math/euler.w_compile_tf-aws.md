@@ -32,7 +32,7 @@ module.exports = function({ compoundOneYear, interest, value, math_Util }) {
     async $inflight_init()  {
     }
     async handle()  {
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.round(compoundOneYear(interest, value), 2) == 105.13")})(((await math_Util.round((await compoundOneYear(interest,value)),2)) === 105.13))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.round(compoundOneYear(interest, value), decimalPlaces: 2) == 105.13")})(((await math_Util.round((await compoundOneYear(interest,value)),{ decimalPlaces: 2 })) === 105.13))};
     }
   }
   return $Closure2;
@@ -255,7 +255,7 @@ class $Root extends $stdlib.std.Resource {
     const interest = 0.05;
     const value = 100;
     const compoundOneYear = new $Closure1(this,"$Closure1");
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.E, 3) == 2.718")})(((math.Util.round(math.Util.E,3)) === 2.718))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.E, decimalPlaces: 3) == 2.718")})(((math.Util.round(math.Util.E,{ decimalPlaces: 3 })) === 2.718))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:EULER",new $Closure2(this,"$Closure2"));
   }
 }
