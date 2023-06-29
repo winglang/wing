@@ -7,7 +7,7 @@ let api = new cloud.Api();
 let handler = inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
   return cloud.ApiResponse {
     body: Json.stringify({ user: req.vars.get("name") }),
-    headers: { "content-type": "application/json" },
+    headers: { "content-type" => "application/json" },
     status: 200
   };
 };

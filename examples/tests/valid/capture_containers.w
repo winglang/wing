@@ -2,8 +2,8 @@ bring cloud;
 
 let arr = ["hello", "world"];
 let mySet = {"my", "my", "set"};
-let myMap = {"hello": 123, "world": 999};
-let arrOfMap = [{"bang": 123}];
+let myMap = {"hello" => 123, "world" => 999};
+let arrOfMap = [{"bang" => 123}];
 let j = Json {a: "hello", b: "world"};
 
 test "capture_containers" {
