@@ -156,12 +156,42 @@ Return type is optional for closures.
 
 #### 1.1.4 Json type
 
+🚧 Json support is still a work in progress 🚧
+Check out the [roadmap](#1149-roadmap) section below, to see what parts are still not implemented.
+
 Wing has a primitive data type called `Json`. This type represents an immutable untyped [JSON
 value](https://www.json.org/json-en.html), including JSON primitives (`string`, `number`,
 `boolean`), arrays (both heterogenous and homogenous) and objects (key-value maps where keys are
 strings and values can be any other JSON value).
 
 `Json` objects are immutable and can be referenced across inflight context.
+
+JSON is the "wire protocol of the cloud" and as such Wing offers built-in support for it. However,
+since Wing is statically-typed (type must be known during compilation) and JSON is dynamically typed
+(type is only known at runtime), bridging is required between these two models.
+
+Let's look at a quick example:
+```js
+struct Employee { 
+  id: str;
+  name: str;
+}
+
+let response = http.get("/employees"); 
+ // returns something like { "items": [ { "id": "12234", "name": "bob" }, ... ] }
+
+let employees = Array<Employee>.fromJson(response.get("items")); //NOTE: Array.fromJson is currently not implemented
+
+for e in employees {
+  log("hello, ${e.name}, your employee id is ${e.id}");
+}
+```
+In the above example, the `http.get` function returns a `Json` object from the server that has a
+single field `items`, with a JSON array of JSON objects, each with an `id` and `name` fields.
+The expression `response.get("items")` returns a `Json` array, and we use `Array<T>.fromJson` to 
+convert this array from `Json` to an `Array<Employee>`. Note that by default `fromJson` will 
+perform schema validation on the array and on each item (based on the declaration of the `Employee`
+struct).
 
 ##### 1.1.4.1 Literals
 
@@ -238,7 +268,6 @@ let jsonObj = Json {
   d: myArr
 };
 ```
-
 
 ##### 1.1.4.4 Assignment to native types
 
@@ -360,6 +389,15 @@ my object is: {
   boom: 123
 }
 ```
+
+#### 1.1.4.9 Roadmap
+
+The following features are not yet implemented, but we are planning to add them in the future:
+
+* Array/Set/Map.fromJson() - see https://github.com/winglang/wing/issues/1796 to track.
+* Json.entries() - see https://github.com/winglang/wing/issues/3142 to track.
+* Schema validation and assignment to struct - see https://github.com/winglang/wing/issues/3139 to track.
+* Equality, diff and patch - see https://github.com/winglang/wing/issues/3140 to track.
 
 [`▲ top`][top]
 
@@ -1693,7 +1731,7 @@ f(1, 2, field1: 3, field2: 4);
 
 The following features are not yet implemented, but we are planning to add them in the future:
 
-* Veriadic arguments ()`...args`) - see https://github.com/winglang/wing/issues/125 to track.
+* Variadic arguments ()`...args`) - see https://github.com/winglang/wing/issues/125 to track.
 
 [`▲ top`][top]
 
@@ -2112,7 +2150,7 @@ for immutable data (on top of nominal typing).
 ### 6.4 Roadmap
 - [ ] Asynchronous Execution Safety Model.
 - [ ] Make the language `async` by default.
-- [ ] First class support for `regx`, `glob`, and `cron` types.
+- [ ] First class support for `regex`, `glob`, and `cron` types.
 - [ ] Support of math operations over `date` and `duration` types.
 - [ ] More useful enums: Support for Enum Classes and Swift style enums.
 - [ ] Reflection: add an extended `typeof` operator to get type information.
