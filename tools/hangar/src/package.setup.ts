@@ -9,6 +9,7 @@ import {
   targetWingSpec,
   targetWingConsoleAppSpec,
   targetWingConsoleServerSpec,
+  targetWingConsoleDesignSystemSpec,
   targetWingConsoleUiSpec,
   tmpDir,
   wingBin,
@@ -49,6 +50,7 @@ export default async function () {
     targetWingSpec,
     targetWingConsoleAppSpec,
     targetWingConsoleServerSpec,
+    targetWingConsoleDesignSystemSpec,
     targetWingConsoleUiSpec,
   ];
   const installResult = await execa(npmBin, installArgs, {
