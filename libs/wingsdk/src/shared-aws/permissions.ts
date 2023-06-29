@@ -101,10 +101,35 @@ export function calculateBucketPermissions(
     ops.includes(cloud.BucketInflightMethods.GET) ||
     ops.includes(cloud.BucketInflightMethods.GET_JSON) ||
     ops.includes(cloud.BucketInflightMethods.LIST) ||
-    ops.includes(cloud.BucketInflightMethods.PUBLIC_URL)
+    ops.includes(cloud.BucketInflightMethods.EXISTS) ||
+    ops.includes(cloud.BucketInflightMethods.TRY_GET) ||
+    ops.includes(cloud.BucketInflightMethods.TRY_GET_JSON)
   ) {
     policies.push({
-      actions: ["s3:GetObject*", "s3:GetBucket*", "s3:List*"],
+      actions: ["s3:GetObject*", "s3:GetBucket*", "s3:ListBucket"],
+      resources: [arn, `${arn}/*`],
+    });
+  }
+
+  if (ops.includes(cloud.BucketInflightMethods.PUBLIC_URL)) {
+    policies.push({
+      actions: [
+        "s3:GetBucket*",
+        "s3:ListBucket",
+        "s3:GetBucketPublicAccessBlock",
+      ],
+      resources: [arn, `${arn}/*`],
+    });
+  }
+
+  if (ops.includes(cloud.BucketInflightMethods.TRY_DELETE)) {
+    policies.push({
+      actions: [
+        "s3:List*",
+        "s3:DeleteObject*",
+        "s3:DeleteObjectVersion*",
+        "s3:PutLifecycleConfiguration*",
+      ],
       resources: [arn, `${arn}/*`],
     });
   }
