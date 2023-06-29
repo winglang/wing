@@ -40,6 +40,7 @@ module.exports = function({  }) {
     }
     async handle()  {
       {((cond) => {if (!cond) throw new Error("assertion failed: \"hello wing\".startsWith(\"h\")")})("hello wing".startsWith("h"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: !\"hello wing\".startsWith(\"H\")")})((!"hello wing".startsWith("H")))};
       {((cond) => {if (!cond) throw new Error("assertion failed: !\"hello wing\".startsWith(\"w\")")})((!"hello wing".startsWith("w")))};
     }
   }
@@ -83,6 +84,8 @@ module.exports = function({  }) {
     async handle()  {
       {((cond) => {if (!cond) throw new Error("assertion failed: \"hello wing         \".trim() == \"hello wing\"")})(((await "hello wing         ".trim()) === "hello wing"))};
       {((cond) => {if (!cond) throw new Error("assertion failed: \"hello wing\".trim() == \"hello wing\"")})(((await "hello wing".trim()) === "hello wing"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: \"\".trim() == \"\"")})(((await "".trim()) === ""))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: \"\\thello wing\\n\".trim() == \"hello wing\"")})(((await "\thello wing\n".trim()) === "hello wing"))};
     }
   }
   return $Closure12;
@@ -208,6 +211,7 @@ module.exports = function({  }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: \"BOOM\".lowercase() == \"boom\"")})(("BOOM".toLocaleLowerCase() === "boom"))};
       {((cond) => {if (!cond) throw new Error("assertion failed: \"BooM\".lowercase() == \"boom\"")})(("BooM".toLocaleLowerCase() === "boom"))};
       {((cond) => {if (!cond) throw new Error("assertion failed: \"boom\".lowercase() == \"boom\"")})(("boom".toLocaleLowerCase() === "boom"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: \"123#@\".lowercase() == \"123#@\"")})(("123#@".toLocaleLowerCase() === "123#@"))};
     }
   }
   return $Closure7;
@@ -230,6 +234,7 @@ module.exports = function({  }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: \"BOOM\".uppercase() == \"BOOM\"")})(("BOOM".toLocaleUpperCase() === "BOOM"))};
       {((cond) => {if (!cond) throw new Error("assertion failed: \"BooM\".uppercase() == \"BOOM\"")})(("BooM".toLocaleUpperCase() === "BOOM"))};
       {((cond) => {if (!cond) throw new Error("assertion failed: \"boom\".uppercase() == \"BOOM\"")})(("boom".toLocaleUpperCase() === "BOOM"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: \"123#@\".uppercase() == \"123#@\"")})(("123#@".toLocaleUpperCase() === "123#@"))};
     }
   }
   return $Closure8;
@@ -1542,16 +1547,19 @@ class $Root extends $stdlib.std.Resource {
     {((cond) => {if (!cond) throw new Error("assertion failed: \"BOOM\".lowercase() == \"boom\"")})(("BOOM".toLocaleLowerCase() === "boom"))};
     {((cond) => {if (!cond) throw new Error("assertion failed: \"BooM\".lowercase() == \"boom\"")})(("BooM".toLocaleLowerCase() === "boom"))};
     {((cond) => {if (!cond) throw new Error("assertion failed: \"boom\".lowercase() == \"boom\"")})(("boom".toLocaleLowerCase() === "boom"))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: \"123#@\".lowercase() == \"123#@\"")})(("123#@".toLocaleLowerCase() === "123#@"))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:lowercase()",new $Closure7(this,"$Closure7"));
     {((cond) => {if (!cond) throw new Error("assertion failed: \"BOOM\".uppercase() == \"BOOM\"")})(("BOOM".toLocaleUpperCase() === "BOOM"))};
     {((cond) => {if (!cond) throw new Error("assertion failed: \"BooM\".uppercase() == \"BOOM\"")})(("BooM".toLocaleUpperCase() === "BOOM"))};
     {((cond) => {if (!cond) throw new Error("assertion failed: \"boom\".uppercase() == \"BOOM\"")})(("boom".toLocaleUpperCase() === "BOOM"))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: \"123#@\".uppercase() == \"123#@\"")})(("123#@".toLocaleUpperCase() === "123#@"))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:uppercase()",new $Closure8(this,"$Closure8"));
     {((cond) => {if (!cond) throw new Error("assertion failed: \"hello;wing\".split(\";\").at(0) == \"hello\"")})(((("hello;wing".split(";")).at(0)) === "hello"))};
     {((cond) => {if (!cond) throw new Error("assertion failed: \"hello wing\".split(\" \").at(0) == \"hello\"")})(((("hello wing".split(" ")).at(0)) === "hello"))};
     {((cond) => {if (!cond) throw new Error("assertion failed: \"hello wing\".split(\"\").at(0) == \"h\"")})(((("hello wing".split("")).at(0)) === "h"))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:split()",new $Closure9(this,"$Closure9"));
     {((cond) => {if (!cond) throw new Error("assertion failed: \"hello wing\".startsWith(\"h\")")})("hello wing".startsWith("h"))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: !\"hello wing\".startsWith(\"H\")")})((!"hello wing".startsWith("H")))};
     {((cond) => {if (!cond) throw new Error("assertion failed: !\"hello wing\".startsWith(\"w\")")})((!"hello wing".startsWith("w")))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:startsWith()",new $Closure10(this,"$Closure10"));
     {((cond) => {if (!cond) throw new Error("assertion failed: \"hello wing\".substring(0, 5) == \"hello\"")})((("hello wing".substring(0,5)) === "hello"))};
@@ -1559,6 +1567,8 @@ class $Root extends $stdlib.std.Resource {
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:substring()",new $Closure11(this,"$Closure11"));
     {((cond) => {if (!cond) throw new Error("assertion failed: \"hello wing         \".trim() == \"hello wing\"")})((("hello wing         ".trim()) === "hello wing"))};
     {((cond) => {if (!cond) throw new Error("assertion failed: \"hello wing\".trim() == \"hello wing\"")})((("hello wing".trim()) === "hello wing"))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: \"\".trim() == \"\"")})((("".trim()) === ""))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: \"\\thello wing\\n\".trim() == \"hello wing\"")})((("\thello wing\n".trim()) === "hello wing"))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:trim()",new $Closure12(this,"$Closure12"));
   }
 }
