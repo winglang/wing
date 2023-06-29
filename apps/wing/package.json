@@ -36,7 +36,7 @@
     "ora": "^5.4.1",
     "update-notifier": "^6.0.2",
     "vscode-languageserver": "^8.0.2",
-    "@wingconsole/app": "file:../wing-console/console/app",
+    "@wingconsole/app": "workspace:../wing-console/console/app",
     "@winglang/compiler": "workspace:../../libs/wingcompiler",
     "@winglang/sdk": "workspace:../../libs/wingsdk"
   },

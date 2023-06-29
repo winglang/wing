@@ -18,9 +18,9 @@
     "package": "bump-pack -b"
   },
   "dependencies": {
-    "@wingconsole/server": "workspace:../server",
     "analytics-node": "^6.2.0",
-    "express": "^4.18.2"
+    "express": "^4.18.2",
+    "@wingconsole/server": "workspace:../server"
   },
   "devDependencies": {
     "@tailwindcss/forms": "^0.5.3",
