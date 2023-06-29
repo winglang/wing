@@ -1090,6 +1090,17 @@ impl Types {
 		self.get_typeref(self.types.len() - 1)
 	}
 
+	/// Get the optional version of a given type.
+	///
+	/// If the type is already optional, return it as-is.
+	pub fn make_option(&mut self, t: TypeRef) -> TypeRef {
+		if t.is_option() {
+			t
+		} else {
+			self.add_type(Type::Optional(t))
+		}
+	}
+
 	fn get_typeref(&self, idx: usize) -> TypeRef {
 		let t = &self.types[idx];
 		UnsafeRef::<Type>(&**t as *const Type)
@@ -1518,6 +1529,8 @@ impl<'a> TypeChecker<'a> {
 			ExprKind::Call { callee, arg_list } => {
 				// Resolve the function's reference (either a method in the class's env or a function in the current env)
 				let func_type = self.type_check_exp(callee, env);
+				let is_option = func_type.is_option();
+				let func_type = func_type.maybe_unwrap_option();
 
 				let arg_list_types = self.type_check_arg_list(arg_list, env);
 
@@ -1576,7 +1589,12 @@ impl<'a> TypeChecker<'a> {
 					}
 				}
 
-				func_sig.return_type
+				if is_option {
+					// When calling a an optional function, the return type is always optional
+					self.types.make_option(func_sig.return_type)
+				} else {
+					func_sig.return_type
+				}
 			}
 			ExprKind::ArrayLiteral { type_, items } => {
 				// Infer type based on either the explicit type or the value in one of the items
@@ -3554,7 +3572,7 @@ impl<'a> TypeChecker<'a> {
 					return self.make_error_variable_info(false);
 				}
 
-				let res = self.resolve_variable_from_instance_type(instance_type, property, env, object);
+				let mut res = self.resolve_variable_from_instance_type(instance_type, property, env, object);
 
 				// Check if the object is an optional type. If it is ensure the use of optional chaining.
 				let object_type = self.types.get_expr_type(object).unwrap();
@@ -3571,13 +3589,15 @@ impl<'a> TypeChecker<'a> {
 				}
 
 				if force_reassignable {
-					VariableInfo {
-						reassignable: true,
-						..res
-					}
-				} else {
-					res
+					res.reassignable = true;
 				}
+
+				// If `a?.b.c`, make sure the entire reference is optional
+				if *optional_accessor {
+					res.type_ = self.types.make_option(res.type_);
+				}
+
+				res
 			}
 			Reference::TypeMember { type_, property } => {
 				let type_ = self

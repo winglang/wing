@@ -395,7 +395,7 @@ impl<'a> JSifier<'a> {
 			}
 			ExprKind::Reference(_ref) => self.jsify_reference(&_ref, ctx),
 			ExprKind::Call { callee, arg_list } => {
-				let function_type = self.get_expr_type(callee);
+				let function_type = self.get_expr_type(callee).maybe_unwrap_option();
 				let function_sig = function_type.as_function_sig();
 
 				let expr_string = match &callee.kind {
