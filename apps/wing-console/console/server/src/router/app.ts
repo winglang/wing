@@ -410,7 +410,7 @@ export const createAppRouter = () => {
         if(ctx.hostUtils?.openExternal) {
           await ctx.hostUtils.openExternal(input.url);
         } else {
-            await open(input.url);
+          await open(input.url);
         }
       }),
   });
