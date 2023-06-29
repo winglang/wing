@@ -40,7 +40,7 @@ test "length" {
 // at()
 
 assert("boom".at(2) == "o");
-//TODO: assertThrows("ERROR", () => { "hey".at(-1); });
+//assertThrows("ERROR", () => { "hey".at(-1); });
 
 test "at()" {
   assert("boom".at(0) == "b");
@@ -112,13 +112,21 @@ test "uppercase()" {
 // split()
 
 assert("hello;wing".split(";").at(0) == "hello");
+assert("hello;wing".split(";").at(1) == "wing");
 assert("hello wing".split(" ").at(0) == "hello");
+assert("hello;wing".split(";").at(1) == "wing");
+assert("hello wing".split("").length == 10);
 assert("hello wing".split("").at(0) == "h");
+assert("hello wing".split("").at(1) == "e");
 
 test "split()" {
   assert("hello;wing".split(";").at(0) == "hello");
+  assert("hello;wing".split(";").at(1) == "wing");
   assert("hello wing".split(" ").at(0) == "hello");
+  assert("hello;wing".split(";").at(1) == "wing");
+  assert("hello wing".split("").length == 10);
   assert("hello wing".split("").at(0) == "h");
+  assert("hello wing".split("").at(1) == "e");
 }
 
 //-----------------------------------------------------------------------------
@@ -160,3 +168,15 @@ test "trim()" {
   assert("\thello wing\n".trim() == "hello wing");
 }
 
+//-----------------------------------------------------------------------------
+// contains()
+
+assert("hello wing".contains("hello"));
+assert(!"hello wing".contains("Hello"));
+assert("hello wing".contains("w"));
+
+test "contains()" {
+  assert("hello wing".contains("hello"));
+  assert(!"hello wing".contains("Hello"));
+  assert("hello wing".contains("w"));
+}
