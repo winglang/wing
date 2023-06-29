@@ -93,6 +93,28 @@ module.exports = function({  }) {
 
 ```
 
+## inflight.$Closure13.js
+```js
+module.exports = function({  }) {
+  class $Closure13 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async $inflight_init()  {
+    }
+    async handle()  {
+      {((cond) => {if (!cond) throw new Error("assertion failed: \"hello wing\".contains(\"hello\")")})("hello wing".includes("hello"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: !\"hello wing\".contains(\"Hello\")")})((!"hello wing".includes("Hello")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: \"hello wing\".contains(\"w\")")})("hello wing".includes("w"))};
+    }
+  }
+  return $Closure13;
+}
+
+```
+
 ## inflight.$Closure2.js
 ```js
 module.exports = function({  }) {
@@ -255,8 +277,12 @@ module.exports = function({  }) {
     }
     async handle()  {
       {((cond) => {if (!cond) throw new Error("assertion failed: \"hello;wing\".split(\";\").at(0) == \"hello\"")})(((await (await "hello;wing".split(";")).at(0)) === "hello"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: \"hello;wing\".split(\";\").at(1) == \"wing\"")})(((await (await "hello;wing".split(";")).at(1)) === "wing"))};
       {((cond) => {if (!cond) throw new Error("assertion failed: \"hello wing\".split(\" \").at(0) == \"hello\"")})(((await (await "hello wing".split(" ")).at(0)) === "hello"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: \"hello;wing\".split(\";\").at(1) == \"wing\"")})(((await (await "hello;wing".split(";")).at(1)) === "wing"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: \"hello wing\".split(\"\").length == 10")})(((await "hello wing".split("")).length === 10))};
       {((cond) => {if (!cond) throw new Error("assertion failed: \"hello wing\".split(\"\").at(0) == \"h\"")})(((await (await "hello wing".split("")).at(0)) === "h"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: \"hello wing\".split(\"\").at(1) == \"e\"")})(((await (await "hello wing".split("")).at(1)) === "e"))};
     }
   }
   return $Closure9;
@@ -285,7 +311,7 @@ module.exports = function({  }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:fromJson\",\"${aws_lambda_function.root_testfromJson_Handler_78BC74EF.arn}\"],[\"root/Default/Default/test:length\",\"${aws_lambda_function.root_testlength_Handler_7245E498.arn}\"],[\"root/Default/Default/test:at()\",\"${aws_lambda_function.root_testat_Handler_39FB3FA1.arn}\"],[\"root/Default/Default/test:concat()\",\"${aws_lambda_function.root_testconcat_Handler_2B9B5654.arn}\"],[\"root/Default/Default/test:endsWith()\",\"${aws_lambda_function.root_testendsWith_Handler_E854161E.arn}\"],[\"root/Default/Default/test:indexOf()\",\"${aws_lambda_function.root_testindexOf_Handler_6F5475B9.arn}\"],[\"root/Default/Default/test:lowercase()\",\"${aws_lambda_function.root_testlowercase_Handler_95CEF018.arn}\"],[\"root/Default/Default/test:uppercase()\",\"${aws_lambda_function.root_testuppercase_Handler_43CD4B37.arn}\"],[\"root/Default/Default/test:split()\",\"${aws_lambda_function.root_testsplit_Handler_BE849B09.arn}\"],[\"root/Default/Default/test:startsWith()\",\"${aws_lambda_function.root_teststartsWith_Handler_C08D2DA3.arn}\"],[\"root/Default/Default/test:substring()\",\"${aws_lambda_function.root_testsubstring_Handler_BB2E73EE.arn}\"],[\"root/Default/Default/test:trim()\",\"${aws_lambda_function.root_testtrim_Handler_8071D201.arn}\"]]"
+      "value": "[[\"root/Default/Default/test:fromJson\",\"${aws_lambda_function.root_testfromJson_Handler_78BC74EF.arn}\"],[\"root/Default/Default/test:length\",\"${aws_lambda_function.root_testlength_Handler_7245E498.arn}\"],[\"root/Default/Default/test:at()\",\"${aws_lambda_function.root_testat_Handler_39FB3FA1.arn}\"],[\"root/Default/Default/test:concat()\",\"${aws_lambda_function.root_testconcat_Handler_2B9B5654.arn}\"],[\"root/Default/Default/test:endsWith()\",\"${aws_lambda_function.root_testendsWith_Handler_E854161E.arn}\"],[\"root/Default/Default/test:indexOf()\",\"${aws_lambda_function.root_testindexOf_Handler_6F5475B9.arn}\"],[\"root/Default/Default/test:lowercase()\",\"${aws_lambda_function.root_testlowercase_Handler_95CEF018.arn}\"],[\"root/Default/Default/test:uppercase()\",\"${aws_lambda_function.root_testuppercase_Handler_43CD4B37.arn}\"],[\"root/Default/Default/test:split()\",\"${aws_lambda_function.root_testsplit_Handler_BE849B09.arn}\"],[\"root/Default/Default/test:startsWith()\",\"${aws_lambda_function.root_teststartsWith_Handler_C08D2DA3.arn}\"],[\"root/Default/Default/test:substring()\",\"${aws_lambda_function.root_testsubstring_Handler_BB2E73EE.arn}\"],[\"root/Default/Default/test:trim()\",\"${aws_lambda_function.root_testtrim_Handler_8071D201.arn}\"],[\"root/Default/Default/test:contains()\",\"${aws_lambda_function.root_testcontains_Handler_9F29A18C.arn}\"]]"
     }
   },
   "provider": {
@@ -309,6 +335,15 @@ module.exports = function({  }) {
           "metadata": {
             "path": "root/Default/Default/test:concat()/Handler/IamRole",
             "uniqueId": "root_testconcat_Handler_IamRole_D3565082"
+          }
+        },
+        "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
+      },
+      "root_testcontains_Handler_IamRole_D838F461": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:contains()/Handler/IamRole",
+            "uniqueId": "root_testcontains_Handler_IamRole_D838F461"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
@@ -424,6 +459,16 @@ module.exports = function({  }) {
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
         "role": "${aws_iam_role.root_testconcat_Handler_IamRole_D3565082.name}"
+      },
+      "root_testcontains_Handler_IamRolePolicy_98FEE2B9": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:contains()/Handler/IamRolePolicy",
+            "uniqueId": "root_testcontains_Handler_IamRolePolicy_98FEE2B9"
+          }
+        },
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
+        "role": "${aws_iam_role.root_testcontains_Handler_IamRole_D838F461.name}"
       },
       "root_testendsWith_Handler_IamRolePolicy_29295A7C": {
         "//": {
@@ -546,6 +591,16 @@ module.exports = function({  }) {
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
         "role": "${aws_iam_role.root_testconcat_Handler_IamRole_D3565082.name}"
+      },
+      "root_testcontains_Handler_IamRolePolicyAttachment_2B74BA53": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:contains()/Handler/IamRolePolicyAttachment",
+            "uniqueId": "root_testcontains_Handler_IamRolePolicyAttachment_2B74BA53"
+          }
+        },
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "${aws_iam_role.root_testcontains_Handler_IamRole_D838F461.name}"
       },
       "root_testendsWith_Handler_IamRolePolicyAttachment_51ADF62A": {
         "//": {
@@ -695,6 +750,32 @@ module.exports = function({  }) {
         "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
         "s3_key": "${aws_s3_object.root_testconcat_Handler_S3Object_883D8A97.key}",
+        "timeout": 30,
+        "vpc_config": {
+          "security_group_ids": [],
+          "subnet_ids": []
+        }
+      },
+      "root_testcontains_Handler_9F29A18C": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:contains()/Handler/Default",
+            "uniqueId": "root_testcontains_Handler_9F29A18C"
+          }
+        },
+        "environment": {
+          "variables": {
+            "WING_FUNCTION_NAME": "Handler-c8e953a0",
+            "WING_TARGET": "tf-aws"
+          }
+        },
+        "function_name": "Handler-c8e953a0",
+        "handler": "index.handler",
+        "publish": true,
+        "role": "${aws_iam_role.root_testcontains_Handler_IamRole_D838F461.arn}",
+        "runtime": "nodejs18.x",
+        "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
+        "s3_key": "${aws_s3_object.root_testcontains_Handler_S3Object_65C920EB.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -990,6 +1071,17 @@ module.exports = function({  }) {
           "metadata": {
             "path": "root/Default/Default/test:concat()/Handler/S3Object",
             "uniqueId": "root_testconcat_Handler_S3Object_883D8A97"
+          }
+        },
+        "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
+        "key": "<ASSET_KEY>",
+        "source": "<ASSET_SOURCE>"
+      },
+      "root_testcontains_Handler_S3Object_65C920EB": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:contains()/Handler/S3Object",
+            "uniqueId": "root_testcontains_Handler_S3Object_65C920EB"
           }
         },
         "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
@@ -1511,6 +1603,38 @@ class $Root extends $stdlib.std.Resource {
         super._registerBind(host, ops);
       }
     }
+    class $Closure13 extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        this._addInflightOps("handle");
+        this.display.hidden = true;
+      }
+      static _toInflightType(context) {
+        const self_client_path = "././inflight.$Closure13.js";
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const $Closure13Client = ${$Closure13._toInflightType(this).text};
+            const client = new $Closure13Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+        }
+        if (ops.includes("handle")) {
+        }
+        super._registerBind(host, ops);
+      }
+    }
     const assertThrows =  (expected, block) =>  {
       let error = false;
       try {
@@ -1555,8 +1679,12 @@ class $Root extends $stdlib.std.Resource {
     {((cond) => {if (!cond) throw new Error("assertion failed: \"123#@\".uppercase() == \"123#@\"")})(("123#@".toLocaleUpperCase() === "123#@"))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:uppercase()",new $Closure8(this,"$Closure8"));
     {((cond) => {if (!cond) throw new Error("assertion failed: \"hello;wing\".split(\";\").at(0) == \"hello\"")})(((("hello;wing".split(";")).at(0)) === "hello"))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: \"hello;wing\".split(\";\").at(1) == \"wing\"")})(((("hello;wing".split(";")).at(1)) === "wing"))};
     {((cond) => {if (!cond) throw new Error("assertion failed: \"hello wing\".split(\" \").at(0) == \"hello\"")})(((("hello wing".split(" ")).at(0)) === "hello"))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: \"hello;wing\".split(\";\").at(1) == \"wing\"")})(((("hello;wing".split(";")).at(1)) === "wing"))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: \"hello wing\".split(\"\").length == 10")})((("hello wing".split("")).length === 10))};
     {((cond) => {if (!cond) throw new Error("assertion failed: \"hello wing\".split(\"\").at(0) == \"h\"")})(((("hello wing".split("")).at(0)) === "h"))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: \"hello wing\".split(\"\").at(1) == \"e\"")})(((("hello wing".split("")).at(1)) === "e"))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:split()",new $Closure9(this,"$Closure9"));
     {((cond) => {if (!cond) throw new Error("assertion failed: \"hello wing\".startsWith(\"h\")")})("hello wing".startsWith("h"))};
     {((cond) => {if (!cond) throw new Error("assertion failed: !\"hello wing\".startsWith(\"H\")")})((!"hello wing".startsWith("H")))};
@@ -1570,6 +1698,10 @@ class $Root extends $stdlib.std.Resource {
     {((cond) => {if (!cond) throw new Error("assertion failed: \"\".trim() == \"\"")})((("".trim()) === ""))};
     {((cond) => {if (!cond) throw new Error("assertion failed: \"\\thello wing\\n\".trim() == \"hello wing\"")})((("\thello wing\n".trim()) === "hello wing"))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:trim()",new $Closure12(this,"$Closure12"));
+    {((cond) => {if (!cond) throw new Error("assertion failed: \"hello wing\".contains(\"hello\")")})("hello wing".includes("hello"))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: !\"hello wing\".contains(\"Hello\")")})((!"hello wing".includes("Hello")))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: \"hello wing\".contains(\"w\")")})("hello wing".includes("w"))};
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:contains()",new $Closure13(this,"$Closure13"));
   }
 }
 class $App extends $AppBase {
