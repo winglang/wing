@@ -106,8 +106,8 @@ class UrlShortenerApi {
         return cloud.ApiResponse {
           status: 302,
           headers: Map<str>{
-            "Content-Type": "text/xml",
-            Location: fullUrl
+            "Content-Type" => "text/xml",
+            Location => fullUrl
           }
         };
       } else {
