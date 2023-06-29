@@ -20,29 +20,27 @@ log(s3); // prints Concat: Hello Wing String
 ```ts playground
 let s = "Hello to a new Wing world";
 
-let var rebuilt = "";
 // lets start with split
 for w in s.split(" ") {
   if w.startsWith("H") {
-    rebuilt = "${rebuilt} ${w}"; // 'Hello' starts with H
+    log(w); // 'Hello' starts with H
   } 
   if w.length > 3 && w.lowercase() == w {
-    rebuilt = "${rebuilt} ${w}"; // 'world' is lowercased with more then 3 chars
+    log(w); // 'world' is lowercased with more then 3 chars
   }
   if w.contains("in") && w.endsWith("g") {
-    rebuilt = "${rebuilt} ${w}"; // 'Wing' has in and end with g
+    log(w); // 'Wing' has in and end with g
   }
   if s.indexOf(w) == 6  {
-    rebuilt = "${rebuilt} ${w}"; // 'to' position is 6
+    log(w); // 'to' position is 6
   }
   if s.at(9) == w {
-    rebuilt = "${rebuilt} ${w}"; // 'a' is a single char
+    log(w); // 'a' is a single char
   }
   if s.substring(11,14) == w {
-    rebuilt = "${rebuilt} ${w}"; // 'new' position is 11-14
+    log(w); // 'new' position is 11-14
   }
 }
-log(rebuilt); // prints "Hello to a new Wing world"
 ```
 
 ## Num
