@@ -103,9 +103,8 @@ export class Util {
    */
   public static geometricMean(arr: number[]): number {
     const product = arr.reduce((acc, num) => acc * num, 1);
-    return this.round(
-      Math.pow(product, 1 / arr.length), {
-      decimalPlaces: 6
+    return this.round(Math.pow(product, 1 / arr.length), {
+      decimalPlaces: 6,
     });
   }
 
@@ -198,5 +197,5 @@ export class Util {
     return numerator / denominator;
   }
 
-  private constructor() { }
+  private constructor() {}
 }
