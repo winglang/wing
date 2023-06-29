@@ -5,6 +5,15 @@ import { Code, InflightClient } from "../core";
  */
 export class Util {
   /**
+   * The mathematical constant representing the ratio of a circle's circumference to its diameter.
+   */
+  public static readonly PI = 3.141592653589793;
+  /**
+   * Euler's number, a mathematical constant approximately equal to 2.71828.
+   */
+  public static readonly E = 2.718281828459045;
+
+  /**
    * @internal
    */
   public static _toInflightType(): Code {
@@ -59,8 +68,7 @@ export class Util {
    */
   public static arithmeticMean(arr: number[]): number {
     const sum = arr.reduce((acc, num) => acc + num, 0);
-    const meanValue = sum / arr.length;
-    return meanValue;
+    return sum / arr.length;
   }
 
   /**
@@ -69,8 +77,7 @@ export class Util {
    */
   public static geometricMean(arr: number[]): number {
     const product = arr.reduce((acc, num) => acc * num, 1);
-    const meanValue = Number(Math.pow(product, 1 / arr.length).toPrecision(6));
-    return meanValue;
+    return this.round(Math.pow(product, 1 / arr.length), 6);
   }
 
   /**
@@ -79,8 +86,7 @@ export class Util {
    */
   public static harmonicMean(arr: number[]): number {
     const reciprocalSum = arr.reduce((acc, num) => acc + 1 / num, 0);
-    const meanValue = arr.length / reciprocalSum;
-    return meanValue;
+    return arr.length / reciprocalSum;
   }
 
   /**
@@ -103,7 +109,11 @@ export class Util {
    * Rounds the given number to the nearest integer.
    * @param value - The number to be rounded.
    */
-  public static round(value: number): number {
+  public static round(value: number, decimalPlaces?: number): number {
+    if (decimalPlaces) {
+      const multiplier = Math.pow(10, decimalPlaces);
+      return Math.round(value * multiplier) / multiplier;
+    }
     return Math.round(value);
   }
 
@@ -131,5 +141,5 @@ export class Util {
     throw new Error("The argument is not a Set");
   }
 
-  private constructor() { }
+  private constructor() {}
 }
