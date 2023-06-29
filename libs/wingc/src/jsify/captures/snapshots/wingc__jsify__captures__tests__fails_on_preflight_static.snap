@@ -66,10 +66,9 @@ class $Closure1 extends $stdlib.std.Resource {
     this.display.hidden = true;
   }
   static _toInflightType(context) {
-    const $_MyType_staticMethod___ = context._lift((MyType.staticMethod()));
     return $stdlib.core.NodeJsCode.fromInline(`
       require("./inflight.$Closure1.js")({ 
-        $_MyType_staticMethod___: ${$_MyType_staticMethod___},
+        $_MyType_staticMethod___: ${context._lift((MyType.staticMethod()))},
       })
     `);
   }

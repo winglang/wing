@@ -1,8 +1,9 @@
 use crate::{
 	ast::{ArgList, Class, Expr, FunctionBody, Phase, Reference, Scope, Stmt, TypeAnnotation, TypeAnnotationKind},
+	diagnostic::{report_diagnostic, Diagnostic, WingSpan},
 	type_check::{
 		symbol_env::{LookupResult, SymbolEnv},
-		SymbolKind, Type, TypeRef, Types, UnsafeRef, VariableInfo,
+		SymbolKind, Types, VariableInfo,
 	},
 	visit::{self, Visit},
 };
@@ -17,9 +18,6 @@ use std::{
 
 /// Lists all the captures from a class
 pub struct ClassCaptures {
-	// all the types captured by this class
-	types: IndexMap<String, TypeRef>,
-
 	/// captured variables per method
 	vars: BTreeMap<String, BTreeMap<String, BTreeSet<String>>>,
 }
@@ -38,6 +36,9 @@ pub struct CaptureScanner<'a> {
 
 	/// The current environment (tracked via the visitor)
 	current_env: &'a RefCell<Option<SymbolEnv>>,
+
+	/// The phase of the current expression
+	current_expr_phase: Option<Phase>,
 
 	/// The index of the last visited statement.
 	current_index: usize,
@@ -66,22 +67,18 @@ impl ClassCaptures {
 		}
 
 		// Remove myself from the list of referenced preflight types because I don't need to import myself
-		captures.remove_type(&class.name.name.clone());
+		captures.remove(&class.name.name.clone());
 		captures
 	}
 
 	fn new() -> Self {
 		Self {
-			types: IndexMap::new(),
+			// types: IndexMap::new(),
 			vars: BTreeMap::new(),
 		}
 	}
 
-	pub fn capture_type(&mut self, name: String, t: UnsafeRef<Type>) {
-		self.types.insert(name, t);
-	}
-
-	pub fn capture_var(&mut self, method_name: &str, var: &str, op: Option<String>) {
+	pub fn capture(&mut self, method_name: &str, var: &str, op: Option<String>) {
 		let entry = self
 			.vars
 			.entry(method_name.to_string())
@@ -94,8 +91,8 @@ impl ClassCaptures {
 		}
 	}
 
-	pub fn remove_type(&mut self, name: &String) {
-		self.types.remove(name);
+	pub fn remove(&mut self, name: &String) {
+		self.vars.remove(name);
 	}
 
 	pub fn vars(&self) -> IndexMap<String, BTreeSet<String>> {
@@ -118,10 +115,6 @@ impl ClassCaptures {
 			result.insert(v);
 		}
 
-		for (t, _) in self.free_types() {
-			result.insert(t);
-		}
-
 		return result;
 	}
 
@@ -133,16 +126,6 @@ impl ClassCaptures {
 			.filter(|(v, _)| !v.starts_with("this."))
 			.map(|(v, ops)| (v.to_string(), ops.clone()))
 			.collect()
-	}
-
-	/// Returns all (free) types
-	pub fn free_types(&self) -> BTreeMap<String, TypeRef> {
-		let mut res: BTreeMap<String, TypeRef> = BTreeMap::new();
-		for (n, t) in &self.types {
-			res.insert(n.clone(), *t);
-		}
-
-		res
 	}
 
 	/// Returns all the fields `this.xxx`
@@ -173,13 +156,6 @@ impl ClassCaptures {
 
 impl Display for ClassCaptures {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-		if !self.types.is_empty() {
-			write!(f, "Types:\n")?;
-			for (name, t) in &self.types {
-				write!(f, "  {} = {}\n", name, t)?;
-			}
-		}
-
 		if !self.vars.is_empty() {
 			write!(f, "Variables:\n")?;
 			for (method, vars) in &self.vars {
@@ -207,6 +183,7 @@ impl<'a> CaptureScanner<'a> {
 			function_scope,
 			method_env: &function_scope.env,
 			current_env: &function_scope.env,
+			current_expr_phase: None,
 			current_index: 0,
 			types,
 		}
@@ -216,9 +193,20 @@ impl<'a> CaptureScanner<'a> {
 		self.visit_scope(self.function_scope);
 	}
 
-	fn try_capture(&mut self, r: String) -> bool {
+	fn try_capture(&mut self, r: String, span: &WingSpan) -> bool {
 		let env = self.current_env.borrow();
 		let result = env.as_ref().unwrap().lookup_nested_str(&r, Some(self.current_index));
+
+		// if the symbol is defined later in the current environment, it means we can't capture a
+		// reference to a symbol with the same name from a parent so bail out.
+		if let LookupResult::DefinedLater = result {
+			report_diagnostic(Diagnostic {
+				span: Some(span.clone()),
+				message: format!("Cannot capture \"{r}\" because it is shadowed by another object defined later"),
+			});
+
+			return false;
+		}
 
 		// if not found, return none
 		let LookupResult::Found(kind, info) = result else {
@@ -230,24 +218,20 @@ impl<'a> CaptureScanner<'a> {
 			return false;
 		}
 
-		match kind {
-			SymbolKind::Type(t) => {
-				self.captures.capture_type(r, *t);
-				return true;
-			}
-			SymbolKind::Variable(v) => {
-				if is_macro(v) {
-					return false;
-				}
-
-				self.captures.capture_var(self.method_name, &r, None);
-				return true;
-			}
-			SymbolKind::Namespace(_) => {}
+		// if the current expression phase is preflight, we don't need to capture
+		// because this expression will be handled by the lifting machinery
+		if self.current_expr_phase == Some(Phase::Preflight) {
+			return false;
 		}
 
-		// capture the dude!
-		return false;
+		if let SymbolKind::Variable(v) = kind {
+			if is_macro(v) {
+				return false;
+			}
+		}
+
+		self.captures.capture(self.method_name, &r, None);
+		return true;
 	}
 
 	/// Returns `true` if `env` is a child of the current method's environment
@@ -283,7 +267,7 @@ impl<'ast> Visit<'ast> for CaptureScanner<'ast> {
 		arg_list: &'ast ArgList,
 	) {
 		if let TypeAnnotationKind::UserDefined(u) = &class.kind {
-			if self.try_capture(u.full_path_str()) {
+			if self.try_capture(u.full_path_str(), &u.span) {
 				return;
 			}
 		}
@@ -294,12 +278,12 @@ impl<'ast> Visit<'ast> for CaptureScanner<'ast> {
 	fn visit_reference(&mut self, node: &'ast Reference) {
 		match node {
 			Reference::Identifier(x) => {
-				if self.try_capture(x.name.clone()) {
+				if self.try_capture(x.name.clone(), &x.span) {
 					return;
 				}
 			}
 			Reference::TypeMember { type_, .. } => {
-				if self.try_capture(type_.full_path_str()) {
+				if self.try_capture(type_.full_path_str(), &type_.span) {
 					return;
 				}
 			}
@@ -314,12 +298,11 @@ impl<'ast> Visit<'ast> for CaptureScanner<'ast> {
 	fn visit_expr(&mut self, node: &'ast Expr) {
 		// skip preflight expressions - they are handled by the lifting machinery
 		if let Some(phase) = self.types.get_expr_phase(node) {
-			if phase == Phase::Preflight {
-				return;
-			}
+			self.current_expr_phase = Some(phase);
 		}
 
 		visit::visit_expr(self, node);
+		self.current_expr_phase = None;
 	}
 
 	fn visit_scope(&mut self, node: &'ast Scope) {

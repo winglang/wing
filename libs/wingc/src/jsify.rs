@@ -8,7 +8,7 @@ use const_format::formatcp;
 use indexmap::IndexSet;
 use itertools::Itertools;
 
-use std::{cmp::Ordering, collections::BTreeMap, path::Path, vec};
+use std::{cmp::Ordering, path::Path, vec};
 
 use crate::{
 	ast::{
@@ -21,7 +21,7 @@ use crate::{
 	diagnostic::{report_diagnostic, Diagnostic, WingSpan},
 	files::Files,
 	type_check::{
-		resolve_user_defined_type, symbol_env::SymbolEnv, ClassLike, Type, TypeRef, Types, CLASS_INFLIGHT_INIT_NAME,
+		symbol_env::SymbolEnv, ClassLike, Type, TypeRef, Types, CLASS_INFLIGHT_INIT_NAME,
 		CLASS_INIT_NAME, HANDLE_METHOD_NAME,
 	},
 	visit::{self, Visit},
@@ -29,12 +29,7 @@ use crate::{
 	WINGSDK_STD_MODULE,
 };
 
-use self::{
-	captures::ClassCaptures,
-	codemaker::CodeMaker,
-	lifts::Lifts,
-	mangling::{mangle, mangle_captures},
-};
+use self::{captures::ClassCaptures, codemaker::CodeMaker, lifts::Lifts, mangling::mangle_captures};
 
 const PREFLIGHT_FILE_NAME: &str = "preflight.js";
 
@@ -63,7 +58,7 @@ pub struct JSifyContext<'a> {
 	/// Objects that need to be lifted into this phase (only relevant for inflight).
 	lifts: &'a mut Lifts,
 
-	current_method_name: Option<String>,
+	current_method_name: String,
 }
 
 pub struct JSifier<'a> {
@@ -127,7 +122,7 @@ impl<'a> JSifier<'a> {
 				in_json: false,
 				phase: Phase::Preflight,
 				lifts: &mut Lifts::default(),
-				current_method_name: None,
+				current_method_name: "<root>".to_string(),
 			};
 			let s = self.jsify_statement(scope.env.borrow().as_ref().unwrap(), statement, &mut jsify_context); // top level statements are always preflight
 			if let StmtKind::Bring {
@@ -229,7 +224,23 @@ impl<'a> JSifier<'a> {
 				property,
 				optional_accessor: _,
 			} => self.jsify_expression(object, Some(property.clone()), ctx) + "." + &property.to_string(),
-			Reference::TypeMember { type_, property } => type_.full_path_str() + "." + &property.to_string(),
+			Reference::TypeMember { type_, property } => {
+				let mut type_str = type_.full_path_str();
+
+				// if we are in "inflight" phase, we need to lift the type (doesn't matter if this is an
+				// inflight class or a preflight class, it's going to be defined in a separate file
+				// anyway.
+				if ctx.phase == Phase::Inflight {
+					type_str = ctx.lifts.allocate(
+						&ctx.current_method_name,
+						false,
+						&type_str,
+						Some(property.name.clone()),
+					);
+			};
+
+				type_str + "." + &property.to_string()
+			}
 		}
 	}
 
@@ -316,10 +327,9 @@ impl<'a> JSifier<'a> {
 				return preflight_js;
 			}
 
-			let method_name = ctx.current_method_name.clone().expect("inflight method name not set");
 			let lift_symbol = ctx
 				.lifts
-				.add(method_name, is_field, preflight_js, property.map(|f| f.name));
+				.allocate(&ctx.current_method_name, is_field, &preflight_js, property.map(|f| f.name));
 			return lift_symbol;
 		}
 
@@ -366,8 +376,6 @@ impl<'a> JSifier<'a> {
 					return "".to_string();
 				};
 
-				let ctor = udt.full_path_str();
-
 				let scope = if is_preflight_class && class_type.std_construct_args {
 					if let Some(scope) = obj_scope {
 						Some(self.jsify_expression(scope, None, ctx))
@@ -378,18 +386,20 @@ impl<'a> JSifier<'a> {
 					None
 			 	};
 
+				
+
 				let id = if is_preflight_class && class_type.std_construct_args {
 					Some(if let Some(id_exp) = obj_id {
 						self.jsify_expression(id_exp, None, ctx)
 					} else {
-						format!("\"{ctor}\"")
+						format!("\"{}\"", udt.full_path_str())
 					})
 				} else {
 					None
 				};
 
 				let args = self.jsify_arg_list(&arg_list, scope, id, ctx);
-
+				let ctor = udt.full_path_str();
 				let fqn = class_type.fqn.clone();
 				if let (true, Some(fqn)) = (is_preflight_class, fqn) {
 					if is_abstract {
@@ -398,7 +408,13 @@ impl<'a> JSifier<'a> {
 						format!("this.node.root.new(\"{}\",{},{})", fqn, ctor, args)
 					}
 				} else {
-					format!("new {}({})", ctor, args)
+					let class_name = if ctx.phase == Phase::Inflight {
+						ctx.lifts.allocate(&ctx.current_method_name, false, &ctor, None)
+					} else {
+						ctor
+					};
+
+					format!("new {}({})", class_name, args)
 				}
 			}
 			ExprKind::Literal(lit) => match lit {
@@ -1008,7 +1024,7 @@ impl<'a> JSifier<'a> {
 
 		// emit the inflight side of the class into a separate file
 
-		let (lifts, captures) = self.jsify_class_inflight(&env, &class, &inflight_methods, ctx);
+		let (lifts, captures) = self.jsify_class_inflight(&class, &inflight_methods, ctx);
 
 		// if our class is declared within a preflight scope, then we emit the preflight class
 		if ctx.phase == Phase::Preflight {
@@ -1044,7 +1060,7 @@ impl<'a> JSifier<'a> {
 			}
 
 			// emit the `_toInflight()` and `_toInflightType()` static methods
-			code.add_code(self.jsify_to_inflight_type_method(&class, &captures, &lifts));
+			code.add_code(self.jsify_to_inflight_type_method(&class, &lifts));
 			code.add_code(self.jsify_to_inflight_method(&class.name, &lifts));
 
 			// emit `_registerBindObject` to register the class's host binding methods (for type & instance binds).
@@ -1117,7 +1133,7 @@ impl<'a> JSifier<'a> {
 				in_json: ctx.in_json,
 				phase: ctx.phase,
 				lifts: ctx.lifts,
-				current_method_name: Some(CLASS_INIT_NAME.to_string()),
+				current_method_name: CLASS_INIT_NAME.into(),
 			},
 		));
 
@@ -1131,49 +1147,24 @@ impl<'a> JSifier<'a> {
 	/// - `class` is the class that is being jsified.
 	/// - `lifted_objects` is a map from object names to the set of properties that are accessed on that object.
 	/// - `captured_types` is the list of types that are referenced in the inflight class.
-	fn jsify_to_inflight_type_method(&mut self, class: &AstClass, captures: &ClassCaptures, lifts: &Lifts) -> CodeMaker {
+	fn jsify_to_inflight_type_method(&mut self, class: &AstClass, lifts: &Lifts) -> CodeMaker {
 		let client_path = Self::js_resolve_path(&inflight_filename(class));
 
 		let mut code = CodeMaker::default();
 
-		code.open("static _toInflightType(context) {"); // TODO: consider removing the context and making _lift a static method
-
-		let mut symbols = BTreeMap::<String, String>::new();
-
-		// lift all free preflight objects
-		for l in lifts.all().iter().filter(|f| !f.is_field) {
-			code.line(format!(
-				"const {} = context._lift({});",
-				l.inflight_symbol.clone(),
-				l.preflight_code,
-			));
-
-			symbols.insert(l.inflight_symbol.clone(), l.inflight_symbol.clone());
-		}
-
-		for (type_name, t) in captures.free_types() {
-			let symbol = mangle(&type_name);
-			let variable = format!("lifted_{}", symbol);
-			match &*t {
-				Type::Class(_) => {
-					code.line(format!("const {variable} = {type_name}._toInflightType(context).text;"));
-				}
-				Type::Enum(e) => {
-					code.open(format!("const {variable} = `"));
-					code.add_code(self.jsify_enum(&e.values));
-					code.close("`;");
-				}
-				_ => {}
-			}
-
-			symbols.insert(symbol, variable);
-		}
+		code.open("static _toInflightType(context) {");
 
 		code.open(format!("return {STDLIB}.core.NodeJsCode.fromInline(`"));
 		code.open(format!("require({client_path})({{ "));
-		for (s, v) in symbols {
-			code.line(format!("{s}: ${{{v}}},"));
+
+		// lift all free preflight objects
+		for l in lifts.all_free() {
+			code.line(format!(
+				"{}: ${{context._lift({})}},",
+				l.inflight_symbol, l.preflight_code
+			));
 		}
+
 		code.close("})");
 		code.close("`);");
 
@@ -1222,7 +1213,6 @@ impl<'a> JSifier<'a> {
 	// Write a class's inflight to a file
 	fn jsify_class_inflight(
 		&mut self,
-		env: &SymbolEnv,
 		class: &AstClass,
 		inflight_methods: &[&(Symbol, FunctionDefinition)],
 		ctx: &mut JSifyContext,
@@ -1243,8 +1233,7 @@ impl<'a> JSifier<'a> {
 		let mut captures = ClassCaptures::scan(class, &self.types);
 
 		if let Some(parent) = &class.parent {
-			let parent_type = resolve_user_defined_type(&parent, env, 0).unwrap();
-			captures.capture_type(parent.full_path_str(), parent_type);
+			captures.capture("<base>", &parent.full_path_str(), None);
 		}
 
 		let mut lifts = Lifts::default();
@@ -1265,7 +1254,7 @@ impl<'a> JSifier<'a> {
 						in_json: ctx.in_json,
 						phase: class.inflight_initializer.signature.phase,
 						lifts: &mut lifts,
-						current_method_name: Some(inflight_init_name.to_string()),
+						current_method_name: inflight_init_name.into(),
 					},
 				));
 			}
@@ -1280,7 +1269,7 @@ impl<'a> JSifier<'a> {
 					in_json: ctx.in_json,
 					phase: def.signature.phase,
 					lifts: &mut lifts,
-					current_method_name: Some(name.name.clone()),
+					current_method_name: name.name.clone(),
 				},
 			));
 		}

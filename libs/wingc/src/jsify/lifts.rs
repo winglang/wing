@@ -27,10 +27,9 @@ impl LiftedObject {
 	}
 }
 
-
-
 impl Lifts {
-	pub fn add(&mut self, method_name: String, is_field: bool, preflight_code: String, op: Option<String>) -> String {
+	/// Allocate a new lifted object. Returns the symbol to use in the inflight code.
+	pub fn allocate(&mut self, method_name: &str, is_field: bool, preflight_code: &str, op: Option<String>) -> String {
 		let prefix = if is_field { "this." } else { "" };
 
 		let slug = replace_non_alphanumeric(&preflight_code);
@@ -39,9 +38,9 @@ impl Lifts {
 		let key = format!("{}.{}", method_name, inflight_symbol);
 
 		let x = self.lifts.entry(key).or_insert(LiftedObject {
-			method_name: method_name.clone(),
+			method_name: method_name.into(),
 			inflight_symbol: inflight_symbol.clone(),
-			preflight_code: preflight_code.clone(),
+			preflight_code: preflight_code.into(),
 			is_field,
 			operations: BTreeSet::default(),
 		});
@@ -85,6 +84,10 @@ impl Lifts {
 		}
 
 		result
+	}
+
+	pub fn all_free(&self) -> Vec<LiftedObject> {
+		self.all().iter().filter(|x| !x.is_field).cloned().collect()
 	}
 }
 

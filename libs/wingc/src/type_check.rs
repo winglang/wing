@@ -3592,7 +3592,7 @@ impl<'a> TypeChecker<'a> {
 									is_static: true,
 									is_member: true,
 								},
-								Phase::Independent, // TODO <<<<<<<<<<<<<<<<<<<<<
+								Phase::Independent,
 							)
 						} else {
 							self.spanned_error(

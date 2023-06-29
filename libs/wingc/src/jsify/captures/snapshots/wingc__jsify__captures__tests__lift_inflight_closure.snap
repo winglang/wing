@@ -68,10 +68,9 @@ class $Closure2 extends $stdlib.std.Resource {
     this.display.hidden = true;
   }
   static _toInflightType(context) {
-    const $f = context._lift(f);
     return $stdlib.core.NodeJsCode.fromInline(`
       require("./inflight.$Closure2.js")({ 
-        $f: ${$f},
+        $f: ${context._lift(f)},
       })
     `);
   }

@@ -47,10 +47,9 @@ class Foo extends $stdlib.std.Resource {
         this.display.hidden = true;
       }
       static _toInflightType(context) {
-        const $__parent_this_1_b = context._lift(__parent_this_1.b);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure1.js")({ 
-            $__parent_this_1_b: ${$__parent_this_1_b},
+            $__parent_this_1_b: ${context._lift(__parent_this_1.b)},
           })
         `);
       }

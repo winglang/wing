@@ -27,7 +27,7 @@ const generateTestName = (path: string) => path.split(sep).slice(-2).join("/");
  */
 export interface TestOptions extends CompileOptions { }
 
-export async function test(entrypoints: string[], options: TestOptions) {
+export async function test(entrypoints: string[], options: TestOptions): Promise<number> {
   const startTime = Date.now();
   const results: { testName: string; results: sdk.cloud.TestResult[] }[] = [];
   for (const entrypoint of entrypoints) {
@@ -36,33 +36,31 @@ export async function test(entrypoints: string[], options: TestOptions) {
       const singleTestResults: sdk.cloud.TestResult[] | void = await testOne(entrypoint, options);
       results.push({ testName, results: singleTestResults ?? [] });
     } catch (error) {
-      console.error((error as Error).message);
+      console.log((error as Error).message);
       results.push({
         testName: generateTestName(entrypoint),
         results: [{ pass: false, path: "", error: (error as Error).message, traces: [] }],
       });
     }
   }
+  printResults(results, Date.now() - startTime);
 
-  const output = renderResults(results, Date.now() - startTime);
-
-  // if we have any failures, throw an error.
+  // if we have any failures, exit with 1
   for (const test of results) {
     for (const r of test.results) {
       if (r.error) {
-        console.error(output);
-        throw new Error("One or more tests failed");
+        return 1;
       }
     }
   }
 
-  console.log(output);
+  return 0;
 }
 
-function renderResults(
+function printResults(
   testResults: { testName: string; results: sdk.cloud.TestResult[] }[],
   duration: number
-): string {
+) {
   const durationInSeconds = duration / 1000;
   const totalSum = testResults.length;
   const failing = testResults.filter(({ results }) => results.some(({ pass }) => !pass));
@@ -125,7 +123,7 @@ function renderResults(
     ).toFixed(2)}s`
   );
 
-  return results.filter((value) => !!value).join("\n");
+  console.log(results.filter((value) => !!value).join("\n"));
 }
 
 async function testOne(entrypoint: string, options: TestOptions) {

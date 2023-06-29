@@ -49,6 +49,11 @@ export function serializeImmutableData(scope: IConstruct, obj: any): string {
         return (obj as IResource)._toInflight().text;
       }
 
+      // if the object is a type object and has a "_toInflightType" method, we use it to serialize
+      if (typeof obj._toInflightType === "function") {
+        return obj._toInflightType(scope).text;
+      }
+
       // structs are just plain objects
       if (obj.constructor.name === "Object") {
         const lines = [];

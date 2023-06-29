@@ -7,11 +7,11 @@ Files:
 
 inflight.$Closure1.js
 ------------------------------------------------------
-module.exports = function({ A }) {
+module.exports = function({ $A, A }) {
   class $Closure1 {
     async handle()  {
       const B = require("./inflight.B.js")({A});
-      (await A.foo());
+      (await $A.foo());
     }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -37,10 +37,10 @@ module.exports = function({  }) {
 
 inflight.B.js
 ------------------------------------------------------
-module.exports = function({ A }) {
+module.exports = function({ $A, A }) {
   class B {
     async foo()  {
-      (await A.foo());
+      (await $A.foo());
     }
   }
   return B;
@@ -77,10 +77,9 @@ class $Closure1 extends $stdlib.std.Resource {
     this.display.hidden = true;
   }
   static _toInflightType(context) {
-    const lifted_A = A._toInflightType(context).text;
     return $stdlib.core.NodeJsCode.fromInline(`
       require("./inflight.$Closure1.js")({ 
-        A: ${lifted_A},
+        $A: ${context._lift(A)},
       })
     `);
   }
@@ -93,6 +92,12 @@ class $Closure1 extends $stdlib.std.Resource {
         return client;
       })())
     `);
+  }
+  _registerBind(host, ops) {
+    if (ops.includes("handle")) {
+      $Closure1._registerBindObject(A, host, ["foo"]);
+    }
+    super._registerBind(host, ops);
   }
 }
 this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:test",new $Closure1(this,"$Closure1"));

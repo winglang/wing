@@ -27,10 +27,9 @@ class MyType extends $stdlib.std.Resource {
     this._addInflightOps("addToQueue");
   }
   static _toInflightType(context) {
-    const $q = context._lift(q);
     return $stdlib.core.NodeJsCode.fromInline(`
       require("./inflight.MyType.js")({ 
-        $q: ${$q},
+        $q: ${context._lift(q)},
       })
     `);
   }

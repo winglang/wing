@@ -7,13 +7,13 @@ Files:
 
 inflight.$Closure1.js
 ------------------------------------------------------
-module.exports = function({ util_Util }) {
+module.exports = function({ $util_Util, util_Util }) {
   const util = {
     Util: util_Util,
   };
   class $Closure1 {
     async handle()  {
-      (await util.Util.tryEnv("PATH"));
+      (await $util_Util.tryEnv("PATH"));
     }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -34,10 +34,9 @@ class $Closure1 extends $stdlib.std.Resource {
     this.display.hidden = true;
   }
   static _toInflightType(context) {
-    const lifted_util_Util = util.Util._toInflightType(context).text;
     return $stdlib.core.NodeJsCode.fromInline(`
       require("./inflight.$Closure1.js")({ 
-        util_Util: ${lifted_util_Util},
+        $util_Util: ${context._lift(util.Util)},
       })
     `);
   }
@@ -50,6 +49,12 @@ class $Closure1 extends $stdlib.std.Resource {
         return client;
       })())
     `);
+  }
+  _registerBind(host, ops) {
+    if (ops.includes("handle")) {
+      $Closure1._registerBindObject(util.Util, host, ["tryEnv"]);
+    }
+    super._registerBind(host, ops);
   }
 }
 this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:test",new $Closure1(this,"$Closure1"));

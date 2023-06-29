@@ -30,10 +30,9 @@ class $Closure1 extends $stdlib.std.Resource {
     this.display.hidden = true;
   }
   static _toInflightType(context) {
-    const $s_length = context._lift(s.length);
     return $stdlib.core.NodeJsCode.fromInline(`
       require("./inflight.$Closure1.js")({ 
-        $s_length: ${$s_length},
+        $s_length: ${context._lift(s.length)},
       })
     `);
   }

@@ -10,7 +10,7 @@ import { log } from "../shared/log";
 /**
  * A resource that can run inflight code.
  */
-export interface IInflightHost extends IResource {}
+export interface IInflightHost extends IResource { }
 
 /**
  * Abstract interface for `Resource`.
@@ -280,8 +280,7 @@ export abstract class Resource extends Construct implements IResource {
    */
   public _registerBind(host: IInflightHost, ops: string[]) {
     log(
-      `Registering a binding for a resource (${this.node.path}) to a host (${
-        host.node.path
+      `Registering a binding for a resource (${this.node.path}) to a host (${host.node.path
       }) with ops: ${JSON.stringify(ops)}`
     );
 
@@ -345,9 +344,13 @@ export abstract class Resource extends Construct implements IResource {
   }
 
   /**
-   * "Lifts" a value into an inflight context. If the value is a resource (i.e. has a `_toInflight`
-   * method), this method will be called and the result will be returned. Otherwise, the value is
-   * returned as-is.
+   * "Lifts" a value into an inflight context. 
+   *
+   * If the value is a resource (i.e. has a `_toInflight` method), this method will be called and
+   * the result will be returned. Otherwise, the value is returned as-is.
+   *
+   * If the value is a type (i.e has a `_toInflightType` method), this method will be called and the
+   * result will be returned.
    *
    * @param value The value to lift.
    * @returns a string representation of the value in an inflight context.

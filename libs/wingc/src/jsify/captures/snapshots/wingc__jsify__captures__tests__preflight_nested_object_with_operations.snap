@@ -63,10 +63,9 @@ class $Closure1 extends $stdlib.std.Resource {
     this.display.hidden = true;
   }
   static _toInflightType(context) {
-    const $a_bucky = context._lift(a.bucky);
     return $stdlib.core.NodeJsCode.fromInline(`
       require("./inflight.$Closure1.js")({ 
-        $a_bucky: ${$a_bucky},
+        $a_bucky: ${context._lift(a.bucky)},
       })
     `);
   }

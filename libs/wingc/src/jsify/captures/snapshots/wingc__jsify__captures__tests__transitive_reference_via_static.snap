@@ -36,10 +36,10 @@ module.exports = function({ $b }) {
 
 inflight.YourType.js
 ------------------------------------------------------
-module.exports = function({ MyType }) {
+module.exports = function({ $MyType }) {
   class YourType {
     async putIndirect()  {
-      (await MyType.putInBucket());
+      (await $MyType.putInBucket());
     }
     constructor({  }) {
     }
@@ -56,10 +56,9 @@ class MyType extends $stdlib.std.Resource {
     this._addInflightOps("putInBucket");
   }
   static _toInflightType(context) {
-    const $b = context._lift(b);
     return $stdlib.core.NodeJsCode.fromInline(`
       require("./inflight.MyType.js")({ 
-        $b: ${$b},
+        $b: ${context._lift(b)},
       })
     `);
   }
@@ -86,10 +85,9 @@ class YourType extends $stdlib.std.Resource {
     this._addInflightOps("putIndirect");
   }
   static _toInflightType(context) {
-    const lifted_MyType = MyType._toInflightType(context).text;
     return $stdlib.core.NodeJsCode.fromInline(`
       require("./inflight.YourType.js")({ 
-        MyType: ${lifted_MyType},
+        $MyType: ${context._lift(MyType)},
       })
     `);
   }
@@ -103,6 +101,12 @@ class YourType extends $stdlib.std.Resource {
       })())
     `);
   }
+  _registerBind(host, ops) {
+    if (ops.includes("putIndirect")) {
+      YourType._registerBindObject(MyType, host, ["putInBucket"]);
+    }
+    super._registerBind(host, ops);
+  }
 }
 class $Closure1 extends $stdlib.std.Resource {
   constructor(scope, id, ) {
@@ -111,10 +115,9 @@ class $Closure1 extends $stdlib.std.Resource {
     this.display.hidden = true;
   }
   static _toInflightType(context) {
-    const $t = context._lift(t);
     return $stdlib.core.NodeJsCode.fromInline(`
       require("./inflight.$Closure1.js")({ 
-        $t: ${$t},
+        $t: ${context._lift(t)},
       })
     `);
   }

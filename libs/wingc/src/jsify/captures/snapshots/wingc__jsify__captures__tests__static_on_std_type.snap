@@ -7,11 +7,7 @@ Files:
 
 inflight.$Closure1.js
 ------------------------------------------------------
-module.exports = function({ std_Json, std_String }) {
-  const std = {
-    Json: std_Json,
-    String: std_String,
-  };
+module.exports = function({ $std_Json, $std_String }) {
   class $Closure1 {
     async handle()  {
       {console.log(((args) => { if (typeof args !== "string") {throw new Error("unable to parse " + typeof args + " " + args + " as a string")}; return JSON.parse(JSON.stringify(args)) })("hello"))};
@@ -35,12 +31,10 @@ class $Closure1 extends $stdlib.std.Resource {
     this.display.hidden = true;
   }
   static _toInflightType(context) {
-    const lifted_std_Json = std.Json._toInflightType(context).text;
-    const lifted_std_String = std.String._toInflightType(context).text;
     return $stdlib.core.NodeJsCode.fromInline(`
       require("./inflight.$Closure1.js")({ 
-        std_Json: ${lifted_std_Json},
-        std_String: ${lifted_std_String},
+        $std_Json: ${context._lift(std.Json)},
+        $std_String: ${context._lift(std.String)},
       })
     `);
   }
@@ -53,6 +47,13 @@ class $Closure1 extends $stdlib.std.Resource {
         return client;
       })())
     `);
+  }
+  _registerBind(host, ops) {
+    if (ops.includes("handle")) {
+      $Closure1._registerBindObject(std.Json, host, ["values"]);
+      $Closure1._registerBindObject(std.String, host, ["fromJson"]);
+    }
+    super._registerBind(host, ops);
   }
 }
 this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:test",new $Closure1(this,"$Closure1"));

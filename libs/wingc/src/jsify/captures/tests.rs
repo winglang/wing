@@ -58,6 +58,23 @@ fn static_local_inflight_class() {
 }
 
 #[test]
+fn inflight_free_var_from_inflight() {
+	assert_snapshot!(capture_ok(
+		r#"
+    test "test" {
+      let s = "hello";
+      
+      class A {
+        init() {
+          log(s);
+        }
+      }
+    }
+    "#,
+	));
+}
+
+#[test]
 fn static_external_inflight_class() {
 	assert_snapshot!(capture_ok(
 		r#"
@@ -385,6 +402,21 @@ fn capture_type_static_method() {
 }
 
 #[test]
+fn capture_type_static_method_inflight_class() {
+	assert_snapshot!(capture_ok(
+		r#"
+    inflight class Foo {
+      static bar(): str { return "bar"; }
+    }
+
+    test "test" {
+      Foo.bar();
+    }
+    "#,
+	));
+}
+
+#[test]
 fn capture_type_new_inflight_class_outer() {
 	assert_snapshot!(capture_ok(
 		r#"
@@ -619,9 +651,10 @@ fn enum_value() {
 	assert_snapshot!(capture_ok(
 		r#"
     enum MyEnum { B, C }
-
+    let x = MyEnum.C;
     test "test" {
       assert(MyEnum.B != MyEnum.C);
+      assert(x == MyEnum.C);
     }
     "#,
 	));

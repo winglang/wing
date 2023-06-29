@@ -7,10 +7,10 @@ Files:
 
 inflight.$Closure1.js
 ------------------------------------------------------
-module.exports = function({ Foo }) {
+module.exports = function({ $Foo, Foo }) {
   class $Closure1 {
     async handle()  {
-      (await Foo.bar());
+      (await $Foo.bar());
     }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -65,10 +65,9 @@ class $Closure1 extends $stdlib.std.Resource {
     this.display.hidden = true;
   }
   static _toInflightType(context) {
-    const lifted_Foo = Foo._toInflightType(context).text;
     return $stdlib.core.NodeJsCode.fromInline(`
       require("./inflight.$Closure1.js")({ 
-        Foo: ${lifted_Foo},
+        $Foo: ${context._lift(Foo)},
       })
     `);
   }
@@ -81,6 +80,12 @@ class $Closure1 extends $stdlib.std.Resource {
         return client;
       })())
     `);
+  }
+  _registerBind(host, ops) {
+    if (ops.includes("handle")) {
+      $Closure1._registerBindObject(Foo, host, ["bar"]);
+    }
+    super._registerBind(host, ops);
   }
 }
 this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:test",new $Closure1(this,"$Closure1"));

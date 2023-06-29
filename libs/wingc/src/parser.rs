@@ -581,7 +581,7 @@ impl<'s> Parser<'s> {
 							.err();
 					}
 
-					let return_type = Box::new(TypeAnnotation {
+					let init_return_type = Box::new(TypeAnnotation {
 						kind: TypeAnnotationKind::UserDefined(UserDefinedType {
 							root: name.clone(),
 							fields: vec![],
@@ -597,7 +597,7 @@ impl<'s> Parser<'s> {
 							),
 							signature: FunctionSignature {
 								parameters,
-								return_type,
+								return_type: init_return_type,
 								phase: Phase::Inflight,
 							},
 							is_static: false,
@@ -611,7 +611,7 @@ impl<'s> Parser<'s> {
 							is_static: false,
 							signature: FunctionSignature {
 								parameters,
-								return_type,
+								return_type: init_return_type,
 								phase: Phase::Preflight,
 							},
 							span: self.node_span(&class_element),
@@ -643,7 +643,7 @@ impl<'s> Parser<'s> {
 						}),
 						span: WingSpan::default(),
 					}),
-					phase: Phase::Preflight,
+					phase: class_phase,
 				},
 				body: FunctionBody::Statements(Scope::new(vec![], WingSpan::default())),
 				is_static: false,

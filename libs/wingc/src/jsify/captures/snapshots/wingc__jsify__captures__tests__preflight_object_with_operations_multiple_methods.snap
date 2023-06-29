@@ -30,10 +30,9 @@ class Foo extends $stdlib.std.Resource {
     this._addInflightOps("put", "list");
   }
   static _toInflightType(context) {
-    const $b = context._lift(b);
     return $stdlib.core.NodeJsCode.fromInline(`
       require("./inflight.Foo.js")({ 
-        $b: ${$b},
+        $b: ${context._lift(b)},
       })
     `);
   }
