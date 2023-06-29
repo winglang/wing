@@ -4,7 +4,8 @@ id: using-javascript
 keywords: [Wing example]
 ---
 
-### `url_utils.js`
+These examples require a separate file named `url_utils.js` with this code:
+
 ```js
 exports.isValidUrl = function(url) {
   try {
@@ -14,7 +15,6 @@ exports.isValidUrl = function(url) {
     return false;
   }
 };
-```
 
 ### Preflight static function
 ```ts 
