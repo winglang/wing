@@ -12,7 +12,7 @@ module.exports = function({  }) {
     async $inflight_init()  {
     }
     async handle(key)  {
-      {console.log(`deleted ${key}`)};
+      {console.log(String.raw({ raw: ["deleted ", ""] }, key))};
     }
   }
   return $Closure1;
@@ -32,7 +32,7 @@ module.exports = function({  }) {
     async $inflight_init()  {
     }
     async handle(key)  {
-      {console.log(`updated ${key}`)};
+      {console.log(String.raw({ raw: ["updated ", ""] }, key))};
     }
   }
   return $Closure2;
@@ -52,7 +52,7 @@ module.exports = function({  }) {
     async $inflight_init()  {
     }
     async handle(key)  {
-      {console.log(`created ${key}`)};
+      {console.log(String.raw({ raw: ["created ", ""] }, key))};
     }
   }
   return $Closure3;
@@ -72,7 +72,7 @@ module.exports = function({ other }) {
     async $inflight_init()  {
     }
     async handle(key, event)  {
-      (await other.put(`last_${event}_key`,key));
+      (await other.put(String.raw({ raw: ["last_", "_key"] }, event),key));
     }
   }
   return $Closure4;

@@ -1,66 +1,136 @@
 ---
 source: libs/wingc/src/lsp/completions.rs
 ---
-- label: assert
-  kind: 3
+- label: asBool
+  kind: 2
   documentation:
     kind: markdown
-    value: "```wing\n assert: (condition: bool): void\n```\n---\nAsserts that a condition is true\n\n### Parameters\n - *condition* - The condition to assert"
-  sortText: cc|assert
-  insertText: assert($0)
+    value: "```wing\n asBool: (): bool\n```\n---\nConvert Json element to number if possible.\n\n### Returns\na string."
+  sortText: ff|asBool
+  insertText: asBool($0)
   insertTextFormat: 2
   command:
     title: triggerParameterHints
     command: editor.action.triggerParameterHints
-- label: j
-  kind: 6
+- label: asNum
+  kind: 2
   documentation:
     kind: markdown
-    value: "```wing\npreflight j: MutJson\n```\n---"
-  sortText: bb|j
-  insertText: j
-  insertTextFormat: 2
-- label: log
-  kind: 3
-  documentation:
-    kind: markdown
-    value: "```wing\n log: (message: str): void\n```\n---\nLogs a message\n\n### Parameters\n - *message* - The message to log"
-  sortText: cc|log
-  insertText: log($0)
+    value: "```wing\n asNum: (): num\n```\n---\nConvert Json element to number if possible.\n\n### Returns\na string."
+  sortText: ff|asNum
+  insertText: asNum($0)
   insertTextFormat: 2
   command:
     title: triggerParameterHints
     command: editor.action.triggerParameterHints
-- label: panic
-  kind: 3
+- label: asStr
+  kind: 2
   documentation:
     kind: markdown
-    value: "```wing\n panic: (message: str): void\n```\n---\npanics with an error\n\n### Parameters\n - *message* - The message to panic with"
-  sortText: cc|panic
-  insertText: panic($0)
+    value: "```wing\n asStr: (): str\n```\n---\nConvert Json element to string if possible.\n\n### Returns\na string."
+  sortText: ff|asStr
+  insertText: asStr($0)
   insertTextFormat: 2
   command:
     title: triggerParameterHints
     command: editor.action.triggerParameterHints
-- label: throw
-  kind: 3
+- label: get
+  kind: 2
   documentation:
     kind: markdown
-    value: "```wing\n throw: (message: str): void\n```\n---\nthrows an error\n\n### Parameters\n - *message* - The message to throw"
-  sortText: cc|throw
-  insertText: throw($0)
+    value: "```wing\n get: (key: str): MutJson\n```\n---\nReturns a specified element from the Json.\n\n### Parameters\n - *key* - The key of the element to return.\n\n### Returns\nThe element associated with the specified key, or undefined if the key can't be found"
+  sortText: ff|get
+  insertText: get($0)
   insertTextFormat: 2
   command:
     title: triggerParameterHints
     command: editor.action.triggerParameterHints
-- label: "inflight () => {}"
-  kind: 15
-  sortText: "ll|inflight () => {}"
-  insertText: "inflight ($1) => {$2}"
+- label: getAt
+  kind: 2
+  documentation:
+    kind: markdown
+    value: "```wing\n getAt: (index: num): MutJson\n```\n---\nReturns a specified element at a given index from MutJson Array.\n\n### Parameters\n - *index* - The index of the element in the MutJson Array to return.\n\n### Returns\nThe element at given index in MutJson Array, or undefined if index is not valid"
+  sortText: ff|getAt
+  insertText: getAt($0)
   insertTextFormat: 2
-- label: "test \"\" { }"
-  kind: 15
-  sortText: "ll|test \"\" { }"
-  insertText: "test \"$1\" {\n\t$2\n}"
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: set
+  kind: 2
+  documentation:
+    kind: markdown
+    value: "```wing\n set: (key: str, value: MutJson): void\n```\n---\nAdds or updates an element in MutJson with a specific key and value.\n\n### Parameters\n - *key* - The key of the element to add.\n - *value* - The value of the element to add."
+  sortText: ff|set
+  insertText: set($0)
   insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: setAt
+  kind: 2
+  documentation:
+    kind: markdown
+    value: "```wing\n setAt: (index: num, value: MutJson): void\n```\n---\nSet element in MutJson Array with a specific key and value.\n\n### Parameters\n - *index*\n - *value* - The value of the element to set."
+  sortText: ff|setAt
+  insertText: setAt($0)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: tryAsBool
+  kind: 2
+  documentation:
+    kind: markdown
+    value: "```wing\n tryAsBool: (): bool?\n```\n---\nConvert Json element to boolean if possible.\n\n### Returns\na string."
+  sortText: ff|tryAsBool
+  insertText: tryAsBool($0)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: tryAsNum
+  kind: 2
+  documentation:
+    kind: markdown
+    value: "```wing\n tryAsNum: (): num?\n```\n---\nConvert Json element to string if possible.\n\n### Returns\na string."
+  sortText: ff|tryAsNum
+  insertText: tryAsNum($0)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: tryAsStr
+  kind: 2
+  documentation:
+    kind: markdown
+    value: "```wing\n tryAsStr: (): str?\n```\n---\nConvert Json element to string if possible.\n\n### Returns\na string."
+  sortText: ff|tryAsStr
+  insertText: tryAsStr($0)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: tryGet
+  kind: 2
+  documentation:
+    kind: markdown
+    value: "```wing\n tryGet: (key: str): MutJson?\n```\n---\nOptionally returns an specified element from the Json.\n\n### Parameters\n - *key* - The key of the element to return.\n\n### Returns\nThe element associated with the specified key, or undefined if the key can't be found"
+  sortText: ff|tryGet
+  insertText: tryGet($0)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: tryGetAt
+  kind: 2
+  documentation:
+    kind: markdown
+    value: "```wing\n tryGetAt: (index: num): MutJson?\n```\n---\nOptionally returns a specified element at a given index from Json Array.\n\n### Parameters\n - *index* - The index of the element in the Json Array to return.\n\n### Returns\nThe element at given index in Json Array, or undefined if index is not valid"
+  sortText: ff|tryGetAt
+  insertText: tryGetAt($0)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
 

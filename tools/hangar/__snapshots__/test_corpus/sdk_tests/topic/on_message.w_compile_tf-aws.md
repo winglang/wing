@@ -59,12 +59,12 @@ module.exports = function({ t, predicate, TestHelper }) {
       while ((i < 600)) {
         i = (i + 1);
         if ((await predicate.test())) {
-          {((cond) => {if (!cond) throw new Error(`assertion failed: '(await predicate.test())'`)})((await predicate.test()))};
+          {((cond) => {if (!cond) throw new Error("assertion failed: predicate.test()")})((await predicate.test()))};
           return;
         }
         (await TestHelper.sleep(100));
       }
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(await predicate.test())'`)})((await predicate.test()))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: predicate.test()")})((await predicate.test()))};
     }
   }
   return $Closure3;

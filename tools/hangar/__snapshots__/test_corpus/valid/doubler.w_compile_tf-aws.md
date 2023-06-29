@@ -12,7 +12,7 @@ module.exports = function({  }) {
     async $inflight_init()  {
     }
     async handle(m)  {
-      return `Hello ${m}!`;
+      return String.raw({ raw: ["Hello ", "!"] }, m);
     }
   }
   return $Closure1;
@@ -76,7 +76,7 @@ module.exports = function({ f }) {
     }
     async handle()  {
       const result = (await f.invoke("2"));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(result === "8")'`)})((result === "8"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: result == \"8\"")})((result === "8"))};
     }
   }
   return $Closure4;
