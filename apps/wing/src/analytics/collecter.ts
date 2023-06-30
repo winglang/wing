@@ -5,18 +5,8 @@ import * as os from "os";
 import { PACKAGE_VERSION } from "../cli";
 
 export class AnalyticsCollector {
-  cmd: Command;
-
-  constructor(cmd: Command) {
-    this.cmd = cmd;
-  }
-
-  public collect() {
-    AnalyticsStorage.storeAnalyticEvent(this.collectAnalyticEvent(this.cmd));
-  }
-
-  private collectAnalyticEvent(cmd: Command): AnalyticEvent {
-    return {
+  static collectCommandAnalytics(cmd: Command) {
+    const event: AnalyticEvent = {
       event: `wing cli:${cmd.name()}`,
       properties: {
         inCI: false,
@@ -29,9 +19,11 @@ export class AnalyticsCollector {
         node: this.collectNodeData(),
       }
     }
+
+    AnalyticsStorage.storeAnalyticEvent(event);
   }
 
-  private collectOSData(): OSData {
+  static collectOSData(): OSData {
     return {
       name: os.platform(),
       arch: os.arch(),
@@ -40,7 +32,7 @@ export class AnalyticsCollector {
     }
   }
 
-  private collectNodeData(): NodeData {
+  static collectNodeData(): NodeData {
     return {
       version: process.version,
     };
