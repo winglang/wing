@@ -392,7 +392,7 @@ impl<'s> Parser<'s> {
 		let reference = self.build_reference(&statement_node.child_by_field_name("name").unwrap(), phase)?;
 		if let ExprKind::Reference(r) = reference.kind {
 			Ok(StmtKind::Assignment {
-				variable: r,
+				variable: Expr::new(ExprKind::Reference(r), reference.span),
 				value: self.build_expression(&statement_node.child_by_field_name("value").unwrap(), phase)?,
 			})
 		} else {
@@ -590,7 +590,7 @@ impl<'s> Parser<'s> {
 							.err();
 					}
 
-					let return_type = Box::new(TypeAnnotation {
+					let init_return_type = Box::new(TypeAnnotation {
 						kind: TypeAnnotationKind::UserDefined(UserDefinedType {
 							root: name.clone(),
 							fields: vec![],
@@ -606,7 +606,7 @@ impl<'s> Parser<'s> {
 							),
 							signature: FunctionSignature {
 								parameters,
-								return_type,
+								return_type: init_return_type,
 								phase: Phase::Inflight,
 							},
 							is_static: false,
@@ -620,7 +620,7 @@ impl<'s> Parser<'s> {
 							is_static: false,
 							signature: FunctionSignature {
 								parameters,
-								return_type,
+								return_type: init_return_type,
 								phase: Phase::Preflight,
 							},
 							span: self.node_span(&class_element),
