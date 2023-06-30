@@ -35,6 +35,7 @@
     "open": "^8.4.0",
     "ora": "^5.4.1",
     "update-notifier": "^6.0.2",
+    "@segment/analytics-node": "^1.0.0",
     "vscode-languageserver": "^8.0.2",
     "@wingconsole/app": "workspace:^",
     "@winglang/compiler": "workspace:^",
