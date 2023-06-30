@@ -139,12 +139,14 @@ impl Fold for ClosureTransformer {
 					span: WingSpan::default(),
 				};
 
+				let class_udt = UserDefinedType {
+					root: new_class_name.clone(),
+					fields: vec![],
+					span: WingSpan::default(),
+				};
+
 				let class_type_annotation = TypeAnnotation {
-					kind: TypeAnnotationKind::UserDefined(UserDefinedType {
-						root: new_class_name.clone(),
-						fields: vec![],
-						span: WingSpan::default(),
-					}),
+					kind: TypeAnnotationKind::UserDefined(class_udt.clone()),
 					span: WingSpan::default(),
 				};
 
@@ -275,7 +277,7 @@ impl Fold for ClosureTransformer {
 				// ```
 				let new_class_instance = Expr::new(
 					ExprKind::New {
-						class: class_type_annotation,
+						class: Box::new(class_udt.to_expression()),
 						arg_list: ArgList {
 							named_args: IndexMap::new(),
 							pos_args: vec![],
@@ -336,7 +338,9 @@ impl<'a> Fold for RenameThisTransformer<'a> {
 					Reference::Identifier(ident)
 				}
 			}
-			Reference::InstanceMember { .. } | Reference::TypeMember { .. } => fold::fold_reference(self, node),
+			Reference::InstanceMember { .. } | Reference::TypeMember { .. } | Reference::TypeReference(_) => {
+				fold::fold_reference(self, node)
+			}
 		}
 	}
 }

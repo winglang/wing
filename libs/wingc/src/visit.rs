@@ -51,7 +51,7 @@ pub trait Visit<'ast> {
 	fn visit_expr_new(
 		&mut self,
 		node: &'ast Expr,
-		class: &'ast TypeAnnotation,
+		class: &'ast Expr,
 		obj_id: &'ast Option<Box<Expr>>,
 		obj_scope: &'ast Option<Box<Expr>>,
 		arg_list: &'ast ArgList,
@@ -247,7 +247,7 @@ where
 	}
 
 	if let Some(extend) = &node.parent {
-		v.visit_user_defined_type(&extend);
+		v.visit_expr(&extend);
 	}
 
 	for implement in &node.implements {
@@ -274,14 +274,14 @@ where
 pub fn visit_expr_new<'ast, V>(
 	v: &mut V,
 	_node: &'ast Expr,
-	class: &'ast TypeAnnotation,
+	class: &'ast Expr,
 	obj_id: &'ast Option<Box<Expr>>,
 	obj_scope: &'ast Option<Box<Expr>>,
 	arg_list: &'ast ArgList,
 ) where
 	V: Visit<'ast> + ?Sized,
 {
-	v.visit_type_annotation(class);
+	v.visit_expr(class);
 	v.visit_args(arg_list);
 	if let Some(id) = obj_id {
 		v.visit_expr(&id);
@@ -413,8 +413,11 @@ where
 			v.visit_expr(object);
 			v.visit_symbol(property);
 		}
-		Reference::TypeMember { type_, property } => {
+		Reference::TypeReference(type_) => {
 			v.visit_user_defined_type(type_);
+		}
+		Reference::TypeMember { typeobject, property } => {
+			v.visit_expr(typeobject);
 			v.visit_symbol(property);
 		}
 	}

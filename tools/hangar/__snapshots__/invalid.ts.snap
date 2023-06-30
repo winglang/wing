@@ -1,20 +1,5 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`access_hidden_namespace.w 1`] = `
-"error: Unknown symbol \\"core\\"
-  --> ../../../examples/tests/invalid/access_hidden_namespace.w:7:5
-  |
-7 | new core.NodeJsCode(\\"/tmp/test.txt\\"); // This should fail even though \`fs.TextFile\` extends \`core.FileBase\` because we didn't bring in \`core\` explicitly.
-  |     ^^^^ Unknown symbol \\"core\\"
-
-
- 
- 
-Tests 1 failed (1)
-Test Files 1 failed (1)
-Duration <DURATION>"
-`;
-
 exports[`access_static_from_instance.w 1`] = `
 "error: Static class fields not supported yet, see https://github.com/winglang/wing/issues/1668
   --> ../../../examples/tests/invalid/access_static_from_instance.w:4:3
@@ -294,11 +279,11 @@ error: Preflight field \\"y\\" is not initialized
    |   ^ Preflight field \\"y\\" is not initialized
 
 
-error: Expected \\"x\\" to be a type but it's a variable
+error: Base class \\"unresolved\\" is not a class
    --> ../../../examples/tests/invalid/class.w:68:18
    |
 68 | class C7 extends x {
-   |                  ^ Expected \\"x\\" to be a type but it's a variable
+   |                  ^ Base class \\"unresolved\\" is not a class
 
 
 error: Base class \\"S1\\" is not a class
@@ -308,11 +293,11 @@ error: Base class \\"S1\\" is not a class
    |                  ^^ Base class \\"S1\\" is not a class
 
 
-error: Class cannot extend itself
+error: Base class \\"unresolved\\" is not a class
    --> ../../../examples/tests/invalid/class.w:78:19
    |
 78 | class C11 extends C11 {
-   |                   ^^^ Class cannot extend itself
+   |                   ^^^ Base class \\"unresolved\\" is not a class
 
 
 error: Expected type to be \\"num\\", but got \\"str\\" instead
@@ -535,18 +520,11 @@ Duration <DURATION>"
 `;
 
 exports[`enums.w 1`] = `
-"error: Enum \\"SomeEnum\\" does not contain value \\"FOUR\\"
-  --> ../../../examples/tests/invalid/enums.w:5:21
-  |
-5 | let four = SomeEnum.FOUR;
-  |                     ^^^^ Enum \\"SomeEnum\\" does not contain value \\"FOUR\\"
-
-
-error: Property access unsupported on type \\"SomeEnum\\"
-  --> ../../../examples/tests/invalid/enums.w:8:11
+"error: Property not found
+  --> ../../../examples/tests/invalid/enums.w:8:24
   |
 8 | let two = SomeEnum.TWO.TWO;
-  |           ^^^^^^^^^^^^ Property access unsupported on type \\"SomeEnum\\"
+  |                        ^^^ Property not found
 
 
  
@@ -1558,11 +1536,11 @@ exports[`sorted_errors_no_span.w 1`] = `
   |              ^^^ Expected type to be \\"num\\", but got \\"str\\" instead
 
 
-error: Expected \\"b\\" to be a type but it's a variable
+error: Base class \\"unresolved\\" is not a class
   --> ../../../examples/tests/invalid/sorted_errors_no_span.w:3:26
   |
 3 | inflight class c extends b {}
-  |                          ^ Expected \\"b\\" to be a type but it's a variable
+  |                          ^ Base class \\"unresolved\\" is not a class
 
 
 error: Expected type to be \\"num\\", but got \\"str\\" instead
@@ -1572,11 +1550,11 @@ error: Expected type to be \\"num\\", but got \\"str\\" instead
   |              ^^^ Expected type to be \\"num\\", but got \\"str\\" instead
 
 
-error: Expected \\"b\\" to be a type but it's a variable
+error: Base class \\"unresolved\\" is not a class
   --> ../../../examples/tests/invalid/sorted_errors_no_span.w:5:26
   |
 5 | inflight class e extends b {}
-  |                          ^ Expected \\"b\\" to be a type but it's a variable
+  |                          ^ Base class \\"unresolved\\" is not a class
 
 
  
@@ -1768,10 +1746,10 @@ error: Struct \\"Showtime\\" extends \\"Dazzle\\" which introduces a conflicting
 
 
 error: Cannot instantiate type \\"BucketProps\\" because it is a struct and not a class. Use struct instantiation instead.
-   --> ../../../examples/tests/invalid/structs.w:47:13
+   --> ../../../examples/tests/invalid/structs.w:47:9
    |
 47 | let x = new cloud.BucketProps(1);
-   |             ^^^^^^^^^^^^^^^^^ Cannot instantiate type \\"BucketProps\\" because it is a struct and not a class. Use struct instantiation instead.
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^ Cannot instantiate type \\"BucketProps\\" because it is a struct and not a class. Use struct instantiation instead.
 
 
  
@@ -1894,32 +1872,25 @@ Duration <DURATION>"
 `;
 
 exports[`unknown_symbol.w 1`] = `
-"error: Unknown symbol \\"clod\\"
-  --> ../../../examples/tests/invalid/unknown_symbol.w:3:18
-  |
-3 | let bucket = new clod.Bucket();
-  |                  ^^^^ Unknown symbol \\"clod\\"
-
-
-error: Unknown symbol \\"cloudy\\"
-  --> ../../../examples/tests/invalid/unknown_symbol.w:6:17
-  |
-6 | let funky = new cloudy.Funktion(inflight () => { });
-  |                 ^^^^^^ Unknown symbol \\"cloudy\\"
-
-
-error: Unknown symbol \\"y\\"
+"error: Unknown symbol \\"y\\"
   --> ../../../examples/tests/invalid/unknown_symbol.w:9:13
   |
 9 | let x = 2 + y;
   |             ^ Unknown symbol \\"y\\"
 
 
-error: Unknown symbol \\"B\\"
+error: Base class \\"unresolved\\" is not a class
    --> ../../../examples/tests/invalid/unknown_symbol.w:28:17
    |
 28 | class A extends B {
-   |                 ^ Unknown symbol \\"B\\"
+   |                 ^ Base class \\"unresolved\\" is not a class
+
+
+error: Unknown symbol \\"unknown\\"
+   --> ../../../examples/tests/invalid/unknown_symbol.w:32:1
+   |
+32 | unknown = 1;
+   | ^^^^^^^ Unknown symbol \\"unknown\\"
 
 
 error: Unknown symbol \\"unknown\\"
@@ -2002,11 +1973,11 @@ Duration <DURATION>"
 `;
 
 exports[`void_in_expression_position.w 1`] = `
-"error: Property access unsupported on type \\"void\\"
-  --> ../../../examples/tests/invalid/void_in_expression_position.w:1:1
+"error: Property not found
+  --> ../../../examples/tests/invalid/void_in_expression_position.w:1:12
   |
 1 | log(\\"hey\\").get(\\"x\\");
-  | ^^^^^^^^^^ Property access unsupported on type \\"void\\"
+  |            ^^^ Property not found
 
 
 error: Binary operator '+' cannot be applied to operands of type 'num' and 'void'; only (num, num) and (str, str) are supported
