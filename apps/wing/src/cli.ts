@@ -58,8 +58,7 @@ async function main() {
 
     // Fail silently if telemetry collection fails
     try {
-      const collector = new AnalyticsCollector(cmd);
-      collector.collect();
+      AnalyticsCollector.collectCommandAnalytics(cmd);
     } catch (err) {
       // ignore
     }
