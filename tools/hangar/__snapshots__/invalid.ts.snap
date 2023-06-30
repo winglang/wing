@@ -1,11 +1,11 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`access_hidden_namespace.w 1`] = `
-"error: Unable to resolve type \\"core.NodeJsCode\\"
+"error: Unknown symbol \\"core\\"
   --> ../../../examples/tests/invalid/access_hidden_namespace.w:7:5
   |
 7 | new core.NodeJsCode(\\"/tmp/test.txt\\"); // This should fail even though \`fs.TextFile\` extends \`core.FileBase\` because we didn't bring in \`core\` explicitly.
-  |     ^^^^^^^^^^^^^^^ Unable to resolve type \\"core.NodeJsCode\\"
+  |     ^^^^^^^^^^^^^^^ Unknown symbol \\"core\\"
 
 
  
@@ -294,39 +294,25 @@ error: Preflight field \\"y\\" is not initialized
    |   ^ Preflight field \\"y\\" is not initialized
 
 
-error: Unable to resolve type \\"x\\"
+error: Expected \\"x\\" to be a type but it's a variable
    --> ../../../examples/tests/invalid/class.w:68:18
    |
 68 | class C7 extends x {
-   |                  ^ Unable to resolve type \\"x\\"
+   |                  ^ Expected \\"x\\" to be a type but it's a variable
 
 
-error: Base class \\"unresolved\\" is not a class
-   --> ../../../examples/tests/invalid/class.w:68:18
-   |
-68 | class C7 extends x {
-   |                  ^ Base class \\"unresolved\\" is not a class
-
-
-error: Base class \\"S1\\" is not a class
+error: Expected \\"S1\\" to be a class
    --> ../../../examples/tests/invalid/class.w:74:18
    |
 74 | class C8 extends S1 {
-   |                  ^^ Base class \\"S1\\" is not a class
+   |                  ^^ Expected \\"S1\\" to be a class
 
 
-error: Unable to resolve type \\"C11\\"
+error: Unknown symbol \\"C11\\"
    --> ../../../examples/tests/invalid/class.w:78:19
    |
 78 | class C11 extends C11 {
-   |                   ^^^ Unable to resolve type \\"C11\\"
-
-
-error: Class cannot extend itself
-   --> ../../../examples/tests/invalid/class.w:78:19
-   |
-78 | class C11 extends C11 {
-   |                   ^^^ Class cannot extend itself
+   |                   ^^^ Unknown symbol \\"C11\\"
 
 
 error: Expected type to be \\"num\\", but got \\"str\\" instead
@@ -1578,18 +1564,11 @@ exports[`sorted_errors_no_span.w 1`] = `
   |              ^^^ Expected type to be \\"num\\", but got \\"str\\" instead
 
 
-error: Unable to resolve type \\"b\\"
+error: Expected \\"b\\" to be a type but it's a variable
   --> ../../../examples/tests/invalid/sorted_errors_no_span.w:3:26
   |
 3 | inflight class c extends b {}
-  |                          ^ Unable to resolve type \\"b\\"
-
-
-error: Base class \\"unresolved\\" is not a class
-  --> ../../../examples/tests/invalid/sorted_errors_no_span.w:3:26
-  |
-3 | inflight class c extends b {}
-  |                          ^ Base class \\"unresolved\\" is not a class
+  |                          ^ Expected \\"b\\" to be a type but it's a variable
 
 
 error: Expected type to be \\"num\\", but got \\"str\\" instead
@@ -1599,18 +1578,11 @@ error: Expected type to be \\"num\\", but got \\"str\\" instead
   |              ^^^ Expected type to be \\"num\\", but got \\"str\\" instead
 
 
-error: Unable to resolve type \\"b\\"
+error: Expected \\"b\\" to be a type but it's a variable
   --> ../../../examples/tests/invalid/sorted_errors_no_span.w:5:26
   |
 5 | inflight class e extends b {}
-  |                          ^ Unable to resolve type \\"b\\"
-
-
-error: Base class \\"unresolved\\" is not a class
-  --> ../../../examples/tests/invalid/sorted_errors_no_span.w:5:26
-  |
-5 | inflight class e extends b {}
-  |                          ^ Base class \\"unresolved\\" is not a class
+  |                          ^ Expected \\"b\\" to be a type but it's a variable
 
 
  
@@ -1928,18 +1900,18 @@ Duration <DURATION>"
 `;
 
 exports[`unknown_symbol.w 1`] = `
-"error: Unable to resolve type \\"clod.Bucket\\"
+"error: Unknown symbol \\"clod\\"
   --> ../../../examples/tests/invalid/unknown_symbol.w:3:18
   |
 3 | let bucket = new clod.Bucket();
-  |                  ^^^^^^^^^^^ Unable to resolve type \\"clod.Bucket\\"
+  |                  ^^^^^^^^^^^ Unknown symbol \\"clod\\"
 
 
-error: Unable to resolve type \\"cloudy.Funktion\\"
+error: Unknown symbol \\"cloudy\\"
   --> ../../../examples/tests/invalid/unknown_symbol.w:6:17
   |
 6 | let funky = new cloudy.Funktion(inflight () => { });
-  |                 ^^^^^^^^^^^^^^^ Unable to resolve type \\"cloudy.Funktion\\"
+  |                 ^^^^^^^^^^^^^^^ Unknown symbol \\"cloudy\\"
 
 
 error: Unknown symbol \\"y\\"
@@ -1949,18 +1921,11 @@ error: Unknown symbol \\"y\\"
   |             ^ Unknown symbol \\"y\\"
 
 
-error: Unable to resolve type \\"B\\"
+error: Unknown symbol \\"B\\"
    --> ../../../examples/tests/invalid/unknown_symbol.w:28:17
    |
 28 | class A extends B {
-   |                 ^ Unable to resolve type \\"B\\"
-
-
-error: Base class \\"unresolved\\" is not a class
-   --> ../../../examples/tests/invalid/unknown_symbol.w:28:17
-   |
-28 | class A extends B {
-   |                 ^ Base class \\"unresolved\\" is not a class
+   |                 ^ Unknown symbol \\"B\\"
 
 
 error: Unknown symbol \\"unknown\\"
