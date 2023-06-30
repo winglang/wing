@@ -1040,15 +1040,15 @@ exports[`missing_semicolon.w 1`] = `
 error: Expected ';'
    --> ../../../examples/tests/invalid/missing_semicolon.w:16:10
    |
-16 | let x = 5
+16 | let x = 5 //
    |          ^ Expected ';'
 
 
 error: Expected '}'
-   --> ../../../examples/tests/invalid/missing_semicolon.w:20:28
+   --> ../../../examples/tests/invalid/missing_semicolon.w:19:14
    |
-20 |            //^ '}' expected
-   |                            ^ Expected '}'
+19 | if (x > 10) {
+   |              ^ Expected '}'
 
 
  
