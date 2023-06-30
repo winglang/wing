@@ -2396,10 +2396,10 @@ impl<'a> TypeChecker<'a> {
 				if let ExprKind::Reference(r) = &variable.kind {
 					let (var, _) = self.resolve_reference(&r, env);
 					if var_phase == Phase::Preflight && env.phase == Phase::Inflight {
-						self.spanned_error(stmt, format!("Variable cannot be reassigned from inflight"));
+						self.spanned_error(stmt, "Variable cannot be reassigned from inflight".to_string());
 					} else {
 						if !var_type.is_unresolved() && !var.reassignable {
-							self.spanned_error(stmt, format!("Variable is not reassignable"));
+							self.spanned_error(stmt, "Variable is not reassignable".to_string());
 						}
 					}
 				}
