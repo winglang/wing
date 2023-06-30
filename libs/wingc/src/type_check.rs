@@ -3697,7 +3697,7 @@ impl<'a> TypeChecker<'a> {
 						name: Symbol::global(udt.full_path_str()),
 						type_: t,
 						reassignable: false,
-						phase: phase.clone(),
+						phase: phase,
 						kind: VariableKind::Type,
 					},
 					phase,
@@ -3848,7 +3848,7 @@ impl<'a> TypeChecker<'a> {
 				property,
 			),
 			Type::Struct(ref s) => self.get_property_from_class_like(s, property),
-			_ => self.spanned_error_with_var(property, format!("Property not found")).0,
+			_ => self.spanned_error_with_var(property, "Property not found".to_string()).0,
 		}
 	}
 
@@ -4079,14 +4079,14 @@ where
 pub fn resolve_udt_from_expr(expr: &Expr) -> Result<&UserDefinedType, TypeError> {
 	let ExprKind::Reference(ref r) = expr.kind else {
 		return Err(TypeError {
-			message: format!("Expected expression to be a reference"),
+			message: "Expected expression to be a reference".to_string(),
 			span: expr.span.clone(),
 		});
 	};
 
 	let Reference::TypeReference(udt) = r else {
 		return Err(TypeError {
-			message: format!("Expected reference to be a reference to a type"),
+			message: "Expected reference to be a reference to a type".to_string(),
 			span: expr.span.clone(),
 		});
 	};
