@@ -17,7 +17,8 @@
     "package:ci": "nx run-many --target=package --all --configuration=release --output-style=stream --verbose",
     "docs": "./scripts/docsite.sh",
     "changelog": "bump-pack",
-    "postinstall": "bash scripts/setup_wasi.sh"
+    "install": "bash scripts/setup_wasi.sh",
+    "postinstall": "link-bundles"
   },
   "volta": {
     "node": "18.16.0",
