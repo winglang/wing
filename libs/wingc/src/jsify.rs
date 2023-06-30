@@ -1437,16 +1437,14 @@ impl<'a> JSifier<'a> {
 		let refs = refs
 			.iter()
 			.filter(|(m, _)| {
-				*m == CLASS_INFLIGHT_INIT_NAME
-					|| !(matches!(
-						class_type
-							.as_class()
-							.unwrap()
-							.get_method(&m.as_str().into())
-							.expect(&format!("method {m} doesn't exist in {class_name}"))
-							.kind,
-						VariableKind::StaticMember
-					)) ^ (matches!(bind_method_kind, BindMethod::Type))
+				let var_kind = class_type
+					.as_class()
+					.unwrap()
+					.get_method(&m.as_str().into())
+					.expect(&format!("method {m} doesn't exist in {class_name}"))
+					.kind;
+				let is_static = matches!(var_kind, VariableKind::StaticMember);
+				(*m == CLASS_INFLIGHT_INIT_NAME || !is_static) ^ (matches!(bind_method_kind, BindMethod::Type))
 			})
 			.collect_vec();
 
