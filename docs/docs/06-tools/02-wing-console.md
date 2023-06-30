@@ -31,7 +31,7 @@ The Console provides seamless interaction with your Wing application resources, 
 
 When you click on a resource in either the Explorer or Map view, the resource interaction panel on the right side of the Console will automatically update. This panel enables you to conveniently interact with the selected resource.
 
-From there, you can perform various actions such as sending messages to Queues, downloading files from Buckets, making API requests to your API resource, and more.
+From there, you can perform various actions such as sending messages to queues, downloading files from buckets, making API requests to your API resource, and more.
 ![The Wing Console Interaction view](console-interaction-1.png 'Wing Console Interaction')
 
 ## Run Tests
