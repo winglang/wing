@@ -618,12 +618,10 @@ pub enum Reference {
 		property: Symbol,
 		optional_accessor: bool,
 	},
+	/// A reference to a type (e.g. `std.Json` or `MyResource` or `aws.s3.Bucket`)
 	TypeReference(UserDefinedType),
 	/// A reference to a member inside a type: `MyType.x` or `MyEnum.A`
-	TypeMember {
-		typeobject: Box<Expr>,
-		property: Symbol,
-	},
+	TypeMember { typeobject: Box<Expr>, property: Symbol },
 }
 
 impl Display for Reference {

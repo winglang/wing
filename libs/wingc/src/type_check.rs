@@ -1322,7 +1322,6 @@ impl<'a> TypeChecker<'a> {
 							self.validate_type_in(exp_type, &self.types.stringables(), interpolated_expr);
 						}
 					});
-					// TODO: do we need to determine the phase based on the inner expressions?
 					(self.types.string(), Phase::Independent)
 				}
 				Literal::Number(_) => (self.types.number(), Phase::Independent),
@@ -3681,8 +3680,10 @@ impl<'a> TypeChecker<'a> {
 				}
 			}
 			Reference::TypeReference(udt) => {
-				let Ok(t) = self.resolve_user_defined_type(udt, env, self.statement_idx) else {
-					return self.spanned_error_with_var(udt, format!("Unable to resolve type \"{}\"", udt));
+				let result = self.resolve_user_defined_type(udt, env, self.statement_idx);
+				let t = match result {
+					Err(e) => return self.spanned_error_with_var(udt, e.message),
+					Ok(t) => t,
 				};
 
 				let phase = if let Some(c) = t.as_class() {
@@ -3919,6 +3920,11 @@ impl<'a> TypeChecker<'a> {
 
 		let (parent_type, _) = self.type_check_exp(&parent_expr, env);
 
+		// bail out if we could not resolve the parent type
+		if parent_type.is_unresolved() {
+			return (None, None);
+		}
+
 		// Safety: we return from the function above so parent_udt cannot be None
 		let parent_udt = resolve_udt_from_expr(parent_expr).unwrap();
 
@@ -3942,7 +3948,7 @@ impl<'a> TypeChecker<'a> {
 			}
 		} else {
 			report_diagnostic(Diagnostic {
-				message: format!("Base class \"{}\" is not a class", parent_type),
+				message: format!("Expected \"{}\" to be a class", parent_udt),
 				span: Some(parent_expr.span.clone()),
 			});
 			(None, None)
