@@ -279,8 +279,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
         this.display.hidden = true;
+        this._addInflightOps("handle");
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.$Closure1.js";
@@ -312,7 +312,7 @@ class $Root extends $stdlib.std.Resource {
     const handler = new $Closure1(this,"$Closure1");
     const testInvalidPath =  (path) =>  {
       let error = "";
-      const expected = `Invalid path ${path}. Url cannot contain \":\", params contains only alpha-numeric chars or \"_\".`;
+      const expected = String.raw({ raw: ["Invalid path ", ". Url cannot contain \":\", params contains only alpha-numeric chars or \"_\"."] }, path);
       try {
         (api.get(path,handler));
       }
@@ -320,7 +320,7 @@ class $Root extends $stdlib.std.Resource {
         const e = $error_e.message;
         error = e;
       }
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(error === expected)'`)})((error === expected))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: error == expected")})((error === expected))};
     }
     ;
     const testValidPath =  (path) =>  {
@@ -332,7 +332,7 @@ class $Root extends $stdlib.std.Resource {
         const e = $error_e.message;
         error = e;
       }
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(error === "")'`)})((error === ""))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: error == \"\"")})((error === ""))};
     }
     ;
     (testInvalidPath("/test/{sup:er/:annoying//path}"));

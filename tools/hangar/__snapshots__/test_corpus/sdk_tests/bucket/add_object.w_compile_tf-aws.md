@@ -12,9 +12,9 @@ module.exports = function({ b, jsonObj1, std_Json }) {
     async $inflight_init()  {
     }
     async handle()  {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await b.list()).length === 2)'`)})(((await b.list()).length === 2))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(((args) => { return JSON.stringify(args[0], null, args[1]) })([(await b.getJson("file1.json"))]) === ((args) => { return JSON.stringify(args[0], null, args[1]) })([jsonObj1]))'`)})((((args) => { return JSON.stringify(args[0], null, args[1]) })([(await b.getJson("file1.json"))]) === ((args) => { return JSON.stringify(args[0], null, args[1]) })([jsonObj1])))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await b.get("file2.txt")) === "Bar")'`)})(((await b.get("file2.txt")) === "Bar"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: b.list().length == 2")})(((await b.list()).length === 2))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: Json.stringify(b.getJson(\"file1.json\")) == Json.stringify(jsonObj1)")})((((args) => { return JSON.stringify(args[0], null, args[1]) })([(await b.getJson("file1.json"))]) === ((args) => { return JSON.stringify(args[0], null, args[1]) })([jsonObj1])))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: b.get(\"file2.txt\") == \"Bar\"")})(((await b.get("file2.txt")) === "Bar"))};
     }
   }
   return $Closure1;
@@ -224,8 +224,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
         this.display.hidden = true;
+        this._addInflightOps("handle");
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.$Closure1.js";

@@ -1,7 +1,5 @@
 bring cloud;
 
-let EMPTY_JSON = Json "empty";
-
 class Utils {
   extern "./url-shortener.js" inflight makeId(): str;
   extern "./url-shortener.js" inflight fetch(url: str, method: str, body: Json?): str;
@@ -73,15 +71,16 @@ class UrlShortenerApi {
     this.api.post("/create", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
       let var requestUrl = "";
       try {
-        // TODO: use `x ?? throw()` syntax
-        requestUrl = str.fromJson((req.body ?? EMPTY_JSON).get("url"));
+        if let body = req.body {
+          requestUrl = str.fromJson(Json.parse(body).get("url"));
+        }
       } catch e {
         log(e);
         return cloud.ApiResponse {
           status: 400,
-          body: Json {
+          body: Json.stringify(Json {
             "error": "missing url field",
-          },
+          }),
         };
       }
       log("Generating shortened URL for ${requestUrl}");
@@ -93,9 +92,9 @@ class UrlShortenerApi {
       log("Shortened URL: ${shortenedUrl}");
       return cloud.ApiResponse {
         status: 200,
-        body: Json {
+        body: Json.stringify(Json {
           "shortenedUrl": shortenedUrl,
-        },
+        }),
       };
     });
 
@@ -107,16 +106,16 @@ class UrlShortenerApi {
         return cloud.ApiResponse {
           status: 302,
           headers: Map<str>{
-            "Content-Type": "text/xml",
-            Location: fullUrl
+            "Content-Type" => "text/xml",
+            Location => fullUrl
           }
         };
       } else {
         return cloud.ApiResponse {
           status: 404,
-          body: Json {
+          body: Json.stringify(Json {
             "error": "url not found",
-          },
+          }),
         };
       }
     });

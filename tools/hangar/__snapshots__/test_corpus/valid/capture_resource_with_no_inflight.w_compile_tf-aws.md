@@ -12,7 +12,7 @@ module.exports = function({ a }) {
     async $inflight_init()  {
     }
     async handle()  {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '("hey" === a.field)'`)})(("hey" === a.field))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: \"hey\" == a.field")})(("hey" === a.field))};
     }
   }
   return $Closure1;
@@ -202,8 +202,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
         this.display.hidden = true;
+        this._addInflightOps("handle");
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.$Closure1.js";

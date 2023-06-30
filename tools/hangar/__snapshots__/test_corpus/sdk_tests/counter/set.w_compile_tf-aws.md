@@ -12,15 +12,15 @@ module.exports = function({ counter }) {
     async $inflight_init()  {
     }
     async handle()  {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await counter.peek()) === 0)'`)})(((await counter.peek()) === 0))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: counter.peek() == 0")})(((await counter.peek()) === 0))};
       (await counter.inc());
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await counter.peek()) === 1)'`)})(((await counter.peek()) === 1))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: counter.peek() == 1")})(((await counter.peek()) === 1))};
       (await counter.inc());
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await counter.peek()) === 2)'`)})(((await counter.peek()) === 2))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: counter.peek() == 2")})(((await counter.peek()) === 2))};
       (await counter.inc(10));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await counter.peek()) === 12)'`)})(((await counter.peek()) === 12))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: counter.peek() == 12")})(((await counter.peek()) === 12))};
       (await counter.set(88));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await counter.peek()) === 88)'`)})(((await counter.peek()) === 88))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: counter.peek() == 88")})(((await counter.peek()) === 88))};
     }
   }
   return $Closure1;
@@ -41,15 +41,15 @@ module.exports = function({ counter }) {
     }
     async handle()  {
       const key = "my-key";
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await counter.peek(key)) === 0)'`)})(((await counter.peek(key)) === 0))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: counter.peek(key) == 0")})(((await counter.peek(key)) === 0))};
       (await counter.inc(undefined,key));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await counter.peek(key)) === 1)'`)})(((await counter.peek(key)) === 1))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: counter.peek(key) == 1")})(((await counter.peek(key)) === 1))};
       (await counter.inc(undefined,key));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await counter.peek(key)) === 2)'`)})(((await counter.peek(key)) === 2))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: counter.peek(key) == 2")})(((await counter.peek(key)) === 2))};
       (await counter.inc(10,key));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await counter.peek(key)) === 12)'`)})(((await counter.peek(key)) === 12))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: counter.peek(key) == 12")})(((await counter.peek(key)) === 12))};
       (await counter.set(88,key));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await counter.peek(key)) === 88)'`)})(((await counter.peek(key)) === 88))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: counter.peek(key) == 88")})(((await counter.peek(key)) === 88))};
     }
   }
   return $Closure2;
@@ -279,8 +279,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
         this.display.hidden = true;
+        this._addInflightOps("handle");
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.$Closure1.js";
@@ -315,8 +315,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure2 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
         this.display.hidden = true;
+        this._addInflightOps("handle");
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.$Closure2.js";

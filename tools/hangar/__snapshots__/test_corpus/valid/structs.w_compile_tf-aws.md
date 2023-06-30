@@ -63,8 +63,8 @@ class $Root extends $stdlib.std.Resource {
     class Foo extends $stdlib.std.Resource {
       constructor(scope, id, b) {
         super(scope, id);
-        this._addInflightOps("getStuff");
         this.data = b;
+        this._addInflightOps("getStuff");
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.Foo.js";
@@ -107,9 +107,9 @@ class $Root extends $stdlib.std.Resource {
     "field0": "foo",}
     ,}
     ;
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '(x.field0 === "Sup")'`)})((x.field0 === "Sup"))};
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '(y.field1 === 1)'`)})((y.field1 === 1))};
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '(y.field3.field0 === "foo")'`)})((y.field3.field0 === "foo"))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: x.field0 == \"Sup\"")})((x.field0 === "Sup"))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: y.field1 == 1")})((y.field1 === 1))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: y.field3.field0 == \"foo\"")})((y.field3.field0 === "foo"))};
     const s = {
     "a": "Boom baby",}
     ;

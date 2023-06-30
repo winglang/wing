@@ -32,7 +32,7 @@ module.exports = function({ Another }) {
     async $inflight_init()  {
     }
     async handle()  {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await Another.myStaticMethod()) === 0)'`)})(((await Another.myStaticMethod()) === 0))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: Another.myStaticMethod() == 0")})(((await Another.myStaticMethod()) === 0))};
     }
   }
   return $Closure2;
@@ -49,7 +49,7 @@ module.exports = function({ globalCounter }) {
       this.myField = myField;
     }
     async $inflight_init()  {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await globalCounter.peek()) === 0)'`)})(((await globalCounter.peek()) === 0))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: globalCounter.peek() == 0")})(((await globalCounter.peek()) === 0))};
     }
     async myMethod()  {
       (await globalCounter.inc());
@@ -92,16 +92,16 @@ module.exports = function({ globalBucket, globalStr, globalBool, globalNum, glob
     async myPut()  {
       (await this.localTopic.publish("hello"));
       (await globalBucket.put("key","value"));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(globalStr === "hello")'`)})((globalStr === "hello"))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(globalBool === true)'`)})((globalBool === true))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(globalNum === 42)'`)})((globalNum === 42))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await globalArrayOfStr.at(0)) === "hello")'`)})(((await globalArrayOfStr.at(0)) === "hello"))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((globalMapOfNum)["a"] === (-5))'`)})(((globalMapOfNum)["a"] === (-5)))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(await globalSetOfStr.has("a"))'`)})((await globalSetOfStr.has("a")))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(globalAnother.myField === "hello!")'`)})((globalAnother.myField === "hello!"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: globalStr == \"hello\"")})((globalStr === "hello"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: globalBool == true")})((globalBool === true))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: globalNum == 42")})((globalNum === 42))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: globalArrayOfStr.at(0) == \"hello\"")})(((await globalArrayOfStr.at(0)) === "hello"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: globalMapOfNum.get(\"a\") == -5")})(((globalMapOfNum)["a"] === (-5)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: globalSetOfStr.has(\"a\")")})((await globalSetOfStr.has("a")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: globalAnother.myField == \"hello!\"")})((globalAnother.myField === "hello!"))};
       (await globalAnother.first.myResource.put("key","value"));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await globalAnother.myMethod()) > 0)'`)})(((await globalAnother.myMethod()) > 0))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await Another.myStaticMethod()) > 0)'`)})(((await Another.myStaticMethod()) > 0))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: globalAnother.myMethod() > 0")})(((await globalAnother.myMethod()) > 0))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: Another.myStaticMethod() > 0")})(((await Another.myStaticMethod()) > 0))};
     }
   }
   return MyResource;
@@ -600,9 +600,9 @@ class $Root extends $stdlib.std.Resource {
     class Another extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("myMethod", "myStaticMethod");
         this.myField = "hello!";
         this.first = new First(this,"First");
+        this._addInflightOps("myMethod", "myStaticMethod");
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.Another.js";
@@ -649,7 +649,6 @@ class $Root extends $stdlib.std.Resource {
     class MyResource extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("myPut");
         this.localTopic = this.node.root.newAbstract("@winglang/sdk.cloud.Topic",this,"cloud.Topic");
         this.localCounter = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"cloud.Counter");
         const $parentThis = this;
@@ -693,6 +692,7 @@ class $Root extends $stdlib.std.Resource {
           }
         }
         (this.localTopic.onMessage(new R(this,"R")));
+        this._addInflightOps("myPut");
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.MyResource.js";
@@ -767,8 +767,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
         this.display.hidden = true;
+        this._addInflightOps("handle");
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.$Closure1.js";
@@ -803,8 +803,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure2 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
         this.display.hidden = true;
+        this._addInflightOps("handle");
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.$Closure2.js";

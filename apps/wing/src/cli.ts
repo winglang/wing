@@ -75,6 +75,7 @@ ${chalk.redBright("(This message will self-destruct after the first run)")}
   });
 
   program
+    .option("--no-progress", "Hide show compilation progress")
     .option("--no-update-check", "Skip checking for toolchain updates")
     .hook("preAction", async (cmd) => {
       const updateCheck = cmd.opts().updateCheck;
@@ -84,11 +85,20 @@ ${chalk.redBright("(This message will self-destruct after the first run)")}
       }
     });
 
+  async function progressHook(cmd: Command) {
+    const target = cmd.opts().target;
+    const progress = program.opts().progress;
+    if (progress !== false && target !== "sim") {
+      process.env.PROGRESS = "1";
+    }
+  }
+
   program
     .command("run")
     .alias("it")
-    .description("Runs a Wing simulator file in the Wing Console")
-    .argument("[simfile]", ".wsim simulator file")
+    .description("Runs a Wing program in the Wing Console")
+    .argument("[entrypoint]", "program .w entrypoint")
+    .option("-p, --port <port>", "specify port")
     .action(run);
 
   program.command("lsp").description("Run the Wing language server on stdio").action(run_server);
@@ -103,6 +113,7 @@ ${chalk.redBright("(This message will self-destruct after the first run)")}
         .default("sim")
     )
     .option("-p, --plugins [plugin...]", "Compiler plugins")
+    .hook("preAction", progressHook)
     .action(actionErrorHandler(compile));
 
   program
@@ -113,10 +124,11 @@ ${chalk.redBright("(This message will self-destruct after the first run)")}
     .argument("<entrypoint...>", "all entrypoints to test")
     .addOption(
       new Option("-t, --target <target>", "Target platform")
-        .choices(["tf-aws", "sim", "awscdk"])
+        .choices(["tf-aws", "tf-azure", "tf-gcp", "sim", "awscdk"])
         .default("sim")
     )
     .option("-p, --plugins [plugin...]", "Compiler plugins")
+    .hook("preAction", progressHook)
     .action(actionErrorHandler(test));
 
   program.command("docs").description("Open the Wing documentation").action(docs);

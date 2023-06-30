@@ -19,9 +19,9 @@ module.exports = function({ q, NIL }) {
       const first = ((await q.pop()) ?? NIL);
       const second = ((await q.pop()) ?? NIL);
       const third = ((await q.pop()) ?? NIL);
-      {((cond) => {if (!cond) throw new Error(`assertion failed: 'msgs.includes(first)'`)})(msgs.includes(first))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: 'msgs.includes(second)'`)})(msgs.includes(second))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(third === NIL)'`)})((third === NIL))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: msgs.contains(first)")})(msgs.includes(first))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: msgs.contains(second)")})(msgs.includes(second))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: third == NIL")})((third === NIL))};
     }
   }
   return $Closure1;
@@ -176,8 +176,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
         this.display.hidden = true;
+        this._addInflightOps("handle");
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.$Closure1.js";

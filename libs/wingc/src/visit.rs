@@ -347,6 +347,11 @@ where
 				v.visit_expr(val);
 			}
 		}
+		ExprKind::JsonMapLiteral { fields } => {
+			for val in fields.values() {
+				v.visit_expr(val);
+			}
+		}
 		ExprKind::MapLiteral { type_, fields } => {
 			if let Some(type_) = type_ {
 				v.visit_type_annotation(type_);

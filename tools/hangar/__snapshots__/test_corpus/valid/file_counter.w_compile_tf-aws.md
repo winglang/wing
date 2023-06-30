@@ -13,7 +13,7 @@ module.exports = function({ counter, bucket }) {
     }
     async handle(body)  {
       const next = (await counter.inc());
-      const key = `myfile-${"hi"}.txt`;
+      const key = String.raw({ raw: ["myfile-", ".txt"] }, "hi");
       (await bucket.put(key,body));
     }
   }
@@ -247,8 +247,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
         this.display.hidden = true;
+        this._addInflightOps("handle");
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.$Closure1.js";

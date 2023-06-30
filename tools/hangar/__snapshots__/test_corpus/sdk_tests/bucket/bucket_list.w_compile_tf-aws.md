@@ -13,22 +13,22 @@ module.exports = function({ b }) {
     }
     async handle()  {
       const jsonObj1 = Object.freeze({"key1":"value1"});
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await b.list()).length === 1)'`)})(((await b.list()).length === 1))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: b.list().length == 1")})(((await b.list()).length === 1))};
       (await b.putJson("file1.json",jsonObj1));
       (await b.put("file2.txt","Bar"));
       (await b.put("random","Buz"));
       const objs = (await b.list());
       const objs2 = (await b.list("file"));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: 'objs.includes("file1.json")'`)})(objs.includes("file1.json"))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: 'objs.includes("file2.txt")'`)})(objs.includes("file2.txt"))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: 'objs.includes("file3.txt")'`)})(objs.includes("file3.txt"))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: 'objs.includes("random")'`)})(objs.includes("random"))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: 'objs2.includes("file1.json")'`)})(objs2.includes("file1.json"))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: 'objs2.includes("file2.txt")'`)})(objs2.includes("file2.txt"))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: 'objs2.includes("file3.txt")'`)})(objs2.includes("file3.txt"))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(!objs2.includes("random"))'`)})((!objs2.includes("random")))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(objs.length === 4)'`)})((objs.length === 4))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(objs2.length === 3)'`)})((objs2.length === 3))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: objs.contains(\"file1.json\")")})(objs.includes("file1.json"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: objs.contains(\"file2.txt\")")})(objs.includes("file2.txt"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: objs.contains(\"file3.txt\")")})(objs.includes("file3.txt"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: objs.contains(\"random\")")})(objs.includes("random"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: objs2.contains(\"file1.json\")")})(objs2.includes("file1.json"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: objs2.contains(\"file2.txt\")")})(objs2.includes("file2.txt"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: objs2.contains(\"file3.txt\")")})(objs2.includes("file3.txt"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: !objs2.contains(\"random\")")})((!objs2.includes("random")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: objs.length == 4")})((objs.length === 4))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: objs2.length == 3")})((objs2.length === 3))};
     }
   }
   return $Closure1;
@@ -227,8 +227,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
         this.display.hidden = true;
+        this._addInflightOps("handle");
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.$Closure1.js";

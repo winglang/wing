@@ -41,10 +41,10 @@ module.exports = function({ fn }) {
     }
     async handle()  {
       const result = (await fn());
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(result.length === 3)'`)})((result.length === 3))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await result.at(0)) === "hola!")'`)})(((await result.at(0)) === "hola!"))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await result.at(1)) === "world")'`)})(((await result.at(1)) === "world"))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await result.at(2)) === "bang")'`)})(((await result.at(2)) === "bang"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: result.length == 3")})((result.length === 3))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: result.at(0) == \"hola!\"")})(((await result.at(0)) === "hola!"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: result.at(1) == \"world\"")})(((await result.at(1)) === "world"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: result.at(2) == \"bang\"")})(((await result.at(2)) === "bang"))};
     }
   }
   return $Closure2;
@@ -187,8 +187,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
         this.display.hidden = true;
+        this._addInflightOps("handle");
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.$Closure1.js";
@@ -223,8 +223,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure2 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
         this.display.hidden = true;
+        this._addInflightOps("handle");
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.$Closure2.js";

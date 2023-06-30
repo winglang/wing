@@ -15,7 +15,7 @@ module.exports = function({ publicBucket, privateBucket }) {
       let error = "";
       (await publicBucket.put("file1.txt","Foo"));
       (await privateBucket.put("file2.txt","Bar"));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await publicBucket.publicUrl("file1.txt")) !== "")'`)})(((await publicBucket.publicUrl("file1.txt")) !== ""))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: publicBucket.publicUrl(\"file1.txt\") != \"\"")})(((await publicBucket.publicUrl("file1.txt")) !== ""))};
       try {
         (await privateBucket.publicUrl("file2.txt"));
       }
@@ -23,7 +23,7 @@ module.exports = function({ publicBucket, privateBucket }) {
         const e = $error_e.message;
         error = e;
       }
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(error === "Cannot provide public url for a non-public bucket")'`)})((error === "Cannot provide public url for a non-public bucket"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: error == \"Cannot provide public url for a non-public bucket\"")})((error === "Cannot provide public url for a non-public bucket"))};
     }
   }
   return $Closure1;
@@ -264,8 +264,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
         this.display.hidden = true;
+        this._addInflightOps("handle");
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.$Closure1.js";

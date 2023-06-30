@@ -14,8 +14,8 @@ module.exports = function({  }) {
     async handle()  {
       const InflightClass = require("./inflight.InflightClass.js")({});
       const inflightClass = new InflightClass();
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await inflightClass.inflightMethod()) === "Inflight method")'`)})(((await inflightClass.inflightMethod()) === "Inflight method"))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await InflightClass.staticInflightMethod()) === "Static inflight method")'`)})(((await InflightClass.staticInflightMethod()) === "Static inflight method"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: inflightClass.inflightMethod() == \"Inflight method\"")})(((await inflightClass.inflightMethod()) === "Inflight method"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: InflightClass.staticInflightMethod() == \"Static inflight method\"")})(((await InflightClass.staticInflightMethod()) === "Static inflight method"))};
     }
   }
   return $Closure1;
@@ -194,8 +194,8 @@ class $Root extends $stdlib.std.Resource {
     class Foo extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("get123");
         this.instanceField = 100;
+        this._addInflightOps("get123");
       }
       static m()  {
         return 99;
@@ -235,8 +235,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
         this.display.hidden = true;
+        this._addInflightOps("handle");
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.$Closure1.js";
@@ -265,8 +265,8 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     const foo = new Foo(this,"Foo");
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '(foo.instanceField === 100)'`)})((foo.instanceField === 100))};
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '((Foo.m()) === 99)'`)})(((Foo.m()) === 99))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: foo.instanceField == 100")})((foo.instanceField === 100))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: Foo.m() == 99")})(((Foo.m()) === 99))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:test",new $Closure1(this,"$Closure1"));
   }
 }

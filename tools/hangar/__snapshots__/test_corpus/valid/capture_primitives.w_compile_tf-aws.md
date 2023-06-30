@@ -14,8 +14,8 @@ module.exports = function({ myStr, myNum, mySecondBool, myBool, myDur }) {
     async handle(s)  {
       {console.log(myStr)};
       const n = myNum;
-      {console.log(`${n}`)};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(mySecondBool === false)'`)})((mySecondBool === false))};
+      {console.log(String.raw({ raw: ["", ""] }, n))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: mySecondBool == false")})((mySecondBool === false))};
       if (myBool) {
         {console.log("bool=true")};
       }
@@ -25,8 +25,8 @@ module.exports = function({ myStr, myNum, mySecondBool, myBool, myDur }) {
       const min = myDur.minutes;
       const sec = myDur.seconds;
       const hr = myDur.hours;
-      const split = (await `min=${min} sec=${sec} hr=${hr}`.split(" "));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(split.length === 3)'`)})((split.length === 3))};
+      const split = (await String.raw({ raw: ["min=", " sec=", " hr=", ""] }, min, sec, hr).split(" "));
+      {((cond) => {if (!cond) throw new Error("assertion failed: split.length == 3")})((split.length === 3))};
     }
   }
   return $Closure1;
@@ -169,8 +169,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
         this.display.hidden = true;
+        this._addInflightOps("handle");
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.$Closure1.js";

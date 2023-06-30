@@ -12,8 +12,8 @@ module.exports = function({ foo }) {
     async $inflight_init()  {
     }
     async handle()  {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((((await foo.returnNil(true))) != null) === true)'`)})(((((await foo.returnNil(true))) != null) === true))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((((await foo.returnNil(false))) != null) === false)'`)})(((((await foo.returnNil(false))) != null) === false))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: foo.returnNil(true)? == true")})(((((await foo.returnNil(true))) != null) === true))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: foo.returnNil(false)? == false")})(((((await foo.returnNil(false))) != null) === false))};
     }
   }
   return $Closure1;
@@ -33,13 +33,13 @@ module.exports = function({ foo }) {
     async $inflight_init()  {
     }
     async handle()  {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((((await foo.getOptionalValue())) != null) === false)'`)})(((((await foo.getOptionalValue())) != null) === false))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: foo.getOptionalValue()? == false")})(((((await foo.getOptionalValue())) != null) === false))};
       (await foo.setOptionalValue("hello"));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((((await foo.getOptionalValue())) != null) === true)'`)})(((((await foo.getOptionalValue())) != null) === true))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await foo.getOptionalValue()) !== undefined)'`)})(((await foo.getOptionalValue()) !== undefined))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: foo.getOptionalValue()? == true")})(((((await foo.getOptionalValue())) != null) === true))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: foo.getOptionalValue() != nil")})(((await foo.getOptionalValue()) !== undefined))};
       (await foo.setOptionalValue(undefined));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((((await foo.getOptionalValue())) != null) === false)'`)})(((((await foo.getOptionalValue())) != null) === false))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await foo.getOptionalValue()) === undefined)'`)})(((await foo.getOptionalValue()) === undefined))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: foo.getOptionalValue()? == false")})(((((await foo.getOptionalValue())) != null) === false))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: foo.getOptionalValue() == nil")})(((await foo.getOptionalValue()) === undefined))};
     }
   }
   return $Closure2;
@@ -310,8 +310,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
         this.display.hidden = true;
+        this._addInflightOps("handle");
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.$Closure1.js";
@@ -346,8 +346,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure2 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
         this.display.hidden = true;
+        this._addInflightOps("handle");
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.$Closure2.js";

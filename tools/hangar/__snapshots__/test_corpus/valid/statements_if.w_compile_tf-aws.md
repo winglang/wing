@@ -16,20 +16,20 @@ module.exports = function({  }) {
         const x = 2;
         if ((true && ((x + 2) === 4))) {
           if ((true && ((x + 3) === 4))) {
-            {((cond) => {if (!cond) throw new Error(`assertion failed: 'false'`)})(false)};
+            {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
           }
           else if ((true && ((x + 3) === 6))) {
-            {((cond) => {if (!cond) throw new Error(`assertion failed: 'false'`)})(false)};
+            {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
           }
           else if ((false || ((x + 3) === 5))) {
-            {((cond) => {if (!cond) throw new Error(`assertion failed: 'true'`)})(true)};
+            {((cond) => {if (!cond) throw new Error("assertion failed: true")})(true)};
           }
           else {
-            {((cond) => {if (!cond) throw new Error(`assertion failed: 'false'`)})(false)};
+            {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
           }
         }
         else {
-          {((cond) => {if (!cond) throw new Error(`assertion failed: 'false'`)})(false)};
+          {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
         }
       }
     }
@@ -174,8 +174,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
         this.display.hidden = true;
+        this._addInflightOps("handle");
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.$Closure1.js";
@@ -208,23 +208,23 @@ class $Root extends $stdlib.std.Resource {
       const f = false;
       if ((true && ((x + 2) === 4))) {
         if ((true && ((x + 3) === 4))) {
-          {((cond) => {if (!cond) throw new Error(`assertion failed: 'false'`)})(false)};
+          {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
         }
         else if ((true && ((x + 3) === 6))) {
-          {((cond) => {if (!cond) throw new Error(`assertion failed: 'false'`)})(false)};
+          {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
         }
         else if ((false || ((x + 3) === 5))) {
-          {((cond) => {if (!cond) throw new Error(`assertion failed: 'true'`)})(true)};
+          {((cond) => {if (!cond) throw new Error("assertion failed: true")})(true)};
         }
         else if ((!f)) {
-          {((cond) => {if (!cond) throw new Error(`assertion failed: '(!(!(!f)))'`)})((!(!(!f))))};
+          {((cond) => {if (!cond) throw new Error("assertion failed: !!!f")})((!(!(!f))))};
         }
         else {
-          {((cond) => {if (!cond) throw new Error(`assertion failed: 'false'`)})(false)};
+          {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
         }
       }
       else {
-        {((cond) => {if (!cond) throw new Error(`assertion failed: 'false'`)})(false)};
+        {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
       }
     }
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:test",new $Closure1(this,"$Closure1"));

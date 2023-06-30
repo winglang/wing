@@ -12,9 +12,9 @@ module.exports = function({ RANDOM, NIL, util_Util }) {
     async $inflight_init()  {
     }
     async handle()  {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await util_Util.env("WING_TARGET")).length > 0)'`)})(((await util_Util.env("WING_TARGET")).length > 0))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: util.env(\"WING_TARGET\").length > 0")})(((await util_Util.env("WING_TARGET")).length > 0))};
       const noValue = ((await util_Util.tryEnv(RANDOM)) ?? NIL);
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(noValue === NIL)'`)})((noValue === NIL))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: noValue == NIL")})((noValue === NIL))};
     }
   }
   return $Closure1;
@@ -157,8 +157,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
         this.display.hidden = true;
+        this._addInflightOps("handle");
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.$Closure1.js";
@@ -198,8 +198,8 @@ class $Root extends $stdlib.std.Resource {
     }
     const RANDOM = "RANDOM123412121212kjhkjskdjkj";
     const NIL = "<<NIL>>";
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '((util.Util.env("PATH")).length > 0)'`)})(((util.Util.env("PATH")).length > 0))};
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '((util.Util.env("MY_VAR")) === "my value")'`)})(((util.Util.env("MY_VAR")) === "my value"))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: util.env(\"PATH\").length > 0")})(((util.Util.env("PATH")).length > 0))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: util.env(\"MY_VAR\") == \"my value\"")})(((util.Util.env("MY_VAR")) === "my value"))};
     let failed = false;
     try {
       (util.Util.env(RANDOM));
@@ -207,9 +207,9 @@ class $Root extends $stdlib.std.Resource {
     catch {
       failed = true;
     }
-    {((cond) => {if (!cond) throw new Error(`assertion failed: 'failed'`)})(failed)};
+    {((cond) => {if (!cond) throw new Error("assertion failed: failed")})(failed)};
     const no_value = ((util.Util.tryEnv(RANDOM)) ?? NIL);
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '(no_value === NIL)'`)})((no_value === NIL))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: no_value == NIL")})((no_value === NIL))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:use util from inflight",new $Closure1(this,"$Closure1"));
   }
 }

@@ -18,11 +18,11 @@ module.exports = function({ b }) {
       (await b.put("foo/bar/","text"));
       (await b.put("foo/bar/baz","text"));
       const objs = (await b.list());
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await objs.at(0)) === "foo")'`)})(((await objs.at(0)) === "foo"))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await objs.at(1)) === "foo/")'`)})(((await objs.at(1)) === "foo/"))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await objs.at(2)) === "foo/bar")'`)})(((await objs.at(2)) === "foo/bar"))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await objs.at(3)) === "foo/bar/")'`)})(((await objs.at(3)) === "foo/bar/"))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await objs.at(4)) === "foo/bar/baz")'`)})(((await objs.at(4)) === "foo/bar/baz"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: objs.at(0) == \"foo\"")})(((await objs.at(0)) === "foo"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: objs.at(1) == \"foo/\"")})(((await objs.at(1)) === "foo/"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: objs.at(2) == \"foo/bar\"")})(((await objs.at(2)) === "foo/bar"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: objs.at(3) == \"foo/bar/\"")})(((await objs.at(3)) === "foo/bar/"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: objs.at(4) == \"foo/bar/baz\"")})(((await objs.at(4)) === "foo/bar/baz"))};
     }
   }
   return $Closure1;
@@ -210,8 +210,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
         this.display.hidden = true;
+        this._addInflightOps("handle");
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.$Closure1.js";

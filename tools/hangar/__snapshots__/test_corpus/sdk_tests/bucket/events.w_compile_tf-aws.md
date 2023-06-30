@@ -12,7 +12,7 @@ module.exports = function({ table, idsCounter }) {
     async $inflight_init()  {
     }
     async handle(key, operation, source)  {
-      (await table.insert(`${(await idsCounter.inc())}`,Object.freeze({"key":key,"operation":operation,"source":`${source}`})));
+      (await table.insert(String.raw({ raw: ["", ""] }, (await idsCounter.inc())),Object.freeze({"key":key,"operation":operation,"source":String.raw({ raw: ["", ""] }, source)})));
     }
   }
   return $Closure1;
@@ -92,7 +92,7 @@ module.exports = function({ logHistory, Source }) {
     async $inflight_init()  {
     }
     async handle(key, event)  {
-      (await logHistory(key,`${event}`,Source.onEvent));
+      (await logHistory(key,String.raw({ raw: ["", ""] }, event),Source.onEvent));
     }
   }
   return $Closure5;
@@ -143,7 +143,7 @@ module.exports = function({ table }) {
       return async () =>  {
         let count = 0;
         for (const u of (await table.list())) {
-          if (((((u)["key"] === opts.key) && ((u)["operation"] === opts.type)) && ((u)["source"] === `${opts.source}`))) {
+          if (((((u)["key"] === opts.key) && ((u)["operation"] === opts.type)) && ((u)["source"] === String.raw({ raw: ["", ""] }, opts.source)))) {
             count = (count + 1);
           }
         }
@@ -174,16 +174,16 @@ module.exports = function({ b, wait, checkHitCount, Source }) {
       (await b.put("c","1"));
       (await b.put("b","100"));
       (await b.delete("c"));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(await wait((await checkHitCount({ key: "a", type: "CREATE", source: Source.anyEvent, count: 1 }))))'`)})((await wait((await checkHitCount({ key: "a", type: "CREATE", source: Source.anyEvent, count: 1 })))))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(await wait((await checkHitCount({ key: "b", type: "CREATE", source: Source.anyEvent, count: 1 }))))'`)})((await wait((await checkHitCount({ key: "b", type: "CREATE", source: Source.anyEvent, count: 1 })))))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(await wait((await checkHitCount({ key: "c", type: "CREATE", source: Source.anyEvent, count: 1 }))))'`)})((await wait((await checkHitCount({ key: "c", type: "CREATE", source: Source.anyEvent, count: 1 })))))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(await wait((await checkHitCount({ key: "a", type: "CREATE", source: Source.onEvent, count: 1 }))))'`)})((await wait((await checkHitCount({ key: "a", type: "CREATE", source: Source.onEvent, count: 1 })))))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(await wait((await checkHitCount({ key: "b", type: "CREATE", source: Source.onEvent, count: 1 }))))'`)})((await wait((await checkHitCount({ key: "b", type: "CREATE", source: Source.onEvent, count: 1 })))))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(await wait((await checkHitCount({ key: "c", type: "CREATE", source: Source.onEvent, count: 1 }))))'`)})((await wait((await checkHitCount({ key: "c", type: "CREATE", source: Source.onEvent, count: 1 })))))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(await wait((await checkHitCount({ key: "b", type: "UPDATE", source: Source.anyEvent, count: 1 }))))'`)})((await wait((await checkHitCount({ key: "b", type: "UPDATE", source: Source.anyEvent, count: 1 })))))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(await wait((await checkHitCount({ key: "c", type: "DELETE", source: Source.anyEvent, count: 1 }))))'`)})((await wait((await checkHitCount({ key: "c", type: "DELETE", source: Source.anyEvent, count: 1 })))))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(await wait((await checkHitCount({ key: "b", type: "UPDATE", source: Source.onEvent, count: 1 }))))'`)})((await wait((await checkHitCount({ key: "b", type: "UPDATE", source: Source.onEvent, count: 1 })))))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(await wait((await checkHitCount({ key: "c", type: "DELETE", source: Source.onEvent, count: 1 }))))'`)})((await wait((await checkHitCount({ key: "c", type: "DELETE", source: Source.onEvent, count: 1 })))))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: wait(checkHitCount(key: \"a\", type: \"CREATE\", source: Source.anyEvent, count: 1))")})((await wait((await checkHitCount({ key: "a", type: "CREATE", source: Source.anyEvent, count: 1 })))))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: wait(checkHitCount(key: \"b\", type: \"CREATE\", source: Source.anyEvent, count: 1))")})((await wait((await checkHitCount({ key: "b", type: "CREATE", source: Source.anyEvent, count: 1 })))))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: wait(checkHitCount(key: \"c\", type: \"CREATE\", source: Source.anyEvent, count: 1))")})((await wait((await checkHitCount({ key: "c", type: "CREATE", source: Source.anyEvent, count: 1 })))))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: wait(checkHitCount(key: \"a\", type: \"CREATE\", source: Source.onEvent, count: 1))")})((await wait((await checkHitCount({ key: "a", type: "CREATE", source: Source.onEvent, count: 1 })))))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: wait(checkHitCount(key: \"b\", type: \"CREATE\", source:  Source.onEvent, count: 1))")})((await wait((await checkHitCount({ key: "b", type: "CREATE", source: Source.onEvent, count: 1 })))))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: wait(checkHitCount(key: \"c\", type: \"CREATE\", source:  Source.onEvent, count: 1))")})((await wait((await checkHitCount({ key: "c", type: "CREATE", source: Source.onEvent, count: 1 })))))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: wait(checkHitCount(key: \"b\", type: \"UPDATE\", source: Source.anyEvent, count: 1))")})((await wait((await checkHitCount({ key: "b", type: "UPDATE", source: Source.anyEvent, count: 1 })))))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: wait(checkHitCount(key: \"c\", type: \"DELETE\", source: Source.anyEvent, count: 1))")})((await wait((await checkHitCount({ key: "c", type: "DELETE", source: Source.anyEvent, count: 1 })))))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: wait(checkHitCount(key: \"b\", type: \"UPDATE\", source: Source.onEvent, count: 1))")})((await wait((await checkHitCount({ key: "b", type: "UPDATE", source: Source.onEvent, count: 1 })))))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: wait(checkHitCount(key: \"c\", type: \"DELETE\", source: Source.onEvent, count: 1))")})((await wait((await checkHitCount({ key: "c", type: "DELETE", source: Source.onEvent, count: 1 })))))};
     }
   }
   return $Closure8;
@@ -1123,8 +1123,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
         this.display.hidden = true;
+        this._addInflightOps("handle");
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.$Closure1.js";
@@ -1163,8 +1163,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure2 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
         this.display.hidden = true;
+        this._addInflightOps("handle");
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.$Closure2.js";
@@ -1207,8 +1207,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure3 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
         this.display.hidden = true;
+        this._addInflightOps("handle");
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.$Closure3.js";
@@ -1251,8 +1251,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure4 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
         this.display.hidden = true;
+        this._addInflightOps("handle");
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.$Closure4.js";
@@ -1295,8 +1295,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure5 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
         this.display.hidden = true;
+        this._addInflightOps("handle");
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.$Closure5.js";
@@ -1339,8 +1339,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure6 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
         this.display.hidden = true;
+        this._addInflightOps("handle");
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.$Closure6.js";
@@ -1374,8 +1374,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure7 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
         this.display.hidden = true;
+        this._addInflightOps("handle");
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.$Closure7.js";
@@ -1410,8 +1410,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure8 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
         this.display.hidden = true;
+        this._addInflightOps("handle");
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.$Closure8.js";

@@ -27,18 +27,12 @@ module.exports = function({ q, js }) {
         return false;
       }
       ;
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(await wait(async () =>  {
-        return ((await q.approxSize()) === 3);
-      }
-      ))'`)})((await wait(async () =>  {
+      {((cond) => {if (!cond) throw new Error("assertion failed: wait(inflight (): bool => { \n    return q.approxSize() == 3;\n  })")})((await wait(async () =>  {
         return ((await q.approxSize()) === 3);
       }
       )))};
       (await q.purge());
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(await wait(async () =>  {
-        return ((await q.approxSize()) === 0);
-      }
-      ))'`)})((await wait(async () =>  {
+      {((cond) => {if (!cond) throw new Error("assertion failed: wait(inflight (): bool => {\n    return q.approxSize() == 0;\n  })")})((await wait(async () =>  {
         return ((await q.approxSize()) === 0);
       }
       )))};
@@ -244,8 +238,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
         this.display.hidden = true;
+        this._addInflightOps("handle");
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.$Closure1.js";

@@ -16,7 +16,7 @@ module.exports = function({ oneHundredMiliseconds, JSHelper, util_Util }) {
       (await util_Util.sleep(oneHundredMiliseconds));
       const end = (await JSHelper.getTime());
       const delta = (end - start);
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(delta >= 100)'`)})((delta >= 100))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: delta >= 100")})((delta >= 100))};
     }
   }
   return $Closure1;
@@ -210,8 +210,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
         this.display.hidden = true;
+        this._addInflightOps("handle");
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.$Closure1.js";

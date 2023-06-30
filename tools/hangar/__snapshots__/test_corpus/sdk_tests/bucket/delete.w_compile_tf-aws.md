@@ -16,8 +16,8 @@ module.exports = function({ b }) {
       const jsonObj1 = Object.freeze({"key1":"value1"});
       (await b.putJson("file1.json",jsonObj1));
       (await b.delete("file1.txt"));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(await b.exists("file1.json"))'`)})((await b.exists("file1.json")))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(await b.exists("file2.txt"))'`)})((await b.exists("file2.txt")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: b.exists(\"file1.json\")")})((await b.exists("file1.json")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: b.exists(\"file2.txt\")")})((await b.exists("file2.txt")))};
       (await b.delete("file1.json",Object.freeze({"mustExist":true})));
       try {
         (await b.delete("file1.json",Object.freeze({"mustExist":true})));
@@ -26,10 +26,10 @@ module.exports = function({ b }) {
         const e = $error_e.message;
         error = e;
       }
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(error === "Object does not exist (key=file1.json).")'`)})((error === "Object does not exist (key=file1.json)."))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(await b.exists("file2.txt"))'`)})((await b.exists("file2.txt")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: error == \"Object does not exist (key=file1.json).\"")})((error === "Object does not exist (key=file1.json)."))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: b.exists(\"file2.txt\")")})((await b.exists("file2.txt")))};
       (await b.delete("file2.txt"));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(!(await b.exists("file2.txt")))'`)})((!(await b.exists("file2.txt"))))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: !b.exists(\"file2.txt\")")})((!(await b.exists("file2.txt"))))};
     }
   }
   return $Closure1;
@@ -228,8 +228,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
         this.display.hidden = true;
+        this._addInflightOps("handle");
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.$Closure1.js";

@@ -29,6 +29,7 @@ jobs:
             tutorial
             vscode
             plugins
+            console
           types: |-
             feat
             fix

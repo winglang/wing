@@ -14,15 +14,15 @@ module.exports = function({ b }) {
     async handle()  {
       const jsonObj2 = Object.freeze({"key2":"value2"});
       (await b.put("file1.txt","Foo"));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await b.tryDelete("file1.txt")) === true)'`)})(((await b.tryDelete("file1.txt")) === true))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await b.tryDelete("file1.txt")) === false)'`)})(((await b.tryDelete("file1.txt")) === false))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await b.tryDelete("random")) === false)'`)})(((await b.tryDelete("random")) === false))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: b.tryDelete(\"file1.txt\") == true")})(((await b.tryDelete("file1.txt")) === true))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: b.tryDelete(\"file1.txt\") == false")})(((await b.tryDelete("file1.txt")) === false))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: b.tryDelete(\"random\") == false")})(((await b.tryDelete("random")) === false))};
       (await b.put("file2.txt","Bar"));
       (await b.putJson("file2.json",jsonObj2));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await b.tryDelete("file2.txt")) === true)'`)})(((await b.tryDelete("file2.txt")) === true))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await b.tryDelete("file2.json")) === true)'`)})(((await b.tryDelete("file2.json")) === true))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await b.tryDelete("file2.txt")) === false)'`)})(((await b.tryDelete("file2.txt")) === false))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await b.tryDelete("file2.json")) === false)'`)})(((await b.tryDelete("file2.json")) === false))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: b.tryDelete(\"file2.txt\") == true")})(((await b.tryDelete("file2.txt")) === true))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: b.tryDelete(\"file2.json\") == true")})(((await b.tryDelete("file2.json")) === true))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: b.tryDelete(\"file2.txt\") == false")})(((await b.tryDelete("file2.txt")) === false))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: b.tryDelete(\"file2.json\") == false")})(((await b.tryDelete("file2.json")) === false))};
     }
   }
   return $Closure1;
@@ -210,8 +210,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
         this.display.hidden = true;
+        this._addInflightOps("handle");
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.$Closure1.js";

@@ -15,10 +15,10 @@ module.exports = function({ r, r2 }) {
       const connection = (await r.rawClient());
       (await connection.set("wing","does redis"));
       const value = (await connection.get("wing"));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(value === "does redis")'`)})((value === "does redis"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: value == \"does redis\"")})((value === "does redis"))};
       (await r2.set("wing","does redis again"));
       const value2 = (await r2.get("wing"));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(value2 === "does redis again")'`)})((value2 === "does redis again"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: value2 == \"does redis again\"")})((value2 === "does redis again"))};
     }
   }
   return $Closure1;
@@ -485,8 +485,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
         this.display.hidden = true;
+        this._addInflightOps("handle");
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.$Closure1.js";

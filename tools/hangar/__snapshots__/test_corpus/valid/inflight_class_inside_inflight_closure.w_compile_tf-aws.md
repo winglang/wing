@@ -59,7 +59,7 @@ module.exports = function({  }) {
       const Foo = require("./inflight.Foo.js")({x});
       const foo = new Foo();
       const y = (await foo.getX());
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(y === 12)'`)})((y === 12))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: y == 12")})((y === 12))};
     }
   }
   return $Closure3;
@@ -90,7 +90,7 @@ module.exports = function({  }) {
       this.field = "value";
     }
     async method()  {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(this.field === "value")'`)})((this.field === "value"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: this.field == \"value\"")})((this.field === "value"))};
     }
   }
   return InflightClass;
@@ -433,8 +433,8 @@ class $Root extends $stdlib.std.Resource {
         class $Closure1 extends $stdlib.std.Resource {
           constructor(scope, id, ) {
             super(scope, id);
-            this._addInflightOps("handle");
             this.display.hidden = true;
+            this._addInflightOps("handle");
           }
           static _toInflightType(context) {
             const self_client_path = "././inflight.$Closure1.js";
@@ -499,8 +499,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure2 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
         this.display.hidden = true;
+        this._addInflightOps("handle");
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.$Closure2.js";
@@ -535,8 +535,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure3 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
         this.display.hidden = true;
+        this._addInflightOps("handle");
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.$Closure3.js";

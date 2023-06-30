@@ -52,11 +52,11 @@ module.exports = function({ c1, c2, Utils }) {
     async $inflight_init()  {
     }
     async handle()  {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await c1.peek()) === 0)'`)})(((await c1.peek()) === 0))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await c2.peek()) === 0)'`)})(((await c2.peek()) === 0))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: c1.peek() == 0")})(((await c1.peek()) === 0))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: c2.peek() == 0")})(((await c2.peek()) === 0))};
       (await Utils.sleep(((60 * 1000) * 1.1)));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await c1.peek()) >= 1)'`)})(((await c1.peek()) >= 1))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await c2.peek()) >= 1)'`)})(((await c2.peek()) >= 1))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: c1.peek() >= 1")})(((await c1.peek()) >= 1))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: c2.peek() >= 1")})(((await c2.peek()) >= 1))};
     }
   }
   return $Closure3;
@@ -460,8 +460,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
         this.display.hidden = true;
+        this._addInflightOps("handle");
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.$Closure1.js";
@@ -496,8 +496,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure2 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
         this.display.hidden = true;
+        this._addInflightOps("handle");
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.$Closure2.js";
@@ -566,8 +566,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure3 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
         this.display.hidden = true;
+        this._addInflightOps("handle");
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.$Closure3.js";

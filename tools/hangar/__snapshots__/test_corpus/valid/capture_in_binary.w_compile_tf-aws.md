@@ -13,8 +13,8 @@ module.exports = function({ b, x }) {
     }
     async handle()  {
       (await b.put("file","foo"));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await b.get("file")) === "foo")'`)})(((await b.get("file")) === "foo"))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(12 === x)'`)})((12 === x))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: b.get(\"file\") == \"foo\"")})(((await b.get("file")) === "foo"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: 12 == x")})((12 === x))};
     }
   }
   return $Closure1;
@@ -202,8 +202,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
         this.display.hidden = true;
+        this._addInflightOps("handle");
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.$Closure1.js";

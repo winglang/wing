@@ -12,7 +12,7 @@ module.exports = function({  }) {
     async $inflight_init()  {
     }
     async handle(m)  {
-      return `Hello ${m}!`;
+      return String.raw({ raw: ["Hello ", "!"] }, m);
     }
   }
   return $Closure1;
@@ -76,7 +76,7 @@ module.exports = function({ f }) {
     }
     async handle()  {
       const result = (await f.invoke("2"));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(result === "8")'`)})((result === "8"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: result == \"8\"")})((result === "8"))};
     }
   }
   return $Closure4;
@@ -319,8 +319,8 @@ class $Root extends $stdlib.std.Resource {
     class Doubler extends $stdlib.std.Resource {
       constructor(scope, id, func) {
         super(scope, id);
-        this._addInflightOps("invoke");
         this.func = func;
+        this._addInflightOps("invoke");
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.Doubler.js";
@@ -355,8 +355,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
         this.display.hidden = true;
+        this._addInflightOps("handle");
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.$Closure1.js";
@@ -393,8 +393,8 @@ class $Root extends $stdlib.std.Resource {
         class $Closure2 extends $stdlib.std.Resource {
           constructor(scope, id, ) {
             super(scope, id);
-            this._addInflightOps("handle");
             this.display.hidden = true;
+            this._addInflightOps("handle");
           }
           static _toInflightType(context) {
             const self_client_path = "././inflight.$Closure2.js";
@@ -459,8 +459,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure3 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
         this.display.hidden = true;
+        this._addInflightOps("handle");
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.$Closure3.js";
@@ -491,8 +491,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure4 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
         this.display.hidden = true;
+        this._addInflightOps("handle");
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.$Closure4.js";

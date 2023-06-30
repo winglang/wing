@@ -40,7 +40,7 @@ module.exports = function({ api }) {
     }
     async handle()  {
       const url = api.url;
-      {((cond) => {if (!cond) throw new Error(`assertion failed: 'url.startsWith("http")'`)})(url.startsWith("http"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: url.startsWith(\"http\")")})(url.startsWith("http"))};
     }
   }
   return $Closure2;
@@ -60,7 +60,7 @@ module.exports = function({ __parent_this_3 }) {
     async $inflight_init()  {
     }
     async handle(req)  {
-      const text = `${__parent_this_3.api.url}/endpoint2`;
+      const text = String.raw({ raw: ["", "/endpoint2"] }, __parent_this_3.api.url);
       return {
       "status": 200,
       "body": text,}
@@ -496,8 +496,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
         this.display.hidden = true;
+        this._addInflightOps("handle");
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.$Closure1.js";
@@ -534,8 +534,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure2 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
         this.display.hidden = true;
+        this._addInflightOps("handle");
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.$Closure2.js";
@@ -575,8 +575,8 @@ class $Root extends $stdlib.std.Resource {
         class $Closure3 extends $stdlib.std.Resource {
           constructor(scope, id, ) {
             super(scope, id);
-            this._addInflightOps("handle");
             this.display.hidden = true;
+            this._addInflightOps("handle");
           }
           static _toInflightType(context) {
             const self_client_path = "././inflight.$Closure3.js";

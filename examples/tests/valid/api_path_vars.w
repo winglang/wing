@@ -1,28 +1,25 @@
 bring cloud;
+bring http;
 
 let api = new cloud.Api();
 
-class Fetch {
-  extern "./api_path_vars.js" inflight get(url: str): Json;
-}
 
 let handler = inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
   return cloud.ApiResponse {
     body: Json.stringify({ user: req.vars.get("name") }),
-    headers: { "content-type": "application/json" },
+    headers: { "content-type" => "application/json" },
     status: 200
   };
 };
 
 api.get("/users/{name}", handler);
 
-let f = new Fetch();
 
 test "test" {
   let username = "tsuf";
-  // TODO: change f.get to static when possible
-  let res = f.get("${api.url}/users/${username}");
+  let res: http.Response = http.get("${api.url}/users/${username}");
 
-  assert(res.get("status") == 200);
-  assert(res.get("body").get("user") == username);
+
+  assert(res.status == 200);
+  assert(Json.parse(res.body ?? "").get("user") == username);
 }

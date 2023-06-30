@@ -293,6 +293,12 @@ where
 				.map(|(name, field)| (f.fold_symbol(name), f.fold_expr(field)))
 				.collect(),
 		},
+		ExprKind::JsonMapLiteral { fields } => ExprKind::JsonMapLiteral {
+			fields: fields
+				.into_iter()
+				.map(|(key, value)| (key, f.fold_expr(value)))
+				.collect(),
+		},
 		ExprKind::MapLiteral { type_, fields } => ExprKind::MapLiteral {
 			type_: type_.map(|t| f.fold_type_annotation(t)),
 			fields: fields
@@ -417,6 +423,7 @@ where
 			.into_iter()
 			.map(|(name, arg)| (f.fold_symbol(name), f.fold_expr(arg)))
 			.collect(),
+		span: node.span,
 	}
 }
 

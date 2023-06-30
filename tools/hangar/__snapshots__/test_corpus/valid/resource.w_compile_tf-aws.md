@@ -13,9 +13,9 @@ module.exports = function({ res, bucket }) {
     }
     async handle()  {
       const s = (await res.myMethod());
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(s === "counter is: 101")'`)})((s === "counter is: 101"))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await bucket.list()).length === 1)'`)})(((await bucket.list()).length === 1))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(res.foo.inflightField === 123)'`)})((res.foo.inflightField === 123))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: s == \"counter is: 101\"")})((s === "counter is: 101"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: bucket.list().length == 1")})(((await bucket.list()).length === 1))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: res.foo.inflightField == 123")})((res.foo.inflightField === 123))};
       (await res.testTypeAccess());
     }
   }
@@ -123,14 +123,14 @@ module.exports = function({ Foo, MyEnum }) {
     async myMethod()  {
       (await this.foo.fooInc());
       const s = (await Foo.fooStatic());
-      (await this.b.put("foo",`counter is: ${(await this.foo.fooGet())}`));
+      (await this.b.put("foo",String.raw({ raw: ["counter is: ", ""] }, (await this.foo.fooGet()))));
       return (await this.b.get("foo"));
     }
     async testTypeAccess()  {
       if (true) {
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await Bar.barStatic()) === "bar static")'`)})(((await Bar.barStatic()) === "bar static"))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '((await Foo.fooStatic()) === "foo static")'`)})(((await Foo.fooStatic()) === "foo static"))};
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(this.e === MyEnum.B)'`)})((this.e === MyEnum.B))};
+        {((cond) => {if (!cond) throw new Error("assertion failed: Bar.barStatic() == \"bar static\"")})(((await Bar.barStatic()) === "bar static"))};
+        {((cond) => {if (!cond) throw new Error("assertion failed: Foo.fooStatic() == \"foo static\"")})(((await Foo.fooStatic()) === "foo static"))};
+        {((cond) => {if (!cond) throw new Error("assertion failed: this.e == MyEnum.B")})((this.e === MyEnum.B))};
       }
     }
   }
@@ -915,8 +915,8 @@ class $Root extends $stdlib.std.Resource {
     class Foo extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("fooInc", "fooGet", "fooStatic", "inflightField");
         this.c = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"cloud.Counter");
+        this._addInflightOps("fooInc", "fooGet", "fooStatic", "inflightField");
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.Foo.js";
@@ -959,11 +959,11 @@ class $Root extends $stdlib.std.Resource {
     class Bar extends $stdlib.std.Resource {
       constructor(scope, id, name, b, e) {
         super(scope, id);
-        this._addInflightOps("barStatic", "myMethod", "testTypeAccess");
         this.name = name;
         this.b = b;
         this.foo = new Foo(this,"Foo");
         this.e = e;
+        this._addInflightOps("barStatic", "myMethod", "testTypeAccess");
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.Bar.js";
@@ -1030,8 +1030,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
         this.display.hidden = true;
+        this._addInflightOps("handle");
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.$Closure1.js";
@@ -1071,7 +1071,6 @@ class $Root extends $stdlib.std.Resource {
     class BigPublisher extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("publish", "getObjectCount");
         this.b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
         this.b2 = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"b2");
         this.q = this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this,"cloud.Queue");
@@ -1080,8 +1079,8 @@ class $Root extends $stdlib.std.Resource {
         class $Closure2 extends $stdlib.std.Resource {
           constructor(scope, id, ) {
             super(scope, id);
-            this._addInflightOps("handle");
             this.display.hidden = true;
+            this._addInflightOps("handle");
           }
           static _toInflightType(context) {
             const self_client_path = "././inflight.$Closure2.js";
@@ -1118,8 +1117,8 @@ class $Root extends $stdlib.std.Resource {
         class $Closure3 extends $stdlib.std.Resource {
           constructor(scope, id, ) {
             super(scope, id);
-            this._addInflightOps("handle");
             this.display.hidden = true;
+            this._addInflightOps("handle");
           }
           static _toInflightType(context) {
             const self_client_path = "././inflight.$Closure3.js";
@@ -1156,8 +1155,8 @@ class $Root extends $stdlib.std.Resource {
         class $Closure4 extends $stdlib.std.Resource {
           constructor(scope, id, ) {
             super(scope, id);
-            this._addInflightOps("handle");
             this.display.hidden = true;
+            this._addInflightOps("handle");
           }
           static _toInflightType(context) {
             const self_client_path = "././inflight.$Closure4.js";
@@ -1190,6 +1189,7 @@ class $Root extends $stdlib.std.Resource {
           }
         }
         (this.b2.onCreate(new $Closure4(this,"$Closure4")));
+        this._addInflightOps("publish", "getObjectCount");
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.BigPublisher.js";
@@ -1238,8 +1238,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure5 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
         this.display.hidden = true;
+        this._addInflightOps("handle");
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.$Closure5.js";
@@ -1303,13 +1303,13 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         const d1 = new Dummy(this,"Dummy");
-        {((cond) => {if (!cond) throw new Error(`assertion failed: 'd1.node.path.endsWith("/ScopeAndIdTestClass/Dummy")'`)})(d1.node.path.endsWith("/ScopeAndIdTestClass/Dummy"))};
+        {((cond) => {if (!cond) throw new Error("assertion failed: d1.node.path.endsWith(\"/ScopeAndIdTestClass/Dummy\")")})(d1.node.path.endsWith("/ScopeAndIdTestClass/Dummy"))};
         const d2 = new Dummy(d1,"Dummy");
-        {((cond) => {if (!cond) throw new Error(`assertion failed: 'd2.node.path.endsWith("/ScopeAndIdTestClass/Dummy/Dummy")'`)})(d2.node.path.endsWith("/ScopeAndIdTestClass/Dummy/Dummy"))};
+        {((cond) => {if (!cond) throw new Error("assertion failed: d2.node.path.endsWith(\"/ScopeAndIdTestClass/Dummy/Dummy\")")})(d2.node.path.endsWith("/ScopeAndIdTestClass/Dummy/Dummy"))};
         for (const i of $stdlib.std.Range.of(0, 3, false)) {
-          const x = new Dummy(this,`tc${i}`);
-          const expected_path = `/ScopeAndIdTestClass/tc${i}`;
-          {((cond) => {if (!cond) throw new Error(`assertion failed: 'x.node.path.endsWith(expected_path)'`)})(x.node.path.endsWith(expected_path))};
+          const x = new Dummy(this,String.raw({ raw: ["tc", ""] }, i));
+          const expected_path = String.raw({ raw: ["/ScopeAndIdTestClass/tc", ""] }, i);
+          {((cond) => {if (!cond) throw new Error("assertion failed: x.node.path.endsWith(expected_path)")})(x.node.path.endsWith(expected_path))};
         }
       }
       static _toInflightType(context) {

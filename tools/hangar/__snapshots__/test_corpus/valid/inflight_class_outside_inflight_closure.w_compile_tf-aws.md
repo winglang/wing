@@ -13,7 +13,7 @@ module.exports = function({ BinaryOperation }) {
     }
     async handle()  {
       const op = new BinaryOperation(10,20);
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await op.add()) === 30)'`)})(((await op.add()) === 30))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: op.add() == 30")})(((await op.add()) === 30))};
     }
   }
   return $Closure1;
@@ -204,8 +204,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
         this.display.hidden = true;
+        this._addInflightOps("handle");
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.$Closure1.js";

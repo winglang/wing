@@ -455,6 +455,9 @@ pub enum ExprKind {
 		// We're using a map implementation with reliable iteration to guarantee deterministic compiler output. See discussion: https://github.com/winglang/wing/discussions/887.
 		fields: IndexMap<Symbol, Expr>,
 	},
+	JsonMapLiteral {
+		fields: IndexMap<String, Expr>,
+	},
 	MapLiteral {
 		type_: Option<TypeAnnotation>,
 		// We're using a map implementation with reliable iteration to guarantee deterministic compiler output. See discussion: https://github.com/winglang/wing/discussions/887.
@@ -494,13 +497,15 @@ impl Expr {
 pub struct ArgList {
 	pub pos_args: Vec<Expr>,
 	pub named_args: IndexMap<Symbol, Expr>,
+	pub span: WingSpan,
 }
 
 impl ArgList {
-	pub fn new() -> Self {
+	pub fn new(span: WingSpan) -> Self {
 		ArgList {
 			pos_args: vec![],
 			named_args: IndexMap::new(),
+			span,
 		}
 	}
 }

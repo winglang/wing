@@ -52,11 +52,11 @@ module.exports = function({ c, f1, f2 }) {
     async $inflight_init()  {
     }
     async handle()  {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await c.peek()) === 0)'`)})(((await c.peek()) === 0))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: c.peek() == 0")})(((await c.peek()) === 0))};
       (await f1.invoke(""));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await c.peek()) === 1)'`)})(((await c.peek()) === 1))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: c.peek() == 1")})(((await c.peek()) === 1))};
       (await f2.invoke(""));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await c.peek()) === 2)'`)})(((await c.peek()) === 2))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: c.peek() == 2")})(((await c.peek()) === 2))};
     }
   }
   return $Closure3;
@@ -402,8 +402,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
         this.display.hidden = true;
+        this._addInflightOps("handle");
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.$Closure1.js";
@@ -438,8 +438,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure2 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
         this.display.hidden = true;
+        this._addInflightOps("handle");
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.$Closure2.js";
@@ -474,8 +474,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure3 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
         this.display.hidden = true;
+        this._addInflightOps("handle");
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.$Closure3.js";
@@ -520,12 +520,10 @@ class $Root extends $stdlib.std.Resource {
     const f1 = this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"memory fn",new $Closure1(this,"$Closure1"),{
     "memory": 128,}
     );
-    const f2 = this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"env fn",new $Closure2(this,"$Closure2"),{
-    "env": Object.freeze({"catName":"Tion"}),}
-    );
+    const f2 = this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"env fn",new $Closure2(this,"$Closure2"),{ env: Object.freeze({"catName":"Tion"}) });
     (f2.addEnvironment("catAge","2"));
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '((f2.env)["catAge"] === "2")'`)})(((f2.env)["catAge"] === "2"))};
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '((f2.env)["catName"] === "Tion")'`)})(((f2.env)["catName"] === "Tion"))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: f2.env.get(\"catAge\") == \"2\"")})(((f2.env)["catAge"] === "2"))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: f2.env.get(\"catName\") == \"Tion\"")})(((f2.env)["catName"] === "Tion"))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:function with memory and function with env can be invoked",new $Closure3(this,"$Closure3"));
   }
 }
