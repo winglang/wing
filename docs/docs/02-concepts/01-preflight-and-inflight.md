@@ -5,22 +5,18 @@ description: "Wing's two execution phases: preflight and inflight"
 keywords: [Inflights, Inflight functions, Preflight, Preflight code]
 ---
 
-Every application built to run on the cloud can be thought of as being made up of two kinds of components.
+Wing has two execution phases:
 
-The first set of components are the resources and network-accessible services that your application uses.
-These resources are typically optimized for use cases like storing data or files (like buckets), processing HTTP requests (like API gateways), distributing content (like CDNs), or running user-defined code (such as Lambda functions or Kubernetes deployments).
+- **preflight**: code that runs once, at compile time, to generate the infrastructure configuration of your cloud application. For example, setting up databases, queues, storage buckets, API endpoints, etc.
+- **inflight**: code that runs at runtime to perform your application logic. For example, handling API requests, processing queue messages, etc. Inflight code can be executed on compute platforms in the cloud, such as function services (lambda), containers, VMs or physical servers.
 
-The second set of components are the pieces of user-defined code that you write to interact with these resources.
-For example, you may have code runs in a Lambda function or a Kubernetes cluster that makes requests to the internet, perform queries on your database, transforms data from storage, and does any number of other operations in response to an event.
-
-Wing lets you express these two parts of a cloud application through the concepts of **preflight code** and **inflight code**.
+One of the main differences between Wing and other languages is that it unifies both execution phases under the same programming model, through the concepts of preflight code and inflight code.
 
 ## Preflight code
 
-Preflight is where you define your app's infrastructure.
-The entrypoint, or default phase, of every Wing program is the preflight phase.
+Preflight code is code that runs once, at compile time, to generate the app's infrastructure configuration.
 
-For example, this code defines a storage bucket, and populates the bucket with a piece of static data when the app is deployed.
+For example, this code snippet defines a storage bucket using a class from the standard library:
 
 ```js playground
 bring cloud;
@@ -31,13 +27,24 @@ let orders = { "hummus": 100 };
 data.addObject("orders.json", Json.stringify(orders));
 ```
 
-`Bucket` is a class, and `addObject()` is a preflight method of `Bucket`.
+`Bucket` is a class from the standard library, and `addObject()` is a preflight method of `Bucket`.
 
-Preflight code is executed at compile-time, before the application is deployed.
+**There is no special annotation to define that this is preflight code because preflight is Wing's default execution phase.**
 
-For example, in the previous example, creating a class during preflight means that after compiling the Wing app, a configuration file is synthesized that describes a bucket resource.
+Compiling the program with the [Wing CLI](../tools/cli) will synthesize a configuration file which can be used to create the bucket and initialize its contents on a cloud provider.
 
-Some global functions  also have specific behaviors in preflight.
+Preflight code can be also used to configure services or set up more complex event listeners.
+
+For example, this code snippet defines a bucket whose contents will be publicly accessible, and which will be pre-populated with a file during deployment (not while the app is running).
+
+```js playground
+bring cloud;
+
+let bucket = new cloud.Bucket(public: true);
+bucket.addObject("file1.txt", "Hello world!");
+```
+
+There are a few global functions with specific behaviors in preflight.
 For example, adding a `log()` statement to your preflight code will result in Wing printing the string to the console after compilation.
 
 ```js playground
@@ -50,10 +57,24 @@ $ wing compile hello.w
 7 * 6 = 42
 ```
 
+Likewise, `assert()` statements will be evaluated during preflight, and will cause compilation to fail if the assertion fails.
+
+```js playground
+// hello.w
+assert(2 + 2 == 5);
+```
+
+```bash
+$ wing compile hello.w
+error: assertion failed: 2 + 2 == 5
+```
+
 ## Inflight code
 
-Inflight blocks are where you write asynchronous runtime code that can seamlessly interact with resources through their inflight APIs.
+Inflight blocks are where you write asynchronous runtime code that can directly interact with resources through their inflight APIs.
 Inflight functions can be easily packaged and executed onto compute platforms like containers, CI/CD pipelines or FaaS.
+Inflight code can also be executed multiple times and on different machines in parallel.
+
 Let's walk through some examples.
 
 Inflight code is always contained inside a block that starts with the word `inflight`.
@@ -78,6 +99,26 @@ let firstObject = inflight (): str => {
 };
 ```
 
+Even though `bucket` is defined in preflight, it's okay to use its inflight method in inflight code because it will always refer to the same bucket "instance" after deployment.
+
+### Executing inflight code
+
+For an inflight function to actually get executed, it must be provided to an API that expects inflight code. For example, we can provide it to a `cloud.Function`:
+
+```js playground
+bring cloud;
+
+let func = new cloud.Function(inflight () => {
+  log("Hello from the cloud!");
+});
+```
+
+`cloud.Function` represents an ephemeral, short-lived function, and it expects an inflight function as its first argument. It's responsible for packaging the code (as well as any any other inflight code it calls) so that it can be executed on cloud compute platforms.
+
+Today, inflights are typically compiled into JavaScript, but Wing may also be able to compile them into state machines, orchestrated workflows, and other formats in the future.
+
+### Restrictions on inflight code
+
 Inflight code cannot be executed during preflight, because inflight APIs assume all resources have already been deployed.
 
 ```js
@@ -97,7 +138,7 @@ let saveCalculation = inflight () => {
 };
 ```
 
-Instead, to insert an object into the bucket at runtime you would have to use the inflight method `put`.
+Instead, to insert an object into the bucket at runtime you would have to use an inflight method from the `Bucket` class, like `put`.
 
 Since a class's initializer is just a special kind of preflight function, it also isn't possible to initialize regular classes during preflight:
 
@@ -108,20 +149,6 @@ inflight () => {
   new cloud.Bucket(); // error: preflight class "Bucket" cannot be created in inflight
 };
 ```
-
-For an inflight function to actually get executed, it must be provided to an API that expects inflight code. For example:
-
-```js playground
-bring cloud;
-
-let func = new cloud.Function(inflight () => {
-  log("Hello from the cloud!");
-});
-```
-
-`cloud.Function` expects an inflight function as its first argument, and it's responsible for packaging the code (as well as any any other inflight code it calls) so that it can be executed on cloud compute platforms.
-
-Today, inflights are typically compiled into machine code (like JavaScript), but Wing may also be able to compile them into state machines, orchestrated workflows, and other formats in the future.
 
 ## Combining preflight and inflight code
 
