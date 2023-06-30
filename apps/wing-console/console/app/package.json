@@ -18,11 +18,13 @@
     "package": "bump-pack -b"
   },
   "dependencies": {
+    "analytics-node": "^6.2.0",
     "express": "^4.18.2",
     "@wingconsole/server": "file:../server"
   },
   "devDependencies": {
     "@tailwindcss/forms": "^0.5.3",
+    "@types/analytics-node": "^3.1.11",
     "@types/express": "^4.17.17",
     "@types/react": "^18.2.12",
     "@types/react-dom": "^18.2.5",
@@ -33,7 +35,9 @@
     "@wingconsole/ui": "file:../ui",
     "autoprefixer": "^10.4.14",
     "bump-pack": "file:../../../../tools/bump-pack",
+    "conf": "^11.0.1",
     "eslint": "^8.42.0",
+    "nanoid": "^4.0.2",
     "open": "^9.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

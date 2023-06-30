@@ -27,8 +27,8 @@ api.patch("/path/{id}", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
 
 test "http.patch and http.fetch can preform a call to an api" {
   let url = "${api.url}/path/${_id}";
-  let response: http.Response = http.patch(url, http.RequestOptions { headers: { "content-type": "application/json" }, body: Json.stringify(body)});
-  let fetchResponse: http.Response = http.patch(url, http.RequestOptions {method: http_PATCH, headers: { "content-type": "application/json" }, body: Json.stringify(body)});
+  let response: http.Response = http.patch(url, http.RequestOptions { headers: { "content-type" => "application/json" }, body: Json.stringify(body)});
+  let fetchResponse: http.Response = http.patch(url, http.RequestOptions {method: http_PATCH, headers: { "content-type" => "application/json" }, body: Json.stringify(body)});
 
   assert(response.body == _id);
   assert(response.status == 200);
