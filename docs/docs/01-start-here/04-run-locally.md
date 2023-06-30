@@ -26,7 +26,7 @@ and load the application.
 
 > The console will "hot reload" your app on each change in the source file parent directory.
 
-In your Wing Console web application you will see the following view of you application:
+In your Wing Console you will see the following view of you application:
 
 ![Wing Console desktop application view](./console-app.png 'Wing Console')
 
