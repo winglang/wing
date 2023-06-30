@@ -301,10 +301,7 @@ class $Root extends $stdlib.std.Resource {
         super._registerBind(host, ops);
       }
     }
-    const bucketProps = {
-    "public": true,}
-    ;
-    const publicBucket = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"publicBucket",bucketProps);
+    const publicBucket = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"publicBucket",{ public: true });
     const privateBucket = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"privateBucket");
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:publicUrl",new $Closure1(this,"$Closure1"));
   }
