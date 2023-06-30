@@ -117,21 +117,25 @@ static RESERVED_WORDS: phf::Set<&'static str> = phf_set! {
 	"preflight",
 	"elif",
 	"init",
+	"any",
+	"num",
+	"str",
+	"duration",
+	"bool",
+	"Json",
+	"MutJson",
+	"Map",
+	"MutMap",
+	"Set",
+	"MutSet",
+	"Array",
+	"MutArray",
 
 	// nodejs globals used in emitted code
 	"require",
 	"module",
 	"process",
 	"Object",
-	"Set",
-
-	// consts declared by the compiler in preflight
-	"$stdlib",
-	"$outdir",
-	"$wing_is_test",
-	"$App",
-	"$AppBase",
-	"$Root",
 };
 
 impl<'s> Parser<'s> {
