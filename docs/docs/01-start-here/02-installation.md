@@ -85,15 +85,7 @@ to use it, but it's great. It's available through the VSCode Marketplace [here](
 
 The Wing Console is a web application that provides a developer-friendly interface for viewing, exploring, and interacting with your Wing applications running on the local cloud simulator.
 
-To install the Wing Console, follow these steps:
-
-1. Ensure that you have already installed the Wing CLI by running the command:
-```shell
-npm i -g winglang
-```
-2. Once the Wing CLI is successfully installed, the Wing Console is automatically included as part of the package. There is no need to install it separately.
-
-That's it! With the Wing CLI installed, you can directly access the Wing Console and begin utilizing its features.
+The Wing Console is included as part of the Wing CLI package. There is no need to install it separately. Once the Wing CLI is successfully installed, you can directly access the Wing Console and begin utilizing its features.
 
 [AWS account]: https://portal.aws.amazon.com/billing/signup
 [AWS CLI]: https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html
