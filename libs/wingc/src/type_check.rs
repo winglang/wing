@@ -1168,7 +1168,7 @@ impl Types {
 		self.resource_base_type.unwrap()
 	}
 
-	/// Stores the type of a given expression node.
+	/// Stores the type and phase of a given expression node.
 	pub fn assign_type_to_expr(&mut self, expr: &Expr, type_: TypeRef, phase: Phase) {
 		let expr_idx = expr.id;
 		if self.type_for_expr.len() <= expr_idx {
