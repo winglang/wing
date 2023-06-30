@@ -23,8 +23,13 @@ impl CodeMaker {
 
 	/// Emits a line of code with the current indent.
 	pub fn line<S: Into<String>>(&mut self, line: S) {
+		let line: String = line.into();
+
+		// remove trailing newline
+		let line = line.strip_suffix("\n").unwrap_or(&line);
+
 		// if the line has newlines in it, consider each line separately
-		for subline in line.into().split('\n') {
+		for subline in line.split('\n') {
 			self.lines.push((self.indent, subline.into()));
 		}
 	}

@@ -312,7 +312,11 @@ impl<'a> JsiiImporter<'a> {
 			self.wing_types.void(),
 			false,
 			false,
-			Phase::Preflight,
+			if is_struct {
+				Phase::Independent
+			} else {
+				Phase::Preflight
+			},
 			self.jsii_spec.import_statement_idx,
 		);
 		let new_type_symbol = Self::jsii_name_to_symbol(&type_name, &jsii_interface.location_in_module);
@@ -326,7 +330,7 @@ impl<'a> JsiiImporter<'a> {
 					self.wing_types.void(),
 					false,
 					false,
-					iface_env.phase,
+					Phase::Independent, // structs are phase-independent
 					self.jsii_spec.import_statement_idx,
 				), // Dummy env, will be replaced below
 			})),
