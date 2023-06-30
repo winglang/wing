@@ -19,11 +19,17 @@ if (!SUPPORTED_NODE_VERSION) {
 }
 
 function actionErrorHandler(fn: (...args: any[]) => Promise<any>) {
-  return (...args: any[]) =>
-    fn(...args).catch((err: Error) => {
+  return async (...args: any[]) => {
+    try {
+      const exitCode = await fn(...args);
+      if (exitCode === 1) {
+        process.exit(1);
+      }
+    } catch (err) {
       console.error(err);
       process.exit(1);
-    });
+    }
+  };
 }
 
 async function main() {

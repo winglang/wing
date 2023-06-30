@@ -659,15 +659,6 @@ Test Files 1 failed (1)
 Duration <DURATION>"
 `;
 
-exports[`inflight_class_capture_mutable.w 1`] = `
-"pass ─ inflight_class_capture_mutable.wsim (no tests)
- 
- 
-Tests 1 passed (1)
-Test Files 1 passed (1)
-Duration <DURATION>"
-`;
-
 exports[`inflight_class_created_in_preflight.w 1`] = `
 "error: Cannot create inflight class \\"Foo\\" in preflight phase
   --> ../../../examples/tests/invalid/inflight_class_created_in_preflight.w:3:1
@@ -999,15 +990,15 @@ exports[`missing_semicolon.w 1`] = `
 error: Expected ';'
    --> ../../../examples/tests/invalid/missing_semicolon.w:16:10
    |
-16 | let x = 5
+16 | let x = 5 //
    |          ^ Expected ';'
 
 
 error: Expected '}'
-   --> ../../../examples/tests/invalid/missing_semicolon.w:20:28
+   --> ../../../examples/tests/invalid/missing_semicolon.w:19:14
    |
-20 |            //^ '}' expected
-   |                            ^ Expected '}'
+19 | if (x > 10) {
+   |              ^ Expected '}'
 
 
  
