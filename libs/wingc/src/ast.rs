@@ -164,6 +164,13 @@ impl UserDefinedType {
 	pub fn full_path_str(&self) -> String {
 		self.full_path().iter().join(".")
 	}
+
+	pub fn to_expression(&self) -> Expr {
+		Expr::new(
+			ExprKind::Reference(Reference::TypeReference(self.clone())),
+			self.span.clone(),
+		)
+	}
 }
 
 impl Display for UserDefinedType {
@@ -319,9 +326,28 @@ pub struct Class {
 	pub methods: Vec<(Symbol, FunctionDefinition)>,
 	pub initializer: FunctionDefinition,
 	pub inflight_initializer: FunctionDefinition,
-	pub parent: Option<UserDefinedType>,
+	pub parent: Option<Expr>, // the expression must be a reference to a user defined type
 	pub implements: Vec<UserDefinedType>,
 	pub phase: Phase,
+}
+
+impl Class {
+	/// Returns the `UserDefinedType` of the parent class, if any.
+	pub fn parent_udt(&self) -> Option<UserDefinedType> {
+		let Some(expr) = &self.parent else {
+			return None;
+		};
+
+		let ExprKind::Reference(ref r) = expr.kind else {
+			return None;
+		};
+
+		let Reference::TypeReference(t) = r else {
+			return None;
+		};
+
+		Some(t.clone())
+	}
 }
 
 #[derive(Debug)]
@@ -372,7 +398,7 @@ pub enum StmtKind {
 	Return(Option<Expr>),
 	Expression(Expr),
 	Assignment {
-		variable: Reference,
+		variable: Expr,
 		value: Expr,
 	},
 	Scope(Scope),
@@ -419,7 +445,7 @@ pub struct StructField {
 #[derive(Debug)]
 pub enum ExprKind {
 	New {
-		class: TypeAnnotation,
+		class: Box<Expr>, // expression must be a reference to a user defined type
 		obj_id: Option<Box<Expr>>,
 		obj_scope: Option<Box<Expr>>,
 		arg_list: ArgList,
@@ -592,8 +618,10 @@ pub enum Reference {
 		property: Symbol,
 		optional_accessor: bool,
 	},
+	/// A reference to a type (e.g. `std.Json` or `MyResource` or `aws.s3.Bucket`)
+	TypeReference(UserDefinedType),
 	/// A reference to a member inside a type: `MyType.x` or `MyEnum.A`
-	TypeMember { type_: UserDefinedType, property: Symbol },
+	TypeMember { typeobject: Box<Expr>, property: Symbol },
 }
 
 impl Display for Reference {
@@ -611,13 +639,13 @@ impl Display for Reference {
 				};
 				write!(f, "{}.{}", obj_str, property.name)
 			}
-			Reference::TypeMember { type_, property } => {
-				write!(
-					f,
-					"{}.{}",
-					TypeAnnotationKind::UserDefined(type_.clone()),
-					property.name
-				)
+			Reference::TypeReference(type_) => write!(f, "{}", type_),
+			Reference::TypeMember { typeobject, property } => {
+				let ExprKind::Reference(ref r) = typeobject.kind else {
+					return write!(f, "<?>.{}", property.name);
+				};
+
+				write!(f, "{}.{}", r, property.name)
 			}
 		}
 	}
