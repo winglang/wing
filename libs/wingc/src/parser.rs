@@ -501,7 +501,7 @@ impl<'s> Parser<'s> {
 		let reference = self.build_reference(&statement_node.child_by_field_name("name").unwrap(), phase)?;
 		if let ExprKind::Reference(r) = reference.kind {
 			Ok(StmtKind::Assignment {
-				variable: r,
+				variable: Expr::new(ExprKind::Reference(r), reference.span),
 				value: self.build_expression(&statement_node.child_by_field_name("value").unwrap(), phase)?,
 			})
 		} else {
@@ -699,7 +699,7 @@ impl<'s> Parser<'s> {
 							.err();
 					}
 
-					let return_type = Box::new(TypeAnnotation {
+					let init_return_type = Box::new(TypeAnnotation {
 						kind: TypeAnnotationKind::UserDefined(UserDefinedType {
 							root: name.clone(),
 							fields: vec![],
@@ -715,7 +715,7 @@ impl<'s> Parser<'s> {
 							),
 							signature: FunctionSignature {
 								parameters,
-								return_type,
+								return_type: init_return_type,
 								phase: Phase::Inflight,
 							},
 							is_static: false,
@@ -729,7 +729,7 @@ impl<'s> Parser<'s> {
 							is_static: false,
 							signature: FunctionSignature {
 								parameters,
-								return_type,
+								return_type: init_return_type,
 								phase: Phase::Preflight,
 							},
 							span: self.node_span(&class_element),
@@ -804,7 +804,10 @@ impl<'s> Parser<'s> {
 		let parent = if let Some(parent_node) = statement_node.child_by_field_name("parent") {
 			let parent_type = self.build_type_annotation(&parent_node, class_phase)?;
 			match parent_type.kind {
-				TypeAnnotationKind::UserDefined(parent_type) => Some(parent_type),
+				TypeAnnotationKind::UserDefined(parent_type) => Some(Expr::new(
+					ExprKind::Reference(Reference::TypeReference(parent_type)),
+					self.node_span(&parent_node),
+				)),
 				_ => {
 					self.with_error::<Node>(
 						format!("Parent type must be a user defined type, found {}", parent_type),
@@ -1005,6 +1008,51 @@ impl<'s> Parser<'s> {
 
 		Ok(res)
 	}
+	fn build_udt(&self, type_node: &Node) -> DiagnosticResult<UserDefinedType> {
+		match type_node.kind() {
+			"custom_type" => {
+				// check if last node is a "."
+				let last_child = type_node
+					.child(type_node.child_count() - 1)
+					.expect("If node is a custom type, it will have at least one child");
+
+				if last_child.kind() == "." {
+					// even though we're missing a field, we can still parse the rest of the type
+					self.add_error("Expected namespaced type", &last_child);
+				}
+
+				let mut cursor = type_node.walk();
+				let udt = UserDefinedType {
+					root: self.node_symbol(&type_node.child_by_field_name("object").unwrap())?,
+					fields: type_node
+						.children_by_field_name("fields", &mut cursor)
+						.map(|n| self.node_symbol(&n).unwrap())
+						.collect(),
+					span: self.node_span(&type_node),
+				};
+
+				Ok(udt)
+			}
+			"mutable_container_type" | "immutable_container_type" => {
+				let container_type = self.node_text(&type_node.child_by_field_name("collection_type").unwrap());
+				match container_type {
+					"ERROR" => self.with_error("Expected builtin container type", type_node)?,
+					builtin => {
+						let udt = UserDefinedType {
+							root: Symbol::global(WINGSDK_STD_MODULE),
+							fields: vec![Symbol {
+								name: builtin.to_string(),
+								span: self.node_span(&type_node),
+							}],
+							span: self.node_span(&type_node),
+						};
+						Ok(udt)
+					}
+				}
+			}
+			other => self.with_error(format!("Expected class. Found {}", other), type_node),
+		}
+	}
 
 	fn build_type_annotation(&self, type_node: &Node, phase: Phase) -> DiagnosticResult<TypeAnnotation> {
 		let span = self.node_span(type_node);
@@ -1136,14 +1184,14 @@ impl<'s> Parser<'s> {
 			let object_expr = if object_expr.kind() == "json_container_type" {
 				Expr::new(
 					ExprKind::Reference(Reference::TypeMember {
-						type_: UserDefinedType {
-							root: Symbol {
-								name: WINGSDK_STD_MODULE.to_string(),
-								span: Default::default(),
-							},
-							fields: vec![self.node_symbol(&object_expr)?],
-							span: self.node_span(&object_expr),
-						},
+						typeobject: Box::new(
+							UserDefinedType {
+								root: Symbol::global(WINGSDK_STD_MODULE),
+								fields: vec![self.node_symbol(&object_expr)?],
+								span: self.node_span(&object_expr),
+							}
+							.to_expression(),
+						),
 						property: self.node_symbol(&property)?,
 					}),
 					self.node_span(&object_expr),
@@ -1265,7 +1313,11 @@ impl<'s> Parser<'s> {
 		let expression_node = &self.check_error(*exp_node, "expression")?;
 		match expression_node.kind() {
 			"new_expression" => {
-				let class = self.build_type_annotation(&expression_node.child_by_field_name("class").unwrap(), phase)?;
+				let class_udt = self.build_udt(&expression_node.child_by_field_name("class").unwrap())?;
+				let class_udt_exp = Expr::new(
+					ExprKind::Reference(Reference::TypeReference(class_udt)),
+					expression_span.clone(),
+				);
 
 				let arg_list = if let Ok(args_node) = self.get_child_field(expression_node, "args") {
 					self.build_arg_list(&args_node, phase)
@@ -1283,9 +1335,10 @@ impl<'s> Parser<'s> {
 				} else {
 					None
 				};
+
 				Ok(Expr::new(
 					ExprKind::New {
-						class,
+						class: Box::new(class_udt_exp),
 						obj_id,
 						arg_list: arg_list?,
 						obj_scope,
@@ -1802,14 +1855,14 @@ impl<'s> Parser<'s> {
 		let type_span = self.node_span(&statement_node.child(0).unwrap());
 		Ok(StmtKind::Expression(Expr::new(
 			ExprKind::New {
-				class: TypeAnnotation {
-					kind: TypeAnnotationKind::UserDefined(UserDefinedType {
+				class: Box::new(Expr::new(
+					ExprKind::Reference(Reference::TypeReference(UserDefinedType {
 						root: Symbol::global(WINGSDK_STD_MODULE),
 						fields: vec![Symbol::global(WINGSDK_TEST_CLASS_NAME)],
 						span: type_span.clone(),
-					}),
-					span: type_span.clone(),
-				},
+					})),
+					type_span.clone(),
+				)),
 				obj_id: Some(test_id),
 				obj_scope: None,
 				arg_list: ArgList {

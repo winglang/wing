@@ -72,11 +72,11 @@ class C7 extends x {
 struct S1 {}
 
 class C8 extends S1 {
-               //^^ Preflight class C8's parent is not a class
+               //^^ Expected "S1" to be a class
 }
 
 class C11 extends C11 {
-                //^^^ Class cannot extend itself
+                //^^^ Unknown symbol "C11"
 }
 
 class Student {
