@@ -1018,7 +1018,7 @@ impl<'s> Parser<'s> {
 
 				if last_child.kind() == "." {
 					// even though we're missing a field, we can still parse the rest of the type
-					let _ = self.add_error::<()>("Expected namespaced type", &last_child);
+					self.add_error("Expected namespaced type", &last_child);
 				}
 
 				let mut cursor = type_node.walk();
@@ -1036,7 +1036,7 @@ impl<'s> Parser<'s> {
 			"mutable_container_type" | "immutable_container_type" => {
 				let container_type = self.node_text(&type_node.child_by_field_name("collection_type").unwrap());
 				match container_type {
-					"ERROR" => self.add_error("Expected builtin container type", type_node)?,
+					"ERROR" => self.with_error("Expected builtin container type", type_node)?,
 					builtin => {
 						let udt = UserDefinedType {
 							root: Symbol::global(WINGSDK_STD_MODULE),
@@ -1050,7 +1050,7 @@ impl<'s> Parser<'s> {
 					}
 				}
 			}
-			other => self.add_error(format!("Expected class. Found {}", other), type_node),
+			other => self.with_error(format!("Expected class. Found {}", other), type_node),
 		}
 	}
 
