@@ -1517,17 +1517,18 @@ impl<'s> Parser<'s> {
 		))
 	}
 
-	fn last_non_comment(node: Node) -> Node {
+	/// Given a node, returns the last non-extra node before it.
+	fn last_non_extra(node: Node) -> Node {
 		let parent = node.parent();
 		if let Some(parent) = parent {
-			if parent.kind() == "comment" {
-				return Self::last_non_comment(parent);
+			if parent.is_extra() {
+				return Self::last_non_extra(parent);
 			}
 		}
-		if node.kind() == "comment" {
+		if node.is_extra() {
 			let mut sibling = node.prev_sibling();
 			while let Some(s) = sibling {
-				if s.kind() != "comment" {
+				if !s.is_extra() {
 					break;
 				}
 				sibling = s.prev_sibling();
@@ -1543,7 +1544,7 @@ impl<'s> Parser<'s> {
 		let iter = traverse(root.walk(), Order::Pre);
 		for node in iter {
 			if node.kind() == "AUTOMATIC_SEMICOLON" {
-				let target_node = Self::last_non_comment(node);
+				let target_node = Self::last_non_extra(node);
 				let diag = Diagnostic {
 					message: "Expected ';'".to_string(),
 					span: Some(WingSpan {
@@ -1553,9 +1554,8 @@ impl<'s> Parser<'s> {
 					}),
 				};
 				report_diagnostic(diag);
-				self.error_nodes.borrow_mut().insert(node.id());
 			} else if node.kind() == "AUTOMATIC_BLOCK" {
-				_ = self.add_error::<()>("Expected block".to_string(), &Self::last_non_comment(node));
+				_ = self.add_error::<()>("Expected block".to_string(), &Self::last_non_extra(node));
 			} else if !self.error_nodes.borrow().contains(&node.id()) {
 				if node.is_error() {
 					if node.named_child_count() == 0 {
@@ -1568,7 +1568,7 @@ impl<'s> Parser<'s> {
 						}
 					}
 				} else if node.is_missing() {
-					let target_node = Self::last_non_comment(node);
+					let target_node = Self::last_non_extra(node);
 					let diag = Diagnostic {
 						message: format!("Expected '{}'", node.kind()),
 						span: Some(WingSpan {
@@ -1578,7 +1578,6 @@ impl<'s> Parser<'s> {
 						}),
 					};
 					report_diagnostic(diag);
-					self.error_nodes.borrow_mut().insert(node.id());
 				}
 			}
 		}
