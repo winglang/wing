@@ -49,7 +49,7 @@ $ wing compile hello.w
 ## Inflight code
 
 Inflight blocks are where you write asynchronous runtime code that can seamlessly interact with resources through their inflight APIs.
-Inflight functions which can be easily packaged and executed onto compute platforms like containers, CI/CD pipelines or FaaS.
+Inflight functions can be easily packaged and executed onto compute platforms like containers, CI/CD pipelines or FaaS.
 Let's walk through some examples.
 
 Inflight code is always contained inside a block (or "scope") that starts with the word `inflight`.
