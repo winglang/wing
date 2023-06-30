@@ -196,6 +196,13 @@ error: Call to super constructor can only be done from within a class constructo
     |    ^^^^^^^^ Call to super constructor can only be done from within a class constructor
 
 
+error: Reserved method name. Initializers are declared with \\"init\\"
+    --> ../../../examples/tests/invalid/class.w:160:3
+    |
+160 |   constructor() {
+    |   ^^^^^^^^^^^ Reserved method name. Initializers are declared with \\"init\\"
+
+
 error: Expected block
    --> ../../../examples/tests/invalid/class.w:17:17
    |
@@ -572,7 +579,14 @@ Duration <DURATION>"
 `;
 
 exports[`for_loop.w 1`] = `
-"error: Unable to iterate over \\"Bucket\\"
+"error: Reserved word
+  --> ../../../examples/tests/invalid/for_loop.w:5:5
+  |
+5 | for test in bucket {
+  |     ^^^^ Reserved word
+
+
+error: Unable to iterate over \\"Bucket\\"
   --> ../../../examples/tests/invalid/for_loop.w:5:13
   |
 5 | for test in bucket {
@@ -1900,7 +1914,14 @@ Duration <DURATION>"
 `;
 
 exports[`unknown_symbol.w 1`] = `
-"error: Unknown symbol \\"clod\\"
+"error: Reserved word
+   --> ../../../examples/tests/invalid/unknown_symbol.w:35:5
+   |
+35 | let let = 2;
+   |     ^^^ Reserved word
+
+
+error: Unknown symbol \\"clod\\"
   --> ../../../examples/tests/invalid/unknown_symbol.w:3:18
   |
 3 | let bucket = new clod.Bucket();
