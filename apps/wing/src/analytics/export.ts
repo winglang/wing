@@ -3,9 +3,9 @@ import { AnalyticsStorage } from './storage';
 
 
 let analytics = new Analytics({ writeKey: 'Rfx0id3AfQCZ5hfSDVy97EoMQB1wDLzF'});
-let events = AnalyticsStorage.loadAnalyticsReport();
+let report = AnalyticsStorage.loadAnalyticsReport();
 
-events.events.forEach(event => {
+report.events.forEach(event => {
   analytics.track({
     anonymousId: event.anonymousId ?? 'unknown',
     timestamp: event.timestamp,
