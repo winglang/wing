@@ -1517,13 +1517,45 @@ impl<'s> Parser<'s> {
 		))
 	}
 
+	/// Given a node, returns the last non-extra node before it.
+	fn last_non_extra(node: Node) -> Node {
+		let parent = node.parent();
+		if let Some(parent) = parent {
+			if parent.is_extra() {
+				return Self::last_non_extra(parent);
+			}
+		}
+		if node.is_extra() {
+			let mut sibling = node.prev_sibling();
+			while let Some(s) = sibling {
+				if !s.is_extra() {
+					break;
+				}
+				sibling = s.prev_sibling();
+			}
+
+			return sibling.unwrap_or(node);
+		} else {
+			return node;
+		}
+	}
+
 	fn report_unhandled_errors(&self, root: &Node) {
 		let iter = traverse(root.walk(), Order::Pre);
 		for node in iter {
 			if node.kind() == "AUTOMATIC_SEMICOLON" {
-				_ = self.add_error::<()>("Expected ';'", &node);
+				let target_node = Self::last_non_extra(node);
+				let diag = Diagnostic {
+					message: "Expected ';'".to_string(),
+					span: Some(WingSpan {
+						start: target_node.end_position().into(),
+						end: target_node.end_position().into(),
+						file_id: self.source_name.clone(),
+					}),
+				};
+				report_diagnostic(diag);
 			} else if node.kind() == "AUTOMATIC_BLOCK" {
-				_ = self.add_error::<()>("Expected block", &node);
+				_ = self.add_error::<()>("Expected block".to_string(), &Self::last_non_extra(node));
 			} else if !self.error_nodes.borrow().contains(&node.id()) {
 				if node.is_error() {
 					if node.named_child_count() == 0 {
@@ -1536,7 +1568,16 @@ impl<'s> Parser<'s> {
 						}
 					}
 				} else if node.is_missing() {
-					_ = self.add_error::<()>(format!("Expected '{}'", node.kind()), &node);
+					let target_node = Self::last_non_extra(node);
+					let diag = Diagnostic {
+						message: format!("Expected '{}'", node.kind()),
+						span: Some(WingSpan {
+							start: target_node.end_position().into(),
+							end: target_node.end_position().into(),
+							file_id: self.source_name.clone(),
+						}),
+					};
+					report_diagnostic(diag);
 				}
 			}
 		}
