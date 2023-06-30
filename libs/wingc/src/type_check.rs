@@ -3333,7 +3333,6 @@ impl<'a> TypeChecker<'a> {
 					reassignable,
 					phase: flight,
 					kind,
-					..
 				}) => {
 					// Replace type params in function signatures
 					if let Some(sig) = v.as_function_sig() {
