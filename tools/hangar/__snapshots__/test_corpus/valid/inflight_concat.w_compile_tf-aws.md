@@ -64,8 +64,8 @@ class $Root extends $stdlib.std.Resource {
     class R extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("foo");
         this.s1 = "hello";
+        this._addInflightOps("foo");
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.R.js";

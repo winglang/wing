@@ -1,6 +1,6 @@
 let a = MutArray<str>["hello"];
 let s = MutSet<num>{12};
-let m = MutMap<bool>{"hello": true};
+let m = MutMap<bool>{"hello" => true};
 
 let aCloned = (Array<str>["hello"]).copyMut();
 

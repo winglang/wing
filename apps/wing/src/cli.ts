@@ -14,11 +14,17 @@ if (!SUPPORTED_NODE_VERSION) {
 }
 
 function actionErrorHandler(fn: (...args: any[]) => Promise<any>) {
-  return (...args: any[]) =>
-    fn(...args).catch((err: Error) => {
+  return async (...args: any[]) => {
+    try {
+      const exitCode = await fn(...args);
+      if (exitCode === 1) {
+        process.exit(1);
+      }
+    } catch (err) {
       console.error(err);
       process.exit(1);
-    });
+    }
+  };
 }
 
 async function main() {
@@ -38,6 +44,7 @@ async function main() {
   });
 
   program
+    .option("--no-progress", "Hide show compilation progress")
     .option("--no-update-check", "Skip checking for toolchain updates")
     .hook("preAction", async (cmd) => {
       const updateCheck = cmd.opts().updateCheck;
@@ -46,6 +53,14 @@ async function main() {
         void checkForUpdates();
       }
     });
+
+  async function progressHook(cmd: Command) {
+    const target = cmd.opts().target;
+    const progress = program.opts().progress;
+    if (progress !== false && target !== "sim") {
+      process.env.PROGRESS = "1";
+    }
+  }
 
   program
     .command("run")
@@ -67,6 +82,7 @@ async function main() {
         .default("sim")
     )
     .option("-p, --plugins [plugin...]", "Compiler plugins")
+    .hook("preAction", progressHook)
     .action(actionErrorHandler(compile));
 
   program
@@ -77,10 +93,11 @@ async function main() {
     .argument("<entrypoint...>", "all entrypoints to test")
     .addOption(
       new Option("-t, --target <target>", "Target platform")
-        .choices(["tf-aws", "sim", "awscdk"])
+        .choices(["tf-aws", "tf-azure", "tf-gcp", "sim", "awscdk"])
         .default("sim")
     )
     .option("-p, --plugins [plugin...]", "Compiler plugins")
+    .hook("preAction", progressHook)
     .action(actionErrorHandler(test));
 
   program.command("docs").description("Open the Wing documentation").action(docs);

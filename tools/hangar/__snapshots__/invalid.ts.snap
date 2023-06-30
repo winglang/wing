@@ -366,24 +366,24 @@ Duration <DURATION>"
 
 exports[`container_types.w 1`] = `
 "error: Unknown parser error
-   --> ../../../examples/tests/invalid/container_types.w:10:24
+   --> ../../../examples/tests/invalid/container_types.w:10:25
    |
-10 | let m2: Map<num> = [\\"a\\":1, \\"b\\":\\"2\\", \\"c\\":3];
-   |                        ^^ Unknown parser error
+10 | let m2: Map<num> = [\\"a\\" => 1, \\"b\\" => \\"2\\", \\"c\\" => 3];
+   |                         ^^^^ Unknown parser error
 
 
 error: Unexpected 'string'
-   --> ../../../examples/tests/invalid/container_types.w:10:28
+   --> ../../../examples/tests/invalid/container_types.w:10:31
    |
-10 | let m2: Map<num> = [\\"a\\":1, \\"b\\":\\"2\\", \\"c\\":3];
-   |                            ^^^ Unexpected 'string'
+10 | let m2: Map<num> = [\\"a\\" => 1, \\"b\\" => \\"2\\", \\"c\\" => 3];
+   |                               ^^^ Unexpected 'string'
 
 
 error: Unknown parser error
-   --> ../../../examples/tests/invalid/container_types.w:10:40
+   --> ../../../examples/tests/invalid/container_types.w:10:47
    |
-10 | let m2: Map<num> = [\\"a\\":1, \\"b\\":\\"2\\", \\"c\\":3];
-   |                                        ^^ Unknown parser error
+10 | let m2: Map<num> = [\\"a\\" => 1, \\"b\\" => \\"2\\", \\"c\\" => 3];
+   |                                               ^^^^ Unknown parser error
 
 
 error: Expected type to be \\"num\\", but got \\"str\\" instead
@@ -415,17 +415,17 @@ error: Unknown symbol \\"someRandomMethod\\"
 
 
 error: Expected type to be \\"num\\", but got \\"str\\" instead
-  --> ../../../examples/tests/invalid/container_types.w:9:32
+  --> ../../../examples/tests/invalid/container_types.w:9:38
   |
-9 | let m1: Map<num> = {\\"a\\":1, \\"b\\":\\"2\\", \\"c\\":3};
-  |                                ^^^ Expected type to be \\"num\\", but got \\"str\\" instead
+9 | let m1: Map<num> = {\\"a\\" => 1, \\"b\\" => \\"2\\", \\"c\\" => 3};
+  |                                      ^^^ Expected type to be \\"num\\", but got \\"str\\" instead
 
 
 error: Expected type to be \\"Map<num>\\", but got \\"Array<str>\\" instead
    --> ../../../examples/tests/invalid/container_types.w:10:20
    |
-10 | let m2: Map<num> = [\\"a\\":1, \\"b\\":\\"2\\", \\"c\\":3];
-   |                    ^^^^^^^^^^^^^^^^^^^^^^^ Expected type to be \\"Map<num>\\", but got \\"Array<str>\\" instead
+10 | let m2: Map<num> = [\\"a\\" => 1, \\"b\\" => \\"2\\", \\"c\\" => 3];
+   |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected type to be \\"Map<num>\\", but got \\"Array<str>\\" instead
 
 
 error: Expected type to be \\"Map<num>\\", but got \\"Map<str>\\" instead
@@ -656,15 +656,6 @@ error: Class \\"r\\" does not implement method \\"method3\\" of interface \\"I3\
  
 Tests 1 failed (1)
 Test Files 1 failed (1)
-Duration <DURATION>"
-`;
-
-exports[`inflight_class_capture_mutable.w 1`] = `
-"pass ─ inflight_class_capture_mutable.wsim (no tests)
- 
- 
-Tests 1 passed (1)
-Test Files 1 passed (1)
 Duration <DURATION>"
 `;
 
@@ -999,15 +990,15 @@ exports[`missing_semicolon.w 1`] = `
 error: Expected ';'
    --> ../../../examples/tests/invalid/missing_semicolon.w:16:10
    |
-16 | let x = 5
+16 | let x = 5 //
    |          ^ Expected ';'
 
 
 error: Expected '}'
-   --> ../../../examples/tests/invalid/missing_semicolon.w:20:28
+   --> ../../../examples/tests/invalid/missing_semicolon.w:19:14
    |
-20 |            //^ '}' expected
-   |                            ^ Expected '}'
+19 | if (x > 10) {
+   |              ^ Expected '}'
 
 
  
@@ -1089,10 +1080,10 @@ error: Unknown symbol \\"someMethod\\"
 
 
 error: Expected type to be \\"num\\", but got \\"str\\" instead
-   --> ../../../examples/tests/invalid/mut_container_types.w:18:31
+   --> ../../../examples/tests/invalid/mut_container_types.w:18:33
    |
-18 | let m1 = MutMap<num>{\\"hello\\": \\"world\\"};
-   |                               ^^^^^^^ Expected type to be \\"num\\", but got \\"str\\" instead
+18 | let m1 = MutMap<num>{\\"hello\\" => \\"world\\"};
+   |                                 ^^^^^^^ Expected type to be \\"num\\", but got \\"str\\" instead
 
 
 error: Expected \\"Array\\" type, found \\"MutMap<str>\\"
@@ -1105,8 +1096,8 @@ error: Expected \\"Array\\" type, found \\"MutMap<str>\\"
 error: Expected type to be \\"MutMap<num>\\", but got \\"Map<str>\\" instead
    --> ../../../examples/tests/invalid/mut_container_types.w:22:23
    |
-22 | let m3: MutMap<num> = {\\"hello\\": \\"world\\"};
-   |                       ^^^^^^^^^^^^^^^^^^ Expected type to be \\"MutMap<num>\\", but got \\"Map<str>\\" instead
+22 | let m3: MutMap<num> = {\\"hello\\" => \\"world\\"};
+   |                       ^^^^^^^^^^^^^^^^^^^^ Expected type to be \\"MutMap<num>\\", but got \\"Map<str>\\" instead
 
 
 error: Expected type to be \\"MutMap<str>\\", but got \\"MutMap<num>\\" instead

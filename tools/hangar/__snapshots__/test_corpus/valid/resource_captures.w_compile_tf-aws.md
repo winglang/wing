@@ -472,9 +472,9 @@ class $Root extends $stdlib.std.Resource {
     class Another extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("meaningOfLife", "anotherFunc");
         this.myField = "hello!";
         this.first = new First(this,"First");
+        this._addInflightOps("meaningOfLife", "anotherFunc");
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.Another.js";
@@ -513,7 +513,6 @@ class $Root extends $stdlib.std.Resource {
     class MyResource extends $stdlib.std.Resource {
       constructor(scope, id, externalBucket, externalNum) {
         super(scope, id);
-        this._addInflightOps("testNoCapture", "testCaptureCollectionsOfData", "testCapturePrimitives", "testCaptureOptional", "testCaptureResource", "testNestedInflightField", "testNestedResource", "testExpressionRecursive", "testExternal", "testUserDefinedResource", "testInflightField", "inflightField");
         this.myResource = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
         this.myStr = "myString";
         this.myNum = 42;
@@ -527,6 +526,7 @@ class $Root extends $stdlib.std.Resource {
         this.extBucket = externalBucket;
         this.extNum = externalNum;
         this.unusedResource = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"cloud.Counter");
+        this._addInflightOps("testNoCapture", "testCaptureCollectionsOfData", "testCapturePrimitives", "testCaptureOptional", "testCaptureResource", "testNestedInflightField", "testNestedResource", "testExpressionRecursive", "testExternal", "testUserDefinedResource", "testInflightField", "inflightField");
       }
        helloPreflight()  {
         return this.another;
@@ -635,8 +635,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
         this.display.hidden = true;
+        this._addInflightOps("handle");
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.$Closure1.js";

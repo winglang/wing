@@ -112,6 +112,64 @@ module.exports = function({ A }) {
 
 ```
 
+## inflight.Bam.js
+```js
+module.exports = function({ Boom }) {
+  class Bam extends Boom {
+    constructor({  }) {
+      super({});
+    }
+    async $inflight_init()  {
+    }
+  }
+  return Bam;
+}
+
+```
+
+## inflight.Bar.js
+```js
+module.exports = function({  }) {
+  class Bar {
+    constructor({  }) {
+    }
+    async $inflight_init()  {
+    }
+  }
+  return Bar;
+}
+
+```
+
+## inflight.Baz.js
+```js
+module.exports = function({ Bar }) {
+  class Baz extends Bar {
+    constructor({  }) {
+      super({});
+    }
+    async $inflight_init()  {
+    }
+  }
+  return Baz;
+}
+
+```
+
+## inflight.Boom.js
+```js
+module.exports = function({  }) {
+  class Boom {
+    constructor({  }) {
+    }
+    async $inflight_init()  {
+    }
+  }
+  return Boom;
+}
+
+```
+
 ## inflight.C1.js
 ```js
 module.exports = function({  }) {
@@ -186,6 +244,23 @@ module.exports = function({  }) {
     }
   }
   return C5;
+}
+
+```
+
+## inflight.Foo.js
+```js
+module.exports = function({ Bar }) {
+  class Foo extends Bar {
+    constructor({  }) {
+      super({});
+    }
+    async $inflight_init()  {
+    }
+    async doStuff(h)  {
+    }
+  }
+  return Foo;
 }
 
 ```
@@ -745,8 +820,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
         this.display.hidden = true;
+        this._addInflightOps("handle");
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.$Closure1.js";
@@ -890,8 +965,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure2 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
         this.display.hidden = true;
+        this._addInflightOps("handle");
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.$Closure2.js";
@@ -968,8 +1043,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure3 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
         this.display.hidden = true;
+        this._addInflightOps("handle");
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.$Closure3.js";
@@ -1032,6 +1107,7 @@ class $Root extends $stdlib.std.Resource {
     }
     class B extends A {
       constructor(scope, id, ) {
+        super(scope, id);
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.B.js";
@@ -1062,8 +1138,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure4 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
         this.display.hidden = true;
+        this._addInflightOps("handle");
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.$Closure4.js";
@@ -1093,6 +1169,155 @@ class $Root extends $stdlib.std.Resource {
         super._registerBind(host, ops);
       }
     }
+    class Bar extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+      }
+      static _toInflightType(context) {
+        const self_client_path = "././inflight.Bar.js";
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const BarClient = ${Bar._toInflightType(this).text};
+            const client = new BarClient({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+        }
+        super._registerBind(host, ops);
+      }
+    }
+    class Foo extends Bar {
+      constructor(scope, id, ) {
+        super(scope,id,);
+        this._addInflightOps("doStuff");
+      }
+      static _toInflightType(context) {
+        const self_client_path = "././inflight.Foo.js";
+        const BarClient = Bar._toInflightType(context);
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+            Bar: ${BarClient.text},
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const FooClient = ${Foo._toInflightType(this).text};
+            const client = new FooClient({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+        }
+        if (ops.includes("doStuff")) {
+        }
+        super._registerBind(host, ops);
+      }
+    }
+    class Baz extends Bar {
+      constructor(scope, id, ) {
+        super(scope, id);
+      }
+      static _toInflightType(context) {
+        const self_client_path = "././inflight.Baz.js";
+        const BarClient = Bar._toInflightType(context);
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+            Bar: ${BarClient.text},
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const BazClient = ${Baz._toInflightType(this).text};
+            const client = new BazClient({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+        }
+        super._registerBind(host, ops);
+      }
+    }
+    class Boom extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+      }
+      static _toInflightType(context) {
+        const self_client_path = "././inflight.Boom.js";
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const BoomClient = ${Boom._toInflightType(this).text};
+            const client = new BoomClient({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+        }
+        super._registerBind(host, ops);
+      }
+    }
+    class Bam extends Boom {
+      constructor(scope, id, ) {
+        super(scope, id);
+      }
+      static _toInflightType(context) {
+        const self_client_path = "././inflight.Bam.js";
+        const BoomClient = Boom._toInflightType(context);
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("${self_client_path}")({
+            Boom: ${BoomClient.text},
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const BamClient = ${Bam._toInflightType(this).text};
+            const client = new BamClient({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+        }
+        super._registerBind(host, ops);
+      }
+    }
     new C1(this,"C1");
     const c2 = new C2(this,"C2");
     {((cond) => {if (!cond) throw new Error("assertion failed: c2.x == 1")})((c2.x === 1))};
@@ -1107,6 +1332,8 @@ class $Root extends $stdlib.std.Resource {
     const ta = new TeacherAid(this,"TeacherAid","John","Rock'n Roll",50);
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:devived class init body happens after super",new $Closure3(this,"$Closure3"));
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:inflight super constructor",new $Closure4(this,"$Closure4"));
+    new Foo(this,"Foo");
+    new Baz(this,"Baz");
   }
 }
 class $App extends $AppBase {

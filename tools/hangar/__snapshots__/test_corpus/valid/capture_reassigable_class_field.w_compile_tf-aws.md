@@ -295,14 +295,13 @@ class $Root extends $stdlib.std.Resource {
     class KeyValueStore extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("get", "set");
         this.bucket = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
         const __parent_this_1 = this;
         class $Closure1 extends $stdlib.std.Resource {
           constructor(scope, id, ) {
             super(scope, id);
-            this._addInflightOps("handle");
             this.display.hidden = true;
+            this._addInflightOps("handle");
           }
           static _toInflightType(context) {
             const self_client_path = "././inflight.$Closure1.js";
@@ -331,6 +330,7 @@ class $Root extends $stdlib.std.Resource {
           }
         }
         this.onUpdateCallback = new $Closure1(this,"$Closure1");
+        this._addInflightOps("get", "set");
       }
        onUpdate(fn)  {
         this.onUpdateCallback = fn;
@@ -375,8 +375,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure2 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
         this.display.hidden = true;
+        this._addInflightOps("handle");
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.$Closure2.js";
@@ -411,8 +411,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure3 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
         this.display.hidden = true;
+        this._addInflightOps("handle");
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.$Closure3.js";
