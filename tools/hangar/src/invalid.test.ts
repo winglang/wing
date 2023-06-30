@@ -21,7 +21,7 @@ invalidWingFiles.forEach((wingFile) => {
       cwd: tmpDir,
       wingFile: relativeWingFile,
       args,
-      expectStdErr: false,
+      expectFailure: true,
       env: metaComment?.env,
     });
 
