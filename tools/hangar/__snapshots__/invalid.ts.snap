@@ -658,15 +658,6 @@ Test Files 1 failed (1)
 Duration <DURATION>"
 `;
 
-exports[`inflight_class_capture_mutable.w 1`] = `
-"pass ─ inflight_class_capture_mutable.wsim (no tests)
- 
- 
-Tests 1 passed (1)
-Test Files 1 passed (1)
-Duration <DURATION>"
-`;
-
 exports[`inflight_class_created_in_preflight.w 1`] = `
 "error: Cannot create inflight class \\"Foo\\" in preflight phase
   --> ../../../examples/tests/invalid/inflight_class_created_in_preflight.w:3:1
