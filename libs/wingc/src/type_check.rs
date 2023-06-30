@@ -3848,7 +3848,11 @@ impl<'a> TypeChecker<'a> {
 				property,
 			),
 			Type::Struct(ref s) => self.get_property_from_class_like(s, property),
-			_ => self.spanned_error_with_var(property, "Property not found".to_string()).0,
+			_ => {
+				self
+					.spanned_error_with_var(property, "Property not found".to_string())
+					.0
+			}
 		}
 	}
 
