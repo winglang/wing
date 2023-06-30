@@ -33,8 +33,12 @@ data.addObject("orders.json", Json.stringify(orders));
 
 `Bucket` is a class, and `addObject()` is a preflight method of `Bucket`.
 
-Preflight code is executed at compile-time.
-For example, if you calculate a value and then log it in preflight, then it will be printed when you run wing compile:
+Preflight code is executed at compile-time, before the application is deployed.
+
+For example, in the previous example, creating a class during preflight means that after compiling the Wing app, a configuration file is synthesized that describes a bucket resource.
+
+Some global functions  also have specific behaviors in preflight.
+For example, adding a `log()` statement to your preflight code will result in Wing printing the string to the console after compilation.
 
 ```js playground
 // hello.w
