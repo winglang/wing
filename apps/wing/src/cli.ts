@@ -59,7 +59,7 @@ async function main() {
     });
 
   
-  async function analyticsHook(cmd: Command) {
+  async function collectAnalyticsHook(cmd: Command) {
     if (ANALYTICS_OPT_OUT) { return; }
 
     // Fail silently if telemetry collection fails
@@ -96,10 +96,10 @@ async function main() {
     .argument("[entrypoint]", "program .w entrypoint")
     .option("-p, --port <port>", "specify port")
     .option("--no-open", "Do not open the Wing Console in the browser")
-    .hook("preAction", analyticsHook)
+    .hook("preAction", collectAnalyticsHook)
     .action(run);
 
-  program.command("lsp").description("Run the Wing language server on stdio").hook("preAction", analyticsHook).action(run_server);
+  program.command("lsp").description("Run the Wing language server on stdio").hook("preAction", collectAnalyticsHook).action(run_server);
 
   program
     .command("compile")
@@ -112,7 +112,7 @@ async function main() {
     )
     .option("-p, --plugins [plugin...]", "Compiler plugins")
     .hook("preAction", progressHook)
-    .hook("preAction", analyticsHook)
+    .hook("preAction", collectAnalyticsHook)
     .action(actionErrorHandler(compile));
 
   program
@@ -128,10 +128,10 @@ async function main() {
     )
     .option("-p, --plugins [plugin...]", "Compiler plugins")
     .hook("preAction", progressHook)
-    .hook("preAction", analyticsHook)
+    .hook("preAction", collectAnalyticsHook)
     .action(actionErrorHandler(test));
 
-  program.command("docs").description("Open the Wing documentation").hook("preAction", analyticsHook).action(docs);
+  program.command("docs").description("Open the Wing documentation").hook("preAction", collectAnalyticsHook).action(docs);
 
   program.hook("postAction", exportAnalyticsHook)
   program.parse();
