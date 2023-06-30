@@ -1591,7 +1591,20 @@ impl<'a> TypeChecker<'a> {
 
 				if is_option {
 					// When calling a an optional function, the return type is always optional
-					self.types.make_option(func_sig.return_type)
+					// To allow this to be both safe and unsurprising,
+					// the callee must be a reference with an optional accessor
+					if let ExprKind::Reference(Reference::InstanceMember { optional_accessor, .. }) = &callee.kind {
+						if *optional_accessor {
+							self.types.make_option(func_sig.return_type)
+						} else {
+							// No additional error is needed here, since the type checker will already have errored without optional chaining
+							self.types.error()
+						}
+					} else {
+						// TODO do we want syntax for this? e.g. `foo?.()`
+						self.spanned_error(callee, "Cannot call an optional function");
+						self.types.error()
+					}
 				} else {
 					func_sig.return_type
 				}

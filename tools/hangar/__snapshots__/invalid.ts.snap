@@ -1237,6 +1237,13 @@ error: Expected type to be \\"str\\", but got \\"str?\\" instead
    |                ^^^^^^^^^^^^^^^^^^ Expected type to be \\"str\\", but got \\"str?\\" instead
 
 
+error: Cannot call an optional function
+   --> ../../../examples/tests/invalid/optionals.w:88:1
+   |
+88 | optionalFunction();
+   | ^^^^^^^^^^^^^^^^ Cannot call an optional function
+
+
 error: Variable hi is not reassignable 
    --> ../../../examples/tests/invalid/optionals.w:46:3
    |
