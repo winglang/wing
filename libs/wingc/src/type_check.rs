@@ -1710,7 +1710,7 @@ impl<'a> TypeChecker<'a> {
 			}
 			ExprKind::JsonMapLiteral { fields } => {
 				fields.iter().for_each(|(_, v)| {
-					let t = self.type_check_exp(v, env);
+					let (t, _) = self.type_check_exp(v, env);
 					// Ensure we dont allow MutJson to Json or vice versa
 					match *t {
 						Type::Json => {
@@ -1744,7 +1744,7 @@ impl<'a> TypeChecker<'a> {
           }
 				});
 
-				self.types.json()
+				(self.types.json(), env.phase)
 			}
 			ExprKind::MapLiteral { fields, type_ } => {
 				// Infer type based on either the explicit type or the value in one of the fields
