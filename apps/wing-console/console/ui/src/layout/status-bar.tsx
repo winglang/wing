@@ -3,6 +3,8 @@ import { State } from "@wingconsole/server";
 import classNames from "classnames";
 
 import { AutoUpdater } from "../features/auto-updater.js";
+import { useState } from "react";
+import { MoonIcon, SunIcon } from "@heroicons/react/24/outline";
 
 export interface StatusBarProps {
   wingVersion?: string;
@@ -24,6 +26,20 @@ export const StatusBar = ({
     success: "success",
     error: "error",
   };
+
+  const [mode, setMode] = useState(
+    document.documentElement.classList.contains("dark") ? "dark" : "light",
+  );
+  const onToggle = () => {
+    if (mode === "light") {
+      setMode("dark");
+      document.documentElement.classList.add("dark");
+    } else {
+      setMode("light");
+      document.documentElement.classList.remove("dark");
+    }
+  };
+
   return (
     <footer
       className={classNames(
@@ -35,6 +51,20 @@ export const StatusBar = ({
     >
       {/*left side*/}
       <div className="w-full flex space-x-6">
+        <div className="flex space-x-1 items-center">
+          <button
+            className={classNames(
+              theme.textInput,
+              "rounded-3xl font-medium flex focus:outline-none",
+              "hover:bg-slate-200 hover:dark:bg-slate-700",
+              "transition-color duration-300",
+            )}
+            onClick={onToggle}
+          >
+            {mode === "light" && <SunIcon className="h-4" />}
+            {mode === "dark" && <MoonIcon className="h-4" />}
+          </button>
+        </div>
         <div title={wingVersion} className="truncate space-x-1 min-w-[7rem]">
           {wingVersion && (
             <>
