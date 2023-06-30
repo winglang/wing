@@ -25,17 +25,13 @@ export async function runWingCommand(options: RunWingCommandOptions) {
       env: options.env,
     }
   );
+
   if (options.expectFailure) {
     expect(out.exitCode).not.toBe(0);
   } else {
-    if (
-      // when this env var is on, we allow the on-demand-panic-char (😱), right now panic writes to stderr (will be changed in the future)
-      options?.env?.WINGC_DEBUG_PANIC !== "type-checking" &&
-      (out.exitCode !== 0 || out.stderr !== "")
-    ) {
-      expect.fail(out.stderr);
-    }
+    expect(out.exitCode).toBe(0);
   }
+
   out.stderr = sanitizeOutput(out.stderr);
   out.stdout = sanitizeOutput(out.stdout);
   return out;
