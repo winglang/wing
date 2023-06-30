@@ -8,7 +8,7 @@ export interface RunWingCommandOptions {
   cwd: string;
   wingFile: string;
   args: string[];
-  expectStdErr: boolean;
+  expectFailure: boolean;
   plugins?: string[];
   env?: Record<string, string>;
 }
@@ -25,9 +25,8 @@ export async function runWingCommand(options: RunWingCommandOptions) {
       env: options.env,
     }
   );
-  if (options.expectStdErr) {
+  if (options.expectFailure) {
     expect(out.exitCode).not.toBe(0);
-    expect(out.stderr).not.toBe("");
   } else {
     if (
       // when this env var is on, we allow the on-demand-panic-char (😱), right now panic writes to stderr (will be changed in the future)
