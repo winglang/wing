@@ -1255,6 +1255,15 @@ impl<'a> TypeChecker<'a> {
 		);
 	}
 
+	fn spanned_error_with_var<S: Into<String>>(&self, spanned: &impl Spanned, message: S) -> (VariableInfo, Phase) {
+		report_diagnostic(Diagnostic {
+			message: message.into(),
+			span: Some(spanned.span()),
+		});
+
+		(self.make_error_variable_info(), Phase::Independent)
+	}
+
 	fn spanned_error<S: Into<String>>(&self, spanned: &impl Spanned, message: S) {
 		report_diagnostic(Diagnostic {
 			message: message.into(),
@@ -3574,11 +3583,10 @@ impl<'a> TypeChecker<'a> {
 						let phase = var.phase;
 						(var, phase)
 					} else {
-						self.spanned_error(
+						self.spanned_error_with_var(
 							symbol,
 							format!("Expected identifier \"{symbol}\" to be a variable, but it's a {var}",),
-						);
-						(self.make_error_variable_info(), Phase::Independent)
+						)
 					}
 				} else {
 					// Give a specific error message if someone tries to write "print" instead of "log"
@@ -3676,7 +3684,7 @@ impl<'a> TypeChecker<'a> {
 			}
 			Reference::TypeReference(udt) => {
 				let Ok(t) = self.resolve_user_defined_type(udt, env, self.statement_idx) else {
-					return (self.make_error_variable_info(), Phase::Independent);
+					return self.spanned_error_with_var(udt, format!("Unable to resolve type \"{}\"", udt));
 				};
 
 				let phase = if let Some(c) = t.as_class() {
@@ -3700,13 +3708,11 @@ impl<'a> TypeChecker<'a> {
 				let (type_, _) = self.type_check_exp(typeobject, env);
 
 				let ExprKind::Reference(typeref) = &typeobject.kind else {
-					self.spanned_error(typeobject, "Expecting a reference");
-					return (self.make_error_variable_info(), Phase::Independent);
+					return self.spanned_error_with_var(typeobject, "Expecting a reference");
 				};
 
 				let Reference::TypeReference(_) = typeref else {
-					self.spanned_error(typeobject, "Expecting a reference to a type");
-					return (self.make_error_variable_info(), Phase::Independent);
+					return self.spanned_error_with_var(typeobject, "Expecting a reference to a type");
 				};
 
 				match *type_ {
@@ -3723,11 +3729,10 @@ impl<'a> TypeChecker<'a> {
 								Phase::Independent,
 							)
 						} else {
-							self.spanned_error(
+							self.spanned_error_with_var(
 								property,
 								format!("Enum \"{}\" does not contain value \"{}\"", type_, property.name),
-							);
-							(self.make_error_variable_info(), Phase::Independent)
+							)
 						}
 					}
 					Type::Class(ref c) => match c.env.lookup(&property, None) {
@@ -3735,28 +3740,21 @@ impl<'a> TypeChecker<'a> {
 							if let VariableKind::StaticMember = v.kind {
 								(v.clone(), v.phase)
 							} else {
-								self.spanned_error(
+								self.spanned_error_with_var(
 									property,
 									format!(
 										"Class \"{}\" contains a member \"{}\" but it is not static",
 										type_, property.name
 									),
-								);
-								(self.make_error_variable_info(), Phase::Independent)
+								)
 							}
 						}
-						_ => {
-							self.spanned_error(
-								property,
-								format!("No member \"{}\" in class \"{}\"", property.name, type_),
-							);
-							(self.make_error_variable_info(), Phase::Independent)
-						}
+						_ => self.spanned_error_with_var(
+							property,
+							format!("No member \"{}\" in class \"{}\"", property.name, type_),
+						),
 					},
-					_ => {
-						self.spanned_error(property, format!("\"{}\" not a valid reference", reference));
-						(self.make_error_variable_info(), Phase::Independent)
-					}
+					_ => self.spanned_error_with_var(property, format!("\"{}\" not a valid reference", reference)),
 				}
 			}
 		}
@@ -3851,10 +3849,7 @@ impl<'a> TypeChecker<'a> {
 				property,
 			),
 			Type::Struct(ref s) => self.get_property_from_class_like(s, property),
-			_ => {
-				self.spanned_error(property, format!("Property not found"));
-				self.make_error_variable_info()
-			}
+			_ => self.spanned_error_with_var(property, format!("Property not found")).0,
 		}
 	}
 
@@ -3864,11 +3859,12 @@ impl<'a> TypeChecker<'a> {
 		if let LookupResult::Found(field, _) = lookup_res {
 			let var = field.as_variable().expect("Expected property to be a variable");
 			if let VariableKind::StaticMember = var.kind {
-				self.spanned_error(
-					property,
-					format!("Cannot access static property \"{property}\" from instance"),
-				);
-				self.make_error_variable_info()
+				self
+					.spanned_error_with_var(
+						property,
+						format!("Cannot access static property \"{property}\" from instance"),
+					)
+					.0
 			} else {
 				var
 			}

@@ -83,11 +83,6 @@ class $Root extends $stdlib.std.Resource {
         }
         super._registerBind(host, ops);
       }
-      static _registerTypeBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-        }
-        super._registerTypeBind(host, ops);
-      }
     }
     const foo1 = new Foo(this,"Foo");
     const bar2 = new Foo(this,"bar2");

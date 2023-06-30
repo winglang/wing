@@ -1,5 +1,20 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`access_hidden_namespace.w 1`] = `
+"error: Unable to resolve type \\"core.NodeJsCode\\"
+  --> ../../../examples/tests/invalid/access_hidden_namespace.w:7:5
+  |
+7 | new core.NodeJsCode(\\"/tmp/test.txt\\"); // This should fail even though \`fs.TextFile\` extends \`core.FileBase\` because we didn't bring in \`core\` explicitly.
+  |     ^^^^^^^^^^^^^^^ Unable to resolve type \\"core.NodeJsCode\\"
+
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
+
 exports[`access_static_from_instance.w 1`] = `
 "error: Static class fields not supported yet, see https://github.com/winglang/wing/issues/1668
   --> ../../../examples/tests/invalid/access_static_from_instance.w:4:3
@@ -279,6 +294,13 @@ error: Preflight field \\"y\\" is not initialized
    |   ^ Preflight field \\"y\\" is not initialized
 
 
+error: Unable to resolve type \\"x\\"
+   --> ../../../examples/tests/invalid/class.w:68:18
+   |
+68 | class C7 extends x {
+   |                  ^ Unable to resolve type \\"x\\"
+
+
 error: Base class \\"unresolved\\" is not a class
    --> ../../../examples/tests/invalid/class.w:68:18
    |
@@ -293,11 +315,18 @@ error: Base class \\"S1\\" is not a class
    |                  ^^ Base class \\"S1\\" is not a class
 
 
-error: Base class \\"unresolved\\" is not a class
+error: Unable to resolve type \\"C11\\"
    --> ../../../examples/tests/invalid/class.w:78:19
    |
 78 | class C11 extends C11 {
-   |                   ^^^ Base class \\"unresolved\\" is not a class
+   |                   ^^^ Unable to resolve type \\"C11\\"
+
+
+error: Class cannot extend itself
+   --> ../../../examples/tests/invalid/class.w:78:19
+   |
+78 | class C11 extends C11 {
+   |                   ^^^ Class cannot extend itself
 
 
 error: Expected type to be \\"num\\", but got \\"str\\" instead
@@ -1527,6 +1556,13 @@ exports[`sorted_errors_no_span.w 1`] = `
   |              ^^^ Expected type to be \\"num\\", but got \\"str\\" instead
 
 
+error: Unable to resolve type \\"b\\"
+  --> ../../../examples/tests/invalid/sorted_errors_no_span.w:3:26
+  |
+3 | inflight class c extends b {}
+  |                          ^ Unable to resolve type \\"b\\"
+
+
 error: Base class \\"unresolved\\" is not a class
   --> ../../../examples/tests/invalid/sorted_errors_no_span.w:3:26
   |
@@ -1539,6 +1575,13 @@ error: Expected type to be \\"num\\", but got \\"str\\" instead
   |
 4 | let d: num = \\"s\\";
   |              ^^^ Expected type to be \\"num\\", but got \\"str\\" instead
+
+
+error: Unable to resolve type \\"b\\"
+  --> ../../../examples/tests/invalid/sorted_errors_no_span.w:5:26
+  |
+5 | inflight class e extends b {}
+  |                          ^ Unable to resolve type \\"b\\"
 
 
 error: Base class \\"unresolved\\" is not a class
@@ -1863,11 +1906,32 @@ Duration <DURATION>"
 `;
 
 exports[`unknown_symbol.w 1`] = `
-"error: Unknown symbol \\"y\\"
+"error: Unable to resolve type \\"clod.Bucket\\"
+  --> ../../../examples/tests/invalid/unknown_symbol.w:3:18
+  |
+3 | let bucket = new clod.Bucket();
+  |                  ^^^^^^^^^^^ Unable to resolve type \\"clod.Bucket\\"
+
+
+error: Unable to resolve type \\"cloudy.Funktion\\"
+  --> ../../../examples/tests/invalid/unknown_symbol.w:6:17
+  |
+6 | let funky = new cloudy.Funktion(inflight () => { });
+  |                 ^^^^^^^^^^^^^^^ Unable to resolve type \\"cloudy.Funktion\\"
+
+
+error: Unknown symbol \\"y\\"
   --> ../../../examples/tests/invalid/unknown_symbol.w:9:13
   |
 9 | let x = 2 + y;
   |             ^ Unknown symbol \\"y\\"
+
+
+error: Unable to resolve type \\"B\\"
+   --> ../../../examples/tests/invalid/unknown_symbol.w:28:17
+   |
+28 | class A extends B {
+   |                 ^ Unable to resolve type \\"B\\"
 
 
 error: Base class \\"unresolved\\" is not a class
@@ -1875,13 +1939,6 @@ error: Base class \\"unresolved\\" is not a class
    |
 28 | class A extends B {
    |                 ^ Base class \\"unresolved\\" is not a class
-
-
-error: Unknown symbol \\"unknown\\"
-   --> ../../../examples/tests/invalid/unknown_symbol.w:32:1
-   |
-32 | unknown = 1;
-   | ^^^^^^^ Unknown symbol \\"unknown\\"
 
 
 error: Unknown symbol \\"unknown\\"
