@@ -277,7 +277,7 @@ Set<num> { 1, 2, 3 };
       element: (number))))
 
 ================================================================================
-Empty Map Literal
+Empty Json Map Literal
 ================================================================================
 
 {};
@@ -286,13 +286,14 @@ Empty Map Literal
 
 (source
   (expression_statement
-    (map_literal)))
+    (json_literal
+      (json_map_literal))))
 
 ================================================================================
 Map Literal
 ================================================================================
 
-{ a: 1, "a": 2, b: 3,};
+{ "a" => 1, "b" => 2, "c" => 3,};
 
 --------------------------------------------------------------------------------
 
@@ -300,13 +301,13 @@ Map Literal
   (expression_statement
     (map_literal
       member: (map_literal_member
-        (identifier)
+        (string)
         (number))
       member: (map_literal_member
         (string)
         (number))
       member: (map_literal_member
-        (identifier)
+        (string)
         (number)))))
 
 ================================================================================

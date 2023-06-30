@@ -87,8 +87,8 @@ class $Root extends $stdlib.std.Resource {
     const someNumber = 999;
     const jj = someNumber;
     const jj1 = Object.freeze({"foo":someNumber});
-    const jj2 = [someNumber, {"bar":someNumber}];
-    const getStr = (() =>  {
+    const jj2 = [someNumber, Object.freeze({"bar":someNumber})];
+    const getStr =  () =>  {
       return "hello";
     });
     const jj3 = (getStr());
@@ -125,9 +125,9 @@ class $Root extends $stdlib.std.Resource {
     {((cond) => {if (!cond) throw new Error("assertion failed: num.fromJson(thatSuperNestedValue) == 1")})((((args) => { if (typeof args !== "number") {throw new Error("unable to parse " + typeof args + " " + args + " as a number")}; return JSON.parse(JSON.stringify(args)) })(thatSuperNestedValue) === 1))};
     const unestedJsonArr = [1, 2, 3];
     {((cond) => {if (!cond) throw new Error("assertion failed: unestedJsonArr.getAt(0) == 1")})(((unestedJsonArr)[0] === 1))};
-    const jsonElements = Object.freeze({"strings":{"single":"Hello","array":["Hello", "World", "!"]},"numbers":{"one":1,"two":2,"three":3},"bools":{"t":true,"f":false}});
+    const jsonElements = Object.freeze({"strings":Object.freeze({"single":"Hello","array":["Hello", "World", "!"]}),"numbers":Object.freeze({"one":1,"two":2,"three":3}),"bools":Object.freeze({"t":true,"f":false})});
     {
-      const $IF_LET_VALUE = ((arg) => { return (typeof arg === "string") ? JSON.parse(JSON.stringify(arg)) : undefined })(((jsonElements)["strings"])["single"]);
+      const $IF_LET_VALUE = ((arg) => { return (typeof arg === "string") ? JSON.parse(JSON.stringify(arg)) : undefined })(((jsonElements)?.["strings"])?.["single"]);
       if ($IF_LET_VALUE != undefined) {
         const val = $IF_LET_VALUE;
         {((cond) => {if (!cond) throw new Error("assertion failed: val == \"Hello\"")})((val === "Hello"))};
@@ -137,11 +137,11 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     {
-      const $IF_LET_VALUE = ((jsonElements)["strings"])["array"];
+      const $IF_LET_VALUE = ((jsonElements)?.["strings"])?.["array"];
       if ($IF_LET_VALUE != undefined) {
         const vals = $IF_LET_VALUE;
         {
-          const $IF_LET_VALUE = (vals)[0];
+          const $IF_LET_VALUE = (vals)?.[0];
           if ($IF_LET_VALUE != undefined) {
             const hello = $IF_LET_VALUE;
             {((cond) => {if (!cond) throw new Error("assertion failed: hello == \"Hello\"")})((hello === "Hello"))};
@@ -156,7 +156,7 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     {
-      const $IF_LET_VALUE = ((arg) => { return (typeof arg === "number") ? JSON.parse(JSON.stringify(arg)) : undefined })(((jsonElements)["numbers"])["two"]);
+      const $IF_LET_VALUE = ((arg) => { return (typeof arg === "number") ? JSON.parse(JSON.stringify(arg)) : undefined })(((jsonElements)?.["numbers"])?.["two"]);
       if ($IF_LET_VALUE != undefined) {
         const two = $IF_LET_VALUE;
         {((cond) => {if (!cond) throw new Error("assertion failed: two + 2 == 4")})(((two + 2) === 4))};
@@ -166,7 +166,7 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     {
-      const $IF_LET_VALUE = ((arg) => { return (typeof arg === "boolean") ? JSON.parse(JSON.stringify(arg)) : undefined })(((jsonElements)["bools"])["t"]);
+      const $IF_LET_VALUE = ((arg) => { return (typeof arg === "boolean") ? JSON.parse(JSON.stringify(arg)) : undefined })(((jsonElements)?.["bools"])?.["t"]);
       if ($IF_LET_VALUE != undefined) {
         const truth = $IF_LET_VALUE;
         {((cond) => {if (!cond) throw new Error("assertion failed: truth")})(truth)};
@@ -175,6 +175,24 @@ class $Root extends $stdlib.std.Resource {
         {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
       }
     }
+    {
+      const $IF_LET_VALUE = ((((jsonElements)?.["strings"])?.["non"])?.["existant"])?.["element"];
+      if ($IF_LET_VALUE != undefined) {
+        const val = $IF_LET_VALUE;
+        {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
+      }
+    }
+    {
+      const $IF_LET_VALUE = (((jsonElements)?.["cant"])?.[1000])?.[42];
+      if ($IF_LET_VALUE != undefined) {
+        const val = $IF_LET_VALUE;
+        {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
+      }
+    }
+    const notSpecified = Object.freeze({"foo":"bar"});
+    {((cond) => {if (!cond) throw new Error("assertion failed: notSpecified.get(\"foo\") == \"bar\"")})(((notSpecified)["foo"] === "bar"))};
+    const empty = Object.freeze({});
+    {((cond) => {if (!cond) throw new Error("assertion failed: Json.has(empty, \"something\") == false")})((((args) => { return args[0].hasOwnProperty(args[1]); })([empty,"something"]) === false))};
   }
 }
 class $App extends $AppBase {

@@ -20,6 +20,7 @@ use derivative::Derivative;
 use indexmap::{IndexMap, IndexSet};
 use itertools::{izip, Itertools};
 use jsii_importer::JsiiImporter;
+
 use std::collections::HashMap;
 use std::fmt::{Debug, Display};
 use std::iter::FilterMap;
@@ -607,9 +608,6 @@ impl Subtype for Type {
 				let r: &Type = r0;
 				self.is_subtype_of(r)
 			}
-			// This allows us for assignment from native types without allowing assignment to native types
-			// e.g. assert("hello" == x.world) but NOT assert(x.world == "hello")
-			(_, Self::Json) | (_, Self::MutJson) => true,
 			(Self::Number, Self::Number) => true,
 			(Self::String, Self::String) => true,
 			(Self::Boolean, Self::Boolean) => true,
@@ -817,6 +815,14 @@ impl TypeRef {
 		matches!(**self, Type::Unresolved)
 	}
 
+	pub fn is_json(&self) -> bool {
+		if let Type::Json | Type::MutJson = **self {
+			return true;
+		} else {
+			false
+		}
+	}
+
 	pub fn is_preflight_class(&self) -> bool {
 		if let Type::Class(ref class) = **self {
 			return class.phase == Phase::Preflight;
@@ -949,10 +955,9 @@ impl TypeRef {
 			Type::Number => true,
 			Type::String => true,
 			Type::Boolean => true,
-			Type::Json => true,
+			Type::Json | Type::MutJson => true,
 			Type::Array(v) => v.is_json_legal_value(),
-			Type::Map(v) => v.is_json_legal_value(),
-			Type::Set(v) => v.is_json_legal_value(),
+			Type::Optional(v) => v.is_json_legal_value(),
 			_ => false,
 		}
 	}
@@ -1194,6 +1199,8 @@ pub struct TypeChecker<'a> {
 	// Nesting level within JSON literals, a value larger than 0 means we're currently in a JSON literal
 	in_json: u64,
 
+	is_in_mut_json: bool,
+
 	/// Index of the current statement being type checked within the current scope
 	statement_idx: usize,
 }
@@ -1212,6 +1219,7 @@ impl<'a> TypeChecker<'a> {
 			source_path,
 			jsii_imports,
 			in_json: 0,
+			is_in_mut_json: false,
 			statement_idx: 0,
 		}
 	}
@@ -1642,8 +1650,8 @@ impl<'a> TypeChecker<'a> {
 					})
 					.collect();
 
-				// If the struct type is anything, we don't need to validate the fields
-				if struct_type.is_anything() {
+				// If we don't have type information for the struct we don't need to validate the fields
+				if struct_type.is_anything() || struct_type.is_unresolved() {
 					return (struct_type, env.phase);
 				}
 
@@ -1681,14 +1689,62 @@ impl<'a> TypeChecker<'a> {
 				(struct_type, env.phase)
 			}
 			ExprKind::JsonLiteral { is_mut, element } => {
+				if *is_mut {
+					self.is_in_mut_json = true;
+				}
+
 				self.in_json += 1;
 				self.type_check_exp(&element, env);
 				self.in_json -= 1;
+
+				// When we are no longer in a Json literal, we reset the is_in_mut_json flag
+				if self.in_json == 0 {
+					self.is_in_mut_json = false;
+				}
+
 				if *is_mut {
 					(self.types.mut_json(), env.phase)
 				} else {
 					(self.types.json(), env.phase)
 				}
+			}
+			ExprKind::JsonMapLiteral { fields } => {
+				fields.iter().for_each(|(_, v)| {
+					let t = self.type_check_exp(v, env);
+					// Ensure we dont allow MutJson to Json or vice versa
+					match *t {
+						Type::Json => {
+							if self.is_in_mut_json {
+								self.spanned_error(
+									v,
+									"Cannot assign type: \"Json\" to a \"MutJson\" field (hint: try using Json.deepMutCopy())"
+										.to_string(),
+								)
+							}
+						}
+						Type::MutJson => {
+							if !self.is_in_mut_json {
+								self.spanned_error(
+									v,
+									"Cannot assign type: \"MutJson\" to a \"Json\" field (hint: try using Json.deepCopy())".to_string(),
+								)
+							}
+						}
+						_ => {}
+					};
+
+          if !t.is_json_legal_value() {
+            self.spanned_error(
+              v,
+              format!(
+                "Expected \"Json\" elements to be Json values (https://www.json.org/json-en.html), but got \"{}\" which is not a Json value",
+                t
+              ),
+            );
+          }
+				});
+
+				self.types.json()
 			}
 			ExprKind::MapLiteral { fields, type_ } => {
 				// Infer type based on either the explicit type or the value in one of the fields
@@ -1698,12 +1754,8 @@ impl<'a> TypeChecker<'a> {
 					let (some_val_type, _) = self.type_check_exp(fields.iter().next().unwrap().1, env);
 					self.types.add_type(Type::Map(some_val_type))
 				} else {
-					if self.in_json > 0 {
-						self.types.add_type(Type::Map(self.types.json()))
-					} else {
-						self.spanned_error(exp, "Cannot infer type of empty map");
-						self.types.add_type(Type::Map(self.types.error()))
-					}
+					self.spanned_error(exp, "Cannot infer type of empty map");
+					self.types.add_type(Type::Map(self.types.error()))
 				};
 
 				let value_type = match *container_type {
@@ -1718,7 +1770,7 @@ impl<'a> TypeChecker<'a> {
 				// Verify all types are the same as the inferred type
 				for (_, v) in fields.iter() {
 					let (t, _) = self.type_check_exp(v, env);
-					self.check_json_serializable_or_validate_type(t, value_type, v);
+					self.validate_type(t, value_type, v);
 				}
 
 				(container_type, env.phase)
@@ -1985,6 +2037,13 @@ impl<'a> TypeChecker<'a> {
 		// assuming the error was already reported.
 		if expected_types.iter().any(|t| t.is_unresolved()) {
 			return actual_type;
+		}
+
+		// If the expected type is Json and the actual type is a Json legal value then we're good
+		if expected_types.iter().any(|t| t.is_json()) {
+			if actual_type.is_json_legal_value() {
+				return actual_type;
+			}
 		}
 
 		let expected_type_str = if expected_types.len() > 1 {

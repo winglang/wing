@@ -324,8 +324,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
         this.display.hidden = true;
+        this._addInflightOps("handle");
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
@@ -347,7 +347,6 @@ class $Root extends $stdlib.std.Resource {
     class D extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("callInner");
         class E extends $stdlib.std.Resource {
           constructor(scope, id, ) {
             super(scope, id);
@@ -400,8 +399,8 @@ class $Root extends $stdlib.std.Resource {
         class $Closure2 extends $stdlib.std.Resource {
           constructor(scope, id, ) {
             super(scope, id);
-            this._addInflightOps("handle");
             this.display.hidden = true;
+            this._addInflightOps("handle");
           }
           static _toInflightType(context) {
             const lifted_F = F._toInflightType(context).text;
@@ -423,6 +422,7 @@ class $Root extends $stdlib.std.Resource {
           }
         }
         this.inner = new $Closure2(this,"$Closure2");
+        this._addInflightOps("callInner");
       }
       getInner()  {
         return this.inner;
@@ -454,8 +454,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure3 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
         this.display.hidden = true;
+        this._addInflightOps("handle");
       }
       static _toInflightType(context) {
         const $a = context._lift(a);

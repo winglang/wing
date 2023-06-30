@@ -9,9 +9,9 @@ let usersTable = new cloud.Table(
   name: "users-table",
   primaryKey: "id",
   columns: {
-    id: cloud.ColumnType.STRING,
-    name: cloud.ColumnType.STRING,
-    age: cloud.ColumnType.NUMBER,
+    "id" => cloud.ColumnType.STRING,
+    "name" => cloud.ColumnType.STRING,
+    "age" => cloud.ColumnType.NUMBER,
   }
 );
 
@@ -42,9 +42,9 @@ let postHandler = inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
 let optionsHandler = inflight(req: cloud.ApiRequest): cloud.ApiResponse => {
   return cloud.ApiResponse {
     headers: {
-      "Access-Control-Allow-Headers" : "Content-Type",
-      "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Methods": "OPTIONS,POST,GET"
+      "Access-Control-Allow-Headers" => "Content-Type",
+      "Access-Control-Allow-Origin" => "*",
+      "Access-Control-Allow-Methods" => "OPTIONS,POST,GET"
     },
     status: 204
   };

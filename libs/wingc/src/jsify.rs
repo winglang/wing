@@ -574,7 +574,7 @@ impl<'a> JSifier<'a> {
 					current_method_name: ctx.current_method_name.clone(),
 				};
 				let js_out = match &element.kind {
-					ExprKind::MapLiteral { .. } => {
+					ExprKind::JsonMapLiteral { .. } => {
 						if *is_mut {
 							self.jsify_expression(element, None, json_context)
 						} else {
@@ -585,6 +585,15 @@ impl<'a> JSifier<'a> {
 				};
 				js_out
 			}
+      ExprKind::JsonMapLiteral { fields } => {
+        let f = fields
+					.iter()
+					.map(|(key, expr)| format!("\"{}\":{}", key, self.jsify_expression(expr, ctx)))
+					.collect::<Vec<String>>()
+					.join(",");
+
+        format!("{{{}}}", f)
+      }
 			ExprKind::MapLiteral { fields, .. } => {
 				let f = fields
 					.iter()
@@ -1111,6 +1120,37 @@ impl<'a> JSifier<'a> {
 			code.line("super(scope, id);");
 		}
 
+		let init_statements = match &constructor.body {
+			FunctionBody::Statements(s) => s,
+			FunctionBody::External(_) => panic!("'init' cannot be 'extern'"),
+		};
+
+		if !no_parent {
+			// Check if the first statement is a super constructor call, if not we need to add one
+			let super_call = if let Some(s) = init_statements.statements.first() {
+				matches!(s.kind, StmtKind::SuperConstructor { .. })
+			} else {
+				false
+			};
+
+			if !super_call {
+				code.line("super(scope, id);");
+			}
+		}
+
+		// We must jsify the statements in the constructor before adding any additional code blew
+		// this is to ensure if there are calls to super constructor within the statements,
+		// they will be jsified before any attempts to call `this` are made.
+		code.add_code(self.jsify_scope_body(
+			&init_statements,
+			&mut JSifyContext {
+				in_json: ctx.in_json,
+				phase: Phase::Preflight,
+				lifts: ctx.lifts,
+				current_method_name: CLASS_INIT_NAME.into(),
+			},
+		));
+
 		if inflight_methods.len() + inflight_fields.len() > 0 {
 			let inflight_method_names = inflight_methods.iter().map(|(name, _)| name.name.clone()).collect_vec();
 			let inflight_field_names = inflight_fields.iter().map(|f| f.name.name.clone()).collect_vec();
@@ -1121,21 +1161,6 @@ impl<'a> JSifier<'a> {
 				.join(", ");
 			code.line(format!("this._addInflightOps({inflight_ops_string});"));
 		}
-
-		let init_statements = match &constructor.body {
-			FunctionBody::Statements(s) => s,
-			FunctionBody::External(_) => panic!("'init' cannot be 'extern'"),
-		};
-
-		code.add_code(self.jsify_scope_body(
-			&init_statements,
-			&mut JSifyContext {
-				in_json: ctx.in_json,
-				phase: ctx.phase,
-				lifts: ctx.lifts,
-				current_method_name: CLASS_INIT_NAME.into(),
-			},
-		));
 
 		code.close("}");
 		code
