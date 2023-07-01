@@ -13,7 +13,6 @@
     "uuid": "^9.0.0"
   },
   "volta": {
-    "node": "18.16.0",
-    "pnpm": "8.6.5"
+    "extends": "../../../package.json"
   }
 }

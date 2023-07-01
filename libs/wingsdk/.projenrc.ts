@@ -1,5 +1,4 @@
 import { JsonFile, cdk, javascript } from "projen";
-import rootPackageJson from "../../package.json";
 
 const JSII_DEPS = ["constructs@~10.1.314"];
 const CDKTF_VERSION = "0.17.0";
@@ -245,7 +244,9 @@ testWatch.description = "Run vitest in watch mode";
 project.testTask.spawn(project.eslint?.eslintTask!);
 
 project.addFields({
-  volta: rootPackageJson.volta,
+  volta: {
+    extends: "../../package.json",
+  },
 });
 
 project.addFields({
@@ -284,5 +285,6 @@ project.tasks.tryFind("bump")?.spawn(removeBundledDeps);
 project.tasks.tryFind("unbump")?.spawn(restoreBundleDeps);
 
 project.package.file.addDeletionOverride("pnpm");
+project.tryRemoveFile(".npmrc");
 
 project.synth();

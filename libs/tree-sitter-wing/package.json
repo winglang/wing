@@ -30,8 +30,7 @@
     "playground:watch": "nodemon --watch grammar.js --watch src/scanner.c --exec \"pnpm playground:quiet\""
   },
   "volta": {
-    "node": "18.16.0",
-    "pnpm": "8.6.5"
+    "extends": "../../package.json"
   },
   "devDependencies": {
     "nodemon": "^2.0.22",

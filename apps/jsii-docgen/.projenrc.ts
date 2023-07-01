@@ -1,5 +1,4 @@
 import { typescript, javascript } from "projen";
-import rootPackageJson from "../../package.json";
 
 const project = new typescript.TypeScriptProject({
   name: "@winglang/jsii-docgen",
@@ -66,9 +65,12 @@ project.testTask.reset(
 );
 
 project.addFields({
-  volta: rootPackageJson.volta,
+  volta: {
+    extends: "../../package.json",
+  },
 });
 
 project.package.file.addDeletionOverride("pnpm");
+project.tryRemoveFile(".npmrc");
 
 project.synth();

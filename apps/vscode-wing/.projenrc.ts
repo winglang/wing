@@ -2,7 +2,6 @@ import { IgnoreFile } from "projen";
 import { NodePackageManager } from "projen/lib/javascript";
 import { TypeScriptAppProject } from "projen/lib/typescript";
 import { VSCodeExtensionContributions } from "./src/project/vscode_types";
-import rootPackageJson from "../../package.json";
 
 const VSCODE_BASE_VERSION = "1.70.0";
 
@@ -147,9 +146,12 @@ project.packageTask.reset(
 project.packageTask.exec("vsce package --no-dependencies -o vscode-wing.vsix");
 
 project.addFields({
-  volta: rootPackageJson.volta,
+  volta: {
+    extends: "../../package.json",
+  },
 });
 
 project.package.file.addDeletionOverride("pnpm");
+project.tryRemoveFile(".npmrc");
 
 project.synth();

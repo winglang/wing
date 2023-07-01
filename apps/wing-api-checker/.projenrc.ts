@@ -1,5 +1,4 @@
 import { javascript, typescript } from "projen";
-import rootPackageJson from "../../package.json";
 
 const project = new typescript.TypeScriptProject({
   defaultReleaseBranch: "main",
@@ -29,9 +28,12 @@ bumpTask.reset(
 );
 
 project.addFields({
-  volta: rootPackageJson.volta,
+  volta: {
+    extends: "../../package.json",
+  },
 });
 
 project.package.file.addDeletionOverride("pnpm");
+project.tryRemoveFile(".npmrc");
 
 project.synth();
