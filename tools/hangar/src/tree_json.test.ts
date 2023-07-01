@@ -14,7 +14,7 @@ test("tree.json for an app with many resources", async () => {
     cwd: validTestDir,
     wingFile: appFile,
     args,
-    expectStdErr: false,
+    expectFailure: false,
   });
 
   const treeJson = JSON.parse(
