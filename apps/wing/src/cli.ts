@@ -39,7 +39,6 @@ async function main() {
   });
 
   program.option("--progress", "Show compilation progress", () => {
-    console.log(program.processedArgs);
     process.env.PROGRESS = "1";
   });
 
