@@ -132,10 +132,6 @@
       "type": "build"
     },
     {
-      "name": "patch-package",
-      "type": "build"
-    },
-    {
       "name": "prettier",
       "type": "build"
     },
@@ -201,8 +197,18 @@
       "type": "bundled"
     },
     {
+      "name": "@aws-sdk/is-array-buffer",
+      "version": "3.201.0",
+      "type": "bundled"
+    },
+    {
       "name": "@aws-sdk/types",
       "version": "3.347.0",
+      "type": "bundled"
+    },
+    {
+      "name": "@aws-sdk/util-buffer-from",
+      "version": "3.208.0",
       "type": "bundled"
     },
     {

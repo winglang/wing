@@ -26,7 +26,13 @@
   },
   "pnpm": {
     "patchedDependencies": {
-      "wasi-js@1.7.3": "patches/wasi-js@1.7.3.patch"
+      "wasi-js@1.7.3": "patches/wasi-js@1.7.3.patch",
+      "@aws-sdk/is-array-buffer@3.201.0": "patches/@aws-sdk__is-array-buffer@3.201.0.patch",
+      "@aws-sdk/util-buffer-from@3.208.0": "patches/@aws-sdk__util-buffer-from@3.208.0.patch",
+      "jsii@5.0.11": "patches/jsii@5.0.11.patch",
+      "esbuild-wasm@0.18.5": "patches/esbuild-wasm@0.18.5.patch",
+      "@aws-sdk/util-utf8-node@3.259.0": "patches/@aws-sdk__util-utf8-node@3.259.0.patch",
+      "@aws-sdk/util-utf8-browser@3.259.0": "patches/@aws-sdk__util-utf8-browser@3.259.0.patch"
     }
   }
 }

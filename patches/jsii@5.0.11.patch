@@ -1,7 +1,7 @@
-diff --git a/node_modules/jsii/lib/assembler.js b/node_modules/jsii/lib/assembler.js
-index c1fa482..9cf0ce2 100644
---- a/node_modules/jsii/lib/assembler.js
-+++ b/node_modules/jsii/lib/assembler.js
+diff --git a/lib/assembler.js b/lib/assembler.js
+index c1fa48219b514c312d5894c9cbf557ac3d8eeed7..9cf0ce22901558d6219fed5a303ae76954561744 100644
+--- a/lib/assembler.js
++++ b/lib/assembler.js
 @@ -1572,7 +1572,12 @@ class Assembler {
              return { type: spec.CANONICAL_ANY };
          }
@@ -29,10 +29,10 @@ index c1fa482..9cf0ce2 100644
          }
          const fqn = this._getFQN(type, declaration, purpose, isThisType);
          if (fqn == null) {
-diff --git a/node_modules/jsii/lib/compiler.js b/node_modules/jsii/lib/compiler.js
-index cb5587e..867d4c5 100644
---- a/node_modules/jsii/lib/compiler.js
-+++ b/node_modules/jsii/lib/compiler.js
+diff --git a/lib/compiler.js b/lib/compiler.js
+index cb5587e1aa778be23eaba65ceeab8b2d99ce90b1..867d4c5b330a34bdcbe491e816f7b63c941eeb69 100644
+--- a/lib/compiler.js
++++ b/lib/compiler.js
 @@ -17,7 +17,8 @@ const BASE_COMPILER_OPTIONS = {
      declaration: true,
      experimentalDecorators: true,

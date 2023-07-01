@@ -62,6 +62,9 @@ const project = new cdk.JsiiProject({
     "@aws-sdk/types@3.347.0",
     "@aws-sdk/util-stream-node@3.350.0",
     "@aws-sdk/util-utf8-node@3.259.0",
+    // the following 2 deps are required by @aws-sdk/util-utf8-node
+    "@aws-sdk/util-buffer-from@3.208.0",
+    "@aws-sdk/is-array-buffer@3.201.0",
     "mime-types",
     // azure client dependencies
     "@azure/storage-blob@12.14.0",
@@ -88,7 +91,6 @@ const project = new cdk.JsiiProject({
     `cdktf-cli@${CDKTF_VERSION}`,
     "eslint-plugin-sort-exports",
     "fs-extra",
-    "patch-package",
     "vitest",
     "@types/uuid",
     "@vitest/coverage-v8",
@@ -192,8 +194,6 @@ project.tasks
 project.tasks
   .tryFind("unbump")!
   .reset("pnpm version 0.0.0 --allow-same-version");
-
-project.preCompileTask.exec("patch-package");
 
 // --------------- docs -----------------
 
