@@ -41,7 +41,7 @@ Check the installed node runtime architecture:
 node -e 'console.log(process.arch)'
 > arm64
 ```
-Your previously installed `esbuild/darwin-x64` package needs to be replaced by `esbuild/darwin-arm64`. Therefore, remove `esbuild` folder from `./libs/wing/wingsdk/node_modules` and run `npm install`.
+Your previously installed `esbuild/darwin-x64` package needs to be replaced by `esbuild/darwin-arm64`. Therefore, remove `esbuild` folder from `./libs/wing/wingsdk/node_modules` and run `pnpm install`.
 
 ## `This version of rustfmt is deprecated. Use rustfmt-nightly.`
 

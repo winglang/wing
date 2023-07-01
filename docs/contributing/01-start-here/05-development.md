@@ -16,7 +16,7 @@ You can open up this repo just using the badge below. It is recommended to selec
 Here is a list of minimal tools you should install to build the Wing repo in your development
 environment:
 
-* [Node.js] v18 and npm v8
+* [Node.js] v18 and pnpm v8
   * We recommend [volta] to manage node tools
 * [Rust]
   * We recommend using [rustup] to manage your Rust installation
@@ -32,7 +32,7 @@ Installation:
 ```sh
 git clone https://github.com/winglang/wing
 cd wing
-npm install
+pnpm install
 ```
 
 :::note Nx Commands
@@ -111,7 +111,7 @@ separately).
 
 :::note
 
-The first time you run `npm install` it may take extra time to install the
+The first time you run `pnpm install` it may take extra time to install the
  [wasi-sdk](https://github.com/WebAssembly/wasi-sdk) for you. This is needed to compile Wing for WASM.
 
 If you wish to install it manually, you may do so by running `scripts/setup_wasi.sh`

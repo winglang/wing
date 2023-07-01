@@ -1,8 +1,7 @@
 {
   "name": "Wing Development",
 	"image": "mcr.microsoft.com/devcontainers/base:jammy",
-  "postCreateCommand": "npm install -g pnpm",
-  "updateContentCommand": "pnpm install",
+  "updateContentCommand": "pnpm install --frozen-lockfile",
   "features": {
     "ghcr.io/devcontainers/features/node:1": {
       "version": "18.16.0"
@@ -12,7 +11,9 @@
     "ghcr.io/devcontainers/features/docker-in-docker:2": {},
     "ghcr.io/devcontainers/features/rust:1": {},
     // install pnpm
-    "ghcr.io/devcontainers/features/pnpm:1": {},
+    "ghcr.io/devcontainers-contrib/features/pnpm:2": {
+      "version": "8.6.5"
+    }
   },
   "hostRequirements": {
     "cpus": 4,
