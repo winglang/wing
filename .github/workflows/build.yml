@@ -262,7 +262,7 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
 
       - name: Install Dependencies
-        run: pnpm install --frozen-lockfile --filter hangar --filter examples-valid --filter examples-invalid
+        run: pnpm install --ignore-scripts --frozen-lockfile --filter hangar --filter examples-valid --filter examples-invalid
 
       - name: Run E2E Benchmarks
         working-directory: tools/hangar
@@ -328,7 +328,7 @@ jobs:
           node-version: ${{ matrix.node }}
 
       - name: Install Dependencies
-        run: pnpm install --frozen-lockfile --filter hangar --filter examples-valid --filter examples-invalid
+        run: pnpm install --ignore-scripts --frozen-lockfile --filter hangar --filter examples-valid --filter examples-invalid
 
       - name: Run E2E Tests
         working-directory: tools/hangar
