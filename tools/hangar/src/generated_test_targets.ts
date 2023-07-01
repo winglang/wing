@@ -28,7 +28,7 @@ export async function compileTest(
     cwd: sourceDir,
     wingFile: filePath,
     args,
-    expectStdErr: false,
+    expectFailure: false,
     env,
   });
 
@@ -76,7 +76,7 @@ export async function testTest(
     cwd: testDir,
     wingFile: relativeWingFile,
     args,
-    expectStdErr: false,
+    expectFailure: false,
     env,
   });
 
