@@ -26,10 +26,16 @@ export async function runWingCommand(options: RunWingCommandOptions) {
     }
   );
 
+  const output = [out.stdout, out.stderr].join("\n");
+
   if (options.expectFailure) {
-    expect(out.exitCode).not.toBe(0);
+    if (out.exitCode == 0) {
+      expect.fail(output);
+    }
   } else {
-    expect(out.exitCode).toBe(0);
+    if (out.exitCode != 0) {
+      expect.fail(output);
+    }
   }
 
   out.stderr = sanitizeOutput(out.stderr);
