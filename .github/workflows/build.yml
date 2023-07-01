@@ -42,19 +42,16 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2.2.4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
           cache: "pnpm"
           node-version: ${{ env.NODE_VERSION }}
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2.2.4
-        with:
-          version: ${{ env.PNPM_VERSION }}
-          run_install: |
-            - recursive: true
-              args: [--frozen-lockfile]
 
       - name: Install Rust
         uses: dtolnay/rust-toolchain@master
@@ -69,7 +66,7 @@ jobs:
         uses: Swatinem/rust-cache@v2
 
       - name: Install Dependencies
-        uses: bahmutov/npm-install@v1
+        run: pnpm install --frozen-lockfile
 
       - name: Changelog Generation
         id: changelog
@@ -187,19 +184,16 @@ jobs:
         with:
           fetch-depth: 1
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2.2.4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
           cache: "pnpm"
           node-version: ${{ env.NODE_VERSION }}
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2.2.4
-        with:
-          version: ${{ env.PNPM_VERSION }}
-          run_install: |
-            - recursive: true
-              args: [--frozen-lockfile]
 
       - name: Install Rust
         uses: dtolnay/rust-toolchain@master
@@ -212,6 +206,9 @@ jobs:
 
       - name: Setup Cargo Cache
         uses: Swatinem/rust-cache@v2
+
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile
 
       - name: Test
         run: pnpm run test:ci
@@ -253,19 +250,19 @@ jobs:
       - name: Download Build Artifacts
         uses: actions/download-artifact@v2
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2.2.4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+        
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
           cache: "pnpm"
           node-version: ${{ env.NODE_VERSION }}
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2.2.4
-        with:
-          version: ${{ env.PNPM_VERSION }}
-          run_install: |
-            - recursive: true
-              args: [--frozen-lockfile, --filter, hangar, --filter, examples-valid, --filter, examples-invalid]
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile --filter hangar --filter examples-valid --filter examples-invalid
 
       - name: Run E2E Benchmarks
         working-directory: tools/hangar
@@ -319,18 +316,19 @@ jobs:
         with:
           path: target
 
-      - name: Setup Node
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ matrix.node }}
-
       - name: Setup pnpm
         uses: pnpm/action-setup@v2.2.4
         with:
           version: ${{ env.PNPM_VERSION }}
-          run_install: |
-            - recursive: true
-              args: [--frozen-lockfile, --filter, hangar, --filter, examples-valid, --filter, examples-invalid]
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          cache: "pnpm"
+          node-version: ${{ matrix.node }}
+
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile --filter hangar --filter examples-valid --filter examples-invalid
 
       - name: Run E2E Tests
         working-directory: tools/hangar
