@@ -19,18 +19,22 @@
     "nan": "^2.12.1"
   },
   "scripts": {
-    "test": "npx -y tree-sitter-cli test",
-    "test:update": "npx -y tree-sitter-cli test --update",
-    "test:watch": "npx -y nodemon --watch grammar.js --watch src/scanner.c --exec \"pnpm run test\"",
-    "build": "npx -y tree-sitter-cli generate",
-    "build:watch": "npx -y nodemon --watch grammar.js --watch src/scanner.c --exec \"pnpm run build\"",
-    "build:wasm": "pnpm run build && npx -y tree-sitter-cli@0.20.6 build-wasm --docker",
-    "playground": "pnpm run build:wasm && npx -y tree-sitter-cli@0.20.6 playground",
-    "playground:quiet": "pnpm run build:wasm && npx -y tree-sitter-cli@0.20.6 playground -q",
-    "playground:watch": "npx -y nodemon --watch grammar.js --watch src/scanner.c --exec \"pnpm run playground:quiet\""
+    "test": "tree-sitter test",
+    "test:update": "tree-sitter test --update",
+    "test:watch": "nodemon --watch grammar.js --watch src/scanner.c --exec \"pnpm run test\"",
+    "build": "tree-sitter generate",
+    "build:watch": "nodemon --watch grammar.js --watch src/scanner.c --exec \"pnpm run build\"",
+    "build:wasm": "pnpm run build && tree-sitter build-wasm --docker",
+    "playground": "pnpm run build:wasm && tree-sitter playground",
+    "playground:quiet": "pnpm run build:wasm && tree-sitter playground -q",
+    "playground:watch": "nodemon --watch grammar.js --watch src/scanner.c --exec \"pnpm run playground:quiet\""
   },
   "volta": {
     "node": "18.16.0",
     "pnpm": "8.6.5"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.22",
+    "tree-sitter-cli": "0.20.6"
   }
 }
