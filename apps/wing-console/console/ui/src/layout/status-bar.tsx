@@ -1,10 +1,11 @@
-import { useTheme, Loader } from "@wingconsole/design-system";
+import { useTheme, Loader, Mode } from "@wingconsole/design-system";
 import { State } from "@wingconsole/server";
 import classNames from "classnames";
 
 import { AutoUpdater } from "../features/auto-updater.js";
-import { useState } from "react";
-import { MoonIcon, SunIcon } from "@heroicons/react/24/outline";
+import { useCallback, useMemo, useState } from "react";
+import { ArrowPathIcon, MoonIcon, SunIcon } from "@heroicons/react/24/outline";
+import { trpc } from "../services/trpc.js";
 
 export interface StatusBarProps {
   wingVersion?: string;
@@ -17,7 +18,7 @@ export const StatusBar = ({
   cloudAppState,
   isError = false,
 }: StatusBarProps) => {
-  const { theme } = useTheme();
+  const { theme, mode, setThemeMode } = useTheme();
   const loading =
     cloudAppState === "loadingSimulator" || cloudAppState === "compiling";
   const cloudAppStateString = {
@@ -27,18 +28,11 @@ export const StatusBar = ({
     error: "error",
   };
 
-  const [mode, setMode] = useState(
-    document.documentElement.classList.contains("dark") ? "dark" : "light",
-  );
-  const onToggle = () => {
-    if (mode === "light") {
-      setMode("dark");
-      document.documentElement.classList.add("dark");
-    } else {
-      setMode("light");
-      document.documentElement.classList.remove("dark");
-    }
-  };
+  const toggleThemeMode = useCallback(() => {
+    const newMode =
+      mode === "light" ? "auto" : mode === "auto" ? "dark" : "light";
+    setThemeMode?.(newMode);
+  }, [setThemeMode, mode]);
 
   return (
     <footer
@@ -59,12 +53,32 @@ export const StatusBar = ({
               "hover:bg-slate-200 hover:dark:bg-slate-700",
               "transition-color duration-300",
             )}
-            onClick={onToggle}
+            onClick={toggleThemeMode}
           >
             {mode === "light" && <SunIcon className="h-4" />}
             {mode === "dark" && <MoonIcon className="h-4" />}
+            {mode === "auto" && (
+              <div className="relative h-4 w-4">
+                <ArrowPathIcon className="h-4 absolute -rotate-[5deg]" />
+                <SunIcon
+                  className={classNames(
+                    "h-[7.5px] absolute z-10 top-0 -left-[1px]",
+                    theme.bg3,
+                    "rounded-xl",
+                  )}
+                />
+                <MoonIcon
+                  className={classNames(
+                    "h-[7.5px] absolute z-10 bottom-0 -right-[1px]",
+                    theme.bg3,
+                    "rounded-xl",
+                  )}
+                />
+              </div>
+            )}
           </button>
         </div>
+
         <div title={wingVersion} className="truncate space-x-1 min-w-[7rem]">
           {wingVersion && (
             <>
