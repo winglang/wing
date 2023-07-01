@@ -5,7 +5,7 @@ exports[`access_hidden_namespace.w 1`] = `
   --> ../../../examples/tests/invalid/access_hidden_namespace.w:7:5
   |
 7 | new core.NodeJsCode(\\"/tmp/test.txt\\"); // This should fail even though \`fs.TextFile\` extends \`core.FileBase\` because we didn't bring in \`core\` explicitly.
-  |     ^^^^ Unknown symbol \\"core\\"
+  |     ^^^^^^^^^^^^^^^ Unknown symbol \\"core\\"
 
 
  
@@ -41,6 +41,20 @@ error: Unknown symbol \\"this\\"
   --> ../../../examples/tests/invalid/access_static_from_instance.w:7:5
   |
 7 |     this.instanceField = 1; // Can't access instance fields from static methods
+  |     ^^^^ Unknown symbol \\"this\\"
+
+
+error: Unknown symbol \\"this\\"
+  --> ../../../examples/tests/invalid/access_static_from_instance.w:7:5
+  |
+7 |     this.instanceField = 1; // Can't access instance fields from static methods
+  |     ^^^^ Unknown symbol \\"this\\"
+
+
+error: Unknown symbol \\"this\\"
+  --> ../../../examples/tests/invalid/access_static_from_instance.w:8:5
+  |
+8 |     this.f = 1; // Can't access static fields through \`this\`
   |     ^^^^ Unknown symbol \\"this\\"
 
 
@@ -182,6 +196,13 @@ error: Call to super constructor can only be done from within a class constructo
     |    ^^^^^^^^ Call to super constructor can only be done from within a class constructor
 
 
+error: Reserved method name. Initializers are declared with \\"init\\"
+    --> ../../../examples/tests/invalid/class.w:160:3
+    |
+160 |   constructor() {
+    |   ^^^^^^^^^^^ Reserved method name. Initializers are declared with \\"init\\"
+
+
 error: Expected block
    --> ../../../examples/tests/invalid/class.w:17:17
    |
@@ -287,18 +308,18 @@ error: Expected \\"x\\" to be a type but it's a variable
    |                  ^ Expected \\"x\\" to be a type but it's a variable
 
 
-error: Base class \\"S1\\" is not a class
+error: Expected \\"S1\\" to be a class
    --> ../../../examples/tests/invalid/class.w:74:18
    |
 74 | class C8 extends S1 {
-   |                  ^^ Base class \\"S1\\" is not a class
+   |                  ^^ Expected \\"S1\\" to be a class
 
 
-error: Class cannot extend itself
+error: Unknown symbol \\"C11\\"
    --> ../../../examples/tests/invalid/class.w:78:19
    |
 78 | class C11 extends C11 {
-   |                   ^^^ Class cannot extend itself
+   |                   ^^^ Unknown symbol \\"C11\\"
 
 
 error: Expected type to be \\"num\\", but got \\"str\\" instead
@@ -334,6 +355,13 @@ error: Expected type to be \\"num\\", but got \\"str\\" instead
    |
 31 |     this.x = \\"Hi\\";
    |              ^^^^ Expected type to be \\"num\\", but got \\"str\\" instead
+
+
+error: Variable cannot be reassigned from inflight
+   --> ../../../examples/tests/invalid/class.w:61:5
+   |
+61 |     this.y = 1;
+   |     ^^^^^^^^^^^ Variable cannot be reassigned from inflight
 
 
  
@@ -521,11 +549,11 @@ exports[`enums.w 1`] = `
   |                     ^^^^ Enum \\"SomeEnum\\" does not contain value \\"FOUR\\"
 
 
-error: Property access unsupported on type \\"SomeEnum\\"
-  --> ../../../examples/tests/invalid/enums.w:8:11
+error: Property not found
+  --> ../../../examples/tests/invalid/enums.w:8:24
   |
 8 | let two = SomeEnum.TWO.TWO;
-  |           ^^^^^^^^^^^^ Property access unsupported on type \\"SomeEnum\\"
+  |                        ^^^ Property not found
 
 
  
@@ -558,7 +586,14 @@ Duration <DURATION>"
 `;
 
 exports[`for_loop.w 1`] = `
-"error: Unable to iterate over \\"Bucket\\"
+"error: Reserved word
+  --> ../../../examples/tests/invalid/for_loop.w:5:5
+  |
+5 | for test in bucket {
+  |     ^^^^ Reserved word
+
+
+error: Unable to iterate over \\"Bucket\\"
   --> ../../../examples/tests/invalid/for_loop.w:5:13
   |
 5 | for test in bucket {
@@ -659,15 +694,6 @@ Test Files 1 failed (1)
 Duration <DURATION>"
 `;
 
-exports[`inflight_class_capture_mutable.w 1`] = `
-"pass ─ inflight_class_capture_mutable.wsim (no tests)
- 
- 
-Tests 1 passed (1)
-Test Files 1 passed (1)
-Duration <DURATION>"
-`;
-
 exports[`inflight_class_created_in_preflight.w 1`] = `
 "error: Cannot create inflight class \\"Foo\\" in preflight phase
   --> ../../../examples/tests/invalid/inflight_class_created_in_preflight.w:3:1
@@ -742,6 +768,28 @@ exports[`inflight_class_interface_structural_typing.w 1`] = `
    |
 26 |   let x: IGoo = new NotGoo();
    |                 ^^^^^^^^^^^^ Expected type to be \\"IGoo\\", but got \\"NotGoo\\" instead
+
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
+
+exports[`inflight_reassign.w 1`] = `
+"error: Variable cannot be reassigned from inflight
+  --> ../../../examples/tests/invalid/inflight_reassign.w:5:3
+  |
+5 |   xvar = \\"hi\\";
+  |   ^^^^^^^^^^^^ Variable cannot be reassigned from inflight
+
+
+error: Variable is not reassignable
+  --> ../../../examples/tests/invalid/inflight_reassign.w:8:3
+  |
+8 |   ylet = 456;
+  |   ^^^^ Variable is not reassignable
 
 
  
@@ -999,15 +1047,15 @@ exports[`missing_semicolon.w 1`] = `
 error: Expected ';'
    --> ../../../examples/tests/invalid/missing_semicolon.w:16:10
    |
-16 | let x = 5
+16 | let x = 5 //
    |          ^ Expected ';'
 
 
 error: Expected '}'
-   --> ../../../examples/tests/invalid/missing_semicolon.w:20:28
+   --> ../../../examples/tests/invalid/missing_semicolon.w:19:14
    |
-20 |            //^ '}' expected
-   |                            ^ Expected '}'
+19 | if (x > 10) {
+   |              ^ Expected '}'
 
 
  
@@ -1244,11 +1292,11 @@ error: Cannot call an optional function
    | ^^^^^^^^^^^^^^^^ Cannot call an optional function
 
 
-error: Variable hi is not reassignable 
+error: Variable is not reassignable
    --> ../../../examples/tests/invalid/optionals.w:46:3
    |
 46 |   hi = \\"bye\\";
-   |   ^^^^^^^^^^^ Variable hi is not reassignable 
+   |   ^^ Variable is not reassignable
 
 
  
@@ -1327,39 +1375,39 @@ Duration <DURATION>"
 `;
 
 exports[`reassign_to_nonreassignable.w 1`] = `
-"error: Variable x is not reassignable 
+"error: Variable is not reassignable
   --> ../../../examples/tests/invalid/reassign_to_nonreassignable.w:3:1
   |
 3 | x = x + 1;
-  | ^^^^^^^^^^ Variable x is not reassignable 
+  | ^ Variable is not reassignable
 
 
-error: Variable this.f is not reassignable 
+error: Variable is not reassignable
    --> ../../../examples/tests/invalid/reassign_to_nonreassignable.w:28:5
    |
 28 |     this.f = this.f + 1;
-   |     ^^^^^^^^^^^^^^^^^^^^ Variable this.f is not reassignable 
+   |     ^^^^^^ Variable is not reassignable
 
 
-error: Variable this.innerR.inner is not reassignable 
+error: Variable is not reassignable
    --> ../../../examples/tests/invalid/reassign_to_nonreassignable.w:30:5
    |
 30 |     this.innerR.inner = 2;
-   |     ^^^^^^^^^^^^^^^^^^^^^^ Variable this.innerR.inner is not reassignable 
+   |     ^^^^^^^^^^^^^^^^^ Variable is not reassignable
 
 
-error: Variable this.inflightF is not reassignable 
+error: Variable is not reassignable
    --> ../../../examples/tests/invalid/reassign_to_nonreassignable.w:35:5
    |
 35 |     this.inflightF = this.inflightF + 1;
-   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Variable this.inflightF is not reassignable 
+   |     ^^^^^^^^^^^^^^ Variable is not reassignable
 
 
-error: Variable arg is not reassignable 
+error: Variable is not reassignable
    --> ../../../examples/tests/invalid/reassign_to_nonreassignable.w:42:3
    |
 42 |   arg = 0;
-   |   ^^^^^^^^ Variable arg is not reassignable 
+   |   ^^^ Variable is not reassignable
 
 
  
@@ -1754,10 +1802,10 @@ error: Struct \\"Showtime\\" extends \\"Dazzle\\" which introduces a conflicting
 
 
 error: Cannot instantiate type \\"BucketProps\\" because it is a struct and not a class. Use struct instantiation instead.
-   --> ../../../examples/tests/invalid/structs.w:47:13
+   --> ../../../examples/tests/invalid/structs.w:47:9
    |
 47 | let x = new cloud.BucketProps(1);
-   |             ^^^^^^^^^^^^^^^^^ Cannot instantiate type \\"BucketProps\\" because it is a struct and not a class. Use struct instantiation instead.
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^ Cannot instantiate type \\"BucketProps\\" because it is a struct and not a class. Use struct instantiation instead.
 
 
  
@@ -1880,18 +1928,25 @@ Duration <DURATION>"
 `;
 
 exports[`unknown_symbol.w 1`] = `
-"error: Unknown symbol \\"clod\\"
+"error: Reserved word
+   --> ../../../examples/tests/invalid/unknown_symbol.w:35:5
+   |
+35 | let let = 2;
+   |     ^^^ Reserved word
+
+
+error: Unknown symbol \\"clod\\"
   --> ../../../examples/tests/invalid/unknown_symbol.w:3:18
   |
 3 | let bucket = new clod.Bucket();
-  |                  ^^^^ Unknown symbol \\"clod\\"
+  |                  ^^^^^^^^^^^ Unknown symbol \\"clod\\"
 
 
 error: Unknown symbol \\"cloudy\\"
   --> ../../../examples/tests/invalid/unknown_symbol.w:6:17
   |
 6 | let funky = new cloudy.Funktion(inflight () => { });
-  |                 ^^^^^^ Unknown symbol \\"cloudy\\"
+  |                 ^^^^^^^^^^^^^^^ Unknown symbol \\"cloudy\\"
 
 
 error: Unknown symbol \\"y\\"
@@ -1906,6 +1961,13 @@ error: Unknown symbol \\"B\\"
    |
 28 | class A extends B {
    |                 ^ Unknown symbol \\"B\\"
+
+
+error: Unknown symbol \\"unknown\\"
+   --> ../../../examples/tests/invalid/unknown_symbol.w:32:1
+   |
+32 | unknown = 1;
+   | ^^^^^^^ Unknown symbol \\"unknown\\"
 
 
 error: Unknown symbol \\"unknown\\"
@@ -1981,11 +2043,11 @@ Duration <DURATION>"
 `;
 
 exports[`void_in_expression_position.w 1`] = `
-"error: Property access unsupported on type \\"void\\"
-  --> ../../../examples/tests/invalid/void_in_expression_position.w:1:1
+"error: Property not found
+  --> ../../../examples/tests/invalid/void_in_expression_position.w:1:12
   |
 1 | log(\\"hey\\").get(\\"x\\");
-  | ^^^^^^^^^^ Property access unsupported on type \\"void\\"
+  |            ^^^ Property not found
 
 
 error: Binary operator '+' cannot be applied to operands of type 'num' and 'void'; only (num, num) and (str, str) are supported
