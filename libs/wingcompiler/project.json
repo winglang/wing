@@ -17,20 +17,20 @@
     "build": {
       "dependsOn": ["^build", "copy"],
       "options": {
-        "command": "pnpm run build",
+        "command": "pnpm build",
         "cwd": "libs/wingcompiler"
       }
     },
     "test": {
       "dependsOn": ["copy"],
       "options": {
-        "command": "pnpm run test",
+        "command": "pnpm test",
         "cwd": "libs/wingcompiler"
       }
     },
     "package": {
       "options": {
-        "command": "pnpm run package",
+        "command": "pnpm package",
         "cwd": "libs/wingcompiler",
         "parallel": false
       }

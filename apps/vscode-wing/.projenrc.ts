@@ -17,6 +17,7 @@ const project = new TypeScriptAppProject({
   bugsUrl: "https://github.com/winglang/wing/issues",
   homepage: "https://winglang.io",
   description: "Wing language support for VSCode",
+  projenCommand: "pnpm exec projen",
   keywords: [
     "cdk",
     "cdktf",

@@ -6,13 +6,13 @@
     "build": {
       "options": {
         "cwd": "apps/wing-playground",
-        "command": "pnpm run build"
+        "command": "pnpm build"
       }
     },
     "dev": {
       "options": {
         "cwd": "apps/wing-playground",
-        "command": "pnpm run dev"
+        "command": "pnpm dev"
       }
     }
   }

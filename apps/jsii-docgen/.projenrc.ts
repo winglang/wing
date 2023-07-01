@@ -1,5 +1,5 @@
-const { typescript, javascript } = require("projen");
-const rootPackageJson = require("../../package.json");
+import { typescript, javascript } from "projen";
+import rootPackageJson from "../../package.json";
 
 const project = new typescript.TypeScriptProject({
   name: "@winglang/jsii-docgen",
@@ -10,6 +10,7 @@ const project = new typescript.TypeScriptProject({
   authorOrganization: true,
   authorUrl: "https://monada.co",
   defaultReleaseBranch: "main",
+  projenCommand: "pnpm exec projen",
 
   bin: {
     "jsii-docgen": "bin/jsii-docgen",
@@ -33,7 +34,6 @@ const project = new typescript.TypeScriptProject({
     "semver",
     "yargs@^16",
   ],
-  compileBeforeTest: true, // we need this for the CLI test
   releaseToNpm: true,
   packageManager: javascript.NodePackageManager.PNPM,
   github: false,
@@ -45,7 +45,7 @@ const libraryFixtures = ["construct-library"];
 
 // compile the test fixtures with jsii
 for (const library of libraryFixtures) {
-  project.compileTask.exec("pnpm run compile", {
+  project.compileTask.exec("pnpm compile", {
     cwd: `./test/__fixtures__/libraries/${library}`,
   });
 }

@@ -14,6 +14,7 @@ const project = new typescript.TypeScriptProject({
   authorOrganization: true,
   authorUrl: "https://monada.co",
   repository: "https://github.com/winglang/wing.git",
+  projenCommand: "pnpm exec projen",
   packageManager: javascript.NodePackageManager.PNPM,
   github: false,
   projenrcTs: true,

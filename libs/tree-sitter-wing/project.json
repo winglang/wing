@@ -4,12 +4,12 @@
   "targets": {
     "test": {
       "options": {
-        "command": "pnpm run test:update",
+        "command": "pnpm test:update",
         "cwd": "libs/tree-sitter-wing"
       },
       "configurations": {
         "release": {
-          "command": "pnpm run test"
+          "command": "pnpm test"
         }
       }
     },
@@ -26,13 +26,13 @@
     },
     "dev": {
       "options": {
-        "command": "pnpm run playground",
+        "command": "pnpm playground",
         "cwd": "libs/tree-sitter-wing"
       }
     },
     "dev:watch": {
       "options": {
-        "command": "pnpm run playground:watch",
+        "command": "pnpm playground:watch",
         "cwd": "libs/tree-sitter-wing"
       }
     }

@@ -10,13 +10,13 @@
   "targets": {
     "build": {
       "options": {
-        "command": "pnpm run compile",
+        "command": "pnpm compile",
         "cwd": "apps/wing-console/console/ui"
       }
     },
     "package": {
       "options": {
-        "command": "pnpm run package",
+        "command": "pnpm package",
         "cwd": "apps/wing-console/console/ui"
       }
     }

@@ -18,7 +18,7 @@ Yes, you can! We use the awesome [Docusaurus](https://docusaurus.io/) project fo
 To start the documentation website, run the following command from the root of the repo:
 
 ```sh
-pnpm run docs
+pnpm docs
 ```
 
 This magical script will clone the [winglang/docsite](https://github.com/winglang/docsite)

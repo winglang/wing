@@ -6,20 +6,20 @@
     "build": {
       "dependsOn": ["^build"],
       "options": {
-        "command": "pnpm run build",
+        "command": "pnpm build",
         "cwd": "apps/wing"
       }
     },
     "test": {
       "dependsOn": ["^build"],
       "options": {
-        "command": "pnpm run test",
+        "command": "pnpm test",
         "cwd": "apps/wing"
       }
     },
     "package": {
       "options": {
-        "command": "pnpm run package",
+        "command": "pnpm package",
         "cwd": "apps/wing"
       }
     },

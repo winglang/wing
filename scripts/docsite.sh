@@ -32,7 +32,7 @@ ln -s $docsdir $symlink_target
 echo '["current"]' > versions.json
 
 echo "🍄 Installing dependencies..."
-pnpm i
+npm i
 
 echo "🍄 Starting local docsite server..."
-pnpm run start
+npm run start

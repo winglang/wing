@@ -72,15 +72,15 @@ jobs:
         id: changelog
         env:
           GENERATE_VERSION: ${{ github.event_name != 'push' || github.repository != 'winglang/wing' }}
-        run: pnpm run changelog
+        run: pnpm changelog
 
       - name: Build
-        run: pnpm run build:ci
+        run: pnpm build:ci
         env:
           SEGMENT_WRITE_KEY: ${{ secrets.SEGMENT_WRITE_KEY }}
 
       - name: Package
-        run: pnpm run package:ci
+        run: pnpm package:ci
 
       - name: Upload Wing CLI
         uses: actions/upload-artifact@v3
@@ -211,7 +211,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Test
-        run: pnpm run test:ci
+        run: pnpm test:ci
 
       - name: Create git patch
         id: diff
@@ -266,7 +266,7 @@ jobs:
 
       - name: Run E2E Benchmarks
         working-directory: tools/hangar
-        run: pnpm run bench
+        run: pnpm bench
 
       - name: Upload Report JSON
         uses: actions/upload-artifact@v3
@@ -333,7 +333,7 @@ jobs:
       - name: Run E2E Tests
         working-directory: tools/hangar
         run: |
-          pnpm run test:generate
+          pnpm test:generate
           pnpm run test --shard=${{ matrix.shard }} --update=${{ matrix.runner == 'ubuntu' && matrix.node == '18' }}
 
       - name: Create mutation if needed

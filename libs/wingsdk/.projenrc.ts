@@ -101,6 +101,7 @@ const project = new cdk.JsiiProject({
   prettier: true,
   npmignoreEnabled: false,
   minNodeVersion: "18.13.0",
+  projenCommand: "pnpm exec projen",
   packageManager: javascript.NodePackageManager.PNPM,
   codeCov: true,
   codeCovTokenSecret: "CODECOV_TOKEN",

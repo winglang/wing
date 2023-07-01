@@ -8,7 +8,6 @@
     "semver": "^7.3.8"
   },
   "scripts": {
-    "nx": "nx",
     "build": "nx run-many --all --targets build,test,package",
     "test": "nx run-many --all --target=test",
     "package": "nx run-many --all --target=package",
