@@ -3794,10 +3794,11 @@ impl<'a> TypeChecker<'a> {
 		instance_type: UnsafeRef<Type>,
 		property: &Symbol,
 		env: &SymbolEnv,
-		object: &Expr,
+		// only used for recursion
+		_object: &Expr,
 	) -> VariableInfo {
 		match *instance_type {
-			Type::Optional(t) => self.resolve_variable_from_instance_type(t, property, env, object),
+			Type::Optional(t) => self.resolve_variable_from_instance_type(t, property, env, _object),
 			Type::Class(ref class) => self.get_property_from_class_like(class, property),
 			Type::Interface(ref interface) => self.get_property_from_class_like(interface, property),
 			Type::Anything => VariableInfo {
