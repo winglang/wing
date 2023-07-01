@@ -4,11 +4,11 @@ use lsp_types::{
 	SignatureInformation,
 };
 
-use crate::ast::{Expr, ExprKind, Symbol, TypeAnnotationKind};
+use crate::ast::{Expr, ExprKind, Symbol};
 use crate::docs::Documented;
 use crate::lsp::sync::FILES;
 
-use crate::type_check::{resolve_user_defined_type, CLASS_INIT_NAME};
+use crate::type_check::{resolve_udt_from_expr, resolve_user_defined_type, CLASS_INIT_NAME};
 use crate::visit::{visit_expr, Visit};
 use crate::wasm_util::{ptr_to_string, string_to_combined_ptr, WASM_RETURN_ERROR};
 
@@ -43,11 +43,14 @@ pub fn on_signature_help(params: lsp_types::SignatureHelpParams) -> Option<Signa
 			&crate::ast::ArgList,
 		) = match &expr.kind {
 			ExprKind::New { class, arg_list, .. } => {
-				let t = if let TypeAnnotationKind::UserDefined(udt) = &class.kind {
-					resolve_user_defined_type(udt, root_scope.env.borrow().as_ref()?, 0).ok()?
-				} else {
+				let Some(udt) = resolve_udt_from_expr(class).ok() else {
 					return None;
 				};
+
+				let Some(t) = resolve_user_defined_type(&udt, root_scope.env.borrow().as_ref()?, 0).ok() else {
+					return None;
+				};
+
 				let init_lookup = t.as_class()?.env.lookup(
 					&Symbol {
 						name: CLASS_INIT_NAME.into(),
