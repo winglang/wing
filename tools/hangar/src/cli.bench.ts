@@ -21,7 +21,7 @@ describe("compile", async () => {
             cwd: benchmarksTestDir,
             wingFile: wingFile,
             args: ["compile", "--target", target],
-            expectStdErr: false,
+            expectFailure: false,
           });
         },
         {
