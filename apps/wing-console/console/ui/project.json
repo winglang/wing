@@ -16,7 +16,7 @@
     },
     "package": {
       "options": {
-        "command": "npm run package",
+        "command": "pnpm run package",
         "cwd": "apps/wing-console/console/ui"
       }
     }

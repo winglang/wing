@@ -16,7 +16,7 @@ The SDK is built using a couple of extra libraries and tools:
 * [JSII] is a tool we used to compile the SDK. JSII is a wrapper over TypeScript that makes it possible to use the SDK in other languages like Python, Java, C#, and Go. This is made possible through extra type checks. In practice, the main difference from ordinary TypeScript is that you cannot use advanced TypeScript types like `Partial` or generics in public APIs.
 * [Projen] is a tool used to manage project configuration files. It uses the `.projenrc.ts` file to generate `package.json` and other files. You can modify it and run `npx projen` to regenerate the resources. If you are not touching configuration files, you can totally ignore this.
 
-Everything in the SDK can be built by running `npm run build` from `libs/wingsdk`. You can also run `npm run test` to just run tests.
+Everything in the SDK can be built by running `pnpm run build` from `libs/wingsdk`. You can also run `npm run test` to just run tests.
 
 In order to work on the source code, you will need to the build at least once so that TypeScript bindings for Terraform resources will be automatically generated.
 These files are not checked in because they are quite large.
@@ -59,7 +59,7 @@ This means that you can generate bindings for any Terraform provider and referen
 To add a new provider, go to `libs/wingsdk/.projenrc.ts` and edit the section
 that says "CDKTF_BINDINGS" to add the new provider.
 Then, run `npx projen` to update the project.
-One that has finished, you can run `npm run build` and the new bindings should be generated inside `libs/wingsdk/src/.gen`.
+One that has finished, you can run `pnpm run build` and the new bindings should be generated inside `libs/wingsdk/src/.gen`.
 
 ## 🧩 How do I add a resource to the SDK?
 
@@ -100,19 +100,19 @@ All features and bug fixes should have tests! They're easy to forget, but they p
 All tests can be run by running the following command from `libs/wingsdk`:
 
 ```sh
-npm run test
+pnpm run test
 ```
 
 During development, you might find it useful to watch for changes and automatically re-run the tests:
 
 ```sh
-npm run test:watch
+pnpm run test:watch
 ```
 
 To re-run individual tests, you can directly use the `vitest` command -- for example:
 
 ```sh
-npx vitest run test/target-tf-aws/bucket.test.ts
+pnpx vitest run test/target-tf-aws/bucket.test.ts
 ```
 
 ## What is the architecture of the Wing SDK?

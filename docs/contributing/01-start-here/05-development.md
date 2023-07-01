@@ -105,9 +105,9 @@ The Wing monorepo uses [Nx] to run commands across all code packages in the `lib
 folders. This means it includes packages that form the entire toolchain (compiler, standard library, IDE
 extension, etc), and the build and release bind them all together.
 
-Nx will be installed alongside the rest of the project's dependencies after you run `npm install`
-from the root directory, and can be accessed with `npx nx` (it does not need to be installed
-separately).
+Nx will be installed alongside the rest of the project's dependencies after you run `pnpm install`
+from the root directory, and can be accessed with `pnpm exec nx` (it does not need to be installed
+separately, but installing nx globally is encouraged).
 
 :::note
 

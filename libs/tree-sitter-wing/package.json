@@ -21,13 +21,13 @@
   "scripts": {
     "test": "npx -y tree-sitter-cli test",
     "test:update": "npx -y tree-sitter-cli test --update",
-    "test:watch": "npx -y nodemon --watch grammar.js --watch src/scanner.c --exec \"npm run test\"",
+    "test:watch": "npx -y nodemon --watch grammar.js --watch src/scanner.c --exec \"pnpm run test\"",
     "build": "npx -y tree-sitter-cli generate",
-    "build:watch": "npx -y nodemon --watch grammar.js --watch src/scanner.c --exec \"npm run build\"",
-    "build:wasm": "npm run build && npx -y tree-sitter-cli@0.20.6 build-wasm --docker",
-    "playground": "npm run build:wasm && npx -y tree-sitter-cli@0.20.6 playground",
-    "playground:quiet": "npm run build:wasm && npx -y tree-sitter-cli@0.20.6 playground -q",
-    "playground:watch": "npx -y nodemon --watch grammar.js --watch src/scanner.c --exec \"npm run playground:quiet\""
+    "build:watch": "npx -y nodemon --watch grammar.js --watch src/scanner.c --exec \"pnpm run build\"",
+    "build:wasm": "pnpm run build && npx -y tree-sitter-cli@0.20.6 build-wasm --docker",
+    "playground": "pnpm run build:wasm && npx -y tree-sitter-cli@0.20.6 playground",
+    "playground:quiet": "pnpm run build:wasm && npx -y tree-sitter-cli@0.20.6 playground -q",
+    "playground:watch": "npx -y nodemon --watch grammar.js --watch src/scanner.c --exec \"pnpm run playground:quiet\""
   },
   "volta": {
     "node": "18.16.0",

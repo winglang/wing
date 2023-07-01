@@ -5,13 +5,13 @@
   "targets": {
     "build": {
       "options": {
-        "command": "npm run compile",
+        "command": "pnpm run compile",
         "cwd": "apps/wing-console/console/design-system"
       }
     },
     "package": {
       "options": {
-        "command": "npm run package",
+        "command": "pnpm run package",
         "cwd": "apps/wing-console/console/design-system"
       }
     }
