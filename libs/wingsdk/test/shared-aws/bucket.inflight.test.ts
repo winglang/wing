@@ -159,6 +159,9 @@ test("delete object from the bucket with mustExist option", async () => {
   s3Mock
     .on(DeleteObjectCommand, { Bucket: BUCKET_NAME, Key: KEY })
     .resolves({});
+  s3Mock
+    .on(ListObjectsV2Command, { Bucket: BUCKET_NAME, Prefix: KEY, MaxKeys: 1 })
+    .resolves({ Contents: [{ Key: KEY }] });
 
   // WHEN
   const client = new BucketClient(BUCKET_NAME);
@@ -166,6 +169,27 @@ test("delete object from the bucket with mustExist option", async () => {
 
   // THEN
   expect(response).toEqual(undefined);
+});
+
+test("delete non-existent object from the bucket with mustExist option", async () => {
+  // GIVEN
+  const BUCKET_NAME = "BUCKET_NAME";
+  const KEY = "KEY";
+
+  s3Mock
+    .on(DeleteObjectCommand, { Bucket: BUCKET_NAME, Key: KEY })
+    .resolves({});
+  s3Mock
+    .on(ListObjectsV2Command, { Bucket: BUCKET_NAME, Prefix: KEY, MaxKeys: 1 })
+    .resolves({ Contents: [] });
+
+  // WHEN
+  const client = new BucketClient(BUCKET_NAME);
+
+  // THEN
+  await expect(() =>
+    client.delete(KEY, { mustExist: true })
+  ).rejects.toThrowError("Object does not exist (key=KEY).");
 });
 
 test("Given a non public bucket when reaching to a key public url it should throw an error", async () => {
