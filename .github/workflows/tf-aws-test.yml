@@ -6,6 +6,9 @@ on:
       - tsuf/test-aws-gh-action
   workflow_dispatch: {}
 
+env:
+  RUST_VERSION: "1.67.1"
+
 jobs:
   install:
     name: Installation & Test
@@ -13,8 +16,23 @@ jobs:
       fail-fast: true
     runs-on: ubuntu-latest
     steps:
+      ########################################################
       - name: Checkout repository
         uses: actions/checkout@v3
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: ${{ env.RUST_VERSION }}
+          targets: |
+            x86_64-unknown-linux-gnu
+            wasm32-wasi
+          components: rustfmt,clippy,rust-std
+      - name: Setup Cargo Cache
+        uses: Swatinem/rust-cache@v2
+      - name: Install Dependencies
+        uses: bahmutov/npm-install@v1
+      ####################### to remove #######################
+
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
@@ -36,4 +54,4 @@ jobs:
           npm install -g winglang@${{ steps.get-version.outputs.version }}
       - name: Run tests
         run: |
-          wing test -t tf-aws examples/tests/sdk_tests/bucket/put.w
+          npx nx wing -- test -t tf-aws ../../examples/tests/sdk_tests/bucket/put.w
