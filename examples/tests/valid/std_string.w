@@ -15,6 +15,9 @@ assert(s1.substring(5, 7) == "st");
 assert("   some string   ".trim() == "some string");
 assert("Some String".uppercase() == "SOME STRING");
 assert("hello" + " world" == "hello world");
+assert(
+"hello ${"funky"}
+ world" == "hello funky\n world");
   
 // For debugging the test
 test "string" {
