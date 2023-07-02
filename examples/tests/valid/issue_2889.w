@@ -9,7 +9,7 @@ api.get("/foo", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
   return cloud.ApiResponse {
     status: 200,
     headers: {
-      "Content-Type": "application/json" // also tried "content-type": "application/json"
+      "Content-Type" => "application/json" // also tried "content-type": "application/json"
     },
     body: Json.stringify(issues),
   };
