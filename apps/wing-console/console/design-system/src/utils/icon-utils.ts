@@ -50,7 +50,7 @@ export const getResourceIconComponent = (
     case "wingsdk.cloud.Queue": {
       return solid ? SolidQueueListIcon : QueueListIcon;
     }
-    case "wingsdk.cloud.Website": // todo [sa] search for icon
+    case "wingsdk.cloud.Website":
     case "wingsdk.cloud.Endpoint": {
       return solid ? SolidGlobeAltIcon : GlobeAltIcon;
     }
