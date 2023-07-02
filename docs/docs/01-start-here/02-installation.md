@@ -23,14 +23,14 @@ The toolchain includes three tools:
 
 1. **Wing CLI** - the compiler toolchain
 2. **Wing VSCode Extension** - IDE support for Wing
-3. **Wing Console** - a desktop app for interacting with your Wing programs.
+3. **Wing Console** - a web application for viewing and interacting with your Wing programs.
 
 To install Wing, you will need the following setup:
 
 * [Node.js](https://nodejs.org/en/) (v18 or later)
-  * We recommend [volta](https://volta.sh) to manage node tools
+    * We recommend [volta](https://volta.sh) to manage node tools
 * [VSCode]
-  * Not required, but currently supported with an [extension](#wing-ide-extension)
+    * Not required, but currently supported with an [extension](#wing-ide-extension)
 
 ## Wing CLI
 
@@ -83,26 +83,9 @@ to use it, but it's great. It's available through the VSCode Marketplace [here](
 
 ## Wing Console
 
-:::caution Wing Console doesn't support Linux yet
+The Wing Console is a web application that provides a developer-friendly interface for viewing, exploring, and interacting with your Wing applications running on the local cloud simulator.
 
-Click :thumbsup: on [this issue](https://github.com/winglang/wing/issues/723) to indicate that you
-are looking for Linux support.
-
-:::
-
-
-The Wing Console is a desktop application that allows you to interact with your
-Wing applications running locally on the cloud simulator.
-
-1. Download the latest version of the **Wing Console**:
-   * [macOS](https://wing-console.s3.amazonaws.com/wing-console.dmg)
-   * [macOS arm64](https://wing-console.s3.amazonaws.com/wing-console-arm64.dmg)
-   * [Windows](https://wing-console.s3.amazonaws.com/wing-console.exe)
-2. Accept the license agreement.
-3. In macOS: drag the Wing Console app into **Applications**
-
-![Drag the Wing Console app into Applications](./console-install.png 'Wing Console app installation')
-
+The Wing Console is included as part of the Wing CLI package. There is no need to install it separately. Once the Wing CLI is successfully installed, you can directly access the Wing Console and begin utilizing its features.
 
 [AWS account]: https://portal.aws.amazon.com/billing/signup
 [AWS CLI]: https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html

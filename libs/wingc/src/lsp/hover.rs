@@ -1,5 +1,3 @@
-use lsp_types::{Hover, HoverContents, MarkupContent, MarkupKind, Position};
-
 use crate::ast::{
 	Class, Expr, FunctionBody, FunctionDefinition, Reference, Scope, Stmt, StmtKind, Symbol, TypeAnnotation,
 	TypeAnnotationKind,
@@ -12,6 +10,7 @@ use crate::type_check::Types;
 use crate::visit::{self, Visit};
 use crate::wasm_util::WASM_RETURN_ERROR;
 use crate::wasm_util::{ptr_to_string, string_to_combined_ptr};
+use lsp_types::{Hover, HoverContents, MarkupContent, MarkupKind, Position};
 
 pub struct HoverVisitor<'a> {
 	position: Position,
@@ -71,6 +70,33 @@ impl<'a> HoverVisitor<'a> {
 		f(self);
 		if self.found.is_none() {
 			self.current_scope = last_scope;
+		}
+	}
+
+	fn visit_reference_with_member(&mut self, object: &Expr, property: &Symbol) {
+		if let Some(obj_type) = self.types.get_expr_type(object) {
+			if property.span.contains(&self.position) {
+				let new_span = WingSpan {
+					start: property.span.start, //<<<
+					end: property.span.end,
+					file_id: property.span.file_id.clone(),
+				};
+
+				if let Some(c) = obj_type.as_class() {
+					if let Some(v) = c.env.lookup(property, None) {
+						let docs = v.render_docs();
+						self.found = Some((new_span, Some(docs)));
+					}
+				} else {
+					self.found = Some((
+						new_span,
+						self
+							.types
+							.get_expr_type(self.current_expr.unwrap())
+							.map(|t| t.render_docs()),
+					));
+				}
+			}
 		}
 	}
 }
@@ -236,45 +262,13 @@ impl<'a> Visit<'a> for HoverVisitor<'a> {
 					self.found = Some((sym.span.clone(), self.lookup_docs(&sym.name, None)));
 				}
 			}
-			Reference::InstanceMember {
-				object,
-				property,
-				optional_accessor: _,
-			} => {
-				if let Some(obj_type) = self.types.get_expr_type(object) {
-					if property.span.contains(&self.position) {
-						let new_span = WingSpan {
-							start: object.span.start,
-							end: property.span.end,
-							file_id: property.span.file_id.clone(),
-						};
-
-						if let Some(c) = obj_type.as_class() {
-							if let Some(v) = c.env.lookup(property, None) {
-								let docs = v.render_docs();
-								self.found = Some((new_span, Some(docs)));
-							}
-						} else {
-							self.found = Some((
-								new_span,
-								self
-									.types
-									.get_expr_type(self.current_expr.unwrap())
-									.map(|t| t.render_docs()),
-							));
-						}
-					}
+			Reference::TypeReference(t) => {
+				if t.span.contains(&self.position) {
+					self.found = Some((t.span.clone(), self.lookup_docs(&t.full_path_str(), None)));
 				}
 			}
-			Reference::TypeMember { type_, property } => {
-				if property.span.contains(&self.position) {
-					// lookup type in environment
-					self.found = Some((
-						property.span.clone(),
-						self.lookup_docs(&type_.full_path_str(), Some(property)),
-					));
-				}
-			}
+			Reference::InstanceMember { object, property, .. } => self.visit_reference_with_member(object, property),
+			Reference::TypeMember { typeobject, property } => self.visit_reference_with_member(&typeobject, property),
 		}
 
 		visit::visit_reference(self, node);
@@ -348,6 +342,9 @@ mod tests {
 		($name:ident, $code:literal, $($assertion:stmt)*) => {
 			#[test]
 			fn $name() {
+				// NOTE: this is needed for debugging to work regardless of where you run the test
+				std::env::set_current_dir(env!("CARGO_MANIFEST_DIR")).unwrap();
+
 				let text_document_position_params = load_file_with_contents($code);
 				let hover = on_hover(HoverParams {
 					text_document_position_params,

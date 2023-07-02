@@ -6,7 +6,7 @@ let globalStr = "hello";
 let globalBool = true;
 let globalNum = 42;
 let globalArrayOfStr = ["hello", "world"];
-let globalMapOfNum = Map<num>{ "a": -5, "b": 2 };
+let globalMapOfNum = Map<num>{ "a" => -5, "b" => 2 };
 let globalSetOfStr = Set<str>{ "a", "b" };
 
 class First {

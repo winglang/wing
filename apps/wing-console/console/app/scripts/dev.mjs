@@ -28,6 +28,11 @@ const { port } = await createConsoleServer({
     },
     set(key, value) {},
   },
+  hostUtils: {
+    async openExternal(url) {
+      await open(url);
+    },
+  },
 });
 
 await open(`http://localhost:${port}`);
