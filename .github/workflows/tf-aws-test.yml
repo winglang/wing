@@ -16,6 +16,10 @@ jobs:
       fail-fast: true
     runs-on: ubuntu-latest
     steps:
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
       ########################################################
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -33,12 +37,9 @@ jobs:
         uses: bahmutov/npm-install@v1
       - name: build
         run: |
+          cd apps/wing
           npm run build
       ####################### to remove #######################
-      - name: Setup Node
-        uses: actions/setup-node@v3
-        with:
-          node-version: 20
       - name: Configure AWS Credentials Action For GitHub Actions
         uses: aws-actions/configure-aws-credentials@v1
         with:
