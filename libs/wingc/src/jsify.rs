@@ -17,17 +17,18 @@ use std::{
 use crate::{
 	ast::{
 		ArgList, BinaryOperator, Class as AstClass, ClassField, Expr, ExprKind, FunctionBody, FunctionDefinition,
-		InterpolatedStringPart, Literal, Phase, Reference, Scope, Stmt, StmtKind, Symbol, TypeAnnotation,
-		TypeAnnotationKind, UnaryOperator,
+		InterpolatedStringPart, Literal, Phase, Reference, Scope, Stmt, StmtKind, Symbol, TypeAnnotationKind,
+		UnaryOperator,
 	},
 	comp_ctx::{CompilationContext, CompilationPhase},
 	dbg_panic, debug,
 	diagnostic::{report_diagnostic, Diagnostic, WingSpan},
 	files::Files,
 	type_check::{
-		resolve_user_defined_type,
+		resolve_udt_from_expr, resolve_user_defined_type,
 		symbol_env::{LookupResult, SymbolEnv, SymbolEnvRef},
-		ClassLike, SymbolKind, Type, TypeRef, Types, UnsafeRef, VariableInfo, CLASS_INFLIGHT_INIT_NAME, HANDLE_METHOD_NAME,
+		ClassLike, SymbolKind, Type, TypeRef, Types, UnsafeRef, VariableInfo, VariableKind, CLASS_INFLIGHT_INIT_NAME,
+		HANDLE_METHOD_NAME,
 	},
 	visit::{self, Visit},
 	MACRO_REPLACE_ARGS, MACRO_REPLACE_ARGS_TEXT, MACRO_REPLACE_SELF, WINGSDK_ASSEMBLY_NAME, WINGSDK_RESOURCE,
@@ -222,8 +223,10 @@ impl<'a> JSifier<'a> {
 				property,
 				optional_accessor: _,
 			} => self.jsify_expression(object, ctx) + "." + &property.to_string(),
-			Reference::TypeMember { type_, property } => {
-				self.jsify_type(&TypeAnnotationKind::UserDefined(type_.clone()), ctx) + "." + &property.to_string()
+			Reference::TypeReference(udt) => self.jsify_type(&TypeAnnotationKind::UserDefined(udt.clone()), ctx),
+			Reference::TypeMember { typeobject, property } => {
+				let typename = self.jsify_expression(typeobject, ctx);
+				typename + "." + &property.to_string()
 			}
 		}
 	}
@@ -309,7 +312,7 @@ impl<'a> JSifier<'a> {
 				// user-defined types), we simply instantiate the type directly (maybe in the future we will
 				// allow customizations of user-defined types as well, but for now we don't).
 
-				let ctor = self.jsify_type(&class.kind, ctx);
+				let ctor = self.jsify_expression(class, ctx);
 
 				let scope = if is_preflight_class && class_type.std_construct_args {
 					if let Some(scope) = obj_scope {
@@ -352,7 +355,14 @@ impl<'a> JSifier<'a> {
 						.parts
 						.iter()
 						.filter_map(|p| match p {
-							InterpolatedStringPart::Static(l) => Some(format!("\"{}\"", l.to_string())),
+							InterpolatedStringPart::Static(static_string) => {
+								// escape any raw newlines in the string because js `"` strings can't contain them
+								let escaped = static_string
+								.replace("\r\n", "\\r\\n")
+								.replace("\n", "\\n");
+
+								Some(format!("\"{escaped}\""))
+							},
 							InterpolatedStringPart::Expr(_) => None,
 						})
 						.collect::<Vec<String>>()
@@ -722,7 +732,7 @@ impl<'a> JSifier<'a> {
 			StmtKind::Expression(e) => CodeMaker::one_line(format!("{};", self.jsify_expression(e, ctx))),
 			StmtKind::Assignment { variable, value } => CodeMaker::one_line(format!(
 				"{} = {};",
-				self.jsify_reference(&variable, ctx),
+				self.jsify_expression(variable, ctx),
 				self.jsify_expression(value, ctx)
 			)),
 			StmtKind::Scope(scope) => {
@@ -955,8 +965,9 @@ impl<'a> JSifier<'a> {
 		let (mut captured_types, captured_vars) = self.scan_captures(class, &inflight_methods);
 
 		if let Some(parent) = &class.parent {
-			let parent_type = resolve_user_defined_type(&parent, env, 0).unwrap();
-			captured_types.insert(parent.full_path(), parent_type);
+			let parent_type_udt = resolve_udt_from_expr(&parent).unwrap();
+			let parent_type = resolve_user_defined_type(&parent_type_udt, env, 0).unwrap();
+			captured_types.insert(parent_type_udt.full_path(), parent_type);
 		}
 
 		// Get all references between inflight methods and preflight values
@@ -988,7 +999,7 @@ impl<'a> JSifier<'a> {
 
 			// default base class for preflight classes is `core.Resource`
 			let extends = if let Some(parent) = &class.parent {
-				format!(" extends {}", jsify_type_name(&parent.full_path(), ctx.phase))
+				format!(" extends {}", self.jsify_expression(&parent, ctx))
 			} else {
 				format!(" extends {}", STDLIB_CORE_RESOURCE)
 			};
@@ -1260,7 +1271,8 @@ impl<'a> JSifier<'a> {
 		// Handle parent class: Need to call super and pass its captured fields (we assume the parent client is already written)
 		let mut lifted_by_parent = vec![];
 		if let Some(parent) = &class.parent {
-			if let Ok(parent_type) = resolve_user_defined_type(parent, env, 0) {
+			let parent_udt = resolve_udt_from_expr(parent).unwrap();
+			if let Ok(parent_type) = resolve_user_defined_type(&parent_udt, env, 0) {
 				lifted_by_parent.extend(self.get_lifted_fields(parent_type));
 			}
 		}
@@ -1278,7 +1290,7 @@ impl<'a> JSifier<'a> {
 		class_code.open(format!(
 			"class {name}{} {{",
 			if let Some(parent) = &class.parent {
-				format!(" extends {}", jsify_type_name(&parent.full_path(), ctx.phase))
+				format!(" extends {}", self.jsify_expression(&parent, ctx))
 			} else {
 				"".to_string()
 			}
@@ -1432,14 +1444,14 @@ impl<'a> JSifier<'a> {
 		let refs = refs
 			.iter()
 			.filter(|(m, _)| {
-				(*m == CLASS_INFLIGHT_INIT_NAME
-					|| !class_type
-						.as_class()
-						.unwrap()
-						.get_method(&m.as_str().into())
-						.expect(&format!("method {m} doesn't exist in {class_name}"))
-						.is_static)
-					^ (matches!(bind_method_kind, BindMethod::Type))
+				let var_kind = class_type
+					.as_class()
+					.unwrap()
+					.get_method(&m.as_str().into())
+					.expect(&format!("method {m} doesn't exist in {class_name}"))
+					.kind;
+				let is_static = matches!(var_kind, VariableKind::StaticMember);
+				(*m == CLASS_INFLIGHT_INIT_NAME || !is_static) ^ (matches!(bind_method_kind, BindMethod::Type))
 			})
 			.collect_vec();
 
@@ -1765,6 +1777,25 @@ impl<'a> FieldReferenceVisitor<'a> {
 					kind: ComponentKind::Member(var),
 				}];
 			}
+			Reference::TypeReference(type_) => {
+				let env = self.env.unwrap();
+
+				// Get the type we're accessing a member of
+				let Ok(t) = resolve_user_defined_type(type_, &env, self.statement_index) else {
+					return vec![];
+				};
+
+				// If the type we're referencing isn't a preflight class then skip it
+				if t.as_preflight_class().is_none() {
+					return vec![];
+				};
+
+				return vec![Component {
+					text: format!("{type_}"),
+					span: type_.span.clone(),
+					kind: ComponentKind::ClassType(t),
+				}];
+			}
 			Reference::InstanceMember {
 				object,
 				property,
@@ -1784,13 +1815,17 @@ impl<'a> FieldReferenceVisitor<'a> {
 				let obj = self.analyze_expr(&object);
 				return [obj, prop].concat();
 			}
-			Reference::TypeMember { type_, property } => {
-				let env = self.env.unwrap();
+			Reference::TypeMember { typeobject, property } => {
+				let obj = self.analyze_expr(&typeobject);
 
-				// Get the type we're accessing a member of
-				let Ok(t) = resolve_user_defined_type(type_, &env, self.statement_index) else {
+				let Some(first) = obj.first() else {
 					return vec![];
 				};
+
+				let ComponentKind::ClassType(t) = first.kind else {
+					return vec![];
+				};
+
 				// If the type we're referencing isn't a preflight class then skip it
 				let Some(class) = t.as_preflight_class() else {
 					return vec![];
@@ -1805,18 +1840,13 @@ impl<'a> FieldReferenceVisitor<'a> {
 					.as_variable()
 					.expect("variable");
 
-				return vec![
-					Component {
-						text: format!("{type_}"),
-						span: type_.span.clone(),
-						kind: ComponentKind::ClassType(t),
-					},
-					Component {
-						text: property.name.clone(),
-						span: property.span.clone(),
-						kind: ComponentKind::Member(var),
-					},
-				];
+				let prop = vec![Component {
+					text: property.name.clone(),
+					span: property.span.clone(),
+					kind: ComponentKind::Member(var),
+				}];
+
+				[obj, prop].concat()
 			}
 		}
 	}
@@ -1945,23 +1975,6 @@ impl<'a> CaptureScanner<'a> {
 }
 
 impl<'ast> Visit<'ast> for CaptureScanner<'ast> {
-	fn visit_expr_new(
-		&mut self,
-		node: &'ast Expr,
-		class: &'ast TypeAnnotation,
-		obj_id: &'ast Option<Box<Expr>>,
-		obj_scope: &'ast Option<Box<Expr>>,
-		arg_list: &'ast ArgList,
-	) {
-		// we want to only capture the type annotation in the case of "new X" because
-		// other cases of type annotation are actually erased in the javascript code.
-		if let TypeAnnotationKind::UserDefined(u) = &class.kind {
-			self.consider_reference(&u.full_path());
-		}
-
-		visit::visit_expr_new(self, node, class, obj_id, obj_scope, arg_list);
-	}
-
 	fn visit_reference(&mut self, node: &'ast Reference) {
 		match node {
 			Reference::Identifier(symb) => {
@@ -1972,12 +1985,12 @@ impl<'ast> Visit<'ast> for CaptureScanner<'ast> {
 
 				self.consider_reference(&vec![symb.clone()]);
 			}
-			Reference::TypeMember { type_, .. } => {
-				self.consider_reference(&type_.full_path());
-			}
 
-			// this is the case of "object.property". if we need to capture "object", it will be captured
-			// as an identifier, so we can skip it here.
+			Reference::TypeReference(t) => self.consider_reference(&t.full_path()),
+
+			// this is the case of "object.property" (or `Type.property`). if we need to capture "object",
+			// it will be captured as an identifier, so we can skip it here.
+			Reference::TypeMember { .. } => {}
 			Reference::InstanceMember { .. } => {}
 		}
 

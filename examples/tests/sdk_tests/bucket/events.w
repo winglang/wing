@@ -106,4 +106,4 @@ new std.Test(inflight () => {
   assert(wait(checkHitCount(key: "b", type: "UPDATE", source: Source.onEvent, count: 1)));
   assert(wait(checkHitCount(key: "c", type: "DELETE", source: Source.onEvent, count: 1)));
 
-}, std.TestProps { timeout: 8m }) as "hitCount is incremented according to the bucket event";
+}, timeout: 8m) as "hitCount is incremented according to the bucket event";
