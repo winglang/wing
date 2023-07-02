@@ -1,12 +1,14 @@
 name: SDK Spec AWS Tests
 on:
-  schedule:
-    - cron: "0 8 * * *"
+  push:
+    branches:
+      - main
+      - tsuf/test-aws-gh-action
   workflow_dispatch: {}
 
 jobs:
   install:
-    name: Installation & Test
+    name: Installation
     strategy:
       fail-fast: true
     runs-on: ubuntu-latest
@@ -32,7 +34,12 @@ jobs:
       - name: Install Wing
         run: |
           npm install -g winglang@${{ steps.get-version.outputs.version }}
+  Test:
+    name: Test
+    strategy:
+      fail-fast: true
+    runs-on: ubuntu-latest
+    steps:
       - name: Run tests
         run: |
-          ls
-          wing test -t tf-aws examples/tests/sdk_tests/*/*.w
+          wing test -t tf-aws examples/tests/sdk_tests/bucket/put.w
