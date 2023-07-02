@@ -39,6 +39,8 @@ jobs:
     strategy:
       fail-fast: true
     runs-on: ubuntu-latest
+    needs:
+      - install
     steps:
       - name: Run tests
         run: |
