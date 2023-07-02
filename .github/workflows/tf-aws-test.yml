@@ -37,7 +37,6 @@ jobs:
         uses: bahmutov/npm-install@v1
       - name: build
         run: |
-          cd apps/wing
           npm run build
       ####################### to remove #######################
       - name: Configure AWS Credentials Action For GitHub Actions
