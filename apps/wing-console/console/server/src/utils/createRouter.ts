@@ -17,6 +17,7 @@ export type QueryNames = {
     | "queue.approxSize"
     | "updater.currentStatus"
     | "config.getThemeMode"
+    | "website.url"
     | undefined;
 };
 

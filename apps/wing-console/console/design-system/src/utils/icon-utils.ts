@@ -50,6 +50,7 @@ export const getResourceIconComponent = (
     case "wingsdk.cloud.Queue": {
       return solid ? SolidQueueListIcon : QueueListIcon;
     }
+    case "wingsdk.cloud.Website": // todo [sa] search for icon
     case "wingsdk.cloud.Endpoint": {
       return solid ? SolidGlobeAltIcon : GlobeAltIcon;
     }
@@ -164,6 +165,14 @@ export const getResourceIconColors = (options: {
         options.darkenOnGroupHover &&
           "group-hover:text-red-700 dark:group-hover:text-red-300",
         options.forceDarken && "text-red-700 dark:text-red-300",
+      ];
+    }
+    case "wingsdk.cloud.Website": {
+      return [
+        "text-violet-700 dark:text-violet-400",
+        options.darkenOnGroupHover &&
+        "group-hover:text-violet-700 dark:group-hover:text-violet-300",
+        options.forceDarken && "text-violet-700 dark:text-violet-300",
       ];
     }
     default: {
