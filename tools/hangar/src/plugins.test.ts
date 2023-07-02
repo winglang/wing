@@ -27,7 +27,7 @@ describe("Plugin examples", () => {
         cwd: tmpDir,
         wingFile: appFile,
         args,
-        expectStdErr: false,
+        expectFailure: false,
         plugins: [plugin],
       });
 
@@ -59,7 +59,7 @@ describe("Plugin examples", () => {
         cwd: tmpDir,
         wingFile: appFile,
         args,
-        expectStdErr: false,
+        expectFailure: false,
         plugins: [plugin],
       });
 
@@ -100,7 +100,7 @@ describe("Plugin examples", () => {
           cwd: tmpDir,
           wingFile: appFile,
           args,
-          expectStdErr: false,
+          expectFailure: false,
           plugins: [plugin],
         });
 
@@ -133,7 +133,7 @@ describe("Plugin examples", () => {
           cwd: tmpDir,
           wingFile: appFile,
           args,
-          expectStdErr: false,
+          expectFailure: false,
           plugins: [plugin],
         });
 
@@ -172,7 +172,7 @@ describe("Plugin examples", () => {
           cwd: tmpDir,
           wingFile: appFile,
           args,
-          expectStdErr: false,
+          expectFailure: false,
           plugins: [plugin],
         });
 

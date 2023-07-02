@@ -7,7 +7,7 @@ use crate::{
 	jsify::codemaker::CodeMaker,
 	type_check::{
 		jsii_importer::is_construct_base, Class, FunctionSignature, Interface, Namespace, Struct, SymbolKind, Type,
-		TypeRef, VariableInfo,
+		TypeRef, VariableInfo, VariableKind,
 	},
 };
 
@@ -94,7 +94,7 @@ impl Documented for VariableInfo {
 	fn render_docs(&self) -> String {
 		let mut modifiers = vec![];
 
-		if self.is_member && self.is_static {
+		if let VariableKind::StaticMember = self.kind {
 			modifiers.push("static");
 		}
 
