@@ -56,4 +56,4 @@ jobs:
           npm install -g winglang@${{ steps.get-version.outputs.version }}
       - name: Run tests
         run: |
-          DEBUG="wing:test" wing test -t tf-aws examples/tests/sdk_tests/bucket/put.w
+          DEBUG=wing:test wing test -t tf-aws examples/tests/sdk_tests/bucket/put.w
