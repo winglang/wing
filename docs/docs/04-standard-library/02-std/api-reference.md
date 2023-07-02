@@ -1867,6 +1867,7 @@ Mutable Set.
 | <code><a href="#@winglang/sdk.std.MutSet.copy">copy</a></code> | Create an immutable shallow copy of this set. |
 | <code><a href="#@winglang/sdk.std.MutSet.delete">delete</a></code> | Removes a specified value from a set, if it is in the set. |
 | <code><a href="#@winglang/sdk.std.MutSet.has">has</a></code> | Returns a boolean indicating whether an element with the specified value exists in the set. |
+| <code><a href="#@winglang/sdk.std.MutSet.toArray">toArray</a></code> | Create an immutable array shallow copy of this set. |
 
 ---
 
@@ -1933,6 +1934,14 @@ Returns a boolean indicating whether an element with the specified value exists 
 The value to test for presence in the Set object.
 
 ---
+
+##### `toArray` <a name="toArray" id="@winglang/sdk.std.MutSet.toArray"></a>
+
+```wing
+toArray(): Array
+```
+
+Create an immutable array shallow copy of this set.
 
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -2026,6 +2035,7 @@ Immutable Set.
 | --- | --- |
 | <code><a href="#@winglang/sdk.std.Set.copyMut">copyMut</a></code> | Create a mutable shallow copy of this set. |
 | <code><a href="#@winglang/sdk.std.Set.has">has</a></code> | Returns a boolean indicating whether an element with the specified value exists in the set. |
+| <code><a href="#@winglang/sdk.std.Set.toArray">toArray</a></code> | Create an immutable array shallow copy of this set. |
 
 ---
 
@@ -2052,6 +2062,14 @@ Returns a boolean indicating whether an element with the specified value exists 
 The value to test for presence in the Set object.
 
 ---
+
+##### `toArray` <a name="toArray" id="@winglang/sdk.std.Set.toArray"></a>
+
+```wing
+toArray(): Array
+```
+
+Create an immutable array shallow copy of this set.
 
 
 #### Properties <a name="Properties" id="Properties"></a>
