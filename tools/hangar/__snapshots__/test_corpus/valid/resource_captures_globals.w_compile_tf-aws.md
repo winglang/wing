@@ -596,9 +596,9 @@ class $Root extends $stdlib.std.Resource {
     class Another extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("myMethod", "myStaticMethod");
         this.myField = "hello!";
         this.first = new First(this,"First");
+        this._addInflightOps("myMethod", "myStaticMethod");
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.Another.js";
@@ -645,7 +645,6 @@ class $Root extends $stdlib.std.Resource {
     class MyResource extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("myPut");
         this.localTopic = this.node.root.newAbstract("@winglang/sdk.cloud.Topic",this,"cloud.Topic");
         this.localCounter = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"cloud.Counter");
         const $parentThis = this;
@@ -689,6 +688,7 @@ class $Root extends $stdlib.std.Resource {
           }
         }
         (this.localTopic.onMessage(new R(this,"R")));
+        this._addInflightOps("myPut");
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.MyResource.js";
@@ -763,8 +763,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
         this.display.hidden = true;
+        this._addInflightOps("handle");
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.$Closure1.js";
@@ -799,8 +799,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure2 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
         this.display.hidden = true;
+        this._addInflightOps("handle");
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.$Closure2.js";

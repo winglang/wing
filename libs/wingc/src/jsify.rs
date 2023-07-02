@@ -17,17 +17,18 @@ use std::{
 use crate::{
 	ast::{
 		ArgList, BinaryOperator, Class as AstClass, ClassField, Expr, ExprKind, FunctionBody, FunctionDefinition,
-		InterpolatedStringPart, Literal, Phase, Reference, Scope, Stmt, StmtKind, Symbol, TypeAnnotation,
-		TypeAnnotationKind, UnaryOperator,
+		InterpolatedStringPart, Literal, Phase, Reference, Scope, Stmt, StmtKind, Symbol, TypeAnnotationKind,
+		UnaryOperator,
 	},
 	comp_ctx::{CompilationContext, CompilationPhase},
 	dbg_panic, debug,
 	diagnostic::{report_diagnostic, Diagnostic, WingSpan},
 	files::Files,
 	type_check::{
-		resolve_user_defined_type,
+		resolve_udt_from_expr, resolve_user_defined_type,
 		symbol_env::{LookupResult, SymbolEnv, SymbolEnvRef},
-		ClassLike, SymbolKind, Type, TypeRef, Types, UnsafeRef, VariableInfo, CLASS_INFLIGHT_INIT_NAME, HANDLE_METHOD_NAME,
+		ClassLike, SymbolKind, Type, TypeRef, Types, UnsafeRef, VariableInfo, VariableKind, CLASS_INFLIGHT_INIT_NAME,
+		HANDLE_METHOD_NAME,
 	},
 	visit::{self, Visit},
 	MACRO_REPLACE_ARGS, MACRO_REPLACE_ARGS_TEXT, MACRO_REPLACE_SELF, WINGSDK_ASSEMBLY_NAME, WINGSDK_RESOURCE,
@@ -222,8 +223,10 @@ impl<'a> JSifier<'a> {
 				property,
 				optional_accessor: _,
 			} => self.jsify_expression(object, ctx) + "." + &property.to_string(),
-			Reference::TypeMember { type_, property } => {
-				self.jsify_type(&TypeAnnotationKind::UserDefined(type_.clone()), ctx) + "." + &property.to_string()
+			Reference::TypeReference(udt) => self.jsify_type(&TypeAnnotationKind::UserDefined(udt.clone()), ctx),
+			Reference::TypeMember { typeobject, property } => {
+				let typename = self.jsify_expression(typeobject, ctx);
+				typename + "." + &property.to_string()
 			}
 		}
 	}
@@ -309,7 +312,7 @@ impl<'a> JSifier<'a> {
 				// user-defined types), we simply instantiate the type directly (maybe in the future we will
 				// allow customizations of user-defined types as well, but for now we don't).
 
-				let ctor = self.jsify_type(&class.kind, ctx);
+				let ctor = self.jsify_expression(class, ctx);
 
 				let scope = if is_preflight_class && class_type.std_construct_args {
 					if let Some(scope) = obj_scope {
@@ -352,7 +355,14 @@ impl<'a> JSifier<'a> {
 						.parts
 						.iter()
 						.filter_map(|p| match p {
-							InterpolatedStringPart::Static(l) => Some(format!("\"{}\"", l.to_string())),
+							InterpolatedStringPart::Static(static_string) => {
+								// escape any raw newlines in the string because js `"` strings can't contain them
+								let escaped = static_string
+								.replace("\r\n", "\\r\\n")
+								.replace("\n", "\\n");
+
+								Some(format!("\"{escaped}\""))
+							},
 							InterpolatedStringPart::Expr(_) => None,
 						})
 						.collect::<Vec<String>>()
@@ -503,7 +513,7 @@ impl<'a> JSifier<'a> {
 					phase: ctx.phase,
 				};
 				let js_out = match &element.kind {
-					ExprKind::MapLiteral { .. } => {
+					ExprKind::JsonMapLiteral { .. } => {
 						if *is_mut {
 							self.jsify_expression(element, json_context)
 						} else {
@@ -514,6 +524,15 @@ impl<'a> JSifier<'a> {
 				};
 				js_out
 			}
+      ExprKind::JsonMapLiteral { fields } => {
+        let f = fields
+					.iter()
+					.map(|(key, expr)| format!("\"{}\":{}", key, self.jsify_expression(expr, ctx)))
+					.collect::<Vec<String>>()
+					.join(",");
+
+        format!("{{{}}}", f)
+      }
 			ExprKind::MapLiteral { fields, .. } => {
 				let f = fields
 					.iter()
@@ -713,7 +732,7 @@ impl<'a> JSifier<'a> {
 			StmtKind::Expression(e) => CodeMaker::one_line(format!("{};", self.jsify_expression(e, ctx))),
 			StmtKind::Assignment { variable, value } => CodeMaker::one_line(format!(
 				"{} = {};",
-				self.jsify_reference(&variable, ctx),
+				self.jsify_expression(variable, ctx),
 				self.jsify_expression(value, ctx)
 			)),
 			StmtKind::Scope(scope) => {
@@ -946,8 +965,9 @@ impl<'a> JSifier<'a> {
 		let (mut captured_types, captured_vars) = self.scan_captures(class, &inflight_methods);
 
 		if let Some(parent) = &class.parent {
-			let parent_type = resolve_user_defined_type(&parent, env, 0).unwrap();
-			captured_types.insert(parent.full_path(), parent_type);
+			let parent_type_udt = resolve_udt_from_expr(&parent).unwrap();
+			let parent_type = resolve_user_defined_type(&parent_type_udt, env, 0).unwrap();
+			captured_types.insert(parent_type_udt.full_path(), parent_type);
 		}
 
 		// Get all references between inflight methods and preflight values
@@ -979,7 +999,7 @@ impl<'a> JSifier<'a> {
 
 			// default base class for preflight classes is `core.Resource`
 			let extends = if let Some(parent) = &class.parent {
-				format!(" extends {}", jsify_type_name(&parent.full_path(), ctx.phase))
+				format!(" extends {}", self.jsify_expression(&parent, ctx))
 			} else {
 				format!(" extends {}", STDLIB_CORE_RESOURCE)
 			};
@@ -1060,6 +1080,35 @@ impl<'a> JSifier<'a> {
 			code.line("super(scope, id);");
 		}
 
+		let init_statements = match &constructor.body {
+			FunctionBody::Statements(s) => s,
+			FunctionBody::External(_) => panic!("'init' cannot be 'extern'"),
+		};
+
+		if !no_parent {
+			// Check if the first statement is a super constructor call, if not we need to add one
+			let super_call = if let Some(s) = init_statements.statements.first() {
+				matches!(s.kind, StmtKind::SuperConstructor { .. })
+			} else {
+				false
+			};
+
+			if !super_call {
+				code.line("super(scope, id);");
+			}
+		}
+
+		// We must jsify the statements in the constructor before adding any additional code blew
+		// this is to ensure if there are calls to super constructor within the statements,
+		// they will be jsified before any attempts to call `this` are made.
+		code.add_code(self.jsify_scope_body(
+			&init_statements,
+			&JSifyContext {
+				in_json: ctx.in_json,
+				phase: Phase::Preflight,
+			},
+		));
+
 		if inflight_methods.len() + inflight_fields.len() > 0 {
 			let inflight_method_names = inflight_methods.iter().map(|(name, _)| name.name.clone()).collect_vec();
 			let inflight_field_names = inflight_fields.iter().map(|f| f.name.name.clone()).collect_vec();
@@ -1070,19 +1119,6 @@ impl<'a> JSifier<'a> {
 				.join(", ");
 			code.line(format!("this._addInflightOps({inflight_ops_string});"));
 		}
-
-		let init_statements = match &constructor.body {
-			FunctionBody::Statements(s) => s,
-			FunctionBody::External(_) => panic!("'init' cannot be 'extern'"),
-		};
-
-		code.add_code(self.jsify_scope_body(
-			&init_statements,
-			&JSifyContext {
-				in_json: ctx.in_json,
-				phase: Phase::Preflight,
-			},
-		));
 
 		code.close("}");
 		code
@@ -1235,7 +1271,8 @@ impl<'a> JSifier<'a> {
 		// Handle parent class: Need to call super and pass its captured fields (we assume the parent client is already written)
 		let mut lifted_by_parent = vec![];
 		if let Some(parent) = &class.parent {
-			if let Ok(parent_type) = resolve_user_defined_type(parent, env, 0) {
+			let parent_udt = resolve_udt_from_expr(parent).unwrap();
+			if let Ok(parent_type) = resolve_user_defined_type(&parent_udt, env, 0) {
 				lifted_by_parent.extend(self.get_lifted_fields(parent_type));
 			}
 		}
@@ -1253,7 +1290,7 @@ impl<'a> JSifier<'a> {
 		class_code.open(format!(
 			"class {name}{} {{",
 			if let Some(parent) = &class.parent {
-				format!(" extends {}", jsify_type_name(&parent.full_path(), ctx.phase))
+				format!(" extends {}", self.jsify_expression(&parent, ctx))
 			} else {
 				"".to_string()
 			}
@@ -1407,14 +1444,14 @@ impl<'a> JSifier<'a> {
 		let refs = refs
 			.iter()
 			.filter(|(m, _)| {
-				(*m == CLASS_INFLIGHT_INIT_NAME
-					|| !class_type
-						.as_class()
-						.unwrap()
-						.get_method(&m.as_str().into())
-						.expect(&format!("method {m} doesn't exist in {class_name}"))
-						.is_static)
-					^ (matches!(bind_method_kind, BindMethod::Type))
+				let var_kind = class_type
+					.as_class()
+					.unwrap()
+					.get_method(&m.as_str().into())
+					.expect(&format!("method {m} doesn't exist in {class_name}"))
+					.kind;
+				let is_static = matches!(var_kind, VariableKind::StaticMember);
+				(*m == CLASS_INFLIGHT_INIT_NAME || !is_static) ^ (matches!(bind_method_kind, BindMethod::Type))
 			})
 			.collect_vec();
 
@@ -1740,6 +1777,25 @@ impl<'a> FieldReferenceVisitor<'a> {
 					kind: ComponentKind::Member(var),
 				}];
 			}
+			Reference::TypeReference(type_) => {
+				let env = self.env.unwrap();
+
+				// Get the type we're accessing a member of
+				let Ok(t) = resolve_user_defined_type(type_, &env, self.statement_index) else {
+					return vec![];
+				};
+
+				// If the type we're referencing isn't a preflight class then skip it
+				if t.as_preflight_class().is_none() {
+					return vec![];
+				};
+
+				return vec![Component {
+					text: format!("{type_}"),
+					span: type_.span.clone(),
+					kind: ComponentKind::ClassType(t),
+				}];
+			}
 			Reference::InstanceMember {
 				object,
 				property,
@@ -1759,13 +1815,17 @@ impl<'a> FieldReferenceVisitor<'a> {
 				let obj = self.analyze_expr(&object);
 				return [obj, prop].concat();
 			}
-			Reference::TypeMember { type_, property } => {
-				let env = self.env.unwrap();
+			Reference::TypeMember { typeobject, property } => {
+				let obj = self.analyze_expr(&typeobject);
 
-				// Get the type we're accessing a member of
-				let Ok(t) = resolve_user_defined_type(type_, &env, self.statement_index) else {
+				let Some(first) = obj.first() else {
 					return vec![];
 				};
+
+				let ComponentKind::ClassType(t) = first.kind else {
+					return vec![];
+				};
+
 				// If the type we're referencing isn't a preflight class then skip it
 				let Some(class) = t.as_preflight_class() else {
 					return vec![];
@@ -1780,27 +1840,22 @@ impl<'a> FieldReferenceVisitor<'a> {
 					.as_variable()
 					.expect("variable");
 
-				return vec![
-					Component {
-						text: format!("{type_}"),
-						span: type_.span.clone(),
-						kind: ComponentKind::ClassType(t),
-					},
-					Component {
-						text: property.name.clone(),
-						span: property.span.clone(),
-						kind: ComponentKind::Member(var),
-					},
-				];
+				let prop = vec![Component {
+					text: property.name.clone(),
+					span: property.span.clone(),
+					kind: ComponentKind::Member(var),
+				}];
+
+				[obj, prop].concat()
 			}
 		}
 	}
 
 	fn determine_component_kind_from_type(obj_type: UnsafeRef<Type>, property: &Symbol) -> Option<ComponentKind> {
 		match &*obj_type {
-			Type::Void => unreachable!("cannot reference a member of void"),
-			Type::Function(_) => unreachable!("cannot reference a member of a function"),
-			Type::Optional(t) => Self::determine_component_kind_from_type(*t, property),
+			// Invalid cases, should be caught by typechecker
+			Type::Void | Type::Function(_) | Type::Unresolved => None,
+
 			// all fields / methods / values of these types are phase-independent so we can skip them
 			Type::Anything
 			| Type::Number
@@ -1810,15 +1865,18 @@ impl<'a> FieldReferenceVisitor<'a> {
 			| Type::Json
 			| Type::MutJson
 			| Type::Nil
-			| Type::Enum(_) => return None,
+			| Type::Enum(_) => None,
+
+			Type::Optional(t) => Self::determine_component_kind_from_type(*t, property),
+
 			// TODO: collection types are unsupported for now
 			Type::Array(_) | Type::MutArray(_) | Type::Map(_) | Type::MutMap(_) | Type::Set(_) | Type::MutSet(_) => {
 				Some(ComponentKind::Unsupported)
 			}
+
 			Type::Class(cls) => Some(ComponentKind::Member(cls.env.lookup(&property, None)?.as_variable()?)),
 			Type::Interface(iface) => Some(ComponentKind::Member(iface.env.lookup(&property, None)?.as_variable()?)),
 			Type::Struct(st) => Some(ComponentKind::Member(st.env.lookup(&property, None)?.as_variable()?)),
-			Type::Unresolved => panic!("Encountered unresolved type during jsification"),
 		}
 	}
 }
@@ -1917,23 +1975,6 @@ impl<'a> CaptureScanner<'a> {
 }
 
 impl<'ast> Visit<'ast> for CaptureScanner<'ast> {
-	fn visit_expr_new(
-		&mut self,
-		node: &'ast Expr,
-		class: &'ast TypeAnnotation,
-		obj_id: &'ast Option<Box<Expr>>,
-		obj_scope: &'ast Option<Box<Expr>>,
-		arg_list: &'ast ArgList,
-	) {
-		// we want to only capture the type annotation in the case of "new X" because
-		// other cases of type annotation are actually erased in the javascript code.
-		if let TypeAnnotationKind::UserDefined(u) = &class.kind {
-			self.consider_reference(&u.full_path());
-		}
-
-		visit::visit_expr_new(self, node, class, obj_id, obj_scope, arg_list);
-	}
-
 	fn visit_reference(&mut self, node: &'ast Reference) {
 		match node {
 			Reference::Identifier(symb) => {
@@ -1944,12 +1985,12 @@ impl<'ast> Visit<'ast> for CaptureScanner<'ast> {
 
 				self.consider_reference(&vec![symb.clone()]);
 			}
-			Reference::TypeMember { type_, .. } => {
-				self.consider_reference(&type_.full_path());
-			}
 
-			// this is the case of "object.property". if we need to capture "object", it will be captured
-			// as an identifier, so we can skip it here.
+			Reference::TypeReference(t) => self.consider_reference(&t.full_path()),
+
+			// this is the case of "object.property" (or `Type.property`). if we need to capture "object",
+			// it will be captured as an identifier, so we can skip it here.
+			Reference::TypeMember { .. } => {}
 			Reference::InstanceMember { .. } => {}
 		}
 

@@ -163,7 +163,7 @@ export class Json {
   /**
    * Optionally returns an specified element from the Json.
    *
-   * @macro ($self$)[$args$]
+   * @macro ($self$)?.[$args$]
    *
    * @param key The key of the element to return
    * @returns The element associated with the specified key, or undefined if the key can't be found
@@ -176,7 +176,7 @@ export class Json {
   /**
    * Optionally returns a specified element at a given index from Json Array
    *
-   * @macro ($self$)[$args$]
+   * @macro ($self$)?.[$args$]
    *
    * @param index The index of the element in the Json Array to return
    * @returns The element at given index in Json Array, or undefined if index is not valid
@@ -320,7 +320,7 @@ export class MutJson {
   /**
    * Optionally returns an specified element from the Json.
    *
-   * @macro ($self$)[$args$]
+   * @macro ($self$)?.[$args$]
    *
    * @param key The key of the element to return
    * @returns The element associated with the specified key, or undefined if the key can't be found
@@ -333,7 +333,7 @@ export class MutJson {
   /**
    * Optionally returns a specified element at a given index from Json Array
    *
-   * @macro ($self$)[$args$]
+   * @macro ($self$)?.[$args$]
    *
    * @param index The index of the element in the Json Array to return
    * @returns The element at given index in Json Array, or undefined if index is not valid

@@ -39,7 +39,7 @@ module.exports = function({ api, http_GET, body, http_Util }) {
     }
     async handle()  {
       const url = (api.url + "/path");
-      const getResponse = (await http_Util.get(url,Object.freeze({"headers":Object.freeze({"content-type":"application/json"})})));
+      const getResponse = (await http_Util.get(url,{ headers: Object.freeze({"content-type":"application/json"}) }));
       const fetchResponse = (await http_Util.fetch(url,{
       "method": http_GET,
       "headers": Object.freeze({"content-type":"application/json"}),}
@@ -336,8 +336,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
         this.display.hidden = true;
+        this._addInflightOps("handle");
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.$Closure1.js";
@@ -376,8 +376,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure2 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
         this.display.hidden = true;
+        this._addInflightOps("handle");
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.$Closure2.js";

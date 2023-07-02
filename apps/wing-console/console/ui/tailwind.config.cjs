@@ -1,8 +1,9 @@
+const { content, plugins, theme } = require("./tailwind-plugin.cjs");
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: [
-    "./src/**/*.{js,ts,jsx,tsx}",
-    "../design-system/src/**/*.{js,ts,jsx,tsx}",
-  ],
-  plugins: [require("@tailwindcss/forms")],
+  darkMode: "class",
+  content: [...content, "./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
+  plugins: [...plugins],
+  theme: { ...theme },
 };

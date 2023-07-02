@@ -24,9 +24,9 @@
     "test:watch": "npx -y nodemon --watch grammar.js --watch src/scanner.c --exec \"npm run test\"",
     "build": "npx -y tree-sitter-cli generate",
     "build:watch": "npx -y nodemon --watch grammar.js --watch src/scanner.c --exec \"npm run build\"",
-    "build:wasm": "npm run build && npx -y tree-sitter-cli build-wasm --docker",
-    "playground": "npm run build:wasm && npx -y tree-sitter-cli playground",
-    "playground:quiet": "npm run build:wasm && npx -y tree-sitter-cli playground -q",
+    "build:wasm": "npm run build && npx -y tree-sitter-cli@0.20.6 build-wasm --docker",
+    "playground": "npm run build:wasm && npx -y tree-sitter-cli@0.20.6 playground",
+    "playground:quiet": "npm run build:wasm && npx -y tree-sitter-cli@0.20.6 playground -q",
     "playground:watch": "npx -y nodemon --watch grammar.js --watch src/scanner.c --exec \"npm run playground:quiet\""
   },
   "volta": {

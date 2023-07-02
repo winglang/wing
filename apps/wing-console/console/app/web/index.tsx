@@ -9,7 +9,7 @@ ReactDOM.createRoot(document.querySelector("#root")!).render(
     <Console
       trpcUrl="/trpc"
       wsUrl={`ws://${location.host}`}
-      layout={Number(query.get("layout"))}
+      layout={Number(query.get("layout")) || 1} // default to 1 = vscode (2 = playground, 3 = tutorial)
       theme={query.get("theme") as any}
       onTrace={(trace) => {
         // Playground and Learn need to be able to listen to all traces.
