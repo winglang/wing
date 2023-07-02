@@ -21,23 +21,23 @@ jobs:
         with:
           node-version: 20
       ########################################################
-      - name: Checkout repository
-        uses: actions/checkout@v3
-      - name: Install Rust
-        uses: dtolnay/rust-toolchain@master
-        with:
-          toolchain: ${{ env.RUST_VERSION }}
-          targets: |
-            x86_64-unknown-linux-gnu
-            wasm32-wasi
-          components: rustfmt,clippy,rust-std
-      - name: Setup Cargo Cache
-        uses: Swatinem/rust-cache@v2
-      - name: Install Dependencies
-        uses: bahmutov/npm-install@v1
-      - name: build
-        run: |
-          npm run build
+      # - name: Checkout repository
+      #   uses: actions/checkout@v3
+      # - name: Install Rust
+      #   uses: dtolnay/rust-toolchain@master
+      #   with:
+      #     toolchain: ${{ env.RUST_VERSION }}
+      #     targets: |
+      #       x86_64-unknown-linux-gnu
+      #       wasm32-wasi
+      #     components: rustfmt,clippy,rust-std
+      # - name: Setup Cargo Cache
+      #   uses: Swatinem/rust-cache@v2
+      # - name: Install Dependencies
+      #   uses: bahmutov/npm-install@v1
+      # - name: build
+      #   run: |
+      #     npm run build
       ####################### to remove #######################
       - name: Configure AWS Credentials Action For GitHub Actions
         uses: aws-actions/configure-aws-credentials@v1
@@ -47,13 +47,13 @@ jobs:
           aws-region: us-east-1
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
-      # - name: Get Latest Wing Version
-      #   id: get-version
-      #   run: |
-      #     echo version=$(npm view winglang version) >> $GITHUB_OUTPUT
-      # - name: Install Wing
-      #   run: |
-      #     npm install -g winglang@${{ steps.get-version.outputs.version }}
+      - name: Get Latest Wing Version
+        id: get-version
+        run: |
+          echo version=$(npm view winglang version) >> $GITHUB_OUTPUT
+      - name: Install Wing
+        run: |
+          npm install -g winglang@${{ steps.get-version.outputs.version }}
       - name: Run tests
         run: |
-          npx nx wing -- test -t tf-aws ../../examples/tests/sdk_tests/bucket/put.w
+          DEBUG="wing:test" wing test -t tf-aws ../../examples/tests/sdk_tests/bucket/put.w
