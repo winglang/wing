@@ -1844,6 +1844,7 @@ impl<'a> TypeChecker<'a> {
 				(container_type, env.phase)
 			}
 			ExprKind::FunctionClosure(func_def) => self.type_check_closure(func_def, env),
+			ExprKind::Lifted(l) => self.type_check_exp(&l.preflight_expr, env),
 			ExprKind::CompilerDebugPanic => {
 				// Handle the debug panic expression (during type-checking)
 				dbg_panic!();
@@ -2219,7 +2220,6 @@ impl<'a> TypeChecker<'a> {
 			named_args: named_arg_types,
 		}
 	}
-
 	fn type_check_statement(&mut self, stmt: &Stmt, env: &mut SymbolEnv) {
 		CompilationContext::set(CompilationPhase::TypeChecking, &stmt.span);
 
@@ -3087,7 +3087,7 @@ impl<'a> TypeChecker<'a> {
 						name: "this".into(),
 						span: method_name.span.clone(),
 					},
-					SymbolKind::make_free_variable("this".into(), class_type, false, class_env.phase),
+					SymbolKind::make_free_variable("this".into(), class_type, false, method_sig.phase),
 					StatementIdx::Top,
 				)
 				.expect("Expected `this` to be added to constructor env");
@@ -3519,6 +3519,7 @@ impl<'a> TypeChecker<'a> {
 						_ => return None,
 					}
 				}
+				Reference::Lifted(_) => {}
 			}
 		}
 
@@ -3755,6 +3756,9 @@ impl<'a> TypeChecker<'a> {
 					},
 					_ => self.spanned_error_with_var(property, format!("\"{}\" not a valid reference", reference)),
 				}
+			}
+			Reference::Lifted(r) => {
+				panic!("Lifted references should have been resolved by now: {:?}", r);
 			}
 		}
 	}

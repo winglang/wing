@@ -2,20 +2,20 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ usersTable, std_Json }) {
+module.exports = function({ $std_Json, $usersTable }) {
   class $Closure1 {
+    async handle(req) {
+      return {
+      "body": ((args) => { return JSON.stringify(args[0], null, args[1]) })([Object.freeze({"users":(await $usersTable.list())})]),
+      "status": 200,}
+      ;
+    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
-    async handle(req)  {
-      return {
-      "body": ((args) => { return JSON.stringify(args[0], null, args[1]) })([Object.freeze({"users":(await usersTable.list())})]),
-      "status": 200,}
-      ;
+    async $inflight_init() {
     }
   }
   return $Closure1;
@@ -25,16 +25,9 @@ module.exports = function({ usersTable, std_Json }) {
 
 ## inflight.$Closure2.js
 ```js
-module.exports = function({ usersTable, std_Json }) {
+module.exports = function({ $std_Json, $usersTable }) {
   class $Closure2 {
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
-    }
-    async $inflight_init()  {
-    }
-    async handle(req)  {
+    async handle(req) {
       const body = (JSON.parse((req.body ?? ((args) => { return JSON.stringify(args[0], null, args[1]) })([Object.freeze({"name":"","age":"","id":""})]))));
       if (((((body)["name"] === "") || ((body)["age"] === "")) || ((body)["id"] === ""))) {
         return {
@@ -42,11 +35,18 @@ module.exports = function({ usersTable, std_Json }) {
         "status": 400,}
         ;
       }
-      (await usersTable.insert(((args) => { return JSON.stringify(args[0], null, args[1]) })([(body)["id"]]),body));
+      (await $usersTable.insert(((args) => { return JSON.stringify(args[0], null, args[1]) })([(body)["id"]]),body));
       return {
       "body": ((args) => { return JSON.stringify(args[0], null, args[1]) })([Object.freeze({"user":(body)["id"]})]),
       "status": 201,}
       ;
+    }
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async $inflight_init() {
     }
   }
   return $Closure2;
@@ -58,18 +58,18 @@ module.exports = function({ usersTable, std_Json }) {
 ```js
 module.exports = function({  }) {
   class $Closure3 {
+    async handle(req) {
+      return {
+      "headers": Object.freeze({"Access-Control-Allow-Headers":"Content-Type","Access-Control-Allow-Origin":"*","Access-Control-Allow-Methods":"OPTIONS,POST,GET"}),
+      "status": 204,}
+      ;
+    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
-    async handle(req)  {
-      return {
-      "headers": Object.freeze({"Access-Control-Allow-Headers":"Content-Type","Access-Control-Allow-Origin":"*","Access-Control-Allow-Methods":"OPTIONS,POST,GET"}),
-      "status": 204,}
-      ;
+    async $inflight_init() {
     }
   }
   return $Closure3;
@@ -614,16 +614,13 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const usersTable_client = context._lift(usersTable);
-        const std_JsonClient = std.Json._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            usersTable: ${usersTable_client},
-            std_Json: ${std_JsonClient.text},
+          require("./inflight.$Closure1.js")({
+            $std_Json: ${context._lift(std.Json)},
+            $usersTable: ${context._lift(usersTable)},
           })
         `);
       }
@@ -639,29 +636,26 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure1._registerBindObject(usersTable, host, []);
-        }
         if (ops.includes("handle")) {
           $Closure1._registerBindObject(usersTable, host, ["list"]);
         }
         super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
+        super._registerTypeBind(host, ops);
       }
     }
     class $Closure2 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure2.js";
-        const usersTable_client = context._lift(usersTable);
-        const std_JsonClient = std.Json._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            usersTable: ${usersTable_client},
-            std_Json: ${std_JsonClient.text},
+          require("./inflight.$Closure2.js")({
+            $std_Json: ${context._lift(std.Json)},
+            $usersTable: ${context._lift(usersTable)},
           })
         `);
       }
@@ -677,25 +671,24 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure2._registerBindObject(usersTable, host, []);
-        }
         if (ops.includes("handle")) {
           $Closure2._registerBindObject(usersTable, host, ["insert"]);
         }
         super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
+        super._registerTypeBind(host, ops);
       }
     }
     class $Closure3 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure3.js";
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.$Closure3.js")({
           })
         `);
       }
@@ -709,13 +702,6 @@ class $Root extends $stdlib.std.Resource {
             return client;
           })())
         `);
-      }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-        }
-        if (ops.includes("handle")) {
-        }
-        super._registerBind(host, ops);
       }
     }
     const api = this.node.root.newAbstract("@winglang/sdk.cloud.Api",this,"cloud.Api");

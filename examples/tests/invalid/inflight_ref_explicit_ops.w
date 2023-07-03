@@ -11,7 +11,7 @@ class Another {
 
   inflight inflightReturnsResource(): cloud.Queue {
     return this.myQueue;
-//              ^^^^^^^^ Cannot qualify which operations are performed on resource
+//              ^^^^^^^^ Cannot qualify access to a lifted object
   }
 }
 
@@ -32,7 +32,7 @@ class Test {
 
   inflight test1() {
     let x = this.b;
-//               ^ Cannot qualify which operations are performed on resource
+//               ^ Cannot qualify access to a lifted object
     x.put("hello", "world");
     assert(this.justStr == "hello");
     this.justBucket.put("hello", "world");

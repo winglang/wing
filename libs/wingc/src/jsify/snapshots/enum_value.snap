@@ -1,0 +1,111 @@
+---
+source: libs/wingc/src/jsify/tests.rs
+---
+## Code
+
+```w
+
+    enum MyEnum { B, C }
+    let x = MyEnum.C;
+
+    test "test" {
+      assert(MyEnum.B != MyEnum.C);
+      assert(x == MyEnum.C);
+    }
+    
+```
+
+## inflight.$Closure1.js
+
+```js
+module.exports = function({ $MyEnum, $x }) {
+  class $Closure1 {
+    async handle() {
+      {((cond) => {if (!cond) throw new Error("assertion failed: MyEnum.B != MyEnum.C")})(($MyEnum.B !== $MyEnum.C))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: x == MyEnum.C")})(($x === $MyEnum.C))};
+    }
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+  }
+  return $Closure1;
+}
+```
+
+## preflight.js
+
+```js
+const $stdlib = require('@winglang/sdk');
+const $outdir = process.env.WING_SYNTH_DIR ?? ".";
+const std = $stdlib.std;
+const $wing_is_test = process.env.WING_IS_TEST === "true";
+const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
+class $Root extends $stdlib.std.Resource {
+  constructor(scope, id) {
+    super(scope, id);
+    class $Closure1 extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        this.display.hidden = true;
+        this._addInflightOps("handle", "$inflight_init");
+      }
+      static _toInflightType(context) {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("./inflight.$Closure1.js")({
+            $MyEnum: ${context._lift(MyEnum)},
+            $x: ${context._lift(x)},
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const $Closure1Client = ${$Closure1._toInflightType(this).text};
+            const client = new $Closure1Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("handle")) {
+          $Closure1._registerBindObject(x, host, []);
+        }
+        super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
+        super._registerTypeBind(host, ops);
+      }
+    }
+    const MyEnum = 
+      Object.freeze((function (tmp) {
+        tmp[tmp["B"] = 0] = "B";
+        tmp[tmp["C"] = 1] = "C";
+        return tmp;
+      })({}))
+    ;
+    const x = MyEnum.C;
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:test",new $Closure1(this,"$Closure1"));
+  }
+}
+class $App extends $AppBase {
+  constructor() {
+    super({ outdir: $outdir, name: "main", plugins: $plugins, isTestEnvironment: $wing_is_test });
+    if ($wing_is_test) {
+      new $Root(this, "env0");
+      const $test_runner = this.testRunner;
+      const $tests = $test_runner.findTests();
+      for (let $i = 1; $i < $tests.length; $i++) {
+        new $Root(this, "env" + $i);
+      }
+    } else {
+      new $Root(this, "Default");
+    }
+  }
+}
+new $App().synth();
+```
+

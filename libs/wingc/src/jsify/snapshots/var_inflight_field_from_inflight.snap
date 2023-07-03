@@ -1,0 +1,90 @@
+---
+source: libs/wingc/src/jsify/tests.rs
+---
+## Code
+
+```w
+
+    class MyType {
+      inflight var s: str;
+      inflight init() {
+        this.s = "hey there!";
+      }
+      inflight foo() {
+        log(this.s);
+        this.s = "hello!";
+      }
+    }
+    
+```
+
+## inflight.MyType.js
+
+```js
+module.exports = function({  }) {
+  class MyType {
+    async foo() {
+      {console.log(this.s)};
+      this.s = "hello!";
+    }
+    constructor({  }) {
+    }
+  }
+  return MyType;
+}
+```
+
+## preflight.js
+
+```js
+const $stdlib = require('@winglang/sdk');
+const $outdir = process.env.WING_SYNTH_DIR ?? ".";
+const std = $stdlib.std;
+const $wing_is_test = process.env.WING_IS_TEST === "true";
+const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
+class $Root extends $stdlib.std.Resource {
+  constructor(scope, id) {
+    super(scope, id);
+    class MyType extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        this._addInflightOps("foo", "$inflight_init", "s");
+      }
+      static _toInflightType(context) {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("./inflight.MyType.js")({
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const MyTypeClient = ${MyType._toInflightType(this).text};
+            const client = new MyTypeClient({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+    }
+  }
+}
+class $App extends $AppBase {
+  constructor() {
+    super({ outdir: $outdir, name: "main", plugins: $plugins, isTestEnvironment: $wing_is_test });
+    if ($wing_is_test) {
+      new $Root(this, "env0");
+      const $test_runner = this.testRunner;
+      const $tests = $test_runner.findTests();
+      for (let $i = 1; $i < $tests.length; $i++) {
+        new $Root(this, "env" + $i);
+      }
+    } else {
+      new $Root(this, "Default");
+    }
+  }
+}
+new $App().synth();
+```
+

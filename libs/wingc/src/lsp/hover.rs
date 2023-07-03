@@ -269,6 +269,7 @@ impl<'a> Visit<'a> for HoverVisitor<'a> {
 			}
 			Reference::InstanceMember { object, property, .. } => self.visit_reference_with_member(object, property),
 			Reference::TypeMember { typeobject, property } => self.visit_reference_with_member(&typeobject, property),
+			Reference::Lifted(l) => self.visit_reference(&l.preflight_ref),
 		}
 
 		visit::visit_reference(self, node);

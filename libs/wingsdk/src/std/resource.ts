@@ -3,14 +3,14 @@ import { Duration } from "./duration";
 import { App } from "../core";
 import { WING_ATTRIBUTE_RESOURCE_CONNECTIONS } from "../core/attributes";
 import { Code } from "../core/inflight";
-import { serializeImmutableData } from "../core/internal";
+import { liftObject } from "../core/internal";
 import { IInspectable, TreeInspector } from "../core/tree";
 import { log } from "../shared/log";
 
 /**
  * A resource that can run inflight code.
  */
-export interface IInflightHost extends IResource {}
+export interface IInflightHost extends IResource { }
 
 /**
  * Abstract interface for `Resource`.
@@ -280,8 +280,7 @@ export abstract class Resource extends Construct implements IResource {
    */
   public _registerBind(host: IInflightHost, ops: string[]) {
     log(
-      `Registering a binding for a resource (${this.node.path}) to a host (${
-        host.node.path
+      `Registering a binding for a resource (${this.node.path}) to a host (${host.node.path
       }) with ops: ${JSON.stringify(ops)}`
     );
 
@@ -354,7 +353,7 @@ export abstract class Resource extends Construct implements IResource {
    * @internal
    */
   protected _lift(value: any): string {
-    return serializeImmutableData(this, value);
+    return liftObject(this, value);
   }
 }
 

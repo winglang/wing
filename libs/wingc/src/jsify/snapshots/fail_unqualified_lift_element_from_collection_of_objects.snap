@@ -1,0 +1,5 @@
+---
+source: libs/wingc/src/jsify/tests.rs
+---
+## Errors
+Cannot qualify access to a lifted object of type "Bucket" 5:6
