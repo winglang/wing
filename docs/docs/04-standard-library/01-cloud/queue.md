@@ -23,62 +23,11 @@ Queues are typically used to decouple producers of data and the consumers of sai
 
 ## Usage
 
-### Setting a Queue Consumer 
-
-```ts playground
-bring cloud;
-
-let q = new cloud.Queue();
-
-q.setConsumer(inflight (m: str) => {
-  log("messgae ${m} consumed")
-});
-
-new cloud.Function(inflight () => {
-  q.push("message a");
-  q.push("message b");
-});
-```
-
-### Using Queue inflight api
-
-Pusing messages, popping them, and purge
-```ts playground
-bring cloud;
-
-let q = new cloud.Queue();
-
-new cloud.Function(inflight () => {
-  q.push("message a");
-  q.push("message b");
-  q.push("message c");
-  q.push("message d");
-  log("approxSize is ${q.approxSize()}");
-  log("popping message ${q.pop()}");
-  log("popping message ${q.pop()}");
-  log("approxSize is ${q.approxSize()}");
-  q.purge();
-  log("approxSize is ${q.approxSize()}");
-});
-```
+TODO
 
 ## Target-specific details
 
-### Simulator (`sim`)
-
-The sim implementation of `cloud.Queue` uses JavaScript's `Array`
-
-### AWS (`tf-aws` and `awscdk`)
-
-The AWS implementation of `cloud.Queue` uses [Amazon Simple Queue Service](https://aws.amazon.com/sqs/).
-
-### Azure (`tf-azure`)
-
-🚧 Not supported yet (tracking issue: [#617](https://github.com/winglang/wing/issues/617))
-
-### GCP (`tf-gcp`)
-
-🚧 Not supported yet (tracking issue: [#616](https://github.com/winglang/wing/issues/616))
+TODO
 
 ## API Reference
 
