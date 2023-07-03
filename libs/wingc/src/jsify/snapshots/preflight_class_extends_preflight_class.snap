@@ -5,33 +5,33 @@ source: libs/wingc/src/jsify/tests.rs
 
 ```w
 
-    class A {}
-    class B extends A {}
+    class Base {}
+    class Derived extends Base {}
     
 ```
 
-## inflight.A.js
+## inflight.Base.js
 
 ```js
 module.exports = function({  }) {
-  class A {
+  class Base {
     constructor({  }) {
     }
   }
-  return A;
+  return Base;
 }
 ```
 
-## inflight.B.js
+## inflight.Derived.js
 
 ```js
-module.exports = function({  }) {
-  class B extends A {
+module.exports = function({ $Base }) {
+  class Derived extends $Base {
     constructor({  }) {
       super({});
     }
   }
-  return B;
+  return Derived;
 }
 ```
 
@@ -46,22 +46,22 @@ const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
-    class A extends $stdlib.std.Resource {
+    class Base extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("$inflight_init");
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.A.js")({
+          require("./inflight.Base.js")({
           })
         `);
       }
       _toInflight() {
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const AClient = ${A._toInflightType(this).text};
-            const client = new AClient({
+            const BaseClient = ${Base._toInflightType(this).text};
+            const client = new BaseClient({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -69,22 +69,23 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
     }
-    class B extends A {
+    class Derived extends Base {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("$inflight_init");
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.B.js")({
+          require("./inflight.Derived.js")({
+            $Base: ${context._lift(Base)},
           })
         `);
       }
       _toInflight() {
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const BClient = ${B._toInflightType(this).text};
-            const client = new BClient({
+            const DerivedClient = ${Derived._toInflightType(this).text};
+            const client = new DerivedClient({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;

@@ -281,8 +281,8 @@ impl<'a> Fold for LiftTransform<'a> {
 			None
 		};
 
-		if let Some(parent) = &node.parent {
-			if self.ctx.current_phase() == Phase::Inflight {
+		if self.ctx.current_phase() == Phase::Inflight {
+			if let Some(parent) = &node.parent {
 				let mut lifts = self.lifts_stack.pop().unwrap();
 				lifts.capture(&parent.id, &self.jsify_expr(&parent, Phase::Inflight));
 				self.lifts_stack.push(lifts);
@@ -300,6 +300,12 @@ impl<'a> Fold for LiftTransform<'a> {
 		);
 
 		self.lifts_stack.push(Lifts::new());
+
+		if let Some(parent) = &node.parent {
+			let mut lifts = self.lifts_stack.pop().unwrap();
+			lifts.capture(&parent.id, &self.jsify_expr(&parent, Phase::Inflight));
+			self.lifts_stack.push(lifts);
+		}
 
 		let result = fold::fold_class(self, node);
 
