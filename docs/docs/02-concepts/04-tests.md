@@ -109,7 +109,7 @@ Test Files 1 passed (1)
 Duration 1m31.44s
 ```
 
-### Running tests on the console
+### Running tests in the console
 
 Wing Console provides a straightforward method to run either a single test or all your tests.
 
