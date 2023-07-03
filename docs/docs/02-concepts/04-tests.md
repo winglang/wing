@@ -109,10 +109,11 @@ Duration 1m31.44s
 
 ### Running tests on the console
 
-Wing Console provides an easy way to run a single or all your tests
+Wing Console provides a straightforward method to run either a single test or all your tests.
 
-When running `wing run example.w`, where example:
+Consider the following code: 
 ```ts playground
+// example.w
 bring cloud;
 
 let b = new cloud.Bucket();
@@ -133,7 +134,7 @@ test "this test should fail" {
 }
 ```
 
-Take a look at the **TESTS** section on the image, you can run all tests or a single test 
+Refer to the TESTS section in the image below. You have the option to run all tests or a single test.
 ![image](https://github.com/winglang/wing/assets/1727147/7d5ebc00-9316-41d1-9a3c-0e28e195d077)
 
 
