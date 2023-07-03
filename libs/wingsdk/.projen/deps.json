@@ -54,11 +54,6 @@
       "type": "build"
     },
     {
-      "name": "wing-api-checker",
-      "version": "workspace:^",
-      "type": "build"
-    },
-    {
       "name": "aws-sdk-client-mock",
       "type": "build"
     },
@@ -154,6 +149,11 @@
     },
     {
       "name": "vitest",
+      "type": "build"
+    },
+    {
+      "name": "wing-api-checker",
+      "version": "workspace:^",
       "type": "build"
     },
     {
