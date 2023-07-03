@@ -7,39 +7,33 @@ use crate::ast::Symbol;
 /// Jsification context at the class level
 #[derive(Debug)]
 pub struct Lifts {
-	/// map from token to lift
-	lift_by_token: BTreeMap<String, Lift>,
-
-	// all the lifts (key is "<method>/<token>")
-	lifts: BTreeMap<String, MethodLift>,
-
-	/// inflight_token -> capture
-	captures: BTreeMap<String, Capture>,
-
+	lift_by_token: BTreeMap<String, Lift>, // map from token to lift
+	lifts: BTreeMap<String, MethodLift>,   // all the lifts (key is "<method>/<token>")
+	captures: BTreeMap<String, Capture>,   // inflight_token -> capture
 	lifted_fields: BTreeMap<String, String>,
-
 	token_by_expr_id: BTreeMap<usize, String>,
+	disabled: bool,
 }
 
 #[derive(Debug, Clone)]
 pub struct Capture {
 	// pub is_type: bool,
 	pub inflight: String,
-	pub preflight: String,
+	pub code: String,
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug)]
 pub struct MethodLift {
 	pub token: String,
 	pub method: String,
-	pub preflight: String,
+	pub code: String,
 	pub ops: BTreeSet<String>,
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug)]
 pub struct Lift {
 	pub token: String,
-	pub preflight: String,
+	pub code: String,
 	pub field: bool,
 }
 
@@ -51,45 +45,43 @@ impl Lifts {
 			captures: BTreeMap::new(),
 			lifted_fields: BTreeMap::new(),
 			token_by_expr_id: BTreeMap::new(),
+			disabled: false,
 		}
 	}
 
 	pub fn disabled() -> Self {
-		Self::new()
+		Self {
+			disabled: true,
+			..Self::new()
+		}
 	}
 
 	pub fn lifts(&self) -> Vec<&Lift> {
 		self.lift_by_token.values().collect_vec()
 	}
 
-	fn render_token(&self, preflight_code: &str) -> String {
-		format!("${}", replace_non_alphanumeric(preflight_code))
+	fn render_token(&self, code: &str) -> String {
+		format!("${}", replace_non_alphanumeric(code))
 	}
 
 	/// Adds a lift to the class context
-	pub fn lift(
-		&mut self,
-		expr_id: usize,
-		method: Option<Symbol>,
-		property: Option<String>,
-		is_field: bool,
-		preflight_code: &str,
-	) {
-		let token = self.render_token(preflight_code);
+	pub fn lift(&mut self, expr_id: usize, method: Option<Symbol>, property: Option<String>, is_field: bool, code: &str) {
+		assert!(!self.disabled);
+		let token = self.render_token(code);
 
 		self.token_by_expr_id.entry(expr_id).or_insert(token.clone());
 
 		self.lift_by_token.entry(token.clone()).or_insert(Lift {
 			token: token.clone(),
 			field: is_field,
-			preflight: preflight_code.to_string(),
+			code: code.to_string(),
 		});
 
 		let method = method.and_then(|m| Some(m.name)).unwrap_or(Default::default());
 
 		let key = format!("{}/{}", method.clone(), token);
 		let lift = self.lifts.entry(key).or_insert(MethodLift {
-			preflight: preflight_code.to_string(),
+			code: code.to_string(),
 			token: token.clone(),
 			method: method.clone(),
 			ops: BTreeSet::new(),
@@ -100,9 +92,9 @@ impl Lifts {
 		}
 
 		if is_field {
-			self.add_lifted_field(&token, &preflight_code);
+			self.add_lifted_field(&token, &code);
 		} else {
-			self.capture(&expr_id, preflight_code);
+			self.capture(&expr_id, code);
 		}
 	}
 
@@ -124,15 +116,15 @@ impl Lifts {
 		}
 	}
 
-	pub fn capture(&mut self, expr_id: &usize, preflight_code: &str) -> String {
-		let token = self.render_token(preflight_code);
+	pub fn capture(&mut self, expr_id: &usize, code: &str) -> String {
+		assert!(!self.disabled);
+		let token = self.render_token(code);
 
 		self.token_by_expr_id.entry(*expr_id).or_insert(token.clone());
 
 		self.captures.entry(token.clone()).or_insert(Capture {
-			// is_type,
 			inflight: token.to_string(),
-			preflight: preflight_code.to_string(),
+			code: code.to_string(),
 		});
 
 		token.clone()
@@ -142,11 +134,9 @@ impl Lifts {
 		self.captures.values().collect_vec()
 	}
 
-	pub fn add_lifted_field(&mut self, field: &str, preflight_code: &str) {
-		self
-			.lifted_fields
-			.entry(field.to_string())
-			.or_insert(preflight_code.to_string());
+	pub fn add_lifted_field(&mut self, field: &str, code: &str) {
+		assert!(!self.disabled);
+		self.lifted_fields.entry(field.to_string()).or_insert(code.to_string());
 	}
 
 	pub fn lifted_fields(&self) -> BTreeMap<String, String> {
@@ -184,13 +174,3 @@ fn replace_non_alphanumeric(s: &str) -> String {
 
 	result
 }
-
-// pub fn jsify_type_name(t: &str, phase: Phase) -> String {
-// 	let parts = t.split(".").collect_vec();
-
-// 	if phase == Phase::Inflight {
-// 		parts.join("_")
-// 	} else {
-// 		parts.join(".")
-// 	}
-// }

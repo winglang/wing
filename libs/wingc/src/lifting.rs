@@ -1,5 +1,3 @@
-use std::mem;
-
 use crate::{
 	ast::{Class, Expr, ExprKind, FunctionBody, FunctionDefinition, Phase, Reference, UserDefinedType},
 	diagnostic::{report_diagnostic, Diagnostic, WingSpan},
@@ -14,7 +12,7 @@ use crate::{
 pub struct LiftTransform<'a> {
 	ctx: VisitContext,
 	jsify: &'a JSifier<'a>,
-	tokens: Lifts,
+	lifts_stack: Vec<Lifts>,
 }
 
 impl<'a> LiftTransform<'a> {
@@ -22,7 +20,7 @@ impl<'a> LiftTransform<'a> {
 		Self {
 			jsify: jsifier,
 			ctx: VisitContext::new(),
-			tokens: Lifts::disabled(),
+			lifts_stack: vec![],
 		}
 	}
 
@@ -120,6 +118,18 @@ impl<'a> LiftTransform<'a> {
 			_ => false,
 		}
 	}
+
+	fn jsify_expr(&self, node: &Expr, phase: Phase) -> String {
+		self.jsify.jsify_expression(
+			&node,
+			&mut JSifyContext {
+				in_json: false,
+				phase: phase,
+				files: &mut Files::default(),
+				tokens: &mut Lifts::disabled(),
+			},
+		)
+	}
 }
 
 impl<'a> Fold for LiftTransform<'a> {
@@ -175,15 +185,7 @@ impl<'a> Fold for LiftTransform<'a> {
 
 		if expr_phase == Phase::Preflight {
 			// jsify the expression so we can get the preflight code
-			let preflight = self.jsify.jsify_expression(
-				&node,
-				&mut JSifyContext {
-					in_json: false,
-					phase: Phase::Preflight,
-					files: &mut Files::default(),
-					tokens: &mut Lifts::disabled(),
-				},
-			);
+			let code = self.jsify_expr(&node, Phase::Preflight);
 
 			// check that we can qualify the lift (e.g. determine which property is being accessed)
 			if self.ctx.current_property().is_none()
@@ -202,14 +204,15 @@ impl<'a> Fold for LiftTransform<'a> {
 			}
 
 			// println!("Lifting: {}", preflight);
-
-			self.tokens.lift(
+			let mut lifts = self.lifts_stack.pop().unwrap();
+			lifts.lift(
 				node.id,
 				self.ctx.current_method(),
 				self.ctx.current_property(),
 				is_field,
-				&preflight,
+				&code,
 			);
+			self.lifts_stack.push(lifts);
 
 			return node;
 		}
@@ -219,18 +222,13 @@ impl<'a> Fold for LiftTransform<'a> {
 
 		if !is_field && self.should_capture_expr(&node) {
 			// jsify the expression so we can get the preflight code
-			let preflight = self.jsify.jsify_expression(
-				&node,
-				&mut JSifyContext {
-					in_json: false,
-					phase: Phase::Inflight,
-					files: &mut Files::default(),
-					tokens: &mut Lifts::disabled(),
-				},
-			);
+			let preflight = self.jsify_expr(&node, Phase::Inflight);
 
 			// println!("Capturing: {}", preflight);
-			self.tokens.capture(&node.id, &preflight);
+			let mut lifts = self.lifts_stack.pop().unwrap();
+			lifts.capture(&node.id, &preflight);
+			self.lifts_stack.push(lifts);
+
 			return node;
 		}
 
@@ -283,6 +281,14 @@ impl<'a> Fold for LiftTransform<'a> {
 			None
 		};
 
+		if let Some(parent) = &node.parent {
+			if self.ctx.current_phase() == Phase::Inflight {
+				let mut lifts = self.lifts_stack.pop().unwrap();
+				lifts.capture(&parent.id, &self.jsify_expr(&parent, Phase::Inflight));
+				self.lifts_stack.push(lifts);
+			}
+		}
+
 		self.ctx.push_class(
 			UserDefinedType {
 				root: node.name.clone(),
@@ -293,13 +299,13 @@ impl<'a> Fold for LiftTransform<'a> {
 			init_env,
 		);
 
-		self.tokens = Lifts::new();
+		self.lifts_stack.push(Lifts::new());
 
 		let result = fold::fold_class(self, node);
 
 		self.ctx.pop_class();
 
-		let tokens = mem::replace(&mut self.tokens, Lifts::disabled());
+		let lifts = self.lifts_stack.pop().expect("Unable to pop class tokens");
 
 		let with_tokens = Class {
 			name: result.name,
@@ -310,8 +316,7 @@ impl<'a> Fold for LiftTransform<'a> {
 			implements: result.implements,
 			inflight_initializer: result.inflight_initializer,
 			parent: result.parent,
-			// tokens: InflightClassContext::new(),
-			lifts: tokens,
+			lifts,
 		};
 
 		with_tokens

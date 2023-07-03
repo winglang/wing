@@ -1456,3 +1456,18 @@ fn fails_when_preflight_class_tries_to_extend_inflight_class() {
     "#
 	);
 }
+
+#[test]
+fn closed_inflight_class_extends_outer_inflight_class() {
+	assert_compile_ok!(
+		r#"
+    inflight class Base { }
+
+    test "test" {
+      inflight class Derived extends Base { }
+
+      new Derived();
+    }
+    "#
+	);
+}

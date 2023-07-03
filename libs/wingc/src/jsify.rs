@@ -1062,7 +1062,7 @@ impl<'a> JSifier<'a> {
 		code.open(format!("require(\"{client_path}\")({{"));
 
 		for capture in icc.captures() {
-			let preflight = capture.preflight.clone();
+			let preflight = capture.code.clone();
 			let lift_type = format!("context._lift({})", preflight);
 			code.line(format!("{}: ${{{}}},", capture.inflight, lift_type));
 		}
@@ -1259,7 +1259,7 @@ impl<'a> JSifier<'a> {
 			bind_method.open(format!("if (ops.includes(\"{method_name}\")) {{"));
 			for lift in method_lifts {
 				let ops_strings = lift.ops.iter().map(|op| format!("\"{}\"", op)).join(", ");
-				let field = lift.preflight.clone();
+				let field = lift.code.clone();
 
 				bind_method.line(format!(
 					"{class_name}._registerBindObject({field}, host, [{ops_strings}]);",
