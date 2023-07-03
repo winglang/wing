@@ -47,7 +47,7 @@ module.exports = function({ compoundOneYear, interest, value, math_Util }) {
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.17.0"
+      "version": "0.15.2"
     },
     "outputs": {
       "root": {
@@ -61,7 +61,7 @@ module.exports = function({ compoundOneYear, interest, value, math_Util }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:EULER\",\"${aws_lambda_function.testEULER_Handler_7DE24200.arn}\"]]"
+      "value": "[[\"root/Default/Default/test:EULER\",\"${aws_lambda_function.root_testEULER_Handler_30ECC143.arn}\"]]"
     }
   },
   "provider": {
@@ -71,46 +71,46 @@ module.exports = function({ compoundOneYear, interest, value, math_Util }) {
   },
   "resource": {
     "aws_iam_role": {
-      "testEULER_Handler_IamRole_ED3CFA98": {
+      "root_testEULER_Handler_IamRole_0FB8D2D6": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:EULER/Handler/IamRole",
-            "uniqueId": "testEULER_Handler_IamRole_ED3CFA98"
+            "uniqueId": "root_testEULER_Handler_IamRole_0FB8D2D6"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
-      "testEULER_Handler_IamRolePolicy_53F6F25E": {
+      "root_testEULER_Handler_IamRolePolicy_1B785233": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:EULER/Handler/IamRolePolicy",
-            "uniqueId": "testEULER_Handler_IamRolePolicy_53F6F25E"
+            "uniqueId": "root_testEULER_Handler_IamRolePolicy_1B785233"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
-        "role": "${aws_iam_role.testEULER_Handler_IamRole_ED3CFA98.name}"
+        "role": "${aws_iam_role.root_testEULER_Handler_IamRole_0FB8D2D6.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
-      "testEULER_Handler_IamRolePolicyAttachment_00CBFA14": {
+      "root_testEULER_Handler_IamRolePolicyAttachment_234F65DD": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:EULER/Handler/IamRolePolicyAttachment",
-            "uniqueId": "testEULER_Handler_IamRolePolicyAttachment_00CBFA14"
+            "uniqueId": "root_testEULER_Handler_IamRolePolicyAttachment_234F65DD"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.testEULER_Handler_IamRole_ED3CFA98.name}"
+        "role": "${aws_iam_role.root_testEULER_Handler_IamRole_0FB8D2D6.name}"
       }
     },
     "aws_lambda_function": {
-      "testEULER_Handler_7DE24200": {
+      "root_testEULER_Handler_30ECC143": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:EULER/Handler/Default",
-            "uniqueId": "testEULER_Handler_7DE24200"
+            "uniqueId": "root_testEULER_Handler_30ECC143"
           }
         },
         "environment": {
@@ -122,10 +122,10 @@ module.exports = function({ compoundOneYear, interest, value, math_Util }) {
         "function_name": "Handler-c80e7a9d",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.testEULER_Handler_IamRole_ED3CFA98.arn}",
+        "role": "${aws_iam_role.root_testEULER_Handler_IamRole_0FB8D2D6.arn}",
         "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
-        "s3_key": "${aws_s3_object.testEULER_Handler_S3Object_A010D852.key}",
+        "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
+        "s3_key": "${aws_s3_object.root_testEULER_Handler_S3Object_530E4C31.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -134,25 +134,25 @@ module.exports = function({ compoundOneYear, interest, value, math_Util }) {
       }
     },
     "aws_s3_bucket": {
-      "Code": {
+      "root_Code_02F3C603": {
         "//": {
           "metadata": {
             "path": "root/Default/Code",
-            "uniqueId": "Code"
+            "uniqueId": "root_Code_02F3C603"
           }
         },
         "bucket_prefix": "code-c84a50b1-"
       }
     },
     "aws_s3_object": {
-      "testEULER_Handler_S3Object_A010D852": {
+      "root_testEULER_Handler_S3Object_530E4C31": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:EULER/Handler/S3Object",
-            "uniqueId": "testEULER_Handler_S3Object_A010D852"
+            "uniqueId": "root_testEULER_Handler_S3Object_530E4C31"
           }
         },
-        "bucket": "${aws_s3_bucket.Code.bucket}",
+        "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       }

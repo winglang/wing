@@ -7,7 +7,7 @@
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.17.0"
+      "version": "0.15.2"
     },
     "outputs": {
       "root": {
@@ -31,11 +31,11 @@
   },
   "resource": {
     "aws_dynamodb_table": {
-      "cloudTable": {
+      "root_cloudTable_323D7643": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/cloud.Table/Default",
-            "uniqueId": "cloudTable"
+            "uniqueId": "root_cloudTable_323D7643"
           }
         },
         "attribute": [

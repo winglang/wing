@@ -11,7 +11,7 @@
       ],
       "outputs": ["{projectRoot}/src/test_corpus/**"],
       "options": {
-        "command": "pnpm test:generate",
+        "command": "npm run test:generate",
         "cwd": "tools/hangar"
       }
     },
@@ -20,12 +20,12 @@
       "inputs": ["!{projectRoot}/tmp/**", "default-test", "^default-build"],
       "outputs": ["${projectRoot}/reports/**"],
       "options": {
-        "command": "pnpm test:update",
+        "command": "npm run test:update",
         "cwd": "tools/hangar"
       },
       "configurations": {
         "release": {
-          "command": "pnpm test"
+          "command": "npm run test"
         }
       }
     },
@@ -35,7 +35,7 @@
       "inputs": ["!{projectRoot}/tmp/**", "default-test", "^default-build"],
       "outputs": ["${projectRoot}/reports/**"],
       "options": {
-        "command": "pnpm bench",
+        "command": "npm run bench",
         "cwd": "tools/hangar"
       }
     }

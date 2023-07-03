@@ -37,7 +37,7 @@ module.exports = function({ x, y, math_Util }) {
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.17.0"
+      "version": "0.15.2"
     },
     "outputs": {
       "root": {
@@ -51,7 +51,7 @@ module.exports = function({ x, y, math_Util }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:inflight floor--ceil--round\",\"${aws_lambda_function.testinflightfloor--ceil--round_Handler_90E85A3F.arn}\"]]"
+      "value": "[[\"root/Default/Default/test:inflight floor--ceil--round\",\"${aws_lambda_function.root_testinflightfloorceilround_Handler_76DC7965.arn}\"]]"
     }
   },
   "provider": {
@@ -61,46 +61,46 @@ module.exports = function({ x, y, math_Util }) {
   },
   "resource": {
     "aws_iam_role": {
-      "testinflightfloor--ceil--round_Handler_IamRole_70C76120": {
+      "root_testinflightfloorceilround_Handler_IamRole_CB79DA89": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:inflight floor--ceil--round/Handler/IamRole",
-            "uniqueId": "testinflightfloor--ceil--round_Handler_IamRole_70C76120"
+            "uniqueId": "root_testinflightfloorceilround_Handler_IamRole_CB79DA89"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
-      "testinflightfloor--ceil--round_Handler_IamRolePolicy_FA154202": {
+      "root_testinflightfloorceilround_Handler_IamRolePolicy_24AE8C0B": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:inflight floor--ceil--round/Handler/IamRolePolicy",
-            "uniqueId": "testinflightfloor--ceil--round_Handler_IamRolePolicy_FA154202"
+            "uniqueId": "root_testinflightfloorceilround_Handler_IamRolePolicy_24AE8C0B"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
-        "role": "${aws_iam_role.testinflightfloor--ceil--round_Handler_IamRole_70C76120.name}"
+        "role": "${aws_iam_role.root_testinflightfloorceilround_Handler_IamRole_CB79DA89.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
-      "testinflightfloor--ceil--round_Handler_IamRolePolicyAttachment_A4FE3D1C": {
+      "root_testinflightfloorceilround_Handler_IamRolePolicyAttachment_D9DEE6B2": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:inflight floor--ceil--round/Handler/IamRolePolicyAttachment",
-            "uniqueId": "testinflightfloor--ceil--round_Handler_IamRolePolicyAttachment_A4FE3D1C"
+            "uniqueId": "root_testinflightfloorceilround_Handler_IamRolePolicyAttachment_D9DEE6B2"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.testinflightfloor--ceil--round_Handler_IamRole_70C76120.name}"
+        "role": "${aws_iam_role.root_testinflightfloorceilround_Handler_IamRole_CB79DA89.name}"
       }
     },
     "aws_lambda_function": {
-      "testinflightfloor--ceil--round_Handler_90E85A3F": {
+      "root_testinflightfloorceilround_Handler_76DC7965": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:inflight floor--ceil--round/Handler/Default",
-            "uniqueId": "testinflightfloor--ceil--round_Handler_90E85A3F"
+            "uniqueId": "root_testinflightfloorceilround_Handler_76DC7965"
           }
         },
         "environment": {
@@ -112,10 +112,10 @@ module.exports = function({ x, y, math_Util }) {
         "function_name": "Handler-c8bf255a",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.testinflightfloor--ceil--round_Handler_IamRole_70C76120.arn}",
+        "role": "${aws_iam_role.root_testinflightfloorceilround_Handler_IamRole_CB79DA89.arn}",
         "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
-        "s3_key": "${aws_s3_object.testinflightfloor--ceil--round_Handler_S3Object_CBAFAFCF.key}",
+        "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
+        "s3_key": "${aws_s3_object.root_testinflightfloorceilround_Handler_S3Object_4406FBE6.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -124,25 +124,25 @@ module.exports = function({ x, y, math_Util }) {
       }
     },
     "aws_s3_bucket": {
-      "Code": {
+      "root_Code_02F3C603": {
         "//": {
           "metadata": {
             "path": "root/Default/Code",
-            "uniqueId": "Code"
+            "uniqueId": "root_Code_02F3C603"
           }
         },
         "bucket_prefix": "code-c84a50b1-"
       }
     },
     "aws_s3_object": {
-      "testinflightfloor--ceil--round_Handler_S3Object_CBAFAFCF": {
+      "root_testinflightfloorceilround_Handler_S3Object_4406FBE6": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:inflight floor--ceil--round/Handler/S3Object",
-            "uniqueId": "testinflightfloor--ceil--round_Handler_S3Object_CBAFAFCF"
+            "uniqueId": "root_testinflightfloorceilround_Handler_S3Object_4406FBE6"
           }
         },
-        "bucket": "${aws_s3_bucket.Code.bucket}",
+        "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       }
