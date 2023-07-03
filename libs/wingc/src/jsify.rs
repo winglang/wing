@@ -1,5 +1,4 @@
 pub mod codemaker;
-pub mod context;
 mod tests;
 use aho_corasick::AhoCorasick;
 use const_format::formatcp;
@@ -18,12 +17,14 @@ use crate::{
 	dbg_panic, debug,
 	diagnostic::{report_diagnostic, Diagnostic, WingSpan},
 	files::Files,
-	type_check::{symbol_env::SymbolEnv, ClassLike, Type, TypeRef, Types, VariableKind, CLASS_INFLIGHT_INIT_NAME},
+	type_check::{
+		lifts::Lifts, symbol_env::SymbolEnv, ClassLike, Type, TypeRef, Types, VariableKind, CLASS_INFLIGHT_INIT_NAME,
+	},
 	MACRO_REPLACE_ARGS, MACRO_REPLACE_ARGS_TEXT, MACRO_REPLACE_SELF, WINGSDK_ASSEMBLY_NAME, WINGSDK_RESOURCE,
 	WINGSDK_STD_MODULE,
 };
 
-use self::{codemaker::CodeMaker, context::InflightClassContext};
+use self::codemaker::CodeMaker;
 
 const PREFLIGHT_FILE_NAME: &str = "preflight.js";
 
@@ -49,7 +50,7 @@ pub struct JSifyContext<'a> {
 	/// the `inflight` keyword specifies scopes that are inflight.
 	pub phase: Phase,
 	pub files: &'a mut Files,
-	pub tokens: &'a InflightClassContext,
+	pub tokens: &'a Lifts,
 }
 
 pub struct JSifier<'a> {
@@ -108,7 +109,7 @@ impl<'a> JSifier<'a> {
 				in_json: false,
 				phase: Phase::Preflight,
 				files: &mut files,
-				tokens: &InflightClassContext::disabled(),
+				tokens: &Lifts::disabled(),
 			};
 			let s = self.jsify_statement(scope.env.borrow().as_ref().unwrap(), statement, &mut jsify_context); // top level statements are always preflight
 			if let StmtKind::Bring {
@@ -1040,7 +1041,7 @@ impl<'a> JSifier<'a> {
 		code
 	}
 
-	fn jsify_to_inflight_type_method(&self, class: &AstClass, icc: &InflightClassContext) -> CodeMaker {
+	fn jsify_to_inflight_type_method(&self, class: &AstClass, icc: &Lifts) -> CodeMaker {
 		let client_path = inflight_filename(class);
 
 		let mut code = CodeMaker::default();
@@ -1065,7 +1066,7 @@ impl<'a> JSifier<'a> {
 		code
 	}
 
-	fn jsify_to_inflight_method(&self, resource_name: &Symbol, icc: &InflightClassContext) -> CodeMaker {
+	fn jsify_to_inflight_method(&self, resource_name: &Symbol, icc: &Lifts) -> CodeMaker {
 		let captured_fields = icc.lifted_fields();
 		let mut code = CodeMaker::default();
 
@@ -1212,7 +1213,7 @@ impl<'a> JSifier<'a> {
 	fn jsify_register_bind_method(
 		&self,
 		class: &AstClass,
-		icc: &InflightClassContext,
+		icc: &Lifts,
 		class_type: TypeRef,
 		bind_method_kind: BindMethod,
 	) -> CodeMaker {

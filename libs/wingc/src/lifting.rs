@@ -5,8 +5,8 @@ use crate::{
 	diagnostic::{report_diagnostic, Diagnostic, WingSpan},
 	files::Files,
 	fold::{self, Fold},
-	jsify::{context::InflightClassContext, JSifier, JSifyContext},
-	type_check::symbol_env::LookupResult,
+	jsify::{JSifier, JSifyContext},
+	type_check::{lifts::Lifts, symbol_env::LookupResult},
 	visit::{self, Visit},
 	visit_context::VisitContext,
 };
@@ -14,7 +14,7 @@ use crate::{
 pub struct LiftTransform<'a> {
 	ctx: VisitContext,
 	jsify: &'a JSifier<'a>,
-	tokens: InflightClassContext,
+	tokens: Lifts,
 }
 
 impl<'a> LiftTransform<'a> {
@@ -22,7 +22,7 @@ impl<'a> LiftTransform<'a> {
 		Self {
 			jsify: jsifier,
 			ctx: VisitContext::new(),
-			tokens: InflightClassContext::disabled(),
+			tokens: Lifts::disabled(),
 		}
 	}
 
@@ -181,7 +181,7 @@ impl<'a> Fold for LiftTransform<'a> {
 					in_json: false,
 					phase: Phase::Preflight,
 					files: &mut Files::default(),
-					tokens: &mut InflightClassContext::disabled(),
+					tokens: &mut Lifts::disabled(),
 				},
 			);
 
@@ -225,7 +225,7 @@ impl<'a> Fold for LiftTransform<'a> {
 					in_json: false,
 					phase: Phase::Inflight,
 					files: &mut Files::default(),
-					tokens: &mut InflightClassContext::disabled(),
+					tokens: &mut Lifts::disabled(),
 				},
 			);
 
@@ -293,13 +293,13 @@ impl<'a> Fold for LiftTransform<'a> {
 			init_env,
 		);
 
-		self.tokens = InflightClassContext::new();
+		self.tokens = Lifts::new();
 
 		let result = fold::fold_class(self, node);
 
 		self.ctx.pop_class();
 
-		let tokens = mem::replace(&mut self.tokens, InflightClassContext::disabled());
+		let tokens = mem::replace(&mut self.tokens, Lifts::disabled());
 
 		let with_tokens = Class {
 			name: result.name,

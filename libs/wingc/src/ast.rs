@@ -8,7 +8,7 @@ use indexmap::{Equivalent, IndexMap, IndexSet};
 use itertools::Itertools;
 
 use crate::diagnostic::WingSpan;
-use crate::jsify::context::InflightClassContext;
+use crate::type_check::lifts::Lifts;
 use crate::type_check::symbol_env::SymbolEnv;
 use crate::type_check::HANDLE_METHOD_NAME;
 
@@ -341,7 +341,7 @@ pub struct Class {
 	pub parent: Option<Expr>, // base class (the expression is a reference to a user defined type)
 	pub implements: Vec<UserDefinedType>,
 	pub phase: Phase,
-	pub tokens: InflightClassContext,
+	pub tokens: Lifts,
 }
 
 impl Class {

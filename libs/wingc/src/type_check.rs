@@ -1,5 +1,6 @@
 mod class_fields_init;
 pub(crate) mod jsii_importer;
+pub mod lifts;
 pub mod symbol_env;
 
 use crate::ast::{self, ClassField, FunctionDefinition, TypeAnnotationKind};

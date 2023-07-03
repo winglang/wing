@@ -6,7 +6,7 @@ use crate::ast::Symbol;
 
 /// Jsification context at the class level
 #[derive(Debug)]
-pub struct InflightClassContext {
+pub struct Lifts {
 	/// map from token to lift
 	lift_by_token: BTreeMap<String, Lift>,
 
@@ -43,7 +43,7 @@ pub struct Lift {
 	pub field: bool,
 }
 
-impl InflightClassContext {
+impl Lifts {
 	pub fn new() -> Self {
 		Self {
 			lifts: BTreeMap::new(),
