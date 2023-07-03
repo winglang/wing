@@ -14,27 +14,30 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
           node-version: 20
+
       - name: Configure AWS Credentials Action For GitHub Actions
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
+
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
         with:
           terraform_wrapper: false #important! since we use terraform output command https://github.com/hashicorp/setup-terraform/issues/20#issuecomment-679424701
+
       - name: Get Latest Wing Version
         id: get-version
-        run: |
-          echo version=$(npm view winglang version) >> $GITHUB_OUTPUT
+        run: echo version=$(npm view winglang version) >> $GITHUB_OUTPUT
+
       - name: Install Wing
-        run: |
-          npm install -g winglang@${{ steps.get-version.outputs.version }}
+        run: npm install -g winglang@${{ steps.get-version.outputs.version }}
+
       - name: Run tests
-        run: |
-          wing test -t tf-aws examples/tests/sdk_tests/*/*.w
+        run: wing test -t tf-aws examples/tests/sdk_tests/*/*.w
