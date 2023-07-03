@@ -25,11 +25,41 @@ For performance reasons, most cloud providers impose a timeout on functions, aft
 
 ## Usage
 
-TODO
+```ts playground
+bring cloud;
+
+// defining a cloud.Function resource
+let countWords = new cloud.Function(inflight (s: str): str => {
+  return "${s.split(" ").length}";
+}) as "countWords";
+
+new cloud.Function(inflight () => {
+  let sentence = "I am a sentence with 7 words";
+  // invoking cloud.Function from inflight context
+  let wordsCount = countWords.invoke(sentence);
+  log("'${sentence}' has ${wordsCount} words");
+}) as "Invoke Me";
+```
 
 ## Target-specific details
 
-TODO
+### Simulator (`sim`)
+
+The sim implementation of `cloud.Function` uses JavaScript's function
+
+### AWS (`tf-aws` and `awscdk`)
+
+The AWS implementation of `cloud.Function` uses [Amazon Lambda](https://aws.amazon.com/lambda/).
+
+### Azure (`tf-azure`)
+
+The Azure implementation of `cloud.Function` uses [Azure Function](https://azure.microsoft.com/en-us/products/function).
+
+🚧 `invoke` API is not supported yet (tracking issue: [#1371](https://github.com/winglang/wing/issues/1371))
+
+### GCP (`tf-gcp`)
+
+🚧 Not supported yet (tracking issue: [#614](https://github.com/winglang/wing/issues/614))
 
 ## API Reference
 

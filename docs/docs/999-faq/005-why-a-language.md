@@ -74,7 +74,7 @@ import CodeComparison from '../src/components/CodeComparison';
 | Testing                      | Same tests run on local simulator and cloud, without mocks | Need mocks for local testing | Need mocks for local testing | Need mocks for local testing |
 
 ## Anything else?
-Creating a new language that is tailored to the cloud from the ground up also allows us to assemble a variety of features (some of which exist in other languages, of course) that, when put together, offer a delightful cloud development experience. You can read more about what these features are [here](https://docs.winglang.io/faq/good-fit).
+Creating a new language that is tailored to the cloud from the ground up also allows us to assemble a variety of features (some of which exist in other languages, of course) that, when put together, offer a delightful cloud development experience. You can read more about what these features are [here](https://www.winglang.io/docs/faq/good-fit).
 
 
 

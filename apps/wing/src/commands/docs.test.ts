@@ -6,5 +6,5 @@ vi.mock("open");
 
 test("wing docs opens the docs website", async () => {
   await docs();
-  expect(open).toBeCalledWith("https://docs.winglang.io");
+  expect(open).toBeCalledWith("https://www.winglang.io/docs/");
 });
