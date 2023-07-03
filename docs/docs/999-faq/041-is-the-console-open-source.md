@@ -1,7 +1,7 @@
 ---
 title: Is the Console open-source? 📦
 id: is-the-console-open-source
-keywords: [faq, console, winglang, Wing programming language, Wing language, open-source, source-available]]
+keywords: [faq, console, winglang, Wing programming language, Wing language, open-source, source-available]
 ---
 
 Unlike the rest of the wing repo, which is open-source under the MIT license, the console is source-available.
