@@ -42,7 +42,7 @@ Duration 0m0.54s
 
 **Notice:** The `--target sim` argument can be omitted as it's the default target for the wing test command.
 
-### Test run in isolation
+### Tests run in isolation
 Every Winglang test is executed in complete isolation. Take a look at the following code:
 
 ```ts playground
