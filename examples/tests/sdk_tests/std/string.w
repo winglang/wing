@@ -40,10 +40,15 @@ test "length" {
 // at()
 
 assert("boom".at(2) == "o");
-//assertThrows("ERROR", () => { "hey".at(-1); });
+// Negative integers count back from the last string character.
+assert("boom".at(-4) == "b");
+assert("boom".at(-1) == "m");
 
 test "at()" {
   assert("boom".at(0) == "b");
+  // Negative integers count back from the last string character.
+  assert("boom".at(-4) == "b");
+  assert("boom".at(-1) == "m");
 }
 
 //-----------------------------------------------------------------------------
