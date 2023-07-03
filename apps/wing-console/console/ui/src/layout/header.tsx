@@ -3,6 +3,8 @@ import { useTheme } from "@wingconsole/design-system";
 import classNames from "classnames";
 import { useCallback } from "react";
 
+import { WingIcon } from "@wingconsole/design-system";
+
 const AutoThemeIcon = () => {
   const { theme } = useTheme();
   return (
@@ -49,7 +51,10 @@ export const Header = ({ title }: HeaderProps) => {
       )}
     >
       <div className="w-1/3 grow" />
-      <div className="w-1/3 justify-center text-center">{title}</div>
+      <div className="w-1/3 justify-center items-center text-center gap-x-1 flex">
+        <WingIcon className="w-4 inline-block" />
+        <div>{title}</div>
+      </div>
       <div className="w-1/3 flex space-x-1 justify-end">
         <button
           className={classNames(

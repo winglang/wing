@@ -56,7 +56,7 @@ export const VscodeLayout = ({ cloudAppState, wingVersion }: LayoutProps) => {
   });
 
   const title = useMemo(() => {
-    return `~ ${wingfile.data ?? ""}`;
+    return `${wingfile.data ?? ""}`;
   }, [wingfile.data]);
 
   useEffect(() => {
