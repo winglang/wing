@@ -8,6 +8,7 @@ use indexmap::{Equivalent, IndexMap, IndexSet};
 use itertools::Itertools;
 
 use crate::diagnostic::WingSpan;
+use crate::jsify::context::InflightClassContext;
 use crate::type_check::symbol_env::SymbolEnv;
 use crate::type_check::HANDLE_METHOD_NAME;
 
@@ -340,6 +341,7 @@ pub struct Class {
 	pub parent: Option<Expr>, // base class (the expression is a reference to a user defined type)
 	pub implements: Vec<UserDefinedType>,
 	pub phase: Phase,
+	pub tokens: InflightClassContext,
 }
 
 impl Class {
@@ -553,21 +555,7 @@ pub enum ExprKind {
 		element: Box<Expr>,
 	},
 	FunctionClosure(FunctionDefinition),
-	Lifted(LiftedExpr),
 	CompilerDebugPanic,
-}
-
-#[derive(Debug)]
-pub struct LiftedExpr {
-	pub preflight_expr: Box<Expr>,
-	pub lifting_method: Option<Symbol>,
-	pub property: Option<String>,
-	pub field: bool,
-}
-
-#[derive(Debug)]
-pub struct LiftedReference {
-	pub preflight_ref: Box<Reference>,
 }
 
 #[derive(Debug)]
@@ -592,14 +580,12 @@ impl Expr {
 		fn resolve_ref(r: &Reference) -> Option<&UserDefinedType> {
 			match r {
 				Reference::TypeReference(t) => Some(t),
-				Reference::Lifted(l) => resolve_ref(&l.preflight_ref),
 				_ => None,
 			}
 		}
 
 		match &self.kind {
 			ExprKind::Reference(r) => resolve_ref(r),
-			ExprKind::Lifted(l) => l.preflight_expr.as_type_reference(),
 			_ => None,
 		}
 	}
@@ -707,11 +693,7 @@ pub enum Reference {
 	/// A reference to a type (e.g. `std.Json` or `MyResource` or `aws.s3.Bucket`)
 	TypeReference(UserDefinedType),
 	/// A reference to a member inside a type: `MyType.x` or `MyEnum.A`
-	TypeMember {
-		typeobject: Box<Expr>,
-		property: Symbol,
-	},
-	Lifted(LiftedReference),
+	TypeMember { typeobject: Box<Expr>, property: Symbol },
 }
 
 impl Display for Reference {
@@ -737,7 +719,6 @@ impl Display for Reference {
 
 				write!(f, "{}.{}", r, property.name)
 			}
-			Reference::Lifted(_) => write!(f, "<lift>"),
 		}
 	}
 }

@@ -1,25 +1,28 @@
+use std::mem;
+
 use crate::{
-	ast::{
-		Class, Expr, ExprKind, FunctionBody, FunctionDefinition, LiftedExpr, LiftedReference, Phase, Reference,
-		UserDefinedType,
-	},
+	ast::{Class, Expr, ExprKind, FunctionBody, FunctionDefinition, Phase, Reference, UserDefinedType},
 	diagnostic::{report_diagnostic, Diagnostic, WingSpan},
+	files::Files,
 	fold::{self, Fold},
-	type_check::{symbol_env::LookupResult, Types},
+	jsify::{context::InflightClassContext, JSifier, JSifyContext},
+	type_check::symbol_env::LookupResult,
 	visit::{self, Visit},
 	visit_context::VisitContext,
 };
 
 pub struct LiftTransform<'a> {
-	types: &'a mut Types,
 	ctx: VisitContext,
+	jsify: &'a JSifier<'a>,
+	tokens: InflightClassContext,
 }
 
 impl<'a> LiftTransform<'a> {
-	pub fn new(types: &'a mut Types) -> Self {
+	pub fn new(jsifier: &'a JSifier<'a>) -> Self {
 		Self {
-			types,
+			jsify: jsifier,
 			ctx: VisitContext::new(),
+			tokens: InflightClassContext::disabled(),
 		}
 	}
 
@@ -36,8 +39,8 @@ impl<'a> LiftTransform<'a> {
 	}
 
 	fn should_lift_expr(&mut self, node: &Expr) -> bool {
-		let expr_type = self.types.get_expr_type(&node).unwrap();
-		let expr_phase = self.types.get_expr_phase(&node).unwrap();
+		let expr_type = self.jsify.types.get_expr_type(&node).unwrap();
+		let expr_phase = self.jsify.types.get_expr_phase(&node).unwrap();
 		let span = node.span.clone();
 
 		// if this expression represents the current class, no need to capture it (it is by definition
@@ -67,43 +70,41 @@ impl<'a> LiftTransform<'a> {
 		return false;
 	}
 
-	fn try_capture_reference(&mut self, node: Reference, fullname: &str, span: &WingSpan) -> Reference {
+	fn should_capture_reference(&self, fullname: &str, span: &WingSpan) -> bool {
 		if self.is_capture_shadow(fullname, span) {
-			return node;
+			return false;
 		}
 
 		let Some(method_env) = self.ctx.current_method_env() else {
-			return node;
+			return false;
 		};
 
 		let lookup = method_env.lookup_nested_str(&fullname, Some(self.ctx.current_stmt_idx()));
 
 		// any other lookup failure is likely a an invalid reference so we can skip it
 		let LookupResult::Found(vi, symbol_info) = lookup else {
-			return node;
+			return false;
 		};
 
 		// now, we need to determine if the environment this symbol is defined in is a parent of the
 		// method's environment. if it is, we need to capture it.
 		if symbol_info.env.is_same(&method_env) || symbol_info.env.is_child_of(&method_env) {
-			return node;
+			return false;
 		}
 
 		// skip macros
 		if let Some(x) = vi.as_variable() {
 			if let Some(f) = x.type_.as_function_sig() {
 				if f.js_override.is_some() {
-					return node;
+					return false;
 				}
 			}
 		}
 
-		Reference::Lifted(LiftedReference {
-			preflight_ref: Box::new(node),
-		})
+		return true;
 	}
 
-	fn is_capture_shadow(&mut self, fullname: &str, span: &WingSpan) -> bool {
+	fn is_capture_shadow(&self, fullname: &str, span: &WingSpan) -> bool {
 		// if the symbol is defined later in the current environment, it means we can't capture a
 		// reference to a symbol with the same name from a parent so bail out.
 		// notice that here we are looking in the current environment and not in the method's environment
@@ -122,6 +123,34 @@ impl<'a> LiftTransform<'a> {
 		}
 
 		return false;
+	}
+
+	fn should_capture_expr(&self, node: &Expr) -> bool {
+		let ExprKind::Reference(ref r) = node.kind else {
+		return false;
+	};
+
+		match r {
+			Reference::Identifier(ref symb) => {
+				let fullname = symb.name.clone();
+				let span = symb.span.clone();
+				self.should_capture_reference(&fullname, &span)
+			}
+			Reference::TypeReference(ref t) => {
+				let fullname = t.full_path_str();
+				let span = t.span.clone();
+
+				// skip "This" (which is the type of "this")
+				if let Some(class) = &self.ctx.current_class() {
+					if class.full_path_str() == fullname {
+						return false;
+					}
+				}
+
+				self.should_capture_reference(&fullname, &span)
+			}
+			_ => false,
+		}
 	}
 }
 
@@ -151,54 +180,50 @@ impl<'a> Fold for LiftTransform<'a> {
 				self.ctx.pop_property();
 				return result;
 			}
-			Reference::Identifier(ref symb) => {
-				let s = symb.name.clone();
-				let span = symb.span.clone();
-				return self.try_capture_reference(node, &s, &span);
-			}
-			Reference::TypeReference(ref t) => {
-				let path = t.full_path_str();
-				let span = t.span.clone();
-
-				// skip "This" (which is the type of "this")
-				if let Some(class) = &self.ctx.current_class() {
-					if class.full_path_str() == path {
-						return fold::fold_reference(self, node);
-					}
-				}
-
-				return self.try_capture_reference(node, &path, &span);
-			}
-			Reference::Lifted(_) => {}
+			_ => {}
 		}
 
 		fold::fold_reference(self, node)
 	}
 
 	fn fold_expr(&mut self, node: Expr) -> Expr {
-		// println!("{:?}", node);
+		let preflight = self.jsify.jsify_expression(
+			&node,
+			&mut JSifyContext {
+				in_json: false,
+				phase: Phase::Preflight,
+				files: &mut Files::default(),
+				tokens: &mut InflightClassContext::disabled(),
+			},
+		);
 
-		if self.should_lift_expr(&node) {
-			let span = node.span.clone();
-			let expr_type = self.types.get_expr_type(&node).unwrap();
+		// println!("{}", preflight);
+
+		if self.ctx.current_phase() == Phase::Inflight {
 			let is_field = includes_this(&node);
 
-			let new_expr = Expr::new(
-				ExprKind::Lifted(LiftedExpr {
-					preflight_expr: Box::new(node),
-					lifting_method: self.ctx.current_method(),
-					property: self.ctx.current_property(),
-					field: is_field,
-				}),
-				span,
-			);
+			if self.should_lift_expr(&node) {
+				println!("Lifting: {}", preflight);
+				self.tokens.lift(
+					node.id,
+					self.ctx.current_method(),
+					self.ctx.current_property(),
+					is_field,
+					&preflight,
+				);
 
-			// make sure this new expression is recorded in the type registry
-			self.types.assign_type_to_expr(&new_expr, expr_type, Phase::Preflight);
-			new_expr
-		} else {
-			fold::fold_expr(self, node)
+				return node;
+			}
+
+			if !is_field && self.should_capture_expr(&node) {
+				println!("Capturing: {}", preflight);
+
+				self.tokens.capture(&node.id, &preflight);
+				return node;
+			}
 		}
+
+		fold::fold_expr(self, node)
 	}
 
 	// State Tracking
@@ -257,10 +282,28 @@ impl<'a> Fold for LiftTransform<'a> {
 			init_env,
 		);
 
+		self.tokens = InflightClassContext::new();
+
 		let result = fold::fold_class(self, node);
+
 		self.ctx.pop_class();
 
-		result
+		let tokens = mem::replace(&mut self.tokens, InflightClassContext::disabled());
+
+		let with_tokens = Class {
+			name: result.name,
+			initializer: result.initializer,
+			phase: result.phase,
+			fields: result.fields,
+			methods: result.methods,
+			implements: result.implements,
+			inflight_initializer: result.inflight_initializer,
+			parent: result.parent,
+			// tokens: InflightClassContext::new(),
+			tokens: tokens,
+		};
+
+		with_tokens
 	}
 
 	fn fold_scope(&mut self, node: crate::ast::Scope) -> crate::ast::Scope {

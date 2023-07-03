@@ -35,7 +35,7 @@ module.exports = function({  }) {
 module.exports = function({ $foo }) {
   class $Closure2 {
     async handle() {
-      (await ($foo)());
+      (await $foo());
     }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);

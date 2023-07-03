@@ -7,6 +7,7 @@ use crate::{
 	},
 	diagnostic::WingSpan,
 	fold::{self, Fold},
+	jsify::context::InflightClassContext,
 	type_check::{CLASS_INFLIGHT_INIT_NAME, CLASS_INIT_NAME, HANDLE_METHOD_NAME},
 };
 
@@ -245,6 +246,7 @@ impl Fold for ClosureTransformer {
 				let class_def = Stmt {
 					kind: StmtKind::Class(Class {
 						name: new_class_name.clone(),
+						tokens: InflightClassContext::new(),
 						phase: Phase::Preflight,
 						initializer: FunctionDefinition {
 							name: Some(CLASS_INIT_NAME.into()),
@@ -347,10 +349,9 @@ impl<'a> Fold for RenameThisTransformer<'a> {
 					Reference::Identifier(ident)
 				}
 			}
-			Reference::InstanceMember { .. }
-			| Reference::TypeMember { .. }
-			| Reference::TypeReference(_)
-			| Reference::Lifted(_) => fold::fold_reference(self, node),
+			Reference::InstanceMember { .. } | Reference::TypeMember { .. } | Reference::TypeReference(_) => {
+				fold::fold_reference(self, node)
+			}
 		}
 	}
 }

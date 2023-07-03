@@ -1428,6 +1428,16 @@ fn inflight_class_extends_both_inside_inflight_closure() {
 }
 
 #[test]
+fn inflight_class_extends_inflight_class() {
+	assert_compile_ok!(
+		r#"
+    inflight class A {}
+    inflight class B extends A {}
+    "#
+	);
+}
+
+#[test]
 fn fails_when_inflight_class_tries_to_extend_preflight_class() {
 	assert_compile_fail!(
 		r#"

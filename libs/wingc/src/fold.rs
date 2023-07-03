@@ -1,9 +1,8 @@
 use crate::{
 	ast::{
 		ArgList, CatchBlock, Class, ClassField, ElifBlock, Expr, ExprKind, FunctionBody, FunctionDefinition,
-		FunctionParameter, FunctionSignature, Interface, InterpolatedString, InterpolatedStringPart, LiftedExpr,
-		LiftedReference, Literal, Reference, Scope, Stmt, StmtKind, StructField, Symbol, TypeAnnotation,
-		TypeAnnotationKind, UserDefinedType,
+		FunctionParameter, FunctionSignature, Interface, InterpolatedString, InterpolatedStringPart, Literal, Reference,
+		Scope, Stmt, StmtKind, StructField, Symbol, TypeAnnotation, TypeAnnotationKind, UserDefinedType,
 	},
 	dbg_panic,
 };
@@ -59,12 +58,6 @@ pub trait Fold {
 	}
 	fn fold_symbol(&mut self, node: Symbol) -> Symbol {
 		fold_symbol(self, node)
-	}
-	fn fold_lifted_expression(&mut self, node: LiftedExpr) -> LiftedExpr {
-		fold_lifted_expression(self, node)
-	}
-	fn fold_lifted_reference(&mut self, node: LiftedReference) -> LiftedReference {
-		fold_lifted_reference(self, node)
 	}
 }
 
@@ -208,6 +201,7 @@ where
 			.collect(),
 		phase: node.phase,
 		inflight_initializer: f.fold_function_definition(node.inflight_initializer),
+		tokens: node.tokens,
 	}
 }
 
@@ -322,7 +316,6 @@ where
 			element: Box::new(f.fold_expr(*element)),
 		},
 		ExprKind::FunctionClosure(def) => ExprKind::FunctionClosure(f.fold_function_definition(def)),
-		ExprKind::Lifted(l) => ExprKind::Lifted(f.fold_lifted_expression(l)),
 		ExprKind::CompilerDebugPanic => {
 			dbg_panic!(); // Handle the debug panic expression (during folding)
 			ExprKind::CompilerDebugPanic
@@ -377,7 +370,6 @@ where
 			typeobject: Box::new(f.fold_expr(*typeobject)),
 			property: f.fold_symbol(property),
 		},
-		Reference::Lifted(l) => Reference::Lifted(f.fold_lifted_reference(l)),
 	}
 }
 
@@ -484,27 +476,4 @@ where
 	F: Fold + ?Sized,
 {
 	node
-}
-
-pub fn fold_lifted_expression<F>(f: &mut F, node: LiftedExpr) -> LiftedExpr
-where
-	F: Fold + ?Sized,
-{
-	LiftedExpr {
-		preflight_expr: Box::new(f.fold_expr(*node.preflight_expr)),
-		lifting_method: node.lifting_method,
-		field: node.field,
-		property: node.property,
-	}
-}
-
-pub fn fold_lifted_reference<F>(f: &mut F, node: LiftedReference) -> LiftedReference
-where
-	F: Fold + ?Sized,
-{
-	LiftedReference {
-		preflight_ref: Box::new(f.fold_reference(*node.preflight_ref)),
-		// lifting_method: node.lifting_method,
-		// property: node.property,
-	}
 }

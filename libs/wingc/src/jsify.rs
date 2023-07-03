@@ -1,5 +1,5 @@
 pub mod codemaker;
-mod context;
+pub mod context;
 mod tests;
 use aho_corasick::AhoCorasick;
 use const_format::formatcp;
@@ -11,8 +11,8 @@ use std::{borrow::Borrow, cmp::Ordering, path::Path, vec};
 use crate::{
 	ast::{
 		ArgList, BinaryOperator, Class as AstClass, Expr, ExprKind, FunctionBody, FunctionDefinition,
-		InterpolatedStringPart, LiftedExpr, LiftedReference, Literal, Phase, Reference, Scope, Stmt, StmtKind, Symbol,
-		TypeAnnotationKind, UnaryOperator, UserDefinedType,
+		InterpolatedStringPart, Literal, Phase, Reference, Scope, Stmt, StmtKind, Symbol, TypeAnnotationKind,
+		UnaryOperator, UserDefinedType,
 	},
 	comp_ctx::{CompilationContext, CompilationPhase},
 	dbg_panic, debug,
@@ -48,15 +48,13 @@ pub struct JSifyContext<'a> {
 	/// The root of any Wing app starts with the preflight phase, and
 	/// the `inflight` keyword specifies scopes that are inflight.
 	pub phase: Phase,
-
-	/// Context collected about inflight classes. This is only used during the inflight phase.
-	pub icc: &'a mut InflightClassContext,
+	pub files: &'a mut Files,
+	pub tokens: &'a InflightClassContext,
 }
 
 pub struct JSifier<'a> {
 	pub types: &'a Types,
 	source_files: &'a Files,
-	emitted_files: Files,
 	/// Root of the project, used for resolving extern modules
 	absolute_project_root: &'a Path,
 	shim: bool,
@@ -82,7 +80,6 @@ impl<'a> JSifier<'a> {
 		Self {
 			types,
 			source_files,
-			emitted_files: Files::new(),
 			shim,
 			app_name,
 			absolute_project_root,
@@ -94,8 +91,9 @@ impl<'a> JSifier<'a> {
 		self.types.get_expr_type(expr).unwrap()
 	}
 
-	pub fn jsify(&mut self, scope: &Scope) {
+	pub fn jsify(&mut self, scope: &Scope) -> Files {
 		CompilationContext::set(CompilationPhase::Jsifying, &scope.span);
+		let mut files = Files::default();
 		let mut js = CodeMaker::default();
 		let mut imports = CodeMaker::default();
 
@@ -109,7 +107,8 @@ impl<'a> JSifier<'a> {
 			let mut jsify_context = JSifyContext {
 				in_json: false,
 				phase: Phase::Preflight,
-				icc: &mut InflightClassContext::disabled(),
+				files: &mut files,
+				tokens: &InflightClassContext::disabled(),
 			};
 			let s = self.jsify_statement(scope.env.borrow().as_ref().unwrap(), statement, &mut jsify_context); // top level statements are always preflight
 			if let StmtKind::Bring {
@@ -177,21 +176,23 @@ impl<'a> JSifier<'a> {
 			output.add_code(js);
 		}
 
-		match self.emitted_files.add_file(PREFLIGHT_FILE_NAME, output.to_string()) {
+		match files.add_file(PREFLIGHT_FILE_NAME, output.to_string()) {
 			Ok(()) => {}
 			Err(err) => report_diagnostic(err.into()),
 		}
+
+		files
 	}
 
-	/// Write all files to the output directory
-	pub fn emit_files(&mut self, out_dir: &Path) {
-		match self.emitted_files.emit_files(out_dir) {
-			Ok(()) => {}
-			Err(err) => report_diagnostic(err.into()),
-		}
-	}
+	// /// Write all files to the output directory
+	// pub fn emit_files(&mut self, out_dir: &Path) {
+	// 	match self.emitted_files.emit_files(out_dir) {
+	// 		Ok(()) => {}
+	// 		Err(err) => report_diagnostic(err.into()),
+	// 	}
+	// }
 
-	fn jsify_scope_body(&mut self, scope: &Scope, ctx: &mut JSifyContext) -> CodeMaker {
+	fn jsify_scope_body(&self, scope: &Scope, ctx: &mut JSifyContext) -> CodeMaker {
 		CompilationContext::set(CompilationPhase::Jsifying, &scope.span);
 		let mut code = CodeMaker::default();
 
@@ -203,7 +204,7 @@ impl<'a> JSifier<'a> {
 		code
 	}
 
-	fn jsify_reference(&mut self, reference: &Reference, ctx: &mut JSifyContext) -> String {
+	pub fn jsify_reference(&self, reference: &Reference, ctx: &mut JSifyContext) -> String {
 		match reference {
 			Reference::Identifier(identifier) => identifier.to_string(),
 			Reference::InstanceMember {
@@ -216,12 +217,11 @@ impl<'a> JSifier<'a> {
 				let typename = self.jsify_expression(typeobject, ctx);
 				typename + "." + &property.to_string()
 			}
-			Reference::Lifted(l) => self.jsify_lifted_reference(l, ctx),
 		}
 	}
 
 	fn jsify_arg_list(
-		&mut self,
+		&self,
 		arg_list: &ArgList,
 		scope: Option<String>,
 		id: Option<String>,
@@ -268,14 +268,18 @@ impl<'a> JSifier<'a> {
 		udt.full_path_str()
 	}
 
-	fn jsify_expression(&mut self, expression: &Expr, ctx: &mut JSifyContext) -> String {
-		if let Some(expr_phase) = self.types.get_expr_phase(expression) {
-			if ctx.phase == Phase::Preflight && expr_phase == Phase::Inflight && !self.is_this(expression) {
-				report_diagnostic(Diagnostic {
-					message: "Cannot reference an inflight value from within a preflight expression".to_string(),
-					span: Some(expression.span.clone()),
-				});
-			}
+	pub fn jsify_expression(&self, expression: &Expr, ctx: &mut JSifyContext) -> String {
+		// if let Some(expr_phase) = self.types.get_expr_phase(expression) {
+		// 	if ctx.phase == Phase::Preflight && expr_phase == Phase::Inflight && !self.is_this(expression) {
+		// 		report_diagnostic(Diagnostic {
+		// 			message: "Cannot reference an inflight value from within a preflight expression".to_string(),
+		// 			span: Some(expression.span.clone()),
+		// 		});
+		// 	}
+		// }
+
+		if let Some(t) = ctx.tokens.token_for_expr(&expression.id) {
+			return t.clone();
 		}
 
 		CompilationContext::set(CompilationPhase::Jsifying, &expression.span);
@@ -398,11 +402,7 @@ impl<'a> JSifier<'a> {
 			ExprKind::Call { callee, arg_list } => {
 				let function_type = self.get_expr_type(callee);
 				let function_sig = function_type.as_function_sig();
-
-				let expr_string = match &callee.kind {
-					ExprKind::Reference(reference) => self.jsify_reference(reference, ctx),
-					_ => format!("({})", self.jsify_expression(callee, ctx)),
-				};
+				let expr_string = self.jsify_expression(callee, ctx);
 				let args_string = self.jsify_arg_list(&arg_list, None, None, ctx);
 				let mut args_text_string = lookup_span(&arg_list.span, &self.source_files);
 				if args_text_string.len() > 0 {
@@ -502,7 +502,8 @@ impl<'a> JSifier<'a> {
 				let json_context = &mut JSifyContext {
 					in_json: true,
 					phase: ctx.phase,
-					icc: ctx.icc,
+					files: ctx.files,
+					tokens: ctx.tokens,
 				};
 				let js_out = match &element.kind {
 					ExprKind::JsonMapLiteral { .. } => {
@@ -553,7 +554,6 @@ impl<'a> JSifier<'a> {
 				}
 			}
 			ExprKind::FunctionClosure(func_def) => self.jsify_function(None, func_def, false, ctx).to_string(),
-			ExprKind::Lifted(l) => self.jsify_lifted_expression(l, ctx),
 			ExprKind::CompilerDebugPanic => {
 				// Handle the debug panic expression (during jsifying)
 				dbg_panic!();
@@ -562,7 +562,7 @@ impl<'a> JSifier<'a> {
 		}
 	}
 
-	fn jsify_statement(&mut self, env: &SymbolEnv, statement: &Stmt, ctx: &mut JSifyContext) -> CodeMaker {
+	fn jsify_statement(&self, env: &SymbolEnv, statement: &Stmt, ctx: &mut JSifyContext) -> CodeMaker {
 		CompilationContext::set(CompilationPhase::Jsifying, &statement.span);
 		match &statement.kind {
 			StmtKind::SuperConstructor { arg_list } => {
@@ -812,7 +812,7 @@ impl<'a> JSifier<'a> {
 	}
 
 	fn jsify_function(
-		&mut self,
+		&self,
 		class: Option<&AstClass>,
 		func_def: &FunctionDefinition,
 		is_static: bool,
@@ -904,12 +904,19 @@ impl<'a> JSifier<'a> {
 		}
 	}
 
-	fn jsify_class(&mut self, env: &SymbolEnv, class: &AstClass, ctx: &mut JSifyContext) -> CodeMaker {
+	fn jsify_class(&self, env: &SymbolEnv, class: &AstClass, ctx: &mut JSifyContext) -> CodeMaker {
+		let ctx = &mut JSifyContext {
+			in_json: ctx.in_json,
+			phase: ctx.phase,
+			files: ctx.files,
+			tokens: &class.tokens,
+		};
+
 		// Lookup the class type
 		let class_type = env.lookup(&class.name, None).unwrap().as_type().unwrap();
 
 		// emit the inflight side of the class into a separate file
-		let icc = self.jsify_class_inflight(env, &class);
+		self.jsify_class_inflight(env, &class, ctx);
 
 		// if our class is declared within a preflight scope, then we emit the preflight class
 		if ctx.phase == Phase::Preflight {
@@ -933,14 +940,14 @@ impl<'a> JSifier<'a> {
 			}
 
 			// emit the `_toInflightType` static method
-			code.add_code(self.jsify_to_inflight_type_method(&class, &icc));
+			code.add_code(self.jsify_to_inflight_type_method(&class, &class.tokens));
 
 			// emit the `_toInflight` instance method
-			code.add_code(self.jsify_to_inflight_method(&class.name, &icc));
+			code.add_code(self.jsify_to_inflight_method(&class.name, &class.tokens));
 
 			// call `_registerBindObject` to register the class's host binding methods (for type & instance binds).
-			code.add_code(self.jsify_register_bind_method(class, &icc, class_type, BindMethod::Instance));
-			code.add_code(self.jsify_register_bind_method(class, &icc, class_type, BindMethod::Type));
+			code.add_code(self.jsify_register_bind_method(class, &class.tokens, class_type, BindMethod::Instance));
+			code.add_code(self.jsify_register_bind_method(class, &class.tokens, class_type, BindMethod::Type));
 
 			code.close("}");
 
@@ -955,14 +962,14 @@ impl<'a> JSifier<'a> {
 			code.line(format!(
 				"const {} = require(\"{client}\")({{{}}});",
 				class.name.name,
-				icc.all_capture_tokens().iter().join(", "),
+				class.tokens.all_capture_tokens().iter().join(", "),
 			));
 
 			code
 		}
 	}
 
-	fn jsify_preflight_constructor(&mut self, class: &AstClass, ctx: &mut JSifyContext) -> CodeMaker {
+	fn jsify_preflight_constructor(&self, class: &AstClass, ctx: &mut JSifyContext) -> CodeMaker {
 		let mut code = CodeMaker::default();
 		code.open(format!(
 			"constructor(scope, id, {}) {{",
@@ -1084,9 +1091,7 @@ impl<'a> JSifier<'a> {
 	}
 
 	// Write a class's inflight to a file
-	fn jsify_class_inflight(&mut self, env: &SymbolEnv, class: &AstClass) -> InflightClassContext {
-		let mut icc = InflightClassContext::new();
-
+	fn jsify_class_inflight(&self, env: &SymbolEnv, class: &AstClass, ctx: &mut JSifyContext) {
 		// Find all free variables in the class, and return a list of their symbols
 		// self.scan_captures(class, &mut icc);
 
@@ -1115,7 +1120,8 @@ impl<'a> JSifier<'a> {
 		let mut ctx = JSifyContext {
 			phase: Phase::Inflight,
 			in_json: false,
-			icc: &mut icc,
+			files: ctx.files,
+			tokens: ctx.tokens,
 		};
 
 		let mut class_code = CodeMaker::default();
@@ -1148,7 +1154,7 @@ impl<'a> JSifier<'a> {
 
 		class_code.close("}");
 
-		let all_captures = icc.all_capture_tokens();
+		let all_captures = class.tokens.all_capture_tokens();
 
 		// export the main class from this file
 		let mut code = CodeMaker::default();
@@ -1159,17 +1165,14 @@ impl<'a> JSifier<'a> {
 		code.close("}");
 
 		let fname = inflight_filename(class);
-		match self.emitted_files.add_file(fname, code.to_string()) {
-			Ok(()) => icc,
-			Err(err) => {
-				report_diagnostic(err.into());
-				icc
-			}
+		match ctx.files.add_file(fname, code.to_string()) {
+			Ok(()) => {}
+			Err(err) => report_diagnostic(err.into()),
 		}
 	}
 
 	fn jsify_inflight_binding_constructor(
-		&mut self,
+		&self,
 		class: &AstClass,
 		env: &SymbolEnv,
 		ctx: &JSifyContext,
@@ -1181,7 +1184,7 @@ impl<'a> JSifier<'a> {
 
 		// Get the fields that are lifted by this class but not by its parent, they will be initialized
 		// in the generated constructor
-		let lifted_fields = ctx.icc.lifted_fields();
+		let lifted_fields = class.tokens.lifted_fields();
 		let my_captures = lifted_fields
 			.iter()
 			.map(|(f, _)| f)
@@ -1312,44 +1315,6 @@ impl<'a> JSifier<'a> {
 	// 		init_refs_entry.entry(free_var.clone()).or_default();
 	// 	}
 	// }
-
-	fn jsify_lifted_expression(&mut self, node: &LiftedExpr, ctx: &mut JSifyContext) -> String {
-		// jsify the *preflight* side of the expression
-		let preflight_code = self.jsify_expression(
-			&node.preflight_expr,
-			&mut JSifyContext {
-				in_json: ctx.in_json,
-				phase: Phase::Preflight,
-				icc: &mut InflightClassContext::disabled(),
-			},
-		);
-
-		// now, we need to lookup the token for the inflight side of the expression.
-		match ctx.phase {
-			Phase::Inflight => ctx.icc.get_lift_token(&node, &preflight_code),
-			Phase::Preflight => preflight_code,
-			Phase::Independent => unreachable!(),
-		}
-	}
-
-	fn jsify_lifted_reference(&mut self, node: &LiftedReference, ctx: &mut JSifyContext) -> String {
-		// jsify the *preflight* side of the expression
-		let preflight_code = self.jsify_reference(
-			&node.preflight_ref,
-			&mut JSifyContext {
-				in_json: ctx.in_json,
-				phase: Phase::Preflight,
-				icc: &mut InflightClassContext::disabled(),
-			},
-		);
-
-		// now, we need to lookup the token for the inflight side of the expression.
-		match ctx.phase {
-			Phase::Inflight => ctx.icc.capture_var(&preflight_code),
-			Phase::Preflight => preflight_code,
-			Phase::Independent => unreachable!(),
-		}
-	}
 
 	fn is_this(&self, expression: &Expr) -> bool {
 		let ExprKind::Reference(ref r) = expression.kind else {

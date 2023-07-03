@@ -1845,7 +1845,6 @@ impl<'a> TypeChecker<'a> {
 				(container_type, env.phase)
 			}
 			ExprKind::FunctionClosure(func_def) => self.type_check_closure(func_def, env),
-			ExprKind::Lifted(l) => self.type_check_exp(&l.preflight_expr, env),
 			ExprKind::CompilerDebugPanic => {
 				// Handle the debug panic expression (during type-checking)
 				dbg_panic!();
@@ -2542,6 +2541,7 @@ impl<'a> TypeChecker<'a> {
 				initializer,
 				phase,
 				inflight_initializer,
+				tokens: _,
 			}) => {
 				// preflight classes cannot be declared inside an inflight scope
 				// (the other way is okay)
@@ -3521,7 +3521,6 @@ impl<'a> TypeChecker<'a> {
 						_ => return None,
 					}
 				}
-				Reference::Lifted(_) => {}
 			}
 		}
 
@@ -3758,9 +3757,6 @@ impl<'a> TypeChecker<'a> {
 					},
 					_ => self.spanned_error_with_var(property, format!("\"{}\" not a valid reference", reference)),
 				}
-			}
-			Reference::Lifted(r) => {
-				panic!("Lifted references should have been resolved by now: {:?}", r);
 			}
 		}
 	}

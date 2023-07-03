@@ -1,8 +1,8 @@
 use crate::{
 	ast::{
 		ArgList, Class, Expr, ExprKind, FunctionBody, FunctionDefinition, FunctionParameter, FunctionSignature, Interface,
-		InterpolatedStringPart, LiftedExpr, LiftedReference, Literal, Reference, Scope, Stmt, StmtKind, Symbol,
-		TypeAnnotation, TypeAnnotationKind, UserDefinedType,
+		InterpolatedStringPart, Literal, Reference, Scope, Stmt, StmtKind, Symbol, TypeAnnotation, TypeAnnotationKind,
+		UserDefinedType,
 	},
 	dbg_panic,
 };
@@ -84,12 +84,6 @@ pub trait Visit<'ast> {
 	}
 	fn visit_symbol(&mut self, node: &'ast Symbol) {
 		visit_symbol(self, node);
-	}
-	fn visit_lifted_expression(&mut self, node: &'ast LiftedExpr) {
-		visit_lifted_expression(self, node);
-	}
-	fn visit_lifted_reference(&mut self, node: &'ast LiftedReference) {
-		visit_lifted_reference(self, node);
 	}
 }
 
@@ -377,9 +371,6 @@ where
 		ExprKind::FunctionClosure(def) => {
 			v.visit_function_definition(def);
 		}
-		ExprKind::Lifted(l) => {
-			v.visit_lifted_expression(l);
-		}
 		ExprKind::CompilerDebugPanic => {
 			// Handle the debug panic expression (during visiting)
 			dbg_panic!();
@@ -428,9 +419,6 @@ where
 		Reference::TypeMember { typeobject, property } => {
 			v.visit_expr(typeobject);
 			v.visit_symbol(property);
-		}
-		Reference::Lifted(l) => {
-			v.visit_lifted_reference(l);
 		}
 	}
 }
@@ -526,18 +514,4 @@ pub fn visit_symbol<'ast, V>(_v: &mut V, _node: &'ast Symbol)
 where
 	V: Visit<'ast> + ?Sized,
 {
-}
-
-pub fn visit_lifted_expression<'ast, V>(_v: &mut V, _node: &'ast LiftedExpr)
-where
-	V: Visit<'ast> + ?Sized,
-{
-	// we are intentionally not visiting the expression since it's not part of the AST at this point
-}
-
-pub fn visit_lifted_reference<'ast, V>(_v: &mut V, _node: &'ast LiftedReference)
-where
-	V: Visit<'ast> + ?Sized,
-{
-	// we are intentionally not visiting the expression since it's not part of the AST at this point
 }

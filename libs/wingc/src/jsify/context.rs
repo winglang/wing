@@ -2,9 +2,10 @@ use std::collections::{BTreeMap, BTreeSet};
 
 use itertools::Itertools;
 
-use crate::ast::LiftedExpr;
+use crate::ast::Symbol;
 
 /// Jsification context at the class level
+#[derive(Debug)]
 pub struct InflightClassContext {
 	/// map from token to lift
 	lift_by_token: BTreeMap<String, Lift>,
@@ -16,14 +17,18 @@ pub struct InflightClassContext {
 	captures: BTreeMap<String, Capture>,
 
 	lifted_fields: BTreeMap<String, String>,
+
+	token_by_expr_id: BTreeMap<usize, String>,
 }
 
+#[derive(Debug, Clone)]
 pub struct Capture {
 	// pub is_type: bool,
 	pub inflight: String,
 	pub preflight: String,
 }
 
+#[derive(Debug, Clone)]
 pub struct MethodLift {
 	pub token: String,
 	pub method: String,
@@ -31,6 +36,7 @@ pub struct MethodLift {
 	pub ops: BTreeSet<String>,
 }
 
+#[derive(Debug, Clone)]
 pub struct Lift {
 	pub token: String,
 	pub preflight: String,
@@ -43,9 +49,8 @@ impl InflightClassContext {
 			lifts: BTreeMap::new(),
 			lift_by_token: BTreeMap::new(),
 			captures: BTreeMap::new(),
-			// captured_types: BTreeMap::new(),
-			// captured_vars: BTreeSet::new(),
 			lifted_fields: BTreeMap::new(),
+			token_by_expr_id: BTreeMap::new(),
 		}
 	}
 
@@ -62,17 +67,25 @@ impl InflightClassContext {
 	}
 
 	/// Adds a lift to the class context
-	pub fn get_lift_token(&mut self, node: &LiftedExpr, preflight_code: &str) -> String {
+	pub fn lift(
+		&mut self,
+		expr_id: usize,
+		method: Option<Symbol>,
+		property: Option<String>,
+		is_field: bool,
+		preflight_code: &str,
+	) {
 		let token = self.render_token(preflight_code);
+
+		self.token_by_expr_id.entry(expr_id).or_insert(token.clone());
 
 		self.lift_by_token.entry(token.clone()).or_insert(Lift {
 			token: token.clone(),
-			field: node.field,
+			field: is_field,
 			preflight: preflight_code.to_string(),
 		});
 
-		let lm = node.lifting_method.clone();
-		let method = lm.and_then(|f| Some(f.name)).unwrap_or(Default::default());
+		let method = method.and_then(|m| Some(m.name)).unwrap_or(Default::default());
 
 		let key = format!("{}/{}", method.clone(), token);
 		let lift = self.lifts.entry(key).or_insert(MethodLift {
@@ -82,38 +95,47 @@ impl InflightClassContext {
 			ops: BTreeSet::new(),
 		});
 
-		if let Some(op) = &node.property {
+		if let Some(op) = &property {
 			lift.ops.insert(op.clone());
 		}
 
-		if node.field {
+		if is_field {
 			self.add_lifted_field(&token, &preflight_code);
-			return format!("this.{}", token);
 		} else {
-			self.capture(preflight_code);
+			self.capture(&expr_id, preflight_code);
 		}
-
-		// return the token
-		token
 	}
 
-	fn capture(&mut self, preflight_code: &str) -> String {
-		let inflight_token = self.render_token(preflight_code);
-		self.captures.entry(inflight_token.clone()).or_insert(Capture {
+	pub fn token_for_expr(&self, expr_id: &usize) -> Option<String> {
+		let Some(token) = self.token_by_expr_id.get(expr_id) else {
+			return None;
+		};
+
+		let is_field = if let Some(lift) = self.lift_by_token.get(token) {
+			lift.field
+		} else {
+			false
+		};
+
+		if is_field {
+			return Some(format!("this.{}", token).to_string());
+		} else {
+			return Some(token.clone());
+		}
+	}
+
+	pub fn capture(&mut self, expr_id: &usize, preflight_code: &str) -> String {
+		let token = self.render_token(preflight_code);
+
+		self.token_by_expr_id.entry(*expr_id).or_insert(token.clone());
+
+		self.captures.entry(token.clone()).or_insert(Capture {
 			// is_type,
-			inflight: inflight_token.to_string(),
+			inflight: token.to_string(),
 			preflight: preflight_code.to_string(),
 		});
 
-		inflight_token.clone()
-	}
-
-	pub fn capture_type(&mut self, fullname: &str) -> String {
-		self.capture(fullname)
-	}
-
-	pub fn capture_var(&mut self, fullname: &str) -> String {
-		self.capture(fullname)
+		token.clone()
 	}
 
 	pub fn captures(&self) -> Vec<&Capture> {

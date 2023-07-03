@@ -352,16 +352,6 @@ pub fn compile(
 	let mut tc_assert = TypeCheckAssert::new(&types, found_errors());
 	tc_assert.check(&scope);
 
-	// -- LIFTING PHASE --
-
-	let mut lift = LiftTransform::new(&mut types);
-	let scope = Box::new(lift.fold_scope(scope));
-
-	// bail out now (before jsification) if there are errors (no point in jsifying)
-	if found_errors() {
-		return Err(());
-	}
-
 	// -- JSIFICATION PHASE --
 
 	let app_name = source_path.file_stem().unwrap().to_str().unwrap();
@@ -379,8 +369,23 @@ pub fn compile(
 	}
 
 	let mut jsifier = JSifier::new(&types, &files, app_name, &project_dir, true);
-	jsifier.jsify(&scope);
-	jsifier.emit_files(&out_dir);
+
+	// -- LIFTING PHASE --
+
+	let mut lift = LiftTransform::new(&jsifier);
+	let scope = Box::new(lift.fold_scope(scope));
+
+	// bail out now (before jsification) if there are errors (no point in jsifying)
+	if found_errors() {
+		return Err(());
+	}
+
+	let files = jsifier.jsify(&scope);
+
+	match files.emit_files(out_dir) {
+		Ok(()) => {}
+		Err(err) => report_diagnostic(err.into()),
+	}
 
 	if found_errors() {
 		return Err(());
