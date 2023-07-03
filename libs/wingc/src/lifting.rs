@@ -101,40 +101,6 @@ impl<'a> LiftTransform<'a> {
 }
 
 impl<'a> Fold for LiftTransform<'a> {
-	fn fold_function_definition(&mut self, node: FunctionDefinition) -> FunctionDefinition {
-		match node.body {
-			FunctionBody::External(s) => {
-				return FunctionDefinition {
-					name: node.name.clone().map(|f| f.clone()),
-					body: FunctionBody::External(s),
-					signature: self.fold_function_signature(node.signature.clone()),
-					is_static: node.is_static,
-					span: node.span.clone(),
-				};
-			}
-
-			FunctionBody::Statements(scope) => {
-				self.ctx.push_function_definition(
-					&node.name,
-					&node.signature.phase,
-					scope.env.borrow().as_ref().unwrap().get_ref(),
-				);
-
-				let result = FunctionDefinition {
-					name: node.name.clone().map(|f| f.clone()),
-					body: FunctionBody::Statements(self.fold_scope(scope)),
-					signature: self.fold_function_signature(node.signature.clone()),
-					is_static: node.is_static,
-					span: node.span.clone(),
-				};
-
-				self.ctx.pop_function_definition();
-
-				result
-			}
-		}
-	}
-
 	fn fold_reference(&mut self, node: Reference) -> Reference {
 		match node {
 			Reference::InstanceMember {
@@ -236,6 +202,40 @@ impl<'a> Fold for LiftTransform<'a> {
 	}
 
 	// State Tracking
+
+	fn fold_function_definition(&mut self, node: FunctionDefinition) -> FunctionDefinition {
+		match node.body {
+			FunctionBody::External(s) => {
+				return FunctionDefinition {
+					name: node.name.clone().map(|f| f.clone()),
+					body: FunctionBody::External(s),
+					signature: self.fold_function_signature(node.signature.clone()),
+					is_static: node.is_static,
+					span: node.span.clone(),
+				};
+			}
+
+			FunctionBody::Statements(scope) => {
+				self.ctx.push_function_definition(
+					&node.name,
+					&node.signature.phase,
+					scope.env.borrow().as_ref().unwrap().get_ref(),
+				);
+
+				let result = FunctionDefinition {
+					name: node.name.clone().map(|f| f.clone()),
+					body: FunctionBody::Statements(self.fold_scope(scope)),
+					signature: self.fold_function_signature(node.signature.clone()),
+					is_static: node.is_static,
+					span: node.span.clone(),
+				};
+
+				self.ctx.pop_function_definition();
+
+				result
+			}
+		}
+	}
 
 	fn fold_class(&mut self, node: Class) -> Class {
 		self.ctx.push_class(UserDefinedType {
