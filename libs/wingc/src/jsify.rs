@@ -345,7 +345,14 @@ impl<'a> JSifier<'a> {
 						.parts
 						.iter()
 						.filter_map(|p| match p {
-							InterpolatedStringPart::Static(l) => Some(format!("\"{}\"", l.to_string())),
+							InterpolatedStringPart::Static(static_string) => {
+								// escape any raw newlines in the string because js `"` strings can't contain them
+								let escaped = static_string
+								.replace("\r\n", "\\r\\n")
+								.replace("\n", "\\n");
+
+								Some(format!("\"{escaped}\""))
+							},
 							InterpolatedStringPart::Expr(_) => None,
 						})
 						.collect::<Vec<String>>()
