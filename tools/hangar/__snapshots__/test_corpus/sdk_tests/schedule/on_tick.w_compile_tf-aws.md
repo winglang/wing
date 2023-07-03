@@ -88,7 +88,7 @@ module.exports = function({  }) {
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.17.0"
+      "version": "0.15.2"
     },
     "outputs": {
       "root": {
@@ -102,7 +102,7 @@ module.exports = function({  }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/on tick is called both for rate and cron schedules\",\"${aws_lambda_function.ontickiscalledbothforrateandcronschedules_Handler_B4B8DF58.arn}\"]]"
+      "value": "[[\"root/Default/Default/on tick is called both for rate and cron schedules\",\"${aws_lambda_function.root_ontickiscalledbothforrateandcronschedules_Handler_C2E1BB5A.arn}\"]]"
     }
   },
   "provider": {
@@ -112,21 +112,21 @@ module.exports = function({  }) {
   },
   "resource": {
     "aws_cloudwatch_event_rule": {
-      "from_cron_Schedule_6C1613E8": {
+      "root_fromcron_Schedule_3D2BEF3C": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/from_cron/Schedule",
-            "uniqueId": "from_cron_Schedule_6C1613E8"
+            "uniqueId": "root_fromcron_Schedule_3D2BEF3C"
           }
         },
         "is_enabled": true,
         "schedule_expression": "cron(* * * * ? *)"
       },
-      "from_rate_Schedule_5B82E706": {
+      "root_fromrate_Schedule_D1B2D87D": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/from_rate/Schedule",
-            "uniqueId": "from_rate_Schedule_5B82E706"
+            "uniqueId": "root_fromrate_Schedule_D1B2D87D"
           }
         },
         "is_enabled": true,
@@ -134,33 +134,33 @@ module.exports = function({  }) {
       }
     },
     "aws_cloudwatch_event_target": {
-      "from_cron_ScheduleTarget-cdafee6e_41C7782A": {
+      "root_fromcron_ScheduleTargetcdafee6e_9F359AC8": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/from_cron/ScheduleTarget-cdafee6e",
-            "uniqueId": "from_cron_ScheduleTarget-cdafee6e_41C7782A"
+            "uniqueId": "root_fromcron_ScheduleTargetcdafee6e_9F359AC8"
           }
         },
-        "arn": "${aws_lambda_function.from_cron-OnTick-cdafee6e.qualified_arn}",
-        "rule": "${aws_cloudwatch_event_rule.from_cron_Schedule_6C1613E8.name}"
+        "arn": "${aws_lambda_function.root_fromcronOnTickcdafee6e_5A276243.qualified_arn}",
+        "rule": "${aws_cloudwatch_event_rule.root_fromcron_Schedule_3D2BEF3C.name}"
       },
-      "from_rate_ScheduleTarget-86898773_91268C49": {
+      "root_fromrate_ScheduleTarget86898773_5D23F273": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/from_rate/ScheduleTarget-86898773",
-            "uniqueId": "from_rate_ScheduleTarget-86898773_91268C49"
+            "uniqueId": "root_fromrate_ScheduleTarget86898773_5D23F273"
           }
         },
-        "arn": "${aws_lambda_function.from_rate-OnTick-86898773.qualified_arn}",
-        "rule": "${aws_cloudwatch_event_rule.from_rate_Schedule_5B82E706.name}"
+        "arn": "${aws_lambda_function.root_fromrateOnTick86898773_8DD612E8.qualified_arn}",
+        "rule": "${aws_cloudwatch_event_rule.root_fromrate_Schedule_D1B2D87D.name}"
       }
     },
     "aws_dynamodb_table": {
-      "c1": {
+      "root_c1_078B8EB9": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/c1/Default",
-            "uniqueId": "c1"
+            "uniqueId": "root_c1_078B8EB9"
           }
         },
         "attribute": [
@@ -173,11 +173,11 @@ module.exports = function({  }) {
         "hash_key": "id",
         "name": "wing-counter-c1-c8b6c50f"
       },
-      "c2": {
+      "root_c2_C0DD38D7": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/c2/Default",
-            "uniqueId": "c2"
+            "uniqueId": "root_c2_C0DD38D7"
           }
         },
         "attribute": [
@@ -192,109 +192,109 @@ module.exports = function({  }) {
       }
     },
     "aws_iam_role": {
-      "from_cron-OnTick-cdafee6e_IamRole_E3633395": {
+      "root_fromcronOnTickcdafee6e_IamRole_52B8F8DE": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/from_cron-OnTick-cdafee6e/IamRole",
-            "uniqueId": "from_cron-OnTick-cdafee6e_IamRole_E3633395"
+            "uniqueId": "root_fromcronOnTickcdafee6e_IamRole_52B8F8DE"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       },
-      "from_rate-OnTick-86898773_IamRole_0C967FAF": {
+      "root_fromrateOnTick86898773_IamRole_071C743E": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/from_rate-OnTick-86898773/IamRole",
-            "uniqueId": "from_rate-OnTick-86898773_IamRole_0C967FAF"
+            "uniqueId": "root_fromrateOnTick86898773_IamRole_071C743E"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       },
-      "ontickiscalledbothforrateandcronschedules_Handler_IamRole_89BBCA80": {
+      "root_ontickiscalledbothforrateandcronschedules_Handler_IamRole_5E1881E8": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/on tick is called both for rate and cron schedules/Handler/IamRole",
-            "uniqueId": "ontickiscalledbothforrateandcronschedules_Handler_IamRole_89BBCA80"
+            "uniqueId": "root_ontickiscalledbothforrateandcronschedules_Handler_IamRole_5E1881E8"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
-      "from_cron-OnTick-cdafee6e_IamRolePolicy_29BCA338": {
+      "root_fromcronOnTickcdafee6e_IamRolePolicy_D826D424": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/from_cron-OnTick-cdafee6e/IamRolePolicy",
-            "uniqueId": "from_cron-OnTick-cdafee6e_IamRolePolicy_29BCA338"
+            "uniqueId": "root_fromcronOnTickcdafee6e_IamRolePolicy_D826D424"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.c1.arn}\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.from_cron-OnTick-cdafee6e_IamRole_E3633395.name}"
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.root_c1_078B8EB9.arn}\"],\"Effect\":\"Allow\"}]}",
+        "role": "${aws_iam_role.root_fromcronOnTickcdafee6e_IamRole_52B8F8DE.name}"
       },
-      "from_rate-OnTick-86898773_IamRolePolicy_4E5A4115": {
+      "root_fromrateOnTick86898773_IamRolePolicy_D0BE52C2": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/from_rate-OnTick-86898773/IamRolePolicy",
-            "uniqueId": "from_rate-OnTick-86898773_IamRolePolicy_4E5A4115"
+            "uniqueId": "root_fromrateOnTick86898773_IamRolePolicy_D0BE52C2"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.c2.arn}\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.from_rate-OnTick-86898773_IamRole_0C967FAF.name}"
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.root_c2_C0DD38D7.arn}\"],\"Effect\":\"Allow\"}]}",
+        "role": "${aws_iam_role.root_fromrateOnTick86898773_IamRole_071C743E.name}"
       },
-      "ontickiscalledbothforrateandcronschedules_Handler_IamRolePolicy_458097AC": {
+      "root_ontickiscalledbothforrateandcronschedules_Handler_IamRolePolicy_E072B7FB": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/on tick is called both for rate and cron schedules/Handler/IamRolePolicy",
-            "uniqueId": "ontickiscalledbothforrateandcronschedules_Handler_IamRolePolicy_458097AC"
+            "uniqueId": "root_ontickiscalledbothforrateandcronschedules_Handler_IamRolePolicy_E072B7FB"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:GetItem\"],\"Resource\":[\"${aws_dynamodb_table.c1.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:GetItem\"],\"Resource\":[\"${aws_dynamodb_table.c2.arn}\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.ontickiscalledbothforrateandcronschedules_Handler_IamRole_89BBCA80.name}"
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:GetItem\"],\"Resource\":[\"${aws_dynamodb_table.root_c1_078B8EB9.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:GetItem\"],\"Resource\":[\"${aws_dynamodb_table.root_c2_C0DD38D7.arn}\"],\"Effect\":\"Allow\"}]}",
+        "role": "${aws_iam_role.root_ontickiscalledbothforrateandcronschedules_Handler_IamRole_5E1881E8.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
-      "from_cron-OnTick-cdafee6e_IamRolePolicyAttachment_C58E382F": {
+      "root_fromcronOnTickcdafee6e_IamRolePolicyAttachment_C877A8DD": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/from_cron-OnTick-cdafee6e/IamRolePolicyAttachment",
-            "uniqueId": "from_cron-OnTick-cdafee6e_IamRolePolicyAttachment_C58E382F"
+            "uniqueId": "root_fromcronOnTickcdafee6e_IamRolePolicyAttachment_C877A8DD"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.from_cron-OnTick-cdafee6e_IamRole_E3633395.name}"
+        "role": "${aws_iam_role.root_fromcronOnTickcdafee6e_IamRole_52B8F8DE.name}"
       },
-      "from_rate-OnTick-86898773_IamRolePolicyAttachment_A9498CA5": {
+      "root_fromrateOnTick86898773_IamRolePolicyAttachment_DDF478CE": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/from_rate-OnTick-86898773/IamRolePolicyAttachment",
-            "uniqueId": "from_rate-OnTick-86898773_IamRolePolicyAttachment_A9498CA5"
+            "uniqueId": "root_fromrateOnTick86898773_IamRolePolicyAttachment_DDF478CE"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.from_rate-OnTick-86898773_IamRole_0C967FAF.name}"
+        "role": "${aws_iam_role.root_fromrateOnTick86898773_IamRole_071C743E.name}"
       },
-      "ontickiscalledbothforrateandcronschedules_Handler_IamRolePolicyAttachment_39063BDF": {
+      "root_ontickiscalledbothforrateandcronschedules_Handler_IamRolePolicyAttachment_B37383AB": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/on tick is called both for rate and cron schedules/Handler/IamRolePolicyAttachment",
-            "uniqueId": "ontickiscalledbothforrateandcronschedules_Handler_IamRolePolicyAttachment_39063BDF"
+            "uniqueId": "root_ontickiscalledbothforrateandcronschedules_Handler_IamRolePolicyAttachment_B37383AB"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.ontickiscalledbothforrateandcronschedules_Handler_IamRole_89BBCA80.name}"
+        "role": "${aws_iam_role.root_ontickiscalledbothforrateandcronschedules_Handler_IamRole_5E1881E8.name}"
       }
     },
     "aws_lambda_function": {
-      "from_cron-OnTick-cdafee6e": {
+      "root_fromcronOnTickcdafee6e_5A276243": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/from_cron-OnTick-cdafee6e/Default",
-            "uniqueId": "from_cron-OnTick-cdafee6e"
+            "uniqueId": "root_fromcronOnTickcdafee6e_5A276243"
           }
         },
         "environment": {
           "variables": {
-            "DYNAMODB_TABLE_NAME_bca69a1d": "${aws_dynamodb_table.c1.name}",
+            "DYNAMODB_TABLE_NAME_bca69a1d": "${aws_dynamodb_table.root_c1_078B8EB9.name}",
             "WING_FUNCTION_NAME": "from_cron-OnTick-cdafee6e-c8a82a50",
             "WING_TARGET": "tf-aws"
           }
@@ -302,26 +302,26 @@ module.exports = function({  }) {
         "function_name": "from_cron-OnTick-cdafee6e-c8a82a50",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.from_cron-OnTick-cdafee6e_IamRole_E3633395.arn}",
+        "role": "${aws_iam_role.root_fromcronOnTickcdafee6e_IamRole_52B8F8DE.arn}",
         "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
-        "s3_key": "${aws_s3_object.from_cron-OnTick-cdafee6e_S3Object_0845743D.key}",
+        "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
+        "s3_key": "${aws_s3_object.root_fromcronOnTickcdafee6e_S3Object_FCA3EA54.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
           "subnet_ids": []
         }
       },
-      "from_rate-OnTick-86898773": {
+      "root_fromrateOnTick86898773_8DD612E8": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/from_rate-OnTick-86898773/Default",
-            "uniqueId": "from_rate-OnTick-86898773"
+            "uniqueId": "root_fromrateOnTick86898773_8DD612E8"
           }
         },
         "environment": {
           "variables": {
-            "DYNAMODB_TABLE_NAME_7ba9f967": "${aws_dynamodb_table.c2.name}",
+            "DYNAMODB_TABLE_NAME_7ba9f967": "${aws_dynamodb_table.root_c2_C0DD38D7.name}",
             "WING_FUNCTION_NAME": "from_rate-OnTick-86898773-c8fb9fa6",
             "WING_TARGET": "tf-aws"
           }
@@ -329,27 +329,27 @@ module.exports = function({  }) {
         "function_name": "from_rate-OnTick-86898773-c8fb9fa6",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.from_rate-OnTick-86898773_IamRole_0C967FAF.arn}",
+        "role": "${aws_iam_role.root_fromrateOnTick86898773_IamRole_071C743E.arn}",
         "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
-        "s3_key": "${aws_s3_object.from_rate-OnTick-86898773_S3Object_68EB6CB9.key}",
+        "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
+        "s3_key": "${aws_s3_object.root_fromrateOnTick86898773_S3Object_4F54473D.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
           "subnet_ids": []
         }
       },
-      "ontickiscalledbothforrateandcronschedules_Handler_B4B8DF58": {
+      "root_ontickiscalledbothforrateandcronschedules_Handler_C2E1BB5A": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/on tick is called both for rate and cron schedules/Handler/Default",
-            "uniqueId": "ontickiscalledbothforrateandcronschedules_Handler_B4B8DF58"
+            "uniqueId": "root_ontickiscalledbothforrateandcronschedules_Handler_C2E1BB5A"
           }
         },
         "environment": {
           "variables": {
-            "DYNAMODB_TABLE_NAME_7ba9f967": "${aws_dynamodb_table.c2.name}",
-            "DYNAMODB_TABLE_NAME_bca69a1d": "${aws_dynamodb_table.c1.name}",
+            "DYNAMODB_TABLE_NAME_7ba9f967": "${aws_dynamodb_table.root_c2_C0DD38D7.name}",
+            "DYNAMODB_TABLE_NAME_bca69a1d": "${aws_dynamodb_table.root_c1_078B8EB9.name}",
             "WING_FUNCTION_NAME": "Handler-c8fa0698",
             "WING_TARGET": "tf-aws"
           }
@@ -357,10 +357,10 @@ module.exports = function({  }) {
         "function_name": "Handler-c8fa0698",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.ontickiscalledbothforrateandcronschedules_Handler_IamRole_89BBCA80.arn}",
+        "role": "${aws_iam_role.root_ontickiscalledbothforrateandcronschedules_Handler_IamRole_5E1881E8.arn}",
         "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
-        "s3_key": "${aws_s3_object.ontickiscalledbothforrateandcronschedules_Handler_S3Object_C05D01D6.key}",
+        "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
+        "s3_key": "${aws_s3_object.root_ontickiscalledbothforrateandcronschedules_Handler_S3Object_D7B071A1.key}",
         "timeout": 120,
         "vpc_config": {
           "security_group_ids": [],
@@ -369,75 +369,75 @@ module.exports = function({  }) {
       }
     },
     "aws_lambda_permission": {
-      "from_cron-OnTick-cdafee6e_InvokePermission-c87c172627b55591ac07edabd9e505482b7ee436d9_5F48CFEA": {
+      "root_fromcronOnTickcdafee6e_InvokePermissionc87c172627b55591ac07edabd9e505482b7ee436d9_D167F85A": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/from_cron-OnTick-cdafee6e/InvokePermission-c87c172627b55591ac07edabd9e505482b7ee436d9",
-            "uniqueId": "from_cron-OnTick-cdafee6e_InvokePermission-c87c172627b55591ac07edabd9e505482b7ee436d9_5F48CFEA"
+            "uniqueId": "root_fromcronOnTickcdafee6e_InvokePermissionc87c172627b55591ac07edabd9e505482b7ee436d9_D167F85A"
           }
         },
         "action": "lambda:InvokeFunction",
-        "function_name": "${aws_lambda_function.from_cron-OnTick-cdafee6e.function_name}",
+        "function_name": "${aws_lambda_function.root_fromcronOnTickcdafee6e_5A276243.function_name}",
         "principal": "events.amazonaws.com",
-        "qualifier": "${aws_lambda_function.from_cron-OnTick-cdafee6e.version}",
-        "source_arn": "${aws_cloudwatch_event_rule.from_cron_Schedule_6C1613E8.arn}"
+        "qualifier": "${aws_lambda_function.root_fromcronOnTickcdafee6e_5A276243.version}",
+        "source_arn": "${aws_cloudwatch_event_rule.root_fromcron_Schedule_3D2BEF3C.arn}"
       },
-      "from_rate-OnTick-86898773_InvokePermission-c83fb79a39ace0a06023877b9ffa8744f9f18c55e4_50324BC1": {
+      "root_fromrateOnTick86898773_InvokePermissionc83fb79a39ace0a06023877b9ffa8744f9f18c55e4_59003CAB": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/from_rate-OnTick-86898773/InvokePermission-c83fb79a39ace0a06023877b9ffa8744f9f18c55e4",
-            "uniqueId": "from_rate-OnTick-86898773_InvokePermission-c83fb79a39ace0a06023877b9ffa8744f9f18c55e4_50324BC1"
+            "uniqueId": "root_fromrateOnTick86898773_InvokePermissionc83fb79a39ace0a06023877b9ffa8744f9f18c55e4_59003CAB"
           }
         },
         "action": "lambda:InvokeFunction",
-        "function_name": "${aws_lambda_function.from_rate-OnTick-86898773.function_name}",
+        "function_name": "${aws_lambda_function.root_fromrateOnTick86898773_8DD612E8.function_name}",
         "principal": "events.amazonaws.com",
-        "qualifier": "${aws_lambda_function.from_rate-OnTick-86898773.version}",
-        "source_arn": "${aws_cloudwatch_event_rule.from_rate_Schedule_5B82E706.arn}"
+        "qualifier": "${aws_lambda_function.root_fromrateOnTick86898773_8DD612E8.version}",
+        "source_arn": "${aws_cloudwatch_event_rule.root_fromrate_Schedule_D1B2D87D.arn}"
       }
     },
     "aws_s3_bucket": {
-      "Code": {
+      "root_Code_02F3C603": {
         "//": {
           "metadata": {
             "path": "root/Default/Code",
-            "uniqueId": "Code"
+            "uniqueId": "root_Code_02F3C603"
           }
         },
         "bucket_prefix": "code-c84a50b1-"
       }
     },
     "aws_s3_object": {
-      "from_cron-OnTick-cdafee6e_S3Object_0845743D": {
+      "root_fromcronOnTickcdafee6e_S3Object_FCA3EA54": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/from_cron-OnTick-cdafee6e/S3Object",
-            "uniqueId": "from_cron-OnTick-cdafee6e_S3Object_0845743D"
+            "uniqueId": "root_fromcronOnTickcdafee6e_S3Object_FCA3EA54"
           }
         },
-        "bucket": "${aws_s3_bucket.Code.bucket}",
+        "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       },
-      "from_rate-OnTick-86898773_S3Object_68EB6CB9": {
+      "root_fromrateOnTick86898773_S3Object_4F54473D": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/from_rate-OnTick-86898773/S3Object",
-            "uniqueId": "from_rate-OnTick-86898773_S3Object_68EB6CB9"
+            "uniqueId": "root_fromrateOnTick86898773_S3Object_4F54473D"
           }
         },
-        "bucket": "${aws_s3_bucket.Code.bucket}",
+        "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       },
-      "ontickiscalledbothforrateandcronschedules_Handler_S3Object_C05D01D6": {
+      "root_ontickiscalledbothforrateandcronschedules_Handler_S3Object_D7B071A1": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/on tick is called both for rate and cron schedules/Handler/S3Object",
-            "uniqueId": "ontickiscalledbothforrateandcronschedules_Handler_S3Object_C05D01D6"
+            "uniqueId": "root_ontickiscalledbothforrateandcronschedules_Handler_S3Object_D7B071A1"
           }
         },
-        "bucket": "${aws_s3_bucket.Code.bucket}",
+        "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       }

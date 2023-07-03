@@ -36,7 +36,8 @@ test("bucket has force_destroy if App is a test environment", () => {
 
   // THEN
   expect(
-    JSON.parse(output).resource.aws_s3_bucket.my_bucket.force_destroy
+    JSON.parse(output).resource.aws_s3_bucket.root_mybucket_E5DAA363
+      .force_destroy
   ).toBe(true);
 });
 

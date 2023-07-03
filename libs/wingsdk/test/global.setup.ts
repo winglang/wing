@@ -5,7 +5,7 @@ import path from "path";
 export async function setup() {
   // compile src/**/*.on*.inflight.ts to .js because these are going to be
   // injected into our javascript vm and cannot be resolved via vitest
-  execSync("pnpm tsc -p tsconfig.test.json", { stdio: "inherit" });
+  execSync("npx tsc -p tsconfig.test.json", { stdio: "inherit" });
   return () => {};
 }
 
