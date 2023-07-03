@@ -10,7 +10,7 @@
 /.projen/tasks.json linguist-generated
 /.vscodeignore linguist-generated
 /LICENSE linguist-generated
-/package-lock.json linguist-generated
 /package.json linguist-generated
+/pnpm-lock.yaml linguist-generated
 /tsconfig.dev.json linguist-generated
 /tsconfig.json linguist-generated

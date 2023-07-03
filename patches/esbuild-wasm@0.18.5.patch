@@ -1,7 +1,7 @@
-diff --git a/node_modules/esbuild-wasm/lib/main.js b/node_modules/esbuild-wasm/lib/main.js
-index 8e02ab5..3e7ac7d 100644
---- a/node_modules/esbuild-wasm/lib/main.js
-+++ b/node_modules/esbuild-wasm/lib/main.js
+diff --git a/lib/main.js b/lib/main.js
+index 8e02ab55097228fb228ebf84baa4f2a0a555870c..3e7ac7dcff97b67e8409044f77f627cebd98e871 100644
+--- a/lib/main.js
++++ b/lib/main.js
 @@ -1926,7 +1926,7 @@ var ensureServiceIsRunning = () => {
    let [command, args] = esbuildCommandAndArgs();
    let child = child_process.spawn(command, args.concat(`--service=${"0.18.5"}`, "--ping"), {
