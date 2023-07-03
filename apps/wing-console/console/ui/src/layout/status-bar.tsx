@@ -1,11 +1,10 @@
-import { useTheme, Loader, Mode } from "@wingconsole/design-system";
+import { useTheme, Loader } from "@wingconsole/design-system";
 import { State } from "@wingconsole/server";
 import classNames from "classnames";
 
 import { AutoUpdater } from "../features/auto-updater.js";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback } from "react";
 import { ArrowPathIcon, MoonIcon, SunIcon } from "@heroicons/react/24/outline";
-import { trpc } from "../services/trpc.js";
 
 export interface StatusBarProps {
   wingVersion?: string;
