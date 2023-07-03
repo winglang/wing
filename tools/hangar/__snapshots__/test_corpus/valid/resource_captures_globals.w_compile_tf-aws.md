@@ -1,143 +1,205 @@
 # [resource_captures_globals.w](../../../../../examples/tests/valid/resource_captures_globals.w) | compile | tf-aws
 
 ## inflight.$Closure1.js
+
 ```js
-module.exports = function({ res }) {
+module.exports = function ({ res }) {
   class $Closure1 {
-    constructor({  }) {
+    constructor({}) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      (await res.myPut());
+    async $inflight_init() {}
+    async handle() {
+      await res.myPut();
     }
   }
   return $Closure1;
-}
-
+};
 ```
 
 ## inflight.$Closure2.js
+
 ```js
-module.exports = function({ Another }) {
+module.exports = function ({ Another }) {
   class $Closure2 {
-    constructor({  }) {
+    constructor({}) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      {((cond) => {if (!cond) throw new Error("assertion failed: Another.myStaticMethod() == 0")})(((await Another.myStaticMethod()) === 0))};
+    async $inflight_init() {}
+    async handle() {
+      {
+        ((cond) => {
+          if (!cond)
+            throw new Error("assertion failed: Another.myStaticMethod() == 0");
+        })((await Another.myStaticMethod()) === 0);
+      }
     }
   }
   return $Closure2;
-}
-
+};
 ```
 
 ## inflight.Another.js
+
 ```js
-module.exports = function({ globalCounter }) {
+module.exports = function ({ globalCounter }) {
   class Another {
     constructor({ first, myField }) {
       this.first = first;
       this.myField = myField;
     }
-    async $inflight_init()  {
-      {((cond) => {if (!cond) throw new Error("assertion failed: globalCounter.peek() == 0")})(((await globalCounter.peek()) === 0))};
+    async $inflight_init() {
+      {
+        ((cond) => {
+          if (!cond)
+            throw new Error("assertion failed: globalCounter.peek() == 0");
+        })((await globalCounter.peek()) === 0);
+      }
     }
-    async myMethod()  {
-      (await globalCounter.inc());
-      return (await globalCounter.peek());
+    async myMethod() {
+      await globalCounter.inc();
+      return await globalCounter.peek();
     }
-    static async myStaticMethod()  {
-      return (await globalCounter.peek());
+    static async myStaticMethod() {
+      return await globalCounter.peek();
     }
   }
   return Another;
-}
-
+};
 ```
 
 ## inflight.First.js
+
 ```js
-module.exports = function({  }) {
+module.exports = function ({}) {
   class First {
     constructor({ myResource }) {
       this.myResource = myResource;
     }
-    async $inflight_init()  {
-    }
+    async $inflight_init() {}
   }
   return First;
-}
-
+};
 ```
 
 ## inflight.MyResource.js
+
 ```js
-module.exports = function({ globalBucket, globalStr, globalBool, globalNum, globalArrayOfStr, globalMapOfNum, globalSetOfStr, globalAnother, Another }) {
+module.exports = function ({
+  globalBucket,
+  globalStr,
+  globalBool,
+  globalNum,
+  globalArrayOfStr,
+  globalMapOfNum,
+  globalSetOfStr,
+  globalAnother,
+  Another,
+}) {
   class MyResource {
     constructor({ localCounter, localTopic }) {
       this.localCounter = localCounter;
       this.localTopic = localTopic;
     }
-    async $inflight_init()  {
-    }
-    async myPut()  {
-      (await this.localTopic.publish("hello"));
-      (await globalBucket.put("key","value"));
-      {((cond) => {if (!cond) throw new Error("assertion failed: globalStr == \"hello\"")})((globalStr === "hello"))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: globalBool == true")})((globalBool === true))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: globalNum == 42")})((globalNum === 42))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: globalArrayOfStr.at(0) == \"hello\"")})(((await globalArrayOfStr.at(0)) === "hello"))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: globalMapOfNum.get(\"a\") == -5")})(((globalMapOfNum)["a"] === (-5)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: globalSetOfStr.has(\"a\")")})((await globalSetOfStr.has("a")))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: globalAnother.myField == \"hello!\"")})((globalAnother.myField === "hello!"))};
-      (await globalAnother.first.myResource.put("key","value"));
-      {((cond) => {if (!cond) throw new Error("assertion failed: globalAnother.myMethod() > 0")})(((await globalAnother.myMethod()) > 0))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: Another.myStaticMethod() > 0")})(((await Another.myStaticMethod()) > 0))};
+    async $inflight_init() {}
+    async myPut() {
+      await this.localTopic.publish("hello");
+      await globalBucket.put("key", "value");
+      {
+        ((cond) => {
+          if (!cond) throw new Error('assertion failed: globalStr == "hello"');
+        })(globalStr === "hello");
+      }
+      {
+        ((cond) => {
+          if (!cond) throw new Error("assertion failed: globalBool == true");
+        })(globalBool === true);
+      }
+      {
+        ((cond) => {
+          if (!cond) throw new Error("assertion failed: globalNum == 42");
+        })(globalNum === 42);
+      }
+      {
+        ((cond) => {
+          if (!cond)
+            throw new Error(
+              'assertion failed: globalArrayOfStr.at(0) == "hello"'
+            );
+        })((await globalArrayOfStr.at(0)) === "hello");
+      }
+      {
+        ((cond) => {
+          if (!cond)
+            throw new Error('assertion failed: globalMapOfNum.get("a") == -5');
+        })(globalMapOfNum["a"] === -5);
+      }
+      {
+        ((cond) => {
+          if (!cond)
+            throw new Error('assertion failed: globalSetOfStr.has("a")');
+        })(await globalSetOfStr.has("a"));
+      }
+      {
+        ((cond) => {
+          if (!cond)
+            throw new Error(
+              'assertion failed: globalAnother.myField == "hello!"'
+            );
+        })(globalAnother.myField === "hello!");
+      }
+      await globalAnother.first.myResource.put("key", "value");
+      {
+        ((cond) => {
+          if (!cond)
+            throw new Error("assertion failed: globalAnother.myMethod() > 0");
+        })((await globalAnother.myMethod()) > 0);
+      }
+      {
+        ((cond) => {
+          if (!cond)
+            throw new Error("assertion failed: Another.myStaticMethod() > 0");
+        })((await Another.myStaticMethod()) > 0);
+      }
     }
   }
   return MyResource;
-}
-
+};
 ```
 
 ## inflight.R.js
+
 ```js
-module.exports = function({ globalCounter, $parentThis }) {
+module.exports = function ({ globalCounter, $parentThis }) {
   class R {
-    constructor({  }) {
+    constructor({}) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      (await globalCounter.inc());
-      (await $parentThis.localCounter.inc());
+    async $inflight_init() {}
+    async handle() {
+      await globalCounter.inc();
+      await $parentThis.localCounter.inc();
     }
   }
   return R;
-}
-
+};
 ```
 
 ## main.tf.json
+
 ```json
 {
   "//": {
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.2"
+      "version": "0.17.0"
     },
     "outputs": {
       "root": {
@@ -151,21 +213,19 @@ module.exports = function({ globalCounter, $parentThis }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:test\",\"${aws_lambda_function.root_testtest_Handler_046C3415.arn}\"],[\"root/Default/Default/test:access cloud resource through static methods only\",\"${aws_lambda_function.root_testaccesscloudresourcethroughstaticmethodsonly_Handler_90784797.arn}\"]]"
+      "value": "[[\"root/Default/Default/test:test\",\"${aws_lambda_function.testtest_Handler_295107CC.arn}\"],[\"root/Default/Default/test:access cloud resource through static methods only\",\"${aws_lambda_function.testaccesscloudresourcethroughstaticmethodsonly_Handler_BC0E7705.arn}\"]]"
     }
   },
   "provider": {
-    "aws": [
-      {}
-    ]
+    "aws": [{}]
   },
   "resource": {
     "aws_dynamodb_table": {
-      "root_MyResource_cloudCounter_B6FF7B6A": {
+      "MyResource_cloudCounter_0782991D": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/MyResource/cloud.Counter/Default",
-            "uniqueId": "root_MyResource_cloudCounter_B6FF7B6A"
+            "uniqueId": "MyResource_cloudCounter_0782991D"
           }
         },
         "attribute": [
@@ -178,11 +238,11 @@ module.exports = function({ globalCounter, $parentThis }) {
         "hash_key": "id",
         "name": "wing-counter-cloud.Counter-c87187fa"
       },
-      "root_cloudCounter_E0AC1263": {
+      "cloudCounter": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/cloud.Counter/Default",
-            "uniqueId": "root_cloudCounter_E0AC1263"
+            "uniqueId": "cloudCounter"
           }
         },
         "attribute": [
@@ -197,113 +257,115 @@ module.exports = function({ globalCounter, $parentThis }) {
       }
     },
     "aws_iam_role": {
-      "root_MyResource_cloudTopicOnMessagef10eb240_IamRole_4BDB9A54": {
+      "MyResource_cloudTopic-OnMessage-f10eb240_IamRole_C06EFF5D": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/MyResource/cloud.Topic-OnMessage-f10eb240/IamRole",
-            "uniqueId": "root_MyResource_cloudTopicOnMessagef10eb240_IamRole_4BDB9A54"
+            "uniqueId": "MyResource_cloudTopic-OnMessage-f10eb240_IamRole_C06EFF5D"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       },
-      "root_testaccesscloudresourcethroughstaticmethodsonly_Handler_IamRole_6B8CBEFD": {
+      "testaccesscloudresourcethroughstaticmethodsonly_Handler_IamRole_1B04D5D0": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:access cloud resource through static methods only/Handler/IamRole",
-            "uniqueId": "root_testaccesscloudresourcethroughstaticmethodsonly_Handler_IamRole_6B8CBEFD"
+            "uniqueId": "testaccesscloudresourcethroughstaticmethodsonly_Handler_IamRole_1B04D5D0"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       },
-      "root_testtest_Handler_IamRole_6C1728D1": {
+      "testtest_Handler_IamRole_15693C93": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:test/Handler/IamRole",
-            "uniqueId": "root_testtest_Handler_IamRole_6C1728D1"
+            "uniqueId": "testtest_Handler_IamRole_15693C93"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
-      "root_MyResource_cloudTopicOnMessagef10eb240_IamRolePolicy_389E9A62": {
+      "MyResource_cloudTopic-OnMessage-f10eb240_IamRolePolicy_3BEB9061": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/MyResource/cloud.Topic-OnMessage-f10eb240/IamRolePolicy",
-            "uniqueId": "root_MyResource_cloudTopicOnMessagef10eb240_IamRolePolicy_389E9A62"
+            "uniqueId": "MyResource_cloudTopic-OnMessage-f10eb240_IamRolePolicy_3BEB9061"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.root_cloudCounter_E0AC1263.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:GetItem\"],\"Resource\":[\"${aws_dynamodb_table.root_cloudCounter_E0AC1263.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.root_MyResource_cloudCounter_B6FF7B6A.arn}\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.root_MyResource_cloudTopicOnMessagef10eb240_IamRole_4BDB9A54.name}"
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.cloudCounter.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:GetItem\"],\"Resource\":[\"${aws_dynamodb_table.cloudCounter.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.MyResource_cloudCounter_0782991D.arn}\"],\"Effect\":\"Allow\"}]}",
+        "role": "${aws_iam_role.MyResource_cloudTopic-OnMessage-f10eb240_IamRole_C06EFF5D.name}"
       },
-      "root_testaccesscloudresourcethroughstaticmethodsonly_Handler_IamRolePolicy_2AD210AF": {
+      "testaccesscloudresourcethroughstaticmethodsonly_Handler_IamRolePolicy_A6861688": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:access cloud resource through static methods only/Handler/IamRolePolicy",
-            "uniqueId": "root_testaccesscloudresourcethroughstaticmethodsonly_Handler_IamRolePolicy_2AD210AF"
+            "uniqueId": "testaccesscloudresourcethroughstaticmethodsonly_Handler_IamRolePolicy_A6861688"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:GetItem\"],\"Resource\":[\"${aws_dynamodb_table.root_cloudCounter_E0AC1263.arn}\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.root_testaccesscloudresourcethroughstaticmethodsonly_Handler_IamRole_6B8CBEFD.name}"
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:GetItem\"],\"Resource\":[\"${aws_dynamodb_table.cloudCounter.arn}\"],\"Effect\":\"Allow\"}]}",
+        "role": "${aws_iam_role.testaccesscloudresourcethroughstaticmethodsonly_Handler_IamRole_1B04D5D0.name}"
       },
-      "root_testtest_Handler_IamRolePolicy_65A1D8BE": {
+      "testtest_Handler_IamRolePolicy_AF0279BD": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:test/Handler/IamRolePolicy",
-            "uniqueId": "root_testtest_Handler_IamRolePolicy_65A1D8BE"
+            "uniqueId": "testtest_Handler_IamRolePolicy_AF0279BD"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\",\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.root_cloudCounter_E0AC1263.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:GetItem\"],\"Resource\":[\"${aws_dynamodb_table.root_cloudCounter_E0AC1263.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.root_Another_First_cloudBucket_B4A67079.arn}\",\"${aws_s3_bucket.root_Another_First_cloudBucket_B4A67079.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"sns:Publish\"],\"Resource\":[\"${aws_sns_topic.root_MyResource_cloudTopic_F71B23B1.arn}\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.root_testtest_Handler_IamRole_6C1728D1.name}"
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.cloudBucket.arn}\",\"${aws_s3_bucket.cloudBucket.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.cloudCounter.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:GetItem\"],\"Resource\":[\"${aws_dynamodb_table.cloudCounter.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.Another_First_cloudBucket_DB822B7C.arn}\",\"${aws_s3_bucket.Another_First_cloudBucket_DB822B7C.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"sns:Publish\"],\"Resource\":[\"${aws_sns_topic.MyResource_cloudTopic_1F3310C3.arn}\"],\"Effect\":\"Allow\"}]}",
+        "role": "${aws_iam_role.testtest_Handler_IamRole_15693C93.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
-      "root_MyResource_cloudTopicOnMessagef10eb240_IamRolePolicyAttachment_B9171011": {
+      "MyResource_cloudTopic-OnMessage-f10eb240_IamRolePolicyAttachment_B5D99AB1": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/MyResource/cloud.Topic-OnMessage-f10eb240/IamRolePolicyAttachment",
-            "uniqueId": "root_MyResource_cloudTopicOnMessagef10eb240_IamRolePolicyAttachment_B9171011"
+            "uniqueId": "MyResource_cloudTopic-OnMessage-f10eb240_IamRolePolicyAttachment_B5D99AB1"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.root_MyResource_cloudTopicOnMessagef10eb240_IamRole_4BDB9A54.name}"
+        "role": "${aws_iam_role.MyResource_cloudTopic-OnMessage-f10eb240_IamRole_C06EFF5D.name}"
       },
-      "root_testaccesscloudresourcethroughstaticmethodsonly_Handler_IamRolePolicyAttachment_B013CEF2": {
+      "testaccesscloudresourcethroughstaticmethodsonly_Handler_IamRolePolicyAttachment_842C871D": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:access cloud resource through static methods only/Handler/IamRolePolicyAttachment",
-            "uniqueId": "root_testaccesscloudresourcethroughstaticmethodsonly_Handler_IamRolePolicyAttachment_B013CEF2"
+            "uniqueId": "testaccesscloudresourcethroughstaticmethodsonly_Handler_IamRolePolicyAttachment_842C871D"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.root_testaccesscloudresourcethroughstaticmethodsonly_Handler_IamRole_6B8CBEFD.name}"
+        "role": "${aws_iam_role.testaccesscloudresourcethroughstaticmethodsonly_Handler_IamRole_1B04D5D0.name}"
       },
-      "root_testtest_Handler_IamRolePolicyAttachment_3716AC26": {
+      "testtest_Handler_IamRolePolicyAttachment_ADF4752D": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:test/Handler/IamRolePolicyAttachment",
-            "uniqueId": "root_testtest_Handler_IamRolePolicyAttachment_3716AC26"
+            "uniqueId": "testtest_Handler_IamRolePolicyAttachment_ADF4752D"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.root_testtest_Handler_IamRole_6C1728D1.name}"
+        "role": "${aws_iam_role.testtest_Handler_IamRole_15693C93.name}"
       }
     },
     "aws_lambda_function": {
-      "root_MyResource_cloudTopicOnMessagef10eb240_AE4B2541": {
+      "MyResource_cloudTopic-OnMessage-f10eb240_23BCEE41": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/MyResource/cloud.Topic-OnMessage-f10eb240/Default",
-            "uniqueId": "root_MyResource_cloudTopicOnMessagef10eb240_AE4B2541"
+            "uniqueId": "MyResource_cloudTopic-OnMessage-f10eb240_23BCEE41"
           }
         },
         "environment": {
           "variables": {
-            "BUCKET_NAME_ae5b06c6": "${aws_s3_bucket.root_Another_First_cloudBucket_B4A67079.bucket}",
-            "BUCKET_NAME_d755b447": "${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
-            "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.root_cloudCounter_E0AC1263.name}",
-            "DYNAMODB_TABLE_NAME_5afed199": "${aws_dynamodb_table.root_MyResource_cloudCounter_B6FF7B6A.name}",
-            "TOPIC_ARN_53de52bf": "${aws_sns_topic.root_MyResource_cloudTopic_F71B23B1.arn}",
+            "BUCKET_NAME_ae5b06c6": "${aws_s3_bucket.Another_First_cloudBucket_DB822B7C.bucket}",
+            "BUCKET_NAME_ae5b06c6_IS_PUBLIC": "false",
+            "BUCKET_NAME_d755b447": "${aws_s3_bucket.cloudBucket.bucket}",
+            "BUCKET_NAME_d755b447_IS_PUBLIC": "false",
+            "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.cloudCounter.name}",
+            "DYNAMODB_TABLE_NAME_5afed199": "${aws_dynamodb_table.MyResource_cloudCounter_0782991D.name}",
+            "TOPIC_ARN_53de52bf": "${aws_sns_topic.MyResource_cloudTopic_1F3310C3.arn}",
             "WING_FUNCTION_NAME": "cloud-Topic-OnMessage-f10eb240-c8df2c86",
             "WING_TARGET": "tf-aws"
           }
@@ -311,26 +373,26 @@ module.exports = function({ globalCounter, $parentThis }) {
         "function_name": "cloud-Topic-OnMessage-f10eb240-c8df2c86",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.root_MyResource_cloudTopicOnMessagef10eb240_IamRole_4BDB9A54.arn}",
+        "role": "${aws_iam_role.MyResource_cloudTopic-OnMessage-f10eb240_IamRole_C06EFF5D.arn}",
         "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
-        "s3_key": "${aws_s3_object.root_MyResource_cloudTopicOnMessagef10eb240_S3Object_7458F840.key}",
+        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
+        "s3_key": "${aws_s3_object.MyResource_cloudTopic-OnMessage-f10eb240_S3Object_B244E1DD.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
           "subnet_ids": []
         }
       },
-      "root_testaccesscloudresourcethroughstaticmethodsonly_Handler_90784797": {
+      "testaccesscloudresourcethroughstaticmethodsonly_Handler_BC0E7705": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:access cloud resource through static methods only/Handler/Default",
-            "uniqueId": "root_testaccesscloudresourcethroughstaticmethodsonly_Handler_90784797"
+            "uniqueId": "testaccesscloudresourcethroughstaticmethodsonly_Handler_BC0E7705"
           }
         },
         "environment": {
           "variables": {
-            "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.root_cloudCounter_E0AC1263.name}",
+            "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.cloudCounter.name}",
             "WING_FUNCTION_NAME": "Handler-c8de1ef1",
             "WING_TARGET": "tf-aws"
           }
@@ -338,30 +400,32 @@ module.exports = function({ globalCounter, $parentThis }) {
         "function_name": "Handler-c8de1ef1",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.root_testaccesscloudresourcethroughstaticmethodsonly_Handler_IamRole_6B8CBEFD.arn}",
+        "role": "${aws_iam_role.testaccesscloudresourcethroughstaticmethodsonly_Handler_IamRole_1B04D5D0.arn}",
         "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
-        "s3_key": "${aws_s3_object.root_testaccesscloudresourcethroughstaticmethodsonly_Handler_S3Object_2C11A1C8.key}",
+        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
+        "s3_key": "${aws_s3_object.testaccesscloudresourcethroughstaticmethodsonly_Handler_S3Object_57D98226.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
           "subnet_ids": []
         }
       },
-      "root_testtest_Handler_046C3415": {
+      "testtest_Handler_295107CC": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:test/Handler/Default",
-            "uniqueId": "root_testtest_Handler_046C3415"
+            "uniqueId": "testtest_Handler_295107CC"
           }
         },
         "environment": {
           "variables": {
-            "BUCKET_NAME_ae5b06c6": "${aws_s3_bucket.root_Another_First_cloudBucket_B4A67079.bucket}",
-            "BUCKET_NAME_d755b447": "${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
-            "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.root_cloudCounter_E0AC1263.name}",
-            "DYNAMODB_TABLE_NAME_5afed199": "${aws_dynamodb_table.root_MyResource_cloudCounter_B6FF7B6A.name}",
-            "TOPIC_ARN_53de52bf": "${aws_sns_topic.root_MyResource_cloudTopic_F71B23B1.arn}",
+            "BUCKET_NAME_ae5b06c6": "${aws_s3_bucket.Another_First_cloudBucket_DB822B7C.bucket}",
+            "BUCKET_NAME_ae5b06c6_IS_PUBLIC": "false",
+            "BUCKET_NAME_d755b447": "${aws_s3_bucket.cloudBucket.bucket}",
+            "BUCKET_NAME_d755b447_IS_PUBLIC": "false",
+            "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.cloudCounter.name}",
+            "DYNAMODB_TABLE_NAME_5afed199": "${aws_dynamodb_table.MyResource_cloudCounter_0782991D.name}",
+            "TOPIC_ARN_53de52bf": "${aws_sns_topic.MyResource_cloudTopic_1F3310C3.arn}",
             "WING_FUNCTION_NAME": "Handler-c8f4f2a1",
             "WING_TARGET": "tf-aws"
           }
@@ -369,10 +433,10 @@ module.exports = function({ globalCounter, $parentThis }) {
         "function_name": "Handler-c8f4f2a1",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.root_testtest_Handler_IamRole_6C1728D1.arn}",
+        "role": "${aws_iam_role.testtest_Handler_IamRole_15693C93.arn}",
         "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
-        "s3_key": "${aws_s3_object.root_testtest_Handler_S3Object_71CD07AC.key}",
+        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
+        "s3_key": "${aws_s3_object.testtest_Handler_S3Object_9F4E28A7.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -381,44 +445,44 @@ module.exports = function({ globalCounter, $parentThis }) {
       }
     },
     "aws_lambda_permission": {
-      "root_MyResource_cloudTopicOnMessagef10eb240_InvokePermissionc8f2c43e88c72aa87b4192974983c81bf653de52bf_BEBFCC54": {
+      "MyResource_cloudTopic-OnMessage-f10eb240_InvokePermission-c8f2c43e88c72aa87b4192974983c81bf653de52bf_CFD3D6F2": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/MyResource/cloud.Topic-OnMessage-f10eb240/InvokePermission-c8f2c43e88c72aa87b4192974983c81bf653de52bf",
-            "uniqueId": "root_MyResource_cloudTopicOnMessagef10eb240_InvokePermissionc8f2c43e88c72aa87b4192974983c81bf653de52bf_BEBFCC54"
+            "uniqueId": "MyResource_cloudTopic-OnMessage-f10eb240_InvokePermission-c8f2c43e88c72aa87b4192974983c81bf653de52bf_CFD3D6F2"
           }
         },
         "action": "lambda:InvokeFunction",
-        "function_name": "${aws_lambda_function.root_MyResource_cloudTopicOnMessagef10eb240_AE4B2541.function_name}",
+        "function_name": "${aws_lambda_function.MyResource_cloudTopic-OnMessage-f10eb240_23BCEE41.function_name}",
         "principal": "sns.amazonaws.com",
-        "source_arn": "${aws_sns_topic.root_MyResource_cloudTopic_F71B23B1.arn}"
+        "source_arn": "${aws_sns_topic.MyResource_cloudTopic_1F3310C3.arn}"
       }
     },
     "aws_s3_bucket": {
-      "root_Another_First_cloudBucket_B4A67079": {
+      "Another_First_cloudBucket_DB822B7C": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/Another/First/cloud.Bucket/Default",
-            "uniqueId": "root_Another_First_cloudBucket_B4A67079"
+            "uniqueId": "Another_First_cloudBucket_DB822B7C"
           }
         },
         "bucket_prefix": "cloud-bucket-c84d72a1-",
         "force_destroy": false
       },
-      "root_Code_02F3C603": {
+      "Code": {
         "//": {
           "metadata": {
             "path": "root/Default/Code",
-            "uniqueId": "root_Code_02F3C603"
+            "uniqueId": "Code"
           }
         },
         "bucket_prefix": "code-c84a50b1-"
       },
-      "root_cloudBucket_4F3C4F53": {
+      "cloudBucket": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/cloud.Bucket/Default",
-            "uniqueId": "root_cloudBucket_4F3C4F53"
+            "uniqueId": "cloudBucket"
           }
         },
         "bucket_prefix": "cloud-bucket-c87175e7-",
@@ -426,42 +490,42 @@ module.exports = function({ globalCounter, $parentThis }) {
       }
     },
     "aws_s3_bucket_public_access_block": {
-      "root_Another_First_cloudBucket_PublicAccessBlock_E03A84DE": {
+      "Another_First_cloudBucket_PublicAccessBlock_BB475ACE": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/Another/First/cloud.Bucket/PublicAccessBlock",
-            "uniqueId": "root_Another_First_cloudBucket_PublicAccessBlock_E03A84DE"
+            "uniqueId": "Another_First_cloudBucket_PublicAccessBlock_BB475ACE"
           }
         },
         "block_public_acls": true,
         "block_public_policy": true,
-        "bucket": "${aws_s3_bucket.root_Another_First_cloudBucket_B4A67079.bucket}",
+        "bucket": "${aws_s3_bucket.Another_First_cloudBucket_DB822B7C.bucket}",
         "ignore_public_acls": true,
         "restrict_public_buckets": true
       },
-      "root_cloudBucket_PublicAccessBlock_319C1C2E": {
+      "cloudBucket_PublicAccessBlock_5946CCE8": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/cloud.Bucket/PublicAccessBlock",
-            "uniqueId": "root_cloudBucket_PublicAccessBlock_319C1C2E"
+            "uniqueId": "cloudBucket_PublicAccessBlock_5946CCE8"
           }
         },
         "block_public_acls": true,
         "block_public_policy": true,
-        "bucket": "${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
+        "bucket": "${aws_s3_bucket.cloudBucket.bucket}",
         "ignore_public_acls": true,
         "restrict_public_buckets": true
       }
     },
     "aws_s3_bucket_server_side_encryption_configuration": {
-      "root_Another_First_cloudBucket_Encryption_1049825A": {
+      "Another_First_cloudBucket_Encryption_C22274BF": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/Another/First/cloud.Bucket/Encryption",
-            "uniqueId": "root_Another_First_cloudBucket_Encryption_1049825A"
+            "uniqueId": "Another_First_cloudBucket_Encryption_C22274BF"
           }
         },
-        "bucket": "${aws_s3_bucket.root_Another_First_cloudBucket_B4A67079.bucket}",
+        "bucket": "${aws_s3_bucket.Another_First_cloudBucket_DB822B7C.bucket}",
         "rule": [
           {
             "apply_server_side_encryption_by_default": {
@@ -470,14 +534,14 @@ module.exports = function({ globalCounter, $parentThis }) {
           }
         ]
       },
-      "root_cloudBucket_Encryption_8ED0CD9C": {
+      "cloudBucket_Encryption_77B6AEEF": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/cloud.Bucket/Encryption",
-            "uniqueId": "root_cloudBucket_Encryption_8ED0CD9C"
+            "uniqueId": "cloudBucket_Encryption_77B6AEEF"
           }
         },
-        "bucket": "${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
+        "bucket": "${aws_s3_bucket.cloudBucket.bucket}",
         "rule": [
           {
             "apply_server_side_encryption_by_default": {
@@ -488,62 +552,62 @@ module.exports = function({ globalCounter, $parentThis }) {
       }
     },
     "aws_s3_object": {
-      "root_MyResource_cloudTopicOnMessagef10eb240_S3Object_7458F840": {
+      "MyResource_cloudTopic-OnMessage-f10eb240_S3Object_B244E1DD": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/MyResource/cloud.Topic-OnMessage-f10eb240/S3Object",
-            "uniqueId": "root_MyResource_cloudTopicOnMessagef10eb240_S3Object_7458F840"
+            "uniqueId": "MyResource_cloudTopic-OnMessage-f10eb240_S3Object_B244E1DD"
           }
         },
-        "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
+        "bucket": "${aws_s3_bucket.Code.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       },
-      "root_testaccesscloudresourcethroughstaticmethodsonly_Handler_S3Object_2C11A1C8": {
+      "testaccesscloudresourcethroughstaticmethodsonly_Handler_S3Object_57D98226": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:access cloud resource through static methods only/Handler/S3Object",
-            "uniqueId": "root_testaccesscloudresourcethroughstaticmethodsonly_Handler_S3Object_2C11A1C8"
+            "uniqueId": "testaccesscloudresourcethroughstaticmethodsonly_Handler_S3Object_57D98226"
           }
         },
-        "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
+        "bucket": "${aws_s3_bucket.Code.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       },
-      "root_testtest_Handler_S3Object_71CD07AC": {
+      "testtest_Handler_S3Object_9F4E28A7": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:test/Handler/S3Object",
-            "uniqueId": "root_testtest_Handler_S3Object_71CD07AC"
+            "uniqueId": "testtest_Handler_S3Object_9F4E28A7"
           }
         },
-        "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
+        "bucket": "${aws_s3_bucket.Code.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       }
     },
     "aws_sns_topic": {
-      "root_MyResource_cloudTopic_F71B23B1": {
+      "MyResource_cloudTopic_1F3310C3": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/MyResource/cloud.Topic/Default",
-            "uniqueId": "root_MyResource_cloudTopic_F71B23B1"
+            "uniqueId": "MyResource_cloudTopic_1F3310C3"
           }
         },
         "name": "cloud-Topic-c8f2c43e"
       }
     },
     "aws_sns_topic_subscription": {
-      "root_MyResource_cloudTopic_cloudTopicTopicSubscriptionf10eb240_334AAAEE": {
+      "MyResource_cloudTopic_cloudTopic-TopicSubscription-f10eb240_5B88092E": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/MyResource/cloud.Topic/cloud.Topic-TopicSubscription-f10eb240",
-            "uniqueId": "root_MyResource_cloudTopic_cloudTopicTopicSubscriptionf10eb240_334AAAEE"
+            "uniqueId": "MyResource_cloudTopic_cloudTopic-TopicSubscription-f10eb240_5B88092E"
           }
         },
-        "endpoint": "${aws_lambda_function.root_MyResource_cloudTopicOnMessagef10eb240_AE4B2541.arn}",
+        "endpoint": "${aws_lambda_function.MyResource_cloudTopic-OnMessage-f10eb240_23BCEE41.arn}",
         "protocol": "lambda",
-        "topic_arn": "${aws_sns_topic.root_MyResource_cloudTopic_F71B23B1.arn}"
+        "topic_arn": "${aws_sns_topic.MyResource_cloudTopic_1F3310C3.arn}"
       }
     }
   }
@@ -551,20 +615,25 @@ module.exports = function({ globalCounter, $parentThis }) {
 ```
 
 ## preflight.js
+
 ```js
-const $stdlib = require('@winglang/sdk');
+const $stdlib = require("@winglang/sdk");
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
-const cloud = require('@winglang/sdk').cloud;
+const cloud = require("@winglang/sdk").cloud;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
     class First extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
+      constructor(scope, id) {
         super(scope, id);
-        this.myResource = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
+        this.myResource = this.node.root.newAbstract(
+          "@winglang/sdk.cloud.Bucket",
+          this,
+          "cloud.Bucket"
+        );
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.First.js";
@@ -594,10 +663,10 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class Another extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
+      constructor(scope, id) {
         super(scope, id);
         this.myField = "hello!";
-        this.first = new First(this,"First");
+        this.first = new First(this, "First");
         this._addInflightOps("myMethod", "myStaticMethod");
       }
       static _toInflightType(context) {
@@ -643,13 +712,21 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class MyResource extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
+      constructor(scope, id) {
         super(scope, id);
-        this.localTopic = this.node.root.newAbstract("@winglang/sdk.cloud.Topic",this,"cloud.Topic");
-        this.localCounter = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"cloud.Counter");
+        this.localTopic = this.node.root.newAbstract(
+          "@winglang/sdk.cloud.Topic",
+          this,
+          "cloud.Topic"
+        );
+        this.localCounter = this.node.root.newAbstract(
+          "@winglang/sdk.cloud.Counter",
+          this,
+          "cloud.Counter"
+        );
         const $parentThis = this;
         class R extends $stdlib.std.Resource {
-          constructor(scope, id, ) {
+          constructor(scope, id) {
             super(scope, id);
             this._addInflightOps("handle");
           }
@@ -687,7 +764,7 @@ class $Root extends $stdlib.std.Resource {
             super._registerBind(host, ops);
           }
         }
-        (this.localTopic.onMessage(new R(this,"R")));
+        this.localTopic.onMessage(new R(this, "R"));
         this._addInflightOps("myPut");
       }
       static _toInflightType(context) {
@@ -746,7 +823,9 @@ class $Root extends $stdlib.std.Resource {
         if (ops.includes("myPut")) {
           MyResource._registerBindObject(Another, host, ["myStaticMethod"]);
           MyResource._registerBindObject(globalAnother, host, ["myMethod"]);
-          MyResource._registerBindObject(globalAnother.first.myResource, host, ["put"]);
+          MyResource._registerBindObject(globalAnother.first.myResource, host, [
+            "put",
+          ]);
           MyResource._registerBindObject(globalAnother.myField, host, []);
           MyResource._registerBindObject(globalArrayOfStr, host, ["at"]);
           MyResource._registerBindObject(globalBool, host, []);
@@ -761,7 +840,7 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure1 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
+      constructor(scope, id) {
         super(scope, id);
         this.display.hidden = true;
         this._addInflightOps("handle");
@@ -797,7 +876,7 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure2 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
+      constructor(scope, id) {
         super(scope, id);
         this.display.hidden = true;
         this._addInflightOps("handle");
@@ -831,23 +910,48 @@ class $Root extends $stdlib.std.Resource {
         super._registerBind(host, ops);
       }
     }
-    const globalBucket = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
-    const globalCounter = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"cloud.Counter");
+    const globalBucket = this.node.root.newAbstract(
+      "@winglang/sdk.cloud.Bucket",
+      this,
+      "cloud.Bucket"
+    );
+    const globalCounter = this.node.root.newAbstract(
+      "@winglang/sdk.cloud.Counter",
+      this,
+      "cloud.Counter"
+    );
     const globalStr = "hello";
     const globalBool = true;
     const globalNum = 42;
     const globalArrayOfStr = Object.freeze(["hello", "world"]);
-    const globalMapOfNum = Object.freeze({"a":(-5),"b":2});
+    const globalMapOfNum = Object.freeze({ a: -5, b: 2 });
     const globalSetOfStr = Object.freeze(new Set(["a", "b"]));
-    const globalAnother = new Another(this,"Another");
-    const res = new MyResource(this,"MyResource");
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:test",new $Closure1(this,"$Closure1"));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:access cloud resource through static methods only",new $Closure2(this,"$Closure2"));
+    const globalAnother = new Another(this, "Another");
+    const res = new MyResource(this, "MyResource");
+    this.node.root.new(
+      "@winglang/sdk.std.Test",
+      std.Test,
+      this,
+      "test:test",
+      new $Closure1(this, "$Closure1")
+    );
+    this.node.root.new(
+      "@winglang/sdk.std.Test",
+      std.Test,
+      this,
+      "test:access cloud resource through static methods only",
+      new $Closure2(this, "$Closure2")
+    );
   }
 }
 class $App extends $AppBase {
   constructor() {
-    super({ outdir: $outdir, name: "resource_captures_globals", plugins: $plugins, isTestEnvironment: $wing_is_test });
+    super({
+      outdir: $outdir,
+      name: "resource_captures_globals",
+      plugins: $plugins,
+      isTestEnvironment: $wing_is_test,
+    });
     if ($wing_is_test) {
       new $Root(this, "env0");
       const $test_runner = this.testRunner;
@@ -861,6 +965,4 @@ class $App extends $AppBase {
   }
 }
 new $App().synth();
-
 ```
-

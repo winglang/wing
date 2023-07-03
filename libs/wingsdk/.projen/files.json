@@ -3,7 +3,6 @@
     ".eslintrc.json",
     ".gitattributes",
     ".gitignore",
-    ".npmrc",
     ".prettierignore",
     ".prettierrc.json",
     ".projen/deps.json",

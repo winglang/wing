@@ -3,6 +3,8 @@ import { parseArgs } from "node:util";
 import { appendFile } from "node:fs/promises";
 import { getReleaseData } from "./release-files.js";
 import { setPackageVersion } from "./bump.js";
+import { pathExistsSync } from "fs-extra";
+import { dirname } from "node:path";
 
 const parsedArgs = parseArgs({
   options: {
@@ -18,10 +20,11 @@ const parsedArgs = parseArgs({
   },
 });
 
-const packageDir = parsedArgs.values.bumpPackage ? process.cwd() : undefined;
+const packageDir = process.cwd();
 const dryRun = parsedArgs.values.dryRun ?? false;
+const bumpPackage = parsedArgs.values.bumpPackage ?? false;
 
-if (packageDir !== undefined) {
+if (bumpPackage) {
   // We want to make sure a package is versioned and is pointing to the correct dep versions
   const originalVersions = await setPackageVersion({
     packageDir,

@@ -1,43 +1,90 @@
 # [try_delete.w](../../../../../../examples/tests/sdk_tests/bucket/try_delete.w) | compile | tf-aws
 
 ## inflight.$Closure1.js
+
 ```js
-module.exports = function({ b }) {
+module.exports = function ({ b }) {
   class $Closure1 {
-    constructor({  }) {
+    constructor({}) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      const jsonObj2 = Object.freeze({"key2":"value2"});
-      (await b.put("file1.txt","Foo"));
-      {((cond) => {if (!cond) throw new Error("assertion failed: b.tryDelete(\"file1.txt\") == true")})(((await b.tryDelete("file1.txt")) === true))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: b.tryDelete(\"file1.txt\") == false")})(((await b.tryDelete("file1.txt")) === false))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: b.tryDelete(\"random\") == false")})(((await b.tryDelete("random")) === false))};
-      (await b.put("file2.txt","Bar"));
-      (await b.putJson("file2.json",jsonObj2));
-      {((cond) => {if (!cond) throw new Error("assertion failed: b.tryDelete(\"file2.txt\") == true")})(((await b.tryDelete("file2.txt")) === true))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: b.tryDelete(\"file2.json\") == true")})(((await b.tryDelete("file2.json")) === true))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: b.tryDelete(\"file2.txt\") == false")})(((await b.tryDelete("file2.txt")) === false))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: b.tryDelete(\"file2.json\") == false")})(((await b.tryDelete("file2.json")) === false))};
+    async $inflight_init() {}
+    async handle() {
+      const jsonObj2 = Object.freeze({ key2: "value2" });
+      await b.put("file1.txt", "Foo");
+      {
+        ((cond) => {
+          if (!cond)
+            throw new Error(
+              'assertion failed: b.tryDelete("file1.txt") == true'
+            );
+        })((await b.tryDelete("file1.txt")) === true);
+      }
+      {
+        ((cond) => {
+          if (!cond)
+            throw new Error(
+              'assertion failed: b.tryDelete("file1.txt") == false'
+            );
+        })((await b.tryDelete("file1.txt")) === false);
+      }
+      {
+        ((cond) => {
+          if (!cond)
+            throw new Error('assertion failed: b.tryDelete("random") == false');
+        })((await b.tryDelete("random")) === false);
+      }
+      await b.put("file2.txt", "Bar");
+      await b.putJson("file2.json", jsonObj2);
+      {
+        ((cond) => {
+          if (!cond)
+            throw new Error(
+              'assertion failed: b.tryDelete("file2.txt") == true'
+            );
+        })((await b.tryDelete("file2.txt")) === true);
+      }
+      {
+        ((cond) => {
+          if (!cond)
+            throw new Error(
+              'assertion failed: b.tryDelete("file2.json") == true'
+            );
+        })((await b.tryDelete("file2.json")) === true);
+      }
+      {
+        ((cond) => {
+          if (!cond)
+            throw new Error(
+              'assertion failed: b.tryDelete("file2.txt") == false'
+            );
+        })((await b.tryDelete("file2.txt")) === false);
+      }
+      {
+        ((cond) => {
+          if (!cond)
+            throw new Error(
+              'assertion failed: b.tryDelete("file2.json") == false'
+            );
+        })((await b.tryDelete("file2.json")) === false);
+      }
     }
   }
   return $Closure1;
-}
-
+};
 ```
 
 ## main.tf.json
+
 ```json
 {
   "//": {
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.2"
+      "version": "0.17.0"
     },
     "outputs": {
       "root": {
@@ -51,61 +98,60 @@ module.exports = function({ b }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:tryDelete\",\"${aws_lambda_function.root_testtryDelete_Handler_5B5B7840.arn}\"]]"
+      "value": "[[\"root/Default/Default/test:tryDelete\",\"${aws_lambda_function.testtryDelete_Handler_C4052A94.arn}\"]]"
     }
   },
   "provider": {
-    "aws": [
-      {}
-    ]
+    "aws": [{}]
   },
   "resource": {
     "aws_iam_role": {
-      "root_testtryDelete_Handler_IamRole_F3282D1A": {
+      "testtryDelete_Handler_IamRole_9139123D": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:tryDelete/Handler/IamRole",
-            "uniqueId": "root_testtryDelete_Handler_IamRole_F3282D1A"
+            "uniqueId": "testtryDelete_Handler_IamRole_9139123D"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
-      "root_testtryDelete_Handler_IamRolePolicy_E6E56C4A": {
+      "testtryDelete_Handler_IamRolePolicy_1DEE72C3": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:tryDelete/Handler/IamRolePolicy",
-            "uniqueId": "root_testtryDelete_Handler_IamRolePolicy_E6E56C4A"
+            "uniqueId": "testtryDelete_Handler_IamRolePolicy_1DEE72C3"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\",\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:List*\",\"s3:DeleteObject*\",\"s3:DeleteObjectVersion*\",\"s3:PutLifecycleConfiguration*\"],\"Resource\":[\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\",\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.root_testtryDelete_Handler_IamRole_F3282D1A.name}"
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.cloudBucket.arn}\",\"${aws_s3_bucket.cloudBucket.arn}/*\"],\"Effect\":\"Allow\"}]}",
+        "role": "${aws_iam_role.testtryDelete_Handler_IamRole_9139123D.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
-      "root_testtryDelete_Handler_IamRolePolicyAttachment_080461CD": {
+      "testtryDelete_Handler_IamRolePolicyAttachment_A43F0399": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:tryDelete/Handler/IamRolePolicyAttachment",
-            "uniqueId": "root_testtryDelete_Handler_IamRolePolicyAttachment_080461CD"
+            "uniqueId": "testtryDelete_Handler_IamRolePolicyAttachment_A43F0399"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.root_testtryDelete_Handler_IamRole_F3282D1A.name}"
+        "role": "${aws_iam_role.testtryDelete_Handler_IamRole_9139123D.name}"
       }
     },
     "aws_lambda_function": {
-      "root_testtryDelete_Handler_5B5B7840": {
+      "testtryDelete_Handler_C4052A94": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:tryDelete/Handler/Default",
-            "uniqueId": "root_testtryDelete_Handler_5B5B7840"
+            "uniqueId": "testtryDelete_Handler_C4052A94"
           }
         },
         "environment": {
           "variables": {
-            "BUCKET_NAME_d755b447": "${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
+            "BUCKET_NAME_d755b447": "${aws_s3_bucket.cloudBucket.bucket}",
+            "BUCKET_NAME_d755b447_IS_PUBLIC": "false",
             "WING_FUNCTION_NAME": "Handler-c85151e8",
             "WING_TARGET": "tf-aws"
           }
@@ -113,10 +159,10 @@ module.exports = function({ b }) {
         "function_name": "Handler-c85151e8",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.root_testtryDelete_Handler_IamRole_F3282D1A.arn}",
+        "role": "${aws_iam_role.testtryDelete_Handler_IamRole_9139123D.arn}",
         "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
-        "s3_key": "${aws_s3_object.root_testtryDelete_Handler_S3Object_8C99824E.key}",
+        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
+        "s3_key": "${aws_s3_object.testtryDelete_Handler_S3Object_DD0AB5F1.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -125,20 +171,20 @@ module.exports = function({ b }) {
       }
     },
     "aws_s3_bucket": {
-      "root_Code_02F3C603": {
+      "Code": {
         "//": {
           "metadata": {
             "path": "root/Default/Code",
-            "uniqueId": "root_Code_02F3C603"
+            "uniqueId": "Code"
           }
         },
         "bucket_prefix": "code-c84a50b1-"
       },
-      "root_cloudBucket_4F3C4F53": {
+      "cloudBucket": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/cloud.Bucket/Default",
-            "uniqueId": "root_cloudBucket_4F3C4F53"
+            "uniqueId": "cloudBucket"
           }
         },
         "bucket_prefix": "cloud-bucket-c87175e7-",
@@ -146,29 +192,29 @@ module.exports = function({ b }) {
       }
     },
     "aws_s3_bucket_public_access_block": {
-      "root_cloudBucket_PublicAccessBlock_319C1C2E": {
+      "cloudBucket_PublicAccessBlock_5946CCE8": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/cloud.Bucket/PublicAccessBlock",
-            "uniqueId": "root_cloudBucket_PublicAccessBlock_319C1C2E"
+            "uniqueId": "cloudBucket_PublicAccessBlock_5946CCE8"
           }
         },
         "block_public_acls": true,
         "block_public_policy": true,
-        "bucket": "${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
+        "bucket": "${aws_s3_bucket.cloudBucket.bucket}",
         "ignore_public_acls": true,
         "restrict_public_buckets": true
       }
     },
     "aws_s3_bucket_server_side_encryption_configuration": {
-      "root_cloudBucket_Encryption_8ED0CD9C": {
+      "cloudBucket_Encryption_77B6AEEF": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/cloud.Bucket/Encryption",
-            "uniqueId": "root_cloudBucket_Encryption_8ED0CD9C"
+            "uniqueId": "cloudBucket_Encryption_77B6AEEF"
           }
         },
-        "bucket": "${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
+        "bucket": "${aws_s3_bucket.cloudBucket.bucket}",
         "rule": [
           {
             "apply_server_side_encryption_by_default": {
@@ -179,14 +225,14 @@ module.exports = function({ b }) {
       }
     },
     "aws_s3_object": {
-      "root_testtryDelete_Handler_S3Object_8C99824E": {
+      "testtryDelete_Handler_S3Object_DD0AB5F1": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:tryDelete/Handler/S3Object",
-            "uniqueId": "root_testtryDelete_Handler_S3Object_8C99824E"
+            "uniqueId": "testtryDelete_Handler_S3Object_DD0AB5F1"
           }
         },
-        "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
+        "bucket": "${aws_s3_bucket.Code.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       }
@@ -196,18 +242,19 @@ module.exports = function({ b }) {
 ```
 
 ## preflight.js
+
 ```js
-const $stdlib = require('@winglang/sdk');
+const $stdlib = require("@winglang/sdk");
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
-const cloud = require('@winglang/sdk').cloud;
+const cloud = require("@winglang/sdk").cloud;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
     class $Closure1 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
+      constructor(scope, id) {
         super(scope, id);
         this.display.hidden = true;
         this._addInflightOps("handle");
@@ -237,18 +284,37 @@ class $Root extends $stdlib.std.Resource {
           $Closure1._registerBindObject(b, host, []);
         }
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(b, host, ["put", "putJson", "tryDelete"]);
+          $Closure1._registerBindObject(b, host, [
+            "put",
+            "putJson",
+            "tryDelete",
+          ]);
         }
         super._registerBind(host, ops);
       }
     }
-    const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:tryDelete",new $Closure1(this,"$Closure1"));
+    const b = this.node.root.newAbstract(
+      "@winglang/sdk.cloud.Bucket",
+      this,
+      "cloud.Bucket"
+    );
+    this.node.root.new(
+      "@winglang/sdk.std.Test",
+      std.Test,
+      this,
+      "test:tryDelete",
+      new $Closure1(this, "$Closure1")
+    );
   }
 }
 class $App extends $AppBase {
   constructor() {
-    super({ outdir: $outdir, name: "try_delete", plugins: $plugins, isTestEnvironment: $wing_is_test });
+    super({
+      outdir: $outdir,
+      name: "try_delete",
+      plugins: $plugins,
+      isTestEnvironment: $wing_is_test,
+    });
     if ($wing_is_test) {
       new $Root(this, "env0");
       const $test_runner = this.testRunner;
@@ -262,6 +328,4 @@ class $App extends $AppBase {
   }
 }
 new $App().synth();
-
 ```
-

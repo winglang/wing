@@ -21,7 +21,7 @@ concurrency:
 env:
   RUST_VERSION: "1.67.1"
   NODE_VERSION: "18.16.0"
-  NPM_VERSION: "8.19.3"
+  PNPM_VERSION: "8.6.3"
 
 jobs:
   build:
@@ -42,13 +42,16 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2.2.4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
+          cache: "pnpm"
           node-version: ${{ env.NODE_VERSION }}
-
-      - name: Setup NPM
-        run: npm install -g npm@${{ env.NPM_VERSION }}
 
       - name: Install Rust
         uses: dtolnay/rust-toolchain@master
@@ -63,21 +66,21 @@ jobs:
         uses: Swatinem/rust-cache@v2
 
       - name: Install Dependencies
-        uses: bahmutov/npm-install@v1
+        run: pnpm install --frozen-lockfile
 
       - name: Changelog Generation
         id: changelog
         env:
           GENERATE_VERSION: ${{ github.event_name != 'push' || github.repository != 'winglang/wing' }}
-        run: npm run changelog
+        run: pnpm changelog
 
       - name: Build
-        run: npm run build:ci
+        run: pnpm build:ci
         env:
           SEGMENT_WRITE_KEY: ${{ secrets.SEGMENT_WRITE_KEY }}
 
       - name: Package
-        run: npm run package:ci
+        run: pnpm package:ci
 
       - name: Upload Wing CLI
         uses: actions/upload-artifact@v3
@@ -181,13 +184,16 @@ jobs:
         with:
           fetch-depth: 1
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2.2.4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
+          cache: "pnpm"
           node-version: ${{ env.NODE_VERSION }}
-
-      - name: Setup NPM
-        run: npm install -g npm@${{ env.NPM_VERSION }}
 
       - name: Install Rust
         uses: dtolnay/rust-toolchain@master
@@ -202,10 +208,10 @@ jobs:
         uses: Swatinem/rust-cache@v2
 
       - name: Install Dependencies
-        uses: bahmutov/npm-install@v1
+        run: pnpm install --frozen-lockfile
 
       - name: Test
-        run: npm run test:ci
+        run: pnpm test:ci
 
       - name: Create git patch
         id: diff
@@ -244,26 +250,23 @@ jobs:
       - name: Download Build Artifacts
         uses: actions/download-artifact@v2
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2.2.4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+        
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
+          cache: "pnpm"
           node-version: ${{ env.NODE_VERSION }}
 
-      - name: Setup NPM
-        run: npm install -g npm@${{ env.NPM_VERSION }}
-
       - name: Install Dependencies
-        uses: bahmutov/npm-install@v1
-        with:
-          working-directory: |
-            tools/hangar
-            examples/tests/valid
-            examples/tests/invalid
-          install-command: npm ci
+        run: pnpm install --ignore-scripts --frozen-lockfile --filter hangar --filter examples-valid --filter examples-invalid
 
       - name: Run E2E Benchmarks
         working-directory: tools/hangar
-        run: npm run bench
+        run: pnpm bench
 
       - name: Upload Report JSON
         uses: actions/upload-artifact@v3
@@ -313,25 +316,25 @@ jobs:
         with:
           path: target
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2.2.4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
+          cache: "pnpm"
           node-version: ${{ matrix.node }}
 
       - name: Install Dependencies
-        uses: bahmutov/npm-install@v1
-        with:
-          working-directory: |
-            tools/hangar
-            examples/tests/valid
-            examples/tests/invalid
-          install-command: npm ci
+        run: pnpm install --ignore-scripts --frozen-lockfile --filter hangar --filter examples-valid --filter examples-invalid
 
       - name: Run E2E Tests
         working-directory: tools/hangar
         run: |
-          npm run test:generate
-          npm run test -- --shard=${{ matrix.shard }} --update=${{ matrix.runner == 'ubuntu' && matrix.node == '18' }}
+          pnpm test:generate
+          pnpm run test --shard=${{ matrix.shard }} --update=${{ matrix.runner == 'ubuntu' && matrix.node == '18' }}
 
       - name: Create mutation if needed
         # we only care about the diff in our standard dev env
@@ -405,6 +408,7 @@ jobs:
           pat: ${{ secrets.VS_MARKETPLACE_TOKEN }}
           registryUrl: "https://marketplace.visualstudio.com"
           extensionFile: "vscode-wing/vscode-wing.vsix"
+          dependencies: false
 
       - name: Login to NPM registry
         run: npm set //registry.npmjs.org/:_authToken ${{ secrets.NPM_PUBLISH_TOKEN }}
@@ -427,14 +431,14 @@ jobs:
         working-directory: wingcompiler
         run: npm publish *.tgz --access public
 
+      - name: Check published Wing Console Design System version
+        id: wingconsoledesignsystem-version
+        run: echo "version=$(npm view @wingconsole/design-system version)" >> $GITHUB_OUTPUT
+
       - name: Publish Wing Console Design System
         if: ${{ steps.wingconsoledesignsystem-version.outputs.version != needs.build.outputs.version }}
         working-directory: wingconsoledesignsystem
         run: npm publish *.tgz --access public
-
-      - name: Check published Wing Console Design System version
-        id: wingconsoledesignsystem-version
-        run: echo "version=$(npm view @wingconsole/design-system version)" >> $GITHUB_OUTPUT
 
       - name: Check published Wing Console UI version
         id: wingconsoleui-version
