@@ -12,16 +12,13 @@ use crate::{
 	ast::{
 		ArgList, BinaryOperator, Class as AstClass, Expr, ExprKind, FunctionBody, FunctionDefinition,
 		InterpolatedStringPart, LiftedExpr, LiftedReference, Literal, Phase, Reference, Scope, Stmt, StmtKind, Symbol,
-		TypeAnnotationKind, UnaryOperator,
+		TypeAnnotationKind, UnaryOperator, UserDefinedType,
 	},
 	comp_ctx::{CompilationContext, CompilationPhase},
 	dbg_panic, debug,
 	diagnostic::{report_diagnostic, Diagnostic, WingSpan},
 	files::Files,
-	type_check::{
-		resolve_udt_from_expr, resolve_user_defined_type, symbol_env::SymbolEnv, ClassLike, Type, TypeRef, Types,
-		VariableKind, CLASS_INFLIGHT_INIT_NAME,
-	},
+	type_check::{symbol_env::SymbolEnv, ClassLike, Type, TypeRef, Types, VariableKind, CLASS_INFLIGHT_INIT_NAME},
 	MACRO_REPLACE_ARGS, MACRO_REPLACE_ARGS_TEXT, MACRO_REPLACE_SELF, WINGSDK_ASSEMBLY_NAME, WINGSDK_RESOURCE,
 	WINGSDK_STD_MODULE,
 };
@@ -262,9 +259,13 @@ impl<'a> JSifier<'a> {
 
 	fn jsify_type(&self, typ: &TypeAnnotationKind) -> String {
 		match typ {
-			TypeAnnotationKind::UserDefined(t) => t.full_path_str(),
+			TypeAnnotationKind::UserDefined(t) => self.jsify_user_defined_type(&t),
 			_ => todo!(),
 		}
+	}
+
+	fn jsify_user_defined_type(&self, udt: &UserDefinedType) -> String {
+		udt.full_path_str()
 	}
 
 	fn jsify_expression(&mut self, expression: &Expr, ctx: &mut JSifyContext) -> String {
@@ -916,7 +917,7 @@ impl<'a> JSifier<'a> {
 
 			// default base class for preflight classes is `core.Resource`
 			let extends = if let Some(parent) = &class.parent {
-				format!(" extends {}", self.jsify_expression(&parent, ctx))
+				format!(" extends {}", self.jsify_expression(parent, ctx))
 			} else {
 				format!(" extends {}", STDLIB_CORE_RESOURCE)
 			};
@@ -1089,14 +1090,26 @@ impl<'a> JSifier<'a> {
 		// Find all free variables in the class, and return a list of their symbols
 		// self.scan_captures(class, &mut icc);
 
-		if let Some(parent) = &class.parent {
-			let parent_type_udt = resolve_udt_from_expr(&parent).unwrap();
-			icc.capture_type(&parent_type_udt.full_path_str());
-		}
+		// if let Some(parent) = &class.parent {
+		// 	let parent_type_udt = resolve_udt_from_expr(&parent).unwrap();
+		// 	icc.capture_type(&parent_type_udt.full_path_str());
+		// }
 
 		// // Add all fields of this class?
 		// for f in &self.get_all_fields(class_type) {
 		// 	icc.add_lifted_field(&f, &f);
+		// }
+
+		// // Handle parent class: Need to call super and pass its captured fields (we assume the parent client is already written)
+		// let mut lifted_by_parent = vec![];
+		// if let Some(parent) = &class.parent {
+		// 	let parent_udt = parent.as_type_reference().unwrap();
+		// 	if let Ok(parent_type) = resolve_user_defined_type(&parent_udt, env, 0) {
+		// 		let fields = self.get_all_fields(parent_type);
+		// 		for parent_field in fields {
+		// 			icc.add_lifted_field(field, preflight_code)
+		// 		}
+		// 	}
 		// }
 
 		let mut ctx = JSifyContext {
@@ -1162,17 +1175,9 @@ impl<'a> JSifier<'a> {
 		ctx: &JSifyContext,
 		class_code: &mut CodeMaker,
 	) {
+		let lifted_by_parent: Vec<String> = vec![];
 		// // Add bindings for the inflight init
 		// self.add_inflight_init_lifts(&mut icc, &lifted_fields);
-
-		// Handle parent class: Need to call super and pass its captured fields (we assume the parent client is already written)
-		let mut lifted_by_parent = vec![];
-		if let Some(parent) = &class.parent {
-			let parent_udt = resolve_udt_from_expr(parent).unwrap();
-			if let Ok(parent_type) = resolve_user_defined_type(&parent_udt, env, 0) {
-				lifted_by_parent.extend(self.get_all_fields(parent_type));
-			}
-		}
 
 		// Get the fields that are lifted by this class but not by its parent, they will be initialized
 		// in the generated constructor

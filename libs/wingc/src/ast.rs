@@ -560,7 +560,7 @@ pub enum ExprKind {
 #[derive(Debug)]
 pub struct LiftedExpr {
 	pub preflight_expr: Box<Expr>,
-	pub lifting_method: String,
+	pub lifting_method: Option<Symbol>,
 	pub property: Option<String>,
 	pub field: bool,
 }
@@ -568,8 +568,6 @@ pub struct LiftedExpr {
 #[derive(Debug)]
 pub struct LiftedReference {
 	pub preflight_ref: Box<Reference>,
-	// pub lifting_method: String,
-	// pub property: Option<String>,
 }
 
 #[derive(Debug)]
@@ -591,11 +589,17 @@ impl Expr {
 
 	/// Returns true if the expression is a reference to a type.
 	pub fn as_type_reference(&self) -> Option<&UserDefinedType> {
-		match &self.kind {
-			ExprKind::Reference(r) => match r {
+		fn resolve_ref(r: &Reference) -> Option<&UserDefinedType> {
+			match r {
 				Reference::TypeReference(t) => Some(t),
+				Reference::Lifted(l) => resolve_ref(&l.preflight_ref),
 				_ => None,
-			},
+			}
+		}
+
+		match &self.kind {
+			ExprKind::Reference(r) => resolve_ref(r),
+			ExprKind::Lifted(l) => l.preflight_expr.as_type_reference(),
 			_ => None,
 		}
 	}

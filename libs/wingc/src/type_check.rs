@@ -3932,10 +3932,11 @@ impl<'a> TypeChecker<'a> {
 		}
 
 		// Safety: we return from the function above so parent_udt cannot be None
-		let parent_udt = resolve_udt_from_expr(parent_expr).unwrap();
+		let parent_udt = parent_expr.as_type_reference().unwrap();
 
 		if &parent_udt.root == name && parent_udt.fields.is_empty() {
 			self.spanned_error(parent_udt, "Class cannot extend itself".to_string());
+			self.types.assign_type_to_expr(parent_expr, self.types.error(), phase);
 			return (None, None);
 		}
 
@@ -3945,11 +3946,12 @@ impl<'a> TypeChecker<'a> {
 			} else {
 				report_diagnostic(Diagnostic {
 					message: format!(
-						"{} class {} cannot extend {} class \"{}\"",
-						phase, name, parent_class.phase, parent_class.name
+						"Class \"{}\" is an {} class and cannot extend {} class \"{}\"",
+						name, phase, parent_class.phase, parent_class.name
 					),
 					span: Some(parent_expr.span.clone()),
 				});
+				self.types.assign_type_to_expr(parent_expr, self.types.error(), phase);
 				(None, None)
 			}
 		} else {
@@ -3957,6 +3959,7 @@ impl<'a> TypeChecker<'a> {
 				message: format!("Expected \"{}\" to be a class", parent_udt),
 				span: Some(parent_expr.span.clone()),
 			});
+			self.types.assign_type_to_expr(parent_expr, self.types.error(), phase);
 			(None, None)
 		}
 	}
@@ -4088,25 +4091,6 @@ where
 		LookupResult::Found(..) => panic!("Expected a lookup error, but found a successful lookup"),
 	};
 	TypeError { message, span }
-}
-
-/// Resolves a user defined type (e.g. `Foo.Bar.Baz`) to a type reference
-pub fn resolve_udt_from_expr(expr: &Expr) -> Result<&UserDefinedType, TypeError> {
-	let ExprKind::Reference(ref r) = expr.kind else {
-		return Err(TypeError {
-			message: "Expected expression to be a reference".to_string(),
-			span: expr.span.clone(),
-		});
-	};
-
-	let Reference::TypeReference(udt) = r else {
-		return Err(TypeError {
-			message: "Expected reference to be a reference to a type".to_string(),
-			span: expr.span.clone(),
-		});
-	};
-
-	Ok(udt)
 }
 
 /// Resolves a user defined type (e.g. `Foo.Bar.Baz`) to a type reference

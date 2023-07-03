@@ -1401,3 +1401,48 @@ fn func_returns_func() {
     "#
 	);
 }
+
+// -------------------------------
+// base classes
+
+#[test]
+fn preflight_class_extends_preflight_class() {
+	assert_compile_ok!(
+		r#"
+    class A {}
+    class B extends A {}
+    "#
+	);
+}
+
+#[test]
+fn inflight_class_extends_both_inside_inflight_closure() {
+	assert_compile_ok!(
+		r#"
+    test "test" {
+      class A {}
+      class B extends A {}
+    }
+    "#
+	);
+}
+
+#[test]
+fn fails_when_inflight_class_tries_to_extend_preflight_class() {
+	assert_compile_fail!(
+		r#"
+    class Base {}
+    inflight class Derived extends Base {}
+    "#
+	);
+}
+
+#[test]
+fn fails_when_preflight_class_tries_to_extend_inflight_class() {
+	assert_compile_fail!(
+		r#"
+    inflight class Base {}
+    class Derived extends Base {}
+    "#
+	);
+}

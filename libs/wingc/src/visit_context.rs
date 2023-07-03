@@ -42,12 +42,16 @@ impl VisitContext {
 
 	// --
 
-	pub fn push_class(&mut self, class: UserDefinedType) {
+	pub fn push_class(&mut self, class: UserDefinedType, phase: &Phase, initializer_env: Option<SymbolEnvRef>) {
 		self.class.push(class);
+		self.phase.push(phase.clone());
+		self.method_env.push(initializer_env);
 	}
 
 	pub fn pop_class(&mut self) {
 		self.class.pop();
+		self.phase.pop();
+		self.method_env.pop();
 	}
 
 	pub fn current_class(&self) -> Option<&UserDefinedType> {

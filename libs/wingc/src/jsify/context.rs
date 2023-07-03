@@ -71,7 +71,9 @@ impl InflightClassContext {
 			preflight: preflight_code.to_string(),
 		});
 
-		let method = node.lifting_method.clone();
+		let lm = node.lifting_method.clone();
+		let method = lm.and_then(|f| Some(f.name)).unwrap_or(Default::default());
+
 		let key = format!("{}/{}", method.clone(), token);
 		let lift = self.lifts.entry(key).or_insert(MethodLift {
 			preflight: preflight_code.to_string(),
@@ -106,30 +108,30 @@ impl InflightClassContext {
 		inflight_token.clone()
 	}
 
-	pub(crate) fn capture_type(&mut self, fullname: &str) -> String {
+	pub fn capture_type(&mut self, fullname: &str) -> String {
 		self.capture(fullname)
 	}
 
-	pub(crate) fn capture_var(&mut self, fullname: &str) -> String {
+	pub fn capture_var(&mut self, fullname: &str) -> String {
 		self.capture(fullname)
 	}
 
-	pub(crate) fn captures(&self) -> Vec<&Capture> {
+	pub fn captures(&self) -> Vec<&Capture> {
 		self.captures.values().collect_vec()
 	}
 
-	pub(crate) fn add_lifted_field(&mut self, field: &str, preflight_code: &str) {
+	pub fn add_lifted_field(&mut self, field: &str, preflight_code: &str) {
 		self
 			.lifted_fields
 			.entry(field.to_string())
 			.or_insert(preflight_code.to_string());
 	}
 
-	pub(crate) fn lifted_fields(&self) -> BTreeMap<String, String> {
+	pub fn lifted_fields(&self) -> BTreeMap<String, String> {
 		self.lifted_fields.clone()
 	}
 
-	pub(crate) fn all_capture_tokens(&self) -> Vec<&String> {
+	pub fn all_capture_tokens(&self) -> Vec<&String> {
 		self.captures.keys().collect_vec()
 	}
 
@@ -137,6 +139,9 @@ impl InflightClassContext {
 		let mut result: BTreeMap<String, Vec<&MethodLift>> = BTreeMap::new();
 
 		for (_, method_lift) in &self.lifts {
+			if method_lift.method.is_empty() {
+				continue;
+			}
 			result.entry(method_lift.method.clone()).or_default().push(method_lift);
 		}
 

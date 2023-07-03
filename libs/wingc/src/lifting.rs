@@ -35,7 +35,39 @@ impl<'a> LiftTransform<'a> {
 		udt.full_path_str() == current_class_udt.full_path_str()
 	}
 
-	fn consider_reference(&mut self, node: Reference, fullname: &str, span: &WingSpan) -> Reference {
+	fn should_lift_expr(&mut self, node: &Expr) -> bool {
+		let expr_type = self.types.get_expr_type(&node).unwrap();
+		let expr_phase = self.types.get_expr_phase(&node).unwrap();
+		let span = node.span.clone();
+
+		// if this expression represents the current class, no need to capture it (it is by definition
+		// available in the current scope)
+		if self.is_self_type_reference(&node) {
+			return false;
+		}
+
+		// LIFT!
+		if self.ctx.current_phase() == Phase::Inflight && expr_phase == Phase::Preflight {
+			if self.ctx.current_property().is_none()
+				&& expr_type.as_preflight_class().is_some()
+				&& !expr_type.is_handler_preflight_class()
+			{
+				report_diagnostic(Diagnostic {
+					message: format!(
+						"Cannot qualify access to a lifted object of type \"{}\"",
+						expr_type.to_string()
+					),
+					span: Some(span.clone()),
+				});
+			}
+
+			return true;
+		}
+
+		return false;
+	}
+
+	fn try_capture_reference(&mut self, node: Reference, fullname: &str, span: &WingSpan) -> Reference {
 		if self.is_capture_shadow(fullname, span) {
 			return node;
 		}
@@ -68,8 +100,6 @@ impl<'a> LiftTransform<'a> {
 
 		Reference::Lifted(LiftedReference {
 			preflight_ref: Box::new(node),
-			// lifting_method: method.name.clone(),
-			// property: self.ctx.current_property(),
 		})
 	}
 
@@ -124,7 +154,7 @@ impl<'a> Fold for LiftTransform<'a> {
 			Reference::Identifier(ref symb) => {
 				let s = symb.name.clone();
 				let span = symb.span.clone();
-				return self.consider_reference(node, &s, &span);
+				return self.try_capture_reference(node, &s, &span);
 			}
 			Reference::TypeReference(ref t) => {
 				let path = t.full_path_str();
@@ -137,7 +167,7 @@ impl<'a> Fold for LiftTransform<'a> {
 					}
 				}
 
-				return self.consider_reference(node, &path, &span);
+				return self.try_capture_reference(node, &path, &span);
 			}
 			Reference::Lifted(_) => {}
 		}
@@ -146,54 +176,29 @@ impl<'a> Fold for LiftTransform<'a> {
 	}
 
 	fn fold_expr(&mut self, node: Expr) -> Expr {
-		let expr_type = self.types.get_expr_type(&node).unwrap();
-		let expr_phase = self.types.get_expr_phase(&node).unwrap();
-		let span = node.span.clone();
+		// println!("{:?}", node);
 
-		// if this expression represents the current class, no need to capture it (it is by definition
-		// available in the current scope)
-		if self.is_self_type_reference(&node) {
-			return fold::fold_expr(self, node);
-		}
-
-		// LIFT!
-		if self.ctx.current_phase() == Phase::Inflight && expr_phase == Phase::Preflight {
-			let is_this = includes_this(&node);
-			let method = self
-				.ctx
-				.current_method()
-				.expect("cannot determine which method is lifting the expression");
-
-			if self.ctx.current_property().is_none()
-				&& expr_type.as_preflight_class().is_some()
-				&& !expr_type.is_handler_preflight_class()
-			{
-				report_diagnostic(Diagnostic {
-					message: format!(
-						"Cannot qualify access to a lifted object of type \"{}\"",
-						expr_type.to_string()
-					),
-					span: Some(span.clone()),
-				});
-			}
+		if self.should_lift_expr(&node) {
+			let span = node.span.clone();
+			let expr_type = self.types.get_expr_type(&node).unwrap();
+			let is_field = includes_this(&node);
 
 			let new_expr = Expr::new(
 				ExprKind::Lifted(LiftedExpr {
 					preflight_expr: Box::new(node),
-					lifting_method: method.name.clone(),
+					lifting_method: self.ctx.current_method(),
 					property: self.ctx.current_property(),
-					field: is_this,
+					field: is_field,
 				}),
 				span,
 			);
 
 			// make sure this new expression is recorded in the type registry
-			self.types.assign_type_to_expr(&new_expr, expr_type, Phase::Inflight);
-
-			return new_expr;
+			self.types.assign_type_to_expr(&new_expr, expr_type, Phase::Preflight);
+			new_expr
+		} else {
+			fold::fold_expr(self, node)
 		}
-
-		fold::fold_expr(self, node)
 	}
 
 	// State Tracking
@@ -233,11 +238,24 @@ impl<'a> Fold for LiftTransform<'a> {
 	}
 
 	fn fold_class(&mut self, node: Class) -> Class {
-		self.ctx.push_class(UserDefinedType {
-			root: node.name.clone(),
-			fields: vec![],
-			span: node.name.span.clone(),
-		});
+		// extract the "env" from the class initializer and push it to the context
+		// because this is the environment in which we want to resolve references
+		// as oppose to the environment of the class definition itself.
+		let init_env = if let FunctionBody::Statements(ref s) = node.initializer.body {
+			Some(s.env.borrow().as_ref().unwrap().get_ref())
+		} else {
+			None
+		};
+
+		self.ctx.push_class(
+			UserDefinedType {
+				root: node.name.clone(),
+				fields: vec![],
+				span: node.name.span.clone(),
+			},
+			&node.phase,
+			init_env,
+		);
 
 		let result = fold::fold_class(self, node);
 		self.ctx.pop_class();
