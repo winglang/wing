@@ -269,20 +269,31 @@ impl<'a> JSifier<'a> {
 	}
 
 	pub fn jsify_expression(&self, expression: &Expr, ctx: &mut JSifyContext) -> String {
-		// if let Some(expr_phase) = self.types.get_expr_phase(expression) {
-		// 	if ctx.phase == Phase::Preflight && expr_phase == Phase::Inflight && !self.is_this(expression) {
-		// 		report_diagnostic(Diagnostic {
-		// 			message: "Cannot reference an inflight value from within a preflight expression".to_string(),
-		// 			span: Some(expression.span.clone()),
-		// 		});
-		// 	}
-		// }
+		CompilationContext::set(CompilationPhase::Jsifying, &expression.span);
 
-		if let Some(t) = ctx.tokens.token_for_expr(&expression.id) {
-			return t.clone();
+		// if we are in inflight and there's a lifting/capturing token associated with this expression
+		// then emit the token instead of the expression.
+		if ctx.phase == Phase::Inflight {
+			if let Some(t) = ctx.tokens.token_for_expr(&expression.id) {
+				return t.clone();
+			}
 		}
 
-		CompilationContext::set(CompilationPhase::Jsifying, &expression.span);
+		// if we are in preflight phase and we see an inflight expression (which is not "this."), then
+		// this is an error. this can happen if we render a lifted preflight expression that references
+		// an e.g. variable from inflight (`myarr.get(i)` where `myarr` is preflight and `i` is an
+		// inflight variable). in this case we need to bail out.
+		if let Some(expr_phase) = self.types.get_expr_phase(expression) {
+			if ctx.phase == Phase::Preflight && expr_phase == Phase::Inflight && !self.is_this(expression) {
+				report_diagnostic(Diagnostic {
+					message: "Cannot reference an inflight value from within a preflight expression".to_string(),
+					span: Some(expression.span.clone()),
+				});
+
+				return "<ERROR>".to_string();
+			}
+		}
+
 		let auto_await = match ctx.phase {
 			Phase::Inflight => "await ",
 			_ => "",
@@ -916,7 +927,7 @@ impl<'a> JSifier<'a> {
 		let class_type = env.lookup(&class.name, None).unwrap().as_type().unwrap();
 
 		// emit the inflight side of the class into a separate file
-		self.jsify_class_inflight(env, &class, ctx);
+		self.jsify_class_inflight(&class, ctx);
 
 		// if our class is declared within a preflight scope, then we emit the preflight class
 		if ctx.phase == Phase::Preflight {
@@ -1091,32 +1102,7 @@ impl<'a> JSifier<'a> {
 	}
 
 	// Write a class's inflight to a file
-	fn jsify_class_inflight(&self, env: &SymbolEnv, class: &AstClass, ctx: &mut JSifyContext) {
-		// Find all free variables in the class, and return a list of their symbols
-		// self.scan_captures(class, &mut icc);
-
-		// if let Some(parent) = &class.parent {
-		// 	let parent_type_udt = resolve_udt_from_expr(&parent).unwrap();
-		// 	icc.capture_type(&parent_type_udt.full_path_str());
-		// }
-
-		// // Add all fields of this class?
-		// for f in &self.get_all_fields(class_type) {
-		// 	icc.add_lifted_field(&f, &f);
-		// }
-
-		// // Handle parent class: Need to call super and pass its captured fields (we assume the parent client is already written)
-		// let mut lifted_by_parent = vec![];
-		// if let Some(parent) = &class.parent {
-		// 	let parent_udt = parent.as_type_reference().unwrap();
-		// 	if let Ok(parent_type) = resolve_user_defined_type(&parent_udt, env, 0) {
-		// 		let fields = self.get_all_fields(parent_type);
-		// 		for parent_field in fields {
-		// 			icc.add_lifted_field(field, preflight_code)
-		// 		}
-		// 	}
-		// }
-
+	fn jsify_class_inflight(&self, class: &AstClass, ctx: &mut JSifyContext) {
 		let mut ctx = JSifyContext {
 			phase: Phase::Inflight,
 			in_json: false,
@@ -1142,7 +1128,7 @@ impl<'a> JSifier<'a> {
 
 		// if this is a preflight class, emit the binding constructor
 		if class.phase == Phase::Preflight {
-			self.jsify_inflight_binding_constructor(class, env, &ctx, &mut class_code);
+			self.jsify_inflight_binding_constructor(class, &mut class_code);
 		}
 
 		// emit the $inflight_init function (if it has a body).
@@ -1171,13 +1157,7 @@ impl<'a> JSifier<'a> {
 		}
 	}
 
-	fn jsify_inflight_binding_constructor(
-		&self,
-		class: &AstClass,
-		env: &SymbolEnv,
-		ctx: &JSifyContext,
-		class_code: &mut CodeMaker,
-	) {
+	fn jsify_inflight_binding_constructor(&self, class: &AstClass, class_code: &mut CodeMaker) {
 		let lifted_by_parent: Vec<String> = vec![];
 		// // Add bindings for the inflight init
 		// self.add_inflight_init_lifts(&mut icc, &lifted_fields);
@@ -1227,24 +1207,6 @@ impl<'a> JSifier<'a> {
 		}
 
 		class_code.close("}");
-	}
-
-	// Get the type and capture info for fields that are captured in the client of the given resource
-	fn get_all_fields(&self, resource_type: TypeRef) -> Vec<String> {
-		if let Some(resource_class) = resource_type.as_class() {
-			resource_class
-				.env
-				.iter(true)
-				.filter(|(_, kind, _)| {
-					let var = kind.as_variable().unwrap();
-					// We capture preflight non-reassignable fields
-					var.phase != Phase::Inflight && var.type_.is_capturable()
-				})
-				.map(|(name, ..)| name)
-				.collect_vec()
-		} else {
-			vec![]
-		}
 	}
 
 	fn jsify_register_bind_method(
@@ -1299,23 +1261,6 @@ impl<'a> JSifier<'a> {
 		bind_method.close("}");
 		bind_method
 	}
-
-	// fn add_inflight_init_lifts(&self, icc: &InflightClassContext, lifted_fields: &[String]) {
-	// 	let free_vars = icc.lifted_vars();
-
-	// 	let init_refs_entry = refs.entry(CLASS_INFLIGHT_INIT_NAME.to_string()).or_default();
-
-	// 	// All "lifted" fields are needed in the inflight init method
-	// 	for field in lifted_fields {
-	// 		init_refs_entry.entry(format!("this.{field}")).or_default();
-	// 	}
-
-	// 	// All free variables are needed in the inflight init method
-	// 	for free_var in free_vars {
-	// 		init_refs_entry.entry(free_var.clone()).or_default();
-	// 	}
-	// }
-
 	fn is_this(&self, expression: &Expr) -> bool {
 		let ExprKind::Reference(ref r) = expression.kind else {
 			return false;

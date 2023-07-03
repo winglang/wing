@@ -38,38 +38,6 @@ impl<'a> LiftTransform<'a> {
 		udt.full_path_str() == current_class_udt.full_path_str()
 	}
 
-	fn should_lift_expr(&mut self, node: &Expr) -> bool {
-		let expr_type = self.jsify.types.get_expr_type(&node).unwrap();
-		let expr_phase = self.jsify.types.get_expr_phase(&node).unwrap();
-		let span = node.span.clone();
-
-		// if this expression represents the current class, no need to capture it (it is by definition
-		// available in the current scope)
-		if self.is_self_type_reference(&node) {
-			return false;
-		}
-
-		// LIFT!
-		if self.ctx.current_phase() == Phase::Inflight && expr_phase == Phase::Preflight {
-			if self.ctx.current_property().is_none()
-				&& expr_type.as_preflight_class().is_some()
-				&& !expr_type.is_handler_preflight_class()
-			{
-				report_diagnostic(Diagnostic {
-					message: format!(
-						"Cannot qualify access to a lifted object of type \"{}\"",
-						expr_type.to_string()
-					),
-					span: Some(span.clone()),
-				});
-			}
-
-			return true;
-		}
-
-		return false;
-	}
-
 	fn should_capture_reference(&self, fullname: &str, span: &WingSpan) -> bool {
 		if self.is_capture_shadow(fullname, span) {
 			return false;
@@ -187,40 +155,83 @@ impl<'a> Fold for LiftTransform<'a> {
 	}
 
 	fn fold_expr(&mut self, node: Expr) -> Expr {
-		let preflight = self.jsify.jsify_expression(
-			&node,
-			&mut JSifyContext {
-				in_json: false,
-				phase: Phase::Preflight,
-				files: &mut Files::default(),
-				tokens: &mut InflightClassContext::disabled(),
-			},
-		);
+		let expr_phase = self.jsify.types.get_expr_phase(&node).unwrap();
+		let expr_type = self.jsify.types.get_expr_type(&node).unwrap();
+		let is_field = includes_this(&node);
 
-		// println!("{}", preflight);
+		// this whole thing only applies to inflight expressions
+		if self.ctx.current_phase() == Phase::Preflight {
+			return fold::fold_expr(self, node);
+		}
 
-		if self.ctx.current_phase() == Phase::Inflight {
-			let is_field = includes_this(&node);
+		// if this expression represents the current class, no need to capture it (it is by definition
+		// available in the current scope)
+		if self.is_self_type_reference(&node) {
+			return fold::fold_expr(self, node);
+		}
 
-			if self.should_lift_expr(&node) {
-				println!("Lifting: {}", preflight);
-				self.tokens.lift(
-					node.id,
-					self.ctx.current_method(),
-					self.ctx.current_property(),
-					is_field,
-					&preflight,
-				);
+		//---------------
+		// LIFT
+
+		if expr_phase == Phase::Preflight {
+			// jsify the expression so we can get the preflight code
+			let preflight = self.jsify.jsify_expression(
+				&node,
+				&mut JSifyContext {
+					in_json: false,
+					phase: Phase::Preflight,
+					files: &mut Files::default(),
+					tokens: &mut InflightClassContext::disabled(),
+				},
+			);
+
+			// check that we can qualify the lift (e.g. determine which property is being accessed)
+			if self.ctx.current_property().is_none()
+				&& expr_type.as_preflight_class().is_some()
+				&& !expr_type.is_handler_preflight_class()
+			{
+				report_diagnostic(Diagnostic {
+					message: format!(
+						"Cannot qualify access to a lifted object of type \"{}\"",
+						expr_type.to_string()
+					),
+					span: Some(node.span.clone()),
+				});
 
 				return node;
 			}
 
-			if !is_field && self.should_capture_expr(&node) {
-				println!("Capturing: {}", preflight);
+			// println!("Lifting: {}", preflight);
 
-				self.tokens.capture(&node.id, &preflight);
-				return node;
-			}
+			self.tokens.lift(
+				node.id,
+				self.ctx.current_method(),
+				self.ctx.current_property(),
+				is_field,
+				&preflight,
+			);
+
+			return node;
+		}
+
+		//---------------
+		// CAPTURE
+
+		if !is_field && self.should_capture_expr(&node) {
+			// jsify the expression so we can get the preflight code
+			let preflight = self.jsify.jsify_expression(
+				&node,
+				&mut JSifyContext {
+					in_json: false,
+					phase: Phase::Inflight,
+					files: &mut Files::default(),
+					tokens: &mut InflightClassContext::disabled(),
+				},
+			);
+
+			// println!("Capturing: {}", preflight);
+			self.tokens.capture(&node.id, &preflight);
+			return node;
 		}
 
 		fold::fold_expr(self, node)
