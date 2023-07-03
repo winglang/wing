@@ -12,13 +12,13 @@ Both are important to the health of Wing however users should be prioritized ove
 User-facing projects and their supporting contributor pieces:
 
 - [Homepage](https://winglang.io)
-- [Documentation](https://docs.winglang.io)
+- [Documentation](https://www.winglang.io/docs/)
   - https://github.com/winglang/docsite
   - https://github.com/winglang/wing/tree/main/docs
 - Wing CLI
   - https://github.com/winglang/wing
 - Wing Console
-  - https://docs.winglang.io/core-concepts/simulator
+  - https://www.winglang.io/docs/concepts/simulator
 - [Playground](https://play.winglang.io)
 - [NPM Packages](https://www.npmjs.com/~monabot) (https://www.npmjs.com/package/winglang and https://www.npmjs.com/package/@winglang/sdk)
 - [VSCode Extension](https://marketplace.visualstudio.com/items?itemName=Monada.vscode-wing)
