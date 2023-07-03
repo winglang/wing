@@ -921,7 +921,7 @@ impl<'a> JSifier<'a> {
 			in_json: ctx.in_json,
 			phase: ctx.phase,
 			files: ctx.files,
-			tokens: &class.tokens,
+			tokens: &class.lifts,
 		};
 
 		// Lookup the class type
@@ -952,14 +952,14 @@ impl<'a> JSifier<'a> {
 			}
 
 			// emit the `_toInflightType` static method
-			code.add_code(self.jsify_to_inflight_type_method(&class, &class.tokens));
+			code.add_code(self.jsify_to_inflight_type_method(&class, &class.lifts));
 
 			// emit the `_toInflight` instance method
-			code.add_code(self.jsify_to_inflight_method(&class.name, &class.tokens));
+			code.add_code(self.jsify_to_inflight_method(&class.name, &class.lifts));
 
 			// call `_registerBindObject` to register the class's host binding methods (for type & instance binds).
-			code.add_code(self.jsify_register_bind_method(class, &class.tokens, class_type, BindMethod::Instance));
-			code.add_code(self.jsify_register_bind_method(class, &class.tokens, class_type, BindMethod::Type));
+			code.add_code(self.jsify_register_bind_method(class, &class.lifts, class_type, BindMethod::Instance));
+			code.add_code(self.jsify_register_bind_method(class, &class.lifts, class_type, BindMethod::Type));
 
 			code.close("}");
 
@@ -974,7 +974,7 @@ impl<'a> JSifier<'a> {
 			code.line(format!(
 				"const {} = require(\"{client}\")({{{}}});",
 				class.name.name,
-				class.tokens.all_capture_tokens().iter().join(", "),
+				class.lifts.all_capture_tokens().iter().join(", "),
 			));
 
 			code
@@ -1141,7 +1141,7 @@ impl<'a> JSifier<'a> {
 
 		class_code.close("}");
 
-		let all_captures = class.tokens.all_capture_tokens();
+		let all_captures = class.lifts.all_capture_tokens();
 
 		// export the main class from this file
 		let mut code = CodeMaker::default();
@@ -1165,7 +1165,7 @@ impl<'a> JSifier<'a> {
 
 		// Get the fields that are lifted by this class but not by its parent, they will be initialized
 		// in the generated constructor
-		let lifted_fields = class.tokens.lifted_fields();
+		let lifted_fields = class.lifts.lifted_fields();
 		let my_captures = lifted_fields
 			.iter()
 			.map(|(f, _)| f)

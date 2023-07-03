@@ -246,7 +246,7 @@ impl Fold for ClosureTransformer {
 				let class_def = Stmt {
 					kind: StmtKind::Class(Class {
 						name: new_class_name.clone(),
-						tokens: Lifts::new(),
+						lifts: Lifts::new(),
 						phase: Phase::Preflight,
 						initializer: FunctionDefinition {
 							name: Some(CLASS_INIT_NAME.into()),

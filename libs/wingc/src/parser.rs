@@ -861,7 +861,7 @@ impl<'s> Parser<'s> {
 			initializer,
 			phase: class_phase,
 			inflight_initializer,
-			tokens: Lifts::new(),
+			lifts: Lifts::new(),
 		}))
 	}
 

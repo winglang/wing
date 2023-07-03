@@ -341,7 +341,7 @@ pub struct Class {
 	pub parent: Option<Expr>, // base class (the expression is a reference to a user defined type)
 	pub implements: Vec<UserDefinedType>,
 	pub phase: Phase,
-	pub tokens: Lifts,
+	pub lifts: Lifts,
 }
 
 impl Class {

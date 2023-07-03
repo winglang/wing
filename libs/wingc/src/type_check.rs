@@ -2542,7 +2542,7 @@ impl<'a> TypeChecker<'a> {
 				initializer,
 				phase,
 				inflight_initializer,
-				tokens: _,
+				lifts: _,
 			}) => {
 				// preflight classes cannot be declared inside an inflight scope
 				// (the other way is okay)

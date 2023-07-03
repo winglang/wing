@@ -311,7 +311,7 @@ impl<'a> Fold for LiftTransform<'a> {
 			inflight_initializer: result.inflight_initializer,
 			parent: result.parent,
 			// tokens: InflightClassContext::new(),
-			tokens: tokens,
+			lifts: tokens,
 		};
 
 		with_tokens
