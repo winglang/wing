@@ -66,7 +66,7 @@ export const StatusBar = ({
       )}
     >
       {/*left side*/}
-      <div className="w-full flex space-x-6">
+      <div className="w-full flex space-x-8">
         <div className="flex space-x-1 items-center">
           <button
             className={classNames(
@@ -83,7 +83,7 @@ export const StatusBar = ({
           </button>
         </div>
 
-        <div title={wingVersion} className="truncate space-x-1 min-w-[7rem]">
+        <div title={wingVersion} className="truncate space-x-1 min-w-[4rem]">
           {wingVersion && (
             <>
               <span>Wing</span>
