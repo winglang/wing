@@ -10,10 +10,6 @@
       "type": "build"
     },
     {
-      "name": "@types/yargs",
-      "type": "build"
-    },
-    {
       "name": "@typescript-eslint/eslint-plugin",
       "version": "^5",
       "type": "build"

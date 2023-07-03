@@ -14,8 +14,8 @@
     "eslint": "eslint --ext .js,.cjs,.ts,.cts,.mts,.tsx --no-error-on-unmatched-pattern . --fix"
   },
   "devDependencies": {
-    "@wingconsole/eslint-plugin": "workspace:^",
-    "@wingconsole/tsconfig": "workspace:^",
+    "@wingconsole/eslint-plugin": "file:../../tools/eslint-plugin",
+    "@wingconsole/tsconfig": "file:../../tools/tsconfig",
     "typescript": "^5.1.3"
   }
 }
