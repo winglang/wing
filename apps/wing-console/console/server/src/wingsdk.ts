@@ -23,4 +23,5 @@ export type { IRedisClient } from "@winglang/sdk/lib/redis/index.js";
 export type {
   ApiSchema,
   TableSchema,
+  WebsiteSchema,
 } from "@winglang/sdk/lib/target-sim/schema-resources.js";
