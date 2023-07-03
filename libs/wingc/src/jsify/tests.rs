@@ -1386,3 +1386,18 @@ fn inflight_constructor() {
     "#
 	)
 }
+
+#[test]
+fn func_returns_func() {
+	assert_compile_ok!(
+		r#"
+    test "test" {
+      (s: str): (): bool => {
+        (): bool => { 
+          s;
+        };
+      };
+    }
+    "#
+	);
+}

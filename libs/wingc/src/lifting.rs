@@ -57,10 +57,6 @@ impl<'a> LiftTransform<'a> {
 			return node;
 		}
 
-		// let Some(_) = self.ctx.current_method() else {
-		// 	return node;
-		// };
-
 		// skip macros
 		if let Some(x) = vi.as_variable() {
 			if let Some(f) = x.type_.as_function_sig() {

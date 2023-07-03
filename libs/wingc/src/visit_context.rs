@@ -6,7 +6,7 @@ use crate::{
 pub struct VisitContext {
 	phase: Vec<Phase>,
 	env: Vec<SymbolEnvRef>,
-	method_env: Vec<SymbolEnvRef>,
+	method_env: Vec<Option<SymbolEnvRef>>,
 	property: Vec<String>,
 	method: Vec<Option<Symbol>>,
 	class: Vec<UserDefinedType>,
@@ -59,7 +59,11 @@ impl VisitContext {
 	pub fn push_function_definition(&mut self, function_name: &Option<Symbol>, phase: &Phase, env: SymbolEnvRef) {
 		self.phase.push(phase.clone());
 		self.method.push(function_name.clone());
-		self.method_env.push(env);
+
+		// if the function definition doesn't have a name (i.e. it's a closure), don't push its env
+		// because it's not a method dude!
+		let maybe_env = if function_name.is_some() { Some(env) } else { None };
+		self.method_env.push(maybe_env);
 	}
 
 	pub fn pop_function_definition(&mut self) {
@@ -78,7 +82,7 @@ impl VisitContext {
 	}
 
 	pub fn current_method_env(&self) -> Option<&SymbolEnvRef> {
-		self.method_env.last()
+		self.method_env.iter().rev().find_map(|m| m.as_ref())
 	}
 
 	// --
