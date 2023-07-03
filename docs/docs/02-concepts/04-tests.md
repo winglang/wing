@@ -5,7 +5,7 @@ description: Execute tests in Winglang across multiple clouds
 keywords: [Wing test, multi-cloud]
 ---
 
-Winglang incorporates a lightweight testing framework, which is built around the `wing test` command and the `test` keyword.
+Winglang incorporates a lightweight testing framework, which is built around the `wing test` command and the `test` keyword. It lets you to run the same tests, in isolation, on both the Wing simulator and in the cloud.
 
 You can construct a test by creating a Winglang file that includes the following code structure:
 ```ts wing
