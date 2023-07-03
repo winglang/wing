@@ -55,7 +55,6 @@ export const VscodeLayout = ({ cloudAppState, wingVersion }: LayoutProps) => {
     defaultLogLevels: ["info", "warn", "error"],
   });
 
-  // const { title } = useContext(AppContext);
   const title = useMemo(() => {
     return `~ ${wingfile.data ?? ""}`;
   }, [wingfile.data]);
