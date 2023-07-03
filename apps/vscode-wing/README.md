@@ -1,29 +1,18 @@
 > **🚧 Alpha Extension**
-> - This extension may crash unexpectedly due to ongoing work on Wing.
+> - This extension is under heavy development alongside the Wing language
 
-###  Current Features
+###  Features
 
 - 💅 Syntax highlighting
-- 🔄 Automatic Updates
 - ❗ Diagnostics
-  - Invalid syntax
-  - Type errors
+- 🤖 Autocomplete
+- 🔍 Hover
+- 
 
 ### Planned Features
 
-This extension is under heavy development alongside the Wing language.  
-
 See [issues labeled with `vscode-extension` or `language-server`](https://github.com/winglang/wing/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc+label%3Avscode-extension%2Clanguage-server) for upcoming work.
 
-- 🤖 Autocomplete
-    - Keywords
-    - Variables
-    - Types
-    - Methods and Fields
-- 🔍 Hover
-  - Symbol information
-  - Documentation 
-  - Expression type information
 - ⤵️ Go-to definition
 - 🕵️‍♀️ Quick Fixes
 - 🖥️ Wing Console integration
