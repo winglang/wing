@@ -19,7 +19,7 @@ Stage: Fill in with current stage in the RFC lifecycle
 Stage Date: Fill in with date of last stage change
 -->
 
-> Implementing the website resource following the [SDK spec](https://docs.winglang.io/contributing/rfcs/2023-01-20-wingsdk-spec#website).
+> Implementing the website resource following the [SDK spec](https://www.winglang.io/contributing/rfcs/2023-01-20-wingsdk-spec#website).
 
 <!--
 This RFC has 3 sections: Requirements -> Design -> Implementation. We intentionally start with *Design* since it
