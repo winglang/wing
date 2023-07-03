@@ -27,28 +27,18 @@
   },
   "dependencies": {
     "@aws-cdk/aws-s3": "^1.110.1",
-    "@aws-cdk/core": "^1.110.1",
-    "@aws-cdk/aws-iam": "^1.110.1",
-    "@aws-cdk/aws-kms": "^1.110.1",
-    "@aws-cdk/aws-events": "^1.110.1",
-    "@aws-cdk/cloud-assembly-schema": "^1.110.1",
-    "constructs": "^3.3.69"
+    "@aws-cdk/core": "^1.110.1"
   },
   "peerDependencies": {
     "@aws-cdk/aws-s3": "^1.110.1",
-    "@aws-cdk/core": "^1.110.1",
-    "@aws-cdk/aws-iam": "^1.110.1",
-    "@aws-cdk/aws-kms": "^1.110.1",
-    "@aws-cdk/aws-events": "^1.110.1",
-    "@aws-cdk/cloud-assembly-schema": "^1.110.1",
-    "constructs": "^3.3.69"
+    "@aws-cdk/core": "^1.110.1"
   },
   "devDependencies": {
-    "@types/node": "^18.0.0",
-    "@types/prettier": "2.6.0",
-    "jsii": "~5.0.0",
-    "jsii-pacmak": "^1.84.0",
-    "typescript": "^4.3.4"
+    "jsii": "^1.33.0",
+    "jsii-pacmak": "^1.33.0",
+    "typescript": "^4.3.4",
+    "@types/node": "^12.0.0",
+    "@types/prettier": "2.6.0"
   },
   "license": "Apache-2.0",
   "version": "0.0.0"

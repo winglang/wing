@@ -1,9 +1,0 @@
-packages:
-  - "apps/*"
-  - "libs/*"
-  - "tools/*"
-  - "apps/wing-console/packages/*"
-  - "apps/wing-console/console/*"
-  - "apps/wing-console/tools/*"
-  - "examples/tests/*"
-  - "apps/jsii-docgen/test/__fixtures__/**"

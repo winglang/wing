@@ -20,7 +20,7 @@
   "dependencies": {
     "analytics-node": "^6.2.0",
     "express": "^4.18.2",
-    "@wingconsole/server": "workspace:^"
+    "@wingconsole/server": "file:../server"
   },
   "devDependencies": {
     "@tailwindcss/forms": "^0.5.3",
@@ -30,11 +30,11 @@
     "@types/react-dom": "^18.2.5",
     "@vitejs/plugin-react": "^4.0.0",
     "@vitest/coverage-c8": "^0.31.4",
-    "@wingconsole/eslint-plugin": "workspace:^",
-    "@wingconsole/tsconfig": "workspace:^",
-    "@wingconsole/ui": "workspace:^",
+    "@wingconsole/eslint-plugin": "file:../../tools/eslint-plugin",
+    "@wingconsole/tsconfig": "file:../../tools/tsconfig",
+    "@wingconsole/ui": "file:../ui",
     "autoprefixer": "^10.4.14",
-    "bump-pack": "workspace:^",
+    "bump-pack": "file:../../../../tools/bump-pack",
     "conf": "^11.0.1",
     "eslint": "^8.42.0",
     "nanoid": "^4.0.2",

@@ -33,7 +33,7 @@ module.exports = function({ r, r2 }) {
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.17.0"
+      "version": "0.15.2"
     },
     "outputs": {
       "root": {
@@ -47,7 +47,7 @@ module.exports = function({ r, r2 }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:test\",\"${aws_lambda_function.testtest_Handler_295107CC.arn}\"]]"
+      "value": "[[\"root/Default/Default/test:test\",\"${aws_lambda_function.root_testtest_Handler_046C3415.arn}\"]]"
     }
   },
   "provider": {
@@ -57,24 +57,24 @@ module.exports = function({ r, r2 }) {
   },
   "resource": {
     "aws_eip": {
-      "EIP": {
+      "root_EIP_ED59AD4B": {
         "//": {
           "metadata": {
             "path": "root/Default/EIP",
-            "uniqueId": "EIP"
+            "uniqueId": "root_EIP_ED59AD4B"
           }
         }
       }
     },
     "aws_elasticache_cluster": {
-      "r2_RedisCluster_C6087F40": {
+      "root_r2_RedisCluster_EB1F5CD1": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/r2/RedisCluster",
-            "uniqueId": "r2_RedisCluster_C6087F40"
+            "uniqueId": "root_r2_RedisCluster_EB1F5CD1"
           }
         },
-        "availability_zone": "${aws_subnet.PrivateSubnet.availability_zone}",
+        "availability_zone": "${aws_subnet.root_PrivateSubnet_8A5D9DDE.availability_zone}",
         "cluster_id": "r2-c882797c",
         "engine": "redis",
         "engine_version": "6.2",
@@ -82,18 +82,18 @@ module.exports = function({ r, r2 }) {
         "num_cache_nodes": 1,
         "parameter_group_name": "default.redis6.x",
         "security_group_ids": [
-          "${aws_security_group.r2_securityGroup_35A75C2E.id}"
+          "${aws_security_group.root_r2_securityGroup_EC7D0A0D.id}"
         ],
-        "subnet_group_name": "${aws_elasticache_subnet_group.r2_RedisSubnetGroup_C415566B.name}"
+        "subnet_group_name": "${aws_elasticache_subnet_group.root_r2_RedisSubnetGroup_873E9A00.name}"
       },
-      "redisRedis_RedisCluster_17F572CD": {
+      "root_redisRedis_RedisCluster_2049056C": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/redis.Redis/RedisCluster",
-            "uniqueId": "redisRedis_RedisCluster_17F572CD"
+            "uniqueId": "root_redisRedis_RedisCluster_2049056C"
           }
         },
-        "availability_zone": "${aws_subnet.PrivateSubnet.availability_zone}",
+        "availability_zone": "${aws_subnet.root_PrivateSubnet_8A5D9DDE.availability_zone}",
         "cluster_id": "redis-redis-c811048b",
         "engine": "redis",
         "engine_version": "6.2",
@@ -101,98 +101,98 @@ module.exports = function({ r, r2 }) {
         "num_cache_nodes": 1,
         "parameter_group_name": "default.redis6.x",
         "security_group_ids": [
-          "${aws_security_group.redisRedis_securityGroup_235C75C0.id}"
+          "${aws_security_group.root_redisRedis_securityGroup_C278C668.id}"
         ],
-        "subnet_group_name": "${aws_elasticache_subnet_group.redisRedis_RedisSubnetGroup_F1A1B37D.name}"
+        "subnet_group_name": "${aws_elasticache_subnet_group.root_redisRedis_RedisSubnetGroup_6ED92583.name}"
       }
     },
     "aws_elasticache_subnet_group": {
-      "r2_RedisSubnetGroup_C415566B": {
+      "root_r2_RedisSubnetGroup_873E9A00": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/r2/RedisSubnetGroup",
-            "uniqueId": "r2_RedisSubnetGroup_C415566B"
+            "uniqueId": "root_r2_RedisSubnetGroup_873E9A00"
           }
         },
         "name": "r2-c882797c-subnetGroup",
         "subnet_ids": [
-          "${aws_subnet.PrivateSubnet.id}"
+          "${aws_subnet.root_PrivateSubnet_8A5D9DDE.id}"
         ]
       },
-      "redisRedis_RedisSubnetGroup_F1A1B37D": {
+      "root_redisRedis_RedisSubnetGroup_6ED92583": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/redis.Redis/RedisSubnetGroup",
-            "uniqueId": "redisRedis_RedisSubnetGroup_F1A1B37D"
+            "uniqueId": "root_redisRedis_RedisSubnetGroup_6ED92583"
           }
         },
         "name": "redis-redis-c811048b-subnetGroup",
         "subnet_ids": [
-          "${aws_subnet.PrivateSubnet.id}"
+          "${aws_subnet.root_PrivateSubnet_8A5D9DDE.id}"
         ]
       }
     },
     "aws_iam_role": {
-      "testtest_Handler_IamRole_15693C93": {
+      "root_testtest_Handler_IamRole_6C1728D1": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:test/Handler/IamRole",
-            "uniqueId": "testtest_Handler_IamRole_15693C93"
+            "uniqueId": "root_testtest_Handler_IamRole_6C1728D1"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
-      "testtest_Handler_IamRolePolicy_AF0279BD": {
+      "root_testtest_Handler_IamRolePolicy_65A1D8BE": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:test/Handler/IamRolePolicy",
-            "uniqueId": "testtest_Handler_IamRolePolicy_AF0279BD"
+            "uniqueId": "root_testtest_Handler_IamRolePolicy_65A1D8BE"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"elasticache:Describe*\"],\"Resource\":[\"${aws_elasticache_cluster.redisRedis_RedisCluster_17F572CD.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"elasticache:Describe*\"],\"Resource\":[\"${aws_elasticache_cluster.r2_RedisCluster_C6087F40.arn}\"],\"Effect\":\"Allow\"},{\"Effect\":\"Allow\",\"Action\":[\"ec2:CreateNetworkInterface\",\"ec2:DescribeNetworkInterfaces\",\"ec2:DeleteNetworkInterface\",\"ec2:DescribeSubnets\",\"ec2:DescribeSecurityGroups\"],\"Resource\":\"*\"},{\"Effect\":\"Allow\",\"Action\":[\"ec2:CreateNetworkInterface\",\"ec2:DescribeNetworkInterfaces\",\"ec2:DeleteNetworkInterface\",\"ec2:DescribeSubnets\",\"ec2:DescribeSecurityGroups\"],\"Resource\":\"*\"}]}",
-        "role": "${aws_iam_role.testtest_Handler_IamRole_15693C93.name}"
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"elasticache:Describe*\"],\"Resource\":[\"${aws_elasticache_cluster.root_redisRedis_RedisCluster_2049056C.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"elasticache:Describe*\"],\"Resource\":[\"${aws_elasticache_cluster.root_r2_RedisCluster_EB1F5CD1.arn}\"],\"Effect\":\"Allow\"},{\"Effect\":\"Allow\",\"Action\":[\"ec2:CreateNetworkInterface\",\"ec2:DescribeNetworkInterfaces\",\"ec2:DeleteNetworkInterface\",\"ec2:DescribeSubnets\",\"ec2:DescribeSecurityGroups\"],\"Resource\":\"*\"},{\"Effect\":\"Allow\",\"Action\":[\"ec2:CreateNetworkInterface\",\"ec2:DescribeNetworkInterfaces\",\"ec2:DeleteNetworkInterface\",\"ec2:DescribeSubnets\",\"ec2:DescribeSecurityGroups\"],\"Resource\":\"*\"}]}",
+        "role": "${aws_iam_role.root_testtest_Handler_IamRole_6C1728D1.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
-      "testtest_Handler_IamRolePolicyAttachment_ADF4752D": {
+      "root_testtest_Handler_IamRolePolicyAttachment_3716AC26": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:test/Handler/IamRolePolicyAttachment",
-            "uniqueId": "testtest_Handler_IamRolePolicyAttachment_ADF4752D"
+            "uniqueId": "root_testtest_Handler_IamRolePolicyAttachment_3716AC26"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.testtest_Handler_IamRole_15693C93.name}"
+        "role": "${aws_iam_role.root_testtest_Handler_IamRole_6C1728D1.name}"
       }
     },
     "aws_internet_gateway": {
-      "InternetGateway": {
+      "root_InternetGateway_8BBAF39E": {
         "//": {
           "metadata": {
             "path": "root/Default/InternetGateway",
-            "uniqueId": "InternetGateway"
+            "uniqueId": "root_InternetGateway_8BBAF39E"
           }
         },
         "tags": {
           "Name": "Default-c82bf964-internet-gateway"
         },
-        "vpc_id": "${aws_vpc.VPC.id}"
+        "vpc_id": "${aws_vpc.root_VPC_15726F37.id}"
       }
     },
     "aws_lambda_function": {
-      "testtest_Handler_295107CC": {
+      "root_testtest_Handler_046C3415": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:test/Handler/Default",
-            "uniqueId": "testtest_Handler_295107CC"
+            "uniqueId": "root_testtest_Handler_046C3415"
           }
         },
         "environment": {
           "variables": {
-            "REDIS_CLUSTER_ID_30c8c4ae": "${aws_elasticache_cluster.r2_RedisCluster_C6087F40.cluster_id}",
-            "REDIS_CLUSTER_ID_5c75c5cf": "${aws_elasticache_cluster.redisRedis_RedisCluster_17F572CD.cluster_id}",
+            "REDIS_CLUSTER_ID_30c8c4ae": "${aws_elasticache_cluster.root_r2_RedisCluster_EB1F5CD1.cluster_id}",
+            "REDIS_CLUSTER_ID_5c75c5cf": "${aws_elasticache_cluster.root_redisRedis_RedisCluster_2049056C.cluster_id}",
             "WING_FUNCTION_NAME": "Handler-c8f4f2a1",
             "WING_TARGET": "tf-aws"
           }
@@ -200,44 +200,44 @@ module.exports = function({ r, r2 }) {
         "function_name": "Handler-c8f4f2a1",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.testtest_Handler_IamRole_15693C93.arn}",
+        "role": "${aws_iam_role.root_testtest_Handler_IamRole_6C1728D1.arn}",
         "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
-        "s3_key": "${aws_s3_object.testtest_Handler_S3Object_9F4E28A7.key}",
+        "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
+        "s3_key": "${aws_s3_object.root_testtest_Handler_S3Object_71CD07AC.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [
-            "${aws_security_group.redisRedis_securityGroup_235C75C0.id}",
-            "${aws_security_group.r2_securityGroup_35A75C2E.id}"
+            "${aws_security_group.root_redisRedis_securityGroup_C278C668.id}",
+            "${aws_security_group.root_r2_securityGroup_EC7D0A0D.id}"
           ],
           "subnet_ids": [
-            "${aws_subnet.PrivateSubnet.id}",
-            "${aws_subnet.PrivateSubnet.id}"
+            "${aws_subnet.root_PrivateSubnet_8A5D9DDE.id}",
+            "${aws_subnet.root_PrivateSubnet_8A5D9DDE.id}"
           ]
         }
       }
     },
     "aws_nat_gateway": {
-      "NATGateway": {
+      "root_NATGateway_23214D12": {
         "//": {
           "metadata": {
             "path": "root/Default/NATGateway",
-            "uniqueId": "NATGateway"
+            "uniqueId": "root_NATGateway_23214D12"
           }
         },
-        "allocation_id": "${aws_eip.EIP.id}",
-        "subnet_id": "${aws_subnet.PublicSubnet.id}",
+        "allocation_id": "${aws_eip.root_EIP_ED59AD4B.id}",
+        "subnet_id": "${aws_subnet.root_PublicSubnet_C9666BAA.id}",
         "tags": {
           "Name": "Default-c82bf964-nat-gateway"
         }
       }
     },
     "aws_route_table": {
-      "PrivateRouteTable": {
+      "root_PrivateRouteTable_E7613E5F": {
         "//": {
           "metadata": {
             "path": "root/Default/PrivateRouteTable",
-            "uniqueId": "PrivateRouteTable"
+            "uniqueId": "root_PrivateRouteTable_E7613E5F"
           }
         },
         "route": [
@@ -251,7 +251,7 @@ module.exports = function({ r, r2 }) {
             "instance_id": null,
             "ipv6_cidr_block": null,
             "local_gateway_id": null,
-            "nat_gateway_id": "${aws_nat_gateway.NATGateway.id}",
+            "nat_gateway_id": "${aws_nat_gateway.root_NATGateway_23214D12.id}",
             "network_interface_id": null,
             "transit_gateway_id": null,
             "vpc_endpoint_id": null,
@@ -261,13 +261,13 @@ module.exports = function({ r, r2 }) {
         "tags": {
           "Name": "Default-c82bf964-private-route-table-1"
         },
-        "vpc_id": "${aws_vpc.VPC.id}"
+        "vpc_id": "${aws_vpc.root_VPC_15726F37.id}"
       },
-      "PublicRouteTable": {
+      "root_PublicRouteTable_36451040": {
         "//": {
           "metadata": {
             "path": "root/Default/PublicRouteTable",
-            "uniqueId": "PublicRouteTable"
+            "uniqueId": "root_PublicRouteTable_36451040"
           }
         },
         "route": [
@@ -277,7 +277,7 @@ module.exports = function({ r, r2 }) {
             "core_network_arn": null,
             "destination_prefix_list_id": null,
             "egress_only_gateway_id": null,
-            "gateway_id": "${aws_internet_gateway.InternetGateway.id}",
+            "gateway_id": "${aws_internet_gateway.root_InternetGateway_8BBAF39E.id}",
             "instance_id": null,
             "ipv6_cidr_block": null,
             "local_gateway_id": null,
@@ -291,61 +291,61 @@ module.exports = function({ r, r2 }) {
         "tags": {
           "Name": "Default-c82bf964-public-route-table-1"
         },
-        "vpc_id": "${aws_vpc.VPC.id}"
+        "vpc_id": "${aws_vpc.root_VPC_15726F37.id}"
       }
     },
     "aws_route_table_association": {
-      "PrivateRouteTableAssociation": {
+      "root_PrivateRouteTableAssociation_A90EF7F6": {
         "//": {
           "metadata": {
             "path": "root/Default/PrivateRouteTableAssociation",
-            "uniqueId": "PrivateRouteTableAssociation"
+            "uniqueId": "root_PrivateRouteTableAssociation_A90EF7F6"
           }
         },
-        "route_table_id": "${aws_route_table.PrivateRouteTable.id}",
-        "subnet_id": "${aws_subnet.PrivateSubnet.id}"
+        "route_table_id": "${aws_route_table.root_PrivateRouteTable_E7613E5F.id}",
+        "subnet_id": "${aws_subnet.root_PrivateSubnet_8A5D9DDE.id}"
       },
-      "PublicRouteTableAssociation": {
+      "root_PublicRouteTableAssociation_22B41679": {
         "//": {
           "metadata": {
             "path": "root/Default/PublicRouteTableAssociation",
-            "uniqueId": "PublicRouteTableAssociation"
+            "uniqueId": "root_PublicRouteTableAssociation_22B41679"
           }
         },
-        "route_table_id": "${aws_route_table.PublicRouteTable.id}",
-        "subnet_id": "${aws_subnet.PublicSubnet.id}"
+        "route_table_id": "${aws_route_table.root_PublicRouteTable_36451040.id}",
+        "subnet_id": "${aws_subnet.root_PublicSubnet_C9666BAA.id}"
       }
     },
     "aws_s3_bucket": {
-      "Code": {
+      "root_Code_02F3C603": {
         "//": {
           "metadata": {
             "path": "root/Default/Code",
-            "uniqueId": "Code"
+            "uniqueId": "root_Code_02F3C603"
           }
         },
         "bucket_prefix": "code-c84a50b1-"
       }
     },
     "aws_s3_object": {
-      "testtest_Handler_S3Object_9F4E28A7": {
+      "root_testtest_Handler_S3Object_71CD07AC": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:test/Handler/S3Object",
-            "uniqueId": "testtest_Handler_S3Object_9F4E28A7"
+            "uniqueId": "root_testtest_Handler_S3Object_71CD07AC"
           }
         },
-        "bucket": "${aws_s3_bucket.Code.bucket}",
+        "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       }
     },
     "aws_security_group": {
-      "r2_securityGroup_35A75C2E": {
+      "root_r2_securityGroup_EC7D0A0D": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/r2/securityGroup",
-            "uniqueId": "r2_securityGroup_35A75C2E"
+            "uniqueId": "root_r2_securityGroup_EC7D0A0D"
           }
         },
         "egress": [
@@ -366,7 +366,7 @@ module.exports = function({ r, r2 }) {
         "ingress": [
           {
             "cidr_blocks": [
-              "${aws_subnet.PrivateSubnet.cidr_block}"
+              "${aws_subnet.root_PrivateSubnet_8A5D9DDE.cidr_block}"
             ],
             "description": null,
             "from_port": 6379,
@@ -379,13 +379,13 @@ module.exports = function({ r, r2 }) {
           }
         ],
         "name": "30c8c4ae-securityGroup",
-        "vpc_id": "${aws_vpc.VPC.id}"
+        "vpc_id": "${aws_vpc.root_VPC_15726F37.id}"
       },
-      "redisRedis_securityGroup_235C75C0": {
+      "root_redisRedis_securityGroup_C278C668": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/redis.Redis/securityGroup",
-            "uniqueId": "redisRedis_securityGroup_235C75C0"
+            "uniqueId": "root_redisRedis_securityGroup_C278C668"
           }
         },
         "egress": [
@@ -406,7 +406,7 @@ module.exports = function({ r, r2 }) {
         "ingress": [
           {
             "cidr_blocks": [
-              "${aws_subnet.PrivateSubnet.cidr_block}"
+              "${aws_subnet.root_PrivateSubnet_8A5D9DDE.cidr_block}"
             ],
             "description": null,
             "from_port": 6379,
@@ -419,43 +419,43 @@ module.exports = function({ r, r2 }) {
           }
         ],
         "name": "5c75c5cf-securityGroup",
-        "vpc_id": "${aws_vpc.VPC.id}"
+        "vpc_id": "${aws_vpc.root_VPC_15726F37.id}"
       }
     },
     "aws_subnet": {
-      "PrivateSubnet": {
+      "root_PrivateSubnet_8A5D9DDE": {
         "//": {
           "metadata": {
             "path": "root/Default/PrivateSubnet",
-            "uniqueId": "PrivateSubnet"
+            "uniqueId": "root_PrivateSubnet_8A5D9DDE"
           }
         },
         "cidr_block": "10.0.4.0/22",
         "tags": {
           "Name": "Default-c82bf964-private-subnet-1"
         },
-        "vpc_id": "${aws_vpc.VPC.id}"
+        "vpc_id": "${aws_vpc.root_VPC_15726F37.id}"
       },
-      "PublicSubnet": {
+      "root_PublicSubnet_C9666BAA": {
         "//": {
           "metadata": {
             "path": "root/Default/PublicSubnet",
-            "uniqueId": "PublicSubnet"
+            "uniqueId": "root_PublicSubnet_C9666BAA"
           }
         },
         "cidr_block": "10.0.0.0/24",
         "tags": {
           "Name": "Default-c82bf964-public-subnet-1"
         },
-        "vpc_id": "${aws_vpc.VPC.id}"
+        "vpc_id": "${aws_vpc.root_VPC_15726F37.id}"
       }
     },
     "aws_vpc": {
-      "VPC": {
+      "root_VPC_15726F37": {
         "//": {
           "metadata": {
             "path": "root/Default/VPC",
-            "uniqueId": "VPC"
+            "uniqueId": "root_VPC_15726F37"
           }
         },
         "cidr_block": "10.0.0.0/16",

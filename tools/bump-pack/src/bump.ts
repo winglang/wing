@@ -10,7 +10,7 @@ export interface SetPackageVersionOptions {
   /**
    * The version to set the package to.
    *
-   * This will also be used for dependencies that are set to "0.0.0" or "workspace:" if `versionMap` is not provided.
+   * This will also be used for dependencies that are set to "0.0.0" or "file:" if `versionMap` is not provided.
    *
    * @default "0.0.0"
    */
@@ -75,7 +75,7 @@ export async function setPackageVersion(options: SetPackageVersionOptions) {
 
     if (
       packageVersion === defaultVersion ||
-      packageVersion.startsWith("workspace:")
+      packageVersion.startsWith("file:")
     ) {
       originals[packageName] = packageVersion;
       if (devBuild) {

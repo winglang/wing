@@ -2,7 +2,7 @@
   "dependencies": [
     {
       "name": "@cdktf/provider-aws",
-      "version": "^15.0.0",
+      "version": "^12.0.1",
       "type": "build"
     },
     {
@@ -23,7 +23,7 @@
     },
     {
       "name": "@types/node",
-      "version": "^18",
+      "version": "^16",
       "type": "build"
     },
     {
@@ -50,7 +50,12 @@
     },
     {
       "name": "@winglang/jsii-docgen",
-      "version": "workspace:^",
+      "version": "file:../../apps/jsii-docgen",
+      "type": "build"
+    },
+    {
+      "name": "@winglang/wing-api-checker",
+      "version": "file:../../apps/wing-api-checker",
       "type": "build"
     },
     {
@@ -63,12 +68,7 @@
     },
     {
       "name": "cdktf-cli",
-      "version": "0.17.0",
-      "type": "build"
-    },
-    {
-      "name": "constructs",
-      "version": "~10.1.314",
+      "version": "0.15.2",
       "type": "build"
     },
     {
@@ -127,6 +127,10 @@
       "type": "build"
     },
     {
+      "name": "patch-package",
+      "type": "build"
+    },
+    {
       "name": "prettier",
       "type": "build"
     },
@@ -149,11 +153,6 @@
     },
     {
       "name": "vitest",
-      "type": "build"
-    },
-    {
-      "name": "wing-api-checker",
-      "version": "workspace:^",
       "type": "build"
     },
     {
@@ -197,18 +196,8 @@
       "type": "bundled"
     },
     {
-      "name": "@aws-sdk/is-array-buffer",
-      "version": "3.201.0",
-      "type": "bundled"
-    },
-    {
       "name": "@aws-sdk/types",
       "version": "3.347.0",
-      "type": "bundled"
-    },
-    {
-      "name": "@aws-sdk/util-buffer-from",
-      "version": "3.208.0",
       "type": "bundled"
     },
     {
@@ -247,7 +236,7 @@
     },
     {
       "name": "cdktf",
-      "version": "0.17.0",
+      "version": "0.15.2",
       "type": "bundled"
     },
     {
@@ -284,12 +273,12 @@
     },
     {
       "name": "constructs",
-      "version": "~10.1.314",
+      "version": "~10.1.228",
       "type": "peer"
     },
     {
       "name": "constructs",
-      "version": "~10.1.314",
+      "version": "~10.1.228",
       "type": "runtime"
     }
   ],
