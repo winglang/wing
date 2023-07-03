@@ -57,7 +57,6 @@ export const Console = ({
   let windowTitle = title ?? "Wing Console";
 
   const appMode = layout === LayoutType.Vscode ? "local" : "remote";
-
   return (
     <AppContext.Provider value={{ appMode, title: windowTitle }}>
       <trpc.Provider client={trpcClient} queryClient={queryClient}>
