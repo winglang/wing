@@ -91,9 +91,8 @@ impl<'a> LiftTransform<'a> {
 						"Cannot capture symbol \"{fullname}\" because it is shadowed by another symbol with the same name"
 					),
 				});
+				return true;
 			}
-
-			return true;
 		}
 
 		return false;
