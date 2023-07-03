@@ -14,6 +14,7 @@ module.exports = function({ $_id, $api_PUT, $body, $std_Json, $user }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: req.headers?.get(\"content-type\") == \"application/json\"")})(((req.headers)["content-type"] === "application/json"))};
       return {
       "status": 200,
+      "headers": Object.freeze({"content-type":"application/json; charset=utf-8"}),
       "body": (req.vars)["id"],}
       ;
     }

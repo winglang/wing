@@ -7,7 +7,7 @@ keywords: [faq, supported provisioning engines, Winglang, Wing programming langu
 
 ## Short answer
 We don't support Kubernetes yet, but we will in the future. 
-Our roadmap is [here](https://docs.winglang.io/status#roadmap).
+Our roadmap is [here](https://www.winglang.io/contributing/status).
 
 ## Long answer
 There are a different kinds of Kubernetes support with varying levels of maturity in Wing:

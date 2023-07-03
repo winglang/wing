@@ -58,7 +58,7 @@ hint: Every preflight object needs a unique identifier within its scope. You can
 
 > new cloud.Bucket() as \\"MyBucket\\";
 
-For more information, see https://docs.winglang.io/concepts/resources
+For more information, see https://www.winglang.io/docs/language-guide/language-reference#33-preflight-classes
 
 ../../../examples/tests/error/target/test/repeat_construct_id.wsim.[REDACTED].tmp/.wing/preflight.js:10
        super(scope, id);
@@ -81,7 +81,7 @@ hint: Every preflight object needs a unique identifier within its scope. You can
 
 > new cloud.Bucket() as \\"MyBucket\\";
 
-For more information, see https://docs.winglang.io/concepts/resources
+For more information, see https://www.winglang.io/docs/language-guide/language-reference#33-preflight-classes
 
 ../../../examples/tests/error/target/test/repeat_construct_id2.wsim.[REDACTED].tmp/.wing/preflight.js:13
        });
