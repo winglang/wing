@@ -103,14 +103,16 @@ function printResults(
   // prints a summary of how many tests passed and failed
   results.push(" ");
   results.push(
-    `${chalk.dim("Tests")}${failingTestsNumber ? chalk.red(` ${failingTestsNumber} failed`) : ""}${failingTestsNumber && passingTestsNumber ? chalk.dim(" |") : ""
+    `${chalk.dim("Tests")}${failingTestsNumber ? chalk.red(` ${failingTestsNumber} failed`) : ""}${
+      failingTestsNumber && passingTestsNumber ? chalk.dim(" |") : ""
     }${passingTestsNumber ? chalk.green(` ${passingTestsNumber} passed`) : ""} ${chalk.dim(
       `(${failingTestsNumber + passingTestsNumber})`
     )}`
   );
   // prints a summary of how many tests files passed and failed
   results.push(
-    `${chalk.dim("Test Files")}${failing.length ? chalk.red(` ${failing.length} failed`) : ""}${failing.length && passing.length ? chalk.dim(" |") : ""
+    `${chalk.dim("Test Files")}${failing.length ? chalk.red(` ${failing.length} failed`) : ""}${
+      failing.length && passing.length ? chalk.dim(" |") : ""
     }${passing.length ? chalk.green(` ${passing.length} passed`) : ""} ${chalk.dim(
       `(${totalSum})`
     )}`
@@ -479,5 +481,6 @@ async function execCapture(command: string, options: { cwd: string }) {
   if (stderr) {
     throw new Error(stderr);
   }
+  log(stdout);
   return stdout;
 }
