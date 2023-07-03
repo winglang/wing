@@ -5,32 +5,20 @@ source: libs/wingc/src/jsify/tests.rs
 
 ```w
 
-    inflight class Base { }
+    let x = "hello";
 
-    test "test" {
-      inflight class Derived extends Base { }
-      new Derived();
+    class Base {
+      bar() {
+        log(x);
+      }
+    }
+
+    class Derived extends Base {
+      foo() {
+        this.bar();
+      }
     }
     
-```
-
-## inflight.$Closure1.js
-
-```js
-module.exports = function({ $Base }) {
-  class $Closure1 {
-    async handle() {
-      const Derived = require("./inflight.Derived.js")({$Base});
-      new Derived();
-    }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
-    }
-  }
-  return $Closure1;
-}
 ```
 
 ## inflight.Base.js
@@ -38,6 +26,8 @@ module.exports = function({ $Base }) {
 ```js
 module.exports = function({  }) {
   class Base {
+    constructor({  }) {
+    }
   }
   return Base;
 }
@@ -48,6 +38,9 @@ module.exports = function({  }) {
 ```js
 module.exports = function({ $Base }) {
   class Derived extends $Base {
+    constructor({  }) {
+      super({});
+    }
   }
   return Derived;
 }
@@ -69,6 +62,9 @@ class $Root extends $stdlib.std.Resource {
         super(scope, id);
         this._addInflightOps("$inflight_init");
       }
+      bar() {
+        {console.log(x)};
+      }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.Base.js")({
@@ -87,15 +83,17 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
     }
-    class $Closure1 extends $stdlib.std.Resource {
+    class Derived extends Base {
       constructor(scope, id, ) {
         super(scope, id);
-        this.display.hidden = true;
-        this._addInflightOps("handle", "$inflight_init");
+        this._addInflightOps("$inflight_init");
+      }
+      foo() {
+        (this.bar());
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1.js")({
+          require("./inflight.Derived.js")({
             $Base: ${context._lift(Base)},
           })
         `);
@@ -103,8 +101,8 @@ class $Root extends $stdlib.std.Resource {
       _toInflight() {
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType(this).text};
-            const client = new $Closure1Client({
+            const DerivedClient = ${Derived._toInflightType(this).text};
+            const client = new DerivedClient({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -112,7 +110,7 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
     }
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:test",new $Closure1(this,"$Closure1"));
+    const x = "hello";
   }
 }
 class $App extends $AppBase {

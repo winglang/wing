@@ -1409,8 +1409,8 @@ fn func_returns_func() {
 fn preflight_class_extends_preflight_class() {
 	assert_compile_ok!(
 		r#"
-    class A {}
-    class B extends A {}
+    class Base {}
+    class Derived extends Base {}
     "#
 	);
 }
@@ -1465,9 +1465,50 @@ fn closed_inflight_class_extends_outer_inflight_class() {
 
     test "test" {
       inflight class Derived extends Base { }
-
       new Derived();
     }
     "#
 	);
+}
+
+#[test]
+fn base_class_captures_preflight() {
+	assert_compile_ok!(
+		r#"
+    let x = "hello";
+
+    class Base {
+      bar() {
+        log(x);
+      }
+    }
+
+    class Derived extends Base {
+      foo() {
+        this.bar();
+      }
+    }
+    "#
+	);
+}
+
+#[test]
+fn base_class_captures_inflight() {
+	assert_compile_ok!(
+		r#"
+    let x = "hello";
+
+    class Base {
+      inflight bar() {
+        log(x);
+      }
+    }
+
+    class Derived extends Base {
+      inflight foo() {
+        this.bar();
+      }
+    }
+    "#
+	)
 }
