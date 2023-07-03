@@ -5,7 +5,7 @@ use lsp_types::{
 use std::cmp::max;
 use tree_sitter::Point;
 
-use crate::ast::{Expr, ExprKind, Phase, Scope, Symbol, TypeAnnotation, TypeAnnotationKind, UserDefinedType};
+use crate::ast::{Expr, Phase, Scope, Symbol, TypeAnnotation, TypeAnnotationKind, UserDefinedType};
 use crate::closure_transform::{CLOSURE_CLASS_PREFIX, PARENT_THIS_NAME};
 use crate::diagnostic::WingSpan;
 use crate::docs::Documented;
@@ -13,7 +13,7 @@ use crate::lsp::sync::{FILES, JSII_TYPES};
 use crate::type_check::symbol_env::{LookupResult, StatementIdx};
 use crate::type_check::{
 	import_udt_from_jsii, resolve_user_defined_type, ClassLike, Namespace, SymbolKind, Type, Types, UnsafeRef,
-	CLASS_INFLIGHT_INIT_NAME, CLASS_INIT_NAME,
+	VariableKind, CLASS_INFLIGHT_INIT_NAME, CLASS_INIT_NAME,
 };
 use crate::visit::{visit_expr, visit_type_annotation, Visit};
 use crate::wasm_util::{ptr_to_string, string_to_combined_ptr, WASM_RETURN_ERROR};
@@ -54,11 +54,17 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 		);
 		let node_to_complete_kind = node_to_complete.kind();
 
+		let file_id = file.to_str().expect("File path must be valid utf8");
 		let mut scope_visitor = ScopeVisitor::new(
+			node_to_complete.parent().map(|parent| WingSpan {
+				start: parent.start_position().into(),
+				end: parent.end_position().into(),
+				file_id: file_id.to_string(),
+			}),
 			WingSpan {
 				start: node_to_complete.start_position().into(),
 				end: node_to_complete.end_position().into(),
-				file_id: file.to_str().expect("File path must be valid utf8").to_string(),
+				file_id: file_id.to_string(),
 			},
 			&root_scope,
 		);
@@ -90,11 +96,40 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 				}
 			}
 
+			let is_new_expression = if let Some(parent) = parent.parent() {
+				parent.kind() == "new_expression"
+			} else {
+				false
+			};
+
+			let filter_completions = |completions: Vec<CompletionItem>| {
+				if !is_new_expression {
+					completions
+				} else {
+					completions
+						.iter()
+						.filter(|c| {
+							matches!(
+								c.kind,
+								Some(CompletionItemKind::CLASS) | Some(CompletionItemKind::MODULE)
+							)
+						})
+						.cloned()
+						.map(|mut c| {
+							if c.kind == Some(CompletionItemKind::CLASS) {
+								convert_to_call_completion(&mut c);
+							}
+							c
+						})
+						.collect()
+				}
+			};
+
 			if let Some(nearest_type_annotation) = scope_visitor.nearest_type_annotation {
 				if let TypeAnnotationKind::UserDefined(udt) = &nearest_type_annotation.kind {
 					let type_lookup = resolve_user_defined_type(udt, found_env, scope_visitor.found_stmt_index.unwrap_or(0));
 
-					let mut completions = if let Ok(type_lookup) = type_lookup {
+					let completions = if let Ok(type_lookup) = type_lookup {
 						get_completions_from_type(&type_lookup, types, Some(found_env.phase), false)
 					} else {
 						// this is probably a namespace, let's look it up
@@ -110,26 +145,7 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 						}
 					};
 
-					if parent.parent().expect("custom_type must have a parent node").kind() == "new_expression" {
-						completions = completions
-							.iter()
-							.filter(|c| {
-								matches!(
-									c.kind,
-									Some(CompletionItemKind::CLASS) | Some(CompletionItemKind::MODULE)
-								)
-							})
-							.cloned()
-							.map(|mut c| {
-								if c.kind == Some(CompletionItemKind::CLASS) {
-									convert_to_call_completion(&mut c);
-								}
-								c
-							})
-							.collect();
-					}
-
-					return completions;
+					return filter_completions(completions);
 				}
 			}
 
@@ -143,11 +159,9 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 				.lookup_nested_str(&reference_text, scope_visitor.found_stmt_index)
 				.ok()
 			{
-				match lookup_thing {
-					SymbolKind::Type(t) => {
-						return get_completions_from_type(&t, types, Some(found_env.phase), false);
-					}
-					SymbolKind::Variable(v) => return get_completions_from_type(&v.type_, types, Some(found_env.phase), false),
+				let completions = match lookup_thing {
+					SymbolKind::Type(t) => get_completions_from_type(&t, types, Some(found_env.phase), false),
+					SymbolKind::Variable(v) => get_completions_from_type(&v.type_, types, Some(found_env.phase), false),
 					SymbolKind::Namespace(n) => {
 						// If the types in this namespace aren't loaded yet, load them now to get completions
 						if !n.loaded {
@@ -164,9 +178,11 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 								import_udt_from_jsii(&mut file_data.types, &mut jsii_types, &udt, &file_data.jsii_imports);
 							});
 						}
-						return get_completions_from_namespace(&n, Some(found_env.phase));
+						get_completions_from_namespace(&n, Some(found_env.phase))
 					}
-				}
+				};
+
+				return filter_completions(completions);
 			}
 
 			return vec![];
@@ -487,7 +503,14 @@ fn get_completions_from_class(
 				.1
 				.as_variable()
 				.expect("Symbols in classes are always variables");
-			if variable.is_static == is_instance {
+
+			let is_static = if let VariableKind::StaticMember = variable.kind {
+				true
+			} else {
+				false
+			};
+
+			if is_static == is_instance {
 				return None;
 			}
 
@@ -603,8 +626,10 @@ fn should_exclude_symbol(symbol: &str) -> bool {
 /// This visitor is used to find the scope
 /// and relevant expression that contains a given location.
 pub struct ScopeVisitor<'a> {
+	/// The area surrounding the location we're looking for
+	pub parent_span: Option<WingSpan>,
 	/// The target location we're looking for
-	pub location: WingSpan,
+	pub target_span: WingSpan,
 	/// The index of the statement that contains the target location
 	/// or, the last valid statement before the target location
 	pub found_stmt_index: Option<usize>,
@@ -617,9 +642,10 @@ pub struct ScopeVisitor<'a> {
 }
 
 impl<'a> ScopeVisitor<'a> {
-	pub fn new(location: WingSpan, starting_scope: &'a Scope) -> Self {
+	pub fn new(parent_span: Option<WingSpan>, target_span: WingSpan, starting_scope: &'a Scope) -> Self {
 		Self {
-			location,
+			parent_span,
+			target_span,
 			found_stmt_index: None,
 			nearest_expr: None,
 			found_scope: starting_scope,
@@ -634,11 +660,11 @@ impl<'a> ScopeVisitor<'a> {
 
 impl<'a> Visit<'a> for ScopeVisitor<'a> {
 	fn visit_scope(&mut self, node: &'a Scope) {
-		if node.span.file_id != "" && node.span.contains(&self.location.start.into()) {
+		if node.span.file_id != "" && node.span.contains(&self.target_span.start.into()) {
 			self.found_scope = node;
 
 			for (i, statement) in node.statements.iter().enumerate() {
-				if statement.span <= self.location {
+				if statement.span <= self.target_span {
 					self.visit_stmt(&statement);
 				} else if self.found_stmt_index.is_none() {
 					self.found_stmt_index = Some(max(i as i64 - 1, 0) as usize);
@@ -654,29 +680,36 @@ impl<'a> Visit<'a> for ScopeVisitor<'a> {
 	fn visit_expr(&mut self, node: &'a Expr) {
 		// We want to find the nearest expression to our target location
 		// i.e we want the expression that is to the left of it
-		if node.span.end == self.location.start {
+		if node.span.end == self.target_span.start {
 			self.nearest_expr = Some(node);
-		} else if node.span.end <= self.location.start {
-			if let Some(nearest_expr) = self.nearest_expr {
-				// If we already have a nearest expression, we want to find the one that is closest to our target location
-				if node.span.end > nearest_expr.span.end {
-					self.nearest_expr = Some(node);
+		}
+		// if we can't get an exact match, we want to find the nearest expression within the same node-ish
+		// (this is for cases like `(Json 5).`, since parentheses are not part of the span)
+		else if node.span.end <= self.target_span.start {
+			if let Some(parent) = &self.parent_span {
+				if parent.contains(&node.span.end.into()) {
+					if let Some(nearest_expr) = self.nearest_expr {
+						// If we already have a nearest expression, we want to find the one that is closest to our target location
+						if node.span.end > nearest_expr.span.end {
+							self.nearest_expr = Some(node);
+						}
+					} else {
+						self.nearest_expr = Some(node);
+					}
 				}
-			} else {
-				self.nearest_expr = Some(node);
 			}
 		}
 
 		// We don't want to visit the children of a reference expression
 		// as that will actually be a less useful piece of information
 		// e.g. With `a.b.c.` we are interested in `a.b.c` and not `a.b`
-		if !matches!(&node.kind, ExprKind::Reference(_)) {
-			visit_expr(self, node);
-		}
+		visit_expr(self, node);
+		// if !matches!(&node.kind, ExprKind::Reference(_)) {
+		// }
 	}
 
 	fn visit_type_annotation(&mut self, node: &'a TypeAnnotation) {
-		if node.span.end == self.location.end {
+		if node.span.end == self.target_span.end {
 			self.nearest_type_annotation = Some(node);
 		}
 
@@ -702,6 +735,9 @@ mod tests {
 		($name:ident, $code:literal, $($assertion:stmt)*) => {
 			#[test]
 			fn $name() {
+				// NOTE: this is needed for debugging to work regardless of where you run the test
+				std::env::set_current_dir(env!("CARGO_MANIFEST_DIR")).unwrap();
+
 				let text_document_position = load_file_with_contents($code);
 				let completion = on_completion(CompletionParams {
 					context: None,
@@ -930,6 +966,36 @@ let x: cloud.
            //^
 "#,
 		assert!(!variable_type_annotation_namespace.is_empty())
+	);
+
+	test_completion_list!(
+		parentheses_expression,
+		r#"
+(Json {}).tryGet("t")?.
+                     //^
+"#,
+		assert!(!parentheses_expression.is_empty())
+	);
+
+	test_completion_list!(
+		static_json_after_expression,
+		r#"
+bring cloud;
+let b = new cloud.Bucket();
+Json.
+   //^
+"#,
+		assert!(!static_json_after_expression.is_empty())
+	);
+
+	test_completion_list!(
+		static_json_after_expression_statement,
+		r#"
+bring cloud;
+let b = new cloud.Bucket();Json.
+                              //^
+"#,
+		assert!(!static_json_after_expression_statement.is_empty())
 	);
 
 	test_completion_list!(

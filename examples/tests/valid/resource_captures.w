@@ -55,8 +55,8 @@ class MyResource {
     this.myOptStr = "myOptString";
     this.arrayOfStr = ["s1", "s2"];
     this.mapOfNum = {
-      k1: 11,
-      k2: 22
+      "k1" => 11,
+      "k2" => 22
     };
     this.setOfStr = {"s1", "s2", "s1"};
 

@@ -12,10 +12,10 @@ let table = new cloud.Table(
   name: "key-history",
   primaryKey: "_id",
   columns: {
-    _id: cloud.ColumnType.STRING,
-    key: cloud.ColumnType.STRING,
-    operation: cloud.ColumnType.STRING,
-    source: cloud.ColumnType.STRING,
+    "_id" => cloud.ColumnType.STRING,
+    "key" => cloud.ColumnType.STRING,
+    "operation" => cloud.ColumnType.STRING,
+    "source" => cloud.ColumnType.STRING,
   }
 );
 
@@ -106,4 +106,4 @@ new std.Test(inflight () => {
   assert(wait(checkHitCount(key: "b", type: "UPDATE", source: Source.onEvent, count: 1)));
   assert(wait(checkHitCount(key: "c", type: "DELETE", source: Source.onEvent, count: 1)));
 
-}, std.TestProps { timeout: 8m }) as "hitCount is incremented according to the bucket event";
+}, timeout: 8m) as "hitCount is incremented according to the bucket event";

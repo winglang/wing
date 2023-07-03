@@ -27,7 +27,7 @@ const generateTestName = (path: string) => path.split(sep).slice(-2).join("/");
  */
 export interface TestOptions extends CompileOptions {}
 
-export async function test(entrypoints: string[], options: TestOptions) {
+export async function test(entrypoints: string[], options: TestOptions): Promise<number> {
   const startTime = Date.now();
   const results: { testName: string; results: sdk.cloud.TestResult[] }[] = [];
   for (const entrypoint of entrypoints) {
@@ -44,6 +44,17 @@ export async function test(entrypoints: string[], options: TestOptions) {
     }
   }
   printResults(results, Date.now() - startTime);
+
+  // if we have any failures, exit with 1
+  for (const test of results) {
+    for (const r of test.results) {
+      if (r.error) {
+        return 1;
+      }
+    }
+  }
+
+  return 0;
 }
 
 function printResults(
@@ -470,5 +481,6 @@ async function execCapture(command: string, options: { cwd: string }) {
   if (stderr) {
     throw new Error(stderr);
   }
+  log(stdout);
   return stdout;
 }

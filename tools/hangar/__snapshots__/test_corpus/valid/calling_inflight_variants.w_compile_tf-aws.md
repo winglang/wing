@@ -216,13 +216,12 @@ class $Root extends $stdlib.std.Resource {
     class Foo extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("makeFn", "callFn", "callFn2", "inflight2");
         const __parent_this_1 = this;
         class $Closure1 extends $stdlib.std.Resource {
           constructor(scope, id, ) {
             super(scope, id);
-            this._addInflightOps("handle");
             this.display.hidden = true;
+            this._addInflightOps("handle");
           }
           static _toInflightType(context) {
             const self_client_path = "././inflight.$Closure1.js";
@@ -251,6 +250,7 @@ class $Root extends $stdlib.std.Resource {
           }
         }
         this.inflight1 = new $Closure1(this,"$Closure1");
+        this._addInflightOps("makeFn", "callFn", "callFn2", "inflight2");
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.Foo.js";
@@ -290,8 +290,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure2 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
         this.display.hidden = true;
+        this._addInflightOps("handle");
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.$Closure2.js";

@@ -57,6 +57,7 @@ const WINGSDK_REDIS_MODULE: &'static str = "redis";
 const WINGSDK_CLOUD_MODULE: &'static str = "cloud";
 const WINGSDK_UTIL_MODULE: &'static str = "util";
 const WINGSDK_HTTP_MODULE: &'static str = "http";
+const WINGSDK_MATH_MODULE: &'static str = "math";
 
 const WINGSDK_DURATION: &'static str = "std.Duration";
 const WINGSDK_MAP: &'static str = "std.Map";
