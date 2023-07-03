@@ -284,14 +284,16 @@ impl<'a> JSifier<'a> {
 		// this is an error. this can happen if we render a lifted preflight expression that references
 		// an e.g. variable from inflight (`myarr.get(i)` where `myarr` is preflight and `i` is an
 		// inflight variable). in this case we need to bail out.
-		if let Some(expr_phase) = self.types.get_expr_phase(expression) {
-			if ctx.phase == Phase::Preflight && expr_phase == Phase::Inflight && !self.is_this(expression) {
-				report_diagnostic(Diagnostic {
-					message: "Cannot reference an inflight value from within a preflight expression".to_string(),
-					span: Some(expression.span.clone()),
-				});
+		if ctx.phase == Phase::Preflight {
+			if let Some(expr_phase) = self.types.get_expr_phase(expression) {
+				if expr_phase == Phase::Inflight && !self.is_this(expression) {
+					report_diagnostic(Diagnostic {
+						message: "Cannot reference an inflight value from within a preflight expression".to_string(),
+						span: Some(expression.span.clone()),
+					});
 
-				return "<ERROR>".to_string();
+					return "<ERROR>".to_string();
+				}
 			}
 		}
 
@@ -936,7 +938,14 @@ impl<'a> JSifier<'a> {
 
 			// default base class for preflight classes is `core.Resource`
 			let extends = if let Some(parent) = &class.parent {
-				format!(" extends {}", self.jsify_expression(parent, ctx))
+				let base = if let Some(udt) = parent.as_type_reference() {
+					self.jsify_user_defined_type(udt)
+				} else {
+					// this is likely a bug in the compiler, but we'll just emit the name as-is
+					self.jsify_expression(parent, ctx)
+				};
+
+				format!(" extends {}", base)
 			} else {
 				format!(" extends {}", STDLIB_CORE_RESOURCE)
 			};
