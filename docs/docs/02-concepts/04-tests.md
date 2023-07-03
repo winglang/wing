@@ -27,7 +27,8 @@ test "abs" {
 }
 ```
 
-You can execute the test on the simulator using the following command:
+### Running tests in the Simulator
+You can execute all tests in a `.w` file in the simulator using the following command:
 
 ```sh
 % wing test example.w --target sim 
