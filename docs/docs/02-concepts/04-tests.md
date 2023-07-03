@@ -1,22 +1,21 @@
 ---
 title: Tests
 id: tests
-description: Run test in wing cross multiple clouds
+description: Execute tests in Winglang across multiple clouds
 keywords: [Wing test, multi-cloud]
 ---
 
-Winglang has a lightweight test framework composed of the `wing test` command and the `test` keyword.
+Winglang incorporates a lightweight testing framework, which is built around the `wing test` command and the `test` keyword.
 
-You write a test by creating a winglang file that contains:
+You can construct a test by creating a Winglang file that includes the following code structure:
 ```ts wing
 test "<test-name>" {
-  // inflight test code 
+  // test code 
 }
 ```
-The test framework runs each such test in isolation; if the test throws an expection (usually using the `assert` funciton) the test is considered to have failed.
+Each test is run in isolation within the test framework. If a test throws an exception (typically using the `assert` function), it's considered to have failed.
 
-
-Consider this example:
+Here's an example:
 
 ```ts playground
 // example.w
@@ -27,7 +26,8 @@ test "abs" {
 }
 ```
 
-And running the test on the simulator
+You can execute the test on the simulator using the following command:
+
 ```sh
 % wing test example.w --target sim 
 pass ─ example.wsim » root/env0/test:abs
@@ -38,10 +38,10 @@ Test Files 1 passed (1)
 Duration 0m0.54s
 ```
 
-**Notice:** The `--target sim` can be ommited since it is the default target for the `wing test` command
+**Notice:** The `--target sim` argument can be omitted as it's the default target for the wing test command.
 
 ### Test run in isolation
-Each wing test runs in complete isolation, consider the following code:
+Every Winglang test is executed in complete isolation. Take a look at the following code:
 
 ```ts playground
 bring cloud;
@@ -60,11 +60,12 @@ test "bucket starts empty" {
 }
 ```
 
-The first test `bucket list should include created file` is creating a file in the bucket, and the second test `bucket starts empty` verifies that the bucket is initialized with no files. 
+In the first test (`bucket list should include created file`), a file is created in the bucket. The second test (`bucket starts empty`) verifies that the bucket is initialized without any file
 
 ### Run test on a the cloud
 
-Lets consider the following example:
+Consider the following example:
+
 ```ts playground
 bring cloud;
 bring util;
