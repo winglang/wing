@@ -134,5 +134,6 @@ test "this test should fail" {
 ```
 
 Take a look at the **TESTS** section on the image, you can run all tests or a single test 
-![image](https://github.com/winglang/wing/assets/1727147/97e9e391-81c0-4aaf-8bc8-6d72ef3bdcee)
+![image](https://github.com/winglang/wing/assets/1727147/7d5ebc00-9316-41d1-9a3c-0e28e195d077)
+
 
