@@ -4,10 +4,7 @@
 ```js
 module.exports = function({  }) {
   class A {
-    constructor({ b }) {
-      this.b = b;
-    }
-    async $inflight_init()  {
+    constructor({  }) {
     }
   }
   return A;
@@ -62,32 +59,24 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
+        this._addInflightOps("$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.A.js";
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.A.js")({
           })
         `);
       }
       _toInflight() {
-        const b_client = this._lift(this.b);
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
             const AClient = ${A._toInflightType(this).text};
             const client = new AClient({
-              b: ${b_client},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
         `);
-      }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          A._registerBindObject(this.b, host, []);
-        }
-        super._registerBind(host, ops);
       }
     }
   }

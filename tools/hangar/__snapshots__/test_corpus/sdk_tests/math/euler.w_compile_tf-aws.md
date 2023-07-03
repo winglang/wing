@@ -2,17 +2,15 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ math_Util }) {
+module.exports = function({ $math_Util }) {
   class $Closure1 {
+    async handle(interestRate, currentVal) {
+      return (currentVal * ($math_Util.E ** interestRate));
+    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
-    }
-    async $inflight_init()  {
-    }
-    async handle(interestRate, currentVal)  {
-      return (currentVal * (math_Util.E ** interestRate));
     }
   }
   return $Closure1;
@@ -22,17 +20,15 @@ module.exports = function({ math_Util }) {
 
 ## inflight.$Closure2.js
 ```js
-module.exports = function({ compoundOneYear, interest, value, math_Util }) {
+module.exports = function({ $compoundOneYear, $interest, $math_Util, $value }) {
   class $Closure2 {
+    async handle() {
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.round(compoundOneYear(interest, value), decimalPlaces: 2) == 105.13")})(((await $math_Util.round((await ($compoundOneYear)($interest,$value)),{ decimalPlaces: 2 })) === 105.13))};
+    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
-    }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.round(compoundOneYear(interest, value), decimalPlaces: 2) == 105.13")})(((await math_Util.round((await compoundOneYear(interest,value)),{ decimalPlaces: 2 })) === 105.13))};
     }
   }
   return $Closure2;
@@ -176,14 +172,12 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const math_UtilClient = math.Util._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            math_Util: ${math_UtilClient.text},
+          require("./inflight.$Closure1.js")({
+            $math_Util: ${context._lift(math.Util)},
           })
         `);
       }
@@ -198,32 +192,20 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-        }
-        if (ops.includes("handle")) {
-        }
-        super._registerBind(host, ops);
-      }
     }
     class $Closure2 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure2.js";
-        const compoundOneYear_client = context._lift(compoundOneYear);
-        const interest_client = context._lift(interest);
-        const value_client = context._lift(value);
-        const math_UtilClient = math.Util._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            compoundOneYear: ${compoundOneYear_client},
-            interest: ${interest_client},
-            value: ${value_client},
-            math_Util: ${math_UtilClient.text},
+          require("./inflight.$Closure2.js")({
+            $compoundOneYear: ${context._lift(compoundOneYear)},
+            $interest: ${context._lift(interest)},
+            $math_Util: ${context._lift(math.Util)},
+            $value: ${context._lift(value)},
           })
         `);
       }
@@ -239,17 +221,15 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
+        if (ops.includes("handle")) {
           $Closure2._registerBindObject(compoundOneYear, host, []);
           $Closure2._registerBindObject(interest, host, []);
           $Closure2._registerBindObject(value, host, []);
         }
-        if (ops.includes("handle")) {
-          $Closure2._registerBindObject(compoundOneYear, host, ["handle"]);
-          $Closure2._registerBindObject(interest, host, []);
-          $Closure2._registerBindObject(value, host, []);
-        }
         super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
+        super._registerTypeBind(host, ops);
       }
     }
     const interest = 0.05;

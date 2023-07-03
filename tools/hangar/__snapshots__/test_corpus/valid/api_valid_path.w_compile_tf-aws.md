@@ -4,18 +4,16 @@
 ```js
 module.exports = function({  }) {
   class $Closure1 {
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
-    }
-    async $inflight_init()  {
-    }
-    async handle(req)  {
+    async handle(req) {
       return {
       "body": "ok",
       "status": 200,}
       ;
+    }
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
   }
   return $Closure1;
@@ -280,12 +278,11 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.$Closure1.js")({
           })
         `);
       }
@@ -300,17 +297,10 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-        }
-        if (ops.includes("handle")) {
-        }
-        super._registerBind(host, ops);
-      }
     }
     const api = this.node.root.newAbstract("@winglang/sdk.cloud.Api",this,"cloud.Api");
     const handler = new $Closure1(this,"$Closure1");
-    const testInvalidPath =  (path) =>  {
+    const testInvalidPath = ((path) => {
       let error = "";
       const expected = String.raw({ raw: ["Invalid path ", ". Url cannot contain \":\", params contains only alpha-numeric chars or \"_\"."] }, path);
       try {
@@ -321,9 +311,8 @@ class $Root extends $stdlib.std.Resource {
         error = e;
       }
       {((cond) => {if (!cond) throw new Error("assertion failed: error == expected")})((error === expected))};
-    }
-    ;
-    const testValidPath =  (path) =>  {
+    });
+    const testValidPath = ((path) => {
       let error = "";
       try {
         (api.get(path,handler));
@@ -333,8 +322,7 @@ class $Root extends $stdlib.std.Resource {
         error = e;
       }
       {((cond) => {if (!cond) throw new Error("assertion failed: error == \"\"")})((error === ""))};
-    }
-    ;
+    });
     (testInvalidPath("/test/{sup:er/:annoying//path}"));
     (testInvalidPath("/test/{::another:annoying:path}"));
     (testInvalidPath("/test/n0t_alphanumer1cPa:th"));

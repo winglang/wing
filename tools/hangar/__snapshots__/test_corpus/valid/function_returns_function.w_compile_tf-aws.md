@@ -4,16 +4,9 @@
 ```js
 module.exports = function({  }) {
   class $Closure1 {
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
-    }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      const iFn = async (s) =>  {
-        return async () =>  {
+    async handle() {
+      const iFn = async (s) => {
+        return async () => {
           return (s === "wing");
         }
         ;
@@ -23,6 +16,11 @@ module.exports = function({  }) {
       const dingInflightFn = (await iFn("ding"));
       {((cond) => {if (!cond) throw new Error("assertion failed: wingInflightFn()")})((await wingInflightFn()))};
       {((cond) => {if (!cond) throw new Error("assertion failed: !dingInflightFn()")})((!(await dingInflightFn())))};
+    }
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
   }
   return $Closure1;
@@ -166,12 +164,11 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.$Closure1.js")({
           })
         `);
       }
@@ -186,21 +183,12 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-        }
-        if (ops.includes("handle")) {
-        }
-        super._registerBind(host, ops);
-      }
     }
-    const fn =  (s) =>  {
-      return  () =>  {
+    const fn = ((s) => {
+      return (() => {
         return (s === "wing");
-      }
-      ;
-    }
-    ;
+      });
+    });
     const wingFn = (fn("wing"));
     const dingFn = (fn("ding"));
     {((cond) => {if (!cond) throw new Error("assertion failed: wingFn()")})((wingFn()))};

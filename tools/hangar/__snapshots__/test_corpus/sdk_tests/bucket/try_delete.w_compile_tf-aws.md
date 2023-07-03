@@ -2,27 +2,25 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ b }) {
+module.exports = function({ $b }) {
   class $Closure1 {
+    async handle() {
+      const jsonObj2 = Object.freeze({"key2":"value2"});
+      (await $b.put("file1.txt","Foo"));
+      {((cond) => {if (!cond) throw new Error("assertion failed: b.tryDelete(\"file1.txt\") == true")})(((await $b.tryDelete("file1.txt")) === true))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: b.tryDelete(\"file1.txt\") == false")})(((await $b.tryDelete("file1.txt")) === false))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: b.tryDelete(\"random\") == false")})(((await $b.tryDelete("random")) === false))};
+      (await $b.put("file2.txt","Bar"));
+      (await $b.putJson("file2.json",jsonObj2));
+      {((cond) => {if (!cond) throw new Error("assertion failed: b.tryDelete(\"file2.txt\") == true")})(((await $b.tryDelete("file2.txt")) === true))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: b.tryDelete(\"file2.json\") == true")})(((await $b.tryDelete("file2.json")) === true))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: b.tryDelete(\"file2.txt\") == false")})(((await $b.tryDelete("file2.txt")) === false))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: b.tryDelete(\"file2.json\") == false")})(((await $b.tryDelete("file2.json")) === false))};
+    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
-    }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      const jsonObj2 = Object.freeze({"key2":"value2"});
-      (await b.put("file1.txt","Foo"));
-      {((cond) => {if (!cond) throw new Error("assertion failed: b.tryDelete(\"file1.txt\") == true")})(((await b.tryDelete("file1.txt")) === true))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: b.tryDelete(\"file1.txt\") == false")})(((await b.tryDelete("file1.txt")) === false))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: b.tryDelete(\"random\") == false")})(((await b.tryDelete("random")) === false))};
-      (await b.put("file2.txt","Bar"));
-      (await b.putJson("file2.json",jsonObj2));
-      {((cond) => {if (!cond) throw new Error("assertion failed: b.tryDelete(\"file2.txt\") == true")})(((await b.tryDelete("file2.txt")) === true))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: b.tryDelete(\"file2.json\") == true")})(((await b.tryDelete("file2.json")) === true))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: b.tryDelete(\"file2.txt\") == false")})(((await b.tryDelete("file2.txt")) === false))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: b.tryDelete(\"file2.json\") == false")})(((await b.tryDelete("file2.json")) === false))};
     }
   }
   return $Closure1;
@@ -211,14 +209,12 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const b_client = context._lift(b);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            b: ${b_client},
+          require("./inflight.$Closure1.js")({
+            $b: ${context._lift(b)},
           })
         `);
       }
@@ -234,13 +230,13 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure1._registerBindObject(b, host, []);
-        }
         if (ops.includes("handle")) {
           $Closure1._registerBindObject(b, host, ["put", "putJson", "tryDelete"]);
         }
         super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
+        super._registerTypeBind(host, ops);
       }
     }
     const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");

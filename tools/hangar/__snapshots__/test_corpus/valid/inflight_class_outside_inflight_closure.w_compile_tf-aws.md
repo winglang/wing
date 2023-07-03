@@ -2,18 +2,16 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ BinaryOperation }) {
+module.exports = function({ $BinaryOperation }) {
   class $Closure1 {
+    async handle() {
+      const op = new $BinaryOperation(10,20);
+      {((cond) => {if (!cond) throw new Error("assertion failed: op.add() == 30")})(((await op.add()) === 30))};
+    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
-    }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      const op = new BinaryOperation(10,20);
-      {((cond) => {if (!cond) throw new Error("assertion failed: op.add() == 30")})(((await op.add()) === 30))};
     }
   }
   return $Closure1;
@@ -25,12 +23,12 @@ module.exports = function({ BinaryOperation }) {
 ```js
 module.exports = function({  }) {
   class BinaryOperation {
-     constructor(lhs, rhs)  {
+    async add() {
+      return (this.lhs + this.rhs);
+    }
+    constructor(lhs, rhs) {
       this.lhs = lhs;
       this.rhs = rhs;
-    }
-    async add()  {
-      return (this.lhs + this.rhs);
     }
   }
   return BinaryOperation;
@@ -173,12 +171,11 @@ class $Root extends $stdlib.std.Resource {
     class BinaryOperation extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("add", "lhs", "rhs");
+        this._addInflightOps("add", "$inflight_init", "lhs", "rhs");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.BinaryOperation.js";
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.BinaryOperation.js")({
           })
         `);
       }
@@ -193,26 +190,17 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-        }
-        if (ops.includes("add")) {
-        }
-        super._registerBind(host, ops);
-      }
     }
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const BinaryOperationClient = BinaryOperation._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            BinaryOperation: ${BinaryOperationClient.text},
+          require("./inflight.$Closure1.js")({
+            $BinaryOperation: ${context._lift(BinaryOperation)},
           })
         `);
       }
@@ -226,13 +214,6 @@ class $Root extends $stdlib.std.Resource {
             return client;
           })())
         `);
-      }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-        }
-        if (ops.includes("handle")) {
-        }
-        super._registerBind(host, ops);
       }
     }
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:inflight class outside inflight closure",new $Closure1(this,"$Closure1"));

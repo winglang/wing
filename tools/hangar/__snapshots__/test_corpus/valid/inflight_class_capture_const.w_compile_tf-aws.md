@@ -2,18 +2,16 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ myConst, Foo }) {
+module.exports = function({ $Foo, $myConst }) {
   class $Closure1 {
+    async handle() {
+      const x = new $Foo();
+      {((cond) => {if (!cond) throw new Error("assertion failed: x.getValue() == myConst")})(((await x.getValue()) === $myConst))};
+    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
-    }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      const x = new Foo();
-      {((cond) => {if (!cond) throw new Error("assertion failed: x.getValue() == myConst")})(((await x.getValue()) === myConst))};
     }
   }
   return $Closure1;
@@ -23,12 +21,10 @@ module.exports = function({ myConst, Foo }) {
 
 ## inflight.Foo.js
 ```js
-module.exports = function({ myConst }) {
+module.exports = function({ $myConst }) {
   class Foo {
-     constructor()  {
-    }
-    async getValue()  {
-      return myConst;
+    async getValue() {
+      return $myConst;
     }
   }
   return Foo;
@@ -171,14 +167,12 @@ class $Root extends $stdlib.std.Resource {
     class Foo extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("getValue");
+        this._addInflightOps("getValue", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.Foo.js";
-        const myConst_client = context._lift(myConst);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            myConst: ${myConst_client},
+          require("./inflight.Foo.js")({
+            $myConst: ${context._lift(myConst)},
           })
         `);
       }
@@ -194,29 +188,26 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          Foo._registerBindObject(myConst, host, []);
-        }
         if (ops.includes("getValue")) {
           Foo._registerBindObject(myConst, host, []);
         }
         super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
+        super._registerTypeBind(host, ops);
       }
     }
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const myConst_client = context._lift(myConst);
-        const FooClient = Foo._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            myConst: ${myConst_client},
-            Foo: ${FooClient.text},
+          require("./inflight.$Closure1.js")({
+            $Foo: ${context._lift(Foo)},
+            $myConst: ${context._lift(myConst)},
           })
         `);
       }
@@ -232,13 +223,13 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure1._registerBindObject(myConst, host, []);
-        }
         if (ops.includes("handle")) {
           $Closure1._registerBindObject(myConst, host, []);
         }
         super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
+        super._registerTypeBind(host, ops);
       }
     }
     const myConst = "bang bang";

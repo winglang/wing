@@ -2,25 +2,23 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ bar }) {
+module.exports = function({ $bar }) {
   class $Closure1 {
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
-    }
-    async $inflight_init()  {
-    }
-    async handle()  {
+    async handle() {
       const result = [];
-      (await result.push(bar));
+      (await result.push($bar));
       if (true) {
         const bar = "world";
-        (await result.push(bar));
+        (await result.push($bar));
       }
       const foo = "bang";
       (await result.push(foo));
       return Object.freeze([...(result)]);
+    }
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
   }
   return $Closure1;
@@ -30,21 +28,19 @@ module.exports = function({ bar }) {
 
 ## inflight.$Closure2.js
 ```js
-module.exports = function({ fn }) {
+module.exports = function({ $fn }) {
   class $Closure2 {
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
-    }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      const result = (await fn());
+    async handle() {
+      const result = (await ($fn)());
       {((cond) => {if (!cond) throw new Error("assertion failed: result.length == 3")})((result.length === 3))};
       {((cond) => {if (!cond) throw new Error("assertion failed: result.at(0) == \"hola!\"")})(((await result.at(0)) === "hola!"))};
       {((cond) => {if (!cond) throw new Error("assertion failed: result.at(1) == \"world\"")})(((await result.at(1)) === "world"))};
       {((cond) => {if (!cond) throw new Error("assertion failed: result.at(2) == \"bang\"")})(((await result.at(2)) === "bang"))};
+    }
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
   }
   return $Closure2;
@@ -188,14 +184,12 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const bar_client = context._lift(bar);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            bar: ${bar_client},
+          require("./inflight.$Closure1.js")({
+            $bar: ${context._lift(bar)},
           })
         `);
       }
@@ -211,27 +205,25 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure1._registerBindObject(bar, host, []);
-        }
         if (ops.includes("handle")) {
           $Closure1._registerBindObject(bar, host, []);
         }
         super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
+        super._registerTypeBind(host, ops);
       }
     }
     class $Closure2 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure2.js";
-        const fn_client = context._lift(fn);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            fn: ${fn_client},
+          require("./inflight.$Closure2.js")({
+            $fn: ${context._lift(fn)},
           })
         `);
       }
@@ -247,13 +239,13 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
+        if (ops.includes("handle")) {
           $Closure2._registerBindObject(fn, host, []);
         }
-        if (ops.includes("handle")) {
-          $Closure2._registerBindObject(fn, host, ["handle"]);
-        }
         super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
+        super._registerTypeBind(host, ops);
       }
     }
     const bar = "hola!";

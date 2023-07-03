@@ -2,31 +2,29 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ s1, s2 }) {
+module.exports = function({ $s1, $s2 }) {
   class $Closure1 {
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
-    }
-    async $inflight_init()  {
-    }
-    async handle()  {
+    async handle() {
       {((cond) => {if (!cond) throw new Error("assertion failed: \"\" == \"\"")})(("" === ""))};
       {((cond) => {if (!cond) throw new Error("assertion failed: \"\'\" == \"\'\"")})(("'" === "'"))};
       {((cond) => {if (!cond) throw new Error("assertion failed: \"\\\"\" == \"\\\"\"")})(("\"" === "\""))};
       {((cond) => {if (!cond) throw new Error("assertion failed: \"`\" == \"`\"")})(("`" === "`"))};
       {((cond) => {if (!cond) throw new Error("assertion failed: \"``\" == \"``\"")})(("``" === "``"))};
       {((cond) => {if (!cond) throw new Error("assertion failed: \"`s1`\" == \"`s1`\"")})(("`s1`" === "`s1`"))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: s1 == s1")})((s1 === s1))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: \"${s1}\" == \"${s1}\"")})((String.raw({ raw: ["", ""] }, s1) === String.raw({ raw: ["", ""] }, s1)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: \"${s1}\" != \"${s2}\"")})((String.raw({ raw: ["", ""] }, s1) !== String.raw({ raw: ["", ""] }, s2)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: \"a${s1}\" == \"a${s1}\"")})((String.raw({ raw: ["a", ""] }, s1) === String.raw({ raw: ["a", ""] }, s1)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: \"a${s1}\" != \"b${s1}\"")})((String.raw({ raw: ["a", ""] }, s1) !== String.raw({ raw: ["b", ""] }, s1)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: \"${s1}a\" == \"${s1}a\"")})((String.raw({ raw: ["", "a"] }, s1) === String.raw({ raw: ["", "a"] }, s1)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: \"${s1}a\" != \"${s1}b\"")})((String.raw({ raw: ["", "a"] }, s1) !== String.raw({ raw: ["", "b"] }, s1)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: \"`\'${s1}\" == \"`\'${s1}\"")})((String.raw({ raw: ["`'", ""] }, s1) === String.raw({ raw: ["`'", ""] }, s1)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: \"a${s1}b${s2}c\" == \"a${s1}b${s2}c\"")})((String.raw({ raw: ["a", "b", "c"] }, s1, s2) === String.raw({ raw: ["a", "b", "c"] }, s1, s2)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: s1 == s1")})(($s1 === $s1))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: \"${s1}\" == \"${s1}\"")})((String.raw({ raw: ["", ""] }, $s1) === String.raw({ raw: ["", ""] }, $s1)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: \"${s1}\" != \"${s2}\"")})((String.raw({ raw: ["", ""] }, $s1) !== String.raw({ raw: ["", ""] }, $s2)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: \"a${s1}\" == \"a${s1}\"")})((String.raw({ raw: ["a", ""] }, $s1) === String.raw({ raw: ["a", ""] }, $s1)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: \"a${s1}\" != \"b${s1}\"")})((String.raw({ raw: ["a", ""] }, $s1) !== String.raw({ raw: ["b", ""] }, $s1)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: \"${s1}a\" == \"${s1}a\"")})((String.raw({ raw: ["", "a"] }, $s1) === String.raw({ raw: ["", "a"] }, $s1)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: \"${s1}a\" != \"${s1}b\"")})((String.raw({ raw: ["", "a"] }, $s1) !== String.raw({ raw: ["", "b"] }, $s1)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: \"`\'${s1}\" == \"`\'${s1}\"")})((String.raw({ raw: ["`'", ""] }, $s1) === String.raw({ raw: ["`'", ""] }, $s1)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: \"a${s1}b${s2}c\" == \"a${s1}b${s2}c\"")})((String.raw({ raw: ["a", "b", "c"] }, $s1, $s2) === String.raw({ raw: ["a", "b", "c"] }, $s1, $s2)))};
+    }
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
   }
   return $Closure1;
@@ -169,16 +167,13 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const s1_client = context._lift(s1);
-        const s2_client = context._lift(s2);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            s1: ${s1_client},
-            s2: ${s2_client},
+          require("./inflight.$Closure1.js")({
+            $s1: ${context._lift(s1)},
+            $s2: ${context._lift(s2)},
           })
         `);
       }
@@ -194,15 +189,14 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure1._registerBindObject(s1, host, []);
-          $Closure1._registerBindObject(s2, host, []);
-        }
         if (ops.includes("handle")) {
           $Closure1._registerBindObject(s1, host, []);
           $Closure1._registerBindObject(s2, host, []);
         }
         super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
+        super._registerTypeBind(host, ops);
       }
     }
     const s1 = "foo";

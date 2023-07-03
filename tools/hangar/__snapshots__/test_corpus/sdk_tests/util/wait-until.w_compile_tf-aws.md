@@ -2,26 +2,24 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ JSHelper, util_Util }) {
+module.exports = function({ $JSHelper, $util_Util }) {
   class $Closure1 {
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
-    }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      const start = (await JSHelper.getTime());
-      if ((await util_Util.waitUntil(async () =>  {
+    async handle() {
+      const start = (await $JSHelper.getTime());
+      if ((await $util_Util.waitUntil(async () => {
         return true;
       }
       ))) {
-        {((cond) => {if (!cond) throw new Error("assertion failed: JSHelper.getTime() - start < 1000")})((((await JSHelper.getTime()) - start) < 1000))};
+        {((cond) => {if (!cond) throw new Error("assertion failed: JSHelper.getTime() - start < 1000")})((((await $JSHelper.getTime()) - start) < 1000))};
       }
       else {
         {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
       }
+    }
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
   }
   return $Closure1;
@@ -31,26 +29,24 @@ module.exports = function({ JSHelper, util_Util }) {
 
 ## inflight.$Closure2.js
 ```js
-module.exports = function({ oneSecond, JSHelper, util_Util }) {
+module.exports = function({ $JSHelper, $oneSecond, $util_Util }) {
   class $Closure2 {
+    async handle() {
+      const start = (await $JSHelper.getTime());
+      if ((await $util_Util.waitUntil(async () => {
+        return false;
+      }
+      ,{ timeout: $oneSecond }))) {
+        {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
+      }
+      else {
+        {((cond) => {if (!cond) throw new Error("assertion failed: JSHelper.getTime() - start > 1 * 1000")})((((await $JSHelper.getTime()) - start) > (1 * 1000)))};
+      }
+    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
-    }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      const start = (await JSHelper.getTime());
-      if ((await util_Util.waitUntil(async () =>  {
-        return false;
-      }
-      ,{ timeout: oneSecond }))) {
-        {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
-      }
-      else {
-        {((cond) => {if (!cond) throw new Error("assertion failed: JSHelper.getTime() - start > 1 * 1000")})((((await JSHelper.getTime()) - start) > (1 * 1000)))};
-      }
     }
   }
   return $Closure2;
@@ -60,29 +56,27 @@ module.exports = function({ oneSecond, JSHelper, util_Util }) {
 
 ## inflight.$Closure3.js
 ```js
-module.exports = function({ invokeCounter, oneSecond, JSHelper, util_Util }) {
+module.exports = function({ $JSHelper, $invokeCounter, $oneSecond, $util_Util }) {
   class $Closure3 {
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
-    }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      const start = (await JSHelper.getTime());
-      const returnTrueAfter3Seconds = async () =>  {
-        (await invokeCounter.inc());
-        return (((await JSHelper.getTime()) - start) > (3 * 1000));
+    async handle() {
+      const start = (await $JSHelper.getTime());
+      const returnTrueAfter3Seconds = async () => {
+        (await $invokeCounter.inc());
+        return (((await $JSHelper.getTime()) - start) > (3 * 1000));
       }
       ;
-      if ((await util_Util.waitUntil(returnTrueAfter3Seconds,{ interval: oneSecond }))) {
-        const invocations = (await invokeCounter.peek());
+      if ((await $util_Util.waitUntil(returnTrueAfter3Seconds,{ interval: $oneSecond }))) {
+        const invocations = (await $invokeCounter.peek());
         {((cond) => {if (!cond) throw new Error("assertion failed:  invocations > 1 && invocations < 10 ")})(((invocations > 1) && (invocations < 10)))};
       }
       else {
         {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
       }
+    }
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
   }
   return $Closure3;
@@ -92,29 +86,27 @@ module.exports = function({ invokeCounter, oneSecond, JSHelper, util_Util }) {
 
 ## inflight.$Closure4.js
 ```js
-module.exports = function({ invokeCounter, oneSecond, fiveSeconds, JSHelper, util_Util }) {
+module.exports = function({ $JSHelper, $fiveSeconds, $invokeCounter, $oneSecond, $util_Util }) {
   class $Closure4 {
+    async handle() {
+      const start = (await $JSHelper.getTime());
+      const returnFalse = async () => {
+        (await $invokeCounter.inc());
+        return false;
+      }
+      ;
+      if ((await $util_Util.waitUntil(returnFalse,{ interval: $oneSecond, timeout: $fiveSeconds }))) {
+        {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
+      }
+      else {
+        const invokeCount = (await $invokeCounter.peek());
+        {((cond) => {if (!cond) throw new Error("assertion failed: invokeCount > 3 && invokeCount < 7")})(((invokeCount > 3) && (invokeCount < 7)))};
+      }
+    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
-    }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      const start = (await JSHelper.getTime());
-      const returnFalse = async () =>  {
-        (await invokeCounter.inc());
-        return false;
-      }
-      ;
-      if ((await util_Util.waitUntil(returnFalse,{ interval: oneSecond, timeout: fiveSeconds }))) {
-        {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
-      }
-      else {
-        const invokeCount = (await invokeCounter.peek());
-        {((cond) => {if (!cond) throw new Error("assertion failed: invokeCount > 3 && invokeCount < 7")})(((invokeCount > 3) && (invokeCount < 7)))};
-      }
     }
   }
   return $Closure4;
@@ -124,27 +116,25 @@ module.exports = function({ invokeCounter, oneSecond, fiveSeconds, JSHelper, uti
 
 ## inflight.$Closure5.js
 ```js
-module.exports = function({ invokeCounter, util_Util }) {
+module.exports = function({ $invokeCounter, $util_Util }) {
   class $Closure5 {
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
-    }
-    async $inflight_init()  {
-    }
-    async handle()  {
+    async handle() {
       try {
-        (await util_Util.waitUntil(async () =>  {
-          (await invokeCounter.inc());
+        (await $util_Util.waitUntil(async () => {
+          (await $invokeCounter.inc());
           {((msg) => {throw new Error(msg)})("ERROR")};
         }
         ));
         {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
       }
       catch {
-        {((cond) => {if (!cond) throw new Error("assertion failed: invokeCounter.peek() == 1")})(((await invokeCounter.peek()) === 1))};
+        {((cond) => {if (!cond) throw new Error("assertion failed: invokeCounter.peek() == 1")})(((await $invokeCounter.peek()) === 1))};
       }
+    }
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
   }
   return $Closure5;
@@ -156,12 +146,10 @@ module.exports = function({ invokeCounter, util_Util }) {
 ```js
 module.exports = function({  }) {
   class JSHelper {
-    constructor({  }) {
-    }
-    async $inflight_init()  {
-    }
-    static async getTime()  {
+    static async getTime() {
       return (require("<ABSOLUTE_PATH>/sleep-helper.js")["getTime"])()
+    }
+    constructor({  }) {
     }
   }
   return JSHelper;
@@ -591,12 +579,11 @@ class $Root extends $stdlib.std.Resource {
     class JSHelper extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("getTime");
+        this._addInflightOps("getTime", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.JSHelper.js";
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.JSHelper.js")({
           })
         `);
       }
@@ -611,31 +598,18 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-        }
-        super._registerBind(host, ops);
-      }
-      static _registerTypeBind(host, ops) {
-        if (ops.includes("getTime")) {
-        }
-        super._registerTypeBind(host, ops);
-      }
     }
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const JSHelperClient = JSHelper._toInflightType(context);
-        const util_UtilClient = util.Util._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            JSHelper: ${JSHelperClient.text},
-            util_Util: ${util_UtilClient.text},
+          require("./inflight.$Closure1.js")({
+            $JSHelper: ${context._lift(JSHelper)},
+            $util_Util: ${context._lift(util.Util)},
           })
         `);
       }
@@ -651,30 +625,27 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-        }
         if (ops.includes("handle")) {
           $Closure1._registerBindObject(JSHelper, host, ["getTime"]);
         }
         super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
+        super._registerTypeBind(host, ops);
       }
     }
     class $Closure2 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure2.js";
-        const oneSecond_client = context._lift(oneSecond);
-        const JSHelperClient = JSHelper._toInflightType(context);
-        const util_UtilClient = util.Util._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            oneSecond: ${oneSecond_client},
-            JSHelper: ${JSHelperClient.text},
-            util_Util: ${util_UtilClient.text},
+          require("./inflight.$Closure2.js")({
+            $JSHelper: ${context._lift(JSHelper)},
+            $oneSecond: ${context._lift(oneSecond)},
+            $util_Util: ${context._lift(util.Util)},
           })
         `);
       }
@@ -690,34 +661,29 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure2._registerBindObject(oneSecond, host, []);
-        }
         if (ops.includes("handle")) {
           $Closure2._registerBindObject(JSHelper, host, ["getTime"]);
           $Closure2._registerBindObject(oneSecond, host, []);
         }
         super._registerBind(host, ops);
       }
+      static _registerTypeBind(host, ops) {
+        super._registerTypeBind(host, ops);
+      }
     }
     class $Closure3 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure3.js";
-        const invokeCounter_client = context._lift(invokeCounter);
-        const oneSecond_client = context._lift(oneSecond);
-        const JSHelperClient = JSHelper._toInflightType(context);
-        const util_UtilClient = util.Util._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            invokeCounter: ${invokeCounter_client},
-            oneSecond: ${oneSecond_client},
-            JSHelper: ${JSHelperClient.text},
-            util_Util: ${util_UtilClient.text},
+          require("./inflight.$Closure3.js")({
+            $JSHelper: ${context._lift(JSHelper)},
+            $invokeCounter: ${context._lift(invokeCounter)},
+            $oneSecond: ${context._lift(oneSecond)},
+            $util_Util: ${context._lift(util.Util)},
           })
         `);
       }
@@ -733,10 +699,6 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure3._registerBindObject(invokeCounter, host, []);
-          $Closure3._registerBindObject(oneSecond, host, []);
-        }
         if (ops.includes("handle")) {
           $Closure3._registerBindObject(JSHelper, host, ["getTime"]);
           $Closure3._registerBindObject(invokeCounter, host, ["inc", "peek"]);
@@ -744,27 +706,24 @@ class $Root extends $stdlib.std.Resource {
         }
         super._registerBind(host, ops);
       }
+      static _registerTypeBind(host, ops) {
+        super._registerTypeBind(host, ops);
+      }
     }
     class $Closure4 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure4.js";
-        const invokeCounter_client = context._lift(invokeCounter);
-        const oneSecond_client = context._lift(oneSecond);
-        const fiveSeconds_client = context._lift(fiveSeconds);
-        const JSHelperClient = JSHelper._toInflightType(context);
-        const util_UtilClient = util.Util._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            invokeCounter: ${invokeCounter_client},
-            oneSecond: ${oneSecond_client},
-            fiveSeconds: ${fiveSeconds_client},
-            JSHelper: ${JSHelperClient.text},
-            util_Util: ${util_UtilClient.text},
+          require("./inflight.$Closure4.js")({
+            $JSHelper: ${context._lift(JSHelper)},
+            $fiveSeconds: ${context._lift(fiveSeconds)},
+            $invokeCounter: ${context._lift(invokeCounter)},
+            $oneSecond: ${context._lift(oneSecond)},
+            $util_Util: ${context._lift(util.Util)},
           })
         `);
       }
@@ -780,11 +739,6 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure4._registerBindObject(fiveSeconds, host, []);
-          $Closure4._registerBindObject(invokeCounter, host, []);
-          $Closure4._registerBindObject(oneSecond, host, []);
-        }
         if (ops.includes("handle")) {
           $Closure4._registerBindObject(JSHelper, host, ["getTime"]);
           $Closure4._registerBindObject(fiveSeconds, host, []);
@@ -793,21 +747,21 @@ class $Root extends $stdlib.std.Resource {
         }
         super._registerBind(host, ops);
       }
+      static _registerTypeBind(host, ops) {
+        super._registerTypeBind(host, ops);
+      }
     }
     class $Closure5 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure5.js";
-        const invokeCounter_client = context._lift(invokeCounter);
-        const util_UtilClient = util.Util._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            invokeCounter: ${invokeCounter_client},
-            util_Util: ${util_UtilClient.text},
+          require("./inflight.$Closure5.js")({
+            $invokeCounter: ${context._lift(invokeCounter)},
+            $util_Util: ${context._lift(util.Util)},
           })
         `);
       }
@@ -823,13 +777,13 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure5._registerBindObject(invokeCounter, host, []);
-        }
         if (ops.includes("handle")) {
           $Closure5._registerBindObject(invokeCounter, host, ["inc", "peek"]);
         }
         super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
+        super._registerTypeBind(host, ops);
       }
     }
     const invokeCounter = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"cloud.Counter");

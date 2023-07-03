@@ -2,18 +2,16 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ one, two, SomeEnum }) {
+module.exports = function({ $SomeEnum, $one, $two }) {
   class $Closure1 {
+    async handle() {
+      {((cond) => {if (!cond) throw new Error("assertion failed: one == SomeEnum.ONE")})(($one === $SomeEnum.ONE))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: two == SomeEnum.TWO")})(($two === $SomeEnum.TWO))};
+    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
-    }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      {((cond) => {if (!cond) throw new Error("assertion failed: one == SomeEnum.ONE")})((one === SomeEnum.ONE))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: two == SomeEnum.TWO")})((two === SomeEnum.TWO))};
     }
   }
   return $Closure1;
@@ -156,25 +154,14 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const one_client = context._lift(one);
-        const two_client = context._lift(two);
-        const SomeEnumClient = $stdlib.core.NodeJsCode.fromInline(`
-          Object.freeze((function (tmp) {
-            tmp[tmp["ONE"] = 0] = "ONE";
-            tmp[tmp["TWO"] = 1] = "TWO";
-            tmp[tmp["THREE"] = 2] = "THREE";
-            return tmp;
-          })({}))
-        `);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            one: ${one_client},
-            two: ${two_client},
-            SomeEnum: ${SomeEnumClient.text},
+          require("./inflight.$Closure1.js")({
+            $SomeEnum: ${context._lift(SomeEnum)},
+            $one: ${context._lift(one)},
+            $two: ${context._lift(two)},
           })
         `);
       }
@@ -190,15 +177,14 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure1._registerBindObject(one, host, []);
-          $Closure1._registerBindObject(two, host, []);
-        }
         if (ops.includes("handle")) {
           $Closure1._registerBindObject(one, host, []);
           $Closure1._registerBindObject(two, host, []);
         }
         super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
+        super._registerTypeBind(host, ops);
       }
     }
     const SomeEnum = 

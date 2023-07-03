@@ -19,8 +19,6 @@ module.exports = function({  }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init() {
-    }
   }
   return $Closure1;
 }

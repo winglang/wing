@@ -15,8 +15,6 @@ module.exports = function({ $std_Json, $usersTable }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init() {
-    }
   }
   return $Closure1;
 }
@@ -46,8 +44,6 @@ module.exports = function({ $std_Json, $usersTable }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init() {
-    }
   }
   return $Closure2;
 }
@@ -68,8 +64,6 @@ module.exports = function({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
-    }
-    async $inflight_init() {
     }
   }
   return $Closure3;

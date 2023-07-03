@@ -4,13 +4,11 @@
 ```js
 module.exports = function({  }) {
   class R {
-    constructor({ s1 }) {
-      this.s1 = s1;
+    async foo() {
+      {console.log(this.$_this_s1_concat___world___)};
     }
-    async $inflight_init()  {
-    }
-    async foo()  {
-      {console.log((await this.s1.concat(" world")))};
+    constructor({ $_this_s1_concat___world___ }) {
+      this.$_this_s1_concat___world___ = $_this_s1_concat___world___;
     }
   }
   return R;
@@ -65,22 +63,20 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.s1 = "hello";
-        this._addInflightOps("foo");
+        this._addInflightOps("foo", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.R.js";
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.R.js")({
           })
         `);
       }
       _toInflight() {
-        const s1_client = this._lift(this.s1);
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
             const RClient = ${R._toInflightType(this).text};
             const client = new RClient({
-              s1: ${s1_client},
+              $_this_s1_concat___world___: ${this._lift((this.s1.concat(" world")))},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -88,13 +84,13 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          R._registerBindObject(this.s1, host, []);
-        }
         if (ops.includes("foo")) {
-          R._registerBindObject(this.s1, host, []);
+          R._registerBindObject((this.s1.concat(" world")), host, []);
         }
         super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
+        super._registerTypeBind(host, ops);
       }
     }
     const r = new R(this,"R");

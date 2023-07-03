@@ -1,11 +1,13 @@
-# [capture_resource_with_no_inflight.w](../../../../../examples/tests/valid/capture_resource_with_no_inflight.w) | compile | tf-aws
+# [lift_redefinition.w](../../../../../examples/tests/valid/lift_redefinition.w) | compile | tf-aws
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ $a_field }) {
+module.exports = function({ $s }) {
   class $Closure1 {
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: \"hey\" == a.field")})(("hey" === $a_field))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: s == \"hello\"")})(($s === "hello"))};
+      const y = "z";
+      {((cond) => {if (!cond) throw new Error("assertion failed: y == \"z\"")})((y === "z"))};
     }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -14,18 +16,6 @@ module.exports = function({ $a_field }) {
     }
   }
   return $Closure1;
-}
-
-```
-
-## inflight.A.js
-```js
-module.exports = function({  }) {
-  class A {
-    constructor({  }) {
-    }
-  }
-  return A;
 }
 
 ```
@@ -158,34 +148,9 @@ const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
-const cloud = require('@winglang/sdk').cloud;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
-    class A extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
-        this.field = "hey";
-        this._addInflightOps("$inflight_init");
-      }
-      static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.A.js")({
-          })
-        `);
-      }
-      _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
-          (await (async () => {
-            const AClient = ${A._toInflightType(this).text};
-            const client = new AClient({
-            });
-            if (client.$inflight_init) { await client.$inflight_init(); }
-            return client;
-          })())
-        `);
-      }
-    }
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
@@ -195,7 +160,7 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure1.js")({
-            $a_field: ${context._lift(a.field)},
+            $s: ${context._lift(s)},
           })
         `);
       }
@@ -212,7 +177,7 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(a.field, host, []);
+          $Closure1._registerBindObject(s, host, []);
         }
         super._registerBind(host, ops);
       }
@@ -220,13 +185,13 @@ class $Root extends $stdlib.std.Resource {
         super._registerTypeBind(host, ops);
       }
     }
-    const a = new A(this,"A");
+    const s = "hello";
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:test",new $Closure1(this,"$Closure1"));
   }
 }
 class $App extends $AppBase {
   constructor() {
-    super({ outdir: $outdir, name: "capture_resource_with_no_inflight", plugins: $plugins, isTestEnvironment: $wing_is_test });
+    super({ outdir: $outdir, name: "lift_redefinition", plugins: $plugins, isTestEnvironment: $wing_is_test });
     if ($wing_is_test) {
       new $Root(this, "env0");
       const $test_runner = this.testRunner;

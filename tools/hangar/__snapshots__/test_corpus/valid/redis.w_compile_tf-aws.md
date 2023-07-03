@@ -2,23 +2,21 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ r, r2 }) {
+module.exports = function({ $r, $r2 }) {
   class $Closure1 {
+    async handle() {
+      const connection = (await $r.rawClient());
+      (await connection.set("wing","does redis"));
+      const value = (await connection.get("wing"));
+      {((cond) => {if (!cond) throw new Error("assertion failed: value == \"does redis\"")})((value === "does redis"))};
+      (await $r2.set("wing","does redis again"));
+      const value2 = (await $r2.get("wing"));
+      {((cond) => {if (!cond) throw new Error("assertion failed: value2 == \"does redis again\"")})((value2 === "does redis again"))};
+    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
-    }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      const connection = (await r.rawClient());
-      (await connection.set("wing","does redis"));
-      const value = (await connection.get("wing"));
-      {((cond) => {if (!cond) throw new Error("assertion failed: value == \"does redis\"")})((value === "does redis"))};
-      (await r2.set("wing","does redis again"));
-      const value2 = (await r2.get("wing"));
-      {((cond) => {if (!cond) throw new Error("assertion failed: value2 == \"does redis again\"")})((value2 === "does redis again"))};
     }
   }
   return $Closure1;
@@ -486,16 +484,13 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const r_client = context._lift(r);
-        const r2_client = context._lift(r2);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            r: ${r_client},
-            r2: ${r2_client},
+          require("./inflight.$Closure1.js")({
+            $r: ${context._lift(r)},
+            $r2: ${context._lift(r2)},
           })
         `);
       }
@@ -511,15 +506,14 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure1._registerBindObject(r, host, []);
-          $Closure1._registerBindObject(r2, host, []);
-        }
         if (ops.includes("handle")) {
           $Closure1._registerBindObject(r, host, ["rawClient"]);
           $Closure1._registerBindObject(r2, host, ["get", "set"]);
         }
         super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
+        super._registerTypeBind(host, ops);
       }
     }
     const r = this.node.root.newAbstract("@winglang/sdk.redis.Redis",this,"redis.Redis");

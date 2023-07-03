@@ -2,18 +2,16 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ x, y, math_Util }) {
+module.exports = function({ $math_Util, $x, $y }) {
   class $Closure1 {
+    async handle() {
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.abs(x - y) == 2")})(((await $math_Util.abs(($x - $y))) === 2))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.abs(y - x) == 2")})(((await $math_Util.abs(($y - $x))) === 2))};
+    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
-    }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.abs(x - y) == 2")})(((await math_Util.abs((x - y))) === 2))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.abs(y - x) == 2")})(((await math_Util.abs((y - x))) === 2))};
     }
   }
   return $Closure1;
@@ -157,18 +155,14 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const x_client = context._lift(x);
-        const y_client = context._lift(y);
-        const math_UtilClient = math.Util._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            x: ${x_client},
-            y: ${y_client},
-            math_Util: ${math_UtilClient.text},
+          require("./inflight.$Closure1.js")({
+            $math_Util: ${context._lift(math.Util)},
+            $x: ${context._lift(x)},
+            $y: ${context._lift(y)},
           })
         `);
       }
@@ -184,15 +178,14 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure1._registerBindObject(x, host, []);
-          $Closure1._registerBindObject(y, host, []);
-        }
         if (ops.includes("handle")) {
           $Closure1._registerBindObject(x, host, []);
           $Closure1._registerBindObject(y, host, []);
         }
         super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
+        super._registerTypeBind(host, ops);
       }
     }
     const x = 3;

@@ -2,25 +2,23 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ arr, mySet, myMap, arrOfMap, j }) {
+module.exports = function({ $Object_keys_myMap__length, $__bang__in___arrOfMap_at_0____, $__world__in__myMap__, $_arr_at_0__, $_arr_at_1__, $_j___b__, $_mySet_has__my___, $arr_length, $mySet_size }) {
   class $Closure1 {
+    async handle() {
+      {((cond) => {if (!cond) throw new Error("assertion failed: arr.at(0) == \"hello\"")})(($_arr_at_0__ === "hello"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: arr.at(1) == \"world\"")})(($_arr_at_1__ === "world"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: arr.length == 2")})(($arr_length === 2))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: mySet.has(\"my\")")})($_mySet_has__my___)};
+      {((cond) => {if (!cond) throw new Error("assertion failed: mySet.size == 2")})(($mySet_size === 2))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: myMap.has(\"world\")")})($__world__in__myMap__)};
+      {((cond) => {if (!cond) throw new Error("assertion failed: myMap.size() == 2")})(($Object_keys_myMap__length === 2))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: arrOfMap.at(0).has(\"bang\")")})($__bang__in___arrOfMap_at_0____)};
+      {((cond) => {if (!cond) throw new Error("assertion failed: j.get(\"b\") == \"world\"")})(($_j___b__ === "world"))};
+    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
-    }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      {((cond) => {if (!cond) throw new Error("assertion failed: arr.at(0) == \"hello\"")})(((await arr.at(0)) === "hello"))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: arr.at(1) == \"world\"")})(((await arr.at(1)) === "world"))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: arr.length == 2")})((arr.length === 2))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: mySet.has(\"my\")")})((await mySet.has("my")))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: mySet.size == 2")})((mySet.size === 2))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: myMap.has(\"world\")")})(("world" in (myMap)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: myMap.size() == 2")})((Object.keys(myMap).length === 2))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: arrOfMap.at(0).has(\"bang\")")})(("bang" in ((await arrOfMap.at(0)))))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: j.get(\"b\") == \"world\"")})(((j)["b"] === "world"))};
     }
   }
   return $Closure1;
@@ -164,22 +162,20 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const arr_client = context._lift(arr);
-        const mySet_client = context._lift(mySet);
-        const myMap_client = context._lift(myMap);
-        const arrOfMap_client = context._lift(arrOfMap);
-        const j_client = context._lift(j);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            arr: ${arr_client},
-            mySet: ${mySet_client},
-            myMap: ${myMap_client},
-            arrOfMap: ${arrOfMap_client},
-            j: ${j_client},
+          require("./inflight.$Closure1.js")({
+            $Object_keys_myMap__length: ${context._lift(Object.keys(myMap).length)},
+            $__bang__in___arrOfMap_at_0____: ${context._lift(("bang" in ((arrOfMap.at(0)))))},
+            $__world__in__myMap__: ${context._lift(("world" in (myMap)))},
+            $_arr_at_0__: ${context._lift((arr.at(0)))},
+            $_arr_at_1__: ${context._lift((arr.at(1)))},
+            $_j___b__: ${context._lift((j)["b"])},
+            $_mySet_has__my___: ${context._lift((mySet.has("my")))},
+            $arr_length: ${context._lift(arr.length)},
+            $mySet_size: ${context._lift(mySet.size)},
           })
         `);
       }
@@ -195,21 +191,21 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure1._registerBindObject(arr, host, []);
-          $Closure1._registerBindObject(arrOfMap, host, []);
-          $Closure1._registerBindObject(j, host, []);
-          $Closure1._registerBindObject(myMap, host, []);
-          $Closure1._registerBindObject(mySet, host, []);
-        }
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(arr, host, ["at", "length"]);
-          $Closure1._registerBindObject(arrOfMap, host, ["at"]);
-          $Closure1._registerBindObject(j, host, []);
-          $Closure1._registerBindObject(myMap, host, ["has", "size"]);
-          $Closure1._registerBindObject(mySet, host, ["has", "size"]);
+          $Closure1._registerBindObject(Object.keys(myMap).length, host, []);
+          $Closure1._registerBindObject(("bang" in ((arrOfMap.at(0)))), host, []);
+          $Closure1._registerBindObject(("world" in (myMap)), host, []);
+          $Closure1._registerBindObject((arr.at(0)), host, []);
+          $Closure1._registerBindObject((arr.at(1)), host, []);
+          $Closure1._registerBindObject((j)["b"], host, []);
+          $Closure1._registerBindObject((mySet.has("my")), host, []);
+          $Closure1._registerBindObject(arr.length, host, []);
+          $Closure1._registerBindObject(mySet.size, host, []);
         }
         super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
+        super._registerTypeBind(host, ops);
       }
     }
     const arr = Object.freeze(["hello", "world"]);

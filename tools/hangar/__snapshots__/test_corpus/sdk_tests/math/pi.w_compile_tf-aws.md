@@ -2,17 +2,15 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ math_Util }) {
+module.exports = function({ $math_Util }) {
   class $Closure1 {
+    async handle(radius) {
+      return ((2 * $math_Util.PI) * radius);
+    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
-    }
-    async $inflight_init()  {
-    }
-    async handle(radius)  {
-      return ((2 * math_Util.PI) * radius);
     }
   }
   return $Closure1;
@@ -22,17 +20,15 @@ module.exports = function({ math_Util }) {
 
 ## inflight.$Closure2.js
 ```js
-module.exports = function({ circumference, r, math_Util }) {
+module.exports = function({ $circumference, $math_Util, $r }) {
   class $Closure2 {
+    async handle() {
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.round(circumference(r), decimalPlaces: 2) == 62.83")})(((await $math_Util.round((await ($circumference)($r)),{ decimalPlaces: 2 })) === 62.83))};
+    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
-    }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.round(circumference(r), decimalPlaces: 2) == 62.83")})(((await math_Util.round((await circumference(r)),{ decimalPlaces: 2 })) === 62.83))};
     }
   }
   return $Closure2;
@@ -176,14 +172,12 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const math_UtilClient = math.Util._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            math_Util: ${math_UtilClient.text},
+          require("./inflight.$Closure1.js")({
+            $math_Util: ${context._lift(math.Util)},
           })
         `);
       }
@@ -198,30 +192,19 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-        }
-        if (ops.includes("handle")) {
-        }
-        super._registerBind(host, ops);
-      }
     }
     class $Closure2 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure2.js";
-        const circumference_client = context._lift(circumference);
-        const r_client = context._lift(r);
-        const math_UtilClient = math.Util._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            circumference: ${circumference_client},
-            r: ${r_client},
-            math_Util: ${math_UtilClient.text},
+          require("./inflight.$Closure2.js")({
+            $circumference: ${context._lift(circumference)},
+            $math_Util: ${context._lift(math.Util)},
+            $r: ${context._lift(r)},
           })
         `);
       }
@@ -237,15 +220,14 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
+        if (ops.includes("handle")) {
           $Closure2._registerBindObject(circumference, host, []);
           $Closure2._registerBindObject(r, host, []);
         }
-        if (ops.includes("handle")) {
-          $Closure2._registerBindObject(circumference, host, ["handle"]);
-          $Closure2._registerBindObject(r, host, []);
-        }
         super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
+        super._registerTypeBind(host, ops);
       }
     }
     const r = 10;

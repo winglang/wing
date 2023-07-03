@@ -2,18 +2,16 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ odd_arr, even_arr, math_Util }) {
+module.exports = function({ $even_arr, $math_Util, $odd_arr }) {
   class $Closure1 {
+    async handle() {
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.median(odd_arr) == 6")})(((await $math_Util.median($odd_arr)) === 6))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.median(even_arr) == 4.5")})(((await $math_Util.median($even_arr)) === 4.5))};
+    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
-    }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.median(odd_arr) == 6")})(((await math_Util.median(odd_arr)) === 6))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.median(even_arr) == 4.5")})(((await math_Util.median(even_arr)) === 4.5))};
     }
   }
   return $Closure1;
@@ -23,22 +21,20 @@ module.exports = function({ odd_arr, even_arr, math_Util }) {
 
 ## inflight.$Closure2.js
 ```js
-module.exports = function({ modal_arr, bimodal, multimodal, math_Util }) {
+module.exports = function({ $_bimodal_at_0__, $_bimodal_at_1__, $_multimodal_at_0__, $_multimodal_at_1__, $_multimodal_at_2__, $math_Util, $modal_arr }) {
   class $Closure2 {
+    async handle() {
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.mode(modal_arr).at(0) == 2")})(((await (await $math_Util.mode($modal_arr)).at(0)) === 2))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: bimodal.at(0) == 2")})(($_bimodal_at_0__ === 2))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: bimodal.at(1) == 7")})(($_bimodal_at_1__ === 7))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: multimodal.at(0) == 2")})(($_multimodal_at_0__ === 2))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: multimodal.at(1) == 7")})(($_multimodal_at_1__ === 7))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: multimodal.at(2) == 9")})(($_multimodal_at_2__ === 9))};
+    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
-    }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.mode(modal_arr).at(0) == 2")})(((await (await math_Util.mode(modal_arr)).at(0)) === 2))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: bimodal.at(0) == 2")})(((await bimodal.at(0)) === 2))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: bimodal.at(1) == 7")})(((await bimodal.at(1)) === 7))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: multimodal.at(0) == 2")})(((await multimodal.at(0)) === 2))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: multimodal.at(1) == 7")})(((await multimodal.at(1)) === 7))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: multimodal.at(2) == 9")})(((await multimodal.at(2)) === 9))};
     }
   }
   return $Closure2;
@@ -48,19 +44,17 @@ module.exports = function({ modal_arr, bimodal, multimodal, math_Util }) {
 
 ## inflight.$Closure3.js
 ```js
-module.exports = function({ mean_arr, math_Util }) {
+module.exports = function({ $math_Util, $mean_arr }) {
   class $Closure3 {
+    async handle() {
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.arithmeticMean(mean_arr) == 42")})(((await $math_Util.arithmeticMean($mean_arr)) === 42))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.geometricMean(mean_arr) == 30")})(((await $math_Util.geometricMean($mean_arr)) === 30))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.harmonicMean(mean_arr) == 15")})(((await $math_Util.harmonicMean($mean_arr)) === 15))};
+    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
-    }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.arithmeticMean(mean_arr) == 42")})(((await math_Util.arithmeticMean(mean_arr)) === 42))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.geometricMean(mean_arr) == 30")})(((await math_Util.geometricMean(mean_arr)) === 30))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.harmonicMean(mean_arr) == 15")})(((await math_Util.harmonicMean(mean_arr)) === 15))};
     }
   }
   return $Closure3;
@@ -336,18 +330,14 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const odd_arr_client = context._lift(odd_arr);
-        const even_arr_client = context._lift(even_arr);
-        const math_UtilClient = math.Util._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            odd_arr: ${odd_arr_client},
-            even_arr: ${even_arr_client},
-            math_Util: ${math_UtilClient.text},
+          require("./inflight.$Closure1.js")({
+            $even_arr: ${context._lift(even_arr)},
+            $math_Util: ${context._lift(math.Util)},
+            $odd_arr: ${context._lift(odd_arr)},
           })
         `);
       }
@@ -363,35 +353,32 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure1._registerBindObject(even_arr, host, []);
-          $Closure1._registerBindObject(odd_arr, host, []);
-        }
         if (ops.includes("handle")) {
           $Closure1._registerBindObject(even_arr, host, []);
           $Closure1._registerBindObject(odd_arr, host, []);
         }
         super._registerBind(host, ops);
       }
+      static _registerTypeBind(host, ops) {
+        super._registerTypeBind(host, ops);
+      }
     }
     class $Closure2 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure2.js";
-        const modal_arr_client = context._lift(modal_arr);
-        const bimodal_client = context._lift(bimodal);
-        const multimodal_client = context._lift(multimodal);
-        const math_UtilClient = math.Util._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            modal_arr: ${modal_arr_client},
-            bimodal: ${bimodal_client},
-            multimodal: ${multimodal_client},
-            math_Util: ${math_UtilClient.text},
+          require("./inflight.$Closure2.js")({
+            $_bimodal_at_0__: ${context._lift((bimodal.at(0)))},
+            $_bimodal_at_1__: ${context._lift((bimodal.at(1)))},
+            $_multimodal_at_0__: ${context._lift((multimodal.at(0)))},
+            $_multimodal_at_1__: ${context._lift((multimodal.at(1)))},
+            $_multimodal_at_2__: ${context._lift((multimodal.at(2)))},
+            $math_Util: ${context._lift(math.Util)},
+            $modal_arr: ${context._lift(modal_arr)},
           })
         `);
       }
@@ -407,33 +394,31 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure2._registerBindObject(bimodal, host, []);
-          $Closure2._registerBindObject(modal_arr, host, []);
-          $Closure2._registerBindObject(multimodal, host, []);
-        }
         if (ops.includes("handle")) {
-          $Closure2._registerBindObject(bimodal, host, ["at"]);
-          $Closure2._registerBindObject(modal_arr, host, []);
-          $Closure2._registerBindObject(multimodal, host, ["at"]);
+          $Closure2._registerBindObject((bimodal.at(0)), host, []);
+          $Closure2._registerBindObject((bimodal.at(1)), host, []);
+          $Closure2._registerBindObject((multimodal.at(0)), host, []);
+          $Closure2._registerBindObject((multimodal.at(1)), host, []);
+          $Closure2._registerBindObject((multimodal.at(2)), host, []);
+          $Closure2._registerBindObject(modal_arr, host, ["at"]);
         }
         super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
+        super._registerTypeBind(host, ops);
       }
     }
     class $Closure3 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure3.js";
-        const mean_arr_client = context._lift(mean_arr);
-        const math_UtilClient = math.Util._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            mean_arr: ${mean_arr_client},
-            math_Util: ${math_UtilClient.text},
+          require("./inflight.$Closure3.js")({
+            $math_Util: ${context._lift(math.Util)},
+            $mean_arr: ${context._lift(mean_arr)},
           })
         `);
       }
@@ -449,13 +434,13 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure3._registerBindObject(mean_arr, host, []);
-        }
         if (ops.includes("handle")) {
           $Closure3._registerBindObject(mean_arr, host, []);
         }
         super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
+        super._registerTypeBind(host, ops);
       }
     }
     const odd_arr = Object.freeze([1, 3, 3, 6, 7, 8, 9]);

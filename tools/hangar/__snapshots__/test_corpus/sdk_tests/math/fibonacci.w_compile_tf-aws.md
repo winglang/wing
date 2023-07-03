@@ -2,27 +2,25 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ math_Util }) {
+module.exports = function({ $math_Util }) {
   class $Closure1 {
+    async handle() {
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.fibonacci(0) == 0")})(((await $math_Util.fibonacci(0)) === 0))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.fibonacci(1) == 1")})(((await $math_Util.fibonacci(1)) === 1))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.fibonacci(2) == 1")})(((await $math_Util.fibonacci(2)) === 1))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.fibonacci(3) == 2")})(((await $math_Util.fibonacci(3)) === 2))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.fibonacci(4) == 3")})(((await $math_Util.fibonacci(4)) === 3))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.fibonacci(5) == 5")})(((await $math_Util.fibonacci(5)) === 5))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.fibonacci(6) == 8")})(((await $math_Util.fibonacci(6)) === 8))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.fibonacci(7) == 13")})(((await $math_Util.fibonacci(7)) === 13))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.fibonacci(8) == 21")})(((await $math_Util.fibonacci(8)) === 21))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.fibonacci(9) == 34")})(((await $math_Util.fibonacci(9)) === 34))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.fibonacci(10) == 55")})(((await $math_Util.fibonacci(10)) === 55))};
+    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
-    }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.fibonacci(0) == 0")})(((await math_Util.fibonacci(0)) === 0))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.fibonacci(1) == 1")})(((await math_Util.fibonacci(1)) === 1))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.fibonacci(2) == 1")})(((await math_Util.fibonacci(2)) === 1))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.fibonacci(3) == 2")})(((await math_Util.fibonacci(3)) === 2))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.fibonacci(4) == 3")})(((await math_Util.fibonacci(4)) === 3))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.fibonacci(5) == 5")})(((await math_Util.fibonacci(5)) === 5))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.fibonacci(6) == 8")})(((await math_Util.fibonacci(6)) === 8))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.fibonacci(7) == 13")})(((await math_Util.fibonacci(7)) === 13))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.fibonacci(8) == 21")})(((await math_Util.fibonacci(8)) === 21))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.fibonacci(9) == 34")})(((await math_Util.fibonacci(9)) === 34))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.fibonacci(10) == 55")})(((await math_Util.fibonacci(10)) === 55))};
     }
   }
   return $Closure1;
@@ -166,14 +164,12 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const math_UtilClient = math.Util._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            math_Util: ${math_UtilClient.text},
+          require("./inflight.$Closure1.js")({
+            $math_Util: ${context._lift(math.Util)},
           })
         `);
       }
@@ -187,13 +183,6 @@ class $Root extends $stdlib.std.Resource {
             return client;
           })())
         `);
-      }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-        }
-        if (ops.includes("handle")) {
-        }
-        super._registerBind(host, ops);
       }
     }
     {((cond) => {if (!cond) throw new Error("assertion failed: math.fibonacci(0) == 0")})(((math.Util.fibonacci(0)) === 0))};

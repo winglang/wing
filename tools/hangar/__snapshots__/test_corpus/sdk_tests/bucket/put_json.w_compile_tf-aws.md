@@ -2,32 +2,30 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ b }) {
+module.exports = function({ $b }) {
   class $Closure1 {
+    async handle() {
+      const jsonObj1 = Object.freeze({"test":"test1"});
+      const jsonObj2 = Object.freeze({"test":"test2"});
+      (await $b.putJson("test1.txt",jsonObj1));
+      (await $b.putJson("test2.txt",jsonObj2));
+      const testJson1 = (await $b.getJson("test1.txt"));
+      const testJson2 = (await $b.getJson("test2.txt"));
+      {((cond) => {if (!cond) throw new Error("assertion failed: testJson1.get(\"test\") == jsonObj1.get(\"test\")")})(((testJson1)["test"] === (jsonObj1)["test"]))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: testJson2.get(\"test\") == jsonObj2.get(\"test\")")})(((testJson2)["test"] === (jsonObj2)["test"]))};
+      const jsonObj3 = Object.freeze({"test":"test3"});
+      (await $b.putJson("test3.txt",jsonObj3));
+      const testJson3 = (await $b.getJson("test3.txt"));
+      {((cond) => {if (!cond) throw new Error("assertion failed: testJson3.get(\"test\") == jsonObj3.get(\"test\")")})(((testJson3)["test"] === (jsonObj3)["test"]))};
+      (await $b.delete("test1.txt"));
+      const files = (await $b.list());
+      {((cond) => {if (!cond) throw new Error("assertion failed: files.contains(\"test1.txt\") == false")})((files.includes("test1.txt") === false))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: files.contains(\"test2.txt\") == true")})((files.includes("test2.txt") === true))};
+    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
-    }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      const jsonObj1 = Object.freeze({"test":"test1"});
-      const jsonObj2 = Object.freeze({"test":"test2"});
-      (await b.putJson("test1.txt",jsonObj1));
-      (await b.putJson("test2.txt",jsonObj2));
-      const testJson1 = (await b.getJson("test1.txt"));
-      const testJson2 = (await b.getJson("test2.txt"));
-      {((cond) => {if (!cond) throw new Error("assertion failed: testJson1.get(\"test\") == jsonObj1.get(\"test\")")})(((testJson1)["test"] === (jsonObj1)["test"]))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: testJson2.get(\"test\") == jsonObj2.get(\"test\")")})(((testJson2)["test"] === (jsonObj2)["test"]))};
-      const jsonObj3 = Object.freeze({"test":"test3"});
-      (await b.putJson("test3.txt",jsonObj3));
-      const testJson3 = (await b.getJson("test3.txt"));
-      {((cond) => {if (!cond) throw new Error("assertion failed: testJson3.get(\"test\") == jsonObj3.get(\"test\")")})(((testJson3)["test"] === (jsonObj3)["test"]))};
-      (await b.delete("test1.txt"));
-      const files = (await b.list());
-      {((cond) => {if (!cond) throw new Error("assertion failed: files.contains(\"test1.txt\") == false")})((files.includes("test1.txt") === false))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: files.contains(\"test2.txt\") == true")})((files.includes("test2.txt") === true))};
     }
   }
   return $Closure1;
@@ -216,14 +214,12 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const b_client = context._lift(b);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            b: ${b_client},
+          require("./inflight.$Closure1.js")({
+            $b: ${context._lift(b)},
           })
         `);
       }
@@ -239,13 +235,13 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure1._registerBindObject(b, host, []);
-        }
         if (ops.includes("handle")) {
           $Closure1._registerBindObject(b, host, ["delete", "getJson", "list", "putJson"]);
         }
         super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
+        super._registerTypeBind(host, ops);
       }
     }
     const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
