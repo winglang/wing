@@ -57,4 +57,5 @@ jobs:
           npm install -g winglang@${{ steps.get-version.outputs.version }}
       - name: Run tests
         run: |
+          echo "::stop-commands::`echo -n ${{ github.token }} | sha256sum | head -c 64`"
           DEBUG=wing:test wing test -t tf-aws examples/tests/sdk_tests/bucket/put.w
