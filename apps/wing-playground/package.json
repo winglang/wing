@@ -11,10 +11,10 @@
   "author": "Monada",
   "dependencies": {
     "@cowasm/memfs": "^3.5.1",
-    "@winglang/compiler": "workspace:../../libs/wingcompiler",
-    "@winglang/sdk": "workspace:../../libs/wingsdk",
+    "@winglang/compiler": "workspace:^",
+    "@winglang/sdk": "workspace:^",
     "constructs": "^10.2.5",
-    "winglang": "workspace:../../apps/wing"
+    "winglang": "workspace:^"
   },
   "devDependencies": {
     "vite": "^4.3.1",

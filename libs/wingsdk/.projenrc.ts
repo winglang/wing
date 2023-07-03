@@ -79,7 +79,7 @@ const project = new cdk.JsiiProject({
   ],
   devDeps: [
     `@cdktf/provider-aws@^15.0.0`, // only for testing Wing plugins
-    "@winglang/wing-api-checker@workspace:../../apps/wing-api-checker",
+    "wing-api-checker@workspace:^",
     "@types/aws-lambda",
     "@types/fs-extra",
     "@types/mime-types",
@@ -119,7 +119,7 @@ project.eslint?.addOverride({
 
 // use fork of jsii-docgen with wing-ish support
 project.deps.removeDependency("jsii-docgen");
-project.addDevDeps("@winglang/jsii-docgen@workspace:../../apps/jsii-docgen");
+project.addDevDeps("@winglang/jsii-docgen@workspace:^");
 
 enum Zone {
   PREFLIGHT = "preflight",

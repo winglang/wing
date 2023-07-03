@@ -2,7 +2,7 @@
   "name": "monowingo",
   "devDependencies": {
     "@nrwl/devkit": "15.7.2",
-    "bump-pack": "workspace:./tools/bump-pack",
+    "bump-pack": "workspace:^",
     "changelogen": "^0.5.3",
     "nx": "15.7.2",
     "semver": "^7.3.8"

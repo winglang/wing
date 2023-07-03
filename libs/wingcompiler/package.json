@@ -25,14 +25,14 @@
   },
   "dependencies": {
     "wasi-js": "^1.7.3",
-    "@winglang/sdk": "workspace:../../libs/wingsdk"
+    "@winglang/sdk": "workspace:^"
   },
   "bundledDependencies": [
     "wasi-js"
   ],
   "devDependencies": {
     "@types/node": "^18.11.18",
-    "bump-pack": "workspace:../../tools/bump-pack",
+    "bump-pack": "workspace:^",
     "esbuild": "^0.17.19",
     "tsup": "^6.7.0",
     "typescript": "^4.9.4",

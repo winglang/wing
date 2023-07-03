@@ -50,12 +50,12 @@
     },
     {
       "name": "@winglang/jsii-docgen",
-      "version": "workspace:../../apps/jsii-docgen",
+      "version": "workspace:^",
       "type": "build"
     },
     {
-      "name": "@winglang/wing-api-checker",
-      "version": "workspace:../../apps/wing-api-checker",
+      "name": "wing-api-checker",
+      "version": "workspace:^",
       "type": "build"
     },
     {

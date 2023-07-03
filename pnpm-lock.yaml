@@ -35,7 +35,7 @@ importers:
         specifier: 15.7.2
         version: 15.7.2(nx@15.7.2)(typescript@4.9.4)
       bump-pack:
-        specifier: workspace:./tools/bump-pack
+        specifier: workspace:^
         version: link:tools/bump-pack
       changelogen:
         specifier: ^0.5.3
@@ -257,13 +257,13 @@ importers:
   apps/wing:
     dependencies:
       '@wingconsole/app':
-        specifier: workspace:../wing-console/console/app
+        specifier: workspace:^
         version: link:../wing-console/console/app
       '@winglang/compiler':
-        specifier: workspace:../../libs/wingcompiler
+        specifier: workspace:^
         version: link:../../libs/wingcompiler
       '@winglang/sdk':
-        specifier: workspace:../../libs/wingsdk
+        specifier: workspace:^
         version: link:../../libs/wingsdk
       chalk:
         specifier: ^4.1.2
@@ -309,7 +309,7 @@ importers:
         specifier: ^6.0.1
         version: 6.0.1
       bump-pack:
-        specifier: workspace:../../tools/bump-pack
+        specifier: workspace:^
         version: link:../../tools/bump-pack
       esbuild:
         specifier: ^0.17.19
@@ -403,7 +403,7 @@ importers:
   apps/wing-console/console/app:
     dependencies:
       '@wingconsole/server':
-        specifier: workspace:../server
+        specifier: workspace:^
         version: link:../server
       analytics-node:
         specifier: ^6.2.0
@@ -434,19 +434,19 @@ importers:
         specifier: ^0.31.4
         version: 0.31.4(vitest@0.31.4)
       '@wingconsole/eslint-plugin':
-        specifier: workspace:../../tools/eslint-plugin
+        specifier: workspace:^
         version: link:../../tools/eslint-plugin
       '@wingconsole/tsconfig':
-        specifier: workspace:../../tools/tsconfig
+        specifier: workspace:^
         version: link:../../tools/tsconfig
       '@wingconsole/ui':
-        specifier: workspace:../ui
+        specifier: workspace:^
         version: link:../ui
       autoprefixer:
         specifier: ^10.4.14
         version: 10.4.14(postcss@8.4.24)
       bump-pack:
-        specifier: workspace:../../../../tools/bump-pack
+        specifier: workspace:^
         version: link:../../../../tools/bump-pack
       conf:
         specifier: ^11.0.1
@@ -549,13 +549,13 @@ importers:
         specifier: ^0.31.4
         version: 0.31.4(vitest@0.31.4)
       '@wingconsole/eslint-plugin':
-        specifier: workspace:../../tools/eslint-plugin
+        specifier: workspace:^
         version: link:../../tools/eslint-plugin
       '@wingconsole/tsconfig':
-        specifier: workspace:../../tools/tsconfig
+        specifier: workspace:^
         version: link:../../tools/tsconfig
       bump-pack:
-        specifier: workspace:../../../../tools/bump-pack
+        specifier: workspace:^
         version: link:../../../../tools/bump-pack
       eslint:
         specifier: ^8.42.0
@@ -582,10 +582,10 @@ importers:
   apps/wing-console/console/server:
     dependencies:
       '@winglang/compiler':
-        specifier: workspace:../../../../libs/wingcompiler
+        specifier: workspace:^
         version: link:../../../../libs/wingcompiler
       '@winglang/sdk':
-        specifier: workspace:../../../../libs/wingsdk
+        specifier: workspace:^
         version: link:../../../../libs/wingsdk
       codespan-wasm:
         specifier: ^0.4.0
@@ -616,16 +616,16 @@ importers:
         specifier: ^0.31.4
         version: 0.31.4(vitest@0.31.4)
       '@wingconsole/error-message':
-        specifier: workspace:../../packages/error-message
+        specifier: workspace:^
         version: link:../../packages/error-message
       '@wingconsole/eslint-plugin':
-        specifier: workspace:../../tools/eslint-plugin
+        specifier: workspace:^
         version: link:../../tools/eslint-plugin
       '@wingconsole/tsconfig':
-        specifier: workspace:../../tools/tsconfig
+        specifier: workspace:^
         version: link:../../tools/tsconfig
       bump-pack:
-        specifier: workspace:../../../../tools/bump-pack
+        specifier: workspace:^
         version: link:../../../../tools/bump-pack
       chokidar:
         specifier: ^3.5.3
@@ -797,22 +797,22 @@ importers:
         specifier: ^3.3.2
         version: 3.3.2(vite@4.3.9)
       '@wingconsole/eslint-plugin':
-        specifier: workspace:../../tools/eslint-plugin
+        specifier: workspace:^
         version: link:../../tools/eslint-plugin
       '@wingconsole/server':
-        specifier: workspace:../server
+        specifier: workspace:^
         version: link:../server
       '@wingconsole/tsconfig':
-        specifier: workspace:../../tools/tsconfig
+        specifier: workspace:^
         version: link:../../tools/tsconfig
       '@wingconsole/use-loading':
-        specifier: workspace:../../packages/use-loading
+        specifier: workspace:^
         version: link:../../packages/use-loading
       autoprefixer:
         specifier: ^10.4.14
         version: 10.4.14(postcss@8.4.24)
       bump-pack:
-        specifier: workspace:../../../../tools/bump-pack
+        specifier: workspace:^
         version: link:../../../../tools/bump-pack
       eslint:
         specifier: ^8.42.0
@@ -842,10 +842,10 @@ importers:
   apps/wing-console/packages/error-message:
     devDependencies:
       '@wingconsole/eslint-plugin':
-        specifier: workspace:../../tools/eslint-plugin
+        specifier: workspace:^
         version: link:../../tools/eslint-plugin
       '@wingconsole/tsconfig':
-        specifier: workspace:../../tools/tsconfig
+        specifier: workspace:^
         version: link:../../tools/tsconfig
       typescript:
         specifier: ^5.1.3
@@ -857,10 +857,10 @@ importers:
         specifier: ^18.2.12
         version: 18.2.12
       '@wingconsole/eslint-plugin':
-        specifier: workspace:../../tools/eslint-plugin
+        specifier: workspace:^
         version: link:../../tools/eslint-plugin
       '@wingconsole/tsconfig':
-        specifier: workspace:../../tools/tsconfig
+        specifier: workspace:^
         version: link:../../tools/tsconfig
       typescript:
         specifier: ^5.1.3
@@ -927,16 +927,16 @@ importers:
         specifier: ^3.5.1
         version: 3.5.1
       '@winglang/compiler':
-        specifier: workspace:../../libs/wingcompiler
+        specifier: workspace:^
         version: link:../../libs/wingcompiler
       '@winglang/sdk':
-        specifier: workspace:../../libs/wingsdk
+        specifier: workspace:^
         version: link:../../libs/wingsdk
       constructs:
         specifier: ^10.2.5
         version: 10.2.51
       winglang:
-        specifier: workspace:../../apps/wing
+        specifier: workspace:^
         version: link:../wing
     devDependencies:
       vite:
@@ -1007,7 +1007,7 @@ importers:
   libs/wingcompiler:
     dependencies:
       '@winglang/sdk':
-        specifier: workspace:../../libs/wingsdk
+        specifier: workspace:^
         version: link:../wingsdk
       wasi-js:
         specifier: ^1.7.3
@@ -1017,7 +1017,7 @@ importers:
         specifier: ^18.11.18
         version: 18.16.18
       bump-pack:
-        specifier: workspace:../../tools/bump-pack
+        specifier: workspace:^
         version: link:../../tools/bump-pack
       esbuild:
         specifier: ^0.17.19
@@ -1153,11 +1153,8 @@ importers:
         specifier: ^0.32.2
         version: 0.32.2(vitest@0.32.2)
       '@winglang/jsii-docgen':
-        specifier: workspace:../../apps/jsii-docgen
+        specifier: workspace:^
         version: link:../../apps/jsii-docgen
-      '@winglang/wing-api-checker':
-        specifier: workspace:../../apps/wing-api-checker
-        version: link:../../apps/wing-api-checker
       aws-sdk-client-mock:
         specifier: ^2.0.1
         version: 2.0.1
@@ -1224,6 +1221,9 @@ importers:
       vitest:
         specifier: ^0.32.2
         version: 0.32.2
+      wing-api-checker:
+        specifier: workspace:^
+        version: link:../../apps/wing-api-checker
 
   tools/bump-pack:
     dependencies:
@@ -12716,7 +12716,7 @@ packages:
     dependencies:
       semver: 7.5.2
       shelljs: 0.8.5
-      typescript: 5.2.0-dev.20230702
+      typescript: 5.2.0-dev.20230703
     dev: true
 
   /duplexer@0.1.2:
@@ -21291,8 +21291,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  /typescript@5.2.0-dev.20230702:
-    resolution: {integrity: sha512-ra+/LDcTNHM36hpRkzM7FwiJsb9axqLXesPIDlxp4FIzjVKIEcl7Tjq7sNGJUX6CiL148l32vwfsQtg1afOkWA==}
+  /typescript@5.2.0-dev.20230703:
+    resolution: {integrity: sha512-O+fL935EQoj276onbuLMys21Pew2AlvZNDqzkw6TXq/BDGoAeUTsxfLQID9o+tKEciOIxdLaZnMF8WXulVMfow==}
     engines: {node: '>=14.17'}
     hasBin: true
     dev: true
