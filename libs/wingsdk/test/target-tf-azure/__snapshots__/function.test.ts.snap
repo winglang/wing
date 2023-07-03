@@ -4,73 +4,73 @@ exports[`basic function 1`] = `
 "{
   \\"resource\\": {
     \\"azurerm_linux_function_app\\": {
-      \\"Function_042596DC\\": {
+      \\"root_Function_9E43762E\\": {
         \\"app_settings\\": {
           \\"FUNCTIONS_WORKER_RUNTIME\\": \\"node\\",
-          \\"WEBSITE_RUN_FROM_PACKAGE\\": \\"https://\${azurerm_storage_account.StorageAccount.name}.blob.core.windows.net/\${azurerm_storage_container.Function_FunctionBucket_0F705EF9.name}/\${azurerm_storage_blob.Function_CodeBlob_8A9705C9.name}\\"
+          \\"WEBSITE_RUN_FROM_PACKAGE\\": \\"https://\${azurerm_storage_account.root_StorageAccount_3B92EC74.name}.blob.core.windows.net/\${azurerm_storage_container.root_Function_FunctionBucket_B5F263FB.name}/\${azurerm_storage_blob.root_Function_CodeBlob_5AAEAFFA.name}\\"
         },
         \\"https_only\\": true,
         \\"identity\\": {
           \\"type\\": \\"SystemAssigned\\"
         },
-        \\"location\\": \\"\${azurerm_resource_group.ResourceGroup.location}\\",
+        \\"location\\": \\"\${azurerm_resource_group.root_ResourceGroup_72A9AFB6.location}\\",
         \\"name\\": \\"function-c852aba6\\",
-        \\"resource_group_name\\": \\"\${azurerm_resource_group.ResourceGroup.name}\\",
-        \\"service_plan_id\\": \\"\${azurerm_service_plan.ServicePlan.id}\\",
+        \\"resource_group_name\\": \\"\${azurerm_resource_group.root_ResourceGroup_72A9AFB6.name}\\",
+        \\"service_plan_id\\": \\"\${azurerm_service_plan.root_ServicePlan_14459C66.id}\\",
         \\"site_config\\": {
           \\"application_stack\\": {
             \\"node_version\\": \\"16\\"
           }
         },
-        \\"storage_account_access_key\\": \\"\${azurerm_storage_account.StorageAccount.primary_access_key}\\",
-        \\"storage_account_name\\": \\"\${azurerm_storage_account.StorageAccount.name}\\"
+        \\"storage_account_access_key\\": \\"\${azurerm_storage_account.root_StorageAccount_3B92EC74.primary_access_key}\\",
+        \\"storage_account_name\\": \\"\${azurerm_storage_account.root_StorageAccount_3B92EC74.name}\\"
       }
     },
     \\"azurerm_resource_group\\": {
-      \\"ResourceGroup\\": {
+      \\"root_ResourceGroup_72A9AFB6\\": {
         \\"location\\": \\"East US\\",
         \\"name\\": \\"Default-c82bf964\\"
       }
     },
     \\"azurerm_role_assignment\\": {
-      \\"Function_ReadLambdaCodeAssignment_75049D5E\\": {
-        \\"principal_id\\": \\"\${azurerm_linux_function_app.Function_042596DC.identity[0].principal_id}\\",
+      \\"root_Function_ReadLambdaCodeAssignment_01DCF214\\": {
+        \\"principal_id\\": \\"\${azurerm_linux_function_app.root_Function_9E43762E.identity[0].principal_id}\\",
         \\"role_definition_name\\": \\"Storage Blob Data Reader\\",
-        \\"scope\\": \\"\${azurerm_storage_account.StorageAccount.id}\\"
+        \\"scope\\": \\"\${azurerm_storage_account.root_StorageAccount_3B92EC74.id}\\"
       }
     },
     \\"azurerm_service_plan\\": {
-      \\"ServicePlan\\": {
-        \\"location\\": \\"\${azurerm_resource_group.ResourceGroup.location}\\",
+      \\"root_ServicePlan_14459C66\\": {
+        \\"location\\": \\"\${azurerm_resource_group.root_ResourceGroup_72A9AFB6.location}\\",
         \\"name\\": \\"Default-c82bf964\\",
         \\"os_type\\": \\"Linux\\",
-        \\"resource_group_name\\": \\"\${azurerm_resource_group.ResourceGroup.name}\\",
+        \\"resource_group_name\\": \\"\${azurerm_resource_group.root_ResourceGroup_72A9AFB6.name}\\",
         \\"sku_name\\": \\"Y1\\"
       }
     },
     \\"azurerm_storage_account\\": {
-      \\"StorageAccount\\": {
+      \\"root_StorageAccount_3B92EC74\\": {
         \\"account_replication_type\\": \\"LRS\\",
         \\"account_tier\\": \\"Standard\\",
-        \\"location\\": \\"\${azurerm_resource_group.ResourceGroup.location}\\",
+        \\"location\\": \\"\${azurerm_resource_group.root_ResourceGroup_72A9AFB6.location}\\",
         \\"name\\": \\"defaultc82bf964\\",
-        \\"resource_group_name\\": \\"\${azurerm_resource_group.ResourceGroup.name}\\"
+        \\"resource_group_name\\": \\"\${azurerm_resource_group.root_ResourceGroup_72A9AFB6.name}\\"
       }
     },
     \\"azurerm_storage_blob\\": {
-      \\"Function_CodeBlob_8A9705C9\\": {
+      \\"root_Function_CodeBlob_5AAEAFFA\\": {
         \\"name\\": \\"function-c852aba6.zip\\",
         \\"source\\": \\"<source>\\",
-        \\"storage_account_name\\": \\"\${azurerm_storage_account.StorageAccount.name}\\",
-        \\"storage_container_name\\": \\"\${azurerm_storage_container.Function_FunctionBucket_0F705EF9.name}\\",
+        \\"storage_account_name\\": \\"\${azurerm_storage_account.root_StorageAccount_3B92EC74.name}\\",
+        \\"storage_container_name\\": \\"\${azurerm_storage_container.root_Function_FunctionBucket_B5F263FB.name}\\",
         \\"type\\": \\"Block\\"
       }
     },
     \\"azurerm_storage_container\\": {
-      \\"Function_FunctionBucket_0F705EF9\\": {
+      \\"root_Function_FunctionBucket_B5F263FB\\": {
         \\"container_access_type\\": \\"private\\",
         \\"name\\": \\"functionbucket-c8ccf7e8\\",
-        \\"storage_account_name\\": \\"\${azurerm_storage_account.StorageAccount.name}\\"
+        \\"storage_account_name\\": \\"\${azurerm_storage_account.root_StorageAccount_3B92EC74.name}\\"
       }
     }
   }
@@ -93,7 +93,7 @@ exports[`basic function 2`] = `
                   "Asset": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformAsset",
-                      "version": "0.17.0",
+                      "version": "0.15.2",
                     },
                     "id": "Asset",
                     "path": "root/Default/Function/Asset",
@@ -101,7 +101,7 @@ exports[`basic function 2`] = `
                   "CodeBlob": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.15.2",
                     },
                     "id": "CodeBlob",
                     "path": "root/Default/Function/CodeBlob",
@@ -109,7 +109,7 @@ exports[`basic function 2`] = `
                   "Function": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.15.2",
                     },
                     "id": "Function",
                     "path": "root/Default/Function/Function",
@@ -122,7 +122,7 @@ exports[`basic function 2`] = `
                       "Bucket": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.15.2",
                         },
                         "id": "Bucket",
                         "path": "root/Default/Function/FunctionBucket/Bucket",
@@ -142,7 +142,7 @@ exports[`basic function 2`] = `
                   "ReadLambdaCodeAssignment": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.15.2",
                     },
                     "id": "ReadLambdaCodeAssignment",
                     "path": "root/Default/Function/ReadLambdaCodeAssignment",
@@ -178,7 +178,7 @@ exports[`basic function 2`] = `
               "ResourceGroup": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.17.0",
+                  "version": "0.15.2",
                 },
                 "id": "ResourceGroup",
                 "path": "root/Default/ResourceGroup",
@@ -186,7 +186,7 @@ exports[`basic function 2`] = `
               "ServicePlan": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.17.0",
+                  "version": "0.15.2",
                 },
                 "id": "ServicePlan",
                 "path": "root/Default/ServicePlan",
@@ -194,7 +194,7 @@ exports[`basic function 2`] = `
               "StorageAccount": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.17.0",
+                  "version": "0.15.2",
                 },
                 "id": "StorageAccount",
                 "path": "root/Default/StorageAccount",
@@ -202,7 +202,7 @@ exports[`basic function 2`] = `
               "azure": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.17.0",
+                  "version": "0.15.2",
                 },
                 "id": "azure",
                 "path": "root/Default/azure",
@@ -218,7 +218,7 @@ exports[`basic function 2`] = `
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.17.0",
+              "version": "0.15.2",
             },
             "id": "backend",
             "path": "root/backend",
@@ -226,7 +226,7 @@ exports[`basic function 2`] = `
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.17.0",
+          "version": "0.15.2",
         },
         "id": "root",
         "path": "root",
@@ -234,7 +234,7 @@ exports[`basic function 2`] = `
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.17.0",
+      "version": "0.15.2",
     },
     "id": "App",
     "path": "",
@@ -247,75 +247,75 @@ exports[`basic function with environment variables 1`] = `
 "{
   \\"resource\\": {
     \\"azurerm_linux_function_app\\": {
-      \\"Function_042596DC\\": {
+      \\"root_Function_9E43762E\\": {
         \\"app_settings\\": {
           \\"BOOM\\": \\"BAM\\",
           \\"FOO\\": \\"BAR\\",
           \\"FUNCTIONS_WORKER_RUNTIME\\": \\"node\\",
-          \\"WEBSITE_RUN_FROM_PACKAGE\\": \\"https://\${azurerm_storage_account.StorageAccount.name}.blob.core.windows.net/\${azurerm_storage_container.Function_FunctionBucket_0F705EF9.name}/\${azurerm_storage_blob.Function_CodeBlob_8A9705C9.name}\\"
+          \\"WEBSITE_RUN_FROM_PACKAGE\\": \\"https://\${azurerm_storage_account.root_StorageAccount_3B92EC74.name}.blob.core.windows.net/\${azurerm_storage_container.root_Function_FunctionBucket_B5F263FB.name}/\${azurerm_storage_blob.root_Function_CodeBlob_5AAEAFFA.name}\\"
         },
         \\"https_only\\": true,
         \\"identity\\": {
           \\"type\\": \\"SystemAssigned\\"
         },
-        \\"location\\": \\"\${azurerm_resource_group.ResourceGroup.location}\\",
+        \\"location\\": \\"\${azurerm_resource_group.root_ResourceGroup_72A9AFB6.location}\\",
         \\"name\\": \\"function-c852aba6\\",
-        \\"resource_group_name\\": \\"\${azurerm_resource_group.ResourceGroup.name}\\",
-        \\"service_plan_id\\": \\"\${azurerm_service_plan.ServicePlan.id}\\",
+        \\"resource_group_name\\": \\"\${azurerm_resource_group.root_ResourceGroup_72A9AFB6.name}\\",
+        \\"service_plan_id\\": \\"\${azurerm_service_plan.root_ServicePlan_14459C66.id}\\",
         \\"site_config\\": {
           \\"application_stack\\": {
             \\"node_version\\": \\"16\\"
           }
         },
-        \\"storage_account_access_key\\": \\"\${azurerm_storage_account.StorageAccount.primary_access_key}\\",
-        \\"storage_account_name\\": \\"\${azurerm_storage_account.StorageAccount.name}\\"
+        \\"storage_account_access_key\\": \\"\${azurerm_storage_account.root_StorageAccount_3B92EC74.primary_access_key}\\",
+        \\"storage_account_name\\": \\"\${azurerm_storage_account.root_StorageAccount_3B92EC74.name}\\"
       }
     },
     \\"azurerm_resource_group\\": {
-      \\"ResourceGroup\\": {
+      \\"root_ResourceGroup_72A9AFB6\\": {
         \\"location\\": \\"East US\\",
         \\"name\\": \\"Default-c82bf964\\"
       }
     },
     \\"azurerm_role_assignment\\": {
-      \\"Function_ReadLambdaCodeAssignment_75049D5E\\": {
-        \\"principal_id\\": \\"\${azurerm_linux_function_app.Function_042596DC.identity[0].principal_id}\\",
+      \\"root_Function_ReadLambdaCodeAssignment_01DCF214\\": {
+        \\"principal_id\\": \\"\${azurerm_linux_function_app.root_Function_9E43762E.identity[0].principal_id}\\",
         \\"role_definition_name\\": \\"Storage Blob Data Reader\\",
-        \\"scope\\": \\"\${azurerm_storage_account.StorageAccount.id}\\"
+        \\"scope\\": \\"\${azurerm_storage_account.root_StorageAccount_3B92EC74.id}\\"
       }
     },
     \\"azurerm_service_plan\\": {
-      \\"ServicePlan\\": {
-        \\"location\\": \\"\${azurerm_resource_group.ResourceGroup.location}\\",
+      \\"root_ServicePlan_14459C66\\": {
+        \\"location\\": \\"\${azurerm_resource_group.root_ResourceGroup_72A9AFB6.location}\\",
         \\"name\\": \\"Default-c82bf964\\",
         \\"os_type\\": \\"Linux\\",
-        \\"resource_group_name\\": \\"\${azurerm_resource_group.ResourceGroup.name}\\",
+        \\"resource_group_name\\": \\"\${azurerm_resource_group.root_ResourceGroup_72A9AFB6.name}\\",
         \\"sku_name\\": \\"Y1\\"
       }
     },
     \\"azurerm_storage_account\\": {
-      \\"StorageAccount\\": {
+      \\"root_StorageAccount_3B92EC74\\": {
         \\"account_replication_type\\": \\"LRS\\",
         \\"account_tier\\": \\"Standard\\",
-        \\"location\\": \\"\${azurerm_resource_group.ResourceGroup.location}\\",
+        \\"location\\": \\"\${azurerm_resource_group.root_ResourceGroup_72A9AFB6.location}\\",
         \\"name\\": \\"defaultc82bf964\\",
-        \\"resource_group_name\\": \\"\${azurerm_resource_group.ResourceGroup.name}\\"
+        \\"resource_group_name\\": \\"\${azurerm_resource_group.root_ResourceGroup_72A9AFB6.name}\\"
       }
     },
     \\"azurerm_storage_blob\\": {
-      \\"Function_CodeBlob_8A9705C9\\": {
+      \\"root_Function_CodeBlob_5AAEAFFA\\": {
         \\"name\\": \\"function-c852aba6.zip\\",
         \\"source\\": \\"<source>\\",
-        \\"storage_account_name\\": \\"\${azurerm_storage_account.StorageAccount.name}\\",
-        \\"storage_container_name\\": \\"\${azurerm_storage_container.Function_FunctionBucket_0F705EF9.name}\\",
+        \\"storage_account_name\\": \\"\${azurerm_storage_account.root_StorageAccount_3B92EC74.name}\\",
+        \\"storage_container_name\\": \\"\${azurerm_storage_container.root_Function_FunctionBucket_B5F263FB.name}\\",
         \\"type\\": \\"Block\\"
       }
     },
     \\"azurerm_storage_container\\": {
-      \\"Function_FunctionBucket_0F705EF9\\": {
+      \\"root_Function_FunctionBucket_B5F263FB\\": {
         \\"container_access_type\\": \\"private\\",
         \\"name\\": \\"functionbucket-c8ccf7e8\\",
-        \\"storage_account_name\\": \\"\${azurerm_storage_account.StorageAccount.name}\\"
+        \\"storage_account_name\\": \\"\${azurerm_storage_account.root_StorageAccount_3B92EC74.name}\\"
       }
     }
   }
@@ -338,7 +338,7 @@ exports[`basic function with environment variables 2`] = `
                   "Asset": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformAsset",
-                      "version": "0.17.0",
+                      "version": "0.15.2",
                     },
                     "id": "Asset",
                     "path": "root/Default/Function/Asset",
@@ -346,7 +346,7 @@ exports[`basic function with environment variables 2`] = `
                   "CodeBlob": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.15.2",
                     },
                     "id": "CodeBlob",
                     "path": "root/Default/Function/CodeBlob",
@@ -354,7 +354,7 @@ exports[`basic function with environment variables 2`] = `
                   "Function": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.15.2",
                     },
                     "id": "Function",
                     "path": "root/Default/Function/Function",
@@ -367,7 +367,7 @@ exports[`basic function with environment variables 2`] = `
                       "Bucket": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.15.2",
                         },
                         "id": "Bucket",
                         "path": "root/Default/Function/FunctionBucket/Bucket",
@@ -387,7 +387,7 @@ exports[`basic function with environment variables 2`] = `
                   "ReadLambdaCodeAssignment": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.15.2",
                     },
                     "id": "ReadLambdaCodeAssignment",
                     "path": "root/Default/Function/ReadLambdaCodeAssignment",
@@ -423,7 +423,7 @@ exports[`basic function with environment variables 2`] = `
               "ResourceGroup": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.17.0",
+                  "version": "0.15.2",
                 },
                 "id": "ResourceGroup",
                 "path": "root/Default/ResourceGroup",
@@ -431,7 +431,7 @@ exports[`basic function with environment variables 2`] = `
               "ServicePlan": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.17.0",
+                  "version": "0.15.2",
                 },
                 "id": "ServicePlan",
                 "path": "root/Default/ServicePlan",
@@ -439,7 +439,7 @@ exports[`basic function with environment variables 2`] = `
               "StorageAccount": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.17.0",
+                  "version": "0.15.2",
                 },
                 "id": "StorageAccount",
                 "path": "root/Default/StorageAccount",
@@ -447,7 +447,7 @@ exports[`basic function with environment variables 2`] = `
               "azure": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.17.0",
+                  "version": "0.15.2",
                 },
                 "id": "azure",
                 "path": "root/Default/azure",
@@ -463,7 +463,7 @@ exports[`basic function with environment variables 2`] = `
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.17.0",
+              "version": "0.15.2",
             },
             "id": "backend",
             "path": "root/backend",
@@ -471,7 +471,7 @@ exports[`basic function with environment variables 2`] = `
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.17.0",
+          "version": "0.15.2",
         },
         "id": "root",
         "path": "root",
@@ -479,7 +479,7 @@ exports[`basic function with environment variables 2`] = `
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.17.0",
+      "version": "0.15.2",
     },
     "id": "App",
     "path": "",
@@ -492,73 +492,73 @@ exports[`replace invalid character from function name 1`] = `
 "{
   \\"resource\\": {
     \\"azurerm_linux_function_app\\": {
-      \\"someFunction01_Function_83CF4008\\": {
+      \\"root_someFunction01_Function_2D89D048\\": {
         \\"app_settings\\": {
           \\"FUNCTIONS_WORKER_RUNTIME\\": \\"node\\",
-          \\"WEBSITE_RUN_FROM_PACKAGE\\": \\"https://\${azurerm_storage_account.StorageAccount.name}.blob.core.windows.net/\${azurerm_storage_container.someFunction01_FunctionBucket_BDC04946.name}/\${azurerm_storage_blob.someFunction01_CodeBlob_D6CD3DCE.name}\\"
+          \\"WEBSITE_RUN_FROM_PACKAGE\\": \\"https://\${azurerm_storage_account.root_StorageAccount_3B92EC74.name}.blob.core.windows.net/\${azurerm_storage_container.root_someFunction01_FunctionBucket_E40551AF.name}/\${azurerm_storage_blob.root_someFunction01_CodeBlob_971120BF.name}\\"
         },
         \\"https_only\\": true,
         \\"identity\\": {
           \\"type\\": \\"SystemAssigned\\"
         },
-        \\"location\\": \\"\${azurerm_resource_group.ResourceGroup.location}\\",
+        \\"location\\": \\"\${azurerm_resource_group.root_ResourceGroup_72A9AFB6.location}\\",
         \\"name\\": \\"somefunction01-c8eb4882\\",
-        \\"resource_group_name\\": \\"\${azurerm_resource_group.ResourceGroup.name}\\",
-        \\"service_plan_id\\": \\"\${azurerm_service_plan.ServicePlan.id}\\",
+        \\"resource_group_name\\": \\"\${azurerm_resource_group.root_ResourceGroup_72A9AFB6.name}\\",
+        \\"service_plan_id\\": \\"\${azurerm_service_plan.root_ServicePlan_14459C66.id}\\",
         \\"site_config\\": {
           \\"application_stack\\": {
             \\"node_version\\": \\"16\\"
           }
         },
-        \\"storage_account_access_key\\": \\"\${azurerm_storage_account.StorageAccount.primary_access_key}\\",
-        \\"storage_account_name\\": \\"\${azurerm_storage_account.StorageAccount.name}\\"
+        \\"storage_account_access_key\\": \\"\${azurerm_storage_account.root_StorageAccount_3B92EC74.primary_access_key}\\",
+        \\"storage_account_name\\": \\"\${azurerm_storage_account.root_StorageAccount_3B92EC74.name}\\"
       }
     },
     \\"azurerm_resource_group\\": {
-      \\"ResourceGroup\\": {
+      \\"root_ResourceGroup_72A9AFB6\\": {
         \\"location\\": \\"East US\\",
         \\"name\\": \\"Default-c82bf964\\"
       }
     },
     \\"azurerm_role_assignment\\": {
-      \\"someFunction01_ReadLambdaCodeAssignment_639B8FD1\\": {
-        \\"principal_id\\": \\"\${azurerm_linux_function_app.someFunction01_Function_83CF4008.identity[0].principal_id}\\",
+      \\"root_someFunction01_ReadLambdaCodeAssignment_B72939BB\\": {
+        \\"principal_id\\": \\"\${azurerm_linux_function_app.root_someFunction01_Function_2D89D048.identity[0].principal_id}\\",
         \\"role_definition_name\\": \\"Storage Blob Data Reader\\",
-        \\"scope\\": \\"\${azurerm_storage_account.StorageAccount.id}\\"
+        \\"scope\\": \\"\${azurerm_storage_account.root_StorageAccount_3B92EC74.id}\\"
       }
     },
     \\"azurerm_service_plan\\": {
-      \\"ServicePlan\\": {
-        \\"location\\": \\"\${azurerm_resource_group.ResourceGroup.location}\\",
+      \\"root_ServicePlan_14459C66\\": {
+        \\"location\\": \\"\${azurerm_resource_group.root_ResourceGroup_72A9AFB6.location}\\",
         \\"name\\": \\"Default-c82bf964\\",
         \\"os_type\\": \\"Linux\\",
-        \\"resource_group_name\\": \\"\${azurerm_resource_group.ResourceGroup.name}\\",
+        \\"resource_group_name\\": \\"\${azurerm_resource_group.root_ResourceGroup_72A9AFB6.name}\\",
         \\"sku_name\\": \\"Y1\\"
       }
     },
     \\"azurerm_storage_account\\": {
-      \\"StorageAccount\\": {
+      \\"root_StorageAccount_3B92EC74\\": {
         \\"account_replication_type\\": \\"LRS\\",
         \\"account_tier\\": \\"Standard\\",
-        \\"location\\": \\"\${azurerm_resource_group.ResourceGroup.location}\\",
+        \\"location\\": \\"\${azurerm_resource_group.root_ResourceGroup_72A9AFB6.location}\\",
         \\"name\\": \\"defaultc82bf964\\",
-        \\"resource_group_name\\": \\"\${azurerm_resource_group.ResourceGroup.name}\\"
+        \\"resource_group_name\\": \\"\${azurerm_resource_group.root_ResourceGroup_72A9AFB6.name}\\"
       }
     },
     \\"azurerm_storage_blob\\": {
-      \\"someFunction01_CodeBlob_D6CD3DCE\\": {
+      \\"root_someFunction01_CodeBlob_971120BF\\": {
         \\"name\\": \\"somefunction01-c8eb4882.zip\\",
         \\"source\\": \\"<source>\\",
-        \\"storage_account_name\\": \\"\${azurerm_storage_account.StorageAccount.name}\\",
-        \\"storage_container_name\\": \\"\${azurerm_storage_container.someFunction01_FunctionBucket_BDC04946.name}\\",
+        \\"storage_account_name\\": \\"\${azurerm_storage_account.root_StorageAccount_3B92EC74.name}\\",
+        \\"storage_container_name\\": \\"\${azurerm_storage_container.root_someFunction01_FunctionBucket_E40551AF.name}\\",
         \\"type\\": \\"Block\\"
       }
     },
     \\"azurerm_storage_container\\": {
-      \\"someFunction01_FunctionBucket_BDC04946\\": {
+      \\"root_someFunction01_FunctionBucket_E40551AF\\": {
         \\"container_access_type\\": \\"private\\",
         \\"name\\": \\"functionbucket-c84280f4\\",
-        \\"storage_account_name\\": \\"\${azurerm_storage_account.StorageAccount.name}\\"
+        \\"storage_account_name\\": \\"\${azurerm_storage_account.root_StorageAccount_3B92EC74.name}\\"
       }
     }
   }
@@ -592,7 +592,7 @@ exports[`replace invalid character from function name 2`] = `
               "ResourceGroup": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.17.0",
+                  "version": "0.15.2",
                 },
                 "id": "ResourceGroup",
                 "path": "root/Default/ResourceGroup",
@@ -600,7 +600,7 @@ exports[`replace invalid character from function name 2`] = `
               "ServicePlan": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.17.0",
+                  "version": "0.15.2",
                 },
                 "id": "ServicePlan",
                 "path": "root/Default/ServicePlan",
@@ -608,7 +608,7 @@ exports[`replace invalid character from function name 2`] = `
               "StorageAccount": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.17.0",
+                  "version": "0.15.2",
                 },
                 "id": "StorageAccount",
                 "path": "root/Default/StorageAccount",
@@ -616,7 +616,7 @@ exports[`replace invalid character from function name 2`] = `
               "azure": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.17.0",
+                  "version": "0.15.2",
                 },
                 "id": "azure",
                 "path": "root/Default/azure",
@@ -629,7 +629,7 @@ exports[`replace invalid character from function name 2`] = `
                   "Asset": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformAsset",
-                      "version": "0.17.0",
+                      "version": "0.15.2",
                     },
                     "id": "Asset",
                     "path": "root/Default/someFunction01/Asset",
@@ -637,7 +637,7 @@ exports[`replace invalid character from function name 2`] = `
                   "CodeBlob": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.15.2",
                     },
                     "id": "CodeBlob",
                     "path": "root/Default/someFunction01/CodeBlob",
@@ -645,7 +645,7 @@ exports[`replace invalid character from function name 2`] = `
                   "Function": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.15.2",
                     },
                     "id": "Function",
                     "path": "root/Default/someFunction01/Function",
@@ -658,7 +658,7 @@ exports[`replace invalid character from function name 2`] = `
                       "Bucket": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
-                          "version": "0.17.0",
+                          "version": "0.15.2",
                         },
                         "id": "Bucket",
                         "path": "root/Default/someFunction01/FunctionBucket/Bucket",
@@ -678,7 +678,7 @@ exports[`replace invalid character from function name 2`] = `
                   "ReadLambdaCodeAssignment": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
+                      "version": "0.15.2",
                     },
                     "id": "ReadLambdaCodeAssignment",
                     "path": "root/Default/someFunction01/ReadLambdaCodeAssignment",
@@ -706,7 +706,7 @@ exports[`replace invalid character from function name 2`] = `
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.17.0",
+              "version": "0.15.2",
             },
             "id": "backend",
             "path": "root/backend",
@@ -714,7 +714,7 @@ exports[`replace invalid character from function name 2`] = `
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.17.0",
+          "version": "0.15.2",
         },
         "id": "root",
         "path": "root",
@@ -722,7 +722,7 @@ exports[`replace invalid character from function name 2`] = `
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.17.0",
+      "version": "0.15.2",
     },
     "id": "App",
     "path": "",

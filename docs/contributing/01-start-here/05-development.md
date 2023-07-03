@@ -16,7 +16,7 @@ You can open up this repo just using the badge below. It is recommended to selec
 Here is a list of minimal tools you should install to build the Wing repo in your development
 environment:
 
-* [Node.js] v18 and [PNPM] v8
+* [Node.js] v18 and npm v8
   * We recommend [volta] to manage node tools
 * [Rust]
   * We recommend using [rustup] to manage your Rust installation
@@ -32,19 +32,19 @@ Installation:
 ```sh
 git clone https://github.com/winglang/wing
 cd wing
-pnpm install
+npm install
 ```
 
 :::note Nx Commands
 [Nx] commands in this document are structured as
 
 ```sh
-pnpm nx <target> <project>
+npx nx <target> <project>
 # or
-pnpm nx <target> <project> -- <args>
+npx nx <target> <project> -- <args>
 ```
 
-- `pnpm` can be omitted if [Nx] is installed globally
+- `npx` can be omitted if [Nx] is installed globally
 - `<project>` may be omitted if the current working directory is within the given project directory. If not within any project directory, it will default to the `winglang` CLI project
 - If any paths are present in `<args>`, ensure they are either absolute or relative to the project directory
 
@@ -57,7 +57,6 @@ pnpm nx <target> <project> -- <args>
 [AWS CLI]: https://aws.amazon.com/cli/
 [Terraform CLI]: https://learn.hashicorp.com/terraform/getting-started/install.html
 [volta]: https://volta.sh
-[PNPM]: https://pnpm.io
 [Docker]: https://docs.docker.com/get-docker/
 [emscripten]: https://emscripten.org/docs/getting_started/downloads.html
 
@@ -66,7 +65,7 @@ pnpm nx <target> <project> -- <args>
 If you wish to perform a full build (similar to the one CI is running), just run this from the root:
 
 ```sh
-pnpm build
+npm run build
 ```
 
 It will run the `build`, `test` and `package` targets on all modules.
@@ -74,7 +73,7 @@ It will run the `build`, `test` and `package` targets on all modules.
 
 ## 🏠 What's the recommended development workflow?
 
-The `pnpm nx wing` command can be executed from the root of the repository in order to build and run the
+The `npx nx wing` command can be executed from the root of the repository in order to build and run the
 compiler, SDK (standard library) and the Wing CLI. Nx is configured to make sure only the changed components are built
 every time.
 
@@ -89,7 +88,7 @@ Now, you can edit a source file anywhere across the stack and run the compiler w
 For example:
 
 ```sh
-pnpm nx wing -- test ../../examples/tests/valid/captures.w
+npx nx wing -- test ../../examples/tests/valid/captures.w
 ```
 
 This command runs the full Wing CLI with the given arguments. Nx will ensure the CLI build is updated.
@@ -106,12 +105,13 @@ The Wing monorepo uses [Nx] to run commands across all code packages in the `lib
 folders. This means it includes packages that form the entire toolchain (compiler, standard library, IDE
 extension, etc), and the build and release bind them all together.
 
-Nx will be installed alongside the rest of the project's dependencies after you run `pnpm install`
-from the root directory, and can be accessed with `pnpm nx` if [Nx] is not installed globally.
+Nx will be installed alongside the rest of the project's dependencies after you run `npm install`
+from the root directory, and can be accessed with `npx nx` (it does not need to be installed
+separately).
 
 :::note
 
-The first time you run `pnpm install` it may take extra time to install the
+The first time you run `npm install` it may take extra time to install the
  [wasi-sdk](https://github.com/WebAssembly/wasi-sdk) for you. This is needed to compile Wing for WASM.
 
 If you wish to install it manually, you may do so by running `scripts/setup_wasi.sh`
@@ -126,7 +126,7 @@ wing](#-how-do-i-build-wing).
 To run the tests (and update snapshots), run the following command from anywhere in the monorepo:
 
 ```sh
-pnpm nx test hangar
+npx nx test hangar
 ```
 
 ### Test Meta-Comments
@@ -153,7 +153,7 @@ This is useful if, for example, the test requires docker. In our CI only linux s
 Benchmark files are located in `examples/tests/valid/benchmarks`. To run the benchmarks, run the following command from anywhere in the monorepo:
 
 ```sh
-pnpm nx bench hangar
+npx nx bench hangar
 ```
 
 Benchmark files should ideally have a meta-comment with the `cases` key. For example:
@@ -179,13 +179,13 @@ The following command runs the rust tests in wingc, including verification that 
 It will also make sure to update any snapshots.
 
 ```sh
-pnpm nx test wingc
+npx nx test wingc
 ```
 
 The following command runs `wingc` on a file. This performs all the compilation steps. Run from the root or `apps/wing`.
 
 ```sh
-pnpm nx wing -- compile <path to a .w file (full path, or relative to the location of the apps/wing folder)>
+npx nx wing -- compile <path to a .w file (full path, or relative to the location of the apps/wing folder)>
 ```
 
 You can find the compilation artifacts in the apps/wing/targets folder.
@@ -193,7 +193,7 @@ You can find the compilation artifacts in the apps/wing/targets folder.
 To check that your code passes all the lints, run:
 
 ```sh
-pnpm nx lint wingc
+npx nx lint wingc
 ```
 
 ### Optional VSCode extensions for working on the compiler
@@ -214,21 +214,30 @@ Open the `.w` file you wish to debug compilation for (e.g. `${workspaceFolder}/e
 After making changes to `grammar.js`, run:
 
 ```sh
-pnpm nx build tree-sitter-wing
+npx nx build tree-sitter-wing
 ```
 
 To run the grammar tests (that are located in the `test` folder):
 
 ```sh
-pnpm nx test tree-sitter-wing
+npx nx test tree-sitter-wing
+```
+
+To build the grammar as WASM for the web-based playground. Leave off `--docker` if you have emscripten
+setup locally:
+
+```sh
+npx tree-sitter-cli build-wasm --docker
 ```
 
 To use the wasm grammar to run a web-based playground where you can explore the AST and test out
 highlight queries, run:
 
 ```sh
-pnpm nx dev tree-sitter-wing
+npx tree-sitter-cli playground
 ```
+
+Make sure to also run `build-wasm` before each time the grammar changes
 
 ## 🔨 How do I build the VSCode extension?
 
@@ -238,13 +247,13 @@ is located in the Wing CLI at `apps/wing/src/commands/lsp.ts`.
 To build the extension (also creates an installable `.vsix` file):
 
 ```sh
-pnpm nx build vscode-wing
+npx nx build vscode-wing
 ```
 
 To run a new isolated VSCode instance with the extension installed:
 
 ```sh
-pnpm nx dev vscode-wing
+npx nx dev vscode-wing
 ```
 
 To modify the package.json, make sure to edit `.projenrc.ts` and rebuild.
@@ -256,7 +265,7 @@ Tip: if you want to print debug messages in your code while developing, you shou
 To lint Rust code, you can run the `lint` target on the `wingc` or `wingii` projects:
 
 ```sh
-pnpm nx lint wingc
+npx nx lint wingc
 ```
 
 It's also possible to lint by running `cargo clippy` directly.

@@ -64,7 +64,7 @@ module.exports = function({  }) {
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.17.0"
+      "version": "0.15.2"
     },
     "outputs": {
       "root": {
@@ -78,7 +78,7 @@ module.exports = function({  }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:structure interface types for 'handle'\",\"${aws_lambda_function.teststructureinterfacetypesforhandle_Handler_2DA6D9F8.arn}\"]]"
+      "value": "[[\"root/Default/Default/test:structure interface types for 'handle'\",\"${aws_lambda_function.root_teststructureinterfacetypesforhandle_Handler_D0AD9EBB.arn}\"]]"
     }
   },
   "provider": {
@@ -88,46 +88,46 @@ module.exports = function({  }) {
   },
   "resource": {
     "aws_iam_role": {
-      "teststructureinterfacetypesforhandle_Handler_IamRole_12602AE7": {
+      "root_teststructureinterfacetypesforhandle_Handler_IamRole_AB74813A": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:structure interface types for 'handle'/Handler/IamRole",
-            "uniqueId": "teststructureinterfacetypesforhandle_Handler_IamRole_12602AE7"
+            "uniqueId": "root_teststructureinterfacetypesforhandle_Handler_IamRole_AB74813A"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
-      "teststructureinterfacetypesforhandle_Handler_IamRolePolicy_AD8B964E": {
+      "root_teststructureinterfacetypesforhandle_Handler_IamRolePolicy_726FC11F": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:structure interface types for 'handle'/Handler/IamRolePolicy",
-            "uniqueId": "teststructureinterfacetypesforhandle_Handler_IamRolePolicy_AD8B964E"
+            "uniqueId": "root_teststructureinterfacetypesforhandle_Handler_IamRolePolicy_726FC11F"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
-        "role": "${aws_iam_role.teststructureinterfacetypesforhandle_Handler_IamRole_12602AE7.name}"
+        "role": "${aws_iam_role.root_teststructureinterfacetypesforhandle_Handler_IamRole_AB74813A.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
-      "teststructureinterfacetypesforhandle_Handler_IamRolePolicyAttachment_B1D53B86": {
+      "root_teststructureinterfacetypesforhandle_Handler_IamRolePolicyAttachment_31DB7A71": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:structure interface types for 'handle'/Handler/IamRolePolicyAttachment",
-            "uniqueId": "teststructureinterfacetypesforhandle_Handler_IamRolePolicyAttachment_B1D53B86"
+            "uniqueId": "root_teststructureinterfacetypesforhandle_Handler_IamRolePolicyAttachment_31DB7A71"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.teststructureinterfacetypesforhandle_Handler_IamRole_12602AE7.name}"
+        "role": "${aws_iam_role.root_teststructureinterfacetypesforhandle_Handler_IamRole_AB74813A.name}"
       }
     },
     "aws_lambda_function": {
-      "teststructureinterfacetypesforhandle_Handler_2DA6D9F8": {
+      "root_teststructureinterfacetypesforhandle_Handler_D0AD9EBB": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:structure interface types for 'handle'/Handler/Default",
-            "uniqueId": "teststructureinterfacetypesforhandle_Handler_2DA6D9F8"
+            "uniqueId": "root_teststructureinterfacetypesforhandle_Handler_D0AD9EBB"
           }
         },
         "environment": {
@@ -139,10 +139,10 @@ module.exports = function({  }) {
         "function_name": "Handler-c83718d0",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.teststructureinterfacetypesforhandle_Handler_IamRole_12602AE7.arn}",
+        "role": "${aws_iam_role.root_teststructureinterfacetypesforhandle_Handler_IamRole_AB74813A.arn}",
         "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
-        "s3_key": "${aws_s3_object.teststructureinterfacetypesforhandle_Handler_S3Object_9308866C.key}",
+        "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
+        "s3_key": "${aws_s3_object.root_teststructureinterfacetypesforhandle_Handler_S3Object_9DFAC484.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -151,25 +151,25 @@ module.exports = function({  }) {
       }
     },
     "aws_s3_bucket": {
-      "Code": {
+      "root_Code_02F3C603": {
         "//": {
           "metadata": {
             "path": "root/Default/Code",
-            "uniqueId": "Code"
+            "uniqueId": "root_Code_02F3C603"
           }
         },
         "bucket_prefix": "code-c84a50b1-"
       }
     },
     "aws_s3_object": {
-      "teststructureinterfacetypesforhandle_Handler_S3Object_9308866C": {
+      "root_teststructureinterfacetypesforhandle_Handler_S3Object_9DFAC484": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:structure interface types for 'handle'/Handler/S3Object",
-            "uniqueId": "teststructureinterfacetypesforhandle_Handler_S3Object_9308866C"
+            "uniqueId": "root_teststructureinterfacetypesforhandle_Handler_S3Object_9DFAC484"
           }
         },
-        "bucket": "${aws_s3_bucket.Code.bucket}",
+        "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       }

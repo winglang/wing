@@ -28,7 +28,7 @@ module.exports = function({ table, marioInfo, peachInfo, std_Json }) {
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.17.0"
+      "version": "0.15.2"
     },
     "outputs": {
       "root": {
@@ -42,7 +42,7 @@ module.exports = function({ table, marioInfo, peachInfo, std_Json }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:addRow\",\"${aws_lambda_function.testaddRow_Handler_2806A65E.arn}\"]]"
+      "value": "[[\"root/Default/Default/test:addRow\",\"${aws_lambda_function.root_testaddRow_Handler_341A155A.arn}\"]]"
     }
   },
   "provider": {
@@ -52,11 +52,11 @@ module.exports = function({ table, marioInfo, peachInfo, std_Json }) {
   },
   "resource": {
     "aws_dynamodb_table": {
-      "cloudTable": {
+      "root_cloudTable_323D7643": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/cloud.Table/Default",
-            "uniqueId": "cloudTable"
+            "uniqueId": "root_cloudTable_323D7643"
           }
         },
         "attribute": [
@@ -71,75 +71,75 @@ module.exports = function({ table, marioInfo, peachInfo, std_Json }) {
       }
     },
     "aws_dynamodb_table_item": {
-      "cloudTable_DynamodbTableItem-mario_5D4D17DE": {
+      "root_cloudTable_DynamodbTableItemmario_B5126782": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/cloud.Table/DynamodbTableItem-mario",
-            "uniqueId": "cloudTable_DynamodbTableItem-mario_5D4D17DE"
+            "uniqueId": "root_cloudTable_DynamodbTableItemmario_B5126782"
           }
         },
-        "hash_key": "${aws_dynamodb_table.cloudTable.hash_key}",
+        "hash_key": "${aws_dynamodb_table.root_cloudTable_323D7643.hash_key}",
         "item": "{\"name\":{\"S\":\"mario\"},\"gender\":{\"S\":\"male\"},\"role\":{\"S\":\"plumber\"}}",
-        "table_name": "${aws_dynamodb_table.cloudTable.name}"
+        "table_name": "${aws_dynamodb_table.root_cloudTable_323D7643.name}"
       },
-      "cloudTable_DynamodbTableItem-peach_292A8BDE": {
+      "root_cloudTable_DynamodbTableItempeach_63A97BD4": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/cloud.Table/DynamodbTableItem-peach",
-            "uniqueId": "cloudTable_DynamodbTableItem-peach_292A8BDE"
+            "uniqueId": "root_cloudTable_DynamodbTableItempeach_63A97BD4"
           }
         },
-        "hash_key": "${aws_dynamodb_table.cloudTable.hash_key}",
+        "hash_key": "${aws_dynamodb_table.root_cloudTable_323D7643.hash_key}",
         "item": "{\"name\":{\"S\":\"peach\"},\"gender\":{\"S\":\"female\"},\"role\":{\"S\":\"princess\"}}",
-        "table_name": "${aws_dynamodb_table.cloudTable.name}"
+        "table_name": "${aws_dynamodb_table.root_cloudTable_323D7643.name}"
       }
     },
     "aws_iam_role": {
-      "testaddRow_Handler_IamRole_809942D9": {
+      "root_testaddRow_Handler_IamRole_938BAC5C": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:addRow/Handler/IamRole",
-            "uniqueId": "testaddRow_Handler_IamRole_809942D9"
+            "uniqueId": "root_testaddRow_Handler_IamRole_938BAC5C"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
-      "testaddRow_Handler_IamRolePolicy_CA240997": {
+      "root_testaddRow_Handler_IamRolePolicy_4078E893": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:addRow/Handler/IamRolePolicy",
-            "uniqueId": "testaddRow_Handler_IamRolePolicy_CA240997"
+            "uniqueId": "root_testaddRow_Handler_IamRolePolicy_4078E893"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:GetItem\"],\"Resource\":[\"${aws_dynamodb_table.cloudTable.arn}\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.testaddRow_Handler_IamRole_809942D9.name}"
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:GetItem\"],\"Resource\":[\"${aws_dynamodb_table.root_cloudTable_323D7643.arn}\"],\"Effect\":\"Allow\"}]}",
+        "role": "${aws_iam_role.root_testaddRow_Handler_IamRole_938BAC5C.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
-      "testaddRow_Handler_IamRolePolicyAttachment_0784B360": {
+      "root_testaddRow_Handler_IamRolePolicyAttachment_263D7BE3": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:addRow/Handler/IamRolePolicyAttachment",
-            "uniqueId": "testaddRow_Handler_IamRolePolicyAttachment_0784B360"
+            "uniqueId": "root_testaddRow_Handler_IamRolePolicyAttachment_263D7BE3"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.testaddRow_Handler_IamRole_809942D9.name}"
+        "role": "${aws_iam_role.root_testaddRow_Handler_IamRole_938BAC5C.name}"
       }
     },
     "aws_lambda_function": {
-      "testaddRow_Handler_2806A65E": {
+      "root_testaddRow_Handler_341A155A": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:addRow/Handler/Default",
-            "uniqueId": "testaddRow_Handler_2806A65E"
+            "uniqueId": "root_testaddRow_Handler_341A155A"
           }
         },
         "environment": {
           "variables": {
-            "DYNAMODB_TABLE_NAME_e8a1ff2c": "${aws_dynamodb_table.cloudTable.name}",
+            "DYNAMODB_TABLE_NAME_e8a1ff2c": "${aws_dynamodb_table.root_cloudTable_323D7643.name}",
             "DYNAMODB_TABLE_NAME_e8a1ff2c_COLUMNS": "{\"gender\":0}",
             "DYNAMODB_TABLE_NAME_e8a1ff2c_PRIMARY_KEY": "name",
             "WING_FUNCTION_NAME": "Handler-c8f74599",
@@ -149,10 +149,10 @@ module.exports = function({ table, marioInfo, peachInfo, std_Json }) {
         "function_name": "Handler-c8f74599",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.testaddRow_Handler_IamRole_809942D9.arn}",
+        "role": "${aws_iam_role.root_testaddRow_Handler_IamRole_938BAC5C.arn}",
         "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
-        "s3_key": "${aws_s3_object.testaddRow_Handler_S3Object_1B25BFDC.key}",
+        "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
+        "s3_key": "${aws_s3_object.root_testaddRow_Handler_S3Object_98654367.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -161,25 +161,25 @@ module.exports = function({ table, marioInfo, peachInfo, std_Json }) {
       }
     },
     "aws_s3_bucket": {
-      "Code": {
+      "root_Code_02F3C603": {
         "//": {
           "metadata": {
             "path": "root/Default/Code",
-            "uniqueId": "Code"
+            "uniqueId": "root_Code_02F3C603"
           }
         },
         "bucket_prefix": "code-c84a50b1-"
       }
     },
     "aws_s3_object": {
-      "testaddRow_Handler_S3Object_1B25BFDC": {
+      "root_testaddRow_Handler_S3Object_98654367": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:addRow/Handler/S3Object",
-            "uniqueId": "testaddRow_Handler_S3Object_1B25BFDC"
+            "uniqueId": "root_testaddRow_Handler_S3Object_98654367"
           }
         },
-        "bucket": "${aws_s3_bucket.Code.bucket}",
+        "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       }

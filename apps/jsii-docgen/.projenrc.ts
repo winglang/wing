@@ -1,4 +1,5 @@
-import { typescript, javascript } from "projen";
+const { typescript, javascript } = require("projen");
+const rootPackageJson = require("../../package.json");
 
 const project = new typescript.TypeScriptProject({
   name: "@winglang/jsii-docgen",
@@ -9,19 +10,11 @@ const project = new typescript.TypeScriptProject({
   authorOrganization: true,
   authorUrl: "https://monada.co",
   defaultReleaseBranch: "main",
-  projenCommand: "pnpm exec projen",
 
   bin: {
     "jsii-docgen": "bin/jsii-docgen",
   },
-  devDeps: [
-    "jsii@~5.0.0",
-    "@types/fs-extra",
-    "@types/semver",
-    "@types/yargs@^16",
-    "@types/node",
-    "constructs",
-  ],
+  devDeps: ["@types/fs-extra", "@types/semver"],
   deps: [
     "@jsii/spec",
     "case",
@@ -31,10 +24,11 @@ const project = new typescript.TypeScriptProject({
     "jsii-reflect",
     "jsii-rosetta",
     "semver",
-    "yargs@^16",
+    "yargs",
   ],
+  compileBeforeTest: true, // we need this for the CLI test
   releaseToNpm: true,
-  packageManager: javascript.NodePackageManager.PNPM,
+  packageManager: javascript.NodePackageManager.NPM,
   github: false,
   projenrcTs: true,
   prettier: true,
@@ -44,7 +38,10 @@ const libraryFixtures = ["construct-library"];
 
 // compile the test fixtures with jsii
 for (const library of libraryFixtures) {
-  project.compileTask.exec("pnpm compile", {
+  project.compileTask.exec("npm ci", {
+    cwd: `./test/__fixtures__/libraries/${library}`,
+  });
+  project.compileTask.exec("npm run compile", {
     cwd: `./test/__fixtures__/libraries/${library}`,
   });
 }
@@ -57,7 +54,7 @@ project.gitignore.exclude(".vscode/");
 
 project.tasks.addEnvironment("NODE_OPTIONS", "--max-old-space-size=7168");
 // Avoid a non JSII compatible package (see https://github.com/projen/projen/issues/2264)
-// project.package.addPackageResolutions("@types/babel__traverse@7.18.2");
+project.package.addPackageResolutions("@types/babel__traverse@7.18.2");
 
 // override default test timeout from 5s to 30s
 project.testTask.reset(
@@ -65,12 +62,11 @@ project.testTask.reset(
 );
 
 project.addFields({
-  volta: {
-    extends: "../../package.json",
-  },
+  volta: rootPackageJson.volta,
 });
 
-project.package.file.addDeletionOverride("pnpm");
-project.tryRemoveFile(".npmrc");
+// We use of symlinks between several projects but we do not use workspaces
+project.npmrc.addConfig("install-links", "false");
+project.npmrc.addConfig("fund", "false");
 
 project.synth();
