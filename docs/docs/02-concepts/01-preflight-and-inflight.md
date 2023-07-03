@@ -1,230 +1,275 @@
 ---
 id: inflights
 title: Preflight and Inflight 
-description: Wing two execution phases preflight and inflight
+description: "Wing's two execution phases: preflight and inflight"
 keywords: [Inflights, Inflight functions, Preflight, Preflight code]
 ---
 
-## Preflight
+Wing has two execution phases:
 
-TODO
+- **preflight**: code that runs once, at compile time, to generate the infrastructure configuration of your cloud application. For example, setting up databases, queues, storage buckets, API endpoints, etc.
+- **inflight**: code that runs at runtime to perform your application logic. For example, handling API requests, processing queue messages, etc. Inflight code can be executed on compute platforms in the cloud, such as function services (lambda), containers, VMs or physical servers.
 
-## Inflight 
+One of the main differences between Wing and other languages is that it unifies both execution phases under the same programming model, through the concepts of preflight code and inflight code.
 
-Inflights (or "inflight functions") are Wing's distributed computing primitive.
-They are isolated code blocks which can be packaged and executed on compute
-platforms in the cloud (such as containers, CI/CD pipelines or FaaS).
+## Preflight code
 
-Inflights can seamlessly interact with resources through the resource's inflight
-API.
+Preflight code is code that runs once, at compile time, to generate the app's infrastructure configuration.
 
-The following example shows an inflight which puts an object inside a bucket,
-hosted in a cloud function:
+For example, this code snippet defines a storage bucket using a class from the standard library:
 
-```js
+```js playground
+bring cloud;
+
+let data = new cloud.Bucket();
+
+let orders = { "hummus": 100 };
+data.addObject("orders.json", Json.stringify(orders));
+```
+
+`Bucket` is a class from the standard library, and `addObject()` is a preflight method of `Bucket`.
+
+**There is no special annotation to define that this is preflight code because preflight is Wing's default execution phase.**
+
+Compiling the program with the [Wing CLI](../tools/cli) will synthesize a configuration file which can be used to create the bucket and initialize its contents on a cloud provider.
+
+Preflight code can be also used to configure services or set up more complex event listeners.
+
+For example, this code snippet defines a bucket whose contents will be publicly accessible, and which will be pre-populated with a file during deployment (not while the app is running).
+
+```js playground
+bring cloud;
+
+let bucket = new cloud.Bucket(public: true);
+bucket.addObject("file1.txt", "Hello world!");
+```
+
+There are a few global functions with specific behaviors in preflight.
+For example, adding a `log()` statement to your preflight code will result in Wing printing the string to the console after compilation.
+
+```js playground
+// hello.w
+log("7 * 6 = ${7 * 6}");
+```
+
+```bash
+$ wing compile hello.w
+7 * 6 = 42
+```
+
+Likewise, `assert()` statements will be evaluated during preflight, and will cause compilation to fail if the assertion fails.
+
+```js playground
+// hello.w
+assert(2 + 2 == 5);
+```
+
+```bash
+$ wing compile hello.w
+error: assertion failed: 2 + 2 == 5
+```
+
+## Inflight code
+
+Inflight blocks are where you write asynchronous runtime code that can directly interact with resources through their inflight APIs.
+Inflight functions can be easily packaged and executed onto compute platforms like containers, CI/CD pipelines or FaaS.
+Inflight code can also be executed multiple times and on different machines in parallel.
+
+Let's walk through some examples.
+
+Inflight code is always contained inside a block that starts with the word `inflight`.
+
+```js playground
+let greeting = inflight () => {
+  log("Hello from the cloud!");
+};
+```
+
+Inflight code can call other inflight functions and methods.
+For example, `cloud.Bucket` has an inflight method named `list()` that can be called inside inflight contexts:
+
+```js playground
 bring cloud;
 
 let bucket = new cloud.Bucket();
 
-new cloud.Function(inflight (_: str): str => {
-  bucket.put("hello.txt", "world");
-});
-```
-
-But before we explain what inflight functions are (we also call them
-"inflights"), let's take a step back and talk about what are cloud applications
-anyway?
-
-A cloud application is software that deeply leverages **cloud resources** in
-order to perform its duties. A cloud resource is *any network-accessible
-service*. These resources can be used to store data or files (like buckets),
-process HTTP requests (like API gateways), distribute content (like CDNs),
-publish notifications to mobile phones or run user-defined code (such as Lambda
-functions or Kubernetes deployments). Cloud providers such as AWS, GCP and Azure
-offer a basic set of resources (similar to how an operating system offers a
-basic set of resources to applications running on the machine), but that doesn't
-imply that those are the only resources an application might use.
-
-These managed services offer not only functional capabilities to applications,
-but also many non-functional benefits such as high availability, elastic
-scalability and reliability. By relying on cloud resources, developers are able
-to innovate faster and focus on the direct value that their applications create
-for users.
-
-Wing is designed around this new programming paradigm, which we call
-**cloud-oriented programming**.
-
-
-
-### Diving deeper into inflight functions
-
-> Taken from [Inflight Magazine](https://docs.winglang.io/blog/2022/12/28/magazine-001#diving-deeper-into-inflight-functions)
-
-Inflight functions are likely Wing's most significant
-language innovation. Since cloud applications are distributed systems and code is executed on
-multiple machines across various compute platforms, our language needs first-class support for this
-idea: code that executes in the cloud and interacts with managed services around it. This is where
-inflight functions come into play.
-
-Asynchronous and concurrent programming have been a continuous source for programming language
-innovation and research. Since the early days of
-[`fork()`](https://man7.org/linux/man-pages/man2/fork.2.html) in POSIX, multi-threaded programming,
-[Goroutines](https://gobyexample.com/goroutines), [Erlang
-Processes](https://www.erlang.org/doc/reference_manual/processes.html) and the recently popularized,
-cooperative concurrency with `async/await`, developers have been looking for ways to write
-applications that included more than a single thread of execution in a safe and intuitive manner.
-
-Wing's inflight functions can be thought of as a type of asynchronous function that can be
-**packaged and executed on a remote system**, such as inside a [Kubernetes
-Pod](https://kubernetes.io/docs/concepts/workloads/pods/), [AWS
-Lambda](https://aws.amazon.com/lambda/), [Azure
-Functions](https://azure.microsoft.com/en-us/products/functions/), on [Cloudflare Edge
-Workers](https://workers.cloudflare.com/) or on any other cloud compute platform.
-
-While inflights are typically compiled into machine code (like JavaScript), Wing may also be able to
-compile them into state machines, orchestrated workflows, and other formats in the future
-
-Our canonic example is a function that wants to put an object inside a bucket:
-
-```js
-bring cloud;
-
-let myBucket = new cloud.Bucket();
-
-new cloud.Function(inflight () => {
-  myBucket.put("hello", "world");
-});
-```
-
-The magic happens when the inflight function is referencing `myBucket`. The `cloud.Bucket` which is
-defined (with `new`) outside the function closure is a preflight object which represents a **cloud infrastructure resource**,
-not an in-memory object. When the function code interacts with this bucket (calls
-`myBucket.put()`), it represents an interaction across machine boundaries. The code is executed
-inside some compute service such as AWS Lambda, and the bucket is backed by something like Amazon
-S3. The compiler has to do quite a lot in order to make this a reality on the cloud: it needs to
-wire up the bucket information during deployment, add the right permissions to the Lambda's IAM
-policy, and create a code bundle with just the right set of dependencies.
-
-Inflight functions can interact with preflight objects through their *inflight interface*. This is not very
-different from e.g. `async` functions in JavaScript, where it doesn't really make sense to `await`
-an async function from synchronous contexts. It is also not very different from how
-[Goroutines](https://gobyexample.com/goroutines) can only interact with the world through
-[Channels](https://gobyexample.com/channels), or child processes can interact through pipes. 
-
-Inflight functions are an *isolation boundary* enforced by the compiler. This means that there are
-certain limitations on what can be accessed from an inflight scope. Specifically, you can only
-access *immutable data* and interact with *preflight object* through their inflight API (like the
-example above demonstrates). If you try to call `myBucket.put()` outside of an `inflight` context
-the Wing compiler will emit this error: 
-
-```
-Cannot call inflight function "myBucket.put" while in preflight phase
-```
-
-Many folks are asking us [why is Wing a language and not a
-library](https://news.ycombinator.com/item?id=34051472). Inflight functions and preflight objects are a
-great example. We believe it is impossible to ensure this level of isolation and interaction
-semantics in existing languages through a library, or even through a compiler extension. We've seen
-some worthy efforts in projects like [Pulumi's Function
-Serialization](https://www.pulumi.com/docs/intro/concepts/function-serialization/),
-[Punchcard](https://github.com/sam-goodwin/punchcard) and [Functionless](https://github.com/functionless/functionless),
-and in all of these cases, there are either compromises in safety (e.g. it is possible to capture
-mutable objects) or in the programming model (e.g. type system is too complex).
-
-We believe inflight functions are a fundamental building block of cloud-oriented programming, and we
-are on a journey to get them right. From a syntactic perspective, we recently decided to [remove the
-short hand `~>`](https://github.com/winglang/wing/pull/866) for representing inflight closures, and
-instead use a simple `inflight` modifier. We've been debating this for a while, and a
-[comment](https://winglang.slack.com/archives/C047QFSUL5R/p1670050350350909?thread_ts=1670030202.531749&cid=C047QFSUL5R)
-from a Wingnut, Adam Ruka, tilted the scale in favor of the less quirky syntax. Don't be surprised,
-though, if `~>` will come back, in addition to the inflight keyword, at some point when things mature.
-
-So now, defining inflight functions in Wing is very similar to defining `async` functions, only that
-instead of the `async` modifier, you can use the `inflight` modifier. Here's an inflight function
-closure:
-
-```js
-let handler = inflight (e: str): str => {
-  // on air (apologies, the puns are unavoidable, really)
+let firstObject = inflight (): str => {
+  let items = bucket.list();
+  return items.at(0);
 };
 ```
 
-## Preflight Classes
+Even though `bucket` is defined in preflight, it's okay to use its inflight method in inflight code because it will always refer to the same bucket "instance" after deployment.
 
-TODO
+### Executing inflight code
 
-Resources are cloud services that are part of the application. Wing uses preflight classes to
-represent these resources and expose both a *preflight API* used to define their deployment
-configuration and an *inflight API* used to interact with them at runtime. Resources are an
-extension of the [Construct Programming Model] and as such any [AWS Constructs] can be natively used
-in Wing applications.
+For an inflight function to actually get executed, it must be provided to an API that expects inflight code. For example, we can provide it to a `cloud.Function`:
 
-The following code defines a bucket resource:
+```js playground
+bring cloud;
 
-```js
-new cloud.Bucket();
+let func = new cloud.Function(inflight () => {
+  log("Hello from the cloud!");
+});
 ```
 
-:::caution Conceptual Example
-The following code block is meant to serve as an example of what is possible 
-based on the wing language specifications. Additional feature implementations
-will need to be completed to make the example possible.
-:::
+`cloud.Function` represents an ephemeral, short-lived function, and it expects an inflight function as its first argument. It's responsible for packaging the code (as well as any any other inflight code it calls) so that it can be executed on cloud compute platforms.
 
-The following code declares a new resource called `SafeQueue` which contains
-a queue with a dead-letter-queue associated with it:
+Today, inflights are typically compiled into JavaScript, but Wing may also be able to compile them into state machines, orchestrated workflows, and other formats in the future.
+
+### Restrictions on inflight code
+
+Inflight code cannot be executed during preflight, because inflight APIs assume all resources have already been deployed.
 
 ```js
-class SafeQueue extends cloud.Queue {
+firstObject(); // error: method "firstObject" cannot be called in preflight phase
+```
+
+Likewise, inflight code cannot call preflight code, because preflight code has the capability to modify your application's infrastructure configuration, which is disallowed after deployment.
+For example, since `addObject` is a preflight method, it cannot be called in inflight:
+
+```js playground
+bring cloud;
+
+let bucket = new cloud.Bucket();
+
+let saveCalculation = inflight () => {
+  bucket.addObject("file1", "${2 ** 10}"); // error: method "addObject" cannot be called in inflight phase
+};
+```
+
+Instead, to insert an object into the bucket at runtime you would have to use an inflight method from the `Bucket` class, like `put`.
+
+Since a class's initializer is just a special kind of preflight function, it also isn't possible to initialize regular classes during preflight:
+
+```js playground
+bring cloud;
+
+inflight () => {
+  new cloud.Bucket(); // error: preflight class "Bucket" cannot be created in inflight
+};
+```
+
+## Combining preflight and inflight code
+
+Preflight and inflight functions can be grouped together using classes.
+A preflight class (the default kind of class) can contain both preflight and inflight methods, as well as preflight and inflight properties.
+
+Here's a class that models a queue that can replay its messages.
+A `cloud.Bucket` stores the history of messages, and a `cloud.Counter` helps with sequencing each new message as it's added to the queue.
+
+```js playground
+class ReplayableQueue {
+  queue: cloud.Queue;
+  bucket: cloud.Bucket; 
+  counter: cloud.Counter;
+  
   init() {
-    let dlq = new cloud.Queue();
+    this.queue = new cloud.Queue();
+    this.bucket = new cloud.Bucket();
+    this.counter = new cloud.Counter();
+  }
 
-    dlq.setConsumer(inflight (m: str) => {
-      log.error("dead-letter: ${m}");
-    });
-
-    this.addDeadLetterQueue(dlq);
+  setConsumer(fn: inflight (str): str){
+    this.queue.setConsumer(fn);
+  }
+  
+  inflight push(m: str) {
+    this.queue.push(m);
+    this.bucket.put("messages/${this.counter.inc()}", m);
+  }
+  
+  inflight replay(){
+    for i in this.bucket.list() {
+      this.queue.push(this.bucket.get(i));
+    }
   }
 }
 ```
 
-## Identifiers
+It's also possible to define inflight classes.
+An inflight class can only contain inflight methods and properties.
+Inflight classes are safe to create in inflight contexts.
 
-Resources are identified by a unique name.
-The name is used to identify the resource in the Wing Console, and is typically used for determining the logical name of the resource in the target provisioning engine (such as Terraform or CloudFormation), and the physical name of the resource in the target cloud provider (such as AWS, Azure, or GCP).
+For example, this inflight class can be created in an inflight contexts, and its methods can be called in inflight contexts:
 
-The default name of a resource is the name of the class. The name can be overridden using the `as` syntax:
+```js playground
+inflight () => {
+  class Person {
+    name: str;
+    age: int;
 
-```js
-let bucket1 = new cloud.Bucket(); // default name is "cloud.Bucket"
-let bucket2 = new cloud.Bucket() as "my-bucket";
+    init(name: str, age: int) {
+      this.name = name;
+      this.age = age;
+    }
+
+    inflight greet() {
+      log("Hello, ${this.name}!");
+    }
+  }
+
+  let p = new Person("John", 30);
+  p.greet();
+};
 ```
 
-The name of a resource needs to be unique within the scope it is defined.
-New classes introduce new scopes, so the same name can be used for different resources in different classes.
+## Using preflight data from inflight
 
-```js
-class Group1 {
-  init() {
-    new cloud.Bucket() as "Store";
-  }
-}
+While inflight code can't call preflight code, it's perfectly ok to reference data from preflight.
 
-class Group2 {
-  init() {
-    new cloud.Bucket() as "Store";
-  }
-}
+For example, the `cloud.Api` class has a preflight field named `url`.
+Since it's a piece of static data, it can be directly referenced inflight:
 
-// The following is valid
-new Group1();
-new Group2();
+```js playground
+bring cloud;
+bring http;
+
+let api = new cloud.Api();
+api.get("/test", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
+  return cloud.ApiResponse {
+    status: 200,
+    body: "success!"
+  };
+});
+
+let checkEndpoint = inflight () => {
+  let url = api.url; // this is OK
+  let path = "${url}/test";
+  let response = http.get(path);
+  assert(response.status == 200);
+};
+new cloud.Function(checkEndpoint);
 ```
 
-[Construct Programming Model]: https://docs.aws.amazon.com/cdk/v2/guide/constructs.html
-[AWS Constructs]: https://github.com/aws/constructs
+However, mutation to preflight data is not allowed.
+This mean means that variables from preflight cannot be reassigned to, and mutable collections like `MutArray` and `MutMap` cannot be modified.
 
-## Inflight Classes
+```js playground
+let var count = 3;
+let names = MutArray<str>["John", "Jane", "Joe"];
 
-TODO
+count = count + 1; // OK
+names.push("Jack"); // OK
 
+inflight () => {
+  count = count + 1; // error: variable "count" cannot be reassigned in inflight
+  names.push("Jill"); // error: variable "names" cannot be mutated in inflight
+};
+```
+
+## Phase-independent code
+
+The global functions `log`, `assert`, `throw`, and `panic` can all be used in both preflight and inflight code.
+
+Issue [#435](https://github.com/winglang/wing/issues/435) is tracking support for the capability to define phase-independent functions.
+
+## Summary
+
+- Preflight code is code that runs once, at compile time, to generate the infrastructure configuration of your cloud application.
+- Inflight code is code that runs at runtime to handle your application logic.
+- Wing programs start in preflight, but can switch to inflight using the `inflight` keyword.
+- Preflight functions can only call other preflight functions, and inflight functions can only call other inflight functions.
+- Classes can be used to group preflight and inflight code together.
+- A class's inflight methods can only be called in inflight contexts, and a class's preflight methods can only be called in preflight contexts.
+- Inflight code can reference data like global variables and class fields from preflight, but the data cannot be mutated.

@@ -3,7 +3,7 @@ enum SomeEnum {
 }
 
 let four = SomeEnum.FOUR;
-// ERR              ^^^^ enum value does not exist
+// ERR              ^^^^ Enum "SomeEnum" does not contain value "FOUR"
 
 let two = SomeEnum.TWO.TWO;
-// ERR                 ^^^
+// ERR                 ^^^ Property not found

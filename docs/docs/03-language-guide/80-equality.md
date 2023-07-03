@@ -11,7 +11,7 @@ Checking for equality is performed with the `==` operator. It returns `true` if 
 
 Equality in Wing is a symmetric and transitive relationship - that is, (1) if `a == b`, then `b == a`, and (2) if `a == b` and `b == c`, then `a == c`.
 
-The execution phase ([preflight or inflight](../02-core-concepts/01-preflight-and-inflight.md)) that a value was created in does not affect its equality. For example, a value created in preflight can be equal to a value created in inflight.
+The execution phase ([preflight or inflight](/docs/concepts/inflights)) that a value was created in does not affect its equality. For example, a value created in preflight can be equal to a value created in inflight.
 
 Some types are compared *by value*, which means that two values are equal if their contents are equivalent. For example, two `str` values are equal if they have the same characters in the same order, even if they are stored in different places in memory.
 
