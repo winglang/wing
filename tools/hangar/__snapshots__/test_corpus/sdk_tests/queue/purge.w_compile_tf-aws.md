@@ -67,7 +67,7 @@ module.exports = function({  }) {
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.17.0"
+      "version": "0.15.2"
     },
     "outputs": {
       "root": {
@@ -81,7 +81,7 @@ module.exports = function({  }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:purge\",\"${aws_lambda_function.testpurge_Handler_F7A5D0E5.arn}\"]]"
+      "value": "[[\"root/Default/Default/test:purge\",\"${aws_lambda_function.root_testpurge_Handler_4198A730.arn}\"]]"
     }
   },
   "provider": {
@@ -91,51 +91,51 @@ module.exports = function({  }) {
   },
   "resource": {
     "aws_iam_role": {
-      "testpurge_Handler_IamRole_242BC35C": {
+      "root_testpurge_Handler_IamRole_F6BC8197": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:purge/Handler/IamRole",
-            "uniqueId": "testpurge_Handler_IamRole_242BC35C"
+            "uniqueId": "root_testpurge_Handler_IamRole_F6BC8197"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
-      "testpurge_Handler_IamRolePolicy_DF93FF98": {
+      "root_testpurge_Handler_IamRolePolicy_E8A7D0E8": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:purge/Handler/IamRolePolicy",
-            "uniqueId": "testpurge_Handler_IamRolePolicy_DF93FF98"
+            "uniqueId": "root_testpurge_Handler_IamRolePolicy_E8A7D0E8"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"sqs:SendMessage\"],\"Resource\":[\"${aws_sqs_queue.cloudQueue.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"sqs:PurgeQueue\"],\"Resource\":[\"${aws_sqs_queue.cloudQueue.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"sqs:GetQueueAttributes\"],\"Resource\":[\"${aws_sqs_queue.cloudQueue.arn}\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.testpurge_Handler_IamRole_242BC35C.name}"
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"sqs:SendMessage\"],\"Resource\":[\"${aws_sqs_queue.root_cloudQueue_E3597F7A.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"sqs:PurgeQueue\"],\"Resource\":[\"${aws_sqs_queue.root_cloudQueue_E3597F7A.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"sqs:GetQueueAttributes\"],\"Resource\":[\"${aws_sqs_queue.root_cloudQueue_E3597F7A.arn}\"],\"Effect\":\"Allow\"}]}",
+        "role": "${aws_iam_role.root_testpurge_Handler_IamRole_F6BC8197.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
-      "testpurge_Handler_IamRolePolicyAttachment_0261B438": {
+      "root_testpurge_Handler_IamRolePolicyAttachment_20D88C7F": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:purge/Handler/IamRolePolicyAttachment",
-            "uniqueId": "testpurge_Handler_IamRolePolicyAttachment_0261B438"
+            "uniqueId": "root_testpurge_Handler_IamRolePolicyAttachment_20D88C7F"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.testpurge_Handler_IamRole_242BC35C.name}"
+        "role": "${aws_iam_role.root_testpurge_Handler_IamRole_F6BC8197.name}"
       }
     },
     "aws_lambda_function": {
-      "testpurge_Handler_F7A5D0E5": {
+      "root_testpurge_Handler_4198A730": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:purge/Handler/Default",
-            "uniqueId": "testpurge_Handler_F7A5D0E5"
+            "uniqueId": "root_testpurge_Handler_4198A730"
           }
         },
         "environment": {
           "variables": {
-            "QUEUE_URL_31e95cbd": "${aws_sqs_queue.cloudQueue.url}",
+            "QUEUE_URL_31e95cbd": "${aws_sqs_queue.root_cloudQueue_E3597F7A.url}",
             "WING_FUNCTION_NAME": "Handler-c849290f",
             "WING_TARGET": "tf-aws"
           }
@@ -143,10 +143,10 @@ module.exports = function({  }) {
         "function_name": "Handler-c849290f",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.testpurge_Handler_IamRole_242BC35C.arn}",
+        "role": "${aws_iam_role.root_testpurge_Handler_IamRole_F6BC8197.arn}",
         "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
-        "s3_key": "${aws_s3_object.testpurge_Handler_S3Object_97CF2166.key}",
+        "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
+        "s3_key": "${aws_s3_object.root_testpurge_Handler_S3Object_6E5F65FA.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -155,35 +155,35 @@ module.exports = function({  }) {
       }
     },
     "aws_s3_bucket": {
-      "Code": {
+      "root_Code_02F3C603": {
         "//": {
           "metadata": {
             "path": "root/Default/Code",
-            "uniqueId": "Code"
+            "uniqueId": "root_Code_02F3C603"
           }
         },
         "bucket_prefix": "code-c84a50b1-"
       }
     },
     "aws_s3_object": {
-      "testpurge_Handler_S3Object_97CF2166": {
+      "root_testpurge_Handler_S3Object_6E5F65FA": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:purge/Handler/S3Object",
-            "uniqueId": "testpurge_Handler_S3Object_97CF2166"
+            "uniqueId": "root_testpurge_Handler_S3Object_6E5F65FA"
           }
         },
-        "bucket": "${aws_s3_bucket.Code.bucket}",
+        "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       }
     },
     "aws_sqs_queue": {
-      "cloudQueue": {
+      "root_cloudQueue_E3597F7A": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/cloud.Queue/Default",
-            "uniqueId": "cloudQueue"
+            "uniqueId": "root_cloudQueue_E3597F7A"
           }
         },
         "name": "cloud-Queue-c86e03d8"

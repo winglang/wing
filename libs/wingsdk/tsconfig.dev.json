@@ -8,9 +8,7 @@
     "inlineSourceMap": true,
     "inlineSources": true,
     "lib": [
-      "es2020",
-      "dom",
-      "dom.iterable"
+      "es2019"
     ],
     "module": "CommonJS",
     "noEmitOnError": false,
