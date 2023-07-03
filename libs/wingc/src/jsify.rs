@@ -1126,8 +1126,12 @@ impl<'a> JSifier<'a> {
 			self.jsify_inflight_binding_constructor(class, env, &ctx, &mut class_code);
 		}
 
-		// emit the $inflight_init function
-		class_code.line(self.jsify_function(Some(class), &class.inflight_initializer, true, &mut ctx));
+		// emit the $inflight_init function (if it has a body).
+		if let FunctionBody::Statements(s) = &class.inflight_initializer.body {
+			if !s.statements.is_empty() {
+				class_code.line(self.jsify_function(Some(class), &class.inflight_initializer, true, &mut ctx));
+			}
+		}
 
 		class_code.close("}");
 
