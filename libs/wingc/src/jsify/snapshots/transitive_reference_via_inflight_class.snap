@@ -49,8 +49,6 @@ module.exports = function({ $b }) {
     async putInBucket() {
       (await $b.put("in","bucket"));
     }
-    constructor() {
-    }
   }
   return MyInflightClass;
 }

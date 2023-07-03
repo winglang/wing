@@ -48,8 +48,6 @@ module.exports = function({  }) {
     static async foo() {
       {console.log("hello")};
     }
-    constructor() {
-    }
   }
   return A;
 }
@@ -62,8 +60,6 @@ module.exports = function({ $A }) {
   class B {
     async callFoo() {
       (await $A.foo());
-    }
-    constructor() {
     }
   }
   return B;

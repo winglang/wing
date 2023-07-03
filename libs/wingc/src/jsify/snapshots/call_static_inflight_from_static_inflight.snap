@@ -40,8 +40,6 @@ module.exports = function({ $A }) {
     static async bar() {
       (await $A.foo());
     }
-    constructor() {
-    }
   }
   return B;
 }

@@ -36,8 +36,6 @@ module.exports = function({ $Foo }) {
 ```js
 module.exports = function({  }) {
   class Foo {
-    constructor() {
-    }
   }
   return Foo;
 }

@@ -43,8 +43,6 @@ module.exports = function({ $Foo }) {
     async myMethod() {
       new $Foo();
     }
-    constructor() {
-    }
   }
   return Bar;
 }
@@ -55,8 +53,6 @@ module.exports = function({ $Foo }) {
 ```js
 module.exports = function({  }) {
   class Foo {
-    constructor() {
-    }
   }
   return Foo;
 }

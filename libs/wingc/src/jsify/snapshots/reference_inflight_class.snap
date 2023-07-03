@@ -41,8 +41,6 @@ module.exports = function({  }) {
     static async a() {
       return "a";
     }
-    constructor() {
-    }
   }
   return Foo;
 }

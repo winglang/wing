@@ -53,8 +53,6 @@ module.exports = function({ $s }) {
     async foofoo1() {
       {console.log($s)};
     }
-    constructor() {
-    }
   }
   return Foo;
 }

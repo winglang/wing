@@ -29,6 +29,9 @@ module.exports = function({  }) {
     }
     constructor({  }) {
     }
+    async $inflight_init() {
+      this.x = "hello";
+    }
   }
   return Foo;
 }
