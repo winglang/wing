@@ -19,6 +19,10 @@ export class Util {
    */
   public static readonly PI = Math.PI;
   /**
+   * The mathematical constant representing the ratio of a circle's circumference to the radius.
+   */
+  public static readonly TAO = 2 * Math.PI;
+  /**
    * Euler's number, a mathematical constant approximately equal to 2.71828.
    */
   public static readonly E = Math.E;
@@ -197,6 +201,32 @@ export class Util {
     return numerator / denominator;
   }
 
+
+  /**
+   * Calculate the length of the vector from the origin to the point given by the coordinates
+   * @param coodinates Array of coodinates
+   * @returns 
+   */
+  public static hypot(coodinates: number[]): number {
+    return Math.hypot(...coodinates);
+  }
+
+  /**
+   * Convert degrees to radians
+   * @param degrees Degree value
+   */
+  public static degreesToRadians(degrees: number): number {
+    return degrees * Math.PI / 180;
+  }
+
+  /**
+   * Convert radians to degrees
+   * @param radians Radians value
+   */
+  public static radiansToDegrees(radians: number): number {
+    return radians * 180 / Math.PI;
+  }
+
   /**
    * Returns the sine of a number in radians.
    * @param value A number representing an angle in radians.
@@ -245,5 +275,5 @@ export class Util {
     return Math.atan(value);
   }
 
-  private constructor() {}
+  private constructor() { }
 }
