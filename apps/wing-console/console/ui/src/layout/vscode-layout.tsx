@@ -64,16 +64,6 @@ export const VscodeLayout = ({ cloudAppState, wingVersion }: LayoutProps) => {
         theme.text2,
       )}
     >
-      <div
-        className={classNames(
-          "w-full h-8 draggable-frame border-b flex items-center justify-center",
-          theme.bg3,
-          theme.border3,
-          theme.text2,
-        )}
-      >
-        <div>{title}</div>
-      </div>
       <div className="flex-1 flex relative">
         {loading && (
           <div
