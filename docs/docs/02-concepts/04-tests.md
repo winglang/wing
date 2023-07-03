@@ -62,7 +62,7 @@ test "bucket starts empty" {
 }
 ```
 
-In the first test (`bucket list should include created file`), a file is created in the bucket. The second test (`bucket starts empty`) verifies that the bucket is initialized without any file
+In the first test (`bucket list should include created file`), a file is created in the bucket. The second test (`bucket starts empty`) verifies that the bucket is initialized without any file.
 
 ### Run test on a the cloud
 
