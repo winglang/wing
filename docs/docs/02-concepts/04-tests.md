@@ -14,7 +14,7 @@ test "<test-name>" {
   // test code 
 }
 ```
-Each test is run in isolation within the test framework. If a test throws an exception (typically using the `assert` function), it's considered to have failed.
+If a test throws an exception (typically using the `assert` function), it's considered to have failed.
 
 Here's an example:
 
