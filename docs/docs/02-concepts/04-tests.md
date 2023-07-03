@@ -106,3 +106,33 @@ Tests 1 passed (1)
 Test Files 1 passed (1)
 Duration 1m31.44s
 ```
+
+### Running tests on the console
+
+Wing Console provides an easy way to run a single or all your tests
+
+When running `wing run example.w`, where example:
+```ts playground
+bring cloud;
+
+let b = new cloud.Bucket();
+
+test "bucket list should include created file" {
+  b.put("file", "lorem ipsum");
+  let listOfFile = b.list();
+  assert(listOfFile.length == 1);
+}
+
+test "bucket starts empty" {
+  let listOfFile = b.list();
+  assert(listOfFile.length == 0);
+}
+
+test "this test should fail" {
+  throw("test throws an exception fails");
+}
+```
+
+Take a look at the **TESTS** section on the image, you can run all tests or a single test 
+![image](https://github.com/winglang/wing/assets/1727147/97e9e391-81c0-4aaf-8bc8-6d72ef3bdcee)
+
