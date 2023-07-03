@@ -15,17 +15,17 @@ npm ci
 ## Run
 
 ```bash
-npm run dev
+pnpm dev
 ```
 
 ## Build
 
 ```bash
-npm run build
+pnpm build
 ```
 
 ## Preview
 
 ```bash
-npm run preview
+pnpm preview
 ```

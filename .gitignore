@@ -1,12 +1,13 @@
 .DS_Store
 node_modules/
+.pnpm-store/
 .env
 *.tfstate
 *.tfstate.*
 .history
 *.vsix
 
-# WASI SDK (insalled by "npm install")
+# WASI SDK (insalled by "pnpm install")
 .cargo/wasi-sdk-*/
 
 # Generated wing output
