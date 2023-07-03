@@ -102,10 +102,7 @@ const getMediaThemeMode = () => {
 };
 
 const getThemeMode = (): Mode => {
-  const mediaTheme = getMediaThemeMode();
-  const localThemeObject = getThemeModeFromLocalStorage();
-  console.log("getThemeMode", mediaTheme, localThemeObject);
-  return localThemeObject ?? mediaTheme;
+  return getThemeModeFromLocalStorage() ?? getMediaThemeMode();
 };
 
 const setThemeMode = (selectedMode?: Mode) => {

@@ -7,7 +7,7 @@ import {
 } from "@wingconsole/design-system";
 import { State } from "@wingconsole/server";
 import classNames from "classnames";
-import { useContext } from "react";
+import { useContext, useEffect, useMemo } from "react";
 
 import { AppContext } from "../AppContext.js";
 import { ConsoleLogsFilters } from "../features/console-logs-filters.js";
@@ -20,6 +20,7 @@ import { ResourceMetadata } from "../ui/resource-metadata.js";
 
 import { StatusBar } from "./status-bar.js";
 import { useLayout } from "./use-layout.js";
+import { Header } from "./header.js";
 
 export interface LayoutProps {
   cloudAppState: State;
@@ -48,12 +49,20 @@ export const VscodeLayout = ({ cloudAppState, wingVersion }: LayoutProps) => {
     logsRef,
     logs,
     onResourceClick,
+    wingfile,
   } = useLayout({
     cloudAppState,
     defaultLogLevels: ["info", "warn", "error"],
   });
 
-  const { title } = useContext(AppContext);
+  // const { title } = useContext(AppContext);
+  const title = useMemo(() => {
+    return `~ ${wingfile.data ?? ""}`;
+  }, [wingfile.data]);
+
+  useEffect(() => {
+    document.title = title ? `${title} | Wing Console` : "Wing Console";
+  }, [title]);
 
   return (
     <div
@@ -64,6 +73,7 @@ export const VscodeLayout = ({ cloudAppState, wingVersion }: LayoutProps) => {
         theme.text2,
       )}
     >
+      <Header title={title} />
       <div className="flex-1 flex relative">
         {loading && (
           <div
