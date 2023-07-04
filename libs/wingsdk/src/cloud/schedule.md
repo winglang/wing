@@ -45,11 +45,11 @@ schedule.onTick(inflight () => {
 ```
 ### Simulator (`sim`)
 
-Sim implementations of `cloud.Schedule` uses standard JavaScript `setTimeout` function.
+A standard JavaScript `setTimeout` function triggers ticks as callbacks.
 
 ### AWS (`tf-aws` and `awscdk`)
 
-AWS implementations of `cloud.Schedule` use [Amazon CloudWatch](https://aws.amazon.com/cloudwatch/).
+See [Amazon CloudWatch](https://aws.amazon.com/cloudwatch/).
 
 ### Azure (`tf-azure`)
 
