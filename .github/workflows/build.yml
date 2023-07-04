@@ -5,9 +5,9 @@ on:
     types:
       - opened
       - synchronize
-    paths:
-      - "!docs/**"
-      - "!logo/**"
+    paths-ignore:
+      - "docs/**"
+      - "logo/**"
   push:
     branches:
       - main
