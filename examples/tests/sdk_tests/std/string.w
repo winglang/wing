@@ -49,6 +49,9 @@ test "at()" {
   // Negative integers count back from the last string character.
   assert("boom".at(-4) == "b");
   assert("boom".at(-1) == "m");
+  
+  // Should throw an exception instead of returns undefined see issue #3240
+  // assert("boom".at(-10) == "m");
 }
 
 //-----------------------------------------------------------------------------

@@ -2,7 +2,7 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ std_Boolean, std_Json }) {
+module.exports = function({ PARSE_ERROR, std_Boolean, std_Json }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -16,6 +16,13 @@ module.exports = function({ std_Boolean, std_Json }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: t == true")})((t === true))};
       const f = (await std_Boolean.fromJson((JSON.parse("false"))));
       {((cond) => {if (!cond) throw new Error("assertion failed: f == false")})((f === false))};
+      try {
+        (await std_Boolean.fromJson(123));
+      }
+      catch ($error_s) {
+        const s = $error_s.message;
+        {((cond) => {if (!cond) throw new Error("assertion failed: s == PARSE_ERROR")})((s === PARSE_ERROR))};
+      }
     }
   }
   return $Closure1;
@@ -162,10 +169,12 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.$Closure1.js";
+        const PARSE_ERROR_client = context._lift(PARSE_ERROR);
         const std_BooleanClient = std.Boolean._toInflightType(context);
         const std_JsonClient = std.Json._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
           require("${self_client_path}")({
+            PARSE_ERROR: ${PARSE_ERROR_client},
             std_Boolean: ${std_BooleanClient.text},
             std_Json: ${std_JsonClient.text},
           })
@@ -184,14 +193,34 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
+          $Closure1._registerBindObject(PARSE_ERROR, host, []);
         }
         if (ops.includes("handle")) {
+          $Closure1._registerBindObject(PARSE_ERROR, host, []);
         }
         super._registerBind(host, ops);
       }
     }
+    const assertThrows =  (expected, block) =>  {
+      let error = false;
+      try {
+        (block());
+      }
+      catch ($error_actual) {
+        const actual = $error_actual.message;
+        {((cond) => {if (!cond) throw new Error("assertion failed: actual == expected")})((actual === expected))};
+        error = true;
+      }
+      {((cond) => {if (!cond) throw new Error("assertion failed: error")})(error)};
+    }
+    ;
+    const PARSE_ERROR = "unable to parse number 123 as a boolean";
     const t = (std.Boolean.fromJson((JSON.parse("true"))));
     {((cond) => {if (!cond) throw new Error("assertion failed: t == true")})((t === true))};
+    (assertThrows(PARSE_ERROR, () =>  {
+      (std.Boolean.fromJson(123));
+    }
+    ));
     const f = (std.Boolean.fromJson((JSON.parse("false"))));
     {((cond) => {if (!cond) throw new Error("assertion failed: f == false")})((f === false))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:fromJson()",new $Closure1(this,"$Closure1"));
