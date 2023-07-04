@@ -23,7 +23,7 @@ module.exports = function({ $x }) {
 module.exports = function({ $handler }) {
   class $Closure2 {
     async handle() {
-      (await ($handler)());
+      (await $handler());
     }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);

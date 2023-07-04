@@ -38,7 +38,7 @@ module.exports = function({  }) {
 module.exports = function({ $Super }) {
   class Sub extends $Super {
     constructor({  }) {
-      super({});
+      super({  });
     }
   }
   return Sub;
@@ -51,7 +51,7 @@ module.exports = function({ $Super }) {
 module.exports = function({ $Super }) {
   class Sub1 extends $Super {
     constructor({  }) {
-      super({});
+      super({  });
     }
   }
   return Sub1;

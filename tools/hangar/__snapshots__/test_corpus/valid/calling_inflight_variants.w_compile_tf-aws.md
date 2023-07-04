@@ -55,7 +55,7 @@ module.exports = function({  }) {
       return (await partialFn());
     }
     async callFn2() {
-      const one = (await (this.$this_inflight1)());
+      const one = (await this.$this_inflight1());
       const two = (await this.inflight2());
       {((cond) => {if (!cond) throw new Error("assertion failed: one == 1")})((one === 1))};
       {((cond) => {if (!cond) throw new Error("assertion failed: two == 2")})((two === 2))};

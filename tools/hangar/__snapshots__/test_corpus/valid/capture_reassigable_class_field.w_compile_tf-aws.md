@@ -70,7 +70,7 @@ module.exports = function({ $counter, $kv, $util_Util }) {
 module.exports = function({  }) {
   class KeyValueStore {
     async get(key) {
-      (await (this.$this_onUpdateCallback)(key));
+      (await this.$this_onUpdateCallback(key));
       return (await this.$this_bucket.getJson(key));
     }
     async set(key, value) {

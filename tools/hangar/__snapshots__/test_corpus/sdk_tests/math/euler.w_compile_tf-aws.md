@@ -23,7 +23,7 @@ module.exports = function({ $math_Util }) {
 module.exports = function({ $compoundOneYear, $interest, $math_Util, $value }) {
   class $Closure2 {
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.round(compoundOneYear(interest, value), decimalPlaces: 2) == 105.13")})(((await $math_Util.round((await ($compoundOneYear)($interest,$value)),{ decimalPlaces: 2 })) === 105.13))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.round(compoundOneYear(interest, value), decimalPlaces: 2) == 105.13")})(((await $math_Util.round((await $compoundOneYear($interest,$value)),{ decimalPlaces: 2 })) === 105.13))};
     }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);

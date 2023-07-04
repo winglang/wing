@@ -23,7 +23,7 @@ module.exports = function({ $globalBucket }) {
 module.exports = function({ $storeInBucket }) {
   class $Closure2 {
     async handle(event) {
-      (await ($storeInBucket)(event,"file1"));
+      (await $storeInBucket(event,"file1"));
     }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -98,7 +98,7 @@ module.exports = function({ $x }) {
 module.exports = function({  }) {
   class MyResource {
     async foo() {
-      return (await (this.$this_closure)("anything"));
+      return (await this.$this_closure("anything"));
     }
     constructor({ $this_closure }) {
       this.$this_closure = $this_closure;

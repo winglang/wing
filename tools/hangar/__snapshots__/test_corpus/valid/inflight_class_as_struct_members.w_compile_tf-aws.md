@@ -25,7 +25,7 @@ module.exports = function({ $Foo }) {
 module.exports = function({ $getBar }) {
   class $Closure2 {
     async handle() {
-      const bar = (await ($getBar)());
+      const bar = (await $getBar());
       {((cond) => {if (!cond) throw new Error("assertion failed: bar.foo.get() == 42")})(((await bar.foo.get()) === 42))};
     }
     constructor({  }) {

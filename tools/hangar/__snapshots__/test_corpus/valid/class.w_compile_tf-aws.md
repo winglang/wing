@@ -2,20 +2,18 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ c5 }) {
+module.exports = function({ $c5 }) {
   class $Closure1 {
+    async handle() {
+      {((cond) => {if (!cond) throw new Error("assertion failed: c5.x == 123")})(($c5.x === 123))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: c5.y == 321")})(($c5.y === 321))};
+      (await $c5.set(111));
+      {((cond) => {if (!cond) throw new Error("assertion failed: c5.y == 111")})(($c5.y === 111))};
+    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
-    }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      {((cond) => {if (!cond) throw new Error("assertion failed: c5.x == 123")})((c5.x === 123))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: c5.y == 321")})((c5.y === 321))};
-      (await c5.set(111));
-      {((cond) => {if (!cond) throw new Error("assertion failed: c5.y == 111")})((c5.y === 111))};
     }
   }
   return $Closure1;
@@ -25,19 +23,17 @@ module.exports = function({ c5 }) {
 
 ## inflight.$Closure2.js
 ```js
-module.exports = function({ student }) {
+module.exports = function({ $student_hrlyWage, $student_major, $student_name }) {
   class $Closure2 {
+    async handle() {
+      {((cond) => {if (!cond) throw new Error("assertion failed: student.name == \"Tom\"")})(($student_name === "Tom"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: student.major == \"MySpace\"")})(($student_major === "MySpace"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: student.hrlyWage == 38")})(($student_hrlyWage === 38))};
+    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
-    }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      {((cond) => {if (!cond) throw new Error("assertion failed: student.name == \"Tom\"")})((student.name === "Tom"))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: student.major == \"MySpace\"")})((student.major === "MySpace"))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: student.hrlyWage == 38")})((student.hrlyWage === 38))};
     }
   }
   return $Closure2;
@@ -47,17 +43,15 @@ module.exports = function({ student }) {
 
 ## inflight.$Closure3.js
 ```js
-module.exports = function({ ta }) {
+module.exports = function({ $ta_hrlyWage }) {
   class $Closure3 {
+    async handle() {
+      {((cond) => {if (!cond) throw new Error("assertion failed: ta.hrlyWage == 10")})(($ta_hrlyWage === 10))};
+    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
-    }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      {((cond) => {if (!cond) throw new Error("assertion failed: ta.hrlyWage == 10")})((ta.hrlyWage === 10))};
     }
   }
   return $Closure3;
@@ -67,18 +61,16 @@ module.exports = function({ ta }) {
 
 ## inflight.$Closure4.js
 ```js
-module.exports = function({ B }) {
+module.exports = function({ $B }) {
   class $Closure4 {
+    async handle() {
+      const b = new $B("ba");
+      {((cond) => {if (!cond) throw new Error("assertion failed: b.sound == \"ba\"")})((b.sound === "ba"))};
+    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
-    }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      const b = new B("ba");
-      {((cond) => {if (!cond) throw new Error("assertion failed: b.sound == \"ba\"")})((b.sound === "ba"))};
     }
   }
   return $Closure4;
@@ -90,7 +82,7 @@ module.exports = function({ B }) {
 ```js
 module.exports = function({  }) {
   class A {
-     constructor(sound)  {
+    constructor(sound) {
       this.sound = sound;
     }
   }
@@ -101,9 +93,9 @@ module.exports = function({  }) {
 
 ## inflight.B.js
 ```js
-module.exports = function({ A }) {
-  class B extends A {
-     constructor(sound)  {
+module.exports = function({ $A }) {
+  class B extends $A {
+    constructor(sound) {
       super(sound);
     }
   }
@@ -114,12 +106,10 @@ module.exports = function({ A }) {
 
 ## inflight.Bam.js
 ```js
-module.exports = function({ Boom }) {
-  class Bam extends Boom {
+module.exports = function({ $Boom }) {
+  class Bam extends $Boom {
     constructor({  }) {
-      super({});
-    }
-    async $inflight_init()  {
+      super({  });
     }
   }
   return Bam;
@@ -133,8 +123,6 @@ module.exports = function({  }) {
   class Bar {
     constructor({  }) {
     }
-    async $inflight_init()  {
-    }
   }
   return Bar;
 }
@@ -143,12 +131,10 @@ module.exports = function({  }) {
 
 ## inflight.Baz.js
 ```js
-module.exports = function({ Bar }) {
-  class Baz extends Bar {
+module.exports = function({ $Bar }) {
+  class Baz extends $Bar {
     constructor({  }) {
-      super({});
-    }
-    async $inflight_init()  {
+      super({  });
     }
   }
   return Baz;
@@ -162,8 +148,6 @@ module.exports = function({  }) {
   class Boom {
     constructor({  }) {
     }
-    async $inflight_init()  {
-    }
   }
   return Boom;
 }
@@ -176,8 +160,6 @@ module.exports = function({  }) {
   class C1 {
     constructor({  }) {
     }
-    async $inflight_init()  {
-    }
   }
   return C1;
 }
@@ -188,10 +170,7 @@ module.exports = function({  }) {
 ```js
 module.exports = function({  }) {
   class C2 {
-    constructor({ x }) {
-      this.x = x;
-    }
-    async $inflight_init()  {
+    constructor({  }) {
     }
   }
   return C2;
@@ -203,11 +182,7 @@ module.exports = function({  }) {
 ```js
 module.exports = function({  }) {
   class C3 {
-    constructor({ x, y }) {
-      this.x = x;
-      this.y = y;
-    }
-    async $inflight_init()  {
+    constructor({  }) {
     }
   }
   return C3;
@@ -221,8 +196,6 @@ module.exports = function({  }) {
   class C4 {
     constructor({  }) {
     }
-    async $inflight_init()  {
-    }
   }
   return C4;
 }
@@ -233,14 +206,14 @@ module.exports = function({  }) {
 ```js
 module.exports = function({  }) {
   class C5 {
+    async set(b) {
+      this.y = b;
+    }
     constructor({  }) {
     }
-    async $inflight_init()  {
+    async $inflight_init() {
       this.x = 123;
       this.y = 321;
-    }
-    async set(b)  {
-      this.y = b;
     }
   }
   return C5;
@@ -250,14 +223,12 @@ module.exports = function({  }) {
 
 ## inflight.Foo.js
 ```js
-module.exports = function({ Bar }) {
-  class Foo extends Bar {
+module.exports = function({ $Bar }) {
+  class Foo extends $Bar {
+    async doStuff(h) {
+    }
     constructor({  }) {
-      super({});
-    }
-    async $inflight_init()  {
-    }
-    async doStuff(h)  {
+      super({  });
     }
   }
   return Foo;
@@ -267,13 +238,10 @@ module.exports = function({ Bar }) {
 
 ## inflight.PaidStudent.js
 ```js
-module.exports = function({ Student }) {
-  class PaidStudent extends Student {
-    constructor({ hrlyWage, major, name }) {
-      super({major, name});
-      this.hrlyWage = hrlyWage;
-    }
-    async $inflight_init()  {
+module.exports = function({ $Student }) {
+  class PaidStudent extends $Student {
+    constructor({  }) {
+      super({  });
     }
   }
   return PaidStudent;
@@ -285,10 +253,7 @@ module.exports = function({ Student }) {
 ```js
 module.exports = function({  }) {
   class Person {
-    constructor({ name }) {
-      this.name = name;
-    }
-    async $inflight_init()  {
+    constructor({  }) {
     }
   }
   return Person;
@@ -298,13 +263,10 @@ module.exports = function({  }) {
 
 ## inflight.Student.js
 ```js
-module.exports = function({ Person }) {
-  class Student extends Person {
-    constructor({ major, name }) {
-      super({name});
-      this.major = major;
-    }
-    async $inflight_init()  {
+module.exports = function({ $Person }) {
+  class Student extends $Person {
+    constructor({  }) {
+      super({  });
     }
   }
   return Student;
@@ -314,12 +276,10 @@ module.exports = function({ Person }) {
 
 ## inflight.TeacherAid.js
 ```js
-module.exports = function({ PaidStudent }) {
-  class TeacherAid extends PaidStudent {
-    constructor({ hrlyWage, major, name }) {
-      super({hrlyWage, major, name});
-    }
-    async $inflight_init()  {
+module.exports = function({ $PaidStudent }) {
+  class TeacherAid extends $PaidStudent {
+    constructor({  }) {
+      super({  });
     }
   }
   return TeacherAid;
@@ -660,11 +620,11 @@ class $Root extends $stdlib.std.Resource {
     class C1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
+        this._addInflightOps("$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.C1.js";
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.C1.js")({
           })
         `);
       }
@@ -679,42 +639,29 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-        }
-        super._registerBind(host, ops);
-      }
     }
     class C2 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.x = 1;
+        this._addInflightOps("$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.C2.js";
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.C2.js")({
           })
         `);
       }
       _toInflight() {
-        const x_client = this._lift(this.x);
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
             const C2Client = ${C2._toInflightType(this).text};
             const client = new C2Client({
-              x: ${x_client},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
         `);
-      }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          C2._registerBindObject(this.x, host, []);
-        }
-        super._registerBind(host, ops);
       }
     }
     class C3 extends $stdlib.std.Resource {
@@ -724,48 +671,37 @@ class $Root extends $stdlib.std.Resource {
         if (true) {
           this.y = b;
         }
+        this._addInflightOps("$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.C3.js";
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.C3.js")({
           })
         `);
       }
       _toInflight() {
-        const x_client = this._lift(this.x);
-        const y_client = this._lift(this.y);
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
             const C3Client = ${C3._toInflightType(this).text};
             const client = new C3Client({
-              x: ${x_client},
-              y: ${y_client},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
         `);
       }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          C3._registerBindObject(this.x, host, []);
-          C3._registerBindObject(this.y, host, []);
-        }
-        super._registerBind(host, ops);
-      }
     }
     class C4 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
+        this._addInflightOps("$inflight_init");
       }
-      static m()  {
+      static m() {
         return 1;
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.C4.js";
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.C4.js")({
           })
         `);
       }
@@ -780,21 +716,15 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-        }
-        super._registerBind(host, ops);
-      }
     }
     class C5 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("set", "x", "y");
+        this._addInflightOps("set", "$inflight_init", "x", "y");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.C5.js";
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.C5.js")({
           })
         `);
       }
@@ -809,26 +739,17 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-        }
-        if (ops.includes("set")) {
-        }
-        super._registerBind(host, ops);
-      }
     }
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const c5_client = context._lift(c5);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            c5: ${c5_client},
+          require("./inflight.$Closure1.js")({
+            $c5: ${context._lift(c5)},
           })
         `);
       }
@@ -844,136 +765,101 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure1._registerBindObject(c5, host, []);
-        }
         if (ops.includes("handle")) {
           $Closure1._registerBindObject(c5, host, ["set", "x", "y"]);
         }
         super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
+        super._registerTypeBind(host, ops);
       }
     }
     class Person extends $stdlib.std.Resource {
       constructor(scope, id, name) {
         super(scope, id);
         this.name = name;
+        this._addInflightOps("$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.Person.js";
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.Person.js")({
           })
         `);
       }
       _toInflight() {
-        const name_client = this._lift(this.name);
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
             const PersonClient = ${Person._toInflightType(this).text};
             const client = new PersonClient({
-              name: ${name_client},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
         `);
-      }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          Person._registerBindObject(this.name, host, []);
-        }
-        super._registerBind(host, ops);
       }
     }
     class Student extends Person {
       constructor(scope, id, name, major) {
         super(scope,id,name);
         this.major = major;
+        this._addInflightOps("$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.Student.js";
-        const PersonClient = Person._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            Person: ${PersonClient.text},
+          require("./inflight.Student.js")({
+            $Person: ${context._lift(Person)},
           })
         `);
       }
       _toInflight() {
-        const major_client = this._lift(this.major);
-        const name_client = this._lift(this.name);
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
             const StudentClient = ${Student._toInflightType(this).text};
             const client = new StudentClient({
-              major: ${major_client},
-              name: ${name_client},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
         `);
-      }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          Student._registerBindObject(this.major, host, []);
-          Student._registerBindObject(this.name, host, []);
-        }
-        super._registerBind(host, ops);
       }
     }
     class PaidStudent extends Student {
       constructor(scope, id, name, major, hrlyWage) {
         super(scope,id,name,major);
         this.hrlyWage = hrlyWage;
+        this._addInflightOps("$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.PaidStudent.js";
-        const StudentClient = Student._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            Student: ${StudentClient.text},
+          require("./inflight.PaidStudent.js")({
+            $Student: ${context._lift(Student)},
           })
         `);
       }
       _toInflight() {
-        const hrlyWage_client = this._lift(this.hrlyWage);
-        const major_client = this._lift(this.major);
-        const name_client = this._lift(this.name);
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
             const PaidStudentClient = ${PaidStudent._toInflightType(this).text};
             const client = new PaidStudentClient({
-              hrlyWage: ${hrlyWage_client},
-              major: ${major_client},
-              name: ${name_client},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
         `);
       }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          PaidStudent._registerBindObject(this.hrlyWage, host, []);
-          PaidStudent._registerBindObject(this.major, host, []);
-          PaidStudent._registerBindObject(this.name, host, []);
-        }
-        super._registerBind(host, ops);
-      }
     }
     class $Closure2 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure2.js";
-        const student_client = context._lift(student);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            student: ${student_client},
+          require("./inflight.$Closure2.js")({
+            $student_hrlyWage: ${context._lift(student.hrlyWage)},
+            $student_major: ${context._lift(student.major)},
+            $student_name: ${context._lift(student.name)},
           })
         `);
       }
@@ -989,9 +875,6 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure2._registerBindObject(student, host, []);
-        }
         if (ops.includes("handle")) {
           $Closure2._registerBindObject(student.hrlyWage, host, []);
           $Closure2._registerBindObject(student.major, host, []);
@@ -999,59 +882,45 @@ class $Root extends $stdlib.std.Resource {
         }
         super._registerBind(host, ops);
       }
+      static _registerTypeBind(host, ops) {
+        super._registerTypeBind(host, ops);
+      }
     }
     class TeacherAid extends PaidStudent {
       constructor(scope, id, name, major, hrlyWage) {
         super(scope,id,name,major,hrlyWage);
         this.hrlyWage = 10;
+        this._addInflightOps("$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.TeacherAid.js";
-        const PaidStudentClient = PaidStudent._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            PaidStudent: ${PaidStudentClient.text},
+          require("./inflight.TeacherAid.js")({
+            $PaidStudent: ${context._lift(PaidStudent)},
           })
         `);
       }
       _toInflight() {
-        const hrlyWage_client = this._lift(this.hrlyWage);
-        const major_client = this._lift(this.major);
-        const name_client = this._lift(this.name);
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
             const TeacherAidClient = ${TeacherAid._toInflightType(this).text};
             const client = new TeacherAidClient({
-              hrlyWage: ${hrlyWage_client},
-              major: ${major_client},
-              name: ${name_client},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
         `);
       }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          TeacherAid._registerBindObject(this.hrlyWage, host, []);
-          TeacherAid._registerBindObject(this.major, host, []);
-          TeacherAid._registerBindObject(this.name, host, []);
-        }
-        super._registerBind(host, ops);
-      }
     }
     class $Closure3 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure3.js";
-        const ta_client = context._lift(ta);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            ta: ${ta_client},
+          require("./inflight.$Closure3.js")({
+            $ta_hrlyWage: ${context._lift(ta.hrlyWage)},
           })
         `);
       }
@@ -1067,24 +936,23 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure3._registerBindObject(ta, host, []);
-        }
         if (ops.includes("handle")) {
           $Closure3._registerBindObject(ta.hrlyWage, host, []);
         }
         super._registerBind(host, ops);
       }
+      static _registerTypeBind(host, ops) {
+        super._registerTypeBind(host, ops);
+      }
     }
     class A extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("sound");
+        this._addInflightOps("$inflight_init", "sound");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.A.js";
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.A.js")({
           })
         `);
       }
@@ -1099,22 +967,16 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-        }
-        super._registerBind(host, ops);
-      }
     }
     class B extends A {
       constructor(scope, id, ) {
         super(scope, id);
+        this._addInflightOps("$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.B.js";
-        const AClient = A._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            A: ${AClient.text},
+          require("./inflight.B.js")({
+            $A: ${context._lift(A)},
           })
         `);
       }
@@ -1129,24 +991,17 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-        }
-        super._registerBind(host, ops);
-      }
     }
     class $Closure4 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure4.js";
-        const BClient = B._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            B: ${BClient.text},
+          require("./inflight.$Closure4.js")({
+            $B: ${context._lift(B)},
           })
         `);
       }
@@ -1161,22 +1016,15 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-        }
-        if (ops.includes("handle")) {
-        }
-        super._registerBind(host, ops);
-      }
     }
     class Bar extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
+        this._addInflightOps("$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.Bar.js";
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.Bar.js")({
           })
         `);
       }
@@ -1191,23 +1039,16 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-        }
-        super._registerBind(host, ops);
-      }
     }
     class Foo extends Bar {
       constructor(scope, id, ) {
         super(scope,id,);
-        this._addInflightOps("doStuff");
+        this._addInflightOps("doStuff", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.Foo.js";
-        const BarClient = Bar._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            Bar: ${BarClient.text},
+          require("./inflight.Foo.js")({
+            $Bar: ${context._lift(Bar)},
           })
         `);
       }
@@ -1222,24 +1063,16 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-        }
-        if (ops.includes("doStuff")) {
-        }
-        super._registerBind(host, ops);
-      }
     }
     class Baz extends Bar {
       constructor(scope, id, ) {
         super(scope, id);
+        this._addInflightOps("$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.Baz.js";
-        const BarClient = Bar._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            Bar: ${BarClient.text},
+          require("./inflight.Baz.js")({
+            $Bar: ${context._lift(Bar)},
           })
         `);
       }
@@ -1254,20 +1087,15 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-        }
-        super._registerBind(host, ops);
-      }
     }
     class Boom extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
+        this._addInflightOps("$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.Boom.js";
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.Boom.js")({
           })
         `);
       }
@@ -1282,22 +1110,16 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-        }
-        super._registerBind(host, ops);
-      }
     }
     class Bam extends Boom {
       constructor(scope, id, ) {
         super(scope, id);
+        this._addInflightOps("$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.Bam.js";
-        const BoomClient = Boom._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            Boom: ${BoomClient.text},
+          require("./inflight.Bam.js")({
+            $Boom: ${context._lift(Boom)},
           })
         `);
       }
@@ -1311,11 +1133,6 @@ class $Root extends $stdlib.std.Resource {
             return client;
           })())
         `);
-      }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-        }
-        super._registerBind(host, ops);
       }
     }
     new C1(this,"C1");

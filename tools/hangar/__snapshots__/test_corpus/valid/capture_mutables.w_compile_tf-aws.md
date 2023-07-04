@@ -26,7 +26,7 @@ module.exports = function({ $Object_keys_m__length, $aCloned_length, $a_length, 
 module.exports = function({ $handler }) {
   class $Closure2 {
     async handle() {
-      (await ($handler)());
+      (await $handler());
     }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);

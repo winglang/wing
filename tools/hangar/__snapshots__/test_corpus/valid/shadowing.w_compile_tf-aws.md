@@ -31,7 +31,7 @@ module.exports = function({ $bar }) {
 module.exports = function({ $fn }) {
   class $Closure2 {
     async handle() {
-      const result = (await ($fn)());
+      const result = (await $fn());
       {((cond) => {if (!cond) throw new Error("assertion failed: result.length == 3")})((result.length === 3))};
       {((cond) => {if (!cond) throw new Error("assertion failed: result.at(0) == \"hola!\"")})(((await result.at(0)) === "hola!"))};
       {((cond) => {if (!cond) throw new Error("assertion failed: result.at(1) == \"world\"")})(((await result.at(1)) === "world"))};

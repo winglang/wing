@@ -51,9 +51,9 @@ class $Root extends $stdlib.std.Resource {
       (myfunc(x));
     });
     (myfunc(1));
-    ((((x) => {
+    (((x) => {
       {((cond) => {if (!cond) throw new Error("assertion failed: x == 1")})((x === 1))};
-    }))(1));
+    })(1));
   }
 }
 class $App extends $AppBase {

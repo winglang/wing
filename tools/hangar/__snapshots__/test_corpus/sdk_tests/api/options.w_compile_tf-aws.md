@@ -2,21 +2,19 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ api_OPTIONS, path }) {
+module.exports = function({ $api_OPTIONS, $path }) {
   class $Closure1 {
+    async handle(req) {
+      {((cond) => {if (!cond) throw new Error("assertion failed: req.method == api_OPTIONS")})((req.method === $api_OPTIONS))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: req.path == path")})((req.path === $path))};
+      return {
+      "status": 204,}
+      ;
+    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
-    }
-    async $inflight_init()  {
-    }
-    async handle(req)  {
-      {((cond) => {if (!cond) throw new Error("assertion failed: req.method == api_OPTIONS")})((req.method === api_OPTIONS))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: req.path == path")})((req.path === path))};
-      return {
-      "status": 204,}
-      ;
     }
   }
   return $Closure1;
@@ -26,21 +24,19 @@ module.exports = function({ api_OPTIONS, path }) {
 
 ## inflight.$Closure2.js
 ```js
-module.exports = function({ api_HEAD, path }) {
+module.exports = function({ $api_HEAD, $path }) {
   class $Closure2 {
+    async handle(req) {
+      {((cond) => {if (!cond) throw new Error("assertion failed: req.method == api_HEAD")})((req.method === $api_HEAD))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: req.path == path")})((req.path === $path))};
+      return {
+      "status": 204,}
+      ;
+    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
-    }
-    async $inflight_init()  {
-    }
-    async handle(req)  {
-      {((cond) => {if (!cond) throw new Error("assertion failed: req.method == api_HEAD")})((req.method === api_HEAD))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: req.path == path")})((req.path === path))};
-      return {
-      "status": 204,}
-      ;
     }
   }
   return $Closure2;
@@ -52,17 +48,15 @@ module.exports = function({ api_HEAD, path }) {
 ```js
 module.exports = function({  }) {
   class $Closure3 {
+    async handle(req) {
+      return {
+      "status": 204,}
+      ;
+    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
-    }
-    async $inflight_init()  {
-    }
-    async handle(req)  {
-      return {
-      "status": 204,}
-      ;
     }
   }
   return $Closure3;
@@ -72,27 +66,25 @@ module.exports = function({  }) {
 
 ## inflight.$Closure4.js
 ```js
-module.exports = function({ api, path, http_OPTIONS, http_HEAD, http_Util }) {
+module.exports = function({ $api_url, $http_HEAD, $http_OPTIONS, $http_Util, $path }) {
   class $Closure4 {
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
-    }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      const url = (api.url + path);
-      const options = (await http_Util.fetch(url,{
-      "method": http_OPTIONS,}
+    async handle() {
+      const url = ($api_url + $path);
+      const options = (await $http_Util.fetch(url,{
+      "method": $http_OPTIONS,}
       ));
-      const head = (await http_Util.fetch(url,{
-      "method": http_HEAD,}
+      const head = (await $http_Util.fetch(url,{
+      "method": $http_HEAD,}
       ));
       {((cond) => {if (!cond) throw new Error("assertion failed: options.status == 204")})((options.status === 204))};
       {((cond) => {if (!cond) throw new Error("assertion failed: options.url == url")})((options.url === url))};
       {((cond) => {if (!cond) throw new Error("assertion failed: head.status == 204")})((head.status === 204))};
       {((cond) => {if (!cond) throw new Error("assertion failed: head.url == url")})((head.url === url))};
+    }
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
   }
   return $Closure4;
@@ -394,7 +386,6 @@ module.exports = function({ api, path, http_OPTIONS, http_HEAD, http_Util }) {
         },
         "environment": {
           "variables": {
-            "CLOUD_API_C82DF3A5": "${aws_api_gateway_stage.root_cloudApi_api_stage_57D6284A.invoke_url}",
             "WING_FUNCTION_NAME": "Handler-c8f5c667",
             "WING_TARGET": "tf-aws",
             "WING_TOKEN_TFTOKEN_TOKEN_49": "${jsonencode(aws_api_gateway_stage.root_cloudApi_api_stage_57D6284A.invoke_url)}"
@@ -532,16 +523,13 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const api_OPTIONS_client = context._lift(api_OPTIONS);
-        const path_client = context._lift(path);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            api_OPTIONS: ${api_OPTIONS_client},
-            path: ${path_client},
+          require("./inflight.$Closure1.js")({
+            $api_OPTIONS: ${context._lift(api_OPTIONS)},
+            $path: ${context._lift(path)},
           })
         `);
       }
@@ -557,31 +545,27 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure1._registerBindObject(api_OPTIONS, host, []);
-          $Closure1._registerBindObject(path, host, []);
-        }
         if (ops.includes("handle")) {
           $Closure1._registerBindObject(api_OPTIONS, host, []);
           $Closure1._registerBindObject(path, host, []);
         }
         super._registerBind(host, ops);
       }
+      static _registerTypeBind(host, ops) {
+        super._registerTypeBind(host, ops);
+      }
     }
     class $Closure2 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure2.js";
-        const api_HEAD_client = context._lift(api_HEAD);
-        const path_client = context._lift(path);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            api_HEAD: ${api_HEAD_client},
-            path: ${path_client},
+          require("./inflight.$Closure2.js")({
+            $api_HEAD: ${context._lift(api_HEAD)},
+            $path: ${context._lift(path)},
           })
         `);
       }
@@ -597,27 +581,25 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure2._registerBindObject(api_HEAD, host, []);
-          $Closure2._registerBindObject(path, host, []);
-        }
         if (ops.includes("handle")) {
           $Closure2._registerBindObject(api_HEAD, host, []);
           $Closure2._registerBindObject(path, host, []);
         }
         super._registerBind(host, ops);
       }
+      static _registerTypeBind(host, ops) {
+        super._registerTypeBind(host, ops);
+      }
     }
     class $Closure3 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure3.js";
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.$Closure3.js")({
           })
         `);
       }
@@ -632,34 +614,21 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-        }
-        if (ops.includes("handle")) {
-        }
-        super._registerBind(host, ops);
-      }
     }
     class $Closure4 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure4.js";
-        const api_client = context._lift(api);
-        const path_client = context._lift(path);
-        const http_OPTIONS_client = context._lift(http_OPTIONS);
-        const http_HEAD_client = context._lift(http_HEAD);
-        const http_UtilClient = http.Util._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            api: ${api_client},
-            path: ${path_client},
-            http_OPTIONS: ${http_OPTIONS_client},
-            http_HEAD: ${http_HEAD_client},
-            http_Util: ${http_UtilClient.text},
+          require("./inflight.$Closure4.js")({
+            $api_url: ${context._lift(api.url)},
+            $http_HEAD: ${context._lift(http_HEAD)},
+            $http_OPTIONS: ${context._lift(http_OPTIONS)},
+            $http_Util: ${context._lift(http.Util)},
+            $path: ${context._lift(path)},
           })
         `);
       }
@@ -675,12 +644,6 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure4._registerBindObject(api, host, []);
-          $Closure4._registerBindObject(http_HEAD, host, []);
-          $Closure4._registerBindObject(http_OPTIONS, host, []);
-          $Closure4._registerBindObject(path, host, []);
-        }
         if (ops.includes("handle")) {
           $Closure4._registerBindObject(api.url, host, []);
           $Closure4._registerBindObject(http_HEAD, host, []);
@@ -688,6 +651,9 @@ class $Root extends $stdlib.std.Resource {
           $Closure4._registerBindObject(path, host, []);
         }
         super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
+        super._registerTypeBind(host, ops);
       }
     }
     const api_OPTIONS = cloud.HttpMethod.OPTIONS;

@@ -46,9 +46,9 @@ module.exports = function({ $B, $a, $d, $fn, $innerD }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: a.goo() == \"a2\"")})(((await $a.goo()) === "a2"))};
       const b = new $B();
       {((cond) => {if (!cond) throw new Error("assertion failed: b.foo() == \"b1\"")})(((await b.foo()) === "b1"))};
-      (await ($fn)());
+      (await $fn());
       {((cond) => {if (!cond) throw new Error("assertion failed: d.callInner() == \"f1\"")})(((await $d.callInner()) === "f1"))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: innerD() == \"f1\"")})(((await ($innerD)()) === "f1"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: innerD() == \"f1\"")})(((await $innerD()) === "f1"))};
     }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -107,7 +107,7 @@ module.exports = function({  }) {
 module.exports = function({  }) {
   class D {
     async callInner() {
-      return (await (this.$this_inner)());
+      return (await this.$this_inner());
     }
     constructor({ $this_inner }) {
       this.$this_inner = $this_inner;
