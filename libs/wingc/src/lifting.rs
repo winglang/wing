@@ -191,9 +191,6 @@ impl<'a> Fold for LiftTransform<'a> {
 			return fold::fold_expr(self, node);
 		}
 
-		let code = self.jsify_expr(&node, Phase::Independent);
-		println!("{}", code);
-
 		//---------------
 		// LIFT
 		if expr_phase == Phase::Preflight {
