@@ -1,9 +1,11 @@
 class Foo {
   static inflight foo(): num { return 1; }
+  static inflight bar(): num { return Foo.foo(); }
 
   inflight callThis(): num {
-    return Foo.foo();
+    return Foo.bar();
   }
+
 }
 
 inflight class Bar {

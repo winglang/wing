@@ -1,7 +1,7 @@
-let s = "hello";
+let y = "hello";
 
 test "test" {
-  assert(s == "hello");
+  assert(y == "hello");
   let y = "z";
   assert(y == "z");
 }

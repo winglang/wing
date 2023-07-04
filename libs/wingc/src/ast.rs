@@ -395,7 +395,7 @@ impl Class {
 		None
 	}
 
-	pub(crate) fn preflight_methods(&self, include_initializers: bool) -> Vec<&FunctionDefinition> {
+	pub fn preflight_methods(&self, include_initializers: bool) -> Vec<&FunctionDefinition> {
 		self
 			.all_methods(include_initializers)
 			.iter()
@@ -575,15 +575,8 @@ impl Expr {
 
 	/// Returns true if the expression is a reference to a type.
 	pub fn as_type_reference(&self) -> Option<&UserDefinedType> {
-		fn resolve_ref(r: &Reference) -> Option<&UserDefinedType> {
-			match r {
-				Reference::TypeReference(t) => Some(t),
-				_ => None,
-			}
-		}
-
 		match &self.kind {
-			ExprKind::Reference(r) => resolve_ref(r),
+			ExprKind::Reference(Reference::TypeReference(t)) => Some(t),
 			_ => None,
 		}
 	}

@@ -154,24 +154,10 @@ Duration <DURATION>"
 
 exports[`capture_redefinition.w 1`] = `
 "error: Cannot capture symbol \\"y\\" because it is shadowed by another symbol with the same name
-  --> ../../../examples/tests/invalid/capture_redefinition.w:5:7
-  |
-5 |   log(y);
-  |       ^ Cannot capture symbol \\"y\\" because it is shadowed by another symbol with the same name
-
-
-error: Cannot capture symbol \\"y\\" because it is shadowed by another symbol with the same name
    --> ../../../examples/tests/invalid/capture_redefinition.w:14:9
    |
 14 |     log(y);
    |         ^ Cannot capture symbol \\"y\\" because it is shadowed by another symbol with the same name
-
-
-error: Cannot capture symbol \\"x\\" because it is shadowed by another symbol with the same name
-   --> ../../../examples/tests/invalid/capture_redefinition.w:22:7
-   |
-22 |   log(x);
-   |       ^ Cannot capture symbol \\"x\\" because it is shadowed by another symbol with the same name
 
 
  
@@ -2039,20 +2025,6 @@ error: Symbol \\"x\\" used before being defined
   |
 5 |   log(\\"\${x}\\");
   |          ^ Symbol \\"x\\" used before being defined
-
-
-error: Cannot capture symbol \\"y\\" because it is shadowed by another symbol with the same name
-  --> ../../../examples/tests/invalid/use_before_defined.w:1:8
-  |
-1 | log(\\"\${y}\\"); // Access y before it's defined
-  |        ^ Cannot capture symbol \\"y\\" because it is shadowed by another symbol with the same name
-
-
-error: Cannot capture symbol \\"x\\" because it is shadowed by another symbol with the same name
-  --> ../../../examples/tests/invalid/use_before_defined.w:5:10
-  |
-5 |   log(\\"\${x}\\");
-  |          ^ Cannot capture symbol \\"x\\" because it is shadowed by another symbol with the same name
 
 
  

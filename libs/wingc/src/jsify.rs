@@ -185,14 +185,6 @@ impl<'a> JSifier<'a> {
 		files
 	}
 
-	// /// Write all files to the output directory
-	// pub fn emit_files(&mut self, out_dir: &Path) {
-	// 	match self.emitted_files.emit_files(out_dir) {
-	// 		Ok(()) => {}
-	// 		Err(err) => report_diagnostic(err.into()),
-	// 	}
-	// }
-
 	fn jsify_scope_body(&self, scope: &Scope, ctx: &mut JSifyContext) -> CodeMaker {
 		CompilationContext::set(CompilationPhase::Jsifying, &scope.span);
 		let mut code = CodeMaker::default();
@@ -205,7 +197,7 @@ impl<'a> JSifier<'a> {
 		code
 	}
 
-	pub fn jsify_reference(&self, reference: &Reference, ctx: &mut JSifyContext) -> String {
+	fn jsify_reference(&self, reference: &Reference, ctx: &mut JSifyContext) -> String {
 		match reference {
 			Reference::Identifier(identifier) => identifier.to_string(),
 			Reference::InstanceMember {
@@ -567,7 +559,7 @@ impl<'a> JSifier<'a> {
 					format!("Object.freeze(new Set([{}]))", item_list)
 				}
 			}
-			ExprKind::FunctionClosure(func_def) => self.jsify_function(None, func_def, false, ctx).to_string(),
+			ExprKind::FunctionClosure(func_def) => self.jsify_function(None, func_def, ctx).to_string(),
 			ExprKind::CompilerDebugPanic => {
 				// Handle the debug panic expression (during jsifying)
 				dbg_panic!();
@@ -825,13 +817,7 @@ impl<'a> JSifier<'a> {
 		code
 	}
 
-	fn jsify_function(
-		&self,
-		class: Option<&AstClass>,
-		func_def: &FunctionDefinition,
-		is_static: bool,
-		ctx: &mut JSifyContext,
-	) -> String {
+	fn jsify_function(&self, class: Option<&AstClass>, func_def: &FunctionDefinition, ctx: &mut JSifyContext) -> String {
 		let mut parameter_list = vec![];
 
 		for p in &func_def.signature.parameters {
@@ -890,7 +876,7 @@ impl<'a> JSifier<'a> {
 		};
 		let mut prefix = vec![];
 
-		if func_def.is_static && is_static {
+		if func_def.is_static && class.is_some() {
 			prefix.push("static")
 		}
 
@@ -910,7 +896,7 @@ impl<'a> JSifier<'a> {
 		code.add_code(body);
 		code.close("}");
 
-		// is prefix is empty it means this is a closure, so we need to wrap it in `(`, `)`.
+		// if prefix is empty it means this is a closure, so we need to wrap it in `(`, `)`.
 		if prefix.is_empty() {
 			format!("({})", code.to_string().trim().to_string())
 		} else {
@@ -939,12 +925,7 @@ impl<'a> JSifier<'a> {
 
 			// default base class for preflight classes is `core.Resource`
 			let extends = if let Some(parent) = &class.parent {
-				let base = if let Some(udt) = parent.as_type_reference() {
-					self.jsify_user_defined_type(udt)
-				} else {
-					// this is likely a bug in the compiler, but we'll just emit the name as-is
-					self.jsify_expression(parent, ctx)
-				};
+				let base = parent.as_type_reference().expect("resolve parent type");
 
 				format!(" extends {}", base)
 			} else {
@@ -958,7 +939,7 @@ impl<'a> JSifier<'a> {
 
 			// emit preflight methods
 			for m in class.preflight_methods(false) {
-				code.line(self.jsify_function(Some(class), m, true, ctx));
+				code.line(self.jsify_function(Some(class), m, ctx));
 			}
 
 			// emit the `_toInflightType` static method
@@ -1133,7 +1114,7 @@ impl<'a> JSifier<'a> {
 		));
 
 		for def in class.inflight_methods(false) {
-			class_code.line(self.jsify_function(Some(class), def, true, &mut ctx));
+			class_code.line(self.jsify_function(Some(class), def, &mut ctx));
 		}
 
 		// if this is a preflight class, emit the binding constructor
@@ -1144,7 +1125,7 @@ impl<'a> JSifier<'a> {
 		// emit the $inflight_init function (if it has a body).
 		if let FunctionBody::Statements(s) = &class.inflight_initializer.body {
 			if !s.statements.is_empty() {
-				class_code.line(self.jsify_function(Some(class), &class.inflight_initializer, true, &mut ctx));
+				class_code.line(self.jsify_function(Some(class), &class.inflight_initializer, &mut ctx));
 			}
 		}
 
@@ -1174,9 +1155,7 @@ impl<'a> JSifier<'a> {
 		let parent_fields = if let Some(parent) = &class.parent {
 			let parent_type = self.get_expr_type(parent);
 			let parent_lifts = &parent_type.as_class().unwrap().lifts;
-			parent_lifts
-				.lifted_fields().keys().map(|f| f.clone())
-				.collect_vec()
+			parent_lifts.lifted_fields().keys().map(|f| f.clone()).collect_vec()
 		} else {
 			vec![]
 		};
@@ -1266,15 +1245,11 @@ impl<'a> JSifier<'a> {
 		bind_method
 	}
 	fn is_this(&self, expression: &Expr) -> bool {
-		let ExprKind::Reference(ref r) = expression.kind else {
-			return false;
-		};
-
-		let Reference::Identifier(i) = r else {
-			return false;
-		};
-
-		i.name == "this"
+		if let ExprKind::Reference(Reference::Identifier(i)) = &expression.kind {
+			i.name == "this"
+		} else {
+			false
+		}
 	}
 }
 

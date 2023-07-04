@@ -194,7 +194,7 @@ impl<'a> Fold for LiftTransform<'a> {
 			{
 				report_diagnostic(Diagnostic {
 					message: format!(
-						"Cannot qualify access to a lifted object of type \"{}\"",
+						"Cannot qualify access to a lifted object of type \"{}\" (see https://github.com/winglang/wing/issues/76 for more details)",
 						expr_type.to_string()
 					),
 					span: Some(node.span.clone()),
@@ -203,7 +203,6 @@ impl<'a> Fold for LiftTransform<'a> {
 				return node;
 			}
 
-			// println!("Lifting: {}", preflight);
 			let mut lifts = self.lifts_stack.pop().unwrap();
 			lifts.lift(
 				node.id,
@@ -224,7 +223,6 @@ impl<'a> Fold for LiftTransform<'a> {
 			// jsify the expression so we can get the preflight code
 			let preflight = self.jsify_expr(&node, Phase::Inflight);
 
-			// println!("Capturing: {}", preflight);
 			let mut lifts = self.lifts_stack.pop().unwrap();
 			lifts.capture(&node.id, &preflight);
 			self.lifts_stack.push(lifts);
