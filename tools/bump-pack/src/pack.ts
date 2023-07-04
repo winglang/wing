@@ -47,7 +47,9 @@ async function prepareBundledDepsAndRun(
   }
   const workspaceDir = await findWorkspaceDir(packageData.dir);
   if (!workspaceDir) {
-    throw new Error(`Could not find workspace directory for ${packageData.dir}`);
+    throw new Error(
+      `Could not find workspace directory for ${packageData.dir}`
+    );
   }
   const depHierarchy = (
     await buildDependenciesHierarchy([packageData.dir], {
@@ -82,7 +84,7 @@ async function prepareBundledDepsAndRun(
     if (await fs.exists(depPath)) {
       const bundledDepStats = await fs.lstat(depPath);
       if (bundledDepStats.isSymbolicLink()) {
-        depsToCopy.push(depPath);
+        depsToCopy.push([dep.path, depPath]);
       } else {
         // nothing needed, should bundle fine
         continue;
@@ -94,12 +96,20 @@ async function prepareBundledDepsAndRun(
     }
   }
 
+  // do all the copies first since they take a while
   for (const dep of depsToCopy) {
-    const bak = `${dep}.bak`;
-    await fs.move(dep, bak);
-    await fs.copy(bak, dep, {
+    await fs.copy(dep[0], `${dep[1]}.copy`, {
       dereference: true,
+      overwrite: true,
     });
+  }
+
+  for (const dep of depsToCopy) {
+    const regPath = dep[1];
+    const bak = `${regPath}.bak`;
+    const copy = `${regPath}.copy`;
+    await fs.move(regPath, bak, { overwrite: true });
+    await fs.move(copy, regPath, { overwrite: true });
   }
 
   try {
@@ -107,8 +117,10 @@ async function prepareBundledDepsAndRun(
   } finally {
     // reset the symlinks, or else pnpm will be mad
     for (const dep of depsToCopy) {
-      await fs.remove(dep);
-      await fs.move(`${dep}.bak`, dep);
+      const regPath = dep[1];
+      await fs.move(regPath, `${regPath}.copy`, { overwrite: true });
+      await fs.move(`${regPath}.bak`, regPath, { overwrite: true });
+      await fs.remove(`${regPath}.copy`);
     }
   }
 }
