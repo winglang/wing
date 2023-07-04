@@ -21,11 +21,43 @@ Schedules are useful for periodic tasks, such as running backups or sending dail
 
 ## Usage
 
-TODO
+### From cron
+```ts playground
+bring cloud;
 
-## Target-specific details
+let schedule = new cloud.Schedule(cron: "* * * * ?");
 
-TODO
+schedule.onTick(inflight () => {
+  log("schedule: triggered");
+});
+```
+
+### From rate 
+
+```ts playground
+bring cloud;
+
+let schedule = new cloud.Schedule(rate: 1m);
+
+schedule.onTick(inflight () => {
+  log("schedule: triggered");
+});
+```
+### Simulator (`sim`)
+
+Sim implementations of `cloud.Schedule` uses standard JavaScript `setTimeout` function.
+
+### AWS (`tf-aws` and `awscdk`)
+
+AWS implementations of `cloud.Schedule` use [Amazon CloudWatch](https://aws.amazon.com/cloudwatch/).
+
+### Azure (`tf-azure`)
+
+🚧 Not supported yet (tracking issue: [#1291](https://github.com/winglang/wing/issues/1291)).
+
+### GCP (`tf-gcp`)
+
+🚧 Not supported yet (tracking issue: [#1292](https://github.com/winglang/wing/issues/1292)).
 
 ## API Reference
 
