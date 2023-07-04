@@ -47,8 +47,11 @@ module.exports = function({  }) {
     static async foo() {
       return 1;
     }
-    async callThis() {
+    static async bar() {
       return (await Foo.foo());
+    }
+    async callThis() {
+      return (await Foo.bar());
     }
     constructor({  }) {
     }
@@ -205,7 +208,7 @@ class $Root extends $stdlib.std.Resource {
     class Foo extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("foo", "callThis", "$inflight_init");
+        this._addInflightOps("foo", "bar", "callThis", "$inflight_init");
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
