@@ -1,4 +1,4 @@
-import { ArrowPathIcon, MoonIcon, SunIcon } from "@heroicons/react/24/outline";
+import { MoonIcon, SunIcon } from "@heroicons/react/24/outline";
 import { useTheme } from "@wingconsole/design-system";
 import classNames from "classnames";
 import { useCallback, useMemo } from "react";
