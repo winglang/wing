@@ -118,7 +118,7 @@ export const PlaygroundLayout = ({
           <RightResizableWidget
             className={classNames(
               theme.border3,
-              "h-full w-1/4 flex flex-col min-w-[10rem] min-h-[10rem] border-r border-b",
+              "h-full w-1/4 flex flex-col min-w-[10rem] min-h-[10rem] border-r",
             )}
           >
             <TestsTreeView />
