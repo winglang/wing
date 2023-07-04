@@ -2,6 +2,7 @@ import { IgnoreFile } from "projen";
 import { NodePackageManager } from "projen/lib/javascript";
 import { TypeScriptAppProject } from "projen/lib/typescript";
 import { VSCodeExtensionContributions } from "./src/project/vscode_types";
+import rootPackageJson from "../../package.json";
 
 const VSCODE_BASE_VERSION = "1.70.0";
 
@@ -16,7 +17,6 @@ const project = new TypeScriptAppProject({
   bugsUrl: "https://github.com/winglang/wing/issues",
   homepage: "https://winglang.io",
   description: "Wing language support for VSCode",
-  projenCommand: "pnpm exec projen",
   keywords: [
     "cdk",
     "cdktf",
@@ -29,7 +29,7 @@ const project = new TypeScriptAppProject({
   ],
   license: "MIT",
 
-  packageManager: NodePackageManager.PNPM,
+  packageManager: NodePackageManager.NPM,
   projenrcTs: true,
   package: false,
   buildWorkflow: false,
@@ -141,17 +141,12 @@ project.compileTask.exec(esbuildComment);
 project.watchTask.reset(`${esbuildComment} --watch`);
 
 project.packageTask.reset(
-  "pnpm version ${PROJEN_BUMP_VERSION:-0.0.0} --allow-same-version"
+  "npm version ${PROJEN_BUMP_VERSION:-0.0.0} --allow-same-version"
 );
-project.packageTask.exec("vsce package --no-dependencies -o vscode-wing.vsix");
+project.packageTask.exec("vsce package -o vscode-wing.vsix");
 
 project.addFields({
-  volta: {
-    extends: "../../package.json",
-  },
+  volta: rootPackageJson.volta,
 });
-
-project.package.file.addDeletionOverride("pnpm");
-project.tryRemoveFile(".npmrc");
 
 project.synth();

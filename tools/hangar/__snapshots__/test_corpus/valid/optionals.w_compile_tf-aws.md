@@ -92,7 +92,7 @@ module.exports = function({  }) {
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.17.0"
+      "version": "0.15.2"
     },
     "outputs": {
       "root": {
@@ -106,7 +106,7 @@ module.exports = function({  }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:t\",\"${aws_lambda_function.testt_Handler_FF112F5E.arn}\"]]"
+      "value": "[[\"root/Default/Default/test:t\",\"${aws_lambda_function.root_testt_Handler_A23A3A53.arn}\"]]"
     }
   },
   "provider": {
@@ -116,51 +116,51 @@ module.exports = function({  }) {
   },
   "resource": {
     "aws_iam_role": {
-      "testt_Handler_IamRole_BF49E95A": {
+      "root_testt_Handler_IamRole_D6F8E063": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:t/Handler/IamRole",
-            "uniqueId": "testt_Handler_IamRole_BF49E95A"
+            "uniqueId": "root_testt_Handler_IamRole_D6F8E063"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
-      "testt_Handler_IamRolePolicy_F429CB90": {
+      "root_testt_Handler_IamRolePolicy_35CD1E8D": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:t/Handler/IamRolePolicy",
-            "uniqueId": "testt_Handler_IamRolePolicy_F429CB90"
+            "uniqueId": "root_testt_Handler_IamRolePolicy_35CD1E8D"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.orangebucket.arn}\",\"${aws_s3_bucket.orangebucket.arn}/*\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.testt_Handler_IamRole_BF49E95A.name}"
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.root_orangebucket_F14D9995.arn}\",\"${aws_s3_bucket.root_orangebucket_F14D9995.arn}/*\"],\"Effect\":\"Allow\"}]}",
+        "role": "${aws_iam_role.root_testt_Handler_IamRole_D6F8E063.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
-      "testt_Handler_IamRolePolicyAttachment_16BB0DB0": {
+      "root_testt_Handler_IamRolePolicyAttachment_83B6CC34": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:t/Handler/IamRolePolicyAttachment",
-            "uniqueId": "testt_Handler_IamRolePolicyAttachment_16BB0DB0"
+            "uniqueId": "root_testt_Handler_IamRolePolicyAttachment_83B6CC34"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.testt_Handler_IamRole_BF49E95A.name}"
+        "role": "${aws_iam_role.root_testt_Handler_IamRole_D6F8E063.name}"
       }
     },
     "aws_lambda_function": {
-      "testt_Handler_FF112F5E": {
+      "root_testt_Handler_A23A3A53": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:t/Handler/Default",
-            "uniqueId": "testt_Handler_FF112F5E"
+            "uniqueId": "root_testt_Handler_A23A3A53"
           }
         },
         "environment": {
           "variables": {
-            "BUCKET_NAME_c1491ba5": "${aws_s3_bucket.orangebucket.bucket}",
+            "BUCKET_NAME_c1491ba5": "${aws_s3_bucket.root_orangebucket_F14D9995.bucket}",
             "WING_FUNCTION_NAME": "Handler-c83c24f9",
             "WING_TARGET": "tf-aws"
           }
@@ -168,10 +168,10 @@ module.exports = function({  }) {
         "function_name": "Handler-c83c24f9",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.testt_Handler_IamRole_BF49E95A.arn}",
+        "role": "${aws_iam_role.root_testt_Handler_IamRole_D6F8E063.arn}",
         "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
-        "s3_key": "${aws_s3_object.testt_Handler_S3Object_572CA425.key}",
+        "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
+        "s3_key": "${aws_s3_object.root_testt_Handler_S3Object_D779BA1A.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -180,20 +180,20 @@ module.exports = function({  }) {
       }
     },
     "aws_s3_bucket": {
-      "Code": {
+      "root_Code_02F3C603": {
         "//": {
           "metadata": {
             "path": "root/Default/Code",
-            "uniqueId": "Code"
+            "uniqueId": "root_Code_02F3C603"
           }
         },
         "bucket_prefix": "code-c84a50b1-"
       },
-      "orangebucket": {
+      "root_orangebucket_F14D9995": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/orange bucket/Default",
-            "uniqueId": "orangebucket"
+            "uniqueId": "root_orangebucket_F14D9995"
           }
         },
         "bucket_prefix": "orange-bucket-c8ecc927-",
@@ -201,29 +201,29 @@ module.exports = function({  }) {
       }
     },
     "aws_s3_bucket_public_access_block": {
-      "orangebucket_PublicAccessBlock_E0BEAC90": {
+      "root_orangebucket_PublicAccessBlock_7E0AC056": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/orange bucket/PublicAccessBlock",
-            "uniqueId": "orangebucket_PublicAccessBlock_E0BEAC90"
+            "uniqueId": "root_orangebucket_PublicAccessBlock_7E0AC056"
           }
         },
         "block_public_acls": true,
         "block_public_policy": true,
-        "bucket": "${aws_s3_bucket.orangebucket.bucket}",
+        "bucket": "${aws_s3_bucket.root_orangebucket_F14D9995.bucket}",
         "ignore_public_acls": true,
         "restrict_public_buckets": true
       }
     },
     "aws_s3_bucket_server_side_encryption_configuration": {
-      "orangebucket_Encryption_F338E6D4": {
+      "root_orangebucket_Encryption_34CE66C9": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/orange bucket/Encryption",
-            "uniqueId": "orangebucket_Encryption_F338E6D4"
+            "uniqueId": "root_orangebucket_Encryption_34CE66C9"
           }
         },
-        "bucket": "${aws_s3_bucket.orangebucket.bucket}",
+        "bucket": "${aws_s3_bucket.root_orangebucket_F14D9995.bucket}",
         "rule": [
           {
             "apply_server_side_encryption_by_default": {
@@ -234,14 +234,14 @@ module.exports = function({  }) {
       }
     },
     "aws_s3_object": {
-      "testt_Handler_S3Object_572CA425": {
+      "root_testt_Handler_S3Object_D779BA1A": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:t/Handler/S3Object",
-            "uniqueId": "testt_Handler_S3Object_572CA425"
+            "uniqueId": "root_testt_Handler_S3Object_D779BA1A"
           }
         },
-        "bucket": "${aws_s3_bucket.Code.bucket}",
+        "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       }

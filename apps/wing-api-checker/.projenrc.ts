@@ -1,4 +1,5 @@
 import { javascript, typescript } from "projen";
+import rootPackageJson from "../../package.json";
 
 const project = new typescript.TypeScriptProject({
   defaultReleaseBranch: "main",
@@ -13,27 +14,21 @@ const project = new typescript.TypeScriptProject({
   authorOrganization: true,
   authorUrl: "https://monada.co",
   repository: "https://github.com/winglang/wing.git",
-  projenCommand: "pnpm exec projen",
-  packageManager: javascript.NodePackageManager.PNPM,
+  packageManager: javascript.NodePackageManager.NPM,
   github: false,
   projenrcTs: true,
   prettier: true,
   deps: ["chalk", "chokidar", "glob-promise", "jsii-reflect", "yargs"],
-  devDeps: ["@types/node@^18", "@types/yargs"],
+  devDeps: ["@types/node@^18"],
 });
 
 const bumpTask = project.tasks.tryFind("bump")!;
 bumpTask.reset(
-  "pnpm version ${PROJEN_BUMP_VERSION:-0.0.0} --allow-same-version"
+  "npm version ${PROJEN_BUMP_VERSION:-0.0.0} --allow-same-version"
 );
 
 project.addFields({
-  volta: {
-    extends: "../../package.json",
-  },
+  volta: rootPackageJson.volta,
 });
-
-project.package.file.addDeletionOverride("pnpm");
-project.tryRemoveFile(".npmrc");
 
 project.synth();

@@ -5,7 +5,7 @@
     "build": {
       "options": {
         "cwd": "apps/jsii-docgen",
-        "command": "pnpm compile"
+        "command": "npm run compile"
       }
     }
   }

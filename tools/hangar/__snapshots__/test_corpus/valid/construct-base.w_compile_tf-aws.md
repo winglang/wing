@@ -21,7 +21,7 @@ module.exports = function({  }) {
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.17.0"
+      "version": "0.15.2"
     },
     "outputs": {
       "root": {
@@ -45,11 +45,11 @@ module.exports = function({  }) {
   },
   "resource": {
     "aws_sqs_queue": {
-      "awssqsQueueSqsQueue": {
+      "root_awssqsQueueSqsQueue_47BDCAE4": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/aws.sqsQueue.SqsQueue",
-            "uniqueId": "awssqsQueueSqsQueue"
+            "uniqueId": "root_awssqsQueueSqsQueue_47BDCAE4"
           }
         }
       }

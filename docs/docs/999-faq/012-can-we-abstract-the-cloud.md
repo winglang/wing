@@ -18,7 +18,7 @@ We understand your concerns and acknowledge the challenges in achieving a higher
 
 Recall the days when developers had to write code for specific file systems or operating systems to save a file to disk. Today, programming languages and frameworks have successfully abstracted these components, a result of a long, gradual process. We envision a future where targeting specific cloud storage solutions or manually setting up IAM policies becomes unnecessary, as policies can be deduced from application code.
 
-While this process takes time, we've implemented [compiler plugins](https://docs.winglang.io/blog/2023/02/17/plugins) in Wing to allow customization of Terraform output, providing more control over finer details in the meantime.
+While this process takes time, we've implemented [compiler plugins](https://www.winglang.io/blog/2023/02/17/plugins) in Wing to allow customization of Terraform output, providing more control over finer details in the meantime.
 
 ## Why use Wing abstraction and compiler plugins?
 
