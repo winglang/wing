@@ -85,42 +85,61 @@ export function calculateBucketPermissions(
   arn: string,
   ops: string[]
 ): PolicyStatement[] {
-  const policies: PolicyStatement[] = [];
+  const actions: string[] = [];
+  // const policies: PolicyStatement[] = [];
 
+  // contains a check if an object exists/list
+  if (
+    ops.includes(cloud.BucketInflightMethods.PUBLIC_URL) ||
+    ops.includes(cloud.BucketInflightMethods.LIST) ||
+    ops.includes(cloud.BucketInflightMethods.EXISTS) ||
+    ops.includes(cloud.BucketInflightMethods.TRY_GET) ||
+    ops.includes(cloud.BucketInflightMethods.TRY_GET_JSON) ||
+    ops.includes(cloud.BucketInflightMethods.TRY_DELETE)
+  ) {
+    actions.push("s3:List*");
+  }
+
+  // putting an object
   if (
     ops.includes(cloud.BucketInflightMethods.PUT) ||
     ops.includes(cloud.BucketInflightMethods.PUT_JSON)
   ) {
-    policies.push({
-      actions: ["s3:PutObject*", "s3:Abort*"],
-      resources: [arn, `${arn}/*`],
-    });
+    actions.push(...["s3:PutObject*", "s3:Abort*"]);
   }
 
+  // getting an object
   if (
     ops.includes(cloud.BucketInflightMethods.GET) ||
     ops.includes(cloud.BucketInflightMethods.GET_JSON) ||
     ops.includes(cloud.BucketInflightMethods.LIST) ||
+    ops.includes(cloud.BucketInflightMethods.TRY_GET) ||
+    ops.includes(cloud.BucketInflightMethods.TRY_GET_JSON) ||
     ops.includes(cloud.BucketInflightMethods.PUBLIC_URL)
   ) {
-    policies.push({
-      actions: ["s3:GetObject*", "s3:GetBucket*", "s3:List*"],
-      resources: [arn, `${arn}/*`],
-    });
+    actions.push(...["s3:GetObject*", "s3:GetBucket*"]);
   }
 
-  if (ops.includes(cloud.BucketInflightMethods.DELETE)) {
-    policies.push({
-      actions: [
+  // accessing the publicAccessBlock
+  if (ops.includes(cloud.BucketInflightMethods.PUBLIC_URL)) {
+    actions.push(...["s3:GetBucketPublicAccessBlock"]);
+  }
+
+  // deleting an object
+  if (
+    ops.includes(cloud.BucketInflightMethods.TRY_DELETE) ||
+    ops.includes(cloud.BucketInflightMethods.DELETE)
+  ) {
+    actions.push(
+      ...[
         "s3:DeleteObject*",
         "s3:DeleteObjectVersion*",
         "s3:PutLifecycleConfiguration*",
-      ],
-      resources: [arn, `${arn}/*`],
-    });
+      ]
+    );
   }
 
-  return policies;
+  return [{ actions, resources: [arn, `${arn}/*`] }];
 }
 
 export function calculateSecretPermissions(
