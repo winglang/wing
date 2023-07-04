@@ -79,8 +79,8 @@ function createGithubActionData(): CIData {
   const commitHash = process.env.GITHUB_SHA ?? "";
   const authorName = process.env.GITHUB_ACTOR ?? "";
   const prId = process.env.GITHUB_REF?.split("/").pop() ?? "";
-  const toBranch = process.env.GITHUB_HEAD_REF ?? "";
-  const fromBranch = process.env.GITHUB_BASE_REF ?? "";
+  const fromBranch = process.env.GITHUB_HEAD_REF ?? "";
+  const toBranch = process.env.GITHUB_BASE_REF ?? "";
 
   return {
     name: CIType.GITHUB_ACTIONS,
