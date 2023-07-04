@@ -1,8 +1,8 @@
 name: SDK Spec AWS Tests
 on:
-  push:
-    branches:
-      - main
+  release:
+    types:
+      - published
   workflow_dispatch: {}
 
 jobs:
