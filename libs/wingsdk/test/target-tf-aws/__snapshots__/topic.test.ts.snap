@@ -502,7 +502,7 @@ exports[`topic with subscriber function 3`] = `
                     {
                       "direction": "outbound",
                       "implicit": false,
-                      "relationship": "on_message",
+                      "relationship": "onMessage",
                       "resource": "root/Default/Topic-OnMessage-c5395e41",
                     },
                   ],
@@ -548,7 +548,7 @@ exports[`topic with subscriber function 3`] = `
                     {
                       "direction": "inbound",
                       "implicit": false,
-                      "relationship": "on_message",
+                      "relationship": "onMessage",
                       "resource": "root/Default/Topic",
                     },
                   ],

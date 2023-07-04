@@ -362,7 +362,7 @@ exports[`queue with a consumer function 3`] = `
                     {
                       "direction": "outbound",
                       "implicit": false,
-                      "relationship": "consumer",
+                      "relationship": "setConsumer",
                       "resource": "root/Default/Queue-SetConsumer-c5395e41",
                     },
                   ],
@@ -408,7 +408,7 @@ exports[`queue with a consumer function 3`] = `
                     {
                       "direction": "inbound",
                       "implicit": false,
-                      "relationship": "consumer",
+                      "relationship": "setConsumer",
                       "resource": "root/Default/Queue",
                     },
                   ],
