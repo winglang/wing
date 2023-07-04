@@ -60,7 +60,7 @@ export async function pack(options: PackOptions) {
       stdio: "inherit",
     });
 
-    // void fs.remove(tmpDir);
+    void fs.remove(tmpDir);
   }
 }
 
