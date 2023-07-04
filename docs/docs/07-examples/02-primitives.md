@@ -73,6 +73,6 @@ let b1 = true;
 let b2 = false;
 
 if b1 && !b2 { 
-  log("${b1},${b2}"); // prints true, false
+  log("b1:${b1},b2:${b2}"); // prints b1:true, b2:false
 }
 ```
