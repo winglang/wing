@@ -104,7 +104,7 @@ pub fn set_custom_panic_hook() {
 
 		report_diagnostic(Diagnostic {
 			message: format!(
-				"Compiler bug ({}) during {}, please report at https://docs.winglang.io/contributing/bugs",
+				"Compiler bug ({}) during {}, please report at https://www.winglang.io/contributing/start-here/bugs",
 				pi,
 				CompilationContext::get_phase()
 			),

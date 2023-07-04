@@ -8,15 +8,17 @@ keywords: [faq, main features, winglang, Wing programming language, Wing languag
 Wing was built from the ground up to make it an ideal choice for building applications on any cloud.
 It includes an assembly of different features that serve that purpose:
 
-* [Cloud services](https://docs.winglang.io/concepts/resources) as first-class citizens, with [phase modifiers](https://docs.winglang.io/contributing/rfcs/language-spec#13-phase-modifiers) for config or runtime (`preflight` and `inflight`).
-* Higher level of cloud abstraction with a [standard library](https://docs.winglang.io/contributing/rfcs/2023-01-20-wingsdk-spec).
-* [Distributed computing primitives](https://docs.winglang.io/concepts/inflights).
-* [Compiler plugins](https://docs.winglang.io/reference/compiler-plugins) that can be used to customize the compilation output, such as infrastructure definitions.
-* [JavaScript interoperability](https://docs.winglang.io/contributing/rfcs/language-spec#5-interoperability).
+* [Cloud services](https://www.winglang.io/docs/faq/supported-clouds-services-and-engines/supported-services) as first-class citizens, with [phase modifiers](https://www.winglang.io/contributing/rfcs/language-spec#13-phase-modifiers) for config or runtime ([`preflight` and `inflight`](https://www.winglang.io/contributing/rfcs/2023-01-20-wingsdk-spec)).
+* Higher level of cloud abstraction with a [standard library](https://www.winglang.io/contributing/rfcs/2023-01-20-wingsdk-spec) of cloud resources that lets you write cloud portable code.
+* [Compiler plugins](https://www.winglang.io/docs/tools/compiler-plugins) that keep you in control by allowing you to customize the compilation output, such as infrastructure definitions.
+* Use any resource in the Terraform ecosystem as first-class citizen in your app.
+* [JavaScript interoperability](https://www.winglang.io/contributing/rfcs/language-spec#5-interoperability).
+* [Distributed computing primitives](https://www.winglang.io/docs/concepts/inflights).
 * Automatic generation of IAM policies and other cloud mechanics based on intent.
-* [Native JSON](https://docs.winglang.io/contributing/rfcs/language-spec#114-json-type) and schema validation support.
-* [Default immutability](https://docs.winglang.io/blog/2023/02/02/good-cognitive-friction#immutable-by-default).
-* [Implicit async](https://docs.winglang.io/contributing/rfcs/language-spec#113-asynchronous-model), explicit defer.
+* Local functional simulator with a visualization and interaction [console](https://www.winglang.io/docs/start-here/installation#wing-console) - used for testing and debugging with instant hot-reloading.
+* [Native JSON](https://www.winglang.io/contributing/rfcs/language-spec#114-json-type) and schema validation support.
+* [Default immutability](https://www.winglang.io/blog/2023/02/02/good-cognitive-friction#immutable-by-default).
+* [Implicit async](https://www.winglang.io/contributing/rfcs/language-spec#113-asynchronous-model), explicit defer.
 
-For a more in-depth look at Wing's features and benefits, check out our [documentation](https://docs.winglang.io/).
+For a more in-depth look at Wing's features and benefits, check out our [documentation](https://www.winglang.io/docs/).
 
