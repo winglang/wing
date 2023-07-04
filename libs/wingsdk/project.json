@@ -24,9 +24,8 @@
     },
     "package": {
       "options": {
-        "commands": ["pnpm remove-bundled-deps", "pnpm bump-pack -b", "pnpm restore-bundled-deps"],
-        "cwd": "libs/wingsdk",
-        "parallel": false
+        "command": "pnpm bump-pack -b",
+        "cwd": "libs/wingsdk"
       }
     }
   }

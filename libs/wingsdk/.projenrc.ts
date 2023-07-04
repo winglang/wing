@@ -249,6 +249,11 @@ project.addFields({
     extends: "../../package.json",
   },
 });
+project.addFields({
+  "bump-pack": {
+    removeBundledDependencies: sideLoad.map((sideDep) => sideDep.split("@")[0]),
+  },
+});
 
 project.addFields({
   files: ["lib", ".jsii", "API.md", "patches"],
@@ -269,21 +274,6 @@ new JsonFile(project, "cdktf.json", {
 project.gitignore.addPatterns("src/.gen/providers");
 
 project.preCompileTask.exec("cdktf get");
-
-const packageJsonBack = "package.json.bak";
-const removeBundledDeps = project.addTask("remove-bundled-deps");
-removeBundledDeps.exec(`cp package.json ${packageJsonBack}`);
-for (const dep of sideLoad) {
-  removeBundledDeps.exec(
-    `./scripts/remove-bundled-dep.js ${dep.split("@")[0]}`
-  );
-}
-
-const restoreBundleDeps = project.addTask("restore-bundled-deps");
-restoreBundleDeps.exec(`mv ${packageJsonBack} package.json`);
-
-project.tasks.tryFind("bump")?.spawn(removeBundledDeps);
-project.tasks.tryFind("unbump")?.spawn(restoreBundleDeps);
 
 project.package.file.addDeletionOverride("pnpm");
 project.tryRemoveFile(".npmrc");

@@ -85,6 +85,7 @@ export async function linkBundledTransitiveDeps(
       );
     }
 
+    depsToLink[bundledDep.alias] = bundledDep;
     visitDependencies(bundledDep.dependencies);
   }
 
@@ -99,10 +100,14 @@ export async function linkBundledTransitiveDeps(
     }
   }
 
+  const linkedKeys = Object.keys(depsToLink);
   console.log(
-    `Linked ${Object.keys(depsToLink).length} transitive bundled deps for:\t ${
-      project.manifest.name
-    }`
+    `Linked ${linkedKeys.length} transitive bundled deps for:\t ${project.manifest.name}`
+  );
+
+  await fs.writeJSON(
+    path.join(project.dir, "node_modules", ".modulelinks"),
+    linkedKeys
   );
 }
 

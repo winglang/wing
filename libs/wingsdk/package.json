@@ -24,8 +24,6 @@
     "post-upgrade": "pnpm exec projen post-upgrade",
     "pre-compile": "pnpm exec projen pre-compile",
     "release": "pnpm exec projen release",
-    "remove-bundled-deps": "pnpm exec projen remove-bundled-deps",
-    "restore-bundled-deps": "pnpm exec projen restore-bundled-deps",
     "test": "pnpm exec projen test",
     "test:watch": "pnpm exec projen test:watch",
     "unbump": "pnpm exec projen unbump",
@@ -157,6 +155,11 @@
   },
   "volta": {
     "extends": "../../package.json"
+  },
+  "bump-pack": {
+    "removeBundledDependencies": [
+      "aws-cdk-lib"
+    ]
   },
   "files": [
     "lib",

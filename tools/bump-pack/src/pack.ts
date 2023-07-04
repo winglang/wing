@@ -41,7 +41,8 @@ export async function pack(options: PackOptions) {
     console.log(`Packing "${packageData.manifest.name}" in ${tmpDir}`);
     await fs.ensureDir(tmpDir);
     await fs.copy(packageDir, tmpDir, {
-      dereference: true,
+      // we'll take care to follow certain symlinks later
+      dereference: false,
       overwrite: true,
     });
 
@@ -58,25 +59,31 @@ export async function pack(options: PackOptions) {
       cwd: tmpDir,
       stdio: "inherit",
     });
+
+    void fs.remove(tmpDir);
   }
 }
 
-// https://github.com/npm/npm-packlist/issues/101
-async function prepareBundledDeps(
-  _packageData: Project,
-  tmpPackageDir: string
-) {
+async function prepareBundledDeps(packageData: Project, tmpPackageDir: string) {
   const packageDirNodeModules = `${tmpPackageDir}/node_modules`;
+  const moduleLinks = fs.readJsonSync(
+    path.join(packageDirNodeModules, ".modulelinks"),
+    { throws: false }
+  );
+  if (!moduleLinks) {
+    // no prep needed
+    return;
+  }
+  console.log(`Preparing bundled dependencies`);
 
-  // for each dir in node_modules, check if it's a symlink
-  for (const dep of await fs.readdir(packageDirNodeModules)) {
-    const depPath = path.join(packageDirNodeModules, dep);
-    const stat = await fs.lstat(depPath);
-    if (stat.isSymbolicLink()) {
-      const realPath = await fs.realpath(depPath);
-      await fs.unlink(depPath);
-      await fs.copy(realPath, depPath);
-    }
+  // resolve all module links to their real paths
+  // this ensures the packing process includes them and anything they need
+  // See https://github.com/npm/npm-packlist/issues/101
+  for (const dep of moduleLinks) {
+    const originalDepPath = path.join(packageData.dir, "node_modules", dep);
+    const newPath = path.join(packageDirNodeModules, dep);
+    await fs.unlink(newPath);
+    await fs.copy(originalDepPath, newPath, { dereference: true });
   }
 }
 
@@ -87,19 +94,19 @@ async function prepareBundledDeps(
  */
 async function preparePackageJson(packageData: Project, tmpPackageDir: string) {
   const packageJsonPath = `${tmpPackageDir}/package.json`;
-  const packageJson = packageData.manifest;
-  await fs.writeFile(
-    packageJsonPath,
-    `${JSON.stringify(
-      {
-        ...packageJson,
-        ...packageJson.publishConfig,
-        publishConfig: undefined,
-        devDependencies: undefined,
-        volta: undefined,
-      },
-      undefined,
-      2
-    )}\n`
-  );
+  const packageJson = packageData.manifest as any;
+
+  Object.assign(packageJson, packageJson.publishConfig);
+  delete packageJson.volta;
+  delete packageJson.devDependencies;
+  delete packageJson.publishConfig;
+
+  if (packageJson.removeBundledDependencies) {
+    for (const dep of packageJson.removeBundledDependencies) {
+      delete packageJson.bundledDependencies[dep];
+      delete packageJson.bundleDependencies[dep];
+    }
+  }
+
+  await fs.writeJSON(packageJsonPath, packageJson);
 }

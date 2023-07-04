@@ -53,9 +53,6 @@
       "steps": [
         {
           "exec": "pnpm version ${PROJEN_BUMP_VERSION:-0.0.0} --allow-same-version"
-        },
-        {
-          "spawn": "remove-bundled-deps"
         }
       ],
       "condition": "! git log --oneline -1 | grep -q \"chore(release):\""
@@ -306,25 +303,6 @@
         }
       ]
     },
-    "remove-bundled-deps": {
-      "name": "remove-bundled-deps",
-      "steps": [
-        {
-          "exec": "cp package.json package.json.bak"
-        },
-        {
-          "exec": "./scripts/remove-bundled-dep.js aws-cdk-lib"
-        }
-      ]
-    },
-    "restore-bundled-deps": {
-      "name": "restore-bundled-deps",
-      "steps": [
-        {
-          "exec": "mv package.json.bak package.json"
-        }
-      ]
-    },
     "test": {
       "name": "test",
       "description": "Run tests",
@@ -359,9 +337,6 @@
       "steps": [
         {
           "exec": "pnpm version 0.0.0 --allow-same-version"
-        },
-        {
-          "spawn": "restore-bundled-deps"
         }
       ]
     },
