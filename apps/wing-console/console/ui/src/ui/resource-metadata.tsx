@@ -220,6 +220,7 @@ export const ResourceMetadata = ({
     <ScrollableArea
       overflowY
       className={classNames("h-full text-sm", theme.bg3, theme.text1)}
+      dataTestid={`resource-metadata:${node.path}`}
     >
       <div className="flex items-center gap-2 px-2 py-2">
         <div className="flex-shrink-0">

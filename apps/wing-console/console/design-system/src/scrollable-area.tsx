@@ -8,17 +8,26 @@ export interface ScrollableAreaProps extends PropsWithChildren {
   scrollbarSize?: "xs" | "sm";
   overflowX?: boolean;
   overflowY?: boolean;
+  dataTestid?: string;
 }
 
 export const ScrollableArea = forwardRef<HTMLDivElement, ScrollableAreaProps>(
   (
-    { className, scrollbarSize = "sm", overflowX, overflowY, children },
+    {
+      className,
+      scrollbarSize = "sm",
+      overflowX,
+      overflowY,
+      dataTestid,
+      children,
+    },
     ref,
   ) => {
     const { theme } = useTheme();
     return (
       <div
         ref={ref}
+        data-testid={dataTestid}
         className={classNames(
           "z-10 absolute inset-0",
           theme.scrollbar,

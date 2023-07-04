@@ -308,7 +308,7 @@ export const ElkMap = <T extends unknown = undefined>({
         onSizesChange={setMinimumSizes}
       />
 
-      <ZoomPane className="w-full h-full">
+      <ZoomPane className="w-full h-full" data-testid="map-pane">
         {graph && (
           <div
             className={classNames("relative transition-all", durationClass)}

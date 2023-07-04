@@ -31,7 +31,7 @@ test("wing it runs the only .w file", async () => {
     await run();
     expect(createConsoleApp).toBeCalledWith({
       wingfile: resolve("foo.w"),
-      requestedPort: undefined,
+      requestedPort: 3000,
       hostUtils: expect.anything(),
     });
     expect(open).toBeCalledWith("http://localhost:3000/");
@@ -66,7 +66,7 @@ test("wing it with a file runs", async () => {
     await run("foo.w");
     expect(createConsoleApp).toBeCalledWith({
       wingfile: resolve("foo.w"),
-      requestedPort: undefined,
+      requestedPort: 3000,
       hostUtils: expect.anything(),
     });
     expect(open).toBeCalledWith("http://localhost:3000/");
@@ -89,7 +89,7 @@ test("wing it with a nested file runs", async () => {
     await run(filePath);
     expect(createConsoleApp).toBeCalledWith({
       wingfile: resolve(filePath),
-      requestedPort: undefined,
+      requestedPort: 3000,
       hostUtils: expect.anything(),
     });
     expect(open).toBeCalledWith("http://localhost:3000/");

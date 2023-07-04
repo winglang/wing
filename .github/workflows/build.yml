@@ -203,6 +203,10 @@ jobs:
       - name: Install Dependencies
         uses: bahmutov/npm-install@v1
 
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
+        working-directory: apps/wing-console/console/app
+
       - name: Test
         run: npm run test:ci
 
@@ -210,7 +214,7 @@ jobs:
         id: diff
         run: |
           git add --all
-          git diff --staged --patch > build.diff
+          git diff --staged --binary --patch > build.diff
           if [ -s build.diff ]; then
             echo "Diff found, creating a patch to apply later"
             cat build.diff
@@ -342,7 +346,7 @@ jobs:
           SHARD=$(echo $RAW_SHARD | sed 's/\//of/g')
           DIFF_NAME="e2e-$SHARD.diff"
           git add --all
-          git diff --staged --patch > $DIFF_NAME
+          git diff --staged --binary --patch > $DIFF_NAME
           if [ -s $DIFF_NAME ]; then
             echo "diff=true" >> $GITHUB_OUTPUT
             echo "diff_name=$DIFF_NAME" >> $GITHUB_OUTPUT
