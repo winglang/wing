@@ -4,8 +4,6 @@ import { Code, InflightClient } from "../core";
  * Immutable Json
  */
 export class Json {
-  private constructor() {}
-
   /**
    * @internal
    */
@@ -135,6 +133,7 @@ export class Json {
     key;
     throw new Error("Macro");
   }
+  private constructor() {}
 
   /**
    * Returns a specified element from the Json.
@@ -259,13 +258,13 @@ export class Json {
  * Mutable Json
  */
 export class MutJson {
-  private constructor() {}
   /**
    * @internal
    */
   public static _toInflightType(): Code {
     return InflightClient.forType(__filename, this.name);
   }
+  private constructor() {}
 
   /**
    * Returns a specified element from the Json.

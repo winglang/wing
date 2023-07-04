@@ -366,6 +366,7 @@ export abstract class Resource extends Construct implements IResource {
  *
  * Visually speaking, if a resource A has an outbound connection with resource B,
  * the arrow would point from A to B, and vice versa for inbound connections.
+ * @skipDocs
  */
 export enum Direction {
   /**

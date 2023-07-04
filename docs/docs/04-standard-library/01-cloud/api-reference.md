@@ -4087,3 +4087,192 @@ Inflight methods and members of `cloud.Website`.
 
 
 
+## Enums <a name="Enums" id="Enums"></a>
+
+### BucketEventType <a name="BucketEventType" id="@winglang/sdk.cloud.BucketEventType"></a>
+
+bucket events to subscribe to.
+
+#### Members <a name="Members" id="Members"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.cloud.BucketEventType.CREATE">CREATE</a></code> | create. |
+| <code><a href="#@winglang/sdk.cloud.BucketEventType.DELETE">DELETE</a></code> | delete. |
+| <code><a href="#@winglang/sdk.cloud.BucketEventType.UPDATE">UPDATE</a></code> | update. |
+
+---
+
+##### `CREATE` <a name="CREATE" id="@winglang/sdk.cloud.BucketEventType.CREATE"></a>
+
+create.
+
+---
+
+
+##### `DELETE` <a name="DELETE" id="@winglang/sdk.cloud.BucketEventType.DELETE"></a>
+
+delete.
+
+---
+
+
+##### `UPDATE` <a name="UPDATE" id="@winglang/sdk.cloud.BucketEventType.UPDATE"></a>
+
+update.
+
+---
+
+
+### ColumnType <a name="ColumnType" id="@winglang/sdk.cloud.ColumnType"></a>
+
+Table column types.
+
+#### Members <a name="Members" id="Members"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.cloud.ColumnType.STRING">STRING</a></code> | string type. |
+| <code><a href="#@winglang/sdk.cloud.ColumnType.NUMBER">NUMBER</a></code> | number type. |
+| <code><a href="#@winglang/sdk.cloud.ColumnType.BOOLEAN">BOOLEAN</a></code> | bool type. |
+| <code><a href="#@winglang/sdk.cloud.ColumnType.DATE">DATE</a></code> | date type. |
+| <code><a href="#@winglang/sdk.cloud.ColumnType.JSON">JSON</a></code> | json type. |
+
+---
+
+##### `STRING` <a name="STRING" id="@winglang/sdk.cloud.ColumnType.STRING"></a>
+
+string type.
+
+---
+
+
+##### `NUMBER` <a name="NUMBER" id="@winglang/sdk.cloud.ColumnType.NUMBER"></a>
+
+number type.
+
+---
+
+
+##### `BOOLEAN` <a name="BOOLEAN" id="@winglang/sdk.cloud.ColumnType.BOOLEAN"></a>
+
+bool type.
+
+---
+
+
+##### `DATE` <a name="DATE" id="@winglang/sdk.cloud.ColumnType.DATE"></a>
+
+date type.
+
+---
+
+
+##### `JSON` <a name="JSON" id="@winglang/sdk.cloud.ColumnType.JSON"></a>
+
+json type.
+
+---
+
+
+### HttpMethod <a name="HttpMethod" id="@winglang/sdk.cloud.HttpMethod"></a>
+
+Allowed HTTP methods for a endpoint.
+
+#### Members <a name="Members" id="Members"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.cloud.HttpMethod.GET">GET</a></code> | Get. |
+| <code><a href="#@winglang/sdk.cloud.HttpMethod.HEAD">HEAD</a></code> | Head. |
+| <code><a href="#@winglang/sdk.cloud.HttpMethod.POST">POST</a></code> | Post. |
+| <code><a href="#@winglang/sdk.cloud.HttpMethod.PUT">PUT</a></code> | Put. |
+| <code><a href="#@winglang/sdk.cloud.HttpMethod.DELETE">DELETE</a></code> | Delete. |
+| <code><a href="#@winglang/sdk.cloud.HttpMethod.CONNECT">CONNECT</a></code> | Connect. |
+| <code><a href="#@winglang/sdk.cloud.HttpMethod.OPTIONS">OPTIONS</a></code> | Options. |
+| <code><a href="#@winglang/sdk.cloud.HttpMethod.PATCH">PATCH</a></code> | Patch. |
+
+---
+
+##### `GET` <a name="GET" id="@winglang/sdk.cloud.HttpMethod.GET"></a>
+
+Get.
+
+---
+
+
+##### `HEAD` <a name="HEAD" id="@winglang/sdk.cloud.HttpMethod.HEAD"></a>
+
+Head.
+
+---
+
+
+##### `POST` <a name="POST" id="@winglang/sdk.cloud.HttpMethod.POST"></a>
+
+Post.
+
+---
+
+
+##### `PUT` <a name="PUT" id="@winglang/sdk.cloud.HttpMethod.PUT"></a>
+
+Put.
+
+---
+
+
+##### `DELETE` <a name="DELETE" id="@winglang/sdk.cloud.HttpMethod.DELETE"></a>
+
+Delete.
+
+---
+
+
+##### `CONNECT` <a name="CONNECT" id="@winglang/sdk.cloud.HttpMethod.CONNECT"></a>
+
+Connect.
+
+---
+
+
+##### `OPTIONS` <a name="OPTIONS" id="@winglang/sdk.cloud.HttpMethod.OPTIONS"></a>
+
+Options.
+
+---
+
+
+##### `PATCH` <a name="PATCH" id="@winglang/sdk.cloud.HttpMethod.PATCH"></a>
+
+Patch.
+
+---
+
+
+### TraceType <a name="TraceType" id="@winglang/sdk.cloud.TraceType"></a>
+
+The type of a trace.
+
+#### Members <a name="Members" id="Members"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.cloud.TraceType.RESOURCE">RESOURCE</a></code> | A trace representing a resource activity. |
+| <code><a href="#@winglang/sdk.cloud.TraceType.LOG">LOG</a></code> | A trace representing a message emitted by the logger. |
+
+---
+
+##### `RESOURCE` <a name="RESOURCE" id="@winglang/sdk.cloud.TraceType.RESOURCE"></a>
+
+A trace representing a resource activity.
+
+---
+
+
+##### `LOG` <a name="LOG" id="@winglang/sdk.cloud.TraceType.LOG"></a>
+
+A trace representing a message emitted by the logger.
+
+---
+

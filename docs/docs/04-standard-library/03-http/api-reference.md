@@ -388,3 +388,164 @@ Sends a PUT request.
 
 
 
+## Enums <a name="Enums" id="Enums"></a>
+
+### HttpMethod <a name="HttpMethod" id="@winglang/sdk.http.HttpMethod"></a>
+
+The request's method.
+
+#### Members <a name="Members" id="Members"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.http.HttpMethod.GET">GET</a></code> | GET. |
+| <code><a href="#@winglang/sdk.http.HttpMethod.PUT">PUT</a></code> | PUT. |
+| <code><a href="#@winglang/sdk.http.HttpMethod.DELETE">DELETE</a></code> | DELETE. |
+| <code><a href="#@winglang/sdk.http.HttpMethod.PATCH">PATCH</a></code> | PATCH. |
+| <code><a href="#@winglang/sdk.http.HttpMethod.POST">POST</a></code> | POST. |
+| <code><a href="#@winglang/sdk.http.HttpMethod.OPTIONS">OPTIONS</a></code> | OPTIONS. |
+| <code><a href="#@winglang/sdk.http.HttpMethod.HEAD">HEAD</a></code> | HEAD. |
+
+---
+
+##### `GET` <a name="GET" id="@winglang/sdk.http.HttpMethod.GET"></a>
+
+GET.
+
+---
+
+
+##### `PUT` <a name="PUT" id="@winglang/sdk.http.HttpMethod.PUT"></a>
+
+PUT.
+
+---
+
+
+##### `DELETE` <a name="DELETE" id="@winglang/sdk.http.HttpMethod.DELETE"></a>
+
+DELETE.
+
+---
+
+
+##### `PATCH` <a name="PATCH" id="@winglang/sdk.http.HttpMethod.PATCH"></a>
+
+PATCH.
+
+---
+
+
+##### `POST` <a name="POST" id="@winglang/sdk.http.HttpMethod.POST"></a>
+
+POST.
+
+---
+
+
+##### `OPTIONS` <a name="OPTIONS" id="@winglang/sdk.http.HttpMethod.OPTIONS"></a>
+
+OPTIONS.
+
+---
+
+
+##### `HEAD` <a name="HEAD" id="@winglang/sdk.http.HttpMethod.HEAD"></a>
+
+HEAD.
+
+---
+
+
+### RequestCache <a name="RequestCache" id="@winglang/sdk.http.RequestCache"></a>
+
+The cache mode of the request.
+
+It controls how a request will interact with the system's HTTP cache.
+
+#### Members <a name="Members" id="Members"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.http.RequestCache.DEFAULT">DEFAULT</a></code> | The runtime environment looks for a matching request in its HTTP cache. |
+| <code><a href="#@winglang/sdk.http.RequestCache.NO_STORE">NO_STORE</a></code> | The runtime environment fetches the resource from the remote server without first looking in the cache, and will not update the cache with the downloaded resource. |
+| <code><a href="#@winglang/sdk.http.RequestCache.RELOAD">RELOAD</a></code> | The runtime environment fetches the resource from the remote server without first looking in the cache, but then will update the cache with the downloaded resource. |
+| <code><a href="#@winglang/sdk.http.RequestCache.NO_CACHE">NO_CACHE</a></code> | The runtime environment looks for a matching request in its HTTP cache. |
+| <code><a href="#@winglang/sdk.http.RequestCache.FORCE_CACHE">FORCE_CACHE</a></code> | The runtime environment looks for a matching request in its HTTP cache. |
+
+---
+
+##### `DEFAULT` <a name="DEFAULT" id="@winglang/sdk.http.RequestCache.DEFAULT"></a>
+
+The runtime environment looks for a matching request in its HTTP cache.
+
+* If there is a match and it is fresh, it will be returned from the cache.
+* If there is a match but it is stale, the runtime environment will make a conditional request to the remote server.
+* If the server indicates that the resource has not changed, it will be returned from the cache.
+* Otherwise the resource will be downloaded from the server and the cache will be updated.
+* If there is no match, the runtime environment will make a normal request, and will update the cache with the downloaded resource.
+
+---
+
+
+##### `NO_STORE` <a name="NO_STORE" id="@winglang/sdk.http.RequestCache.NO_STORE"></a>
+
+The runtime environment fetches the resource from the remote server without first looking in the cache, and will not update the cache with the downloaded resource.
+
+---
+
+
+##### `RELOAD` <a name="RELOAD" id="@winglang/sdk.http.RequestCache.RELOAD"></a>
+
+The runtime environment fetches the resource from the remote server without first looking in the cache, but then will update the cache with the downloaded resource.
+
+---
+
+
+##### `NO_CACHE` <a name="NO_CACHE" id="@winglang/sdk.http.RequestCache.NO_CACHE"></a>
+
+The runtime environment looks for a matching request in its HTTP cache.
+
+* If there is a match, fresh or stale, the runtime environment will make a conditional request to the remote server.
+* If the server indicates that the resource has not changed, it will be returned from the cache. Otherwise the resource will be downloaded from the server and the cache will be updated.
+* If there is no match, the runtime environment will make a normal request, and will update the cache with the downloaded resource.
+
+---
+
+
+##### `FORCE_CACHE` <a name="FORCE_CACHE" id="@winglang/sdk.http.RequestCache.FORCE_CACHE"></a>
+
+The runtime environment looks for a matching request in its HTTP cache.
+
+* If there is a match, fresh or stale, it will be returned from the cache.
+* If there is no match, the runtime environment will make a normal request, and will update the cache with the downloaded resource.
+
+---
+
+
+### RequestRedirect <a name="RequestRedirect" id="@winglang/sdk.http.RequestRedirect"></a>
+
+The redirect read-only property that contains the mode for how redirects are handled.
+
+#### Members <a name="Members" id="Members"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.http.RequestRedirect.FOLLOW">FOLLOW</a></code> | Follow all redirects incurred when fetching a resource. |
+| <code><a href="#@winglang/sdk.http.RequestRedirect.ERROR">ERROR</a></code> | Return a network error when a request is met with a redirect. |
+
+---
+
+##### `FOLLOW` <a name="FOLLOW" id="@winglang/sdk.http.RequestRedirect.FOLLOW"></a>
+
+Follow all redirects incurred when fetching a resource.
+
+---
+
+
+##### `ERROR` <a name="ERROR" id="@winglang/sdk.http.RequestRedirect.ERROR"></a>
+
+Return a network error when a request is met with a redirect.
+
+---
+
