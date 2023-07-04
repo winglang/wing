@@ -226,11 +226,13 @@ export class Simulator {
       );
     }
 
+    for (const resource of this._config.resources) {
+      const object = this.getResource(resource.path);
+      await object.cleanup();
+    }
 
     this._handles.reset();
     this._running = false;
-
-    // TODO: remove "attrs" data from tree
   }
 
   /**
@@ -265,7 +267,7 @@ export class Simulator {
    * Get a simulated resource instance.
    * @returns the resource
    */
-  public getResource(path: string): any {
+  public getResource(path: string): ISimulatorResourceInstance {
     const handle = this.tryGetResource(path);
     if (!handle) {
       throw new Error(`Resource "${path}" not found.`);
@@ -277,11 +279,12 @@ export class Simulator {
    * Get a simulated resource instance.
    * @returns The resource of undefined if not found
    */
-  public tryGetResource(path: string): any | undefined {
+  public tryGetResource(path: string): ISimulatorResourceInstance | undefined {
     const handle = this.tryGetResourceConfig(path)?.attrs.handle;
     if (!handle) {
       return undefined;
     }
+
     return this._handles.find(handle);
   }
 
