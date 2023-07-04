@@ -39,6 +39,12 @@ export const useLayout = ({
   const [logsTimeFilter, setLogsTimeFilter] = useState(0);
 
   const wingfile = trpc["app.wingfile"].useQuery();
+  const title = useMemo(() => {
+    if (!wingfile.data) {
+      return "Wing Console";
+    }
+    return `${wingfile.data} - Wing Console`;
+  }, [wingfile.data]);
 
   const logs = trpc["app.logs"].useQuery(
     {
@@ -121,6 +127,7 @@ export const useLayout = ({
     logsRef,
     logs,
     onResourceClick,
+    title,
     wingfile,
   };
 };
