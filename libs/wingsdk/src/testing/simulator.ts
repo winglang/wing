@@ -9,6 +9,8 @@ import { readJsonSync } from "../shared/misc";
 import { DefaultSimulatorFactory } from "../target-sim/factory.inflight";
 import { isToken } from "../target-sim/tokens";
 
+const START_ATTEMPT_COUNT = 10;
+
 /**
  * Props for `Simulator`.
  */
@@ -183,70 +185,32 @@ export class Simulator {
       );
     }
 
-    this._traces = [];
 
-    for (const resourceConfig of this._config.resources) {
-      const context: ISimulatorContext = {
-        simdir: this.simdir,
-        resourcePath: resourceConfig.path,
-        findInstance: (handle: string) => {
-          return this._handles.find(handle);
-        },
-        addTrace: (trace: Trace) => {
-          this._addTrace(trace);
-        },
-        withTrace: async (props: IWithTraceProps) => {
-          // TODO: log start time and end time of activity?
-          try {
-            let result = await props.activity();
-            this._addTrace({
-              data: {
-                message: props.message,
-                status: "success",
-                result: JSON.stringify(result),
-              },
-              type: TraceType.RESOURCE,
-              sourcePath: resourceConfig.path,
-              sourceType: resourceConfig.type,
-              timestamp: new Date().toISOString(),
-            });
-            return result;
-          } catch (err) {
-            this._addTrace({
-              data: { message: props.message, status: "failure", error: err },
-              type: TraceType.RESOURCE,
-              sourcePath: resourceConfig.path,
-              sourceType: resourceConfig.type,
-              timestamp: new Date().toISOString(),
-            });
-            throw err;
-          }
-        },
-        listTraces: () => {
-          return [...this._traces];
-        },
-      };
+    const initQueue: (BaseResourceSchema & { _attempts?: number })[] = [...this._config.resources];
 
-      const resolvedProps = this.resolveTokens(
-        resourceConfig.props,
-        resourceConfig.path
-      );
-      const resource = this._factory.resolve(
-        resourceConfig.type,
-        resolvedProps,
-        context
-      );
-      const resourceAttrs = await resource.init();
-      const handle = this._handles.allocate(resource);
-      (resourceConfig as any).attrs = { ...resourceAttrs, handle };
-      let event: Trace = {
-        type: TraceType.RESOURCE,
-        data: { message: `${resourceConfig.type} created.` },
-        sourcePath: resourceConfig.path,
-        sourceType: resourceConfig.type,
-        timestamp: new Date().toISOString(),
-      };
-      this._addTrace(event);
+    while (true) {
+      const next = initQueue.shift();
+      if (!next) {
+        break;
+      }
+
+      // we couldn't start this resource yet, so decrement the retry counter and put it back in
+      // the init queue.
+      if (!await this.tryStartResource(next)) {
+        // we couldn't start this resource yet, so decrement the attempt counter
+        next._attempts = next._attempts ?? START_ATTEMPT_COUNT;
+        next._attempts--;
+
+        // if we've tried too many times, give up (might be a dependency cycle or a bad reference)
+        if (next._attempts === 0) {
+          throw new Error(
+            `Could not start resource ${next.path} after ${START_ATTEMPT_COUNT} attempts. This could be due to a dependency cycle or an invalid attribute reference.`
+          );
+        }
+
+        // put back in the queue for another round
+        initQueue.push(next);
+      }
     }
 
     this._running = true;
@@ -262,25 +226,6 @@ export class Simulator {
       );
     }
 
-    for (const resourceConfig of this._config.resources.slice().reverse()) {
-      const handle = resourceConfig.attrs?.handle;
-      if (!handle) {
-        throw new Error(
-          `Resource ${resourceConfig.path} could not be cleaned up, no handle for it was found.`
-        );
-      }
-      const resource = this._handles.deallocate(resourceConfig.attrs!.handle);
-      await resource.cleanup();
-
-      let event: Trace = {
-        type: TraceType.RESOURCE,
-        data: { message: `${resourceConfig.type} deleted.` },
-        sourcePath: resourceConfig.path,
-        sourceType: resourceConfig.type,
-        timestamp: new Date().toISOString(),
-      };
-      this._addTrace(event);
-    }
 
     this._handles.reset();
     this._running = false;
@@ -380,6 +325,91 @@ export class Simulator {
     return this._tree;
   }
 
+  private async tryStartResource(resourceConfig: BaseResourceSchema): Promise<boolean> {
+    const context = this.createContext(resourceConfig);
+
+    const resolvedProps = this.tryResolveTokens(resourceConfig.props, resourceConfig.path);
+    if (resolvedProps === undefined) {
+      this._addTrace({
+        type: TraceType.RESOURCE,
+        data: { message: `${resourceConfig.path} is waiting on a dependency` },
+        sourcePath: resourceConfig.path,
+        sourceType: resourceConfig.type,
+        timestamp: new Date().toISOString(),
+      });
+
+      // this means the resource has a dependency that hasn't been started yet (hopefully). return
+      // it to the init queue.
+      return false;
+    }
+
+    // create the resource based on its type
+    const resourceObject = this._factory.resolve(resourceConfig.type, resolvedProps, context);
+
+    // go ahead and initialize the resource
+    const attrs = await resourceObject.init();
+
+    // allocate a handle for the resource so others can find it
+    const handle = this._handles.allocate(resourceObject);
+
+    // update the resource configuration with new attrs returned after initialization
+    (resourceConfig as any).attrs = { ...attrs, handle };
+
+    // trace the resource creation
+    this._addTrace({
+      type: TraceType.RESOURCE,
+      data: { message: `${resourceConfig.type} created.` },
+      sourcePath: resourceConfig.path,
+      sourceType: resourceConfig.type,
+      timestamp: new Date().toISOString(),
+    });
+
+    return true;
+  }
+
+  private createContext(resourceConfig: BaseResourceSchema): ISimulatorContext {
+    return {
+      simdir: this.simdir,
+      resourcePath: resourceConfig.path,
+      findInstance: (handle: string) => {
+        return this._handles.find(handle);
+      },
+      addTrace: (trace: Trace) => {
+        this._addTrace(trace);
+      },
+      withTrace: async (props: IWithTraceProps) => {
+        // TODO: log start time and end time of activity?
+        try {
+          let result = await props.activity();
+          this._addTrace({
+            data: {
+              message: props.message,
+              status: "success",
+              result: JSON.stringify(result),
+            },
+            type: TraceType.RESOURCE,
+            sourcePath: resourceConfig.path,
+            sourceType: resourceConfig.type,
+            timestamp: new Date().toISOString(),
+          });
+          return result;
+        } catch (err) {
+          this._addTrace({
+            data: { message: props.message, status: "failure", error: err },
+            type: TraceType.RESOURCE,
+            sourcePath: resourceConfig.path,
+            sourceType: resourceConfig.type,
+            timestamp: new Date().toISOString(),
+          });
+          throw err;
+        }
+      },
+      listTraces: () => {
+        return [...this._traces];
+      },
+    };
+  }
+
   private _addTrace(event: Trace) {
     event = Object.freeze(event);
     for (const sub of this._traceSubscribers) {
@@ -389,21 +419,21 @@ export class Simulator {
   }
 
   /**
-   * Return an object with all tokens in it resolved to their appropriate
-   * values.
+   * Return an object with all tokens in it resolved to their appropriate values.
    *
-   * A token can be a string like "${app/my_bucket#attrs.handle}". This token
-   * would be resolved to the "handle" attribute of the resource at path
-   * "app/my_bucket". If that attribute does not exist at the time of resolution
-   * (for example, if my_bucket is not being simulated yet), an error will be
-   * thrown.
+   * A token can be a string like "${app/my_bucket#attrs.handle}". This token would be resolved to
+   * the "handle" attribute of the resource at path "app/my_bucket". If that attribute does not
+   * exist at the time of resolution (for example, if my_bucket is not being simulated yet), an
+   * error will be thrown.
    *
    * Tokens can also be nested, like "${app/my_bucket#attrs.handle}/foo/bar".
    *
    * @param obj The object to resolve tokens in.
    * @param source The path of the resource that requested the token to be resolved.
+   * @returns `undefined` if the token could not be resolved (e.g. needs a dependency), otherwise
+   * the resolved value.
    */
-  private resolveTokens(obj: any, source: string): any {
+  private tryResolveTokens(obj: any, source: string): any {
     if (typeof obj === "string") {
       if (isToken(obj)) {
         const ref = obj.slice(2, -1);
@@ -412,10 +442,12 @@ export class Simulator {
         if (rest.startsWith("attrs.")) {
           const attrName = rest.slice(6);
           const attr = config?.attrs[attrName];
+
+          // we couldn't find the attribute. this doesn't mean it doesn't exist, it's just likely
+          // that this resource haven't been started yet. so return `undefined`, which will cause
+          // this resource to go back to the init queue.
           if (!attr) {
-            throw new Error(
-              `Tried to resolve token "${obj}" but resource ${path} has no attribute ${attrName} defined yet. Is it possible ${source} needs to take a dependency on ${path}?`
-            );
+            return undefined;
           }
           return attr;
         } else if (rest.startsWith("props.")) {
@@ -429,17 +461,31 @@ export class Simulator {
           throw new Error(`Invalid token reference: "${ref}"`);
         }
       }
+
       return obj;
     }
 
     if (Array.isArray(obj)) {
-      return obj.map((x) => this.resolveTokens(x, source));
+      const result = [];
+      for (const x of obj) {
+        const value = this.tryResolveTokens(x, source);
+        if (value === undefined) {
+          return undefined;
+        };
+        result.push(value);
+      }
+
+      return result;
     }
 
     if (typeof obj === "object") {
       const ret: any = {};
       for (const [key, value] of Object.entries(obj)) {
-        ret[key] = this.resolveTokens(value, source);
+        const resolved = this.tryResolveTokens(value, source);
+        if (resolved === undefined) {
+          return undefined;
+        }
+        ret[key] = resolved;
       }
       return ret;
     }
