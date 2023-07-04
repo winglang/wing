@@ -8,8 +8,6 @@ on:
     paths:
       - "!docs/**"
       - "!logo/**"
-      - "!*.md"
-      - "libs/wingsdk/src/cloud/*.md"
   push:
     branches:
       - main
