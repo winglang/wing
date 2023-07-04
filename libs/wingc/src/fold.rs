@@ -141,7 +141,7 @@ where
 		StmtKind::Return(value) => StmtKind::Return(value.map(|value| f.fold_expr(value))),
 		StmtKind::Expression(expr) => StmtKind::Expression(f.fold_expr(expr)),
 		StmtKind::Assignment { variable, value } => StmtKind::Assignment {
-			variable: f.fold_reference(variable),
+			variable: f.fold_expr(variable),
 			value: f.fold_expr(value),
 		},
 		StmtKind::Scope(scope) => StmtKind::Scope(f.fold_scope(scope)),
@@ -193,7 +193,7 @@ where
 			.map(|(name, def)| (f.fold_symbol(name), f.fold_function_definition(def)))
 			.collect(),
 		initializer: f.fold_function_definition(node.initializer),
-		parent: node.parent.map(|parent| f.fold_user_defined_type(parent)),
+		parent: node.parent.map(|parent| f.fold_expr(parent)),
 		implements: node
 			.implements
 			.into_iter()
@@ -257,7 +257,7 @@ where
 			obj_scope,
 			arg_list,
 		} => ExprKind::New {
-			class: f.fold_type_annotation(class),
+			class: Box::new(f.fold_expr(*class)),
 			obj_id,
 			obj_scope: obj_scope.map(|scope| Box::new(f.fold_expr(*scope))),
 			arg_list: f.fold_args(arg_list),
@@ -291,6 +291,12 @@ where
 			fields: fields
 				.into_iter()
 				.map(|(name, field)| (f.fold_symbol(name), f.fold_expr(field)))
+				.collect(),
+		},
+		ExprKind::JsonMapLiteral { fields } => ExprKind::JsonMapLiteral {
+			fields: fields
+				.into_iter()
+				.map(|(key, value)| (key, f.fold_expr(value)))
 				.collect(),
 		},
 		ExprKind::MapLiteral { type_, fields } => ExprKind::MapLiteral {
@@ -358,8 +364,9 @@ where
 			property: f.fold_symbol(property),
 			optional_accessor,
 		},
-		Reference::TypeMember { type_, property } => Reference::TypeMember {
-			type_: f.fold_user_defined_type(type_),
+		Reference::TypeReference(udt) => Reference::TypeReference(f.fold_user_defined_type(udt)),
+		Reference::TypeMember { typeobject, property } => Reference::TypeMember {
+			typeobject: Box::new(f.fold_expr(*typeobject)),
 			property: f.fold_symbol(property),
 		},
 	}

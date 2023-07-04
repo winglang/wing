@@ -198,7 +198,7 @@ module.exports = function({  }) {
             "uniqueId": "root_testinflightscancallotherinflights_Handler_IamRolePolicy_9ADCA787"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:List*\"],\"Resource\":[\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\",\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"lambda:InvokeFunction\"],\"Resource\":[\"${aws_lambda_function.root_func1_52D4D9D4.arn}\"],\"Effect\":\"Allow\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:GetObject*\",\"s3:GetBucket*\"],\"Resource\":[\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\",\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"lambda:InvokeFunction\"],\"Resource\":[\"${aws_lambda_function.root_func1_52D4D9D4.arn}\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.root_testinflightscancallotherinflights_Handler_IamRole_BB2EB09E.name}"
       },
       "root_testvariablecanbeaninflightclosure_Handler_IamRolePolicy_1E567808": {
@@ -208,7 +208,7 @@ module.exports = function({  }) {
             "uniqueId": "root_testvariablecanbeaninflightclosure_Handler_IamRolePolicy_1E567808"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:List*\"],\"Resource\":[\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\",\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\"],\"Effect\":\"Allow\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:List*\",\"s3:GetObject*\",\"s3:GetBucket*\"],\"Resource\":[\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\",\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.root_testvariablecanbeaninflightclosure_Handler_IamRole_507C37DB.name}"
       }
     },
@@ -255,7 +255,6 @@ module.exports = function({  }) {
         "environment": {
           "variables": {
             "BUCKET_NAME_d755b447": "${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
-            "BUCKET_NAME_d755b447_IS_PUBLIC": "false",
             "WING_FUNCTION_NAME": "func1-c899062d",
             "WING_TARGET": "tf-aws"
           }
@@ -283,7 +282,6 @@ module.exports = function({  }) {
         "environment": {
           "variables": {
             "BUCKET_NAME_d755b447": "${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
-            "BUCKET_NAME_d755b447_IS_PUBLIC": "false",
             "FUNCTION_NAME_c79d5cd4": "${aws_lambda_function.root_func1_52D4D9D4.arn}",
             "WING_FUNCTION_NAME": "Handler-c8ad4c02",
             "WING_TARGET": "tf-aws"
@@ -312,7 +310,6 @@ module.exports = function({  }) {
         "environment": {
           "variables": {
             "BUCKET_NAME_d755b447": "${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
-            "BUCKET_NAME_d755b447_IS_PUBLIC": "false",
             "WING_FUNCTION_NAME": "Handler-c8210662",
             "WING_TARGET": "tf-aws"
           }
@@ -438,8 +435,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
         this.display.hidden = true;
+        this._addInflightOps("handle");
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.$Closure1.js";
@@ -474,8 +471,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure2 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
         this.display.hidden = true;
+        this._addInflightOps("handle");
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.$Closure2.js";
@@ -510,8 +507,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure3 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
         this.display.hidden = true;
+        this._addInflightOps("handle");
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.$Closure3.js";
@@ -550,13 +547,12 @@ class $Root extends $stdlib.std.Resource {
     class MyResource extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("foo");
         const __parent_this_4 = this;
         class $Closure4 extends $stdlib.std.Resource {
           constructor(scope, id, ) {
             super(scope, id);
-            this._addInflightOps("handle");
             this.display.hidden = true;
+            this._addInflightOps("handle");
           }
           static _toInflightType(context) {
             const self_client_path = "././inflight.$Closure4.js";
@@ -589,6 +585,7 @@ class $Root extends $stdlib.std.Resource {
           }
         }
         this.closure = new $Closure4(this,"$Closure4");
+        this._addInflightOps("foo");
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.MyResource.js";
@@ -623,8 +620,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure5 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
         this.display.hidden = true;
+        this._addInflightOps("handle");
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.$Closure5.js";

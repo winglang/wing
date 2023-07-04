@@ -100,7 +100,7 @@ module.exports = function({ b, fileName, j, getJson }) {
             "uniqueId": "root_cloudFunction_IamRolePolicy_AAE6C0C0"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:List*\"],\"Resource\":[\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\",\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\"],\"Effect\":\"Allow\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:GetObject*\",\"s3:GetBucket*\"],\"Resource\":[\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\",\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.root_cloudFunction_IamRole_DAEC3578.name}"
       },
       "root_testput_Handler_IamRolePolicy_401F0ED6": {
@@ -147,7 +147,6 @@ module.exports = function({ b, fileName, j, getJson }) {
         "environment": {
           "variables": {
             "BUCKET_NAME_d755b447": "${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
-            "BUCKET_NAME_d755b447_IS_PUBLIC": "false",
             "WING_FUNCTION_NAME": "cloud-Function-c8d2eca1",
             "WING_TARGET": "tf-aws"
           }
@@ -175,7 +174,6 @@ module.exports = function({ b, fileName, j, getJson }) {
         "environment": {
           "variables": {
             "BUCKET_NAME_d755b447": "${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
-            "BUCKET_NAME_d755b447_IS_PUBLIC": "false",
             "FUNCTION_NAME_5bb84dfa": "${aws_lambda_function.root_cloudFunction_6A57BA0A.arn}",
             "WING_FUNCTION_NAME": "Handler-c8a253bd",
             "WING_TARGET": "tf-aws"
@@ -291,8 +289,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
         this.display.hidden = true;
+        this._addInflightOps("handle");
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.$Closure1.js";
@@ -331,8 +329,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure2 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
         this.display.hidden = true;
+        this._addInflightOps("handle");
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.$Closure2.js";
@@ -378,7 +376,7 @@ class $Root extends $stdlib.std.Resource {
     }
     const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
     const fileName = "file.json";
-    const j = Object.freeze({"persons":[{"age":30,"name":"hasan","fears":["heights", "failure"]}]});
+    const j = Object.freeze({"persons":[Object.freeze({"age":30,"name":"hasan","fears":["heights", "failure"]})]});
     const getJson = this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"cloud.Function",new $Closure1(this,"$Closure1"));
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:put",new $Closure2(this,"$Closure2"));
   }

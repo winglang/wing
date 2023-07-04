@@ -162,7 +162,7 @@ module.exports = function({  }) {
             "uniqueId": "root_testmain_Handler_IamRolePolicy_184F2A46"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.root_KeyValueStore_cloudBucket_B6A49C6A.arn}\",\"${aws_s3_bucket.root_KeyValueStore_cloudBucket_B6A49C6A.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:List*\"],\"Resource\":[\"${aws_s3_bucket.root_KeyValueStore_cloudBucket_B6A49C6A.arn}\",\"${aws_s3_bucket.root_KeyValueStore_cloudBucket_B6A49C6A.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.root_sasa_B91F09DA.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:GetItem\"],\"Resource\":[\"${aws_dynamodb_table.root_sasa_B91F09DA.arn}\"],\"Effect\":\"Allow\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\",\"s3:GetObject*\",\"s3:GetBucket*\"],\"Resource\":[\"${aws_s3_bucket.root_KeyValueStore_cloudBucket_B6A49C6A.arn}\",\"${aws_s3_bucket.root_KeyValueStore_cloudBucket_B6A49C6A.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.root_sasa_B91F09DA.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:GetItem\"],\"Resource\":[\"${aws_dynamodb_table.root_sasa_B91F09DA.arn}\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.root_testmain_Handler_IamRole_0300CAA5.name}"
       }
     },
@@ -189,7 +189,6 @@ module.exports = function({  }) {
         "environment": {
           "variables": {
             "BUCKET_NAME_ce72b88b": "${aws_s3_bucket.root_KeyValueStore_cloudBucket_B6A49C6A.bucket}",
-            "BUCKET_NAME_ce72b88b_IS_PUBLIC": "false",
             "DYNAMODB_TABLE_NAME_5a275103": "${aws_dynamodb_table.root_sasa_B91F09DA.name}",
             "WING_FUNCTION_NAME": "Handler-c8d10438",
             "WING_TARGET": "tf-aws"
@@ -295,14 +294,13 @@ class $Root extends $stdlib.std.Resource {
     class KeyValueStore extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("get", "set");
         this.bucket = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
         const __parent_this_1 = this;
         class $Closure1 extends $stdlib.std.Resource {
           constructor(scope, id, ) {
             super(scope, id);
-            this._addInflightOps("handle");
             this.display.hidden = true;
+            this._addInflightOps("handle");
           }
           static _toInflightType(context) {
             const self_client_path = "././inflight.$Closure1.js";
@@ -331,6 +329,7 @@ class $Root extends $stdlib.std.Resource {
           }
         }
         this.onUpdateCallback = new $Closure1(this,"$Closure1");
+        this._addInflightOps("get", "set");
       }
        onUpdate(fn)  {
         this.onUpdateCallback = fn;
@@ -375,8 +374,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure2 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
         this.display.hidden = true;
+        this._addInflightOps("handle");
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.$Closure2.js";
@@ -411,8 +410,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure3 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
         this.display.hidden = true;
+        this._addInflightOps("handle");
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.$Closure3.js";

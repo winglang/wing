@@ -37,6 +37,9 @@ const getResourceBorderColor = (
     case "wingsdk.redis.Redis": {
       return "border-t-[3px] border-t-red-700 group-hover:border-t-red-700 group-focus:border-t-red-700 dark:border-t-red-700 dark:group-hover:border-t-red-700 dark:group-focus:border-t-red-700";
     }
+    case "wingsdk.cloud.Website": {
+      return "border-t-[3px] border-t-violet-500 group-hover:border-t-violet-500 group-focus:border-t-violet-500 dark:border-t-violet-500 dark:group-hover:border-t-violet-500 dark:group-focus:border-t-violet-500";
+    }
   }
 };
 
