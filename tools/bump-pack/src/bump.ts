@@ -52,11 +52,7 @@ export async function setPackageVersion(options: SetPackageVersionOptions) {
 
   const originals: Record<string, string> = {};
 
-  console.log(
-    `Setting version to ${version}${
-      devBuild ? " (DEV)" : ""
-    } in ${packageJsonPath}`
-  );
+  console.log(`Setting version to ${version}${devBuild ? " (DEV)" : ""}`);
 
   if (options.dryRun) {
     console.log(`DRYRUN: Set version to ${version} in ${packageJsonPath}`);

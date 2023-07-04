@@ -1,7 +1,9 @@
 import { execSync } from "node:child_process";
 import fs from "fs-extra";
-import { findWorkspacePackages } from "@pnpm/workspace.find-packages";
-import { findWorkspaceDir } from "@pnpm/find-workspace-dir";
+import { Project, findWorkspacePackages } from "@pnpm/workspace.find-packages";
+import path from "node:path";
+import { tmpdir } from "node:os";
+import { setPackageVersion } from "./bump";
 
 export interface PackOptions {
   /**
@@ -25,112 +27,79 @@ export async function pack(options: PackOptions) {
   if (dryRun) {
     console.log(`Would have run "pnpm pack" in ${packageDir}`);
   } else {
-    preparePackageJsonAndRun(packageDir, () => {
-      prepareBundledDepsAndRun(packageDir, () => {
-        execSync("pnpm pack", { cwd: packageDir, stdio: "inherit" });
-      });
+    const packageData = (await findWorkspacePackages(packageDir)).find(
+      (p) => p.dir === packageDir
+    );
+    if (!packageData) {
+      throw new Error(`Could not find package data for ${packageDir}`);
+    }
+
+    // create a working copy of the entire directory so we can apply changes
+    // to the package.json and bundled dependencies without affecting the
+    // original package
+    const tmpDir = await fs.mkdtemp(path.join(tmpdir(), "bump-pack-"));
+    console.log(`Packing "${packageData.manifest.name}" in ${tmpDir}`);
+    await fs.ensureDir(tmpDir);
+    await fs.copy(packageDir, tmpDir, {
+      dereference: true,
+      overwrite: true,
+    });
+
+    await setPackageVersion({
+      packageDir: tmpDir,
+      dryRun,
+      version: process.env.PROJEN_BUMP_VERSION,
+    });
+
+    await preparePackageJson(packageData, tmpDir);
+    await prepareBundledDeps(packageData, tmpDir);
+
+    execSync(`pnpm pack --pack-destination ${packageDir}`, {
+      cwd: tmpDir,
+      stdio: "inherit",
     });
   }
 }
 
 // https://github.com/npm/npm-packlist/issues/101
-async function prepareBundledDepsAndRun(
-  packageDir: string,
-  callback: () => void
+async function prepareBundledDeps(
+  _packageData: Project,
+  tmpPackageDir: string
 ) {
-  const packageData = (await findWorkspacePackages(packageDir)).find(
-    (p) => p.dir === packageDir
-  );
-  if (!packageData) {
-    throw new Error(`Could not find package data for ${packageDir}`);
-  }
-  const workspaceDir = await findWorkspaceDir(packageData.dir);
-  if (!workspaceDir) {
-    throw new Error(
-      `Could not find workspace directory for ${packageData.dir}`
-    );
-  }
+  const packageDirNodeModules = `${tmpPackageDir}/node_modules`;
 
-  const bundledDeps =
-    packageData.manifest.bundledDependencies ??
-    packageData.manifest.bundleDependencies ??
-    [];
-  const packageDirNodeModules = `${packageDir}/node_modules`;
-  const depsToCopy = [];
-
-  for (const bundledDepName of bundledDeps) {
-    // check if file exists and is a symlink
-    const depPath = `${packageDirNodeModules}/${bundledDepName}`;
-    if (await fs.exists(depPath)) {
-      const bundledDepStats = await fs.lstat(depPath);
-      if (bundledDepStats.isSymbolicLink()) {
-        depsToCopy.push([await fs.realpath(depPath), depPath]);
-      } else {
-        // nothing needed, should bundle fine
-        continue;
-      }
-    } else {
-      throw new Error(
-        `Could not find bundled dep ${bundledDepName} in ${packageDir}`
-      );
-    }
-  }
-
-  // do all the copies first since they take a while
-  for (const dep of depsToCopy) {
-    await fs.copy(dep[0], `${dep[1]}.copy`, {
-      dereference: true,
-      overwrite: true,
-    });
-  }
-
-  for (const dep of depsToCopy) {
-    const regPath = dep[1];
-    const bak = `${regPath}.bak`;
-    const copy = `${regPath}.copy`;
-    await fs.move(regPath, bak, { overwrite: true });
-    await fs.move(copy, regPath, { overwrite: true });
-  }
-
-  try {
-    callback();
-  } finally {
-    // reset the symlinks, or else pnpm will be mad
-    for (const dep of depsToCopy) {
-      const regPath = dep[1];
-      await fs.move(regPath, `${regPath}.copy`, { overwrite: true });
-      await fs.move(`${regPath}.bak`, regPath, { overwrite: true });
-      await fs.remove(`${regPath}.copy`);
+  // for each dir in node_modules, check if it's a symlink
+  for (const dep of await fs.readdir(packageDirNodeModules)) {
+    const depPath = path.join(packageDirNodeModules, dep);
+    const stat = await fs.lstat(depPath);
+    if (stat.isSymbolicLink()) {
+      const realPath = await fs.realpath(depPath);
+      await fs.unlink(depPath);
+      await fs.copy(realPath, depPath);
     }
   }
 }
 
 /**
  * Transforms the package.json at `packageDir` to use the publishConfig field and remove other unnecessary fields such as devDependencies.
- * @param packageDir The directory that contains the package.json to transform.
- * @param callback The function called after the transformation, before reverting the package.json back to its original state.
+ * @param packageData The package data for the package to prepare.
+ * @param tmpPackageDir The temporary directory to prepare the package in.
  */
-function preparePackageJsonAndRun(packageDir: string, callback: () => void) {
-  const packageJsonPath = `${packageDir}/package.json`;
-  const packageJsonString = fs.readFileSync(packageJsonPath, "utf8");
-  const packageJson = JSON.parse(packageJsonString);
-  try {
-    fs.writeFileSync(
-      packageJsonPath,
-      `${JSON.stringify(
-        {
-          ...packageJson,
-          ...packageJson.publishConfig,
-          publishConfig: undefined,
-          devDependencies: undefined,
-        },
-        undefined,
-        2
-      )}\n`
-    );
-
-    callback();
-  } finally {
-    fs.writeFileSync(packageJsonPath, packageJsonString);
-  }
+async function preparePackageJson(packageData: Project, tmpPackageDir: string) {
+  const packageJsonPath = `${tmpPackageDir}/package.json`;
+  const packageJson = packageData.manifest;
+  await fs.writeFile(
+    packageJsonPath,
+    `${JSON.stringify(
+      {
+        ...packageJson,
+        ...packageJson.publishConfig,
+        publishConfig: undefined,
+        devDependencies: undefined,
+        volta: undefined,
+      },
+      undefined,
+      2
+    )}\n`
+  );
 }
