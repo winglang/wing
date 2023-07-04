@@ -37,7 +37,7 @@ export async function linkBundledTransitiveDeps(
 
   const dependencyHierarchy = (
     await buildDependenciesHierarchy([project.dir], {
-      depth: 1,
+      depth: Number.MAX_SAFE_INTEGER,
       lockfileDir: workspaceDir,
       include: {
         dependencies: true,
@@ -70,7 +70,7 @@ export async function linkBundledTransitiveDeps(
       // Use the latest version of transitive deps only
       if (!existing_dep || SemVer.gt(dep.version, existing_dep.version)) {
         depsToLink[dep.alias] = dep;
-        // visitDependencies(dep.dependencies);
+        visitDependencies(dep.dependencies);
       }
     });
   }

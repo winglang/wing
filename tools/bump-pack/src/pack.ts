@@ -1,6 +1,5 @@
 import { execSync } from "node:child_process";
 import fs from "fs-extra";
-import { buildDependenciesHierarchy } from "@pnpm/reviewing.dependencies-hierarchy";
 import { findWorkspacePackages } from "@pnpm/workspace.find-packages";
 import { findWorkspaceDir } from "@pnpm/find-workspace-dir";
 
@@ -51,40 +50,21 @@ async function prepareBundledDepsAndRun(
       `Could not find workspace directory for ${packageData.dir}`
     );
   }
-  const depHierarchy = (
-    await buildDependenciesHierarchy([packageData.dir], {
-      depth: 1,
-      lockfileDir: workspaceDir,
-      include: {
-        dependencies: true,
-        optionalDependencies: false,
-        devDependencies: false,
-      },
-    })
-  )[packageData.dir];
 
-  const deps = depHierarchy.dependencies ?? [];
-  const depsToCopy = [];
   const bundledDeps =
     packageData.manifest.bundledDependencies ??
     packageData.manifest.bundleDependencies ??
     [];
   const packageDirNodeModules = `${packageDir}/node_modules`;
+  const depsToCopy = [];
 
   for (const bundledDepName of bundledDeps) {
-    const dep = deps.find((dep) => dep.alias === bundledDepName);
-    if (!dep) {
-      throw new Error(
-        `Could not find bundled dep ${bundledDepName} in ${packageDir}`
-      );
-    }
-
     // check if file exists and is a symlink
-    const depPath = `${packageDirNodeModules}/${dep.alias}`;
+    const depPath = `${packageDirNodeModules}/${bundledDepName}`;
     if (await fs.exists(depPath)) {
       const bundledDepStats = await fs.lstat(depPath);
       if (bundledDepStats.isSymbolicLink()) {
-        depsToCopy.push([dep.path, depPath]);
+        depsToCopy.push([await fs.realpath(depPath), depPath]);
       } else {
         // nothing needed, should bundle fine
         continue;
