@@ -60,7 +60,7 @@ export async function pack(options: PackOptions) {
       stdio: "inherit",
     });
 
-    void fs.remove(tmpDir);
+    // void fs.remove(tmpDir);
   }
 }
 
@@ -100,17 +100,20 @@ async function preparePackageJson(tmpPackageDir: string) {
   const packageJson = await fs.readJSON(packageJsonPath);
 
   Object.assign(packageJson, packageJson.publishConfig);
-  delete packageJson.volta;
-  delete packageJson.devDependencies;
-  delete packageJson.publishConfig;
 
   const bumpPackConfig = packageJson["bump-pack"];
   if (bumpPackConfig) {
-    for (const dep of (bumpPackConfig.removeBundledDependencies ?? [])) {
-      console.log(`Removing bundled dependency "${dep}"`);
-      delete packageJson.bundledDependencies[dep];
+    for(const depToRemove of bumpPackConfig.removeBundledDependencies ?? []) {
+      console.log(`Removing bundled dependency "${depToRemove}"`);
+      delete packageJson.dependencies[depToRemove];
+      packageJson.bundledDependencies = packageJson.bundledDependencies?.filter((d: string) => d !== depToRemove);
     }
   }
+
+  delete packageJson["bump-pack"];
+  delete packageJson.volta;
+  delete packageJson.devDependencies;
+  delete packageJson.publishConfig;
 
   await fs.writeJSON(packageJsonPath, packageJson);
 }
