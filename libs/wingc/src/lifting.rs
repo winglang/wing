@@ -38,7 +38,9 @@ impl<'a> LiftTransform<'a> {
 	}
 
 	fn should_capture_reference(&self, fullname: &str, span: &WingSpan) -> bool {
-		if self.is_capture_shadow(fullname, span) {
+		// if the symbol is defined in the *current* environment (which could also be a nested scope
+		// inside the current method), we don't need to capture it
+		if self.is_defined_in_current_env(fullname, span) {
 			return false;
 		}
 
@@ -71,21 +73,30 @@ impl<'a> LiftTransform<'a> {
 		return true;
 	}
 
-	fn is_capture_shadow(&self, fullname: &str, span: &WingSpan) -> bool {
+	fn is_defined_in_current_env(&self, fullname: &str, span: &WingSpan) -> bool {
 		// if the symbol is defined later in the current environment, it means we can't capture a
 		// reference to a symbol with the same name from a parent so bail out.
 		// notice that here we are looking in the current environment and not in the method's environment
 		if let Some(env) = self.ctx.current_env() {
 			let lookup = env.lookup_nested_str(&fullname, Some(self.ctx.current_stmt_idx()));
 
-			if let LookupResult::DefinedLater = lookup {
-				report_diagnostic(Diagnostic {
-					span: Some(span.clone()),
-					message: format!(
-						"Cannot capture symbol \"{fullname}\" because it is shadowed by another symbol with the same name"
-					),
-				});
-				return true;
+			match lookup {
+				LookupResult::Found(_, e) => {
+					// if we found the symbol in the current environment, it means we don't need to capture it at all
+					if e.env.is_same(env) {
+						return true;
+					}
+				}
+				LookupResult::DefinedLater => {
+					report_diagnostic(Diagnostic {
+						span: Some(span.clone()),
+						message: format!(
+							"Cannot capture symbol \"{fullname}\" because it is shadowed by another symbol with the same name"
+						),
+					});
+					return true;
+				}
+				LookupResult::NotFound(_) | LookupResult::ExpectedNamespace(_) => {}
 			}
 		}
 
@@ -179,6 +190,9 @@ impl<'a> Fold for LiftTransform<'a> {
 		if self.is_self_type_reference(&node) {
 			return fold::fold_expr(self, node);
 		}
+
+		let code = self.jsify_expr(&node, Phase::Independent);
+		println!("{}", code);
 
 		//---------------
 		// LIFT

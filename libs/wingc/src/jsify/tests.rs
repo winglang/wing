@@ -1778,3 +1778,40 @@ fn reassign_captured_variable() {
     "#
 	);
 }
+
+#[test]
+fn no_capture_shadow_inside_inner_scopes() {
+	assert_compile_ok!(
+		r#"
+    test "testing" {
+      let arr = MutArray<num> [0];
+
+      let i = 1;
+      arr.push(i);
+
+      if true {
+        let i = 2;
+        arr.push(i);
+      }
+    }
+    "#
+	);
+}
+
+#[test]
+fn no_lift_shadow_inside_inner_scopes() {
+	assert_compile_ok!(
+		r#"
+    let i = 1;
+    test "testing" {
+      let arr = MutArray<num> [0];
+      arr.push(i);
+
+      if true {
+        let i = 2;
+        arr.push(i);
+      }
+    }
+    "#
+	);
+}

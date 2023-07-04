@@ -16,7 +16,7 @@ let fn = inflight (): Array<str> => {
     result.push(bar);
   }
 
-  // since we are not attempting to capture "foo" before it ise defined in this scope, this should
+  // since we are not attempting to capture "foo" before it is defined in this scope, this should
   // work.
   let foo = "bang";
   result.push(foo);
@@ -27,6 +27,10 @@ let fn = inflight (): Array<str> => {
 test "capture shadow interaction" {
   let result = fn();
   assert(result.length == 3);
+  log(result.at(0));
+  log(result.at(1));
+  log(result.at(2));
+
   assert(result.at(0) == "hola!");
   assert(result.at(1) == "world");
   assert(result.at(2) == "bang");
