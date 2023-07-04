@@ -70,8 +70,8 @@ export async function linkBundledTransitiveDeps(
       // Use the latest version of transitive deps only
       if (!existing_dep || SemVer.gt(dep.version, existing_dep.version)) {
         depsToLink[dep.alias] = dep;
-        visitDependencies(dep.dependencies);
       }
+      visitDependencies(dep.dependencies);
     });
   }
 
