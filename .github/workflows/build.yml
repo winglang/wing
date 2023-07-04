@@ -5,11 +5,9 @@ on:
     types:
       - opened
       - synchronize
-    paths:
-      - "!docs/**"
-      - "!logo/**"
-      - "!*.md"
-      - "libs/wingsdk/src/cloud/*.md"
+    paths-ignore:
+      - "docs/**"
+      - "logo/**"
   push:
     branches:
       - main
