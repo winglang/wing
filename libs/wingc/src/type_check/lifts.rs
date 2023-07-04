@@ -7,10 +7,10 @@ use crate::ast::Symbol;
 /// Jsification context at the class level
 #[derive(Debug)]
 pub struct Lifts {
-	lift_by_token: BTreeMap<String, Lift>, // map from token to lift
-	lifts: BTreeMap<String, MethodLift>,   // all the lifts (key is "<method>/<token>")
-	captures: BTreeMap<String, Capture>,   // inflight_token -> capture
-	lifted_fields: BTreeMap<String, String>,
+	lift_by_token: BTreeMap<String, Lift>,            // map from token to lift
+	lifts: BTreeMap<String, MethodLift>,              // all the lifts (key is "<method>/<token>")
+	captures: BTreeMap<String, Capture>,              // inflight_token -> capture
+	lifted_fields_by_token: BTreeMap<String, String>, // token -> code
 	token_by_expr_id: BTreeMap<usize, String>,
 	disabled: bool,
 }
@@ -43,7 +43,7 @@ impl Lifts {
 			lifts: BTreeMap::new(),
 			lift_by_token: BTreeMap::new(),
 			captures: BTreeMap::new(),
-			lifted_fields: BTreeMap::new(),
+			lifted_fields_by_token: BTreeMap::new(),
 			token_by_expr_id: BTreeMap::new(),
 			disabled: false,
 		}
@@ -134,13 +134,16 @@ impl Lifts {
 		self.captures.values().collect_vec()
 	}
 
-	pub fn add_lifted_field(&mut self, field: &str, code: &str) {
+	fn add_lifted_field(&mut self, token: &str, code: &str) {
 		assert!(!self.disabled);
-		self.lifted_fields.entry(field.to_string()).or_insert(code.to_string());
+		self
+			.lifted_fields_by_token
+			.entry(token.to_string())
+			.or_insert(code.to_string());
 	}
 
 	pub fn lifted_fields(&self) -> BTreeMap<String, String> {
-		self.lifted_fields.clone()
+		self.lifted_fields_by_token.clone()
 	}
 
 	pub fn all_capture_tokens(&self) -> Vec<&String> {

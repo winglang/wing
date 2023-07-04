@@ -141,9 +141,9 @@ fn namespaced_static_from_inflight() {
 fn lift_string() {
 	assert_compile_ok!(
 		r#"
-    let a = "hello";
+    let b = "hello";
     test "test" {
-      log(a);
+      log(b);
     }
     "#
 	);
@@ -1507,6 +1507,152 @@ fn base_class_captures_inflight() {
     class Derived extends Base {
       inflight foo() {
         this.bar();
+      }
+    }
+    "#
+	)
+}
+
+#[test]
+fn base_class_with_fields_preflight() {
+	assert_compile_ok!(
+		r#"
+    class Base {
+      f: str;
+      init() {
+        this.f = "hello";
+      }
+    }
+
+    class Derived extends Base {
+      g: str;
+      init() {
+        this.g = "world";
+      }
+
+      foo() {
+        this.f;
+        this.g;
+      }
+    }
+    "#
+	);
+}
+
+#[test]
+fn base_class_with_fields_inflight() {
+	assert_compile_ok!(
+		r#"
+    class Base {
+      inflight f: str;
+      inflight init() {
+        this.f = "hello";
+      }
+    }
+
+    class Derived extends Base {
+      inflight g: str;
+      inflight init() {
+        this.g = "world";
+      }
+
+      inflight foo() {
+        this.f;
+        this.g;
+      }
+    }
+    "#
+	);
+}
+
+#[test]
+fn base_class_with_lifted_fields() {
+	assert_compile_ok!(
+		r#"
+    let x = "hello";
+
+    class Base {
+      f: str;
+      init() {
+        this.f = x;
+      }
+    }
+
+    class Derived extends Base {
+      inflight foo() {
+        this.f;
+      }
+    }
+    "#
+	);
+}
+
+#[test]
+fn fails_base_class_with_lifted_field_object_unqualified() {
+	assert_compile_fail!(
+		r#"
+    bring cloud;
+
+    class Base {
+      b: cloud.Bucket;
+      init() {
+        this.b = new cloud.Bucket();
+      }
+    }
+
+    class Derived extends Base {
+      inflight foo() {
+        this.b;
+//           ^ Cannot qualify access to a lifted object of type "Bucket"
+      }
+    }
+    "#
+	);
+}
+
+#[test]
+fn base_class_with_lifted_field_object() {
+	assert_compile_ok!(
+		r#"
+    bring cloud;
+
+    class Base {
+      b: cloud.Bucket;
+      init() {
+        this.b = new cloud.Bucket();
+      }
+    }
+
+    class Derived extends Base {
+      inflight foo() {
+        this.b.put("hello", "world");
+      }
+    }
+    "#
+	);
+}
+
+#[test]
+fn base_class_lift_indirect() {
+	assert_compile_ok!(
+		r#"
+    bring cloud;
+
+    class Base {
+      b: cloud.Bucket;
+      init() {
+        this.b = new cloud.Bucket();
+      }
+
+      inflight put() {
+        this.b.put("hello", "world");
+        this.b.list();
+      }
+    }
+
+    class Derived extends Base {
+      inflight foo() {
+        this.put();
       }
     }
     "#

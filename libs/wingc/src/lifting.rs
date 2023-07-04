@@ -4,7 +4,7 @@ use crate::{
 	files::Files,
 	fold::{self, Fold},
 	jsify::{JSifier, JSifyContext},
-	type_check::{lifts::Lifts, symbol_env::LookupResult},
+	type_check::{lifts::Lifts, resolve_user_defined_type, symbol_env::LookupResult},
 	visit::{self, Visit},
 	visit_context::VisitContext,
 };
@@ -126,7 +126,7 @@ impl<'a> LiftTransform<'a> {
 				in_json: false,
 				phase: phase,
 				files: &mut Files::default(),
-				tokens: &mut Lifts::disabled(),
+				lifts: &mut Lifts::disabled(),
 			},
 		)
 	}
@@ -289,15 +289,13 @@ impl<'a> Fold for LiftTransform<'a> {
 			}
 		}
 
-		self.ctx.push_class(
-			UserDefinedType {
-				root: node.name.clone(),
-				fields: vec![],
-				span: node.name.span.clone(),
-			},
-			&node.phase,
-			init_env,
-		);
+		let udt = UserDefinedType {
+			root: node.name.clone(),
+			fields: vec![],
+			span: node.name.span.clone(),
+		};
+
+		self.ctx.push_class(udt.clone(), &node.phase, init_env);
 
 		self.lifts_stack.push(Lifts::new());
 
@@ -313,19 +311,14 @@ impl<'a> Fold for LiftTransform<'a> {
 
 		let lifts = self.lifts_stack.pop().expect("Unable to pop class tokens");
 
-		let with_tokens = Class {
-			name: result.name,
-			initializer: result.initializer,
-			phase: result.phase,
-			fields: result.fields,
-			methods: result.methods,
-			implements: result.implements,
-			inflight_initializer: result.inflight_initializer,
-			parent: result.parent,
-			lifts,
-		};
+		if let Some(env) = &self.ctx.current_env() {
+			if let Some(mut t) = resolve_user_defined_type(&udt, env, 0).ok() {
+				let mut_class = t.as_class_mut().unwrap();
+				mut_class.set_lifts(lifts);
+			}
+		}
 
-		with_tokens
+		result
 	}
 
 	fn fold_scope(&mut self, node: crate::ast::Scope) -> crate::ast::Scope {

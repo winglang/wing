@@ -7,7 +7,6 @@ use crate::{
 	},
 	diagnostic::WingSpan,
 	fold::{self, Fold},
-	type_check::lifts::Lifts,
 	type_check::{CLASS_INFLIGHT_INIT_NAME, CLASS_INIT_NAME, HANDLE_METHOD_NAME},
 };
 
@@ -246,7 +245,6 @@ impl Fold for ClosureTransformer {
 				let class_def = Stmt {
 					kind: StmtKind::Class(Class {
 						name: new_class_name.clone(),
-						lifts: Lifts::new(),
 						phase: Phase::Preflight,
 						initializer: FunctionDefinition {
 							name: Some(CLASS_INIT_NAME.into()),

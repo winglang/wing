@@ -201,7 +201,6 @@ where
 			.collect(),
 		phase: node.phase,
 		inflight_initializer: f.fold_function_definition(node.inflight_initializer),
-		lifts: node.lifts,
 	}
 }
 

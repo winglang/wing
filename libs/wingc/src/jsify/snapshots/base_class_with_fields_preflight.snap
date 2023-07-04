@@ -5,8 +5,24 @@ source: libs/wingc/src/jsify/tests.rs
 
 ```w
 
-    class Base {}
-    class Derived extends Base {}
+    class Base {
+      f: str;
+      init() {
+        this.f = "hello";
+      }
+    }
+
+    class Derived extends Base {
+      g: str;
+      init() {
+        this.g = "world";
+      }
+
+      foo() {
+        this.f;
+        this.g;
+      }
+    }
     
 ```
 
@@ -49,6 +65,7 @@ class $Root extends $stdlib.std.Resource {
     class Base extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
+        this.f = "hello";
         this._addInflightOps("$inflight_init");
       }
       static _toInflightType(context) {
@@ -72,7 +89,12 @@ class $Root extends $stdlib.std.Resource {
     class Derived extends Base {
       constructor(scope, id, ) {
         super(scope, id);
+        this.g = "world";
         this._addInflightOps("$inflight_init");
+      }
+      foo() {
+        this.f;
+        this.g;
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`

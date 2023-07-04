@@ -5,8 +5,20 @@ source: libs/wingc/src/jsify/tests.rs
 
 ```w
 
-    class Base {}
-    class Derived extends Base {}
+    let x = "hello";
+
+    class Base {
+      f: str;
+      init() {
+        this.f = x;
+      }
+    }
+
+    class Derived extends Base {
+      inflight foo() {
+        this.f;
+      }
+    }
     
 ```
 
@@ -27,8 +39,12 @@ module.exports = function({  }) {
 ```js
 module.exports = function({ $Base }) {
   class Derived extends $Base {
-    constructor({  }) {
+    async foo() {
+      this.$this_f;
+    }
+    constructor({ $this_f }) {
       super({  });
+      this.$this_f = $this_f;
     }
   }
   return Derived;
@@ -49,6 +65,7 @@ class $Root extends $stdlib.std.Resource {
     class Base extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
+        this.f = x;
         this._addInflightOps("$inflight_init");
       }
       static _toInflightType(context) {
@@ -72,7 +89,7 @@ class $Root extends $stdlib.std.Resource {
     class Derived extends Base {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("$inflight_init");
+        this._addInflightOps("foo", "$inflight_init");
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
@@ -86,13 +103,24 @@ class $Root extends $stdlib.std.Resource {
           (await (async () => {
             const DerivedClient = ${Derived._toInflightType(this).text};
             const client = new DerivedClient({
+              $this_f: ${this._lift(this.f)},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
         `);
       }
+      _registerBind(host, ops) {
+        if (ops.includes("foo")) {
+          Derived._registerBindObject(this.f, host, []);
+        }
+        super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
+        super._registerTypeBind(host, ops);
+      }
     }
+    const x = "hello";
   }
 }
 class $App extends $AppBase {

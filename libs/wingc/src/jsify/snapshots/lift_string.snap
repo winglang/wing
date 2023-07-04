@@ -5,9 +5,9 @@ source: libs/wingc/src/jsify/tests.rs
 
 ```w
 
-    let a = "hello";
+    let b = "hello";
     test "test" {
-      log(a);
+      log(b);
     }
     
 ```
@@ -15,10 +15,10 @@ source: libs/wingc/src/jsify/tests.rs
 ## inflight.$Closure1.js
 
 ```js
-module.exports = function({ $a }) {
+module.exports = function({ $b }) {
   class $Closure1 {
     async handle() {
-      {console.log($a)};
+      {console.log($b)};
     }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -50,7 +50,7 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure1.js")({
-            $a: ${context._lift(a)},
+            $b: ${context._lift(b)},
           })
         `);
       }
@@ -67,7 +67,7 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(a, host, []);
+          $Closure1._registerBindObject(b, host, []);
         }
         super._registerBind(host, ops);
       }
@@ -75,7 +75,7 @@ class $Root extends $stdlib.std.Resource {
         super._registerTypeBind(host, ops);
       }
     }
-    const a = "hello";
+    const b = "hello";
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:test",new $Closure1(this,"$Closure1"));
   }
 }

@@ -33,6 +33,7 @@ use wingii::type_system::TypeSystem;
 
 use self::class_fields_init::VisitClassInit;
 use self::jsii_importer::JsiiImportSpec;
+use self::lifts::Lifts;
 use self::symbol_env::{LookupResult, SymbolEnvIter, SymbolEnvRef};
 
 pub struct UnsafeRef<T>(*const T);
@@ -240,12 +241,18 @@ pub struct Class {
 	pub type_parameters: Option<Vec<TypeRef>>,
 	pub phase: Phase,
 	pub docs: Docs,
+	pub lifts: Lifts,
 
 	// Preflight classes are CDK Constructs which means they have a scope and id as their first arguments
 	// this is natively supported by wing using the `as` `in` keywords. However theoretically it is possible
 	// to have a construct which does not have these arguments, in which case we can't use the `as` `in` keywords
 	// and instead the user will need to pass the relevant args to the class's init method.
 	pub std_construct_args: bool,
+}
+impl Class {
+	pub(crate) fn set_lifts(&mut self, lifts: Lifts) {
+		self.lifts = lifts;
+	}
 }
 
 #[derive(Derivative)]
@@ -2542,7 +2549,6 @@ impl<'a> TypeChecker<'a> {
 				initializer,
 				phase,
 				inflight_initializer,
-				lifts: _,
 			}) => {
 				// preflight classes cannot be declared inside an inflight scope
 				// (the other way is okay)
@@ -2582,6 +2588,7 @@ impl<'a> TypeChecker<'a> {
 					type_parameters: None, // TODO no way to have generic args in wing yet
 					docs: Docs::default(),
 					std_construct_args: *phase == Phase::Preflight,
+					lifts: Lifts::new(),
 				};
 				let mut class_type = self.types.add_type(Type::Class(class_spec));
 				match env.define(name, SymbolKind::Type(class_type), StatementIdx::Top) {
@@ -3319,6 +3326,7 @@ impl<'a> TypeChecker<'a> {
 			phase: original_type_class.phase,
 			docs: original_type_class.docs.clone(),
 			std_construct_args: original_type_class.std_construct_args,
+			lifts: Lifts::new(),
 		});
 
 		// TODO: here we add a new type regardless whether we already "hydrated" `original_type` with these `type_params`. Cache!

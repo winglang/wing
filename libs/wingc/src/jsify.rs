@@ -50,11 +50,11 @@ pub struct JSifyContext<'a> {
 	/// the `inflight` keyword specifies scopes that are inflight.
 	pub phase: Phase,
 	pub files: &'a mut Files,
-	pub tokens: &'a Lifts,
+	pub lifts: &'a Lifts,
 }
 
 pub struct JSifier<'a> {
-	pub types: &'a Types,
+	pub types: &'a mut Types,
 	source_files: &'a Files,
 	/// Root of the project, used for resolving extern modules
 	absolute_project_root: &'a Path,
@@ -72,7 +72,7 @@ enum BindMethod {
 
 impl<'a> JSifier<'a> {
 	pub fn new(
-		types: &'a Types,
+		types: &'a mut Types,
 		source_files: &'a Files,
 		app_name: &'a str,
 		absolute_project_root: &'a Path,
@@ -109,7 +109,7 @@ impl<'a> JSifier<'a> {
 				in_json: false,
 				phase: Phase::Preflight,
 				files: &mut files,
-				tokens: &Lifts::disabled(),
+				lifts: &Lifts::disabled(),
 			};
 			let s = self.jsify_statement(scope.env.borrow().as_ref().unwrap(), statement, &mut jsify_context); // top level statements are always preflight
 			if let StmtKind::Bring {
@@ -275,7 +275,7 @@ impl<'a> JSifier<'a> {
 		// if we are in inflight and there's a lifting/capturing token associated with this expression
 		// then emit the token instead of the expression.
 		if ctx.phase == Phase::Inflight {
-			if let Some(t) = ctx.tokens.token_for_expr(&expression.id) {
+			if let Some(t) = ctx.lifts.token_for_expr(&expression.id) {
 				return t.clone();
 			}
 		}
@@ -517,7 +517,7 @@ impl<'a> JSifier<'a> {
 					in_json: true,
 					phase: ctx.phase,
 					files: ctx.files,
-					tokens: ctx.tokens,
+					lifts: ctx.lifts,
 				};
 				let js_out = match &element.kind {
 					ExprKind::JsonMapLiteral { .. } => {
@@ -919,15 +919,16 @@ impl<'a> JSifier<'a> {
 	}
 
 	fn jsify_class(&self, env: &SymbolEnv, class: &AstClass, ctx: &mut JSifyContext) -> CodeMaker {
+		// Lookup the class type
+		let class_type = env.lookup(&class.name, None).unwrap().as_type().unwrap();
+
+		let lifts = &class_type.as_class().unwrap().lifts;
 		let ctx = &mut JSifyContext {
 			in_json: ctx.in_json,
 			phase: ctx.phase,
 			files: ctx.files,
-			tokens: &class.lifts,
+			lifts: &lifts,
 		};
-
-		// Lookup the class type
-		let class_type = env.lookup(&class.name, None).unwrap().as_type().unwrap();
 
 		// emit the inflight side of the class into a separate file
 		self.jsify_class_inflight(&class, ctx);
@@ -961,14 +962,14 @@ impl<'a> JSifier<'a> {
 			}
 
 			// emit the `_toInflightType` static method
-			code.add_code(self.jsify_to_inflight_type_method(&class, &class.lifts));
+			code.add_code(self.jsify_to_inflight_type_method(&class, ctx));
 
 			// emit the `_toInflight` instance method
-			code.add_code(self.jsify_to_inflight_method(&class.name, &class.lifts));
+			code.add_code(self.jsify_to_inflight_method(&class.name, ctx));
 
 			// call `_registerBindObject` to register the class's host binding methods (for type & instance binds).
-			code.add_code(self.jsify_register_bind_method(class, &class.lifts, class_type, BindMethod::Instance));
-			code.add_code(self.jsify_register_bind_method(class, &class.lifts, class_type, BindMethod::Type));
+			code.add_code(self.jsify_register_bind_method(class, class_type, BindMethod::Instance, ctx));
+			code.add_code(self.jsify_register_bind_method(class, class_type, BindMethod::Type, ctx));
 
 			code.close("}");
 
@@ -983,7 +984,7 @@ impl<'a> JSifier<'a> {
 			code.line(format!(
 				"const {} = require(\"{client}\")({{{}}});",
 				class.name.name,
-				class.lifts.all_capture_tokens().iter().join(", "),
+				ctx.lifts.all_capture_tokens().iter().join(", "),
 			));
 
 			code
@@ -1050,7 +1051,7 @@ impl<'a> JSifier<'a> {
 		code
 	}
 
-	fn jsify_to_inflight_type_method(&self, class: &AstClass, icc: &Lifts) -> CodeMaker {
+	fn jsify_to_inflight_type_method(&self, class: &AstClass, ctx: &JSifyContext) -> CodeMaker {
 		let client_path = inflight_filename(class);
 
 		let mut code = CodeMaker::default();
@@ -1061,7 +1062,7 @@ impl<'a> JSifier<'a> {
 
 		code.open(format!("require(\"{client_path}\")({{"));
 
-		for capture in icc.captures() {
+		for capture in ctx.lifts.captures() {
 			let preflight = capture.code.clone();
 			let lift_type = format!("context._lift({})", preflight);
 			code.line(format!("{}: ${{{}}},", capture.inflight, lift_type));
@@ -1075,8 +1076,7 @@ impl<'a> JSifier<'a> {
 		code
 	}
 
-	fn jsify_to_inflight_method(&self, resource_name: &Symbol, icc: &Lifts) -> CodeMaker {
-		let captured_fields = icc.lifted_fields();
+	fn jsify_to_inflight_method(&self, resource_name: &Symbol, ctx: &JSifyContext) -> CodeMaker {
 		let mut code = CodeMaker::default();
 
 		code.open("_toInflight() {");
@@ -1092,8 +1092,8 @@ impl<'a> JSifier<'a> {
 
 		code.open(format!("const client = new {}Client({{", resource_name.name));
 
-		for (field, obj) in captured_fields {
-			code.line(format!("{field}: ${{this._lift({obj})}},"));
+		for (token, obj) in ctx.lifts.lifted_fields() {
+			code.line(format!("{token}: ${{this._lift({obj})}},"));
 		}
 
 		code.close("});");
@@ -1117,7 +1117,7 @@ impl<'a> JSifier<'a> {
 			phase: Phase::Inflight,
 			in_json: false,
 			files: ctx.files,
-			tokens: ctx.tokens,
+			lifts: ctx.lifts,
 		};
 
 		let mut class_code = CodeMaker::default();
@@ -1138,7 +1138,7 @@ impl<'a> JSifier<'a> {
 
 		// if this is a preflight class, emit the binding constructor
 		if class.phase == Phase::Preflight {
-			self.jsify_inflight_binding_constructor(class, &mut class_code);
+			self.jsify_inflight_binding_constructor(class, &mut class_code, &ctx);
 		}
 
 		// emit the $inflight_init function (if it has a body).
@@ -1150,7 +1150,7 @@ impl<'a> JSifier<'a> {
 
 		class_code.close("}");
 
-		let all_captures = class.lifts.all_capture_tokens();
+		let all_captures = ctx.lifts.all_capture_tokens();
 
 		// export the main class from this file
 		let mut code = CodeMaker::default();
@@ -1167,42 +1167,38 @@ impl<'a> JSifier<'a> {
 		}
 	}
 
-	fn jsify_inflight_binding_constructor(&self, class: &AstClass, class_code: &mut CodeMaker) {
-		let lifted_by_parent: Vec<String> = vec![];
-		// // Add bindings for the inflight init
-		// self.add_inflight_init_lifts(&mut icc, &lifted_fields);
-
+	fn jsify_inflight_binding_constructor(&self, class: &AstClass, class_code: &mut CodeMaker, ctx: &JSifyContext) {
 		// Get the fields that are lifted by this class but not by its parent, they will be initialized
 		// in the generated constructor
-		let lifted_fields = class.lifts.lifted_fields();
-		let my_captures = lifted_fields
-			.iter()
-			.map(|(f, _)| f)
-			.filter(|name| !lifted_by_parent.iter().any(|n| *n == **name))
-			.collect_vec();
+		let lifted_fields = ctx.lifts.lifted_fields().iter().map(|(f, _)| f.clone()).collect_vec();
+		let parent_fields = if let Some(parent) = &class.parent {
+			let parent_type = self.get_expr_type(parent);
+			let parent_lifts = &parent_type.as_class().unwrap().lifts;
+			parent_lifts
+				.lifted_fields()
+				.iter()
+				.map(|(f, _)| f.clone())
+				.collect_vec()
+		} else {
+			vec![]
+		};
 
 		class_code.open(format!(
 			"{JS_CONSTRUCTOR}({{ {} }}) {{",
 			lifted_fields
 				.iter()
-				.map(|(name, _)| { name.clone() })
+				.merge(parent_fields.iter())
+				.map(|token| { token.clone() })
 				.collect_vec()
 				.join(", ")
 		));
 
 		if class.parent.is_some() {
-			class_code.line(format!(
-				"super({{{}}});",
-				lifted_by_parent
-					.iter()
-					.map(|name| name.clone())
-					.collect_vec()
-					.join(", ")
-			));
+			class_code.line(format!("super({{ {} }});", parent_fields.join(", ")));
 		}
 
-		for name in &my_captures {
-			class_code.line(format!("this.{} = {};", name, name));
+		for token in &lifted_fields {
+			class_code.line(format!("this.{} = {};", token, token));
 		}
 
 		// if this class has a "handle" method, we are going to turn it into a callable function
@@ -1222,9 +1218,9 @@ impl<'a> JSifier<'a> {
 	fn jsify_register_bind_method(
 		&self,
 		class: &AstClass,
-		icc: &Lifts,
 		class_type: TypeRef,
 		bind_method_kind: BindMethod,
+		ctx: &JSifyContext,
 	) -> CodeMaker {
 		let mut bind_method = CodeMaker::default();
 		let (modifier, bind_method_name) = match bind_method_kind {
@@ -1234,7 +1230,7 @@ impl<'a> JSifier<'a> {
 
 		let class_name = class.name.to_string();
 
-		let lifts_per_method = icc.lifts_per_method();
+		let lifts_per_method = ctx.lifts.lifts_per_method();
 		let lifts = lifts_per_method
 			.iter()
 			.filter(|(m, _)| {
@@ -1250,7 +1246,7 @@ impl<'a> JSifier<'a> {
 			.collect_vec();
 
 		// Skip jsifying this method if there are no lifts (in this case we'll use super's register bind method)
-		if icc.lifts().is_empty() {
+		if ctx.lifts.lifts().is_empty() {
 			return bind_method;
 		}
 

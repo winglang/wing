@@ -39,7 +39,7 @@ module.exports = function({  }) {
 module.exports = function({ $Base }) {
   class Derived extends $Base {
     constructor({  }) {
-      super({});
+      super({  });
     }
   }
   return Derived;

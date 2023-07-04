@@ -5,8 +5,24 @@ source: libs/wingc/src/jsify/tests.rs
 
 ```w
 
-    class Base {}
-    class Derived extends Base {}
+    class Base {
+      inflight f: str;
+      inflight init() {
+        this.f = "hello";
+      }
+    }
+
+    class Derived extends Base {
+      inflight g: str;
+      inflight init() {
+        this.g = "world";
+      }
+
+      inflight foo() {
+        this.f;
+        this.g;
+      }
+    }
     
 ```
 
@@ -16,6 +32,9 @@ source: libs/wingc/src/jsify/tests.rs
 module.exports = function({  }) {
   class Base {
     constructor({  }) {
+    }
+    async $inflight_init() {
+      this.f = "hello";
     }
   }
   return Base;
@@ -27,8 +46,15 @@ module.exports = function({  }) {
 ```js
 module.exports = function({ $Base }) {
   class Derived extends $Base {
+    async foo() {
+      this.f;
+      this.g;
+    }
     constructor({  }) {
       super({  });
+    }
+    async $inflight_init() {
+      this.g = "world";
     }
   }
   return Derived;
@@ -49,7 +75,7 @@ class $Root extends $stdlib.std.Resource {
     class Base extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("$inflight_init");
+        this._addInflightOps("$inflight_init", "f");
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
@@ -72,7 +98,7 @@ class $Root extends $stdlib.std.Resource {
     class Derived extends Base {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("$inflight_init");
+        this._addInflightOps("foo", "$inflight_init", "g");
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
