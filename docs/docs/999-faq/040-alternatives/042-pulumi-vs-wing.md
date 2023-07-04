@@ -9,8 +9,8 @@ Wing is a general purpose programming language, designed to develop entire cloud
 The main differences between them are:
 1. Wing code is cloud-portable, so you can write the code once and then compile to any cloud. Pulumi is not cloud-portable. Although it supports all clouds, you need to write specific code for each one.
 2. Since the Wing compiler sees both the infra and application code, it can automatically generate much of the infrastructure definitions that you have to manually define in Pulumi (IAM policies, network topologies, etc).
-3. You will be able to compile Wing to Javascript and Pulumi in the future (roadmap is [here](https://docs.winglang.io/status#roadmap)). You will be able to use our [compiler plugins](https://docs.winglang.io/blog/2023/02/17/plugins) to customize the Pulumi output directly.
-4. Wing provides local simulation and visualization [tools](https://docs.winglang.io/start-here/local) that let you develop locally with instant hot reloading. With Pulumi, you must deploy to the cloud in order to interact with your application, which can take several minutes.
+3. You will be able to compile Wing to Javascript and Pulumi in the future (roadmap is [here](https://www.winglang.io/contributing/status)). You will be able to use our [compiler plugins](https://www.winglang.io/blog/2023/02/17/plugins) to customize the Pulumi output directly.
+4. Wing provides local simulation and visualization [tools](https://www.winglang.io/docs/start-here/local) that let you develop locally with instant hot reloading. With Pulumi, you must deploy to the cloud in order to interact with your application, which can take several minutes.
 
 ## Code samples
 

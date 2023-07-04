@@ -1,20 +1,18 @@
 <h1 align="center">Welcome to the Wing Language! :wave:</h1>
 <p align="center">
-  <a href="https://docs.winglang.io/">Quick Start</a>
+  <a href="https://www.winglang.io/docs/">Quick Start</a>
   ▪︎
   <a href="http://t.winglang.io/slack">Join Slack</a>
   ▪︎
-  <a href="https://docs.winglang.io">Docs</a>
+  <a href="https://www.winglang.io/docs/category/faq">FAQ</a>
   ▪︎
-  <a href="https://docs.winglang.io/category/faq">FAQ</a>
-  ▪︎
-  <a href="https://docs.winglang.io/status#roadmap">Roadmap</a>
+  <a href="https://www.winglang.io/contributing/status#roadmap">Roadmap</a>
   ▪︎
   <a href="https://github.com/winglang/wing/issues">Issues</a>
   ▪︎
   <a href="https://github.com/winglang/wing/discussions">Discussions</a>
   ▪︎
-  <a href="https://docs.winglang.io/contributing/">Contribute</a>
+  <a href="https://www.winglang.io/contributing/">Contribute</a>
 </p>
 
 **Winglang** is a new open-source programming language designed for the cloud (aka "*cloud-oriented*"). 
@@ -71,50 +69,50 @@ called from inflight scopes.
 
 ### Very cool, but what here cannot be done by a library or compiler extension?
 In existing languages, where there is no way to distinguish between multiple execution phases, it is impossible to naturally represent this idea that an object has methods that can only be executed from within a specific execution phase.
-You are welcome to read more about it [here](https://docs.winglang.io/faq/why-a-language) (including code samples that show the same app built in Wing vs. other solutions).
+You are welcome to read more about it [here](https://www.winglang.io/docs/faq/why-a-language) (including code samples that show the same app built in Wing vs. other solutions).
 
 ## What makes Wing a good fit for cloud development? 🌟
 
 Wing was built from the ground up to make it an ideal choice for building applications on any cloud.
 It includes an assembly of different features that serve that purpose:
 
-* [Cloud services](https://docs.winglang.io/concepts/resources) as first-class citizens, with [phase modifiers](https://docs.winglang.io/contributing/rfcs/language-spec#13-phase-modifiers) for config or runtime (`preflight` and `inflight`).
-* Higher level of cloud abstraction with a [standard library](https://docs.winglang.io/contributing/rfcs/2023-01-20-wingsdk-spec) of cloud resources that lets you write cloud portable code.
-* [Compiler plugins](https://docs.winglang.io/reference/compiler-plugins) that keep you in control by allowing you to customize the compilation output, such as infrastructure definitions.
+* [Cloud services](https://www.winglang.io/docs/faq/supported-clouds-services-and-engines/supported-services) as first-class citizens, with [phase modifiers](https://www.winglang.io/contributing/rfcs/language-spec#13-phase-modifiers) for config or runtime ([`preflight` and `inflight`](https://www.winglang.io/contributing/rfcs/2023-01-20-wingsdk-spec)). 
+* Higher level of cloud abstraction with a [standard library](https://www.winglang.io/contributing/rfcs/2023-01-20-wingsdk-spec) of cloud resources that lets you write cloud portable code.
+* [Compiler plugins](https://www.winglang.io/docs/tools/compiler-plugins) that keep you in control by allowing you to customize the compilation output, such as infrastructure definitions.
 * Use any resource in the Terraform ecosystem as first-class citizen in your app.
-* [JavaScript interoperability](https://docs.winglang.io/contributing/rfcs/language-spec#5-interoperability).
-* [Distributed computing primitives](https://docs.winglang.io/concepts/inflights).
+* [JavaScript interoperability](https://www.winglang.io/contributing/rfcs/language-spec#5-interoperability).
+* [Distributed computing primitives](https://www.winglang.io/docs/concepts/inflights).
 * Automatic generation of IAM policies and other cloud mechanics based on intent.
-* Local functional simulator with a visualization and interaction [console](https://docs.winglang.io/start-here/installation#wing-console) - used for testing and debugging with instant hot-reloading. 
-* [Native JSON](https://docs.winglang.io/contributing/rfcs/language-spec#114-json-type) and schema validation support.
-* [Default immutability](https://docs.winglang.io/blog/2023/02/02/good-cognitive-friction#immutable-by-default).
-* [Implicit async](https://docs.winglang.io/contributing/rfcs/language-spec#113-asynchronous-model), explicit defer.
+* Local functional simulator with a visualization and interaction [console](https://www.winglang.io/docs/start-here/installation#wing-console) - used for testing and debugging with instant hot-reloading. 
+* [Native JSON](https://www.winglang.io/contributing/rfcs/language-spec#114-json-type) and schema validation support.
+* [Default immutability](https://www.winglang.io/blog/2023/02/02/good-cognitive-friction#immutable-by-default).
+* [Implicit async](https://www.winglang.io/contributing/rfcs/language-spec#113-asynchronous-model), explicit defer.
 
-For a more in-depth look at Wing's features and benefits, check out our [documentation](https://docs.winglang.io/).
+For a more in-depth look at Wing's features and benefits, check out our [documentation](https://www.winglang.io/docs/).
 
 ## Getting started 🛠️
 
 > 🚧 Wing is still in alpha, and not recommended for production use. But we're excited for anyone to take part in shaping our 
-> roadmap and contributing in any way. Our [project status](https://docs.winglang.io/status) page includes more information about 
+> roadmap and contributing in any way. Our [project status](https://www.winglang.io/contributing/status) page includes more information about 
 > stability and roadmap.
 
 You can install Wing in a few simple steps:
 
-1. Check out the [Prerequisites](https://docs.winglang.io/start-here/installation#prerequisites).
-2. Install the [Wing CLI](https://docs.winglang.io/start-here/installation#wing-cli).
-3. Get the [Wing IDE Extension](https://docs.winglang.io/start-here/installation#wing-ide-extension) for your favorite editor.
-4. Launch the [Wing Console](https://docs.winglang.io/start-here/installation#wing-console) and take it for a spin!
+1. Check out the [Prerequisites](https://www.winglang.io/docs/start-here/installation#prerequisites).
+2. Install the [Wing CLI](https://www.winglang.io/docs/start-here/installation#wing-cli).
+3. Get the [Wing IDE Extension](https://www.winglang.io/docs/start-here/installation#wing-ide-extension) for your favorite editor.
+4. Launch the [Wing Console](https://www.winglang.io/docs/start-here/installation#wing-console) and take it for a spin!
 
-For a step-by-step guide, head over to our [Getting Started](https://docs.winglang.io/) guide.
+For a step-by-step guide, head over to our [Getting Started](https://www.winglang.io/docs/) guide.
 It's a once-in-a-lifetime adventure into the Wing rabbit hole!
 
 ## FAQs ❓
 
-Here are some questions we're commonly asked that are covered by our [FAQ](https://docs.winglang.io/category/faq):
+Here are some questions we're commonly asked that are covered by our [FAQ](https://www.winglang.io/docs/category/faq):
 
-* [Who is behind this project?](https://docs.winglang.io/faq/who-is-behind-wing)
-* [Which clouds are supported by Wing?](https://docs.winglang.io/faq/supported-clouds)
-* [Which provisioning engines are supported by Wing?](https://docs.winglang.io/faq/supported-provisioning-engines)
+* [Who is behind this project?](https://www.winglang.io/docs/faq/who-is-behind-wing)
+* [Which clouds are supported by Wing?](https://www.winglang.io/docs/faq/supported-clouds-services-and-engines/supported-clouds)
+* [Which provisioning engines are supported by Wing?](https://www.winglang.io/docs/faq/supported-clouds-services-and-engines/supported-provisioning-engines)
 
 ## Community 💬
 
@@ -139,7 +137,7 @@ We are incredibly grateful to our entire community for contributing bug fixes an
 ## License 📜
 
 Wing is licensed under the  [MIT License](./LICENSE.md).
-Contributions are made under our [contribution license](https://docs.winglang.io/terms-and-policies/contribution-license.html).
+Contributions are made under our [contribution license](https://www.winglang.io/terms-and-policies/contribution-license.html).
 
 Happy coding, and remember: the sky's the limit with Wing (yes, another pun)! 🌤️🚀
 
