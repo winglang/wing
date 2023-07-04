@@ -77,6 +77,14 @@ export enum HttpMethod {
    * POST
    */
   POST = "POST",
+  /**
+   * OPTIONS
+   */
+  OPTIONS = "OPTIONS",
+  /**
+   * HEAD
+   */
+  HEAD = "HEAD",
 }
 
 /**
