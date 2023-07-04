@@ -278,7 +278,7 @@ impl<'a> JSifier<'a> {
 		// inflight variable). in this case we need to bail out.
 		if ctx.phase == Phase::Preflight {
 			if let Some(expr_phase) = self.types.get_expr_phase(expression) {
-				if expr_phase == Phase::Inflight && !self.is_this(expression) {
+				if expr_phase == Phase::Inflight {
 					report_diagnostic(Diagnostic {
 						message: "Cannot reference an inflight value from within a preflight expression".to_string(),
 						span: Some(expression.span.clone()),
@@ -1223,7 +1223,7 @@ impl<'a> JSifier<'a> {
 			.collect_vec();
 
 		// Skip jsifying this method if there are no lifts (in this case we'll use super's register bind method)
-		if ctx.lifts.lifts().is_empty() {
+		if lifts.is_empty() {
 			return bind_method;
 		}
 
@@ -1243,13 +1243,6 @@ impl<'a> JSifier<'a> {
 		bind_method.line(format!("super.{bind_method_name}(host, ops);"));
 		bind_method.close("}");
 		bind_method
-	}
-	fn is_this(&self, expression: &Expr) -> bool {
-		if let ExprKind::Reference(Reference::Identifier(i)) = &expression.kind {
-			i.name == "this"
-		} else {
-			false
-		}
 	}
 }
 

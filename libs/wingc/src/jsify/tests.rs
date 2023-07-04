@@ -1658,3 +1658,80 @@ fn base_class_lift_indirect() {
     "#
 	)
 }
+
+#[test]
+fn lift_via_closure() {
+	assert_compile_ok!(
+		r#"
+    bring cloud;
+
+    let bucket = new cloud.Bucket();
+    
+    let fn = inflight () => {
+      bucket.put("hello", "world");
+    };
+    
+    test "test" {
+      fn();
+    }
+    "#
+	);
+}
+
+#[test]
+fn indirect_capture() {
+	assert_compile_ok!(
+		r#"
+    bring cloud;
+    let b = new cloud.Bucket();
+
+    class Capture {
+      q: cloud.Queue;
+      init() { this.q = new cloud.Queue(); }
+
+      inflight foo() {
+        b.list();
+      }
+
+      inflight goo() {
+        this.foo();
+      }
+    }
+
+    let f = new Capture();
+    test "test" {
+      f.goo();
+    }
+    "#
+	);
+}
+
+#[test]
+fn lift_via_closure_class_explicit() {
+	assert_compile_ok!(
+		r#"
+    bring cloud;
+
+    class MyClosure {
+      q: cloud.Queue;
+      init() {
+        this.q = new cloud.Queue();
+      }
+
+      inflight handle() {
+        this.another();
+      }
+
+      inflight another() {
+        this.q.push("hello");
+      }
+    }
+    
+    let fn = new MyClosure();
+    
+    test "test" {
+      fn();
+    }
+    "#
+	);
+}

@@ -7,7 +7,7 @@ use crate::{
 	},
 	diagnostic::WingSpan,
 	fold::{self, Fold},
-	type_check::{CLASS_INFLIGHT_INIT_NAME, CLASS_INIT_NAME, HANDLE_METHOD_NAME},
+	type_check::{CLASS_INFLIGHT_INIT_NAME, CLASS_INIT_NAME, CLOSURE_CLASS_HANDLE_METHOD},
 };
 
 pub const CLOSURE_CLASS_PREFIX: &str = "$Closure";
@@ -135,7 +135,7 @@ impl Fold for ClosureTransformer {
 					span: WingSpan::default(),
 				};
 				let handle_name = Symbol {
-					name: HANDLE_METHOD_NAME.to_string(),
+					name: CLOSURE_CLASS_HANDLE_METHOD.to_string(),
 					span: WingSpan::default(),
 				};
 

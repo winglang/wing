@@ -9,7 +9,7 @@ use itertools::Itertools;
 
 use crate::diagnostic::WingSpan;
 use crate::type_check::symbol_env::SymbolEnv;
-use crate::type_check::HANDLE_METHOD_NAME;
+use crate::type_check::CLOSURE_CLASS_HANDLE_METHOD;
 
 static EXPR_COUNTER: AtomicUsize = AtomicUsize::new(0);
 
@@ -386,7 +386,7 @@ impl Class {
 	pub fn handle_method(&self) -> Option<&FunctionDefinition> {
 		for method in self.inflight_methods(false) {
 			if let Some(name) = &method.name {
-				if name.name == HANDLE_METHOD_NAME {
+				if name.name == CLOSURE_CLASS_HANDLE_METHOD {
 					return Some(method);
 				}
 			}

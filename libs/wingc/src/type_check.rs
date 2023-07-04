@@ -203,7 +203,7 @@ pub enum Type {
 pub const CLASS_INIT_NAME: &'static str = "init";
 pub const CLASS_INFLIGHT_INIT_NAME: &'static str = "$inflight_init";
 
-pub const HANDLE_METHOD_NAME: &'static str = "handle";
+pub const CLOSURE_CLASS_HANDLE_METHOD: &'static str = "handle";
 
 #[derive(Derivative)]
 #[derivative(Debug)]
@@ -282,7 +282,7 @@ impl Interface {
 
 impl Display for Interface {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-		if let LookupResult::Found(method, _) = self.get_env().lookup_ext(&HANDLE_METHOD_NAME.into(), None) {
+		if let LookupResult::Found(method, _) = self.get_env().lookup_ext(&CLOSURE_CLASS_HANDLE_METHOD.into(), None) {
 			let method = method.as_variable().unwrap();
 			if method.phase == Phase::Inflight {
 				write!(f, "{}", method.type_) // show signature of inflight closure
@@ -445,7 +445,7 @@ impl Subtype for Type {
 				}
 
 				// Next, compare the function to a method on the interface named "handle" if it exists
-				if let Some((method, _)) = r0.get_env().lookup_ext(&HANDLE_METHOD_NAME.into(), None).ok() {
+				if let Some((method, _)) = r0.get_env().lookup_ext(&CLOSURE_CLASS_HANDLE_METHOD.into(), None).ok() {
 					let method = method.as_variable().unwrap();
 					if method.phase != Phase::Inflight {
 						return false;
@@ -517,7 +517,7 @@ impl Subtype for Type {
 
 				// To support flexible inflight closures, we say that any class with an inflight method
 				// named "handle" is a subtype of any single-method interface with a matching "handle"
-				// method type.
+				// method type (aka "closure classes").
 
 				// First, check if there is exactly one inflight method in the interface
 				let mut inflight_methods = iface
@@ -530,12 +530,12 @@ impl Subtype for Type {
 
 				// Next, check that the method's name is "handle"
 				let (handler_method_name, handler_method_type) = handler_method.unwrap();
-				if handler_method_name != HANDLE_METHOD_NAME {
+				if handler_method_name != CLOSURE_CLASS_HANDLE_METHOD {
 					return false;
 				}
 
 				// Then get the type of the resource's "handle" method if it has one
-				let res_handle_type = if let Some(method) = class.get_method(&HANDLE_METHOD_NAME.into()) {
+				let res_handle_type = if let Some(method) = class.get_method(&CLOSURE_CLASS_HANDLE_METHOD.into()) {
 					if method.type_.is_inflight_function() {
 						method.type_
 					} else {
@@ -554,7 +554,7 @@ impl Subtype for Type {
 				// any matching inflight type.
 
 				// Get the type of the resource's "handle" method if it has one
-				let res_handle_type = if let Some(method) = res.get_method(&HANDLE_METHOD_NAME.into()) {
+				let res_handle_type = if let Some(method) = res.get_method(&CLOSURE_CLASS_HANDLE_METHOD.into()) {
 					if method.type_.is_inflight_function() {
 						method.type_
 					} else {
@@ -862,11 +862,11 @@ impl TypeRef {
 	}
 
 	/// Returns whether the type is a preflight class with an inflight method named "handle"
-	pub fn is_handler_preflight_class(&self) -> bool {
+	pub fn is_closure_class(&self) -> bool {
 		if let Some(ref class) = self.as_preflight_class() {
 			return class
 				.methods(true)
-				.any(|(name, type_)| name == HANDLE_METHOD_NAME && type_.is_inflight_function());
+				.any(|(name, type_)| name == CLOSURE_CLASS_HANDLE_METHOD && type_.is_inflight_function());
 		}
 		false
 	}
@@ -1603,7 +1603,7 @@ impl<'a> TypeChecker<'a> {
 					func_sig.clone()
 				} else if let Some(class) = func_type.as_preflight_class() {
 					// return the signature of the "handle" method
-					let lookup_res = class.get_method(&HANDLE_METHOD_NAME.into());
+					let lookup_res = class.get_method(&CLOSURE_CLASS_HANDLE_METHOD.into());
 					let handle_type = if let Some(method) = lookup_res {
 						method.type_
 					} else {
@@ -3097,7 +3097,7 @@ impl<'a> TypeChecker<'a> {
 						name: "this".into(),
 						span: method_name.span.clone(),
 					},
-					SymbolKind::make_free_variable("this".into(), class_type, false, method_sig.phase),
+					SymbolKind::make_free_variable("this".into(), class_type, false, class_env.phase),
 					StatementIdx::Top,
 				)
 				.expect("Expected `this` to be added to constructor env");

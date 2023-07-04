@@ -61,12 +61,19 @@ impl Lifts {
 	}
 
 	fn render_token(&self, code: &str) -> String {
+		if code == "this" {
+			return code.to_string();
+		}
+
 		format!("${}", replace_non_alphanumeric(code))
 	}
 
 	/// Adds a lift to the class context
-	pub fn lift(&mut self, expr_id: usize, method: Option<Symbol>, property: Option<String>, is_field: bool, code: &str) {
+	pub fn lift(&mut self, expr_id: usize, method: Option<Symbol>, property: Option<String>, code: &str) {
 		assert!(!self.disabled);
+
+		let is_field = code.contains("this.");
+
 		let token = self.render_token(code);
 
 		self.token_by_expr_id.entry(expr_id).or_insert(token.clone());
@@ -118,6 +125,11 @@ impl Lifts {
 
 	pub fn capture(&mut self, expr_id: &usize, code: &str) -> String {
 		assert!(!self.disabled);
+
+		if code == "this" {
+			return code.to_string();
+		}
+
 		let token = self.render_token(code);
 
 		self.token_by_expr_id.entry(*expr_id).or_insert(token.clone());

@@ -92,9 +92,6 @@ class $Root extends $stdlib.std.Resource {
         }
         super._registerBind(host, ops);
       }
-      static _registerTypeBind(host, ops) {
-        super._registerTypeBind(host, ops);
-      }
     }
     class Derived extends Base {
       constructor(scope, id, ) {
@@ -118,6 +115,12 @@ class $Root extends $stdlib.std.Resource {
             return client;
           })())
         `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("foo")) {
+          Derived._registerBindObject(this, host, ["bar"]);
+        }
+        super._registerBind(host, ops);
       }
     }
     const x = "hello";

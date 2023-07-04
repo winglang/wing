@@ -210,9 +210,6 @@ class $Root extends $stdlib.std.Resource {
         }
         super._registerBind(host, ops);
       }
-      static _registerTypeBind(host, ops) {
-        super._registerTypeBind(host, ops);
-      }
     }
     class $Closure2 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
@@ -240,12 +237,9 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure2._registerBindObject(fn, host, []);
+          $Closure2._registerBindObject(fn, host, ["handle"]);
         }
         super._registerBind(host, ops);
-      }
-      static _registerTypeBind(host, ops) {
-        super._registerTypeBind(host, ops);
       }
     }
     const bar = "hola!";

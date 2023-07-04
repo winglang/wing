@@ -108,13 +108,13 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
+        if (ops.includes("checkIfEmpty")) {
+          MyType._registerBindObject(this, host, ["isEmpty"]);
+        }
         if (ops.includes("isEmpty")) {
           MyType._registerBindObject(this.b, host, ["list"]);
         }
         super._registerBind(host, ops);
-      }
-      static _registerTypeBind(host, ops) {
-        super._registerTypeBind(host, ops);
       }
     }
     class $Closure1 extends $stdlib.std.Resource {
@@ -146,9 +146,6 @@ class $Root extends $stdlib.std.Resource {
           $Closure1._registerBindObject(t, host, ["checkIfEmpty"]);
         }
         super._registerBind(host, ops);
-      }
-      static _registerTypeBind(host, ops) {
-        super._registerTypeBind(host, ops);
       }
     }
     const t = new MyType(this,"MyType");

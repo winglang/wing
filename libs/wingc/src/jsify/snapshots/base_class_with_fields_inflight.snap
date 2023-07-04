@@ -94,6 +94,12 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+          Base._registerBindObject(this, host, ["f"]);
+        }
+        super._registerBind(host, ops);
+      }
     }
     class Derived extends Base {
       constructor(scope, id, ) {
@@ -117,6 +123,15 @@ class $Root extends $stdlib.std.Resource {
             return client;
           })())
         `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+          Derived._registerBindObject(this, host, ["g"]);
+        }
+        if (ops.includes("foo")) {
+          Derived._registerBindObject(this, host, ["f", "g"]);
+        }
+        super._registerBind(host, ops);
       }
     }
   }
