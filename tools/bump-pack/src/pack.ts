@@ -104,10 +104,11 @@ async function preparePackageJson(tmpPackageDir: string) {
   delete packageJson.devDependencies;
   delete packageJson.publishConfig;
 
-  if (packageJson.removeBundledDependencies) {
-    for (const dep of packageJson.removeBundledDependencies) {
+  const bumpPackConfig = packageJson["bump-pack"];
+  if (bumpPackConfig) {
+    for (const dep of (bumpPackConfig.removeBundledDependencies ?? [])) {
+      console.log(`Removing bundled dependency "${dep}"`);
       delete packageJson.bundledDependencies[dep];
-      delete packageJson.bundleDependencies[dep];
     }
   }
 
