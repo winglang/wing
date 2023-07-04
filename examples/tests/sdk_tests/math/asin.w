@@ -1,22 +1,34 @@
 bring math;
-// TODO: need to handle NaN https://github.com/winglang/wing/issues/3210
-// assert(math.asin(-2) == NaN);
+try {
+  log("${math.asin(-2)}");
+} catch e {
+  assert(e == "Input value must be between -1 and 1, inclusive.");
+}
 assert(math.asin(-1) == -1.5707963267948966);
 assert(math.asin(-0) == -0);
 assert(math.asin(0) == 0);
 assert(math.asin(0.5) == 0.5235987755982989);
 assert(math.asin(1) == 1.5707963267948966);
-// TODO: need to handle NaN https://github.com/winglang/wing/issues/3210
-// assert(math.asin(2) == NaN);
+try {
+  log("${math.asin(2)}");
+} catch e {
+  assert(e == "Input value must be between -1 and 1, inclusive.");
+}
 
 test "inflight arc sine" {
-  // TODO: need to handle NaN
-  // assert(math.asin(-2) == NaN);
+  try {
+    log("${math.asin(-2)}");
+  } catch e {
+    assert(e == "Input value must be between -1 and 1, inclusive.");
+  }
   assert(math.asin(-1) == -1.5707963267948966);
   assert(math.asin(-0) == -0);
   assert(math.asin(0) == 0);
   assert(math.asin(0.5) == 0.5235987755982989);
   assert(math.asin(1) == 1.5707963267948966);
-  // TODO: need to handle NaN https://github.com/winglang/wing/issues/3210
-  // assert(math.asin(2) == NaN);
+  try {
+    log("${math.asin(2)}");
+  } catch e {
+    assert(e == "Input value must be between -1 and 1, inclusive.");
+  }
 }

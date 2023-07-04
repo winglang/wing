@@ -21,11 +21,15 @@ export class Util {
   /**
    * The mathematical constant representing the ratio of a circle's circumference to the radius.
    */
-  public static readonly TAO = 2 * Math.PI;
+  public static readonly TAU = 2 * Math.PI;
   /**
    * Euler's number, a mathematical constant approximately equal to 2.71828.
    */
   public static readonly E = Math.E;
+  /**
+   * Positive infinity constant
+   */
+  public static readonly INF = Number.POSITIVE_INFINITY;
 
   /**
    * @internal
@@ -201,11 +205,10 @@ export class Util {
     return numerator / denominator;
   }
 
-
   /**
    * Calculate the length of the vector from the origin to the point given by the coordinates
    * @param coodinates Array of coodinates
-   * @returns 
+   * @returns
    */
   public static hypot(coodinates: number[]): number {
     return Math.hypot(...coodinates);
@@ -216,7 +219,7 @@ export class Util {
    * @param degrees Degree value
    */
   public static degreesToRadians(degrees: number): number {
-    return degrees * Math.PI / 180;
+    return (degrees * Math.PI) / 180;
   }
 
   /**
@@ -224,7 +227,7 @@ export class Util {
    * @param radians Radians value
    */
   public static radiansToDegrees(radians: number): number {
-    return radians * 180 / Math.PI;
+    return (radians * 180) / Math.PI;
   }
 
   /**
@@ -256,6 +259,9 @@ export class Util {
    * @param value A number between -1 and 1, inclusive, representing the angle's sine value.
    */
   public static asin(value: number): number {
+    if (value < -1 || value > 1) {
+      throw new Error("Input value must be between -1 and 1, inclusive.");
+    }
     return Math.asin(value);
   }
 
@@ -264,6 +270,9 @@ export class Util {
    * @param value A number between -1 and 1, inclusive, representing the angle's cosine value.
    */
   public static acos(value: number): number {
+    if (value < -1 || value > 1) {
+      throw new Error("Input value must be between -1 and 1, inclusive.");
+    }
     return Math.acos(value);
   }
 
@@ -275,5 +284,71 @@ export class Util {
     return Math.atan(value);
   }
 
-  private constructor() { }
+  /**
+   * Calculates the secant of an angle (in radians).
+   *
+   * @param value The angle in radians.
+   * @returns The secant value of the angle.
+   */
+  public static sec(value: number): number {
+    return 1 / Math.cos(value);
+  }
+
+  /**
+   * Calculates the cosecant of an angle (in radians).
+   *
+   * @param value The angle in radians.
+   * @returns The cosecant value of the angle.
+   */
+  public static csc(value: number): number {
+    return 1 / Math.sin(value);
+  }
+
+  /**
+   * Calculates the cotangent of an angle (in radians).
+   *
+   * @param value The angle in radians.
+   * @returns The cotangent value of the angle.
+   */
+  public static cot(value: number): number {
+    return 1 / Math.tan(value);
+  }
+
+  /**
+   * Calculates the inverse secant (asec) of a number.
+   *
+   * @param value A number equal or greater than |1|, representing the secant value.
+   * @returns The inverse secant (asec) in radians.
+   */
+  public static asec(value: number): number {
+    if (Math.abs(value) < 1) {
+      throw new Error("Input value must be equal or greater than |1|.");
+    }
+    return Math.acos(1 / value);
+  }
+
+  /**
+   * Calculates the inverse cosecant (acsc) of a number.
+   *
+   * @param value A number equal or greater than |1|, representing the cosecant value.
+   * @returns The inverse cosecant (acsc) in radians.
+   */
+  public static acsc(value: number): number {
+    if (Math.abs(value) < 1) {
+      throw new Error("Input value must be equal or greater than |1|.");
+    }
+    return Math.asin(1 / value);
+  }
+
+  /**
+   * Calculates the inverse cotangent (acot) of a number.
+   *
+   * @param value A number representing the cotangent value.
+   * @returns The inverse cotangent (acot) in radians.
+   */
+  public static acot(value: number): number {
+    return Math.atan(1 / value);
+  }
+
+  private constructor() {}
 }
