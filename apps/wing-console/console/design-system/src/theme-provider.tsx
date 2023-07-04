@@ -73,6 +73,7 @@ export interface ThemeProviderProps {
   theme: Theme;
   mode: Mode;
   setThemeMode?: (mode: Mode) => void;
+  mediaTheme?: Mode;
 }
 
 const setModeInLocalStorage = (mode: Mode) => {
@@ -162,6 +163,7 @@ export const ThemeProvider = ({
       value={{
         theme: theme ?? DefaultTheme,
         mode: currentMode,
+        mediaTheme: getMediaThemeMode(),
         setThemeMode: onSetThemeMode,
       }}
     >

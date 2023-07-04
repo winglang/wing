@@ -1,39 +1,21 @@
 import { ArrowPathIcon, MoonIcon, SunIcon } from "@heroicons/react/24/outline";
 import { useTheme } from "@wingconsole/design-system";
 import classNames from "classnames";
-import { useCallback } from "react";
-
-import { WingIcon } from "@wingconsole/design-system";
-
-const AutoThemeIcon = () => {
-  const { theme } = useTheme();
-  return (
-    <div className={"relative h-4 w-4"}>
-      <ArrowPathIcon className="h-4 absolute -rotate-[5deg]" />
-      <SunIcon
-        className={classNames(
-          "h-[7.5px] absolute z-10 top-0 -left-[1px]",
-          theme.bg3,
-          "rounded-xl",
-        )}
-      />
-      <MoonIcon
-        className={classNames(
-          "h-[7.5px] absolute z-10 bottom-0 -right-[1px]",
-          theme.bg3,
-          "rounded-xl",
-        )}
-      />
-    </div>
-  );
-};
+import { useCallback, useMemo } from "react";
 
 export interface HeaderProps {
   title: string;
 }
 
 export const Header = ({ title }: HeaderProps) => {
-  const { theme, setThemeMode, mode } = useTheme();
+  const { theme, setThemeMode, mode, mediaTheme } = useTheme();
+
+  const currentTheme = useMemo(() => {
+    if (mode === "auto") {
+      return mediaTheme;
+    }
+    return mode;
+  }, [mode, mediaTheme]);
 
   const toggleThemeMode = useCallback(() => {
     const newMode =
@@ -59,14 +41,15 @@ export const Header = ({ title }: HeaderProps) => {
           className={classNames(
             theme.textInput,
             "rounded-3xl font-medium flex focus:outline-none",
-            "hover:bg-slate-200 hover:dark:bg-slate-700",
-            "transition-color duration-300",
+            "hover:bg-slate-200 hover:dark:bg-slate-600",
+            "transition-color duration-300 cursor-pointer",
+            "gap-x-1 px-1.5 py-0.5",
           )}
           onClick={toggleThemeMode}
         >
-          {mode === "light" && <SunIcon className="h-4" />}
-          {mode === "dark" && <MoonIcon className="h-4" />}
-          {mode === "auto" && <AutoThemeIcon />}
+          {currentTheme === "light" && <SunIcon className="h-4" />}
+          {currentTheme === "dark" && <MoonIcon className="h-4" />}
+          <div className="font-light capitalize text-xs">{mode}</div>
         </button>
       </div>
     </div>
