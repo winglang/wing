@@ -4,6 +4,8 @@ import { Code, InflightClient } from "../core";
  * Immutable Json
  */
 export class Json {
+  private constructor() {}
+
   /**
    * @internal
    */
@@ -257,6 +259,7 @@ export class Json {
  * Mutable Json
  */
 export class MutJson {
+  private constructor() {}
   /**
    * @internal
    */

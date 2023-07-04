@@ -3,6 +3,8 @@ import * as transpile from "./transpile";
 import { TranspiledTypeReferenceToStringOptions } from "./transpile";
 import { submodulePath } from "../schema";
 
+const STD = "std";
+
 // Helpers
 const formatArguments = (inputs: string[]) => {
   return inputs.join(", ");
@@ -15,7 +17,10 @@ const typeToString: TranspiledTypeReferenceToStringOptions = {
 };
 
 const formatStructInitialization = (type: transpile.TranspiledType) => {
-  const target = type.submodule ? `${type.namespace}.${type.name}` : type.name;
+  const target =
+    type.submodule && type.submodule !== STD
+      ? `${type.namespace}.${type.name}`
+      : type.name;
   return `let ${type.name} = ${target}{ ... }`;
 };
 
@@ -23,7 +28,10 @@ const formatClassInitialization = (
   type: transpile.TranspiledType,
   inputs: string[]
 ) => {
-  const target = type.submodule ? `${type.namespace}.${type.name}` : type.name;
+  const target =
+    type.submodule && type.submodule !== STD
+      ? `${type.namespace}.${type.name}`
+      : type.name;
   return `new ${target}(${formatArguments(inputs)})`;
 };
 
@@ -32,7 +40,10 @@ const formatInvocation = (
   inputs: string[],
   method: string
 ) => {
-  let target = type.submodule ? `${type.namespace}.${type.name}` : type.name;
+  let target =
+    type.submodule && type.submodule !== STD
+      ? `${type.namespace}.${type.name}`
+      : type.name;
   if (method) {
     target = `${target}.${method}`;
   }
@@ -42,7 +53,7 @@ const formatInvocation = (
 const formatImport = (type: transpile.TranspiledType) => {
   // TODO idk
   if (type.module.endsWith("/sdk")) {
-    return `bring ${type.submodule};`;
+    return type.submodule !== STD ? `bring ${type.submodule};` : "";
   }
   if (type.submodule) {
     return `bring { ${type.submodule} } from "${type.module}"`;

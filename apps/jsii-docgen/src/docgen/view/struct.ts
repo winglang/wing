@@ -21,7 +21,9 @@ export class Struct {
       id: this.iface.fqn,
       properties: this.properties.toJson(),
       docs: extractDocs(this.iface.docs),
-      usage: `${this.transpiled.import}\n\n${this.transpiled.initialization}`,
+      usage: [this.transpiled.import, this.transpiled.initialization]
+        .filter((item) => !!item)
+        .join("\n\n"),
     };
   }
 }
