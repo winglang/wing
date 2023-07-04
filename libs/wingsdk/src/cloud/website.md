@@ -32,7 +32,7 @@ Under `./public/index.html`
 ```html
 <!DOCTYPE html>
 <html>
-  Hello Wing!
+  Hello Winglang!
 </html>
 ```
 
