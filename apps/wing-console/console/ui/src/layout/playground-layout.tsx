@@ -123,7 +123,14 @@ export const PlaygroundLayout = ({
           >
             <TestsTreeView />
           </RightResizableWidget>
-          <div className={classNames(theme.border3, theme.bg3, theme.text2)}>
+          <div
+            className={classNames(
+              theme.border3,
+              "flex-1 flex flex-col min-w-[10rem] min-h-[15rem] border-r border-b border-slate-300",
+              theme.bg3,
+              theme.text2,
+            )}
+          >
             <div className="relative h-full flex flex-col gap-2">
               {loading && (
                 <div
