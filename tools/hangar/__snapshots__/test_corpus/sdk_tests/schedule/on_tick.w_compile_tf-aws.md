@@ -479,9 +479,6 @@ class $Root extends $stdlib.std.Resource {
         }
         super._registerBind(host, ops);
       }
-      static _registerTypeBind(host, ops) {
-        super._registerTypeBind(host, ops);
-      }
     }
     class $Closure2 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
@@ -512,9 +509,6 @@ class $Root extends $stdlib.std.Resource {
           $Closure2._registerBindObject(c2, host, ["inc"]);
         }
         super._registerBind(host, ops);
-      }
-      static _registerTypeBind(host, ops) {
-        super._registerTypeBind(host, ops);
       }
     }
     class Utils extends $stdlib.std.Resource {
@@ -573,9 +567,6 @@ class $Root extends $stdlib.std.Resource {
           $Closure3._registerBindObject(c2, host, ["peek"]);
         }
         super._registerBind(host, ops);
-      }
-      static _registerTypeBind(host, ops) {
-        super._registerTypeBind(host, ops);
       }
     }
     const from_cron = this.node.root.newAbstract("@winglang/sdk.cloud.Schedule",this,"from_cron",{ cron: "* * * * ?" });

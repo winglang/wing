@@ -176,7 +176,7 @@ module.exports = function({  }) {
             "uniqueId": "root_func1_IamRolePolicy_85554F29"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\",\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.root_func1_IamRole_D5C6999E.name}"
       },
       "root_testinflightscancallotherinflights_Handler_IamRolePolicy_9ADCA787": {
@@ -242,6 +242,8 @@ module.exports = function({  }) {
         },
         "environment": {
           "variables": {
+            "BUCKET_NAME_d755b447": "${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
+            "BUCKET_NAME_d755b447_IS_PUBLIC": "false",
             "WING_FUNCTION_NAME": "func1-c899062d",
             "WING_TARGET": "tf-aws"
           }
@@ -449,9 +451,6 @@ class $Root extends $stdlib.std.Resource {
         }
         super._registerBind(host, ops);
       }
-      static _registerTypeBind(host, ops) {
-        super._registerTypeBind(host, ops);
-      }
     }
     class $Closure2 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
@@ -479,12 +478,9 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure2._registerBindObject(storeInBucket, host, []);
+          $Closure2._registerBindObject(storeInBucket, host, ["handle"]);
         }
         super._registerBind(host, ops);
-      }
-      static _registerTypeBind(host, ops) {
-        super._registerTypeBind(host, ops);
       }
     }
     class $Closure3 extends $stdlib.std.Resource {
@@ -518,9 +514,6 @@ class $Root extends $stdlib.std.Resource {
           $Closure3._registerBindObject(globalBucket, host, ["get"]);
         }
         super._registerBind(host, ops);
-      }
-      static _registerTypeBind(host, ops) {
-        super._registerTypeBind(host, ops);
       }
     }
     class MyResource extends $stdlib.std.Resource {
@@ -557,9 +550,6 @@ class $Root extends $stdlib.std.Resource {
             }
             super._registerBind(host, ops);
           }
-          static _registerTypeBind(host, ops) {
-            super._registerTypeBind(host, ops);
-          }
         }
         this.closure = new $Closure4(this,"$Closure4");
         this._addInflightOps("foo", "$inflight_init");
@@ -587,9 +577,6 @@ class $Root extends $stdlib.std.Resource {
           MyResource._registerBindObject(this.closure, host, []);
         }
         super._registerBind(host, ops);
-      }
-      static _registerTypeBind(host, ops) {
-        super._registerTypeBind(host, ops);
       }
     }
     class $Closure5 extends $stdlib.std.Resource {
@@ -621,9 +608,6 @@ class $Root extends $stdlib.std.Resource {
           $Closure5._registerBindObject(x, host, ["foo"]);
         }
         super._registerBind(host, ops);
-      }
-      static _registerTypeBind(host, ops) {
-        super._registerTypeBind(host, ops);
       }
     }
     const globalBucket = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");

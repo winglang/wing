@@ -334,9 +334,6 @@ class $Root extends $stdlib.std.Resource {
         }
         super._registerBind(host, ops);
       }
-      static _registerTypeBind(host, ops) {
-        super._registerTypeBind(host, ops);
-      }
     }
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
@@ -400,9 +397,6 @@ class $Root extends $stdlib.std.Resource {
               $Closure2._registerBindObject(handler, host, []);
             }
             super._registerBind(host, ops);
-          }
-          static _registerTypeBind(host, ops) {
-            super._registerTypeBind(host, ops);
           }
         }
         return this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"cloud.Function",new $Closure2(this,"$Closure2"));
@@ -478,9 +472,6 @@ class $Root extends $stdlib.std.Resource {
           $Closure4._registerBindObject(f, host, ["invoke"]);
         }
         super._registerBind(host, ops);
-      }
-      static _registerTypeBind(host, ops) {
-        super._registerTypeBind(host, ops);
       }
     }
     const fn = new Doubler(this,"Doubler",new $Closure1(this,"$Closure1"));

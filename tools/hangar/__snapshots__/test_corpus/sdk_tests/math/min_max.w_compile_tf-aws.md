@@ -182,9 +182,6 @@ class $Root extends $stdlib.std.Resource {
         }
         super._registerBind(host, ops);
       }
-      static _registerTypeBind(host, ops) {
-        super._registerTypeBind(host, ops);
-      }
     }
     const myArray = Object.freeze([1, 2, 3, 4, 5]);
     {((cond) => {if (!cond) throw new Error("assertion failed: math.min(myArray) == 1")})(((math.Util.min(myArray)) === 1))};

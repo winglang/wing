@@ -221,13 +221,10 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure2._registerBindObject(circumference, host, []);
+          $Closure2._registerBindObject(circumference, host, ["handle"]);
           $Closure2._registerBindObject(r, host, []);
         }
         super._registerBind(host, ops);
-      }
-      static _registerTypeBind(host, ops) {
-        super._registerTypeBind(host, ops);
       }
     }
     const r = 10;

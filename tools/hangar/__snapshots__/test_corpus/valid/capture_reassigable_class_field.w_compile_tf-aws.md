@@ -348,9 +348,6 @@ class $Root extends $stdlib.std.Resource {
         }
         super._registerBind(host, ops);
       }
-      static _registerTypeBind(host, ops) {
-        super._registerTypeBind(host, ops);
-      }
     }
     class $Closure2 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
@@ -381,9 +378,6 @@ class $Root extends $stdlib.std.Resource {
           $Closure2._registerBindObject(counter, host, ["inc"]);
         }
         super._registerBind(host, ops);
-      }
-      static _registerTypeBind(host, ops) {
-        super._registerTypeBind(host, ops);
       }
     }
     class $Closure3 extends $stdlib.std.Resource {
@@ -418,9 +412,6 @@ class $Root extends $stdlib.std.Resource {
           $Closure3._registerBindObject(kv, host, ["get", "set"]);
         }
         super._registerBind(host, ops);
-      }
-      static _registerTypeBind(host, ops) {
-        super._registerTypeBind(host, ops);
       }
     }
     const kv = new KeyValueStore(this,"KeyValueStore");

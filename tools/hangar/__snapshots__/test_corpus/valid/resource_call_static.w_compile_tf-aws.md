@@ -208,9 +208,6 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
-      _registerBind(host, ops) {
-        super._registerBind(host, ops);
-      }
       static _registerTypeBind(host, ops) {
         if (ops.includes("myStaticMethod")) {
           Another._registerBindObject(globalCounter, host, ["peek"]);
@@ -247,9 +244,6 @@ class $Root extends $stdlib.std.Resource {
           $Closure1._registerBindObject(Another, host, ["myStaticMethod"]);
         }
         super._registerBind(host, ops);
-      }
-      static _registerTypeBind(host, ops) {
-        super._registerTypeBind(host, ops);
       }
     }
     const globalCounter = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"cloud.Counter");

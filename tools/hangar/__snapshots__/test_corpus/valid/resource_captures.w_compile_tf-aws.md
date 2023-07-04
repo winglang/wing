@@ -540,6 +540,9 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+          MyResource._registerBindObject(this, host, ["inflightField"]);
+        }
         if (ops.includes("testCaptureCollectionsOfData")) {
           MyResource._registerBindObject((!(this.setOfStr.has("s3"))), host, []);
           MyResource._registerBindObject((this.arrayOfStr.at(0)), host, []);
@@ -569,6 +572,9 @@ class $Root extends $stdlib.std.Resource {
           MyResource._registerBindObject(this.extBucket, host, ["list"]);
           MyResource._registerBindObject(this.extNum, host, []);
         }
+        if (ops.includes("testInflightField")) {
+          MyResource._registerBindObject(this, host, ["inflightField"]);
+        }
         if (ops.includes("testNestedInflightField")) {
           MyResource._registerBindObject(this.another.myField, host, []);
         }
@@ -580,9 +586,6 @@ class $Root extends $stdlib.std.Resource {
           MyResource._registerBindObject(this.another, host, ["anotherFunc", "meaningOfLife"]);
         }
         super._registerBind(host, ops);
-      }
-      static _registerTypeBind(host, ops) {
-        super._registerTypeBind(host, ops);
       }
     }
     class $Closure1 extends $stdlib.std.Resource {
@@ -614,9 +617,6 @@ class $Root extends $stdlib.std.Resource {
           $Closure1._registerBindObject(r, host, ["testCaptureCollectionsOfData", "testCaptureOptional", "testCapturePrimitives", "testCaptureResource", "testExpressionRecursive", "testExternal", "testInflightField", "testNestedInflightField", "testNestedResource", "testNoCapture", "testUserDefinedResource"]);
         }
         super._registerBind(host, ops);
-      }
-      static _registerTypeBind(host, ops) {
-        super._registerTypeBind(host, ops);
       }
     }
     const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");

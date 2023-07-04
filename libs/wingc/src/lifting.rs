@@ -1,5 +1,5 @@
 use crate::{
-	ast::{Class, Expr, ExprKind, FunctionBody, FunctionDefinition, Phase, Reference, UserDefinedType},
+	ast::{Class, Expr, ExprKind, FunctionBody, FunctionDefinition, Phase, Reference, Stmt, StmtKind, UserDefinedType},
 	diagnostic::{report_diagnostic, Diagnostic, WingSpan},
 	files::Files,
 	fold::{self, Fold},
@@ -7,6 +7,8 @@ use crate::{
 	type_check::{lifts::Lifts, resolve_user_defined_type, symbol_env::LookupResult, CLOSURE_CLASS_HANDLE_METHOD},
 	visit_context::VisitContext,
 };
+
+const ASSIGNMENT_OPERATION: &str = "=";
 
 pub struct LiftTransform<'a> {
 	ctx: VisitContext,
@@ -222,6 +224,16 @@ impl<'a> Fold for LiftTransform<'a> {
 			// jsify the expression so we can get the preflight code
 			let preflight = self.jsify_expr(&node, Phase::Inflight);
 
+			if let Some(p) = self.ctx.current_property() {
+				if p == ASSIGNMENT_OPERATION {
+					report_diagnostic(Diagnostic {
+						message: "Unable to reassign a captured variable".to_string(),
+						span: Some(node.span.clone()),
+					});
+					return node;
+				}
+			}
+
 			let mut lifts = self.lifts_stack.pop().unwrap();
 			lifts.capture(&node.id, &preflight);
 			self.lifts_stack.push(lifts);
@@ -327,8 +339,25 @@ impl<'a> Fold for LiftTransform<'a> {
 
 	fn fold_stmt(&mut self, node: crate::ast::Stmt) -> crate::ast::Stmt {
 		self.ctx.push_stmt(node.idx);
+
+		if let StmtKind::Assignment { variable, value } = node.kind {
+			self.ctx.push_property(ASSIGNMENT_OPERATION.to_string());
+			let var = self.fold_expr(variable);
+			self.ctx.pop_property();
+			return Stmt {
+				kind: StmtKind::Assignment {
+					variable: var,
+					value: self.fold_expr(value),
+				},
+				span: node.span,
+				idx: node.idx,
+			};
+		}
+
 		let result = fold::fold_stmt(self, node);
+
 		self.ctx.pop_stmt();
+
 		result
 	}
 }

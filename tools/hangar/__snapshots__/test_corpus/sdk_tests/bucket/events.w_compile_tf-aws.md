@@ -329,7 +329,7 @@ module.exports = function({  }) {
             "uniqueId": "root_cloudBucket_cloudBucketoncreateOnMessage440eabdf_IamRolePolicy_675C6DEE"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.root_cloudCounter_E0AC1263.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:PutItem\"],\"Resource\":[\"${aws_dynamodb_table.root_cloudTable_323D7643.arn}\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.root_cloudBucket_cloudBucketoncreateOnMessage440eabdf_IamRole_30706CBE.name}"
       },
       "root_cloudBucket_cloudBucketoncreateOnMessagee889c56f_IamRolePolicy_648290E9": {
@@ -339,7 +339,7 @@ module.exports = function({  }) {
             "uniqueId": "root_cloudBucket_cloudBucketoncreateOnMessagee889c56f_IamRolePolicy_648290E9"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.root_cloudCounter_E0AC1263.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:PutItem\"],\"Resource\":[\"${aws_dynamodb_table.root_cloudTable_323D7643.arn}\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.root_cloudBucket_cloudBucketoncreateOnMessagee889c56f_IamRole_705DC888.name}"
       },
       "root_cloudBucket_cloudBucketondeleteOnMessage25075838_IamRolePolicy_F5FB115F": {
@@ -349,7 +349,7 @@ module.exports = function({  }) {
             "uniqueId": "root_cloudBucket_cloudBucketondeleteOnMessage25075838_IamRolePolicy_F5FB115F"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.root_cloudCounter_E0AC1263.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:PutItem\"],\"Resource\":[\"${aws_dynamodb_table.root_cloudTable_323D7643.arn}\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.root_cloudBucket_cloudBucketondeleteOnMessage25075838_IamRole_1BE6C1CC.name}"
       },
       "root_cloudBucket_cloudBucketondeleteOnMessage252b9bf8_IamRolePolicy_9BF85531": {
@@ -359,7 +359,7 @@ module.exports = function({  }) {
             "uniqueId": "root_cloudBucket_cloudBucketondeleteOnMessage252b9bf8_IamRolePolicy_9BF85531"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.root_cloudCounter_E0AC1263.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:PutItem\"],\"Resource\":[\"${aws_dynamodb_table.root_cloudTable_323D7643.arn}\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.root_cloudBucket_cloudBucketondeleteOnMessage252b9bf8_IamRole_E1C544E0.name}"
       },
       "root_cloudBucket_cloudBucketonupdateOnMessage675a2aa1_IamRolePolicy_6638F7CC": {
@@ -369,7 +369,7 @@ module.exports = function({  }) {
             "uniqueId": "root_cloudBucket_cloudBucketonupdateOnMessage675a2aa1_IamRolePolicy_6638F7CC"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.root_cloudCounter_E0AC1263.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:PutItem\"],\"Resource\":[\"${aws_dynamodb_table.root_cloudTable_323D7643.arn}\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.root_cloudBucket_cloudBucketonupdateOnMessage675a2aa1_IamRole_74B414C4.name}"
       },
       "root_cloudBucket_cloudBucketonupdateOnMessageae97bd1d_IamRolePolicy_E98946EC": {
@@ -379,7 +379,7 @@ module.exports = function({  }) {
             "uniqueId": "root_cloudBucket_cloudBucketonupdateOnMessageae97bd1d_IamRolePolicy_E98946EC"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.root_cloudCounter_E0AC1263.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:PutItem\"],\"Resource\":[\"${aws_dynamodb_table.root_cloudTable_323D7643.arn}\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.root_cloudBucket_cloudBucketonupdateOnMessageae97bd1d_IamRole_CECD9E96.name}"
       },
       "root_hitCountisincrementedaccordingtothebucketevent_Handler_IamRolePolicy_3CBCB600": {
@@ -389,7 +389,7 @@ module.exports = function({  }) {
             "uniqueId": "root_hitCountisincrementedaccordingtothebucketevent_Handler_IamRolePolicy_3CBCB600"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\",\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:DeleteObject*\",\"s3:DeleteObjectVersion*\",\"s3:PutLifecycleConfiguration*\"],\"Resource\":[\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\",\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\"],\"Effect\":\"Allow\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\",\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:DeleteObject*\",\"s3:DeleteObjectVersion*\",\"s3:PutLifecycleConfiguration*\"],\"Resource\":[\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\",\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:Scan\"],\"Resource\":[\"${aws_dynamodb_table.root_cloudTable_323D7643.arn}\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.root_hitCountisincrementedaccordingtothebucketevent_Handler_IamRole_1E308580.name}"
       }
     },
@@ -475,6 +475,10 @@ module.exports = function({  }) {
         },
         "environment": {
           "variables": {
+            "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.root_cloudCounter_E0AC1263.name}",
+            "DYNAMODB_TABLE_NAME_e8a1ff2c": "${aws_dynamodb_table.root_cloudTable_323D7643.name}",
+            "DYNAMODB_TABLE_NAME_e8a1ff2c_COLUMNS": "{\"_id\":0,\"key\":0,\"operation\":0,\"source\":0}",
+            "DYNAMODB_TABLE_NAME_e8a1ff2c_PRIMARY_KEY": "_id",
             "WING_FUNCTION_NAME": "cloud-Bucket-on_create-OnMessage-440eabdf-c86eb675",
             "WING_TARGET": "tf-aws"
           }
@@ -501,6 +505,10 @@ module.exports = function({  }) {
         },
         "environment": {
           "variables": {
+            "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.root_cloudCounter_E0AC1263.name}",
+            "DYNAMODB_TABLE_NAME_e8a1ff2c": "${aws_dynamodb_table.root_cloudTable_323D7643.name}",
+            "DYNAMODB_TABLE_NAME_e8a1ff2c_COLUMNS": "{\"_id\":0,\"key\":0,\"operation\":0,\"source\":0}",
+            "DYNAMODB_TABLE_NAME_e8a1ff2c_PRIMARY_KEY": "_id",
             "WING_FUNCTION_NAME": "cloud-Bucket-on_create-OnMessage-e889c56f-c8509332",
             "WING_TARGET": "tf-aws"
           }
@@ -527,6 +535,10 @@ module.exports = function({  }) {
         },
         "environment": {
           "variables": {
+            "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.root_cloudCounter_E0AC1263.name}",
+            "DYNAMODB_TABLE_NAME_e8a1ff2c": "${aws_dynamodb_table.root_cloudTable_323D7643.name}",
+            "DYNAMODB_TABLE_NAME_e8a1ff2c_COLUMNS": "{\"_id\":0,\"key\":0,\"operation\":0,\"source\":0}",
+            "DYNAMODB_TABLE_NAME_e8a1ff2c_PRIMARY_KEY": "_id",
             "WING_FUNCTION_NAME": "cloud-Bucket-on_delete-OnMessage-25075838-c8e76d95",
             "WING_TARGET": "tf-aws"
           }
@@ -553,6 +565,10 @@ module.exports = function({  }) {
         },
         "environment": {
           "variables": {
+            "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.root_cloudCounter_E0AC1263.name}",
+            "DYNAMODB_TABLE_NAME_e8a1ff2c": "${aws_dynamodb_table.root_cloudTable_323D7643.name}",
+            "DYNAMODB_TABLE_NAME_e8a1ff2c_COLUMNS": "{\"_id\":0,\"key\":0,\"operation\":0,\"source\":0}",
+            "DYNAMODB_TABLE_NAME_e8a1ff2c_PRIMARY_KEY": "_id",
             "WING_FUNCTION_NAME": "cloud-Bucket-on_delete-OnMessage-252b9bf8-c84c16bd",
             "WING_TARGET": "tf-aws"
           }
@@ -579,6 +595,10 @@ module.exports = function({  }) {
         },
         "environment": {
           "variables": {
+            "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.root_cloudCounter_E0AC1263.name}",
+            "DYNAMODB_TABLE_NAME_e8a1ff2c": "${aws_dynamodb_table.root_cloudTable_323D7643.name}",
+            "DYNAMODB_TABLE_NAME_e8a1ff2c_COLUMNS": "{\"_id\":0,\"key\":0,\"operation\":0,\"source\":0}",
+            "DYNAMODB_TABLE_NAME_e8a1ff2c_PRIMARY_KEY": "_id",
             "WING_FUNCTION_NAME": "cloud-Bucket-on_update-OnMessage-675a2aa1-c80803b8",
             "WING_TARGET": "tf-aws"
           }
@@ -605,6 +625,10 @@ module.exports = function({  }) {
         },
         "environment": {
           "variables": {
+            "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.root_cloudCounter_E0AC1263.name}",
+            "DYNAMODB_TABLE_NAME_e8a1ff2c": "${aws_dynamodb_table.root_cloudTable_323D7643.name}",
+            "DYNAMODB_TABLE_NAME_e8a1ff2c_COLUMNS": "{\"_id\":0,\"key\":0,\"operation\":0,\"source\":0}",
+            "DYNAMODB_TABLE_NAME_e8a1ff2c_PRIMARY_KEY": "_id",
             "WING_FUNCTION_NAME": "cloud-Bucket-on_update-OnMessage-ae97bd1d-c84cffd8",
             "WING_TARGET": "tf-aws"
           }
@@ -633,6 +657,9 @@ module.exports = function({  }) {
           "variables": {
             "BUCKET_NAME_d755b447": "${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
             "BUCKET_NAME_d755b447_IS_PUBLIC": "false",
+            "DYNAMODB_TABLE_NAME_e8a1ff2c": "${aws_dynamodb_table.root_cloudTable_323D7643.name}",
+            "DYNAMODB_TABLE_NAME_e8a1ff2c_COLUMNS": "{\"_id\":0,\"key\":0,\"operation\":0,\"source\":0}",
+            "DYNAMODB_TABLE_NAME_e8a1ff2c_PRIMARY_KEY": "_id",
             "WING_FUNCTION_NAME": "Handler-c88204a7",
             "WING_TARGET": "tf-aws"
           }
@@ -1096,9 +1123,6 @@ class $Root extends $stdlib.std.Resource {
         }
         super._registerBind(host, ops);
       }
-      static _registerTypeBind(host, ops) {
-        super._registerTypeBind(host, ops);
-      }
     }
     class $Closure2 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
@@ -1127,12 +1151,9 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure2._registerBindObject(logHistory, host, []);
+          $Closure2._registerBindObject(logHistory, host, ["handle"]);
         }
         super._registerBind(host, ops);
-      }
-      static _registerTypeBind(host, ops) {
-        super._registerTypeBind(host, ops);
       }
     }
     class $Closure3 extends $stdlib.std.Resource {
@@ -1162,12 +1183,9 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure3._registerBindObject(logHistory, host, []);
+          $Closure3._registerBindObject(logHistory, host, ["handle"]);
         }
         super._registerBind(host, ops);
-      }
-      static _registerTypeBind(host, ops) {
-        super._registerTypeBind(host, ops);
       }
     }
     class $Closure4 extends $stdlib.std.Resource {
@@ -1197,12 +1215,9 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure4._registerBindObject(logHistory, host, []);
+          $Closure4._registerBindObject(logHistory, host, ["handle"]);
         }
         super._registerBind(host, ops);
-      }
-      static _registerTypeBind(host, ops) {
-        super._registerTypeBind(host, ops);
       }
     }
     class $Closure5 extends $stdlib.std.Resource {
@@ -1232,12 +1247,9 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure5._registerBindObject(logHistory, host, []);
+          $Closure5._registerBindObject(logHistory, host, ["handle"]);
         }
         super._registerBind(host, ops);
-      }
-      static _registerTypeBind(host, ops) {
-        super._registerTypeBind(host, ops);
       }
     }
     class $Closure6 extends $stdlib.std.Resource {
@@ -1270,9 +1282,6 @@ class $Root extends $stdlib.std.Resource {
         }
         super._registerBind(host, ops);
       }
-      static _registerTypeBind(host, ops) {
-        super._registerTypeBind(host, ops);
-      }
     }
     class $Closure7 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
@@ -1303,9 +1312,6 @@ class $Root extends $stdlib.std.Resource {
           $Closure7._registerBindObject(table, host, ["list"]);
         }
         super._registerBind(host, ops);
-      }
-      static _registerTypeBind(host, ops) {
-        super._registerTypeBind(host, ops);
       }
     }
     class $Closure8 extends $stdlib.std.Resource {
@@ -1338,13 +1344,10 @@ class $Root extends $stdlib.std.Resource {
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
           $Closure8._registerBindObject(b, host, ["delete", "put"]);
-          $Closure8._registerBindObject(checkHitCount, host, []);
-          $Closure8._registerBindObject(wait, host, []);
+          $Closure8._registerBindObject(checkHitCount, host, ["handle"]);
+          $Closure8._registerBindObject(wait, host, ["handle"]);
         }
         super._registerBind(host, ops);
-      }
-      static _registerTypeBind(host, ops) {
-        super._registerTypeBind(host, ops);
       }
     }
     const Source = 

@@ -190,6 +190,15 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+          BinaryOperation._registerBindObject(this, host, ["lhs", "rhs"]);
+        }
+        if (ops.includes("add")) {
+          BinaryOperation._registerBindObject(this, host, ["lhs", "rhs"]);
+        }
+        super._registerBind(host, ops);
+      }
     }
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {

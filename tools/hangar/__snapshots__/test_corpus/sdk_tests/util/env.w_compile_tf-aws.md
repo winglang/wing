@@ -185,9 +185,6 @@ class $Root extends $stdlib.std.Resource {
         }
         super._registerBind(host, ops);
       }
-      static _registerTypeBind(host, ops) {
-        super._registerTypeBind(host, ops);
-      }
     }
     const RANDOM = "RANDOM123412121212kjhkjskdjkj";
     const NIL = "<<NIL>>";

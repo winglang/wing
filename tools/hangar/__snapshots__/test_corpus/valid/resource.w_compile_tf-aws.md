@@ -6,7 +6,8 @@ module.exports = function({ $bucket, $res, $res_foo }) {
   class $Closure1 {
     async handle() {
       const s = (await $res.myMethod());
-      {((cond) => {if (!cond) throw new Error("assertion failed: s == \"counter is: 101\"")})((s === "counter is: 101"))};
+      {console.log(s)};
+      {((cond) => {if (!cond) throw new Error("assertion failed: s == \"counter is: 201\"")})((s === "counter is: 201"))};
       {((cond) => {if (!cond) throw new Error("assertion failed: bucket.list().length == 1")})(((await $bucket.list()).length === 1))};
       {((cond) => {if (!cond) throw new Error("assertion failed: res.foo.inflightField == 123")})(($res_foo.inflightField === 123))};
       (await $res.testTypeAccess());
@@ -907,6 +908,7 @@ class $Root extends $stdlib.std.Resource {
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
           Foo._registerBindObject(this.c, host, ["dec", "inc"]);
+          Foo._registerBindObject(this, host, ["inflightField"]);
         }
         if (ops.includes("fooGet")) {
           Foo._registerBindObject(this.c, host, ["peek"]);
@@ -915,9 +917,6 @@ class $Root extends $stdlib.std.Resource {
           Foo._registerBindObject(this.c, host, ["inc"]);
         }
         super._registerBind(host, ops);
-      }
-      static _registerTypeBind(host, ops) {
-        super._registerTypeBind(host, ops);
       }
     }
     class Bar extends $stdlib.std.Resource {
@@ -963,9 +962,6 @@ class $Root extends $stdlib.std.Resource {
         }
         super._registerBind(host, ops);
       }
-      static _registerTypeBind(host, ops) {
-        super._registerTypeBind(host, ops);
-      }
     }
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
@@ -1000,9 +996,6 @@ class $Root extends $stdlib.std.Resource {
           $Closure1._registerBindObject(res.foo, host, ["inflightField"]);
         }
         super._registerBind(host, ops);
-      }
-      static _registerTypeBind(host, ops) {
-        super._registerTypeBind(host, ops);
       }
     }
     class BigPublisher extends $stdlib.std.Resource {
@@ -1043,9 +1036,6 @@ class $Root extends $stdlib.std.Resource {
             }
             super._registerBind(host, ops);
           }
-          static _registerTypeBind(host, ops) {
-            super._registerTypeBind(host, ops);
-          }
         }
         (this.t.onMessage(new $Closure2(this,"$Closure2")));
         const __parent_this_3 = this;
@@ -1079,9 +1069,6 @@ class $Root extends $stdlib.std.Resource {
             }
             super._registerBind(host, ops);
           }
-          static _registerTypeBind(host, ops) {
-            super._registerTypeBind(host, ops);
-          }
         }
         (this.q.setConsumer(new $Closure3(this,"$Closure3")));
         const __parent_this_4 = this;
@@ -1114,9 +1101,6 @@ class $Root extends $stdlib.std.Resource {
               $Closure4._registerBindObject(__parent_this_4.q, host, ["push"]);
             }
             super._registerBind(host, ops);
-          }
-          static _registerTypeBind(host, ops) {
-            super._registerTypeBind(host, ops);
           }
         }
         (this.b2.onCreate(new $Closure4(this,"$Closure4")));
@@ -1154,9 +1138,6 @@ class $Root extends $stdlib.std.Resource {
         }
         super._registerBind(host, ops);
       }
-      static _registerTypeBind(host, ops) {
-        super._registerTypeBind(host, ops);
-      }
     }
     class $Closure5 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
@@ -1187,9 +1168,6 @@ class $Root extends $stdlib.std.Resource {
           $Closure5._registerBindObject(bigOlPublisher, host, ["getObjectCount", "publish"]);
         }
         super._registerBind(host, ops);
-      }
-      static _registerTypeBind(host, ops) {
-        super._registerTypeBind(host, ops);
       }
     }
     class Dummy extends $stdlib.std.Resource {

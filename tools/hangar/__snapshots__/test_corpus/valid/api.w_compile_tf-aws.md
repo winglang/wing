@@ -513,9 +513,6 @@ class $Root extends $stdlib.std.Resource {
         }
         super._registerBind(host, ops);
       }
-      static _registerTypeBind(host, ops) {
-        super._registerTypeBind(host, ops);
-      }
     }
     class $Closure2 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
@@ -546,9 +543,6 @@ class $Root extends $stdlib.std.Resource {
           $Closure2._registerBindObject(api.url, host, []);
         }
         super._registerBind(host, ops);
-      }
-      static _registerTypeBind(host, ops) {
-        super._registerTypeBind(host, ops);
       }
     }
     class A extends $stdlib.std.Resource {
@@ -585,9 +579,6 @@ class $Root extends $stdlib.std.Resource {
               $Closure3._registerBindObject(__parent_this_3.api.url, host, []);
             }
             super._registerBind(host, ops);
-          }
-          static _registerTypeBind(host, ops) {
-            super._registerTypeBind(host, ops);
           }
         }
         (this.api.get("/endpoint1",new $Closure3(this,"$Closure3")));

@@ -258,16 +258,21 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+          Foo._registerBindObject(this, host, ["inflight2"]);
+        }
+        if (ops.includes("callFn")) {
+          Foo._registerBindObject(this, host, ["makeFn"]);
+        }
         if (ops.includes("callFn2")) {
           Foo._registerBindObject(this.inflight1, host, []);
+          Foo._registerBindObject(this, host, ["inflight2"]);
         }
         if (ops.includes("makeFn")) {
           Foo._registerBindObject(this.inflight1, host, []);
+          Foo._registerBindObject(this, host, ["inflight2"]);
         }
         super._registerBind(host, ops);
-      }
-      static _registerTypeBind(host, ops) {
-        super._registerTypeBind(host, ops);
       }
     }
     class $Closure2 extends $stdlib.std.Resource {
@@ -299,9 +304,6 @@ class $Root extends $stdlib.std.Resource {
           $Closure2._registerBindObject(foo, host, ["callFn", "callFn2"]);
         }
         super._registerBind(host, ops);
-      }
-      static _registerTypeBind(host, ops) {
-        super._registerTypeBind(host, ops);
       }
     }
     const foo = new Foo(this,"Foo");

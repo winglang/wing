@@ -189,7 +189,7 @@ export abstract class Resource extends Construct implements IResource {
         if (isResource(obj)) {
           // Explicitly register the resource's `$inflight_init` op, which is a special op that can be used to makes sure
           // the host can instantiate a client for this resource.
-          obj._registerBind(host, ["$inflight_init"]);
+          // obj._registerBind(host, ["$inflight_init"]);
 
           obj._registerBind(host, ops);
 

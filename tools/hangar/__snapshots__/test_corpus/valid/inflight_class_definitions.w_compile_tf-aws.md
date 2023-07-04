@@ -457,9 +457,6 @@ class $Root extends $stdlib.std.Resource {
         }
         super._registerBind(host, ops);
       }
-      static _registerTypeBind(host, ops) {
-        super._registerTypeBind(host, ops);
-      }
     }
     class $Closure3 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
@@ -493,13 +490,10 @@ class $Root extends $stdlib.std.Resource {
         if (ops.includes("handle")) {
           $Closure3._registerBindObject(a, host, ["goo"]);
           $Closure3._registerBindObject(d, host, ["callInner"]);
-          $Closure3._registerBindObject(fn, host, []);
+          $Closure3._registerBindObject(fn, host, ["handle"]);
           $Closure3._registerBindObject(innerD, host, []);
         }
         super._registerBind(host, ops);
-      }
-      static _registerTypeBind(host, ops) {
-        super._registerTypeBind(host, ops);
       }
     }
     const a = new A(this,"A");

@@ -222,14 +222,11 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure2._registerBindObject(compoundOneYear, host, []);
+          $Closure2._registerBindObject(compoundOneYear, host, ["handle"]);
           $Closure2._registerBindObject(interest, host, []);
           $Closure2._registerBindObject(value, host, []);
         }
         super._registerBind(host, ops);
-      }
-      static _registerTypeBind(host, ops) {
-        super._registerTypeBind(host, ops);
       }
     }
     const interest = 0.05;

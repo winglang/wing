@@ -257,12 +257,9 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure2._registerBindObject(getBar, host, []);
+          $Closure2._registerBindObject(getBar, host, ["handle"]);
         }
         super._registerBind(host, ops);
-      }
-      static _registerTypeBind(host, ops) {
-        super._registerTypeBind(host, ops);
       }
     }
     const getBar = new $Closure1(this,"$Closure1");

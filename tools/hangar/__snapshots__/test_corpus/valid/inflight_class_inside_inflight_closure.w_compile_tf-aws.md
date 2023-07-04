@@ -450,9 +450,6 @@ class $Root extends $stdlib.std.Resource {
             }
             super._registerBind(host, ops);
           }
-          static _registerTypeBind(host, ops) {
-            super._registerTypeBind(host, ops);
-          }
         }
         const inflight_closure = new $Closure1(this,"$Closure1");
         return this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"cloud.Function",inflight_closure);
@@ -504,9 +501,6 @@ class $Root extends $stdlib.std.Resource {
           $Closure2._registerBindObject(f, host, ["invoke"]);
         }
         super._registerBind(host, ops);
-      }
-      static _registerTypeBind(host, ops) {
-        super._registerTypeBind(host, ops);
       }
     }
     class $Closure3 extends $stdlib.std.Resource {

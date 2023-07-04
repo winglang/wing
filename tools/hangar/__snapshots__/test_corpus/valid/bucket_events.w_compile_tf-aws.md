@@ -1435,9 +1435,6 @@ class $Root extends $stdlib.std.Resource {
         }
         super._registerBind(host, ops);
       }
-      static _registerTypeBind(host, ops) {
-        super._registerTypeBind(host, ops);
-      }
     }
     class $Closure5 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
@@ -1492,9 +1489,6 @@ class $Root extends $stdlib.std.Resource {
           $Closure6._registerBindObject(b, host, ["delete", "put"]);
         }
         super._registerBind(host, ops);
-      }
-      static _registerTypeBind(host, ops) {
-        super._registerTypeBind(host, ops);
       }
     }
     const other = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"other");

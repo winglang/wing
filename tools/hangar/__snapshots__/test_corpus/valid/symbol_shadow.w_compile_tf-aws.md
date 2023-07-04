@@ -451,9 +451,6 @@ class $Root extends $stdlib.std.Resource {
             }
             super._registerBind(host, ops);
           }
-          static _registerTypeBind(host, ops) {
-            super._registerTypeBind(host, ops);
-          }
         }
         this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:inflight in resource should capture the right scoped var",new $Closure2(this,"$Closure2"));
         this._addInflightOps("$inflight_init");
@@ -505,9 +502,6 @@ class $Root extends $stdlib.std.Resource {
           $Closure3._registerBindObject(s, host, []);
         }
         super._registerBind(host, ops);
-      }
-      static _registerTypeBind(host, ops) {
-        super._registerTypeBind(host, ops);
       }
     }
     class $Closure4 extends $stdlib.std.Resource {
@@ -567,9 +561,6 @@ class $Root extends $stdlib.std.Resource {
             $Closure1._registerBindObject(s, host, []);
           }
           super._registerBind(host, ops);
-        }
-        static _registerTypeBind(host, ops) {
-          super._registerTypeBind(host, ops);
         }
       }
       this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:inflight nested should not capture the shadowed var",new $Closure1(this,"$Closure1"));

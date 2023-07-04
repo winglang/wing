@@ -382,9 +382,6 @@ class $Root extends $stdlib.std.Resource {
         }
         super._registerBind(host, ops);
       }
-      static _registerTypeBind(host, ops) {
-        super._registerTypeBind(host, ops);
-      }
     }
     const x = 4;
     {((cond) => {if (!cond) throw new Error("assertion failed: x? == true")})((((x) != null) === true))};
