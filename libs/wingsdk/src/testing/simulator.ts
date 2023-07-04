@@ -185,7 +185,7 @@ export class Simulator {
       );
     }
 
-
+    // create a copy of the resource list to be used as an init queue.
     const initQueue: (BaseResourceSchema & { _attempts?: number })[] = [...this._config.resources];
 
     while (true) {
@@ -227,7 +227,7 @@ export class Simulator {
     }
 
     for (const resource of this._config.resources) {
-      const object = this.getResource(resource.path);
+      const object = this.getResource(resource.path) as ISimulatorResourceInstance;
       await object.cleanup();
     }
 
@@ -267,7 +267,7 @@ export class Simulator {
    * Get a simulated resource instance.
    * @returns the resource
    */
-  public getResource(path: string): ISimulatorResourceInstance {
+  public getResource(path: string): any {
     const handle = this.tryGetResource(path);
     if (!handle) {
       throw new Error(`Resource "${path}" not found.`);
@@ -279,7 +279,7 @@ export class Simulator {
    * Get a simulated resource instance.
    * @returns The resource of undefined if not found
    */
-  public tryGetResource(path: string): ISimulatorResourceInstance | undefined {
+  public tryGetResource(path: string): any | undefined {
     const handle = this.tryGetResourceConfig(path)?.attrs.handle;
     if (!handle) {
       return undefined;
