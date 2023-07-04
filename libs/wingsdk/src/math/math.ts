@@ -197,5 +197,53 @@ export class Util {
     return numerator / denominator;
   }
 
+  /**
+   * Returns the sine of a number in radians.
+   * @param value A number representing an angle in radians.
+   */
+  public static sin(value: number): number {
+    return Math.sin(value);
+  }
+
+  /**
+   * Returns the cosine of a number in radians.
+   * @param value A number representing an angle in radians.
+   */
+  public static cos(value: number): number {
+    return Math.cos(value);
+  }
+
+  /**
+   * Returns the tangent of a number in radians.
+   * @param value A number representing an angle in radians.
+   */
+  public static tan(value: number): number {
+    return Math.tan(value);
+  }
+
+  /**
+   * Returns the inverse sine (in radians) of a number.
+   * @param value A number between -1 and 1, inclusive, representing the angle's sine value.
+   */
+  public static asin(value: number): number {
+    return Math.asin(value);
+  }
+
+  /**
+   * Returns the inverse cosine (in radians) of a number.
+   * @param value A number between -1 and 1, inclusive, representing the angle's cosine value.
+   */
+  public static acos(value: number): number {
+    return Math.acos(value);
+  }
+
+  /**
+   * Returns the inverse tangent (in radians) of a number.
+   * @param value A number.
+   */
+  public static atan(value: number): number {
+    return Math.atan(value);
+  }
+
   private constructor() {}
 }

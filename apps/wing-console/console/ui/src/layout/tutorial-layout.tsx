@@ -99,7 +99,7 @@ export const TutorialLayout = ({ cloudAppState, wingVersion }: LayoutProps) => {
             "flex relative border-t border-slate-300 bg-slate-50",
             cloudAppState === "error"
               ? "min-h-[32rem] h-[32rem]"
-              : "min-h-[5rem] h-[15rem] max-h-[25rem]",
+              : "min-h-[5rem] h-[8rem] max-h-[25rem]",
           )}
         >
           <BlueScreenOfDeath

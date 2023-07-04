@@ -1,3 +1,6 @@
 label: Standard library
 collapsible: true
 collapsed: true
+link:
+  type: generated-index
+  title: Wing standard library

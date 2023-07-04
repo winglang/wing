@@ -19,7 +19,7 @@ Please don't hesitate to ping us on [Slack](https://t.winglang.io/slack) or
 [file an issue](https://github.com/winglang/wing). We promise to do our best to
 respond quickly and help out.
 
-Our <a href="https://docs.winglang.io/status">Project Status</a> page includes
+Our <a href="https://www.winglang.io/contributing/status">Project Status</a> page includes
 more information about stability and roadmap 👷‍♀️ 
 
 :::

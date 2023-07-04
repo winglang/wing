@@ -2304,7 +2304,7 @@ test "can add objects" {
 
 The behavior of running tests with `wing test` CLI command is determined by the `cloud.TestRunner` resource in the Wing SDK, which can be implemented for any compiler target.
 
-See the [CLI User Manual](https://docs.winglang.io/reference/cli#test-wing-test) for more details on running tests.
+See the [CLI User Manual](https://www.winglang.io/docs/tools/cli#test-wing-test) for more details on running tests.
 
 [`▲ top`][top]
 
@@ -2461,7 +2461,7 @@ If [frozen](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Gl
 
 ### 6.1 Strings
 
-String reference doc is available [here](https://docs.winglang.io/standard-library/sdk#string-).
+String reference doc is available [here](https://www.winglang.io/docs/standard-library/std/api-reference#string-).
 Type of string is UTF-16 internally.  
 All string declaration variants are multi-line.  
 

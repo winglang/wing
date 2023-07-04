@@ -135,7 +135,7 @@ function annotatePreflightError(error: Error): Error {
       "hint: Every preflight object needs a unique identifier within its scope. You can assign one as shown:"
     );
     newMessage.push('> new cloud.Bucket() as "MyBucket";');
-    newMessage.push("For more information, see https://docs.winglang.io/concepts/resources");
+    newMessage.push("For more information, see https://www.winglang.io/docs/language-guide/language-reference#33-preflight-classes");
 
     const newError = new Error(newMessage.join("\n\n"), { cause: error });
     newError.stack = error.stack;
