@@ -50,7 +50,7 @@ export class Topic extends cloud.Topic implements ISimulatorResource {
     Resource.addConnection({
       from: this,
       to: fn,
-      relationship: "on_message",
+      relationship: "onMessage",
     });
 
     return fn;
