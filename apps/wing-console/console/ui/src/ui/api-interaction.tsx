@@ -196,7 +196,7 @@ export const ApiInteraction = ({
   return (
     <div className="h-full flex-1 flex flex-col text-sm space-y-1">
       <div className="relative grow">
-        {appMode !== "webapp" && (
+        {appMode === "local" && (
           <Attribute name="URL" value={url} noLeftPadding />
         )}
         <div className="space-y-2 flex-col grow mt-4">

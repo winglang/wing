@@ -1039,17 +1039,13 @@ impl<'s> Parser<'s> {
 			))
 		} else {
 			// we are missing the last property, but we can still parse the rest of the expression
-			let err = self.add_error(
+			let _ = self.add_error::<()>(
 				"Expected property",
 				&nested_node
 					.child(nested_node.child_count() - 1)
 					.expect("Nested identifier should have at least one child"),
 			);
-			if object_expr.kind() == "reference" {
-				self.build_reference(&object_expr, phase)
-			} else {
-				err
-			}
+			self.build_expression(&object_expr, phase)
 		}
 	}
 
