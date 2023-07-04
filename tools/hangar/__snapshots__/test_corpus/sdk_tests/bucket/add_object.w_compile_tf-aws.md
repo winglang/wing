@@ -71,13 +71,8 @@ module.exports = function({ b, jsonObj1, std_Json }) {
             "uniqueId": "testaddObject_Handler_IamRolePolicy_B5188189"
           }
         },
-<<<<<<< HEAD
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:List*\",\"s3:GetObject*\",\"s3:GetBucket*\"],\"Resource\":[\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\",\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.root_testaddObject_Handler_IamRole_CCB55BBB.name}"
-=======
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:List*\"],\"Resource\":[\"${aws_s3_bucket.cloudBucket.arn}\",\"${aws_s3_bucket.cloudBucket.arn}/*\"],\"Effect\":\"Allow\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:List*\",\"s3:GetObject*\",\"s3:GetBucket*\"],\"Resource\":[\"${aws_s3_bucket.cloudBucket.arn}\",\"${aws_s3_bucket.cloudBucket.arn}/*\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.testaddObject_Handler_IamRole_1A9672A7.name}"
->>>>>>> parent of 1ead58d5a (chore: revert switch to pnpm (#3222))
       }
     },
     "aws_iam_role_policy_attachment": {
@@ -102,12 +97,7 @@ module.exports = function({ b, jsonObj1, std_Json }) {
         },
         "environment": {
           "variables": {
-<<<<<<< HEAD
-            "BUCKET_NAME_d755b447": "${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
-=======
             "BUCKET_NAME_d755b447": "${aws_s3_bucket.cloudBucket.bucket}",
-            "BUCKET_NAME_d755b447_IS_PUBLIC": "false",
->>>>>>> parent of 1ead58d5a (chore: revert switch to pnpm (#3222))
             "WING_FUNCTION_NAME": "Handler-c89ea41b",
             "WING_TARGET": "tf-aws"
           }

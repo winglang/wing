@@ -84,13 +84,8 @@ module.exports = function({ publicBucket, privateBucket, util_Util, http_Util })
             "uniqueId": "testpublicUrl_Handler_IamRolePolicy_5664CCF6"
           }
         },
-<<<<<<< HEAD
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:List*\",\"s3:PutObject*\",\"s3:Abort*\",\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:GetBucketPublicAccessBlock\"],\"Resource\":[\"${aws_s3_bucket.root_publicBucket_8E082B9B.arn}\",\"${aws_s3_bucket.root_publicBucket_8E082B9B.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:List*\",\"s3:PutObject*\",\"s3:Abort*\",\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:GetBucketPublicAccessBlock\"],\"Resource\":[\"${aws_s3_bucket.root_privateBucket_9063F4A1.arn}\",\"${aws_s3_bucket.root_privateBucket_9063F4A1.arn}/*\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.root_testpublicUrl_Handler_IamRole_D906F1F6.name}"
-=======
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.publicBucket.arn}\",\"${aws_s3_bucket.publicBucket.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:List*\"],\"Resource\":[\"${aws_s3_bucket.publicBucket.arn}\",\"${aws_s3_bucket.publicBucket.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.privateBucket.arn}\",\"${aws_s3_bucket.privateBucket.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:List*\"],\"Resource\":[\"${aws_s3_bucket.privateBucket.arn}\",\"${aws_s3_bucket.privateBucket.arn}/*\"],\"Effect\":\"Allow\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:List*\",\"s3:PutObject*\",\"s3:Abort*\",\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:GetBucketPublicAccessBlock\"],\"Resource\":[\"${aws_s3_bucket.publicBucket.arn}\",\"${aws_s3_bucket.publicBucket.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:List*\",\"s3:PutObject*\",\"s3:Abort*\",\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:GetBucketPublicAccessBlock\"],\"Resource\":[\"${aws_s3_bucket.privateBucket.arn}\",\"${aws_s3_bucket.privateBucket.arn}/*\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.testpublicUrl_Handler_IamRole_9C38B5EF.name}"
->>>>>>> parent of 1ead58d5a (chore: revert switch to pnpm (#3222))
       }
     },
     "aws_iam_role_policy_attachment": {
@@ -115,15 +110,8 @@ module.exports = function({ publicBucket, privateBucket, util_Util, http_Util })
         },
         "environment": {
           "variables": {
-<<<<<<< HEAD
-            "BUCKET_NAME_7c320eda": "${aws_s3_bucket.root_publicBucket_8E082B9B.bucket}",
-            "BUCKET_NAME_e82f6088": "${aws_s3_bucket.root_privateBucket_9063F4A1.bucket}",
-=======
             "BUCKET_NAME_7c320eda": "${aws_s3_bucket.publicBucket.bucket}",
-            "BUCKET_NAME_7c320eda_IS_PUBLIC": "true",
             "BUCKET_NAME_e82f6088": "${aws_s3_bucket.privateBucket.bucket}",
-            "BUCKET_NAME_e82f6088_IS_PUBLIC": "false",
->>>>>>> parent of 1ead58d5a (chore: revert switch to pnpm (#3222))
             "WING_FUNCTION_NAME": "Handler-c849898f",
             "WING_TARGET": "tf-aws"
           }

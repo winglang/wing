@@ -198,13 +198,8 @@ module.exports = function({  }) {
             "uniqueId": "testinflightscancallotherinflights_Handler_IamRolePolicy_1E6CC29C"
           }
         },
-<<<<<<< HEAD
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:GetObject*\",\"s3:GetBucket*\"],\"Resource\":[\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\",\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"lambda:InvokeFunction\"],\"Resource\":[\"${aws_lambda_function.root_func1_52D4D9D4.arn}\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.root_testinflightscancallotherinflights_Handler_IamRole_BB2EB09E.name}"
-=======
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:List*\"],\"Resource\":[\"${aws_s3_bucket.cloudBucket.arn}\",\"${aws_s3_bucket.cloudBucket.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"lambda:InvokeFunction\"],\"Resource\":[\"${aws_lambda_function.func1.arn}\"],\"Effect\":\"Allow\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:GetObject*\",\"s3:GetBucket*\"],\"Resource\":[\"${aws_s3_bucket.cloudBucket.arn}\",\"${aws_s3_bucket.cloudBucket.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"lambda:InvokeFunction\"],\"Resource\":[\"${aws_lambda_function.func1.arn}\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.testinflightscancallotherinflights_Handler_IamRole_30D96E98.name}"
->>>>>>> parent of 1ead58d5a (chore: revert switch to pnpm (#3222))
       },
       "testvariablecanbeaninflightclosure_Handler_IamRolePolicy_B1660864": {
         "//": {
@@ -213,13 +208,8 @@ module.exports = function({  }) {
             "uniqueId": "testvariablecanbeaninflightclosure_Handler_IamRolePolicy_B1660864"
           }
         },
-<<<<<<< HEAD
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:List*\",\"s3:GetObject*\",\"s3:GetBucket*\"],\"Resource\":[\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\",\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.root_testvariablecanbeaninflightclosure_Handler_IamRole_507C37DB.name}"
-=======
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:List*\"],\"Resource\":[\"${aws_s3_bucket.cloudBucket.arn}\",\"${aws_s3_bucket.cloudBucket.arn}/*\"],\"Effect\":\"Allow\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:List*\",\"s3:GetObject*\",\"s3:GetBucket*\"],\"Resource\":[\"${aws_s3_bucket.cloudBucket.arn}\",\"${aws_s3_bucket.cloudBucket.arn}/*\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.testvariablecanbeaninflightclosure_Handler_IamRole_12408457.name}"
->>>>>>> parent of 1ead58d5a (chore: revert switch to pnpm (#3222))
       }
     },
     "aws_iam_role_policy_attachment": {
@@ -264,12 +254,7 @@ module.exports = function({  }) {
         },
         "environment": {
           "variables": {
-<<<<<<< HEAD
-            "BUCKET_NAME_d755b447": "${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
-=======
             "BUCKET_NAME_d755b447": "${aws_s3_bucket.cloudBucket.bucket}",
-            "BUCKET_NAME_d755b447_IS_PUBLIC": "false",
->>>>>>> parent of 1ead58d5a (chore: revert switch to pnpm (#3222))
             "WING_FUNCTION_NAME": "func1-c899062d",
             "WING_TARGET": "tf-aws"
           }
@@ -296,14 +281,8 @@ module.exports = function({  }) {
         },
         "environment": {
           "variables": {
-<<<<<<< HEAD
-            "BUCKET_NAME_d755b447": "${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
-            "FUNCTION_NAME_c79d5cd4": "${aws_lambda_function.root_func1_52D4D9D4.arn}",
-=======
             "BUCKET_NAME_d755b447": "${aws_s3_bucket.cloudBucket.bucket}",
-            "BUCKET_NAME_d755b447_IS_PUBLIC": "false",
             "FUNCTION_NAME_c79d5cd4": "${aws_lambda_function.func1.arn}",
->>>>>>> parent of 1ead58d5a (chore: revert switch to pnpm (#3222))
             "WING_FUNCTION_NAME": "Handler-c8ad4c02",
             "WING_TARGET": "tf-aws"
           }
@@ -330,12 +309,7 @@ module.exports = function({  }) {
         },
         "environment": {
           "variables": {
-<<<<<<< HEAD
-            "BUCKET_NAME_d755b447": "${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
-=======
             "BUCKET_NAME_d755b447": "${aws_s3_bucket.cloudBucket.bucket}",
-            "BUCKET_NAME_d755b447_IS_PUBLIC": "false",
->>>>>>> parent of 1ead58d5a (chore: revert switch to pnpm (#3222))
             "WING_FUNCTION_NAME": "Handler-c8210662",
             "WING_TARGET": "tf-aws"
           }

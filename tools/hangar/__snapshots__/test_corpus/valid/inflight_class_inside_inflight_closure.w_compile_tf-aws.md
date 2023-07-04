@@ -246,12 +246,7 @@ module.exports = function({  }) {
         },
         "environment": {
           "variables": {
-<<<<<<< HEAD
-            "BUCKET_NAME_70ca4fed": "${aws_s3_bucket.root_PreflightClass_cloudBucket_DABE9D2A.bucket}",
-=======
             "BUCKET_NAME_70ca4fed": "${aws_s3_bucket.PreflightClass_cloudBucket_05421049.bucket}",
-            "BUCKET_NAME_70ca4fed_IS_PUBLIC": "false",
->>>>>>> parent of 1ead58d5a (chore: revert switch to pnpm (#3222))
             "WING_FUNCTION_NAME": "cloud-Function-c8db99e3",
             "WING_TARGET": "tf-aws"
           }

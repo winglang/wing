@@ -15,8 +15,7 @@
       }
     },
     "test": {
-      "/": "test only depends on package to prevent them from running at the same time",
-      "dependsOn": ["^build", "build", "package"],
+      "dependsOn": ["^build", "build"],
       "options": {
         "commands": ["pnpm post-compile", "pnpm test"],
         "cwd": "libs/wingsdk",

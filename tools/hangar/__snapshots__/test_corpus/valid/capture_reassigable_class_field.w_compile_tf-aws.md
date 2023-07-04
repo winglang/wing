@@ -162,13 +162,8 @@ module.exports = function({  }) {
             "uniqueId": "testmain_Handler_IamRolePolicy_A91080AC"
           }
         },
-<<<<<<< HEAD
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\",\"s3:GetObject*\",\"s3:GetBucket*\"],\"Resource\":[\"${aws_s3_bucket.root_KeyValueStore_cloudBucket_B6A49C6A.arn}\",\"${aws_s3_bucket.root_KeyValueStore_cloudBucket_B6A49C6A.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.root_sasa_B91F09DA.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:GetItem\"],\"Resource\":[\"${aws_dynamodb_table.root_sasa_B91F09DA.arn}\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.root_testmain_Handler_IamRole_0300CAA5.name}"
-=======
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.KeyValueStore_cloudBucket_D9D365FD.arn}\",\"${aws_s3_bucket.KeyValueStore_cloudBucket_D9D365FD.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:List*\"],\"Resource\":[\"${aws_s3_bucket.KeyValueStore_cloudBucket_D9D365FD.arn}\",\"${aws_s3_bucket.KeyValueStore_cloudBucket_D9D365FD.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.sasa.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:GetItem\"],\"Resource\":[\"${aws_dynamodb_table.sasa.arn}\"],\"Effect\":\"Allow\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\",\"s3:GetObject*\",\"s3:GetBucket*\"],\"Resource\":[\"${aws_s3_bucket.KeyValueStore_cloudBucket_D9D365FD.arn}\",\"${aws_s3_bucket.KeyValueStore_cloudBucket_D9D365FD.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.sasa.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:GetItem\"],\"Resource\":[\"${aws_dynamodb_table.sasa.arn}\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.testmain_Handler_IamRole_0E2C4B8D.name}"
->>>>>>> parent of 1ead58d5a (chore: revert switch to pnpm (#3222))
       }
     },
     "aws_iam_role_policy_attachment": {
@@ -193,14 +188,8 @@ module.exports = function({  }) {
         },
         "environment": {
           "variables": {
-<<<<<<< HEAD
-            "BUCKET_NAME_ce72b88b": "${aws_s3_bucket.root_KeyValueStore_cloudBucket_B6A49C6A.bucket}",
-            "DYNAMODB_TABLE_NAME_5a275103": "${aws_dynamodb_table.root_sasa_B91F09DA.name}",
-=======
             "BUCKET_NAME_ce72b88b": "${aws_s3_bucket.KeyValueStore_cloudBucket_D9D365FD.bucket}",
-            "BUCKET_NAME_ce72b88b_IS_PUBLIC": "false",
             "DYNAMODB_TABLE_NAME_5a275103": "${aws_dynamodb_table.sasa.name}",
->>>>>>> parent of 1ead58d5a (chore: revert switch to pnpm (#3222))
             "WING_FUNCTION_NAME": "Handler-c8d10438",
             "WING_TARGET": "tf-aws"
           }

@@ -315,12 +315,7 @@ exports[`function with bucket binding > put operation 2`] = `
       \\"Function\\": {
         \\"environment\\": {
           \\"variables\\": {
-<<<<<<< HEAD
-            \\"BUCKET_NAME_1357ca3a\\": \\"\${aws_s3_bucket.root_Bucket_966015A6.bucket}\\",
-=======
             \\"BUCKET_NAME_1357ca3a\\": \\"\${aws_s3_bucket.Bucket.bucket}\\",
-            \\"BUCKET_NAME_1357ca3a_IS_PUBLIC\\": \\"false\\",
->>>>>>> parent of 1ead58d5a (chore: revert switch to pnpm (#3222))
             \\"WING_FUNCTION_NAME\\": \\"Function-c852aba6\\"
           }
         },
