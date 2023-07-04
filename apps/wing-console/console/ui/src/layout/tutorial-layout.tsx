@@ -72,7 +72,7 @@ export const TutorialLayout = ({ cloudAppState }: LayoutProps) => {
             <LeftResizableWidget
               className={classNames(
                 theme.border3,
-                "h-full w-1/4 flex flex-col min-w-[10rem] min-h-[15rem] border-l z-10",
+                "h-full w-1/4 flex flex-col min-w-[10rem] min-h-[10rem] border-l z-10",
                 theme.bg4,
               )}
             >
@@ -96,8 +96,8 @@ export const TutorialLayout = ({ cloudAppState }: LayoutProps) => {
           theme.border3,
           "flex relative border-t border-slate-300 bg-slate-50",
           {
-            "min-h-[32rem] h-[32rem]": cloudAppState === "error",
-            "min-h-[5rem] h-[20rem] max-h-[25rem]": cloudAppState !== "error",
+            "min-h-[5rem] h-[30rem]": cloudAppState === "error",
+            "min-h-[5rem] h-[15rem]": cloudAppState !== "error",
           },
         )}
       >
@@ -111,7 +111,7 @@ export const TutorialLayout = ({ cloudAppState }: LayoutProps) => {
         <div
           className={classNames(
             theme.border3,
-            "flex-1 flex flex-col min-w-[10rem] min-h-[15rem] border-r border-b border-slate-300",
+            "flex-1 flex flex-col min-w-[10rem] border-r border-b border-slate-300",
             theme.bg3,
             theme.text2,
           )}

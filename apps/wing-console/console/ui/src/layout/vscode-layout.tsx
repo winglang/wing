@@ -96,7 +96,7 @@ export const VscodeLayout = ({ cloudAppState, wingVersion }: LayoutProps) => {
         <RightResizableWidget
           className={classNames(
             theme.border3,
-            "h-full flex flex-col w-80 min-w-[10rem] min-h-[15rem] border-r",
+            "h-full flex flex-col w-80 min-w-[10rem] min-h-[10rem] border-r",
           )}
         >
           <div className="flex grow">
