@@ -9,7 +9,7 @@ module.exports = function({ $bar }) {
       (await result.push($bar));
       if (true) {
         const bar = "world";
-        (await result.push($bar));
+        (await result.push(bar));
       }
       const foo = "bang";
       (await result.push(foo));
@@ -33,6 +33,9 @@ module.exports = function({ $fn }) {
     async handle() {
       const result = (await $fn());
       {((cond) => {if (!cond) throw new Error("assertion failed: result.length == 3")})((result.length === 3))};
+      {console.log((await result.at(0)))};
+      {console.log((await result.at(1)))};
+      {console.log((await result.at(2)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: result.at(0) == \"hola!\"")})(((await result.at(0)) === "hola!"))};
       {((cond) => {if (!cond) throw new Error("assertion failed: result.at(1) == \"world\"")})(((await result.at(1)) === "world"))};
       {((cond) => {if (!cond) throw new Error("assertion failed: result.at(2) == \"bang\"")})(((await result.at(2)) === "bang"))};
