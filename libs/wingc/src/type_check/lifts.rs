@@ -77,7 +77,7 @@ impl Lifts {
 			code: code.to_string(),
 		});
 
-		let method = method.and_then(|m| Some(m.name)).unwrap_or(Default::default());
+		let method = method.map(|m| m.name).unwrap_or(Default::default());
 
 		let key = format!("{}/{}", method.clone(), token);
 		let lift = self.lifts.entry(key).or_insert(MethodLift {

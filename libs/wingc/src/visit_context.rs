@@ -44,7 +44,7 @@ impl VisitContext {
 
 	pub fn push_class(&mut self, class: UserDefinedType, phase: &Phase, initializer_env: Option<SymbolEnvRef>) {
 		self.class.push(class);
-		self.phase.push(phase.clone());
+		self.phase.push(*phase);
 		self.method_env.push(initializer_env);
 	}
 
@@ -61,7 +61,7 @@ impl VisitContext {
 	// --
 
 	pub fn push_function_definition(&mut self, function_name: &Option<Symbol>, phase: &Phase, env: SymbolEnvRef) {
-		self.phase.push(phase.clone());
+		self.phase.push(*phase);
 		self.method.push(function_name.clone());
 
 		// if the function definition doesn't have a name (i.e. it's a closure), don't push its env

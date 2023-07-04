@@ -1170,14 +1170,12 @@ impl<'a> JSifier<'a> {
 	fn jsify_inflight_binding_constructor(&self, class: &AstClass, class_code: &mut CodeMaker, ctx: &JSifyContext) {
 		// Get the fields that are lifted by this class but not by its parent, they will be initialized
 		// in the generated constructor
-		let lifted_fields = ctx.lifts.lifted_fields().iter().map(|(f, _)| f.clone()).collect_vec();
+		let lifted_fields = ctx.lifts.lifted_fields().keys().map(|f| f.clone()).collect_vec();
 		let parent_fields = if let Some(parent) = &class.parent {
 			let parent_type = self.get_expr_type(parent);
 			let parent_lifts = &parent_type.as_class().unwrap().lifts;
 			parent_lifts
-				.lifted_fields()
-				.iter()
-				.map(|(f, _)| f.clone())
+				.lifted_fields().keys().map(|f| f.clone())
 				.collect_vec()
 		} else {
 			vec![]

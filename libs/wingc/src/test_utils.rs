@@ -15,7 +15,7 @@ macro_rules! assert_compile_ok {
       prepend_module_to_snapshot => false,
       omit_expression => true,
     }, {
-      insta::assert_snapshot!(crate::test_utils::compile_ok($code));
+      insta::assert_snapshot!($crate::test_utils::compile_ok($code));
     })
   };
 }
@@ -27,7 +27,7 @@ macro_rules! assert_compile_fail {
       prepend_module_to_snapshot => false,
       omit_expression => true,
     }, {
-      insta::assert_snapshot!(crate::test_utils::compile_fail($code));
+      insta::assert_snapshot!($crate::test_utils::compile_fail($code));
     });
   };
 }
@@ -75,7 +75,7 @@ fn compile_code(code: &str) -> String {
         panic!("failed to read dir");
       };
 
-			snap.push(format!("## Code"));
+			snap.push("## Code".to_string());
 			snap.push("".into());
 			snap.push("```w".into());
 			snap.push(code);
