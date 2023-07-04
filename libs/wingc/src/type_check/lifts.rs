@@ -17,16 +17,15 @@ pub struct Lifts {
 
 #[derive(Debug, Clone)]
 pub struct Capture {
-	// pub is_type: bool,
-	pub inflight: String,
+	pub token: String,
 	pub code: String,
 }
 
 #[derive(Debug)]
 pub struct MethodLift {
 	pub token: String,
-	pub method: String,
 	pub code: String,
+	pub method: String,
 	pub ops: BTreeSet<String>,
 }
 
@@ -34,7 +33,7 @@ pub struct MethodLift {
 pub struct Lift {
 	pub token: String,
 	pub code: String,
-	pub field: bool,
+	pub is_field: bool,
 }
 
 impl Lifts {
@@ -80,7 +79,7 @@ impl Lifts {
 
 		self.lift_by_token.entry(token.clone()).or_insert(Lift {
 			token: token.clone(),
-			field: is_field,
+			is_field,
 			code: code.to_string(),
 		});
 
@@ -111,7 +110,7 @@ impl Lifts {
 		};
 
 		let is_field = if let Some(lift) = self.lift_by_token.get(token) {
-			lift.field
+			lift.is_field
 		} else {
 			false
 		};
@@ -135,7 +134,7 @@ impl Lifts {
 		self.token_by_expr_id.entry(*expr_id).or_insert(token.clone());
 
 		self.captures.entry(token.clone()).or_insert(Capture {
-			inflight: token.to_string(),
+			token: token.to_string(),
 			code: code.to_string(),
 		});
 
@@ -156,10 +155,6 @@ impl Lifts {
 
 	pub fn lifted_fields(&self) -> BTreeMap<String, String> {
 		self.lifted_fields_by_token.clone()
-	}
-
-	pub fn all_capture_tokens(&self) -> Vec<&String> {
-		self.captures.keys().collect_vec()
 	}
 
 	pub fn lifts_per_method(&self) -> BTreeMap<String, Vec<&MethodLift>> {

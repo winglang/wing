@@ -37,42 +37,6 @@ impl<'a> LiftTransform<'a> {
 		udt.full_path_str() == current_class_udt.full_path_str()
 	}
 
-	fn should_capture_reference(&self, fullname: &str, span: &WingSpan) -> bool {
-		// if the symbol is defined in the *current* environment (which could also be a nested scope
-		// inside the current method), we don't need to capture it
-		if self.is_defined_in_current_env(fullname, span) {
-			return false;
-		}
-
-		let Some(method_env) = self.ctx.current_method_env() else {
-			return false;
-		};
-
-		let lookup = method_env.lookup_nested_str(&fullname, Some(self.ctx.current_stmt_idx()));
-
-		// any other lookup failure is likely a an invalid reference so we can skip it
-		let LookupResult::Found(vi, symbol_info) = lookup else {
-			return false;
-		};
-
-		// now, we need to determine if the environment this symbol is defined in is a parent of the
-		// method's environment. if it is, we need to capture it.
-		if symbol_info.env.is_same(&method_env) || symbol_info.env.is_child_of(&method_env) {
-			return false;
-		}
-
-		// skip macros
-		if let Some(x) = vi.as_variable() {
-			if let Some(f) = x.type_.as_function_sig() {
-				if f.js_override.is_some() {
-					return false;
-				}
-			}
-		}
-
-		return true;
-	}
-
 	fn is_defined_in_current_env(&self, fullname: &str, span: &WingSpan) -> bool {
 		// if the symbol is defined later in the current environment, it means we can't capture a
 		// reference to a symbol with the same name from a parent so bail out.
@@ -105,30 +69,61 @@ impl<'a> LiftTransform<'a> {
 
 	fn should_capture_expr(&self, node: &Expr) -> bool {
 		let ExprKind::Reference(ref r) = node.kind else {
-		return false;
-	};
+			return false;
+		};
 
-		match r {
-			Reference::Identifier(ref symb) => {
-				let fullname = symb.name.clone();
-				let span = symb.span.clone();
-				self.should_capture_reference(&fullname, &span)
+		let (fullname, span) = match r {
+			Reference::Identifier(ref symb) => (symb.name.clone(), symb.span.clone()),
+			Reference::TypeReference(ref t) => (t.full_path_str(), t.span.clone()),
+			_ => return false,
+		};
+
+		// skip "This" (which is the type of "this")
+		if let Some(class) = &self.ctx.current_class() {
+			if class.full_path_str() == fullname {
+				return false;
 			}
-			Reference::TypeReference(ref t) => {
-				let fullname = t.full_path_str();
-				let span = t.span.clone();
-
-				// skip "This" (which is the type of "this")
-				if let Some(class) = &self.ctx.current_class() {
-					if class.full_path_str() == fullname {
-						return false;
-					}
-				}
-
-				self.should_capture_reference(&fullname, &span)
-			}
-			_ => false,
 		}
+
+		// if the symbol is defined in the *current* environment (which could also be a nested scope
+		// inside the current method), we don't need to capture it
+		if self.is_defined_in_current_env(&fullname, &span) {
+			return false;
+		}
+
+		let Some(method_env) = self.ctx.current_method_env() else {
+			return false;
+		};
+
+		let lookup = method_env.lookup_nested_str(&fullname, Some(self.ctx.current_stmt_idx()));
+
+		// any other lookup failure is likely a an invalid reference so we can skip it
+		let LookupResult::Found(vi, symbol_info) = lookup else {
+			return false;
+		};
+
+		// now, we need to determine if the environment this symbol is defined in is a parent of the
+		// method's environment. if it is, we need to capture it.
+		if symbol_info.env.is_same(&method_env) || symbol_info.env.is_child_of(&method_env) {
+			return false;
+		}
+
+		// the symbol is defined in a parent environment, but it's still an inflight environment
+		// which means we don't need to capture.
+		if symbol_info.phase == Phase::Inflight && symbol_info.env.phase == Phase::Inflight {
+			return false;
+		}
+
+		// skip macros
+		if let Some(x) = vi.as_variable() {
+			if let Some(f) = x.type_.as_function_sig() {
+				if f.js_override.is_some() {
+					return false;
+				}
+			}
+		}
+
+		return true;
 	}
 
 	fn jsify_expr(&self, node: &Expr, phase: Phase) -> String {
@@ -233,20 +228,10 @@ impl<'a> Fold for LiftTransform<'a> {
 
 		if self.should_capture_expr(&node) {
 			// jsify the expression so we can get the preflight code
-			let preflight = self.jsify_expr(&node, Phase::Inflight);
-
-			if let Some(p) = self.ctx.current_property() {
-				if p == ASSIGNMENT_OPERATION {
-					report_diagnostic(Diagnostic {
-						message: "Unable to reassign a captured variable".to_string(),
-						span: Some(node.span.clone()),
-					});
-					return node;
-				}
-			}
+			let code = self.jsify_expr(&node, Phase::Inflight);
 
 			let mut lifts = self.lifts_stack.pop().unwrap();
-			lifts.capture(&node.id, &preflight);
+			lifts.capture(&node.id, &code);
 			self.lifts_stack.push(lifts);
 
 			return node;
@@ -259,16 +244,6 @@ impl<'a> Fold for LiftTransform<'a> {
 
 	fn fold_function_definition(&mut self, node: FunctionDefinition) -> FunctionDefinition {
 		match node.body {
-			FunctionBody::External(s) => {
-				return FunctionDefinition {
-					name: node.name.clone().map(|f| f.clone()),
-					body: FunctionBody::External(s),
-					signature: self.fold_function_signature(node.signature.clone()),
-					is_static: node.is_static,
-					span: node.span.clone(),
-				};
-			}
-
 			FunctionBody::Statements(scope) => {
 				self.ctx.push_function_definition(
 					&node.name,
@@ -286,12 +261,41 @@ impl<'a> Fold for LiftTransform<'a> {
 
 				self.ctx.pop_function_definition();
 
-				result
+				return result;
 			}
+			FunctionBody::External(_) => {}
 		}
+
+		fold::fold_function_definition(self, node)
 	}
 
 	fn fold_class(&mut self, node: Class) -> Class {
+		// nothing to do if we are emitting an inflight class from within an inflight scope
+		if self.ctx.current_phase() == Phase::Inflight && node.phase == Phase::Inflight {
+			return Class {
+				name: self.fold_symbol(node.name),
+				fields: node
+					.fields
+					.into_iter()
+					.map(|field| self.fold_class_field(field))
+					.collect(),
+				methods: node
+					.methods
+					.into_iter()
+					.map(|(name, def)| (self.fold_symbol(name), fold::fold_function_definition(self, def)))
+					.collect(),
+				initializer: fold::fold_function_definition(self, node.initializer),
+				parent: node.parent.map(|parent| self.fold_expr(parent)),
+				implements: node
+					.implements
+					.into_iter()
+					.map(|interface| self.fold_user_defined_type(interface))
+					.collect(),
+				phase: node.phase,
+				inflight_initializer: fold::fold_function_definition(self, node.inflight_initializer),
+			};
+		}
+
 		// extract the "env" from the class initializer and push it to the context
 		// because this is the environment in which we want to resolve references
 		// as oppose to the environment of the class definition itself.
@@ -303,9 +307,11 @@ impl<'a> Fold for LiftTransform<'a> {
 
 		if self.ctx.current_phase() == Phase::Inflight {
 			if let Some(parent) = &node.parent {
-				let mut lifts = self.lifts_stack.pop().unwrap();
-				lifts.capture(&parent.id, &self.jsify_expr(&parent, Phase::Inflight));
-				self.lifts_stack.push(lifts);
+				if self.should_capture_expr(parent) {
+					let mut lifts = self.lifts_stack.pop().unwrap();
+					lifts.capture(&parent.id, &self.jsify_expr(&parent, Phase::Inflight));
+					self.lifts_stack.push(lifts);
+				}
 			}
 		}
 

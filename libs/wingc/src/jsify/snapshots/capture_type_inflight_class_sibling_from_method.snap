@@ -22,8 +22,13 @@ source: libs/wingc/src/jsify/tests.rs
 module.exports = function({  }) {
   class $Closure1 {
     async handle() {
-      const Foo = require("./inflight.Foo.js")({});
-      const Bar = require("./inflight.Bar.js")({$Foo});
+      class Foo {
+      }
+      class Bar {
+        async myMethod() {
+          new Foo();
+        }
+      }
     }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -32,29 +37,6 @@ module.exports = function({  }) {
     }
   }
   return $Closure1;
-}
-```
-
-## inflight.Bar.js
-
-```js
-module.exports = function({ $Foo }) {
-  class Bar {
-    async myMethod() {
-      new $Foo();
-    }
-  }
-  return Bar;
-}
-```
-
-## inflight.Foo.js
-
-```js
-module.exports = function({  }) {
-  class Foo {
-  }
-  return Foo;
 }
 ```
 

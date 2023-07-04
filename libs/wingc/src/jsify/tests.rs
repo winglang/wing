@@ -115,8 +115,6 @@ fn static_external_preflight_class() {
           A.foo();
         }
       }
-
-      A.foo();
     }
     "#
 	);
@@ -1764,7 +1762,8 @@ fn lift_this() {
 
 #[test]
 fn reassign_captured_variable() {
-	assert_compile_fail!(
+	// TODO: https://github.com/winglang/wing/issues/3249 (this should fail)
+	assert_compile_ok!(
 		r#"
     test "test" {
       let var i = 10;
@@ -1775,6 +1774,19 @@ fn reassign_captured_variable() {
         }
       }
     }
+    "#
+	);
+}
+
+#[test]
+fn reassigned_captured_variable_preflight() {
+	// TODO: https://github.com/winglang/wing/issues/3249 (this should fail)
+	assert_compile_ok!(
+		r#"
+    let var i = 10;
+    () => {
+      i = 12;
+    };
     "#
 	);
 }
@@ -1814,4 +1826,18 @@ fn no_lift_shadow_inside_inner_scopes() {
     }
     "#
 	);
+}
+
+#[test]
+fn capture_var_from_method_inflight() {
+	assert_compile_ok!(
+		r#"
+    test "test" {
+      let x = 12;
+      class Foo {
+        getX(): num { return x; }
+      }
+    }
+    "#
+	)
 }

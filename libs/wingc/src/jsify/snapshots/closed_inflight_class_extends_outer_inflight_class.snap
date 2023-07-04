@@ -20,7 +20,8 @@ source: libs/wingc/src/jsify/tests.rs
 module.exports = function({ $Base }) {
   class $Closure1 {
     async handle() {
-      const Derived = require("./inflight.Derived.js")({$Base});
+      class Derived extends $Base {
+      }
       new Derived();
     }
     constructor({  }) {
@@ -40,16 +41,6 @@ module.exports = function({  }) {
   class Base {
   }
   return Base;
-}
-```
-
-## inflight.Derived.js
-
-```js
-module.exports = function({ $Base }) {
-  class Derived extends $Base {
-  }
-  return Derived;
 }
 ```
 

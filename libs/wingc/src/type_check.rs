@@ -241,7 +241,7 @@ pub struct Class {
 	pub type_parameters: Option<Vec<TypeRef>>,
 	pub phase: Phase,
 	pub docs: Docs,
-	pub lifts: Lifts,
+	pub lifts: Option<Lifts>,
 
 	// Preflight classes are CDK Constructs which means they have a scope and id as their first arguments
 	// this is natively supported by wing using the `as` `in` keywords. However theoretically it is possible
@@ -251,7 +251,7 @@ pub struct Class {
 }
 impl Class {
 	pub(crate) fn set_lifts(&mut self, lifts: Lifts) {
-		self.lifts = lifts;
+		self.lifts = Some(lifts);
 	}
 }
 
@@ -2438,7 +2438,9 @@ impl<'a> TypeChecker<'a> {
 				let (exp_type, _) = self.type_check_exp(value, env);
 				let (var_type, var_phase) = self.type_check_exp(variable, env);
 
-				// check if the variable can be reassigned
+				// TODO: we need to verify that if this variable is defined in a parent environment (i.e.
+				// being captured) it cannot be reassigned: 
+
 
 				if let ExprKind::Reference(r) = &variable.kind {
 					let (var, _) = self.resolve_reference(&r, env);
@@ -2588,7 +2590,7 @@ impl<'a> TypeChecker<'a> {
 					type_parameters: None, // TODO no way to have generic args in wing yet
 					docs: Docs::default(),
 					std_construct_args: *phase == Phase::Preflight,
-					lifts: Lifts::new(),
+					lifts: None,
 				};
 				let mut class_type = self.types.add_type(Type::Class(class_spec));
 				match env.define(name, SymbolKind::Type(class_type), StatementIdx::Top) {
@@ -3326,7 +3328,7 @@ impl<'a> TypeChecker<'a> {
 			phase: original_type_class.phase,
 			docs: original_type_class.docs.clone(),
 			std_construct_args: original_type_class.std_construct_args,
-			lifts: Lifts::new(),
+			lifts: None,
 		});
 
 		// TODO: here we add a new type regardless whether we already "hydrated" `original_type` with these `type_params`. Cache!

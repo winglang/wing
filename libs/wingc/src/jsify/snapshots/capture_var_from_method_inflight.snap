@@ -6,8 +6,10 @@ source: libs/wingc/src/jsify/tests.rs
 ```w
 
     test "test" {
-      class A {}
-      class B extends A {}
+      let x = 12;
+      class Foo {
+        getX(): num { return x; }
+      }
     }
     
 ```
@@ -18,9 +20,11 @@ source: libs/wingc/src/jsify/tests.rs
 module.exports = function({  }) {
   class $Closure1 {
     async handle() {
-      class A {
-      }
-      class B extends A {
+      const x = 12;
+      class Foo {
+        async getX() {
+          return x;
+        }
       }
     }
     constructor({  }) {

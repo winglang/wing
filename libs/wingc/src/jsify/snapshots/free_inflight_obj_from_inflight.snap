@@ -24,7 +24,11 @@ module.exports = function({  }) {
   class $Closure1 {
     async handle() {
       const y = "hello";
-      const A = require("./inflight.A.js")({$y});
+      class A {
+        constructor() {
+          {console.log(y)};
+        }
+      }
     }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -33,19 +37,6 @@ module.exports = function({  }) {
     }
   }
   return $Closure1;
-}
-```
-
-## inflight.A.js
-
-```js
-module.exports = function({ $y }) {
-  class A {
-    constructor() {
-      {console.log($y)};
-    }
-  }
-  return A;
 }
 ```
 

@@ -908,7 +908,12 @@ impl<'a> JSifier<'a> {
 		// Lookup the class type
 		let class_type = env.lookup(&class.name, None).unwrap().as_type().unwrap();
 
-		let lifts = &class_type.as_class().unwrap().lifts;
+		let lifts = if let Some(lifts) = &class_type.as_class().unwrap().lifts {
+			lifts
+		} else {
+			ctx.lifts
+		};
+
 		let ctx = &mut JSifyContext {
 			in_json: ctx.in_json,
 			phase: ctx.phase,
@@ -917,10 +922,13 @@ impl<'a> JSifier<'a> {
 		};
 
 		// emit the inflight side of the class into a separate file
-		self.jsify_class_inflight(&class, ctx);
+		let inflight_class_code = self.jsify_class_inflight(&class, ctx);
 
 		// if our class is declared within a preflight scope, then we emit the preflight class
 		if ctx.phase == Phase::Preflight {
+			// emit the inflight file
+			self.emit_inflight_file(&class, inflight_class_code, ctx);
+
 			let mut code = CodeMaker::default();
 
 			// default base class for preflight classes is `core.Resource`
@@ -956,19 +964,7 @@ impl<'a> JSifier<'a> {
 
 			code
 		} else {
-			// this is the case where a class was declared within an inflight scope in this case we just
-			// emit a const with the same name that `require`s the inflight client code.
-			let mut code = CodeMaker::default();
-
-			let client = inflight_filename(class);
-
-			code.line(format!(
-				"const {} = require(\"{client}\")({{{}}});",
-				class.name.name,
-				ctx.lifts.all_capture_tokens().iter().join(", "),
-			));
-
-			code
+			inflight_class_code
 		}
 	}
 
@@ -1046,7 +1042,7 @@ impl<'a> JSifier<'a> {
 		for capture in ctx.lifts.captures() {
 			let preflight = capture.code.clone();
 			let lift_type = format!("context._lift({})", preflight);
-			code.line(format!("{}: ${{{}}},", capture.inflight, lift_type));
+			code.line(format!("{}: ${{{}}},", capture.token, lift_type));
 		}
 
 		code.close("})");
@@ -1093,7 +1089,7 @@ impl<'a> JSifier<'a> {
 	}
 
 	// Write a class's inflight to a file
-	fn jsify_class_inflight(&self, class: &AstClass, ctx: &mut JSifyContext) {
+	fn jsify_class_inflight(&self, class: &AstClass, ctx: &mut JSifyContext) -> CodeMaker {
 		let mut ctx = JSifyContext {
 			phase: Phase::Inflight,
 			in_json: false,
@@ -1130,19 +1126,20 @@ impl<'a> JSifier<'a> {
 		}
 
 		class_code.close("}");
+		class_code
+	}
 
-		let all_captures = ctx.lifts.all_capture_tokens();
-
-		// export the main class from this file
+	fn emit_inflight_file(&self, class: &AstClass, inflight_class_code: CodeMaker, ctx: &mut JSifyContext) {
+		let name = &class.name.name;
 		let mut code = CodeMaker::default();
-		let inputs = all_captures.iter().join(", ");
+		let inputs = ctx.lifts.captures().iter().map(|c| c.token.clone()).join(", ");
 		code.open(format!("module.exports = function({{ {inputs} }}) {{"));
-		code.add_code(class_code);
+		code.add_code(inflight_class_code);
 		code.line(format!("return {name};"));
 		code.close("}");
 
-		let fname = inflight_filename(class);
-		match ctx.files.add_file(fname, code.to_string()) {
+		// emit the inflight class to a file
+		match ctx.files.add_file(inflight_filename(class), code.to_string()) {
 			Ok(()) => {}
 			Err(err) => report_diagnostic(err.into()),
 		}
@@ -1154,8 +1151,11 @@ impl<'a> JSifier<'a> {
 		let lifted_fields = ctx.lifts.lifted_fields().keys().map(|f| f.clone()).collect_vec();
 		let parent_fields = if let Some(parent) = &class.parent {
 			let parent_type = self.get_expr_type(parent);
-			let parent_lifts = &parent_type.as_class().unwrap().lifts;
-			parent_lifts.lifted_fields().keys().map(|f| f.clone()).collect_vec()
+			if let Some(parent_lifts) = &parent_type.as_class().unwrap().lifts {
+				parent_lifts.lifted_fields().keys().map(|f| f.clone()).collect_vec()
+			} else {
+				vec![]
+			}
 		} else {
 			vec![]
 		};
@@ -1215,7 +1215,7 @@ impl<'a> JSifier<'a> {
 					.as_class()
 					.unwrap()
 					.get_method(&m.as_str().into())
-					.expect(&format!("method {m} doesn't exist in {class_name}"))
+					.expect(&format!("method \"{m}\" doesn't exist in {class_name}"))
 					.kind;
 				let is_static = matches!(var_kind, VariableKind::StaticMember);
 				(*m == CLASS_INFLIGHT_INIT_NAME || !is_static) ^ (matches!(bind_method_kind, BindMethod::Type))

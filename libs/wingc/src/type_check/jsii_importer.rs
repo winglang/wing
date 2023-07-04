@@ -4,8 +4,8 @@ use crate::{
 	diagnostic::{WingLocation, WingSpan},
 	docs::Docs,
 	type_check::{
-		self, lifts::Lifts, symbol_env::StatementIdx, Class, FunctionParameter, FunctionSignature, Interface, Struct,
-		SymbolKind, Type, TypeRef, Types, CLASS_INIT_NAME,
+		self, symbol_env::StatementIdx, Class, FunctionParameter, FunctionSignature, Interface, Struct, SymbolKind, Type,
+		TypeRef, Types, CLASS_INIT_NAME,
 	},
 	CONSTRUCT_BASE_CLASS, WINGSDK_ASSEMBLY_NAME, WINGSDK_DURATION, WINGSDK_JSON, WINGSDK_MUT_JSON, WINGSDK_RESOURCE,
 };
@@ -663,7 +663,7 @@ impl<'a> JsiiImporter<'a> {
 			phase: class_phase,
 			docs: Docs::from(&jsii_class.docs),
 			std_construct_args: false, // Temporary value, will be updated once we parse the initializer args
-			lifts: Lifts::new(),
+			lifts: None,
 		};
 		let mut new_type = self.wing_types.add_type(Type::Class(class_spec));
 		self.register_jsii_type(&jsii_class_fqn, &new_type_symbol, new_type);
