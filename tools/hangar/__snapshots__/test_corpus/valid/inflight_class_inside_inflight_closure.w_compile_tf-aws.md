@@ -6,7 +6,14 @@ module.exports = function({ $__parent_this_1_b }) {
   class $Closure1 {
     async handle(payload) {
       (await $__parent_this_1_b.put("k","v"));
-      const InflightClass = require("./inflight.InflightClass.js")({});
+      class InflightClass {
+        async method() {
+          {((cond) => {if (!cond) throw new Error("assertion failed: this.field == \"value\"")})((this.field === "value"))};
+        }
+        constructor() {
+          this.field = "value";
+        }
+      }
       const c = new InflightClass();
       (await c.method());
     }
@@ -45,7 +52,11 @@ module.exports = function({  }) {
   class $Closure3 {
     async handle() {
       const x = 12;
-      const Foo = require("./inflight.Foo.js")({$x});
+      class Foo {
+        async getX() {
+          return x;
+        }
+      }
       const foo = new Foo();
       const y = (await foo.getX());
       {((cond) => {if (!cond) throw new Error("assertion failed: y == 12")})((y === 12))};
@@ -57,35 +68,6 @@ module.exports = function({  }) {
     }
   }
   return $Closure3;
-}
-
-```
-
-## inflight.Foo.js
-```js
-module.exports = function({ $x }) {
-  class Foo {
-    async getX() {
-      return $x;
-    }
-  }
-  return Foo;
-}
-
-```
-
-## inflight.InflightClass.js
-```js
-module.exports = function({  }) {
-  class InflightClass {
-    async method() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: this.field == \"value\"")})((this.field === "value"))};
-    }
-    constructor() {
-      this.field = "value";
-    }
-  }
-  return InflightClass;
 }
 
 ```

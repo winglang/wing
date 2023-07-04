@@ -5,7 +5,11 @@
 module.exports = function({ $Bar, $Foo, $foo }) {
   class $Closure1 {
     async handle() {
-      const Zoo = require("./inflight.Zoo.js")({});
+      class Zoo {
+        static async zoo() {
+          return 3;
+        }
+      }
       const bar = new $Bar();
       {((cond) => {if (!cond) throw new Error("assertion failed: Foo.foo() == 1")})(((await $Foo.foo()) === 1))};
       {((cond) => {if (!cond) throw new Error("assertion failed: Bar.bar() == 2")})(((await $Bar.bar()) === 2))};
@@ -57,19 +61,6 @@ module.exports = function({  }) {
     }
   }
   return Foo;
-}
-
-```
-
-## inflight.Zoo.js
-```js
-module.exports = function({  }) {
-  class Zoo {
-    static async zoo() {
-      return 3;
-    }
-  }
-  return Zoo;
 }
 
 ```

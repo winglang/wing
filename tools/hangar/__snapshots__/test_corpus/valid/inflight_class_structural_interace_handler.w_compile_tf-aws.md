@@ -5,7 +5,14 @@
 module.exports = function({ $NotGoo }) {
   class $Closure1 {
     async handle() {
-      const YesGoo = require("./inflight.YesGoo.js")({});
+      class YesGoo {
+        async handle() {
+          return 456;
+        }
+        async anotherMethod() {
+          {console.log("also fine")};
+        }
+      }
       const y = new YesGoo();
       {((cond) => {if (!cond) throw new Error("assertion failed: y.handle() == 456")})(((await y.handle()) === 456))};
       const x = new $NotGoo();
@@ -31,22 +38,6 @@ module.exports = function({  }) {
     }
   }
   return NotGoo;
-}
-
-```
-
-## inflight.YesGoo.js
-```js
-module.exports = function({  }) {
-  class YesGoo {
-    async handle() {
-      return 456;
-    }
-    async anotherMethod() {
-      {console.log("also fine")};
-    }
-  }
-  return YesGoo;
 }
 
 ```

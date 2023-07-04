@@ -41,7 +41,11 @@ module.exports = function({ $OuterInflight }) {
 module.exports = function({  }) {
   class $Closure3 {
     async handle() {
-      const InnerInflight = require("./inflight.InnerInflight.js")({});
+      class InnerInflight {
+        static async staticMethod() {
+          return "hello";
+        }
+      }
       {((cond) => {if (!cond) throw new Error("assertion failed: InnerInflight.staticMethod() == \"hello\"")})(((await InnerInflight.staticMethod()) === "hello"))};
     }
     constructor({  }) {
@@ -78,19 +82,6 @@ module.exports = function({ $util_Util }) {
     }
   }
   return $Closure4;
-}
-
-```
-
-## inflight.InnerInflight.js
-```js
-module.exports = function({  }) {
-  class InnerInflight {
-    static async staticMethod() {
-      return "hello";
-    }
-  }
-  return InnerInflight;
 }
 
 ```

@@ -5,7 +5,11 @@
 module.exports = function({  }) {
   class $Closure1 {
     async handle() {
-      const C = require("./inflight.C.js")({});
+      class C {
+        async foo() {
+          return "c1";
+        }
+      }
       const c = new C();
       {((cond) => {if (!cond) throw new Error("assertion failed: c.foo() == \"c1\"")})(((await c.foo()) === "c1"))};
     }
@@ -85,19 +89,6 @@ module.exports = function({  }) {
     }
   }
   return B;
-}
-
-```
-
-## inflight.C.js
-```js
-module.exports = function({  }) {
-  class C {
-    async foo() {
-      return "c1";
-    }
-  }
-  return C;
 }
 
 ```

@@ -5,7 +5,14 @@
 module.exports = function({  }) {
   class $Closure1 {
     async handle() {
-      const InflightClass = require("./inflight.InflightClass.js")({});
+      class InflightClass {
+        async inflightMethod() {
+          return "Inflight method";
+        }
+        static async staticInflightMethod() {
+          return "Static inflight method";
+        }
+      }
       const inflightClass = new InflightClass();
       {((cond) => {if (!cond) throw new Error("assertion failed: inflightClass.inflightMethod() == \"Inflight method\"")})(((await inflightClass.inflightMethod()) === "Inflight method"))};
       {((cond) => {if (!cond) throw new Error("assertion failed: InflightClass.staticInflightMethod() == \"Static inflight method\"")})(((await InflightClass.staticInflightMethod()) === "Static inflight method"))};
@@ -32,22 +39,6 @@ module.exports = function({  }) {
     }
   }
   return Foo;
-}
-
-```
-
-## inflight.InflightClass.js
-```js
-module.exports = function({  }) {
-  class InflightClass {
-    async inflightMethod() {
-      return "Inflight method";
-    }
-    static async staticInflightMethod() {
-      return "Static inflight method";
-    }
-  }
-  return InflightClass;
 }
 
 ```
