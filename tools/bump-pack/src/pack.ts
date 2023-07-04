@@ -1,5 +1,6 @@
 import { execSync } from "node:child_process";
 import { readFileSync, writeFileSync } from "node:fs";
+import { linkBundledTransitiveDeps } from "./bundle-link";
 
 export interface PackOptions {
   /**
@@ -15,16 +16,16 @@ export interface PackOptions {
 }
 
 /**
- * Runs `npm pack` in the given package directory.
+ * Runs `pnpm pack` in the given package directory.
  */
 export async function pack(options: PackOptions) {
   const { packageDir, dryRun } = options;
 
   if (dryRun) {
-    console.log(`Would have run "npm pack" in ${packageDir}`);
+    console.log(`Would have run "pnpm pack" in ${packageDir}`);
   } else {
     preparePackageJsonAndRun(packageDir, () => {
-      execSync("npm pack", { cwd: packageDir, stdio: "inherit" });
+      execSync("pnpm pack", { cwd: packageDir, stdio: "inherit" });
     });
   }
 }
