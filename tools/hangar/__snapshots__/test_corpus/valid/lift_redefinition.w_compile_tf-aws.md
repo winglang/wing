@@ -2,10 +2,10 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ $s }) {
+module.exports = function({ $y }) {
   class $Closure1 {
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: s == \"hello\"")})(($s === "hello"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: y == \"hello\"")})(($y === "hello"))};
       const y = "z";
       {((cond) => {if (!cond) throw new Error("assertion failed: y == \"z\"")})((y === "z"))};
     }
@@ -160,7 +160,7 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure1.js")({
-            $s: ${context._lift(s)},
+            $y: ${context._lift(y)},
           })
         `);
       }
@@ -177,7 +177,7 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(s, host, []);
+          $Closure1._registerBindObject(y, host, []);
         }
         super._registerBind(host, ops);
       }
@@ -185,7 +185,7 @@ class $Root extends $stdlib.std.Resource {
         super._registerTypeBind(host, ops);
       }
     }
-    const s = "hello";
+    const y = "hello";
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:test",new $Closure1(this,"$Closure1"));
   }
 }
