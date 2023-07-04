@@ -52,8 +52,8 @@ export async function pack(options: PackOptions) {
       version: process.env.PROJEN_BUMP_VERSION,
     });
 
-    await preparePackageJson(packageData, tmpDir);
-    await prepareBundledDeps(packageData, tmpDir);
+    await preparePackageJson(tmpDir);
+    await prepareBundledDeps(packageData.dir, tmpDir);
 
     execSync(`pnpm pack --pack-destination ${packageDir}`, {
       cwd: tmpDir,
@@ -64,7 +64,10 @@ export async function pack(options: PackOptions) {
   }
 }
 
-async function prepareBundledDeps(packageData: Project, tmpPackageDir: string) {
+async function prepareBundledDeps(
+  originalPackageDir: string,
+  tmpPackageDir: string
+) {
   const packageDirNodeModules = `${tmpPackageDir}/node_modules`;
   const moduleLinks = fs.readJsonSync(
     path.join(packageDirNodeModules, ".modulelinks"),
@@ -80,7 +83,7 @@ async function prepareBundledDeps(packageData: Project, tmpPackageDir: string) {
   // this ensures the packing process includes them and anything they need
   // See https://github.com/npm/npm-packlist/issues/101
   for (const dep of moduleLinks) {
-    const originalDepPath = path.join(packageData.dir, "node_modules", dep);
+    const originalDepPath = path.join(originalPackageDir, "node_modules", dep);
     const newPath = path.join(packageDirNodeModules, dep);
     await fs.unlink(newPath);
     await fs.copy(originalDepPath, newPath, { dereference: true });
@@ -92,9 +95,9 @@ async function prepareBundledDeps(packageData: Project, tmpPackageDir: string) {
  * @param packageData The package data for the package to prepare.
  * @param tmpPackageDir The temporary directory to prepare the package in.
  */
-async function preparePackageJson(packageData: Project, tmpPackageDir: string) {
+async function preparePackageJson(tmpPackageDir: string) {
   const packageJsonPath = `${tmpPackageDir}/package.json`;
-  const packageJson = packageData.manifest as any;
+  const packageJson = await fs.readJSON(packageJsonPath);
 
   Object.assign(packageJson, packageJson.publishConfig);
   delete packageJson.volta;
