@@ -80,6 +80,7 @@ const project = new cdk.JsiiProject({
   devDeps: [
     `@cdktf/provider-aws@^15.0.0`, // only for testing Wing plugins
     "wing-api-checker@workspace:^",
+    "bump-pack@workspace:^",
     "@types/aws-lambda",
     "@types/fs-extra",
     "@types/mime-types",

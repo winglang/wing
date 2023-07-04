@@ -37,7 +37,7 @@ export async function linkBundledTransitiveDeps(
 
   const dependencyHierarchy = (
     await buildDependenciesHierarchy([project.dir], {
-      depth: Number.MAX_SAFE_INTEGER,
+      depth: 1,
       lockfileDir: workspaceDir,
       include: {
         dependencies: true,
@@ -47,7 +47,7 @@ export async function linkBundledTransitiveDeps(
     })
   )[project.dir];
 
-  const transitiveDeps: Record<string, PackageNode> = {};
+  const depsToLink: Record<string, PackageNode> = {};
 
   function visitDependencies(deps?: PackageNode[]) {
     if (!deps || deps.length === 0) {
@@ -65,12 +65,12 @@ export async function linkBundledTransitiveDeps(
       }
 
       // record the transitive dep with resolved path to symlink
-      const existing_dep = transitiveDeps[dep.alias];
+      const existing_dep = depsToLink[dep.alias];
 
       // Use the latest version of transitive deps only
       if (!existing_dep || SemVer.gt(dep.version, existing_dep.version)) {
-        transitiveDeps[dep.alias] = dep;
-        visitDependencies(dep.dependencies);
+        depsToLink[dep.alias] = dep;
+        // visitDependencies(dep.dependencies);
       }
     });
   }
@@ -89,21 +89,20 @@ export async function linkBundledTransitiveDeps(
   }
 
   // create symlink for each transitive dep in package node_modules
-  for (const [name, dep] of Object.entries(transitiveDeps)) {
+  for (const [name, dep] of Object.entries(depsToLink)) {
     const destModule = path.join(project.dir, "node_modules", name);
-    if (!await fs.pathExists(destModule)) {
-      if (!await fs.pathExists(dep.path)) {
-        throw new Error(`Pnpm dependency path not found: ${dep.path}`);
+    if (!(await fs.pathExists(destModule))) {
+      if (!(await fs.pathExists(dep.path))) {
+        throw new Error(`pnpm dependency path not found: ${dep.path}`);
       }
-
-      await fs.ensureSymlink(dep.path, destModule, "dir");
+      await fs.ensureSymlink(dep.path, destModule);
     }
   }
 
   console.log(
-    `Linked ${
-      Object.keys(transitiveDeps).length
-    } transitive bundled deps for:\t ${project.manifest.name}`
+    `Linked ${Object.keys(depsToLink).length} transitive bundled deps for:\t ${
+      project.manifest.name
+    }`
   );
 }
 

@@ -700,8 +700,8 @@ importers:
         specifier: ^10.30.0
         version: 10.30.0
       '@wingconsole/design-system':
-        specifier: file:../design-system
-        version: file:apps/wing-console/console/design-system
+        specifier: workspace:^
+        version: link:../design-system
       classnames:
         specifier: ^2.3.2
         version: 2.3.2
@@ -1161,6 +1161,9 @@ importers:
       aws-sdk-client-mock-jest:
         specifier: ^2.0.1
         version: 2.0.1(aws-sdk-client-mock@2.0.1)
+      bump-pack:
+        specifier: workspace:^
+        version: link:../../tools/bump-pack
       cdktf-cli:
         specifier: 0.17.0
         version: 0.17.0(ink@3.2.0)(react@17.0.2)
@@ -22584,23 +22587,3 @@ packages:
 
   /zod@3.21.4:
     resolution: {integrity: sha512-m46AKbrzKVzOzs/DZgVnG5H55N1sv1M8qZU3A8RIKbs3mrACDNeIOeilDymVb2HdmP8uwshOCF4uJ8uM9rCqJw==}
-
-  file:apps/wing-console/console/design-system:
-    resolution: {directory: apps/wing-console/console/design-system, type: directory}
-    name: '@wingconsole/design-system'
-    dependencies:
-      '@headlessui/react': 1.7.15(react-dom@18.2.0)(react@18.2.0)
-      '@heroicons/react': 2.0.18(react@18.2.0)
-      '@popperjs/core': 2.11.8
-      '@tailwindcss/forms': 0.5.3(tailwindcss@3.3.2)
-      classnames: 2.3.2
-      lodash.uniq: 4.5.0
-      nanoid: 4.0.2
-      react: 18.2.0
-      react-dom: 18.2.0(react@18.2.0)
-      react-lottie-player: 1.5.4(react@18.2.0)
-      react-popper: 2.3.0(@popperjs/core@2.11.8)(react-dom@18.2.0)(react@18.2.0)
-      tailwindcss: 3.3.2
-    transitivePeerDependencies:
-      - ts-node
-    dev: false

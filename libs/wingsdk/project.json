@@ -15,7 +15,8 @@
       }
     },
     "test": {
-      "dependsOn": ["^build", "build"],
+      "/": "test only depends on package to prevent them from running at the same time",
+      "dependsOn": ["^build", "build", "package"],
       "options": {
         "commands": ["pnpm post-compile", "pnpm test"],
         "cwd": "libs/wingsdk",
@@ -24,7 +25,7 @@
     },
     "package": {
       "options": {
-        "commands": ["pnpm bump", "pnpm pack", "pnpm unbump"],
+        "commands": ["pnpm remove-bundled-deps", "pnpm bump-pack -b", "pnpm restore-bundled-deps"],
         "cwd": "libs/wingsdk",
         "parallel": false
       }

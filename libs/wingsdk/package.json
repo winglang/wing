@@ -53,6 +53,7 @@
     "@winglang/jsii-docgen": "workspace:^",
     "aws-sdk-client-mock": "^2.0.1",
     "aws-sdk-client-mock-jest": "^2.0.1",
+    "bump-pack": "workspace:^",
     "cdktf-cli": "0.17.0",
     "constructs": "~10.1.314",
     "eslint": "^8",
