@@ -68,7 +68,7 @@ export const VscodeLayout = ({ cloudAppState, wingVersion }: LayoutProps) => {
         theme.text2,
       )}
     >
-      <Header title={wingfile.data} />
+      <Header title={wingfile.data ?? ""} />
       <div className="flex-1 flex relative">
         {loading && (
           <div
