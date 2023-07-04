@@ -104,7 +104,7 @@ describe("function with bucket binding", () => {
     const output = JSON.parse(app.synth());
     const hasActions = statementsContain(
       output,
-      ["s3:GetObject*", "s3:GetBucket*", "s3:ListBucket"],
+      ["s3:GetObject*", "s3:GetBucket*"],
       "Allow"
     );
 

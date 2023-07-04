@@ -1,29 +1,26 @@
 # [hello.w](../../../../../examples/tests/valid/hello.w) | compile | tf-aws
 
 ## inflight.$Closure1.js
-
 ```js
-module.exports = function ({ bucket }) {
+module.exports = function({ bucket }) {
   class $Closure1 {
-    constructor({}) {
+    constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init() {}
-    async handle(message) {
-      await bucket.put(
-        "wing.txt",
-        String.raw({ raw: ["Hello, ", ""] }, message)
-      );
+    async $inflight_init()  {
+    }
+    async handle(message)  {
+      (await bucket.put("wing.txt",String.raw({ raw: ["Hello, ", ""] }, message)));
     }
   }
   return $Closure1;
-};
+}
+
 ```
 
 ## main.tf.json
-
 ```json
 {
   "//": {
@@ -48,7 +45,9 @@ module.exports = function ({ bucket }) {
     }
   },
   "provider": {
-    "aws": [{}]
+    "aws": [
+      {}
+    ]
   },
   "resource": {
     "aws_iam_role": {
@@ -110,7 +109,6 @@ module.exports = function ({ bucket }) {
         "environment": {
           "variables": {
             "BUCKET_NAME_d755b447": "${aws_s3_bucket.cloudBucket.bucket}",
-            "BUCKET_NAME_d755b447_IS_PUBLIC": "false",
             "WING_FUNCTION_NAME": "cloud-Queue-SetConsumer-cdafee6e-c8eb6a09",
             "WING_TARGET": "tf-aws"
           }
@@ -212,19 +210,18 @@ module.exports = function ({ bucket }) {
 ```
 
 ## preflight.js
-
 ```js
-const $stdlib = require("@winglang/sdk");
+const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
-const cloud = require("@winglang/sdk").cloud;
+const cloud = require('@winglang/sdk').cloud;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
     class $Closure1 extends $stdlib.std.Resource {
-      constructor(scope, id) {
+      constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
         this._addInflightOps("handle");
@@ -259,27 +256,14 @@ class $Root extends $stdlib.std.Resource {
         super._registerBind(host, ops);
       }
     }
-    const bucket = this.node.root.newAbstract(
-      "@winglang/sdk.cloud.Bucket",
-      this,
-      "cloud.Bucket"
-    );
-    const queue = this.node.root.newAbstract(
-      "@winglang/sdk.cloud.Queue",
-      this,
-      "cloud.Queue"
-    );
-    queue.setConsumer(new $Closure1(this, "$Closure1"));
+    const bucket = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
+    const queue = this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this,"cloud.Queue");
+    (queue.setConsumer(new $Closure1(this,"$Closure1")));
   }
 }
 class $App extends $AppBase {
   constructor() {
-    super({
-      outdir: $outdir,
-      name: "hello",
-      plugins: $plugins,
-      isTestEnvironment: $wing_is_test,
-    });
+    super({ outdir: $outdir, name: "hello", plugins: $plugins, isTestEnvironment: $wing_is_test });
     if ($wing_is_test) {
       new $Root(this, "env0");
       const $test_runner = this.testRunner;
@@ -293,4 +277,6 @@ class $App extends $AppBase {
   }
 }
 new $App().synth();
+
 ```
+

@@ -1,133 +1,127 @@
 # [inflights_calling_inflights.w](../../../../../examples/tests/valid/inflights_calling_inflights.w) | compile | tf-aws
 
 ## inflight.$Closure1.js
-
 ```js
-module.exports = function ({ globalBucket }) {
+module.exports = function({ globalBucket }) {
   class $Closure1 {
-    constructor({}) {
+    constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init() {}
-    async handle(event, file) {
-      await globalBucket.put(file, event);
+    async $inflight_init()  {
+    }
+    async handle(event, file)  {
+      (await globalBucket.put(file,event));
     }
   }
   return $Closure1;
-};
+}
+
 ```
 
 ## inflight.$Closure2.js
-
 ```js
-module.exports = function ({ storeInBucket }) {
+module.exports = function({ storeInBucket }) {
   class $Closure2 {
-    constructor({}) {
+    constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init() {}
-    async handle(event) {
-      await storeInBucket(event, "file1");
+    async $inflight_init()  {
+    }
+    async handle(event)  {
+      (await storeInBucket(event,"file1"));
     }
   }
   return $Closure2;
-};
+}
+
 ```
 
 ## inflight.$Closure3.js
-
 ```js
-module.exports = function ({ func1, globalBucket }) {
+module.exports = function({ func1, globalBucket }) {
   class $Closure3 {
-    constructor({}) {
+    constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init() {}
-    async handle() {
-      await func1.invoke("hi1");
-      {
-        ((cond) => {
-          if (!cond)
-            throw new Error(
-              'assertion failed: globalBucket.get("file1") == "hi1"'
-            );
-        })((await globalBucket.get("file1")) === "hi1");
-      }
+    async $inflight_init()  {
+    }
+    async handle()  {
+      (await func1.invoke("hi1"));
+      {((cond) => {if (!cond) throw new Error("assertion failed: globalBucket.get(\"file1\") == \"hi1\"")})(((await globalBucket.get("file1")) === "hi1"))};
     }
   }
   return $Closure3;
-};
+}
+
 ```
 
 ## inflight.$Closure4.js
-
 ```js
-module.exports = function ({ globalBucket }) {
+module.exports = function({ globalBucket }) {
   class $Closure4 {
-    constructor({}) {
+    constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init() {}
-    async handle(s) {
-      await globalBucket.list();
+    async $inflight_init()  {
+    }
+    async handle(s)  {
+      (await globalBucket.list());
       return "hello";
     }
   }
   return $Closure4;
-};
+}
+
 ```
 
 ## inflight.$Closure5.js
-
 ```js
-module.exports = function ({ x }) {
+module.exports = function({ x }) {
   class $Closure5 {
-    constructor({}) {
+    constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init() {}
-    async handle() {
-      const val = await x.foo();
-      {
-        ((cond) => {
-          if (!cond) throw new Error('assertion failed: val == "hello"');
-        })(val === "hello");
-      }
+    async $inflight_init()  {
+    }
+    async handle()  {
+      const val = (await x.foo());
+      {((cond) => {if (!cond) throw new Error("assertion failed: val == \"hello\"")})((val === "hello"))};
     }
   }
   return $Closure5;
-};
+}
+
 ```
 
 ## inflight.MyResource.js
-
 ```js
-module.exports = function ({}) {
+module.exports = function({  }) {
   class MyResource {
     constructor({ closure }) {
       this.closure = closure;
     }
-    async $inflight_init() {}
-    async foo() {
-      return await this.closure("anything");
+    async $inflight_init()  {
+    }
+    async foo()  {
+      return (await this.closure("anything"));
     }
   }
   return MyResource;
-};
+}
+
 ```
 
 ## main.tf.json
-
 ```json
 {
   "//": {
@@ -152,7 +146,9 @@ module.exports = function ({}) {
     }
   },
   "provider": {
-    "aws": [{}]
+    "aws": [
+      {}
+    ]
   },
   "resource": {
     "aws_iam_role": {
@@ -202,7 +198,7 @@ module.exports = function ({}) {
             "uniqueId": "testinflightscancallotherinflights_Handler_IamRolePolicy_1E6CC29C"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:List*\"],\"Resource\":[\"${aws_s3_bucket.cloudBucket.arn}\",\"${aws_s3_bucket.cloudBucket.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"lambda:InvokeFunction\"],\"Resource\":[\"${aws_lambda_function.func1.arn}\"],\"Effect\":\"Allow\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:GetObject*\",\"s3:GetBucket*\"],\"Resource\":[\"${aws_s3_bucket.cloudBucket.arn}\",\"${aws_s3_bucket.cloudBucket.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"lambda:InvokeFunction\"],\"Resource\":[\"${aws_lambda_function.func1.arn}\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.testinflightscancallotherinflights_Handler_IamRole_30D96E98.name}"
       },
       "testvariablecanbeaninflightclosure_Handler_IamRolePolicy_B1660864": {
@@ -212,7 +208,7 @@ module.exports = function ({}) {
             "uniqueId": "testvariablecanbeaninflightclosure_Handler_IamRolePolicy_B1660864"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:List*\"],\"Resource\":[\"${aws_s3_bucket.cloudBucket.arn}\",\"${aws_s3_bucket.cloudBucket.arn}/*\"],\"Effect\":\"Allow\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:List*\",\"s3:GetObject*\",\"s3:GetBucket*\"],\"Resource\":[\"${aws_s3_bucket.cloudBucket.arn}\",\"${aws_s3_bucket.cloudBucket.arn}/*\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.testvariablecanbeaninflightclosure_Handler_IamRole_12408457.name}"
       }
     },
@@ -259,7 +255,6 @@ module.exports = function ({}) {
         "environment": {
           "variables": {
             "BUCKET_NAME_d755b447": "${aws_s3_bucket.cloudBucket.bucket}",
-            "BUCKET_NAME_d755b447_IS_PUBLIC": "false",
             "WING_FUNCTION_NAME": "func1-c899062d",
             "WING_TARGET": "tf-aws"
           }
@@ -287,7 +282,6 @@ module.exports = function ({}) {
         "environment": {
           "variables": {
             "BUCKET_NAME_d755b447": "${aws_s3_bucket.cloudBucket.bucket}",
-            "BUCKET_NAME_d755b447_IS_PUBLIC": "false",
             "FUNCTION_NAME_c79d5cd4": "${aws_lambda_function.func1.arn}",
             "WING_FUNCTION_NAME": "Handler-c8ad4c02",
             "WING_TARGET": "tf-aws"
@@ -316,7 +310,6 @@ module.exports = function ({}) {
         "environment": {
           "variables": {
             "BUCKET_NAME_d755b447": "${aws_s3_bucket.cloudBucket.bucket}",
-            "BUCKET_NAME_d755b447_IS_PUBLIC": "false",
             "WING_FUNCTION_NAME": "Handler-c8210662",
             "WING_TARGET": "tf-aws"
           }
@@ -429,19 +422,18 @@ module.exports = function ({}) {
 ```
 
 ## preflight.js
-
 ```js
-const $stdlib = require("@winglang/sdk");
+const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
-const cloud = require("@winglang/sdk").cloud;
+const cloud = require('@winglang/sdk').cloud;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
     class $Closure1 extends $stdlib.std.Resource {
-      constructor(scope, id) {
+      constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
         this._addInflightOps("handle");
@@ -477,7 +469,7 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure2 extends $stdlib.std.Resource {
-      constructor(scope, id) {
+      constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
         this._addInflightOps("handle");
@@ -513,7 +505,7 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure3 extends $stdlib.std.Resource {
-      constructor(scope, id) {
+      constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
         this._addInflightOps("handle");
@@ -553,11 +545,11 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class MyResource extends $stdlib.std.Resource {
-      constructor(scope, id) {
+      constructor(scope, id, ) {
         super(scope, id);
         const __parent_this_4 = this;
         class $Closure4 extends $stdlib.std.Resource {
-          constructor(scope, id) {
+          constructor(scope, id, ) {
             super(scope, id);
             this.display.hidden = true;
             this._addInflightOps("handle");
@@ -592,7 +584,7 @@ class $Root extends $stdlib.std.Resource {
             super._registerBind(host, ops);
           }
         }
-        this.closure = new $Closure4(this, "$Closure4");
+        this.closure = new $Closure4(this,"$Closure4");
         this._addInflightOps("foo");
       }
       static _toInflightType(context) {
@@ -626,7 +618,7 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure5 extends $stdlib.std.Resource {
-      constructor(scope, id) {
+      constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
         this._addInflightOps("handle");
@@ -661,44 +653,18 @@ class $Root extends $stdlib.std.Resource {
         super._registerBind(host, ops);
       }
     }
-    const globalBucket = this.node.root.newAbstract(
-      "@winglang/sdk.cloud.Bucket",
-      this,
-      "cloud.Bucket"
-    );
-    const storeInBucket = new $Closure1(this, "$Closure1");
-    const handler1 = new $Closure2(this, "$Closure2");
-    const func1 = this.node.root.newAbstract(
-      "@winglang/sdk.cloud.Function",
-      this,
-      "func1",
-      handler1
-    );
-    this.node.root.new(
-      "@winglang/sdk.std.Test",
-      std.Test,
-      this,
-      "test:inflights can call other inflights",
-      new $Closure3(this, "$Closure3")
-    );
-    const x = new MyResource(this, "MyResource");
-    this.node.root.new(
-      "@winglang/sdk.std.Test",
-      std.Test,
-      this,
-      "test:variable can be an inflight closure",
-      new $Closure5(this, "$Closure5")
-    );
+    const globalBucket = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
+    const storeInBucket = new $Closure1(this,"$Closure1");
+    const handler1 = new $Closure2(this,"$Closure2");
+    const func1 = this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"func1",handler1);
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:inflights can call other inflights",new $Closure3(this,"$Closure3"));
+    const x = new MyResource(this,"MyResource");
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:variable can be an inflight closure",new $Closure5(this,"$Closure5"));
   }
 }
 class $App extends $AppBase {
   constructor() {
-    super({
-      outdir: $outdir,
-      name: "inflights_calling_inflights",
-      plugins: $plugins,
-      isTestEnvironment: $wing_is_test,
-    });
+    super({ outdir: $outdir, name: "inflights_calling_inflights", plugins: $plugins, isTestEnvironment: $wing_is_test });
     if ($wing_is_test) {
       new $Root(this, "env0");
       const $test_runner = this.testRunner;
@@ -712,4 +678,6 @@ class $App extends $AppBase {
   }
 }
 new $App().synth();
+
 ```
+

@@ -1,85 +1,36 @@
 # [try_get_json.w](../../../../../../examples/tests/sdk_tests/bucket/try_get_json.w) | compile | tf-aws
 
 ## inflight.$Closure1.js
-
 ```js
-module.exports = function ({ b, std_Json }) {
+module.exports = function({ b, std_Json }) {
   class $Closure1 {
-    constructor({}) {
+    constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init() {}
-    async handle() {
-      const jsonObj1 = Object.freeze({ key1: "value1" });
-      const jsonObj2 = Object.freeze({ key2: "value2" });
-      await b.putJson("file1.json", jsonObj1);
-      {
-        ((cond) => {
-          if (!cond)
-            throw new Error(
-              'assertion failed: Json.stringify(b.tryGetJson("file1.json")) == Json.stringify(jsonObj1)'
-            );
-        })(
-          ((args) => {
-            return JSON.stringify(args[0], null, args[1]);
-          })([await b.tryGetJson("file1.json")]) ===
-            ((args) => {
-              return JSON.stringify(args[0], null, args[1]);
-            })([jsonObj1])
-        );
-      }
-      {
-        ((cond) => {
-          if (!cond)
-            throw new Error(
-              'assertion failed: b.tryGetJson("file2.json") == nil'
-            );
-        })((await b.tryGetJson("file2.json")) === undefined);
-      }
-      await b.putJson("file2.json", jsonObj2);
-      {
-        ((cond) => {
-          if (!cond)
-            throw new Error(
-              'assertion failed: Json.stringify(b.tryGetJson("file2.json")) == Json.stringify(jsonObj2)'
-            );
-        })(
-          ((args) => {
-            return JSON.stringify(args[0], null, args[1]);
-          })([await b.tryGetJson("file2.json")]) ===
-            ((args) => {
-              return JSON.stringify(args[0], null, args[1]);
-            })([jsonObj2])
-        );
-      }
-      await b.delete("file1.json");
-      await b.delete("file2.json");
-      {
-        ((cond) => {
-          if (!cond)
-            throw new Error(
-              'assertion failed: b.tryGetJson("file1.json") == nil'
-            );
-        })((await b.tryGetJson("file1.json")) === undefined);
-      }
-      {
-        ((cond) => {
-          if (!cond)
-            throw new Error(
-              'assertion failed: b.tryGetJson("file2.json") == nil'
-            );
-        })((await b.tryGetJson("file2.json")) === undefined);
-      }
+    async $inflight_init()  {
+    }
+    async handle()  {
+      const jsonObj1 = Object.freeze({"key1":"value1"});
+      const jsonObj2 = Object.freeze({"key2":"value2"});
+      (await b.putJson("file1.json",jsonObj1));
+      {((cond) => {if (!cond) throw new Error("assertion failed: Json.stringify(b.tryGetJson(\"file1.json\")) == Json.stringify(jsonObj1)")})((((args) => { return JSON.stringify(args[0], null, args[1]) })([(await b.tryGetJson("file1.json"))]) === ((args) => { return JSON.stringify(args[0], null, args[1]) })([jsonObj1])))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: b.tryGetJson(\"file2.json\") == nil")})(((await b.tryGetJson("file2.json")) === undefined))};
+      (await b.putJson("file2.json",jsonObj2));
+      {((cond) => {if (!cond) throw new Error("assertion failed: Json.stringify(b.tryGetJson(\"file2.json\")) == Json.stringify(jsonObj2)")})((((args) => { return JSON.stringify(args[0], null, args[1]) })([(await b.tryGetJson("file2.json"))]) === ((args) => { return JSON.stringify(args[0], null, args[1]) })([jsonObj2])))};
+      (await b.delete("file1.json"));
+      (await b.delete("file2.json"));
+      {((cond) => {if (!cond) throw new Error("assertion failed: b.tryGetJson(\"file1.json\") == nil")})(((await b.tryGetJson("file1.json")) === undefined))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: b.tryGetJson(\"file2.json\") == nil")})(((await b.tryGetJson("file2.json")) === undefined))};
     }
   }
   return $Closure1;
-};
+}
+
 ```
 
 ## main.tf.json
-
 ```json
 {
   "//": {
@@ -104,7 +55,9 @@ module.exports = function ({ b, std_Json }) {
     }
   },
   "provider": {
-    "aws": [{}]
+    "aws": [
+      {}
+    ]
   },
   "resource": {
     "aws_iam_role": {
@@ -126,7 +79,7 @@ module.exports = function ({ b, std_Json }) {
             "uniqueId": "testtryGetJson_Handler_IamRolePolicy_061A4068"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.cloudBucket.arn}\",\"${aws_s3_bucket.cloudBucket.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:DeleteObject*\",\"s3:DeleteObjectVersion*\",\"s3:PutLifecycleConfiguration*\"],\"Resource\":[\"${aws_s3_bucket.cloudBucket.arn}\",\"${aws_s3_bucket.cloudBucket.arn}/*\"],\"Effect\":\"Allow\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:List*\",\"s3:PutObject*\",\"s3:Abort*\",\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:DeleteObject*\",\"s3:DeleteObjectVersion*\",\"s3:PutLifecycleConfiguration*\"],\"Resource\":[\"${aws_s3_bucket.cloudBucket.arn}\",\"${aws_s3_bucket.cloudBucket.arn}/*\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.testtryGetJson_Handler_IamRole_AA5E00E8.name}"
       }
     },
@@ -153,7 +106,6 @@ module.exports = function ({ b, std_Json }) {
         "environment": {
           "variables": {
             "BUCKET_NAME_d755b447": "${aws_s3_bucket.cloudBucket.bucket}",
-            "BUCKET_NAME_d755b447_IS_PUBLIC": "false",
             "WING_FUNCTION_NAME": "Handler-c8858898",
             "WING_TARGET": "tf-aws"
           }
@@ -244,19 +196,18 @@ module.exports = function ({ b, std_Json }) {
 ```
 
 ## preflight.js
-
 ```js
-const $stdlib = require("@winglang/sdk");
+const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
-const cloud = require("@winglang/sdk").cloud;
+const cloud = require('@winglang/sdk').cloud;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
     class $Closure1 extends $stdlib.std.Resource {
-      constructor(scope, id) {
+      constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
         this._addInflightOps("handle");
@@ -288,37 +239,18 @@ class $Root extends $stdlib.std.Resource {
           $Closure1._registerBindObject(b, host, []);
         }
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(b, host, [
-            "delete",
-            "putJson",
-            "tryGetJson",
-          ]);
+          $Closure1._registerBindObject(b, host, ["delete", "putJson", "tryGetJson"]);
         }
         super._registerBind(host, ops);
       }
     }
-    const b = this.node.root.newAbstract(
-      "@winglang/sdk.cloud.Bucket",
-      this,
-      "cloud.Bucket"
-    );
-    this.node.root.new(
-      "@winglang/sdk.std.Test",
-      std.Test,
-      this,
-      "test:tryGetJson",
-      new $Closure1(this, "$Closure1")
-    );
+    const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:tryGetJson",new $Closure1(this,"$Closure1"));
   }
 }
 class $App extends $AppBase {
   constructor() {
-    super({
-      outdir: $outdir,
-      name: "try_get_json",
-      plugins: $plugins,
-      isTestEnvironment: $wing_is_test,
-    });
+    super({ outdir: $outdir, name: "try_get_json", plugins: $plugins, isTestEnvironment: $wing_is_test });
     if ($wing_is_test) {
       new $Root(this, "env0");
       const $test_runner = this.testRunner;
@@ -332,4 +264,6 @@ class $App extends $AppBase {
   }
 }
 new $App().synth();
+
 ```
+

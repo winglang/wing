@@ -1,123 +1,119 @@
 # [inflight_class_inside_inflight_closure.w](../../../../../examples/tests/valid/inflight_class_inside_inflight_closure.w) | compile | tf-aws
 
 ## inflight.$Closure1.js
-
 ```js
-module.exports = function ({ __parent_this_1 }) {
+module.exports = function({ __parent_this_1 }) {
   class $Closure1 {
-    constructor({}) {
+    constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init() {}
-    async handle(payload) {
-      await __parent_this_1.b.put("k", "v");
+    async $inflight_init()  {
+    }
+    async handle(payload)  {
+      (await __parent_this_1.b.put("k","v"));
       const InflightClass = require("./inflight.InflightClass.js")({});
       const c = new InflightClass();
-      await c.method();
+      (await c.method());
     }
   }
   return $Closure1;
-};
+}
+
 ```
 
 ## inflight.$Closure2.js
-
 ```js
-module.exports = function ({ f }) {
+module.exports = function({ f }) {
   class $Closure2 {
-    constructor({}) {
+    constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init() {}
-    async handle() {
-      await f.invoke("text");
+    async $inflight_init()  {
+    }
+    async handle()  {
+      (await f.invoke("text"));
     }
   }
   return $Closure2;
-};
+}
+
 ```
 
 ## inflight.$Closure3.js
-
 ```js
-module.exports = function ({}) {
+module.exports = function({  }) {
   class $Closure3 {
-    constructor({}) {
+    constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init() {}
-    async handle() {
+    async $inflight_init()  {
+    }
+    async handle()  {
       const x = 12;
-      const Foo = require("./inflight.Foo.js")({ x });
+      const Foo = require("./inflight.Foo.js")({x});
       const foo = new Foo();
-      const y = await foo.getX();
-      {
-        ((cond) => {
-          if (!cond) throw new Error("assertion failed: y == 12");
-        })(y === 12);
-      }
+      const y = (await foo.getX());
+      {((cond) => {if (!cond) throw new Error("assertion failed: y == 12")})((y === 12))};
     }
   }
   return $Closure3;
-};
+}
+
 ```
 
 ## inflight.Foo.js
-
 ```js
-module.exports = function ({ x }) {
+module.exports = function({ x }) {
   class Foo {
-    constructor() {}
-    async getX() {
+     constructor()  {
+    }
+    async getX()  {
       return x;
     }
   }
   return Foo;
-};
+}
+
 ```
 
 ## inflight.InflightClass.js
-
 ```js
-module.exports = function ({}) {
+module.exports = function({  }) {
   class InflightClass {
-    constructor() {
+     constructor()  {
       this.field = "value";
     }
-    async method() {
-      {
-        ((cond) => {
-          if (!cond) throw new Error('assertion failed: this.field == "value"');
-        })(this.field === "value");
-      }
+    async method()  {
+      {((cond) => {if (!cond) throw new Error("assertion failed: this.field == \"value\"")})((this.field === "value"))};
     }
   }
   return InflightClass;
-};
+}
+
 ```
 
 ## inflight.PreflightClass.js
-
 ```js
-module.exports = function ({}) {
+module.exports = function({  }) {
   class PreflightClass {
     constructor({ b }) {
       this.b = b;
     }
-    async $inflight_init() {}
+    async $inflight_init()  {
+    }
   }
   return PreflightClass;
-};
+}
+
 ```
 
 ## main.tf.json
-
 ```json
 {
   "//": {
@@ -142,7 +138,9 @@ module.exports = function ({}) {
     }
   },
   "provider": {
-    "aws": [{}]
+    "aws": [
+      {}
+    ]
   },
   "resource": {
     "aws_iam_role": {
@@ -249,7 +247,6 @@ module.exports = function ({}) {
         "environment": {
           "variables": {
             "BUCKET_NAME_70ca4fed": "${aws_s3_bucket.PreflightClass_cloudBucket_05421049.bucket}",
-            "BUCKET_NAME_70ca4fed_IS_PUBLIC": "false",
             "WING_FUNCTION_NAME": "cloud-Function-c8db99e3",
             "WING_TARGET": "tf-aws"
           }
@@ -415,30 +412,25 @@ module.exports = function ({}) {
 ```
 
 ## preflight.js
-
 ```js
-const $stdlib = require("@winglang/sdk");
+const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
-const cloud = require("@winglang/sdk").cloud;
+const cloud = require('@winglang/sdk').cloud;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
     class PreflightClass extends $stdlib.std.Resource {
-      constructor(scope, id) {
+      constructor(scope, id, ) {
         super(scope, id);
-        this.b = this.node.root.newAbstract(
-          "@winglang/sdk.cloud.Bucket",
-          this,
-          "cloud.Bucket"
-        );
+        this.b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
       }
-      preflight_method() {
+       preflight_method()  {
         const __parent_this_1 = this;
         class $Closure1 extends $stdlib.std.Resource {
-          constructor(scope, id) {
+          constructor(scope, id, ) {
             super(scope, id);
             this.display.hidden = true;
             this._addInflightOps("handle");
@@ -473,13 +465,8 @@ class $Root extends $stdlib.std.Resource {
             super._registerBind(host, ops);
           }
         }
-        const inflight_closure = new $Closure1(this, "$Closure1");
-        return this.node.root.newAbstract(
-          "@winglang/sdk.cloud.Function",
-          this,
-          "cloud.Function",
-          inflight_closure
-        );
+        const inflight_closure = new $Closure1(this,"$Closure1");
+        return this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"cloud.Function",inflight_closure);
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.PreflightClass.js";
@@ -492,9 +479,7 @@ class $Root extends $stdlib.std.Resource {
         const b_client = this._lift(this.b);
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const PreflightClassClient = ${
-              PreflightClass._toInflightType(this).text
-            };
+            const PreflightClassClient = ${PreflightClass._toInflightType(this).text};
             const client = new PreflightClassClient({
               b: ${b_client},
             });
@@ -511,7 +496,7 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure2 extends $stdlib.std.Resource {
-      constructor(scope, id) {
+      constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
         this._addInflightOps("handle");
@@ -547,7 +532,7 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure3 extends $stdlib.std.Resource {
-      constructor(scope, id) {
+      constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
         this._addInflightOps("handle");
@@ -578,32 +563,15 @@ class $Root extends $stdlib.std.Resource {
         super._registerBind(host, ops);
       }
     }
-    const p = new PreflightClass(this, "PreflightClass");
-    const f = p.preflight_method();
-    this.node.root.new(
-      "@winglang/sdk.std.Test",
-      std.Test,
-      this,
-      "test:it works",
-      new $Closure2(this, "$Closure2")
-    );
-    this.node.root.new(
-      "@winglang/sdk.std.Test",
-      std.Test,
-      this,
-      "test:inflight class inside closure captures from closure",
-      new $Closure3(this, "$Closure3")
-    );
+    const p = new PreflightClass(this,"PreflightClass");
+    const f = (p.preflight_method());
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:it works",new $Closure2(this,"$Closure2"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:inflight class inside closure captures from closure",new $Closure3(this,"$Closure3"));
   }
 }
 class $App extends $AppBase {
   constructor() {
-    super({
-      outdir: $outdir,
-      name: "inflight_class_inside_inflight_closure",
-      plugins: $plugins,
-      isTestEnvironment: $wing_is_test,
-    });
+    super({ outdir: $outdir, name: "inflight_class_inside_inflight_closure", plugins: $plugins, isTestEnvironment: $wing_is_test });
     if ($wing_is_test) {
       new $Root(this, "env0");
       const $test_runner = this.testRunner;
@@ -617,4 +585,6 @@ class $App extends $AppBase {
   }
 }
 new $App().synth();
+
 ```
+

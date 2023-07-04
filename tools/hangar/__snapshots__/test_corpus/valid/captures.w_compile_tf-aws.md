@@ -1,45 +1,40 @@
 # [captures.w](../../../../../examples/tests/valid/captures.w) | compile | tf-aws
 
 ## inflight.$Closure1.js
-
 ```js
-module.exports = function ({ bucket1, bucket2, bucket3 }) {
+module.exports = function({ bucket1, bucket2, bucket3 }) {
   class $Closure1 {
-    constructor({}) {
+    constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init() {}
-    async handle(event) {
-      await bucket1.put("file.txt", "data");
-      await bucket2.get("file.txt");
-      await bucket2.get("file2.txt");
-      await bucket3.get("file3.txt");
-      for (const stuff of await bucket1.list()) {
-        {
-          console.log(stuff);
-        }
+    async $inflight_init()  {
+    }
+    async handle(event)  {
+      (await bucket1.put("file.txt","data"));
+      (await bucket2.get("file.txt"));
+      (await bucket2.get("file2.txt"));
+      (await bucket3.get("file3.txt"));
+      for (const stuff of (await bucket1.list())) {
+        {console.log(stuff)};
       }
-      {
-        console.log(await bucket2.publicUrl("file.txt"));
-      }
+      {console.log((await bucket2.publicUrl("file.txt")))};
       try {
-        await bucket1.publicUrl("file.txt");
-      } catch ($error_error) {
+        (await bucket1.publicUrl("file.txt"));
+      }
+      catch ($error_error) {
         const error = $error_error.message;
-        {
-          console.log(error);
-        }
+        {console.log(error)};
       }
     }
   }
   return $Closure1;
-};
+}
+
 ```
 
 ## main.tf.json
-
 ```json
 {
   "//": {
@@ -64,7 +59,9 @@ module.exports = function ({ bucket1, bucket2, bucket3 }) {
     }
   },
   "provider": {
-    "aws": [{}]
+    "aws": [
+      {}
+    ]
   },
   "resource": {
     "aws_iam_role": {
@@ -104,7 +101,7 @@ module.exports = function ({ bucket1, bucket2, bucket3 }) {
             "uniqueId": "AnotherFunction_IamRolePolicy_5A9BEFB1"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.cloudBucket.arn}\",\"${aws_s3_bucket.cloudBucket.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:List*\"],\"Resource\":[\"${aws_s3_bucket.cloudBucket.arn}\",\"${aws_s3_bucket.cloudBucket.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:List*\"],\"Resource\":[\"${aws_s3_bucket.PublicBucket.arn}\",\"${aws_s3_bucket.PublicBucket.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:List*\"],\"Resource\":[\"${aws_s3_bucket.PrivateBucket.arn}\",\"${aws_s3_bucket.PrivateBucket.arn}/*\"],\"Effect\":\"Allow\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:List*\",\"s3:PutObject*\",\"s3:Abort*\",\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:GetBucketPublicAccessBlock\"],\"Resource\":[\"${aws_s3_bucket.cloudBucket.arn}\",\"${aws_s3_bucket.cloudBucket.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:List*\",\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:GetBucketPublicAccessBlock\"],\"Resource\":[\"${aws_s3_bucket.PublicBucket.arn}\",\"${aws_s3_bucket.PublicBucket.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:GetObject*\",\"s3:GetBucket*\"],\"Resource\":[\"${aws_s3_bucket.PrivateBucket.arn}\",\"${aws_s3_bucket.PrivateBucket.arn}/*\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.AnotherFunction_IamRole_74447271.name}"
       },
       "cloudFunction_IamRolePolicy_618BF987": {
@@ -114,7 +111,7 @@ module.exports = function ({ bucket1, bucket2, bucket3 }) {
             "uniqueId": "cloudFunction_IamRolePolicy_618BF987"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.cloudBucket.arn}\",\"${aws_s3_bucket.cloudBucket.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:List*\"],\"Resource\":[\"${aws_s3_bucket.cloudBucket.arn}\",\"${aws_s3_bucket.cloudBucket.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:List*\"],\"Resource\":[\"${aws_s3_bucket.PublicBucket.arn}\",\"${aws_s3_bucket.PublicBucket.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:List*\"],\"Resource\":[\"${aws_s3_bucket.PrivateBucket.arn}\",\"${aws_s3_bucket.PrivateBucket.arn}/*\"],\"Effect\":\"Allow\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:List*\",\"s3:PutObject*\",\"s3:Abort*\",\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:GetBucketPublicAccessBlock\"],\"Resource\":[\"${aws_s3_bucket.cloudBucket.arn}\",\"${aws_s3_bucket.cloudBucket.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:List*\",\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:GetBucketPublicAccessBlock\"],\"Resource\":[\"${aws_s3_bucket.PublicBucket.arn}\",\"${aws_s3_bucket.PublicBucket.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:GetObject*\",\"s3:GetBucket*\"],\"Resource\":[\"${aws_s3_bucket.PrivateBucket.arn}\",\"${aws_s3_bucket.PrivateBucket.arn}/*\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.cloudFunction_IamRole_5A4430DC.name}"
       },
       "cloudQueue-SetConsumer-cdafee6e_IamRolePolicy_37133937": {
@@ -124,7 +121,7 @@ module.exports = function ({ bucket1, bucket2, bucket3 }) {
             "uniqueId": "cloudQueue-SetConsumer-cdafee6e_IamRolePolicy_37133937"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"sqs:ReceiveMessage\",\"sqs:ChangeMessageVisibility\",\"sqs:GetQueueUrl\",\"sqs:DeleteMessage\",\"sqs:GetQueueAttributes\"],\"Resource\":[\"${aws_sqs_queue.cloudQueue.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.cloudBucket.arn}\",\"${aws_s3_bucket.cloudBucket.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:List*\"],\"Resource\":[\"${aws_s3_bucket.cloudBucket.arn}\",\"${aws_s3_bucket.cloudBucket.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:List*\"],\"Resource\":[\"${aws_s3_bucket.PublicBucket.arn}\",\"${aws_s3_bucket.PublicBucket.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:List*\"],\"Resource\":[\"${aws_s3_bucket.PrivateBucket.arn}\",\"${aws_s3_bucket.PrivateBucket.arn}/*\"],\"Effect\":\"Allow\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"sqs:ReceiveMessage\",\"sqs:ChangeMessageVisibility\",\"sqs:GetQueueUrl\",\"sqs:DeleteMessage\",\"sqs:GetQueueAttributes\"],\"Resource\":[\"${aws_sqs_queue.cloudQueue.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:List*\",\"s3:PutObject*\",\"s3:Abort*\",\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:GetBucketPublicAccessBlock\"],\"Resource\":[\"${aws_s3_bucket.cloudBucket.arn}\",\"${aws_s3_bucket.cloudBucket.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:List*\",\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:GetBucketPublicAccessBlock\"],\"Resource\":[\"${aws_s3_bucket.PublicBucket.arn}\",\"${aws_s3_bucket.PublicBucket.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:GetObject*\",\"s3:GetBucket*\"],\"Resource\":[\"${aws_s3_bucket.PrivateBucket.arn}\",\"${aws_s3_bucket.PrivateBucket.arn}/*\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.cloudQueue-SetConsumer-cdafee6e_IamRole_2548D828.name}"
       }
     },
@@ -184,11 +181,8 @@ module.exports = function ({ bucket1, bucket2, bucket3 }) {
         "environment": {
           "variables": {
             "BUCKET_NAME_0c557d45": "${aws_s3_bucket.PrivateBucket.bucket}",
-            "BUCKET_NAME_0c557d45_IS_PUBLIC": "false",
             "BUCKET_NAME_21bd2572": "${aws_s3_bucket.PublicBucket.bucket}",
-            "BUCKET_NAME_21bd2572_IS_PUBLIC": "true",
             "BUCKET_NAME_d755b447": "${aws_s3_bucket.cloudBucket.bucket}",
-            "BUCKET_NAME_d755b447_IS_PUBLIC": "false",
             "WING_FUNCTION_NAME": "AnotherFunction-c88d2a81",
             "WING_TARGET": "tf-aws"
           }
@@ -216,11 +210,8 @@ module.exports = function ({ bucket1, bucket2, bucket3 }) {
         "environment": {
           "variables": {
             "BUCKET_NAME_0c557d45": "${aws_s3_bucket.PrivateBucket.bucket}",
-            "BUCKET_NAME_0c557d45_IS_PUBLIC": "false",
             "BUCKET_NAME_21bd2572": "${aws_s3_bucket.PublicBucket.bucket}",
-            "BUCKET_NAME_21bd2572_IS_PUBLIC": "true",
             "BUCKET_NAME_d755b447": "${aws_s3_bucket.cloudBucket.bucket}",
-            "BUCKET_NAME_d755b447_IS_PUBLIC": "false",
             "WING_FUNCTION_NAME": "cloud-Function-c8d2eca1",
             "WING_TARGET": "tf-aws"
           }
@@ -248,11 +239,8 @@ module.exports = function ({ bucket1, bucket2, bucket3 }) {
         "environment": {
           "variables": {
             "BUCKET_NAME_0c557d45": "${aws_s3_bucket.PrivateBucket.bucket}",
-            "BUCKET_NAME_0c557d45_IS_PUBLIC": "false",
             "BUCKET_NAME_21bd2572": "${aws_s3_bucket.PublicBucket.bucket}",
-            "BUCKET_NAME_21bd2572_IS_PUBLIC": "true",
             "BUCKET_NAME_d755b447": "${aws_s3_bucket.cloudBucket.bucket}",
-            "BUCKET_NAME_d755b447_IS_PUBLIC": "false",
             "WING_FUNCTION_NAME": "cloud-Queue-SetConsumer-cdafee6e-c8eb6a09",
             "WING_TARGET": "tf-aws"
           }
@@ -466,19 +454,18 @@ module.exports = function ({ bucket1, bucket2, bucket3 }) {
 ```
 
 ## preflight.js
-
 ```js
-const $stdlib = require("@winglang/sdk");
+const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
-const cloud = require("@winglang/sdk").cloud;
+const cloud = require('@winglang/sdk').cloud;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
     class $Closure1 extends $stdlib.std.Resource {
-      constructor(scope, id) {
+      constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
         this._addInflightOps("handle");
@@ -514,68 +501,29 @@ class $Root extends $stdlib.std.Resource {
           $Closure1._registerBindObject(bucket3, host, []);
         }
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(bucket1, host, [
-            "list",
-            "publicUrl",
-            "put",
-          ]);
+          $Closure1._registerBindObject(bucket1, host, ["list", "publicUrl", "put"]);
           $Closure1._registerBindObject(bucket2, host, ["get", "publicUrl"]);
           $Closure1._registerBindObject(bucket3, host, ["get"]);
         }
         super._registerBind(host, ops);
       }
     }
-    const bucket1 = this.node.root.newAbstract(
-      "@winglang/sdk.cloud.Bucket",
-      this,
-      "cloud.Bucket"
+    const bucket1 = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
+    const bucket2 = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"PublicBucket",{
+    "public": true,}
     );
-    const bucket2 = this.node.root.newAbstract(
-      "@winglang/sdk.cloud.Bucket",
-      this,
-      "PublicBucket",
-      {
-        public: true,
-      }
-    );
-    const bucket3 = this.node.root.newAbstract(
-      "@winglang/sdk.cloud.Bucket",
-      this,
-      "PrivateBucket",
-      { public: false }
-    );
-    const queue = this.node.root.newAbstract(
-      "@winglang/sdk.cloud.Queue",
-      this,
-      "cloud.Queue"
-    );
-    const handler = new $Closure1(this, "$Closure1");
-    queue.setConsumer(handler, { batchSize: 5 });
-    this.node.root.newAbstract(
-      "@winglang/sdk.cloud.Function",
-      this,
-      "cloud.Function",
-      handler,
-      { env: Object.freeze({}) }
-    );
+    const bucket3 = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"PrivateBucket",{ public: false });
+    const queue = this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this,"cloud.Queue");
+    const handler = new $Closure1(this,"$Closure1");
+    (queue.setConsumer(handler,{ batchSize: 5 }));
+    this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"cloud.Function",handler,{ env: Object.freeze({}) });
     const emptyEnv = Object.freeze({});
-    this.node.root.newAbstract(
-      "@winglang/sdk.cloud.Function",
-      this,
-      "AnotherFunction",
-      handler,
-      { env: emptyEnv }
-    );
+    this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"AnotherFunction",handler,{ env: emptyEnv });
   }
 }
 class $App extends $AppBase {
   constructor() {
-    super({
-      outdir: $outdir,
-      name: "captures",
-      plugins: $plugins,
-      isTestEnvironment: $wing_is_test,
-    });
+    super({ outdir: $outdir, name: "captures", plugins: $plugins, isTestEnvironment: $wing_is_test });
     if ($wing_is_test) {
       new $Root(this, "env0");
       const $test_runner = this.testRunner;
@@ -589,4 +537,6 @@ class $App extends $AppBase {
   }
 }
 new $App().synth();
+
 ```
+

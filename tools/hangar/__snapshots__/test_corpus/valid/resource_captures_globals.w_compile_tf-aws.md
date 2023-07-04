@@ -1,198 +1,136 @@
 # [resource_captures_globals.w](../../../../../examples/tests/valid/resource_captures_globals.w) | compile | tf-aws
 
 ## inflight.$Closure1.js
-
 ```js
-module.exports = function ({ res }) {
+module.exports = function({ res }) {
   class $Closure1 {
-    constructor({}) {
+    constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init() {}
-    async handle() {
-      await res.myPut();
+    async $inflight_init()  {
+    }
+    async handle()  {
+      (await res.myPut());
     }
   }
   return $Closure1;
-};
+}
+
 ```
 
 ## inflight.$Closure2.js
-
 ```js
-module.exports = function ({ Another }) {
+module.exports = function({ Another }) {
   class $Closure2 {
-    constructor({}) {
+    constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init() {}
-    async handle() {
-      {
-        ((cond) => {
-          if (!cond)
-            throw new Error("assertion failed: Another.myStaticMethod() == 0");
-        })((await Another.myStaticMethod()) === 0);
-      }
+    async $inflight_init()  {
+    }
+    async handle()  {
+      {((cond) => {if (!cond) throw new Error("assertion failed: Another.myStaticMethod() == 0")})(((await Another.myStaticMethod()) === 0))};
     }
   }
   return $Closure2;
-};
+}
+
 ```
 
 ## inflight.Another.js
-
 ```js
-module.exports = function ({ globalCounter }) {
+module.exports = function({ globalCounter }) {
   class Another {
     constructor({ first, myField }) {
       this.first = first;
       this.myField = myField;
     }
-    async $inflight_init() {
-      {
-        ((cond) => {
-          if (!cond)
-            throw new Error("assertion failed: globalCounter.peek() == 0");
-        })((await globalCounter.peek()) === 0);
-      }
+    async $inflight_init()  {
+      {((cond) => {if (!cond) throw new Error("assertion failed: globalCounter.peek() == 0")})(((await globalCounter.peek()) === 0))};
     }
-    async myMethod() {
-      await globalCounter.inc();
-      return await globalCounter.peek();
+    async myMethod()  {
+      (await globalCounter.inc());
+      return (await globalCounter.peek());
     }
-    static async myStaticMethod() {
-      return await globalCounter.peek();
+    static async myStaticMethod()  {
+      return (await globalCounter.peek());
     }
   }
   return Another;
-};
+}
+
 ```
 
 ## inflight.First.js
-
 ```js
-module.exports = function ({}) {
+module.exports = function({  }) {
   class First {
     constructor({ myResource }) {
       this.myResource = myResource;
     }
-    async $inflight_init() {}
+    async $inflight_init()  {
+    }
   }
   return First;
-};
+}
+
 ```
 
 ## inflight.MyResource.js
-
 ```js
-module.exports = function ({
-  globalBucket,
-  globalStr,
-  globalBool,
-  globalNum,
-  globalArrayOfStr,
-  globalMapOfNum,
-  globalSetOfStr,
-  globalAnother,
-  Another,
-}) {
+module.exports = function({ globalBucket, globalStr, globalBool, globalNum, globalArrayOfStr, globalMapOfNum, globalSetOfStr, globalAnother, Another }) {
   class MyResource {
     constructor({ localCounter, localTopic }) {
       this.localCounter = localCounter;
       this.localTopic = localTopic;
     }
-    async $inflight_init() {}
-    async myPut() {
-      await this.localTopic.publish("hello");
-      await globalBucket.put("key", "value");
-      {
-        ((cond) => {
-          if (!cond) throw new Error('assertion failed: globalStr == "hello"');
-        })(globalStr === "hello");
-      }
-      {
-        ((cond) => {
-          if (!cond) throw new Error("assertion failed: globalBool == true");
-        })(globalBool === true);
-      }
-      {
-        ((cond) => {
-          if (!cond) throw new Error("assertion failed: globalNum == 42");
-        })(globalNum === 42);
-      }
-      {
-        ((cond) => {
-          if (!cond)
-            throw new Error(
-              'assertion failed: globalArrayOfStr.at(0) == "hello"'
-            );
-        })((await globalArrayOfStr.at(0)) === "hello");
-      }
-      {
-        ((cond) => {
-          if (!cond)
-            throw new Error('assertion failed: globalMapOfNum.get("a") == -5');
-        })(globalMapOfNum["a"] === -5);
-      }
-      {
-        ((cond) => {
-          if (!cond)
-            throw new Error('assertion failed: globalSetOfStr.has("a")');
-        })(await globalSetOfStr.has("a"));
-      }
-      {
-        ((cond) => {
-          if (!cond)
-            throw new Error(
-              'assertion failed: globalAnother.myField == "hello!"'
-            );
-        })(globalAnother.myField === "hello!");
-      }
-      await globalAnother.first.myResource.put("key", "value");
-      {
-        ((cond) => {
-          if (!cond)
-            throw new Error("assertion failed: globalAnother.myMethod() > 0");
-        })((await globalAnother.myMethod()) > 0);
-      }
-      {
-        ((cond) => {
-          if (!cond)
-            throw new Error("assertion failed: Another.myStaticMethod() > 0");
-        })((await Another.myStaticMethod()) > 0);
-      }
+    async $inflight_init()  {
+    }
+    async myPut()  {
+      (await this.localTopic.publish("hello"));
+      (await globalBucket.put("key","value"));
+      {((cond) => {if (!cond) throw new Error("assertion failed: globalStr == \"hello\"")})((globalStr === "hello"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: globalBool == true")})((globalBool === true))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: globalNum == 42")})((globalNum === 42))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: globalArrayOfStr.at(0) == \"hello\"")})(((await globalArrayOfStr.at(0)) === "hello"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: globalMapOfNum.get(\"a\") == -5")})(((globalMapOfNum)["a"] === (-5)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: globalSetOfStr.has(\"a\")")})((await globalSetOfStr.has("a")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: globalAnother.myField == \"hello!\"")})((globalAnother.myField === "hello!"))};
+      (await globalAnother.first.myResource.put("key","value"));
+      {((cond) => {if (!cond) throw new Error("assertion failed: globalAnother.myMethod() > 0")})(((await globalAnother.myMethod()) > 0))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: Another.myStaticMethod() > 0")})(((await Another.myStaticMethod()) > 0))};
     }
   }
   return MyResource;
-};
+}
+
 ```
 
 ## inflight.R.js
-
 ```js
-module.exports = function ({ globalCounter, $parentThis }) {
+module.exports = function({ globalCounter, $parentThis }) {
   class R {
-    constructor({}) {
+    constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init() {}
-    async handle() {
-      await globalCounter.inc();
-      await $parentThis.localCounter.inc();
+    async $inflight_init()  {
+    }
+    async handle()  {
+      (await globalCounter.inc());
+      (await $parentThis.localCounter.inc());
     }
   }
   return R;
-};
+}
+
 ```
 
 ## main.tf.json
-
 ```json
 {
   "//": {
@@ -217,7 +155,9 @@ module.exports = function ({ globalCounter, $parentThis }) {
     }
   },
   "provider": {
-    "aws": [{}]
+    "aws": [
+      {}
+    ]
   },
   "resource": {
     "aws_dynamodb_table": {
@@ -293,7 +233,7 @@ module.exports = function ({ globalCounter, $parentThis }) {
             "uniqueId": "MyResource_cloudTopic-OnMessage-f10eb240_IamRolePolicy_3BEB9061"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.cloudCounter.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:GetItem\"],\"Resource\":[\"${aws_dynamodb_table.cloudCounter.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.MyResource_cloudCounter_0782991D.arn}\"],\"Effect\":\"Allow\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[],\"Resource\":[\"${aws_s3_bucket.cloudBucket.arn}\",\"${aws_s3_bucket.cloudBucket.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.cloudCounter.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:GetItem\"],\"Resource\":[\"${aws_dynamodb_table.cloudCounter.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[],\"Resource\":[\"${aws_s3_bucket.Another_First_cloudBucket_DB822B7C.arn}\",\"${aws_s3_bucket.Another_First_cloudBucket_DB822B7C.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.MyResource_cloudCounter_0782991D.arn}\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.MyResource_cloudTopic-OnMessage-f10eb240_IamRole_C06EFF5D.name}"
       },
       "testaccesscloudresourcethroughstaticmethodsonly_Handler_IamRolePolicy_A6861688": {
@@ -360,9 +300,7 @@ module.exports = function ({ globalCounter, $parentThis }) {
         "environment": {
           "variables": {
             "BUCKET_NAME_ae5b06c6": "${aws_s3_bucket.Another_First_cloudBucket_DB822B7C.bucket}",
-            "BUCKET_NAME_ae5b06c6_IS_PUBLIC": "false",
             "BUCKET_NAME_d755b447": "${aws_s3_bucket.cloudBucket.bucket}",
-            "BUCKET_NAME_d755b447_IS_PUBLIC": "false",
             "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.cloudCounter.name}",
             "DYNAMODB_TABLE_NAME_5afed199": "${aws_dynamodb_table.MyResource_cloudCounter_0782991D.name}",
             "TOPIC_ARN_53de52bf": "${aws_sns_topic.MyResource_cloudTopic_1F3310C3.arn}",
@@ -420,9 +358,7 @@ module.exports = function ({ globalCounter, $parentThis }) {
         "environment": {
           "variables": {
             "BUCKET_NAME_ae5b06c6": "${aws_s3_bucket.Another_First_cloudBucket_DB822B7C.bucket}",
-            "BUCKET_NAME_ae5b06c6_IS_PUBLIC": "false",
             "BUCKET_NAME_d755b447": "${aws_s3_bucket.cloudBucket.bucket}",
-            "BUCKET_NAME_d755b447_IS_PUBLIC": "false",
             "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.cloudCounter.name}",
             "DYNAMODB_TABLE_NAME_5afed199": "${aws_dynamodb_table.MyResource_cloudCounter_0782991D.name}",
             "TOPIC_ARN_53de52bf": "${aws_sns_topic.MyResource_cloudTopic_1F3310C3.arn}",
@@ -615,25 +551,20 @@ module.exports = function ({ globalCounter, $parentThis }) {
 ```
 
 ## preflight.js
-
 ```js
-const $stdlib = require("@winglang/sdk");
+const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
-const cloud = require("@winglang/sdk").cloud;
+const cloud = require('@winglang/sdk').cloud;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
     class First extends $stdlib.std.Resource {
-      constructor(scope, id) {
+      constructor(scope, id, ) {
         super(scope, id);
-        this.myResource = this.node.root.newAbstract(
-          "@winglang/sdk.cloud.Bucket",
-          this,
-          "cloud.Bucket"
-        );
+        this.myResource = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.First.js";
@@ -663,10 +594,10 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class Another extends $stdlib.std.Resource {
-      constructor(scope, id) {
+      constructor(scope, id, ) {
         super(scope, id);
         this.myField = "hello!";
-        this.first = new First(this, "First");
+        this.first = new First(this,"First");
         this._addInflightOps("myMethod", "myStaticMethod");
       }
       static _toInflightType(context) {
@@ -712,21 +643,13 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class MyResource extends $stdlib.std.Resource {
-      constructor(scope, id) {
+      constructor(scope, id, ) {
         super(scope, id);
-        this.localTopic = this.node.root.newAbstract(
-          "@winglang/sdk.cloud.Topic",
-          this,
-          "cloud.Topic"
-        );
-        this.localCounter = this.node.root.newAbstract(
-          "@winglang/sdk.cloud.Counter",
-          this,
-          "cloud.Counter"
-        );
+        this.localTopic = this.node.root.newAbstract("@winglang/sdk.cloud.Topic",this,"cloud.Topic");
+        this.localCounter = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"cloud.Counter");
         const $parentThis = this;
         class R extends $stdlib.std.Resource {
-          constructor(scope, id) {
+          constructor(scope, id, ) {
             super(scope, id);
             this._addInflightOps("handle");
           }
@@ -764,7 +687,7 @@ class $Root extends $stdlib.std.Resource {
             super._registerBind(host, ops);
           }
         }
-        this.localTopic.onMessage(new R(this, "R"));
+        (this.localTopic.onMessage(new R(this,"R")));
         this._addInflightOps("myPut");
       }
       static _toInflightType(context) {
@@ -823,9 +746,7 @@ class $Root extends $stdlib.std.Resource {
         if (ops.includes("myPut")) {
           MyResource._registerBindObject(Another, host, ["myStaticMethod"]);
           MyResource._registerBindObject(globalAnother, host, ["myMethod"]);
-          MyResource._registerBindObject(globalAnother.first.myResource, host, [
-            "put",
-          ]);
+          MyResource._registerBindObject(globalAnother.first.myResource, host, ["put"]);
           MyResource._registerBindObject(globalAnother.myField, host, []);
           MyResource._registerBindObject(globalArrayOfStr, host, ["at"]);
           MyResource._registerBindObject(globalBool, host, []);
@@ -840,7 +761,7 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure1 extends $stdlib.std.Resource {
-      constructor(scope, id) {
+      constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
         this._addInflightOps("handle");
@@ -876,7 +797,7 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure2 extends $stdlib.std.Resource {
-      constructor(scope, id) {
+      constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
         this._addInflightOps("handle");
@@ -910,48 +831,23 @@ class $Root extends $stdlib.std.Resource {
         super._registerBind(host, ops);
       }
     }
-    const globalBucket = this.node.root.newAbstract(
-      "@winglang/sdk.cloud.Bucket",
-      this,
-      "cloud.Bucket"
-    );
-    const globalCounter = this.node.root.newAbstract(
-      "@winglang/sdk.cloud.Counter",
-      this,
-      "cloud.Counter"
-    );
+    const globalBucket = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
+    const globalCounter = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"cloud.Counter");
     const globalStr = "hello";
     const globalBool = true;
     const globalNum = 42;
     const globalArrayOfStr = Object.freeze(["hello", "world"]);
-    const globalMapOfNum = Object.freeze({ a: -5, b: 2 });
+    const globalMapOfNum = Object.freeze({"a":(-5),"b":2});
     const globalSetOfStr = Object.freeze(new Set(["a", "b"]));
-    const globalAnother = new Another(this, "Another");
-    const res = new MyResource(this, "MyResource");
-    this.node.root.new(
-      "@winglang/sdk.std.Test",
-      std.Test,
-      this,
-      "test:test",
-      new $Closure1(this, "$Closure1")
-    );
-    this.node.root.new(
-      "@winglang/sdk.std.Test",
-      std.Test,
-      this,
-      "test:access cloud resource through static methods only",
-      new $Closure2(this, "$Closure2")
-    );
+    const globalAnother = new Another(this,"Another");
+    const res = new MyResource(this,"MyResource");
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:test",new $Closure1(this,"$Closure1"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:access cloud resource through static methods only",new $Closure2(this,"$Closure2"));
   }
 }
 class $App extends $AppBase {
   constructor() {
-    super({
-      outdir: $outdir,
-      name: "resource_captures_globals",
-      plugins: $plugins,
-      isTestEnvironment: $wing_is_test,
-    });
+    super({ outdir: $outdir, name: "resource_captures_globals", plugins: $plugins, isTestEnvironment: $wing_is_test });
     if ($wing_is_test) {
       new $Root(this, "env0");
       const $test_runner = this.testRunner;
@@ -965,4 +861,6 @@ class $App extends $AppBase {
   }
 }
 new $App().synth();
+
 ```
+

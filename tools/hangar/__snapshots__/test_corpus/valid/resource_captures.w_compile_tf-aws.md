@@ -1,89 +1,77 @@
 # [resource_captures.w](../../../../../examples/tests/valid/resource_captures.w) | compile | tf-aws
 
 ## inflight.$Closure1.js
-
 ```js
-module.exports = function ({ r }) {
+module.exports = function({ r }) {
   class $Closure1 {
-    constructor({}) {
+    constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init() {}
-    async handle() {
-      await r.testNoCapture();
-      await r.testCaptureCollectionsOfData();
-      await r.testCapturePrimitives();
-      await r.testCaptureOptional();
-      await r.testCaptureResource();
-      await r.testNestedInflightField();
-      await r.testNestedResource();
-      await r.testExpressionRecursive();
-      await r.testExternal();
-      await r.testUserDefinedResource();
-      await r.testInflightField();
+    async $inflight_init()  {
+    }
+    async handle()  {
+      (await r.testNoCapture());
+      (await r.testCaptureCollectionsOfData());
+      (await r.testCapturePrimitives());
+      (await r.testCaptureOptional());
+      (await r.testCaptureResource());
+      (await r.testNestedInflightField());
+      (await r.testNestedResource());
+      (await r.testExpressionRecursive());
+      (await r.testExternal());
+      (await r.testUserDefinedResource());
+      (await r.testInflightField());
     }
   }
   return $Closure1;
-};
+}
+
 ```
 
 ## inflight.Another.js
-
 ```js
-module.exports = function ({}) {
+module.exports = function({  }) {
   class Another {
     constructor({ first, myField }) {
       this.first = first;
       this.myField = myField;
     }
-    async $inflight_init() {}
-    async meaningOfLife() {
+    async $inflight_init()  {
+    }
+    async meaningOfLife()  {
       return 42;
     }
-    async anotherFunc() {
+    async anotherFunc()  {
       return "42";
     }
   }
   return Another;
-};
+}
+
 ```
 
 ## inflight.First.js
-
 ```js
-module.exports = function ({}) {
+module.exports = function({  }) {
   class First {
     constructor({ myResource }) {
       this.myResource = myResource;
     }
-    async $inflight_init() {}
+    async $inflight_init()  {
+    }
   }
   return First;
-};
+}
+
 ```
 
 ## inflight.MyResource.js
-
 ```js
-module.exports = function ({}) {
+module.exports = function({  }) {
   class MyResource {
-    constructor({
-      another,
-      arrayOfStr,
-      extBucket,
-      extNum,
-      mapOfNum,
-      myBool,
-      myNum,
-      myOptStr,
-      myQueue,
-      myResource,
-      myStr,
-      setOfStr,
-      unusedResource,
-    }) {
+    constructor({ another, arrayOfStr, extBucket, extNum, mapOfNum, myBool, myNum, myOptStr, myQueue, myResource, myStr, setOfStr, unusedResource }) {
       this.another = another;
       this.arrayOfStr = arrayOfStr;
       this.extBucket = extBucket;
@@ -98,200 +86,67 @@ module.exports = function ({}) {
       this.setOfStr = setOfStr;
       this.unusedResource = unusedResource;
     }
-    async $inflight_init() {
+    async $inflight_init()  {
       this.inflightField = 123;
     }
-    async testNoCapture() {
+    async testNoCapture()  {
       const arr = Object.freeze([1, 2, 3]);
-      {
-        ((cond) => {
-          if (!cond) throw new Error("assertion failed: arr.length == 3");
-        })(arr.length === 3);
-      }
-      {
-        console.log(String.raw({ raw: ["array.len=", ""] }, arr.length));
-      }
+      {((cond) => {if (!cond) throw new Error("assertion failed: arr.length == 3")})((arr.length === 3))};
+      {console.log(String.raw({ raw: ["array.len=", ""] }, arr.length))};
     }
-    async testCaptureCollectionsOfData() {
-      {
-        ((cond) => {
-          if (!cond)
-            throw new Error("assertion failed: this.arrayOfStr.length == 2");
-        })(this.arrayOfStr.length === 2);
-      }
-      {
-        ((cond) => {
-          if (!cond)
-            throw new Error('assertion failed: this.arrayOfStr.at(0) == "s1"');
-        })((await this.arrayOfStr.at(0)) === "s1");
-      }
-      {
-        ((cond) => {
-          if (!cond)
-            throw new Error('assertion failed: this.arrayOfStr.at(1) == "s2"');
-        })((await this.arrayOfStr.at(1)) === "s2");
-      }
-      {
-        ((cond) => {
-          if (!cond)
-            throw new Error('assertion failed: this.mapOfNum.get("k1") == 11');
-        })(this.mapOfNum["k1"] === 11);
-      }
-      {
-        ((cond) => {
-          if (!cond)
-            throw new Error('assertion failed: this.mapOfNum.get("k2") == 22');
-        })(this.mapOfNum["k2"] === 22);
-      }
-      {
-        ((cond) => {
-          if (!cond)
-            throw new Error('assertion failed: this.setOfStr.has("s1")');
-        })(await this.setOfStr.has("s1"));
-      }
-      {
-        ((cond) => {
-          if (!cond)
-            throw new Error('assertion failed: this.setOfStr.has("s2")');
-        })(await this.setOfStr.has("s2"));
-      }
-      {
-        ((cond) => {
-          if (!cond)
-            throw new Error('assertion failed: !this.setOfStr.has("s3")');
-        })(!(await this.setOfStr.has("s3")));
-      }
+    async testCaptureCollectionsOfData()  {
+      {((cond) => {if (!cond) throw new Error("assertion failed: this.arrayOfStr.length == 2")})((this.arrayOfStr.length === 2))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: this.arrayOfStr.at(0) == \"s1\"")})(((await this.arrayOfStr.at(0)) === "s1"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: this.arrayOfStr.at(1) == \"s2\"")})(((await this.arrayOfStr.at(1)) === "s2"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: this.mapOfNum.get(\"k1\") == 11")})(((this.mapOfNum)["k1"] === 11))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: this.mapOfNum.get(\"k2\") == 22")})(((this.mapOfNum)["k2"] === 22))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: this.setOfStr.has(\"s1\")")})((await this.setOfStr.has("s1")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: this.setOfStr.has(\"s2\")")})((await this.setOfStr.has("s2")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: !this.setOfStr.has(\"s3\")")})((!(await this.setOfStr.has("s3"))))};
     }
-    async testCapturePrimitives() {
-      {
-        ((cond) => {
-          if (!cond)
-            throw new Error('assertion failed: this.myStr == "myString"');
-        })(this.myStr === "myString");
-      }
-      {
-        ((cond) => {
-          if (!cond) throw new Error("assertion failed: this.myNum == 42");
-        })(this.myNum === 42);
-      }
-      {
-        ((cond) => {
-          if (!cond) throw new Error("assertion failed: this.myBool == true");
-        })(this.myBool === true);
-      }
+    async testCapturePrimitives()  {
+      {((cond) => {if (!cond) throw new Error("assertion failed: this.myStr == \"myString\"")})((this.myStr === "myString"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: this.myNum == 42")})((this.myNum === 42))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: this.myBool == true")})((this.myBool === true))};
     }
-    async testCaptureOptional() {
-      {
-        ((cond) => {
-          if (!cond)
-            throw new Error(
-              'assertion failed: this.myOptStr ?? "" == "myOptString"'
-            );
-        })((this.myOptStr ?? "") === "myOptString");
-      }
+    async testCaptureOptional()  {
+      {((cond) => {if (!cond) throw new Error("assertion failed: this.myOptStr ?? \"\" == \"myOptString\"")})(((this.myOptStr ?? "") === "myOptString"))};
     }
-    async testCaptureResource() {
-      await this.myResource.put("f1.txt", "f1");
-      {
-        ((cond) => {
-          if (!cond)
-            throw new Error(
-              'assertion failed: this.myResource.get("f1.txt") == "f1"'
-            );
-        })((await this.myResource.get("f1.txt")) === "f1");
-      }
-      {
-        ((cond) => {
-          if (!cond)
-            throw new Error(
-              "assertion failed: this.myResource.list().length == 1"
-            );
-        })((await this.myResource.list()).length === 1);
-      }
+    async testCaptureResource()  {
+      (await this.myResource.put("f1.txt","f1"));
+      {((cond) => {if (!cond) throw new Error("assertion failed: this.myResource.get(\"f1.txt\") == \"f1\"")})(((await this.myResource.get("f1.txt")) === "f1"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: this.myResource.list().length == 1")})(((await this.myResource.list()).length === 1))};
     }
-    async testNestedInflightField() {
-      {
-        ((cond) => {
-          if (!cond)
-            throw new Error(
-              'assertion failed: this.another.myField == "hello!"'
-            );
-        })(this.another.myField === "hello!");
-      }
-      {
-        console.log(String.raw({ raw: ["field=", ""] }, this.another.myField));
-      }
+    async testNestedInflightField()  {
+      {((cond) => {if (!cond) throw new Error("assertion failed: this.another.myField == \"hello!\"")})((this.another.myField === "hello!"))};
+      {console.log(String.raw({ raw: ["field=", ""] }, this.another.myField))};
     }
-    async testNestedResource() {
-      {
-        ((cond) => {
-          if (!cond)
-            throw new Error(
-              "assertion failed: this.another.first.myResource.list().length == 0"
-            );
-        })((await this.another.first.myResource.list()).length === 0);
-      }
-      await this.another.first.myResource.put("hello", this.myStr);
-      {
-        console.log(
-          String.raw(
-            { raw: ["this.another.first.myResource:", ""] },
-            await this.another.first.myResource.get("hello")
-          )
-        );
-      }
+    async testNestedResource()  {
+      {((cond) => {if (!cond) throw new Error("assertion failed: this.another.first.myResource.list().length == 0")})(((await this.another.first.myResource.list()).length === 0))};
+      (await this.another.first.myResource.put("hello",this.myStr));
+      {console.log(String.raw({ raw: ["this.another.first.myResource:", ""] }, (await this.another.first.myResource.get("hello"))))};
     }
-    async testExpressionRecursive() {
-      await this.myQueue.push(this.myStr);
+    async testExpressionRecursive()  {
+      (await this.myQueue.push(this.myStr));
     }
-    async testExternal() {
-      {
-        ((cond) => {
-          if (!cond)
-            throw new Error(
-              "assertion failed: this.extBucket.list().length == 0"
-            );
-        })((await this.extBucket.list()).length === 0);
-      }
-      {
-        ((cond) => {
-          if (!cond) throw new Error("assertion failed: this.extNum == 12");
-        })(this.extNum === 12);
-      }
+    async testExternal()  {
+      {((cond) => {if (!cond) throw new Error("assertion failed: this.extBucket.list().length == 0")})(((await this.extBucket.list()).length === 0))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: this.extNum == 12")})((this.extNum === 12))};
     }
-    async testUserDefinedResource() {
-      {
-        ((cond) => {
-          if (!cond)
-            throw new Error(
-              "assertion failed: this.another.meaningOfLife() == 42"
-            );
-        })((await this.another.meaningOfLife()) === 42);
-      }
-      {
-        ((cond) => {
-          if (!cond)
-            throw new Error(
-              'assertion failed: this.another.anotherFunc() == "42"'
-            );
-        })((await this.another.anotherFunc()) === "42");
-      }
+    async testUserDefinedResource()  {
+      {((cond) => {if (!cond) throw new Error("assertion failed: this.another.meaningOfLife() == 42")})(((await this.another.meaningOfLife()) === 42))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: this.another.anotherFunc() == \"42\"")})(((await this.another.anotherFunc()) === "42"))};
     }
-    async testInflightField() {
-      {
-        ((cond) => {
-          if (!cond)
-            throw new Error("assertion failed: this.inflightField == 123");
-        })(this.inflightField === 123);
-      }
+    async testInflightField()  {
+      {((cond) => {if (!cond) throw new Error("assertion failed: this.inflightField == 123")})((this.inflightField === 123))};
     }
   }
   return MyResource;
-};
+}
+
 ```
 
 ## main.tf.json
-
 ```json
 {
   "//": {
@@ -316,7 +171,9 @@ module.exports = function ({}) {
     }
   },
   "provider": {
-    "aws": [{}]
+    "aws": [
+      {}
+    ]
   },
   "resource": {
     "aws_dynamodb_table": {
@@ -357,7 +214,7 @@ module.exports = function ({}) {
             "uniqueId": "testtest_Handler_IamRolePolicy_AF0279BD"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:List*\"],\"Resource\":[\"${aws_s3_bucket.cloudBucket.arn}\",\"${aws_s3_bucket.cloudBucket.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.MyResource_cloudBucket_B5E6C951.arn}\",\"${aws_s3_bucket.MyResource_cloudBucket_B5E6C951.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:List*\"],\"Resource\":[\"${aws_s3_bucket.MyResource_cloudBucket_B5E6C951.arn}\",\"${aws_s3_bucket.MyResource_cloudBucket_B5E6C951.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.MyResource_Another_First_cloudBucket_5C44A510.arn}\",\"${aws_s3_bucket.MyResource_Another_First_cloudBucket_5C44A510.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:List*\"],\"Resource\":[\"${aws_s3_bucket.MyResource_Another_First_cloudBucket_5C44A510.arn}\",\"${aws_s3_bucket.MyResource_Another_First_cloudBucket_5C44A510.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"sqs:SendMessage\"],\"Resource\":[\"${aws_sqs_queue.MyResource_cloudQueue_E7A2C0F4.arn}\"],\"Effect\":\"Allow\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:List*\",\"s3:GetObject*\",\"s3:GetBucket*\"],\"Resource\":[\"${aws_s3_bucket.cloudBucket.arn}\",\"${aws_s3_bucket.cloudBucket.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:List*\",\"s3:PutObject*\",\"s3:Abort*\",\"s3:GetObject*\",\"s3:GetBucket*\"],\"Resource\":[\"${aws_s3_bucket.MyResource_cloudBucket_B5E6C951.arn}\",\"${aws_s3_bucket.MyResource_cloudBucket_B5E6C951.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:List*\",\"s3:PutObject*\",\"s3:Abort*\",\"s3:GetObject*\",\"s3:GetBucket*\"],\"Resource\":[\"${aws_s3_bucket.MyResource_Another_First_cloudBucket_5C44A510.arn}\",\"${aws_s3_bucket.MyResource_Another_First_cloudBucket_5C44A510.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"sqs:SendMessage\"],\"Resource\":[\"${aws_sqs_queue.MyResource_cloudQueue_E7A2C0F4.arn}\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.testtest_Handler_IamRole_15693C93.name}"
       }
     },
@@ -384,11 +241,8 @@ module.exports = function ({}) {
         "environment": {
           "variables": {
             "BUCKET_NAME_51ee81c0": "${aws_s3_bucket.MyResource_cloudBucket_B5E6C951.bucket}",
-            "BUCKET_NAME_51ee81c0_IS_PUBLIC": "false",
             "BUCKET_NAME_830bf023": "${aws_s3_bucket.MyResource_Another_First_cloudBucket_5C44A510.bucket}",
-            "BUCKET_NAME_830bf023_IS_PUBLIC": "false",
             "BUCKET_NAME_d755b447": "${aws_s3_bucket.cloudBucket.bucket}",
-            "BUCKET_NAME_d755b447_IS_PUBLIC": "false",
             "DYNAMODB_TABLE_NAME_5afed199": "${aws_dynamodb_table.MyResource_cloudCounter_0782991D.name}",
             "QUEUE_URL_ea9f63d6": "${aws_sqs_queue.MyResource_cloudQueue_E7A2C0F4.url}",
             "WING_FUNCTION_NAME": "Handler-c8f4f2a1",
@@ -570,25 +424,20 @@ module.exports = function ({}) {
 ```
 
 ## preflight.js
-
 ```js
-const $stdlib = require("@winglang/sdk");
+const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
-const cloud = require("@winglang/sdk").cloud;
+const cloud = require('@winglang/sdk').cloud;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
     class First extends $stdlib.std.Resource {
-      constructor(scope, id) {
+      constructor(scope, id, ) {
         super(scope, id);
-        this.myResource = this.node.root.newAbstract(
-          "@winglang/sdk.cloud.Bucket",
-          this,
-          "cloud.Bucket"
-        );
+        this.myResource = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
       }
       static _toInflightType(context) {
         const self_client_path = "././inflight.First.js";
@@ -618,10 +467,10 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class Another extends $stdlib.std.Resource {
-      constructor(scope, id) {
+      constructor(scope, id, ) {
         super(scope, id);
         this.myField = "hello!";
-        this.first = new First(this, "First");
+        this.first = new First(this,"First");
         this._addInflightOps("meaningOfLife", "anotherFunc");
       }
       static _toInflightType(context) {
@@ -661,47 +510,22 @@ class $Root extends $stdlib.std.Resource {
     class MyResource extends $stdlib.std.Resource {
       constructor(scope, id, externalBucket, externalNum) {
         super(scope, id);
-        this.myResource = this.node.root.newAbstract(
-          "@winglang/sdk.cloud.Bucket",
-          this,
-          "cloud.Bucket"
-        );
+        this.myResource = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
         this.myStr = "myString";
         this.myNum = 42;
         this.myBool = true;
         this.myOptStr = "myOptString";
         this.arrayOfStr = Object.freeze(["s1", "s2"]);
-        this.mapOfNum = Object.freeze({ k1: 11, k2: 22 });
+        this.mapOfNum = Object.freeze({"k1":11,"k2":22});
         this.setOfStr = Object.freeze(new Set(["s1", "s2", "s1"]));
-        this.another = new Another(this, "Another");
-        this.myQueue = this.node.root.newAbstract(
-          "@winglang/sdk.cloud.Queue",
-          this,
-          "cloud.Queue"
-        );
+        this.another = new Another(this,"Another");
+        this.myQueue = this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this,"cloud.Queue");
         this.extBucket = externalBucket;
         this.extNum = externalNum;
-        this.unusedResource = this.node.root.newAbstract(
-          "@winglang/sdk.cloud.Counter",
-          this,
-          "cloud.Counter"
-        );
-        this._addInflightOps(
-          "testNoCapture",
-          "testCaptureCollectionsOfData",
-          "testCapturePrimitives",
-          "testCaptureOptional",
-          "testCaptureResource",
-          "testNestedInflightField",
-          "testNestedResource",
-          "testExpressionRecursive",
-          "testExternal",
-          "testUserDefinedResource",
-          "testInflightField",
-          "inflightField"
-        );
+        this.unusedResource = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"cloud.Counter");
+        this._addInflightOps("testNoCapture", "testCaptureCollectionsOfData", "testCapturePrimitives", "testCaptureOptional", "testCaptureResource", "testNestedInflightField", "testNestedResource", "testExpressionRecursive", "testExternal", "testUserDefinedResource", "testInflightField", "inflightField");
       }
-      helloPreflight() {
+       helloPreflight()  {
         return this.another;
       }
       static _toInflightType(context) {
@@ -765,10 +589,7 @@ class $Root extends $stdlib.std.Resource {
           MyResource._registerBindObject(this.unusedResource, host, []);
         }
         if (ops.includes("testCaptureCollectionsOfData")) {
-          MyResource._registerBindObject(this.arrayOfStr, host, [
-            "at",
-            "length",
-          ]);
+          MyResource._registerBindObject(this.arrayOfStr, host, ["at", "length"]);
           MyResource._registerBindObject(this.mapOfNum, host, ["get"]);
           MyResource._registerBindObject(this.setOfStr, host, ["has"]);
         }
@@ -781,11 +602,7 @@ class $Root extends $stdlib.std.Resource {
           MyResource._registerBindObject(this.myStr, host, []);
         }
         if (ops.includes("testCaptureResource")) {
-          MyResource._registerBindObject(this.myResource, host, [
-            "get",
-            "list",
-            "put",
-          ]);
+          MyResource._registerBindObject(this.myResource, host, ["get", "list", "put"]);
         }
         if (ops.includes("testExpressionRecursive")) {
           MyResource._registerBindObject(this.myQueue, host, ["push"]);
@@ -801,26 +618,19 @@ class $Root extends $stdlib.std.Resource {
           MyResource._registerBindObject(this.another.myField, host, []);
         }
         if (ops.includes("testNestedResource")) {
-          MyResource._registerBindObject(this.another.first.myResource, host, [
-            "get",
-            "list",
-            "put",
-          ]);
+          MyResource._registerBindObject(this.another.first.myResource, host, ["get", "list", "put"]);
           MyResource._registerBindObject(this.myStr, host, []);
         }
         if (ops.includes("testNoCapture")) {
         }
         if (ops.includes("testUserDefinedResource")) {
-          MyResource._registerBindObject(this.another, host, [
-            "anotherFunc",
-            "meaningOfLife",
-          ]);
+          MyResource._registerBindObject(this.another, host, ["anotherFunc", "meaningOfLife"]);
         }
         super._registerBind(host, ops);
       }
     }
     class $Closure1 extends $stdlib.std.Resource {
-      constructor(scope, id) {
+      constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
         this._addInflightOps("handle");
@@ -850,46 +660,19 @@ class $Root extends $stdlib.std.Resource {
           $Closure1._registerBindObject(r, host, []);
         }
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(r, host, [
-            "testCaptureCollectionsOfData",
-            "testCaptureOptional",
-            "testCapturePrimitives",
-            "testCaptureResource",
-            "testExpressionRecursive",
-            "testExternal",
-            "testInflightField",
-            "testNestedInflightField",
-            "testNestedResource",
-            "testNoCapture",
-            "testUserDefinedResource",
-          ]);
+          $Closure1._registerBindObject(r, host, ["testCaptureCollectionsOfData", "testCaptureOptional", "testCapturePrimitives", "testCaptureResource", "testExpressionRecursive", "testExternal", "testInflightField", "testNestedInflightField", "testNestedResource", "testNoCapture", "testUserDefinedResource"]);
         }
         super._registerBind(host, ops);
       }
     }
-    const b = this.node.root.newAbstract(
-      "@winglang/sdk.cloud.Bucket",
-      this,
-      "cloud.Bucket"
-    );
-    const r = new MyResource(this, "MyResource", b, 12);
-    this.node.root.new(
-      "@winglang/sdk.std.Test",
-      std.Test,
-      this,
-      "test:test",
-      new $Closure1(this, "$Closure1")
-    );
+    const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
+    const r = new MyResource(this,"MyResource",b,12);
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:test",new $Closure1(this,"$Closure1"));
   }
 }
 class $App extends $AppBase {
   constructor() {
-    super({
-      outdir: $outdir,
-      name: "resource_captures",
-      plugins: $plugins,
-      isTestEnvironment: $wing_is_test,
-    });
+    super({ outdir: $outdir, name: "resource_captures", plugins: $plugins, isTestEnvironment: $wing_is_test });
     if ($wing_is_test) {
       new $Root(this, "env0");
       const $test_runner = this.testRunner;
@@ -903,4 +686,6 @@ class $App extends $AppBase {
   }
 }
 new $App().synth();
+
 ```
+

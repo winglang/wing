@@ -1,63 +1,41 @@
 # [public_url.w](../../../../../../examples/tests/sdk_tests/bucket/public_url.w) | compile | tf-aws
 
 ## inflight.$Closure1.js
-
 ```js
-module.exports = function ({
-  publicBucket,
-  privateBucket,
-  util_Util,
-  http_Util,
-}) {
+module.exports = function({ publicBucket, privateBucket, util_Util, http_Util }) {
   class $Closure1 {
-    constructor({}) {
+    constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init() {}
-    async handle() {
+    async $inflight_init()  {
+    }
+    async handle()  {
       let error = "";
-      await publicBucket.put("file1.txt", "Foo");
-      await privateBucket.put("file2.txt", "Bar");
-      const publicUrl = await publicBucket.publicUrl("file1.txt");
-      {
-        ((cond) => {
-          if (!cond) throw new Error('assertion failed: publicUrl != ""');
-        })(publicUrl !== "");
-      }
-      if ((await util_Util.env("WING_TARGET")) !== "sim") {
-        {
-          ((cond) => {
-            if (!cond)
-              throw new Error(
-                'assertion failed: http.get(publicUrl).body ==  "Foo"'
-              );
-          })((await http_Util.get(publicUrl)).body === "Foo");
-        }
+      (await publicBucket.put("file1.txt","Foo"));
+      (await privateBucket.put("file2.txt","Bar"));
+      const publicUrl = (await publicBucket.publicUrl("file1.txt"));
+      {((cond) => {if (!cond) throw new Error("assertion failed: publicUrl != \"\"")})((publicUrl !== ""))};
+      if (((await util_Util.env("WING_TARGET")) !== "sim")) {
+        {((cond) => {if (!cond) throw new Error("assertion failed: http.get(publicUrl).body ==  \"Foo\"")})(((await http_Util.get(publicUrl)).body === "Foo"))};
       }
       try {
-        await privateBucket.publicUrl("file2.txt");
-      } catch ($error_e) {
+        (await privateBucket.publicUrl("file2.txt"));
+      }
+      catch ($error_e) {
         const e = $error_e.message;
         error = e;
       }
-      {
-        ((cond) => {
-          if (!cond)
-            throw new Error(
-              'assertion failed: error == "Cannot provide public url for a non-public bucket"'
-            );
-        })(error === "Cannot provide public url for a non-public bucket");
-      }
+      {((cond) => {if (!cond) throw new Error("assertion failed: error == \"Cannot provide public url for a non-public bucket\"")})((error === "Cannot provide public url for a non-public bucket"))};
     }
   }
   return $Closure1;
-};
+}
+
 ```
 
 ## main.tf.json
-
 ```json
 {
   "//": {
@@ -82,7 +60,9 @@ module.exports = function ({
     }
   },
   "provider": {
-    "aws": [{}]
+    "aws": [
+      {}
+    ]
   },
   "resource": {
     "aws_iam_role": {
@@ -104,7 +84,7 @@ module.exports = function ({
             "uniqueId": "testpublicUrl_Handler_IamRolePolicy_5664CCF6"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.publicBucket.arn}\",\"${aws_s3_bucket.publicBucket.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:List*\"],\"Resource\":[\"${aws_s3_bucket.publicBucket.arn}\",\"${aws_s3_bucket.publicBucket.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.privateBucket.arn}\",\"${aws_s3_bucket.privateBucket.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:List*\"],\"Resource\":[\"${aws_s3_bucket.privateBucket.arn}\",\"${aws_s3_bucket.privateBucket.arn}/*\"],\"Effect\":\"Allow\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:List*\",\"s3:PutObject*\",\"s3:Abort*\",\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:GetBucketPublicAccessBlock\"],\"Resource\":[\"${aws_s3_bucket.publicBucket.arn}\",\"${aws_s3_bucket.publicBucket.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:List*\",\"s3:PutObject*\",\"s3:Abort*\",\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:GetBucketPublicAccessBlock\"],\"Resource\":[\"${aws_s3_bucket.privateBucket.arn}\",\"${aws_s3_bucket.privateBucket.arn}/*\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.testpublicUrl_Handler_IamRole_9C38B5EF.name}"
       }
     },
@@ -131,9 +111,7 @@ module.exports = function ({
         "environment": {
           "variables": {
             "BUCKET_NAME_7c320eda": "${aws_s3_bucket.publicBucket.bucket}",
-            "BUCKET_NAME_7c320eda_IS_PUBLIC": "true",
             "BUCKET_NAME_e82f6088": "${aws_s3_bucket.privateBucket.bucket}",
-            "BUCKET_NAME_e82f6088_IS_PUBLIC": "false",
             "WING_FUNCTION_NAME": "Handler-c849898f",
             "WING_TARGET": "tf-aws"
           }
@@ -275,21 +253,20 @@ module.exports = function ({
 ```
 
 ## preflight.js
-
 ```js
-const $stdlib = require("@winglang/sdk");
+const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
-const cloud = require("@winglang/sdk").cloud;
-const http = require("@winglang/sdk").http;
-const util = require("@winglang/sdk").util;
+const cloud = require('@winglang/sdk').cloud;
+const http = require('@winglang/sdk').http;
+const util = require('@winglang/sdk').util;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
     class $Closure1 extends $stdlib.std.Resource {
-      constructor(scope, id) {
+      constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
         this._addInflightOps("handle");
@@ -326,46 +303,20 @@ class $Root extends $stdlib.std.Resource {
           $Closure1._registerBindObject(publicBucket, host, []);
         }
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(privateBucket, host, [
-            "publicUrl",
-            "put",
-          ]);
-          $Closure1._registerBindObject(publicBucket, host, [
-            "publicUrl",
-            "put",
-          ]);
+          $Closure1._registerBindObject(privateBucket, host, ["publicUrl", "put"]);
+          $Closure1._registerBindObject(publicBucket, host, ["publicUrl", "put"]);
         }
         super._registerBind(host, ops);
       }
     }
-    const publicBucket = this.node.root.newAbstract(
-      "@winglang/sdk.cloud.Bucket",
-      this,
-      "publicBucket",
-      { public: true }
-    );
-    const privateBucket = this.node.root.newAbstract(
-      "@winglang/sdk.cloud.Bucket",
-      this,
-      "privateBucket"
-    );
-    this.node.root.new(
-      "@winglang/sdk.std.Test",
-      std.Test,
-      this,
-      "test:publicUrl",
-      new $Closure1(this, "$Closure1")
-    );
+    const publicBucket = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"publicBucket",{ public: true });
+    const privateBucket = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"privateBucket");
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:publicUrl",new $Closure1(this,"$Closure1"));
   }
 }
 class $App extends $AppBase {
   constructor() {
-    super({
-      outdir: $outdir,
-      name: "public_url",
-      plugins: $plugins,
-      isTestEnvironment: $wing_is_test,
-    });
+    super({ outdir: $outdir, name: "public_url", plugins: $plugins, isTestEnvironment: $wing_is_test });
     if ($wing_is_test) {
       new $Root(this, "env0");
       const $test_runner = this.testRunner;
@@ -379,4 +330,6 @@ class $App extends $AppBase {
   }
 }
 new $App().synth();
+
 ```
+

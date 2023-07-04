@@ -1,67 +1,43 @@
 # [delete.w](../../../../../../examples/tests/sdk_tests/bucket/delete.w) | compile | tf-aws
 
 ## inflight.$Closure1.js
-
 ```js
-module.exports = function ({ b }) {
+module.exports = function({ b }) {
   class $Closure1 {
-    constructor({}) {
+    constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init() {}
-    async handle() {
+    async $inflight_init()  {
+    }
+    async handle()  {
       let error = "";
-      const jsonObj1 = Object.freeze({ key1: "value1" });
-      await b.putJson("file1.json", jsonObj1);
-      await b.delete("file1.txt");
-      {
-        ((cond) => {
-          if (!cond)
-            throw new Error('assertion failed: b.exists("file1.json")');
-        })(await b.exists("file1.json"));
-      }
-      {
-        ((cond) => {
-          if (!cond) throw new Error('assertion failed: b.exists("file2.txt")');
-        })(await b.exists("file2.txt"));
-      }
-      await b.delete("file1.json", Object.freeze({ mustExist: true }));
+      const jsonObj1 = Object.freeze({"key1":"value1"});
+      (await b.putJson("file1.json",jsonObj1));
+      (await b.delete("file1.txt"));
+      {((cond) => {if (!cond) throw new Error("assertion failed: b.exists(\"file1.json\")")})((await b.exists("file1.json")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: b.exists(\"file2.txt\")")})((await b.exists("file2.txt")))};
+      (await b.delete("file1.json",Object.freeze({"mustExist":true})));
       try {
-        await b.delete("file1.json", Object.freeze({ mustExist: true }));
-      } catch ($error_e) {
+        (await b.delete("file1.json",Object.freeze({"mustExist":true})));
+      }
+      catch ($error_e) {
         const e = $error_e.message;
         error = e;
       }
-      {
-        ((cond) => {
-          if (!cond)
-            throw new Error(
-              'assertion failed: error == "Object does not exist (key=file1.json)."'
-            );
-        })(error === "Object does not exist (key=file1.json).");
-      }
-      {
-        ((cond) => {
-          if (!cond) throw new Error('assertion failed: b.exists("file2.txt")');
-        })(await b.exists("file2.txt"));
-      }
-      await b.delete("file2.txt");
-      {
-        ((cond) => {
-          if (!cond)
-            throw new Error('assertion failed: !b.exists("file2.txt")');
-        })(!(await b.exists("file2.txt")));
-      }
+      {((cond) => {if (!cond) throw new Error("assertion failed: error == \"Object does not exist (key=file1.json).\"")})((error === "Object does not exist (key=file1.json)."))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: b.exists(\"file2.txt\")")})((await b.exists("file2.txt")))};
+      (await b.delete("file2.txt"));
+      {((cond) => {if (!cond) throw new Error("assertion failed: !b.exists(\"file2.txt\")")})((!(await b.exists("file2.txt"))))};
     }
   }
   return $Closure1;
-};
+}
+
 ```
 
 ## main.tf.json
-
 ```json
 {
   "//": {
@@ -86,7 +62,9 @@ module.exports = function ({ b }) {
     }
   },
   "provider": {
-    "aws": [{}]
+    "aws": [
+      {}
+    ]
   },
   "resource": {
     "aws_iam_role": {
@@ -108,7 +86,7 @@ module.exports = function ({ b }) {
             "uniqueId": "testdelete_Handler_IamRolePolicy_D6FF0B67"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.cloudBucket.arn}\",\"${aws_s3_bucket.cloudBucket.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:DeleteObject*\",\"s3:DeleteObjectVersion*\",\"s3:PutLifecycleConfiguration*\"],\"Resource\":[\"${aws_s3_bucket.cloudBucket.arn}\",\"${aws_s3_bucket.cloudBucket.arn}/*\"],\"Effect\":\"Allow\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:List*\",\"s3:PutObject*\",\"s3:Abort*\",\"s3:DeleteObject*\",\"s3:DeleteObjectVersion*\",\"s3:PutLifecycleConfiguration*\"],\"Resource\":[\"${aws_s3_bucket.cloudBucket.arn}\",\"${aws_s3_bucket.cloudBucket.arn}/*\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.testdelete_Handler_IamRole_0B29F48A.name}"
       }
     },
@@ -135,7 +113,6 @@ module.exports = function ({ b }) {
         "environment": {
           "variables": {
             "BUCKET_NAME_d755b447": "${aws_s3_bucket.cloudBucket.bucket}",
-            "BUCKET_NAME_d755b447_IS_PUBLIC": "false",
             "WING_FUNCTION_NAME": "Handler-c8edf1bd",
             "WING_TARGET": "tf-aws"
           }
@@ -237,19 +214,18 @@ module.exports = function ({ b }) {
 ```
 
 ## preflight.js
-
 ```js
-const $stdlib = require("@winglang/sdk");
+const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
-const cloud = require("@winglang/sdk").cloud;
+const cloud = require('@winglang/sdk').cloud;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
     class $Closure1 extends $stdlib.std.Resource {
-      constructor(scope, id) {
+      constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
         this._addInflightOps("handle");
@@ -279,38 +255,19 @@ class $Root extends $stdlib.std.Resource {
           $Closure1._registerBindObject(b, host, []);
         }
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(b, host, [
-            "delete",
-            "exists",
-            "putJson",
-          ]);
+          $Closure1._registerBindObject(b, host, ["delete", "exists", "putJson"]);
         }
         super._registerBind(host, ops);
       }
     }
-    const b = this.node.root.newAbstract(
-      "@winglang/sdk.cloud.Bucket",
-      this,
-      "cloud.Bucket"
-    );
-    b.addObject("file2.txt", "Bar");
-    this.node.root.new(
-      "@winglang/sdk.std.Test",
-      std.Test,
-      this,
-      "test:delete",
-      new $Closure1(this, "$Closure1")
-    );
+    const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
+    (b.addObject("file2.txt","Bar"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:delete",new $Closure1(this,"$Closure1"));
   }
 }
 class $App extends $AppBase {
   constructor() {
-    super({
-      outdir: $outdir,
-      name: "delete",
-      plugins: $plugins,
-      isTestEnvironment: $wing_is_test,
-    });
+    super({ outdir: $outdir, name: "delete", plugins: $plugins, isTestEnvironment: $wing_is_test });
     if ($wing_is_test) {
       new $Root(this, "env0");
       const $test_runner = this.testRunner;
@@ -324,4 +281,6 @@ class $App extends $AppBase {
   }
 }
 new $App().synth();
+
 ```
+

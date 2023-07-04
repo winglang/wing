@@ -1,112 +1,100 @@
 # [capture_reassigable_class_field.w](../../../../../examples/tests/valid/capture_reassigable_class_field.w) | compile | tf-aws
 
 ## inflight.$Closure1.js
-
 ```js
-module.exports = function ({}) {
+module.exports = function({  }) {
   class $Closure1 {
-    constructor({}) {
+    constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init() {}
-    async handle(k) {}
+    async $inflight_init()  {
+    }
+    async handle(k)  {
+    }
   }
   return $Closure1;
-};
+}
+
 ```
 
 ## inflight.$Closure2.js
-
 ```js
-module.exports = function ({ counter }) {
+module.exports = function({ counter }) {
   class $Closure2 {
-    constructor({}) {
+    constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init() {}
-    async handle(key) {
-      await counter.inc(1, key);
+    async $inflight_init()  {
+    }
+    async handle(key)  {
+      (await counter.inc(1,key));
     }
   }
   return $Closure2;
-};
+}
+
 ```
 
 ## inflight.$Closure3.js
-
 ```js
-module.exports = function ({ kv, counter, util_Util }) {
+module.exports = function({ kv, counter, util_Util }) {
   class $Closure3 {
-    constructor({}) {
+    constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init() {}
-    async handle() {
-      await kv.set("k", Object.freeze({ value: "v" }));
-      await kv.set("k2", Object.freeze({ value: "v" }));
-      await kv.get("k");
-      await kv.get("k");
-      await kv.get("k2");
-      {
-        ((cond) => {
-          if (!cond)
-            throw new Error(
-              'assertion failed: util.waitUntil((): bool => {\n    return counter.peek("k") == 2;\n  })'
-            );
-        })(
-          await util_Util.waitUntil(async () => {
-            return (await counter.peek("k")) === 2;
-          })
-        );
+    async $inflight_init()  {
+    }
+    async handle()  {
+      (await kv.set("k",Object.freeze({"value":"v"})));
+      (await kv.set("k2",Object.freeze({"value":"v"})));
+      (await kv.get("k"));
+      (await kv.get("k"));
+      (await kv.get("k2"));
+      {((cond) => {if (!cond) throw new Error("assertion failed: util.waitUntil((): bool => {\n    return counter.peek(\"k\") == 2;\n  })")})((await util_Util.waitUntil(async () =>  {
+        return ((await counter.peek("k")) === 2);
       }
-      {
-        ((cond) => {
-          if (!cond)
-            throw new Error(
-              'assertion failed: util.waitUntil((): bool => {\n    return counter.peek("k2") == 1;\n  })'
-            );
-        })(
-          await util_Util.waitUntil(async () => {
-            return (await counter.peek("k2")) === 1;
-          })
-        );
+      )))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: util.waitUntil((): bool => {\n    return counter.peek(\"k2\") == 1;\n  })")})((await util_Util.waitUntil(async () =>  {
+        return ((await counter.peek("k2")) === 1);
       }
+      )))};
     }
   }
   return $Closure3;
-};
+}
+
 ```
 
 ## inflight.KeyValueStore.js
-
 ```js
-module.exports = function ({}) {
+module.exports = function({  }) {
   class KeyValueStore {
     constructor({ bucket, onUpdateCallback }) {
       this.bucket = bucket;
       this.onUpdateCallback = onUpdateCallback;
     }
-    async $inflight_init() {}
-    async get(key) {
-      await this.onUpdateCallback(key);
-      return await this.bucket.getJson(key);
+    async $inflight_init()  {
     }
-    async set(key, value) {
-      await this.bucket.putJson(key, value);
+    async get(key)  {
+      (await this.onUpdateCallback(key));
+      return (await this.bucket.getJson(key));
+    }
+    async set(key, value)  {
+      (await this.bucket.putJson(key,value));
     }
   }
   return KeyValueStore;
-};
+}
+
 ```
 
 ## main.tf.json
-
 ```json
 {
   "//": {
@@ -131,7 +119,9 @@ module.exports = function ({}) {
     }
   },
   "provider": {
-    "aws": [{}]
+    "aws": [
+      {}
+    ]
   },
   "resource": {
     "aws_dynamodb_table": {
@@ -172,7 +162,7 @@ module.exports = function ({}) {
             "uniqueId": "testmain_Handler_IamRolePolicy_A91080AC"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.KeyValueStore_cloudBucket_D9D365FD.arn}\",\"${aws_s3_bucket.KeyValueStore_cloudBucket_D9D365FD.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:List*\"],\"Resource\":[\"${aws_s3_bucket.KeyValueStore_cloudBucket_D9D365FD.arn}\",\"${aws_s3_bucket.KeyValueStore_cloudBucket_D9D365FD.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.sasa.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:GetItem\"],\"Resource\":[\"${aws_dynamodb_table.sasa.arn}\"],\"Effect\":\"Allow\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\",\"s3:GetObject*\",\"s3:GetBucket*\"],\"Resource\":[\"${aws_s3_bucket.KeyValueStore_cloudBucket_D9D365FD.arn}\",\"${aws_s3_bucket.KeyValueStore_cloudBucket_D9D365FD.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.sasa.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:GetItem\"],\"Resource\":[\"${aws_dynamodb_table.sasa.arn}\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.testmain_Handler_IamRole_0E2C4B8D.name}"
       }
     },
@@ -199,7 +189,6 @@ module.exports = function ({}) {
         "environment": {
           "variables": {
             "BUCKET_NAME_ce72b88b": "${aws_s3_bucket.KeyValueStore_cloudBucket_D9D365FD.bucket}",
-            "BUCKET_NAME_ce72b88b_IS_PUBLIC": "false",
             "DYNAMODB_TABLE_NAME_5a275103": "${aws_dynamodb_table.sasa.name}",
             "WING_FUNCTION_NAME": "Handler-c8d10438",
             "WING_TARGET": "tf-aws"
@@ -291,29 +280,24 @@ module.exports = function ({}) {
 ```
 
 ## preflight.js
-
 ```js
-const $stdlib = require("@winglang/sdk");
+const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
-const cloud = require("@winglang/sdk").cloud;
-const util = require("@winglang/sdk").util;
+const cloud = require('@winglang/sdk').cloud;
+const util = require('@winglang/sdk').util;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
     class KeyValueStore extends $stdlib.std.Resource {
-      constructor(scope, id) {
+      constructor(scope, id, ) {
         super(scope, id);
-        this.bucket = this.node.root.newAbstract(
-          "@winglang/sdk.cloud.Bucket",
-          this,
-          "cloud.Bucket"
-        );
+        this.bucket = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
         const __parent_this_1 = this;
         class $Closure1 extends $stdlib.std.Resource {
-          constructor(scope, id) {
+          constructor(scope, id, ) {
             super(scope, id);
             this.display.hidden = true;
             this._addInflightOps("handle");
@@ -344,10 +328,10 @@ class $Root extends $stdlib.std.Resource {
             super._registerBind(host, ops);
           }
         }
-        this.onUpdateCallback = new $Closure1(this, "$Closure1");
+        this.onUpdateCallback = new $Closure1(this,"$Closure1");
         this._addInflightOps("get", "set");
       }
-      onUpdate(fn) {
+       onUpdate(fn)  {
         this.onUpdateCallback = fn;
       }
       static _toInflightType(context) {
@@ -362,9 +346,7 @@ class $Root extends $stdlib.std.Resource {
         const onUpdateCallback_client = this._lift(this.onUpdateCallback);
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const KeyValueStoreClient = ${
-              KeyValueStore._toInflightType(this).text
-            };
+            const KeyValueStoreClient = ${KeyValueStore._toInflightType(this).text};
             const client = new KeyValueStoreClient({
               bucket: ${bucket_client},
               onUpdateCallback: ${onUpdateCallback_client},
@@ -381,9 +363,7 @@ class $Root extends $stdlib.std.Resource {
         }
         if (ops.includes("get")) {
           KeyValueStore._registerBindObject(this.bucket, host, ["getJson"]);
-          KeyValueStore._registerBindObject(this.onUpdateCallback, host, [
-            "handle",
-          ]);
+          KeyValueStore._registerBindObject(this.onUpdateCallback, host, ["handle"]);
         }
         if (ops.includes("set")) {
           KeyValueStore._registerBindObject(this.bucket, host, ["putJson"]);
@@ -392,7 +372,7 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure2 extends $stdlib.std.Resource {
-      constructor(scope, id) {
+      constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
         this._addInflightOps("handle");
@@ -428,7 +408,7 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure3 extends $stdlib.std.Resource {
-      constructor(scope, id) {
+      constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
         this._addInflightOps("handle");
@@ -469,30 +449,15 @@ class $Root extends $stdlib.std.Resource {
         super._registerBind(host, ops);
       }
     }
-    const kv = new KeyValueStore(this, "KeyValueStore");
-    const counter = this.node.root.newAbstract(
-      "@winglang/sdk.cloud.Counter",
-      this,
-      "sasa"
-    );
-    kv.onUpdate(new $Closure2(this, "$Closure2"));
-    this.node.root.new(
-      "@winglang/sdk.std.Test",
-      std.Test,
-      this,
-      "test:main",
-      new $Closure3(this, "$Closure3")
-    );
+    const kv = new KeyValueStore(this,"KeyValueStore");
+    const counter = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"sasa");
+    (kv.onUpdate(new $Closure2(this,"$Closure2")));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:main",new $Closure3(this,"$Closure3"));
   }
 }
 class $App extends $AppBase {
   constructor() {
-    super({
-      outdir: $outdir,
-      name: "capture_reassigable_class_field",
-      plugins: $plugins,
-      isTestEnvironment: $wing_is_test,
-    });
+    super({ outdir: $outdir, name: "capture_reassigable_class_field", plugins: $plugins, isTestEnvironment: $wing_is_test });
     if ($wing_is_test) {
       new $Root(this, "env0");
       const $test_runner = this.testRunner;
@@ -506,4 +471,6 @@ class $App extends $AppBase {
   }
 }
 new $App().synth();
+
 ```
+

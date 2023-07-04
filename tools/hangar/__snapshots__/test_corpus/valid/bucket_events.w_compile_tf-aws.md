@@ -1,133 +1,130 @@
 # [bucket_events.w](../../../../../examples/tests/valid/bucket_events.w) | compile | tf-aws
 
 ## inflight.$Closure1.js
-
 ```js
-module.exports = function ({}) {
+module.exports = function({  }) {
   class $Closure1 {
-    constructor({}) {
+    constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init() {}
-    async handle(key) {
-      {
-        console.log(String.raw({ raw: ["deleted ", ""] }, key));
-      }
+    async $inflight_init()  {
+    }
+    async handle(key)  {
+      {console.log(String.raw({ raw: ["deleted ", ""] }, key))};
     }
   }
   return $Closure1;
-};
+}
+
 ```
 
 ## inflight.$Closure2.js
-
 ```js
-module.exports = function ({}) {
+module.exports = function({  }) {
   class $Closure2 {
-    constructor({}) {
+    constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init() {}
-    async handle(key) {
-      {
-        console.log(String.raw({ raw: ["updated ", ""] }, key));
-      }
+    async $inflight_init()  {
+    }
+    async handle(key)  {
+      {console.log(String.raw({ raw: ["updated ", ""] }, key))};
     }
   }
   return $Closure2;
-};
+}
+
 ```
 
 ## inflight.$Closure3.js
-
 ```js
-module.exports = function ({}) {
+module.exports = function({  }) {
   class $Closure3 {
-    constructor({}) {
+    constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init() {}
-    async handle(key) {
-      {
-        console.log(String.raw({ raw: ["created ", ""] }, key));
-      }
+    async $inflight_init()  {
+    }
+    async handle(key)  {
+      {console.log(String.raw({ raw: ["created ", ""] }, key))};
     }
   }
   return $Closure3;
-};
+}
+
 ```
 
 ## inflight.$Closure4.js
-
 ```js
-module.exports = function ({ other }) {
+module.exports = function({ other }) {
   class $Closure4 {
-    constructor({}) {
+    constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init() {}
-    async handle(key, event) {
-      await other.put(String.raw({ raw: ["last_", "_key"] }, event), key);
+    async $inflight_init()  {
+    }
+    async handle(key, event)  {
+      (await other.put(String.raw({ raw: ["last_", "_key"] }, event),key));
     }
   }
   return $Closure4;
-};
+}
+
 ```
 
 ## inflight.$Closure5.js
-
 ```js
-module.exports = function ({}) {
+module.exports = function({  }) {
   class $Closure5 {
-    constructor({}) {
+    constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init() {}
-    async handle(key) {
-      {
-        console.log("other bucket event called!");
-      }
+    async $inflight_init()  {
+    }
+    async handle(key)  {
+      {console.log("other bucket event called!")};
     }
   }
   return $Closure5;
-};
+}
+
 ```
 
 ## inflight.$Closure6.js
-
 ```js
-module.exports = function ({ b }) {
+module.exports = function({ b }) {
   class $Closure6 {
-    constructor({}) {
+    constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init() {}
-    async handle() {
-      await b.put("a", "1");
-      await b.put("b", "1");
-      await b.put("b", "100");
-      await b.put("c", "1");
-      await b.delete("c");
+    async $inflight_init()  {
+    }
+    async handle()  {
+      (await b.put("a","1"));
+      (await b.put("b","1"));
+      (await b.put("b","100"));
+      (await b.put("c","1"));
+      (await b.delete("c"));
     }
   }
   return $Closure6;
-};
+}
+
 ```
 
 ## main.tf.json
-
 ```json
 {
   "//": {
@@ -152,7 +149,9 @@ module.exports = function ({ b }) {
     }
   },
   "provider": {
-    "aws": [{}]
+    "aws": [
+      {}
+    ]
   },
   "resource": {
     "aws_iam_role": {
@@ -345,7 +344,7 @@ module.exports = function ({ b }) {
             "uniqueId": "testputtinganddeletingfromabuckettotriggerbucketevents_Handler_IamRolePolicy_4BAD9EF3"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.b.arn}\",\"${aws_s3_bucket.b.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:DeleteObject*\",\"s3:DeleteObjectVersion*\",\"s3:PutLifecycleConfiguration*\"],\"Resource\":[\"${aws_s3_bucket.b.arn}\",\"${aws_s3_bucket.b.arn}/*\"],\"Effect\":\"Allow\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\",\"s3:DeleteObject*\",\"s3:DeleteObjectVersion*\",\"s3:PutLifecycleConfiguration*\"],\"Resource\":[\"${aws_s3_bucket.b.arn}\",\"${aws_s3_bucket.b.arn}/*\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.testputtinganddeletingfromabuckettotriggerbucketevents_Handler_IamRole_C2098456.name}"
       }
     },
@@ -488,7 +487,6 @@ module.exports = function ({ b }) {
         "environment": {
           "variables": {
             "BUCKET_NAME_73fd1ead": "${aws_s3_bucket.other.bucket}",
-            "BUCKET_NAME_73fd1ead_IS_PUBLIC": "false",
             "WING_FUNCTION_NAME": "b-on_create-OnMessage-aef3f85d-c8d1e844",
             "WING_TARGET": "tf-aws"
           }
@@ -516,7 +514,6 @@ module.exports = function ({ b }) {
         "environment": {
           "variables": {
             "BUCKET_NAME_73fd1ead": "${aws_s3_bucket.other.bucket}",
-            "BUCKET_NAME_73fd1ead_IS_PUBLIC": "false",
             "WING_FUNCTION_NAME": "b-on_delete-OnMessage-1c41a2ad-c87344ee",
             "WING_TARGET": "tf-aws"
           }
@@ -570,7 +567,6 @@ module.exports = function ({ b }) {
         "environment": {
           "variables": {
             "BUCKET_NAME_73fd1ead": "${aws_s3_bucket.other.bucket}",
-            "BUCKET_NAME_73fd1ead_IS_PUBLIC": "false",
             "WING_FUNCTION_NAME": "b-on_update-OnMessage-3ed6033f-c8b563a2",
             "WING_TARGET": "tf-aws"
           }
@@ -702,7 +698,6 @@ module.exports = function ({ b }) {
         "environment": {
           "variables": {
             "BUCKET_NAME_34279ead": "${aws_s3_bucket.b.bucket}",
-            "BUCKET_NAME_34279ead_IS_PUBLIC": "false",
             "WING_FUNCTION_NAME": "Handler-c8457446",
             "WING_TARGET": "tf-aws"
           }
@@ -878,17 +873,23 @@ module.exports = function ({ b }) {
         ],
         "topic": [
           {
-            "events": ["s3:ObjectRemoved:*"],
+            "events": [
+              "s3:ObjectRemoved:*"
+            ],
             "id": "on-delete-notification",
             "topic_arn": "${aws_sns_topic.b_b-on_delete_6DFE0D85.arn}"
           },
           {
-            "events": ["s3:ObjectCreated:Post"],
+            "events": [
+              "s3:ObjectCreated:Post"
+            ],
             "id": "on-update-notification",
             "topic_arn": "${aws_sns_topic.b_b-on_update_D9B22749.arn}"
           },
           {
-            "events": ["s3:ObjectCreated:Put"],
+            "events": [
+              "s3:ObjectCreated:Put"
+            ],
             "id": "on-create-notification",
             "topic_arn": "${aws_sns_topic.b_b-on_create_624B99B5.arn}"
           }
@@ -909,17 +910,23 @@ module.exports = function ({ b }) {
         ],
         "topic": [
           {
-            "events": ["s3:ObjectCreated:Put"],
+            "events": [
+              "s3:ObjectCreated:Put"
+            ],
             "id": "on-create-notification",
             "topic_arn": "${aws_sns_topic.other_other-on_create_F8EFCB58.arn}"
           },
           {
-            "events": ["s3:ObjectCreated:Post"],
+            "events": [
+              "s3:ObjectCreated:Post"
+            ],
             "id": "on-update-notification",
             "topic_arn": "${aws_sns_topic.other_other-on_update_389364BA.arn}"
           },
           {
-            "events": ["s3:ObjectRemoved:*"],
+            "events": [
+              "s3:ObjectRemoved:*"
+            ],
             "id": "on-delete-notification",
             "topic_arn": "${aws_sns_topic.other_other-on_delete_BB67CC72.arn}"
           }
@@ -1324,19 +1331,18 @@ module.exports = function ({ b }) {
 ```
 
 ## preflight.js
-
 ```js
-const $stdlib = require("@winglang/sdk");
+const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
-const cloud = require("@winglang/sdk").cloud;
+const cloud = require('@winglang/sdk').cloud;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
     class $Closure1 extends $stdlib.std.Resource {
-      constructor(scope, id) {
+      constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
         this._addInflightOps("handle");
@@ -1368,7 +1374,7 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure2 extends $stdlib.std.Resource {
-      constructor(scope, id) {
+      constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
         this._addInflightOps("handle");
@@ -1400,7 +1406,7 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure3 extends $stdlib.std.Resource {
-      constructor(scope, id) {
+      constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
         this._addInflightOps("handle");
@@ -1432,7 +1438,7 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure4 extends $stdlib.std.Resource {
-      constructor(scope, id) {
+      constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
         this._addInflightOps("handle");
@@ -1468,7 +1474,7 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure5 extends $stdlib.std.Resource {
-      constructor(scope, id) {
+      constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
         this._addInflightOps("handle");
@@ -1500,7 +1506,7 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure6 extends $stdlib.std.Resource {
-      constructor(scope, id) {
+      constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
         this._addInflightOps("handle");
@@ -1535,38 +1541,19 @@ class $Root extends $stdlib.std.Resource {
         super._registerBind(host, ops);
       }
     }
-    const other = this.node.root.newAbstract(
-      "@winglang/sdk.cloud.Bucket",
-      this,
-      "other"
-    );
-    const b = this.node.root.newAbstract(
-      "@winglang/sdk.cloud.Bucket",
-      this,
-      "b"
-    );
-    b.onDelete(new $Closure1(this, "$Closure1"));
-    b.onUpdate(new $Closure2(this, "$Closure2"));
-    b.onCreate(new $Closure3(this, "$Closure3"));
-    b.onEvent(new $Closure4(this, "$Closure4"));
-    other.onEvent(new $Closure5(this, "$Closure5"));
-    this.node.root.new(
-      "@winglang/sdk.std.Test",
-      std.Test,
-      this,
-      "test:putting and deleting from a bucket to trigger bucket events",
-      new $Closure6(this, "$Closure6")
-    );
+    const other = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"other");
+    const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"b");
+    (b.onDelete(new $Closure1(this,"$Closure1")));
+    (b.onUpdate(new $Closure2(this,"$Closure2")));
+    (b.onCreate(new $Closure3(this,"$Closure3")));
+    (b.onEvent(new $Closure4(this,"$Closure4")));
+    (other.onEvent(new $Closure5(this,"$Closure5")));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:putting and deleting from a bucket to trigger bucket events",new $Closure6(this,"$Closure6"));
   }
 }
 class $App extends $AppBase {
   constructor() {
-    super({
-      outdir: $outdir,
-      name: "bucket_events",
-      plugins: $plugins,
-      isTestEnvironment: $wing_is_test,
-    });
+    super({ outdir: $outdir, name: "bucket_events", plugins: $plugins, isTestEnvironment: $wing_is_test });
     if ($wing_is_test) {
       new $Root(this, "env0");
       const $test_runner = this.testRunner;
@@ -1580,4 +1567,6 @@ class $App extends $AppBase {
   }
 }
 new $App().synth();
+
 ```
+

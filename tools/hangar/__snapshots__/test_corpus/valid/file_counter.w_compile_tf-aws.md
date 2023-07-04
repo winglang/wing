@@ -1,28 +1,28 @@
 # [file_counter.w](../../../../../examples/tests/valid/file_counter.w) | compile | tf-aws
 
 ## inflight.$Closure1.js
-
 ```js
-module.exports = function ({ counter, bucket }) {
+module.exports = function({ counter, bucket }) {
   class $Closure1 {
-    constructor({}) {
+    constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init() {}
-    async handle(body) {
-      const next = await counter.inc();
+    async $inflight_init()  {
+    }
+    async handle(body)  {
+      const next = (await counter.inc());
       const key = String.raw({ raw: ["myfile-", ".txt"] }, "hi");
-      await bucket.put(key, body);
+      (await bucket.put(key,body));
     }
   }
   return $Closure1;
-};
+}
+
 ```
 
 ## main.tf.json
-
 ```json
 {
   "//": {
@@ -47,7 +47,9 @@ module.exports = function ({ counter, bucket }) {
     }
   },
   "provider": {
-    "aws": [{}]
+    "aws": [
+      {}
+    ]
   },
   "resource": {
     "aws_dynamodb_table": {
@@ -128,7 +130,6 @@ module.exports = function ({ counter, bucket }) {
         "environment": {
           "variables": {
             "BUCKET_NAME_d755b447": "${aws_s3_bucket.cloudBucket.bucket}",
-            "BUCKET_NAME_d755b447_IS_PUBLIC": "false",
             "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.cloudCounter.name}",
             "WING_FUNCTION_NAME": "cloud-Queue-SetConsumer-cdafee6e-c8eb6a09",
             "WING_TARGET": "tf-aws"
@@ -232,19 +233,18 @@ module.exports = function ({ counter, bucket }) {
 ```
 
 ## preflight.js
-
 ```js
-const $stdlib = require("@winglang/sdk");
+const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
-const cloud = require("@winglang/sdk").cloud;
+const cloud = require('@winglang/sdk').cloud;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
     class $Closure1 extends $stdlib.std.Resource {
-      constructor(scope, id) {
+      constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
         this._addInflightOps("handle");
@@ -283,35 +283,16 @@ class $Root extends $stdlib.std.Resource {
         super._registerBind(host, ops);
       }
     }
-    const bucket = this.node.root.newAbstract(
-      "@winglang/sdk.cloud.Bucket",
-      this,
-      "cloud.Bucket"
-    );
-    const counter = this.node.root.newAbstract(
-      "@winglang/sdk.cloud.Counter",
-      this,
-      "cloud.Counter",
-      { initial: 100 }
-    );
-    const queue = this.node.root.newAbstract(
-      "@winglang/sdk.cloud.Queue",
-      this,
-      "cloud.Queue",
-      { timeout: std.Duration.fromSeconds(10) }
-    );
-    const handler = new $Closure1(this, "$Closure1");
-    queue.setConsumer(handler);
+    const bucket = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
+    const counter = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"cloud.Counter",{ initial: 100 });
+    const queue = this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this,"cloud.Queue",{ timeout: (std.Duration.fromSeconds(10)) });
+    const handler = new $Closure1(this,"$Closure1");
+    (queue.setConsumer(handler));
   }
 }
 class $App extends $AppBase {
   constructor() {
-    super({
-      outdir: $outdir,
-      name: "file_counter",
-      plugins: $plugins,
-      isTestEnvironment: $wing_is_test,
-    });
+    super({ outdir: $outdir, name: "file_counter", plugins: $plugins, isTestEnvironment: $wing_is_test });
     if ($wing_is_test) {
       new $Root(this, "env0");
       const $test_runner = this.testRunner;
@@ -325,4 +306,6 @@ class $App extends $AppBase {
   }
 }
 new $App().synth();
+
 ```
+
