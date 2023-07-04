@@ -1,10 +1,11 @@
 import { Analytics } from '@segment/analytics-node';
 import { AnalyticsStorage } from './storage';
 
-
-// TODO: How do we manage this writeKey? Right now its just my personal free-tier writeKey
-let analytics = new Analytics({ writeKey: 'Rfx0id3AfQCZ5hfSDVy97EoMQB1wDLzF'});
+let analytics = new Analytics({ writeKey: 'sCqPF5xSscOjJdi5Tbkqu73vfF8zkZdw'});
 let report = AnalyticsStorage.loadAnalyticsReport();
+
+analytics;
+report;
 
 report.events.forEach(event => {
   analytics.track({
