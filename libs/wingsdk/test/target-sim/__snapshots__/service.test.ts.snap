@@ -100,7 +100,7 @@ async handle(message) {
               {
                 "direction": "outbound",
                 "implicit": false,
-                "relationship": "on_start",
+                "relationship": "onStart",
                 "resource": "root/my_service-ServiceOnStartef2b13b9",
               },
             ],
@@ -142,7 +142,7 @@ async handle(message) {
               {
                 "direction": "inbound",
                 "implicit": false,
-                "relationship": "on_start",
+                "relationship": "onStart",
                 "resource": "root/my_service",
               },
             ],

@@ -179,7 +179,7 @@ console.log(\\"Hello from schedule!\\");
               {
                 "direction": "outbound",
                 "implicit": false,
-                "relationship": "on_tick",
+                "relationship": "onTick",
                 "resource": "root/my_schedule-OnTick-e645076f",
               },
             ],
@@ -223,7 +223,7 @@ console.log(\\"Hello from schedule!\\");
               {
                 "direction": "inbound",
                 "implicit": false,
-                "relationship": "on_tick",
+                "relationship": "onTick",
                 "resource": "root/my_schedule",
               },
             ],
@@ -375,7 +375,7 @@ console.log(\\"Hello from schedule!\\");
               {
                 "direction": "outbound",
                 "implicit": false,
-                "relationship": "on_tick",
+                "relationship": "onTick",
                 "resource": "root/my_schedule-OnTick-e645076f",
               },
             ],
@@ -419,7 +419,7 @@ console.log(\\"Hello from schedule!\\");
               {
                 "direction": "inbound",
                 "implicit": false,
-                "relationship": "on_tick",
+                "relationship": "onTick",
                 "resource": "root/my_schedule",
               },
             ],
@@ -571,7 +571,7 @@ console.log(\\"Hello from schedule!\\");
               {
                 "direction": "outbound",
                 "implicit": false,
-                "relationship": "on_tick",
+                "relationship": "onTick",
                 "resource": "root/my_schedule-OnTick-e645076f",
               },
             ],
@@ -615,7 +615,7 @@ console.log(\\"Hello from schedule!\\");
               {
                 "direction": "inbound",
                 "implicit": false,
-                "relationship": "on_tick",
+                "relationship": "onTick",
                 "resource": "root/my_schedule",
               },
             ],
