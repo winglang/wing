@@ -1,7 +1,19 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`access_hidden_namespace.w 1`] = `
-"error: Unknown symbol \\"core\\"
+"Error: ENOENT: no such file or directory, open '/home/runner/.wing/wing-analytics-anonymous-id.json'
+    at Object.openSync (node:fs:601:3)
+    at writeFileSync (node:fs:2249:35)
+    at getAnonymousId (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/storage.js:66:32)
+    at storeAnalyticEvent (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/storage.js:49:25)
+    at collectCommandAnalytics (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/collect.js:37:45)
+    at async Object.collectAnalyticsHook [as callback] (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/cli.js:60:37) {
+  errno: -2,
+  syscall: 'open',
+  code: 'ENOENT',
+  path: '/home/runner/.wing/wing-analytics-anonymous-id.json'
+}
+error: Unknown symbol \\"core\\"
   --> ../../../examples/tests/invalid/access_hidden_namespace.w:7:5
   |
 7 | new core.NodeJsCode(\\"/tmp/test.txt\\"); // This should fail even though \`fs.TextFile\` extends \`core.FileBase\` because we didn't bring in \`core\` explicitly.
@@ -16,7 +28,20 @@ Duration <DURATION>"
 `;
 
 exports[`access_static_from_instance.w 1`] = `
-"error: Static class fields not supported yet, see https://github.com/winglang/wing/issues/1668
+"Error: ENOENT: no such file or directory, open '/home/runner/.wing/wing-analytics-anonymous-id.json'
+    at Object.openSync (node:fs:601:3)
+    at writeFileSync (node:fs:2249:35)
+    at getAnonymousId (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/storage.js:66:32)
+    at storeAnalyticEvent (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/storage.js:49:25)
+    at collectCommandAnalytics (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/collect.js:37:45)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async Object.collectAnalyticsHook [as callback] (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/cli.js:60:37) {
+  errno: -2,
+  syscall: 'open',
+  code: 'ENOENT',
+  path: '/home/runner/.wing/wing-analytics-anonymous-id.json'
+}
+error: Static class fields not supported yet, see https://github.com/winglang/wing/issues/1668
   --> ../../../examples/tests/invalid/access_static_from_instance.w:4:3
   |
 4 |   static f: num;
@@ -73,7 +98,20 @@ Duration <DURATION>"
 `;
 
 exports[`bring.w 1`] = `
-"error: Redundant bring of \\"std\\"
+"Error: ENOENT: no such file or directory, open '/home/runner/.wing/wing-analytics-anonymous-id.json'
+    at Object.openSync (node:fs:601:3)
+    at writeFileSync (node:fs:2249:35)
+    at getAnonymousId (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/storage.js:66:32)
+    at storeAnalyticEvent (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/storage.js:49:25)
+    at collectCommandAnalytics (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/collect.js:37:45)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async Object.collectAnalyticsHook [as callback] (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/cli.js:60:37) {
+  errno: -2,
+  syscall: 'open',
+  code: 'ENOENT',
+  path: '/home/runner/.wing/wing-analytics-anonymous-id.json'
+}
+error: Redundant bring of \\"std\\"
   --> ../../../examples/tests/invalid/bring.w:1:1
   |
 1 | bring std;
@@ -102,7 +140,20 @@ Duration <DURATION>"
 `;
 
 exports[`bring_jsii.w 1`] = `
-"error: bring \\"jsii-code-samples\\" must be assigned to an identifier (e.g. bring \\"foo\\" as foo)
+"Error: ENOENT: no such file or directory, open '/home/runner/.wing/wing-analytics-anonymous-id.json'
+    at Object.openSync (node:fs:601:3)
+    at writeFileSync (node:fs:2249:35)
+    at getAnonymousId (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/storage.js:66:32)
+    at storeAnalyticEvent (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/storage.js:49:25)
+    at collectCommandAnalytics (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/collect.js:37:45)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async Object.collectAnalyticsHook [as callback] (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/cli.js:60:37) {
+  errno: -2,
+  syscall: 'open',
+  code: 'ENOENT',
+  path: '/home/runner/.wing/wing-analytics-anonymous-id.json'
+}
+error: bring \\"jsii-code-samples\\" must be assigned to an identifier (e.g. bring \\"foo\\" as foo)
   --> ../../../examples/tests/invalid/bring_jsii.w:1:1
   |
 1 | bring \\"jsii-code-samples\\";
@@ -124,7 +175,20 @@ Duration <DURATION>"
 `;
 
 exports[`bring_non_std_construct.w 1`] = `
-"error: Expected 1 positional argument(s) but got 0
+"Error: ENOENT: no such file or directory, open '/home/runner/.wing/wing-analytics-anonymous-id.json'
+    at Object.openSync (node:fs:601:3)
+    at writeFileSync (node:fs:2249:35)
+    at getAnonymousId (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/storage.js:66:32)
+    at storeAnalyticEvent (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/storage.js:49:25)
+    at collectCommandAnalytics (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/collect.js:37:45)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async Object.collectAnalyticsHook [as callback] (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/cli.js:60:37) {
+  errno: -2,
+  syscall: 'open',
+  code: 'ENOENT',
+  path: '/home/runner/.wing/wing-analytics-anonymous-id.json'
+}
+error: Expected 1 positional argument(s) but got 0
   --> ../../../examples/tests/invalid/bring_non_std_construct.w:8:1
   |
 8 | new cdktf.S3Backend();
@@ -168,7 +232,19 @@ Duration <DURATION>"
 `;
 
 exports[`class.w 1`] = `
-"error: Call to super constructor can only be made from derived classes
+"Error: ENOENT: no such file or directory, open '/home/runner/.wing/wing-analytics-anonymous-id.json'
+    at Object.openSync (node:fs:601:3)
+    at writeFileSync (node:fs:2249:35)
+    at getAnonymousId (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/storage.js:66:32)
+    at storeAnalyticEvent (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/storage.js:49:25)
+    at collectCommandAnalytics (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/collect.js:37:45)
+    at async Object.collectAnalyticsHook [as callback] (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/cli.js:60:37) {
+  errno: -2,
+  syscall: 'open',
+  code: 'ENOENT',
+  path: '/home/runner/.wing/wing-analytics-anonymous-id.json'
+}
+error: Call to super constructor can only be made from derived classes
    --> ../../../examples/tests/invalid/class.w:86:5
    |
 86 |     super();
@@ -372,7 +448,20 @@ Duration <DURATION>"
 `;
 
 exports[`cloud_function_expects_inflight.w 1`] = `
-"error: Expected type to be \\"inflight (event: str): void\\", but got \\"preflight (name: str): str\\" instead
+"Error: ENOENT: no such file or directory, open '/home/runner/.wing/wing-analytics-anonymous-id.json'
+    at Object.openSync (node:fs:601:3)
+    at writeFileSync (node:fs:2249:35)
+    at getAnonymousId (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/storage.js:66:32)
+    at storeAnalyticEvent (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/storage.js:49:25)
+    at collectCommandAnalytics (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/collect.js:37:45)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async Object.collectAnalyticsHook [as callback] (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/cli.js:60:37) {
+  errno: -2,
+  syscall: 'open',
+  code: 'ENOENT',
+  path: '/home/runner/.wing/wing-analytics-anonymous-id.json'
+}
+error: Expected type to be \\"inflight (event: str): void\\", but got \\"preflight (name: str): str\\" instead
   --> ../../../examples/tests/invalid/cloud_function_expects_inflight.w:3:20
   |  
 3 |   new cloud.Function((name: str): str => {
@@ -401,7 +490,19 @@ Duration <DURATION>"
 `;
 
 exports[`container_types.w 1`] = `
-"error: Unknown parser error
+"Error: ENOENT: no such file or directory, open '/home/runner/.wing/wing-analytics-anonymous-id.json'
+    at Object.openSync (node:fs:601:3)
+    at writeFileSync (node:fs:2249:35)
+    at getAnonymousId (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/storage.js:66:32)
+    at storeAnalyticEvent (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/storage.js:49:25)
+    at collectCommandAnalytics (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/collect.js:37:45)
+    at async Object.collectAnalyticsHook [as callback] (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/cli.js:60:37) {
+  errno: -2,
+  syscall: 'open',
+  code: 'ENOENT',
+  path: '/home/runner/.wing/wing-analytics-anonymous-id.json'
+}
+error: Unknown parser error
    --> ../../../examples/tests/invalid/container_types.w:10:25
    |
 10 | let m2: Map<num> = [\\"a\\" => 1, \\"b\\" => \\"2\\", \\"c\\" => 3];
@@ -535,7 +636,19 @@ Duration <DURATION>"
 `;
 
 exports[`diags_with_multibyte_chars.w 1`] = `
-"error: Unknown symbol \\"asdf\\"
+"Error: ENOENT: no such file or directory, open '/home/runner/.wing/wing-analytics-anonymous-id.json'
+    at Object.openSync (node:fs:601:3)
+    at writeFileSync (node:fs:2249:35)
+    at getAnonymousId (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/storage.js:66:32)
+    at storeAnalyticEvent (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/storage.js:49:25)
+    at collectCommandAnalytics (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/collect.js:37:45)
+    at async Object.collectAnalyticsHook [as callback] (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/cli.js:60:37) {
+  errno: -2,
+  syscall: 'open',
+  code: 'ENOENT',
+  path: '/home/runner/.wing/wing-analytics-anonymous-id.json'
+}
+error: Unknown symbol \\"asdf\\"
   --> ../../../examples/tests/invalid/diags_with_multibyte_chars.w:4:1
   |
 4 | asdf;
@@ -550,7 +663,19 @@ Duration <DURATION>"
 `;
 
 exports[`enums.w 1`] = `
-"error: Enum \\"SomeEnum\\" does not contain value \\"FOUR\\"
+"Error: ENOENT: no such file or directory, open '/home/runner/.wing/wing-analytics-anonymous-id.json'
+    at Object.openSync (node:fs:601:3)
+    at writeFileSync (node:fs:2249:35)
+    at getAnonymousId (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/storage.js:66:32)
+    at storeAnalyticEvent (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/storage.js:49:25)
+    at collectCommandAnalytics (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/collect.js:37:45)
+    at async Object.collectAnalyticsHook [as callback] (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/cli.js:60:37) {
+  errno: -2,
+  syscall: 'open',
+  code: 'ENOENT',
+  path: '/home/runner/.wing/wing-analytics-anonymous-id.json'
+}
+error: Enum \\"SomeEnum\\" does not contain value \\"FOUR\\"
   --> ../../../examples/tests/invalid/enums.w:5:21
   |
 5 | let four = SomeEnum.FOUR;
@@ -572,7 +697,19 @@ Duration <DURATION>"
 `;
 
 exports[`extern.w 1`] = `
-"error: Failed to resolve extern \\"./sad.js\\": Not Found
+"Error: ENOENT: no such file or directory, open '/home/runner/.wing/wing-analytics-anonymous-id.json'
+    at Object.openSync (node:fs:601:3)
+    at writeFileSync (node:fs:2249:35)
+    at getAnonymousId (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/storage.js:66:32)
+    at storeAnalyticEvent (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/storage.js:49:25)
+    at collectCommandAnalytics (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/collect.js:37:45)
+    at async Object.collectAnalyticsHook [as callback] (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/cli.js:60:37) {
+  errno: -2,
+  syscall: 'open',
+  code: 'ENOENT',
+  path: '/home/runner/.wing/wing-analytics-anonymous-id.json'
+}
+error: Failed to resolve extern \\"./sad.js\\": Not Found
   --> ../../../examples/tests/invalid/extern.w:2:3
   |
 2 |   extern \\"./sad.js\\" static getNum(): num;
@@ -594,7 +731,19 @@ Duration <DURATION>"
 `;
 
 exports[`for_loop.w 1`] = `
-"error: Reserved word
+"Error: ENOENT: no such file or directory, open '/home/runner/.wing/wing-analytics-anonymous-id.json'
+    at Object.openSync (node:fs:601:3)
+    at writeFileSync (node:fs:2249:35)
+    at getAnonymousId (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/storage.js:66:32)
+    at storeAnalyticEvent (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/storage.js:49:25)
+    at collectCommandAnalytics (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/collect.js:37:45)
+    at async Object.collectAnalyticsHook [as callback] (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/cli.js:60:37) {
+  errno: -2,
+  syscall: 'open',
+  code: 'ENOENT',
+  path: '/home/runner/.wing/wing-analytics-anonymous-id.json'
+}
+error: Reserved word
   --> ../../../examples/tests/invalid/for_loop.w:5:5
   |
 5 | for test in bucket {
@@ -616,7 +765,20 @@ Duration <DURATION>"
 `;
 
 exports[`function_type.w 1`] = `
-"error: Expected function return type
+"Error: ENOENT: no such file or directory, open '/home/runner/.wing/wing-analytics-anonymous-id.json'
+    at Object.openSync (node:fs:601:3)
+    at writeFileSync (node:fs:2249:35)
+    at getAnonymousId (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/storage.js:66:32)
+    at storeAnalyticEvent (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/storage.js:49:25)
+    at collectCommandAnalytics (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/collect.js:37:45)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async Object.collectAnalyticsHook [as callback] (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/cli.js:60:37) {
+  errno: -2,
+  syscall: 'open',
+  code: 'ENOENT',
+  path: '/home/runner/.wing/wing-analytics-anonymous-id.json'
+}
+error: Expected function return type
   --> ../../../examples/tests/invalid/function_type.w:2:26
   |
 2 | let my_func = (callback: (num)) => {  };
@@ -638,7 +800,19 @@ Duration <DURATION>"
 `;
 
 exports[`immutable_container_types.w 1`] = `
-"error: Unknown symbol \\"set\\"
+"Error: ENOENT: no such file or directory, open '/home/runner/.wing/wing-analytics-anonymous-id.json'
+    at Object.openSync (node:fs:601:3)
+    at writeFileSync (node:fs:2249:35)
+    at getAnonymousId (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/storage.js:66:32)
+    at storeAnalyticEvent (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/storage.js:49:25)
+    at collectCommandAnalytics (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/collect.js:37:45)
+    at async Object.collectAnalyticsHook [as callback] (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/cli.js:60:37) {
+  errno: -2,
+  syscall: 'open',
+  code: 'ENOENT',
+  path: '/home/runner/.wing/wing-analytics-anonymous-id.json'
+}
+error: Unknown symbol \\"set\\"
   --> ../../../examples/tests/invalid/immutable_container_types.w:3:4
   |
 3 | m1.set(\\"a\\", \\"bye\\");
@@ -653,7 +827,20 @@ Duration <DURATION>"
 `;
 
 exports[`impl_interface.w 1`] = `
-"error: Class \\"A\\" does not implement method \\"handle\\" of interface \\"IQueueSetConsumerHandler\\"
+"Error: ENOENT: no such file or directory, open '/home/runner/.wing/wing-analytics-anonymous-id.json'
+    at Object.openSync (node:fs:601:3)
+    at writeFileSync (node:fs:2249:35)
+    at getAnonymousId (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/storage.js:66:32)
+    at storeAnalyticEvent (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/storage.js:49:25)
+    at collectCommandAnalytics (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/collect.js:37:45)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async Object.collectAnalyticsHook [as callback] (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/cli.js:60:37) {
+  errno: -2,
+  syscall: 'open',
+  code: 'ENOENT',
+  path: '/home/runner/.wing/wing-analytics-anonymous-id.json'
+}
+error: Class \\"A\\" does not implement method \\"handle\\" of interface \\"IQueueSetConsumerHandler\\"
   --> ../../../examples/tests/invalid/impl_interface.w:3:7
   |
 3 | class A impl cloud.IQueueSetConsumerHandler {
@@ -703,7 +890,19 @@ Duration <DURATION>"
 `;
 
 exports[`inflight_class_created_in_preflight.w 1`] = `
-"error: Cannot create inflight class \\"Foo\\" in preflight phase
+"Error: ENOENT: no such file or directory, open '/home/runner/.wing/wing-analytics-anonymous-id.json'
+    at Object.openSync (node:fs:601:3)
+    at writeFileSync (node:fs:2249:35)
+    at getAnonymousId (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/storage.js:66:32)
+    at storeAnalyticEvent (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/storage.js:49:25)
+    at collectCommandAnalytics (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/collect.js:37:45)
+    at async Object.collectAnalyticsHook [as callback] (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/cli.js:60:37) {
+  errno: -2,
+  syscall: 'open',
+  code: 'ENOENT',
+  path: '/home/runner/.wing/wing-analytics-anonymous-id.json'
+}
+error: Cannot create inflight class \\"Foo\\" in preflight phase
   --> ../../../examples/tests/invalid/inflight_class_created_in_preflight.w:3:1
   |
 3 | new Foo();
@@ -746,7 +945,19 @@ Duration <DURATION>"
 `;
 
 exports[`inflight_class_dup_init.w 1`] = `
-"error: Multiple inflight initializers defined in class Foo
+"Error: ENOENT: no such file or directory, open '/home/runner/.wing/wing-analytics-anonymous-id.json'
+    at Object.openSync (node:fs:601:3)
+    at writeFileSync (node:fs:2249:35)
+    at getAnonymousId (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/storage.js:66:32)
+    at storeAnalyticEvent (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/storage.js:49:25)
+    at collectCommandAnalytics (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/collect.js:37:45)
+    at async Object.collectAnalyticsHook [as callback] (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/cli.js:60:37) {
+  errno: -2,
+  syscall: 'open',
+  code: 'ENOENT',
+  path: '/home/runner/.wing/wing-analytics-anonymous-id.json'
+}
+error: Multiple inflight initializers defined in class Foo
   --> ../../../examples/tests/invalid/inflight_class_dup_init.w:6:3
   |  
 6 | /   inflight init() {
@@ -763,7 +974,19 @@ Duration <DURATION>"
 `;
 
 exports[`inflight_class_in_preflight.w 1`] = `
-"error: Cannot create inflight class \\"Foo\\" in preflight phase
+"Error: ENOENT: no such file or directory, open '/home/runner/.wing/wing-analytics-anonymous-id.json'
+    at Object.openSync (node:fs:601:3)
+    at writeFileSync (node:fs:2249:35)
+    at getAnonymousId (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/storage.js:66:32)
+    at storeAnalyticEvent (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/storage.js:49:25)
+    at collectCommandAnalytics (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/collect.js:37:45)
+    at async Object.collectAnalyticsHook [as callback] (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/cli.js:60:37) {
+  errno: -2,
+  syscall: 'open',
+  code: 'ENOENT',
+  path: '/home/runner/.wing/wing-analytics-anonymous-id.json'
+}
+error: Cannot create inflight class \\"Foo\\" in preflight phase
   --> ../../../examples/tests/invalid/inflight_class_in_preflight.w:5:1
   |
 5 | new Foo();
@@ -778,7 +1001,20 @@ Duration <DURATION>"
 `;
 
 exports[`inflight_class_interface_structural_typing.w 1`] = `
-"error: Expected type to be \\"IGoo\\", but got \\"NotGoo\\" instead
+"Error: ENOENT: no such file or directory, open '/home/runner/.wing/wing-analytics-anonymous-id.json'
+    at Object.openSync (node:fs:601:3)
+    at writeFileSync (node:fs:2249:35)
+    at getAnonymousId (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/storage.js:66:32)
+    at storeAnalyticEvent (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/storage.js:49:25)
+    at collectCommandAnalytics (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/collect.js:37:45)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async Object.collectAnalyticsHook [as callback] (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/cli.js:60:37) {
+  errno: -2,
+  syscall: 'open',
+  code: 'ENOENT',
+  path: '/home/runner/.wing/wing-analytics-anonymous-id.json'
+}
+error: Expected type to be \\"IGoo\\", but got \\"NotGoo\\" instead
    --> ../../../examples/tests/invalid/inflight_class_interface_structural_typing.w:26:17
    |
 26 |   let x: IGoo = new NotGoo();
@@ -793,7 +1029,19 @@ Duration <DURATION>"
 `;
 
 exports[`inflight_reassign.w 1`] = `
-"error: Variable cannot be reassigned from inflight
+"Error: ENOENT: no such file or directory, open '/home/runner/.wing/wing-analytics-anonymous-id.json'
+    at Object.openSync (node:fs:601:3)
+    at writeFileSync (node:fs:2249:35)
+    at getAnonymousId (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/storage.js:66:32)
+    at storeAnalyticEvent (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/storage.js:49:25)
+    at collectCommandAnalytics (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/collect.js:37:45)
+    at async Object.collectAnalyticsHook [as callback] (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/cli.js:60:37) {
+  errno: -2,
+  syscall: 'open',
+  code: 'ENOENT',
+  path: '/home/runner/.wing/wing-analytics-anonymous-id.json'
+}
+error: Variable cannot be reassigned from inflight
   --> ../../../examples/tests/invalid/inflight_reassign.w:5:3
   |
 5 |   xvar = \\"hi\\";
@@ -888,7 +1136,19 @@ Duration <DURATION>"
 `;
 
 exports[`interface.w 1`] = `
-"error: Properties are not supported in interfaces
+"Error: ENOENT: no such file or directory, open '/home/runner/.wing/wing-analytics-anonymous-id.json'
+    at Object.openSync (node:fs:601:3)
+    at writeFileSync (node:fs:2249:35)
+    at getAnonymousId (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/storage.js:66:32)
+    at storeAnalyticEvent (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/storage.js:49:25)
+    at collectCommandAnalytics (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/collect.js:37:45)
+    at async Object.collectAnalyticsHook [as callback] (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/cli.js:60:37) {
+  errno: -2,
+  syscall: 'open',
+  code: 'ENOENT',
+  path: '/home/runner/.wing/wing-analytics-anonymous-id.json'
+}
+error: Properties are not supported in interfaces
    --> ../../../examples/tests/invalid/interface.w:30:3
    |
 30 |   bar: str;
@@ -938,7 +1198,19 @@ Duration <DURATION>"
 `;
 
 exports[`issue_2767.w 1`] = `
-"error: Expected type to be \\"MutJson\\", but got \\"Bucket\\" instead
+"Error: ENOENT: no such file or directory, open '/home/runner/.wing/wing-analytics-anonymous-id.json'
+    at Object.openSync (node:fs:601:3)
+    at writeFileSync (node:fs:2249:35)
+    at getAnonymousId (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/storage.js:66:32)
+    at storeAnalyticEvent (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/storage.js:49:25)
+    at collectCommandAnalytics (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/collect.js:37:45)
+    at async Object.collectAnalyticsHook [as callback] (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/cli.js:60:37) {
+  errno: -2,
+  syscall: 'open',
+  code: 'ENOENT',
+  path: '/home/runner/.wing/wing-analytics-anonymous-id.json'
+}
+error: Expected type to be \\"MutJson\\", but got \\"Bucket\\" instead
   --> ../../../examples/tests/invalid/issue_2767.w:4:16
   |
 4 | x.set(\\"hello\\", new cloud.Bucket());
@@ -953,7 +1225,20 @@ Duration <DURATION>"
 `;
 
 exports[`json.w 1`] = `
-"error: Json literal must have an element
+"Error: ENOENT: no such file or directory, open '/home/runner/.wing/wing-analytics-anonymous-id.json'
+    at Object.openSync (node:fs:601:3)
+    at writeFileSync (node:fs:2249:35)
+    at getAnonymousId (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/storage.js:66:32)
+    at storeAnalyticEvent (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/storage.js:49:25)
+    at collectCommandAnalytics (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/collect.js:37:45)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async Object.collectAnalyticsHook [as callback] (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/cli.js:60:37) {
+  errno: -2,
+  syscall: 'open',
+  code: 'ENOENT',
+  path: '/home/runner/.wing/wing-analytics-anonymous-id.json'
+}
+error: Json literal must have an element
    --> ../../../examples/tests/invalid/json.w:30:26
    |
 30 | let jsonIncomplete = Json;
@@ -1052,7 +1337,20 @@ Duration <DURATION>"
 `;
 
 exports[`json_static.w 1`] = `
-"error: Unknown symbol \\"set\\"
+"Error: ENOENT: no such file or directory, open '/home/runner/.wing/wing-analytics-anonymous-id.json'
+    at Object.openSync (node:fs:601:3)
+    at writeFileSync (node:fs:2249:35)
+    at getAnonymousId (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/storage.js:66:32)
+    at storeAnalyticEvent (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/storage.js:49:25)
+    at collectCommandAnalytics (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/collect.js:37:45)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async Object.collectAnalyticsHook [as callback] (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/cli.js:60:37) {
+  errno: -2,
+  syscall: 'open',
+  code: 'ENOENT',
+  path: '/home/runner/.wing/wing-analytics-anonymous-id.json'
+}
+error: Unknown symbol \\"set\\"
   --> ../../../examples/tests/invalid/json_static.w:4:10
   |
 4 | immutObj.set(\\"a\\", \\"foo\\");
@@ -1067,7 +1365,19 @@ Duration <DURATION>"
 `;
 
 exports[`missing_semicolon.w 1`] = `
-"error: Expected ';'
+"Error: ENOENT: no such file or directory, open '/home/runner/.wing/wing-analytics-anonymous-id.json'
+    at Object.openSync (node:fs:601:3)
+    at writeFileSync (node:fs:2249:35)
+    at getAnonymousId (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/storage.js:66:32)
+    at storeAnalyticEvent (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/storage.js:49:25)
+    at collectCommandAnalytics (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/collect.js:37:45)
+    at async Object.collectAnalyticsHook [as callback] (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/cli.js:60:37) {
+  errno: -2,
+  syscall: 'open',
+  code: 'ENOENT',
+  path: '/home/runner/.wing/wing-analytics-anonymous-id.json'
+}
+error: Expected ';'
   --> ../../../examples/tests/invalid/missing_semicolon.w:9:3
   |
 9 | })
@@ -1096,7 +1406,20 @@ Duration <DURATION>"
 `;
 
 exports[`mut_container_types.w 1`] = `
-"error: Expected type to be \\"num\\", but got \\"str\\" instead
+"Error: ENOENT: no such file or directory, open '/home/runner/.wing/wing-analytics-anonymous-id.json'
+    at Object.openSync (node:fs:601:3)
+    at writeFileSync (node:fs:2249:35)
+    at getAnonymousId (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/storage.js:66:32)
+    at storeAnalyticEvent (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/storage.js:49:25)
+    at collectCommandAnalytics (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/collect.js:37:45)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async Object.collectAnalyticsHook [as callback] (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/cli.js:60:37) {
+  errno: -2,
+  syscall: 'open',
+  code: 'ENOENT',
+  path: '/home/runner/.wing/wing-analytics-anonymous-id.json'
+}
+error: Expected type to be \\"num\\", but got \\"str\\" instead
   --> ../../../examples/tests/invalid/mut_container_types.w:2:29
   |
 2 | let arr1 = MutArray<num>[1, \\"2\\", 3];
@@ -1202,7 +1525,19 @@ Duration <DURATION>"
 `;
 
 exports[`nil.w 1`] = `
-"error: Expected type to be \\"str\\", but got \\"nil\\" instead (hint: to allow \\"nil\\" assignment use optional type: \\"str?\\")
+"Error: ENOENT: no such file or directory, open '/home/runner/.wing/wing-analytics-anonymous-id.json'
+    at Object.openSync (node:fs:601:3)
+    at writeFileSync (node:fs:2249:35)
+    at getAnonymousId (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/storage.js:66:32)
+    at storeAnalyticEvent (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/storage.js:49:25)
+    at collectCommandAnalytics (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/collect.js:37:45)
+    at async Object.collectAnalyticsHook [as callback] (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/cli.js:60:37) {
+  errno: -2,
+  syscall: 'open',
+  code: 'ENOENT',
+  path: '/home/runner/.wing/wing-analytics-anonymous-id.json'
+}
+error: Expected type to be \\"str\\", but got \\"nil\\" instead (hint: to allow \\"nil\\" assignment use optional type: \\"str?\\")
   --> ../../../examples/tests/invalid/nil.w:3:14
   |
 3 | let x: str = nil;
@@ -1245,7 +1580,20 @@ Duration <DURATION>"
 `;
 
 exports[`optionals.w 1`] = `
-"error: Expected type to be \\"num\\", but got \\"num?\\" instead
+"Error: ENOENT: no such file or directory, open '/home/runner/.wing/wing-analytics-anonymous-id.json'
+    at Object.openSync (node:fs:601:3)
+    at writeFileSync (node:fs:2249:35)
+    at getAnonymousId (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/storage.js:66:32)
+    at storeAnalyticEvent (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/storage.js:49:25)
+    at collectCommandAnalytics (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/collect.js:37:45)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async Object.collectAnalyticsHook [as callback] (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/cli.js:60:37) {
+  errno: -2,
+  syscall: 'open',
+  code: 'ENOENT',
+  path: '/home/runner/.wing/wing-analytics-anonymous-id.json'
+}
+error: Expected type to be \\"num\\", but got \\"num?\\" instead
   --> ../../../examples/tests/invalid/optionals.w:7:3
   |
 7 | f(x);
@@ -1337,7 +1685,19 @@ Duration <DURATION>"
 `;
 
 exports[`panic.w 1`] = `
-"error: Compiler bug (panicked at 'User invoked panic', libs/wingc/src/type_check.rs:LINE:COL) during type-checking, please report at https://www.winglang.io/contributing/start-here/bugs
+"Error: ENOENT: no such file or directory, open '/home/runner/.wing/wing-analytics-anonymous-id.json'
+    at Object.openSync (node:fs:601:3)
+    at writeFileSync (node:fs:2249:35)
+    at getAnonymousId (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/storage.js:66:32)
+    at storeAnalyticEvent (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/storage.js:49:25)
+    at collectCommandAnalytics (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/collect.js:37:45)
+    at async Object.collectAnalyticsHook [as callback] (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/cli.js:60:37) {
+  errno: -2,
+  syscall: 'open',
+  code: 'ENOENT',
+  path: '/home/runner/.wing/wing-analytics-anonymous-id.json'
+}
+error: Compiler bug (panicked at 'User invoked panic', libs/wingc/src/type_check.rs:LINE:COL) during type-checking, please report at https://www.winglang.io/contributing/start-here/bugs
   --> ../../../examples/tests/invalid/panic.w:6:1
   |
 6 | 😱;
@@ -1354,7 +1714,20 @@ Duration <DURATION>"
 exports[`panic.w 2`] = `"Panicked, backtrace not captured: Unsupported"`;
 
 exports[`preflight_from_inflight.w 1`] = `
-"error: Cannot call into preflight phase while inflight
+"Error: ENOENT: no such file or directory, open '/home/runner/.wing/wing-analytics-anonymous-id.json'
+    at Object.openSync (node:fs:601:3)
+    at writeFileSync (node:fs:2249:35)
+    at getAnonymousId (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/storage.js:66:32)
+    at storeAnalyticEvent (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/storage.js:49:25)
+    at collectCommandAnalytics (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/collect.js:37:45)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async Object.collectAnalyticsHook [as callback] (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/cli.js:60:37) {
+  errno: -2,
+  syscall: 'open',
+  code: 'ENOENT',
+  path: '/home/runner/.wing/wing-analytics-anonymous-id.json'
+}
+error: Cannot call into preflight phase while inflight
    --> ../../../examples/tests/invalid/preflight_from_inflight.w:15:5
    |
 15 |     this.r.myPreflight();
@@ -1369,7 +1742,20 @@ Duration <DURATION>"
 `;
 
 exports[`primitives.w 1`] = `
-"error: Unexpected reference \\"structured_access_expression\\"
+"Error: ENOENT: no such file or directory, open '/home/runner/.wing/wing-analytics-anonymous-id.json'
+    at Object.openSync (node:fs:601:3)
+    at writeFileSync (node:fs:2249:35)
+    at getAnonymousId (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/storage.js:66:32)
+    at storeAnalyticEvent (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/storage.js:49:25)
+    at collectCommandAnalytics (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/collect.js:37:45)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async Object.collectAnalyticsHook [as callback] (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/cli.js:60:37) {
+  errno: -2,
+  syscall: 'open',
+  code: 'ENOENT',
+  path: '/home/runner/.wing/wing-analytics-anonymous-id.json'
+}
+error: Unexpected reference \\"structured_access_expression\\"
   --> ../../../examples/tests/invalid/primitives.w:5:5
   |
 5 | log(y[0]);
@@ -1405,7 +1791,19 @@ Duration <DURATION>"
 `;
 
 exports[`reassign_to_nonreassignable.w 1`] = `
-"error: Variable is not reassignable
+"Error: ENOENT: no such file or directory, open '/home/runner/.wing/wing-analytics-anonymous-id.json'
+    at Object.openSync (node:fs:601:3)
+    at writeFileSync (node:fs:2249:35)
+    at getAnonymousId (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/storage.js:66:32)
+    at storeAnalyticEvent (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/storage.js:49:25)
+    at collectCommandAnalytics (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/collect.js:37:45)
+    at async Object.collectAnalyticsHook [as callback] (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/cli.js:60:37) {
+  errno: -2,
+  syscall: 'open',
+  code: 'ENOENT',
+  path: '/home/runner/.wing/wing-analytics-anonymous-id.json'
+}
+error: Variable is not reassignable
   --> ../../../examples/tests/invalid/reassign_to_nonreassignable.w:3:1
   |
 3 | x = x + 1;
@@ -1448,7 +1846,19 @@ Duration <DURATION>"
 `;
 
 exports[`resource_access_field_as_method.w 1`] = `
-"error: Expected a function or method, found \\"str\\"
+"Error: ENOENT: no such file or directory, open '/home/runner/.wing/wing-analytics-anonymous-id.json'
+    at Object.openSync (node:fs:601:3)
+    at writeFileSync (node:fs:2249:35)
+    at getAnonymousId (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/storage.js:66:32)
+    at storeAnalyticEvent (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/storage.js:49:25)
+    at collectCommandAnalytics (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/collect.js:37:45)
+    at async Object.collectAnalyticsHook [as callback] (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/cli.js:60:37) {
+  errno: -2,
+  syscall: 'open',
+  code: 'ENOENT',
+  path: '/home/runner/.wing/wing-analytics-anonymous-id.json'
+}
+error: Expected a function or method, found \\"str\\"
   --> ../../../examples/tests/invalid/resource_access_field_as_method.w:9:1
   |
 9 | x.name();
@@ -1478,7 +1888,20 @@ Duration <DURATION>"
 `;
 
 exports[`resource_inflight.w 1`] = `
-"error: Cannot create preflight class \\"Bucket\\" in inflight phase
+"Error: ENOENT: no such file or directory, open '/home/runner/.wing/wing-analytics-anonymous-id.json'
+    at Object.openSync (node:fs:601:3)
+    at writeFileSync (node:fs:2249:35)
+    at getAnonymousId (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/storage.js:66:32)
+    at storeAnalyticEvent (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/storage.js:49:25)
+    at collectCommandAnalytics (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/collect.js:37:45)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async Object.collectAnalyticsHook [as callback] (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/cli.js:60:37) {
+  errno: -2,
+  syscall: 'open',
+  code: 'ENOENT',
+  path: '/home/runner/.wing/wing-analytics-anonymous-id.json'
+}
+error: Cannot create preflight class \\"Bucket\\" in inflight phase
   --> ../../../examples/tests/invalid/resource_inflight.w:4:3
   |
 4 |   new cloud.Bucket(); // Should fail because we can't create resources inflight
@@ -1500,7 +1923,20 @@ Duration <DURATION>"
 `;
 
 exports[`resource_init.w 1`] = `
-"error: Multiple initializers defined in class R
+"Error: ENOENT: no such file or directory, open '/home/runner/.wing/wing-analytics-anonymous-id.json'
+    at Object.openSync (node:fs:601:3)
+    at writeFileSync (node:fs:2249:35)
+    at getAnonymousId (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/storage.js:66:32)
+    at storeAnalyticEvent (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/storage.js:49:25)
+    at collectCommandAnalytics (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/collect.js:37:45)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async Object.collectAnalyticsHook [as callback] (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/cli.js:60:37) {
+  errno: -2,
+  syscall: 'open',
+  code: 'ENOENT',
+  path: '/home/runner/.wing/wing-analytics-anonymous-id.json'
+}
+error: Multiple initializers defined in class R
   --> ../../../examples/tests/invalid/resource_init.w:3:3
   |
 3 |   init() {}
@@ -1536,7 +1972,19 @@ Duration <DURATION>"
 `;
 
 exports[`return_types.w 1`] = `
-"error: Return statement outside of function cannot return a value
+"Error: ENOENT: no such file or directory, open '/home/runner/.wing/wing-analytics-anonymous-id.json'
+    at Object.openSync (node:fs:601:3)
+    at writeFileSync (node:fs:2249:35)
+    at getAnonymousId (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/storage.js:66:32)
+    at storeAnalyticEvent (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/storage.js:49:25)
+    at collectCommandAnalytics (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/collect.js:37:45)
+    at async Object.collectAnalyticsHook [as callback] (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/cli.js:60:37) {
+  errno: -2,
+  syscall: 'open',
+  code: 'ENOENT',
+  path: '/home/runner/.wing/wing-analytics-anonymous-id.json'
+}
+error: Return statement outside of function cannot return a value
   --> ../../../examples/tests/invalid/return_types.w:1:5
   |
 1 |     return 9;
@@ -1579,7 +2027,20 @@ Duration <DURATION>"
 `;
 
 exports[`scope_and_id.w 1`] = `
-"error: Expected type to be \\"str\\", but got \\"num\\" instead
+"Error: ENOENT: no such file or directory, open '/home/runner/.wing/wing-analytics-anonymous-id.json'
+    at Object.openSync (node:fs:601:3)
+    at writeFileSync (node:fs:2249:35)
+    at getAnonymousId (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/storage.js:66:32)
+    at storeAnalyticEvent (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/storage.js:49:25)
+    at collectCommandAnalytics (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/collect.js:37:45)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async Object.collectAnalyticsHook [as callback] (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/cli.js:60:37) {
+  errno: -2,
+  syscall: 'open',
+  code: 'ENOENT',
+  path: '/home/runner/.wing/wing-analytics-anonymous-id.json'
+}
+error: Expected type to be \\"str\\", but got \\"num\\" instead
   --> ../../../examples/tests/invalid/scope_and_id.w:6:25
   |
 6 | new PreflightClass() as x;
@@ -1622,7 +2083,20 @@ Duration <DURATION>"
 `;
 
 exports[`sorted_errors_no_span.w 1`] = `
-"error: Expected type to be \\"num\\", but got \\"str\\" instead
+"Error: ENOENT: no such file or directory, open '/home/runner/.wing/wing-analytics-anonymous-id.json'
+    at Object.openSync (node:fs:601:3)
+    at writeFileSync (node:fs:2249:35)
+    at getAnonymousId (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/storage.js:66:32)
+    at storeAnalyticEvent (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/storage.js:49:25)
+    at collectCommandAnalytics (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/collect.js:37:45)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async Object.collectAnalyticsHook [as callback] (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/cli.js:60:37) {
+  errno: -2,
+  syscall: 'open',
+  code: 'ENOENT',
+  path: '/home/runner/.wing/wing-analytics-anonymous-id.json'
+}
+error: Expected type to be \\"num\\", but got \\"str\\" instead
   --> ../../../examples/tests/invalid/sorted_errors_no_span.w:1:14
   |
 1 | let a: num = \\"s\\";
@@ -1658,7 +2132,20 @@ Duration <DURATION>"
 `;
 
 exports[`statement_invalid_scope.w 1`] = `
-"error: Expected break statement to be inside of a loop (while/for)
+"Error: ENOENT: no such file or directory, open '/home/runner/.wing/wing-analytics-anonymous-id.json'
+    at Object.openSync (node:fs:601:3)
+    at writeFileSync (node:fs:2249:35)
+    at getAnonymousId (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/storage.js:66:32)
+    at storeAnalyticEvent (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/storage.js:49:25)
+    at collectCommandAnalytics (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/collect.js:37:45)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async Object.collectAnalyticsHook [as callback] (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/cli.js:60:37) {
+  errno: -2,
+  syscall: 'open',
+  code: 'ENOENT',
+  path: '/home/runner/.wing/wing-analytics-anonymous-id.json'
+}
+error: Expected break statement to be inside of a loop (while/for)
   --> ../../../examples/tests/invalid/statement_invalid_scope.w:3:5
   |
 3 |     break;
@@ -1694,7 +2181,20 @@ Duration <DURATION>"
 `;
 
 exports[`statements_if.w 1`] = `
-"error: Unexpected unary operator \\"--\\"
+"Error: ENOENT: no such file or directory, open '/home/runner/.wing/wing-analytics-anonymous-id.json'
+    at Object.openSync (node:fs:601:3)
+    at writeFileSync (node:fs:2249:35)
+    at getAnonymousId (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/storage.js:66:32)
+    at storeAnalyticEvent (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/storage.js:49:25)
+    at collectCommandAnalytics (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/collect.js:37:45)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async Object.collectAnalyticsHook [as callback] (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/cli.js:60:37) {
+  errno: -2,
+  syscall: 'open',
+  code: 'ENOENT',
+  path: '/home/runner/.wing/wing-analytics-anonymous-id.json'
+}
+error: Unexpected unary operator \\"--\\"
   --> ../../../examples/tests/invalid/statements_if.w:2:1
   |
 2 | --n;
@@ -1723,7 +2223,19 @@ Duration <DURATION>"
 `;
 
 exports[`std_containers.w 1`] = `
-"error: Expected type to be \\"Array<num>\\", but got \\"Array<str>\\" instead
+"Error: ENOENT: no such file or directory, open '/home/runner/.wing/wing-analytics-anonymous-id.json'
+    at Object.openSync (node:fs:601:3)
+    at writeFileSync (node:fs:2249:35)
+    at getAnonymousId (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/storage.js:66:32)
+    at storeAnalyticEvent (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/storage.js:49:25)
+    at collectCommandAnalytics (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/collect.js:37:45)
+    at async Object.collectAnalyticsHook [as callback] (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/cli.js:60:37) {
+  errno: -2,
+  syscall: 'open',
+  code: 'ENOENT',
+  path: '/home/runner/.wing/wing-analytics-anonymous-id.json'
+}
+error: Expected type to be \\"Array<num>\\", but got \\"Array<str>\\" instead
   --> ../../../examples/tests/invalid/std_containers.w:3:18
   |
 3 | let c = a.concat(b); 
@@ -1738,7 +2250,19 @@ Duration <DURATION>"
 `;
 
 exports[`struct_expansion.w 1`] = `
-"error: Unexpected 'keyword_argument'
+"Error: ENOENT: no such file or directory, open '/home/runner/.wing/wing-analytics-anonymous-id.json'
+    at Object.openSync (node:fs:601:3)
+    at writeFileSync (node:fs:2249:35)
+    at getAnonymousId (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/storage.js:66:32)
+    at storeAnalyticEvent (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/storage.js:49:25)
+    at collectCommandAnalytics (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/collect.js:37:45)
+    at async Object.collectAnalyticsHook [as callback] (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/cli.js:60:37) {
+  errno: -2,
+  syscall: 'open',
+  code: 'ENOENT',
+  path: '/home/runner/.wing/wing-analytics-anonymous-id.json'
+}
+error: Unexpected 'keyword_argument'
    --> ../../../examples/tests/invalid/struct_expansion.w:11:15
    |
 11 |   bucket1.put(file: \\"file.txt\\", \\"data\\");
@@ -1796,7 +2320,20 @@ Duration <DURATION>"
 `;
 
 exports[`structs.w 1`] = `
-"error: Struct \\"C\\" extends \\"B\\" which introduces a conflicting member \\"x\\" (str != str)
+"Error: ENOENT: no such file or directory, open '/home/runner/.wing/wing-analytics-anonymous-id.json'
+    at Object.openSync (node:fs:601:3)
+    at writeFileSync (node:fs:2249:35)
+    at getAnonymousId (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/storage.js:66:32)
+    at storeAnalyticEvent (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/storage.js:49:25)
+    at collectCommandAnalytics (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/collect.js:37:45)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async Object.collectAnalyticsHook [as callback] (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/cli.js:60:37) {
+  errno: -2,
+  syscall: 'open',
+  code: 'ENOENT',
+  path: '/home/runner/.wing/wing-analytics-anonymous-id.json'
+}
+error: Struct \\"C\\" extends \\"B\\" which introduces a conflicting member \\"x\\" (str != str)
    --> ../../../examples/tests/invalid/structs.w:11:8
    |
 11 | struct C extends B {
@@ -1853,7 +2390,20 @@ Duration <DURATION>"
 `;
 
 exports[`try_no_catch_or_finally.w 1`] = `
-"error: Missing \`catch\` or \`finally\` blocks for this try statement
+"Error: ENOENT: no such file or directory, open '/home/runner/.wing/wing-analytics-anonymous-id.json'
+    at Object.openSync (node:fs:601:3)
+    at writeFileSync (node:fs:2249:35)
+    at getAnonymousId (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/storage.js:66:32)
+    at storeAnalyticEvent (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/storage.js:49:25)
+    at collectCommandAnalytics (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/collect.js:37:45)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async Object.collectAnalyticsHook [as callback] (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/cli.js:60:37) {
+  errno: -2,
+  syscall: 'open',
+  code: 'ENOENT',
+  path: '/home/runner/.wing/wing-analytics-anonymous-id.json'
+}
+error: Missing \`catch\` or \`finally\` blocks for this try statement
   --> ../../../examples/tests/invalid/try_no_catch_or_finally.w:1:1
   |  
 1 | / try {
@@ -1870,7 +2420,19 @@ Duration <DURATION>"
 `;
 
 exports[`types_strings_arithmetic.w 1`] = `
-"error: Binary operator '+' cannot be applied to operands of type 'num' and 'str'; only (num, num) and (str, str) are supported
+"Error: ENOENT: no such file or directory, open '/home/runner/.wing/wing-analytics-anonymous-id.json'
+    at Object.openSync (node:fs:601:3)
+    at writeFileSync (node:fs:2249:35)
+    at getAnonymousId (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/storage.js:66:32)
+    at storeAnalyticEvent (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/storage.js:49:25)
+    at collectCommandAnalytics (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/collect.js:37:45)
+    at async Object.collectAnalyticsHook [as callback] (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/cli.js:60:37) {
+  errno: -2,
+  syscall: 'open',
+  code: 'ENOENT',
+  path: '/home/runner/.wing/wing-analytics-anonymous-id.json'
+}
+error: Binary operator '+' cannot be applied to operands of type 'num' and 'str'; only (num, num) and (str, str) are supported
   --> ../../../examples/tests/invalid/types_strings_arithmetic.w:1:10
   |
 1 | let e1 = 2 + \\"2\\";
@@ -1899,7 +2461,20 @@ Duration <DURATION>"
 `;
 
 exports[`unimplemented_grammar.w 1`] = `
-"error: builtin \\"any\\" is not supported yet see https://github.com/winglang/wing/issues/434
+"Error: ENOENT: no such file or directory, open '/home/runner/.wing/wing-analytics-anonymous-id.json'
+    at Object.openSync (node:fs:601:3)
+    at writeFileSync (node:fs:2249:35)
+    at getAnonymousId (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/storage.js:66:32)
+    at storeAnalyticEvent (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/storage.js:49:25)
+    at collectCommandAnalytics (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/collect.js:37:45)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async Object.collectAnalyticsHook [as callback] (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/cli.js:60:37) {
+  errno: -2,
+  syscall: 'open',
+  code: 'ENOENT',
+  path: '/home/runner/.wing/wing-analytics-anonymous-id.json'
+}
+error: builtin \\"any\\" is not supported yet see https://github.com/winglang/wing/issues/434
   --> ../../../examples/tests/invalid/unimplemented_grammar.w:1:8
   |
 1 | let b: any = 0;
@@ -1935,7 +2510,19 @@ Duration <DURATION>"
 `;
 
 exports[`unknown_field.w 1`] = `
-"error: No member \\"a\\" in class \\"String\\"
+"Error: ENOENT: no such file or directory, open '/home/runner/.wing/wing-analytics-anonymous-id.json'
+    at Object.openSync (node:fs:601:3)
+    at writeFileSync (node:fs:2249:35)
+    at getAnonymousId (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/storage.js:66:32)
+    at storeAnalyticEvent (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/storage.js:49:25)
+    at collectCommandAnalytics (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/collect.js:37:45)
+    at async Object.collectAnalyticsHook [as callback] (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/cli.js:60:37) {
+  errno: -2,
+  syscall: 'open',
+  code: 'ENOENT',
+  path: '/home/runner/.wing/wing-analytics-anonymous-id.json'
+}
+error: No member \\"a\\" in class \\"String\\"
   --> ../../../examples/tests/invalid/unknown_field.w:1:12
   |
 1 | std.String.a.b.c.fromJson();
@@ -1950,7 +2537,20 @@ Duration <DURATION>"
 `;
 
 exports[`unknown_submodule.w 1`] = `
-"error: Expected identifier \\"std\\" to be a variable, but it's a namespace
+"Error: ENOENT: no such file or directory, open '/home/runner/.wing/wing-analytics-anonymous-id.json'
+    at Object.openSync (node:fs:601:3)
+    at writeFileSync (node:fs:2249:35)
+    at getAnonymousId (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/storage.js:66:32)
+    at storeAnalyticEvent (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/storage.js:49:25)
+    at collectCommandAnalytics (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/collect.js:37:45)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async Object.collectAnalyticsHook [as callback] (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/cli.js:60:37) {
+  errno: -2,
+  syscall: 'open',
+  code: 'ENOENT',
+  path: '/home/runner/.wing/wing-analytics-anonymous-id.json'
+}
+error: Expected identifier \\"std\\" to be a variable, but it's a namespace
   --> ../../../examples/tests/invalid/unknown_submodule.w:1:1
   |
 1 | std.random.String.fromJson(\\"hello\\");
@@ -1965,7 +2565,20 @@ Duration <DURATION>"
 `;
 
 exports[`unknown_symbol.w 1`] = `
-"error: Reserved word
+"Error: ENOENT: no such file or directory, open '/home/runner/.wing/wing-analytics-anonymous-id.json'
+    at Object.openSync (node:fs:601:3)
+    at writeFileSync (node:fs:2249:35)
+    at getAnonymousId (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/storage.js:66:32)
+    at storeAnalyticEvent (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/storage.js:49:25)
+    at collectCommandAnalytics (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/collect.js:37:45)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async Object.collectAnalyticsHook [as callback] (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/cli.js:60:37) {
+  errno: -2,
+  syscall: 'open',
+  code: 'ENOENT',
+  path: '/home/runner/.wing/wing-analytics-anonymous-id.json'
+}
+error: Reserved word
    --> ../../../examples/tests/invalid/unknown_symbol.w:35:5
    |
 35 | let let = 2;
@@ -2043,7 +2656,19 @@ Duration <DURATION>"
 `;
 
 exports[`use_before_defined.w 1`] = `
-"error: Unknown symbol \\"y\\"
+"Error: ENOENT: no such file or directory, open '/home/runner/.wing/wing-analytics-anonymous-id.json'
+    at Object.openSync (node:fs:601:3)
+    at writeFileSync (node:fs:2249:35)
+    at getAnonymousId (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/storage.js:66:32)
+    at storeAnalyticEvent (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/storage.js:49:25)
+    at collectCommandAnalytics (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/collect.js:37:45)
+    at async Object.collectAnalyticsHook [as callback] (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/cli.js:60:37) {
+  errno: -2,
+  syscall: 'open',
+  code: 'ENOENT',
+  path: '/home/runner/.wing/wing-analytics-anonymous-id.json'
+}
+error: Unknown symbol \\"y\\"
   --> ../../../examples/tests/invalid/use_before_defined.w:1:8
   |
 1 | log(\\"\${y}\\"); // Access y before it's defined
@@ -2065,7 +2690,20 @@ Duration <DURATION>"
 `;
 
 exports[`variable_scoping.w 1`] = `
-"error: Unknown symbol \\"x\\"
+"Error: ENOENT: no such file or directory, open '/home/runner/.wing/wing-analytics-anonymous-id.json'
+    at Object.openSync (node:fs:601:3)
+    at writeFileSync (node:fs:2249:35)
+    at getAnonymousId (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/storage.js:66:32)
+    at storeAnalyticEvent (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/storage.js:49:25)
+    at collectCommandAnalytics (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/collect.js:37:45)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async Object.collectAnalyticsHook [as callback] (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/cli.js:60:37) {
+  errno: -2,
+  syscall: 'open',
+  code: 'ENOENT',
+  path: '/home/runner/.wing/wing-analytics-anonymous-id.json'
+}
+error: Unknown symbol \\"x\\"
   --> ../../../examples/tests/invalid/variable_scoping.w:6:11
   |
 6 |   let z = x;
@@ -2080,7 +2718,20 @@ Duration <DURATION>"
 `;
 
 exports[`void_in_expression_position.w 1`] = `
-"error: Property not found
+"Error: ENOENT: no such file or directory, open '/home/runner/.wing/wing-analytics-anonymous-id.json'
+    at Object.openSync (node:fs:601:3)
+    at writeFileSync (node:fs:2249:35)
+    at getAnonymousId (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/storage.js:66:32)
+    at storeAnalyticEvent (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/storage.js:49:25)
+    at collectCommandAnalytics (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/analytics/collect.js:37:45)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async Object.collectAnalyticsHook [as callback] (/home/runner/work/wing/wing/tools/hangar/tmp/node_modules/winglang/dist/cli.js:60:37) {
+  errno: -2,
+  syscall: 'open',
+  code: 'ENOENT',
+  path: '/home/runner/.wing/wing-analytics-anonymous-id.json'
+}
+error: Property not found
   --> ../../../examples/tests/invalid/void_in_expression_position.w:1:12
   |
 1 | log(\\"hey\\").get(\\"x\\");
