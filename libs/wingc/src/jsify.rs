@@ -203,7 +203,7 @@ impl<'a> JSifier<'a> {
 			Reference::InstanceMember {
 				object,
 				property,
-				optional_accessor: _,
+				optional_accessor,
 			} => self.jsify_expression(object, ctx) + (if *optional_accessor { "?." } else { "." }) + &property.to_string(),
 			Reference::TypeReference(udt) => self.jsify_type(&TypeAnnotationKind::UserDefined(udt.clone())),
 			Reference::TypeMember { typeobject, property } => {
