@@ -5,8 +5,6 @@ export interface Data {
 }
 
 export abstract class Collector {
-  constructor() {}
-  
   abstract canCollect(): Promise<boolean>;
   abstract collect(): Promise<Data>;
 
