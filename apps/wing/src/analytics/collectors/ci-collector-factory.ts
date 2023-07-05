@@ -28,6 +28,16 @@ export enum CIType {
   NONE = "none",
 }
 
+export class UnimplementedCICollector extends Collector {
+  async canCollect(): Promise<boolean> {
+    return false;
+  }
+
+  async collect(): Promise<CIData> {
+    return {} as any;
+  }
+}
+
 export class CICollectorFactory {
   static create(): Collector {
     const type = CICollectorFactory.getCIType();
@@ -35,7 +45,7 @@ export class CICollectorFactory {
       case CIType.GITHUB_ACTIONS:
         return new GithubActionCollector();
       default:
-        throw new Error(`CI type ${type} is not supported`);
+        return new UnimplementedCICollector();
     }
   }
 
