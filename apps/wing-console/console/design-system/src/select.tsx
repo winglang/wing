@@ -20,6 +20,7 @@ export interface SelectProps {
   className?: string;
   btnClassName?: string;
   showSelected?: boolean;
+  dataTestid?: string;
 }
 
 export const Select = ({
@@ -31,6 +32,7 @@ export const Select = ({
   className,
   btnClassName,
   showSelected = true,
+  dataTestid,
 }: SelectProps) => {
   const { theme } = useTheme();
 
@@ -57,6 +59,7 @@ export const Select = ({
       value={value}
       onChange={(item) => onChange(item)}
       disabled={disabled}
+      data-testid={dataTestid}
     >
       {({ open }) => (
         <div className={classNames("relative inline-block", className)}>
@@ -64,6 +67,7 @@ export const Select = ({
             <Listbox.Button
               as="button"
               className={classNames("relative", btnClassName)}
+              data-testid={`${dataTestid}-button`}
             >
               {placeholder && !value && (
                 <div className={classNames("truncate", theme.text2)}>
@@ -128,6 +132,7 @@ export const Select = ({
                         )
                       }
                       value={item.value}
+                      data-testid={`${dataTestid}-${item.value}`}
                     >
                       {({ selected }) => (
                         <>

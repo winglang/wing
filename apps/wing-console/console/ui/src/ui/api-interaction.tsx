@@ -231,6 +231,7 @@ export const ApiInteraction = ({
                     "border-r",
                   )}
                   showSelected={false}
+                  dataTestid="cloud.api:method"
                 />
                 <Combobox
                   placeholder="Enter a route"
@@ -266,12 +267,14 @@ export const ApiInteraction = ({
                       </div>
                     );
                   }}
+                  dataTestid="cloud.api:route"
                 />
               </div>
               <Button
                 primary
                 onClick={apiCall}
                 disabled={!currentMethod || !currentRoute}
+                dataTestid="cloud.api:send"
               >
                 Send
               </Button>
@@ -373,6 +376,7 @@ export const ApiInteraction = ({
                       <ApiResponseBodyPanel
                         response={apiResponse}
                         isLoading={isLoading}
+                        dataTestid="cloud.api:response-body"
                       />
                     ),
                   },
