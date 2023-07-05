@@ -1,10 +1,10 @@
 {
   "name": "monowingo",
   "devDependencies": {
-    "@nrwl/devkit": "15.7.2",
+    "@nrwl/devkit": "16.4.3",
     "bump-pack": "workspace:^",
     "changelogen": "^0.5.3",
-    "nx": "15.7.2",
+    "nx": "16.4.3",
     "semver": "^7.3.8"
   },
   "scripts": {
@@ -31,7 +31,8 @@
       "jsii@5.0.11": "patches/jsii@5.0.11.patch",
       "esbuild-wasm@0.18.5": "patches/esbuild-wasm@0.18.5.patch",
       "@aws-sdk/util-utf8-node@3.259.0": "patches/@aws-sdk__util-utf8-node@3.259.0.patch",
-      "@aws-sdk/util-utf8-browser@3.259.0": "patches/@aws-sdk__util-utf8-browser@3.259.0.patch"
+      "@aws-sdk/util-utf8-browser@3.259.0": "patches/@aws-sdk__util-utf8-browser@3.259.0.patch",
+      "nx@16.4.3": "patches/nx@16.4.3.patch"
     }
   }
 }
