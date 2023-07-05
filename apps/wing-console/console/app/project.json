@@ -10,8 +10,9 @@
       }
     },
     "test": {
+      "dependsOn": ["build"],
       "options": {
-        "command": "pnpm vitest",
+        "command": "pnpm run test",
         "cwd": "apps/wing-console/console/app"
       }
     },
