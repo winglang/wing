@@ -40,6 +40,7 @@ export async function run(entrypoint?: string, options?: RunOptions) {
   debug("opening the wing console with:" + entrypoint);
 
   const { port } = await createConsoleApp({
+    needLegalConsent: true,
     wingfile: entrypoint,
     requestedPort: parseNumericString(options?.port) ?? 3000,
     hostUtils: {

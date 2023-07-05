@@ -10,6 +10,7 @@ import {
 import express from "express";
 import { createAnalytics } from "./analytics";
 import { getAnonymousId } from "./anonymous-id";
+import { legalConsent } from "./legal-consent";
 
 export type {
   LogInterface,
@@ -29,6 +30,7 @@ export interface CreateConsoleAppOptions {
   hostUtils?: HostUtils;
   onTrace?: (trace: Trace) => void;
   onExpressCreated?: CreateConsoleServerOptions["onExpressCreated"];
+  needLegalConsent?: boolean;
 }
 
 const staticDir = `${__dirname}/vite`;
@@ -36,6 +38,14 @@ const staticDir = `${__dirname}/vite`;
 const { SEGMENT_WRITE_KEY } = process.env;
 
 export const createConsoleApp = async (options: CreateConsoleAppOptions) => {
+
+  if(options.needLegalConsent) {
+    const accepted = await legalConsent();
+    if(!accepted) {
+      return;
+    }
+  }
+
   const analytics = SEGMENT_WRITE_KEY
     ? createAnalytics({
         anonymousId: getAnonymousId(),
