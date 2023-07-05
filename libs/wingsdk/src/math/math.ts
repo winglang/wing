@@ -170,6 +170,17 @@ export class Util {
   }
 
   /**
+   * Returns the square root of a number.
+   * @param value A number greater than or equal to 0.
+   */
+  public static sqrt(value: number): number {
+    if (value < 0) {
+      throw new Error("Input value must be greater than or equal to 0.");
+    }    
+    return Math.sqrt(value);
+  }
+
+  /**
    * Calculates the nth Fibonacci number.
    * @param n - The position of the Fibonacci number to calculate.
    */
@@ -282,6 +293,16 @@ export class Util {
    */
   public static atan(value: number): number {
     return Math.atan(value);
+  }
+
+  /**
+   * Returns the angle in the plane (in radians) between the positive x-axis and the ray from
+   * (0, 0) to the point (x, y), for Math.atan2(y, x).
+   * @param y The y coordinate of the point.
+   * @param x The x coordinate of the point.
+   */
+  public static atan2(y: number, x: number): number {
+    return Math.atan2(y, x);
   }
 
   /**
