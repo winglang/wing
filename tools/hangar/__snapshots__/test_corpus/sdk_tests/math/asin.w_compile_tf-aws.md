@@ -5,39 +5,30 @@
 module.exports = function({ $math_Util }) {
   class $Closure1 {
     async handle() {
+      try {
+        {console.log(String.raw({ raw: ["", ""] }, (await $math_Util.asin((-2)))))};
+      }
+      catch ($error_e) {
+        const e = $error_e.message;
+        {((cond) => {if (!cond) throw new Error("assertion failed: e == \"Input value must be between -1 and 1, inclusive.\"")})((e === "Input value must be between -1 and 1, inclusive."))};
+      }
       {((cond) => {if (!cond) throw new Error("assertion failed: math.asin(-1) == -1.5707963267948966")})(((await $math_Util.asin((-1))) === (-1.5707963267948966)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: math.asin(-0) == -0")})(((await $math_Util.asin((-0))) === (-0)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: math.asin(0) == 0")})(((await $math_Util.asin(0)) === 0))};
       {((cond) => {if (!cond) throw new Error("assertion failed: math.asin(0.5) == 0.5235987755982989")})(((await $math_Util.asin(0.5)) === 0.5235987755982989))};
       {((cond) => {if (!cond) throw new Error("assertion failed: math.asin(1) == 1.5707963267948966")})(((await $math_Util.asin(1)) === 1.5707963267948966))};
+      try {
+        {console.log(String.raw({ raw: ["", ""] }, (await $math_Util.asin(2))))};
+      }
+      catch ($error_e) {
+        const e = $error_e.message;
+        {((cond) => {if (!cond) throw new Error("assertion failed: e == \"Input value must be between -1 and 1, inclusive.\"")})((e === "Input value must be between -1 and 1, inclusive."))};
+      }
     }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
-    }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      try {
-        {console.log(String.raw({ raw: ["", ""] }, (await math_Util.asin((-2)))))};
-      }
-      catch ($error_e) {
-        const e = $error_e.message;
-        {((cond) => {if (!cond) throw new Error("assertion failed: e == \"Input value must be between -1 and 1, inclusive.\"")})((e === "Input value must be between -1 and 1, inclusive."))};
-      }
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.asin(-1) == -1.5707963267948966")})(((await math_Util.asin((-1))) === (-1.5707963267948966)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.asin(-0) == -0")})(((await math_Util.asin((-0))) === (-0)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.asin(0) == 0")})(((await math_Util.asin(0)) === 0))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.asin(0.5) == 0.5235987755982989")})(((await math_Util.asin(0.5)) === 0.5235987755982989))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.asin(1) == 1.5707963267948966")})(((await math_Util.asin(1)) === 1.5707963267948966))};
-      try {
-        {console.log(String.raw({ raw: ["", ""] }, (await math_Util.asin(2))))};
-      }
-      catch ($error_e) {
-        const e = $error_e.message;
-        {((cond) => {if (!cond) throw new Error("assertion failed: e == \"Input value must be between -1 and 1, inclusive.\"")})((e === "Input value must be between -1 and 1, inclusive."))};
-      }
     }
   }
   return $Closure1;
