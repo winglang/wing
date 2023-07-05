@@ -1125,13 +1125,13 @@ impl<'a> JSifier<'a> {
 			}
 		));
 
-		for def in class.inflight_methods(false) {
-			class_code.line(self.jsify_function(Some(class), def, &mut ctx));
-		}
-
 		// if this is a preflight class, emit the binding constructor
 		if class.phase == Phase::Preflight {
 			self.jsify_inflight_binding_constructor(class, &mut class_code, &ctx);
+		}
+
+		for def in class.inflight_methods(false) {
+			class_code.line(self.jsify_function(Some(class), def, &mut ctx));
 		}
 
 		// emit the $inflight_init function (if it has a body).
