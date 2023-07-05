@@ -1,4 +1,4 @@
-import { getAnonymousId, loadAnalyticsEvent } from './storage';
+import { getAnonymousId, loadAnalyticsEvent } from '../storage';
 import * as fs from 'fs';
 import Analytics from '@segment/analytics-node';
 
@@ -9,7 +9,7 @@ const filePath = process.argv[2];
 try {
   const analytics = new Analytics({ writeKey: 'sCqPF5xSscOjJdi5Tbkqu73vfF8zkZdw'});
   const event = loadAnalyticsEvent(filePath);
-  
+
   analytics.track({
     anonymousId: getAnonymousId(),
     timestamp: event.timestamp,

@@ -1,3 +1,9 @@
+import { CIData } from "./collectors/ci-collector";
+import { CLIData } from "./collectors/cli-collector";
+import { GitData } from "./collectors/git-collector";
+import { NodeData } from "./collectors/node-collector";
+import { OSData } from "./collectors/os-collector";
+
 export interface AnalyticEvent {
   event: string;
   timestamp?: string;
@@ -10,44 +16,4 @@ export interface AnalyticEvent {
     git?: GitData;
     ci?: CIData;
   }
-}
-
-export interface CLIData {
-  target: string;
-  version: string;
-  options: string;
-}
-
-export interface OSData {
-  arch: string;
-  platform: string;
-  release: string;
-}
-
-export interface NodeData {
-  version: string;
-}
-
-export interface GitData {
-  contributors: {
-    total: number;
-    last90Days: number;
-  }
-  version: string;
-  originUrl: string;
-}
-
-export interface CIData {
-  name: string;
-  serverUrl: string;
-  toBranch: string;
-  fromBranch: string;
-  prId: string;
-  prUrl: string;
-  runId: string;
-  runUrl: string;
-  commitHash: string;
-  commitUrl: string;
-  repositoryUrl: string;
-  authorName: string;
 }

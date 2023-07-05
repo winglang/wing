@@ -1,10 +1,11 @@
 import { Command } from "commander";
 import { storeAnalyticEvent } from "./storage";
-import { AnalyticEvent, GitData, NodeData, OSData } from "./event";
-import * as os from "os";
-import { PACKAGE_VERSION } from "../cli";
-import { getDevStats } from "./git-analysis";
-import { getCIData, isInCI } from "./ci-analysis";
+import { AnalyticEvent } from "./event";
+import { GitCollector } from "./collectors/git-collector";
+import { OSCollector } from "./collectors/os-collector";
+import { NodeCollector } from "./collectors/node-collector";
+import { CICollectorFactory, CIData } from "./collectors/ci-collector";
+import { CLICollector } from "./collectors/cli-collector";
 
 
 /**
@@ -14,40 +15,23 @@ import { getCIData, isInCI } from "./ci-analysis";
  * @returns string the file path of the stored analytic
  */
 export async function collectCommandAnalytics(cmd: Command): Promise<string> {
+  const gitCollector = new GitCollector();
+  const osCollector = new OSCollector();
+  const nodeCollector = new NodeCollector();
+  const ciCollector = CICollectorFactory.create();
+  const cliCollector = new CLICollector(cmd);
+
   const event: AnalyticEvent = {
     event: `wing cli:${cmd.name()}`,
     properties: {
-      inCI: isInCI(),
-      cli: {
-        target: cmd.opts().target,
-        options: `${JSON.stringify(cmd.opts())}`,
-        version: PACKAGE_VERSION,
-      },
-      os: collectOSData(),
-      node: collectNodeData(),
-      ci: getCIData(),
-      git: await collectGitData(),
+      inCI: CICollectorFactory.inCI(),
+      cli: await cliCollector.collect(),
+      os: await osCollector.collect(),
+      node: await nodeCollector.collect(),
+      ci: await ciCollector.collect() as CIData,
+      git: await gitCollector.collect(),
     }
   }
 
   return storeAnalyticEvent(event);
-}
-
-
-function collectOSData(): OSData {
-  return {
-    arch: os.arch(),
-    platform: os.platform(),
-    release: os.release(),
-  }
-}
-
-function collectNodeData(): NodeData {
-  return {
-    version: process.version,
-  };
-}
-
-async function collectGitData(): Promise<GitData> {
-  return await getDevStats();
 }
