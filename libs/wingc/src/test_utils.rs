@@ -28,7 +28,7 @@ macro_rules! assert_compile_fail {
       omit_expression => true,
     }, {
       insta::assert_snapshot!($crate::test_utils::compile_fail($code));
-    });
+    })
   };
 }
 

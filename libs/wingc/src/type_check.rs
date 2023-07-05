@@ -253,6 +253,15 @@ impl Class {
 	pub(crate) fn set_lifts(&mut self, lifts: Lifts) {
 		self.lifts = Some(lifts);
 	}
+
+	/// Returns the type of the "handle" method of a closure class or `None` if this is not a closure
+	/// class.
+	pub fn get_closure_method(&self) -> Option<TypeRef> {
+		self
+			.methods(true)
+			.find(|(name, type_)| name == CLOSURE_CLASS_HANDLE_METHOD && type_.is_inflight_function())
+			.map(|(_, t)| t)
+	}
 }
 
 #[derive(Derivative)]
@@ -712,6 +721,16 @@ impl Display for SymbolKind {
 	}
 }
 
+impl Display for Class {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		if let Some(closure) = self.get_closure_method() {
+			std::fmt::Display::fmt(&closure, f)
+		} else {
+			write!(f, "{}", self.name.name)
+		}
+	}
+}
+
 impl Display for Type {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		match self {
@@ -727,7 +746,8 @@ impl Display for Type {
 			Type::Unresolved => write!(f, "unresolved"),
 			Type::Optional(v) => write!(f, "{}?", v),
 			Type::Function(sig) => write!(f, "{}", sig),
-			Type::Class(class) => write!(f, "{}", class.name.name),
+			Type::Class(class) => write!(f, "{}", class),
+
 			Type::Interface(iface) => write!(f, "{}", iface),
 			Type::Struct(s) => write!(f, "{}", s.name.name),
 			Type::Array(v) => write!(f, "Array<{}>", v),
@@ -868,9 +888,7 @@ impl TypeRef {
 		}
 
 		if let Some(ref class) = self.as_preflight_class() {
-			return class
-				.methods(true)
-				.any(|(name, type_)| name == CLOSURE_CLASS_HANDLE_METHOD && type_.is_inflight_function());
+			return class.get_closure_method().is_some();
 		}
 		false
 	}

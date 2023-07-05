@@ -383,7 +383,7 @@ impl Class {
 
 	/// Returns the function definition of the "handle" method of this class (if this is a closure
 	/// class). Otherwise returns None.
-	pub fn handle_method(&self) -> Option<&FunctionDefinition> {
+	pub fn closure_handle_method(&self) -> Option<&FunctionDefinition> {
 		for method in self.inflight_methods(false) {
 			if let Some(name) = &method.name {
 				if name.name == CLOSURE_CLASS_HANDLE_METHOD {

@@ -295,7 +295,7 @@ impl Fold for ClosureTransformer {
 						obj_id: None,
 						obj_scope: None,
 					},
-					WingSpan::default(),
+					expr.span.clone(), // <<-- span of original expression
 				);
 
 				self.class_statements.push(class_def);

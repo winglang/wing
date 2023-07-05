@@ -1180,7 +1180,7 @@ impl<'a> JSifier<'a> {
 
 		// if this class has a "handle" method, we are going to turn it into a callable function
 		// so that instances of this class can also be called like regular functions
-		if let Some(handle) = class.handle_method() {
+		if let Some(handle) = class.closure_handle_method() {
 			class_code.line(format!(
 				"const $obj = (...args) => this.{}(...args);",
 				handle.name.clone().unwrap()
