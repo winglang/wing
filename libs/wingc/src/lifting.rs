@@ -1,5 +1,6 @@
 use crate::{
 	ast::{Class, Expr, ExprKind, FunctionBody, FunctionDefinition, Phase, Reference, Stmt, StmtKind, UserDefinedType},
+	comp_ctx::{CompilationContext, CompilationPhase},
 	diagnostic::{report_diagnostic, Diagnostic, WingSpan},
 	files::Files,
 	fold::{self, Fold},
@@ -172,6 +173,8 @@ impl<'a> Fold for LiftTransform<'a> {
 	}
 
 	fn fold_expr(&mut self, node: Expr) -> Expr {
+		CompilationContext::set(CompilationPhase::Lifting, &node.span);
+
 		let expr_phase = self.jsify.types.get_expr_phase(&node).unwrap();
 		let expr_type = self.jsify.types.get_expr_type(&node).unwrap();
 
@@ -355,6 +358,8 @@ impl<'a> Fold for LiftTransform<'a> {
 	}
 
 	fn fold_stmt(&mut self, node: crate::ast::Stmt) -> crate::ast::Stmt {
+		CompilationContext::set(CompilationPhase::Lifting, &node.span);
+
 		self.ctx.push_stmt(node.idx);
 
 		if let StmtKind::Assignment { variable, value } = node.kind {

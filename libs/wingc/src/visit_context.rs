@@ -66,7 +66,7 @@ impl VisitContext {
 
 		// if the function definition doesn't have a name (i.e. it's a closure), don't push its env
 		// because it's not a method dude!
-		let maybe_env = if function_name.is_some() { Some(env) } else { None };
+		let maybe_env = function_name.map(|_| env);
 		self.method_env.push(maybe_env);
 	}
 

@@ -2461,7 +2461,7 @@ impl<'a> TypeChecker<'a> {
 				let (var_type, var_phase) = self.type_check_exp(variable, env);
 
 				// TODO: we need to verify that if this variable is defined in a parent environment (i.e.
-				// being captured) it cannot be reassigned:
+				// being captured) it cannot be reassigned: https://github.com/winglang/wing/issues/3069
 
 				if let ExprKind::Reference(r) = &variable.kind {
 					let (var, _) = self.resolve_reference(&r, env);
