@@ -5,39 +5,30 @@
 module.exports = function({ $math_Util }) {
   class $Closure1 {
     async handle() {
+      try {
+        {console.log(String.raw({ raw: ["", ""] }, (await $math_Util.acos((-2)))))};
+      }
+      catch ($error_e) {
+        const e = $error_e.message;
+        {((cond) => {if (!cond) throw new Error("assertion failed: e == \"Input value must be between -1 and 1, inclusive.\"")})((e === "Input value must be between -1 and 1, inclusive."))};
+      }
       {((cond) => {if (!cond) throw new Error("assertion failed: math.acos(-1) == math.PI")})(((await $math_Util.acos((-1))) === $math_Util.PI))};
       {((cond) => {if (!cond) throw new Error("assertion failed: math.acos(-0) == 1.5707963267948966")})(((await $math_Util.acos((-0))) === 1.5707963267948966))};
       {((cond) => {if (!cond) throw new Error("assertion failed: math.acos(0) == 1.5707963267948966")})(((await $math_Util.acos(0)) === 1.5707963267948966))};
       {((cond) => {if (!cond) throw new Error("assertion failed: math.acos(0.5) == 1.0471975511965979")})(((await $math_Util.acos(0.5)) === 1.0471975511965979))};
       {((cond) => {if (!cond) throw new Error("assertion failed: math.acos(1) == 0")})(((await $math_Util.acos(1)) === 0))};
+      try {
+        {console.log(String.raw({ raw: ["", ""] }, (await $math_Util.acos(2))))};
+      }
+      catch ($error_e) {
+        const e = $error_e.message;
+        {((cond) => {if (!cond) throw new Error("assertion failed: e == \"Input value must be between -1 and 1, inclusive.\"")})((e === "Input value must be between -1 and 1, inclusive."))};
+      }
     }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
-    }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      try {
-        {console.log(String.raw({ raw: ["", ""] }, (await math_Util.acos((-2)))))};
-      }
-      catch ($error_e) {
-        const e = $error_e.message;
-        {((cond) => {if (!cond) throw new Error("assertion failed: e == \"Input value must be between -1 and 1, inclusive.\"")})((e === "Input value must be between -1 and 1, inclusive."))};
-      }
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.acos(-1) == math.PI")})(((await math_Util.acos((-1))) === math_Util.PI))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.acos(-0) == 1.5707963267948966")})(((await math_Util.acos((-0))) === 1.5707963267948966))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.acos(0) == 1.5707963267948966")})(((await math_Util.acos(0)) === 1.5707963267948966))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.acos(0.5) == 1.0471975511965979")})(((await math_Util.acos(0.5)) === 1.0471975511965979))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.acos(1) == 0")})(((await math_Util.acos(1)) === 0))};
-      try {
-        {console.log(String.raw({ raw: ["", ""] }, (await math_Util.acos(2))))};
-      }
-      catch ($error_e) {
-        const e = $error_e.message;
-        {((cond) => {if (!cond) throw new Error("assertion failed: e == \"Input value must be between -1 and 1, inclusive.\"")})((e === "Input value must be between -1 and 1, inclusive."))};
-      }
     }
   }
   return $Closure1;
