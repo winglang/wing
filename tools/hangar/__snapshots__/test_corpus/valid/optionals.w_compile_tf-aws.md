@@ -15,6 +15,14 @@ module.exports = function({ $__payloadWithBucket_c_____null_, $__payloadWithoutO
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
+    async $inflight_init()  {
+    }
+    async handle()  {
+      {((cond) => {if (!cond) throw new Error("assertion failed: payloadWithoutOptions.b? == false")})((((payloadWithoutOptions.b) != null) === false))};
+      if (((payloadWithBucket.c) != null)) {
+        (await payloadWithBucket.c?.put?.("x.txt","something"));
+      }
+    }
   }
   return $Closure1;
 }
@@ -499,12 +507,12 @@ class $Root extends $stdlib.std.Resource {
     {((cond) => {if (!cond) throw new Error("assertion failed: fun(\"hello\") == \"hello\"")})(((fun("hello")) === "hello"))};
     {((cond) => {if (!cond) throw new Error("assertion failed: fun(nil) == \"default\"")})(((fun(undefined)) === "default"))};
     const tree = new Node(this,"eight",8,new Node(this,"three",3,new Node(this,"one",1,undefined,undefined),new Node(this,"six",6,undefined,undefined)),new Node(this,"ten",10,undefined,new Node(this,"fourteen",14,new Node(this,"thirteen",13,undefined,undefined),undefined)));
-    const thirteen = tree.right.right.left.value;
-    const notThere = tree.right.right.right;
+    const thirteen = tree.right?.right?.left?.value;
+    const notThere = tree.right?.right?.right;
     {((cond) => {if (!cond) throw new Error("assertion failed: thirteen == 13")})((thirteen === 13))};
     {((cond) => {if (!cond) throw new Error("assertion failed: notThere == nil")})((notThere === undefined))};
     {
-      const $IF_LET_VALUE = tree.left.left;
+      const $IF_LET_VALUE = tree.left?.left;
       if ($IF_LET_VALUE != undefined) {
         const o = $IF_LET_VALUE;
         {((cond) => {if (!cond) throw new Error("assertion failed: o.value == 1")})((o.value === 1))};

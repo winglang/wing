@@ -129,7 +129,7 @@ class $Root extends $stdlib.std.Resource {
     {((cond) => {if (!cond) throw new Error("assertion failed: unestedJsonArr.getAt(0) == 1")})(((unestedJsonArr)[0] === 1))};
     const jsonElements = Object.freeze({"strings":Object.freeze({"single":"Hello","array":["Hello", "World", "!"]}),"numbers":Object.freeze({"one":1,"two":2,"three":3}),"bools":Object.freeze({"t":true,"f":false})});
     {
-      const $IF_LET_VALUE = ((arg) => { return (typeof arg === "string") ? JSON.parse(JSON.stringify(arg)) : undefined })(((jsonElements)?.["strings"])?.["single"]);
+      const $IF_LET_VALUE = ((arg) => { if (typeof arg !== "string") {throw new Error("unable to parse " + typeof arg + " " + arg + " as a string")}; return JSON.parse(JSON.stringify(arg)) })(((jsonElements)?.["strings"])?.["single"]);
       if ($IF_LET_VALUE != undefined) {
         const val = $IF_LET_VALUE;
         {((cond) => {if (!cond) throw new Error("assertion failed: val == \"Hello\"")})((val === "Hello"))};

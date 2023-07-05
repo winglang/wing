@@ -204,7 +204,7 @@ impl<'a> JSifier<'a> {
 				object,
 				property,
 				optional_accessor: _,
-			} => self.jsify_expression(object, ctx) + "." + &property.to_string(),
+			} => self.jsify_expression(object, ctx) + (if *optional_accessor { "?." } else { "." }) + &property.to_string(),
 			Reference::TypeReference(udt) => self.jsify_type(&TypeAnnotationKind::UserDefined(udt.clone())),
 			Reference::TypeMember { typeobject, property } => {
 				let typename = self.jsify_expression(typeobject, ctx);
@@ -409,6 +409,8 @@ impl<'a> JSifier<'a> {
 			ExprKind::Reference(_ref) => self.jsify_reference(&_ref, ctx),
 			ExprKind::Call { callee, arg_list } => {
 				let function_type = self.get_expr_type(callee);
+				let is_option = function_type.is_option();
+				let function_type = function_type.maybe_unwrap_option();
 				let function_sig = function_type.as_function_sig();
 				let expr_string = self.jsify_expression(callee, ctx);
 				let args_string = self.jsify_arg_list(&arg_list, None, None, ctx);
@@ -437,9 +439,15 @@ impl<'a> JSifier<'a> {
 					}
 				}
 
+				let optional_access = if is_option {
+					"?."
+				} else {
+					""
+				};
+
 				// NOTE: if the expression is a "handle" class, the object itself is callable (see
 				// `jsify_class_inflight` below), so we can just call it as-is.
-				format!("({auto_await}{expr_string}({args_string}))")
+				format!("({auto_await}{expr_string}{optional_access}({args_string}))")
 			}
 			ExprKind::Unary { op, exp } => {
 				let js_exp = self.jsify_expression(exp, ctx);
