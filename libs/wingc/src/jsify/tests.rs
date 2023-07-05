@@ -1883,3 +1883,50 @@ fn fails_invalid_closure_type() {
     "#
 	)
 }
+#[test]
+fn capture_object_with_this_in_name() {
+	assert_compile_ok!(
+		r#"
+    bring cloud;
+    let bucket_this = new cloud.Bucket();
+    let fn = inflight () => {
+      bucket_this.put("this", "is not a field");
+    };
+    "#
+	)
+}
+
+#[test]
+fn identify_field() {
+	assert_compile_ok!(
+		r#"
+    bring cloud;
+    class A {
+      bucket_this: cloud.Bucket;
+
+      init() { this.bucket_this = new cloud.Bucket(); }
+
+      inflight foo() {
+        (this.bucket_this).put("hello", "world");
+      }
+    }
+    "#
+	)
+}
+
+#[test]
+fn lift_var_with_this() {
+	assert_compile_ok!(
+		r#"
+    class Foo {
+      value: str;
+      init() { this.value = "hello"; }
+    }
+
+    let foo_this = new Foo();
+    test "test" {
+      assert(foo_this.value == "hello");
+    }
+    "#
+	)
+}

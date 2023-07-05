@@ -1,5 +1,5 @@
 use crate::{
-	ast::{Class, Expr, ExprKind, FunctionBody, FunctionDefinition, Phase, Reference, Stmt, StmtKind, UserDefinedType},
+	ast::{Class, Expr, ExprKind, FunctionBody, FunctionDefinition, Phase, Reference, UserDefinedType},
 	comp_ctx::{CompilationContext, CompilationPhase},
 	diagnostic::{report_diagnostic, Diagnostic, WingSpan},
 	files::Files,
