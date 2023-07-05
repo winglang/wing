@@ -9,8 +9,6 @@ use crate::{
 	visit_context::VisitContext,
 };
 
-const ASSIGNMENT_OPERATION: &str = "=";
-
 pub struct LiftTransform<'a> {
 	ctx: VisitContext,
 	jsify: &'a JSifier<'a>,
@@ -361,23 +359,7 @@ impl<'a> Fold for LiftTransform<'a> {
 		CompilationContext::set(CompilationPhase::Lifting, &node.span);
 
 		self.ctx.push_stmt(node.idx);
-
-		if let StmtKind::Assignment { variable, value } = node.kind {
-			self.ctx.push_property(ASSIGNMENT_OPERATION.to_string());
-			let var = self.fold_expr(variable);
-			self.ctx.pop_property();
-			return Stmt {
-				kind: StmtKind::Assignment {
-					variable: var,
-					value: self.fold_expr(value),
-				},
-				span: node.span,
-				idx: node.idx,
-			};
-		}
-
 		let result = fold::fold_stmt(self, node);
-
 		self.ctx.pop_stmt();
 
 		result
