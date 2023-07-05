@@ -16,6 +16,7 @@ interface ButtonProps {
   onClick?: (event: React.MouseEvent<HTMLElement>) => void;
   small?: boolean;
   transparent?: boolean;
+  dataTestid?: string;
 }
 
 export const Button = forwardRef<
@@ -36,6 +37,7 @@ export const Button = forwardRef<
       children,
       small = false,
       transparent = false,
+      dataTestid,
     },
     ref,
   ) => {
@@ -74,6 +76,7 @@ export const Button = forwardRef<
         title={title}
         disabled={disabled}
         onClick={onClick}
+        data-testid={dataTestid}
       >
         {Icon && <Icon className={classNames(label && "-ml-0.5", "h-4 w-4")} />}
         {label}
