@@ -176,7 +176,7 @@ export class Util {
   public static sqrt(value: number): number {
     if (value < 0) {
       throw new Error("Input value must be greater than or equal to 0.");
-    }    
+    }
     return Math.sqrt(value);
   }
 
