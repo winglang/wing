@@ -9,7 +9,10 @@
   },
   "types": "./src/index.ts",
   "publishConfig": {
-    "exports": "./dist/index.js",
+    "exports": {
+      ".": "./dist/index.js",
+      "./tailwind-plugin.cjs": "./tailwind-plugin.cjs"
+    },
     "types": "./dist/index.d.ts",
     "files": [
       "dist",
