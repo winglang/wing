@@ -207,7 +207,7 @@ export class Util {
 
   /**
    * Calculate the length of the vector from the origin to the point given by the coordinates
-   * @param coodinates Array of coodinates
+   * @param coordinates Array of coordinates
    * @returns
    */
   public static hypot(coodinates: number[]): number {
