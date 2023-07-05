@@ -907,9 +907,11 @@ impl<'a> JSifier<'a> {
 	}
 
 	fn jsify_class(&self, env: &SymbolEnv, class: &AstClass, ctx: &mut JSifyContext) -> CodeMaker {
-		// Lookup the class type
+		// lookup the class type
 		let class_type = env.lookup(&class.name, None).unwrap().as_type().unwrap();
 
+		// find the nearest lifts object. this could be in the current scope (in which case there will
+		// be a `lifts` fields in the `class_type` or the parent scope.
 		let lifts = if let Some(lifts) = &class_type.as_class().unwrap().lifts {
 			Some(lifts)
 		} else {
@@ -926,48 +928,48 @@ impl<'a> JSifier<'a> {
 		// emit the inflight side of the class into a separate file
 		let inflight_class_code = self.jsify_class_inflight(&class, ctx);
 
-		// if our class is declared within a preflight scope, then we emit the preflight class
-		if ctx.phase == Phase::Preflight {
-			// emit the inflight file
-			self.emit_inflight_file(&class, inflight_class_code, ctx);
-
-			let mut code = CodeMaker::default();
-
-			// default base class for preflight classes is `core.Resource`
-			let extends = if let Some(parent) = &class.parent {
-				let base = parent.as_type_reference().expect("resolve parent type");
-
-				format!(" extends {}", base)
-			} else {
-				format!(" extends {}", STDLIB_CORE_RESOURCE)
-			};
-
-			code.open(format!("class {}{extends} {{", class.name.name));
-
-			// emit the preflight constructor
-			code.add_code(self.jsify_preflight_constructor(&class, ctx));
-
-			// emit preflight methods
-			for m in class.preflight_methods(false) {
-				code.line(self.jsify_function(Some(class), m, ctx));
-			}
-
-			// emit the `_toInflightType` static method
-			code.add_code(self.jsify_to_inflight_type_method(&class, ctx));
-
-			// emit the `_toInflight` instance method
-			code.add_code(self.jsify_to_inflight_method(&class.name, ctx));
-
-			// call `_registerBindObject` to register the class's host binding methods (for type & instance binds).
-			code.add_code(self.jsify_register_bind_method(class, class_type, BindMethod::Instance, ctx));
-			code.add_code(self.jsify_register_bind_method(class, class_type, BindMethod::Type, ctx));
-
-			code.close("}");
-
-			code
-		} else {
-			inflight_class_code
+		// if this is inflight/independent, class, just emit the inflight class code inline and move on
+		// with your life.
+		if ctx.phase != Phase::Preflight {
+			return inflight_class_code;
 		}
+
+		// emit the inflight file
+		self.emit_inflight_file(&class, inflight_class_code, ctx);
+
+		// lets write the code for the preflight side of the class
+		let mut code = CodeMaker::default();
+
+		// default base class for preflight classes is `core.Resource`
+		let extends = if let Some(parent) = &class.parent {
+			let base = parent.as_type_reference().expect("resolve parent type");
+
+			format!(" extends {}", base)
+		} else {
+			format!(" extends {}", STDLIB_CORE_RESOURCE)
+		};
+
+		code.open(format!("class {}{extends} {{", class.name.name));
+
+		// emit the preflight constructor
+		code.add_code(self.jsify_preflight_constructor(&class, ctx));
+
+		// emit preflight methods
+		for m in class.preflight_methods(false) {
+			code.line(self.jsify_function(Some(class), m, ctx));
+		}
+
+		// emit the `_toInflight` and `_toInflightType` methods (TODO: renamed to `_liftObject` and
+		// `_liftType`).
+		code.add_code(self.jsify_to_inflight_type_method(&class, ctx));
+		code.add_code(self.jsify_to_inflight_method(&class.name, ctx));
+
+		// emit `_registerBindObject` to register bindings (for type & instance binds)
+		code.add_code(self.jsify_register_bind_method(class, class_type, BindMethod::Instance, ctx));
+		code.add_code(self.jsify_register_bind_method(class, class_type, BindMethod::Type, ctx));
+
+		code.close("}");
+		code
 	}
 
 	fn jsify_preflight_constructor(&self, class: &AstClass, ctx: &mut JSifyContext) -> CodeMaker {
