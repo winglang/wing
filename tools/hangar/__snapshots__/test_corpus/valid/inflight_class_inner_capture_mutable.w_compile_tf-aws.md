@@ -16,7 +16,7 @@ module.exports = function({  }) {
       }
       {((cond) => {if (!cond) throw new Error("assertion failed: new Inner().dang() == 11")})(((await new Inner().dang()) === 11))};
       {((cond) => {if (!cond) throw new Error("assertion failed: y.at(1) == 2")})(((await y.at(1)) === 2))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: i == 10")})((i === 10))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: i == 11")})((i === 11))};
     }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);

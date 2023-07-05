@@ -7,9 +7,9 @@ test "inner inflight class capture immutable" {
   class Inner {
     dang(): num {
       y.push(2);
-  
-      // TODO: this should be a compiler error (it doesn't)
-      // see https://github.com/winglang/wing/issues/2729
+    
+      // since the inner class is defined within the same scope, it is actually possible to reassign
+      // `i` and all will be good with the world.
       i = i + 1;
 
       return y.at(0) + 10;
@@ -17,7 +17,6 @@ test "inner inflight class capture immutable" {
   }
 
   assert(new Inner().dang() == 11);
-  assert(y.at(1) == 2);
-  
-  assert(i == 10); // we cannot reassign from within the inflight class above, so this should hold
+  assert(y.at(1) == 2); 
+  assert(i == 11);
 }
