@@ -6,7 +6,7 @@ keywords: [Wing contributors, contributors, Troubleshooting]
 
 # 🔨 Troubleshooting
 
-## `npm run build`
+## `pnpm build`
 
 #### Mac dev tools: `error: linking with cc failed: exit code: 1`
 Make sure to install Mac dev tools:
@@ -16,11 +16,11 @@ xcode-select --install
 
 #### NPM registry: `npm ERR! Cannot read properties of null (reading 'pickAlgorithm')`
 ```sh
-npm cache clear --force 
-npm config set registry https://registry.npmjs.org/
+pnpm store prune
+pnpm config set registry https://registry.npmjs.org/
 ```
 
-## `npm run test`
+## `pnpm test`
 
 `Error: Failed to bundle function: assertion failed [block != nullptr]: BasicBlock requested for unrecognized address (BuilderBase.h:550 block_for_offset)`
 
@@ -41,7 +41,7 @@ Check the installed node runtime architecture:
 node -e 'console.log(process.arch)'
 > arm64
 ```
-Your previously installed `esbuild/darwin-x64` package needs to be replaced by `esbuild/darwin-arm64`. Therefore, remove `esbuild` folder from `./libs/wing/wingsdk/node_modules` and run `npm install`.
+Your previously installed `esbuild/darwin-x64` package needs to be replaced by `esbuild/darwin-arm64`. Therefore, remove `esbuild` folder from `./libs/wing/wingsdk/node_modules` and run `pnpm install`.
 
 ## `This version of rustfmt is deprecated. Use rustfmt-nightly.`
 
