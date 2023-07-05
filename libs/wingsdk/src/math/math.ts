@@ -211,7 +211,7 @@ export class Util {
    * @returns
    */
   public static hypot(coordinates: number[]): number {
-    return Math.hypot(...coodinates);
+    return Math.hypot(...coordinates);
   }
 
   /**
