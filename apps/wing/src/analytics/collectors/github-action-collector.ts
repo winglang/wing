@@ -1,4 +1,4 @@
-import { CICollectorFactory, CIData, CIType } from "./ci-collector";
+import { CICollectorFactory, CIData, CIType } from "./ci-collector-factory";
 import { Collector } from "./collector";
 
 export class GithubActionCollector extends Collector {

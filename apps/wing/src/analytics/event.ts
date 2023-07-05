@@ -1,4 +1,4 @@
-import { CIData } from "./collectors/ci-collector";
+import { CIData } from "./collectors/ci-collector-factory";
 import { CLIData } from "./collectors/cli-collector";
 import { GitData } from "./collectors/git-collector";
 import { NodeData } from "./collectors/node-collector";

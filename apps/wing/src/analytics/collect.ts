@@ -4,7 +4,7 @@ import { AnalyticEvent } from "./event";
 import { GitCollector } from "./collectors/git-collector";
 import { OSCollector } from "./collectors/os-collector";
 import { NodeCollector } from "./collectors/node-collector";
-import { CICollectorFactory, CIData } from "./collectors/ci-collector";
+import { CICollectorFactory, CIData } from "./collectors/ci-collector-factory";
 import { CLICollector } from "./collectors/cli-collector";
 
 
