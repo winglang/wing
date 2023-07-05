@@ -46,6 +46,9 @@ export const createAppRouter = () => {
     "app.details": createProcedure.query(({ ctx }) => {
       return ctx.appDetails();
     }),
+    "app.wingfile": createProcedure.query(({ ctx }) => {
+      return ctx.wingfile.split("/").pop();
+    }),
     "app.logs": createProcedure
       .input(
         z.object({
@@ -86,7 +89,6 @@ export const createAppRouter = () => {
       )
       .query(async ({ ctx, input }) => {
         const simulator = await ctx.simulator();
-
         const { tree } = simulator.tree().rawData();
         return createExplorerItemFromConstructTreeNode(
           shakeTree(tree),
