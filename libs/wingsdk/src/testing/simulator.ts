@@ -226,9 +226,24 @@ export class Simulator {
       );
     }
 
-    for (const resource of this._config.resources) {
-      const object = this.getResource(resource.path) as ISimulatorResourceInstance;
-      await object.cleanup();
+    for (const resourceConfig of this._config.resources.slice().reverse()) {
+      const handle = resourceConfig.attrs?.handle;
+      if (!handle) {
+        throw new Error(
+          `Resource ${resourceConfig.path} could not be cleaned up, no handle for it was found.`
+        );
+      }
+      const resource = this._handles.deallocate(resourceConfig.attrs!.handle);
+      await resource.cleanup();
+
+      let event: Trace = {
+        type: TraceType.RESOURCE,
+        data: { message: `${resourceConfig.type} deleted.` },
+        sourcePath: resourceConfig.path,
+        sourceType: resourceConfig.type,
+        timestamp: new Date().toISOString(),
+      };
+      this._addTrace(event);
     }
 
     this._handles.reset();

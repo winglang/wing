@@ -313,6 +313,6 @@ test("api url can be used as environment variable", () => {
   // THEN
   const tfConfig = JSON.parse(output);
   expect(
-    tfConfig.resource.aws_lambda_function.Fn.environment.variables.API_URL
-  ).toEqual("${aws_api_gateway_stage.Api_api_stage_E0FA39D6.invoke_url}");
+    tfConfig.resource.aws_lambda_function.root_Fn_2A5D440A.environment.variables.API_URL
+  ).toEqual("${aws_api_gateway_stage.root_Api_api_stage_3E2E462A.invoke_url}");
 });
