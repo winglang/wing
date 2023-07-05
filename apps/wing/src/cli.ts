@@ -70,6 +70,7 @@ async function main() {
     try {
       ANALYTICS_EXPORT_FILE = await collectCommandAnalytics(cmd);
     } catch (err) {
+      // TODO: remove this log I only have it for debugging
       console.log(err);
       // ignore
     }
@@ -84,6 +85,7 @@ async function main() {
         exportAnalytics(ANALYTICS_EXPORT_FILE);
       }
     } catch (err) {
+      // TODO: remove this log I only have it for debugging
       console.log(err);
       // ignore
     }
