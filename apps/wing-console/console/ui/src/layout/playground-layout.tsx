@@ -102,9 +102,10 @@ export const PlaygroundLayout = ({
           className={classNames(
             theme.border3,
             "flex relative border-t border-slate-300 bg-slate-50",
-            cloudAppState === "error"
-              ? "min-h-[32rem] h-[32rem]"
-              : "min-h-[5rem] h-[15rem] max-h-[25rem]",
+            {
+              "min-h-[5rem] h-[30rem]": cloudAppState === "error",
+              "min-h-[5rem] h-[15rem]": cloudAppState !== "error",
+            },
           )}
         >
           <BlueScreenOfDeath
@@ -117,7 +118,7 @@ export const PlaygroundLayout = ({
           <RightResizableWidget
             className={classNames(
               theme.border3,
-              "h-full w-1/4 flex flex-col min-w-[10rem] min-h-[15rem] border-r border-b",
+              "h-full w-1/4 flex flex-col min-w-[10rem] min-h-[10rem] border-r",
             )}
           >
             <TestsTreeView />
