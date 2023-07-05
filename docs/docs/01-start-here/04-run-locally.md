@@ -27,8 +27,7 @@ and load the application.
 > The console will "hot reload" your app on each change in the source file parent directory.
 
 In your Wing Console you will see the following view of you application:
-
-![Wing Console desktop application view](./console-app.png 'Wing Console')
+<img width="1512" alt="Wing Console desktop application view" src="https://github.com/winglang/wing/assets/1727147/926eff7f-c795-4132-8efc-96e99f2c580c">
 
 You are now able to run your IDE and the Wing Console side-by-side and watch how changes to your code update your application.
 
@@ -38,8 +37,8 @@ In the console [map view](../tools/wing-console#view-and-explore-your-wing-appli
 The Queue and the Bucket are connected through the Function resource, which serves as a message handler and is set as the consumer for the Queue.
 
 Click on the Queue resource and pay attention to the right hand panel. This is the [resource interaction panel](../tools/wing-console#interact-with-your-wing-application).
+<img width="1512" alt="Queue resource view in Wing Console" src="https://github.com/winglang/wing/assets/1727147/301945b6-2837-407e-8da4-af969c738c4a">
 
-![Queue resource view in Wing Console](./console-queue.png 'Queue resource')
 
 ## Push a message to the Queue
 
@@ -51,7 +50,7 @@ Now, click on the Bucket in the Console map view. Notice that the interaction pa
 
 Check out the `wing.txt` file, click on it and see it's preview.
 
-![Bucket resource view in Wing Console](./console-bucket-1.png 'Bucket resource')
+<img width="757" alt="Bucket resource view in Wing Console" src="https://github.com/winglang/wing/assets/1727147/59d9028e-4d3d-4136-9991-c2f2877f9f5b">
 
 You can also download the file, using the **download** button.
 
