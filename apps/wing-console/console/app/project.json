@@ -10,8 +10,9 @@
       }
     },
     "test": {
+      "dependsOn": ["build"],
       "options": {
-        "command": "npm run vitest",
+        "command": "npm run test",
         "cwd": "apps/wing-console/console/app"
       }
     },

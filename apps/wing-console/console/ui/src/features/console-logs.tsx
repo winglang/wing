@@ -212,7 +212,7 @@ export const ConsoleLogs = ({
   const { theme } = useTheme();
 
   return (
-    <div className="w-full gap-x-2 text-2xs font-mono">
+    <div className="w-full gap-x-2 text-2xs font-mono" data-testid="logs">
       {logs.map((log) => (
         <LogEntryRow
           key={`${log.id}`}

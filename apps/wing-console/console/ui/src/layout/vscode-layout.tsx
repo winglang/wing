@@ -75,6 +75,7 @@ export const VscodeLayout = ({ cloudAppState, wingVersion }: LayoutProps) => {
             className={classNames(
               "absolute h-full w-full z-50 bg-white/70 dark:bg-slate-600/70",
             )}
+            data-testid="loading-overlay"
           >
             <div className=" absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
               <SpinnerLoader />

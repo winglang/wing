@@ -1,9 +1,18 @@
 import { createConsoleServer } from "@wingconsole/server";
 import { fileURLToPath } from "node:url";
+import { parseArgs } from "node:util";
 import open from "open";
 
 import { createServer as createViteServer } from "vite";
 import { viteConfig } from "./config.mjs";
+
+const options = parseArgs({
+  options: {
+    wingfile: {
+      type: "string",
+    },
+  },
+});
 
 const vite = await createViteServer({
   ...viteConfig,
@@ -11,7 +20,10 @@ const vite = await createViteServer({
 });
 
 const { port } = await createConsoleServer({
-  wingfile: fileURLToPath(new URL("../demo/index.w", import.meta.url)),
+  wingfile:
+    options.values.wingfile ??
+    fileURLToPath(new URL("../demo/index.w", import.meta.url)),
+  requestedPort: 1214,
   async onExpressCreated(app) {
     app.use(vite.middlewares);
   },

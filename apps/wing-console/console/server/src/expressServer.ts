@@ -5,7 +5,7 @@ import { Trace } from "@winglang/sdk/lib/cloud/index.js";
 import cors from "cors";
 import Emittery from "emittery";
 import express from "express";
-import getPort from "get-port";
+import getPort, { portNumbers } from "get-port";
 import { WebSocketServer } from "ws";
 
 import { Config } from "./config.js";
@@ -88,12 +88,21 @@ export const createExpressServer = async ({
   // Allow extending the express app (after trpc is set up).
   onExpressCreated?.(app);
 
-  log.info("Looking for an open port");
-  const port = await getPort({ port: requestedPort });
-  const server = app.listen(port);
+  const server = app.listen(
+    requestedPort
+      ? await getPort({
+          port: portNumbers(requestedPort, requestedPort + 100),
+        })
+      : undefined,
+  );
   await new Promise<void>((resolve) => {
     server.on("listening", resolve);
   });
+  const address = server.address();
+  if (!address || typeof address === "string") {
+    throw new Error("Server address is not available");
+  }
+  const { port } = address;
   log.info(`Server is listening on port ${port}`);
 
   const wss = new WebSocketServer({ server });

@@ -54,15 +54,14 @@ topic.onMessage(inflight (message: str): str => {
 //   return r.url();
 // }) as "Redis interaction";
 
-
 let table = new cloud.Table(cloud.TableProps{
   name: "simple-table",
   primaryKey: "id",
   columns: {
-    id: cloud.ColumnType.STRING,
-    name: cloud.ColumnType.STRING,
-    date: cloud.ColumnType.DATE,
-    active: cloud.ColumnType.BOOLEAN,
+    "id" => cloud.ColumnType.STRING,
+    "name" => cloud.ColumnType.STRING,
+    "date" => cloud.ColumnType.DATE,
+    "active" => cloud.ColumnType.BOOLEAN,
   },
 });
 
