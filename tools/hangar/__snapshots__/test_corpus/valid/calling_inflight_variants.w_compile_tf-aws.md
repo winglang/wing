@@ -265,11 +265,11 @@ class $Root extends $stdlib.std.Resource {
           Foo._registerBindObject(this, host, ["makeFn"]);
         }
         if (ops.includes("callFn2")) {
-          Foo._registerBindObject(this.inflight1, host, []);
+          Foo._registerBindObject(this.inflight1, host, ["handle"]);
           Foo._registerBindObject(this, host, ["inflight2"]);
         }
         if (ops.includes("makeFn")) {
-          Foo._registerBindObject(this.inflight1, host, []);
+          Foo._registerBindObject(this.inflight1, host, ["handle"]);
           Foo._registerBindObject(this, host, ["inflight2"]);
         }
         super._registerBind(host, ops);

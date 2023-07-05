@@ -444,7 +444,7 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("callInner")) {
-          D._registerBindObject(this.inner, host, []);
+          D._registerBindObject(this.inner, host, ["handle"]);
         }
         super._registerBind(host, ops);
       }
@@ -482,7 +482,7 @@ class $Root extends $stdlib.std.Resource {
           $Closure3._registerBindObject(a, host, ["goo"]);
           $Closure3._registerBindObject(d, host, ["callInner"]);
           $Closure3._registerBindObject(fn, host, ["handle"]);
-          $Closure3._registerBindObject(innerD, host, []);
+          $Closure3._registerBindObject(innerD, host, ["handle"]);
         }
         super._registerBind(host, ops);
       }

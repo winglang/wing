@@ -7,7 +7,13 @@ module.exports = function({  }) {
     async handle() {
       const y = [1];
       let i = 10;
-      const Inner = require("./inflight.Inner.js")({$i, $y});
+      class Inner {
+        async dang() {
+          (await y.push(2));
+          i = (i + 1);
+          return ((await y.at(0)) + 10);
+        }
+      }
       {((cond) => {if (!cond) throw new Error("assertion failed: new Inner().dang() == 11")})(((await new Inner().dang()) === 11))};
       {((cond) => {if (!cond) throw new Error("assertion failed: y.at(1) == 2")})(((await y.at(1)) === 2))};
       {((cond) => {if (!cond) throw new Error("assertion failed: i == 10")})((i === 10))};
@@ -19,21 +25,6 @@ module.exports = function({  }) {
     }
   }
   return $Closure1;
-}
-
-```
-
-## inflight.Inner.js
-```js
-module.exports = function({ $i, $y }) {
-  class Inner {
-    async dang() {
-      (await $y.push(2));
-      $i = ($i + 1);
-      return ((await $y.at(0)) + 10);
-    }
-  }
-  return Inner;
 }
 
 ```

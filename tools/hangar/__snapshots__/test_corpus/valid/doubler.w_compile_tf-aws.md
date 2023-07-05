@@ -394,7 +394,7 @@ class $Root extends $stdlib.std.Resource {
           }
           _registerBind(host, ops) {
             if (ops.includes("handle")) {
-              $Closure2._registerBindObject(handler, host, []);
+              $Closure2._registerBindObject(handler, host, ["handle"]);
             }
             super._registerBind(host, ops);
           }
