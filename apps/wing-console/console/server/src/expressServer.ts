@@ -33,6 +33,7 @@ export interface CreateExpressServerOptions {
   appState(): State;
   hostUtils?: HostUtils;
   onExpressCreated?: (app: express.Express) => void;
+  wingfile: string;
 }
 
 export const createExpressServer = async ({
@@ -47,6 +48,7 @@ export const createExpressServer = async ({
   appState,
   hostUtils,
   onExpressCreated,
+  wingfile,
 }: CreateExpressServerOptions) => {
   const app = express();
   app.use(cors());
@@ -71,6 +73,7 @@ export const createExpressServer = async ({
       config,
       appState,
       hostUtils,
+      wingfile: wingfile ?? "",
     };
   };
   app.use(

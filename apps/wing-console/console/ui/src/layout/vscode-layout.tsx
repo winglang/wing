@@ -7,9 +7,8 @@ import {
 } from "@wingconsole/design-system";
 import { State } from "@wingconsole/server";
 import classNames from "classnames";
-import { useContext } from "react";
+import { useEffect } from "react";
 
-import { AppContext } from "../AppContext.js";
 import { ConsoleLogsFilters } from "../features/console-logs-filters.js";
 import { ConsoleLogs } from "../features/console-logs.js";
 import { MapView } from "../features/map-view.js";
@@ -20,6 +19,7 @@ import { ResourceMetadata } from "../ui/resource-metadata.js";
 
 import { StatusBar } from "./status-bar.js";
 import { useLayout } from "./use-layout.js";
+import { Header } from "./header.js";
 
 export interface LayoutProps {
   cloudAppState: State;
@@ -48,12 +48,16 @@ export const VscodeLayout = ({ cloudAppState, wingVersion }: LayoutProps) => {
     logsRef,
     logs,
     onResourceClick,
+    title,
+    wingfile,
   } = useLayout({
     cloudAppState,
     defaultLogLevels: ["info", "warn", "error"],
   });
 
-  const { title } = useContext(AppContext);
+  useEffect(() => {
+    document.title = title;
+  }, [title]);
 
   return (
     <div
@@ -64,16 +68,7 @@ export const VscodeLayout = ({ cloudAppState, wingVersion }: LayoutProps) => {
         theme.text2,
       )}
     >
-      <div
-        className={classNames(
-          "w-full h-8 draggable-frame border-b flex items-center justify-center",
-          theme.bg3,
-          theme.border3,
-          theme.text2,
-        )}
-      >
-        <div>{title}</div>
-      </div>
+      <Header title={wingfile.data ?? ""} />
       <div className="flex-1 flex relative">
         {loading && (
           <div
@@ -97,7 +92,7 @@ export const VscodeLayout = ({ cloudAppState, wingVersion }: LayoutProps) => {
         <RightResizableWidget
           className={classNames(
             theme.border3,
-            "h-full flex flex-col w-80 min-w-[10rem] min-h-[15rem] border-r",
+            "h-full flex flex-col w-80 min-w-[10rem] min-h-[10rem] border-r",
           )}
         >
           <div className="flex grow">
