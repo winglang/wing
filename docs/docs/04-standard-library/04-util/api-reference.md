@@ -23,7 +23,7 @@ Properties for `util.waitUntil`.
 ```wing
 bring util;
 
-let WaitUntilProps = util.WaitUntilProps{ ... }
+let WaitUntilProps = util.WaitUntilProps{ ... };
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -72,7 +72,7 @@ Utility functions.
 ```wing
 bring util;
 
-new util.Util()
+new util.Util();
 ```
 
 | **Name** | **Type** | **Description** |
@@ -97,7 +97,7 @@ new util.Util()
 ```wing
 bring util;
 
-util.Util.env(name: str)
+util.Util.env(name: str);
 ```
 
 Returns the value of an environment variable.
@@ -117,7 +117,7 @@ The name of the environment variable.
 ```wing
 bring util;
 
-util.Util.sleep(delay: Duration)
+util.Util.sleep(delay: Duration);
 ```
 
 **Inflight client:** [true](#true)
@@ -137,7 +137,7 @@ The time to suspend execution.
 ```wing
 bring util;
 
-util.Util.tryEnv(name: str)
+util.Util.tryEnv(name: str);
 ```
 
 Returns the value of an environment variable.
@@ -157,7 +157,7 @@ The name of the environment variable.
 ```wing
 bring util;
 
-util.Util.waitUntil(predicate: IPredicateHandler, props?: WaitUntilProps)
+util.Util.waitUntil(predicate: IPredicateHandler, props?: WaitUntilProps);
 ```
 
 **Inflight client:** [true](#true)

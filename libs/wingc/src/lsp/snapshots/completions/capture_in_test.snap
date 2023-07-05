@@ -5,7 +5,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 5
   documentation:
     kind: markdown
-    value: "```wing\npreflight display: Display\n```\n---\n```wing\nclass Display\n```\n---\nInformation on how to display a resource in the UI.\n\n*@skipDocs*"
+    value: "```wing\npreflight display: Display\n```\n---\n```wing\nclass Display\n```\n---\nInformation on how to display a resource in the UI."
   sortText: ee|display
 - label: node
   kind: 5

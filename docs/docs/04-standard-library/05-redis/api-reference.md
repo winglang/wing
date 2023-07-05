@@ -24,7 +24,7 @@ Represents a cloud redis db.
 ```wing
 bring redis;
 
-new redis.Redis()
+new redis.Redis();
 ```
 
 | **Name** | **Type** | **Description** |
@@ -82,7 +82,7 @@ Base class for `Redis` Client.
 ```wing
 bring redis;
 
-new redis.RedisClientBase()
+new redis.RedisClientBase();
 ```
 
 | **Name** | **Type** | **Description** |

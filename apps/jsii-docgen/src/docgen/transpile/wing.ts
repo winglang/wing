@@ -2,8 +2,7 @@ import * as reflect from "jsii-reflect";
 import * as transpile from "./transpile";
 import { TranspiledTypeReferenceToStringOptions } from "./transpile";
 import { submodulePath } from "../schema";
-
-const STD = "std";
+import { HIDDEN_IMPORTS } from "../view/wing-filters";
 
 // Helpers
 const formatArguments = (inputs: string[]) => {
@@ -18,10 +17,10 @@ const typeToString: TranspiledTypeReferenceToStringOptions = {
 
 const formatStructInitialization = (type: transpile.TranspiledType) => {
   const target =
-    type.submodule && type.submodule !== STD
+    type.submodule && !HIDDEN_IMPORTS.includes(type.submodule)
       ? `${type.namespace}.${type.name}`
       : type.name;
-  return `let ${type.name} = ${target}{ ... }`;
+  return `let ${type.name} = ${target}{ ... };`;
 };
 
 const formatClassInitialization = (
@@ -29,10 +28,10 @@ const formatClassInitialization = (
   inputs: string[]
 ) => {
   const target =
-    type.submodule && type.submodule !== STD
+    type.submodule && !HIDDEN_IMPORTS.includes(type.submodule)
       ? `${type.namespace}.${type.name}`
       : type.name;
-  return `new ${target}(${formatArguments(inputs)})`;
+  return `new ${target}(${formatArguments(inputs)});`;
 };
 
 const formatInvocation = (
@@ -41,24 +40,26 @@ const formatInvocation = (
   method: string
 ) => {
   let target =
-    type.submodule && type.submodule !== STD
+    type.submodule && !HIDDEN_IMPORTS.includes(type.submodule)
       ? `${type.namespace}.${type.name}`
       : type.name;
   if (method) {
     target = `${target}.${method}`;
   }
-  return `${target}(${formatArguments(inputs)})`;
+  return `${target}(${formatArguments(inputs)});`;
 };
 
 const formatImport = (type: transpile.TranspiledType) => {
   // TODO idk
   if (type.module.endsWith("/sdk")) {
-    return type.submodule !== STD ? `bring ${type.submodule};` : "";
+    return type.submodule && !HIDDEN_IMPORTS.includes(type.submodule)
+      ? `bring ${type.submodule};`
+      : "";
   }
   if (type.submodule) {
-    return `bring { ${type.submodule} } from "${type.module}"`;
+    return `bring { ${type.submodule} } from "${type.module}";`;
   } else {
-    return `bring { ${type.name} } from "${type.module}"`;
+    return `bring { ${type.name} } from "${type.module}";`;
   }
 };
 

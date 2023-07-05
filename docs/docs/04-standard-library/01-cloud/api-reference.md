@@ -22,7 +22,7 @@ Functionality shared between all `Api` implementations.
 ```wing
 bring cloud;
 
-new cloud.Api(props?: ApiProps)
+new cloud.Api(props?: ApiProps);
 ```
 
 | **Name** | **Type** | **Description** |
@@ -367,7 +367,7 @@ Represents a cloud object store.
 ```wing
 bring cloud;
 
-new cloud.Bucket(props?: BucketProps)
+new cloud.Bucket(props?: BucketProps);
 ```
 
 | **Name** | **Type** | **Description** |
@@ -543,7 +543,7 @@ Represents a distributed atomic counter.
 ```wing
 bring cloud;
 
-new cloud.Counter(props?: CounterProps)
+new cloud.Counter(props?: CounterProps);
 ```
 
 | **Name** | **Type** | **Description** |
@@ -620,7 +620,7 @@ Represents a function.
 ```wing
 bring cloud;
 
-new cloud.Function(inflight: IFunctionHandler, props?: FunctionProps)
+new cloud.Function(inflight: IFunctionHandler, props?: FunctionProps);
 ```
 
 | **Name** | **Type** | **Description** |
@@ -729,7 +729,7 @@ Represents a queue.
 ```wing
 bring cloud;
 
-new cloud.Queue(props?: QueueProps)
+new cloud.Queue(props?: QueueProps);
 ```
 
 | **Name** | **Type** | **Description** |
@@ -818,7 +818,7 @@ Represents a schedule.
 ```wing
 bring cloud;
 
-new cloud.Schedule(props?: ScheduleProps)
+new cloud.Schedule(props?: ScheduleProps);
 ```
 
 | **Name** | **Type** | **Description** |
@@ -907,7 +907,7 @@ Represents a cloud secret.
 ```wing
 bring cloud;
 
-new cloud.Secret(props?: SecretProps)
+new cloud.Secret(props?: SecretProps);
 ```
 
 | **Name** | **Type** | **Description** |
@@ -969,7 +969,7 @@ Represents a service.
 ```wing
 bring cloud;
 
-new cloud.Service(props: ServiceProps)
+new cloud.Service(props: ServiceProps);
 ```
 
 | **Name** | **Type** | **Description** |
@@ -1031,7 +1031,7 @@ Represents a NoSQL database table that can be used to store and query data.
 ```wing
 bring cloud;
 
-new cloud.Table(props: TableProps)
+new cloud.Table(props: TableProps);
 ```
 
 | **Name** | **Type** | **Description** |
@@ -1159,7 +1159,7 @@ Represents a test engine.
 ```wing
 bring cloud;
 
-new cloud.TestRunner(props?: TestRunnerProps)
+new cloud.TestRunner(props?: TestRunnerProps);
 ```
 
 | **Name** | **Type** | **Description** |
@@ -1236,7 +1236,7 @@ Represents a topic.
 ```wing
 bring cloud;
 
-new cloud.Topic(props?: TopicProps)
+new cloud.Topic(props?: TopicProps);
 ```
 
 | **Name** | **Type** | **Description** |
@@ -1325,7 +1325,7 @@ Represents a cloud static website.
 ```wing
 bring cloud;
 
-new cloud.Website(props: WebsiteProps)
+new cloud.Website(props: WebsiteProps);
 ```
 
 | **Name** | **Type** | **Description** |
@@ -1446,7 +1446,7 @@ Options for Api patch endpoint.
 ```wing
 bring cloud;
 
-let ApiConnectProps = cloud.ApiConnectProps{ ... }
+let ApiConnectProps = cloud.ApiConnectProps{ ... };
 ```
 
 
@@ -1459,7 +1459,7 @@ Options for Api put endpoint.
 ```wing
 bring cloud;
 
-let ApiDeleteProps = cloud.ApiDeleteProps{ ... }
+let ApiDeleteProps = cloud.ApiDeleteProps{ ... };
 ```
 
 
@@ -1472,7 +1472,7 @@ Options for Api get endpoint.
 ```wing
 bring cloud;
 
-let ApiGetProps = cloud.ApiGetProps{ ... }
+let ApiGetProps = cloud.ApiGetProps{ ... };
 ```
 
 
@@ -1485,7 +1485,7 @@ Options for Api patch endpoint.
 ```wing
 bring cloud;
 
-let ApiHeadProps = cloud.ApiHeadProps{ ... }
+let ApiHeadProps = cloud.ApiHeadProps{ ... };
 ```
 
 
@@ -1498,7 +1498,7 @@ Options for Api patch endpoint.
 ```wing
 bring cloud;
 
-let ApiOptionsProps = cloud.ApiOptionsProps{ ... }
+let ApiOptionsProps = cloud.ApiOptionsProps{ ... };
 ```
 
 
@@ -1511,7 +1511,7 @@ Options for Api patch endpoint.
 ```wing
 bring cloud;
 
-let ApiPatchProps = cloud.ApiPatchProps{ ... }
+let ApiPatchProps = cloud.ApiPatchProps{ ... };
 ```
 
 
@@ -1524,7 +1524,7 @@ Options for Api post endpoint.
 ```wing
 bring cloud;
 
-let ApiPostProps = cloud.ApiPostProps{ ... }
+let ApiPostProps = cloud.ApiPostProps{ ... };
 ```
 
 
@@ -1537,7 +1537,7 @@ Properties for `Api`.
 ```wing
 bring cloud;
 
-let ApiProps = cloud.ApiProps{ ... }
+let ApiProps = cloud.ApiProps{ ... };
 ```
 
 
@@ -1550,7 +1550,7 @@ Options for Api put endpoint.
 ```wing
 bring cloud;
 
-let ApiPutProps = cloud.ApiPutProps{ ... }
+let ApiPutProps = cloud.ApiPutProps{ ... };
 ```
 
 
@@ -1563,7 +1563,7 @@ Shape of a request to an inflight handler.
 ```wing
 bring cloud;
 
-let ApiRequest = cloud.ApiRequest{ ... }
+let ApiRequest = cloud.ApiRequest{ ... };
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -1660,7 +1660,7 @@ Shape of a response from a inflight handler.
 ```wing
 bring cloud;
 
-let ApiResponse = cloud.ApiResponse{ ... }
+let ApiResponse = cloud.ApiResponse{ ... };
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -1718,7 +1718,7 @@ Interface for delete method inside `Bucket`.
 ```wing
 bring cloud;
 
-let BucketDeleteOptions = cloud.BucketDeleteOptions{ ... }
+let BucketDeleteOptions = cloud.BucketDeleteOptions{ ... };
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -1751,7 +1751,7 @@ on_event notification payload- will be in use after solving issue: https://githu
 ```wing
 bring cloud;
 
-let BucketEvent = cloud.BucketEvent{ ... }
+let BucketEvent = cloud.BucketEvent{ ... };
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -1796,7 +1796,7 @@ on create event options.
 ```wing
 bring cloud;
 
-let BucketOnCreateProps = cloud.BucketOnCreateProps{ ... }
+let BucketOnCreateProps = cloud.BucketOnCreateProps{ ... };
 ```
 
 
@@ -1809,7 +1809,7 @@ on delete event options.
 ```wing
 bring cloud;
 
-let BucketOnDeleteProps = cloud.BucketOnDeleteProps{ ... }
+let BucketOnDeleteProps = cloud.BucketOnDeleteProps{ ... };
 ```
 
 
@@ -1822,7 +1822,7 @@ on any event options.
 ```wing
 bring cloud;
 
-let BucketOnEventProps = cloud.BucketOnEventProps{ ... }
+let BucketOnEventProps = cloud.BucketOnEventProps{ ... };
 ```
 
 
@@ -1835,7 +1835,7 @@ on update event options.
 ```wing
 bring cloud;
 
-let BucketOnUpdateProps = cloud.BucketOnUpdateProps{ ... }
+let BucketOnUpdateProps = cloud.BucketOnUpdateProps{ ... };
 ```
 
 
@@ -1848,7 +1848,7 @@ Properties for `Bucket`.
 ```wing
 bring cloud;
 
-let BucketProps = cloud.BucketProps{ ... }
+let BucketProps = cloud.BucketProps{ ... };
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -1881,7 +1881,7 @@ Properties for `Counter`.
 ```wing
 bring cloud;
 
-let CounterProps = cloud.CounterProps{ ... }
+let CounterProps = cloud.CounterProps{ ... };
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -1916,7 +1916,7 @@ This is the type users see when constructing a cloud.Function instance.
 ```wing
 bring cloud;
 
-let FunctionProps = cloud.FunctionProps{ ... }
+let FunctionProps = cloud.FunctionProps{ ... };
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -1977,7 +1977,7 @@ Options when getting a secret value.
 ```wing
 bring cloud;
 
-let GetSecretValueOptions = cloud.GetSecretValueOptions{ ... }
+let GetSecretValueOptions = cloud.GetSecretValueOptions{ ... };
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -2010,7 +2010,7 @@ Properties for `Queue`.
 ```wing
 bring cloud;
 
-let QueueProps = cloud.QueueProps{ ... }
+let QueueProps = cloud.QueueProps{ ... };
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -2071,7 +2071,7 @@ Options for Queue.setConsumer.
 ```wing
 bring cloud;
 
-let QueueSetConsumerProps = cloud.QueueSetConsumerProps{ ... }
+let QueueSetConsumerProps = cloud.QueueSetConsumerProps{ ... };
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -2146,7 +2146,7 @@ Options for Schedule.onTick.
 ```wing
 bring cloud;
 
-let ScheduleOnTickProps = cloud.ScheduleOnTickProps{ ... }
+let ScheduleOnTickProps = cloud.ScheduleOnTickProps{ ... };
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -2207,7 +2207,7 @@ Properties for `Schedule`.
 ```wing
 bring cloud;
 
-let ScheduleProps = cloud.ScheduleProps{ ... }
+let ScheduleProps = cloud.ScheduleProps{ ... };
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -2270,7 +2270,7 @@ Properties for `Secret`.
 ```wing
 bring cloud;
 
-let SecretProps = cloud.SecretProps{ ... }
+let SecretProps = cloud.SecretProps{ ... };
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -2307,7 +2307,7 @@ Options for Service.onStart.
 ```wing
 bring cloud;
 
-let ServiceOnStartProps = cloud.ServiceOnStartProps{ ... }
+let ServiceOnStartProps = cloud.ServiceOnStartProps{ ... };
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -2368,7 +2368,7 @@ Properties for `Service`.
 ```wing
 bring cloud;
 
-let ServiceProps = cloud.ServiceProps{ ... }
+let ServiceProps = cloud.ServiceProps{ ... };
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -2428,7 +2428,7 @@ Properties for `Table`.
 ```wing
 bring cloud;
 
-let TableProps = cloud.TableProps{ ... }
+let TableProps = cloud.TableProps{ ... };
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -2506,7 +2506,7 @@ A result of a single test.
 ```wing
 bring cloud;
 
-let TestResult = cloud.TestResult{ ... }
+let TestResult = cloud.TestResult{ ... };
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -2577,7 +2577,7 @@ Properties for `TestRunner`.
 ```wing
 bring cloud;
 
-let TestRunnerProps = cloud.TestRunnerProps{ ... }
+let TestRunnerProps = cloud.TestRunnerProps{ ... };
 ```
 
 
@@ -2590,7 +2590,7 @@ Options for `Topic.onMessage`.
 ```wing
 bring cloud;
 
-let TopicOnMessageProps = cloud.TopicOnMessageProps{ ... }
+let TopicOnMessageProps = cloud.TopicOnMessageProps{ ... };
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -2651,7 +2651,7 @@ Properties for `Topic`.
 ```wing
 bring cloud;
 
-let TopicProps = cloud.TopicProps{ ... }
+let TopicProps = cloud.TopicProps{ ... };
 ```
 
 
@@ -2664,7 +2664,7 @@ Represents an trace emitted during simulation.
 ```wing
 bring cloud;
 
-let Trace = cloud.Trace{ ... }
+let Trace = cloud.Trace{ ... };
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -2755,7 +2755,7 @@ website props.
 ```wing
 bring cloud;
 
-let WebsiteProps = cloud.WebsiteProps{ ... }
+let WebsiteProps = cloud.WebsiteProps{ ... };
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>

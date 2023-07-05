@@ -37,9 +37,9 @@ Object {
               },
             },
           ],
-          "usage": "bring { GreeterBucket } from \\"construct-library\\"
+          "usage": "bring { GreeterBucket } from \\"construct-library\\";
 
-new GreeterBucket(props?: BucketProps)",
+new GreeterBucket(props?: BucketProps);",
         },
         "instanceMethods": Array [
           Object {
@@ -1379,9 +1379,9 @@ first call to addToResourcePolicy(s).",
                 },
               },
             ],
-            "usage": "bring { GreeterBucket } from \\"construct-library\\"
+            "usage": "bring { GreeterBucket } from \\"construct-library\\";
 
-GreeterBucket.isResource(construct: IConstruct)",
+GreeterBucket.isResource(construct: IConstruct);",
           },
           Object {
             "displayName": "fromBucketArn",
@@ -1401,9 +1401,9 @@ GreeterBucket.isResource(construct: IConstruct)",
                 },
               },
             ],
-            "usage": "bring { GreeterBucket } from \\"construct-library\\"
+            "usage": "bring { GreeterBucket } from \\"construct-library\\";
 
-GreeterBucket.fromBucketArn(bucketArn: str)",
+GreeterBucket.fromBucketArn(bucketArn: str);",
           },
           Object {
             "displayName": "fromBucketAttributes",
@@ -1438,9 +1438,9 @@ GreeterBucket.fromBucketArn(bucketArn: str)",
                 },
               },
             ],
-            "usage": "bring { GreeterBucket } from \\"construct-library\\"
+            "usage": "bring { GreeterBucket } from \\"construct-library\\";
 
-GreeterBucket.fromBucketAttributes(attrs: BucketAttributes)",
+GreeterBucket.fromBucketAttributes(attrs: BucketAttributes);",
           },
           Object {
             "displayName": "fromBucketName",
@@ -1460,9 +1460,9 @@ GreeterBucket.fromBucketAttributes(attrs: BucketAttributes)",
                 },
               },
             ],
-            "usage": "bring { GreeterBucket } from \\"construct-library\\"
+            "usage": "bring { GreeterBucket } from \\"construct-library\\";
 
-GreeterBucket.fromBucketName(bucketName: str)",
+GreeterBucket.fromBucketName(bucketName: str);",
           },
           Object {
             "displayName": "validateBucketName",
@@ -1486,9 +1486,9 @@ GreeterBucket.fromBucketName(bucketName: str)",
                 },
               },
             ],
-            "usage": "bring { GreeterBucket } from \\"construct-library\\"
+            "usage": "bring { GreeterBucket } from \\"construct-library\\";
 
-GreeterBucket.validateBucketName(physicalName: str)",
+GreeterBucket.validateBucketName(physicalName: str);",
           },
         ],
       },
@@ -1525,9 +1525,9 @@ for construct libraries.
 #### Initializers <a name=\\"Initializers\\" id=\\"construct-library.GreeterBucket.Initializer\\"></a>
 
 \`\`\`wing
-bring { GreeterBucket } from \\"construct-library\\"
+bring { GreeterBucket } from \\"construct-library\\";
 
-new GreeterBucket(props?: BucketProps)
+new GreeterBucket(props?: BucketProps);
 \`\`\`
 
 | **Name** | **Type** | **Description** |
@@ -2211,9 +2211,9 @@ greet(): void
 ##### \`isResource\` <a name=\\"isResource\\" id=\\"construct-library.GreeterBucket.isResource\\"></a>
 
 \`\`\`wing
-bring { GreeterBucket } from \\"construct-library\\"
+bring { GreeterBucket } from \\"construct-library\\";
 
-GreeterBucket.isResource(construct: IConstruct)
+GreeterBucket.isResource(construct: IConstruct);
 \`\`\`
 
 Check whether the given construct is a Resource.
@@ -2227,9 +2227,9 @@ Check whether the given construct is a Resource.
 ##### \`fromBucketArn\` <a name=\\"fromBucketArn\\" id=\\"construct-library.GreeterBucket.fromBucketArn\\"></a>
 
 \`\`\`wing
-bring { GreeterBucket } from \\"construct-library\\"
+bring { GreeterBucket } from \\"construct-library\\";
 
-GreeterBucket.fromBucketArn(bucketArn: str)
+GreeterBucket.fromBucketArn(bucketArn: str);
 \`\`\`
 
 ###### \`bucketArn\`<sup>Required</sup> <a name=\\"bucketArn\\" id=\\"construct-library.GreeterBucket.fromBucketArn.parameter.bucketArn\\"></a>
@@ -2241,9 +2241,9 @@ GreeterBucket.fromBucketArn(bucketArn: str)
 ##### \`fromBucketAttributes\` <a name=\\"fromBucketAttributes\\" id=\\"construct-library.GreeterBucket.fromBucketAttributes\\"></a>
 
 \`\`\`wing
-bring { GreeterBucket } from \\"construct-library\\"
+bring { GreeterBucket } from \\"construct-library\\";
 
-GreeterBucket.fromBucketAttributes(attrs: BucketAttributes)
+GreeterBucket.fromBucketAttributes(attrs: BucketAttributes);
 \`\`\`
 
 Creates a Bucket construct that represents an external bucket.
@@ -2262,9 +2262,9 @@ Can be obtained from a call to
 ##### \`fromBucketName\` <a name=\\"fromBucketName\\" id=\\"construct-library.GreeterBucket.fromBucketName\\"></a>
 
 \`\`\`wing
-bring { GreeterBucket } from \\"construct-library\\"
+bring { GreeterBucket } from \\"construct-library\\";
 
-GreeterBucket.fromBucketName(bucketName: str)
+GreeterBucket.fromBucketName(bucketName: str);
 \`\`\`
 
 ###### \`bucketName\`<sup>Required</sup> <a name=\\"bucketName\\" id=\\"construct-library.GreeterBucket.fromBucketName.parameter.bucketName\\"></a>
@@ -2276,9 +2276,9 @@ GreeterBucket.fromBucketName(bucketName: str)
 ##### \`validateBucketName\` <a name=\\"validateBucketName\\" id=\\"construct-library.GreeterBucket.validateBucketName\\"></a>
 
 \`\`\`wing
-bring { GreeterBucket } from \\"construct-library\\"
+bring { GreeterBucket } from \\"construct-library\\";
 
-GreeterBucket.validateBucketName(physicalName: str)
+GreeterBucket.validateBucketName(physicalName: str);
 \`\`\`
 
 Thrown an exception if the given bucket name is not valid.

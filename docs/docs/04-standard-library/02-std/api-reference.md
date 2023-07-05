@@ -176,7 +176,7 @@ Boolean.
 ##### `fromJson` <a name="fromJson" id="@winglang/sdk.std.Boolean.fromJson"></a>
 
 ```wing
-Boolean.fromJson(json: Json)
+Boolean.fromJson(json: Json);
 ```
 
 Parse a boolean from Json.
@@ -213,7 +213,7 @@ Represents a length of time.
 ##### `fromDays` <a name="fromDays" id="@winglang/sdk.std.Duration.fromDays"></a>
 
 ```wing
-Duration.fromDays(amount: num)
+Duration.fromDays(amount: num);
 ```
 
 Create a Duration representing an amount of days.
@@ -229,7 +229,7 @@ the amount of Days the `Duration` will represent.
 ##### `fromHours` <a name="fromHours" id="@winglang/sdk.std.Duration.fromHours"></a>
 
 ```wing
-Duration.fromHours(amount: num)
+Duration.fromHours(amount: num);
 ```
 
 Create a Duration representing an amount of hours.
@@ -245,7 +245,7 @@ the amount of Hours the `Duration` will represent.
 ##### `fromMilliseconds` <a name="fromMilliseconds" id="@winglang/sdk.std.Duration.fromMilliseconds"></a>
 
 ```wing
-Duration.fromMilliseconds(amount: num)
+Duration.fromMilliseconds(amount: num);
 ```
 
 Create a Duration representing an amount of milliseconds.
@@ -261,7 +261,7 @@ the amount of Milliseconds the `Duration` will represent.
 ##### `fromMinutes` <a name="fromMinutes" id="@winglang/sdk.std.Duration.fromMinutes"></a>
 
 ```wing
-Duration.fromMinutes(amount: num)
+Duration.fromMinutes(amount: num);
 ```
 
 Create a Duration representing an amount of minutes.
@@ -277,7 +277,7 @@ the amount of Minutes the `Duration` will represent.
 ##### `fromMonths` <a name="fromMonths" id="@winglang/sdk.std.Duration.fromMonths"></a>
 
 ```wing
-Duration.fromMonths(amount: num)
+Duration.fromMonths(amount: num);
 ```
 
 Create a Duration representing an amount of months.
@@ -293,7 +293,7 @@ the amount of Months the `Duration` will represent.
 ##### `fromSeconds` <a name="fromSeconds" id="@winglang/sdk.std.Duration.fromSeconds"></a>
 
 ```wing
-Duration.fromSeconds(amount: num)
+Duration.fromSeconds(amount: num);
 ```
 
 Create a Duration representing an amount of seconds.
@@ -309,7 +309,7 @@ the amount of Seconds the `Duration` will represent.
 ##### `fromYears` <a name="fromYears" id="@winglang/sdk.std.Duration.fromYears"></a>
 
 ```wing
-Duration.fromYears(amount: num)
+Duration.fromYears(amount: num);
 ```
 
 Create a Duration representing an amount of years.
@@ -573,7 +573,7 @@ The index of the element in the Json Array to return.
 ##### `deepCopy` <a name="deepCopy" id="@winglang/sdk.std.Json.deepCopy"></a>
 
 ```wing
-Json.deepCopy(json: MutJson)
+Json.deepCopy(json: MutJson);
 ```
 
 Creates an immutable deep copy of the Json.
@@ -589,7 +589,7 @@ to copy.
 ##### `deepCopyMut` <a name="deepCopyMut" id="@winglang/sdk.std.Json.deepCopyMut"></a>
 
 ```wing
-Json.deepCopyMut(json: Json)
+Json.deepCopyMut(json: Json);
 ```
 
 Creates a mutable deep copy of the Json.
@@ -605,7 +605,7 @@ to copy.
 ##### `delete` <a name="delete" id="@winglang/sdk.std.Json.delete"></a>
 
 ```wing
-Json.delete(json: MutJson, key: str)
+Json.delete(json: MutJson, key: str);
 ```
 
 Deletes a key in a given Json.
@@ -629,7 +629,7 @@ the key to delete.
 ##### `has` <a name="has" id="@winglang/sdk.std.Json.has"></a>
 
 ```wing
-Json.has(json: Json, key: str)
+Json.has(json: Json, key: str);
 ```
 
 Checks if a Json object has a given key.
@@ -653,7 +653,7 @@ The key to check.
 ##### `keys` <a name="keys" id="@winglang/sdk.std.Json.keys"></a>
 
 ```wing
-Json.keys(json: any)
+Json.keys(json: any);
 ```
 
 Returns the keys from the Json object.
@@ -669,7 +669,7 @@ to get keys from.
 ##### `parse` <a name="parse" id="@winglang/sdk.std.Json.parse"></a>
 
 ```wing
-Json.parse(str: str)
+Json.parse(str: str);
 ```
 
 Parse a string into a Json.
@@ -685,7 +685,7 @@ to parse as Json.
 ##### `stringify` <a name="stringify" id="@winglang/sdk.std.Json.stringify"></a>
 
 ```wing
-Json.stringify(json: any, indent?: num)
+Json.stringify(json: any, indent?: num);
 ```
 
 Formats Json as string.
@@ -709,7 +709,7 @@ to format as string.
 ##### `tryParse` <a name="tryParse" id="@winglang/sdk.std.Json.tryParse"></a>
 
 ```wing
-Json.tryParse(str: str)
+Json.tryParse(str: str);
 ```
 
 Try to parse a string into a Json.
@@ -725,7 +725,7 @@ to parse as Json.
 ##### `values` <a name="values" id="@winglang/sdk.std.Json.values"></a>
 
 ```wing
-Json.values(json: Json)
+Json.values(json: Json);
 ```
 
 Returns the values from the Json.
@@ -1454,7 +1454,7 @@ Number.
 ##### `fromJson` <a name="fromJson" id="@winglang/sdk.std.Number.fromJson"></a>
 
 ```wing
-Number.fromJson(json: Json)
+Number.fromJson(json: Json);
 ```
 
 Parse a number from Json.
@@ -1470,7 +1470,7 @@ to parse number from.
 ##### `fromStr` <a name="fromStr" id="@winglang/sdk.std.Number.fromStr"></a>
 
 ```wing
-Number.fromStr(str: str)
+Number.fromStr(str: str);
 ```
 
 Parse a number from string.
@@ -1754,7 +1754,7 @@ Returns this string in upper case.
 ##### `fromJson` <a name="fromJson" id="@winglang/sdk.std.String.fromJson"></a>
 
 ```wing
-String.fromJson(json: Json)
+String.fromJson(json: Json);
 ```
 
 Parse string from Json.
