@@ -2,22 +2,20 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ std_Json }) {
+module.exports = function({ $std_Json }) {
   class $Closure1 {
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
-    }
-    async $inflight_init()  {
-    }
-    async handle(req)  {
+    async handle(req) {
       const issues = (JSON.parse("[{\"foo\": \"bar\"}, {\"foo\": \"baz\"}, {\"foo\": \"qux\"}]"));
       return {
       "status": 200,
       "headers": Object.freeze({"Content-Type":"application/json"}),
       "body": ((args) => { return JSON.stringify(args[0], null, args[1]) })([issues]),}
       ;
+    }
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
     }
   }
   return $Closure1;
@@ -27,20 +25,18 @@ module.exports = function({ std_Json }) {
 
 ## inflight.$Closure2.js
 ```js
-module.exports = function({ api, http_Util, std_Json }) {
+module.exports = function({ $api_url, $http_Util, $std_Json }) {
   class $Closure2 {
+    async handle() {
+      const res = (await $http_Util.get(($api_url + "/foo")));
+      const body = (JSON.parse((res.body ?? "")));
+      const a1 = (body)[0];
+      {((cond) => {if (!cond) throw new Error("assertion failed: a1.get(\"foo\") == \"bar\"")})(((a1)["foo"] === "bar"))};
+    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
-    }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      const res = (await http_Util.get((api.url + "/foo")));
-      const body = (JSON.parse((res.body ?? "")));
-      const a1 = (body)[0];
-      {((cond) => {if (!cond) throw new Error("assertion failed: a1.get(\"foo\") == \"bar\"")})(((a1)["foo"] === "bar"))};
     }
   }
   return $Closure2;
@@ -232,7 +228,6 @@ module.exports = function({ api, http_Util, std_Json }) {
         },
         "environment": {
           "variables": {
-            "CLOUD_API_C82DF3A5": "${aws_api_gateway_stage.root_cloudApi_api_stage_57D6284A.invoke_url}",
             "WING_FUNCTION_NAME": "Handler-c88c3aa2",
             "WING_TARGET": "tf-aws",
             "WING_TOKEN_TFTOKEN_TOKEN_21": "${jsonencode(aws_api_gateway_stage.root_cloudApi_api_stage_57D6284A.invoke_url)}"
@@ -322,14 +317,12 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const std_JsonClient = std.Json._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            std_Json: ${std_JsonClient.text},
+          require("./inflight.$Closure1.js")({
+            $std_Json: ${context._lift(std.Json)},
           })
         `);
       }
@@ -344,30 +337,19 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-        }
-        if (ops.includes("handle")) {
-        }
-        super._registerBind(host, ops);
-      }
     }
     class $Closure2 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure2.js";
-        const api_client = context._lift(api);
-        const http_UtilClient = http.Util._toInflightType(context);
-        const std_JsonClient = std.Json._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            api: ${api_client},
-            http_Util: ${http_UtilClient.text},
-            std_Json: ${std_JsonClient.text},
+          require("./inflight.$Closure2.js")({
+            $api_url: ${context._lift(api.url)},
+            $http_Util: ${context._lift(http.Util)},
+            $std_Json: ${context._lift(std.Json)},
           })
         `);
       }
@@ -383,9 +365,6 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure2._registerBindObject(api, host, []);
-        }
         if (ops.includes("handle")) {
           $Closure2._registerBindObject(api.url, host, []);
         }

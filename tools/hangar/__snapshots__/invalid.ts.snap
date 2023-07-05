@@ -382,7 +382,15 @@ exports[`cloud_function_expects_inflight.w 1`] = `
   | \\\\-^ Expected type to be \\"inflight (event: str): void\\", but got \\"preflight (name: str): str\\" instead
 
 
-error: Expected type to be \\"inflight (message: str): void\\", but got \\"$Closure1\\" instead
+error: Expected type to be \\"inflight (message: str): void\\", but got \\"inflight (x: num): void\\" instead
+   --> ../../../examples/tests/invalid/cloud_function_expects_inflight.w:9:15
+   |  
+ 9 |   q.setConsumer(inflight (x: num) => {
+   | /---------------^
+10 | |                      // ^ \\"num\\" doesn't match the expected type \\"str\\"
+11 | |   return;
+12 | | });
+   | \\\\-^ Expected type to be \\"inflight (message: str): void\\", but got \\"inflight (x: num): void\\" instead
 
 
  

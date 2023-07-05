@@ -143,7 +143,7 @@ module.exports = function({ $bucket2 }) {
             "uniqueId": "root_testcallnonsyntheticclosureasafunction_Handler_IamRolePolicy_4B2DF871"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\",\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:List*\"],\"Resource\":[\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\",\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.root_MyClosure_cloudBucket_BFE554F4.arn}\",\"${aws_s3_bucket.root_MyClosure_cloudBucket_BFE554F4.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:List*\"],\"Resource\":[\"${aws_s3_bucket.root_MyClosure_cloudBucket_BFE554F4.arn}\",\"${aws_s3_bucket.root_MyClosure_cloudBucket_BFE554F4.arn}/*\"],\"Effect\":\"Allow\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\",\"s3:GetObject*\",\"s3:GetBucket*\"],\"Resource\":[\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\",\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:List*\",\"s3:PutObject*\",\"s3:Abort*\",\"s3:GetObject*\",\"s3:GetBucket*\"],\"Resource\":[\"${aws_s3_bucket.root_MyClosure_cloudBucket_BFE554F4.arn}\",\"${aws_s3_bucket.root_MyClosure_cloudBucket_BFE554F4.arn}/*\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.root_testcallnonsyntheticclosureasafunction_Handler_IamRole_4F671D8B.name}"
       },
       "root_testcallsyntheticclosureclassasafunction_Handler_IamRolePolicy_3689D05A": {
@@ -190,9 +190,7 @@ module.exports = function({ $bucket2 }) {
         "environment": {
           "variables": {
             "BUCKET_NAME_bbe94f63": "${aws_s3_bucket.root_MyClosure_cloudBucket_BFE554F4.bucket}",
-            "BUCKET_NAME_bbe94f63_IS_PUBLIC": "false",
             "BUCKET_NAME_d755b447": "${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
-            "BUCKET_NAME_d755b447_IS_PUBLIC": "false",
             "WING_FUNCTION_NAME": "Handler-c88b1fea",
             "WING_TARGET": "tf-aws"
           }
@@ -220,7 +218,6 @@ module.exports = function({ $bucket2 }) {
         "environment": {
           "variables": {
             "BUCKET_NAME_d755b447": "${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
-            "BUCKET_NAME_d755b447_IS_PUBLIC": "false",
             "WING_FUNCTION_NAME": "Handler-c822e354",
             "WING_TARGET": "tf-aws"
           }
