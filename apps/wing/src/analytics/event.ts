@@ -1,8 +1,3 @@
-export interface AnalyticsReport {
-  anonymousId?: string;
-  events: AnalyticEvent[];
-}
-
 export interface AnalyticEvent {
   event: string;
   timestamp?: string;

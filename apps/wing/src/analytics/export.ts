@@ -1,19 +1,11 @@
-import { Analytics } from '@segment/analytics-node';
-import { AnalyticsStorage } from './storage';
+import { spawn } from 'child_process';
 
-let analytics = new Analytics({ writeKey: 'sCqPF5xSscOjJdi5Tbkqu73vfF8zkZdw'});
-let report = AnalyticsStorage.loadAnalyticsReport();
+export function exportAnalytics(filePath: string) {
+  const child = spawn(process.argv[0], [require.resolve('./exporter'), filePath], {
+    detached: true,
+    stdio: 'ignore',
+    windowsHide: true,
+  });
 
-analytics;
-report;
-
-report.events.forEach(event => {
-  analytics.track({
-    anonymousId: event.anonymousId ?? 'unknown',
-    timestamp: event.timestamp,
-    event: event.event,
-    properties: event.properties,
-  })
-});
-
-AnalyticsStorage.clearEvents();
+  child.unref();
+}

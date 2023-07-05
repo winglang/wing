@@ -7,12 +7,16 @@ import { satisfies } from "compare-versions";
 import { Command, Option } from "commander";
 import { run_server } from "./commands/lsp";
 
-import { AnalyticsCollector } from "./analytics/collecter";
-import { AnalyticsExporter } from "./analytics/exporter";
+import { collectCommandAnalytics } from "./analytics/collect";
+import { exportAnalytics } from "./analytics/export";
 
 
 export const PACKAGE_VERSION = require("../package.json").version as string;
+
 const ANALYTICS_OPT_OUT = process.env.WING_DISABLE_ANALYTICS ? true : false; 
+const ANALYTICS_EXPORT_OFF = process.env.WING_DISABLE_ANALYTICS_EXPORT ? true : false;
+let ANALYTICS_EXPORT_FILE: string | undefined = undefined;
+
 const SUPPORTED_NODE_VERSION = require("../package.json").engines.node as string;
 if (!SUPPORTED_NODE_VERSION) {
   throw new Error("couldn't parse engines.node version from package.json");
@@ -62,21 +66,25 @@ async function main() {
   async function collectAnalyticsHook(cmd: Command) {
     if (ANALYTICS_OPT_OUT) { return; }
 
-    // Fail silently if telemetry collection fails
+    // Fail silently if collection fails
     try {
-      AnalyticsCollector.collectCommandAnalytics(cmd);
+      ANALYTICS_EXPORT_FILE = await collectCommandAnalytics(cmd);
     } catch (err) {
+      console.log(err);
       // ignore
     }
   }
 
   async function exportAnalyticsHook() {
-    if (ANALYTICS_OPT_OUT) { return; }
+    if (ANALYTICS_OPT_OUT || ANALYTICS_EXPORT_OFF) { return; }
 
-    // Fail silently if telemetry collection fails
+    // Fail silently if export fails
     try {
-      AnalyticsExporter.exportAnalytics();
+      if (ANALYTICS_EXPORT_FILE) {
+        exportAnalytics(ANALYTICS_EXPORT_FILE);
+      }
     } catch (err) {
+      console.log(err);
       // ignore
     }
   }
