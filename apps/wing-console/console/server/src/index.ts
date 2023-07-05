@@ -175,6 +175,7 @@ export const createConsoleServer = async ({
     },
     hostUtils,
     onExpressCreated,
+    wingfile,
   });
 
   const close = async () => {
