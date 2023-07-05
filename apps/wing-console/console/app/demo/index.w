@@ -57,7 +57,7 @@ topic.onMessage(inflight (message: str): str => {
 let table = new cloud.Table(cloud.TableProps{
   name: "simple-table",
   primaryKey: "id",
-  columns: Map<cloud.ColumnType> {
+  columns: {
     "id" => cloud.ColumnType.STRING,
     "name" => cloud.ColumnType.STRING,
     "date" => cloud.ColumnType.DATE,
