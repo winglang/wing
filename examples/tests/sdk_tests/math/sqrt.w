@@ -7,7 +7,6 @@ try {
 assert(math.sqrt(-0) == -0);
 assert(math.sqrt(0) == 0);
 assert(math.sqrt(1) == 1);
-log("${math.sqrt(2)}");
 assert(math.sqrt(2) == 1.4142135623730951);
 assert(math.sqrt(9) == 3);
 assert(math.sqrt(math.INF) == math.INF);
