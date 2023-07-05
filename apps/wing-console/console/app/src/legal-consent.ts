@@ -26,6 +26,7 @@ export const legalConsent = async (): Promise<boolean> => {
     }
     return false;
 }
+
 const getLegalConsent = (): boolean => {
     const conf = new Conf({
         projectName: "@wingconsole/app",
