@@ -220,7 +220,7 @@ export const TableInteraction = ({
                         className={classNames(
                           "inline-block whitespace-nowrap",
                           theme.bg3,
-                          "text-[0.60rem] font-semibold tracking-wide text-slate-400 dark:text-slate-350",
+                          "text-[0.60rem] font-medium tracking-wide text-slate-400 dark:text-slate-350",
                           "leading-none px-2 pt-1.5 pb-1",
                           "rounded-t",
                         )}
