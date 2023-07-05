@@ -1841,3 +1841,35 @@ fn capture_var_from_method_inflight() {
     "#
 	)
 }
+
+#[test]
+fn closure_field() {
+	assert_compile_ok!(
+		r#"
+    bring cloud;
+    let globalBucket = new cloud.Bucket();
+
+    class MyResource {
+      closure: inflight (str): str;
+    
+      init() {
+        this.closure = inflight (s: str): str => {
+          globalBucket.list();
+          return "hello";
+        };
+      }
+    
+      inflight foo(): str {
+        return this.closure("anything");
+      }
+    }
+    
+    let x = new MyResource();
+    
+    test "variable can be an inflight closure" {
+      let val = x.foo();
+      assert(val == "hello");
+    }
+    "#
+	)
+}

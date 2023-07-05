@@ -861,8 +861,12 @@ impl TypeRef {
 		return false;
 	}
 
-	/// Returns whether the type is a preflight class with an inflight method named "handle"
-	pub fn is_closure_class(&self) -> bool {
+	/// Returns whether type represents a closure (either a function or a closure class).
+	pub fn is_closure(&self) -> bool {
+		if self.as_function_sig().is_some() {
+			return true;
+		}
+
 		if let Some(ref class) = self.as_preflight_class() {
 			return class
 				.methods(true)
@@ -2439,8 +2443,7 @@ impl<'a> TypeChecker<'a> {
 				let (var_type, var_phase) = self.type_check_exp(variable, env);
 
 				// TODO: we need to verify that if this variable is defined in a parent environment (i.e.
-				// being captured) it cannot be reassigned: 
-
+				// being captured) it cannot be reassigned:
 
 				if let ExprKind::Reference(r) = &variable.kind {
 					let (var, _) = self.resolve_reference(&r, env);
