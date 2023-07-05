@@ -83,3 +83,7 @@ let baz: Baz = Baz {
 // Ensure that ?. returns T? rather than T
 let val: str = baz?.bar?.foo?.val;
 //             ^^^^^^^^^^^^^^^^^^ Expected type to be "str", but got "str?" instead
+
+let optionalFunction = Json.tryParse("")?.asStr;
+optionalFunction();
+//^ Cannot call optional function (unless it's part of a reference)
