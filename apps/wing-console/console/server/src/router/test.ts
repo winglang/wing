@@ -45,6 +45,9 @@ const runTest = async (
       ...result,
       ...t,
     };
+    if(result.error) {
+      throw new Error(result.error);
+    }
     logger.log(
       `Test "${getTestName(resourcePath)}" succeeded (${
         Date.now() - startTime
@@ -56,7 +59,7 @@ const runTest = async (
     );
   } catch {
     logger.log(
-      `Test "${getTestName(resourcePath)} failed (${Date.now() - startTime}ms)`,
+      `Test "${getTestName(resourcePath)}" failed (${Date.now() - startTime}ms)`,
       "console",
       {
         messageType: "fail",
