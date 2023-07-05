@@ -136,7 +136,6 @@ export const ThemeProvider = ({
   const [currentMode, setCurrentMode] = useState<Mode>(mode ?? getThemeMode());
 
   const onSetThemeMode = useCallback((mode: Mode) => {
-    console.log("setThemeMode", mode);
     setCurrentMode(mode);
     setThemeMode(mode);
   }, []);
