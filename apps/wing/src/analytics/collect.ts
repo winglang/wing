@@ -21,16 +21,22 @@ export async function collectCommandAnalytics(cmd: Command): Promise<string> {
   const ciCollector = CICollectorFactory.create();
   const cliCollector = new CLICollector(cmd);
 
-  const event: AnalyticEvent = {
+  let event: AnalyticEvent = {
     event: `wing cli:${cmd.name()}`,
     properties: {
       inCI: CICollectorFactory.inCI(),
       cli: await cliCollector.collect(),
       os: await osCollector.collect(),
       node: await nodeCollector.collect(),
-      ci: await ciCollector.collect() as CIData,
-      git: await gitCollector.collect(),
     }
+  }
+
+  if (await ciCollector.canCollect()) {
+    event.properties.ci = await ciCollector.collect() as CIData;
+  }
+
+  if (await gitCollector.canCollect()) {
+    event.properties.git = await gitCollector.collect();
   }
 
   return storeAnalyticEvent(event);

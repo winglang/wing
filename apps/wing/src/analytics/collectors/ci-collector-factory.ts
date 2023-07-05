@@ -28,13 +28,13 @@ export enum CIType {
   NONE = "none",
 }
 
-export class UnimplementedCICollector extends Collector {
+class UnimplementedCICollector extends Collector {
   async canCollect(): Promise<boolean> {
     return false;
   }
 
   async collect(): Promise<CIData> {
-    return {} as any;
+    return {name: CICollectorFactory.getCIType(), msg: 'currently analytics are not yet supported for this ci-environment'} as any;
   }
 }
 
