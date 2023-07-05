@@ -56,5 +56,9 @@ export const ResourceInteractionView = ({
     }
   };
 
-  return getResourceView();
+  return (
+    <div data-testid={`resource-interaction:${resourcePath}`}>
+      {getResourceView()}
+    </div>
+  );
 };

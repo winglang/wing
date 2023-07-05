@@ -41,7 +41,7 @@ export async function run(entrypoint?: string, options?: RunOptions) {
 
   const { port } = await createConsoleApp({
     wingfile: entrypoint,
-    requestedPort: parseNumericString(options?.port),
+    requestedPort: parseNumericString(options?.port) ?? 3000,
     hostUtils: {
       async openExternal(url) {
         await open(url);

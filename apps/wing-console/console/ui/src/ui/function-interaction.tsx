@@ -42,6 +42,7 @@ export const FunctionInteraction = ({
               label="Invoke"
               onClick={() => onInvokeClick(payload)}
               disabled={isLoading}
+              dataTestid="cloud.function:invoke"
             />
           </div>
           <div>
@@ -56,6 +57,7 @@ export const FunctionInteraction = ({
               loading={isLoading}
               placeholder="No response"
               className="max-h-[20rem]"
+              dataTestid="cloud.function:response"
             />
           </div>
         </div>

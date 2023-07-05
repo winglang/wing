@@ -15,10 +15,15 @@ export const TopicInteraction = ({ onPublishClick }: TopicInteractionProps) => {
           id={elementId}
           className="text-xs"
           value={message}
+          dataTestid="cloud.topic:message"
           onInput={(event) => setMessage(event.currentTarget.value)}
         />
         <div className="flex gap-2 justify-end">
-          <Button label="Publish" onClick={() => onPublishClick(message)} />
+          <Button
+            label="Publish"
+            onClick={() => onPublishClick(message)}
+            dataTestid="cloud.topic:send-message"
+          />
         </div>
       </div>
     </div>
