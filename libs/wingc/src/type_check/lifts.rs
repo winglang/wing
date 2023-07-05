@@ -4,35 +4,61 @@ use itertools::Itertools;
 
 use crate::ast::Symbol;
 
-/// Jsification context at the class level
+/// A repository of lifts and captures at the class level.
 #[derive(Debug)]
 pub struct Lifts {
-	lift_by_token: BTreeMap<String, Lift>,            // map from token to lift
-	lifts: BTreeMap<String, MethodLift>,              // all the lifts (key is "<method>/<token>")
-	captures: BTreeMap<String, Capture>,              // inflight_token -> capture
-	lifted_fields_by_token: BTreeMap<String, String>, // token -> code
+	/// All the lifts. The key is "<method>/<token>"
+	lifts: BTreeMap<String, MethodLift>,
+
+	/// All the captures. The key is token.
+	captures: BTreeMap<String, Capture>,
+
+	/// Map from token to lift
+	lift_by_token: BTreeMap<String, Lift>,
+
+	/// A map of all lifted fields (`this.foo`). Key is token, value is the javascript code.
+	lifted_fields_by_token: BTreeMap<String, String>,
+
+	/// Map between expression id and a lift token.
 	token_by_expr_id: BTreeMap<usize, String>,
-	disabled: bool,
 }
 
+/// A record that describes a capture.
 #[derive(Debug, Clone)]
 pub struct Capture {
+	/// Lifting token (the symbol used in inflight code)
 	pub token: String,
+
+	/// The javascript code to capture
 	pub code: String,
 }
 
+/// A record that describes a single lift from a method.
 #[derive(Debug)]
 pub struct MethodLift {
-	pub token: String,
-	pub code: String,
+	/// The method name
 	pub method: String,
+
+	/// Lifting token (the symbol used in inflight code)
+	pub token: String,
+
+	/// The javascript code to lift (preflight)
+	pub code: String,
+
+	/// The operations that qualify the lift (the property names)
 	pub ops: BTreeSet<String>,
 }
 
+/// A record that describes a lift from a class.
 #[derive(Debug)]
 pub struct Lift {
+	/// Lifting token (the symbol used in inflight code)
 	pub token: String,
+
+	/// The javascript code to lift (preflight)
 	pub code: String,
+
+	/// Whether this is a field lift (`this.foo`)
 	pub is_field: bool,
 }
 
@@ -44,17 +70,10 @@ impl Lifts {
 			captures: BTreeMap::new(),
 			lifted_fields_by_token: BTreeMap::new(),
 			token_by_expr_id: BTreeMap::new(),
-			disabled: false,
 		}
 	}
 
-	pub fn disabled() -> Self {
-		Self {
-			disabled: true,
-			..Self::new()
-		}
-	}
-
+	/// Returns the list of all lifts from this class.
 	pub fn lifts(&self) -> Vec<&Lift> {
 		self.lift_by_token.values().collect_vec()
 	}
@@ -67,10 +86,8 @@ impl Lifts {
 		format!("${}", replace_non_alphanumeric(code))
 	}
 
-	/// Adds a lift to the class context
+	/// Adds a lift for an expression.
 	pub fn lift(&mut self, expr_id: usize, method: Option<Symbol>, property: Option<String>, code: &str) {
-		assert!(!self.disabled);
-
 		let is_field = code.contains("this.");
 
 		let token = self.render_token(code);
@@ -98,12 +115,16 @@ impl Lifts {
 		}
 
 		if is_field {
-			self.add_lifted_field(&token, &code);
+			self
+				.lifted_fields_by_token
+				.entry(token.to_string())
+				.or_insert(code.to_string());
 		} else {
 			self.capture(&expr_id, code);
 		}
 	}
 
+	/// Returns the token for an expression. Called by the jsifier when emitting inflight code.
 	pub fn token_for_expr(&self, expr_id: &usize) -> Option<String> {
 		let Some(token) = self.token_by_expr_id.get(expr_id) else {
 			return None;
@@ -122,11 +143,11 @@ impl Lifts {
 		}
 	}
 
-	pub fn capture(&mut self, expr_id: &usize, code: &str) -> String {
-		assert!(!self.disabled);
-
+	/// Captures an expression.
+	pub fn capture(&mut self, expr_id: &usize, code: &str) {
+		// no need to capture this (it's already in scope)
 		if code == "this" {
-			return code.to_string();
+			return;
 		}
 
 		let token = self.render_token(code);
@@ -137,26 +158,19 @@ impl Lifts {
 			token: token.to_string(),
 			code: code.to_string(),
 		});
-
-		token.clone()
 	}
 
+	/// The list of captures.
 	pub fn captures(&self) -> Vec<&Capture> {
 		self.captures.values().collect_vec()
 	}
 
-	fn add_lifted_field(&mut self, token: &str, code: &str) {
-		assert!(!self.disabled);
-		self
-			.lifted_fields_by_token
-			.entry(token.to_string())
-			.or_insert(code.to_string());
-	}
-
+	/// List of all lifted fields in the class.
 	pub fn lifted_fields(&self) -> BTreeMap<String, String> {
 		self.lifted_fields_by_token.clone()
 	}
 
+	/// List of all lifts per method. Key is the method name and the value is a list of lifts.
 	pub fn lifts_per_method(&self) -> BTreeMap<String, Vec<&MethodLift>> {
 		let mut result: BTreeMap<String, Vec<&MethodLift>> = BTreeMap::new();
 

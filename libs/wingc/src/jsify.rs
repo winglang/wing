@@ -5,7 +5,7 @@ use const_format::formatcp;
 use indexmap::IndexSet;
 use itertools::Itertools;
 
-use std::{borrow::Borrow, cmp::Ordering, path::Path, vec};
+use std::{borrow::Borrow, cmp::Ordering, collections::BTreeMap, path::Path, vec};
 
 use crate::{
 	ast::{
@@ -50,7 +50,7 @@ pub struct JSifyContext<'a> {
 	/// the `inflight` keyword specifies scopes that are inflight.
 	pub phase: Phase,
 	pub files: &'a mut Files,
-	pub lifts: &'a Lifts,
+	pub lifts: Option<&'a Lifts>,
 }
 
 pub struct JSifier<'a> {
@@ -109,7 +109,7 @@ impl<'a> JSifier<'a> {
 				in_json: false,
 				phase: Phase::Preflight,
 				files: &mut files,
-				lifts: &Lifts::disabled(),
+				lifts: None,
 			};
 			let s = self.jsify_statement(scope.env.borrow().as_ref().unwrap(), statement, &mut jsify_context); // top level statements are always preflight
 			if let StmtKind::Bring {
@@ -267,8 +267,10 @@ impl<'a> JSifier<'a> {
 		// if we are in inflight and there's a lifting/capturing token associated with this expression
 		// then emit the token instead of the expression.
 		if ctx.phase == Phase::Inflight {
-			if let Some(t) = ctx.lifts.token_for_expr(&expression.id) {
-				return t.clone();
+			if let Some(lifts) = &ctx.lifts {
+				if let Some(t) = lifts.token_for_expr(&expression.id) {
+					return t.clone();
+				}
 			}
 		}
 
@@ -909,7 +911,7 @@ impl<'a> JSifier<'a> {
 		let class_type = env.lookup(&class.name, None).unwrap().as_type().unwrap();
 
 		let lifts = if let Some(lifts) = &class_type.as_class().unwrap().lifts {
-			lifts
+			Some(lifts)
 		} else {
 			ctx.lifts
 		};
@@ -918,7 +920,7 @@ impl<'a> JSifier<'a> {
 			in_json: ctx.in_json,
 			phase: ctx.phase,
 			files: ctx.files,
-			lifts: &lifts,
+			lifts,
 		};
 
 		// emit the inflight side of the class into a separate file
@@ -1039,10 +1041,12 @@ impl<'a> JSifier<'a> {
 
 		code.open(format!("require(\"{client_path}\")({{"));
 
-		for capture in ctx.lifts.captures() {
-			let preflight = capture.code.clone();
-			let lift_type = format!("context._lift({})", preflight);
-			code.line(format!("{}: ${{{}}},", capture.token, lift_type));
+		if let Some(lifts) = &ctx.lifts {
+			for capture in lifts.captures() {
+				let preflight = capture.code.clone();
+				let lift_type = format!("context._lift({})", preflight);
+				code.line(format!("{}: ${{{}}},", capture.token, lift_type));
+			}
 		}
 
 		code.close("})");
@@ -1069,8 +1073,10 @@ impl<'a> JSifier<'a> {
 
 		code.open(format!("const client = new {}Client({{", resource_name.name));
 
-		for (token, obj) in ctx.lifts.lifted_fields() {
-			code.line(format!("{token}: ${{this._lift({obj})}},"));
+		if let Some(lifts) = &ctx.lifts {
+			for (token, obj) in lifts.lifted_fields() {
+				code.line(format!("{token}: ${{this._lift({obj})}},"));
+			}
 		}
 
 		code.close("});");
@@ -1132,7 +1138,13 @@ impl<'a> JSifier<'a> {
 	fn emit_inflight_file(&self, class: &AstClass, inflight_class_code: CodeMaker, ctx: &mut JSifyContext) {
 		let name = &class.name.name;
 		let mut code = CodeMaker::default();
-		let inputs = ctx.lifts.captures().iter().map(|c| c.token.clone()).join(", ");
+
+		let inputs = if let Some(lifts) = &ctx.lifts {
+			lifts.captures().iter().map(|c| c.token.clone()).join(", ")
+		} else {
+			Default::default()
+		};
+
 		code.open(format!("module.exports = function({{ {inputs} }}) {{"));
 		code.add_code(inflight_class_code);
 		code.line(format!("return {name};"));
@@ -1148,7 +1160,12 @@ impl<'a> JSifier<'a> {
 	fn jsify_inflight_binding_constructor(&self, class: &AstClass, class_code: &mut CodeMaker, ctx: &JSifyContext) {
 		// Get the fields that are lifted by this class but not by its parent, they will be initialized
 		// in the generated constructor
-		let lifted_fields = ctx.lifts.lifted_fields().keys().map(|f| f.clone()).collect_vec();
+		let lifted_fields = if let Some(lifts) = &ctx.lifts {
+			lifts.lifted_fields().keys().map(|f| f.clone()).collect_vec()
+		} else {
+			vec![]
+		};
+
 		let parent_fields = if let Some(parent) = &class.parent {
 			let parent_type = self.get_expr_type(parent);
 			if let Some(parent_lifts) = &parent_type.as_class().unwrap().lifts {
@@ -1207,7 +1224,12 @@ impl<'a> JSifier<'a> {
 
 		let class_name = class.name.to_string();
 
-		let lifts_per_method = ctx.lifts.lifts_per_method();
+		let lifts_per_method = if let Some(lifts) = &ctx.lifts {
+			lifts.lifts_per_method()
+		} else {
+			BTreeMap::default()
+		};
+
 		let lifts = lifts_per_method
 			.iter()
 			.filter(|(m, _)| {

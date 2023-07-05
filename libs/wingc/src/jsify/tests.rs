@@ -1930,3 +1930,44 @@ fn lift_var_with_this() {
     "#
 	)
 }
+
+#[test]
+fn two_identical_lifts() {
+	assert_compile_ok!(
+		r#"
+    bring cloud;
+    let b = new cloud.Bucket();
+    
+    test "test" {
+      b.put("hello", "world");
+
+      () => {
+        b.put("hello", "world");
+      };
+    }
+    "#
+	)
+}
+
+#[test]
+fn lift_inside_preflight_method() {
+	assert_compile_ok!(
+		r#"
+    bring cloud;
+
+    class Foo {
+      defineBucket(name: str) {
+          let b = new cloud.Bucket() as name;
+          inflight () => {
+            b.put("dirty","x");
+          };
+      }
+    
+      init() {
+        this.defineBucket("b1");
+        this.defineBucket("b2");
+      }
+    }
+    "#
+	)
+}

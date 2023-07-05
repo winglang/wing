@@ -132,7 +132,7 @@ impl<'a> LiftTransform<'a> {
 				in_json: false,
 				phase: phase,
 				files: &mut Files::default(),
-				lifts: &mut Lifts::disabled(),
+				lifts: None,
 			},
 		)
 	}
