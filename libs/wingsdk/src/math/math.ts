@@ -210,7 +210,7 @@ export class Util {
    * @param coordinates Array of coordinates
    * @returns
    */
-  public static hypot(coodinates: number[]): number {
+  public static hypot(coordinates: number[]): number {
     return Math.hypot(...coodinates);
   }
 
