@@ -332,7 +332,7 @@ module.exports = function({ $b }) {
             "uniqueId": "root_testputtinganddeletingfromabuckettotriggerbucketevents_Handler_IamRolePolicy_D5A50C10"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.root_b_6D0D1E6D.arn}\",\"${aws_s3_bucket.root_b_6D0D1E6D.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:DeleteObject*\",\"s3:DeleteObjectVersion*\",\"s3:PutLifecycleConfiguration*\"],\"Resource\":[\"${aws_s3_bucket.root_b_6D0D1E6D.arn}\",\"${aws_s3_bucket.root_b_6D0D1E6D.arn}/*\"],\"Effect\":\"Allow\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\",\"s3:DeleteObject*\",\"s3:DeleteObjectVersion*\",\"s3:PutLifecycleConfiguration*\"],\"Resource\":[\"${aws_s3_bucket.root_b_6D0D1E6D.arn}\",\"${aws_s3_bucket.root_b_6D0D1E6D.arn}/*\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.root_testputtinganddeletingfromabuckettotriggerbucketevents_Handler_IamRole_F8CDA20E.name}"
       }
     },
@@ -475,7 +475,6 @@ module.exports = function({ $b }) {
         "environment": {
           "variables": {
             "BUCKET_NAME_73fd1ead": "${aws_s3_bucket.root_other_26932ECB.bucket}",
-            "BUCKET_NAME_73fd1ead_IS_PUBLIC": "false",
             "WING_FUNCTION_NAME": "b-on_create-OnMessage-aef3f85d-c8d1e844",
             "WING_TARGET": "tf-aws"
           }
@@ -503,7 +502,6 @@ module.exports = function({ $b }) {
         "environment": {
           "variables": {
             "BUCKET_NAME_73fd1ead": "${aws_s3_bucket.root_other_26932ECB.bucket}",
-            "BUCKET_NAME_73fd1ead_IS_PUBLIC": "false",
             "WING_FUNCTION_NAME": "b-on_delete-OnMessage-1c41a2ad-c87344ee",
             "WING_TARGET": "tf-aws"
           }
@@ -557,7 +555,6 @@ module.exports = function({ $b }) {
         "environment": {
           "variables": {
             "BUCKET_NAME_73fd1ead": "${aws_s3_bucket.root_other_26932ECB.bucket}",
-            "BUCKET_NAME_73fd1ead_IS_PUBLIC": "false",
             "WING_FUNCTION_NAME": "b-on_update-OnMessage-3ed6033f-c8b563a2",
             "WING_TARGET": "tf-aws"
           }
@@ -689,7 +686,6 @@ module.exports = function({ $b }) {
         "environment": {
           "variables": {
             "BUCKET_NAME_34279ead": "${aws_s3_bucket.root_b_6D0D1E6D.bucket}",
-            "BUCKET_NAME_34279ead_IS_PUBLIC": "false",
             "WING_FUNCTION_NAME": "Handler-c8457446",
             "WING_TARGET": "tf-aws"
           }

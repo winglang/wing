@@ -1,4 +1,11 @@
-import { createContext, PropsWithChildren, useContext, useEffect } from "react";
+import {
+  createContext,
+  PropsWithChildren,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 
 export interface Theme {
   bg1: string;
@@ -62,17 +69,23 @@ export const DefaultTheme: Theme = {
     "scrollbar hover:scrollbar-bg-slate-500/10 hover:scrollbar-thumb-slate-700/30 scrollbar-thumb-hover-slate-700/40 scrollbar-thumb-active-slate-700/60 dark:hover:scrollbar-bg-slate-400/10 dark:hover:scrollbar-thumb-slate-400/30 dark:scrollbar-thumb-hover-slate-400/40 dark:scrollbar-thumb-active-slate-400/60",
 };
 
-const ThemeContext = createContext<ThemeProviderProps>({
-  theme: DefaultTheme,
-});
-
 export interface ThemeProviderProps {
   theme: Theme;
-  mode?: Mode;
+  mode: Mode;
+  setThemeMode?: (mode: Mode) => void;
+  mediaTheme?: Mode;
 }
 
 const setModeInLocalStorage = (mode: Mode) => {
   localStorage.setItem(localStorageThemeKey, JSON.stringify({ mode: mode }));
+};
+
+const getThemeModeFromLocalStorage = () => {
+  const localThemeObject = localStorage.getItem(localStorageThemeKey);
+  if (!localThemeObject) {
+    return;
+  }
+  return JSON.parse(localThemeObject)?.mode as Mode;
 };
 
 const updateDomClassList = (mode: Mode) => {
@@ -83,29 +96,50 @@ const updateDomClassList = (mode: Mode) => {
   }
 };
 
-const setThemeMode = (selectedMode?: Mode) => {
-  const mediaTheme = window?.matchMedia("(prefers-color-scheme: dark)")?.matches
+const getMediaThemeMode = () => {
+  return window?.matchMedia("(prefers-color-scheme: dark)")?.matches
     ? "dark"
     : "light";
+};
+
+const getThemeMode = (): Mode => {
+  return getThemeModeFromLocalStorage() ?? getMediaThemeMode();
+};
+
+const setThemeMode = (selectedMode?: Mode) => {
+  const mediaTheme = getMediaThemeMode();
   if (selectedMode) {
     setModeInLocalStorage(selectedMode);
     updateDomClassList(selectedMode === "auto" ? mediaTheme : selectedMode);
     return;
   }
-  const localThemeObject = localStorage.getItem(localStorageThemeKey);
+  const localThemeObject = getThemeMode();
   if (!localThemeObject) {
     updateDomClassList(mediaTheme);
     return;
   }
-  const mode = JSON.parse(localThemeObject)?.mode ?? mediaTheme;
-  return updateDomClassList(mode === "auto" ? mediaTheme : mode);
+  const mode = localThemeObject === "auto" ? mediaTheme : localThemeObject;
+  return updateDomClassList(mode);
 };
+
+const ThemeContext = createContext<ThemeProviderProps>({
+  theme: DefaultTheme,
+  mode: getThemeMode(),
+  setThemeMode,
+});
 
 export const ThemeProvider = ({
   theme,
   mode,
   children,
 }: PropsWithChildren<ThemeProviderProps>) => {
+  const [currentMode, setCurrentMode] = useState<Mode>(mode ?? getThemeMode());
+
+  const onSetThemeMode = useCallback((mode: Mode) => {
+    setCurrentMode(mode);
+    setThemeMode(mode);
+  }, []);
+
   setThemeMode(mode);
 
   useEffect(() => {
@@ -124,7 +158,14 @@ export const ThemeProvider = ({
   }, []);
 
   return (
-    <ThemeContext.Provider value={{ theme: theme ?? DefaultTheme, mode: mode }}>
+    <ThemeContext.Provider
+      value={{
+        theme: theme ?? DefaultTheme,
+        mode: currentMode,
+        mediaTheme: getMediaThemeMode(),
+        setThemeMode: onSetThemeMode,
+      }}
+    >
       {children}
     </ThemeContext.Provider>
   );

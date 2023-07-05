@@ -929,6 +929,21 @@ Test Files 1 failed (1)
 Duration <DURATION>"
 `;
 
+exports[`issue_2767.w 1`] = `
+"error: Expected type to be \\"MutJson\\", but got \\"Bucket\\" instead
+  --> ../../../examples/tests/invalid/issue_2767.w:4:16
+  |
+4 | x.set(\\"hello\\", new cloud.Bucket());
+  |                ^^^^^^^^^^^^^^^^^^ Expected type to be \\"MutJson\\", but got \\"Bucket\\" instead
+
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
+
 exports[`json.w 1`] = `
 "error: Json literal must have an element
    --> ../../../examples/tests/invalid/json.w:30:26

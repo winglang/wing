@@ -2,13 +2,17 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ $privateBucket, $publicBucket }) {
+module.exports = function({ publicBucket, privateBucket, util_Util, http_Util }) {
   class $Closure1 {
     async handle() {
       let error = "";
-      (await $publicBucket.put("file1.txt","Foo"));
-      (await $privateBucket.put("file2.txt","Bar"));
-      {((cond) => {if (!cond) throw new Error("assertion failed: publicBucket.publicUrl(\"file1.txt\") != \"\"")})(((await $publicBucket.publicUrl("file1.txt")) !== ""))};
+      (await publicBucket.put("file1.txt","Foo"));
+      (await privateBucket.put("file2.txt","Bar"));
+      const publicUrl = (await publicBucket.publicUrl("file1.txt"));
+      {((cond) => {if (!cond) throw new Error("assertion failed: publicUrl != \"\"")})((publicUrl !== ""))};
+      if (((await util_Util.env("WING_TARGET")) !== "sim")) {
+        {((cond) => {if (!cond) throw new Error("assertion failed: http.get(publicUrl).body ==  \"Foo\"")})(((await http_Util.get(publicUrl)).body === "Foo"))};
+      }
       try {
         (await $privateBucket.publicUrl("file2.txt"));
       }
@@ -78,7 +82,7 @@ module.exports = function({ $privateBucket, $publicBucket }) {
             "uniqueId": "root_testpublicUrl_Handler_IamRolePolicy_1DF4CEA8"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.root_publicBucket_8E082B9B.arn}\",\"${aws_s3_bucket.root_publicBucket_8E082B9B.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:List*\"],\"Resource\":[\"${aws_s3_bucket.root_publicBucket_8E082B9B.arn}\",\"${aws_s3_bucket.root_publicBucket_8E082B9B.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.root_privateBucket_9063F4A1.arn}\",\"${aws_s3_bucket.root_privateBucket_9063F4A1.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:List*\"],\"Resource\":[\"${aws_s3_bucket.root_privateBucket_9063F4A1.arn}\",\"${aws_s3_bucket.root_privateBucket_9063F4A1.arn}/*\"],\"Effect\":\"Allow\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:List*\",\"s3:PutObject*\",\"s3:Abort*\",\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:GetBucketPublicAccessBlock\"],\"Resource\":[\"${aws_s3_bucket.root_publicBucket_8E082B9B.arn}\",\"${aws_s3_bucket.root_publicBucket_8E082B9B.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:List*\",\"s3:PutObject*\",\"s3:Abort*\",\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:GetBucketPublicAccessBlock\"],\"Resource\":[\"${aws_s3_bucket.root_privateBucket_9063F4A1.arn}\",\"${aws_s3_bucket.root_privateBucket_9063F4A1.arn}/*\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.root_testpublicUrl_Handler_IamRole_D906F1F6.name}"
       }
     },
@@ -105,9 +109,7 @@ module.exports = function({ $privateBucket, $publicBucket }) {
         "environment": {
           "variables": {
             "BUCKET_NAME_7c320eda": "${aws_s3_bucket.root_publicBucket_8E082B9B.bucket}",
-            "BUCKET_NAME_7c320eda_IS_PUBLIC": "true",
             "BUCKET_NAME_e82f6088": "${aws_s3_bucket.root_privateBucket_9063F4A1.bucket}",
-            "BUCKET_NAME_e82f6088_IS_PUBLIC": "false",
             "WING_FUNCTION_NAME": "Handler-c849898f",
             "WING_TARGET": "tf-aws"
           }
@@ -256,6 +258,8 @@ const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 const cloud = require('@winglang/sdk').cloud;
+const http = require('@winglang/sdk').http;
+const util = require('@winglang/sdk').util;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
@@ -266,10 +270,17 @@ class $Root extends $stdlib.std.Resource {
         this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
+        const self_client_path = "././inflight.$Closure1.js";
+        const publicBucket_client = context._lift(publicBucket);
+        const privateBucket_client = context._lift(privateBucket);
+        const util_UtilClient = util.Util._toInflightType(context);
+        const http_UtilClient = http.Util._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1.js")({
-            $privateBucket: ${context._lift(privateBucket)},
-            $publicBucket: ${context._lift(publicBucket)},
+          require("${self_client_path}")({
+            publicBucket: ${publicBucket_client},
+            privateBucket: ${privateBucket_client},
+            util_Util: ${util_UtilClient.text},
+            http_Util: ${http_UtilClient.text},
           })
         `);
       }
