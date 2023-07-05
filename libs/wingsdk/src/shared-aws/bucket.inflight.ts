@@ -7,6 +7,8 @@ import {
   ListObjectsV2CommandOutput,
   PutObjectCommand,
   GetBucketLocationCommand,
+  GetPublicAccessBlockCommand,
+  GetPublicAccessBlockCommandOutput,
   S3Client,
   GetObjectOutput,
 } from "@aws-sdk/client-s3";
@@ -16,7 +18,6 @@ import { Duration, Json } from "../std";
 export class BucketClient implements IBucketClient {
   constructor(
     private readonly bucketName: string,
-    private readonly _public: boolean = false,
     private readonly s3Client = new S3Client({})
   ) {}
 
@@ -138,6 +139,10 @@ export class BucketClient implements IBucketClient {
   public async delete(key: string, opts?: BucketDeleteOptions): Promise<void> {
     const mustExist = opts?.mustExist ?? false;
 
+    if (mustExist && !(await this.exists(key))) {
+      throw new Error(`Object does not exist (key=${key}).`);
+    }
+
     const command = new DeleteObjectCommand({
       Key: key,
       Bucket: this.bucketName,
@@ -151,7 +156,7 @@ export class BucketClient implements IBucketClient {
         return;
       }
 
-      throw Error(`unable to delete "${key}": ${error.message}`);
+      throw new Error(`Unable to delete "${key}": ${error.message}`);
     }
   }
 
@@ -200,15 +205,34 @@ export class BucketClient implements IBucketClient {
     }
     return list;
   }
+  /**
+   * checks if the bucket is public
+   * @returns true if the bucket is public and false otherwise
+   */
+  private async checkIfPublic(): Promise<boolean> {
+    const command = new GetPublicAccessBlockCommand({
+      Bucket: this.bucketName,
+    });
+    const resp: GetPublicAccessBlockCommandOutput = await this.s3Client.send(
+      command
+    );
+    return (
+      !resp.PublicAccessBlockConfiguration?.BlockPublicAcls &&
+      !resp.PublicAccessBlockConfiguration?.BlockPublicPolicy &&
+      !resp.PublicAccessBlockConfiguration?.RestrictPublicBuckets &&
+      !resp.PublicAccessBlockConfiguration?.IgnorePublicAcls
+    );
+  }
 
   /**
    * Returns a url to the given file.
    * @Throws if the file is not public or if object does not exist.
    */
   public async publicUrl(key: string): Promise<string> {
-    if (!this._public) {
+    if (!(await this.checkIfPublic())) {
       throw new Error("Cannot provide public url for a non-public bucket");
     }
+
     if (!(await this.exists(key))) {
       throw new Error(
         `Cannot provide public url for an non-existent key (key=${key})`
