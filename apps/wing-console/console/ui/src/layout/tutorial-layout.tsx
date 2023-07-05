@@ -15,12 +15,11 @@ import { ResourceMetadata } from "../ui/resource-metadata.js";
 import { useLayout } from "./use-layout.js";
 import { LayoutProps } from "./vscode-layout.js";
 
-export const TutorialLayout = ({ cloudAppState, wingVersion }: LayoutProps) => {
+export const TutorialLayout = ({ cloudAppState }: LayoutProps) => {
   const {
     selectedItems,
     setSelectedItems,
     expand,
-
     theme,
     errorMessage,
     loading,
@@ -73,7 +72,7 @@ export const TutorialLayout = ({ cloudAppState, wingVersion }: LayoutProps) => {
             <LeftResizableWidget
               className={classNames(
                 theme.border3,
-                "h-full w-1/4 flex flex-col min-w-[10rem] min-h-[15rem] border-l z-10",
+                "h-full w-1/4 flex flex-col min-w-[10rem] min-h-[10rem] border-l z-10",
                 theme.bg4,
               )}
             >
@@ -92,63 +91,62 @@ export const TutorialLayout = ({ cloudAppState, wingVersion }: LayoutProps) => {
           </div>
         </div>
       </div>
-      {
-        <TopResizableWidget
+      <TopResizableWidget
+        className={classNames(
+          theme.border3,
+          "flex relative border-t border-slate-300 bg-slate-50",
+          {
+            "min-h-[5rem] h-[30rem]": cloudAppState === "error",
+            "min-h-[5rem] h-[15rem]": cloudAppState !== "error",
+          },
+        )}
+      >
+        <BlueScreenOfDeath
+          hidden={cloudAppState !== "error"}
+          title={"An error has occurred:"}
+          error={errorMessage.data ?? ""}
+          displayLinks={false}
+          displayWingTitle={false}
+        />
+        <div
           className={classNames(
             theme.border3,
-            "flex relative border-t border-slate-300 bg-slate-50",
-            cloudAppState === "error"
-              ? "min-h-[32rem] h-[32rem]"
-              : "min-h-[5rem] h-[8rem] max-h-[25rem]",
+            "flex-1 flex flex-col min-w-[10rem] border-r border-b border-slate-300",
+            theme.bg3,
+            theme.text2,
           )}
         >
-          <BlueScreenOfDeath
-            hidden={cloudAppState !== "error"}
-            title={"An error has occurred:"}
-            error={errorMessage.data ?? ""}
-            displayLinks={false}
-            displayWingTitle={false}
-          />
-          <div
-            className={classNames(
-              theme.border3,
-              "flex-1 flex flex-col min-w-[10rem] min-h-[15rem] border-r border-b border-slate-300",
-              theme.bg3,
-              theme.text2,
-            )}
-          >
-            <div className="relative h-full flex flex-col gap-2">
-              {loading && (
-                <div
-                  className={classNames(
-                    "absolute h-full w-full z-50 bg-white/70 dark:bg-slate-600/70",
-                    theme.text2,
-                  )}
-                />
-              )}
-              <ConsoleLogsFilters
-                selectedLogTypeFilters={selectedLogTypeFilters}
-                setSelectedLogTypeFilters={setSelectedLogTypeFilters}
-                clearLogs={() => setLogsTimeFilter(Date.now())}
-                isLoading={loading}
-                onSearch={setSearchText}
+          <div className="relative h-full flex flex-col gap-2">
+            {loading && (
+              <div
+                className={classNames(
+                  "absolute h-full w-full z-50 bg-white/70 dark:bg-slate-600/70",
+                  theme.text2,
+                )}
               />
-              <div className="relative h-full">
-                <ScrollableArea
-                  ref={logsRef}
-                  overflowY
-                  className={classNames("pb-1.5", theme.bg3, theme.text2)}
-                >
-                  <ConsoleLogs
-                    logs={logs.data ?? []}
-                    onResourceClick={onResourceClick}
-                  />
-                </ScrollableArea>
-              </div>
+            )}
+            <ConsoleLogsFilters
+              selectedLogTypeFilters={selectedLogTypeFilters}
+              setSelectedLogTypeFilters={setSelectedLogTypeFilters}
+              clearLogs={() => setLogsTimeFilter(Date.now())}
+              isLoading={loading}
+              onSearch={setSearchText}
+            />
+            <div className="relative h-full">
+              <ScrollableArea
+                ref={logsRef}
+                overflowY
+                className={classNames("pb-1.5", theme.bg3, theme.text2)}
+              >
+                <ConsoleLogs
+                  logs={logs.data ?? []}
+                  onResourceClick={onResourceClick}
+                />
+              </ScrollableArea>
             </div>
           </div>
-        </TopResizableWidget>
-      }
+        </div>
+      </TopResizableWidget>
     </div>
   );
 };
