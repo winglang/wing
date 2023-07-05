@@ -43,13 +43,15 @@ export const Header = ({ title }: HeaderProps) => {
             "rounded-3xl font-medium flex focus:outline-none",
             "hover:bg-slate-200 hover:dark:bg-slate-600",
             "transition-color duration-300 cursor-pointer",
-            "gap-x-1 px-1.5 py-0.5",
+            "gap-x-1 p-1",
           )}
           onClick={toggleThemeMode}
         >
           {currentTheme === "light" && <SunIcon className="h-4" />}
           {currentTheme === "dark" && <MoonIcon className="h-4" />}
-          <div className="font-light capitalize text-xs">{mode}</div>
+          {mode === "auto" && (
+            <div className="font-light capitalize text-xs">{mode}</div>
+          )}
         </button>
       </div>
     </div>
