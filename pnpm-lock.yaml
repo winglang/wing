@@ -412,6 +412,12 @@ importers:
         specifier: ^4.18.2
         version: 4.18.2
     devDependencies:
+      '@ibm/plex':
+        specifier: ^6.3.0
+        version: 6.3.0
+      '@playwright/test':
+        specifier: ^1.35.1
+        version: 1.35.1
       '@tailwindcss/forms':
         specifier: ^0.5.3
         version: 0.5.3(tailwindcss@3.3.2)
@@ -481,9 +487,6 @@ importers:
       vite:
         specifier: ^4.3.9
         version: 4.3.9(@types/node@18.16.18)
-      vitest:
-        specifier: ^0.31.4
-        version: 0.31.4(happy-dom@9.20.3)
 
   apps/wing-console/console/design-system:
     dependencies:
@@ -6012,6 +6015,10 @@ packages:
   /@iarna/toml@2.2.5:
     resolution: {integrity: sha512-trnsAYxU3xnS1gPHPyU961coFyLkh4gAD/0zQ5mymY4yOZ+CYvsPqUbOFSw0aDM4y0tV7tiFxL/1XfXPNC6IPg==}
 
+  /@ibm/plex@6.3.0:
+    resolution: {integrity: sha512-kb1ATGXrFu/gF2NZY40OlRUAEWCcrq9mIEYkuWqXUPaC6Zrb7iA9wQYTkJdAPP+V6ySfp7NLAyzAnK9c5k90Sg==}
+    dev: true
+
   /@inquirer/checkbox@1.3.2:
     resolution: {integrity: sha512-9ZhpEXiwlXAJ7KvUiDqIy9L4mayOGcP9aDRLT6eiwguuFW1gXQTspteIxk/b6QGger1UXJrtXQpPS7A+PGzVuA==}
     engines: {node: '>=14.18.0'}
@@ -6980,6 +6987,17 @@ packages:
       open: 9.1.0
       picocolors: 1.0.0
       tslib: 2.6.0
+
+  /@playwright/test@1.35.1:
+    resolution: {integrity: sha512-b5YoFe6J9exsMYg0pQAobNDR85T1nLumUYgUTtKm4d21iX2L7WqKq9dW8NGJ+2vX0etZd+Y7UeuqsxDXm9+5ZA==}
+    engines: {node: '>=16'}
+    hasBin: true
+    dependencies:
+      '@types/node': 18.16.18
+      playwright-core: 1.35.1
+    optionalDependencies:
+      fsevents: 2.3.2
+    dev: true
 
   /@pnpm/cli-meta@5.0.1:
     resolution: {integrity: sha512-s7rVArn3s78w2ZDWC2/NzMaYBzq39QBmo1BQ4+qq1liX+ltSErDyAx3M/wvvJQgc+Ur3dZJYuc9t96roPnW3XQ==}
@@ -12719,7 +12737,7 @@ packages:
     dependencies:
       semver: 7.5.2
       shelljs: 0.8.5
-      typescript: 5.2.0-dev.20230703
+      typescript: 5.2.0-dev.20230705
     dev: true
 
   /duplexer@0.1.2:
@@ -18716,6 +18734,12 @@ packages:
       find-up: 3.0.0
     dev: true
 
+  /playwright-core@1.35.1:
+    resolution: {integrity: sha512-pNXb6CQ7OqmGDRspEjlxE49w+4YtR6a3X6mT1hZXeJHWmsEz7SunmvZeiG/+y1yyMZdHnnn73WKYdtV1er0Xyg==}
+    engines: {node: '>=16'}
+    hasBin: true
+    dev: true
+
   /pluralize@8.0.0:
     resolution: {integrity: sha512-Nc3IT5yHzflTfbjgqWcCPpo7DaKy4FnpB0l/zCAW0Tc7jxAiuqSxHasntB3D7887LSrA93kDJ9IXovxJYxyLCA==}
     engines: {node: '>=4'}
@@ -21294,8 +21318,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  /typescript@5.2.0-dev.20230703:
-    resolution: {integrity: sha512-O+fL935EQoj276onbuLMys21Pew2AlvZNDqzkw6TXq/BDGoAeUTsxfLQID9o+tKEciOIxdLaZnMF8WXulVMfow==}
+  /typescript@5.2.0-dev.20230705:
+    resolution: {integrity: sha512-eMgfQ/e5CgYYSaduGhDc2UiY2EzzgrBMfHyagjUP70jj4VDCmLlIp1EftT5AMiLvNc7PYNCeziRFY5fBZhD9uA==}
     engines: {node: '>=14.17'}
     hasBin: true
     dev: true
