@@ -14,7 +14,7 @@ vi.mock("@wingconsole/app", () => {
   return {
     createConsoleApp: vi.fn((options?: { requestedPort?: number }) => {
       return {
-        port: options?.requestedPort ?? 3000,
+        port: options?.requestedPort ?? 1214,
       };
     }),
   };

@@ -17,7 +17,7 @@ const { port } = await createConsoleApp({
   wingfile:
     options.values.wingfile ??
     fileURLToPath(new URL("../demo/index.w", import.meta.url)),
-  requestedPort: 3000,
+  requestedPort: 1214,
   hostUtils: {
     async openExternal(url) {
       await open(url);

@@ -23,7 +23,7 @@ const { port } = await createConsoleServer({
   wingfile:
     options.values.wingfile ??
     fileURLToPath(new URL("../demo/index.w", import.meta.url)),
-  requestedPort: 3000,
+  requestedPort: 1214,
   async onExpressCreated(app) {
     app.use(vite.middlewares);
   },
