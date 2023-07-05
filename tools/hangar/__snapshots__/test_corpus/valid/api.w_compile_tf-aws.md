@@ -320,10 +320,9 @@ module.exports = function({  }) {
         },
         "environment": {
           "variables": {
-            "CLOUD_API_C8B1D888": "${aws_api_gateway_stage.A_cloudApi_api_stage_6D822CCE.invoke_url}",
             "WING_FUNCTION_NAME": "cloud-Api-OnRequest-73c5308f-c85168bb",
             "WING_TARGET": "tf-aws",
-            "WING_TOKEN_TFTOKEN_TOKEN_41": "${jsonencode(aws_api_gateway_stage.A_cloudApi_api_stage_6D822CCE.invoke_url)}"
+            "WING_TOKEN_TFTOKEN_TOKEN_42": "${jsonencode(aws_api_gateway_stage.A_cloudApi_api_stage_6D822CCE.invoke_url)}"
           }
         },
         "function_name": "cloud-Api-OnRequest-73c5308f-c85168bb",
@@ -375,7 +374,6 @@ module.exports = function({  }) {
         },
         "environment": {
           "variables": {
-            "CLOUD_API_C82DF3A5": "${aws_api_gateway_stage.cloudApi_api_stage_BBB283E4.invoke_url}",
             "WING_FUNCTION_NAME": "Handler-c8315524",
             "WING_TARGET": "tf-aws",
             "WING_TOKEN_TFTOKEN_TOKEN_21": "${jsonencode(aws_api_gateway_stage.cloudApi_api_stage_BBB283E4.invoke_url)}"

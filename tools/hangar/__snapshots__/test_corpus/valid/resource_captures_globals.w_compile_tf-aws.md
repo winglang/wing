@@ -219,7 +219,7 @@ module.exports = function({ $_parentThis_localCounter, $globalCounter }) {
             "uniqueId": "MyResource_cloudTopic-OnMessage-f10eb240_IamRolePolicy_3BEB9061"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[],\"Resource\":[\"${aws_s3_bucket.cloudBucket.arn}\",\"${aws_s3_bucket.cloudBucket.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.cloudCounter.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:GetItem\"],\"Resource\":[\"${aws_dynamodb_table.cloudCounter.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[],\"Resource\":[\"${aws_s3_bucket.Another_First_cloudBucket_DB822B7C.arn}\",\"${aws_s3_bucket.Another_First_cloudBucket_DB822B7C.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.MyResource_cloudCounter_0782991D.arn}\"],\"Effect\":\"Allow\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.cloudCounter.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.MyResource_cloudCounter_0782991D.arn}\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.MyResource_cloudTopic-OnMessage-f10eb240_IamRole_C06EFF5D.name}"
       },
       "testaccesscloudresourcethroughstaticmethodsonly_Handler_IamRolePolicy_A6861688": {
@@ -285,11 +285,8 @@ module.exports = function({ $_parentThis_localCounter, $globalCounter }) {
         },
         "environment": {
           "variables": {
-            "BUCKET_NAME_ae5b06c6": "${aws_s3_bucket.Another_First_cloudBucket_DB822B7C.bucket}",
-            "BUCKET_NAME_d755b447": "${aws_s3_bucket.cloudBucket.bucket}",
             "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.cloudCounter.name}",
             "DYNAMODB_TABLE_NAME_5afed199": "${aws_dynamodb_table.MyResource_cloudCounter_0782991D.name}",
-            "TOPIC_ARN_53de52bf": "${aws_sns_topic.MyResource_cloudTopic_1F3310C3.arn}",
             "WING_FUNCTION_NAME": "cloud-Topic-OnMessage-f10eb240-c8df2c86",
             "WING_TARGET": "tf-aws"
           }
@@ -346,7 +343,6 @@ module.exports = function({ $_parentThis_localCounter, $globalCounter }) {
             "BUCKET_NAME_ae5b06c6": "${aws_s3_bucket.Another_First_cloudBucket_DB822B7C.bucket}",
             "BUCKET_NAME_d755b447": "${aws_s3_bucket.cloudBucket.bucket}",
             "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.cloudCounter.name}",
-            "DYNAMODB_TABLE_NAME_5afed199": "${aws_dynamodb_table.MyResource_cloudCounter_0782991D.name}",
             "TOPIC_ARN_53de52bf": "${aws_sns_topic.MyResource_cloudTopic_1F3310C3.arn}",
             "WING_FUNCTION_NAME": "Handler-c8f4f2a1",
             "WING_TARGET": "tf-aws"

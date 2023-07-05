@@ -92,7 +92,7 @@ module.exports = function({ $bucket2 }) {
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.2"
+      "version": "0.17.0"
     },
     "outputs": {
       "root": {
@@ -106,7 +106,7 @@ module.exports = function({ $bucket2 }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:call synthetic closure class as a function\",\"${aws_lambda_function.root_testcallsyntheticclosureclassasafunction_Handler_9FCCE7B2.arn}\"],[\"root/Default/Default/test:call non-synthetic closure as a function\",\"${aws_lambda_function.root_testcallnonsyntheticclosureasafunction_Handler_B5D5A937.arn}\"]]"
+      "value": "[[\"root/Default/Default/test:call synthetic closure class as a function\",\"${aws_lambda_function.testcallsyntheticclosureclassasafunction_Handler_577F53A9.arn}\"],[\"root/Default/Default/test:call non-synthetic closure as a function\",\"${aws_lambda_function.testcallnon-syntheticclosureasafunction_Handler_8C8F5E97.arn}\"]]"
     }
   },
   "provider": {
@@ -116,81 +116,81 @@ module.exports = function({ $bucket2 }) {
   },
   "resource": {
     "aws_iam_role": {
-      "root_testcallnonsyntheticclosureasafunction_Handler_IamRole_4F671D8B": {
+      "testcallnon-syntheticclosureasafunction_Handler_IamRole_A06F3749": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:call non-synthetic closure as a function/Handler/IamRole",
-            "uniqueId": "root_testcallnonsyntheticclosureasafunction_Handler_IamRole_4F671D8B"
+            "uniqueId": "testcallnon-syntheticclosureasafunction_Handler_IamRole_A06F3749"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       },
-      "root_testcallsyntheticclosureclassasafunction_Handler_IamRole_33EC36C4": {
+      "testcallsyntheticclosureclassasafunction_Handler_IamRole_75DB8DE1": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:call synthetic closure class as a function/Handler/IamRole",
-            "uniqueId": "root_testcallsyntheticclosureclassasafunction_Handler_IamRole_33EC36C4"
+            "uniqueId": "testcallsyntheticclosureclassasafunction_Handler_IamRole_75DB8DE1"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
-      "root_testcallnonsyntheticclosureasafunction_Handler_IamRolePolicy_4B2DF871": {
+      "testcallnon-syntheticclosureasafunction_Handler_IamRolePolicy_3CCA75F8": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:call non-synthetic closure as a function/Handler/IamRolePolicy",
-            "uniqueId": "root_testcallnonsyntheticclosureasafunction_Handler_IamRolePolicy_4B2DF871"
+            "uniqueId": "testcallnon-syntheticclosureasafunction_Handler_IamRolePolicy_3CCA75F8"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\",\"s3:GetObject*\",\"s3:GetBucket*\"],\"Resource\":[\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\",\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:List*\",\"s3:PutObject*\",\"s3:Abort*\",\"s3:GetObject*\",\"s3:GetBucket*\"],\"Resource\":[\"${aws_s3_bucket.root_MyClosure_cloudBucket_BFE554F4.arn}\",\"${aws_s3_bucket.root_MyClosure_cloudBucket_BFE554F4.arn}/*\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.root_testcallnonsyntheticclosureasafunction_Handler_IamRole_4F671D8B.name}"
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\",\"s3:GetObject*\",\"s3:GetBucket*\"],\"Resource\":[\"${aws_s3_bucket.cloudBucket.arn}\",\"${aws_s3_bucket.cloudBucket.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:List*\",\"s3:PutObject*\",\"s3:Abort*\",\"s3:GetObject*\",\"s3:GetBucket*\"],\"Resource\":[\"${aws_s3_bucket.MyClosure_cloudBucket_4DAD12C0.arn}\",\"${aws_s3_bucket.MyClosure_cloudBucket_4DAD12C0.arn}/*\"],\"Effect\":\"Allow\"}]}",
+        "role": "${aws_iam_role.testcallnon-syntheticclosureasafunction_Handler_IamRole_A06F3749.name}"
       },
-      "root_testcallsyntheticclosureclassasafunction_Handler_IamRolePolicy_3689D05A": {
+      "testcallsyntheticclosureclassasafunction_Handler_IamRolePolicy_64E9CC96": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:call synthetic closure class as a function/Handler/IamRolePolicy",
-            "uniqueId": "root_testcallsyntheticclosureclassasafunction_Handler_IamRolePolicy_3689D05A"
+            "uniqueId": "testcallsyntheticclosureclassasafunction_Handler_IamRolePolicy_64E9CC96"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\",\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.root_testcallsyntheticclosureclassasafunction_Handler_IamRole_33EC36C4.name}"
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.cloudBucket.arn}\",\"${aws_s3_bucket.cloudBucket.arn}/*\"],\"Effect\":\"Allow\"}]}",
+        "role": "${aws_iam_role.testcallsyntheticclosureclassasafunction_Handler_IamRole_75DB8DE1.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
-      "root_testcallnonsyntheticclosureasafunction_Handler_IamRolePolicyAttachment_9740A041": {
+      "testcallnon-syntheticclosureasafunction_Handler_IamRolePolicyAttachment_228ED90F": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:call non-synthetic closure as a function/Handler/IamRolePolicyAttachment",
-            "uniqueId": "root_testcallnonsyntheticclosureasafunction_Handler_IamRolePolicyAttachment_9740A041"
+            "uniqueId": "testcallnon-syntheticclosureasafunction_Handler_IamRolePolicyAttachment_228ED90F"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.root_testcallnonsyntheticclosureasafunction_Handler_IamRole_4F671D8B.name}"
+        "role": "${aws_iam_role.testcallnon-syntheticclosureasafunction_Handler_IamRole_A06F3749.name}"
       },
-      "root_testcallsyntheticclosureclassasafunction_Handler_IamRolePolicyAttachment_8F43CDA2": {
+      "testcallsyntheticclosureclassasafunction_Handler_IamRolePolicyAttachment_8F878B5F": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:call synthetic closure class as a function/Handler/IamRolePolicyAttachment",
-            "uniqueId": "root_testcallsyntheticclosureclassasafunction_Handler_IamRolePolicyAttachment_8F43CDA2"
+            "uniqueId": "testcallsyntheticclosureclassasafunction_Handler_IamRolePolicyAttachment_8F878B5F"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.root_testcallsyntheticclosureclassasafunction_Handler_IamRole_33EC36C4.name}"
+        "role": "${aws_iam_role.testcallsyntheticclosureclassasafunction_Handler_IamRole_75DB8DE1.name}"
       }
     },
     "aws_lambda_function": {
-      "root_testcallnonsyntheticclosureasafunction_Handler_B5D5A937": {
+      "testcallnon-syntheticclosureasafunction_Handler_8C8F5E97": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:call non-synthetic closure as a function/Handler/Default",
-            "uniqueId": "root_testcallnonsyntheticclosureasafunction_Handler_B5D5A937"
+            "uniqueId": "testcallnon-syntheticclosureasafunction_Handler_8C8F5E97"
           }
         },
         "environment": {
           "variables": {
-            "BUCKET_NAME_bbe94f63": "${aws_s3_bucket.root_MyClosure_cloudBucket_BFE554F4.bucket}",
-            "BUCKET_NAME_d755b447": "${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
+            "BUCKET_NAME_bbe94f63": "${aws_s3_bucket.MyClosure_cloudBucket_4DAD12C0.bucket}",
+            "BUCKET_NAME_d755b447": "${aws_s3_bucket.cloudBucket.bucket}",
             "WING_FUNCTION_NAME": "Handler-c88b1fea",
             "WING_TARGET": "tf-aws"
           }
@@ -198,26 +198,26 @@ module.exports = function({ $bucket2 }) {
         "function_name": "Handler-c88b1fea",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.root_testcallnonsyntheticclosureasafunction_Handler_IamRole_4F671D8B.arn}",
+        "role": "${aws_iam_role.testcallnon-syntheticclosureasafunction_Handler_IamRole_A06F3749.arn}",
         "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
-        "s3_key": "${aws_s3_object.root_testcallnonsyntheticclosureasafunction_Handler_S3Object_0E104851.key}",
+        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
+        "s3_key": "${aws_s3_object.testcallnon-syntheticclosureasafunction_Handler_S3Object_F2F52456.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
           "subnet_ids": []
         }
       },
-      "root_testcallsyntheticclosureclassasafunction_Handler_9FCCE7B2": {
+      "testcallsyntheticclosureclassasafunction_Handler_577F53A9": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:call synthetic closure class as a function/Handler/Default",
-            "uniqueId": "root_testcallsyntheticclosureclassasafunction_Handler_9FCCE7B2"
+            "uniqueId": "testcallsyntheticclosureclassasafunction_Handler_577F53A9"
           }
         },
         "environment": {
           "variables": {
-            "BUCKET_NAME_d755b447": "${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
+            "BUCKET_NAME_d755b447": "${aws_s3_bucket.cloudBucket.bucket}",
             "WING_FUNCTION_NAME": "Handler-c822e354",
             "WING_TARGET": "tf-aws"
           }
@@ -225,10 +225,10 @@ module.exports = function({ $bucket2 }) {
         "function_name": "Handler-c822e354",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.root_testcallsyntheticclosureclassasafunction_Handler_IamRole_33EC36C4.arn}",
+        "role": "${aws_iam_role.testcallsyntheticclosureclassasafunction_Handler_IamRole_75DB8DE1.arn}",
         "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
-        "s3_key": "${aws_s3_object.root_testcallsyntheticclosureclassasafunction_Handler_S3Object_86969DD9.key}",
+        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
+        "s3_key": "${aws_s3_object.testcallsyntheticclosureclassasafunction_Handler_S3Object_CBB724B2.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -237,30 +237,30 @@ module.exports = function({ $bucket2 }) {
       }
     },
     "aws_s3_bucket": {
-      "root_Code_02F3C603": {
+      "Code": {
         "//": {
           "metadata": {
             "path": "root/Default/Code",
-            "uniqueId": "root_Code_02F3C603"
+            "uniqueId": "Code"
           }
         },
         "bucket_prefix": "code-c84a50b1-"
       },
-      "root_MyClosure_cloudBucket_BFE554F4": {
+      "MyClosure_cloudBucket_4DAD12C0": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/MyClosure/cloud.Bucket/Default",
-            "uniqueId": "root_MyClosure_cloudBucket_BFE554F4"
+            "uniqueId": "MyClosure_cloudBucket_4DAD12C0"
           }
         },
         "bucket_prefix": "cloud-bucket-c8b87a6b-",
         "force_destroy": false
       },
-      "root_cloudBucket_4F3C4F53": {
+      "cloudBucket": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/cloud.Bucket/Default",
-            "uniqueId": "root_cloudBucket_4F3C4F53"
+            "uniqueId": "cloudBucket"
           }
         },
         "bucket_prefix": "cloud-bucket-c87175e7-",
@@ -268,42 +268,42 @@ module.exports = function({ $bucket2 }) {
       }
     },
     "aws_s3_bucket_public_access_block": {
-      "root_MyClosure_cloudBucket_PublicAccessBlock_0001444D": {
+      "MyClosure_cloudBucket_PublicAccessBlock_EFF6E688": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/MyClosure/cloud.Bucket/PublicAccessBlock",
-            "uniqueId": "root_MyClosure_cloudBucket_PublicAccessBlock_0001444D"
+            "uniqueId": "MyClosure_cloudBucket_PublicAccessBlock_EFF6E688"
           }
         },
         "block_public_acls": true,
         "block_public_policy": true,
-        "bucket": "${aws_s3_bucket.root_MyClosure_cloudBucket_BFE554F4.bucket}",
+        "bucket": "${aws_s3_bucket.MyClosure_cloudBucket_4DAD12C0.bucket}",
         "ignore_public_acls": true,
         "restrict_public_buckets": true
       },
-      "root_cloudBucket_PublicAccessBlock_319C1C2E": {
+      "cloudBucket_PublicAccessBlock_5946CCE8": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/cloud.Bucket/PublicAccessBlock",
-            "uniqueId": "root_cloudBucket_PublicAccessBlock_319C1C2E"
+            "uniqueId": "cloudBucket_PublicAccessBlock_5946CCE8"
           }
         },
         "block_public_acls": true,
         "block_public_policy": true,
-        "bucket": "${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
+        "bucket": "${aws_s3_bucket.cloudBucket.bucket}",
         "ignore_public_acls": true,
         "restrict_public_buckets": true
       }
     },
     "aws_s3_bucket_server_side_encryption_configuration": {
-      "root_MyClosure_cloudBucket_Encryption_0C0CCC48": {
+      "MyClosure_cloudBucket_Encryption_31C1B5A0": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/MyClosure/cloud.Bucket/Encryption",
-            "uniqueId": "root_MyClosure_cloudBucket_Encryption_0C0CCC48"
+            "uniqueId": "MyClosure_cloudBucket_Encryption_31C1B5A0"
           }
         },
-        "bucket": "${aws_s3_bucket.root_MyClosure_cloudBucket_BFE554F4.bucket}",
+        "bucket": "${aws_s3_bucket.MyClosure_cloudBucket_4DAD12C0.bucket}",
         "rule": [
           {
             "apply_server_side_encryption_by_default": {
@@ -312,14 +312,14 @@ module.exports = function({ $bucket2 }) {
           }
         ]
       },
-      "root_cloudBucket_Encryption_8ED0CD9C": {
+      "cloudBucket_Encryption_77B6AEEF": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/cloud.Bucket/Encryption",
-            "uniqueId": "root_cloudBucket_Encryption_8ED0CD9C"
+            "uniqueId": "cloudBucket_Encryption_77B6AEEF"
           }
         },
-        "bucket": "${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
+        "bucket": "${aws_s3_bucket.cloudBucket.bucket}",
         "rule": [
           {
             "apply_server_side_encryption_by_default": {
@@ -330,25 +330,25 @@ module.exports = function({ $bucket2 }) {
       }
     },
     "aws_s3_object": {
-      "root_testcallnonsyntheticclosureasafunction_Handler_S3Object_0E104851": {
+      "testcallnon-syntheticclosureasafunction_Handler_S3Object_F2F52456": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:call non-synthetic closure as a function/Handler/S3Object",
-            "uniqueId": "root_testcallnonsyntheticclosureasafunction_Handler_S3Object_0E104851"
+            "uniqueId": "testcallnon-syntheticclosureasafunction_Handler_S3Object_F2F52456"
           }
         },
-        "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
+        "bucket": "${aws_s3_bucket.Code.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       },
-      "root_testcallsyntheticclosureclassasafunction_Handler_S3Object_86969DD9": {
+      "testcallsyntheticclosureclassasafunction_Handler_S3Object_CBB724B2": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:call synthetic closure class as a function/Handler/S3Object",
-            "uniqueId": "root_testcallsyntheticclosureclassasafunction_Handler_S3Object_86969DD9"
+            "uniqueId": "testcallsyntheticclosureclassasafunction_Handler_S3Object_CBB724B2"
           }
         },
-        "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
+        "bucket": "${aws_s3_bucket.Code.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       }

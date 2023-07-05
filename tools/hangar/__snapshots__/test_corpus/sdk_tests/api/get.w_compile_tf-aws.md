@@ -243,7 +243,6 @@ module.exports = function({ $api_url, $body, $http_GET, $http_Util }) {
         },
         "environment": {
           "variables": {
-            "CLOUD_API_C82DF3A5": "${aws_api_gateway_stage.cloudApi_api_stage_BBB283E4.invoke_url}",
             "WING_FUNCTION_NAME": "Handler-c838ce37",
             "WING_TARGET": "tf-aws",
             "WING_TOKEN_TFTOKEN_TOKEN_21": "${jsonencode(aws_api_gateway_stage.cloudApi_api_stage_BBB283E4.invoke_url)}"
