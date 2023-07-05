@@ -30,7 +30,7 @@ export const StatusBar = ({
         theme.bg3,
         theme.text1,
         theme.border3,
-        "py-1 px-4 flex text-2xs w-full relative border-t",
+        "py-1 px-4 flex text-2xs w-full relative border-t z-10",
       )}
     >
       {/*left side*/}

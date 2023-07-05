@@ -7,6 +7,7 @@ export interface TextHighlightProps {
   text: string;
   className?: string;
   json?: boolean;
+  dataTestid?: string;
 }
 
 const palette = {
@@ -49,6 +50,7 @@ export const TextHighlight = ({
   text,
   className = "",
   json = true,
+  dataTestid,
 }: TextHighlightProps) => {
   const { theme } = useTheme();
 
@@ -65,7 +67,7 @@ export const TextHighlight = ({
   }, [text, json, theme]);
 
   return (
-    <div className={className}>
+    <div className={className} data-testid={dataTestid}>
       {json && highlightedText ? (
         <div
           id={id}
