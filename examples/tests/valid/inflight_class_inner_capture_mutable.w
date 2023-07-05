@@ -7,7 +7,9 @@ test "inner inflight class capture immutable" {
   class Inner {
     dang(): num {
       y.push(2);
-
+  
+      // TODO: this should be a compiler error (it doesn't)
+      // see https://github.com/winglang/wing/issues/2729
       i = i + 1;
 
       return y.at(0) + 10;
