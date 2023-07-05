@@ -27,10 +27,6 @@ let fn = inflight (): Array<str> => {
 test "capture shadow interaction" {
   let result = fn();
   assert(result.length == 3);
-  log(result.at(0));
-  log(result.at(1));
-  log(result.at(2));
-
   assert(result.at(0) == "hola!");
   assert(result.at(1) == "world");
   assert(result.at(2) == "bang");
