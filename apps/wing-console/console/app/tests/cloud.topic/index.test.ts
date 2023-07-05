@@ -4,7 +4,7 @@ import { getResourceNode } from "../helpers.js";
 
 describe(`${__dirname}/index.w`, () => {
   test("publishes message", async ({ page }) => {
-    await getResourceNode(page, "root/Default/cloud.Function").click();
+    await getResourceNode(page, "root/Default/cloud.Topic").click();
 
     await page.getByTestId("cloud.topic:message").fill("Hello world!");
 

@@ -12,7 +12,7 @@ describe(`${__dirname}/index.w`, () => {
     await getResourceNode(page, "root/Default/cloud.Api").click();
 
     await page.getByTestId("cloud.api:method-button").click();
-    await page.getByTestId("cloud.api:method-${method}").click();
+    await page.getByTestId(`cloud.api:method-${method}`).click();
 
     await page.getByTestId("cloud.api:route").fill(route);
     await page.getByTestId("cloud.api:send").click();
