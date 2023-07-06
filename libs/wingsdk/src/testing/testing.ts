@@ -1,6 +1,6 @@
 import { IConstruct } from "constructs";
 import { InflightBindings, NodeJsCode } from "../core";
-import { serializeImmutableData } from "../core/internal";
+import { liftObject } from "../core/internal";
 import { IInflightHost, IResource, Resource } from "../std";
 
 /**
@@ -30,7 +30,7 @@ export class Testing {
     const clients: Record<string, string> = {};
 
     for (const [k, v] of Object.entries(bindings)) {
-      clients[k] = serializeImmutableData(scope, v.obj);
+      clients[k] = liftObject(scope, v.obj);
     }
 
     // implements IFunctionHandler

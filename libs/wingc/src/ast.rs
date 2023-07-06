@@ -9,6 +9,7 @@ use itertools::Itertools;
 
 use crate::diagnostic::WingSpan;
 use crate::type_check::symbol_env::SymbolEnv;
+use crate::type_check::CLOSURE_CLASS_HANDLE_METHOD;
 
 static EXPR_COUNTER: AtomicUsize = AtomicUsize::new(0);
 
@@ -155,6 +156,14 @@ pub struct UserDefinedType {
 }
 
 impl UserDefinedType {
+	pub fn for_class(class: &Class) -> Self {
+		Self {
+			root: class.name.clone(),
+			fields: vec![],
+			span: class.name.span.clone(),
+		}
+	}
+
 	pub fn full_path(&self) -> Vec<Symbol> {
 		let mut path = vec![self.root.clone()];
 		path.extend(self.fields.clone());
@@ -266,6 +275,8 @@ pub enum FunctionBody {
 
 #[derive(Debug)]
 pub struct FunctionDefinition {
+	/// The name of the function ('None' if this is a closure).
+	pub name: Option<Symbol>,
 	/// The function implementation.
 	pub body: FunctionBody,
 	/// The function signature, including the return type.
@@ -326,27 +337,71 @@ pub struct Class {
 	pub methods: Vec<(Symbol, FunctionDefinition)>,
 	pub initializer: FunctionDefinition,
 	pub inflight_initializer: FunctionDefinition,
-	pub parent: Option<Expr>, // the expression must be a reference to a user defined type
+	pub parent: Option<Expr>, // base class (the expression is a reference to a user defined type)
 	pub implements: Vec<UserDefinedType>,
 	pub phase: Phase,
 }
 
 impl Class {
 	/// Returns the `UserDefinedType` of the parent class, if any.
-	pub fn parent_udt(&self) -> Option<UserDefinedType> {
+	pub fn parent_udt(&self) -> Option<&UserDefinedType> {
 		let Some(expr) = &self.parent else {
 			return None;
 		};
 
-		let ExprKind::Reference(ref r) = expr.kind else {
-			return None;
-		};
+		expr.as_type_reference()
+	}
 
-		let Reference::TypeReference(t) = r else {
-			return None;
-		};
+	/// Returns all methods, including the initializer and inflight initializer.
+	pub fn all_methods(&self, include_initializers: bool) -> Vec<&FunctionDefinition> {
+		let mut methods: Vec<&FunctionDefinition> = vec![];
 
-		Some(t.clone())
+		for (_, m) in &self.methods {
+			methods.push(&m);
+		}
+
+		if include_initializers {
+			methods.push(&self.initializer);
+			methods.push(&self.inflight_initializer);
+		}
+
+		methods
+	}
+
+	pub fn inflight_methods(&self, include_initializers: bool) -> Vec<&FunctionDefinition> {
+		self
+			.all_methods(include_initializers)
+			.iter()
+			.filter(|m| m.signature.phase == Phase::Inflight)
+			.map(|f| *f)
+			.collect_vec()
+	}
+
+	pub fn inflight_fields(&self) -> Vec<&ClassField> {
+		self.fields.iter().filter(|f| f.phase == Phase::Inflight).collect_vec()
+	}
+
+	/// Returns the function definition of the "handle" method of this class (if this is a closure
+	/// class). Otherwise returns None.
+	pub fn closure_handle_method(&self) -> Option<&FunctionDefinition> {
+		for method in self.inflight_methods(false) {
+			if let Some(name) = &method.name {
+				if name.name == CLOSURE_CLASS_HANDLE_METHOD {
+					return Some(method);
+				}
+			}
+		}
+
+		None
+	}
+
+	pub fn preflight_methods(&self, include_initializers: bool) -> Vec<&FunctionDefinition> {
+		self
+			.all_methods(include_initializers)
+			.iter()
+			.filter(|f| f.signature.phase != Phase::Inflight)
+			.map(|f| *f)
+			.collect_vec()
 	}
 }
 
@@ -516,6 +571,14 @@ impl Expr {
 		let id = EXPR_COUNTER.fetch_add(1, Ordering::SeqCst);
 
 		Self { id, kind, span }
+	}
+
+	/// Returns true if the expression is a reference to a type.
+	pub fn as_type_reference(&self) -> Option<&UserDefinedType> {
+		match &self.kind {
+			ExprKind::Reference(Reference::TypeReference(t)) => Some(t),
+			_ => None,
+		}
 	}
 }
 
