@@ -36,7 +36,8 @@ export function createBundle(entrypoint: string, outputDir?: string): Bundle {
   });
 
   if (esbuild.errors.length > 0) {
-    throw new Error(`Failed to bundle function: ${esbuild.errors.join("\n")}`);
+    const errors = esbuild.errors.map((e) => e.text).join("\n");
+    throw new Error(`Failed to bundle function: ${errors}`);
   }
 
   // the bundled contains line comments with file paths, which are not useful for us, especially

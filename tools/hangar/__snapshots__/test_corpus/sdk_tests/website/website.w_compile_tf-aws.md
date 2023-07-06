@@ -2,19 +2,17 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ w, indexFile, otherFile, config, std_Json, Util }) {
+module.exports = function({ $Util, $config, $indexFile, $otherFile, $std_Json, $w_url }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      {((cond) => {if (!cond) throw new Error("assertion failed: Json.stringify(Util.http(w.url).get(\"body\")) == Json.stringify(indexFile)")})((((args) => { return JSON.stringify(args[0], null, args[1]) })([((await Util.http(w.url)))["body"]]) === ((args) => { return JSON.stringify(args[0], null, args[1]) })([indexFile])))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: Json.stringify(Util.http(w.url + \"/inner-folder/other.html\").get(\"body\")) == Json.stringify(otherFile)")})((((args) => { return JSON.stringify(args[0], null, args[1]) })([((await Util.http((w.url + "/inner-folder/other.html"))))["body"]]) === ((args) => { return JSON.stringify(args[0], null, args[1]) })([otherFile])))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: Json.stringify(Util.http(w.url + \"/config.json\").get(\"body\")) == Json.stringify(Json.stringify(config))")})((((args) => { return JSON.stringify(args[0], null, args[1]) })([((await Util.http((w.url + "/config.json"))))["body"]]) === ((args) => { return JSON.stringify(args[0], null, args[1]) })([((args) => { return JSON.stringify(args[0], null, args[1]) })([config])])))};
+    async handle() {
+      {((cond) => {if (!cond) throw new Error("assertion failed: Json.stringify(Util.http(w.url).get(\"body\")) == Json.stringify(indexFile)")})((((args) => { return JSON.stringify(args[0], null, args[1]) })([((await $Util.http($w_url)))["body"]]) === ((args) => { return JSON.stringify(args[0], null, args[1]) })([$indexFile])))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: Json.stringify(Util.http(w.url + \"/inner-folder/other.html\").get(\"body\")) == Json.stringify(otherFile)")})((((args) => { return JSON.stringify(args[0], null, args[1]) })([((await $Util.http(($w_url + "/inner-folder/other.html"))))["body"]]) === ((args) => { return JSON.stringify(args[0], null, args[1]) })([$otherFile])))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: Json.stringify(Util.http(w.url + \"/config.json\").get(\"body\")) == Json.stringify(Json.stringify(config))")})((((args) => { return JSON.stringify(args[0], null, args[1]) })([((await $Util.http(($w_url + "/config.json"))))["body"]]) === ((args) => { return JSON.stringify(args[0], null, args[1]) })([((args) => { return JSON.stringify(args[0], null, args[1]) })([$config])])))};
     }
   }
   return $Closure1;
@@ -28,9 +26,7 @@ module.exports = function({  }) {
   class Util {
     constructor({  }) {
     }
-    async $inflight_init()  {
-    }
-    static async http(url)  {
+    static async http(url) {
       return (require("<ABSOLUTE_PATH>/http.js")["http"])(url)
     }
   }
@@ -46,7 +42,7 @@ module.exports = function({  }) {
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.2"
+      "version": "0.17.0"
     },
     "outputs": {
       "root": {
@@ -60,7 +56,7 @@ module.exports = function({  }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:access files on the website\",\"${aws_lambda_function.root_testaccessfilesonthewebsite_Handler_C97B2B6F.arn}\"]]"
+      "value": "[[\"root/Default/Default/test:access files on the website\",\"${aws_lambda_function.testaccessfilesonthewebsite_Handler_B4D12109.arn}\"]]"
     }
   },
   "provider": {
@@ -70,11 +66,11 @@ module.exports = function({  }) {
   },
   "resource": {
     "aws_cloudfront_distribution": {
-      "root_cloudWebsite_Distribution_6BC863F8": {
+      "cloudWebsite_Distribution_083B5AF9": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/cloud.Website/Distribution",
-            "uniqueId": "root_cloudWebsite_Distribution_6BC863F8"
+            "uniqueId": "cloudWebsite_Distribution_083B5AF9"
           }
         },
         "default_cache_behavior": {
@@ -103,7 +99,7 @@ module.exports = function({  }) {
         "enabled": true,
         "origin": [
           {
-            "domain_name": "${aws_s3_bucket.root_cloudWebsite_WebsiteBucket_E28E35CE.bucket_regional_domain_name}",
+            "domain_name": "${aws_s3_bucket.cloudWebsite_WebsiteBucket_EB03D355.bucket_regional_domain_name}",
             "origin_id": "s3Origin"
           }
         ],
@@ -120,62 +116,62 @@ module.exports = function({  }) {
       }
     },
     "aws_iam_role": {
-      "root_testaccessfilesonthewebsite_Handler_IamRole_359FBA18": {
+      "testaccessfilesonthewebsite_Handler_IamRole_1A1B55D7": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:access files on the website/Handler/IamRole",
-            "uniqueId": "root_testaccessfilesonthewebsite_Handler_IamRole_359FBA18"
+            "uniqueId": "testaccessfilesonthewebsite_Handler_IamRole_1A1B55D7"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
-      "root_testaccessfilesonthewebsite_Handler_IamRolePolicy_2BFFD84E": {
+      "testaccessfilesonthewebsite_Handler_IamRolePolicy_D3277813": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:access files on the website/Handler/IamRolePolicy",
-            "uniqueId": "root_testaccessfilesonthewebsite_Handler_IamRolePolicy_2BFFD84E"
+            "uniqueId": "testaccessfilesonthewebsite_Handler_IamRolePolicy_D3277813"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
-        "role": "${aws_iam_role.root_testaccessfilesonthewebsite_Handler_IamRole_359FBA18.name}"
+        "role": "${aws_iam_role.testaccessfilesonthewebsite_Handler_IamRole_1A1B55D7.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
-      "root_testaccessfilesonthewebsite_Handler_IamRolePolicyAttachment_2FF11015": {
+      "testaccessfilesonthewebsite_Handler_IamRolePolicyAttachment_15B88AC9": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:access files on the website/Handler/IamRolePolicyAttachment",
-            "uniqueId": "root_testaccessfilesonthewebsite_Handler_IamRolePolicyAttachment_2FF11015"
+            "uniqueId": "testaccessfilesonthewebsite_Handler_IamRolePolicyAttachment_15B88AC9"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.root_testaccessfilesonthewebsite_Handler_IamRole_359FBA18.name}"
+        "role": "${aws_iam_role.testaccessfilesonthewebsite_Handler_IamRole_1A1B55D7.name}"
       }
     },
     "aws_lambda_function": {
-      "root_testaccessfilesonthewebsite_Handler_C97B2B6F": {
+      "testaccessfilesonthewebsite_Handler_B4D12109": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:access files on the website/Handler/Default",
-            "uniqueId": "root_testaccessfilesonthewebsite_Handler_C97B2B6F"
+            "uniqueId": "testaccessfilesonthewebsite_Handler_B4D12109"
           }
         },
         "environment": {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c867c4e0",
             "WING_TARGET": "tf-aws",
-            "WING_TOKEN_TFTOKEN_TOKEN_11": "${jsonencode(aws_cloudfront_distribution.root_cloudWebsite_Distribution_6BC863F8.domain_name)}"
+            "WING_TOKEN_TFTOKEN_TOKEN_11": "${jsonencode(aws_cloudfront_distribution.cloudWebsite_Distribution_083B5AF9.domain_name)}"
           }
         },
         "function_name": "Handler-c867c4e0",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.root_testaccessfilesonthewebsite_Handler_IamRole_359FBA18.arn}",
+        "role": "${aws_iam_role.testaccessfilesonthewebsite_Handler_IamRole_1A1B55D7.arn}",
         "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
-        "s3_key": "${aws_s3_object.root_testaccessfilesonthewebsite_Handler_S3Object_63750589.key}",
+        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
+        "s3_key": "${aws_s3_object.testaccessfilesonthewebsite_Handler_S3Object_BD206D0E.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -184,20 +180,20 @@ module.exports = function({  }) {
       }
     },
     "aws_s3_bucket": {
-      "root_Code_02F3C603": {
+      "Code": {
         "//": {
           "metadata": {
             "path": "root/Default/Code",
-            "uniqueId": "root_Code_02F3C603"
+            "uniqueId": "Code"
           }
         },
         "bucket_prefix": "code-c84a50b1-"
       },
-      "root_cloudWebsite_WebsiteBucket_E28E35CE": {
+      "cloudWebsite_WebsiteBucket_EB03D355": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/cloud.Website/WebsiteBucket",
-            "uniqueId": "root_cloudWebsite_WebsiteBucket_E28E35CE"
+            "uniqueId": "cloudWebsite_WebsiteBucket_EB03D355"
           }
         },
         "bucket_prefix": "cloud-website-c8e58765-",
@@ -205,41 +201,41 @@ module.exports = function({  }) {
       }
     },
     "aws_s3_bucket_policy": {
-      "root_cloudWebsite_PublicPolicy_2884A0C6": {
+      "cloudWebsite_PublicPolicy_44BB71F3": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/cloud.Website/PublicPolicy",
-            "uniqueId": "root_cloudWebsite_PublicPolicy_2884A0C6"
+            "uniqueId": "cloudWebsite_PublicPolicy_44BB71F3"
           }
         },
-        "bucket": "${aws_s3_bucket.root_cloudWebsite_WebsiteBucket_E28E35CE.bucket}",
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":\"*\",\"Action\":[\"s3:GetObject\"],\"Resource\":[\"${aws_s3_bucket.root_cloudWebsite_WebsiteBucket_E28E35CE.arn}/*\"]}]}"
+        "bucket": "${aws_s3_bucket.cloudWebsite_WebsiteBucket_EB03D355.bucket}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":\"*\",\"Action\":[\"s3:GetObject\"],\"Resource\":[\"${aws_s3_bucket.cloudWebsite_WebsiteBucket_EB03D355.arn}/*\"]}]}"
       }
     },
     "aws_s3_bucket_public_access_block": {
-      "root_cloudWebsite_PublicAccessBlock_89CD01D0": {
+      "cloudWebsite_PublicAccessBlock_18A70311": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/cloud.Website/PublicAccessBlock",
-            "uniqueId": "root_cloudWebsite_PublicAccessBlock_89CD01D0"
+            "uniqueId": "cloudWebsite_PublicAccessBlock_18A70311"
           }
         },
         "block_public_acls": false,
         "block_public_policy": false,
-        "bucket": "${aws_s3_bucket.root_cloudWebsite_WebsiteBucket_E28E35CE.bucket}",
+        "bucket": "${aws_s3_bucket.cloudWebsite_WebsiteBucket_EB03D355.bucket}",
         "ignore_public_acls": false,
         "restrict_public_buckets": false
       }
     },
     "aws_s3_bucket_server_side_encryption_configuration": {
-      "root_cloudWebsite_Encryption_8B168696": {
+      "cloudWebsite_Encryption_6A8A4E29": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/cloud.Website/Encryption",
-            "uniqueId": "root_cloudWebsite_Encryption_8B168696"
+            "uniqueId": "cloudWebsite_Encryption_6A8A4E29"
           }
         },
-        "bucket": "${aws_s3_bucket.root_cloudWebsite_WebsiteBucket_E28E35CE.bucket}",
+        "bucket": "${aws_s3_bucket.cloudWebsite_WebsiteBucket_EB03D355.bucket}",
         "rule": [
           {
             "apply_server_side_encryption_by_default": {
@@ -250,73 +246,73 @@ module.exports = function({  }) {
       }
     },
     "aws_s3_bucket_website_configuration": {
-      "root_cloudWebsite_BucketWebsiteConfiguration_DEE39F09": {
+      "cloudWebsite_BucketWebsiteConfiguration_920E8E41": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/cloud.Website/BucketWebsiteConfiguration",
-            "uniqueId": "root_cloudWebsite_BucketWebsiteConfiguration_DEE39F09"
+            "uniqueId": "cloudWebsite_BucketWebsiteConfiguration_920E8E41"
           }
         },
-        "bucket": "${aws_s3_bucket.root_cloudWebsite_WebsiteBucket_E28E35CE.bucket}",
+        "bucket": "${aws_s3_bucket.cloudWebsite_WebsiteBucket_EB03D355.bucket}",
         "index_document": {
           "suffix": "index.html"
         }
       }
     },
     "aws_s3_object": {
-      "root_cloudWebsite_Fileconfigjson_366296B1": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/cloud.Website/File-config.json",
-            "uniqueId": "root_cloudWebsite_Fileconfigjson_366296B1"
-          }
-        },
-        "bucket": "${aws_s3_bucket.root_cloudWebsite_WebsiteBucket_E28E35CE.bucket}",
-        "content": "{\"json\":1}",
-        "content_type": "application/json",
-        "depends_on": [
-          "aws_s3_bucket.root_cloudWebsite_WebsiteBucket_E28E35CE"
-        ],
-        "key": "config.json"
-      },
-      "root_cloudWebsite_Fileindexhtml_A07B6D26": {
+      "cloudWebsite_File--indexhtml_2A2AE13C": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/cloud.Website/File--index.html",
-            "uniqueId": "root_cloudWebsite_Fileindexhtml_A07B6D26"
+            "uniqueId": "cloudWebsite_File--indexhtml_2A2AE13C"
           }
         },
-        "bucket": "${aws_s3_bucket.root_cloudWebsite_WebsiteBucket_E28E35CE.bucket}",
+        "bucket": "${aws_s3_bucket.cloudWebsite_WebsiteBucket_EB03D355.bucket}",
         "content_type": "text/html; charset=utf-8",
         "depends_on": [
-          "aws_s3_bucket.root_cloudWebsite_WebsiteBucket_E28E35CE"
+          "aws_s3_bucket.cloudWebsite_WebsiteBucket_EB03D355"
         ],
         "key": "/index.html",
         "source": "<SOURCE>"
       },
-      "root_cloudWebsite_Fileinnerfolderotherhtml_28F0E842": {
+      "cloudWebsite_File--inner-folder--otherhtml_72DA631C": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/cloud.Website/File--inner-folder--other.html",
-            "uniqueId": "root_cloudWebsite_Fileinnerfolderotherhtml_28F0E842"
+            "uniqueId": "cloudWebsite_File--inner-folder--otherhtml_72DA631C"
           }
         },
-        "bucket": "${aws_s3_bucket.root_cloudWebsite_WebsiteBucket_E28E35CE.bucket}",
+        "bucket": "${aws_s3_bucket.cloudWebsite_WebsiteBucket_EB03D355.bucket}",
         "content_type": "text/html; charset=utf-8",
         "depends_on": [
-          "aws_s3_bucket.root_cloudWebsite_WebsiteBucket_E28E35CE"
+          "aws_s3_bucket.cloudWebsite_WebsiteBucket_EB03D355"
         ],
         "key": "/inner-folder/other.html",
         "source": "<SOURCE>"
       },
-      "root_testaccessfilesonthewebsite_Handler_S3Object_63750589": {
+      "cloudWebsite_File-configjson_591A81BA": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/cloud.Website/File-config.json",
+            "uniqueId": "cloudWebsite_File-configjson_591A81BA"
+          }
+        },
+        "bucket": "${aws_s3_bucket.cloudWebsite_WebsiteBucket_EB03D355.bucket}",
+        "content": "{\"json\":1}",
+        "content_type": "application/json",
+        "depends_on": [
+          "aws_s3_bucket.cloudWebsite_WebsiteBucket_EB03D355"
+        ],
+        "key": "config.json"
+      },
+      "testaccessfilesonthewebsite_Handler_S3Object_BD206D0E": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:access files on the website/Handler/S3Object",
-            "uniqueId": "root_testaccessfilesonthewebsite_Handler_S3Object_63750589"
+            "uniqueId": "testaccessfilesonthewebsite_Handler_S3Object_BD206D0E"
           }
         },
-        "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
+        "bucket": "${aws_s3_bucket.Code.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       }
@@ -339,15 +335,14 @@ class $Root extends $stdlib.std.Resource {
     class Util extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("http");
+        this._addInflightOps("http", "$inflight_init");
       }
-      static readFile(path)  {
+      static readFile(path) {
         return (require("<ABSOLUTE_PATH>/fs.js")["readFile"])(path)
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.Util.js";
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.Util.js")({
           })
         `);
       }
@@ -362,39 +357,22 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-        }
-        super._registerBind(host, ops);
-      }
-      static _registerTypeBind(host, ops) {
-        if (ops.includes("http")) {
-        }
-        super._registerTypeBind(host, ops);
-      }
     }
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const w_client = context._lift(w);
-        const indexFile_client = context._lift(indexFile);
-        const otherFile_client = context._lift(otherFile);
-        const config_client = context._lift(config);
-        const std_JsonClient = std.Json._toInflightType(context);
-        const UtilClient = Util._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            w: ${w_client},
-            indexFile: ${indexFile_client},
-            otherFile: ${otherFile_client},
-            config: ${config_client},
-            std_Json: ${std_JsonClient.text},
-            Util: ${UtilClient.text},
+          require("./inflight.$Closure1.js")({
+            $Util: ${context._lift(Util)},
+            $config: ${context._lift(config)},
+            $indexFile: ${context._lift(indexFile)},
+            $otherFile: ${context._lift(otherFile)},
+            $std_Json: ${context._lift(std.Json)},
+            $w_url: ${context._lift(w.url)},
           })
         `);
       }
@@ -410,18 +388,12 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure1._registerBindObject(config, host, []);
-          $Closure1._registerBindObject(indexFile, host, []);
-          $Closure1._registerBindObject(otherFile, host, []);
-          $Closure1._registerBindObject(w, host, []);
-        }
         if (ops.includes("handle")) {
           $Closure1._registerBindObject(Util, host, ["http"]);
           $Closure1._registerBindObject(config, host, []);
           $Closure1._registerBindObject(indexFile, host, []);
           $Closure1._registerBindObject(otherFile, host, []);
-          $Closure1._registerBindObject(w.url, host, []);
+          $Closure1._registerBindObject(w.url, host, ["get"]);
         }
         super._registerBind(host, ops);
       }

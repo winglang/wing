@@ -2,28 +2,26 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ math_Util }) {
+module.exports = function({ $math_Util }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.degreesToRadians(360) == math.TAU")})(((await math_Util.degreesToRadians(360)) === math_Util.TAU))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.degreesToRadians(180) == math.PI")})(((await math_Util.degreesToRadians(180)) === math_Util.PI))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.degreesToRadians(90) == math.PI / 2")})(((await math_Util.degreesToRadians(90)) === (math_Util.PI / 2)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.degreesToRadians(60) == math.PI / 3")})(((await math_Util.degreesToRadians(60)) === (math_Util.PI / 3)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.degreesToRadians(45) == math.PI / 4")})(((await math_Util.degreesToRadians(45)) === (math_Util.PI / 4)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.degreesToRadians(30) == math.PI / 6")})(((await math_Util.degreesToRadians(30)) === (math_Util.PI / 6)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.radiansToDegrees(math.TAU) == 360")})(((await math_Util.radiansToDegrees(math_Util.TAU)) === 360))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.radiansToDegrees(math.PI) == 180")})(((await math_Util.radiansToDegrees(math_Util.PI)) === 180))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.radiansToDegrees(math.PI / 2) == 90")})(((await math_Util.radiansToDegrees((math_Util.PI / 2))) === 90))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.radiansToDegrees(math.PI / 3)) == 60")})(((await math_Util.round((await math_Util.radiansToDegrees((math_Util.PI / 3))))) === 60))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.radiansToDegrees(math.PI / 4) == 45")})(((await math_Util.radiansToDegrees((math_Util.PI / 4))) === 45))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.radiansToDegrees(math.PI / 6)) == 30")})(((await math_Util.round((await math_Util.radiansToDegrees((math_Util.PI / 6))))) === 30))};
+    async handle() {
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.degreesToRadians(360) == math.TAU")})(((await $math_Util.degreesToRadians(360)) === $math_Util.TAU))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.degreesToRadians(180) == math.PI")})(((await $math_Util.degreesToRadians(180)) === $math_Util.PI))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.degreesToRadians(90) == math.PI / 2")})(((await $math_Util.degreesToRadians(90)) === ($math_Util.PI / 2)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.degreesToRadians(60) == math.PI / 3")})(((await $math_Util.degreesToRadians(60)) === ($math_Util.PI / 3)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.degreesToRadians(45) == math.PI / 4")})(((await $math_Util.degreesToRadians(45)) === ($math_Util.PI / 4)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.degreesToRadians(30) == math.PI / 6")})(((await $math_Util.degreesToRadians(30)) === ($math_Util.PI / 6)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.radiansToDegrees(math.TAU) == 360")})(((await $math_Util.radiansToDegrees($math_Util.TAU)) === 360))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.radiansToDegrees(math.PI) == 180")})(((await $math_Util.radiansToDegrees($math_Util.PI)) === 180))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.radiansToDegrees(math.PI / 2) == 90")})(((await $math_Util.radiansToDegrees(($math_Util.PI / 2))) === 90))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.radiansToDegrees(math.PI / 3)) == 60")})(((await $math_Util.round((await $math_Util.radiansToDegrees(($math_Util.PI / 3))))) === 60))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.radiansToDegrees(math.PI / 4) == 45")})(((await $math_Util.radiansToDegrees(($math_Util.PI / 4))) === 45))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.radiansToDegrees(math.PI / 6)) == 30")})(((await $math_Util.round((await $math_Util.radiansToDegrees(($math_Util.PI / 6))))) === 30))};
     }
   }
   return $Closure1;
@@ -38,7 +36,7 @@ module.exports = function({ math_Util }) {
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.2"
+      "version": "0.17.0"
     },
     "outputs": {
       "root": {
@@ -52,7 +50,7 @@ module.exports = function({ math_Util }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:inflight angular conversions\",\"${aws_lambda_function.root_testinflightangularconversions_Handler_47C8E57E.arn}\"]]"
+      "value": "[[\"root/Default/Default/test:inflight angular conversions\",\"${aws_lambda_function.testinflightangularconversions_Handler_70CD171D.arn}\"]]"
     }
   },
   "provider": {
@@ -62,46 +60,46 @@ module.exports = function({ math_Util }) {
   },
   "resource": {
     "aws_iam_role": {
-      "root_testinflightangularconversions_Handler_IamRole_64A47C25": {
+      "testinflightangularconversions_Handler_IamRole_AEAE2854": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:inflight angular conversions/Handler/IamRole",
-            "uniqueId": "root_testinflightangularconversions_Handler_IamRole_64A47C25"
+            "uniqueId": "testinflightangularconversions_Handler_IamRole_AEAE2854"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
-      "root_testinflightangularconversions_Handler_IamRolePolicy_57D3BD0F": {
+      "testinflightangularconversions_Handler_IamRolePolicy_C649FC50": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:inflight angular conversions/Handler/IamRolePolicy",
-            "uniqueId": "root_testinflightangularconversions_Handler_IamRolePolicy_57D3BD0F"
+            "uniqueId": "testinflightangularconversions_Handler_IamRolePolicy_C649FC50"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
-        "role": "${aws_iam_role.root_testinflightangularconversions_Handler_IamRole_64A47C25.name}"
+        "role": "${aws_iam_role.testinflightangularconversions_Handler_IamRole_AEAE2854.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
-      "root_testinflightangularconversions_Handler_IamRolePolicyAttachment_14F20BF3": {
+      "testinflightangularconversions_Handler_IamRolePolicyAttachment_1DB6ACA8": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:inflight angular conversions/Handler/IamRolePolicyAttachment",
-            "uniqueId": "root_testinflightangularconversions_Handler_IamRolePolicyAttachment_14F20BF3"
+            "uniqueId": "testinflightangularconversions_Handler_IamRolePolicyAttachment_1DB6ACA8"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.root_testinflightangularconversions_Handler_IamRole_64A47C25.name}"
+        "role": "${aws_iam_role.testinflightangularconversions_Handler_IamRole_AEAE2854.name}"
       }
     },
     "aws_lambda_function": {
-      "root_testinflightangularconversions_Handler_47C8E57E": {
+      "testinflightangularconversions_Handler_70CD171D": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:inflight angular conversions/Handler/Default",
-            "uniqueId": "root_testinflightangularconversions_Handler_47C8E57E"
+            "uniqueId": "testinflightangularconversions_Handler_70CD171D"
           }
         },
         "environment": {
@@ -113,10 +111,10 @@ module.exports = function({ math_Util }) {
         "function_name": "Handler-c85ddda6",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.root_testinflightangularconversions_Handler_IamRole_64A47C25.arn}",
+        "role": "${aws_iam_role.testinflightangularconversions_Handler_IamRole_AEAE2854.arn}",
         "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
-        "s3_key": "${aws_s3_object.root_testinflightangularconversions_Handler_S3Object_0BC467D7.key}",
+        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
+        "s3_key": "${aws_s3_object.testinflightangularconversions_Handler_S3Object_87548D7C.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -125,25 +123,25 @@ module.exports = function({ math_Util }) {
       }
     },
     "aws_s3_bucket": {
-      "root_Code_02F3C603": {
+      "Code": {
         "//": {
           "metadata": {
             "path": "root/Default/Code",
-            "uniqueId": "root_Code_02F3C603"
+            "uniqueId": "Code"
           }
         },
         "bucket_prefix": "code-c84a50b1-"
       }
     },
     "aws_s3_object": {
-      "root_testinflightangularconversions_Handler_S3Object_0BC467D7": {
+      "testinflightangularconversions_Handler_S3Object_87548D7C": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:inflight angular conversions/Handler/S3Object",
-            "uniqueId": "root_testinflightangularconversions_Handler_S3Object_0BC467D7"
+            "uniqueId": "testinflightangularconversions_Handler_S3Object_87548D7C"
           }
         },
-        "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
+        "bucket": "${aws_s3_bucket.Code.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       }
@@ -167,14 +165,12 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const math_UtilClient = math.Util._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            math_Util: ${math_UtilClient.text},
+          require("./inflight.$Closure1.js")({
+            $math_Util: ${context._lift(math.Util)},
           })
         `);
       }
@@ -188,13 +184,6 @@ class $Root extends $stdlib.std.Resource {
             return client;
           })())
         `);
-      }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-        }
-        if (ops.includes("handle")) {
-        }
-        super._registerBind(host, ops);
       }
     }
     {((cond) => {if (!cond) throw new Error("assertion failed: math.degreesToRadians(360) == math.TAU")})(((math.Util.degreesToRadians(360)) === math.Util.TAU))};

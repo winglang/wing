@@ -2,20 +2,18 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ math_Util }) {
+module.exports = function({ $math_Util }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.hypot([3, 4]) == 5")})(((await math_Util.hypot(Object.freeze([3, 4]))) === 5))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.hypot([5, 12]) == 13")})(((await math_Util.hypot(Object.freeze([5, 12]))) === 13))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.hypot([3, 4, 5]), decimalPlaces: 2) == 7.07")})(((await math_Util.round((await math_Util.hypot(Object.freeze([3, 4, 5]))),{ decimalPlaces: 2 })) === 7.07))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.hypot([-5]) == 5")})(((await math_Util.hypot(Object.freeze([(-5)]))) === 5))};
+    async handle() {
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.hypot([3, 4]) == 5")})(((await $math_Util.hypot(Object.freeze([3, 4]))) === 5))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.hypot([5, 12]) == 13")})(((await $math_Util.hypot(Object.freeze([5, 12]))) === 13))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.hypot([3, 4, 5]), decimalPlaces: 2) == 7.07")})(((await $math_Util.round((await $math_Util.hypot(Object.freeze([3, 4, 5]))),{ decimalPlaces: 2 })) === 7.07))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.hypot([-5]) == 5")})(((await $math_Util.hypot(Object.freeze([(-5)]))) === 5))};
     }
   }
   return $Closure1;
@@ -30,7 +28,7 @@ module.exports = function({ math_Util }) {
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.2"
+      "version": "0.17.0"
     },
     "outputs": {
       "root": {
@@ -44,7 +42,7 @@ module.exports = function({ math_Util }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:inflight hypot\",\"${aws_lambda_function.root_testinflighthypot_Handler_D0ED3393.arn}\"]]"
+      "value": "[[\"root/Default/Default/test:inflight hypot\",\"${aws_lambda_function.testinflighthypot_Handler_892C5ACF.arn}\"]]"
     }
   },
   "provider": {
@@ -54,46 +52,46 @@ module.exports = function({ math_Util }) {
   },
   "resource": {
     "aws_iam_role": {
-      "root_testinflighthypot_Handler_IamRole_9DFB9267": {
+      "testinflighthypot_Handler_IamRole_1958850E": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:inflight hypot/Handler/IamRole",
-            "uniqueId": "root_testinflighthypot_Handler_IamRole_9DFB9267"
+            "uniqueId": "testinflighthypot_Handler_IamRole_1958850E"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
-      "root_testinflighthypot_Handler_IamRolePolicy_A98E0B1F": {
+      "testinflighthypot_Handler_IamRolePolicy_3A895B06": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:inflight hypot/Handler/IamRolePolicy",
-            "uniqueId": "root_testinflighthypot_Handler_IamRolePolicy_A98E0B1F"
+            "uniqueId": "testinflighthypot_Handler_IamRolePolicy_3A895B06"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
-        "role": "${aws_iam_role.root_testinflighthypot_Handler_IamRole_9DFB9267.name}"
+        "role": "${aws_iam_role.testinflighthypot_Handler_IamRole_1958850E.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
-      "root_testinflighthypot_Handler_IamRolePolicyAttachment_85AA6FED": {
+      "testinflighthypot_Handler_IamRolePolicyAttachment_D2DB4216": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:inflight hypot/Handler/IamRolePolicyAttachment",
-            "uniqueId": "root_testinflighthypot_Handler_IamRolePolicyAttachment_85AA6FED"
+            "uniqueId": "testinflighthypot_Handler_IamRolePolicyAttachment_D2DB4216"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.root_testinflighthypot_Handler_IamRole_9DFB9267.name}"
+        "role": "${aws_iam_role.testinflighthypot_Handler_IamRole_1958850E.name}"
       }
     },
     "aws_lambda_function": {
-      "root_testinflighthypot_Handler_D0ED3393": {
+      "testinflighthypot_Handler_892C5ACF": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:inflight hypot/Handler/Default",
-            "uniqueId": "root_testinflighthypot_Handler_D0ED3393"
+            "uniqueId": "testinflighthypot_Handler_892C5ACF"
           }
         },
         "environment": {
@@ -105,10 +103,10 @@ module.exports = function({ math_Util }) {
         "function_name": "Handler-c8289cd0",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.root_testinflighthypot_Handler_IamRole_9DFB9267.arn}",
+        "role": "${aws_iam_role.testinflighthypot_Handler_IamRole_1958850E.arn}",
         "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
-        "s3_key": "${aws_s3_object.root_testinflighthypot_Handler_S3Object_45B643BC.key}",
+        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
+        "s3_key": "${aws_s3_object.testinflighthypot_Handler_S3Object_7DF86846.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -117,25 +115,25 @@ module.exports = function({ math_Util }) {
       }
     },
     "aws_s3_bucket": {
-      "root_Code_02F3C603": {
+      "Code": {
         "//": {
           "metadata": {
             "path": "root/Default/Code",
-            "uniqueId": "root_Code_02F3C603"
+            "uniqueId": "Code"
           }
         },
         "bucket_prefix": "code-c84a50b1-"
       }
     },
     "aws_s3_object": {
-      "root_testinflighthypot_Handler_S3Object_45B643BC": {
+      "testinflighthypot_Handler_S3Object_7DF86846": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:inflight hypot/Handler/S3Object",
-            "uniqueId": "root_testinflighthypot_Handler_S3Object_45B643BC"
+            "uniqueId": "testinflighthypot_Handler_S3Object_7DF86846"
           }
         },
-        "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
+        "bucket": "${aws_s3_bucket.Code.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       }
@@ -159,14 +157,12 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const math_UtilClient = math.Util._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            math_Util: ${math_UtilClient.text},
+          require("./inflight.$Closure1.js")({
+            $math_Util: ${context._lift(math.Util)},
           })
         `);
       }
@@ -180,13 +176,6 @@ class $Root extends $stdlib.std.Resource {
             return client;
           })())
         `);
-      }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-        }
-        if (ops.includes("handle")) {
-        }
-        super._registerBind(host, ops);
       }
     }
     {((cond) => {if (!cond) throw new Error("assertion failed: math.hypot([3, 4]) == 5")})(((math.Util.hypot(Object.freeze([3, 4]))) === 5))};

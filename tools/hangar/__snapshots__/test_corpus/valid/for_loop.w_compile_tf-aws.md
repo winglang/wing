@@ -9,9 +9,7 @@ module.exports = function({  }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
-    async handle(event)  {
+    async handle(event) {
       for (const x of ((s,e,i) => { function* iterator(start,end,inclusive) { let i = start; let limit = inclusive ? ((end < start) ? end - 1 : end + 1) : end; while (i < limit) yield i++; while (i > limit) yield i--; }; return iterator(s,e,i); })(0,10,false)) {
         {((cond) => {if (!cond) throw new Error("assertion failed: x <= 0")})((x <= 0))};
         {((cond) => {if (!cond) throw new Error("assertion failed: x > 10")})((x > 10))};
@@ -30,9 +28,7 @@ module.exports = function({  }) {
   class Foo {
     constructor({  }) {
     }
-    async $inflight_init()  {
-    }
-    async hello()  {
+    async hello() {
       for (const p of Object.freeze(["hello"])) {
         {console.log(p)};
       }
@@ -50,7 +46,7 @@ module.exports = function({  }) {
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.2"
+      "version": "0.17.0"
     },
     "outputs": {
       "root": {
@@ -74,46 +70,46 @@ module.exports = function({  }) {
   },
   "resource": {
     "aws_iam_role": {
-      "root_cloudFunction_IamRole_DAEC3578": {
+      "cloudFunction_IamRole_5A4430DC": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/cloud.Function/IamRole",
-            "uniqueId": "root_cloudFunction_IamRole_DAEC3578"
+            "uniqueId": "cloudFunction_IamRole_5A4430DC"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
-      "root_cloudFunction_IamRolePolicy_AAE6C0C0": {
+      "cloudFunction_IamRolePolicy_618BF987": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/cloud.Function/IamRolePolicy",
-            "uniqueId": "root_cloudFunction_IamRolePolicy_AAE6C0C0"
+            "uniqueId": "cloudFunction_IamRolePolicy_618BF987"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
-        "role": "${aws_iam_role.root_cloudFunction_IamRole_DAEC3578.name}"
+        "role": "${aws_iam_role.cloudFunction_IamRole_5A4430DC.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
-      "root_cloudFunction_IamRolePolicyAttachment_FC3D9E7C": {
+      "cloudFunction_IamRolePolicyAttachment_288B9653": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/cloud.Function/IamRolePolicyAttachment",
-            "uniqueId": "root_cloudFunction_IamRolePolicyAttachment_FC3D9E7C"
+            "uniqueId": "cloudFunction_IamRolePolicyAttachment_288B9653"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.root_cloudFunction_IamRole_DAEC3578.name}"
+        "role": "${aws_iam_role.cloudFunction_IamRole_5A4430DC.name}"
       }
     },
     "aws_lambda_function": {
-      "root_cloudFunction_6A57BA0A": {
+      "cloudFunction": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/cloud.Function/Default",
-            "uniqueId": "root_cloudFunction_6A57BA0A"
+            "uniqueId": "cloudFunction"
           }
         },
         "environment": {
@@ -125,10 +121,10 @@ module.exports = function({  }) {
         "function_name": "cloud-Function-c8d2eca1",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.root_cloudFunction_IamRole_DAEC3578.arn}",
+        "role": "${aws_iam_role.cloudFunction_IamRole_5A4430DC.arn}",
         "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
-        "s3_key": "${aws_s3_object.root_cloudFunction_S3Object_C8435368.key}",
+        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
+        "s3_key": "${aws_s3_object.cloudFunction_S3Object_71908BAD.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -137,25 +133,25 @@ module.exports = function({  }) {
       }
     },
     "aws_s3_bucket": {
-      "root_Code_02F3C603": {
+      "Code": {
         "//": {
           "metadata": {
             "path": "root/Default/Code",
-            "uniqueId": "root_Code_02F3C603"
+            "uniqueId": "Code"
           }
         },
         "bucket_prefix": "code-c84a50b1-"
       }
     },
     "aws_s3_object": {
-      "root_cloudFunction_S3Object_C8435368": {
+      "cloudFunction_S3Object_71908BAD": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/cloud.Function/S3Object",
-            "uniqueId": "root_cloudFunction_S3Object_C8435368"
+            "uniqueId": "cloudFunction_S3Object_71908BAD"
           }
         },
-        "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
+        "bucket": "${aws_s3_bucket.Code.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       }
@@ -179,12 +175,11 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.$Closure1.js")({
           })
         `);
       }
@@ -199,23 +194,15 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-        }
-        if (ops.includes("handle")) {
-        }
-        super._registerBind(host, ops);
-      }
     }
     class Foo extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("hello");
+        this._addInflightOps("hello", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.Foo.js";
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.Foo.js")({
           })
         `);
       }
@@ -229,13 +216,6 @@ class $Root extends $stdlib.std.Resource {
             return client;
           })())
         `);
-      }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-        }
-        if (ops.includes("hello")) {
-        }
-        super._registerBind(host, ops);
       }
     }
     const words = Object.freeze(["wing", "lang", "dang"]);

@@ -1,8 +1,7 @@
 import { JsonFile, cdk, javascript } from "projen";
-import rootPackageJson from "../../package.json";
 
-const JSII_DEPS = ["constructs@~10.1.228"];
-const CDKTF_VERSION = "0.15.2";
+const JSII_DEPS = ["constructs@~10.1.314"];
+const CDKTF_VERSION = "0.17.0";
 
 const CDKTF_PROVIDERS = [
   "aws@~>4.65.0",
@@ -36,6 +35,11 @@ const project = new cdk.JsiiProject({
   defaultReleaseBranch: "main",
   peerDeps: [...JSII_DEPS],
   deps: [...JSII_DEPS],
+  tsconfig: {
+    compilerOptions: {
+      lib: ["es2020", "dom", "dom.iterable"],
+    },
+  },
   bundledDeps: [
     `cdktf@${CDKTF_VERSION}`,
     ...sideLoad,
@@ -57,6 +61,9 @@ const project = new cdk.JsiiProject({
     "@aws-sdk/types@3.347.0",
     "@aws-sdk/util-stream-node@3.350.0",
     "@aws-sdk/util-utf8-node@3.259.0",
+    // the following 2 deps are required by @aws-sdk/util-utf8-node
+    "@aws-sdk/util-buffer-from@3.208.0",
+    "@aws-sdk/is-array-buffer@3.201.0",
     "mime-types",
     // azure client dependencies
     "@azure/storage-blob@12.14.0",
@@ -71,8 +78,9 @@ const project = new cdk.JsiiProject({
     "ioredis",
   ],
   devDeps: [
-    `@cdktf/provider-aws@^12.0.1`, // only for testing Wing plugins
-    "@winglang/wing-api-checker@file:../../apps/wing-api-checker",
+    `@cdktf/provider-aws@^15.0.0`, // only for testing Wing plugins
+    "wing-api-checker@workspace:^",
+    "bump-pack@workspace:^",
     "@types/aws-lambda",
     "@types/fs-extra",
     "@types/mime-types",
@@ -83,17 +91,18 @@ const project = new cdk.JsiiProject({
     `cdktf-cli@${CDKTF_VERSION}`,
     "eslint-plugin-sort-exports",
     "fs-extra",
-    "patch-package",
     "vitest",
     "@types/uuid",
     "@vitest/coverage-v8",
     "nanoid", // for ESM import test in target-sim/function.test.ts
+    ...JSII_DEPS,
   ],
   jest: false,
   prettier: true,
   npmignoreEnabled: false,
-  minNodeVersion: "16.16.0",
-  packageManager: javascript.NodePackageManager.NPM,
+  minNodeVersion: "18.13.0",
+  projenCommand: "pnpm exec projen",
+  packageManager: javascript.NodePackageManager.PNPM,
   codeCov: true,
   codeCovTokenSecret: "CODECOV_TOKEN",
   github: false,
@@ -111,7 +120,7 @@ project.eslint?.addOverride({
 
 // use fork of jsii-docgen with wing-ish support
 project.deps.removeDependency("jsii-docgen");
-project.addDevDeps("@winglang/jsii-docgen@file:../../apps/jsii-docgen");
+project.addDevDeps("@winglang/jsii-docgen@workspace:^");
 
 enum Zone {
   PREFLIGHT = "preflight",
@@ -181,13 +190,11 @@ project.postCompileTask.prependSpawn(apiCheck);
 
 project.tasks
   .tryFind("bump")!
-  .reset("npm version ${PROJEN_BUMP_VERSION:-0.0.0} --allow-same-version");
+  .reset("pnpm version ${PROJEN_BUMP_VERSION:-0.0.0} --allow-same-version");
 
 project.tasks
   .tryFind("unbump")!
-  .reset("npm version 0.0.0 --allow-same-version");
-
-project.preCompileTask.exec("patch-package");
+  .reset("pnpm version 0.0.0 --allow-same-version");
 
 // --------------- docs -----------------
 
@@ -238,7 +245,14 @@ testWatch.description = "Run vitest in watch mode";
 project.testTask.spawn(project.eslint?.eslintTask!);
 
 project.addFields({
-  volta: rootPackageJson.volta,
+  volta: {
+    extends: "../../package.json",
+  },
+});
+project.addFields({
+  "bump-pack": {
+    removeBundledDependencies: sideLoad.map((sideDep) => sideDep.split("@")[0]),
+  },
 });
 
 project.addFields({
@@ -261,23 +275,7 @@ project.gitignore.addPatterns("src/.gen/providers");
 
 project.preCompileTask.exec("cdktf get");
 
-const packageJsonBack = "package.json.bak";
-const removeBundledDeps = project.addTask("remove-bundled-deps");
-removeBundledDeps.exec(`cp package.json ${packageJsonBack}`);
-for (const dep of sideLoad) {
-  removeBundledDeps.exec(
-    `./scripts/remove-bundled-dep.js ${dep.split("@")[0]}`
-  );
-}
-
-const restoreBundleDeps = project.addTask("restore-bundled-deps");
-restoreBundleDeps.exec(`mv ${packageJsonBack} package.json`);
-
-project.tasks.tryFind("bump")?.spawn(removeBundledDeps);
-project.tasks.tryFind("unbump")?.spawn(restoreBundleDeps);
-
-// We use symlinks between several projects but we do not use workspaces
-project.npmrc.addConfig("install-links", "false");
-project.npmrc.addConfig("fund", "false");
+project.package.file.addDeletionOverride("pnpm");
+project.tryRemoveFile(".npmrc");
 
 project.synth();

@@ -2,7 +2,6 @@ import { pack } from "./pack.js";
 import { parseArgs } from "node:util";
 import { appendFile } from "node:fs/promises";
 import { getReleaseData } from "./release-files.js";
-import { setPackageVersion } from "./bump.js";
 
 const parsedArgs = parseArgs({
   options: {
@@ -18,29 +17,15 @@ const parsedArgs = parseArgs({
   },
 });
 
-const packageDir = parsedArgs.values.bumpPackage ? process.cwd() : undefined;
+const packageDir = process.cwd();
 const dryRun = parsedArgs.values.dryRun ?? false;
+const bumpPackage = parsedArgs.values.bumpPackage ?? false;
 
-if (packageDir !== undefined) {
-  // We want to make sure a package is versioned and is pointing to the correct dep versions
-  const originalVersions = await setPackageVersion({
+if (bumpPackage) {
+  await pack({
     packageDir,
     dryRun,
-    version: process.env.PROJEN_BUMP_VERSION,
   });
-
-  try {
-    await pack({
-      packageDir,
-      dryRun,
-    });
-  } finally {
-    await setPackageVersion({
-      packageDir,
-      dryRun,
-      versionMap: originalVersions,
-    });
-  }
 } else {
   // We just want to output the useful release data
   const releaseData = await getReleaseData();

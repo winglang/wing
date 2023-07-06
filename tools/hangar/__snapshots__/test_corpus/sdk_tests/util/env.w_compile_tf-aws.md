@@ -2,19 +2,17 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ RANDOM, NIL, util_Util }) {
+module.exports = function({ $NIL, $RANDOM, $util_Util }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      {((cond) => {if (!cond) throw new Error("assertion failed: util.env(\"WING_TARGET\").length > 0")})(((await util_Util.env("WING_TARGET")).length > 0))};
-      const noValue = ((await util_Util.tryEnv(RANDOM)) ?? NIL);
-      {((cond) => {if (!cond) throw new Error("assertion failed: noValue == NIL")})((noValue === NIL))};
+    async handle() {
+      {((cond) => {if (!cond) throw new Error("assertion failed: util.env(\"WING_TARGET\").length > 0")})(((await $util_Util.env("WING_TARGET")).length > 0))};
+      const noValue = ((await $util_Util.tryEnv($RANDOM)) ?? $NIL);
+      {((cond) => {if (!cond) throw new Error("assertion failed: noValue == NIL")})((noValue === $NIL))};
     }
   }
   return $Closure1;
@@ -29,7 +27,7 @@ module.exports = function({ RANDOM, NIL, util_Util }) {
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.2"
+      "version": "0.17.0"
     },
     "outputs": {
       "root": {
@@ -43,7 +41,7 @@ module.exports = function({ RANDOM, NIL, util_Util }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:use util from inflight\",\"${aws_lambda_function.root_testuseutilfrominflight_Handler_D483C462.arn}\"]]"
+      "value": "[[\"root/Default/Default/test:use util from inflight\",\"${aws_lambda_function.testuseutilfrominflight_Handler_6C871F39.arn}\"]]"
     }
   },
   "provider": {
@@ -53,46 +51,46 @@ module.exports = function({ RANDOM, NIL, util_Util }) {
   },
   "resource": {
     "aws_iam_role": {
-      "root_testuseutilfrominflight_Handler_IamRole_9A472AAE": {
+      "testuseutilfrominflight_Handler_IamRole_0F4456F5": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:use util from inflight/Handler/IamRole",
-            "uniqueId": "root_testuseutilfrominflight_Handler_IamRole_9A472AAE"
+            "uniqueId": "testuseutilfrominflight_Handler_IamRole_0F4456F5"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
-      "root_testuseutilfrominflight_Handler_IamRolePolicy_A01DB43A": {
+      "testuseutilfrominflight_Handler_IamRolePolicy_17DE9CD4": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:use util from inflight/Handler/IamRolePolicy",
-            "uniqueId": "root_testuseutilfrominflight_Handler_IamRolePolicy_A01DB43A"
+            "uniqueId": "testuseutilfrominflight_Handler_IamRolePolicy_17DE9CD4"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
-        "role": "${aws_iam_role.root_testuseutilfrominflight_Handler_IamRole_9A472AAE.name}"
+        "role": "${aws_iam_role.testuseutilfrominflight_Handler_IamRole_0F4456F5.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
-      "root_testuseutilfrominflight_Handler_IamRolePolicyAttachment_52E62571": {
+      "testuseutilfrominflight_Handler_IamRolePolicyAttachment_FC7E7304": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:use util from inflight/Handler/IamRolePolicyAttachment",
-            "uniqueId": "root_testuseutilfrominflight_Handler_IamRolePolicyAttachment_52E62571"
+            "uniqueId": "testuseutilfrominflight_Handler_IamRolePolicyAttachment_FC7E7304"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.root_testuseutilfrominflight_Handler_IamRole_9A472AAE.name}"
+        "role": "${aws_iam_role.testuseutilfrominflight_Handler_IamRole_0F4456F5.name}"
       }
     },
     "aws_lambda_function": {
-      "root_testuseutilfrominflight_Handler_D483C462": {
+      "testuseutilfrominflight_Handler_6C871F39": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:use util from inflight/Handler/Default",
-            "uniqueId": "root_testuseutilfrominflight_Handler_D483C462"
+            "uniqueId": "testuseutilfrominflight_Handler_6C871F39"
           }
         },
         "environment": {
@@ -104,10 +102,10 @@ module.exports = function({ RANDOM, NIL, util_Util }) {
         "function_name": "Handler-c8904ffd",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.root_testuseutilfrominflight_Handler_IamRole_9A472AAE.arn}",
+        "role": "${aws_iam_role.testuseutilfrominflight_Handler_IamRole_0F4456F5.arn}",
         "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
-        "s3_key": "${aws_s3_object.root_testuseutilfrominflight_Handler_S3Object_7B8CA2C3.key}",
+        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
+        "s3_key": "${aws_s3_object.testuseutilfrominflight_Handler_S3Object_6902665C.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -116,25 +114,25 @@ module.exports = function({ RANDOM, NIL, util_Util }) {
       }
     },
     "aws_s3_bucket": {
-      "root_Code_02F3C603": {
+      "Code": {
         "//": {
           "metadata": {
             "path": "root/Default/Code",
-            "uniqueId": "root_Code_02F3C603"
+            "uniqueId": "Code"
           }
         },
         "bucket_prefix": "code-c84a50b1-"
       }
     },
     "aws_s3_object": {
-      "root_testuseutilfrominflight_Handler_S3Object_7B8CA2C3": {
+      "testuseutilfrominflight_Handler_S3Object_6902665C": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:use util from inflight/Handler/S3Object",
-            "uniqueId": "root_testuseutilfrominflight_Handler_S3Object_7B8CA2C3"
+            "uniqueId": "testuseutilfrominflight_Handler_S3Object_6902665C"
           }
         },
-        "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
+        "bucket": "${aws_s3_bucket.Code.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       }
@@ -158,18 +156,14 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const RANDOM_client = context._lift(RANDOM);
-        const NIL_client = context._lift(NIL);
-        const util_UtilClient = util.Util._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            RANDOM: ${RANDOM_client},
-            NIL: ${NIL_client},
-            util_Util: ${util_UtilClient.text},
+          require("./inflight.$Closure1.js")({
+            $NIL: ${context._lift(NIL)},
+            $RANDOM: ${context._lift(RANDOM)},
+            $util_Util: ${context._lift(util.Util)},
           })
         `);
       }
@@ -185,10 +179,6 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure1._registerBindObject(NIL, host, []);
-          $Closure1._registerBindObject(RANDOM, host, []);
-        }
         if (ops.includes("handle")) {
           $Closure1._registerBindObject(NIL, host, []);
           $Closure1._registerBindObject(RANDOM, host, []);
