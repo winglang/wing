@@ -1,0 +1,112 @@
+---
+source: libs/wingc/src/jsify/tests.rs
+---
+## Code
+
+```w
+
+    bring cloud;
+
+    class Foo {
+      c: cloud.Counter;
+
+      init() {
+        this.c = new cloud.Counter();
+      }
+
+      inflight incCounter() {
+        this.c.inc();
+      }
+
+      inflight dontTouchCounter() {
+        log("hello");
+      }
+    }
+    
+```
+
+## inflight.Foo.js
+
+```js
+module.exports = function({  }) {
+  class Foo {
+    constructor({ $this_c }) {
+      this.$this_c = $this_c;
+    }
+    async incCounter() {
+      (await this.$this_c.inc());
+    }
+    async dontTouchCounter() {
+      {console.log("hello")};
+    }
+  }
+  return Foo;
+}
+```
+
+## preflight.js
+
+```js
+const $stdlib = require('@winglang/sdk');
+const $outdir = process.env.WING_SYNTH_DIR ?? ".";
+const std = $stdlib.std;
+const $wing_is_test = process.env.WING_IS_TEST === "true";
+const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
+const cloud = require('@winglang/sdk').cloud;
+class $Root extends $stdlib.std.Resource {
+  constructor(scope, id) {
+    super(scope, id);
+    class Foo extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        this.c = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"cloud.Counter");
+        this._addInflightOps("incCounter", "dontTouchCounter", "$inflight_init");
+      }
+      static _toInflightType(context) {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("./inflight.Foo.js")({
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const FooClient = ${Foo._toInflightType(this).text};
+            const client = new FooClient({
+              $this_c: ${this._lift(this.c)},
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+          Foo._registerBindObject(this.c, host, []);
+        }
+        if (ops.includes("incCounter")) {
+          Foo._registerBindObject(this.c, host, ["inc"]);
+        }
+        super._registerBind(host, ops);
+      }
+    }
+  }
+}
+class $App extends $AppBase {
+  constructor() {
+    super({ outdir: $outdir, name: "main", plugins: $plugins, isTestEnvironment: $wing_is_test });
+    if ($wing_is_test) {
+      new $Root(this, "env0");
+      const $test_runner = this.testRunner;
+      const $tests = $test_runner.findTests();
+      for (let $i = 1; $i < $tests.length; $i++) {
+        new $Root(this, "env" + $i);
+      }
+    } else {
+      new $Root(this, "Default");
+    }
+  }
+}
+new $App().synth();
+```
+

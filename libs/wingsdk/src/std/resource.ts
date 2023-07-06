@@ -10,7 +10,7 @@ import { log } from "../shared/log";
 /**
  * A resource that can run inflight code.
  */
-export interface IInflightHost extends IResource {}
+export interface IInflightHost extends IResource { }
 
 /**
  * Abstract interface for `Resource`.
@@ -187,10 +187,11 @@ export abstract class Resource extends Construct implements IResource {
 
         // if the object is a resource (i.e. has a "_bind" method"), register a binding between it and the host.
         if (isResource(obj)) {
+          obj._registerBind(host, ops);
+
           // Explicitly register the resource's `$inflight_init` op, which is a special op that can be used to makes sure
           // the host can instantiate a client for this resource.
-
-          obj._registerBind(host, ops);
+          obj._registerBind(host, ["$inflight_init"]);
 
           // add connection metadata
           for (const op of ops) {
@@ -279,8 +280,7 @@ export abstract class Resource extends Construct implements IResource {
    */
   public _registerBind(host: IInflightHost, ops: string[]) {
     log(
-      `Registering a binding for a resource (${this.node.path}) to a host (${
-        host.node.path
+      `Registering a binding for a resource (${this.node.path}) to a host (${host.node.path
       }) with ops: ${JSON.stringify(ops)}`
     );
 
