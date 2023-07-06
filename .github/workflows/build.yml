@@ -154,18 +154,6 @@ jobs:
           name: docs
           path: docs.tgz
 
-      - name: Publish Playground
-        if: ${{ github.event_name == 'push' && github.repository == 'winglang/wing' }}
-        uses: amondnet/vercel-action@v25.1.0
-        with:
-          github-token: ${{ secrets.PROJEN_GITHUB_TOKEN }}
-          vercel-token: ${{ secrets.VERCEL_TOKEN_WING_PLAYGROUND }}
-          vercel-org-id: ${{ secrets.VERCEL_TEAM_ID }}
-          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID_WING_PLAYGROUND }}
-          working-directory: apps/wing-playground/dist
-          github-comment: false
-          vercel-args: "--prod "
-
   unit-tests:
     name: "Unit Tests"
     timeout-minutes: 30
