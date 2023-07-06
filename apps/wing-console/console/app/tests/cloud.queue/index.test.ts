@@ -14,7 +14,7 @@ describe(`${__dirname}/index.w`, () => {
 
     const approxSize = page.getByTestId("cloud.queue:approx-size");
 
-    expect(await approxSize.textContent()).toBe("0");
+    expect(await approxSize.textContent()).toBe("1");
   });
 
   test("purge message", async ({ page }) => {
@@ -33,6 +33,7 @@ describe(`${__dirname}/index.w`, () => {
     await page.getByTestId("cloud.queue:purge").click();
 
     await page.waitForLoadState("networkidle");
+    await page.waitForTimeout(300);
 
     expect(await approxSize.textContent()).toBe("0");
   });

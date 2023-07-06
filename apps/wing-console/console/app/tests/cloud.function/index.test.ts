@@ -7,6 +7,8 @@ describe(`${__dirname}/index.w`, () => {
     await getResourceNode(page, "root/Default/cloud.Function").click();
     await page.getByTestId("cloud.function:invoke").click();
 
+    await page.waitForLoadState("networkidle");
+
     expect(
       await page.getByTestId("cloud.function:response").textContent(),
     ).toEqual(
