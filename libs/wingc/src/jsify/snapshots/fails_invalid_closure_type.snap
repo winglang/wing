@@ -1,0 +1,5 @@
+---
+source: libs/wingc/src/jsify/tests.rs
+---
+## Errors
+Expected type to be "inflight (event: str): void", but got "inflight (s: num): void" instead 2:23

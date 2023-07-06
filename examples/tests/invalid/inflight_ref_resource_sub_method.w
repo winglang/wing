@@ -11,12 +11,12 @@ class Another {
 
   inflight inflightReturnsResource(): cloud.Queue {
     return this.myQueue;
-//              ^^^^^^^^ Cannot qualify which operations are performed on class "this.myQueue"
+//              ^^^^^^^^ Cannot qualify access to a lifted object
   }
 
   inflight inflightReturnsResource2(): cloud.Queue {
     return globalQueue;
-//         ^^^^^^^^^^^^ Cannot qualify which operations are performed on class "globalQueue"
+//         ^^^^^^^^^^^^ Cannot qualify access to a lifted object
   }
 }
 

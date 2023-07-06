@@ -2,18 +2,16 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ Foo }) {
+module.exports = function({ $Foo }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
-    async handle()  {
+    async handle() {
       return {
-      "foo": new Foo(),}
+      "foo": new $Foo(),}
       ;
     }
   }
@@ -24,17 +22,15 @@ module.exports = function({ Foo }) {
 
 ## inflight.$Closure2.js
 ```js
-module.exports = function({ getBar }) {
+module.exports = function({ $getBar }) {
   class $Closure2 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      const bar = (await getBar());
+    async handle() {
+      const bar = (await $getBar());
       {((cond) => {if (!cond) throw new Error("assertion failed: bar.foo.get() == 42")})(((await bar.foo.get()) === 42))};
     }
   }
@@ -47,9 +43,7 @@ module.exports = function({ getBar }) {
 ```js
 module.exports = function({  }) {
   class Foo {
-     constructor()  {
-    }
-    async get()  {
+    async get() {
       return 42;
     }
   }
@@ -192,12 +186,11 @@ class $Root extends $stdlib.std.Resource {
     class Foo extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("get");
+        this._addInflightOps("get", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.Foo.js";
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.Foo.js")({
           })
         `);
       }
@@ -212,26 +205,17 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-        }
-        if (ops.includes("get")) {
-        }
-        super._registerBind(host, ops);
-      }
     }
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const FooClient = Foo._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            Foo: ${FooClient.text},
+          require("./inflight.$Closure1.js")({
+            $Foo: ${context._lift(Foo)},
           })
         `);
       }
@@ -246,26 +230,17 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-        }
-        if (ops.includes("handle")) {
-        }
-        super._registerBind(host, ops);
-      }
     }
     class $Closure2 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure2.js";
-        const getBar_client = context._lift(getBar);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            getBar: ${getBar_client},
+          require("./inflight.$Closure2.js")({
+            $getBar: ${context._lift(getBar)},
           })
         `);
       }
@@ -281,9 +256,6 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure2._registerBindObject(getBar, host, []);
-        }
         if (ops.includes("handle")) {
           $Closure2._registerBindObject(getBar, host, ["handle"]);
         }

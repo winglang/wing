@@ -110,4 +110,4 @@ Within the context of the simulator, services are just spawned processes ran wit
 
 ## API Reference
 
-The full list of APIs for `cloud.Service` is available in the [API Reference](../api-reference).
+The full list of APIs for `cloud.Service` is available in the [API Reference](./api-reference).

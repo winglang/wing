@@ -2,17 +2,15 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ f }) {
+module.exports = function({ $f }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      (await f.call());
+    async handle() {
+      (await $f.call());
     }
   }
   return $Closure1;
@@ -22,17 +20,15 @@ module.exports = function({ f }) {
 
 ## inflight.$Closure2.js
 ```js
-module.exports = function({ f }) {
+module.exports = function({ $f }) {
   class $Closure2 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      (await f.print("hey there"));
+    async handle() {
+      (await $f.print("hey there"));
     }
   }
   return $Closure2;
@@ -46,21 +42,19 @@ module.exports = function({  }) {
   class Foo {
     constructor({  }) {
     }
-    async $inflight_init()  {
-    }
-    static async regexInflight(pattern, text)  {
+    static async regexInflight(pattern, text) {
       return (require("<ABSOLUTE_PATH>/external_js.js")["regexInflight"])(pattern, text)
     }
-    static async getUuid()  {
+    static async getUuid() {
       return (require("<ABSOLUTE_PATH>/external_js.js")["getUuid"])()
     }
-    static async getData()  {
+    static async getData() {
       return (require("<ABSOLUTE_PATH>/external_js.js")["getData"])()
     }
-    async print(msg)  {
+    async print(msg) {
       return (require("<ABSOLUTE_PATH>/external_js.js")["print"])(msg)
     }
-    async call()  {
+    async call() {
       {((cond) => {if (!cond) throw new Error("assertion failed: Foo.regexInflight(\"[a-z]+-\\\\d+\", \"abc-123\")")})((await Foo.regexInflight("[a-z]+-\\d+","abc-123")))};
       const uuid = (await Foo.getUuid());
       {((cond) => {if (!cond) throw new Error("assertion failed: uuid.length == 36")})((uuid.length === 36))};
@@ -273,18 +267,17 @@ class $Root extends $stdlib.std.Resource {
     class Foo extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("regexInflight", "getUuid", "getData", "print", "call");
+        this._addInflightOps("regexInflight", "getUuid", "getData", "print", "call", "$inflight_init");
       }
-      static getGreeting(name)  {
+      static getGreeting(name) {
         return (require("<ABSOLUTE_PATH>/external_js.js")["getGreeting"])(name)
       }
-      static v4()  {
+      static v4() {
         return (require("<ABSOLUTE_PATH>/index.js")["v4"])()
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.Foo.js";
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.Foo.js")({
           })
         `);
       }
@@ -299,38 +292,17 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-        }
-        if (ops.includes("call")) {
-          Foo._registerBindObject(Foo, host, ["getData", "getUuid", "regexInflight"]);
-        }
-        if (ops.includes("print")) {
-        }
-        super._registerBind(host, ops);
-      }
-      static _registerTypeBind(host, ops) {
-        if (ops.includes("getData")) {
-        }
-        if (ops.includes("getUuid")) {
-        }
-        if (ops.includes("regexInflight")) {
-        }
-        super._registerTypeBind(host, ops);
-      }
     }
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const f_client = context._lift(f);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            f: ${f_client},
+          require("./inflight.$Closure1.js")({
+            $f: ${context._lift(f)},
           })
         `);
       }
@@ -346,9 +318,6 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure1._registerBindObject(f, host, []);
-        }
         if (ops.includes("handle")) {
           $Closure1._registerBindObject(f, host, ["call"]);
         }
@@ -359,14 +328,12 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure2.js";
-        const f_client = context._lift(f);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            f: ${f_client},
+          require("./inflight.$Closure2.js")({
+            $f: ${context._lift(f)},
           })
         `);
       }
@@ -382,9 +349,6 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure2._registerBindObject(f, host, []);
-        }
         if (ops.includes("handle")) {
           $Closure2._registerBindObject(f, host, ["print"]);
         }

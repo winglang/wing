@@ -96,4 +96,4 @@ AWS implementations of `cloud.Topic` use [AWS SNS](https://docs.aws.amazon.com/s
 
 ## API Reference
 
-The full list of APIs for `cloud.Topic` is available in the [API Reference](../api-reference).
+The full list of APIs for `cloud.Topic` is available in the [API Reference](./api-reference).

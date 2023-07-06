@@ -2,17 +2,15 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ b, fileName }) {
+module.exports = function({ $b, $fileName }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
-    async handle(msg)  {
-      const x = (await b.getJson(fileName));
+    async handle(msg) {
+      const x = (await $b.getJson($fileName));
       {((cond) => {if (!cond) throw new Error("assertion failed: x.get(\"persons\").getAt(0).get(\"fears\").getAt(1) == \"failure\"")})((((((x)["persons"])[0])["fears"])[1] === "failure"))};
     }
   }
@@ -23,18 +21,16 @@ module.exports = function({ b, fileName }) {
 
 ## inflight.$Closure2.js
 ```js
-module.exports = function({ b, fileName, j, getJson }) {
+module.exports = function({ $b, $fileName, $getJson, $j }) {
   class $Closure2 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      (await b.putJson(fileName,j));
-      (await getJson.invoke(""));
+    async handle() {
+      (await $b.putJson($fileName,$j));
+      (await $getJson.invoke(""));
     }
   }
   return $Closure2;
@@ -290,16 +286,13 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const b_client = context._lift(b);
-        const fileName_client = context._lift(fileName);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            b: ${b_client},
-            fileName: ${fileName_client},
+          require("./inflight.$Closure1.js")({
+            $b: ${context._lift(b)},
+            $fileName: ${context._lift(fileName)},
           })
         `);
       }
@@ -315,10 +308,6 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure1._registerBindObject(b, host, []);
-          $Closure1._registerBindObject(fileName, host, []);
-        }
         if (ops.includes("handle")) {
           $Closure1._registerBindObject(b, host, ["getJson"]);
           $Closure1._registerBindObject(fileName, host, []);
@@ -330,20 +319,15 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure2.js";
-        const b_client = context._lift(b);
-        const fileName_client = context._lift(fileName);
-        const j_client = context._lift(j);
-        const getJson_client = context._lift(getJson);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            b: ${b_client},
-            fileName: ${fileName_client},
-            j: ${j_client},
-            getJson: ${getJson_client},
+          require("./inflight.$Closure2.js")({
+            $b: ${context._lift(b)},
+            $fileName: ${context._lift(fileName)},
+            $getJson: ${context._lift(getJson)},
+            $j: ${context._lift(j)},
           })
         `);
       }
@@ -359,12 +343,6 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure2._registerBindObject(b, host, []);
-          $Closure2._registerBindObject(fileName, host, []);
-          $Closure2._registerBindObject(getJson, host, []);
-          $Closure2._registerBindObject(j, host, []);
-        }
         if (ops.includes("handle")) {
           $Closure2._registerBindObject(b, host, ["putJson"]);
           $Closure2._registerBindObject(fileName, host, []);

@@ -2,22 +2,20 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ api_GET, body }) {
+module.exports = function({ $api_GET, $body }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
-    async handle(req)  {
-      {((cond) => {if (!cond) throw new Error("assertion failed: req.method == api_GET")})((req.method === api_GET))};
+    async handle(req) {
+      {((cond) => {if (!cond) throw new Error("assertion failed: req.method == api_GET")})((req.method === $api_GET))};
       {((cond) => {if (!cond) throw new Error("assertion failed: req.path == \"/path\"")})((req.path === "/path"))};
       {((cond) => {if (!cond) throw new Error("assertion failed: req.headers?.get(\"content-type\") == \"application/json\"")})(((req.headers)["content-type"] === "application/json"))};
       return {
       "status": 200,
-      "body": body,}
+      "body": $body,}
       ;
     }
   }
@@ -28,32 +26,30 @@ module.exports = function({ api_GET, body }) {
 
 ## inflight.$Closure2.js
 ```js
-module.exports = function({ api, http_GET, body, http_Util }) {
+module.exports = function({ $api_url, $body, $http_GET, $http_Util }) {
   class $Closure2 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      const url = (api.url + "/path");
-      const getResponse = (await http_Util.get(url,{ headers: Object.freeze({"content-type":"application/json"}) }));
-      const fetchResponse = (await http_Util.fetch(url,{
-      "method": http_GET,
+    async handle() {
+      const url = ($api_url + "/path");
+      const getResponse = (await $http_Util.get(url,{ headers: Object.freeze({"content-type":"application/json"}) }));
+      const fetchResponse = (await $http_Util.fetch(url,{
+      "method": $http_GET,
       "headers": Object.freeze({"content-type":"application/json"}),}
       ));
-      const fetchResponseNoMethod = (await http_Util.fetch(url,{
+      const fetchResponseNoMethod = (await $http_Util.fetch(url,{
       "headers": Object.freeze({"content-type":"application/json"}),}
       ));
-      {((cond) => {if (!cond) throw new Error("assertion failed: getResponse.body == body")})((getResponse.body === body))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: getResponse.body == body")})((getResponse.body === $body))};
       {((cond) => {if (!cond) throw new Error("assertion failed: getResponse.status == 200")})((getResponse.status === 200))};
       {((cond) => {if (!cond) throw new Error("assertion failed: getResponse.url == url")})((getResponse.url === url))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: fetchResponse.body == body")})((fetchResponse.body === body))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: fetchResponse.body == body")})((fetchResponse.body === $body))};
       {((cond) => {if (!cond) throw new Error("assertion failed: fetchResponse.status == 200")})((fetchResponse.status === 200))};
       {((cond) => {if (!cond) throw new Error("assertion failed: fetchResponse.url == url")})((fetchResponse.url === url))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: fetchResponseNoMethod.body == body")})((fetchResponseNoMethod.body === body))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: fetchResponseNoMethod.body == body")})((fetchResponseNoMethod.body === $body))};
       {((cond) => {if (!cond) throw new Error("assertion failed: fetchResponseNoMethod.status == 200")})((fetchResponseNoMethod.status === 200))};
       {((cond) => {if (!cond) throw new Error("assertion failed: fetchResponseNoMethod.url == url")})((fetchResponseNoMethod.url === url))};
     }
@@ -247,7 +243,6 @@ module.exports = function({ api, http_GET, body, http_Util }) {
         },
         "environment": {
           "variables": {
-            "CLOUD_API_C82DF3A5": "${aws_api_gateway_stage.cloudApi_api_stage_BBB283E4.invoke_url}",
             "WING_FUNCTION_NAME": "Handler-c838ce37",
             "WING_TARGET": "tf-aws",
             "WING_TOKEN_TFTOKEN_TOKEN_21": "${jsonencode(aws_api_gateway_stage.cloudApi_api_stage_BBB283E4.invoke_url)}"
@@ -337,16 +332,13 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const api_GET_client = context._lift(api_GET);
-        const body_client = context._lift(body);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            api_GET: ${api_GET_client},
-            body: ${body_client},
+          require("./inflight.$Closure1.js")({
+            $api_GET: ${context._lift(api_GET)},
+            $body: ${context._lift(body)},
           })
         `);
       }
@@ -362,10 +354,6 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure1._registerBindObject(api_GET, host, []);
-          $Closure1._registerBindObject(body, host, []);
-        }
         if (ops.includes("handle")) {
           $Closure1._registerBindObject(api_GET, host, []);
           $Closure1._registerBindObject(body, host, []);
@@ -377,20 +365,15 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure2.js";
-        const api_client = context._lift(api);
-        const http_GET_client = context._lift(http_GET);
-        const body_client = context._lift(body);
-        const http_UtilClient = http.Util._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            api: ${api_client},
-            http_GET: ${http_GET_client},
-            body: ${body_client},
-            http_Util: ${http_UtilClient.text},
+          require("./inflight.$Closure2.js")({
+            $api_url: ${context._lift(api.url)},
+            $body: ${context._lift(body)},
+            $http_GET: ${context._lift(http_GET)},
+            $http_Util: ${context._lift(http.Util)},
           })
         `);
       }
@@ -406,11 +389,6 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure2._registerBindObject(api, host, []);
-          $Closure2._registerBindObject(body, host, []);
-          $Closure2._registerBindObject(http_GET, host, []);
-        }
         if (ops.includes("handle")) {
           $Closure2._registerBindObject(api.url, host, []);
           $Closure2._registerBindObject(body, host, []);
