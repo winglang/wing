@@ -25,7 +25,7 @@ $ wing <command> <options>
 ## Run: `wing run` / `wing it`
 
 You can use the `run` command (or `it`) when you want to interact with your Wing program in the
-[Wing Console](/start-here/local).
+[Wing Console](/docs/start-here/local).
 
 Usage:
 
@@ -70,7 +70,7 @@ $ wing compile --target sim ENTRYPOINT.w
 
 The output will be under `target/ENTRYPOINT.wsim` and can be opened in one two ways:
 
-* Interactively using [Wing Console](/start-here/local) using `wing it target/hello.wsim`.
+* Interactively using [Wing Console](/docs/start-here/local) using `wing it target/hello.wsim`.
 
 
 ### `tf-aws` Target
@@ -86,7 +86,8 @@ $ wing compile --target tf-aws ENTRYPOINT.w
 The output includes both a Terraform configuration file (under `target/cdktf.out/stacks/root`) and
 JavaScript bundles that include inflight code that executes on compute platform such as AWS Lambda.
 
-You can deploy your stack to AWS using Terraform ([instructions](/start-here/aws)).
+You can deploy your stack to AWS using Terraform ([instructions](/docs/start-here/aws)).
+
 
 
 ### `tf-azure` Target
@@ -156,7 +157,7 @@ Additionally the `compile` command can be provided an optional list of plugins t
 $ wing compile --target tf-aws ENTRYPOINT.w --plugins PLUGIN1 PLUGIN2
 ```
 Each plugin can be an absolute paths or relative path to a JavaScript file. For more 
-on how to create a plugin, see [Compiler Plugins](/reference/compiler-plugins).
+on how to create a plugin, see [Compiler Plugins](./compiler-plugins).
 
 ## Test: `wing test`
 

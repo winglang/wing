@@ -14,6 +14,7 @@ use diagnostic::{found_errors, report_diagnostic, Diagnostic};
 use files::Files;
 use fold::Fold;
 use jsify::JSifier;
+use lifting::LiftTransform;
 use type_check::jsii_importer::JsiiImportSpec;
 use type_check::symbol_env::StatementIdx;
 use type_check::{FunctionSignature, SymbolKind, Type};
@@ -34,6 +35,10 @@ use crate::ast::Phase;
 use crate::type_check::symbol_env::SymbolEnv;
 use crate::type_check::{FunctionParameter, TypeChecker, Types};
 
+#[macro_use]
+#[cfg(test)]
+mod test_utils;
+
 pub mod ast;
 pub mod closure_transform;
 mod comp_ctx;
@@ -43,11 +48,14 @@ mod docs;
 mod files;
 pub mod fold;
 pub mod jsify;
+mod lifting;
 pub mod lsp;
 pub mod parser;
+
 pub mod type_check;
 mod type_check_assert;
 pub mod visit;
+mod visit_context;
 mod wasm_util;
 
 const WINGSDK_ASSEMBLY_NAME: &'static str = "@winglang/sdk";
@@ -344,11 +352,6 @@ pub fn compile(
 	let mut tc_assert = TypeCheckAssert::new(&types, found_errors());
 	tc_assert.check(&scope);
 
-	// bail out now (before jsification) if there are errors (no point in jsifying)
-	if found_errors() {
-		return Err(());
-	}
-
 	// -- JSIFICATION PHASE --
 
 	let app_name = source_path.file_stem().unwrap().to_str().unwrap();
@@ -365,9 +368,24 @@ pub fn compile(
 		return Err(());
 	}
 
-	let mut jsifier = JSifier::new(&types, &files, app_name, &project_dir, true);
-	jsifier.jsify(&scope);
-	jsifier.emit_files(&out_dir);
+	let mut jsifier = JSifier::new(&mut types, &files, app_name, &project_dir, true);
+
+	// -- LIFTING PHASE --
+
+	let mut lift = LiftTransform::new(&jsifier);
+	let scope = Box::new(lift.fold_scope(scope));
+
+	// bail out now (before jsification) if there are errors (no point in jsifying)
+	if found_errors() {
+		return Err(());
+	}
+
+	let files = jsifier.jsify(&scope);
+
+	match files.emit_files(out_dir) {
+		Ok(()) => {}
+		Err(err) => report_diagnostic(err.into()),
+	}
 
 	if found_errors() {
 		return Err(());

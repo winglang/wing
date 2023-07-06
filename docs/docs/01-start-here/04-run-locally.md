@@ -8,13 +8,6 @@ The Wing Console is a web application that provides a developer-friendly interfa
 
 ## Opening your app in the console
 
-:::info
-
-Make sure you have [installed](./installation#wing-console) the Wing Console on your system
-before getting started with this step.
-
-:::
-
 Use the Wing CLI to start the console with our newly created Wing source file:
 
 ```sh

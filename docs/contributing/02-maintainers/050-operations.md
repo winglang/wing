@@ -59,7 +59,7 @@ If not automated, the responder should create a thread in the #alert channel in 
 ### Response
 
 If possible, immediate action should be taken to mitigate the issue.
-A [runbook](./10-runbooks/) should be followed if one exists.
+A [runbook](/contributing/category/runbooks) should be followed if one exists.
 Otherwise, the responder should take the best action they can to mitigate the issue.
 For P0/P1 issues based on regressions, the default behavior should be to revert to the last known good version.
 Make sure to document any actions taken as this will be extremely helpful in building a good post-mortem and runbook if needed.

@@ -91,3 +91,12 @@ if util.env("WING_TARGET") == "sim" {
 ```
 
 In this example, we're creating a verbose logger service only when the `WING_TARGET` environment variable is set to "sim". The `onStart` function of this service lists the files in the bucket and logs them every 10 seconds.
+
+## Compiler plugins
+
+Compiler plugins serve to extend the capabilities of the Wing compiler. They offer customization for the compilation output, such as infrastructure definitions. For instance, a compiler plugin can be employed to enforce a specific tagging convention on all resources within the resulting infrastructure.
+
+Learn more about compiler plugins [here](https://www.winglang.io/docs/tools/compiler-plugins)
+
+
+
