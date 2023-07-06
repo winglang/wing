@@ -137,18 +137,6 @@ const contributes: VSCodeExtensionContributions = {
       },
     ],
   },
-  // viewsContainers: {
-  //   panel: [
-  //     {
-  //       id: "wing.console",
-  //       title: "Wing Console",
-  //       icon: {
-  //         light: "resources/icon-light.png",
-  //         dark: "resources/icon-dark.png",
-  //       },
-  //     },
-  //   ],
-  // },
   configuration: [
     {
       title: "Wing",
