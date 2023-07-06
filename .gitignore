@@ -37,14 +37,6 @@ libs/tree-sitter-wing/src/tree_sitter/
 # wing
 apps/wing/dist
 
-# wing-playground
-apps/wing-playground/*.wasm
-apps/wing-playground/dist
-
-# vscode-wing
-apps/vscode-wing/resources/native/wing-language-server
-.vercel
-
 # hangar
 tools/hangar/results/
 tools/hangar/tmp/
