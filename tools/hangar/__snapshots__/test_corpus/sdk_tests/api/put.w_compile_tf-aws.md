@@ -44,7 +44,7 @@ module.exports = function({ $_id, $api_url, $body, $http_PUT, $http_Util, $std_J
       "headers": Object.freeze({"content-type":"application/json"}),
       "body": ((args) => { return JSON.stringify(args[0], null, args[1]) })([$body]),}
       ));
-      const fetchResponse = (await $http_Util.put(url,{
+      const fetchResponse = (await $http_Util.fetch(url,{
       "method": $http_PUT,
       "headers": Object.freeze({"content-type":"application/json"}),
       "body": ((args) => { return JSON.stringify(args[0], null, args[1]) })([$body]),}

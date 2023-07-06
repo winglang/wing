@@ -41,7 +41,7 @@ module.exports = function({ $_id, $api_url, $body, $http_PATCH, $http_Util, $std
       "headers": Object.freeze({"content-type":"application/json"}),
       "body": ((args) => { return JSON.stringify(args[0], null, args[1]) })([$body]),}
       ));
-      const fetchResponse = (await $http_Util.patch(url,{
+      const fetchResponse = (await $http_Util.fetch(url,{
       "method": $http_PATCH,
       "headers": Object.freeze({"content-type":"application/json"}),
       "body": ((args) => { return JSON.stringify(args[0], null, args[1]) })([$body]),}
