@@ -35,6 +35,8 @@ describe(`${__dirname}/index.w`, () => {
 
     await page.waitForLoadState("networkidle");
 
+    await page.waitForTimeout(300);
+
     expect(await approxSize.textContent()).toBe("0");
   });
 });
