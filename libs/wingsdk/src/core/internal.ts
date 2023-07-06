@@ -28,9 +28,7 @@ export function liftObject(scope: IConstruct, obj: any): string {
 
     case "object":
       if (Array.isArray(obj)) {
-        return `[${obj
-          .map((o) => liftObject(scope, o))
-          .join(",")}]`;
+        return `[${obj.map((o) => liftObject(scope, o)).join(",")}]`;
       }
 
       if (obj instanceof Duration) {
@@ -69,7 +67,5 @@ export function liftObject(scope: IConstruct, obj: any): string {
       break;
   }
 
-  throw new Error(
-    `Unable to lift object of type ${obj?.constructor?.name}`
-  );
+  throw new Error(`Unable to lift object of type ${obj?.constructor?.name}`);
 }

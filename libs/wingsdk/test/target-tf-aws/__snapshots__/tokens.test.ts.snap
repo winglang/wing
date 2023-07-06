@@ -23,7 +23,7 @@ exports[`captures tokens 2`] = `
 "{
   \\"data\\": {
     \\"aws_region\\": {
-      \\"root_Region_A2D17352\\": {}
+      \\"Region\\": {}
     }
   },
   \\"output\\": {
@@ -33,63 +33,63 @@ exports[`captures tokens 2`] = `
   },
   \\"resource\\": {
     \\"aws_api_gateway_deployment\\": {
-      \\"root_Api_api_deployment_AA827467\\": {
+      \\"Api_api_deployment_7FB64CC4\\": {
         \\"lifecycle\\": {
           \\"create_before_destroy\\": true
         },
-        \\"rest_api_id\\": \\"\${aws_api_gateway_rest_api.root_Api_api_0637EF1E.id}\\",
+        \\"rest_api_id\\": \\"\${aws_api_gateway_rest_api.Api_api_91C07D84.id}\\",
         \\"triggers\\": {
           \\"redeployment\\": \\"78e5e40c11e87555822daa92a92cba68abd2ec5b\\"
         }
       }
     },
     \\"aws_api_gateway_rest_api\\": {
-      \\"root_Api_api_0637EF1E\\": {
-        \\"body\\": \\"{\\\\\\"openapi\\\\\\":\\\\\\"3.0.3\\\\\\",\\\\\\"paths\\\\\\":{\\\\\\"/\\\\\\":{\\\\\\"get\\\\\\":{\\\\\\"operationId\\\\\\":\\\\\\"get\\\\\\",\\\\\\"responses\\\\\\":{\\\\\\"200\\\\\\":{\\\\\\"description\\\\\\":\\\\\\"200 response\\\\\\",\\\\\\"content\\\\\\":{}}},\\\\\\"parameters\\\\\\":[],\\\\\\"x-amazon-apigateway-integration\\\\\\":{\\\\\\"uri\\\\\\":\\\\\\"arn:aws:apigateway:\${data.aws_region.root_Region_A2D17352.name}:lambda:path/2015-03-31/functions/\${aws_lambda_function.root_Api_ApiOnRequestc5395e41_C98C3415.arn}/invocations\\\\\\",\\\\\\"type\\\\\\":\\\\\\"aws_proxy\\\\\\",\\\\\\"httpMethod\\\\\\":\\\\\\"POST\\\\\\",\\\\\\"responses\\\\\\":{\\\\\\"default\\\\\\":{\\\\\\"statusCode\\\\\\":\\\\\\"200\\\\\\"}},\\\\\\"passthroughBehavior\\\\\\":\\\\\\"when_no_match\\\\\\",\\\\\\"contentHandling\\\\\\":\\\\\\"CONVERT_TO_TEXT\\\\\\"}}}}}\\",
+      \\"Api_api_91C07D84\\": {
+        \\"body\\": \\"{\\\\\\"openapi\\\\\\":\\\\\\"3.0.3\\\\\\",\\\\\\"paths\\\\\\":{\\\\\\"/\\\\\\":{\\\\\\"get\\\\\\":{\\\\\\"operationId\\\\\\":\\\\\\"get\\\\\\",\\\\\\"responses\\\\\\":{\\\\\\"200\\\\\\":{\\\\\\"description\\\\\\":\\\\\\"200 response\\\\\\",\\\\\\"content\\\\\\":{}}},\\\\\\"parameters\\\\\\":[],\\\\\\"x-amazon-apigateway-integration\\\\\\":{\\\\\\"uri\\\\\\":\\\\\\"arn:aws:apigateway:\${data.aws_region.Region.name}:lambda:path/2015-03-31/functions/\${aws_lambda_function.Api_Api-OnRequest-c5395e41_37F21C2B.arn}/invocations\\\\\\",\\\\\\"type\\\\\\":\\\\\\"aws_proxy\\\\\\",\\\\\\"httpMethod\\\\\\":\\\\\\"POST\\\\\\",\\\\\\"responses\\\\\\":{\\\\\\"default\\\\\\":{\\\\\\"statusCode\\\\\\":\\\\\\"200\\\\\\"}},\\\\\\"passthroughBehavior\\\\\\":\\\\\\"when_no_match\\\\\\",\\\\\\"contentHandling\\\\\\":\\\\\\"CONVERT_TO_TEXT\\\\\\"}}}}}\\",
         \\"name\\": \\"api-c8f613f0\\"
       }
     },
     \\"aws_api_gateway_stage\\": {
-      \\"root_Api_api_stage_3E2E462A\\": {
-        \\"deployment_id\\": \\"\${aws_api_gateway_deployment.root_Api_api_deployment_AA827467.id}\\",
-        \\"rest_api_id\\": \\"\${aws_api_gateway_rest_api.root_Api_api_0637EF1E.id}\\",
+      \\"Api_api_stage_E0FA39D6\\": {
+        \\"deployment_id\\": \\"\${aws_api_gateway_deployment.Api_api_deployment_7FB64CC4.id}\\",
+        \\"rest_api_id\\": \\"\${aws_api_gateway_rest_api.Api_api_91C07D84.id}\\",
         \\"stage_name\\": \\"prod\\"
       }
     },
     \\"aws_iam_role\\": {
-      \\"root_Api_ApiOnRequestc5395e41_IamRole_81A26E79\\": {
+      \\"Api_Api-OnRequest-c5395e41_IamRole_9427E0ED\\": {
         \\"assume_role_policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":\\\\\\"sts:AssumeRole\\\\\\",\\\\\\"Principal\\\\\\":{\\\\\\"Service\\\\\\":\\\\\\"lambda.amazonaws.com\\\\\\"},\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\"
       }
     },
     \\"aws_iam_role_policy\\": {
-      \\"root_Api_ApiOnRequestc5395e41_IamRolePolicy_BB47A35C\\": {
+      \\"Api_Api-OnRequest-c5395e41_IamRolePolicy_7C0B6530\\": {
         \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Action\\\\\\":\\\\\\"none:null\\\\\\",\\\\\\"Resource\\\\\\":\\\\\\"*\\\\\\"}]}\\",
-        \\"role\\": \\"\${aws_iam_role.root_Api_ApiOnRequestc5395e41_IamRole_81A26E79.name}\\"
+        \\"role\\": \\"\${aws_iam_role.Api_Api-OnRequest-c5395e41_IamRole_9427E0ED.name}\\"
       }
     },
     \\"aws_iam_role_policy_attachment\\": {
-      \\"root_Api_ApiOnRequestc5395e41_IamRolePolicyAttachment_B6C58E02\\": {
+      \\"Api_Api-OnRequest-c5395e41_IamRolePolicyAttachment_60C1AF18\\": {
         \\"policy_arn\\": \\"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole\\",
-        \\"role\\": \\"\${aws_iam_role.root_Api_ApiOnRequestc5395e41_IamRole_81A26E79.name}\\"
+        \\"role\\": \\"\${aws_iam_role.Api_Api-OnRequest-c5395e41_IamRole_9427E0ED.name}\\"
       }
     },
     \\"aws_lambda_function\\": {
-      \\"root_Api_ApiOnRequestc5395e41_C98C3415\\": {
+      \\"Api_Api-OnRequest-c5395e41_37F21C2B\\": {
         \\"environment\\": {
           \\"variables\\": {
             \\"WING_FUNCTION_NAME\\": \\"Api-OnRequest-c5395e41-c8f26cae\\",
-            \\"WING_TOKEN_8_109562212591386E_298\\": \\"\${jsonencode(var.root_Number_F3C25933)}\\",
-            \\"WING_TOKEN_TFTOKEN_TOKEN_7\\": \\"\${jsonencode(aws_api_gateway_stage.root_Api_api_stage_3E2E462A.invoke_url)}\\",
-            \\"WING_TOKEN_TFTOKEN_TOKEN_9\\": \\"\${jsonencode(var.root_List_6887BE0A)}\\"
+            \\"WING_TOKEN_8_109562212591386E_298\\": \\"\${jsonencode(var.Number)}\\",
+            \\"WING_TOKEN_TFTOKEN_TOKEN_7\\": \\"\${jsonencode(aws_api_gateway_stage.Api_api_stage_E0FA39D6.invoke_url)}\\",
+            \\"WING_TOKEN_TFTOKEN_TOKEN_9\\": \\"\${jsonencode(var.List)}\\"
           }
         },
         \\"function_name\\": \\"Api-OnRequest-c5395e41-c8f26cae\\",
         \\"handler\\": \\"index.handler\\",
         \\"publish\\": true,
-        \\"role\\": \\"\${aws_iam_role.root_Api_ApiOnRequestc5395e41_IamRole_81A26E79.arn}\\",
+        \\"role\\": \\"\${aws_iam_role.Api_Api-OnRequest-c5395e41_IamRole_9427E0ED.arn}\\",
         \\"runtime\\": \\"nodejs18.x\\",
-        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Code_02F3C603.bucket}\\",
-        \\"s3_key\\": \\"\${aws_s3_object.root_Api_ApiOnRequestc5395e41_S3Object_BC49C8EE.key}\\",
+        \\"s3_bucket\\": \\"\${aws_s3_bucket.Code.bucket}\\",
+        \\"s3_key\\": \\"\${aws_s3_object.Api_Api-OnRequest-c5395e41_S3Object_D564F39C.key}\\",
         \\"timeout\\": 30,
         \\"vpc_config\\": {
           \\"security_group_ids\\": [],
@@ -98,29 +98,29 @@ exports[`captures tokens 2`] = `
       }
     },
     \\"aws_lambda_permission\\": {
-      \\"root_Api_api_permissionGETc2e3ffa8_29652446\\": {
+      \\"Api_api_permission-GET-c2e3ffa8_5BF93889\\": {
         \\"action\\": \\"lambda:InvokeFunction\\",
-        \\"function_name\\": \\"\${aws_lambda_function.root_Api_ApiOnRequestc5395e41_C98C3415.function_name}\\",
+        \\"function_name\\": \\"\${aws_lambda_function.Api_Api-OnRequest-c5395e41_37F21C2B.function_name}\\",
         \\"principal\\": \\"apigateway.amazonaws.com\\",
-        \\"source_arn\\": \\"\${aws_api_gateway_rest_api.root_Api_api_0637EF1E.execution_arn}/*/GET/\\",
+        \\"source_arn\\": \\"\${aws_api_gateway_rest_api.Api_api_91C07D84.execution_arn}/*/GET/\\",
         \\"statement_id\\": \\"AllowExecutionFromAPIGateway-GET-c2e3ffa8\\"
       }
     },
     \\"aws_s3_bucket\\": {
-      \\"root_Code_02F3C603\\": {
+      \\"Code\\": {
         \\"bucket_prefix\\": \\"code-c84a50b1-\\"
       }
     },
     \\"aws_s3_object\\": {
-      \\"root_Api_ApiOnRequestc5395e41_S3Object_BC49C8EE\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.root_Code_02F3C603.bucket}\\",
+      \\"Api_Api-OnRequest-c5395e41_S3Object_D564F39C\\": {
+        \\"bucket\\": \\"\${aws_s3_bucket.Code.bucket}\\",
         \\"key\\": \\"<key>\\",
         \\"source\\": \\"<source>\\"
       }
     }
   },
   \\"variable\\": {
-    \\"root_List_6887BE0A\\": {
+    \\"List\\": {
       \\"default\\": [
         1,
         2,
@@ -128,7 +128,7 @@ exports[`captures tokens 2`] = `
       ],
       \\"type\\": \\"List<Number>\\"
     },
-    \\"root_Number_F3C25933\\": {
+    \\"Number\\": {
       \\"default\\": 123,
       \\"type\\": \\"Number\\"
     }

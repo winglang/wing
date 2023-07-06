@@ -36,7 +36,7 @@ export function createBundle(entrypoint: string, outputDir?: string): Bundle {
   });
 
   if (esbuild.errors.length > 0) {
-    const errors = esbuild.errors.map(e => e.text).join("\n");
+    const errors = esbuild.errors.map((e) => e.text).join("\n");
     throw new Error(`Failed to bundle function: ${errors}`);
   }
 

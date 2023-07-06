@@ -186,7 +186,9 @@ export class Simulator {
     }
 
     // create a copy of the resource list to be used as an init queue.
-    const initQueue: (BaseResourceSchema & { _attempts?: number })[] = [...this._config.resources];
+    const initQueue: (BaseResourceSchema & { _attempts?: number })[] = [
+      ...this._config.resources,
+    ];
 
     while (true) {
       const next = initQueue.shift();
@@ -196,7 +198,7 @@ export class Simulator {
 
       // we couldn't start this resource yet, so decrement the retry counter and put it back in
       // the init queue.
-      if (!await this.tryStartResource(next)) {
+      if (!(await this.tryStartResource(next))) {
         // we couldn't start this resource yet, so decrement the attempt counter
         next._attempts = next._attempts ?? START_ATTEMPT_COUNT;
         next._attempts--;
@@ -343,10 +345,15 @@ export class Simulator {
     return this._tree;
   }
 
-  private async tryStartResource(resourceConfig: BaseResourceSchema): Promise<boolean> {
+  private async tryStartResource(
+    resourceConfig: BaseResourceSchema
+  ): Promise<boolean> {
     const context = this.createContext(resourceConfig);
 
-    const resolvedProps = this.tryResolveTokens(resourceConfig.props, resourceConfig.path);
+    const resolvedProps = this.tryResolveTokens(
+      resourceConfig.props,
+      resourceConfig.path
+    );
     if (resolvedProps === undefined) {
       this._addTrace({
         type: TraceType.RESOURCE,
@@ -362,7 +369,11 @@ export class Simulator {
     }
 
     // create the resource based on its type
-    const resourceObject = this._factory.resolve(resourceConfig.type, resolvedProps, context);
+    const resourceObject = this._factory.resolve(
+      resourceConfig.type,
+      resolvedProps,
+      context
+    );
 
     // go ahead and initialize the resource
     const attrs = await resourceObject.init();
@@ -489,7 +500,7 @@ export class Simulator {
         const value = this.tryResolveTokens(x, source);
         if (value === undefined) {
           return undefined;
-        };
+        }
         result.push(value);
       }
 
