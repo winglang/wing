@@ -157,7 +157,7 @@ Additionally the `compile` command can be provided an optional list of plugins t
 $ wing compile --target tf-aws ENTRYPOINT.w --plugins PLUGIN1 PLUGIN2
 ```
 Each plugin can be an absolute paths or relative path to a JavaScript file. For more 
-on how to create a plugin, see [Compiler Plugins](/reference/compiler-plugins).
+on how to create a plugin, see [Compiler Plugins](./compiler-plugins).
 
 ## Test: `wing test`
 
