@@ -1,6 +1,5 @@
 bring cloud;
 
-// This class has no inflight methods (no client) but we can still access its fields inflight
 class A {
   field: str;
   counter: cloud.Counter;
