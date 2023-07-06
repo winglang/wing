@@ -19,6 +19,8 @@ export interface RunOptions {
 
   /**
    * Whether to open the Wing Console in the browser automatically.
+   * 
+   * @default true
    */
   readonly open?: boolean;
 }
@@ -29,6 +31,9 @@ export interface RunOptions {
  * @param options Run options.
  */
 export async function run(entrypoint?: string, options?: RunOptions) {
+  const requestedPort = parseNumericString(options?.port) ?? 3000;
+  const openBrowser = options?.open ?? true;
+
   if (!entrypoint) {
     const wingFiles = readdirSync(".").filter((item) => item.endsWith(".w"));
     if (wingFiles.length !== 1) {
@@ -46,7 +51,7 @@ export async function run(entrypoint?: string, options?: RunOptions) {
 
   const { port } = await createConsoleApp({
     wingfile: entrypoint,
-    requestedPort: parseNumericString(options?.port) ?? 3000,
+    requestedPort,
     hostUtils: {
       async openExternal(url) {
         await open(url);
@@ -54,7 +59,7 @@ export async function run(entrypoint?: string, options?: RunOptions) {
     },
   });
   const url = `http://localhost:${port}/`;
-  if (options?.open) {
+  if (openBrowser) {
     await open(url);
   }
   console.log(`The Wing Console is running at ${url}`);
