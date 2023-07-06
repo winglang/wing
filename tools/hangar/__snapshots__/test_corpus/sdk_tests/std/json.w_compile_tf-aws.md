@@ -4,16 +4,16 @@
 ```js
 module.exports = function({  }) {
   class $Closure1 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
     async handle() {
       const x = {"a":1};
       ((obj, args) => { obj[args[0]] = args[1]; })(x, ["b",2]);
       const y = (x)["b"];
       {((cond) => {if (!cond) throw new Error("assertion failed: y == 2")})((y === 2))};
-    }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
     }
   }
   return $Closure1;
@@ -25,17 +25,17 @@ module.exports = function({  }) {
 ```js
 module.exports = function({  }) {
   class $Closure2 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
     async handle() {
       const x = {"a":1};
       const a = {"c":3};
       ((obj, args) => { obj[args[0]] = args[1]; })(x, [2,a]);
       const d = (x)[2];
       {((cond) => {if (!cond) throw new Error("assertion failed: d.get(\"c\") == 3")})(((d)["c"] === 3))};
-    }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
     }
   }
   return $Closure2;

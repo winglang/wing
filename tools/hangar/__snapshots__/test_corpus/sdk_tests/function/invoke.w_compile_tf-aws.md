@@ -4,15 +4,15 @@
 ```js
 module.exports = function({ $util_Util }) {
   class $Closure1 {
-    async handle(input) {
-      const target = (await $util_Util.tryEnv("WING_TARGET"));
-      {((cond) => {if (!cond) throw new Error("assertion failed: target?")})(((target) != null))};
-      return String.raw({ raw: ["", "-response"] }, input);
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle(input) {
+      const target = (await $util_Util.tryEnv("WING_TARGET"));
+      {((cond) => {if (!cond) throw new Error("assertion failed: target?")})(((target) != null))};
+      return String.raw({ raw: ["", "-response"] }, input);
     }
   }
   return $Closure1;
@@ -24,14 +24,14 @@ module.exports = function({ $util_Util }) {
 ```js
 module.exports = function({ $f }) {
   class $Closure2 {
-    async handle() {
-      const x = (await $f.invoke("hello"));
-      {((cond) => {if (!cond) throw new Error("assertion failed: x == \"hello-response\"")})((x === "hello-response"))};
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle() {
+      const x = (await $f.invoke("hello"));
+      {((cond) => {if (!cond) throw new Error("assertion failed: x == \"hello-response\"")})((x === "hello-response"))};
     }
   }
   return $Closure2;

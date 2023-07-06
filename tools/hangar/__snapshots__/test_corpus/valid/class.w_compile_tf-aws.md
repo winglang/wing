@@ -4,16 +4,16 @@
 ```js
 module.exports = function({ $c5 }) {
   class $Closure1 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
     async handle() {
       {((cond) => {if (!cond) throw new Error("assertion failed: c5.x == 123")})(($c5.x === 123))};
       {((cond) => {if (!cond) throw new Error("assertion failed: c5.y == 321")})(($c5.y === 321))};
       (await $c5.set(111));
       {((cond) => {if (!cond) throw new Error("assertion failed: c5.y == 111")})(($c5.y === 111))};
-    }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
     }
   }
   return $Closure1;
@@ -25,15 +25,15 @@ module.exports = function({ $c5 }) {
 ```js
 module.exports = function({ $student_hrlyWage, $student_major, $student_name }) {
   class $Closure2 {
-    async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: student.name == \"Tom\"")})(($student_name === "Tom"))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: student.major == \"MySpace\"")})(($student_major === "MySpace"))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: student.hrlyWage == 38")})(($student_hrlyWage === 38))};
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle() {
+      {((cond) => {if (!cond) throw new Error("assertion failed: student.name == \"Tom\"")})(($student_name === "Tom"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: student.major == \"MySpace\"")})(($student_major === "MySpace"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: student.hrlyWage == 38")})(($student_hrlyWage === 38))};
     }
   }
   return $Closure2;
@@ -45,13 +45,13 @@ module.exports = function({ $student_hrlyWage, $student_major, $student_name }) 
 ```js
 module.exports = function({ $ta_hrlyWage }) {
   class $Closure3 {
-    async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: ta.hrlyWage == 10")})(($ta_hrlyWage === 10))};
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle() {
+      {((cond) => {if (!cond) throw new Error("assertion failed: ta.hrlyWage == 10")})(($ta_hrlyWage === 10))};
     }
   }
   return $Closure3;
@@ -63,14 +63,14 @@ module.exports = function({ $ta_hrlyWage }) {
 ```js
 module.exports = function({ $B }) {
   class $Closure4 {
-    async handle() {
-      const b = new $B("ba");
-      {((cond) => {if (!cond) throw new Error("assertion failed: b.sound == \"ba\"")})((b.sound === "ba"))};
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle() {
+      const b = new $B("ba");
+      {((cond) => {if (!cond) throw new Error("assertion failed: b.sound == \"ba\"")})((b.sound === "ba"))};
     }
   }
   return $Closure4;
@@ -206,10 +206,10 @@ module.exports = function({  }) {
 ```js
 module.exports = function({  }) {
   class C5 {
+    constructor({  }) {
+    }
     async set(b) {
       this.y = b;
-    }
-    constructor({  }) {
     }
     async $inflight_init() {
       this.x = 123;
@@ -225,10 +225,10 @@ module.exports = function({  }) {
 ```js
 module.exports = function({ $Bar }) {
   class Foo extends $Bar {
-    async doStuff(h) {
-    }
     constructor({  }) {
       super({  });
+    }
+    async doStuff(h) {
     }
   }
   return Foo;

@@ -4,13 +4,13 @@
 ```js
 module.exports = function({ $s }) {
   class $Closure1 {
-    async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: s == \"inner\"")})(($s === "inner"))};
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle() {
+      {((cond) => {if (!cond) throw new Error("assertion failed: s == \"inner\"")})(($s === "inner"))};
     }
   }
   return $Closure1;
@@ -22,13 +22,13 @@ module.exports = function({ $s }) {
 ```js
 module.exports = function({ $s }) {
   class $Closure2 {
-    async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: s == \"inResource\"")})(($s === "inResource"))};
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle() {
+      {((cond) => {if (!cond) throw new Error("assertion failed: s == \"inResource\"")})(($s === "inResource"))};
     }
   }
   return $Closure2;
@@ -40,13 +40,13 @@ module.exports = function({ $s }) {
 ```js
 module.exports = function({ $s }) {
   class $Closure3 {
-    async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: s == \"top\"")})(($s === "top"))};
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle() {
+      {((cond) => {if (!cond) throw new Error("assertion failed: s == \"top\"")})(($s === "top"))};
     }
   }
   return $Closure3;
@@ -58,14 +58,14 @@ module.exports = function({ $s }) {
 ```js
 module.exports = function({  }) {
   class $Closure4 {
-    async handle() {
-      const s = "insideInflight";
-      {((cond) => {if (!cond) throw new Error("assertion failed: s == \"insideInflight\"")})((s === "insideInflight"))};
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle() {
+      const s = "insideInflight";
+      {((cond) => {if (!cond) throw new Error("assertion failed: s == \"insideInflight\"")})((s === "insideInflight"))};
     }
   }
   return $Closure4;

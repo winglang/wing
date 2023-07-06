@@ -4,12 +4,12 @@
 ```js
 module.exports = function({  }) {
   class $Closure1 {
-    async handle(k) {
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle(k) {
     }
   }
   return $Closure1;
@@ -21,13 +21,13 @@ module.exports = function({  }) {
 ```js
 module.exports = function({ $counter }) {
   class $Closure2 {
-    async handle(key) {
-      (await $counter.inc(1,key));
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle(key) {
+      (await $counter.inc(1,key));
     }
   }
   return $Closure2;
@@ -39,6 +39,11 @@ module.exports = function({ $counter }) {
 ```js
 module.exports = function({ $counter, $kv, $util_Util }) {
   class $Closure3 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
     async handle() {
       (await $kv.set("k",Object.freeze({"value":"v"})));
       (await $kv.set("k2",Object.freeze({"value":"v"})));
@@ -54,11 +59,6 @@ module.exports = function({ $counter, $kv, $util_Util }) {
       }
       )))};
     }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
-    }
   }
   return $Closure3;
 }
@@ -69,16 +69,16 @@ module.exports = function({ $counter, $kv, $util_Util }) {
 ```js
 module.exports = function({  }) {
   class KeyValueStore {
+    constructor({ $this_bucket, $this_onUpdateCallback }) {
+      this.$this_bucket = $this_bucket;
+      this.$this_onUpdateCallback = $this_onUpdateCallback;
+    }
     async get(key) {
       (await this.$this_onUpdateCallback(key));
       return (await this.$this_bucket.getJson(key));
     }
     async set(key, value) {
       (await this.$this_bucket.putJson(key,value));
-    }
-    constructor({ $this_bucket, $this_onUpdateCallback }) {
-      this.$this_bucket = $this_bucket;
-      this.$this_onUpdateCallback = $this_onUpdateCallback;
     }
   }
   return KeyValueStore;

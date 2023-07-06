@@ -4,6 +4,11 @@
 ```js
 module.exports = function({ $math_Util }) {
   class $Closure1 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
     async handle() {
       {((cond) => {if (!cond) throw new Error("assertion failed: math.factorial(0) == 1")})(((await $math_Util.factorial(0)) === 1))};
       {((cond) => {if (!cond) throw new Error("assertion failed: math.factorial(1) == 1")})(((await $math_Util.factorial(1)) === 1))};
@@ -11,11 +16,6 @@ module.exports = function({ $math_Util }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: math.factorial(3) == 6")})(((await $math_Util.factorial(3)) === 6))};
       {((cond) => {if (!cond) throw new Error("assertion failed: math.factorial(4) == 24")})(((await $math_Util.factorial(4)) === 24))};
       {((cond) => {if (!cond) throw new Error("assertion failed: math.factorial(5) == 120")})(((await $math_Util.factorial(5)) === 120))};
-    }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
     }
   }
   return $Closure1;

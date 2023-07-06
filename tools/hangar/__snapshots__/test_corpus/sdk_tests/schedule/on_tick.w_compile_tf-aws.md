@@ -4,13 +4,13 @@
 ```js
 module.exports = function({ $c1 }) {
   class $Closure1 {
-    async handle() {
-      (await $c1.inc());
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle() {
+      (await $c1.inc());
     }
   }
   return $Closure1;
@@ -22,13 +22,13 @@ module.exports = function({ $c1 }) {
 ```js
 module.exports = function({ $c2 }) {
   class $Closure2 {
-    async handle() {
-      (await $c2.inc());
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle() {
+      (await $c2.inc());
     }
   }
   return $Closure2;
@@ -40,17 +40,17 @@ module.exports = function({ $c2 }) {
 ```js
 module.exports = function({ $Utils, $c1, $c2 }) {
   class $Closure3 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
     async handle() {
       {((cond) => {if (!cond) throw new Error("assertion failed: c1.peek() == 0")})(((await $c1.peek()) === 0))};
       {((cond) => {if (!cond) throw new Error("assertion failed: c2.peek() == 0")})(((await $c2.peek()) === 0))};
       (await $Utils.sleep(((60 * 1000) * 1.1)));
       {((cond) => {if (!cond) throw new Error("assertion failed: c1.peek() >= 1")})(((await $c1.peek()) >= 1))};
       {((cond) => {if (!cond) throw new Error("assertion failed: c2.peek() >= 1")})(((await $c2.peek()) >= 1))};
-    }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
     }
   }
   return $Closure3;
@@ -62,10 +62,10 @@ module.exports = function({ $Utils, $c1, $c2 }) {
 ```js
 module.exports = function({  }) {
   class Utils {
+    constructor({  }) {
+    }
     static async sleep(milli) {
       return (require("<ABSOLUTE_PATH>/sleep.js")["sleep"])(milli)
-    }
-    constructor({  }) {
     }
   }
   return Utils;

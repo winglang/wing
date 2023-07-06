@@ -4,13 +4,13 @@
 ```js
 module.exports = function({ $f }) {
   class $Closure1 {
-    async handle() {
-      (await $f.call());
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle() {
+      (await $f.call());
     }
   }
   return $Closure1;
@@ -22,13 +22,13 @@ module.exports = function({ $f }) {
 ```js
 module.exports = function({ $f }) {
   class $Closure2 {
-    async handle() {
-      (await $f.print("hey there"));
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle() {
+      (await $f.print("hey there"));
     }
   }
   return $Closure2;
@@ -40,6 +40,8 @@ module.exports = function({ $f }) {
 ```js
 module.exports = function({  }) {
   class Foo {
+    constructor({  }) {
+    }
     static async regexInflight(pattern, text) {
       return (require("<ABSOLUTE_PATH>/external_js.js")["regexInflight"])(pattern, text)
     }
@@ -57,8 +59,6 @@ module.exports = function({  }) {
       const uuid = (await Foo.getUuid());
       {((cond) => {if (!cond) throw new Error("assertion failed: uuid.length == 36")})((uuid.length === 36))};
       {((cond) => {if (!cond) throw new Error("assertion failed: Foo.getData() == \"Cool data!\"")})(((await Foo.getData()) === "Cool data!"))};
-    }
-    constructor({  }) {
     }
   }
   return Foo;

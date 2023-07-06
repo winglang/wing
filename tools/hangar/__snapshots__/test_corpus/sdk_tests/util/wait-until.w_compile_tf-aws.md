@@ -4,6 +4,11 @@
 ```js
 module.exports = function({ $JSHelper, $util_Util }) {
   class $Closure1 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
     async handle() {
       const start = (await $JSHelper.getTime());
       if ((await $util_Util.waitUntil(async () => {
@@ -16,11 +21,6 @@ module.exports = function({ $JSHelper, $util_Util }) {
         {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
       }
     }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
-    }
   }
   return $Closure1;
 }
@@ -31,6 +31,11 @@ module.exports = function({ $JSHelper, $util_Util }) {
 ```js
 module.exports = function({ $JSHelper, $oneSecond, $util_Util }) {
   class $Closure2 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
     async handle() {
       const start = (await $JSHelper.getTime());
       if ((await $util_Util.waitUntil(async () => {
@@ -43,11 +48,6 @@ module.exports = function({ $JSHelper, $oneSecond, $util_Util }) {
         {((cond) => {if (!cond) throw new Error("assertion failed: JSHelper.getTime() - start > 1 * 1000")})((((await $JSHelper.getTime()) - start) > (1 * 1000)))};
       }
     }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
-    }
   }
   return $Closure2;
 }
@@ -58,6 +58,11 @@ module.exports = function({ $JSHelper, $oneSecond, $util_Util }) {
 ```js
 module.exports = function({ $JSHelper, $invokeCounter, $oneSecond, $util_Util }) {
   class $Closure3 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
     async handle() {
       const start = (await $JSHelper.getTime());
       const returnTrueAfter3Seconds = async () => {
@@ -73,11 +78,6 @@ module.exports = function({ $JSHelper, $invokeCounter, $oneSecond, $util_Util })
         {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
       }
     }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
-    }
   }
   return $Closure3;
 }
@@ -88,6 +88,11 @@ module.exports = function({ $JSHelper, $invokeCounter, $oneSecond, $util_Util })
 ```js
 module.exports = function({ $JSHelper, $fiveSeconds, $invokeCounter, $oneSecond, $util_Util }) {
   class $Closure4 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
     async handle() {
       const start = (await $JSHelper.getTime());
       const returnFalse = async () => {
@@ -103,11 +108,6 @@ module.exports = function({ $JSHelper, $fiveSeconds, $invokeCounter, $oneSecond,
         {((cond) => {if (!cond) throw new Error("assertion failed: invokeCount > 3 && invokeCount < 7")})(((invokeCount > 3) && (invokeCount < 7)))};
       }
     }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
-    }
   }
   return $Closure4;
 }
@@ -118,6 +118,11 @@ module.exports = function({ $JSHelper, $fiveSeconds, $invokeCounter, $oneSecond,
 ```js
 module.exports = function({ $invokeCounter, $util_Util }) {
   class $Closure5 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
     async handle() {
       try {
         (await $util_Util.waitUntil(async () => {
@@ -131,11 +136,6 @@ module.exports = function({ $invokeCounter, $util_Util }) {
         {((cond) => {if (!cond) throw new Error("assertion failed: invokeCounter.peek() == 1")})(((await $invokeCounter.peek()) === 1))};
       }
     }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
-    }
   }
   return $Closure5;
 }
@@ -146,10 +146,10 @@ module.exports = function({ $invokeCounter, $util_Util }) {
 ```js
 module.exports = function({  }) {
   class JSHelper {
+    constructor({  }) {
+    }
     static async getTime() {
       return (require("<ABSOLUTE_PATH>/sleep-helper.js")["getTime"])()
-    }
-    constructor({  }) {
     }
   }
   return JSHelper;

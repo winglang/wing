@@ -4,14 +4,14 @@
 ```js
 module.exports = function({ $fn }) {
   class $Closure1 {
-    async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: fn() == 42")})(((await $fn()) === 42))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: fn.another() == \"hello\"")})(((await $fn.another()) === "hello"))};
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle() {
+      {((cond) => {if (!cond) throw new Error("assertion failed: fn() == 42")})(((await $fn()) === 42))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: fn.another() == \"hello\"")})(((await $fn.another()) === "hello"))};
     }
   }
   return $Closure1;
@@ -23,16 +23,16 @@ module.exports = function({ $fn }) {
 ```js
 module.exports = function({  }) {
   class MyClosure {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
     async another() {
       return "hello";
     }
     async handle() {
       return 42;
-    }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
     }
   }
   return MyClosure;

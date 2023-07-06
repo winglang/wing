@@ -4,15 +4,15 @@
 ```js
 module.exports = function({ $b }) {
   class $Closure1 {
-    async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: b.list().length == 0")})(((await $b.list()).length === 0))};
-      (await $b.put("hello.txt","world"));
-      {((cond) => {if (!cond) throw new Error("assertion failed: b.list().length == 1")})(((await $b.list()).length === 1))};
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle() {
+      {((cond) => {if (!cond) throw new Error("assertion failed: b.list().length == 0")})(((await $b.list()).length === 0))};
+      (await $b.put("hello.txt","world"));
+      {((cond) => {if (!cond) throw new Error("assertion failed: b.list().length == 1")})(((await $b.list()).length === 1))};
     }
   }
   return $Closure1;
@@ -24,14 +24,14 @@ module.exports = function({ $b }) {
 ```js
 module.exports = function({ $b }) {
   class $Closure2 {
-    async handle() {
-      (await $b.put("hello.txt","world"));
-      {((cond) => {if (!cond) throw new Error("assertion failed: b.get(\"hello.txt\") == \"world\"")})(((await $b.get("hello.txt")) === "world"))};
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle() {
+      (await $b.put("hello.txt","world"));
+      {((cond) => {if (!cond) throw new Error("assertion failed: b.get(\"hello.txt\") == \"world\"")})(((await $b.get("hello.txt")) === "world"))};
     }
   }
   return $Closure2;

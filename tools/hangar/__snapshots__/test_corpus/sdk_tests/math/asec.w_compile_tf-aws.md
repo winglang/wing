@@ -4,6 +4,11 @@
 ```js
 module.exports = function({ $math_Util }) {
   class $Closure1 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
     async handle() {
       try {
         {console.log(String.raw({ raw: ["", ""] }, (await $math_Util.asec(0.5))))};
@@ -18,11 +23,6 @@ module.exports = function({ $math_Util }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: math.asec(-math.PI) == 1.8947424337268775")})(((await $math_Util.asec((-$math_Util.PI))) === 1.8947424337268775))};
       {((cond) => {if (!cond) throw new Error("assertion failed: math.asec(-1) == math.PI")})(((await $math_Util.asec((-1))) === $math_Util.PI))};
       {((cond) => {if (!cond) throw new Error("assertion failed: math.asec(-2) == 2.0943951023931957")})(((await $math_Util.asec((-2))) === 2.0943951023931957))};
-    }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
     }
   }
   return $Closure1;

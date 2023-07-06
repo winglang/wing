@@ -4,13 +4,13 @@
 ```js
 module.exports = function({ $c }) {
   class $Closure1 {
-    async handle(msg) {
-      (await $c.inc());
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle(msg) {
+      (await $c.inc());
     }
   }
   return $Closure1;
@@ -22,6 +22,11 @@ module.exports = function({ $c }) {
 ```js
 module.exports = function({ $js, $predicate, $q }) {
   class $Closure2 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
     async handle() {
       (await $q.push("hello"));
       (await $q.push("world"));
@@ -36,11 +41,6 @@ module.exports = function({ $js, $predicate, $q }) {
       }
       {((cond) => {if (!cond) throw new Error("assertion failed: predicate.test()")})((await $predicate.test()))};
     }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
-    }
   }
   return $Closure2;
 }
@@ -51,11 +51,11 @@ module.exports = function({ $js, $predicate, $q }) {
 ```js
 module.exports = function({  }) {
   class Predicate {
-    async test() {
-      return ((await this.$this_c.peek()) === 2);
-    }
     constructor({ $this_c }) {
       this.$this_c = $this_c;
+    }
+    async test() {
+      return ((await this.$this_c.peek()) === 2);
     }
   }
   return Predicate;
@@ -67,10 +67,10 @@ module.exports = function({  }) {
 ```js
 module.exports = function({  }) {
   class TestHelper {
+    constructor({  }) {
+    }
     async sleep(milli) {
       return (require("<ABSOLUTE_PATH>/sleep.js")["sleep"])(milli)
-    }
-    constructor({  }) {
     }
   }
   return TestHelper;

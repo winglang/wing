@@ -4,13 +4,13 @@
 ```js
 module.exports = function({ $math_Util }) {
   class $Closure1 {
-    async handle(interestRate, currentVal) {
-      return (currentVal * ($math_Util.E ** interestRate));
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle(interestRate, currentVal) {
+      return (currentVal * ($math_Util.E ** interestRate));
     }
   }
   return $Closure1;
@@ -22,13 +22,13 @@ module.exports = function({ $math_Util }) {
 ```js
 module.exports = function({ $compoundOneYear, $interest, $math_Util, $value }) {
   class $Closure2 {
-    async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.round(compoundOneYear(interest, value), decimalPlaces: 2) == 105.13")})(((await $math_Util.round((await $compoundOneYear($interest,$value)),{ decimalPlaces: 2 })) === 105.13))};
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle() {
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.round(compoundOneYear(interest, value), decimalPlaces: 2) == 105.13")})(((await $math_Util.round((await $compoundOneYear($interest,$value)),{ decimalPlaces: 2 })) === 105.13))};
     }
   }
   return $Closure2;

@@ -4,14 +4,14 @@
 ```js
 module.exports = function({ $BinaryOperation }) {
   class $Closure1 {
-    async handle() {
-      const op = new $BinaryOperation(10,20);
-      {((cond) => {if (!cond) throw new Error("assertion failed: op.add() == 30")})(((await op.add()) === 30))};
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle() {
+      const op = new $BinaryOperation(10,20);
+      {((cond) => {if (!cond) throw new Error("assertion failed: op.add() == 30")})(((await op.add()) === 30))};
     }
   }
   return $Closure1;

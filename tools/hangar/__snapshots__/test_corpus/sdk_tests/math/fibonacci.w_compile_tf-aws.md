@@ -4,6 +4,11 @@
 ```js
 module.exports = function({ $math_Util }) {
   class $Closure1 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
     async handle() {
       {((cond) => {if (!cond) throw new Error("assertion failed: math.fibonacci(0) == 0")})(((await $math_Util.fibonacci(0)) === 0))};
       {((cond) => {if (!cond) throw new Error("assertion failed: math.fibonacci(1) == 1")})(((await $math_Util.fibonacci(1)) === 1))};
@@ -16,11 +21,6 @@ module.exports = function({ $math_Util }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: math.fibonacci(8) == 21")})(((await $math_Util.fibonacci(8)) === 21))};
       {((cond) => {if (!cond) throw new Error("assertion failed: math.fibonacci(9) == 34")})(((await $math_Util.fibonacci(9)) === 34))};
       {((cond) => {if (!cond) throw new Error("assertion failed: math.fibonacci(10) == 55")})(((await $math_Util.fibonacci(10)) === 55))};
-    }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
     }
   }
   return $Closure1;

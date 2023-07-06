@@ -4,14 +4,14 @@
 ```js
 module.exports = function({ $Foo, $myConst }) {
   class $Closure1 {
-    async handle() {
-      const x = new $Foo();
-      {((cond) => {if (!cond) throw new Error("assertion failed: x.getValue() == myConst")})(((await x.getValue()) === $myConst))};
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle() {
+      const x = new $Foo();
+      {((cond) => {if (!cond) throw new Error("assertion failed: x.getValue() == myConst")})(((await x.getValue()) === $myConst))};
     }
   }
   return $Closure1;

@@ -4,6 +4,11 @@
 ```js
 module.exports = function({ $counter, $std_Json }) {
   class $Closure1 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
     async handle(request) {
       const count = (await $counter.inc());
       const bodyResponse = Object.freeze({"count":count});
@@ -13,11 +18,6 @@ module.exports = function({ $counter, $std_Json }) {
       "status": 200,}
       ;
       return resp;
-    }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
     }
   }
   return $Closure1;
@@ -29,14 +29,14 @@ module.exports = function({ $counter, $std_Json }) {
 ```js
 module.exports = function({ $api_url }) {
   class $Closure2 {
-    async handle() {
-      const url = $api_url;
-      {((cond) => {if (!cond) throw new Error("assertion failed: url.startsWith(\"http\")")})(url.startsWith("http"))};
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle() {
+      const url = $api_url;
+      {((cond) => {if (!cond) throw new Error("assertion failed: url.startsWith(\"http\")")})(url.startsWith("http"))};
     }
   }
   return $Closure2;
@@ -48,17 +48,17 @@ module.exports = function({ $api_url }) {
 ```js
 module.exports = function({ $__parent_this_3_api_url }) {
   class $Closure3 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
     async handle(req) {
       const text = String.raw({ raw: ["", "/endpoint2"] }, $__parent_this_3_api_url);
       return {
       "status": 200,
       "body": text,}
       ;
-    }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
     }
   }
   return $Closure3;

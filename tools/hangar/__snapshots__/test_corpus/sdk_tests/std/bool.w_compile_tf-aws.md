@@ -4,6 +4,11 @@
 ```js
 module.exports = function({ $PARSE_ERROR, $std_Boolean, $std_Json }) {
   class $Closure1 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
     async handle() {
       const t = (await $std_Boolean.fromJson((JSON.parse("true"))));
       {((cond) => {if (!cond) throw new Error("assertion failed: t == true")})((t === true))};
@@ -16,11 +21,6 @@ module.exports = function({ $PARSE_ERROR, $std_Boolean, $std_Json }) {
         const s = $error_s.message;
         {((cond) => {if (!cond) throw new Error("assertion failed: s == PARSE_ERROR")})((s === $PARSE_ERROR))};
       }
-    }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
     }
   }
   return $Closure1;

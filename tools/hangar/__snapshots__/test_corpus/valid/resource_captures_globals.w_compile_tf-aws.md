@@ -4,13 +4,13 @@
 ```js
 module.exports = function({ $res }) {
   class $Closure1 {
-    async handle() {
-      (await $res.myPut());
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle() {
+      (await $res.myPut());
     }
   }
   return $Closure1;
@@ -22,13 +22,13 @@ module.exports = function({ $res }) {
 ```js
 module.exports = function({ $Another }) {
   class $Closure2 {
-    async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: Another.myStaticMethod() == 0")})(((await $Another.myStaticMethod()) === 0))};
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle() {
+      {((cond) => {if (!cond) throw new Error("assertion failed: Another.myStaticMethod() == 0")})(((await $Another.myStaticMethod()) === 0))};
     }
   }
   return $Closure2;
@@ -40,14 +40,14 @@ module.exports = function({ $Another }) {
 ```js
 module.exports = function({ $globalCounter }) {
   class Another {
+    constructor({  }) {
+    }
     async myMethod() {
       (await $globalCounter.inc());
       return (await $globalCounter.peek());
     }
     static async myStaticMethod() {
       return (await $globalCounter.peek());
-    }
-    constructor({  }) {
     }
     async $inflight_init() {
       {((cond) => {if (!cond) throw new Error("assertion failed: globalCounter.peek() == 0")})(((await $globalCounter.peek()) === 0))};
@@ -74,6 +74,9 @@ module.exports = function({  }) {
 ```js
 module.exports = function({ $Another, $_globalArrayOfStr_at_0__, $_globalMapOfNum___a__, $_globalSetOfStr_has__a___, $globalAnother, $globalAnother_first_myResource, $globalAnother_myField, $globalBool, $globalBucket, $globalNum, $globalStr }) {
   class MyResource {
+    constructor({ $this_localTopic }) {
+      this.$this_localTopic = $this_localTopic;
+    }
     async myPut() {
       (await this.$this_localTopic.publish("hello"));
       (await $globalBucket.put("key","value"));
@@ -88,9 +91,6 @@ module.exports = function({ $Another, $_globalArrayOfStr_at_0__, $_globalMapOfNu
       {((cond) => {if (!cond) throw new Error("assertion failed: globalAnother.myMethod() > 0")})(((await $globalAnother.myMethod()) > 0))};
       {((cond) => {if (!cond) throw new Error("assertion failed: Another.myStaticMethod() > 0")})(((await $Another.myStaticMethod()) > 0))};
     }
-    constructor({ $this_localTopic }) {
-      this.$this_localTopic = $this_localTopic;
-    }
   }
   return MyResource;
 }
@@ -101,14 +101,14 @@ module.exports = function({ $Another, $_globalArrayOfStr_at_0__, $_globalMapOfNu
 ```js
 module.exports = function({ $_parentThis_localCounter, $globalCounter }) {
   class R {
-    async handle() {
-      (await $globalCounter.inc());
-      (await $_parentThis_localCounter.inc());
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle() {
+      (await $globalCounter.inc());
+      (await $_parentThis_localCounter.inc());
     }
   }
   return R;

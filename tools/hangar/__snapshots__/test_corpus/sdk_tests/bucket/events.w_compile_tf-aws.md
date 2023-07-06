@@ -4,13 +4,13 @@
 ```js
 module.exports = function({ $idsCounter, $table }) {
   class $Closure1 {
-    async handle(key, operation, source) {
-      (await $table.insert(String.raw({ raw: ["", ""] }, (await $idsCounter.inc())),Object.freeze({"key":key,"operation":operation,"source":String.raw({ raw: ["", ""] }, source)})));
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle(key, operation, source) {
+      (await $table.insert(String.raw({ raw: ["", ""] }, (await $idsCounter.inc())),Object.freeze({"key":key,"operation":operation,"source":String.raw({ raw: ["", ""] }, source)})));
     }
   }
   return $Closure1;
@@ -22,13 +22,13 @@ module.exports = function({ $idsCounter, $table }) {
 ```js
 module.exports = function({ $Source, $logHistory }) {
   class $Closure2 {
-    async handle(key) {
-      (await $logHistory(key,"DELETE",$Source.anyEvent));
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle(key) {
+      (await $logHistory(key,"DELETE",$Source.anyEvent));
     }
   }
   return $Closure2;
@@ -40,13 +40,13 @@ module.exports = function({ $Source, $logHistory }) {
 ```js
 module.exports = function({ $Source, $logHistory }) {
   class $Closure3 {
-    async handle(key) {
-      (await $logHistory(key,"UPDATE",$Source.anyEvent));
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle(key) {
+      (await $logHistory(key,"UPDATE",$Source.anyEvent));
     }
   }
   return $Closure3;
@@ -58,13 +58,13 @@ module.exports = function({ $Source, $logHistory }) {
 ```js
 module.exports = function({ $Source, $logHistory }) {
   class $Closure4 {
-    async handle(key) {
-      (await $logHistory(key,"CREATE",$Source.anyEvent));
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle(key) {
+      (await $logHistory(key,"CREATE",$Source.anyEvent));
     }
   }
   return $Closure4;
@@ -76,13 +76,13 @@ module.exports = function({ $Source, $logHistory }) {
 ```js
 module.exports = function({ $Source, $logHistory }) {
   class $Closure5 {
-    async handle(key, event) {
-      (await $logHistory(key,String.raw({ raw: ["", ""] }, event),$Source.onEvent));
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle(key, event) {
+      (await $logHistory(key,String.raw({ raw: ["", ""] }, event),$Source.onEvent));
     }
   }
   return $Closure5;
@@ -94,6 +94,11 @@ module.exports = function({ $Source, $logHistory }) {
 ```js
 module.exports = function({ $Util }) {
   class $Closure6 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
     async handle(pred) {
       let i = 0;
       while ((i < 12)) {
@@ -105,11 +110,6 @@ module.exports = function({ $Util }) {
       }
       return false;
     }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
-    }
   }
   return $Closure6;
 }
@@ -120,6 +120,11 @@ module.exports = function({ $Util }) {
 ```js
 module.exports = function({ $table }) {
   class $Closure7 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
     async handle(opts) {
       return async () => {
         let count = 0;
@@ -132,11 +137,6 @@ module.exports = function({ $table }) {
       }
       ;
     }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
-    }
   }
   return $Closure7;
 }
@@ -147,6 +147,11 @@ module.exports = function({ $table }) {
 ```js
 module.exports = function({ $Source, $b, $checkHitCount, $wait }) {
   class $Closure8 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
     async handle() {
       (await $b.put("a","1"));
       (await $b.put("b","1"));
@@ -164,11 +169,6 @@ module.exports = function({ $Source, $b, $checkHitCount, $wait }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: wait(checkHitCount(key: \"b\", type: \"UPDATE\", source: Source.onEvent, count: 1))")})((await $wait((await $checkHitCount({ key: "b", type: "UPDATE", source: $Source.onEvent, count: 1 })))))};
       {((cond) => {if (!cond) throw new Error("assertion failed: wait(checkHitCount(key: \"c\", type: \"DELETE\", source: Source.onEvent, count: 1))")})((await $wait((await $checkHitCount({ key: "c", type: "DELETE", source: $Source.onEvent, count: 1 })))))};
     }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
-    }
   }
   return $Closure8;
 }
@@ -179,10 +179,10 @@ module.exports = function({ $Source, $b, $checkHitCount, $wait }) {
 ```js
 module.exports = function({  }) {
   class Util {
+    constructor({  }) {
+    }
     static async sleep(milli) {
       return (require("<ABSOLUTE_PATH>/sleep.js")["sleep"])(milli)
-    }
-    constructor({  }) {
     }
   }
   return Util;

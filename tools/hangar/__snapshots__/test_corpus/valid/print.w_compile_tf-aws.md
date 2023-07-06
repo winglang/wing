@@ -4,14 +4,14 @@
 ```js
 module.exports = function({  }) {
   class $Closure1 {
-    async handle() {
-      {console.log("inflight log 1.1")};
-      {console.log("inflight log 1.2")};
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle() {
+      {console.log("inflight log 1.1")};
+      {console.log("inflight log 1.2")};
     }
   }
   return $Closure1;
@@ -23,14 +23,14 @@ module.exports = function({  }) {
 ```js
 module.exports = function({  }) {
   class $Closure2 {
-    async handle() {
-      {console.log("inflight log 2.1")};
-      {console.log("inflight log 2.2")};
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle() {
+      {console.log("inflight log 2.1")};
+      {console.log("inflight log 2.2")};
     }
   }
   return $Closure2;

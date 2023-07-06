@@ -4,16 +4,16 @@
 ```js
 module.exports = function({ $c }) {
   class $Closure1 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
     async handle() {
       {((cond) => {if (!cond) throw new Error("assertion failed: c.peek() == 0")})(((await $c.peek()) === 0))};
       {((cond) => {if (!cond) throw new Error("assertion failed: c.peek() == 0")})(((await $c.peek()) === 0))};
       (await $c.inc());
       {((cond) => {if (!cond) throw new Error("assertion failed: c.peek() == 1")})(((await $c.peek()) === 1))};
-    }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
     }
   }
   return $Closure1;
@@ -25,17 +25,17 @@ module.exports = function({ $c }) {
 ```js
 module.exports = function({ $c }) {
   class $Closure2 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
     async handle() {
       const key = "my-key";
       {((cond) => {if (!cond) throw new Error("assertion failed: c.peek(key) == 0")})(((await $c.peek(key)) === 0))};
       {((cond) => {if (!cond) throw new Error("assertion failed: c.peek(key) == 0")})(((await $c.peek(key)) === 0))};
       (await $c.inc(undefined,key));
       {((cond) => {if (!cond) throw new Error("assertion failed: c.peek(key) == 1")})(((await $c.peek(key)) === 1))};
-    }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
     }
   }
   return $Closure2;

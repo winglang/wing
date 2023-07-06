@@ -4,14 +4,14 @@
 ```js
 module.exports = function({ $SomeEnum, $one, $two }) {
   class $Closure1 {
-    async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: one == SomeEnum.ONE")})(($one === $SomeEnum.ONE))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: two == SomeEnum.TWO")})(($two === $SomeEnum.TWO))};
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle() {
+      {((cond) => {if (!cond) throw new Error("assertion failed: one == SomeEnum.ONE")})(($one === $SomeEnum.ONE))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: two == SomeEnum.TWO")})(($two === $SomeEnum.TWO))};
     }
   }
   return $Closure1;

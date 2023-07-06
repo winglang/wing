@@ -4,13 +4,13 @@
 ```js
 module.exports = function({ $c }) {
   class $Closure1 {
-    async handle() {
-      (await $c.inc());
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle() {
+      (await $c.inc());
     }
   }
   return $Closure1;
@@ -22,13 +22,13 @@ module.exports = function({ $c }) {
 ```js
 module.exports = function({ $c }) {
   class $Closure2 {
-    async handle() {
-      (await $c.inc());
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle() {
+      (await $c.inc());
     }
   }
   return $Closure2;
@@ -40,17 +40,17 @@ module.exports = function({ $c }) {
 ```js
 module.exports = function({ $c, $f1, $f2 }) {
   class $Closure3 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
     async handle() {
       {((cond) => {if (!cond) throw new Error("assertion failed: c.peek() == 0")})(((await $c.peek()) === 0))};
       (await $f1.invoke(""));
       {((cond) => {if (!cond) throw new Error("assertion failed: c.peek() == 1")})(((await $c.peek()) === 1))};
       (await $f2.invoke(""));
       {((cond) => {if (!cond) throw new Error("assertion failed: c.peek() == 2")})(((await $c.peek()) === 2))};
-    }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
     }
   }
   return $Closure3;

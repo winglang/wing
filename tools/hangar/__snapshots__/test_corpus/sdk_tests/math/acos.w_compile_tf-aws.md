@@ -4,6 +4,11 @@
 ```js
 module.exports = function({ $math_Util }) {
   class $Closure1 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
     async handle() {
       try {
         {console.log(String.raw({ raw: ["", ""] }, (await $math_Util.acos((-2)))))};
@@ -24,11 +29,6 @@ module.exports = function({ $math_Util }) {
         const e = $error_e.message;
         {((cond) => {if (!cond) throw new Error("assertion failed: e == \"Input value must be between -1 and 1, inclusive.\"")})((e === "Input value must be between -1 and 1, inclusive."))};
       }
-    }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
     }
   }
   return $Closure1;

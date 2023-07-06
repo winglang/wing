@@ -4,16 +4,16 @@
 ```js
 module.exports = function({ $math_Util }) {
   class $Closure1 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
     async handle() {
       {((cond) => {if (!cond) throw new Error("assertion failed: math.TAU / 4 == math.PI / 2")})((($math_Util.TAU / 4) === ($math_Util.PI / 2)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: math.TAU / 2 == math.PI")})((($math_Util.TAU / 2) === $math_Util.PI))};
       {((cond) => {if (!cond) throw new Error("assertion failed: math.TAU * 3 / 4 == math.PI * 3 / 2")})(((($math_Util.TAU * 3) / 4) === (($math_Util.PI * 3) / 2)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: math.TAU == math.PI * 2")})(($math_Util.TAU === ($math_Util.PI * 2)))};
-    }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
     }
   }
   return $Closure1;

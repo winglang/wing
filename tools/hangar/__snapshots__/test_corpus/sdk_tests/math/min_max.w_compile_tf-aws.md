@@ -4,14 +4,14 @@
 ```js
 module.exports = function({ $math_Util, $myArray }) {
   class $Closure1 {
-    async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.min(myArray) == 1")})(((await $math_Util.min($myArray)) === 1))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.max(myArray) == 5")})(((await $math_Util.max($myArray)) === 5))};
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle() {
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.min(myArray) == 1")})(((await $math_Util.min($myArray)) === 1))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.max(myArray) == 5")})(((await $math_Util.max($myArray)) === 5))};
     }
   }
   return $Closure1;

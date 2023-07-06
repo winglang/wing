@@ -4,14 +4,14 @@
 ```js
 module.exports = function({ $b, $fileName }) {
   class $Closure1 {
-    async handle(msg) {
-      const x = (await $b.getJson($fileName));
-      {((cond) => {if (!cond) throw new Error("assertion failed: x.get(\"persons\").getAt(0).get(\"fears\").getAt(1) == \"failure\"")})((((((x)["persons"])[0])["fears"])[1] === "failure"))};
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle(msg) {
+      const x = (await $b.getJson($fileName));
+      {((cond) => {if (!cond) throw new Error("assertion failed: x.get(\"persons\").getAt(0).get(\"fears\").getAt(1) == \"failure\"")})((((((x)["persons"])[0])["fears"])[1] === "failure"))};
     }
   }
   return $Closure1;
@@ -23,14 +23,14 @@ module.exports = function({ $b, $fileName }) {
 ```js
 module.exports = function({ $b, $fileName, $getJson, $j }) {
   class $Closure2 {
-    async handle() {
-      (await $b.putJson($fileName,$j));
-      (await $getJson.invoke(""));
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle() {
+      (await $b.putJson($fileName,$j));
+      (await $getJson.invoke(""));
     }
   }
   return $Closure2;

@@ -4,13 +4,13 @@
 ```js
 module.exports = function({ $math_Util, $population, $subset }) {
   class $Closure1 {
-    async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.combinations(population, subset) == 10")})(((await $math_Util.combinations($population,$subset)) === 10))};
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle() {
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.combinations(population, subset) == 10")})(((await $math_Util.combinations($population,$subset)) === 10))};
     }
   }
   return $Closure1;

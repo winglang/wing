@@ -4,16 +4,16 @@
 ```js
 module.exports = function({ $math_Util }) {
   class $Closure1 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
     async handle() {
       {((cond) => {if (!cond) throw new Error("assertion failed: math.cot(0) == math.INF")})(((await $math_Util.cot(0)) === $math_Util.INF))};
       {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.cot(math.PI / 4)) == 1")})(((await $math_Util.round((await $math_Util.cot(($math_Util.PI / 4))))) === 1))};
       {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.cot(math.PI * 3 / 4)) == -1")})(((await $math_Util.round((await $math_Util.cot((($math_Util.PI * 3) / 4))))) === (-1)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: math.cot(-0) == -math.INF")})(((await $math_Util.cot((-0))) === (-$math_Util.INF)))};
-    }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
     }
   }
   return $Closure1;

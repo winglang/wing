@@ -4,13 +4,13 @@
 ```js
 module.exports = function({ $Foo }) {
   class $Closure1 {
-    async handle() {
-      new $Foo();
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle() {
+      new $Foo();
     }
   }
   return $Closure1;

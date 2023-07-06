@@ -4,15 +4,15 @@
 ```js
 module.exports = function({ $NIL, $RANDOM, $util_Util }) {
   class $Closure1 {
-    async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: util.env(\"WING_TARGET\").length > 0")})(((await $util_Util.env("WING_TARGET")).length > 0))};
-      const noValue = ((await $util_Util.tryEnv($RANDOM)) ?? $NIL);
-      {((cond) => {if (!cond) throw new Error("assertion failed: noValue == NIL")})((noValue === $NIL))};
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle() {
+      {((cond) => {if (!cond) throw new Error("assertion failed: util.env(\"WING_TARGET\").length > 0")})(((await $util_Util.env("WING_TARGET")).length > 0))};
+      const noValue = ((await $util_Util.tryEnv($RANDOM)) ?? $NIL);
+      {((cond) => {if (!cond) throw new Error("assertion failed: noValue == NIL")})((noValue === $NIL))};
     }
   }
   return $Closure1;

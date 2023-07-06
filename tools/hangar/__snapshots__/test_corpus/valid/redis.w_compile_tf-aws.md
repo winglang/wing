@@ -4,6 +4,11 @@
 ```js
 module.exports = function({ $r, $r2 }) {
   class $Closure1 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
     async handle() {
       const connection = (await $r.rawClient());
       (await connection.set("wing","does redis"));
@@ -12,11 +17,6 @@ module.exports = function({ $r, $r2 }) {
       (await $r2.set("wing","does redis again"));
       const value2 = (await $r2.get("wing"));
       {((cond) => {if (!cond) throw new Error("assertion failed: value2 == \"does redis again\"")})((value2 === "does redis again"))};
-    }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
     }
   }
   return $Closure1;

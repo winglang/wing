@@ -4,13 +4,13 @@
 ```js
 module.exports = function({  }) {
   class $Closure1 {
-    async handle(key) {
-      {console.log(String.raw({ raw: ["deleted ", ""] }, key))};
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle(key) {
+      {console.log(String.raw({ raw: ["deleted ", ""] }, key))};
     }
   }
   return $Closure1;
@@ -22,13 +22,13 @@ module.exports = function({  }) {
 ```js
 module.exports = function({  }) {
   class $Closure2 {
-    async handle(key) {
-      {console.log(String.raw({ raw: ["updated ", ""] }, key))};
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle(key) {
+      {console.log(String.raw({ raw: ["updated ", ""] }, key))};
     }
   }
   return $Closure2;
@@ -40,13 +40,13 @@ module.exports = function({  }) {
 ```js
 module.exports = function({  }) {
   class $Closure3 {
-    async handle(key) {
-      {console.log(String.raw({ raw: ["created ", ""] }, key))};
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle(key) {
+      {console.log(String.raw({ raw: ["created ", ""] }, key))};
     }
   }
   return $Closure3;
@@ -58,13 +58,13 @@ module.exports = function({  }) {
 ```js
 module.exports = function({ $other }) {
   class $Closure4 {
-    async handle(key, event) {
-      (await $other.put(String.raw({ raw: ["last_", "_key"] }, event),key));
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle(key, event) {
+      (await $other.put(String.raw({ raw: ["last_", "_key"] }, event),key));
     }
   }
   return $Closure4;
@@ -76,13 +76,13 @@ module.exports = function({ $other }) {
 ```js
 module.exports = function({  }) {
   class $Closure5 {
-    async handle(key) {
-      {console.log("other bucket event called!")};
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle(key) {
+      {console.log("other bucket event called!")};
     }
   }
   return $Closure5;
@@ -94,17 +94,17 @@ module.exports = function({  }) {
 ```js
 module.exports = function({ $b }) {
   class $Closure6 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
     async handle() {
       (await $b.put("a","1"));
       (await $b.put("b","1"));
       (await $b.put("b","100"));
       (await $b.put("c","1"));
       (await $b.delete("c"));
-    }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
     }
   }
   return $Closure6;

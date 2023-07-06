@@ -4,14 +4,14 @@
 ```js
 module.exports = function({ $foo }) {
   class $Closure1 {
-    async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: foo.returnNil(true)? == true")})(((((await $foo.returnNil(true))) != null) === true))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: foo.returnNil(false)? == false")})(((((await $foo.returnNil(false))) != null) === false))};
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle() {
+      {((cond) => {if (!cond) throw new Error("assertion failed: foo.returnNil(true)? == true")})(((((await $foo.returnNil(true))) != null) === true))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: foo.returnNil(false)? == false")})(((((await $foo.returnNil(false))) != null) === false))};
     }
   }
   return $Closure1;
@@ -23,6 +23,11 @@ module.exports = function({ $foo }) {
 ```js
 module.exports = function({ $foo }) {
   class $Closure2 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
     async handle() {
       {((cond) => {if (!cond) throw new Error("assertion failed: foo.getOptionalValue()? == false")})(((((await $foo.getOptionalValue())) != null) === false))};
       (await $foo.setOptionalValue("hello"));
@@ -31,11 +36,6 @@ module.exports = function({ $foo }) {
       (await $foo.setOptionalValue(undefined));
       {((cond) => {if (!cond) throw new Error("assertion failed: foo.getOptionalValue()? == false")})(((((await $foo.getOptionalValue())) != null) === false))};
       {((cond) => {if (!cond) throw new Error("assertion failed: foo.getOptionalValue() == nil")})(((await $foo.getOptionalValue()) === undefined))};
-    }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
     }
   }
   return $Closure2;
@@ -47,6 +47,8 @@ module.exports = function({ $foo }) {
 ```js
 module.exports = function({  }) {
   class Foo {
+    constructor({  }) {
+    }
     async returnNil(t) {
       if (t) {
         return "hello";
@@ -58,8 +60,6 @@ module.exports = function({  }) {
     }
     async getOptionalValue() {
       return this.optionalVar;
-    }
-    constructor({  }) {
     }
     async $inflight_init() {
       this.optionalVar = undefined;

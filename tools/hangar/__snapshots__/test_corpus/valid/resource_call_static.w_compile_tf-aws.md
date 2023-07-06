@@ -4,13 +4,13 @@
 ```js
 module.exports = function({ $Another }) {
   class $Closure1 {
-    async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: Another.myStaticMethod() == 0")})(((await $Another.myStaticMethod()) === 0))};
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle() {
+      {((cond) => {if (!cond) throw new Error("assertion failed: Another.myStaticMethod() == 0")})(((await $Another.myStaticMethod()) === 0))};
     }
   }
   return $Closure1;
@@ -22,10 +22,10 @@ module.exports = function({ $Another }) {
 ```js
 module.exports = function({ $globalCounter }) {
   class Another {
+    constructor({  }) {
+    }
     static async myStaticMethod() {
       return (await $globalCounter.peek());
-    }
-    constructor({  }) {
     }
   }
   return Another;

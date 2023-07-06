@@ -4,6 +4,11 @@
 ```js
 module.exports = function({ $std_Json }) {
   class $Closure1 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
     async handle(req) {
       const issues = (JSON.parse("[{\"foo\": \"bar\"}, {\"foo\": \"baz\"}, {\"foo\": \"qux\"}]"));
       return {
@@ -11,11 +16,6 @@ module.exports = function({ $std_Json }) {
       "headers": Object.freeze({"Content-Type":"application/json"}),
       "body": ((args) => { return JSON.stringify(args[0], null, args[1]) })([issues]),}
       ;
-    }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
     }
   }
   return $Closure1;
@@ -27,16 +27,16 @@ module.exports = function({ $std_Json }) {
 ```js
 module.exports = function({ $api_url, $http_Util, $std_Json }) {
   class $Closure2 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
     async handle() {
       const res = (await $http_Util.get(($api_url + "/foo")));
       const body = (JSON.parse((res.body ?? "")));
       const a1 = (body)[0];
       {((cond) => {if (!cond) throw new Error("assertion failed: a1.get(\"foo\") == \"bar\"")})(((a1)["foo"] === "bar"))};
-    }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
     }
   }
   return $Closure2;
@@ -228,7 +228,6 @@ module.exports = function({ $api_url, $http_Util, $std_Json }) {
         },
         "environment": {
           "variables": {
-            "CLOUD_API_C82DF3A5": "${aws_api_gateway_stage.cloudApi_api_stage_BBB283E4.invoke_url}",
             "WING_FUNCTION_NAME": "Handler-c88c3aa2",
             "WING_TARGET": "tf-aws",
             "WING_TOKEN_TFTOKEN_TOKEN_21": "${jsonencode(aws_api_gateway_stage.cloudApi_api_stage_BBB283E4.invoke_url)}"

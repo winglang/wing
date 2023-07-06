@@ -4,6 +4,11 @@
 ```js
 module.exports = function({ $myBool, $myDur_hours, $myDur_minutes, $myDur_seconds, $myNum, $mySecondBool, $myStr }) {
   class $Closure1 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
     async handle(s) {
       {console.log($myStr)};
       const n = $myNum;
@@ -20,11 +25,6 @@ module.exports = function({ $myBool, $myDur_hours, $myDur_minutes, $myDur_second
       const hr = $myDur_hours;
       const split = (await String.raw({ raw: ["min=", " sec=", " hr=", ""] }, min, sec, hr).split(" "));
       {((cond) => {if (!cond) throw new Error("assertion failed: split.length == 3")})((split.length === 3))};
-    }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
     }
   }
   return $Closure1;

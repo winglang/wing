@@ -4,6 +4,11 @@
 ```js
 module.exports = function({  }) {
   class $Closure1 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
     async handle(body) {
       const i = 0;
       const iterator = async (j) => {
@@ -13,11 +18,6 @@ module.exports = function({  }) {
       while (((await iterator(i)) < 3)) {
         {console.log(String.raw({ raw: ["", ""] }, i))};
       }
-    }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
     }
   }
   return $Closure1;

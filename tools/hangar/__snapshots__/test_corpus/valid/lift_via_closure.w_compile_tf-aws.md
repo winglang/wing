@@ -4,13 +4,13 @@
 ```js
 module.exports = function({ $bucket2 }) {
   class $Closure1 {
-    async handle() {
-      (await $bucket2.put("hello","world"));
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle() {
+      (await $bucket2.put("hello","world"));
     }
   }
   return $Closure1;
@@ -22,13 +22,13 @@ module.exports = function({ $bucket2 }) {
 ```js
 module.exports = function({ $fn }) {
   class $Closure2 {
-    async handle() {
-      (await $fn());
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle() {
+      (await $fn());
     }
   }
   return $Closure2;
@@ -40,16 +40,16 @@ module.exports = function({ $fn }) {
 ```js
 module.exports = function({ $bucket2, $fn2, $fn2_bucket }) {
   class $Closure3 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
     async handle() {
       (await $fn2());
       {((cond) => {if (!cond) throw new Error("assertion failed: fn2.bucket.get(\"hello\") == \"world\"")})(((await $fn2_bucket.get("hello")) === "world"))};
       {((cond) => {if (!cond) throw new Error("assertion failed: fn2.listFiles().length == 1")})(((await $fn2.listFiles()).length === 1))};
       {((cond) => {if (!cond) throw new Error("assertion failed: bucket2.get(\"b2\") == \"world\"")})(((await $bucket2.get("b2")) === "world"))};
-    }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
     }
   }
   return $Closure3;
@@ -61,6 +61,12 @@ module.exports = function({ $bucket2, $fn2, $fn2_bucket }) {
 ```js
 module.exports = function({ $bucket2 }) {
   class MyClosure {
+    constructor({ $this_bucket }) {
+      this.$this_bucket = $this_bucket;
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
     async handle() {
       {console.log("handle called")};
       (await this.putFile());
@@ -72,12 +78,6 @@ module.exports = function({ $bucket2 }) {
     async listFiles() {
       (await $bucket2.put("b2","world"));
       return (await this.$this_bucket.list());
-    }
-    constructor({ $this_bucket }) {
-      this.$this_bucket = $this_bucket;
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
     }
   }
   return MyClosure;

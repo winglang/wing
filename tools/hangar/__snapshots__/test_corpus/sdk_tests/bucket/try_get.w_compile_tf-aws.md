@@ -4,6 +4,11 @@
 ```js
 module.exports = function({ $b }) {
   class $Closure1 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
     async handle() {
       (await $b.put("test1.txt","Foo"));
       {((cond) => {if (!cond) throw new Error("assertion failed: b.tryGet(\"test1.txt\") == \"Foo\"")})(((await $b.tryGet("test1.txt")) === "Foo"))};
@@ -12,11 +17,6 @@ module.exports = function({ $b }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: b.tryGet(\"test2.txt\") == \"Bar\"")})(((await $b.tryGet("test2.txt")) === "Bar"))};
       (await $b.delete("test1.txt"));
       {((cond) => {if (!cond) throw new Error("assertion failed: b.tryGet(\"test1.txt\") == nil")})(((await $b.tryGet("test1.txt")) === undefined))};
-    }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
     }
   }
   return $Closure1;

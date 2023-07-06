@@ -4,13 +4,13 @@
 ```js
 module.exports = function({ $x }) {
   class $Closure1 {
-    async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: x == 5")})(($x === 5))};
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle() {
+      {((cond) => {if (!cond) throw new Error("assertion failed: x == 5")})(($x === 5))};
     }
   }
   return $Closure1;
@@ -22,13 +22,13 @@ module.exports = function({ $x }) {
 ```js
 module.exports = function({ $handler }) {
   class $Closure2 {
-    async handle() {
-      (await $handler());
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle() {
+      (await $handler());
     }
   }
   return $Closure2;

@@ -4,11 +4,11 @@
 ```js
 module.exports = function({  }) {
   class Foo {
-    async getStuff() {
-      return this.$this_data_field0;
-    }
     constructor({ $this_data_field0 }) {
       this.$this_data_field0 = $this_data_field0;
+    }
+    async getStuff() {
+      return this.$this_data_field0;
     }
   }
   return Foo;

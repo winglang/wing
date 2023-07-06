@@ -4,6 +4,11 @@
 ```js
 module.exports = function({ $b, $std_Json }) {
   class $Closure1 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
     async handle() {
       const jsonObj1 = Object.freeze({"key1":"value1"});
       const jsonObj2 = Object.freeze({"key2":"value2"});
@@ -16,11 +21,6 @@ module.exports = function({ $b, $std_Json }) {
       (await $b.delete("file2.json"));
       {((cond) => {if (!cond) throw new Error("assertion failed: b.tryGetJson(\"file1.json\") == nil")})(((await $b.tryGetJson("file1.json")) === undefined))};
       {((cond) => {if (!cond) throw new Error("assertion failed: b.tryGetJson(\"file2.json\") == nil")})(((await $b.tryGetJson("file2.json")) === undefined))};
-    }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
     }
   }
   return $Closure1;

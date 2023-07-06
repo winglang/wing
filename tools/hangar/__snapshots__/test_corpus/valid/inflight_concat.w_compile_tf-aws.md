@@ -4,11 +4,11 @@
 ```js
 module.exports = function({  }) {
   class R {
-    async foo() {
-      {console.log(this.$_this_s1_concat___world___)};
-    }
     constructor({ $_this_s1_concat___world___ }) {
       this.$_this_s1_concat___world___ = $_this_s1_concat___world___;
+    }
+    async foo() {
+      {console.log(this.$_this_s1_concat___world___)};
     }
   }
   return R;

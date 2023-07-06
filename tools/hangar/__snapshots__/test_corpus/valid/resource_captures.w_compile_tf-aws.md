@@ -4,6 +4,11 @@
 ```js
 module.exports = function({ $r }) {
   class $Closure1 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
     async handle() {
       (await $r.testNoCapture());
       (await $r.testCaptureCollectionsOfData());
@@ -17,11 +22,6 @@ module.exports = function({ $r }) {
       (await $r.testUserDefinedResource());
       (await $r.testInflightField());
     }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
-    }
   }
   return $Closure1;
 }
@@ -32,13 +32,13 @@ module.exports = function({ $r }) {
 ```js
 module.exports = function({  }) {
   class Another {
+    constructor({  }) {
+    }
     async meaningOfLife() {
       return 42;
     }
     async anotherFunc() {
       return "42";
-    }
-    constructor({  }) {
     }
   }
   return Another;
@@ -62,6 +62,27 @@ module.exports = function({  }) {
 ```js
 module.exports = function({  }) {
   class MyResource {
+    constructor({ $___this_setOfStr_has__s3____, $_this_arrayOfStr_at_0__, $_this_arrayOfStr_at_1__, $_this_mapOfNum___k1__, $_this_mapOfNum___k2__, $_this_myOptStr_______, $_this_setOfStr_has__s1___, $_this_setOfStr_has__s2___, $this_another, $this_another_first_myResource, $this_another_myField, $this_arrayOfStr_length, $this_extBucket, $this_extNum, $this_myBool, $this_myNum, $this_myQueue, $this_myResource, $this_myStr }) {
+      this.$___this_setOfStr_has__s3____ = $___this_setOfStr_has__s3____;
+      this.$_this_arrayOfStr_at_0__ = $_this_arrayOfStr_at_0__;
+      this.$_this_arrayOfStr_at_1__ = $_this_arrayOfStr_at_1__;
+      this.$_this_mapOfNum___k1__ = $_this_mapOfNum___k1__;
+      this.$_this_mapOfNum___k2__ = $_this_mapOfNum___k2__;
+      this.$_this_myOptStr_______ = $_this_myOptStr_______;
+      this.$_this_setOfStr_has__s1___ = $_this_setOfStr_has__s1___;
+      this.$_this_setOfStr_has__s2___ = $_this_setOfStr_has__s2___;
+      this.$this_another = $this_another;
+      this.$this_another_first_myResource = $this_another_first_myResource;
+      this.$this_another_myField = $this_another_myField;
+      this.$this_arrayOfStr_length = $this_arrayOfStr_length;
+      this.$this_extBucket = $this_extBucket;
+      this.$this_extNum = $this_extNum;
+      this.$this_myBool = $this_myBool;
+      this.$this_myNum = $this_myNum;
+      this.$this_myQueue = $this_myQueue;
+      this.$this_myResource = $this_myResource;
+      this.$this_myStr = $this_myStr;
+    }
     async testNoCapture() {
       const arr = Object.freeze([1, 2, 3]);
       {((cond) => {if (!cond) throw new Error("assertion failed: arr.length == 3")})((arr.length === 3))};
@@ -112,27 +133,6 @@ module.exports = function({  }) {
     }
     async testInflightField() {
       {((cond) => {if (!cond) throw new Error("assertion failed: this.inflightField == 123")})((this.inflightField === 123))};
-    }
-    constructor({ $___this_setOfStr_has__s3____, $_this_arrayOfStr_at_0__, $_this_arrayOfStr_at_1__, $_this_mapOfNum___k1__, $_this_mapOfNum___k2__, $_this_myOptStr_______, $_this_setOfStr_has__s1___, $_this_setOfStr_has__s2___, $this_another, $this_another_first_myResource, $this_another_myField, $this_arrayOfStr_length, $this_extBucket, $this_extNum, $this_myBool, $this_myNum, $this_myQueue, $this_myResource, $this_myStr }) {
-      this.$___this_setOfStr_has__s3____ = $___this_setOfStr_has__s3____;
-      this.$_this_arrayOfStr_at_0__ = $_this_arrayOfStr_at_0__;
-      this.$_this_arrayOfStr_at_1__ = $_this_arrayOfStr_at_1__;
-      this.$_this_mapOfNum___k1__ = $_this_mapOfNum___k1__;
-      this.$_this_mapOfNum___k2__ = $_this_mapOfNum___k2__;
-      this.$_this_myOptStr_______ = $_this_myOptStr_______;
-      this.$_this_setOfStr_has__s1___ = $_this_setOfStr_has__s1___;
-      this.$_this_setOfStr_has__s2___ = $_this_setOfStr_has__s2___;
-      this.$this_another = $this_another;
-      this.$this_another_first_myResource = $this_another_first_myResource;
-      this.$this_another_myField = $this_another_myField;
-      this.$this_arrayOfStr_length = $this_arrayOfStr_length;
-      this.$this_extBucket = $this_extBucket;
-      this.$this_extNum = $this_extNum;
-      this.$this_myBool = $this_myBool;
-      this.$this_myNum = $this_myNum;
-      this.$this_myQueue = $this_myQueue;
-      this.$this_myResource = $this_myResource;
-      this.$this_myStr = $this_myStr;
     }
     async $inflight_init() {
       this.inflightField = 123;
@@ -240,7 +240,6 @@ module.exports = function({  }) {
             "BUCKET_NAME_51ee81c0": "${aws_s3_bucket.MyResource_cloudBucket_B5E6C951.bucket}",
             "BUCKET_NAME_830bf023": "${aws_s3_bucket.MyResource_Another_First_cloudBucket_5C44A510.bucket}",
             "BUCKET_NAME_d755b447": "${aws_s3_bucket.cloudBucket.bucket}",
-            "DYNAMODB_TABLE_NAME_5afed199": "${aws_dynamodb_table.MyResource_cloudCounter_0782991D.name}",
             "QUEUE_URL_ea9f63d6": "${aws_sqs_queue.MyResource_cloudQueue_E7A2C0F4.url}",
             "WING_FUNCTION_NAME": "Handler-c8f4f2a1",
             "WING_TARGET": "tf-aws"

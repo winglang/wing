@@ -4,13 +4,13 @@
 ```js
 module.exports = function({ $c }) {
   class $Closure1 {
-    async handle() {
-      (await $c.inc());
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle() {
+      (await $c.inc());
     }
   }
   return $Closure1;
@@ -22,13 +22,13 @@ module.exports = function({ $c }) {
 ```js
 module.exports = function({ $c }) {
   class $Closure2 {
-    async handle() {
-      (await $c.inc());
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle() {
+      (await $c.inc());
     }
   }
   return $Closure2;
@@ -40,6 +40,11 @@ module.exports = function({ $c }) {
 ```js
 module.exports = function({ $TestHelper, $predicate, $t }) {
   class $Closure3 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
     async handle() {
       for (const i of ((s,e,i) => { function* iterator(start,end,inclusive) { let i = start; let limit = inclusive ? ((end < start) ? end - 1 : end + 1) : end; while (i < limit) yield i++; while (i > limit) yield i--; }; return iterator(s,e,i); })(0,5,false)) {
         (await $t.publish("msg"));
@@ -55,11 +60,6 @@ module.exports = function({ $TestHelper, $predicate, $t }) {
       }
       {((cond) => {if (!cond) throw new Error("assertion failed: predicate.test()")})((await $predicate.test()))};
     }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
-    }
   }
   return $Closure3;
 }
@@ -70,11 +70,11 @@ module.exports = function({ $TestHelper, $predicate, $t }) {
 ```js
 module.exports = function({  }) {
   class Predicate {
-    async test() {
-      return ((await this.$this_c.peek()) === 10);
-    }
     constructor({ $this_c }) {
       this.$this_c = $this_c;
+    }
+    async test() {
+      return ((await this.$this_c.peek()) === 10);
     }
   }
   return Predicate;
@@ -86,10 +86,10 @@ module.exports = function({  }) {
 ```js
 module.exports = function({  }) {
   class TestHelper {
+    constructor({  }) {
+    }
     static async sleep(milli) {
       return (require("<ABSOLUTE_PATH>/sleep.js")["sleep"])(milli)
-    }
-    constructor({  }) {
     }
   }
   return TestHelper;

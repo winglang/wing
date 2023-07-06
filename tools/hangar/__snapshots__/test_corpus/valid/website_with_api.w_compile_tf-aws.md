@@ -4,16 +4,16 @@
 ```js
 module.exports = function({ $std_Json, $usersTable }) {
   class $Closure1 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
     async handle(req) {
       return {
       "body": ((args) => { return JSON.stringify(args[0], null, args[1]) })([Object.freeze({"users":(await $usersTable.list())})]),
       "status": 200,}
       ;
-    }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
     }
   }
   return $Closure1;
@@ -25,6 +25,11 @@ module.exports = function({ $std_Json, $usersTable }) {
 ```js
 module.exports = function({ $std_Json, $usersTable }) {
   class $Closure2 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
     async handle(req) {
       const body = (JSON.parse((req.body ?? ((args) => { return JSON.stringify(args[0], null, args[1]) })([Object.freeze({"name":"","age":"","id":""})]))));
       if (((((body)["name"] === "") || ((body)["age"] === "")) || ((body)["id"] === ""))) {
@@ -39,11 +44,6 @@ module.exports = function({ $std_Json, $usersTable }) {
       "status": 201,}
       ;
     }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
-    }
   }
   return $Closure2;
 }
@@ -54,16 +54,16 @@ module.exports = function({ $std_Json, $usersTable }) {
 ```js
 module.exports = function({  }) {
   class $Closure3 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
     async handle(req) {
       return {
       "headers": Object.freeze({"Access-Control-Allow-Headers":"Content-Type","Access-Control-Allow-Origin":"*","Access-Control-Allow-Methods":"OPTIONS,POST,GET"}),
       "status": 204,}
       ;
-    }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
     }
   }
   return $Closure3;

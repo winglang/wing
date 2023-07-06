@@ -4,6 +4,11 @@
 ```js
 module.exports = function({ $counter }) {
   class $Closure1 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
     async handle() {
       {((cond) => {if (!cond) throw new Error("assertion failed: counter.peek() == 1")})(((await $counter.peek()) === 1))};
       const dec1 = (await $counter.dec());
@@ -12,11 +17,6 @@ module.exports = function({ $counter }) {
       const dec2 = (await $counter.dec(2));
       {((cond) => {if (!cond) throw new Error("assertion failed: counter.peek() == -2")})(((await $counter.peek()) === (-2)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: dec2 == 0")})((dec2 === 0))};
-    }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
     }
   }
   return $Closure1;
@@ -28,6 +28,11 @@ module.exports = function({ $counter }) {
 ```js
 module.exports = function({ $counter }) {
   class $Closure2 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
     async handle() {
       const key = "my-key";
       {((cond) => {if (!cond) throw new Error("assertion failed: counter.peek(key) == 0")})(((await $counter.peek(key)) === 0))};
@@ -37,11 +42,6 @@ module.exports = function({ $counter }) {
       const dec2 = (await $counter.dec(2,key));
       {((cond) => {if (!cond) throw new Error("assertion failed: counter.peek(key) == -3")})(((await $counter.peek(key)) === (-3)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: dec2 == -1")})((dec2 === (-1)))};
-    }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
     }
   }
   return $Closure2;

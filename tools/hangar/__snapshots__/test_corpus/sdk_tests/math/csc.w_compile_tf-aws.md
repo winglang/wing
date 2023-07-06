@@ -4,6 +4,11 @@
 ```js
 module.exports = function({ $math_Util }) {
   class $Closure1 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
     async handle() {
       {((cond) => {if (!cond) throw new Error("assertion failed: math.csc(-0) == -math.INF")})(((await $math_Util.csc((-0))) === (-$math_Util.INF)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: math.csc(0) == math.INF")})(((await $math_Util.csc(0)) === $math_Util.INF))};
@@ -13,11 +18,6 @@ module.exports = function({ $math_Util }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: math.csc(math.TAU / 4) == 1")})(((await $math_Util.csc(($math_Util.TAU / 4))) === 1))};
       {((cond) => {if (!cond) throw new Error("assertion failed: math.csc(math.PI * 3 / 2) == -1")})(((await $math_Util.csc((($math_Util.PI * 3) / 2))) === (-1)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: math.csc(math.TAU * 3 / 4) == -1")})(((await $math_Util.csc((($math_Util.TAU * 3) / 4))) === (-1)))};
-    }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
     }
   }
   return $Closure1;

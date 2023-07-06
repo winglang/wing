@@ -4,13 +4,13 @@
 ```js
 module.exports = function({ $globalBucket }) {
   class $Closure1 {
-    async handle(event, file) {
-      (await $globalBucket.put(file,event));
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle(event, file) {
+      (await $globalBucket.put(file,event));
     }
   }
   return $Closure1;
@@ -22,13 +22,13 @@ module.exports = function({ $globalBucket }) {
 ```js
 module.exports = function({ $storeInBucket }) {
   class $Closure2 {
-    async handle(event) {
-      (await $storeInBucket(event,"file1"));
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle(event) {
+      (await $storeInBucket(event,"file1"));
     }
   }
   return $Closure2;
@@ -40,14 +40,14 @@ module.exports = function({ $storeInBucket }) {
 ```js
 module.exports = function({ $func1, $globalBucket }) {
   class $Closure3 {
-    async handle() {
-      (await $func1.invoke("hi1"));
-      {((cond) => {if (!cond) throw new Error("assertion failed: globalBucket.get(\"file1\") == \"hi1\"")})(((await $globalBucket.get("file1")) === "hi1"))};
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle() {
+      (await $func1.invoke("hi1"));
+      {((cond) => {if (!cond) throw new Error("assertion failed: globalBucket.get(\"file1\") == \"hi1\"")})(((await $globalBucket.get("file1")) === "hi1"))};
     }
   }
   return $Closure3;
@@ -59,14 +59,14 @@ module.exports = function({ $func1, $globalBucket }) {
 ```js
 module.exports = function({ $globalBucket }) {
   class $Closure4 {
-    async handle(s) {
-      (await $globalBucket.list());
-      return "hello";
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle(s) {
+      (await $globalBucket.list());
+      return "hello";
     }
   }
   return $Closure4;
@@ -78,14 +78,14 @@ module.exports = function({ $globalBucket }) {
 ```js
 module.exports = function({ $x }) {
   class $Closure5 {
-    async handle() {
-      const val = (await $x.foo());
-      {((cond) => {if (!cond) throw new Error("assertion failed: val == \"hello\"")})((val === "hello"))};
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle() {
+      const val = (await $x.foo());
+      {((cond) => {if (!cond) throw new Error("assertion failed: val == \"hello\"")})((val === "hello"))};
     }
   }
   return $Closure5;
@@ -97,11 +97,11 @@ module.exports = function({ $x }) {
 ```js
 module.exports = function({  }) {
   class MyResource {
-    async foo() {
-      return (await this.$this_closure("anything"));
-    }
     constructor({ $this_closure }) {
       this.$this_closure = $this_closure;
+    }
+    async foo() {
+      return (await this.$this_closure("anything"));
     }
   }
   return MyResource;

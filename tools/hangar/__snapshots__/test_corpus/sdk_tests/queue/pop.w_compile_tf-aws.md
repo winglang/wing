@@ -4,6 +4,11 @@
 ```js
 module.exports = function({ $NIL, $q }) {
   class $Closure1 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
     async handle() {
       const msgs = Object.freeze(["Foo", "Bar"]);
       for (const msg of msgs) {
@@ -15,11 +20,6 @@ module.exports = function({ $NIL, $q }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: msgs.contains(first)")})(msgs.includes(first))};
       {((cond) => {if (!cond) throw new Error("assertion failed: msgs.contains(second)")})(msgs.includes(second))};
       {((cond) => {if (!cond) throw new Error("assertion failed: third == NIL")})((third === $NIL))};
-    }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
     }
   }
   return $Closure1;

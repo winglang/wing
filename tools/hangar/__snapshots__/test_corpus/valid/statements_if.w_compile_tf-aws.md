@@ -4,6 +4,11 @@
 ```js
 module.exports = function({  }) {
   class $Closure1 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
     async handle() {
       if (true) {
         const x = 2;
@@ -25,11 +30,6 @@ module.exports = function({  }) {
           {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
         }
       }
-    }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
     }
   }
   return $Closure1;

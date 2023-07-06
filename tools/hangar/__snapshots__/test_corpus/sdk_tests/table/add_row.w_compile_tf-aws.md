@@ -4,14 +4,14 @@
 ```js
 module.exports = function({ $marioInfo, $peachInfo, $std_Json, $table }) {
   class $Closure1 {
-    async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: Json.stringify(table.get(\"mario\")) == Json.stringify(marioInfo)")})((((args) => { return JSON.stringify(args[0], null, args[1]) })([(await $table.get("mario"))]) === ((args) => { return JSON.stringify(args[0], null, args[1]) })([$marioInfo])))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: Json.stringify(table.get(\"peach\")) == Json.stringify(peachInfo)")})((((args) => { return JSON.stringify(args[0], null, args[1]) })([(await $table.get("peach"))]) === ((args) => { return JSON.stringify(args[0], null, args[1]) })([$peachInfo])))};
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle() {
+      {((cond) => {if (!cond) throw new Error("assertion failed: Json.stringify(table.get(\"mario\")) == Json.stringify(marioInfo)")})((((args) => { return JSON.stringify(args[0], null, args[1]) })([(await $table.get("mario"))]) === ((args) => { return JSON.stringify(args[0], null, args[1]) })([$marioInfo])))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: Json.stringify(table.get(\"peach\")) == Json.stringify(peachInfo)")})((((args) => { return JSON.stringify(args[0], null, args[1]) })([(await $table.get("peach"))]) === ((args) => { return JSON.stringify(args[0], null, args[1]) })([$peachInfo])))};
     }
   }
   return $Closure1;

@@ -4,6 +4,11 @@
 ```js
 module.exports = function({ $bucket1, $bucket2, $bucket3 }) {
   class $Closure1 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
     async handle(event) {
       (await $bucket1.put("file.txt","data"));
       (await $bucket2.get("file.txt"));
@@ -20,11 +25,6 @@ module.exports = function({ $bucket1, $bucket2, $bucket3 }) {
         const error = $error_error.message;
         {console.log(error)};
       }
-    }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
     }
   }
   return $Closure1;

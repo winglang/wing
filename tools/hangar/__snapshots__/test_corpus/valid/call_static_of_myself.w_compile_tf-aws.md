@@ -4,6 +4,11 @@
 ```js
 module.exports = function({ $Bar, $Foo, $foo }) {
   class $Closure1 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
     async handle() {
       class Zoo {
         static async zoo() {
@@ -16,11 +21,6 @@ module.exports = function({ $Bar, $Foo, $foo }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: Zoo.zoo() == 3")})(((await Zoo.zoo()) === 3))};
       {((cond) => {if (!cond) throw new Error("assertion failed: foo.callThis() == 1")})(((await $foo.callThis()) === 1))};
       {((cond) => {if (!cond) throw new Error("assertion failed: bar.callThis() == 2")})(((await bar.callThis()) === 2))};
-    }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
     }
   }
   return $Closure1;
@@ -48,6 +48,8 @@ module.exports = function({  }) {
 ```js
 module.exports = function({  }) {
   class Foo {
+    constructor({  }) {
+    }
     static async foo() {
       return 1;
     }
@@ -56,8 +58,6 @@ module.exports = function({  }) {
     }
     async callThis() {
       return (await Foo.bar());
-    }
-    constructor({  }) {
     }
   }
   return Foo;

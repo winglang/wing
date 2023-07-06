@@ -4,14 +4,14 @@
 ```js
 module.exports = function({  }) {
   class $Closure1 {
-    async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: [\"hello\"].length == 1")})((Object.freeze(["hello"]).length === 1))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: MutArray<str>[\"hello\"].length == 1")})((["hello"].length === 1))};
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle() {
+      {((cond) => {if (!cond) throw new Error("assertion failed: [\"hello\"].length == 1")})((Object.freeze(["hello"]).length === 1))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: MutArray<str>[\"hello\"].length == 1")})((["hello"].length === 1))};
     }
   }
   return $Closure1;
@@ -23,17 +23,17 @@ module.exports = function({  }) {
 ```js
 module.exports = function({  }) {
   class $Closure10 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
     async handle() {
       const i = ["hello", "wing"];
       const separator = ",";
       const joinedString = (await i.join());
       const expectedString = (((await i.at(0)) + separator) + (await i.at(1)));
       {((cond) => {if (!cond) throw new Error("assertion failed: joinedString == expectedString")})((joinedString === expectedString))};
-    }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
     }
   }
   return $Closure10;
@@ -45,16 +45,16 @@ module.exports = function({  }) {
 ```js
 module.exports = function({  }) {
   class $Closure11 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
     async handle() {
       const o = ["hello", "wing"];
       const p = Object.freeze([...(o)]);
       {((cond) => {if (!cond) throw new Error("assertion failed: o.length == p.length")})((o.length === p.length))};
       {((cond) => {if (!cond) throw new Error("assertion failed: o.at(0) == p.at(0)")})(((await o.at(0)) === (await p.at(0))))};
-    }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
     }
   }
   return $Closure11;
@@ -66,16 +66,16 @@ module.exports = function({  }) {
 ```js
 module.exports = function({  }) {
   class $Closure12 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
     async handle() {
       const q = Object.freeze(["hello", "wing"]);
       const r = [...(q)];
       {((cond) => {if (!cond) throw new Error("assertion failed: q.length == r.length")})((q.length === r.length))};
       {((cond) => {if (!cond) throw new Error("assertion failed: q.at(0) == r.at(0)")})(((await q.at(0)) === (await r.at(0))))};
-    }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
     }
   }
   return $Closure12;
@@ -87,16 +87,16 @@ module.exports = function({  }) {
 ```js
 module.exports = function({  }) {
   class $Closure13 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
     async handle() {
       const lastStr = "wing";
       const s = ["hello", lastStr, lastStr];
       {((cond) => {if (!cond) throw new Error("assertion failed: s.lastIndexOf(lastStr) == 2")})((s.lastIndexOf(lastStr) === 2))};
       {((cond) => {if (!cond) throw new Error("assertion failed: s.lastIndexOf(\"something\") == -1")})((s.lastIndexOf("something") === (-1)))};
-    }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
     }
   }
   return $Closure13;
@@ -108,14 +108,14 @@ module.exports = function({  }) {
 ```js
 module.exports = function({  }) {
   class $Closure2 {
-    async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: [\"hello\"].at(0) == \"hello\"")})(((await Object.freeze(["hello"]).at(0)) === "hello"))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: MutArray<str>[\"hello\", \"world\"].at(1) == \"world\"")})(((await ["hello", "world"].at(1)) === "world"))};
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle() {
+      {((cond) => {if (!cond) throw new Error("assertion failed: [\"hello\"].at(0) == \"hello\"")})(((await Object.freeze(["hello"]).at(0)) === "hello"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: MutArray<str>[\"hello\", \"world\"].at(1) == \"world\"")})(((await ["hello", "world"].at(1)) === "world"))};
     }
   }
   return $Closure2;
@@ -127,6 +127,11 @@ module.exports = function({  }) {
 ```js
 module.exports = function({  }) {
   class $Closure3 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
     async handle() {
       const a = ["hello"];
       {((cond) => {if (!cond) throw new Error("assertion failed: a.length == 1")})((a.length === 1))};
@@ -139,11 +144,6 @@ module.exports = function({  }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: a.length == 1")})((a.length === 1))};
       {((cond) => {if (!cond) throw new Error("assertion failed: a.at(0) == \"hello\"")})(((await a.at(0)) === "hello"))};
     }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
-    }
   }
   return $Closure3;
 }
@@ -154,6 +154,11 @@ module.exports = function({  }) {
 ```js
 module.exports = function({  }) {
   class $Closure4 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
     async handle() {
       const b = ["hello"];
       {((cond) => {if (!cond) throw new Error("assertion failed: b.length == 1")})((b.length === 1))};
@@ -161,11 +166,6 @@ module.exports = function({  }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: d.length == 2")})((d.length === 2))};
       {((cond) => {if (!cond) throw new Error("assertion failed: d.at(0) == \"hello\"")})(((await d.at(0)) === "hello"))};
       {((cond) => {if (!cond) throw new Error("assertion failed: d.at(1) == \"wing\"")})(((await d.at(1)) === "wing"))};
-    }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
     }
   }
   return $Closure4;
@@ -177,6 +177,11 @@ module.exports = function({  }) {
 ```js
 module.exports = function({  }) {
   class $Closure5 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
     async handle() {
       const array = Object.freeze(["hello"]);
       {((cond) => {if (!cond) throw new Error("assertion failed: array.length == 1")})((array.length === 1))};
@@ -186,11 +191,6 @@ module.exports = function({  }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: mergedArray.length == 2")})((mergedArray.length === 2))};
       {((cond) => {if (!cond) throw new Error("assertion failed: mergedArray.at(0) == \"hello\"")})(((await mergedArray.at(0)) === "hello"))};
       {((cond) => {if (!cond) throw new Error("assertion failed: mergedArray.at(1) == \"wing\"")})(((await mergedArray.at(1)) === "wing"))};
-    }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
     }
   }
   return $Closure5;
@@ -202,6 +202,11 @@ module.exports = function({  }) {
 ```js
 module.exports = function({  }) {
   class $Closure6 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
     async handle() {
       const e = ["hello", "wing"];
       {((cond) => {if (!cond) throw new Error("assertion failed: e.contains(\"wing\")")})(e.includes("wing"))};
@@ -209,11 +214,6 @@ module.exports = function({  }) {
       const h = Object.freeze(["hello", "wing"]);
       {((cond) => {if (!cond) throw new Error("assertion failed: h.contains(\"wing\")")})(h.includes("wing"))};
       {((cond) => {if (!cond) throw new Error("assertion failed: !h.contains(\"NotThere\")")})((!h.includes("NotThere")))};
-    }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
     }
   }
   return $Closure6;
@@ -225,15 +225,15 @@ module.exports = function({  }) {
 ```js
 module.exports = function({  }) {
   class $Closure7 {
-    async handle() {
-      const g = ["hello", "wing"];
-      {((cond) => {if (!cond) throw new Error("assertion failed: g.indexOf(\"wing\") == 1")})((g.indexOf("wing") === 1))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: g.indexOf(\"notThere\") == -1")})((g.indexOf("notThere") === (-1)))};
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle() {
+      const g = ["hello", "wing"];
+      {((cond) => {if (!cond) throw new Error("assertion failed: g.indexOf(\"wing\") == 1")})((g.indexOf("wing") === 1))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: g.indexOf(\"notThere\") == -1")})((g.indexOf("notThere") === (-1)))};
     }
   }
   return $Closure7;
@@ -245,15 +245,15 @@ module.exports = function({  }) {
 ```js
 module.exports = function({  }) {
   class $Closure8 {
-    async handle() {
-      const g = Object.freeze(["hello", "wing"]);
-      {((cond) => {if (!cond) throw new Error("assertion failed: g.indexOf(\"wing\") == 1")})((g.indexOf("wing") === 1))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: g.indexOf(\"notThere\") == -1")})((g.indexOf("notThere") === (-1)))};
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle() {
+      const g = Object.freeze(["hello", "wing"]);
+      {((cond) => {if (!cond) throw new Error("assertion failed: g.indexOf(\"wing\") == 1")})((g.indexOf("wing") === 1))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: g.indexOf(\"notThere\") == -1")})((g.indexOf("notThere") === (-1)))};
     }
   }
   return $Closure8;
@@ -265,17 +265,17 @@ module.exports = function({  }) {
 ```js
 module.exports = function({  }) {
   class $Closure9 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
     async handle() {
       const i = ["hello", "wing"];
       const separator = ";";
       const joinedString = (await i.join(separator));
       const expectedString = (((await i.at(0)) + separator) + (await i.at(1)));
       {((cond) => {if (!cond) throw new Error("assertion failed: joinedString == expectedString")})((joinedString === expectedString))};
-    }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
     }
   }
   return $Closure9;

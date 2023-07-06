@@ -4,13 +4,13 @@
 ```js
 module.exports = function({ $x }) {
   class $Closure1 {
-    async handle() {
-      (await $x.handle("hello world!"));
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle() {
+      (await $x.handle("hello world!"));
     }
   }
   return $Closure1;
@@ -22,13 +22,13 @@ module.exports = function({ $x }) {
 ```js
 module.exports = function({  }) {
   class A {
-    async handle(msg) {
-      return;
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle(msg) {
+      return;
     }
   }
   return A;
@@ -40,10 +40,10 @@ module.exports = function({  }) {
 ```js
 module.exports = function({  }) {
   class Dog {
+    constructor({  }) {
+    }
     async eat() {
       return;
-    }
-    constructor({  }) {
     }
   }
   return Dog;
@@ -55,10 +55,10 @@ module.exports = function({  }) {
 ```js
 module.exports = function({  }) {
   class r {
+    constructor({  }) {
+    }
     async method2(x) {
       return x;
-    }
-    constructor({  }) {
     }
   }
   return r;

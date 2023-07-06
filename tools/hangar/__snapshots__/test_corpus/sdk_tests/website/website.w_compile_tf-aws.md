@@ -4,15 +4,15 @@
 ```js
 module.exports = function({ $Util, $config, $indexFile, $otherFile, $std_Json, $w_url }) {
   class $Closure1 {
-    async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: Json.stringify(Util.http(w.url).get(\"body\")) == Json.stringify(indexFile)")})((((args) => { return JSON.stringify(args[0], null, args[1]) })([((await $Util.http($w_url)))["body"]]) === ((args) => { return JSON.stringify(args[0], null, args[1]) })([$indexFile])))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: Json.stringify(Util.http(w.url + \"/inner-folder/other.html\").get(\"body\")) == Json.stringify(otherFile)")})((((args) => { return JSON.stringify(args[0], null, args[1]) })([((await $Util.http(($w_url + "/inner-folder/other.html"))))["body"]]) === ((args) => { return JSON.stringify(args[0], null, args[1]) })([$otherFile])))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: Json.stringify(Util.http(w.url + \"/config.json\").get(\"body\")) == Json.stringify(Json.stringify(config))")})((((args) => { return JSON.stringify(args[0], null, args[1]) })([((await $Util.http(($w_url + "/config.json"))))["body"]]) === ((args) => { return JSON.stringify(args[0], null, args[1]) })([((args) => { return JSON.stringify(args[0], null, args[1]) })([$config])])))};
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle() {
+      {((cond) => {if (!cond) throw new Error("assertion failed: Json.stringify(Util.http(w.url).get(\"body\")) == Json.stringify(indexFile)")})((((args) => { return JSON.stringify(args[0], null, args[1]) })([((await $Util.http($w_url)))["body"]]) === ((args) => { return JSON.stringify(args[0], null, args[1]) })([$indexFile])))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: Json.stringify(Util.http(w.url + \"/inner-folder/other.html\").get(\"body\")) == Json.stringify(otherFile)")})((((args) => { return JSON.stringify(args[0], null, args[1]) })([((await $Util.http(($w_url + "/inner-folder/other.html"))))["body"]]) === ((args) => { return JSON.stringify(args[0], null, args[1]) })([$otherFile])))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: Json.stringify(Util.http(w.url + \"/config.json\").get(\"body\")) == Json.stringify(Json.stringify(config))")})((((args) => { return JSON.stringify(args[0], null, args[1]) })([((await $Util.http(($w_url + "/config.json"))))["body"]]) === ((args) => { return JSON.stringify(args[0], null, args[1]) })([((args) => { return JSON.stringify(args[0], null, args[1]) })([$config])])))};
     }
   }
   return $Closure1;
@@ -24,10 +24,10 @@ module.exports = function({ $Util, $config, $indexFile, $otherFile, $std_Json, $
 ```js
 module.exports = function({  }) {
   class Util {
+    constructor({  }) {
+    }
     static async http(url) {
       return (require("<ABSOLUTE_PATH>/http.js")["http"])(url)
-    }
-    constructor({  }) {
     }
   }
   return Util;

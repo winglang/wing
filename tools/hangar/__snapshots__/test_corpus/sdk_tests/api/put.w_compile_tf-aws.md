@@ -4,6 +4,11 @@
 ```js
 module.exports = function({ $_id, $api_PUT, $body, $std_Json, $user }) {
   class $Closure1 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
     async handle(req) {
       const path = String.raw({ raw: ["/path/", "/nn/", ""] }, $_id, $user);
       {((cond) => {if (!cond) throw new Error("assertion failed: req.method == api_PUT")})((req.method === $api_PUT))};
@@ -18,11 +23,6 @@ module.exports = function({ $_id, $api_PUT, $body, $std_Json, $user }) {
       "body": (req.vars)["id"],}
       ;
     }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
-    }
   }
   return $Closure1;
 }
@@ -33,6 +33,11 @@ module.exports = function({ $_id, $api_PUT, $body, $std_Json, $user }) {
 ```js
 module.exports = function({ $_id, $api_url, $body, $http_PUT, $http_Util, $std_Json, $user }) {
   class $Closure2 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
     async handle() {
       const url = String.raw({ raw: ["", "/path/", "/nn/", ""] }, $api_url, $_id, $user);
       const response = (await $http_Util.put(url,{
@@ -52,11 +57,6 @@ module.exports = function({ $_id, $api_url, $body, $http_PUT, $http_Util, $std_J
       {((cond) => {if (!cond) throw new Error("assertion failed: fetchResponse.body == _id")})((fetchResponse.body === $_id))};
       {((cond) => {if (!cond) throw new Error("assertion failed: fetchResponse.status == 200")})((fetchResponse.status === 200))};
       {((cond) => {if (!cond) throw new Error("assertion failed: fetchResponse.url == url")})((fetchResponse.url === url))};
-    }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
     }
   }
   return $Closure2;
@@ -248,7 +248,6 @@ module.exports = function({ $_id, $api_url, $body, $http_PUT, $http_Util, $std_J
         },
         "environment": {
           "variables": {
-            "CLOUD_API_C82DF3A5": "${aws_api_gateway_stage.cloudApi_api_stage_BBB283E4.invoke_url}",
             "WING_FUNCTION_NAME": "Handler-c8e4b12f",
             "WING_TARGET": "tf-aws",
             "WING_TOKEN_TFTOKEN_TOKEN_21": "${jsonencode(aws_api_gateway_stage.cloudApi_api_stage_BBB283E4.invoke_url)}"

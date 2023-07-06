@@ -4,13 +4,13 @@
 ```js
 module.exports = function({ $math_Util }) {
   class $Closure1 {
-    async handle(radius) {
-      return ((2 * $math_Util.PI) * radius);
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle(radius) {
+      return ((2 * $math_Util.PI) * radius);
     }
   }
   return $Closure1;
@@ -22,13 +22,13 @@ module.exports = function({ $math_Util }) {
 ```js
 module.exports = function({ $circumference, $math_Util, $r }) {
   class $Closure2 {
-    async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.round(circumference(r), decimalPlaces: 2) == 62.83")})(((await $math_Util.round((await $circumference($r)),{ decimalPlaces: 2 })) === 62.83))};
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle() {
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.round(circumference(r), decimalPlaces: 2) == 62.83")})(((await $math_Util.round((await $circumference($r)),{ decimalPlaces: 2 })) === 62.83))};
     }
   }
   return $Closure2;

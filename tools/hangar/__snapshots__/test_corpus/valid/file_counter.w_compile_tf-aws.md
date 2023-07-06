@@ -4,15 +4,15 @@
 ```js
 module.exports = function({ $bucket, $counter }) {
   class $Closure1 {
-    async handle(body) {
-      const next = (await $counter.inc());
-      const key = String.raw({ raw: ["myfile-", ".txt"] }, "hi");
-      (await $bucket.put(key,body));
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle(body) {
+      const next = (await $counter.inc());
+      const key = String.raw({ raw: ["myfile-", ".txt"] }, "hi");
+      (await $bucket.put(key,body));
     }
   }
   return $Closure1;

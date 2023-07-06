@@ -4,6 +4,11 @@
 ```js
 module.exports = function({ $__parent_this_1_b }) {
   class $Closure1 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
     async handle(payload) {
       (await $__parent_this_1_b.put("k","v"));
       class InflightClass {
@@ -17,11 +22,6 @@ module.exports = function({ $__parent_this_1_b }) {
       const c = new InflightClass();
       (await c.method());
     }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
-    }
   }
   return $Closure1;
 }
@@ -32,13 +32,13 @@ module.exports = function({ $__parent_this_1_b }) {
 ```js
 module.exports = function({ $f }) {
   class $Closure2 {
-    async handle() {
-      (await $f.invoke("text"));
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle() {
+      (await $f.invoke("text"));
     }
   }
   return $Closure2;
@@ -50,6 +50,11 @@ module.exports = function({ $f }) {
 ```js
 module.exports = function({  }) {
   class $Closure3 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
     async handle() {
       const x = 12;
       class Foo {
@@ -60,11 +65,6 @@ module.exports = function({  }) {
       const foo = new Foo();
       const y = (await foo.getX());
       {((cond) => {if (!cond) throw new Error("assertion failed: y == 12")})((y === 12))};
-    }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
     }
   }
   return $Closure3;

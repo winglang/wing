@@ -4,17 +4,17 @@
 ```js
 module.exports = function({ $std_Json }) {
   class $Closure1 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
     async handle(req) {
       return {
       "body": ((args) => { return JSON.stringify(args[0], null, args[1]) })([Object.freeze({"user":(req.vars)["name"]})]),
       "headers": Object.freeze({"content-type":"application/json"}),
       "status": 200,}
       ;
-    }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
     }
   }
   return $Closure1;
@@ -26,16 +26,16 @@ module.exports = function({ $std_Json }) {
 ```js
 module.exports = function({ $api_url, $http_Util, $std_Json }) {
   class $Closure2 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
     async handle() {
       const username = "tsuf";
       const res = (await $http_Util.get(String.raw({ raw: ["", "/users/", ""] }, $api_url, username)));
       {((cond) => {if (!cond) throw new Error("assertion failed: res.status == 200")})((res.status === 200))};
       {((cond) => {if (!cond) throw new Error("assertion failed: Json.parse(res.body ?? \"\").get(\"user\") == username")})((((JSON.parse((res.body ?? ""))))["user"] === username))};
-    }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
     }
   }
   return $Closure2;
@@ -227,7 +227,6 @@ module.exports = function({ $api_url, $http_Util, $std_Json }) {
         },
         "environment": {
           "variables": {
-            "CLOUD_API_C82DF3A5": "${aws_api_gateway_stage.cloudApi_api_stage_BBB283E4.invoke_url}",
             "WING_FUNCTION_NAME": "Handler-c8f4f2a1",
             "WING_TARGET": "tf-aws",
             "WING_TOKEN_TFTOKEN_TOKEN_21": "${jsonencode(aws_api_gateway_stage.cloudApi_api_stage_BBB283E4.invoke_url)}"

@@ -4,6 +4,11 @@
 ```js
 module.exports = function({ $api_POST, $body, $std_Json }) {
   class $Closure1 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
     async handle(req) {
       {((cond) => {if (!cond) throw new Error("assertion failed: req.method == api_POST")})((req.method === $api_POST))};
       {((cond) => {if (!cond) throw new Error("assertion failed: req.path == \"/path\"")})((req.path === "/path"))};
@@ -13,11 +18,6 @@ module.exports = function({ $api_POST, $body, $std_Json }) {
       "status": 200,
       "body": req.body,}
       ;
-    }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
     }
   }
   return $Closure1;
@@ -29,6 +29,11 @@ module.exports = function({ $api_POST, $body, $std_Json }) {
 ```js
 module.exports = function({ $api_url, $body, $http_POST, $http_Util, $std_Json }) {
   class $Closure2 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
     async handle() {
       const url = ($api_url + "/path");
       const response = (await $http_Util.post(url,{
@@ -46,11 +51,6 @@ module.exports = function({ $api_url, $body, $http_POST, $http_Util, $std_Json }
       {((cond) => {if (!cond) throw new Error("assertion failed: fetchResponse.body == Json.stringify(body)")})((fetchResponse.body === ((args) => { return JSON.stringify(args[0], null, args[1]) })([$body])))};
       {((cond) => {if (!cond) throw new Error("assertion failed: fetchResponse.status == 200")})((fetchResponse.status === 200))};
       {((cond) => {if (!cond) throw new Error("assertion failed: fetchResponse.url == url")})((fetchResponse.url === url))};
-    }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
     }
   }
   return $Closure2;

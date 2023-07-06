@@ -4,14 +4,14 @@
 ```js
 module.exports = function({ $math_Util, $x, $y }) {
   class $Closure1 {
-    async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.abs(x - y) == 2")})(((await $math_Util.abs(($x - $y))) === 2))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.abs(y - x) == 2")})(((await $math_Util.abs(($y - $x))) === 2))};
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle() {
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.abs(x - y) == 2")})(((await $math_Util.abs(($x - $y))) === 2))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.abs(y - x) == 2")})(((await $math_Util.abs(($y - $x))) === 2))};
     }
   }
   return $Closure1;

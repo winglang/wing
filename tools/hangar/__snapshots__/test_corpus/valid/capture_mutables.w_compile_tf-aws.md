@@ -4,16 +4,16 @@
 ```js
 module.exports = function({ $Object_keys_m__length, $aCloned_length, $a_length, $s_size }) {
   class $Closure1 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
     async handle() {
       {((cond) => {if (!cond) throw new Error("assertion failed: a.length == 1")})(($a_length === 1))};
       {((cond) => {if (!cond) throw new Error("assertion failed: s.size == 1")})(($s_size === 1))};
       {((cond) => {if (!cond) throw new Error("assertion failed: m.size() == 1")})(($Object_keys_m__length === 1))};
       {((cond) => {if (!cond) throw new Error("assertion failed: aCloned.length == 1")})(($aCloned_length === 1))};
-    }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
     }
   }
   return $Closure1;
@@ -25,13 +25,13 @@ module.exports = function({ $Object_keys_m__length, $aCloned_length, $a_length, 
 ```js
 module.exports = function({ $handler }) {
   class $Closure2 {
-    async handle() {
-      (await $handler());
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle() {
+      (await $handler());
     }
   }
   return $Closure2;

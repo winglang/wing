@@ -4,17 +4,17 @@
 ```js
 module.exports = function({  }) {
   class $Closure1 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
     async handle(event) {
       for (const x of ((s,e,i) => { function* iterator(start,end,inclusive) { let i = start; let limit = inclusive ? ((end < start) ? end - 1 : end + 1) : end; while (i < limit) yield i++; while (i > limit) yield i--; }; return iterator(s,e,i); })(0,10,false)) {
         {((cond) => {if (!cond) throw new Error("assertion failed: x <= 0")})((x <= 0))};
         {((cond) => {if (!cond) throw new Error("assertion failed: x > 10")})((x > 10))};
         {console.log(String.raw({ raw: ["", ""] }, x))};
       }
-    }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
     }
   }
   return $Closure1;
@@ -26,12 +26,12 @@ module.exports = function({  }) {
 ```js
 module.exports = function({  }) {
   class Foo {
+    constructor({  }) {
+    }
     async hello() {
       for (const p of Object.freeze(["hello"])) {
         {console.log(p)};
       }
-    }
-    constructor({  }) {
     }
   }
   return Foo;

@@ -4,16 +4,16 @@
 ```js
 module.exports = function({ $math_Util }) {
   class $Closure1 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
     async handle() {
       {((cond) => {if (!cond) throw new Error("assertion failed: math.hypot([3, 4]) == 5")})(((await $math_Util.hypot(Object.freeze([3, 4]))) === 5))};
       {((cond) => {if (!cond) throw new Error("assertion failed: math.hypot([5, 12]) == 13")})(((await $math_Util.hypot(Object.freeze([5, 12]))) === 13))};
       {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.hypot([3, 4, 5]), decimalPlaces: 2) == 7.07")})(((await $math_Util.round((await $math_Util.hypot(Object.freeze([3, 4, 5]))),{ decimalPlaces: 2 })) === 7.07))};
       {((cond) => {if (!cond) throw new Error("assertion failed: math.hypot([-5]) == 5")})(((await $math_Util.hypot(Object.freeze([(-5)]))) === 5))};
-    }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
     }
   }
   return $Closure1;

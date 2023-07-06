@@ -4,13 +4,13 @@
 ```js
 module.exports = function({  }) {
   class $Closure1 {
-    async handle() {
-      {console.log("hello, world")};
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle() {
+      {console.log("hello, world")};
     }
   }
   return $Closure1;
@@ -22,13 +22,13 @@ module.exports = function({  }) {
 ```js
 module.exports = function({  }) {
   class $Closure2 {
-    async handle() {
-      {console.log("hello, world")};
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle() {
+      {console.log("hello, world")};
     }
   }
   return $Closure2;

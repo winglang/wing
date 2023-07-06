@@ -4,6 +4,11 @@
 ```js
 module.exports = function({  }) {
   class $Closure1 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
     async handle() {
       class C {
         async foo() {
@@ -12,11 +17,6 @@ module.exports = function({  }) {
       }
       const c = new C();
       {((cond) => {if (!cond) throw new Error("assertion failed: c.foo() == \"c1\"")})(((await c.foo()) === "c1"))};
-    }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
     }
   }
   return $Closure1;
@@ -28,13 +28,13 @@ module.exports = function({  }) {
 ```js
 module.exports = function({ $F }) {
   class $Closure2 {
-    async handle() {
-      return (await new $F().foo());
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle() {
+      return (await new $F().foo());
     }
   }
   return $Closure2;
@@ -46,6 +46,11 @@ module.exports = function({ $F }) {
 ```js
 module.exports = function({ $B, $a, $d, $fn, $innerD }) {
   class $Closure3 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
     async handle() {
       {((cond) => {if (!cond) throw new Error("assertion failed: a.goo() == \"a2\"")})(((await $a.goo()) === "a2"))};
       const b = new $B();
@@ -53,11 +58,6 @@ module.exports = function({ $B, $a, $d, $fn, $innerD }) {
       (await $fn());
       {((cond) => {if (!cond) throw new Error("assertion failed: d.callInner() == \"f1\"")})(((await $d.callInner()) === "f1"))};
       {((cond) => {if (!cond) throw new Error("assertion failed: innerD() == \"f1\"")})(((await $innerD()) === "f1"))};
-    }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
     }
   }
   return $Closure3;
@@ -69,10 +69,10 @@ module.exports = function({ $B, $a, $d, $fn, $innerD }) {
 ```js
 module.exports = function({  }) {
   class A {
+    constructor({  }) {
+    }
     async goo() {
       return "a2";
-    }
-    constructor({  }) {
     }
   }
   return A;
@@ -97,11 +97,11 @@ module.exports = function({  }) {
 ```js
 module.exports = function({  }) {
   class D {
-    async callInner() {
-      return (await this.$this_inner());
-    }
     constructor({ $this_inner }) {
       this.$this_inner = $this_inner;
+    }
+    async callInner() {
+      return (await this.$this_inner());
     }
   }
   return D;

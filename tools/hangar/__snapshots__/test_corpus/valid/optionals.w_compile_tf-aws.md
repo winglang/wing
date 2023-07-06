@@ -4,23 +4,15 @@
 ```js
 module.exports = function({ $__payloadWithBucket_c_____null_, $__payloadWithoutOptions_b_____null_, $payloadWithBucket_c }) {
   class $Closure1 {
-    async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: payloadWithoutOptions.b? == false")})(($__payloadWithoutOptions_b_____null_ === false))};
-      if ($__payloadWithBucket_c_____null_) {
-        (await $payloadWithBucket_c.put("x.txt","something"));
-      }
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      {((cond) => {if (!cond) throw new Error("assertion failed: payloadWithoutOptions.b? == false")})((((payloadWithoutOptions.b) != null) === false))};
-      if (((payloadWithBucket.c) != null)) {
-        (await payloadWithBucket.c?.put?.("x.txt","something"));
+    async handle() {
+      {((cond) => {if (!cond) throw new Error("assertion failed: payloadWithoutOptions.b? == false")})(($__payloadWithoutOptions_b_____null_ === false))};
+      if ($__payloadWithBucket_c_____null_) {
+        (await $payloadWithBucket_c?.put?.("x.txt","something"));
       }
     }
   }

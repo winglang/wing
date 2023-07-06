@@ -4,6 +4,11 @@
 ```js
 module.exports = function({ $b }) {
   class $Closure1 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
     async handle() {
       const jsonObj1 = Object.freeze({"key1":"value1"});
       {((cond) => {if (!cond) throw new Error("assertion failed: b.list().length == 1")})(((await $b.list()).length === 1))};
@@ -22,11 +27,6 @@ module.exports = function({ $b }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: !objs2.contains(\"random\")")})((!objs2.includes("random")))};
       {((cond) => {if (!cond) throw new Error("assertion failed: objs.length == 4")})((objs.length === 4))};
       {((cond) => {if (!cond) throw new Error("assertion failed: objs2.length == 3")})((objs2.length === 3))};
-    }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
     }
   }
   return $Closure1;

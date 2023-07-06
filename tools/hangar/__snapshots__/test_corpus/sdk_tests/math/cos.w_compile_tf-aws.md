@@ -4,6 +4,11 @@
 ```js
 module.exports = function({ $math_Util }) {
   class $Closure1 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
     async handle() {
       {((cond) => {if (!cond) throw new Error("assertion failed: math.cos(-0) == 1")})(((await $math_Util.cos((-0))) === 1))};
       {((cond) => {if (!cond) throw new Error("assertion failed: math.cos(0) == 1")})(((await $math_Util.cos(0)) === 1))};
@@ -11,11 +16,6 @@ module.exports = function({ $math_Util }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: math.cos(-5) == 0.28366218546322625")})(((await $math_Util.cos((-5))) === 0.28366218546322625))};
       {((cond) => {if (!cond) throw new Error("assertion failed: math.cos(math.PI) == -1")})(((await $math_Util.cos($math_Util.PI)) === (-1)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: math.cos(math.PI * 2) == 1")})(((await $math_Util.cos(($math_Util.PI * 2))) === 1))};
-    }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
     }
   }
   return $Closure1;

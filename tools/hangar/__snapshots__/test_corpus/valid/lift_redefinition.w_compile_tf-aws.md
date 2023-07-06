@@ -4,15 +4,15 @@
 ```js
 module.exports = function({ $y }) {
   class $Closure1 {
-    async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: y == \"hello\"")})(($y === "hello"))};
-      const y = "z";
-      {((cond) => {if (!cond) throw new Error("assertion failed: y == \"z\"")})((y === "z"))};
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle() {
+      {((cond) => {if (!cond) throw new Error("assertion failed: y == \"hello\"")})(($y === "hello"))};
+      const y = "z";
+      {((cond) => {if (!cond) throw new Error("assertion failed: y == \"z\"")})((y === "z"))};
     }
   }
   return $Closure1;

@@ -4,6 +4,11 @@
 ```js
 module.exports = function({ $api_DELETE }) {
   class $Closure1 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
     async handle(req) {
       {((cond) => {if (!cond) throw new Error("assertion failed: req.method == api_DELETE")})((req.method === $api_DELETE))};
       {((cond) => {if (!cond) throw new Error("assertion failed: req.query?.get(\"all\") == \"true\"")})(((req.query)["all"] === "true"))};
@@ -13,11 +18,6 @@ module.exports = function({ $api_DELETE }) {
       "status": 200,
       "body": (req.query)["page"],}
       ;
-    }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
     }
   }
   return $Closure1;
@@ -29,6 +29,11 @@ module.exports = function({ $api_DELETE }) {
 ```js
 module.exports = function({ $api_url, $http_DELETE, $http_Util }) {
   class $Closure2 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
     async handle() {
       const url = String.raw({ raw: ["", "/path?all=true&page=6"] }, $api_url);
       const response = (await $http_Util.delete(url));
@@ -39,11 +44,6 @@ module.exports = function({ $api_url, $http_DELETE, $http_Util }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: fetchResponse.body == \"6\"")})((fetchResponse.body === "6"))};
       {((cond) => {if (!cond) throw new Error("assertion failed: fetchResponse.status == 200")})((fetchResponse.status === 200))};
       {((cond) => {if (!cond) throw new Error("assertion failed: fetchResponse.url == url")})((fetchResponse.url === url))};
-    }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
     }
   }
   return $Closure2;
@@ -235,7 +235,6 @@ module.exports = function({ $api_url, $http_DELETE, $http_Util }) {
         },
         "environment": {
           "variables": {
-            "CLOUD_API_C82DF3A5": "${aws_api_gateway_stage.cloudApi_api_stage_BBB283E4.invoke_url}",
             "WING_FUNCTION_NAME": "Handler-c897cd38",
             "WING_TARGET": "tf-aws",
             "WING_TOKEN_TFTOKEN_TOKEN_21": "${jsonencode(aws_api_gateway_stage.cloudApi_api_stage_BBB283E4.invoke_url)}"

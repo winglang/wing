@@ -4,17 +4,17 @@
 ```js
 module.exports = function({ $api_OPTIONS, $path }) {
   class $Closure1 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
     async handle(req) {
       {((cond) => {if (!cond) throw new Error("assertion failed: req.method == api_OPTIONS")})((req.method === $api_OPTIONS))};
       {((cond) => {if (!cond) throw new Error("assertion failed: req.path == path")})((req.path === $path))};
       return {
       "status": 204,}
       ;
-    }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
     }
   }
   return $Closure1;
@@ -26,17 +26,17 @@ module.exports = function({ $api_OPTIONS, $path }) {
 ```js
 module.exports = function({ $api_HEAD, $path }) {
   class $Closure2 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
     async handle(req) {
       {((cond) => {if (!cond) throw new Error("assertion failed: req.method == api_HEAD")})((req.method === $api_HEAD))};
       {((cond) => {if (!cond) throw new Error("assertion failed: req.path == path")})((req.path === $path))};
       return {
       "status": 204,}
       ;
-    }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
     }
   }
   return $Closure2;
@@ -48,15 +48,15 @@ module.exports = function({ $api_HEAD, $path }) {
 ```js
 module.exports = function({  }) {
   class $Closure3 {
-    async handle(req) {
-      return {
-      "status": 204,}
-      ;
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle(req) {
+      return {
+      "status": 204,}
+      ;
     }
   }
   return $Closure3;
@@ -68,6 +68,11 @@ module.exports = function({  }) {
 ```js
 module.exports = function({ $api_url, $http_HEAD, $http_OPTIONS, $http_Util, $path }) {
   class $Closure4 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
     async handle() {
       const url = ($api_url + $path);
       const options = (await $http_Util.fetch(url,{
@@ -80,11 +85,6 @@ module.exports = function({ $api_url, $http_HEAD, $http_OPTIONS, $http_Util, $pa
       {((cond) => {if (!cond) throw new Error("assertion failed: options.url == url")})((options.url === url))};
       {((cond) => {if (!cond) throw new Error("assertion failed: head.status == 204")})((head.status === 204))};
       {((cond) => {if (!cond) throw new Error("assertion failed: head.url == url")})((head.url === url))};
-    }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
     }
   }
   return $Closure4;

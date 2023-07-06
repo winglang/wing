@@ -4,13 +4,13 @@
 ```js
 module.exports = function({ $fn }) {
   class $Closure1 {
-    async handle() {
-      (await $fn());
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle() {
+      (await $fn());
     }
   }
   return $Closure1;
@@ -22,14 +22,14 @@ module.exports = function({ $fn }) {
 ```js
 module.exports = function({  }) {
   class MyClosure {
-    async handle() {
-      (await this.$this_q.push("hello"));
-    }
     constructor({ $this_q }) {
       this.$this_q = $this_q;
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle() {
+      (await this.$this_q.push("hello"));
     }
   }
   return MyClosure;

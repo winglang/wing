@@ -4,6 +4,11 @@
 ```js
 module.exports = function({ $bucket, $res, $res_foo }) {
   class $Closure1 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
     async handle() {
       const s = (await $res.myMethod());
       {console.log(s)};
@@ -11,11 +16,6 @@ module.exports = function({ $bucket, $res, $res_foo }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: bucket.list().length == 1")})(((await $bucket.list()).length === 1))};
       {((cond) => {if (!cond) throw new Error("assertion failed: res.foo.inflightField == 123")})(($res_foo.inflightField === 123))};
       (await $res.testTypeAccess());
-    }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
     }
   }
   return $Closure1;
@@ -27,13 +27,13 @@ module.exports = function({ $bucket, $res, $res_foo }) {
 ```js
 module.exports = function({ $__parent_this_2_b }) {
   class $Closure2 {
-    async handle() {
-      (await $__parent_this_2_b.put("foo1.txt","bar"));
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle() {
+      (await $__parent_this_2_b.put("foo1.txt","bar"));
     }
   }
   return $Closure2;
@@ -45,13 +45,13 @@ module.exports = function({ $__parent_this_2_b }) {
 ```js
 module.exports = function({ $__parent_this_3_b }) {
   class $Closure3 {
-    async handle() {
-      (await $__parent_this_3_b.put("foo2.txt","bar"));
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle() {
+      (await $__parent_this_3_b.put("foo2.txt","bar"));
     }
   }
   return $Closure3;
@@ -63,13 +63,13 @@ module.exports = function({ $__parent_this_3_b }) {
 ```js
 module.exports = function({ $__parent_this_4_q }) {
   class $Closure4 {
-    async handle() {
-      (await $__parent_this_4_q.push("foo"));
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle() {
+      (await $__parent_this_4_q.push("foo"));
     }
   }
   return $Closure4;
@@ -81,14 +81,14 @@ module.exports = function({ $__parent_this_4_q }) {
 ```js
 module.exports = function({ $bigOlPublisher }) {
   class $Closure5 {
-    async handle() {
-      (await $bigOlPublisher.publish("foo"));
-      const count = (await $bigOlPublisher.getObjectCount());
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle() {
+      (await $bigOlPublisher.publish("foo"));
+      const count = (await $bigOlPublisher.getObjectCount());
     }
   }
   return $Closure5;
@@ -100,6 +100,11 @@ module.exports = function({ $bigOlPublisher }) {
 ```js
 module.exports = function({ $Foo, $MyEnum }) {
   class Bar {
+    constructor({ $this_b, $this_e, $this_foo }) {
+      this.$this_b = $this_b;
+      this.$this_e = $this_e;
+      this.$this_foo = $this_foo;
+    }
     static async barStatic() {
       return "bar static";
     }
@@ -116,11 +121,6 @@ module.exports = function({ $Foo, $MyEnum }) {
         {((cond) => {if (!cond) throw new Error("assertion failed: this.e == MyEnum.B")})((this.$this_e === $MyEnum.B))};
       }
     }
-    constructor({ $this_b, $this_e, $this_foo }) {
-      this.$this_b = $this_b;
-      this.$this_e = $this_e;
-      this.$this_foo = $this_foo;
-    }
   }
   return Bar;
 }
@@ -131,6 +131,12 @@ module.exports = function({ $Foo, $MyEnum }) {
 ```js
 module.exports = function({  }) {
   class BigPublisher {
+    constructor({ $this_b, $this_b2, $this_q, $this_t }) {
+      this.$this_b = $this_b;
+      this.$this_b2 = $this_b2;
+      this.$this_q = $this_q;
+      this.$this_t = $this_t;
+    }
     async publish(s) {
       (await this.$this_t.publish(s));
       (await this.$this_q.push(s));
@@ -138,12 +144,6 @@ module.exports = function({  }) {
     }
     async getObjectCount() {
       return (await this.$this_b.list()).length;
-    }
-    constructor({ $this_b, $this_b2, $this_q, $this_t }) {
-      this.$this_b = $this_b;
-      this.$this_b2 = $this_b2;
-      this.$this_q = $this_q;
-      this.$this_t = $this_t;
     }
   }
   return BigPublisher;
@@ -167,6 +167,9 @@ module.exports = function({  }) {
 ```js
 module.exports = function({  }) {
   class Foo {
+    constructor({ $this_c }) {
+      this.$this_c = $this_c;
+    }
     async fooInc() {
       (await this.$this_c.inc());
     }
@@ -175,9 +178,6 @@ module.exports = function({  }) {
     }
     static async fooStatic() {
       return "foo static";
-    }
-    constructor({ $this_c }) {
-      this.$this_c = $this_c;
     }
     async $inflight_init() {
       this.inflightField = 123;
@@ -306,7 +306,7 @@ module.exports = function({  }) {
             "uniqueId": "BigPublisher_b2_b2-on_create-OnMessage-a6a70fca_IamRolePolicy_46BA1064"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[],\"Resource\":[\"${aws_s3_bucket.BigPublisher_cloudBucket_ABF95118.arn}\",\"${aws_s3_bucket.BigPublisher_cloudBucket_ABF95118.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[],\"Resource\":[\"${aws_s3_bucket.BigPublisher_b2_702AC841.arn}\",\"${aws_s3_bucket.BigPublisher_b2_702AC841.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"sqs:SendMessage\"],\"Resource\":[\"${aws_sqs_queue.BigPublisher_cloudQueue_2EE8871A.arn}\"],\"Effect\":\"Allow\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"sqs:SendMessage\"],\"Resource\":[\"${aws_sqs_queue.BigPublisher_cloudQueue_2EE8871A.arn}\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.BigPublisher_b2_b2-on_create-OnMessage-a6a70fca_IamRole_ADCAC8AB.name}"
       },
       "BigPublisher_cloudQueue-SetConsumer-c50bc9ef_IamRolePolicy_6AF2C97F": {
@@ -316,7 +316,7 @@ module.exports = function({  }) {
             "uniqueId": "BigPublisher_cloudQueue-SetConsumer-c50bc9ef_IamRolePolicy_6AF2C97F"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"sqs:ReceiveMessage\",\"sqs:ChangeMessageVisibility\",\"sqs:GetQueueUrl\",\"sqs:DeleteMessage\",\"sqs:GetQueueAttributes\"],\"Resource\":[\"${aws_sqs_queue.BigPublisher_cloudQueue_2EE8871A.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.BigPublisher_cloudBucket_ABF95118.arn}\",\"${aws_s3_bucket.BigPublisher_cloudBucket_ABF95118.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[],\"Resource\":[\"${aws_s3_bucket.BigPublisher_b2_702AC841.arn}\",\"${aws_s3_bucket.BigPublisher_b2_702AC841.arn}/*\"],\"Effect\":\"Allow\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"sqs:ReceiveMessage\",\"sqs:ChangeMessageVisibility\",\"sqs:GetQueueUrl\",\"sqs:DeleteMessage\",\"sqs:GetQueueAttributes\"],\"Resource\":[\"${aws_sqs_queue.BigPublisher_cloudQueue_2EE8871A.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.BigPublisher_cloudBucket_ABF95118.arn}\",\"${aws_s3_bucket.BigPublisher_cloudBucket_ABF95118.arn}/*\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.BigPublisher_cloudQueue-SetConsumer-c50bc9ef_IamRole_7FC6BA51.name}"
       },
       "BigPublisher_cloudTopic-OnMessage-113c9059_IamRolePolicy_51FA866C": {
@@ -326,7 +326,7 @@ module.exports = function({  }) {
             "uniqueId": "BigPublisher_cloudTopic-OnMessage-113c9059_IamRolePolicy_51FA866C"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.BigPublisher_cloudBucket_ABF95118.arn}\",\"${aws_s3_bucket.BigPublisher_cloudBucket_ABF95118.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[],\"Resource\":[\"${aws_s3_bucket.BigPublisher_b2_702AC841.arn}\",\"${aws_s3_bucket.BigPublisher_b2_702AC841.arn}/*\"],\"Effect\":\"Allow\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.BigPublisher_cloudBucket_ABF95118.arn}\",\"${aws_s3_bucket.BigPublisher_cloudBucket_ABF95118.arn}/*\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.BigPublisher_cloudTopic-OnMessage-113c9059_IamRole_1067F50A.name}"
       },
       "testdependencycycles_Handler_IamRolePolicy_A8D5A9DF": {
@@ -425,10 +425,7 @@ module.exports = function({  }) {
         },
         "environment": {
           "variables": {
-            "BUCKET_NAME_584271ad": "${aws_s3_bucket.BigPublisher_b2_702AC841.bucket}",
-            "BUCKET_NAME_7ef741f5": "${aws_s3_bucket.BigPublisher_cloudBucket_ABF95118.bucket}",
             "QUEUE_URL_b0ba884c": "${aws_sqs_queue.BigPublisher_cloudQueue_2EE8871A.url}",
-            "TOPIC_ARN_eb0072ec": "${aws_sns_topic.BigPublisher_cloudTopic_61DC7B63.arn}",
             "WING_FUNCTION_NAME": "b2-on_create-OnMessage-a6a70fca-c87e0778",
             "WING_TARGET": "tf-aws"
           }
@@ -455,10 +452,7 @@ module.exports = function({  }) {
         },
         "environment": {
           "variables": {
-            "BUCKET_NAME_584271ad": "${aws_s3_bucket.BigPublisher_b2_702AC841.bucket}",
             "BUCKET_NAME_7ef741f5": "${aws_s3_bucket.BigPublisher_cloudBucket_ABF95118.bucket}",
-            "QUEUE_URL_b0ba884c": "${aws_sqs_queue.BigPublisher_cloudQueue_2EE8871A.url}",
-            "TOPIC_ARN_eb0072ec": "${aws_sns_topic.BigPublisher_cloudTopic_61DC7B63.arn}",
             "WING_FUNCTION_NAME": "cloud-Queue-SetConsumer-c50bc9ef-c889d16f",
             "WING_TARGET": "tf-aws"
           }
@@ -485,10 +479,7 @@ module.exports = function({  }) {
         },
         "environment": {
           "variables": {
-            "BUCKET_NAME_584271ad": "${aws_s3_bucket.BigPublisher_b2_702AC841.bucket}",
             "BUCKET_NAME_7ef741f5": "${aws_s3_bucket.BigPublisher_cloudBucket_ABF95118.bucket}",
-            "QUEUE_URL_b0ba884c": "${aws_sqs_queue.BigPublisher_cloudQueue_2EE8871A.url}",
-            "TOPIC_ARN_eb0072ec": "${aws_sns_topic.BigPublisher_cloudTopic_61DC7B63.arn}",
             "WING_FUNCTION_NAME": "cloud-Topic-OnMessage-113c9059-c81d1d09",
             "WING_TARGET": "tf-aws"
           }

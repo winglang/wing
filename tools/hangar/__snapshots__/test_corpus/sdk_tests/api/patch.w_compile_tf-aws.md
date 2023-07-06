@@ -4,6 +4,11 @@
 ```js
 module.exports = function({ $_id, $api_PATCH, $body, $std_Json }) {
   class $Closure1 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
     async handle(req) {
       {((cond) => {if (!cond) throw new Error("assertion failed: req.method == api_PATCH")})((req.method === $api_PATCH))};
       {((cond) => {if (!cond) throw new Error("assertion failed: req.vars?.get(\"id\") == _id")})(((req.vars)["id"] === $_id))};
@@ -15,11 +20,6 @@ module.exports = function({ $_id, $api_PATCH, $body, $std_Json }) {
       "body": (req.vars)["id"],}
       ;
     }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
-    }
   }
   return $Closure1;
 }
@@ -30,6 +30,11 @@ module.exports = function({ $_id, $api_PATCH, $body, $std_Json }) {
 ```js
 module.exports = function({ $_id, $api_url, $body, $http_PATCH, $http_Util, $std_Json }) {
   class $Closure2 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
     async handle() {
       const url = String.raw({ raw: ["", "/path/", ""] }, $api_url, $_id);
       const response = (await $http_Util.patch(url,{
@@ -47,11 +52,6 @@ module.exports = function({ $_id, $api_url, $body, $http_PATCH, $http_Util, $std
       {((cond) => {if (!cond) throw new Error("assertion failed: fetchResponse.body == _id")})((fetchResponse.body === $_id))};
       {((cond) => {if (!cond) throw new Error("assertion failed: fetchResponse.status == 200")})((fetchResponse.status === 200))};
       {((cond) => {if (!cond) throw new Error("assertion failed: fetchResponse.url == url")})((fetchResponse.url === url))};
-    }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
     }
   }
   return $Closure2;
@@ -243,7 +243,6 @@ module.exports = function({ $_id, $api_url, $body, $http_PATCH, $http_Util, $std
         },
         "environment": {
           "variables": {
-            "CLOUD_API_C82DF3A5": "${aws_api_gateway_stage.cloudApi_api_stage_BBB283E4.invoke_url}",
             "WING_FUNCTION_NAME": "Handler-c89df580",
             "WING_TARGET": "tf-aws",
             "WING_TOKEN_TFTOKEN_TOKEN_21": "${jsonencode(aws_api_gateway_stage.cloudApi_api_stage_BBB283E4.invoke_url)}"

@@ -4,14 +4,14 @@
 ```js
 module.exports = function({ $jj, $std_Json }) {
   class $Closure1 {
-    async handle() {
-      const ss = ((args) => { return JSON.stringify(args[0], null, args[1]) })([$jj]);
-      {((cond) => {if (!cond) throw new Error("assertion failed: ss == \"{\\\"a\\\":123,\\\"b\\\":{\\\"c\\\":456,\\\"d\\\":789}}\"")})((ss === "{\"a\":123,\"b\":{\"c\":456,\"d\":789}}"))};
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle() {
+      const ss = ((args) => { return JSON.stringify(args[0], null, args[1]) })([$jj]);
+      {((cond) => {if (!cond) throw new Error("assertion failed: ss == \"{\\\"a\\\":123,\\\"b\\\":{\\\"c\\\":456,\\\"d\\\":789}}\"")})((ss === "{\"a\":123,\"b\":{\"c\":456,\"d\":789}}"))};
     }
   }
   return $Closure1;
@@ -23,15 +23,15 @@ module.exports = function({ $jj, $std_Json }) {
 ```js
 module.exports = function({ $std_Json }) {
   class $Closure2 {
-    async handle() {
-      const hasCheck = Object.freeze({"a":"hello","b":"wing"});
-      {((cond) => {if (!cond) throw new Error("assertion failed: Json.has(hasCheck, \"a\") == true")})((((args) => { return args[0].hasOwnProperty(args[1]); })([hasCheck,"a"]) === true))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: Json.has(hasCheck, \"c\") == false")})((((args) => { return args[0].hasOwnProperty(args[1]); })([hasCheck,"c"]) === false))};
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle() {
+      const hasCheck = Object.freeze({"a":"hello","b":"wing"});
+      {((cond) => {if (!cond) throw new Error("assertion failed: Json.has(hasCheck, \"a\") == true")})((((args) => { return args[0].hasOwnProperty(args[1]); })([hasCheck,"a"]) === true))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: Json.has(hasCheck, \"c\") == false")})((((args) => { return args[0].hasOwnProperty(args[1]); })([hasCheck,"c"]) === false))};
     }
   }
   return $Closure2;

@@ -4,16 +4,16 @@
 ```js
 module.exports = function({ $data_size, $queue, $res }) {
   class $Closure1 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
     async handle() {
       {((cond) => {if (!cond) throw new Error("assertion failed: data.size == 3")})(($data_size === 3))};
       (await $res.put("file.txt","world"));
       {((cond) => {if (!cond) throw new Error("assertion failed: res.get(\"file.txt\") == \"world\"")})(((await $res.get("file.txt")) === "world"))};
       (await $queue.push("spirulina"));
-    }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
     }
   }
   return $Closure1;

@@ -4,6 +4,11 @@
 ```js
 module.exports = function({ $std_Duration }) {
   class $Closure1 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
     async handle() {
       {((cond) => {if (!cond) throw new Error("assertion failed: 12ms.seconds == 12 / 1000")})(((await $std_Duration.fromSeconds(0.012)).seconds === (12 / 1000)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: 12s.seconds == 12")})(((await $std_Duration.fromSeconds(12)).seconds === 12))};
@@ -25,11 +30,6 @@ module.exports = function({ $std_Duration }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: 1s.days == 1 / (60 * 60 * 24)")})(((await $std_Duration.fromSeconds(1)).days === (1 / ((60 * 60) * 24))))};
       {((cond) => {if (!cond) throw new Error("assertion failed: 1s.months == 1 / ((60 * 60 * 24 * 365) / 12)")})(((await $std_Duration.fromSeconds(1)).months === (1 / ((((60 * 60) * 24) * 365) / 12))))};
       {((cond) => {if (!cond) throw new Error("assertion failed: 1s.years == 1 / (60 * 60 * 24 * 365)")})(((await $std_Duration.fromSeconds(1)).years === (1 / (((60 * 60) * 24) * 365))))};
-    }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
     }
   }
   return $Closure1;

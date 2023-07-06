@@ -4,14 +4,14 @@
 ```js
 module.exports = function({ $even_arr, $math_Util, $odd_arr }) {
   class $Closure1 {
-    async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.median(odd_arr) == 6")})(((await $math_Util.median($odd_arr)) === 6))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.median(even_arr) == 4.5")})(((await $math_Util.median($even_arr)) === 4.5))};
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle() {
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.median(odd_arr) == 6")})(((await $math_Util.median($odd_arr)) === 6))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.median(even_arr) == 4.5")})(((await $math_Util.median($even_arr)) === 4.5))};
     }
   }
   return $Closure1;
@@ -23,6 +23,11 @@ module.exports = function({ $even_arr, $math_Util, $odd_arr }) {
 ```js
 module.exports = function({ $_bimodal_at_0__, $_bimodal_at_1__, $_multimodal_at_0__, $_multimodal_at_1__, $_multimodal_at_2__, $math_Util, $modal_arr }) {
   class $Closure2 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
     async handle() {
       {((cond) => {if (!cond) throw new Error("assertion failed: math.mode(modal_arr).at(0) == 2")})(((await (await $math_Util.mode($modal_arr)).at(0)) === 2))};
       {((cond) => {if (!cond) throw new Error("assertion failed: bimodal.at(0) == 2")})(($_bimodal_at_0__ === 2))};
@@ -30,11 +35,6 @@ module.exports = function({ $_bimodal_at_0__, $_bimodal_at_1__, $_multimodal_at_
       {((cond) => {if (!cond) throw new Error("assertion failed: multimodal.at(0) == 2")})(($_multimodal_at_0__ === 2))};
       {((cond) => {if (!cond) throw new Error("assertion failed: multimodal.at(1) == 7")})(($_multimodal_at_1__ === 7))};
       {((cond) => {if (!cond) throw new Error("assertion failed: multimodal.at(2) == 9")})(($_multimodal_at_2__ === 9))};
-    }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
     }
   }
   return $Closure2;
@@ -46,15 +46,15 @@ module.exports = function({ $_bimodal_at_0__, $_bimodal_at_1__, $_multimodal_at_
 ```js
 module.exports = function({ $math_Util, $mean_arr }) {
   class $Closure3 {
-    async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.arithmeticMean(mean_arr) == 42")})(((await $math_Util.arithmeticMean($mean_arr)) === 42))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.geometricMean(mean_arr) == 30")})(((await $math_Util.geometricMean($mean_arr)) === 30))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.harmonicMean(mean_arr) == 15")})(((await $math_Util.harmonicMean($mean_arr)) === 15))};
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle() {
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.arithmeticMean(mean_arr) == 42")})(((await $math_Util.arithmeticMean($mean_arr)) === 42))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.geometricMean(mean_arr) == 30")})(((await $math_Util.geometricMean($mean_arr)) === 30))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.harmonicMean(mean_arr) == 15")})(((await $math_Util.harmonicMean($mean_arr)) === 15))};
     }
   }
   return $Closure3;

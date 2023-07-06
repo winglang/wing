@@ -4,13 +4,13 @@
 ```js
 module.exports = function({ $Preflight }) {
   class $Closure1 {
-    async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: Preflight.staticMethod(123) == \"foo-123\"")})(((await $Preflight.staticMethod(123)) === "foo-123"))};
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle() {
+      {((cond) => {if (!cond) throw new Error("assertion failed: Preflight.staticMethod(123) == \"foo-123\"")})(((await $Preflight.staticMethod(123)) === "foo-123"))};
     }
   }
   return $Closure1;
@@ -22,13 +22,13 @@ module.exports = function({ $Preflight }) {
 ```js
 module.exports = function({ $OuterInflight }) {
   class $Closure2 {
-    async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: OuterInflight.staticMethod(\"hello\") == 5")})(((await $OuterInflight.staticMethod("hello")) === 5))};
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle() {
+      {((cond) => {if (!cond) throw new Error("assertion failed: OuterInflight.staticMethod(\"hello\") == 5")})(((await $OuterInflight.staticMethod("hello")) === 5))};
     }
   }
   return $Closure2;
@@ -40,6 +40,11 @@ module.exports = function({ $OuterInflight }) {
 ```js
 module.exports = function({  }) {
   class $Closure3 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
     async handle() {
       class InnerInflight {
         static async staticMethod() {
@@ -47,11 +52,6 @@ module.exports = function({  }) {
         }
       }
       {((cond) => {if (!cond) throw new Error("assertion failed: InnerInflight.staticMethod() == \"hello\"")})(((await InnerInflight.staticMethod()) === "hello"))};
-    }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
     }
   }
   return $Closure3;
@@ -63,6 +63,11 @@ module.exports = function({  }) {
 ```js
 module.exports = function({ $util_Util }) {
   class $Closure4 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
     async handle() {
       {
         const $IF_LET_VALUE = (await $util_Util.tryEnv("WING_TARGET"));
@@ -74,11 +79,6 @@ module.exports = function({ $util_Util }) {
           {((cond) => {if (!cond) throw new Error("assertion failed: false /* target not defined*/")})(false)};
         }
       }
-    }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
     }
   }
   return $Closure4;
@@ -103,10 +103,10 @@ module.exports = function({  }) {
 ```js
 module.exports = function({  }) {
   class Preflight {
+    constructor({  }) {
+    }
     static async staticMethod(a) {
       return String.raw({ raw: ["foo-", ""] }, a);
-    }
-    constructor({  }) {
     }
   }
   return Preflight;

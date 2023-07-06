@@ -4,6 +4,11 @@
 ```js
 module.exports = function({ $b }) {
   class $Closure1 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
     async handle() {
       const jsonObj1 = Object.freeze({"test":"test1"});
       const jsonObj2 = Object.freeze({"test":"test2"});
@@ -21,11 +26,6 @@ module.exports = function({ $b }) {
       const files = (await $b.list());
       {((cond) => {if (!cond) throw new Error("assertion failed: files.contains(\"test1.txt\") == false")})((files.includes("test1.txt") === false))};
       {((cond) => {if (!cond) throw new Error("assertion failed: files.contains(\"test2.txt\") == true")})((files.includes("test2.txt") === true))};
-    }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
     }
   }
   return $Closure1;

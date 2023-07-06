@@ -4,17 +4,17 @@
 ```js
 module.exports = function({ $math_Util }) {
   class $Closure1 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
     async handle() {
       {((cond) => {if (!cond) throw new Error("assertion failed: math.acot(0) == 1.5707963267948966")})(((await $math_Util.acot(0)) === 1.5707963267948966))};
       {((cond) => {if (!cond) throw new Error("assertion failed: math.acot(math.PI / 2) == 0.5669115049410094")})(((await $math_Util.acot(($math_Util.PI / 2))) === 0.5669115049410094))};
       {((cond) => {if (!cond) throw new Error("assertion failed: math.acot(math.PI) == 0.30816907111598496")})(((await $math_Util.acot($math_Util.PI)) === 0.30816907111598496))};
       {((cond) => {if (!cond) throw new Error("assertion failed: math.acot(math.TAU) == 0.15783119028815887")})(((await $math_Util.acot($math_Util.TAU)) === 0.15783119028815887))};
       {((cond) => {if (!cond) throw new Error("assertion failed: math.acot(-0) == -1.5707963267948966")})(((await $math_Util.acot((-0))) === (-1.5707963267948966)))};
-    }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
     }
   }
   return $Closure1;

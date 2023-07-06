@@ -4,6 +4,11 @@
 ```js
 module.exports = function({ $b }) {
   class $Closure1 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
     async handle() {
       const jsonObj2 = Object.freeze({"key2":"value2"});
       (await $b.put("file1.txt","Foo"));
@@ -16,11 +21,6 @@ module.exports = function({ $b }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: b.tryDelete(\"file2.json\") == true")})(((await $b.tryDelete("file2.json")) === true))};
       {((cond) => {if (!cond) throw new Error("assertion failed: b.tryDelete(\"file2.txt\") == false")})(((await $b.tryDelete("file2.txt")) === false))};
       {((cond) => {if (!cond) throw new Error("assertion failed: b.tryDelete(\"file2.json\") == false")})(((await $b.tryDelete("file2.json")) === false))};
-    }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
     }
   }
   return $Closure1;

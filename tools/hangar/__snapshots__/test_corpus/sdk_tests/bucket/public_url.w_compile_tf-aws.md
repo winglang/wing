@@ -4,6 +4,11 @@
 ```js
 module.exports = function({ $http_Util, $privateBucket, $publicBucket, $util_Util }) {
   class $Closure1 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
     async handle() {
       let error = "";
       (await $publicBucket.put("file1.txt","Foo"));
@@ -21,11 +26,6 @@ module.exports = function({ $http_Util, $privateBucket, $publicBucket, $util_Uti
         error = e;
       }
       {((cond) => {if (!cond) throw new Error("assertion failed: error == \"Cannot provide public url for a non-public bucket\"")})((error === "Cannot provide public url for a non-public bucket"))};
-    }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
     }
   }
   return $Closure1;

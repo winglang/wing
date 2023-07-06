@@ -4,6 +4,11 @@
 ```js
 module.exports = function({ $__x_, $__y_, $math_Util, $x, $y }) {
   class $Closure1 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
     async handle() {
       {((cond) => {if (!cond) throw new Error("assertion failed: math.floor(x) == 5")})(((await $math_Util.floor($x)) === 5))};
       {((cond) => {if (!cond) throw new Error("assertion failed: math.ceil(x) == 6")})(((await $math_Util.ceil($x)) === 6))};
@@ -16,11 +21,6 @@ module.exports = function({ $__x_, $__y_, $math_Util, $x, $y }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.E, decimalPlaces: 3) == 2.718")})(((await $math_Util.round($math_Util.E,{ decimalPlaces: 3 })) === 2.718))};
       {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.E, decimalPlaces: 4) == 2.7183")})(((await $math_Util.round($math_Util.E,{ decimalPlaces: 4 })) === 2.7183))};
       {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.E, decimalPlaces: 5) == 2.71828")})(((await $math_Util.round($math_Util.E,{ decimalPlaces: 5 })) === 2.71828))};
-    }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
     }
   }
   return $Closure1;

@@ -4,17 +4,17 @@
 ```js
 module.exports = function({ $math_Util }) {
   class $Closure1 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
     async handle() {
       {((cond) => {if (!cond) throw new Error("assertion failed: math.sin(-0) == -0")})(((await $math_Util.sin((-0))) === (-0)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: math.sin(0) == 0")})(((await $math_Util.sin(0)) === 0))};
       {((cond) => {if (!cond) throw new Error("assertion failed: math.sin(1) == 0.8414709848078965")})(((await $math_Util.sin(1)) === 0.8414709848078965))};
       {((cond) => {if (!cond) throw new Error("assertion failed: math.sin(-5) == 0.9589242746631385")})(((await $math_Util.sin((-5))) === 0.9589242746631385))};
       {((cond) => {if (!cond) throw new Error("assertion failed: math.sin(math.PI / 2) == 1")})(((await $math_Util.sin(($math_Util.PI / 2))) === 1))};
-    }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
     }
   }
   return $Closure1;

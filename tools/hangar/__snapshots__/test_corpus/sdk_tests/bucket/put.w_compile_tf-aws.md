@@ -4,6 +4,11 @@
 ```js
 module.exports = function({ $b }) {
   class $Closure1 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
     async handle() {
       (await $b.put("test1.txt","Foo"));
       (await $b.put("test2.txt","Bar"));
@@ -18,11 +23,6 @@ module.exports = function({ $b }) {
       (await $b.put("test2.txt","Baz"));
       const third = (await $b.get("test2.txt"));
       {((cond) => {if (!cond) throw new Error("assertion failed: third == \"Baz\"")})((third === "Baz"))};
-    }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
     }
   }
   return $Closure1;

@@ -4,6 +4,11 @@
 ```js
 module.exports = function({ $js, $q }) {
   class $Closure1 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
     async handle() {
       (await $q.push("foo"));
       (await $q.push("bar"));
@@ -30,11 +35,6 @@ module.exports = function({ $js, $q }) {
       }
       )))};
     }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
-    }
   }
   return $Closure1;
 }
@@ -45,10 +45,10 @@ module.exports = function({ $js, $q }) {
 ```js
 module.exports = function({  }) {
   class TestHelper {
+    constructor({  }) {
+    }
     async sleep(milli) {
       return (require("<ABSOLUTE_PATH>/sleep.js")["sleep"])(milli)
-    }
-    constructor({  }) {
     }
   }
   return TestHelper;

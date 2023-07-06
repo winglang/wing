@@ -4,17 +4,17 @@
 ```js
 module.exports = function({ $JSHelper, $oneHundredMiliseconds, $util_Util }) {
   class $Closure1 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
     async handle() {
       const start = (await $JSHelper.getTime());
       (await $util_Util.sleep($oneHundredMiliseconds));
       const end = (await $JSHelper.getTime());
       const delta = (end - start);
       {((cond) => {if (!cond) throw new Error("assertion failed: delta >= 100")})((delta >= 100))};
-    }
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
     }
   }
   return $Closure1;
@@ -26,10 +26,10 @@ module.exports = function({ $JSHelper, $oneHundredMiliseconds, $util_Util }) {
 ```js
 module.exports = function({  }) {
   class JSHelper {
+    constructor({  }) {
+    }
     static async getTime() {
       return (require("<ABSOLUTE_PATH>/sleep-helper.js")["getTime"])()
-    }
-    constructor({  }) {
     }
   }
   return JSHelper;
