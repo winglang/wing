@@ -25,6 +25,7 @@ describe(`${__dirname}/index.w`, () => {
     const rowId = "Hello World!";
 
     await page.getByTestId("cloud.table:new-row-column-id").type(rowId);
+
     await page.getByTestId("cloud.table:new-row-column-name").type(rowId);
 
     await page.getByTestId("cloud.table:add-row").click();

@@ -11,6 +11,7 @@ describe(`${__dirname}/index.w`, () => {
     await page.waitForLoadState("networkidle");
 
     const preview = page.getByTestId("cloud.bucket:file-preview");
+
     await expect(preview).toContainText("Hello World!");
   });
 
@@ -20,6 +21,7 @@ describe(`${__dirname}/index.w`, () => {
     const file = page.getByTestId("cloud.bucket:files-entry-test.txt");
 
     await file.click();
+
     await page.getByTestId("cloud.bucket:delete-file").click();
 
     await page.waitForLoadState("networkidle");

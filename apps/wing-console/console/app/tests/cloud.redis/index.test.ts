@@ -9,6 +9,7 @@ describe(`${__dirname}/index.w`, () => {
     const input = page.getByTestId("redis.redis:input");
 
     await input.type("help");
+
     await input.press("Enter");
 
     await page.waitForLoadState("networkidle");
@@ -16,6 +17,7 @@ describe(`${__dirname}/index.w`, () => {
     const history = await page
       .getByTestId("redis.redis:history")
       .allTextContents();
+
     expect(history[0]).toContain(
       "No problem! Let me just open this url for you",
     );
@@ -27,6 +29,7 @@ describe(`${__dirname}/index.w`, () => {
     const input = page.getByTestId("redis.redis:input");
 
     await input.type("help");
+
     await input.press("Enter");
 
     await page.waitForLoadState("networkidle");
