@@ -7,7 +7,16 @@ import { satisfies } from "compare-versions";
 import { Command, Option } from "commander";
 import { run_server } from "./commands/lsp";
 
-const PACKAGE_VERSION = require("../package.json").version as string;
+import { collectCommandAnalytics, getWingAnalyticsCollectionConfig } from "./analytics/collect";
+import { exportAnalytics } from "./analytics/export";
+import { optionallyDisplayDisclaimer } from "./analytics/disclaimer";
+
+
+export const PACKAGE_VERSION = require("../package.json").version as string;
+
+const ANALYTICS_COLLECTION_CONFIG = getWingAnalyticsCollectionConfig(); 
+let ANALYTICS_EXPORT_FILE: string | undefined = undefined;
+
 const SUPPORTED_NODE_VERSION = require("../package.json").engines.node as string;
 if (!SUPPORTED_NODE_VERSION) {
   throw new Error("couldn't parse engines.node version from package.json");
@@ -42,6 +51,10 @@ async function main() {
     process.env.PROGRESS = "1";
   });
 
+  program.option("--no-analytics", "Disable analytics collection (same as WING_DISABLE_ANALYTICS=1)", () => {
+    process.env.WING_DISABLE_ANALYTICS = "1";
+  });
+
   program
     .option("--no-progress", "Hide show compilation progress")
     .option("--no-update-check", "Skip checking for toolchain updates")
@@ -52,6 +65,36 @@ async function main() {
         void checkForUpdates();
       }
     });
+
+
+    async function collectAnalyticsHook(cmd: Command) {
+      if (!ANALYTICS_COLLECTION_CONFIG.collect) { return; }
+  
+      // Fail silently if collection fails
+      try {
+        optionallyDisplayDisclaimer();
+        ANALYTICS_EXPORT_FILE = await collectCommandAnalytics(cmd);
+      } catch (err) {
+        if (ANALYTICS_COLLECTION_CONFIG.debug) {
+          console.error(err);
+        }
+      }
+    }
+  
+    async function exportAnalyticsHook() {
+      if (!ANALYTICS_COLLECTION_CONFIG.collect || !ANALYTICS_COLLECTION_CONFIG.export) { return; }
+  
+      // Fail silently if export fails
+      try {
+        if (ANALYTICS_EXPORT_FILE) {
+          exportAnalytics(ANALYTICS_EXPORT_FILE);
+        }
+      } catch (err) {
+        if (ANALYTICS_COLLECTION_CONFIG.debug) {
+          console.log(err);
+        }
+      }
+    }
 
   async function progressHook(cmd: Command) {
     const target = cmd.opts().target;
@@ -70,7 +113,7 @@ async function main() {
     .option("--no-open", "Do not open the Wing Console in the browser")
     .action(run);
 
-  program.command("lsp").description("Run the Wing language server on stdio").action(run_server);
+  program.command("lsp").description("Run the Wing language server on stdio").action(run_server).hook("preAction", collectAnalyticsHook);
 
   program
     .command("compile")
@@ -83,6 +126,7 @@ async function main() {
     )
     .option("-p, --plugins [plugin...]", "Compiler plugins")
     .hook("preAction", progressHook)
+    .hook("preAction", collectAnalyticsHook)
     .action(actionErrorHandler(compile));
 
   program
@@ -98,10 +142,12 @@ async function main() {
     )
     .option("-p, --plugins [plugin...]", "Compiler plugins")
     .hook("preAction", progressHook)
+    .hook("preAction", collectAnalyticsHook)
     .action(actionErrorHandler(test));
 
   program.command("docs").description("Open the Wing documentation").action(docs);
 
+  program.hook("postAction", exportAnalyticsHook)
   program.parse();
 }
 
