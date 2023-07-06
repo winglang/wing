@@ -1,9 +1,5 @@
 lockfileVersion: '6.0'
 
-settings:
-  autoInstallPeers: true
-  excludeLinksFromLockfile: false
-
 patchedDependencies:
   '@aws-sdk/is-array-buffer@3.201.0':
     hash: lcduyc25etdvbxthpjpldc7hvu
