@@ -13,11 +13,10 @@ describe(`${__dirname}/index.w`, () => {
     await page.getByTestId("cloud.table:add-row").click();
 
     await page.waitForLoadState("networkidle");
-    await page.waitForTimeout(300);
 
     const row = page.getByTestId(`cloud.table:row-${rowId}`);
 
-    expect(await row.isVisible()).toBe(true);
+    await expect(row).toBeVisible();
   });
 
   test("edit row", async ({ page }) => {
@@ -31,11 +30,10 @@ describe(`${__dirname}/index.w`, () => {
     await page.getByTestId("cloud.table:add-row").click();
 
     await page.waitForLoadState("networkidle");
-    await page.waitForTimeout(300);
 
     const row = page.getByTestId(`cloud.table:row-${rowId}`);
 
-    expect(await row.isVisible()).toBe(true);
+    await expect(row).toBeVisible();
 
     const nameInput = page.getByTestId(`cloud.table:row-${rowId}-column-name`);
     await nameInput.clear();
@@ -61,17 +59,15 @@ describe(`${__dirname}/index.w`, () => {
     await page.getByTestId("cloud.table:add-row").click();
 
     await page.waitForLoadState("networkidle");
-    await page.waitForTimeout(300);
 
     const row = page.getByTestId(`cloud.table:row-${rowId}`);
 
-    expect(await row.isVisible()).toBe(true);
+    await expect(row).toBeVisible();
 
     await page.getByTestId(`cloud.table:remove-row-${rowId}`).click();
 
     await page.waitForLoadState("networkidle");
-    await page.waitForTimeout(300);
 
-    expect(await row.isVisible()).toBe(false);
+    await expect(row).toBeHidden();
   });
 });

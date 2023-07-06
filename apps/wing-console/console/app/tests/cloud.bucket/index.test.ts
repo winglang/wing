@@ -10,25 +10,20 @@ describe(`${__dirname}/index.w`, () => {
 
     await page.waitForLoadState("networkidle");
 
-    const preview = await page
-      .getByTestId("cloud.bucket:file-preview")
-      .allTextContents();
-    expect(preview.includes("Hello World!")).toBe(true);
+    const preview = page.getByTestId("cloud.bucket:file-preview");
+    await expect(preview).toContainText("Hello World!");
   });
 
   test("delete file", async ({ page }) => {
     await getResourceNode(page, "root/Default/cloud.Bucket").click();
 
-    const emptyState = page.getByTestId("cloud.bucket:empty-state");
+    const file = page.getByTestId("cloud.bucket:files-entry-test.txt");
 
-    expect(await emptyState.isVisible()).toBe(false);
-
-    await page.getByTestId("cloud.bucket:files-entry-test.txt").click();
+    await file.click();
     await page.getByTestId("cloud.bucket:delete-file").click();
 
     await page.waitForLoadState("networkidle");
-    await page.waitForTimeout(300);
 
-    expect(await emptyState.isVisible()).toBe(true);
+    await expect(file).toBeHidden();
   });
 });

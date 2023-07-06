@@ -8,13 +8,13 @@ describe(`${__dirname}/index.w`, () => {
 
     const currentValue = page.getByTestId("cloud.counter:current-value");
 
-    expect(await currentValue.inputValue()).toBe("0");
+    await expect(currentValue).toHaveValue("0");
 
     await page.getByTestId("cloud.counter:increase").click();
 
     await page.waitForLoadState("networkidle");
 
-    expect(await currentValue.inputValue()).toBe("1");
+    await expect(currentValue).toHaveValue("1");
   });
 
   test("decrease counter", async ({ page }) => {
@@ -22,13 +22,13 @@ describe(`${__dirname}/index.w`, () => {
 
     const currentValue = page.getByTestId("cloud.counter:current-value");
 
-    expect(await currentValue.inputValue()).toBe("0");
+    await expect(currentValue).toHaveValue("0");
 
     await page.getByTestId("cloud.counter:decrease").click();
 
     await page.waitForLoadState("networkidle");
 
-    expect(await currentValue.inputValue()).toBe("-1");
+    await expect(currentValue).toHaveValue("-1");
   });
 
   test("reset counter", async ({ page }) => {
@@ -36,18 +36,18 @@ describe(`${__dirname}/index.w`, () => {
 
     const currentValue = page.getByTestId("cloud.counter:current-value");
 
-    expect(await currentValue.inputValue()).toBe("0");
+    await expect(currentValue).toHaveValue("0");
 
     await page.getByTestId("cloud.counter:increase").click();
 
     await page.waitForLoadState("networkidle");
 
-    expect(await currentValue.inputValue()).toBe("1");
+    await expect(currentValue).toHaveValue("1");
 
     await page.getByTestId("cloud.counter:reset").click();
 
     await page.waitForLoadState("networkidle");
 
-    expect(await currentValue.inputValue()).toBe("0");
+    await expect(currentValue).toHaveValue("0");
   });
 });
