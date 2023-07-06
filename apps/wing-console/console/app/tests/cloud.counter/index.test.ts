@@ -12,8 +12,6 @@ describe(`${__dirname}/index.w`, () => {
 
     await page.getByTestId("cloud.counter:increase").click();
 
-    await page.waitForLoadState("networkidle");
-
     await expect(currentValue).toHaveValue("1");
   });
 
@@ -25,8 +23,6 @@ describe(`${__dirname}/index.w`, () => {
     await expect(currentValue).toHaveValue("0");
 
     await page.getByTestId("cloud.counter:decrease").click();
-
-    await page.waitForLoadState("networkidle");
 
     await expect(currentValue).toHaveValue("-1");
   });
@@ -40,13 +36,9 @@ describe(`${__dirname}/index.w`, () => {
 
     await page.getByTestId("cloud.counter:increase").click();
 
-    await page.waitForLoadState("networkidle");
-
     await expect(currentValue).toHaveValue("1");
 
     await page.getByTestId("cloud.counter:reset").click();
-
-    await page.waitForLoadState("networkidle");
 
     await expect(currentValue).toHaveValue("0");
   });

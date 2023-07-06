@@ -10,8 +10,6 @@ describe(`${__dirname}/index.w`, () => {
 
     await page.getByTestId("cloud.queue:push").click();
 
-    await page.waitForLoadState("networkidle");
-
     const approxSize = page.getByTestId("cloud.queue:approx-size");
 
     await expect(approxSize).toContainText("1");
@@ -29,8 +27,6 @@ describe(`${__dirname}/index.w`, () => {
     await expect(approxSize).toContainText("1");
 
     await page.getByTestId("cloud.queue:purge").click();
-
-    await page.waitForLoadState("networkidle");
 
     await expect(approxSize).toContainText("0");
   });

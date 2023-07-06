@@ -8,8 +8,6 @@ describe(`${__dirname}/index.w`, () => {
 
     await page.getByTestId("cloud.function:invoke").click();
 
-    await page.waitForLoadState("networkidle");
-
     expect(
       await page.getByTestId("cloud.function:response").textContent(),
     ).toEqual(

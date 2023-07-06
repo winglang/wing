@@ -12,8 +12,6 @@ describe(`${__dirname}/index.w`, () => {
 
     await page.getByTestId("cloud.table:add-row").click();
 
-    await page.waitForLoadState("networkidle");
-
     const row = page.getByTestId(`cloud.table:row-${rowId}`);
 
     await expect(row).toBeVisible();
@@ -30,8 +28,6 @@ describe(`${__dirname}/index.w`, () => {
 
     await page.getByTestId("cloud.table:add-row").click();
 
-    await page.waitForLoadState("networkidle");
-
     const row = page.getByTestId(`cloud.table:row-${rowId}`);
 
     await expect(row).toBeVisible();
@@ -40,8 +36,6 @@ describe(`${__dirname}/index.w`, () => {
     await nameInput.clear();
     await nameInput.type("Hello World! 2");
     await nameInput.blur();
-
-    await page.waitForLoadState("networkidle");
 
     expect(
       await page
@@ -59,15 +53,11 @@ describe(`${__dirname}/index.w`, () => {
 
     await page.getByTestId("cloud.table:add-row").click();
 
-    await page.waitForLoadState("networkidle");
-
     const row = page.getByTestId(`cloud.table:row-${rowId}`);
 
     await expect(row).toBeVisible();
 
     await page.getByTestId(`cloud.table:remove-row-${rowId}`).click();
-
-    await page.waitForLoadState("networkidle");
 
     await expect(row).toBeHidden();
   });

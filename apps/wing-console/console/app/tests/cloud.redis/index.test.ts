@@ -12,8 +12,6 @@ describe(`${__dirname}/index.w`, () => {
 
     await input.press("Enter");
 
-    await page.waitForLoadState("networkidle");
-
     const history = await page
       .getByTestId("redis.redis:history")
       .allTextContents();
@@ -31,8 +29,6 @@ describe(`${__dirname}/index.w`, () => {
     await input.type("help");
 
     await input.press("Enter");
-
-    await page.waitForLoadState("networkidle");
 
     expect(await input.inputValue()).toBe("");
 
