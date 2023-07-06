@@ -1,0 +1,40 @@
+import { expect, test } from "@playwright/test";
+import { describe } from "../describe.js";
+import { getResourceNode } from "../helpers.js";
+
+describe(`${__dirname}/index.w`, () => {
+  test("open redis help", async ({ page }) => {
+    await getResourceNode(page, "root/Default/redis.Redis").click();
+
+    const input = page.getByTestId("redis.redis:input");
+
+    await input.type("help");
+    await input.press("Enter");
+
+    await page.waitForLoadState("networkidle");
+
+    const history = await page
+      .getByTestId("redis.redis:history")
+      .allTextContents();
+    expect(history[0]).toContain(
+      "No problem! Let me just open this url for you",
+    );
+  });
+
+  test("redis history navigation", async ({ page }) => {
+    await getResourceNode(page, "root/Default/redis.Redis").click();
+
+    const input = page.getByTestId("redis.redis:input");
+
+    await input.type("help");
+    await input.press("Enter");
+
+    await page.waitForLoadState("networkidle");
+
+    expect(await input.inputValue()).toBe("");
+
+    await input.press("ArrowUp");
+
+    expect(await input.inputValue()).toBe("help");
+  });
+});

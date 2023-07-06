@@ -90,7 +90,10 @@ export const RedisInteraction = ({
               inputRef.current?.focus();
             }}
           >
-            <div className="max-h-[20rem] space-y-1">
+            <div
+              className="max-h-[20rem] space-y-1"
+              data-testid="redis.redis:history"
+            >
               {terminalHistory.map((log, index) => (
                 <div key={index} className="flex">
                   {log.type === "command" && (
@@ -123,6 +126,7 @@ export const RedisInteraction = ({
                   onKeyDown={onInputKeyDown}
                   readOnly={isLoading}
                   placeholder={(isLoading && "...") || ""}
+                  data-testid="redis.redis:input"
                 />
               </div>
             </div>
