@@ -16,6 +16,11 @@ export interface RunOptions {
    * Falls back to a random port number if necessary.
    */
   readonly port?: string;
+
+  /**
+   * Whether to open the Wing Console in the browser automatically.
+   */
+  readonly open?: boolean;
 }
 
 /**
@@ -49,6 +54,8 @@ export async function run(entrypoint?: string, options?: RunOptions) {
     },
   });
   const url = `http://localhost:${port}/`;
-  await open(url);
+  if (options?.open) {
+    await open(url);
+  }
   console.log(`The Wing Console is running at ${url}`);
 }

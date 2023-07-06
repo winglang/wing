@@ -67,6 +67,7 @@ async function main() {
     .description("Runs a Wing program in the Wing Console")
     .argument("[entrypoint]", "program .w entrypoint")
     .option("-p, --port <port>", "specify port")
+    .option("--no-open", "Do not open the Wing Console in the browser")
     .action(run);
 
   program.command("lsp").description("Run the Wing language server on stdio").action(run_server);

@@ -1,9 +1,15 @@
 import { exec } from "child_process";
+import path from "path";
 import { env } from "process";
 import {
+  commands,
   ExtensionContext,
   languages,
   ProgressLocation,
+  StatusBarItem,
+  Uri,
+  ViewColumn,
+  WebviewPanel,
   window,
   workspace,
 } from "vscode";
@@ -22,6 +28,7 @@ const CFG_WING = "wing";
 const CFG_WING_BIN = `${CFG_WING}.bin`;
 
 let client: LanguageClient;
+let STATUS_BAR_ITEM: StatusBarItem;
 
 export function deactivate() {
   return client?.stop();
@@ -35,45 +42,149 @@ export async function activate(context: ExtensionContext) {
   });
 
   await startLanguageServer(context);
+
+  const consolePanels: Record<string, WebviewPanel> = {};
+  let activeConsolePanel: string | undefined;
+
+  // add command to preview wing files
+  context.subscriptions.push(
+    commands.registerCommand("wing.openFile", async () => {
+      if (activeConsolePanel) {
+        const document = await workspace.openTextDocument(activeConsolePanel);
+
+        await window.showTextDocument(document);
+      }
+    }),
+    commands.registerCommand("wing.openConsole", async () => {
+      // get the current active file
+      const editor = window.activeTextEditor;
+      if (!editor) {
+        return;
+      }
+      const document = editor.document;
+      if (document.languageId !== "wing") {
+        return;
+      }
+      const uri = document.uri;
+
+      const existingPanel = consolePanels[uri.fsPath];
+      if (existingPanel) {
+        existingPanel.reveal();
+        return;
+      }
+
+      const args = await getWingBinAndArgs(context);
+      if (!args) {
+        return;
+      }
+
+      // get random unused port
+      const port = await new Promise<number>((resolve, reject) => {
+        // eslint-disable-next-line @typescript-eslint/no-require-imports
+        const server = require("net").createServer();
+        server.listen(0, () => {
+          const p = server.address()?.port;
+          if (p) {
+            server.close(() => {
+              resolve(p);
+            });
+          } else {
+            reject("No port found");
+          }
+        });
+      });
+
+      const filename = path.basename(uri.fsPath);
+      let panel: WebviewPanel;
+
+      const cp = exec(
+        `${args.join(" ")} it --port ${port} --no-open ${uri.fsPath}`,
+        (err) => {
+          if (err) {
+            if (!err.killed) {
+              void window.showErrorMessage(err.message);
+            }
+
+            panel?.dispose();
+          }
+        }
+      );
+      cp.stdout?.once("data", () => {
+        panel = window.createWebviewPanel(
+          "wing.console",
+          `${filename} [Console]`,
+          ViewColumn.One,
+          {
+            enableScripts: true,
+            enableCommandUris: true,
+            portMapping: [{ webviewPort: port, extensionHostPort: port }],
+          }
+        );
+        panel.iconPath = {
+          light: Uri.joinPath(
+            context.extensionUri,
+            "resources",
+            "icon-light.png"
+          ),
+          dark: Uri.joinPath(
+            context.extensionUri,
+            "resources",
+            "icon-dark.png"
+          ),
+        };
+
+        consolePanels[uri.fsPath] = panel;
+        activeConsolePanel = uri.fsPath;
+        panel.onDidChangeViewState(() => {
+          if (panel.active) {
+            activeConsolePanel = uri.fsPath;
+          } else if (activeConsolePanel === uri.fsPath) {
+            activeConsolePanel = undefined;
+          }
+        });
+
+        panel.onDidDispose(() => {
+          delete consolePanels[uri.fsPath];
+          activeConsolePanel = undefined;
+          cp.kill();
+        });
+        panel.webview.html = `<!DOCTYPE html>
+        <html lang="en"">
+        <head>
+            <meta charset="UTF-8">
+            <style>
+              body {
+                  margin: 0; /* Remove default margin */
+                  padding: 0; /* Remove default padding */
+              }
+              iframe {      
+                  display: block;  /* iframes are inline by default */   
+                  height: 100vh;  /* Set height to 100% of the viewport height */   
+                  width: 100vw;  /* Set width to 100% of the viewport width */     
+                  border: none; /* Remove default border */
+              }
+            </style>
+        </head>
+        <body><iframe src="http://localhost:${port}/"></iframe></body>
+        </html>`;
+      });
+    })
+  );
 }
 
 async function startLanguageServer(context: ExtensionContext) {
-  const extVersion = context.extension.packageJSON.version;
-  const configuredWingBin = workspace
-    .getConfiguration(CFG_WING)
-    .get<string>(CFG_WING_BIN, "wing");
-  let wingBin = env.WING_BIN ?? configuredWingBin;
+  const args = await getWingBinAndArgs(context);
 
-  if (wingBin !== "npx") {
-    const result = wingBinaryLocation(wingBin);
-    if (!result) {
-      const npmInstallOption = `Install globally with npm`;
-      const choice = await window.showWarningMessage(
-        `"${wingBin}" is not in PATH, please choose one of the following options to use the Wing language server`,
-        npmInstallOption
-      );
-
-      if (choice === npmInstallOption) {
-        wingBin = await guidedWingInstallation(extVersion);
-      } else {
-        // User decided to ignore the warning
-        return;
-      }
-    }
+  if (!args) {
+    // User doesn't have wing and doesn't want to install it yet
+    return;
   }
-
-  const args =
-    wingBin === "npx"
-      ? ["-y", "-q", `winglang@${extVersion}`, "--no-update-check"]
-      : ["--no-update-check"];
-
-  await updateStatusBar(wingBin, args);
 
   args.push("lsp");
 
   const run: Executable = {
-    command: wingBin,
-    args,
+    command: args[0]!,
+    args: args.slice(1),
     options: {
       env: {
         ...process.env,
@@ -158,9 +269,47 @@ async function updateStatusBar(wingBin: string, args?: string[]) {
 
   // update status bar
   const status = `Wing v${version}`;
-  const statusItem = window.createStatusBarItem();
-  statusItem.text = status;
-  statusItem.show();
+  if (!STATUS_BAR_ITEM) {
+    STATUS_BAR_ITEM = window.createStatusBarItem();
+  }
+
+  STATUS_BAR_ITEM.text = status;
+  STATUS_BAR_ITEM.show();
+}
+
+async function getWingBinAndArgs(context: ExtensionContext) {
+  const extVersion = context.extension.packageJSON.version;
+  const configuredWingBin = workspace
+    .getConfiguration(CFG_WING)
+    .get<string>(CFG_WING_BIN, "wing");
+  let wingBin = env.WING_BIN ?? configuredWingBin;
+
+  if (wingBin !== "npx") {
+    const result = wingBinaryLocation(wingBin);
+    if (!result) {
+      const npmInstallOption = `Install globally with npm`;
+      const choice = await window.showWarningMessage(
+        `"${wingBin}" is not in PATH, please choose one of the following options to use the Wing language server`,
+        npmInstallOption
+      );
+
+      if (choice === npmInstallOption) {
+        wingBin = await guidedWingInstallation(extVersion);
+      } else {
+        // User decided to ignore the warning
+        return;
+      }
+    }
+  }
+
+  const args =
+    wingBin === "npx"
+      ? ["-y", "-q", `winglang@${extVersion}`, "--no-update-check"]
+      : ["--no-update-check"];
+
+  await updateStatusBar(wingBin, args);
+
+  return [wingBin, ...args];
 }
 
 /**

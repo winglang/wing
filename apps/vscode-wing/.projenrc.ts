@@ -105,6 +105,50 @@ const contributes: VSCodeExtensionContributions = {
       },
     },
   ],
+  commands: [
+    {
+      command: "wing.openConsole",
+      title: "Open in Wing Console",
+      icon: {
+        light: "resources/icon-light.png",
+        dark: "resources/icon-dark.png",
+      },
+    },
+    {
+      command: "wing.openFile",
+      title: "Open source file",
+      icon: {
+        light: "resources/icon-light.png",
+        dark: "resources/icon-dark.png",
+      },
+    },
+  ],
+  menus: {
+    "editor/title": [
+      {
+        when: "resourceLangId == wing && activeWebviewPanelId != 'wing.console'",
+        command: "wing.openConsole",
+        group: "navigation",
+      },
+      {
+        when: "resourceLangId != wing && activeWebviewPanelId == 'wing.console'",
+        command: "wing.openFile",
+        group: "navigation",
+      },
+    ],
+  },
+  // viewsContainers: {
+  //   panel: [
+  //     {
+  //       id: "wing.console",
+  //       title: "Wing Console",
+  //       icon: {
+  //         light: "resources/icon-light.png",
+  //         dark: "resources/icon-dark.png",
+  //       },
+  //     },
+  //   ],
+  // },
   configuration: [
     {
       title: "Wing",
