@@ -1,0 +1,16 @@
+diff --git a/bin/init-local.js b/bin/init-local.js
+index 1b9372d45243dc4ad0601bced818b0f3787b56e1..0d94a4832e013f445bc4e28407bfb5ab2e9e922d 100644
+--- a/bin/init-local.js
++++ b/bin/init-local.js
+@@ -85,7 +85,10 @@ function rewritePositionalArguments(args) {
+     const relevantPositionalArgs = [];
+     const rest = [];
+     for (let i = 2; i < args.length; i++) {
+-        if (!args[i].startsWith('-')) {
++        if (args[i] === '--') {
++            rest.push(...args.slice(i + 1));
++            break;
++        } else if (!args[i].startsWith('-')) {
+             relevantPositionalArgs.push(args[i]);
+             if (relevantPositionalArgs.length === 2) {
+                 rest.push(...args.slice(i + 1));

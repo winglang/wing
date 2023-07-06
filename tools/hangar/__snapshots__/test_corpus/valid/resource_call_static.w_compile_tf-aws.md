@@ -2,17 +2,15 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ Another }) {
+module.exports = function({ $Another }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      {((cond) => {if (!cond) throw new Error("assertion failed: Another.myStaticMethod() == 0")})(((await Another.myStaticMethod()) === 0))};
+    async handle() {
+      {((cond) => {if (!cond) throw new Error("assertion failed: Another.myStaticMethod() == 0")})(((await $Another.myStaticMethod()) === 0))};
     }
   }
   return $Closure1;
@@ -22,14 +20,12 @@ module.exports = function({ Another }) {
 
 ## inflight.Another.js
 ```js
-module.exports = function({ globalCounter }) {
+module.exports = function({ $globalCounter }) {
   class Another {
     constructor({  }) {
     }
-    async $inflight_init()  {
-    }
-    static async myStaticMethod()  {
-      return (await globalCounter.peek());
+    static async myStaticMethod() {
+      return (await $globalCounter.peek());
     }
   }
   return Another;
@@ -44,7 +40,7 @@ module.exports = function({ globalCounter }) {
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.2"
+      "version": "0.17.0"
     },
     "outputs": {
       "root": {
@@ -58,7 +54,7 @@ module.exports = function({ globalCounter }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:access cloud resource through static methods only\",\"${aws_lambda_function.root_testaccesscloudresourcethroughstaticmethodsonly_Handler_90784797.arn}\"]]"
+      "value": "[[\"root/Default/Default/test:access cloud resource through static methods only\",\"${aws_lambda_function.testaccesscloudresourcethroughstaticmethodsonly_Handler_BC0E7705.arn}\"]]"
     }
   },
   "provider": {
@@ -68,11 +64,11 @@ module.exports = function({ globalCounter }) {
   },
   "resource": {
     "aws_dynamodb_table": {
-      "root_cloudCounter_E0AC1263": {
+      "cloudCounter": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/cloud.Counter/Default",
-            "uniqueId": "root_cloudCounter_E0AC1263"
+            "uniqueId": "cloudCounter"
           }
         },
         "attribute": [
@@ -87,51 +83,51 @@ module.exports = function({ globalCounter }) {
       }
     },
     "aws_iam_role": {
-      "root_testaccesscloudresourcethroughstaticmethodsonly_Handler_IamRole_6B8CBEFD": {
+      "testaccesscloudresourcethroughstaticmethodsonly_Handler_IamRole_1B04D5D0": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:access cloud resource through static methods only/Handler/IamRole",
-            "uniqueId": "root_testaccesscloudresourcethroughstaticmethodsonly_Handler_IamRole_6B8CBEFD"
+            "uniqueId": "testaccesscloudresourcethroughstaticmethodsonly_Handler_IamRole_1B04D5D0"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
-      "root_testaccesscloudresourcethroughstaticmethodsonly_Handler_IamRolePolicy_2AD210AF": {
+      "testaccesscloudresourcethroughstaticmethodsonly_Handler_IamRolePolicy_A6861688": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:access cloud resource through static methods only/Handler/IamRolePolicy",
-            "uniqueId": "root_testaccesscloudresourcethroughstaticmethodsonly_Handler_IamRolePolicy_2AD210AF"
+            "uniqueId": "testaccesscloudresourcethroughstaticmethodsonly_Handler_IamRolePolicy_A6861688"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:GetItem\"],\"Resource\":[\"${aws_dynamodb_table.root_cloudCounter_E0AC1263.arn}\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.root_testaccesscloudresourcethroughstaticmethodsonly_Handler_IamRole_6B8CBEFD.name}"
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:GetItem\"],\"Resource\":[\"${aws_dynamodb_table.cloudCounter.arn}\"],\"Effect\":\"Allow\"}]}",
+        "role": "${aws_iam_role.testaccesscloudresourcethroughstaticmethodsonly_Handler_IamRole_1B04D5D0.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
-      "root_testaccesscloudresourcethroughstaticmethodsonly_Handler_IamRolePolicyAttachment_B013CEF2": {
+      "testaccesscloudresourcethroughstaticmethodsonly_Handler_IamRolePolicyAttachment_842C871D": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:access cloud resource through static methods only/Handler/IamRolePolicyAttachment",
-            "uniqueId": "root_testaccesscloudresourcethroughstaticmethodsonly_Handler_IamRolePolicyAttachment_B013CEF2"
+            "uniqueId": "testaccesscloudresourcethroughstaticmethodsonly_Handler_IamRolePolicyAttachment_842C871D"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.root_testaccesscloudresourcethroughstaticmethodsonly_Handler_IamRole_6B8CBEFD.name}"
+        "role": "${aws_iam_role.testaccesscloudresourcethroughstaticmethodsonly_Handler_IamRole_1B04D5D0.name}"
       }
     },
     "aws_lambda_function": {
-      "root_testaccesscloudresourcethroughstaticmethodsonly_Handler_90784797": {
+      "testaccesscloudresourcethroughstaticmethodsonly_Handler_BC0E7705": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:access cloud resource through static methods only/Handler/Default",
-            "uniqueId": "root_testaccesscloudresourcethroughstaticmethodsonly_Handler_90784797"
+            "uniqueId": "testaccesscloudresourcethroughstaticmethodsonly_Handler_BC0E7705"
           }
         },
         "environment": {
           "variables": {
-            "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.root_cloudCounter_E0AC1263.name}",
+            "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.cloudCounter.name}",
             "WING_FUNCTION_NAME": "Handler-c8de1ef1",
             "WING_TARGET": "tf-aws"
           }
@@ -139,10 +135,10 @@ module.exports = function({ globalCounter }) {
         "function_name": "Handler-c8de1ef1",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.root_testaccesscloudresourcethroughstaticmethodsonly_Handler_IamRole_6B8CBEFD.arn}",
+        "role": "${aws_iam_role.testaccesscloudresourcethroughstaticmethodsonly_Handler_IamRole_1B04D5D0.arn}",
         "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
-        "s3_key": "${aws_s3_object.root_testaccesscloudresourcethroughstaticmethodsonly_Handler_S3Object_2C11A1C8.key}",
+        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
+        "s3_key": "${aws_s3_object.testaccesscloudresourcethroughstaticmethodsonly_Handler_S3Object_57D98226.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -151,25 +147,25 @@ module.exports = function({ globalCounter }) {
       }
     },
     "aws_s3_bucket": {
-      "root_Code_02F3C603": {
+      "Code": {
         "//": {
           "metadata": {
             "path": "root/Default/Code",
-            "uniqueId": "root_Code_02F3C603"
+            "uniqueId": "Code"
           }
         },
         "bucket_prefix": "code-c84a50b1-"
       }
     },
     "aws_s3_object": {
-      "root_testaccesscloudresourcethroughstaticmethodsonly_Handler_S3Object_2C11A1C8": {
+      "testaccesscloudresourcethroughstaticmethodsonly_Handler_S3Object_57D98226": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:access cloud resource through static methods only/Handler/S3Object",
-            "uniqueId": "root_testaccesscloudresourcethroughstaticmethodsonly_Handler_S3Object_2C11A1C8"
+            "uniqueId": "testaccesscloudresourcethroughstaticmethodsonly_Handler_S3Object_57D98226"
           }
         },
-        "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
+        "bucket": "${aws_s3_bucket.Code.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       }
@@ -192,14 +188,12 @@ class $Root extends $stdlib.std.Resource {
     class Another extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("myStaticMethod");
+        this._addInflightOps("myStaticMethod", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.Another.js";
-        const globalCounter_client = context._lift(globalCounter);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            globalCounter: ${globalCounter_client},
+          require("./inflight.Another.js")({
+            $globalCounter: ${context._lift(globalCounter)},
           })
         `);
       }
@@ -214,12 +208,6 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          Another._registerBindObject(globalCounter, host, []);
-        }
-        super._registerBind(host, ops);
-      }
       static _registerTypeBind(host, ops) {
         if (ops.includes("myStaticMethod")) {
           Another._registerBindObject(globalCounter, host, ["peek"]);
@@ -231,14 +219,12 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const AnotherClient = Another._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            Another: ${AnotherClient.text},
+          require("./inflight.$Closure1.js")({
+            $Another: ${context._lift(Another)},
           })
         `);
       }
@@ -254,8 +240,6 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-        }
         if (ops.includes("handle")) {
           $Closure1._registerBindObject(Another, host, ["myStaticMethod"]);
         }

@@ -4,9 +4,9 @@ This package provides support for generating Wing documentation for jsii modules
 
 ## Testing
 
-A minimal set of tests verify that the generated documentation is valid in CI. This is done by running `npm run test` which will run the tests in the `test` directory.
+A minimal set of tests verify that the generated documentation is valid in CI. This is done by running `pnpm test` which will run the tests in the `test` directory.
 
-To run the complete test suite (including `.full.test.ts` files), run `npm run test:full`.
+To run the complete test suite (including `.full.test.ts` files), run `pnpm test:full`.
 
 ---
 

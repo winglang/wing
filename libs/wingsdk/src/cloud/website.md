@@ -62,4 +62,4 @@ AWS implementations of `cloud.Website` uses [Amazon S3](https://aws.amazon.com/s
 
 ## API Reference
 
-The full list of APIs for `cloud.Website` is available in the [API Reference](../api-reference).
+The full list of APIs for `cloud.Website` is available in the [API Reference](./api-reference).

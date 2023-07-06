@@ -14,6 +14,7 @@ use crate::ast::{
 };
 use crate::comp_ctx::{CompilationContext, CompilationPhase};
 use crate::diagnostic::{report_diagnostic, Diagnostic, DiagnosticResult, WingSpan};
+use crate::type_check::{CLASS_INFLIGHT_INIT_NAME, CLASS_INIT_NAME};
 use crate::{dbg_panic, WINGSDK_STD_MODULE, WINGSDK_TEST_CLASS_NAME};
 
 pub struct Parser<'a> {
@@ -628,23 +629,22 @@ impl<'s> Parser<'s> {
 				continue;
 			}
 			match class_element.kind() {
-				"method_definition" => {
-					let method_name = self.node_symbol(&class_element.child_by_field_name("name").unwrap());
-					let is_static = class_element.child_by_field_name("static").is_some();
-					let func_def = self.build_function_definition(&class_element, class_phase, is_static);
-					match (method_name, func_def) {
-						(Ok(method_name), Ok(func_def)) => methods.push((method_name, func_def)),
-						_ => {}
+				"method_definition" | "inflight_method_definition" => {
+					let mut phase = class_phase;
+					if class_element.kind() == "inflight_method_definition" {
+						phase = Phase::Inflight;
 					}
-				}
-				"inflight_method_definition" => {
-					let method_name = self.node_symbol(&class_element.child_by_field_name("name").unwrap());
+
 					let is_static = class_element.child_by_field_name("static").is_some();
-					let func_def = self.build_function_definition(&class_element, Phase::Inflight, is_static);
-					match (method_name, func_def) {
-						(Ok(method_name), Ok(func_def)) => methods.push((method_name, func_def)),
-						_ => {}
-					}
+					let Ok(method_name) = self.node_symbol(&class_element.child_by_field_name("name").unwrap()) else {
+						continue;
+					};
+
+					let Ok(func_def) = self.build_function_definition(Some(method_name.clone()), &class_element, phase, is_static) else {
+						continue;
+					};
+
+					methods.push((method_name, func_def))
 				}
 				"class_field" => {
 					let is_static = class_element.child_by_field_name("static").is_some();
@@ -710,6 +710,7 @@ impl<'s> Parser<'s> {
 
 					if is_inflight {
 						inflight_initializer = Some(FunctionDefinition {
+							name: Some(CLASS_INFLIGHT_INIT_NAME.into()),
 							body: FunctionBody::Statements(
 								self.build_scope(&class_element.child_by_field_name("block").unwrap(), Phase::Inflight),
 							),
@@ -723,6 +724,7 @@ impl<'s> Parser<'s> {
 						})
 					} else {
 						initializer = Some(FunctionDefinition {
+							name: Some(CLASS_INIT_NAME.into()),
 							body: FunctionBody::Statements(
 								self.build_scope(&class_element.child_by_field_name("block").unwrap(), Phase::Preflight),
 							),
@@ -760,6 +762,7 @@ impl<'s> Parser<'s> {
 			Some(init) => init,
 			// add a default initializer if none is defined
 			None => FunctionDefinition {
+				name: Some(CLASS_INIT_NAME.into()),
 				signature: FunctionSignature {
 					parameters: vec![],
 					return_type: Box::new(TypeAnnotation {
@@ -783,6 +786,7 @@ impl<'s> Parser<'s> {
 
 			// add a default inflight initializer if none is defined
 			None => FunctionDefinition {
+				name: Some(CLASS_INFLIGHT_INIT_NAME.into()),
 				signature: FunctionSignature {
 					parameters: vec![],
 					return_type: Box::new(TypeAnnotation {
@@ -959,11 +963,12 @@ impl<'s> Parser<'s> {
 	}
 
 	fn build_anonymous_closure(&self, anon_closure_node: &Node, phase: Phase) -> DiagnosticResult<FunctionDefinition> {
-		self.build_function_definition(anon_closure_node, phase, true)
+		self.build_function_definition(None, anon_closure_node, phase, true)
 	}
 
 	fn build_function_definition(
 		&self,
+		name: Option<Symbol>,
 		func_def_node: &Node,
 		phase: Phase,
 		is_static: bool,
@@ -978,6 +983,7 @@ impl<'s> Parser<'s> {
 		};
 
 		Ok(FunctionDefinition {
+			name,
 			body: statements,
 			signature,
 			is_static,
@@ -1837,6 +1843,7 @@ impl<'s> Parser<'s> {
 
 		let inflight_closure = Expr::new(
 			ExprKind::FunctionClosure(FunctionDefinition {
+				name: None,
 				body: FunctionBody::Statements(statements),
 				signature: FunctionSignature {
 					parameters: vec![],

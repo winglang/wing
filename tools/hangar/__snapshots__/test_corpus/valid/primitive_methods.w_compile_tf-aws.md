@@ -7,7 +7,7 @@
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.2"
+      "version": "0.17.0"
     },
     "outputs": {
       "root": {
@@ -44,9 +44,8 @@ class $Root extends $stdlib.std.Resource {
     super(scope, id);
     const dur = (std.Duration.fromSeconds(60));
     const dur2 = (std.Duration.fromSeconds(600));
-    const f =  (d) =>  {
-    }
-    ;
+    const f = ((d) => {
+    });
     const stringy = String.raw({ raw: ["", ":", ""] }, dur.minutes, dur.seconds);
     {console.log(stringy)};
     if ((stringy.includes("60") && (((stringy.split(":")).at(0)) === "60"))) {

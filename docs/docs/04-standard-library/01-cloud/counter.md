@@ -65,4 +65,4 @@ The AWS implementation of `cloud.Counter` uses [Amazon DynamoDB](https://aws.ama
 
 ## API Reference
 
-The full list of APIs for `cloud.Counter` is available in the [API Reference](../api-reference).
+The full list of APIs for `cloud.Counter` is available in the [API Reference](./api-reference).

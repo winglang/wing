@@ -63,4 +63,4 @@ The Azure implementation of `cloud.Function` uses [Azure Function](https://azure
 
 ## API Reference
 
-The full list of APIs for `cloud.Function` is available in the [API Reference](../api-reference).
+The full list of APIs for `cloud.Function` is available in the [API Reference](./api-reference).

@@ -1,5 +1,6 @@
 mod class_fields_init;
 pub(crate) mod jsii_importer;
+pub mod lifts;
 pub mod symbol_env;
 
 use crate::ast::{self, ClassField, FunctionDefinition, TypeAnnotationKind};
@@ -32,6 +33,7 @@ use wingii::type_system::TypeSystem;
 
 use self::class_fields_init::VisitClassInit;
 use self::jsii_importer::JsiiImportSpec;
+use self::lifts::Lifts;
 use self::symbol_env::{LookupResult, SymbolEnvIter, SymbolEnvRef};
 
 pub struct UnsafeRef<T>(*const T);
@@ -201,7 +203,7 @@ pub enum Type {
 pub const CLASS_INIT_NAME: &'static str = "init";
 pub const CLASS_INFLIGHT_INIT_NAME: &'static str = "$inflight_init";
 
-pub const HANDLE_METHOD_NAME: &'static str = "handle";
+pub const CLOSURE_CLASS_HANDLE_METHOD: &'static str = "handle";
 
 #[derive(Derivative)]
 #[derivative(Debug)]
@@ -239,12 +241,27 @@ pub struct Class {
 	pub type_parameters: Option<Vec<TypeRef>>,
 	pub phase: Phase,
 	pub docs: Docs,
+	pub lifts: Option<Lifts>,
 
 	// Preflight classes are CDK Constructs which means they have a scope and id as their first arguments
 	// this is natively supported by wing using the `as` `in` keywords. However theoretically it is possible
 	// to have a construct which does not have these arguments, in which case we can't use the `as` `in` keywords
 	// and instead the user will need to pass the relevant args to the class's init method.
 	pub std_construct_args: bool,
+}
+impl Class {
+	pub(crate) fn set_lifts(&mut self, lifts: Lifts) {
+		self.lifts = Some(lifts);
+	}
+
+	/// Returns the type of the "handle" method of a closure class or `None` if this is not a closure
+	/// class.
+	pub fn get_closure_method(&self) -> Option<TypeRef> {
+		self
+			.methods(true)
+			.find(|(name, type_)| name == CLOSURE_CLASS_HANDLE_METHOD && type_.is_inflight_function())
+			.map(|(_, t)| t)
+	}
 }
 
 #[derive(Derivative)]
@@ -274,7 +291,7 @@ impl Interface {
 
 impl Display for Interface {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-		if let LookupResult::Found(method, _) = self.get_env().lookup_ext(&HANDLE_METHOD_NAME.into(), None) {
+		if let LookupResult::Found(method, _) = self.get_env().lookup_ext(&CLOSURE_CLASS_HANDLE_METHOD.into(), None) {
 			let method = method.as_variable().unwrap();
 			if method.phase == Phase::Inflight {
 				write!(f, "{}", method.type_) // show signature of inflight closure
@@ -437,7 +454,7 @@ impl Subtype for Type {
 				}
 
 				// Next, compare the function to a method on the interface named "handle" if it exists
-				if let Some((method, _)) = r0.get_env().lookup_ext(&HANDLE_METHOD_NAME.into(), None).ok() {
+				if let Some((method, _)) = r0.get_env().lookup_ext(&CLOSURE_CLASS_HANDLE_METHOD.into(), None).ok() {
 					let method = method.as_variable().unwrap();
 					if method.phase != Phase::Inflight {
 						return false;
@@ -509,7 +526,7 @@ impl Subtype for Type {
 
 				// To support flexible inflight closures, we say that any class with an inflight method
 				// named "handle" is a subtype of any single-method interface with a matching "handle"
-				// method type.
+				// method type (aka "closure classes").
 
 				// First, check if there is exactly one inflight method in the interface
 				let mut inflight_methods = iface
@@ -522,12 +539,12 @@ impl Subtype for Type {
 
 				// Next, check that the method's name is "handle"
 				let (handler_method_name, handler_method_type) = handler_method.unwrap();
-				if handler_method_name != HANDLE_METHOD_NAME {
+				if handler_method_name != CLOSURE_CLASS_HANDLE_METHOD {
 					return false;
 				}
 
 				// Then get the type of the resource's "handle" method if it has one
-				let res_handle_type = if let Some(method) = class.get_method(&HANDLE_METHOD_NAME.into()) {
+				let res_handle_type = if let Some(method) = class.get_method(&CLOSURE_CLASS_HANDLE_METHOD.into()) {
 					if method.type_.is_inflight_function() {
 						method.type_
 					} else {
@@ -546,7 +563,7 @@ impl Subtype for Type {
 				// any matching inflight type.
 
 				// Get the type of the resource's "handle" method if it has one
-				let res_handle_type = if let Some(method) = res.get_method(&HANDLE_METHOD_NAME.into()) {
+				let res_handle_type = if let Some(method) = res.get_method(&CLOSURE_CLASS_HANDLE_METHOD.into()) {
 					if method.type_.is_inflight_function() {
 						method.type_
 					} else {
@@ -704,6 +721,16 @@ impl Display for SymbolKind {
 	}
 }
 
+impl Display for Class {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		if let Some(closure) = self.get_closure_method() {
+			std::fmt::Display::fmt(&closure, f)
+		} else {
+			write!(f, "{}", self.name.name)
+		}
+	}
+}
+
 impl Display for Type {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		match self {
@@ -719,7 +746,8 @@ impl Display for Type {
 			Type::Unresolved => write!(f, "unresolved"),
 			Type::Optional(v) => write!(f, "{}?", v),
 			Type::Function(sig) => write!(f, "{}", sig),
-			Type::Class(class) => write!(f, "{}", class.name.name),
+			Type::Class(class) => write!(f, "{}", class),
+
 			Type::Interface(iface) => write!(f, "{}", iface),
 			Type::Struct(s) => write!(f, "{}", s.name.name),
 			Type::Array(v) => write!(f, "Array<{}>", v),
@@ -853,12 +881,14 @@ impl TypeRef {
 		return false;
 	}
 
-	/// Returns whether the type is a preflight class with an inflight method named "handle"
-	pub fn is_handler_preflight_class(&self) -> bool {
+	/// Returns whether type represents a closure (either a function or a closure class).
+	pub fn is_closure(&self) -> bool {
+		if self.as_function_sig().is_some() {
+			return true;
+		}
+
 		if let Some(ref class) = self.as_preflight_class() {
-			return class
-				.methods(true)
-				.any(|(name, type_)| name == HANDLE_METHOD_NAME && type_.is_inflight_function());
+			return class.get_closure_method().is_some();
 		}
 		false
 	}
@@ -1114,6 +1144,17 @@ impl Types {
 	pub fn add_type(&mut self, t: Type) -> TypeRef {
 		self.types.push(Box::new(t));
 		self.get_typeref(self.types.len() - 1)
+	}
+
+	/// Get the optional version of a given type.
+	///
+	/// If the type is already optional, return it as-is.
+	pub fn make_option(&mut self, t: TypeRef) -> TypeRef {
+		if t.is_option() {
+			t
+		} else {
+			self.add_type(Type::Optional(t))
+		}
 	}
 
 	fn get_typeref(&self, idx: usize) -> TypeRef {
@@ -1577,6 +1618,8 @@ impl<'a> TypeChecker<'a> {
 			ExprKind::Call { callee, arg_list } => {
 				// Resolve the function's reference (either a method in the class's env or a function in the current env)
 				let (func_type, callee_phase) = self.type_check_exp(callee, env);
+				let is_option = func_type.is_option();
+				let func_type = func_type.maybe_unwrap_option();
 
 				let arg_list_types = self.type_check_arg_list(arg_list, env);
 
@@ -1595,7 +1638,7 @@ impl<'a> TypeChecker<'a> {
 					func_sig.clone()
 				} else if let Some(class) = func_type.as_preflight_class() {
 					// return the signature of the "handle" method
-					let lookup_res = class.get_method(&HANDLE_METHOD_NAME.into());
+					let lookup_res = class.get_method(&CLOSURE_CLASS_HANDLE_METHOD.into());
 					let handle_type = if let Some(method) = lookup_res {
 						method.type_
 					} else {
@@ -1642,7 +1685,25 @@ impl<'a> TypeChecker<'a> {
 					}
 				}
 
-				(func_sig.return_type, func_phase)
+				if is_option {
+					// When calling a an optional function, the return type is always optional
+					// To allow this to be both safe and unsurprising,
+					// the callee must be a reference with an optional accessor
+					if let ExprKind::Reference(Reference::InstanceMember { optional_accessor, .. }) = &callee.kind {
+						if *optional_accessor {
+							(self.types.make_option(func_sig.return_type), func_phase)
+						} else {
+							// No additional error is needed here, since the type checker will already have errored without optional chaining
+							(self.types.error(), func_phase)
+						}
+					} else {
+						// TODO do we want syntax for this? e.g. `foo?.()`
+						self.spanned_error(callee, "Cannot call an optional function");
+						(self.types.error(), func_phase)
+					}
+				} else {
+					(func_sig.return_type, func_phase)
+				}
 			}
 			ExprKind::ArrayLiteral { type_, items } => {
 				// Infer type based on either the explicit type or the value in one of the items
@@ -2220,7 +2281,6 @@ impl<'a> TypeChecker<'a> {
 			named_args: named_arg_types,
 		}
 	}
-
 	fn type_check_statement(&mut self, stmt: &Stmt, env: &mut SymbolEnv) {
 		CompilationContext::set(CompilationPhase::TypeChecking, &stmt.span);
 
@@ -2431,7 +2491,8 @@ impl<'a> TypeChecker<'a> {
 				let (exp_type, _) = self.type_check_exp(value, env);
 				let (var_type, var_phase) = self.type_check_exp(variable, env);
 
-				// check if the variable can be reassigned
+				// TODO: we need to verify that if this variable is defined in a parent environment (i.e.
+				// being captured) it cannot be reassigned: https://github.com/winglang/wing/issues/3069
 
 				if let ExprKind::Reference(r) = &variable.kind {
 					let (var, _) = self.resolve_reference(&r, env);
@@ -2581,6 +2642,7 @@ impl<'a> TypeChecker<'a> {
 					type_parameters: None, // TODO no way to have generic args in wing yet
 					docs: Docs::default(),
 					std_construct_args: *phase == Phase::Preflight,
+					lifts: None,
 				};
 				let mut class_type = self.types.add_type(Type::Class(class_spec));
 				match env.define(name, SymbolKind::Type(class_type), StatementIdx::Top) {
@@ -3318,6 +3380,7 @@ impl<'a> TypeChecker<'a> {
 			phase: original_type_class.phase,
 			docs: original_type_class.docs.clone(),
 			std_construct_args: original_type_class.std_construct_args,
+			lifts: None,
 		});
 
 		// TODO: here we add a new type regardless whether we already "hydrated" `original_type` with these `type_params`. Cache!
@@ -3646,7 +3709,7 @@ impl<'a> TypeChecker<'a> {
 					return (self.make_error_variable_info(), Phase::Independent);
 				}
 
-				let property_variable = self.resolve_variable_from_instance_type(instance_type, property, env, object);
+				let mut property_variable = self.resolve_variable_from_instance_type(instance_type, property, env, object);
 
 				// if the object is `this`, then use the property's phase instead of the object phase
 				let property_phase = if property_variable.phase == Phase::Independent {
@@ -3670,16 +3733,15 @@ impl<'a> TypeChecker<'a> {
 				}
 
 				if force_reassignable {
-					(
-						VariableInfo {
-							reassignable: true,
-							..property_variable
-						},
-						property_phase,
-					)
-				} else {
-					(property_variable, property_phase)
+					property_variable.reassignable = true;
 				}
+
+				// If `a?.b.c`, make sure the entire reference is optional
+				if *optional_accessor {
+					property_variable.type_ = self.types.make_option(property_variable.type_);
+				}
+
+				(property_variable, property_phase)
 			}
 			Reference::TypeReference(udt) => {
 				let result = self.resolve_user_defined_type(udt, env, self.statement_idx);
@@ -3766,10 +3828,11 @@ impl<'a> TypeChecker<'a> {
 		instance_type: UnsafeRef<Type>,
 		property: &Symbol,
 		env: &SymbolEnv,
-		object: &Expr,
+		// only used for recursion
+		_object: &Expr,
 	) -> VariableInfo {
 		match *instance_type {
-			Type::Optional(t) => self.resolve_variable_from_instance_type(t, property, env, object),
+			Type::Optional(t) => self.resolve_variable_from_instance_type(t, property, env, _object),
 			Type::Class(ref class) => self.get_property_from_class_like(class, property),
 			Type::Interface(ref interface) => self.get_property_from_class_like(interface, property),
 			Type::Anything => VariableInfo {
@@ -3928,10 +3991,11 @@ impl<'a> TypeChecker<'a> {
 		}
 
 		// Safety: we return from the function above so parent_udt cannot be None
-		let parent_udt = resolve_udt_from_expr(parent_expr).unwrap();
+		let parent_udt = parent_expr.as_type_reference().unwrap();
 
 		if &parent_udt.root == name && parent_udt.fields.is_empty() {
 			self.spanned_error(parent_udt, "Class cannot extend itself".to_string());
+			self.types.assign_type_to_expr(parent_expr, self.types.error(), phase);
 			return (None, None);
 		}
 
@@ -3941,11 +4005,12 @@ impl<'a> TypeChecker<'a> {
 			} else {
 				report_diagnostic(Diagnostic {
 					message: format!(
-						"{} class {} cannot extend {} class \"{}\"",
-						phase, name, parent_class.phase, parent_class.name
+						"Class \"{}\" is an {} class and cannot extend {} class \"{}\"",
+						name, phase, parent_class.phase, parent_class.name
 					),
 					span: Some(parent_expr.span.clone()),
 				});
+				self.types.assign_type_to_expr(parent_expr, self.types.error(), phase);
 				(None, None)
 			}
 		} else {
@@ -3953,6 +4018,7 @@ impl<'a> TypeChecker<'a> {
 				message: format!("Expected \"{}\" to be a class", parent_udt),
 				span: Some(parent_expr.span.clone()),
 			});
+			self.types.assign_type_to_expr(parent_expr, self.types.error(), phase);
 			(None, None)
 		}
 	}
@@ -4084,25 +4150,6 @@ where
 		LookupResult::Found(..) => panic!("Expected a lookup error, but found a successful lookup"),
 	};
 	TypeError { message, span }
-}
-
-/// Resolves a user defined type (e.g. `Foo.Bar.Baz`) to a type reference
-pub fn resolve_udt_from_expr(expr: &Expr) -> Result<&UserDefinedType, TypeError> {
-	let ExprKind::Reference(ref r) = expr.kind else {
-		return Err(TypeError {
-			message: "Expected expression to be a reference".to_string(),
-			span: expr.span.clone(),
-		});
-	};
-
-	let Reference::TypeReference(udt) = r else {
-		return Err(TypeError {
-			message: "Expected reference to be a reference to a type".to_string(),
-			span: expr.span.clone(),
-		});
-	};
-
-	Ok(udt)
 }
 
 /// Resolves a user defined type (e.g. `Foo.Bar.Baz`) to a type reference

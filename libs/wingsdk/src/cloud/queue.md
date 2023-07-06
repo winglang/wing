@@ -82,4 +82,4 @@ The AWS implementation of `cloud.Queue` uses [Amazon Simple Queue Service](https
 
 ## API Reference
 
-The full list of APIs for `cloud.Queue` is available in the [API Reference](../api-reference).
+The full list of APIs for `cloud.Queue` is available in the [API Reference](./api-reference).

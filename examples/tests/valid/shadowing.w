@@ -16,7 +16,7 @@ let fn = inflight (): Array<str> => {
     result.push(bar);
   }
 
-  // since we are not attempting to capture "foo" before it ise defined in this scope, this should
+  // since we are not attempting to capture "foo" before it is defined in this scope, this should
   // work.
   let foo = "bang";
   result.push(foo);

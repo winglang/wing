@@ -2,18 +2,16 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ foo }) {
+module.exports = function({ $foo }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      {((cond) => {if (!cond) throw new Error("assertion failed: foo.returnNil(true)? == true")})(((((await foo.returnNil(true))) != null) === true))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: foo.returnNil(false)? == false")})(((((await foo.returnNil(false))) != null) === false))};
+    async handle() {
+      {((cond) => {if (!cond) throw new Error("assertion failed: foo.returnNil(true)? == true")})(((((await $foo.returnNil(true))) != null) === true))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: foo.returnNil(false)? == false")})(((((await $foo.returnNil(false))) != null) === false))};
     }
   }
   return $Closure1;
@@ -23,23 +21,21 @@ module.exports = function({ foo }) {
 
 ## inflight.$Closure2.js
 ```js
-module.exports = function({ foo }) {
+module.exports = function({ $foo }) {
   class $Closure2 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      {((cond) => {if (!cond) throw new Error("assertion failed: foo.getOptionalValue()? == false")})(((((await foo.getOptionalValue())) != null) === false))};
-      (await foo.setOptionalValue("hello"));
-      {((cond) => {if (!cond) throw new Error("assertion failed: foo.getOptionalValue()? == true")})(((((await foo.getOptionalValue())) != null) === true))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: foo.getOptionalValue() != nil")})(((await foo.getOptionalValue()) !== undefined))};
-      (await foo.setOptionalValue(undefined));
-      {((cond) => {if (!cond) throw new Error("assertion failed: foo.getOptionalValue()? == false")})(((((await foo.getOptionalValue())) != null) === false))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: foo.getOptionalValue() == nil")})(((await foo.getOptionalValue()) === undefined))};
+    async handle() {
+      {((cond) => {if (!cond) throw new Error("assertion failed: foo.getOptionalValue()? == false")})(((((await $foo.getOptionalValue())) != null) === false))};
+      (await $foo.setOptionalValue("hello"));
+      {((cond) => {if (!cond) throw new Error("assertion failed: foo.getOptionalValue()? == true")})(((((await $foo.getOptionalValue())) != null) === true))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: foo.getOptionalValue() != nil")})(((await $foo.getOptionalValue()) !== undefined))};
+      (await $foo.setOptionalValue(undefined));
+      {((cond) => {if (!cond) throw new Error("assertion failed: foo.getOptionalValue()? == false")})(((((await $foo.getOptionalValue())) != null) === false))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: foo.getOptionalValue() == nil")})(((await $foo.getOptionalValue()) === undefined))};
     }
   }
   return $Closure2;
@@ -53,20 +49,20 @@ module.exports = function({  }) {
   class Foo {
     constructor({  }) {
     }
-    async $inflight_init()  {
-      this.optionalVar = undefined;
-    }
-    async returnNil(t)  {
+    async returnNil(t) {
       if (t) {
         return "hello";
       }
       return undefined;
     }
-    async setOptionalValue(msg)  {
+    async setOptionalValue(msg) {
       this.optionalVar = msg;
     }
-    async getOptionalValue()  {
+    async getOptionalValue() {
       return this.optionalVar;
+    }
+    async $inflight_init() {
+      this.optionalVar = undefined;
     }
   }
   return Foo;
@@ -81,7 +77,7 @@ module.exports = function({  }) {
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.2"
+      "version": "0.17.0"
     },
     "outputs": {
       "root": {
@@ -95,7 +91,7 @@ module.exports = function({  }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:nil return\",\"${aws_lambda_function.root_testnilreturn_Handler_3225915F.arn}\"],[\"root/Default/Default/test:optional instance variable\",\"${aws_lambda_function.root_testoptionalinstancevariable_Handler_47D78041.arn}\"]]"
+      "value": "[[\"root/Default/Default/test:nil return\",\"${aws_lambda_function.testnilreturn_Handler_C1CE87DB.arn}\"],[\"root/Default/Default/test:optional instance variable\",\"${aws_lambda_function.testoptionalinstancevariable_Handler_CA8A00DB.arn}\"]]"
     }
   },
   "provider": {
@@ -105,75 +101,75 @@ module.exports = function({  }) {
   },
   "resource": {
     "aws_iam_role": {
-      "root_testnilreturn_Handler_IamRole_47507CA4": {
+      "testnilreturn_Handler_IamRole_FC194663": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:nil return/Handler/IamRole",
-            "uniqueId": "root_testnilreturn_Handler_IamRole_47507CA4"
+            "uniqueId": "testnilreturn_Handler_IamRole_FC194663"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       },
-      "root_testoptionalinstancevariable_Handler_IamRole_191EFCE1": {
+      "testoptionalinstancevariable_Handler_IamRole_CF882930": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:optional instance variable/Handler/IamRole",
-            "uniqueId": "root_testoptionalinstancevariable_Handler_IamRole_191EFCE1"
+            "uniqueId": "testoptionalinstancevariable_Handler_IamRole_CF882930"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
-      "root_testnilreturn_Handler_IamRolePolicy_B6986683": {
+      "testnilreturn_Handler_IamRolePolicy_90B0B661": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:nil return/Handler/IamRolePolicy",
-            "uniqueId": "root_testnilreturn_Handler_IamRolePolicy_B6986683"
+            "uniqueId": "testnilreturn_Handler_IamRolePolicy_90B0B661"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
-        "role": "${aws_iam_role.root_testnilreturn_Handler_IamRole_47507CA4.name}"
+        "role": "${aws_iam_role.testnilreturn_Handler_IamRole_FC194663.name}"
       },
-      "root_testoptionalinstancevariable_Handler_IamRolePolicy_588B9479": {
+      "testoptionalinstancevariable_Handler_IamRolePolicy_9EEF9C64": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:optional instance variable/Handler/IamRolePolicy",
-            "uniqueId": "root_testoptionalinstancevariable_Handler_IamRolePolicy_588B9479"
+            "uniqueId": "testoptionalinstancevariable_Handler_IamRolePolicy_9EEF9C64"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
-        "role": "${aws_iam_role.root_testoptionalinstancevariable_Handler_IamRole_191EFCE1.name}"
+        "role": "${aws_iam_role.testoptionalinstancevariable_Handler_IamRole_CF882930.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
-      "root_testnilreturn_Handler_IamRolePolicyAttachment_E13D851A": {
+      "testnilreturn_Handler_IamRolePolicyAttachment_53CE8059": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:nil return/Handler/IamRolePolicyAttachment",
-            "uniqueId": "root_testnilreturn_Handler_IamRolePolicyAttachment_E13D851A"
+            "uniqueId": "testnilreturn_Handler_IamRolePolicyAttachment_53CE8059"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.root_testnilreturn_Handler_IamRole_47507CA4.name}"
+        "role": "${aws_iam_role.testnilreturn_Handler_IamRole_FC194663.name}"
       },
-      "root_testoptionalinstancevariable_Handler_IamRolePolicyAttachment_EEBB1730": {
+      "testoptionalinstancevariable_Handler_IamRolePolicyAttachment_9A7EB140": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:optional instance variable/Handler/IamRolePolicyAttachment",
-            "uniqueId": "root_testoptionalinstancevariable_Handler_IamRolePolicyAttachment_EEBB1730"
+            "uniqueId": "testoptionalinstancevariable_Handler_IamRolePolicyAttachment_9A7EB140"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.root_testoptionalinstancevariable_Handler_IamRole_191EFCE1.name}"
+        "role": "${aws_iam_role.testoptionalinstancevariable_Handler_IamRole_CF882930.name}"
       }
     },
     "aws_lambda_function": {
-      "root_testnilreturn_Handler_3225915F": {
+      "testnilreturn_Handler_C1CE87DB": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:nil return/Handler/Default",
-            "uniqueId": "root_testnilreturn_Handler_3225915F"
+            "uniqueId": "testnilreturn_Handler_C1CE87DB"
           }
         },
         "environment": {
@@ -185,21 +181,21 @@ module.exports = function({  }) {
         "function_name": "Handler-c8668556",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.root_testnilreturn_Handler_IamRole_47507CA4.arn}",
+        "role": "${aws_iam_role.testnilreturn_Handler_IamRole_FC194663.arn}",
         "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
-        "s3_key": "${aws_s3_object.root_testnilreturn_Handler_S3Object_DEC9B907.key}",
+        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
+        "s3_key": "${aws_s3_object.testnilreturn_Handler_S3Object_74809085.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
           "subnet_ids": []
         }
       },
-      "root_testoptionalinstancevariable_Handler_47D78041": {
+      "testoptionalinstancevariable_Handler_CA8A00DB": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:optional instance variable/Handler/Default",
-            "uniqueId": "root_testoptionalinstancevariable_Handler_47D78041"
+            "uniqueId": "testoptionalinstancevariable_Handler_CA8A00DB"
           }
         },
         "environment": {
@@ -211,10 +207,10 @@ module.exports = function({  }) {
         "function_name": "Handler-c8a1de9c",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.root_testoptionalinstancevariable_Handler_IamRole_191EFCE1.arn}",
+        "role": "${aws_iam_role.testoptionalinstancevariable_Handler_IamRole_CF882930.arn}",
         "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
-        "s3_key": "${aws_s3_object.root_testoptionalinstancevariable_Handler_S3Object_938977CF.key}",
+        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
+        "s3_key": "${aws_s3_object.testoptionalinstancevariable_Handler_S3Object_6CA58018.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -223,36 +219,36 @@ module.exports = function({  }) {
       }
     },
     "aws_s3_bucket": {
-      "root_Code_02F3C603": {
+      "Code": {
         "//": {
           "metadata": {
             "path": "root/Default/Code",
-            "uniqueId": "root_Code_02F3C603"
+            "uniqueId": "Code"
           }
         },
         "bucket_prefix": "code-c84a50b1-"
       }
     },
     "aws_s3_object": {
-      "root_testnilreturn_Handler_S3Object_DEC9B907": {
+      "testnilreturn_Handler_S3Object_74809085": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:nil return/Handler/S3Object",
-            "uniqueId": "root_testnilreturn_Handler_S3Object_DEC9B907"
+            "uniqueId": "testnilreturn_Handler_S3Object_74809085"
           }
         },
-        "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
+        "bucket": "${aws_s3_bucket.Code.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       },
-      "root_testoptionalinstancevariable_Handler_S3Object_938977CF": {
+      "testoptionalinstancevariable_Handler_S3Object_6CA58018": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:optional instance variable/Handler/S3Object",
-            "uniqueId": "root_testoptionalinstancevariable_Handler_S3Object_938977CF"
+            "uniqueId": "testoptionalinstancevariable_Handler_S3Object_6CA58018"
           }
         },
-        "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
+        "bucket": "${aws_s3_bucket.Code.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       }
@@ -275,12 +271,11 @@ class $Root extends $stdlib.std.Resource {
     class Foo extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("returnNil", "setOptionalValue", "getOptionalValue", "optionalVar");
+        this._addInflightOps("returnNil", "setOptionalValue", "getOptionalValue", "$inflight_init", "optionalVar");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.Foo.js";
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.Foo.js")({
           })
         `);
       }
@@ -297,12 +292,13 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
+          Foo._registerBindObject(this, host, ["optionalVar"]);
         }
         if (ops.includes("getOptionalValue")) {
-        }
-        if (ops.includes("returnNil")) {
+          Foo._registerBindObject(this, host, ["optionalVar"]);
         }
         if (ops.includes("setOptionalValue")) {
+          Foo._registerBindObject(this, host, ["optionalVar"]);
         }
         super._registerBind(host, ops);
       }
@@ -311,14 +307,12 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const foo_client = context._lift(foo);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            foo: ${foo_client},
+          require("./inflight.$Closure1.js")({
+            $foo: ${context._lift(foo)},
           })
         `);
       }
@@ -334,9 +328,6 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure1._registerBindObject(foo, host, []);
-        }
         if (ops.includes("handle")) {
           $Closure1._registerBindObject(foo, host, ["returnNil"]);
         }
@@ -347,14 +338,12 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure2.js";
-        const foo_client = context._lift(foo);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            foo: ${foo_client},
+          require("./inflight.$Closure2.js")({
+            $foo: ${context._lift(foo)},
           })
         `);
       }
@@ -370,9 +359,6 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure2._registerBindObject(foo, host, []);
-        }
         if (ops.includes("handle")) {
           $Closure2._registerBindObject(foo, host, ["getOptionalValue", "setOptionalValue"]);
         }

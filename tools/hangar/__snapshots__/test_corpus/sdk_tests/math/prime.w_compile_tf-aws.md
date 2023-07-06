@@ -2,23 +2,21 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ math_Util }) {
+module.exports = function({ $math_Util }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.isPrime(1) == false")})(((await math_Util.isPrime(1)) === false))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.isPrime(2) == true")})(((await math_Util.isPrime(2)) === true))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.isPrime(3) == true")})(((await math_Util.isPrime(3)) === true))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.isPrime(4) == false")})(((await math_Util.isPrime(4)) === false))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.isPrime(10) == false")})(((await math_Util.isPrime(10)) === false))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.isPrime(11) == true")})(((await math_Util.isPrime(11)) === true))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.isPrime(12) == false")})(((await math_Util.isPrime(12)) === false))};
+    async handle() {
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.isPrime(1) == false")})(((await $math_Util.isPrime(1)) === false))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.isPrime(2) == true")})(((await $math_Util.isPrime(2)) === true))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.isPrime(3) == true")})(((await $math_Util.isPrime(3)) === true))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.isPrime(4) == false")})(((await $math_Util.isPrime(4)) === false))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.isPrime(10) == false")})(((await $math_Util.isPrime(10)) === false))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.isPrime(11) == true")})(((await $math_Util.isPrime(11)) === true))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.isPrime(12) == false")})(((await $math_Util.isPrime(12)) === false))};
     }
   }
   return $Closure1;
@@ -33,7 +31,7 @@ module.exports = function({ math_Util }) {
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.2"
+      "version": "0.17.0"
     },
     "outputs": {
       "root": {
@@ -47,7 +45,7 @@ module.exports = function({ math_Util }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:inflight prime numbers\",\"${aws_lambda_function.root_testinflightprimenumbers_Handler_D84E45D0.arn}\"]]"
+      "value": "[[\"root/Default/Default/test:inflight prime numbers\",\"${aws_lambda_function.testinflightprimenumbers_Handler_E7E982CC.arn}\"]]"
     }
   },
   "provider": {
@@ -57,46 +55,46 @@ module.exports = function({ math_Util }) {
   },
   "resource": {
     "aws_iam_role": {
-      "root_testinflightprimenumbers_Handler_IamRole_239615E9": {
+      "testinflightprimenumbers_Handler_IamRole_8F4FF334": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:inflight prime numbers/Handler/IamRole",
-            "uniqueId": "root_testinflightprimenumbers_Handler_IamRole_239615E9"
+            "uniqueId": "testinflightprimenumbers_Handler_IamRole_8F4FF334"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
-      "root_testinflightprimenumbers_Handler_IamRolePolicy_B1CFEADD": {
+      "testinflightprimenumbers_Handler_IamRolePolicy_75A11057": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:inflight prime numbers/Handler/IamRolePolicy",
-            "uniqueId": "root_testinflightprimenumbers_Handler_IamRolePolicy_B1CFEADD"
+            "uniqueId": "testinflightprimenumbers_Handler_IamRolePolicy_75A11057"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
-        "role": "${aws_iam_role.root_testinflightprimenumbers_Handler_IamRole_239615E9.name}"
+        "role": "${aws_iam_role.testinflightprimenumbers_Handler_IamRole_8F4FF334.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
-      "root_testinflightprimenumbers_Handler_IamRolePolicyAttachment_41DBC244": {
+      "testinflightprimenumbers_Handler_IamRolePolicyAttachment_80C5EF7B": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:inflight prime numbers/Handler/IamRolePolicyAttachment",
-            "uniqueId": "root_testinflightprimenumbers_Handler_IamRolePolicyAttachment_41DBC244"
+            "uniqueId": "testinflightprimenumbers_Handler_IamRolePolicyAttachment_80C5EF7B"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.root_testinflightprimenumbers_Handler_IamRole_239615E9.name}"
+        "role": "${aws_iam_role.testinflightprimenumbers_Handler_IamRole_8F4FF334.name}"
       }
     },
     "aws_lambda_function": {
-      "root_testinflightprimenumbers_Handler_D84E45D0": {
+      "testinflightprimenumbers_Handler_E7E982CC": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:inflight prime numbers/Handler/Default",
-            "uniqueId": "root_testinflightprimenumbers_Handler_D84E45D0"
+            "uniqueId": "testinflightprimenumbers_Handler_E7E982CC"
           }
         },
         "environment": {
@@ -108,10 +106,10 @@ module.exports = function({ math_Util }) {
         "function_name": "Handler-c80a9be6",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.root_testinflightprimenumbers_Handler_IamRole_239615E9.arn}",
+        "role": "${aws_iam_role.testinflightprimenumbers_Handler_IamRole_8F4FF334.arn}",
         "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
-        "s3_key": "${aws_s3_object.root_testinflightprimenumbers_Handler_S3Object_CDE54AB3.key}",
+        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
+        "s3_key": "${aws_s3_object.testinflightprimenumbers_Handler_S3Object_AA8A6648.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -120,25 +118,25 @@ module.exports = function({ math_Util }) {
       }
     },
     "aws_s3_bucket": {
-      "root_Code_02F3C603": {
+      "Code": {
         "//": {
           "metadata": {
             "path": "root/Default/Code",
-            "uniqueId": "root_Code_02F3C603"
+            "uniqueId": "Code"
           }
         },
         "bucket_prefix": "code-c84a50b1-"
       }
     },
     "aws_s3_object": {
-      "root_testinflightprimenumbers_Handler_S3Object_CDE54AB3": {
+      "testinflightprimenumbers_Handler_S3Object_AA8A6648": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:inflight prime numbers/Handler/S3Object",
-            "uniqueId": "root_testinflightprimenumbers_Handler_S3Object_CDE54AB3"
+            "uniqueId": "testinflightprimenumbers_Handler_S3Object_AA8A6648"
           }
         },
-        "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
+        "bucket": "${aws_s3_bucket.Code.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       }
@@ -162,14 +160,12 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const math_UtilClient = math.Util._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            math_Util: ${math_UtilClient.text},
+          require("./inflight.$Closure1.js")({
+            $math_Util: ${context._lift(math.Util)},
           })
         `);
       }
@@ -183,13 +179,6 @@ class $Root extends $stdlib.std.Resource {
             return client;
           })())
         `);
-      }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-        }
-        if (ops.includes("handle")) {
-        }
-        super._registerBind(host, ops);
       }
     }
     {((cond) => {if (!cond) throw new Error("assertion failed: math.isPrime(1) == false")})(((math.Util.isPrime(1)) === false))};
