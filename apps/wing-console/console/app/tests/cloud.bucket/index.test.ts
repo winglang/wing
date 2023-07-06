@@ -3,16 +3,31 @@ import { describe } from "../describe.js";
 import { getResourceNode } from "../helpers.js";
 
 describe(`${__dirname}/index.w`, () => {
-  test("publishes message", async ({ page }) => {
-    await getResourceNode(page, "root/Default/cloud.Topic").click();
+  test("open file preview", async ({ page }) => {
+    await getResourceNode(page, "root/Default/cloud.Bucket").click();
 
-    await page.getByTestId("cloud.topic:message").fill("Hello world!");
-
-    await page.getByTestId("cloud.topic:send-message").click();
+    await page.getByTestId("cloud.bucket:files-entry-test.txt").click();
 
     await page.waitForLoadState("networkidle");
 
-    const logs = await page.getByTestId("logs").allTextContents();
-    expect(logs.includes("Message received: Hello world!"));
+    const preview = await page
+      .getByTestId("cloud.bucket:file-preview")
+      .allTextContents();
+    expect(preview.includes("Hello World!")).toBe(true);
+  });
+
+  test("delete file", async ({ page }) => {
+    await getResourceNode(page, "root/Default/cloud.Bucket").click();
+
+    const emptyState = page.getByTestId("cloud.bucket:empty-state");
+
+    expect(await emptyState.isVisible()).toBe(false);
+
+    await page.getByTestId("cloud.bucket:files-entry-test.txt").click();
+    await page.getByTestId("cloud.bucket:delete-file").click();
+
+    await page.waitForLoadState("networkidle");
+
+    expect(await emptyState.isVisible()).toBe(true);
   });
 });

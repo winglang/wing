@@ -67,7 +67,7 @@ export const Select = ({
             <Listbox.Button
               as="button"
               className={classNames("relative", btnClassName)}
-              data-testid={`${dataTestid}-button`}
+              data-testid={`${dataTestid}-toggle`}
             >
               {placeholder && !value && (
                 <div className={classNames("truncate", theme.text2)}>
@@ -132,7 +132,7 @@ export const Select = ({
                         )
                       }
                       value={item.value}
-                      data-testid={`${dataTestid}-${item.value}`}
+                      data-testid={`${dataTestid}-entry-${item.value}`}
                     >
                       {({ selected }) => (
                         <>

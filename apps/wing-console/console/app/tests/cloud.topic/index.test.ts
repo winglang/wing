@@ -13,6 +13,6 @@ describe(`${__dirname}/index.w`, () => {
     await page.waitForLoadState("networkidle");
 
     const logs = await page.getByTestId("logs").allTextContents();
-    expect(logs.includes("Message received: Hello world!"));
+    expect(logs.includes("Message received: Hello world!")).toBe(true);
   });
 });

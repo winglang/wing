@@ -70,11 +70,13 @@ export const BucketInteraction = ({
             label="Download"
             disabled={selectedEntries.length === 0}
             onClick={onDownloadSelectedFilesClick}
+            dataTestid="cloud.bucket:download"
           />
           <Button
             label="Delete"
             disabled={selectedEntries.length === 0}
             onClick={onDeleteSelectedFilesClick}
+            dataTestid="cloud.bucket:delete-file"
           />
         </div>
 
@@ -92,6 +94,7 @@ export const BucketInteraction = ({
             onClick={() => {
               fileInputRef.current?.click();
             }}
+            dataTestid="cloud.bucket:upload"
           />
         </div>
       </div>
@@ -105,6 +108,7 @@ export const BucketInteraction = ({
             "px-2.5 py-1.5",
             "outline-none rounded text-center inline-block w-full text-xs",
           )}
+          data-testId="cloud.bucket:empty-state"
         >
           No files
         </div>
@@ -122,6 +126,7 @@ export const BucketInteraction = ({
             }
           }}
           className="min-h-[6rem] h-48 overflow-y-auto resize-y"
+          dataTestid="cloud.bucket:files"
         />
       )}
 
@@ -151,6 +156,7 @@ export const BucketInteraction = ({
                 previewType === "text" &&
                   "max-h-[30rem] resize-y overflow-y-auto",
               )}
+              dataTestid="cloud.bucket:file-preview"
             />
           </ResponseInput>
         </div>
