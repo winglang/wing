@@ -14,7 +14,7 @@ module.exports = function({ payloadWithoutOptions, payloadWithBucket }) {
     async handle()  {
       {((cond) => {if (!cond) throw new Error("assertion failed: payloadWithoutOptions.b? == false")})((((payloadWithoutOptions.b) != null) === false))};
       if (((payloadWithBucket.c) != null)) {
-        (await payloadWithBucket.c.put("x.txt","something"));
+        (await payloadWithBucket.c?.put?.("x.txt","something"));
       }
     }
   }
@@ -92,7 +92,7 @@ module.exports = function({  }) {
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.2"
+      "version": "0.17.0"
     },
     "outputs": {
       "root": {
@@ -106,7 +106,7 @@ module.exports = function({  }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:t\",\"${aws_lambda_function.root_testt_Handler_A23A3A53.arn}\"]]"
+      "value": "[[\"root/Default/Default/test:t\",\"${aws_lambda_function.testt_Handler_FF112F5E.arn}\"]]"
     }
   },
   "provider": {
@@ -116,51 +116,51 @@ module.exports = function({  }) {
   },
   "resource": {
     "aws_iam_role": {
-      "root_testt_Handler_IamRole_D6F8E063": {
+      "testt_Handler_IamRole_BF49E95A": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:t/Handler/IamRole",
-            "uniqueId": "root_testt_Handler_IamRole_D6F8E063"
+            "uniqueId": "testt_Handler_IamRole_BF49E95A"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
-      "root_testt_Handler_IamRolePolicy_35CD1E8D": {
+      "testt_Handler_IamRolePolicy_F429CB90": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:t/Handler/IamRolePolicy",
-            "uniqueId": "root_testt_Handler_IamRolePolicy_35CD1E8D"
+            "uniqueId": "testt_Handler_IamRolePolicy_F429CB90"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.root_orangebucket_F14D9995.arn}\",\"${aws_s3_bucket.root_orangebucket_F14D9995.arn}/*\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.root_testt_Handler_IamRole_D6F8E063.name}"
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.orangebucket.arn}\",\"${aws_s3_bucket.orangebucket.arn}/*\"],\"Effect\":\"Allow\"}]}",
+        "role": "${aws_iam_role.testt_Handler_IamRole_BF49E95A.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
-      "root_testt_Handler_IamRolePolicyAttachment_83B6CC34": {
+      "testt_Handler_IamRolePolicyAttachment_16BB0DB0": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:t/Handler/IamRolePolicyAttachment",
-            "uniqueId": "root_testt_Handler_IamRolePolicyAttachment_83B6CC34"
+            "uniqueId": "testt_Handler_IamRolePolicyAttachment_16BB0DB0"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.root_testt_Handler_IamRole_D6F8E063.name}"
+        "role": "${aws_iam_role.testt_Handler_IamRole_BF49E95A.name}"
       }
     },
     "aws_lambda_function": {
-      "root_testt_Handler_A23A3A53": {
+      "testt_Handler_FF112F5E": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:t/Handler/Default",
-            "uniqueId": "root_testt_Handler_A23A3A53"
+            "uniqueId": "testt_Handler_FF112F5E"
           }
         },
         "environment": {
           "variables": {
-            "BUCKET_NAME_c1491ba5": "${aws_s3_bucket.root_orangebucket_F14D9995.bucket}",
+            "BUCKET_NAME_c1491ba5": "${aws_s3_bucket.orangebucket.bucket}",
             "WING_FUNCTION_NAME": "Handler-c83c24f9",
             "WING_TARGET": "tf-aws"
           }
@@ -168,10 +168,10 @@ module.exports = function({  }) {
         "function_name": "Handler-c83c24f9",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.root_testt_Handler_IamRole_D6F8E063.arn}",
+        "role": "${aws_iam_role.testt_Handler_IamRole_BF49E95A.arn}",
         "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
-        "s3_key": "${aws_s3_object.root_testt_Handler_S3Object_D779BA1A.key}",
+        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
+        "s3_key": "${aws_s3_object.testt_Handler_S3Object_572CA425.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -180,20 +180,20 @@ module.exports = function({  }) {
       }
     },
     "aws_s3_bucket": {
-      "root_Code_02F3C603": {
+      "Code": {
         "//": {
           "metadata": {
             "path": "root/Default/Code",
-            "uniqueId": "root_Code_02F3C603"
+            "uniqueId": "Code"
           }
         },
         "bucket_prefix": "code-c84a50b1-"
       },
-      "root_orangebucket_F14D9995": {
+      "orangebucket": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/orange bucket/Default",
-            "uniqueId": "root_orangebucket_F14D9995"
+            "uniqueId": "orangebucket"
           }
         },
         "bucket_prefix": "orange-bucket-c8ecc927-",
@@ -201,29 +201,29 @@ module.exports = function({  }) {
       }
     },
     "aws_s3_bucket_public_access_block": {
-      "root_orangebucket_PublicAccessBlock_7E0AC056": {
+      "orangebucket_PublicAccessBlock_E0BEAC90": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/orange bucket/PublicAccessBlock",
-            "uniqueId": "root_orangebucket_PublicAccessBlock_7E0AC056"
+            "uniqueId": "orangebucket_PublicAccessBlock_E0BEAC90"
           }
         },
         "block_public_acls": true,
         "block_public_policy": true,
-        "bucket": "${aws_s3_bucket.root_orangebucket_F14D9995.bucket}",
+        "bucket": "${aws_s3_bucket.orangebucket.bucket}",
         "ignore_public_acls": true,
         "restrict_public_buckets": true
       }
     },
     "aws_s3_bucket_server_side_encryption_configuration": {
-      "root_orangebucket_Encryption_34CE66C9": {
+      "orangebucket_Encryption_F338E6D4": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/orange bucket/Encryption",
-            "uniqueId": "root_orangebucket_Encryption_34CE66C9"
+            "uniqueId": "orangebucket_Encryption_F338E6D4"
           }
         },
-        "bucket": "${aws_s3_bucket.root_orangebucket_F14D9995.bucket}",
+        "bucket": "${aws_s3_bucket.orangebucket.bucket}",
         "rule": [
           {
             "apply_server_side_encryption_by_default": {
@@ -234,14 +234,14 @@ module.exports = function({  }) {
       }
     },
     "aws_s3_object": {
-      "root_testt_Handler_S3Object_D779BA1A": {
+      "testt_Handler_S3Object_572CA425": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:t/Handler/S3Object",
-            "uniqueId": "root_testt_Handler_S3Object_D779BA1A"
+            "uniqueId": "testt_Handler_S3Object_572CA425"
           }
         },
-        "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
+        "bucket": "${aws_s3_bucket.Code.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       }
@@ -560,12 +560,12 @@ class $Root extends $stdlib.std.Resource {
     {((cond) => {if (!cond) throw new Error("assertion failed: fun(\"hello\") == \"hello\"")})(((fun("hello")) === "hello"))};
     {((cond) => {if (!cond) throw new Error("assertion failed: fun(nil) == \"default\"")})(((fun(undefined)) === "default"))};
     const tree = new Node(this,"eight",8,new Node(this,"three",3,new Node(this,"one",1,undefined,undefined),new Node(this,"six",6,undefined,undefined)),new Node(this,"ten",10,undefined,new Node(this,"fourteen",14,new Node(this,"thirteen",13,undefined,undefined),undefined)));
-    const thirteen = tree.right.right.left.value;
-    const notThere = tree.right.right.right;
+    const thirteen = tree.right?.right?.left?.value;
+    const notThere = tree.right?.right?.right;
     {((cond) => {if (!cond) throw new Error("assertion failed: thirteen == 13")})((thirteen === 13))};
     {((cond) => {if (!cond) throw new Error("assertion failed: notThere == nil")})((notThere === undefined))};
     {
-      const $IF_LET_VALUE = tree.left.left;
+      const $IF_LET_VALUE = tree.left?.left;
       if ($IF_LET_VALUE != undefined) {
         const o = $IF_LET_VALUE;
         {((cond) => {if (!cond) throw new Error("assertion failed: o.value == 1")})((o.value === 1))};
