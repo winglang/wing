@@ -2,29 +2,27 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ math_Util }) {
+module.exports = function({ $math_Util }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
-    async handle()  {
+    async handle() {
       try {
-        {console.log(String.raw({ raw: ["", ""] }, (await math_Util.asec(0.5))))};
+        {console.log(String.raw({ raw: ["", ""] }, (await $math_Util.asec(0.5))))};
       }
       catch ($error_e) {
         const e = $error_e.message;
         {((cond) => {if (!cond) throw new Error("assertion failed: e == \"Input value must be equal or greater than |1|.\"")})((e === "Input value must be equal or greater than |1|."))};
       }
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.asec(2) == 1.0471975511965979")})(((await math_Util.asec(2)) === 1.0471975511965979))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.asec(1) == 0")})(((await math_Util.asec(1)) === 0))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.asec(math.PI) == 1.2468502198629159")})(((await math_Util.asec(math_Util.PI)) === 1.2468502198629159))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.asec(-math.PI) == 1.8947424337268775")})(((await math_Util.asec((-math_Util.PI))) === 1.8947424337268775))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.asec(-1) == math.PI")})(((await math_Util.asec((-1))) === math_Util.PI))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.asec(-2) == 2.0943951023931957")})(((await math_Util.asec((-2))) === 2.0943951023931957))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.asec(2) == 1.0471975511965979")})(((await $math_Util.asec(2)) === 1.0471975511965979))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.asec(1) == 0")})(((await $math_Util.asec(1)) === 0))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.asec(math.PI) == 1.2468502198629159")})(((await $math_Util.asec($math_Util.PI)) === 1.2468502198629159))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.asec(-math.PI) == 1.8947424337268775")})(((await $math_Util.asec((-$math_Util.PI))) === 1.8947424337268775))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.asec(-1) == math.PI")})(((await $math_Util.asec((-1))) === $math_Util.PI))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.asec(-2) == 2.0943951023931957")})(((await $math_Util.asec((-2))) === 2.0943951023931957))};
     }
   }
   return $Closure1;
@@ -168,14 +166,12 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const math_UtilClient = math.Util._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            math_Util: ${math_UtilClient.text},
+          require("./inflight.$Closure1.js")({
+            $math_Util: ${context._lift(math.Util)},
           })
         `);
       }
@@ -189,13 +185,6 @@ class $Root extends $stdlib.std.Resource {
             return client;
           })())
         `);
-      }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-        }
-        if (ops.includes("handle")) {
-        }
-        super._registerBind(host, ops);
       }
     }
     try {

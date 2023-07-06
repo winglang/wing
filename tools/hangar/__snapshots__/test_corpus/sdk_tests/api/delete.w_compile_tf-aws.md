@@ -2,17 +2,15 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ api_DELETE }) {
+module.exports = function({ $api_DELETE }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
-    async handle(req)  {
-      {((cond) => {if (!cond) throw new Error("assertion failed: req.method == api_DELETE")})((req.method === api_DELETE))};
+    async handle(req) {
+      {((cond) => {if (!cond) throw new Error("assertion failed: req.method == api_DELETE")})((req.method === $api_DELETE))};
       {((cond) => {if (!cond) throw new Error("assertion failed: req.query?.get(\"all\") == \"true\"")})(((req.query)["all"] === "true"))};
       {((cond) => {if (!cond) throw new Error("assertion failed: req.query?.get(\"page\") == \"6\"")})(((req.query)["page"] === "6"))};
       {((cond) => {if (!cond) throw new Error("assertion failed: req.path == \"/path\"")})((req.path === "/path"))};
@@ -29,19 +27,17 @@ module.exports = function({ api_DELETE }) {
 
 ## inflight.$Closure2.js
 ```js
-module.exports = function({ api, http_DELETE, http_Util }) {
+module.exports = function({ $api_url, $http_DELETE, $http_Util }) {
   class $Closure2 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      const url = String.raw({ raw: ["", "/path?all=true&page=6"] }, api.url);
-      const response = (await http_Util.delete(url));
-      const fetchResponse = (await http_Util.fetch(url,Object.freeze({"method":http_DELETE})));
+    async handle() {
+      const url = String.raw({ raw: ["", "/path?all=true&page=6"] }, $api_url);
+      const response = (await $http_Util.delete(url));
+      const fetchResponse = (await $http_Util.fetch(url,Object.freeze({"method":$http_DELETE})));
       {((cond) => {if (!cond) throw new Error("assertion failed: response.body == \"6\"")})((response.body === "6"))};
       {((cond) => {if (!cond) throw new Error("assertion failed: response.status == 200")})((response.status === 200))};
       {((cond) => {if (!cond) throw new Error("assertion failed: response.url == url")})((response.url === url))};
@@ -239,7 +235,6 @@ module.exports = function({ api, http_DELETE, http_Util }) {
         },
         "environment": {
           "variables": {
-            "CLOUD_API_C82DF3A5": "${aws_api_gateway_stage.cloudApi_api_stage_BBB283E4.invoke_url}",
             "WING_FUNCTION_NAME": "Handler-c897cd38",
             "WING_TARGET": "tf-aws",
             "WING_TOKEN_TFTOKEN_TOKEN_21": "${jsonencode(aws_api_gateway_stage.cloudApi_api_stage_BBB283E4.invoke_url)}"
@@ -329,14 +324,12 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const api_DELETE_client = context._lift(api_DELETE);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            api_DELETE: ${api_DELETE_client},
+          require("./inflight.$Closure1.js")({
+            $api_DELETE: ${context._lift(api_DELETE)},
           })
         `);
       }
@@ -352,9 +345,6 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure1._registerBindObject(api_DELETE, host, []);
-        }
         if (ops.includes("handle")) {
           $Closure1._registerBindObject(api_DELETE, host, []);
         }
@@ -365,18 +355,14 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure2.js";
-        const api_client = context._lift(api);
-        const http_DELETE_client = context._lift(http_DELETE);
-        const http_UtilClient = http.Util._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            api: ${api_client},
-            http_DELETE: ${http_DELETE_client},
-            http_Util: ${http_UtilClient.text},
+          require("./inflight.$Closure2.js")({
+            $api_url: ${context._lift(api.url)},
+            $http_DELETE: ${context._lift(http_DELETE)},
+            $http_Util: ${context._lift(http.Util)},
           })
         `);
       }
@@ -392,10 +378,6 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure2._registerBindObject(api, host, []);
-          $Closure2._registerBindObject(http_DELETE, host, []);
-        }
         if (ops.includes("handle")) {
           $Closure2._registerBindObject(api.url, host, []);
           $Closure2._registerBindObject(http_DELETE, host, []);

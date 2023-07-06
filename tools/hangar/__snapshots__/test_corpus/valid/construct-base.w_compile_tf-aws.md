@@ -6,8 +6,6 @@ module.exports = function({  }) {
   class WingResource {
     constructor({  }) {
     }
-    async $inflight_init()  {
-    }
   }
   return WingResource;
 }
@@ -75,11 +73,11 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         {console.log(String.raw({ raw: ["my id is ", ""] }, this.node.id))};
+        this._addInflightOps("$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.WingResource.js";
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.WingResource.js")({
           })
         `);
       }
@@ -94,20 +92,13 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-        }
-        super._registerBind(host, ops);
-      }
     }
-    const getPath =  (c) =>  {
+    const getPath = ((c) => {
       return c.node.path;
-    }
-    ;
-    const getDisplayName =  (r) =>  {
+    });
+    const getDisplayName = ((r) => {
       return r.display.title;
-    }
-    ;
+    });
     const q = this.node.root.new("@cdktf/provider-aws.sqsQueue.SqsQueue",aws.sqsQueue.SqsQueue,this,"aws.sqsQueue.SqsQueue");
     const wr = new WingResource(this,"WingResource");
     const another_resource = wr;

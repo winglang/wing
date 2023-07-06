@@ -8,7 +8,7 @@ use crate::ast::{Expr, ExprKind, Symbol};
 use crate::docs::Documented;
 use crate::lsp::sync::FILES;
 
-use crate::type_check::{resolve_udt_from_expr, resolve_user_defined_type, CLASS_INIT_NAME};
+use crate::type_check::{resolve_user_defined_type, CLASS_INIT_NAME};
 use crate::visit::{visit_expr, Visit};
 use crate::wasm_util::{ptr_to_string, string_to_combined_ptr, WASM_RETURN_ERROR};
 
@@ -43,7 +43,7 @@ pub fn on_signature_help(params: lsp_types::SignatureHelpParams) -> Option<Signa
 			&crate::ast::ArgList,
 		) = match &expr.kind {
 			ExprKind::New { class, arg_list, .. } => {
-				let Some(udt) = resolve_udt_from_expr(class).ok() else {
+				let Some(udt) = class.as_type_reference() else {
 					return None;
 				};
 

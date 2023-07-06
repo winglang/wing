@@ -4,10 +4,7 @@
 ```js
 module.exports = function({  }) {
   class Foo {
-    constructor({ SumStr }) {
-      this.SumStr = SumStr;
-    }
-    async $inflight_init()  {
+    constructor({  }) {
     }
   }
   return Foo;
@@ -61,32 +58,24 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.SumStr = "wow!";
+        this._addInflightOps("$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.Foo.js";
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.Foo.js")({
           })
         `);
       }
       _toInflight() {
-        const SumStr_client = this._lift(this.SumStr);
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
             const FooClient = ${Foo._toInflightType(this).text};
             const client = new FooClient({
-              SumStr: ${SumStr_client},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
         `);
-      }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          Foo._registerBindObject(this.SumStr, host, []);
-        }
-        super._registerBind(host, ops);
       }
     }
     const jsonNumber = 123;
@@ -101,10 +90,9 @@ class $Root extends $stdlib.std.Resource {
     const jj = someNumber;
     const jj1 = Object.freeze({"foo":someNumber});
     const jj2 = [someNumber, Object.freeze({"bar":someNumber})];
-    const getStr =  () =>  {
+    const getStr = (() => {
       return "hello";
-    }
-    ;
+    });
     const jj3 = (getStr());
     {((cond) => {if (!cond) throw new Error("assertion failed: jj3 == Json \"hello\"")})((jj3 === "hello"))};
     const f = new Foo(this,"Foo");
