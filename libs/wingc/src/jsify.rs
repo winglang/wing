@@ -1,36 +1,25 @@
 pub mod codemaker;
-
+mod tests;
 use aho_corasick::AhoCorasick;
 use const_format::formatcp;
-use indexmap::{indexmap, indexset, IndexMap, IndexSet};
+use indexmap::IndexSet;
 use itertools::Itertools;
 
-use std::{
-	cmp::Ordering,
-	collections::{BTreeMap, BTreeSet},
-	fmt::Display,
-	path::Path,
-	slice::Iter,
-	vec,
-};
+use std::{borrow::Borrow, cmp::Ordering, collections::BTreeMap, path::Path, vec};
 
 use crate::{
 	ast::{
-		ArgList, BinaryOperator, Class as AstClass, ClassField, Expr, ExprKind, FunctionBody, FunctionDefinition,
+		ArgList, BinaryOperator, Class as AstClass, Expr, ExprKind, FunctionBody, FunctionDefinition,
 		InterpolatedStringPart, Literal, Phase, Reference, Scope, Stmt, StmtKind, Symbol, TypeAnnotationKind,
-		UnaryOperator,
+		UnaryOperator, UserDefinedType,
 	},
 	comp_ctx::{CompilationContext, CompilationPhase},
 	dbg_panic, debug,
 	diagnostic::{report_diagnostic, Diagnostic, WingSpan},
 	files::Files,
 	type_check::{
-		resolve_udt_from_expr, resolve_user_defined_type,
-		symbol_env::{LookupResult, SymbolEnv, SymbolEnvRef},
-		ClassLike, SymbolKind, Type, TypeRef, Types, UnsafeRef, VariableInfo, VariableKind, CLASS_INFLIGHT_INIT_NAME,
-		HANDLE_METHOD_NAME,
+		lifts::Lifts, symbol_env::SymbolEnv, ClassLike, Type, TypeRef, Types, VariableKind, CLASS_INFLIGHT_INIT_NAME,
 	},
-	visit::{self, Visit},
 	MACRO_REPLACE_ARGS, MACRO_REPLACE_ARGS_TEXT, MACRO_REPLACE_SELF, WINGSDK_ASSEMBLY_NAME, WINGSDK_RESOURCE,
 	WINGSDK_STD_MODULE,
 };
@@ -54,18 +43,19 @@ const APP_BASE_CLASS: &str = "$AppBase";
 const ROOT_CLASS: &str = "$Root";
 const JS_CONSTRUCTOR: &str = "constructor";
 
-pub struct JSifyContext {
+pub struct JSifyContext<'a> {
 	pub in_json: bool,
 	/// The current execution phase of the AST traversal.
 	/// The root of any Wing app starts with the preflight phase, and
 	/// the `inflight` keyword specifies scopes that are inflight.
 	pub phase: Phase,
+	pub files: &'a mut Files,
+	pub lifts: Option<&'a Lifts>,
 }
 
 pub struct JSifier<'a> {
-	pub types: &'a Types,
+	pub types: &'a mut Types,
 	source_files: &'a Files,
-	emitted_files: Files,
 	/// Root of the project, used for resolving extern modules
 	absolute_project_root: &'a Path,
 	shim: bool,
@@ -82,7 +72,7 @@ enum BindMethod {
 
 impl<'a> JSifier<'a> {
 	pub fn new(
-		types: &'a Types,
+		types: &'a mut Types,
 		source_files: &'a Files,
 		app_name: &'a str,
 		absolute_project_root: &'a Path,
@@ -91,7 +81,6 @@ impl<'a> JSifier<'a> {
 		Self {
 			types,
 			source_files,
-			emitted_files: Files::new(),
 			shim,
 			app_name,
 			absolute_project_root,
@@ -103,12 +92,9 @@ impl<'a> JSifier<'a> {
 		self.types.get_expr_type(expr).unwrap()
 	}
 
-	fn js_resolve_path(path_name: &str) -> String {
-		format!("\"./{}\"", path_name.replace("\\", "/"))
-	}
-
-	pub fn jsify(&mut self, scope: &Scope) {
+	pub fn jsify(&mut self, scope: &Scope) -> Files {
 		CompilationContext::set(CompilationPhase::Jsifying, &scope.span);
+		let mut files = Files::default();
 		let mut js = CodeMaker::default();
 		let mut imports = CodeMaker::default();
 
@@ -119,11 +105,13 @@ impl<'a> JSifier<'a> {
 			(_, StmtKind::Class(AstClass { .. })) => Ordering::Greater,
 			_ => Ordering::Equal,
 		}) {
-			let jsify_context = JSifyContext {
+			let mut jsify_context = JSifyContext {
 				in_json: false,
 				phase: Phase::Preflight,
+				files: &mut files,
+				lifts: None,
 			};
-			let s = self.jsify_statement(scope.env.borrow().as_ref().unwrap(), statement, &jsify_context); // top level statements are always preflight
+			let s = self.jsify_statement(scope.env.borrow().as_ref().unwrap(), statement, &mut jsify_context); // top level statements are always preflight
 			if let StmtKind::Bring {
 				identifier: _,
 				module_name: _,
@@ -189,21 +177,15 @@ impl<'a> JSifier<'a> {
 			output.add_code(js);
 		}
 
-		match self.emitted_files.add_file(PREFLIGHT_FILE_NAME, output.to_string()) {
+		match files.add_file(PREFLIGHT_FILE_NAME, output.to_string()) {
 			Ok(()) => {}
 			Err(err) => report_diagnostic(err.into()),
 		}
+
+		files
 	}
 
-	/// Write all files to the output directory
-	pub fn emit_files(&mut self, out_dir: &Path) {
-		match self.emitted_files.emit_files(out_dir) {
-			Ok(()) => {}
-			Err(err) => report_diagnostic(err.into()),
-		}
-	}
-
-	fn jsify_scope_body(&mut self, scope: &Scope, ctx: &JSifyContext) -> CodeMaker {
+	fn jsify_scope_body(&self, scope: &Scope, ctx: &mut JSifyContext) -> CodeMaker {
 		CompilationContext::set(CompilationPhase::Jsifying, &scope.span);
 		let mut code = CodeMaker::default();
 
@@ -215,7 +197,7 @@ impl<'a> JSifier<'a> {
 		code
 	}
 
-	fn jsify_reference(&mut self, reference: &Reference, ctx: &JSifyContext) -> String {
+	fn jsify_reference(&self, reference: &Reference, ctx: &mut JSifyContext) -> String {
 		match reference {
 			Reference::Identifier(identifier) => identifier.to_string(),
 			Reference::InstanceMember {
@@ -223,7 +205,7 @@ impl<'a> JSifier<'a> {
 				property,
 				optional_accessor,
 			} => self.jsify_expression(object, ctx) + (if *optional_accessor { "?." } else { "." }) + &property.to_string(),
-			Reference::TypeReference(udt) => self.jsify_type(&TypeAnnotationKind::UserDefined(udt.clone()), ctx),
+			Reference::TypeReference(udt) => self.jsify_type(&TypeAnnotationKind::UserDefined(udt.clone())),
 			Reference::TypeMember { typeobject, property } => {
 				let typename = self.jsify_expression(typeobject, ctx);
 				typename + "." + &property.to_string()
@@ -232,11 +214,11 @@ impl<'a> JSifier<'a> {
 	}
 
 	fn jsify_arg_list(
-		&mut self,
+		&self,
 		arg_list: &ArgList,
 		scope: Option<String>,
 		id: Option<String>,
-		ctx: &JSifyContext,
+		ctx: &mut JSifyContext,
 	) -> String {
 		let mut args = vec![];
 		let mut structure_args = vec![];
@@ -250,22 +232,11 @@ impl<'a> JSifier<'a> {
 		}
 
 		for arg in arg_list.pos_args.iter() {
-			args.push(self.jsify_expression(arg, &ctx));
+			args.push(self.jsify_expression(arg, ctx));
 		}
 
 		for arg in arg_list.named_args.iter() {
-			// convert snake to camel case
-			structure_args.push(format!(
-				"{}: {}",
-				arg.0.name.clone(),
-				self.jsify_expression(
-					arg.1,
-					&JSifyContext {
-						in_json: ctx.in_json,
-						phase: Phase::Independent,
-					}
-				)
-			));
+			structure_args.push(format!("{}: {}", arg.0.name.clone(), self.jsify_expression(arg.1, ctx)));
 		}
 
 		if !structure_args.is_empty() {
@@ -279,15 +250,47 @@ impl<'a> JSifier<'a> {
 		}
 	}
 
-	fn jsify_type(&self, typ: &TypeAnnotationKind, ctx: &JSifyContext) -> String {
+	fn jsify_type(&self, typ: &TypeAnnotationKind) -> String {
 		match typ {
-			TypeAnnotationKind::UserDefined(t) => jsify_type_name(&t.full_path(), ctx.phase),
+			TypeAnnotationKind::UserDefined(t) => self.jsify_user_defined_type(&t),
 			_ => todo!(),
 		}
 	}
 
-	fn jsify_expression(&mut self, expression: &Expr, ctx: &JSifyContext) -> String {
+	fn jsify_user_defined_type(&self, udt: &UserDefinedType) -> String {
+		udt.full_path_str()
+	}
+
+	pub fn jsify_expression(&self, expression: &Expr, ctx: &mut JSifyContext) -> String {
 		CompilationContext::set(CompilationPhase::Jsifying, &expression.span);
+
+		// if we are in inflight and there's a lifting/capturing token associated with this expression
+		// then emit the token instead of the expression.
+		if ctx.phase == Phase::Inflight {
+			if let Some(lifts) = &ctx.lifts {
+				if let Some(t) = lifts.token_for_expr(&expression.id) {
+					return t.clone();
+				}
+			}
+		}
+
+		// if we are in preflight phase and we see an inflight expression (which is not "this."), then
+		// this is an error. this can happen if we render a lifted preflight expression that references
+		// an e.g. variable from inflight (`myarr.get(i)` where `myarr` is preflight and `i` is an
+		// inflight variable). in this case we need to bail out.
+		if ctx.phase == Phase::Preflight {
+			if let Some(expr_phase) = self.types.get_expr_phase(expression) {
+				if expr_phase == Phase::Inflight {
+					report_diagnostic(Diagnostic {
+						message: "Cannot reference an inflight value from within a preflight expression".to_string(),
+						span: Some(expression.span.clone()),
+					});
+
+					return "<ERROR>".to_string();
+				}
+			}
+		}
+
 		let auto_await = match ctx.phase {
 			Phase::Inflight => "await ",
 			_ => "",
@@ -409,11 +412,7 @@ impl<'a> JSifier<'a> {
 				let is_option = function_type.is_option();
 				let function_type = function_type.maybe_unwrap_option();
 				let function_sig = function_type.as_function_sig();
-
-				let expr_string = match &callee.kind {
-					ExprKind::Reference(reference) => self.jsify_reference(reference, ctx),
-					_ => format!("({})", self.jsify_expression(callee, ctx)),
-				};
+				let expr_string = self.jsify_expression(callee, ctx);
 				let args_string = self.jsify_arg_list(&arg_list, None, None, ctx);
 				let mut args_text_string = lookup_span(&arg_list.span, &self.source_files);
 				if args_text_string.len() > 0 {
@@ -516,9 +515,11 @@ impl<'a> JSifier<'a> {
 				)
 			}
 			ExprKind::JsonLiteral { is_mut, element } => {
-				let json_context = &JSifyContext {
+				let json_context = &mut JSifyContext {
 					in_json: true,
 					phase: ctx.phase,
+					files: ctx.files,
+					lifts: ctx.lifts,
 				};
 				let js_out = match &element.kind {
 					ExprKind::JsonMapLiteral { .. } => {
@@ -568,14 +569,7 @@ impl<'a> JSifier<'a> {
 					format!("Object.freeze(new Set([{}]))", item_list)
 				}
 			}
-			ExprKind::FunctionClosure(func_def) => match func_def.signature.phase {
-				Phase::Inflight => {
-					assert!(ctx.phase == Phase::Inflight, "inflight closures should have been transformed into preflight handler classes in the closure_transform compiler phase");
-					self.jsify_function(None, func_def, false, ctx).to_string()
-				},
-				Phase::Independent => unimplemented!(),
-				Phase::Preflight => self.jsify_function(None, func_def, false, ctx).to_string(),
-			},
+			ExprKind::FunctionClosure(func_def) => self.jsify_function(None, func_def, ctx).to_string(),
 			ExprKind::CompilerDebugPanic => {
 				// Handle the debug panic expression (during jsifying)
 				dbg_panic!();
@@ -584,7 +578,7 @@ impl<'a> JSifier<'a> {
 		}
 	}
 
-	fn jsify_statement(&mut self, env: &SymbolEnv, statement: &Stmt, ctx: &JSifyContext) -> CodeMaker {
+	fn jsify_statement(&self, env: &SymbolEnv, statement: &Stmt, ctx: &mut JSifyContext) -> CodeMaker {
 		CompilationContext::set(CompilationPhase::Jsifying, &statement.span);
 		match &statement.kind {
 			StmtKind::SuperConstructor { arg_list } => {
@@ -812,7 +806,7 @@ impl<'a> JSifier<'a> {
 		}
 	}
 
-	fn jsify_enum(&mut self, values: &IndexSet<Symbol>) -> CodeMaker {
+	fn jsify_enum(&self, values: &IndexSet<Symbol>) -> CodeMaker {
 		let mut code = CodeMaker::default();
 		let mut value_index = 0;
 
@@ -833,22 +827,28 @@ impl<'a> JSifier<'a> {
 		code
 	}
 
-	fn jsify_function(
-		&mut self,
-		name: Option<&str>,
-		func_def: &FunctionDefinition,
-		is_class_member: bool,
-		ctx: &JSifyContext,
-	) -> CodeMaker {
+	fn jsify_function(&self, class: Option<&AstClass>, func_def: &FunctionDefinition, ctx: &mut JSifyContext) -> String {
 		let mut parameter_list = vec![];
 
 		for p in &func_def.signature.parameters {
 			parameter_list.push(p.name.to_string());
 		}
 
-		let (name, arrow) = match name {
-			Some(name) => (name, ""),
-			None => ("", "=> "),
+		let (name, arrow) = match &func_def.name {
+			Some(name) => {
+				let mut result = name.name.clone();
+
+				// if this is an inflight class, we need to rename the constructor to "constructor" because
+				// it's "just a class" basically.
+				if let Some(class) = class {
+					if result == CLASS_INFLIGHT_INIT_NAME && class.phase == Phase::Inflight {
+						result = JS_CONSTRUCTOR.to_string();
+					}
+				}
+
+				(result, " ".to_string())
+			}
+			None => ("".to_string(), " => ".to_string()),
 		};
 
 		let parameters = parameter_list.iter().map(|x| x.as_str()).collect::<Vec<_>>().join(", ");
@@ -884,198 +884,108 @@ impl<'a> JSifier<'a> {
 				))
 			}
 		};
-		let mut modifiers = vec![];
+		let mut prefix = vec![];
 
-		if func_def.is_static && is_class_member {
-			modifiers.push("static")
+		if func_def.is_static && class.is_some() {
+			prefix.push("static")
 		}
 
 		// if this is "constructor" it cannot be async
 		if name != JS_CONSTRUCTOR && matches!(func_def.signature.phase, Phase::Inflight) {
-			modifiers.push("async")
+			prefix.push("async")
 		}
 
-		let modifiers = modifiers.join(" ");
+		if !name.is_empty() {
+			prefix.push(name.borrow());
+		} else if !prefix.is_empty() {
+			prefix.push("");
+		}
 
 		let mut code = CodeMaker::default();
-		code.open(format!("{modifiers} {name}({parameters}) {arrow} {{"));
+		code.open(format!("{}({parameters}){arrow}{{", prefix.join(" ")));
 		code.add_code(body);
 		code.close("}");
 
+		// if prefix is empty it means this is a closure, so we need to wrap it in `(`, `)`.
+		if prefix.is_empty() {
+			format!("({})", code.to_string().trim().to_string())
+		} else {
+			code.to_string()
+		}
+	}
+
+	fn jsify_class(&self, env: &SymbolEnv, class: &AstClass, ctx: &mut JSifyContext) -> CodeMaker {
+		// lookup the class type
+		let class_type = env.lookup(&class.name, None).unwrap().as_type().unwrap();
+
+		// find the nearest lifts object. this could be in the current scope (in which case there will
+		// be a `lifts` fields in the `class_type` or the parent scope.
+		let lifts = if let Some(lifts) = &class_type.as_class().unwrap().lifts {
+			Some(lifts)
+		} else {
+			ctx.lifts
+		};
+
+		let ctx = &mut JSifyContext {
+			in_json: ctx.in_json,
+			phase: ctx.phase,
+			files: ctx.files,
+			lifts,
+		};
+
+		// emit the inflight side of the class into a separate file
+		let inflight_class_code = self.jsify_class_inflight(&class, ctx);
+
+		// if this is inflight/independent, class, just emit the inflight class code inline and move on
+		// with your life.
+		if ctx.phase != Phase::Preflight {
+			return inflight_class_code;
+		}
+
+		// emit the inflight file
+		self.emit_inflight_file(&class, inflight_class_code, ctx);
+
+		// lets write the code for the preflight side of the class
+		let mut code = CodeMaker::default();
+
+		// default base class for preflight classes is `core.Resource`
+		let extends = if let Some(parent) = &class.parent {
+			let base = parent.as_type_reference().expect("resolve parent type");
+
+			format!(" extends {}", base)
+		} else {
+			format!(" extends {}", STDLIB_CORE_RESOURCE)
+		};
+
+		code.open(format!("class {}{extends} {{", class.name.name));
+
+		// emit the preflight constructor
+		code.add_code(self.jsify_preflight_constructor(&class, ctx));
+
+		// emit preflight methods
+		for m in class.preflight_methods(false) {
+			code.line(self.jsify_function(Some(class), m, ctx));
+		}
+
+		// emit the `_toInflight` and `_toInflightType` methods (TODO: renamed to `_liftObject` and
+		// `_liftType`).
+		code.add_code(self.jsify_to_inflight_type_method(&class, ctx));
+		code.add_code(self.jsify_to_inflight_method(&class.name, ctx));
+
+		// emit `_registerBindObject` to register bindings (for type & instance binds)
+		code.add_code(self.jsify_register_bind_method(class, class_type, BindMethod::Instance, ctx));
+		code.add_code(self.jsify_register_bind_method(class, class_type, BindMethod::Type, ctx));
+
+		code.close("}");
 		code
 	}
 
-	/// Jsify a class
-	/// This performs two things:
-	/// 1) It returns the JS code for the resource which includes:
-	/// 	- A JS class which inherits from `core.Resource` with all the preflight code of the resource.
-	/// 	- A `_toInflight` method in that class that creates inflight client for the resource. This code creates inflight
-	///     clients for all inner resources and passes them to the inflight client constructor.
-	///   - Calls to `core.Resource._annotateInflight` to annotate the inflight client's methods with binding information.
-	///     * Note that at this point the binding information includes ALL methods of all the captured resources. For all
-	///       client methods. In the future this needs to be generated based on the compiler's capture usage analysis
-	/// 		  in capture.rs. (see https://github.com/winglang/wing/issues/76, https://github.com/winglang/wing/issues/1449).
-	/// 2) It generates the JS code for the resource's inflight client and writes it to a JS file.
-	///
-	/// # Example
-	///
-	///  ```wing
-	/// bring cloud;
-	/// resource Foo {
-	///   init() {
-	/// 	  this.b = new cloud.Bucket();
-	///   }
-	///   inflight my_put() {
-	/// 	  this.b.put("foo", "bar");
-	/// 	}
-	/// }
-	/// ```
-	/// Will produce the following **preflight** JS code:
-	/// ```js
-	/// class Foo extends core.Resource {
-	///  constructor(scope, id) {
-	/// 	 super(scope, id);
-	/// 	 this.b = new cloud.Bucket(scope, id);
-	/// 	}
-	/// }
-	/// _toInflight() {
-	/// 	const b_client = this._lift(b);
-	///  	const self_client_path = require('path').resolve(__dirname, "clients/MyResource.inflight.js");
-	///   return $stdlib.core.NodeJsCode.fromInline(`(new (require("${self_client_path}")).MyResource_inflight({b: ${b_client}}))`);
-	/// }
-	/// MyResource._annotateInflight("my_put", {"this.b": { ops: ["put"]}});
-	/// ```
-	/// And generated Foo client will go into a file called `clients/Foo.inflight.js` that'll look like this:
-	/// ```js
-	/// export class Foo_inflight {
-	///   constructor({ b }) {
-	///     this.b = b;
-	///   }
-	///   async my_put() {
-	///     await this.b.put("foo","bar");
-	///   }
-	/// }
-	/// ```
-	fn jsify_class(&mut self, env: &SymbolEnv, class: &AstClass, ctx: &JSifyContext) -> CodeMaker {
-		// Lookup the class type
-		let class_type = env.lookup(&class.name, None).unwrap().as_type().unwrap();
-
-		// Jsify the inflight side of the class
-		let inflight_methods = class
-			.methods
-			.iter()
-			.filter(|(_, m)| m.signature.phase == Phase::Inflight)
-			.collect_vec();
-
-		let inflight_fields = class.fields.iter().filter(|f| f.phase == Phase::Inflight).collect_vec();
-
-		// Find all free variables in the class, and return a list of their symbols
-		let (mut captured_types, captured_vars) = self.scan_captures(class, &inflight_methods);
-
-		if let Some(parent) = &class.parent {
-			let parent_type_udt = resolve_udt_from_expr(&parent).unwrap();
-			let parent_type = resolve_user_defined_type(&parent_type_udt, env, 0).unwrap();
-			captured_types.insert(parent_type_udt.full_path(), parent_type);
-		}
-
-		// Get all references between inflight methods and preflight values
-		let mut refs = self.find_inflight_references(class, &captured_vars);
-
-		// Get fields to be captured by resource's client
-		let lifted_fields = self.get_lifted_fields(class_type);
-
-		// Add bindings for the inflight init
-		self.add_inflight_init_refs(&mut refs, &lifted_fields, &captured_vars);
-
-		// create a list of all captured symbols (vars and types).
-		let captures = captured_vars
-			.iter()
-			.map(|f| f.clone())
-			.chain(
-				captured_types
-					.iter()
-					.map(|(n, _)| jsify_type_name(n, Phase::Inflight).clone()),
-			)
-			.collect_vec();
-
-		// emit the inflight side of the class into a separate file
-		self.jsify_class_inflight(env, &class, &lifted_fields, &inflight_methods, &captures, ctx);
-
-		// if our class is declared within a preflight scope, then we emit the preflight class
-		if ctx.phase == Phase::Preflight {
-			let mut code = CodeMaker::default();
-
-			// default base class for preflight classes is `core.Resource`
-			let extends = if let Some(parent) = &class.parent {
-				format!(" extends {}", self.jsify_expression(&parent, ctx))
-			} else {
-				format!(" extends {}", STDLIB_CORE_RESOURCE)
-			};
-
-			code.open(format!("class {}{extends} {{", class.name.name));
-
-			// emit the preflight constructor
-			code.add_code(self.jsify_constructor(
-				&class.initializer,
-				class.parent.is_none(),
-				&inflight_methods,
-				&inflight_fields,
-				ctx,
-			));
-
-			// emit preflight methods
-			let preflight_methods = class
-				.methods
-				.iter()
-				.filter(|(_, m)| m.signature.phase != Phase::Inflight)
-				.collect_vec();
-
-			for (n, m) in preflight_methods {
-				code.add_code(self.jsify_function(Some(&n.name), m, true, ctx));
-			}
-
-			// emit the `_toInflightType` static method
-			code.add_code(self.jsify_to_inflight_type_method(&class, &captured_vars, &captured_types));
-
-			// emit the `_toInflight` instance method
-			code.add_code(self.jsify_toinflight_method(&class.name, &lifted_fields));
-
-			// call `_registerBindObject` to register the class's host binding methods (for type & instance binds).
-			code.add_code(self.jsify_register_bind_method(class, &refs, class_type, BindMethod::Instance));
-			code.add_code(self.jsify_register_bind_method(class, &refs, class_type, BindMethod::Type));
-
-			code.close("}");
-
-			code
-		} else {
-			// this is the case where a class was declared within an inflight scope in this case we just
-			// emit a const with the same name that `require`s the inflight client code.
-			let mut code = CodeMaker::default();
-
-			let client = Self::js_resolve_path(&inflight_filename(class));
-
-			code.line(format!(
-				"const {} = require({client})({{{}}});",
-				class.name.name,
-				captures.join(", "),
-			));
-
-			code
-		}
-	}
-
-	fn jsify_constructor(
-		&mut self,
-		constructor: &FunctionDefinition,
-		no_parent: bool,
-		inflight_methods: &[&(Symbol, FunctionDefinition)],
-		inflight_fields: &[&ClassField],
-		ctx: &JSifyContext,
-	) -> CodeMaker {
+	fn jsify_preflight_constructor(&self, class: &AstClass, ctx: &mut JSifyContext) -> CodeMaker {
 		let mut code = CodeMaker::default();
 		code.open(format!(
 			"constructor(scope, id, {}) {{",
-			constructor
+			class
+				.initializer
 				.signature
 				.parameters
 				.iter()
@@ -1084,41 +994,39 @@ impl<'a> JSifier<'a> {
 				.join(", "),
 		));
 
-		if no_parent {
-			code.line("super(scope, id);");
-		}
-
-		let init_statements = match &constructor.body {
+		let init_statements = match &class.initializer.body {
 			FunctionBody::Statements(s) => s,
 			FunctionBody::External(_) => panic!("'init' cannot be 'extern'"),
 		};
 
-		if !no_parent {
-			// Check if the first statement is a super constructor call, if not we need to add one
-			let super_call = if let Some(s) = init_statements.statements.first() {
-				matches!(s.kind, StmtKind::SuperConstructor { .. })
-			} else {
-				false
-			};
+		// Check if the first statement is a super constructor call, if not we need to add one
+		let super_called = if let Some(s) = init_statements.statements.first() {
+			matches!(s.kind, StmtKind::SuperConstructor { .. })
+		} else {
+			false
+		};
 
-			if !super_call {
-				code.line("super(scope, id);");
-			}
+		// we always need a super() call because even if the class doesn't have an explicit parent, it
+		// will inherit from core.Resource.
+		if !super_called {
+			code.line("super(scope, id);");
 		}
 
 		// We must jsify the statements in the constructor before adding any additional code blew
 		// this is to ensure if there are calls to super constructor within the statements,
 		// they will be jsified before any attempts to call `this` are made.
-		code.add_code(self.jsify_scope_body(
-			&init_statements,
-			&JSifyContext {
-				in_json: ctx.in_json,
-				phase: Phase::Preflight,
-			},
-		));
+		code.add_code(self.jsify_scope_body(&init_statements, ctx));
 
-		if inflight_methods.len() + inflight_fields.len() > 0 {
-			let inflight_method_names = inflight_methods.iter().map(|(name, _)| name.name.clone()).collect_vec();
+		let inflight_fields = class.inflight_fields();
+		let inflight_methods = class.inflight_methods(true);
+
+		if inflight_fields.len() + inflight_methods.len() > 0 {
+			let inflight_method_names = inflight_methods
+				.iter()
+				.filter_map(|m| m.name.clone())
+				.map(|s| s.name)
+				.collect_vec();
+
 			let inflight_field_names = inflight_fields.iter().map(|f| f.name.name.clone()).collect_vec();
 			let inflight_ops_string = inflight_method_names
 				.iter()
@@ -1132,64 +1040,25 @@ impl<'a> JSifier<'a> {
 		code
 	}
 
-	fn jsify_to_inflight_type_method(
-		&mut self,
-		class: &AstClass,
-		lifted_vars: &IndexSet<String>,
-		captured_types: &IndexMap<Vec<Symbol>, TypeRef>,
-	) -> CodeMaker {
-		let client_path = Self::js_resolve_path(&format!("./{}", inflight_filename(class)));
+	fn jsify_to_inflight_type_method(&self, class: &AstClass, ctx: &JSifyContext) -> CodeMaker {
+		let client_path = inflight_filename(class);
 
 		let mut code = CodeMaker::default();
 
 		code.open("static _toInflightType(context) {"); // TODO: consider removing the context and making _lift a static method
 
-		code.line(format!("const self_client_path = {client_path};"));
+		code.open(format!("return {STDLIB}.core.NodeJsCode.fromInline(`"));
 
-		// create an inflight client for each object that is captured from the environment
-		for var_name in lifted_vars {
-			code.line(format!("const {var_name}_client = context._lift({var_name});",));
-		}
+		code.open(format!("require(\"{client_path}\")({{"));
 
-		// create an inflight type for each referenced preflight type
-		for (n, t) in captured_types {
-			let inflight_name = jsify_type_name(n, Phase::Inflight);
-			let preflight_name = jsify_type_name(n, Phase::Preflight);
-
-			match &**t {
-				Type::Class(_) => {
-					code.line(format!(
-						"const {inflight_name}Client = {preflight_name}._toInflightType(context);"
-					));
-				}
-				Type::Enum(e) => {
-					code.open(format!(
-						"const {inflight_name}Client = {STDLIB}.core.NodeJsCode.fromInline(`"
-					));
-					code.add_code(self.jsify_enum(&e.values));
-					code.close("`);");
-				}
-				_ => {
-					for sym in n {
-						report_diagnostic(Diagnostic {
-							message: format!("Unexpected type \"{t}\" referenced inflight"),
-							span: Some(sym.span.clone()),
-						});
-					}
-				}
+		if let Some(lifts) = &ctx.lifts {
+			for capture in lifts.captures() {
+				let preflight = capture.code.clone();
+				let lift_type = format!("context._lift({})", preflight);
+				code.line(format!("{}: ${{{}}},", capture.token, lift_type));
 			}
 		}
 
-		code.open(format!("return {STDLIB}.core.NodeJsCode.fromInline(`"));
-
-		code.open("require(\"${self_client_path}\")({");
-		for var_name in lifted_vars {
-			code.line(format!("{var_name}: ${{{var_name}_client}},"));
-		}
-		for (type_name, _) in captured_types {
-			let inflight_name = jsify_type_name(type_name, Phase::Inflight);
-			code.line(format!("{inflight_name}: ${{{inflight_name}Client.text}},"));
-		}
 		code.close("})");
 
 		code.close("`);");
@@ -1198,18 +1067,10 @@ impl<'a> JSifier<'a> {
 		code
 	}
 
-	fn jsify_toinflight_method(&mut self, resource_name: &Symbol, captured_fields: &[String]) -> CodeMaker {
+	fn jsify_to_inflight_method(&self, resource_name: &Symbol, ctx: &JSifyContext) -> CodeMaker {
 		let mut code = CodeMaker::default();
 
 		code.open("_toInflight() {");
-
-		// create an inflight client for each "child" object
-		for inner_member_name in captured_fields {
-			code.line(format!(
-				"const {}_client = this._lift(this.{});",
-				inner_member_name, inner_member_name,
-			));
-		}
 
 		code.open(format!("return {STDLIB}.core.NodeJsCode.fromInline(`"));
 
@@ -1222,8 +1083,10 @@ impl<'a> JSifier<'a> {
 
 		code.open(format!("const client = new {}Client({{", resource_name.name));
 
-		for inner_member_name in captured_fields {
-			code.line(format!("{inner_member_name}: ${{{inner_member_name}_client}},"));
+		if let Some(lifts) = &ctx.lifts {
+			for (token, obj) in lifts.lifted_fields() {
+				code.line(format!("{token}: ${{this._lift({obj})}},"));
+			}
 		}
 
 		code.close("});");
@@ -1241,56 +1104,14 @@ impl<'a> JSifier<'a> {
 		code
 	}
 
-	/// Scan all inflight methods in a class and extract the names of all the types and variables that
-	/// are defined outside of this method.
-	fn scan_captures(
-		&mut self,
-		class: &AstClass,
-		inflight_methods: &[&(Symbol, FunctionDefinition)],
-	) -> (IndexMap<Vec<Symbol>, TypeRef>, IndexSet<String>) {
-		let mut types = indexmap![];
-		let mut vars = indexset![];
-
-		for (_, m) in inflight_methods {
-			if let FunctionBody::Statements(scope) = &m.body {
-				let mut visitor = CaptureScanner::new(scope);
-				visitor.scan();
-
-				types.extend(visitor.captured_types);
-				vars.extend(visitor.captured_vars);
-			}
-		}
-		// Remove myself from the list of referenced preflight types because I don't need to import myself
-		types.remove(&vec![class.name.clone()]);
-
-		(types, vars)
-	}
-
 	// Write a class's inflight to a file
-	fn jsify_class_inflight(
-		&mut self,
-		env: &SymbolEnv,
-		class: &AstClass,
-		lifted_fields: &[String],
-		inflight_methods: &[&(Symbol, FunctionDefinition)],
-		captures: &[String],
-		ctx: &JSifyContext,
-	) {
-		// Handle parent class: Need to call super and pass its captured fields (we assume the parent client is already written)
-		let mut lifted_by_parent = vec![];
-		if let Some(parent) = &class.parent {
-			let parent_udt = resolve_udt_from_expr(parent).unwrap();
-			if let Ok(parent_type) = resolve_user_defined_type(&parent_udt, env, 0) {
-				lifted_by_parent.extend(self.get_lifted_fields(parent_type));
-			}
-		}
-
-		// Get the fields that are lifted by this class but not by its parent, they will be initialized
-		// in the generated constructor
-		let my_captures = lifted_fields
-			.iter()
-			.filter(|name| !lifted_by_parent.iter().any(|n| n == *name))
-			.collect_vec();
+	fn jsify_class_inflight(&self, class: &AstClass, ctx: &mut JSifyContext) -> CodeMaker {
+		let mut ctx = JSifyContext {
+			phase: Phase::Inflight,
+			in_json: false,
+			files: ctx.files,
+			lifts: ctx.lifts,
+		};
 
 		let mut class_code = CodeMaker::default();
 
@@ -1298,7 +1119,7 @@ impl<'a> JSifier<'a> {
 		class_code.open(format!(
 			"class {name}{} {{",
 			if let Some(parent) = &class.parent {
-				format!(" extends {}", self.jsify_expression(&parent, ctx))
+				format!(" extends {}", self.jsify_expression(&parent, &mut ctx))
 			} else {
 				"".to_string()
 			}
@@ -1306,141 +1127,104 @@ impl<'a> JSifier<'a> {
 
 		// if this is a preflight class, emit the binding constructor
 		if class.phase == Phase::Preflight {
-			class_code.open(format!(
-				"{JS_CONSTRUCTOR}({{ {} }}) {{",
-				lifted_fields
-					.iter()
-					.map(|name| { name.clone() })
-					.collect_vec()
-					.join(", ")
-			));
-
-			if class.parent.is_some() {
-				class_code.line(format!(
-					"super({{{}}});",
-					lifted_by_parent
-						.iter()
-						.map(|name| name.clone())
-						.collect_vec()
-						.join(", ")
-				));
-			}
-
-			for name in &my_captures {
-				class_code.line(format!("this.{} = {};", name, name));
-			}
-
-			// if this class has a "handle" method, we are going to turn it into a callable function
-			// so that instances of this class can also be called like regular functions
-			if inflight_methods.iter().any(|(name, _)| name.name == HANDLE_METHOD_NAME) {
-				class_code.line(format!("const $obj = (...args) => this.{HANDLE_METHOD_NAME}(...args);"));
-				class_code.line("Object.setPrototypeOf($obj, this);");
-				class_code.line("return $obj;");
-			}
-
-			class_code.close("}");
+			self.jsify_inflight_binding_constructor(class, &mut class_code, &ctx);
 		}
 
-		let inflight_init_name = if class.phase == Phase::Preflight {
-			CLASS_INFLIGHT_INIT_NAME
-		} else {
-			JS_CONSTRUCTOR
-		};
+		for def in class.inflight_methods(false) {
+			class_code.line(self.jsify_function(Some(class), def, &mut ctx));
+		}
 
-		class_code.add_code(self.jsify_function(
-			Some(inflight_init_name),
-			&class.inflight_initializer,
-			true,
-			&JSifyContext {
-				in_json: ctx.in_json,
-				phase: class.inflight_initializer.signature.phase,
-			},
-		));
-
-		for (name, def) in inflight_methods {
-			class_code.add_code(self.jsify_function(
-				Some(&name.name),
-				def,
-				true,
-				&JSifyContext {
-					in_json: ctx.in_json,
-					phase: def.signature.phase,
-				},
-			));
+		// emit the $inflight_init function (if it has a body).
+		if let FunctionBody::Statements(s) = &class.inflight_initializer.body {
+			if !s.statements.is_empty() {
+				class_code.line(self.jsify_function(Some(class), &class.inflight_initializer, &mut ctx));
+			}
 		}
 
 		class_code.close("}");
+		class_code
+	}
 
-		// export the main class from this file
+	fn emit_inflight_file(&self, class: &AstClass, inflight_class_code: CodeMaker, ctx: &mut JSifyContext) {
+		let name = &class.name.name;
 		let mut code = CodeMaker::default();
-		let inputs = captures.join(", ");
+
+		let inputs = if let Some(lifts) = &ctx.lifts {
+			lifts.captures().iter().map(|c| c.token.clone()).join(", ")
+		} else {
+			Default::default()
+		};
+
 		code.open(format!("module.exports = function({{ {inputs} }}) {{"));
-		code.add_code(class_code);
+		code.add_code(inflight_class_code);
 		code.line(format!("return {name};"));
 		code.close("}");
 
-		match self.emitted_files.add_file(inflight_filename(class), code.to_string()) {
+		// emit the inflight class to a file
+		match ctx.files.add_file(inflight_filename(class), code.to_string()) {
 			Ok(()) => {}
 			Err(err) => report_diagnostic(err.into()),
 		}
 	}
 
-	/// Get the type and capture info for fields that are captured in the client of the given resource
-	/// Returns a map from method name to a map from field name to a set of operations
-	fn find_inflight_references(
-		&mut self,
-		resource_class: &AstClass,
-		free_vars: &IndexSet<String>,
-	) -> BTreeMap<String, BTreeMap<String, BTreeSet<String>>> {
-		let inflight_methods = resource_class
-			.methods
-			.iter()
-			.filter(|(_, m)| m.signature.phase == Phase::Inflight);
-
-		let mut result = BTreeMap::new();
-
-		for (method_name, function_def) in inflight_methods {
-			// visit statements of method and find all references to fields ("this.xxx")
-			let visitor = FieldReferenceVisitor::new(self.types, &function_def, free_vars);
-			let refs = visitor.find_refs();
-
-			// add the references to the result
-			result.insert(method_name.name.clone(), refs);
-		}
-
-		// Also add field rerferences from the inflight initializer
-		let visitor = FieldReferenceVisitor::new(self.types, &resource_class.inflight_initializer, free_vars);
-		let refs = visitor.find_refs();
-
-		result.insert(CLASS_INFLIGHT_INIT_NAME.to_string(), refs);
-
-		return result;
-	}
-
-	// Get the type and capture info for fields that are captured in the client of the given resource
-	fn get_lifted_fields(&self, resource_type: TypeRef) -> Vec<String> {
-		if let Some(resource_class) = resource_type.as_class() {
-			resource_class
-				.env
-				.iter(true)
-				.filter(|(_, kind, _)| {
-					let var = kind.as_variable().unwrap();
-					// We capture preflight non-reassignable fields
-					var.phase != Phase::Inflight && var.type_.is_capturable()
-				})
-				.map(|(name, ..)| name)
-				.collect_vec()
+	fn jsify_inflight_binding_constructor(&self, class: &AstClass, class_code: &mut CodeMaker, ctx: &JSifyContext) {
+		// Get the fields that are lifted by this class but not by its parent, they will be initialized
+		// in the generated constructor
+		let lifted_fields = if let Some(lifts) = &ctx.lifts {
+			lifts.lifted_fields().keys().map(|f| f.clone()).collect_vec()
 		} else {
 			vec![]
+		};
+
+		let parent_fields = if let Some(parent) = &class.parent {
+			let parent_type = self.get_expr_type(parent);
+			if let Some(parent_lifts) = &parent_type.as_class().unwrap().lifts {
+				parent_lifts.lifted_fields().keys().map(|f| f.clone()).collect_vec()
+			} else {
+				vec![]
+			}
+		} else {
+			vec![]
+		};
+
+		class_code.open(format!(
+			"{JS_CONSTRUCTOR}({{ {} }}) {{",
+			lifted_fields
+				.iter()
+				.merge(parent_fields.iter())
+				.map(|token| { token.clone() })
+				.collect_vec()
+				.join(", ")
+		));
+
+		if class.parent.is_some() {
+			class_code.line(format!("super({{ {} }});", parent_fields.join(", ")));
 		}
+
+		for token in &lifted_fields {
+			class_code.line(format!("this.{} = {};", token, token));
+		}
+
+		// if this class has a "handle" method, we are going to turn it into a callable function
+		// so that instances of this class can also be called like regular functions
+		if let Some(handle) = class.closure_handle_method() {
+			class_code.line(format!(
+				"const $obj = (...args) => this.{}(...args);",
+				handle.name.clone().unwrap()
+			));
+			class_code.line("Object.setPrototypeOf($obj, this);");
+			class_code.line("return $obj;");
+		}
+
+		class_code.close("}");
 	}
 
 	fn jsify_register_bind_method(
 		&self,
 		class: &AstClass,
-		refs: &BTreeMap<String, BTreeMap<String, BTreeSet<String>>>,
 		class_type: TypeRef,
 		bind_method_kind: BindMethod,
+		ctx: &JSifyContext,
 	) -> CodeMaker {
 		let mut bind_method = CodeMaker::default();
 		let (modifier, bind_method_name) = match bind_method_kind {
@@ -1449,30 +1233,39 @@ impl<'a> JSifier<'a> {
 		};
 
 		let class_name = class.name.to_string();
-		let refs = refs
+
+		let lifts_per_method = if let Some(lifts) = &ctx.lifts {
+			lifts.lifts_per_method()
+		} else {
+			BTreeMap::default()
+		};
+
+		let lifts = lifts_per_method
 			.iter()
 			.filter(|(m, _)| {
 				let var_kind = class_type
 					.as_class()
 					.unwrap()
 					.get_method(&m.as_str().into())
-					.expect(&format!("method {m} doesn't exist in {class_name}"))
+					.expect(&format!("method \"{m}\" doesn't exist in {class_name}"))
 					.kind;
 				let is_static = matches!(var_kind, VariableKind::StaticMember);
 				(*m == CLASS_INFLIGHT_INIT_NAME || !is_static) ^ (matches!(bind_method_kind, BindMethod::Type))
 			})
 			.collect_vec();
 
-		// Skip jsifying this method if there are no references (in this case we'll use super's register bind method)
-		if refs.is_empty() {
+		// Skip jsifying this method if there are no lifts (in this case we'll use super's register bind method)
+		if lifts.is_empty() {
 			return bind_method;
 		}
 
 		bind_method.open(format!("{modifier}{bind_method_name}(host, ops) {{"));
-		for (method_name, method_refs) in refs {
+		for (method_name, method_lifts) in lifts {
 			bind_method.open(format!("if (ops.includes(\"{method_name}\")) {{"));
-			for (field, ops) in method_refs {
-				let ops_strings = ops.iter().map(|op| format!("\"{}\"", op)).join(", ");
+			for lift in method_lifts {
+				let ops_strings = lift.ops.iter().map(|op| format!("\"{}\"", op)).join(", ");
+				let field = lift.code.clone();
+
 				bind_method.line(format!(
 					"{class_name}._registerBindObject({field}, host, [{ops_strings}]);",
 				));
@@ -1483,554 +1276,10 @@ impl<'a> JSifier<'a> {
 		bind_method.close("}");
 		bind_method
 	}
-
-	fn add_inflight_init_refs(
-		&self,
-		refs: &mut BTreeMap<String, BTreeMap<String, BTreeSet<String>>>,
-		lifted_fields: &[String],
-		free_vars: &IndexSet<String>,
-	) {
-		let init_refs_entry = refs.entry(CLASS_INFLIGHT_INIT_NAME.to_string()).or_default();
-
-		// All "lifted" fields are needed in the inflight init method
-		for field in lifted_fields {
-			init_refs_entry.entry(format!("this.{field}")).or_default();
-		}
-
-		// All free variables are needed in the inflight init method
-		for free_var in free_vars {
-			init_refs_entry.entry(free_var.clone()).or_default();
-		}
-	}
-}
-
-/// Analysizes a resource inflight method and returns a list of fields that are referenced from the
-/// method and which operations are performed on them.
-struct FieldReferenceVisitor<'a> {
-	types: &'a Types,
-
-	/// The key is field name, value is a list of operations performed on this field
-	references: BTreeMap<String, BTreeSet<String>>,
-
-	/// The resource type's symbol env (used to resolve field types)
-	function_def: &'a FunctionDefinition,
-
-	/// A list of free variables preloaded into the visitor. Whenever the visitor encounters a
-	/// reference to a free variable, it will be added to list of references since the
-	/// resource needs to bind to it.
-	free_vars: &'a IndexSet<String>,
-
-	/// The current symbol env, option just so we can initialize it to None
-	env: Option<SymbolEnvRef>,
-
-	/// The current statement index
-	statement_index: usize,
-}
-
-impl<'a> FieldReferenceVisitor<'a> {
-	pub fn new(types: &'a Types, function_def: &'a FunctionDefinition, free_vars: &'a IndexSet<String>) -> Self {
-		Self {
-			types,
-			references: BTreeMap::new(),
-			function_def,
-			env: None,
-			free_vars,
-			statement_index: 0,
-		}
-	}
-
-	pub fn find_refs(mut self) -> BTreeMap<String, BTreeSet<String>> {
-		if let FunctionBody::Statements(statements) = &self.function_def.body {
-			self.visit_scope(statements);
-		}
-		self.references
-	}
-}
-
-impl<'ast> Visit<'ast> for FieldReferenceVisitor<'ast> {
-	fn visit_scope(&mut self, node: &'ast Scope) {
-		let backup_env = self.env;
-		self.env = Some(node.env.borrow().as_ref().unwrap().get_ref());
-		visit::visit_scope(self, node);
-		self.env = backup_env;
-	}
-
-	fn visit_stmt(&mut self, node: &'ast Stmt) {
-		self.statement_index = node.idx;
-		visit::visit_stmt(self, node);
-	}
-
-	fn visit_expr(&mut self, node: &'ast Expr) {
-		let parts = self.analyze_expr(node);
-
-		let is_field_reference = match parts.first() {
-			Some(first) => first.text == "this" && parts.len() > 1,
-			None => false,
-		};
-
-		let is_free_var = match parts.first() {
-			// TODO: chnge this "==" to make sure first.symbol is the same variable definition as something in free_vars
-			// todo this i'll need to have a "unique id" on the variable definition stored in the environment and then
-			// do a lookup for first.symbol and compare the id's
-			Some(first) => self.free_vars.iter().any(|v| *v == first.text),
-			None => false,
-		};
-
-		let is_type_reference = match parts.first() {
-			Some(first) => matches!(first.kind, ComponentKind::ClassType(_)),
-			None => false,
-		};
-
-		if !is_field_reference && !is_free_var && !is_type_reference {
-			visit::visit_expr(self, node);
-			return;
-		}
-
-		let mut index = if is_field_reference {
-			// we know i[0] is "this" and that we have at least 2 parts
-			1
-		} else {
-			0
-		};
-
-		// iterate over the components of the expression and determine
-		// what are we capturing from preflight.
-		let mut capture = vec![];
-
-		while index < parts.len() {
-			let curr = parts.get(index).unwrap();
-
-			match &curr.kind {
-				ComponentKind::Member(variable) => {
-					// we have lift off (reached an inflight component)! break our search.
-					if variable.phase == Phase::Inflight {
-						break;
-					}
-
-					// now we need to verify that the component can be captured.
-					// (2) capturable type (immutable/resource).
-
-					// if this type is not capturable, bail out
-					if !variable.type_.is_capturable() {
-						report_diagnostic(Diagnostic {
-							message: format!(
-								"Cannot capture field '{curr}' with non-capturable type '{}'",
-								variable.type_
-							),
-							span: Some(curr.span.clone()),
-						});
-
-						return;
-					}
-
-					// okay, so we have a non-reassignable, capturable type.
-					// one more special case is collections. we currently only support
-					// collections which do not include resources because we cannot
-					// qualify the capture.
-					if let Some(inner_type) = variable.type_.collection_item_type() {
-						if inner_type.is_preflight_class() {
-							report_diagnostic(Diagnostic {
-								message: format!(
-									"Capturing collection of preflight classes is not supported yet (type is '{}')",
-									variable.type_,
-								),
-								span: Some(curr.span.clone()),
-							});
-
-							return;
-						}
-					}
-
-					// accumulate "curr" into capture
-					capture.push(curr);
-					index = index + 1;
-
-					// if "curr" is a collection, break here because the following
-					// components are going to be simple identifiers (TODO: is this a bug in
-					// how we model the API of collections?)
-					if variable.type_.collection_item_type().is_some() {
-						break;
-					}
-				}
-				ComponentKind::ClassType(_) => {
-					capture.push(curr);
-					index = index + 1;
-				}
-				ComponentKind::Unsupported => {
-					report_diagnostic(Diagnostic {
-						message: format!("Unsupported component \"{}\"", curr.text),
-						span: Some(curr.span.clone()),
-					});
-					return;
-				}
-			}
-		}
-
-		// if capture is empty, it means this is a reference to an inflight field, so we can just move
-		// on
-		if capture.is_empty() {
-			return;
-		}
-
-		// now that we have "capture", the rest of the expression
-		// is the "qualification" of the capture
-		let binding = parts.iter().collect::<Vec<_>>();
-		let qualification = binding.split_at(index).1.iter();
-
-		let fmt = |x: Iter<&Component>| x.map(|f| f.text.to_string()).collect_vec();
-		let mut key = fmt(capture.iter()).join(".");
-		if is_field_reference {
-			key = format!("this.{}", key);
-		}
-
-		if let Some(c) = capture.last() {
-			if let ComponentKind::Member(v) = &c.kind {
-				// if our last captured component is a non-handler preflight class and we don't have a
-				// qualification for it, it's currently an error.
-				if v.type_.is_preflight_class() && !v.type_.is_handler_preflight_class() && qualification.len() == 0 {
-					report_diagnostic(Diagnostic {
-						message: format!(
-							"Unable to qualify which operations are performed on '{}' of type '{}'. This is not supported yet.",
-							key, v.type_,
-						),
-						span: Some(node.span.clone()),
-					});
-
-					return;
-				}
-
-				// if this reference refers to an inflight function or handler resource,
-				// we need to give permission to the "handle" operation
-				if v.type_.is_inflight_function() || v.type_.is_handler_preflight_class() {
-					self
-						.references
-						.entry(key)
-						.or_default()
-						.insert(HANDLE_METHOD_NAME.to_string());
-					return;
-				}
-			}
-		}
-
-		let ops = fmt(qualification);
-
-		self.references.entry(key).or_default().extend(ops);
-	}
-}
-
-#[derive(Clone, Debug)]
-struct Component {
-	text: String,
-	span: WingSpan,
-	kind: ComponentKind,
-}
-
-#[derive(Clone, Debug)]
-enum ComponentKind {
-	Member(VariableInfo),
-	ClassType(TypeRef),
-	Unsupported,
-}
-
-impl Display for Component {
-	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-		write!(f, "{}", self.text)
-	}
-}
-
-impl<'a> FieldReferenceVisitor<'a> {
-	fn analyze_expr(&self, node: &'a Expr) -> Vec<Component> {
-		let ExprKind::Reference(ref_expr) = &node.kind else {
-			return vec![];
-		};
-
-		match ref_expr {
-			Reference::Identifier(x) => {
-				let env = self.env.unwrap();
-
-				let lookup = env.lookup_ext(&x, Some(self.statement_index));
-
-				// if the reference is already defined later in this scope, skip it
-				if matches!(lookup, LookupResult::DefinedLater) {
-					return vec![];
-				}
-
-				let id_name = x.name.clone();
-				let id_span = x.span.clone();
-
-				let LookupResult::Found(kind, _) = lookup else {
-					return vec![Component {
-						text: id_name,
-						span: id_span,
-						kind: ComponentKind::Unsupported,
-					}];
-				};
-
-				let Some(var) = kind.as_variable() else {
-					return vec![Component {
-						text: id_name,
-						span: id_span,
-						kind: ComponentKind::Unsupported,
-					}];
-				};
-
-				// If the reference isn't a preflight (lifted) variable then skip it
-				if var.phase != Phase::Preflight {
-					return vec![];
-				}
-
-				return vec![Component {
-					text: id_name,
-					span: id_span,
-					kind: ComponentKind::Member(var),
-				}];
-			}
-			Reference::TypeReference(type_) => {
-				let env = self.env.unwrap();
-
-				// Get the type we're accessing a member of
-				let Ok(t) = resolve_user_defined_type(type_, &env, self.statement_index) else {
-					return vec![];
-				};
-
-				// If the type we're referencing isn't a preflight class then skip it
-				if t.as_preflight_class().is_none() {
-					return vec![];
-				};
-
-				return vec![Component {
-					text: format!("{type_}"),
-					span: type_.span.clone(),
-					kind: ComponentKind::ClassType(t),
-				}];
-			}
-			Reference::InstanceMember {
-				object,
-				property,
-				optional_accessor: _optional_chain,
-			} => {
-				let obj_type = self.types.get_expr_type(object).unwrap();
-				let prop = if let Some(component_kind) = Self::determine_component_kind_from_type(obj_type, property) {
-					vec![Component {
-						text: property.name.clone(),
-						span: property.span.clone(),
-						kind: component_kind,
-					}]
-				} else {
-					vec![]
-				};
-
-				let obj = self.analyze_expr(&object);
-				return [obj, prop].concat();
-			}
-			Reference::TypeMember { typeobject, property } => {
-				let obj = self.analyze_expr(&typeobject);
-
-				let Some(first) = obj.first() else {
-					return vec![];
-				};
-
-				let ComponentKind::ClassType(t) = first.kind else {
-					return vec![];
-				};
-
-				// If the type we're referencing isn't a preflight class then skip it
-				let Some(class) = t.as_preflight_class() else {
-					return vec![];
-				};
-
-				// To obtain information about the variable we're referencing (like its type and
-				// whether it's reassignable), we look it up in the class's env.
-				let var = class
-					.env
-					.lookup(&property, None)
-					.expect("lookup")
-					.as_variable()
-					.expect("variable");
-
-				let prop = vec![Component {
-					text: property.name.clone(),
-					span: property.span.clone(),
-					kind: ComponentKind::Member(var),
-				}];
-
-				[obj, prop].concat()
-			}
-		}
-	}
-
-	fn determine_component_kind_from_type(obj_type: UnsafeRef<Type>, property: &Symbol) -> Option<ComponentKind> {
-		match &*obj_type {
-			// Invalid cases, should be caught by typechecker
-			Type::Void | Type::Function(_) | Type::Unresolved => None,
-
-			// all fields / methods / values of these types are phase-independent so we can skip them
-			Type::Anything
-			| Type::Number
-			| Type::String
-			| Type::Duration
-			| Type::Boolean
-			| Type::Json
-			| Type::MutJson
-			| Type::Nil
-			| Type::Enum(_) => None,
-
-			Type::Optional(t) => Self::determine_component_kind_from_type(*t, property),
-
-			// TODO: collection types are unsupported for now
-			Type::Array(_) | Type::MutArray(_) | Type::Map(_) | Type::MutMap(_) | Type::Set(_) | Type::MutSet(_) => {
-				Some(ComponentKind::Unsupported)
-			}
-
-			Type::Class(cls) => Some(ComponentKind::Member(cls.env.lookup(&property, None)?.as_variable()?)),
-			Type::Interface(iface) => Some(ComponentKind::Member(iface.env.lookup(&property, None)?.as_variable()?)),
-			Type::Struct(st) => Some(ComponentKind::Member(st.env.lookup(&property, None)?.as_variable()?)),
-		}
-	}
-}
-
-/// Visitor that finds all the types and variables used within an inflight method but defined in its
-/// parent environment
-struct CaptureScanner<'a> {
-	/// Set of user types referenced inside the method
-	captured_types: IndexMap<Vec<Symbol>, TypeRef>,
-
-	/// The set of free variables referenced by the method
-	captured_vars: IndexSet<String>,
-
-	/// The root scope of the function we're analyzing
-	function_scope: &'a Scope,
-
-	/// The method env, used to lookup the type
-	method_env: SymbolEnvRef,
-
-	/// The current environment (tracked via the visitor)
-	current_env: SymbolEnvRef,
-
-	/// The index of the last visited statement.
-	current_index: usize,
-}
-
-impl<'a> CaptureScanner<'a> {
-	pub fn new(function_scope: &'a Scope) -> Self {
-		let env = function_scope.env.borrow().as_ref().unwrap().get_ref();
-		Self {
-			captured_types: IndexMap::new(),
-			captured_vars: IndexSet::new(),
-			function_scope,
-			method_env: env,
-			current_env: env,
-			current_index: 0,
-		}
-	}
-
-	pub fn scan(&mut self) {
-		self.visit_scope(self.function_scope);
-	}
-
-	fn consider_reference(&mut self, path: &Vec<Symbol>) {
-		let fullname = path.iter().map(|s| s.name.clone()).collect_vec().join(".");
-
-		let lookup = self
-			.current_env
-			.lookup_nested(&path.iter().collect_vec(), Some(self.current_index));
-
-		// if the symbol is defined later in the current environment, it means we can't capture a
-		// reference to a symbol with the same name from a parent so bail out.
-		if let LookupResult::DefinedLater = lookup {
-			let sym = path.first().unwrap();
-
-			report_diagnostic(Diagnostic {
-				span: Some(sym.span.clone()),
-				message: format!(
-					"Cannot capture symbol \"{fullname}\" because it is shadowed by another symbol with the same name"
-				),
-			});
-
-			return;
-		}
-
-		// any other lookup failure is likely a an invalid reference so we can skip it
-		let LookupResult::Found(kind, symbol_info) = lookup else {
-			return;
-		};
-
-		// now, we need to determine if the environment this symbol is defined in is a parent of the
-		// method's environment. if it is, we need to capture it.
-		if symbol_info.env.is_same(&self.method_env) || symbol_info.env.is_child_of(&self.method_env) {
-			return;
-		}
-
-		match kind {
-			SymbolKind::Type(t) => {
-				self.captured_types.insert(path.clone(), *t);
-			}
-			SymbolKind::Variable(var) => {
-				// skip macro functions (like "log" and "assert")
-				if let Type::Function(f) = &*var.type_ {
-					if f.js_override.is_some() {
-						return;
-					}
-				}
-
-				self.captured_vars.insert(fullname);
-			}
-			// Namespaces are not captured as they are not actually valid references
-			// The existence of this reference will have already caused an error in the type checker
-			SymbolKind::Namespace(_) => {}
-		}
-	}
-}
-
-impl<'ast> Visit<'ast> for CaptureScanner<'ast> {
-	fn visit_reference(&mut self, node: &'ast Reference) {
-		match node {
-			Reference::Identifier(symb) => {
-				// skip "this"
-				if symb.name == "this" {
-					return;
-				}
-
-				self.consider_reference(&vec![symb.clone()]);
-			}
-
-			Reference::TypeReference(t) => self.consider_reference(&t.full_path()),
-
-			// this is the case of "object.property" (or `Type.property`). if we need to capture "object",
-			// it will be captured as an identifier, so we can skip it here.
-			Reference::TypeMember { .. } => {}
-			Reference::InstanceMember { .. } => {}
-		}
-
-		visit::visit_reference(self, node);
-	}
-
-	fn visit_scope(&mut self, node: &'ast Scope) {
-		let backup_env = self.current_env;
-		self.current_env = node.env.borrow().as_ref().unwrap().get_ref();
-		visit::visit_scope(self, node);
-		self.current_env = backup_env;
-	}
-
-	fn visit_stmt(&mut self, node: &'ast Stmt) {
-		self.current_index = node.idx;
-		visit::visit_stmt(self, node);
-	}
 }
 
 fn inflight_filename(class: &AstClass) -> String {
-	format!("inflight.{}.js", class.name.name)
-}
-
-fn jsify_type_name(t: &Vec<Symbol>, phase: Phase) -> String {
-	// if we are inside an inflight context, we need to mangle the type name so we can capture it
-	let p = t.iter().map(|f| f.name.clone()).collect_vec();
-
-	if phase == Phase::Inflight {
-		p.join("_")
-	} else {
-		p.join(".")
-	}
+	format!("./inflight.{}.js", class.name.name)
 }
 
 fn lookup_span(span: &WingSpan, files: &Files) -> String {
@@ -2083,21 +1332,4 @@ fn escape_javascript_string(s: &str) -> String {
 	}
 
 	result
-}
-
-#[cfg(test)]
-mod tests {
-	use super::*;
-
-	#[test]
-	fn test_escape_javascript_string() {
-		assert_eq!(escape_javascript_string("hello"), String::from("hello"));
-		assert_eq!(escape_javascript_string("hello\nworld"), String::from("hello\\nworld"));
-		assert_eq!(escape_javascript_string("hello\rworld"), String::from("hello\\rworld"));
-		assert_eq!(escape_javascript_string("hello\tworld"), String::from("hello\\tworld"));
-		assert_eq!(escape_javascript_string("hello\\world"), String::from("hello\\\\world"));
-		assert_eq!(escape_javascript_string("hello'world"), String::from("hello\\'world"));
-		assert_eq!(escape_javascript_string("hello\"world"), String::from("hello\\\"world"));
-		assert_eq!(escape_javascript_string("hello\0world"), String::from("hello\\0world"));
-	}
 }

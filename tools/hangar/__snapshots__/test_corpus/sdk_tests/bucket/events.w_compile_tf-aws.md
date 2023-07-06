@@ -2,17 +2,15 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ table, idsCounter }) {
+module.exports = function({ $idsCounter, $table }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
-    async handle(key, operation, source)  {
-      (await table.insert(String.raw({ raw: ["", ""] }, (await idsCounter.inc())),Object.freeze({"key":key,"operation":operation,"source":String.raw({ raw: ["", ""] }, source)})));
+    async handle(key, operation, source) {
+      (await $table.insert(String.raw({ raw: ["", ""] }, (await $idsCounter.inc())),Object.freeze({"key":key,"operation":operation,"source":String.raw({ raw: ["", ""] }, source)})));
     }
   }
   return $Closure1;
@@ -22,17 +20,15 @@ module.exports = function({ table, idsCounter }) {
 
 ## inflight.$Closure2.js
 ```js
-module.exports = function({ logHistory, Source }) {
+module.exports = function({ $Source, $logHistory }) {
   class $Closure2 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
-    async handle(key)  {
-      (await logHistory(key,"DELETE",Source.anyEvent));
+    async handle(key) {
+      (await $logHistory(key,"DELETE",$Source.anyEvent));
     }
   }
   return $Closure2;
@@ -42,17 +38,15 @@ module.exports = function({ logHistory, Source }) {
 
 ## inflight.$Closure3.js
 ```js
-module.exports = function({ logHistory, Source }) {
+module.exports = function({ $Source, $logHistory }) {
   class $Closure3 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
-    async handle(key)  {
-      (await logHistory(key,"UPDATE",Source.anyEvent));
+    async handle(key) {
+      (await $logHistory(key,"UPDATE",$Source.anyEvent));
     }
   }
   return $Closure3;
@@ -62,17 +56,15 @@ module.exports = function({ logHistory, Source }) {
 
 ## inflight.$Closure4.js
 ```js
-module.exports = function({ logHistory, Source }) {
+module.exports = function({ $Source, $logHistory }) {
   class $Closure4 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
-    async handle(key)  {
-      (await logHistory(key,"CREATE",Source.anyEvent));
+    async handle(key) {
+      (await $logHistory(key,"CREATE",$Source.anyEvent));
     }
   }
   return $Closure4;
@@ -82,17 +74,15 @@ module.exports = function({ logHistory, Source }) {
 
 ## inflight.$Closure5.js
 ```js
-module.exports = function({ logHistory, Source }) {
+module.exports = function({ $Source, $logHistory }) {
   class $Closure5 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
-    async handle(key, event)  {
-      (await logHistory(key,String.raw({ raw: ["", ""] }, event),Source.onEvent));
+    async handle(key, event) {
+      (await $logHistory(key,String.raw({ raw: ["", ""] }, event),$Source.onEvent));
     }
   }
   return $Closure5;
@@ -102,22 +92,20 @@ module.exports = function({ logHistory, Source }) {
 
 ## inflight.$Closure6.js
 ```js
-module.exports = function({ Util }) {
+module.exports = function({ $Util }) {
   class $Closure6 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
-    async handle(pred)  {
+    async handle(pred) {
       let i = 0;
       while ((i < 12)) {
         if ((await pred())) {
           return true;
         }
-        (await Util.sleep(10000));
+        (await $Util.sleep(10000));
         i = (i + 1);
       }
       return false;
@@ -130,19 +118,17 @@ module.exports = function({ Util }) {
 
 ## inflight.$Closure7.js
 ```js
-module.exports = function({ table }) {
+module.exports = function({ $table }) {
   class $Closure7 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
-    async handle(opts)  {
-      return async () =>  {
+    async handle(opts) {
+      return async () => {
         let count = 0;
-        for (const u of (await table.list())) {
+        for (const u of (await $table.list())) {
           if (((((u)["key"] === opts.key) && ((u)["operation"] === opts.type)) && ((u)["source"] === String.raw({ raw: ["", ""] }, opts.source)))) {
             count = (count + 1);
           }
@@ -159,31 +145,29 @@ module.exports = function({ table }) {
 
 ## inflight.$Closure8.js
 ```js
-module.exports = function({ b, wait, checkHitCount, Source }) {
+module.exports = function({ $Source, $b, $checkHitCount, $wait }) {
   class $Closure8 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      (await b.put("a","1"));
-      (await b.put("b","1"));
-      (await b.put("c","1"));
-      (await b.put("b","100"));
-      (await b.delete("c"));
-      {((cond) => {if (!cond) throw new Error("assertion failed: wait(checkHitCount(key: \"a\", type: \"CREATE\", source: Source.anyEvent, count: 1))")})((await wait((await checkHitCount({ key: "a", type: "CREATE", source: Source.anyEvent, count: 1 })))))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: wait(checkHitCount(key: \"b\", type: \"CREATE\", source: Source.anyEvent, count: 1))")})((await wait((await checkHitCount({ key: "b", type: "CREATE", source: Source.anyEvent, count: 1 })))))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: wait(checkHitCount(key: \"c\", type: \"CREATE\", source: Source.anyEvent, count: 1))")})((await wait((await checkHitCount({ key: "c", type: "CREATE", source: Source.anyEvent, count: 1 })))))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: wait(checkHitCount(key: \"a\", type: \"CREATE\", source: Source.onEvent, count: 1))")})((await wait((await checkHitCount({ key: "a", type: "CREATE", source: Source.onEvent, count: 1 })))))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: wait(checkHitCount(key: \"b\", type: \"CREATE\", source:  Source.onEvent, count: 1))")})((await wait((await checkHitCount({ key: "b", type: "CREATE", source: Source.onEvent, count: 1 })))))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: wait(checkHitCount(key: \"c\", type: \"CREATE\", source:  Source.onEvent, count: 1))")})((await wait((await checkHitCount({ key: "c", type: "CREATE", source: Source.onEvent, count: 1 })))))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: wait(checkHitCount(key: \"b\", type: \"UPDATE\", source: Source.anyEvent, count: 1))")})((await wait((await checkHitCount({ key: "b", type: "UPDATE", source: Source.anyEvent, count: 1 })))))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: wait(checkHitCount(key: \"c\", type: \"DELETE\", source: Source.anyEvent, count: 1))")})((await wait((await checkHitCount({ key: "c", type: "DELETE", source: Source.anyEvent, count: 1 })))))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: wait(checkHitCount(key: \"b\", type: \"UPDATE\", source: Source.onEvent, count: 1))")})((await wait((await checkHitCount({ key: "b", type: "UPDATE", source: Source.onEvent, count: 1 })))))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: wait(checkHitCount(key: \"c\", type: \"DELETE\", source: Source.onEvent, count: 1))")})((await wait((await checkHitCount({ key: "c", type: "DELETE", source: Source.onEvent, count: 1 })))))};
+    async handle() {
+      (await $b.put("a","1"));
+      (await $b.put("b","1"));
+      (await $b.put("c","1"));
+      (await $b.put("b","100"));
+      (await $b.delete("c"));
+      {((cond) => {if (!cond) throw new Error("assertion failed: wait(checkHitCount(key: \"a\", type: \"CREATE\", source: Source.anyEvent, count: 1))")})((await $wait((await $checkHitCount({ key: "a", type: "CREATE", source: $Source.anyEvent, count: 1 })))))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: wait(checkHitCount(key: \"b\", type: \"CREATE\", source: Source.anyEvent, count: 1))")})((await $wait((await $checkHitCount({ key: "b", type: "CREATE", source: $Source.anyEvent, count: 1 })))))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: wait(checkHitCount(key: \"c\", type: \"CREATE\", source: Source.anyEvent, count: 1))")})((await $wait((await $checkHitCount({ key: "c", type: "CREATE", source: $Source.anyEvent, count: 1 })))))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: wait(checkHitCount(key: \"a\", type: \"CREATE\", source: Source.onEvent, count: 1))")})((await $wait((await $checkHitCount({ key: "a", type: "CREATE", source: $Source.onEvent, count: 1 })))))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: wait(checkHitCount(key: \"b\", type: \"CREATE\", source:  Source.onEvent, count: 1))")})((await $wait((await $checkHitCount({ key: "b", type: "CREATE", source: $Source.onEvent, count: 1 })))))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: wait(checkHitCount(key: \"c\", type: \"CREATE\", source:  Source.onEvent, count: 1))")})((await $wait((await $checkHitCount({ key: "c", type: "CREATE", source: $Source.onEvent, count: 1 })))))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: wait(checkHitCount(key: \"b\", type: \"UPDATE\", source: Source.anyEvent, count: 1))")})((await $wait((await $checkHitCount({ key: "b", type: "UPDATE", source: $Source.anyEvent, count: 1 })))))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: wait(checkHitCount(key: \"c\", type: \"DELETE\", source: Source.anyEvent, count: 1))")})((await $wait((await $checkHitCount({ key: "c", type: "DELETE", source: $Source.anyEvent, count: 1 })))))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: wait(checkHitCount(key: \"b\", type: \"UPDATE\", source: Source.onEvent, count: 1))")})((await $wait((await $checkHitCount({ key: "b", type: "UPDATE", source: $Source.onEvent, count: 1 })))))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: wait(checkHitCount(key: \"c\", type: \"DELETE\", source: Source.onEvent, count: 1))")})((await $wait((await $checkHitCount({ key: "c", type: "DELETE", source: $Source.onEvent, count: 1 })))))};
     }
   }
   return $Closure8;
@@ -197,9 +181,7 @@ module.exports = function({  }) {
   class Util {
     constructor({  }) {
     }
-    async $inflight_init()  {
-    }
-    static async sleep(milli)  {
+    static async sleep(milli) {
       return (require("<ABSOLUTE_PATH>/sleep.js")["sleep"])(milli)
     }
   }
@@ -1088,12 +1070,11 @@ class $Root extends $stdlib.std.Resource {
     class Util extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("sleep");
+        this._addInflightOps("sleep", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.Util.js";
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.Util.js")({
           })
         `);
       }
@@ -1108,31 +1089,18 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-        }
-        super._registerBind(host, ops);
-      }
-      static _registerTypeBind(host, ops) {
-        if (ops.includes("sleep")) {
-        }
-        super._registerTypeBind(host, ops);
-      }
     }
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const table_client = context._lift(table);
-        const idsCounter_client = context._lift(idsCounter);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            table: ${table_client},
-            idsCounter: ${idsCounter_client},
+          require("./inflight.$Closure1.js")({
+            $idsCounter: ${context._lift(idsCounter)},
+            $table: ${context._lift(table)},
           })
         `);
       }
@@ -1148,10 +1116,6 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure1._registerBindObject(idsCounter, host, []);
-          $Closure1._registerBindObject(table, host, []);
-        }
         if (ops.includes("handle")) {
           $Closure1._registerBindObject(idsCounter, host, ["inc"]);
           $Closure1._registerBindObject(table, host, ["insert"]);
@@ -1163,22 +1127,13 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure2.js";
-        const logHistory_client = context._lift(logHistory);
-        const SourceClient = $stdlib.core.NodeJsCode.fromInline(`
-          Object.freeze((function (tmp) {
-            tmp[tmp["anyEvent"] = 0] = "anyEvent";
-            tmp[tmp["onEvent"] = 1] = "onEvent";
-            return tmp;
-          })({}))
-        `);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            logHistory: ${logHistory_client},
-            Source: ${SourceClient.text},
+          require("./inflight.$Closure2.js")({
+            $Source: ${context._lift(Source)},
+            $logHistory: ${context._lift(logHistory)},
           })
         `);
       }
@@ -1194,9 +1149,6 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure2._registerBindObject(logHistory, host, []);
-        }
         if (ops.includes("handle")) {
           $Closure2._registerBindObject(logHistory, host, ["handle"]);
         }
@@ -1207,22 +1159,13 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure3.js";
-        const logHistory_client = context._lift(logHistory);
-        const SourceClient = $stdlib.core.NodeJsCode.fromInline(`
-          Object.freeze((function (tmp) {
-            tmp[tmp["anyEvent"] = 0] = "anyEvent";
-            tmp[tmp["onEvent"] = 1] = "onEvent";
-            return tmp;
-          })({}))
-        `);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            logHistory: ${logHistory_client},
-            Source: ${SourceClient.text},
+          require("./inflight.$Closure3.js")({
+            $Source: ${context._lift(Source)},
+            $logHistory: ${context._lift(logHistory)},
           })
         `);
       }
@@ -1238,9 +1181,6 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure3._registerBindObject(logHistory, host, []);
-        }
         if (ops.includes("handle")) {
           $Closure3._registerBindObject(logHistory, host, ["handle"]);
         }
@@ -1251,22 +1191,13 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure4.js";
-        const logHistory_client = context._lift(logHistory);
-        const SourceClient = $stdlib.core.NodeJsCode.fromInline(`
-          Object.freeze((function (tmp) {
-            tmp[tmp["anyEvent"] = 0] = "anyEvent";
-            tmp[tmp["onEvent"] = 1] = "onEvent";
-            return tmp;
-          })({}))
-        `);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            logHistory: ${logHistory_client},
-            Source: ${SourceClient.text},
+          require("./inflight.$Closure4.js")({
+            $Source: ${context._lift(Source)},
+            $logHistory: ${context._lift(logHistory)},
           })
         `);
       }
@@ -1282,9 +1213,6 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure4._registerBindObject(logHistory, host, []);
-        }
         if (ops.includes("handle")) {
           $Closure4._registerBindObject(logHistory, host, ["handle"]);
         }
@@ -1295,22 +1223,13 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure5.js";
-        const logHistory_client = context._lift(logHistory);
-        const SourceClient = $stdlib.core.NodeJsCode.fromInline(`
-          Object.freeze((function (tmp) {
-            tmp[tmp["anyEvent"] = 0] = "anyEvent";
-            tmp[tmp["onEvent"] = 1] = "onEvent";
-            return tmp;
-          })({}))
-        `);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            logHistory: ${logHistory_client},
-            Source: ${SourceClient.text},
+          require("./inflight.$Closure5.js")({
+            $Source: ${context._lift(Source)},
+            $logHistory: ${context._lift(logHistory)},
           })
         `);
       }
@@ -1326,9 +1245,6 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure5._registerBindObject(logHistory, host, []);
-        }
         if (ops.includes("handle")) {
           $Closure5._registerBindObject(logHistory, host, ["handle"]);
         }
@@ -1339,14 +1255,12 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure6.js";
-        const UtilClient = Util._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            Util: ${UtilClient.text},
+          require("./inflight.$Closure6.js")({
+            $Util: ${context._lift(Util)},
           })
         `);
       }
@@ -1362,8 +1276,6 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-        }
         if (ops.includes("handle")) {
           $Closure6._registerBindObject(Util, host, ["sleep"]);
         }
@@ -1374,14 +1286,12 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure7.js";
-        const table_client = context._lift(table);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            table: ${table_client},
+          require("./inflight.$Closure7.js")({
+            $table: ${context._lift(table)},
           })
         `);
       }
@@ -1397,9 +1307,6 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure7._registerBindObject(table, host, []);
-        }
         if (ops.includes("handle")) {
           $Closure7._registerBindObject(table, host, ["list"]);
         }
@@ -1410,26 +1317,15 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure8.js";
-        const b_client = context._lift(b);
-        const wait_client = context._lift(wait);
-        const checkHitCount_client = context._lift(checkHitCount);
-        const SourceClient = $stdlib.core.NodeJsCode.fromInline(`
-          Object.freeze((function (tmp) {
-            tmp[tmp["anyEvent"] = 0] = "anyEvent";
-            tmp[tmp["onEvent"] = 1] = "onEvent";
-            return tmp;
-          })({}))
-        `);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            b: ${b_client},
-            wait: ${wait_client},
-            checkHitCount: ${checkHitCount_client},
-            Source: ${SourceClient.text},
+          require("./inflight.$Closure8.js")({
+            $Source: ${context._lift(Source)},
+            $b: ${context._lift(b)},
+            $checkHitCount: ${context._lift(checkHitCount)},
+            $wait: ${context._lift(wait)},
           })
         `);
       }
@@ -1445,11 +1341,6 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure8._registerBindObject(b, host, []);
-          $Closure8._registerBindObject(checkHitCount, host, []);
-          $Closure8._registerBindObject(wait, host, []);
-        }
         if (ops.includes("handle")) {
           $Closure8._registerBindObject(b, host, ["delete", "put"]);
           $Closure8._registerBindObject(checkHitCount, host, ["handle"]);

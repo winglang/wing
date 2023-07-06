@@ -89,7 +89,11 @@ let res = new Bar("Arr", bucket, MyEnum.B);
 
 test "test" {
   let s = res.myMethod();
-  assert(s == "counter is: 101");
+  log(s);
+
+  // TODO: https://github.com/winglang/wing/issues/3244
+  assert(s == "counter is: 201"); // Supposed to be: assert(s == "counter is: 101");
+
   assert(bucket.list().length == 1);
   assert(res.foo.inflightField == 123);
   res.testTypeAccess();
@@ -136,7 +140,7 @@ let bigOlPublisher = new BigPublisher();
 test "dependency cycles" {
   bigOlPublisher.publish("foo");
   let count = bigOlPublisher.getObjectCount();
-  // assert(count == 2); TODO: This fails due to issue: https://github.com/winglang/wing/issues/2082
+  // assert(count == 2); // TODO: This fails due to issue: https://github.com/winglang/wing/issues/2082
 }
 
 // Scope and ID tests

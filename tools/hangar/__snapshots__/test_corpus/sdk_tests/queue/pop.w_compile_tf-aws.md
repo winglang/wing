@@ -2,26 +2,24 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ q, NIL }) {
+module.exports = function({ $NIL, $q }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
-    async handle()  {
+    async handle() {
       const msgs = Object.freeze(["Foo", "Bar"]);
       for (const msg of msgs) {
-        (await q.push(msg));
+        (await $q.push(msg));
       }
-      const first = ((await q.pop()) ?? NIL);
-      const second = ((await q.pop()) ?? NIL);
-      const third = ((await q.pop()) ?? NIL);
+      const first = ((await $q.pop()) ?? $NIL);
+      const second = ((await $q.pop()) ?? $NIL);
+      const third = ((await $q.pop()) ?? $NIL);
       {((cond) => {if (!cond) throw new Error("assertion failed: msgs.contains(first)")})(msgs.includes(first))};
       {((cond) => {if (!cond) throw new Error("assertion failed: msgs.contains(second)")})(msgs.includes(second))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: third == NIL")})((third === NIL))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: third == NIL")})((third === $NIL))};
     }
   }
   return $Closure1;
@@ -177,16 +175,13 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const q_client = context._lift(q);
-        const NIL_client = context._lift(NIL);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            q: ${q_client},
-            NIL: ${NIL_client},
+          require("./inflight.$Closure1.js")({
+            $NIL: ${context._lift(NIL)},
+            $q: ${context._lift(q)},
           })
         `);
       }
@@ -202,10 +197,6 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure1._registerBindObject(NIL, host, []);
-          $Closure1._registerBindObject(q, host, []);
-        }
         if (ops.includes("handle")) {
           $Closure1._registerBindObject(NIL, host, []);
           $Closure1._registerBindObject(q, host, ["pop", "push"]);

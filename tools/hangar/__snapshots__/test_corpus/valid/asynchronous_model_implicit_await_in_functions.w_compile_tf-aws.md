@@ -9,9 +9,7 @@ module.exports = function({  }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
-    async handle(s)  {
+    async handle(s) {
     }
   }
   return $Closure1;
@@ -21,18 +19,16 @@ module.exports = function({  }) {
 
 ## inflight.$Closure2.js
 ```js
-module.exports = function({ strToStr }) {
+module.exports = function({ $strToStr }) {
   class $Closure2 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
-    async handle(s)  {
-      (await strToStr.invoke("one"));
-      {console.log((await strToStr.invoke("two")))};
+    async handle(s) {
+      (await $strToStr.invoke("one"));
+      {console.log((await $strToStr.invoke("two")))};
     }
   }
   return $Closure2;
@@ -254,12 +250,11 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.$Closure1.js")({
           })
         `);
       }
@@ -274,26 +269,17 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-        }
-        if (ops.includes("handle")) {
-        }
-        super._registerBind(host, ops);
-      }
     }
     class $Closure2 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure2.js";
-        const strToStr_client = context._lift(strToStr);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            strToStr: ${strToStr_client},
+          require("./inflight.$Closure2.js")({
+            $strToStr: ${context._lift(strToStr)},
           })
         `);
       }
@@ -309,9 +295,6 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure2._registerBindObject(strToStr, host, []);
-        }
         if (ops.includes("handle")) {
           $Closure2._registerBindObject(strToStr, host, ["invoke"]);
         }

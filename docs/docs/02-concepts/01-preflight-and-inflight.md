@@ -5,16 +5,15 @@ description: "Wing's two execution phases: preflight and inflight"
 keywords: [Inflights, Inflight functions, Preflight, Preflight code]
 ---
 
-Wing has two execution phases:
+One of the main differences between Wing and other languages is that it unifies both infrastructure definitions and application logic under the same programming model. 
+This is enabled by the concepts of the *preflight* and *inflight* execution phases:
 
-- **preflight**: code that runs once, at compile time, to generate the infrastructure configuration of your cloud application. For example, setting up databases, queues, storage buckets, API endpoints, etc.
-- **inflight**: code that runs at runtime to perform your application logic. For example, handling API requests, processing queue messages, etc. Inflight code can be executed on compute platforms in the cloud, such as function services (lambda), containers, VMs or physical servers.
-
-One of the main differences between Wing and other languages is that it unifies both execution phases under the same programming model, through the concepts of preflight code and inflight code.
+- **Preflight**: Code that runs once, at compile time, and generates the infrastructure configuration of your cloud application. For example, setting up databases, queues, storage buckets, API endpoints, etc.
+- **Inflight**: Code that runs at runtime and implements your application's behavior. For example, handling API requests, processing queue messages, etc. Inflight code can be executed on various compute platforms in the cloud, such as function services (such as AWS Lambda or Azure Functions), containers (such as ECS or Kubernetes), VMs or even physical servers.
 
 ## Preflight code
 
-Preflight code is code that runs once, at compile time, to generate the app's infrastructure configuration.
+Your preflight code runs once, at compile time, and defines your application's infrastructure configuration. This configuration is then consumed by an infrastructure provisioning engine such as Terraform, CloudFormation, Pulumi or Kubernetes.
 
 For example, this code snippet defines a storage bucket using a class from the standard library:
 
