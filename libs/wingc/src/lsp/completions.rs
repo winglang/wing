@@ -94,15 +94,17 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 
 					let mut completions = get_completions_from_type(&nearest_expr_type, types, Some(found_env.phase), true);
 					if nearest_expr_type.is_option() && node_to_complete.kind() == "." {
-						let extra_insert_position = Position {
-							character: node_to_complete.start_position().column as u32,
-							line: node_to_complete.start_position().row as u32,
-						};
 						let extra_edit = Some(vec![TextEdit {
 							new_text: "?.".to_string(),
 							range: Range {
-								start: extra_insert_position,
-								end: extra_insert_position,
+								start: Position {
+									character: node_to_complete.start_position().column as u32,
+									line: node_to_complete.start_position().row as u32,
+								},
+								end: Position {
+									character: node_to_complete.end_position().column as u32,
+									line: node_to_complete.end_position().row as u32,
+								},
 							},
 						}]);
 						for completion in completions.iter_mut() {
