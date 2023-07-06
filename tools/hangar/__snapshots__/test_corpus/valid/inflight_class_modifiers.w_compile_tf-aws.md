@@ -4,10 +4,10 @@
 ```js
 module.exports = function({  }) {
   class C {
-     constructor()  {
-      this.field = 12;
+    async method() {
     }
-    async method()  {
+    constructor() {
+      this.field = 12;
     }
   }
   return C;
@@ -60,12 +60,11 @@ class $Root extends $stdlib.std.Resource {
     class C extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("method", "field");
+        this._addInflightOps("method", "$inflight_init", "field");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.C.js";
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.C.js")({
           })
         `);
       }
@@ -82,8 +81,7 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-        }
-        if (ops.includes("method")) {
+          C._registerBindObject(this, host, ["field"]);
         }
         super._registerBind(host, ops);
       }

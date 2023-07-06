@@ -2,19 +2,17 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ s1, s2 }) {
+module.exports = function({ $__s1_split_______at_1__, $_s1_concat_s2__, $s1_indexOf__s__ }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      {console.log(String.raw({ raw: ["index of \"s\" in s1 is ", ""] }, s1.indexOf("s")))};
-      {console.log((await (await s1.split(" ")).at(1)))};
-      {console.log((await s1.concat(s2)))};
+    async handle() {
+      {console.log(String.raw({ raw: ["index of \"s\" in s1 is ", ""] }, $s1_indexOf__s__))};
+      {console.log($__s1_split_______at_1__)};
+      {console.log($_s1_concat_s2__)};
     }
   }
   return $Closure1;
@@ -157,16 +155,14 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const s1_client = context._lift(s1);
-        const s2_client = context._lift(s2);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            s1: ${s1_client},
-            s2: ${s2_client},
+          require("./inflight.$Closure1.js")({
+            $__s1_split_______at_1__: ${context._lift(((s1.split(" ")).at(1)))},
+            $_s1_concat_s2__: ${context._lift((s1.concat(s2)))},
+            $s1_indexOf__s__: ${context._lift(s1.indexOf("s"))},
           })
         `);
       }
@@ -182,13 +178,10 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure1._registerBindObject(s1, host, []);
-          $Closure1._registerBindObject(s2, host, []);
-        }
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(s1, host, []);
-          $Closure1._registerBindObject(s2, host, []);
+          $Closure1._registerBindObject(((s1.split(" ")).at(1)), host, []);
+          $Closure1._registerBindObject((s1.concat(s2)), host, []);
+          $Closure1._registerBindObject(s1.indexOf("s"), host, []);
         }
         super._registerBind(host, ops);
       }

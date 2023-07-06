@@ -2,27 +2,25 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ counter }) {
+module.exports = function({ $counter }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      {((cond) => {if (!cond) throw new Error("assertion failed: counter.peek() == 0")})(((await counter.peek()) === 0))};
-      const r0 = (await counter.inc());
+    async handle() {
+      {((cond) => {if (!cond) throw new Error("assertion failed: counter.peek() == 0")})(((await $counter.peek()) === 0))};
+      const r0 = (await $counter.inc());
       {((cond) => {if (!cond) throw new Error("assertion failed: r0 == 0")})((r0 === 0))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: counter.peek() == 1")})(((await counter.peek()) === 1))};
-      const r1 = (await counter.inc());
+      {((cond) => {if (!cond) throw new Error("assertion failed: counter.peek() == 1")})(((await $counter.peek()) === 1))};
+      const r1 = (await $counter.inc());
       {((cond) => {if (!cond) throw new Error("assertion failed: r1 == 1")})((r1 === 1))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: counter.peek() == 2")})(((await counter.peek()) === 2))};
-      const r2 = (await counter.inc(10));
+      {((cond) => {if (!cond) throw new Error("assertion failed: counter.peek() == 2")})(((await $counter.peek()) === 2))};
+      const r2 = (await $counter.inc(10));
       {((cond) => {if (!cond) throw new Error("assertion failed: r2 == 2")})((r2 === 2))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: counter.peek() == 12")})(((await counter.peek()) === 12))};
-      const r3 = (await counter.inc());
+      {((cond) => {if (!cond) throw new Error("assertion failed: counter.peek() == 12")})(((await $counter.peek()) === 12))};
+      const r3 = (await $counter.inc());
       {((cond) => {if (!cond) throw new Error("assertion failed: r3 == 12")})((r3 === 12))};
     }
   }
@@ -33,28 +31,26 @@ module.exports = function({ counter }) {
 
 ## inflight.$Closure2.js
 ```js
-module.exports = function({ counter }) {
+module.exports = function({ $counter }) {
   class $Closure2 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
-    async handle()  {
+    async handle() {
       const key = "my-key";
-      {((cond) => {if (!cond) throw new Error("assertion failed: counter.peek(key) == 0")})(((await counter.peek(key)) === 0))};
-      const r0 = (await counter.inc(undefined,key));
+      {((cond) => {if (!cond) throw new Error("assertion failed: counter.peek(key) == 0")})(((await $counter.peek(key)) === 0))};
+      const r0 = (await $counter.inc(undefined,key));
       {((cond) => {if (!cond) throw new Error("assertion failed: r0 == 0")})((r0 === 0))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: counter.peek(key) == 1")})(((await counter.peek(key)) === 1))};
-      const r1 = (await counter.inc(undefined,key));
+      {((cond) => {if (!cond) throw new Error("assertion failed: counter.peek(key) == 1")})(((await $counter.peek(key)) === 1))};
+      const r1 = (await $counter.inc(undefined,key));
       {((cond) => {if (!cond) throw new Error("assertion failed: r1 == 1")})((r1 === 1))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: counter.peek(key) == 2")})(((await counter.peek(key)) === 2))};
-      const r2 = (await counter.inc(10,key));
+      {((cond) => {if (!cond) throw new Error("assertion failed: counter.peek(key) == 2")})(((await $counter.peek(key)) === 2))};
+      const r2 = (await $counter.inc(10,key));
       {((cond) => {if (!cond) throw new Error("assertion failed: r2 == 2")})((r2 === 2))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: counter.peek(key) == 12")})(((await counter.peek(key)) === 12))};
-      const r3 = (await counter.inc(undefined,key));
+      {((cond) => {if (!cond) throw new Error("assertion failed: counter.peek(key) == 12")})(((await $counter.peek(key)) === 12))};
+      const r3 = (await $counter.inc(undefined,key));
       {((cond) => {if (!cond) throw new Error("assertion failed: r3 == 12")})((r3 === 12))};
     }
   }
@@ -286,14 +282,12 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const counter_client = context._lift(counter);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            counter: ${counter_client},
+          require("./inflight.$Closure1.js")({
+            $counter: ${context._lift(counter)},
           })
         `);
       }
@@ -309,9 +303,6 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure1._registerBindObject(counter, host, []);
-        }
         if (ops.includes("handle")) {
           $Closure1._registerBindObject(counter, host, ["inc", "peek"]);
         }
@@ -322,14 +313,12 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure2.js";
-        const counter_client = context._lift(counter);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            counter: ${counter_client},
+          require("./inflight.$Closure2.js")({
+            $counter: ${context._lift(counter)},
           })
         `);
       }
@@ -345,9 +334,6 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure2._registerBindObject(counter, host, []);
-        }
         if (ops.includes("handle")) {
           $Closure2._registerBindObject(counter, host, ["inc", "peek"]);
         }

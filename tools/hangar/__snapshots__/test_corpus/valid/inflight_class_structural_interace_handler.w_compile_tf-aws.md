@@ -2,20 +2,25 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ NotGoo }) {
+module.exports = function({ $NotGoo }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      const YesGoo = require("./inflight.YesGoo.js")({});
+    async handle() {
+      class YesGoo {
+        async handle() {
+          return 456;
+        }
+        async anotherMethod() {
+          {console.log("also fine")};
+        }
+      }
       const y = new YesGoo();
       {((cond) => {if (!cond) throw new Error("assertion failed: y.handle() == 456")})(((await y.handle()) === 456))};
-      const x = new NotGoo();
+      const x = new $NotGoo();
       {((cond) => {if (!cond) throw new Error("assertion failed: x.handle() == 123")})(((await x.handle()) === 123))};
     }
   }
@@ -28,31 +33,11 @@ module.exports = function({ NotGoo }) {
 ```js
 module.exports = function({  }) {
   class NotGoo {
-     constructor()  {
-    }
-    async handle()  {
+    async handle() {
       return 123;
     }
   }
   return NotGoo;
-}
-
-```
-
-## inflight.YesGoo.js
-```js
-module.exports = function({  }) {
-  class YesGoo {
-     constructor()  {
-    }
-    async handle()  {
-      return 456;
-    }
-    async anotherMethod()  {
-      {console.log("also fine")};
-    }
-  }
-  return YesGoo;
 }
 
 ```
@@ -192,12 +177,11 @@ class $Root extends $stdlib.std.Resource {
     class NotGoo extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.NotGoo.js";
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.NotGoo.js")({
           })
         `);
       }
@@ -212,26 +196,17 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-        }
-        if (ops.includes("handle")) {
-        }
-        super._registerBind(host, ops);
-      }
     }
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const NotGooClient = NotGoo._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            NotGoo: ${NotGooClient.text},
+          require("./inflight.$Closure1.js")({
+            $NotGoo: ${context._lift(NotGoo)},
           })
         `);
       }
@@ -245,13 +220,6 @@ class $Root extends $stdlib.std.Resource {
             return client;
           })())
         `);
-      }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-        }
-        if (ops.includes("handle")) {
-        }
-        super._registerBind(host, ops);
       }
     }
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:structure interface types for 'handle'",new $Closure1(this,"$Closure1"));

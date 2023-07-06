@@ -2,18 +2,16 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ foo }) {
+module.exports = function({ $foo }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      {((cond) => {if (!cond) throw new Error("assertion failed: foo.returnNil(true)? == true")})(((((await foo.returnNil(true))) != null) === true))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: foo.returnNil(false)? == false")})(((((await foo.returnNil(false))) != null) === false))};
+    async handle() {
+      {((cond) => {if (!cond) throw new Error("assertion failed: foo.returnNil(true)? == true")})(((((await $foo.returnNil(true))) != null) === true))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: foo.returnNil(false)? == false")})(((((await $foo.returnNil(false))) != null) === false))};
     }
   }
   return $Closure1;
@@ -23,23 +21,21 @@ module.exports = function({ foo }) {
 
 ## inflight.$Closure2.js
 ```js
-module.exports = function({ foo }) {
+module.exports = function({ $foo }) {
   class $Closure2 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      {((cond) => {if (!cond) throw new Error("assertion failed: foo.getOptionalValue()? == false")})(((((await foo.getOptionalValue())) != null) === false))};
-      (await foo.setOptionalValue("hello"));
-      {((cond) => {if (!cond) throw new Error("assertion failed: foo.getOptionalValue()? == true")})(((((await foo.getOptionalValue())) != null) === true))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: foo.getOptionalValue() != nil")})(((await foo.getOptionalValue()) !== undefined))};
-      (await foo.setOptionalValue(undefined));
-      {((cond) => {if (!cond) throw new Error("assertion failed: foo.getOptionalValue()? == false")})(((((await foo.getOptionalValue())) != null) === false))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: foo.getOptionalValue() == nil")})(((await foo.getOptionalValue()) === undefined))};
+    async handle() {
+      {((cond) => {if (!cond) throw new Error("assertion failed: foo.getOptionalValue()? == false")})(((((await $foo.getOptionalValue())) != null) === false))};
+      (await $foo.setOptionalValue("hello"));
+      {((cond) => {if (!cond) throw new Error("assertion failed: foo.getOptionalValue()? == true")})(((((await $foo.getOptionalValue())) != null) === true))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: foo.getOptionalValue() != nil")})(((await $foo.getOptionalValue()) !== undefined))};
+      (await $foo.setOptionalValue(undefined));
+      {((cond) => {if (!cond) throw new Error("assertion failed: foo.getOptionalValue()? == false")})(((((await $foo.getOptionalValue())) != null) === false))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: foo.getOptionalValue() == nil")})(((await $foo.getOptionalValue()) === undefined))};
     }
   }
   return $Closure2;
@@ -53,20 +49,20 @@ module.exports = function({  }) {
   class Foo {
     constructor({  }) {
     }
-    async $inflight_init()  {
-      this.optionalVar = undefined;
-    }
-    async returnNil(t)  {
+    async returnNil(t) {
       if (t) {
         return "hello";
       }
       return undefined;
     }
-    async setOptionalValue(msg)  {
+    async setOptionalValue(msg) {
       this.optionalVar = msg;
     }
-    async getOptionalValue()  {
+    async getOptionalValue() {
       return this.optionalVar;
+    }
+    async $inflight_init() {
+      this.optionalVar = undefined;
     }
   }
   return Foo;
@@ -275,12 +271,11 @@ class $Root extends $stdlib.std.Resource {
     class Foo extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("returnNil", "setOptionalValue", "getOptionalValue", "optionalVar");
+        this._addInflightOps("returnNil", "setOptionalValue", "getOptionalValue", "$inflight_init", "optionalVar");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.Foo.js";
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.Foo.js")({
           })
         `);
       }
@@ -297,12 +292,13 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
+          Foo._registerBindObject(this, host, ["optionalVar"]);
         }
         if (ops.includes("getOptionalValue")) {
-        }
-        if (ops.includes("returnNil")) {
+          Foo._registerBindObject(this, host, ["optionalVar"]);
         }
         if (ops.includes("setOptionalValue")) {
+          Foo._registerBindObject(this, host, ["optionalVar"]);
         }
         super._registerBind(host, ops);
       }
@@ -311,14 +307,12 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const foo_client = context._lift(foo);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            foo: ${foo_client},
+          require("./inflight.$Closure1.js")({
+            $foo: ${context._lift(foo)},
           })
         `);
       }
@@ -334,9 +328,6 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure1._registerBindObject(foo, host, []);
-        }
         if (ops.includes("handle")) {
           $Closure1._registerBindObject(foo, host, ["returnNil"]);
         }
@@ -347,14 +338,12 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure2.js";
-        const foo_client = context._lift(foo);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            foo: ${foo_client},
+          require("./inflight.$Closure2.js")({
+            $foo: ${context._lift(foo)},
           })
         `);
       }
@@ -370,9 +359,6 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure2._registerBindObject(foo, host, []);
-        }
         if (ops.includes("handle")) {
           $Closure2._registerBindObject(foo, host, ["getOptionalValue", "setOptionalValue"]);
         }

@@ -377,6 +377,7 @@ where
 	F: Fold + ?Sized,
 {
 	FunctionDefinition {
+		name: node.name.map(|x| f.fold_symbol(x)),
 		body: match node.body {
 			FunctionBody::Statements(scope) => FunctionBody::Statements(f.fold_scope(scope)),
 			FunctionBody::External(s) => FunctionBody::External(s),
