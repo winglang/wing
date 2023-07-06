@@ -3,7 +3,7 @@ import { describe } from "../describe.js";
 import { getResourceNode } from "../helpers.js";
 
 describe(`${__dirname}/index.w`, () => {
-  test("open redis help", async ({ page }) => {
+  test("opens redis help", async ({ page }) => {
     await getResourceNode(page, "root/Default/redis.Redis").click();
 
     const input = page.getByTestId("redis.redis:input");
@@ -23,7 +23,7 @@ describe(`${__dirname}/index.w`, () => {
     );
   });
 
-  test("redis history navigation", async ({ page }) => {
+  test("navigates history", async ({ page }) => {
     await getResourceNode(page, "root/Default/redis.Redis").click();
 
     const input = page.getByTestId("redis.redis:input");

@@ -3,7 +3,7 @@ import { describe } from "../describe.js";
 import { getResourceNode } from "../helpers.js";
 
 describe(`${__dirname}/index.w`, () => {
-  test("push message", async ({ page }) => {
+  test("pushes message", async ({ page }) => {
     await getResourceNode(page, "root/Default/cloud.Queue").click();
 
     await page.getByTestId("cloud.queue:message").fill("Hello world!");
@@ -17,7 +17,7 @@ describe(`${__dirname}/index.w`, () => {
     await expect(approxSize).toContainText("1");
   });
 
-  test("purge message", async ({ page }) => {
+  test("purges message", async ({ page }) => {
     await getResourceNode(page, "root/Default/cloud.Queue").click();
 
     await page.getByTestId("cloud.queue:message").fill("Hello world!");

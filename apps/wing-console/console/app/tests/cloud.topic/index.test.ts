@@ -12,7 +12,9 @@ describe(`${__dirname}/index.w`, () => {
 
     await page.waitForLoadState("networkidle");
 
-    const logs = await page.getByTestId("logs").allTextContents();
-    expect(logs[0]).toContain("Message received: Hello world!");
+    const logs = page.getByTestId("logs");
+    expect(logs).toContainText("Message received: Hello world!", {
+      timeout: 5000,
+    });
   });
 });

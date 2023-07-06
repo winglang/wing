@@ -17,7 +17,7 @@ describe(`${__dirname}/index.w`, () => {
     await expect(currentValue).toHaveValue("1");
   });
 
-  test("decrease counter", async ({ page }) => {
+  test("decreases counter", async ({ page }) => {
     await getResourceNode(page, "root/Default/cloud.Counter").click();
 
     const currentValue = page.getByTestId("cloud.counter:current-value");
@@ -31,7 +31,7 @@ describe(`${__dirname}/index.w`, () => {
     await expect(currentValue).toHaveValue("-1");
   });
 
-  test("reset counter", async ({ page }) => {
+  test("resets counter", async ({ page }) => {
     await getResourceNode(page, "root/Default/cloud.Counter").click();
 
     const currentValue = page.getByTestId("cloud.counter:current-value");

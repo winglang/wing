@@ -3,7 +3,7 @@ import { describe } from "../describe.js";
 import { getResourceNode } from "../helpers.js";
 
 describe(`${__dirname}/index.w`, () => {
-  test("open file preview", async ({ page }) => {
+  test("opens file preview", async ({ page }) => {
     await getResourceNode(page, "root/Default/cloud.Bucket").click();
 
     await page.getByTestId("cloud.bucket:files-entry-test.txt").click();
@@ -15,7 +15,7 @@ describe(`${__dirname}/index.w`, () => {
     await expect(preview).toContainText("Hello World!");
   });
 
-  test("delete file", async ({ page }) => {
+  test("deletes a file", async ({ page }) => {
     await getResourceNode(page, "root/Default/cloud.Bucket").click();
 
     const file = page.getByTestId("cloud.bucket:files-entry-test.txt");

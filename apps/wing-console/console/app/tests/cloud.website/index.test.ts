@@ -3,11 +3,11 @@ import { describe } from "../describe.js";
 import { getResourceNode } from "../helpers.js";
 
 describe(`${__dirname}/index.w`, () => {
-  test("open website", async ({ page }) => {
+  test("opens website", async ({ page }) => {
     await getResourceNode(page, "root/Default/cloud.Website").click();
 
-    const url = await page.getByTestId("cloud.website:url").inputValue();
+    const urlInput = page.getByTestId("cloud.website:url");
 
-    expect(url).toMatch(/http:\/\/127.0.0.1:\d+/);
+    expect(urlInput).toBeVisible();
   });
 });

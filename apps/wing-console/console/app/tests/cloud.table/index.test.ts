@@ -3,7 +3,7 @@ import { describe } from "../describe.js";
 import { getResourceNode } from "../helpers.js";
 
 describe(`${__dirname}/index.w`, () => {
-  test("add new row", async ({ page }) => {
+  test("adds new row", async ({ page }) => {
     await getResourceNode(page, "root/Default/cloud.Table").click();
 
     const rowId = "Hello World!";
@@ -19,7 +19,7 @@ describe(`${__dirname}/index.w`, () => {
     await expect(row).toBeVisible();
   });
 
-  test("edit row", async ({ page }) => {
+  test("edits row", async ({ page }) => {
     await getResourceNode(page, "root/Default/cloud.Table").click();
 
     const rowId = "Hello World!";
@@ -50,7 +50,7 @@ describe(`${__dirname}/index.w`, () => {
     ).toBe("Hello World! 2");
   });
 
-  test("remove row", async ({ page }) => {
+  test("removes row", async ({ page }) => {
     await getResourceNode(page, "root/Default/cloud.Table").click();
 
     const rowId = "Hello World!";
