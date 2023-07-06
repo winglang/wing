@@ -1,19 +1,7 @@
 import { Collector } from "./collector";
-import { GithubActionCollector } from "./github-action-collector";
 
 export interface CIData {
   name: string;
-  serverUrl: string;
-  toBranch: string;
-  fromBranch: string;
-  prId: string;
-  prUrl: string;
-  runId: string;
-  runUrl: string;
-  commitHash: string;
-  commitUrl: string;
-  repositoryUrl: string;
-  authorName: string;
 }
 
 export enum CIType {
@@ -28,27 +16,8 @@ export enum CIType {
   NONE = "none",
 }
 
-class UnimplementedCICollector extends Collector {
-  async canCollect(): Promise<boolean> {
-    return false;
-  }
-
-  async collect(): Promise<CIData> {
-    return {name: CICollectorFactory.getCIType(), msg: 'currently analytics are not yet supported for this ci-environment'} as any;
-  }
-}
-
-export class CICollectorFactory {
-  static create(): Collector {
-    const type = CICollectorFactory.getCIType();
-    switch(type) {
-      case CIType.GITHUB_ACTIONS:
-        return new GithubActionCollector();
-      default:
-        return new UnimplementedCICollector();
-    }
-  }
-
+export class CICollector extends Collector {
+  
   static inCI(): boolean {
     return this.getCIType() !== CIType.NONE;
   }
@@ -95,5 +64,13 @@ export class CICollectorFactory {
       return CIType.AWS_CODEBUILD;
     }
     return CIType.NONE;
+  }
+
+  async canCollect(): Promise<boolean> {
+    return CICollector.inCI();
+  }
+
+  async collect(): Promise<CIData> {
+    return { name: CICollector.getCIType() };
   }
 }

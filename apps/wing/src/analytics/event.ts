@@ -1,6 +1,5 @@
-import { CIData } from "./collectors/ci-collector-factory";
+import { CIData } from "./collectors/ci-collector";
 import { CLIData } from "./collectors/cli-collector";
-import { GitData } from "./collectors/git-collector";
 import { NodeData } from "./collectors/node-collector";
 import { OSData } from "./collectors/os-collector";
 
@@ -13,7 +12,6 @@ export interface AnalyticEvent {
     cli: CLIData;
     os: OSData;
     node: NodeData;
-    git?: GitData;
     ci?: CIData;
   }
 }

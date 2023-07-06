@@ -1,11 +1,11 @@
 import { Command } from "commander";
-import { storeAnalyticEvent } from "./storage";
+import { loadAnalyticsConfig, storeAnalyticEvent } from "./storage";
 import { AnalyticEvent } from "./event";
-import { GitCollector } from "./collectors/git-collector";
 import { OSCollector } from "./collectors/os-collector";
 import { NodeCollector } from "./collectors/node-collector";
-import { CICollectorFactory, CIData } from "./collectors/ci-collector-factory";
 import { CLICollector } from "./collectors/cli-collector";
+import { CICollector } from "./collectors/ci-collector";
+import { PACKAGE_VERSION } from "../cli";
 
 
 /**
@@ -15,16 +15,15 @@ import { CLICollector } from "./collectors/cli-collector";
  * @returns string the file path of the stored analytic
  */
 export async function collectCommandAnalytics(cmd: Command): Promise<string> {
-  const gitCollector = new GitCollector();
   const osCollector = new OSCollector();
   const nodeCollector = new NodeCollector();
-  const ciCollector = CICollectorFactory.create();
+  const ciCollector = new CICollector();
   const cliCollector = new CLICollector(cmd);
 
   let event: AnalyticEvent = {
     event: `wing cli:${cmd.name()}`,
     properties: {
-      inCI: CICollectorFactory.inCI(),
+      inCI: CICollector.inCI(),
       cli: await cliCollector.collect(),
       os: await osCollector.collect(),
       node: await nodeCollector.collect(),
@@ -32,12 +31,65 @@ export async function collectCommandAnalytics(cmd: Command): Promise<string> {
   }
 
   if (await ciCollector.canCollect()) {
-    event.properties.ci = await ciCollector.collect() as CIData;
+    event.properties.ci = await ciCollector.collect();
+  }
+  
+  let analyticFilePath = storeAnalyticEvent(event);
+  if (getWingAnalyticsCollectionConfig().debug) {
+    console.log(`Analytics event stored at ${analyticFilePath}`);
+  }
+  return analyticFilePath;
+}
+
+/**
+ * Analytics configuration that determines whether to collect or export analytics
+ * Having these options separate makes it easy to debug when developing
+ */
+export interface AnalyticsCollectionConfig {
+  collect: boolean;
+  export: boolean;
+  debug: boolean;
+}
+
+export function getWingAnalyticsCollectionConfig(): AnalyticsCollectionConfig {
+  const optOutCollectionConfig: AnalyticsCollectionConfig = {
+    collect: false,
+    export: false,
+    debug: false,
   }
 
-  if (await gitCollector.canCollect()) {
-    event.properties.git = await gitCollector.collect();
+  // If user has provided opt out flag, do not collect or export anything
+  if (process.env.WING_DISABLE_ANALYTICS) {
+    return optOutCollectionConfig
   }
 
-  return storeAnalyticEvent(event);
+  // If no environment variable is set, check the analytics config file for opt-out
+  const config = loadAnalyticsConfig();
+  // If opt out is set do not 
+  if (config.optOut) {
+    return optOutCollectionConfig;
+  }
+
+  // If no opt out is set, then we should collect and export analytics
+  const optInConfig: AnalyticsCollectionConfig = {
+    collect: true,
+    export: true,
+    debug: false,
+  }
+
+  // check for debug environment variable
+  if (process.env.WING_ANALYTICS_DEBUG) {
+    // If debug is set, do not export analytics but we still want to generate them
+    optInConfig.export = false;
+    optInConfig.debug = true;
+  }
+
+  // If using local development version of wing, do not collect or export anything
+  // unless debug mode is enabled
+  if (PACKAGE_VERSION == "0.0.0" && !optInConfig.debug) {
+    return optOutCollectionConfig;
+  }
+
+  // If we've made it this far, we should collect and export analytics
+  return optInConfig;
 }

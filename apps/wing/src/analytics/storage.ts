@@ -5,10 +5,13 @@ import {v4 as uuidv4 } from "uuid";
 import path from "path";
 import * as os from "os";
 
-const WING_ANALYTICS_ANONYMOUS_ID_FILE = path.join(os.homedir(), ".wing", 'wing-analytics-anonymous-id.json');
+const WING_HOME_DIR = path.join(os.homedir(), ".wing")
+const WING_ANALYTICS_CONFIG_FILE = path.join(WING_HOME_DIR, 'wing-analytics-config.json');
 
-interface AnonymousId {
+interface AnalyticsConfig {
   anonymousId: string;
+  disclaimerDisplayed?: boolean;
+  optOut?: boolean;
 }
 
 /**
@@ -39,18 +42,40 @@ export function storeAnalyticEvent(event: AnalyticEvent): string {
 }
 
 export function getAnonymousId(): string {
-  let data: AnonymousId = { anonymousId: '' };
-  
-  try {
-    const fileContents = readFileSync(WING_ANALYTICS_ANONYMOUS_ID_FILE, 'utf-8');
-    data = JSON.parse(fileContents) as AnonymousId;
-  } catch (error) {
-    // Issue reading file with anonymousId, generate a new one
-    data.anonymousId = randomBytes(16).toString('hex');
-    writeFileSync(WING_ANALYTICS_ANONYMOUS_ID_FILE, JSON.stringify(data))
-  }
+  let config = loadAnalyticsConfig();
+  return config.anonymousId;
+}
 
-  return data.anonymousId;
+export function loadAnalyticsConfig(): AnalyticsConfig {
+  try {
+    const fileContents = readFileSync(WING_ANALYTICS_CONFIG_FILE, 'utf-8');
+    return JSON.parse(fileContents) as AnalyticsConfig;
+  } catch (error) {
+    // Possible issue reading analytics config file, first determine if file exists yet
+    if (existsSync(WING_ANALYTICS_CONFIG_FILE)) {
+      // File exists but could not be read. In this case we should not attempt to
+      // make any assumptions about the contents of the file
+      // This exception will only be visible in DEBUG mode
+      throw new Error("Could not read analytics config file")
+    }
+
+    // Since file does NOT exist we can generate a new config and store it
+    const analyticsConfig: AnalyticsConfig = {
+      anonymousId: randomBytes(16).toString('hex'),
+      optOut: false,
+    }
+
+    saveAnalyticsConfig(analyticsConfig);
+
+    return analyticsConfig;
+  }
+}
+
+export function saveAnalyticsConfig(config: AnalyticsConfig) {
+  if (!existsSync(WING_HOME_DIR)) {
+    mkdirSync(WING_HOME_DIR);
+  }
+  writeFileSync(WING_ANALYTICS_CONFIG_FILE, JSON.stringify(config))
 }
 
 export function loadAnalyticsEvent(filePath: string): AnalyticEvent {

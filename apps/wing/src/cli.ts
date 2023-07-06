@@ -7,13 +7,14 @@ import { satisfies } from "compare-versions";
 import { Command, Option } from "commander";
 import { run_server } from "./commands/lsp";
 
-import { collectCommandAnalytics } from "./analytics/collect";
+import { collectCommandAnalytics, getWingAnalyticsCollectionConfig } from "./analytics/collect";
 import { exportAnalytics } from "./analytics/export";
+import { optionallyDisplayDisclaimer } from "./analytics/disclaimer";
 
 
-const PACKAGE_VERSION = require("../package.json").version as string;
+export const PACKAGE_VERSION = require("../package.json").version as string;
 
-const ANALYTICS_OPT_OUT = process.env.WING_DISABLE_ANALYTICS || PACKAGE_VERSION == "0.0.0" ? true : false; 
+const ANALYTICS_COLLECTION_CONFIG = getWingAnalyticsCollectionConfig(); 
 let ANALYTICS_EXPORT_FILE: string | undefined = undefined;
 
 const SUPPORTED_NODE_VERSION = require("../package.json").engines.node as string;
@@ -50,6 +51,10 @@ async function main() {
     process.env.PROGRESS = "1";
   });
 
+  program.option("--no-analytics", "Disable analytics collection (same as WING_DISABLE_ANALYTICS=1)", () => {
+    process.env.WING_DISABLE_ANALYTICS = "1";
+  });
+
   program
     .option("--no-progress", "Hide show compilation progress")
     .option("--no-update-check", "Skip checking for toolchain updates")
@@ -63,18 +68,21 @@ async function main() {
 
   
   async function collectAnalyticsHook(cmd: Command) {
-    if (ANALYTICS_OPT_OUT) { return; }
+    if (!ANALYTICS_COLLECTION_CONFIG.collect) { return; }
 
     // Fail silently if collection fails
     try {
+      optionallyDisplayDisclaimer();
       ANALYTICS_EXPORT_FILE = await collectCommandAnalytics(cmd);
     } catch (err) {
-      // ignore
+      if (ANALYTICS_COLLECTION_CONFIG.debug) {
+        console.error(err);
+      }
     }
   }
 
   async function exportAnalyticsHook() {
-    if (ANALYTICS_OPT_OUT) { return; }
+    if (!ANALYTICS_COLLECTION_CONFIG.collect || !ANALYTICS_COLLECTION_CONFIG.export) { return; }
 
     // Fail silently if export fails
     try {
@@ -82,7 +90,9 @@ async function main() {
         exportAnalytics(ANALYTICS_EXPORT_FILE);
       }
     } catch (err) {
-      // ignore
+      if (ANALYTICS_COLLECTION_CONFIG.debug) {
+        console.log(err);
+      }
     }
   }
 

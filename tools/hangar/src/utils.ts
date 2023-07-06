@@ -14,7 +14,7 @@ export interface RunWingCommandOptions {
 }
 
 export async function runWingCommand(options: RunWingCommandOptions) {
-  const plugins = options.plugins ? ["--plugins", ...options.plugins] : [];
+  const plugins = options.plugins ? ["--no-analytics", "--plugins", ...options.plugins] : [];
   const out = await execa(
     wingBin,
     ["--no-update-check", ...options.args, options.wingFile, ...plugins],
