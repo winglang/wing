@@ -2,7 +2,8 @@
 
 ## stdout.log
 ```log
-pass ─ resource.wsim » root/env0/test:test             
+pass ┌ resource.wsim » root/env0/test:test             
+     └ counter is: 201
 pass ─ resource.wsim » root/env1/test:dependency cycles
  
  

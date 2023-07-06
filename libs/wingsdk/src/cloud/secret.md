@@ -78,4 +78,4 @@ See [AWS documentation](https://docs.aws.amazon.com/secretsmanager/latest/usergu
 
 ## API Reference
 
-The full list of APIs for `cloud.Secret` is available in the [API Reference](../api-reference).
+The full list of APIs for `cloud.Secret` is available in the [API Reference](./api-reference).

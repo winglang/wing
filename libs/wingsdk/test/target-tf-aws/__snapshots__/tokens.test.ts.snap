@@ -39,7 +39,7 @@ exports[`captures tokens 2`] = `
         },
         \\"rest_api_id\\": \\"\${aws_api_gateway_rest_api.Api_api_91C07D84.id}\\",
         \\"triggers\\": {
-          \\"redeployment\\": \\"5c0f11f0478884e3d7859fa987b8b7ecf8f2f6bc\\"
+          \\"redeployment\\": \\"78e5e40c11e87555822daa92a92cba68abd2ec5b\\"
         }
       }
     },
