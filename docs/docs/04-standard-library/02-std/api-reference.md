@@ -36,7 +36,7 @@ Immutable Array.
 ##### `at` <a name="at" id="@winglang/sdk.std.Array.at"></a>
 
 ```wing
-at(index: num): T1
+at(index: num): <T>
 ```
 
 Get the value at the given index.
@@ -68,14 +68,14 @@ array to merge.
 ##### `contains` <a name="contains" id="@winglang/sdk.std.Array.contains"></a>
 
 ```wing
-contains(searchElement: T1): bool
+contains(searchElement: <T>): bool
 ```
 
 Checks if this array includes searchElement.
 
 ###### `searchElement`<sup>Required</sup> <a name="searchElement" id="@winglang/sdk.std.Array.contains.parameter.searchElement"></a>
 
-- *Type:* <a href="#@winglang/sdk.std.T1">T1</a>
+- *Type:* <a href="#@winglang/sdk.std.T1">&lt;T&gt;</a>
 
 to search for.
 
@@ -92,14 +92,14 @@ Create a mutable shallow copy of this array.
 ##### `indexOf` <a name="indexOf" id="@winglang/sdk.std.Array.indexOf"></a>
 
 ```wing
-indexOf(searchElement: T1): num
+indexOf(searchElement: <T>): num
 ```
 
 Returns the index of the first occurrence of searchElement found.
 
 ###### `searchElement`<sup>Required</sup> <a name="searchElement" id="@winglang/sdk.std.Array.indexOf.parameter.searchElement"></a>
 
-- *Type:* <a href="#@winglang/sdk.std.T1">T1</a>
+- *Type:* <a href="#@winglang/sdk.std.T1">&lt;T&gt;</a>
 
 to search for.
 
@@ -125,14 +125,14 @@ one item, then that item will be returned without using the separator.
 ##### `lastIndexOf` <a name="lastIndexOf" id="@winglang/sdk.std.Array.lastIndexOf"></a>
 
 ```wing
-lastIndexOf(searchElement: T1): num
+lastIndexOf(searchElement: <T>): num
 ```
 
 Returns the index of the last occurrence of searchElement found.
 
 ###### `searchElement`<sup>Required</sup> <a name="searchElement" id="@winglang/sdk.std.Array.lastIndexOf.parameter.searchElement"></a>
 
-- *Type:* <a href="#@winglang/sdk.std.T1">T1</a>
+- *Type:* <a href="#@winglang/sdk.std.T1">&lt;T&gt;</a>
 
 to search for.
 
@@ -176,7 +176,7 @@ Boolean.
 ##### `fromJson` <a name="fromJson" id="@winglang/sdk.std.Boolean.fromJson"></a>
 
 ```wing
-Boolean.fromJson(json: Json);
+bool.fromJson(json: Json);
 ```
 
 Parse a boolean from Json.
@@ -213,7 +213,7 @@ Represents a length of time.
 ##### `fromDays` <a name="fromDays" id="@winglang/sdk.std.Duration.fromDays"></a>
 
 ```wing
-Duration.fromDays(amount: num);
+duration.fromDays(amount: num);
 ```
 
 Create a Duration representing an amount of days.
@@ -229,7 +229,7 @@ the amount of Days the `Duration` will represent.
 ##### `fromHours` <a name="fromHours" id="@winglang/sdk.std.Duration.fromHours"></a>
 
 ```wing
-Duration.fromHours(amount: num);
+duration.fromHours(amount: num);
 ```
 
 Create a Duration representing an amount of hours.
@@ -245,7 +245,7 @@ the amount of Hours the `Duration` will represent.
 ##### `fromMilliseconds` <a name="fromMilliseconds" id="@winglang/sdk.std.Duration.fromMilliseconds"></a>
 
 ```wing
-Duration.fromMilliseconds(amount: num);
+duration.fromMilliseconds(amount: num);
 ```
 
 Create a Duration representing an amount of milliseconds.
@@ -261,7 +261,7 @@ the amount of Milliseconds the `Duration` will represent.
 ##### `fromMinutes` <a name="fromMinutes" id="@winglang/sdk.std.Duration.fromMinutes"></a>
 
 ```wing
-Duration.fromMinutes(amount: num);
+duration.fromMinutes(amount: num);
 ```
 
 Create a Duration representing an amount of minutes.
@@ -277,7 +277,7 @@ the amount of Minutes the `Duration` will represent.
 ##### `fromMonths` <a name="fromMonths" id="@winglang/sdk.std.Duration.fromMonths"></a>
 
 ```wing
-Duration.fromMonths(amount: num);
+duration.fromMonths(amount: num);
 ```
 
 Create a Duration representing an amount of months.
@@ -293,7 +293,7 @@ the amount of Months the `Duration` will represent.
 ##### `fromSeconds` <a name="fromSeconds" id="@winglang/sdk.std.Duration.fromSeconds"></a>
 
 ```wing
-Duration.fromSeconds(amount: num);
+duration.fromSeconds(amount: num);
 ```
 
 Create a Duration representing an amount of seconds.
@@ -309,7 +309,7 @@ the amount of Seconds the `Duration` will represent.
 ##### `fromYears` <a name="fromYears" id="@winglang/sdk.std.Duration.fromYears"></a>
 
 ```wing
-Duration.fromYears(amount: num);
+duration.fromYears(amount: num);
 ```
 
 Create a Duration representing an amount of years.
@@ -768,7 +768,7 @@ Create a mutable shallow copy of this map.
 ##### `get` <a name="get" id="@winglang/sdk.std.Map.get"></a>
 
 ```wing
-get(key: str): T1
+get(key: str): <T>
 ```
 
 Returns a specified element from the map.
@@ -852,7 +852,7 @@ Mutable Array.
 ##### `at` <a name="at" id="@winglang/sdk.std.MutArray.at"></a>
 
 ```wing
-at(index: num): T1
+at(index: num): <T>
 ```
 
 Get the value at the given index.
@@ -884,14 +884,14 @@ array to merge.
 ##### `contains` <a name="contains" id="@winglang/sdk.std.MutArray.contains"></a>
 
 ```wing
-contains(searchElement: T1): bool
+contains(searchElement: <T>): bool
 ```
 
 Checks if this array includes searchElement.
 
 ###### `searchElement`<sup>Required</sup> <a name="searchElement" id="@winglang/sdk.std.MutArray.contains.parameter.searchElement"></a>
 
-- *Type:* <a href="#@winglang/sdk.std.T1">T1</a>
+- *Type:* <a href="#@winglang/sdk.std.T1">&lt;T&gt;</a>
 
 to search for.
 
@@ -908,14 +908,14 @@ Create an immutable shallow copy of this array.
 ##### `indexOf` <a name="indexOf" id="@winglang/sdk.std.MutArray.indexOf"></a>
 
 ```wing
-indexOf(searchElement: T1): num
+indexOf(searchElement: <T>): num
 ```
 
 Returns the index of the first occurrence of searchElement found.
 
 ###### `searchElement`<sup>Required</sup> <a name="searchElement" id="@winglang/sdk.std.MutArray.indexOf.parameter.searchElement"></a>
 
-- *Type:* <a href="#@winglang/sdk.std.T1">T1</a>
+- *Type:* <a href="#@winglang/sdk.std.T1">&lt;T&gt;</a>
 
 to search for.
 
@@ -941,14 +941,14 @@ one item, then that item will be returned without using the separator.
 ##### `lastIndexOf` <a name="lastIndexOf" id="@winglang/sdk.std.MutArray.lastIndexOf"></a>
 
 ```wing
-lastIndexOf(searchElement: T1): num
+lastIndexOf(searchElement: <T>): num
 ```
 
 Returns the index of the last occurrence of searchElement found.
 
 ###### `searchElement`<sup>Required</sup> <a name="searchElement" id="@winglang/sdk.std.MutArray.lastIndexOf.parameter.searchElement"></a>
 
-- *Type:* <a href="#@winglang/sdk.std.T1">T1</a>
+- *Type:* <a href="#@winglang/sdk.std.T1">&lt;T&gt;</a>
 
 to search for.
 
@@ -957,7 +957,7 @@ to search for.
 ##### `pop` <a name="pop" id="@winglang/sdk.std.MutArray.pop"></a>
 
 ```wing
-pop(): T1
+pop(): <T>
 ```
 
 Remove value from end of array.
@@ -965,14 +965,14 @@ Remove value from end of array.
 ##### `push` <a name="push" id="@winglang/sdk.std.MutArray.push"></a>
 
 ```wing
-push(value: T1): void
+push(value: <T>): void
 ```
 
 Add value to end of array.
 
 ###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.std.MutArray.push.parameter.value"></a>
 
-- *Type:* <a href="#@winglang/sdk.std.T1">T1</a>
+- *Type:* <a href="#@winglang/sdk.std.T1">&lt;T&gt;</a>
 
 value to add.
 
@@ -1239,7 +1239,7 @@ The key.
 ##### `get` <a name="get" id="@winglang/sdk.std.MutMap.get"></a>
 
 ```wing
-get(key: str): T1
+get(key: str): <T>
 ```
 
 Returns a specified element from the map.
@@ -1282,7 +1282,7 @@ Returns the keys of this map.
 ##### `set` <a name="set" id="@winglang/sdk.std.MutMap.set"></a>
 
 ```wing
-set(key: str, value: T1): void
+set(key: str, value: <T>): void
 ```
 
 Adds or updates an entry in a Map object with a specified key and a value.
@@ -1299,7 +1299,7 @@ The key of the element to add.
 
 ###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.std.MutMap.set.parameter.value"></a>
 
-- *Type:* <a href="#@winglang/sdk.std.T1">T1</a>
+- *Type:* <a href="#@winglang/sdk.std.T1">&lt;T&gt;</a>
 
 The value of the element to add.
 
@@ -1346,14 +1346,14 @@ Mutable Set.
 ##### `add` <a name="add" id="@winglang/sdk.std.MutSet.add"></a>
 
 ```wing
-add(value: T1): MutSet
+add(value: <T>): MutSet
 ```
 
 Add value to set.
 
 ###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.std.MutSet.add.parameter.value"></a>
 
-- *Type:* <a href="#@winglang/sdk.std.T1">T1</a>
+- *Type:* <a href="#@winglang/sdk.std.T1">&lt;T&gt;</a>
 
 value to add.
 
@@ -1378,14 +1378,14 @@ Create an immutable shallow copy of this set.
 ##### `delete` <a name="delete" id="@winglang/sdk.std.MutSet.delete"></a>
 
 ```wing
-delete(value: T1): bool
+delete(value: <T>): bool
 ```
 
 Removes a specified value from a set, if it is in the set.
 
 ###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.std.MutSet.delete.parameter.value"></a>
 
-- *Type:* <a href="#@winglang/sdk.std.T1">T1</a>
+- *Type:* <a href="#@winglang/sdk.std.T1">&lt;T&gt;</a>
 
 The value to remove from the set.
 
@@ -1394,14 +1394,14 @@ The value to remove from the set.
 ##### `has` <a name="has" id="@winglang/sdk.std.MutSet.has"></a>
 
 ```wing
-has(value: T1): bool
+has(value: <T>): bool
 ```
 
 Returns a boolean indicating whether an element with the specified value exists in the set.
 
 ###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.std.MutSet.has.parameter.value"></a>
 
-- *Type:* <a href="#@winglang/sdk.std.T1">T1</a>
+- *Type:* <a href="#@winglang/sdk.std.T1">&lt;T&gt;</a>
 
 The value to test for presence in the Set object.
 
@@ -1454,7 +1454,7 @@ Number.
 ##### `fromJson` <a name="fromJson" id="@winglang/sdk.std.Number.fromJson"></a>
 
 ```wing
-Number.fromJson(json: Json);
+num.fromJson(json: Json);
 ```
 
 Parse a number from Json.
@@ -1470,7 +1470,7 @@ to parse number from.
 ##### `fromStr` <a name="fromStr" id="@winglang/sdk.std.Number.fromStr"></a>
 
 ```wing
-Number.fromStr(str: str);
+num.fromStr(str: str);
 ```
 
 Parse a number from string.
@@ -1518,14 +1518,14 @@ Create a mutable shallow copy of this set.
 ##### `has` <a name="has" id="@winglang/sdk.std.Set.has"></a>
 
 ```wing
-has(value: T1): bool
+has(value: <T>): bool
 ```
 
 Returns a boolean indicating whether an element with the specified value exists in the set.
 
 ###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.std.Set.has.parameter.value"></a>
 
-- *Type:* <a href="#@winglang/sdk.std.T1">T1</a>
+- *Type:* <a href="#@winglang/sdk.std.T1">&lt;T&gt;</a>
 
 The value to test for presence in the Set object.
 
@@ -1754,7 +1754,7 @@ Returns this string in upper case.
 ##### `fromJson` <a name="fromJson" id="@winglang/sdk.std.String.fromJson"></a>
 
 ```wing
-String.fromJson(json: Json);
+str.fromJson(json: Json);
 ```
 
 Parse string from Json.

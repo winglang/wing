@@ -3,6 +3,7 @@ import { Code, InflightClient } from "../core";
 
 /**
  * Boolean
+ * @wingType bool
  */
 export class Boolean {
   /**

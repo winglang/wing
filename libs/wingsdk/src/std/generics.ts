@@ -3,5 +3,6 @@
  *
  * @hidden
  * @skipDocs
+ * @wingType  &lt;T&gt;
  */
 export class T1 {}

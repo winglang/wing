@@ -1925,7 +1925,7 @@ let FunctionProps = cloud.FunctionProps{ ... };
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.FunctionProps.property.env">env</a></code> | <code>MutMap&lt;str&gt;</code> | Environment variables to pass to the function. |
 | <code><a href="#@winglang/sdk.cloud.FunctionProps.property.memory">memory</a></code> | <code>num</code> | The amount of memory to allocate to the function, in MB. |
-| <code><a href="#@winglang/sdk.cloud.FunctionProps.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">Duration</a></code> | The maximum amount of time the function can run. |
+| <code><a href="#@winglang/sdk.cloud.FunctionProps.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">duration</a></code> | The maximum amount of time the function can run. |
 
 ---
 
@@ -1958,10 +1958,10 @@ The amount of memory to allocate to the function, in MB.
 ##### `timeout`<sup>Optional</sup> <a name="timeout" id="@winglang/sdk.cloud.FunctionProps.property.timeout"></a>
 
 ```wing
-timeout: Duration;
+timeout: duration;
 ```
 
-- *Type:* <a href="#@winglang/sdk.std.Duration">Duration</a>
+- *Type:* <a href="#@winglang/sdk.std.Duration">duration</a>
 - *Default:* 1m
 
 The maximum amount of time the function can run.
@@ -2018,8 +2018,8 @@ let QueueProps = cloud.QueueProps{ ... };
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.QueueProps.property.initialMessages">initialMessages</a></code> | <code>MutArray&lt;str&gt;</code> | Initialize the queue with a set of messages. |
-| <code><a href="#@winglang/sdk.cloud.QueueProps.property.retentionPeriod">retentionPeriod</a></code> | <code><a href="#@winglang/sdk.std.Duration">Duration</a></code> | How long a queue retains a message. |
-| <code><a href="#@winglang/sdk.cloud.QueueProps.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">Duration</a></code> | How long a queue's consumers have to process a message. |
+| <code><a href="#@winglang/sdk.cloud.QueueProps.property.retentionPeriod">retentionPeriod</a></code> | <code><a href="#@winglang/sdk.std.Duration">duration</a></code> | How long a queue retains a message. |
+| <code><a href="#@winglang/sdk.cloud.QueueProps.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">duration</a></code> | How long a queue's consumers have to process a message. |
 
 ---
 
@@ -2039,10 +2039,10 @@ Initialize the queue with a set of messages.
 ##### `retentionPeriod`<sup>Optional</sup> <a name="retentionPeriod" id="@winglang/sdk.cloud.QueueProps.property.retentionPeriod"></a>
 
 ```wing
-retentionPeriod: Duration;
+retentionPeriod: duration;
 ```
 
-- *Type:* <a href="#@winglang/sdk.std.Duration">Duration</a>
+- *Type:* <a href="#@winglang/sdk.std.Duration">duration</a>
 - *Default:* undefined
 
 How long a queue retains a message.
@@ -2052,10 +2052,10 @@ How long a queue retains a message.
 ##### `timeout`<sup>Optional</sup> <a name="timeout" id="@winglang/sdk.cloud.QueueProps.property.timeout"></a>
 
 ```wing
-timeout: Duration;
+timeout: duration;
 ```
 
-- *Type:* <a href="#@winglang/sdk.std.Duration">Duration</a>
+- *Type:* <a href="#@winglang/sdk.std.Duration">duration</a>
 - *Default:* undefined
 
 How long a queue's consumers have to process a message.
@@ -2080,7 +2080,7 @@ let QueueSetConsumerProps = cloud.QueueSetConsumerProps{ ... };
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.QueueSetConsumerProps.property.env">env</a></code> | <code>MutMap&lt;str&gt;</code> | Environment variables to pass to the function. |
 | <code><a href="#@winglang/sdk.cloud.QueueSetConsumerProps.property.memory">memory</a></code> | <code>num</code> | The amount of memory to allocate to the function, in MB. |
-| <code><a href="#@winglang/sdk.cloud.QueueSetConsumerProps.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">Duration</a></code> | The maximum amount of time the function can run. |
+| <code><a href="#@winglang/sdk.cloud.QueueSetConsumerProps.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">duration</a></code> | The maximum amount of time the function can run. |
 | <code><a href="#@winglang/sdk.cloud.QueueSetConsumerProps.property.batchSize">batchSize</a></code> | <code>num</code> | The maximum number of messages to send to subscribers at once. |
 
 ---
@@ -2114,10 +2114,10 @@ The amount of memory to allocate to the function, in MB.
 ##### `timeout`<sup>Optional</sup> <a name="timeout" id="@winglang/sdk.cloud.QueueSetConsumerProps.property.timeout"></a>
 
 ```wing
-timeout: Duration;
+timeout: duration;
 ```
 
-- *Type:* <a href="#@winglang/sdk.std.Duration">Duration</a>
+- *Type:* <a href="#@winglang/sdk.std.Duration">duration</a>
 - *Default:* 1m
 
 The maximum amount of time the function can run.
@@ -2155,7 +2155,7 @@ let ScheduleOnTickProps = cloud.ScheduleOnTickProps{ ... };
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.ScheduleOnTickProps.property.env">env</a></code> | <code>MutMap&lt;str&gt;</code> | Environment variables to pass to the function. |
 | <code><a href="#@winglang/sdk.cloud.ScheduleOnTickProps.property.memory">memory</a></code> | <code>num</code> | The amount of memory to allocate to the function, in MB. |
-| <code><a href="#@winglang/sdk.cloud.ScheduleOnTickProps.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">Duration</a></code> | The maximum amount of time the function can run. |
+| <code><a href="#@winglang/sdk.cloud.ScheduleOnTickProps.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">duration</a></code> | The maximum amount of time the function can run. |
 
 ---
 
@@ -2188,10 +2188,10 @@ The amount of memory to allocate to the function, in MB.
 ##### `timeout`<sup>Optional</sup> <a name="timeout" id="@winglang/sdk.cloud.ScheduleOnTickProps.property.timeout"></a>
 
 ```wing
-timeout: Duration;
+timeout: duration;
 ```
 
-- *Type:* <a href="#@winglang/sdk.std.Duration">Duration</a>
+- *Type:* <a href="#@winglang/sdk.std.Duration">duration</a>
 - *Default:* 1m
 
 The maximum amount of time the function can run.
@@ -2215,7 +2215,7 @@ let ScheduleProps = cloud.ScheduleProps{ ... };
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.ScheduleProps.property.cron">cron</a></code> | <code>str</code> | Trigger events according to a cron schedule using the UNIX cron format. |
-| <code><a href="#@winglang/sdk.cloud.ScheduleProps.property.rate">rate</a></code> | <code><a href="#@winglang/sdk.std.Duration">Duration</a></code> | Trigger events at a periodic rate. |
+| <code><a href="#@winglang/sdk.cloud.ScheduleProps.property.rate">rate</a></code> | <code><a href="#@winglang/sdk.std.Duration">duration</a></code> | Trigger events at a periodic rate. |
 
 ---
 
@@ -2244,10 +2244,10 @@ Trigger events according to a cron schedule using the UNIX cron format.
 ##### `rate`<sup>Optional</sup> <a name="rate" id="@winglang/sdk.cloud.ScheduleProps.property.rate"></a>
 
 ```wing
-rate: Duration;
+rate: duration;
 ```
 
-- *Type:* <a href="#@winglang/sdk.std.Duration">Duration</a>
+- *Type:* <a href="#@winglang/sdk.std.Duration">duration</a>
 - *Default:* undefined
 
 Trigger events at a periodic rate.
@@ -2316,7 +2316,7 @@ let ServiceOnStartProps = cloud.ServiceOnStartProps{ ... };
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.ServiceOnStartProps.property.env">env</a></code> | <code>MutMap&lt;str&gt;</code> | Environment variables to pass to the function. |
 | <code><a href="#@winglang/sdk.cloud.ServiceOnStartProps.property.memory">memory</a></code> | <code>num</code> | The amount of memory to allocate to the function, in MB. |
-| <code><a href="#@winglang/sdk.cloud.ServiceOnStartProps.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">Duration</a></code> | The maximum amount of time the function can run. |
+| <code><a href="#@winglang/sdk.cloud.ServiceOnStartProps.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">duration</a></code> | The maximum amount of time the function can run. |
 
 ---
 
@@ -2349,10 +2349,10 @@ The amount of memory to allocate to the function, in MB.
 ##### `timeout`<sup>Optional</sup> <a name="timeout" id="@winglang/sdk.cloud.ServiceOnStartProps.property.timeout"></a>
 
 ```wing
-timeout: Duration;
+timeout: duration;
 ```
 
-- *Type:* <a href="#@winglang/sdk.std.Duration">Duration</a>
+- *Type:* <a href="#@winglang/sdk.std.Duration">duration</a>
 - *Default:* 1m
 
 The maximum amount of time the function can run.
@@ -2599,7 +2599,7 @@ let TopicOnMessageProps = cloud.TopicOnMessageProps{ ... };
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.TopicOnMessageProps.property.env">env</a></code> | <code>MutMap&lt;str&gt;</code> | Environment variables to pass to the function. |
 | <code><a href="#@winglang/sdk.cloud.TopicOnMessageProps.property.memory">memory</a></code> | <code>num</code> | The amount of memory to allocate to the function, in MB. |
-| <code><a href="#@winglang/sdk.cloud.TopicOnMessageProps.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">Duration</a></code> | The maximum amount of time the function can run. |
+| <code><a href="#@winglang/sdk.cloud.TopicOnMessageProps.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">duration</a></code> | The maximum amount of time the function can run. |
 
 ---
 
@@ -2632,10 +2632,10 @@ The amount of memory to allocate to the function, in MB.
 ##### `timeout`<sup>Optional</sup> <a name="timeout" id="@winglang/sdk.cloud.TopicOnMessageProps.property.timeout"></a>
 
 ```wing
-timeout: Duration;
+timeout: duration;
 ```
 
-- *Type:* <a href="#@winglang/sdk.std.Duration">Duration</a>
+- *Type:* <a href="#@winglang/sdk.std.Duration">duration</a>
 - *Default:* 1m
 
 The maximum amount of time the function can run.

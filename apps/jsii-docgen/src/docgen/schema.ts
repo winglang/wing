@@ -468,6 +468,11 @@ export interface DocsSchema {
    * skipping documentation
    */
   readonly skipDocs?: boolean;
+
+  /**
+   * showing the wingType instead of the written type
+   */
+  readonly wingType?: string;
 }
 
 /**
@@ -523,6 +528,10 @@ export function extractDocs(docs: reflect.Docs): DocsSchema {
 
 export function isSkipped(docs: reflect.Docs): boolean {
   return docs.customTag("skipDocs") === "true";
+}
+
+export function getWingType(docs: reflect.Docs): string | undefined {
+  return docs.customTag("wingType");
 }
 
 /**

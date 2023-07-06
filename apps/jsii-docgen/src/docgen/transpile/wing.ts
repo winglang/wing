@@ -1,8 +1,8 @@
 import * as reflect from "jsii-reflect";
 import * as transpile from "./transpile";
 import { TranspiledTypeReferenceToStringOptions } from "./transpile";
-import { submodulePath } from "../schema";
-import { HIDDEN_IMPORTS } from "../view/wing-filters";
+import { getWingType, submodulePath } from "../schema";
+import { BUILTIN_IMPORTS } from "../view/wing-filters";
 
 // Helpers
 const formatArguments = (inputs: string[]) => {
@@ -17,7 +17,7 @@ const typeToString: TranspiledTypeReferenceToStringOptions = {
 
 const formatStructInitialization = (type: transpile.TranspiledType) => {
   const target =
-    type.submodule && !HIDDEN_IMPORTS.includes(type.submodule)
+    type.submodule && !BUILTIN_IMPORTS.includes(type.submodule)
       ? `${type.namespace}.${type.name}`
       : type.name;
   return `let ${type.name} = ${target}{ ... };`;
@@ -28,7 +28,7 @@ const formatClassInitialization = (
   inputs: string[]
 ) => {
   const target =
-    type.submodule && !HIDDEN_IMPORTS.includes(type.submodule)
+    type.submodule && !BUILTIN_IMPORTS.includes(type.submodule)
       ? `${type.namespace}.${type.name}`
       : type.name;
   return `new ${target}(${formatArguments(inputs)});`;
@@ -40,7 +40,7 @@ const formatInvocation = (
   method: string
 ) => {
   let target =
-    type.submodule && !HIDDEN_IMPORTS.includes(type.submodule)
+    type.submodule && !BUILTIN_IMPORTS.includes(type.submodule)
       ? `${type.namespace}.${type.name}`
       : type.name;
   if (method) {
@@ -52,7 +52,7 @@ const formatInvocation = (
 const formatImport = (type: transpile.TranspiledType) => {
   // TODO idk
   if (type.module.endsWith("/sdk")) {
-    return type.submodule && !HIDDEN_IMPORTS.includes(type.submodule)
+    return type.submodule && !BUILTIN_IMPORTS.includes(type.submodule)
       ? `bring ${type.submodule};`
       : "";
   }
@@ -184,6 +184,7 @@ export class WingTranspile extends transpile.TranspileBase {
         return p.name !== "scope" && p.name !== "id";
       })
       .sort(this.optionalityCompare);
+
     const name = callable.name;
     const inputs = parameters.map((p) =>
       this.formatParameters(this.parameter(p))
@@ -232,7 +233,7 @@ export class WingTranspile extends transpile.TranspileBase {
     }
     fqn.push(type.name);
 
-    let typeName = type.name;
+    let typeName = getWingType(type.docs) ?? type.name;
     if (typeName === "inflight") {
       typeName = "~inflight";
     }

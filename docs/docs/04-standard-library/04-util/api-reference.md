@@ -30,18 +30,18 @@ let WaitUntilProps = util.WaitUntilProps{ ... };
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.util.WaitUntilProps.property.interval">interval</a></code> | <code><a href="#@winglang/sdk.std.Duration">Duration</a></code> | Interval between predicate retries. |
-| <code><a href="#@winglang/sdk.util.WaitUntilProps.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">Duration</a></code> | The timeout for keep trying predicate. |
+| <code><a href="#@winglang/sdk.util.WaitUntilProps.property.interval">interval</a></code> | <code><a href="#@winglang/sdk.std.Duration">duration</a></code> | Interval between predicate retries. |
+| <code><a href="#@winglang/sdk.util.WaitUntilProps.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">duration</a></code> | The timeout for keep trying predicate. |
 
 ---
 
 ##### `interval`<sup>Optional</sup> <a name="interval" id="@winglang/sdk.util.WaitUntilProps.property.interval"></a>
 
 ```wing
-interval: Duration;
+interval: duration;
 ```
 
-- *Type:* <a href="#@winglang/sdk.std.Duration">Duration</a>
+- *Type:* <a href="#@winglang/sdk.std.Duration">duration</a>
 - *Default:* 0.1s
 
 Interval between predicate retries.
@@ -51,10 +51,10 @@ Interval between predicate retries.
 ##### `timeout`<sup>Optional</sup> <a name="timeout" id="@winglang/sdk.util.WaitUntilProps.property.timeout"></a>
 
 ```wing
-timeout: Duration;
+timeout: duration;
 ```
 
-- *Type:* <a href="#@winglang/sdk.std.Duration">Duration</a>
+- *Type:* <a href="#@winglang/sdk.std.Duration">duration</a>
 - *Default:* 1m
 
 The timeout for keep trying predicate.
@@ -117,7 +117,7 @@ The name of the environment variable.
 ```wing
 bring util;
 
-util.Util.sleep(delay: Duration);
+util.Util.sleep(delay: duration);
 ```
 
 **Inflight client:** [true](#true)
@@ -126,7 +126,7 @@ Suspends execution for a given duration.
 
 ###### `delay`<sup>Required</sup> <a name="delay" id="@winglang/sdk.util.Util.sleep.parameter.delay"></a>
 
-- *Type:* <a href="#@winglang/sdk.std.Duration">Duration</a>
+- *Type:* <a href="#@winglang/sdk.std.Duration">duration</a>
 
 The time to suspend execution.
 

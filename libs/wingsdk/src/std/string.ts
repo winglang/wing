@@ -7,6 +7,7 @@ import { Code, InflightClient } from "../core";
 
 /**
  * String
+ * @wingType str
  */
 export class String {
   /**
