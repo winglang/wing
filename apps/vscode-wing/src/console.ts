@@ -1,4 +1,4 @@
-import { exec } from "child_process";
+import { spawn } from "child_process";
 import path from "path";
 import {
   ExtensionContext,
@@ -43,11 +43,17 @@ export class WingConsoleManager {
     const filename = path.basename(uri.fsPath);
     let panel: WebviewPanel;
 
-    const cp = exec(`${args.join(" ")} it --no-open ${uri.fsPath}`, (err) => {
+    args.push("it", "--no-open", uri.fsPath);
+
+    const cp = spawn(args[0]!, args.slice(1), {
+      stdio: ["ignore", "pipe", "pipe"],
+      windowsHide: true,
+      shell: false,
+    });
+
+    cp.on("error", (err) => {
       if (err) {
-        if (!err.killed) {
-          void window.showErrorMessage(err.message);
-        }
+        void window.showErrorMessage(err.message);
 
         panel?.dispose();
       }
