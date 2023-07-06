@@ -36,15 +36,8 @@ module.exports = function({ $api_url, $body, $http_POST, $http_Util, $std_Json }
     }
     async handle() {
       const url = ($api_url + "/path");
-      const response = (await $http_Util.post(url,{
-      "headers": Object.freeze({"content-type":"application/json"}),
-      "body": ((args) => { return JSON.stringify(args[0], null, args[1]) })([$body]),}
-      ));
-      const fetchResponse = (await $http_Util.fetch(url,{
-      "method": $http_POST,
-      "headers": Object.freeze({"content-type":"application/json"}),
-      "body": ((args) => { return JSON.stringify(args[0], null, args[1]) })([$body]),}
-      ));
+      const response = (await $http_Util.post(url,{ headers: Object.freeze({"content-type":"application/json"}), body: ((args) => { return JSON.stringify(args[0], null, args[1]) })([$body]) }));
+      const fetchResponse = (await $http_Util.fetch(url,{ method: $http_POST, headers: Object.freeze({"content-type":"application/json"}), body: ((args) => { return JSON.stringify(args[0], null, args[1]) })([$body]) }));
       {((cond) => {if (!cond) throw new Error("assertion failed: response.body == Json.stringify(body)")})((response.body === ((args) => { return JSON.stringify(args[0], null, args[1]) })([$body])))};
       {((cond) => {if (!cond) throw new Error("assertion failed: response.status == 200")})((response.status === 200))};
       {((cond) => {if (!cond) throw new Error("assertion failed: response.url == url")})((response.url === url))};
