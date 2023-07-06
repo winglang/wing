@@ -65,7 +65,7 @@ export class WingConsoleManager {
       panel = window.createWebviewPanel(
         VIEW_TYPE_CONSOLE,
         `${filename} [Console]`,
-        ViewColumn.One,
+        ViewColumn.Beside,
         {
           enableScripts: true,
           enableCommandUris: true,
