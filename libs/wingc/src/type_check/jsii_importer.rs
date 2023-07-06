@@ -663,6 +663,7 @@ impl<'a> JsiiImporter<'a> {
 			phase: class_phase,
 			docs: Docs::from(&jsii_class.docs),
 			std_construct_args: false, // Temporary value, will be updated once we parse the initializer args
+			lifts: None,
 		};
 		let mut new_type = self.wing_types.add_type(Type::Class(class_spec));
 		self.register_jsii_type(&jsii_class_fqn, &new_type_symbol, new_type);

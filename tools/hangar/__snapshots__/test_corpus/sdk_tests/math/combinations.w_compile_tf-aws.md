@@ -2,17 +2,15 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ population, subset, math_Util }) {
+module.exports = function({ $math_Util, $population, $subset }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.combinations(population, subset) == 10")})(((await math_Util.combinations(population,subset)) === 10))};
+    async handle() {
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.combinations(population, subset) == 10")})(((await $math_Util.combinations($population,$subset)) === 10))};
     }
   }
   return $Closure1;
@@ -156,18 +154,14 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const population_client = context._lift(population);
-        const subset_client = context._lift(subset);
-        const math_UtilClient = math.Util._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            population: ${population_client},
-            subset: ${subset_client},
-            math_Util: ${math_UtilClient.text},
+          require("./inflight.$Closure1.js")({
+            $math_Util: ${context._lift(math.Util)},
+            $population: ${context._lift(population)},
+            $subset: ${context._lift(subset)},
           })
         `);
       }
@@ -183,10 +177,6 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure1._registerBindObject(population, host, []);
-          $Closure1._registerBindObject(subset, host, []);
-        }
         if (ops.includes("handle")) {
           $Closure1._registerBindObject(population, host, []);
           $Closure1._registerBindObject(subset, host, []);

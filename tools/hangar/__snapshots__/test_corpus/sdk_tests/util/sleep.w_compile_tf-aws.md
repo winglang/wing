@@ -2,19 +2,17 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ oneHundredMiliseconds, JSHelper, util_Util }) {
+module.exports = function({ $JSHelper, $oneHundredMiliseconds, $util_Util }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      const start = (await JSHelper.getTime());
-      (await util_Util.sleep(oneHundredMiliseconds));
-      const end = (await JSHelper.getTime());
+    async handle() {
+      const start = (await $JSHelper.getTime());
+      (await $util_Util.sleep($oneHundredMiliseconds));
+      const end = (await $JSHelper.getTime());
       const delta = (end - start);
       {((cond) => {if (!cond) throw new Error("assertion failed: delta >= 100")})((delta >= 100))};
     }
@@ -30,9 +28,7 @@ module.exports = function({  }) {
   class JSHelper {
     constructor({  }) {
     }
-    async $inflight_init()  {
-    }
-    static async getTime()  {
+    static async getTime() {
       return (require("<ABSOLUTE_PATH>/sleep-helper.js")["getTime"])()
     }
   }
@@ -176,12 +172,11 @@ class $Root extends $stdlib.std.Resource {
     class JSHelper extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("getTime");
+        this._addInflightOps("getTime", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.JSHelper.js";
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.JSHelper.js")({
           })
         `);
       }
@@ -196,33 +191,19 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-        }
-        super._registerBind(host, ops);
-      }
-      static _registerTypeBind(host, ops) {
-        if (ops.includes("getTime")) {
-        }
-        super._registerTypeBind(host, ops);
-      }
     }
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const oneHundredMiliseconds_client = context._lift(oneHundredMiliseconds);
-        const JSHelperClient = JSHelper._toInflightType(context);
-        const util_UtilClient = util.Util._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            oneHundredMiliseconds: ${oneHundredMiliseconds_client},
-            JSHelper: ${JSHelperClient.text},
-            util_Util: ${util_UtilClient.text},
+          require("./inflight.$Closure1.js")({
+            $JSHelper: ${context._lift(JSHelper)},
+            $oneHundredMiliseconds: ${context._lift(oneHundredMiliseconds)},
+            $util_Util: ${context._lift(util.Util)},
           })
         `);
       }
@@ -238,9 +219,6 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure1._registerBindObject(oneHundredMiliseconds, host, []);
-        }
         if (ops.includes("handle")) {
           $Closure1._registerBindObject(JSHelper, host, ["getTime"]);
           $Closure1._registerBindObject(oneHundredMiliseconds, host, []);

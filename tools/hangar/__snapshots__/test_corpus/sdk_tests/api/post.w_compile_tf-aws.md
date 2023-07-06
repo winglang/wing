@@ -2,19 +2,17 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ api_POST, body, std_Json }) {
+module.exports = function({ $api_POST, $body, $std_Json }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
-    async handle(req)  {
-      {((cond) => {if (!cond) throw new Error("assertion failed: req.method == api_POST")})((req.method === api_POST))};
+    async handle(req) {
+      {((cond) => {if (!cond) throw new Error("assertion failed: req.method == api_POST")})((req.method === $api_POST))};
       {((cond) => {if (!cond) throw new Error("assertion failed: req.path == \"/path\"")})((req.path === "/path"))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: req.body == Json.stringify(body)")})((req.body === ((args) => { return JSON.stringify(args[0], null, args[1]) })([body])))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: req.body == Json.stringify(body)")})((req.body === ((args) => { return JSON.stringify(args[0], null, args[1]) })([$body])))};
       {((cond) => {if (!cond) throw new Error("assertion failed: req.headers?.get(\"content-type\") == \"application/json\"")})(((req.headers)["content-type"] === "application/json"))};
       return {
       "status": 200,
@@ -29,30 +27,28 @@ module.exports = function({ api_POST, body, std_Json }) {
 
 ## inflight.$Closure2.js
 ```js
-module.exports = function({ api, body, http_POST, http_Util, std_Json }) {
+module.exports = function({ $api_url, $body, $http_POST, $http_Util, $std_Json }) {
   class $Closure2 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      const url = (api.url + "/path");
-      const response = (await http_Util.post(url,{
+    async handle() {
+      const url = ($api_url + "/path");
+      const response = (await $http_Util.post(url,{
       "headers": Object.freeze({"content-type":"application/json"}),
-      "body": ((args) => { return JSON.stringify(args[0], null, args[1]) })([body]),}
+      "body": ((args) => { return JSON.stringify(args[0], null, args[1]) })([$body]),}
       ));
-      const fetchResponse = (await http_Util.post(url,{
-      "method": http_POST,
+      const fetchResponse = (await $http_Util.post(url,{
+      "method": $http_POST,
       "headers": Object.freeze({"content-type":"application/json"}),
-      "body": ((args) => { return JSON.stringify(args[0], null, args[1]) })([body]),}
+      "body": ((args) => { return JSON.stringify(args[0], null, args[1]) })([$body]),}
       ));
-      {((cond) => {if (!cond) throw new Error("assertion failed: response.body == Json.stringify(body)")})((response.body === ((args) => { return JSON.stringify(args[0], null, args[1]) })([body])))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: response.body == Json.stringify(body)")})((response.body === ((args) => { return JSON.stringify(args[0], null, args[1]) })([$body])))};
       {((cond) => {if (!cond) throw new Error("assertion failed: response.status == 200")})((response.status === 200))};
       {((cond) => {if (!cond) throw new Error("assertion failed: response.url == url")})((response.url === url))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: fetchResponse.body == Json.stringify(body)")})((fetchResponse.body === ((args) => { return JSON.stringify(args[0], null, args[1]) })([body])))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: fetchResponse.body == Json.stringify(body)")})((fetchResponse.body === ((args) => { return JSON.stringify(args[0], null, args[1]) })([$body])))};
       {((cond) => {if (!cond) throw new Error("assertion failed: fetchResponse.status == 200")})((fetchResponse.status === 200))};
       {((cond) => {if (!cond) throw new Error("assertion failed: fetchResponse.url == url")})((fetchResponse.url === url))};
     }
@@ -246,7 +242,6 @@ module.exports = function({ api, body, http_POST, http_Util, std_Json }) {
         },
         "environment": {
           "variables": {
-            "CLOUD_API_C82DF3A5": "${aws_api_gateway_stage.cloudApi_api_stage_BBB283E4.invoke_url}",
             "WING_FUNCTION_NAME": "Handler-c88947b5",
             "WING_TARGET": "tf-aws",
             "WING_TOKEN_TFTOKEN_TOKEN_21": "${jsonencode(aws_api_gateway_stage.cloudApi_api_stage_BBB283E4.invoke_url)}"
@@ -336,18 +331,14 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const api_POST_client = context._lift(api_POST);
-        const body_client = context._lift(body);
-        const std_JsonClient = std.Json._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            api_POST: ${api_POST_client},
-            body: ${body_client},
-            std_Json: ${std_JsonClient.text},
+          require("./inflight.$Closure1.js")({
+            $api_POST: ${context._lift(api_POST)},
+            $body: ${context._lift(body)},
+            $std_Json: ${context._lift(std.Json)},
           })
         `);
       }
@@ -363,10 +354,6 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure1._registerBindObject(api_POST, host, []);
-          $Closure1._registerBindObject(body, host, []);
-        }
         if (ops.includes("handle")) {
           $Closure1._registerBindObject(api_POST, host, []);
           $Closure1._registerBindObject(body, host, []);
@@ -378,22 +365,16 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure2.js";
-        const api_client = context._lift(api);
-        const body_client = context._lift(body);
-        const http_POST_client = context._lift(http_POST);
-        const http_UtilClient = http.Util._toInflightType(context);
-        const std_JsonClient = std.Json._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            api: ${api_client},
-            body: ${body_client},
-            http_POST: ${http_POST_client},
-            http_Util: ${http_UtilClient.text},
-            std_Json: ${std_JsonClient.text},
+          require("./inflight.$Closure2.js")({
+            $api_url: ${context._lift(api.url)},
+            $body: ${context._lift(body)},
+            $http_POST: ${context._lift(http_POST)},
+            $http_Util: ${context._lift(http.Util)},
+            $std_Json: ${context._lift(std.Json)},
           })
         `);
       }
@@ -409,11 +390,6 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure2._registerBindObject(api, host, []);
-          $Closure2._registerBindObject(body, host, []);
-          $Closure2._registerBindObject(http_POST, host, []);
-        }
         if (ops.includes("handle")) {
           $Closure2._registerBindObject(api.url, host, []);
           $Closure2._registerBindObject(body, host, []);
