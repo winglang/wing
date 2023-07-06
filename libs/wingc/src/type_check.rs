@@ -1116,6 +1116,17 @@ impl Types {
 		self.get_typeref(self.types.len() - 1)
 	}
 
+	/// Get the optional version of a given type.
+	///
+	/// If the type is already optional, return it as-is.
+	pub fn make_option(&mut self, t: TypeRef) -> TypeRef {
+		if t.is_option() {
+			t
+		} else {
+			self.add_type(Type::Optional(t))
+		}
+	}
+
 	fn get_typeref(&self, idx: usize) -> TypeRef {
 		let t = &self.types[idx];
 		UnsafeRef::<Type>(&**t as *const Type)
@@ -1577,6 +1588,8 @@ impl<'a> TypeChecker<'a> {
 			ExprKind::Call { callee, arg_list } => {
 				// Resolve the function's reference (either a method in the class's env or a function in the current env)
 				let (func_type, callee_phase) = self.type_check_exp(callee, env);
+				let is_option = func_type.is_option();
+				let func_type = func_type.maybe_unwrap_option();
 
 				let arg_list_types = self.type_check_arg_list(arg_list, env);
 
@@ -1642,7 +1655,25 @@ impl<'a> TypeChecker<'a> {
 					}
 				}
 
-				(func_sig.return_type, func_phase)
+				if is_option {
+					// When calling a an optional function, the return type is always optional
+					// To allow this to be both safe and unsurprising,
+					// the callee must be a reference with an optional accessor
+					if let ExprKind::Reference(Reference::InstanceMember { optional_accessor, .. }) = &callee.kind {
+						if *optional_accessor {
+							(self.types.make_option(func_sig.return_type), func_phase)
+						} else {
+							// No additional error is needed here, since the type checker will already have errored without optional chaining
+							(self.types.error(), func_phase)
+						}
+					} else {
+						// TODO do we want syntax for this? e.g. `foo?.()`
+						self.spanned_error(callee, "Cannot call an optional function");
+						(self.types.error(), func_phase)
+					}
+				} else {
+					(func_sig.return_type, func_phase)
+				}
 			}
 			ExprKind::ArrayLiteral { type_, items } => {
 				// Infer type based on either the explicit type or the value in one of the items
@@ -3646,7 +3677,7 @@ impl<'a> TypeChecker<'a> {
 					return (self.make_error_variable_info(), Phase::Independent);
 				}
 
-				let property_variable = self.resolve_variable_from_instance_type(instance_type, property, env, object);
+				let mut property_variable = self.resolve_variable_from_instance_type(instance_type, property, env, object);
 
 				// if the object is `this`, then use the property's phase instead of the object phase
 				let property_phase = if property_variable.phase == Phase::Independent {
@@ -3670,16 +3701,15 @@ impl<'a> TypeChecker<'a> {
 				}
 
 				if force_reassignable {
-					(
-						VariableInfo {
-							reassignable: true,
-							..property_variable
-						},
-						property_phase,
-					)
-				} else {
-					(property_variable, property_phase)
+					property_variable.reassignable = true;
 				}
+
+				// If `a?.b.c`, make sure the entire reference is optional
+				if *optional_accessor {
+					property_variable.type_ = self.types.make_option(property_variable.type_);
+				}
+
+				(property_variable, property_phase)
 			}
 			Reference::TypeReference(udt) => {
 				let result = self.resolve_user_defined_type(udt, env, self.statement_idx);
@@ -3766,10 +3796,11 @@ impl<'a> TypeChecker<'a> {
 		instance_type: UnsafeRef<Type>,
 		property: &Symbol,
 		env: &SymbolEnv,
-		object: &Expr,
+		// only used for recursion
+		_object: &Expr,
 	) -> VariableInfo {
 		match *instance_type {
-			Type::Optional(t) => self.resolve_variable_from_instance_type(t, property, env, object),
+			Type::Optional(t) => self.resolve_variable_from_instance_type(t, property, env, _object),
 			Type::Class(ref class) => self.get_property_from_class_like(class, property),
 			Type::Interface(ref interface) => self.get_property_from_class_like(interface, property),
 			Type::Anything => VariableInfo {

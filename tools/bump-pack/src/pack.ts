@@ -1,5 +1,9 @@
 import { execSync } from "node:child_process";
-import { readFileSync, writeFileSync } from "node:fs";
+import fs from "fs-extra";
+import { Project, findWorkspacePackages } from "@pnpm/workspace.find-packages";
+import path from "node:path";
+import { tmpdir } from "node:os";
+import { setPackageVersion } from "./bump";
 
 export interface PackOptions {
   /**
@@ -15,46 +19,101 @@ export interface PackOptions {
 }
 
 /**
- * Runs `npm pack` in the given package directory.
+ * Runs `pnpm pack` in the given package directory.
  */
 export async function pack(options: PackOptions) {
   const { packageDir, dryRun } = options;
 
   if (dryRun) {
-    console.log(`Would have run "npm pack" in ${packageDir}`);
+    console.log(`Would have run "pnpm pack" in ${packageDir}`);
   } else {
-    preparePackageJsonAndRun(packageDir, () => {
-      execSync("npm pack", { cwd: packageDir, stdio: "inherit" });
+    const packageData = (await findWorkspacePackages(packageDir)).find(
+      (p) => p.dir === packageDir
+    );
+    if (!packageData) {
+      throw new Error(`Could not find package data for ${packageDir}`);
+    }
+
+    // create a working copy of the entire directory so we can apply changes
+    // to the package.json and bundled dependencies without affecting the
+    // original package
+    const tmpDir = await fs.mkdtemp(path.join(tmpdir(), "bump-pack-"));
+    console.log(`Packing "${packageData.manifest.name}" in ${tmpDir}`);
+    await fs.ensureDir(tmpDir);
+    await fs.copy(packageDir, tmpDir, {
+      // we'll take care to follow certain symlinks later
+      dereference: false,
+      overwrite: true,
     });
+
+    await setPackageVersion({
+      packageDir: tmpDir,
+      dryRun,
+      version: process.env.PROJEN_BUMP_VERSION,
+    });
+
+    await preparePackageJson(tmpDir);
+    await prepareBundledDeps(packageData.dir, tmpDir);
+
+    execSync(`pnpm pack --pack-destination ${packageDir}`, {
+      cwd: tmpDir,
+      stdio: "inherit",
+    });
+
+    void fs.remove(tmpDir);
+  }
+}
+
+async function prepareBundledDeps(
+  originalPackageDir: string,
+  tmpPackageDir: string
+) {
+  const packageDirNodeModules = `${tmpPackageDir}/node_modules`;
+  const moduleLinks = fs.readJsonSync(
+    path.join(packageDirNodeModules, ".modulelinks"),
+    { throws: false }
+  );
+  if (!moduleLinks) {
+    // no prep needed
+    return;
+  }
+  console.log(`Preparing bundled dependencies`);
+
+  // resolve all module links to their real paths
+  // this ensures the packing process includes them and anything they need
+  // See https://github.com/npm/npm-packlist/issues/101
+  for (const dep of moduleLinks) {
+    const originalDepPath = path.join(originalPackageDir, "node_modules", dep);
+    const newPath = path.join(packageDirNodeModules, dep);
+    await fs.unlink(newPath);
+    await fs.copy(originalDepPath, newPath, { dereference: true });
   }
 }
 
 /**
  * Transforms the package.json at `packageDir` to use the publishConfig field and remove other unnecessary fields such as devDependencies.
- * @param packageDir The directory that contains the package.json to transform.
- * @param callback The function called after the transformation, before reverting the package.json back to its original state.
+ * @param packageData The package data for the package to prepare.
+ * @param tmpPackageDir The temporary directory to prepare the package in.
  */
-function preparePackageJsonAndRun(packageDir: string, callback: () => void) {
-  const packageJsonPath = `${packageDir}/package.json`;
-  const packageJsonString = readFileSync(packageJsonPath, "utf8");
-  const packageJson = JSON.parse(packageJsonString);
-  try {
-    writeFileSync(
-      packageJsonPath,
-      `${JSON.stringify(
-        {
-          ...packageJson,
-          ...packageJson.publishConfig,
-          publishConfig: undefined,
-          devDependencies: undefined,
-        },
-        undefined,
-        2
-      )}\n`
-    );
+async function preparePackageJson(tmpPackageDir: string) {
+  const packageJsonPath = `${tmpPackageDir}/package.json`;
+  const packageJson = await fs.readJSON(packageJsonPath);
 
-    callback();
-  } finally {
-    writeFileSync(packageJsonPath, packageJsonString);
+  Object.assign(packageJson, packageJson.publishConfig);
+
+  const bumpPackConfig = packageJson["bump-pack"];
+  if (bumpPackConfig) {
+    for(const depToRemove of bumpPackConfig.removeBundledDependencies ?? []) {
+      console.log(`Removing bundled dependency "${depToRemove}"`);
+      delete packageJson.dependencies[depToRemove];
+      packageJson.bundledDependencies = packageJson.bundledDependencies?.filter((d: string) => d !== depToRemove);
+    }
   }
+
+  delete packageJson["bump-pack"];
+  delete packageJson.volta;
+  delete packageJson.devDependencies;
+  delete packageJson.publishConfig;
+
+  await fs.writeJSON(packageJsonPath, packageJson);
 }

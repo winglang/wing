@@ -21,7 +21,7 @@ module.exports = function({  }) {
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.2"
+      "version": "0.17.0"
     },
     "outputs": {
       "root": {
@@ -45,11 +45,11 @@ module.exports = function({  }) {
   },
   "resource": {
     "aws_s3_bucket": {
-      "root_Bucket_966015A6": {
+      "Bucket": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/Bucket",
-            "uniqueId": "root_Bucket_966015A6"
+            "uniqueId": "Bucket"
           }
         },
         "bucket_prefix": "hello",
