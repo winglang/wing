@@ -18,6 +18,7 @@ pub enum CompilationPhase {
 	Compiling,
 	Parsing,
 	TypeChecking,
+	Lifting,
 	Jsifying,
 }
 

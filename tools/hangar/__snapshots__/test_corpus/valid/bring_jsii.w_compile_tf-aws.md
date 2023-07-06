@@ -2,17 +2,15 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ greeting }) {
+module.exports = function({ $greeting }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      {((cond) => {if (!cond) throw new Error("assertion failed: greeting == \"Hello, wingnuts\"")})((greeting === "Hello, wingnuts"))};
+    async handle() {
+      {((cond) => {if (!cond) throw new Error("assertion failed: greeting == \"Hello, wingnuts\"")})(($greeting === "Hello, wingnuts"))};
     }
   }
   return $Closure1;
@@ -157,14 +155,12 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const greeting_client = context._lift(greeting);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            greeting: ${greeting_client},
+          require("./inflight.$Closure1.js")({
+            $greeting: ${context._lift(greeting)},
           })
         `);
       }
@@ -180,9 +176,6 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure1._registerBindObject(greeting, host, []);
-        }
         if (ops.includes("handle")) {
           $Closure1._registerBindObject(greeting, host, []);
         }

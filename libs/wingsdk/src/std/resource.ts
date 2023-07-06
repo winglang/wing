@@ -3,7 +3,7 @@ import { Duration } from "./duration";
 import { App } from "../core";
 import { WING_ATTRIBUTE_RESOURCE_CONNECTIONS } from "../core/attributes";
 import { Code } from "../core/inflight";
-import { serializeImmutableData } from "../core/internal";
+import { liftObject } from "../core/internal";
 import { IInspectable, TreeInspector } from "../core/tree";
 import { log } from "../shared/log";
 
@@ -189,7 +189,6 @@ export abstract class Resource extends Construct implements IResource {
         if (isResource(obj)) {
           // Explicitly register the resource's `$inflight_init` op, which is a special op that can be used to makes sure
           // the host can instantiate a client for this resource.
-          obj._registerBind(host, ["$inflight_init"]);
 
           obj._registerBind(host, ops);
 
@@ -354,7 +353,7 @@ export abstract class Resource extends Construct implements IResource {
    * @internal
    */
   protected _lift(value: any): string {
-    return serializeImmutableData(this, value);
+    return liftObject(this, value);
   }
 }
 

@@ -2,23 +2,21 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ math_Util }) {
+module.exports = function({ $math_Util }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.isPrime(1) == false")})(((await math_Util.isPrime(1)) === false))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.isPrime(2) == true")})(((await math_Util.isPrime(2)) === true))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.isPrime(3) == true")})(((await math_Util.isPrime(3)) === true))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.isPrime(4) == false")})(((await math_Util.isPrime(4)) === false))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.isPrime(10) == false")})(((await math_Util.isPrime(10)) === false))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.isPrime(11) == true")})(((await math_Util.isPrime(11)) === true))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.isPrime(12) == false")})(((await math_Util.isPrime(12)) === false))};
+    async handle() {
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.isPrime(1) == false")})(((await $math_Util.isPrime(1)) === false))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.isPrime(2) == true")})(((await $math_Util.isPrime(2)) === true))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.isPrime(3) == true")})(((await $math_Util.isPrime(3)) === true))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.isPrime(4) == false")})(((await $math_Util.isPrime(4)) === false))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.isPrime(10) == false")})(((await $math_Util.isPrime(10)) === false))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.isPrime(11) == true")})(((await $math_Util.isPrime(11)) === true))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.isPrime(12) == false")})(((await $math_Util.isPrime(12)) === false))};
     }
   }
   return $Closure1;
@@ -162,14 +160,12 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const math_UtilClient = math.Util._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            math_Util: ${math_UtilClient.text},
+          require("./inflight.$Closure1.js")({
+            $math_Util: ${context._lift(math.Util)},
           })
         `);
       }
@@ -183,13 +179,6 @@ class $Root extends $stdlib.std.Resource {
             return client;
           })())
         `);
-      }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-        }
-        if (ops.includes("handle")) {
-        }
-        super._registerBind(host, ops);
       }
     }
     {((cond) => {if (!cond) throw new Error("assertion failed: math.isPrime(1) == false")})(((math.Util.isPrime(1)) === false))};
