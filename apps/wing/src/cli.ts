@@ -11,10 +11,9 @@ import { collectCommandAnalytics } from "./analytics/collect";
 import { exportAnalytics } from "./analytics/export";
 
 
-export const PACKAGE_VERSION = require("../package.json").version as string;
+const PACKAGE_VERSION = require("../package.json").version as string;
 
-const ANALYTICS_OPT_OUT = process.env.WING_DISABLE_ANALYTICS ? true : false; 
-const ANALYTICS_EXPORT_OFF = process.env.WING_DISABLE_ANALYTICS_EXPORT ? true : false;
+const ANALYTICS_OPT_OUT = process.env.WING_DISABLE_ANALYTICS || PACKAGE_VERSION == "0.0.0" ? true : false; 
 let ANALYTICS_EXPORT_FILE: string | undefined = undefined;
 
 const SUPPORTED_NODE_VERSION = require("../package.json").engines.node as string;
@@ -70,14 +69,12 @@ async function main() {
     try {
       ANALYTICS_EXPORT_FILE = await collectCommandAnalytics(cmd);
     } catch (err) {
-      // TODO: remove this log I only have it for debugging
-      console.log(err);
       // ignore
     }
   }
 
   async function exportAnalyticsHook() {
-    if (ANALYTICS_OPT_OUT || ANALYTICS_EXPORT_OFF) { return; }
+    if (ANALYTICS_OPT_OUT) { return; }
 
     // Fail silently if export fails
     try {
@@ -85,8 +82,6 @@ async function main() {
         exportAnalytics(ANALYTICS_EXPORT_FILE);
       }
     } catch (err) {
-      // TODO: remove this log I only have it for debugging
-      console.log(err);
       // ignore
     }
   }
