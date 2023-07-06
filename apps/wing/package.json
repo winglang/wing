@@ -48,11 +48,8 @@
     "@types/prettier": "^2.7.3",
     "@types/semver-utils": "^1.1.1",
     "@types/update-notifier": "^6.0.1",
-<<<<<<< HEAD
     "@withfig/autocomplete-types": "^1.28.0",
-=======
     "bump-pack": "workspace:^",
->>>>>>> origin/main
     "esbuild": "^0.17.19",
     "typescript": "^4.9.4",
     "vitest": "^0.30.1"
