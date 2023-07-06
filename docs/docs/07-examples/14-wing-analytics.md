@@ -20,26 +20,11 @@ wing compile -t sim app.w --no-analytics
 
 ### What data is collected
 
-Each run of the Wing cli collects information about various aspects of the environment and project that it is running it. Below is are tables with the information that is collected. As well
+Each run of the Wing cli collects information about various aspects of the environment it is running in. Below are the analytics we gather. As well
 you can always head over to our Github and view the code that collects these metrics, as the code is open source.
 
-| Command Info | Description |
-| --- | --- |
-| command | The command that was run |
-| options | The options that were passed to the command |
-
-| Operating System Info | Description |
-| --- | --- |
-| arch | The operating system architecture |
-| platform | The operating system platform |
-| release | The operating system release |
-
-| Node Info | Description |
-| --- | --- |
-| version | The node version |
-
-
-| CI Info (if applicable) | Description |
-| --- | --- |
-| name | The name of the CI environment (e.g. Github Actions, Circleci, etc..) |
-
+- The Wing cli version
+- The command information, including the command name, arguments, and flags
+- Operating system information, including the architecture, version, and platform
+- Node js version
+- CI environment name (if applicable)
