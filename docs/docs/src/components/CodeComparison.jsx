@@ -3,7 +3,6 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
 import FileCodeBlock from './FileCodeBlock';
-import helloWPath from '!file-loader!../examples/function-upload-to-bucket/wing/hello.w';
 
 import getExamplePlatforms from '../examples/getExamplePlatforms';
 import getExampleWingFile from '../examples/getExampleWingFile';
