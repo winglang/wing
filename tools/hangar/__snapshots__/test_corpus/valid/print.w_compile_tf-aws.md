@@ -9,9 +9,7 @@ module.exports = function({  }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
-    async handle()  {
+    async handle() {
       {console.log("inflight log 1.1")};
       {console.log("inflight log 1.2")};
     }
@@ -30,9 +28,7 @@ module.exports = function({  }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
-    async handle()  {
+    async handle() {
       {console.log("inflight log 2.1")};
       {console.log("inflight log 2.2")};
     }
@@ -244,12 +240,11 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.$Closure1.js")({
           })
         `);
       }
@@ -264,24 +259,16 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-        }
-        if (ops.includes("handle")) {
-        }
-        super._registerBind(host, ops);
-      }
     }
     class $Closure2 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure2.js";
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.$Closure2.js")({
           })
         `);
       }
@@ -295,13 +282,6 @@ class $Root extends $stdlib.std.Resource {
             return client;
           })())
         `);
-      }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-        }
-        if (ops.includes("handle")) {
-        }
-        super._registerBind(host, ops);
       }
     }
     {console.log("preflight log")};

@@ -2,17 +2,15 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ util_Util }) {
+module.exports = function({ $util_Util }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
-    async handle(input)  {
-      const target = (await util_Util.tryEnv("WING_TARGET"));
+    async handle(input) {
+      const target = (await $util_Util.tryEnv("WING_TARGET"));
       {((cond) => {if (!cond) throw new Error("assertion failed: target?")})(((target) != null))};
       return String.raw({ raw: ["", "-response"] }, input);
     }
@@ -24,17 +22,15 @@ module.exports = function({ util_Util }) {
 
 ## inflight.$Closure2.js
 ```js
-module.exports = function({ f }) {
+module.exports = function({ $f }) {
   class $Closure2 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      const x = (await f.invoke("hello"));
+    async handle() {
+      const x = (await $f.invoke("hello"));
       {((cond) => {if (!cond) throw new Error("assertion failed: x == \"hello-response\"")})((x === "hello-response"))};
     }
   }
@@ -247,14 +243,12 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const util_UtilClient = util.Util._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            util_Util: ${util_UtilClient.text},
+          require("./inflight.$Closure1.js")({
+            $util_Util: ${context._lift(util.Util)},
           })
         `);
       }
@@ -269,26 +263,17 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-        }
-        if (ops.includes("handle")) {
-        }
-        super._registerBind(host, ops);
-      }
     }
     class $Closure2 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure2.js";
-        const f_client = context._lift(f);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            f: ${f_client},
+          require("./inflight.$Closure2.js")({
+            $f: ${context._lift(f)},
           })
         `);
       }
@@ -304,9 +289,6 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure2._registerBindObject(f, host, []);
-        }
         if (ops.includes("handle")) {
           $Closure2._registerBindObject(f, host, ["invoke"]);
         }

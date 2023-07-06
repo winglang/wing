@@ -2,28 +2,26 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ b }) {
+module.exports = function({ $b }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      (await b.put("test1.txt","Foo"));
-      (await b.put("test2.txt","Bar"));
-      const first = (await b.get("test1.txt"));
-      const second = (await b.get("test2.txt"));
+    async handle() {
+      (await $b.put("test1.txt","Foo"));
+      (await $b.put("test2.txt","Bar"));
+      const first = (await $b.get("test1.txt"));
+      const second = (await $b.get("test2.txt"));
       {((cond) => {if (!cond) throw new Error("assertion failed: first == \"Foo\"")})((first === "Foo"))};
       {((cond) => {if (!cond) throw new Error("assertion failed: second == \"Bar\"")})((second === "Bar"))};
-      (await b.delete("test1.txt"));
-      const files = (await b.list());
+      (await $b.delete("test1.txt"));
+      const files = (await $b.list());
       {((cond) => {if (!cond) throw new Error("assertion failed: files.contains(\"test1.txt\") == false")})((files.includes("test1.txt") === false))};
       {((cond) => {if (!cond) throw new Error("assertion failed: files.contains(\"test2.txt\") == true")})((files.includes("test2.txt") === true))};
-      (await b.put("test2.txt","Baz"));
-      const third = (await b.get("test2.txt"));
+      (await $b.put("test2.txt","Baz"));
+      const third = (await $b.get("test2.txt"));
       {((cond) => {if (!cond) throw new Error("assertion failed: third == \"Baz\"")})((third === "Baz"))};
     }
   }
@@ -212,14 +210,12 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const b_client = context._lift(b);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            b: ${b_client},
+          require("./inflight.$Closure1.js")({
+            $b: ${context._lift(b)},
           })
         `);
       }
@@ -235,9 +231,6 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure1._registerBindObject(b, host, []);
-        }
         if (ops.includes("handle")) {
           $Closure1._registerBindObject(b, host, ["delete", "get", "list", "put"]);
         }

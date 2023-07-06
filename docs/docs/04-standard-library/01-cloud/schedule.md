@@ -61,4 +61,4 @@ See [Amazon CloudWatch](https://aws.amazon.com/cloudwatch/).
 
 ## API Reference
 
-The full list of APIs for `cloud.Schedule` is available in the [API Reference](../api-reference).
+The full list of APIs for `cloud.Schedule` is available in the [API Reference](./api-reference).
