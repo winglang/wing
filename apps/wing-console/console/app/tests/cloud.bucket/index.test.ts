@@ -27,6 +27,7 @@ describe(`${__dirname}/index.w`, () => {
     await page.getByTestId("cloud.bucket:delete-file").click();
 
     await page.waitForLoadState("networkidle");
+    await page.waitForTimeout(300);
 
     expect(await emptyState.isVisible()).toBe(true);
   });
