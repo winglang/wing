@@ -95,7 +95,10 @@ export function calculateBucketPermissions(
     ops.includes(cloud.BucketInflightMethods.EXISTS) ||
     ops.includes(cloud.BucketInflightMethods.TRY_GET) ||
     ops.includes(cloud.BucketInflightMethods.TRY_GET_JSON) ||
-    ops.includes(cloud.BucketInflightMethods.TRY_DELETE)
+    ops.includes(cloud.BucketInflightMethods.TRY_DELETE) ||
+    // get requires list permissions too https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/client/s3/command/GetObjectCommand/
+    ops.includes(cloud.BucketInflightMethods.GET) ||
+    ops.includes(cloud.BucketInflightMethods.GET_JSON)
   ) {
     actions.push("s3:List*");
   }

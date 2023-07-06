@@ -154,7 +154,7 @@ module.exports = function({  }) {
             "uniqueId": "testmain_Handler_IamRolePolicy_A91080AC"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\",\"s3:GetObject*\",\"s3:GetBucket*\"],\"Resource\":[\"${aws_s3_bucket.KeyValueStore_cloudBucket_D9D365FD.arn}\",\"${aws_s3_bucket.KeyValueStore_cloudBucket_D9D365FD.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.sasa.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:GetItem\"],\"Resource\":[\"${aws_dynamodb_table.sasa.arn}\"],\"Effect\":\"Allow\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:List*\",\"s3:PutObject*\",\"s3:Abort*\",\"s3:GetObject*\",\"s3:GetBucket*\"],\"Resource\":[\"${aws_s3_bucket.KeyValueStore_cloudBucket_D9D365FD.arn}\",\"${aws_s3_bucket.KeyValueStore_cloudBucket_D9D365FD.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.sasa.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:GetItem\"],\"Resource\":[\"${aws_dynamodb_table.sasa.arn}\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.testmain_Handler_IamRole_0E2C4B8D.name}"
       }
     },
