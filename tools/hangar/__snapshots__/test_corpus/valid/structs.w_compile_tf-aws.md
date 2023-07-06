@@ -4,13 +4,11 @@
 ```js
 module.exports = function({  }) {
   class Foo {
-    constructor({ data }) {
-      this.data = data;
+    constructor({ $this_data_field0 }) {
+      this.$this_data_field0 = $this_data_field0;
     }
-    async $inflight_init()  {
-    }
-    async getStuff()  {
-      return this.data.field0;
+    async getStuff() {
+      return this.$this_data_field0;
     }
   }
   return Foo;
@@ -25,7 +23,7 @@ module.exports = function({  }) {
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.2"
+      "version": "0.17.0"
     },
     "outputs": {
       "root": {
@@ -63,23 +61,21 @@ class $Root extends $stdlib.std.Resource {
     class Foo extends $stdlib.std.Resource {
       constructor(scope, id, b) {
         super(scope, id);
-        this._addInflightOps("getStuff");
         this.data = b;
+        this._addInflightOps("getStuff", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.Foo.js";
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.Foo.js")({
           })
         `);
       }
       _toInflight() {
-        const data_client = this._lift(this.data);
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
             const FooClient = ${Foo._toInflightType(this).text};
             const client = new FooClient({
-              data: ${data_client},
+              $this_data_field0: ${this._lift(this.data.field0)},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -87,9 +83,6 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          Foo._registerBindObject(this.data, host, []);
-        }
         if (ops.includes("getStuff")) {
           Foo._registerBindObject(this.data.field0, host, []);
         }
@@ -107,9 +100,9 @@ class $Root extends $stdlib.std.Resource {
     "field0": "foo",}
     ,}
     ;
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '(x.field0 === "Sup")'`)})((x.field0 === "Sup"))};
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '(y.field1 === 1)'`)})((y.field1 === 1))};
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '(y.field3.field0 === "foo")'`)})((y.field3.field0 === "foo"))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: x.field0 == \"Sup\"")})((x.field0 === "Sup"))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: y.field1 == 1")})((y.field1 === 1))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: y.field3.field0 == \"foo\"")})((y.field3.field0 === "foo"))};
     const s = {
     "a": "Boom baby",}
     ;

@@ -1,25 +1,25 @@
 {
   "name": "winglang",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "implicitDependencies": ["wingc", "sdk", "compiler"],
+  "implicitDependencies": ["wingc", "sdk", "compiler", "console-app"],
   "targets": {
     "build": {
       "dependsOn": ["^build"],
       "options": {
-        "command": "npm run build",
+        "command": "pnpm build",
         "cwd": "apps/wing"
       }
     },
     "test": {
       "dependsOn": ["^build"],
       "options": {
-        "command": "npm run test",
+        "command": "pnpm test",
         "cwd": "apps/wing"
       }
     },
     "package": {
       "options": {
-        "command": "npm run package",
+        "command": "pnpm package",
         "cwd": "apps/wing"
       }
     },

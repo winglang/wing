@@ -2,31 +2,29 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ myStr, myNum, mySecondBool, myBool, myDur }) {
+module.exports = function({ $myBool, $myDur_hours, $myDur_minutes, $myDur_seconds, $myNum, $mySecondBool, $myStr }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
-    async handle(s)  {
-      {console.log(myStr)};
-      const n = myNum;
-      {console.log(`${n}`)};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(mySecondBool === false)'`)})((mySecondBool === false))};
-      if (myBool) {
+    async handle(s) {
+      {console.log($myStr)};
+      const n = $myNum;
+      {console.log(String.raw({ raw: ["", ""] }, n))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: mySecondBool == false")})(($mySecondBool === false))};
+      if ($myBool) {
         {console.log("bool=true")};
       }
       else {
         {console.log("bool=false")};
       }
-      const min = myDur.minutes;
-      const sec = myDur.seconds;
-      const hr = myDur.hours;
-      const split = (await `min=${min} sec=${sec} hr=${hr}`.split(" "));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(split.length === 3)'`)})((split.length === 3))};
+      const min = $myDur_minutes;
+      const sec = $myDur_seconds;
+      const hr = $myDur_hours;
+      const split = (await String.raw({ raw: ["min=", " sec=", " hr=", ""] }, min, sec, hr).split(" "));
+      {((cond) => {if (!cond) throw new Error("assertion failed: split.length == 3")})((split.length === 3))};
     }
   }
   return $Closure1;
@@ -41,7 +39,7 @@ module.exports = function({ myStr, myNum, mySecondBool, myBool, myDur }) {
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.2"
+      "version": "0.17.0"
     },
     "outputs": {
       "root": {
@@ -65,46 +63,46 @@ module.exports = function({ myStr, myNum, mySecondBool, myBool, myDur }) {
   },
   "resource": {
     "aws_iam_role": {
-      "root_cloudFunction_IamRole_DAEC3578": {
+      "cloudFunction_IamRole_5A4430DC": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/cloud.Function/IamRole",
-            "uniqueId": "root_cloudFunction_IamRole_DAEC3578"
+            "uniqueId": "cloudFunction_IamRole_5A4430DC"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
-      "root_cloudFunction_IamRolePolicy_AAE6C0C0": {
+      "cloudFunction_IamRolePolicy_618BF987": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/cloud.Function/IamRolePolicy",
-            "uniqueId": "root_cloudFunction_IamRolePolicy_AAE6C0C0"
+            "uniqueId": "cloudFunction_IamRolePolicy_618BF987"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
-        "role": "${aws_iam_role.root_cloudFunction_IamRole_DAEC3578.name}"
+        "role": "${aws_iam_role.cloudFunction_IamRole_5A4430DC.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
-      "root_cloudFunction_IamRolePolicyAttachment_FC3D9E7C": {
+      "cloudFunction_IamRolePolicyAttachment_288B9653": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/cloud.Function/IamRolePolicyAttachment",
-            "uniqueId": "root_cloudFunction_IamRolePolicyAttachment_FC3D9E7C"
+            "uniqueId": "cloudFunction_IamRolePolicyAttachment_288B9653"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.root_cloudFunction_IamRole_DAEC3578.name}"
+        "role": "${aws_iam_role.cloudFunction_IamRole_5A4430DC.name}"
       }
     },
     "aws_lambda_function": {
-      "root_cloudFunction_6A57BA0A": {
+      "cloudFunction": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/cloud.Function/Default",
-            "uniqueId": "root_cloudFunction_6A57BA0A"
+            "uniqueId": "cloudFunction"
           }
         },
         "environment": {
@@ -116,10 +114,10 @@ module.exports = function({ myStr, myNum, mySecondBool, myBool, myDur }) {
         "function_name": "cloud-Function-c8d2eca1",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.root_cloudFunction_IamRole_DAEC3578.arn}",
+        "role": "${aws_iam_role.cloudFunction_IamRole_5A4430DC.arn}",
         "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
-        "s3_key": "${aws_s3_object.root_cloudFunction_S3Object_C8435368.key}",
+        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
+        "s3_key": "${aws_s3_object.cloudFunction_S3Object_71908BAD.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -128,25 +126,25 @@ module.exports = function({ myStr, myNum, mySecondBool, myBool, myDur }) {
       }
     },
     "aws_s3_bucket": {
-      "root_Code_02F3C603": {
+      "Code": {
         "//": {
           "metadata": {
             "path": "root/Default/Code",
-            "uniqueId": "root_Code_02F3C603"
+            "uniqueId": "Code"
           }
         },
         "bucket_prefix": "code-c84a50b1-"
       }
     },
     "aws_s3_object": {
-      "root_cloudFunction_S3Object_C8435368": {
+      "cloudFunction_S3Object_71908BAD": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/cloud.Function/S3Object",
-            "uniqueId": "root_cloudFunction_S3Object_C8435368"
+            "uniqueId": "cloudFunction_S3Object_71908BAD"
           }
         },
-        "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
+        "bucket": "${aws_s3_bucket.Code.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       }
@@ -169,23 +167,19 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
         this.display.hidden = true;
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const myStr_client = context._lift(myStr);
-        const myNum_client = context._lift(myNum);
-        const mySecondBool_client = context._lift(mySecondBool);
-        const myBool_client = context._lift(myBool);
-        const myDur_client = context._lift(myDur);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            myStr: ${myStr_client},
-            myNum: ${myNum_client},
-            mySecondBool: ${mySecondBool_client},
-            myBool: ${myBool_client},
-            myDur: ${myDur_client},
+          require("./inflight.$Closure1.js")({
+            $myBool: ${context._lift(myBool)},
+            $myDur_hours: ${context._lift(myDur.hours)},
+            $myDur_minutes: ${context._lift(myDur.minutes)},
+            $myDur_seconds: ${context._lift(myDur.seconds)},
+            $myNum: ${context._lift(myNum)},
+            $mySecondBool: ${context._lift(mySecondBool)},
+            $myStr: ${context._lift(myStr)},
           })
         `);
       }
@@ -201,16 +195,11 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure1._registerBindObject(myBool, host, []);
-          $Closure1._registerBindObject(myDur, host, []);
-          $Closure1._registerBindObject(myNum, host, []);
-          $Closure1._registerBindObject(mySecondBool, host, []);
-          $Closure1._registerBindObject(myStr, host, []);
-        }
         if (ops.includes("handle")) {
           $Closure1._registerBindObject(myBool, host, []);
-          $Closure1._registerBindObject(myDur, host, []);
+          $Closure1._registerBindObject(myDur.hours, host, []);
+          $Closure1._registerBindObject(myDur.minutes, host, []);
+          $Closure1._registerBindObject(myDur.seconds, host, []);
           $Closure1._registerBindObject(myNum, host, []);
           $Closure1._registerBindObject(mySecondBool, host, []);
           $Closure1._registerBindObject(myStr, host, []);

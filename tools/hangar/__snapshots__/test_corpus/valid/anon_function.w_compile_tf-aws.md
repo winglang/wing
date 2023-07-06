@@ -7,7 +7,7 @@
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.2"
+      "version": "0.17.0"
     },
     "outputs": {
       "root": {
@@ -42,20 +42,18 @@ const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
-    const myfunc =  (x) =>  {
-      {console.log(`${x}`)};
+    const myfunc = ((x) => {
+      {console.log(String.raw({ raw: ["", ""] }, x))};
       x = (x + 1);
       if ((x > 3.14)) {
         return;
       }
       (myfunc(x));
-    }
-    ;
+    });
     (myfunc(1));
-    (( (x) =>  {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(x === 1)'`)})((x === 1))};
-    }
-    )(1));
+    (((x) => {
+      {((cond) => {if (!cond) throw new Error("assertion failed: x == 1")})((x === 1))};
+    })(1));
   }
 }
 class $App extends $AppBase {

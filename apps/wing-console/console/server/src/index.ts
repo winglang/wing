@@ -24,8 +24,13 @@ export type { Updater, UpdaterStatus } from "./updater.js";
 export type { Config } from "./config.js";
 export type { Router } from "./router/index.js";
 export type { HostUtils } from "./hostUtils.js";
+export type { RouterContext } from "./utils/createRouter.js";
+export type { MapNode, MapEdge } from "./router/app.js";
+export type { InternalTestResult } from "./router/test.js";
+export type { Column } from "./router/table.js";
+export type { NodeDisplay } from "./utils/constructTreeNodeMap.js";
 
-type RouteNames = keyof inferRouterInputs<Router> | undefined;
+export type RouteNames = keyof inferRouterInputs<Router> | undefined;
 
 export interface CreateConsoleServerOptions {
   wingfile: string;
@@ -170,6 +175,7 @@ export const createConsoleServer = async ({
     },
     hostUtils,
     onExpressCreated,
+    wingfile,
   });
 
   const close = async () => {

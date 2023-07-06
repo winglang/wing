@@ -2,44 +2,36 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ q, js }) {
+module.exports = function({ $js, $q }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      (await q.push("foo"));
-      (await q.push("bar"));
-      (await q.push("baz"));
-      const wait = async (pred) =>  {
+    async handle() {
+      (await $q.push("foo"));
+      (await $q.push("bar"));
+      (await $q.push("baz"));
+      const wait = async (pred) => {
         let i = 0;
         while ((i < 60)) {
           if ((await pred())) {
             return true;
           }
-          (await js.sleep(100));
+          (await $js.sleep(100));
           i = (i + 1);
         }
         return false;
       }
       ;
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(await wait(async () =>  {
-        return ((await q.approxSize()) === 3);
-      }
-      ))'`)})((await wait(async () =>  {
-        return ((await q.approxSize()) === 3);
+      {((cond) => {if (!cond) throw new Error("assertion failed: wait(inflight (): bool => { \n    return q.approxSize() == 3;\n  })")})((await wait(async () => {
+        return ((await $q.approxSize()) === 3);
       }
       )))};
-      (await q.purge());
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(await wait(async () =>  {
-        return ((await q.approxSize()) === 0);
-      }
-      ))'`)})((await wait(async () =>  {
-        return ((await q.approxSize()) === 0);
+      (await $q.purge());
+      {((cond) => {if (!cond) throw new Error("assertion failed: wait(inflight (): bool => {\n    return q.approxSize() == 0;\n  })")})((await wait(async () => {
+        return ((await $q.approxSize()) === 0);
       }
       )))};
     }
@@ -55,9 +47,7 @@ module.exports = function({  }) {
   class TestHelper {
     constructor({  }) {
     }
-    async $inflight_init()  {
-    }
-    async sleep(milli)  {
+    async sleep(milli) {
       return (require("<ABSOLUTE_PATH>/sleep.js")["sleep"])(milli)
     }
   }
@@ -73,7 +63,7 @@ module.exports = function({  }) {
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.2"
+      "version": "0.17.0"
     },
     "outputs": {
       "root": {
@@ -87,7 +77,7 @@ module.exports = function({  }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:purge\",\"${aws_lambda_function.root_testpurge_Handler_4198A730.arn}\"]]"
+      "value": "[[\"root/Default/Default/test:purge\",\"${aws_lambda_function.testpurge_Handler_F7A5D0E5.arn}\"]]"
     }
   },
   "provider": {
@@ -97,51 +87,51 @@ module.exports = function({  }) {
   },
   "resource": {
     "aws_iam_role": {
-      "root_testpurge_Handler_IamRole_F6BC8197": {
+      "testpurge_Handler_IamRole_242BC35C": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:purge/Handler/IamRole",
-            "uniqueId": "root_testpurge_Handler_IamRole_F6BC8197"
+            "uniqueId": "testpurge_Handler_IamRole_242BC35C"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
-      "root_testpurge_Handler_IamRolePolicy_E8A7D0E8": {
+      "testpurge_Handler_IamRolePolicy_DF93FF98": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:purge/Handler/IamRolePolicy",
-            "uniqueId": "root_testpurge_Handler_IamRolePolicy_E8A7D0E8"
+            "uniqueId": "testpurge_Handler_IamRolePolicy_DF93FF98"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"sqs:SendMessage\"],\"Resource\":[\"${aws_sqs_queue.root_cloudQueue_E3597F7A.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"sqs:PurgeQueue\"],\"Resource\":[\"${aws_sqs_queue.root_cloudQueue_E3597F7A.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"sqs:GetQueueAttributes\"],\"Resource\":[\"${aws_sqs_queue.root_cloudQueue_E3597F7A.arn}\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.root_testpurge_Handler_IamRole_F6BC8197.name}"
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"sqs:SendMessage\"],\"Resource\":[\"${aws_sqs_queue.cloudQueue.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"sqs:PurgeQueue\"],\"Resource\":[\"${aws_sqs_queue.cloudQueue.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"sqs:GetQueueAttributes\"],\"Resource\":[\"${aws_sqs_queue.cloudQueue.arn}\"],\"Effect\":\"Allow\"}]}",
+        "role": "${aws_iam_role.testpurge_Handler_IamRole_242BC35C.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
-      "root_testpurge_Handler_IamRolePolicyAttachment_20D88C7F": {
+      "testpurge_Handler_IamRolePolicyAttachment_0261B438": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:purge/Handler/IamRolePolicyAttachment",
-            "uniqueId": "root_testpurge_Handler_IamRolePolicyAttachment_20D88C7F"
+            "uniqueId": "testpurge_Handler_IamRolePolicyAttachment_0261B438"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.root_testpurge_Handler_IamRole_F6BC8197.name}"
+        "role": "${aws_iam_role.testpurge_Handler_IamRole_242BC35C.name}"
       }
     },
     "aws_lambda_function": {
-      "root_testpurge_Handler_4198A730": {
+      "testpurge_Handler_F7A5D0E5": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:purge/Handler/Default",
-            "uniqueId": "root_testpurge_Handler_4198A730"
+            "uniqueId": "testpurge_Handler_F7A5D0E5"
           }
         },
         "environment": {
           "variables": {
-            "QUEUE_URL_31e95cbd": "${aws_sqs_queue.root_cloudQueue_E3597F7A.url}",
+            "QUEUE_URL_31e95cbd": "${aws_sqs_queue.cloudQueue.url}",
             "WING_FUNCTION_NAME": "Handler-c849290f",
             "WING_TARGET": "tf-aws"
           }
@@ -149,10 +139,10 @@ module.exports = function({  }) {
         "function_name": "Handler-c849290f",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.root_testpurge_Handler_IamRole_F6BC8197.arn}",
+        "role": "${aws_iam_role.testpurge_Handler_IamRole_242BC35C.arn}",
         "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
-        "s3_key": "${aws_s3_object.root_testpurge_Handler_S3Object_6E5F65FA.key}",
+        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
+        "s3_key": "${aws_s3_object.testpurge_Handler_S3Object_97CF2166.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -161,35 +151,35 @@ module.exports = function({  }) {
       }
     },
     "aws_s3_bucket": {
-      "root_Code_02F3C603": {
+      "Code": {
         "//": {
           "metadata": {
             "path": "root/Default/Code",
-            "uniqueId": "root_Code_02F3C603"
+            "uniqueId": "Code"
           }
         },
         "bucket_prefix": "code-c84a50b1-"
       }
     },
     "aws_s3_object": {
-      "root_testpurge_Handler_S3Object_6E5F65FA": {
+      "testpurge_Handler_S3Object_97CF2166": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:purge/Handler/S3Object",
-            "uniqueId": "root_testpurge_Handler_S3Object_6E5F65FA"
+            "uniqueId": "testpurge_Handler_S3Object_97CF2166"
           }
         },
-        "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
+        "bucket": "${aws_s3_bucket.Code.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       }
     },
     "aws_sqs_queue": {
-      "root_cloudQueue_E3597F7A": {
+      "cloudQueue": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/cloud.Queue/Default",
-            "uniqueId": "root_cloudQueue_E3597F7A"
+            "uniqueId": "cloudQueue"
           }
         },
         "name": "cloud-Queue-c86e03d8"
@@ -213,12 +203,11 @@ class $Root extends $stdlib.std.Resource {
     class TestHelper extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("sleep");
+        this._addInflightOps("sleep", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.TestHelper.js";
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.TestHelper.js")({
           })
         `);
       }
@@ -233,28 +222,18 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-        }
-        if (ops.includes("sleep")) {
-        }
-        super._registerBind(host, ops);
-      }
     }
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
         this.display.hidden = true;
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const q_client = context._lift(q);
-        const js_client = context._lift(js);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            q: ${q_client},
-            js: ${js_client},
+          require("./inflight.$Closure1.js")({
+            $js: ${context._lift(js)},
+            $q: ${context._lift(q)},
           })
         `);
       }
@@ -270,10 +249,6 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure1._registerBindObject(js, host, []);
-          $Closure1._registerBindObject(q, host, []);
-        }
         if (ops.includes("handle")) {
           $Closure1._registerBindObject(js, host, ["sleep"]);
           $Closure1._registerBindObject(q, host, ["approxSize", "purge", "push"]);

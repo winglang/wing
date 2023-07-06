@@ -1,6 +1,6 @@
-import react from "@vitejs/plugin-react";
 import { defineConfig } from "tsup";
 import * as vite from "vite";
+import { viteConfig } from "./scripts/config.mjs";
 
 export default defineConfig({
   entry: ["src/index.ts"],
@@ -12,14 +12,6 @@ export default defineConfig({
     console.log("Build succeeded");
 
     console.log("Build UI files...");
-    await vite.build({
-      configFile: false,
-      root: "./web",
-      plugins: [react()],
-      build: {
-        outDir: "../dist/vite",
-      },
-      base: "./",
-    });
+    await vite.build(viteConfig);
   },
 });

@@ -16,7 +16,7 @@ pub fn main() {
 
 	let results = compile(
 		source_path,
-		None,
+		Some(env::current_dir().unwrap().join("target").as_path()),
 		Some(source_path.canonicalize().unwrap().parent().unwrap()),
 	);
 	if results.is_err() {

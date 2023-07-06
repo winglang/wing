@@ -4,10 +4,7 @@
 ```js
 module.exports = function({  }) {
   class R {
-    constructor({ f }) {
-      this.f = f;
-    }
-    async $inflight_init()  {
+    constructor({  }) {
     }
   }
   return R;
@@ -22,7 +19,7 @@ module.exports = function({  }) {
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.2"
+      "version": "0.17.0"
     },
     "outputs": {
       "root": {
@@ -61,44 +58,36 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.f = "Hello World!!!";
+        this._addInflightOps("$inflight_init");
       }
-       method2()  {
+      method2() {
         (this.method1());
-        {console.log(`${this.f}`)};
+        {console.log(String.raw({ raw: ["", ""] }, this.f))};
         (this.method2());
       }
-       method1()  {
+      method1() {
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.R.js";
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.R.js")({
           })
         `);
       }
       _toInflight() {
-        const f_client = this._lift(this.f);
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
             const RClient = ${R._toInflightType(this).text};
             const client = new RClient({
-              f: ${f_client},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
         `);
       }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          R._registerBindObject(this.f, host, []);
-        }
-        super._registerBind(host, ops);
-      }
     }
     const x = "hi";
     if (true) {
-      {console.log(`${x}`)};
+      {console.log(String.raw({ raw: ["", ""] }, x))};
       const y = new R(this,"R");
     }
   }

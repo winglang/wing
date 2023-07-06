@@ -2,19 +2,17 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ payloadWithoutOptions, payloadWithBucket }) {
+module.exports = function({ $__payloadWithBucket_c_____null_, $__payloadWithoutOptions_b_____null_, $payloadWithBucket_c }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(((payloadWithoutOptions.b) != null) === false)'`)})((((payloadWithoutOptions.b) != null) === false))};
-      if (((payloadWithBucket.c) != null)) {
-        (await payloadWithBucket.c.put("x.txt","something"));
+    async handle() {
+      {((cond) => {if (!cond) throw new Error("assertion failed: payloadWithoutOptions.b? == false")})(($__payloadWithoutOptions_b_____null_ === false))};
+      if ($__payloadWithBucket_c_____null_) {
+        (await $payloadWithBucket_c?.put?.("x.txt","something"));
       }
     }
   }
@@ -27,12 +25,7 @@ module.exports = function({ payloadWithoutOptions, payloadWithBucket }) {
 ```js
 module.exports = function({  }) {
   class Node {
-    constructor({ left, right, value }) {
-      this.left = left;
-      this.right = right;
-      this.value = value;
-    }
-    async $inflight_init()  {
+    constructor({  }) {
     }
   }
   return Node;
@@ -42,12 +35,10 @@ module.exports = function({  }) {
 
 ## inflight.Sub.js
 ```js
-module.exports = function({ Super }) {
-  class Sub extends Super {
-    constructor({ name }) {
-      super({name});
-    }
-    async $inflight_init()  {
+module.exports = function({ $Super }) {
+  class Sub extends $Super {
+    constructor({  }) {
+      super({  });
     }
   }
   return Sub;
@@ -57,12 +48,10 @@ module.exports = function({ Super }) {
 
 ## inflight.Sub1.js
 ```js
-module.exports = function({ Super }) {
-  class Sub1 extends Super {
-    constructor({ name }) {
-      super({name});
-    }
-    async $inflight_init()  {
+module.exports = function({ $Super }) {
+  class Sub1 extends $Super {
+    constructor({  }) {
+      super({  });
     }
   }
   return Sub1;
@@ -74,10 +63,7 @@ module.exports = function({ Super }) {
 ```js
 module.exports = function({  }) {
   class Super {
-    constructor({ name }) {
-      this.name = name;
-    }
-    async $inflight_init()  {
+    constructor({  }) {
     }
   }
   return Super;
@@ -92,7 +78,7 @@ module.exports = function({  }) {
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.2"
+      "version": "0.17.0"
     },
     "outputs": {
       "root": {
@@ -106,7 +92,7 @@ module.exports = function({  }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:t\",\"${aws_lambda_function.root_testt_Handler_A23A3A53.arn}\"]]"
+      "value": "[[\"root/Default/Default/test:t\",\"${aws_lambda_function.testt_Handler_FF112F5E.arn}\"]]"
     }
   },
   "provider": {
@@ -116,52 +102,51 @@ module.exports = function({  }) {
   },
   "resource": {
     "aws_iam_role": {
-      "root_testt_Handler_IamRole_D6F8E063": {
+      "testt_Handler_IamRole_BF49E95A": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:t/Handler/IamRole",
-            "uniqueId": "root_testt_Handler_IamRole_D6F8E063"
+            "uniqueId": "testt_Handler_IamRole_BF49E95A"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
-      "root_testt_Handler_IamRolePolicy_35CD1E8D": {
+      "testt_Handler_IamRolePolicy_F429CB90": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:t/Handler/IamRolePolicy",
-            "uniqueId": "root_testt_Handler_IamRolePolicy_35CD1E8D"
+            "uniqueId": "testt_Handler_IamRolePolicy_F429CB90"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.root_orangebucket_F14D9995.arn}\",\"${aws_s3_bucket.root_orangebucket_F14D9995.arn}/*\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.root_testt_Handler_IamRole_D6F8E063.name}"
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.orangebucket.arn}\",\"${aws_s3_bucket.orangebucket.arn}/*\"],\"Effect\":\"Allow\"}]}",
+        "role": "${aws_iam_role.testt_Handler_IamRole_BF49E95A.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
-      "root_testt_Handler_IamRolePolicyAttachment_83B6CC34": {
+      "testt_Handler_IamRolePolicyAttachment_16BB0DB0": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:t/Handler/IamRolePolicyAttachment",
-            "uniqueId": "root_testt_Handler_IamRolePolicyAttachment_83B6CC34"
+            "uniqueId": "testt_Handler_IamRolePolicyAttachment_16BB0DB0"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.root_testt_Handler_IamRole_D6F8E063.name}"
+        "role": "${aws_iam_role.testt_Handler_IamRole_BF49E95A.name}"
       }
     },
     "aws_lambda_function": {
-      "root_testt_Handler_A23A3A53": {
+      "testt_Handler_FF112F5E": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:t/Handler/Default",
-            "uniqueId": "root_testt_Handler_A23A3A53"
+            "uniqueId": "testt_Handler_FF112F5E"
           }
         },
         "environment": {
           "variables": {
-            "BUCKET_NAME_c1491ba5": "${aws_s3_bucket.root_orangebucket_F14D9995.bucket}",
-            "BUCKET_NAME_c1491ba5_IS_PUBLIC": "false",
+            "BUCKET_NAME_c1491ba5": "${aws_s3_bucket.orangebucket.bucket}",
             "WING_FUNCTION_NAME": "Handler-c83c24f9",
             "WING_TARGET": "tf-aws"
           }
@@ -169,10 +154,10 @@ module.exports = function({  }) {
         "function_name": "Handler-c83c24f9",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.root_testt_Handler_IamRole_D6F8E063.arn}",
+        "role": "${aws_iam_role.testt_Handler_IamRole_BF49E95A.arn}",
         "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
-        "s3_key": "${aws_s3_object.root_testt_Handler_S3Object_D779BA1A.key}",
+        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
+        "s3_key": "${aws_s3_object.testt_Handler_S3Object_572CA425.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -181,20 +166,20 @@ module.exports = function({  }) {
       }
     },
     "aws_s3_bucket": {
-      "root_Code_02F3C603": {
+      "Code": {
         "//": {
           "metadata": {
             "path": "root/Default/Code",
-            "uniqueId": "root_Code_02F3C603"
+            "uniqueId": "Code"
           }
         },
         "bucket_prefix": "code-c84a50b1-"
       },
-      "root_orangebucket_F14D9995": {
+      "orangebucket": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/orange bucket/Default",
-            "uniqueId": "root_orangebucket_F14D9995"
+            "uniqueId": "orangebucket"
           }
         },
         "bucket_prefix": "orange-bucket-c8ecc927-",
@@ -202,29 +187,29 @@ module.exports = function({  }) {
       }
     },
     "aws_s3_bucket_public_access_block": {
-      "root_orangebucket_PublicAccessBlock_7E0AC056": {
+      "orangebucket_PublicAccessBlock_E0BEAC90": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/orange bucket/PublicAccessBlock",
-            "uniqueId": "root_orangebucket_PublicAccessBlock_7E0AC056"
+            "uniqueId": "orangebucket_PublicAccessBlock_E0BEAC90"
           }
         },
         "block_public_acls": true,
         "block_public_policy": true,
-        "bucket": "${aws_s3_bucket.root_orangebucket_F14D9995.bucket}",
+        "bucket": "${aws_s3_bucket.orangebucket.bucket}",
         "ignore_public_acls": true,
         "restrict_public_buckets": true
       }
     },
     "aws_s3_bucket_server_side_encryption_configuration": {
-      "root_orangebucket_Encryption_34CE66C9": {
+      "orangebucket_Encryption_F338E6D4": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/orange bucket/Encryption",
-            "uniqueId": "root_orangebucket_Encryption_34CE66C9"
+            "uniqueId": "orangebucket_Encryption_F338E6D4"
           }
         },
-        "bucket": "${aws_s3_bucket.root_orangebucket_F14D9995.bucket}",
+        "bucket": "${aws_s3_bucket.orangebucket.bucket}",
         "rule": [
           {
             "apply_server_side_encryption_by_default": {
@@ -235,14 +220,14 @@ module.exports = function({  }) {
       }
     },
     "aws_s3_object": {
-      "root_testt_Handler_S3Object_D779BA1A": {
+      "testt_Handler_S3Object_572CA425": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:t/Handler/S3Object",
-            "uniqueId": "root_testt_Handler_S3Object_D779BA1A"
+            "uniqueId": "testt_Handler_S3Object_572CA425"
           }
         },
-        "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
+        "bucket": "${aws_s3_bucket.Code.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       }
@@ -266,98 +251,74 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.name = "Super";
+        this._addInflightOps("$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.Super.js";
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.Super.js")({
           })
         `);
       }
       _toInflight() {
-        const name_client = this._lift(this.name);
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
             const SuperClient = ${Super._toInflightType(this).text};
             const client = new SuperClient({
-              name: ${name_client},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
         `);
-      }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          Super._registerBindObject(this.name, host, []);
-        }
-        super._registerBind(host, ops);
       }
     }
     class Sub extends Super {
       constructor(scope, id, ) {
+        super(scope, id);
         this.name = "Sub";
+        this._addInflightOps("$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.Sub.js";
-        const SuperClient = Super._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            Super: ${SuperClient.text},
+          require("./inflight.Sub.js")({
+            $Super: ${context._lift(Super)},
           })
         `);
       }
       _toInflight() {
-        const name_client = this._lift(this.name);
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
             const SubClient = ${Sub._toInflightType(this).text};
             const client = new SubClient({
-              name: ${name_client},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
         `);
-      }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          Sub._registerBindObject(this.name, host, []);
-        }
-        super._registerBind(host, ops);
       }
     }
     class Sub1 extends Super {
       constructor(scope, id, ) {
+        super(scope, id);
         this.name = "Sub";
+        this._addInflightOps("$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.Sub1.js";
-        const SuperClient = Super._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            Super: ${SuperClient.text},
+          require("./inflight.Sub1.js")({
+            $Super: ${context._lift(Super)},
           })
         `);
       }
       _toInflight() {
-        const name_client = this._lift(this.name);
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
             const Sub1Client = ${Sub1._toInflightType(this).text};
             const client = new Sub1Client({
-              name: ${name_client},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
         `);
-      }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          Sub1._registerBindObject(this.name, host, []);
-        }
-        super._registerBind(host, ops);
       }
     }
     class Node extends $stdlib.std.Resource {
@@ -366,54 +327,38 @@ class $Root extends $stdlib.std.Resource {
         this.value = value;
         this.left = left;
         this.right = right;
+        this._addInflightOps("$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.Node.js";
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.Node.js")({
           })
         `);
       }
       _toInflight() {
-        const left_client = this._lift(this.left);
-        const right_client = this._lift(this.right);
-        const value_client = this._lift(this.value);
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
             const NodeClient = ${Node._toInflightType(this).text};
             const client = new NodeClient({
-              left: ${left_client},
-              right: ${right_client},
-              value: ${value_client},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
         `);
       }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          Node._registerBindObject(this.left, host, []);
-          Node._registerBindObject(this.right, host, []);
-          Node._registerBindObject(this.value, host, []);
-        }
-        super._registerBind(host, ops);
-      }
     }
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
         this.display.hidden = true;
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const payloadWithoutOptions_client = context._lift(payloadWithoutOptions);
-        const payloadWithBucket_client = context._lift(payloadWithBucket);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            payloadWithoutOptions: ${payloadWithoutOptions_client},
-            payloadWithBucket: ${payloadWithBucket_client},
+          require("./inflight.$Closure1.js")({
+            $__payloadWithBucket_c_____null_: ${context._lift(((payloadWithBucket.c) != null))},
+            $__payloadWithoutOptions_b_____null_: ${context._lift(((payloadWithoutOptions.b) != null))},
+            $payloadWithBucket_c: ${context._lift(payloadWithBucket.c)},
           })
         `);
       }
@@ -429,26 +374,23 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure1._registerBindObject(payloadWithBucket, host, []);
-          $Closure1._registerBindObject(payloadWithoutOptions, host, []);
-        }
         if (ops.includes("handle")) {
+          $Closure1._registerBindObject(((payloadWithBucket.c) != null), host, []);
+          $Closure1._registerBindObject(((payloadWithoutOptions.b) != null), host, []);
           $Closure1._registerBindObject(payloadWithBucket.c, host, ["put"]);
-          $Closure1._registerBindObject(payloadWithoutOptions.b, host, []);
         }
         super._registerBind(host, ops);
       }
     }
     const x = 4;
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '(((x) != null) === true)'`)})((((x) != null) === true))};
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '((!((x) != null)) === false)'`)})(((!((x) != null)) === false))};
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '((x ?? 5) === 4)'`)})(((x ?? 5) === 4))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: x? == true")})((((x) != null) === true))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: !x? == false")})(((!((x) != null)) === false))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: x ?? 5 == 4")})(((x ?? 5) === 4))};
     const y = (x ?? 5);
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '(y === 4)'`)})((y === 4))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: y == 4")})((y === 4))};
     const optionalSup = new Super(this,"Super");
     const s = (optionalSup ?? new Sub(this,"Sub"));
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '(s.name === "Super")'`)})((s.name === "Super"))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: s.name == \"Super\"")})((s.name === "Super"))};
     let name = {
     "first": "John",
     "last": "Doe",}
@@ -457,7 +399,7 @@ class $Root extends $stdlib.std.Resource {
       const $IF_LET_VALUE = name;
       if ($IF_LET_VALUE != undefined) {
         const n = $IF_LET_VALUE;
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(n.first === "John")'`)})((n.first === "John"))};
+        {((cond) => {if (!cond) throw new Error("assertion failed: n.first == \"John\"")})((n.first === "John"))};
       }
     }
     name = undefined;
@@ -465,13 +407,13 @@ class $Root extends $stdlib.std.Resource {
       const $IF_LET_VALUE = name;
       if ($IF_LET_VALUE != undefined) {
         const n = $IF_LET_VALUE;
-        {((cond) => {if (!cond) throw new Error(`assertion failed: 'false'`)})(false)};
+        {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
       }
       else {
-        {((cond) => {if (!cond) throw new Error(`assertion failed: 'true'`)})(true)};
+        {((cond) => {if (!cond) throw new Error("assertion failed: true")})(true)};
       }
     }
-    const tryParseName =  (fullName) =>  {
+    const tryParseName = ((fullName) => {
       const parts = (fullName.split(" "));
       if ((parts.length < 1)) {
         return undefined;
@@ -480,21 +422,20 @@ class $Root extends $stdlib.std.Resource {
       "first": (parts.at(0)),
       "last": (parts.at(1)),}
       ;
-    }
-    ;
+    });
     {
       const $IF_LET_VALUE = (tryParseName("Good Name"));
       if ($IF_LET_VALUE != undefined) {
         const parsedName = $IF_LET_VALUE;
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(parsedName.first === "Good")'`)})((parsedName.first === "Good"))};
+        {((cond) => {if (!cond) throw new Error("assertion failed: parsedName.first == \"Good\"")})((parsedName.first === "Good"))};
         {
           const $IF_LET_VALUE = parsedName.last;
           if ($IF_LET_VALUE != undefined) {
             const lastName = $IF_LET_VALUE;
-            {((cond) => {if (!cond) throw new Error(`assertion failed: '(lastName === "Name")'`)})((lastName === "Name"))};
+            {((cond) => {if (!cond) throw new Error("assertion failed: lastName == \"Name\"")})((lastName === "Name"))};
           }
           else {
-            {((cond) => {if (!cond) throw new Error(`assertion failed: 'false'`)})(false)};
+            {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
           }
         }
       }
@@ -503,12 +444,12 @@ class $Root extends $stdlib.std.Resource {
       const $IF_LET_VALUE = (tryParseName("BadName"));
       if ($IF_LET_VALUE != undefined) {
         const parsedName = $IF_LET_VALUE;
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(parsedName.first === "BadName")'`)})((parsedName.first === "BadName"))};
+        {((cond) => {if (!cond) throw new Error("assertion failed: parsedName.first == \"BadName\"")})((parsedName.first === "BadName"))};
         {
           const $IF_LET_VALUE = parsedName.last;
           if ($IF_LET_VALUE != undefined) {
             const lastName = $IF_LET_VALUE;
-            {((cond) => {if (!cond) throw new Error(`assertion failed: 'false'`)})(false)};
+            {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
           }
         }
       }
@@ -518,10 +459,10 @@ class $Root extends $stdlib.std.Resource {
       const $IF_LET_VALUE = falsy;
       if ($IF_LET_VALUE != undefined) {
         const f = $IF_LET_VALUE;
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(f === false)'`)})((f === false))};
+        {((cond) => {if (!cond) throw new Error("assertion failed: f == false")})((f === false))};
       }
       else {
-        {((cond) => {if (!cond) throw new Error(`assertion failed: 'false'`)})(false)};
+        {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
       }
     }
     const shadow = "root";
@@ -529,21 +470,21 @@ class $Root extends $stdlib.std.Resource {
       const $IF_LET_VALUE = shadow;
       if ($IF_LET_VALUE != undefined) {
         const shadow = $IF_LET_VALUE;
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(shadow === "root")'`)})((shadow === "root"))};
+        {((cond) => {if (!cond) throw new Error("assertion failed: shadow == \"root\"")})((shadow === "root"))};
         const shadow1 = "nested";
         {
           const $IF_LET_VALUE = shadow1;
           if ($IF_LET_VALUE != undefined) {
             const shadow1 = $IF_LET_VALUE;
-            {((cond) => {if (!cond) throw new Error(`assertion failed: '(shadow1 === "nested")'`)})((shadow1 === "nested"))};
+            {((cond) => {if (!cond) throw new Error("assertion failed: shadow1 == \"nested\"")})((shadow1 === "nested"))};
           }
           else {
-            {((cond) => {if (!cond) throw new Error(`assertion failed: 'false'`)})(false)};
+            {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
           }
         }
       }
     }
-    const fun =  (a) =>  {
+    const fun = ((a) => {
       {
         const $IF_LET_VALUE = a;
         if ($IF_LET_VALUE != undefined) {
@@ -554,20 +495,19 @@ class $Root extends $stdlib.std.Resource {
           return "default";
         }
       }
-    }
-    ;
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '((fun("hello")) === "hello")'`)})(((fun("hello")) === "hello"))};
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '((fun(undefined)) === "default")'`)})(((fun(undefined)) === "default"))};
+    });
+    {((cond) => {if (!cond) throw new Error("assertion failed: fun(\"hello\") == \"hello\"")})(((fun("hello")) === "hello"))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: fun(nil) == \"default\"")})(((fun(undefined)) === "default"))};
     const tree = new Node(this,"eight",8,new Node(this,"three",3,new Node(this,"one",1,undefined,undefined),new Node(this,"six",6,undefined,undefined)),new Node(this,"ten",10,undefined,new Node(this,"fourteen",14,new Node(this,"thirteen",13,undefined,undefined),undefined)));
-    const thirteen = tree.right.right.left.value;
-    const notThere = tree.right.right.right;
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '(thirteen === 13)'`)})((thirteen === 13))};
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '(notThere === undefined)'`)})((notThere === undefined))};
+    const thirteen = tree.right?.right?.left?.value;
+    const notThere = tree.right?.right?.right;
+    {((cond) => {if (!cond) throw new Error("assertion failed: thirteen == 13")})((thirteen === 13))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: notThere == nil")})((notThere === undefined))};
     {
-      const $IF_LET_VALUE = tree.left.left;
+      const $IF_LET_VALUE = tree.left?.left;
       if ($IF_LET_VALUE != undefined) {
         const o = $IF_LET_VALUE;
-        {((cond) => {if (!cond) throw new Error(`assertion failed: '(o.value === 1)'`)})((o.value === 1))};
+        {((cond) => {if (!cond) throw new Error("assertion failed: o.value == 1")})((o.value === 1))};
       }
     }
     const payloadWithoutOptions = {

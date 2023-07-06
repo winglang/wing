@@ -4,10 +4,7 @@
 ```js
 module.exports = function({  }) {
   class CdkDockerImageFunction {
-    constructor({ function }) {
-      this.function = function;
-    }
-    async $inflight_init()  {
+    constructor({  }) {
     }
   }
   return CdkDockerImageFunction;
@@ -22,7 +19,7 @@ module.exports = function({  }) {
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.2"
+      "version": "0.17.0"
     },
     "outputs": {
       "root": {
@@ -64,34 +61,27 @@ class $Root extends $stdlib.std.Resource {
         this.function = this.node.root.new("aws-cdk-lib.aws_lambda.DockerImageFunction",awscdk.aws_lambda.DockerImageFunction,this,"DockerImageFunction",{
         "code": (awscdk.aws_lambda.DockerImageCode.fromImageAsset("./test.ts")),}
         );
+        this._addInflightOps("$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.CdkDockerImageFunction.js";
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.CdkDockerImageFunction.js")({
           })
         `);
       }
       _toInflight() {
-        const function_client = this._lift(this.function);
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
             const CdkDockerImageFunctionClient = ${CdkDockerImageFunction._toInflightType(this).text};
             const client = new CdkDockerImageFunctionClient({
-              function: ${function_client},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
         `);
       }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          CdkDockerImageFunction._registerBindObject(this.function, host, []);
-        }
-        super._registerBind(host, ops);
-      }
     }
+    this.node.root.new("aws-cdk-lib.App",awscdk.App,);
   }
 }
 class $App extends $AppBase {

@@ -10,6 +10,7 @@ export interface JsonResponseInputProps {
   json?: boolean;
   placeholder?: string;
   className?: string;
+  dataTestid?: string;
 }
 
 export const JsonResponseInput = ({
@@ -18,6 +19,7 @@ export const JsonResponseInput = ({
   json = true,
   placeholder = "No value",
   className,
+  dataTestid,
 }: JsonResponseInputProps) => {
   const { theme } = useTheme();
   return (
@@ -36,6 +38,7 @@ export const JsonResponseInput = ({
         )}
         text={value}
         json={json}
+        dataTestid={dataTestid}
       />
     </ResponseInput>
   );

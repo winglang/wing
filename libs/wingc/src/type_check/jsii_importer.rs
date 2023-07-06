@@ -200,7 +200,7 @@ impl<'a> JsiiImporter<'a> {
 		} else {
 			let ns = self.wing_types.add_namespace(Namespace {
 				name: type_name.assembly().to_string(),
-				env: SymbolEnv::new(None, self.wing_types.void(), false, Phase::Preflight, 0),
+				env: SymbolEnv::new(None, self.wing_types.void(), false, false, Phase::Preflight, 0),
 				loaded: false,
 			});
 			self
@@ -242,7 +242,7 @@ impl<'a> JsiiImporter<'a> {
 			} else {
 				let ns = self.wing_types.add_namespace(Namespace {
 					name: namespace_name.to_string(),
-					env: SymbolEnv::new(None, self.wing_types.void(), false, Phase::Preflight, 0),
+					env: SymbolEnv::new(None, self.wing_types.void(), false, false, Phase::Preflight, 0),
 					loaded: false,
 				});
 				parent_ns
@@ -311,7 +311,12 @@ impl<'a> JsiiImporter<'a> {
 			None,
 			self.wing_types.void(),
 			false,
-			Phase::Preflight,
+			false,
+			if is_struct {
+				Phase::Independent
+			} else {
+				Phase::Preflight
+			},
 			self.jsii_spec.import_statement_idx,
 		);
 		let new_type_symbol = Self::jsii_name_to_symbol(&type_name, &jsii_interface.location_in_module);
@@ -324,7 +329,8 @@ impl<'a> JsiiImporter<'a> {
 					None,
 					self.wing_types.void(),
 					false,
-					iface_env.phase,
+					false,
+					Phase::Independent, // structs are phase-independent
 					self.jsii_spec.import_statement_idx,
 				), // Dummy env, will be replaced below
 			})),
@@ -335,6 +341,7 @@ impl<'a> JsiiImporter<'a> {
 				env: SymbolEnv::new(
 					None,
 					self.wing_types.void(),
+					false,
 					false,
 					iface_env.phase,
 					self.jsii_spec.import_statement_idx,
@@ -609,7 +616,7 @@ impl<'a> JsiiImporter<'a> {
 		};
 
 		// Create environment representing this class, for now it'll be empty just so we can support referencing ourselves from the class definition.
-		let dummy_env = SymbolEnv::new(None, self.wing_types.void(), false, class_phase, 0);
+		let dummy_env = SymbolEnv::new(None, self.wing_types.void(), false, false, class_phase, 0);
 		let new_type_symbol = Self::jsii_name_to_symbol(type_name, &jsii_class.location_in_module);
 		// Create the new resource/class type and add it to the current environment.
 		// When adding the class methods below we'll be able to reference this type.
@@ -655,32 +662,50 @@ impl<'a> JsiiImporter<'a> {
 			type_parameters: type_params,
 			phase: class_phase,
 			docs: Docs::from(&jsii_class.docs),
+			std_construct_args: false, // Temporary value, will be updated once we parse the initializer args
+			lifts: None,
 		};
 		let mut new_type = self.wing_types.add_type(Type::Class(class_spec));
 		self.register_jsii_type(&jsii_class_fqn, &new_type_symbol, new_type);
 
 		// Create class's actual environment before we add properties and methods to it
-		let mut class_env = SymbolEnv::new(base_class_env, self.wing_types.void(), false, class_phase, 0);
+		let mut class_env = SymbolEnv::new(base_class_env, self.wing_types.void(), false, false, class_phase, 0);
 
 		// Add constructor to the class environment
 		let jsii_initializer = jsii_class.initializer.as_ref();
-
 		if let Some(initializer) = jsii_initializer {
 			let mut fn_params = vec![];
 			if let Some(params) = &initializer.parameters {
-				for (i, param) in params.iter().enumerate() {
-					// If this is a resource then skip scope and id arguments
-					// TODO hack - skip this check if the resource's name is "App"
-					// https://github.com/winglang/wing/issues/1485
-					if class_phase == Phase::Preflight && type_name != "App" {
-						if i == 0 {
-							assert!(param.name == "scope");
-							continue;
-						} else if i == 1 {
-							assert!(param.name == "id");
-							continue;
+				let mut params_iter = params.iter();
+
+				// If this is a preflight class then we need to verify its first two args (scope and id):
+				// If both exist and are of a preflight class type and string type respectively then this is a standard constrcut type
+				// otherwise we need to mark it as having non standard constructor args meaning we can't use the `as` `in` keywords
+				// when instantiating it.
+				if class_phase == Phase::Preflight {
+					let scope_arg = params.get(0);
+					let id_arg = params.get(1);
+					if let (Some(scope_arg), Some(id_arg)) = (scope_arg, id_arg) {
+						let scope_arg_type = self.type_ref_to_wing_type(&scope_arg.type_);
+						let id_arg_type = self.type_ref_to_wing_type(&id_arg.type_);
+						// If scope is a preflight class, id is a string and both are non variadic non optionals types then this is a standard construct type
+						if scope_arg.name == "scope"
+							&& id_arg.name == "id"
+							&& scope_arg_type.is_preflight_class()
+							&& id_arg_type.is_string()
+							&& !scope_arg.variadic.unwrap_or(false)
+							&& !scope_arg.optional.unwrap_or(false)
+							&& !id_arg.variadic.unwrap_or(false)
+							&& !id_arg.optional.unwrap_or(false)
+						{
+							new_type.as_class_mut().unwrap().std_construct_args = true;
+							params_iter.next();
+							params_iter.next();
 						}
 					}
+				}
+
+				for param in params_iter {
 					fn_params.push(FunctionParameter {
 						name: param.name.clone(),
 						typeref: self.parameter_to_wing_type(&param),
@@ -877,7 +902,7 @@ impl<'a> JsiiImporter<'a> {
 			{
 				let ns = self.wing_types.add_namespace(Namespace {
 					name: assembly.name.clone(),
-					env: SymbolEnv::new(None, self.wing_types.void(), false, Phase::Preflight, 0),
+					env: SymbolEnv::new(None, self.wing_types.void(), false, false, Phase::Preflight, 0),
 					loaded: false,
 				});
 				self

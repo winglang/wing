@@ -2,27 +2,25 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ b, std_Json }) {
+module.exports = function({ $b, $std_Json }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
-    async handle()  {
+    async handle() {
       const jsonObj1 = Object.freeze({"key1":"value1"});
       const jsonObj2 = Object.freeze({"key2":"value2"});
-      (await b.putJson("file1.json",jsonObj1));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(((args) => { return JSON.stringify(args[0], null, args[1]) })([(await b.tryGetJson("file1.json"))]) === ((args) => { return JSON.stringify(args[0], null, args[1]) })([jsonObj1]))'`)})((((args) => { return JSON.stringify(args[0], null, args[1]) })([(await b.tryGetJson("file1.json"))]) === ((args) => { return JSON.stringify(args[0], null, args[1]) })([jsonObj1])))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await b.tryGetJson("file2.json")) === undefined)'`)})(((await b.tryGetJson("file2.json")) === undefined))};
-      (await b.putJson("file2.json",jsonObj2));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(((args) => { return JSON.stringify(args[0], null, args[1]) })([(await b.tryGetJson("file2.json"))]) === ((args) => { return JSON.stringify(args[0], null, args[1]) })([jsonObj2]))'`)})((((args) => { return JSON.stringify(args[0], null, args[1]) })([(await b.tryGetJson("file2.json"))]) === ((args) => { return JSON.stringify(args[0], null, args[1]) })([jsonObj2])))};
-      (await b.delete("file1.json"));
-      (await b.delete("file2.json"));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await b.tryGetJson("file1.json")) === undefined)'`)})(((await b.tryGetJson("file1.json")) === undefined))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await b.tryGetJson("file2.json")) === undefined)'`)})(((await b.tryGetJson("file2.json")) === undefined))};
+      (await $b.putJson("file1.json",jsonObj1));
+      {((cond) => {if (!cond) throw new Error("assertion failed: Json.stringify(b.tryGetJson(\"file1.json\")) == Json.stringify(jsonObj1)")})((((args) => { return JSON.stringify(args[0], null, args[1]) })([(await $b.tryGetJson("file1.json"))]) === ((args) => { return JSON.stringify(args[0], null, args[1]) })([jsonObj1])))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: b.tryGetJson(\"file2.json\") == nil")})(((await $b.tryGetJson("file2.json")) === undefined))};
+      (await $b.putJson("file2.json",jsonObj2));
+      {((cond) => {if (!cond) throw new Error("assertion failed: Json.stringify(b.tryGetJson(\"file2.json\")) == Json.stringify(jsonObj2)")})((((args) => { return JSON.stringify(args[0], null, args[1]) })([(await $b.tryGetJson("file2.json"))]) === ((args) => { return JSON.stringify(args[0], null, args[1]) })([jsonObj2])))};
+      (await $b.delete("file1.json"));
+      (await $b.delete("file2.json"));
+      {((cond) => {if (!cond) throw new Error("assertion failed: b.tryGetJson(\"file1.json\") == nil")})(((await $b.tryGetJson("file1.json")) === undefined))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: b.tryGetJson(\"file2.json\") == nil")})(((await $b.tryGetJson("file2.json")) === undefined))};
     }
   }
   return $Closure1;
@@ -37,7 +35,7 @@ module.exports = function({ b, std_Json }) {
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.2"
+      "version": "0.17.0"
     },
     "outputs": {
       "root": {
@@ -51,7 +49,7 @@ module.exports = function({ b, std_Json }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:tryGetJson\",\"${aws_lambda_function.root_testtryGetJson_Handler_A06B9978.arn}\"]]"
+      "value": "[[\"root/Default/Default/test:tryGetJson\",\"${aws_lambda_function.testtryGetJson_Handler_A244DB7C.arn}\"]]"
     }
   },
   "provider": {
@@ -61,52 +59,51 @@ module.exports = function({ b, std_Json }) {
   },
   "resource": {
     "aws_iam_role": {
-      "root_testtryGetJson_Handler_IamRole_C576788E": {
+      "testtryGetJson_Handler_IamRole_AA5E00E8": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:tryGetJson/Handler/IamRole",
-            "uniqueId": "root_testtryGetJson_Handler_IamRole_C576788E"
+            "uniqueId": "testtryGetJson_Handler_IamRole_AA5E00E8"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
-      "root_testtryGetJson_Handler_IamRolePolicy_3E0C59F3": {
+      "testtryGetJson_Handler_IamRolePolicy_061A4068": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:tryGetJson/Handler/IamRolePolicy",
-            "uniqueId": "root_testtryGetJson_Handler_IamRolePolicy_3E0C59F3"
+            "uniqueId": "testtryGetJson_Handler_IamRolePolicy_061A4068"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\",\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:DeleteObject*\",\"s3:DeleteObjectVersion*\",\"s3:PutLifecycleConfiguration*\"],\"Resource\":[\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\",\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.root_testtryGetJson_Handler_IamRole_C576788E.name}"
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:List*\",\"s3:PutObject*\",\"s3:Abort*\",\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:DeleteObject*\",\"s3:DeleteObjectVersion*\",\"s3:PutLifecycleConfiguration*\"],\"Resource\":[\"${aws_s3_bucket.cloudBucket.arn}\",\"${aws_s3_bucket.cloudBucket.arn}/*\"],\"Effect\":\"Allow\"}]}",
+        "role": "${aws_iam_role.testtryGetJson_Handler_IamRole_AA5E00E8.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
-      "root_testtryGetJson_Handler_IamRolePolicyAttachment_84FA982E": {
+      "testtryGetJson_Handler_IamRolePolicyAttachment_4FC81A05": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:tryGetJson/Handler/IamRolePolicyAttachment",
-            "uniqueId": "root_testtryGetJson_Handler_IamRolePolicyAttachment_84FA982E"
+            "uniqueId": "testtryGetJson_Handler_IamRolePolicyAttachment_4FC81A05"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.root_testtryGetJson_Handler_IamRole_C576788E.name}"
+        "role": "${aws_iam_role.testtryGetJson_Handler_IamRole_AA5E00E8.name}"
       }
     },
     "aws_lambda_function": {
-      "root_testtryGetJson_Handler_A06B9978": {
+      "testtryGetJson_Handler_A244DB7C": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:tryGetJson/Handler/Default",
-            "uniqueId": "root_testtryGetJson_Handler_A06B9978"
+            "uniqueId": "testtryGetJson_Handler_A244DB7C"
           }
         },
         "environment": {
           "variables": {
-            "BUCKET_NAME_d755b447": "${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
-            "BUCKET_NAME_d755b447_IS_PUBLIC": "false",
+            "BUCKET_NAME_d755b447": "${aws_s3_bucket.cloudBucket.bucket}",
             "WING_FUNCTION_NAME": "Handler-c8858898",
             "WING_TARGET": "tf-aws"
           }
@@ -114,10 +111,10 @@ module.exports = function({ b, std_Json }) {
         "function_name": "Handler-c8858898",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.root_testtryGetJson_Handler_IamRole_C576788E.arn}",
+        "role": "${aws_iam_role.testtryGetJson_Handler_IamRole_AA5E00E8.arn}",
         "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
-        "s3_key": "${aws_s3_object.root_testtryGetJson_Handler_S3Object_9ACD3FFF.key}",
+        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
+        "s3_key": "${aws_s3_object.testtryGetJson_Handler_S3Object_A843B277.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -126,20 +123,20 @@ module.exports = function({ b, std_Json }) {
       }
     },
     "aws_s3_bucket": {
-      "root_Code_02F3C603": {
+      "Code": {
         "//": {
           "metadata": {
             "path": "root/Default/Code",
-            "uniqueId": "root_Code_02F3C603"
+            "uniqueId": "Code"
           }
         },
         "bucket_prefix": "code-c84a50b1-"
       },
-      "root_cloudBucket_4F3C4F53": {
+      "cloudBucket": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/cloud.Bucket/Default",
-            "uniqueId": "root_cloudBucket_4F3C4F53"
+            "uniqueId": "cloudBucket"
           }
         },
         "bucket_prefix": "cloud-bucket-c87175e7-",
@@ -147,29 +144,29 @@ module.exports = function({ b, std_Json }) {
       }
     },
     "aws_s3_bucket_public_access_block": {
-      "root_cloudBucket_PublicAccessBlock_319C1C2E": {
+      "cloudBucket_PublicAccessBlock_5946CCE8": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/cloud.Bucket/PublicAccessBlock",
-            "uniqueId": "root_cloudBucket_PublicAccessBlock_319C1C2E"
+            "uniqueId": "cloudBucket_PublicAccessBlock_5946CCE8"
           }
         },
         "block_public_acls": true,
         "block_public_policy": true,
-        "bucket": "${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
+        "bucket": "${aws_s3_bucket.cloudBucket.bucket}",
         "ignore_public_acls": true,
         "restrict_public_buckets": true
       }
     },
     "aws_s3_bucket_server_side_encryption_configuration": {
-      "root_cloudBucket_Encryption_8ED0CD9C": {
+      "cloudBucket_Encryption_77B6AEEF": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/cloud.Bucket/Encryption",
-            "uniqueId": "root_cloudBucket_Encryption_8ED0CD9C"
+            "uniqueId": "cloudBucket_Encryption_77B6AEEF"
           }
         },
-        "bucket": "${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
+        "bucket": "${aws_s3_bucket.cloudBucket.bucket}",
         "rule": [
           {
             "apply_server_side_encryption_by_default": {
@@ -180,14 +177,14 @@ module.exports = function({ b, std_Json }) {
       }
     },
     "aws_s3_object": {
-      "root_testtryGetJson_Handler_S3Object_9ACD3FFF": {
+      "testtryGetJson_Handler_S3Object_A843B277": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:tryGetJson/Handler/S3Object",
-            "uniqueId": "root_testtryGetJson_Handler_S3Object_9ACD3FFF"
+            "uniqueId": "testtryGetJson_Handler_S3Object_A843B277"
           }
         },
-        "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
+        "bucket": "${aws_s3_bucket.Code.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       }
@@ -210,17 +207,14 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
         this.display.hidden = true;
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const b_client = context._lift(b);
-        const std_JsonClient = std.Json._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            b: ${b_client},
-            std_Json: ${std_JsonClient.text},
+          require("./inflight.$Closure1.js")({
+            $b: ${context._lift(b)},
+            $std_Json: ${context._lift(std.Json)},
           })
         `);
       }
@@ -236,9 +230,6 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure1._registerBindObject(b, host, []);
-        }
         if (ops.includes("handle")) {
           $Closure1._registerBindObject(b, host, ["delete", "putJson", "tryGetJson"]);
         }

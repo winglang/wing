@@ -2,14 +2,11 @@
 
 ## stdout.log
 ```log
-pass ─ bool.wsim (no tests)
+pass ─ bool.wsim » root/env0/test:fromJson()
  
-
-
-
-
-Tests 1 passed (1) 
+ 
+Tests 1 passed (1)
+Test Files 1 passed (1)
 Duration <DURATION>
-
 ```
 

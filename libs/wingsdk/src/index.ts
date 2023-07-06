@@ -2,6 +2,7 @@
 export * as cloud from "./cloud";
 export * as core from "./core";
 export * as http from "./http";
+export * as math from "./math";
 export * as redis from "./redis";
 export * as std from "./std";
 export * as testing from "./testing";

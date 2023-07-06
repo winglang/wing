@@ -18,6 +18,7 @@ pub enum CompilationPhase {
 	Compiling,
 	Parsing,
 	TypeChecking,
+	Lifting,
 	Jsifying,
 }
 
@@ -104,7 +105,7 @@ pub fn set_custom_panic_hook() {
 
 		report_diagnostic(Diagnostic {
 			message: format!(
-				"Compiler bug ({}) during {}, please report at https://docs.winglang.io/contributors/bugs",
+				"Compiler bug ({}) during {}, please report at https://www.winglang.io/contributing/start-here/bugs",
 				pi,
 				CompilationContext::get_phase()
 			),

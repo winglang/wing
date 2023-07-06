@@ -17,6 +17,7 @@ export type QueryNames = {
     | "queue.approxSize"
     | "updater.currentStatus"
     | "config.getThemeMode"
+    | "website.url"
     | undefined;
 };
 
@@ -39,6 +40,7 @@ export interface RouterContext {
   updater?: Updater;
   config?: Config;
   hostUtils?: HostUtils;
+  wingfile: string;
 }
 
 const t = initTRPC.context<RouterContext>().create();

@@ -7,7 +7,7 @@ import {
   sanitize_json_paths,
   tfResourcesOfCount,
 } from "./utils";
-import * as cdktf from "cdktf";
+import { Testing } from "cdktf";
 
 describe("Plugin examples", () => {
   const app = "app.w";
@@ -27,7 +27,7 @@ describe("Plugin examples", () => {
         cwd: tmpDir,
         wingFile: appFile,
         args,
-        expectStdErr: false,
+        expectFailure: false,
         plugins: [plugin],
       });
 
@@ -38,7 +38,7 @@ describe("Plugin examples", () => {
 
       expect(terraformOutput).toMatchSnapshot();
       expect(
-        cdktf.Testing.toHaveResourceWithProperties(
+        Testing.toHaveResourceWithProperties(
           terraformOutputString,
           "aws_iam_role",
           {
@@ -59,7 +59,7 @@ describe("Plugin examples", () => {
         cwd: tmpDir,
         wingFile: appFile,
         args,
-        expectStdErr: false,
+        expectFailure: false,
         plugins: [plugin],
       });
 
@@ -100,7 +100,7 @@ describe("Plugin examples", () => {
           cwd: tmpDir,
           wingFile: appFile,
           args,
-          expectStdErr: false,
+          expectFailure: false,
           plugins: [plugin],
         });
 
@@ -133,7 +133,7 @@ describe("Plugin examples", () => {
           cwd: tmpDir,
           wingFile: appFile,
           args,
-          expectStdErr: false,
+          expectFailure: false,
           plugins: [plugin],
         });
 
@@ -172,7 +172,7 @@ describe("Plugin examples", () => {
           cwd: tmpDir,
           wingFile: appFile,
           args,
-          expectStdErr: false,
+          expectFailure: false,
           plugins: [plugin],
         });
 

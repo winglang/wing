@@ -2,21 +2,19 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ api_PATCH, _id, body, std_Json }) {
+module.exports = function({ $_id, $api_PATCH, $body, $std_Json }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
-    async handle(req)  {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(req.method === api_PATCH)'`)})((req.method === api_PATCH))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((req.vars)["id"] === _id)'`)})(((req.vars)["id"] === _id))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(req.path === ("/path/" + _id))'`)})((req.path === ("/path/" + _id)))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(req.body === ((args) => { return JSON.stringify(args[0], null, args[1]) })([body]))'`)})((req.body === ((args) => { return JSON.stringify(args[0], null, args[1]) })([body])))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((req.headers)["content-type"] === "application/json")'`)})(((req.headers)["content-type"] === "application/json"))};
+    async handle(req) {
+      {((cond) => {if (!cond) throw new Error("assertion failed: req.method == api_PATCH")})((req.method === $api_PATCH))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: req.vars?.get(\"id\") == _id")})(((req.vars)["id"] === $_id))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: req.path == \"/path/\"+ _id")})((req.path === ("/path/" + $_id)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: req.body == Json.stringify(body)")})((req.body === ((args) => { return JSON.stringify(args[0], null, args[1]) })([$body])))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: req.headers?.get(\"content-type\") == \"application/json\"")})(((req.headers)["content-type"] === "application/json"))};
       return {
       "status": 200,
       "body": (req.vars)["id"],}
@@ -30,32 +28,30 @@ module.exports = function({ api_PATCH, _id, body, std_Json }) {
 
 ## inflight.$Closure2.js
 ```js
-module.exports = function({ api, _id, body, http_PATCH, http_Util, std_Json }) {
+module.exports = function({ $_id, $api_url, $body, $http_PATCH, $http_Util, $std_Json }) {
   class $Closure2 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      const url = `${api.url}/path/${_id}`;
-      const response = (await http_Util.patch(url,{
+    async handle() {
+      const url = String.raw({ raw: ["", "/path/", ""] }, $api_url, $_id);
+      const response = (await $http_Util.patch(url,{
       "headers": Object.freeze({"content-type":"application/json"}),
-      "body": ((args) => { return JSON.stringify(args[0], null, args[1]) })([body]),}
+      "body": ((args) => { return JSON.stringify(args[0], null, args[1]) })([$body]),}
       ));
-      const fetchResponse = (await http_Util.patch(url,{
-      "method": http_PATCH,
+      const fetchResponse = (await $http_Util.patch(url,{
+      "method": $http_PATCH,
       "headers": Object.freeze({"content-type":"application/json"}),
-      "body": ((args) => { return JSON.stringify(args[0], null, args[1]) })([body]),}
+      "body": ((args) => { return JSON.stringify(args[0], null, args[1]) })([$body]),}
       ));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(response.body === _id)'`)})((response.body === _id))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(response.status === 200)'`)})((response.status === 200))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(response.url === url)'`)})((response.url === url))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(fetchResponse.body === _id)'`)})((fetchResponse.body === _id))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(fetchResponse.status === 200)'`)})((fetchResponse.status === 200))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(fetchResponse.url === url)'`)})((fetchResponse.url === url))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: response.body == _id")})((response.body === $_id))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: response.status == 200")})((response.status === 200))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: response.url == url")})((response.url === url))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: fetchResponse.body == _id")})((fetchResponse.body === $_id))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: fetchResponse.status == 200")})((fetchResponse.status === 200))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: fetchResponse.url == url")})((fetchResponse.url === url))};
     }
   }
   return $Closure2;
@@ -70,7 +66,7 @@ module.exports = function({ api, _id, body, http_PATCH, http_Util, std_Json }) {
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.2"
+      "version": "0.17.0"
     },
     "outputs": {
       "root": {
@@ -84,11 +80,11 @@ module.exports = function({ api, _id, body, http_PATCH, http_Util, std_Json }) {
   },
   "data": {
     "aws_region": {
-      "root_Region_A2D17352": {
+      "Region": {
         "//": {
           "metadata": {
             "path": "root/Default/Region",
-            "uniqueId": "root_Region_A2D17352"
+            "uniqueId": "Region"
           }
         }
       }
@@ -96,7 +92,7 @@ module.exports = function({ api, _id, body, http_PATCH, http_Util, std_Json }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:http.patch and http.fetch can preform a call to an api\",\"${aws_lambda_function.root_testhttppatchandhttpfetchcanpreformacalltoanapi_Handler_1C5BB2AB.arn}\"]]"
+      "value": "[[\"root/Default/Default/test:http.patch and http.fetch can preform a call to an api\",\"${aws_lambda_function.testhttppatchandhttpfetchcanpreformacalltoanapi_Handler_185CBA02.arn}\"]]"
     }
   },
   "provider": {
@@ -106,117 +102,117 @@ module.exports = function({ api, _id, body, http_PATCH, http_Util, std_Json }) {
   },
   "resource": {
     "aws_api_gateway_deployment": {
-      "root_cloudApi_api_deployment_E29F699A": {
+      "cloudApi_api_deployment_545514BF": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/cloud.Api/api/deployment",
-            "uniqueId": "root_cloudApi_api_deployment_E29F699A"
+            "uniqueId": "cloudApi_api_deployment_545514BF"
           }
         },
         "lifecycle": {
           "create_before_destroy": true
         },
-        "rest_api_id": "${aws_api_gateway_rest_api.root_cloudApi_api_8C9FE51E.id}",
+        "rest_api_id": "${aws_api_gateway_rest_api.cloudApi_api_2B334D75.id}",
         "triggers": {
           "redeployment": "fea7e9f182aa5daf0c90efdf632bb2737c4ef5c4"
         }
       }
     },
     "aws_api_gateway_rest_api": {
-      "root_cloudApi_api_8C9FE51E": {
+      "cloudApi_api_2B334D75": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/cloud.Api/api/api",
-            "uniqueId": "root_cloudApi_api_8C9FE51E"
+            "uniqueId": "cloudApi_api_2B334D75"
           }
         },
-        "body": "{\"openapi\":\"3.0.3\",\"paths\":{\"/path/{id}\":{\"patch\":{\"operationId\":\"patch-path/{id}\",\"responses\":{\"200\":{\"description\":\"200 response\",\"content\":{}}},\"parameters\":[{\"name\":\"id\",\"in\":\"path\",\"required\":true,\"schema\":{\"type\":\"string\"}}],\"x-amazon-apigateway-integration\":{\"uri\":\"arn:aws:apigateway:${data.aws_region.root_Region_A2D17352.name}:lambda:path/2015-03-31/functions/${aws_lambda_function.root_cloudApi_cloudApiOnRequestcdafee6e_582EA655.arn}/invocations\",\"type\":\"aws_proxy\",\"httpMethod\":\"POST\",\"responses\":{\"default\":{\"statusCode\":\"200\"}},\"passthroughBehavior\":\"when_no_match\",\"contentHandling\":\"CONVERT_TO_TEXT\"}}}}}",
+        "body": "{\"openapi\":\"3.0.3\",\"paths\":{\"/path/{id}\":{\"patch\":{\"operationId\":\"patch-path/{id}\",\"responses\":{\"200\":{\"description\":\"200 response\",\"content\":{}}},\"parameters\":[{\"name\":\"id\",\"in\":\"path\",\"required\":true,\"schema\":{\"type\":\"string\"}}],\"x-amazon-apigateway-integration\":{\"uri\":\"arn:aws:apigateway:${data.aws_region.Region.name}:lambda:path/2015-03-31/functions/${aws_lambda_function.cloudApi_cloudApi-OnRequest-cdafee6e_A6C8366F.arn}/invocations\",\"type\":\"aws_proxy\",\"httpMethod\":\"POST\",\"responses\":{\"default\":{\"statusCode\":\"200\"}},\"passthroughBehavior\":\"when_no_match\",\"contentHandling\":\"CONVERT_TO_TEXT\"}}}}}",
         "name": "api-c895068c"
       }
     },
     "aws_api_gateway_stage": {
-      "root_cloudApi_api_stage_57D6284A": {
+      "cloudApi_api_stage_BBB283E4": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/cloud.Api/api/stage",
-            "uniqueId": "root_cloudApi_api_stage_57D6284A"
+            "uniqueId": "cloudApi_api_stage_BBB283E4"
           }
         },
-        "deployment_id": "${aws_api_gateway_deployment.root_cloudApi_api_deployment_E29F699A.id}",
-        "rest_api_id": "${aws_api_gateway_rest_api.root_cloudApi_api_8C9FE51E.id}",
+        "deployment_id": "${aws_api_gateway_deployment.cloudApi_api_deployment_545514BF.id}",
+        "rest_api_id": "${aws_api_gateway_rest_api.cloudApi_api_2B334D75.id}",
         "stage_name": "prod"
       }
     },
     "aws_iam_role": {
-      "root_cloudApi_cloudApiOnRequestcdafee6e_IamRole_2B8A04C3": {
+      "cloudApi_cloudApi-OnRequest-cdafee6e_IamRole_4382C442": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/cloud.Api/cloud.Api-OnRequest-cdafee6e/IamRole",
-            "uniqueId": "root_cloudApi_cloudApiOnRequestcdafee6e_IamRole_2B8A04C3"
+            "uniqueId": "cloudApi_cloudApi-OnRequest-cdafee6e_IamRole_4382C442"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       },
-      "root_testhttppatchandhttpfetchcanpreformacalltoanapi_Handler_IamRole_D7C5DEEB": {
+      "testhttppatchandhttpfetchcanpreformacalltoanapi_Handler_IamRole_C2F43DF0": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:http.patch and http.fetch can preform a call to an api/Handler/IamRole",
-            "uniqueId": "root_testhttppatchandhttpfetchcanpreformacalltoanapi_Handler_IamRole_D7C5DEEB"
+            "uniqueId": "testhttppatchandhttpfetchcanpreformacalltoanapi_Handler_IamRole_C2F43DF0"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
-      "root_cloudApi_cloudApiOnRequestcdafee6e_IamRolePolicy_E6B9BE66": {
+      "cloudApi_cloudApi-OnRequest-cdafee6e_IamRolePolicy_8BF9C89F": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/cloud.Api/cloud.Api-OnRequest-cdafee6e/IamRolePolicy",
-            "uniqueId": "root_cloudApi_cloudApiOnRequestcdafee6e_IamRolePolicy_E6B9BE66"
+            "uniqueId": "cloudApi_cloudApi-OnRequest-cdafee6e_IamRolePolicy_8BF9C89F"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
-        "role": "${aws_iam_role.root_cloudApi_cloudApiOnRequestcdafee6e_IamRole_2B8A04C3.name}"
+        "role": "${aws_iam_role.cloudApi_cloudApi-OnRequest-cdafee6e_IamRole_4382C442.name}"
       },
-      "root_testhttppatchandhttpfetchcanpreformacalltoanapi_Handler_IamRolePolicy_1172AA12": {
+      "testhttppatchandhttpfetchcanpreformacalltoanapi_Handler_IamRolePolicy_6D4DBF6C": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:http.patch and http.fetch can preform a call to an api/Handler/IamRolePolicy",
-            "uniqueId": "root_testhttppatchandhttpfetchcanpreformacalltoanapi_Handler_IamRolePolicy_1172AA12"
+            "uniqueId": "testhttppatchandhttpfetchcanpreformacalltoanapi_Handler_IamRolePolicy_6D4DBF6C"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
-        "role": "${aws_iam_role.root_testhttppatchandhttpfetchcanpreformacalltoanapi_Handler_IamRole_D7C5DEEB.name}"
+        "role": "${aws_iam_role.testhttppatchandhttpfetchcanpreformacalltoanapi_Handler_IamRole_C2F43DF0.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
-      "root_cloudApi_cloudApiOnRequestcdafee6e_IamRolePolicyAttachment_4A873879": {
+      "cloudApi_cloudApi-OnRequest-cdafee6e_IamRolePolicyAttachment_5383D6A2": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/cloud.Api/cloud.Api-OnRequest-cdafee6e/IamRolePolicyAttachment",
-            "uniqueId": "root_cloudApi_cloudApiOnRequestcdafee6e_IamRolePolicyAttachment_4A873879"
+            "uniqueId": "cloudApi_cloudApi-OnRequest-cdafee6e_IamRolePolicyAttachment_5383D6A2"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.root_cloudApi_cloudApiOnRequestcdafee6e_IamRole_2B8A04C3.name}"
+        "role": "${aws_iam_role.cloudApi_cloudApi-OnRequest-cdafee6e_IamRole_4382C442.name}"
       },
-      "root_testhttppatchandhttpfetchcanpreformacalltoanapi_Handler_IamRolePolicyAttachment_93E80B8C": {
+      "testhttppatchandhttpfetchcanpreformacalltoanapi_Handler_IamRolePolicyAttachment_FDA4E9BA": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:http.patch and http.fetch can preform a call to an api/Handler/IamRolePolicyAttachment",
-            "uniqueId": "root_testhttppatchandhttpfetchcanpreformacalltoanapi_Handler_IamRolePolicyAttachment_93E80B8C"
+            "uniqueId": "testhttppatchandhttpfetchcanpreformacalltoanapi_Handler_IamRolePolicyAttachment_FDA4E9BA"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.root_testhttppatchandhttpfetchcanpreformacalltoanapi_Handler_IamRole_D7C5DEEB.name}"
+        "role": "${aws_iam_role.testhttppatchandhttpfetchcanpreformacalltoanapi_Handler_IamRole_C2F43DF0.name}"
       }
     },
     "aws_lambda_function": {
-      "root_cloudApi_cloudApiOnRequestcdafee6e_582EA655": {
+      "cloudApi_cloudApi-OnRequest-cdafee6e_A6C8366F": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/cloud.Api/cloud.Api-OnRequest-cdafee6e/Default",
-            "uniqueId": "root_cloudApi_cloudApiOnRequestcdafee6e_582EA655"
+            "uniqueId": "cloudApi_cloudApi-OnRequest-cdafee6e_A6C8366F"
           }
         },
         "environment": {
@@ -228,38 +224,37 @@ module.exports = function({ api, _id, body, http_PATCH, http_Util, std_Json }) {
         "function_name": "cloud-Api-OnRequest-cdafee6e-c8147384",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.root_cloudApi_cloudApiOnRequestcdafee6e_IamRole_2B8A04C3.arn}",
+        "role": "${aws_iam_role.cloudApi_cloudApi-OnRequest-cdafee6e_IamRole_4382C442.arn}",
         "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
-        "s3_key": "${aws_s3_object.root_cloudApi_cloudApiOnRequestcdafee6e_S3Object_AA762041.key}",
+        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
+        "s3_key": "${aws_s3_object.cloudApi_cloudApi-OnRequest-cdafee6e_S3Object_5DAAA0EF.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
           "subnet_ids": []
         }
       },
-      "root_testhttppatchandhttpfetchcanpreformacalltoanapi_Handler_1C5BB2AB": {
+      "testhttppatchandhttpfetchcanpreformacalltoanapi_Handler_185CBA02": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:http.patch and http.fetch can preform a call to an api/Handler/Default",
-            "uniqueId": "root_testhttppatchandhttpfetchcanpreformacalltoanapi_Handler_1C5BB2AB"
+            "uniqueId": "testhttppatchandhttpfetchcanpreformacalltoanapi_Handler_185CBA02"
           }
         },
         "environment": {
           "variables": {
-            "CLOUD_API_C82DF3A5": "${aws_api_gateway_stage.root_cloudApi_api_stage_57D6284A.invoke_url}",
             "WING_FUNCTION_NAME": "Handler-c89df580",
             "WING_TARGET": "tf-aws",
-            "WING_TOKEN_TFTOKEN_TOKEN_21": "${jsonencode(aws_api_gateway_stage.root_cloudApi_api_stage_57D6284A.invoke_url)}"
+            "WING_TOKEN_TFTOKEN_TOKEN_21": "${jsonencode(aws_api_gateway_stage.cloudApi_api_stage_BBB283E4.invoke_url)}"
           }
         },
         "function_name": "Handler-c89df580",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.root_testhttppatchandhttpfetchcanpreformacalltoanapi_Handler_IamRole_D7C5DEEB.arn}",
+        "role": "${aws_iam_role.testhttppatchandhttpfetchcanpreformacalltoanapi_Handler_IamRole_C2F43DF0.arn}",
         "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
-        "s3_key": "${aws_s3_object.root_testhttppatchandhttpfetchcanpreformacalltoanapi_Handler_S3Object_7BA45804.key}",
+        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
+        "s3_key": "${aws_s3_object.testhttppatchandhttpfetchcanpreformacalltoanapi_Handler_S3Object_2CE72DAC.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -268,51 +263,51 @@ module.exports = function({ api, _id, body, http_PATCH, http_Util, std_Json }) {
       }
     },
     "aws_lambda_permission": {
-      "root_cloudApi_api_permissionPATCH4d67c9d8_FFD02B88": {
+      "cloudApi_api_permission-PATCH-4d67c9d8_BC5EF557": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/cloud.Api/api/permission-PATCH-4d67c9d8",
-            "uniqueId": "root_cloudApi_api_permissionPATCH4d67c9d8_FFD02B88"
+            "uniqueId": "cloudApi_api_permission-PATCH-4d67c9d8_BC5EF557"
           }
         },
         "action": "lambda:InvokeFunction",
-        "function_name": "${aws_lambda_function.root_cloudApi_cloudApiOnRequestcdafee6e_582EA655.function_name}",
+        "function_name": "${aws_lambda_function.cloudApi_cloudApi-OnRequest-cdafee6e_A6C8366F.function_name}",
         "principal": "apigateway.amazonaws.com",
-        "source_arn": "${aws_api_gateway_rest_api.root_cloudApi_api_8C9FE51E.execution_arn}/*/PATCH/path/{id}",
+        "source_arn": "${aws_api_gateway_rest_api.cloudApi_api_2B334D75.execution_arn}/*/PATCH/path/{id}",
         "statement_id": "AllowExecutionFromAPIGateway-PATCH-4d67c9d8"
       }
     },
     "aws_s3_bucket": {
-      "root_Code_02F3C603": {
+      "Code": {
         "//": {
           "metadata": {
             "path": "root/Default/Code",
-            "uniqueId": "root_Code_02F3C603"
+            "uniqueId": "Code"
           }
         },
         "bucket_prefix": "code-c84a50b1-"
       }
     },
     "aws_s3_object": {
-      "root_cloudApi_cloudApiOnRequestcdafee6e_S3Object_AA762041": {
+      "cloudApi_cloudApi-OnRequest-cdafee6e_S3Object_5DAAA0EF": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/cloud.Api/cloud.Api-OnRequest-cdafee6e/S3Object",
-            "uniqueId": "root_cloudApi_cloudApiOnRequestcdafee6e_S3Object_AA762041"
+            "uniqueId": "cloudApi_cloudApi-OnRequest-cdafee6e_S3Object_5DAAA0EF"
           }
         },
-        "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
+        "bucket": "${aws_s3_bucket.Code.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       },
-      "root_testhttppatchandhttpfetchcanpreformacalltoanapi_Handler_S3Object_7BA45804": {
+      "testhttppatchandhttpfetchcanpreformacalltoanapi_Handler_S3Object_2CE72DAC": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:http.patch and http.fetch can preform a call to an api/Handler/S3Object",
-            "uniqueId": "root_testhttppatchandhttpfetchcanpreformacalltoanapi_Handler_S3Object_7BA45804"
+            "uniqueId": "testhttppatchandhttpfetchcanpreformacalltoanapi_Handler_S3Object_2CE72DAC"
           }
         },
-        "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
+        "bucket": "${aws_s3_bucket.Code.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       }
@@ -336,21 +331,16 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
         this.display.hidden = true;
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const api_PATCH_client = context._lift(api_PATCH);
-        const _id_client = context._lift(_id);
-        const body_client = context._lift(body);
-        const std_JsonClient = std.Json._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            api_PATCH: ${api_PATCH_client},
-            _id: ${_id_client},
-            body: ${body_client},
-            std_Json: ${std_JsonClient.text},
+          require("./inflight.$Closure1.js")({
+            $_id: ${context._lift(_id)},
+            $api_PATCH: ${context._lift(api_PATCH)},
+            $body: ${context._lift(body)},
+            $std_Json: ${context._lift(std.Json)},
           })
         `);
       }
@@ -366,11 +356,6 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure1._registerBindObject(_id, host, []);
-          $Closure1._registerBindObject(api_PATCH, host, []);
-          $Closure1._registerBindObject(body, host, []);
-        }
         if (ops.includes("handle")) {
           $Closure1._registerBindObject(_id, host, []);
           $Closure1._registerBindObject(api_PATCH, host, []);
@@ -382,25 +367,18 @@ class $Root extends $stdlib.std.Resource {
     class $Closure2 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
         this.display.hidden = true;
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure2.js";
-        const api_client = context._lift(api);
-        const _id_client = context._lift(_id);
-        const body_client = context._lift(body);
-        const http_PATCH_client = context._lift(http_PATCH);
-        const http_UtilClient = http.Util._toInflightType(context);
-        const std_JsonClient = std.Json._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            api: ${api_client},
-            _id: ${_id_client},
-            body: ${body_client},
-            http_PATCH: ${http_PATCH_client},
-            http_Util: ${http_UtilClient.text},
-            std_Json: ${std_JsonClient.text},
+          require("./inflight.$Closure2.js")({
+            $_id: ${context._lift(_id)},
+            $api_url: ${context._lift(api.url)},
+            $body: ${context._lift(body)},
+            $http_PATCH: ${context._lift(http_PATCH)},
+            $http_Util: ${context._lift(http.Util)},
+            $std_Json: ${context._lift(std.Json)},
           })
         `);
       }
@@ -416,12 +394,6 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure2._registerBindObject(_id, host, []);
-          $Closure2._registerBindObject(api, host, []);
-          $Closure2._registerBindObject(body, host, []);
-          $Closure2._registerBindObject(http_PATCH, host, []);
-        }
         if (ops.includes("handle")) {
           $Closure2._registerBindObject(_id, host, []);
           $Closure2._registerBindObject(api.url, host, []);

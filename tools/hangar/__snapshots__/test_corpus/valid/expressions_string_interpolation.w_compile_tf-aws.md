@@ -7,7 +7,7 @@
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.2"
+      "version": "0.17.0"
     },
     "outputs": {
       "root": {
@@ -45,10 +45,10 @@ class $Root extends $stdlib.std.Resource {
     const regularString = "str\n\"";
     const emptyString = "";
     const number = 1;
-    const coolString = `cool \"\${${regularString}}\" test`;
-    const reallyCoolString = `${number}${emptyString}\n${coolString}\n\${empty_string}${"string-in-string"}!`;
-    const beginingWithCoolStrings = `${regularString} ${number} <- cool`;
-    const endingWithCoolStrings = `cool -> ${regularString} ${number}`;
+    const coolString = String.raw({ raw: ["cool \"\${", "}\" test"] }, regularString);
+    const reallyCoolString = String.raw({ raw: ["", "", "\n", "\n\${empty_string}", "!"] }, number, emptyString, coolString, "string-in-string");
+    const beginingWithCoolStrings = String.raw({ raw: ["", " ", " <- cool"] }, regularString, number);
+    const endingWithCoolStrings = String.raw({ raw: ["cool -> ", " ", ""] }, regularString, number);
   }
 }
 class $App extends $AppBase {

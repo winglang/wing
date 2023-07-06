@@ -2,26 +2,24 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ q, NIL }) {
+module.exports = function({ $NIL, $q }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
-    async handle()  {
+    async handle() {
       const msgs = Object.freeze(["Foo", "Bar"]);
       for (const msg of msgs) {
-        (await q.push(msg));
+        (await $q.push(msg));
       }
-      const first = ((await q.pop()) ?? NIL);
-      const second = ((await q.pop()) ?? NIL);
-      const third = ((await q.pop()) ?? NIL);
-      {((cond) => {if (!cond) throw new Error(`assertion failed: 'msgs.includes(first)'`)})(msgs.includes(first))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: 'msgs.includes(second)'`)})(msgs.includes(second))};
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(third === NIL)'`)})((third === NIL))};
+      const first = ((await $q.pop()) ?? $NIL);
+      const second = ((await $q.pop()) ?? $NIL);
+      const third = ((await $q.pop()) ?? $NIL);
+      {((cond) => {if (!cond) throw new Error("assertion failed: msgs.contains(first)")})(msgs.includes(first))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: msgs.contains(second)")})(msgs.includes(second))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: third == NIL")})((third === $NIL))};
     }
   }
   return $Closure1;
@@ -36,7 +34,7 @@ module.exports = function({ q, NIL }) {
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.2"
+      "version": "0.17.0"
     },
     "outputs": {
       "root": {
@@ -50,7 +48,7 @@ module.exports = function({ q, NIL }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:pop\",\"${aws_lambda_function.root_testpop_Handler_55CCA640.arn}\"]]"
+      "value": "[[\"root/Default/Default/test:pop\",\"${aws_lambda_function.testpop_Handler_595175BF.arn}\"]]"
     }
   },
   "provider": {
@@ -60,51 +58,51 @@ module.exports = function({ q, NIL }) {
   },
   "resource": {
     "aws_iam_role": {
-      "root_testpop_Handler_IamRole_77C9AD24": {
+      "testpop_Handler_IamRole_2CAAA350": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:pop/Handler/IamRole",
-            "uniqueId": "root_testpop_Handler_IamRole_77C9AD24"
+            "uniqueId": "testpop_Handler_IamRole_2CAAA350"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
-      "root_testpop_Handler_IamRolePolicy_F10011B4": {
+      "testpop_Handler_IamRolePolicy_81414D48": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:pop/Handler/IamRolePolicy",
-            "uniqueId": "root_testpop_Handler_IamRolePolicy_F10011B4"
+            "uniqueId": "testpop_Handler_IamRolePolicy_81414D48"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"sqs:SendMessage\"],\"Resource\":[\"${aws_sqs_queue.root_cloudQueue_E3597F7A.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"sqs:ReceiveMessage\"],\"Resource\":[\"${aws_sqs_queue.root_cloudQueue_E3597F7A.arn}\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.root_testpop_Handler_IamRole_77C9AD24.name}"
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"sqs:SendMessage\"],\"Resource\":[\"${aws_sqs_queue.cloudQueue.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"sqs:ReceiveMessage\"],\"Resource\":[\"${aws_sqs_queue.cloudQueue.arn}\"],\"Effect\":\"Allow\"}]}",
+        "role": "${aws_iam_role.testpop_Handler_IamRole_2CAAA350.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
-      "root_testpop_Handler_IamRolePolicyAttachment_A5F1DB79": {
+      "testpop_Handler_IamRolePolicyAttachment_DBFE44D0": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:pop/Handler/IamRolePolicyAttachment",
-            "uniqueId": "root_testpop_Handler_IamRolePolicyAttachment_A5F1DB79"
+            "uniqueId": "testpop_Handler_IamRolePolicyAttachment_DBFE44D0"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.root_testpop_Handler_IamRole_77C9AD24.name}"
+        "role": "${aws_iam_role.testpop_Handler_IamRole_2CAAA350.name}"
       }
     },
     "aws_lambda_function": {
-      "root_testpop_Handler_55CCA640": {
+      "testpop_Handler_595175BF": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:pop/Handler/Default",
-            "uniqueId": "root_testpop_Handler_55CCA640"
+            "uniqueId": "testpop_Handler_595175BF"
           }
         },
         "environment": {
           "variables": {
-            "QUEUE_URL_31e95cbd": "${aws_sqs_queue.root_cloudQueue_E3597F7A.url}",
+            "QUEUE_URL_31e95cbd": "${aws_sqs_queue.cloudQueue.url}",
             "WING_FUNCTION_NAME": "Handler-c888e5ca",
             "WING_TARGET": "tf-aws"
           }
@@ -112,10 +110,10 @@ module.exports = function({ q, NIL }) {
         "function_name": "Handler-c888e5ca",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.root_testpop_Handler_IamRole_77C9AD24.arn}",
+        "role": "${aws_iam_role.testpop_Handler_IamRole_2CAAA350.arn}",
         "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
-        "s3_key": "${aws_s3_object.root_testpop_Handler_S3Object_88106DFE.key}",
+        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
+        "s3_key": "${aws_s3_object.testpop_Handler_S3Object_35D71FAF.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -124,35 +122,35 @@ module.exports = function({ q, NIL }) {
       }
     },
     "aws_s3_bucket": {
-      "root_Code_02F3C603": {
+      "Code": {
         "//": {
           "metadata": {
             "path": "root/Default/Code",
-            "uniqueId": "root_Code_02F3C603"
+            "uniqueId": "Code"
           }
         },
         "bucket_prefix": "code-c84a50b1-"
       }
     },
     "aws_s3_object": {
-      "root_testpop_Handler_S3Object_88106DFE": {
+      "testpop_Handler_S3Object_35D71FAF": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:pop/Handler/S3Object",
-            "uniqueId": "root_testpop_Handler_S3Object_88106DFE"
+            "uniqueId": "testpop_Handler_S3Object_35D71FAF"
           }
         },
-        "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
+        "bucket": "${aws_s3_bucket.Code.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       }
     },
     "aws_sqs_queue": {
-      "root_cloudQueue_E3597F7A": {
+      "cloudQueue": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/cloud.Queue/Default",
-            "uniqueId": "root_cloudQueue_E3597F7A"
+            "uniqueId": "cloudQueue"
           }
         },
         "name": "cloud-Queue-c86e03d8"
@@ -176,17 +174,14 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
         this.display.hidden = true;
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const q_client = context._lift(q);
-        const NIL_client = context._lift(NIL);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            q: ${q_client},
-            NIL: ${NIL_client},
+          require("./inflight.$Closure1.js")({
+            $NIL: ${context._lift(NIL)},
+            $q: ${context._lift(q)},
           })
         `);
       }
@@ -202,10 +197,6 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure1._registerBindObject(NIL, host, []);
-          $Closure1._registerBindObject(q, host, []);
-        }
         if (ops.includes("handle")) {
           $Closure1._registerBindObject(NIL, host, []);
           $Closure1._registerBindObject(q, host, ["pop", "push"]);

@@ -40,21 +40,151 @@ test "length" {
 // at()
 
 assert("boom".at(2) == "o");
-//TODO: assertThrows("ERROR", () => { "hey".at(-1); });
+// Negative integers count back from the last string character.
+assert("boom".at(-4) == "b");
+assert("boom".at(-1) == "m");
 
 test "at()" {
   assert("boom".at(0) == "b");
+  // Negative integers count back from the last string character.
+  assert("boom".at(-4) == "b");
+  assert("boom".at(-1) == "m");
+  
+  // Should throw an exception instead of returns undefined see issue #3240
+  // assert("boom".at(-10) == "m");
 }
 
 //-----------------------------------------------------------------------------
-// TODO: https://github.com/winglang/wing/issues/2785
-
 // concat()
+
+assert("boom".concat("boom") == "boomboom");
+
+test "concat()" {
+  assert("boom".concat("boom") == "boomboom");
+}
+
+//-----------------------------------------------------------------------------
 // endsWith()
+
+assert("boom".endsWith("m"));
+assert(!"boom".endsWith("b"));
+
+test "endsWith()" {
+  assert("boom".endsWith("m"));
+  assert(!"boom".endsWith("b"));
+}
+
+//-----------------------------------------------------------------------------
 // indexOf()
+
+assert("boom".indexOf("m") == 3);
+assert("boom".indexOf("a") == -1);
+
+test "indexOf()" {
+  assert("boom".indexOf("m") == 3);
+  assert("boom".indexOf("a") == -1);
+}
+
+//-----------------------------------------------------------------------------
 // lowercase()
-// split()
-// startsWith()
-// substring()
-// trim()
+
+assert("BOOM".lowercase() == "boom");
+assert("BooM".lowercase() == "boom");
+assert("boom".lowercase() == "boom");
+assert("123#@".lowercase() == "123#@");
+
+test "lowercase()" {
+  assert("BOOM".lowercase() == "boom");
+  assert("BooM".lowercase() == "boom");
+  assert("boom".lowercase() == "boom");
+  assert("123#@".lowercase() == "123#@");
+
+}
+
+//-----------------------------------------------------------------------------
 // uppercase()
+
+assert("BOOM".uppercase() == "BOOM");
+assert("BooM".uppercase() == "BOOM");
+assert("boom".uppercase() == "BOOM");
+assert("123#@".uppercase() == "123#@");
+
+test "uppercase()" {
+  assert("BOOM".uppercase() == "BOOM");
+  assert("BooM".uppercase() == "BOOM");
+  assert("boom".uppercase() == "BOOM");
+  assert("123#@".uppercase() == "123#@");
+}
+
+//-----------------------------------------------------------------------------
+// split()
+
+assert("hello;wing".split(";").at(0) == "hello");
+assert("hello;wing".split(";").at(1) == "wing");
+assert("hello wing".split(" ").at(0) == "hello");
+assert("hello;wing".split(";").at(1) == "wing");
+assert("hello wing".split("").length == 10);
+assert("hello wing".split("").at(0) == "h");
+assert("hello wing".split("").at(1) == "e");
+
+test "split()" {
+  assert("hello;wing".split(";").at(0) == "hello");
+  assert("hello;wing".split(";").at(1) == "wing");
+  assert("hello wing".split(" ").at(0) == "hello");
+  assert("hello;wing".split(";").at(1) == "wing");
+  assert("hello wing".split("").length == 10);
+  assert("hello wing".split("").at(0) == "h");
+  assert("hello wing".split("").at(1) == "e");
+}
+
+//-----------------------------------------------------------------------------
+// startsWith()
+
+assert("hello wing".startsWith("h"));
+assert(!"hello wing".startsWith("H"));
+assert(!"hello wing".startsWith("w"));
+
+test "startsWith()" {
+  assert("hello wing".startsWith("h"));
+  assert(!"hello wing".startsWith("H"));
+  assert(!"hello wing".startsWith("w"));
+}
+
+//-----------------------------------------------------------------------------
+// substring()
+
+assert("hello wing".substring(0, 5) == "hello");
+assert("hello wing".substring(0, 100) == "hello wing");
+
+test "substring()" {
+  assert("hello wing".substring(0, 5) == "hello");
+  assert("hello wing".substring(0, 100) == "hello wing");
+}
+
+//-----------------------------------------------------------------------------
+// trim()
+
+assert("hello wing         ".trim() == "hello wing");
+assert("hello wing".trim() == "hello wing");
+assert("".trim() == "");
+assert("\thello wing\n".trim() == "hello wing");
+
+test "trim()" {
+  assert("hello wing         ".trim() == "hello wing");
+  assert("hello wing".trim() == "hello wing");
+  assert("".trim() == "");
+  assert("\thello wing\n".trim() == "hello wing");
+}
+
+//-----------------------------------------------------------------------------
+// contains()
+
+assert("hello wing".contains("hello"));
+assert(!"hello wing".contains("Hello"));
+assert("hello wing".contains("w"));
+
+test "contains()" {
+  assert("hello wing".contains("hello"));
+  assert(!"hello wing".contains("Hello"));
+  assert("hello wing".contains("w"));
+}

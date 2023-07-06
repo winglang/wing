@@ -13,7 +13,7 @@ q2.setConsumer(inflight (m:str): str => {
   b.put("2.txt", "Hello, ${m}"); 
 });
 
-let x = 5
+let x = 5 //
       //^ ';' expected
 
 if (x > 10) {

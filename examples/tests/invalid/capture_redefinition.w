@@ -1,14 +1,25 @@
-let y = "hello";
+let y = "h";
 
-inflight () => {
+() => {
+  log("hello");
   log(y);
 //    ^ Cannot capture symbol "y" because it is shadowed by another symbol with the same name
-  let y = "world";
+  let y = "y";
 };
 
-// TODO: https://github.com/winglang/wing/issues/2753
-// let x = "hi";
-// if true {
-//   log(x);
-//   let x = "world";
-// }
+inflight () => {
+  let y = "hi";
+
+  inflight () => {
+    log(y);
+//      ^ Cannot capture symbol "y" because it is shadowed by another symbol with the same name
+    let y = "world";
+  };
+};
+
+let x = "hi";
+if true {
+  log(x);
+//    ^ Cannot capture symbol "x" because it is shadowed by another symbol with the same name
+  let x = "world";
+}

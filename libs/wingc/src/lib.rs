@@ -11,8 +11,10 @@ use ast::{Scope, Stmt, Symbol, UtilityFunctions};
 use closure_transform::ClosureTransformer;
 use comp_ctx::set_custom_panic_hook;
 use diagnostic::{found_errors, report_diagnostic, Diagnostic};
+use files::Files;
 use fold::Fold;
 use jsify::JSifier;
+use lifting::LiftTransform;
 use type_check::jsii_importer::JsiiImportSpec;
 use type_check::symbol_env::StatementIdx;
 use type_check::{FunctionSignature, SymbolKind, Type};
@@ -33,19 +35,27 @@ use crate::ast::Phase;
 use crate::type_check::symbol_env::SymbolEnv;
 use crate::type_check::{FunctionParameter, TypeChecker, Types};
 
+#[macro_use]
+#[cfg(test)]
+mod test_utils;
+
 pub mod ast;
 pub mod closure_transform;
 mod comp_ctx;
 pub mod debug;
 pub mod diagnostic;
 mod docs;
+mod files;
 pub mod fold;
 pub mod jsify;
+mod lifting;
 pub mod lsp;
 pub mod parser;
+
 pub mod type_check;
 mod type_check_assert;
 pub mod visit;
+mod visit_context;
 mod wasm_util;
 
 const WINGSDK_ASSEMBLY_NAME: &'static str = "@winglang/sdk";
@@ -55,6 +65,7 @@ const WINGSDK_REDIS_MODULE: &'static str = "redis";
 const WINGSDK_CLOUD_MODULE: &'static str = "cloud";
 const WINGSDK_UTIL_MODULE: &'static str = "util";
 const WINGSDK_HTTP_MODULE: &'static str = "http";
+const WINGSDK_MATH_MODULE: &'static str = "math";
 
 const WINGSDK_DURATION: &'static str = "std.Duration";
 const WINGSDK_MAP: &'static str = "std.Map";
@@ -73,6 +84,7 @@ const CONSTRUCT_BASE_CLASS: &'static str = "constructs.Construct";
 
 const MACRO_REPLACE_SELF: &'static str = "$self$";
 const MACRO_REPLACE_ARGS: &'static str = "$args$";
+const MACRO_REPLACE_ARGS_TEXT: &'static str = "$args_text$";
 
 pub struct CompilerOutput {}
 
@@ -135,7 +147,7 @@ pub unsafe extern "C" fn wingc_compile(ptr: u32, len: u32) -> u64 {
 	}
 }
 
-pub fn parse(source_path: &Path) -> Scope {
+pub fn parse(source_path: &Path) -> (Files, Scope) {
 	let language = tree_sitter_wing::language();
 	let mut parser = tree_sitter::Parser::new();
 	parser.set_language(language).unwrap();
@@ -154,20 +166,31 @@ pub fn parse(source_path: &Path) -> Scope {
 				env: RefCell::new(None),
 				span: Default::default(),
 			};
-			return empty_scope;
+			return (Files::default(), empty_scope);
 		}
 	};
 
-	let tree = match parser.parse(&source[..], None) {
+	let mut files = Files::new();
+	match files.add_file(
+		source_path.to_path_buf(),
+		String::from_utf8(source.clone()).expect("Invalid UTF-8 sequence"),
+	) {
+		Ok(_) => {}
+		Err(err) => {
+			panic!("Failed adding source file to parser: {}", err);
+		}
+	}
+
+	let tree = match parser.parse(&source, None) {
 		Some(tree) => tree,
 		None => {
 			panic!("Failed parsing source file: {}", source_path.display());
 		}
 	};
 
-	let wing_parser = Parser::new(&source[..], source_path.to_str().unwrap().to_string());
+	let wing_parser = Parser::new(&source, source_path.to_str().unwrap().to_string());
 
-	wing_parser.wingit(&tree.root_node())
+	(files, wing_parser.wingit(&tree.root_node()))
 }
 
 pub fn type_check(
@@ -178,7 +201,7 @@ pub fn type_check(
 	jsii_imports: &mut Vec<JsiiImportSpec>,
 ) {
 	assert!(scope.env.borrow().is_none(), "Scope should not have an env yet");
-	let env = SymbolEnv::new(None, types.void(), false, Phase::Preflight, 0);
+	let env = SymbolEnv::new(None, types.void(), false, false, Phase::Preflight, 0);
 	scope.set_env(env);
 
 	// note: Globals are emitted here and wrapped in "{ ... }" blocks. Wrapping makes these emissions, actual
@@ -211,7 +234,9 @@ pub fn type_check(
 			}],
 			return_type: types.void(),
 			phase: Phase::Independent,
-			js_override: Some("{((cond) => {if (!cond) throw new Error(`assertion failed: '$args$'`)})($args$)}".to_string()),
+			js_override: Some(
+				"{((cond) => {if (!cond) throw new Error(\"assertion failed: $args_text$\")})($args$)}".to_string(),
+			),
 			docs: Docs::with_summary("Asserts that a condition is true"),
 		}),
 		scope,
@@ -303,7 +328,7 @@ pub fn compile(
 	let out_dir = out_dir.unwrap_or(default_out_dir.as_ref());
 
 	// -- PARSING PHASE --
-	let scope = parse(&source_path);
+	let (files, scope) = parse(&source_path);
 
 	// -- DESUGARING PHASE --
 
@@ -327,11 +352,6 @@ pub fn compile(
 	let mut tc_assert = TypeCheckAssert::new(&types, found_errors());
 	tc_assert.check(&scope);
 
-	// bail out now (before jsification) if there are errors (no point in jsifying)
-	if found_errors() {
-		return Err(());
-	}
-
 	// -- JSIFICATION PHASE --
 
 	let app_name = source_path.file_stem().unwrap().to_str().unwrap();
@@ -348,9 +368,24 @@ pub fn compile(
 		return Err(());
 	}
 
-	let mut jsifier = JSifier::new(&types, app_name, &project_dir, true);
-	jsifier.jsify(&scope);
-	jsifier.emit_files(&out_dir);
+	let mut jsifier = JSifier::new(&mut types, &files, app_name, &project_dir, true);
+
+	// -- LIFTING PHASE --
+
+	let mut lift = LiftTransform::new(&jsifier);
+	let scope = Box::new(lift.fold_scope(scope));
+
+	// bail out now (before jsification) if there are errors (no point in jsifying)
+	if found_errors() {
+		return Err(());
+	}
+
+	let files = jsifier.jsify(&scope);
+
+	match files.emit_files(out_dir) {
+		Ok(()) => {}
+		Err(err) => report_diagnostic(err.into()),
+	}
 
 	if found_errors() {
 		return Err(());

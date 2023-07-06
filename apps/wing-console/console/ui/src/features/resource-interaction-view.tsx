@@ -8,6 +8,7 @@ import { ScheduleInteractionView } from "./schedule-interaction-view.js";
 import { TableInteractionView } from "./table-interaction-view.js";
 import { TopicInteractionView } from "./topic-interaction-view.js";
 import { UnsupportedInteractionView } from "./unsupported-interaction-view.js";
+import { WebsiteInteractionView } from "./website-interaction-view";
 
 export interface ResourceViewProps {
   resourceType: string;
@@ -46,11 +47,18 @@ export const ResourceInteractionView = ({
       case "wingsdk.redis.Redis": {
         return <RedisInteractionView resourcePath={resourcePath} />;
       }
+      case "wingsdk.cloud.Website": {
+        return <WebsiteInteractionView resourcePath={resourcePath} />;
+      }
       default: {
         return <UnsupportedInteractionView resourceType={resourceType} />;
       }
     }
   };
 
-  return getResourceView();
+  return (
+    <div data-testid={`resource-interaction:${resourcePath}`}>
+      {getResourceView()}
+    </div>
+  );
 };

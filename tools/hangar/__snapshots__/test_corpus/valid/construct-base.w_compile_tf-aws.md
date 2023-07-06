@@ -6,8 +6,6 @@ module.exports = function({  }) {
   class WingResource {
     constructor({  }) {
     }
-    async $inflight_init()  {
-    }
   }
   return WingResource;
 }
@@ -21,7 +19,7 @@ module.exports = function({  }) {
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.2"
+      "version": "0.17.0"
     },
     "outputs": {
       "root": {
@@ -45,11 +43,11 @@ module.exports = function({  }) {
   },
   "resource": {
     "aws_sqs_queue": {
-      "root_awssqsQueueSqsQueue_47BDCAE4": {
+      "awssqsQueueSqsQueue": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/aws.sqsQueue.SqsQueue",
-            "uniqueId": "root_awssqsQueueSqsQueue_47BDCAE4"
+            "uniqueId": "awssqsQueueSqsQueue"
           }
         }
       }
@@ -74,12 +72,12 @@ class $Root extends $stdlib.std.Resource {
     class WingResource extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        {console.log(`my id is ${this.node.id}`)};
+        {console.log(String.raw({ raw: ["my id is ", ""] }, this.node.id))};
+        this._addInflightOps("$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.WingResource.js";
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.WingResource.js")({
           })
         `);
       }
@@ -94,27 +92,20 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-        }
-        super._registerBind(host, ops);
-      }
     }
-    const getPath =  (c) =>  {
+    const getPath = ((c) => {
       return c.node.path;
-    }
-    ;
-    const getDisplayName =  (r) =>  {
+    });
+    const getDisplayName = ((r) => {
       return r.display.title;
-    }
-    ;
+    });
     const q = this.node.root.new("@cdktf/provider-aws.sqsQueue.SqsQueue",aws.sqsQueue.SqsQueue,this,"aws.sqsQueue.SqsQueue");
     const wr = new WingResource(this,"WingResource");
     const another_resource = wr;
-    {console.log(`path of sqs.queue: ${(getPath(q))}`)};
-    {console.log(`path of wing resource: ${(getPath(wr))}`)};
+    {console.log(String.raw({ raw: ["path of sqs.queue: ", ""] }, (getPath(q))))};
+    {console.log(String.raw({ raw: ["path of wing resource: ", ""] }, (getPath(wr))))};
     const title = ((getDisplayName(wr)) ?? "no display name");
-    {console.log(`display name of wing resource: ${title}`)};
+    {console.log(String.raw({ raw: ["display name of wing resource: ", ""] }, title))};
   }
 }
 class $App extends $AppBase {

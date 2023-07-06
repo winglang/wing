@@ -2,17 +2,15 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ c }) {
+module.exports = function({ $c }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      (await c.inc());
+    async handle() {
+      (await $c.inc());
     }
   }
   return $Closure1;
@@ -22,17 +20,15 @@ module.exports = function({ c }) {
 
 ## inflight.$Closure2.js
 ```js
-module.exports = function({ c }) {
+module.exports = function({ $c }) {
   class $Closure2 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      (await c.inc());
+    async handle() {
+      (await $c.inc());
     }
   }
   return $Closure2;
@@ -42,21 +38,19 @@ module.exports = function({ c }) {
 
 ## inflight.$Closure3.js
 ```js
-module.exports = function({ c, f1, f2 }) {
+module.exports = function({ $c, $f1, $f2 }) {
   class $Closure3 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await c.peek()) === 0)'`)})(((await c.peek()) === 0))};
-      (await f1.invoke(""));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await c.peek()) === 1)'`)})(((await c.peek()) === 1))};
-      (await f2.invoke(""));
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await c.peek()) === 2)'`)})(((await c.peek()) === 2))};
+    async handle() {
+      {((cond) => {if (!cond) throw new Error("assertion failed: c.peek() == 0")})(((await $c.peek()) === 0))};
+      (await $f1.invoke(""));
+      {((cond) => {if (!cond) throw new Error("assertion failed: c.peek() == 1")})(((await $c.peek()) === 1))};
+      (await $f2.invoke(""));
+      {((cond) => {if (!cond) throw new Error("assertion failed: c.peek() == 2")})(((await $c.peek()) === 2))};
     }
   }
   return $Closure3;
@@ -71,7 +65,7 @@ module.exports = function({ c, f1, f2 }) {
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.2"
+      "version": "0.17.0"
     },
     "outputs": {
       "root": {
@@ -85,7 +79,7 @@ module.exports = function({ c, f1, f2 }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:function with memory and function with env can be invoked\",\"${aws_lambda_function.root_testfunctionwithmemoryandfunctionwithenvcanbeinvoked_Handler_D0AA45AD.arn}\"]]"
+      "value": "[[\"root/Default/Default/test:function with memory and function with env can be invoked\",\"${aws_lambda_function.testfunctionwithmemoryandfunctionwithenvcanbeinvoked_Handler_BE0A518F.arn}\"]]"
     }
   },
   "provider": {
@@ -95,11 +89,11 @@ module.exports = function({ c, f1, f2 }) {
   },
   "resource": {
     "aws_dynamodb_table": {
-      "root_cloudCounter_E0AC1263": {
+      "cloudCounter": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/cloud.Counter/Default",
-            "uniqueId": "root_cloudCounter_E0AC1263"
+            "uniqueId": "cloudCounter"
           }
         },
         "attribute": [
@@ -114,109 +108,109 @@ module.exports = function({ c, f1, f2 }) {
       }
     },
     "aws_iam_role": {
-      "root_envfn_IamRole_F8D93FC8": {
+      "envfn_IamRole_88E952E6": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/env fn/IamRole",
-            "uniqueId": "root_envfn_IamRole_F8D93FC8"
+            "uniqueId": "envfn_IamRole_88E952E6"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       },
-      "root_memoryfn_IamRole_93CF0A9D": {
+      "memoryfn_IamRole_87751238": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/memory fn/IamRole",
-            "uniqueId": "root_memoryfn_IamRole_93CF0A9D"
+            "uniqueId": "memoryfn_IamRole_87751238"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       },
-      "root_testfunctionwithmemoryandfunctionwithenvcanbeinvoked_Handler_IamRole_EFFE5DB4": {
+      "testfunctionwithmemoryandfunctionwithenvcanbeinvoked_Handler_IamRole_8471F020": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:function with memory and function with env can be invoked/Handler/IamRole",
-            "uniqueId": "root_testfunctionwithmemoryandfunctionwithenvcanbeinvoked_Handler_IamRole_EFFE5DB4"
+            "uniqueId": "testfunctionwithmemoryandfunctionwithenvcanbeinvoked_Handler_IamRole_8471F020"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
-      "root_envfn_IamRolePolicy_F98ACE26": {
+      "envfn_IamRolePolicy_63955289": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/env fn/IamRolePolicy",
-            "uniqueId": "root_envfn_IamRolePolicy_F98ACE26"
+            "uniqueId": "envfn_IamRolePolicy_63955289"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.root_cloudCounter_E0AC1263.arn}\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.root_envfn_IamRole_F8D93FC8.name}"
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.cloudCounter.arn}\"],\"Effect\":\"Allow\"}]}",
+        "role": "${aws_iam_role.envfn_IamRole_88E952E6.name}"
       },
-      "root_memoryfn_IamRolePolicy_1A26656B": {
+      "memoryfn_IamRolePolicy_5DA20EF5": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/memory fn/IamRolePolicy",
-            "uniqueId": "root_memoryfn_IamRolePolicy_1A26656B"
+            "uniqueId": "memoryfn_IamRolePolicy_5DA20EF5"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.root_cloudCounter_E0AC1263.arn}\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.root_memoryfn_IamRole_93CF0A9D.name}"
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.cloudCounter.arn}\"],\"Effect\":\"Allow\"}]}",
+        "role": "${aws_iam_role.memoryfn_IamRole_87751238.name}"
       },
-      "root_testfunctionwithmemoryandfunctionwithenvcanbeinvoked_Handler_IamRolePolicy_1E4BE4AC": {
+      "testfunctionwithmemoryandfunctionwithenvcanbeinvoked_Handler_IamRolePolicy_8C973050": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:function with memory and function with env can be invoked/Handler/IamRolePolicy",
-            "uniqueId": "root_testfunctionwithmemoryandfunctionwithenvcanbeinvoked_Handler_IamRolePolicy_1E4BE4AC"
+            "uniqueId": "testfunctionwithmemoryandfunctionwithenvcanbeinvoked_Handler_IamRolePolicy_8C973050"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:GetItem\"],\"Resource\":[\"${aws_dynamodb_table.root_cloudCounter_E0AC1263.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"lambda:InvokeFunction\"],\"Resource\":[\"${aws_lambda_function.root_memoryfn_812AB0A5.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"lambda:InvokeFunction\"],\"Resource\":[\"${aws_lambda_function.root_envfn_7540B24D.arn}\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.root_testfunctionwithmemoryandfunctionwithenvcanbeinvoked_Handler_IamRole_EFFE5DB4.name}"
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:GetItem\"],\"Resource\":[\"${aws_dynamodb_table.cloudCounter.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"lambda:InvokeFunction\"],\"Resource\":[\"${aws_lambda_function.memoryfn.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"lambda:InvokeFunction\"],\"Resource\":[\"${aws_lambda_function.envfn.arn}\"],\"Effect\":\"Allow\"}]}",
+        "role": "${aws_iam_role.testfunctionwithmemoryandfunctionwithenvcanbeinvoked_Handler_IamRole_8471F020.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
-      "root_envfn_IamRolePolicyAttachment_5E383376": {
+      "envfn_IamRolePolicyAttachment_FF624FBC": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/env fn/IamRolePolicyAttachment",
-            "uniqueId": "root_envfn_IamRolePolicyAttachment_5E383376"
+            "uniqueId": "envfn_IamRolePolicyAttachment_FF624FBC"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.root_envfn_IamRole_F8D93FC8.name}"
+        "role": "${aws_iam_role.envfn_IamRole_88E952E6.name}"
       },
-      "root_memoryfn_IamRolePolicyAttachment_2056B650": {
+      "memoryfn_IamRolePolicyAttachment_97CAD739": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/memory fn/IamRolePolicyAttachment",
-            "uniqueId": "root_memoryfn_IamRolePolicyAttachment_2056B650"
+            "uniqueId": "memoryfn_IamRolePolicyAttachment_97CAD739"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.root_memoryfn_IamRole_93CF0A9D.name}"
+        "role": "${aws_iam_role.memoryfn_IamRole_87751238.name}"
       },
-      "root_testfunctionwithmemoryandfunctionwithenvcanbeinvoked_Handler_IamRolePolicyAttachment_F48A468C": {
+      "testfunctionwithmemoryandfunctionwithenvcanbeinvoked_Handler_IamRolePolicyAttachment_82EEF7BB": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:function with memory and function with env can be invoked/Handler/IamRolePolicyAttachment",
-            "uniqueId": "root_testfunctionwithmemoryandfunctionwithenvcanbeinvoked_Handler_IamRolePolicyAttachment_F48A468C"
+            "uniqueId": "testfunctionwithmemoryandfunctionwithenvcanbeinvoked_Handler_IamRolePolicyAttachment_82EEF7BB"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.root_testfunctionwithmemoryandfunctionwithenvcanbeinvoked_Handler_IamRole_EFFE5DB4.name}"
+        "role": "${aws_iam_role.testfunctionwithmemoryandfunctionwithenvcanbeinvoked_Handler_IamRole_8471F020.name}"
       }
     },
     "aws_lambda_function": {
-      "root_envfn_7540B24D": {
+      "envfn": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/env fn/Default",
-            "uniqueId": "root_envfn_7540B24D"
+            "uniqueId": "envfn"
           }
         },
         "environment": {
           "variables": {
-            "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.root_cloudCounter_E0AC1263.name}",
+            "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.cloudCounter.name}",
             "WING_FUNCTION_NAME": "env-fn-c8a226dd",
             "WING_TARGET": "tf-aws",
             "catAge": "2",
@@ -226,26 +220,26 @@ module.exports = function({ c, f1, f2 }) {
         "function_name": "env-fn-c8a226dd",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.root_envfn_IamRole_F8D93FC8.arn}",
+        "role": "${aws_iam_role.envfn_IamRole_88E952E6.arn}",
         "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
-        "s3_key": "${aws_s3_object.root_envfn_S3Object_CCCD24F3.key}",
+        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
+        "s3_key": "${aws_s3_object.envfn_S3Object_0080F00E.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
           "subnet_ids": []
         }
       },
-      "root_memoryfn_812AB0A5": {
+      "memoryfn": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/memory fn/Default",
-            "uniqueId": "root_memoryfn_812AB0A5"
+            "uniqueId": "memoryfn"
           }
         },
         "environment": {
           "variables": {
-            "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.root_cloudCounter_E0AC1263.name}",
+            "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.cloudCounter.name}",
             "WING_FUNCTION_NAME": "memory-fn-c844bdf7",
             "WING_TARGET": "tf-aws"
           }
@@ -254,28 +248,28 @@ module.exports = function({ c, f1, f2 }) {
         "handler": "index.handler",
         "memory_size": 128,
         "publish": true,
-        "role": "${aws_iam_role.root_memoryfn_IamRole_93CF0A9D.arn}",
+        "role": "${aws_iam_role.memoryfn_IamRole_87751238.arn}",
         "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
-        "s3_key": "${aws_s3_object.root_memoryfn_S3Object_77D2B335.key}",
+        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
+        "s3_key": "${aws_s3_object.memoryfn_S3Object_3B51C445.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
           "subnet_ids": []
         }
       },
-      "root_testfunctionwithmemoryandfunctionwithenvcanbeinvoked_Handler_D0AA45AD": {
+      "testfunctionwithmemoryandfunctionwithenvcanbeinvoked_Handler_BE0A518F": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:function with memory and function with env can be invoked/Handler/Default",
-            "uniqueId": "root_testfunctionwithmemoryandfunctionwithenvcanbeinvoked_Handler_D0AA45AD"
+            "uniqueId": "testfunctionwithmemoryandfunctionwithenvcanbeinvoked_Handler_BE0A518F"
           }
         },
         "environment": {
           "variables": {
-            "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.root_cloudCounter_E0AC1263.name}",
-            "FUNCTION_NAME_2d5b932f": "${aws_lambda_function.root_memoryfn_812AB0A5.arn}",
-            "FUNCTION_NAME_d7a1b8c8": "${aws_lambda_function.root_envfn_7540B24D.arn}",
+            "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.cloudCounter.name}",
+            "FUNCTION_NAME_2d5b932f": "${aws_lambda_function.memoryfn.arn}",
+            "FUNCTION_NAME_d7a1b8c8": "${aws_lambda_function.envfn.arn}",
             "WING_FUNCTION_NAME": "Handler-c8bf8232",
             "WING_TARGET": "tf-aws"
           }
@@ -283,10 +277,10 @@ module.exports = function({ c, f1, f2 }) {
         "function_name": "Handler-c8bf8232",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.root_testfunctionwithmemoryandfunctionwithenvcanbeinvoked_Handler_IamRole_EFFE5DB4.arn}",
+        "role": "${aws_iam_role.testfunctionwithmemoryandfunctionwithenvcanbeinvoked_Handler_IamRole_8471F020.arn}",
         "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
-        "s3_key": "${aws_s3_object.root_testfunctionwithmemoryandfunctionwithenvcanbeinvoked_Handler_S3Object_1C181B39.key}",
+        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
+        "s3_key": "${aws_s3_object.testfunctionwithmemoryandfunctionwithenvcanbeinvoked_Handler_S3Object_8A751E03.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -295,20 +289,20 @@ module.exports = function({ c, f1, f2 }) {
       }
     },
     "aws_s3_bucket": {
-      "root_Code_02F3C603": {
+      "Code": {
         "//": {
           "metadata": {
             "path": "root/Default/Code",
-            "uniqueId": "root_Code_02F3C603"
+            "uniqueId": "Code"
           }
         },
         "bucket_prefix": "code-c84a50b1-"
       },
-      "root_cloudBucket_4F3C4F53": {
+      "cloudBucket": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/cloud.Bucket/Default",
-            "uniqueId": "root_cloudBucket_4F3C4F53"
+            "uniqueId": "cloudBucket"
           }
         },
         "bucket_prefix": "cloud-bucket-c87175e7-",
@@ -316,29 +310,29 @@ module.exports = function({ c, f1, f2 }) {
       }
     },
     "aws_s3_bucket_public_access_block": {
-      "root_cloudBucket_PublicAccessBlock_319C1C2E": {
+      "cloudBucket_PublicAccessBlock_5946CCE8": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/cloud.Bucket/PublicAccessBlock",
-            "uniqueId": "root_cloudBucket_PublicAccessBlock_319C1C2E"
+            "uniqueId": "cloudBucket_PublicAccessBlock_5946CCE8"
           }
         },
         "block_public_acls": true,
         "block_public_policy": true,
-        "bucket": "${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
+        "bucket": "${aws_s3_bucket.cloudBucket.bucket}",
         "ignore_public_acls": true,
         "restrict_public_buckets": true
       }
     },
     "aws_s3_bucket_server_side_encryption_configuration": {
-      "root_cloudBucket_Encryption_8ED0CD9C": {
+      "cloudBucket_Encryption_77B6AEEF": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/cloud.Bucket/Encryption",
-            "uniqueId": "root_cloudBucket_Encryption_8ED0CD9C"
+            "uniqueId": "cloudBucket_Encryption_77B6AEEF"
           }
         },
-        "bucket": "${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
+        "bucket": "${aws_s3_bucket.cloudBucket.bucket}",
         "rule": [
           {
             "apply_server_side_encryption_by_default": {
@@ -349,36 +343,36 @@ module.exports = function({ c, f1, f2 }) {
       }
     },
     "aws_s3_object": {
-      "root_envfn_S3Object_CCCD24F3": {
+      "envfn_S3Object_0080F00E": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/env fn/S3Object",
-            "uniqueId": "root_envfn_S3Object_CCCD24F3"
+            "uniqueId": "envfn_S3Object_0080F00E"
           }
         },
-        "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
+        "bucket": "${aws_s3_bucket.Code.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       },
-      "root_memoryfn_S3Object_77D2B335": {
+      "memoryfn_S3Object_3B51C445": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/memory fn/S3Object",
-            "uniqueId": "root_memoryfn_S3Object_77D2B335"
+            "uniqueId": "memoryfn_S3Object_3B51C445"
           }
         },
-        "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
+        "bucket": "${aws_s3_bucket.Code.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       },
-      "root_testfunctionwithmemoryandfunctionwithenvcanbeinvoked_Handler_S3Object_1C181B39": {
+      "testfunctionwithmemoryandfunctionwithenvcanbeinvoked_Handler_S3Object_8A751E03": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:function with memory and function with env can be invoked/Handler/S3Object",
-            "uniqueId": "root_testfunctionwithmemoryandfunctionwithenvcanbeinvoked_Handler_S3Object_1C181B39"
+            "uniqueId": "testfunctionwithmemoryandfunctionwithenvcanbeinvoked_Handler_S3Object_8A751E03"
           }
         },
-        "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
+        "bucket": "${aws_s3_bucket.Code.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       }
@@ -402,15 +396,13 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
         this.display.hidden = true;
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const c_client = context._lift(c);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            c: ${c_client},
+          require("./inflight.$Closure1.js")({
+            $c: ${context._lift(c)},
           })
         `);
       }
@@ -426,9 +418,6 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure1._registerBindObject(c, host, []);
-        }
         if (ops.includes("handle")) {
           $Closure1._registerBindObject(c, host, ["inc"]);
         }
@@ -438,15 +427,13 @@ class $Root extends $stdlib.std.Resource {
     class $Closure2 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
         this.display.hidden = true;
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure2.js";
-        const c_client = context._lift(c);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            c: ${c_client},
+          require("./inflight.$Closure2.js")({
+            $c: ${context._lift(c)},
           })
         `);
       }
@@ -462,9 +449,6 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure2._registerBindObject(c, host, []);
-        }
         if (ops.includes("handle")) {
           $Closure2._registerBindObject(c, host, ["inc"]);
         }
@@ -474,19 +458,15 @@ class $Root extends $stdlib.std.Resource {
     class $Closure3 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
         this.display.hidden = true;
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure3.js";
-        const c_client = context._lift(c);
-        const f1_client = context._lift(f1);
-        const f2_client = context._lift(f2);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            c: ${c_client},
-            f1: ${f1_client},
-            f2: ${f2_client},
+          require("./inflight.$Closure3.js")({
+            $c: ${context._lift(c)},
+            $f1: ${context._lift(f1)},
+            $f2: ${context._lift(f2)},
           })
         `);
       }
@@ -502,11 +482,6 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure3._registerBindObject(c, host, []);
-          $Closure3._registerBindObject(f1, host, []);
-          $Closure3._registerBindObject(f2, host, []);
-        }
         if (ops.includes("handle")) {
           $Closure3._registerBindObject(c, host, ["peek"]);
           $Closure3._registerBindObject(f1, host, ["invoke"]);
@@ -520,12 +495,10 @@ class $Root extends $stdlib.std.Resource {
     const f1 = this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"memory fn",new $Closure1(this,"$Closure1"),{
     "memory": 128,}
     );
-    const f2 = this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"env fn",new $Closure2(this,"$Closure2"),{
-    "env": Object.freeze({"catName":"Tion"}),}
-    );
+    const f2 = this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"env fn",new $Closure2(this,"$Closure2"),{ env: Object.freeze({"catName":"Tion"}) });
     (f2.addEnvironment("catAge","2"));
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '((f2.env)["catAge"] === "2")'`)})(((f2.env)["catAge"] === "2"))};
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '((f2.env)["catName"] === "Tion")'`)})(((f2.env)["catName"] === "Tion"))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: f2.env.get(\"catAge\") == \"2\"")})(((f2.env)["catAge"] === "2"))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: f2.env.get(\"catName\") == \"Tion\"")})(((f2.env)["catName"] === "Tion"))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:function with memory and function with env can be invoked",new $Closure3(this,"$Closure3"));
   }
 }

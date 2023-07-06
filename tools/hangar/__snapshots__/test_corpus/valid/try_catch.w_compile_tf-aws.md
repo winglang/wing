@@ -7,7 +7,7 @@
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.2"
+      "version": "0.17.0"
     },
     "outputs": {
       "root": {
@@ -49,14 +49,14 @@ class $Root extends $stdlib.std.Resource {
     }
     catch ($error_e) {
       const e = $error_e.message;
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(e === "hello")'`)})((e === "hello"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: e == \"hello\"")})((e === "hello"))};
       x = "caught";
     }
     finally {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(x === "caught")'`)})((x === "caught"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: x == \"caught\"")})((x === "caught"))};
       x = "finally";
     }
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '(x === "finally")'`)})((x === "finally"))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: x == \"finally\"")})((x === "finally"))};
     try {
       x = "I got here";
     }
@@ -65,10 +65,10 @@ class $Root extends $stdlib.std.Resource {
       x = "caught";
     }
     finally {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(x === "I got here")'`)})((x === "I got here"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: x == \"I got here\"")})((x === "I got here"))};
       x = "finally";
     }
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '(x === "finally")'`)})((x === "finally"))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: x == \"finally\"")})((x === "finally"))};
     try {
       try {
         {((msg) => {throw new Error(msg)})("hello")};
@@ -76,7 +76,7 @@ class $Root extends $stdlib.std.Resource {
       finally {
         x = "finally with no catch";
       }
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '(x === "finally with no catch")'`)})((x === "finally with no catch"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: x == \"finally with no catch\"")})((x === "finally with no catch"))};
     }
     catch {
     }
@@ -85,54 +85,29 @@ class $Root extends $stdlib.std.Resource {
     finally {
       x = "finally with no catch and no exception";
     }
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '(x === "finally with no catch and no exception")'`)})((x === "finally with no catch and no exception"))};
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '((( () =>  {
+    {((cond) => {if (!cond) throw new Error("assertion failed: x == \"finally with no catch and no exception\"")})((x === "finally with no catch and no exception"))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: (():num => { try {} finally {return 1;}})() == 1")})((((() => {
       try {
       }
       finally {
         return 1;
       }
-    }
-    )()) === 1)'`)})(((( () =>  {
-      try {
-      }
-      finally {
-        return 1;
-      }
-    }
-    )()) === 1))};
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '((( () =>  {
+    })()) === 1))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: (():num => { try {throw(\"\");} catch {return 2;}})() == 2")})((((() => {
       try {
         {((msg) => {throw new Error(msg)})("")};
       }
       catch {
         return 2;
       }
-    }
-    )()) === 2)'`)})(((( () =>  {
-      try {
-        {((msg) => {throw new Error(msg)})("")};
-      }
-      catch {
-        return 2;
-      }
-    }
-    )()) === 2))};
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '((( () =>  {
+    })()) === 2))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: (():num => { try {return 3;} finally {}})() == 3")})((((() => {
       try {
         return 3;
       }
       finally {
       }
-    }
-    )()) === 3)'`)})(((( () =>  {
-      try {
-        return 3;
-      }
-      finally {
-      }
-    }
-    )()) === 3))};
+    })()) === 3))};
   }
 }
 class $App extends $AppBase {

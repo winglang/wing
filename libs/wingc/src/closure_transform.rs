@@ -7,7 +7,7 @@ use crate::{
 	},
 	diagnostic::WingSpan,
 	fold::{self, Fold},
-	type_check::HANDLE_METHOD_NAME,
+	type_check::{CLASS_INFLIGHT_INIT_NAME, CLASS_INIT_NAME, CLOSURE_CLASS_HANDLE_METHOD},
 };
 
 pub const CLOSURE_CLASS_PREFIX: &str = "$Closure";
@@ -135,23 +135,25 @@ impl Fold for ClosureTransformer {
 					span: WingSpan::default(),
 				};
 				let handle_name = Symbol {
-					name: HANDLE_METHOD_NAME.to_string(),
+					name: CLOSURE_CLASS_HANDLE_METHOD.to_string(),
+					span: WingSpan::default(),
+				};
+
+				let class_udt = UserDefinedType {
+					root: new_class_name.clone(),
+					fields: vec![],
 					span: WingSpan::default(),
 				};
 
 				let class_type_annotation = TypeAnnotation {
-					kind: TypeAnnotationKind::UserDefined(UserDefinedType {
-						root: new_class_name.clone(),
-						fields: vec![],
-						span: WingSpan::default(),
-					}),
+					kind: TypeAnnotationKind::UserDefined(class_udt.clone()),
 					span: WingSpan::default(),
 				};
 
 				let class_fields: Vec<ClassField> = vec![];
 				let class_init_params: Vec<FunctionParameter> = vec![];
 
-				let mut new_func_def = if self.inside_scope_with_this {
+				let new_func_def = if self.inside_scope_with_this {
 					// If we are inside a class, we transform inflight closures with an extra
 					// `let __parent_this_${CLOSURE_COUNT} = this;` statement before the class definition, and replace references
 					// to `this` with `__parent_this_${CLOSURE_COUNT}` so that they can access the parent class's fields.
@@ -166,9 +168,16 @@ impl Fold for ClosureTransformer {
 					func_def
 				};
 
-				// Anonymous functions are always static -- since the function code is now an instance method on a class,
-				// we need to set this to false.
-				new_func_def.is_static = false;
+				let new_func_def = FunctionDefinition {
+					name: Some(handle_name.clone()),
+					body: new_func_def.body,
+					signature: new_func_def.signature,
+					span: new_func_def.span,
+
+					// Anonymous functions are always static -- since the function code is now an instance method on a class,
+					// we need to set this to false.
+					is_static: false,
+				};
 
 				// class_init_body :=
 				// ```
@@ -177,21 +186,24 @@ impl Fold for ClosureTransformer {
 				let class_init_body = vec![Stmt {
 					idx: 0,
 					kind: StmtKind::Assignment {
-						variable: Reference::InstanceMember {
-							object: Box::new(Expr::new(
-								ExprKind::Reference(Reference::InstanceMember {
-									object: Box::new(Expr::new(
-										ExprKind::Reference(Reference::Identifier(Symbol::new("this", WingSpan::default()))),
-										WingSpan::default(),
-									)),
-									property: Symbol::new("display", WingSpan::default()),
-									optional_accessor: false,
-								}),
-								WingSpan::default(),
-							)),
-							property: Symbol::new("hidden", WingSpan::default()),
-							optional_accessor: false,
-						},
+						variable: Expr::new(
+							ExprKind::Reference(Reference::InstanceMember {
+								object: Box::new(Expr::new(
+									ExprKind::Reference(Reference::InstanceMember {
+										object: Box::new(Expr::new(
+											ExprKind::Reference(Reference::Identifier(Symbol::new("this", WingSpan::default()))),
+											WingSpan::default(),
+										)),
+										property: Symbol::new("display", WingSpan::default()),
+										optional_accessor: false,
+									}),
+									WingSpan::default(),
+								)),
+								property: Symbol::new("hidden", WingSpan::default()),
+								optional_accessor: false,
+							}),
+							WingSpan::default(),
+						),
 						value: Expr::new(ExprKind::Literal(Literal::Boolean(true)), WingSpan::default()),
 					},
 					span: WingSpan::default(),
@@ -235,6 +247,7 @@ impl Fold for ClosureTransformer {
 						name: new_class_name.clone(),
 						phase: Phase::Preflight,
 						initializer: FunctionDefinition {
+							name: Some(CLASS_INIT_NAME.into()),
 							signature: FunctionSignature {
 								parameters: class_init_params,
 								return_type: Box::new(class_type_annotation.clone()),
@@ -249,6 +262,7 @@ impl Fold for ClosureTransformer {
 						parent: None,
 						methods: vec![(handle_name.clone(), new_func_def)],
 						inflight_initializer: FunctionDefinition {
+							name: Some(CLASS_INFLIGHT_INIT_NAME.into()),
 							signature: FunctionSignature {
 								parameters: vec![],
 								return_type: Box::new(TypeAnnotation {
@@ -272,15 +286,16 @@ impl Fold for ClosureTransformer {
 				// ```
 				let new_class_instance = Expr::new(
 					ExprKind::New {
-						class: class_type_annotation,
+						class: Box::new(class_udt.to_expression()),
 						arg_list: ArgList {
 							named_args: IndexMap::new(),
 							pos_args: vec![],
+							span: WingSpan::default(),
 						},
 						obj_id: None,
 						obj_scope: None,
 					},
-					WingSpan::default(),
+					expr.span.clone(), // <<-- span of original expression
 				);
 
 				self.class_statements.push(class_def);
@@ -332,7 +347,9 @@ impl<'a> Fold for RenameThisTransformer<'a> {
 					Reference::Identifier(ident)
 				}
 			}
-			Reference::InstanceMember { .. } | Reference::TypeMember { .. } => fold::fold_reference(self, node),
+			Reference::InstanceMember { .. } | Reference::TypeMember { .. } | Reference::TypeReference(_) => {
+				fold::fold_reference(self, node)
+			}
 		}
 	}
 }

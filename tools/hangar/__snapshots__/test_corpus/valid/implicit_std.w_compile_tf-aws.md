@@ -7,7 +7,7 @@
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.2"
+      "version": "0.17.0"
     },
     "outputs": {
       "root": {
@@ -44,8 +44,8 @@ class $Root extends $stdlib.std.Resource {
     super(scope, id);
     const d = (std.Duration.fromMinutes(5));
     const n = ((args) => { if (isNaN(args)) {throw new Error("unable to parse \"" + args + "\" as a number")}; return parseInt(args) })("12");
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '(d.seconds === (5 * 60))'`)})((d.seconds === (5 * 60)))};
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '(n === 12)'`)})((n === 12))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: d.seconds == 5 * 60")})((d.seconds === (5 * 60)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: n == 12")})((n === 12))};
   }
 }
 class $App extends $AppBase {

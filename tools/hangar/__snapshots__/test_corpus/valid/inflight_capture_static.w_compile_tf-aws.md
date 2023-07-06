@@ -2,17 +2,15 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ Preflight }) {
+module.exports = function({ $Preflight }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await Preflight.staticMethod(123)) === "foo-123")'`)})(((await Preflight.staticMethod(123)) === "foo-123"))};
+    async handle() {
+      {((cond) => {if (!cond) throw new Error("assertion failed: Preflight.staticMethod(123) == \"foo-123\"")})(((await $Preflight.staticMethod(123)) === "foo-123"))};
     }
   }
   return $Closure1;
@@ -22,17 +20,15 @@ module.exports = function({ Preflight }) {
 
 ## inflight.$Closure2.js
 ```js
-module.exports = function({ OuterInflight }) {
+module.exports = function({ $OuterInflight }) {
   class $Closure2 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await OuterInflight.staticMethod("hello")) === 5)'`)})(((await OuterInflight.staticMethod("hello")) === 5))};
+    async handle() {
+      {((cond) => {if (!cond) throw new Error("assertion failed: OuterInflight.staticMethod(\"hello\") == 5")})(((await $OuterInflight.staticMethod("hello")) === 5))};
     }
   }
   return $Closure2;
@@ -49,11 +45,13 @@ module.exports = function({  }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      const InnerInflight = require("./inflight.InnerInflight.js")({});
-      {((cond) => {if (!cond) throw new Error(`assertion failed: '((await InnerInflight.staticMethod()) === "hello")'`)})(((await InnerInflight.staticMethod()) === "hello"))};
+    async handle() {
+      class InnerInflight {
+        static async staticMethod() {
+          return "hello";
+        }
+      }
+      {((cond) => {if (!cond) throw new Error("assertion failed: InnerInflight.staticMethod() == \"hello\"")})(((await InnerInflight.staticMethod()) === "hello"))};
     }
   }
   return $Closure3;
@@ -63,24 +61,22 @@ module.exports = function({  }) {
 
 ## inflight.$Closure4.js
 ```js
-module.exports = function({ util_Util }) {
+module.exports = function({ $util_Util }) {
   class $Closure4 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
-    async handle()  {
+    async handle() {
       {
-        const $IF_LET_VALUE = (await util_Util.tryEnv("WING_TARGET"));
+        const $IF_LET_VALUE = (await $util_Util.tryEnv("WING_TARGET"));
         if ($IF_LET_VALUE != undefined) {
           const target = $IF_LET_VALUE;
-          {console.log(`WING_TARGET=${target}`)};
+          {console.log(String.raw({ raw: ["WING_TARGET=", ""] }, target))};
         }
         else {
-          {((cond) => {if (!cond) throw new Error(`assertion failed: 'false'`)})(false)};
+          {((cond) => {if (!cond) throw new Error("assertion failed: false /* target not defined*/")})(false)};
         }
       }
     }
@@ -90,28 +86,11 @@ module.exports = function({ util_Util }) {
 
 ```
 
-## inflight.InnerInflight.js
-```js
-module.exports = function({  }) {
-  class InnerInflight {
-     constructor()  {
-    }
-    static async staticMethod()  {
-      return "hello";
-    }
-  }
-  return InnerInflight;
-}
-
-```
-
 ## inflight.OuterInflight.js
 ```js
 module.exports = function({  }) {
   class OuterInflight {
-     constructor()  {
-    }
-    static async staticMethod(b)  {
+    static async staticMethod(b) {
       return b.length;
     }
   }
@@ -126,10 +105,8 @@ module.exports = function({  }) {
   class Preflight {
     constructor({  }) {
     }
-    async $inflight_init()  {
-    }
-    static async staticMethod(a)  {
-      return `foo-${a}`;
+    static async staticMethod(a) {
+      return String.raw({ raw: ["foo-", ""] }, a);
     }
   }
   return Preflight;
@@ -144,7 +121,7 @@ module.exports = function({  }) {
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.2"
+      "version": "0.17.0"
     },
     "outputs": {
       "root": {
@@ -158,7 +135,7 @@ module.exports = function({  }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:call static method of preflight\",\"${aws_lambda_function.root_testcallstaticmethodofpreflight_Handler_5B448807.arn}\"],[\"root/Default/Default/test:call static method of an outer inflight class\",\"${aws_lambda_function.root_testcallstaticmethodofanouterinflightclass_Handler_1A423447.arn}\"],[\"root/Default/Default/test:call static method of an inner inflight class\",\"${aws_lambda_function.root_testcallstaticmethodofaninnerinflightclass_Handler_E8B7C24A.arn}\"],[\"root/Default/Default/test:call static method of a namespaced type\",\"${aws_lambda_function.root_testcallstaticmethodofanamespacedtype_Handler_AEBE56F1.arn}\"]]"
+      "value": "[[\"root/Default/Default/test:call static method of preflight\",\"${aws_lambda_function.testcallstaticmethodofpreflight_Handler_8B40B9DA.arn}\"],[\"root/Default/Default/test:call static method of an outer inflight class\",\"${aws_lambda_function.testcallstaticmethodofanouterinflightclass_Handler_2DD5B79F.arn}\"],[\"root/Default/Default/test:call static method of an inner inflight class\",\"${aws_lambda_function.testcallstaticmethodofaninnerinflightclass_Handler_2C5AF32C.arn}\"],[\"root/Default/Default/test:call static method of a namespaced type\",\"${aws_lambda_function.testcallstaticmethodofanamespacedtype_Handler_482915F1.arn}\"]]"
     }
   },
   "provider": {
@@ -168,133 +145,133 @@ module.exports = function({  }) {
   },
   "resource": {
     "aws_iam_role": {
-      "root_testcallstaticmethodofanamespacedtype_Handler_IamRole_0A29293B": {
+      "testcallstaticmethodofanamespacedtype_Handler_IamRole_25705033": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:call static method of a namespaced type/Handler/IamRole",
-            "uniqueId": "root_testcallstaticmethodofanamespacedtype_Handler_IamRole_0A29293B"
+            "uniqueId": "testcallstaticmethodofanamespacedtype_Handler_IamRole_25705033"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       },
-      "root_testcallstaticmethodofaninnerinflightclass_Handler_IamRole_440C387C": {
+      "testcallstaticmethodofaninnerinflightclass_Handler_IamRole_CDAA9C7A": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:call static method of an inner inflight class/Handler/IamRole",
-            "uniqueId": "root_testcallstaticmethodofaninnerinflightclass_Handler_IamRole_440C387C"
+            "uniqueId": "testcallstaticmethodofaninnerinflightclass_Handler_IamRole_CDAA9C7A"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       },
-      "root_testcallstaticmethodofanouterinflightclass_Handler_IamRole_D329D2D2": {
+      "testcallstaticmethodofanouterinflightclass_Handler_IamRole_0FC1D765": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:call static method of an outer inflight class/Handler/IamRole",
-            "uniqueId": "root_testcallstaticmethodofanouterinflightclass_Handler_IamRole_D329D2D2"
+            "uniqueId": "testcallstaticmethodofanouterinflightclass_Handler_IamRole_0FC1D765"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       },
-      "root_testcallstaticmethodofpreflight_Handler_IamRole_22C5CECD": {
+      "testcallstaticmethodofpreflight_Handler_IamRole_E8EA54F9": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:call static method of preflight/Handler/IamRole",
-            "uniqueId": "root_testcallstaticmethodofpreflight_Handler_IamRole_22C5CECD"
+            "uniqueId": "testcallstaticmethodofpreflight_Handler_IamRole_E8EA54F9"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
-      "root_testcallstaticmethodofanamespacedtype_Handler_IamRolePolicy_50C4E57F": {
+      "testcallstaticmethodofanamespacedtype_Handler_IamRolePolicy_12949151": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:call static method of a namespaced type/Handler/IamRolePolicy",
-            "uniqueId": "root_testcallstaticmethodofanamespacedtype_Handler_IamRolePolicy_50C4E57F"
+            "uniqueId": "testcallstaticmethodofanamespacedtype_Handler_IamRolePolicy_12949151"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
-        "role": "${aws_iam_role.root_testcallstaticmethodofanamespacedtype_Handler_IamRole_0A29293B.name}"
+        "role": "${aws_iam_role.testcallstaticmethodofanamespacedtype_Handler_IamRole_25705033.name}"
       },
-      "root_testcallstaticmethodofaninnerinflightclass_Handler_IamRolePolicy_FE01820C": {
+      "testcallstaticmethodofaninnerinflightclass_Handler_IamRolePolicy_C6A53FA8": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:call static method of an inner inflight class/Handler/IamRolePolicy",
-            "uniqueId": "root_testcallstaticmethodofaninnerinflightclass_Handler_IamRolePolicy_FE01820C"
+            "uniqueId": "testcallstaticmethodofaninnerinflightclass_Handler_IamRolePolicy_C6A53FA8"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
-        "role": "${aws_iam_role.root_testcallstaticmethodofaninnerinflightclass_Handler_IamRole_440C387C.name}"
+        "role": "${aws_iam_role.testcallstaticmethodofaninnerinflightclass_Handler_IamRole_CDAA9C7A.name}"
       },
-      "root_testcallstaticmethodofanouterinflightclass_Handler_IamRolePolicy_D50A44BD": {
+      "testcallstaticmethodofanouterinflightclass_Handler_IamRolePolicy_38ABBE2B": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:call static method of an outer inflight class/Handler/IamRolePolicy",
-            "uniqueId": "root_testcallstaticmethodofanouterinflightclass_Handler_IamRolePolicy_D50A44BD"
+            "uniqueId": "testcallstaticmethodofanouterinflightclass_Handler_IamRolePolicy_38ABBE2B"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
-        "role": "${aws_iam_role.root_testcallstaticmethodofanouterinflightclass_Handler_IamRole_D329D2D2.name}"
+        "role": "${aws_iam_role.testcallstaticmethodofanouterinflightclass_Handler_IamRole_0FC1D765.name}"
       },
-      "root_testcallstaticmethodofpreflight_Handler_IamRolePolicy_9DD7990E": {
+      "testcallstaticmethodofpreflight_Handler_IamRolePolicy_D3497043": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:call static method of preflight/Handler/IamRolePolicy",
-            "uniqueId": "root_testcallstaticmethodofpreflight_Handler_IamRolePolicy_9DD7990E"
+            "uniqueId": "testcallstaticmethodofpreflight_Handler_IamRolePolicy_D3497043"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
-        "role": "${aws_iam_role.root_testcallstaticmethodofpreflight_Handler_IamRole_22C5CECD.name}"
+        "role": "${aws_iam_role.testcallstaticmethodofpreflight_Handler_IamRole_E8EA54F9.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
-      "root_testcallstaticmethodofanamespacedtype_Handler_IamRolePolicyAttachment_37AD44B3": {
+      "testcallstaticmethodofanamespacedtype_Handler_IamRolePolicyAttachment_ECE71D89": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:call static method of a namespaced type/Handler/IamRolePolicyAttachment",
-            "uniqueId": "root_testcallstaticmethodofanamespacedtype_Handler_IamRolePolicyAttachment_37AD44B3"
+            "uniqueId": "testcallstaticmethodofanamespacedtype_Handler_IamRolePolicyAttachment_ECE71D89"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.root_testcallstaticmethodofanamespacedtype_Handler_IamRole_0A29293B.name}"
+        "role": "${aws_iam_role.testcallstaticmethodofanamespacedtype_Handler_IamRole_25705033.name}"
       },
-      "root_testcallstaticmethodofaninnerinflightclass_Handler_IamRolePolicyAttachment_13C700AD": {
+      "testcallstaticmethodofaninnerinflightclass_Handler_IamRolePolicyAttachment_41BCA0B2": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:call static method of an inner inflight class/Handler/IamRolePolicyAttachment",
-            "uniqueId": "root_testcallstaticmethodofaninnerinflightclass_Handler_IamRolePolicyAttachment_13C700AD"
+            "uniqueId": "testcallstaticmethodofaninnerinflightclass_Handler_IamRolePolicyAttachment_41BCA0B2"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.root_testcallstaticmethodofaninnerinflightclass_Handler_IamRole_440C387C.name}"
+        "role": "${aws_iam_role.testcallstaticmethodofaninnerinflightclass_Handler_IamRole_CDAA9C7A.name}"
       },
-      "root_testcallstaticmethodofanouterinflightclass_Handler_IamRolePolicyAttachment_8F3C3D3E": {
+      "testcallstaticmethodofanouterinflightclass_Handler_IamRolePolicyAttachment_8D3E1518": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:call static method of an outer inflight class/Handler/IamRolePolicyAttachment",
-            "uniqueId": "root_testcallstaticmethodofanouterinflightclass_Handler_IamRolePolicyAttachment_8F3C3D3E"
+            "uniqueId": "testcallstaticmethodofanouterinflightclass_Handler_IamRolePolicyAttachment_8D3E1518"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.root_testcallstaticmethodofanouterinflightclass_Handler_IamRole_D329D2D2.name}"
+        "role": "${aws_iam_role.testcallstaticmethodofanouterinflightclass_Handler_IamRole_0FC1D765.name}"
       },
-      "root_testcallstaticmethodofpreflight_Handler_IamRolePolicyAttachment_CCA0F261": {
+      "testcallstaticmethodofpreflight_Handler_IamRolePolicyAttachment_65F94B62": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:call static method of preflight/Handler/IamRolePolicyAttachment",
-            "uniqueId": "root_testcallstaticmethodofpreflight_Handler_IamRolePolicyAttachment_CCA0F261"
+            "uniqueId": "testcallstaticmethodofpreflight_Handler_IamRolePolicyAttachment_65F94B62"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.root_testcallstaticmethodofpreflight_Handler_IamRole_22C5CECD.name}"
+        "role": "${aws_iam_role.testcallstaticmethodofpreflight_Handler_IamRole_E8EA54F9.name}"
       }
     },
     "aws_lambda_function": {
-      "root_testcallstaticmethodofanamespacedtype_Handler_AEBE56F1": {
+      "testcallstaticmethodofanamespacedtype_Handler_482915F1": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:call static method of a namespaced type/Handler/Default",
-            "uniqueId": "root_testcallstaticmethodofanamespacedtype_Handler_AEBE56F1"
+            "uniqueId": "testcallstaticmethodofanamespacedtype_Handler_482915F1"
           }
         },
         "environment": {
@@ -306,21 +283,21 @@ module.exports = function({  }) {
         "function_name": "Handler-c808c556",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.root_testcallstaticmethodofanamespacedtype_Handler_IamRole_0A29293B.arn}",
+        "role": "${aws_iam_role.testcallstaticmethodofanamespacedtype_Handler_IamRole_25705033.arn}",
         "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
-        "s3_key": "${aws_s3_object.root_testcallstaticmethodofanamespacedtype_Handler_S3Object_996E2B82.key}",
+        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
+        "s3_key": "${aws_s3_object.testcallstaticmethodofanamespacedtype_Handler_S3Object_F7E5940D.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
           "subnet_ids": []
         }
       },
-      "root_testcallstaticmethodofaninnerinflightclass_Handler_E8B7C24A": {
+      "testcallstaticmethodofaninnerinflightclass_Handler_2C5AF32C": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:call static method of an inner inflight class/Handler/Default",
-            "uniqueId": "root_testcallstaticmethodofaninnerinflightclass_Handler_E8B7C24A"
+            "uniqueId": "testcallstaticmethodofaninnerinflightclass_Handler_2C5AF32C"
           }
         },
         "environment": {
@@ -332,21 +309,21 @@ module.exports = function({  }) {
         "function_name": "Handler-c8d913d8",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.root_testcallstaticmethodofaninnerinflightclass_Handler_IamRole_440C387C.arn}",
+        "role": "${aws_iam_role.testcallstaticmethodofaninnerinflightclass_Handler_IamRole_CDAA9C7A.arn}",
         "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
-        "s3_key": "${aws_s3_object.root_testcallstaticmethodofaninnerinflightclass_Handler_S3Object_A3ED9F15.key}",
+        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
+        "s3_key": "${aws_s3_object.testcallstaticmethodofaninnerinflightclass_Handler_S3Object_054F3843.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
           "subnet_ids": []
         }
       },
-      "root_testcallstaticmethodofanouterinflightclass_Handler_1A423447": {
+      "testcallstaticmethodofanouterinflightclass_Handler_2DD5B79F": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:call static method of an outer inflight class/Handler/Default",
-            "uniqueId": "root_testcallstaticmethodofanouterinflightclass_Handler_1A423447"
+            "uniqueId": "testcallstaticmethodofanouterinflightclass_Handler_2DD5B79F"
           }
         },
         "environment": {
@@ -358,21 +335,21 @@ module.exports = function({  }) {
         "function_name": "Handler-c8dbdf1b",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.root_testcallstaticmethodofanouterinflightclass_Handler_IamRole_D329D2D2.arn}",
+        "role": "${aws_iam_role.testcallstaticmethodofanouterinflightclass_Handler_IamRole_0FC1D765.arn}",
         "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
-        "s3_key": "${aws_s3_object.root_testcallstaticmethodofanouterinflightclass_Handler_S3Object_074F10E0.key}",
+        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
+        "s3_key": "${aws_s3_object.testcallstaticmethodofanouterinflightclass_Handler_S3Object_1DB15ACB.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
           "subnet_ids": []
         }
       },
-      "root_testcallstaticmethodofpreflight_Handler_5B448807": {
+      "testcallstaticmethodofpreflight_Handler_8B40B9DA": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:call static method of preflight/Handler/Default",
-            "uniqueId": "root_testcallstaticmethodofpreflight_Handler_5B448807"
+            "uniqueId": "testcallstaticmethodofpreflight_Handler_8B40B9DA"
           }
         },
         "environment": {
@@ -384,10 +361,10 @@ module.exports = function({  }) {
         "function_name": "Handler-c8e286c0",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.root_testcallstaticmethodofpreflight_Handler_IamRole_22C5CECD.arn}",
+        "role": "${aws_iam_role.testcallstaticmethodofpreflight_Handler_IamRole_E8EA54F9.arn}",
         "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
-        "s3_key": "${aws_s3_object.root_testcallstaticmethodofpreflight_Handler_S3Object_74E016B5.key}",
+        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
+        "s3_key": "${aws_s3_object.testcallstaticmethodofpreflight_Handler_S3Object_4DFBB09F.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -396,58 +373,58 @@ module.exports = function({  }) {
       }
     },
     "aws_s3_bucket": {
-      "root_Code_02F3C603": {
+      "Code": {
         "//": {
           "metadata": {
             "path": "root/Default/Code",
-            "uniqueId": "root_Code_02F3C603"
+            "uniqueId": "Code"
           }
         },
         "bucket_prefix": "code-c84a50b1-"
       }
     },
     "aws_s3_object": {
-      "root_testcallstaticmethodofanamespacedtype_Handler_S3Object_996E2B82": {
+      "testcallstaticmethodofanamespacedtype_Handler_S3Object_F7E5940D": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:call static method of a namespaced type/Handler/S3Object",
-            "uniqueId": "root_testcallstaticmethodofanamespacedtype_Handler_S3Object_996E2B82"
+            "uniqueId": "testcallstaticmethodofanamespacedtype_Handler_S3Object_F7E5940D"
           }
         },
-        "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
+        "bucket": "${aws_s3_bucket.Code.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       },
-      "root_testcallstaticmethodofaninnerinflightclass_Handler_S3Object_A3ED9F15": {
+      "testcallstaticmethodofaninnerinflightclass_Handler_S3Object_054F3843": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:call static method of an inner inflight class/Handler/S3Object",
-            "uniqueId": "root_testcallstaticmethodofaninnerinflightclass_Handler_S3Object_A3ED9F15"
+            "uniqueId": "testcallstaticmethodofaninnerinflightclass_Handler_S3Object_054F3843"
           }
         },
-        "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
+        "bucket": "${aws_s3_bucket.Code.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       },
-      "root_testcallstaticmethodofanouterinflightclass_Handler_S3Object_074F10E0": {
+      "testcallstaticmethodofanouterinflightclass_Handler_S3Object_1DB15ACB": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:call static method of an outer inflight class/Handler/S3Object",
-            "uniqueId": "root_testcallstaticmethodofanouterinflightclass_Handler_S3Object_074F10E0"
+            "uniqueId": "testcallstaticmethodofanouterinflightclass_Handler_S3Object_1DB15ACB"
           }
         },
-        "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
+        "bucket": "${aws_s3_bucket.Code.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       },
-      "root_testcallstaticmethodofpreflight_Handler_S3Object_74E016B5": {
+      "testcallstaticmethodofpreflight_Handler_S3Object_4DFBB09F": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:call static method of preflight/Handler/S3Object",
-            "uniqueId": "root_testcallstaticmethodofpreflight_Handler_S3Object_74E016B5"
+            "uniqueId": "testcallstaticmethodofpreflight_Handler_S3Object_4DFBB09F"
           }
         },
-        "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
+        "bucket": "${aws_s3_bucket.Code.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       }
@@ -470,12 +447,11 @@ class $Root extends $stdlib.std.Resource {
     class Preflight extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("staticMethod");
+        this._addInflightOps("staticMethod", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.Preflight.js";
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.Preflight.js")({
           })
         `);
       }
@@ -490,26 +466,15 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-        }
-        super._registerBind(host, ops);
-      }
-      static _registerTypeBind(host, ops) {
-        if (ops.includes("staticMethod")) {
-        }
-        super._registerTypeBind(host, ops);
-      }
     }
     class OuterInflight extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("staticMethod");
+        this._addInflightOps("staticMethod", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.OuterInflight.js";
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.OuterInflight.js")({
           })
         `);
       }
@@ -524,29 +489,17 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-        }
-        super._registerBind(host, ops);
-      }
-      static _registerTypeBind(host, ops) {
-        if (ops.includes("staticMethod")) {
-        }
-        super._registerTypeBind(host, ops);
-      }
     }
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
         this.display.hidden = true;
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const PreflightClient = Preflight._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            Preflight: ${PreflightClient.text},
+          require("./inflight.$Closure1.js")({
+            $Preflight: ${context._lift(Preflight)},
           })
         `);
       }
@@ -562,8 +515,6 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-        }
         if (ops.includes("handle")) {
           $Closure1._registerBindObject(Preflight, host, ["staticMethod"]);
         }
@@ -573,15 +524,13 @@ class $Root extends $stdlib.std.Resource {
     class $Closure2 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
         this.display.hidden = true;
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure2.js";
-        const OuterInflightClient = OuterInflight._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            OuterInflight: ${OuterInflightClient.text},
+          require("./inflight.$Closure2.js")({
+            $OuterInflight: ${context._lift(OuterInflight)},
           })
         `);
       }
@@ -596,24 +545,16 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-        }
-        if (ops.includes("handle")) {
-        }
-        super._registerBind(host, ops);
-      }
     }
     class $Closure3 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
         this.display.hidden = true;
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure3.js";
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.$Closure3.js")({
           })
         `);
       }
@@ -628,26 +569,17 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-        }
-        if (ops.includes("handle")) {
-        }
-        super._registerBind(host, ops);
-      }
     }
     class $Closure4 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle");
         this.display.hidden = true;
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure4.js";
-        const util_UtilClient = util.Util._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            util_Util: ${util_UtilClient.text},
+          require("./inflight.$Closure4.js")({
+            $util_Util: ${context._lift(util.Util)},
           })
         `);
       }
@@ -661,13 +593,6 @@ class $Root extends $stdlib.std.Resource {
             return client;
           })())
         `);
-      }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-        }
-        if (ops.includes("handle")) {
-        }
-        super._registerBind(host, ops);
       }
     }
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:call static method of preflight",new $Closure1(this,"$Closure1"));

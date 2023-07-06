@@ -1,0 +1,91 @@
+name: "Pull Request Mutation"
+
+run-name: "Pull Request Mutation: ${{ github.event.workflow_run.head_branch }}"
+
+on:
+  workflow_run:
+    workflows:
+      - Build
+    types:
+      - completed
+
+concurrency:
+  group: "mutation-${{ github.event.workflow_run.head_branch }}"
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  packages: read
+  statuses: write
+
+jobs:
+  mutate:
+    runs-on: ubuntu-latest
+    # Run if the workflow run is a pull request
+    if: github.event.workflow_run.conclusion == 'failure' && (github.event.workflow_run.head_branch != 'main' || github.event.workflow_run.head_repository.fork)
+    steps:
+      - name: Download artifacts
+        id: download-artifacts
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          github_token: ${{secrets.GITHUB_TOKEN}}
+          run_id: ${{ github.event.workflow_run.id }}
+          name: .+\.diff$
+          name_is_regexp: true
+          if_no_artifact_found: ignore
+          path: patches
+      - uses: marocchino/action-workflow_run-status@54b6e87d6cb552fc5f36dbe9a722a6048725917a
+        if: steps.download-artifacts.outputs.found_artifact == 'true'
+        with:
+          github_token: ${{secrets.GITHUB_TOKEN}}
+      - name: Token check
+        if: steps.download-artifacts.outputs.found_artifact == 'true'
+        run: |
+          if ${{ secrets.MUTATION_TOKEN && 'true' || 'false' }}; then
+            echo "Token available, enabling self mutation"
+            exit 0
+          else
+            echo "Add a MUTATION_TOKEN repository secret with a personal access token to enable self mutation.
+            It requires private repo read/write permissions." >> $GITHUB_STEP_SUMMARY
+            exit 1
+          fi
+      - name: Disable Git Hooks
+        if: steps.download-artifacts.outputs.found_artifact == 'true'
+        run: |
+          git config --global core.hooksPath /dev/null
+      - name: Checkout Workflow Branch
+        if: steps.download-artifacts.outputs.found_artifact == 'true'
+        uses: actions/checkout@v3
+        with:
+          token: ${{secrets.MUTATION_TOKEN}}
+          ref: ${{ github.event.workflow_run.head_branch }}
+          repository: ${{ github.event.workflow_run.head_repository.full_name }}
+          path: repo
+      - id: self_mutation
+        if: steps.download-artifacts.outputs.found_artifact == 'true'
+        name: Apply downloaded pathes
+        working-directory: repo
+        run: |
+          for f in $(find ../patches/*.diff/*.diff); do
+            echo "Applying $f"
+            git apply --binary $f
+            if [ $? -eq 0 ]; then
+              echo "Patch applied successfully"
+              rm $f
+            else
+              echo "Patch failed to apply"
+              cat $f
+              exit 1
+            fi
+          done
+      - name: Push changes
+        if: steps.download-artifacts.outputs.found_artifact == 'true'
+        working-directory: repo
+        env:
+          HEAD_REF: ${{ github.event.workflow_run.head_branch }}
+        run: |
+          git config user.name "monada-bot[bot]"
+          git config user.email "monabot@monada.co"
+          git add --all
+          git commit -s -m "chore: self mutation"
+          git push origin HEAD:$HEAD_REF

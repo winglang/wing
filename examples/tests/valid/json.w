@@ -51,8 +51,7 @@ assert(someJson.get("x") == someNumber);
 someJson.set("x", 111);
 assert(someJson.get("x") == 111);
 
-// assign Map to Json
-let x: Json = {cool: "beans"};
+let x: Json = {cool :"beans"};
 
 // Nested Gets and Sets
 let nestedJson = MutJson {
@@ -129,3 +128,74 @@ assert(num.fromJson(thatSuperNestedValue) == 1);
 // Unested Json Arrays
 let unestedJsonArr = Json [1, 2, 3];
 assert(unestedJsonArr.getAt(0) == 1);
+
+
+let jsonElements = Json {
+  strings: {
+    single: "Hello",
+    array: ["Hello", "World", "!"]
+  },
+  numbers: {
+    one: 1,
+    two: 2,
+    three: 3
+  },
+  bools: {
+    t: true,
+    f: false
+  }
+};
+
+if let val = jsonElements.tryGet("strings")?.tryGet("single")?.asStr() {
+  assert(val == "Hello");
+} else {
+  // This should not happen
+  assert(false);
+}
+
+if let vals = jsonElements.tryGet("strings")?.tryGet("array") {
+  // Try getting an index 
+  if let hello = vals.tryGetAt(0) {
+    assert(hello == "Hello");
+  } else {
+    // This should not happen
+    assert(false);
+  }
+} else {
+  // This should not happen
+  assert(false);
+}
+
+if let two = jsonElements.tryGet("numbers")?.tryGet("two")?.tryAsNum() {
+  assert(two + 2 == 4);
+} else {
+  // This should not happen
+  assert(false);
+}
+
+if let truth = jsonElements.tryGet("bools")?.tryGet("t")?.tryAsBool() {
+  assert(truth);
+} else {
+  // This should not happen
+  assert(false);
+}
+
+// tryGet Chains where members are missing
+if let val = jsonElements.tryGet("strings")?.tryGet("non")?.tryGet("existant")?.tryGet("element") {
+  assert(false); // nothing should have been found
+}
+
+// tryGetAt chains with missing members
+if let val = jsonElements.tryGet("cant")?.tryGetAt(1000)?.tryGetAt(42) {
+  assert(false); // nothing should have been found
+}
+// Json keyword is optional
+let notSpecified = {
+  foo: "bar"
+};
+
+assert(notSpecified.get("foo") == "bar");
+
+// Check that empty {} is a Json
+let empty = {};
+assert(Json.has(empty, "something") == false);

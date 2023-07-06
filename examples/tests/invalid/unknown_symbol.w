@@ -31,3 +31,6 @@ class A extends B {
 
 unknown = 1;
 //^ Unknown symbol
+
+let let = 2;
+  //^^^ Reserved word

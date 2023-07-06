@@ -4,10 +4,7 @@
 ```js
 module.exports = function({  }) {
   class Foo {
-    constructor({ SumStr }) {
-      this.SumStr = SumStr;
-    }
-    async $inflight_init()  {
+    constructor({  }) {
     }
   }
   return Foo;
@@ -22,7 +19,7 @@ module.exports = function({  }) {
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.2"
+      "version": "0.17.0"
     },
     "outputs": {
       "root": {
@@ -61,32 +58,24 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.SumStr = "wow!";
+        this._addInflightOps("$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.Foo.js";
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.Foo.js")({
           })
         `);
       }
       _toInflight() {
-        const SumStr_client = this._lift(this.SumStr);
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
             const FooClient = ${Foo._toInflightType(this).text};
             const client = new FooClient({
-              SumStr: ${SumStr_client},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
         `);
-      }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          Foo._registerBindObject(this.SumStr, host, []);
-        }
-        super._registerBind(host, ops);
       }
     }
     const jsonNumber = 123;
@@ -96,34 +85,33 @@ class $Root extends $stdlib.std.Resource {
     const jsonMutObj = {"hello":123,"world":[1, "cat", 3],"boom boom":{"hello":1233}};
     const message = "Coolness";
     ((obj, args) => { obj[args[0]] = args[1]; })(jsonMutObj, ["hello",message]);
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '((jsonMutObj)["hello"] === message)'`)})(((jsonMutObj)["hello"] === message))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: jsonMutObj.get(\"hello\") == message")})(((jsonMutObj)["hello"] === message))};
     const someNumber = 999;
     const jj = someNumber;
     const jj1 = Object.freeze({"foo":someNumber});
-    const jj2 = [someNumber, {"bar":someNumber}];
-    const getStr =  () =>  {
+    const jj2 = [someNumber, Object.freeze({"bar":someNumber})];
+    const getStr = (() => {
       return "hello";
-    }
-    ;
+    });
     const jj3 = (getStr());
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '(jj3 === "hello")'`)})((jj3 === "hello"))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: jj3 == Json \"hello\"")})((jj3 === "hello"))};
     const f = new Foo(this,"Foo");
     const jj4 = f.SumStr;
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '(jj4 === "wow!")'`)})((jj4 === "wow!"))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: jj4 == Json \"wow!\"")})((jj4 === "wow!"))};
     const someJson = {"x":someNumber};
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '((someJson)["x"] === someNumber)'`)})(((someJson)["x"] === someNumber))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: someJson.get(\"x\") == someNumber")})(((someJson)["x"] === someNumber))};
     ((obj, args) => { obj[args[0]] = args[1]; })(someJson, ["x",111]);
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '((someJson)["x"] === 111)'`)})(((someJson)["x"] === 111))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: someJson.get(\"x\") == 111")})(((someJson)["x"] === 111))};
     const x = Object.freeze({"cool":"beans"});
     const nestedJson = {"a":"hello","b":{"c":"world","d":{"foo":"foo","bar":123}}};
     ((obj, args) => { obj[args[0]] = args[1]; })(((nestedJson)["b"])["d"], ["foo","tastic"]);
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '((((nestedJson)["b"])["d"])["foo"] === "tastic")'`)})(((((nestedJson)["b"])["d"])["foo"] === "tastic"))};
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '((((nestedJson)["b"])["d"])["bar"] === 123)'`)})(((((nestedJson)["b"])["d"])["bar"] === 123))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: nestedJson.get(\"b\").get(\"d\").get(\"foo\") == \"tastic\"")})(((((nestedJson)["b"])["d"])["foo"] === "tastic"))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: nestedJson.get(\"b\").get(\"d\").get(\"bar\") == 123")})(((((nestedJson)["b"])["d"])["bar"] === 123))};
     const b = "buckle";
     const arr = [1, 2, b, "my", "shoe", 3, 4, ["shut", "the", "door"]];
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '((arr)[0] === 1)'`)})(((arr)[0] === 1))};
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '((arr)[2] === b)'`)})(((arr)[2] === b))};
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '(((arr)[7])[0] === "shut")'`)})((((arr)[7])[0] === "shut"))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: arr.getAt(0) == 1")})(((arr)[0] === 1))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: arr.getAt(2) == b")})(((arr)[2] === b))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: arr.getAt(7).getAt(0) == \"shut\"")})((((arr)[7])[0] === "shut"))};
     Object.freeze({"a":[1, 2, "world"],"b":[1, 2, "world"]});
     const emptyJson = Object.freeze({});
     const emptyJsonArr = [];
@@ -136,9 +124,77 @@ class $Root extends $stdlib.std.Resource {
     const theTowerOfJson = {"a":{},"b":{"c":{},"d":[[[{}]]]},"e":{"f":{"g":{},"h":[{}, []]}}};
     ((obj, args) => { obj[args[0]] = args[1]; })(((((theTowerOfJson)["e"])["f"])["h"])[0], ["a",1]);
     const thatSuperNestedValue = (((((theTowerOfJson)["e"])["f"])["h"])[0])["a"];
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '(((args) => { if (typeof args !== "number") {throw new Error("unable to parse " + typeof args + " " + args + " as a number")}; return JSON.parse(JSON.stringify(args)) })(thatSuperNestedValue) === 1)'`)})((((args) => { if (typeof args !== "number") {throw new Error("unable to parse " + typeof args + " " + args + " as a number")}; return JSON.parse(JSON.stringify(args)) })(thatSuperNestedValue) === 1))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: num.fromJson(thatSuperNestedValue) == 1")})((((args) => { if (typeof args !== "number") {throw new Error("unable to parse " + typeof args + " " + args + " as a number")}; return JSON.parse(JSON.stringify(args)) })(thatSuperNestedValue) === 1))};
     const unestedJsonArr = [1, 2, 3];
-    {((cond) => {if (!cond) throw new Error(`assertion failed: '((unestedJsonArr)[0] === 1)'`)})(((unestedJsonArr)[0] === 1))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: unestedJsonArr.getAt(0) == 1")})(((unestedJsonArr)[0] === 1))};
+    const jsonElements = Object.freeze({"strings":Object.freeze({"single":"Hello","array":["Hello", "World", "!"]}),"numbers":Object.freeze({"one":1,"two":2,"three":3}),"bools":Object.freeze({"t":true,"f":false})});
+    {
+      const $IF_LET_VALUE = ((arg) => { if (typeof arg !== "string") {throw new Error("unable to parse " + typeof arg + " " + arg + " as a string")}; return JSON.parse(JSON.stringify(arg)) })(((jsonElements)?.["strings"])?.["single"]);
+      if ($IF_LET_VALUE != undefined) {
+        const val = $IF_LET_VALUE;
+        {((cond) => {if (!cond) throw new Error("assertion failed: val == \"Hello\"")})((val === "Hello"))};
+      }
+      else {
+        {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
+      }
+    }
+    {
+      const $IF_LET_VALUE = ((jsonElements)?.["strings"])?.["array"];
+      if ($IF_LET_VALUE != undefined) {
+        const vals = $IF_LET_VALUE;
+        {
+          const $IF_LET_VALUE = (vals)?.[0];
+          if ($IF_LET_VALUE != undefined) {
+            const hello = $IF_LET_VALUE;
+            {((cond) => {if (!cond) throw new Error("assertion failed: hello == \"Hello\"")})((hello === "Hello"))};
+          }
+          else {
+            {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
+          }
+        }
+      }
+      else {
+        {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
+      }
+    }
+    {
+      const $IF_LET_VALUE = ((arg) => { return (typeof arg === "number") ? JSON.parse(JSON.stringify(arg)) : undefined })(((jsonElements)?.["numbers"])?.["two"]);
+      if ($IF_LET_VALUE != undefined) {
+        const two = $IF_LET_VALUE;
+        {((cond) => {if (!cond) throw new Error("assertion failed: two + 2 == 4")})(((two + 2) === 4))};
+      }
+      else {
+        {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
+      }
+    }
+    {
+      const $IF_LET_VALUE = ((arg) => { return (typeof arg === "boolean") ? JSON.parse(JSON.stringify(arg)) : undefined })(((jsonElements)?.["bools"])?.["t"]);
+      if ($IF_LET_VALUE != undefined) {
+        const truth = $IF_LET_VALUE;
+        {((cond) => {if (!cond) throw new Error("assertion failed: truth")})(truth)};
+      }
+      else {
+        {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
+      }
+    }
+    {
+      const $IF_LET_VALUE = ((((jsonElements)?.["strings"])?.["non"])?.["existant"])?.["element"];
+      if ($IF_LET_VALUE != undefined) {
+        const val = $IF_LET_VALUE;
+        {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
+      }
+    }
+    {
+      const $IF_LET_VALUE = (((jsonElements)?.["cant"])?.[1000])?.[42];
+      if ($IF_LET_VALUE != undefined) {
+        const val = $IF_LET_VALUE;
+        {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
+      }
+    }
+    const notSpecified = Object.freeze({"foo":"bar"});
+    {((cond) => {if (!cond) throw new Error("assertion failed: notSpecified.get(\"foo\") == \"bar\"")})(((notSpecified)["foo"] === "bar"))};
+    const empty = Object.freeze({});
+    {((cond) => {if (!cond) throw new Error("assertion failed: Json.has(empty, \"something\") == false")})((((args) => { return args[0].hasOwnProperty(args[1]); })([empty,"something"]) === false))};
   }
 }
 class $App extends $AppBase {
