@@ -20,15 +20,15 @@ source: libs/wingc/src/jsify/tests.rs
 ```js
 module.exports = function({ $util_Util, $x }) {
   class $Closure1 {
-    async handle() {
-      (await $util_Util.waitUntil(async () => {
-      }
-      ,{ interval: $x }));
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle() {
+      (await $util_Util.waitUntil(async () => {
+      }
+      ,{ interval: $x }));
     }
   }
   return $Closure1;

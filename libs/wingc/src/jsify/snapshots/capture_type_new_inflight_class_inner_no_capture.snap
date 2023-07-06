@@ -17,15 +17,15 @@ source: libs/wingc/src/jsify/tests.rs
 ```js
 module.exports = function({  }) {
   class $Closure1 {
-    async handle() {
-      class Foo {
-      }
-      new Foo();
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle() {
+      class Foo {
+      }
+      new Foo();
     }
   }
   return $Closure1;

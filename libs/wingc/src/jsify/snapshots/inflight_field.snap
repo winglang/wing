@@ -23,10 +23,10 @@ source: libs/wingc/src/jsify/tests.rs
 ```js
 module.exports = function({  }) {
   class A {
+    constructor({  }) {
+    }
     async method() {
       {console.log(this.x)};
-    }
-    constructor({  }) {
     }
     async $inflight_init() {
       this.x = "hello";

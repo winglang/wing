@@ -20,10 +20,10 @@ source: libs/wingc/src/jsify/tests.rs
 ```js
 module.exports = function({ $s }) {
   class MyType {
+    constructor({  }) {
+    }
     static async staticMethod() {
       return $s;
-    }
-    constructor({  }) {
     }
   }
   return MyType;

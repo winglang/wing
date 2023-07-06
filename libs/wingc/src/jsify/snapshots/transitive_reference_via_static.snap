@@ -33,13 +33,13 @@ source: libs/wingc/src/jsify/tests.rs
 ```js
 module.exports = function({ $t }) {
   class $Closure1 {
-    async handle() {
-      (await $t.putIndirect());
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle() {
+      (await $t.putIndirect());
     }
   }
   return $Closure1;
@@ -51,10 +51,10 @@ module.exports = function({ $t }) {
 ```js
 module.exports = function({ $b }) {
   class MyType {
+    constructor({  }) {
+    }
     static async putInBucket() {
       (await $b.put("in","bucket"));
-    }
-    constructor({  }) {
     }
   }
   return MyType;
@@ -66,10 +66,10 @@ module.exports = function({ $b }) {
 ```js
 module.exports = function({ $MyType }) {
   class YourType {
+    constructor({  }) {
+    }
     async putIndirect() {
       (await $MyType.putInBucket());
-    }
-    constructor({  }) {
     }
   }
   return YourType;

@@ -37,14 +37,14 @@ source: libs/wingc/src/jsify/tests.rs
 ```js
 module.exports = function({ $globalBucket }) {
   class $Closure1 {
-    async handle(s) {
-      (await $globalBucket.list());
-      return "hello";
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle(s) {
+      (await $globalBucket.list());
+      return "hello";
     }
   }
   return $Closure1;
@@ -56,14 +56,14 @@ module.exports = function({ $globalBucket }) {
 ```js
 module.exports = function({ $x }) {
   class $Closure2 {
-    async handle() {
-      const val = (await $x.foo());
-      {((cond) => {if (!cond) throw new Error("assertion failed: val == \"hello\"")})((val === "hello"))};
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle() {
+      const val = (await $x.foo());
+      {((cond) => {if (!cond) throw new Error("assertion failed: val == \"hello\"")})((val === "hello"))};
     }
   }
   return $Closure2;
@@ -75,11 +75,11 @@ module.exports = function({ $x }) {
 ```js
 module.exports = function({  }) {
   class MyResource {
-    async foo() {
-      return (await this.$this_closure("anything"));
-    }
     constructor({ $this_closure }) {
       this.$this_closure = $this_closure;
+    }
+    async foo() {
+      return (await this.$this_closure("anything"));
     }
   }
   return MyResource;

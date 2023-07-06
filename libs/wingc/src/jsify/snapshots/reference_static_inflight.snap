@@ -20,13 +20,13 @@ source: libs/wingc/src/jsify/tests.rs
 ```js
 module.exports = function({ $MyType }) {
   class $Closure1 {
-    async handle() {
-      {console.log((await $MyType.myStaticMethod()))};
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle() {
+      {console.log((await $MyType.myStaticMethod()))};
     }
   }
   return $Closure1;
@@ -38,9 +38,9 @@ module.exports = function({ $MyType }) {
 ```js
 module.exports = function({  }) {
   class MyType {
-    static async myStaticMethod() {
-    }
     constructor({  }) {
+    }
+    static async myStaticMethod() {
     }
   }
   return MyType;

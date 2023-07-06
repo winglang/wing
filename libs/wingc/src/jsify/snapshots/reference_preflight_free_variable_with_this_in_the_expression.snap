@@ -27,11 +27,11 @@ source: libs/wingc/src/jsify/tests.rs
 ```js
 module.exports = function({ $b }) {
   class Foo {
-    async method() {
-      (await $b.put(this.$this_name,"value"));
-    }
     constructor({ $this_name }) {
       this.$this_name = $this_name;
+    }
+    async method() {
+      (await $b.put(this.$this_name,"value"));
     }
   }
   return Foo;

@@ -25,13 +25,13 @@ source: libs/wingc/src/jsify/tests.rs
 ```js
 module.exports = function({ $b }) {
   class Foo {
+    constructor({  }) {
+    }
     async put() {
       (await $b.put("hello1","world"));
     }
     async list() {
       (await $b.list());
-    }
-    constructor({  }) {
     }
   }
   return Foo;

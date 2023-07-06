@@ -21,13 +21,13 @@ source: libs/wingc/src/jsify/tests.rs
 ```js
 module.exports = function({ $f }) {
   class $Closure1 {
-    async handle() {
-      (await $f.bar());
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle() {
+      (await $f.bar());
     }
   }
   return $Closure1;
@@ -39,9 +39,9 @@ module.exports = function({ $f }) {
 ```js
 module.exports = function({  }) {
   class Foo {
-    async bar() {
-    }
     constructor({  }) {
+    }
+    async bar() {
     }
   }
   return Foo;

@@ -19,14 +19,14 @@ source: libs/wingc/src/jsify/tests.rs
 ```js
 module.exports = function({ $b }) {
   class $Closure1 {
-    async handle() {
-      (await $b.list());
-      (await $b.put("hello","world"));
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle() {
+      (await $b.list());
+      (await $b.put("hello","world"));
     }
   }
   return $Closure1;

@@ -24,10 +24,10 @@ source: libs/wingc/src/jsify/tests.rs
 ```js
 module.exports = function({  }) {
   class Foo {
+    constructor({  }) {
+    }
     async foo() {
       this.x;
-    }
-    constructor({  }) {
     }
     async $inflight_init() {
       this.x = "hello";

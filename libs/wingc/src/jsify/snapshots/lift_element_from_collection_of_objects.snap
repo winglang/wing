@@ -19,13 +19,13 @@ source: libs/wingc/src/jsify/tests.rs
 ```js
 module.exports = function({ $_a_at_0__ }) {
   class $Closure1 {
-    async handle() {
-      (await $_a_at_0__.put("hello","world"));
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle() {
+      (await $_a_at_0__.put("hello","world"));
     }
   }
   return $Closure1;

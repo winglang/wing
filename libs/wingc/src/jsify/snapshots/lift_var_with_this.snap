@@ -22,14 +22,14 @@ source: libs/wingc/src/jsify/tests.rs
 ```js
 module.exports = function({  }) {
   class $Closure1 {
-    async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: foo_this.value == \"hello\"")})((this.$foo_this_value === "hello"))};
-    }
     constructor({ $foo_this_value }) {
       this.$foo_this_value = $foo_this_value;
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle() {
+      {((cond) => {if (!cond) throw new Error("assertion failed: foo_this.value == \"hello\"")})((this.$foo_this_value === "hello"))};
     }
   }
   return $Closure1;

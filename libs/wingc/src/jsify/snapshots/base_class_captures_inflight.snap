@@ -26,10 +26,10 @@ source: libs/wingc/src/jsify/tests.rs
 ```js
 module.exports = function({ $x }) {
   class Base {
+    constructor({  }) {
+    }
     async bar() {
       {console.log($x)};
-    }
-    constructor({  }) {
     }
   }
   return Base;
@@ -41,11 +41,11 @@ module.exports = function({ $x }) {
 ```js
 module.exports = function({ $Base }) {
   class Derived extends $Base {
-    async foo() {
-      (await this.bar());
-    }
     constructor({  }) {
       super({  });
+    }
+    async foo() {
+      (await this.bar());
     }
   }
   return Derived;

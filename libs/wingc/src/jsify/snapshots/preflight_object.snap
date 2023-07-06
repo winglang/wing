@@ -22,14 +22,14 @@ source: libs/wingc/src/jsify/tests.rs
 ```js
 module.exports = function({ $pf_obj }) {
   class $Closure1 {
-    async handle() {
-      (await $pf_obj.hello());
-      (await $pf_obj.goodbye());
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle() {
+      (await $pf_obj.hello());
+      (await $pf_obj.goodbye());
     }
   }
   return $Closure1;
@@ -41,11 +41,11 @@ module.exports = function({ $pf_obj }) {
 ```js
 module.exports = function({  }) {
   class A {
+    constructor({  }) {
+    }
     async hello() {
     }
     async goodbye() {
-    }
-    constructor({  }) {
     }
   }
   return A;

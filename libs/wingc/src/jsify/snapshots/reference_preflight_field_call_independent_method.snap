@@ -24,11 +24,11 @@ source: libs/wingc/src/jsify/tests.rs
 ```js
 module.exports = function({  }) {
   class Foo {
-    async method() {
-      this.$_this_arr_at_1__;
-    }
     constructor({ $_this_arr_at_1__ }) {
       this.$_this_arr_at_1__ = $_this_arr_at_1__;
+    }
+    async method() {
+      this.$_this_arr_at_1__;
     }
   }
   return Foo;

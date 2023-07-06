@@ -23,11 +23,11 @@ source: libs/wingc/src/jsify/tests.rs
 ```js
 module.exports = function({  }) {
   class A {
-    async foo() {
-      (await this.$this_bucket_this.put("hello","world"));
-    }
     constructor({ $this_bucket_this }) {
       this.$this_bucket_this = $this_bucket_this;
+    }
+    async foo() {
+      (await this.$this_bucket_this.put("hello","world"));
     }
   }
   return A;

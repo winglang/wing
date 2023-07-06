@@ -19,15 +19,15 @@ source: libs/wingc/src/jsify/tests.rs
 ```js
 module.exports = function({ $Base }) {
   class $Closure1 {
-    async handle() {
-      class Derived extends $Base {
-      }
-      new Derived();
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle() {
+      class Derived extends $Base {
+      }
+      new Derived();
     }
   }
   return $Closure1;

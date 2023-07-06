@@ -18,14 +18,14 @@ source: libs/wingc/src/jsify/tests.rs
 ```js
 module.exports = function({ $x }) {
   class $Closure1 {
-    async handle() {
-      const y = 2;
-      ($x + y);
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle() {
+      const y = 2;
+      ($x + y);
     }
   }
   return $Closure1;

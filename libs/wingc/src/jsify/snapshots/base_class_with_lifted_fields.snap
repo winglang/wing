@@ -39,12 +39,12 @@ module.exports = function({  }) {
 ```js
 module.exports = function({ $Base }) {
   class Derived extends $Base {
-    async foo() {
-      this.$this_f;
-    }
     constructor({ $this_f }) {
       super({  });
       this.$this_f = $this_f;
+    }
+    async foo() {
+      this.$this_f;
     }
   }
   return Derived;

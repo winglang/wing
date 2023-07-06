@@ -37,13 +37,13 @@ source: libs/wingc/src/jsify/tests.rs
 ```js
 module.exports = function({ $t }) {
   class $Closure1 {
-    async handle() {
-      (await $t.checkIfEmpty());
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle() {
+      (await $t.checkIfEmpty());
     }
   }
   return $Closure1;
@@ -55,6 +55,9 @@ module.exports = function({ $t }) {
 ```js
 module.exports = function({  }) {
   class MyType {
+    constructor({ $this_b }) {
+      this.$this_b = $this_b;
+    }
     async isEmpty() {
       return ((await this.$this_b.list()).length === 0);
     }
@@ -62,9 +65,6 @@ module.exports = function({  }) {
       if ((await this.isEmpty())) {
         {console.log("empty!")};
       }
-    }
-    constructor({ $this_b }) {
-      this.$this_b = $this_b;
     }
   }
   return MyType;

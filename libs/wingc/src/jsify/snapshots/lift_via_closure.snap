@@ -24,13 +24,13 @@ source: libs/wingc/src/jsify/tests.rs
 ```js
 module.exports = function({ $bucket }) {
   class $Closure1 {
-    async handle() {
-      (await $bucket.put("hello","world"));
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle() {
+      (await $bucket.put("hello","world"));
     }
   }
   return $Closure1;
@@ -42,13 +42,13 @@ module.exports = function({ $bucket }) {
 ```js
 module.exports = function({ $fn }) {
   class $Closure2 {
-    async handle() {
-      (await $fn());
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle() {
+      (await $fn());
     }
   }
   return $Closure2;

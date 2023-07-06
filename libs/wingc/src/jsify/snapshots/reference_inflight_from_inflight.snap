@@ -32,13 +32,13 @@ source: libs/wingc/src/jsify/tests.rs
 ```js
 module.exports = function({ $Foo }) {
   class $Closure1 {
-    async handle() {
-      const f = new $Foo();
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle() {
+      const f = new $Foo();
     }
   }
   return $Closure1;

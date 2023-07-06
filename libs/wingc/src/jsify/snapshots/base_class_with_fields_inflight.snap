@@ -46,12 +46,12 @@ module.exports = function({  }) {
 ```js
 module.exports = function({ $Base }) {
   class Derived extends $Base {
+    constructor({  }) {
+      super({  });
+    }
     async foo() {
       this.f;
       this.g;
-    }
-    constructor({  }) {
-      super({  });
     }
     async $inflight_init() {
       this.g = "world";

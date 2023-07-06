@@ -18,12 +18,12 @@ source: libs/wingc/src/jsify/tests.rs
 ```js
 module.exports = function({  }) {
   class $Closure1 {
-    async handle() {
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle() {
     }
   }
   return $Closure1;
@@ -35,13 +35,13 @@ module.exports = function({  }) {
 ```js
 module.exports = function({ $f }) {
   class $Closure2 {
-    async handle() {
-      (await $f());
-    }
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
+    }
+    async handle() {
+      (await $f());
     }
   }
   return $Closure2;
