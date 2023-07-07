@@ -67,13 +67,12 @@ async function main() {
     });
 
 
-    async function collectAnalyticsHook(cmd: Command) {
+    async function collectAnalyticsHook(_: Command, subCmd: Command) {
       if (!ANALYTICS_COLLECTION_CONFIG.collect) { return; }
-  
       // Fail silently if collection fails
       try {
         optionallyDisplayDisclaimer();
-        ANALYTICS_EXPORT_FILE = await collectCommandAnalytics(cmd);
+        ANALYTICS_EXPORT_FILE = await collectCommandAnalytics(subCmd);
       } catch (err) {
         if (ANALYTICS_COLLECTION_CONFIG.debug) {
           console.error(err);
@@ -113,7 +112,7 @@ async function main() {
     .option("--no-open", "Do not open the Wing Console in the browser")
     .action(run);
 
-  program.command("lsp").description("Run the Wing language server on stdio").action(run_server).hook("preAction", collectAnalyticsHook);
+  program.command("lsp").description("Run the Wing language server on stdio").action(run_server);
 
   program
     .command("compile")
@@ -126,7 +125,6 @@ async function main() {
     )
     .option("-p, --plugins [plugin...]", "Compiler plugins")
     .hook("preAction", progressHook)
-    .hook("preAction", collectAnalyticsHook)
     .action(actionErrorHandler(compile));
 
   program
@@ -142,11 +140,10 @@ async function main() {
     )
     .option("-p, --plugins [plugin...]", "Compiler plugins")
     .hook("preAction", progressHook)
-    .hook("preAction", collectAnalyticsHook)
     .action(actionErrorHandler(test));
 
   program.command("docs").description("Open the Wing documentation").action(docs);
-
+  program.hook("preSubcommand", collectAnalyticsHook)
   program.hook("postAction", exportAnalyticsHook)
   program.parse();
 }

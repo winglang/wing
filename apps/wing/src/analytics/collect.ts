@@ -23,7 +23,6 @@ export async function collectCommandAnalytics(cmd: Command): Promise<string> {
   let event: AnalyticEvent = {
     event: `wing cli:${cmd.name()}`,
     properties: {
-      inCI: CICollector.inCI(),
       cli: await cliCollector.collect(),
       os: await osCollector.collect(),
       node: await nodeCollector.collect(),
