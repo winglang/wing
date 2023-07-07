@@ -8,7 +8,7 @@ keywords: [Analytics, Telemetry]
 
 The Wing cli collects anonymous usage data in order to help us improve the cli experience. The intent is to collect data that will help us understand how the cli is being used throughout the community, with hopes that this will help us to build the right features and improve the right areas.
 
-You may not feel comfortable sharing this data with us, and that is ok. The gathering of these analytics is completely optional to use the Wing cli, and can be opted out of at any time.
+You may not feel comfortable sharing this data with us, and that is ok. The gathering of these analytics is completely optional to use the Wing CLI, and can be opted out of at any time.
 
 ### Opting out
 
