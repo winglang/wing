@@ -26,5 +26,5 @@ you can always head over to our Github and view the code that collects these met
 - The Wing cli version
 - The command information, including the command name, arguments, and flags
 - Operating system information, including the architecture, version, and platform
-- Node js version
+- Node.js version
 - CI environment name (if applicable)
