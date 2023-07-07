@@ -12,6 +12,7 @@ use crate::{
 
 pub const CLOSURE_CLASS_PREFIX: &str = "$Closure";
 pub const PARENT_THIS_NAME: &str = "__parent_this";
+pub const PARENT_SUPER_NAME: &str = "__parent_super";
 
 /// Transforms inflight closures defined in preflight scopes into preflight classes.
 ///
@@ -157,10 +158,12 @@ impl Fold for ClosureTransformer {
 					// If we are inside a class, we transform inflight closures with an extra
 					// `let __parent_this_${CLOSURE_COUNT} = this;` statement before the class definition, and replace references
 					// to `this` with `__parent_this_${CLOSURE_COUNT}` so that they can access the parent class's fields.
+					// We also handle `super` references by replacing them with `__parent_super_${CLOSURE_COUNT}`.
 					let parent_this = format!("{}_{}", PARENT_THIS_NAME, self.closure_counter);
+					let parent_super = format!("{}_{}", PARENT_SUPER_NAME, self.closure_counter);
 					let mut this_transform = RenameThisTransformer {
-						from: "this",
-						to: parent_this.as_str(),
+						new_this: parent_this.as_str(),
+						new_super: parent_super.as_str(),
 						inside_class: false,
 					};
 					this_transform.fold_function_definition(func_def)
@@ -216,13 +219,35 @@ impl Fold for ClosureTransformer {
 						format!("{}_{}", PARENT_THIS_NAME, self.closure_counter),
 						WingSpan::default(),
 					);
-					let this_name = Symbol::new("this", WingSpan::default());
+					let parent_super_name = Symbol::new(
+						format!("{}_{}", PARENT_SUPER_NAME, self.closure_counter),
+						WingSpan::default(),
+					);
 					let parent_this_def = Stmt {
 						kind: StmtKind::Let {
 							reassignable: false,
 							var_name: parent_this_name,
 							initial_value: Expr::new(
-								ExprKind::Reference(Reference::Identifier(this_name)),
+								ExprKind::Reference(Reference::SelfRef {
+									as_super: false,
+									span: WingSpan::default(),
+								}),
+								WingSpan::default(),
+							),
+							type_: None,
+						},
+						span: WingSpan::default(),
+						idx: 0,
+					};
+					let parent_super_def = Stmt {
+						kind: StmtKind::Let {
+							reassignable: false,
+							var_name: parent_super_name,
+							initial_value: Expr::new(
+								ExprKind::Reference(Reference::SelfRef {
+									as_super: true,
+									span: WingSpan::default(),
+								}),
 								WingSpan::default(),
 							),
 							type_: None,
@@ -231,6 +256,7 @@ impl Fold for ClosureTransformer {
 						idx: 0,
 					};
 					self.class_statements.push(parent_this_def);
+					self.class_statements.push(parent_super_def);
 				}
 
 				// class_def :=
@@ -307,10 +333,10 @@ impl Fold for ClosureTransformer {
 	}
 }
 
-/// Rename all occurrences of an identifier inside an inflight closure to a new name.
+/// Rename all references to `this`/`super` inside an inflight closure to a new name.
 struct RenameThisTransformer<'a> {
-	from: &'a str,
-	to: &'a str,
+	new_this: &'a str,
+	new_super: &'a str,
 	// The transform shouldn't change references to `this` inside inflight classes since
 	// they refer to different objects.
 	inside_class: bool,
@@ -319,8 +345,8 @@ struct RenameThisTransformer<'a> {
 impl Default for RenameThisTransformer<'_> {
 	fn default() -> Self {
 		Self {
-			from: "this",
-			to: PARENT_THIS_NAME,
+			new_this: PARENT_THIS_NAME,
+			new_super: PARENT_SUPER_NAME,
 			inside_class: false,
 		}
 	}
@@ -336,20 +362,19 @@ impl<'a> Fold for RenameThisTransformer<'a> {
 	}
 
 	fn fold_reference(&mut self, node: Reference) -> Reference {
+		if self.inside_class {
+			return fold::fold_reference(self, node);
+		}
 		match node {
-			Reference::Identifier(ident) => {
-				if !self.inside_class && ident.name == self.from {
-					Reference::Identifier(Symbol {
-						name: self.to.to_string(),
-						span: ident.span,
-					})
+			Reference::SelfRef { as_super, span } => Reference::Identifier(Symbol {
+				name: if as_super {
+					self.new_super.to_string()
 				} else {
-					Reference::Identifier(ident)
-				}
-			}
-			Reference::InstanceMember { .. } | Reference::TypeMember { .. } | Reference::TypeReference(_) => {
-				fold::fold_reference(self, node)
-			}
+					self.new_this.to_string()
+				},
+				span,
+			}),
+			_ => fold::fold_reference(self, node),
 		}
 	}
 }

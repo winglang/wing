@@ -210,6 +210,14 @@ impl<'a> JSifier<'a> {
 				let typename = self.jsify_expression(typeobject, ctx);
 				typename + "." + &property.to_string()
 			}
+			Reference::SelfRef { as_super, .. } => {
+				if *as_super {
+					// JS's `super` is too limiting because you can't assing it to stuff (unlike `this`), use double `__proto__` hack instead
+					"this.__proto__.__proto__".to_string()
+				} else {
+					"this".to_string()
+				}
+			}
 		}
 	}
 

@@ -53,10 +53,14 @@ module.exports = grammar({
       choice(
         $.nested_identifier,
         $._reference_identifier,
-        $.structured_access_expression
+        $.structured_access_expression,
+        $.self_identifier,
+        $.parent_identifier
       ),
 
     identifier: ($) => /([A-Za-z_$][A-Za-z_$0-9]*|[A-Z][A-Z0-9_]*)/,
+    self_identifier: ($) => "this",
+    parent_identifier: ($) => "super",
     _type_identifier: ($) => alias($.identifier, $.type_identifier),
     _member_identifier: ($) => alias($.identifier, $.member_identifier),
     _reference_identifier: ($) => alias($.identifier, $.reference_identifier),
@@ -264,8 +268,10 @@ module.exports = grammar({
       seq("while", field("condition", $.expression), field("block", $.block)),
 
     break_statement: ($) => seq("break", $._semicolon),
-    _super: ($) => "super",
-    super_constructor_statement: ($) => seq($._super, field("args", $.argument_list), $._semicolon),
+    super_constructor_statement: ($) =>
+      prec(1, // We provide a higher precedence than the expression statement so a call to super() is not parsed as a function call
+        seq($.parent_identifier, field("args", $.argument_list), $._semicolon)
+      ),
 
     continue_statement: ($) => seq("continue", $._semicolon),
 

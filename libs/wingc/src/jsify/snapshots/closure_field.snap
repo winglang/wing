@@ -102,6 +102,7 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         const __parent_this_1 = this;
+        const __parent_super_1 = this.__proto__.__proto__;
         class $Closure1 extends $stdlib.std.Resource {
           constructor(scope, id, ) {
             super(scope, id);

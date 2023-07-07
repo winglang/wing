@@ -1,5 +1,5 @@
 use crate::ast::{
-	Class, Expr, FunctionBody, FunctionDefinition, Reference, Scope, Stmt, StmtKind, Symbol, TypeAnnotation,
+	Class, Expr, FunctionBody, FunctionDefinition, Reference, Scope, Spanned, Stmt, StmtKind, Symbol, TypeAnnotation,
 	TypeAnnotationKind,
 };
 use crate::diagnostic::WingSpan;
@@ -269,6 +269,9 @@ impl<'a> Visit<'a> for HoverVisitor<'a> {
 			}
 			Reference::InstanceMember { object, property, .. } => self.visit_reference_with_member(object, property),
 			Reference::TypeMember { typeobject, property } => self.visit_reference_with_member(&typeobject, property),
+			Reference::SelfRef { .. } => {
+				self.found = Some((node.span().clone(), self.lookup_docs(&node.to_string(), None)));
+			}
 		}
 
 		visit::visit_reference(self, node);

@@ -1264,6 +1264,20 @@ impl<'s> Parser<'s> {
 				actual_node_span,
 			)),
 			"nested_identifier" => Ok(self.build_nested_identifier(&actual_node, phase)?),
+			"self_identifier" => Ok(Expr::new(
+				ExprKind::Reference(Reference::SelfRef {
+					as_super: false,
+					span: actual_node_span.clone(),
+				}),
+				actual_node_span.clone(),
+			)),
+			"super_identifier" => Ok(Expr::new(
+				ExprKind::Reference(Reference::SelfRef {
+					as_super: true,
+					span: actual_node_span.clone(),
+				}),
+				actual_node_span.clone(),
+			)),
 			"structured_access_expression" => {
 				self.report_unimplemented_grammar("structured_access_expression", "reference", &actual_node)
 			}

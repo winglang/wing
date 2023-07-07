@@ -85,6 +85,9 @@ pub trait Visit<'ast> {
 	fn visit_symbol(&mut self, node: &'ast Symbol) {
 		visit_symbol(self, node);
 	}
+	fn visit_self_ref(&mut self, node: bool) {
+		visit_self_ref(self, node);
+	}
 }
 
 pub fn visit_scope<'ast, V>(v: &mut V, node: &'ast Scope)
@@ -420,6 +423,7 @@ where
 			v.visit_expr(typeobject);
 			v.visit_symbol(property);
 		}
+		Reference::SelfRef { as_super, .. } => v.visit_self_ref(*as_super),
 	}
 }
 
@@ -511,6 +515,12 @@ where
 }
 
 pub fn visit_symbol<'ast, V>(_v: &mut V, _node: &'ast Symbol)
+where
+	V: Visit<'ast> + ?Sized,
+{
+}
+
+pub fn visit_self_ref<'ast, V>(_v: &mut V, _node: bool)
 where
 	V: Visit<'ast> + ?Sized,
 {

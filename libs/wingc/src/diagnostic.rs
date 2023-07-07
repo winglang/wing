@@ -72,6 +72,23 @@ pub struct WingSpan {
 	pub file_id: String,
 }
 
+impl WingSpan {
+	pub fn merge(&self, other: &Self) -> Self {
+		let start = if self.start < other.start {
+			self.start
+		} else {
+			other.start
+		};
+		let end = if self.end > other.end { self.end } else { other.end };
+		Self {
+			start,
+			end,
+			// Implicit assumption that both spans are from the same file
+			file_id: self.file_id.clone(),
+		}
+	}
+}
+
 impl Into<Range> for WingSpan {
 	fn into(self) -> Range {
 		Range {

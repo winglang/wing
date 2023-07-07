@@ -3154,7 +3154,21 @@ impl<'a> TypeChecker<'a> {
 					SymbolKind::make_free_variable("this".into(), class_type, false, class_env.phase),
 					StatementIdx::Top,
 				)
-				.expect("Expected `this` to be added to constructor env");
+				.expect("Expected `this` to be added to method env");
+
+			// If this class has a parent, prime the method environment with `super`
+			if let Some(parent_type) = class_type.as_class().expect("a class type").parent {
+				method_env
+					.define(
+						&Symbol {
+							name: "super".into(),
+							span: method_name.span.clone(),
+						},
+						SymbolKind::make_free_variable("super".into(), parent_type, false, class_env.phase),
+						StatementIdx::Top,
+					)
+					.expect("Expected `super` to be added to method env");
+			}
 		}
 		self.add_arguments_to_env(&method_def.signature.parameters, method_sig, &mut method_env);
 
@@ -3584,6 +3598,7 @@ impl<'a> TypeChecker<'a> {
 						_ => return None,
 					}
 				}
+				Reference::SelfRef { .. } => return None,
 			}
 		}
 
@@ -3692,9 +3707,11 @@ impl<'a> TypeChecker<'a> {
 				// Special case: if the object expression is a simple reference to `this` and we're inside the init function then
 				// we'll consider all properties as reassignable regardless of whether they're `var`.
 				let mut force_reassignable = false;
-				if let ExprKind::Reference(Reference::Identifier(symb)) = &object.kind {
-					if symb.name == "this" {
-						if let LookupResult::Found(kind, info) = env.lookup_ext(&symb, Some(self.statement_idx)) {
+				if let ExprKind::Reference(r) = &object.kind {
+					if let Reference::SelfRef { as_super: false, span } = r {
+						if let LookupResult::Found(kind, info) =
+							env.lookup_ext(&Symbol::new(format!("{}", r), span.clone()), Some(self.statement_idx))
+						{
 							// `this` reserved symbol should always be a variable
 							assert!(matches!(kind, SymbolKind::Variable(_)));
 							force_reassignable = info.init;
@@ -3818,6 +3835,29 @@ impl<'a> TypeChecker<'a> {
 						),
 					},
 					_ => self.spanned_error_with_var(property, format!("\"{}\" not a valid reference", reference)),
+				}
+			}
+			Reference::SelfRef { .. } => {
+				// TODO: ideally we can resolve this based on the current class instead of doing a lookup, perhaps even remove `this`/`super`
+				// from the environment entirely
+				let lookup_res = env.lookup_ext(
+					&Symbol::new(format!("{}", reference), reference.span()),
+					Some(self.statement_idx),
+				);
+				if let LookupResult::Found(var, _) = lookup_res {
+					let var = var.as_variable().expect("this/super should be a variable");
+					let phase = var.phase;
+					(var, phase)
+				} else {
+					// Any lookup failure for `this`/`super` means it was used in an unexpected context
+					self.spanned_error(
+						&reference.span(),
+						format!(
+							"\"{}\" can only be used in an instance method or constructor",
+							reference
+						),
+					);
+					(self.make_error_variable_info(), Phase::Independent)
 				}
 			}
 		}

@@ -70,6 +70,7 @@ class $Root extends $stdlib.std.Resource {
         this.b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
         this.q = this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this,"cloud.Queue");
         const __parent_this_1 = this;
+        const __parent_super_1 = this.__proto__.__proto__;
         class $Closure1 extends $stdlib.std.Resource {
           constructor(scope, id, ) {
             super(scope, id);

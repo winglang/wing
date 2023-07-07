@@ -6,7 +6,7 @@ use std::cmp::max;
 use tree_sitter::Point;
 
 use crate::ast::{Expr, Phase, Scope, Symbol, TypeAnnotation, TypeAnnotationKind, UserDefinedType};
-use crate::closure_transform::{CLOSURE_CLASS_PREFIX, PARENT_THIS_NAME};
+use crate::closure_transform::{CLOSURE_CLASS_PREFIX, PARENT_SUPER_NAME, PARENT_THIS_NAME};
 use crate::diagnostic::WingSpan;
 use crate::docs::Documented;
 use crate::lsp::sync::{FILES, JSII_TYPES};
@@ -643,7 +643,10 @@ fn format_symbol_kind_as_completion(name: &str, symbol_kind: &SymbolKind) -> Opt
 }
 
 fn should_exclude_symbol(symbol: &str) -> bool {
-	symbol == WINGSDK_STD_MODULE || symbol.starts_with(CLOSURE_CLASS_PREFIX) || symbol.starts_with(PARENT_THIS_NAME)
+	symbol == WINGSDK_STD_MODULE
+		|| symbol.starts_with(CLOSURE_CLASS_PREFIX)
+		|| symbol.starts_with(PARENT_THIS_NAME)
+		|| symbol.starts_with(PARENT_SUPER_NAME)
 }
 
 /// This visitor is used to find the scope

@@ -369,6 +369,7 @@ where
 			typeobject: Box::new(f.fold_expr(*typeobject)),
 			property: f.fold_symbol(property),
 		},
+		Reference::SelfRef { as_super, span } => Reference::SelfRef { as_super, span },
 	}
 }
 

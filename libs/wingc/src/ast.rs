@@ -675,6 +675,9 @@ pub enum BinaryOperator {
 pub enum Reference {
 	/// A simple identifier: `x`
 	Identifier(Symbol),
+	/// A reference to my own instance (`this`),
+	/// if `as_super` is true, then it's a reference to my parent's aspect of myself (`super`)
+	SelfRef { as_super: bool, span: WingSpan },
 	/// A reference to a member nested inside some object `expression.x`
 	InstanceMember {
 		object: Box<Expr>,
@@ -710,6 +713,25 @@ impl Display for Reference {
 
 				write!(f, "{}.{}", r, property.name)
 			}
+			Reference::SelfRef { as_super, .. } => {
+				if *as_super {
+					write!(f, "super")
+				} else {
+					write!(f, "this")
+				}
+			}
+		}
+	}
+}
+
+impl Spanned for Reference {
+	fn span(&self) -> WingSpan {
+		match self {
+			Reference::Identifier(s) => s.span(),
+			Reference::SelfRef { span, .. } => span.clone(),
+			Reference::InstanceMember { object, property, .. } => object.span().merge(&property.span()),
+			Reference::TypeReference(u) => u.span(),
+			Reference::TypeMember { typeobject, property } => typeobject.span().merge(&property.span()),
 		}
 	}
 }
