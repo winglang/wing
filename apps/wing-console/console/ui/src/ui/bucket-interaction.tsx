@@ -15,7 +15,8 @@ import {
   useTheme,
 } from "@wingconsole/design-system";
 import classNames from "classnames";
-import { FormEvent, useMemo, useRef, useState } from "react";
+import { FormEvent, useContext, useMemo, useRef, useState } from "react";
+import { LayoutContext, LayoutType } from "../layout/layout-provider";
 
 export interface BucketInteractionProps {
   selectedEntries: string[];
@@ -61,6 +62,8 @@ export const BucketInteraction = ({
     setShowPreview(false);
     currentRef.current?.focus();
   };
+
+  const layoutType = useContext(LayoutContext);
 
   return (
     <div className="h-full flex-1 flex flex-col text-sm space-y-1.5">
@@ -121,7 +124,11 @@ export const BucketInteraction = ({
               setShowPreview(true);
             }
           }}
-          className="min-h-[6rem] h-48 overflow-y-auto resize-y"
+          className={classNames(
+            "overflow-y-auto resize-y",
+            layoutType === LayoutType.Tutorial && "min-h-[4rem]",
+            layoutType !== LayoutType.Tutorial && "h-48 min-h-[6rem]",
+          )}
         />
       )}
 
