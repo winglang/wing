@@ -16,7 +16,7 @@ source: libs/wingc/src/lsp/completions.rs
           character: 12
         end:
           line: 2
-          character: 12
+          character: 13
       newText: "?."
   command:
     title: triggerParameterHints
@@ -36,7 +36,7 @@ source: libs/wingc/src/lsp/completions.rs
           character: 12
         end:
           line: 2
-          character: 12
+          character: 13
       newText: "?."
   command:
     title: triggerParameterHints
@@ -56,7 +56,7 @@ source: libs/wingc/src/lsp/completions.rs
           character: 12
         end:
           line: 2
-          character: 12
+          character: 13
       newText: "?."
   command:
     title: triggerParameterHints
@@ -76,7 +76,7 @@ source: libs/wingc/src/lsp/completions.rs
           character: 12
         end:
           line: 2
-          character: 12
+          character: 13
       newText: "?."
   command:
     title: triggerParameterHints
@@ -96,7 +96,7 @@ source: libs/wingc/src/lsp/completions.rs
           character: 12
         end:
           line: 2
-          character: 12
+          character: 13
       newText: "?."
   command:
     title: triggerParameterHints
@@ -116,7 +116,7 @@ source: libs/wingc/src/lsp/completions.rs
           character: 12
         end:
           line: 2
-          character: 12
+          character: 13
       newText: "?."
   command:
     title: triggerParameterHints
@@ -136,7 +136,7 @@ source: libs/wingc/src/lsp/completions.rs
           character: 12
         end:
           line: 2
-          character: 12
+          character: 13
       newText: "?."
   command:
     title: triggerParameterHints
@@ -156,7 +156,7 @@ source: libs/wingc/src/lsp/completions.rs
           character: 12
         end:
           line: 2
-          character: 12
+          character: 13
       newText: "?."
   command:
     title: triggerParameterHints
@@ -176,7 +176,7 @@ source: libs/wingc/src/lsp/completions.rs
           character: 12
         end:
           line: 2
-          character: 12
+          character: 13
       newText: "?."
   command:
     title: triggerParameterHints
@@ -196,7 +196,7 @@ source: libs/wingc/src/lsp/completions.rs
           character: 12
         end:
           line: 2
-          character: 12
+          character: 13
       newText: "?."
   command:
     title: triggerParameterHints
