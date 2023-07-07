@@ -1,0 +1,10 @@
+---
+source: libs/wingc/src/lsp/completions.rs
+---
+- label: Foo
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nFoo\n```\n---"
+  sortText: hh|Foo
+
