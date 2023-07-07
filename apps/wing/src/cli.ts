@@ -15,7 +15,7 @@ import { optionallyDisplayDisclaimer } from "./analytics/disclaimer";
 export const PACKAGE_VERSION = require("../package.json").version as string;
 
 const ANALYTICS_COLLECTION_CONFIG = getWingAnalyticsCollectionConfig(); 
-let ANALYTICS_EXPORT_FILE: string | undefined = undefined;
+let analyticsExportFile: Promise<string> | undefined = undefined;
 
 const SUPPORTED_NODE_VERSION = require("../package.json").engines.node as string;
 if (!SUPPORTED_NODE_VERSION) {
@@ -72,7 +72,7 @@ async function main() {
       // Fail silently if collection fails
       try {
         optionallyDisplayDisclaimer();
-        ANALYTICS_EXPORT_FILE = await collectCommandAnalytics(subCmd);
+        analyticsExportFile = collectCommandAnalytics(subCmd);
       } catch (err) {
         if (ANALYTICS_COLLECTION_CONFIG.debug) {
           console.error(err);
@@ -85,8 +85,8 @@ async function main() {
   
       // Fail silently if export fails
       try {
-        if (ANALYTICS_EXPORT_FILE) {
-          exportAnalytics(ANALYTICS_EXPORT_FILE);
+        if (analyticsExportFile) {
+          await exportAnalytics(analyticsExportFile);
         }
       } catch (err) {
         if (ANALYTICS_COLLECTION_CONFIG.debug) {

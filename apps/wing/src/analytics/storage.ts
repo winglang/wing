@@ -89,6 +89,5 @@ export function loadAnalyticsEvent(filePath: string): AnalyticEvent {
 }
 
 function saveAnalyticsReport(filePath: string, event: AnalyticEvent) {
-  // TODO: get rid of the null, 2
-  writeFileSync(filePath, JSON.stringify(event, null, 2))
+  writeFileSync(filePath, JSON.stringify(event))
 }
