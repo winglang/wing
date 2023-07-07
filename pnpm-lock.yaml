@@ -314,8 +314,8 @@ importers:
         specifier: ^6.0.1
         version: 6.0.1
       '@types/uuid':
-        specifier: ^9.0.1
-        version: 9.0.1
+        specifier: ^8.3.2
+        version: 8.3.2
       bump-pack:
         specifier: workspace:^
         version: link:../../tools/bump-pack
@@ -9344,6 +9344,10 @@ packages:
     dependencies:
       '@types/configstore': 6.0.0
       boxen: 7.1.0
+    dev: true
+
+  /@types/uuid@8.3.2:
+    resolution: {integrity: sha512-u40ViizKDmdl5FhOXn9WQbulpigYCaiD5hD4KqR3xyQww6l3+0ND+A9TeFla8tFpqvR+UAkJdYb/8jdaQG4/nw==}
     dev: true
 
   /@types/uuid@9.0.1:

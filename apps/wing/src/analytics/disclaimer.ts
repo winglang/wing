@@ -2,7 +2,7 @@ import chalk from "chalk";
 import { loadAnalyticsConfig, saveAnalyticsConfig } from "./storage";
 
 const disclaimer = `
-🧪 This is an early pre-release of the Wing Programming Language (aka "alpha").
+🧪 This is an early pre-release of the Wing Programming Language.
   
 We are working hard to make this a great tool, but there's still a pretty good
 chance you'll encounter missing pieces, rough edges, performance issues and even,
