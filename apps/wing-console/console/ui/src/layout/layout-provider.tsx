@@ -10,7 +10,7 @@ export enum LayoutType {
   Tutorial,
 }
 
-const LayoutContext = createContext(LayoutType.Vscode);
+export const LayoutContext = createContext(LayoutType.Vscode);
 
 export interface LayoutProviderProps {
   layoutType?: LayoutType;
