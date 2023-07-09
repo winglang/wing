@@ -186,7 +186,7 @@ module.exports = function({  }) {
             "uniqueId": "testinflightscancallotherinflights_Handler_IamRolePolicy_1E6CC29C"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:GetObject*\",\"s3:GetBucket*\"],\"Resource\":[\"${aws_s3_bucket.cloudBucket.arn}\",\"${aws_s3_bucket.cloudBucket.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"lambda:InvokeFunction\"],\"Resource\":[\"${aws_lambda_function.func1.arn}\"],\"Effect\":\"Allow\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:List*\",\"s3:GetObject*\",\"s3:GetBucket*\"],\"Resource\":[\"${aws_s3_bucket.cloudBucket.arn}\",\"${aws_s3_bucket.cloudBucket.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"lambda:InvokeFunction\"],\"Resource\":[\"${aws_lambda_function.func1.arn}\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.testinflightscancallotherinflights_Handler_IamRole_30D96E98.name}"
       },
       "testvariablecanbeaninflightclosure_Handler_IamRolePolicy_B1660864": {
