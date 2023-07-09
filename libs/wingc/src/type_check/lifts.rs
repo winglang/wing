@@ -18,9 +18,6 @@ pub struct Lifts {
 	/// Map from token to lift
 	lift_by_token: BTreeMap<String, Lift>,
 
-	/// A map of all lifted fields (`this.foo`). Key is token, value is the javascript code.
-	lifted_fields_by_token: BTreeMap<String, String>,
-
 	/// Map between expression id and a lift token.
 	token_by_expr_id: BTreeMap<usize, String>,
 }
@@ -73,7 +70,6 @@ impl Lifts {
 			lifts: BTreeMap::new(),
 			lift_by_token: BTreeMap::new(),
 			captures: BTreeMap::new(),
-			lifted_fields_by_token: BTreeMap::new(),
 			token_by_expr_id: BTreeMap::new(),
 		}
 	}
@@ -129,13 +125,6 @@ impl Lifts {
 
 		if let Some(op) = &property {
 			lift.ops.insert(op.clone());
-		}
-
-		if is_field {
-			self
-				.lifted_fields_by_token
-				.entry(token.to_string())
-				.or_insert(code.to_string());
 		}
 	}
 
