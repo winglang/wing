@@ -1,4 +1,5 @@
 import { SHA256 } from "crypto-js";
+import { nanoid, customAlphabet } from "nanoid";
 import { v4 } from "uuid";
 import { Code, InflightClient } from "../core";
 import { Duration, IResource } from "../std";
@@ -35,6 +36,21 @@ export interface IPredicateHandlerClient {
    * @inflight
    */
   handle(): Promise<boolean>;
+}
+
+/**
+ * Options to generating a unique ID
+ */
+export interface NanoIDOptions {
+  /**
+   * Size of ID
+   * @default 21
+   */
+  readonly size?: number;
+  /**
+   * Characters that make up the alphabet to generate the ID, limited to 256 characters or fewer.
+   */
+  readonly alphabet?: string;
 }
 
 /**
@@ -112,6 +128,18 @@ export class Util {
    */
   public static uuidv4(): string {
     return v4();
+  }
+
+  /**
+   * Generates a unique ID using the nanoid library.
+   * @param options - Optional options object for generating the ID.
+   */
+  public static nanoid(options?: NanoIDOptions): string {
+    const size = options?.size ?? 21;
+    const nano = options?.alphabet
+      ? customAlphabet(options.alphabet, size)
+      : undefined;
+    return nano ? nano(size) : nanoid(size);
   }
 
   /**

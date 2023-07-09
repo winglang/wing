@@ -12,6 +12,17 @@ source: libs/wingc/src/lsp/completions.rs
   command:
     title: triggerParameterHints
     command: editor.action.triggerParameterHints
+- label: nanoid
+  kind: 2
+  documentation:
+    kind: markdown
+    value: "```wing\nstatic nanoid: (options: NanoIDOptions?): str\n```\n---\nGenerates a unique ID using the nanoid library.\n\n### Parameters\n - *options* - - Optional options object for generating the ID."
+  sortText: ff|nanoid
+  insertText: nanoid($0)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
 - label: sha256
   kind: 2
   documentation:
@@ -73,6 +84,12 @@ source: libs/wingc/src/lsp/completions.rs
     kind: markdown
     value: "```wing\nclass Util\n```\n---\nUtility functions."
   sortText: gg|Util
+- label: NanoIDOptions
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nNanoIDOptions\n```\n---\nOptions to generating a unique ID."
+  sortText: hh|NanoIDOptions
 - label: WaitUntilProps
   kind: 22
   documentation:

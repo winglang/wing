@@ -74,6 +74,7 @@ const project = new cdk.JsiiProject({
     "express",
     "uuid",
     "crypto-js",
+    "nanoid@^3.3.6",
     "cron-parser",
     // shared client dependencies
     "ioredis",
