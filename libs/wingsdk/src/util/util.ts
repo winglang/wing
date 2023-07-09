@@ -1,6 +1,7 @@
+import { SHA256 } from "crypto-js";
+import { v4 } from "uuid";
 import { Code, InflightClient } from "../core";
 import { Duration, IResource } from "../std";
-import { v4 } from "uuid";
 
 /**
  * Properties for `util.waitUntil`.
@@ -23,7 +24,7 @@ export interface WaitUntilProps {
  * `util.busyWait`.
  * @inflight `@winglang/sdk.util.IPredicateHandlerClient`
  */
-export interface IPredicateHandler extends IResource { }
+export interface IPredicateHandler extends IResource {}
 
 /**
  * Inflight client for `IPredicateHandler`.
@@ -99,8 +100,15 @@ export class Util {
   }
 
   /**
-   * create a universally unique identifier (UUID) v4
-   * @returns 
+   * Computes the SHA256 hash of the given data.
+   * @param data - The string to be hashed.
+   */
+  public static sha256(data: string): string {
+    return SHA256(data).toString();
+  }
+
+  /**
+   * Generates a version 4 UUID.
    */
   public static uuidv4(): string {
     return v4();

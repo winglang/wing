@@ -12,6 +12,17 @@ source: libs/wingc/src/lsp/completions.rs
   command:
     title: triggerParameterHints
     command: editor.action.triggerParameterHints
+- label: sha256
+  kind: 2
+  documentation:
+    kind: markdown
+    value: "```wing\nstatic sha256: (data: str): str\n```\n---\nComputes the SHA256 hash of the given data.\n\n### Parameters\n - *data* - - The string to be hashed."
+  sortText: ff|sha256
+  insertText: sha256($0)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
 - label: sleep
   kind: 2
   documentation:
@@ -30,6 +41,17 @@ source: libs/wingc/src/lsp/completions.rs
     value: "```wing\nstatic tryEnv: (name: str): str?\n```\n---\nReturns the value of an environment variable.\n\n### Parameters\n - *name* - The name of the environment variable.\n\n### Returns\nThe value of the environment variable or `nil`.\n\n### Remarks\nReturns `nil` if not found or empty."
   sortText: ff|tryEnv
   insertText: tryEnv($0)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: uuidv4
+  kind: 2
+  documentation:
+    kind: markdown
+    value: "```wing\nstatic uuidv4: (): str\n```\n---\nGenerates a version 4 UUID."
+  sortText: ff|uuidv4
+  insertText: uuidv4($0)
   insertTextFormat: 2
   command:
     title: triggerParameterHints

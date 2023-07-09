@@ -73,6 +73,7 @@ const project = new cdk.JsiiProject({
     "tar",
     "express",
     "uuid",
+    "crypto-js",
     "cron-parser",
     // shared client dependencies
     "ioredis",
@@ -93,6 +94,7 @@ const project = new cdk.JsiiProject({
     "fs-extra",
     "vitest",
     "@types/uuid",
+    "@types/crypto-js",
     "@vitest/coverage-v8",
     "nanoid", // for ESM import test in target-sim/function.test.ts
     ...JSII_DEPS,

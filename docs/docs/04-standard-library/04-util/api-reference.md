@@ -86,8 +86,10 @@ new util.Util()
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/sdk.util.Util.env">env</a></code> | Returns the value of an environment variable. |
+| <code><a href="#@winglang/sdk.util.Util.sha256">sha256</a></code> | Computes the SHA256 hash of the given data. |
 | <code><a href="#@winglang/sdk.util.Util.sleep">sleep</a></code> | Suspends execution for a given duration. |
 | <code><a href="#@winglang/sdk.util.Util.tryEnv">tryEnv</a></code> | Returns the value of an environment variable. |
+| <code><a href="#@winglang/sdk.util.Util.uuidv4">uuidv4</a></code> | Generates a version 4 UUID. |
 | <code><a href="#@winglang/sdk.util.Util.waitUntil">waitUntil</a></code> | Run a predicate repeatedly, waiting until it returns true or until the timeout elapses. |
 
 ---
@@ -109,6 +111,24 @@ Throws if not found or empty.
 - *Type:* str
 
 The name of the environment variable.
+
+---
+
+##### `sha256` <a name="sha256" id="@winglang/sdk.util.Util.sha256"></a>
+
+```wing
+bring util;
+
+util.Util.sha256(data: str)
+```
+
+Computes the SHA256 hash of the given data.
+
+###### `data`<sup>Required</sup> <a name="data" id="@winglang/sdk.util.Util.sha256.parameter.data"></a>
+
+- *Type:* str
+
+The string to be hashed.
 
 ---
 
@@ -151,6 +171,16 @@ Returns `nil` if not found or empty.
 The name of the environment variable.
 
 ---
+
+##### `uuidv4` <a name="uuidv4" id="@winglang/sdk.util.Util.uuidv4"></a>
+
+```wing
+bring util;
+
+util.Util.uuidv4()
+```
+
+Generates a version 4 UUID.
 
 ##### `waitUntil` <a name="waitUntil" id="@winglang/sdk.util.Util.waitUntil"></a>
 

@@ -1,0 +1,9 @@
+{
+  "name": "examples-util",
+  "dependencies": {
+    "uuid": "^9.0.0"
+  },
+  "volta": {
+    "extends": "../../../package.json"
+  }
+}
