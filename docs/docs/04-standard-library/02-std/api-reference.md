@@ -926,13 +926,13 @@ new std.Json()
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.std.Json.asBool">asBool</a></code> | Convert Json element to number if possible. |
+| <code><a href="#@winglang/sdk.std.Json.asBool">asBool</a></code> | Convert Json element to boolean if possible. |
 | <code><a href="#@winglang/sdk.std.Json.asNum">asNum</a></code> | Convert Json element to number if possible. |
 | <code><a href="#@winglang/sdk.std.Json.asStr">asStr</a></code> | Convert Json element to string if possible. |
 | <code><a href="#@winglang/sdk.std.Json.get">get</a></code> | Returns a specified element from the Json. |
 | <code><a href="#@winglang/sdk.std.Json.getAt">getAt</a></code> | Returns a specified element at a given index from Json Array. |
 | <code><a href="#@winglang/sdk.std.Json.tryAsBool">tryAsBool</a></code> | Convert Json element to boolean if possible. |
-| <code><a href="#@winglang/sdk.std.Json.tryAsNum">tryAsNum</a></code> | Convert Json element to string if possible. |
+| <code><a href="#@winglang/sdk.std.Json.tryAsNum">tryAsNum</a></code> | Convert Json element to number if possible. |
 | <code><a href="#@winglang/sdk.std.Json.tryAsStr">tryAsStr</a></code> | Convert Json element to string if possible. |
 | <code><a href="#@winglang/sdk.std.Json.tryGet">tryGet</a></code> | Optionally returns an specified element from the Json. |
 | <code><a href="#@winglang/sdk.std.Json.tryGetAt">tryGetAt</a></code> | Optionally returns a specified element at a given index from Json Array. |
@@ -945,7 +945,7 @@ new std.Json()
 asBool(): bool
 ```
 
-Convert Json element to number if possible.
+Convert Json element to boolean if possible.
 
 ##### `asNum` <a name="asNum" id="@winglang/sdk.std.Json.asNum"></a>
 
@@ -1009,7 +1009,7 @@ Convert Json element to boolean if possible.
 tryAsNum(): num
 ```
 
-Convert Json element to string if possible.
+Convert Json element to number if possible.
 
 ##### `tryAsStr` <a name="tryAsStr" id="@winglang/sdk.std.Json.tryAsStr"></a>
 
@@ -1536,7 +1536,7 @@ new std.MutJson()
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.std.MutJson.asBool">asBool</a></code> | Convert Json element to number if possible. |
+| <code><a href="#@winglang/sdk.std.MutJson.asBool">asBool</a></code> | Convert Json element to boolean if possible. |
 | <code><a href="#@winglang/sdk.std.MutJson.asNum">asNum</a></code> | Convert Json element to number if possible. |
 | <code><a href="#@winglang/sdk.std.MutJson.asStr">asStr</a></code> | Convert Json element to string if possible. |
 | <code><a href="#@winglang/sdk.std.MutJson.get">get</a></code> | Returns a specified element from the Json. |
@@ -1544,7 +1544,7 @@ new std.MutJson()
 | <code><a href="#@winglang/sdk.std.MutJson.set">set</a></code> | Adds or updates an element in MutJson with a specific key and value. |
 | <code><a href="#@winglang/sdk.std.MutJson.setAt">setAt</a></code> | Set element in MutJson Array with a specific key and value. |
 | <code><a href="#@winglang/sdk.std.MutJson.tryAsBool">tryAsBool</a></code> | Convert Json element to boolean if possible. |
-| <code><a href="#@winglang/sdk.std.MutJson.tryAsNum">tryAsNum</a></code> | Convert Json element to string if possible. |
+| <code><a href="#@winglang/sdk.std.MutJson.tryAsNum">tryAsNum</a></code> | Convert Json element to number if possible. |
 | <code><a href="#@winglang/sdk.std.MutJson.tryAsStr">tryAsStr</a></code> | Convert Json element to string if possible. |
 | <code><a href="#@winglang/sdk.std.MutJson.tryGet">tryGet</a></code> | Optionally returns an specified element from the Json. |
 | <code><a href="#@winglang/sdk.std.MutJson.tryGetAt">tryGetAt</a></code> | Optionally returns a specified element at a given index from Json Array. |
@@ -1557,7 +1557,7 @@ new std.MutJson()
 asBool(): bool
 ```
 
-Convert Json element to number if possible.
+Convert Json element to boolean if possible.
 
 ##### `asNum` <a name="asNum" id="@winglang/sdk.std.MutJson.asNum"></a>
 
@@ -1667,7 +1667,7 @@ Convert Json element to boolean if possible.
 tryAsNum(): num
 ```
 
-Convert Json element to string if possible.
+Convert Json element to number if possible.
 
 ##### `tryAsStr` <a name="tryAsStr" id="@winglang/sdk.std.MutJson.tryAsStr"></a>
 
