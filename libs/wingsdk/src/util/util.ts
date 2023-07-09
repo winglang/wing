@@ -1,5 +1,6 @@
 import { Code, InflightClient } from "../core";
 import { Duration, IResource } from "../std";
+import { v4 } from "uuid";
 
 /**
  * Properties for `util.waitUntil`.
@@ -22,7 +23,7 @@ export interface WaitUntilProps {
  * `util.busyWait`.
  * @inflight `@winglang/sdk.util.IPredicateHandlerClient`
  */
-export interface IPredicateHandler extends IResource {}
+export interface IPredicateHandler extends IResource { }
 
 /**
  * Inflight client for `IPredicateHandler`.
@@ -95,6 +96,14 @@ export class Util {
       await this.sleep(interval);
     }
     return false;
+  }
+
+  /**
+   * create a universally unique identifier (UUID) v4
+   * @returns 
+   */
+  public static uuidv4(): string {
+    return v4();
   }
 
   /**
