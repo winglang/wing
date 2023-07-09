@@ -34,7 +34,7 @@
 This extension uses the globally installed `wing` CLI to provide language services. You can install it via npm:
 
 ```sh
-npm install -g @winglang/wing
+npm install -g winglang
 ```
 
 ### Planned Features
