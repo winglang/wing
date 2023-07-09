@@ -196,7 +196,14 @@ my_buckets: [(function(env) {
       "children": {
         "B1": {
           "attributes": {
-            "wing:resource:connections": [],
+            "wing:resource:connections": [
+              {
+                "direction": "inbound",
+                "implicit": false,
+                "relationship": "$inflight_init",
+                "resource": "root/Function",
+              },
+            ],
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -211,7 +218,14 @@ my_buckets: [(function(env) {
         },
         "B2": {
           "attributes": {
-            "wing:resource:connections": [],
+            "wing:resource:connections": [
+              {
+                "direction": "inbound",
+                "implicit": false,
+                "relationship": "$inflight_init",
+                "resource": "root/Function",
+              },
+            ],
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -226,7 +240,20 @@ my_buckets: [(function(env) {
         },
         "Function": {
           "attributes": {
-            "wing:resource:connections": [],
+            "wing:resource:connections": [
+              {
+                "direction": "outbound",
+                "implicit": false,
+                "relationship": "$inflight_init",
+                "resource": "root/B1",
+              },
+              {
+                "direction": "outbound",
+                "implicit": false,
+                "relationship": "$inflight_init",
+                "resource": "root/B2",
+              },
+            ],
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -1129,7 +1156,14 @@ my_map: new Map([[\\"foo\\",(function(env) {
       "children": {
         "B1": {
           "attributes": {
-            "wing:resource:connections": [],
+            "wing:resource:connections": [
+              {
+                "direction": "inbound",
+                "implicit": false,
+                "relationship": "$inflight_init",
+                "resource": "root/Function",
+              },
+            ],
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -1144,7 +1178,14 @@ my_map: new Map([[\\"foo\\",(function(env) {
         },
         "B2": {
           "attributes": {
-            "wing:resource:connections": [],
+            "wing:resource:connections": [
+              {
+                "direction": "inbound",
+                "implicit": false,
+                "relationship": "$inflight_init",
+                "resource": "root/Function",
+              },
+            ],
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -1159,7 +1200,20 @@ my_map: new Map([[\\"foo\\",(function(env) {
         },
         "Function": {
           "attributes": {
-            "wing:resource:connections": [],
+            "wing:resource:connections": [
+              {
+                "direction": "outbound",
+                "implicit": false,
+                "relationship": "$inflight_init",
+                "resource": "root/B1",
+              },
+              {
+                "direction": "outbound",
+                "implicit": false,
+                "relationship": "$inflight_init",
+                "resource": "root/B2",
+              },
+            ],
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -2006,7 +2060,14 @@ my_struct: {bucky: (function(env) {
       "children": {
         "B1": {
           "attributes": {
-            "wing:resource:connections": [],
+            "wing:resource:connections": [
+              {
+                "direction": "inbound",
+                "implicit": false,
+                "relationship": "$inflight_init",
+                "resource": "root/Function",
+              },
+            ],
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -2021,7 +2082,14 @@ my_struct: {bucky: (function(env) {
         },
         "B2": {
           "attributes": {
-            "wing:resource:connections": [],
+            "wing:resource:connections": [
+              {
+                "direction": "inbound",
+                "implicit": false,
+                "relationship": "$inflight_init",
+                "resource": "root/Function",
+              },
+            ],
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -2036,7 +2104,14 @@ my_struct: {bucky: (function(env) {
         },
         "B3": {
           "attributes": {
-            "wing:resource:connections": [],
+            "wing:resource:connections": [
+              {
+                "direction": "inbound",
+                "implicit": false,
+                "relationship": "$inflight_init",
+                "resource": "root/Function",
+              },
+            ],
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -2051,7 +2126,14 @@ my_struct: {bucky: (function(env) {
         },
         "B4": {
           "attributes": {
-            "wing:resource:connections": [],
+            "wing:resource:connections": [
+              {
+                "direction": "inbound",
+                "implicit": false,
+                "relationship": "$inflight_init",
+                "resource": "root/Function",
+              },
+            ],
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -2066,7 +2148,14 @@ my_struct: {bucky: (function(env) {
         },
         "B5": {
           "attributes": {
-            "wing:resource:connections": [],
+            "wing:resource:connections": [
+              {
+                "direction": "inbound",
+                "implicit": false,
+                "relationship": "$inflight_init",
+                "resource": "root/Function",
+              },
+            ],
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
@@ -2081,7 +2170,38 @@ my_struct: {bucky: (function(env) {
         },
         "Function": {
           "attributes": {
-            "wing:resource:connections": [],
+            "wing:resource:connections": [
+              {
+                "direction": "outbound",
+                "implicit": false,
+                "relationship": "$inflight_init",
+                "resource": "root/B1",
+              },
+              {
+                "direction": "outbound",
+                "implicit": false,
+                "relationship": "$inflight_init",
+                "resource": "root/B2",
+              },
+              {
+                "direction": "outbound",
+                "implicit": false,
+                "relationship": "$inflight_init",
+                "resource": "root/B3",
+              },
+              {
+                "direction": "outbound",
+                "implicit": false,
+                "relationship": "$inflight_init",
+                "resource": "root/B4",
+              },
+              {
+                "direction": "outbound",
+                "implicit": false,
+                "relationship": "$inflight_init",
+                "resource": "root/B5",
+              },
+            ],
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
