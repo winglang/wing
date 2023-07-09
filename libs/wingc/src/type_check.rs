@@ -3158,16 +3158,19 @@ impl<'a> TypeChecker<'a> {
 
 			// If this class has a parent, prime the method environment with `super`
 			if let Some(parent_type) = class_type.as_class().expect("a class type").parent {
-				method_env
-					.define(
-						&Symbol {
-							name: "super".into(),
-							span: method_name.span.clone(),
-						},
-						SymbolKind::make_free_variable("super".into(), parent_type, false, class_env.phase),
-						StatementIdx::Top,
-					)
-					.expect("Expected `super` to be added to method env");
+				// If this is a preflight type and the parent is the resource base type then it's an implicit parent and we act as if there's no `super`
+				if class_env.phase != Phase::Preflight || !parent_type.is_same_type_as(&self.types.resource_base_type()) {
+					method_env
+						.define(
+							&Symbol {
+								name: "super".into(),
+								span: method_name.span.clone(),
+							},
+							SymbolKind::make_free_variable("super".into(), parent_type, false, class_env.phase),
+							StatementIdx::Top,
+						)
+						.expect("Expected `super` to be added to method env");
+				}
 			}
 		}
 		self.add_arguments_to_env(&method_def.signature.parameters, method_sig, &mut method_env);
@@ -3853,7 +3856,7 @@ impl<'a> TypeChecker<'a> {
 					self.spanned_error(
 						&reference.span(),
 						format!(
-							"\"{}\" can only be used in an instance method or constructor",
+							"\"{}\" can only be used in an instance method or constructor of and inherited class",
 							reference
 						),
 					);

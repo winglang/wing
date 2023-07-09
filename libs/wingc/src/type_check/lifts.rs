@@ -79,9 +79,9 @@ impl Lifts {
 	}
 
 	fn render_token(&self, code: &str) -> String {
-		if code == "this" {
-			return code.to_string();
-		}
+		// if code == "this" || code.contains("Proxy") {
+		// 	return code.to_string();
+		// }
 
 		format!("${}", replace_non_alphanumeric(code))
 	}
@@ -146,9 +146,10 @@ impl Lifts {
 	/// Captures an expression.
 	pub fn capture(&mut self, expr_id: &usize, code: &str) {
 		// no need to capture this (it's already in scope)
-		if code == "this" {
-			return;
-		}
+		// if code == "this" || code.contains("Proxy") {
+		// 	println!("skipping capture of {code}");
+		// 	return;
+		// }
 
 		let token = self.render_token(code);
 

@@ -20,6 +20,7 @@ use crate::{
 	type_check::{
 		lifts::Lifts, symbol_env::SymbolEnv, ClassLike, Type, TypeRef, Types, VariableKind, CLASS_INFLIGHT_INIT_NAME,
 	},
+	visit_context::VisitContext,
 	MACRO_REPLACE_ARGS, MACRO_REPLACE_ARGS_TEXT, MACRO_REPLACE_SELF, WINGSDK_ASSEMBLY_NAME, WINGSDK_RESOURCE,
 	WINGSDK_STD_MODULE,
 };
@@ -44,13 +45,14 @@ const ROOT_CLASS: &str = "$Root";
 const JS_CONSTRUCTOR: &str = "constructor";
 
 pub struct JSifyContext<'a> {
-	pub in_json: bool,
 	/// The current execution phase of the AST traversal.
 	/// The root of any Wing app starts with the preflight phase, and
 	/// the `inflight` keyword specifies scopes that are inflight.
-	pub phase: Phase,
+	//pub phase: Phase,
 	pub files: &'a mut Files,
 	pub lifts: Option<&'a Lifts>,
+
+	pub visit_ctx: VisitContext,
 }
 
 pub struct JSifier<'a> {
@@ -106,8 +108,7 @@ impl<'a> JSifier<'a> {
 			_ => Ordering::Equal,
 		}) {
 			let mut jsify_context = JSifyContext {
-				in_json: false,
-				phase: Phase::Preflight,
+				visit_ctx: VisitContext::new(),
 				files: &mut files,
 				lifts: None,
 			};
@@ -212,8 +213,24 @@ impl<'a> JSifier<'a> {
 			}
 			Reference::SelfRef { as_super, .. } => {
 				if *as_super {
-					// JS's `super` is too limiting because you can't assing it to stuff (unlike `this`), use double `__proto__` hack instead
-					"this.__proto__.__proto__".to_string()
+					// JS's `super` is too limiting because you can't assing it to stuff (unlike `this`), create a "super proxy" instead
+					// format!(
+					// 	"$stdlib.core.getSuperProxy(this, {})",
+					// 	ctx.visit_ctx.current_class().expect("to be in a class")
+					// )
+					format!(
+						r#"(new Proxy(this, {{
+							get(target, property, _receiver) {{
+								let maybe_func = Object.getPrototypeOf({}.prototype)[property];
+								if (typeof maybe_func === "function") {{
+									return maybe_func.bind(target);
+								}}
+								return target[property];
+							}}
+						}}))
+						"#,
+						ctx.visit_ctx.current_class().expect("to be in a class")
+					)
 				} else {
 					"this".to_string()
 				}
@@ -274,7 +291,7 @@ impl<'a> JSifier<'a> {
 
 		// if we are in inflight and there's a lifting/capturing token associated with this expression
 		// then emit the token instead of the expression.
-		if ctx.phase == Phase::Inflight {
+		if ctx.visit_ctx.current_phase() == Phase::Inflight {
 			if let Some(lifts) = &ctx.lifts {
 				if let Some(t) = lifts.token_for_expr(&expression.id) {
 					return t.clone();
@@ -286,7 +303,7 @@ impl<'a> JSifier<'a> {
 		// this is an error. this can happen if we render a lifted preflight expression that references
 		// an e.g. variable from inflight (`myarr.get(i)` where `myarr` is preflight and `i` is an
 		// inflight variable). in this case we need to bail out.
-		if ctx.phase == Phase::Preflight {
+		if ctx.visit_ctx.current_phase() == Phase::Preflight {
 			if let Some(expr_phase) = self.types.get_expr_phase(expression) {
 				if expr_phase == Phase::Inflight {
 					report_diagnostic(Diagnostic {
@@ -299,7 +316,7 @@ impl<'a> JSifier<'a> {
 			}
 		}
 
-		let auto_await = match ctx.phase {
+		let auto_await = match ctx.visit_ctx.current_phase() {
 			Phase::Inflight => "await ",
 			_ => "",
 		};
@@ -398,7 +415,7 @@ impl<'a> JSifier<'a> {
 				Literal::Boolean(b) => (if *b { "true" } else { "false" }).to_string(),
 			},
 			ExprKind::Range { start, inclusive, end } => {
-				match ctx.phase {
+				match ctx.visit_ctx.current_phase() {
 					Phase::Inflight => format!(
 						"((s,e,i) => {{ function* iterator(start,end,inclusive) {{ let i = start; let limit = inclusive ? ((end < start) ? end - 1 : end + 1) : end; while (i < limit) yield i++; while (i > limit) yield i--; }}; return iterator(s,e,i); }})({},{},{})",
 						self.jsify_expression(start, ctx),
@@ -505,7 +522,7 @@ impl<'a> JSifier<'a> {
 					.collect::<Vec<String>>()
 					.join(", ");
 
-				if self.get_expr_type(expression).is_mutable_collection() || ctx.in_json {
+				if self.get_expr_type(expression).is_mutable_collection() || ctx.visit_ctx.in_json() {
 					// json arrays dont need frozen at nested level
 					format!("[{}]", item_list)
 				} else {
@@ -523,22 +540,18 @@ impl<'a> JSifier<'a> {
 				)
 			}
 			ExprKind::JsonLiteral { is_mut, element } => {
-				let json_context = &mut JSifyContext {
-					in_json: true,
-					phase: ctx.phase,
-					files: ctx.files,
-					lifts: ctx.lifts,
-				};
+				ctx.visit_ctx.push_json();
 				let js_out = match &element.kind {
 					ExprKind::JsonMapLiteral { .. } => {
 						if *is_mut {
-							self.jsify_expression(element, json_context)
+							self.jsify_expression(element, ctx)
 						} else {
-							format!("Object.freeze({})", self.jsify_expression(element, json_context))
+							format!("Object.freeze({})", self.jsify_expression(element, ctx))
 						}
 					}
-					_ => self.jsify_expression(element, json_context)
+					_ => self.jsify_expression(element, ctx)
 				};
+				ctx.visit_ctx.pop_json();
 				js_out
 			}
       ExprKind::JsonMapLiteral { fields } => {
@@ -557,7 +570,7 @@ impl<'a> JSifier<'a> {
 					.collect::<Vec<String>>()
 					.join(",");
 
-				if self.get_expr_type(expression).is_mutable_collection() || ctx.in_json {
+				if self.get_expr_type(expression).is_mutable_collection() || ctx.visit_ctx.in_json() {
 					// json maps dont need frozen in the nested level
 					format!("{{{}}}", f)
 				} else {
@@ -591,7 +604,7 @@ impl<'a> JSifier<'a> {
 		match &statement.kind {
 			StmtKind::SuperConstructor { arg_list } => {
 				let args = self.jsify_arg_list(&arg_list, None, None, ctx);
-				match ctx.phase {
+				match ctx.visit_ctx.current_phase() {
 					Phase::Preflight => CodeMaker::one_line(format!("super(scope,id,{});", args)),
 					_ => CodeMaker::one_line(format!("super({});", args)),
 				}
@@ -923,6 +936,26 @@ impl<'a> JSifier<'a> {
 	}
 
 	fn jsify_class(&self, env: &SymbolEnv, class: &AstClass, ctx: &mut JSifyContext) -> CodeMaker {
+		// extract the "env" from the class initializer and push it to the context
+		// because this is the environment in which we want to resolve references
+		// as oppose to the environment of the class definition itself.
+		let init_env = if let FunctionBody::Statements(ref s) = class.initializer.body {
+			Some(s.env.borrow().as_ref().unwrap().get_ref())
+		} else {
+			None
+		};
+		ctx.visit_ctx.push_class(
+			UserDefinedType {
+				root: class.name.clone(),
+				fields: vec![],
+				span: class.name.span.clone(),
+			},
+			// TODO: this is a bit weird, we preserve the phase instead of using the phase of the class so we can distinguish between
+			// an inflight class defined in preflight and an inflight class defined in inflight.
+			&ctx.visit_ctx.current_phase(),
+			init_env,
+		);
+
 		// lookup the class type
 		let class_type = env.lookup(&class.name, None).unwrap().as_type().unwrap();
 
@@ -935,10 +968,9 @@ impl<'a> JSifier<'a> {
 		};
 
 		let ctx = &mut JSifyContext {
-			in_json: ctx.in_json,
-			phase: ctx.phase,
 			files: ctx.files,
 			lifts,
+			visit_ctx: ctx.visit_ctx.clone(),
 		};
 
 		// emit the inflight side of the class into a separate file
@@ -946,7 +978,8 @@ impl<'a> JSifier<'a> {
 
 		// if this is inflight/independent, class, just emit the inflight class code inline and move on
 		// with your life.
-		if ctx.phase != Phase::Preflight {
+		if ctx.visit_ctx.current_phase() != Phase::Preflight {
+			ctx.visit_ctx.pop_class();
 			return inflight_class_code;
 		}
 
@@ -985,6 +1018,7 @@ impl<'a> JSifier<'a> {
 		code.add_code(self.jsify_register_bind_method(class, class_type, BindMethod::Type, ctx));
 
 		code.close("}");
+		ctx.visit_ctx.pop_class();
 		code
 	}
 
@@ -1113,13 +1147,8 @@ impl<'a> JSifier<'a> {
 	}
 
 	// Write a class's inflight to a file
-	fn jsify_class_inflight(&self, class: &AstClass, ctx: &mut JSifyContext) -> CodeMaker {
-		let mut ctx = JSifyContext {
-			phase: Phase::Inflight,
-			in_json: false,
-			files: ctx.files,
-			lifts: ctx.lifts,
-		};
+	fn jsify_class_inflight(&self, class: &AstClass, mut ctx: &mut JSifyContext) -> CodeMaker {
+		ctx.visit_ctx.push_phase(Phase::Inflight);
 
 		let mut class_code = CodeMaker::default();
 
@@ -1150,6 +1179,7 @@ impl<'a> JSifier<'a> {
 		}
 
 		class_code.close("}");
+		ctx.visit_ctx.pop_phase();
 		class_code
 	}
 

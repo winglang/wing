@@ -1271,7 +1271,7 @@ impl<'s> Parser<'s> {
 				}),
 				actual_node_span.clone(),
 			)),
-			"super_identifier" => Ok(Expr::new(
+			"parent_identifier" => Ok(Expr::new(
 				ExprKind::Reference(Reference::SelfRef {
 					as_super: true,
 					span: actual_node_span.clone(),

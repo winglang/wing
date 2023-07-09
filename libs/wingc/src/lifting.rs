@@ -125,14 +125,16 @@ impl<'a> LiftTransform<'a> {
 		return true;
 	}
 
-	fn jsify_expr(&self, node: &Expr, phase: Phase) -> String {
+	fn jsify_expr(&self, node: &Expr, _phase: Phase) -> String {
+		// let mut visit_ctx = VisitContext::new();
+		// visit_ctx.push_phase(phase);
 		self.jsify.jsify_expression(
 			&node,
 			&mut JSifyContext {
-				in_json: false,
-				phase: phase,
 				files: &mut Files::default(),
 				lifts: None,
+				//visit_ctx,
+				visit_ctx: self.ctx.clone(),
 			},
 		)
 	}
@@ -184,6 +186,12 @@ impl<'a> Fold for LiftTransform<'a> {
 		// if this expression represents the current class, no need to capture it (it is by definition
 		// available in the current scope)
 		if self.is_self_type_reference(&node) {
+			return fold::fold_expr(self, node);
+		}
+
+		// if the expression is a self reference then skip it since it should be available in the current
+		// scope
+		if matches!(&node.kind, &ExprKind::Reference(Reference::SelfRef { .. })) {
 			return fold::fold_expr(self, node);
 		}
 
