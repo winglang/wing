@@ -52,7 +52,7 @@ pub struct JSifyContext<'a> {
 	pub files: &'a mut Files,
 	pub lifts: Option<&'a Lifts>,
 
-	pub visit_ctx: VisitContext,
+	pub visit_ctx: &'a mut VisitContext,
 }
 
 pub struct JSifier<'a> {
@@ -107,8 +107,9 @@ impl<'a> JSifier<'a> {
 			(_, StmtKind::Class(AstClass { .. })) => Ordering::Greater,
 			_ => Ordering::Equal,
 		}) {
+			let mut visit_ctx = VisitContext::new();
 			let mut jsify_context = JSifyContext {
-				visit_ctx: VisitContext::new(),
+				visit_ctx: &mut visit_ctx,
 				files: &mut files,
 				lifts: None,
 			};
@@ -970,7 +971,7 @@ impl<'a> JSifier<'a> {
 		let ctx = &mut JSifyContext {
 			files: ctx.files,
 			lifts,
-			visit_ctx: ctx.visit_ctx.clone(),
+			visit_ctx: &mut ctx.visit_ctx,
 		};
 
 		// emit the inflight side of the class into a separate file

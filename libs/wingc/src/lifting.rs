@@ -133,7 +133,7 @@ impl<'a> LiftTransform<'a> {
 			&mut JSifyContext {
 				files: &mut Files::default(),
 				lifts: None,
-				visit_ctx,
+				visit_ctx: &mut visit_ctx,
 			},
 		)
 	}
