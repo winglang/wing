@@ -121,7 +121,7 @@ module.exports = function({ $initCount }) {
             "uniqueId": "testhello_Handler_IamRolePolicy_152A5EC1"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:GetItem\"],\"Resource\":[\"${aws_dynamodb_table.cloudCounter.arn}\"],\"Effect\":\"Allow\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.cloudCounter.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:GetItem\"],\"Resource\":[\"${aws_dynamodb_table.cloudCounter.arn}\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.testhello_Handler_IamRole_84258FE3.name}"
       }
     },
@@ -260,6 +260,9 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+          Bar._registerBindObject(this.foo, host, []);
+        }
         if (ops.includes("callFoo")) {
           Bar._registerBindObject(this.foo, host, ["method"]);
         }

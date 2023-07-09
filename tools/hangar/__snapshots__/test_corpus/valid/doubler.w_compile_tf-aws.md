@@ -329,6 +329,9 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+          Doubler._registerBindObject(this.func, host, []);
+        }
         if (ops.includes("invoke")) {
           Doubler._registerBindObject(this.func, host, ["handle"]);
         }
