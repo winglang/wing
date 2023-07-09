@@ -111,9 +111,6 @@ class $Root extends $stdlib.std.Resource {
         if (ops.includes("$inflight_init")) {
           MyType._registerBindObject(this.b, host, []);
         }
-        if (ops.includes("checkIfEmpty")) {
-          MyType._registerBindObject(this, host, ["isEmpty"]);
-        }
         if (ops.includes("isEmpty")) {
           MyType._registerBindObject(this.b, host, ["list"]);
         }

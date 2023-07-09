@@ -129,12 +129,6 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
-      _registerBind(host, ops) {
-        if (ops.includes("foo")) {
-          Derived._registerBindObject(this, host, ["put"]);
-        }
-        super._registerBind(host, ops);
-      }
     }
   }
 }

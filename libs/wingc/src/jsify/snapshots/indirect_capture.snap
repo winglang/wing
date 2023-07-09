@@ -104,9 +104,6 @@ class $Root extends $stdlib.std.Resource {
         if (ops.includes("foo")) {
           Capture._registerBindObject(b, host, ["list"]);
         }
-        if (ops.includes("goo")) {
-          Capture._registerBindObject(this, host, ["foo"]);
-        }
         super._registerBind(host, ops);
       }
     }

@@ -113,9 +113,6 @@ class $Root extends $stdlib.std.Resource {
         if (ops.includes("another")) {
           MyClosure._registerBindObject(this.q, host, ["push"]);
         }
-        if (ops.includes("handle")) {
-          MyClosure._registerBindObject(this, host, ["another"]);
-        }
         super._registerBind(host, ops);
       }
     }
