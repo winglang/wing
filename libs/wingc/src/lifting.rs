@@ -125,16 +125,15 @@ impl<'a> LiftTransform<'a> {
 		return true;
 	}
 
-	fn jsify_expr(&self, node: &Expr, _phase: Phase) -> String {
-		// let mut visit_ctx = VisitContext::new();
-		// visit_ctx.push_phase(phase);
+	fn jsify_expr(&self, node: &Expr, phase: Phase) -> String {
+		let mut visit_ctx = self.ctx.clone();
+		visit_ctx.push_phase(phase);
 		self.jsify.jsify_expression(
 			&node,
 			&mut JSifyContext {
 				files: &mut Files::default(),
 				lifts: None,
-				//visit_ctx,
-				visit_ctx: self.ctx.clone(),
+				visit_ctx,
 			},
 		)
 	}
