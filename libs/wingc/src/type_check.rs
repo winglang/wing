@@ -3840,7 +3840,7 @@ impl<'a> TypeChecker<'a> {
 					_ => self.spanned_error_with_var(property, format!("\"{}\" not a valid reference", reference)),
 				}
 			}
-			Reference::SelfRef { .. } => {
+			Reference::SelfRef { as_super, .. } => {
 				// TODO: ideally we can resolve this based on the current class instead of doing a lookup, perhaps even remove `this`/`super`
 				// from the environment entirely
 				let lookup_res = env.lookup_ext(
@@ -3853,13 +3853,18 @@ impl<'a> TypeChecker<'a> {
 					(var, phase)
 				} else {
 					// Any lookup failure for `this`/`super` means it was used in an unexpected context
-					self.spanned_error(
-						&reference.span(),
+					let msg = if *as_super {
 						format!(
 							"\"{}\" can only be used in an instance method or constructor of and inherited class",
 							reference
-						),
-					);
+						)
+					} else {
+						format!(
+							"\"{}\" can only be used in an instance method or constructor",
+							reference
+						)
+					};
+					self.spanned_error(&reference.span(), msg);
 					(self.make_error_variable_info(), Phase::Independent)
 				}
 			}
