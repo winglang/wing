@@ -143,6 +143,12 @@ console.log(\\"Hello from schedule!\\");
                 "relationship": "handle",
                 "resource": "root/my_schedule-OnTick-e645076f",
               },
+              {
+                "direction": "inbound",
+                "implicit": false,
+                "relationship": "$inflight_init",
+                "resource": "root/my_schedule-OnTick-e645076f",
+              },
             ],
           },
           "constructInfo": {
@@ -218,6 +224,12 @@ console.log(\\"Hello from schedule!\\");
                 "direction": "outbound",
                 "implicit": false,
                 "relationship": "handle",
+                "resource": "root/Handler",
+              },
+              {
+                "direction": "outbound",
+                "implicit": false,
+                "relationship": "$inflight_init",
                 "resource": "root/Handler",
               },
               {
@@ -339,6 +351,12 @@ console.log(\\"Hello from schedule!\\");
                 "relationship": "handle",
                 "resource": "root/my_schedule-OnTick-e645076f",
               },
+              {
+                "direction": "inbound",
+                "implicit": false,
+                "relationship": "$inflight_init",
+                "resource": "root/my_schedule-OnTick-e645076f",
+              },
             ],
           },
           "constructInfo": {
@@ -414,6 +432,12 @@ console.log(\\"Hello from schedule!\\");
                 "direction": "outbound",
                 "implicit": false,
                 "relationship": "handle",
+                "resource": "root/Handler",
+              },
+              {
+                "direction": "outbound",
+                "implicit": false,
+                "relationship": "$inflight_init",
                 "resource": "root/Handler",
               },
               {
@@ -535,6 +559,12 @@ console.log(\\"Hello from schedule!\\");
                 "relationship": "handle",
                 "resource": "root/my_schedule-OnTick-e645076f",
               },
+              {
+                "direction": "inbound",
+                "implicit": false,
+                "relationship": "$inflight_init",
+                "resource": "root/my_schedule-OnTick-e645076f",
+              },
             ],
           },
           "constructInfo": {
@@ -610,6 +640,12 @@ console.log(\\"Hello from schedule!\\");
                 "direction": "outbound",
                 "implicit": false,
                 "relationship": "handle",
+                "resource": "root/Handler",
+              },
+              {
+                "direction": "outbound",
+                "implicit": false,
+                "relationship": "$inflight_init",
                 "resource": "root/Handler",
               },
               {
