@@ -90,6 +90,11 @@ impl Lifts {
 
 	/// Adds a lift for an expression.
 	pub fn lift(&mut self, expr_id: usize, method: Option<Symbol>, property: Option<String>, code: &str) {
+		// no need to capture this (it's already in scope)
+		if code == "this" {
+			return;
+		}
+
 		let is_field = code.contains("this.");
 
 		let token = self.render_token(code);
