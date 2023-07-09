@@ -8,10 +8,6 @@ export interface OSData {
 }
 
 export class OSCollector extends Collector {
-  async canCollect(): Promise<boolean> {
-    return true;
-  }
-
   async collect(): Promise<OSData> {
     return {
       arch: os.arch(),

@@ -8,6 +8,10 @@ import { getWingAnalyticsCollectionConfig } from '../collect';
 const filePath = process.argv[2];
 
 try {
+  if (!filePath) {
+    throw new Error('No file analytic path provided');
+  }
+
   const analytics = new Analytics({ writeKey: 'sCqPF5xSscOjJdi5Tbkqu73vfF8zkZdw'});
   const event = loadAnalyticsEvent(filePath);
   const analyticsConfig = getWingAnalyticsCollectionConfig();

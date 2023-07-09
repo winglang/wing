@@ -5,10 +5,6 @@ export interface NodeData {
 }
 
 export class NodeCollector extends Collector {
-  async canCollect(): Promise<boolean> {
-    return true;
-  }
-
   async collect(): Promise<NodeData> {
     return {
       version: process.version,

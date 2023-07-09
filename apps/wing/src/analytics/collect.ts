@@ -14,7 +14,7 @@ import { PACKAGE_VERSION } from "../cli";
  * @param cmd The commander command to collect analytics for
  * @returns string the file path of the stored analytic
  */
-export async function collectCommandAnalytics(cmd: Command): Promise<string> {
+export async function collectCommandAnalytics(cmd: Command): Promise<string | undefined> {
   const osCollector = new OSCollector();
   const nodeCollector = new NodeCollector();
   const ciCollector = new CICollector();
@@ -26,17 +26,16 @@ export async function collectCommandAnalytics(cmd: Command): Promise<string> {
       cli: await cliCollector.collect(),
       os: await osCollector.collect(),
       node: await nodeCollector.collect(),
+      ci: await ciCollector.collect(),
     }
-  }
-
-  if (await ciCollector.canCollect()) {
-    event.properties.ci = await ciCollector.collect();
   }
   
   let analyticFilePath = storeAnalyticEvent(event);
+  
   if (getWingAnalyticsCollectionConfig().debug) {
     console.log(`Analytics event stored at ${analyticFilePath}`);
   }
+  
   return analyticFilePath;
 }
 

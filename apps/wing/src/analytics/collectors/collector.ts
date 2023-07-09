@@ -5,8 +5,7 @@ export interface Data {
 }
 
 export abstract class Collector {
-  abstract canCollect(): Promise<boolean>;
-  abstract collect(): Promise<Data>;
+  abstract collect(): Promise<Data | undefined>;
 
   async runCommand(cmd: string, args: string[]): Promise<any> {
     try {

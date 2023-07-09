@@ -20,25 +20,31 @@ interface AnalyticsConfig {
  * @param event the event to store
  * @returns string the file path of the stored analytic
  */
-export function storeAnalyticEvent(event: AnalyticEvent): string {
-  const eventId = uuidv4();
-  const tmpdir = path.join(os.tmpdir(), "wing-analytics");
+export function storeAnalyticEvent(event: AnalyticEvent): string | undefined {
+  try {
+    const eventId = uuidv4();
+    const tmpdir = path.join(os.tmpdir(), "wing-analytics");
+    
+    if (!existsSync(tmpdir)) {
+      mkdirSync(tmpdir);
+    }
+
+    const analyticReportFile = path.join(tmpdir, `${eventId}.json`);
+    
+    const anonymousId = getAnonymousId();
   
-  if (!existsSync(tmpdir)) {
-    mkdirSync(tmpdir);
+    // attach timestamp and anonymousId to event
+    event.timestamp = event.timestamp ?? new Date().toISOString();
+    event.anonymousId = anonymousId;
+  
+    saveAnalyticsReport(analyticReportFile, event);
+  
+    return analyticReportFile;
+
+  } catch (error) {
+    return undefined;
   }
 
-  const analyticReportFile = path.join(tmpdir, `${eventId}.json`);
-  
-  const anonymousId = getAnonymousId();
-
-  // attach timestamp and anonymousId to event
-  event.timestamp = event.timestamp ?? new Date().toISOString();
-  event.anonymousId = anonymousId;
-
-  saveAnalyticsReport(analyticReportFile, event);
-
-  return analyticReportFile;
 }
 
 export function getAnonymousId(): string {
@@ -50,16 +56,13 @@ export function loadAnalyticsConfig(): AnalyticsConfig {
   try {
     const fileContents = readFileSync(WING_ANALYTICS_CONFIG_FILE, 'utf-8');
     return JSON.parse(fileContents) as AnalyticsConfig;
-  } catch (error) {
+  } catch (error: any) {
     // Possible issue reading analytics config file, first determine if file exists yet
-    if (existsSync(WING_ANALYTICS_CONFIG_FILE)) {
-      // File exists but could not be read. In this case we should not attempt to
-      // make any assumptions about the contents of the file
-      // This exception will only be visible in DEBUG mode
-      throw new Error("Could not read analytics config file")
+
+    if (error.code === 'EACCES') {
+      throw new Error("Not able to access analytics config file due to permissions");
     }
 
-    // Since file does NOT exist we can generate a new config and store it
     const analyticsConfig: AnalyticsConfig = {
       anonymousId: randomBytes(16).toString('hex'),
       optOut: false,

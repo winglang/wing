@@ -15,10 +15,6 @@ export class CLICollector extends Collector {
     this.cmd = cmd;
   }
 
-  async canCollect(): Promise<boolean> {
-    return true;
-  }
-
   async collect(): Promise<CLIData> {
     return {
       target: this.cmd.opts().target,

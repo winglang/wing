@@ -15,7 +15,7 @@ import { optionallyDisplayDisclaimer } from "./analytics/disclaimer";
 export const PACKAGE_VERSION = require("../package.json").version as string;
 
 const ANALYTICS_COLLECTION_CONFIG = getWingAnalyticsCollectionConfig(); 
-let analyticsExportFile: Promise<string> | undefined = undefined;
+let analyticsExportFile: Promise<string | undefined>;
 
 const SUPPORTED_NODE_VERSION = require("../package.json").engines.node as string;
 if (!SUPPORTED_NODE_VERSION) {
