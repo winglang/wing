@@ -5,34 +5,50 @@ source: libs/wingc/src/jsify/tests.rs
 
 ```w
 
-    class A {
-      inflight x: str;
-      inflight init() {
-        this.x = "hello";
+    bring cloud;
+
+    class Foo {
+      c: cloud.Counter;
+      inflight myField: str;
+
+      init() {
+        this.c = new cloud.Counter();
       }
 
-      inflight method() {
-        log(this.x);
+      inflight init() {
+        this.myField = "hello";
+      }
+
+      inflight incCounter() {
+        this.c.inc();
+      }
+
+      inflight dontTouchCounter() {
+        log("hello");
       }
     }
     
 ```
 
-## inflight.A.js
+## inflight.Foo.js
 
 ```js
 module.exports = function({  }) {
-  class A {
-    constructor({  }) {
+  class Foo {
+    constructor({ $this_c }) {
+      this.$this_c = $this_c;
     }
-    async method() {
-      {console.log(this.x)};
+    async incCounter() {
+      (await this.$this_c.inc());
+    }
+    async dontTouchCounter() {
+      {console.log("hello")};
     }
     async $inflight_init() {
-      this.x = "hello";
+      this.myField = "hello";
     }
   }
-  return A;
+  return Foo;
 }
 ```
 
@@ -44,30 +60,42 @@ const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
+const cloud = require('@winglang/sdk').cloud;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
-    class A extends $stdlib.std.Resource {
+    class Foo extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("method", "$inflight_init", "x");
+        this.c = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"cloud.Counter");
+        this._addInflightOps("incCounter", "dontTouchCounter", "$inflight_init", "myField");
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.A.js")({
+          require("./inflight.Foo.js")({
           })
         `);
       }
       _toInflight() {
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const AClient = ${A._toInflightType(this).text};
-            const client = new AClient({
+            const FooClient = ${Foo._toInflightType(this).text};
+            const client = new FooClient({
+              $this_c: ${this._lift(this.c)},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
         `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+          Foo._registerBindObject(this.c, host, []);
+        }
+        if (ops.includes("incCounter")) {
+          Foo._registerBindObject(this.c, host, ["inc"]);
+        }
+        super._registerBind(host, ops);
       }
     }
   }

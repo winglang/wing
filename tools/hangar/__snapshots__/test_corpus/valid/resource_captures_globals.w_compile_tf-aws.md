@@ -679,6 +679,9 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+          MyResource._registerBindObject(this.localTopic, host, []);
+        }
         if (ops.includes("myPut")) {
           MyResource._registerBindObject(Another, host, ["myStaticMethod"]);
           MyResource._registerBindObject((globalArrayOfStr.at(0)), host, []);

@@ -106,6 +106,12 @@ exports[`tree.json for an app with many resources 1`] = `
                                   "relationship": "inc",
                                   "resource": "root/Default/Default/test:test/Handler",
                                 },
+                                {
+                                  "direction": "inbound",
+                                  "implicit": false,
+                                  "relationship": "dec",
+                                  "resource": "root/Default/Default/test:test/Handler",
+                                },
                               ],
                             },
                             "children": {
@@ -1130,6 +1136,12 @@ exports[`tree.json for an app with many resources 1`] = `
                               "direction": "outbound",
                               "implicit": false,
                               "relationship": "inc",
+                              "resource": "root/Default/Default/Bar/Foo/cloud.Counter",
+                            },
+                            {
+                              "direction": "outbound",
+                              "implicit": false,
+                              "relationship": "dec",
                               "resource": "root/Default/Default/Bar/Foo/cloud.Counter",
                             },
                             {
