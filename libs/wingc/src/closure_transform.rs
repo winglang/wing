@@ -47,6 +47,8 @@ pub struct ClosureTransformer {
 	phase: Phase,
 	// Whether the transformer is inside a scope where "this" is valid.
 	inside_scope_with_this: bool,
+	// Whether the transformer is inside a scope where "super" is valid.
+	inside_scope_with_super: Vec<bool>,
 	// Helper state for generating unique class names
 	closure_counter: usize,
 	// Stores the list of class definitions that need to be added to the nearest scope
@@ -64,6 +66,7 @@ impl ClosureTransformer {
 			closure_counter: 0,
 			class_statements: vec![],
 			nearest_stmt_idx: 0,
+			inside_scope_with_super: vec![false],
 		}
 	}
 }
@@ -96,6 +99,17 @@ impl Fold for ClosureTransformer {
 			span: node.span,
 			env: node.env,
 		}
+	}
+
+	fn fold_class(&mut self, node: Class) -> Class {
+		if node.parent.is_some() {
+			self.inside_scope_with_super.push(true);
+		} else {
+			self.inside_scope_with_super.push(false);
+		}
+		let new_node = fold::fold_class(self, node);
+		self.inside_scope_with_super.pop();
+		new_node
 	}
 
 	fn fold_function_definition(&mut self, node: FunctionDefinition) -> FunctionDefinition {
@@ -219,10 +233,6 @@ impl Fold for ClosureTransformer {
 						format!("{}_{}", PARENT_THIS_NAME, self.closure_counter),
 						WingSpan::default(),
 					);
-					let parent_super_name = Symbol::new(
-						format!("{}_{}", PARENT_SUPER_NAME, self.closure_counter),
-						WingSpan::default(),
-					);
 					let parent_this_def = Stmt {
 						kind: StmtKind::Let {
 							reassignable: false,
@@ -239,6 +249,17 @@ impl Fold for ClosureTransformer {
 						span: WingSpan::default(),
 						idx: 0,
 					};
+					self.class_statements.push(parent_this_def);
+				}
+
+				// If we are inside a scope with "super", add define `let __parent_super_${CLOSURE_COUNT} = this` which can be
+				// used by the newly-created preflight classes
+				let inside_scope_with_super = *self.inside_scope_with_super.last().unwrap() && self.inside_scope_with_this;
+				if inside_scope_with_super {
+					let parent_super_name = Symbol::new(
+						format!("{}_{}", PARENT_SUPER_NAME, self.closure_counter),
+						WingSpan::default(),
+					);
 					let parent_super_def = Stmt {
 						kind: StmtKind::Let {
 							reassignable: false,
@@ -255,7 +276,6 @@ impl Fold for ClosureTransformer {
 						span: WingSpan::default(),
 						idx: 0,
 					};
-					self.class_statements.push(parent_this_def);
 					self.class_statements.push(parent_super_def);
 				}
 
