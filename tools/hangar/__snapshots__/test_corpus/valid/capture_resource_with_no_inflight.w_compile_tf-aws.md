@@ -2,7 +2,7 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ $a, $a_field }) {
+module.exports = function({ $a_field }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -11,7 +11,6 @@ module.exports = function({ $a, $a_field }) {
     }
     async handle() {
       {((cond) => {if (!cond) throw new Error("assertion failed: \"hey\" == a.field")})(("hey" === $a_field))};
-      (await $a.bar());
     }
   }
   return $Closure1;
@@ -23,13 +22,7 @@ module.exports = function({ $a, $a_field }) {
 ```js
 module.exports = function({  }) {
   class A {
-    constructor({ $this_counter }) {
-      this.$this_counter = $this_counter;
-    }
-    async incCounter() {
-      (await this.$this_counter.inc());
-    }
-    async bar() {
+    constructor({  }) {
     }
   }
   return A;
@@ -67,25 +60,6 @@ module.exports = function({  }) {
     ]
   },
   "resource": {
-    "aws_dynamodb_table": {
-      "A_cloudCounter_1CAB7DAD": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/A/cloud.Counter/Default",
-            "uniqueId": "A_cloudCounter_1CAB7DAD"
-          }
-        },
-        "attribute": [
-          {
-            "name": "id",
-            "type": "S"
-          }
-        ],
-        "billing_mode": "PAY_PER_REQUEST",
-        "hash_key": "id",
-        "name": "wing-counter-cloud.Counter-c88d0b81"
-      }
-    },
     "aws_iam_role": {
       "testtest_Handler_IamRole_15693C93": {
         "//": {
@@ -131,7 +105,6 @@ module.exports = function({  }) {
         },
         "environment": {
           "variables": {
-            "DYNAMODB_TABLE_NAME_5b05aa10": "${aws_dynamodb_table.A_cloudCounter_1CAB7DAD.name}",
             "WING_FUNCTION_NAME": "Handler-c8f4f2a1",
             "WING_TARGET": "tf-aws"
           }
@@ -193,8 +166,7 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.field = "hey";
-        this.counter = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"cloud.Counter");
-        this._addInflightOps("incCounter", "bar", "$inflight_init");
+        this._addInflightOps("$inflight_init");
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
@@ -207,21 +179,11 @@ class $Root extends $stdlib.std.Resource {
           (await (async () => {
             const AClient = ${A._toInflightType(this).text};
             const client = new AClient({
-              $this_counter: ${this._lift(this.counter)},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
         `);
-      }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          A._registerBindObject(this.counter, host, []);
-        }
-        if (ops.includes("incCounter")) {
-          A._registerBindObject(this.counter, host, ["inc"]);
-        }
-        super._registerBind(host, ops);
       }
     }
     class $Closure1 extends $stdlib.std.Resource {
@@ -233,7 +195,6 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure1.js")({
-            $a: ${context._lift(a)},
             $a_field: ${context._lift(a.field)},
           })
         `);
@@ -251,7 +212,6 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(a, host, ["bar"]);
           $Closure1._registerBindObject(a.field, host, []);
         }
         super._registerBind(host, ops);

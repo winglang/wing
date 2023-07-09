@@ -72,9 +72,6 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          Foo._registerBindObject((this.arr.at(0)), host, []);
-        }
         if (ops.includes("foo")) {
           Foo._registerBindObject((this.arr.at(0)), host, ["put"]);
         }

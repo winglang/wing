@@ -338,10 +338,6 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          KeyValueStore._registerBindObject(this.bucket, host, []);
-          KeyValueStore._registerBindObject(this.onUpdateCallback, host, []);
-        }
         if (ops.includes("get")) {
           KeyValueStore._registerBindObject(this.bucket, host, ["getJson"]);
           KeyValueStore._registerBindObject(this.onUpdateCallback, host, ["handle"]);
