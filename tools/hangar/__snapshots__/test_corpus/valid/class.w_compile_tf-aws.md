@@ -739,6 +739,15 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+          C5._registerBindObject(this, host, ["x", "y"]);
+        }
+        if (ops.includes("set")) {
+          C5._registerBindObject(this, host, ["y"]);
+        }
+        super._registerBind(host, ops);
+      }
     }
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
@@ -957,6 +966,12 @@ class $Root extends $stdlib.std.Resource {
             return client;
           })())
         `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+          A._registerBindObject(this, host, ["sound"]);
+        }
+        super._registerBind(host, ops);
       }
     }
     class B extends A {

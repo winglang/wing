@@ -903,6 +903,7 @@ class $Root extends $stdlib.std.Resource {
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
           Foo._registerBindObject(this.c, host, ["dec", "inc"]);
+          Foo._registerBindObject(this, host, ["inflightField"]);
         }
         if (ops.includes("fooGet")) {
           Foo._registerBindObject(this.c, host, ["peek"]);
@@ -945,11 +946,6 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          Bar._registerBindObject(this.b, host, []);
-          Bar._registerBindObject(this.e, host, []);
-          Bar._registerBindObject(this.foo, host, []);
-        }
         if (ops.includes("myMethod")) {
           Bar._registerBindObject(Foo, host, ["fooStatic"]);
           Bar._registerBindObject(this.b, host, ["get", "put"]);
@@ -1127,12 +1123,6 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          BigPublisher._registerBindObject(this.b, host, []);
-          BigPublisher._registerBindObject(this.b2, host, []);
-          BigPublisher._registerBindObject(this.q, host, []);
-          BigPublisher._registerBindObject(this.t, host, []);
-        }
         if (ops.includes("getObjectCount")) {
           BigPublisher._registerBindObject(this.b, host, ["list"]);
         }

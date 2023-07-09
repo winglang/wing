@@ -443,9 +443,6 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          D._registerBindObject(this.inner, host, []);
-        }
         if (ops.includes("callInner")) {
           D._registerBindObject(this.inner, host, ["handle"]);
         }

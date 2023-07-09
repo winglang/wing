@@ -69,6 +69,15 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+          A._registerBindObject(this, host, ["x"]);
+        }
+        if (ops.includes("method")) {
+          A._registerBindObject(this, host, ["x"]);
+        }
+        super._registerBind(host, ops);
+      }
     }
   }
 }

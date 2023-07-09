@@ -4,8 +4,6 @@ use itertools::Itertools;
 
 use crate::ast::Symbol;
 
-use super::CLASS_INFLIGHT_INIT_NAME;
-
 /// A repository of lifts and captures at the class level.
 #[derive(Debug)]
 pub struct Lifts {
@@ -90,11 +88,6 @@ impl Lifts {
 
 	/// Adds a lift for an expression.
 	pub fn lift(&mut self, expr_id: usize, method: Option<Symbol>, property: Option<String>, code: &str) {
-		// no need to capture this (it's already in scope)
-		if code == "this" {
-			return;
-		}
-
 		let is_field = code.contains("this.");
 
 		let token = self.render_token(code);
@@ -109,23 +102,6 @@ impl Lifts {
 
 		let method = method.map(|m| m.name).unwrap_or(Default::default());
 
-		self.add_lift(method, token.clone(), code, property, is_field, expr_id);
-
-		// add a lift to the inflight initializer
-		if is_field {
-			self.add_lift(CLASS_INFLIGHT_INIT_NAME.to_string(), token, code, None, true, 0);
-		}
-	}
-
-	fn add_lift(
-		&mut self,
-		method: String,
-		token: String,
-		code: &str,
-		property: Option<String>,
-		is_field: bool,
-		expr_id: usize,
-	) {
 		let key = format!("{}/{}", method.clone(), token);
 		let lift = self.lifts.entry(key).or_insert(MethodLift {
 			code: code.to_string(),

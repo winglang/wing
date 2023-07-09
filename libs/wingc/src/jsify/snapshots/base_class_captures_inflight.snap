@@ -116,6 +116,12 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
+      _registerBind(host, ops) {
+        if (ops.includes("foo")) {
+          Derived._registerBindObject(this, host, ["bar"]);
+        }
+        super._registerBind(host, ops);
+      }
     }
     const x = "hello";
   }
