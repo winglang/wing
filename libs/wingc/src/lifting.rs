@@ -6,8 +6,7 @@ use crate::{
 	fold::{self, Fold},
 	jsify::{JSifier, JSifyContext},
 	type_check::{
-		lifts::Lifts, resolve_user_defined_type, symbol_env::LookupResult, TypeRef,
-		CLOSURE_CLASS_HANDLE_METHOD,
+		lifts::Lifts, resolve_user_defined_type, symbol_env::LookupResult, TypeRef, CLOSURE_CLASS_HANDLE_METHOD,
 	},
 	visit_context::VisitContext,
 };
