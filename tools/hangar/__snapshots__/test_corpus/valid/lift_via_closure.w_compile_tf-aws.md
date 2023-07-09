@@ -425,6 +425,9 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+          MyClosure._registerBindObject(this.bucket, host, []);
+        }
         if (ops.includes("handle")) {
           MyClosure._registerBindObject(this, host, ["putFile"]);
         }

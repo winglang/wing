@@ -1980,14 +1980,14 @@ fn implicit_lift_inflight_init() {
 
     class Foo {
       c: cloud.Counter;
-      inflight myField: str;
+      inflight myField2: str;
 
       init() {
         this.c = new cloud.Counter();
       }
 
       inflight init() {
-        this.myField = "hello";
+        this.myField2 = "hello";
       }
 
       inflight incCounter() {

@@ -49,6 +49,9 @@ pub struct MethodLift {
 
 	/// The operations that qualify the lift (the property names)
 	pub ops: BTreeSet<String>,
+
+	/// Indicates if this is a lift for a field or a free variable
+	pub is_field: bool,
 }
 
 /// A record that describes a lift from a class.
@@ -90,11 +93,6 @@ impl Lifts {
 
 	/// Adds a lift for an expression.
 	pub fn lift(&mut self, expr_id: usize, method: Option<Symbol>, property: Option<String>, code: &str) {
-		// no need to capture this (it's already in scope)
-		if code == "this" {
-			return;
-		}
-
 		let is_field = code.contains("this.");
 
 		let token = self.render_token(code);
@@ -109,29 +107,24 @@ impl Lifts {
 
 		let method = method.map(|m| m.name).unwrap_or(Default::default());
 
-		self.add_lift(method, token.clone(), code, property, is_field, expr_id);
+		self.add_lift(method, token.clone(), code, property, is_field);
 
-		// add a lift to the inflight initializer
+		// add a lift to the inflight initializer or capture it if its not a field
 		if is_field {
-			self.add_lift(CLASS_INFLIGHT_INIT_NAME.to_string(), token, code, None, true, 0);
+			self.add_lift(CLASS_INFLIGHT_INIT_NAME.to_string(), token, code, None, true);
+		} else {
+			self.capture(&expr_id, code);
 		}
 	}
 
-	fn add_lift(
-		&mut self,
-		method: String,
-		token: String,
-		code: &str,
-		property: Option<String>,
-		is_field: bool,
-		expr_id: usize,
-	) {
+	fn add_lift(&mut self, method: String, token: String, code: &str, property: Option<String>, is_field: bool) {
 		let key = format!("{}/{}", method.clone(), token);
 		let lift = self.lifts.entry(key).or_insert(MethodLift {
 			code: code.to_string(),
 			token: token.clone(),
 			method: method.clone(),
 			ops: BTreeSet::new(),
+			is_field,
 		});
 
 		if let Some(op) = &property {
@@ -143,8 +136,6 @@ impl Lifts {
 				.lifted_fields_by_token
 				.entry(token.to_string())
 				.or_insert(code.to_string());
-		} else {
-			self.capture(&expr_id, code);
 		}
 	}
 
@@ -191,7 +182,18 @@ impl Lifts {
 
 	/// List of all lifted fields in the class.
 	pub fn lifted_fields(&self) -> BTreeMap<String, String> {
-		self.lifted_fields_by_token.clone()
+		let mut result: BTreeMap<String, String> = BTreeMap::new();
+
+		for (_, lift) in &self.lifts {
+			if !lift.is_field {
+				continue;
+			}
+
+			result.insert(lift.token.clone(), lift.code.clone());
+		}
+
+		// self.lifted_fields_by_token.clone()
+		result
 	}
 
 	/// List of all lifts per method. Key is the method name and the value is a list of lifts.

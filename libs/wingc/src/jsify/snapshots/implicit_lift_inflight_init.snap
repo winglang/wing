@@ -9,14 +9,14 @@ source: libs/wingc/src/jsify/tests.rs
 
     class Foo {
       c: cloud.Counter;
-      inflight myField: str;
+      inflight myField2: str;
 
       init() {
         this.c = new cloud.Counter();
       }
 
       inflight init() {
-        this.myField = "hello";
+        this.myField2 = "hello";
       }
 
       inflight incCounter() {
@@ -45,7 +45,7 @@ module.exports = function({  }) {
       {console.log("hello")};
     }
     async $inflight_init() {
-      this.myField = "hello";
+      this.myField2 = "hello";
     }
   }
   return Foo;
@@ -68,7 +68,7 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.c = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"cloud.Counter");
-        this._addInflightOps("incCounter", "dontTouchCounter", "$inflight_init", "myField");
+        this._addInflightOps("incCounter", "dontTouchCounter", "$inflight_init", "myField2");
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
