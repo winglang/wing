@@ -49,6 +49,9 @@ assert("boom".at(-1) == "m");
 assertThrows(INDEX_OUT_OF_BOUNDS_ERROR, () => {
   "boom".at(4);
 });
+assertThrows(INDEX_OUT_OF_BOUNDS_ERROR, () => {
+  "boom".at(-5);
+});
 
 test "at()" {
   assert("boom".at(0) == "b");
@@ -57,6 +60,7 @@ test "at()" {
   assert("boom".at(-1) == "m");
   // Should throw an exception
   try { "boom".at(4); } catch s { assert(s == INDEX_OUT_OF_BOUNDS_ERROR ); }
+  try { "boom".at(-5); } catch s { assert(s == INDEX_OUT_OF_BOUNDS_ERROR ); }
 }
 
 //-----------------------------------------------------------------------------
