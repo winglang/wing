@@ -10,7 +10,7 @@ import { log } from "../shared/log";
 /**
  * A resource that can run inflight code.
  */
-export interface IInflightHost extends IResource { }
+export interface IInflightHost extends IResource {}
 
 /**
  * Abstract interface for `Resource`.
@@ -278,7 +278,8 @@ export abstract class Resource extends Construct implements IResource {
    */
   private _addBind(host: IInflightHost, ops: string[]) {
     log(
-      `Registering a binding for a resource (${this.node.path}) to a host (${host.node.path
+      `Registering a binding for a resource (${this.node.path}) to a host (${
+        host.node.path
       }) with ops: ${JSON.stringify(ops)}`
     );
 
