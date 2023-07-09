@@ -23,7 +23,7 @@ wing compile -t sim app.w --no-analytics
 Each run of the Wing cli collects information about various aspects of the environment it is running in. Below are the analytics we gather. As well
 you can always head over to our Github and view the code that collects these metrics, as the code is open source.
 
-- The Wing CLI version
+- The Wing CLI, SDK, and Console versions
 - The command information, including the command name, arguments, and flags
 - Operating system information, including the architecture, version, and platform
 - Node.js version
