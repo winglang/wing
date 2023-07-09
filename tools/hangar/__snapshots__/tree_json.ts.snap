@@ -97,7 +97,7 @@ exports[`tree.json for an app with many resources 1`] = `
                                 {
                                   "direction": "inbound",
                                   "implicit": false,
-                                  "relationship": "peek",
+                                  "relationship": "dec",
                                   "resource": "root/Default/Default/test:test/Handler",
                                 },
                                 {
@@ -109,7 +109,7 @@ exports[`tree.json for an app with many resources 1`] = `
                                 {
                                   "direction": "inbound",
                                   "implicit": false,
-                                  "relationship": "dec",
+                                  "relationship": "peek",
                                   "resource": "root/Default/Default/test:test/Handler",
                                 },
                               ],
@@ -1117,6 +1117,18 @@ exports[`tree.json for an app with many resources 1`] = `
                             {
                               "direction": "outbound",
                               "implicit": false,
+                              "relationship": "dec",
+                              "resource": "root/Default/Default/Bar/Foo/cloud.Counter",
+                            },
+                            {
+                              "direction": "outbound",
+                              "implicit": false,
+                              "relationship": "inc",
+                              "resource": "root/Default/Default/Bar/Foo/cloud.Counter",
+                            },
+                            {
+                              "direction": "outbound",
+                              "implicit": false,
                               "relationship": "get",
                               "resource": "root/Default/Default/cloud.Bucket",
                             },
@@ -1130,18 +1142,6 @@ exports[`tree.json for an app with many resources 1`] = `
                               "direction": "outbound",
                               "implicit": false,
                               "relationship": "peek",
-                              "resource": "root/Default/Default/Bar/Foo/cloud.Counter",
-                            },
-                            {
-                              "direction": "outbound",
-                              "implicit": false,
-                              "relationship": "inc",
-                              "resource": "root/Default/Default/Bar/Foo/cloud.Counter",
-                            },
-                            {
-                              "direction": "outbound",
-                              "implicit": false,
-                              "relationship": "dec",
                               "resource": "root/Default/Default/Bar/Foo/cloud.Counter",
                             },
                             {

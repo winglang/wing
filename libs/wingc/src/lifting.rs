@@ -374,6 +374,7 @@ impl<'a> Fold for LiftTransform<'a> {
 }
 
 /// Check if an expression is a reference to an inflight field (`this.<field>`).
+/// in this case, we don't need to lift the field because it is already available
 fn is_inflight_field(expr: &Expr, expr_type: TypeRef, property: &Option<String>) -> bool {
 	if let ExprKind::Reference(r) = &expr.kind {
 		if let Reference::Identifier(symb) = r {
@@ -382,7 +383,7 @@ fn is_inflight_field(expr: &Expr, expr_type: TypeRef, property: &Option<String>)
 					let result = cls.env.lookup_nested_str(&property, None);
 					if let LookupResult::Found(kind, _) = result {
 						if let Some(var) = kind.as_variable() {
-							if var.type_.as_function_sig().is_none() {
+							if !var.type_.is_closure() {
 								if var.phase != Phase::Preflight {
 									return true;
 								}

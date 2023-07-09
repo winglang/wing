@@ -192,6 +192,12 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
+      _registerBind(host, ops) {
+        if (ops.includes("foo")) {
+          Foo._registerBindObject(this, host, ["bar"]);
+        }
+        super._registerBind(host, ops);
+      }
     }
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
