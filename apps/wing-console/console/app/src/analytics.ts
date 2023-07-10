@@ -12,10 +12,6 @@ export interface Analytics {
 export const createAnalytics = (options: CreateAnalyticsOptions): Analytics => {
   const segment = new Segment(options.segmentWriteKey);
 
-  segment.identify({
-    anonymousId: options.anonymousId,
-  });
-
   return {
     track(event: string) {
       segment.track({

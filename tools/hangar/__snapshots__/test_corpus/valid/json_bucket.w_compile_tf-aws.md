@@ -96,7 +96,7 @@ module.exports = function({ $b, $fileName, $getJson, $j }) {
             "uniqueId": "cloudFunction_IamRolePolicy_618BF987"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:GetObject*\",\"s3:GetBucket*\"],\"Resource\":[\"${aws_s3_bucket.cloudBucket.arn}\",\"${aws_s3_bucket.cloudBucket.arn}/*\"],\"Effect\":\"Allow\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:List*\",\"s3:GetObject*\",\"s3:GetBucket*\"],\"Resource\":[\"${aws_s3_bucket.cloudBucket.arn}\",\"${aws_s3_bucket.cloudBucket.arn}/*\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.cloudFunction_IamRole_5A4430DC.name}"
       },
       "testput_Handler_IamRolePolicy_CB5C72C0": {

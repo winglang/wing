@@ -206,6 +206,9 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+          MyClosure._registerBindObject(this.q, host, []);
+        }
         if (ops.includes("handle")) {
           MyClosure._registerBindObject(this.q, host, ["push"]);
         }

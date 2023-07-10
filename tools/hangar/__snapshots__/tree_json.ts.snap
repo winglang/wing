@@ -64,6 +64,12 @@ exports[`tree.json for an app with many resources 1`] = `
                           "relationship": "testTypeAccess",
                           "resource": "root/Default/Default/test:test/Handler",
                         },
+                        {
+                          "direction": "inbound",
+                          "implicit": false,
+                          "relationship": "$inflight_init",
+                          "resource": "root/Default/Default/test:test/Handler",
+                        },
                       ],
                     },
                     "children": {
@@ -80,6 +86,12 @@ exports[`tree.json for an app with many resources 1`] = `
                               "direction": "inbound",
                               "implicit": false,
                               "relationship": "fooInc",
+                              "resource": "root/Default/Default/test:test/Handler",
+                            },
+                            {
+                              "direction": "inbound",
+                              "implicit": false,
+                              "relationship": "$inflight_init",
                               "resource": "root/Default/Default/test:test/Handler",
                             },
                             {
@@ -103,7 +115,19 @@ exports[`tree.json for an app with many resources 1`] = `
                                 {
                                   "direction": "inbound",
                                   "implicit": false,
+                                  "relationship": "$inflight_init",
+                                  "resource": "root/Default/Default/test:test/Handler",
+                                },
+                                {
+                                  "direction": "inbound",
+                                  "implicit": false,
                                   "relationship": "inc",
+                                  "resource": "root/Default/Default/test:test/Handler",
+                                },
+                                {
+                                  "direction": "inbound",
+                                  "implicit": false,
+                                  "relationship": "dec",
                                   "resource": "root/Default/Default/test:test/Handler",
                                 },
                               ],
@@ -160,6 +184,12 @@ exports[`tree.json for an app with many resources 1`] = `
                           "relationship": "publish",
                           "resource": "root/Default/Default/test:dependency cycles/Handler",
                         },
+                        {
+                          "direction": "inbound",
+                          "implicit": false,
+                          "relationship": "$inflight_init",
+                          "resource": "root/Default/Default/test:dependency cycles/Handler",
+                        },
                       ],
                     },
                     "children": {
@@ -170,6 +200,12 @@ exports[`tree.json for an app with many resources 1`] = `
                               "direction": "inbound",
                               "implicit": false,
                               "relationship": "handle",
+                              "resource": "root/Default/Default/BigPublisher/cloud.Topic-OnMessage-113c9059",
+                            },
+                            {
+                              "direction": "inbound",
+                              "implicit": false,
+                              "relationship": "$inflight_init",
                               "resource": "root/Default/Default/BigPublisher/cloud.Topic-OnMessage-113c9059",
                             },
                           ],
@@ -193,6 +229,12 @@ exports[`tree.json for an app with many resources 1`] = `
                               "relationship": "handle",
                               "resource": "root/Default/Default/BigPublisher/cloud.Queue-SetConsumer-c50bc9ef",
                             },
+                            {
+                              "direction": "inbound",
+                              "implicit": false,
+                              "relationship": "$inflight_init",
+                              "resource": "root/Default/Default/BigPublisher/cloud.Queue-SetConsumer-c50bc9ef",
+                            },
                           ],
                         },
                         "constructInfo": {
@@ -212,6 +254,12 @@ exports[`tree.json for an app with many resources 1`] = `
                               "direction": "inbound",
                               "implicit": false,
                               "relationship": "handle",
+                              "resource": "root/Default/Default/BigPublisher/b2/b2-on_create-OnMessage-a6a70fca",
+                            },
+                            {
+                              "direction": "inbound",
+                              "implicit": false,
+                              "relationship": "$inflight_init",
                               "resource": "root/Default/Default/BigPublisher/b2/b2-on_create-OnMessage-a6a70fca",
                             },
                           ],
@@ -239,6 +287,12 @@ exports[`tree.json for an app with many resources 1`] = `
                               "direction": "inbound",
                               "implicit": false,
                               "relationship": "put",
+                              "resource": "root/Default/Default/test:dependency cycles/Handler",
+                            },
+                            {
+                              "direction": "inbound",
+                              "implicit": false,
+                              "relationship": "$inflight_init",
                               "resource": "root/Default/Default/test:dependency cycles/Handler",
                             },
                           ],
@@ -342,13 +396,31 @@ exports[`tree.json for an app with many resources 1`] = `
                                 {
                                   "direction": "outbound",
                                   "implicit": false,
+                                  "relationship": "$inflight_init",
+                                  "resource": "root/Default/Default/BigPublisher/cloud.Queue",
+                                },
+                                {
+                                  "direction": "outbound",
+                                  "implicit": false,
                                   "relationship": "handle",
                                   "resource": "root/Default/Default/BigPublisher/$Closure4",
                                 },
                                 {
                                   "direction": "outbound",
                                   "implicit": false,
+                                  "relationship": "$inflight_init",
+                                  "resource": "root/Default/Default/BigPublisher/$Closure4",
+                                },
+                                {
+                                  "direction": "outbound",
+                                  "implicit": false,
                                   "relationship": "handle",
+                                  "resource": "root/Default/Default/BigPublisher/b2-on_create-eventHandler-fe70cb1e",
+                                },
+                                {
+                                  "direction": "outbound",
+                                  "implicit": false,
+                                  "relationship": "$inflight_init",
                                   "resource": "root/Default/Default/BigPublisher/b2-on_create-eventHandler-fe70cb1e",
                                 },
                                 {
@@ -463,6 +535,12 @@ exports[`tree.json for an app with many resources 1`] = `
                               "relationship": "handle",
                               "resource": "root/Default/Default/BigPublisher/b2/b2-on_create-OnMessage-a6a70fca",
                             },
+                            {
+                              "direction": "inbound",
+                              "implicit": false,
+                              "relationship": "$inflight_init",
+                              "resource": "root/Default/Default/BigPublisher/b2/b2-on_create-OnMessage-a6a70fca",
+                            },
                           ],
                         },
                         "constructInfo": {
@@ -487,13 +565,31 @@ exports[`tree.json for an app with many resources 1`] = `
                             {
                               "direction": "inbound",
                               "implicit": false,
+                              "relationship": "$inflight_init",
+                              "resource": "root/Default/Default/BigPublisher/cloud.Topic-OnMessage-113c9059",
+                            },
+                            {
+                              "direction": "inbound",
+                              "implicit": false,
                               "relationship": "put",
                               "resource": "root/Default/Default/BigPublisher/cloud.Queue-SetConsumer-c50bc9ef",
                             },
                             {
                               "direction": "inbound",
                               "implicit": false,
+                              "relationship": "$inflight_init",
+                              "resource": "root/Default/Default/BigPublisher/cloud.Queue-SetConsumer-c50bc9ef",
+                            },
+                            {
+                              "direction": "inbound",
+                              "implicit": false,
                               "relationship": "list",
+                              "resource": "root/Default/Default/test:dependency cycles/Handler",
+                            },
+                            {
+                              "direction": "inbound",
+                              "implicit": false,
+                              "relationship": "$inflight_init",
                               "resource": "root/Default/Default/test:dependency cycles/Handler",
                             },
                           ],
@@ -553,7 +649,19 @@ exports[`tree.json for an app with many resources 1`] = `
                             {
                               "direction": "inbound",
                               "implicit": false,
+                              "relationship": "$inflight_init",
+                              "resource": "root/Default/Default/BigPublisher/b2/b2-on_create-OnMessage-a6a70fca",
+                            },
+                            {
+                              "direction": "inbound",
+                              "implicit": false,
                               "relationship": "push",
+                              "resource": "root/Default/Default/test:dependency cycles/Handler",
+                            },
+                            {
+                              "direction": "inbound",
+                              "implicit": false,
+                              "relationship": "$inflight_init",
                               "resource": "root/Default/Default/test:dependency cycles/Handler",
                             },
                           ],
@@ -599,7 +707,19 @@ exports[`tree.json for an app with many resources 1`] = `
                             {
                               "direction": "outbound",
                               "implicit": false,
+                              "relationship": "$inflight_init",
+                              "resource": "root/Default/Default/BigPublisher/cloud.Bucket",
+                            },
+                            {
+                              "direction": "outbound",
+                              "implicit": false,
                               "relationship": "handle",
+                              "resource": "root/Default/Default/BigPublisher/$Closure3",
+                            },
+                            {
+                              "direction": "outbound",
+                              "implicit": false,
+                              "relationship": "$inflight_init",
                               "resource": "root/Default/Default/BigPublisher/$Closure3",
                             },
                             {
@@ -700,6 +820,12 @@ exports[`tree.json for an app with many resources 1`] = `
                               "relationship": "publish",
                               "resource": "root/Default/Default/test:dependency cycles/Handler",
                             },
+                            {
+                              "direction": "inbound",
+                              "implicit": false,
+                              "relationship": "$inflight_init",
+                              "resource": "root/Default/Default/test:dependency cycles/Handler",
+                            },
                           ],
                         },
                         "children": {
@@ -743,7 +869,19 @@ exports[`tree.json for an app with many resources 1`] = `
                             {
                               "direction": "outbound",
                               "implicit": false,
+                              "relationship": "$inflight_init",
+                              "resource": "root/Default/Default/BigPublisher/cloud.Bucket",
+                            },
+                            {
+                              "direction": "outbound",
+                              "implicit": false,
                               "relationship": "handle",
+                              "resource": "root/Default/Default/BigPublisher/$Closure2",
+                            },
+                            {
+                              "direction": "outbound",
+                              "implicit": false,
+                              "relationship": "$inflight_init",
                               "resource": "root/Default/Default/BigPublisher/$Closure2",
                             },
                             {
@@ -927,6 +1065,12 @@ exports[`tree.json for an app with many resources 1`] = `
                         {
                           "direction": "inbound",
                           "implicit": false,
+                          "relationship": "$inflight_init",
+                          "resource": "root/Default/Default/test:test/Handler",
+                        },
+                        {
+                          "direction": "inbound",
+                          "implicit": false,
                           "relationship": "get",
                           "resource": "root/Default/Default/test:test/Handler",
                         },
@@ -992,7 +1136,25 @@ exports[`tree.json for an app with many resources 1`] = `
                             {
                               "direction": "outbound",
                               "implicit": false,
+                              "relationship": "$inflight_init",
+                              "resource": "root/Default/Default/BigPublisher/cloud.Bucket",
+                            },
+                            {
+                              "direction": "outbound",
+                              "implicit": false,
+                              "relationship": "getObjectCount",
+                              "resource": "root/Default/Default/BigPublisher",
+                            },
+                            {
+                              "direction": "outbound",
+                              "implicit": false,
                               "relationship": "put",
+                              "resource": "root/Default/Default/BigPublisher/b2",
+                            },
+                            {
+                              "direction": "outbound",
+                              "implicit": false,
+                              "relationship": "$inflight_init",
                               "resource": "root/Default/Default/BigPublisher/b2",
                             },
                             {
@@ -1004,19 +1166,31 @@ exports[`tree.json for an app with many resources 1`] = `
                             {
                               "direction": "outbound",
                               "implicit": false,
+                              "relationship": "$inflight_init",
+                              "resource": "root/Default/Default/BigPublisher/cloud.Queue",
+                            },
+                            {
+                              "direction": "outbound",
+                              "implicit": false,
                               "relationship": "publish",
                               "resource": "root/Default/Default/BigPublisher/cloud.Topic",
                             },
                             {
                               "direction": "outbound",
                               "implicit": false,
-                              "relationship": "getObjectCount",
-                              "resource": "root/Default/Default/BigPublisher",
+                              "relationship": "$inflight_init",
+                              "resource": "root/Default/Default/BigPublisher/cloud.Topic",
                             },
                             {
                               "direction": "outbound",
                               "implicit": false,
                               "relationship": "publish",
+                              "resource": "root/Default/Default/BigPublisher",
+                            },
+                            {
+                              "direction": "outbound",
+                              "implicit": false,
+                              "relationship": "$inflight_init",
                               "resource": "root/Default/Default/BigPublisher",
                             },
                           ],
@@ -1111,6 +1285,12 @@ exports[`tree.json for an app with many resources 1`] = `
                             {
                               "direction": "outbound",
                               "implicit": false,
+                              "relationship": "$inflight_init",
+                              "resource": "root/Default/Default/cloud.Bucket",
+                            },
+                            {
+                              "direction": "outbound",
+                              "implicit": false,
                               "relationship": "get",
                               "resource": "root/Default/Default/cloud.Bucket",
                             },
@@ -1129,7 +1309,7 @@ exports[`tree.json for an app with many resources 1`] = `
                             {
                               "direction": "outbound",
                               "implicit": false,
-                              "relationship": "inc",
+                              "relationship": "$inflight_init",
                               "resource": "root/Default/Default/Bar/Foo/cloud.Counter",
                             },
                             {
@@ -1141,7 +1321,25 @@ exports[`tree.json for an app with many resources 1`] = `
                             {
                               "direction": "outbound",
                               "implicit": false,
+                              "relationship": "inc",
+                              "resource": "root/Default/Default/Bar/Foo/cloud.Counter",
+                            },
+                            {
+                              "direction": "outbound",
+                              "implicit": false,
                               "relationship": "fooInc",
+                              "resource": "root/Default/Default/Bar/Foo",
+                            },
+                            {
+                              "direction": "outbound",
+                              "implicit": false,
+                              "relationship": "dec",
+                              "resource": "root/Default/Default/Bar/Foo/cloud.Counter",
+                            },
+                            {
+                              "direction": "outbound",
+                              "implicit": false,
+                              "relationship": "$inflight_init",
                               "resource": "root/Default/Default/Bar/Foo",
                             },
                             {
@@ -1154,6 +1352,12 @@ exports[`tree.json for an app with many resources 1`] = `
                               "direction": "outbound",
                               "implicit": false,
                               "relationship": "testTypeAccess",
+                              "resource": "root/Default/Default/Bar",
+                            },
+                            {
+                              "direction": "outbound",
+                              "implicit": false,
+                              "relationship": "$inflight_init",
                               "resource": "root/Default/Default/Bar",
                             },
                             {

@@ -1971,3 +1971,33 @@ fn lift_inside_preflight_method() {
     "#
 	)
 }
+
+#[test]
+fn implicit_lift_inflight_init() {
+	assert_compile_ok!(
+		r#"
+    bring cloud;
+
+    class Foo {
+      c: cloud.Counter;
+      inflight myField2: str;
+
+      init() {
+        this.c = new cloud.Counter();
+      }
+
+      inflight init() {
+        this.myField2 = "hello";
+      }
+
+      inflight incCounter() {
+        this.c.inc();
+      }
+
+      inflight dontTouchCounter() {
+        log("hello");
+      }
+    }
+    "#
+	);
+}
