@@ -7,15 +7,17 @@ import { satisfies } from "compare-versions";
 import { Command, Option } from "commander";
 import { run_server } from "./commands/lsp";
 
-import { collectCommandAnalytics, getWingAnalyticsCollectionConfig } from "./analytics/collect";
+import { collectCommandAnalytics } from "./analytics/collect";
 import { exportAnalytics } from "./analytics/export";
 import { optionallyDisplayDisclaimer } from "./analytics/disclaimer";
 
 
 export const PACKAGE_VERSION = require("../package.json").version as string;
-
-const ANALYTICS_COLLECTION_CONFIG = getWingAnalyticsCollectionConfig(); 
 let analyticsExportFile: Promise<string | undefined>;
+
+if (PACKAGE_VERSION == "0.0.0" && !process.env.DEBUG) {
+  process.env.WING_DISABLE_ANALYTICS = "1";
+}
 
 const SUPPORTED_NODE_VERSION = require("../package.json").engines.node as string;
 if (!SUPPORTED_NODE_VERSION) {
@@ -68,29 +70,28 @@ async function main() {
 
 
     async function collectAnalyticsHook(_: Command, subCmd: Command) {
-      if (!ANALYTICS_COLLECTION_CONFIG.collect) { return; }
+      if (process.env.WING_DISABLE_ANALYTICS) { return; }
       // Fail silently if collection fails
       try {
         optionallyDisplayDisclaimer();
         analyticsExportFile = collectCommandAnalytics(subCmd);
       } catch (err) {
-        if (ANALYTICS_COLLECTION_CONFIG.debug) {
+        if (process.env.WING_ANALYTICS_DEBUG) {
           console.error(err);
         }
       }
     }
   
     async function exportAnalyticsHook() {
-      if (!ANALYTICS_COLLECTION_CONFIG.collect || !ANALYTICS_COLLECTION_CONFIG.export) { return; }
-  
+      if (process.env.WING_DISABLE_ANALYTICS) { return; }
       // Fail silently if export fails
       try {
         if (analyticsExportFile) {
           await exportAnalytics(analyticsExportFile);
         }
       } catch (err) {
-        if (ANALYTICS_COLLECTION_CONFIG.debug) {
-          console.log(err);
+        if (process.env.WING_ANALYTICS_DEBUG) {
+          console.error(err);
         }
       }
     }

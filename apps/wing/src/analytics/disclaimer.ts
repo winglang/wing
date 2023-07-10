@@ -1,7 +1,7 @@
 import chalk from "chalk";
-import { loadAnalyticsConfig, saveAnalyticsConfig } from "./storage";
+import { AnalyticsStorage } from "./storage";
 
-const disclaimer = `
+export const WING_DISCLAIMER = `
 🧪 This is an early pre-release of the Wing Programming Language.
   
 We are working hard to make this a great tool, but there's still a pretty good
@@ -22,16 +22,17 @@ ${chalk.redBright("(This message will self-destruct after the first run)")}
 `;
 
 function displayDisclaimer() {
-  console.log(`${chalk.hex("#2AD5C1")(disclaimer)}`);
+  console.log(`${chalk.hex("#2AD5C1")(WING_DISCLAIMER)}`);
 }
 
-export function optionallyDisplayDisclaimer() {
+export function optionallyDisplayDisclaimer(existingStorage?: AnalyticsStorage) {
   try {
-    const analyticsConfig = loadAnalyticsConfig();
+    const storage = existingStorage ?? new AnalyticsStorage();
+    const analyticsConfig = storage.loadConfig();
     if (!analyticsConfig.disclaimerDisplayed) {
       displayDisclaimer();
       analyticsConfig.disclaimerDisplayed = true;
-      saveAnalyticsConfig(analyticsConfig);
+      storage.saveConfig(analyticsConfig);
     }
   } catch (error) {
     // Incase there was any reason the config could not be loaded, 
