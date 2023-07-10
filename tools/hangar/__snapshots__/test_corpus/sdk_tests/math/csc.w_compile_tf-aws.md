@@ -2,24 +2,22 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ math_Util }) {
+module.exports = function({ $math_Util }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.csc(-0) == -math.INF")})(((await math_Util.csc((-0))) === (-math_Util.INF)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.csc(0) == math.INF")})(((await math_Util.csc(0)) === math_Util.INF))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.csc(1) == 1.1883951057781212")})(((await math_Util.csc(1)) === 1.1883951057781212))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.csc(-5) == 1.0428352127714058")})(((await math_Util.csc((-5))) === 1.0428352127714058))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.csc(math.PI / 2) == 1")})(((await math_Util.csc((math_Util.PI / 2))) === 1))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.csc(math.TAU / 4) == 1")})(((await math_Util.csc((math_Util.TAU / 4))) === 1))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.csc(math.PI * 3 / 2) == -1")})(((await math_Util.csc(((math_Util.PI * 3) / 2))) === (-1)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.csc(math.TAU * 3 / 4) == -1")})(((await math_Util.csc(((math_Util.TAU * 3) / 4))) === (-1)))};
+    async handle() {
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.csc(-0) == -math.INF")})(((await $math_Util.csc((-0))) === (-$math_Util.INF)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.csc(0) == math.INF")})(((await $math_Util.csc(0)) === $math_Util.INF))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.csc(1) == 1.1883951057781212")})(((await $math_Util.csc(1)) === 1.1883951057781212))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.csc(-5) == 1.0428352127714058")})(((await $math_Util.csc((-5))) === 1.0428352127714058))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.csc(math.PI / 2) == 1")})(((await $math_Util.csc(($math_Util.PI / 2))) === 1))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.csc(math.TAU / 4) == 1")})(((await $math_Util.csc(($math_Util.TAU / 4))) === 1))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.csc(math.PI * 3 / 2) == -1")})(((await $math_Util.csc((($math_Util.PI * 3) / 2))) === (-1)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.csc(math.TAU * 3 / 4) == -1")})(((await $math_Util.csc((($math_Util.TAU * 3) / 4))) === (-1)))};
     }
   }
   return $Closure1;
@@ -34,7 +32,7 @@ module.exports = function({ math_Util }) {
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.2"
+      "version": "0.17.0"
     },
     "outputs": {
       "root": {
@@ -48,7 +46,7 @@ module.exports = function({ math_Util }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:inflight cosecant\",\"${aws_lambda_function.root_testinflightcosecant_Handler_BC477EBD.arn}\"]]"
+      "value": "[[\"root/Default/Default/test:inflight cosecant\",\"${aws_lambda_function.testinflightcosecant_Handler_0491DCB0.arn}\"]]"
     }
   },
   "provider": {
@@ -58,46 +56,46 @@ module.exports = function({ math_Util }) {
   },
   "resource": {
     "aws_iam_role": {
-      "root_testinflightcosecant_Handler_IamRole_E31971F0": {
+      "testinflightcosecant_Handler_IamRole_D7226B8F": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:inflight cosecant/Handler/IamRole",
-            "uniqueId": "root_testinflightcosecant_Handler_IamRole_E31971F0"
+            "uniqueId": "testinflightcosecant_Handler_IamRole_D7226B8F"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
-      "root_testinflightcosecant_Handler_IamRolePolicy_630C5721": {
+      "testinflightcosecant_Handler_IamRolePolicy_09309D29": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:inflight cosecant/Handler/IamRolePolicy",
-            "uniqueId": "root_testinflightcosecant_Handler_IamRolePolicy_630C5721"
+            "uniqueId": "testinflightcosecant_Handler_IamRolePolicy_09309D29"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
-        "role": "${aws_iam_role.root_testinflightcosecant_Handler_IamRole_E31971F0.name}"
+        "role": "${aws_iam_role.testinflightcosecant_Handler_IamRole_D7226B8F.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
-      "root_testinflightcosecant_Handler_IamRolePolicyAttachment_BA8D2C21": {
+      "testinflightcosecant_Handler_IamRolePolicyAttachment_79166A81": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:inflight cosecant/Handler/IamRolePolicyAttachment",
-            "uniqueId": "root_testinflightcosecant_Handler_IamRolePolicyAttachment_BA8D2C21"
+            "uniqueId": "testinflightcosecant_Handler_IamRolePolicyAttachment_79166A81"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.root_testinflightcosecant_Handler_IamRole_E31971F0.name}"
+        "role": "${aws_iam_role.testinflightcosecant_Handler_IamRole_D7226B8F.name}"
       }
     },
     "aws_lambda_function": {
-      "root_testinflightcosecant_Handler_BC477EBD": {
+      "testinflightcosecant_Handler_0491DCB0": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:inflight cosecant/Handler/Default",
-            "uniqueId": "root_testinflightcosecant_Handler_BC477EBD"
+            "uniqueId": "testinflightcosecant_Handler_0491DCB0"
           }
         },
         "environment": {
@@ -109,10 +107,10 @@ module.exports = function({ math_Util }) {
         "function_name": "Handler-c8baaa0a",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.root_testinflightcosecant_Handler_IamRole_E31971F0.arn}",
+        "role": "${aws_iam_role.testinflightcosecant_Handler_IamRole_D7226B8F.arn}",
         "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
-        "s3_key": "${aws_s3_object.root_testinflightcosecant_Handler_S3Object_384CDFA5.key}",
+        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
+        "s3_key": "${aws_s3_object.testinflightcosecant_Handler_S3Object_82EC6921.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -121,25 +119,25 @@ module.exports = function({ math_Util }) {
       }
     },
     "aws_s3_bucket": {
-      "root_Code_02F3C603": {
+      "Code": {
         "//": {
           "metadata": {
             "path": "root/Default/Code",
-            "uniqueId": "root_Code_02F3C603"
+            "uniqueId": "Code"
           }
         },
         "bucket_prefix": "code-c84a50b1-"
       }
     },
     "aws_s3_object": {
-      "root_testinflightcosecant_Handler_S3Object_384CDFA5": {
+      "testinflightcosecant_Handler_S3Object_82EC6921": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:inflight cosecant/Handler/S3Object",
-            "uniqueId": "root_testinflightcosecant_Handler_S3Object_384CDFA5"
+            "uniqueId": "testinflightcosecant_Handler_S3Object_82EC6921"
           }
         },
-        "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
+        "bucket": "${aws_s3_bucket.Code.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       }
@@ -163,14 +161,12 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const math_UtilClient = math.Util._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            math_Util: ${math_UtilClient.text},
+          require("./inflight.$Closure1.js")({
+            $math_Util: ${context._lift(math.Util)},
           })
         `);
       }
@@ -184,13 +180,6 @@ class $Root extends $stdlib.std.Resource {
             return client;
           })())
         `);
-      }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-        }
-        if (ops.includes("handle")) {
-        }
-        super._registerBind(host, ops);
       }
     }
     {((cond) => {if (!cond) throw new Error("assertion failed: math.csc(-0) == -math.INF")})(((math.Util.csc((-0))) === (-math.Util.INF)))};

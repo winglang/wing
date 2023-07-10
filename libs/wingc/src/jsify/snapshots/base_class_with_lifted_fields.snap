@@ -1,0 +1,143 @@
+---
+source: libs/wingc/src/jsify/tests.rs
+---
+## Code
+
+```w
+
+    let x = "hello";
+
+    class Base {
+      f: str;
+      init() {
+        this.f = x;
+      }
+    }
+
+    class Derived extends Base {
+      inflight foo() {
+        this.f;
+      }
+    }
+    
+```
+
+## inflight.Base.js
+
+```js
+module.exports = function({  }) {
+  class Base {
+    constructor({  }) {
+    }
+  }
+  return Base;
+}
+```
+
+## inflight.Derived.js
+
+```js
+module.exports = function({ $Base }) {
+  class Derived extends $Base {
+    constructor({ $this_f }) {
+      super({  });
+      this.$this_f = $this_f;
+    }
+    async foo() {
+      this.$this_f;
+    }
+  }
+  return Derived;
+}
+```
+
+## preflight.js
+
+```js
+const $stdlib = require('@winglang/sdk');
+const $outdir = process.env.WING_SYNTH_DIR ?? ".";
+const std = $stdlib.std;
+const $wing_is_test = process.env.WING_IS_TEST === "true";
+const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
+class $Root extends $stdlib.std.Resource {
+  constructor(scope, id) {
+    super(scope, id);
+    class Base extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        this.f = x;
+        this._addInflightOps("$inflight_init");
+      }
+      static _toInflightType(context) {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("./inflight.Base.js")({
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const BaseClient = ${Base._toInflightType(this).text};
+            const client = new BaseClient({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+    }
+    class Derived extends Base {
+      constructor(scope, id, ) {
+        super(scope, id);
+        this._addInflightOps("foo", "$inflight_init");
+      }
+      static _toInflightType(context) {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("./inflight.Derived.js")({
+            $Base: ${context._lift(Base)},
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const DerivedClient = ${Derived._toInflightType(this).text};
+            const client = new DerivedClient({
+              $this_f: ${this._lift(this.f)},
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+          Derived._registerBindObject(this.f, host, []);
+        }
+        if (ops.includes("foo")) {
+          Derived._registerBindObject(this.f, host, []);
+        }
+        super._registerBind(host, ops);
+      }
+    }
+    const x = "hello";
+  }
+}
+class $App extends $AppBase {
+  constructor() {
+    super({ outdir: $outdir, name: "main", plugins: $plugins, isTestEnvironment: $wing_is_test });
+    if ($wing_is_test) {
+      new $Root(this, "env0");
+      const $test_runner = this.testRunner;
+      const $tests = $test_runner.findTests();
+      for (let $i = 1; $i < $tests.length; $i++) {
+        new $Root(this, "env" + $i);
+      }
+    } else {
+      new $Root(this, "Default");
+    }
+  }
+}
+new $App().synth();
+```
+

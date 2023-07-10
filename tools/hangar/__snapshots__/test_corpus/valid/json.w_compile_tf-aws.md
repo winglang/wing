@@ -4,10 +4,7 @@
 ```js
 module.exports = function({  }) {
   class Foo {
-    constructor({ SumStr }) {
-      this.SumStr = SumStr;
-    }
-    async $inflight_init()  {
+    constructor({  }) {
     }
   }
   return Foo;
@@ -22,7 +19,7 @@ module.exports = function({  }) {
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.2"
+      "version": "0.17.0"
     },
     "outputs": {
       "root": {
@@ -61,32 +58,24 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.SumStr = "wow!";
+        this._addInflightOps("$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.Foo.js";
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.Foo.js")({
           })
         `);
       }
       _toInflight() {
-        const SumStr_client = this._lift(this.SumStr);
         return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
             const FooClient = ${Foo._toInflightType(this).text};
             const client = new FooClient({
-              SumStr: ${SumStr_client},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
         `);
-      }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          Foo._registerBindObject(this.SumStr, host, []);
-        }
-        super._registerBind(host, ops);
       }
     }
     const jsonNumber = 123;
@@ -101,10 +90,9 @@ class $Root extends $stdlib.std.Resource {
     const jj = someNumber;
     const jj1 = Object.freeze({"foo":someNumber});
     const jj2 = [someNumber, Object.freeze({"bar":someNumber})];
-    const getStr =  () =>  {
+    const getStr = (() => {
       return "hello";
-    }
-    ;
+    });
     const jj3 = (getStr());
     {((cond) => {if (!cond) throw new Error("assertion failed: jj3 == Json \"hello\"")})((jj3 === "hello"))};
     const f = new Foo(this,"Foo");
@@ -141,7 +129,7 @@ class $Root extends $stdlib.std.Resource {
     {((cond) => {if (!cond) throw new Error("assertion failed: unestedJsonArr.getAt(0) == 1")})(((unestedJsonArr)[0] === 1))};
     const jsonElements = Object.freeze({"strings":Object.freeze({"single":"Hello","array":["Hello", "World", "!"]}),"numbers":Object.freeze({"one":1,"two":2,"three":3}),"bools":Object.freeze({"t":true,"f":false})});
     {
-      const $IF_LET_VALUE = ((arg) => { return (typeof arg === "string") ? JSON.parse(JSON.stringify(arg)) : undefined })(((jsonElements)?.["strings"])?.["single"]);
+      const $IF_LET_VALUE = ((arg) => { if (typeof arg !== "string") {throw new Error("unable to parse " + typeof arg + " " + arg + " as a string")}; return JSON.parse(JSON.stringify(arg)) })(((jsonElements)?.["strings"])?.["single"]);
       if ($IF_LET_VALUE != undefined) {
         const val = $IF_LET_VALUE;
         {((cond) => {if (!cond) throw new Error("assertion failed: val == \"Hello\"")})((val === "Hello"))};

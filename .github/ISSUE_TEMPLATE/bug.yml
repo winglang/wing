@@ -71,12 +71,6 @@ body:
     placeholder: "wing --version"
 
 - type: input
-  id: console-version
-  attributes:
-    label: "Wing Console Version"
-    placeholder: "Wing Console > About Wing Console (if relevant)"
-
-- type: input
   id: node
   attributes:
     label: "Node.js Version"

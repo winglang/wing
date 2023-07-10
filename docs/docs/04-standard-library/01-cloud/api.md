@@ -119,4 +119,4 @@ The AWS implementation of `cloud.Api` uses [Amazon API Gateway](https://aws.amaz
 
 ## API Reference
 
-The full list of APIs for `cloud.Api` is available in the [API Reference](../api-reference).
+The full list of APIs for `cloud.Api` is available in the [API Reference](./api-reference).

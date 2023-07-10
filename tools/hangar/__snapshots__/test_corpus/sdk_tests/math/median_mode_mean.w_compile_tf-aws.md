@@ -2,18 +2,16 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ odd_arr, even_arr, math_Util }) {
+module.exports = function({ $even_arr, $math_Util, $odd_arr }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.median(odd_arr) == 6")})(((await math_Util.median(odd_arr)) === 6))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.median(even_arr) == 4.5")})(((await math_Util.median(even_arr)) === 4.5))};
+    async handle() {
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.median(odd_arr) == 6")})(((await $math_Util.median($odd_arr)) === 6))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.median(even_arr) == 4.5")})(((await $math_Util.median($even_arr)) === 4.5))};
     }
   }
   return $Closure1;
@@ -23,22 +21,20 @@ module.exports = function({ odd_arr, even_arr, math_Util }) {
 
 ## inflight.$Closure2.js
 ```js
-module.exports = function({ modal_arr, bimodal, multimodal, math_Util }) {
+module.exports = function({ $_bimodal_at_0__, $_bimodal_at_1__, $_multimodal_at_0__, $_multimodal_at_1__, $_multimodal_at_2__, $math_Util, $modal_arr }) {
   class $Closure2 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.mode(modal_arr).at(0) == 2")})(((await (await math_Util.mode(modal_arr)).at(0)) === 2))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: bimodal.at(0) == 2")})(((await bimodal.at(0)) === 2))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: bimodal.at(1) == 7")})(((await bimodal.at(1)) === 7))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: multimodal.at(0) == 2")})(((await multimodal.at(0)) === 2))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: multimodal.at(1) == 7")})(((await multimodal.at(1)) === 7))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: multimodal.at(2) == 9")})(((await multimodal.at(2)) === 9))};
+    async handle() {
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.mode(modal_arr).at(0) == 2")})(((await (await $math_Util.mode($modal_arr)).at(0)) === 2))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: bimodal.at(0) == 2")})(($_bimodal_at_0__ === 2))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: bimodal.at(1) == 7")})(($_bimodal_at_1__ === 7))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: multimodal.at(0) == 2")})(($_multimodal_at_0__ === 2))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: multimodal.at(1) == 7")})(($_multimodal_at_1__ === 7))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: multimodal.at(2) == 9")})(($_multimodal_at_2__ === 9))};
     }
   }
   return $Closure2;
@@ -48,19 +44,17 @@ module.exports = function({ modal_arr, bimodal, multimodal, math_Util }) {
 
 ## inflight.$Closure3.js
 ```js
-module.exports = function({ mean_arr, math_Util }) {
+module.exports = function({ $math_Util, $mean_arr }) {
   class $Closure3 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.arithmeticMean(mean_arr) == 42")})(((await math_Util.arithmeticMean(mean_arr)) === 42))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.geometricMean(mean_arr) == 30")})(((await math_Util.geometricMean(mean_arr)) === 30))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.harmonicMean(mean_arr) == 15")})(((await math_Util.harmonicMean(mean_arr)) === 15))};
+    async handle() {
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.arithmeticMean(mean_arr) == 42")})(((await $math_Util.arithmeticMean($mean_arr)) === 42))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.geometricMean(mean_arr) == 30")})(((await $math_Util.geometricMean($mean_arr)) === 30))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.harmonicMean(mean_arr) == 15")})(((await $math_Util.harmonicMean($mean_arr)) === 15))};
     }
   }
   return $Closure3;
@@ -75,7 +69,7 @@ module.exports = function({ mean_arr, math_Util }) {
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.2"
+      "version": "0.17.0"
     },
     "outputs": {
       "root": {
@@ -89,7 +83,7 @@ module.exports = function({ mean_arr, math_Util }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:inflight median\",\"${aws_lambda_function.root_testinflightmedian_Handler_15967B87.arn}\"],[\"root/Default/Default/test:inflight mode\",\"${aws_lambda_function.root_testinflightmode_Handler_AEAA7263.arn}\"],[\"root/Default/Default/test:inflight mean\",\"${aws_lambda_function.root_testinflightmean_Handler_4F320506.arn}\"]]"
+      "value": "[[\"root/Default/Default/test:inflight median\",\"${aws_lambda_function.testinflightmedian_Handler_B978E173.arn}\"],[\"root/Default/Default/test:inflight mode\",\"${aws_lambda_function.testinflightmode_Handler_72A19270.arn}\"],[\"root/Default/Default/test:inflight mean\",\"${aws_lambda_function.testinflightmean_Handler_8EC47095.arn}\"]]"
     }
   },
   "provider": {
@@ -99,104 +93,104 @@ module.exports = function({ mean_arr, math_Util }) {
   },
   "resource": {
     "aws_iam_role": {
-      "root_testinflightmean_Handler_IamRole_895A9FC3": {
+      "testinflightmean_Handler_IamRole_FBB742BC": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:inflight mean/Handler/IamRole",
-            "uniqueId": "root_testinflightmean_Handler_IamRole_895A9FC3"
+            "uniqueId": "testinflightmean_Handler_IamRole_FBB742BC"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       },
-      "root_testinflightmedian_Handler_IamRole_E9544EA2": {
+      "testinflightmedian_Handler_IamRole_3B7DA0C5": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:inflight median/Handler/IamRole",
-            "uniqueId": "root_testinflightmedian_Handler_IamRole_E9544EA2"
+            "uniqueId": "testinflightmedian_Handler_IamRole_3B7DA0C5"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       },
-      "root_testinflightmode_Handler_IamRole_5CAE07A0": {
+      "testinflightmode_Handler_IamRole_06517FF6": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:inflight mode/Handler/IamRole",
-            "uniqueId": "root_testinflightmode_Handler_IamRole_5CAE07A0"
+            "uniqueId": "testinflightmode_Handler_IamRole_06517FF6"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
-      "root_testinflightmean_Handler_IamRolePolicy_E56C67A8": {
+      "testinflightmean_Handler_IamRolePolicy_67540022": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:inflight mean/Handler/IamRolePolicy",
-            "uniqueId": "root_testinflightmean_Handler_IamRolePolicy_E56C67A8"
+            "uniqueId": "testinflightmean_Handler_IamRolePolicy_67540022"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
-        "role": "${aws_iam_role.root_testinflightmean_Handler_IamRole_895A9FC3.name}"
+        "role": "${aws_iam_role.testinflightmean_Handler_IamRole_FBB742BC.name}"
       },
-      "root_testinflightmedian_Handler_IamRolePolicy_735CFB20": {
+      "testinflightmedian_Handler_IamRolePolicy_FF81B1E5": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:inflight median/Handler/IamRolePolicy",
-            "uniqueId": "root_testinflightmedian_Handler_IamRolePolicy_735CFB20"
+            "uniqueId": "testinflightmedian_Handler_IamRolePolicy_FF81B1E5"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
-        "role": "${aws_iam_role.root_testinflightmedian_Handler_IamRole_E9544EA2.name}"
+        "role": "${aws_iam_role.testinflightmedian_Handler_IamRole_3B7DA0C5.name}"
       },
-      "root_testinflightmode_Handler_IamRolePolicy_C096AFF9": {
+      "testinflightmode_Handler_IamRolePolicy_CB816C3B": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:inflight mode/Handler/IamRolePolicy",
-            "uniqueId": "root_testinflightmode_Handler_IamRolePolicy_C096AFF9"
+            "uniqueId": "testinflightmode_Handler_IamRolePolicy_CB816C3B"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
-        "role": "${aws_iam_role.root_testinflightmode_Handler_IamRole_5CAE07A0.name}"
+        "role": "${aws_iam_role.testinflightmode_Handler_IamRole_06517FF6.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
-      "root_testinflightmean_Handler_IamRolePolicyAttachment_49287AF1": {
+      "testinflightmean_Handler_IamRolePolicyAttachment_ED6C9099": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:inflight mean/Handler/IamRolePolicyAttachment",
-            "uniqueId": "root_testinflightmean_Handler_IamRolePolicyAttachment_49287AF1"
+            "uniqueId": "testinflightmean_Handler_IamRolePolicyAttachment_ED6C9099"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.root_testinflightmean_Handler_IamRole_895A9FC3.name}"
+        "role": "${aws_iam_role.testinflightmean_Handler_IamRole_FBB742BC.name}"
       },
-      "root_testinflightmedian_Handler_IamRolePolicyAttachment_21472737": {
+      "testinflightmedian_Handler_IamRolePolicyAttachment_48BFB0EF": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:inflight median/Handler/IamRolePolicyAttachment",
-            "uniqueId": "root_testinflightmedian_Handler_IamRolePolicyAttachment_21472737"
+            "uniqueId": "testinflightmedian_Handler_IamRolePolicyAttachment_48BFB0EF"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.root_testinflightmedian_Handler_IamRole_E9544EA2.name}"
+        "role": "${aws_iam_role.testinflightmedian_Handler_IamRole_3B7DA0C5.name}"
       },
-      "root_testinflightmode_Handler_IamRolePolicyAttachment_2F401533": {
+      "testinflightmode_Handler_IamRolePolicyAttachment_FB3CC1BF": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:inflight mode/Handler/IamRolePolicyAttachment",
-            "uniqueId": "root_testinflightmode_Handler_IamRolePolicyAttachment_2F401533"
+            "uniqueId": "testinflightmode_Handler_IamRolePolicyAttachment_FB3CC1BF"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.root_testinflightmode_Handler_IamRole_5CAE07A0.name}"
+        "role": "${aws_iam_role.testinflightmode_Handler_IamRole_06517FF6.name}"
       }
     },
     "aws_lambda_function": {
-      "root_testinflightmean_Handler_4F320506": {
+      "testinflightmean_Handler_8EC47095": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:inflight mean/Handler/Default",
-            "uniqueId": "root_testinflightmean_Handler_4F320506"
+            "uniqueId": "testinflightmean_Handler_8EC47095"
           }
         },
         "environment": {
@@ -208,21 +202,21 @@ module.exports = function({ mean_arr, math_Util }) {
         "function_name": "Handler-c81bc5c0",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.root_testinflightmean_Handler_IamRole_895A9FC3.arn}",
+        "role": "${aws_iam_role.testinflightmean_Handler_IamRole_FBB742BC.arn}",
         "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
-        "s3_key": "${aws_s3_object.root_testinflightmean_Handler_S3Object_2478609D.key}",
+        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
+        "s3_key": "${aws_s3_object.testinflightmean_Handler_S3Object_B038C877.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
           "subnet_ids": []
         }
       },
-      "root_testinflightmedian_Handler_15967B87": {
+      "testinflightmedian_Handler_B978E173": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:inflight median/Handler/Default",
-            "uniqueId": "root_testinflightmedian_Handler_15967B87"
+            "uniqueId": "testinflightmedian_Handler_B978E173"
           }
         },
         "environment": {
@@ -234,21 +228,21 @@ module.exports = function({ mean_arr, math_Util }) {
         "function_name": "Handler-c8d95514",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.root_testinflightmedian_Handler_IamRole_E9544EA2.arn}",
+        "role": "${aws_iam_role.testinflightmedian_Handler_IamRole_3B7DA0C5.arn}",
         "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
-        "s3_key": "${aws_s3_object.root_testinflightmedian_Handler_S3Object_FB5CCD67.key}",
+        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
+        "s3_key": "${aws_s3_object.testinflightmedian_Handler_S3Object_24DB22D7.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
           "subnet_ids": []
         }
       },
-      "root_testinflightmode_Handler_AEAA7263": {
+      "testinflightmode_Handler_72A19270": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:inflight mode/Handler/Default",
-            "uniqueId": "root_testinflightmode_Handler_AEAA7263"
+            "uniqueId": "testinflightmode_Handler_72A19270"
           }
         },
         "environment": {
@@ -260,10 +254,10 @@ module.exports = function({ mean_arr, math_Util }) {
         "function_name": "Handler-c8c7e996",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.root_testinflightmode_Handler_IamRole_5CAE07A0.arn}",
+        "role": "${aws_iam_role.testinflightmode_Handler_IamRole_06517FF6.arn}",
         "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
-        "s3_key": "${aws_s3_object.root_testinflightmode_Handler_S3Object_3F496665.key}",
+        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
+        "s3_key": "${aws_s3_object.testinflightmode_Handler_S3Object_48CE9E2C.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -272,47 +266,47 @@ module.exports = function({ mean_arr, math_Util }) {
       }
     },
     "aws_s3_bucket": {
-      "root_Code_02F3C603": {
+      "Code": {
         "//": {
           "metadata": {
             "path": "root/Default/Code",
-            "uniqueId": "root_Code_02F3C603"
+            "uniqueId": "Code"
           }
         },
         "bucket_prefix": "code-c84a50b1-"
       }
     },
     "aws_s3_object": {
-      "root_testinflightmean_Handler_S3Object_2478609D": {
+      "testinflightmean_Handler_S3Object_B038C877": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:inflight mean/Handler/S3Object",
-            "uniqueId": "root_testinflightmean_Handler_S3Object_2478609D"
+            "uniqueId": "testinflightmean_Handler_S3Object_B038C877"
           }
         },
-        "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
+        "bucket": "${aws_s3_bucket.Code.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       },
-      "root_testinflightmedian_Handler_S3Object_FB5CCD67": {
+      "testinflightmedian_Handler_S3Object_24DB22D7": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:inflight median/Handler/S3Object",
-            "uniqueId": "root_testinflightmedian_Handler_S3Object_FB5CCD67"
+            "uniqueId": "testinflightmedian_Handler_S3Object_24DB22D7"
           }
         },
-        "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
+        "bucket": "${aws_s3_bucket.Code.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       },
-      "root_testinflightmode_Handler_S3Object_3F496665": {
+      "testinflightmode_Handler_S3Object_48CE9E2C": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:inflight mode/Handler/S3Object",
-            "uniqueId": "root_testinflightmode_Handler_S3Object_3F496665"
+            "uniqueId": "testinflightmode_Handler_S3Object_48CE9E2C"
           }
         },
-        "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
+        "bucket": "${aws_s3_bucket.Code.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       }
@@ -336,18 +330,14 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const odd_arr_client = context._lift(odd_arr);
-        const even_arr_client = context._lift(even_arr);
-        const math_UtilClient = math.Util._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            odd_arr: ${odd_arr_client},
-            even_arr: ${even_arr_client},
-            math_Util: ${math_UtilClient.text},
+          require("./inflight.$Closure1.js")({
+            $even_arr: ${context._lift(even_arr)},
+            $math_Util: ${context._lift(math.Util)},
+            $odd_arr: ${context._lift(odd_arr)},
           })
         `);
       }
@@ -363,10 +353,6 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure1._registerBindObject(even_arr, host, []);
-          $Closure1._registerBindObject(odd_arr, host, []);
-        }
         if (ops.includes("handle")) {
           $Closure1._registerBindObject(even_arr, host, []);
           $Closure1._registerBindObject(odd_arr, host, []);
@@ -378,20 +364,18 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure2.js";
-        const modal_arr_client = context._lift(modal_arr);
-        const bimodal_client = context._lift(bimodal);
-        const multimodal_client = context._lift(multimodal);
-        const math_UtilClient = math.Util._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            modal_arr: ${modal_arr_client},
-            bimodal: ${bimodal_client},
-            multimodal: ${multimodal_client},
-            math_Util: ${math_UtilClient.text},
+          require("./inflight.$Closure2.js")({
+            $_bimodal_at_0__: ${context._lift((bimodal.at(0)))},
+            $_bimodal_at_1__: ${context._lift((bimodal.at(1)))},
+            $_multimodal_at_0__: ${context._lift((multimodal.at(0)))},
+            $_multimodal_at_1__: ${context._lift((multimodal.at(1)))},
+            $_multimodal_at_2__: ${context._lift((multimodal.at(2)))},
+            $math_Util: ${context._lift(math.Util)},
+            $modal_arr: ${context._lift(modal_arr)},
           })
         `);
       }
@@ -407,15 +391,13 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure2._registerBindObject(bimodal, host, []);
-          $Closure2._registerBindObject(modal_arr, host, []);
-          $Closure2._registerBindObject(multimodal, host, []);
-        }
         if (ops.includes("handle")) {
-          $Closure2._registerBindObject(bimodal, host, ["at"]);
-          $Closure2._registerBindObject(modal_arr, host, []);
-          $Closure2._registerBindObject(multimodal, host, ["at"]);
+          $Closure2._registerBindObject((bimodal.at(0)), host, []);
+          $Closure2._registerBindObject((bimodal.at(1)), host, []);
+          $Closure2._registerBindObject((multimodal.at(0)), host, []);
+          $Closure2._registerBindObject((multimodal.at(1)), host, []);
+          $Closure2._registerBindObject((multimodal.at(2)), host, []);
+          $Closure2._registerBindObject(modal_arr, host, ["at"]);
         }
         super._registerBind(host, ops);
       }
@@ -424,16 +406,13 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure3.js";
-        const mean_arr_client = context._lift(mean_arr);
-        const math_UtilClient = math.Util._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            mean_arr: ${mean_arr_client},
-            math_Util: ${math_UtilClient.text},
+          require("./inflight.$Closure3.js")({
+            $math_Util: ${context._lift(math.Util)},
+            $mean_arr: ${context._lift(mean_arr)},
           })
         `);
       }
@@ -449,9 +428,6 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure3._registerBindObject(mean_arr, host, []);
-        }
         if (ops.includes("handle")) {
           $Closure3._registerBindObject(mean_arr, host, []);
         }

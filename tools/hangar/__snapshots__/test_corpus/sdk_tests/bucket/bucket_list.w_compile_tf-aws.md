@@ -2,23 +2,21 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ b }) {
+module.exports = function({ $b }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
-    async handle()  {
+    async handle() {
       const jsonObj1 = Object.freeze({"key1":"value1"});
-      {((cond) => {if (!cond) throw new Error("assertion failed: b.list().length == 1")})(((await b.list()).length === 1))};
-      (await b.putJson("file1.json",jsonObj1));
-      (await b.put("file2.txt","Bar"));
-      (await b.put("random","Buz"));
-      const objs = (await b.list());
-      const objs2 = (await b.list("file"));
+      {((cond) => {if (!cond) throw new Error("assertion failed: b.list().length == 1")})(((await $b.list()).length === 1))};
+      (await $b.putJson("file1.json",jsonObj1));
+      (await $b.put("file2.txt","Bar"));
+      (await $b.put("random","Buz"));
+      const objs = (await $b.list());
+      const objs2 = (await $b.list("file"));
       {((cond) => {if (!cond) throw new Error("assertion failed: objs.contains(\"file1.json\")")})(objs.includes("file1.json"))};
       {((cond) => {if (!cond) throw new Error("assertion failed: objs.contains(\"file2.txt\")")})(objs.includes("file2.txt"))};
       {((cond) => {if (!cond) throw new Error("assertion failed: objs.contains(\"file3.txt\")")})(objs.includes("file3.txt"))};
@@ -43,7 +41,7 @@ module.exports = function({ b }) {
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.2"
+      "version": "0.17.0"
     },
     "outputs": {
       "root": {
@@ -57,7 +55,7 @@ module.exports = function({ b }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:list\",\"${aws_lambda_function.root_testlist_Handler_EFBD85FC.arn}\"]]"
+      "value": "[[\"root/Default/Default/test:list\",\"${aws_lambda_function.testlist_Handler_58856559.arn}\"]]"
     }
   },
   "provider": {
@@ -67,51 +65,51 @@ module.exports = function({ b }) {
   },
   "resource": {
     "aws_iam_role": {
-      "root_testlist_Handler_IamRole_4D7098F9": {
+      "testlist_Handler_IamRole_1E7E84A8": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:list/Handler/IamRole",
-            "uniqueId": "root_testlist_Handler_IamRole_4D7098F9"
+            "uniqueId": "testlist_Handler_IamRole_1E7E84A8"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
-      "root_testlist_Handler_IamRolePolicy_039D0595": {
+      "testlist_Handler_IamRolePolicy_7EFE6464": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:list/Handler/IamRolePolicy",
-            "uniqueId": "root_testlist_Handler_IamRolePolicy_039D0595"
+            "uniqueId": "testlist_Handler_IamRolePolicy_7EFE6464"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:List*\",\"s3:PutObject*\",\"s3:Abort*\",\"s3:GetObject*\",\"s3:GetBucket*\"],\"Resource\":[\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\",\"${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.root_testlist_Handler_IamRole_4D7098F9.name}"
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:List*\",\"s3:PutObject*\",\"s3:Abort*\",\"s3:GetObject*\",\"s3:GetBucket*\"],\"Resource\":[\"${aws_s3_bucket.cloudBucket.arn}\",\"${aws_s3_bucket.cloudBucket.arn}/*\"],\"Effect\":\"Allow\"}]}",
+        "role": "${aws_iam_role.testlist_Handler_IamRole_1E7E84A8.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
-      "root_testlist_Handler_IamRolePolicyAttachment_59333345": {
+      "testlist_Handler_IamRolePolicyAttachment_913EEFDF": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:list/Handler/IamRolePolicyAttachment",
-            "uniqueId": "root_testlist_Handler_IamRolePolicyAttachment_59333345"
+            "uniqueId": "testlist_Handler_IamRolePolicyAttachment_913EEFDF"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.root_testlist_Handler_IamRole_4D7098F9.name}"
+        "role": "${aws_iam_role.testlist_Handler_IamRole_1E7E84A8.name}"
       }
     },
     "aws_lambda_function": {
-      "root_testlist_Handler_EFBD85FC": {
+      "testlist_Handler_58856559": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:list/Handler/Default",
-            "uniqueId": "root_testlist_Handler_EFBD85FC"
+            "uniqueId": "testlist_Handler_58856559"
           }
         },
         "environment": {
           "variables": {
-            "BUCKET_NAME_d755b447": "${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
+            "BUCKET_NAME_d755b447": "${aws_s3_bucket.cloudBucket.bucket}",
             "WING_FUNCTION_NAME": "Handler-c8867143",
             "WING_TARGET": "tf-aws"
           }
@@ -119,10 +117,10 @@ module.exports = function({ b }) {
         "function_name": "Handler-c8867143",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.root_testlist_Handler_IamRole_4D7098F9.arn}",
+        "role": "${aws_iam_role.testlist_Handler_IamRole_1E7E84A8.arn}",
         "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
-        "s3_key": "${aws_s3_object.root_testlist_Handler_S3Object_68237BDC.key}",
+        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
+        "s3_key": "${aws_s3_object.testlist_Handler_S3Object_8A6D3046.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -131,20 +129,20 @@ module.exports = function({ b }) {
       }
     },
     "aws_s3_bucket": {
-      "root_Code_02F3C603": {
+      "Code": {
         "//": {
           "metadata": {
             "path": "root/Default/Code",
-            "uniqueId": "root_Code_02F3C603"
+            "uniqueId": "Code"
           }
         },
         "bucket_prefix": "code-c84a50b1-"
       },
-      "root_cloudBucket_4F3C4F53": {
+      "cloudBucket": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/cloud.Bucket/Default",
-            "uniqueId": "root_cloudBucket_4F3C4F53"
+            "uniqueId": "cloudBucket"
           }
         },
         "bucket_prefix": "cloud-bucket-c87175e7-",
@@ -152,29 +150,29 @@ module.exports = function({ b }) {
       }
     },
     "aws_s3_bucket_public_access_block": {
-      "root_cloudBucket_PublicAccessBlock_319C1C2E": {
+      "cloudBucket_PublicAccessBlock_5946CCE8": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/cloud.Bucket/PublicAccessBlock",
-            "uniqueId": "root_cloudBucket_PublicAccessBlock_319C1C2E"
+            "uniqueId": "cloudBucket_PublicAccessBlock_5946CCE8"
           }
         },
         "block_public_acls": true,
         "block_public_policy": true,
-        "bucket": "${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
+        "bucket": "${aws_s3_bucket.cloudBucket.bucket}",
         "ignore_public_acls": true,
         "restrict_public_buckets": true
       }
     },
     "aws_s3_bucket_server_side_encryption_configuration": {
-      "root_cloudBucket_Encryption_8ED0CD9C": {
+      "cloudBucket_Encryption_77B6AEEF": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/cloud.Bucket/Encryption",
-            "uniqueId": "root_cloudBucket_Encryption_8ED0CD9C"
+            "uniqueId": "cloudBucket_Encryption_77B6AEEF"
           }
         },
-        "bucket": "${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
+        "bucket": "${aws_s3_bucket.cloudBucket.bucket}",
         "rule": [
           {
             "apply_server_side_encryption_by_default": {
@@ -185,25 +183,25 @@ module.exports = function({ b }) {
       }
     },
     "aws_s3_object": {
-      "root_cloudBucket_S3Objectfile3txt_7A4012BD": {
+      "cloudBucket_S3Object-file3txt_DFC4715B": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/cloud.Bucket/S3Object-file3.txt",
-            "uniqueId": "root_cloudBucket_S3Objectfile3txt_7A4012BD"
+            "uniqueId": "cloudBucket_S3Object-file3txt_DFC4715B"
           }
         },
-        "bucket": "${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
+        "bucket": "${aws_s3_bucket.cloudBucket.bucket}",
         "content": "Baz",
         "key": "file3.txt"
       },
-      "root_testlist_Handler_S3Object_68237BDC": {
+      "testlist_Handler_S3Object_8A6D3046": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:list/Handler/S3Object",
-            "uniqueId": "root_testlist_Handler_S3Object_68237BDC"
+            "uniqueId": "testlist_Handler_S3Object_8A6D3046"
           }
         },
-        "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
+        "bucket": "${aws_s3_bucket.Code.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       }
@@ -227,14 +225,12 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const b_client = context._lift(b);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            b: ${b_client},
+          require("./inflight.$Closure1.js")({
+            $b: ${context._lift(b)},
           })
         `);
       }
@@ -250,9 +246,6 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure1._registerBindObject(b, host, []);
-        }
         if (ops.includes("handle")) {
           $Closure1._registerBindObject(b, host, ["list", "put", "putJson"]);
         }
