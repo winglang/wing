@@ -1,4 +1,4 @@
-import { ColumnType } from "../cloud";
+import { ColumnType } from "../ex";
 import { Json } from "../std";
 
 export function validateRow(row: Json, columns: { [key: string]: ColumnType }) {

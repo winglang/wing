@@ -22,7 +22,7 @@ export interface BucketProps {
 }
 
 /**
- * Represents a cloud object store.
+ * A cloud object store.
  *
  * @inflight `@winglang/sdk.cloud.IBucketClient`
  */
@@ -344,7 +344,7 @@ export interface BucketOnEventProps {
 }
 
 /**
- * Represents a resource with an inflight "handle" method that can be passed to
+ * A resource with an inflight "handle" method that can be passed to
  * the bucket events.
  *
  * @inflight  `@winglang/sdk.cloud.IBucketEventHandlerClient`
@@ -352,7 +352,7 @@ export interface BucketOnEventProps {
 export interface IBucketEventHandler extends IResource {}
 
 /**
- * Represents a resource with an inflight "handle" method that can be passed to
+ * A resource with an inflight "handle" method that can be passed to
  * the bucket events.
  *
  */
