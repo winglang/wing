@@ -520,7 +520,14 @@ impl Subtype for Type {
 					parent_type.is_subtype_of(other)
 				});
 
-				if implements_iface {
+				let base_class_implements_iface = if let Some(base_class) = &class.parent {
+					let base_class_type: &Type = base_class;
+					base_class_type.is_subtype_of(other)
+				} else {
+					false
+				};
+
+				if implements_iface || base_class_implements_iface {
 					return true;
 				}
 
