@@ -52,7 +52,7 @@ export interface TableProps {
 }
 
 /**
- * Represents a NoSQL database table that can be used to store and query data.
+ * A NoSQL database table that can be used to store and query data.
  * @inflight `@winglang/sdk.cloud.ITableClient`
  */
 export abstract class Table extends Resource {

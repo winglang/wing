@@ -360,7 +360,7 @@ The base URL of the API endpoint.
 
 **Inflight client:** [@winglang/sdk.cloud.IBucketClient](#@winglang/sdk.cloud.IBucketClient)
 
-Represents a cloud object store.
+A cloud object store.
 
 #### Initializers <a name="Initializers" id="@winglang/sdk.cloud.Bucket.Initializer"></a>
 
@@ -536,7 +536,7 @@ Information on how to display a resource in the UI.
 
 **Inflight client:** [@winglang/sdk.cloud.ICounterClient](#@winglang/sdk.cloud.ICounterClient)
 
-Represents a distributed atomic counter.
+A distributed atomic counter.
 
 #### Initializers <a name="Initializers" id="@winglang/sdk.cloud.Counter.Initializer"></a>
 
@@ -613,7 +613,7 @@ The initial value of the counter.
 
 **Inflight client:** [@winglang/sdk.cloud.IFunctionClient](#@winglang/sdk.cloud.IFunctionClient)
 
-Represents a function.
+A function.
 
 #### Initializers <a name="Initializers" id="@winglang/sdk.cloud.Function.Initializer"></a>
 
@@ -722,7 +722,7 @@ Returns the set of environment variables for this function.
 
 **Inflight client:** [@winglang/sdk.cloud.IQueueClient](#@winglang/sdk.cloud.IQueueClient)
 
-Represents a queue.
+A queue.
 
 #### Initializers <a name="Initializers" id="@winglang/sdk.cloud.Queue.Initializer"></a>
 
@@ -811,7 +811,7 @@ Information on how to display a resource in the UI.
 
 **Inflight client:** [@winglang/sdk.cloud.IScheduleClient](#@winglang/sdk.cloud.IScheduleClient)
 
-Represents a schedule.
+A schedule.
 
 #### Initializers <a name="Initializers" id="@winglang/sdk.cloud.Schedule.Initializer"></a>
 
@@ -900,7 +900,7 @@ Information on how to display a resource in the UI.
 
 **Inflight client:** [@winglang/sdk.cloud.ISecretClient](#@winglang/sdk.cloud.ISecretClient)
 
-Represents a cloud secret.
+A cloud secret.
 
 #### Initializers <a name="Initializers" id="@winglang/sdk.cloud.Secret.Initializer"></a>
 
@@ -962,7 +962,7 @@ Information on how to display a resource in the UI.
 
 **Inflight client:** [@winglang/sdk.cloud.IServiceClient](#@winglang/sdk.cloud.IServiceClient)
 
-Represents a service.
+A long-running service.
 
 #### Initializers <a name="Initializers" id="@winglang/sdk.cloud.Service.Initializer"></a>
 
@@ -1024,7 +1024,7 @@ Information on how to display a resource in the UI.
 
 **Inflight client:** [@winglang/sdk.cloud.ITableClient](#@winglang/sdk.cloud.ITableClient)
 
-Represents a NoSQL database table that can be used to store and query data.
+A NoSQL database table that can be used to store and query data.
 
 #### Initializers <a name="Initializers" id="@winglang/sdk.cloud.Table.Initializer"></a>
 
@@ -1152,7 +1152,7 @@ Table primary key name.
 
 **Inflight client:** [@winglang/sdk.cloud.ITestRunnerClient](#@winglang/sdk.cloud.ITestRunnerClient)
 
-Represents a test engine.
+A test engine.
 
 #### Initializers <a name="Initializers" id="@winglang/sdk.cloud.TestRunner.Initializer"></a>
 
@@ -1229,7 +1229,7 @@ Information on how to display a resource in the UI.
 
 **Inflight client:** [@winglang/sdk.cloud.ITopicClient](#@winglang/sdk.cloud.ITopicClient)
 
-Represents a topic.
+A topic.
 
 #### Initializers <a name="Initializers" id="@winglang/sdk.cloud.Topic.Initializer"></a>
 
@@ -1318,7 +1318,7 @@ Information on how to display a resource in the UI.
 
 **Inflight client:** [@winglang/sdk.cloud.IWebsiteClient](#@winglang/sdk.cloud.IWebsiteClient)
 
-Represents a cloud static website.
+A cloud static website.
 
 #### Initializers <a name="Initializers" id="@winglang/sdk.cloud.Website.Initializer"></a>
 
@@ -2657,7 +2657,7 @@ let TopicProps = cloud.TopicProps{ ... }
 
 ### Trace <a name="Trace" id="@winglang/sdk.cloud.Trace"></a>
 
-Represents an trace emitted during simulation.
+A trace emitted during simulation.
 
 #### Initializer <a name="Initializer" id="@winglang/sdk.cloud.Trace.Initializer"></a>
 
@@ -2825,7 +2825,7 @@ Inflight methods and members of `cloud.Api`.
 
 **Inflight client:** [@winglang/sdk.cloud.IApiEndpointHandlerClient](#@winglang/sdk.cloud.IApiEndpointHandlerClient)
 
-Represents a resource with an inflight "handle" method that can be passed to one of the `Api` request preflight methods.
+A resource with an inflight "handle" method that can be passed to one of the `Api` request preflight methods.
 
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -3145,7 +3145,7 @@ Key of the object.
 
 **Inflight client:** [@winglang/sdk.cloud.IBucketEventHandlerClient](#@winglang/sdk.cloud.IBucketEventHandlerClient)
 
-Represents a resource with an inflight "handle" method that can be passed to the bucket events.
+A resource with an inflight "handle" method that can be passed to the bucket events.
 
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -3185,7 +3185,7 @@ Information on how to display a resource in the UI.
 
 - *Implemented By:* <a href="#@winglang/sdk.cloud.IBucketEventHandlerClient">IBucketEventHandlerClient</a>
 
-Represents a resource with an inflight "handle" method that can be passed to the bucket events.
+A resource with an inflight "handle" method that can be passed to the bucket events.
 
 #### Methods <a name="Methods" id="Methods"></a>
 
@@ -3374,7 +3374,7 @@ Invoke the function asynchronously with a given payload.
 
 **Inflight client:** [@winglang/sdk.cloud.IFunctionHandlerClient](#@winglang/sdk.cloud.IFunctionHandlerClient)
 
-Represents a resource with an inflight "handle" method that can be used to create a `cloud.Function`.
+A resource with an inflight "handle" method that can be used to create a `cloud.Function`.
 
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -3515,7 +3515,7 @@ Payload to send to the queue.
 
 **Inflight client:** [@winglang/sdk.cloud.IQueueSetConsumerHandlerClient](#@winglang/sdk.cloud.IQueueSetConsumerHandlerClient)
 
-Represents a resource with an inflight "handle" method that can be passed to `Queue.setConsumer`.
+A resource with an inflight "handle" method that can be passed to `Queue.setConsumer`.
 
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -3598,7 +3598,7 @@ Inflight interface for `Schedule`.
 
 **Inflight client:** [@winglang/sdk.cloud.IScheduleOnTickHandlerClient](#@winglang/sdk.cloud.IScheduleOnTickHandlerClient)
 
-Represents a resource with an inflight "handle" method that can be passed to `Schedule.on_tick`.
+A resource with an inflight "handle" method that can be passed to `Schedule.on_tick`.
 
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -3776,7 +3776,7 @@ Function that will be called for service events.
 
 **Inflight client:** [@winglang/sdk.cloud.IServiceOnEventClient](#@winglang/sdk.cloud.IServiceOnEventClient)
 
-Represents a resource with an inflight "handle" method that can be passed to `ServiceProps.on_start` || `ServiceProps.on_stop`.
+A resource with an inflight "handle" method that can be passed to `ServiceProps.on_start` || `ServiceProps.on_stop`.
 
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -4012,7 +4012,7 @@ Payload to publish to Topic.
 
 **Inflight client:** [@winglang/sdk.cloud.ITopicOnMessageHandlerClient](#@winglang/sdk.cloud.ITopicOnMessageHandlerClient)
 
-Represents a resource with an inflight "handle" method that can be passed to `Topic.on_message`.
+A resource with an inflight "handle" method that can be passed to `Topic.on_message`.
 
 
 #### Properties <a name="Properties" id="Properties"></a>

@@ -9,7 +9,7 @@ import { Resource } from "../std";
 export const REDIS_FQN = fqnForType("redis.Redis");
 
 /**
- * Represents a cloud redis db.
+ * A cloud redis db.
  *
  * @inflight `@winglang/sdk.redis.IRedisClient`
  */

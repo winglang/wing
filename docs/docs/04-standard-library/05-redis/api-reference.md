@@ -17,7 +17,7 @@ sidebar_position: 100
 
 **Inflight client:** [@winglang/sdk.redis.IRedisClient](#@winglang/sdk.redis.IRedisClient)
 
-Represents a cloud redis db.
+A cloud redis db.
 
 #### Initializers <a name="Initializers" id="@winglang/sdk.redis.Redis.Initializer"></a>
 

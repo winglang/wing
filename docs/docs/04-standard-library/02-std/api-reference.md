@@ -74,7 +74,7 @@ Information on how to display a resource in the UI.
 
 **Inflight client:** [@winglang/sdk.cloud.ITestClient](#@winglang/sdk.cloud.ITestClient)
 
-Represents a unit test.
+A unit test.
 
 #### Initializers <a name="Initializers" id="@winglang/sdk.std.Test.Initializer"></a>
 
