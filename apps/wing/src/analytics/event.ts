@@ -8,6 +8,7 @@ export interface AnalyticEvent {
   timestamp?: string;
   anonymousId?: string;
   properties: {
+    anonymous_repo_id?: string;
     cli: CLIData;
     os: OSData;
     node: NodeData;

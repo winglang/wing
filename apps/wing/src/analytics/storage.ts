@@ -6,7 +6,6 @@ import path from "path";
 import * as os from "os";
 
 const WING_HOME_DIR = path.join(os.homedir(), ".wing")
-const DEFAULT_WING_ANALYTICS_CONFIG_FILE = path.join(WING_HOME_DIR, 'wing-analytics-config.json');
 
 export interface AnalyticsConfig {
   anonymousId: string;
@@ -15,17 +14,20 @@ export interface AnalyticsConfig {
 }
 
 interface AnalyticsStorageProps {
+  analyticsStorageDir?: string;
   configFile?: string;
   debug?: boolean;
 }
 
 export class AnalyticsStorage {
+  analyticsStorageDir: string;
   analyticsConfigFile: string;
   analyticsConfig: AnalyticsConfig;
   debug?: boolean;
 
   constructor(props?: AnalyticsStorageProps) {
-    this.analyticsConfigFile = props?.configFile ?? DEFAULT_WING_ANALYTICS_CONFIG_FILE;
+    this.analyticsConfigFile = props?.configFile ?? path.join(path.join(WING_HOME_DIR, 'wing-analytics-config.json'));
+    this.analyticsStorageDir = props?.analyticsStorageDir ?? path.join(os.tmpdir(), "wing-analytics");
     this.debug = props?.debug;
     this.analyticsConfig = this.loadConfig();
   }
@@ -36,19 +38,22 @@ export class AnalyticsStorage {
         return undefined;
       }
       const eventId = uuidv4();
-      const tmpdir = path.join(os.tmpdir(), "wing-analytics");
       
-      if (!existsSync(tmpdir)) {
-        mkdirSync(tmpdir);
+      if (!existsSync(this.analyticsStorageDir)) {
+        mkdirSync(this.analyticsStorageDir);
       }
   
-      const analyticReportFile = path.join(tmpdir, `${eventId}.json`);
+      const analyticReportFile = path.join(this.analyticsStorageDir, `${eventId}.json`);
       
-      const anonymousId = this.getAnonymousId();
-    
+      
       // attach timestamp and anonymousId to event
       event.timestamp = event.timestamp ?? new Date().toISOString();
-      event.anonymousId = anonymousId;
+      
+      // We add the anonymousId only if we are not in a CI environment
+      if (!event.properties.ci) {
+        const anonymousId = this.getAnonymousId();
+        event.anonymousId = anonymousId;
+      }
     
       this.saveEvent(analyticReportFile, event);
     
@@ -103,7 +108,30 @@ export class AnalyticsStorage {
     writeFileSync(this.analyticsConfigFile, JSON.stringify(config))
   }
 
+  /**
+   * Helper method to flatten objects
+   * 
+   * @param properties The properties to flatten
+   * @param parentKey The key of the parent (defaults to "")
+   * @returns 
+   */
+  private flattenProperties(properties: {[key: string]: any}, parentKey: string = ""): {[key: string]: any} {
+    return Object.keys(properties).reduce((accumulated: {[key:string]: any}, key) => {
+      const newKey = parentKey ? `${parentKey}_${key}` : key;
+
+      if (typeof properties[key] === 'object' && properties[key] !== null && !Array.isArray(properties[key])) {
+        Object.assign(accumulated, this.flattenProperties(properties[key], newKey));
+      } else {
+        accumulated[newKey] = properties[key];
+      }
+      
+      return accumulated;
+    }, {});
+  }
+
+
   private saveEvent(filePath: string, event: AnalyticEvent) {
+    event.properties = this.flattenProperties(event.properties) as any;
     writeFileSync(filePath, JSON.stringify(event))
     if (this.debug) {
       console.log(`Analytics event stored at ${filePath}`);

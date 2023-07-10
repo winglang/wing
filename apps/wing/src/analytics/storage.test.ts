@@ -1,7 +1,7 @@
 import {describe, test, expect } from "vitest";
 import { AnalyticEvent } from "./event";
 import { AnalyticsConfig, AnalyticsStorage } from "./storage";
-import { writeFileSync } from "fs";
+import { existsSync, mkdirSync, writeFileSync } from "fs";
 import path from "path";
 import * as os from "os";
 
@@ -15,8 +15,8 @@ describe(
           options: "\{\"-t\": \"fake-aws\"\}",
           target: "fake-aws",
           version: "4.2.0",
-          wingConsoleVersion: "1.2.3",
-          wingSDKVersion: "4.5.6"
+          wing_console_version: "1.2.3",
+          wing_sdk_version: "4.5.6"
         },
         os: {
           arch: "x64",
@@ -30,23 +30,52 @@ describe(
     }
 
     describe("when analytics is opt-in", () => {
-      const fakeAnalyticConfig: AnalyticsConfig = {
+      const fakeAnalyticConfig = {
         optOut: false,
-        anonymousId: "fake-anonymous-id"
-      }
-      const storage = createStorageWithFakeConfig(fakeAnalyticConfig);
+        anonymousId: "fake-anonymous-id",
+      } as AnalyticsConfig;
 
-      test("should store analytic event and return correct filepath", async () => {
+      test("anonymous id should not be included if in CI environment", () => {
+        // GIVEN
+        process.env.GITHUB_ACTION = "1";
+        const storage = createStorageWithFakeConfig({} as any, "opt-in-1");
+
         // WHEN
+        const analyticPath = storage.storeAnalyticEvent(DUMMY_ANALYTIC);
+        const storedAnalytic = storage.loadEvent(analyticPath!);
+
+        // THEN
+        expect(analyticPath).toBeDefined();
+        expect(storedAnalytic).not.toHaveProperty("anonymousId");
+      });
+
+      test("should store analytic with flattened properties and return correct filepath", async () => {
+        // WHEN
+        const storage = createStorageWithFakeConfig(fakeAnalyticConfig, "opt-in-2");
         const analyticPath = storage.storeAnalyticEvent(DUMMY_ANALYTIC);
         const storedAnalytic = storage.loadEvent(analyticPath!);
   
         // THEN
         expect(analyticPath).toBeDefined();
-        expect(storedAnalytic).toEqual(DUMMY_ANALYTIC);
+        expect(storedAnalytic).toEqual(expect.objectContaining({
+          event: DUMMY_ANALYTIC.event, 
+          anonymousId: DUMMY_ANALYTIC.anonymousId, 
+          properties: {
+            "cli_target": "fake-aws",
+            "cli_version": "4.2.0",
+            "cli_options": "\{\"-t\": \"fake-aws\"\}",
+            "cli_wing_console_version": "1.2.3",
+            "cli_wing_sdk_version": "4.5.6",
+            "os_arch": "x64",
+            "os_platform": "xbox",
+            "os_release": "360",
+            "node_version": "a million"
+          }
+        }));
       });
 
       test("can retrieve anonymous id", () => {
+        const storage = createStorageWithFakeConfig(fakeAnalyticConfig, "opt-in-3");
         expect(storage.getAnonymousId()).toBe("fake-anonymous-id");
       });
     });
@@ -58,7 +87,7 @@ describe(
         anonymousId: "fake-anonymous-id"
       }
 
-      const storage = createStorageWithFakeConfig(fakeAnalyticConfig);
+      const storage = createStorageWithFakeConfig(fakeAnalyticConfig, "opt-out-1");
       
       test("does not store analytic", async () => {
         // WHEN
@@ -74,10 +103,12 @@ describe(
   }
 );
 
-export function createStorageWithFakeConfig(config: AnalyticsConfig): AnalyticsStorage {
-  const tmpDir = path.join(os.tmpdir(), "wing-storage-test");
+export function createStorageWithFakeConfig(config: AnalyticsConfig, dirName: string): AnalyticsStorage {
+  const tmpDir = path.join(os.tmpdir(), dirName);
   const configFile = path.join(tmpDir, "analytics-fake-config.json");
-
+  if (!existsSync(tmpDir)) {
+    mkdirSync(tmpDir);
+  }
   writeFileSync(configFile, JSON.stringify(config));
-  return new AnalyticsStorage({configFile: configFile});
+  return new AnalyticsStorage({configFile: configFile, analyticsStorageDir: tmpDir});
 }

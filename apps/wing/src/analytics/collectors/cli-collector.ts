@@ -6,8 +6,8 @@ export interface CLIData {
   target: string;
   version: string;
   options: string;
-  wingSDKVersion: string;
-  wingConsoleVersion: string;
+  wing_sdk_version: string;
+  wing_console_version: string;
 }
 
 export class CLICollector extends Collector {
@@ -23,8 +23,8 @@ export class CLICollector extends Collector {
       target: this.cmd.opts().target,
       options: `${JSON.stringify(this.cmd.opts())}`,
       version: PACKAGE_VERSION,
-      wingSDKVersion: require(`@winglang/sdk/package.json`).version as string,
-      wingConsoleVersion: require(`@wingconsole/app/package.json`).version as string
+      wing_sdk_version: require(`@winglang/sdk/package.json`).version as string,
+      wing_console_version: require(`@wingconsole/app/package.json`).version as string
     }
   }
 }

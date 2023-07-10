@@ -5,6 +5,7 @@ import { NodeCollector } from "./collectors/node-collector";
 import { CLICollector } from "./collectors/cli-collector";
 import { CICollector } from "./collectors/ci-collector";
 import { AnalyticsStorage } from "./storage";
+import { GitCollector } from "./collectors/git-collector";
 
 
 /**
@@ -17,6 +18,7 @@ export async function collectCommandAnalytics(cmd: Command): Promise<string | un
   const osCollector = new OSCollector();
   const nodeCollector = new NodeCollector();
   const ciCollector = new CICollector();
+  const gitCollector = new GitCollector();
   const cliCollector = new CLICollector(cmd);
 
   let event: AnalyticEvent = {
@@ -26,6 +28,7 @@ export async function collectCommandAnalytics(cmd: Command): Promise<string | un
       os: await osCollector.collect(),
       node: await nodeCollector.collect(),
       ci: await ciCollector.collect(),
+      anonymous_repo_id: (await gitCollector.collect())?.anonymous_repo_id
     }
   }
 
