@@ -143,7 +143,7 @@ module.exports = function({ $bucket2 }) {
             "uniqueId": "testcallnon-syntheticclosureasafunction_Handler_IamRolePolicy_3CCA75F8"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\",\"s3:GetObject*\",\"s3:GetBucket*\"],\"Resource\":[\"${aws_s3_bucket.cloudBucket.arn}\",\"${aws_s3_bucket.cloudBucket.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:List*\",\"s3:PutObject*\",\"s3:Abort*\",\"s3:GetObject*\",\"s3:GetBucket*\"],\"Resource\":[\"${aws_s3_bucket.MyClosure_cloudBucket_4DAD12C0.arn}\",\"${aws_s3_bucket.MyClosure_cloudBucket_4DAD12C0.arn}/*\"],\"Effect\":\"Allow\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:List*\",\"s3:PutObject*\",\"s3:Abort*\",\"s3:GetObject*\",\"s3:GetBucket*\"],\"Resource\":[\"${aws_s3_bucket.cloudBucket.arn}\",\"${aws_s3_bucket.cloudBucket.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"s3:List*\",\"s3:PutObject*\",\"s3:Abort*\",\"s3:GetObject*\",\"s3:GetBucket*\"],\"Resource\":[\"${aws_s3_bucket.MyClosure_cloudBucket_4DAD12C0.arn}\",\"${aws_s3_bucket.MyClosure_cloudBucket_4DAD12C0.arn}/*\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.testcallnon-syntheticclosureasafunction_Handler_IamRole_A06F3749.name}"
       },
       "testcallsyntheticclosureclassasafunction_Handler_IamRolePolicy_64E9CC96": {
@@ -425,6 +425,9 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+          MyClosure._registerBindObject(this.bucket, host, []);
+        }
         if (ops.includes("handle")) {
           MyClosure._registerBindObject(this, host, ["putFile"]);
         }

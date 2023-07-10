@@ -5,7 +5,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 2
   documentation:
     kind: markdown
-    value: "```wing\n asBool: (): bool\n```\n---\nConvert Json element to number if possible.\n\n### Returns\na string."
+    value: "```wing\n asBool: (): bool\n```\n---\nConvert Json element to boolean if possible.\n\n### Returns\na boolean."
   sortText: ff|asBool
   insertText: asBool($0)
   insertTextFormat: 2
@@ -25,7 +25,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 2
   documentation:
     kind: markdown
-    value: "```wing\n asNum: (): num\n```\n---\nConvert Json element to number if possible.\n\n### Returns\na string."
+    value: "```wing\n asNum: (): num\n```\n---\nConvert Json element to number if possible.\n\n### Returns\na number."
   sortText: ff|asNum
   insertText: asNum($0)
   insertTextFormat: 2
@@ -105,7 +105,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 2
   documentation:
     kind: markdown
-    value: "```wing\n tryAsBool: (): bool?\n```\n---\nConvert Json element to boolean if possible.\n\n### Returns\na string."
+    value: "```wing\n tryAsBool: (): bool?\n```\n---\nConvert Json element to boolean if possible.\n\n### Returns\na boolean."
   sortText: ff|tryAsBool
   insertText: tryAsBool($0)
   insertTextFormat: 2
@@ -125,7 +125,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 2
   documentation:
     kind: markdown
-    value: "```wing\n tryAsNum: (): num?\n```\n---\nConvert Json element to string if possible.\n\n### Returns\na string."
+    value: "```wing\n tryAsNum: (): num?\n```\n---\nConvert Json element to number if possible.\n\n### Returns\na number."
   sortText: ff|tryAsNum
   insertText: tryAsNum($0)
   insertTextFormat: 2
