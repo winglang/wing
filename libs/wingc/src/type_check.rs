@@ -111,10 +111,19 @@ pub struct VariableInfo {
 	pub phase: Phase,
 	/// The kind of variable
 	pub kind: VariableKind,
+
+	pub docs: Option<Docs>,
 }
 
 impl SymbolKind {
-	pub fn make_member_variable(name: Symbol, type_: TypeRef, reassignable: bool, is_static: bool, phase: Phase) -> Self {
+	pub fn make_member_variable(
+		name: Symbol,
+		type_: TypeRef,
+		reassignable: bool,
+		is_static: bool,
+		phase: Phase,
+		docs: Option<Docs>,
+	) -> Self {
 		SymbolKind::Variable(VariableInfo {
 			name,
 			type_,
@@ -125,6 +134,7 @@ impl SymbolKind {
 			} else {
 				VariableKind::InstanceMember
 			},
+			docs,
 		})
 	}
 
@@ -135,6 +145,7 @@ impl SymbolKind {
 			reassignable,
 			phase,
 			kind: VariableKind::Free,
+			docs: None,
 		})
 	}
 
@@ -269,7 +280,7 @@ impl Class {
 pub struct Interface {
 	pub name: Symbol,
 	pub docs: Docs,
-	extends: Vec<TypeRef>, // Must be a Type::Interface type
+	pub extends: Vec<TypeRef>, // Must be a Type::Interface type
 	#[derivative(Debug = "ignore")]
 	pub env: SymbolEnv,
 }
@@ -338,7 +349,15 @@ pub trait ClassLike {
 			.0
 			.as_variable()
 			.expect("class env should only contain variables");
-		v.type_.as_function_sig().map(|_| v.clone())
+		if v.type_.as_function_sig().is_some() {
+			Some(v)
+		} else {
+			None
+		}
+	}
+
+	fn get_field(&self, name: &Symbol) -> Option<VariableInfo> {
+		self.get_env().lookup_ext(name, None).ok()?.0.as_variable()
 	}
 }
 
@@ -371,7 +390,7 @@ pub struct ArgListTypes {
 pub struct Struct {
 	pub name: Symbol,
 	pub docs: Docs,
-	extends: Vec<TypeRef>, // Must be a Type::Struct type
+	pub extends: Vec<TypeRef>, // Must be a Type::Struct type
 	#[derivative(Debug = "ignore")]
 	pub env: SymbolEnv,
 }
@@ -379,6 +398,7 @@ pub struct Struct {
 #[derive(Debug)]
 pub struct Enum {
 	pub name: Symbol,
+	pub docs: Docs,
 	pub values: IndexSet<Symbol>,
 }
 
@@ -771,7 +791,13 @@ impl Display for FunctionSignature {
 		let params_str = self
 			.parameters
 			.iter()
-			.map(|a| format!("{}: {}", a.name, a.typeref))
+			.map(|a| {
+				if a.name.is_empty() {
+					format!("{}", a.typeref)
+				} else {
+					format!("{}: {}", a.name, a.typeref)
+				}
+			})
 			.collect::<Vec<String>>()
 			.join(", ");
 
@@ -833,11 +859,11 @@ impl TypeRef {
 		}
 	}
 
-	pub fn maybe_unwrap_option(&self) -> TypeRef {
+	pub fn maybe_unwrap_option(&self) -> &Self {
 		if let Type::Optional(ref t) = **self {
-			*t
+			t
 		} else {
-			*self
+			self
 		}
 	}
 
@@ -919,6 +945,17 @@ impl TypeRef {
 		} else {
 			false
 		}
+	}
+
+	/// If this is a function and its last argument is a struct, return that struct.
+	pub fn get_function_struct_arg(&self) -> Option<&Struct> {
+		if let Some(func) = self.maybe_unwrap_option().as_function_sig() {
+			if let Some(arg) = func.parameters.last() {
+				return arg.typeref.maybe_unwrap_option().as_struct();
+			}
+		}
+
+		None
 	}
 
 	/// Returns the item type of a collection type, or None if the type is not a collection.
@@ -1228,11 +1265,36 @@ impl Types {
 			.and_then(|t| t.as_ref().map(|t| t.type_))
 	}
 
+	/// Obtain the type of a given expression node. Will panic if the expression has not been type checked yet.
+	pub fn get_expr_type_after_check(&self, expr: &Expr) -> TypeRef {
+		self
+			.type_for_expr
+			.get(expr.id)
+			.and_then(|t| t.as_ref().map(|t| t.type_))
+			.expect("All expressions should have a type")
+	}
+
 	pub fn get_expr_phase(&self, expr: &Expr) -> Option<Phase> {
 		self
 			.type_for_expr
 			.get(expr.id)
 			.and_then(|t| t.as_ref().map(|t| t.phase))
+	}
+
+	/// Given an unqualified type name of a builtin type, return the full type info.
+	///
+	/// This is needed because our builtin types have no API.
+	/// So we have to get the API from the std lib
+	/// but the std lib sometimes doesn't have the same names as the builtin types
+	/// https://github.com/winglang/wing/issues/1780
+	///
+	/// Note: This Doesn't handle generics (i.e. this keeps the `T1`)
+	pub fn get_std_class(&self, type_: &str) -> Option<(&SymbolKind, symbol_env::SymbolLookupInfo)> {
+		let type_name = fully_qualify_std_type(type_);
+
+		let fqn = format!("{WINGSDK_ASSEMBLY_NAME}.{type_name}");
+
+		self.libraries.lookup_nested_str(fqn.as_str(), None).ok()
 	}
 }
 
@@ -1337,6 +1399,7 @@ impl<'a> TypeChecker<'a> {
 			reassignable: false,
 			phase: Phase::Independent,
 			kind: VariableKind::Error,
+			docs: None,
 		}
 	}
 
@@ -1427,7 +1490,7 @@ impl<'a> TypeChecker<'a> {
 							(ltype, ltype_phase)
 						} else {
 							// Right argument must be a subtype of the inner type of the left argument
-							let inner_type = ltype.maybe_unwrap_option();
+							let inner_type = *ltype.maybe_unwrap_option();
 							self.validate_type(rtype, inner_type, right);
 							(inner_type, ltype_phase)
 						}
@@ -2407,7 +2470,7 @@ impl<'a> TypeChecker<'a> {
 				// and above validate_type_is_optional method will attach a diagnostic error if it is not.
 				// However for the sake of verbose diagnostics we'll allow the code to continue if the type is not an optional
 				// and complete the type checking process for additional errors.
-				let var_type = cond_type.maybe_unwrap_option();
+				let var_type = *cond_type.maybe_unwrap_option();
 
 				let mut stmt_env = SymbolEnv::new(Some(env.get_ref()), env.return_type, false, false, env.phase, stmt.idx);
 
@@ -2666,6 +2729,7 @@ impl<'a> TypeChecker<'a> {
 							field.reassignable,
 							field.is_static,
 							field.phase,
+							None,
 						),
 						StatementIdx::Top,
 					) {
@@ -2854,7 +2918,7 @@ impl<'a> TypeChecker<'a> {
 
 					match interface_env.define(
 						method_name,
-						SymbolKind::make_member_variable(method_name.clone(), method_type, false, false, sig.phase),
+						SymbolKind::make_member_variable(method_name.clone(), method_type, false, false, sig.phase, None),
 						StatementIdx::Top,
 					) {
 						Err(type_error) => {
@@ -2888,7 +2952,7 @@ impl<'a> TypeChecker<'a> {
 					}
 					match struct_env.define(
 						&field.name,
-						SymbolKind::make_member_variable(field.name.clone(), field_type, false, false, Phase::Independent),
+						SymbolKind::make_member_variable(field.name.clone(), field_type, false, false, Phase::Independent, None),
 						StatementIdx::Top,
 					) {
 						Err(type_error) => {
@@ -2937,6 +3001,7 @@ impl<'a> TypeChecker<'a> {
 				let enum_type_ref = self.types.add_type(Type::Enum(Enum {
 					name: name.clone(),
 					values: values.clone(),
+					docs: Default::default(),
 				}));
 
 				match env.define(name, SymbolKind::Type(enum_type_ref), StatementIdx::Top) {
@@ -3187,6 +3252,7 @@ impl<'a> TypeChecker<'a> {
 				false,
 				instance_type.is_none(),
 				method_sig.phase,
+				None,
 			),
 			StatementIdx::Top,
 		) {
@@ -3397,6 +3463,7 @@ impl<'a> TypeChecker<'a> {
 					reassignable,
 					phase: flight,
 					kind,
+					docs: _,
 				}) => {
 					// Replace type params in function signatures
 					if let Some(sig) = v.as_function_sig() {
@@ -3437,6 +3504,7 @@ impl<'a> TypeChecker<'a> {
 								*reassignable,
 								matches!(kind, VariableKind::StaticMember),
 								*flight,
+								None,
 							),
 							StatementIdx::Top,
 						) {
@@ -3457,6 +3525,7 @@ impl<'a> TypeChecker<'a> {
 								*reassignable,
 								matches!(kind, VariableKind::StaticMember),
 								*flight,
+								None,
 							),
 							StatementIdx::Top,
 						) {
@@ -3589,10 +3658,16 @@ impl<'a> TypeChecker<'a> {
 
 		let root = path.pop().unwrap();
 		path.reverse();
+
+		// combine all the spans into a single span
+		let start = root.span.start;
+		let end = path.last().map(|s| s.span.end).unwrap_or(root.span.end);
+		let file_id = root.span.file_id.clone();
+
 		Some(UserDefinedType {
 			root,
 			fields: path,
-			span: WingSpan::default(),
+			span: WingSpan { start, end, file_id },
 		})
 	}
 
@@ -3761,8 +3836,9 @@ impl<'a> TypeChecker<'a> {
 						name: Symbol::global(udt.full_path_str()),
 						type_: t,
 						reassignable: false,
-						phase: phase,
+						phase,
 						kind: VariableKind::Type,
+						docs: None,
 					},
 					phase,
 				)
@@ -3788,6 +3864,7 @@ impl<'a> TypeChecker<'a> {
 									type_,
 									reassignable: false,
 									phase: Phase::Independent,
+									docs: None,
 								},
 								Phase::Independent,
 							)
@@ -3841,6 +3918,7 @@ impl<'a> TypeChecker<'a> {
 				reassignable: false,
 				phase: env.phase,
 				kind: VariableKind::InstanceMember,
+				docs: None,
 			},
 
 			// Lookup wingsdk std types, hydrating generics if necessary
@@ -4069,7 +4147,7 @@ fn add_parent_members_to_struct_env(
 				};
 				struct_env.define(
 					&sym,
-					SymbolKind::make_member_variable(sym.clone(), member_type, false, false, struct_env.phase),
+					SymbolKind::make_member_variable(sym.clone(), member_type, false, false, struct_env.phase, None),
 					StatementIdx::Top,
 				)?;
 			}
@@ -4124,7 +4202,7 @@ fn add_parent_members_to_iface_env(
 				};
 				iface_env.define(
 					&sym,
-					SymbolKind::make_member_variable(sym.clone(), member_type, false, true, iface_env.phase),
+					SymbolKind::make_member_variable(sym.clone(), member_type, false, true, iface_env.phase, None),
 					StatementIdx::Top,
 				)?;
 			}
@@ -4201,6 +4279,37 @@ pub fn import_udt_from_jsii(
 		}
 	}
 	false
+}
+
+/// *Hacky* If the given type is from the std namespace, add the implicit `std.` to it.
+///
+/// This is needed because our builtin types have no API
+/// So we have to get the API from the std lib
+/// But the std lib sometimes doesn't have the same names as the builtin types
+///
+/// https://github.com/winglang/wing/issues/1780
+pub fn fully_qualify_std_type(type_: &str) -> std::string::String {
+	// Additionally, this doesn't handle for generics
+	let type_name = type_.to_string();
+	let type_name = if let Some((prefix, _)) = type_name.split_once("<") {
+		prefix
+	} else {
+		&type_name
+	};
+
+	let type_name = match type_name {
+		"str" => "String",
+		"duration" => "Duration",
+		"bool" => "Boolean",
+		"num" => "Number",
+		_ => type_name,
+	};
+
+	match type_name {
+		"Json" | "MutJson" | "MutArray" | "MutMap" | "MutSet" | "Array" | "Map" | "Set" | "String" | "Duration"
+		| "Boolean" | "Number" => format!("{WINGSDK_STD_MODULE}.{type_name}"),
+		_ => type_name.to_string(),
+	}
 }
 
 #[cfg(test)]
