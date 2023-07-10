@@ -36,6 +36,7 @@
     "@wingconsole/tsconfig": "workspace:^",
     "bump-pack": "workspace:^",
     "chokidar": "^3.5.3",
+    "conf": "^11.0.1",
     "constructs": "^10.2.51",
     "cors": "^2.8.5",
     "emittery": "^1.0.1",
