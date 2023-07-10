@@ -465,12 +465,12 @@ export interface DocsSchema {
   readonly inflight?: string;
 
   /**
-   * skipping documentation
+   * Skipping documentation
    */
   readonly skipDocs?: boolean;
 
   /**
-   * showing the wingType instead of the written type
+   * Showing the wingType instead of the written type
    */
   readonly wingType?: string;
 }
