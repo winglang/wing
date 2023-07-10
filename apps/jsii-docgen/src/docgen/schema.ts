@@ -465,7 +465,7 @@ export interface DocsSchema {
   readonly inflight?: string;
 
   /**
-   * skipping documentation
+   * Skipping documentation
    */
   readonly skipDocs?: boolean;
 
