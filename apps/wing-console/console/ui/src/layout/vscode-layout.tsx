@@ -7,8 +7,9 @@ import {
 } from "@wingconsole/design-system";
 import { State } from "@wingconsole/server";
 import classNames from "classnames";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo } from "react";
 
+import License from "../../LICENSE.md?raw";
 import { ConsoleLogsFilters } from "../features/console-logs-filters.js";
 import { ConsoleLogs } from "../features/console-logs.js";
 import { MapView } from "../features/map-view.js";
@@ -19,7 +20,7 @@ import { ResourceMetadata } from "../ui/resource-metadata.js";
 
 import { Header } from "./header.js";
 import { StatusBar } from "./status-bar.js";
-import { TermsAndConditions } from "./terms-and-conditions.js";
+import { TermsAndConditionsModal } from "./terms-and-conditions-modal.js";
 import { useLayout } from "./use-layout.js";
 
 export interface LayoutProps {
@@ -62,24 +63,22 @@ export const VscodeLayout = ({ cloudAppState, wingVersion }: LayoutProps) => {
     document.title = title;
   }, [title]);
 
-  const [showTerms, setShowTerms] = useState(false);
-  useEffect(() => {
+  const showTerms = useMemo(() => {
     if (!termsConfig.data) {
-      return;
+      return false;
     }
-    if (termsConfig.data.requireAcceptTerms && !termsConfig.data.accepted) {
-      setShowTerms(true);
-    }
+    return termsConfig.data.requireAcceptTerms && !termsConfig.data.accepted;
   }, [termsConfig.data]);
-
-  const onAcceptTerms = () => {
-    acceptTerms();
-    setShowTerms(false);
-  };
 
   return (
     <>
-      <TermsAndConditions visible={showTerms} onAccept={onAcceptTerms} />
+      {showTerms && (
+        <TermsAndConditionsModal
+          visible={true}
+          onAccept={() => acceptTerms()}
+          license={License}
+        />
+      )}
       <div
         data-testid="vscode-layout"
         className={classNames(

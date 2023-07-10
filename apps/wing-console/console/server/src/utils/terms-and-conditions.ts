@@ -1,3 +1,4 @@
+// @ts-ignore
 import Conf from "conf";
 
 const PROJECT_NAME = "@wingconsole/server";
