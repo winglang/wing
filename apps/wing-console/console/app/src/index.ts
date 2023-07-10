@@ -31,6 +31,7 @@ export interface CreateConsoleAppOptions {
   hostUtils?: HostUtils;
   onTrace?: (trace: Trace) => void;
   onExpressCreated?: CreateConsoleServerOptions["onExpressCreated"];
+  requireAcceptTerms?: boolean;
 }
 
 const staticDir = `${__dirname}/vite`;
@@ -60,7 +61,7 @@ export const createConsoleApp = async (options: CreateConsoleAppOptions) => {
       if (trace.type !== "resource") {
         return;
       }
-      if (!isTermsAccepted()) {
+      if (options.requireAcceptTerms && !isTermsAccepted()) {
         return;
       }
 
