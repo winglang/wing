@@ -52,7 +52,7 @@ export const createAppRouter = () => {
       return isTermsAccepted();
     }),
     "app.acceptTerms": createProcedure.mutation(() => {
-      setTermsAccepted(true);
+      acceptTerms(true);
     }),
     "app.logs": createProcedure
       .input(
