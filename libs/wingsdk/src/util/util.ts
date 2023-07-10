@@ -18,7 +18,7 @@ export interface WaitUntilProps {
 }
 
 /**
- * Represents a predicate with an inflight "handle" method that can be passed to
+ * A predicate with an inflight "handle" method that can be passed to
  * `util.busyWait`.
  * @inflight `@winglang/sdk.util.IPredicateHandlerClient`
  */
