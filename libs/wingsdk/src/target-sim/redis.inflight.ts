@@ -1,7 +1,7 @@
 import IoRedis from "ioredis";
 import { v4 as uuidv4 } from "uuid";
 import { RedisAttributes, RedisSchema } from "./schema-resources";
-import { RedisClientBase } from "../redis";
+import { RedisClientBase } from "../ex";
 import { runCommand } from "../shared/misc";
 import {
   ISimulatorContext,

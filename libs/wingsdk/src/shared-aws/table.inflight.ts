@@ -7,7 +7,7 @@ import {
   DynamoDBClient,
 } from "@aws-sdk/client-dynamodb";
 import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
-import { ITableClient } from "../cloud";
+import { ITableClient } from "../ex";
 import { validateRow } from "../shared/table-utils";
 import { Json } from "../std";
 

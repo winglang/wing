@@ -3,8 +3,8 @@ import { Construct } from "constructs";
 import { Function } from "./function";
 import { DynamodbTable } from "../.gen/providers/aws/dynamodb-table";
 import { DynamodbTableItem } from "../.gen/providers/aws/dynamodb-table-item";
-import * as cloud from "../cloud";
 import * as core from "../core";
+import * as ex from "../ex";
 import { NameOptions, ResourceNames } from "../shared/resource-names";
 import { Json, IInflightHost } from "../std";
 
@@ -22,10 +22,10 @@ const NAME_OPTS: NameOptions = {
  *
  * @inflight `@winglang/sdk.cloud.ITableClient`
  */
-export class Table extends cloud.Table {
+export class Table extends ex.Table {
   private readonly table: DynamodbTable;
 
-  constructor(scope: Construct, id: string, props: cloud.TableProps = {}) {
+  constructor(scope: Construct, id: string, props: ex.TableProps = {}) {
     super(scope, id, props);
 
     this.table = new DynamodbTable(this, "Default", {
@@ -57,34 +57,34 @@ export class Table extends cloud.Table {
       throw new Error("tables can only be bound by tfaws.Function for now");
     }
 
-    if (ops.includes(cloud.TableInflightMethods.INSERT)) {
+    if (ops.includes(ex.TableInflightMethods.INSERT)) {
       host.addPolicyStatements({
         actions: ["dynamodb:PutItem"],
         resources: [this.table.arn],
       });
     }
-    if (ops.includes(cloud.TableInflightMethods.UPDATE)) {
+    if (ops.includes(ex.TableInflightMethods.UPDATE)) {
       host.addPolicyStatements({
         actions: ["dynamodb:UpdateItem"],
         resources: [this.table.arn],
       });
     }
 
-    if (ops.includes(cloud.TableInflightMethods.DELETE)) {
+    if (ops.includes(ex.TableInflightMethods.DELETE)) {
       host.addPolicyStatements({
         actions: ["dynamodb:DeleteItem"],
         resources: [this.table.arn],
       });
     }
 
-    if (ops.includes(cloud.TableInflightMethods.GET)) {
+    if (ops.includes(ex.TableInflightMethods.GET)) {
       host.addPolicyStatements({
         actions: ["dynamodb:GetItem"],
         resources: [this.table.arn],
       });
     }
 
-    if (ops.includes(cloud.TableInflightMethods.LIST)) {
+    if (ops.includes(ex.TableInflightMethods.LIST)) {
       host.addPolicyStatements({
         actions: ["dynamodb:Scan"],
         resources: [this.table.arn],
