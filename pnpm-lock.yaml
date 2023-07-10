@@ -636,6 +636,9 @@ importers:
       chokidar:
         specifier: ^3.5.3
         version: 3.5.3
+      conf:
+        specifier: ^11.0.1
+        version: 11.0.1
       constructs:
         specifier: ^10.2.51
         version: 10.2.51
@@ -12529,7 +12532,7 @@ packages:
     dependencies:
       semver: 7.5.2
       shelljs: 0.8.5
-      typescript: 5.2.0-dev.20230705
+      typescript: 5.2.0-dev.20230710
     dev: true
 
   /duplexer@0.1.2:
@@ -20911,8 +20914,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  /typescript@5.2.0-dev.20230705:
-    resolution: {integrity: sha512-eMgfQ/e5CgYYSaduGhDc2UiY2EzzgrBMfHyagjUP70jj4VDCmLlIp1EftT5AMiLvNc7PYNCeziRFY5fBZhD9uA==}
+  /typescript@5.2.0-dev.20230710:
+    resolution: {integrity: sha512-D4u4/pfdrIi94+F+iVzxzuzCk8bE/cbe4jng6Sce2Y1szj/QiBqN43X5lMrIbMR9Kb1G2AdWzYPrcNv/ButJGA==}
     engines: {node: '>=14.17'}
     hasBin: true
     dev: true

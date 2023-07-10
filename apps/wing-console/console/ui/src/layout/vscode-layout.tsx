@@ -51,6 +51,8 @@ export const VscodeLayout = ({ cloudAppState, wingVersion }: LayoutProps) => {
     onResourceClick,
     title,
     wingfile,
+    termsAccepted,
+    acceptTerms,
   } = useLayout({
     cloudAppState,
     defaultLogLevels: ["info", "warn", "error"],
@@ -60,14 +62,21 @@ export const VscodeLayout = ({ cloudAppState, wingVersion }: LayoutProps) => {
     document.title = title;
   }, [title]);
 
-  const [showTerms, setShowTerms] = useState(true);
+  const [showTerms, setShowTerms] = useState(false);
+  useEffect(() => {
+    if (termsAccepted.data === false) {
+      setShowTerms(true);
+    }
+  }, [termsAccepted.data]);
+
+  const onAcceptTerms = () => {
+    acceptTerms();
+    setShowTerms(false);
+  };
 
   return (
     <>
-      <TermsAndConditions
-        visible={showTerms}
-        onAccept={() => setShowTerms(false)}
-      />
+      <TermsAndConditions visible={showTerms} onAccept={onAcceptTerms} />
       <div
         data-testid="vscode-layout"
         className={classNames(
