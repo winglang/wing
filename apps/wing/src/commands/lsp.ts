@@ -86,7 +86,7 @@ export async function run_server() {
       capabilities: {
         textDocumentSync: TextDocumentSyncKind.Full,
         completionProvider: {
-          triggerCharacters: ["."],
+          triggerCharacters: [".", ":", "("],
         },
         signatureHelpProvider: {
           triggerCharacters: ["(", ",", ")"],
