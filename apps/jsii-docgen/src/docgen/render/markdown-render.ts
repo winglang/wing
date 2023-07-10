@@ -18,6 +18,7 @@ import {
   TypeSchema,
 } from "../schema";
 import { Language } from "../transpile/transpile";
+import { HEADLESS_SUBMODULES } from "../view/wing-filters";
 
 export interface MarkdownFormattingOptions {
   /**
@@ -127,7 +128,14 @@ export class MarkdownRenderer {
         language: Language.fromString(schema.language),
         ...schema.metadata,
       });
-      documentation.section(renderer.visitApiReference(schema.apiReference));
+
+      documentation.section(
+        renderer.visitApiReference(
+          schema.apiReference,
+          !!schema.metadata.submodule &&
+            HEADLESS_SUBMODULES.includes(schema.metadata.submodule)
+        )
+      );
     }
 
     return documentation;
@@ -157,12 +165,15 @@ export class MarkdownRenderer {
     };
   }
 
-  public visitApiReference(apiRef: ApiReferenceSchema): MarkdownDocument {
+  public visitApiReference(
+    apiRef: ApiReferenceSchema,
+    headless: boolean
+  ): MarkdownDocument {
     const md = new MarkdownDocument({
-      header: { title: "API Reference" },
+      ...(!headless && { header: { title: "API Reference" } }),
       id: "api-reference",
     });
-    md.section(this.visitConstructs(apiRef.constructs));
+    md.section(this.visitConstructs(apiRef.constructs, headless));
     md.section(this.visitStructs(apiRef.structs));
     md.section(this.visitClasses(apiRef.classes));
     md.section(this.visitInterfaces(apiRef.interfaces));
@@ -170,12 +181,17 @@ export class MarkdownRenderer {
     return md;
   }
 
-  public visitConstructs(constructs: ConstructSchema[]): MarkdownDocument {
+  public visitConstructs(
+    constructs: ConstructSchema[],
+    headless: boolean
+  ): MarkdownDocument {
     if (constructs.length === 0) {
       return MarkdownDocument.EMPTY;
     }
 
-    const md = new MarkdownDocument({ header: { title: "Resources" } });
+    const md = new MarkdownDocument({
+      header: { title: headless ? "API Reference" : "Resources" },
+    });
     for (const construct of constructs) {
       md.section(this.visitConstruct(construct));
     }

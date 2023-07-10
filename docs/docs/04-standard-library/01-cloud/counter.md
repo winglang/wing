@@ -2,7 +2,15 @@
 title: Counter
 id: counter
 description: A built-in resource for representing an container for numbers in the cloud.
-keywords: [Wing reference, Wing language, language, Wing standard library, Wing programming language, Counter]
+keywords:
+  [
+    Wing reference,
+    Wing language,
+    language,
+    Wing standard library,
+    Wing programming language,
+    Counter,
+  ]
 sidebar_position: 1
 ---
 
@@ -62,7 +70,235 @@ The AWS implementation of `cloud.Counter` uses [Amazon DynamoDB](https://aws.ama
 ### GCP (`tf-gcp`)
 
 🚧 Not supported yet (tracking issue: [#628](https://github.com/winglang/wing/issues/628))
+## API Reference <a name="API Reference" id="API Reference"></a>
 
-## API Reference
+### Counter <a name="Counter" id="@winglang/sdk.cloud.Counter"></a>
 
-The full list of APIs for `cloud.Counter` is available in the [API Reference](./api-reference).
+**Inflight client:** [@winglang/sdk.cloud.ICounterClient](#@winglang/sdk.cloud.ICounterClient)
+
+Represents a distributed atomic counter.
+
+#### Initializers <a name="Initializers" id="@winglang/sdk.cloud.Counter.Initializer"></a>
+
+```wing
+bring cloud;
+
+new cloud.Counter(props?: CounterProps)
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.Counter.Initializer.parameter.props">props</a></code> | <code><a href="#@winglang/sdk.cloud.CounterProps">CounterProps</a></code> | *No description.* |
+
+---
+
+##### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.cloud.Counter.Initializer.parameter.props"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.CounterProps">CounterProps</a>
+
+---
+
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.Counter.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@winglang/sdk.cloud.Counter.property.display">display</a></code> | <code><a href="#@winglang/sdk.std.Display">Display</a></code> | Information on how to display a resource in the UI. |
+| <code><a href="#@winglang/sdk.cloud.Counter.property.initial">initial</a></code> | <code>num</code> | The initial value of the counter. |
+
+---
+
+##### `node`<sup>Required</sup> <a name="node" id="@winglang/sdk.cloud.Counter.property.node"></a>
+
+```wing
+node: Node;
+```
+
+- *Type:* constructs.Node
+
+The tree node.
+
+---
+
+##### `display`<sup>Required</sup> <a name="display" id="@winglang/sdk.cloud.Counter.property.display"></a>
+
+```wing
+display: Display;
+```
+
+- *Type:* <a href="#@winglang/sdk.std.Display">Display</a>
+
+Information on how to display a resource in the UI.
+
+---
+
+##### `initial`<sup>Required</sup> <a name="initial" id="@winglang/sdk.cloud.Counter.property.initial"></a>
+
+```wing
+initial: num;
+```
+
+- *Type:* num
+
+The initial value of the counter.
+
+---
+
+
+## Structs <a name="Structs" id="Structs"></a>
+
+### CounterProps <a name="CounterProps" id="@winglang/sdk.cloud.CounterProps"></a>
+
+Properties for `Counter`.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.CounterProps.Initializer"></a>
+
+```wing
+bring cloud;
+
+let CounterProps = cloud.CounterProps{ ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.CounterProps.property.initial">initial</a></code> | <code>num</code> | The initial value of the counter. |
+
+---
+
+##### `initial`<sup>Optional</sup> <a name="initial" id="@winglang/sdk.cloud.CounterProps.property.initial"></a>
+
+```wing
+initial: num;
+```
+
+- *Type:* num
+- *Default:* 0
+
+The initial value of the counter.
+
+---
+
+
+## Protocols <a name="Protocols" id="Protocols"></a>
+
+### ICounterClient <a name="ICounterClient" id="@winglang/sdk.cloud.ICounterClient"></a>
+
+- *Implemented By:* <a href="#@winglang/sdk.cloud.ICounterClient">ICounterClient</a>
+
+Inflight interface for `Counter`.
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.cloud.ICounterClient.dec">dec</a></code> | Decrement the counter, returning the previous value. |
+| <code><a href="#@winglang/sdk.cloud.ICounterClient.inc">inc</a></code> | Increments the counter atomically by a certain amount and returns the previous value. |
+| <code><a href="#@winglang/sdk.cloud.ICounterClient.peek">peek</a></code> | Get the current value of the counter. |
+| <code><a href="#@winglang/sdk.cloud.ICounterClient.set">set</a></code> | Set a counter to a given value. |
+
+---
+
+##### `dec` <a name="dec" id="@winglang/sdk.cloud.ICounterClient.dec"></a>
+
+```wing
+dec(amount?: num, key?: str): num
+```
+
+**Inflight client:** [true](#true)
+
+Decrement the counter, returning the previous value.
+
+###### `amount`<sup>Optional</sup> <a name="amount" id="@winglang/sdk.cloud.ICounterClient.dec.parameter.amount"></a>
+
+- *Type:* num
+
+amount to decrement (default is 1).
+
+---
+
+###### `key`<sup>Optional</sup> <a name="key" id="@winglang/sdk.cloud.ICounterClient.dec.parameter.key"></a>
+
+- *Type:* str
+
+specify the key to be decremented.
+
+---
+
+##### `inc` <a name="inc" id="@winglang/sdk.cloud.ICounterClient.inc"></a>
+
+```wing
+inc(amount?: num, key?: str): num
+```
+
+**Inflight client:** [true](#true)
+
+Increments the counter atomically by a certain amount and returns the previous value.
+
+###### `amount`<sup>Optional</sup> <a name="amount" id="@winglang/sdk.cloud.ICounterClient.inc.parameter.amount"></a>
+
+- *Type:* num
+
+amount to increment (default is 1).
+
+---
+
+###### `key`<sup>Optional</sup> <a name="key" id="@winglang/sdk.cloud.ICounterClient.inc.parameter.key"></a>
+
+- *Type:* str
+
+specify the key to be incremented.
+
+---
+
+##### `peek` <a name="peek" id="@winglang/sdk.cloud.ICounterClient.peek"></a>
+
+```wing
+peek(key?: str): num
+```
+
+**Inflight client:** [true](#true)
+
+Get the current value of the counter.
+
+Using this API may introduce race conditions since the value can change between
+the time it is read and the time it is used in your code.
+
+###### `key`<sup>Optional</sup> <a name="key" id="@winglang/sdk.cloud.ICounterClient.peek.parameter.key"></a>
+
+- *Type:* str
+
+specify the key to be retrieved.
+
+---
+
+##### `set` <a name="set" id="@winglang/sdk.cloud.ICounterClient.set"></a>
+
+```wing
+set(value: num, key?: str): void
+```
+
+**Inflight client:** [true](#true)
+
+Set a counter to a given value.
+
+###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.cloud.ICounterClient.set.parameter.value"></a>
+
+- *Type:* num
+
+new value.
+
+---
+
+###### `key`<sup>Optional</sup> <a name="key" id="@winglang/sdk.cloud.ICounterClient.set.parameter.key"></a>
+
+- *Type:* str
+
+specify the key to be set.
+
+---
+
+

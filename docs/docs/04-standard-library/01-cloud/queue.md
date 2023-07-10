@@ -23,7 +23,7 @@ Queues are typically used to decouple producers of data and the consumers of sai
 
 ## Usage
 
-### Setting a Queue Consumer 
+### Setting a Queue Consumer
 
 ```ts playground
 bring cloud;
@@ -43,6 +43,7 @@ new cloud.Function(inflight () => {
 ### Using Queue inflight api
 
 Pusing messages, popping them, and purge
+
 ```ts playground
 bring cloud;
 
@@ -79,7 +80,376 @@ The AWS implementation of `cloud.Queue` uses [Amazon Simple Queue Service](https
 ### GCP (`tf-gcp`)
 
 🚧 Not supported yet (tracking issue: [#616](https://github.com/winglang/wing/issues/616))
+## API Reference <a name="API Reference" id="API Reference"></a>
 
-## API Reference
+### Queue <a name="Queue" id="@winglang/sdk.cloud.Queue"></a>
 
-The full list of APIs for `cloud.Queue` is available in the [API Reference](./api-reference).
+**Inflight client:** [@winglang/sdk.cloud.IQueueClient](#@winglang/sdk.cloud.IQueueClient)
+
+Represents a queue.
+
+#### Initializers <a name="Initializers" id="@winglang/sdk.cloud.Queue.Initializer"></a>
+
+```wing
+bring cloud;
+
+new cloud.Queue(props?: QueueProps)
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.Queue.Initializer.parameter.props">props</a></code> | <code><a href="#@winglang/sdk.cloud.QueueProps">QueueProps</a></code> | *No description.* |
+
+---
+
+##### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.cloud.Queue.Initializer.parameter.props"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.QueueProps">QueueProps</a>
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.cloud.Queue.setConsumer">setConsumer</a></code> | Create a function to consume messages from this queue. |
+
+---
+
+##### `setConsumer` <a name="setConsumer" id="@winglang/sdk.cloud.Queue.setConsumer"></a>
+
+```wing
+setConsumer(handler: IQueueSetConsumerHandler, props?: QueueSetConsumerProps): Function
+```
+
+Create a function to consume messages from this queue.
+
+###### `handler`<sup>Required</sup> <a name="handler" id="@winglang/sdk.cloud.Queue.setConsumer.parameter.handler"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.IQueueSetConsumerHandler">IQueueSetConsumerHandler</a>
+
+---
+
+###### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.cloud.Queue.setConsumer.parameter.props"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.QueueSetConsumerProps">QueueSetConsumerProps</a>
+
+---
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.Queue.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@winglang/sdk.cloud.Queue.property.display">display</a></code> | <code><a href="#@winglang/sdk.std.Display">Display</a></code> | Information on how to display a resource in the UI. |
+
+---
+
+##### `node`<sup>Required</sup> <a name="node" id="@winglang/sdk.cloud.Queue.property.node"></a>
+
+```wing
+node: Node;
+```
+
+- *Type:* constructs.Node
+
+The tree node.
+
+---
+
+##### `display`<sup>Required</sup> <a name="display" id="@winglang/sdk.cloud.Queue.property.display"></a>
+
+```wing
+display: Display;
+```
+
+- *Type:* <a href="#@winglang/sdk.std.Display">Display</a>
+
+Information on how to display a resource in the UI.
+
+---
+
+
+## Structs <a name="Structs" id="Structs"></a>
+
+### QueueProps <a name="QueueProps" id="@winglang/sdk.cloud.QueueProps"></a>
+
+Properties for `Queue`.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.QueueProps.Initializer"></a>
+
+```wing
+bring cloud;
+
+let QueueProps = cloud.QueueProps{ ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.QueueProps.property.initialMessages">initialMessages</a></code> | <code>MutArray&lt;str&gt;</code> | Initialize the queue with a set of messages. |
+| <code><a href="#@winglang/sdk.cloud.QueueProps.property.retentionPeriod">retentionPeriod</a></code> | <code><a href="#@winglang/sdk.std.Duration">Duration</a></code> | How long a queue retains a message. |
+| <code><a href="#@winglang/sdk.cloud.QueueProps.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">Duration</a></code> | How long a queue's consumers have to process a message. |
+
+---
+
+##### `initialMessages`<sup>Optional</sup> <a name="initialMessages" id="@winglang/sdk.cloud.QueueProps.property.initialMessages"></a>
+
+```wing
+initialMessages: MutArray<str>;
+```
+
+- *Type:* MutArray&lt;str&gt;
+- *Default:* []
+
+Initialize the queue with a set of messages.
+
+---
+
+##### `retentionPeriod`<sup>Optional</sup> <a name="retentionPeriod" id="@winglang/sdk.cloud.QueueProps.property.retentionPeriod"></a>
+
+```wing
+retentionPeriod: Duration;
+```
+
+- *Type:* <a href="#@winglang/sdk.std.Duration">Duration</a>
+- *Default:* undefined
+
+How long a queue retains a message.
+
+---
+
+##### `timeout`<sup>Optional</sup> <a name="timeout" id="@winglang/sdk.cloud.QueueProps.property.timeout"></a>
+
+```wing
+timeout: Duration;
+```
+
+- *Type:* <a href="#@winglang/sdk.std.Duration">Duration</a>
+- *Default:* undefined
+
+How long a queue's consumers have to process a message.
+
+---
+
+### QueueSetConsumerProps <a name="QueueSetConsumerProps" id="@winglang/sdk.cloud.QueueSetConsumerProps"></a>
+
+Options for Queue.setConsumer.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.QueueSetConsumerProps.Initializer"></a>
+
+```wing
+bring cloud;
+
+let QueueSetConsumerProps = cloud.QueueSetConsumerProps{ ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.QueueSetConsumerProps.property.env">env</a></code> | <code>MutMap&lt;str&gt;</code> | Environment variables to pass to the function. |
+| <code><a href="#@winglang/sdk.cloud.QueueSetConsumerProps.property.memory">memory</a></code> | <code>num</code> | The amount of memory to allocate to the function, in MB. |
+| <code><a href="#@winglang/sdk.cloud.QueueSetConsumerProps.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">Duration</a></code> | The maximum amount of time the function can run. |
+| <code><a href="#@winglang/sdk.cloud.QueueSetConsumerProps.property.batchSize">batchSize</a></code> | <code>num</code> | The maximum number of messages to send to subscribers at once. |
+
+---
+
+##### `env`<sup>Optional</sup> <a name="env" id="@winglang/sdk.cloud.QueueSetConsumerProps.property.env"></a>
+
+```wing
+env: MutMap<str>;
+```
+
+- *Type:* MutMap&lt;str&gt;
+- *Default:* No environment variables.
+
+Environment variables to pass to the function.
+
+---
+
+##### `memory`<sup>Optional</sup> <a name="memory" id="@winglang/sdk.cloud.QueueSetConsumerProps.property.memory"></a>
+
+```wing
+memory: num;
+```
+
+- *Type:* num
+- *Default:* 128
+
+The amount of memory to allocate to the function, in MB.
+
+---
+
+##### `timeout`<sup>Optional</sup> <a name="timeout" id="@winglang/sdk.cloud.QueueSetConsumerProps.property.timeout"></a>
+
+```wing
+timeout: Duration;
+```
+
+- *Type:* <a href="#@winglang/sdk.std.Duration">Duration</a>
+- *Default:* 1m
+
+The maximum amount of time the function can run.
+
+---
+
+##### `batchSize`<sup>Optional</sup> <a name="batchSize" id="@winglang/sdk.cloud.QueueSetConsumerProps.property.batchSize"></a>
+
+```wing
+batchSize: num;
+```
+
+- *Type:* num
+- *Default:* 1
+
+The maximum number of messages to send to subscribers at once.
+
+---
+
+
+## Protocols <a name="Protocols" id="Protocols"></a>
+
+### IQueueClient <a name="IQueueClient" id="@winglang/sdk.cloud.IQueueClient"></a>
+
+- *Implemented By:* <a href="#@winglang/sdk.cloud.IQueueClient">IQueueClient</a>
+
+Inflight interface for `Queue`.
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.cloud.IQueueClient.approxSize">approxSize</a></code> | Retrieve the approximate number of messages in the queue. |
+| <code><a href="#@winglang/sdk.cloud.IQueueClient.pop">pop</a></code> | Pop a message from the queue. |
+| <code><a href="#@winglang/sdk.cloud.IQueueClient.purge">purge</a></code> | Purge all of the messages in the queue. |
+| <code><a href="#@winglang/sdk.cloud.IQueueClient.push">push</a></code> | Push a message to the queue. |
+
+---
+
+##### `approxSize` <a name="approxSize" id="@winglang/sdk.cloud.IQueueClient.approxSize"></a>
+
+```wing
+approxSize(): num
+```
+
+**Inflight client:** [true](#true)
+
+Retrieve the approximate number of messages in the queue.
+
+##### `pop` <a name="pop" id="@winglang/sdk.cloud.IQueueClient.pop"></a>
+
+```wing
+pop(): str
+```
+
+**Inflight client:** [true](#true)
+
+Pop a message from the queue.
+
+##### `purge` <a name="purge" id="@winglang/sdk.cloud.IQueueClient.purge"></a>
+
+```wing
+purge(): void
+```
+
+**Inflight client:** [true](#true)
+
+Purge all of the messages in the queue.
+
+##### `push` <a name="push" id="@winglang/sdk.cloud.IQueueClient.push"></a>
+
+```wing
+push(message: str): void
+```
+
+**Inflight client:** [true](#true)
+
+Push a message to the queue.
+
+###### `message`<sup>Required</sup> <a name="message" id="@winglang/sdk.cloud.IQueueClient.push.parameter.message"></a>
+
+- *Type:* str
+
+Payload to send to the queue.
+
+---
+
+
+### IQueueSetConsumerHandler <a name="IQueueSetConsumerHandler" id="@winglang/sdk.cloud.IQueueSetConsumerHandler"></a>
+
+- *Extends:* <a href="#@winglang/sdk.std.IResource">IResource</a>
+
+- *Implemented By:* <a href="#@winglang/sdk.cloud.IQueueSetConsumerHandler">IQueueSetConsumerHandler</a>
+
+**Inflight client:** [@winglang/sdk.cloud.IQueueSetConsumerHandlerClient](#@winglang/sdk.cloud.IQueueSetConsumerHandlerClient)
+
+Represents a resource with an inflight "handle" method that can be passed to `Queue.setConsumer`.
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.IQueueSetConsumerHandler.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@winglang/sdk.cloud.IQueueSetConsumerHandler.property.display">display</a></code> | <code><a href="#@winglang/sdk.std.Display">Display</a></code> | Information on how to display a resource in the UI. |
+
+---
+
+##### `node`<sup>Required</sup> <a name="node" id="@winglang/sdk.cloud.IQueueSetConsumerHandler.property.node"></a>
+
+```wing
+node: Node;
+```
+
+- *Type:* constructs.Node
+
+The tree node.
+
+---
+
+##### `display`<sup>Required</sup> <a name="display" id="@winglang/sdk.cloud.IQueueSetConsumerHandler.property.display"></a>
+
+```wing
+display: Display;
+```
+
+- *Type:* <a href="#@winglang/sdk.std.Display">Display</a>
+
+Information on how to display a resource in the UI.
+
+---
+
+### IQueueSetConsumerHandlerClient <a name="IQueueSetConsumerHandlerClient" id="@winglang/sdk.cloud.IQueueSetConsumerHandlerClient"></a>
+
+- *Implemented By:* <a href="#@winglang/sdk.cloud.IQueueSetConsumerHandlerClient">IQueueSetConsumerHandlerClient</a>
+
+Inflight client for `IQueueSetConsumerHandler`.
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.cloud.IQueueSetConsumerHandlerClient.handle">handle</a></code> | Function that will be called when a message is received from the queue. |
+
+---
+
+##### `handle` <a name="handle" id="@winglang/sdk.cloud.IQueueSetConsumerHandlerClient.handle"></a>
+
+```wing
+handle(message: str): void
+```
+
+**Inflight client:** [true](#true)
+
+Function that will be called when a message is received from the queue.
+
+###### `message`<sup>Required</sup> <a name="message" id="@winglang/sdk.cloud.IQueueSetConsumerHandlerClient.handle.parameter.message"></a>
+
+- *Type:* str
+
+---
+
+

@@ -28,6 +28,7 @@ When a client invokes a route, the corresponding event handler function executes
 ### REST API
 
 The following example shows a complete REST API implemetnation using `cloud.Api`, `cloud.Table` & `cloud.Counter`
+
 ```ts playground
 bring cloud;
 
@@ -95,7 +96,7 @@ api.delete("/employees/{id}", inflight (request: cloud.ApiRequest): cloud.ApiRes
   return cloud.ApiResponse {
     status: 204
   };
-}); 
+});
 ```
 
 ## Target-specific details
@@ -115,8 +116,3 @@ The AWS implementation of `cloud.Api` uses [Amazon API Gateway](https://aws.amaz
 ### GCP (`tf-gcp`)
 
 🚧 Not supported yet (tracking issue: [#624](https://github.com/winglang/wing/issues/624))
-
-
-## API Reference
-
-The full list of APIs for `cloud.Api` is available in the [API Reference](./api-reference).
