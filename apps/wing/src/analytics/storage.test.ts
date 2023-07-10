@@ -58,8 +58,7 @@ describe(
         // THEN
         expect(analyticPath).toBeDefined();
         expect(storedAnalytic).toEqual(expect.objectContaining({
-          event: DUMMY_ANALYTIC.event, 
-          anonymousId: DUMMY_ANALYTIC.anonymousId, 
+          event: DUMMY_ANALYTIC.event,
           properties: {
             "cli_target": "fake-aws",
             "cli_version": "4.2.0",

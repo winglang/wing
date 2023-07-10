@@ -21,8 +21,10 @@ export async function collectCommandAnalytics(cmd: Command): Promise<string | un
   const gitCollector = new GitCollector();
   const cliCollector = new CLICollector(cmd);
 
+  const eventName = `cli_${cmd.opts().target ?? ''}_${cmd.name()}`;
+
   let event: AnalyticEvent = {
-    event: `wing cli:${cmd.name()}`,
+    event: eventName.replace(/[^a-zA-Z_]/g, ""),
     properties: {
       cli: await cliCollector.collect(),
       os: await osCollector.collect(),

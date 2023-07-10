@@ -27,6 +27,7 @@ if (!SUPPORTED_NODE_VERSION) {
 function actionErrorHandler(fn: (...args: any[]) => Promise<any>) {
   return async (...args: any[]) => {
     try {
+      await exportAnalyticsHook();
       const exitCode = await fn(...args);
       if (exitCode === 1) {
         process.exit(1);
@@ -36,6 +37,33 @@ function actionErrorHandler(fn: (...args: any[]) => Promise<any>) {
       process.exit(1);
     }
   };
+}
+
+async function collectAnalyticsHook(cmd: Command) {
+  if (process.env.WING_DISABLE_ANALYTICS) { return; }
+  // Fail silently if collection fails
+  try {
+    optionallyDisplayDisclaimer();
+    analyticsExportFile = collectCommandAnalytics(cmd);
+  } catch (err) {
+    if (process.env.DEBUG) {
+      console.error(err);
+    }
+  }
+}
+
+async function exportAnalyticsHook() {
+  if (process.env.WING_DISABLE_ANALYTICS) { return; }
+  // Fail silently if export fails
+  try {
+    if (analyticsExportFile) {
+      await exportAnalytics(analyticsExportFile);
+    }
+  } catch (err) {
+    if (process.env.DEBUG) {
+      console.error(err);
+    }
+  }
 }
 
 async function main() {
@@ -68,34 +96,6 @@ async function main() {
       }
     });
 
-
-    async function collectAnalyticsHook(_: Command, subCmd: Command) {
-      if (process.env.WING_DISABLE_ANALYTICS) { return; }
-      // Fail silently if collection fails
-      try {
-        optionallyDisplayDisclaimer();
-        analyticsExportFile = collectCommandAnalytics(subCmd);
-      } catch (err) {
-        if (process.env.WING_ANALYTICS_DEBUG) {
-          console.error(err);
-        }
-      }
-    }
-  
-    async function exportAnalyticsHook() {
-      if (process.env.WING_DISABLE_ANALYTICS) { return; }
-      // Fail silently if export fails
-      try {
-        if (analyticsExportFile) {
-          await exportAnalytics(analyticsExportFile);
-        }
-      } catch (err) {
-        if (process.env.WING_ANALYTICS_DEBUG) {
-          console.error(err);
-        }
-      }
-    }
-
   async function progressHook(cmd: Command) {
     const target = cmd.opts().target;
     const progress = program.opts().progress;
@@ -111,9 +111,10 @@ async function main() {
     .argument("[entrypoint]", "program .w entrypoint")
     .option("-p, --port <port>", "specify port")
     .option("--no-open", "Do not open the Wing Console in the browser")
+    .hook("preAction", collectAnalyticsHook)
     .action(run);
 
-  program.command("lsp").description("Run the Wing language server on stdio").action(run_server);
+  program.command("lsp").description("Run the Wing language server on stdio").hook("preAction", collectAnalyticsHook).action(run_server);
 
   program
     .command("compile")
@@ -126,6 +127,7 @@ async function main() {
     )
     .option("-p, --plugins [plugin...]", "Compiler plugins")
     .hook("preAction", progressHook)
+    .hook("preAction", collectAnalyticsHook)
     .action(actionErrorHandler(compile));
 
   program
@@ -141,10 +143,11 @@ async function main() {
     )
     .option("-p, --plugins [plugin...]", "Compiler plugins")
     .hook("preAction", progressHook)
+    .hook("preAction", collectAnalyticsHook)
     .action(actionErrorHandler(test));
 
-  program.command("docs").description("Open the Wing documentation").action(docs);
-  program.hook("preSubcommand", collectAnalyticsHook)
+  program.command("docs").description("Open the Wing documentation").hook("preAction", collectAnalyticsHook).action(docs);
+  
   program.hook("postAction", exportAnalyticsHook)
   program.parse();
 }

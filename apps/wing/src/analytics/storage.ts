@@ -50,11 +50,11 @@ export class AnalyticsStorage {
       event.timestamp = event.timestamp ?? new Date().toISOString();
       
       // We add the anonymousId only if we are not in a CI environment
-      if (!event.properties.ci) {
+      if (event.properties.ci) {
         const anonymousId = this.getAnonymousId();
         event.anonymousId = anonymousId;
       }
-    
+
       this.saveEvent(analyticReportFile, event);
     
       return analyticReportFile;
@@ -76,7 +76,15 @@ export class AnalyticsStorage {
 
   public getAnonymousId(): string {
     let config = this.loadConfig();
+    if (!config.anonymousId) {
+      config.anonymousId = this.generateAnonymousId();
+      this.saveConfig(config);
+    }
     return config.anonymousId;
+  }
+
+  private generateAnonymousId(): string {
+    return randomBytes(16).toString('hex');
   }
 
   public loadConfig(): AnalyticsConfig {
@@ -91,7 +99,7 @@ export class AnalyticsStorage {
       }
   
       const analyticsConfig: AnalyticsConfig = {
-        anonymousId: randomBytes(16).toString('hex'),
+        anonymousId: this.generateAnonymousId(),
         optOut: false,
       }
   

@@ -7,12 +7,12 @@ import { exit } from 'process';
 // to the analytics report file
 const filePath = process.argv[2];
 
-try {
+async function reportAnalytic() {
   if (process.env.DEBUG) {
     // In debug mode no need to export the metrics
     exit(0);
   }
-  
+
   if (!filePath) {
     throw new Error('No file analytic path provided');
   }
@@ -25,15 +25,34 @@ try {
     throw new Error(`No analytic event found at: ${filePath}`);
   }
 
-  analytics.track({
-    anonymousId: storage.getAnonymousId(),
+  const params = {
+    anonymousId: (event.properties as any).ci_name ? 'ci_run' : storage.getAnonymousId(),
     timestamp: event.timestamp,
     event: event.event,
     properties: event.properties,
-  });
+  }
+
+  const awaitTrack = async () => {
+    return new Promise((resolve, reject) => {
+      analytics.track(params, (err, data) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(data);
+        }
+      });
+    });
+  }
   
+  await awaitTrack();
+
   fs.unlinkSync(filePath);
-  
-} catch(err) {
-  // TODO: add mechanism to retry
 }
+
+(async () => {
+  try {
+    await reportAnalytic();
+  } catch(err: any) {
+    // TODO: add mechanism to retry maybe
+  }
+})();
