@@ -189,7 +189,7 @@ class $Root extends $stdlib.std.Resource {
     const s1 = "some string";
     const s2 = "s are immutable";
     {((cond) => {if (!cond) throw new Error("assertion failed: s1.length == 11")})((s1.length === 11))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: s1.at(7) == \"r\"")})(((s1.at(7)) === "r"))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: s1.at(7) == \"r\"")})((((args) => { if (7 >= s1.length || 7 + s1.length < 0) {throw new Error("index out of bounds")}; return s1.at(7) })(7) === "r"))};
     {((cond) => {if (!cond) throw new Error("assertion failed: s1.concat(s2) == \"some strings are immutable\"")})(((s1.concat(s2)) === "some strings are immutable"))};
     {((cond) => {if (!cond) throw new Error("assertion failed: s1.contains(\"some\")")})(s1.includes("some"))};
     {((cond) => {if (!cond) throw new Error("assertion failed: !\"some\".contains(s1)")})((!"some".includes(s1)))};

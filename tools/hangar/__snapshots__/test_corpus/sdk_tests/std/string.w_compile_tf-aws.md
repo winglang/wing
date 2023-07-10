@@ -126,7 +126,7 @@ module.exports = function({  }) {
 
 ## inflight.$Closure3.js
 ```js
-module.exports = function({  }) {
+module.exports = function({ $INDEX_OUT_OF_BOUNDS_ERROR }) {
   class $Closure3 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -134,9 +134,23 @@ module.exports = function({  }) {
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: \"boom\".at(0) == \"b\"")})(((await "boom".at(0)) === "b"))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: \"boom\".at(-4) == \"b\"")})(((await "boom".at((-4))) === "b"))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: \"boom\".at(-1) == \"m\"")})(((await "boom".at((-1))) === "m"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: \"boom\".at(0) == \"b\"")})((((args) => { if (0 >= "boom".length || 0 + "boom".length < 0) {throw new Error("index out of bounds")}; return "boom".at(0) })(0) === "b"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: \"boom\".at(-4) == \"b\"")})((((args) => { if ((-4) >= "boom".length || (-4) + "boom".length < 0) {throw new Error("index out of bounds")}; return "boom".at((-4)) })((-4)) === "b"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: \"boom\".at(-1) == \"m\"")})((((args) => { if ((-1) >= "boom".length || (-1) + "boom".length < 0) {throw new Error("index out of bounds")}; return "boom".at((-1)) })((-1)) === "m"))};
+      try {
+        ((args) => { if (4 >= "boom".length || 4 + "boom".length < 0) {throw new Error("index out of bounds")}; return "boom".at(4) })(4);
+      }
+      catch ($error_s) {
+        const s = $error_s.message;
+        {((cond) => {if (!cond) throw new Error("assertion failed: s == INDEX_OUT_OF_BOUNDS_ERROR ")})((s === $INDEX_OUT_OF_BOUNDS_ERROR))};
+      }
+      try {
+        ((args) => { if ((-5) >= "boom".length || (-5) + "boom".length < 0) {throw new Error("index out of bounds")}; return "boom".at((-5)) })((-5));
+      }
+      catch ($error_s) {
+        const s = $error_s.message;
+        {((cond) => {if (!cond) throw new Error("assertion failed: s == INDEX_OUT_OF_BOUNDS_ERROR ")})((s === $INDEX_OUT_OF_BOUNDS_ERROR))};
+      }
     }
   }
   return $Closure3;
@@ -1254,6 +1268,7 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure3.js")({
+            $INDEX_OUT_OF_BOUNDS_ERROR: ${context._lift(INDEX_OUT_OF_BOUNDS_ERROR)},
           })
         `);
       }
@@ -1267,6 +1282,12 @@ class $Root extends $stdlib.std.Resource {
             return client;
           })())
         `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("handle")) {
+          $Closure3._registerBindObject(INDEX_OUT_OF_BOUNDS_ERROR, host, []);
+        }
+        super._registerBind(host, ops);
       }
     }
     class $Closure4 extends $stdlib.std.Resource {
@@ -1530,9 +1551,16 @@ class $Root extends $stdlib.std.Resource {
     {((cond) => {if (!cond) throw new Error("assertion failed: \"hello\".length == 5")})(("hello".length === 5))};
     {((cond) => {if (!cond) throw new Error("assertion failed: \"\".length == 0")})(("".length === 0))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:length",new $Closure2(this,"$Closure2"));
-    {((cond) => {if (!cond) throw new Error("assertion failed: \"boom\".at(2) == \"o\"")})((("boom".at(2)) === "o"))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: \"boom\".at(-4) == \"b\"")})((("boom".at((-4))) === "b"))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: \"boom\".at(-1) == \"m\"")})((("boom".at((-1))) === "m"))};
+    const INDEX_OUT_OF_BOUNDS_ERROR = "index out of bounds";
+    {((cond) => {if (!cond) throw new Error("assertion failed: \"boom\".at(2) == \"o\"")})((((args) => { if (2 >= "boom".length || 2 + "boom".length < 0) {throw new Error("index out of bounds")}; return "boom".at(2) })(2) === "o"))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: \"boom\".at(-4) == \"b\"")})((((args) => { if ((-4) >= "boom".length || (-4) + "boom".length < 0) {throw new Error("index out of bounds")}; return "boom".at((-4)) })((-4)) === "b"))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: \"boom\".at(-1) == \"m\"")})((((args) => { if ((-1) >= "boom".length || (-1) + "boom".length < 0) {throw new Error("index out of bounds")}; return "boom".at((-1)) })((-1)) === "m"))};
+    (assertThrows(INDEX_OUT_OF_BOUNDS_ERROR,(() => {
+      ((args) => { if (4 >= "boom".length || 4 + "boom".length < 0) {throw new Error("index out of bounds")}; return "boom".at(4) })(4);
+    })));
+    (assertThrows(INDEX_OUT_OF_BOUNDS_ERROR,(() => {
+      ((args) => { if ((-5) >= "boom".length || (-5) + "boom".length < 0) {throw new Error("index out of bounds")}; return "boom".at((-5)) })((-5));
+    })));
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:at()",new $Closure3(this,"$Closure3"));
     {((cond) => {if (!cond) throw new Error("assertion failed: \"boom\".concat(\"boom\") == \"boomboom\"")})((("boom".concat("boom")) === "boomboom"))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:concat()",new $Closure4(this,"$Closure4"));
