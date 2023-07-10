@@ -145,6 +145,12 @@ exports[`function with a table binding 3`] = `
                       "relationship": "insert",
                       "resource": "root/Default/Table",
                     },
+                    {
+                      "direction": "outbound",
+                      "implicit": false,
+                      "relationship": "$inflight_init",
+                      "resource": "root/Default/Table",
+                    },
                   ],
                 },
                 "children": {
@@ -231,6 +237,12 @@ exports[`function with a table binding 3`] = `
                       "direction": "inbound",
                       "implicit": false,
                       "relationship": "insert",
+                      "resource": "root/Default/Function",
+                    },
+                    {
+                      "direction": "inbound",
+                      "implicit": false,
+                      "relationship": "$inflight_init",
                       "resource": "root/Default/Function",
                     },
                   ],

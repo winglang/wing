@@ -5,7 +5,9 @@ use crate::{
 	files::Files,
 	fold::{self, Fold},
 	jsify::{JSifier, JSifyContext},
-	type_check::{lifts::Lifts, resolve_user_defined_type, symbol_env::LookupResult, CLOSURE_CLASS_HANDLE_METHOD},
+	type_check::{
+		lifts::Lifts, resolve_user_defined_type, symbol_env::LookupResult, TypeRef, CLOSURE_CLASS_HANDLE_METHOD,
+	},
 	visit_context::VisitContext,
 };
 
@@ -217,6 +219,11 @@ impl<'a> Fold for LiftTransform<'a> {
 				return node;
 			}
 
+			// if this is an inflight property, no need to lift it
+			if is_inflight_field(&node, expr_type, &property) {
+				return node;
+			}
+
 			let mut lifts = self.lifts_stack.pop().unwrap();
 			lifts.lift(node.id, self.ctx.current_method(), property, &code);
 			self.lifts_stack.push(lifts);
@@ -364,4 +371,26 @@ impl<'a> Fold for LiftTransform<'a> {
 
 		result
 	}
+}
+
+/// Check if an expression is a reference to an inflight field (`this.<field>`).
+/// in this case, we don't need to lift the field because it is already available
+fn is_inflight_field(expr: &Expr, expr_type: TypeRef, property: &Option<String>) -> bool {
+	if let ExprKind::Reference(Reference::Identifier(symb)) = &expr.kind {
+		if symb.name == "this" {
+			if let (Some(cls), Some(property)) = (expr_type.as_preflight_class(), property) {
+				if let LookupResult::Found(kind, _) = cls.env.lookup_nested_str(&property, None) {
+					if let Some(var) = kind.as_variable() {
+						if !var.type_.is_closure() {
+							if var.phase != Phase::Preflight {
+								return true;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	return false;
 }

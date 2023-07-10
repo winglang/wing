@@ -169,6 +169,12 @@ async handle(message) {
                 "relationship": "handle",
                 "resource": "root/my_queue-SetConsumer-e645076f",
               },
+              {
+                "direction": "inbound",
+                "implicit": false,
+                "relationship": "$inflight_init",
+                "resource": "root/my_queue-SetConsumer-e645076f",
+              },
             ],
           },
           "constructInfo": {
@@ -244,6 +250,12 @@ async handle(message) {
                 "direction": "outbound",
                 "implicit": false,
                 "relationship": "handle",
+                "resource": "root/Handler",
+              },
+              {
+                "direction": "outbound",
+                "implicit": false,
+                "relationship": "$inflight_init",
                 "resource": "root/Handler",
               },
               {
@@ -389,6 +401,12 @@ async handle(message) {
                 "relationship": "handle",
                 "resource": "root/my_queue-SetConsumer-e645076f",
               },
+              {
+                "direction": "inbound",
+                "implicit": false,
+                "relationship": "$inflight_init",
+                "resource": "root/my_queue-SetConsumer-e645076f",
+              },
             ],
           },
           "constructInfo": {
@@ -464,6 +482,12 @@ async handle(message) {
                 "direction": "outbound",
                 "implicit": false,
                 "relationship": "handle",
+                "resource": "root/Handler",
+              },
+              {
+                "direction": "outbound",
+                "implicit": false,
+                "relationship": "$inflight_init",
                 "resource": "root/Handler",
               },
               {
@@ -613,6 +637,12 @@ async handle(message) {
                 "relationship": "handle",
                 "resource": "root/my_queue-SetConsumer-e645076f",
               },
+              {
+                "direction": "inbound",
+                "implicit": false,
+                "relationship": "$inflight_init",
+                "resource": "root/my_queue-SetConsumer-e645076f",
+              },
             ],
           },
           "constructInfo": {
@@ -688,6 +718,12 @@ async handle(message) {
                 "direction": "outbound",
                 "implicit": false,
                 "relationship": "handle",
+                "resource": "root/Handler",
+              },
+              {
+                "direction": "outbound",
+                "implicit": false,
+                "relationship": "$inflight_init",
                 "resource": "root/Handler",
               },
               {
@@ -923,6 +959,12 @@ async handle(message) {
                 "relationship": "handle",
                 "resource": "root/my_queue-SetConsumer-e645076f",
               },
+              {
+                "direction": "inbound",
+                "implicit": false,
+                "relationship": "$inflight_init",
+                "resource": "root/my_queue-SetConsumer-e645076f",
+              },
             ],
           },
           "constructInfo": {
@@ -998,6 +1040,12 @@ async handle(message) {
                 "direction": "outbound",
                 "implicit": false,
                 "relationship": "handle",
+                "resource": "root/Handler",
+              },
+              {
+                "direction": "outbound",
+                "implicit": false,
+                "relationship": "$inflight_init",
                 "resource": "root/Handler",
               },
               {
@@ -1142,6 +1190,12 @@ async handle(message) {
                 "relationship": "handle",
                 "resource": "root/my_queue-SetConsumer-e645076f",
               },
+              {
+                "direction": "inbound",
+                "implicit": false,
+                "relationship": "$inflight_init",
+                "resource": "root/my_queue-SetConsumer-e645076f",
+              },
             ],
           },
           "constructInfo": {
@@ -1217,6 +1271,12 @@ async handle(message) {
                 "direction": "outbound",
                 "implicit": false,
                 "relationship": "handle",
+                "resource": "root/Handler",
+              },
+              {
+                "direction": "outbound",
+                "implicit": false,
+                "relationship": "$inflight_init",
                 "resource": "root/Handler",
               },
               {
