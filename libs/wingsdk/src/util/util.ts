@@ -41,7 +41,7 @@ export interface IPredicateHandlerClient {
 /**
  * Options to generating a unique ID
  */
-export interface NanoIDOptions {
+export interface NanoidOptions {
   /**
    * Size of ID
    * @default 21
