@@ -6,7 +6,7 @@ import { Json, Resource } from "../std";
 /**
  * Global identifier for `Table`.
  */
-export const TABLE_FQN = fqnForType("cloud.Table");
+export const TABLE_FQN = fqnForType("ex.Table");
 
 /**
  * Table column types

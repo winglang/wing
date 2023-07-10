@@ -65,6 +65,25 @@ module.exports = function({ $r, $r2 }) {
       }
     },
     "aws_elasticache_cluster": {
+      "exRedis_RedisCluster_3C9A5882": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/ex.Redis/RedisCluster",
+            "uniqueId": "exRedis_RedisCluster_3C9A5882"
+          }
+        },
+        "availability_zone": "${aws_subnet.PrivateSubnet.availability_zone}",
+        "cluster_id": "ex-redis-c8a27ec9",
+        "engine": "redis",
+        "engine_version": "6.2",
+        "node_type": "cache.t4g.small",
+        "num_cache_nodes": 1,
+        "parameter_group_name": "default.redis6.x",
+        "security_group_ids": [
+          "${aws_security_group.exRedis_securityGroup_3948C3F2.id}"
+        ],
+        "subnet_group_name": "${aws_elasticache_subnet_group.exRedis_RedisSubnetGroup_EE9BBE48.name}"
+      },
       "r2_RedisCluster_C6087F40": {
         "//": {
           "metadata": {
@@ -83,28 +102,21 @@ module.exports = function({ $r, $r2 }) {
           "${aws_security_group.r2_securityGroup_35A75C2E.id}"
         ],
         "subnet_group_name": "${aws_elasticache_subnet_group.r2_RedisSubnetGroup_C415566B.name}"
-      },
-      "redisRedis_RedisCluster_17F572CD": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/redis.Redis/RedisCluster",
-            "uniqueId": "redisRedis_RedisCluster_17F572CD"
-          }
-        },
-        "availability_zone": "${aws_subnet.PrivateSubnet.availability_zone}",
-        "cluster_id": "redis-redis-c811048b",
-        "engine": "redis",
-        "engine_version": "6.2",
-        "node_type": "cache.t4g.small",
-        "num_cache_nodes": 1,
-        "parameter_group_name": "default.redis6.x",
-        "security_group_ids": [
-          "${aws_security_group.redisRedis_securityGroup_235C75C0.id}"
-        ],
-        "subnet_group_name": "${aws_elasticache_subnet_group.redisRedis_RedisSubnetGroup_F1A1B37D.name}"
       }
     },
     "aws_elasticache_subnet_group": {
+      "exRedis_RedisSubnetGroup_EE9BBE48": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/ex.Redis/RedisSubnetGroup",
+            "uniqueId": "exRedis_RedisSubnetGroup_EE9BBE48"
+          }
+        },
+        "name": "ex-redis-c8a27ec9-subnetGroup",
+        "subnet_ids": [
+          "${aws_subnet.PrivateSubnet.id}"
+        ]
+      },
       "r2_RedisSubnetGroup_C415566B": {
         "//": {
           "metadata": {
@@ -113,18 +125,6 @@ module.exports = function({ $r, $r2 }) {
           }
         },
         "name": "r2-c882797c-subnetGroup",
-        "subnet_ids": [
-          "${aws_subnet.PrivateSubnet.id}"
-        ]
-      },
-      "redisRedis_RedisSubnetGroup_F1A1B37D": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/redis.Redis/RedisSubnetGroup",
-            "uniqueId": "redisRedis_RedisSubnetGroup_F1A1B37D"
-          }
-        },
-        "name": "redis-redis-c811048b-subnetGroup",
         "subnet_ids": [
           "${aws_subnet.PrivateSubnet.id}"
         ]
@@ -149,7 +149,7 @@ module.exports = function({ $r, $r2 }) {
             "uniqueId": "testtest_Handler_IamRolePolicy_AF0279BD"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"elasticache:Describe*\"],\"Resource\":[\"${aws_elasticache_cluster.redisRedis_RedisCluster_17F572CD.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"elasticache:Describe*\"],\"Resource\":[\"${aws_elasticache_cluster.r2_RedisCluster_C6087F40.arn}\"],\"Effect\":\"Allow\"},{\"Effect\":\"Allow\",\"Action\":[\"ec2:CreateNetworkInterface\",\"ec2:DescribeNetworkInterfaces\",\"ec2:DeleteNetworkInterface\",\"ec2:DescribeSubnets\",\"ec2:DescribeSecurityGroups\"],\"Resource\":\"*\"},{\"Effect\":\"Allow\",\"Action\":[\"ec2:CreateNetworkInterface\",\"ec2:DescribeNetworkInterfaces\",\"ec2:DeleteNetworkInterface\",\"ec2:DescribeSubnets\",\"ec2:DescribeSecurityGroups\"],\"Resource\":\"*\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"elasticache:Describe*\"],\"Resource\":[\"${aws_elasticache_cluster.exRedis_RedisCluster_3C9A5882.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"elasticache:Describe*\"],\"Resource\":[\"${aws_elasticache_cluster.r2_RedisCluster_C6087F40.arn}\"],\"Effect\":\"Allow\"},{\"Effect\":\"Allow\",\"Action\":[\"ec2:CreateNetworkInterface\",\"ec2:DescribeNetworkInterfaces\",\"ec2:DeleteNetworkInterface\",\"ec2:DescribeSubnets\",\"ec2:DescribeSecurityGroups\"],\"Resource\":\"*\"},{\"Effect\":\"Allow\",\"Action\":[\"ec2:CreateNetworkInterface\",\"ec2:DescribeNetworkInterfaces\",\"ec2:DeleteNetworkInterface\",\"ec2:DescribeSubnets\",\"ec2:DescribeSecurityGroups\"],\"Resource\":\"*\"}]}",
         "role": "${aws_iam_role.testtest_Handler_IamRole_15693C93.name}"
       }
     },
@@ -190,7 +190,7 @@ module.exports = function({ $r, $r2 }) {
         "environment": {
           "variables": {
             "REDIS_CLUSTER_ID_30c8c4ae": "${aws_elasticache_cluster.r2_RedisCluster_C6087F40.cluster_id}",
-            "REDIS_CLUSTER_ID_5c75c5cf": "${aws_elasticache_cluster.redisRedis_RedisCluster_17F572CD.cluster_id}",
+            "REDIS_CLUSTER_ID_89baf91f": "${aws_elasticache_cluster.exRedis_RedisCluster_3C9A5882.cluster_id}",
             "WING_FUNCTION_NAME": "Handler-c8f4f2a1",
             "WING_TARGET": "tf-aws"
           }
@@ -205,7 +205,7 @@ module.exports = function({ $r, $r2 }) {
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [
-            "${aws_security_group.redisRedis_securityGroup_235C75C0.id}",
+            "${aws_security_group.exRedis_securityGroup_3948C3F2.id}",
             "${aws_security_group.r2_securityGroup_35A75C2E.id}"
           ],
           "subnet_ids": [
@@ -339,6 +339,46 @@ module.exports = function({ $r, $r2 }) {
       }
     },
     "aws_security_group": {
+      "exRedis_securityGroup_3948C3F2": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/ex.Redis/securityGroup",
+            "uniqueId": "exRedis_securityGroup_3948C3F2"
+          }
+        },
+        "egress": [
+          {
+            "cidr_blocks": [
+              "0.0.0.0/0"
+            ],
+            "description": null,
+            "from_port": 0,
+            "ipv6_cidr_blocks": null,
+            "prefix_list_ids": null,
+            "protocol": "-1",
+            "security_groups": null,
+            "self": null,
+            "to_port": 0
+          }
+        ],
+        "ingress": [
+          {
+            "cidr_blocks": [
+              "${aws_subnet.PrivateSubnet.cidr_block}"
+            ],
+            "description": null,
+            "from_port": 6379,
+            "ipv6_cidr_blocks": null,
+            "prefix_list_ids": null,
+            "protocol": "tcp",
+            "security_groups": null,
+            "self": true,
+            "to_port": 6379
+          }
+        ],
+        "name": "89baf91f-securityGroup",
+        "vpc_id": "${aws_vpc.VPC.id}"
+      },
       "r2_securityGroup_35A75C2E": {
         "//": {
           "metadata": {
@@ -377,46 +417,6 @@ module.exports = function({ $r, $r2 }) {
           }
         ],
         "name": "30c8c4ae-securityGroup",
-        "vpc_id": "${aws_vpc.VPC.id}"
-      },
-      "redisRedis_securityGroup_235C75C0": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/redis.Redis/securityGroup",
-            "uniqueId": "redisRedis_securityGroup_235C75C0"
-          }
-        },
-        "egress": [
-          {
-            "cidr_blocks": [
-              "0.0.0.0/0"
-            ],
-            "description": null,
-            "from_port": 0,
-            "ipv6_cidr_blocks": null,
-            "prefix_list_ids": null,
-            "protocol": "-1",
-            "security_groups": null,
-            "self": null,
-            "to_port": 0
-          }
-        ],
-        "ingress": [
-          {
-            "cidr_blocks": [
-              "${aws_subnet.PrivateSubnet.cidr_block}"
-            ],
-            "description": null,
-            "from_port": 6379,
-            "ipv6_cidr_blocks": null,
-            "prefix_list_ids": null,
-            "protocol": "tcp",
-            "security_groups": null,
-            "self": true,
-            "to_port": 6379
-          }
-        ],
-        "name": "5c75c5cf-securityGroup",
         "vpc_id": "${aws_vpc.VPC.id}"
       }
     },
@@ -476,7 +476,7 @@ const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 const cloud = require('@winglang/sdk').cloud;
-const redis = require('@winglang/sdk').redis;
+const ex = require('@winglang/sdk').ex;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
@@ -513,8 +513,8 @@ class $Root extends $stdlib.std.Resource {
         super._registerBind(host, ops);
       }
     }
-    const r = this.node.root.newAbstract("@winglang/sdk.redis.Redis",this,"redis.Redis");
-    const r2 = this.node.root.newAbstract("@winglang/sdk.redis.Redis",this,"r2");
+    const r = this.node.root.newAbstract("@winglang/sdk.ex.Redis",this,"ex.Redis");
+    const r2 = this.node.root.newAbstract("@winglang/sdk.ex.Redis",this,"r2");
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:test",new $Closure1(this,"$Closure1"));
   }
 }

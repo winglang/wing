@@ -6,7 +6,7 @@ import { Resource } from "../std";
 /**
  * Global identifier for `Bucket`.
  */
-export const REDIS_FQN = fqnForType("redis.Redis");
+export const REDIS_FQN = fqnForType("ex.Redis");
 
 /**
  * A cloud redis db.
