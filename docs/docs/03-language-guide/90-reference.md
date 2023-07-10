@@ -98,20 +98,6 @@ import TOCInline from '@theme/TOCInline';
 > let w = new SampleClass();       // class instance (mutability unknown)
 > ```
 
-<details><summary>Equivalent TypeScript Code</summary>
-
-> ```TS
-> const z: Set<number> = Object.freeze(new Set([1, 2, 3]));
-> const zm: Set = new Set();
-> const y: Map<string, number> = Object.freeze(new Map([["a", 1], ["b", 2]]));
-> const ym: Map = new Map();
-> const x: number[] = Object.freeze([1, 2, 3]);
-> const xm: number[] = [];
-> const w: SampleClass = new SampleClass();
-> ```
-
-</details>
-
 [`▲ top`][top]
 
 ---
@@ -452,25 +438,6 @@ communicating errors to the user.
 > panic("a fatal error encountered");
 > assert(x > 0);
 > ```
-
-<details><summary>Equivalent TypeScript Code</summary>
-
-> ```TS
-> console.log("Hello ${name}");
-> // throws
-> throw new Error("a recoverable error occurred");
-> // calling panic in wing is fatal
-> (() => {
->   console.error("Something went wrong");
->   // generate core dump
->   // show stack trace
->   process.exit(1);
-> })();
-> // assertion
-> (() => { assert.ok(x > 0); })();
-> ```
-
-</details>
 
 [`▲ top`][top]
 
@@ -898,20 +865,6 @@ Function arguments and their return type are always required.
 > let i2: num? = i;
 > ```
 
-<details><summary>Equivalent TypeScript Code</summary>
-
-> ```TS
-> const i: number = 5;
-> const m: number = i;
-> const arrOpt: number[] | undefined = [];
-> const arr: readonly number[] = Object.freeze([]);
-> const copy: readonly number[] = Object.freeze([...arr]);
-> const i1: number | undefined = undefined;
-> const i2: number | undefined = i;
-> ```
-
-</details>
-
 [`▲ top`][top]
 
 ---
@@ -941,21 +894,6 @@ expected from a call and it is not being caught.
 >   log("done");
 > }
 > ```
-
-<details><summary>Equivalent TypeScript Code</summary>
-
-> ```TS
-> try {
->   let x: number | undefined = 1;
->   throw new Error("hello exception");
-> } catch (e) {
->   console.log(e);
-> } finally {
->   console.log("done");
-> }
-> ```
-  
-</details>
 
 [`▲ top`][top]
 
@@ -1010,19 +948,6 @@ AWS CDK or `TerraformApp` in case of CDK for Terraform target.
 > let a = MyResource();
 > let b = MyResource() be "my-resource";
 > ```
-
-<details><summary>Equivalent TypeScript Code</summary>
-
-> ```TS
-> (new class extends cdk.Stack {
->   constructor(scope: constructs.Construct, id: string) {
->     const a = new MyResource(this, "MyResource");
->     const b = new MyResource(this, "my-resource");
->   }
-> })(new cdk.App(), "WingEntry");
-> ```
-
-</details>
 
 [`▲ top`][top]
 
@@ -1079,19 +1004,6 @@ this document: [Module System](#4-module-system).
 > }
 > ```
 
-<details><summary>Equivalent TypeScript Code</summary>
-
-> ```TS
-> for (let i = 1; i < 10; i++) {
->   if (i > 5) {
->     break;
->   }
->   console.log(i);
-> }
-> ```
-  
-</details>
-
 [`▲ top`][top]
 
 ---
@@ -1110,19 +1022,6 @@ includes for and while loops currently.
 > }
 > ```
 
-<details><summary>Equivalent TypeScript Code</summary>
-
-> ```TS
-> for (let i = 1; i < 10; i++) {
->   if (i > 5) {
->     continue;
->   }
->   console.log(i);
-> }
-> ```
-  
-</details>
-
 [`▲ top`][top]
 
 ---
@@ -1137,17 +1036,6 @@ includes for and while loops currently.
 >   myMethod2(): void {}
 >   myMethod3(): void { return; }
 >   myMethod4(): str { return "hi!"; }
-> }
-> ```
-
-<details><summary>Equivalent TypeScript Code</summary>
-
-> ```TS
-> class MyClass {
->   public myMethod(): void {}
->   public myMethod2(): void {}
->   public myMethod3(): void { return; }
->   public myMethod4(): string { return "hi!"; }
 > }
 > ```
   
@@ -1175,22 +1063,6 @@ The **if** statement is optionally followed by **elif** and **else**.
 > }
 > ```
 
-<details><summary>Equivalent TypeScript Code</summary>
-
-> ```TS
-> const x: number = 1;
-> const y: string = "sample";
-> if (x === 2) {
->   console.log("x is 2");
-> } else if (y !== "sample") {
->   console.log("y is not sample");
-> } else {
->   console.log("x is 1 and y is sample");
-> }
-> ```
-  
-</details>
-
 [`▲ top`][top]
 
 ---
@@ -1216,31 +1088,6 @@ The loop invariant in for loops is implicitly re-assignable (`var`).
 > }
 > ```
 
-<details><summary>Equivalent TypeScript Code</summary>
-
-> ```TS
-> const arr: readonly number[] = Object.freeze([1, 2, 3]);
-> const set: Set<number> = Object.freeze(new Set([1, 2, 3]));
-> for (const item of arr) {
->   console.log(item);
-> }
-> for (const item of set) {
->   console.log(item);
-> }
-> // calling 0..100 does not allocate, just returns an iterator
-> function* iterator(start: number, end: number) {
->   let i = start;
->   while (i < end) yield i++;
->   while (i > end) yield i--;
-> }
-> const iter = iterator(0, 100);
-> for (const val of iter) {
->   console.log(val);
-> }
-> ```
-  
-</details>
-
 [`▲ top`][top]
 
 ---
@@ -1255,16 +1102,6 @@ The loop invariant in for loops is implicitly re-assignable (`var`).
 >   log("hello");
 > }
 > ```
-
-<details><summary>Equivalent TypeScript Code</summary>
-
-> ```TS
-> while (callSomeFunction()) {
->   console.log("hello");
-> }
-> ```
-  
-</details>
 
 [`▲ top`][top]
 
@@ -1308,36 +1145,6 @@ Structs can inherit from multiple other structs.
 >   field5: "sample"
 > };
 > ```
-
-<details><summary>Equivalent TypeScript Code</summary>
-
-> ```TS
-> interface MyDataModel1 {
->   readonly field1: number;
->   readonly field2: string;
-> }
-> interface MyDataModel2 {
->   readonly field3: number;
->   readonly field4?: boolean;
-> }
-> interface MyDataModel3 extends MyDataModel1, MyDataModel2 {
->   readonly field5: string;
->   readonly field6: number;
-> }
-> const s1: MyDataModel1 = { field1: 1, field2: "sample" };
-> const s2: MyDataModel2 = { field3: 1, field4: true };
-> const s3: MyDataModel2 = { field3: 1, field4: undefined };
-> const s4: MyDataModel3 = {
->   field1: 12,
->   field2: "sample",
->   field3: 11,
->   field4: false,
->   field5: "sample",
->   field6: 11
-> };
-> ```
-  
-</details>
 
 [`▲ top`][top]
 
@@ -1610,38 +1417,6 @@ Interface fields are not supported.
 > }
 > ```
 
-<details><summary>Equivalent TypeScript Code</summary>
-
-> ```TS
-> interface IMyInterface1 {
->   readonly field1: number;
->   method1(x: number): string;
-> }
-> interface IMyInterface2 {
->   readonly __inflight__field2: string;
->   __inflight__method2(): string;
-> }
-> // this is only shown as a hypothetical sample
-> class MyResource extends constructs.Construct
->   implements IMyInterface1, IMyInterface2 {
->   public readonly field1: number;
->   public readonly __inflight__field2: string;
->   public __inflight__constructor() {
->     // inflight client initialization
->     this.field1 = x;
->     this.__inflight__field2 = "sample";
->   }
->   public __inflight__method2(): string {
->     return this.__inflight__field2;
->   }
->   public method1(x: number): string {
->     return `sample: ${x}`;
->   }
-> }
-> ```
-  
-</details>
-
 [`▲ top`][top]
 
 ---
@@ -1662,15 +1437,6 @@ Type annotation is optional if a default value is given.
 > let n = 10;
 > let s: str = "hello";
 > ```
-
-<details><summary>Equivalent TypeScript Code</summary>
-
-> ```TS
-> const n: number = 10;
-> const s: string = "hello";
-> ```
-  
-</details>
 
 [`▲ top`][top]
 
@@ -1751,17 +1517,6 @@ Arrays are similar to dynamically sized arrays or vectors in other languages.
 > let l = arr1.length + arr2.length + arr3.length + arr1.at(0);
 > ```
 
-<details><summary>Equivalent TypeScript Code</summary>
-
-> ```TS
-> const arr1: readonly number[] = Object.freeze([1, 2, 3]);
-> const arr2: readonly string[] = Object.freeze(["a", "b", "c"]);
-> const arr3: string[] = ["a1", "b2", "c3"];
-> const l = arr1.length + arr2.length + arr3.length + arr1[0];
-> ```
-  
-</details>
-
 [`▲ top`][top]
 
 ---
@@ -1783,21 +1538,6 @@ Naming convention for enums is to use "TitleCase" for name and ALL_CAPS for memb
 > let x = MyFoo.B;
 > let y = x; // type is MyFoo
 > ```
-
-<details><summary>Equivalent TypeScript Code</summary>
-
-> ```TS
-> enum SomeEnum { ONE, TWO, THREE };
-> enum MyFoo {
->   A,
->   B,
->   C,
-> };
-> const x: MyFoo = MyFoo.B;
-> const y: MyFoo = x;
-> ```
-  
-</details>
 
 [`▲ top`][top]
 
@@ -1960,7 +1700,169 @@ If [frozen](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Gl
 
 ## 6. Miscellaneous
 
-### 6.1 Strings
+### 6.1 Equality
+
+Checking for equality is performed with the `==` operator. It returns `true` if the two values are equal, and `false` otherwise. Similarly, inequality is performed with the `!=` operator.
+
+> The main difference between equality in JavaScript and Wing is that `==` in Wing is not allowed to compare values of different types. For example, `1 == "1"` is not allowed in Wing, and will result in a compile-time error.
+
+Equality in Wing is a symmetric and transitive relationship - that is, (1) if `a == b`, then `b == a`, and (2) if `a == b` and `b == c`, then `a == c`.
+
+The execution phase ([preflight or inflight](/docs/concepts/inflights)) that a value was created in does not affect its equality. For example, a value created in preflight can be equal to a value created in inflight.
+
+Some types are compared *by value*, which means that two values are equal if their contents are equivalent. For example, two `str` values are equal if they have the same characters in the same order, even if they are stored in different places in memory.
+
+Other types are compared *by reference*, which means that two values are equal if they point to the same object in memory. For example, two functions are equal if they are the same object, even if they have the same code.
+
+The following is a set of rules for checking equality:
+
+#### 6.1.1 Basic types
+
+Basic types are compared *by value*.
+
+1. Two `str` values are equal if they have the same characters in the same order.
+2. Two `num` values are equal if they have the same floating-point value. The [IEEE 754] standard is used for storing numbers, which means that for example `-0 == +0`. `NaN` is not equal to any value, including itself.
+3. Two `bool` values are equal if they are both `true` or both `false`.
+4. Two `duration` values are equal if they have the same number of milliseconds.
+5. Two `T?` types (optional `T` values) are equal if they are both empty (`nil`) or both non-empty, and if they are both non-empty, their inner values are equal. A value of type `T?` is never equal to a value of type `T`.
+
+[IEEE 754]: https://en.wikipedia.org/wiki/IEEE_754
+
+> *Note*: Equality checking for `duration` is not fully implemented. See [#2941](https://github.com/winglang/wing/issues/2941).
+
+#### 6.1.2 Collection types
+
+Wing contains six collection types: `Array`, `MutArray`, `Map`, `MutMap`, `Set`, and `MutSet`. The following rules apply to all of them:
+
+1. Two collections are equal if they have the same number of elements, and if each element in the first collection is equal to the corresponding element in the second collection (according to the rules of equality of that type). The order of elements only matters for `Array` and `MutArray`.
+2. The mutability of a collection does not affect its equality. In other words, a `MutArray` is equal to an `Array` with the same elements, and a `MutMap` is equal to a `Map` with the same keys and values.
+3. Only collections of the same "kind" can be equal. For example, an `Array` cannot be equal to a `Map`, and a `MutArray` cannot be equal to a `MutMap`.
+
+```js
+assert(Array<num>[1, 2, 3] == Array<num>[1, 2, 3]);
+assert(Array<num>[1, 2, 3] != Array<num>[3, 2, 1]);
+assert(MutArray<num>[1, 2, 3] == Array<num>[1, 2, 3]);
+
+assert(Map<str>{"a": "1", "b": "2"} == Map<str>{"a": "1", "b": "2"});
+assert(Map<str>{"a": "1", "b": "2"} == Map<str>{"b": "2", "a": "1"});
+
+assert(Set<num>{1, 2, 3} == Set<num>{1, 2, 3});
+assert(Set<num>{1, 2, 3} == Set<num>{3, 2, 1});
+```
+
+> *Note*: Collection type equality checking is not fully implemented. See [#2867](https://github.com/winglang/wing/issues/2867), [#2940](https://github.com/winglang/wing/issues/2940).
+
+
+#### 6.1.3 Function types
+
+Two functions are equal if they are both the same object (by reference). This means that two functions that have the same code are not necessarily equal, since they may have been defined in different places.
+
+```js
+let f1 = (x: num): num => { return x + 1; };
+let f2 = (x: num): num => { return x + 1; };
+let f3 = f1;
+
+assert(f1 != f2);
+assert(f1 == f3);
+```
+
+Functions can only be compared if they have the same signature (including its execution phase). For example, a function defined in preflight cannot be compared to a function defined in inflight, even if they have the same code.
+
+```js
+let f1 = (x: num): num => { return x + 1; }; // (preflight)
+let f2 = inflight (x: num): num => { return x + 1; };
+
+assert(f1 != f2); // compile error (can't compare different types)
+```
+
+#### 6.1.4 Enums
+
+Two enum values are equal if they refer to the same case.
+
+```js
+enum PizzaTopping {
+  CHEESE,
+  PINEAPPLE,
+}
+
+let topping1 = PizzaTopping.CHEESE;
+let topping2 = PizzaTopping.CHEESE;
+let topping3 = PizzaTopping.PINEAPPLE;
+
+assert(topping1 == topping2);
+assert(topping1 != topping3);
+```
+
+#### 6.1.5 Classes and interfaces
+
+Two class instances or interface-satisfying objects are equal if they are the same instance (by reference). This means that two class instances, or interface-satisfying objects that have the same data are not necessarily equal, since they may have been created in different places.
+
+```js
+class Shop {
+  hats: num;
+  init(hats: num) {
+    this.hats = hats;
+  }
+}
+
+let shop1 = new Shop(1) as "Shop1";
+let shop2 = new Shop(1) as "Shop2";
+let shop3 = shop1;
+
+assert(shop1 != shop2);
+assert(shop1 == shop3);
+```
+
+#### 6.1.6 Json
+
+Two `Json` values are equal if they contain the same structure and values. Another way to think about it is the two `Json` values are equal if their stringified representation is equal. The following rules apply:
+
+1. Two `Json` values are equal if they are both `null`.
+2. Two `Json` values are equal if they are both `bool` values and are equal.
+3. Two `Json` values are equal if they are both `num` values and are equal.
+4. Two `Json` values are equal if they are both `str` values and are equal.
+5. Two `Json` values are equal if they are both `Array` values and are equal.
+6. Two `Json` values are equal if they are both `Map` values and are equal.
+
+```js
+assert(Json true == Json true);
+assert(Json false == Json false);
+assert(Json 1 == Json 1);
+assert(Json -0.42 == Json -0.42);
+assert(Json "foo" == Json "foo");
+assert(Json [1, 2, 3] == Json [1, 2, 3]);
+assert(Json { "foo": 1, "bar": 2 } == Json { "foo": 1, "bar": 2 });
+```
+
+> *Note*: `Json` equality is not fully implemented. See [#2938](https://github.com/winglang/wing/issues/2938), [#2937](https://github.com/winglang/wing/issues/2937).
+
+#### 6.1.7 Structs
+
+Two structs are equal if they have the same type and all of their fields are equal (based on rules of equality of their type).
+
+```js
+struct Cat {
+  name: str;
+  age: num;
+}
+struct Dog {
+  name: str;
+  age: num;
+}
+
+let cat1 = Cat { name: "Mittens", age: 3 };
+let cat2 = Cat { name: "Mittens", age: 3 };
+let cat3 = Cat { name: "Mittens", age: 4 };
+let dog = Dog { name: "Mittens", age: 3 };
+
+assert(cat1 == cat2); // fields and types match
+assert(cat1 != cat3); // field "age" does not match
+assert(cat1 != dog); // compile time error (can't compare different types)
+```
+
+> *Note*: Struct equality is not fully implemented. See [#2939](https://github.com/winglang/wing/issues/2939).
+
+### 6.2 Strings
 
 String reference doc is available [here](https://www.winglang.io/docs/language-guide/language-reference#61-strings).
 Type of string is UTF-16 internally.  
@@ -1970,7 +1872,7 @@ All string declaration variants are multi-line.
 
 ---
 
-#### 6.1.1 Normal strings "..."
+#### 6.2.1 Normal strings "..."
 
 The string inside the double quotes is processed, and all notations of form
 `${<expression>}` are substituted from their respective scopes. The behavior is
@@ -1984,21 +1886,11 @@ Processing unicode escape sequences happens in these strings.
 > let l = s.length;
 > ```
 
-<details><summary>Equivalent TypeScript Code</summary>
-
-> ```TS
-> const name = "World";
-> const s = `Hello, ${name}!`; // with substitution
-> const l = s.length; // length of string
-> ```
-
-</details>
-
 [`▲ top`][top]
 
 ---
 
-### 6.2 Comments
+### 6.3 Comments
 
 Single line comments start with a `//` and continue to the end of the line.  
 Multi-line comments are supported with the `/* ... */` syntax.  
@@ -2015,13 +1907,13 @@ Multi-line comments are supported with the `/* ... */` syntax.
 
 ---
 
-### 6.3 Operators
+### 6.4 Operators
 
 Unary operators are not supported except outline below.  
 Arithmetic assignment operators are not supported.  
 Ternary or conditional operators are not supported.
 
-#### 6.3.1 Relational Operators
+#### 6.4.1 Relational Operators
 
 | Operator | Description                                      | Example  |
 | -------- | ------------------------------------------------ | -------- |
@@ -2036,7 +1928,7 @@ Ternary or conditional operators are not supported.
 
 ---
 
-#### 6.3.2 Logical Operators
+#### 6.4.2 Logical Operators
 
 | Operator | Description          | Example    |
 | -------- | -------------------- | ---------- |
@@ -2048,7 +1940,7 @@ Ternary or conditional operators are not supported.
 
 ---
 
-#### 6.3.3 Mathematics Operators
+#### 6.4.3 Mathematics Operators
 
 | Operator | Description    | Example  |
 | -------- | -------------- | -------- |
@@ -2064,7 +1956,7 @@ Ternary or conditional operators are not supported.
 
 ---
 
-#### 6.3.4 Operator Precedence
+#### 6.4.4 Operator Precedence
 
 | Operator             | Notes                                             |
 | -------------------- | ------------------------------------------------- |
@@ -2088,7 +1980,7 @@ determined by associativity.
 
 ---
 
-#### 6.3.5 Short Circuiting
+#### 6.4.5 Short Circuiting
 
 For the built-in logical NOT operators, the result is `true` if the operand is
 `false`. Otherwise, the result is `false`.
@@ -2128,27 +2020,7 @@ if x != nil {
 
 ---
 
-#### 6.3.6 Equality
-
-Of the operators supported, the following can be used with non-numeric operands:
-
-- `==`: can be used to check for equality of types and values in operands.
-- `!=`: can be used to check for inequality of types and values in operands.
-
-When these operators are used on immutable data, values are checked for equality
-as well as types. When these operators are used on mutable data, types and refs
-are checked for equality. Concept of "refs" is loosely defined as "any object"
-that's instantiated through a class currently and then gets reassigned to other
-names until a mutable method is called on it, which then turns into a new "ref".
-
-This behavior is the same as JavaScript with the addition of structural equality
-for immutable data (on top of nominal typing).
-
-[`▲ top`][top]
-
----
-
-### 6.4 Roadmap
+### 6.5 Roadmap
 - [ ] Asynchronous Execution Safety Model.
 - [ ] Make the language `async` by default.
 - [ ] First class support for `regex`, `glob`, and `cron` types.
@@ -2166,7 +2038,7 @@ for immutable data (on top of nominal typing).
 [`▲ top`][top]
 ---
 
-### 6.5 Credits
+### 6.6 Credits
 
 * **Contributors (A-Z):**
   * Chris R. ([@Chriscbr](https://github.com/Chriscbr))
