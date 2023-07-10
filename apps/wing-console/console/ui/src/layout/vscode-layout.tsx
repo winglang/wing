@@ -51,7 +51,7 @@ export const VscodeLayout = ({ cloudAppState, wingVersion }: LayoutProps) => {
     onResourceClick,
     title,
     wingfile,
-    termsAccepted,
+    termsConfig,
     acceptTerms,
   } = useLayout({
     cloudAppState,
@@ -64,10 +64,13 @@ export const VscodeLayout = ({ cloudAppState, wingVersion }: LayoutProps) => {
 
   const [showTerms, setShowTerms] = useState(false);
   useEffect(() => {
-    if (termsAccepted.data === false) {
+    if (!termsConfig.data) {
+      return;
+    }
+    if (termsConfig.data.requireAcceptTerms && !termsConfig.data.accepted) {
       setShowTerms(true);
     }
-  }, [termsAccepted.data]);
+  }, [termsConfig.data]);
 
   const onAcceptTerms = () => {
     acceptTerms();

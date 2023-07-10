@@ -48,8 +48,11 @@ export const createAppRouter = () => {
     "app.wingfile": createProcedure.query(({ ctx }) => {
       return ctx.wingfile.split("/").pop();
     }),
-    "app.terms": createProcedure.query(() => {
-      return isTermsAccepted();
+    "app.termsConfig": createProcedure.query(({ ctx }) => {
+      return {
+        requireAcceptTerms: ctx.requireAcceptTerms,
+        accepted: isTermsAccepted(),
+      };
     }),
     "app.acceptTerms": createProcedure.mutation(() => {
       acceptTerms(true);

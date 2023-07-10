@@ -46,7 +46,7 @@ export const useLayout = ({
     return `${wingfile.data} - Wing Console`;
   }, [wingfile.data]);
 
-  const termsAccepted = trpc["app.terms"].useQuery();
+  const termsConfig = trpc["app.termsConfig"].useQuery();
   const acceptTerms = trpc["app.acceptTerms"].useMutation();
 
   const logs = trpc["app.logs"].useQuery(
@@ -132,7 +132,7 @@ export const useLayout = ({
     onResourceClick,
     title,
     wingfile,
-    termsAccepted,
+    termsConfig,
     acceptTerms: acceptTerms.mutate,
   };
 };

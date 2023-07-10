@@ -43,6 +43,7 @@ export interface CreateConsoleServerOptions {
   hostUtils?: HostUtils;
   onTrace?: (trace: Trace) => void;
   onExpressCreated?: (app: ExpressApplication) => void;
+  requireAcceptTerms?: boolean;
 }
 
 export const createConsoleServer = async ({
@@ -54,6 +55,7 @@ export const createConsoleServer = async ({
   hostUtils,
   onTrace,
   onExpressCreated,
+  requireAcceptTerms,
 }: CreateConsoleServerOptions) => {
   const emitter = new Emittery<{
     invalidateQuery: RouteNames;
@@ -178,6 +180,7 @@ export const createConsoleServer = async ({
     hostUtils,
     onExpressCreated,
     wingfile,
+    requireAcceptTerms,
   });
 
   const close = async () => {
