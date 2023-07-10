@@ -40,6 +40,12 @@ Firstly, we need to create the S3 bucket that will store our Terraform state fil
 aws s3api create-bucket --bucket <bucket-name> --region <region> --create-bucket-configuration LocationConstraint=<region>
 ```
 
+This could be looking like the following when replacing the placeholder `<bucket-name>` and `<region>`
+
+```sh
+aws s3api create-bucket --bucket my-tfstate-bucket-with-a-uniue-name --region us-east-1 --create-bucket-configuration LocationConstraint=us-east-1
+```
+
 ## Step 2: Enable Versioning
 
 To take advantage of the S3 backend's versioning capabilities, we must enable versioning on our bucket. Versioning allows us to preserve, retrieve, and restore every version of every object in our bucket. This will be particularly beneficial when dealing with Terraform's state file as it allows us to roll back to a previous state if needed.
