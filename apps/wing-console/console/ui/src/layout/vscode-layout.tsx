@@ -9,7 +9,6 @@ import { State } from "@wingconsole/server";
 import classNames from "classnames";
 import { useEffect, useMemo } from "react";
 
-import License from "../../LICENSE.md?raw";
 import { ConsoleLogsFilters } from "../features/console-logs-filters.js";
 import { ConsoleLogs } from "../features/console-logs.js";
 import { MapView } from "../features/map-view.js";
@@ -76,7 +75,7 @@ export const VscodeLayout = ({ cloudAppState, wingVersion }: LayoutProps) => {
         <TermsAndConditionsModal
           visible={true}
           onAccept={() => acceptTerms()}
-          license={License}
+          license={termsConfig.data?.license ?? ""}
         />
       )}
       <div
