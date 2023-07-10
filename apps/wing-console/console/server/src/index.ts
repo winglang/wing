@@ -32,6 +32,8 @@ export type { NodeDisplay } from "./utils/constructTreeNodeMap.js";
 
 export type RouteNames = keyof inferRouterInputs<Router> | undefined;
 
+export { isTermsAccepted } from "./utils/terms-and-conditions.js";
+
 export interface CreateConsoleServerOptions {
   wingfile: string;
   log: LogInterface;

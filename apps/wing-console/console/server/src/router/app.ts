@@ -13,10 +13,7 @@ import {
   ConstructTreeNodeMap,
 } from "../utils/constructTreeNodeMap.js";
 import { createProcedure, createRouter } from "../utils/createRouter.js";
-import {
-  getTermsAccepted,
-  setTermsAccepted,
-} from "../utils/terms-and-conditions.js";
+import { isTermsAccepted, acceptTerms } from "../utils/terms-and-conditions.js";
 import { Simulator } from "../wingsdk.js";
 
 const isTest = /(\/test$|\/test:([^/\\])+$)/;
@@ -52,7 +49,7 @@ export const createAppRouter = () => {
       return ctx.wingfile.split("/").pop();
     }),
     "app.terms": createProcedure.query(() => {
-      return getTermsAccepted();
+      return isTermsAccepted();
     }),
     "app.acceptTerms": createProcedure.mutation(() => {
       setTermsAccepted(true);

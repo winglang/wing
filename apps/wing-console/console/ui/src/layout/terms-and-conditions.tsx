@@ -1,4 +1,5 @@
-import { Button } from "@wingconsole/design-system";
+import { Button, useTheme } from "@wingconsole/design-system";
+import classNames from "classnames";
 
 export interface TermsAndConditionsProps {
   visible: boolean;
@@ -9,10 +10,18 @@ export const TermsAndConditions = ({
   visible,
   onAccept,
 }: TermsAndConditionsProps) => {
+  const { theme } = useTheme();
+
   return (
     visible && (
       <div className="fixed inset-0 flex justify-center items-center z-50 bg-black bg-opacity-40">
-        <div className="bg-white p-4 rounded-lg shadow-lg space-y-2">
+        <div
+          className={classNames(
+            "p-4 rounded-lg shadow-lg space-y-2",
+            theme.bgInput,
+            theme.textInput,
+          )}
+        >
           <h1 className="text-lg font-bold">Terms and Conditions</h1>
           <div className="text-sm space-y-2 py-2">
             <p className="text-sm">
@@ -34,7 +43,9 @@ export const TermsAndConditions = ({
             </p>
           </div>
           <div className="flex justify-end">
-            <Button onClick={onAccept}>Accept</Button>
+            <Button primary onClick={onAccept}>
+              Accept
+            </Button>
           </div>
         </div>
       </div>

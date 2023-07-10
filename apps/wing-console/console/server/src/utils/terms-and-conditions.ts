@@ -3,7 +3,7 @@ import Conf from "conf";
 const PROJECT_NAME = "@wingconsole/server";
 const CONFIG_KEY = "termsAndConditions";
 
-export const getTermsAccepted = (): boolean => {
+export const isTermsAccepted = (): boolean => {
   const config = new Conf({
     projectName: PROJECT_NAME,
   });
@@ -12,7 +12,7 @@ export const getTermsAccepted = (): boolean => {
   return accepted === true;
 };
 
-export const setTermsAccepted = (value: boolean) => {
+export const acceptTerms = (value: boolean) => {
   const config = new Conf({
     projectName: PROJECT_NAME,
   });
