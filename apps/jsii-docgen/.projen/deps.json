@@ -18,6 +18,11 @@
       "type": "build"
     },
     {
+      "name": "@types/yargs",
+      "version": "^16",
+      "type": "build"
+    },
+    {
       "name": "@typescript-eslint/eslint-plugin",
       "version": "^5",
       "type": "build"
@@ -25,6 +30,10 @@
     {
       "name": "@typescript-eslint/parser",
       "version": "^5",
+      "type": "build"
+    },
+    {
+      "name": "constructs",
       "type": "build"
     },
     {
@@ -62,6 +71,11 @@
       "type": "build"
     },
     {
+      "name": "jsii",
+      "version": "~5.0.0",
+      "type": "build"
+    },
+    {
       "name": "npm-check-updates",
       "version": "^16",
       "type": "build"
@@ -90,11 +104,6 @@
     {
       "name": "typescript",
       "type": "build"
-    },
-    {
-      "name": "@types/babel__traverse",
-      "version": "7.18.2",
-      "type": "override"
     },
     {
       "name": "@jsii/spec",
@@ -130,6 +139,7 @@
     },
     {
       "name": "yargs",
+      "version": "^16",
       "type": "runtime"
     }
   ],

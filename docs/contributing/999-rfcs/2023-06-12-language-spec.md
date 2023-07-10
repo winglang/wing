@@ -16,7 +16,7 @@ are still not implemented (see [project board](https://github.com/orgs/winglang/
 
 ### 0.1 Motivation
 
-The Wing Programming Language (aka winglang[<sup>RFC</sup>](/2022-05-28-winglang-reqs)) is a general
+The Wing Programming Language (aka winglang[<sup>RFC</sup>](./2022-05-28-winglang-reqs)) is a general
 purpose programming language designed for building applications for the cloud.
 
 What makes Wing special? Traditional programming languages are designed around

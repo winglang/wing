@@ -102,7 +102,7 @@ api.delete("/employees/{id}", inflight (request: cloud.ApiRequest): cloud.ApiRes
 
 ### Simulator (`sim`)
 
-The sim implementation of `cloud.Api` uses [nodejs express]([url](https://expressjs.com/)).
+The sim implementation of `cloud.Api` uses [nodejs express](https://expressjs.com/).
 
 ### AWS (`tf-aws` and `awscdk`)
 
@@ -119,4 +119,4 @@ The AWS implementation of `cloud.Api` uses [Amazon API Gateway](https://aws.amaz
 
 ## API Reference
 
-The full list of APIs for `cloud.Api` is available in the [API Reference](../api-reference).
+The full list of APIs for `cloud.Api` is available in the [API Reference](./api-reference).

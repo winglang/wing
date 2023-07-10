@@ -3,7 +3,7 @@ import { Duration } from "./duration";
 import { App } from "../core";
 import { WING_ATTRIBUTE_RESOURCE_CONNECTIONS } from "../core/attributes";
 import { Code } from "../core/inflight";
-import { serializeImmutableData } from "../core/internal";
+import { liftObject } from "../core/internal";
 import { IInspectable, TreeInspector } from "../core/tree";
 import { log } from "../shared/log";
 
@@ -192,19 +192,7 @@ export abstract class Resource extends Construct implements IResource {
         if (isResource(obj)) {
           // Explicitly register the resource's `$inflight_init` op, which is a special op that can be used to makes sure
           // the host can instantiate a client for this resource.
-          obj._registerBind(host, ["$inflight_init"]);
-
-          obj._registerBind(host, ops);
-
-          // add connection metadata
-          for (const op of ops) {
-            Resource.addConnection({
-              from: host,
-              to: obj,
-              relationship: op,
-            });
-          }
-
+          obj._addBind(host, [...ops, "$inflight_init"]);
           return;
         }
 
@@ -281,27 +269,52 @@ export abstract class Resource extends Construct implements IResource {
    *
    * @internal
    */
-  public _registerBind(host: IInflightHost, ops: string[]) {
+  public _registerBind(_host: IInflightHost, _ops: string[]) {
+    return;
+  }
+
+  /**
+   * Adds a binding between this resource and the host.
+   * @param host The host to bind to
+   * @param ops The operations that may access this resource
+   * @returns `true` if a new bind was added or `false` if there was already a bind
+   */
+  private _addBind(host: IInflightHost, ops: string[]) {
     log(
       `Registering a binding for a resource (${this.node.path}) to a host (${
         host.node.path
       }) with ops: ${JSON.stringify(ops)}`
     );
 
+    // Register the binding between this resource and the host
+    if (!this.bindMap.has(host)) {
+      this.bindMap.set(host, new Set());
+    }
+
+    const opsForHost = this.bindMap.get(host)!;
+
+    // For each operation, re
     for (const op of ops) {
       if (!this.inflightOps.includes(op)) {
         throw new Error(
           `Resource ${this.node.path} does not support inflight operation ${op} (requested by ${host.node.path})`
         );
       }
-    }
 
-    // Register the binding between this resource and the host
-    if (!this.bindMap.has(host)) {
-      this.bindMap.set(host, new Set());
-    }
-    for (const op of ops) {
-      this.bindMap.get(host)!.add(op);
+      if (!opsForHost.has(op)) {
+        // first add the operation to the set of operations for the host so that we can avoid
+        // infinite recursion.
+        opsForHost.add(op);
+
+        this._registerBind(host, [op]);
+
+        // add connection metadata
+        Resource.addConnection({
+          from: host,
+          to: this,
+          relationship: op,
+        });
+      }
     }
   }
 
@@ -357,7 +370,7 @@ export abstract class Resource extends Construct implements IResource {
    * @internal
    */
   protected _lift(value: any): string {
-    return serializeImmutableData(this, value);
+    return liftObject(this, value);
   }
 }
 
@@ -505,7 +518,7 @@ export class Display {
   }
 }
 
-function isResource(obj: any): obj is IResource {
+function isResource(obj: any): obj is Resource {
   return isIResourceType(obj.constructor);
 }
 

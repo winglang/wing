@@ -117,4 +117,4 @@ The Google Cloud implementation of `cloud.Bucket` uses [Google Cloud Storage](ht
 
 ## API Reference
 
-The full list of APIs for `cloud.Bucket` is available in the [API Reference](../api-reference).
+The full list of APIs for `cloud.Bucket` is available in the [API Reference](./api-reference).

@@ -20,12 +20,46 @@ Websites are typically used to serve static content, such as HTML, CSS, and Java
 
 ## Usage
 
-TODO
+### Website 
+
+```ts
+bring cloud;
+
+let website = new cloud.Website(path: "./public");
+```
+
+Under `./public/index.html`
+```html
+<!DOCTYPE html>
+<html>
+  Hello Winglang!!!
+</html>
+```
+
+### Webapp
+
+An extended Web App example including static Website, API Gateway and a Redis database, can be found in this [example project](https://github.com/winglang/research/tree/main/dogfooding/where-to-eat).
 
 ## Target-specific details
 
-TODO
+Review the [Website RFC](https://www.winglang.io/contributing/rfcs/2023-04-16-website-resource) for detailed information.
+
+### Simulator (`sim`)
+
+sim implementations of `cloud.Website` is using [nodejs express](https://expressjs.com/).
+
+### AWS (`tf-aws` and `awscdk`)
+
+AWS implementations of `cloud.Website` uses [Amazon S3](https://aws.amazon.com/s3/) & [Amazon CloudFront](https://www.amazonaws.cn/en/cloudfront/).
+
+### Azure (`tf-azure`)
+
+🚧 Not supported yet (tracking issue: [#1295](https://github.com/winglang/wing/issues/1295))
+
+### GCP (`tf-gcp`)
+
+🚧 Not supported yet (tracking issue: [#1296](https://github.com/winglang/wing/issues/1296))
 
 ## API Reference
 
-The full list of APIs for `cloud.Website` is available in the [API Reference](../api-reference).
+The full list of APIs for `cloud.Website` is available in the [API Reference](./api-reference).

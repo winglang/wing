@@ -9,7 +9,7 @@ exports[`counter name valid 1`] = `
   },
   \\"resource\\": {
     \\"aws_dynamodb_table\\": {
-      \\"root_TheAmazingCounter01_86E53E0B\\": {
+      \\"TheAmazing-Counter_01\\": {
         \\"attribute\\": [
           {
             \\"name\\": \\"id\\",
@@ -41,7 +41,7 @@ exports[`counter name valid 2`] = `
                   "Default": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.15.2",
+                      "version": "0.17.0",
                     },
                     "id": "Default",
                     "path": "root/Default/The.Amazing-Counter_01/Default",
@@ -61,7 +61,7 @@ exports[`counter name valid 2`] = `
               "aws": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.15.2",
+                  "version": "0.17.0",
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
@@ -74,7 +74,7 @@ exports[`counter name valid 2`] = `
                   "TestFunctionArns": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformOutput",
-                      "version": "0.15.2",
+                      "version": "0.17.0",
                     },
                     "id": "TestFunctionArns",
                     "path": "root/Default/cloud.TestRunner/TestFunctionArns",
@@ -103,7 +103,7 @@ exports[`counter name valid 2`] = `
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.15.2",
+              "version": "0.17.0",
             },
             "id": "backend",
             "path": "root/backend",
@@ -111,7 +111,7 @@ exports[`counter name valid 2`] = `
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.15.2",
+          "version": "0.17.0",
         },
         "id": "root",
         "path": "root",
@@ -119,7 +119,7 @@ exports[`counter name valid 2`] = `
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.15.2",
+      "version": "0.17.0",
     },
     "id": "App",
     "path": "",
@@ -137,7 +137,7 @@ exports[`counter with initial value 1`] = `
   },
   \\"resource\\": {
     \\"aws_dynamodb_table\\": {
-      \\"root_Counter_2358A01E\\": {
+      \\"Counter\\": {
         \\"attribute\\": [
           {
             \\"name\\": \\"id\\",
@@ -169,7 +169,7 @@ exports[`counter with initial value 2`] = `
                   "Default": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.15.2",
+                      "version": "0.17.0",
                     },
                     "id": "Default",
                     "path": "root/Default/Counter/Default",
@@ -189,7 +189,7 @@ exports[`counter with initial value 2`] = `
               "aws": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.15.2",
+                  "version": "0.17.0",
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
@@ -202,7 +202,7 @@ exports[`counter with initial value 2`] = `
                   "TestFunctionArns": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformOutput",
-                      "version": "0.15.2",
+                      "version": "0.17.0",
                     },
                     "id": "TestFunctionArns",
                     "path": "root/Default/cloud.TestRunner/TestFunctionArns",
@@ -231,7 +231,7 @@ exports[`counter with initial value 2`] = `
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.15.2",
+              "version": "0.17.0",
             },
             "id": "backend",
             "path": "root/backend",
@@ -239,7 +239,7 @@ exports[`counter with initial value 2`] = `
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.15.2",
+          "version": "0.17.0",
         },
         "id": "root",
         "path": "root",
@@ -247,7 +247,7 @@ exports[`counter with initial value 2`] = `
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.15.2",
+      "version": "0.17.0",
     },
     "id": "App",
     "path": "",
@@ -265,7 +265,7 @@ exports[`dec() policy statement 1`] = `
   },
   \\"resource\\": {
     \\"aws_dynamodb_table\\": {
-      \\"root_Counter_2358A01E\\": {
+      \\"Counter\\": {
         \\"attribute\\": [
           {
             \\"name\\": \\"id\\",
@@ -278,37 +278,37 @@ exports[`dec() policy statement 1`] = `
       }
     },
     \\"aws_iam_role\\": {
-      \\"root_Function_IamRole_88AD864C\\": {
+      \\"Function_IamRole_678BE84C\\": {
         \\"assume_role_policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":\\\\\\"sts:AssumeRole\\\\\\",\\\\\\"Principal\\\\\\":{\\\\\\"Service\\\\\\":\\\\\\"lambda.amazonaws.com\\\\\\"},\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\"
       }
     },
     \\"aws_iam_role_policy\\": {
-      \\"root_Function_IamRolePolicy_8C4F8AF5\\": {
-        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":[\\\\\\"dynamodb:UpdateItem\\\\\\"],\\\\\\"Resource\\\\\\":[\\\\\\"\${aws_dynamodb_table.root_Counter_2358A01E.arn}\\\\\\"],\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\",
-        \\"role\\": \\"\${aws_iam_role.root_Function_IamRole_88AD864C.name}\\"
+      \\"Function_IamRolePolicy_E3B26607\\": {
+        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":[\\\\\\"dynamodb:UpdateItem\\\\\\"],\\\\\\"Resource\\\\\\":[\\\\\\"\${aws_dynamodb_table.Counter.arn}\\\\\\"],\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\",
+        \\"role\\": \\"\${aws_iam_role.Function_IamRole_678BE84C.name}\\"
       }
     },
     \\"aws_iam_role_policy_attachment\\": {
-      \\"root_Function_IamRolePolicyAttachment_AF131EC2\\": {
+      \\"Function_IamRolePolicyAttachment_CACE1358\\": {
         \\"policy_arn\\": \\"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole\\",
-        \\"role\\": \\"\${aws_iam_role.root_Function_IamRole_88AD864C.name}\\"
+        \\"role\\": \\"\${aws_iam_role.Function_IamRole_678BE84C.name}\\"
       }
     },
     \\"aws_lambda_function\\": {
-      \\"root_Function_9F694E40\\": {
+      \\"Function\\": {
         \\"environment\\": {
           \\"variables\\": {
-            \\"DYNAMODB_TABLE_NAME_6cb5a3a4\\": \\"\${aws_dynamodb_table.root_Counter_2358A01E.name}\\",
+            \\"DYNAMODB_TABLE_NAME_6cb5a3a4\\": \\"\${aws_dynamodb_table.Counter.name}\\",
             \\"WING_FUNCTION_NAME\\": \\"Function-c852aba6\\"
           }
         },
         \\"function_name\\": \\"Function-c852aba6\\",
         \\"handler\\": \\"index.handler\\",
         \\"publish\\": true,
-        \\"role\\": \\"\${aws_iam_role.root_Function_IamRole_88AD864C.arn}\\",
+        \\"role\\": \\"\${aws_iam_role.Function_IamRole_678BE84C.arn}\\",
         \\"runtime\\": \\"nodejs18.x\\",
-        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Code_02F3C603.bucket}\\",
-        \\"s3_key\\": \\"\${aws_s3_object.root_Function_S3Object_A62722D8.key}\\",
+        \\"s3_bucket\\": \\"\${aws_s3_bucket.Code.bucket}\\",
+        \\"s3_key\\": \\"\${aws_s3_object.Function_S3Object_C62A0C2D.key}\\",
         \\"timeout\\": 30,
         \\"vpc_config\\": {
           \\"security_group_ids\\": [],
@@ -317,13 +317,13 @@ exports[`dec() policy statement 1`] = `
       }
     },
     \\"aws_s3_bucket\\": {
-      \\"root_Code_02F3C603\\": {
+      \\"Code\\": {
         \\"bucket_prefix\\": \\"code-c84a50b1-\\"
       }
     },
     \\"aws_s3_object\\": {
-      \\"root_Function_S3Object_A62722D8\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.root_Code_02F3C603.bucket}\\",
+      \\"Function_S3Object_C62A0C2D\\": {
+        \\"bucket\\": \\"\${aws_s3_bucket.Code.bucket}\\",
         \\"key\\": \\"<key>\\",
         \\"source\\": \\"<source>\\"
       }
@@ -343,7 +343,7 @@ exports[`dec() policy statement 2`] = `
               "Code": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.15.2",
+                  "version": "0.17.0",
                 },
                 "id": "Code",
                 "path": "root/Default/Code",
@@ -357,13 +357,19 @@ exports[`dec() policy statement 2`] = `
                       "relationship": "dec",
                       "resource": "root/Default/Function",
                     },
+                    {
+                      "direction": "inbound",
+                      "implicit": false,
+                      "relationship": "$inflight_init",
+                      "resource": "root/Default/Function",
+                    },
                   ],
                 },
                 "children": {
                   "Default": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.15.2",
+                      "version": "0.17.0",
                     },
                     "id": "Default",
                     "path": "root/Default/Counter/Default",
@@ -389,13 +395,19 @@ exports[`dec() policy statement 2`] = `
                       "relationship": "dec",
                       "resource": "root/Default/Counter",
                     },
+                    {
+                      "direction": "outbound",
+                      "implicit": false,
+                      "relationship": "$inflight_init",
+                      "resource": "root/Default/Counter",
+                    },
                   ],
                 },
                 "children": {
                   "Asset": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformAsset",
-                      "version": "0.15.2",
+                      "version": "0.17.0",
                     },
                     "id": "Asset",
                     "path": "root/Default/Function/Asset",
@@ -403,7 +415,7 @@ exports[`dec() policy statement 2`] = `
                   "Default": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.15.2",
+                      "version": "0.17.0",
                     },
                     "id": "Default",
                     "path": "root/Default/Function/Default",
@@ -411,7 +423,7 @@ exports[`dec() policy statement 2`] = `
                   "IamRole": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.15.2",
+                      "version": "0.17.0",
                     },
                     "id": "IamRole",
                     "path": "root/Default/Function/IamRole",
@@ -419,7 +431,7 @@ exports[`dec() policy statement 2`] = `
                   "IamRolePolicy": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.15.2",
+                      "version": "0.17.0",
                     },
                     "id": "IamRolePolicy",
                     "path": "root/Default/Function/IamRolePolicy",
@@ -427,7 +439,7 @@ exports[`dec() policy statement 2`] = `
                   "IamRolePolicyAttachment": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.15.2",
+                      "version": "0.17.0",
                     },
                     "id": "IamRolePolicyAttachment",
                     "path": "root/Default/Function/IamRolePolicyAttachment",
@@ -435,7 +447,7 @@ exports[`dec() policy statement 2`] = `
                   "S3Object": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.15.2",
+                      "version": "0.17.0",
                     },
                     "id": "S3Object",
                     "path": "root/Default/Function/S3Object",
@@ -471,7 +483,7 @@ exports[`dec() policy statement 2`] = `
               "aws": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.15.2",
+                  "version": "0.17.0",
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
@@ -484,7 +496,7 @@ exports[`dec() policy statement 2`] = `
                   "TestFunctionArns": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformOutput",
-                      "version": "0.15.2",
+                      "version": "0.17.0",
                     },
                     "id": "TestFunctionArns",
                     "path": "root/Default/cloud.TestRunner/TestFunctionArns",
@@ -513,7 +525,7 @@ exports[`dec() policy statement 2`] = `
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.15.2",
+              "version": "0.17.0",
             },
             "id": "backend",
             "path": "root/backend",
@@ -521,7 +533,7 @@ exports[`dec() policy statement 2`] = `
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.15.2",
+          "version": "0.17.0",
         },
         "id": "root",
         "path": "root",
@@ -529,7 +541,7 @@ exports[`dec() policy statement 2`] = `
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.15.2",
+      "version": "0.17.0",
     },
     "id": "App",
     "path": "",
@@ -547,7 +559,7 @@ exports[`default counter behavior 1`] = `
   },
   \\"resource\\": {
     \\"aws_dynamodb_table\\": {
-      \\"root_Counter_2358A01E\\": {
+      \\"Counter\\": {
         \\"attribute\\": [
           {
             \\"name\\": \\"id\\",
@@ -590,7 +602,7 @@ exports[`function with a counter binding 2`] = `
   },
   \\"resource\\": {
     \\"aws_dynamodb_table\\": {
-      \\"root_Counter_2358A01E\\": {
+      \\"Counter\\": {
         \\"attribute\\": [
           {
             \\"name\\": \\"id\\",
@@ -603,37 +615,37 @@ exports[`function with a counter binding 2`] = `
       }
     },
     \\"aws_iam_role\\": {
-      \\"root_Function_IamRole_88AD864C\\": {
+      \\"Function_IamRole_678BE84C\\": {
         \\"assume_role_policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":\\\\\\"sts:AssumeRole\\\\\\",\\\\\\"Principal\\\\\\":{\\\\\\"Service\\\\\\":\\\\\\"lambda.amazonaws.com\\\\\\"},\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\"
       }
     },
     \\"aws_iam_role_policy\\": {
-      \\"root_Function_IamRolePolicy_8C4F8AF5\\": {
-        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":[\\\\\\"dynamodb:UpdateItem\\\\\\"],\\\\\\"Resource\\\\\\":[\\\\\\"\${aws_dynamodb_table.root_Counter_2358A01E.arn}\\\\\\"],\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\",
-        \\"role\\": \\"\${aws_iam_role.root_Function_IamRole_88AD864C.name}\\"
+      \\"Function_IamRolePolicy_E3B26607\\": {
+        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":[\\\\\\"dynamodb:UpdateItem\\\\\\"],\\\\\\"Resource\\\\\\":[\\\\\\"\${aws_dynamodb_table.Counter.arn}\\\\\\"],\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\",
+        \\"role\\": \\"\${aws_iam_role.Function_IamRole_678BE84C.name}\\"
       }
     },
     \\"aws_iam_role_policy_attachment\\": {
-      \\"root_Function_IamRolePolicyAttachment_AF131EC2\\": {
+      \\"Function_IamRolePolicyAttachment_CACE1358\\": {
         \\"policy_arn\\": \\"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole\\",
-        \\"role\\": \\"\${aws_iam_role.root_Function_IamRole_88AD864C.name}\\"
+        \\"role\\": \\"\${aws_iam_role.Function_IamRole_678BE84C.name}\\"
       }
     },
     \\"aws_lambda_function\\": {
-      \\"root_Function_9F694E40\\": {
+      \\"Function\\": {
         \\"environment\\": {
           \\"variables\\": {
-            \\"DYNAMODB_TABLE_NAME_6cb5a3a4\\": \\"\${aws_dynamodb_table.root_Counter_2358A01E.name}\\",
+            \\"DYNAMODB_TABLE_NAME_6cb5a3a4\\": \\"\${aws_dynamodb_table.Counter.name}\\",
             \\"WING_FUNCTION_NAME\\": \\"Function-c852aba6\\"
           }
         },
         \\"function_name\\": \\"Function-c852aba6\\",
         \\"handler\\": \\"index.handler\\",
         \\"publish\\": true,
-        \\"role\\": \\"\${aws_iam_role.root_Function_IamRole_88AD864C.arn}\\",
+        \\"role\\": \\"\${aws_iam_role.Function_IamRole_678BE84C.arn}\\",
         \\"runtime\\": \\"nodejs18.x\\",
-        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Code_02F3C603.bucket}\\",
-        \\"s3_key\\": \\"\${aws_s3_object.root_Function_S3Object_A62722D8.key}\\",
+        \\"s3_bucket\\": \\"\${aws_s3_bucket.Code.bucket}\\",
+        \\"s3_key\\": \\"\${aws_s3_object.Function_S3Object_C62A0C2D.key}\\",
         \\"timeout\\": 30,
         \\"vpc_config\\": {
           \\"security_group_ids\\": [],
@@ -642,13 +654,13 @@ exports[`function with a counter binding 2`] = `
       }
     },
     \\"aws_s3_bucket\\": {
-      \\"root_Code_02F3C603\\": {
+      \\"Code\\": {
         \\"bucket_prefix\\": \\"code-c84a50b1-\\"
       }
     },
     \\"aws_s3_object\\": {
-      \\"root_Function_S3Object_A62722D8\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.root_Code_02F3C603.bucket}\\",
+      \\"Function_S3Object_C62A0C2D\\": {
+        \\"bucket\\": \\"\${aws_s3_bucket.Code.bucket}\\",
         \\"key\\": \\"<key>\\",
         \\"source\\": \\"<source>\\"
       }
@@ -668,7 +680,7 @@ exports[`function with a counter binding 3`] = `
               "Code": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.15.2",
+                  "version": "0.17.0",
                 },
                 "id": "Code",
                 "path": "root/Default/Code",
@@ -682,13 +694,19 @@ exports[`function with a counter binding 3`] = `
                       "relationship": "inc",
                       "resource": "root/Default/Function",
                     },
+                    {
+                      "direction": "inbound",
+                      "implicit": false,
+                      "relationship": "$inflight_init",
+                      "resource": "root/Default/Function",
+                    },
                   ],
                 },
                 "children": {
                   "Default": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.15.2",
+                      "version": "0.17.0",
                     },
                     "id": "Default",
                     "path": "root/Default/Counter/Default",
@@ -714,13 +732,19 @@ exports[`function with a counter binding 3`] = `
                       "relationship": "inc",
                       "resource": "root/Default/Counter",
                     },
+                    {
+                      "direction": "outbound",
+                      "implicit": false,
+                      "relationship": "$inflight_init",
+                      "resource": "root/Default/Counter",
+                    },
                   ],
                 },
                 "children": {
                   "Asset": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformAsset",
-                      "version": "0.15.2",
+                      "version": "0.17.0",
                     },
                     "id": "Asset",
                     "path": "root/Default/Function/Asset",
@@ -728,7 +752,7 @@ exports[`function with a counter binding 3`] = `
                   "Default": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.15.2",
+                      "version": "0.17.0",
                     },
                     "id": "Default",
                     "path": "root/Default/Function/Default",
@@ -736,7 +760,7 @@ exports[`function with a counter binding 3`] = `
                   "IamRole": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.15.2",
+                      "version": "0.17.0",
                     },
                     "id": "IamRole",
                     "path": "root/Default/Function/IamRole",
@@ -744,7 +768,7 @@ exports[`function with a counter binding 3`] = `
                   "IamRolePolicy": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.15.2",
+                      "version": "0.17.0",
                     },
                     "id": "IamRolePolicy",
                     "path": "root/Default/Function/IamRolePolicy",
@@ -752,7 +776,7 @@ exports[`function with a counter binding 3`] = `
                   "IamRolePolicyAttachment": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.15.2",
+                      "version": "0.17.0",
                     },
                     "id": "IamRolePolicyAttachment",
                     "path": "root/Default/Function/IamRolePolicyAttachment",
@@ -760,7 +784,7 @@ exports[`function with a counter binding 3`] = `
                   "S3Object": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.15.2",
+                      "version": "0.17.0",
                     },
                     "id": "S3Object",
                     "path": "root/Default/Function/S3Object",
@@ -796,7 +820,7 @@ exports[`function with a counter binding 3`] = `
               "aws": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.15.2",
+                  "version": "0.17.0",
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
@@ -809,7 +833,7 @@ exports[`function with a counter binding 3`] = `
                   "TestFunctionArns": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformOutput",
-                      "version": "0.15.2",
+                      "version": "0.17.0",
                     },
                     "id": "TestFunctionArns",
                     "path": "root/Default/cloud.TestRunner/TestFunctionArns",
@@ -838,7 +862,7 @@ exports[`function with a counter binding 3`] = `
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.15.2",
+              "version": "0.17.0",
             },
             "id": "backend",
             "path": "root/backend",
@@ -846,7 +870,7 @@ exports[`function with a counter binding 3`] = `
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.15.2",
+          "version": "0.17.0",
         },
         "id": "root",
         "path": "root",
@@ -854,7 +878,7 @@ exports[`function with a counter binding 3`] = `
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.15.2",
+      "version": "0.17.0",
     },
     "id": "App",
     "path": "",
@@ -872,7 +896,7 @@ exports[`inc() policy statement 1`] = `
   },
   \\"resource\\": {
     \\"aws_dynamodb_table\\": {
-      \\"root_Counter_2358A01E\\": {
+      \\"Counter\\": {
         \\"attribute\\": [
           {
             \\"name\\": \\"id\\",
@@ -885,37 +909,37 @@ exports[`inc() policy statement 1`] = `
       }
     },
     \\"aws_iam_role\\": {
-      \\"root_Function_IamRole_88AD864C\\": {
+      \\"Function_IamRole_678BE84C\\": {
         \\"assume_role_policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":\\\\\\"sts:AssumeRole\\\\\\",\\\\\\"Principal\\\\\\":{\\\\\\"Service\\\\\\":\\\\\\"lambda.amazonaws.com\\\\\\"},\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\"
       }
     },
     \\"aws_iam_role_policy\\": {
-      \\"root_Function_IamRolePolicy_8C4F8AF5\\": {
-        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":[\\\\\\"dynamodb:UpdateItem\\\\\\"],\\\\\\"Resource\\\\\\":[\\\\\\"\${aws_dynamodb_table.root_Counter_2358A01E.arn}\\\\\\"],\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\",
-        \\"role\\": \\"\${aws_iam_role.root_Function_IamRole_88AD864C.name}\\"
+      \\"Function_IamRolePolicy_E3B26607\\": {
+        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":[\\\\\\"dynamodb:UpdateItem\\\\\\"],\\\\\\"Resource\\\\\\":[\\\\\\"\${aws_dynamodb_table.Counter.arn}\\\\\\"],\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\",
+        \\"role\\": \\"\${aws_iam_role.Function_IamRole_678BE84C.name}\\"
       }
     },
     \\"aws_iam_role_policy_attachment\\": {
-      \\"root_Function_IamRolePolicyAttachment_AF131EC2\\": {
+      \\"Function_IamRolePolicyAttachment_CACE1358\\": {
         \\"policy_arn\\": \\"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole\\",
-        \\"role\\": \\"\${aws_iam_role.root_Function_IamRole_88AD864C.name}\\"
+        \\"role\\": \\"\${aws_iam_role.Function_IamRole_678BE84C.name}\\"
       }
     },
     \\"aws_lambda_function\\": {
-      \\"root_Function_9F694E40\\": {
+      \\"Function\\": {
         \\"environment\\": {
           \\"variables\\": {
-            \\"DYNAMODB_TABLE_NAME_6cb5a3a4\\": \\"\${aws_dynamodb_table.root_Counter_2358A01E.name}\\",
+            \\"DYNAMODB_TABLE_NAME_6cb5a3a4\\": \\"\${aws_dynamodb_table.Counter.name}\\",
             \\"WING_FUNCTION_NAME\\": \\"Function-c852aba6\\"
           }
         },
         \\"function_name\\": \\"Function-c852aba6\\",
         \\"handler\\": \\"index.handler\\",
         \\"publish\\": true,
-        \\"role\\": \\"\${aws_iam_role.root_Function_IamRole_88AD864C.arn}\\",
+        \\"role\\": \\"\${aws_iam_role.Function_IamRole_678BE84C.arn}\\",
         \\"runtime\\": \\"nodejs18.x\\",
-        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Code_02F3C603.bucket}\\",
-        \\"s3_key\\": \\"\${aws_s3_object.root_Function_S3Object_A62722D8.key}\\",
+        \\"s3_bucket\\": \\"\${aws_s3_bucket.Code.bucket}\\",
+        \\"s3_key\\": \\"\${aws_s3_object.Function_S3Object_C62A0C2D.key}\\",
         \\"timeout\\": 30,
         \\"vpc_config\\": {
           \\"security_group_ids\\": [],
@@ -924,13 +948,13 @@ exports[`inc() policy statement 1`] = `
       }
     },
     \\"aws_s3_bucket\\": {
-      \\"root_Code_02F3C603\\": {
+      \\"Code\\": {
         \\"bucket_prefix\\": \\"code-c84a50b1-\\"
       }
     },
     \\"aws_s3_object\\": {
-      \\"root_Function_S3Object_A62722D8\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.root_Code_02F3C603.bucket}\\",
+      \\"Function_S3Object_C62A0C2D\\": {
+        \\"bucket\\": \\"\${aws_s3_bucket.Code.bucket}\\",
         \\"key\\": \\"<key>\\",
         \\"source\\": \\"<source>\\"
       }
@@ -950,7 +974,7 @@ exports[`inc() policy statement 2`] = `
               "Code": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.15.2",
+                  "version": "0.17.0",
                 },
                 "id": "Code",
                 "path": "root/Default/Code",
@@ -964,13 +988,19 @@ exports[`inc() policy statement 2`] = `
                       "relationship": "inc",
                       "resource": "root/Default/Function",
                     },
+                    {
+                      "direction": "inbound",
+                      "implicit": false,
+                      "relationship": "$inflight_init",
+                      "resource": "root/Default/Function",
+                    },
                   ],
                 },
                 "children": {
                   "Default": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.15.2",
+                      "version": "0.17.0",
                     },
                     "id": "Default",
                     "path": "root/Default/Counter/Default",
@@ -996,13 +1026,19 @@ exports[`inc() policy statement 2`] = `
                       "relationship": "inc",
                       "resource": "root/Default/Counter",
                     },
+                    {
+                      "direction": "outbound",
+                      "implicit": false,
+                      "relationship": "$inflight_init",
+                      "resource": "root/Default/Counter",
+                    },
                   ],
                 },
                 "children": {
                   "Asset": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformAsset",
-                      "version": "0.15.2",
+                      "version": "0.17.0",
                     },
                     "id": "Asset",
                     "path": "root/Default/Function/Asset",
@@ -1010,7 +1046,7 @@ exports[`inc() policy statement 2`] = `
                   "Default": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.15.2",
+                      "version": "0.17.0",
                     },
                     "id": "Default",
                     "path": "root/Default/Function/Default",
@@ -1018,7 +1054,7 @@ exports[`inc() policy statement 2`] = `
                   "IamRole": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.15.2",
+                      "version": "0.17.0",
                     },
                     "id": "IamRole",
                     "path": "root/Default/Function/IamRole",
@@ -1026,7 +1062,7 @@ exports[`inc() policy statement 2`] = `
                   "IamRolePolicy": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.15.2",
+                      "version": "0.17.0",
                     },
                     "id": "IamRolePolicy",
                     "path": "root/Default/Function/IamRolePolicy",
@@ -1034,7 +1070,7 @@ exports[`inc() policy statement 2`] = `
                   "IamRolePolicyAttachment": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.15.2",
+                      "version": "0.17.0",
                     },
                     "id": "IamRolePolicyAttachment",
                     "path": "root/Default/Function/IamRolePolicyAttachment",
@@ -1042,7 +1078,7 @@ exports[`inc() policy statement 2`] = `
                   "S3Object": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.15.2",
+                      "version": "0.17.0",
                     },
                     "id": "S3Object",
                     "path": "root/Default/Function/S3Object",
@@ -1078,7 +1114,7 @@ exports[`inc() policy statement 2`] = `
               "aws": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.15.2",
+                  "version": "0.17.0",
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
@@ -1091,7 +1127,7 @@ exports[`inc() policy statement 2`] = `
                   "TestFunctionArns": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformOutput",
-                      "version": "0.15.2",
+                      "version": "0.17.0",
                     },
                     "id": "TestFunctionArns",
                     "path": "root/Default/cloud.TestRunner/TestFunctionArns",
@@ -1120,7 +1156,7 @@ exports[`inc() policy statement 2`] = `
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.15.2",
+              "version": "0.17.0",
             },
             "id": "backend",
             "path": "root/backend",
@@ -1128,7 +1164,7 @@ exports[`inc() policy statement 2`] = `
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.15.2",
+          "version": "0.17.0",
         },
         "id": "root",
         "path": "root",
@@ -1136,7 +1172,7 @@ exports[`inc() policy statement 2`] = `
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.15.2",
+      "version": "0.17.0",
     },
     "id": "App",
     "path": "",
@@ -1154,7 +1190,7 @@ exports[`peek() policy statement 1`] = `
   },
   \\"resource\\": {
     \\"aws_dynamodb_table\\": {
-      \\"root_Counter_2358A01E\\": {
+      \\"Counter\\": {
         \\"attribute\\": [
           {
             \\"name\\": \\"id\\",
@@ -1167,37 +1203,37 @@ exports[`peek() policy statement 1`] = `
       }
     },
     \\"aws_iam_role\\": {
-      \\"root_Function_IamRole_88AD864C\\": {
+      \\"Function_IamRole_678BE84C\\": {
         \\"assume_role_policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":\\\\\\"sts:AssumeRole\\\\\\",\\\\\\"Principal\\\\\\":{\\\\\\"Service\\\\\\":\\\\\\"lambda.amazonaws.com\\\\\\"},\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\"
       }
     },
     \\"aws_iam_role_policy\\": {
-      \\"root_Function_IamRolePolicy_8C4F8AF5\\": {
-        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":[\\\\\\"dynamodb:GetItem\\\\\\"],\\\\\\"Resource\\\\\\":[\\\\\\"\${aws_dynamodb_table.root_Counter_2358A01E.arn}\\\\\\"],\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\",
-        \\"role\\": \\"\${aws_iam_role.root_Function_IamRole_88AD864C.name}\\"
+      \\"Function_IamRolePolicy_E3B26607\\": {
+        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":[\\\\\\"dynamodb:GetItem\\\\\\"],\\\\\\"Resource\\\\\\":[\\\\\\"\${aws_dynamodb_table.Counter.arn}\\\\\\"],\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\",
+        \\"role\\": \\"\${aws_iam_role.Function_IamRole_678BE84C.name}\\"
       }
     },
     \\"aws_iam_role_policy_attachment\\": {
-      \\"root_Function_IamRolePolicyAttachment_AF131EC2\\": {
+      \\"Function_IamRolePolicyAttachment_CACE1358\\": {
         \\"policy_arn\\": \\"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole\\",
-        \\"role\\": \\"\${aws_iam_role.root_Function_IamRole_88AD864C.name}\\"
+        \\"role\\": \\"\${aws_iam_role.Function_IamRole_678BE84C.name}\\"
       }
     },
     \\"aws_lambda_function\\": {
-      \\"root_Function_9F694E40\\": {
+      \\"Function\\": {
         \\"environment\\": {
           \\"variables\\": {
-            \\"DYNAMODB_TABLE_NAME_6cb5a3a4\\": \\"\${aws_dynamodb_table.root_Counter_2358A01E.name}\\",
+            \\"DYNAMODB_TABLE_NAME_6cb5a3a4\\": \\"\${aws_dynamodb_table.Counter.name}\\",
             \\"WING_FUNCTION_NAME\\": \\"Function-c852aba6\\"
           }
         },
         \\"function_name\\": \\"Function-c852aba6\\",
         \\"handler\\": \\"index.handler\\",
         \\"publish\\": true,
-        \\"role\\": \\"\${aws_iam_role.root_Function_IamRole_88AD864C.arn}\\",
+        \\"role\\": \\"\${aws_iam_role.Function_IamRole_678BE84C.arn}\\",
         \\"runtime\\": \\"nodejs18.x\\",
-        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Code_02F3C603.bucket}\\",
-        \\"s3_key\\": \\"\${aws_s3_object.root_Function_S3Object_A62722D8.key}\\",
+        \\"s3_bucket\\": \\"\${aws_s3_bucket.Code.bucket}\\",
+        \\"s3_key\\": \\"\${aws_s3_object.Function_S3Object_C62A0C2D.key}\\",
         \\"timeout\\": 30,
         \\"vpc_config\\": {
           \\"security_group_ids\\": [],
@@ -1206,13 +1242,13 @@ exports[`peek() policy statement 1`] = `
       }
     },
     \\"aws_s3_bucket\\": {
-      \\"root_Code_02F3C603\\": {
+      \\"Code\\": {
         \\"bucket_prefix\\": \\"code-c84a50b1-\\"
       }
     },
     \\"aws_s3_object\\": {
-      \\"root_Function_S3Object_A62722D8\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.root_Code_02F3C603.bucket}\\",
+      \\"Function_S3Object_C62A0C2D\\": {
+        \\"bucket\\": \\"\${aws_s3_bucket.Code.bucket}\\",
         \\"key\\": \\"<key>\\",
         \\"source\\": \\"<source>\\"
       }
@@ -1232,7 +1268,7 @@ exports[`peek() policy statement 2`] = `
               "Code": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.15.2",
+                  "version": "0.17.0",
                 },
                 "id": "Code",
                 "path": "root/Default/Code",
@@ -1246,13 +1282,19 @@ exports[`peek() policy statement 2`] = `
                       "relationship": "peek",
                       "resource": "root/Default/Function",
                     },
+                    {
+                      "direction": "inbound",
+                      "implicit": false,
+                      "relationship": "$inflight_init",
+                      "resource": "root/Default/Function",
+                    },
                   ],
                 },
                 "children": {
                   "Default": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.15.2",
+                      "version": "0.17.0",
                     },
                     "id": "Default",
                     "path": "root/Default/Counter/Default",
@@ -1278,13 +1320,19 @@ exports[`peek() policy statement 2`] = `
                       "relationship": "peek",
                       "resource": "root/Default/Counter",
                     },
+                    {
+                      "direction": "outbound",
+                      "implicit": false,
+                      "relationship": "$inflight_init",
+                      "resource": "root/Default/Counter",
+                    },
                   ],
                 },
                 "children": {
                   "Asset": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformAsset",
-                      "version": "0.15.2",
+                      "version": "0.17.0",
                     },
                     "id": "Asset",
                     "path": "root/Default/Function/Asset",
@@ -1292,7 +1340,7 @@ exports[`peek() policy statement 2`] = `
                   "Default": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.15.2",
+                      "version": "0.17.0",
                     },
                     "id": "Default",
                     "path": "root/Default/Function/Default",
@@ -1300,7 +1348,7 @@ exports[`peek() policy statement 2`] = `
                   "IamRole": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.15.2",
+                      "version": "0.17.0",
                     },
                     "id": "IamRole",
                     "path": "root/Default/Function/IamRole",
@@ -1308,7 +1356,7 @@ exports[`peek() policy statement 2`] = `
                   "IamRolePolicy": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.15.2",
+                      "version": "0.17.0",
                     },
                     "id": "IamRolePolicy",
                     "path": "root/Default/Function/IamRolePolicy",
@@ -1316,7 +1364,7 @@ exports[`peek() policy statement 2`] = `
                   "IamRolePolicyAttachment": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.15.2",
+                      "version": "0.17.0",
                     },
                     "id": "IamRolePolicyAttachment",
                     "path": "root/Default/Function/IamRolePolicyAttachment",
@@ -1324,7 +1372,7 @@ exports[`peek() policy statement 2`] = `
                   "S3Object": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.15.2",
+                      "version": "0.17.0",
                     },
                     "id": "S3Object",
                     "path": "root/Default/Function/S3Object",
@@ -1360,7 +1408,7 @@ exports[`peek() policy statement 2`] = `
               "aws": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.15.2",
+                  "version": "0.17.0",
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
@@ -1373,7 +1421,7 @@ exports[`peek() policy statement 2`] = `
                   "TestFunctionArns": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformOutput",
-                      "version": "0.15.2",
+                      "version": "0.17.0",
                     },
                     "id": "TestFunctionArns",
                     "path": "root/Default/cloud.TestRunner/TestFunctionArns",
@@ -1402,7 +1450,7 @@ exports[`peek() policy statement 2`] = `
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.15.2",
+              "version": "0.17.0",
             },
             "id": "backend",
             "path": "root/backend",
@@ -1410,7 +1458,7 @@ exports[`peek() policy statement 2`] = `
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.15.2",
+          "version": "0.17.0",
         },
         "id": "root",
         "path": "root",
@@ -1418,7 +1466,7 @@ exports[`peek() policy statement 2`] = `
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.15.2",
+      "version": "0.17.0",
     },
     "id": "App",
     "path": "",
@@ -1436,7 +1484,7 @@ exports[`replace invalid character from counter name 1`] = `
   },
   \\"resource\\": {
     \\"aws_dynamodb_table\\": {
-      \\"root_TheAmazingCounter01_CDE0F8E2\\": {
+      \\"TheAmazingCounter01\\": {
         \\"attribute\\": [
           {
             \\"name\\": \\"id\\",
@@ -1468,7 +1516,7 @@ exports[`replace invalid character from counter name 2`] = `
                   "Default": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.15.2",
+                      "version": "0.17.0",
                     },
                     "id": "Default",
                     "path": "root/Default/The*Amazing%Counter@01/Default",
@@ -1488,7 +1536,7 @@ exports[`replace invalid character from counter name 2`] = `
               "aws": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.15.2",
+                  "version": "0.17.0",
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
@@ -1501,7 +1549,7 @@ exports[`replace invalid character from counter name 2`] = `
                   "TestFunctionArns": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformOutput",
-                      "version": "0.15.2",
+                      "version": "0.17.0",
                     },
                     "id": "TestFunctionArns",
                     "path": "root/Default/cloud.TestRunner/TestFunctionArns",
@@ -1530,7 +1578,7 @@ exports[`replace invalid character from counter name 2`] = `
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.15.2",
+              "version": "0.17.0",
             },
             "id": "backend",
             "path": "root/backend",
@@ -1538,7 +1586,7 @@ exports[`replace invalid character from counter name 2`] = `
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.15.2",
+          "version": "0.17.0",
         },
         "id": "root",
         "path": "root",
@@ -1546,7 +1594,7 @@ exports[`replace invalid character from counter name 2`] = `
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.15.2",
+      "version": "0.17.0",
     },
     "id": "App",
     "path": "",
@@ -1564,7 +1612,7 @@ exports[`set() policy statement 1`] = `
   },
   \\"resource\\": {
     \\"aws_dynamodb_table\\": {
-      \\"root_Counter_2358A01E\\": {
+      \\"Counter\\": {
         \\"attribute\\": [
           {
             \\"name\\": \\"id\\",
@@ -1577,37 +1625,37 @@ exports[`set() policy statement 1`] = `
       }
     },
     \\"aws_iam_role\\": {
-      \\"root_Function_IamRole_88AD864C\\": {
+      \\"Function_IamRole_678BE84C\\": {
         \\"assume_role_policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":\\\\\\"sts:AssumeRole\\\\\\",\\\\\\"Principal\\\\\\":{\\\\\\"Service\\\\\\":\\\\\\"lambda.amazonaws.com\\\\\\"},\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\"
       }
     },
     \\"aws_iam_role_policy\\": {
-      \\"root_Function_IamRolePolicy_8C4F8AF5\\": {
-        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":[\\\\\\"dynamodb:UpdateItem\\\\\\"],\\\\\\"Resource\\\\\\":[\\\\\\"\${aws_dynamodb_table.root_Counter_2358A01E.arn}\\\\\\"],\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\",
-        \\"role\\": \\"\${aws_iam_role.root_Function_IamRole_88AD864C.name}\\"
+      \\"Function_IamRolePolicy_E3B26607\\": {
+        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":[\\\\\\"dynamodb:UpdateItem\\\\\\"],\\\\\\"Resource\\\\\\":[\\\\\\"\${aws_dynamodb_table.Counter.arn}\\\\\\"],\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\",
+        \\"role\\": \\"\${aws_iam_role.Function_IamRole_678BE84C.name}\\"
       }
     },
     \\"aws_iam_role_policy_attachment\\": {
-      \\"root_Function_IamRolePolicyAttachment_AF131EC2\\": {
+      \\"Function_IamRolePolicyAttachment_CACE1358\\": {
         \\"policy_arn\\": \\"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole\\",
-        \\"role\\": \\"\${aws_iam_role.root_Function_IamRole_88AD864C.name}\\"
+        \\"role\\": \\"\${aws_iam_role.Function_IamRole_678BE84C.name}\\"
       }
     },
     \\"aws_lambda_function\\": {
-      \\"root_Function_9F694E40\\": {
+      \\"Function\\": {
         \\"environment\\": {
           \\"variables\\": {
-            \\"DYNAMODB_TABLE_NAME_6cb5a3a4\\": \\"\${aws_dynamodb_table.root_Counter_2358A01E.name}\\",
+            \\"DYNAMODB_TABLE_NAME_6cb5a3a4\\": \\"\${aws_dynamodb_table.Counter.name}\\",
             \\"WING_FUNCTION_NAME\\": \\"Function-c852aba6\\"
           }
         },
         \\"function_name\\": \\"Function-c852aba6\\",
         \\"handler\\": \\"index.handler\\",
         \\"publish\\": true,
-        \\"role\\": \\"\${aws_iam_role.root_Function_IamRole_88AD864C.arn}\\",
+        \\"role\\": \\"\${aws_iam_role.Function_IamRole_678BE84C.arn}\\",
         \\"runtime\\": \\"nodejs18.x\\",
-        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Code_02F3C603.bucket}\\",
-        \\"s3_key\\": \\"\${aws_s3_object.root_Function_S3Object_A62722D8.key}\\",
+        \\"s3_bucket\\": \\"\${aws_s3_bucket.Code.bucket}\\",
+        \\"s3_key\\": \\"\${aws_s3_object.Function_S3Object_C62A0C2D.key}\\",
         \\"timeout\\": 30,
         \\"vpc_config\\": {
           \\"security_group_ids\\": [],
@@ -1616,13 +1664,13 @@ exports[`set() policy statement 1`] = `
       }
     },
     \\"aws_s3_bucket\\": {
-      \\"root_Code_02F3C603\\": {
+      \\"Code\\": {
         \\"bucket_prefix\\": \\"code-c84a50b1-\\"
       }
     },
     \\"aws_s3_object\\": {
-      \\"root_Function_S3Object_A62722D8\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.root_Code_02F3C603.bucket}\\",
+      \\"Function_S3Object_C62A0C2D\\": {
+        \\"bucket\\": \\"\${aws_s3_bucket.Code.bucket}\\",
         \\"key\\": \\"<key>\\",
         \\"source\\": \\"<source>\\"
       }
@@ -1642,7 +1690,7 @@ exports[`set() policy statement 2`] = `
               "Code": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.15.2",
+                  "version": "0.17.0",
                 },
                 "id": "Code",
                 "path": "root/Default/Code",
@@ -1656,13 +1704,19 @@ exports[`set() policy statement 2`] = `
                       "relationship": "set",
                       "resource": "root/Default/Function",
                     },
+                    {
+                      "direction": "inbound",
+                      "implicit": false,
+                      "relationship": "$inflight_init",
+                      "resource": "root/Default/Function",
+                    },
                   ],
                 },
                 "children": {
                   "Default": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.15.2",
+                      "version": "0.17.0",
                     },
                     "id": "Default",
                     "path": "root/Default/Counter/Default",
@@ -1688,13 +1742,19 @@ exports[`set() policy statement 2`] = `
                       "relationship": "set",
                       "resource": "root/Default/Counter",
                     },
+                    {
+                      "direction": "outbound",
+                      "implicit": false,
+                      "relationship": "$inflight_init",
+                      "resource": "root/Default/Counter",
+                    },
                   ],
                 },
                 "children": {
                   "Asset": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformAsset",
-                      "version": "0.15.2",
+                      "version": "0.17.0",
                     },
                     "id": "Asset",
                     "path": "root/Default/Function/Asset",
@@ -1702,7 +1762,7 @@ exports[`set() policy statement 2`] = `
                   "Default": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.15.2",
+                      "version": "0.17.0",
                     },
                     "id": "Default",
                     "path": "root/Default/Function/Default",
@@ -1710,7 +1770,7 @@ exports[`set() policy statement 2`] = `
                   "IamRole": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.15.2",
+                      "version": "0.17.0",
                     },
                     "id": "IamRole",
                     "path": "root/Default/Function/IamRole",
@@ -1718,7 +1778,7 @@ exports[`set() policy statement 2`] = `
                   "IamRolePolicy": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.15.2",
+                      "version": "0.17.0",
                     },
                     "id": "IamRolePolicy",
                     "path": "root/Default/Function/IamRolePolicy",
@@ -1726,7 +1786,7 @@ exports[`set() policy statement 2`] = `
                   "IamRolePolicyAttachment": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.15.2",
+                      "version": "0.17.0",
                     },
                     "id": "IamRolePolicyAttachment",
                     "path": "root/Default/Function/IamRolePolicyAttachment",
@@ -1734,7 +1794,7 @@ exports[`set() policy statement 2`] = `
                   "S3Object": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.15.2",
+                      "version": "0.17.0",
                     },
                     "id": "S3Object",
                     "path": "root/Default/Function/S3Object",
@@ -1770,7 +1830,7 @@ exports[`set() policy statement 2`] = `
               "aws": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.15.2",
+                  "version": "0.17.0",
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
@@ -1783,7 +1843,7 @@ exports[`set() policy statement 2`] = `
                   "TestFunctionArns": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformOutput",
-                      "version": "0.15.2",
+                      "version": "0.17.0",
                     },
                     "id": "TestFunctionArns",
                     "path": "root/Default/cloud.TestRunner/TestFunctionArns",
@@ -1812,7 +1872,7 @@ exports[`set() policy statement 2`] = `
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.15.2",
+              "version": "0.17.0",
             },
             "id": "backend",
             "path": "root/backend",
@@ -1820,7 +1880,7 @@ exports[`set() policy statement 2`] = `
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.15.2",
+          "version": "0.17.0",
         },
         "id": "root",
         "path": "root",
@@ -1828,7 +1888,7 @@ exports[`set() policy statement 2`] = `
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.15.2",
+      "version": "0.17.0",
     },
     "id": "App",
     "path": "",

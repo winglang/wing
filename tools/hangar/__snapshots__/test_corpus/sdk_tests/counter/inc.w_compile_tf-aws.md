@@ -2,27 +2,25 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ counter }) {
+module.exports = function({ $counter }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      {((cond) => {if (!cond) throw new Error("assertion failed: counter.peek() == 0")})(((await counter.peek()) === 0))};
-      const r0 = (await counter.inc());
+    async handle() {
+      {((cond) => {if (!cond) throw new Error("assertion failed: counter.peek() == 0")})(((await $counter.peek()) === 0))};
+      const r0 = (await $counter.inc());
       {((cond) => {if (!cond) throw new Error("assertion failed: r0 == 0")})((r0 === 0))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: counter.peek() == 1")})(((await counter.peek()) === 1))};
-      const r1 = (await counter.inc());
+      {((cond) => {if (!cond) throw new Error("assertion failed: counter.peek() == 1")})(((await $counter.peek()) === 1))};
+      const r1 = (await $counter.inc());
       {((cond) => {if (!cond) throw new Error("assertion failed: r1 == 1")})((r1 === 1))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: counter.peek() == 2")})(((await counter.peek()) === 2))};
-      const r2 = (await counter.inc(10));
+      {((cond) => {if (!cond) throw new Error("assertion failed: counter.peek() == 2")})(((await $counter.peek()) === 2))};
+      const r2 = (await $counter.inc(10));
       {((cond) => {if (!cond) throw new Error("assertion failed: r2 == 2")})((r2 === 2))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: counter.peek() == 12")})(((await counter.peek()) === 12))};
-      const r3 = (await counter.inc());
+      {((cond) => {if (!cond) throw new Error("assertion failed: counter.peek() == 12")})(((await $counter.peek()) === 12))};
+      const r3 = (await $counter.inc());
       {((cond) => {if (!cond) throw new Error("assertion failed: r3 == 12")})((r3 === 12))};
     }
   }
@@ -33,28 +31,26 @@ module.exports = function({ counter }) {
 
 ## inflight.$Closure2.js
 ```js
-module.exports = function({ counter }) {
+module.exports = function({ $counter }) {
   class $Closure2 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
-    async handle()  {
+    async handle() {
       const key = "my-key";
-      {((cond) => {if (!cond) throw new Error("assertion failed: counter.peek(key) == 0")})(((await counter.peek(key)) === 0))};
-      const r0 = (await counter.inc(undefined,key));
+      {((cond) => {if (!cond) throw new Error("assertion failed: counter.peek(key) == 0")})(((await $counter.peek(key)) === 0))};
+      const r0 = (await $counter.inc(undefined,key));
       {((cond) => {if (!cond) throw new Error("assertion failed: r0 == 0")})((r0 === 0))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: counter.peek(key) == 1")})(((await counter.peek(key)) === 1))};
-      const r1 = (await counter.inc(undefined,key));
+      {((cond) => {if (!cond) throw new Error("assertion failed: counter.peek(key) == 1")})(((await $counter.peek(key)) === 1))};
+      const r1 = (await $counter.inc(undefined,key));
       {((cond) => {if (!cond) throw new Error("assertion failed: r1 == 1")})((r1 === 1))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: counter.peek(key) == 2")})(((await counter.peek(key)) === 2))};
-      const r2 = (await counter.inc(10,key));
+      {((cond) => {if (!cond) throw new Error("assertion failed: counter.peek(key) == 2")})(((await $counter.peek(key)) === 2))};
+      const r2 = (await $counter.inc(10,key));
       {((cond) => {if (!cond) throw new Error("assertion failed: r2 == 2")})((r2 === 2))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: counter.peek(key) == 12")})(((await counter.peek(key)) === 12))};
-      const r3 = (await counter.inc(undefined,key));
+      {((cond) => {if (!cond) throw new Error("assertion failed: counter.peek(key) == 12")})(((await $counter.peek(key)) === 12))};
+      const r3 = (await $counter.inc(undefined,key));
       {((cond) => {if (!cond) throw new Error("assertion failed: r3 == 12")})((r3 === 12))};
     }
   }
@@ -70,7 +66,7 @@ module.exports = function({ counter }) {
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.2"
+      "version": "0.17.0"
     },
     "outputs": {
       "root": {
@@ -84,7 +80,7 @@ module.exports = function({ counter }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:inc\",\"${aws_lambda_function.root_testinc_Handler_A10D3F88.arn}\"],[\"root/Default/Default/test:key inc\",\"${aws_lambda_function.root_testkeyinc_Handler_81AACB2B.arn}\"]]"
+      "value": "[[\"root/Default/Default/test:inc\",\"${aws_lambda_function.testinc_Handler_5C48B863.arn}\"],[\"root/Default/Default/test:key inc\",\"${aws_lambda_function.testkeyinc_Handler_15600574.arn}\"]]"
     }
   },
   "provider": {
@@ -94,11 +90,11 @@ module.exports = function({ counter }) {
   },
   "resource": {
     "aws_dynamodb_table": {
-      "root_cloudCounter_E0AC1263": {
+      "cloudCounter": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/cloud.Counter/Default",
-            "uniqueId": "root_cloudCounter_E0AC1263"
+            "uniqueId": "cloudCounter"
           }
         },
         "attribute": [
@@ -113,80 +109,80 @@ module.exports = function({ counter }) {
       }
     },
     "aws_iam_role": {
-      "root_testinc_Handler_IamRole_FADF671C": {
+      "testinc_Handler_IamRole_3AAB9B32": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:inc/Handler/IamRole",
-            "uniqueId": "root_testinc_Handler_IamRole_FADF671C"
+            "uniqueId": "testinc_Handler_IamRole_3AAB9B32"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       },
-      "root_testkeyinc_Handler_IamRole_3767E961": {
+      "testkeyinc_Handler_IamRole_13A4B666": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:key inc/Handler/IamRole",
-            "uniqueId": "root_testkeyinc_Handler_IamRole_3767E961"
+            "uniqueId": "testkeyinc_Handler_IamRole_13A4B666"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
-      "root_testinc_Handler_IamRolePolicy_C6ED1330": {
+      "testinc_Handler_IamRolePolicy_8B469F7E": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:inc/Handler/IamRolePolicy",
-            "uniqueId": "root_testinc_Handler_IamRolePolicy_C6ED1330"
+            "uniqueId": "testinc_Handler_IamRolePolicy_8B469F7E"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.root_cloudCounter_E0AC1263.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:GetItem\"],\"Resource\":[\"${aws_dynamodb_table.root_cloudCounter_E0AC1263.arn}\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.root_testinc_Handler_IamRole_FADF671C.name}"
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.cloudCounter.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:GetItem\"],\"Resource\":[\"${aws_dynamodb_table.cloudCounter.arn}\"],\"Effect\":\"Allow\"}]}",
+        "role": "${aws_iam_role.testinc_Handler_IamRole_3AAB9B32.name}"
       },
-      "root_testkeyinc_Handler_IamRolePolicy_ABAD8DBA": {
+      "testkeyinc_Handler_IamRolePolicy_FC9413B6": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:key inc/Handler/IamRolePolicy",
-            "uniqueId": "root_testkeyinc_Handler_IamRolePolicy_ABAD8DBA"
+            "uniqueId": "testkeyinc_Handler_IamRolePolicy_FC9413B6"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.root_cloudCounter_E0AC1263.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:GetItem\"],\"Resource\":[\"${aws_dynamodb_table.root_cloudCounter_E0AC1263.arn}\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.root_testkeyinc_Handler_IamRole_3767E961.name}"
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.cloudCounter.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:GetItem\"],\"Resource\":[\"${aws_dynamodb_table.cloudCounter.arn}\"],\"Effect\":\"Allow\"}]}",
+        "role": "${aws_iam_role.testkeyinc_Handler_IamRole_13A4B666.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
-      "root_testinc_Handler_IamRolePolicyAttachment_F0CAB67D": {
+      "testinc_Handler_IamRolePolicyAttachment_0B0CDAE1": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:inc/Handler/IamRolePolicyAttachment",
-            "uniqueId": "root_testinc_Handler_IamRolePolicyAttachment_F0CAB67D"
+            "uniqueId": "testinc_Handler_IamRolePolicyAttachment_0B0CDAE1"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.root_testinc_Handler_IamRole_FADF671C.name}"
+        "role": "${aws_iam_role.testinc_Handler_IamRole_3AAB9B32.name}"
       },
-      "root_testkeyinc_Handler_IamRolePolicyAttachment_F25A8A4D": {
+      "testkeyinc_Handler_IamRolePolicyAttachment_7E0AFF36": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:key inc/Handler/IamRolePolicyAttachment",
-            "uniqueId": "root_testkeyinc_Handler_IamRolePolicyAttachment_F25A8A4D"
+            "uniqueId": "testkeyinc_Handler_IamRolePolicyAttachment_7E0AFF36"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.root_testkeyinc_Handler_IamRole_3767E961.name}"
+        "role": "${aws_iam_role.testkeyinc_Handler_IamRole_13A4B666.name}"
       }
     },
     "aws_lambda_function": {
-      "root_testinc_Handler_A10D3F88": {
+      "testinc_Handler_5C48B863": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:inc/Handler/Default",
-            "uniqueId": "root_testinc_Handler_A10D3F88"
+            "uniqueId": "testinc_Handler_5C48B863"
           }
         },
         "environment": {
           "variables": {
-            "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.root_cloudCounter_E0AC1263.name}",
+            "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.cloudCounter.name}",
             "WING_FUNCTION_NAME": "Handler-c8ddbb5a",
             "WING_TARGET": "tf-aws"
           }
@@ -194,26 +190,26 @@ module.exports = function({ counter }) {
         "function_name": "Handler-c8ddbb5a",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.root_testinc_Handler_IamRole_FADF671C.arn}",
+        "role": "${aws_iam_role.testinc_Handler_IamRole_3AAB9B32.arn}",
         "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
-        "s3_key": "${aws_s3_object.root_testinc_Handler_S3Object_3A9256BD.key}",
+        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
+        "s3_key": "${aws_s3_object.testinc_Handler_S3Object_111FAB39.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
           "subnet_ids": []
         }
       },
-      "root_testkeyinc_Handler_81AACB2B": {
+      "testkeyinc_Handler_15600574": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:key inc/Handler/Default",
-            "uniqueId": "root_testkeyinc_Handler_81AACB2B"
+            "uniqueId": "testkeyinc_Handler_15600574"
           }
         },
         "environment": {
           "variables": {
-            "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.root_cloudCounter_E0AC1263.name}",
+            "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.cloudCounter.name}",
             "WING_FUNCTION_NAME": "Handler-c87f92b5",
             "WING_TARGET": "tf-aws"
           }
@@ -221,10 +217,10 @@ module.exports = function({ counter }) {
         "function_name": "Handler-c87f92b5",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.root_testkeyinc_Handler_IamRole_3767E961.arn}",
+        "role": "${aws_iam_role.testkeyinc_Handler_IamRole_13A4B666.arn}",
         "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
-        "s3_key": "${aws_s3_object.root_testkeyinc_Handler_S3Object_38372573.key}",
+        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
+        "s3_key": "${aws_s3_object.testkeyinc_Handler_S3Object_A4437850.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -233,36 +229,36 @@ module.exports = function({ counter }) {
       }
     },
     "aws_s3_bucket": {
-      "root_Code_02F3C603": {
+      "Code": {
         "//": {
           "metadata": {
             "path": "root/Default/Code",
-            "uniqueId": "root_Code_02F3C603"
+            "uniqueId": "Code"
           }
         },
         "bucket_prefix": "code-c84a50b1-"
       }
     },
     "aws_s3_object": {
-      "root_testinc_Handler_S3Object_3A9256BD": {
+      "testinc_Handler_S3Object_111FAB39": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:inc/Handler/S3Object",
-            "uniqueId": "root_testinc_Handler_S3Object_3A9256BD"
+            "uniqueId": "testinc_Handler_S3Object_111FAB39"
           }
         },
-        "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
+        "bucket": "${aws_s3_bucket.Code.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       },
-      "root_testkeyinc_Handler_S3Object_38372573": {
+      "testkeyinc_Handler_S3Object_A4437850": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:key inc/Handler/S3Object",
-            "uniqueId": "root_testkeyinc_Handler_S3Object_38372573"
+            "uniqueId": "testkeyinc_Handler_S3Object_A4437850"
           }
         },
-        "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
+        "bucket": "${aws_s3_bucket.Code.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       }
@@ -286,14 +282,12 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const counter_client = context._lift(counter);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            counter: ${counter_client},
+          require("./inflight.$Closure1.js")({
+            $counter: ${context._lift(counter)},
           })
         `);
       }
@@ -309,9 +303,6 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure1._registerBindObject(counter, host, []);
-        }
         if (ops.includes("handle")) {
           $Closure1._registerBindObject(counter, host, ["inc", "peek"]);
         }
@@ -322,14 +313,12 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure2.js";
-        const counter_client = context._lift(counter);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            counter: ${counter_client},
+          require("./inflight.$Closure2.js")({
+            $counter: ${context._lift(counter)},
           })
         `);
       }
@@ -345,9 +334,6 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure2._registerBindObject(counter, host, []);
-        }
         if (ops.includes("handle")) {
           $Closure2._registerBindObject(counter, host, ["inc", "peek"]);
         }

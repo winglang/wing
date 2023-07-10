@@ -2,16 +2,14 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ std_Json }) {
+module.exports = function({ $std_Json }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
-    async handle(req)  {
+    async handle(req) {
       return {
       "body": ((args) => { return JSON.stringify(args[0], null, args[1]) })([Object.freeze({"user":(req.vars)["name"]})]),
       "headers": Object.freeze({"content-type":"application/json"}),
@@ -26,18 +24,16 @@ module.exports = function({ std_Json }) {
 
 ## inflight.$Closure2.js
 ```js
-module.exports = function({ api, http_Util, std_Json }) {
+module.exports = function({ $api_url, $http_Util, $std_Json }) {
   class $Closure2 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
-    async handle()  {
+    async handle() {
       const username = "tsuf";
-      const res = (await http_Util.get(String.raw({ raw: ["", "/users/", ""] }, api.url, username)));
+      const res = (await $http_Util.get(String.raw({ raw: ["", "/users/", ""] }, $api_url, username)));
       {((cond) => {if (!cond) throw new Error("assertion failed: res.status == 200")})((res.status === 200))};
       {((cond) => {if (!cond) throw new Error("assertion failed: Json.parse(res.body ?? \"\").get(\"user\") == username")})((((JSON.parse((res.body ?? ""))))["user"] === username))};
     }
@@ -54,7 +50,7 @@ module.exports = function({ api, http_Util, std_Json }) {
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.2"
+      "version": "0.17.0"
     },
     "outputs": {
       "root": {
@@ -68,11 +64,11 @@ module.exports = function({ api, http_Util, std_Json }) {
   },
   "data": {
     "aws_region": {
-      "root_Region_A2D17352": {
+      "Region": {
         "//": {
           "metadata": {
             "path": "root/Default/Region",
-            "uniqueId": "root_Region_A2D17352"
+            "uniqueId": "Region"
           }
         }
       }
@@ -80,7 +76,7 @@ module.exports = function({ api, http_Util, std_Json }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:test\",\"${aws_lambda_function.root_testtest_Handler_046C3415.arn}\"]]"
+      "value": "[[\"root/Default/Default/test:test\",\"${aws_lambda_function.testtest_Handler_295107CC.arn}\"]]"
     }
   },
   "provider": {
@@ -90,117 +86,117 @@ module.exports = function({ api, http_Util, std_Json }) {
   },
   "resource": {
     "aws_api_gateway_deployment": {
-      "root_cloudApi_api_deployment_E29F699A": {
+      "cloudApi_api_deployment_545514BF": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/cloud.Api/api/deployment",
-            "uniqueId": "root_cloudApi_api_deployment_E29F699A"
+            "uniqueId": "cloudApi_api_deployment_545514BF"
           }
         },
         "lifecycle": {
           "create_before_destroy": true
         },
-        "rest_api_id": "${aws_api_gateway_rest_api.root_cloudApi_api_8C9FE51E.id}",
+        "rest_api_id": "${aws_api_gateway_rest_api.cloudApi_api_2B334D75.id}",
         "triggers": {
           "redeployment": "ee1148d10d8bb2403dd0cc6100b576b5968ee68f"
         }
       }
     },
     "aws_api_gateway_rest_api": {
-      "root_cloudApi_api_8C9FE51E": {
+      "cloudApi_api_2B334D75": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/cloud.Api/api/api",
-            "uniqueId": "root_cloudApi_api_8C9FE51E"
+            "uniqueId": "cloudApi_api_2B334D75"
           }
         },
-        "body": "{\"openapi\":\"3.0.3\",\"paths\":{\"/users/{name}\":{\"get\":{\"operationId\":\"get-users/{name}\",\"responses\":{\"200\":{\"description\":\"200 response\",\"content\":{}}},\"parameters\":[{\"name\":\"name\",\"in\":\"path\",\"required\":true,\"schema\":{\"type\":\"string\"}}],\"x-amazon-apigateway-integration\":{\"uri\":\"arn:aws:apigateway:${data.aws_region.root_Region_A2D17352.name}:lambda:path/2015-03-31/functions/${aws_lambda_function.root_cloudApi_cloudApiOnRequestcdafee6e_582EA655.arn}/invocations\",\"type\":\"aws_proxy\",\"httpMethod\":\"POST\",\"responses\":{\"default\":{\"statusCode\":\"200\"}},\"passthroughBehavior\":\"when_no_match\",\"contentHandling\":\"CONVERT_TO_TEXT\"}}}}}",
+        "body": "{\"openapi\":\"3.0.3\",\"paths\":{\"/users/{name}\":{\"get\":{\"operationId\":\"get-users/{name}\",\"responses\":{\"200\":{\"description\":\"200 response\",\"content\":{}}},\"parameters\":[{\"name\":\"name\",\"in\":\"path\",\"required\":true,\"schema\":{\"type\":\"string\"}}],\"x-amazon-apigateway-integration\":{\"uri\":\"arn:aws:apigateway:${data.aws_region.Region.name}:lambda:path/2015-03-31/functions/${aws_lambda_function.cloudApi_cloudApi-OnRequest-cdafee6e_A6C8366F.arn}/invocations\",\"type\":\"aws_proxy\",\"httpMethod\":\"POST\",\"responses\":{\"default\":{\"statusCode\":\"200\"}},\"passthroughBehavior\":\"when_no_match\",\"contentHandling\":\"CONVERT_TO_TEXT\"}}}}}",
         "name": "api-c895068c"
       }
     },
     "aws_api_gateway_stage": {
-      "root_cloudApi_api_stage_57D6284A": {
+      "cloudApi_api_stage_BBB283E4": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/cloud.Api/api/stage",
-            "uniqueId": "root_cloudApi_api_stage_57D6284A"
+            "uniqueId": "cloudApi_api_stage_BBB283E4"
           }
         },
-        "deployment_id": "${aws_api_gateway_deployment.root_cloudApi_api_deployment_E29F699A.id}",
-        "rest_api_id": "${aws_api_gateway_rest_api.root_cloudApi_api_8C9FE51E.id}",
+        "deployment_id": "${aws_api_gateway_deployment.cloudApi_api_deployment_545514BF.id}",
+        "rest_api_id": "${aws_api_gateway_rest_api.cloudApi_api_2B334D75.id}",
         "stage_name": "prod"
       }
     },
     "aws_iam_role": {
-      "root_cloudApi_cloudApiOnRequestcdafee6e_IamRole_2B8A04C3": {
+      "cloudApi_cloudApi-OnRequest-cdafee6e_IamRole_4382C442": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/cloud.Api/cloud.Api-OnRequest-cdafee6e/IamRole",
-            "uniqueId": "root_cloudApi_cloudApiOnRequestcdafee6e_IamRole_2B8A04C3"
+            "uniqueId": "cloudApi_cloudApi-OnRequest-cdafee6e_IamRole_4382C442"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       },
-      "root_testtest_Handler_IamRole_6C1728D1": {
+      "testtest_Handler_IamRole_15693C93": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:test/Handler/IamRole",
-            "uniqueId": "root_testtest_Handler_IamRole_6C1728D1"
+            "uniqueId": "testtest_Handler_IamRole_15693C93"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
-      "root_cloudApi_cloudApiOnRequestcdafee6e_IamRolePolicy_E6B9BE66": {
+      "cloudApi_cloudApi-OnRequest-cdafee6e_IamRolePolicy_8BF9C89F": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/cloud.Api/cloud.Api-OnRequest-cdafee6e/IamRolePolicy",
-            "uniqueId": "root_cloudApi_cloudApiOnRequestcdafee6e_IamRolePolicy_E6B9BE66"
+            "uniqueId": "cloudApi_cloudApi-OnRequest-cdafee6e_IamRolePolicy_8BF9C89F"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
-        "role": "${aws_iam_role.root_cloudApi_cloudApiOnRequestcdafee6e_IamRole_2B8A04C3.name}"
+        "role": "${aws_iam_role.cloudApi_cloudApi-OnRequest-cdafee6e_IamRole_4382C442.name}"
       },
-      "root_testtest_Handler_IamRolePolicy_65A1D8BE": {
+      "testtest_Handler_IamRolePolicy_AF0279BD": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:test/Handler/IamRolePolicy",
-            "uniqueId": "root_testtest_Handler_IamRolePolicy_65A1D8BE"
+            "uniqueId": "testtest_Handler_IamRolePolicy_AF0279BD"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
-        "role": "${aws_iam_role.root_testtest_Handler_IamRole_6C1728D1.name}"
+        "role": "${aws_iam_role.testtest_Handler_IamRole_15693C93.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
-      "root_cloudApi_cloudApiOnRequestcdafee6e_IamRolePolicyAttachment_4A873879": {
+      "cloudApi_cloudApi-OnRequest-cdafee6e_IamRolePolicyAttachment_5383D6A2": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/cloud.Api/cloud.Api-OnRequest-cdafee6e/IamRolePolicyAttachment",
-            "uniqueId": "root_cloudApi_cloudApiOnRequestcdafee6e_IamRolePolicyAttachment_4A873879"
+            "uniqueId": "cloudApi_cloudApi-OnRequest-cdafee6e_IamRolePolicyAttachment_5383D6A2"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.root_cloudApi_cloudApiOnRequestcdafee6e_IamRole_2B8A04C3.name}"
+        "role": "${aws_iam_role.cloudApi_cloudApi-OnRequest-cdafee6e_IamRole_4382C442.name}"
       },
-      "root_testtest_Handler_IamRolePolicyAttachment_3716AC26": {
+      "testtest_Handler_IamRolePolicyAttachment_ADF4752D": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:test/Handler/IamRolePolicyAttachment",
-            "uniqueId": "root_testtest_Handler_IamRolePolicyAttachment_3716AC26"
+            "uniqueId": "testtest_Handler_IamRolePolicyAttachment_ADF4752D"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.root_testtest_Handler_IamRole_6C1728D1.name}"
+        "role": "${aws_iam_role.testtest_Handler_IamRole_15693C93.name}"
       }
     },
     "aws_lambda_function": {
-      "root_cloudApi_cloudApiOnRequestcdafee6e_582EA655": {
+      "cloudApi_cloudApi-OnRequest-cdafee6e_A6C8366F": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/cloud.Api/cloud.Api-OnRequest-cdafee6e/Default",
-            "uniqueId": "root_cloudApi_cloudApiOnRequestcdafee6e_582EA655"
+            "uniqueId": "cloudApi_cloudApi-OnRequest-cdafee6e_A6C8366F"
           }
         },
         "environment": {
@@ -212,38 +208,37 @@ module.exports = function({ api, http_Util, std_Json }) {
         "function_name": "cloud-Api-OnRequest-cdafee6e-c8147384",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.root_cloudApi_cloudApiOnRequestcdafee6e_IamRole_2B8A04C3.arn}",
+        "role": "${aws_iam_role.cloudApi_cloudApi-OnRequest-cdafee6e_IamRole_4382C442.arn}",
         "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
-        "s3_key": "${aws_s3_object.root_cloudApi_cloudApiOnRequestcdafee6e_S3Object_AA762041.key}",
+        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
+        "s3_key": "${aws_s3_object.cloudApi_cloudApi-OnRequest-cdafee6e_S3Object_5DAAA0EF.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
           "subnet_ids": []
         }
       },
-      "root_testtest_Handler_046C3415": {
+      "testtest_Handler_295107CC": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:test/Handler/Default",
-            "uniqueId": "root_testtest_Handler_046C3415"
+            "uniqueId": "testtest_Handler_295107CC"
           }
         },
         "environment": {
           "variables": {
-            "CLOUD_API_C82DF3A5": "${aws_api_gateway_stage.root_cloudApi_api_stage_57D6284A.invoke_url}",
             "WING_FUNCTION_NAME": "Handler-c8f4f2a1",
             "WING_TARGET": "tf-aws",
-            "WING_TOKEN_TFTOKEN_TOKEN_21": "${jsonencode(aws_api_gateway_stage.root_cloudApi_api_stage_57D6284A.invoke_url)}"
+            "WING_TOKEN_TFTOKEN_TOKEN_21": "${jsonencode(aws_api_gateway_stage.cloudApi_api_stage_BBB283E4.invoke_url)}"
           }
         },
         "function_name": "Handler-c8f4f2a1",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.root_testtest_Handler_IamRole_6C1728D1.arn}",
+        "role": "${aws_iam_role.testtest_Handler_IamRole_15693C93.arn}",
         "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
-        "s3_key": "${aws_s3_object.root_testtest_Handler_S3Object_71CD07AC.key}",
+        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
+        "s3_key": "${aws_s3_object.testtest_Handler_S3Object_9F4E28A7.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -252,51 +247,51 @@ module.exports = function({ api, http_Util, std_Json }) {
       }
     },
     "aws_lambda_permission": {
-      "root_cloudApi_api_permissionGET9f89597e_58775ACD": {
+      "cloudApi_api_permission-GET-9f89597e_FFBE5338": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/cloud.Api/api/permission-GET-9f89597e",
-            "uniqueId": "root_cloudApi_api_permissionGET9f89597e_58775ACD"
+            "uniqueId": "cloudApi_api_permission-GET-9f89597e_FFBE5338"
           }
         },
         "action": "lambda:InvokeFunction",
-        "function_name": "${aws_lambda_function.root_cloudApi_cloudApiOnRequestcdafee6e_582EA655.function_name}",
+        "function_name": "${aws_lambda_function.cloudApi_cloudApi-OnRequest-cdafee6e_A6C8366F.function_name}",
         "principal": "apigateway.amazonaws.com",
-        "source_arn": "${aws_api_gateway_rest_api.root_cloudApi_api_8C9FE51E.execution_arn}/*/GET/users/{name}",
+        "source_arn": "${aws_api_gateway_rest_api.cloudApi_api_2B334D75.execution_arn}/*/GET/users/{name}",
         "statement_id": "AllowExecutionFromAPIGateway-GET-9f89597e"
       }
     },
     "aws_s3_bucket": {
-      "root_Code_02F3C603": {
+      "Code": {
         "//": {
           "metadata": {
             "path": "root/Default/Code",
-            "uniqueId": "root_Code_02F3C603"
+            "uniqueId": "Code"
           }
         },
         "bucket_prefix": "code-c84a50b1-"
       }
     },
     "aws_s3_object": {
-      "root_cloudApi_cloudApiOnRequestcdafee6e_S3Object_AA762041": {
+      "cloudApi_cloudApi-OnRequest-cdafee6e_S3Object_5DAAA0EF": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/cloud.Api/cloud.Api-OnRequest-cdafee6e/S3Object",
-            "uniqueId": "root_cloudApi_cloudApiOnRequestcdafee6e_S3Object_AA762041"
+            "uniqueId": "cloudApi_cloudApi-OnRequest-cdafee6e_S3Object_5DAAA0EF"
           }
         },
-        "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
+        "bucket": "${aws_s3_bucket.Code.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       },
-      "root_testtest_Handler_S3Object_71CD07AC": {
+      "testtest_Handler_S3Object_9F4E28A7": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:test/Handler/S3Object",
-            "uniqueId": "root_testtest_Handler_S3Object_71CD07AC"
+            "uniqueId": "testtest_Handler_S3Object_9F4E28A7"
           }
         },
-        "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
+        "bucket": "${aws_s3_bucket.Code.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       }
@@ -321,14 +316,12 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const std_JsonClient = std.Json._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            std_Json: ${std_JsonClient.text},
+          require("./inflight.$Closure1.js")({
+            $std_Json: ${context._lift(std.Json)},
           })
         `);
       }
@@ -343,30 +336,19 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-        }
-        if (ops.includes("handle")) {
-        }
-        super._registerBind(host, ops);
-      }
     }
     class $Closure2 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure2.js";
-        const api_client = context._lift(api);
-        const http_UtilClient = http.Util._toInflightType(context);
-        const std_JsonClient = std.Json._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            api: ${api_client},
-            http_Util: ${http_UtilClient.text},
-            std_Json: ${std_JsonClient.text},
+          require("./inflight.$Closure2.js")({
+            $api_url: ${context._lift(api.url)},
+            $http_Util: ${context._lift(http.Util)},
+            $std_Json: ${context._lift(std.Json)},
           })
         `);
       }
@@ -382,9 +364,6 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure2._registerBindObject(api, host, []);
-        }
         if (ops.includes("handle")) {
           $Closure2._registerBindObject(api.url, host, []);
         }

@@ -2,21 +2,33 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ math_Util }) {
+module.exports = function({ $math_Util }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.acos(-1) == math.PI")})(((await math_Util.acos((-1))) === math_Util.PI))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.acos(-0) == 1.5707963267948966")})(((await math_Util.acos((-0))) === 1.5707963267948966))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.acos(0) == 1.5707963267948966")})(((await math_Util.acos(0)) === 1.5707963267948966))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.acos(0.5) == 1.0471975511965979")})(((await math_Util.acos(0.5)) === 1.0471975511965979))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.acos(1) == 0")})(((await math_Util.acos(1)) === 0))};
+    async handle() {
+      try {
+        {console.log(String.raw({ raw: ["", ""] }, (await $math_Util.acos((-2)))))};
+      }
+      catch ($error_e) {
+        const e = $error_e.message;
+        {((cond) => {if (!cond) throw new Error("assertion failed: e == \"Input value must be between -1 and 1, inclusive.\"")})((e === "Input value must be between -1 and 1, inclusive."))};
+      }
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.acos(-1) == math.PI")})(((await $math_Util.acos((-1))) === $math_Util.PI))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.acos(-0) == 1.5707963267948966")})(((await $math_Util.acos((-0))) === 1.5707963267948966))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.acos(0) == 1.5707963267948966")})(((await $math_Util.acos(0)) === 1.5707963267948966))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.acos(0.5) == 1.0471975511965979")})(((await $math_Util.acos(0.5)) === 1.0471975511965979))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.acos(1) == 0")})(((await $math_Util.acos(1)) === 0))};
+      try {
+        {console.log(String.raw({ raw: ["", ""] }, (await $math_Util.acos(2))))};
+      }
+      catch ($error_e) {
+        const e = $error_e.message;
+        {((cond) => {if (!cond) throw new Error("assertion failed: e == \"Input value must be between -1 and 1, inclusive.\"")})((e === "Input value must be between -1 and 1, inclusive."))};
+      }
     }
   }
   return $Closure1;
@@ -31,7 +43,7 @@ module.exports = function({ math_Util }) {
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.2"
+      "version": "0.17.0"
     },
     "outputs": {
       "root": {
@@ -45,7 +57,7 @@ module.exports = function({ math_Util }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:inflight arc cosine\",\"${aws_lambda_function.root_testinflightarccosine_Handler_4A10AA9F.arn}\"]]"
+      "value": "[[\"root/Default/Default/test:inflight arc cosine\",\"${aws_lambda_function.testinflightarccosine_Handler_506E61C9.arn}\"]]"
     }
   },
   "provider": {
@@ -55,46 +67,46 @@ module.exports = function({ math_Util }) {
   },
   "resource": {
     "aws_iam_role": {
-      "root_testinflightarccosine_Handler_IamRole_E3E61ED9": {
+      "testinflightarccosine_Handler_IamRole_257E26AA": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:inflight arc cosine/Handler/IamRole",
-            "uniqueId": "root_testinflightarccosine_Handler_IamRole_E3E61ED9"
+            "uniqueId": "testinflightarccosine_Handler_IamRole_257E26AA"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
-      "root_testinflightarccosine_Handler_IamRolePolicy_365D4807": {
+      "testinflightarccosine_Handler_IamRolePolicy_EC4E3669": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:inflight arc cosine/Handler/IamRolePolicy",
-            "uniqueId": "root_testinflightarccosine_Handler_IamRolePolicy_365D4807"
+            "uniqueId": "testinflightarccosine_Handler_IamRolePolicy_EC4E3669"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
-        "role": "${aws_iam_role.root_testinflightarccosine_Handler_IamRole_E3E61ED9.name}"
+        "role": "${aws_iam_role.testinflightarccosine_Handler_IamRole_257E26AA.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
-      "root_testinflightarccosine_Handler_IamRolePolicyAttachment_5E0A7B85": {
+      "testinflightarccosine_Handler_IamRolePolicyAttachment_B810E693": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:inflight arc cosine/Handler/IamRolePolicyAttachment",
-            "uniqueId": "root_testinflightarccosine_Handler_IamRolePolicyAttachment_5E0A7B85"
+            "uniqueId": "testinflightarccosine_Handler_IamRolePolicyAttachment_B810E693"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.root_testinflightarccosine_Handler_IamRole_E3E61ED9.name}"
+        "role": "${aws_iam_role.testinflightarccosine_Handler_IamRole_257E26AA.name}"
       }
     },
     "aws_lambda_function": {
-      "root_testinflightarccosine_Handler_4A10AA9F": {
+      "testinflightarccosine_Handler_506E61C9": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:inflight arc cosine/Handler/Default",
-            "uniqueId": "root_testinflightarccosine_Handler_4A10AA9F"
+            "uniqueId": "testinflightarccosine_Handler_506E61C9"
           }
         },
         "environment": {
@@ -106,10 +118,10 @@ module.exports = function({ math_Util }) {
         "function_name": "Handler-c853dd3e",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.root_testinflightarccosine_Handler_IamRole_E3E61ED9.arn}",
+        "role": "${aws_iam_role.testinflightarccosine_Handler_IamRole_257E26AA.arn}",
         "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
-        "s3_key": "${aws_s3_object.root_testinflightarccosine_Handler_S3Object_8FCE55D8.key}",
+        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
+        "s3_key": "${aws_s3_object.testinflightarccosine_Handler_S3Object_5C3F35A1.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -118,25 +130,25 @@ module.exports = function({ math_Util }) {
       }
     },
     "aws_s3_bucket": {
-      "root_Code_02F3C603": {
+      "Code": {
         "//": {
           "metadata": {
             "path": "root/Default/Code",
-            "uniqueId": "root_Code_02F3C603"
+            "uniqueId": "Code"
           }
         },
         "bucket_prefix": "code-c84a50b1-"
       }
     },
     "aws_s3_object": {
-      "root_testinflightarccosine_Handler_S3Object_8FCE55D8": {
+      "testinflightarccosine_Handler_S3Object_5C3F35A1": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:inflight arc cosine/Handler/S3Object",
-            "uniqueId": "root_testinflightarccosine_Handler_S3Object_8FCE55D8"
+            "uniqueId": "testinflightarccosine_Handler_S3Object_5C3F35A1"
           }
         },
-        "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
+        "bucket": "${aws_s3_bucket.Code.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       }
@@ -160,14 +172,12 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const math_UtilClient = math.Util._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            math_Util: ${math_UtilClient.text},
+          require("./inflight.$Closure1.js")({
+            $math_Util: ${context._lift(math.Util)},
           })
         `);
       }
@@ -182,19 +192,26 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-        }
-        if (ops.includes("handle")) {
-        }
-        super._registerBind(host, ops);
-      }
+    }
+    try {
+      {console.log(String.raw({ raw: ["", ""] }, (math.Util.acos((-2)))))};
+    }
+    catch ($error_e) {
+      const e = $error_e.message;
+      {((cond) => {if (!cond) throw new Error("assertion failed: e == \"Input value must be between -1 and 1, inclusive.\"")})((e === "Input value must be between -1 and 1, inclusive."))};
     }
     {((cond) => {if (!cond) throw new Error("assertion failed: math.acos(-1) == math.PI")})(((math.Util.acos((-1))) === math.Util.PI))};
     {((cond) => {if (!cond) throw new Error("assertion failed: math.acos(-0) == 1.5707963267948966")})(((math.Util.acos((-0))) === 1.5707963267948966))};
     {((cond) => {if (!cond) throw new Error("assertion failed: math.acos(0) == 1.5707963267948966")})(((math.Util.acos(0)) === 1.5707963267948966))};
     {((cond) => {if (!cond) throw new Error("assertion failed: math.acos(0.5) == 1.0471975511965979")})(((math.Util.acos(0.5)) === 1.0471975511965979))};
     {((cond) => {if (!cond) throw new Error("assertion failed: math.acos(1) == 0")})(((math.Util.acos(1)) === 0))};
+    try {
+      {console.log(String.raw({ raw: ["", ""] }, (math.Util.acos(2))))};
+    }
+    catch ($error_e) {
+      const e = $error_e.message;
+      {((cond) => {if (!cond) throw new Error("assertion failed: e == \"Input value must be between -1 and 1, inclusive.\"")})((e === "Input value must be between -1 and 1, inclusive."))};
+    }
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:inflight arc cosine",new $Closure1(this,"$Closure1"));
   }
 }

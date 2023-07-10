@@ -24,7 +24,7 @@ export const QueueMetadata = ({
       <Attribute name="Timeout" value={`${timeout}s`} />
       <Attribute name="Approx size">
         <div className="flex gap-2">
-          <label>{approxSize}</label>
+          <label data-testid="cloud.queue:approx-size">{approxSize}</label>
           <Button
             small
             label="Purge"

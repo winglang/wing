@@ -114,6 +114,12 @@ bucket: (function(env) {
                     "relationship": "put",
                     "resource": "root/HelloWorld/Queue-SetConsumer-401ee792",
                   },
+                  {
+                    "direction": "inbound",
+                    "implicit": false,
+                    "relationship": "$inflight_init",
+                    "resource": "root/HelloWorld/Queue-SetConsumer-401ee792",
+                  },
                 ],
               },
               "constructInfo": {
@@ -136,6 +142,12 @@ bucket: (function(env) {
                     "relationship": "inc",
                     "resource": "root/HelloWorld/Queue-SetConsumer-401ee792",
                   },
+                  {
+                    "direction": "inbound",
+                    "implicit": false,
+                    "relationship": "$inflight_init",
+                    "resource": "root/HelloWorld/Queue-SetConsumer-401ee792",
+                  },
                 ],
               },
               "constructInfo": {
@@ -156,6 +168,12 @@ bucket: (function(env) {
                     "direction": "inbound",
                     "implicit": false,
                     "relationship": "handle",
+                    "resource": "root/HelloWorld/Queue-SetConsumer-401ee792",
+                  },
+                  {
+                    "direction": "inbound",
+                    "implicit": false,
+                    "relationship": "$inflight_init",
                     "resource": "root/HelloWorld/Queue-SetConsumer-401ee792",
                   },
                 ],
@@ -222,13 +240,31 @@ bucket: (function(env) {
                   {
                     "direction": "outbound",
                     "implicit": false,
+                    "relationship": "$inflight_init",
+                    "resource": "root/HelloWorld/Counter",
+                  },
+                  {
+                    "direction": "outbound",
+                    "implicit": false,
                     "relationship": "put",
                     "resource": "root/HelloWorld/Bucket",
                   },
                   {
                     "direction": "outbound",
                     "implicit": false,
+                    "relationship": "$inflight_init",
+                    "resource": "root/HelloWorld/Bucket",
+                  },
+                  {
+                    "direction": "outbound",
+                    "implicit": false,
                     "relationship": "handle",
+                    "resource": "root/HelloWorld/Processor",
+                  },
+                  {
+                    "direction": "outbound",
+                    "implicit": false,
+                    "relationship": "$inflight_init",
                     "resource": "root/HelloWorld/Processor",
                   },
                   {

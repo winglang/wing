@@ -5,19 +5,20 @@
   "targets": {
     "build": {
       "options": {
-        "command": "npm run compile",
+        "command": "pnpm compile",
         "cwd": "apps/wing-console/console/app"
       }
     },
     "test": {
+      "dependsOn": ["build"],
       "options": {
-        "command": "npm run vitest",
+        "command": "pnpm run test",
         "cwd": "apps/wing-console/console/app"
       }
     },
     "package": {
       "options": {
-        "command": "npm run package",
+        "command": "pnpm package",
         "cwd": "apps/wing-console/console/app"
       }
     }

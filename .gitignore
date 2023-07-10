@@ -1,12 +1,13 @@
 .DS_Store
 node_modules/
+.pnpm-store/
 .env
 *.tfstate
 *.tfstate.*
 .history
 *.vsix
 
-# WASI SDK (insalled by "npm install")
+# WASI SDK (insalled by "pnpm install")
 .cargo/wasi-sdk-*/
 
 # Generated wing output
@@ -35,14 +36,6 @@ libs/tree-sitter-wing/src/tree_sitter/
 
 # wing
 apps/wing/dist
-
-# wing-playground
-apps/wing-playground/*.wasm
-apps/wing-playground/dist
-
-# vscode-wing
-apps/vscode-wing/resources/native/wing-language-server
-.vercel
 
 # hangar
 tools/hangar/results/

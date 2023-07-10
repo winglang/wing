@@ -6,9 +6,9 @@
     "build": {
       "options": {
         "commands": [
-          "npm run projen",
-          "npm run pre-compile",
-          "npm run compile"
+          "pnpm projen",
+          "pnpm pre-compile",
+          "pnpm compile"
         ],
         "cwd": "libs/wingsdk",
         "parallel": false
@@ -17,16 +17,15 @@
     "test": {
       "dependsOn": ["^build", "build"],
       "options": {
-        "commands": ["npm run post-compile", "npm run test"],
+        "commands": ["pnpm post-compile", "pnpm test"],
         "cwd": "libs/wingsdk",
         "parallel": false
       }
     },
     "package": {
       "options": {
-        "commands": ["npm run bump", "npm pack", "npm run unbump"],
-        "cwd": "libs/wingsdk",
-        "parallel": false
+        "command": "pnpm bump-pack -b",
+        "cwd": "libs/wingsdk"
       }
     }
   }

@@ -27,11 +27,17 @@ export const QueueInteraction = ({
           id={elementId}
           className="text-xs"
           value={message}
+          dataTestid="cloud.queue:message"
           onInput={(event) => setMessage(event.currentTarget.value)}
           disabled={isLoading}
         />
         <div className="flex gap-2 justify-end">
-          <Button label="Push" onClick={pushMessage} disabled={isLoading} />
+          <Button
+            label="Push"
+            dataTestid="cloud.queue:push"
+            onClick={pushMessage}
+            disabled={isLoading}
+          />
         </div>
       </div>
     </div>

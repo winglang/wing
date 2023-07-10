@@ -6,31 +6,31 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "command": "npx nx wing -- compile -t tf-aws ..${pathSeparator}..${pathSeparator}${relativeFile}",
+      "command": "pnpm nx wing -- compile -t tf-aws ..${pathSeparator}..${pathSeparator}${relativeFile}",
       "name": "wing compile tf-aws",
       "request": "launch",
       "type": "node-terminal"
     },
     {
-      "command": "npx nx wing -- compile -t tf-azure ..${pathSeparator}..${pathSeparator}${relativeFile}",
+      "command": "pnpm nx wing -- compile -t tf-azure ..${pathSeparator}..${pathSeparator}${relativeFile}",
       "name": "wing compile tf-azure",
       "request": "launch",
       "type": "node-terminal"
     },
     {
-      "command": "npx nx wing -- compile -t sim ..${pathSeparator}..${pathSeparator}${relativeFile}",
+      "command": "pnpm nx wing -- compile -t sim ..${pathSeparator}..${pathSeparator}${relativeFile}",
       "name": "wing compile sim",
       "request": "launch",
       "type": "node-terminal"
     },
     {
-      "command": "npx nx wing -- test ..${pathSeparator}..${pathSeparator}${relativeFile}",
+      "command": "pnpm nx wing -- test ..${pathSeparator}..${pathSeparator}${relativeFile}",
       "name": "wing test sim",
       "request": "launch",
       "type": "node-terminal"
     },
     {
-      "command": "npx nx wing -- test -t tf-aws ..${pathSeparator}..${pathSeparator}${relativeFile}",
+      "command": "pnpm nx wing -- test -t tf-aws ..${pathSeparator}..${pathSeparator}${relativeFile}",
       "name": "wing test tf-aws",
       "request": "launch",
       "type": "node-terminal"

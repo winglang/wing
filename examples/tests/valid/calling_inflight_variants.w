@@ -1,5 +1,3 @@
-bring cloud;
-
 class Foo {
   inflight1: inflight (): num;
   init() {

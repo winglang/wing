@@ -2,18 +2,16 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ x, y, math_Util }) {
+module.exports = function({ $math_Util, $x, $y }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.abs(x - y) == 2")})(((await math_Util.abs((x - y))) === 2))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.abs(y - x) == 2")})(((await math_Util.abs((y - x))) === 2))};
+    async handle() {
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.abs(x - y) == 2")})(((await $math_Util.abs(($x - $y))) === 2))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.abs(y - x) == 2")})(((await $math_Util.abs(($y - $x))) === 2))};
     }
   }
   return $Closure1;
@@ -28,7 +26,7 @@ module.exports = function({ x, y, math_Util }) {
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.2"
+      "version": "0.17.0"
     },
     "outputs": {
       "root": {
@@ -42,7 +40,7 @@ module.exports = function({ x, y, math_Util }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:inflight absolute\",\"${aws_lambda_function.root_testinflightabsolute_Handler_FB8DE1CC.arn}\"]]"
+      "value": "[[\"root/Default/Default/test:inflight absolute\",\"${aws_lambda_function.testinflightabsolute_Handler_DB051761.arn}\"]]"
     }
   },
   "provider": {
@@ -52,46 +50,46 @@ module.exports = function({ x, y, math_Util }) {
   },
   "resource": {
     "aws_iam_role": {
-      "root_testinflightabsolute_Handler_IamRole_C8454350": {
+      "testinflightabsolute_Handler_IamRole_73FC0806": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:inflight absolute/Handler/IamRole",
-            "uniqueId": "root_testinflightabsolute_Handler_IamRole_C8454350"
+            "uniqueId": "testinflightabsolute_Handler_IamRole_73FC0806"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
-      "root_testinflightabsolute_Handler_IamRolePolicy_EC52C249": {
+      "testinflightabsolute_Handler_IamRolePolicy_6FD74632": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:inflight absolute/Handler/IamRolePolicy",
-            "uniqueId": "root_testinflightabsolute_Handler_IamRolePolicy_EC52C249"
+            "uniqueId": "testinflightabsolute_Handler_IamRolePolicy_6FD74632"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
-        "role": "${aws_iam_role.root_testinflightabsolute_Handler_IamRole_C8454350.name}"
+        "role": "${aws_iam_role.testinflightabsolute_Handler_IamRole_73FC0806.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
-      "root_testinflightabsolute_Handler_IamRolePolicyAttachment_E40F6DB6": {
+      "testinflightabsolute_Handler_IamRolePolicyAttachment_C2286158": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:inflight absolute/Handler/IamRolePolicyAttachment",
-            "uniqueId": "root_testinflightabsolute_Handler_IamRolePolicyAttachment_E40F6DB6"
+            "uniqueId": "testinflightabsolute_Handler_IamRolePolicyAttachment_C2286158"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.root_testinflightabsolute_Handler_IamRole_C8454350.name}"
+        "role": "${aws_iam_role.testinflightabsolute_Handler_IamRole_73FC0806.name}"
       }
     },
     "aws_lambda_function": {
-      "root_testinflightabsolute_Handler_FB8DE1CC": {
+      "testinflightabsolute_Handler_DB051761": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:inflight absolute/Handler/Default",
-            "uniqueId": "root_testinflightabsolute_Handler_FB8DE1CC"
+            "uniqueId": "testinflightabsolute_Handler_DB051761"
           }
         },
         "environment": {
@@ -103,10 +101,10 @@ module.exports = function({ x, y, math_Util }) {
         "function_name": "Handler-c84ad0c4",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.root_testinflightabsolute_Handler_IamRole_C8454350.arn}",
+        "role": "${aws_iam_role.testinflightabsolute_Handler_IamRole_73FC0806.arn}",
         "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
-        "s3_key": "${aws_s3_object.root_testinflightabsolute_Handler_S3Object_2DAB12E7.key}",
+        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
+        "s3_key": "${aws_s3_object.testinflightabsolute_Handler_S3Object_B9AB2D8D.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -115,25 +113,25 @@ module.exports = function({ x, y, math_Util }) {
       }
     },
     "aws_s3_bucket": {
-      "root_Code_02F3C603": {
+      "Code": {
         "//": {
           "metadata": {
             "path": "root/Default/Code",
-            "uniqueId": "root_Code_02F3C603"
+            "uniqueId": "Code"
           }
         },
         "bucket_prefix": "code-c84a50b1-"
       }
     },
     "aws_s3_object": {
-      "root_testinflightabsolute_Handler_S3Object_2DAB12E7": {
+      "testinflightabsolute_Handler_S3Object_B9AB2D8D": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:inflight absolute/Handler/S3Object",
-            "uniqueId": "root_testinflightabsolute_Handler_S3Object_2DAB12E7"
+            "uniqueId": "testinflightabsolute_Handler_S3Object_B9AB2D8D"
           }
         },
-        "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
+        "bucket": "${aws_s3_bucket.Code.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       }
@@ -157,18 +155,14 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this.display.hidden = true;
-        this._addInflightOps("handle");
+        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const x_client = context._lift(x);
-        const y_client = context._lift(y);
-        const math_UtilClient = math.Util._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            x: ${x_client},
-            y: ${y_client},
-            math_Util: ${math_UtilClient.text},
+          require("./inflight.$Closure1.js")({
+            $math_Util: ${context._lift(math.Util)},
+            $x: ${context._lift(x)},
+            $y: ${context._lift(y)},
           })
         `);
       }
@@ -184,10 +178,6 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure1._registerBindObject(x, host, []);
-          $Closure1._registerBindObject(y, host, []);
-        }
         if (ops.includes("handle")) {
           $Closure1._registerBindObject(x, host, []);
           $Closure1._registerBindObject(y, host, []);
