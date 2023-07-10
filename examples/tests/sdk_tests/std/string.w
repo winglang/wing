@@ -59,7 +59,7 @@ test "at()" {
   assert("boom".at(-4) == "b");
   assert("boom".at(-1) == "m");
   // Should throw an exception
-  try { "boom".at(4); } catch s { assert(s == INDEX_OUT_OF_BOUNDS_ERROR ); }
+  try { "boom".at(4); } catch s { assert(s == INDEX_OUT_OF_BOUNDS_ERROR ); } // <-- Passes if no exception is thrown, see issue #3341
   try { "boom".at(-5); } catch s { assert(s == INDEX_OUT_OF_BOUNDS_ERROR ); }
 }
 
