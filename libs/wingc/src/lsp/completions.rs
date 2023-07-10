@@ -1,6 +1,6 @@
 use lsp_types::{
 	Command, CompletionItem, CompletionItemKind, CompletionResponse, Documentation, InsertTextFormat, MarkupContent,
-	MarkupKind,
+	MarkupKind, Position, Range, TextEdit,
 };
 use std::cmp::max;
 use tree_sitter::Point;
@@ -92,7 +92,27 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 						}
 					}
 
-					return get_completions_from_type(&nearest_expr_type, types, Some(found_env.phase), true);
+					let mut completions = get_completions_from_type(&nearest_expr_type, types, Some(found_env.phase), true);
+					if nearest_expr_type.is_option() && node_to_complete.kind() == "." {
+						let extra_edit = Some(vec![TextEdit {
+							new_text: "?.".to_string(),
+							range: Range {
+								start: Position {
+									character: node_to_complete.start_position().column as u32,
+									line: node_to_complete.start_position().row as u32,
+								},
+								end: Position {
+									character: node_to_complete.end_position().column as u32,
+									line: node_to_complete.end_position().row as u32,
+								},
+							},
+						}]);
+						for completion in completions.iter_mut() {
+							completion.additional_text_edits = extra_edit.clone();
+						}
+					}
+
+					return completions;
 				}
 			}
 
@@ -279,13 +299,16 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 		}
 
 		if in_type {
-			// show only namespaces and types
+			// show only namespaces, types,
 			completions
 				.into_iter()
 				.filter(|c| {
 					matches!(
 						c.kind,
-						Some(CompletionItemKind::CLASS) | Some(CompletionItemKind::MODULE)
+						Some(CompletionItemKind::CLASS)
+							| Some(CompletionItemKind::MODULE)
+							| Some(CompletionItemKind::ENUM)
+							| Some(CompletionItemKind::STRUCT)
 					)
 				})
 				.collect()
@@ -1006,5 +1029,27 @@ j.tryGet("")?.
             //^
 "#,
 		assert!(!optional_chaining.is_empty())
+	);
+
+	test_completion_list!(
+		optional_chaining_auto,
+		r#"
+let j = Json {};
+j.tryGet("").
+           //^
+"#,
+		assert!(!optional_chaining_auto.is_empty())
+	);
+
+	test_completion_list!(
+		type_annotation_shows_struct,
+		r#"
+struct Foo {}
+
+let x: 
+    //^
+"#,
+		assert!(type_annotation_shows_struct.len() == 1)
+		assert!(type_annotation_shows_struct.get(0).unwrap().label == "Foo")
 	);
 }

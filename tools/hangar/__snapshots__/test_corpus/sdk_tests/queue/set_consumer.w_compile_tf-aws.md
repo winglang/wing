@@ -347,6 +347,9 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
+        if (ops.includes("$inflight_init")) {
+          Predicate._registerBindObject(this.c, host, []);
+        }
         if (ops.includes("test")) {
           Predicate._registerBindObject(this.c, host, ["peek"]);
         }

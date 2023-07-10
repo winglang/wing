@@ -9,6 +9,15 @@ source: libs/wingc/src/lsp/completions.rs
   sortText: ff|asBool
   insertText: asBool($0)
   insertTextFormat: 2
+  additionalTextEdits:
+    - range:
+        start:
+          line: 2
+          character: 12
+        end:
+          line: 2
+          character: 13
+      newText: "?."
   command:
     title: triggerParameterHints
     command: editor.action.triggerParameterHints
@@ -20,6 +29,15 @@ source: libs/wingc/src/lsp/completions.rs
   sortText: ff|asNum
   insertText: asNum($0)
   insertTextFormat: 2
+  additionalTextEdits:
+    - range:
+        start:
+          line: 2
+          character: 12
+        end:
+          line: 2
+          character: 13
+      newText: "?."
   command:
     title: triggerParameterHints
     command: editor.action.triggerParameterHints
@@ -31,6 +49,15 @@ source: libs/wingc/src/lsp/completions.rs
   sortText: ff|asStr
   insertText: asStr($0)
   insertTextFormat: 2
+  additionalTextEdits:
+    - range:
+        start:
+          line: 2
+          character: 12
+        end:
+          line: 2
+          character: 13
+      newText: "?."
   command:
     title: triggerParameterHints
     command: editor.action.triggerParameterHints
@@ -42,6 +69,15 @@ source: libs/wingc/src/lsp/completions.rs
   sortText: ff|get
   insertText: get($0)
   insertTextFormat: 2
+  additionalTextEdits:
+    - range:
+        start:
+          line: 2
+          character: 12
+        end:
+          line: 2
+          character: 13
+      newText: "?."
   command:
     title: triggerParameterHints
     command: editor.action.triggerParameterHints
@@ -53,6 +89,15 @@ source: libs/wingc/src/lsp/completions.rs
   sortText: ff|getAt
   insertText: getAt($0)
   insertTextFormat: 2
+  additionalTextEdits:
+    - range:
+        start:
+          line: 2
+          character: 12
+        end:
+          line: 2
+          character: 13
+      newText: "?."
   command:
     title: triggerParameterHints
     command: editor.action.triggerParameterHints
@@ -64,6 +109,15 @@ source: libs/wingc/src/lsp/completions.rs
   sortText: ff|tryAsBool
   insertText: tryAsBool($0)
   insertTextFormat: 2
+  additionalTextEdits:
+    - range:
+        start:
+          line: 2
+          character: 12
+        end:
+          line: 2
+          character: 13
+      newText: "?."
   command:
     title: triggerParameterHints
     command: editor.action.triggerParameterHints
@@ -75,6 +129,15 @@ source: libs/wingc/src/lsp/completions.rs
   sortText: ff|tryAsNum
   insertText: tryAsNum($0)
   insertTextFormat: 2
+  additionalTextEdits:
+    - range:
+        start:
+          line: 2
+          character: 12
+        end:
+          line: 2
+          character: 13
+      newText: "?."
   command:
     title: triggerParameterHints
     command: editor.action.triggerParameterHints
@@ -86,6 +149,15 @@ source: libs/wingc/src/lsp/completions.rs
   sortText: ff|tryAsStr
   insertText: tryAsStr($0)
   insertTextFormat: 2
+  additionalTextEdits:
+    - range:
+        start:
+          line: 2
+          character: 12
+        end:
+          line: 2
+          character: 13
+      newText: "?."
   command:
     title: triggerParameterHints
     command: editor.action.triggerParameterHints
@@ -97,6 +169,15 @@ source: libs/wingc/src/lsp/completions.rs
   sortText: ff|tryGet
   insertText: tryGet($0)
   insertTextFormat: 2
+  additionalTextEdits:
+    - range:
+        start:
+          line: 2
+          character: 12
+        end:
+          line: 2
+          character: 13
+      newText: "?."
   command:
     title: triggerParameterHints
     command: editor.action.triggerParameterHints
@@ -108,6 +189,15 @@ source: libs/wingc/src/lsp/completions.rs
   sortText: ff|tryGetAt
   insertText: tryGetAt($0)
   insertTextFormat: 2
+  additionalTextEdits:
+    - range:
+        start:
+          line: 2
+          character: 12
+        end:
+          line: 2
+          character: 13
+      newText: "?."
   command:
     title: triggerParameterHints
     command: editor.action.triggerParameterHints
