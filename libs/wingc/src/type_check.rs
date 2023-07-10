@@ -13,10 +13,9 @@ use crate::comp_ctx::{CompilationContext, CompilationPhase};
 use crate::diagnostic::{report_diagnostic, Diagnostic, TypeError, WingSpan};
 use crate::docs::Docs;
 use crate::{
-	dbg_panic, debug, WINGSDK_ARRAY, WINGSDK_ASSEMBLY_NAME, WINGSDK_CLOUD_MODULE, WINGSDK_DURATION, WINGSDK_HTTP_MODULE,
-	WINGSDK_JSON, WINGSDK_MAP, WINGSDK_MATH_MODULE, WINGSDK_MUT_ARRAY, WINGSDK_MUT_JSON, WINGSDK_MUT_MAP,
-	WINGSDK_MUT_SET, WINGSDK_REDIS_MODULE, WINGSDK_RESOURCE, WINGSDK_SET, WINGSDK_STD_MODULE, WINGSDK_STRING,
-	WINGSDK_UTIL_MODULE,
+	dbg_panic, debug, WINGSDK_ARRAY, WINGSDK_ASSEMBLY_NAME, WINGSDK_BRINGABLE_MODULES, WINGSDK_DURATION, WINGSDK_JSON,
+	WINGSDK_MAP, WINGSDK_MUT_ARRAY, WINGSDK_MUT_JSON, WINGSDK_MUT_MAP, WINGSDK_MUT_SET, WINGSDK_RESOURCE, WINGSDK_SET,
+	WINGSDK_STD_MODULE, WINGSDK_STRING,
 };
 use derivative::Derivative;
 use indexmap::{IndexMap, IndexSet};
@@ -2539,26 +2538,16 @@ impl<'a> TypeChecker<'a> {
 				} else {
 					// case 2: bring module_name;
 					// case 3: bring module_name as identifier;
-					match module_name.name.as_str() {
-						// If the module name is a built-in module, then we use @winglang/sdk as the library name,
-						// and import the module as a namespace. If the user doesn't specify an identifier, then
-						// we use the module name as the identifier.
-						// For example, `bring cloud` will import the `cloud` namespace from @winglang/sdk and assign it
-						// to an identifier named `cloud`.
-						WINGSDK_CLOUD_MODULE | WINGSDK_REDIS_MODULE | WINGSDK_UTIL_MODULE | WINGSDK_HTTP_MODULE
-						| WINGSDK_MATH_MODULE => {
-							library_name = WINGSDK_ASSEMBLY_NAME.to_string();
-							namespace_filter = vec![module_name.name.clone()];
-							alias = identifier.as_ref().unwrap_or(&module_name);
-						}
-						WINGSDK_STD_MODULE => {
-							self.spanned_error(stmt, format!("Redundant bring of \"{}\"", WINGSDK_STD_MODULE));
-							return;
-						}
-						_ => {
-							self.spanned_error(stmt, format!("\"{}\" is not a built-in module", module_name.name));
-							return;
-						}
+					if WINGSDK_BRINGABLE_MODULES.contains(&module_name.name.as_str()) {
+						library_name = WINGSDK_ASSEMBLY_NAME.to_string();
+						namespace_filter = vec![module_name.name.clone()];
+						alias = identifier.as_ref().unwrap_or(&module_name);
+					} else if module_name.name.as_str() == WINGSDK_STD_MODULE {
+						self.spanned_error(stmt, format!("Redundant bring of \"{}\"", WINGSDK_STD_MODULE));
+						return;
+					} else {
+						self.spanned_error(stmt, format!("\"{}\" is not a built-in module", module_name.name));
+						return;
 					}
 				};
 

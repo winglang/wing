@@ -8,9 +8,9 @@ import { Json, IInflightHost } from "../std";
 import { BaseResourceSchema } from "../testing/simulator";
 
 /**
- * Simulator implementation of `cloud.Table`.
+ * Simulator implementation of `ex.Table`.
  *
- * @inflight `@winglang/sdk.cloud.ITableClient`
+ * @inflight `@winglang/sdk.ex.ITableClient`
  */
 export class Table extends ex.Table implements ISimulatorResource {
   private readonly initialRows: Record<string, Json> = {};

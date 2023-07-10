@@ -15,7 +15,7 @@ sidebar_position: 100
 
 ### Redis <a name="Redis" id="@winglang/sdk.ex.Redis"></a>
 
-**Inflight client:** [@winglang/sdk.redis.IRedisClient](#@winglang/sdk.redis.IRedisClient)
+**Inflight client:** [@winglang/sdk.ex.IRedisClient](#@winglang/sdk.ex.IRedisClient)
 
 A cloud redis db.
 
@@ -70,7 +70,7 @@ Information on how to display a resource in the UI.
 
 ### Table <a name="Table" id="@winglang/sdk.ex.Table"></a>
 
-**Inflight client:** [@winglang/sdk.cloud.ITableClient](#@winglang/sdk.cloud.ITableClient)
+**Inflight client:** [@winglang/sdk.ex.ITableClient](#@winglang/sdk.ex.ITableClient)
 
 A NoSQL database table that can be used to store and query data.
 

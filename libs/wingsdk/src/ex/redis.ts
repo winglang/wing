@@ -11,7 +11,7 @@ export const REDIS_FQN = fqnForType("redis.Redis");
 /**
  * A cloud redis db.
  *
- * @inflight `@winglang/sdk.redis.IRedisClient`
+ * @inflight `@winglang/sdk.ex.IRedisClient`
  */
 export abstract class Redis extends Resource {
   /**

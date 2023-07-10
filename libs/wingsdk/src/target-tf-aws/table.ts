@@ -18,9 +18,9 @@ const NAME_OPTS: NameOptions = {
 };
 
 /**
- * AWS implementation of `cloud.Table`.
+ * AWS implementation of `ex.Table`.
  *
- * @inflight `@winglang/sdk.cloud.ITableClient`
+ * @inflight `@winglang/sdk.ex.ITableClient`
  */
 export class Table extends ex.Table {
   private readonly table: DynamodbTable;

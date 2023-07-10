@@ -123,7 +123,7 @@ class TableBasedKeyValueStore impl IKVStore {
       name: "table",
       primaryKey: "key",
       columns: {
-        value: cloud.ColumnType.STRING
+        value: ex.ColumnType.STRING
       }
     );
   }
