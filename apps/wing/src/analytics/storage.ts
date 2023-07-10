@@ -7,18 +7,43 @@ import * as os from "os";
 
 const WING_HOME_DIR = path.join(os.homedir(), ".wing")
 
+/**
+ * AnalyticsConfig is the configuration for the analytics collection
+ */
 export interface AnalyticsConfig {
+  /** user's anonymous id */
   anonymousId: string;
+  /** boolean flag to determine if user has already been given a disclaimer message */
   disclaimerDisplayed?: boolean;
+  /** optional opt out value */
   optOut?: boolean;
 }
 
+/**
+ * Props for AnalyticsStorage, mostly used for testing and debugging
+ */
 interface AnalyticsStorageProps {
+  /** 
+   * directory to store
+   * @default path.join(os.tmpdir(), "wing-analytics")
+   */
   analyticsStorageDir?: string;
+  /**
+   * path to analytics config file
+   * @default path.join(path.join(WING_HOME_DIR, 'wing-analytics-config.json'))
+   */
   configFile?: string;
+  /**
+   * debug flag for verbose logging when storing and retrieving analytics events
+   * @default false
+   */
   debug?: boolean;
 }
 
+/**
+ * Storage class used to encapsulate the storage and retrieval of analytics events
+ * and configuration. Errors are ignored for the most part unless in debug mode.
+ */
 export class AnalyticsStorage {
   analyticsStorageDir: string;
   analyticsConfigFile: string;
@@ -32,6 +57,12 @@ export class AnalyticsStorage {
     this.analyticsConfig = this.loadConfig();
   }
 
+  /**
+   * Stores a single analytic event to disk
+   * 
+   * @param event the analytic event to save
+   * @returns the path to the saved event or undefined if there was an error
+   */
   public storeAnalyticEvent(event: AnalyticEvent): string | undefined {
     try {
       if (this.analyticsConfig.optOut == true) {
@@ -64,6 +95,12 @@ export class AnalyticsStorage {
     }
   }
 
+  /**
+   * Retrieves an analytic event from disk
+   * 
+   * @param filePath the path the event was saved to
+   * @returns the event or undefined if there was an error
+   */
   public loadEvent(filePath: string): AnalyticEvent | undefined {
     try {
       const fileContents = readFileSync(filePath, 'utf-8');
@@ -74,6 +111,12 @@ export class AnalyticsStorage {
     }
   }
 
+  /**
+   * Reads the analytics config for the user's anonymous id, 
+   * if an id does not exist, one is generated and saved to disk
+   * 
+   * @returns the anonymous id for the user
+   */
   public getAnonymousId(): string {
     let config = this.loadConfig();
     if (!config.anonymousId) {
@@ -83,10 +126,17 @@ export class AnalyticsStorage {
     return config.anonymousId;
   }
 
+
   private generateAnonymousId(): string {
     return randomBytes(16).toString('hex');
   }
 
+  /**
+   * Retrieves the analytics config from disk, if one does not exist
+   * a new one is created and saved to disk
+   * 
+   * @returns the analytics config for the user
+   */
   public loadConfig(): AnalyticsConfig {
     try {
       const fileContents = readFileSync(this.analyticsConfigFile, 'utf-8');
@@ -109,6 +159,11 @@ export class AnalyticsStorage {
     }
   }
 
+  /**
+   * Saves the analytics config to disk
+   * 
+   * @param config the analytics config to save to disk
+   */
   public saveConfig(config: AnalyticsConfig) {
     if (!existsSync(WING_HOME_DIR)) {
       mkdirSync(WING_HOME_DIR);
@@ -136,7 +191,6 @@ export class AnalyticsStorage {
       return accumulated;
     }, {});
   }
-
 
   private saveEvent(filePath: string, event: AnalyticEvent) {
     event.properties = this.flattenProperties(event.properties) as any;
