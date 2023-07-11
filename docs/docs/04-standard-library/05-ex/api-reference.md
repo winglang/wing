@@ -24,7 +24,7 @@ A cloud redis db.
 ```wing
 bring ex;
 
-new ex.Redis()
+new ex.Redis();
 ```
 
 | **Name** | **Type** | **Description** |
@@ -79,7 +79,7 @@ A NoSQL database table that can be used to store and query data.
 ```wing
 bring ex;
 
-new ex.Table(props: TableProps)
+new ex.Table(props: TableProps);
 ```
 
 | **Name** | **Type** | **Description** |
@@ -207,7 +207,7 @@ Properties for `Table`.
 ```wing
 bring ex;
 
-let TableProps = ex.TableProps{ ... }
+let TableProps = ex.TableProps{ ... };
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -289,7 +289,7 @@ Base class for `Redis` Client.
 ```wing
 bring ex;
 
-new ex.RedisClientBase()
+new ex.RedisClientBase();
 ```
 
 | **Name** | **Type** | **Description** |

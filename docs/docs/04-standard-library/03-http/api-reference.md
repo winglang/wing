@@ -23,7 +23,7 @@ An object containing any custom settings that you want to apply to the request.
 ```wing
 bring http;
 
-let RequestOptions = http.RequestOptions{ ... }
+let RequestOptions = http.RequestOptions{ ... };
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -129,7 +129,7 @@ The response to a HTTP request.
 ```wing
 bring http;
 
-let Response = http.Response{ ... }
+let Response = http.Response{ ... };
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -219,7 +219,7 @@ the Http class is used for calling different HTTP methods and requesting and sen
 ```wing
 bring http;
 
-new http.Util()
+new http.Util();
 ```
 
 | **Name** | **Type** | **Description** |
@@ -246,7 +246,7 @@ new http.Util()
 ```wing
 bring http;
 
-http.Util.delete(url: str, options?: RequestOptions)
+http.Util.delete(url: str, options?: RequestOptions);
 ```
 
 **Inflight client:** [true](#true)
@@ -270,7 +270,7 @@ Sends a DELETE request.
 ```wing
 bring http;
 
-http.Util.fetch(url: str, options?: RequestOptions)
+http.Util.fetch(url: str, options?: RequestOptions);
 ```
 
 **Inflight client:** [true](#true)
@@ -294,7 +294,7 @@ Sends an HTTP request to a URL, returning a fulfilled or failed response.
 ```wing
 bring http;
 
-http.Util.get(url: str, options?: RequestOptions)
+http.Util.get(url: str, options?: RequestOptions);
 ```
 
 **Inflight client:** [true](#true)
@@ -318,7 +318,7 @@ Sends a GET request.
 ```wing
 bring http;
 
-http.Util.patch(url: str, options?: RequestOptions)
+http.Util.patch(url: str, options?: RequestOptions);
 ```
 
 **Inflight client:** [true](#true)
@@ -342,7 +342,7 @@ Sends a PATCH request.
 ```wing
 bring http;
 
-http.Util.post(url: str, options?: RequestOptions)
+http.Util.post(url: str, options?: RequestOptions);
 ```
 
 **Inflight client:** [true](#true)
@@ -366,7 +366,7 @@ Sends a POST request.
 ```wing
 bring http;
 
-http.Util.put(url: str, options?: RequestOptions)
+http.Util.put(url: str, options?: RequestOptions);
 ```
 
 **Inflight client:** [true](#true)
