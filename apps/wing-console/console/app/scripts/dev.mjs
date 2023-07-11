@@ -1,9 +1,10 @@
-import { createConsoleServer } from "@wingconsole/server";
 import { fileURLToPath } from "node:url";
 import { parseArgs } from "node:util";
-import open from "open";
 
+import { createConsoleServer } from "@wingconsole/server";
+import open from "open";
 import { createServer as createViteServer } from "vite";
+
 import { viteConfig } from "./config.mjs";
 
 const options = parseArgs({
@@ -36,7 +37,7 @@ const { port } = await createConsoleServer({
     addEventListener(event, listener) {},
     removeEventListener(event, listener) {},
     get(key) {
-      return undefined;
+      return;
     },
     set(key, value) {},
   },
@@ -45,6 +46,7 @@ const { port } = await createConsoleServer({
       await open(url);
     },
   },
+  requireAcceptTerms: true,
 });
 
 await open(`http://localhost:${port}`);

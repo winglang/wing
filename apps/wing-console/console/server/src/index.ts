@@ -32,6 +32,8 @@ export type { NodeDisplay } from "./utils/constructTreeNodeMap.js";
 
 export type RouteNames = keyof inferRouterInputs<Router> | undefined;
 
+export { isTermsAccepted } from "./utils/terms-and-conditions.js";
+
 export interface CreateConsoleServerOptions {
   wingfile: string;
   log: LogInterface;
@@ -41,6 +43,7 @@ export interface CreateConsoleServerOptions {
   hostUtils?: HostUtils;
   onTrace?: (trace: Trace) => void;
   onExpressCreated?: (app: ExpressApplication) => void;
+  requireAcceptTerms?: boolean;
 }
 
 export const createConsoleServer = async ({
@@ -52,6 +55,7 @@ export const createConsoleServer = async ({
   hostUtils,
   onTrace,
   onExpressCreated,
+  requireAcceptTerms,
 }: CreateConsoleServerOptions) => {
   const emitter = new Emittery<{
     invalidateQuery: RouteNames;
@@ -176,6 +180,7 @@ export const createConsoleServer = async ({
     hostUtils,
     onExpressCreated,
     wingfile,
+    requireAcceptTerms,
   });
 
   const close = async () => {
