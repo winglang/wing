@@ -113,19 +113,6 @@ The timeout for keep trying predicate.
 
 Utility functions.
 
-#### Initializers <a name="Initializers" id="@winglang/sdk.util.Util.Initializer"></a>
-
-```wing
-bring util;
-
-new util.Util()
-```
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-
----
-
 
 #### Static Functions <a name="Static Functions" id="Static Functions"></a>
 
@@ -146,7 +133,7 @@ new util.Util()
 ```wing
 bring util;
 
-util.Util.env(name: str)
+util.env(name: str);
 ```
 
 Returns the value of an environment variable.
@@ -202,16 +189,14 @@ The string to be hashed.
 ```wing
 bring util;
 
-util.Util.sleep(delay: Duration)
+util.sleep(delay: duration);
 ```
-
-**Inflight client:** [true](#true)
 
 Suspends execution for a given duration.
 
 ###### `delay`<sup>Required</sup> <a name="delay" id="@winglang/sdk.util.Util.sleep.parameter.delay"></a>
 
-- *Type:* <a href="#@winglang/sdk.std.Duration">Duration</a>
+- *Type:* <a href="#@winglang/sdk.std.Duration">duration</a>
 
 The time to suspend execution.
 
@@ -222,7 +207,7 @@ The time to suspend execution.
 ```wing
 bring util;
 
-util.Util.tryEnv(name: str)
+util.tryEnv(name: str);
 ```
 
 Returns the value of an environment variable.
@@ -252,10 +237,8 @@ Generates a version 4 UUID.
 ```wing
 bring util;
 
-util.Util.waitUntil(predicate: IPredicateHandler, props?: WaitUntilProps)
+util.waitUntil(predicate: IPredicateHandler, props?: WaitUntilProps);
 ```
-
-**Inflight client:** [true](#true)
 
 Run a predicate repeatedly, waiting until it returns true or until the timeout elapses.
 
@@ -277,6 +260,55 @@ Timeout and interval values, default to one 1m timeout and 0.1sec interval.
 
 
 
+## Structs <a name="Structs" id="Structs"></a>
+
+### WaitUntilProps <a name="WaitUntilProps" id="@winglang/sdk.util.WaitUntilProps"></a>
+
+Properties for `util.waitUntil`.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.util.WaitUntilProps.Initializer"></a>
+
+```wing
+bring util;
+
+let WaitUntilProps = util.WaitUntilProps{ ... };
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.util.WaitUntilProps.property.interval">interval</a></code> | <code><a href="#@winglang/sdk.std.Duration">duration</a></code> | Interval between predicate retries. |
+| <code><a href="#@winglang/sdk.util.WaitUntilProps.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">duration</a></code> | The timeout for keep trying predicate. |
+
+---
+
+##### `interval`<sup>Optional</sup> <a name="interval" id="@winglang/sdk.util.WaitUntilProps.property.interval"></a>
+
+```wing
+interval: duration;
+```
+
+- *Type:* <a href="#@winglang/sdk.std.Duration">duration</a>
+- *Default:* 0.1s
+
+Interval between predicate retries.
+
+---
+
+##### `timeout`<sup>Optional</sup> <a name="timeout" id="@winglang/sdk.util.WaitUntilProps.property.timeout"></a>
+
+```wing
+timeout: duration;
+```
+
+- *Type:* <a href="#@winglang/sdk.std.Duration">duration</a>
+- *Default:* 1m
+
+The timeout for keep trying predicate.
+
+---
+
 ## Protocols <a name="Protocols" id="Protocols"></a>
 
 ### IPredicateHandler <a name="IPredicateHandler" id="@winglang/sdk.util.IPredicateHandler"></a>
@@ -287,7 +319,7 @@ Timeout and interval values, default to one 1m timeout and 0.1sec interval.
 
 **Inflight client:** [@winglang/sdk.util.IPredicateHandlerClient](#@winglang/sdk.util.IPredicateHandlerClient)
 
-Represents a predicate with an inflight "handle" method that can be passed to `util.busyWait`.
+A predicate with an inflight "handle" method that can be passed to `util.busyWait`.
 
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -340,10 +372,8 @@ Inflight client for `IPredicateHandler`.
 ##### `handle` <a name="handle" id="@winglang/sdk.util.IPredicateHandlerClient.handle"></a>
 
 ```wing
-handle(): bool
+inflight handle(): bool
 ```
-
-**Inflight client:** [true](#true)
 
 The Predicate function that is called.
 

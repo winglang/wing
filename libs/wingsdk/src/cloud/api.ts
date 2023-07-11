@@ -333,7 +333,7 @@ export interface ApiResponse {
 }
 
 /**
- * Represents a resource with an inflight "handle" method that can be passed to
+ * A resource with an inflight "handle" method that can be passed to
  * one of the `Api` request preflight methods.
  *
  * @inflight `@winglang/sdk.cloud.IApiEndpointHandlerClient`

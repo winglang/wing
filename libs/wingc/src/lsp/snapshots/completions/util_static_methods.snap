@@ -100,7 +100,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 8
   documentation:
     kind: markdown
-    value: "```wing\nIPredicateHandler\n```\n---\nRepresents a predicate with an inflight \"handle\" method that can be passed to `util.busyWait`."
+    value: "```wing\nIPredicateHandler\n```\n---\nA predicate with an inflight \"handle\" method that can be passed to `util.busyWait`."
   sortText: ii|IPredicateHandler
 - label: IPredicateHandlerClient
   kind: 8

@@ -206,11 +206,11 @@ module.exports = function({  }) {
       }
     },
     "aws_dynamodb_table": {
-      "cloudTable": {
+      "exTable": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Table/Default",
-            "uniqueId": "cloudTable"
+            "path": "root/Default/Default/ex.Table/Default",
+            "uniqueId": "exTable"
           }
         },
         "attribute": [
@@ -221,7 +221,7 @@ module.exports = function({  }) {
         ],
         "billing_mode": "PAY_PER_REQUEST",
         "hash_key": "id",
-        "name": "users-tablecloud.Table-c83b78a7"
+        "name": "users-tableex.Table-c840a49c"
       }
     },
     "aws_iam_role": {
@@ -271,7 +271,7 @@ module.exports = function({  }) {
             "uniqueId": "cloudApi_cloudApi-OnRequest-86898773_IamRolePolicy_DAC639E5"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:PutItem\"],\"Resource\":[\"${aws_dynamodb_table.cloudTable.arn}\"],\"Effect\":\"Allow\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:PutItem\"],\"Resource\":[\"${aws_dynamodb_table.exTable.arn}\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.cloudApi_cloudApi-OnRequest-86898773_IamRole_6300C24F.name}"
       },
       "cloudApi_cloudApi-OnRequest-cdafee6e_IamRolePolicy_8BF9C89F": {
@@ -281,7 +281,7 @@ module.exports = function({  }) {
             "uniqueId": "cloudApi_cloudApi-OnRequest-cdafee6e_IamRolePolicy_8BF9C89F"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:Scan\"],\"Resource\":[\"${aws_dynamodb_table.cloudTable.arn}\"],\"Effect\":\"Allow\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:Scan\"],\"Resource\":[\"${aws_dynamodb_table.exTable.arn}\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.cloudApi_cloudApi-OnRequest-cdafee6e_IamRole_4382C442.name}"
       }
     },
@@ -353,9 +353,9 @@ module.exports = function({  }) {
         },
         "environment": {
           "variables": {
-            "DYNAMODB_TABLE_NAME_e8a1ff2c": "${aws_dynamodb_table.cloudTable.name}",
-            "DYNAMODB_TABLE_NAME_e8a1ff2c_COLUMNS": "{\"id\":0,\"name\":0,\"age\":1}",
-            "DYNAMODB_TABLE_NAME_e8a1ff2c_PRIMARY_KEY": "id",
+            "DYNAMODB_TABLE_NAME_d5d44f18": "${aws_dynamodb_table.exTable.name}",
+            "DYNAMODB_TABLE_NAME_d5d44f18_COLUMNS": "{\"id\":0,\"name\":0,\"age\":1}",
+            "DYNAMODB_TABLE_NAME_d5d44f18_PRIMARY_KEY": "id",
             "WING_FUNCTION_NAME": "cloud-Api-OnRequest-86898773-c8ed6547",
             "WING_TARGET": "tf-aws"
           }
@@ -382,9 +382,9 @@ module.exports = function({  }) {
         },
         "environment": {
           "variables": {
-            "DYNAMODB_TABLE_NAME_e8a1ff2c": "${aws_dynamodb_table.cloudTable.name}",
-            "DYNAMODB_TABLE_NAME_e8a1ff2c_COLUMNS": "{\"id\":0,\"name\":0,\"age\":1}",
-            "DYNAMODB_TABLE_NAME_e8a1ff2c_PRIMARY_KEY": "id",
+            "DYNAMODB_TABLE_NAME_d5d44f18": "${aws_dynamodb_table.exTable.name}",
+            "DYNAMODB_TABLE_NAME_d5d44f18_COLUMNS": "{\"id\":0,\"name\":0,\"age\":1}",
+            "DYNAMODB_TABLE_NAME_d5d44f18_PRIMARY_KEY": "id",
             "WING_FUNCTION_NAME": "cloud-Api-OnRequest-cdafee6e-c8147384",
             "WING_TARGET": "tf-aws"
           }
@@ -601,6 +601,7 @@ const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 const cloud = require('@winglang/sdk').cloud;
+const ex = require('@winglang/sdk').ex;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
@@ -694,7 +695,7 @@ class $Root extends $stdlib.std.Resource {
     }
     const api = this.node.root.newAbstract("@winglang/sdk.cloud.Api",this,"cloud.Api");
     const website = this.node.root.newAbstract("@winglang/sdk.cloud.Website",this,"cloud.Website",{ path: "./website_with_api" });
-    const usersTable = this.node.root.newAbstract("@winglang/sdk.cloud.Table",this,"cloud.Table",{ name: "users-table", primaryKey: "id", columns: Object.freeze({"id":cloud.ColumnType.STRING,"name":cloud.ColumnType.STRING,"age":cloud.ColumnType.NUMBER}) });
+    const usersTable = this.node.root.newAbstract("@winglang/sdk.ex.Table",this,"ex.Table",{ name: "users-table", primaryKey: "id", columns: Object.freeze({"id":ex.ColumnType.STRING,"name":ex.ColumnType.STRING,"age":ex.ColumnType.NUMBER}) });
     const getHandler = new $Closure1(this,"$Closure1");
     const postHandler = new $Closure2(this,"$Closure2");
     const optionsHandler = new $Closure3(this,"$Closure3");

@@ -34,6 +34,7 @@ export interface CreateExpressServerOptions {
   hostUtils?: HostUtils;
   onExpressCreated?: (app: express.Express) => void;
   wingfile: string;
+  requireAcceptTerms?: boolean;
 }
 
 export const createExpressServer = async ({
@@ -49,6 +50,7 @@ export const createExpressServer = async ({
   hostUtils,
   onExpressCreated,
   wingfile,
+  requireAcceptTerms = false,
 }: CreateExpressServerOptions) => {
   const app = express();
   app.use(cors());
@@ -74,6 +76,7 @@ export const createExpressServer = async ({
       appState,
       hostUtils,
       wingfile: wingfile ?? "",
+      requireAcceptTerms,
     };
   };
   app.use(

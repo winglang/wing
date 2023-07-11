@@ -118,7 +118,7 @@ export class MarkdownDocument {
    * Render a docs element into the markdown.
    */
   public docs(docs: DocsSchema, language?: Language) {
-    if (docs.inflight) {
+    if (docs.inflight && docs.inflight !== "true") {
       const sanitized = MarkdownDocument.sanitize(docs.inflight);
       this.lines(
         MarkdownDocument.bold("Inflight client:") +

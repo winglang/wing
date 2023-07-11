@@ -161,6 +161,10 @@ fn render_docs(markdown: &mut CodeMaker, docs: &Docs) {
 		if k == "macro" {
 			return;
 		}
+		// marking types that are skipped/changed in the documentation, irrelevant to the language server
+		if k == "skipDocs" || k == "wingType" {
+			return;
+		}
 
 		let value = if v == "true" {
 			String::default()

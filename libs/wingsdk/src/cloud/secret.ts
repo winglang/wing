@@ -25,7 +25,7 @@ export interface SecretProps {
 }
 
 /**
- * Represents a cloud secret.
+ * A cloud secret.
  *
  * @inflight `@winglang/sdk.cloud.ISecretClient`
  */
