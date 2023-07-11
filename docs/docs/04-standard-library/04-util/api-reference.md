@@ -12,101 +12,6 @@ sidebar_position: 100
 # API Reference <a name="API Reference" id="api-reference"></a>
 
 
-## Structs <a name="Structs" id="Structs"></a>
-
-### NanoidOptions <a name="NanoidOptions" id="@winglang/sdk.util.NanoidOptions"></a>
-
-Options to generating a unique ID.
-
-#### Initializer <a name="Initializer" id="@winglang/sdk.util.NanoidOptions.Initializer"></a>
-
-```wing
-bring util;
-
-let NanoidOptions = util.NanoidOptions{ ... }
-```
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@winglang/sdk.util.NanoidOptions.property.alphabet">alphabet</a></code> | <code>str</code> | Characters that make up the alphabet to generate the ID, limited to 256 characters or fewer. |
-| <code><a href="#@winglang/sdk.util.NanoidOptions.property.size">size</a></code> | <code>num</code> | Size of ID. |
-
----
-
-##### `alphabet`<sup>Optional</sup> <a name="alphabet" id="@winglang/sdk.util.NanoidOptions.property.alphabet"></a>
-
-```wing
-alphabet: str;
-```
-
-- *Type:* str
-
-Characters that make up the alphabet to generate the ID, limited to 256 characters or fewer.
-
----
-
-##### `size`<sup>Optional</sup> <a name="size" id="@winglang/sdk.util.NanoidOptions.property.size"></a>
-
-```wing
-size: num;
-```
-
-- *Type:* num
-- *Default:* 21
-
-Size of ID.
-
----
-
-### WaitUntilProps <a name="WaitUntilProps" id="@winglang/sdk.util.WaitUntilProps"></a>
-
-Properties for `util.waitUntil`.
-
-#### Initializer <a name="Initializer" id="@winglang/sdk.util.WaitUntilProps.Initializer"></a>
-
-```wing
-bring util;
-
-let WaitUntilProps = util.WaitUntilProps{ ... }
-```
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@winglang/sdk.util.WaitUntilProps.property.interval">interval</a></code> | <code><a href="#@winglang/sdk.std.Duration">Duration</a></code> | Interval between predicate retries. |
-| <code><a href="#@winglang/sdk.util.WaitUntilProps.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">Duration</a></code> | The timeout for keep trying predicate. |
-
----
-
-##### `interval`<sup>Optional</sup> <a name="interval" id="@winglang/sdk.util.WaitUntilProps.property.interval"></a>
-
-```wing
-interval: Duration;
-```
-
-- *Type:* <a href="#@winglang/sdk.std.Duration">Duration</a>
-- *Default:* 0.1s
-
-Interval between predicate retries.
-
----
-
-##### `timeout`<sup>Optional</sup> <a name="timeout" id="@winglang/sdk.util.WaitUntilProps.property.timeout"></a>
-
-```wing
-timeout: Duration;
-```
-
-- *Type:* <a href="#@winglang/sdk.std.Duration">Duration</a>
-- *Default:* 1m
-
-The timeout for keep trying predicate.
-
----
-
 ## Classes <a name="Classes" id="Classes"></a>
 
 ### Util <a name="Util" id="@winglang/sdk.util.Util"></a>
@@ -153,7 +58,7 @@ The name of the environment variable.
 ```wing
 bring util;
 
-util.Util.nanoid(options?: NanoidOptions)
+util.nanoid(options?: NanoidOptions);
 ```
 
 Generates a unique ID using the nanoid library.
@@ -171,7 +76,7 @@ Optional options object for generating the ID.
 ```wing
 bring util;
 
-util.Util.sha256(data: str)
+util.sha256(data: str);
 ```
 
 Computes the SHA256 hash of the given data.
@@ -227,7 +132,7 @@ The name of the environment variable.
 ```wing
 bring util;
 
-util.Util.uuidv4()
+util.uuidv4();
 ```
 
 Generates a version 4 UUID.
@@ -261,6 +166,52 @@ Timeout and interval values, default to one 1m timeout and 0.1sec interval.
 
 
 ## Structs <a name="Structs" id="Structs"></a>
+
+### NanoidOptions <a name="NanoidOptions" id="@winglang/sdk.util.NanoidOptions"></a>
+
+Options to generating a unique ID.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.util.NanoidOptions.Initializer"></a>
+
+```wing
+bring util;
+
+let NanoidOptions = util.NanoidOptions{ ... };
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.util.NanoidOptions.property.alphabet">alphabet</a></code> | <code>str</code> | Characters that make up the alphabet to generate the ID, limited to 256 characters or fewer. |
+| <code><a href="#@winglang/sdk.util.NanoidOptions.property.size">size</a></code> | <code>num</code> | Size of ID. |
+
+---
+
+##### `alphabet`<sup>Optional</sup> <a name="alphabet" id="@winglang/sdk.util.NanoidOptions.property.alphabet"></a>
+
+```wing
+alphabet: str;
+```
+
+- *Type:* str
+
+Characters that make up the alphabet to generate the ID, limited to 256 characters or fewer.
+
+---
+
+##### `size`<sup>Optional</sup> <a name="size" id="@winglang/sdk.util.NanoidOptions.property.size"></a>
+
+```wing
+size: num;
+```
+
+- *Type:* num
+- *Default:* 21
+
+Size of ID.
+
+---
 
 ### WaitUntilProps <a name="WaitUntilProps" id="@winglang/sdk.util.WaitUntilProps"></a>
 
