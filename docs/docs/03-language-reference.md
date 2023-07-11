@@ -1039,8 +1039,6 @@ includes for and while loops currently.
 > }
 > ```
   
-</details>
-
 [`▲ top`][top]
 
 ---
