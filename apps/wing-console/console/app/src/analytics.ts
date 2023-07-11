@@ -17,10 +17,12 @@ export const createAnalytics = (options: CreateAnalyticsOptions): Analytics => {
       segment.track({
         anonymousId: options.anonymousId,
         event,
-        properties: {
-          session_id: sessionId,
-          ...(properties || {}),
-        },
+        properties,
+        integrations: {
+          "Actions Amplitude": {
+            "session_id": sessionId
+          },
+        }
       });
     },
   };
