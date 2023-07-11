@@ -1,11 +1,11 @@
-bring cloud;
+bring ex;
 
-let t = new cloud.Table(cloud.TableProps{
+let t = new ex.Table(
   name: "simple-table",
   primaryKey: "id",
   columns: {
-    "id" => cloud.ColumnType.STRING,
-    "name" => cloud.ColumnType.STRING,
-    "age" => cloud.ColumnType.NUMBER,
+    "id" => ex.ColumnType.STRING,
+    "name" => ex.ColumnType.STRING,
+    "age" => ex.ColumnType.NUMBER,
   }
-});
+);

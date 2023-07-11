@@ -309,9 +309,9 @@ Object {
       },
     },
   ],
-  "usage": "bring { AuthorizationToken } from \\"@aws-cdk/aws-ecr\\"
+  "usage": "bring { AuthorizationToken } from \\"@aws-cdk/aws-ecr\\";
 
-AuthorizationToken.grantRead(grantee: IGrantable)",
+AuthorizationToken.grantRead(grantee: IGrantable);",
 }
 `;
 
@@ -319,9 +319,9 @@ exports[`wing snapshot 2`] = `
 " \`grantRead\` <a name=\\"grantRead\\" id=\\"@aws-cdk/aws-ecr.AuthorizationToken.grantRead\\"></a>
 
 \`\`\`wing
-bring { AuthorizationToken } from \\"@aws-cdk/aws-ecr\\"
+bring { AuthorizationToken } from \\"@aws-cdk/aws-ecr\\";
 
-AuthorizationToken.grantRead(grantee: IGrantable)
+AuthorizationToken.grantRead(grantee: IGrantable);
 \`\`\`
 
 Grant access to retrieve an authorization token.

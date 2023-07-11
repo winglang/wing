@@ -15,7 +15,7 @@ export const TEST_RUNNER_FQN = fqnForType("cloud.TestRunner");
 export interface TestRunnerProps {}
 
 /**
- * Represents a test engine.
+ * A test engine.
  *
  * @inflight `@winglang/sdk.cloud.ITestRunnerClient`
  */
@@ -101,7 +101,7 @@ export interface TestResult {
 }
 
 /**
- * Represents an trace emitted during simulation.
+ * A trace emitted during simulation.
  */
 export interface Trace {
   /**

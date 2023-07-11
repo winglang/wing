@@ -3,6 +3,7 @@ import { Code, InflightClient } from "../core";
 
 /**
  * Number
+ * @wingType num
  */
 export class Number {
   /**

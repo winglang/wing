@@ -10,7 +10,7 @@ import { Json, Resource } from "../std";
 export const WEBSITE_FQN = fqnForType("cloud.Website");
 
 /**
- * Represents a cloud static website.
+ * A cloud static website.
  *
  * @inflight `@winglang/sdk.cloud.IWebsiteClient`
  */
