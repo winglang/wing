@@ -261,7 +261,10 @@ export const ApiInteraction = ({
                   renderItem={(item) => {
                     const [method, route] = item.value.split(" ");
                     return (
-                      <div className="flex items-center pl-2">
+                      <div
+                        className="flex items-center pl-2"
+                        data-testid={`cloud.api:route-${route}`}
+                      >
                         <span className="shrink-0 w-[78px]">{method}</span>
                         <span className="w-full">{route}</span>
                       </div>
