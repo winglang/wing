@@ -41,6 +41,7 @@ export interface RouterContext {
   config?: Config;
   hostUtils?: HostUtils;
   wingfile: string;
+  requireAcceptTerms?: boolean;
 }
 
 const t = initTRPC.context<RouterContext>().create();
