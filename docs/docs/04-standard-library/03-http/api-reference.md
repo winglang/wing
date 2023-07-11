@@ -122,7 +122,7 @@ The default is "about:client".
 
 ### Response <a name="Response" id="@winglang/sdk.http.Response"></a>
 
-Represents the response to a request.
+The response to a HTTP request.
 
 #### Initializer <a name="Initializer" id="@winglang/sdk.http.Response.Initializer"></a>
 
@@ -140,7 +140,7 @@ let Response = http.Response{ ... };
 | <code><a href="#@winglang/sdk.http.Response.property.ok">ok</a></code> | <code>bool</code> | A boolean indicating whether the response was successful (status in the range 200 – 299) or not. |
 | <code><a href="#@winglang/sdk.http.Response.property.status">status</a></code> | <code>num</code> | The status code of the response. |
 | <code><a href="#@winglang/sdk.http.Response.property.url">url</a></code> | <code>str</code> | The URL of the response. |
-| <code><a href="#@winglang/sdk.http.Response.property.body">body</a></code> | <code>str</code> | A string represents the body contents. |
+| <code><a href="#@winglang/sdk.http.Response.property.body">body</a></code> | <code>str</code> | A string representation of the body contents. |
 
 ---
 
@@ -202,7 +202,7 @@ body: str;
 
 - *Type:* str
 
-A string represents the body contents.
+A string representation of the body contents.
 
 ---
 

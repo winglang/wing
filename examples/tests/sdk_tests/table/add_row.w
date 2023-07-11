@@ -1,9 +1,9 @@
-bring cloud;
+bring ex;
 
-let table = new cloud.Table( 
-    name: "users", 
+let table = new ex.Table(
+    name: "users",
     primaryKey: "name", 
-    columns: { "gender" => cloud.ColumnType.STRING } 
+    columns: { "gender" => ex.ColumnType.STRING } 
 );
 
 let marioInfo = Json { gender: "male", role: "plumber" };

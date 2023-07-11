@@ -121,7 +121,7 @@ export interface RequestOptions {
   readonly referrer?: string;
 }
 /**
- * Represents the response to a request.
+ * The response to a HTTP request.
  */
 export interface Response {
   /**
@@ -141,7 +141,7 @@ export interface Response {
    */
   readonly headers: Record<string, string>;
   /**
-   * A string represents the body contents.
+   * A string representation of the body contents.
    */
   readonly body?: string;
 }

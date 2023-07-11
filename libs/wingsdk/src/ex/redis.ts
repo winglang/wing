@@ -6,12 +6,12 @@ import { Resource } from "../std";
 /**
  * Global identifier for `Bucket`.
  */
-export const REDIS_FQN = fqnForType("redis.Redis");
+export const REDIS_FQN = fqnForType("ex.Redis");
 
 /**
- * Represents a cloud redis db.
+ * A cloud redis db.
  *
- * @inflight `@winglang/sdk.redis.IRedisClient`
+ * @inflight `@winglang/sdk.ex.IRedisClient`
  */
 export abstract class Redis extends Resource {
   /**

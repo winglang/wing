@@ -192,7 +192,7 @@ Timeout and interval values, default to one 1m timeout and 0.1sec interval.
 
 **Inflight client:** [@winglang/sdk.util.IPredicateHandlerClient](#@winglang/sdk.util.IPredicateHandlerClient)
 
-Represents a predicate with an inflight "handle" method that can be passed to `util.busyWait`.
+A predicate with an inflight "handle" method that can be passed to `util.busyWait`.
 
 
 #### Properties <a name="Properties" id="Properties"></a>

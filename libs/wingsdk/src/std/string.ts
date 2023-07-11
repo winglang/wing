@@ -42,6 +42,8 @@ export class String {
   /**
    * Returns the character at the specified index.
    *
+   * @macro ((args) => { if ($args$ >= $self$.length || $args$ + $self$.length < 0) {throw new Error("index out of bounds")}; return $self$.at($args$) })($args$)
+   *
    * @param index position of the character.
    * @returns string at the specified index.
    */

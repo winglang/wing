@@ -16,7 +16,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 7
   documentation:
     kind: markdown
-    value: "```wing\nclass Bucket\n```\n---\nRepresents a cloud object store."
+    value: "```wing\nclass Bucket\n```\n---\nA cloud object store."
   sortText: gg|Bucket
   insertText: Bucket($0)
   insertTextFormat: 2
@@ -27,7 +27,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 7
   documentation:
     kind: markdown
-    value: "```wing\nclass Counter\n```\n---\nRepresents a distributed atomic counter."
+    value: "```wing\nclass Counter\n```\n---\nA distributed atomic counter."
   sortText: gg|Counter
   insertText: Counter($0)
   insertTextFormat: 2
@@ -38,7 +38,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 7
   documentation:
     kind: markdown
-    value: "```wing\nclass Function impl IInflightHost\n```\n---\nRepresents a function."
+    value: "```wing\nclass Function impl IInflightHost\n```\n---\nA function."
   sortText: gg|Function
   insertText: Function($0)
   insertTextFormat: 2
@@ -49,7 +49,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 7
   documentation:
     kind: markdown
-    value: "```wing\nclass Queue\n```\n---\nRepresents a queue."
+    value: "```wing\nclass Queue\n```\n---\nA queue."
   sortText: gg|Queue
   insertText: Queue($0)
   insertTextFormat: 2
@@ -60,7 +60,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 7
   documentation:
     kind: markdown
-    value: "```wing\nclass Schedule\n```\n---\nRepresents a schedule."
+    value: "```wing\nclass Schedule\n```\n---\nA schedule."
   sortText: gg|Schedule
   insertText: Schedule($0)
   insertTextFormat: 2
@@ -71,7 +71,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 7
   documentation:
     kind: markdown
-    value: "```wing\nclass Secret\n```\n---\nRepresents a cloud secret."
+    value: "```wing\nclass Secret\n```\n---\nA cloud secret."
   sortText: gg|Secret
   insertText: Secret($0)
   insertTextFormat: 2
@@ -82,20 +82,9 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 7
   documentation:
     kind: markdown
-    value: "```wing\nclass Service\n```\n---\nRepresents a service."
+    value: "```wing\nclass Service\n```\n---\nA long-running service."
   sortText: gg|Service
   insertText: Service($0)
-  insertTextFormat: 2
-  command:
-    title: triggerParameterHints
-    command: editor.action.triggerParameterHints
-- label: Table
-  kind: 7
-  documentation:
-    kind: markdown
-    value: "```wing\nclass Table\n```\n---\nRepresents a NoSQL database table that can be used to store and query data."
-  sortText: gg|Table
-  insertText: Table($0)
   insertTextFormat: 2
   command:
     title: triggerParameterHints
@@ -104,7 +93,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 7
   documentation:
     kind: markdown
-    value: "```wing\nclass TestRunner\n```\n---\nRepresents a test engine."
+    value: "```wing\nclass TestRunner\n```\n---\nA test engine."
   sortText: gg|TestRunner
   insertText: TestRunner($0)
   insertTextFormat: 2
@@ -115,7 +104,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 7
   documentation:
     kind: markdown
-    value: "```wing\nclass Topic\n```\n---\nRepresents a topic."
+    value: "```wing\nclass Topic\n```\n---\nA topic."
   sortText: gg|Topic
   insertText: Topic($0)
   insertTextFormat: 2
@@ -126,7 +115,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 7
   documentation:
     kind: markdown
-    value: "```wing\nclass Website\n```\n---\nRepresents a cloud static website."
+    value: "```wing\nclass Website\n```\n---\nA cloud static website."
   sortText: gg|Website
   insertText: Website($0)
   insertTextFormat: 2

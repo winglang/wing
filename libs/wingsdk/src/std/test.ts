@@ -19,7 +19,7 @@ export const TEST_FQN = fqnForType("std.Test");
 export interface TestProps extends FunctionProps {}
 
 /**
- * Represents a unit test.
+ * A unit test.
  *
  * @inflight `@winglang/sdk.cloud.ITestClient`
  * @skipDocs

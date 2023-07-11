@@ -31,11 +31,11 @@
   },
   "resource": {
     "aws_dynamodb_table": {
-      "cloudTable": {
+      "exTable": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Table/Default",
-            "uniqueId": "cloudTable"
+            "path": "root/Default/Default/ex.Table/Default",
+            "uniqueId": "exTable"
           }
         },
         "attribute": [
@@ -46,7 +46,7 @@
         ],
         "billing_mode": "PAY_PER_REQUEST",
         "hash_key": "id",
-        "name": "simple-tablecloud.Table-c83b78a7"
+        "name": "simple-tableex.Table-c840a49c"
       }
     }
   }
@@ -60,15 +60,11 @@ const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
-const cloud = require('@winglang/sdk').cloud;
+const ex = require('@winglang/sdk').ex;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
-    const t = this.node.root.newAbstract("@winglang/sdk.cloud.Table",this,"cloud.Table",{
-    "name": "simple-table",
-    "primaryKey": "id",
-    "columns": Object.freeze({"id":cloud.ColumnType.STRING,"name":cloud.ColumnType.STRING,"age":cloud.ColumnType.NUMBER}),}
-    );
+    const t = this.node.root.newAbstract("@winglang/sdk.ex.Table",this,"ex.Table",{ name: "simple-table", primaryKey: "id", columns: Object.freeze({"id":ex.ColumnType.STRING,"name":ex.ColumnType.STRING,"age":ex.ColumnType.NUMBER}) });
   }
 }
 class $App extends $AppBase {
