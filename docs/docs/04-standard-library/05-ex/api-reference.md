@@ -196,86 +196,6 @@ Table primary key name.
 ---
 
 
-## Structs <a name="Structs" id="Structs"></a>
-
-### TableProps <a name="TableProps" id="@winglang/sdk.ex.TableProps"></a>
-
-Properties for `Table`.
-
-#### Initializer <a name="Initializer" id="@winglang/sdk.ex.TableProps.Initializer"></a>
-
-```wing
-bring ex;
-
-let TableProps = ex.TableProps{ ... };
-```
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@winglang/sdk.ex.TableProps.property.columns">columns</a></code> | <code>MutMap&lt;<a href="#@winglang/sdk.ex.ColumnType">ColumnType</a>&gt;</code> | The table's columns. |
-| <code><a href="#@winglang/sdk.ex.TableProps.property.initialRows">initialRows</a></code> | <code>MutMap&lt;<a href="#@winglang/sdk.std.Json">Json</a>&gt;</code> | The table's initial rows. |
-| <code><a href="#@winglang/sdk.ex.TableProps.property.name">name</a></code> | <code>str</code> | The table's name. |
-| <code><a href="#@winglang/sdk.ex.TableProps.property.primaryKey">primaryKey</a></code> | <code>str</code> | The table's primary key. |
-
----
-
-##### `columns`<sup>Optional</sup> <a name="columns" id="@winglang/sdk.ex.TableProps.property.columns"></a>
-
-```wing
-columns: MutMap<ColumnType>;
-```
-
-- *Type:* MutMap&lt;<a href="#@winglang/sdk.ex.ColumnType">ColumnType</a>&gt;
-- *Default:* undefined
-
-The table's columns.
-
----
-
-##### `initialRows`<sup>Optional</sup> <a name="initialRows" id="@winglang/sdk.ex.TableProps.property.initialRows"></a>
-
-```wing
-initialRows: MutMap<Json>;
-```
-
-- *Type:* MutMap&lt;<a href="#@winglang/sdk.std.Json">Json</a>&gt;
-- *Default:* undefined
-
-The table's initial rows.
-
----
-
-##### `name`<sup>Optional</sup> <a name="name" id="@winglang/sdk.ex.TableProps.property.name"></a>
-
-```wing
-name: str;
-```
-
-- *Type:* str
-- *Default:* undefined
-
-The table's name.
-
----
-
-##### `primaryKey`<sup>Optional</sup> <a name="primaryKey" id="@winglang/sdk.ex.TableProps.property.primaryKey"></a>
-
-```wing
-primaryKey: str;
-```
-
-- *Type:* str
-- *Default:* undefined
-
-The table's primary key.
-
-No two rows can have the same value for the
-primary key.
-
----
-
 ## Classes <a name="Classes" id="Classes"></a>
 
 ### RedisClientBase <a name="RedisClientBase" id="@winglang/sdk.ex.RedisClientBase"></a>
@@ -460,6 +380,86 @@ Get url of redis server.
 
 
 
+## Structs <a name="Structs" id="Structs"></a>
+
+### TableProps <a name="TableProps" id="@winglang/sdk.ex.TableProps"></a>
+
+Properties for `Table`.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.ex.TableProps.Initializer"></a>
+
+```wing
+bring ex;
+
+let TableProps = ex.TableProps{ ... };
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.ex.TableProps.property.columns">columns</a></code> | <code>MutMap&lt;<a href="#@winglang/sdk.ex.ColumnType">ColumnType</a>&gt;</code> | The table's columns. |
+| <code><a href="#@winglang/sdk.ex.TableProps.property.initialRows">initialRows</a></code> | <code>MutMap&lt;<a href="#@winglang/sdk.std.Json">Json</a>&gt;</code> | The table's initial rows. |
+| <code><a href="#@winglang/sdk.ex.TableProps.property.name">name</a></code> | <code>str</code> | The table's name. |
+| <code><a href="#@winglang/sdk.ex.TableProps.property.primaryKey">primaryKey</a></code> | <code>str</code> | The table's primary key. |
+
+---
+
+##### `columns`<sup>Optional</sup> <a name="columns" id="@winglang/sdk.ex.TableProps.property.columns"></a>
+
+```wing
+columns: MutMap<ColumnType>;
+```
+
+- *Type:* MutMap&lt;<a href="#@winglang/sdk.ex.ColumnType">ColumnType</a>&gt;
+- *Default:* undefined
+
+The table's columns.
+
+---
+
+##### `initialRows`<sup>Optional</sup> <a name="initialRows" id="@winglang/sdk.ex.TableProps.property.initialRows"></a>
+
+```wing
+initialRows: MutMap<Json>;
+```
+
+- *Type:* MutMap&lt;<a href="#@winglang/sdk.std.Json">Json</a>&gt;
+- *Default:* undefined
+
+The table's initial rows.
+
+---
+
+##### `name`<sup>Optional</sup> <a name="name" id="@winglang/sdk.ex.TableProps.property.name"></a>
+
+```wing
+name: str;
+```
+
+- *Type:* str
+- *Default:* undefined
+
+The table's name.
+
+---
+
+##### `primaryKey`<sup>Optional</sup> <a name="primaryKey" id="@winglang/sdk.ex.TableProps.property.primaryKey"></a>
+
+```wing
+primaryKey: str;
+```
+
+- *Type:* str
+- *Default:* undefined
+
+The table's primary key.
+
+No two rows can have the same value for the
+primary key.
+
+---
+
 ## Protocols <a name="Protocols" id="Protocols"></a>
 
 ### IRedisClient <a name="IRedisClient" id="@winglang/sdk.ex.IRedisClient"></a>
@@ -487,10 +487,8 @@ Inflight interface for `Redis`.
 ##### `del` <a name="del" id="@winglang/sdk.ex.IRedisClient.del"></a>
 
 ```wing
-del(key: str): num
+inflight del(key: str): num
 ```
-
-**Inflight client:** [true](#true)
 
 Removes the specified key.
 
@@ -505,10 +503,8 @@ the key.
 ##### `get` <a name="get" id="@winglang/sdk.ex.IRedisClient.get"></a>
 
 ```wing
-get(key: str): str
+inflight get(key: str): str
 ```
-
-**Inflight client:** [true](#true)
 
 Get value at given key.
 
@@ -523,10 +519,8 @@ the key to get.
 ##### `hget` <a name="hget" id="@winglang/sdk.ex.IRedisClient.hget"></a>
 
 ```wing
-hget(key: str, field: str): str
+inflight hget(key: str, field: str): str
 ```
-
-**Inflight client:** [true](#true)
 
 Returns the value associated with field in the hash stored at key.
 
@@ -549,10 +543,8 @@ the field at given key.
 ##### `hset` <a name="hset" id="@winglang/sdk.ex.IRedisClient.hset"></a>
 
 ```wing
-hset(key: str, field: str, value: str): num
+inflight hset(key: str, field: str, value: str): num
 ```
-
-**Inflight client:** [true](#true)
 
 Sets the specified field to respective value in the hash stored at key.
 
@@ -583,20 +575,16 @@ value to set at field in key.
 ##### `rawClient` <a name="rawClient" id="@winglang/sdk.ex.IRedisClient.rawClient"></a>
 
 ```wing
-rawClient(): any
+inflight rawClient(): any
 ```
-
-**Inflight client:** [true](#true)
 
 Get raw redis client (currently IoRedis).
 
 ##### `sadd` <a name="sadd" id="@winglang/sdk.ex.IRedisClient.sadd"></a>
 
 ```wing
-sadd(key: str, value: str): num
+inflight sadd(key: str, value: str): num
 ```
-
-**Inflight client:** [true](#true)
 
 Add the specified members to the set stored at key.
 
@@ -619,10 +607,8 @@ the value to add to the set at given key.
 ##### `set` <a name="set" id="@winglang/sdk.ex.IRedisClient.set"></a>
 
 ```wing
-set(key: str, value: str): void
+inflight set(key: str, value: str): void
 ```
-
-**Inflight client:** [true](#true)
 
 Set key value pair.
 
@@ -645,10 +631,8 @@ the value to store at given key.
 ##### `smembers` <a name="smembers" id="@winglang/sdk.ex.IRedisClient.smembers"></a>
 
 ```wing
-smembers(key: str): MutArray<str>
+inflight smembers(key: str): MutArray<str>
 ```
-
-**Inflight client:** [true](#true)
 
 Returns all the members of the set value stored at key.
 
@@ -663,10 +647,8 @@ the key.
 ##### `url` <a name="url" id="@winglang/sdk.ex.IRedisClient.url"></a>
 
 ```wing
-url(): str
+inflight url(): str
 ```
-
-**Inflight client:** [true](#true)
 
 Get url of redis server.
 
@@ -692,10 +674,8 @@ Inflight interface for `Table`.
 ##### `delete` <a name="delete" id="@winglang/sdk.ex.ITableClient.delete"></a>
 
 ```wing
-delete(key: str): void
+inflight delete(key: str): void
 ```
-
-**Inflight client:** [true](#true)
 
 Delete a row from the table, by primary key.
 
@@ -710,10 +690,8 @@ primary key to delete the row.
 ##### `get` <a name="get" id="@winglang/sdk.ex.ITableClient.get"></a>
 
 ```wing
-get(key: str): Json
+inflight get(key: str): Json
 ```
-
-**Inflight client:** [true](#true)
 
 Get a row from the table, by primary key.
 
@@ -728,10 +706,8 @@ primary key to search.
 ##### `insert` <a name="insert" id="@winglang/sdk.ex.ITableClient.insert"></a>
 
 ```wing
-insert(key: str, row: Json): void
+inflight insert(key: str, row: Json): void
 ```
-
-**Inflight client:** [true](#true)
 
 Insert a row into the table.
 
@@ -754,20 +730,16 @@ data to be inserted.
 ##### `list` <a name="list" id="@winglang/sdk.ex.ITableClient.list"></a>
 
 ```wing
-list(): MutArray<Json>
+inflight list(): MutArray<Json>
 ```
-
-**Inflight client:** [true](#true)
 
 List all rows in the table.
 
 ##### `update` <a name="update" id="@winglang/sdk.ex.ITableClient.update"></a>
 
 ```wing
-update(key: str, row: Json): void
+inflight update(key: str, row: Json): void
 ```
-
-**Inflight client:** [true](#true)
 
 Update a row in the table.
 

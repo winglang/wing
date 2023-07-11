@@ -12,6 +12,160 @@ sidebar_position: 100
 # API Reference <a name="API Reference" id="api-reference"></a>
 
 
+## Classes <a name="Classes" id="Classes"></a>
+
+### Http <a name="Http" id="@winglang/sdk.http.Util"></a>
+
+the Http class is used for calling different HTTP methods and requesting and sending information online,  as well as testing public accessible resources.
+
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.http.Util.delete">delete</a></code> | Sends a DELETE request. |
+| <code><a href="#@winglang/sdk.http.Util.fetch">fetch</a></code> | Sends an HTTP request to a URL, returning a fulfilled or failed response. |
+| <code><a href="#@winglang/sdk.http.Util.get">get</a></code> | Sends a GET request. |
+| <code><a href="#@winglang/sdk.http.Util.patch">patch</a></code> | Sends a PATCH request. |
+| <code><a href="#@winglang/sdk.http.Util.post">post</a></code> | Sends a POST request. |
+| <code><a href="#@winglang/sdk.http.Util.put">put</a></code> | Sends a PUT request. |
+
+---
+
+##### `delete` <a name="delete" id="@winglang/sdk.http.Util.delete"></a>
+
+```wing
+bring http;
+
+inflight http.delete(url: str, options?: RequestOptions);
+```
+
+Sends a DELETE request.
+
+###### `url`<sup>Required</sup> <a name="url" id="@winglang/sdk.http.Util.delete.parameter.url"></a>
+
+- *Type:* str
+
+---
+
+###### `options`<sup>Optional</sup> <a name="options" id="@winglang/sdk.http.Util.delete.parameter.options"></a>
+
+- *Type:* <a href="#@winglang/sdk.http.RequestOptions">RequestOptions</a>
+
+---
+
+##### `fetch` <a name="fetch" id="@winglang/sdk.http.Util.fetch"></a>
+
+```wing
+bring http;
+
+inflight http.fetch(url: str, options?: RequestOptions);
+```
+
+Sends an HTTP request to a URL, returning a fulfilled or failed response.
+
+###### `url`<sup>Required</sup> <a name="url" id="@winglang/sdk.http.Util.fetch.parameter.url"></a>
+
+- *Type:* str
+
+---
+
+###### `options`<sup>Optional</sup> <a name="options" id="@winglang/sdk.http.Util.fetch.parameter.options"></a>
+
+- *Type:* <a href="#@winglang/sdk.http.RequestOptions">RequestOptions</a>
+
+---
+
+##### `get` <a name="get" id="@winglang/sdk.http.Util.get"></a>
+
+```wing
+bring http;
+
+inflight http.get(url: str, options?: RequestOptions);
+```
+
+Sends a GET request.
+
+###### `url`<sup>Required</sup> <a name="url" id="@winglang/sdk.http.Util.get.parameter.url"></a>
+
+- *Type:* str
+
+---
+
+###### `options`<sup>Optional</sup> <a name="options" id="@winglang/sdk.http.Util.get.parameter.options"></a>
+
+- *Type:* <a href="#@winglang/sdk.http.RequestOptions">RequestOptions</a>
+
+---
+
+##### `patch` <a name="patch" id="@winglang/sdk.http.Util.patch"></a>
+
+```wing
+bring http;
+
+inflight http.patch(url: str, options?: RequestOptions);
+```
+
+Sends a PATCH request.
+
+###### `url`<sup>Required</sup> <a name="url" id="@winglang/sdk.http.Util.patch.parameter.url"></a>
+
+- *Type:* str
+
+---
+
+###### `options`<sup>Optional</sup> <a name="options" id="@winglang/sdk.http.Util.patch.parameter.options"></a>
+
+- *Type:* <a href="#@winglang/sdk.http.RequestOptions">RequestOptions</a>
+
+---
+
+##### `post` <a name="post" id="@winglang/sdk.http.Util.post"></a>
+
+```wing
+bring http;
+
+inflight http.post(url: str, options?: RequestOptions);
+```
+
+Sends a POST request.
+
+###### `url`<sup>Required</sup> <a name="url" id="@winglang/sdk.http.Util.post.parameter.url"></a>
+
+- *Type:* str
+
+---
+
+###### `options`<sup>Optional</sup> <a name="options" id="@winglang/sdk.http.Util.post.parameter.options"></a>
+
+- *Type:* <a href="#@winglang/sdk.http.RequestOptions">RequestOptions</a>
+
+---
+
+##### `put` <a name="put" id="@winglang/sdk.http.Util.put"></a>
+
+```wing
+bring http;
+
+inflight http.put(url: str, options?: RequestOptions);
+```
+
+Sends a PUT request.
+
+###### `url`<sup>Required</sup> <a name="url" id="@winglang/sdk.http.Util.put.parameter.url"></a>
+
+- *Type:* str
+
+---
+
+###### `options`<sup>Optional</sup> <a name="options" id="@winglang/sdk.http.Util.put.parameter.options"></a>
+
+- *Type:* <a href="#@winglang/sdk.http.RequestOptions">RequestOptions</a>
+
+---
+
+
+
 ## Structs <a name="Structs" id="Structs"></a>
 
 ### RequestOptions <a name="RequestOptions" id="@winglang/sdk.http.RequestOptions"></a>
@@ -205,187 +359,6 @@ body: str;
 A string representation of the body contents.
 
 ---
-
-## Classes <a name="Classes" id="Classes"></a>
-
-### Util <a name="Util" id="@winglang/sdk.http.Util"></a>
-
-**Inflight client:** [true](#true)
-
-the Http class is used for calling different HTTP methods and requesting and sending information online,  as well as testing public accessible resources.
-
-#### Initializers <a name="Initializers" id="@winglang/sdk.http.Util.Initializer"></a>
-
-```wing
-bring http;
-
-new http.Util();
-```
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-
----
-
-
-#### Static Functions <a name="Static Functions" id="Static Functions"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@winglang/sdk.http.Util.delete">delete</a></code> | Sends a DELETE request. |
-| <code><a href="#@winglang/sdk.http.Util.fetch">fetch</a></code> | Sends an HTTP request to a URL, returning a fulfilled or failed response. |
-| <code><a href="#@winglang/sdk.http.Util.get">get</a></code> | Sends a GET request. |
-| <code><a href="#@winglang/sdk.http.Util.patch">patch</a></code> | Sends a PATCH request. |
-| <code><a href="#@winglang/sdk.http.Util.post">post</a></code> | Sends a POST request. |
-| <code><a href="#@winglang/sdk.http.Util.put">put</a></code> | Sends a PUT request. |
-
----
-
-##### `delete` <a name="delete" id="@winglang/sdk.http.Util.delete"></a>
-
-```wing
-bring http;
-
-http.Util.delete(url: str, options?: RequestOptions);
-```
-
-**Inflight client:** [true](#true)
-
-Sends a DELETE request.
-
-###### `url`<sup>Required</sup> <a name="url" id="@winglang/sdk.http.Util.delete.parameter.url"></a>
-
-- *Type:* str
-
----
-
-###### `options`<sup>Optional</sup> <a name="options" id="@winglang/sdk.http.Util.delete.parameter.options"></a>
-
-- *Type:* <a href="#@winglang/sdk.http.RequestOptions">RequestOptions</a>
-
----
-
-##### `fetch` <a name="fetch" id="@winglang/sdk.http.Util.fetch"></a>
-
-```wing
-bring http;
-
-http.Util.fetch(url: str, options?: RequestOptions);
-```
-
-**Inflight client:** [true](#true)
-
-Sends an HTTP request to a URL, returning a fulfilled or failed response.
-
-###### `url`<sup>Required</sup> <a name="url" id="@winglang/sdk.http.Util.fetch.parameter.url"></a>
-
-- *Type:* str
-
----
-
-###### `options`<sup>Optional</sup> <a name="options" id="@winglang/sdk.http.Util.fetch.parameter.options"></a>
-
-- *Type:* <a href="#@winglang/sdk.http.RequestOptions">RequestOptions</a>
-
----
-
-##### `get` <a name="get" id="@winglang/sdk.http.Util.get"></a>
-
-```wing
-bring http;
-
-http.Util.get(url: str, options?: RequestOptions);
-```
-
-**Inflight client:** [true](#true)
-
-Sends a GET request.
-
-###### `url`<sup>Required</sup> <a name="url" id="@winglang/sdk.http.Util.get.parameter.url"></a>
-
-- *Type:* str
-
----
-
-###### `options`<sup>Optional</sup> <a name="options" id="@winglang/sdk.http.Util.get.parameter.options"></a>
-
-- *Type:* <a href="#@winglang/sdk.http.RequestOptions">RequestOptions</a>
-
----
-
-##### `patch` <a name="patch" id="@winglang/sdk.http.Util.patch"></a>
-
-```wing
-bring http;
-
-http.Util.patch(url: str, options?: RequestOptions);
-```
-
-**Inflight client:** [true](#true)
-
-Sends a PATCH request.
-
-###### `url`<sup>Required</sup> <a name="url" id="@winglang/sdk.http.Util.patch.parameter.url"></a>
-
-- *Type:* str
-
----
-
-###### `options`<sup>Optional</sup> <a name="options" id="@winglang/sdk.http.Util.patch.parameter.options"></a>
-
-- *Type:* <a href="#@winglang/sdk.http.RequestOptions">RequestOptions</a>
-
----
-
-##### `post` <a name="post" id="@winglang/sdk.http.Util.post"></a>
-
-```wing
-bring http;
-
-http.Util.post(url: str, options?: RequestOptions);
-```
-
-**Inflight client:** [true](#true)
-
-Sends a POST request.
-
-###### `url`<sup>Required</sup> <a name="url" id="@winglang/sdk.http.Util.post.parameter.url"></a>
-
-- *Type:* str
-
----
-
-###### `options`<sup>Optional</sup> <a name="options" id="@winglang/sdk.http.Util.post.parameter.options"></a>
-
-- *Type:* <a href="#@winglang/sdk.http.RequestOptions">RequestOptions</a>
-
----
-
-##### `put` <a name="put" id="@winglang/sdk.http.Util.put"></a>
-
-```wing
-bring http;
-
-http.Util.put(url: str, options?: RequestOptions);
-```
-
-**Inflight client:** [true](#true)
-
-Sends a PUT request.
-
-###### `url`<sup>Required</sup> <a name="url" id="@winglang/sdk.http.Util.put.parameter.url"></a>
-
-- *Type:* str
-
----
-
-###### `options`<sup>Optional</sup> <a name="options" id="@winglang/sdk.http.Util.put.parameter.options"></a>
-
-- *Type:* <a href="#@winglang/sdk.http.RequestOptions">RequestOptions</a>
-
----
-
-
 
 
 ## Enums <a name="Enums" id="Enums"></a>

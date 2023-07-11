@@ -526,6 +526,10 @@ export function extractDocs(docs: reflect.Docs): DocsSchema {
   });
 }
 
+export function isInflightMethod(docs: reflect.Docs): boolean {
+  return docs.customTag("inflight") === "true";
+}
+
 export function isSkipped(docs: reflect.Docs): boolean {
   return docs.customTag("skipDocs") === "true";
 }

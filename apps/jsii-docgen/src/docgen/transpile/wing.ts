@@ -1,7 +1,7 @@
 import * as reflect from "jsii-reflect";
 import * as transpile from "./transpile";
 import { TranspiledTypeReferenceToStringOptions } from "./transpile";
-import { getWingType, submodulePath } from "../schema";
+import { getWingType, isInflightMethod, submodulePath } from "../schema";
 import { BUILTIN_IMPORTS } from "../view/wing-filters";
 
 // Helpers
@@ -40,13 +40,17 @@ const formatInvocation = (
   method: string
 ) => {
   let target =
-    type.submodule && !BUILTIN_IMPORTS.includes(type.submodule)
+    type.name === "Util"
+      ? type.namespace
+      : type.submodule && !BUILTIN_IMPORTS.includes(type.submodule)
       ? `${type.namespace}.${type.name}`
       : type.name;
   if (method) {
     target = `${target}.${method}`;
   }
-  return `${target}(${formatArguments(inputs)});`;
+  return `${
+    isInflightMethod(type.source.docs) ? "inflight " : ""
+  }${target}(${formatArguments(inputs)});`;
 };
 
 const formatImport = (type: transpile.TranspiledType) => {
@@ -63,8 +67,15 @@ const formatImport = (type: transpile.TranspiledType) => {
   }
 };
 
-const formatSignature = (name: string, inputs: string[], returns?: string) => {
-  return `${name}(${formatArguments(inputs)})${returns ? ": " + returns : ""}`;
+const formatSignature = (
+  name: string,
+  inputs: string[],
+  returns?: string,
+  isInflight?: boolean
+) => {
+  return `${isInflight ? "inflight " : ""}${name}(${formatArguments(inputs)})${
+    returns ? ": " + returns : ""
+  }`;
 };
 
 /**
@@ -207,7 +218,9 @@ export class WingTranspile extends transpile.TranspileBase {
       parentType: type,
       import: formatImport(type),
       parameters,
-      signatures: [formatSignature(name, inputs, returns)],
+      signatures: [
+        formatSignature(name, inputs, returns, isInflightMethod(callable.docs)),
+      ],
       invocations: [invocation],
       returnType,
     };
