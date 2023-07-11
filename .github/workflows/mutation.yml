@@ -34,10 +34,12 @@ jobs:
           name_is_regexp: true
           if_no_artifact_found: ignore
           path: patches
+
       - uses: marocchino/action-workflow_run-status@54b6e87d6cb552fc5f36dbe9a722a6048725917a
         if: steps.download-artifacts.outputs.found_artifact == 'true'
         with:
           github_token: ${{secrets.GITHUB_TOKEN}}
+
       - name: Token check
         if: steps.download-artifacts.outputs.found_artifact == 'true'
         run: |
@@ -49,10 +51,22 @@ jobs:
             It requires private repo read/write permissions." >> $GITHUB_STEP_SUMMARY
             exit 1
           fi
+
+      - name: Add label to block auto merge
+        if: github.event.workflow_run.event == 'pull_request' && steps.download-artifacts.outputs.found_artifact == 'true'
+        run: |
+          curl \
+            -X POST \
+            -H "Authorization: Bearer ${{ secrets.MUTATION_TOKEN }}" \
+            -H "Accept: application/vnd.github.v3+json" \
+            "https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.workflow_run.pull_requests[0].number }}/labels" \
+            -d '["🚧 pr/do-not-merge"]'
+
       - name: Disable Git Hooks
         if: steps.download-artifacts.outputs.found_artifact == 'true'
         run: |
           git config --global core.hooksPath /dev/null
+
       - name: Checkout Workflow Branch
         if: steps.download-artifacts.outputs.found_artifact == 'true'
         uses: actions/checkout@v3
@@ -61,6 +75,7 @@ jobs:
           ref: ${{ github.event.workflow_run.head_branch }}
           repository: ${{ github.event.workflow_run.head_repository.full_name }}
           path: repo
+
       - id: self_mutation
         if: steps.download-artifacts.outputs.found_artifact == 'true'
         name: Apply downloaded pathes
@@ -78,6 +93,7 @@ jobs:
               exit 1
             fi
           done
+
       - name: Push changes
         if: steps.download-artifacts.outputs.found_artifact == 'true'
         working-directory: repo
