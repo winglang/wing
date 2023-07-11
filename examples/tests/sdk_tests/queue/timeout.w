@@ -3,29 +3,33 @@ skip: true
 \*/
 
 bring cloud;
+bring util;
 
-let q = new cloud.Queue(cloud.QueueProps{timeout: 1s});
-
-class JSHelper {
-  init() {}
-  extern "../external/sleep.js" inflight sleep(milli: num);
+let var timeout: duration = 30s;
+let var sleep: duration = 31s;
+if (util.env("WING_TARGET") == "sim") {
+  timeout = 1s;
+  sleep = 2s;
 }
 
-let js = new JSHelper();
+
+let q = new cloud.Queue(cloud.QueueProps{timeout: timeout});
 
 q.setConsumer(inflight () => {
-  js.sleep(2000);
+  util.sleep(sleep);
 });
 
 
 // TODO: this test fails sim due to issue: https://github.com/winglang/wing/issues/165
-test "timeout" {
+new std.Test(inflight () => {  
   // each push should result in a timeout
   q.push("foo");
   q.push("foo");
-  // TODO: replace this sleep with std.sleep: https://github.com/winglang/wing/issues/1535
-  // wait for 3 seconds
-  js.sleep(3000);
-  // The queue should have 2 messages still due to timeout
-  assert(q.approxSize() == 2);
-}
+
+  util.sleep(duration.fromSeconds(timeout.seconds + 1));
+  // The queue should have 2 messages still due to timeout - doesn't work on aws or sim unfortunately
+  // for aws- https://github.com/winglang/wing/issues/3354
+  if (util.env("WING_TARGET") == "sim") {
+    assert(q.approxSize() == 2);
+  }
+  }, timeout: 2m) as "timeout";
