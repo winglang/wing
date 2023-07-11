@@ -60,7 +60,7 @@ jobs:
             -H "Authorization: Bearer ${{ secrets.MUTATION_TOKEN }}" \
             -H "Accept: application/vnd.github.v3+json" \
             "https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.workflow_run.pull_requests[0].number }}/labels" \
-            -d '["🚧 pr/do-not-merge"]'
+            -d '["⚠️ pr/review-mutation"]'
 
       - name: Disable Git Hooks
         if: steps.download-artifacts.outputs.found_artifact == 'true'
