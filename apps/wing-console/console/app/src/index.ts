@@ -20,7 +20,7 @@ export type {
   Trace,
 } from "@wingconsole/server";
 
-const MAX_ANALYTICS_STRING_LENGTH = 1023;
+const MAX_ANALYTICS_STRING_LENGTH = 1024;
 
 export interface CreateConsoleAppOptions {
   wingfile: string;
