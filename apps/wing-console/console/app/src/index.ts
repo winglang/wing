@@ -72,22 +72,25 @@ export const createConsoleApp = async (options: CreateConsoleAppOptions) => {
         Math.max(0, trace.data.message.indexOf("(")),
       );
 
+      const properties = {
+        message: trace?.data?.message.substring(0, MAX_ANALYTICS_STRING_LENGTH) || '',
+        status: trace?.data?.status.substring(0, MAX_ANALYTICS_STRING_LENGTH) || 'unknown',
+        result: trace?.data?.result.substring(0, MAX_ANALYTICS_STRING_LENGTH) || 'unknown',
+      }
+
       // general interaction event
       analytics.track(
         'console_resource_interact',
           {
             resource: resourceName,
             action,
+            ...properties
           }
       );
       // resrouce specific event
       analytics.track(
         `console_${resourceName}_${action}`,
-          {
-            message: trace?.data?.message.substring(0, MAX_ANALYTICS_STRING_LENGTH) || '',
-            status: trace?.data?.status.substring(0, MAX_ANALYTICS_STRING_LENGTH) || 'unknown',
-            result: trace?.data?.result.substring(0, MAX_ANALYTICS_STRING_LENGTH) || 'unknown',
-          }
+          properties
       );
     },
     log: options.log ?? {
