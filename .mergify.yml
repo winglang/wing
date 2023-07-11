@@ -20,7 +20,7 @@ pull_request_rules:
           {{ body }}
     conditions:
       - -title~=(WIP|wip)
-      - -label~=(do-not-merge)
+      - -label~=(🚧 pr/do-not-merge|⚠️ pr/review-mutation)
       - -merged
       - -closed
       - "#approved-reviews-by>=1"
