@@ -1,13 +1,13 @@
-bring cloud;
+bring ex;
 
-let table = new cloud.Table(cloud.TableProps{
+let table = new ex.Table(ex.TableProps{
   name: "table",
   primaryKey: "id",
   columns: {
-    "id" => cloud.ColumnType.STRING,
-    "name" => cloud.ColumnType.STRING,
-    "date" => cloud.ColumnType.DATE,
-    "active" => cloud.ColumnType.BOOLEAN,
+    "id" => ex.ColumnType.STRING,
+    "name" => ex.ColumnType.STRING,
+    "date" => ex.ColumnType.DATE,
+    "active" => ex.ColumnType.BOOLEAN,
   },
   initialRows: {
     "1" => {

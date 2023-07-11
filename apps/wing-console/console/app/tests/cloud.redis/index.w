@@ -1,3 +1,3 @@
-bring redis;
+bring ex;
 
-new redis.Redis();
+new ex.Redis();
