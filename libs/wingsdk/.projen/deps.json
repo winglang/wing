@@ -10,10 +10,6 @@
       "type": "build"
     },
     {
-      "name": "@types/crypto-js",
-      "type": "build"
-    },
-    {
       "name": "@types/express",
       "type": "build"
     },
@@ -261,10 +257,6 @@
     },
     {
       "name": "cron-parser",
-      "type": "bundled"
-    },
-    {
-      "name": "crypto-js",
       "type": "bundled"
     },
     {

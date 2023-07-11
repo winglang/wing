@@ -1087,9 +1087,6 @@ importers:
       cron-parser:
         specifier: ^4.8.1
         version: 4.8.1
-      crypto-js:
-        specifier: ^3.1.2-1
-        version: 3.1.2-1
       esbuild-wasm:
         specifier: ^0.18.5
         version: 0.18.5(patch_hash=t2ef2z2cxi7d6lxkcfsq2qtq3m)
@@ -1121,9 +1118,6 @@ importers:
       '@types/aws-lambda':
         specifier: ^8.10.109
         version: 8.10.109
-      '@types/crypto-js':
-        specifier: ^3.1.15-alpha
-        version: 3.1.15-alpha
       '@types/express':
         specifier: ^4.17.17
         version: 4.17.17
@@ -8920,10 +8914,6 @@ packages:
       '@types/node': 18.16.18
     dev: true
 
-  /@types/crypto-js@3.1.15-alpha:
-    resolution: {integrity: sha512-QNiaQsC4II96xssHMaf5mFGtiAwp3sCkKADlcMuhirnV0Oc6K+G8nQ4ISLbDnmCKk1sTCpgdx7JxCskXNsT3Rw==}
-    dev: true
-
   /@types/d3-color@3.1.0:
     resolution: {integrity: sha512-HKuicPHJuvPgCD+np6Se9MQvS6OCbJmOjGvylzMJRlDwUXjKTTXs6Pwgk79O09Vj/ho3u1ofXnhFOaEWWPrlwA==}
     dev: true
@@ -12002,10 +11992,6 @@ packages:
     resolution: {integrity: sha512-mCxBlsHFYh9C+HVpiEacem8FEBnMXgU9gy4zmNC+SXAZNB/1idgp/aulFJ4FgCi7GPEVbfyng092GqL2k2rmow==}
     dev: false
 
-  /crypto-js@3.1.2-1:
-    resolution: {integrity: sha512-ENPx5g9llQKrlpt0VOcsvyIgoNc20wBAsUVa2kHDyaae1O6jazOgAuk+59QF2U5wM9m9Ay6e+HFd+PVicj7Lww==}
-    dev: false
-
   /crypto-random-string@2.0.0:
     resolution: {integrity: sha512-v1plID3y9r/lPhviJ1wrXpLeyUIGAZ2SHNYTEapm7/8A9nLPoyvVp3RK/EPFqn5kEznyWgYZNsRtYYIWbuG8KA==}
     engines: {node: '>=8'}
@@ -12552,7 +12538,7 @@ packages:
     dependencies:
       semver: 7.5.2
       shelljs: 0.8.5
-      typescript: 5.2.0-dev.20230709
+      typescript: 5.2.0-dev.20230710
     dev: true
 
   /duplexer@0.1.2:
@@ -20928,8 +20914,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  /typescript@5.2.0-dev.20230709:
-    resolution: {integrity: sha512-5t8YdsfgmOchjqTAAKmSWAwHwUURpdquE+HzENLRZXpwBHklFoipu/KoC6W7TiVz2/8FcjjFjq8ABDGttwAQ1w==}
+  /typescript@5.2.0-dev.20230710:
+    resolution: {integrity: sha512-D4u4/pfdrIi94+F+iVzxzuzCk8bE/cbe4jng6Sce2Y1szj/QiBqN43X5lMrIbMR9Kb1G2AdWzYPrcNv/ButJGA==}
     engines: {node: '>=14.17'}
     hasBin: true
     dev: true

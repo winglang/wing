@@ -1,4 +1,4 @@
-import { SHA256 } from "crypto-js";
+import { createHash } from "crypto";
 import { nanoid, customAlphabet } from "nanoid";
 import { v4 } from "uuid";
 import { Code, InflightClient } from "../core";
@@ -120,7 +120,7 @@ export class Util {
    * @param data - The string to be hashed.
    */
   public static sha256(data: string): string {
-    return SHA256(data).toString();
+    return createHash("sha256").update(data).digest("hex"); //SHA256(data).toString();
   }
 
   /**
@@ -134,7 +134,7 @@ export class Util {
    * Generates a unique ID using the nanoid library.
    * @param options - Optional options object for generating the ID.
    */
-  public static nanoid(options?: NanoIDOptions): string {
+  public static nanoid(options?: NanoidOptions): string {
     const size = options?.size ?? 21;
     const nano = options?.alphabet
       ? customAlphabet(options.alphabet, size)

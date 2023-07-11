@@ -16,7 +16,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 2
   documentation:
     kind: markdown
-    value: "```wing\nstatic nanoid: (options: NanoIDOptions?): str\n```\n---\nGenerates a unique ID using the nanoid library.\n\n### Parameters\n - *options* - - Optional options object for generating the ID."
+    value: "```wing\nstatic nanoid: (options: NanoidOptions?): str\n```\n---\nGenerates a unique ID using the nanoid library.\n\n### Parameters\n - *options* - - Optional options object for generating the ID."
   sortText: ff|nanoid
   insertText: nanoid($0)
   insertTextFormat: 2
@@ -84,12 +84,12 @@ source: libs/wingc/src/lsp/completions.rs
     kind: markdown
     value: "```wing\nclass Util\n```\n---\nUtility functions."
   sortText: gg|Util
-- label: NanoIDOptions
+- label: NanoidOptions
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nNanoIDOptions\n```\n---\nOptions to generating a unique ID."
-  sortText: hh|NanoIDOptions
+    value: "```wing\nNanoidOptions\n```\n---\nOptions to generating a unique ID."
+  sortText: hh|NanoidOptions
 - label: WaitUntilProps
   kind: 22
   documentation:

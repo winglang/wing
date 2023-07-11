@@ -14,28 +14,28 @@ sidebar_position: 100
 
 ## Structs <a name="Structs" id="Structs"></a>
 
-### NanoIDOptions <a name="NanoIDOptions" id="@winglang/sdk.util.NanoIDOptions"></a>
+### NanoidOptions <a name="NanoidOptions" id="@winglang/sdk.util.NanoidOptions"></a>
 
 Options to generating a unique ID.
 
-#### Initializer <a name="Initializer" id="@winglang/sdk.util.NanoIDOptions.Initializer"></a>
+#### Initializer <a name="Initializer" id="@winglang/sdk.util.NanoidOptions.Initializer"></a>
 
 ```wing
 bring util;
 
-let NanoIDOptions = util.NanoIDOptions{ ... }
+let NanoidOptions = util.NanoidOptions{ ... }
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.util.NanoIDOptions.property.alphabet">alphabet</a></code> | <code>str</code> | Characters that make up the alphabet to generate the ID, limited to 256 characters or fewer. |
-| <code><a href="#@winglang/sdk.util.NanoIDOptions.property.size">size</a></code> | <code>num</code> | Size of ID. |
+| <code><a href="#@winglang/sdk.util.NanoidOptions.property.alphabet">alphabet</a></code> | <code>str</code> | Characters that make up the alphabet to generate the ID, limited to 256 characters or fewer. |
+| <code><a href="#@winglang/sdk.util.NanoidOptions.property.size">size</a></code> | <code>num</code> | Size of ID. |
 
 ---
 
-##### `alphabet`<sup>Optional</sup> <a name="alphabet" id="@winglang/sdk.util.NanoIDOptions.property.alphabet"></a>
+##### `alphabet`<sup>Optional</sup> <a name="alphabet" id="@winglang/sdk.util.NanoidOptions.property.alphabet"></a>
 
 ```wing
 alphabet: str;
@@ -47,7 +47,7 @@ Characters that make up the alphabet to generate the ID, limited to 256 characte
 
 ---
 
-##### `size`<sup>Optional</sup> <a name="size" id="@winglang/sdk.util.NanoIDOptions.property.size"></a>
+##### `size`<sup>Optional</sup> <a name="size" id="@winglang/sdk.util.NanoidOptions.property.size"></a>
 
 ```wing
 size: num;
@@ -166,14 +166,14 @@ The name of the environment variable.
 ```wing
 bring util;
 
-util.Util.nanoid(options?: NanoIDOptions)
+util.Util.nanoid(options?: NanoidOptions)
 ```
 
 Generates a unique ID using the nanoid library.
 
 ###### `options`<sup>Optional</sup> <a name="options" id="@winglang/sdk.util.Util.nanoid.parameter.options"></a>
 
-- *Type:* <a href="#@winglang/sdk.util.NanoIDOptions">NanoIDOptions</a>
+- *Type:* <a href="#@winglang/sdk.util.NanoidOptions">NanoidOptions</a>
 
 Optional options object for generating the ID.
 
