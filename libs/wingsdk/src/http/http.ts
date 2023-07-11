@@ -169,10 +169,11 @@ export class Util {
     return InflightClient.forType(__filename, this.name);
   }
   /**
-   * Sends an HTTP request to a URL, returning a fulfilled or failed response.
+   * Executes a HTTP request to a specified URL and provides a formatted response. 
+   * This method allows various HTTP methods based on the provided options.
    * @throws Only throws if there is a networking error
-   * @param url
-   * @param options
+   * @param url The target URL for the request.
+   * @param options Optional parameters for customizing the HTTP request.
    * @inflight
    * @returns the formatted response of the call
    */
@@ -181,9 +182,9 @@ export class Util {
     return this._formatResponse(res);
   }
   /**
-   * Sends a GET request.
-   * @param url
-   * @param options
+   * Executes a GET request to a specified URL and provides a formatted response.
+   * @param url The target URL for the GET request.
+   * @param options Optional parameters for customizing the GET request.
    * @inflight
    * @returns the formatted response of the call
    */
@@ -195,9 +196,9 @@ export class Util {
     });
   }
   /**
-   * Sends a POST request.
-   * @param url
-   * @param options
+   * Executes a POST request to a specified URL and provides a formatted response.
+   * @param url The target URL for the POST request.
+   * @param options Optional parameters for customizing the POST request.
    * @inflight
    * @returns the formatted response of the call
    */
@@ -209,9 +210,9 @@ export class Util {
     });
   }
   /**
-   * Sends a PUT request.
-   * @param url
-   * @param options
+   * Executes a PUT request to a specified URL and provides a formatted response.
+   * @param url The target URL for the PUT request.
+   * @param options ptional parameters for customizing the PUT request.
    * @inflight
    * @returns the formatted response of the call
    */
@@ -223,9 +224,9 @@ export class Util {
     });
   }
   /**
-   * Sends a PATCH request.
-   * @param url
-   * @param options
+   * Executes a PATCH request to a specified URL and provides a formatted response.
+   * @param url The target URL for the PATCH request.
+   * @param options Optional parameters for customizing the PATCH request.
    * @inflight
    * @returns the formatted response of the call
    */
@@ -238,9 +239,9 @@ export class Util {
   }
 
   /**
-   * Sends a DELETE request.
-   * @param url
-   * @param options
+   * Executes a DELETE request to a specified URL and provides a formatted response.
+   * @param url The target URL for the DELETE request.
+   * @param options  Optional parameters for customizing the DELETE request.
    * @inflight
    * @returns the formatted response of the call
    */
