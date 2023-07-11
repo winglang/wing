@@ -1,0 +1,14 @@
+---
+source: libs/wingc/src/lsp/hover.rs
+---
+contents:
+  kind: markdown
+  value: "```wing\nb: Bucket?\nclass Bucket\n```\n---\nRepresents a cloud object store."
+range:
+  start:
+    line: 7
+    character: 4
+  end:
+    line: 7
+    character: 5
+
