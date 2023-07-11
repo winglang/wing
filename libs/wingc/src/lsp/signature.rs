@@ -4,7 +4,7 @@ use lsp_types::{
 	SignatureInformation,
 };
 
-use crate::ast::{Expr, ExprKind, Symbol};
+use crate::ast::{Expr, ExprKind, NewExpr, Symbol};
 use crate::docs::Documented;
 use crate::lsp::sync::FILES;
 
@@ -42,7 +42,8 @@ pub fn on_signature_help(params: lsp_types::SignatureHelpParams) -> Option<Signa
 			crate::type_check::UnsafeRef<crate::type_check::Type>,
 			&crate::ast::ArgList,
 		) = match &expr.kind {
-			ExprKind::New { class, arg_list, .. } => {
+			ExprKind::New(new_expr) => {
+				let NewExpr { class, arg_list, .. } = new_expr;
 				let Some(udt) = class.as_type_reference() else {
 					return None;
 				};

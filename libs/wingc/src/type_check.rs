@@ -3,7 +3,7 @@ pub(crate) mod jsii_importer;
 pub mod lifts;
 pub mod symbol_env;
 
-use crate::ast::{self, ClassField, FunctionDefinition, TypeAnnotationKind};
+use crate::ast::{self, ClassField, FunctionDefinition, NewExpr, TypeAnnotationKind};
 use crate::ast::{
 	ArgList, BinaryOperator, Class as AstClass, Expr, ExprKind, FunctionBody, FunctionParameter as AstFunctionParameter,
 	Interface as AstInterface, InterpolatedStringPart, Literal, Phase, Reference, Scope, Spanned, Stmt, StmtKind, Symbol,
@@ -1470,12 +1470,13 @@ impl<'a> TypeChecker<'a> {
 				let (vi, phase) = self.resolve_reference(_ref, env);
 				(vi.type_, phase)
 			}
-			ExprKind::New {
-				class,
-				obj_id,
-				arg_list,
-				obj_scope,
-			} => {
+			ExprKind::New(new_expr) => {
+				let NewExpr {
+					class,
+					obj_id,
+					arg_list,
+					obj_scope,
+				} = new_expr;
 				// Type check everything
 				let class_type = self.type_check_exp(&class, env).0;
 				let obj_scope_type = obj_scope.as_ref().map(|x| self.type_check_exp(x, env).0);

@@ -10,7 +10,7 @@ use std::{borrow::Borrow, cmp::Ordering, collections::BTreeMap, path::Path, vec}
 use crate::{
 	ast::{
 		ArgList, BinaryOperator, Class as AstClass, Expr, ExprKind, FunctionBody, FunctionDefinition,
-		InterpolatedStringPart, Literal, Phase, Reference, Scope, Stmt, StmtKind, Symbol, TypeAnnotationKind,
+		InterpolatedStringPart, Literal, NewExpr, Phase, Reference, Scope, Stmt, StmtKind, Symbol, TypeAnnotationKind,
 		UnaryOperator, UserDefinedType,
 	},
 	comp_ctx::{CompilationContext, CompilationPhase},
@@ -296,12 +296,8 @@ impl<'a> JSifier<'a> {
 			_ => "",
 		};
 		match &expression.kind {
-			ExprKind::New {
-				class,
-				obj_id,
-				arg_list,
-				obj_scope
-			} => {
+			ExprKind::New(new_expr) => {
+				let NewExpr { class, obj_id, arg_list, obj_scope } = new_expr;
 				let expression_type = self.get_expr_type(&expression);
 				let is_preflight_class = expression_type.is_preflight_class();
 
