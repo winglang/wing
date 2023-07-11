@@ -169,7 +169,7 @@ export class Util {
     return InflightClient.forType(__filename, this.name);
   }
   /**
-   * Executes a HTTP request to a specified URL and provides a formatted response. 
+   * Executes a HTTP request to a specified URL and provides a formatted response.
    * This method allows various HTTP methods based on the provided options.
    * @throws Only throws if there is a networking error
    * @param url The target URL for the request.
