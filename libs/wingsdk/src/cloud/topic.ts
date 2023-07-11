@@ -12,7 +12,7 @@ export const TOPIC_FQN = fqnForType("cloud.Topic");
 export interface TopicProps {}
 
 /**
- * Represents a topic.
+ * A topic.
  *
  * @inflight `@winglang/sdk.cloud.ITopicClient`
  */
@@ -67,7 +67,7 @@ export interface ITopicClient {
 }
 
 /**
- * Represents a resource with an inflight "handle" method that can be passed to
+ * A resource with an inflight "handle" method that can be passed to
  * `Topic.on_message`.
  *
  * @inflight `@winglang/sdk.cloud.ITopicOnMessageHandlerClient`

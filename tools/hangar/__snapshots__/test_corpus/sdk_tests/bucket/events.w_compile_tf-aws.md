@@ -238,11 +238,11 @@ module.exports = function({  }) {
         "hash_key": "id",
         "name": "wing-counter-cloud.Counter-c866f225"
       },
-      "cloudTable": {
+      "exTable": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Table/Default",
-            "uniqueId": "cloudTable"
+            "path": "root/Default/Default/ex.Table/Default",
+            "uniqueId": "exTable"
           }
         },
         "attribute": [
@@ -253,7 +253,7 @@ module.exports = function({  }) {
         ],
         "billing_mode": "PAY_PER_REQUEST",
         "hash_key": "_id",
-        "name": "key-historycloud.Table-c83b78a7"
+        "name": "key-historyex.Table-c840a49c"
       }
     },
     "aws_iam_role": {
@@ -329,7 +329,7 @@ module.exports = function({  }) {
             "uniqueId": "cloudBucket_cloudBucket-on_create-OnMessage-440eabdf_IamRolePolicy_45F66540"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.cloudCounter.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:PutItem\"],\"Resource\":[\"${aws_dynamodb_table.cloudTable.arn}\"],\"Effect\":\"Allow\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.cloudCounter.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:PutItem\"],\"Resource\":[\"${aws_dynamodb_table.exTable.arn}\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.cloudBucket_cloudBucket-on_create-OnMessage-440eabdf_IamRole_324909ED.name}"
       },
       "cloudBucket_cloudBucket-on_create-OnMessage-e889c56f_IamRolePolicy_A41FA737": {
@@ -339,7 +339,7 @@ module.exports = function({  }) {
             "uniqueId": "cloudBucket_cloudBucket-on_create-OnMessage-e889c56f_IamRolePolicy_A41FA737"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.cloudCounter.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:PutItem\"],\"Resource\":[\"${aws_dynamodb_table.cloudTable.arn}\"],\"Effect\":\"Allow\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.cloudCounter.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:PutItem\"],\"Resource\":[\"${aws_dynamodb_table.exTable.arn}\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.cloudBucket_cloudBucket-on_create-OnMessage-e889c56f_IamRole_72BADB08.name}"
       },
       "cloudBucket_cloudBucket-on_delete-OnMessage-25075838_IamRolePolicy_34D95A68": {
@@ -349,7 +349,7 @@ module.exports = function({  }) {
             "uniqueId": "cloudBucket_cloudBucket-on_delete-OnMessage-25075838_IamRolePolicy_34D95A68"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.cloudCounter.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:PutItem\"],\"Resource\":[\"${aws_dynamodb_table.cloudTable.arn}\"],\"Effect\":\"Allow\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.cloudCounter.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:PutItem\"],\"Resource\":[\"${aws_dynamodb_table.exTable.arn}\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.cloudBucket_cloudBucket-on_delete-OnMessage-25075838_IamRole_40D9C71E.name}"
       },
       "cloudBucket_cloudBucket-on_delete-OnMessage-252b9bf8_IamRolePolicy_BD944116": {
@@ -359,7 +359,7 @@ module.exports = function({  }) {
             "uniqueId": "cloudBucket_cloudBucket-on_delete-OnMessage-252b9bf8_IamRolePolicy_BD944116"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.cloudCounter.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:PutItem\"],\"Resource\":[\"${aws_dynamodb_table.cloudTable.arn}\"],\"Effect\":\"Allow\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.cloudCounter.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:PutItem\"],\"Resource\":[\"${aws_dynamodb_table.exTable.arn}\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.cloudBucket_cloudBucket-on_delete-OnMessage-252b9bf8_IamRole_4554AF84.name}"
       },
       "cloudBucket_cloudBucket-on_update-OnMessage-675a2aa1_IamRolePolicy_3F8615D0": {
@@ -369,7 +369,7 @@ module.exports = function({  }) {
             "uniqueId": "cloudBucket_cloudBucket-on_update-OnMessage-675a2aa1_IamRolePolicy_3F8615D0"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.cloudCounter.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:PutItem\"],\"Resource\":[\"${aws_dynamodb_table.cloudTable.arn}\"],\"Effect\":\"Allow\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.cloudCounter.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:PutItem\"],\"Resource\":[\"${aws_dynamodb_table.exTable.arn}\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.cloudBucket_cloudBucket-on_update-OnMessage-675a2aa1_IamRole_FD7BC908.name}"
       },
       "cloudBucket_cloudBucket-on_update-OnMessage-ae97bd1d_IamRolePolicy_9C52CDBE": {
@@ -379,7 +379,7 @@ module.exports = function({  }) {
             "uniqueId": "cloudBucket_cloudBucket-on_update-OnMessage-ae97bd1d_IamRolePolicy_9C52CDBE"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.cloudCounter.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:PutItem\"],\"Resource\":[\"${aws_dynamodb_table.cloudTable.arn}\"],\"Effect\":\"Allow\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.cloudCounter.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:PutItem\"],\"Resource\":[\"${aws_dynamodb_table.exTable.arn}\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.cloudBucket_cloudBucket-on_update-OnMessage-ae97bd1d_IamRole_7260B85F.name}"
       },
       "hitCountisincrementedaccordingtothebucketevent_Handler_IamRolePolicy_678D6495": {
@@ -389,7 +389,7 @@ module.exports = function({  }) {
             "uniqueId": "hitCountisincrementedaccordingtothebucketevent_Handler_IamRolePolicy_678D6495"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\",\"s3:DeleteObject*\",\"s3:DeleteObjectVersion*\",\"s3:PutLifecycleConfiguration*\"],\"Resource\":[\"${aws_s3_bucket.cloudBucket.arn}\",\"${aws_s3_bucket.cloudBucket.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:Scan\"],\"Resource\":[\"${aws_dynamodb_table.cloudTable.arn}\"],\"Effect\":\"Allow\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\",\"s3:DeleteObject*\",\"s3:DeleteObjectVersion*\",\"s3:PutLifecycleConfiguration*\"],\"Resource\":[\"${aws_s3_bucket.cloudBucket.arn}\",\"${aws_s3_bucket.cloudBucket.arn}/*\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:Scan\"],\"Resource\":[\"${aws_dynamodb_table.exTable.arn}\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.hitCountisincrementedaccordingtothebucketevent_Handler_IamRole_AF1E4A64.name}"
       }
     },
@@ -476,9 +476,9 @@ module.exports = function({  }) {
         "environment": {
           "variables": {
             "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.cloudCounter.name}",
-            "DYNAMODB_TABLE_NAME_e8a1ff2c": "${aws_dynamodb_table.cloudTable.name}",
-            "DYNAMODB_TABLE_NAME_e8a1ff2c_COLUMNS": "{\"_id\":0,\"key\":0,\"operation\":0,\"source\":0}",
-            "DYNAMODB_TABLE_NAME_e8a1ff2c_PRIMARY_KEY": "_id",
+            "DYNAMODB_TABLE_NAME_d5d44f18": "${aws_dynamodb_table.exTable.name}",
+            "DYNAMODB_TABLE_NAME_d5d44f18_COLUMNS": "{\"_id\":0,\"key\":0,\"operation\":0,\"source\":0}",
+            "DYNAMODB_TABLE_NAME_d5d44f18_PRIMARY_KEY": "_id",
             "WING_FUNCTION_NAME": "cloud-Bucket-on_create-OnMessage-440eabdf-c86eb675",
             "WING_TARGET": "tf-aws"
           }
@@ -506,9 +506,9 @@ module.exports = function({  }) {
         "environment": {
           "variables": {
             "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.cloudCounter.name}",
-            "DYNAMODB_TABLE_NAME_e8a1ff2c": "${aws_dynamodb_table.cloudTable.name}",
-            "DYNAMODB_TABLE_NAME_e8a1ff2c_COLUMNS": "{\"_id\":0,\"key\":0,\"operation\":0,\"source\":0}",
-            "DYNAMODB_TABLE_NAME_e8a1ff2c_PRIMARY_KEY": "_id",
+            "DYNAMODB_TABLE_NAME_d5d44f18": "${aws_dynamodb_table.exTable.name}",
+            "DYNAMODB_TABLE_NAME_d5d44f18_COLUMNS": "{\"_id\":0,\"key\":0,\"operation\":0,\"source\":0}",
+            "DYNAMODB_TABLE_NAME_d5d44f18_PRIMARY_KEY": "_id",
             "WING_FUNCTION_NAME": "cloud-Bucket-on_create-OnMessage-e889c56f-c8509332",
             "WING_TARGET": "tf-aws"
           }
@@ -536,9 +536,9 @@ module.exports = function({  }) {
         "environment": {
           "variables": {
             "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.cloudCounter.name}",
-            "DYNAMODB_TABLE_NAME_e8a1ff2c": "${aws_dynamodb_table.cloudTable.name}",
-            "DYNAMODB_TABLE_NAME_e8a1ff2c_COLUMNS": "{\"_id\":0,\"key\":0,\"operation\":0,\"source\":0}",
-            "DYNAMODB_TABLE_NAME_e8a1ff2c_PRIMARY_KEY": "_id",
+            "DYNAMODB_TABLE_NAME_d5d44f18": "${aws_dynamodb_table.exTable.name}",
+            "DYNAMODB_TABLE_NAME_d5d44f18_COLUMNS": "{\"_id\":0,\"key\":0,\"operation\":0,\"source\":0}",
+            "DYNAMODB_TABLE_NAME_d5d44f18_PRIMARY_KEY": "_id",
             "WING_FUNCTION_NAME": "cloud-Bucket-on_delete-OnMessage-25075838-c8e76d95",
             "WING_TARGET": "tf-aws"
           }
@@ -566,9 +566,9 @@ module.exports = function({  }) {
         "environment": {
           "variables": {
             "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.cloudCounter.name}",
-            "DYNAMODB_TABLE_NAME_e8a1ff2c": "${aws_dynamodb_table.cloudTable.name}",
-            "DYNAMODB_TABLE_NAME_e8a1ff2c_COLUMNS": "{\"_id\":0,\"key\":0,\"operation\":0,\"source\":0}",
-            "DYNAMODB_TABLE_NAME_e8a1ff2c_PRIMARY_KEY": "_id",
+            "DYNAMODB_TABLE_NAME_d5d44f18": "${aws_dynamodb_table.exTable.name}",
+            "DYNAMODB_TABLE_NAME_d5d44f18_COLUMNS": "{\"_id\":0,\"key\":0,\"operation\":0,\"source\":0}",
+            "DYNAMODB_TABLE_NAME_d5d44f18_PRIMARY_KEY": "_id",
             "WING_FUNCTION_NAME": "cloud-Bucket-on_delete-OnMessage-252b9bf8-c84c16bd",
             "WING_TARGET": "tf-aws"
           }
@@ -596,9 +596,9 @@ module.exports = function({  }) {
         "environment": {
           "variables": {
             "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.cloudCounter.name}",
-            "DYNAMODB_TABLE_NAME_e8a1ff2c": "${aws_dynamodb_table.cloudTable.name}",
-            "DYNAMODB_TABLE_NAME_e8a1ff2c_COLUMNS": "{\"_id\":0,\"key\":0,\"operation\":0,\"source\":0}",
-            "DYNAMODB_TABLE_NAME_e8a1ff2c_PRIMARY_KEY": "_id",
+            "DYNAMODB_TABLE_NAME_d5d44f18": "${aws_dynamodb_table.exTable.name}",
+            "DYNAMODB_TABLE_NAME_d5d44f18_COLUMNS": "{\"_id\":0,\"key\":0,\"operation\":0,\"source\":0}",
+            "DYNAMODB_TABLE_NAME_d5d44f18_PRIMARY_KEY": "_id",
             "WING_FUNCTION_NAME": "cloud-Bucket-on_update-OnMessage-675a2aa1-c80803b8",
             "WING_TARGET": "tf-aws"
           }
@@ -626,9 +626,9 @@ module.exports = function({  }) {
         "environment": {
           "variables": {
             "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.cloudCounter.name}",
-            "DYNAMODB_TABLE_NAME_e8a1ff2c": "${aws_dynamodb_table.cloudTable.name}",
-            "DYNAMODB_TABLE_NAME_e8a1ff2c_COLUMNS": "{\"_id\":0,\"key\":0,\"operation\":0,\"source\":0}",
-            "DYNAMODB_TABLE_NAME_e8a1ff2c_PRIMARY_KEY": "_id",
+            "DYNAMODB_TABLE_NAME_d5d44f18": "${aws_dynamodb_table.exTable.name}",
+            "DYNAMODB_TABLE_NAME_d5d44f18_COLUMNS": "{\"_id\":0,\"key\":0,\"operation\":0,\"source\":0}",
+            "DYNAMODB_TABLE_NAME_d5d44f18_PRIMARY_KEY": "_id",
             "WING_FUNCTION_NAME": "cloud-Bucket-on_update-OnMessage-ae97bd1d-c84cffd8",
             "WING_TARGET": "tf-aws"
           }
@@ -656,9 +656,9 @@ module.exports = function({  }) {
         "environment": {
           "variables": {
             "BUCKET_NAME_d755b447": "${aws_s3_bucket.cloudBucket.bucket}",
-            "DYNAMODB_TABLE_NAME_e8a1ff2c": "${aws_dynamodb_table.cloudTable.name}",
-            "DYNAMODB_TABLE_NAME_e8a1ff2c_COLUMNS": "{\"_id\":0,\"key\":0,\"operation\":0,\"source\":0}",
-            "DYNAMODB_TABLE_NAME_e8a1ff2c_PRIMARY_KEY": "_id",
+            "DYNAMODB_TABLE_NAME_d5d44f18": "${aws_dynamodb_table.exTable.name}",
+            "DYNAMODB_TABLE_NAME_d5d44f18_COLUMNS": "{\"_id\":0,\"key\":0,\"operation\":0,\"source\":0}",
+            "DYNAMODB_TABLE_NAME_d5d44f18_PRIMARY_KEY": "_id",
             "WING_FUNCTION_NAME": "Handler-c88204a7",
             "WING_TARGET": "tf-aws"
           }
@@ -1064,6 +1064,7 @@ const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 const cloud = require('@winglang/sdk').cloud;
+const ex = require('@winglang/sdk').ex;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
@@ -1358,7 +1359,7 @@ class $Root extends $stdlib.std.Resource {
     ;
     const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
     const idsCounter = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"cloud.Counter");
-    const table = this.node.root.newAbstract("@winglang/sdk.cloud.Table",this,"cloud.Table",{ name: "key-history", primaryKey: "_id", columns: Object.freeze({"_id":cloud.ColumnType.STRING,"key":cloud.ColumnType.STRING,"operation":cloud.ColumnType.STRING,"source":cloud.ColumnType.STRING}) });
+    const table = this.node.root.newAbstract("@winglang/sdk.ex.Table",this,"ex.Table",{ name: "key-history", primaryKey: "_id", columns: Object.freeze({"_id":ex.ColumnType.STRING,"key":ex.ColumnType.STRING,"operation":ex.ColumnType.STRING,"source":ex.ColumnType.STRING}) });
     const logHistory = new $Closure1(this,"$Closure1");
     (b.onDelete(new $Closure2(this,"$Closure2")));
     (b.onUpdate(new $Closure3(this,"$Closure3")));

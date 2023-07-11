@@ -33,7 +33,7 @@ export interface QueueProps {
 }
 
 /**
- * Represents a queue.
+ * A queue.
  *
  * @inflight `@winglang/sdk.cloud.IQueueClient`
  */
@@ -118,7 +118,7 @@ export interface IQueueClient {
 }
 
 /**
- * Represents a resource with an inflight "handle" method that can be passed to
+ * A resource with an inflight "handle" method that can be passed to
  * `Queue.setConsumer`.
  *
  * @inflight `@winglang/sdk.cloud.IQueueSetConsumerHandlerClient`

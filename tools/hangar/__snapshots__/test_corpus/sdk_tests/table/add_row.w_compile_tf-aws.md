@@ -50,11 +50,11 @@ module.exports = function({ $marioInfo, $peachInfo, $std_Json, $table }) {
   },
   "resource": {
     "aws_dynamodb_table": {
-      "cloudTable": {
+      "exTable": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Table/Default",
-            "uniqueId": "cloudTable"
+            "path": "root/Default/Default/ex.Table/Default",
+            "uniqueId": "exTable"
           }
         },
         "attribute": [
@@ -65,31 +65,31 @@ module.exports = function({ $marioInfo, $peachInfo, $std_Json, $table }) {
         ],
         "billing_mode": "PAY_PER_REQUEST",
         "hash_key": "name",
-        "name": "userscloud.Table-c83b78a7"
+        "name": "usersex.Table-c840a49c"
       }
     },
     "aws_dynamodb_table_item": {
-      "cloudTable_DynamodbTableItem-mario_5D4D17DE": {
+      "exTable_DynamodbTableItem-mario_1CD163AB": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Table/DynamodbTableItem-mario",
-            "uniqueId": "cloudTable_DynamodbTableItem-mario_5D4D17DE"
+            "path": "root/Default/Default/ex.Table/DynamodbTableItem-mario",
+            "uniqueId": "exTable_DynamodbTableItem-mario_1CD163AB"
           }
         },
-        "hash_key": "${aws_dynamodb_table.cloudTable.hash_key}",
+        "hash_key": "${aws_dynamodb_table.exTable.hash_key}",
         "item": "{\"name\":{\"S\":\"mario\"},\"gender\":{\"S\":\"male\"},\"role\":{\"S\":\"plumber\"}}",
-        "table_name": "${aws_dynamodb_table.cloudTable.name}"
+        "table_name": "${aws_dynamodb_table.exTable.name}"
       },
-      "cloudTable_DynamodbTableItem-peach_292A8BDE": {
+      "exTable_DynamodbTableItem-peach_C3D57BF1": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Table/DynamodbTableItem-peach",
-            "uniqueId": "cloudTable_DynamodbTableItem-peach_292A8BDE"
+            "path": "root/Default/Default/ex.Table/DynamodbTableItem-peach",
+            "uniqueId": "exTable_DynamodbTableItem-peach_C3D57BF1"
           }
         },
-        "hash_key": "${aws_dynamodb_table.cloudTable.hash_key}",
+        "hash_key": "${aws_dynamodb_table.exTable.hash_key}",
         "item": "{\"name\":{\"S\":\"peach\"},\"gender\":{\"S\":\"female\"},\"role\":{\"S\":\"princess\"}}",
-        "table_name": "${aws_dynamodb_table.cloudTable.name}"
+        "table_name": "${aws_dynamodb_table.exTable.name}"
       }
     },
     "aws_iam_role": {
@@ -111,7 +111,7 @@ module.exports = function({ $marioInfo, $peachInfo, $std_Json, $table }) {
             "uniqueId": "testaddRow_Handler_IamRolePolicy_CA240997"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:GetItem\"],\"Resource\":[\"${aws_dynamodb_table.cloudTable.arn}\"],\"Effect\":\"Allow\"}]}",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:GetItem\"],\"Resource\":[\"${aws_dynamodb_table.exTable.arn}\"],\"Effect\":\"Allow\"}]}",
         "role": "${aws_iam_role.testaddRow_Handler_IamRole_809942D9.name}"
       }
     },
@@ -137,9 +137,9 @@ module.exports = function({ $marioInfo, $peachInfo, $std_Json, $table }) {
         },
         "environment": {
           "variables": {
-            "DYNAMODB_TABLE_NAME_e8a1ff2c": "${aws_dynamodb_table.cloudTable.name}",
-            "DYNAMODB_TABLE_NAME_e8a1ff2c_COLUMNS": "{\"gender\":0}",
-            "DYNAMODB_TABLE_NAME_e8a1ff2c_PRIMARY_KEY": "name",
+            "DYNAMODB_TABLE_NAME_d5d44f18": "${aws_dynamodb_table.exTable.name}",
+            "DYNAMODB_TABLE_NAME_d5d44f18_COLUMNS": "{\"gender\":0}",
+            "DYNAMODB_TABLE_NAME_d5d44f18_PRIMARY_KEY": "name",
             "WING_FUNCTION_NAME": "Handler-c8f74599",
             "WING_TARGET": "tf-aws"
           }
@@ -193,7 +193,7 @@ const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
-const cloud = require('@winglang/sdk').cloud;
+const ex = require('@winglang/sdk').ex;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
@@ -233,7 +233,7 @@ class $Root extends $stdlib.std.Resource {
         super._registerBind(host, ops);
       }
     }
-    const table = this.node.root.newAbstract("@winglang/sdk.cloud.Table",this,"cloud.Table",{ name: "users", primaryKey: "name", columns: Object.freeze({"gender":cloud.ColumnType.STRING}) });
+    const table = this.node.root.newAbstract("@winglang/sdk.ex.Table",this,"ex.Table",{ name: "users", primaryKey: "name", columns: Object.freeze({"gender":ex.ColumnType.STRING}) });
     const marioInfo = Object.freeze({"gender":"male","role":"plumber"});
     const peachInfo = Object.freeze({"gender":"female","role":"princess"});
     (table.addRow("mario",marioInfo));

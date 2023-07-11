@@ -11,67 +11,61 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 7
   documentation:
     kind: markdown
-    value: "```wing\nclass Bucket\n```\n---\nRepresents a cloud object store."
+    value: "```wing\nclass Bucket\n```\n---\nA cloud object store."
   sortText: gg|Bucket
 - label: Counter
   kind: 7
   documentation:
     kind: markdown
-    value: "```wing\nclass Counter\n```\n---\nRepresents a distributed atomic counter."
+    value: "```wing\nclass Counter\n```\n---\nA distributed atomic counter."
   sortText: gg|Counter
 - label: Function
   kind: 7
   documentation:
     kind: markdown
-    value: "```wing\nclass Function impl IInflightHost\n```\n---\nRepresents a function."
+    value: "```wing\nclass Function impl IInflightHost\n```\n---\nA function."
   sortText: gg|Function
 - label: Queue
   kind: 7
   documentation:
     kind: markdown
-    value: "```wing\nclass Queue\n```\n---\nRepresents a queue."
+    value: "```wing\nclass Queue\n```\n---\nA queue."
   sortText: gg|Queue
 - label: Schedule
   kind: 7
   documentation:
     kind: markdown
-    value: "```wing\nclass Schedule\n```\n---\nRepresents a schedule."
+    value: "```wing\nclass Schedule\n```\n---\nA schedule."
   sortText: gg|Schedule
 - label: Secret
   kind: 7
   documentation:
     kind: markdown
-    value: "```wing\nclass Secret\n```\n---\nRepresents a cloud secret."
+    value: "```wing\nclass Secret\n```\n---\nA cloud secret."
   sortText: gg|Secret
 - label: Service
   kind: 7
   documentation:
     kind: markdown
-    value: "```wing\nclass Service\n```\n---\nRepresents a service."
+    value: "```wing\nclass Service\n```\n---\nA long-running service."
   sortText: gg|Service
-- label: Table
-  kind: 7
-  documentation:
-    kind: markdown
-    value: "```wing\nclass Table\n```\n---\nRepresents a NoSQL database table that can be used to store and query data."
-  sortText: gg|Table
 - label: TestRunner
   kind: 7
   documentation:
     kind: markdown
-    value: "```wing\nclass TestRunner\n```\n---\nRepresents a test engine."
+    value: "```wing\nclass TestRunner\n```\n---\nA test engine."
   sortText: gg|TestRunner
 - label: Topic
   kind: 7
   documentation:
     kind: markdown
-    value: "```wing\nclass Topic\n```\n---\nRepresents a topic."
+    value: "```wing\nclass Topic\n```\n---\nA topic."
   sortText: gg|Topic
 - label: Website
   kind: 7
   documentation:
     kind: markdown
-    value: "```wing\nclass Website\n```\n---\nRepresents a cloud static website."
+    value: "```wing\nclass Website\n```\n---\nA cloud static website."
   sortText: gg|Website
 - label: ApiConnectProps
   kind: 22
@@ -241,12 +235,6 @@ source: libs/wingc/src/lsp/completions.rs
     kind: markdown
     value: "```wing\nServiceProps\n```\n---\nProperties for `Service`."
   sortText: hh|ServiceProps
-- label: TableProps
-  kind: 22
-  documentation:
-    kind: markdown
-    value: "```wing\nTableProps\n```\n---\nProperties for `Table`."
-  sortText: hh|TableProps
 - label: TestResult
   kind: 22
   documentation:
@@ -275,7 +263,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nTrace\n```\n---\nRepresents an trace emitted during simulation."
+    value: "```wing\nTrace\n```\n---\nA trace emitted during simulation."
   sortText: hh|Trace
 - label: WebsiteProps
   kind: 22
@@ -293,7 +281,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 8
   documentation:
     kind: markdown
-    value: "```wing\nIApiEndpointHandler\n```\n---\nRepresents a resource with an inflight \"handle\" method that can be passed to one of the `Api` request preflight methods."
+    value: "```wing\nIApiEndpointHandler\n```\n---\nA resource with an inflight \"handle\" method that can be passed to one of the `Api` request preflight methods."
   sortText: ii|IApiEndpointHandler
 - label: IApiEndpointHandlerClient
   kind: 8
@@ -311,13 +299,13 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 8
   documentation:
     kind: markdown
-    value: "```wing\nIBucketEventHandler\n```\n---\nRepresents a resource with an inflight \"handle\" method that can be passed to the bucket events."
+    value: "```wing\nIBucketEventHandler\n```\n---\nA resource with an inflight \"handle\" method that can be passed to the bucket events."
   sortText: ii|IBucketEventHandler
 - label: IBucketEventHandlerClient
   kind: 8
   documentation:
     kind: markdown
-    value: "```wing\nIBucketEventHandlerClient\n```\n---\nRepresents a resource with an inflight \"handle\" method that can be passed to the bucket events."
+    value: "```wing\nIBucketEventHandlerClient\n```\n---\nA resource with an inflight \"handle\" method that can be passed to the bucket events."
   sortText: ii|IBucketEventHandlerClient
 - label: ICounterClient
   kind: 8
@@ -335,7 +323,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 8
   documentation:
     kind: markdown
-    value: "```wing\nIFunctionHandler\n```\n---\nRepresents a resource with an inflight \"handle\" method that can be used to create a `cloud.Function`."
+    value: "```wing\nIFunctionHandler\n```\n---\nA resource with an inflight \"handle\" method that can be used to create a `cloud.Function`."
   sortText: ii|IFunctionHandler
 - label: IFunctionHandlerClient
   kind: 8
@@ -353,7 +341,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 8
   documentation:
     kind: markdown
-    value: "```wing\nIQueueSetConsumerHandler\n```\n---\nRepresents a resource with an inflight \"handle\" method that can be passed to `Queue.setConsumer`."
+    value: "```wing\nIQueueSetConsumerHandler\n```\n---\nA resource with an inflight \"handle\" method that can be passed to `Queue.setConsumer`."
   sortText: ii|IQueueSetConsumerHandler
 - label: IQueueSetConsumerHandlerClient
   kind: 8
@@ -371,7 +359,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 8
   documentation:
     kind: markdown
-    value: "```wing\nIScheduleOnTickHandler\n```\n---\nRepresents a resource with an inflight \"handle\" method that can be passed to `Schedule.on_tick`."
+    value: "```wing\nIScheduleOnTickHandler\n```\n---\nA resource with an inflight \"handle\" method that can be passed to `Schedule.on_tick`."
   sortText: ii|IScheduleOnTickHandler
 - label: IScheduleOnTickHandlerClient
   kind: 8
@@ -401,14 +389,8 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 8
   documentation:
     kind: markdown
-    value: "```wing\nIServiceOnEventHandler\n```\n---\nRepresents a resource with an inflight \"handle\" method that can be passed to `ServiceProps.on_start` || `ServiceProps.on_stop`."
+    value: "```wing\nIServiceOnEventHandler\n```\n---\nA resource with an inflight \"handle\" method that can be passed to `ServiceProps.on_start` || `ServiceProps.on_stop`."
   sortText: ii|IServiceOnEventHandler
-- label: ITableClient
-  kind: 8
-  documentation:
-    kind: markdown
-    value: "```wing\nITableClient\n```\n---\nInflight interface for `Table`."
-  sortText: ii|ITableClient
 - label: ITestRunnerClient
   kind: 8
   documentation:
@@ -425,7 +407,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 8
   documentation:
     kind: markdown
-    value: "```wing\nITopicOnMessageHandler\n```\n---\nRepresents a resource with an inflight \"handle\" method that can be passed to `Topic.on_message`."
+    value: "```wing\nITopicOnMessageHandler\n```\n---\nA resource with an inflight \"handle\" method that can be passed to `Topic.on_message`."
   sortText: ii|ITopicOnMessageHandler
 - label: ITopicOnMessageHandlerClient
   kind: 8
@@ -445,12 +427,6 @@ source: libs/wingc/src/lsp/completions.rs
     kind: markdown
     value: ""
   sortText: jj|BucketEventType
-- label: ColumnType
-  kind: 13
-  documentation:
-    kind: markdown
-    value: ""
-  sortText: jj|ColumnType
 - label: HttpMethod
   kind: 13
   documentation:

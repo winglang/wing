@@ -5,10 +5,10 @@ skipPlatforms:
 \*/
 
 bring cloud;
-bring redis;
+bring ex;
 
-let r = new redis.Redis();
-let r2 = new redis.Redis() as "r2";
+let r = new ex.Redis();
+let r2 = new ex.Redis() as "r2";
 
 test "test" {
   // Using raw client
