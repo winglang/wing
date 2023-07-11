@@ -26,7 +26,7 @@ async function reportAnalytic() {
   }
 
   const params = {
-    anonymousId: (event.properties as any).ci_name ? 'ci_run' : storage.getAnonymousId(),
+    anonymousId: storage.getAnonymousId(),
     timestamp: event.timestamp,
     event: event.event,
     properties: event.properties,

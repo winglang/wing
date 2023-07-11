@@ -28,3 +28,4 @@ you can always head over to our Github and view the code that collects these met
 - Operating system information, including the architecture, version, and platform
 - Node.js version
 - CI environment name (if applicable)
+- Git repo (if applicable) is assigned a hashed anonymous id. This is used to understand how many unique repos are using Wing.

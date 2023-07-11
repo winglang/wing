@@ -142,12 +142,10 @@ export class AnalyticsStorage {
       const fileContents = readFileSync(this.analyticsConfigFile, 'utf-8');
       return JSON.parse(fileContents) as AnalyticsConfig;
     } catch (error: any) {
-      // Possible issue reading analytics config file, first determine if file exists yet
-  
-      if (error.code === 'EACCES') {
-        throw new Error("Not able to access analytics config file due to permissions");
+      if (this.debug) {
+        console.log(`Error loading analytics config: ${error}`)
       }
-  
+
       const analyticsConfig: AnalyticsConfig = {
         anonymousId: this.generateAnonymousId(),
         optOut: false,
@@ -165,10 +163,14 @@ export class AnalyticsStorage {
    * @param config the analytics config to save to disk
    */
   public saveConfig(config: AnalyticsConfig) {
-    if (!existsSync(WING_HOME_DIR)) {
-      mkdirSync(WING_HOME_DIR);
+    try {
+      if (!existsSync(WING_HOME_DIR)) {
+        mkdirSync(WING_HOME_DIR);
+      }
+      writeFileSync(this.analyticsConfigFile, JSON.stringify(config))
+    } catch (error) {
+      if (this.debug) { console.log(`Error saving config file ${error}`) }
     }
-    writeFileSync(this.analyticsConfigFile, JSON.stringify(config))
   }
 
   /**
@@ -193,10 +195,16 @@ export class AnalyticsStorage {
   }
 
   private saveEvent(filePath: string, event: AnalyticEvent) {
-    event.properties = this.flattenProperties(event.properties) as any;
-    writeFileSync(filePath, JSON.stringify(event))
-    if (this.debug) {
-      console.log(`Analytics event stored at ${filePath}`);
+    try {
+      event.properties = this.flattenProperties(event.properties) as any;
+      writeFileSync(filePath, JSON.stringify(event))
+      if (this.debug) {
+        console.log(`Analytics event stored at ${filePath}`);
+      }
+    } catch (error) {
+      if (this.debug) {
+        console.log(`Error storing analytics event: ${error}`)
+      }
     }
   }
 }
