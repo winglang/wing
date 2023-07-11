@@ -7,4 +7,10 @@ source: libs/wingc/src/lsp/completions.rs
     kind: markdown
     value: "```wing\nstruct Foo\n```\n---"
   sortText: hh|Foo
+- label: cloud
+  kind: 9
+  documentation:
+    kind: markdown
+    value: "Module `cloud`"
+  sortText: kk|cloud
 

@@ -1,0 +1,131 @@
+---
+source: libs/wingc/src/lsp/completions.rs
+---
+- label: length
+  kind: 5
+  detail: num
+  documentation:
+    kind: markdown
+    value: "```wing\nlength: num\n```\n---\nThe length of the string."
+  sortText: ab|length
+- label: at
+  kind: 2
+  detail: "(index: num): str"
+  documentation:
+    kind: markdown
+    value: "```wing\nat: (index: num): str\n```\n---\nReturns the character at the specified index.\n\n\n### Returns\nstring at the specified index."
+  sortText: ff|at
+  insertText: at($0)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: concat
+  kind: 2
+  detail: "(strN: str): str"
+  documentation:
+    kind: markdown
+    value: "```wing\nconcat: (strN: str): str\n```\n---\nCombines the text of two (or more) strings and returns a new string.\n\n\n### Returns\na new combined string."
+  sortText: ff|concat
+  insertText: concat($0)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: contains
+  kind: 2
+  detail: "(searchString: str): bool"
+  documentation:
+    kind: markdown
+    value: "```wing\ncontains: (searchString: str): bool\n```\n---\nChecks if string includes substring.\n\n\n### Returns\ntrue if string includes substring."
+  sortText: ff|contains
+  insertText: contains($0)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: endsWith
+  kind: 2
+  detail: "(searchString: str): bool"
+  documentation:
+    kind: markdown
+    value: "```wing\nendsWith: (searchString: str): bool\n```\n---\nDoes this string end with the given searchString?\n\n\n### Returns\ntrue if string ends with searchString."
+  sortText: ff|endsWith
+  insertText: endsWith($0)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: indexOf
+  kind: 2
+  detail: "(searchString: str): num"
+  documentation:
+    kind: markdown
+    value: "```wing\nindexOf: (searchString: str): num\n```\n---\nReturns the index of the first occurrence of searchString found.\n\n\n### Returns\nthe index of the first occurrence of searchString found, or -1 if not found."
+  sortText: ff|indexOf
+  insertText: indexOf($0)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: lowercase
+  kind: 2
+  detail: "(): str"
+  documentation:
+    kind: markdown
+    value: "```wing\nlowercase: (): str\n```\n---\nReturns this string in lower case.\n\n\n### Returns\na new lower case string."
+  sortText: ff|lowercase
+  insertText: lowercase()
+- label: split
+  kind: 2
+  detail: "(separator: str): Array<str>"
+  documentation:
+    kind: markdown
+    value: "```wing\nsplit: (separator: str): Array<str>\n```\n---\nSplits string by separator.\n\n\n### Returns\narray of strings."
+  sortText: ff|split
+  insertText: split($0)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: startsWith
+  kind: 2
+  detail: "(searchString: str): bool"
+  documentation:
+    kind: markdown
+    value: "```wing\nstartsWith: (searchString: str): bool\n```\n---\nDoes this string start with the given searchString?\n\n\n### Returns\ntrue if string starts with searchString."
+  sortText: ff|startsWith
+  insertText: startsWith($0)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: substring
+  kind: 2
+  detail: "(indexStart: num, indexEnd: num?): str"
+  documentation:
+    kind: markdown
+    value: "```wing\nsubstring: (indexStart: num, indexEnd: num?): str\n```\n---\nReturns a string between indexStart, indexEnd.\n\n\n### Returns\nthe string contained from indexStart to indexEnd."
+  sortText: ff|substring
+  insertText: substring($0)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: trim
+  kind: 2
+  detail: "(): str"
+  documentation:
+    kind: markdown
+    value: "```wing\ntrim: (): str\n```\n---\nRemoves white spaces from start and end of this string.\n\n\n### Returns\na new string with white spaces removed from start and end."
+  sortText: ff|trim
+  insertText: trim()
+- label: uppercase
+  kind: 2
+  detail: "(): str"
+  documentation:
+    kind: markdown
+    value: "```wing\nuppercase: (): str\n```\n---\nReturns this string in upper case.\n\n\n### Returns\na new upper case string."
+  sortText: ff|uppercase
+  insertText: uppercase()
+

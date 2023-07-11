@@ -40,15 +40,8 @@ module.exports = function({ $_id, $api_url, $body, $http_PUT, $http_Util, $std_J
     }
     async handle() {
       const url = String.raw({ raw: ["", "/path/", "/nn/", ""] }, $api_url, $_id, $user);
-      const response = (await $http_Util.put(url,{
-      "headers": Object.freeze({"content-type":"application/json"}),
-      "body": ((args) => { return JSON.stringify(args[0], null, args[1]) })([$body]),}
-      ));
-      const fetchResponse = (await $http_Util.put(url,{
-      "method": $http_PUT,
-      "headers": Object.freeze({"content-type":"application/json"}),
-      "body": ((args) => { return JSON.stringify(args[0], null, args[1]) })([$body]),}
-      ));
+      const response = (await $http_Util.put(url,{ headers: Object.freeze({"content-type":"application/json"}), body: ((args) => { return JSON.stringify(args[0], null, args[1]) })([$body]) }));
+      const fetchResponse = (await $http_Util.fetch(url,{ method: $http_PUT, headers: Object.freeze({"content-type":"application/json"}), body: ((args) => { return JSON.stringify(args[0], null, args[1]) })([$body]) }));
       {((cond) => {if (!cond) throw new Error("assertion failed: response.headers.get(\"content-type\") == \"application/json; charset=utf-8\"")})(((response.headers)["content-type"] === "application/json; charset=utf-8"))};
       {((cond) => {if (!cond) throw new Error("assertion failed: response.body == _id")})((response.body === $_id))};
       {((cond) => {if (!cond) throw new Error("assertion failed: response.status == 200")})((response.status === 200))};

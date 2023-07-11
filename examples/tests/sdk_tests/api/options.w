@@ -50,8 +50,8 @@ api.connect(path, inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
 
 test "http.fetch can preform a call to an api to CONNECT, HEAD and OPTIONS" {
   let url = api.url + path;
-  let options: http.Response = http.fetch(url, http.RequestOptions { method: http_OPTIONS});
-  let head: http.Response = http.fetch(url, http.RequestOptions { method: http_HEAD});
+  let options: http.Response = http.fetch(url, method: http_OPTIONS);
+  let head: http.Response = http.fetch(url, method: http_HEAD);
 
   assert(options.status == 204);
   assert(options.url == url);
