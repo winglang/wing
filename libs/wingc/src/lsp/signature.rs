@@ -63,7 +63,7 @@ pub fn on_signature_help(params: lsp_types::SignatureHelpParams) -> Option<Signa
 			}
 			ExprKind::Call { callee, arg_list } => {
 				let t = file_data.types.get_expr_type(callee);
-				(*t.as_ref()?, arg_list)
+				(t, arg_list)
 			}
 			_ => return None,
 		};

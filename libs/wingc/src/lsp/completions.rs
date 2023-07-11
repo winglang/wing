@@ -117,7 +117,7 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 			let parent = node_to_complete.parent().expect("A dot must have a parent");
 
 			if let Some(nearest_expr) = scope_visitor.nearest_expr {
-				let mut nearest_expr_type = types.get_expr_type_after_check(nearest_expr);
+				let mut nearest_expr_type = types.get_expr_type(nearest_expr);
 				if let ExprKind::Call { .. } = &nearest_expr.kind {
 					if let Some(f) = nearest_expr_type.maybe_unwrap_option().as_function_sig() {
 						nearest_expr_type = f.return_type;
@@ -259,7 +259,7 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 			// if it is, we want an expression instead of struct completions
 			if !last_char_is_colon {
 				if let Some(expr) = scope_visitor.expression_trail.iter().last() {
-					let type_ = types.get_expr_type_after_check(expr);
+					let type_ = types.get_expr_type(expr);
 					if let Some(t) = type_.maybe_unwrap_option().as_struct() {
 						if let ExprKind::StructLiteral { fields, .. } = &expr.kind {
 							return get_inner_struct_completions(
@@ -275,8 +275,8 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 				|| matches!(nearest_non_reference_parent, Some(p) if p.kind() == "argument_list" || p.kind() == "positional_argument"))
 		{
 			if let Some(callish_expr) = scope_visitor.expression_trail.iter().rev().find_map(|e| match &e.kind {
-				ExprKind::Call { arg_list, callee } => Some((types.get_expr_type_after_check(&callee), arg_list)),
-				ExprKind::New { class, arg_list, .. } => Some((types.get_expr_type_after_check(&class), arg_list)),
+				ExprKind::Call { arg_list, callee } => Some((types.get_expr_type(&callee), arg_list)),
+				ExprKind::New { class, arg_list, .. } => Some((types.get_expr_type(&class), arg_list)),
 				_ => None,
 			}) {
 				let mut completions = get_current_scope_completions(&scope_visitor, &node_to_complete, preceding_text);
@@ -291,7 +291,7 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 				// if we're in a function, get the struct expansion
 				if let Some(structy) = callish_expr.0.get_function_struct_arg() {
 					let func = callish_expr.0.maybe_unwrap_option().as_function_sig().unwrap();
-					if callish_expr.1.pos_args.iter().filter(|a| !types.get_expr_type_after_check(a).is_unresolved()).count() == func.parameters.len() - 1 {
+					if callish_expr.1.pos_args.iter().filter(|a| !types.get_expr_type(a).is_unresolved()).count() == func.parameters.len() - 1 {
 						completions.extend(get_inner_struct_completions(structy, arg_list_strings));
 					}
 				}
@@ -306,7 +306,7 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 					};
 					if let Some(init_method) = init_method {
 						let func = init_method.type_.maybe_unwrap_option().as_function_sig().unwrap();
-						if callish_expr.1.pos_args.iter().filter(|a| !types.get_expr_type_after_check(a).is_unresolved()).count() == func.parameters.len() - 1 {
+						if callish_expr.1.pos_args.iter().filter(|a| !types.get_expr_type(a).is_unresolved()).count() == func.parameters.len() - 1 {
 							if let Some(structy) = init_method.type_.get_function_struct_arg() {
 								completions.extend(get_inner_struct_completions(structy, arg_list_strings));
 							}

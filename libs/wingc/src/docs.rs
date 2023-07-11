@@ -85,9 +85,7 @@ impl Documented for TypeRef {
 			| Type::Map(_)
 			| Type::MutMap(_)
 			| Type::Set(_)
-			| Type::MutSet(_)
-			// TODO enums may have docs
-			 => "".to_string(),
+			| Type::MutSet(_) => "".to_string(),
 		}
 	}
 }
@@ -242,7 +240,7 @@ fn has_parameters_documentation(f: &FunctionSignature) -> bool {
 fn render_struct(s: &Struct) -> String {
 	let mut markdown = CodeMaker::default();
 
-	let extends = s.extends.iter().map(|e| format!("{e}")).join(", ");
+	let extends = s.extends.iter().map(ToString::to_string).join(", ");
 	let extends = if extends.is_empty() {
 		String::default()
 	} else {

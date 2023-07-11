@@ -78,51 +78,47 @@ impl<'a> HoverVisitor<'a> {
 			self.visit_expr(object);
 			return;
 		}
-		if let Some(obj_type) = self.types.get_expr_type(object) {
-			if property.span.contains(&self.position) {
-				let new_span = self.current_expr.unwrap().span.clone();
-				match &**obj_type.maybe_unwrap_option() {
-					Type::Optional(_) | Type::Anything | Type::Void | Type::Nil | Type::Unresolved => {}
+		let obj_type = self.types.get_expr_type(object);
+		if property.span.contains(&self.position) {
+			let new_span = self.current_expr.unwrap().span.clone();
+			match &**obj_type.maybe_unwrap_option() {
+				Type::Optional(_) | Type::Anything | Type::Void | Type::Nil | Type::Unresolved => {}
 
-					Type::Array(_)
-					| Type::MutArray(_)
-					| Type::Map(_)
-					| Type::MutMap(_)
-					| Type::Set(_)
-					| Type::MutSet(_)
-					| Type::Json
-					| Type::MutJson
-					| Type::Number
-					| Type::String
-					| Type::Duration
-					| Type::Boolean => {
-						if let Some((std_type, ..)) = self.types.get_std_class(&obj_type.to_string()) {
-							if let Some(c) = std_type.as_type() {
-								if let Some(c) = c.as_class() {
-									self.found = Some((new_span, docs_from_classlike_property(c, property)));
-								}
+				Type::Array(_)
+				| Type::MutArray(_)
+				| Type::Map(_)
+				| Type::MutMap(_)
+				| Type::Set(_)
+				| Type::MutSet(_)
+				| Type::Json
+				| Type::MutJson
+				| Type::Number
+				| Type::String
+				| Type::Duration
+				| Type::Boolean => {
+					if let Some((std_type, ..)) = self.types.get_std_class(&obj_type.to_string()) {
+						if let Some(c) = std_type.as_type() {
+							if let Some(c) = c.as_class() {
+								self.found = Some((new_span, docs_from_classlike_property(c, property)));
 							}
 						}
 					}
+				}
 
-					Type::Function(_) | Type::Enum(_) => {
-						self.found = Some((
-							new_span,
-							self
-								.types
-								.get_expr_type(self.current_expr.unwrap())
-								.map(|t| t.render_docs()),
-						));
-					}
-					Type::Class(c) => {
-						self.found = Some((new_span, docs_from_classlike_property(c, property)));
-					}
-					Type::Interface(c) => {
-						self.found = Some((new_span, docs_from_classlike_property(c, property)));
-					}
-					Type::Struct(c) => {
-						self.found = Some((new_span, docs_from_classlike_property(c, property)));
-					}
+				Type::Function(_) | Type::Enum(_) => {
+					self.found = Some((
+						new_span,
+						Some(self.types.get_expr_type(self.current_expr.unwrap()).render_docs()),
+					));
+				}
+				Type::Class(c) => {
+					self.found = Some((new_span, docs_from_classlike_property(c, property)));
+				}
+				Type::Interface(c) => {
+					self.found = Some((new_span, docs_from_classlike_property(c, property)));
+				}
+				Type::Struct(c) => {
+					self.found = Some((new_span, docs_from_classlike_property(c, property)));
 				}
 			}
 		}
@@ -222,7 +218,7 @@ impl<'a> Visit<'a> for HoverVisitor<'a> {
 				let x = arg_list.named_args.iter().find(|a| a.0.span.contains(&self.position));
 				if let Some((arg_name, ..)) = x {
 					// we need to get the struct type from the class constructor
-					let class_type = self.types.get_expr_type_after_check(node);
+					let class_type = self.types.get_expr_type(node);
 					let class_phase = self.types.get_expr_phase(node).unwrap();
 					let class_type = class_type.as_class().unwrap();
 					let init_info = match class_phase {
@@ -241,7 +237,7 @@ impl<'a> Visit<'a> for HoverVisitor<'a> {
 				let x = arg_list.named_args.iter().find(|a| a.0.span.contains(&self.position));
 				if let Some((arg_name, ..)) = x {
 					// we need to get the struct type from the callee
-					let callee_type = self.types.get_expr_type_after_check(callee);
+					let callee_type = self.types.get_expr_type(callee);
 					if let Some(structy) = callee_type.get_function_struct_arg() {
 						self.found = Some((arg_name.span.clone(), docs_from_classlike_property(structy, arg_name)));
 					}
@@ -250,7 +246,7 @@ impl<'a> Visit<'a> for HoverVisitor<'a> {
 			ExprKind::StructLiteral { fields, .. } => {
 				if let Some(f) = fields.iter().find(|f| f.0.span.contains(&self.position)) {
 					let field_name = f.0;
-					let struct_type = self.types.get_expr_type_after_check(node);
+					let struct_type = self.types.get_expr_type(node);
 					if let Some(structy) = struct_type.maybe_unwrap_option().as_struct() {
 						self.found = Some((
 							field_name.span.clone(),

@@ -1262,22 +1262,20 @@ impl Types {
 		self.type_for_expr[expr_idx] = Some(ResolvedExpression { type_, phase });
 	}
 
-	/// Obtain the type of a given expression node. Returns None if the expression has not been type checked yet. If
-	/// this is called after type checking, it should always return Some.
-	pub fn get_expr_type(&self, expr: &Expr) -> Option<TypeRef> {
+	/// Obtain the type of a given expression node. Will panic if the expression has not been type checked yet.
+	pub fn get_expr_type(&self, expr: &Expr) -> TypeRef {
 		self
 			.type_for_expr
 			.get(expr.id)
 			.and_then(|t| t.as_ref().map(|t| t.type_))
+			.expect("Expression has no type")
 	}
 
-	/// Obtain the type of a given expression node. Will panic if the expression has not been type checked yet.
-	pub fn get_expr_type_after_check(&self, expr: &Expr) -> TypeRef {
+	pub fn try_get_expr_type(&self, expr: &Expr) -> Option<TypeRef> {
 		self
 			.type_for_expr
 			.get(expr.id)
 			.and_then(|t| t.as_ref().map(|t| t.type_))
-			.expect("All expressions should have a type")
 	}
 
 	pub fn get_expr_phase(&self, expr: &Expr) -> Option<Phase> {
@@ -3741,9 +3739,6 @@ impl<'a> TypeChecker<'a> {
 				// reference into a type reference.
 				if let Some(user_type_annotation) = self.expr_maybe_type(object, env) {
 					// We can't get here twice, we can safely assume that if we're here the `object` part of the reference doesn't have and evaluated type yet.
-					let object_type = self.types.get_expr_type(object);
-					assert!(object_type.is_none());
-
 					// Create a type reference out of this nested reference and call ourselves again
 					let new_ref = Reference::TypeMember {
 						typeobject: Box::new(user_type_annotation.to_expression()),
@@ -3790,7 +3785,7 @@ impl<'a> TypeChecker<'a> {
 				};
 
 				// Check if the object is an optional type. If it is ensure the use of optional chaining.
-				let object_type = self.types.get_expr_type(object).unwrap();
+				let object_type = self.types.get_expr_type(object);
 				let object_is_option = object_type.is_option();
 
 				if object_is_option && !optional_accessor {
