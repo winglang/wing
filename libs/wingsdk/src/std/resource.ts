@@ -9,11 +9,13 @@ import { log } from "../shared/log";
 
 /**
  * A resource that can run inflight code.
+ * @skipDocs
  */
 export interface IInflightHost extends IResource {}
 
 /**
  * Abstract interface for `Resource`.
+ * @skipDocs
  */
 export interface IResource extends IInspectable, IConstruct {
   /**
@@ -67,6 +69,7 @@ export interface IResource extends IInspectable, IConstruct {
 
 /**
  * Shared behavior between all Wing SDK resources.
+ * @skipDocs
  */
 export abstract class Resource extends Construct implements IResource {
   /**
@@ -376,6 +379,7 @@ export abstract class Resource extends Construct implements IResource {
  *
  * Visually speaking, if a resource A has an outbound connection with resource B,
  * the arrow would point from A to B, and vice versa for inbound connections.
+ * @skipDocs
  */
 export enum Direction {
   /**
@@ -393,6 +397,7 @@ export enum Direction {
 
 /**
  * Props for `Resource.addConnection`.
+ * @skipDocs
  */
 export interface AddConnectionProps {
   /**
@@ -420,6 +425,7 @@ export interface AddConnectionProps {
 
 /**
  * A connection between two resources.
+ * @skipDocs
  */
 export interface Connection {
   /**
@@ -463,6 +469,7 @@ export interface OperationAnnotation {
 
 /**
  * Properties for the Display class.
+ * @skipDocs
  */
 export interface DisplayProps {
   /**
@@ -486,6 +493,7 @@ export interface DisplayProps {
 
 /**
  * Information on how to display a resource in the UI.
+ * @skipDocs
  */
 export class Display {
   /**

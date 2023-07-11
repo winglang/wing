@@ -1060,9 +1060,9 @@ Object {
       "usage": "tags: MutArray&lt;CfnTag&gt;;",
     },
   ],
-  "usage": "bring { CfnPublicRepositoryProps } from \\"@aws-cdk/aws-ecr\\"
+  "usage": "bring { CfnPublicRepositoryProps } from \\"@aws-cdk/aws-ecr\\";
 
-let CfnPublicRepositoryProps = CfnPublicRepositoryProps{ ... }",
+let CfnPublicRepositoryProps = CfnPublicRepositoryProps{ ... };",
 }
 `;
 
@@ -1076,9 +1076,9 @@ Properties for defining a \`AWS::ECR::PublicRepository\`.
 # Initializer <a name=\\"Initializer\\" id=\\"@aws-cdk/aws-ecr.CfnPublicRepositoryProps.Initializer\\"></a>
 
 \`\`\`wing
-bring { CfnPublicRepositoryProps } from \\"@aws-cdk/aws-ecr\\"
+bring { CfnPublicRepositoryProps } from \\"@aws-cdk/aws-ecr\\";
 
-let CfnPublicRepositoryProps = CfnPublicRepositoryProps{ ... }
+let CfnPublicRepositoryProps = CfnPublicRepositoryProps{ ... };
 \`\`\`
 
 # Properties <a name=\\"Properties\\" id=\\"Properties\\"></a>

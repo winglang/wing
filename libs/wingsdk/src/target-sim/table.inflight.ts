@@ -1,5 +1,5 @@
 import { TableAttributes, TableSchema } from "./schema-resources";
-import { ColumnType, ITableClient } from "../cloud";
+import { ColumnType, ITableClient } from "../ex";
 import { validateRow } from "../shared/table-utils";
 import { Json } from "../std";
 import {

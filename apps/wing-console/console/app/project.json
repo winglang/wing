@@ -12,8 +12,9 @@
     "test": {
       "dependsOn": ["build"],
       "options": {
-        "command": "pnpm run test",
-        "cwd": "apps/wing-console/console/app"
+        "commands": ["pnpm playwright install --with-deps", "pnpm run test"],
+        "cwd": "apps/wing-console/console/app",
+        "parallel": false
       }
     },
     "package": {

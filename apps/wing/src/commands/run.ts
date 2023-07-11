@@ -19,7 +19,7 @@ export interface RunOptions {
 
   /**
    * Whether to open the Wing Console in the browser automatically.
-   * 
+   *
    * @default true
    */
   readonly open?: boolean;
@@ -57,6 +57,7 @@ export async function run(entrypoint?: string, options?: RunOptions) {
         await open(url);
       },
     },
+    requireAcceptTerms: true,
   });
   const url = `http://localhost:${port}/`;
   if (openBrowser) {

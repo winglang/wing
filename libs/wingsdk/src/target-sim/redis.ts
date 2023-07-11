@@ -3,7 +3,7 @@ import { ISimulatorResource } from "./resource";
 import { RedisSchema, REDIS_TYPE } from "./schema-resources";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as core from "../core";
-import * as redis from "../redis";
+import * as ex from "../ex";
 import { IInflightHost } from "../std";
 import { BaseResourceSchema } from "../testing/simulator";
 
@@ -12,7 +12,7 @@ import { BaseResourceSchema } from "../testing/simulator";
  *
  * @inflight `@winglang/sdk.redis.IRedisClient`
  */
-export class Redis extends redis.Redis implements ISimulatorResource {
+export class Redis extends ex.Redis implements ISimulatorResource {
   constructor(scope: Construct, id: string) {
     super(scope, id);
   }

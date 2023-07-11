@@ -4,8 +4,8 @@ import { Constructs } from "./constructs";
 import { Enums } from "./enums";
 import { Interfaces } from "./interfaces";
 import { Structs } from "./structs";
-import { HIDDEN_CLASSES, VISIBLE_SUBMODULES } from "./wing-filters";
-import { ApiReferenceSchema } from "../schema";
+import { VISIBLE_SUBMODULES } from "./wing-filters";
+import { ApiReferenceSchema, isSkipped } from "../schema";
 import { Transpile } from "../transpile/transpile";
 
 /**
@@ -41,7 +41,6 @@ export class ApiReference {
         ...assembly.classes,
         ...flatMap(submodules, (submod) => [...submod.classes]),
       ]);
-      classes = classes.filter((c) => !HIDDEN_CLASSES.includes(c.name));
       interfaces = this.sortByName([
         ...assembly.interfaces,
         ...flatMap(submodules, (submod) => [...submod.interfaces]),
@@ -59,6 +58,10 @@ export class ApiReference {
       );
       enums = this.sortByName(submodule ? submodule.enums : assembly.enums);
     }
+
+    classes = classes.filter((item) => !isSkipped(item.docs));
+    interfaces = interfaces.filter((item) => !isSkipped(item.docs));
+    enums = enums.filter((item) => !isSkipped(item.docs));
 
     this.constructs = new Constructs(transpile, classes);
     this.classes = new Classes(transpile, classes);

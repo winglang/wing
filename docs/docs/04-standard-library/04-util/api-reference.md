@@ -23,25 +23,25 @@ Properties for `util.waitUntil`.
 ```wing
 bring util;
 
-let WaitUntilProps = util.WaitUntilProps{ ... }
+let WaitUntilProps = util.WaitUntilProps{ ... };
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.util.WaitUntilProps.property.interval">interval</a></code> | <code><a href="#@winglang/sdk.std.Duration">Duration</a></code> | Interval between predicate retries. |
-| <code><a href="#@winglang/sdk.util.WaitUntilProps.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">Duration</a></code> | The timeout for keep trying predicate. |
+| <code><a href="#@winglang/sdk.util.WaitUntilProps.property.interval">interval</a></code> | <code><a href="#@winglang/sdk.std.Duration">duration</a></code> | Interval between predicate retries. |
+| <code><a href="#@winglang/sdk.util.WaitUntilProps.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">duration</a></code> | The timeout for keep trying predicate. |
 
 ---
 
 ##### `interval`<sup>Optional</sup> <a name="interval" id="@winglang/sdk.util.WaitUntilProps.property.interval"></a>
 
 ```wing
-interval: Duration;
+interval: duration;
 ```
 
-- *Type:* <a href="#@winglang/sdk.std.Duration">Duration</a>
+- *Type:* <a href="#@winglang/sdk.std.Duration">duration</a>
 - *Default:* 0.1s
 
 Interval between predicate retries.
@@ -51,10 +51,10 @@ Interval between predicate retries.
 ##### `timeout`<sup>Optional</sup> <a name="timeout" id="@winglang/sdk.util.WaitUntilProps.property.timeout"></a>
 
 ```wing
-timeout: Duration;
+timeout: duration;
 ```
 
-- *Type:* <a href="#@winglang/sdk.std.Duration">Duration</a>
+- *Type:* <a href="#@winglang/sdk.std.Duration">duration</a>
 - *Default:* 1m
 
 The timeout for keep trying predicate.
@@ -72,7 +72,7 @@ Utility functions.
 ```wing
 bring util;
 
-new util.Util()
+new util.Util();
 ```
 
 | **Name** | **Type** | **Description** |
@@ -97,7 +97,7 @@ new util.Util()
 ```wing
 bring util;
 
-util.Util.env(name: str)
+util.Util.env(name: str);
 ```
 
 Returns the value of an environment variable.
@@ -117,7 +117,7 @@ The name of the environment variable.
 ```wing
 bring util;
 
-util.Util.sleep(delay: Duration)
+util.Util.sleep(delay: duration);
 ```
 
 **Inflight client:** [true](#true)
@@ -126,7 +126,7 @@ Suspends execution for a given duration.
 
 ###### `delay`<sup>Required</sup> <a name="delay" id="@winglang/sdk.util.Util.sleep.parameter.delay"></a>
 
-- *Type:* <a href="#@winglang/sdk.std.Duration">Duration</a>
+- *Type:* <a href="#@winglang/sdk.std.Duration">duration</a>
 
 The time to suspend execution.
 
@@ -137,7 +137,7 @@ The time to suspend execution.
 ```wing
 bring util;
 
-util.Util.tryEnv(name: str)
+util.Util.tryEnv(name: str);
 ```
 
 Returns the value of an environment variable.
@@ -157,7 +157,7 @@ The name of the environment variable.
 ```wing
 bring util;
 
-util.Util.waitUntil(predicate: IPredicateHandler, props?: WaitUntilProps)
+util.Util.waitUntil(predicate: IPredicateHandler, props?: WaitUntilProps);
 ```
 
 **Inflight client:** [true](#true)
@@ -192,7 +192,7 @@ Timeout and interval values, default to one 1m timeout and 0.1sec interval.
 
 **Inflight client:** [@winglang/sdk.util.IPredicateHandlerClient](#@winglang/sdk.util.IPredicateHandlerClient)
 
-Represents a predicate with an inflight "handle" method that can be passed to `util.busyWait`.
+A predicate with an inflight "handle" method that can be passed to `util.busyWait`.
 
 
 #### Properties <a name="Properties" id="Properties"></a>
