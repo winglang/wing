@@ -1,7 +1,7 @@
 import { Construct } from "constructs";
 import { Tokens } from "./tokens";
 import { IResource } from "../std/resource";
-import { TestRunner } from "./test-runner";
+import { TestRunner } from "../std/test-runner";
 
 /**
  * Props for all `App` classes.
@@ -187,6 +187,14 @@ export abstract class App extends Construct {
     return undefined;
   }
 
+  /**
+   * Synthesize the root construct if one was given. If this is a test environment, then
+   * we will synthesize one root construct per test. Otherwise, we will synthesize exactly
+   * one root construct.
+   *
+   * @param props The App props
+   * @param testRunner The test runner
+   */
   protected synthRoots(props: AppProps, testRunner: TestRunner) {
     if (props.rootConstruct) {
       const Root = props.rootConstruct;

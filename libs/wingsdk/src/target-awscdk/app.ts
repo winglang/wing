@@ -19,11 +19,11 @@ import {
   FUNCTION_FQN,
   QUEUE_FQN,
   SECRET_FQN,
-  TEST_RUNNER_FQN,
   TOPIC_FQN,
 } from "../cloud";
 import { App as CoreApp, AppProps, preSynthesizeAllConstructs } from "../core";
 import { PluginManager } from "../core/plugin-manager";
+import { TEST_RUNNER_FQN } from "../std";
 
 /**
  * AWS-CDK App props

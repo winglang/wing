@@ -30,7 +30,6 @@ import {
   QUEUE_FQN,
   SCHEDULE_FQN,
   SECRET_FQN,
-  TEST_RUNNER_FQN,
   TOPIC_FQN,
   WEBSITE_FQN,
 } from "../cloud";
@@ -38,6 +37,7 @@ import { AppProps } from "../core";
 import { TABLE_FQN, REDIS_FQN } from "../ex";
 import { NameOptions, ResourceNames } from "../shared/resource-names";
 import { CdktfApp } from "../shared-tf/app";
+import { TEST_RUNNER_FQN } from "../std";
 
 /**
  * An app that knows how to synthesize constructs into a Terraform configuration

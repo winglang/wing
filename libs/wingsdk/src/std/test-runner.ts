@@ -1,8 +1,8 @@
 import { Construct } from "constructs";
+import { Resource } from "./resource";
+import { Test } from "./test";
 import { fqnForType } from "../constants";
-import { App } from "./app";
-import { Resource } from "../std";
-import { Test } from "../std/test";
+import { App } from "../core/app";
 
 /**
  * Global identifier for `TestRunner`.

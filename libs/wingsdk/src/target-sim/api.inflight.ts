@@ -14,10 +14,10 @@ import {
   ApiResponse,
   IApiClient,
   IFunctionClient,
-  TraceType,
   parseHttpMethod,
   sanitizeParamLikeObject,
 } from "../cloud";
+import { TraceType } from "../std";
 import {
   ISimulatorContext,
   ISimulatorResourceInstance,
