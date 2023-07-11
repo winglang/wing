@@ -20,7 +20,7 @@ export interface CounterProps {
 }
 
 /**
- * Represents a distributed atomic counter.
+ * A distributed atomic counter.
  * @inflight `@winglang/sdk.cloud.ICounterClient`
  */
 export abstract class Counter extends Resource {

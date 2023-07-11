@@ -6,7 +6,7 @@ import { Json, Resource } from "../std";
 /**
  * Global identifier for `Table`.
  */
-export const TABLE_FQN = fqnForType("cloud.Table");
+export const TABLE_FQN = fqnForType("ex.Table");
 
 /**
  * Table column types
@@ -52,8 +52,8 @@ export interface TableProps {
 }
 
 /**
- * Represents a NoSQL database table that can be used to store and query data.
- * @inflight `@winglang/sdk.cloud.ITableClient`
+ * A NoSQL database table that can be used to store and query data.
+ * @inflight `@winglang/sdk.ex.ITableClient`
  */
 export abstract class Table extends Resource {
   /**
