@@ -25,7 +25,6 @@ import {
   SCHEDULE_FQN,
   SECRET_FQN,
   SERVICE_FQN,
-  TABLE_FQN,
   TEST_RUNNER_FQN,
   TOPIC_FQN,
   WEBSITE_FQN,
@@ -33,7 +32,7 @@ import {
 import { SDK_VERSION } from "../constants";
 import * as core from "../core";
 import { preSynthesizeAllConstructs } from "../core/app";
-import { REDIS_FQN } from "../redis";
+import { TABLE_FQN, REDIS_FQN } from "../ex";
 import { WingSimulatorSchema } from "../testing/simulator";
 
 /**

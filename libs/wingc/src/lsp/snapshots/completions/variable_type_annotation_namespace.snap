@@ -11,67 +11,61 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 7
   documentation:
     kind: markdown
-    value: "```wing\nclass Bucket\n```\n---\nRepresents a cloud object store."
+    value: "```wing\nclass Bucket\n```\n---\nA cloud object store."
   sortText: gg|Bucket
 - label: Counter
   kind: 7
   documentation:
     kind: markdown
-    value: "```wing\nclass Counter\n```\n---\nRepresents a distributed atomic counter."
+    value: "```wing\nclass Counter\n```\n---\nA distributed atomic counter."
   sortText: gg|Counter
 - label: Function
   kind: 7
   documentation:
     kind: markdown
-    value: "```wing\nclass Function impl IInflightHost\n```\n---\nRepresents a function."
+    value: "```wing\nclass Function impl IInflightHost\n```\n---\nA function."
   sortText: gg|Function
 - label: Queue
   kind: 7
   documentation:
     kind: markdown
-    value: "```wing\nclass Queue\n```\n---\nRepresents a queue."
+    value: "```wing\nclass Queue\n```\n---\nA queue."
   sortText: gg|Queue
 - label: Schedule
   kind: 7
   documentation:
     kind: markdown
-    value: "```wing\nclass Schedule\n```\n---\nRepresents a schedule."
+    value: "```wing\nclass Schedule\n```\n---\nA schedule."
   sortText: gg|Schedule
 - label: Secret
   kind: 7
   documentation:
     kind: markdown
-    value: "```wing\nclass Secret\n```\n---\nRepresents a cloud secret."
+    value: "```wing\nclass Secret\n```\n---\nA cloud secret."
   sortText: gg|Secret
 - label: Service
   kind: 7
   documentation:
     kind: markdown
-    value: "```wing\nclass Service\n```\n---\nRepresents a service."
+    value: "```wing\nclass Service\n```\n---\nA long-running service."
   sortText: gg|Service
-- label: Table
-  kind: 7
-  documentation:
-    kind: markdown
-    value: "```wing\nclass Table\n```\n---\nRepresents a NoSQL database table that can be used to store and query data."
-  sortText: gg|Table
 - label: TestRunner
   kind: 7
   documentation:
     kind: markdown
-    value: "```wing\nclass TestRunner\n```\n---\nRepresents a test engine."
+    value: "```wing\nclass TestRunner\n```\n---\nA test engine."
   sortText: gg|TestRunner
 - label: Topic
   kind: 7
   documentation:
     kind: markdown
-    value: "```wing\nclass Topic\n```\n---\nRepresents a topic."
+    value: "```wing\nclass Topic\n```\n---\nA topic."
   sortText: gg|Topic
 - label: Website
   kind: 7
   documentation:
     kind: markdown
-    value: "```wing\nclass Website\n```\n---\nRepresents a cloud static website."
+    value: "```wing\nclass Website\n```\n---\nA cloud static website."
   sortText: gg|Website
 - label: ApiConnectProps
   kind: 22
@@ -241,12 +235,15 @@ source: libs/wingc/src/lsp/completions.rs
     kind: markdown
     value: "```wing\nstruct ServiceProps\n```\n---\nProperties for `Service`.\n### Fields\n- `autoStart?` — Whether the service should start automatically.\n- `onStart` — Handler to run with the service starts.\n- `onStop?` — Handler to run with the service stops."
   sortText: hh|ServiceProps
+<<<<<<< HEAD
 - label: TableProps
   kind: 22
   documentation:
     kind: markdown
     value: "```wing\nstruct TableProps\n```\n---\nProperties for `Table`.\n### Fields\n- `columns?` — The table's columns.\n- `initialRows?` — The table's initial rows.\n- `name?` — The table's name.\n- `primaryKey?` — The table's primary key."
   sortText: hh|TableProps
+=======
+>>>>>>> d1f91987b83178dcb304f9093596a20e27c8e5e5
 - label: TestResult
   kind: 22
   documentation:
@@ -275,7 +272,11 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 22
   documentation:
     kind: markdown
+<<<<<<< HEAD
     value: "```wing\nstruct Trace\n```\n---\nRepresents an trace emitted during simulation.\n### Fields\n- `data` — A JSON blob with structured data.\n- `sourcePath` — The path of the resource that emitted the trace.\n- `sourceType` — The type of the source that emitted the trace.\n- `timestamp` — The timestamp of the event, in ISO 8601 format.\n- `type` — The type of a trace."
+=======
+    value: "```wing\nTrace\n```\n---\nA trace emitted during simulation."
+>>>>>>> d1f91987b83178dcb304f9093596a20e27c8e5e5
   sortText: hh|Trace
 - label: WebsiteProps
   kind: 22
@@ -293,7 +294,11 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 8
   documentation:
     kind: markdown
+<<<<<<< HEAD
     value: "```wing\ninterface IApiEndpointHandler extends IResource\n```\n---\nRepresents a resource with an inflight \"handle\" method that can be passed to one of the `Api` request preflight methods.\n### Methods\n- `handle` — Inflight that will be called when a request is made to the endpoint."
+=======
+    value: "```wing\nIApiEndpointHandler\n```\n---\nA resource with an inflight \"handle\" method that can be passed to one of the `Api` request preflight methods."
+>>>>>>> d1f91987b83178dcb304f9093596a20e27c8e5e5
   sortText: ii|IApiEndpointHandler
 - label: IApiEndpointHandlerClient
   kind: 8
@@ -311,13 +316,21 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 8
   documentation:
     kind: markdown
+<<<<<<< HEAD
     value: "```wing\ninterface IBucketEventHandler extends IResource\n```\n---\nRepresents a resource with an inflight \"handle\" method that can be passed to the bucket events.\n### Methods\n- `handle` — Function that will be called when an event notification is fired."
+=======
+    value: "```wing\nIBucketEventHandler\n```\n---\nA resource with an inflight \"handle\" method that can be passed to the bucket events."
+>>>>>>> d1f91987b83178dcb304f9093596a20e27c8e5e5
   sortText: ii|IBucketEventHandler
 - label: IBucketEventHandlerClient
   kind: 8
   documentation:
     kind: markdown
+<<<<<<< HEAD
     value: "```wing\ninterface IBucketEventHandlerClient\n```\n---\nRepresents a resource with an inflight \"handle\" method that can be passed to the bucket events.\n### Methods\n- `handle` — Function that will be called when an event notification is fired."
+=======
+    value: "```wing\nIBucketEventHandlerClient\n```\n---\nA resource with an inflight \"handle\" method that can be passed to the bucket events."
+>>>>>>> d1f91987b83178dcb304f9093596a20e27c8e5e5
   sortText: ii|IBucketEventHandlerClient
 - label: ICounterClient
   kind: 8
@@ -335,7 +348,11 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 8
   documentation:
     kind: markdown
+<<<<<<< HEAD
     value: "```wing\ninterface IFunctionHandler extends IResource\n```\n---\nRepresents a resource with an inflight \"handle\" method that can be used to create a `cloud.Function`.\n### Methods\n- `handle` — Entrypoint function that will be called when the cloud function is invoked."
+=======
+    value: "```wing\nIFunctionHandler\n```\n---\nA resource with an inflight \"handle\" method that can be used to create a `cloud.Function`."
+>>>>>>> d1f91987b83178dcb304f9093596a20e27c8e5e5
   sortText: ii|IFunctionHandler
 - label: IFunctionHandlerClient
   kind: 8
@@ -353,7 +370,11 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 8
   documentation:
     kind: markdown
+<<<<<<< HEAD
     value: "```wing\ninterface IQueueSetConsumerHandler extends IResource\n```\n---\nRepresents a resource with an inflight \"handle\" method that can be passed to `Queue.setConsumer`.\n### Methods\n- `handle` — Function that will be called when a message is received from the queue."
+=======
+    value: "```wing\nIQueueSetConsumerHandler\n```\n---\nA resource with an inflight \"handle\" method that can be passed to `Queue.setConsumer`."
+>>>>>>> d1f91987b83178dcb304f9093596a20e27c8e5e5
   sortText: ii|IQueueSetConsumerHandler
 - label: IQueueSetConsumerHandlerClient
   kind: 8
@@ -371,7 +392,11 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 8
   documentation:
     kind: markdown
+<<<<<<< HEAD
     value: "```wing\ninterface IScheduleOnTickHandler extends IResource\n```\n---\nRepresents a resource with an inflight \"handle\" method that can be passed to `Schedule.on_tick`.\n### Methods\n- `handle` — Function that will be called when a message is received from the schedule."
+=======
+    value: "```wing\nIScheduleOnTickHandler\n```\n---\nA resource with an inflight \"handle\" method that can be passed to `Schedule.on_tick`."
+>>>>>>> d1f91987b83178dcb304f9093596a20e27c8e5e5
   sortText: ii|IScheduleOnTickHandler
 - label: IScheduleOnTickHandlerClient
   kind: 8
@@ -401,6 +426,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 8
   documentation:
     kind: markdown
+<<<<<<< HEAD
     value: "```wing\ninterface IServiceOnEventHandler extends IResource\n```\n---\nRepresents a resource with an inflight \"handle\" method that can be passed to `ServiceProps.on_start` || `ServiceProps.on_stop`.\n### Methods\n- `handle` — Function that will be called for service events."
   sortText: ii|IServiceOnEventHandler
 - label: ITableClient
@@ -409,6 +435,10 @@ source: libs/wingc/src/lsp/completions.rs
     kind: markdown
     value: "```wing\ninterface ITableClient\n```\n---\nInflight interface for `Table`.\n### Methods\n- `delete` — Delete a row from the table, by primary key.\n- `get` — Get a row from the table, by primary key.\n- `insert` — Insert a row into the table.\n- `list` — List all rows in the table.\n- `update` — Update a row in the table."
   sortText: ii|ITableClient
+=======
+    value: "```wing\nIServiceOnEventHandler\n```\n---\nA resource with an inflight \"handle\" method that can be passed to `ServiceProps.on_start` || `ServiceProps.on_stop`."
+  sortText: ii|IServiceOnEventHandler
+>>>>>>> d1f91987b83178dcb304f9093596a20e27c8e5e5
 - label: ITestRunnerClient
   kind: 8
   documentation:
@@ -425,7 +455,11 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 8
   documentation:
     kind: markdown
+<<<<<<< HEAD
     value: "```wing\ninterface ITopicOnMessageHandler extends IResource\n```\n---\nRepresents a resource with an inflight \"handle\" method that can be passed to `Topic.on_message`.\n### Methods\n- `handle` — Function that will be called when a message is received from the topic."
+=======
+    value: "```wing\nITopicOnMessageHandler\n```\n---\nA resource with an inflight \"handle\" method that can be passed to `Topic.on_message`."
+>>>>>>> d1f91987b83178dcb304f9093596a20e27c8e5e5
   sortText: ii|ITopicOnMessageHandler
 - label: ITopicOnMessageHandlerClient
   kind: 8
@@ -445,12 +479,15 @@ source: libs/wingc/src/lsp/completions.rs
     kind: markdown
     value: "```wing\nenum BucketEventType\n```\n---\nbucket events to subscribe to.\n- `CREATE`\n- `DELETE`\n- `UPDATE`"
   sortText: jj|BucketEventType
+<<<<<<< HEAD
 - label: ColumnType
   kind: 13
   documentation:
     kind: markdown
     value: "```wing\nenum ColumnType\n```\n---\nTable column types.\n- `STRING`\n- `NUMBER`\n- `BOOLEAN`\n- `DATE`\n- `JSON`"
   sortText: jj|ColumnType
+=======
+>>>>>>> d1f91987b83178dcb304f9093596a20e27c8e5e5
 - label: HttpMethod
   kind: 13
   documentation:

@@ -89,7 +89,11 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 22
   documentation:
     kind: markdown
+<<<<<<< HEAD
     value: "```wing\nstruct Response\n```\n---\nRepresents the response to a request.\n### Fields\n- `body?` — A string represents the body contents.\n- `headers` — The map of header information associated with the response.\n- `ok` — A boolean indicating whether the response was successful (status in the range 200 – 299) or not.\n- `status` — The status code of the response.\n- `url` — The URL of the response."
+=======
+    value: "```wing\nResponse\n```\n---\nThe response to a HTTP request."
+>>>>>>> d1f91987b83178dcb304f9093596a20e27c8e5e5
   sortText: hh|Response
 - label: HttpMethod
   kind: 13

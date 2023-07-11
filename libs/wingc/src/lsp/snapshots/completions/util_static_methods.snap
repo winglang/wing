@@ -65,7 +65,11 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 8
   documentation:
     kind: markdown
+<<<<<<< HEAD
     value: "```wing\ninterface IPredicateHandler extends IResource\n```\n---\nRepresents a predicate with an inflight \"handle\" method that can be passed to `util.busyWait`.\n### Methods\n- `handle` — The Predicate function that is called."
+=======
+    value: "```wing\nIPredicateHandler\n```\n---\nA predicate with an inflight \"handle\" method that can be passed to `util.busyWait`."
+>>>>>>> d1f91987b83178dcb304f9093596a20e27c8e5e5
   sortText: ii|IPredicateHandler
 - label: IPredicateHandlerClient
   kind: 8

@@ -197,10 +197,6 @@ jobs:
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Install Playwright Browsers
-        run: npx playwright install --with-deps
-        working-directory: apps/wing-console/console/app
-
       - name: Test
         run: pnpm test:ci
 

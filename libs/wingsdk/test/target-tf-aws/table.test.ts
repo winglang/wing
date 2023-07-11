@@ -1,5 +1,6 @@
 import { test, expect } from "vitest";
 import * as cloud from "../../src/cloud";
+import * as ex from "../../src/ex";
 import * as tfaws from "../../src/target-tf-aws";
 import { Testing } from "../../src/testing";
 import {
@@ -12,8 +13,8 @@ import {
 
 test("default table behavior", () => {
   const app = new tfaws.App({ outdir: mkdtemp() });
-  cloud.Table._newTable(app, "Table", {
-    columns: { name: cloud.ColumnType.STRING },
+  ex.Table._newTable(app, "Table", {
+    columns: { name: ex.ColumnType.STRING },
     primaryKey: "id",
     name: "my-wing-table",
   });
@@ -25,8 +26,8 @@ test("default table behavior", () => {
 
 test("function with a table binding", () => {
   const app = new tfaws.App({ outdir: mkdtemp() });
-  const table = cloud.Table._newTable(app, "Table", {
-    columns: { name: cloud.ColumnType.STRING },
+  const table = ex.Table._newTable(app, "Table", {
+    columns: { name: ex.ColumnType.STRING },
     primaryKey: "id",
     name: "my-wing-table",
   });
@@ -39,7 +40,7 @@ test("function with a table binding", () => {
     {
       my_table: {
         obj: table,
-        ops: [cloud.TableInflightMethods.INSERT],
+        ops: [ex.TableInflightMethods.INSERT],
       },
     }
   );

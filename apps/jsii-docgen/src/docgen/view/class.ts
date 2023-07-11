@@ -58,6 +58,8 @@ export class Class {
   }
 
   public toJson(): ClassSchema {
+    const name = this.transpiled.type.fqn.split(".").pop()!;
+    const namespace = this.transpiled.type.namespace;
     return {
       initializer: this.initializer?.toJson(),
       interfaces: this.interfaces.map((iface) => iface.toJson()),
@@ -66,7 +68,11 @@ export class Class {
       constants: this.constants.toJson(),
       properties: this.properties.toJson(),
       fqn: this.transpiled.type.fqn,
-      displayName: this.transpiled.type.fqn.split(".").pop()!,
+      displayName:
+        name === "Util" && namespace
+          ? // capitalized namespace
+            namespace.charAt(0).toUpperCase() + namespace.slice(1)
+          : name,
       id: this.klass.fqn,
       docs: extractDocs(this.klass.docs),
     };
