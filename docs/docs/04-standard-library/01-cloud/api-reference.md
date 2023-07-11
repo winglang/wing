@@ -22,7 +22,7 @@ Functionality shared between all `Api` implementations.
 ```wing
 bring cloud;
 
-new cloud.Api(props?: ApiProps)
+new cloud.Api(props?: ApiProps);
 ```
 
 | **Name** | **Type** | **Description** |
@@ -367,7 +367,7 @@ A cloud object store.
 ```wing
 bring cloud;
 
-new cloud.Bucket(props?: BucketProps)
+new cloud.Bucket(props?: BucketProps);
 ```
 
 | **Name** | **Type** | **Description** |
@@ -543,7 +543,7 @@ A distributed atomic counter.
 ```wing
 bring cloud;
 
-new cloud.Counter(props?: CounterProps)
+new cloud.Counter(props?: CounterProps);
 ```
 
 | **Name** | **Type** | **Description** |
@@ -620,7 +620,7 @@ A function.
 ```wing
 bring cloud;
 
-new cloud.Function(inflight: IFunctionHandler, props?: FunctionProps)
+new cloud.Function(inflight: IFunctionHandler, props?: FunctionProps);
 ```
 
 | **Name** | **Type** | **Description** |
@@ -729,7 +729,7 @@ A queue.
 ```wing
 bring cloud;
 
-new cloud.Queue(props?: QueueProps)
+new cloud.Queue(props?: QueueProps);
 ```
 
 | **Name** | **Type** | **Description** |
@@ -818,7 +818,7 @@ A schedule.
 ```wing
 bring cloud;
 
-new cloud.Schedule(props?: ScheduleProps)
+new cloud.Schedule(props?: ScheduleProps);
 ```
 
 | **Name** | **Type** | **Description** |
@@ -907,7 +907,7 @@ A cloud secret.
 ```wing
 bring cloud;
 
-new cloud.Secret(props?: SecretProps)
+new cloud.Secret(props?: SecretProps);
 ```
 
 | **Name** | **Type** | **Description** |
@@ -969,7 +969,7 @@ A long-running service.
 ```wing
 bring cloud;
 
-new cloud.Service(props: ServiceProps)
+new cloud.Service(props: ServiceProps);
 ```
 
 | **Name** | **Type** | **Description** |
@@ -1031,7 +1031,7 @@ A test engine.
 ```wing
 bring cloud;
 
-new cloud.TestRunner(props?: TestRunnerProps)
+new cloud.TestRunner(props?: TestRunnerProps);
 ```
 
 | **Name** | **Type** | **Description** |
@@ -1108,7 +1108,7 @@ A topic.
 ```wing
 bring cloud;
 
-new cloud.Topic(props?: TopicProps)
+new cloud.Topic(props?: TopicProps);
 ```
 
 | **Name** | **Type** | **Description** |
@@ -1197,7 +1197,7 @@ A cloud static website.
 ```wing
 bring cloud;
 
-new cloud.Website(props: WebsiteProps)
+new cloud.Website(props: WebsiteProps);
 ```
 
 | **Name** | **Type** | **Description** |
@@ -1318,7 +1318,7 @@ Options for Api patch endpoint.
 ```wing
 bring cloud;
 
-let ApiConnectProps = cloud.ApiConnectProps{ ... }
+let ApiConnectProps = cloud.ApiConnectProps{ ... };
 ```
 
 
@@ -1331,7 +1331,7 @@ Options for Api put endpoint.
 ```wing
 bring cloud;
 
-let ApiDeleteProps = cloud.ApiDeleteProps{ ... }
+let ApiDeleteProps = cloud.ApiDeleteProps{ ... };
 ```
 
 
@@ -1344,7 +1344,7 @@ Options for Api get endpoint.
 ```wing
 bring cloud;
 
-let ApiGetProps = cloud.ApiGetProps{ ... }
+let ApiGetProps = cloud.ApiGetProps{ ... };
 ```
 
 
@@ -1357,7 +1357,7 @@ Options for Api patch endpoint.
 ```wing
 bring cloud;
 
-let ApiHeadProps = cloud.ApiHeadProps{ ... }
+let ApiHeadProps = cloud.ApiHeadProps{ ... };
 ```
 
 
@@ -1370,7 +1370,7 @@ Options for Api patch endpoint.
 ```wing
 bring cloud;
 
-let ApiOptionsProps = cloud.ApiOptionsProps{ ... }
+let ApiOptionsProps = cloud.ApiOptionsProps{ ... };
 ```
 
 
@@ -1383,7 +1383,7 @@ Options for Api patch endpoint.
 ```wing
 bring cloud;
 
-let ApiPatchProps = cloud.ApiPatchProps{ ... }
+let ApiPatchProps = cloud.ApiPatchProps{ ... };
 ```
 
 
@@ -1396,7 +1396,7 @@ Options for Api post endpoint.
 ```wing
 bring cloud;
 
-let ApiPostProps = cloud.ApiPostProps{ ... }
+let ApiPostProps = cloud.ApiPostProps{ ... };
 ```
 
 
@@ -1409,7 +1409,7 @@ Properties for `Api`.
 ```wing
 bring cloud;
 
-let ApiProps = cloud.ApiProps{ ... }
+let ApiProps = cloud.ApiProps{ ... };
 ```
 
 
@@ -1422,7 +1422,7 @@ Options for Api put endpoint.
 ```wing
 bring cloud;
 
-let ApiPutProps = cloud.ApiPutProps{ ... }
+let ApiPutProps = cloud.ApiPutProps{ ... };
 ```
 
 
@@ -1435,7 +1435,7 @@ Shape of a request to an inflight handler.
 ```wing
 bring cloud;
 
-let ApiRequest = cloud.ApiRequest{ ... }
+let ApiRequest = cloud.ApiRequest{ ... };
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -1532,7 +1532,7 @@ Shape of a response from a inflight handler.
 ```wing
 bring cloud;
 
-let ApiResponse = cloud.ApiResponse{ ... }
+let ApiResponse = cloud.ApiResponse{ ... };
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -1590,7 +1590,7 @@ Interface for delete method inside `Bucket`.
 ```wing
 bring cloud;
 
-let BucketDeleteOptions = cloud.BucketDeleteOptions{ ... }
+let BucketDeleteOptions = cloud.BucketDeleteOptions{ ... };
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -1623,7 +1623,7 @@ on_event notification payload- will be in use after solving issue: https://githu
 ```wing
 bring cloud;
 
-let BucketEvent = cloud.BucketEvent{ ... }
+let BucketEvent = cloud.BucketEvent{ ... };
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -1668,7 +1668,7 @@ on create event options.
 ```wing
 bring cloud;
 
-let BucketOnCreateProps = cloud.BucketOnCreateProps{ ... }
+let BucketOnCreateProps = cloud.BucketOnCreateProps{ ... };
 ```
 
 
@@ -1681,7 +1681,7 @@ on delete event options.
 ```wing
 bring cloud;
 
-let BucketOnDeleteProps = cloud.BucketOnDeleteProps{ ... }
+let BucketOnDeleteProps = cloud.BucketOnDeleteProps{ ... };
 ```
 
 
@@ -1694,7 +1694,7 @@ on any event options.
 ```wing
 bring cloud;
 
-let BucketOnEventProps = cloud.BucketOnEventProps{ ... }
+let BucketOnEventProps = cloud.BucketOnEventProps{ ... };
 ```
 
 
@@ -1707,7 +1707,7 @@ on update event options.
 ```wing
 bring cloud;
 
-let BucketOnUpdateProps = cloud.BucketOnUpdateProps{ ... }
+let BucketOnUpdateProps = cloud.BucketOnUpdateProps{ ... };
 ```
 
 
@@ -1720,7 +1720,7 @@ Properties for `Bucket`.
 ```wing
 bring cloud;
 
-let BucketProps = cloud.BucketProps{ ... }
+let BucketProps = cloud.BucketProps{ ... };
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -1753,7 +1753,7 @@ Properties for `Counter`.
 ```wing
 bring cloud;
 
-let CounterProps = cloud.CounterProps{ ... }
+let CounterProps = cloud.CounterProps{ ... };
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -1788,7 +1788,7 @@ This is the type users see when constructing a cloud.Function instance.
 ```wing
 bring cloud;
 
-let FunctionProps = cloud.FunctionProps{ ... }
+let FunctionProps = cloud.FunctionProps{ ... };
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -1797,7 +1797,7 @@ let FunctionProps = cloud.FunctionProps{ ... }
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.FunctionProps.property.env">env</a></code> | <code>MutMap&lt;str&gt;</code> | Environment variables to pass to the function. |
 | <code><a href="#@winglang/sdk.cloud.FunctionProps.property.memory">memory</a></code> | <code>num</code> | The amount of memory to allocate to the function, in MB. |
-| <code><a href="#@winglang/sdk.cloud.FunctionProps.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">Duration</a></code> | The maximum amount of time the function can run. |
+| <code><a href="#@winglang/sdk.cloud.FunctionProps.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">duration</a></code> | The maximum amount of time the function can run. |
 
 ---
 
@@ -1830,10 +1830,10 @@ The amount of memory to allocate to the function, in MB.
 ##### `timeout`<sup>Optional</sup> <a name="timeout" id="@winglang/sdk.cloud.FunctionProps.property.timeout"></a>
 
 ```wing
-timeout: Duration;
+timeout: duration;
 ```
 
-- *Type:* <a href="#@winglang/sdk.std.Duration">Duration</a>
+- *Type:* <a href="#@winglang/sdk.std.Duration">duration</a>
 - *Default:* 1m
 
 The maximum amount of time the function can run.
@@ -1849,7 +1849,7 @@ Options when getting a secret value.
 ```wing
 bring cloud;
 
-let GetSecretValueOptions = cloud.GetSecretValueOptions{ ... }
+let GetSecretValueOptions = cloud.GetSecretValueOptions{ ... };
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -1882,7 +1882,7 @@ Properties for `Queue`.
 ```wing
 bring cloud;
 
-let QueueProps = cloud.QueueProps{ ... }
+let QueueProps = cloud.QueueProps{ ... };
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -1890,8 +1890,8 @@ let QueueProps = cloud.QueueProps{ ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.QueueProps.property.initialMessages">initialMessages</a></code> | <code>MutArray&lt;str&gt;</code> | Initialize the queue with a set of messages. |
-| <code><a href="#@winglang/sdk.cloud.QueueProps.property.retentionPeriod">retentionPeriod</a></code> | <code><a href="#@winglang/sdk.std.Duration">Duration</a></code> | How long a queue retains a message. |
-| <code><a href="#@winglang/sdk.cloud.QueueProps.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">Duration</a></code> | How long a queue's consumers have to process a message. |
+| <code><a href="#@winglang/sdk.cloud.QueueProps.property.retentionPeriod">retentionPeriod</a></code> | <code><a href="#@winglang/sdk.std.Duration">duration</a></code> | How long a queue retains a message. |
+| <code><a href="#@winglang/sdk.cloud.QueueProps.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">duration</a></code> | How long a queue's consumers have to process a message. |
 
 ---
 
@@ -1911,10 +1911,10 @@ Initialize the queue with a set of messages.
 ##### `retentionPeriod`<sup>Optional</sup> <a name="retentionPeriod" id="@winglang/sdk.cloud.QueueProps.property.retentionPeriod"></a>
 
 ```wing
-retentionPeriod: Duration;
+retentionPeriod: duration;
 ```
 
-- *Type:* <a href="#@winglang/sdk.std.Duration">Duration</a>
+- *Type:* <a href="#@winglang/sdk.std.Duration">duration</a>
 - *Default:* undefined
 
 How long a queue retains a message.
@@ -1924,10 +1924,10 @@ How long a queue retains a message.
 ##### `timeout`<sup>Optional</sup> <a name="timeout" id="@winglang/sdk.cloud.QueueProps.property.timeout"></a>
 
 ```wing
-timeout: Duration;
+timeout: duration;
 ```
 
-- *Type:* <a href="#@winglang/sdk.std.Duration">Duration</a>
+- *Type:* <a href="#@winglang/sdk.std.Duration">duration</a>
 - *Default:* undefined
 
 How long a queue's consumers have to process a message.
@@ -1943,7 +1943,7 @@ Options for Queue.setConsumer.
 ```wing
 bring cloud;
 
-let QueueSetConsumerProps = cloud.QueueSetConsumerProps{ ... }
+let QueueSetConsumerProps = cloud.QueueSetConsumerProps{ ... };
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -1952,7 +1952,7 @@ let QueueSetConsumerProps = cloud.QueueSetConsumerProps{ ... }
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.QueueSetConsumerProps.property.env">env</a></code> | <code>MutMap&lt;str&gt;</code> | Environment variables to pass to the function. |
 | <code><a href="#@winglang/sdk.cloud.QueueSetConsumerProps.property.memory">memory</a></code> | <code>num</code> | The amount of memory to allocate to the function, in MB. |
-| <code><a href="#@winglang/sdk.cloud.QueueSetConsumerProps.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">Duration</a></code> | The maximum amount of time the function can run. |
+| <code><a href="#@winglang/sdk.cloud.QueueSetConsumerProps.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">duration</a></code> | The maximum amount of time the function can run. |
 | <code><a href="#@winglang/sdk.cloud.QueueSetConsumerProps.property.batchSize">batchSize</a></code> | <code>num</code> | The maximum number of messages to send to subscribers at once. |
 
 ---
@@ -1986,10 +1986,10 @@ The amount of memory to allocate to the function, in MB.
 ##### `timeout`<sup>Optional</sup> <a name="timeout" id="@winglang/sdk.cloud.QueueSetConsumerProps.property.timeout"></a>
 
 ```wing
-timeout: Duration;
+timeout: duration;
 ```
 
-- *Type:* <a href="#@winglang/sdk.std.Duration">Duration</a>
+- *Type:* <a href="#@winglang/sdk.std.Duration">duration</a>
 - *Default:* 1m
 
 The maximum amount of time the function can run.
@@ -2018,7 +2018,7 @@ Options for Schedule.onTick.
 ```wing
 bring cloud;
 
-let ScheduleOnTickProps = cloud.ScheduleOnTickProps{ ... }
+let ScheduleOnTickProps = cloud.ScheduleOnTickProps{ ... };
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -2027,7 +2027,7 @@ let ScheduleOnTickProps = cloud.ScheduleOnTickProps{ ... }
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.ScheduleOnTickProps.property.env">env</a></code> | <code>MutMap&lt;str&gt;</code> | Environment variables to pass to the function. |
 | <code><a href="#@winglang/sdk.cloud.ScheduleOnTickProps.property.memory">memory</a></code> | <code>num</code> | The amount of memory to allocate to the function, in MB. |
-| <code><a href="#@winglang/sdk.cloud.ScheduleOnTickProps.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">Duration</a></code> | The maximum amount of time the function can run. |
+| <code><a href="#@winglang/sdk.cloud.ScheduleOnTickProps.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">duration</a></code> | The maximum amount of time the function can run. |
 
 ---
 
@@ -2060,10 +2060,10 @@ The amount of memory to allocate to the function, in MB.
 ##### `timeout`<sup>Optional</sup> <a name="timeout" id="@winglang/sdk.cloud.ScheduleOnTickProps.property.timeout"></a>
 
 ```wing
-timeout: Duration;
+timeout: duration;
 ```
 
-- *Type:* <a href="#@winglang/sdk.std.Duration">Duration</a>
+- *Type:* <a href="#@winglang/sdk.std.Duration">duration</a>
 - *Default:* 1m
 
 The maximum amount of time the function can run.
@@ -2079,7 +2079,7 @@ Properties for `Schedule`.
 ```wing
 bring cloud;
 
-let ScheduleProps = cloud.ScheduleProps{ ... }
+let ScheduleProps = cloud.ScheduleProps{ ... };
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -2087,7 +2087,7 @@ let ScheduleProps = cloud.ScheduleProps{ ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.ScheduleProps.property.cron">cron</a></code> | <code>str</code> | Trigger events according to a cron schedule using the UNIX cron format. |
-| <code><a href="#@winglang/sdk.cloud.ScheduleProps.property.rate">rate</a></code> | <code><a href="#@winglang/sdk.std.Duration">Duration</a></code> | Trigger events at a periodic rate. |
+| <code><a href="#@winglang/sdk.cloud.ScheduleProps.property.rate">rate</a></code> | <code><a href="#@winglang/sdk.std.Duration">duration</a></code> | Trigger events at a periodic rate. |
 
 ---
 
@@ -2116,10 +2116,10 @@ Trigger events according to a cron schedule using the UNIX cron format.
 ##### `rate`<sup>Optional</sup> <a name="rate" id="@winglang/sdk.cloud.ScheduleProps.property.rate"></a>
 
 ```wing
-rate: Duration;
+rate: duration;
 ```
 
-- *Type:* <a href="#@winglang/sdk.std.Duration">Duration</a>
+- *Type:* <a href="#@winglang/sdk.std.Duration">duration</a>
 - *Default:* undefined
 
 Trigger events at a periodic rate.
@@ -2142,7 +2142,7 @@ Properties for `Secret`.
 ```wing
 bring cloud;
 
-let SecretProps = cloud.SecretProps{ ... }
+let SecretProps = cloud.SecretProps{ ... };
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -2179,7 +2179,7 @@ Options for Service.onStart.
 ```wing
 bring cloud;
 
-let ServiceOnStartProps = cloud.ServiceOnStartProps{ ... }
+let ServiceOnStartProps = cloud.ServiceOnStartProps{ ... };
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -2188,7 +2188,7 @@ let ServiceOnStartProps = cloud.ServiceOnStartProps{ ... }
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.ServiceOnStartProps.property.env">env</a></code> | <code>MutMap&lt;str&gt;</code> | Environment variables to pass to the function. |
 | <code><a href="#@winglang/sdk.cloud.ServiceOnStartProps.property.memory">memory</a></code> | <code>num</code> | The amount of memory to allocate to the function, in MB. |
-| <code><a href="#@winglang/sdk.cloud.ServiceOnStartProps.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">Duration</a></code> | The maximum amount of time the function can run. |
+| <code><a href="#@winglang/sdk.cloud.ServiceOnStartProps.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">duration</a></code> | The maximum amount of time the function can run. |
 
 ---
 
@@ -2221,10 +2221,10 @@ The amount of memory to allocate to the function, in MB.
 ##### `timeout`<sup>Optional</sup> <a name="timeout" id="@winglang/sdk.cloud.ServiceOnStartProps.property.timeout"></a>
 
 ```wing
-timeout: Duration;
+timeout: duration;
 ```
 
-- *Type:* <a href="#@winglang/sdk.std.Duration">Duration</a>
+- *Type:* <a href="#@winglang/sdk.std.Duration">duration</a>
 - *Default:* 1m
 
 The maximum amount of time the function can run.
@@ -2240,7 +2240,7 @@ Properties for `Service`.
 ```wing
 bring cloud;
 
-let ServiceProps = cloud.ServiceProps{ ... }
+let ServiceProps = cloud.ServiceProps{ ... };
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -2300,7 +2300,7 @@ A result of a single test.
 ```wing
 bring cloud;
 
-let TestResult = cloud.TestResult{ ... }
+let TestResult = cloud.TestResult{ ... };
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -2371,7 +2371,7 @@ Properties for `TestRunner`.
 ```wing
 bring cloud;
 
-let TestRunnerProps = cloud.TestRunnerProps{ ... }
+let TestRunnerProps = cloud.TestRunnerProps{ ... };
 ```
 
 
@@ -2384,7 +2384,7 @@ Options for `Topic.onMessage`.
 ```wing
 bring cloud;
 
-let TopicOnMessageProps = cloud.TopicOnMessageProps{ ... }
+let TopicOnMessageProps = cloud.TopicOnMessageProps{ ... };
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -2393,7 +2393,7 @@ let TopicOnMessageProps = cloud.TopicOnMessageProps{ ... }
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.TopicOnMessageProps.property.env">env</a></code> | <code>MutMap&lt;str&gt;</code> | Environment variables to pass to the function. |
 | <code><a href="#@winglang/sdk.cloud.TopicOnMessageProps.property.memory">memory</a></code> | <code>num</code> | The amount of memory to allocate to the function, in MB. |
-| <code><a href="#@winglang/sdk.cloud.TopicOnMessageProps.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">Duration</a></code> | The maximum amount of time the function can run. |
+| <code><a href="#@winglang/sdk.cloud.TopicOnMessageProps.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">duration</a></code> | The maximum amount of time the function can run. |
 
 ---
 
@@ -2426,10 +2426,10 @@ The amount of memory to allocate to the function, in MB.
 ##### `timeout`<sup>Optional</sup> <a name="timeout" id="@winglang/sdk.cloud.TopicOnMessageProps.property.timeout"></a>
 
 ```wing
-timeout: Duration;
+timeout: duration;
 ```
 
-- *Type:* <a href="#@winglang/sdk.std.Duration">Duration</a>
+- *Type:* <a href="#@winglang/sdk.std.Duration">duration</a>
 - *Default:* 1m
 
 The maximum amount of time the function can run.
@@ -2445,7 +2445,7 @@ Properties for `Topic`.
 ```wing
 bring cloud;
 
-let TopicProps = cloud.TopicProps{ ... }
+let TopicProps = cloud.TopicProps{ ... };
 ```
 
 
@@ -2458,7 +2458,7 @@ A trace emitted during simulation.
 ```wing
 bring cloud;
 
-let Trace = cloud.Trace{ ... }
+let Trace = cloud.Trace{ ... };
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -2549,7 +2549,7 @@ website props.
 ```wing
 bring cloud;
 
-let WebsiteProps = cloud.WebsiteProps{ ... }
+let WebsiteProps = cloud.WebsiteProps{ ... };
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>

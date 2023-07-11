@@ -800,9 +800,9 @@ Object {
       },
     },
   ],
-  "usage": "bring { CfnPublicRepository } from \\"@aws-cdk/aws-ecr\\"
+  "usage": "bring { CfnPublicRepository } from \\"@aws-cdk/aws-ecr\\";
 
-new CfnPublicRepository(props?: CfnPublicRepositoryProps)",
+new CfnPublicRepository(props?: CfnPublicRepositoryProps);",
 }
 `;
 
@@ -810,9 +810,9 @@ exports[`wing snapshot 2`] = `
 " Initializers <a name=\\"Initializers\\" id=\\"@aws-cdk/aws-ecr.CfnPublicRepository.Initializer\\"></a>
 
 \`\`\`wing
-bring { CfnPublicRepository } from \\"@aws-cdk/aws-ecr\\"
+bring { CfnPublicRepository } from \\"@aws-cdk/aws-ecr\\";
 
-new CfnPublicRepository(props?: CfnPublicRepositoryProps)
+new CfnPublicRepository(props?: CfnPublicRepositoryProps);
 \`\`\`
 
 | **Name** | **Type** | **Description** |

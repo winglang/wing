@@ -20,7 +20,9 @@
     "url": "git+https://github.com/winglang/wing.git"
   },
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && pnpm copy-root-readme",
+    "copy-root-readme": "cp ../../README.md ./README.md && pnpm copy-root-assets",
+    "copy-root-assets": "cp ../../logo/demo.gif ./logo/demo.gif",
     "watch": "tsc --watch",
     "test": "vitest run",
     "dev": "pnpm build && ./bin/wing",
