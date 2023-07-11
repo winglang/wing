@@ -15,9 +15,10 @@ source: libs/wingc/src/lsp/completions.rs
     command: editor.action.triggerParameterHints
 - label: nanoid
   kind: 2
+  detail: "(options: NanoidOptions?): str"
   documentation:
     kind: markdown
-    value: "```wing\nstatic nanoid: (options: NanoidOptions?): str\n```\n---\nGenerates a unique ID using the nanoid library.\n\n### Parameters\n - *options* - - Optional options object for generating the ID."
+    value: "```wing\nstatic nanoid: (options: NanoidOptions?): str\n```\n---\nGenerates a unique ID using the nanoid library."
   sortText: ff|nanoid
   insertText: nanoid($0)
   insertTextFormat: 2
@@ -26,9 +27,10 @@ source: libs/wingc/src/lsp/completions.rs
     command: editor.action.triggerParameterHints
 - label: sha256
   kind: 2
+  detail: "(data: str): str"
   documentation:
     kind: markdown
-    value: "```wing\nstatic sha256: (data: str): str\n```\n---\nComputes the SHA256 hash of the given data.\n\n### Parameters\n - *data* - - The string to be hashed."
+    value: "```wing\nstatic sha256: (data: str): str\n```\n---\nComputes the SHA256 hash of the given data."
   sortText: ff|sha256
   insertText: sha256($0)
   insertTextFormat: 2
@@ -61,15 +63,12 @@ source: libs/wingc/src/lsp/completions.rs
     command: editor.action.triggerParameterHints
 - label: uuidv4
   kind: 2
+  detail: "(): str"
   documentation:
     kind: markdown
     value: "```wing\nstatic uuidv4: (): str\n```\n---\nGenerates a version 4 UUID."
   sortText: ff|uuidv4
-  insertText: uuidv4($0)
-  insertTextFormat: 2
-  command:
-    title: triggerParameterHints
-    command: editor.action.triggerParameterHints
+  insertText: uuidv4()
 - label: waitUntil
   kind: 2
   detail: "(predicate: inflight (): bool, props: WaitUntilProps?): bool"
@@ -92,7 +91,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nNanoidOptions\n```\n---\nOptions to generating a unique ID."
+    value: "```wing\nstruct NanoidOptions\n```\n---\nOptions to generating a unique ID.\n### Fields\n- `alphabet?` — Characters that make up the alphabet to generate the ID, limited to 256 characters or fewer.\n- `size?` — Size of ID."
   sortText: hh|NanoidOptions
 - label: WaitUntilProps
   kind: 22
