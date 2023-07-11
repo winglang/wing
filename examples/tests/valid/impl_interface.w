@@ -48,3 +48,12 @@ class Dog impl IAnimal {
 }
 
 let z: IAnimal = new Dog();
+
+// base class is checked for implemention of interface
+class Terrier extends Dog {
+  inflight eat() {
+    return;
+  }
+}
+
+let w: IAnimal = new Terrier();
