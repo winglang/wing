@@ -2,7 +2,6 @@ import { basename, sep } from "path";
 import { compile, CompileOptions } from "./compile";
 import chalk from "chalk";
 import * as sdk from "@winglang/sdk";
-import { ITestRunnerClient } from "@winglang/sdk/lib/cloud";
 import { TestRunnerClient } from "@winglang/sdk/lib/shared-aws/test-runner.inflight";
 import * as cp from "child_process";
 import debug from "debug";
@@ -29,11 +28,11 @@ export interface TestOptions extends CompileOptions {}
 
 export async function test(entrypoints: string[], options: TestOptions): Promise<number> {
   const startTime = Date.now();
-  const results: { testName: string; results: sdk.cloud.TestResult[] }[] = [];
+  const results: { testName: string; results: sdk.std.TestResult[] }[] = [];
   for (const entrypoint of entrypoints) {
     const testName = generateTestName(entrypoint);
     try {
-      const singleTestResults: sdk.cloud.TestResult[] | void = await testOne(entrypoint, options);
+      const singleTestResults: sdk.std.TestResult[] | void = await testOne(entrypoint, options);
       results.push({ testName, results: singleTestResults ?? [] });
     } catch (error) {
       console.log((error as Error).message);
@@ -58,7 +57,7 @@ export async function test(entrypoints: string[], options: TestOptions): Promise
 }
 
 function printResults(
-  testResults: { testName: string; results: sdk.cloud.TestResult[] }[],
+  testResults: { testName: string; results: sdk.std.TestResult[] }[],
   duration: number
 ) {
   const durationInSeconds = duration / 1000;
@@ -156,7 +155,7 @@ async function testOne(entrypoint: string, options: TestOptions) {
 /**
  * Render a test report for printing out to the console.
  */
-export function renderTestReport(entrypoint: string, results: sdk.cloud.TestResult[]): string {
+export function renderTestReport(entrypoint: string, results: sdk.std.TestResult[]): string {
   const out = new Array<string>();
 
   // find the longest `path` of all the tests
@@ -233,7 +232,7 @@ export function renderTestReport(entrypoint: string, results: sdk.cloud.TestResu
   return out.join("\n");
 }
 
-function testResultsContainsFailure(results: sdk.cloud.TestResult[]): boolean {
+function testResultsContainsFailure(results: sdk.std.TestResult[]): boolean {
   return results.some((r) => !r.pass);
 }
 
@@ -241,10 +240,10 @@ async function testSimulator(synthDir: string) {
   const s = new sdk.testing.Simulator({ simfile: synthDir });
   await s.start();
 
-  const testRunner = s.getResource("root/cloud.TestRunner") as ITestRunnerClient;
+  const testRunner = s.getResource("root/cloud.TestRunner") as sdk.std.ITestRunnerClient;
   const tests = await testRunner.listTests();
   const filteredTests = pickOneTestPerEnvironment(tests);
-  const results = new Array<sdk.cloud.TestResult>();
+  const results = new Array<sdk.std.TestResult>();
 
   // TODO: run these tests in parallel
   for (const path of filteredTests) {
@@ -261,7 +260,7 @@ async function testSimulator(synthDir: string) {
   return results;
 }
 
-async function testAwsCdk(synthDir: string): Promise<sdk.cloud.TestResult[]> {
+async function testAwsCdk(synthDir: string): Promise<sdk.std.TestResult[]> {
   try {
     isAwsCdkInstalled(synthDir);
 
@@ -280,7 +279,7 @@ async function testAwsCdk(synthDir: string): Promise<sdk.cloud.TestResult[]> {
     });
 
     const results = await withSpinner("Running tests...", async () => {
-      const results = new Array<sdk.cloud.TestResult>();
+      const results = new Array<sdk.std.TestResult>();
       for (const path of tests) {
         results.push(await testRunner.runTest(path));
       }
@@ -337,7 +336,7 @@ async function awsCdkOutput(synthDir: string, name: string, stackName: string) {
   return parsed[stackName][name];
 }
 
-async function testTfAws(synthDir: string): Promise<sdk.cloud.TestResult[] | void> {
+async function testTfAws(synthDir: string): Promise<sdk.std.TestResult[] | void> {
   try {
     if (!isTerraformInstalled(synthDir)) {
       throw new Error(
@@ -358,7 +357,7 @@ async function testTfAws(synthDir: string): Promise<sdk.cloud.TestResult[] | voi
     });
 
     const results = await withSpinner("Running tests...", async () => {
-      const results = new Array<sdk.cloud.TestResult>();
+      const results = new Array<sdk.std.TestResult>();
       for (const path of tests) {
         results.push(await testRunner.runTest(path));
       }
@@ -456,7 +455,7 @@ function pickOneTestPerEnvironment(testPaths: string[]) {
   return Array.from(tests.values());
 }
 
-function sortTests(a: sdk.cloud.TestResult, b: sdk.cloud.TestResult) {
+function sortTests(a: sdk.std.TestResult, b: sdk.std.TestResult) {
   if (a.pass && !b.pass) {
     return -1;
   }

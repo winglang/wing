@@ -80,7 +80,8 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
         );
         result.push(diagnosticText);
       }
-      throw new Error(result.join("\n"));
+      console.log(result.join("\n"));
+      process.exit(1);
     } else if (error instanceof wingCompiler.PreflightError) {
       const causedBy = annotatePreflightError(error.causedBy);
 
@@ -120,7 +121,8 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
         output.push(error.stack ?? "");
       }
 
-      throw new Error(output.join("\n"));
+      console.log(output.join("\n"));
+      process.exit(1);
     } else {
       throw error;
     }
@@ -135,7 +137,9 @@ function annotatePreflightError(error: Error): Error {
       "hint: Every preflight object needs a unique identifier within its scope. You can assign one as shown:"
     );
     newMessage.push('> new cloud.Bucket() as "MyBucket";');
-    newMessage.push("For more information, see https://www.winglang.io/docs/language-guide/language-reference#33-preflight-classes");
+    newMessage.push(
+      "For more information, see https://www.winglang.io/docs/language-guide/language-reference#33-preflight-classes"
+    );
 
     const newError = new Error(newMessage.join("\n\n"), { cause: error });
     newError.stack = error.stack;
