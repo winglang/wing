@@ -1,6 +1,6 @@
 import { Construct } from "constructs";
 import { fqnForType } from "../constants";
-import { App } from "../core/app";
+import { App } from "./app";
 import { Resource } from "../std";
 import { Test } from "../std/test";
 

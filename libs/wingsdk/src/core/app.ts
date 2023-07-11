@@ -1,6 +1,7 @@
 import { Construct } from "constructs";
 import { Tokens } from "./tokens";
 import { IResource } from "../std/resource";
+import { TestRunner } from "./test-runner";
 
 /**
  * Props for all `App` classes.
@@ -184,6 +185,21 @@ export abstract class App extends Construct {
     id;
     args;
     return undefined;
+  }
+
+  protected synthRoots(props: AppProps, testRunner: TestRunner) {
+    if (props.rootConstruct) {
+      const Root = props.rootConstruct;
+      if (this.isTestEnvironment) {
+        new Root(this, "env0");
+        const tests = testRunner.findTests();
+        for (let i = 1; i < tests.length; i++) {
+          new Root(this, "env" + i);
+        }
+      } else {
+        new Root(this, "Default");
+      }
+    }
   }
 }
 
