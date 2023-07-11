@@ -12,7 +12,6 @@ sidebar_position: 100
 # API Reference <a name="API Reference" id="api-reference"></a>
 
 
-
 ## Classes <a name="Classes" id="Classes"></a>
 
 ### Array <a name="Array" id="@winglang/sdk.std.Array"></a>
@@ -1786,6 +1785,7 @@ length: num;
 The length of the string.
 
 ---
+
 
 
 
