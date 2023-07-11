@@ -1,5 +1,6 @@
-import { Button, useTheme } from "@wingconsole/design-system";
+import { Button, Checkbox, Input, useTheme } from "@wingconsole/design-system";
 import classNames from "classnames";
+import { useId, useState } from "react";
 import ReactMarkdown from "react-markdown";
 
 export interface TermsAndConditionsModalProps {
@@ -14,6 +15,10 @@ export const TermsAndConditionsModal = ({
   license,
 }: TermsAndConditionsModalProps) => {
   const { theme } = useTheme();
+
+  const [checked, setChecked] = useState(false);
+
+  const id = useId();
 
   return (
     visible && (
@@ -34,10 +39,24 @@ export const TermsAndConditionsModal = ({
               />
             </div>
           </div>
-          <div className="flex justify-end">
-            <Button primary onClick={onAccept}>
-              Accept
-            </Button>
+
+          <div className="pt-2">
+            <div className="space-x-2 items-center flex">
+              <Checkbox
+                id={id}
+                checked={checked}
+                onChange={(event) => setChecked(event.target.checked)}
+                className="cursor-pointer"
+              />
+              <label htmlFor={id} className="cursor-pointer select-none">
+                I have read and agree to the terms and conditions.
+              </label>
+            </div>
+            <div className="flex justify-end">
+              <Button primary onClick={onAccept} disabled={!checked}>
+                Close
+              </Button>
+            </div>
           </div>
         </div>
       </div>
