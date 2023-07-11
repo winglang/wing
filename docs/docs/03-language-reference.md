@@ -2019,6 +2019,7 @@ if x != nil {
 ---
 
 ### 6.5 Roadmap
+
 - [ ] Asynchronous Execution Safety Model.
 - [ ] Make the language `async` by default.
 - [ ] First class support for `regex`, `glob`, and `cron` types.
@@ -2034,6 +2035,7 @@ if x != nil {
 - [ ] Distributed data structures.
 
 [`▲ top`][top]
+
 ---
 
 ### 6.6 Credits
