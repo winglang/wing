@@ -30,7 +30,7 @@ export interface ScheduleProps {
 }
 
 /**
- * Represents a schedule.
+ * A schedule.
  *
  * @inflight `@winglang/sdk.cloud.IScheduleClient`
  */
@@ -92,7 +92,7 @@ export abstract class Schedule extends Resource {
 export interface ScheduleOnTickProps extends FunctionProps {}
 
 /**
- * Represents a resource with an inflight "handle" method that can be passed to
+ * A resource with an inflight "handle" method that can be passed to
  * `Schedule.on_tick`.
  *
  * @inflight `@winglang/sdk.cloud.IScheduleOnTickHandlerClient`
