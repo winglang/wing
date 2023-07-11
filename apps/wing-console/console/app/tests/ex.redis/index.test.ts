@@ -5,16 +5,16 @@ import { getResourceNode } from "../helpers.js";
 
 describe(`${__dirname}/index.w`, () => {
   test("opens redis help", async ({ page }) => {
-    await getResourceNode(page, "root/Default/redis.Redis").click();
+    await getResourceNode(page, "root/Default/ex.Redis").click();
 
-    const input = page.getByTestId("redis.redis:input");
+    const input = page.getByTestId("ex.redis:input");
 
     await input.type("help");
 
     await input.press("Enter");
 
     const history = await page
-      .getByTestId("redis.redis:history")
+      .getByTestId("ex.redis:history")
       .allTextContents();
 
     expect(history[0]).toContain(
@@ -23,9 +23,9 @@ describe(`${__dirname}/index.w`, () => {
   });
 
   test("navigates history", async ({ page }) => {
-    await getResourceNode(page, "root/Default/redis.Redis").click();
+    await getResourceNode(page, "root/Default/ex.Redis").click();
 
-    const input = page.getByTestId("redis.redis:input");
+    const input = page.getByTestId("ex.redis:input");
 
     await input.type("help");
 

@@ -202,7 +202,7 @@ export const TableInteraction = ({
                           )}
                           onClick={() => onRemoveRow(index)}
                           disabled={disabled}
-                          data-testid={`cloud.table:remove-row-${row[primaryKey]}`}
+                          data-testid={`ex.table:remove-row-${row[primaryKey]}`}
                         >
                           <TrashIcon className="w-4 h-4" />
                         </button>
@@ -210,7 +210,7 @@ export const TableInteraction = ({
                     </>
                   );
                 }}
-                dataTestid={`cloud.table:row-${row[primaryKey]}`}
+                dataTestid={`ex.table:row-${row[primaryKey]}`}
               />
             ))}
             {!readonly && columns.length > 0 && (
@@ -255,7 +255,7 @@ export const TableInteraction = ({
                   readonly={readonly}
                   saveRow={addRow}
                   updateRow={(key, value) => updateNewRow(key, value)}
-                  dataTestid="cloud.table:new-row"
+                  dataTestid="ex.table:new-row"
                   actions={() => {
                     return (
                       <button
@@ -271,7 +271,7 @@ export const TableInteraction = ({
                         )}
                         onClick={addRow}
                         disabled={disabled || !newRow.data[primaryKey]}
-                        data-testid="cloud.table:add-row"
+                        data-testid="ex.table:add-row"
                       >
                         <PlusIcon className="w-4 h-4" />
                       </button>

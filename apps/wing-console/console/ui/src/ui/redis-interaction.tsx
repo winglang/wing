@@ -92,7 +92,7 @@ export const RedisInteraction = ({
           >
             <div
               className="max-h-[20rem] space-y-1"
-              data-testid="redis.redis:history"
+              data-testid="ex.redis:history"
             >
               {terminalHistory.map((log, index) => (
                 <div key={index} className="flex">
@@ -126,7 +126,7 @@ export const RedisInteraction = ({
                   onKeyDown={onInputKeyDown}
                   readOnly={isLoading}
                   placeholder={(isLoading && "...") || ""}
-                  data-testid="redis.redis:input"
+                  data-testid="ex.redis:input"
                 />
               </div>
             </div>
