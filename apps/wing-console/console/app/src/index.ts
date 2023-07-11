@@ -6,10 +6,12 @@ import {
   Config,
   HostUtils,
   Trace,
+  isTermsAccepted,
 } from "@wingconsole/server";
 import express from "express";
-import { createAnalytics } from "./analytics";
-import { getAnonymousId } from "./anonymous-id";
+
+import { createAnalytics } from "./analytics.js";
+import { getAnonymousId } from "./anonymous-id.js";
 
 export type {
   LogInterface,
@@ -29,6 +31,7 @@ export interface CreateConsoleAppOptions {
   hostUtils?: HostUtils;
   onTrace?: (trace: Trace) => void;
   onExpressCreated?: CreateConsoleServerOptions["onExpressCreated"];
+  requireAcceptTerms?: boolean;
 }
 
 const staticDir = `${__dirname}/vite`;
@@ -58,6 +61,10 @@ export const createConsoleApp = async (options: CreateConsoleAppOptions) => {
       if (trace.type !== "resource") {
         return;
       }
+      if (options.requireAcceptTerms && !isTermsAccepted()) {
+        return;
+      }
+
       const resourceName = trace.sourceType.replace("wingsdk.cloud.", "");
       if (!trace.data.message.includes("(")) {
         return;
