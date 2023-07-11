@@ -1,4 +1,5 @@
 import Segment from "analytics-node";
+import { nanoid } from "nanoid";
 
 export interface CreateAnalyticsOptions {
   anonymousId: string;
@@ -6,17 +7,21 @@ export interface CreateAnalyticsOptions {
 }
 
 export interface Analytics {
-  track(event: string): void;
+  track(event: string, properties?: Record<string, any>): void;
 }
 
 export const createAnalytics = (options: CreateAnalyticsOptions): Analytics => {
   const segment = new Segment(options.segmentWriteKey);
-
+  const sessionId = nanoid();
   return {
-    track(event: string) {
+    track(event: string, properties?: Record<string, any>) {
       segment.track({
         anonymousId: options.anonymousId,
         event,
+        properties: {
+          sessionId,
+          ...(properties || {}),
+        },
       });
     },
   };
