@@ -57,12 +57,25 @@ export class App extends CdktfApp {
   /** Subnets shared across app */
   public subnets: { [key: string]: Subnet };
 
-  constructor(props: AppProps = {}) {
+  constructor(props: AppProps) {
     super(props);
     new AwsProvider(this, "aws", {});
 
     this.testRunner = new TestRunner(this, "cloud.TestRunner");
     this.subnets = {};
+
+    if (props.rootConstruct) {
+      const Root = props.rootConstruct;
+      if (this.isTestEnvironment) {
+        new Root(this, "env0");
+        const tests = this.testRunner.findTests();
+        for (let i = 1; i < tests.length; i++) {
+          new Root(this, "env" + i);
+        }
+      } else {
+        new Root(this, "Default");
+      }
+    }
   }
 
   protected tryNew(

@@ -5,7 +5,7 @@ import { runWingCommand } from "./utils";
 
 errorWingFiles.forEach((wingFile) => {
   test(wingFile, async ({ expect }) => {
-    const args = ["test", "-t", "sim"];
+    const args = ["compile", "-t", "sim"];
 
     const relativeWingFile = path.relative(
       tmpDir,
@@ -19,9 +19,9 @@ errorWingFiles.forEach((wingFile) => {
       expectFailure: true,
     });
 
-    const stdout = out.stdout;
+    const stderr = out.stderr;
 
-    const stdoutSanitized = stdout
+    const stderrSanitized = stderr
       // Remove absolute paths
       // Normalize paths
       .replaceAll("\\", "/")
@@ -31,6 +31,6 @@ errorWingFiles.forEach((wingFile) => {
       // e.g. "{...}.wsim.927822.tmp/{...}" => "{...}.wsim.[REDACTED].tmp/{...}"
       .replaceAll(/\.wsim\.\d+\.tmp/g, ".wsim.[REDACTED].tmp");
 
-    expect(stdoutSanitized).toMatchSnapshot();
+    expect(stderrSanitized).toMatchSnapshot();
   });
 });

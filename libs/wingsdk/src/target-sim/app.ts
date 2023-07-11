@@ -63,6 +63,19 @@ export class App extends core.App {
     this._tokens = new SimTokens();
 
     this.testRunner = new TestRunner(this, "cloud.TestRunner");
+
+    if (props.rootConstruct) {
+      const Root = props.rootConstruct;
+      if (this.isTestEnvironment) {
+        new Root(this, "env0");
+        const tests = this.testRunner.findTests();
+        for (let i = 1; i < tests.length; i++) {
+          new Root(this, "env" + i);
+        }
+      } else {
+        new Root(this, "Default");
+      }
+    }
   }
 
   protected tryNew(

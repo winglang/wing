@@ -32,6 +32,16 @@ export interface AppProps {
   readonly plugins?: string[];
 
   /**
+   * The root construct class that should be instantiated with a scope and id.
+   * If provided, then it will be instantiated on the user's behalf.
+   * When the app is synthesized with `isTestEnvironment` set to `true`, then
+   * one instance of the root construct will be created per test; otherwise,
+   * it will be created exactly once.
+   * @default - no root construct
+   */
+  readonly rootConstruct?: any;
+
+  /**
    * Whether or not this app is being synthesized into a test environment.
    * @default false
    */
