@@ -30,6 +30,7 @@ export const QueueMetadata = ({
             label="Purge"
             onClick={onPurgeClick}
             disabled={approxSize === 0}
+            dataTestid="cloud.queue:purge"
           />
         </div>
       </Attribute>
