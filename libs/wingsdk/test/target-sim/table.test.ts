@@ -280,7 +280,7 @@ test("can add row in preflight", async () => {
   const client = s.getResource("/my_table") as ex.ITableClient;
 
   const joe = await client.get("joe-id");
-  expect(joe).toEqual({ name: "Joe Doe", age: 50 });
+  expect(joe).toEqual({ name: "Joe Doe", age: 50, id: KEY });
 
   expect(s.getResourceConfig("/my_table")).toEqual({
     attrs: {

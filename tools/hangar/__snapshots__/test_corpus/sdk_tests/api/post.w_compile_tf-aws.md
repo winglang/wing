@@ -91,7 +91,7 @@ module.exports = function({ $api_url, $body, $http_POST, $http_Util, $std_Json }
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:http.post and http.fetch can preform a call to an api\",\"${aws_lambda_function.testhttppostandhttpfetchcanpreformacalltoanapi_Handler_C4853DBD.arn}\"]]"
+      "value": "[]"
     }
   },
   "provider": {
@@ -151,15 +151,6 @@ module.exports = function({ $api_url, $body, $http_POST, $http_Util, $std_Json }
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
-      },
-      "testhttppostandhttpfetchcanpreformacalltoanapi_Handler_IamRole_364748FC": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:http.post and http.fetch can preform a call to an api/Handler/IamRole",
-            "uniqueId": "testhttppostandhttpfetchcanpreformacalltoanapi_Handler_IamRole_364748FC"
-          }
-        },
-        "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
@@ -172,16 +163,6 @@ module.exports = function({ $api_url, $body, $http_POST, $http_Util, $std_Json }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
         "role": "${aws_iam_role.cloudApi_cloudApi-OnRequest-cdafee6e_IamRole_4382C442.name}"
-      },
-      "testhttppostandhttpfetchcanpreformacalltoanapi_Handler_IamRolePolicy_720C559E": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:http.post and http.fetch can preform a call to an api/Handler/IamRolePolicy",
-            "uniqueId": "testhttppostandhttpfetchcanpreformacalltoanapi_Handler_IamRolePolicy_720C559E"
-          }
-        },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
-        "role": "${aws_iam_role.testhttppostandhttpfetchcanpreformacalltoanapi_Handler_IamRole_364748FC.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
@@ -194,16 +175,6 @@ module.exports = function({ $api_url, $body, $http_POST, $http_Util, $std_Json }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
         "role": "${aws_iam_role.cloudApi_cloudApi-OnRequest-cdafee6e_IamRole_4382C442.name}"
-      },
-      "testhttppostandhttpfetchcanpreformacalltoanapi_Handler_IamRolePolicyAttachment_E623498E": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:http.post and http.fetch can preform a call to an api/Handler/IamRolePolicyAttachment",
-            "uniqueId": "testhttppostandhttpfetchcanpreformacalltoanapi_Handler_IamRolePolicyAttachment_E623498E"
-          }
-        },
-        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.testhttppostandhttpfetchcanpreformacalltoanapi_Handler_IamRole_364748FC.name}"
       }
     },
     "aws_lambda_function": {
@@ -227,33 +198,6 @@ module.exports = function({ $api_url, $body, $http_POST, $http_Util, $std_Json }
         "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",
         "s3_key": "${aws_s3_object.cloudApi_cloudApi-OnRequest-cdafee6e_S3Object_5DAAA0EF.key}",
-        "timeout": 30,
-        "vpc_config": {
-          "security_group_ids": [],
-          "subnet_ids": []
-        }
-      },
-      "testhttppostandhttpfetchcanpreformacalltoanapi_Handler_C4853DBD": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:http.post and http.fetch can preform a call to an api/Handler/Default",
-            "uniqueId": "testhttppostandhttpfetchcanpreformacalltoanapi_Handler_C4853DBD"
-          }
-        },
-        "environment": {
-          "variables": {
-            "WING_FUNCTION_NAME": "Handler-c88947b5",
-            "WING_TARGET": "tf-aws",
-            "WING_TOKEN_TFTOKEN_TOKEN_21": "${jsonencode(aws_api_gateway_stage.cloudApi_api_stage_BBB283E4.invoke_url)}"
-          }
-        },
-        "function_name": "Handler-c88947b5",
-        "handler": "index.handler",
-        "publish": true,
-        "role": "${aws_iam_role.testhttppostandhttpfetchcanpreformacalltoanapi_Handler_IamRole_364748FC.arn}",
-        "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
-        "s3_key": "${aws_s3_object.testhttppostandhttpfetchcanpreformacalltoanapi_Handler_S3Object_BEC67279.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -298,17 +242,6 @@ module.exports = function({ $api_url, $body, $http_POST, $http_Util, $std_Json }
         "bucket": "${aws_s3_bucket.Code.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
-      },
-      "testhttppostandhttpfetchcanpreformacalltoanapi_Handler_S3Object_BEC67279": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:http.post and http.fetch can preform a call to an api/Handler/S3Object",
-            "uniqueId": "testhttppostandhttpfetchcanpreformacalltoanapi_Handler_S3Object_BEC67279"
-          }
-        },
-        "bucket": "${aws_s3_bucket.Code.bucket}",
-        "key": "<ASSET_KEY>",
-        "source": "<ASSET_SOURCE>"
       }
     }
   }
@@ -324,6 +257,7 @@ const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 const cloud = require('@winglang/sdk').cloud;
 const http = require('@winglang/sdk').http;
+const util = require('@winglang/sdk').util;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
@@ -361,49 +295,51 @@ class $Root extends $stdlib.std.Resource {
         super._registerBind(host, ops);
       }
     }
-    class $Closure2 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
-        this.display.hidden = true;
-        this._addInflightOps("handle", "$inflight_init");
-      }
-      static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure2.js")({
-            $api_url: ${context._lift(api.url)},
-            $body: ${context._lift(body)},
-            $http_POST: ${context._lift(http_POST)},
-            $http_Util: ${context._lift(http.Util)},
-            $std_Json: ${context._lift(std.Json)},
-          })
-        `);
-      }
-      _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
-          (await (async () => {
-            const $Closure2Client = ${$Closure2._toInflightType(this).text};
-            const client = new $Closure2Client({
-            });
-            if (client.$inflight_init) { await client.$inflight_init(); }
-            return client;
-          })())
-        `);
-      }
-      _registerBind(host, ops) {
-        if (ops.includes("handle")) {
-          $Closure2._registerBindObject(api.url, host, []);
-          $Closure2._registerBindObject(body, host, []);
-          $Closure2._registerBindObject(http_POST, host, []);
-        }
-        super._registerBind(host, ops);
-      }
-    }
     const http_POST = http.HttpMethod.POST;
     const api_POST = cloud.HttpMethod.POST;
     const api = this.node.root.newAbstract("@winglang/sdk.cloud.Api",this,"cloud.Api");
     const body = Object.freeze({"cat":"Tion"});
     (api.post("/path",new $Closure1(this,"$Closure1")));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:http.post and http.fetch can preform a call to an api",new $Closure2(this,"$Closure2"));
+    if (((util.Util.env("WING_TARGET")) !== "tf-aws")) {
+      class $Closure2 extends $stdlib.std.Resource {
+        constructor(scope, id, ) {
+          super(scope, id);
+          this.display.hidden = true;
+          this._addInflightOps("handle", "$inflight_init");
+        }
+        static _toInflightType(context) {
+          return $stdlib.core.NodeJsCode.fromInline(`
+            require("./inflight.$Closure2.js")({
+              $api_url: ${context._lift(api.url)},
+              $body: ${context._lift(body)},
+              $http_POST: ${context._lift(http_POST)},
+              $http_Util: ${context._lift(http.Util)},
+              $std_Json: ${context._lift(std.Json)},
+            })
+          `);
+        }
+        _toInflight() {
+          return $stdlib.core.NodeJsCode.fromInline(`
+            (await (async () => {
+              const $Closure2Client = ${$Closure2._toInflightType(this).text};
+              const client = new $Closure2Client({
+              });
+              if (client.$inflight_init) { await client.$inflight_init(); }
+              return client;
+            })())
+          `);
+        }
+        _registerBind(host, ops) {
+          if (ops.includes("handle")) {
+            $Closure2._registerBindObject(api.url, host, []);
+            $Closure2._registerBindObject(body, host, []);
+            $Closure2._registerBindObject(http_POST, host, []);
+          }
+          super._registerBind(host, ops);
+        }
+      }
+      this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:http.post and http.fetch can preform a call to an api",new $Closure2(this,"$Closure2"));
+    }
   }
 }
 class $App extends $AppBase {
