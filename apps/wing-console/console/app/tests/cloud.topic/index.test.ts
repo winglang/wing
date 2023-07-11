@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+
 import { describe } from "../describe.js";
 import { getResourceNode } from "../helpers.js";
 
@@ -9,6 +10,8 @@ describe(`${__dirname}/index.w`, () => {
     await page.getByTestId("cloud.topic:message").fill("Hello world!");
 
     await page.getByTestId("cloud.topic:send-message").click();
+
+    await page.waitForLoadState("networkidle");
 
     const logs = await page.getByTestId("logs").allTextContents();
     expect(logs[0]).toContain("Message received: Hello world!");
