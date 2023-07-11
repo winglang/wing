@@ -1,7 +1,8 @@
 // @ts-ignore-next-line
 import Conf from "conf";
 
-import { license } from "./license.js";
+// @ts-ignore-next-line
+import License from "../../LICENSE.md?raw";
 
 const PROJECT_NAME = "@wingconsole/server";
 const CONFIG_KEY = "termsAndConditions";
@@ -24,5 +25,5 @@ export const acceptTerms = (value: boolean) => {
 };
 
 export const getLicense = (): string => {
-  return license;
+  return License;
 };
