@@ -17,7 +17,7 @@ module.exports = function({ $util_Util }) {
       const id_custom = (await $util_Util.nanoid({ alphabet: "01*/ab" }));
       {((cond) => {if (!cond) throw new Error("assertion failed: id_custom.length == 21")})((id_custom.length === 21))};
       for (const i of ((s,e,i) => { function* iterator(start,end,inclusive) { let i = start; let limit = inclusive ? ((end < start) ? end - 1 : end + 1) : end; while (i < limit) yield i++; while (i > limit) yield i--; }; return iterator(s,e,i); })(0,id_custom.length,false)) {
-        if ((((((((await id_custom.at(i)) === "0") || ((await id_custom.at(i)) === "1")) || ((await id_custom.at(i)) === "*")) || ((await id_custom.at(i)) === "/")) || ((await id_custom.at(i)) === "a")) || ((await id_custom.at(i)) === "b"))) {
+        if (((((((((args) => { if (i >= id_custom.length || i + id_custom.length < 0) {throw new Error("index out of bounds")}; return id_custom.at(i) })(i) === "0") || (((args) => { if (i >= id_custom.length || i + id_custom.length < 0) {throw new Error("index out of bounds")}; return id_custom.at(i) })(i) === "1")) || (((args) => { if (i >= id_custom.length || i + id_custom.length < 0) {throw new Error("index out of bounds")}; return id_custom.at(i) })(i) === "*")) || (((args) => { if (i >= id_custom.length || i + id_custom.length < 0) {throw new Error("index out of bounds")}; return id_custom.at(i) })(i) === "/")) || (((args) => { if (i >= id_custom.length || i + id_custom.length < 0) {throw new Error("index out of bounds")}; return id_custom.at(i) })(i) === "a")) || (((args) => { if (i >= id_custom.length || i + id_custom.length < 0) {throw new Error("index out of bounds")}; return id_custom.at(i) })(i) === "b"))) {
           {((cond) => {if (!cond) throw new Error("assertion failed: true")})(true)};
         }
         else {
@@ -195,7 +195,7 @@ class $Root extends $stdlib.std.Resource {
     const id_custom = (util.Util.nanoid({ alphabet: "01*/ab" }));
     {((cond) => {if (!cond) throw new Error("assertion failed: id_custom.length == 21")})((id_custom.length === 21))};
     for (const i of $stdlib.std.Range.of(0, id_custom.length, false)) {
-      if ((((((((id_custom.at(i)) === "0") || ((id_custom.at(i)) === "1")) || ((id_custom.at(i)) === "*")) || ((id_custom.at(i)) === "/")) || ((id_custom.at(i)) === "a")) || ((id_custom.at(i)) === "b"))) {
+      if (((((((((args) => { if (i >= id_custom.length || i + id_custom.length < 0) {throw new Error("index out of bounds")}; return id_custom.at(i) })(i) === "0") || (((args) => { if (i >= id_custom.length || i + id_custom.length < 0) {throw new Error("index out of bounds")}; return id_custom.at(i) })(i) === "1")) || (((args) => { if (i >= id_custom.length || i + id_custom.length < 0) {throw new Error("index out of bounds")}; return id_custom.at(i) })(i) === "*")) || (((args) => { if (i >= id_custom.length || i + id_custom.length < 0) {throw new Error("index out of bounds")}; return id_custom.at(i) })(i) === "/")) || (((args) => { if (i >= id_custom.length || i + id_custom.length < 0) {throw new Error("index out of bounds")}; return id_custom.at(i) })(i) === "a")) || (((args) => { if (i >= id_custom.length || i + id_custom.length < 0) {throw new Error("index out of bounds")}; return id_custom.at(i) })(i) === "b"))) {
         {((cond) => {if (!cond) throw new Error("assertion failed: true")})(true)};
       }
       else {
