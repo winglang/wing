@@ -1,5 +1,6 @@
 // !!! isn't working on aws due to https://github.com/winglang/wing/issues/2724
 bring cloud;
+bring ex;
 
 enum Source {
   anyEvent,
@@ -8,14 +9,14 @@ enum Source {
 
 let b = new cloud.Bucket();
 let idsCounter = new cloud.Counter();
-let table = new cloud.Table(
+let table = new ex.Table(
   name: "key-history",
   primaryKey: "_id",
   columns: {
-    "_id" => cloud.ColumnType.STRING,
-    "key" => cloud.ColumnType.STRING,
-    "operation" => cloud.ColumnType.STRING,
-    "source" => cloud.ColumnType.STRING,
+    "_id" => ex.ColumnType.STRING,
+    "key" => ex.ColumnType.STRING,
+    "operation" => ex.ColumnType.STRING,
+    "source" => ex.ColumnType.STRING,
   }
 );
 

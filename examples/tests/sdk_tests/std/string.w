@@ -39,19 +39,28 @@ test "length" {
 //-----------------------------------------------------------------------------
 // at()
 
+let INDEX_OUT_OF_BOUNDS_ERROR = "index out of bounds";
+
 assert("boom".at(2) == "o");
 // Negative integers count back from the last string character.
 assert("boom".at(-4) == "b");
 assert("boom".at(-1) == "m");
+// Should throw an exception
+assertThrows(INDEX_OUT_OF_BOUNDS_ERROR, () => {
+  "boom".at(4);
+});
+assertThrows(INDEX_OUT_OF_BOUNDS_ERROR, () => {
+  "boom".at(-5);
+});
 
 test "at()" {
   assert("boom".at(0) == "b");
   // Negative integers count back from the last string character.
   assert("boom".at(-4) == "b");
   assert("boom".at(-1) == "m");
-  
-  // Should throw an exception instead of returns undefined see issue #3240
-  // assert("boom".at(-10) == "m");
+  // Should throw an exception
+  try { "boom".at(4); } catch s { assert(s == INDEX_OUT_OF_BOUNDS_ERROR ); } // <-- Passes if no exception is thrown, see issue #3341
+  try { "boom".at(-5); } catch s { assert(s == INDEX_OUT_OF_BOUNDS_ERROR ); }
 }
 
 //-----------------------------------------------------------------------------

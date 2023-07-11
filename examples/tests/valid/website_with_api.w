@@ -1,17 +1,18 @@
 bring cloud;
+bring ex;
 
 //needs to be written before the website (so the website will be able to use it's url on sim env)
 let api = new cloud.Api();
 
 let website = new cloud.Website(path: "./website_with_api");
 
-let usersTable = new cloud.Table(
+let usersTable = new ex.Table(
   name: "users-table",
   primaryKey: "id",
   columns: {
-    "id" => cloud.ColumnType.STRING,
-    "name" => cloud.ColumnType.STRING,
-    "age" => cloud.ColumnType.NUMBER,
+    "id" => ex.ColumnType.STRING,
+    "name" => ex.ColumnType.STRING,
+    "age" => ex.ColumnType.NUMBER,
   }
 );
 
