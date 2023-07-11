@@ -14,8 +14,6 @@ module.exports = function({ $config, $http_Util, $indexFile, $otherFile, $std_Js
       if ((!url.startsWith("http"))) {
         url = ("http://" + url);
       }
-      {console.log($indexFile)};
-      {console.log(((await $http_Util.get(url)).body ?? ""))};
       {((cond) => {if (!cond) throw new Error("assertion failed: http.get(url).body == indexFile")})(((await $http_Util.get(url)).body === $indexFile))};
       {((cond) => {if (!cond) throw new Error("assertion failed: http.get(url + \"/inner-folder/other.html\").body == otherFile")})(((await $http_Util.get((url + "/inner-folder/other.html"))).body === $otherFile))};
       {((cond) => {if (!cond) throw new Error("assertion failed: http.get(url + \"/config.json\").body == Json.stringify(config)")})(((await $http_Util.get((url + "/config.json"))).body === ((args) => { return JSON.stringify(args[0], null, args[1]) })([$config])))};

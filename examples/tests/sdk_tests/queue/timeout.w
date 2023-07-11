@@ -20,7 +20,7 @@ q.setConsumer(inflight () => {
 });
 
 
-// TODO: this test fails sim due to issue: https://github.com/winglang/wing/issues/165
+// TODO: this test fails sim due to issue: https://github.com/winglang/wing/issues/1980
 new std.Test(inflight () => {  
   // each push should result in a timeout
   q.push("foo");

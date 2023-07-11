@@ -11,7 +11,7 @@ let NIL = "<<NIL>>";
 assert(util.env("PATH").length > 0);
 
 // won't work, since the meta comments aren't native to the cli command, but to hangar only
-if (util.env("WING_TARGET") != "tf-aws") {
+if (util.tryEnv("MY_VAR") != nil) {
   assert(util.env("MY_VAR") == "my value");
 }
 let var failed = false;

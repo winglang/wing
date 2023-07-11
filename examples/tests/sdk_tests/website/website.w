@@ -23,8 +23,6 @@ test "access files on the website" {
       url = "http://" + url;
     }
     
-    log(indexFile);
-    log(http.get(url).body ?? "");
     assert(http.get(url).body == indexFile);
     assert(http.get(url + "/inner-folder/other.html").body == otherFile);
     assert(http.get(url + "/config.json").body == Json.stringify(config));
