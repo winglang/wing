@@ -84,11 +84,6 @@ impl<'a> JSifier<'a> {
 		}
 	}
 
-	fn get_expr_type(&self, expr: &Expr) -> TypeRef {
-		// Safety: JSifier is always run after type checking has finished, so all types should be resolved.
-		self.types.get_expr_type(expr).unwrap()
-	}
-
 	pub fn jsify(&mut self, scope: &Scope) -> Files {
 		CompilationContext::set(CompilationPhase::Jsifying, &scope.span);
 		let mut files = Files::default();
@@ -275,7 +270,8 @@ impl<'a> JSifier<'a> {
 		match &expression.kind {
 			ExprKind::New(new_expr) => {
 				let NewExpr { class, obj_id, arg_list, obj_scope } = new_expr;
-				let expression_type = self.get_expr_type(&expression);
+
+				let expression_type = self.types.get_expr_type(&expression);
 				let is_preflight_class = expression_type.is_preflight_class();
 
 				let class_type = if let Some(class_type) = expression_type.as_class() { class_type } else {
@@ -348,7 +344,7 @@ impl<'a> JSifier<'a> {
 						.iter()
 						.filter_map(|p| match p {
 							InterpolatedStringPart::Static(_) => None,
-							InterpolatedStringPart::Expr(e) => Some(match *self.get_expr_type(e) {
+							InterpolatedStringPart::Expr(e) => Some(match *self.types.get_expr_type(e) {
 								Type::Json | Type::MutJson => {
 									format!("((e) => typeof e === 'string' ? e : JSON.stringify(e, null, 2))({})", self.jsify_expression(e, ctx))
 								}
@@ -381,7 +377,7 @@ impl<'a> JSifier<'a> {
 			}
 			ExprKind::Reference(_ref) => self.jsify_reference(&_ref, ctx),
 			ExprKind::Call { callee, arg_list } => {
-				let function_type = self.get_expr_type(callee);
+				let function_type = self.types.get_expr_type(callee);
 				let is_option = function_type.is_option();
 				let function_type = function_type.maybe_unwrap_option();
 				let function_sig = function_type.as_function_sig();
@@ -470,7 +466,7 @@ impl<'a> JSifier<'a> {
 					.collect::<Vec<String>>()
 					.join(", ");
 
-				if self.get_expr_type(expression).is_mutable_collection() || ctx.in_json {
+				if self.types.get_expr_type(expression).is_mutable_collection() || ctx.in_json {
 					// json arrays dont need frozen at nested level
 					format!("[{}]", item_list)
 				} else {
@@ -522,7 +518,7 @@ impl<'a> JSifier<'a> {
 					.collect::<Vec<String>>()
 					.join(",");
 
-				if self.get_expr_type(expression).is_mutable_collection() || ctx.in_json {
+				if self.types.get_expr_type(expression).is_mutable_collection() || ctx.in_json {
 					// json maps dont need frozen in the nested level
 					format!("{{{}}}", f)
 				} else {
@@ -536,7 +532,7 @@ impl<'a> JSifier<'a> {
 					.collect::<Vec<String>>()
 					.join(", ");
 
-				if self.get_expr_type(expression).is_mutable_collection() {
+				if self.types.get_expr_type(expression).is_mutable_collection() {
 					format!("new Set([{}])", item_list)
 				} else {
 					format!("Object.freeze(new Set([{}]))", item_list)
@@ -1150,7 +1146,7 @@ impl<'a> JSifier<'a> {
 		};
 
 		let parent_fields = if let Some(parent) = &class.parent {
-			let parent_type = self.get_expr_type(parent);
+			let parent_type = self.types.get_expr_type(parent);
 			if let Some(parent_lifts) = &parent_type.as_class().unwrap().lifts {
 				parent_lifts.lifted_fields().keys().map(|f| f.clone()).collect_vec()
 			} else {

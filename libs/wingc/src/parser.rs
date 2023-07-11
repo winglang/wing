@@ -1285,7 +1285,7 @@ impl<'s> Parser<'s> {
 			match child.kind() {
 				"positional_argument" => {
 					if seen_keyword_args {
-						self.with_error("Positional arguments must come before named arguments", &child)?;
+						self.add_error("Positional arguments must come before named arguments", &child);
 					}
 					pos_args.push(self.build_expression(&child, phase)?);
 				}
@@ -1618,7 +1618,6 @@ impl<'s> Parser<'s> {
 					// Add fields to our struct literal, if some are missing or aren't part of the type we'll fail on type checking
 					if let (Ok(k), Ok(v)) = (field_name, field_value) {
 						if fields.contains_key(&k) {
-							// TODO: ugly, we need to change add_error to not return anything and have a wrapper `raise_error` that returns a Result
 							self.add_error(format!("Duplicate field {} in struct literal", k), expression_node);
 						} else {
 							fields.insert(k, v);

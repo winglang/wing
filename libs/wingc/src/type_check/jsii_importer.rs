@@ -264,6 +264,7 @@ impl<'a> JsiiImporter<'a> {
 
 		let enum_type_ref = self.wing_types.add_type(Type::Enum(Enum {
 			name: enum_symbol.clone(),
+			docs: Docs::from(&jsii_enum.docs),
 			values: jsii_enum
 				.members
 				.iter()
@@ -479,7 +480,14 @@ impl<'a> JsiiImporter<'a> {
 				class_env
 					.define(
 						&sym,
-						SymbolKind::make_member_variable(sym.clone(), method_sig, false, is_static, member_phase),
+						SymbolKind::make_member_variable(
+							sym.clone(),
+							method_sig,
+							false,
+							is_static,
+							member_phase,
+							Some(Docs::from(&m.docs)),
+						),
 						StatementIdx::Top,
 					)
 					.expect(&format!(
@@ -516,6 +524,7 @@ impl<'a> JsiiImporter<'a> {
 							!matches!(p.immutable, Some(true)),
 							is_static,
 							member_phase,
+							Some(Docs::from(&p.docs)),
 						),
 						StatementIdx::Top,
 					)
@@ -724,7 +733,14 @@ impl<'a> JsiiImporter<'a> {
 			let sym = Self::jsii_name_to_symbol(CLASS_INIT_NAME, &initializer.location_in_module);
 			if let Err(e) = class_env.define(
 				&sym,
-				SymbolKind::make_member_variable(sym.clone(), method_sig, false, true, member_phase),
+				SymbolKind::make_member_variable(
+					sym.clone(),
+					method_sig,
+					false,
+					true,
+					member_phase,
+					Some(Docs::from(&initializer.docs)),
+				),
 				StatementIdx::Top,
 			) {
 				panic!("Invalid JSII library, failed to define {}'s init: {}", type_name, e)
