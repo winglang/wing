@@ -295,7 +295,7 @@ test("can add row in preflight", async () => {
       },
       primaryKey: "id",
       initialRows: {
-        "joe-id": { name: "Joe Doe", age: 50 },
+        "joe-id": { name: "Joe Doe", age: 50, id: KEY },
       },
     },
     type: "wingsdk.cloud.Table",
