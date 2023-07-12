@@ -7,10 +7,10 @@ export interface Data {
 export abstract class Collector {
   abstract collect(): Promise<Data | undefined>;
 
-  protected async runCommand(cmd: string, args: string[]): Promise<any> {
+  protected async runCommand(cmd: string, args: string[], dir: string = '.'): Promise<any> {
     try {
       const raw = await new Promise((resolve, reject) => {
-        execFile(cmd, args, (error, stdout, stderr) => {
+        execFile(cmd, args, { cwd: dir }, (error, stdout, stderr) => {
           if (error) {
             stderr;
             reject(error);

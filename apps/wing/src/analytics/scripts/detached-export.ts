@@ -7,8 +7,17 @@ import { exit } from 'process';
 // to the analytics report file
 const filePath = process.argv[2];
 
+const segmentWriteKey = 'sCqPF5xSscOjJdi5Tbkqu73vfF8zkZdw'
+
+// This debug write key is used to send events to a debug source in segment
+// the purpose is to make life easier for testing analytics changes without
+// sifting through real data. The only time we export metrics to the debug source
+// is if the DEBUG env var is set AND the WING_ANALYTICS_FORCE_EXPORT env var is set
+// this way when just running with DEBUG flag we can see analytic event files on disk
+const segmentDebugWriteKey = '6r9ySJHdUGkDO80X8i4h2pGGHxYRwFe2'
+
 async function reportAnalytic() {
-  if (process.env.DEBUG) {
+  if (process.env.DEBUG && !process.env.WING_ANALYTICS_FORCE_EXPORT) {
     // In debug mode no need to export the metrics
     exit(0);
   }
@@ -17,7 +26,7 @@ async function reportAnalytic() {
     throw new Error('No file analytic path provided');
   }
 
-  const analytics = new Analytics({ writeKey: 'sCqPF5xSscOjJdi5Tbkqu73vfF8zkZdw'});
+  const analytics = new Analytics({ writeKey: process.env.DEBUG === undefined ? segmentWriteKey : segmentDebugWriteKey});
   const storage = new AnalyticsStorage();
   const event = storage.loadEvent(filePath);
 
