@@ -16,7 +16,7 @@
     },
     "onUpload": {
       "sim": {"implemented": true},
-      "tf-aws": {"implemented": true},
+      "tf-aws": {"implemented": false, "issue": 2724},
       "tf-azure": {"implemented": false, "issue": 1954},
       "tf-gcp": {"implemented": false},
       "aws-cdk": {"implemented": true}
@@ -30,14 +30,14 @@
     },
     "onUpdate": {
       "sim": {"implemented": true},
-      "tf-aws": {"implemented": true},
+      "tf-aws": {"implemented": false, "issue": 2724},
       "tf-azure": {"implemented": false, "issue": 1954},
       "tf-gcp": {"implemented": false},
       "aws-cdk": {"implemented": true}
     },
     "onEvent": {
       "sim": {"implemented": true},
-      "tf-aws": {"implemented": true},
+      "tf-aws": {"implemented": false, "issue": 2724},
       "tf-azure": {"implemented": false, "issue": 1954},
       "tf-gcp": {"implemented": false},
       "aws-cdk": {"implemented": true}
@@ -178,8 +178,8 @@
       "aws-cdk": {"implemented": true}
     },
     "timeout": {
-      "sim": {"implemented": true},
-      "tf-aws": {"implemented": true},
+      "sim": {"implemented": false, "issue": 1980},
+      "tf-aws": {"implemented": false, "issue": 3354},
       "tf-azure": {"implemented": false},
       "tf-gcp": {"implemented": false},
       "aws-cdk": {"implemented": true}
@@ -270,9 +270,9 @@
       "tf-gcp": {"implemented": false},
       "aws-cdk": {"implemented": false}
     },
-    "addEnv": {
-      "sim": {"implemented": false},
-      "tf-aws": {"implemented": false},
+    "addEnvironment": {
+      "sim": {"implemented": true},
+      "tf-aws": {"implemented": true},
       "tf-azure": {"implemented": false},
       "tf-gcp": {"implemented": false},
       "aws-cdk": {"implemented": false}
@@ -293,7 +293,7 @@
     }
   },
   "Counter": {
-    "CounterProps.num": {
+    "CounterProps.initial": {
       "sim": {"implemented": true},
       "tf-aws": {"implemented": true},
       "tf-azure": {"implemented": false, "issue": 629},
@@ -346,16 +346,16 @@
     }
   },
   "Schedule": {
-    "fromCron": {
-      "sim": {"implemented": false},
-      "tf-aws": {"implemented": false},
+    "ScheduleProps.cron": {
+      "sim": {"implemented": true},
+      "tf-aws": {"implemented": true},
       "tf-azure": {"implemented": false, "issue": 1291},
       "tf-gcp": {"implemented": false, "issue": 1292},
       "aws-cdk": {"implemented": false}
     },
-    "fromRate": {
-      "sim": {"implemented": false},
-      "tf-aws": {"implemented": false},
+    "ScheduleProps.rate": {
+      "sim": {"implemented": true},
+      "tf-aws": {"implemented": true},
       "tf-azure": {"implemented": false, "issue": 1291},
       "tf-gcp": {"implemented": false, "issue": 1292},
       "aws-cdk": {"implemented": false}
@@ -408,7 +408,7 @@
     },
     "url": {
       "sim": {"implemented": true},
-      "tf-aws": {"implemented": true},
+      "tf-aws": {"implemented": false, "issue": 3342},
       "tf-azure": {"implemented": false, "issue": 625},
       "tf-gcp": {"implemented": false, "issue": 624},
       "aws-cdk": {"implemented": false}

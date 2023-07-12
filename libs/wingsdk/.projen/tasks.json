@@ -172,16 +172,16 @@
           "exec": "cat API.md >> ../../docs/docs/04-standard-library/05-ex/api-reference.md"
         },
         {
-          "exec": "jsii-docgen -o API.md -l wing --submodule cloud/bucket"
-        },
-        {
-          "exec": "cat API.md >> ../../docs/docs/04-standard-library/01-cloud/bucket.md"
-        },
-        {
           "exec": "jsii-docgen -o API.md -l wing --submodule cloud/api"
         },
         {
           "exec": "cat API.md >> ../../docs/docs/04-standard-library/01-cloud/api.md"
+        },
+        {
+          "exec": "jsii-docgen -o API.md -l wing --submodule cloud/bucket"
+        },
+        {
+          "exec": "cat API.md >> ../../docs/docs/04-standard-library/01-cloud/bucket.md"
         },
         {
           "exec": "jsii-docgen -o API.md -l wing --submodule cloud/counter"
