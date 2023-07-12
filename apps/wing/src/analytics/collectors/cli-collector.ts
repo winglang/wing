@@ -24,7 +24,6 @@ export class CLICollector extends Collector {
       target: this.cmd.opts().target,
       options: `${JSON.stringify(this.cmd.opts())}`,
       version: PACKAGE_VERSION,
-      entrypoint: this.cmd.args.at(0),
       wing_sdk_version: this.tryGetModuleVersion("@winglang/sdk/package.json"),
       wing_console_version: this.tryGetModuleVersion(`@wingconsole/app/package.json`)
     }
