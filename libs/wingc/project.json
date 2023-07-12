@@ -15,18 +15,10 @@
       "options": {
         "commands": [
           "cargo fmt",
-          "cargo clippy --fix --no-deps --allow-dirty --target wasm32-wasi"
+          "cargo clippy --fix --no-deps --allow-dirty --target wasm32-wasi --release"
         ],
         "cwd": "libs/wingc",
         "parallel": false
-      },
-      "configurations": {
-        "release": {
-          "commands": [
-            "cargo fmt",
-            "cargo clippy --fix --no-deps --allow-dirty --target wasm32-wasi --release"
-          ]
-        }
       }
     },
     "build": {
@@ -42,13 +34,8 @@
     },
     "dev": {
       "options": {
-        "command": "cargo run --example compile",
+        "command": "cargo run --example compile --release",
         "cwd": "libs/wingc"
-      },
-      "configurations": {
-        "release": {
-          "command": "cargo run --release --example compile"
-        }
       }
     }
   }

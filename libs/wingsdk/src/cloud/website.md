@@ -20,7 +20,7 @@ Websites are typically used to serve static content, such as HTML, CSS, and Java
 
 ## Usage
 
-### Website 
+### Website
 
 ```ts
 bring cloud;
@@ -29,6 +29,7 @@ let website = new cloud.Website(path: "./public");
 ```
 
 Under `./public/index.html`
+
 ```html
 <!DOCTYPE html>
 <html>
@@ -59,7 +60,3 @@ AWS implementations of `cloud.Website` uses [Amazon S3](https://aws.amazon.com/s
 ### GCP (`tf-gcp`)
 
 🚧 Not supported yet (tracking issue: [#1296](https://github.com/winglang/wing/issues/1296))
-
-## API Reference
-
-The full list of APIs for `cloud.Website` is available in the [API Reference](./api-reference).

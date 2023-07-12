@@ -11,7 +11,7 @@ import {
 import express from "express";
 
 import { createAnalytics } from "./analytics.js";
-import { getAnonymousId } from "./anonymous-id.js";
+import {AnalyticsStorage} from "./storage.js";
 
 export type {
   LogInterface,
@@ -38,12 +38,13 @@ export interface CreateConsoleAppOptions {
 
 const staticDir = `${__dirname}/vite`;
 
-const { SEGMENT_WRITE_KEY } = process.env;
+const SEGMENT_WRITE_KEY = process.env.SEGMENT_WRITE_KEY;
 
 export const createConsoleApp = async (options: CreateConsoleAppOptions) => {
+  const analyticsStorage = new AnalyticsStorage();
   const analytics = SEGMENT_WRITE_KEY
     ? createAnalytics({
-        anonymousId: getAnonymousId(),
+        anonymousId: analyticsStorage.getAnonymousId(),
         segmentWriteKey: SEGMENT_WRITE_KEY,
       })
     : undefined;
@@ -80,9 +81,9 @@ export const createConsoleApp = async (options: CreateConsoleAppOptions) => {
       );
 
       const properties = {
-        message: trace?.data?.message.substring(0, MAX_ANALYTICS_STRING_LENGTH) || '',
-        status: trace?.data?.status.substring(0, MAX_ANALYTICS_STRING_LENGTH) || 'unknown',
-        result: trace?.data?.result.substring(0, MAX_ANALYTICS_STRING_LENGTH) || 'unknown',
+        message: trace?.data?.message?.substring(0, MAX_ANALYTICS_STRING_LENGTH) || '',
+        status: trace?.data?.status?.substring(0, MAX_ANALYTICS_STRING_LENGTH) || 'unknown',
+        result: trace?.data?.result?.substring(0, MAX_ANALYTICS_STRING_LENGTH) || 'unknown',
       }
 
       // general interaction event
