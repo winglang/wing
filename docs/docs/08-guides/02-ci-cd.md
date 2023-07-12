@@ -4,24 +4,34 @@ id: ci-cd
 keywords: [CICD, Continuous Integration, Continuous Deployment, Deployment, GitHub Actions]
 ---
 
-Wing compiles to multiple targets such as `tf-aws`, `tf-azure`, `tf-gcp` or `awscdk`. Once the compilation is complete, Wing does not dictate the method for deploying your infrastructure. Its focus on Terraform targets means almost all existing services can be used for deployment, providing significant flexibility to select the method that best fits your organizational needs or is most straightforward.
+Wing supports compilation to various targets including `tf-aws`, `tf-azure`, `tf-gcp`, and `awscdk`. After compilation, Wing does not impose a specific deployment method for your infrastructure. Its Terraform target compatibility ensures that nearly all existing services can be utilized for deployment, offering considerable flexibility to choose the approach best aligned with your organizational needs or preferences.
 
-This guide will walk you through a full deployment lifecycle of a Wing application using GitHub Actions and the `tf-aws` target.
+This guide will detail the complete deployment lifecycle of a Wing application using GitHub Actions and the `tf-aws` target.
 
 ## Setup
 ### Managing Access for GitHub Actions and AWS
 
-While you can use static, long-lived IAM user credentials, this is generally discouraged due to security risks.
+It's generally discouraged to use static, long-lived IAM user credentials due to associated security risks.
 
-Instead, it's advisable to use GitHub's OpenID Connect service in conjunction with Amazon Web Services for better security. This service provides temporary credentials, reducing the risk of unauthorized access. More information can be found in [Configuring OpenID Connect in Amazon Web Services](https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-amazon-web-services) and [configure-aws-credentials](https://github.com/aws-actions/configure-aws-credentials).
+As an alternative, it's recommended to use GitHub's OpenID Connect service in conjunction with Amazon Web Services to enhance security. This service offers temporary credentials, thereby reducing the risk of unauthorized access. For more information, refer to [Configuring OpenID Connect in Amazon Web Services](https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-amazon-web-services) and [configure-aws-credentials](https://github.com/aws-actions/configure-aws-credentials).
 
 ### Terraform State
 
-The Terraform state must be persisted as part of the GitHub Action workflow. To ensure this is set up correctly, please refer to this [guide](./terraform-backends).
+Persisting the Terraform state is a crucial part of the GitHub Action workflow. To ensure this is properly set up, refer to this [guide](./terraform-backends).
 
 ## Wing GitHub Action
 
-With the AWS credentials and Terraform state setup, the most straightforward approach is to use the [Wing GitHub Action](https://github.com/winglang/wing-github-action/).
+With AWS credentials and Terraform state set up, the easiest approach is to use the [Wing GitHub Action](https://github.com/winglang/wing-github-action/).
+
+### Environment Variables
+
+- `AWS_REGION`: The target region for app deployment.
+- `TF_BACKEND_BUCKET`: The name of the bucket where the Terraform state is stored, for example, `my-terraform-state-bucket-with-a-globally-unique-name`.
+- `TF_BACKEND_BUCKET_REGION`: The region for the Terraform state bucket. This should match the region defined above.
+
+### Secrets
+
+- `AWS_ROLE_ARN`: The Github OIDC enabled AWS role arn. This role should be configured to allow access from the repository being deployed from. Moreover, it should have sufficient permissions to create the resources defined in the Wing application. Defining this as a Github Action secret won't print the role name in the Github Action log output. Depending on the context of your application, this might be desirable, but it's not strictly necessary.
 
 ### Deployments
 
@@ -44,9 +54,9 @@ permissions:
   contents: read  # This is required for actions/checkout
 
 env:
-  AWS_REGION: ${{ secrets.AWS_REGION }}
-  TF_BACKEND_BUCKET: ${{ secrets.TF_BACKEND_BUCKET }}
-  TF_BACKEND_BUCKET_REGION: ${{ secrets.AWS_REGION }}
+  AWS_REGION: 'us-east-1'
+  TF_BACKEND_BUCKET: 'my-terraform-state-bucket-with-a-globally-unique-name'
+  TF_BACKEND_BUCKET_REGION: 'us-east-1'
 
 jobs:
   deploy:
@@ -58,10 +68,10 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v2
         with:
           role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
-          role-session-name: gh-actions-winglang
-          aws-region: ${{ env.AWS_REGION}}
+          role-session-name: gh-actions-winglang # makes it easy to identify, e.g. in AWS Cloudtrail
+          aws-region: ${{ env.AWS_REGION }}
       - name: Deploy Winglang App
-        uses: winglang/wing-github-action/actions/deploy@main
+        uses: winglang/wing-github-action/actions/deploy@v0.1.0
         with:
           entry: main.w
           target: 'tf-aws'
@@ -80,9 +90,9 @@ permissions:
   pull-requests: write # This is required for commenting on PRs
 
 env:
-  AWS_REGION: ${{ secrets.AWS_REGION }}
-  TF_BACKEND_BUCKET: ${{ secrets.TF_BACKEND_BUCKET }}
-  TF_BACKEND_BUCKET_REGION: ${{ secrets.AWS_REGION }}
+  AWS_REGION: 'us-east-1'
+  TF_BACKEND_BUCKET: 'my-terraform-state-bucket-with-a-globally-unique-name'
+  TF_BACKEND_BUCKET_REGION: 'us-east-1'
 
 jobs:
   build:
@@ -97,7 +107,7 @@ jobs:
           role-session-name: gh-actions-winglang
           aws-region: ${{ env.AWS_REGION }}
       - name: Terraform Plan
-        uses: winglang/wing-github-action/actions/pull-request-diff@main
+        uses: winglang/wing-github-action/actions/pull-request-diff@v0.1.0
         with:
           entry: main.w
           target: 'tf-aws'
@@ -105,22 +115,136 @@ jobs:
 ```
 ## Custom GitHub Actions Workflow for AWS
 
-Most users will find using the Wing GitHub Action within GitHub Actions the simplest and most effective method. If you have specific requirements, such as additional build steps, you may need to create your own custom GitHub Actions Workflow.
+Most users will find using the Wing GitHub Action within GitHub Actions as the simplest and most effective method. However, if you have specific requirements such as additional build steps, you may need to create your own custom GitHub Actions Workflow.
 
-## Continuous Integration
+### Deployment
 
-### Running Tests
+Refer to the following Github Action workflow as a template to define your customized workflow. For detailed instructions, please refer to the Github Actions [documentation](https://docs.github.com/en/actions).
 
-Tests should be run in every build to ensure code quality and prevent potential issues from making it into the production environment.
+#### Backend Plugin
 
-### Diff
+Add the following file to your application root directory as `plugin.s3-backend.js`. This will be used in the Github Action workflow during the `wing compile` step. Learn more about this in the [Terraform Backend guide](./01-terraform-backend.md)
 
-Assuming we have a GitHub repository with a `main` branch configured as our default branch, we want each commit to be deployed to the desired AWS account. In this setup, a 'diff' would display the changes introduced in the commit and provide an opportunity to review them before deployment.
+```
+// plugin.s3-backend.js
+exports.postSynth = function(config) {
+  if (!process.env.TF_BACKEND_BUCKET) {throw new Error("env var TF_BACKEND_BUCKET not set")}
+  if (!process.env.TF_BACKEND_BUCKET_REGION) {throw new Error("env var TF_BACKEND_BUCKET_REGION not set")}
+  if (!process.env.TF_BACKEND_STATE_FILE) {throw new Error("env var TF_BACKEND_STATE_FILE not set")}
+  config.terraform.backend = {
+    s3: {
+      bucket: process.env.TF_BACKEND_BUCKET,
+      region: process.env.TF_BACKEND_BUCKET_REGION,
+      key: process.env.TF_BACKEND_STATE_FILE
+    }
+  }
+  return config;
+}
+```
 
-## Continuous Delivery
+#### Deployment Workflow
 
-Continuous Delivery is a methodology where code changes are automatically built, tested, and prepared for a release to production. It expands upon Continuous Integration by deploying all code changes to a testing environment and/or production environment after the build stage.
+This workflow:
+
+- Checks out the code.
+- Installs Node.js v18.
+- Installs the winglang CLI with the latest version.
+- Installs npm dependencies (this step can be skipped if not necessary).
+- Retrieves short-lived credentials for AWS via OIDC.
+- Compiles the Wing application.
+- Uses Terraform to deploy the synthesized Terraform configuration.
+
+:::info
+
+The output directory of the wing compile step depends on the Wing application's file name. When your file is named `main`, the output directory will be `./target/main.tfaws`. This allows for the compilation and deployment of multiple applications from the same base directory. For the workflow, we're assuming a `main.w` file name.
+
+:::
+
+```
+name: Deploy and Test Wing Application
+
+on:
+  push:
+    branches: [ main ]
+
+# Make sure there is only one deployment running at
+# the same time. See https://docs.github.com/en/actions/using-jobs/using-concurrency
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  id-token: write # This is required for requesting the JWT
+  contents: read  # This is required for actions/checkout
+
+env:
+  AWS_REGION: "us-east-1"
+  # The following values are used in the backend plugin which
+  # is used in the `wing compile` step
+  TF_BACKEND_BUCKET: "my-terraform-state-bucket-with-a-globally-unique-name"
+  TF_BACKEND_BUCKET_REGION: "us-east-1"
+  TF_BACKEND_STATE_FILE: "my/repo/main/terraform.tfstate"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+      - name: Setup Node.js v18
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: Install winglang globally
+        run: npm install -g winglang@latest
+      - name: Install Dependencies
+        run: npm ci
+      - name: Compile
+        run: wing compile -t tf-aws --plugins=plugin.s3-backend.js main.w
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          role-session-name: gh-actions-winglang-website-proxy
+          aws-region: ${{ env.AWS_REGION }}
+      - name: Deploy with Terraform
+        run: cd ./target/main.tfaws && terraform init && terraform apply -auto-approve
+```
+
+### Customization
+
+The workflow can be easily adapted to your specific needs. Here are a few suggestions:
+
+#### Test Execution
+
+Consider adding Winglang simulator tests as an intermediate step in your workflow. For example:
+
+```
+# ...
+      - name: Install Dependencies
+        run: npm ci
+      - name: Run Tests
+        run: wing test main.w
+      - name: Compile
+        run: wing compile -t tf-aws --plugins=plugin.s3-backend.js main.w
+# ...
+```
+
+#### Implementing Terraform Checks
+
+Consider integrating third-party Terraform analysis tools for more comprehensive checks. For instance:
+
+```
+# ...
+      - name: Install Dependencies
+        run: npm ci
+      - name: Compile
+        run: wing compile -t tf-aws --plugins=plugin.s3-backend.js main.w
+      - name: Check Terraform Config
+        run: cd ./target/main.tfaws && your-tf-tool
+# ...
+```
 
 ## Live Examples
 
-For a real-world example of a Wing application continuously deployed to AWS using GitHub actions, visit [https://github.com/winglang/gwomp](https://github.com/winglang/gwomp).
+For a practical demonstration of a Wing application being continuously deployed to AWS via the Winglang GitHub Actions, refer to [this example](https://github.com/winglang/gwomp).
