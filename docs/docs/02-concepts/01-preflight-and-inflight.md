@@ -5,6 +5,8 @@ description: "Wing's two execution phases: preflight and inflight"
 keywords: [Inflights, Inflight functions, Preflight, Preflight code]
 ---
 
+> This content is also available in an [interactive tutorial](https://www.winglang.io/learn/preflight-inflight)
+
 One of the main differences between Wing and other languages is that it unifies both infrastructure definitions and application logic under the same programming model. 
 This is enabled by the concepts of the *preflight* and *inflight* execution phases:
 
