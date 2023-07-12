@@ -122,25 +122,4 @@ export class AnalyticsStorage {
             if (this.debug) { console.log(`Error saving config file ${error}`) }
         }
     }
-
-    /**
-     * Helper method to flatten objects
-     *
-     * @param properties The properties to flatten
-     * @param parentKey The key of the parent (defaults to "")
-     * @returns
-     */
-    private flattenProperties(properties: {[key: string]: any}, parentKey: string = ""): {[key: string]: any} {
-        return Object.keys(properties).reduce((accumulated: {[key:string]: any}, key) => {
-            const newKey = parentKey ? `${parentKey}_${key}` : key;
-
-            if (typeof properties[key] === 'object' && properties[key] !== null && !Array.isArray(properties[key])) {
-                Object.assign(accumulated, this.flattenProperties(properties[key], newKey));
-            } else {
-                accumulated[newKey] = properties[key];
-            }
-
-            return accumulated;
-        }, {});
-    }
 }
