@@ -103,4 +103,5 @@ export class Util {
   public static _toInflightType(): Code {
     return InflightClient.forType(__filename, this.name);
   }
+  private constructor() {}
 }

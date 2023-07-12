@@ -1,4 +1,5 @@
 use crate::ast::*;
+use crate::closure_transform::{CLOSURE_CLASS_PREFIX, PARENT_THIS_NAME};
 use crate::lsp::sync::FILES;
 use crate::visit::Visit;
 use crate::wasm_util::{ptr_to_string, string_to_combined_ptr, WASM_RETURN_ERROR};
@@ -23,16 +24,16 @@ impl Visit<'_> for DocumentSymbolVisitor {
 				module_name,
 				identifier,
 			} => {
-				let mod_symbol = module_name;
-				self
-					.document_symbols
-					.push(create_document_symbol(mod_symbol, SymbolKind::MODULE));
-
 				if let Some(identifier) = identifier {
 					let symbol = identifier;
 					self
 						.document_symbols
 						.push(create_document_symbol(symbol, SymbolKind::VARIABLE));
+				} else {
+					let mod_symbol = module_name;
+					self
+						.document_symbols
+						.push(create_document_symbol(mod_symbol, SymbolKind::MODULE));
 				}
 			}
 			StmtKind::Let { var_name, .. } => {
@@ -94,8 +95,16 @@ pub fn on_document_symbols(params: lsp_types::DocumentSymbolParams) -> Vec<Docum
 		let mut visitor = DocumentSymbolVisitor::new();
 		visitor.visit_scope(scope);
 
-		visitor.document_symbols
+		visitor
+			.document_symbols
+			.into_iter()
+			.filter(|sym| filter_symbol(sym))
+			.collect()
 	})
+}
+
+fn filter_symbol(symbol: &DocumentSymbol) -> bool {
+	!{ symbol.name.starts_with(CLOSURE_CLASS_PREFIX) || symbol.name.starts_with(PARENT_THIS_NAME) }
 }
 
 fn create_document_symbol(symbol: &Symbol, kind: SymbolKind) -> DocumentSymbol {

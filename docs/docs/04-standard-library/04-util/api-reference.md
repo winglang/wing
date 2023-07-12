@@ -12,6 +12,110 @@ sidebar_position: 100
 # API Reference <a name="API Reference" id="api-reference"></a>
 
 
+## Classes <a name="Classes" id="Classes"></a>
+
+### Util <a name="Util" id="@winglang/sdk.util.Util"></a>
+
+Utility functions.
+
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.util.Util.env">env</a></code> | Returns the value of an environment variable. |
+| <code><a href="#@winglang/sdk.util.Util.sleep">sleep</a></code> | Suspends execution for a given duration. |
+| <code><a href="#@winglang/sdk.util.Util.tryEnv">tryEnv</a></code> | Returns the value of an environment variable. |
+| <code><a href="#@winglang/sdk.util.Util.waitUntil">waitUntil</a></code> | Run a predicate repeatedly, waiting until it returns true or until the timeout elapses. |
+
+---
+
+##### `env` <a name="env" id="@winglang/sdk.util.Util.env"></a>
+
+```wing
+bring util;
+
+util.env(name: str);
+```
+
+Returns the value of an environment variable.
+
+Throws if not found or empty.
+
+###### `name`<sup>Required</sup> <a name="name" id="@winglang/sdk.util.Util.env.parameter.name"></a>
+
+- *Type:* str
+
+The name of the environment variable.
+
+---
+
+##### `sleep` <a name="sleep" id="@winglang/sdk.util.Util.sleep"></a>
+
+```wing
+bring util;
+
+util.sleep(delay: duration);
+```
+
+Suspends execution for a given duration.
+
+###### `delay`<sup>Required</sup> <a name="delay" id="@winglang/sdk.util.Util.sleep.parameter.delay"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.Duration">duration</a>
+
+The time to suspend execution.
+
+---
+
+##### `tryEnv` <a name="tryEnv" id="@winglang/sdk.util.Util.tryEnv"></a>
+
+```wing
+bring util;
+
+util.tryEnv(name: str);
+```
+
+Returns the value of an environment variable.
+
+Returns `nil` if not found or empty.
+
+###### `name`<sup>Required</sup> <a name="name" id="@winglang/sdk.util.Util.tryEnv.parameter.name"></a>
+
+- *Type:* str
+
+The name of the environment variable.
+
+---
+
+##### `waitUntil` <a name="waitUntil" id="@winglang/sdk.util.Util.waitUntil"></a>
+
+```wing
+bring util;
+
+util.waitUntil(predicate: IPredicateHandler, props?: WaitUntilProps);
+```
+
+Run a predicate repeatedly, waiting until it returns true or until the timeout elapses.
+
+###### `predicate`<sup>Required</sup> <a name="predicate" id="@winglang/sdk.util.Util.waitUntil.parameter.predicate"></a>
+
+- *Type:* <a href="#@winglang/sdk.util.IPredicateHandler">IPredicateHandler</a>
+
+The function that will be evaluated.
+
+---
+
+###### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.util.Util.waitUntil.parameter.props"></a>
+
+- *Type:* <a href="#@winglang/sdk.util.WaitUntilProps">WaitUntilProps</a>
+
+Timeout and interval values, default to one 1m timeout and 0.1sec interval.
+
+---
+
+
+
 ## Structs <a name="Structs" id="Structs"></a>
 
 ### WaitUntilProps <a name="WaitUntilProps" id="@winglang/sdk.util.WaitUntilProps"></a>
@@ -60,127 +164,6 @@ timeout: duration;
 The timeout for keep trying predicate.
 
 ---
-
-## Classes <a name="Classes" id="Classes"></a>
-
-### Util <a name="Util" id="@winglang/sdk.util.Util"></a>
-
-Utility functions.
-
-#### Initializers <a name="Initializers" id="@winglang/sdk.util.Util.Initializer"></a>
-
-```wing
-bring util;
-
-new util.Util();
-```
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-
----
-
-
-#### Static Functions <a name="Static Functions" id="Static Functions"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@winglang/sdk.util.Util.env">env</a></code> | Returns the value of an environment variable. |
-| <code><a href="#@winglang/sdk.util.Util.sleep">sleep</a></code> | Suspends execution for a given duration. |
-| <code><a href="#@winglang/sdk.util.Util.tryEnv">tryEnv</a></code> | Returns the value of an environment variable. |
-| <code><a href="#@winglang/sdk.util.Util.waitUntil">waitUntil</a></code> | Run a predicate repeatedly, waiting until it returns true or until the timeout elapses. |
-
----
-
-##### `env` <a name="env" id="@winglang/sdk.util.Util.env"></a>
-
-```wing
-bring util;
-
-util.Util.env(name: str);
-```
-
-Returns the value of an environment variable.
-
-Throws if not found or empty.
-
-###### `name`<sup>Required</sup> <a name="name" id="@winglang/sdk.util.Util.env.parameter.name"></a>
-
-- *Type:* str
-
-The name of the environment variable.
-
----
-
-##### `sleep` <a name="sleep" id="@winglang/sdk.util.Util.sleep"></a>
-
-```wing
-bring util;
-
-util.Util.sleep(delay: duration);
-```
-
-**Inflight client:** [true](#true)
-
-Suspends execution for a given duration.
-
-###### `delay`<sup>Required</sup> <a name="delay" id="@winglang/sdk.util.Util.sleep.parameter.delay"></a>
-
-- *Type:* <a href="#@winglang/sdk.std.Duration">duration</a>
-
-The time to suspend execution.
-
----
-
-##### `tryEnv` <a name="tryEnv" id="@winglang/sdk.util.Util.tryEnv"></a>
-
-```wing
-bring util;
-
-util.Util.tryEnv(name: str);
-```
-
-Returns the value of an environment variable.
-
-Returns `nil` if not found or empty.
-
-###### `name`<sup>Required</sup> <a name="name" id="@winglang/sdk.util.Util.tryEnv.parameter.name"></a>
-
-- *Type:* str
-
-The name of the environment variable.
-
----
-
-##### `waitUntil` <a name="waitUntil" id="@winglang/sdk.util.Util.waitUntil"></a>
-
-```wing
-bring util;
-
-util.Util.waitUntil(predicate: IPredicateHandler, props?: WaitUntilProps);
-```
-
-**Inflight client:** [true](#true)
-
-Run a predicate repeatedly, waiting until it returns true or until the timeout elapses.
-
-###### `predicate`<sup>Required</sup> <a name="predicate" id="@winglang/sdk.util.Util.waitUntil.parameter.predicate"></a>
-
-- *Type:* <a href="#@winglang/sdk.util.IPredicateHandler">IPredicateHandler</a>
-
-The function that will be evaluated.
-
----
-
-###### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.util.Util.waitUntil.parameter.props"></a>
-
-- *Type:* <a href="#@winglang/sdk.util.WaitUntilProps">WaitUntilProps</a>
-
-Timeout and interval values, default to one 1m timeout and 0.1sec interval.
-
----
-
-
 
 ## Protocols <a name="Protocols" id="Protocols"></a>
 
@@ -245,10 +228,8 @@ Inflight client for `IPredicateHandler`.
 ##### `handle` <a name="handle" id="@winglang/sdk.util.IPredicateHandlerClient.handle"></a>
 
 ```wing
-handle(): bool
+inflight handle(): bool
 ```
-
-**Inflight client:** [true](#true)
 
 The Predicate function that is called.
 

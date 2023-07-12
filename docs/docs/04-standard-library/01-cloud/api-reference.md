@@ -1307,6 +1307,7 @@ The website's url.
 ---
 
 
+
 ## Structs <a name="Structs" id="Structs"></a>
 
 ### ApiConnectProps <a name="ApiConnectProps" id="@winglang/sdk.cloud.ApiConnectProps"></a>
@@ -2600,7 +2601,6 @@ The website's custom domain name.
 ```
 
 
-
 ## Protocols <a name="Protocols" id="Protocols"></a>
 
 ### IApiClient <a name="IApiClient" id="@winglang/sdk.cloud.IApiClient"></a>
@@ -2672,10 +2672,8 @@ Inflight client for `IApiEndpointHandler`.
 ##### `handle` <a name="handle" id="@winglang/sdk.cloud.IApiEndpointHandlerClient.handle"></a>
 
 ```wing
-handle(request: ApiRequest): ApiResponse
+inflight handle(request: ApiRequest): ApiResponse
 ```
-
-**Inflight client:** [true](#true)
 
 Inflight that will be called when a request is made to the endpoint.
 
@@ -2713,10 +2711,8 @@ Inflight interface for `Bucket`.
 ##### `delete` <a name="delete" id="@winglang/sdk.cloud.IBucketClient.delete"></a>
 
 ```wing
-delete(key: str, opts?: BucketDeleteOptions): void
+inflight delete(key: str, opts?: BucketDeleteOptions): void
 ```
-
-**Inflight client:** [true](#true)
 
 Delete an existing object using a key from the bucket.
 
@@ -2739,10 +2735,8 @@ Options available for delete an item from a bucket.
 ##### `exists` <a name="exists" id="@winglang/sdk.cloud.IBucketClient.exists"></a>
 
 ```wing
-exists(key: str): bool
+inflight exists(key: str): bool
 ```
-
-**Inflight client:** [true](#true)
 
 Check if an object exists in the bucket.
 
@@ -2757,10 +2751,8 @@ Key of the object.
 ##### `get` <a name="get" id="@winglang/sdk.cloud.IBucketClient.get"></a>
 
 ```wing
-get(key: str): str
+inflight get(key: str): str
 ```
-
-**Inflight client:** [true](#true)
 
 Retrieve an object from the bucket.
 
@@ -2775,10 +2767,8 @@ Key of the object.
 ##### `getJson` <a name="getJson" id="@winglang/sdk.cloud.IBucketClient.getJson"></a>
 
 ```wing
-getJson(key: str): Json
+inflight getJson(key: str): Json
 ```
-
-**Inflight client:** [true](#true)
 
 Retrieve a Json object from the bucket.
 
@@ -2793,10 +2783,8 @@ Key of the object.
 ##### `list` <a name="list" id="@winglang/sdk.cloud.IBucketClient.list"></a>
 
 ```wing
-list(prefix?: str): MutArray<str>
+inflight list(prefix?: str): MutArray<str>
 ```
-
-**Inflight client:** [true](#true)
 
 Retrieve existing objects keys from the bucket.
 
@@ -2811,10 +2799,8 @@ Limits the response to keys that begin with the specified prefix.
 ##### `publicUrl` <a name="publicUrl" id="@winglang/sdk.cloud.IBucketClient.publicUrl"></a>
 
 ```wing
-publicUrl(key: str): str
+inflight publicUrl(key: str): str
 ```
-
-**Inflight client:** [true](#true)
 
 Returns a url to the given file.
 
@@ -2827,10 +2813,8 @@ Returns a url to the given file.
 ##### `put` <a name="put" id="@winglang/sdk.cloud.IBucketClient.put"></a>
 
 ```wing
-put(key: str, body: str): void
+inflight put(key: str, body: str): void
 ```
-
-**Inflight client:** [true](#true)
 
 Put an object in the bucket.
 
@@ -2853,10 +2837,8 @@ Content of the object we want to store into the bucket.
 ##### `putJson` <a name="putJson" id="@winglang/sdk.cloud.IBucketClient.putJson"></a>
 
 ```wing
-putJson(key: str, body: Json): void
+inflight putJson(key: str, body: Json): void
 ```
-
-**Inflight client:** [true](#true)
 
 Put a Json object in the bucket.
 
@@ -2879,10 +2861,8 @@ Json object that we want to store into the bucket.
 ##### `tryDelete` <a name="tryDelete" id="@winglang/sdk.cloud.IBucketClient.tryDelete"></a>
 
 ```wing
-tryDelete(key: str): bool
+inflight tryDelete(key: str): bool
 ```
-
-**Inflight client:** [true](#true)
 
 Delete an object from the bucket if it exists.
 
@@ -2897,10 +2877,8 @@ Key of the object.
 ##### `tryGet` <a name="tryGet" id="@winglang/sdk.cloud.IBucketClient.tryGet"></a>
 
 ```wing
-tryGet(key: str): str
+inflight tryGet(key: str): str
 ```
-
-**Inflight client:** [true](#true)
 
 Get an object from the bucket if it exists.
 
@@ -2915,10 +2893,8 @@ Key of the object.
 ##### `tryGetJson` <a name="tryGetJson" id="@winglang/sdk.cloud.IBucketClient.tryGetJson"></a>
 
 ```wing
-tryGetJson(key: str): Json
+inflight tryGetJson(key: str): Json
 ```
-
-**Inflight client:** [true](#true)
 
 Gets an object from the bucket if it exists, parsing it as Json.
 
@@ -2992,10 +2968,8 @@ A resource with an inflight "handle" method that can be passed to the bucket eve
 ##### `handle` <a name="handle" id="@winglang/sdk.cloud.IBucketEventHandlerClient.handle"></a>
 
 ```wing
-handle(key: str, type: BucketEventType): void
+inflight handle(key: str, type: BucketEventType): void
 ```
-
-**Inflight client:** [true](#true)
 
 Function that will be called when an event notification is fired.
 
@@ -3032,10 +3006,8 @@ Inflight interface for `Counter`.
 ##### `dec` <a name="dec" id="@winglang/sdk.cloud.ICounterClient.dec"></a>
 
 ```wing
-dec(amount?: num, key?: str): num
+inflight dec(amount?: num, key?: str): num
 ```
-
-**Inflight client:** [true](#true)
 
 Decrement the counter, returning the previous value.
 
@@ -3058,10 +3030,8 @@ specify the key to be decremented.
 ##### `inc` <a name="inc" id="@winglang/sdk.cloud.ICounterClient.inc"></a>
 
 ```wing
-inc(amount?: num, key?: str): num
+inflight inc(amount?: num, key?: str): num
 ```
-
-**Inflight client:** [true](#true)
 
 Increments the counter atomically by a certain amount and returns the previous value.
 
@@ -3084,10 +3054,8 @@ specify the key to be incremented.
 ##### `peek` <a name="peek" id="@winglang/sdk.cloud.ICounterClient.peek"></a>
 
 ```wing
-peek(key?: str): num
+inflight peek(key?: str): num
 ```
-
-**Inflight client:** [true](#true)
 
 Get the current value of the counter.
 
@@ -3105,10 +3073,8 @@ specify the key to be retrieved.
 ##### `set` <a name="set" id="@winglang/sdk.cloud.ICounterClient.set"></a>
 
 ```wing
-set(value: num, key?: str): void
+inflight set(value: num, key?: str): void
 ```
-
-**Inflight client:** [true](#true)
 
 Set a counter to a given value.
 
@@ -3146,10 +3112,8 @@ Inflight interface for `Function`.
 ##### `invoke` <a name="invoke" id="@winglang/sdk.cloud.IFunctionClient.invoke"></a>
 
 ```wing
-invoke(payload: str): str
+inflight invoke(payload: str): str
 ```
-
-**Inflight client:** [true](#true)
 
 Invoke the function asynchronously with a given payload.
 
@@ -3221,10 +3185,8 @@ Inflight client for `IFunctionHandler`.
 ##### `handle` <a name="handle" id="@winglang/sdk.cloud.IFunctionHandlerClient.handle"></a>
 
 ```wing
-handle(event: str): void
+inflight handle(event: str): void
 ```
-
-**Inflight client:** [true](#true)
 
 Entrypoint function that will be called when the cloud function is invoked.
 
@@ -3255,40 +3217,32 @@ Inflight interface for `Queue`.
 ##### `approxSize` <a name="approxSize" id="@winglang/sdk.cloud.IQueueClient.approxSize"></a>
 
 ```wing
-approxSize(): num
+inflight approxSize(): num
 ```
-
-**Inflight client:** [true](#true)
 
 Retrieve the approximate number of messages in the queue.
 
 ##### `pop` <a name="pop" id="@winglang/sdk.cloud.IQueueClient.pop"></a>
 
 ```wing
-pop(): str
+inflight pop(): str
 ```
-
-**Inflight client:** [true](#true)
 
 Pop a message from the queue.
 
 ##### `purge` <a name="purge" id="@winglang/sdk.cloud.IQueueClient.purge"></a>
 
 ```wing
-purge(): void
+inflight purge(): void
 ```
-
-**Inflight client:** [true](#true)
 
 Purge all of the messages in the queue.
 
 ##### `push` <a name="push" id="@winglang/sdk.cloud.IQueueClient.push"></a>
 
 ```wing
-push(message: str): void
+inflight push(message: str): void
 ```
-
-**Inflight client:** [true](#true)
 
 Push a message to the queue.
 
@@ -3362,10 +3316,8 @@ Inflight client for `IQueueSetConsumerHandler`.
 ##### `handle` <a name="handle" id="@winglang/sdk.cloud.IQueueSetConsumerHandlerClient.handle"></a>
 
 ```wing
-handle(message: str): void
+inflight handle(message: str): void
 ```
-
-**Inflight client:** [true](#true)
 
 Function that will be called when a message is received from the queue.
 
@@ -3445,10 +3397,8 @@ Inflight client for `IScheduleOnTickHandler`.
 ##### `handle` <a name="handle" id="@winglang/sdk.cloud.IScheduleOnTickHandlerClient.handle"></a>
 
 ```wing
-handle(): void
+inflight handle(): void
 ```
-
-**Inflight client:** [true](#true)
 
 Function that will be called when a message is received from the schedule.
 
@@ -3471,10 +3421,8 @@ Inflight interface for `Secret`.
 ##### `value` <a name="value" id="@winglang/sdk.cloud.ISecretClient.value"></a>
 
 ```wing
-value(options?: GetSecretValueOptions): str
+inflight value(options?: GetSecretValueOptions): str
 ```
-
-**Inflight client:** [true](#true)
 
 Retrieve the value of the secret.
 
@@ -3487,10 +3435,8 @@ Retrieve the value of the secret.
 ##### `valueJson` <a name="valueJson" id="@winglang/sdk.cloud.ISecretClient.valueJson"></a>
 
 ```wing
-valueJson(options?: GetSecretValueOptions): Json
+inflight valueJson(options?: GetSecretValueOptions): Json
 ```
-
-**Inflight client:** [true](#true)
 
 Retrieve the Json value of the secret.
 
@@ -3519,20 +3465,16 @@ Inflight interface for `Service`.
 ##### `start` <a name="start" id="@winglang/sdk.cloud.IServiceClient.start"></a>
 
 ```wing
-start(): void
+inflight start(): void
 ```
-
-**Inflight client:** [true](#true)
 
 Start the service.
 
 ##### `stop` <a name="stop" id="@winglang/sdk.cloud.IServiceClient.stop"></a>
 
 ```wing
-stop(): void
+inflight stop(): void
 ```
-
-**Inflight client:** [true](#true)
 
 Stop the service.
 
@@ -3554,10 +3496,8 @@ Inflight client for `IServiceOnEventHandler`.
 ##### `handle` <a name="handle" id="@winglang/sdk.cloud.IServiceOnEventClient.handle"></a>
 
 ```wing
-handle(): void
+inflight handle(): void
 ```
-
-**Inflight client:** [true](#true)
 
 Function that will be called for service events.
 
@@ -3624,20 +3564,16 @@ Inflight interface for `TestRunner`.
 ##### `listTests` <a name="listTests" id="@winglang/sdk.cloud.ITestRunnerClient.listTests"></a>
 
 ```wing
-listTests(): MutArray<str>
+inflight listTests(): MutArray<str>
 ```
-
-**Inflight client:** [true](#true)
 
 List all tests available for this test engine.
 
 ##### `runTest` <a name="runTest" id="@winglang/sdk.cloud.ITestRunnerClient.runTest"></a>
 
 ```wing
-runTest(path: str): TestResult
+inflight runTest(path: str): TestResult
 ```
-
-**Inflight client:** [true](#true)
 
 Run a test with a given path and return the result.
 
@@ -3665,10 +3601,8 @@ Inflight interface for `Topic`.
 ##### `publish` <a name="publish" id="@winglang/sdk.cloud.ITopicClient.publish"></a>
 
 ```wing
-publish(message: str): void
+inflight publish(message: str): void
 ```
-
-**Inflight client:** [true](#true)
 
 Publish message to topic.
 
@@ -3742,10 +3676,8 @@ Inflight client for `ITopicOnMessageHandler`.
 ##### `handle` <a name="handle" id="@winglang/sdk.cloud.ITopicOnMessageHandlerClient.handle"></a>
 
 ```wing
-handle(event: str): void
+inflight handle(event: str): void
 ```
-
-**Inflight client:** [true](#true)
 
 Function that will be called when a message is received from the topic.
 
