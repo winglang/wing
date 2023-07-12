@@ -1,11 +1,25 @@
 import { Collector } from "./collector";
 import { createHash } from 'crypto';
+import path from 'path';
 
 export interface GitData {
   anonymous_repo_id: string;
 }
 
+export interface GitCollectorProps {
+  appEntrypoint?: string;
+}
+
 export class GitCollector extends Collector {
+  private dir: string;
+  
+  constructor(props?: GitCollectorProps) {
+    super();
+    this.dir = props?.appEntrypoint ? path.dirname(props.appEntrypoint) : '.';
+  }
+
+
+
   async collect(): Promise<GitData | undefined> {
     if (await this.isInGitRepo()) {
       const remoteUrl = await this.getRemoteUrl();
@@ -19,12 +33,12 @@ export class GitCollector extends Collector {
   }
 
   async isInGitRepo(): Promise<boolean> {
-    const results = await this.runCommand('git', ['rev-parse', '--is-inside-work-tree']);
+    const results = await this.runCommand('git', ['rev-parse', '--is-inside-work-tree'], this.dir);
     return results.trim() === 'true';
   }
 
   async getRemoteUrl(): Promise<string | undefined> {
-    const results = await this.runCommand('git', ['config', '--get', 'remote.origin.url']);
+    const results = await this.runCommand('git', ['config', '--get', 'remote.origin.url'], this.dir);
     return results.trim();
   }
 }

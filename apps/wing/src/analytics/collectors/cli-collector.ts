@@ -6,6 +6,7 @@ export interface CLIData {
   target: string;
   version: string;
   options: string;
+  entrypoint?: string;
   wing_sdk_version?: string;
   wing_console_version?: string;
 }
@@ -19,7 +20,6 @@ export class CLICollector extends Collector {
   }
 
   async collect(): Promise<CLIData> {
-
     return {
       target: this.cmd.opts().target,
       options: `${JSON.stringify(this.cmd.opts())}`,
