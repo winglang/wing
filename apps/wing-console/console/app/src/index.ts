@@ -11,7 +11,7 @@ import {
 import express from "express";
 
 import { createAnalytics } from "./analytics.js";
-import {AnalyticsStorage} from "./storage";
+import {AnalyticsStorage} from "./storage.js";
 
 export type {
   LogInterface,
