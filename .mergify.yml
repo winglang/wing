@@ -38,6 +38,7 @@ pull_request_rules:
       - or:
         - check-success=Quality Gate
         - -files~=^(?!docs/|logo/)
+
   - name: backport change to main
     conditions:
       - base=dev
@@ -46,6 +47,17 @@ pull_request_rules:
       backport:
         branches:
           - main
+
+  - name: documentation backport
+    conditions:
+      - base=dev
+      - updated-at > 2023-07-13T07:00:00Z
+      - -files~=^(?!docs/|logo/)
+    actions:
+      label:
+        add:
+          - pr/backport
+
   - name: Inform about code freeze
     conditions:
       - base=main
