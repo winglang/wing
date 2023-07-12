@@ -122,14 +122,14 @@ Within the context of the simulator, services are just spawned processes ran wit
 
 **Inflight client:** [@winglang/sdk.cloud.IServiceClient](#@winglang/sdk.cloud.IServiceClient)
 
-Represents a service.
+A long-running service.
 
 #### Initializers <a name="Initializers" id="@winglang/sdk.cloud.Service.Initializer"></a>
 
 ```wing
 bring cloud;
 
-new cloud.Service(props: ServiceProps)
+new cloud.Service(props: ServiceProps);
 ```
 
 | **Name** | **Type** | **Description** |
@@ -180,6 +180,7 @@ Information on how to display a resource in the UI.
 ---
 
 
+
 ## Structs <a name="Structs" id="Structs"></a>
 
 ### ServiceOnStartProps <a name="ServiceOnStartProps" id="@winglang/sdk.cloud.ServiceOnStartProps"></a>
@@ -191,7 +192,7 @@ Options for Service.onStart.
 ```wing
 bring cloud;
 
-let ServiceOnStartProps = cloud.ServiceOnStartProps{ ... }
+let ServiceOnStartProps = cloud.ServiceOnStartProps{ ... };
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -200,7 +201,7 @@ let ServiceOnStartProps = cloud.ServiceOnStartProps{ ... }
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.ServiceOnStartProps.property.env">env</a></code> | <code>MutMap&lt;str&gt;</code> | Environment variables to pass to the function. |
 | <code><a href="#@winglang/sdk.cloud.ServiceOnStartProps.property.memory">memory</a></code> | <code>num</code> | The amount of memory to allocate to the function, in MB. |
-| <code><a href="#@winglang/sdk.cloud.ServiceOnStartProps.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">Duration</a></code> | The maximum amount of time the function can run. |
+| <code><a href="#@winglang/sdk.cloud.ServiceOnStartProps.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">duration</a></code> | The maximum amount of time the function can run. |
 
 ---
 
@@ -233,10 +234,10 @@ The amount of memory to allocate to the function, in MB.
 ##### `timeout`<sup>Optional</sup> <a name="timeout" id="@winglang/sdk.cloud.ServiceOnStartProps.property.timeout"></a>
 
 ```wing
-timeout: Duration;
+timeout: duration;
 ```
 
-- *Type:* <a href="#@winglang/sdk.std.Duration">Duration</a>
+- *Type:* <a href="#@winglang/sdk.std.Duration">duration</a>
 - *Default:* 1m
 
 The maximum amount of time the function can run.
@@ -252,7 +253,7 @@ Properties for `Service`.
 ```wing
 bring cloud;
 
-let ServiceProps = cloud.ServiceProps{ ... }
+let ServiceProps = cloud.ServiceProps{ ... };
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -303,7 +304,6 @@ Handler to run with the service stops.
 
 ---
 
-
 ## Protocols <a name="Protocols" id="Protocols"></a>
 
 ### IServiceClient <a name="IServiceClient" id="@winglang/sdk.cloud.IServiceClient"></a>
@@ -324,20 +324,16 @@ Inflight interface for `Service`.
 ##### `start` <a name="start" id="@winglang/sdk.cloud.IServiceClient.start"></a>
 
 ```wing
-start(): void
+inflight start(): void
 ```
-
-**Inflight client:** [true](#true)
 
 Start the service.
 
 ##### `stop` <a name="stop" id="@winglang/sdk.cloud.IServiceClient.stop"></a>
 
 ```wing
-stop(): void
+inflight stop(): void
 ```
-
-**Inflight client:** [true](#true)
 
 Stop the service.
 
@@ -359,10 +355,8 @@ Inflight client for `IServiceOnEventHandler`.
 ##### `handle` <a name="handle" id="@winglang/sdk.cloud.IServiceOnEventClient.handle"></a>
 
 ```wing
-handle(): void
+inflight handle(): void
 ```
-
-**Inflight client:** [true](#true)
 
 Function that will be called for service events.
 
@@ -375,7 +369,7 @@ Function that will be called for service events.
 
 **Inflight client:** [@winglang/sdk.cloud.IServiceOnEventClient](#@winglang/sdk.cloud.IServiceOnEventClient)
 
-Represents a resource with an inflight "handle" method that can be passed to `ServiceProps.on_start` || `ServiceProps.on_stop`.
+A resource with an inflight "handle" method that can be passed to `ServiceProps.on_start` || `ServiceProps.on_stop`.
 
 
 #### Properties <a name="Properties" id="Properties"></a>

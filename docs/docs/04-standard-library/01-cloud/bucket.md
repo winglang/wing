@@ -120,14 +120,14 @@ The Google Cloud implementation of `cloud.Bucket` uses [Google Cloud Storage](ht
 
 **Inflight client:** [@winglang/sdk.cloud.IBucketClient](#@winglang/sdk.cloud.IBucketClient)
 
-Represents a cloud object store.
+A cloud object store.
 
 #### Initializers <a name="Initializers" id="@winglang/sdk.cloud.Bucket.Initializer"></a>
 
 ```wing
 bring cloud;
 
-new cloud.Bucket(props?: BucketProps)
+new cloud.Bucket(props?: BucketProps);
 ```
 
 | **Name** | **Type** | **Description** |
@@ -292,6 +292,7 @@ Information on how to display a resource in the UI.
 ---
 
 
+
 ## Structs <a name="Structs" id="Structs"></a>
 
 ### BucketDeleteOptions <a name="BucketDeleteOptions" id="@winglang/sdk.cloud.BucketDeleteOptions"></a>
@@ -303,7 +304,7 @@ Interface for delete method inside `Bucket`.
 ```wing
 bring cloud;
 
-let BucketDeleteOptions = cloud.BucketDeleteOptions{ ... }
+let BucketDeleteOptions = cloud.BucketDeleteOptions{ ... };
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -336,7 +337,7 @@ on_event notification payload- will be in use after solving issue: https://githu
 ```wing
 bring cloud;
 
-let BucketEvent = cloud.BucketEvent{ ... }
+let BucketEvent = cloud.BucketEvent{ ... };
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -381,7 +382,7 @@ on create event options.
 ```wing
 bring cloud;
 
-let BucketOnCreateProps = cloud.BucketOnCreateProps{ ... }
+let BucketOnCreateProps = cloud.BucketOnCreateProps{ ... };
 ```
 
 
@@ -394,7 +395,7 @@ on delete event options.
 ```wing
 bring cloud;
 
-let BucketOnDeleteProps = cloud.BucketOnDeleteProps{ ... }
+let BucketOnDeleteProps = cloud.BucketOnDeleteProps{ ... };
 ```
 
 
@@ -407,7 +408,7 @@ on any event options.
 ```wing
 bring cloud;
 
-let BucketOnEventProps = cloud.BucketOnEventProps{ ... }
+let BucketOnEventProps = cloud.BucketOnEventProps{ ... };
 ```
 
 
@@ -420,7 +421,7 @@ on update event options.
 ```wing
 bring cloud;
 
-let BucketOnUpdateProps = cloud.BucketOnUpdateProps{ ... }
+let BucketOnUpdateProps = cloud.BucketOnUpdateProps{ ... };
 ```
 
 
@@ -433,7 +434,7 @@ Properties for `Bucket`.
 ```wing
 bring cloud;
 
-let BucketProps = cloud.BucketProps{ ... }
+let BucketProps = cloud.BucketProps{ ... };
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -456,7 +457,6 @@ public: bool;
 Whether the bucket's objects should be publicly accessible.
 
 ---
-
 
 ## Protocols <a name="Protocols" id="Protocols"></a>
 
@@ -487,10 +487,8 @@ Inflight interface for `Bucket`.
 ##### `delete` <a name="delete" id="@winglang/sdk.cloud.IBucketClient.delete"></a>
 
 ```wing
-delete(key: str, opts?: BucketDeleteOptions): void
+inflight delete(key: str, opts?: BucketDeleteOptions): void
 ```
-
-**Inflight client:** [true](#true)
 
 Delete an existing object using a key from the bucket.
 
@@ -513,10 +511,8 @@ Options available for delete an item from a bucket.
 ##### `exists` <a name="exists" id="@winglang/sdk.cloud.IBucketClient.exists"></a>
 
 ```wing
-exists(key: str): bool
+inflight exists(key: str): bool
 ```
-
-**Inflight client:** [true](#true)
 
 Check if an object exists in the bucket.
 
@@ -531,10 +527,8 @@ Key of the object.
 ##### `get` <a name="get" id="@winglang/sdk.cloud.IBucketClient.get"></a>
 
 ```wing
-get(key: str): str
+inflight get(key: str): str
 ```
-
-**Inflight client:** [true](#true)
 
 Retrieve an object from the bucket.
 
@@ -549,10 +543,8 @@ Key of the object.
 ##### `getJson` <a name="getJson" id="@winglang/sdk.cloud.IBucketClient.getJson"></a>
 
 ```wing
-getJson(key: str): Json
+inflight getJson(key: str): Json
 ```
-
-**Inflight client:** [true](#true)
 
 Retrieve a Json object from the bucket.
 
@@ -567,10 +559,8 @@ Key of the object.
 ##### `list` <a name="list" id="@winglang/sdk.cloud.IBucketClient.list"></a>
 
 ```wing
-list(prefix?: str): MutArray<str>
+inflight list(prefix?: str): MutArray<str>
 ```
-
-**Inflight client:** [true](#true)
 
 Retrieve existing objects keys from the bucket.
 
@@ -585,10 +575,8 @@ Limits the response to keys that begin with the specified prefix.
 ##### `publicUrl` <a name="publicUrl" id="@winglang/sdk.cloud.IBucketClient.publicUrl"></a>
 
 ```wing
-publicUrl(key: str): str
+inflight publicUrl(key: str): str
 ```
-
-**Inflight client:** [true](#true)
 
 Returns a url to the given file.
 
@@ -601,10 +589,8 @@ Returns a url to the given file.
 ##### `put` <a name="put" id="@winglang/sdk.cloud.IBucketClient.put"></a>
 
 ```wing
-put(key: str, body: str): void
+inflight put(key: str, body: str): void
 ```
-
-**Inflight client:** [true](#true)
 
 Put an object in the bucket.
 
@@ -627,10 +613,8 @@ Content of the object we want to store into the bucket.
 ##### `putJson` <a name="putJson" id="@winglang/sdk.cloud.IBucketClient.putJson"></a>
 
 ```wing
-putJson(key: str, body: Json): void
+inflight putJson(key: str, body: Json): void
 ```
-
-**Inflight client:** [true](#true)
 
 Put a Json object in the bucket.
 
@@ -653,10 +637,8 @@ Json object that we want to store into the bucket.
 ##### `tryDelete` <a name="tryDelete" id="@winglang/sdk.cloud.IBucketClient.tryDelete"></a>
 
 ```wing
-tryDelete(key: str): bool
+inflight tryDelete(key: str): bool
 ```
-
-**Inflight client:** [true](#true)
 
 Delete an object from the bucket if it exists.
 
@@ -671,10 +653,8 @@ Key of the object.
 ##### `tryGet` <a name="tryGet" id="@winglang/sdk.cloud.IBucketClient.tryGet"></a>
 
 ```wing
-tryGet(key: str): str
+inflight tryGet(key: str): str
 ```
-
-**Inflight client:** [true](#true)
 
 Get an object from the bucket if it exists.
 
@@ -689,10 +669,8 @@ Key of the object.
 ##### `tryGetJson` <a name="tryGetJson" id="@winglang/sdk.cloud.IBucketClient.tryGetJson"></a>
 
 ```wing
-tryGetJson(key: str): Json
+inflight tryGetJson(key: str): Json
 ```
-
-**Inflight client:** [true](#true)
 
 Gets an object from the bucket if it exists, parsing it as Json.
 
@@ -713,7 +691,7 @@ Key of the object.
 
 **Inflight client:** [@winglang/sdk.cloud.IBucketEventHandlerClient](#@winglang/sdk.cloud.IBucketEventHandlerClient)
 
-Represents a resource with an inflight "handle" method that can be passed to the bucket events.
+A resource with an inflight "handle" method that can be passed to the bucket events.
 
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -753,7 +731,7 @@ Information on how to display a resource in the UI.
 
 - *Implemented By:* <a href="#@winglang/sdk.cloud.IBucketEventHandlerClient">IBucketEventHandlerClient</a>
 
-Represents a resource with an inflight "handle" method that can be passed to the bucket events.
+A resource with an inflight "handle" method that can be passed to the bucket events.
 
 #### Methods <a name="Methods" id="Methods"></a>
 
@@ -766,10 +744,8 @@ Represents a resource with an inflight "handle" method that can be passed to the
 ##### `handle` <a name="handle" id="@winglang/sdk.cloud.IBucketEventHandlerClient.handle"></a>
 
 ```wing
-handle(key: str, type: BucketEventType): void
+inflight handle(key: str, type: BucketEventType): void
 ```
-
-**Inflight client:** [true](#true)
 
 Function that will be called when an event notification is fired.
 

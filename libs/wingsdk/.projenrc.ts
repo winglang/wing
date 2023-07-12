@@ -19,13 +19,12 @@ const CLOUD_MODULES = [
   "schedule",
   "secret",
   "service",
-  "table",
   "topic",
   "website",
   // no test-runner
 ];
 
-const PUBLIC_MODULES = ["std", "http", "util", "redis", "ex"];
+const PUBLIC_MODULES = ["std", "http", "util", "ex"];
 
 const CLOUD_DOCS_PREFIX = "../../docs/docs/04-standard-library/01-cloud/";
 
@@ -239,7 +238,7 @@ docgen.exec(`cp -r src/cloud/*.md ${CLOUD_DOCS_PREFIX}`);
 
 // generate api reference for each submodule
 for (const mod of PUBLIC_MODULES) {
-  const prefix = docsPrefix(PUBLIC_MODULES.indexOf(mod) + 1, mod);
+  const prefix = docsPrefix(PUBLIC_MODULES.indexOf(mod) + 2, mod);
   const docsPath = prefix + "/api-reference.md";
   docgen.exec(`jsii-docgen -o API.md -l wing --submodule ${mod}`);
   docgen.exec(`mkdir -p ${prefix}`);

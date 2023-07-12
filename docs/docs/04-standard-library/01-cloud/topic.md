@@ -108,14 +108,14 @@ AWS implementations of `cloud.Topic` use [AWS SNS](https://docs.aws.amazon.com/s
 
 **Inflight client:** [@winglang/sdk.cloud.ITopicClient](#@winglang/sdk.cloud.ITopicClient)
 
-Represents a topic.
+A topic.
 
 #### Initializers <a name="Initializers" id="@winglang/sdk.cloud.Topic.Initializer"></a>
 
 ```wing
 bring cloud;
 
-new cloud.Topic(props?: TopicProps)
+new cloud.Topic(props?: TopicProps);
 ```
 
 | **Name** | **Type** | **Description** |
@@ -193,6 +193,7 @@ Information on how to display a resource in the UI.
 ---
 
 
+
 ## Structs <a name="Structs" id="Structs"></a>
 
 ### TopicOnMessageProps <a name="TopicOnMessageProps" id="@winglang/sdk.cloud.TopicOnMessageProps"></a>
@@ -204,7 +205,7 @@ Options for `Topic.onMessage`.
 ```wing
 bring cloud;
 
-let TopicOnMessageProps = cloud.TopicOnMessageProps{ ... }
+let TopicOnMessageProps = cloud.TopicOnMessageProps{ ... };
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -213,7 +214,7 @@ let TopicOnMessageProps = cloud.TopicOnMessageProps{ ... }
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.TopicOnMessageProps.property.env">env</a></code> | <code>MutMap&lt;str&gt;</code> | Environment variables to pass to the function. |
 | <code><a href="#@winglang/sdk.cloud.TopicOnMessageProps.property.memory">memory</a></code> | <code>num</code> | The amount of memory to allocate to the function, in MB. |
-| <code><a href="#@winglang/sdk.cloud.TopicOnMessageProps.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">Duration</a></code> | The maximum amount of time the function can run. |
+| <code><a href="#@winglang/sdk.cloud.TopicOnMessageProps.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">duration</a></code> | The maximum amount of time the function can run. |
 
 ---
 
@@ -246,10 +247,10 @@ The amount of memory to allocate to the function, in MB.
 ##### `timeout`<sup>Optional</sup> <a name="timeout" id="@winglang/sdk.cloud.TopicOnMessageProps.property.timeout"></a>
 
 ```wing
-timeout: Duration;
+timeout: duration;
 ```
 
-- *Type:* <a href="#@winglang/sdk.std.Duration">Duration</a>
+- *Type:* <a href="#@winglang/sdk.std.Duration">duration</a>
 - *Default:* 1m
 
 The maximum amount of time the function can run.
@@ -265,9 +266,8 @@ Properties for `Topic`.
 ```wing
 bring cloud;
 
-let TopicProps = cloud.TopicProps{ ... }
+let TopicProps = cloud.TopicProps{ ... };
 ```
-
 
 
 ## Protocols <a name="Protocols" id="Protocols"></a>
@@ -289,10 +289,8 @@ Inflight interface for `Topic`.
 ##### `publish` <a name="publish" id="@winglang/sdk.cloud.ITopicClient.publish"></a>
 
 ```wing
-publish(message: str): void
+inflight publish(message: str): void
 ```
-
-**Inflight client:** [true](#true)
 
 Publish message to topic.
 
@@ -313,7 +311,7 @@ Payload to publish to Topic.
 
 **Inflight client:** [@winglang/sdk.cloud.ITopicOnMessageHandlerClient](#@winglang/sdk.cloud.ITopicOnMessageHandlerClient)
 
-Represents a resource with an inflight "handle" method that can be passed to `Topic.on_message`.
+A resource with an inflight "handle" method that can be passed to `Topic.on_message`.
 
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -366,10 +364,8 @@ Inflight client for `ITopicOnMessageHandler`.
 ##### `handle` <a name="handle" id="@winglang/sdk.cloud.ITopicOnMessageHandlerClient.handle"></a>
 
 ```wing
-handle(event: str): void
+inflight handle(event: str): void
 ```
-
-**Inflight client:** [true](#true)
 
 Function that will be called when a message is received from the topic.
 

@@ -2,7 +2,17 @@
 title: Api
 id: api
 description: A built-in resource for creating HTTP endpoints in the cloud.
-keywords: [Wing reference, Wing language, language, Wing standard library, Wing programming language, APIs, Endpoints, HTTP endpoint]
+keywords:
+  [
+    Wing reference,
+    Wing language,
+    language,
+    Wing standard library,
+    Wing programming language,
+    APIs,
+    Endpoints,
+    HTTP endpoint,
+  ]
 sidebar_position: 1
 ---
 
@@ -17,7 +27,7 @@ When a client invokes a route, the corresponding event handler function executes
 
 ### REST API
 
-The following example shows a complete REST API implemetnation using `cloud.Api`, `ex.Table` & `cloud.Counter`
+The following example shows a complete REST API implementation using `cloud.Api`, `ex.Table` & `cloud.Counter`
 
 ```ts playground
 bring cloud;
@@ -106,7 +116,6 @@ The AWS implementation of `cloud.Api` uses [Amazon API Gateway](https://aws.amaz
 ### GCP (`tf-gcp`)
 
 🚧 Not supported yet (tracking issue: [#624](https://github.com/winglang/wing/issues/624))
-
 ## API Reference <a name="API Reference" id="API Reference"></a>
 
 ### Api <a name="Api" id="@winglang/sdk.cloud.Api"></a>
@@ -118,33 +127,33 @@ Functionality shared between all `Api` implementations.
 ```wing
 bring cloud;
 
-new cloud.Api(props?: ApiProps)
+new cloud.Api(props?: ApiProps);
 ```
 
-| **Name**                                                                              | **Type**                                                          | **Description**   |
-| ------------------------------------------------------------------------------------- | ----------------------------------------------------------------- | ----------------- |
-| <code><a href="#@winglang/sdk.cloud.Api.Initializer.parameter.props">props</a></code> | <code><a href="#@winglang/sdk.cloud.ApiProps">ApiProps</a></code> | _No description._ |
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.Api.Initializer.parameter.props">props</a></code> | <code><a href="#@winglang/sdk.cloud.ApiProps">ApiProps</a></code> | *No description.* |
 
 ---
 
 ##### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.cloud.Api.Initializer.parameter.props"></a>
 
-- _Type:_ <a href="#@winglang/sdk.cloud.ApiProps">ApiProps</a>
+- *Type:* <a href="#@winglang/sdk.cloud.ApiProps">ApiProps</a>
 
 ---
 
 #### Methods <a name="Methods" id="Methods"></a>
 
-| **Name**                                                            | **Description**                                                           |
-| ------------------------------------------------------------------- | ------------------------------------------------------------------------- |
+| **Name** | **Description** |
+| --- | --- |
 | <code><a href="#@winglang/sdk.cloud.Api.connect">connect</a></code> | Add a inflight handler to the api for CONNECT requests on the given path. |
-| <code><a href="#@winglang/sdk.cloud.Api.delete">delete</a></code>   | Add a inflight handler to the api for DELETE requests on the given path.  |
-| <code><a href="#@winglang/sdk.cloud.Api.get">get</a></code>         | Add a inflight handler to the api for GET requests on the given path.     |
-| <code><a href="#@winglang/sdk.cloud.Api.head">head</a></code>       | Add a inflight handler to the api for HEAD requests on the given path.    |
+| <code><a href="#@winglang/sdk.cloud.Api.delete">delete</a></code> | Add a inflight handler to the api for DELETE requests on the given path. |
+| <code><a href="#@winglang/sdk.cloud.Api.get">get</a></code> | Add a inflight handler to the api for GET requests on the given path. |
+| <code><a href="#@winglang/sdk.cloud.Api.head">head</a></code> | Add a inflight handler to the api for HEAD requests on the given path. |
 | <code><a href="#@winglang/sdk.cloud.Api.options">options</a></code> | Add a inflight handler to the api for OPTIONS requests on the given path. |
-| <code><a href="#@winglang/sdk.cloud.Api.patch">patch</a></code>     | Add a inflight handler to the api for PATCH requests on the given path.   |
-| <code><a href="#@winglang/sdk.cloud.Api.post">post</a></code>       | Add a inflight handler to the api for POST requests on the given path.    |
-| <code><a href="#@winglang/sdk.cloud.Api.put">put</a></code>         | Add a inflight handler to the api for PUT requests on the given path.     |
+| <code><a href="#@winglang/sdk.cloud.Api.patch">patch</a></code> | Add a inflight handler to the api for PATCH requests on the given path. |
+| <code><a href="#@winglang/sdk.cloud.Api.post">post</a></code> | Add a inflight handler to the api for POST requests on the given path. |
+| <code><a href="#@winglang/sdk.cloud.Api.put">put</a></code> | Add a inflight handler to the api for PUT requests on the given path. |
 
 ---
 
@@ -158,7 +167,7 @@ Add a inflight handler to the api for CONNECT requests on the given path.
 
 ###### `path`<sup>Required</sup> <a name="path" id="@winglang/sdk.cloud.Api.connect.parameter.path"></a>
 
-- _Type:_ str
+- *Type:* str
 
 The path to handle CONNECT requests for.
 
@@ -166,7 +175,7 @@ The path to handle CONNECT requests for.
 
 ###### `inflight`<sup>Required</sup> <a name="inflight" id="@winglang/sdk.cloud.Api.connect.parameter.inflight"></a>
 
-- _Type:_ <a href="#@winglang/sdk.cloud.IApiEndpointHandler">IApiEndpointHandler</a>
+- *Type:* <a href="#@winglang/sdk.cloud.IApiEndpointHandler">IApiEndpointHandler</a>
 
 The function to handle the request.
 
@@ -174,7 +183,7 @@ The function to handle the request.
 
 ###### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.cloud.Api.connect.parameter.props"></a>
 
-- _Type:_ <a href="#@winglang/sdk.cloud.ApiConnectProps">ApiConnectProps</a>
+- *Type:* <a href="#@winglang/sdk.cloud.ApiConnectProps">ApiConnectProps</a>
 
 Options for the route.
 
@@ -190,7 +199,7 @@ Add a inflight handler to the api for DELETE requests on the given path.
 
 ###### `path`<sup>Required</sup> <a name="path" id="@winglang/sdk.cloud.Api.delete.parameter.path"></a>
 
-- _Type:_ str
+- *Type:* str
 
 The path to handle DELETE requests for.
 
@@ -198,7 +207,7 @@ The path to handle DELETE requests for.
 
 ###### `inflight`<sup>Required</sup> <a name="inflight" id="@winglang/sdk.cloud.Api.delete.parameter.inflight"></a>
 
-- _Type:_ <a href="#@winglang/sdk.cloud.IApiEndpointHandler">IApiEndpointHandler</a>
+- *Type:* <a href="#@winglang/sdk.cloud.IApiEndpointHandler">IApiEndpointHandler</a>
 
 The function to handle the request.
 
@@ -206,7 +215,7 @@ The function to handle the request.
 
 ###### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.cloud.Api.delete.parameter.props"></a>
 
-- _Type:_ <a href="#@winglang/sdk.cloud.ApiDeleteProps">ApiDeleteProps</a>
+- *Type:* <a href="#@winglang/sdk.cloud.ApiDeleteProps">ApiDeleteProps</a>
 
 Options for the route.
 
@@ -222,7 +231,7 @@ Add a inflight handler to the api for GET requests on the given path.
 
 ###### `path`<sup>Required</sup> <a name="path" id="@winglang/sdk.cloud.Api.get.parameter.path"></a>
 
-- _Type:_ str
+- *Type:* str
 
 The path to handle GET requests for.
 
@@ -230,7 +239,7 @@ The path to handle GET requests for.
 
 ###### `inflight`<sup>Required</sup> <a name="inflight" id="@winglang/sdk.cloud.Api.get.parameter.inflight"></a>
 
-- _Type:_ <a href="#@winglang/sdk.cloud.IApiEndpointHandler">IApiEndpointHandler</a>
+- *Type:* <a href="#@winglang/sdk.cloud.IApiEndpointHandler">IApiEndpointHandler</a>
 
 The function to handle the request.
 
@@ -238,7 +247,7 @@ The function to handle the request.
 
 ###### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.cloud.Api.get.parameter.props"></a>
 
-- _Type:_ <a href="#@winglang/sdk.cloud.ApiGetProps">ApiGetProps</a>
+- *Type:* <a href="#@winglang/sdk.cloud.ApiGetProps">ApiGetProps</a>
 
 Options for the route.
 
@@ -254,7 +263,7 @@ Add a inflight handler to the api for HEAD requests on the given path.
 
 ###### `path`<sup>Required</sup> <a name="path" id="@winglang/sdk.cloud.Api.head.parameter.path"></a>
 
-- _Type:_ str
+- *Type:* str
 
 The path to handle HEAD requests for.
 
@@ -262,7 +271,7 @@ The path to handle HEAD requests for.
 
 ###### `inflight`<sup>Required</sup> <a name="inflight" id="@winglang/sdk.cloud.Api.head.parameter.inflight"></a>
 
-- _Type:_ <a href="#@winglang/sdk.cloud.IApiEndpointHandler">IApiEndpointHandler</a>
+- *Type:* <a href="#@winglang/sdk.cloud.IApiEndpointHandler">IApiEndpointHandler</a>
 
 The function to handle the request.
 
@@ -270,7 +279,7 @@ The function to handle the request.
 
 ###### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.cloud.Api.head.parameter.props"></a>
 
-- _Type:_ <a href="#@winglang/sdk.cloud.ApiHeadProps">ApiHeadProps</a>
+- *Type:* <a href="#@winglang/sdk.cloud.ApiHeadProps">ApiHeadProps</a>
 
 Options for the route.
 
@@ -286,7 +295,7 @@ Add a inflight handler to the api for OPTIONS requests on the given path.
 
 ###### `path`<sup>Required</sup> <a name="path" id="@winglang/sdk.cloud.Api.options.parameter.path"></a>
 
-- _Type:_ str
+- *Type:* str
 
 The path to handle OPTIONS requests for.
 
@@ -294,7 +303,7 @@ The path to handle OPTIONS requests for.
 
 ###### `inflight`<sup>Required</sup> <a name="inflight" id="@winglang/sdk.cloud.Api.options.parameter.inflight"></a>
 
-- _Type:_ <a href="#@winglang/sdk.cloud.IApiEndpointHandler">IApiEndpointHandler</a>
+- *Type:* <a href="#@winglang/sdk.cloud.IApiEndpointHandler">IApiEndpointHandler</a>
 
 The function to handle the request.
 
@@ -302,7 +311,7 @@ The function to handle the request.
 
 ###### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.cloud.Api.options.parameter.props"></a>
 
-- _Type:_ <a href="#@winglang/sdk.cloud.ApiOptionsProps">ApiOptionsProps</a>
+- *Type:* <a href="#@winglang/sdk.cloud.ApiOptionsProps">ApiOptionsProps</a>
 
 Options for the route.
 
@@ -318,7 +327,7 @@ Add a inflight handler to the api for PATCH requests on the given path.
 
 ###### `path`<sup>Required</sup> <a name="path" id="@winglang/sdk.cloud.Api.patch.parameter.path"></a>
 
-- _Type:_ str
+- *Type:* str
 
 The path to handle PATCH requests for.
 
@@ -326,7 +335,7 @@ The path to handle PATCH requests for.
 
 ###### `inflight`<sup>Required</sup> <a name="inflight" id="@winglang/sdk.cloud.Api.patch.parameter.inflight"></a>
 
-- _Type:_ <a href="#@winglang/sdk.cloud.IApiEndpointHandler">IApiEndpointHandler</a>
+- *Type:* <a href="#@winglang/sdk.cloud.IApiEndpointHandler">IApiEndpointHandler</a>
 
 The function to handle the request.
 
@@ -334,7 +343,7 @@ The function to handle the request.
 
 ###### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.cloud.Api.patch.parameter.props"></a>
 
-- _Type:_ <a href="#@winglang/sdk.cloud.ApiPatchProps">ApiPatchProps</a>
+- *Type:* <a href="#@winglang/sdk.cloud.ApiPatchProps">ApiPatchProps</a>
 
 Options for the route.
 
@@ -350,7 +359,7 @@ Add a inflight handler to the api for POST requests on the given path.
 
 ###### `path`<sup>Required</sup> <a name="path" id="@winglang/sdk.cloud.Api.post.parameter.path"></a>
 
-- _Type:_ str
+- *Type:* str
 
 The path to handle POST requests for.
 
@@ -358,7 +367,7 @@ The path to handle POST requests for.
 
 ###### `inflight`<sup>Required</sup> <a name="inflight" id="@winglang/sdk.cloud.Api.post.parameter.inflight"></a>
 
-- _Type:_ <a href="#@winglang/sdk.cloud.IApiEndpointHandler">IApiEndpointHandler</a>
+- *Type:* <a href="#@winglang/sdk.cloud.IApiEndpointHandler">IApiEndpointHandler</a>
 
 The function to handle the request.
 
@@ -366,7 +375,7 @@ The function to handle the request.
 
 ###### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.cloud.Api.post.parameter.props"></a>
 
-- _Type:_ <a href="#@winglang/sdk.cloud.ApiPostProps">ApiPostProps</a>
+- *Type:* <a href="#@winglang/sdk.cloud.ApiPostProps">ApiPostProps</a>
 
 Options for the route.
 
@@ -382,7 +391,7 @@ Add a inflight handler to the api for PUT requests on the given path.
 
 ###### `path`<sup>Required</sup> <a name="path" id="@winglang/sdk.cloud.Api.put.parameter.path"></a>
 
-- _Type:_ str
+- *Type:* str
 
 The path to handle PUT requests for.
 
@@ -390,7 +399,7 @@ The path to handle PUT requests for.
 
 ###### `inflight`<sup>Required</sup> <a name="inflight" id="@winglang/sdk.cloud.Api.put.parameter.inflight"></a>
 
-- _Type:_ <a href="#@winglang/sdk.cloud.IApiEndpointHandler">IApiEndpointHandler</a>
+- *Type:* <a href="#@winglang/sdk.cloud.IApiEndpointHandler">IApiEndpointHandler</a>
 
 The function to handle the request.
 
@@ -398,19 +407,20 @@ The function to handle the request.
 
 ###### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.cloud.Api.put.parameter.props"></a>
 
-- _Type:_ <a href="#@winglang/sdk.cloud.ApiPutProps">ApiPutProps</a>
+- *Type:* <a href="#@winglang/sdk.cloud.ApiPutProps">ApiPutProps</a>
 
 Options for the route.
 
 ---
 
+
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name**                                                                     | **Type**                                                      | **Description**                                     |
-| ---------------------------------------------------------------------------- | ------------------------------------------------------------- | --------------------------------------------------- |
-| <code><a href="#@winglang/sdk.cloud.Api.property.node">node</a></code>       | <code>constructs.Node</code>                                  | The tree node.                                      |
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.Api.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
 | <code><a href="#@winglang/sdk.cloud.Api.property.display">display</a></code> | <code><a href="#@winglang/sdk.std.Display">Display</a></code> | Information on how to display a resource in the UI. |
-| <code><a href="#@winglang/sdk.cloud.Api.property.url">url</a></code>         | <code>str</code>                                              | The base URL of the API endpoint.                   |
+| <code><a href="#@winglang/sdk.cloud.Api.property.url">url</a></code> | <code>str</code> | The base URL of the API endpoint. |
 
 ---
 
@@ -420,7 +430,7 @@ Options for the route.
 node: Node;
 ```
 
-- _Type:_ constructs.Node
+- *Type:* constructs.Node
 
 The tree node.
 
@@ -432,7 +442,7 @@ The tree node.
 display: Display;
 ```
 
-- _Type:_ <a href="#@winglang/sdk.std.Display">Display</a>
+- *Type:* <a href="#@winglang/sdk.std.Display">Display</a>
 
 Information on how to display a resource in the UI.
 
@@ -444,11 +454,13 @@ Information on how to display a resource in the UI.
 url: str;
 ```
 
-- _Type:_ str
+- *Type:* str
 
 The base URL of the API endpoint.
 
 ---
+
+
 
 ## Structs <a name="Structs" id="Structs"></a>
 
@@ -461,8 +473,9 @@ Options for Api patch endpoint.
 ```wing
 bring cloud;
 
-let ApiConnectProps = cloud.ApiConnectProps{ ... }
+let ApiConnectProps = cloud.ApiConnectProps{ ... };
 ```
+
 
 ### ApiDeleteProps <a name="ApiDeleteProps" id="@winglang/sdk.cloud.ApiDeleteProps"></a>
 
@@ -473,8 +486,9 @@ Options for Api put endpoint.
 ```wing
 bring cloud;
 
-let ApiDeleteProps = cloud.ApiDeleteProps{ ... }
+let ApiDeleteProps = cloud.ApiDeleteProps{ ... };
 ```
+
 
 ### ApiGetProps <a name="ApiGetProps" id="@winglang/sdk.cloud.ApiGetProps"></a>
 
@@ -485,8 +499,9 @@ Options for Api get endpoint.
 ```wing
 bring cloud;
 
-let ApiGetProps = cloud.ApiGetProps{ ... }
+let ApiGetProps = cloud.ApiGetProps{ ... };
 ```
+
 
 ### ApiHeadProps <a name="ApiHeadProps" id="@winglang/sdk.cloud.ApiHeadProps"></a>
 
@@ -497,8 +512,9 @@ Options for Api patch endpoint.
 ```wing
 bring cloud;
 
-let ApiHeadProps = cloud.ApiHeadProps{ ... }
+let ApiHeadProps = cloud.ApiHeadProps{ ... };
 ```
+
 
 ### ApiOptionsProps <a name="ApiOptionsProps" id="@winglang/sdk.cloud.ApiOptionsProps"></a>
 
@@ -509,8 +525,9 @@ Options for Api patch endpoint.
 ```wing
 bring cloud;
 
-let ApiOptionsProps = cloud.ApiOptionsProps{ ... }
+let ApiOptionsProps = cloud.ApiOptionsProps{ ... };
 ```
+
 
 ### ApiPatchProps <a name="ApiPatchProps" id="@winglang/sdk.cloud.ApiPatchProps"></a>
 
@@ -521,8 +538,9 @@ Options for Api patch endpoint.
 ```wing
 bring cloud;
 
-let ApiPatchProps = cloud.ApiPatchProps{ ... }
+let ApiPatchProps = cloud.ApiPatchProps{ ... };
 ```
+
 
 ### ApiPostProps <a name="ApiPostProps" id="@winglang/sdk.cloud.ApiPostProps"></a>
 
@@ -533,8 +551,9 @@ Options for Api post endpoint.
 ```wing
 bring cloud;
 
-let ApiPostProps = cloud.ApiPostProps{ ... }
+let ApiPostProps = cloud.ApiPostProps{ ... };
 ```
+
 
 ### ApiProps <a name="ApiProps" id="@winglang/sdk.cloud.ApiProps"></a>
 
@@ -545,8 +564,9 @@ Properties for `Api`.
 ```wing
 bring cloud;
 
-let ApiProps = cloud.ApiProps{ ... }
+let ApiProps = cloud.ApiProps{ ... };
 ```
+
 
 ### ApiPutProps <a name="ApiPutProps" id="@winglang/sdk.cloud.ApiPutProps"></a>
 
@@ -557,8 +577,9 @@ Options for Api put endpoint.
 ```wing
 bring cloud;
 
-let ApiPutProps = cloud.ApiPutProps{ ... }
+let ApiPutProps = cloud.ApiPutProps{ ... };
 ```
+
 
 ### ApiRequest <a name="ApiRequest" id="@winglang/sdk.cloud.ApiRequest"></a>
 
@@ -569,19 +590,19 @@ Shape of a request to an inflight handler.
 ```wing
 bring cloud;
 
-let ApiRequest = cloud.ApiRequest{ ... }
+let ApiRequest = cloud.ApiRequest{ ... };
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name**                                                                            | **Type**                                                              | **Description**                    |
-| ----------------------------------------------------------------------------------- | --------------------------------------------------------------------- | ---------------------------------- |
-| <code><a href="#@winglang/sdk.cloud.ApiRequest.property.method">method</a></code>   | <code><a href="#@winglang/sdk.cloud.HttpMethod">HttpMethod</a></code> | The request's HTTP method.         |
-| <code><a href="#@winglang/sdk.cloud.ApiRequest.property.path">path</a></code>       | <code>str</code>                                                      | The request's path.                |
-| <code><a href="#@winglang/sdk.cloud.ApiRequest.property.query">query</a></code>     | <code>MutMap&lt;str&gt;</code>                                        | The request's query string values. |
-| <code><a href="#@winglang/sdk.cloud.ApiRequest.property.vars">vars</a></code>       | <code>MutMap&lt;str&gt;</code>                                        | The path variables.                |
-| <code><a href="#@winglang/sdk.cloud.ApiRequest.property.body">body</a></code>       | <code>str</code>                                                      | The request's body.                |
-| <code><a href="#@winglang/sdk.cloud.ApiRequest.property.headers">headers</a></code> | <code>MutMap&lt;str&gt;</code>                                        | The request's headers.             |
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.ApiRequest.property.method">method</a></code> | <code><a href="#@winglang/sdk.cloud.HttpMethod">HttpMethod</a></code> | The request's HTTP method. |
+| <code><a href="#@winglang/sdk.cloud.ApiRequest.property.path">path</a></code> | <code>str</code> | The request's path. |
+| <code><a href="#@winglang/sdk.cloud.ApiRequest.property.query">query</a></code> | <code>MutMap&lt;str&gt;</code> | The request's query string values. |
+| <code><a href="#@winglang/sdk.cloud.ApiRequest.property.vars">vars</a></code> | <code>MutMap&lt;str&gt;</code> | The path variables. |
+| <code><a href="#@winglang/sdk.cloud.ApiRequest.property.body">body</a></code> | <code>str</code> | The request's body. |
+| <code><a href="#@winglang/sdk.cloud.ApiRequest.property.headers">headers</a></code> | <code>MutMap&lt;str&gt;</code> | The request's headers. |
 
 ---
 
@@ -591,7 +612,7 @@ let ApiRequest = cloud.ApiRequest{ ... }
 method: HttpMethod;
 ```
 
-- _Type:_ <a href="#@winglang/sdk.cloud.HttpMethod">HttpMethod</a>
+- *Type:* <a href="#@winglang/sdk.cloud.HttpMethod">HttpMethod</a>
 
 The request's HTTP method.
 
@@ -603,7 +624,7 @@ The request's HTTP method.
 path: str;
 ```
 
-- _Type:_ str
+- *Type:* str
 
 The request's path.
 
@@ -615,7 +636,7 @@ The request's path.
 query: MutMap<str>;
 ```
 
-- _Type:_ MutMap&lt;str&gt;
+- *Type:* MutMap&lt;str&gt;
 
 The request's query string values.
 
@@ -627,7 +648,7 @@ The request's query string values.
 vars: MutMap<str>;
 ```
 
-- _Type:_ MutMap&lt;str&gt;
+- *Type:* MutMap&lt;str&gt;
 
 The path variables.
 
@@ -639,7 +660,7 @@ The path variables.
 body: str;
 ```
 
-- _Type:_ str
+- *Type:* str
 
 The request's body.
 
@@ -651,7 +672,7 @@ The request's body.
 headers: MutMap<str>;
 ```
 
-- _Type:_ MutMap&lt;str&gt;
+- *Type:* MutMap&lt;str&gt;
 
 The request's headers.
 
@@ -666,16 +687,16 @@ Shape of a response from a inflight handler.
 ```wing
 bring cloud;
 
-let ApiResponse = cloud.ApiResponse{ ... }
+let ApiResponse = cloud.ApiResponse{ ... };
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name**                                                                             | **Type**                       | **Description**             |
-| ------------------------------------------------------------------------------------ | ------------------------------ | --------------------------- |
-| <code><a href="#@winglang/sdk.cloud.ApiResponse.property.status">status</a></code>   | <code>num</code>               | The response's status code. |
-| <code><a href="#@winglang/sdk.cloud.ApiResponse.property.body">body</a></code>       | <code>str</code>               | The response's body.        |
-| <code><a href="#@winglang/sdk.cloud.ApiResponse.property.headers">headers</a></code> | <code>MutMap&lt;str&gt;</code> | The response's headers.     |
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.ApiResponse.property.status">status</a></code> | <code>num</code> | The response's status code. |
+| <code><a href="#@winglang/sdk.cloud.ApiResponse.property.body">body</a></code> | <code>str</code> | The response's body. |
+| <code><a href="#@winglang/sdk.cloud.ApiResponse.property.headers">headers</a></code> | <code>MutMap&lt;str&gt;</code> | The response's headers. |
 
 ---
 
@@ -685,7 +706,7 @@ let ApiResponse = cloud.ApiResponse{ ... }
 status: num;
 ```
 
-- _Type:_ num
+- *Type:* num
 
 The response's status code.
 
@@ -697,7 +718,7 @@ The response's status code.
 body: str;
 ```
 
-- _Type:_ str
+- *Type:* str
 
 The response's body.
 
@@ -709,7 +730,7 @@ The response's body.
 headers: MutMap<str>;
 ```
 
-- _Type:_ MutMap&lt;str&gt;
+- *Type:* MutMap&lt;str&gt;
 
 The response's headers.
 
@@ -719,25 +740,28 @@ The response's headers.
 
 ### IApiClient <a name="IApiClient" id="@winglang/sdk.cloud.IApiClient"></a>
 
-- _Implemented By:_ <a href="#@winglang/sdk.cloud.IApiClient">IApiClient</a>
+- *Implemented By:* <a href="#@winglang/sdk.cloud.IApiClient">IApiClient</a>
 
 Inflight methods and members of `cloud.Api`.
 
+
+
 ### IApiEndpointHandler <a name="IApiEndpointHandler" id="@winglang/sdk.cloud.IApiEndpointHandler"></a>
 
-- _Extends:_ <a href="#@winglang/sdk.std.IResource">IResource</a>
+- *Extends:* <a href="#@winglang/sdk.std.IResource">IResource</a>
 
-- _Implemented By:_ <a href="#@winglang/sdk.cloud.IApiEndpointHandler">IApiEndpointHandler</a>
+- *Implemented By:* <a href="#@winglang/sdk.cloud.IApiEndpointHandler">IApiEndpointHandler</a>
 
 **Inflight client:** [@winglang/sdk.cloud.IApiEndpointHandlerClient](#@winglang/sdk.cloud.IApiEndpointHandlerClient)
 
-Represents a resource with an inflight "handle" method that can be passed to one of the `Api` request preflight methods.
+A resource with an inflight "handle" method that can be passed to one of the `Api` request preflight methods.
+
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name**                                                                                     | **Type**                                                      | **Description**                                     |
-| -------------------------------------------------------------------------------------------- | ------------------------------------------------------------- | --------------------------------------------------- |
-| <code><a href="#@winglang/sdk.cloud.IApiEndpointHandler.property.node">node</a></code>       | <code>constructs.Node</code>                                  | The tree node.                                      |
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.IApiEndpointHandler.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
 | <code><a href="#@winglang/sdk.cloud.IApiEndpointHandler.property.display">display</a></code> | <code><a href="#@winglang/sdk.std.Display">Display</a></code> | Information on how to display a resource in the UI. |
 
 ---
@@ -748,7 +772,7 @@ Represents a resource with an inflight "handle" method that can be passed to one
 node: Node;
 ```
 
-- _Type:_ constructs.Node
+- *Type:* constructs.Node
 
 The tree node.
 
@@ -760,7 +784,7 @@ The tree node.
 display: Display;
 ```
 
-- _Type:_ <a href="#@winglang/sdk.std.Display">Display</a>
+- *Type:* <a href="#@winglang/sdk.std.Display">Display</a>
 
 Information on how to display a resource in the UI.
 
@@ -768,14 +792,14 @@ Information on how to display a resource in the UI.
 
 ### IApiEndpointHandlerClient <a name="IApiEndpointHandlerClient" id="@winglang/sdk.cloud.IApiEndpointHandlerClient"></a>
 
-- _Implemented By:_ <a href="#@winglang/sdk.cloud.IApiEndpointHandlerClient">IApiEndpointHandlerClient</a>
+- *Implemented By:* <a href="#@winglang/sdk.cloud.IApiEndpointHandlerClient">IApiEndpointHandlerClient</a>
 
 Inflight client for `IApiEndpointHandler`.
 
 #### Methods <a name="Methods" id="Methods"></a>
 
-| **Name**                                                                                | **Description**                                                      |
-| --------------------------------------------------------------------------------------- | -------------------------------------------------------------------- |
+| **Name** | **Description** |
+| --- | --- |
 | <code><a href="#@winglang/sdk.cloud.IApiEndpointHandlerClient.handle">handle</a></code> | Inflight that will be called when a request is made to the endpoint. |
 
 ---
@@ -783,18 +807,17 @@ Inflight client for `IApiEndpointHandler`.
 ##### `handle` <a name="handle" id="@winglang/sdk.cloud.IApiEndpointHandlerClient.handle"></a>
 
 ```wing
-handle(request: ApiRequest): ApiResponse
+inflight handle(request: ApiRequest): ApiResponse
 ```
-
-**Inflight client:** [true](#true)
 
 Inflight that will be called when a request is made to the endpoint.
 
 ###### `request`<sup>Required</sup> <a name="request" id="@winglang/sdk.cloud.IApiEndpointHandlerClient.handle.parameter.request"></a>
 
-- _Type:_ <a href="#@winglang/sdk.cloud.ApiRequest">ApiRequest</a>
+- *Type:* <a href="#@winglang/sdk.cloud.ApiRequest">ApiRequest</a>
 
 ---
+
 
 ## Enums <a name="Enums" id="Enums"></a>
 
@@ -804,16 +827,16 @@ Allowed HTTP methods for a endpoint.
 
 #### Members <a name="Members" id="Members"></a>
 
-| **Name**                                                                   | **Description** |
-| -------------------------------------------------------------------------- | --------------- |
-| <code><a href="#@winglang/sdk.cloud.HttpMethod.GET">GET</a></code>         | Get.            |
-| <code><a href="#@winglang/sdk.cloud.HttpMethod.HEAD">HEAD</a></code>       | Head.           |
-| <code><a href="#@winglang/sdk.cloud.HttpMethod.POST">POST</a></code>       | Post.           |
-| <code><a href="#@winglang/sdk.cloud.HttpMethod.PUT">PUT</a></code>         | Put.            |
-| <code><a href="#@winglang/sdk.cloud.HttpMethod.DELETE">DELETE</a></code>   | Delete.         |
-| <code><a href="#@winglang/sdk.cloud.HttpMethod.CONNECT">CONNECT</a></code> | Connect.        |
-| <code><a href="#@winglang/sdk.cloud.HttpMethod.OPTIONS">OPTIONS</a></code> | Options.        |
-| <code><a href="#@winglang/sdk.cloud.HttpMethod.PATCH">PATCH</a></code>     | Patch.          |
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.cloud.HttpMethod.GET">GET</a></code> | Get. |
+| <code><a href="#@winglang/sdk.cloud.HttpMethod.HEAD">HEAD</a></code> | Head. |
+| <code><a href="#@winglang/sdk.cloud.HttpMethod.POST">POST</a></code> | Post. |
+| <code><a href="#@winglang/sdk.cloud.HttpMethod.PUT">PUT</a></code> | Put. |
+| <code><a href="#@winglang/sdk.cloud.HttpMethod.DELETE">DELETE</a></code> | Delete. |
+| <code><a href="#@winglang/sdk.cloud.HttpMethod.CONNECT">CONNECT</a></code> | Connect. |
+| <code><a href="#@winglang/sdk.cloud.HttpMethod.OPTIONS">OPTIONS</a></code> | Options. |
+| <code><a href="#@winglang/sdk.cloud.HttpMethod.PATCH">PATCH</a></code> | Patch. |
 
 ---
 
@@ -823,11 +846,13 @@ Get.
 
 ---
 
+
 ##### `HEAD` <a name="HEAD" id="@winglang/sdk.cloud.HttpMethod.HEAD"></a>
 
 Head.
 
 ---
+
 
 ##### `POST` <a name="POST" id="@winglang/sdk.cloud.HttpMethod.POST"></a>
 
@@ -835,11 +860,13 @@ Post.
 
 ---
 
+
 ##### `PUT` <a name="PUT" id="@winglang/sdk.cloud.HttpMethod.PUT"></a>
 
 Put.
 
 ---
+
 
 ##### `DELETE` <a name="DELETE" id="@winglang/sdk.cloud.HttpMethod.DELETE"></a>
 
@@ -847,11 +874,13 @@ Delete.
 
 ---
 
+
 ##### `CONNECT` <a name="CONNECT" id="@winglang/sdk.cloud.HttpMethod.CONNECT"></a>
 
 Connect.
 
 ---
+
 
 ##### `OPTIONS` <a name="OPTIONS" id="@winglang/sdk.cloud.HttpMethod.OPTIONS"></a>
 
@@ -859,8 +888,10 @@ Options.
 
 ---
 
+
 ##### `PATCH` <a name="PATCH" id="@winglang/sdk.cloud.HttpMethod.PATCH"></a>
 
 Patch.
 
 ---
+

@@ -66,14 +66,14 @@ AWS implementations of `cloud.Website` uses [Amazon S3](https://aws.amazon.com/s
 
 **Inflight client:** [@winglang/sdk.cloud.IWebsiteClient](#@winglang/sdk.cloud.IWebsiteClient)
 
-Represents a cloud static website.
+A cloud static website.
 
 #### Initializers <a name="Initializers" id="@winglang/sdk.cloud.Website.Initializer"></a>
 
 ```wing
 bring cloud;
 
-new cloud.Website(props: WebsiteProps)
+new cloud.Website(props: WebsiteProps);
 ```
 
 | **Name** | **Type** | **Description** |
@@ -183,6 +183,7 @@ The website's url.
 ---
 
 
+
 ## Structs <a name="Structs" id="Structs"></a>
 
 ### WebsiteProps <a name="WebsiteProps" id="@winglang/sdk.cloud.WebsiteProps"></a>
@@ -194,7 +195,7 @@ website props.
 ```wing
 bring cloud;
 
-let WebsiteProps = cloud.WebsiteProps{ ... }
+let WebsiteProps = cloud.WebsiteProps{ ... };
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -243,7 +244,6 @@ The website's custom domain name.
 ```wing
 "example.com"
 ```
-
 
 
 ## Protocols <a name="Protocols" id="Protocols"></a>

@@ -68,14 +68,14 @@ The Azure implementation of `cloud.Function` uses [Azure Function](https://azure
 
 **Inflight client:** [@winglang/sdk.cloud.IFunctionClient](#@winglang/sdk.cloud.IFunctionClient)
 
-Represents a function.
+A function.
 
 #### Initializers <a name="Initializers" id="@winglang/sdk.cloud.Function.Initializer"></a>
 
 ```wing
 bring cloud;
 
-new cloud.Function(inflight: IFunctionHandler, props?: FunctionProps)
+new cloud.Function(inflight: IFunctionHandler, props?: FunctionProps);
 ```
 
 | **Name** | **Type** | **Description** |
@@ -173,6 +173,7 @@ Returns the set of environment variables for this function.
 ---
 
 
+
 ## Structs <a name="Structs" id="Structs"></a>
 
 ### FunctionProps <a name="FunctionProps" id="@winglang/sdk.cloud.FunctionProps"></a>
@@ -186,7 +187,7 @@ This is the type users see when constructing a cloud.Function instance.
 ```wing
 bring cloud;
 
-let FunctionProps = cloud.FunctionProps{ ... }
+let FunctionProps = cloud.FunctionProps{ ... };
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -195,7 +196,7 @@ let FunctionProps = cloud.FunctionProps{ ... }
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.FunctionProps.property.env">env</a></code> | <code>MutMap&lt;str&gt;</code> | Environment variables to pass to the function. |
 | <code><a href="#@winglang/sdk.cloud.FunctionProps.property.memory">memory</a></code> | <code>num</code> | The amount of memory to allocate to the function, in MB. |
-| <code><a href="#@winglang/sdk.cloud.FunctionProps.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">Duration</a></code> | The maximum amount of time the function can run. |
+| <code><a href="#@winglang/sdk.cloud.FunctionProps.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">duration</a></code> | The maximum amount of time the function can run. |
 
 ---
 
@@ -228,16 +229,15 @@ The amount of memory to allocate to the function, in MB.
 ##### `timeout`<sup>Optional</sup> <a name="timeout" id="@winglang/sdk.cloud.FunctionProps.property.timeout"></a>
 
 ```wing
-timeout: Duration;
+timeout: duration;
 ```
 
-- *Type:* <a href="#@winglang/sdk.std.Duration">Duration</a>
+- *Type:* <a href="#@winglang/sdk.std.Duration">duration</a>
 - *Default:* 1m
 
 The maximum amount of time the function can run.
 
 ---
-
 
 ## Protocols <a name="Protocols" id="Protocols"></a>
 
@@ -258,10 +258,8 @@ Inflight interface for `Function`.
 ##### `invoke` <a name="invoke" id="@winglang/sdk.cloud.IFunctionClient.invoke"></a>
 
 ```wing
-invoke(payload: str): str
+inflight invoke(payload: str): str
 ```
-
-**Inflight client:** [true](#true)
 
 Invoke the function asynchronously with a given payload.
 
@@ -280,7 +278,7 @@ Invoke the function asynchronously with a given payload.
 
 **Inflight client:** [@winglang/sdk.cloud.IFunctionHandlerClient](#@winglang/sdk.cloud.IFunctionHandlerClient)
 
-Represents a resource with an inflight "handle" method that can be used to create a `cloud.Function`.
+A resource with an inflight "handle" method that can be used to create a `cloud.Function`.
 
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -333,10 +331,8 @@ Inflight client for `IFunctionHandler`.
 ##### `handle` <a name="handle" id="@winglang/sdk.cloud.IFunctionHandlerClient.handle"></a>
 
 ```wing
-handle(event: str): void
+inflight handle(event: str): void
 ```
-
-**Inflight client:** [true](#true)
 
 Entrypoint function that will be called when the cloud function is invoked.
 

@@ -86,14 +86,14 @@ The AWS implementation of `cloud.Queue` uses [Amazon Simple Queue Service](https
 
 **Inflight client:** [@winglang/sdk.cloud.IQueueClient](#@winglang/sdk.cloud.IQueueClient)
 
-Represents a queue.
+A queue.
 
 #### Initializers <a name="Initializers" id="@winglang/sdk.cloud.Queue.Initializer"></a>
 
 ```wing
 bring cloud;
 
-new cloud.Queue(props?: QueueProps)
+new cloud.Queue(props?: QueueProps);
 ```
 
 | **Name** | **Type** | **Description** |
@@ -171,6 +171,7 @@ Information on how to display a resource in the UI.
 ---
 
 
+
 ## Structs <a name="Structs" id="Structs"></a>
 
 ### QueueProps <a name="QueueProps" id="@winglang/sdk.cloud.QueueProps"></a>
@@ -182,7 +183,7 @@ Properties for `Queue`.
 ```wing
 bring cloud;
 
-let QueueProps = cloud.QueueProps{ ... }
+let QueueProps = cloud.QueueProps{ ... };
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -190,8 +191,8 @@ let QueueProps = cloud.QueueProps{ ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.QueueProps.property.initialMessages">initialMessages</a></code> | <code>MutArray&lt;str&gt;</code> | Initialize the queue with a set of messages. |
-| <code><a href="#@winglang/sdk.cloud.QueueProps.property.retentionPeriod">retentionPeriod</a></code> | <code><a href="#@winglang/sdk.std.Duration">Duration</a></code> | How long a queue retains a message. |
-| <code><a href="#@winglang/sdk.cloud.QueueProps.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">Duration</a></code> | How long a queue's consumers have to process a message. |
+| <code><a href="#@winglang/sdk.cloud.QueueProps.property.retentionPeriod">retentionPeriod</a></code> | <code><a href="#@winglang/sdk.std.Duration">duration</a></code> | How long a queue retains a message. |
+| <code><a href="#@winglang/sdk.cloud.QueueProps.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">duration</a></code> | How long a queue's consumers have to process a message. |
 
 ---
 
@@ -211,10 +212,10 @@ Initialize the queue with a set of messages.
 ##### `retentionPeriod`<sup>Optional</sup> <a name="retentionPeriod" id="@winglang/sdk.cloud.QueueProps.property.retentionPeriod"></a>
 
 ```wing
-retentionPeriod: Duration;
+retentionPeriod: duration;
 ```
 
-- *Type:* <a href="#@winglang/sdk.std.Duration">Duration</a>
+- *Type:* <a href="#@winglang/sdk.std.Duration">duration</a>
 - *Default:* undefined
 
 How long a queue retains a message.
@@ -224,10 +225,10 @@ How long a queue retains a message.
 ##### `timeout`<sup>Optional</sup> <a name="timeout" id="@winglang/sdk.cloud.QueueProps.property.timeout"></a>
 
 ```wing
-timeout: Duration;
+timeout: duration;
 ```
 
-- *Type:* <a href="#@winglang/sdk.std.Duration">Duration</a>
+- *Type:* <a href="#@winglang/sdk.std.Duration">duration</a>
 - *Default:* undefined
 
 How long a queue's consumers have to process a message.
@@ -243,7 +244,7 @@ Options for Queue.setConsumer.
 ```wing
 bring cloud;
 
-let QueueSetConsumerProps = cloud.QueueSetConsumerProps{ ... }
+let QueueSetConsumerProps = cloud.QueueSetConsumerProps{ ... };
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -252,7 +253,7 @@ let QueueSetConsumerProps = cloud.QueueSetConsumerProps{ ... }
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.QueueSetConsumerProps.property.env">env</a></code> | <code>MutMap&lt;str&gt;</code> | Environment variables to pass to the function. |
 | <code><a href="#@winglang/sdk.cloud.QueueSetConsumerProps.property.memory">memory</a></code> | <code>num</code> | The amount of memory to allocate to the function, in MB. |
-| <code><a href="#@winglang/sdk.cloud.QueueSetConsumerProps.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">Duration</a></code> | The maximum amount of time the function can run. |
+| <code><a href="#@winglang/sdk.cloud.QueueSetConsumerProps.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">duration</a></code> | The maximum amount of time the function can run. |
 | <code><a href="#@winglang/sdk.cloud.QueueSetConsumerProps.property.batchSize">batchSize</a></code> | <code>num</code> | The maximum number of messages to send to subscribers at once. |
 
 ---
@@ -286,10 +287,10 @@ The amount of memory to allocate to the function, in MB.
 ##### `timeout`<sup>Optional</sup> <a name="timeout" id="@winglang/sdk.cloud.QueueSetConsumerProps.property.timeout"></a>
 
 ```wing
-timeout: Duration;
+timeout: duration;
 ```
 
-- *Type:* <a href="#@winglang/sdk.std.Duration">Duration</a>
+- *Type:* <a href="#@winglang/sdk.std.Duration">duration</a>
 - *Default:* 1m
 
 The maximum amount of time the function can run.
@@ -308,7 +309,6 @@ batchSize: num;
 The maximum number of messages to send to subscribers at once.
 
 ---
-
 
 ## Protocols <a name="Protocols" id="Protocols"></a>
 
@@ -332,40 +332,32 @@ Inflight interface for `Queue`.
 ##### `approxSize` <a name="approxSize" id="@winglang/sdk.cloud.IQueueClient.approxSize"></a>
 
 ```wing
-approxSize(): num
+inflight approxSize(): num
 ```
-
-**Inflight client:** [true](#true)
 
 Retrieve the approximate number of messages in the queue.
 
 ##### `pop` <a name="pop" id="@winglang/sdk.cloud.IQueueClient.pop"></a>
 
 ```wing
-pop(): str
+inflight pop(): str
 ```
-
-**Inflight client:** [true](#true)
 
 Pop a message from the queue.
 
 ##### `purge` <a name="purge" id="@winglang/sdk.cloud.IQueueClient.purge"></a>
 
 ```wing
-purge(): void
+inflight purge(): void
 ```
-
-**Inflight client:** [true](#true)
 
 Purge all of the messages in the queue.
 
 ##### `push` <a name="push" id="@winglang/sdk.cloud.IQueueClient.push"></a>
 
 ```wing
-push(message: str): void
+inflight push(message: str): void
 ```
-
-**Inflight client:** [true](#true)
 
 Push a message to the queue.
 
@@ -386,7 +378,7 @@ Payload to send to the queue.
 
 **Inflight client:** [@winglang/sdk.cloud.IQueueSetConsumerHandlerClient](#@winglang/sdk.cloud.IQueueSetConsumerHandlerClient)
 
-Represents a resource with an inflight "handle" method that can be passed to `Queue.setConsumer`.
+A resource with an inflight "handle" method that can be passed to `Queue.setConsumer`.
 
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -439,10 +431,8 @@ Inflight client for `IQueueSetConsumerHandler`.
 ##### `handle` <a name="handle" id="@winglang/sdk.cloud.IQueueSetConsumerHandlerClient.handle"></a>
 
 ```wing
-handle(message: str): void
+inflight handle(message: str): void
 ```
-
-**Inflight client:** [true](#true)
 
 Function that will be called when a message is received from the queue.
 

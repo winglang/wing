@@ -76,14 +76,14 @@ The AWS implementation of `cloud.Counter` uses [Amazon DynamoDB](https://aws.ama
 
 **Inflight client:** [@winglang/sdk.cloud.ICounterClient](#@winglang/sdk.cloud.ICounterClient)
 
-Represents a distributed atomic counter.
+A distributed atomic counter.
 
 #### Initializers <a name="Initializers" id="@winglang/sdk.cloud.Counter.Initializer"></a>
 
 ```wing
 bring cloud;
 
-new cloud.Counter(props?: CounterProps)
+new cloud.Counter(props?: CounterProps);
 ```
 
 | **Name** | **Type** | **Description** |
@@ -147,6 +147,7 @@ The initial value of the counter.
 ---
 
 
+
 ## Structs <a name="Structs" id="Structs"></a>
 
 ### CounterProps <a name="CounterProps" id="@winglang/sdk.cloud.CounterProps"></a>
@@ -158,7 +159,7 @@ Properties for `Counter`.
 ```wing
 bring cloud;
 
-let CounterProps = cloud.CounterProps{ ... }
+let CounterProps = cloud.CounterProps{ ... };
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -182,7 +183,6 @@ The initial value of the counter.
 
 ---
 
-
 ## Protocols <a name="Protocols" id="Protocols"></a>
 
 ### ICounterClient <a name="ICounterClient" id="@winglang/sdk.cloud.ICounterClient"></a>
@@ -205,10 +205,8 @@ Inflight interface for `Counter`.
 ##### `dec` <a name="dec" id="@winglang/sdk.cloud.ICounterClient.dec"></a>
 
 ```wing
-dec(amount?: num, key?: str): num
+inflight dec(amount?: num, key?: str): num
 ```
-
-**Inflight client:** [true](#true)
 
 Decrement the counter, returning the previous value.
 
@@ -231,10 +229,8 @@ specify the key to be decremented.
 ##### `inc` <a name="inc" id="@winglang/sdk.cloud.ICounterClient.inc"></a>
 
 ```wing
-inc(amount?: num, key?: str): num
+inflight inc(amount?: num, key?: str): num
 ```
-
-**Inflight client:** [true](#true)
 
 Increments the counter atomically by a certain amount and returns the previous value.
 
@@ -257,10 +253,8 @@ specify the key to be incremented.
 ##### `peek` <a name="peek" id="@winglang/sdk.cloud.ICounterClient.peek"></a>
 
 ```wing
-peek(key?: str): num
+inflight peek(key?: str): num
 ```
-
-**Inflight client:** [true](#true)
 
 Get the current value of the counter.
 
@@ -278,10 +272,8 @@ specify the key to be retrieved.
 ##### `set` <a name="set" id="@winglang/sdk.cloud.ICounterClient.set"></a>
 
 ```wing
-set(value: num, key?: str): void
+inflight set(value: num, key?: str): void
 ```
-
-**Inflight client:** [true](#true)
 
 Set a counter to a given value.
 

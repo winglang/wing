@@ -65,14 +65,14 @@ See [Amazon CloudWatch](https://aws.amazon.com/cloudwatch/).
 
 **Inflight client:** [@winglang/sdk.cloud.IScheduleClient](#@winglang/sdk.cloud.IScheduleClient)
 
-Represents a schedule.
+A schedule.
 
 #### Initializers <a name="Initializers" id="@winglang/sdk.cloud.Schedule.Initializer"></a>
 
 ```wing
 bring cloud;
 
-new cloud.Schedule(props?: ScheduleProps)
+new cloud.Schedule(props?: ScheduleProps);
 ```
 
 | **Name** | **Type** | **Description** |
@@ -150,6 +150,7 @@ Information on how to display a resource in the UI.
 ---
 
 
+
 ## Structs <a name="Structs" id="Structs"></a>
 
 ### ScheduleOnTickProps <a name="ScheduleOnTickProps" id="@winglang/sdk.cloud.ScheduleOnTickProps"></a>
@@ -161,7 +162,7 @@ Options for Schedule.onTick.
 ```wing
 bring cloud;
 
-let ScheduleOnTickProps = cloud.ScheduleOnTickProps{ ... }
+let ScheduleOnTickProps = cloud.ScheduleOnTickProps{ ... };
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -170,7 +171,7 @@ let ScheduleOnTickProps = cloud.ScheduleOnTickProps{ ... }
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.ScheduleOnTickProps.property.env">env</a></code> | <code>MutMap&lt;str&gt;</code> | Environment variables to pass to the function. |
 | <code><a href="#@winglang/sdk.cloud.ScheduleOnTickProps.property.memory">memory</a></code> | <code>num</code> | The amount of memory to allocate to the function, in MB. |
-| <code><a href="#@winglang/sdk.cloud.ScheduleOnTickProps.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">Duration</a></code> | The maximum amount of time the function can run. |
+| <code><a href="#@winglang/sdk.cloud.ScheduleOnTickProps.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">duration</a></code> | The maximum amount of time the function can run. |
 
 ---
 
@@ -203,10 +204,10 @@ The amount of memory to allocate to the function, in MB.
 ##### `timeout`<sup>Optional</sup> <a name="timeout" id="@winglang/sdk.cloud.ScheduleOnTickProps.property.timeout"></a>
 
 ```wing
-timeout: Duration;
+timeout: duration;
 ```
 
-- *Type:* <a href="#@winglang/sdk.std.Duration">Duration</a>
+- *Type:* <a href="#@winglang/sdk.std.Duration">duration</a>
 - *Default:* 1m
 
 The maximum amount of time the function can run.
@@ -222,7 +223,7 @@ Properties for `Schedule`.
 ```wing
 bring cloud;
 
-let ScheduleProps = cloud.ScheduleProps{ ... }
+let ScheduleProps = cloud.ScheduleProps{ ... };
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -230,7 +231,7 @@ let ScheduleProps = cloud.ScheduleProps{ ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.ScheduleProps.property.cron">cron</a></code> | <code>str</code> | Trigger events according to a cron schedule using the UNIX cron format. |
-| <code><a href="#@winglang/sdk.cloud.ScheduleProps.property.rate">rate</a></code> | <code><a href="#@winglang/sdk.std.Duration">Duration</a></code> | Trigger events at a periodic rate. |
+| <code><a href="#@winglang/sdk.cloud.ScheduleProps.property.rate">rate</a></code> | <code><a href="#@winglang/sdk.std.Duration">duration</a></code> | Trigger events at a periodic rate. |
 
 ---
 
@@ -259,10 +260,10 @@ Trigger events according to a cron schedule using the UNIX cron format.
 ##### `rate`<sup>Optional</sup> <a name="rate" id="@winglang/sdk.cloud.ScheduleProps.property.rate"></a>
 
 ```wing
-rate: Duration;
+rate: duration;
 ```
 
-- *Type:* <a href="#@winglang/sdk.std.Duration">Duration</a>
+- *Type:* <a href="#@winglang/sdk.std.Duration">duration</a>
 - *Default:* undefined
 
 Trigger events at a periodic rate.
@@ -274,7 +275,6 @@ Trigger events at a periodic rate.
 ```wing
 1m
 ```
-
 
 
 ## Protocols <a name="Protocols" id="Protocols"></a>
@@ -295,7 +295,7 @@ Inflight interface for `Schedule`.
 
 **Inflight client:** [@winglang/sdk.cloud.IScheduleOnTickHandlerClient](#@winglang/sdk.cloud.IScheduleOnTickHandlerClient)
 
-Represents a resource with an inflight "handle" method that can be passed to `Schedule.on_tick`.
+A resource with an inflight "handle" method that can be passed to `Schedule.on_tick`.
 
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -348,10 +348,8 @@ Inflight client for `IScheduleOnTickHandler`.
 ##### `handle` <a name="handle" id="@winglang/sdk.cloud.IScheduleOnTickHandlerClient.handle"></a>
 
 ```wing
-handle(): void
+inflight handle(): void
 ```
-
-**Inflight client:** [true](#true)
 
 Function that will be called when a message is received from the schedule.
 

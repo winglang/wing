@@ -89,14 +89,14 @@ See [AWS documentation](https://docs.aws.amazon.com/secretsmanager/latest/usergu
 
 **Inflight client:** [@winglang/sdk.cloud.ISecretClient](#@winglang/sdk.cloud.ISecretClient)
 
-Represents a cloud secret.
+A cloud secret.
 
 #### Initializers <a name="Initializers" id="@winglang/sdk.cloud.Secret.Initializer"></a>
 
 ```wing
 bring cloud;
 
-new cloud.Secret(props?: SecretProps)
+new cloud.Secret(props?: SecretProps);
 ```
 
 | **Name** | **Type** | **Description** |
@@ -147,6 +147,7 @@ Information on how to display a resource in the UI.
 ---
 
 
+
 ## Structs <a name="Structs" id="Structs"></a>
 
 ### GetSecretValueOptions <a name="GetSecretValueOptions" id="@winglang/sdk.cloud.GetSecretValueOptions"></a>
@@ -158,7 +159,7 @@ Options when getting a secret value.
 ```wing
 bring cloud;
 
-let GetSecretValueOptions = cloud.GetSecretValueOptions{ ... }
+let GetSecretValueOptions = cloud.GetSecretValueOptions{ ... };
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -191,7 +192,7 @@ Properties for `Secret`.
 ```wing
 bring cloud;
 
-let SecretProps = cloud.SecretProps{ ... }
+let SecretProps = cloud.SecretProps{ ... };
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -219,7 +220,6 @@ secret in the target.
 
 ---
 
-
 ## Protocols <a name="Protocols" id="Protocols"></a>
 
 ### ISecretClient <a name="ISecretClient" id="@winglang/sdk.cloud.ISecretClient"></a>
@@ -240,10 +240,8 @@ Inflight interface for `Secret`.
 ##### `value` <a name="value" id="@winglang/sdk.cloud.ISecretClient.value"></a>
 
 ```wing
-value(options?: GetSecretValueOptions): str
+inflight value(options?: GetSecretValueOptions): str
 ```
-
-**Inflight client:** [true](#true)
 
 Retrieve the value of the secret.
 
@@ -256,10 +254,8 @@ Retrieve the value of the secret.
 ##### `valueJson` <a name="valueJson" id="@winglang/sdk.cloud.ISecretClient.valueJson"></a>
 
 ```wing
-valueJson(options?: GetSecretValueOptions): Json
+inflight valueJson(options?: GetSecretValueOptions): Json
 ```
-
-**Inflight client:** [true](#true)
 
 Retrieve the Json value of the secret.
 
