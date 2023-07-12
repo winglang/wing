@@ -15,6 +15,8 @@ It's generally discouraged to use static, long-lived IAM user credentials due to
 
 As an alternative, it's recommended to use GitHub's OpenID Connect service in conjunction with Amazon Web Services to enhance security. This service offers temporary credentials, thereby reducing the risk of unauthorized access. For more information, refer to [Configuring OpenID Connect in Amazon Web Services](https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-amazon-web-services) and [configure-aws-credentials](https://github.com/aws-actions/configure-aws-credentials).
 
+Find an example for setting up Github OIDC with Wing [here](https://github.com/winglang/github-aws-oidc).
+
 ### Terraform State
 
 Persisting the Terraform state is a crucial part of the GitHub Action workflow. To ensure this is properly set up, refer to this [guide](./terraform-backends).
