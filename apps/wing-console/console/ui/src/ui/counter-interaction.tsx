@@ -21,7 +21,10 @@ export const CounterInteraction = ({
   const resetValueElementId = useId();
 
   return (
-    <div className={classNames("flex flex-col gap-1", theme.bg3, theme.text2)}>
+    <div
+      className={classNames("flex flex-col gap-1", theme.bg3, theme.text2)}
+      data-testid="cloud.Counter:interaction"
+    >
       <div className="flex flex-row items-center">
         <label
           htmlFor={actualValueElementId}

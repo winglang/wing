@@ -67,7 +67,10 @@ export const BucketInteraction = ({
   const layoutType = useContext(LayoutContext);
 
   return (
-    <div className="h-full flex-1 flex flex-col text-sm space-y-1.5">
+    <div
+      className="h-full flex-1 flex flex-col text-sm space-y-1.5"
+      data-testid="cloud.Bucket:interaction"
+    >
       <div className="flex justify-between items-center gap-1">
         <div className="flex items-center gap-1">
           <Button

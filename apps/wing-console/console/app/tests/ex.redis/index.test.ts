@@ -6,6 +6,7 @@ import { getResourceNode } from "../helpers.js";
 describe(`${__dirname}/index.w`, () => {
   test("opens redis help", async ({ page }) => {
     await getResourceNode(page, "root/Default/ex.Redis").click();
+    await expect(page.getByTestId("ex.Redis:interaction")).toBeVisible();
 
     const input = page.getByTestId("ex.redis:input");
 
@@ -24,6 +25,7 @@ describe(`${__dirname}/index.w`, () => {
 
   test("navigates history", async ({ page }) => {
     await getResourceNode(page, "root/Default/ex.Redis").click();
+    await expect(page.getByTestId("ex.Redis:interaction")).toBeVisible();
 
     const input = page.getByTestId("ex.redis:input");
 

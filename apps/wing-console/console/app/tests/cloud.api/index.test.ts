@@ -10,6 +10,7 @@ const runApiTest = async (
   response: string,
 ) => {
   await getResourceNode(page, "root/Default/cloud.Api").click();
+  await expect(page.getByTestId("cloud.Api:interaction")).toBeVisible();
 
   await page.getByTestId("cloud.api:method-toggle").click();
   await page.getByTestId(`cloud.api:method-entry-${method}`).click();

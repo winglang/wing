@@ -1,7 +1,8 @@
-import { Attribute, useTheme } from "@wingconsole/design-system";
 import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/solid";
-import { AppMode } from "../AppContext.js";
+import { Attribute, useTheme } from "@wingconsole/design-system";
 import classNames from "classnames";
+
+import { AppMode } from "../AppContext.js";
 
 export interface WebsiteInteractionProps {
   url: string;
@@ -15,7 +16,10 @@ export const WebsiteInteraction = ({
 }: WebsiteInteractionProps) => {
   const { theme } = useTheme();
   return (
-    <div className="h-full flex-1 flex flex-col text-sm space-y-1">
+    <div
+      className="h-full flex-1 flex flex-col text-sm space-y-1"
+      data-testid="cloud.Website:interaction"
+    >
       <div className="relative grow flex-row flex items-center">
         {appMode === "local" && (
           <>

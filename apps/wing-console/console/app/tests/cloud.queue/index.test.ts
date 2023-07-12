@@ -6,6 +6,7 @@ import { getResourceNode } from "../helpers.js";
 describe(`${__dirname}/index.w`, () => {
   test("pushes message", async ({ page }) => {
     await getResourceNode(page, "root/Default/cloud.Queue").click();
+    await expect(page.getByTestId("cloud.Queue:interaction")).toBeVisible();
 
     await page.getByTestId("cloud.queue:message").fill("Hello world!");
 
@@ -18,6 +19,7 @@ describe(`${__dirname}/index.w`, () => {
 
   test("purges message", async ({ page }) => {
     await getResourceNode(page, "root/Default/cloud.Queue").click();
+    await expect(page.getByTestId("cloud.Queue:interaction")).toBeVisible();
 
     await page.getByTestId("cloud.queue:message").fill("Hello world!");
 

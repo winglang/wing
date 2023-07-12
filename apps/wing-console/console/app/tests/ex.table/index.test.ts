@@ -6,12 +6,13 @@ import { getResourceNode } from "../helpers.js";
 describe(`${__dirname}/index.w`, () => {
   test("adds new row", async ({ page }) => {
     await getResourceNode(page, "root/Default/ex.Table").click();
+    await expect(page.getByTestId("ex.Table:interaction")).toBeVisible();
 
     const rowId = "Hello World!";
 
     await page.getByTestId("ex.table:new-row-column-id").type(rowId);
 
-    await page.getByTestId("ex.table:add-row").click();
+    await page.getByTestId("ex.table:add-row").click({ force: true });
 
     const row = page.getByTestId(`ex.table:row-${rowId}`);
 
@@ -20,6 +21,7 @@ describe(`${__dirname}/index.w`, () => {
 
   test("edits row", async ({ page }) => {
     await getResourceNode(page, "root/Default/ex.Table").click();
+    await expect(page.getByTestId("ex.Table:interaction")).toBeVisible();
 
     const rowId = "Hello World!";
 
@@ -27,7 +29,7 @@ describe(`${__dirname}/index.w`, () => {
 
     await page.getByTestId("ex.table:new-row-column-name").type(rowId);
 
-    await page.getByTestId("ex.table:add-row").click();
+    await page.getByTestId("ex.table:add-row").click({ force: true });
 
     const row = page.getByTestId(`ex.table:row-${rowId}`);
 
@@ -45,18 +47,21 @@ describe(`${__dirname}/index.w`, () => {
 
   test("removes row", async ({ page }) => {
     await getResourceNode(page, "root/Default/ex.Table").click();
+    await expect(page.getByTestId("ex.Table:interaction")).toBeVisible();
 
     const rowId = "Hello World!";
 
     await page.getByTestId("ex.table:new-row-column-id").type(rowId);
 
-    await page.getByTestId("ex.table:add-row").click();
+    await page.getByTestId("ex.table:add-row").click({ force: true });
 
     const row = page.getByTestId(`ex.table:row-${rowId}`);
 
     await expect(row).toBeVisible();
 
-    await page.getByTestId(`ex.table:remove-row-${rowId}`).click();
+    await page
+      .getByTestId(`ex.table:remove-row-${rowId}`)
+      .click({ force: true });
 
     await expect(row).toBeHidden();
   });
