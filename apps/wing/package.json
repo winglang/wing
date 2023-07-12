@@ -11,7 +11,7 @@
   "engines": {
     "node": ">=v18.0.0"
   },
-  "main": "./dist/index.js",
+  "main": "./dist/cli.js",
   "bin": {
     "wing": "./bin/wing"
   },
@@ -29,6 +29,10 @@
     "package": "bump-pack -b"
   },
   "dependencies": {
+    "@segment/analytics-node": "^1.0.0",
+    "@wingconsole/app": "workspace:^",
+    "@winglang/compiler": "workspace:^",
+    "@winglang/sdk": "workspace:^",
     "chalk": "^4.1.2",
     "codespan-wasm": "0.4.0",
     "commander": "^10.0.0",
@@ -36,13 +40,9 @@
     "debug": "^4.3.4",
     "open": "^8.4.0",
     "ora": "^5.4.1",
-    "update-notifier": "^6.0.2",
-    "vscode-languageserver": "^8.0.2",
+    "tiny-updater": "^3.4.0",
     "uuid": "^8.3.2",
-    "@segment/analytics-node": "^1.0.0",
-    "@wingconsole/app": "workspace:^",
-    "@winglang/compiler": "workspace:^",
-    "@winglang/sdk": "workspace:^"
+    "vscode-languageserver": "^8.0.2"
   },
   "devDependencies": {
     "@types/debug": "^4.1.7",
