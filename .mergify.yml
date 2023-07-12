@@ -11,7 +11,7 @@ pull_request_rules:
   - name: automatic merge
     actions:
       comment:
-        message: Thank you for contributing! Your pull request will be updated from main and then merged automatically (do not update manually, and be sure to [allow changes to be pushed to your fork](https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/allowing-changes-to-a-pull-request-branch-created-from-a-fork)).
+        message: Thank you for contributing! Your pull request will be updated from {{ base }} and then merged automatically (do not update manually, and be sure to [allow changes to be pushed to your fork](https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/allowing-changes-to-a-pull-request-branch-created-from-a-fork)).
       queue:
         name: default
         method: squash
@@ -29,5 +29,32 @@ pull_request_rules:
       - -approved-reviews-by~=author
       - check-success=Validate PR title
       - or:
+        -  base=main
+        -  base=dev
+      - or:
+        # Code freeze at 7am utc July 13th 2023
+        - updated-at<=2023-07-13T07:00:00Z
+        - base=dev
+      - or:
         - check-success=Quality Gate
         - -files~=^(?!docs/|logo/)
+  - name: backport change to main
+    conditions:
+      - base=dev
+      - label=pr/backport
+    actions:
+      backport:
+        branches:
+          - main
+  - name: Inform about code freeze
+    conditions:
+      - base=main
+      - updated-at > 2023-07-13T07:00:00Z
+      - -author=mergify[bot]
+    actions:
+      comment:
+        message: |
+          :warning: **Code freeze in effect!** :warning:
+
+          The `main` branch is currently frozen. Only critical fixes or documentation updates will be merged.
+          Please submit your pull request against the `dev` branch instead.
