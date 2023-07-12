@@ -92,7 +92,7 @@ new std.Test(inflight () => {
   b.put("b", "100");
   b.delete("c");
 
-// !!! isn't working on aws due to https://github.com/winglang/wing/issues/2724
+// https://github.com/winglang/wing/issues/2724
   if (util.env("WING_TARGET") != "tf-aws") {
     // assert that onCreate events about the "a", "b", and "c" objects were each produced exactly 1 time
     assert(wait(checkHitCount(key: "a", type: "CREATE", source: Source.anyEvent, count: 1)));
