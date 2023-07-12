@@ -37,7 +37,7 @@ module.exports = function({ $api_url, $http_DELETE, $http_Util }) {
     async handle() {
       const url = String.raw({ raw: ["", "/path?all=true&page=6"] }, $api_url);
       const response = (await $http_Util.delete(url));
-      const fetchResponse = (await $http_Util.fetch(url,Object.freeze({"method":$http_DELETE})));
+      const fetchResponse = (await $http_Util.fetch(url,{ method: $http_DELETE }));
       {((cond) => {if (!cond) throw new Error("assertion failed: response.body == \"6\"")})((response.body === "6"))};
       {((cond) => {if (!cond) throw new Error("assertion failed: response.status == 200")})((response.status === 200))};
       {((cond) => {if (!cond) throw new Error("assertion failed: response.url == url")})((response.url === url))};
