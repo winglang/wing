@@ -28,6 +28,7 @@ function runSubCommand(subCommand: string) {
       await exportAnalyticsHook();
       const exitCode = await import(`./commands/${subCommand}`).then((m) => m[subCommand](...args));
       if (exitCode === 1) {
+        await exportAnalyticsHook();
         process.exit(1);
       }
     } catch (err) {
