@@ -15,9 +15,9 @@ const runApiTest = async (
   await page.getByTestId(`cloud.api:method-entry-${method}`).click();
 
   await page.getByTestId("cloud.api:route").click();
-  await page.getByTestId(`cloud.api:route-${route}`).click({ force: true });
+  await page.getByTestId(`cloud.api:route-${route}`).click();
 
-  await page.getByTestId("cloud.api:send").click();
+  await page.getByTestId("cloud.api:send").click({ force: true });
 
   await page.waitForLoadState("networkidle");
   const result = await page
