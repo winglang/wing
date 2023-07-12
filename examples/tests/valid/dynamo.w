@@ -1,3 +1,8 @@
+/*\
+skip: true
+\*/
+// this example only works on AWS (intentionally)
+
 bring "@cdktf/provider-aws" as tfaws;
 bring aws;
 bring cloud;
@@ -40,11 +45,11 @@ class DynamoTable {
   _bind(host: std.IInflightHost, ops: Array<str>) {
     if let host = aws.Function.from(host) {
       if ops.contains("putItem") {
-        host.addPolicyStatement(aws.PolicyStatement {
+        host.addPolicyStatements([aws.PolicyStatement {
           actions: ["dynamodb:PutItem"],
           resources: [this.table.arn],
           effect: aws.Effect.ALLOW,
-        });
+        }]);
       }
     }
   }
