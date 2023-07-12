@@ -1,3 +1,6 @@
 label: Cloud resources
 collapsible: true
 collapsed: true
+link:
+  type: generated-index
+  title: Wing cloud resources
