@@ -965,6 +965,9 @@ importers:
       '@aws-cdk/asset-node-proxy-agent-v5':
         specifier: ^2.0.165
         version: 2.0.165
+      '@aws-sdk/client-dynamodb':
+        specifier: ^3.344.0
+        version: 3.354.0
       '@cdktf/provider-aws':
         specifier: ^15.0.0
         version: 15.0.0(cdktf@0.17.0)(constructs@10.2.51)
