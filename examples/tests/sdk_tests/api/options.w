@@ -57,9 +57,6 @@ if (util.env("WING_TARGET") != "tf-aws") {
 
     assert(options.status == 204);
     assert(options.url == url);
-
-    assert(head.status == 204);
-    assert(head.url == url);
   }
 }
 

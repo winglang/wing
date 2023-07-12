@@ -7,7 +7,18 @@ import { satisfies } from "compare-versions";
 import { Command, Option } from "commander";
 import { run_server } from "./commands/lsp";
 
-const PACKAGE_VERSION = require("../package.json").version as string;
+import { collectCommandAnalytics } from "./analytics/collect";
+import { exportAnalytics } from "./analytics/export";
+import { optionallyDisplayDisclaimer } from "./analytics/disclaimer";
+
+
+export const PACKAGE_VERSION = require("../package.json").version as string;
+let analyticsExportFile: Promise<string | undefined>;
+
+if (PACKAGE_VERSION == "0.0.0" && !process.env.DEBUG) {
+  process.env.WING_DISABLE_ANALYTICS = "1";
+}
+
 const SUPPORTED_NODE_VERSION = require("../package.json").engines.node as string;
 if (!SUPPORTED_NODE_VERSION) {
   throw new Error("couldn't parse engines.node version from package.json");
@@ -16,6 +27,7 @@ if (!SUPPORTED_NODE_VERSION) {
 function actionErrorHandler(fn: (...args: any[]) => Promise<any>) {
   return async (...args: any[]) => {
     try {
+      await exportAnalyticsHook();
       const exitCode = await fn(...args);
       if (exitCode === 1) {
         process.exit(1);
@@ -25,6 +37,33 @@ function actionErrorHandler(fn: (...args: any[]) => Promise<any>) {
       process.exit(1);
     }
   };
+}
+
+async function collectAnalyticsHook(cmd: Command) {
+  if (process.env.WING_DISABLE_ANALYTICS) { return; }
+  // Fail silently if collection fails
+  try {
+    optionallyDisplayDisclaimer();
+    analyticsExportFile = collectCommandAnalytics(cmd);
+  } catch (err) {
+    if (process.env.DEBUG) {
+      console.error(err);
+    }
+  }
+}
+
+async function exportAnalyticsHook() {
+  if (process.env.WING_DISABLE_ANALYTICS) { return; }
+  // Fail silently if export fails
+  try {
+    if (analyticsExportFile) {
+      await exportAnalytics(analyticsExportFile);
+    }
+  } catch (err) {
+    if (process.env.DEBUG) {
+      console.error(err);
+    }
+  }
 }
 
 async function main() {
@@ -40,6 +79,10 @@ async function main() {
 
   program.option("--progress", "Show compilation progress", () => {
     process.env.PROGRESS = "1";
+  });
+
+  program.option("--no-analytics", "Disable analytics collection (same as WING_DISABLE_ANALYTICS=1)", () => {
+    process.env.WING_DISABLE_ANALYTICS = "1";
   });
 
   program
@@ -68,9 +111,10 @@ async function main() {
     .argument("[entrypoint]", "program .w entrypoint")
     .option("-p, --port <port>", "specify port")
     .option("--no-open", "Do not open the Wing Console in the browser")
+    .hook("preAction", collectAnalyticsHook)
     .action(run);
 
-  program.command("lsp").description("Run the Wing language server on stdio").action(run_server);
+  program.command("lsp").description("Run the Wing language server on stdio").hook("preAction", collectAnalyticsHook).action(run_server);
 
   program
     .command("compile")
@@ -83,6 +127,7 @@ async function main() {
     )
     .option("-p, --plugins [plugin...]", "Compiler plugins")
     .hook("preAction", progressHook)
+    .hook("preAction", collectAnalyticsHook)
     .action(actionErrorHandler(compile));
 
   program
@@ -98,10 +143,12 @@ async function main() {
     )
     .option("-p, --plugins [plugin...]", "Compiler plugins")
     .hook("preAction", progressHook)
+    .hook("preAction", collectAnalyticsHook)
     .action(actionErrorHandler(test));
 
-  program.command("docs").description("Open the Wing documentation").action(docs);
-
+  program.command("docs").description("Open the Wing documentation").hook("preAction", collectAnalyticsHook).action(docs);
+  
+  program.hook("postAction", exportAnalyticsHook)
   program.parse();
 }
 

@@ -27,8 +27,6 @@ if (util.env("WING_TARGET") != "tf-aws") {
     let response: http.Response = http.delete(url);
     let fetchResponse: http.Response = http.fetch(url, {"method" => http_DELETE});
 
-    // TODO: adding a fetch request when the enums 
-
     assert(response.body == "6");
     assert(response.status == 200);
     assert(response.url == url);

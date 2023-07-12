@@ -21,11 +21,13 @@ const getResponseColor: (status: number) => string = (status) => {
 interface ApiBodyPanelProps {
   response: ApiResponse | undefined;
   isLoading: boolean;
+  dataTestid?: string;
 }
 
 export const ApiResponseBodyPanel = ({
   response,
   isLoading,
+  dataTestid,
 }: ApiBodyPanelProps) => {
   const { theme } = useTheme();
   return (
@@ -35,6 +37,7 @@ export const ApiResponseBodyPanel = ({
         loading={isLoading}
         placeholder="No body"
         json={true}
+        dataTestid={dataTestid}
       />
       {response && (
         <div

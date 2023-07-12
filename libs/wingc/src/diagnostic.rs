@@ -11,10 +11,26 @@ type Diagnostics = Vec<Diagnostic>;
 pub type DiagnosticResult<T> = Result<T, ()>;
 
 /// Line and character location in a UTF8 Wing source file
-#[derive(Clone, Copy, Debug, Default, PartialEq, Eq, Hash, PartialOrd, Ord, Serialize)]
+#[derive(Clone, Copy, Debug, Default, PartialEq, Eq, Hash, Serialize)]
 pub struct WingLocation {
 	pub line: u32,
 	pub col: u32,
+}
+
+impl Ord for WingLocation {
+	fn cmp(&self, other: &Self) -> std::cmp::Ordering {
+		if self.line == other.line {
+			self.col.cmp(&other.col)
+		} else {
+			self.line.cmp(&other.line)
+		}
+	}
+}
+
+impl PartialOrd for WingLocation {
+	fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
+		Some(self.cmp(other))
+	}
 }
 
 /// tree-sitter-based Point => WingLocation
