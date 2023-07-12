@@ -11,7 +11,7 @@ import {
 import express from "express";
 
 import { createAnalytics } from "./analytics.js";
-import { getAnonymousId } from "./anonymous-id.js";
+import {AnalyticsStorage} from "./storage";
 
 export type {
   LogInterface,
@@ -41,9 +41,10 @@ const staticDir = `${__dirname}/vite`;
 const { SEGMENT_WRITE_KEY } = process.env;
 
 export const createConsoleApp = async (options: CreateConsoleAppOptions) => {
+  const analyticsStorage = new AnalyticsStorage();
   const analytics = SEGMENT_WRITE_KEY
     ? createAnalytics({
-        anonymousId: getAnonymousId(),
+        anonymousId: analyticsStorage.getAnonymousId(),
         segmentWriteKey: SEGMENT_WRITE_KEY,
       })
     : undefined;
