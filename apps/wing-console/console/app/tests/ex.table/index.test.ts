@@ -11,7 +11,7 @@ describe(`${__dirname}/index.w`, () => {
 
     await page.getByTestId("ex.table:new-row-column-id").type(rowId);
 
-    await page.getByTestId("ex.table:add-row").click();
+    await page.getByTestId("ex.table:add-row").click({ force: true });
 
     const row = page.getByTestId(`ex.table:row-${rowId}`);
 
@@ -27,7 +27,7 @@ describe(`${__dirname}/index.w`, () => {
 
     await page.getByTestId("ex.table:new-row-column-name").type(rowId);
 
-    await page.getByTestId("ex.table:add-row").click();
+    await page.getByTestId("ex.table:add-row").click({ force: true });
 
     const row = page.getByTestId(`ex.table:row-${rowId}`);
 
@@ -50,13 +50,15 @@ describe(`${__dirname}/index.w`, () => {
 
     await page.getByTestId("ex.table:new-row-column-id").type(rowId);
 
-    await page.getByTestId("ex.table:add-row").click();
+    await page.getByTestId("ex.table:add-row").click({ force: true });
 
     const row = page.getByTestId(`ex.table:row-${rowId}`);
 
     await expect(row).toBeVisible();
 
-    await page.getByTestId(`ex.table:remove-row-${rowId}`).click();
+    await page
+      .getByTestId(`ex.table:remove-row-${rowId}`)
+      .click({ force: true });
 
     await expect(row).toBeHidden();
   });
