@@ -7,7 +7,7 @@ export default defineConfig({
   external: ["fsevents"],
   format: ["cjs"],
   env: {
-    SEGMENT_WRITE_KEY: process.env.SEGMENT_WRITE_KEY,
+    SEGMENT_WRITE_KEY: process.env.SEGMENT_WRITE_KEY ?? "",
   },
   dts: true,
   clean: true,
