@@ -6,7 +6,6 @@ import { getResourceNode } from "../helpers.js";
 describe(`${__dirname}/index.w`, () => {
   test("increase counter", async ({ page }) => {
     await getResourceNode(page, "root/Default/cloud.Counter").click();
-    await expect(page.getByTestId("cloud.Counter:interaction")).toBeVisible();
 
     const currentValue = page.getByTestId("cloud.counter:current-value");
 
@@ -21,7 +20,6 @@ describe(`${__dirname}/index.w`, () => {
     await getResourceNode(page, "root/Default/cloud.Counter").click();
 
     const currentValue = page.getByTestId("cloud.counter:current-value");
-    await expect(page.getByTestId("cloud.Counter:interaction")).toBeVisible();
 
     await expect(currentValue).toHaveValue("0");
 
@@ -34,7 +32,6 @@ describe(`${__dirname}/index.w`, () => {
     await getResourceNode(page, "root/Default/cloud.Counter").click();
 
     const currentValue = page.getByTestId("cloud.counter:current-value");
-    await expect(page.getByTestId("cloud.Counter:interaction")).toBeVisible();
 
     await expect(currentValue).toHaveValue("0");
 

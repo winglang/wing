@@ -9,10 +9,7 @@ export const TopicInteraction = ({ onPublishClick }: TopicInteractionProps) => {
   const elementId = useId();
 
   return (
-    <div
-      className="h-full flex-1 flex flex-col text-sm"
-      data-testid="cloud.Topic:interaction"
-    >
+    <div className="h-full flex-1 flex flex-col text-sm">
       <div className="flex flex-col gap-2">
         <TextArea
           id={elementId}

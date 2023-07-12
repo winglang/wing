@@ -62,10 +62,7 @@ export const RedisInteraction = ({
   }, [terminalHistory]);
 
   return (
-    <div
-      className="h-full flex-1 flex flex-col text-sm gap-y-1"
-      data-testid="ex.Redis:interaction"
-    >
+    <div className="h-full flex-1 flex flex-col text-sm gap-y-1">
       <Attribute name="URL" value={url} noLeftPadding />
       <div>
         <label htmlFor={inputId} className={classNames("text-sm", theme.text2)}>

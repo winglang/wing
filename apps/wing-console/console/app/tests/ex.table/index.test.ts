@@ -6,7 +6,6 @@ import { getResourceNode } from "../helpers.js";
 describe(`${__dirname}/index.w`, () => {
   test("adds new row", async ({ page }) => {
     await getResourceNode(page, "root/Default/ex.Table").click();
-    await expect(page.getByTestId("ex.Table:interaction")).toBeVisible();
 
     const rowId = "Hello World!";
 
@@ -21,7 +20,6 @@ describe(`${__dirname}/index.w`, () => {
 
   test("edits row", async ({ page }) => {
     await getResourceNode(page, "root/Default/ex.Table").click();
-    await expect(page.getByTestId("ex.Table:interaction")).toBeVisible();
 
     const rowId = "Hello World!";
 
@@ -47,7 +45,6 @@ describe(`${__dirname}/index.w`, () => {
 
   test("removes row", async ({ page }) => {
     await getResourceNode(page, "root/Default/ex.Table").click();
-    await expect(page.getByTestId("ex.Table:interaction")).toBeVisible();
 
     const rowId = "Hello World!";
 

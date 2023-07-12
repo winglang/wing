@@ -6,7 +6,6 @@ import { getResourceNode } from "../helpers.js";
 describe(`${__dirname}/index.w`, () => {
   test("opens file preview", async ({ page }) => {
     await getResourceNode(page, "root/Default/cloud.Bucket").click();
-    await expect(page.getByTestId("cloud.Bucket:interaction")).toBeVisible();
 
     await page.getByTestId("cloud.bucket:files-entry-test.txt").click();
 
@@ -17,7 +16,6 @@ describe(`${__dirname}/index.w`, () => {
 
   test("deletes a file", async ({ page }) => {
     await getResourceNode(page, "root/Default/cloud.Bucket").click();
-    await expect(page.getByTestId("cloud.Bucket:interaction")).toBeVisible();
 
     const file = page.getByTestId("cloud.bucket:files-entry-test.txt");
 

@@ -16,10 +16,7 @@ export const WebsiteInteraction = ({
 }: WebsiteInteractionProps) => {
   const { theme } = useTheme();
   return (
-    <div
-      className="h-full flex-1 flex flex-col text-sm space-y-1"
-      data-testid="cloud.Website:interaction"
-    >
+    <div className="h-full flex-1 flex flex-col text-sm space-y-1">
       <div className="relative grow flex-row flex items-center">
         {appMode === "local" && (
           <>

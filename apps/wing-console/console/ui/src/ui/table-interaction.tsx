@@ -103,10 +103,7 @@ export const TableInteraction = ({
   }, [internalRows.length]);
 
   return (
-    <div
-      className="inline-block align-middle w-full mt-1"
-      data-testid="ex.Table:interaction"
-    >
+    <div className="inline-block align-middle w-full mt-1">
       <div
         className={classNames(
           "relative min-h-[2rem] max-h-[30rem]",

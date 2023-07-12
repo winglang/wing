@@ -194,10 +194,7 @@ export const ApiInteraction = ({
   }, [schemaData]);
 
   return (
-    <div
-      className="h-full flex-1 flex flex-col text-sm space-y-1"
-      data-testid="cloud.Api:interaction"
-    >
+    <div className="h-full flex-1 flex flex-col text-sm space-y-1">
       <div className="relative grow">
         {appMode === "local" && (
           <Attribute name="URL" value={url} noLeftPadding />
