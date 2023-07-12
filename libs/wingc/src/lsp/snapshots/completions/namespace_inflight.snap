@@ -6,7 +6,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(url: str, options: RequestOptions?): Response"
   documentation:
     kind: markdown
-    value: "```wing\nstatic delete: (url: str, options: RequestOptions?): Response\n```\n---\nSends a DELETE request.\n\n\n### Returns\nthe formatted response of the call"
+    value: "```wing\nstatic delete: (url: str, options: RequestOptions?): Response\n```\n---\nExecutes a DELETE request to a specified URL and provides a formatted response.\n\n\n### Returns\nthe formatted response of the call"
   sortText: ff|delete
   insertText: delete($0)
   insertTextFormat: 2
@@ -18,7 +18,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(url: str, options: RequestOptions?): Response"
   documentation:
     kind: markdown
-    value: "```wing\nstatic fetch: (url: str, options: RequestOptions?): Response\n```\n---\nSends an HTTP request to a URL, returning a fulfilled or failed response.\n\n\n### Returns\nthe formatted response of the call\n\n*@throws* *Only throws if there is a networking error*"
+    value: "```wing\nstatic fetch: (url: str, options: RequestOptions?): Response\n```\n---\nExecutes a HTTP request to a specified URL and provides a formatted response.\n\n\n### Returns\nthe formatted response of the call\n\n### Remarks\nThis method allows various HTTP methods based on the provided options.\n\n*@throws* *Only throws if there is a networking error*"
   sortText: ff|fetch
   insertText: fetch($0)
   insertTextFormat: 2
@@ -30,7 +30,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(url: str, options: RequestOptions?): Response"
   documentation:
     kind: markdown
-    value: "```wing\nstatic get: (url: str, options: RequestOptions?): Response\n```\n---\nSends a GET request.\n\n\n### Returns\nthe formatted response of the call"
+    value: "```wing\nstatic get: (url: str, options: RequestOptions?): Response\n```\n---\nExecutes a GET request to a specified URL and provides a formatted response.\n\n\n### Returns\nthe formatted response of the call"
   sortText: ff|get
   insertText: get($0)
   insertTextFormat: 2
@@ -42,7 +42,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(url: str, options: RequestOptions?): Response"
   documentation:
     kind: markdown
-    value: "```wing\nstatic patch: (url: str, options: RequestOptions?): Response\n```\n---\nSends a PATCH request.\n\n\n### Returns\nthe formatted response of the call"
+    value: "```wing\nstatic patch: (url: str, options: RequestOptions?): Response\n```\n---\nExecutes a PATCH request to a specified URL and provides a formatted response.\n\n\n### Returns\nthe formatted response of the call"
   sortText: ff|patch
   insertText: patch($0)
   insertTextFormat: 2
@@ -54,7 +54,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(url: str, options: RequestOptions?): Response"
   documentation:
     kind: markdown
-    value: "```wing\nstatic post: (url: str, options: RequestOptions?): Response\n```\n---\nSends a POST request.\n\n\n### Returns\nthe formatted response of the call"
+    value: "```wing\nstatic post: (url: str, options: RequestOptions?): Response\n```\n---\nExecutes a POST request to a specified URL and provides a formatted response.\n\n\n### Returns\nthe formatted response of the call"
   sortText: ff|post
   insertText: post($0)
   insertTextFormat: 2
@@ -66,7 +66,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(url: str, options: RequestOptions?): Response"
   documentation:
     kind: markdown
-    value: "```wing\nstatic put: (url: str, options: RequestOptions?): Response\n```\n---\nSends a PUT request.\n\n\n### Returns\nthe formatted response of the call"
+    value: "```wing\nstatic put: (url: str, options: RequestOptions?): Response\n```\n---\nExecutes a PUT request to a specified URL and provides a formatted response.\n\n\n### Returns\nthe formatted response of the call"
   sortText: ff|put
   insertText: put($0)
   insertTextFormat: 2

@@ -122,3 +122,11 @@ through the AWS Management Console.
 8. Cycle through the buckets until you find one that contains `wing.txt`.
 9. Click `wing.txt` then click the `Open` button.
 10. The file should contain `Hello, cloud`.
+
+## Cleanup
+
+Once you're done, you can destroy all of the resources that were created on your AWS account by running:
+
+```sh
+terraform destroy
+```
