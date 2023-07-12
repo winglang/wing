@@ -18,10 +18,10 @@ sidebar_position: 1
 The `cloud.Schedule` resource is used to trigger events at a regular interval.
 Schedules are useful for periodic tasks, such as running backups or sending daily reports.
 
-
 ## Usage
 
 ### From cron
+
 ```ts playground
 bring cloud;
 
@@ -32,7 +32,7 @@ schedule.onTick(inflight () => {
 });
 ```
 
-### From rate 
+### From rate
 
 ```ts playground
 bring cloud;
@@ -43,6 +43,7 @@ schedule.onTick(inflight () => {
   log("schedule: triggered");
 });
 ```
+
 ### Simulator (`sim`)
 
 A standard JavaScript `setTimeout` function triggers ticks as callbacks.
@@ -58,7 +59,3 @@ See [Amazon CloudWatch](https://aws.amazon.com/cloudwatch/).
 ### GCP (`tf-gcp`)
 
 🚧 Not supported yet (tracking issue: [#1292](https://github.com/winglang/wing/issues/1292)).
-
-## API Reference
-
-The full list of APIs for `cloud.Schedule` is available in the [API Reference](./api-reference).

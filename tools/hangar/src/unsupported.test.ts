@@ -39,7 +39,7 @@ test("unsupported resource in target", async ({ expect }) => {
          }
        }
 
-        at compile <PATH>
+        at Object.compile <PATH>
         at async Command.<anonymous> <PATH>"
   `);
 });

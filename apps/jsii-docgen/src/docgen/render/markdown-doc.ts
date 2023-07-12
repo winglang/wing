@@ -178,6 +178,11 @@ export class MarkdownDocument {
     this.lines("");
   }
 
+  public title(line: string, headerSize: number) {
+    this.lines(`${"#".repeat(headerSize)} ${line}`);
+    this.lines("");
+  }
+
   public bullet(line: string) {
     this.lines(`- ${line}`);
   }

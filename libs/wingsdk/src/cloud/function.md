@@ -60,7 +60,3 @@ The Azure implementation of `cloud.Function` uses [Azure Function](https://azure
 ### GCP (`tf-gcp`)
 
 🚧 Not supported yet (tracking issue: [#614](https://github.com/winglang/wing/issues/614))
-
-## API Reference
-
-The full list of APIs for `cloud.Function` is available in the [API Reference](./api-reference).
