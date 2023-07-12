@@ -311,9 +311,6 @@ importers:
       '@types/semver-utils':
         specifier: ^1.1.1
         version: 1.1.1
-      '@types/update-notifier':
-        specifier: ^6.0.1
-        version: 6.0.1
       '@types/uuid':
         specifier: ^8.3.2
         version: 8.3.2
@@ -8958,10 +8955,6 @@ packages:
     resolution: {integrity: sha512-mEo1sAde+UCE6b2hxn332f1g1E8WfYRu6p5SvTKr2ZKC1f7gFJXk4h5PyGP9Dt6gCaG8y8XhwnXWC6Iy2cmBng==}
     dev: true
 
-  /@types/configstore@6.0.0:
-    resolution: {integrity: sha512-GUvNiia85zTDDIx0iPrtF3pI8dwrQkfuokEqxqPDE55qxH0U5SZz4awVZjiJLWN2ZZRkXCUqgsMUbygXY+kytA==}
-    dev: true
-
   /@types/connect@3.4.35:
     resolution: {integrity: sha512-cdeYyv4KWoEgpBISTxWvqYsVy444DOqehiF3fM3ne10AmJ62RSyNkUnxMJXHQWRQQX2eR94m5y1IZyDwBjV9FQ==}
     dependencies:
@@ -9342,13 +9335,6 @@ packages:
 
   /@types/unist@2.0.6:
     resolution: {integrity: sha512-PBjIUxZHOuj0R15/xuwJYjFi+KZdNFrehocChv4g5hu6aFroHue8m0lBP0POdK2nKzbw0cgV1mws8+V/JAcEkQ==}
-    dev: true
-
-  /@types/update-notifier@6.0.1:
-    resolution: {integrity: sha512-J6x9qtPDKgJGLdTjiswhhiL5QJoZv7eQb44t90mWb4Cf3tnuDRMvg8je9PoxDJZiGog0bfoFVcVHBq4RcItRZg==}
-    dependencies:
-      '@types/configstore': 6.0.0
-      boxen: 7.1.0
     dev: true
 
   /@types/uuid@8.3.2:
