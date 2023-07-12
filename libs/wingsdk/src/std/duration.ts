@@ -2,6 +2,7 @@ import { Code, InflightClient } from "../core";
 
 /**
  * Represents a length of time.
+ * @wingType duration
  */
 export class Duration {
   /**

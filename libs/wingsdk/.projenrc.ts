@@ -25,7 +25,7 @@ const CLOUD_MODULES = [
   // no test-runner
 ];
 
-const PUBLIC_MODULES = ["std", "http", "util", "redis"];
+const PUBLIC_MODULES = ["std", "http", "util", "redis", "ex"];
 
 const CLOUD_DOCS_PREFIX = "../../docs/docs/04-standard-library/01-cloud/";
 

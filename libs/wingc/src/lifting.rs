@@ -5,7 +5,9 @@ use crate::{
 	files::Files,
 	fold::{self, Fold},
 	jsify::{JSifier, JSifyContext},
-	type_check::{lifts::Lifts, resolve_user_defined_type, symbol_env::LookupResult, CLOSURE_CLASS_HANDLE_METHOD},
+	type_check::{
+		lifts::Lifts, resolve_user_defined_type, symbol_env::LookupResult, TypeRef, CLOSURE_CLASS_HANDLE_METHOD,
+	},
 	visit_context::VisitContext,
 };
 
@@ -174,7 +176,7 @@ impl<'a> Fold for LiftTransform<'a> {
 		CompilationContext::set(CompilationPhase::Lifting, &node.span);
 
 		let expr_phase = self.jsify.types.get_expr_phase(&node).unwrap();
-		let expr_type = self.jsify.types.get_expr_type(&node).unwrap();
+		let expr_type = self.jsify.types.get_expr_type(&node);
 
 		// this whole thing only applies to inflight expressions
 		if self.ctx.current_phase() == Phase::Preflight {
@@ -214,6 +216,11 @@ impl<'a> Fold for LiftTransform<'a> {
 					span: Some(node.span.clone()),
 				});
 
+				return node;
+			}
+
+			// if this is an inflight property, no need to lift it
+			if is_inflight_field(&node, expr_type, &property) {
 				return node;
 			}
 
@@ -364,4 +371,26 @@ impl<'a> Fold for LiftTransform<'a> {
 
 		result
 	}
+}
+
+/// Check if an expression is a reference to an inflight field (`this.<field>`).
+/// in this case, we don't need to lift the field because it is already available
+fn is_inflight_field(expr: &Expr, expr_type: TypeRef, property: &Option<String>) -> bool {
+	if let ExprKind::Reference(Reference::Identifier(symb)) = &expr.kind {
+		if symb.name == "this" {
+			if let (Some(cls), Some(property)) = (expr_type.as_preflight_class(), property) {
+				if let LookupResult::Found(kind, _) = cls.env.lookup_nested_str(&property, None) {
+					if let Some(var) = kind.as_variable() {
+						if !var.type_.is_closure() {
+							if var.phase != Phase::Preflight {
+								return true;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	return false;
 }

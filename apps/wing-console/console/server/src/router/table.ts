@@ -1,4 +1,4 @@
-import { ColumnType as SdkColumnType } from "@winglang/sdk/lib/cloud/table.js";
+import { ColumnType as SdkColumnType } from "@winglang/sdk/lib/ex/table.js";
 import { z } from "zod";
 
 import { createProcedure, createRouter } from "../utils/createRouter.js";

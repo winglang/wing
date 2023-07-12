@@ -4,6 +4,8 @@ use itertools::Itertools;
 
 use crate::ast::Symbol;
 
+use super::CLASS_INFLIGHT_INIT_NAME;
+
 /// A repository of lifts and captures at the class level.
 #[derive(Debug)]
 pub struct Lifts {
@@ -15,9 +17,6 @@ pub struct Lifts {
 
 	/// Map from token to lift
 	lift_by_token: BTreeMap<String, Lift>,
-
-	/// A map of all lifted fields (`this.foo`). Key is token, value is the javascript code.
-	lifted_fields_by_token: BTreeMap<String, String>,
 
 	/// Map between expression id and a lift token.
 	token_by_expr_id: BTreeMap<usize, String>,
@@ -47,6 +46,9 @@ pub struct MethodLift {
 
 	/// The operations that qualify the lift (the property names)
 	pub ops: BTreeSet<String>,
+
+	/// Indicates if this is a lift for a field or a free variable
+	pub is_field: bool,
 }
 
 /// A record that describes a lift from a class.
@@ -68,7 +70,6 @@ impl Lifts {
 			lifts: BTreeMap::new(),
 			lift_by_token: BTreeMap::new(),
 			captures: BTreeMap::new(),
-			lifted_fields_by_token: BTreeMap::new(),
 			token_by_expr_id: BTreeMap::new(),
 		}
 	}
@@ -102,25 +103,28 @@ impl Lifts {
 
 		let method = method.map(|m| m.name).unwrap_or(Default::default());
 
+		self.add_lift(method, token.clone(), code, property, is_field);
+
+		// add a lift to the inflight initializer or capture it if its not a field
+		if is_field {
+			self.add_lift(CLASS_INFLIGHT_INIT_NAME.to_string(), token, code, None, true);
+		} else {
+			self.capture(&expr_id, code);
+		}
+	}
+
+	fn add_lift(&mut self, method: String, token: String, code: &str, property: Option<String>, is_field: bool) {
 		let key = format!("{}/{}", method.clone(), token);
 		let lift = self.lifts.entry(key).or_insert(MethodLift {
 			code: code.to_string(),
 			token: token.clone(),
 			method: method.clone(),
 			ops: BTreeSet::new(),
+			is_field,
 		});
 
 		if let Some(op) = &property {
 			lift.ops.insert(op.clone());
-		}
-
-		if is_field {
-			self
-				.lifted_fields_by_token
-				.entry(token.to_string())
-				.or_insert(code.to_string());
-		} else {
-			self.capture(&expr_id, code);
 		}
 	}
 
@@ -167,7 +171,18 @@ impl Lifts {
 
 	/// List of all lifted fields in the class.
 	pub fn lifted_fields(&self) -> BTreeMap<String, String> {
-		self.lifted_fields_by_token.clone()
+		let mut result: BTreeMap<String, String> = BTreeMap::new();
+
+		for (_, lift) in &self.lifts {
+			if !lift.is_field {
+				continue;
+			}
+
+			result.insert(lift.token.clone(), lift.code.clone());
+		}
+
+		// self.lifted_fields_by_token.clone()
+		result
 	}
 
 	/// List of all lifts per method. Key is the method name and the value is a list of lifts.

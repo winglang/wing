@@ -27,7 +27,7 @@ When a client invokes a route, the corresponding event handler function executes
 
 ### REST API
 
-The following example shows a complete REST API implemetnation using `cloud.Api`, `cloud.Table` & `cloud.Counter`
+The following example shows a complete REST API implementation using `cloud.Api`, `ex.Table` & `cloud.Counter`
 
 ```ts playground
 bring cloud;
@@ -36,11 +36,11 @@ let api = new cloud.Api();
 // Used for generating unique id
 let counter = new cloud.Counter();
 // our employee database
-let db = new cloud.Table(
+let db = new ex.Table(
   name: "employees",
   primaryKey: "id",
   columns: {
-    "name" => cloud.ColumnType.STRING
+    "name" => ex.ColumnType.STRING
   }
 );
 

@@ -683,6 +683,12 @@ exports[`bucket with onCreate method 2`] = `
                       "relationship": "handle",
                       "resource": "root/Default/my_bucket/my_bucket-on_create-OnMessage-2c90a36b",
                     },
+                    {
+                      "direction": "inbound",
+                      "implicit": false,
+                      "relationship": "$inflight_init",
+                      "resource": "root/Default/my_bucket/my_bucket-on_create-OnMessage-2c90a36b",
+                    },
                   ],
                 },
                 "constructInfo": {
@@ -815,7 +821,19 @@ exports[`bucket with onCreate method 2`] = `
                         {
                           "direction": "outbound",
                           "implicit": false,
+                          "relationship": "$inflight_init",
+                          "resource": "root/Default/inflight",
+                        },
+                        {
+                          "direction": "outbound",
+                          "implicit": false,
                           "relationship": "handle",
+                          "resource": "root/Default/my_bucket-on_create-eventHandler-9eade8f6",
+                        },
+                        {
+                          "direction": "outbound",
+                          "implicit": false,
+                          "relationship": "$inflight_init",
                           "resource": "root/Default/my_bucket-on_create-eventHandler-9eade8f6",
                         },
                         {
@@ -928,6 +946,12 @@ exports[`bucket with onCreate method 2`] = `
                       "direction": "inbound",
                       "implicit": false,
                       "relationship": "handle",
+                      "resource": "root/Default/my_bucket/my_bucket-on_create-OnMessage-2c90a36b",
+                    },
+                    {
+                      "direction": "inbound",
+                      "implicit": false,
+                      "relationship": "$inflight_init",
                       "resource": "root/Default/my_bucket/my_bucket-on_create-OnMessage-2c90a36b",
                     },
                   ],
@@ -1173,6 +1197,12 @@ exports[`bucket with onDelete method 2`] = `
                       "relationship": "handle",
                       "resource": "root/Default/my_bucket/my_bucket-on_delete-OnMessage-f22c8a47",
                     },
+                    {
+                      "direction": "inbound",
+                      "implicit": false,
+                      "relationship": "$inflight_init",
+                      "resource": "root/Default/my_bucket/my_bucket-on_delete-OnMessage-f22c8a47",
+                    },
                   ],
                 },
                 "constructInfo": {
@@ -1305,7 +1335,19 @@ exports[`bucket with onDelete method 2`] = `
                         {
                           "direction": "outbound",
                           "implicit": false,
+                          "relationship": "$inflight_init",
+                          "resource": "root/Default/inflight",
+                        },
+                        {
+                          "direction": "outbound",
+                          "implicit": false,
                           "relationship": "handle",
+                          "resource": "root/Default/my_bucket-on_delete-eventHandler-9eade8f6",
+                        },
+                        {
+                          "direction": "outbound",
+                          "implicit": false,
+                          "relationship": "$inflight_init",
                           "resource": "root/Default/my_bucket-on_delete-eventHandler-9eade8f6",
                         },
                         {
@@ -1418,6 +1460,12 @@ exports[`bucket with onDelete method 2`] = `
                       "direction": "inbound",
                       "implicit": false,
                       "relationship": "handle",
+                      "resource": "root/Default/my_bucket/my_bucket-on_delete-OnMessage-f22c8a47",
+                    },
+                    {
+                      "direction": "inbound",
+                      "implicit": false,
+                      "relationship": "$inflight_init",
                       "resource": "root/Default/my_bucket/my_bucket-on_delete-OnMessage-f22c8a47",
                     },
                   ],
@@ -1788,13 +1836,31 @@ exports[`bucket with onEvent method 2`] = `
                     {
                       "direction": "inbound",
                       "implicit": false,
+                      "relationship": "$inflight_init",
+                      "resource": "root/Default/my_bucket/my_bucket-on_create-OnMessage-2c90a36b",
+                    },
+                    {
+                      "direction": "inbound",
+                      "implicit": false,
                       "relationship": "handle",
                       "resource": "root/Default/my_bucket/my_bucket-on_update-OnMessage-32b7a290",
                     },
                     {
                       "direction": "inbound",
                       "implicit": false,
+                      "relationship": "$inflight_init",
+                      "resource": "root/Default/my_bucket/my_bucket-on_update-OnMessage-32b7a290",
+                    },
+                    {
+                      "direction": "inbound",
+                      "implicit": false,
                       "relationship": "handle",
+                      "resource": "root/Default/my_bucket/my_bucket-on_delete-OnMessage-f22c8a47",
+                    },
+                    {
+                      "direction": "inbound",
+                      "implicit": false,
+                      "relationship": "$inflight_init",
                       "resource": "root/Default/my_bucket/my_bucket-on_delete-OnMessage-f22c8a47",
                     },
                   ],
@@ -1941,7 +2007,19 @@ exports[`bucket with onEvent method 2`] = `
                         {
                           "direction": "outbound",
                           "implicit": false,
+                          "relationship": "$inflight_init",
+                          "resource": "root/Default/inflight",
+                        },
+                        {
+                          "direction": "outbound",
+                          "implicit": false,
                           "relationship": "handle",
+                          "resource": "root/Default/my_bucket-on_create-eventHandler-9eade8f6",
+                        },
+                        {
+                          "direction": "outbound",
+                          "implicit": false,
+                          "relationship": "$inflight_init",
                           "resource": "root/Default/my_bucket-on_create-eventHandler-9eade8f6",
                         },
                         {
@@ -2101,7 +2179,19 @@ exports[`bucket with onEvent method 2`] = `
                         {
                           "direction": "outbound",
                           "implicit": false,
+                          "relationship": "$inflight_init",
+                          "resource": "root/Default/inflight",
+                        },
+                        {
+                          "direction": "outbound",
+                          "implicit": false,
                           "relationship": "handle",
+                          "resource": "root/Default/my_bucket-on_delete-eventHandler-9eade8f6",
+                        },
+                        {
+                          "direction": "outbound",
+                          "implicit": false,
+                          "relationship": "$inflight_init",
                           "resource": "root/Default/my_bucket-on_delete-eventHandler-9eade8f6",
                         },
                         {
@@ -2261,7 +2351,19 @@ exports[`bucket with onEvent method 2`] = `
                         {
                           "direction": "outbound",
                           "implicit": false,
+                          "relationship": "$inflight_init",
+                          "resource": "root/Default/inflight",
+                        },
+                        {
+                          "direction": "outbound",
+                          "implicit": false,
                           "relationship": "handle",
+                          "resource": "root/Default/my_bucket-on_update-eventHandler-9eade8f6",
+                        },
+                        {
+                          "direction": "outbound",
+                          "implicit": false,
+                          "relationship": "$inflight_init",
                           "resource": "root/Default/my_bucket-on_update-eventHandler-9eade8f6",
                         },
                         {
@@ -2376,6 +2478,12 @@ exports[`bucket with onEvent method 2`] = `
                       "relationship": "handle",
                       "resource": "root/Default/my_bucket/my_bucket-on_create-OnMessage-2c90a36b",
                     },
+                    {
+                      "direction": "inbound",
+                      "implicit": false,
+                      "relationship": "$inflight_init",
+                      "resource": "root/Default/my_bucket/my_bucket-on_create-OnMessage-2c90a36b",
+                    },
                   ],
                 },
                 "constructInfo": {
@@ -2397,6 +2505,12 @@ exports[`bucket with onEvent method 2`] = `
                       "relationship": "handle",
                       "resource": "root/Default/my_bucket/my_bucket-on_delete-OnMessage-f22c8a47",
                     },
+                    {
+                      "direction": "inbound",
+                      "implicit": false,
+                      "relationship": "$inflight_init",
+                      "resource": "root/Default/my_bucket/my_bucket-on_delete-OnMessage-f22c8a47",
+                    },
                   ],
                 },
                 "constructInfo": {
@@ -2416,6 +2530,12 @@ exports[`bucket with onEvent method 2`] = `
                       "direction": "inbound",
                       "implicit": false,
                       "relationship": "handle",
+                      "resource": "root/Default/my_bucket/my_bucket-on_update-OnMessage-32b7a290",
+                    },
+                    {
+                      "direction": "inbound",
+                      "implicit": false,
+                      "relationship": "$inflight_init",
                       "resource": "root/Default/my_bucket/my_bucket-on_update-OnMessage-32b7a290",
                     },
                   ],
@@ -2661,6 +2781,12 @@ exports[`bucket with onUpdate method 2`] = `
                       "relationship": "handle",
                       "resource": "root/Default/my_bucket/my_bucket-on_update-OnMessage-32b7a290",
                     },
+                    {
+                      "direction": "inbound",
+                      "implicit": false,
+                      "relationship": "$inflight_init",
+                      "resource": "root/Default/my_bucket/my_bucket-on_update-OnMessage-32b7a290",
+                    },
                   ],
                 },
                 "constructInfo": {
@@ -2793,7 +2919,19 @@ exports[`bucket with onUpdate method 2`] = `
                         {
                           "direction": "outbound",
                           "implicit": false,
+                          "relationship": "$inflight_init",
+                          "resource": "root/Default/inflight",
+                        },
+                        {
+                          "direction": "outbound",
+                          "implicit": false,
                           "relationship": "handle",
+                          "resource": "root/Default/my_bucket-on_update-eventHandler-9eade8f6",
+                        },
+                        {
+                          "direction": "outbound",
+                          "implicit": false,
+                          "relationship": "$inflight_init",
                           "resource": "root/Default/my_bucket-on_update-eventHandler-9eade8f6",
                         },
                         {
@@ -2906,6 +3044,12 @@ exports[`bucket with onUpdate method 2`] = `
                       "direction": "inbound",
                       "implicit": false,
                       "relationship": "handle",
+                      "resource": "root/Default/my_bucket/my_bucket-on_update-OnMessage-32b7a290",
+                    },
+                    {
+                      "direction": "inbound",
+                      "implicit": false,
+                      "relationship": "$inflight_init",
                       "resource": "root/Default/my_bucket/my_bucket-on_update-OnMessage-32b7a290",
                     },
                   ],

@@ -19,7 +19,7 @@ import {
 import { mockClient } from "aws-sdk-client-mock";
 import { test, expect, describe, beforeEach } from "vitest";
 
-import { ColumnType } from "../../src/cloud";
+import { ColumnType } from "../../src/ex";
 import { TableClient } from "../../src/shared-aws/table.inflight";
 
 const MOCK_TABLE_NAME = "MyBeautifulTable";

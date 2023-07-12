@@ -6,21 +6,23 @@ export interface CreateAnalyticsOptions {
 }
 
 export interface Analytics {
-  track(event: string): void;
+  track(event: string, properties?: Record<string, any>): void;
 }
 
 export const createAnalytics = (options: CreateAnalyticsOptions): Analytics => {
   const segment = new Segment(options.segmentWriteKey);
-
-  segment.identify({
-    anonymousId: options.anonymousId,
-  });
-
+  const sessionId = Date.now();
   return {
-    track(event: string) {
+    track(event: string, properties?: Record<string, any>) {
       segment.track({
         anonymousId: options.anonymousId,
         event,
+        properties,
+        integrations: {
+          "Actions Amplitude": {
+            "session_id": sessionId
+          },
+        }
       });
     },
   };

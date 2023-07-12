@@ -1,8 +1,6 @@
 import { TRPCError } from "@trpc/server";
 import { observable } from "@trpc/server/observable";
 import { Trace } from "@winglang/sdk/lib/cloud/test-runner.js";
-import { ConstructTree } from "@winglang/sdk/lib/core";
-import { ConstructInfo, DisplayInfo } from "@winglang/sdk/lib/core/tree";
 import uniqby from "lodash.uniqby";
 import { z } from "zod";
 
@@ -15,6 +13,11 @@ import {
   ConstructTreeNodeMap,
 } from "../utils/constructTreeNodeMap.js";
 import { createProcedure, createRouter } from "../utils/createRouter.js";
+import {
+  isTermsAccepted,
+  acceptTerms,
+  getLicense,
+} from "../utils/terms-and-conditions.js";
 import { Simulator } from "../wingsdk.js";
 
 const isTest = /(\/test$|\/test:([^/\\])+$)/;
@@ -48,6 +51,16 @@ export const createAppRouter = () => {
     }),
     "app.wingfile": createProcedure.query(({ ctx }) => {
       return ctx.wingfile.split("/").pop();
+    }),
+    "app.termsConfig": createProcedure.query(({ ctx }) => {
+      return {
+        requireAcceptTerms: ctx.requireAcceptTerms,
+        accepted: isTermsAccepted(),
+        license: getLicense(),
+      };
+    }),
+    "app.acceptTerms": createProcedure.mutation(() => {
+      acceptTerms(true);
     }),
     "app.logs": createProcedure
       .input(

@@ -538,7 +538,25 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          MyResource._registerBindObject(this, host, ["inflightField"]);
+          MyResource._registerBindObject((!(this.setOfStr.has("s3"))), host, []);
+          MyResource._registerBindObject((this.arrayOfStr.at(0)), host, []);
+          MyResource._registerBindObject((this.arrayOfStr.at(1)), host, []);
+          MyResource._registerBindObject((this.mapOfNum)["k1"], host, []);
+          MyResource._registerBindObject((this.mapOfNum)["k2"], host, []);
+          MyResource._registerBindObject((this.myOptStr ?? ""), host, []);
+          MyResource._registerBindObject((this.setOfStr.has("s1")), host, []);
+          MyResource._registerBindObject((this.setOfStr.has("s2")), host, []);
+          MyResource._registerBindObject(this.another, host, []);
+          MyResource._registerBindObject(this.another.first.myResource, host, []);
+          MyResource._registerBindObject(this.another.myField, host, []);
+          MyResource._registerBindObject(this.arrayOfStr.length, host, []);
+          MyResource._registerBindObject(this.extBucket, host, []);
+          MyResource._registerBindObject(this.extNum, host, []);
+          MyResource._registerBindObject(this.myBool, host, []);
+          MyResource._registerBindObject(this.myNum, host, []);
+          MyResource._registerBindObject(this.myQueue, host, []);
+          MyResource._registerBindObject(this.myResource, host, []);
+          MyResource._registerBindObject(this.myStr, host, []);
         }
         if (ops.includes("testCaptureCollectionsOfData")) {
           MyResource._registerBindObject((!(this.setOfStr.has("s3"))), host, []);
@@ -568,9 +586,6 @@ class $Root extends $stdlib.std.Resource {
         if (ops.includes("testExternal")) {
           MyResource._registerBindObject(this.extBucket, host, ["list"]);
           MyResource._registerBindObject(this.extNum, host, []);
-        }
-        if (ops.includes("testInflightField")) {
-          MyResource._registerBindObject(this, host, ["inflightField"]);
         }
         if (ops.includes("testNestedInflightField")) {
           MyResource._registerBindObject(this.another.myField, host, []);

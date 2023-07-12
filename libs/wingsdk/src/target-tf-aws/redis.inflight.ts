@@ -2,7 +2,7 @@ import {
   DescribeCacheClustersCommand,
   ElastiCacheClient,
 } from "@aws-sdk/client-elasticache";
-import { RedisClientBase } from "../redis";
+import { RedisClientBase } from "../ex";
 
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 const IoRedis = require("ioredis");

@@ -88,7 +88,6 @@ export const ContainerNode = ({
       tabIndex={-1}
       onClick={onClick}
       onMouseEnter={onMouseEnter}
-      data-testid={`map-node:${props.nodeId}`}
     >
       <div
         className={classNames(
@@ -142,6 +141,7 @@ export const ContainerNode = ({
               "rounded-l": !Icon,
             },
           )}
+          data-testid={`map-node:${props.nodeId}`}
         >
           <div className="flex flex-col">
             <div

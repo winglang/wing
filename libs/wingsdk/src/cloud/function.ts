@@ -38,7 +38,7 @@ export interface FunctionProps {
 }
 
 /**
- * Represents a function.
+ * A function.
  *
  * @inflight `@winglang/sdk.cloud.IFunctionClient`
  */
@@ -142,7 +142,7 @@ export interface IFunctionClient {
 }
 
 /**
- * Represents a resource with an inflight "handle" method that can be used to
+ * A resource with an inflight "handle" method that can be used to
  * create a `cloud.Function`.
  *
  * @inflight `@winglang/sdk.cloud.IFunctionHandlerClient`

@@ -174,8 +174,8 @@ export class MarkdownRenderer {
       id: "api-reference",
     });
     md.section(this.visitConstructs(apiRef.constructs, headless));
-    md.section(this.visitStructs(apiRef.structs));
     md.section(this.visitClasses(apiRef.classes));
+    md.section(this.visitStructs(apiRef.structs));
     md.section(this.visitInterfaces(apiRef.interfaces));
     md.section(this.visitEnums(apiRef.enums));
     return md;
