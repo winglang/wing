@@ -1,10 +1,10 @@
 bring cloud;
+bring http;
 
 let w = new cloud.Website(path: "./website");
 let config = Json { json: 1 };
 
 class Util {
-  extern "../external/http.js" static inflight http(url: str): Json;
   extern "../external/fs.js" static readFile(path: str): str;    
 }
  
@@ -18,8 +18,12 @@ assert(w.path.endsWith("sdk_tests/website/website") || w.path.endsWith("sdk_test
 
 
 test "access files on the website" {
-    //TODO doesn't work on tf-aws, w.url is undefined https://github.com/winglang/wing/issues/2829
-    assert(Json.stringify(Util.http(w.url).get("body")) == Json.stringify(indexFile));
-    assert(Json.stringify(Util.http(w.url + "/inner-folder/other.html").get("body")) == Json.stringify(otherFile));
-    assert(Json.stringify(Util.http(w.url + "/config.json").get("body")) == Json.stringify(Json.stringify(config)));
+    let var url = w.url;
+    if (!url.startsWith("http")) {
+      url = "http://" + url;
+    }
+    
+    assert(http.get(url).body == indexFile);
+    assert(http.get(url + "/inner-folder/other.html").body == otherFile);
+    assert(http.get(url + "/config.json").body == Json.stringify(config));
 }  

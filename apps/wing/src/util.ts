@@ -1,5 +1,4 @@
 import { copyFileSync, promises as fsPromise, readFileSync, cpSync } from "fs";
-import ora from "ora";
 import { basename, join, resolve } from "path";
 import { tmpdir } from "os";
 
@@ -23,6 +22,8 @@ export async function withSpinner<T>(message: string, fn: () => Promise<T>): Pro
   if (!process.env.PROGRESS) {
     return fn();
   }
+
+  const ora = await import("ora").then((m) => m.default);
 
   const spinner = ora({
     stream: process.stdout, // hangar tests currently expect stderr to be empty or else they fail
@@ -93,3 +94,5 @@ export function parseNumericString(text?: string) {
 
   return number;
 }
+
+export const currentPackage: { name: string, version: string, engines: { node: string } } = require("../package.json");
