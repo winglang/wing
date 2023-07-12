@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+
 import { describe } from "../describe.js";
 import { getResourceNode } from "../helpers.js";
 
@@ -12,7 +13,7 @@ describe(`${__dirname}/index.w`, () => {
 
     const approxSize = page.getByTestId("cloud.queue:approx-size");
 
-    await expect(approxSize).toContainText("1");
+    await expect(approxSize).toHaveText("1");
   });
 
   test("purges message", async ({ page }) => {
@@ -24,10 +25,10 @@ describe(`${__dirname}/index.w`, () => {
 
     const approxSize = page.getByTestId("cloud.queue:approx-size");
 
-    await expect(approxSize).toContainText("1");
+    await expect(approxSize).toHaveText("1");
 
     await page.getByTestId("cloud.queue:purge").click();
 
-    await expect(approxSize).toContainText("0");
+    await expect(approxSize).toHaveText("0");
   });
 });
