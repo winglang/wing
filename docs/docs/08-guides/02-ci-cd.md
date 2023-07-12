@@ -45,13 +45,15 @@ on:
     branches:
       - main
 
+# Make sure there is only one deployment running at
+# the same time. See https://docs.github.com/en/actions/using-jobs/using-concurrency
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: false
 
 permissions:
-  id-token: write
-  contents: read
+  id-token: write # This is required for requesting the JWT
+  contents: read  # This is required for actions/checkout
 
 env:
   AWS_REGION: 'us-east-1'
@@ -68,7 +70,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v2
         with:
           role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
-          role-session-name: gh-actions-winglang
+          role-session-name: gh-actions-winglang # makes it easy to identify, e.g. in AWS Cloudtrail
           aws-region: ${{ env.AWS_REGION }}
       - name: Deploy Winglang App
         uses: winglang/wing-github-action/actions/deploy@v0.1.0
