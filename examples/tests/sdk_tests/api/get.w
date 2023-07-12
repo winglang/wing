@@ -1,5 +1,6 @@
 bring cloud;
 bring http;
+bring util;
 
 // https://github.com/winglang/wing/issues/3049
 let http_GET = http.HttpMethod.GET;
@@ -21,23 +22,25 @@ api.get("/path", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
   };
 });
 
+/// https://github.com/winglang/wing/issues/3342
+if (util.env("WING_TARGET") != "tf-aws") {
+  test "http.get and http.fetch can preform a call to an api" {
+    let url = api.url + "/path";
+    let getResponse: http.Response = http.get(url, headers: { "content-type" => "application/json" });
+    let fetchResponse: http.Response = http.fetch(url, method: http_GET, headers: { "content-type" => "application/json" });
+    let fetchResponseNoMethod: http.Response = http.fetch(url,  headers: { "content-type" => "application/json" });
 
-test "http.get and http.fetch can preform a call to an api" {
-  let url = api.url + "/path";
-  let getResponse: http.Response = http.get(url, headers: { "content-type" => "application/json" });
-  let fetchResponse: http.Response = http.fetch(url, method: http_GET, headers: { "content-type" => "application/json" });
-  let fetchResponseNoMethod: http.Response = http.fetch(url, headers: { "content-type" => "application/json" });
 
+    assert(getResponse.body == body);
+    assert(getResponse.status == 200);
+    assert(getResponse.url == url);
 
-  assert(getResponse.body == body);
-  assert(getResponse.status == 200);
-  assert(getResponse.url == url);
+    assert(fetchResponse.body == body);
+    assert(fetchResponse.status == 200);
+    assert(fetchResponse.url == url);
 
-  assert(fetchResponse.body == body);
-  assert(fetchResponse.status == 200);
-  assert(fetchResponse.url == url);
-
-  assert(fetchResponseNoMethod.body == body);
-  assert(fetchResponseNoMethod.status == 200);
-  assert(fetchResponseNoMethod.url == url);
+    assert(fetchResponseNoMethod.body == body);
+    assert(fetchResponseNoMethod.status == 200);
+    assert(fetchResponseNoMethod.url == url);
+  }
 }

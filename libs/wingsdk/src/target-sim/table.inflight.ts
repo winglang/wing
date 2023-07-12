@@ -99,6 +99,7 @@ export class Table implements ITableClient, ISimulatorResourceInstance {
       },
     });
   }
+
   public async list(): Promise<Array<Json>> {
     return this.context.withTrace({
       message: `list all rows from table ${this.name}.`,
