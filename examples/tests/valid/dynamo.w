@@ -24,7 +24,7 @@ class DynamoTable {
     }
 
     this.table = new tfaws.dynamodbTable.DynamodbTable(
-      name: "Default",
+      name: this.node.addr,
       billingMode: "PAY_PER_REQUEST",
       hashKey: "Flavor",
       attribute: [
@@ -38,9 +38,9 @@ class DynamoTable {
   }
 
   _bind(host: std.IInflightHost, ops: Array<str>) {
-    if let host = aws.AwsFunction.from(host) {
+    if let host = aws.Function.from(host) {
       if ops.contains("putItem") {
-        host.addIamPolicy(aws.PolicyStatement {
+        host.addPolicyStatement(aws.PolicyStatement {
           actions: ["dynamodb:PutItem"],
           resources: [this.table.arn],
           effect: aws.Effect.ALLOW,
@@ -52,11 +52,11 @@ class DynamoTable {
   extern "./dynamo.js" inflight _putItem(tableName: str, item: Json): void;
 
   inflight putItem(item: Map<Attribute>) {
-    let json = this.itemToJson(item);
+    let json = this._itemToJson(item);
     this._putItem(this.tableName, json);
   }
 
-  inflight itemToJson(item: Map<Attribute>): Json {
+  inflight _itemToJson(item: Map<Attribute>): Json {
     let json = MutJson {};
     for key in item.keys() {
       let attribute = item.get(key);

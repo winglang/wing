@@ -4,23 +4,27 @@ import { Function as AwsCdkFunction } from "../target-awscdk";
 import { Function as TfAwsFunction } from "../target-tf-aws";
 
 /**
- * A helper interface for working with AWS functions.
+ * A shared interface for AWS functions.
  */
 export interface IAwsFunction {
   /**
    * Add an environment variable to the function.
    */
   addEnvironment(key: string, value: string): void;
+
   /**
-   * Add a policy statement to the function's IAM role.
+   * Add policy statements to the function's IAM role.
+   *
+   * TODO: update this to accept a variadic parameter (...policies)
+   * https://github.com/winglang/wing/issues/397
    */
-  addIamPolicy(policy: PolicyStatement): void;
+  addPolicyStatements(policies: PolicyStatement[]): void;
 }
 
 /**
  * A helper class for working with AWS functions.
  */
-export class AwsFunction {
+export class Function {
   /**
    * If the inflight host is an AWS function, return a helper interface for
    * working with it.
@@ -28,25 +32,11 @@ export class AwsFunction {
    */
   public static from(host: IInflightHost): IAwsFunction | undefined {
     if (host instanceof TfAwsFunction) {
-      return {
-        addEnvironment(key: string, value: string): void {
-          host.addEnvironment(key, value);
-        },
-        addIamPolicy(policy: PolicyStatement): void {
-          host.addPolicyStatements(policy);
-        },
-      };
+      return host;
     }
 
     if (host instanceof AwsCdkFunction) {
-      return {
-        addEnvironment(key: string, value: string): void {
-          host.addEnvironment(key, value);
-        },
-        addIamPolicy(policy: PolicyStatement): void {
-          host.addPolicyStatements(policy);
-        },
-      };
+      return host;
     }
 
     return undefined;
