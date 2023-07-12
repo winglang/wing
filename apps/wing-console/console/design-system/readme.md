@@ -2,4 +2,4 @@
 
 ## License
 
-This code is distributed under the [Monada Console License](./LICENSE.md).
+This code is distributed under the [Wing Cloud Console License](./LICENSE.md).

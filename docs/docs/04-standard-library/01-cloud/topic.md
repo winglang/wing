@@ -106,8 +106,6 @@ AWS implementations of `cloud.Topic` use [AWS SNS](https://docs.aws.amazon.com/s
 
 ### Topic <a name="Topic" id="@winglang/sdk.cloud.Topic"></a>
 
-**Inflight client:** [@winglang/sdk.cloud.ITopicClient](#@winglang/sdk.cloud.ITopicClient)
-
 A topic.
 
 #### Initializers <a name="Initializers" id="@winglang/sdk.cloud.Topic.Initializer"></a>
@@ -132,9 +130,17 @@ new cloud.Topic(props?: TopicProps);
 
 #### Methods <a name="Methods" id="Methods"></a>
 
+##### Preflight Methods
+
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.Topic.onMessage">onMessage</a></code> | Run an inflight whenever an message is published to the topic. |
+
+##### Inflight Methods
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.cloud.ITopicClient.publish">publish</a></code> | Publish message to topic. |
 
 ---
 
@@ -155,6 +161,22 @@ Run an inflight whenever an message is published to the topic.
 ###### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.cloud.Topic.onMessage.parameter.props"></a>
 
 - *Type:* <a href="#@winglang/sdk.cloud.TopicOnMessageProps">TopicOnMessageProps</a>
+
+---
+
+##### `publish` <a name="publish" id="@winglang/sdk.cloud.ITopicClient.publish"></a>
+
+```wing
+inflight publish(message: str): void
+```
+
+Publish message to topic.
+
+###### `message`<sup>Required</sup> <a name="message" id="@winglang/sdk.cloud.ITopicClient.publish.parameter.message"></a>
+
+- *Type:* str
+
+Payload to publish to Topic.
 
 ---
 
@@ -271,37 +293,6 @@ let TopicProps = cloud.TopicProps{ ... };
 
 
 ## Protocols <a name="Protocols" id="Protocols"></a>
-
-### ITopicClient <a name="ITopicClient" id="@winglang/sdk.cloud.ITopicClient"></a>
-
-- *Implemented By:* <a href="#@winglang/sdk.cloud.ITopicClient">ITopicClient</a>
-
-Inflight interface for `Topic`.
-
-#### Methods <a name="Methods" id="Methods"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@winglang/sdk.cloud.ITopicClient.publish">publish</a></code> | Publish message to topic. |
-
----
-
-##### `publish` <a name="publish" id="@winglang/sdk.cloud.ITopicClient.publish"></a>
-
-```wing
-inflight publish(message: str): void
-```
-
-Publish message to topic.
-
-###### `message`<sup>Required</sup> <a name="message" id="@winglang/sdk.cloud.ITopicClient.publish.parameter.message"></a>
-
-- *Type:* str
-
-Payload to publish to Topic.
-
----
-
 
 ### ITopicOnMessageHandler <a name="ITopicOnMessageHandler" id="@winglang/sdk.cloud.ITopicOnMessageHandler"></a>
 
