@@ -307,14 +307,26 @@ export class MarkdownRenderer {
     }
 
     if (klass.docs) {
-      md.docs(klass.docs, this.language);
+      md.docs(
+        {
+          ...klass.docs,
+          // removes the inflight client link when inflight interface is united with preflight's
+          inflight: klass.inflight ? undefined : klass.docs.inflight,
+        },
+        this.language
+      );
     }
 
     if (klass.initializer) {
       md.section(this.visitInitializer(klass.initializer));
     }
 
-    md.section(this.visitInstanceMethods(klass.instanceMethods));
+    md.section(
+      this.visitInstanceMethods(
+        klass.instanceMethods,
+        klass.inflight?.instanceMethods
+      )
+    );
     md.section(this.visitStaticFunctions(klass.staticMethods));
     md.section(this.visitProperties(klass.properties));
     md.section(this.visitConstants(klass.constants));
@@ -441,17 +453,32 @@ export class MarkdownRenderer {
     return md;
   }
 
-  public visitInstanceMethods(methods: MethodSchema[]): MarkdownDocument {
-    if (methods.length === 0) {
+  public visitInstanceMethods(
+    methods: MethodSchema[],
+    inflightMethods?: MethodSchema[]
+  ): MarkdownDocument {
+    if (!methods.length && !inflightMethods?.length) {
       return MarkdownDocument.EMPTY;
     }
 
-    const md = new MarkdownDocument({ header: { title: "Methods" } });
+    const md = new MarkdownDocument({
+      header: { title: "Methods" },
+    });
 
-    md.table(this.createTable(methods));
+    if (methods.length) {
+      if (inflightMethods) {
+        md.title("Preflight Methods", 5);
+      }
+      md.table(this.createTable(methods));
+    }
+
+    if (inflightMethods?.length) {
+      md.title("Inflight Methods", 5);
+      md.table(this.createTable(inflightMethods));
+    }
     md.split();
 
-    for (const method of methods) {
+    for (const method of [...methods, ...(inflightMethods ?? [])]) {
       md.section(this.visitInstanceMethod(method));
     }
     return md;

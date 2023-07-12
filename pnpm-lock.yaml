@@ -26,6 +26,9 @@ patchedDependencies:
   nx@16.5.0:
     hash: lrfqlgav6luth37zd7626v5b7q
     path: patches/nx@16.5.0.patch
+  wasi-js@1.7.3:
+    hash: rmwvp46j2ligfusbdx5dzh4a3q
+    path: patches/wasi-js@1.7.3.patch
 
 importers:
 
@@ -1002,6 +1005,9 @@ importers:
       '@winglang/sdk':
         specifier: workspace:^
         version: link:../wingsdk
+      wasi-js:
+        specifier: ^1.7.3
+        version: 1.7.3(patch_hash=rmwvp46j2ligfusbdx5dzh4a3q)
     devDependencies:
       '@types/node':
         specifier: ^18.11.18
@@ -1018,9 +1024,6 @@ importers:
       vitest:
         specifier: ^0.30.1
         version: 0.30.1
-      wasi-js:
-        specifier: ^1.7.3
-        version: 1.7.3
 
   libs/wingsdk:
     dependencies:
@@ -5484,7 +5487,7 @@ packages:
     engines: {node: '>= 4.0.0'}
     dependencies:
       fs-monkey: 1.0.4
-    dev: true
+    dev: false
 
   /@cspotcode/source-map-support@0.8.1:
     resolution: {integrity: sha512-IchNf6dN4tHoMFIn/7OE8LWZ19Y6q/67Bmf6vnGREv8RSbBVb9LPJxEcnwrcwX6ixSvaiGoomAUvu4YSxXrVgw==}
@@ -9859,7 +9862,7 @@ packages:
     resolution: {integrity: sha512-7809nAVelP9TqXCq5c1yCwymPreTXrK4n4q/zxOlQOIIz4PNmoQmIKiLnwkKk39GDnLmP1MvP9ZkBDyXCCmTfg==}
     dependencies:
       fs-monkey: 1.0.4
-    dev: true
+    dev: false
 
   /@webassemblyjs/ast@1.11.6:
     resolution: {integrity: sha512-IN1xI7PwOvLPgjcf180gC1bqn3q/QaOCwYUahIOhbYUu8KA/3tw2RT/T0Gidi1l7Hhj5D/INhJxiICObqpMu4Q==}
@@ -12639,7 +12642,7 @@ packages:
     dependencies:
       semver: 7.5.2
       shelljs: 0.8.5
-      typescript: 5.2.0-dev.20230711
+      typescript: 5.2.0-dev.20230712
     dev: true
 
   /dset@3.1.2:
@@ -13773,7 +13776,7 @@ packages:
 
   /fflate@0.7.4:
     resolution: {integrity: sha512-5u2V/CDW15QM1XbbgS+0DfPxVB+jUKhWEKuuFuHncbk3tEEqzmoXL+2KyOFuKGqOnmdIy0/davWF1CkuwtibCw==}
-    dev: true
+    dev: false
 
   /figures@3.2.0:
     resolution: {integrity: sha512-yaduQFRKLXYOGgEn6AZau90j3ggSOyiqXU0F9JZfeXYhNa+Jk4X+s45A2zg5jns87GAFa34BBm2kXw4XpNcbdg==}
@@ -14044,7 +14047,7 @@ packages:
 
   /fs-monkey@1.0.4:
     resolution: {integrity: sha512-INM/fWAxMICjttnD0DX1rBvinKskj5G1w+oy/pnm9u/tSlnBrzFonJMcalKJ30P8RRsPzKcCG7Q8l0jx5Fh9YQ==}
-    dev: true
+    dev: false
 
   /fs.realpath@1.0.0:
     resolution: {integrity: sha512-OO0pH2lK6a0hZnAdau5ItzHPI6pUlvI7jMVnxUQRtw4owF2wk8lOSabtGDCTP4Ggrg2MbGnWO9X8K1t4+fGMDw==}
@@ -18851,7 +18854,7 @@ packages:
 
   /path-browserify@1.0.1:
     resolution: {integrity: sha512-b7uo2UCUOYZcnF/3ID0lulOJi/bafxa1xPe7ZPsammBSpjSWQkjNxlt635YGS2MiR9GjvuXCtz2emr3jbsz98g==}
-    dev: true
+    dev: false
 
   /path-exists@3.0.0:
     resolution: {integrity: sha512-bpC7GYwiDYQ4wYLe+FA8lhRjhQCMcQGuSgGGqDkg/QerRWw9CmGRT0iSOVRSZJ29NMLZgIzqaljJ63oaL4NIJQ==}
@@ -19412,14 +19415,13 @@ packages:
     resolution: {integrity: sha512-vYl3iOX+4CKUWuxGi9Ukhie6fsqXqS9FE2Zaic4tNFD2N2QQaXOMFbuKK4QmDHC0JO6B1Zp41J0LpT0oR68amQ==}
     dependencies:
       safe-buffer: 5.2.1
-    dev: true
 
   /randomfill@1.0.4:
     resolution: {integrity: sha512-87lcbR8+MhcWcUiQ+9e+Rwx8MyR2P7qnt15ynUlbm3TU/fjbgz4GsvfSUDTemtCCtVCqb4ZcEFlyPNTh9bBTLw==}
     dependencies:
       randombytes: 2.1.0
       safe-buffer: 5.2.1
-    dev: true
+    dev: false
 
   /range-parser@1.2.1:
     resolution: {integrity: sha512-Hrgsx+orqoygnmhFbKaHE6c296J+HTAQXoxEF6gNupROmmGJRoyzfG3ccAveqCBrwr/2yxQ5BVd/GTl5agOwSg==}
@@ -21601,7 +21603,7 @@ packages:
 
   /typedarray-to-buffer@4.0.0:
     resolution: {integrity: sha512-6dOYeZfS3O9RtRD1caom0sMxgK59b27+IwoNy8RDPsmslSGOyU+mpTamlaIW7aNKi90ZQZ9DFaZL3YRoiSCULQ==}
-    dev: true
+    dev: false
 
   /typedarray@0.0.6:
     resolution: {integrity: sha512-/aCDEGatGvZ2BIk+HmLf4ifCJFwvKFNb9/JeZPMulfgFracn9QFcAf5GO8B/mweUjSoblS5In0cWhqpfs/5PQA==}
@@ -21628,8 +21630,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  /typescript@5.2.0-dev.20230711:
-    resolution: {integrity: sha512-Pu1roPsNZOmZvIeoPHiwFqO31X+LQYLXjQgADk/wXu4qZ0/ovCuMVA3+3CYnrvsBecjLU9UN0pC4JFUyvfN6lA==}
+  /typescript@5.2.0-dev.20230712:
+    resolution: {integrity: sha512-F/VND6YrBGr8RvnmpFpTDC5sT0Hh5cuXFWurGEhSBjwXodW+POmfGU0uLn+s/Rl0+Yvffpd2WRrpYC7bSDQS/Q==}
     engines: {node: '>=14.17'}
     hasBin: true
     dev: true
@@ -22343,7 +22345,7 @@ packages:
       loose-envify: 1.4.0
     dev: false
 
-  /wasi-js@1.7.3:
+  /wasi-js@1.7.3(patch_hash=rmwvp46j2ligfusbdx5dzh4a3q):
     resolution: {integrity: sha512-4oq6iVdY4nlsqFviS98ltEdWnhYQoeZwz3/5AxQ3bs0fd/YBzBMS162p/n0DHEIJFev1Jvk3gnJwck1s4a8mVQ==}
     hasBin: true
     requiresBuild: true
@@ -22357,7 +22359,8 @@ packages:
       typedarray-to-buffer: 4.0.0
     transitivePeerDependencies:
       - supports-color
-    dev: true
+    dev: false
+    patched: true
 
   /watchpack@2.4.0:
     resolution: {integrity: sha512-Lcvm7MGST/4fup+ifyKi2hjyIAwcdI4HRgtvTpIUxBRhB+RFtUh8XtDOxUfctVCnhVi+QQj49i91OyvzkJl6cg==}
