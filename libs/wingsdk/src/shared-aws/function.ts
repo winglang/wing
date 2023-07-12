@@ -1,6 +1,5 @@
 import { PolicyStatement } from "./types";
 import { IInflightHost } from "../std";
-import { Function as AwsCdkFunction } from "../target-awscdk";
 import { Function as TfAwsFunction } from "../target-tf-aws";
 
 /**
@@ -32,10 +31,6 @@ export class Function {
    */
   public static from(host: IInflightHost): IAwsFunction | undefined {
     if (host instanceof TfAwsFunction) {
-      return host;
-    }
-
-    if (host instanceof AwsCdkFunction) {
       return host;
     }
 
