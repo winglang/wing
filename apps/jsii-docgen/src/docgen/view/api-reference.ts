@@ -5,8 +5,9 @@ import { Enums } from "./enums";
 import { Interfaces } from "./interfaces";
 import { Structs } from "./structs";
 import { VISIBLE_SUBMODULES } from "./wing-filters";
-import { ApiReferenceSchema, isSkipped } from "../schema";
+import { ApiReferenceSchema, getInflight, isSkipped } from "../schema";
 import { Transpile } from "../transpile/transpile";
+import { MarkdownDocument } from "../render/markdown-doc";
 
 /**
  * Render an API reference based on the jsii assembly.
@@ -23,7 +24,7 @@ export class ApiReference {
     submodule?: reflect.Submodule,
     allSubmodules?: boolean
   ) {
-    let classes: reflect.ClassType[];
+    let classes: (reflect.ClassType & { inflightId?: string })[];
     let interfaces: reflect.InterfaceType[];
     let enums: reflect.EnumType[];
 
@@ -63,10 +64,28 @@ export class ApiReference {
     interfaces = interfaces.filter((item) => !isSkipped(item.docs));
     enums = enums.filter((item) => !isSkipped(item.docs));
 
-    this.constructs = new Constructs(transpile, classes);
+    classes.forEach((c) => {
+      const inflight = getInflight(c.docs);
+      if (inflight) {
+        c.inflightId = MarkdownDocument.sanitize(inflight);
+      }
+    });
+
+    const inflightIds: string[] = classes
+      .map(({ inflightId }) => inflightId)
+      .filter((id) => typeof id === "string") as string[];
+
+    this.constructs = new Constructs(
+      transpile,
+      classes,
+      this.searchableInterfaces(interfaces)
+    );
     this.classes = new Classes(transpile, classes);
     this.structs = new Structs(transpile, interfaces);
-    this.interfaces = new Interfaces(transpile, interfaces);
+    this.interfaces = new Interfaces(
+      transpile,
+      this.filterOutInflightInterfaces(interfaces, inflightIds)
+    );
     this.enums = new Enums(transpile, enums);
   }
 
@@ -81,6 +100,24 @@ export class ApiReference {
       interfaces: this.interfaces.toJson(),
       enums: this.enums.toJson(),
     };
+  }
+
+  private searchableInterfaces(
+    interfaces: reflect.InterfaceType[]
+  ): Record<string, reflect.InterfaceType> {
+    return interfaces.reduce(
+      (acc, iface) => ({ ...acc, [iface.fqn.replace(/ /g, "-")]: iface }),
+      {}
+    );
+  }
+
+  private filterOutInflightInterfaces(
+    interfaces: reflect.InterfaceType[],
+    inflightIds: string[]
+  ): reflect.InterfaceType[] {
+    return interfaces.filter(
+      (iface) => !inflightIds.includes(iface.fqn.replace(/ /g, "-"))
+    );
   }
 
   private sortByName<Type extends reflect.Type>(arr: readonly Type[]): Type[] {

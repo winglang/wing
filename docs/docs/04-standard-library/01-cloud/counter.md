@@ -74,8 +74,6 @@ The AWS implementation of `cloud.Counter` uses [Amazon DynamoDB](https://aws.ama
 
 ### Counter <a name="Counter" id="@winglang/sdk.cloud.Counter"></a>
 
-**Inflight client:** [@winglang/sdk.cloud.ICounterClient](#@winglang/sdk.cloud.ICounterClient)
-
 A distributed atomic counter.
 
 #### Initializers <a name="Initializers" id="@winglang/sdk.cloud.Counter.Initializer"></a>
@@ -98,100 +96,7 @@ new cloud.Counter(props?: CounterProps);
 
 ---
 
-
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.Counter.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@winglang/sdk.cloud.Counter.property.display">display</a></code> | <code><a href="#@winglang/sdk.std.Display">Display</a></code> | Information on how to display a resource in the UI. |
-| <code><a href="#@winglang/sdk.cloud.Counter.property.initial">initial</a></code> | <code>num</code> | The initial value of the counter. |
-
----
-
-##### `node`<sup>Required</sup> <a name="node" id="@winglang/sdk.cloud.Counter.property.node"></a>
-
-```wing
-node: Node;
-```
-
-- *Type:* constructs.Node
-
-The tree node.
-
----
-
-##### `display`<sup>Required</sup> <a name="display" id="@winglang/sdk.cloud.Counter.property.display"></a>
-
-```wing
-display: Display;
-```
-
-- *Type:* <a href="#@winglang/sdk.std.Display">Display</a>
-
-Information on how to display a resource in the UI.
-
----
-
-##### `initial`<sup>Required</sup> <a name="initial" id="@winglang/sdk.cloud.Counter.property.initial"></a>
-
-```wing
-initial: num;
-```
-
-- *Type:* num
-
-The initial value of the counter.
-
----
-
-
-
-## Structs <a name="Structs" id="Structs"></a>
-
-### CounterProps <a name="CounterProps" id="@winglang/sdk.cloud.CounterProps"></a>
-
-Properties for `Counter`.
-
-#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.CounterProps.Initializer"></a>
-
-```wing
-bring cloud;
-
-let CounterProps = cloud.CounterProps{ ... };
-```
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.CounterProps.property.initial">initial</a></code> | <code>num</code> | The initial value of the counter. |
-
----
-
-##### `initial`<sup>Optional</sup> <a name="initial" id="@winglang/sdk.cloud.CounterProps.property.initial"></a>
-
-```wing
-initial: num;
-```
-
-- *Type:* num
-- *Default:* 0
-
-The initial value of the counter.
-
----
-
-## Protocols <a name="Protocols" id="Protocols"></a>
-
-### ICounterClient <a name="ICounterClient" id="@winglang/sdk.cloud.ICounterClient"></a>
-
-- *Implemented By:* <a href="#@winglang/sdk.cloud.ICounterClient">ICounterClient</a>
-
-Inflight interface for `Counter`.
-
-#### Methods <a name="Methods" id="Methods"></a>
+#### Inflight Methods <a name="Inflight Methods" id="Inflight Methods"></a>
 
 | **Name** | **Description** |
 | --- | --- |
@@ -290,6 +195,90 @@ new value.
 - *Type:* str
 
 specify the key to be set.
+
+---
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.Counter.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@winglang/sdk.cloud.Counter.property.display">display</a></code> | <code><a href="#@winglang/sdk.std.Display">Display</a></code> | Information on how to display a resource in the UI. |
+| <code><a href="#@winglang/sdk.cloud.Counter.property.initial">initial</a></code> | <code>num</code> | The initial value of the counter. |
+
+---
+
+##### `node`<sup>Required</sup> <a name="node" id="@winglang/sdk.cloud.Counter.property.node"></a>
+
+```wing
+node: Node;
+```
+
+- *Type:* constructs.Node
+
+The tree node.
+
+---
+
+##### `display`<sup>Required</sup> <a name="display" id="@winglang/sdk.cloud.Counter.property.display"></a>
+
+```wing
+display: Display;
+```
+
+- *Type:* <a href="#@winglang/sdk.std.Display">Display</a>
+
+Information on how to display a resource in the UI.
+
+---
+
+##### `initial`<sup>Required</sup> <a name="initial" id="@winglang/sdk.cloud.Counter.property.initial"></a>
+
+```wing
+initial: num;
+```
+
+- *Type:* num
+
+The initial value of the counter.
+
+---
+
+
+
+## Structs <a name="Structs" id="Structs"></a>
+
+### CounterProps <a name="CounterProps" id="@winglang/sdk.cloud.CounterProps"></a>
+
+Properties for `Counter`.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.CounterProps.Initializer"></a>
+
+```wing
+bring cloud;
+
+let CounterProps = cloud.CounterProps{ ... };
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.CounterProps.property.initial">initial</a></code> | <code>num</code> | The initial value of the counter. |
+
+---
+
+##### `initial`<sup>Optional</sup> <a name="initial" id="@winglang/sdk.cloud.CounterProps.property.initial"></a>
+
+```wing
+initial: num;
+```
+
+- *Type:* num
+- *Default:* 0
+
+The initial value of the counter.
 
 ---
 

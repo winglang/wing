@@ -66,8 +66,6 @@ The Azure implementation of `cloud.Function` uses [Azure Function](https://azure
 
 - *Implements:* <a href="#@winglang/sdk.std.IInflightHost">IInflightHost</a>
 
-**Inflight client:** [@winglang/sdk.cloud.IFunctionClient](#@winglang/sdk.cloud.IFunctionClient)
-
 A function.
 
 #### Initializers <a name="Initializers" id="@winglang/sdk.cloud.Function.Initializer"></a>
@@ -97,11 +95,17 @@ new cloud.Function(inflight: IFunctionHandler, props?: FunctionProps);
 
 ---
 
-#### Methods <a name="Methods" id="Methods"></a>
+#### Preflight Methods <a name="Preflight Methods" id="Preflight Methods"></a>
 
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.Function.addEnvironment">addEnvironment</a></code> | Add an environment variable to the function. |
+
+#### Inflight Methods
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.cloud.IFunctionClient.invoke">invoke</a></code> | Invoke the function asynchronously with a given payload. |
 
 ---
 
@@ -120,6 +124,20 @@ Add an environment variable to the function.
 ---
 
 ###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.cloud.Function.addEnvironment.parameter.value"></a>
+
+- *Type:* str
+
+---
+
+##### `invoke` <a name="invoke" id="@winglang/sdk.cloud.IFunctionClient.invoke"></a>
+
+```wing
+inflight invoke(payload: str): str
+```
+
+Invoke the function asynchronously with a given payload.
+
+###### `payload`<sup>Required</sup> <a name="payload" id="@winglang/sdk.cloud.IFunctionClient.invoke.parameter.payload"></a>
 
 - *Type:* str
 
@@ -240,35 +258,6 @@ The maximum amount of time the function can run.
 ---
 
 ## Protocols <a name="Protocols" id="Protocols"></a>
-
-### IFunctionClient <a name="IFunctionClient" id="@winglang/sdk.cloud.IFunctionClient"></a>
-
-- *Implemented By:* <a href="#@winglang/sdk.cloud.IFunctionClient">IFunctionClient</a>
-
-Inflight interface for `Function`.
-
-#### Methods <a name="Methods" id="Methods"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@winglang/sdk.cloud.IFunctionClient.invoke">invoke</a></code> | Invoke the function asynchronously with a given payload. |
-
----
-
-##### `invoke` <a name="invoke" id="@winglang/sdk.cloud.IFunctionClient.invoke"></a>
-
-```wing
-inflight invoke(payload: str): str
-```
-
-Invoke the function asynchronously with a given payload.
-
-###### `payload`<sup>Required</sup> <a name="payload" id="@winglang/sdk.cloud.IFunctionClient.invoke.parameter.payload"></a>
-
-- *Type:* str
-
----
-
 
 ### IFunctionHandler <a name="IFunctionHandler" id="@winglang/sdk.cloud.IFunctionHandler"></a>
 

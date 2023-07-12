@@ -63,8 +63,6 @@ See [Amazon CloudWatch](https://aws.amazon.com/cloudwatch/).
 
 ### Schedule <a name="Schedule" id="@winglang/sdk.cloud.Schedule"></a>
 
-**Inflight client:** [@winglang/sdk.cloud.IScheduleClient](#@winglang/sdk.cloud.IScheduleClient)
-
 A schedule.
 
 #### Initializers <a name="Initializers" id="@winglang/sdk.cloud.Schedule.Initializer"></a>
@@ -87,7 +85,7 @@ new cloud.Schedule(props?: ScheduleProps);
 
 ---
 
-#### Methods <a name="Methods" id="Methods"></a>
+#### Preflight Methods <a name="Preflight Methods" id="Preflight Methods"></a>
 
 | **Name** | **Description** |
 | --- | --- |
@@ -278,14 +276,6 @@ Trigger events at a periodic rate.
 
 
 ## Protocols <a name="Protocols" id="Protocols"></a>
-
-### IScheduleClient <a name="IScheduleClient" id="@winglang/sdk.cloud.IScheduleClient"></a>
-
-- *Implemented By:* <a href="#@winglang/sdk.cloud.IScheduleClient">IScheduleClient</a>
-
-Inflight interface for `Schedule`.
-
-
 
 ### IScheduleOnTickHandler <a name="IScheduleOnTickHandler" id="@winglang/sdk.cloud.IScheduleOnTickHandler"></a>
 

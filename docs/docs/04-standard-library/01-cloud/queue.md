@@ -84,8 +84,6 @@ The AWS implementation of `cloud.Queue` uses [Amazon Simple Queue Service](https
 
 ### Queue <a name="Queue" id="@winglang/sdk.cloud.Queue"></a>
 
-**Inflight client:** [@winglang/sdk.cloud.IQueueClient](#@winglang/sdk.cloud.IQueueClient)
-
 A queue.
 
 #### Initializers <a name="Initializers" id="@winglang/sdk.cloud.Queue.Initializer"></a>
@@ -108,11 +106,20 @@ new cloud.Queue(props?: QueueProps);
 
 ---
 
-#### Methods <a name="Methods" id="Methods"></a>
+#### Preflight Methods <a name="Preflight Methods" id="Preflight Methods"></a>
 
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.Queue.setConsumer">setConsumer</a></code> | Create a function to consume messages from this queue. |
+
+#### Inflight Methods
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.cloud.IQueueClient.approxSize">approxSize</a></code> | Retrieve the approximate number of messages in the queue. |
+| <code><a href="#@winglang/sdk.cloud.IQueueClient.pop">pop</a></code> | Pop a message from the queue. |
+| <code><a href="#@winglang/sdk.cloud.IQueueClient.purge">purge</a></code> | Purge all of the messages in the queue. |
+| <code><a href="#@winglang/sdk.cloud.IQueueClient.push">push</a></code> | Push a message to the queue. |
 
 ---
 
@@ -133,6 +140,46 @@ Create a function to consume messages from this queue.
 ###### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.cloud.Queue.setConsumer.parameter.props"></a>
 
 - *Type:* <a href="#@winglang/sdk.cloud.QueueSetConsumerProps">QueueSetConsumerProps</a>
+
+---
+
+##### `approxSize` <a name="approxSize" id="@winglang/sdk.cloud.IQueueClient.approxSize"></a>
+
+```wing
+inflight approxSize(): num
+```
+
+Retrieve the approximate number of messages in the queue.
+
+##### `pop` <a name="pop" id="@winglang/sdk.cloud.IQueueClient.pop"></a>
+
+```wing
+inflight pop(): str
+```
+
+Pop a message from the queue.
+
+##### `purge` <a name="purge" id="@winglang/sdk.cloud.IQueueClient.purge"></a>
+
+```wing
+inflight purge(): void
+```
+
+Purge all of the messages in the queue.
+
+##### `push` <a name="push" id="@winglang/sdk.cloud.IQueueClient.push"></a>
+
+```wing
+inflight push(message: str): void
+```
+
+Push a message to the queue.
+
+###### `message`<sup>Required</sup> <a name="message" id="@winglang/sdk.cloud.IQueueClient.push.parameter.message"></a>
+
+- *Type:* str
+
+Payload to send to the queue.
 
 ---
 
@@ -311,64 +358,6 @@ The maximum number of messages to send to subscribers at once.
 ---
 
 ## Protocols <a name="Protocols" id="Protocols"></a>
-
-### IQueueClient <a name="IQueueClient" id="@winglang/sdk.cloud.IQueueClient"></a>
-
-- *Implemented By:* <a href="#@winglang/sdk.cloud.IQueueClient">IQueueClient</a>
-
-Inflight interface for `Queue`.
-
-#### Methods <a name="Methods" id="Methods"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@winglang/sdk.cloud.IQueueClient.approxSize">approxSize</a></code> | Retrieve the approximate number of messages in the queue. |
-| <code><a href="#@winglang/sdk.cloud.IQueueClient.pop">pop</a></code> | Pop a message from the queue. |
-| <code><a href="#@winglang/sdk.cloud.IQueueClient.purge">purge</a></code> | Purge all of the messages in the queue. |
-| <code><a href="#@winglang/sdk.cloud.IQueueClient.push">push</a></code> | Push a message to the queue. |
-
----
-
-##### `approxSize` <a name="approxSize" id="@winglang/sdk.cloud.IQueueClient.approxSize"></a>
-
-```wing
-inflight approxSize(): num
-```
-
-Retrieve the approximate number of messages in the queue.
-
-##### `pop` <a name="pop" id="@winglang/sdk.cloud.IQueueClient.pop"></a>
-
-```wing
-inflight pop(): str
-```
-
-Pop a message from the queue.
-
-##### `purge` <a name="purge" id="@winglang/sdk.cloud.IQueueClient.purge"></a>
-
-```wing
-inflight purge(): void
-```
-
-Purge all of the messages in the queue.
-
-##### `push` <a name="push" id="@winglang/sdk.cloud.IQueueClient.push"></a>
-
-```wing
-inflight push(message: str): void
-```
-
-Push a message to the queue.
-
-###### `message`<sup>Required</sup> <a name="message" id="@winglang/sdk.cloud.IQueueClient.push.parameter.message"></a>
-
-- *Type:* str
-
-Payload to send to the queue.
-
----
-
 
 ### IQueueSetConsumerHandler <a name="IQueueSetConsumerHandler" id="@winglang/sdk.cloud.IQueueSetConsumerHandler"></a>
 
