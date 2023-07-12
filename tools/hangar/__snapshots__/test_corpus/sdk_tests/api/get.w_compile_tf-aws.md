@@ -36,8 +36,13 @@ module.exports = function({ $api_url, $body, $http_GET, $http_Util }) {
     async handle() {
       const url = ($api_url + "/path");
       const getResponse = (await $http_Util.get(url,{ headers: Object.freeze({"content-type":"application/json"}) }));
-      const fetchResponse = (await $http_Util.fetch(url,{ method: $http_GET, headers: Object.freeze({"content-type":"application/json"}) }));
-      const fetchResponseNoMethod = (await $http_Util.fetch(url,{ headers: Object.freeze({"content-type":"application/json"}) }));
+      const fetchResponse = (await $http_Util.fetch(url,{
+      "method": $http_GET,
+      "headers": Object.freeze({"content-type":"application/json"}),}
+      ));
+      const fetchResponseNoMethod = (await $http_Util.fetch(url,{
+      "headers": Object.freeze({"content-type":"application/json"}),}
+      ));
       {((cond) => {if (!cond) throw new Error("assertion failed: getResponse.body == body")})((getResponse.body === $body))};
       {((cond) => {if (!cond) throw new Error("assertion failed: getResponse.status == 200")})((getResponse.status === 200))};
       {((cond) => {if (!cond) throw new Error("assertion failed: getResponse.url == url")})((getResponse.url === url))};

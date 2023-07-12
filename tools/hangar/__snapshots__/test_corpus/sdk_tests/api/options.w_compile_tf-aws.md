@@ -75,12 +75,14 @@ module.exports = function({ $api_url, $http_HEAD, $http_OPTIONS, $http_Util, $pa
     }
     async handle() {
       const url = ($api_url + $path);
-      const options = (await $http_Util.fetch(url,{ method: $http_OPTIONS }));
-      const head = (await $http_Util.fetch(url,{ method: $http_HEAD }));
+      const options = (await $http_Util.fetch(url,{
+      "method": $http_OPTIONS,}
+      ));
+      const head = (await $http_Util.fetch(url,{
+      "method": $http_HEAD,}
+      ));
       {((cond) => {if (!cond) throw new Error("assertion failed: options.status == 204")})((options.status === 204))};
       {((cond) => {if (!cond) throw new Error("assertion failed: options.url == url")})((options.url === url))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: head.status == 204")})((head.status === 204))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: head.url == url")})((head.url === url))};
     }
   }
   return $Closure4;
