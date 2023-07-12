@@ -2,7 +2,7 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ $marioInfo, $peachInfo, $std_Json, $table }) {
+module.exports = function({ $_marioInfo___gender__, $_marioInfo___role__, $_peachInfo___gender__, $_peachInfo___role__, $table }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -10,8 +10,12 @@ module.exports = function({ $marioInfo, $peachInfo, $std_Json, $table }) {
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: Json.stringify(table.get(\"mario\")) == Json.stringify(marioInfo)")})((((args) => { return JSON.stringify(args[0], null, args[1]) })([(await $table.get("mario"))]) === ((args) => { return JSON.stringify(args[0], null, args[1]) })([$marioInfo])))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: Json.stringify(table.get(\"peach\")) == Json.stringify(peachInfo)")})((((args) => { return JSON.stringify(args[0], null, args[1]) })([(await $table.get("peach"))]) === ((args) => { return JSON.stringify(args[0], null, args[1]) })([$peachInfo])))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: table.get(\"mario\").get(\"name\") == \"mario\"")})((((await $table.get("mario")))["name"] === "mario"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: table.get(\"mario\").get(\"role\") == marioInfo.get(\"role\")")})((((await $table.get("mario")))["role"] === $_marioInfo___role__))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: table.get(\"mario\").get(\"gender\") == marioInfo.get(\"gender\")")})((((await $table.get("mario")))["gender"] === $_marioInfo___gender__))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: table.get(\"peach\").get(\"name\") == \"peach\"")})((((await $table.get("peach")))["name"] === "peach"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: table.get(\"peach\").get(\"role\") == peachInfo.get(\"role\")")})((((await $table.get("peach")))["role"] === $_peachInfo___role__))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: table.get(\"peach\").get(\"gender\") == peachInfo.get(\"gender\")")})((((await $table.get("peach")))["gender"] === $_peachInfo___gender__))};
     }
   }
   return $Closure1;
@@ -138,7 +142,7 @@ module.exports = function({ $marioInfo, $peachInfo, $std_Json, $table }) {
         "environment": {
           "variables": {
             "DYNAMODB_TABLE_NAME_d5d44f18": "${aws_dynamodb_table.exTable.name}",
-            "DYNAMODB_TABLE_NAME_d5d44f18_COLUMNS": "{\"gender\":0}",
+            "DYNAMODB_TABLE_NAME_d5d44f18_COLUMNS": "{\"gender\":0,\"role\":0}",
             "DYNAMODB_TABLE_NAME_d5d44f18_PRIMARY_KEY": "name",
             "WING_FUNCTION_NAME": "Handler-c8f74599",
             "WING_TARGET": "tf-aws"
@@ -194,6 +198,7 @@ const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 const ex = require('@winglang/sdk').ex;
+const util = require('@winglang/sdk').util;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
@@ -206,9 +211,10 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure1.js")({
-            $marioInfo: ${context._lift(marioInfo)},
-            $peachInfo: ${context._lift(peachInfo)},
-            $std_Json: ${context._lift(std.Json)},
+            $_marioInfo___gender__: ${context._lift((marioInfo)["gender"])},
+            $_marioInfo___role__: ${context._lift((marioInfo)["role"])},
+            $_peachInfo___gender__: ${context._lift((peachInfo)["gender"])},
+            $_peachInfo___role__: ${context._lift((peachInfo)["role"])},
             $table: ${context._lift(table)},
           })
         `);
@@ -226,14 +232,16 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(marioInfo, host, []);
-          $Closure1._registerBindObject(peachInfo, host, []);
+          $Closure1._registerBindObject((marioInfo)["gender"], host, []);
+          $Closure1._registerBindObject((marioInfo)["role"], host, []);
+          $Closure1._registerBindObject((peachInfo)["gender"], host, []);
+          $Closure1._registerBindObject((peachInfo)["role"], host, []);
           $Closure1._registerBindObject(table, host, ["get"]);
         }
         super._registerBind(host, ops);
       }
     }
-    const table = this.node.root.newAbstract("@winglang/sdk.ex.Table",this,"ex.Table",{ name: "users", primaryKey: "name", columns: Object.freeze({"gender":ex.ColumnType.STRING}) });
+    const table = this.node.root.newAbstract("@winglang/sdk.ex.Table",this,"ex.Table",{ name: "users", primaryKey: "name", columns: Object.freeze({"gender":ex.ColumnType.STRING,"role":ex.ColumnType.STRING}) });
     const marioInfo = Object.freeze({"gender":"male","role":"plumber"});
     const peachInfo = Object.freeze({"gender":"female","role":"princess"});
     (table.addRow("mario",marioInfo));

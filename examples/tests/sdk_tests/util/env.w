@@ -9,7 +9,11 @@ let NIL = "<<NIL>>";
 
 // --env--
 assert(util.env("PATH").length > 0);
-assert(util.env("MY_VAR") == "my value");
+
+// won't work, since the meta comments aren't native to the cli command, but to hangar only
+if (util.tryEnv("MY_VAR") != nil) {
+  assert(util.env("MY_VAR") == "my value");
+}
 let var failed = false;
 try { util.env(RANDOM); }
 catch { failed = true; }
