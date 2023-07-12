@@ -1,6 +1,6 @@
 use crate::{
 	ast::{
-		ArgList, CatchBlock, Class, ClassField, ElifBlock, Expr, ExprKind, FunctionBody, FunctionDefinition,
+		ArgList, CalleeKind, CatchBlock, Class, ClassField, ElifBlock, Expr, ExprKind, FunctionBody, FunctionDefinition,
 		FunctionParameter, FunctionSignature, Interface, InterpolatedString, InterpolatedStringPart, Literal, Reference,
 		Scope, Stmt, StmtKind, StructField, Symbol, TypeAnnotation, TypeAnnotationKind, UserDefinedType,
 	},
@@ -270,7 +270,10 @@ where
 		},
 		ExprKind::Reference(reference) => ExprKind::Reference(f.fold_reference(reference)),
 		ExprKind::Call { callee, arg_list } => ExprKind::Call {
-			callee: Box::new(f.fold_expr(*callee)),
+			callee: match callee {
+				CalleeKind::Expr(expr) => CalleeKind::Expr(Box::new(f.fold_expr(*expr))),
+				CalleeKind::SuperCall(method) => CalleeKind::SuperCall(f.fold_symbol(method)),
+			},
 			arg_list: f.fold_args(arg_list),
 		},
 		ExprKind::Unary { op, exp } => ExprKind::Unary {
