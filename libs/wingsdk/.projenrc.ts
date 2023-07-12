@@ -1,4 +1,13 @@
+import { readdirSync } from "fs";
 import { JsonFile, cdk, javascript } from "projen";
+
+const UNDOCUMENTED_CLOUD_FILES = ["index", "test-runner"];
+
+const cloudResources: Set<string> = new Set(
+  readdirSync("./src/cloud")
+    .map((filename) => filename.split(".").slice(0, -1).join("."))
+    .filter((filename) => !UNDOCUMENTED_CLOUD_FILES.includes(filename))
+);
 
 const JSII_DEPS = ["constructs@~10.1.314"];
 const CDKTF_VERSION = "0.17.0";
@@ -8,20 +17,6 @@ const CDKTF_PROVIDERS = [
   "random@~>3.5.1",
   "azurerm@~>3.54.0",
   "google@~>4.63.1",
-];
-
-const CLOUD_MODULES = [
-  "bucket",
-  "api",
-  "counter",
-  "function",
-  "queue",
-  "schedule",
-  "secret",
-  "service",
-  "topic",
-  "website",
-  // no test-runner
 ];
 
 const PUBLIC_MODULES = ["std", "http", "util", "ex"];
@@ -247,9 +242,11 @@ for (const mod of PUBLIC_MODULES) {
 }
 
 // generate api reference for each cloud/submodule and append it to the doc file
-for (const mod of CLOUD_MODULES) {
+for (const mod of cloudResources) {
   const docsPath = `${CLOUD_DOCS_PREFIX}${mod}.md`;
   docgen.exec(`jsii-docgen -o API.md -l wing --submodule cloud/${mod}`);
+  // the documentation file might be non exist
+  docgen.exec(`touch ${docsPath}`);
   docgen.exec(`cat API.md >> ${docsPath}`);
 }
 
