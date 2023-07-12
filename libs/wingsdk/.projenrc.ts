@@ -10,7 +10,7 @@ const CDKTF_PROVIDERS = [
   "google@~>4.63.1",
 ];
 
-const PUBLIC_MODULES = ["cloud", "std", "http", "util", "ex"];
+const PUBLIC_MODULES = ["cloud", "std", "http", "util", "aws", "ex"];
 
 // defines the list of dependencies required for each compilation target that is not built into the
 // compiler (like Terraform targets).
