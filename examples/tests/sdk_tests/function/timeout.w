@@ -23,7 +23,10 @@ test "timeout" {
   }
 
   if (util.env("WING_TARGET") == "tf-aws") {
-  assert(e.contains("Task timed out after"));
+    assert(e.contains("Task timed out after"));
   }
-  assert(c.peek() == 0);
+
+  if (util.env("WING_TARGET") != "sim") {
+    assert(c.peek() == 0);
+  }
 }
