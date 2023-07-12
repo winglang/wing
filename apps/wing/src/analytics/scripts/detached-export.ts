@@ -26,7 +26,7 @@ async function reportAnalytic() {
     throw new Error('No file analytic path provided');
   }
 
-  const analytics = new Analytics({ writeKey: process.env.DEBUG === undefined ? segmentWriteKey : segmentDebugWriteKey});
+  const analytics = new Analytics({ writeKey: process.env.DEBUG ? segmentDebugWriteKey : segmentWriteKey});
   const storage = new AnalyticsStorage();
   const event = storage.loadEvent(filePath);
 
