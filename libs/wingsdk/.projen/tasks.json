@@ -175,16 +175,10 @@
           "exec": "jsii-docgen -o API.md -l wing --submodule cloud/api"
         },
         {
-          "exec": "touch ../../docs/docs/04-standard-library/01-cloud/api.md"
-        },
-        {
           "exec": "cat API.md >> ../../docs/docs/04-standard-library/01-cloud/api.md"
         },
         {
           "exec": "jsii-docgen -o API.md -l wing --submodule cloud/bucket"
-        },
-        {
-          "exec": "touch ../../docs/docs/04-standard-library/01-cloud/bucket.md"
         },
         {
           "exec": "cat API.md >> ../../docs/docs/04-standard-library/01-cloud/bucket.md"
@@ -193,16 +187,10 @@
           "exec": "jsii-docgen -o API.md -l wing --submodule cloud/counter"
         },
         {
-          "exec": "touch ../../docs/docs/04-standard-library/01-cloud/counter.md"
-        },
-        {
           "exec": "cat API.md >> ../../docs/docs/04-standard-library/01-cloud/counter.md"
         },
         {
           "exec": "jsii-docgen -o API.md -l wing --submodule cloud/function"
-        },
-        {
-          "exec": "touch ../../docs/docs/04-standard-library/01-cloud/function.md"
         },
         {
           "exec": "cat API.md >> ../../docs/docs/04-standard-library/01-cloud/function.md"
@@ -211,16 +199,10 @@
           "exec": "jsii-docgen -o API.md -l wing --submodule cloud/queue"
         },
         {
-          "exec": "touch ../../docs/docs/04-standard-library/01-cloud/queue.md"
-        },
-        {
           "exec": "cat API.md >> ../../docs/docs/04-standard-library/01-cloud/queue.md"
         },
         {
           "exec": "jsii-docgen -o API.md -l wing --submodule cloud/schedule"
-        },
-        {
-          "exec": "touch ../../docs/docs/04-standard-library/01-cloud/schedule.md"
         },
         {
           "exec": "cat API.md >> ../../docs/docs/04-standard-library/01-cloud/schedule.md"
@@ -229,16 +211,10 @@
           "exec": "jsii-docgen -o API.md -l wing --submodule cloud/secret"
         },
         {
-          "exec": "touch ../../docs/docs/04-standard-library/01-cloud/secret.md"
-        },
-        {
           "exec": "cat API.md >> ../../docs/docs/04-standard-library/01-cloud/secret.md"
         },
         {
           "exec": "jsii-docgen -o API.md -l wing --submodule cloud/service"
-        },
-        {
-          "exec": "touch ../../docs/docs/04-standard-library/01-cloud/service.md"
         },
         {
           "exec": "cat API.md >> ../../docs/docs/04-standard-library/01-cloud/service.md"
@@ -247,16 +223,10 @@
           "exec": "jsii-docgen -o API.md -l wing --submodule cloud/topic"
         },
         {
-          "exec": "touch ../../docs/docs/04-standard-library/01-cloud/topic.md"
-        },
-        {
           "exec": "cat API.md >> ../../docs/docs/04-standard-library/01-cloud/topic.md"
         },
         {
           "exec": "jsii-docgen -o API.md -l wing --submodule cloud/website"
-        },
-        {
-          "exec": "touch ../../docs/docs/04-standard-library/01-cloud/website.md"
         },
         {
           "exec": "cat API.md >> ../../docs/docs/04-standard-library/01-cloud/website.md"

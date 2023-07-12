@@ -3,11 +3,25 @@ import { JsonFile, cdk, javascript } from "projen";
 
 const UNDOCUMENTED_CLOUD_FILES = ["index", "test-runner"];
 
+const cloudFiles = readdirSync("./src/cloud");
+
 const cloudResources: Set<string> = new Set(
-  readdirSync("./src/cloud")
-    .map((filename) => filename.split(".").slice(0, -1).join("."))
-    .filter((filename) => !UNDOCUMENTED_CLOUD_FILES.includes(filename))
+  cloudFiles.map((filename) => filename.split(".").slice(0, -1).join("."))
 );
+
+UNDOCUMENTED_CLOUD_FILES.forEach((file) => cloudResources.delete(file));
+
+const undocumentedResources = Array.from(cloudResources).filter(
+  (file) => !cloudFiles.includes(`${file}.md`)
+);
+
+if (undocumentedResources.length) {
+  throw new Error(
+    `Detected undocumented resources: ${undocumentedResources.join(
+      ", "
+    )}. Please add the corresponding .md files in ./src/cloud folder.`
+  );
+}
 
 const JSII_DEPS = ["constructs@~10.1.314"];
 const CDKTF_VERSION = "0.17.0";
@@ -245,8 +259,6 @@ for (const mod of PUBLIC_MODULES) {
 for (const mod of cloudResources) {
   const docsPath = `${CLOUD_DOCS_PREFIX}${mod}.md`;
   docgen.exec(`jsii-docgen -o API.md -l wing --submodule cloud/${mod}`);
-  // the documentation file might be non exist
-  docgen.exec(`touch ${docsPath}`);
   docgen.exec(`cat API.md >> ${docsPath}`);
 }
 
