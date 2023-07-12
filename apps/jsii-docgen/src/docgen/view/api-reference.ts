@@ -71,9 +71,9 @@ export class ApiReference {
       }
     });
 
-    const inflightIds: string[] = classes
-      .map(({ inflightId }) => inflightId)
-      .filter((id) => typeof id === "string") as string[];
+    const inflightFqns: string[] = classes
+      .map(({ inflightFqn }) => inflightFqn)
+      .filter((fqn) => typeof fqn === "string") as string[];
 
     this.constructs = new Constructs(
       transpile,
