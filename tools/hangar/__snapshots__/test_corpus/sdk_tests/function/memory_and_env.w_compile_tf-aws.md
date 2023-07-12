@@ -20,7 +20,7 @@ module.exports = function({ $c }) {
 
 ## inflight.$Closure2.js
 ```js
-module.exports = function({ $c }) {
+module.exports = function({ $c, $util_Util }) {
   class $Closure2 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -29,6 +29,7 @@ module.exports = function({ $c }) {
     }
     async handle() {
       (await $c.inc());
+      {((cond) => {if (!cond) throw new Error("assertion failed: util.env(\"catName\") == \"Tion\"")})(((await $util_Util.env("catName")) === "Tion"))};
     }
   }
   return $Closure2;
@@ -434,6 +435,7 @@ class $Root extends $stdlib.std.Resource {
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure2.js")({
             $c: ${context._lift(c)},
+            $util_Util: ${context._lift(util.Util)},
           })
         `);
       }

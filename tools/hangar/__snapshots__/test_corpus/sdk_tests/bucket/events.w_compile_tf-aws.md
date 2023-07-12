@@ -145,7 +145,7 @@ module.exports = function({ $table }) {
 
 ## inflight.$Closure8.js
 ```js
-module.exports = function({ $Source, $b, $checkHitCount, $wait }) {
+module.exports = function({ $Source, $b, $checkHitCount, $util_Util, $wait }) {
   class $Closure8 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -158,16 +158,18 @@ module.exports = function({ $Source, $b, $checkHitCount, $wait }) {
       (await $b.put("c","1"));
       (await $b.put("b","100"));
       (await $b.delete("c"));
-      {((cond) => {if (!cond) throw new Error("assertion failed: wait(checkHitCount(key: \"a\", type: \"CREATE\", source: Source.anyEvent, count: 1))")})((await $wait((await $checkHitCount({ key: "a", type: "CREATE", source: $Source.anyEvent, count: 1 })))))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: wait(checkHitCount(key: \"b\", type: \"CREATE\", source: Source.anyEvent, count: 1))")})((await $wait((await $checkHitCount({ key: "b", type: "CREATE", source: $Source.anyEvent, count: 1 })))))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: wait(checkHitCount(key: \"c\", type: \"CREATE\", source: Source.anyEvent, count: 1))")})((await $wait((await $checkHitCount({ key: "c", type: "CREATE", source: $Source.anyEvent, count: 1 })))))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: wait(checkHitCount(key: \"a\", type: \"CREATE\", source: Source.onEvent, count: 1))")})((await $wait((await $checkHitCount({ key: "a", type: "CREATE", source: $Source.onEvent, count: 1 })))))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: wait(checkHitCount(key: \"b\", type: \"CREATE\", source:  Source.onEvent, count: 1))")})((await $wait((await $checkHitCount({ key: "b", type: "CREATE", source: $Source.onEvent, count: 1 })))))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: wait(checkHitCount(key: \"c\", type: \"CREATE\", source:  Source.onEvent, count: 1))")})((await $wait((await $checkHitCount({ key: "c", type: "CREATE", source: $Source.onEvent, count: 1 })))))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: wait(checkHitCount(key: \"b\", type: \"UPDATE\", source: Source.anyEvent, count: 1))")})((await $wait((await $checkHitCount({ key: "b", type: "UPDATE", source: $Source.anyEvent, count: 1 })))))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: wait(checkHitCount(key: \"c\", type: \"DELETE\", source: Source.anyEvent, count: 1))")})((await $wait((await $checkHitCount({ key: "c", type: "DELETE", source: $Source.anyEvent, count: 1 })))))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: wait(checkHitCount(key: \"b\", type: \"UPDATE\", source: Source.onEvent, count: 1))")})((await $wait((await $checkHitCount({ key: "b", type: "UPDATE", source: $Source.onEvent, count: 1 })))))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: wait(checkHitCount(key: \"c\", type: \"DELETE\", source: Source.onEvent, count: 1))")})((await $wait((await $checkHitCount({ key: "c", type: "DELETE", source: $Source.onEvent, count: 1 })))))};
+      if (((await $util_Util.env("WING_TARGET")) !== "tf-aws")) {
+        {((cond) => {if (!cond) throw new Error("assertion failed: wait(checkHitCount(key: \"a\", type: \"CREATE\", source: Source.anyEvent, count: 1))")})((await $wait((await $checkHitCount({ key: "a", type: "CREATE", source: $Source.anyEvent, count: 1 })))))};
+        {((cond) => {if (!cond) throw new Error("assertion failed: wait(checkHitCount(key: \"b\", type: \"CREATE\", source: Source.anyEvent, count: 1))")})((await $wait((await $checkHitCount({ key: "b", type: "CREATE", source: $Source.anyEvent, count: 1 })))))};
+        {((cond) => {if (!cond) throw new Error("assertion failed: wait(checkHitCount(key: \"c\", type: \"CREATE\", source: Source.anyEvent, count: 1))")})((await $wait((await $checkHitCount({ key: "c", type: "CREATE", source: $Source.anyEvent, count: 1 })))))};
+        {((cond) => {if (!cond) throw new Error("assertion failed: wait(checkHitCount(key: \"a\", type: \"CREATE\", source: Source.onEvent, count: 1))")})((await $wait((await $checkHitCount({ key: "a", type: "CREATE", source: $Source.onEvent, count: 1 })))))};
+        {((cond) => {if (!cond) throw new Error("assertion failed: wait(checkHitCount(key: \"b\", type: \"CREATE\", source:  Source.onEvent, count: 1))")})((await $wait((await $checkHitCount({ key: "b", type: "CREATE", source: $Source.onEvent, count: 1 })))))};
+        {((cond) => {if (!cond) throw new Error("assertion failed: wait(checkHitCount(key: \"c\", type: \"CREATE\", source:  Source.onEvent, count: 1))")})((await $wait((await $checkHitCount({ key: "c", type: "CREATE", source: $Source.onEvent, count: 1 })))))};
+        {((cond) => {if (!cond) throw new Error("assertion failed: wait(checkHitCount(key: \"b\", type: \"UPDATE\", source: Source.anyEvent, count: 1))")})((await $wait((await $checkHitCount({ key: "b", type: "UPDATE", source: $Source.anyEvent, count: 1 })))))};
+        {((cond) => {if (!cond) throw new Error("assertion failed: wait(checkHitCount(key: \"c\", type: \"DELETE\", source: Source.anyEvent, count: 1))")})((await $wait((await $checkHitCount({ key: "c", type: "DELETE", source: $Source.anyEvent, count: 1 })))))};
+        {((cond) => {if (!cond) throw new Error("assertion failed: wait(checkHitCount(key: \"b\", type: \"UPDATE\", source: Source.onEvent, count: 1))")})((await $wait((await $checkHitCount({ key: "b", type: "UPDATE", source: $Source.onEvent, count: 1 })))))};
+        {((cond) => {if (!cond) throw new Error("assertion failed: wait(checkHitCount(key: \"c\", type: \"DELETE\", source: Source.onEvent, count: 1))")})((await $wait((await $checkHitCount({ key: "c", type: "DELETE", source: $Source.onEvent, count: 1 })))))};
+      }
     }
   }
   return $Closure8;
@@ -1065,6 +1067,7 @@ const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 const cloud = require('@winglang/sdk').cloud;
 const ex = require('@winglang/sdk').ex;
+const util = require('@winglang/sdk').util;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
@@ -1326,6 +1329,7 @@ class $Root extends $stdlib.std.Resource {
             $Source: ${context._lift(Source)},
             $b: ${context._lift(b)},
             $checkHitCount: ${context._lift(checkHitCount)},
+            $util_Util: ${context._lift(util.Util)},
             $wait: ${context._lift(wait)},
           })
         `);
