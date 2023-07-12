@@ -190,6 +190,11 @@ export interface ClassSchema extends Documentable {
    * Constants.
    */
   readonly constants: PropertySchema[];
+
+  /**
+   * inflight interface.
+   */
+  readonly inflight?: InterfaceSchema;
 }
 
 /**
@@ -536,6 +541,10 @@ export function isSkipped(docs: reflect.Docs): boolean {
 
 export function getWingType(docs: reflect.Docs): string | undefined {
   return docs.customTag("wingType");
+}
+
+export function getInflight(docs: reflect.Docs): string | undefined {
+  return docs.customTag("inflight");
 }
 
 /**

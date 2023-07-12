@@ -120,8 +120,6 @@ Within the context of the simulator, services are just spawned processes ran wit
 
 ### Service <a name="Service" id="@winglang/sdk.cloud.Service"></a>
 
-**Inflight client:** [@winglang/sdk.cloud.IServiceClient](#@winglang/sdk.cloud.IServiceClient)
-
 A long-running service.
 
 #### Initializers <a name="Initializers" id="@winglang/sdk.cloud.Service.Initializer"></a>
@@ -144,6 +142,32 @@ new cloud.Service(props: ServiceProps);
 
 ---
 
+#### Methods <a name="Methods" id="Methods"></a>
+
+##### Inflight Methods
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.cloud.IServiceClient.start">start</a></code> | Start the service. |
+| <code><a href="#@winglang/sdk.cloud.IServiceClient.stop">stop</a></code> | Stop the service. |
+
+---
+
+##### `start` <a name="start" id="@winglang/sdk.cloud.IServiceClient.start"></a>
+
+```wing
+inflight start(): void
+```
+
+Start the service.
+
+##### `stop` <a name="stop" id="@winglang/sdk.cloud.IServiceClient.stop"></a>
+
+```wing
+inflight stop(): void
+```
+
+Stop the service.
 
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -305,38 +329,6 @@ Handler to run with the service stops.
 ---
 
 ## Protocols <a name="Protocols" id="Protocols"></a>
-
-### IServiceClient <a name="IServiceClient" id="@winglang/sdk.cloud.IServiceClient"></a>
-
-- *Implemented By:* <a href="#@winglang/sdk.cloud.IServiceClient">IServiceClient</a>
-
-Inflight interface for `Service`.
-
-#### Methods <a name="Methods" id="Methods"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@winglang/sdk.cloud.IServiceClient.start">start</a></code> | Start the service. |
-| <code><a href="#@winglang/sdk.cloud.IServiceClient.stop">stop</a></code> | Stop the service. |
-
----
-
-##### `start` <a name="start" id="@winglang/sdk.cloud.IServiceClient.start"></a>
-
-```wing
-inflight start(): void
-```
-
-Start the service.
-
-##### `stop` <a name="stop" id="@winglang/sdk.cloud.IServiceClient.stop"></a>
-
-```wing
-inflight stop(): void
-```
-
-Stop the service.
-
 
 ### IServiceOnEventClient <a name="IServiceOnEventClient" id="@winglang/sdk.cloud.IServiceOnEventClient"></a>
 
