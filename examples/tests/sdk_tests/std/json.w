@@ -33,6 +33,13 @@ test "setAt()" {
   assert(d.get("c") == 3);
 }
 
+//-----------------------------------------------------------------------------
+// tryParse()
+assert(Json.tryParse(nil) == nil);
+assert(Json.tryParse(12) == 12);
+assert(Json.tryParse("boom") == nil);
+
+
 /*
 Will add test later:
 test "setWithNonMutJsonObject()" {
