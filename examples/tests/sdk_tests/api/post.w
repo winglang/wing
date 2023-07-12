@@ -23,8 +23,8 @@ api.post("/path", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
 
 test "http.post and http.fetch can preform a call to an api" {
   let url = api.url + "/path";
-  let response: http.Response = http.post(url, http.RequestOptions { headers: { "content-type" => "application/json" }, body: Json.stringify(body)});
-  let fetchResponse: http.Response = http.post(url, http.RequestOptions {method: http_POST, headers: { "content-type" => "application/json" }, body: Json.stringify(body)});
+  let response: http.Response = http.post(url, headers: { "content-type" => "application/json" }, body: Json.stringify(body));
+  let fetchResponse: http.Response = http.fetch(url, method: http_POST, headers: { "content-type" => "application/json" }, body: Json.stringify(body));
 
   assert(response.body == Json.stringify(body));
   assert(response.status == 200);
