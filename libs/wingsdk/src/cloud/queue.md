@@ -23,7 +23,7 @@ Queues are typically used to decouple producers of data and the consumers of sai
 
 ## Usage
 
-### Setting a Queue Consumer 
+### Setting a Queue Consumer
 
 ```ts playground
 bring cloud;
@@ -43,6 +43,7 @@ new cloud.Function(inflight () => {
 ### Using Queue inflight api
 
 Pusing messages, popping them, and purge
+
 ```ts playground
 bring cloud;
 
@@ -79,7 +80,3 @@ The AWS implementation of `cloud.Queue` uses [Amazon Simple Queue Service](https
 ### GCP (`tf-gcp`)
 
 🚧 Not supported yet (tracking issue: [#616](https://github.com/winglang/wing/issues/616))
-
-## API Reference
-
-The full list of APIs for `cloud.Queue` is available in the [API Reference](./api-reference).
