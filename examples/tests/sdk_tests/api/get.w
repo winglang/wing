@@ -27,8 +27,8 @@ if (util.env("WING_TARGET") != "tf-aws") {
   test "http.get and http.fetch can preform a call to an api" {
     let url = api.url + "/path";
     let getResponse: http.Response = http.get(url, headers: { "content-type" => "application/json" });
-    let fetchResponse: http.Response = http.fetch(url, http.RequestOptions { method: http_GET, headers: { "content-type" => "application/json" }});
-    let fetchResponseNoMethod: http.Response = http.fetch(url, http.RequestOptions { headers: { "content-type" => "application/json" }});
+    let fetchResponse: http.Response = http.fetch(url, method: http_GET, headers: { "content-type" => "application/json" });
+    let fetchResponseNoMethod: http.Response = http.fetch(url,  headers: { "content-type" => "application/json" });
 
 
     assert(getResponse.body == body);
