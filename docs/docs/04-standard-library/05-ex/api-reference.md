@@ -30,7 +30,9 @@ new ex.Redis();
 
 ---
 
-#### Inflight Methods <a name="Inflight Methods" id="Inflight Methods"></a>
+#### Methods <a name="Methods" id="Methods"></a>
+
+##### Inflight Methods
 
 | **Name** | **Description** |
 | --- | --- |
@@ -273,13 +275,15 @@ new ex.Table(props: TableProps);
 
 ---
 
-#### Preflight Methods <a name="Preflight Methods" id="Preflight Methods"></a>
+#### Methods <a name="Methods" id="Methods"></a>
+
+##### Preflight Methods
 
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/sdk.ex.Table.addRow">addRow</a></code> | Add a row to the table that is created when the app is deployed. |
 
-#### Inflight Methods
+##### Inflight Methods
 
 | **Name** | **Description** |
 | --- | --- |

@@ -461,21 +461,19 @@ export class MarkdownRenderer {
       return MarkdownDocument.EMPTY;
     }
 
-    const inflightTitle = "Inflight Methods";
-    const PreflightTitle = inflightMethods ? "Preflight Methods" : "Methods";
-
     const md = new MarkdownDocument({
-      header: { title: methods.length ? PreflightTitle : inflightTitle },
+      header: { title: "Methods" },
     });
 
     if (methods.length) {
-      md.table(this.createTable(methods));
-      if (inflightMethods?.length) {
-        md.title(inflightTitle, 4);
+      if (inflightMethods) {
+        md.title("Preflight Methods", 5);
       }
+      md.table(this.createTable(methods));
     }
 
     if (inflightMethods?.length) {
+      md.title("Inflight Methods", 5);
       md.table(this.createTable(inflightMethods));
     }
     md.split();

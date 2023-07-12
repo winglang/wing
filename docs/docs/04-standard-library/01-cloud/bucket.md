@@ -140,7 +140,9 @@ new cloud.Bucket(props?: BucketProps);
 
 ---
 
-#### Preflight Methods <a name="Preflight Methods" id="Preflight Methods"></a>
+#### Methods <a name="Methods" id="Methods"></a>
+
+##### Preflight Methods
 
 | **Name** | **Description** |
 | --- | --- |
@@ -150,7 +152,7 @@ new cloud.Bucket(props?: BucketProps);
 | <code><a href="#@winglang/sdk.cloud.Bucket.onEvent">onEvent</a></code> | Run an inflight whenever a file is uploaded, modified, or deleted from the bucket. |
 | <code><a href="#@winglang/sdk.cloud.Bucket.onUpdate">onUpdate</a></code> | Run an inflight whenever a file is updated in the bucket. |
 
-#### Inflight Methods
+##### Inflight Methods
 
 | **Name** | **Description** |
 | --- | --- |

@@ -5,11 +5,13 @@ import { Class } from "./class";
 import { Construct } from "./construct";
 import { Interface } from "./interface";
 
+export type WingClassType = reflect.ClassType & { inflightFqn?: string };
+
 export class Constructs {
   private readonly constructs: Construct[];
   constructor(
     transpile: Transpile,
-    classes: (reflect.ClassType & { inflightId?: string })[],
+    classes: WingClassType[],
     interfaces: Record<string, reflect.InterfaceType>
   ) {
     this.constructs = classes
@@ -18,8 +20,8 @@ export class Constructs {
         return new Construct(
           transpile,
           c,
-          c.inflightId
-            ? new Interface(transpile, interfaces[c.inflightId])
+          c.inflightFqn
+            ? new Interface(transpile, interfaces[c.inflightFqn])
             : undefined
         );
       });

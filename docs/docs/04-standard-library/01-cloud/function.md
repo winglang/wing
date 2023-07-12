@@ -95,13 +95,15 @@ new cloud.Function(inflight: IFunctionHandler, props?: FunctionProps);
 
 ---
 
-#### Preflight Methods <a name="Preflight Methods" id="Preflight Methods"></a>
+#### Methods <a name="Methods" id="Methods"></a>
+
+##### Preflight Methods
 
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.Function.addEnvironment">addEnvironment</a></code> | Add an environment variable to the function. |
 
-#### Inflight Methods
+##### Inflight Methods
 
 | **Name** | **Description** |
 | --- | --- |

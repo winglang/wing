@@ -1,6 +1,6 @@
 import * as reflect from "jsii-reflect";
 import { Classes } from "./classes";
-import { Constructs } from "./constructs";
+import { Constructs, WingClassType } from "./constructs";
 import { Enums } from "./enums";
 import { Interfaces } from "./interfaces";
 import { Structs } from "./structs";
@@ -24,7 +24,7 @@ export class ApiReference {
     submodule?: reflect.Submodule,
     allSubmodules?: boolean
   ) {
-    let classes: (reflect.ClassType & { inflightId?: string })[];
+    let classes: WingClassType[];
     let interfaces: reflect.InterfaceType[];
     let enums: reflect.EnumType[];
 
@@ -67,13 +67,13 @@ export class ApiReference {
     classes.forEach((c) => {
       const inflight = getInflight(c.docs);
       if (inflight) {
-        c.inflightId = MarkdownDocument.sanitize(inflight);
+        c.inflightFqn = MarkdownDocument.sanitize(inflight);
       }
     });
 
-    const inflightIds: string[] = classes
-      .map(({ inflightId }) => inflightId)
-      .filter((id) => typeof id === "string") as string[];
+    const inflightFqns: string[] = classes
+      .map(({ inflightFqn }) => inflightFqn)
+      .filter((fqn) => typeof fqn === "string") as string[];
 
     this.constructs = new Constructs(
       transpile,
@@ -84,7 +84,7 @@ export class ApiReference {
     this.structs = new Structs(transpile, interfaces);
     this.interfaces = new Interfaces(
       transpile,
-      this.filterOutInflightInterfaces(interfaces, inflightIds)
+      this.filterOutInflightInterfaces(interfaces, inflightFqns)
     );
     this.enums = new Enums(transpile, enums);
   }
@@ -113,10 +113,10 @@ export class ApiReference {
 
   private filterOutInflightInterfaces(
     interfaces: reflect.InterfaceType[],
-    inflightIds: string[]
+    inflightFqns: string[]
   ): reflect.InterfaceType[] {
     return interfaces.filter(
-      (iface) => !inflightIds.includes(iface.fqn.replace(/ /g, "-"))
+      (iface) => !inflightFqns.includes(iface.fqn.replace(/ /g, "-"))
     );
   }
 

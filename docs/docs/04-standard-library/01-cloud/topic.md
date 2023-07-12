@@ -128,13 +128,15 @@ new cloud.Topic(props?: TopicProps);
 
 ---
 
-#### Preflight Methods <a name="Preflight Methods" id="Preflight Methods"></a>
+#### Methods <a name="Methods" id="Methods"></a>
+
+##### Preflight Methods
 
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.Topic.onMessage">onMessage</a></code> | Run an inflight whenever an message is published to the topic. |
 
-#### Inflight Methods
+##### Inflight Methods
 
 | **Name** | **Description** |
 | --- | --- |

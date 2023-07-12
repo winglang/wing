@@ -142,7 +142,9 @@ new cloud.Service(props: ServiceProps);
 
 ---
 
-#### Inflight Methods <a name="Inflight Methods" id="Inflight Methods"></a>
+#### Methods <a name="Methods" id="Methods"></a>
+
+##### Inflight Methods
 
 | **Name** | **Description** |
 | --- | --- |

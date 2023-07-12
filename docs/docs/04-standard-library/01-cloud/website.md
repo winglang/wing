@@ -86,7 +86,9 @@ new cloud.Website(props: WebsiteProps);
 
 ---
 
-#### Preflight Methods <a name="Preflight Methods" id="Preflight Methods"></a>
+#### Methods <a name="Methods" id="Methods"></a>
+
+##### Preflight Methods
 
 | **Name** | **Description** |
 | --- | --- |

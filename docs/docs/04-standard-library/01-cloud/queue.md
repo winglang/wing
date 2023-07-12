@@ -106,13 +106,15 @@ new cloud.Queue(props?: QueueProps);
 
 ---
 
-#### Preflight Methods <a name="Preflight Methods" id="Preflight Methods"></a>
+#### Methods <a name="Methods" id="Methods"></a>
+
+##### Preflight Methods
 
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.Queue.setConsumer">setConsumer</a></code> | Create a function to consume messages from this queue. |
 
-#### Inflight Methods
+##### Inflight Methods
 
 | **Name** | **Description** |
 | --- | --- |

@@ -96,7 +96,9 @@ new cloud.Counter(props?: CounterProps);
 
 ---
 
-#### Inflight Methods <a name="Inflight Methods" id="Inflight Methods"></a>
+#### Methods <a name="Methods" id="Methods"></a>
+
+##### Inflight Methods
 
 | **Name** | **Description** |
 | --- | --- |
