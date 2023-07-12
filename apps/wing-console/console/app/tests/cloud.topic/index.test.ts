@@ -13,6 +13,6 @@ describe(`${__dirname}/index.w`, () => {
 
     const log = page.getByText("Message received: Hello world!");
 
-    await log.waitFor({ state: "visible" });
+    await expect(log).toBeVisible();
   });
 });
