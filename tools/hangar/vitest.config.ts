@@ -11,6 +11,7 @@ export default defineConfig({
         json: join(__dirname, "results", "report.json"),
       },
     },
+    isolate: false,
     testTimeout: 200_000,
     globalSetup: join(__dirname, "src", "package.setup.ts"),
     resolveSnapshotPath(path, extension) {

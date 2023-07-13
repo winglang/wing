@@ -87,8 +87,6 @@ See [AWS documentation](https://docs.aws.amazon.com/secretsmanager/latest/usergu
 
 ### Secret <a name="Secret" id="@winglang/sdk.cloud.Secret"></a>
 
-**Inflight client:** [@winglang/sdk.cloud.ISecretClient](#@winglang/sdk.cloud.ISecretClient)
-
 A cloud secret.
 
 #### Initializers <a name="Initializers" id="@winglang/sdk.cloud.Secret.Initializer"></a>
@@ -111,6 +109,44 @@ new cloud.Secret(props?: SecretProps);
 
 ---
 
+#### Methods <a name="Methods" id="Methods"></a>
+
+##### Inflight Methods
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.cloud.ISecretClient.value">value</a></code> | Retrieve the value of the secret. |
+| <code><a href="#@winglang/sdk.cloud.ISecretClient.valueJson">valueJson</a></code> | Retrieve the Json value of the secret. |
+
+---
+
+##### `value` <a name="value" id="@winglang/sdk.cloud.ISecretClient.value"></a>
+
+```wing
+inflight value(options?: GetSecretValueOptions): str
+```
+
+Retrieve the value of the secret.
+
+###### `options`<sup>Optional</sup> <a name="options" id="@winglang/sdk.cloud.ISecretClient.value.parameter.options"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.GetSecretValueOptions">GetSecretValueOptions</a>
+
+---
+
+##### `valueJson` <a name="valueJson" id="@winglang/sdk.cloud.ISecretClient.valueJson"></a>
+
+```wing
+inflight valueJson(options?: GetSecretValueOptions): Json
+```
+
+Retrieve the Json value of the secret.
+
+###### `options`<sup>Optional</sup> <a name="options" id="@winglang/sdk.cloud.ISecretClient.valueJson.parameter.options"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.GetSecretValueOptions">GetSecretValueOptions</a>
+
+---
 
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -217,51 +253,6 @@ The secret's name.
 If no name is provided then a new secret is provisioned in the target.
 If a name is provided then the resource will reference an existing
 secret in the target.
-
----
-
-## Protocols <a name="Protocols" id="Protocols"></a>
-
-### ISecretClient <a name="ISecretClient" id="@winglang/sdk.cloud.ISecretClient"></a>
-
-- *Implemented By:* <a href="#@winglang/sdk.cloud.ISecretClient">ISecretClient</a>
-
-Inflight interface for `Secret`.
-
-#### Methods <a name="Methods" id="Methods"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@winglang/sdk.cloud.ISecretClient.value">value</a></code> | Retrieve the value of the secret. |
-| <code><a href="#@winglang/sdk.cloud.ISecretClient.valueJson">valueJson</a></code> | Retrieve the Json value of the secret. |
-
----
-
-##### `value` <a name="value" id="@winglang/sdk.cloud.ISecretClient.value"></a>
-
-```wing
-inflight value(options?: GetSecretValueOptions): str
-```
-
-Retrieve the value of the secret.
-
-###### `options`<sup>Optional</sup> <a name="options" id="@winglang/sdk.cloud.ISecretClient.value.parameter.options"></a>
-
-- *Type:* <a href="#@winglang/sdk.cloud.GetSecretValueOptions">GetSecretValueOptions</a>
-
----
-
-##### `valueJson` <a name="valueJson" id="@winglang/sdk.cloud.ISecretClient.valueJson"></a>
-
-```wing
-inflight valueJson(options?: GetSecretValueOptions): Json
-```
-
-Retrieve the Json value of the secret.
-
-###### `options`<sup>Optional</sup> <a name="options" id="@winglang/sdk.cloud.ISecretClient.valueJson.parameter.options"></a>
-
-- *Type:* <a href="#@winglang/sdk.cloud.GetSecretValueOptions">GetSecretValueOptions</a>
 
 ---
 

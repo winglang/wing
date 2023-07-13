@@ -1,7 +1,8 @@
-import { Attribute, useTheme } from "@wingconsole/design-system";
 import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/solid";
-import { AppMode } from "../AppContext.js";
+import { Attribute, useTheme } from "@wingconsole/design-system";
 import classNames from "classnames";
+
+import { AppMode } from "../AppContext.js";
 
 export interface WebsiteInteractionProps {
   url: string;

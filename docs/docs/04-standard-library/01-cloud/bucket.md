@@ -118,8 +118,6 @@ The Google Cloud implementation of `cloud.Bucket` uses [Google Cloud Storage](ht
 
 ### Bucket <a name="Bucket" id="@winglang/sdk.cloud.Bucket"></a>
 
-**Inflight client:** [@winglang/sdk.cloud.IBucketClient](#@winglang/sdk.cloud.IBucketClient)
-
 A cloud object store.
 
 #### Initializers <a name="Initializers" id="@winglang/sdk.cloud.Bucket.Initializer"></a>
@@ -144,6 +142,8 @@ new cloud.Bucket(props?: BucketProps);
 
 #### Methods <a name="Methods" id="Methods"></a>
 
+##### Preflight Methods
+
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.Bucket.addObject">addObject</a></code> | Add a file to the bucket that is uploaded when the app is deployed. |
@@ -151,6 +151,22 @@ new cloud.Bucket(props?: BucketProps);
 | <code><a href="#@winglang/sdk.cloud.Bucket.onDelete">onDelete</a></code> | Run an inflight whenever a file is deleted from the bucket. |
 | <code><a href="#@winglang/sdk.cloud.Bucket.onEvent">onEvent</a></code> | Run an inflight whenever a file is uploaded, modified, or deleted from the bucket. |
 | <code><a href="#@winglang/sdk.cloud.Bucket.onUpdate">onUpdate</a></code> | Run an inflight whenever a file is updated in the bucket. |
+
+##### Inflight Methods
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.cloud.IBucketClient.delete">delete</a></code> | Delete an existing object using a key from the bucket. |
+| <code><a href="#@winglang/sdk.cloud.IBucketClient.exists">exists</a></code> | Check if an object exists in the bucket. |
+| <code><a href="#@winglang/sdk.cloud.IBucketClient.get">get</a></code> | Retrieve an object from the bucket. |
+| <code><a href="#@winglang/sdk.cloud.IBucketClient.getJson">getJson</a></code> | Retrieve a Json object from the bucket. |
+| <code><a href="#@winglang/sdk.cloud.IBucketClient.list">list</a></code> | Retrieve existing objects keys from the bucket. |
+| <code><a href="#@winglang/sdk.cloud.IBucketClient.publicUrl">publicUrl</a></code> | Returns a url to the given file. |
+| <code><a href="#@winglang/sdk.cloud.IBucketClient.put">put</a></code> | Put an object in the bucket. |
+| <code><a href="#@winglang/sdk.cloud.IBucketClient.putJson">putJson</a></code> | Put a Json object in the bucket. |
+| <code><a href="#@winglang/sdk.cloud.IBucketClient.tryDelete">tryDelete</a></code> | Delete an object from the bucket if it exists. |
+| <code><a href="#@winglang/sdk.cloud.IBucketClient.tryGet">tryGet</a></code> | Get an object from the bucket if it exists. |
+| <code><a href="#@winglang/sdk.cloud.IBucketClient.tryGetJson">tryGetJson</a></code> | Gets an object from the bucket if it exists, parsing it as Json. |
 
 ---
 
@@ -254,6 +270,204 @@ Run an inflight whenever a file is updated in the bucket.
 ###### `opts`<sup>Optional</sup> <a name="opts" id="@winglang/sdk.cloud.Bucket.onUpdate.parameter.opts"></a>
 
 - *Type:* <a href="#@winglang/sdk.cloud.BucketOnUpdateProps">BucketOnUpdateProps</a>
+
+---
+
+##### `delete` <a name="delete" id="@winglang/sdk.cloud.IBucketClient.delete"></a>
+
+```wing
+inflight delete(key: str, opts?: BucketDeleteOptions): void
+```
+
+Delete an existing object using a key from the bucket.
+
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.cloud.IBucketClient.delete.parameter.key"></a>
+
+- *Type:* str
+
+Key of the object.
+
+---
+
+###### `opts`<sup>Optional</sup> <a name="opts" id="@winglang/sdk.cloud.IBucketClient.delete.parameter.opts"></a>
+
+- *Type:* <a href="#@winglang/sdk.cloud.BucketDeleteOptions">BucketDeleteOptions</a>
+
+Options available for delete an item from a bucket.
+
+---
+
+##### `exists` <a name="exists" id="@winglang/sdk.cloud.IBucketClient.exists"></a>
+
+```wing
+inflight exists(key: str): bool
+```
+
+Check if an object exists in the bucket.
+
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.cloud.IBucketClient.exists.parameter.key"></a>
+
+- *Type:* str
+
+Key of the object.
+
+---
+
+##### `get` <a name="get" id="@winglang/sdk.cloud.IBucketClient.get"></a>
+
+```wing
+inflight get(key: str): str
+```
+
+Retrieve an object from the bucket.
+
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.cloud.IBucketClient.get.parameter.key"></a>
+
+- *Type:* str
+
+Key of the object.
+
+---
+
+##### `getJson` <a name="getJson" id="@winglang/sdk.cloud.IBucketClient.getJson"></a>
+
+```wing
+inflight getJson(key: str): Json
+```
+
+Retrieve a Json object from the bucket.
+
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.cloud.IBucketClient.getJson.parameter.key"></a>
+
+- *Type:* str
+
+Key of the object.
+
+---
+
+##### `list` <a name="list" id="@winglang/sdk.cloud.IBucketClient.list"></a>
+
+```wing
+inflight list(prefix?: str): MutArray<str>
+```
+
+Retrieve existing objects keys from the bucket.
+
+###### `prefix`<sup>Optional</sup> <a name="prefix" id="@winglang/sdk.cloud.IBucketClient.list.parameter.prefix"></a>
+
+- *Type:* str
+
+Limits the response to keys that begin with the specified prefix.
+
+---
+
+##### `publicUrl` <a name="publicUrl" id="@winglang/sdk.cloud.IBucketClient.publicUrl"></a>
+
+```wing
+inflight publicUrl(key: str): str
+```
+
+Returns a url to the given file.
+
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.cloud.IBucketClient.publicUrl.parameter.key"></a>
+
+- *Type:* str
+
+---
+
+##### `put` <a name="put" id="@winglang/sdk.cloud.IBucketClient.put"></a>
+
+```wing
+inflight put(key: str, body: str): void
+```
+
+Put an object in the bucket.
+
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.cloud.IBucketClient.put.parameter.key"></a>
+
+- *Type:* str
+
+Key of the object.
+
+---
+
+###### `body`<sup>Required</sup> <a name="body" id="@winglang/sdk.cloud.IBucketClient.put.parameter.body"></a>
+
+- *Type:* str
+
+Content of the object we want to store into the bucket.
+
+---
+
+##### `putJson` <a name="putJson" id="@winglang/sdk.cloud.IBucketClient.putJson"></a>
+
+```wing
+inflight putJson(key: str, body: Json): void
+```
+
+Put a Json object in the bucket.
+
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.cloud.IBucketClient.putJson.parameter.key"></a>
+
+- *Type:* str
+
+Key of the object.
+
+---
+
+###### `body`<sup>Required</sup> <a name="body" id="@winglang/sdk.cloud.IBucketClient.putJson.parameter.body"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
+
+Json object that we want to store into the bucket.
+
+---
+
+##### `tryDelete` <a name="tryDelete" id="@winglang/sdk.cloud.IBucketClient.tryDelete"></a>
+
+```wing
+inflight tryDelete(key: str): bool
+```
+
+Delete an object from the bucket if it exists.
+
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.cloud.IBucketClient.tryDelete.parameter.key"></a>
+
+- *Type:* str
+
+Key of the object.
+
+---
+
+##### `tryGet` <a name="tryGet" id="@winglang/sdk.cloud.IBucketClient.tryGet"></a>
+
+```wing
+inflight tryGet(key: str): str
+```
+
+Get an object from the bucket if it exists.
+
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.cloud.IBucketClient.tryGet.parameter.key"></a>
+
+- *Type:* str
+
+Key of the object.
+
+---
+
+##### `tryGetJson` <a name="tryGetJson" id="@winglang/sdk.cloud.IBucketClient.tryGetJson"></a>
+
+```wing
+inflight tryGetJson(key: str): Json
+```
+
+Gets an object from the bucket if it exists, parsing it as Json.
+
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.cloud.IBucketClient.tryGetJson.parameter.key"></a>
+
+- *Type:* str
+
+Key of the object.
 
 ---
 
@@ -459,229 +673,6 @@ Whether the bucket's objects should be publicly accessible.
 ---
 
 ## Protocols <a name="Protocols" id="Protocols"></a>
-
-### IBucketClient <a name="IBucketClient" id="@winglang/sdk.cloud.IBucketClient"></a>
-
-- *Implemented By:* <a href="#@winglang/sdk.cloud.IBucketClient">IBucketClient</a>
-
-Inflight interface for `Bucket`.
-
-#### Methods <a name="Methods" id="Methods"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@winglang/sdk.cloud.IBucketClient.delete">delete</a></code> | Delete an existing object using a key from the bucket. |
-| <code><a href="#@winglang/sdk.cloud.IBucketClient.exists">exists</a></code> | Check if an object exists in the bucket. |
-| <code><a href="#@winglang/sdk.cloud.IBucketClient.get">get</a></code> | Retrieve an object from the bucket. |
-| <code><a href="#@winglang/sdk.cloud.IBucketClient.getJson">getJson</a></code> | Retrieve a Json object from the bucket. |
-| <code><a href="#@winglang/sdk.cloud.IBucketClient.list">list</a></code> | Retrieve existing objects keys from the bucket. |
-| <code><a href="#@winglang/sdk.cloud.IBucketClient.publicUrl">publicUrl</a></code> | Returns a url to the given file. |
-| <code><a href="#@winglang/sdk.cloud.IBucketClient.put">put</a></code> | Put an object in the bucket. |
-| <code><a href="#@winglang/sdk.cloud.IBucketClient.putJson">putJson</a></code> | Put a Json object in the bucket. |
-| <code><a href="#@winglang/sdk.cloud.IBucketClient.tryDelete">tryDelete</a></code> | Delete an object from the bucket if it exists. |
-| <code><a href="#@winglang/sdk.cloud.IBucketClient.tryGet">tryGet</a></code> | Get an object from the bucket if it exists. |
-| <code><a href="#@winglang/sdk.cloud.IBucketClient.tryGetJson">tryGetJson</a></code> | Gets an object from the bucket if it exists, parsing it as Json. |
-
----
-
-##### `delete` <a name="delete" id="@winglang/sdk.cloud.IBucketClient.delete"></a>
-
-```wing
-inflight delete(key: str, opts?: BucketDeleteOptions): void
-```
-
-Delete an existing object using a key from the bucket.
-
-###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.cloud.IBucketClient.delete.parameter.key"></a>
-
-- *Type:* str
-
-Key of the object.
-
----
-
-###### `opts`<sup>Optional</sup> <a name="opts" id="@winglang/sdk.cloud.IBucketClient.delete.parameter.opts"></a>
-
-- *Type:* <a href="#@winglang/sdk.cloud.BucketDeleteOptions">BucketDeleteOptions</a>
-
-Options available for delete an item from a bucket.
-
----
-
-##### `exists` <a name="exists" id="@winglang/sdk.cloud.IBucketClient.exists"></a>
-
-```wing
-inflight exists(key: str): bool
-```
-
-Check if an object exists in the bucket.
-
-###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.cloud.IBucketClient.exists.parameter.key"></a>
-
-- *Type:* str
-
-Key of the object.
-
----
-
-##### `get` <a name="get" id="@winglang/sdk.cloud.IBucketClient.get"></a>
-
-```wing
-inflight get(key: str): str
-```
-
-Retrieve an object from the bucket.
-
-###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.cloud.IBucketClient.get.parameter.key"></a>
-
-- *Type:* str
-
-Key of the object.
-
----
-
-##### `getJson` <a name="getJson" id="@winglang/sdk.cloud.IBucketClient.getJson"></a>
-
-```wing
-inflight getJson(key: str): Json
-```
-
-Retrieve a Json object from the bucket.
-
-###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.cloud.IBucketClient.getJson.parameter.key"></a>
-
-- *Type:* str
-
-Key of the object.
-
----
-
-##### `list` <a name="list" id="@winglang/sdk.cloud.IBucketClient.list"></a>
-
-```wing
-inflight list(prefix?: str): MutArray<str>
-```
-
-Retrieve existing objects keys from the bucket.
-
-###### `prefix`<sup>Optional</sup> <a name="prefix" id="@winglang/sdk.cloud.IBucketClient.list.parameter.prefix"></a>
-
-- *Type:* str
-
-Limits the response to keys that begin with the specified prefix.
-
----
-
-##### `publicUrl` <a name="publicUrl" id="@winglang/sdk.cloud.IBucketClient.publicUrl"></a>
-
-```wing
-inflight publicUrl(key: str): str
-```
-
-Returns a url to the given file.
-
-###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.cloud.IBucketClient.publicUrl.parameter.key"></a>
-
-- *Type:* str
-
----
-
-##### `put` <a name="put" id="@winglang/sdk.cloud.IBucketClient.put"></a>
-
-```wing
-inflight put(key: str, body: str): void
-```
-
-Put an object in the bucket.
-
-###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.cloud.IBucketClient.put.parameter.key"></a>
-
-- *Type:* str
-
-Key of the object.
-
----
-
-###### `body`<sup>Required</sup> <a name="body" id="@winglang/sdk.cloud.IBucketClient.put.parameter.body"></a>
-
-- *Type:* str
-
-Content of the object we want to store into the bucket.
-
----
-
-##### `putJson` <a name="putJson" id="@winglang/sdk.cloud.IBucketClient.putJson"></a>
-
-```wing
-inflight putJson(key: str, body: Json): void
-```
-
-Put a Json object in the bucket.
-
-###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.cloud.IBucketClient.putJson.parameter.key"></a>
-
-- *Type:* str
-
-Key of the object.
-
----
-
-###### `body`<sup>Required</sup> <a name="body" id="@winglang/sdk.cloud.IBucketClient.putJson.parameter.body"></a>
-
-- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
-
-Json object that we want to store into the bucket.
-
----
-
-##### `tryDelete` <a name="tryDelete" id="@winglang/sdk.cloud.IBucketClient.tryDelete"></a>
-
-```wing
-inflight tryDelete(key: str): bool
-```
-
-Delete an object from the bucket if it exists.
-
-###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.cloud.IBucketClient.tryDelete.parameter.key"></a>
-
-- *Type:* str
-
-Key of the object.
-
----
-
-##### `tryGet` <a name="tryGet" id="@winglang/sdk.cloud.IBucketClient.tryGet"></a>
-
-```wing
-inflight tryGet(key: str): str
-```
-
-Get an object from the bucket if it exists.
-
-###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.cloud.IBucketClient.tryGet.parameter.key"></a>
-
-- *Type:* str
-
-Key of the object.
-
----
-
-##### `tryGetJson` <a name="tryGetJson" id="@winglang/sdk.cloud.IBucketClient.tryGetJson"></a>
-
-```wing
-inflight tryGetJson(key: str): Json
-```
-
-Gets an object from the bucket if it exists, parsing it as Json.
-
-###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.cloud.IBucketClient.tryGetJson.parameter.key"></a>
-
-- *Type:* str
-
-Key of the object.
-
----
-
 
 ### IBucketEventHandler <a name="IBucketEventHandler" id="@winglang/sdk.cloud.IBucketEventHandler"></a>
 
