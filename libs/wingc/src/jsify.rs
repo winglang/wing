@@ -1143,11 +1143,8 @@ impl<'a> JSifier<'a> {
 		}
 
 		// emit fakeSuper method
-		class_code.open("fakeSuper(property, args) {");
-		class_code.line(format!(
-			"return Object.getPrototypeOf({}.prototype)[property].apply(this, args);",
-			name
-		));
+		class_code.open("fakeSuper(property, ...args) {");
+		class_code.line("return super[property](...args);");
 		class_code.close("}");
 
 		class_code.close("}");
