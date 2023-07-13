@@ -2,6 +2,7 @@
 queue_rules:
   - name: default
     conditions:
+      - -files=.mergify.yml
       - status-success=Validate PR title
       - or:
         - status-success=Quality Gate
@@ -19,7 +20,8 @@ pull_request_rules:
           {{ title }} (#{{ number }})
           {{ body }}
     conditions:
-      - -title~=(WIP|wip)
+      - -files=.mergify.yml
+      - -title~=(?i)wip
       - -label~=(🚧 pr/do-not-merge|⚠️ pr/review-mutation)
       - -merged
       - -closed
@@ -38,6 +40,35 @@ pull_request_rules:
       - or:
         - check-success=Quality Gate
         - -files~=^(?!docs/|logo/)
+
+  - name: requires manual merge
+    conditions:
+      - files=.mergify.yml
+      - -title~=(?i)wip
+      - -label~=(🚧 pr/do-not-merge|⚠️ pr/review-mutation|⚠️ mergify/review-config)
+      - -merged
+      - -closed
+      - "#approved-reviews-by>=1"
+      - "#changes-requested-reviews-by=0"
+      - "#review-threads-unresolved=0"
+      - -approved-reviews-by~=author
+      - check-success=Validate PR title
+      - check-success=Quality Gate
+      - or:
+        -  base=main
+        -  base=dev
+      - or:
+        - updated-at<=2023-07-13T07:00:00Z
+        - base=dev
+    actions:
+      comment:
+        message: Thank you for contributing! Your pull request contains megify configuration changes and needs manual merge from a maintainer (be sure to [allow changes to be pushed to your fork](https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/allowing-changes-to-a-pull-request-branch-created-from-a-fork)).
+      label:
+        add:
+          - ⚠️ mergify/review-config
+      request_reviews:
+        teams:
+          - "@winglang/maintainers"
 
   - name: backport change to main
     conditions:
