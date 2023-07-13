@@ -22,9 +22,9 @@
     "projen": "pnpm exec projen"
   },
   "author": {
-    "name": "Monada",
-    "email": "ping@monada.co",
-    "url": "https://monada.co",
+    "name": "Wing Cloud",
+    "email": "ping@wing.cloud",
+    "url": "https://winglang.io",
     "organization": true
   },
   "devDependencies": {
@@ -75,7 +75,7 @@
   "publisher": "Monada",
   "preview": true,
   "private": true,
-  "displayName": "Wing [Alpha]",
+  "displayName": "Wing",
   "icon": "resources/logo.png",
   "categories": [
     "Programming Languages"
