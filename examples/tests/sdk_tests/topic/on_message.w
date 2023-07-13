@@ -1,4 +1,5 @@
 bring cloud;
+bring util;
 
 let t = new cloud.Topic();
 let c = new cloud.Counter();
@@ -40,7 +41,7 @@ test "onMessage" {
         assert(predicate.test());
         return;
       } 
-      TestHelper.sleep(100);
+      util.sleep(1s);
     }
     assert(predicate.test());
 }
