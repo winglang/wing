@@ -15,10 +15,6 @@ class Predicate {
   }
 }
 
-class TestHelper {
-  extern "../external/sleep.js" static inflight sleep(milli: num);
-}
-
 t.onMessage(inflight() => {
   c.inc();
 });
@@ -27,7 +23,6 @@ t.onMessage(inflight() => {
   c.inc();
 });
 
-let js = new TestHelper();
 
 let predicate = new Predicate(c);
 test "onMessage" {
