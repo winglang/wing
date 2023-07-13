@@ -23,7 +23,7 @@ resources, using Terraform as the provisioning engine.
 
 :::info Under Construction
 
-:construction: We plan to support [AWS](https://github.com/winglang/wing/issues?q=is:issue+is:open+sort:updated-desc+label:aws), [Azure](https://github.com/winglang/wing/issues?q=is:issue+is:open+sort:updated-desc+label:azure) and [Google Cloud](https://github.com/winglang/wing/issues?q=is:issue+is:open+sort:updated-desc+label:gcp) as targets out of
+:construction: We plan to also support [Azure](https://github.com/winglang/wing/issues?q=is:issue+is:open+sort:updated-desc+label:azure) and [Google Cloud](https://github.com/winglang/wing/issues?q=is:issue+is:open+sort:updated-desc+label:gcp) as targets out of
 the box. In addition, we are planning support for other provisioning engines
 such as AWS CloudFormation and Kubernetes.
 
