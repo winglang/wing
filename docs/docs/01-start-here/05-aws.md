@@ -148,7 +148,7 @@ through the AWS Management Console.
 4. Click **Send and receive messages**.
 5. In the **Message Body** box type `cloud` and hit **Send message**.
 6. Jump over to the [S3 Console](https://s3.console.aws.amazon.com/s3/buckets) 
-7. There should be some buckets prefixed with `terraform-202`. 
+7. There should be some buckets prefixed with `cloud-bucket-`. 
 8. Cycle through the buckets until you find one that contains `wing.txt`.
 9. Click `wing.txt` then click the `Open` button.
 10. The file should contain `Hello, cloud`.
