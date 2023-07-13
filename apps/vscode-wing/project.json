@@ -22,7 +22,7 @@
       }
     },
     "test": {
-      "dependsOn": ["^build", "build"],
+      "dependsOn": ["build"],
       "options": {
         "cwd": "apps/vscode-wing",
         "command": "echo \"No tests! (yet)\""
