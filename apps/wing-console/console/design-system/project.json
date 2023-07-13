@@ -9,6 +9,12 @@
         "cwd": "apps/wing-console/console/design-system"
       }
     },
+    "test": {
+      "options": {
+        "command": "pnpm eslint",
+        "cwd": "apps/wing-console/console/design-system"
+      }
+    },
     "package": {
       "options": {
         "command": "pnpm package",
