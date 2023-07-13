@@ -39,6 +39,7 @@ export const BlueScreenOfDeath = ({
         "absolute h-full w-full z-50 px-10 py-20 bg-[#004295] overflow-auto flex justify-center items-center",
         hidden && "hidden",
       )}
+      data-testid="blue-screen-of-death"
     >
       <div className="h-full w-full text-md font-share-tech text-white max-w-7xl break-words space-y-4">
         {displayWingTitle && (

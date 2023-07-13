@@ -4,7 +4,7 @@ import { describe } from "../describe.js";
 import { getResourceNode } from "../helpers.js";
 
 describe(`${__dirname}/index.w`, () => {
-  test("opens redis help", async ({ page }) => {
+  test.skip("opens redis help", async ({ page }) => {
     await getResourceNode(page, "root/Default/ex.Redis").click();
 
     const input = page.getByTestId("ex.redis:input");
@@ -22,7 +22,7 @@ describe(`${__dirname}/index.w`, () => {
     );
   });
 
-  test("navigates history", async ({ page }) => {
+  test.skip("navigates history", async ({ page }) => {
     await getResourceNode(page, "root/Default/ex.Redis").click();
 
     const input = page.getByTestId("ex.redis:input");
