@@ -118,7 +118,11 @@ export async function lsp() {
     connection.sendDiagnostics({
       uri,
       diagnostics: raw_diagnostics.map((rd) => {
-        return Diagnostic.create(Range.create(rd.span.start.line, rd.span.start.col, rd.span.end.line, rd.span.end.col), rd.message)
+        if(rd.span) {
+          return Diagnostic.create(Range.create(rd.span.start.line, rd.span.start.col, rd.span.end.line, rd.span.end.col), rd.message)
+        } else {
+          return Diagnostic.create(Range.create(0, 0, 0, 0), rd.message)
+        }
       })
     });
   }
