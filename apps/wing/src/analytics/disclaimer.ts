@@ -1,5 +1,9 @@
 import chalk from "chalk";
-import { AnalyticsStorage } from "./storage";
+import { AnalyticsConfig, AnalyticsStorage } from "./storage";
+
+// simplest way I could think of to allow us to update the disclaimer
+// and force it to be displayed again
+export const WING_DISCLAIMER_VERSION = "1";
 
 export const WING_DISCLAIMER = `
 🧪 This is an early pre-release of the Wing Programming Language.
@@ -25,13 +29,33 @@ function displayDisclaimer() {
   console.log(`${chalk.hex("#2AD5C1")(WING_DISCLAIMER)}`);
 }
 
+export function shouldDisplayDisclaimer(config: AnalyticsConfig): boolean {
+  // only consider display if stdin is a TTY
+  if (!process.stdin.isTTY) {
+    return false;
+  }
+
+  // If never displayed, display
+  if (!config.disclaimerDisplayed) {
+    return true;
+  }
+
+  // If disclaimer version has changed, display
+  if ((config.disclaimerVersion ?? "") !== WING_DISCLAIMER_VERSION) {
+    return true;
+  }
+
+  return !(config.disclaimerDisplayed && config.disclaimerVersion === WING_DISCLAIMER_VERSION);
+}
+
 export function optionallyDisplayDisclaimer(existingStorage?: AnalyticsStorage) {
   try {
     const storage = existingStorage ?? new AnalyticsStorage();
     const analyticsConfig = storage.loadConfig();
-    if (!analyticsConfig.disclaimerDisplayed) {
+    if (shouldDisplayDisclaimer(analyticsConfig)) {
       displayDisclaimer();
       analyticsConfig.disclaimerDisplayed = true;
+      analyticsConfig.disclaimerVersion = WING_DISCLAIMER_VERSION;
       storage.saveConfig(analyticsConfig);
     }
   } catch (error) {

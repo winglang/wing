@@ -2,7 +2,7 @@ import {test, expect, describe, beforeEach, afterEach, vi} from "vitest";
 import { AnalyticsStorage } from "./storage";
 import path from "path";
 import * as os from "os";
-import { WING_DISCLAIMER, optionallyDisplayDisclaimer } from "./disclaimer";
+import { WING_DISCLAIMER, WING_DISCLAIMER_VERSION, optionallyDisplayDisclaimer, shouldDisplayDisclaimer } from "./disclaimer";
 import { existsSync, unlinkSync } from "fs";
 
 
@@ -35,6 +35,30 @@ describe("disclaimer", () => {
     expect(console.log).toHaveBeenCalledWith(expect.stringContaining(WING_DISCLAIMER.split("\n")[0]));
   });
 
+  test("alters config value for displayed", () => {
+    // GIVEN
+    const storage = new AnalyticsStorage({configFile: nonExistentFile});
+    storage.saveConfig({anonymousId: "fake-id", disclaimerDisplayed: false});
+
+    // WHEN
+    optionallyDisplayDisclaimer(storage);
+
+    // THEN
+    expect(storage.loadConfig().disclaimerDisplayed).toBe(true);
+  });
+
+  test("alters displayed version", () => {
+    // GIVEN 
+    const storage = new AnalyticsStorage({configFile: nonExistentFile});
+    storage.saveConfig({anonymousId: "fake-id", disclaimerDisplayed: false});
+
+    // WHEN 
+    optionallyDisplayDisclaimer(storage);
+
+    // THEN
+    expect(storage.loadConfig().disclaimerVersion).toBe(WING_DISCLAIMER_VERSION);
+  })
+
   test("does not appear on second run", () => {
     // GIVEN
     const storage = new AnalyticsStorage({configFile: nonExistentFile});
@@ -45,5 +69,58 @@ describe("disclaimer", () => {
 
     // THEN
     expect(console.log).toHaveBeenCalledTimes(1);
+  });
+
+  describe("behavior when not in TTY", () => {
+    let originalTTY: any;
+    beforeEach(() => {
+      originalTTY = process.stdin.isTTY;
+      process.stdin.isTTY = false;
+    })
+
+    afterEach(() => {
+      process.stdin.isTTY = originalTTY;
+    });
+
+    test("does not alter config value for displayed", () => {
+      // GIVEN
+      const storage = new AnalyticsStorage({configFile: nonExistentFile});
+      storage.saveConfig({anonymousId: "fake-id", disclaimerDisplayed: false});
+
+      // WHEN
+      optionallyDisplayDisclaimer(storage);
+
+      // THEN
+      expect(storage.loadConfig().disclaimerDisplayed).toBe(false);
+    });
+  });
+
+  describe("shouldDisplayDisclaimer", () => {
+    test("returns true if config is empty", () => {
+      expect(shouldDisplayDisclaimer({} as any)).toBe(true);
+    });
+
+    test("returns true if version is not set", () => {
+      expect(shouldDisplayDisclaimer({
+        anonymousId: "fake-id",
+        disclaimerDisplayed: true
+      })).toBe(true);
+    });
+
+    test("returns true if version is not current", () => {
+      expect(shouldDisplayDisclaimer({
+        anonymousId: "fake-id",
+        disclaimerDisplayed: true,
+        disclaimerVersion: "-100.0.0"
+      })).toBe(true);
+    });
+
+    test("return false if displayed version is current", () => {
+      expect(shouldDisplayDisclaimer({
+        anonymousId: "fake-id",
+        disclaimerDisplayed: true,
+        disclaimerVersion: WING_DISCLAIMER_VERSION
+      })).toBe(false);
+    })
   });
 })
