@@ -53,16 +53,13 @@ pull_request_rules:
       - "#review-threads-unresolved=0"
       - -approved-reviews-by~=author
       - check-success=Validate PR title
+      - check-success=Quality Gate
       - or:
         -  base=main
         -  base=dev
       - or:
-        # Code freeze at 7am utc July 13th 2023
         - updated-at<=2023-07-13T07:00:00Z
         - base=dev
-      - or:
-        - check-success=Quality Gate
-        - -files~=^(?!docs/|logo/)
     actions:
       comment:
         message: Thank you for contributing! Your pull request contains megify configuration changes and needs manual merge from a maintainer (be sure to [allow changes to be pushed to your fork](https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/allowing-changes-to-a-pull-request-branch-created-from-a-fork)).
