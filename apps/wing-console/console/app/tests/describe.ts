@@ -1,6 +1,8 @@
-import { test } from "@playwright/test";
-import { createConsoleApp } from "../dist/index.js";
 import * as path from "node:path";
+
+import { test } from "@playwright/test";
+
+import { createConsoleApp } from "../dist/index.js";
 
 /**
  * Declares a group of console tests.
