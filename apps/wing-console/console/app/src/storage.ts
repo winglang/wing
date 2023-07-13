@@ -89,7 +89,7 @@ export class AnalyticsStorage {
      */
     public loadConfig(): AnalyticsConfig {
         try {
-            const fileContents = readFileSync(this.analyticsConfigFile, 'utf-8');
+            const fileContents = readFileSync(this.analyticsConfigFile, 'utf8');
             return JSON.parse(fileContents) as AnalyticsConfig;
         } catch (error: any) {
             if (this.debug) {
