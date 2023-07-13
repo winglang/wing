@@ -48,7 +48,7 @@ bucket.addObject("file1.txt", "Hello world!");
 There are a few global functions with specific behaviors in preflight.
 For example, adding a `log()` statement to your preflight code will result in Wing printing the string to the console after compilation.
 
-```js playground
+```js
 // hello.w
 log("7 * 6 = ${7 * 6}");
 ```
@@ -80,7 +80,7 @@ Let's walk through some examples.
 
 Inflight code is always contained inside a block that starts with the word `inflight`.
 
-```js playground
+```js
 let greeting = inflight () => {
   log("Hello from the cloud!");
 };
@@ -123,7 +123,7 @@ Today, inflights are typically compiled into JavaScript, but Wing may also be ab
 Inflight code cannot be executed during preflight, because inflight APIs assume all resources have already been deployed.
 
 ```js
-firstObject(); // error: method "firstObject" cannot be called in preflight phase
+firstObject(); // error: Cannot call into inflight phase while preflight
 ```
 
 Likewise, inflight code cannot call preflight code, because preflight code has the capability to modify your application's infrastructure configuration, which is disallowed after deployment.
@@ -135,7 +135,7 @@ bring cloud;
 let bucket = new cloud.Bucket();
 
 let saveCalculation = inflight () => {
-  bucket.addObject("file1", "${2 ** 10}"); // error: method "addObject" cannot be called in inflight phase
+  bucket.addObject("file1", "${2 ** 10}"); // error: Cannot call into preflight phase while inflight
 };
 ```
 
@@ -147,7 +147,7 @@ Since a class's initializer is just a special kind of preflight function, it als
 bring cloud;
 
 inflight () => {
-  new cloud.Bucket(); // error: preflight class "Bucket" cannot be created in inflight
+  new cloud.Bucket(); // error: Cannot create preflight class "Bucket" in inflight phase
 };
 ```
 
@@ -160,6 +160,8 @@ Here's a class that models a queue that can replay its messages.
 A `cloud.Bucket` stores the history of messages, and a `cloud.Counter` helps with sequencing each new message as it's added to the queue.
 
 ```js playground
+bring cloud;
+
 class ReplayableQueue {
   queue: cloud.Queue;
   bucket: cloud.Bucket; 
@@ -186,6 +188,8 @@ class ReplayableQueue {
     }
   }
 }
+
+let rq = new ReplayableQueue();
 ```
 
 It's also possible to define inflight classes.
@@ -198,9 +202,9 @@ For example, this inflight class can be created in an inflight contexts, and its
 inflight () => {
   class Person {
     name: str;
-    age: int;
+    age: num;
 
-    init(name: str, age: int) {
+    init(name: str, age: num) {
       this.name = name;
       this.age = age;
     }
@@ -254,7 +258,7 @@ count = count + 1; // OK
 names.push("Jack"); // OK
 
 inflight () => {
-  count = count + 1; // error: variable "count" cannot be reassigned in inflight
+  count = count + 1; // error: Variable cannot be reassigned from inflight
   names.push("Jill"); // error: variable "names" cannot be mutated in inflight
 };
 ```
