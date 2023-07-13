@@ -25,7 +25,6 @@ if (!SUPPORTED_NODE_VERSION) {
 function runSubCommand(subCommand: string) {
   return async (...args: any[]) => {
     try {
-      await exportAnalyticsHook();
       const exitCode = await import(`./commands/${subCommand}`).then((m) => m[subCommand](...args));
       if (exitCode === 1) {
         await exportAnalyticsHook();

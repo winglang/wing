@@ -38,7 +38,7 @@ module.exports = function({ $c2 }) {
 
 ## inflight.$Closure3.js
 ```js
-module.exports = function({ $Utils, $c1, $c2 }) {
+module.exports = function({ $c1, $c2, $std_Duration, $util_Util }) {
   class $Closure3 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -48,27 +48,12 @@ module.exports = function({ $Utils, $c1, $c2 }) {
     async handle() {
       {((cond) => {if (!cond) throw new Error("assertion failed: c1.peek() == 0")})(((await $c1.peek()) === 0))};
       {((cond) => {if (!cond) throw new Error("assertion failed: c2.peek() == 0")})(((await $c2.peek()) === 0))};
-      (await $Utils.sleep(((60 * 1000) * 1.1)));
+      (await $util_Util.sleep((await $std_Duration.fromSeconds(66))));
       {((cond) => {if (!cond) throw new Error("assertion failed: c1.peek() >= 1")})(((await $c1.peek()) >= 1))};
       {((cond) => {if (!cond) throw new Error("assertion failed: c2.peek() >= 1")})(((await $c2.peek()) >= 1))};
     }
   }
   return $Closure3;
-}
-
-```
-
-## inflight.Utils.js
-```js
-module.exports = function({  }) {
-  class Utils {
-    constructor({  }) {
-    }
-    static async sleep(milli) {
-      return (require("<ABSOLUTE_PATH>/sleep.js")["sleep"])(milli)
-    }
-  }
-  return Utils;
 }
 
 ```
@@ -446,6 +431,7 @@ const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 const cloud = require('@winglang/sdk').cloud;
+const util = require('@winglang/sdk').util;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
@@ -511,29 +497,6 @@ class $Root extends $stdlib.std.Resource {
         super._registerBind(host, ops);
       }
     }
-    class Utils extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
-        this._addInflightOps("sleep", "$inflight_init");
-      }
-      static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.Utils.js")({
-          })
-        `);
-      }
-      _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
-          (await (async () => {
-            const UtilsClient = ${Utils._toInflightType(this).text};
-            const client = new UtilsClient({
-            });
-            if (client.$inflight_init) { await client.$inflight_init(); }
-            return client;
-          })())
-        `);
-      }
-    }
     class $Closure3 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
@@ -543,9 +506,10 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure3.js")({
-            $Utils: ${context._lift(Utils)},
             $c1: ${context._lift(c1)},
             $c2: ${context._lift(c2)},
+            $std_Duration: ${context._lift(std.Duration)},
+            $util_Util: ${context._lift(util.Util)},
           })
         `);
       }
@@ -562,7 +526,6 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure3._registerBindObject(Utils, host, ["sleep"]);
           $Closure3._registerBindObject(c1, host, ["peek"]);
           $Closure3._registerBindObject(c2, host, ["peek"]);
         }

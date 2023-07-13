@@ -1,4 +1,5 @@
 bring cloud;
+bring util;
 
 let q = new cloud.Queue();
 let c = new cloud.Counter();
@@ -16,16 +17,12 @@ class Predicate {
   }
 }
 
-class TestHelper {
-  init(){}
-  extern "../external/sleep.js" inflight sleep(milli: num);
-}
+
 
 q.setConsumer(inflight (msg: str): str => {
   c.inc();
 });
 
-let js = new TestHelper();
 
 let predicate = new Predicate(c);
 test "setConsumer" {
@@ -39,7 +36,7 @@ test "setConsumer" {
       assert(predicate.test());
       return;
     } 
-    js.sleep(100);
+    util.sleep(1s);
   }
   assert(predicate.test());
 }
