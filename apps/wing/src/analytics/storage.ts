@@ -15,6 +15,8 @@ export interface AnalyticsConfig {
   anonymousId: string;
   /** boolean flag to determine if user has already been given a disclaimer message */
   disclaimerDisplayed?: boolean;
+  /** displayed version of the disclaimer */
+  disclaimerVersion?: string;
   /** optional opt out value */
   optOut?: boolean;
 }
