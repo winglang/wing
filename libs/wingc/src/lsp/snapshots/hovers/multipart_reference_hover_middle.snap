@@ -1,0 +1,14 @@
+---
+source: libs/wingc/src/lsp/hover.rs
+---
+contents:
+  kind: markdown
+  value: "```wing\nget: (key: str): Json\n```\n---\nReturns a specified element from the Json.\n\n\n### Returns\nThe element associated with the specified key, or undefined if the key can't be found"
+range:
+  start:
+    line: 2
+    character: 0
+  end:
+    line: 2
+    character: 5
+

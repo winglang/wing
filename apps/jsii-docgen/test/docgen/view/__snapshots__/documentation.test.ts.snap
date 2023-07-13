@@ -11,6 +11,7 @@ Object {
         "docs": Object {},
         "fqn": "construct-library.GreeterBucket",
         "id": "construct-library.GreeterBucket",
+        "inflight": undefined,
         "initializer": Object {
           "displayName": "Initializer",
           "fqn": "construct-library.GreeterBucket.Initializer",

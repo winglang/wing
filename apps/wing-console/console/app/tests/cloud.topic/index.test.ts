@@ -11,9 +11,8 @@ describe(`${__dirname}/index.w`, () => {
 
     await page.getByTestId("cloud.topic:send-message").click();
 
-    await page.waitForLoadState("networkidle");
+    const log = page.getByText("Message received: Hello world!");
 
-    const logs = await page.getByTestId("logs").allTextContents();
-    expect(logs[0]).toContain("Message received: Hello world!");
+    await expect(log).toBeVisible();
   });
 });

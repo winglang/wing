@@ -23,12 +23,12 @@ the Http class is used for calling different HTTP methods and requesting and sen
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.http.Util.delete">delete</a></code> | Sends a DELETE request. |
-| <code><a href="#@winglang/sdk.http.Util.fetch">fetch</a></code> | Sends an HTTP request to a URL, returning a fulfilled or failed response. |
-| <code><a href="#@winglang/sdk.http.Util.get">get</a></code> | Sends a GET request. |
-| <code><a href="#@winglang/sdk.http.Util.patch">patch</a></code> | Sends a PATCH request. |
-| <code><a href="#@winglang/sdk.http.Util.post">post</a></code> | Sends a POST request. |
-| <code><a href="#@winglang/sdk.http.Util.put">put</a></code> | Sends a PUT request. |
+| <code><a href="#@winglang/sdk.http.Util.delete">delete</a></code> | Executes a DELETE request to a specified URL and provides a formatted response. |
+| <code><a href="#@winglang/sdk.http.Util.fetch">fetch</a></code> | Executes a HTTP request to a specified URL and provides a formatted response. |
+| <code><a href="#@winglang/sdk.http.Util.get">get</a></code> | Executes a GET request to a specified URL and provides a formatted response. |
+| <code><a href="#@winglang/sdk.http.Util.patch">patch</a></code> | Executes a PATCH request to a specified URL and provides a formatted response. |
+| <code><a href="#@winglang/sdk.http.Util.post">post</a></code> | Executes a POST request to a specified URL and provides a formatted response. |
+| <code><a href="#@winglang/sdk.http.Util.put">put</a></code> | Executes a PUT request to a specified URL and provides a formatted response. |
 
 ---
 
@@ -40,17 +40,21 @@ bring http;
 inflight http.delete(url: str, options?: RequestOptions);
 ```
 
-Sends a DELETE request.
+Executes a DELETE request to a specified URL and provides a formatted response.
 
 ###### `url`<sup>Required</sup> <a name="url" id="@winglang/sdk.http.Util.delete.parameter.url"></a>
 
 - *Type:* str
+
+The target URL for the DELETE request.
 
 ---
 
 ###### `options`<sup>Optional</sup> <a name="options" id="@winglang/sdk.http.Util.delete.parameter.options"></a>
 
 - *Type:* <a href="#@winglang/sdk.http.RequestOptions">RequestOptions</a>
+
+Optional parameters for customizing the DELETE request.
 
 ---
 
@@ -62,17 +66,23 @@ bring http;
 inflight http.fetch(url: str, options?: RequestOptions);
 ```
 
-Sends an HTTP request to a URL, returning a fulfilled or failed response.
+Executes a HTTP request to a specified URL and provides a formatted response.
+
+This method allows various HTTP methods based on the provided options.
 
 ###### `url`<sup>Required</sup> <a name="url" id="@winglang/sdk.http.Util.fetch.parameter.url"></a>
 
 - *Type:* str
+
+The target URL for the request.
 
 ---
 
 ###### `options`<sup>Optional</sup> <a name="options" id="@winglang/sdk.http.Util.fetch.parameter.options"></a>
 
 - *Type:* <a href="#@winglang/sdk.http.RequestOptions">RequestOptions</a>
+
+Optional parameters for customizing the HTTP request.
 
 ---
 
@@ -84,17 +94,21 @@ bring http;
 inflight http.get(url: str, options?: RequestOptions);
 ```
 
-Sends a GET request.
+Executes a GET request to a specified URL and provides a formatted response.
 
 ###### `url`<sup>Required</sup> <a name="url" id="@winglang/sdk.http.Util.get.parameter.url"></a>
 
 - *Type:* str
+
+The target URL for the GET request.
 
 ---
 
 ###### `options`<sup>Optional</sup> <a name="options" id="@winglang/sdk.http.Util.get.parameter.options"></a>
 
 - *Type:* <a href="#@winglang/sdk.http.RequestOptions">RequestOptions</a>
+
+Optional parameters for customizing the GET request.
 
 ---
 
@@ -106,17 +120,21 @@ bring http;
 inflight http.patch(url: str, options?: RequestOptions);
 ```
 
-Sends a PATCH request.
+Executes a PATCH request to a specified URL and provides a formatted response.
 
 ###### `url`<sup>Required</sup> <a name="url" id="@winglang/sdk.http.Util.patch.parameter.url"></a>
 
 - *Type:* str
+
+The target URL for the PATCH request.
 
 ---
 
 ###### `options`<sup>Optional</sup> <a name="options" id="@winglang/sdk.http.Util.patch.parameter.options"></a>
 
 - *Type:* <a href="#@winglang/sdk.http.RequestOptions">RequestOptions</a>
+
+Optional parameters for customizing the PATCH request.
 
 ---
 
@@ -128,17 +146,21 @@ bring http;
 inflight http.post(url: str, options?: RequestOptions);
 ```
 
-Sends a POST request.
+Executes a POST request to a specified URL and provides a formatted response.
 
 ###### `url`<sup>Required</sup> <a name="url" id="@winglang/sdk.http.Util.post.parameter.url"></a>
 
 - *Type:* str
+
+The target URL for the POST request.
 
 ---
 
 ###### `options`<sup>Optional</sup> <a name="options" id="@winglang/sdk.http.Util.post.parameter.options"></a>
 
 - *Type:* <a href="#@winglang/sdk.http.RequestOptions">RequestOptions</a>
+
+Optional parameters for customizing the POST request.
 
 ---
 
@@ -150,17 +172,21 @@ bring http;
 inflight http.put(url: str, options?: RequestOptions);
 ```
 
-Sends a PUT request.
+Executes a PUT request to a specified URL and provides a formatted response.
 
 ###### `url`<sup>Required</sup> <a name="url" id="@winglang/sdk.http.Util.put.parameter.url"></a>
 
 - *Type:* str
+
+The target URL for the PUT request.
 
 ---
 
 ###### `options`<sup>Optional</sup> <a name="options" id="@winglang/sdk.http.Util.put.parameter.options"></a>
 
 - *Type:* <a href="#@winglang/sdk.http.RequestOptions">RequestOptions</a>
+
+ptional parameters for customizing the PUT request.
 
 ---
 

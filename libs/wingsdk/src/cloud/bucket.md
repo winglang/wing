@@ -114,7 +114,3 @@ The Azure implementation of `cloud.Bucket` uses [Azure Blob Storage](https://lea
 ### GCP (`tf-gcp`)
 
 The Google Cloud implementation of `cloud.Bucket` uses [Google Cloud Storage](https://cloud.google.com/storage).
-
-## API Reference
-
-The full list of APIs for `cloud.Bucket` is available in the [API Reference](./api-reference).

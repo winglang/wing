@@ -7,13 +7,15 @@ import {
 
 export class Counter implements ICounterClient, ISimulatorResourceInstance {
   private values: Map<string, number>;
+  private initial: number;
   private readonly context: ISimulatorContext;
 
   public constructor(
     props: CounterSchema["props"],
     context: ISimulatorContext
   ) {
-    this.values = new Map().set("default", props.initial);
+    this.initial = props.initial ?? 0;
+    this.values = new Map().set("default", this.initial);
     this.context = context;
   }
 
@@ -32,7 +34,7 @@ export class Counter implements ICounterClient, ISimulatorResourceInstance {
         key != "default" ? ", key: " + key : ""
       }).`,
       activity: async () => {
-        const prev = this.values.get(key) ?? 0;
+        const prev = this.values.get(key) ?? this.initial;
         this.values.set(key, prev + amount);
         return prev;
       },
@@ -49,7 +51,7 @@ export class Counter implements ICounterClient, ISimulatorResourceInstance {
         key != "default" ? ", key: " + key : ""
       }).`,
       activity: async () => {
-        const prev = this.values.get(key) ?? 0;
+        const prev = this.values.get(key) ?? this.initial;
         this.values.set(key, prev - amount);
         return prev;
       },
@@ -58,11 +60,11 @@ export class Counter implements ICounterClient, ISimulatorResourceInstance {
 
   public async peek(key: string = "default"): Promise<number> {
     return this.context.withTrace({
-      message: `Peek (value=${this.values.get(key) ?? 0}${
+      message: `Peek (value=${this.values.get(key) ?? this.initial}${
         key != "default" ? ", key: " + key : ""
       }).`,
       activity: async () => {
-        return this.values.get(key) ?? 0;
+        return this.values.get(key) ?? this.initial;
       },
     });
   }

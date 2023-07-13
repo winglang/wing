@@ -53,7 +53,7 @@ export class CounterClient implements ICounterClient {
 
     const result = await this.client.send(command);
     let currentValue = result.Item?.[VALUE_ATTRIBUTE].N;
-    if (!currentValue) {
+    if (currentValue === undefined) {
       return this.initial;
     }
 

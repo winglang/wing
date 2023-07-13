@@ -9,9 +9,9 @@ import {
   DocumentUri,
 } from "vscode-languageserver/node";
 
-import * as wingCompiler from "../wingc";
+import * as wingCompiler from "@winglang/compiler";
 
-export async function run_server() {
+export async function lsp() {
   let wingc = await wingCompiler.load({
     imports: {
       env: {
@@ -86,7 +86,7 @@ export async function run_server() {
       capabilities: {
         textDocumentSync: TextDocumentSyncKind.Full,
         completionProvider: {
-          triggerCharacters: ["."],
+          triggerCharacters: [".", ":"],
         },
         signatureHelpProvider: {
           triggerCharacters: ["(", ",", ")"],

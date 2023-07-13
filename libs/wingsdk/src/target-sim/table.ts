@@ -19,7 +19,7 @@ export class Table extends ex.Table implements ISimulatorResource {
   }
 
   public addRow(key: string, row: Json): void {
-    this.initialRows[key] = row;
+    this.initialRows[key] = { ...row, [this.primaryKey]: key } as Json;
   }
 
   public toSimulator(): BaseResourceSchema {
