@@ -1,8 +1,9 @@
-import { WebsiteInteraction } from "../ui/website-interaction";
 import { useContext } from "react";
-import { AppContext } from "../AppContext";
-import { useOpenExternal } from "../services/use-open-external";
-import { useWebsite } from "../services/use-website";
+
+import { AppContext } from "../AppContext.js";
+import { useOpenExternal } from "../services/use-open-external.js";
+import { useWebsite } from "../services/use-website.js";
+import { WebsiteInteraction } from "../ui/website-interaction.js";
 
 export interface WebsiteInteractionViewProps {
   resourcePath: string;
