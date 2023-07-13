@@ -27,7 +27,7 @@ const JSII_DEPS = ["constructs@~10.1.314"];
 const CDKTF_VERSION = "0.17.0";
 
 const CDKTF_PROVIDERS = [
-  "aws@~>5.7.0",
+  "aws@~>4.65.0",
   "random@~>3.5.1",
   "azurerm@~>3.54.0",
   "google@~>4.63.1",
