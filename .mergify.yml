@@ -2,7 +2,7 @@
 queue_rules:
   - name: default
     conditions:
-      - files=.mergify.yml
+      - -files=.mergify.yml
       - status-success=Validate PR title
       - or:
         - status-success=Quality Gate
