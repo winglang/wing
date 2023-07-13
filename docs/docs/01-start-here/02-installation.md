@@ -63,6 +63,7 @@ You can also just delete `~/.npmrc` if there are no other registries that you ar
 </details>
 
 <br/>
+
 Install the Wing CLI through npm:
 
 ```sh
