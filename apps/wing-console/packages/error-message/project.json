@@ -1,0 +1,12 @@
+{
+  "name": "console-error-message",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "targets": {
+    "test": {
+      "options": {
+        "command": "pnpm eslint",
+        "cwd": "apps/wing-console/packages/error-message"
+      }
+    }
+  }
+}

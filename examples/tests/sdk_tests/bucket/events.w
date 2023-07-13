@@ -20,9 +20,6 @@ let table = new ex.Table(
   }
 );
 
-class Util {
-  extern "../external/sleep.js" static inflight sleep(milli: num);
-}
 
 
 let logHistory = inflight (key: str, operation: str, source: Source) => {
@@ -55,7 +52,7 @@ let wait = inflight (pred: inflight (): bool): bool => {
       return true;
     } 
   
-    Util.sleep(10000);
+    util.sleep(10s);
 
     i = i + 1;
   }

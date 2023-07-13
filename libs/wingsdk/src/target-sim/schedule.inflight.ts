@@ -20,7 +20,7 @@ export class Schedule
 
   constructor(props: ScheduleSchema["props"], context: ISimulatorContext) {
     this.context = context;
-    this.interval = parseExpression(props.cronExpression);
+    this.interval = parseExpression(props.cronExpression, { utc: true });
     this.scheduleFunction();
   }
 

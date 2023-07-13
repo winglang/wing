@@ -171,7 +171,7 @@ export const getResourceIconColors = (options: {
       return [
         "text-violet-700 dark:text-violet-400",
         options.darkenOnGroupHover &&
-        "group-hover:text-violet-700 dark:group-hover:text-violet-300",
+          "group-hover:text-violet-700 dark:group-hover:text-violet-300",
         options.forceDarken && "text-violet-700 dark:text-violet-300",
       ];
     }

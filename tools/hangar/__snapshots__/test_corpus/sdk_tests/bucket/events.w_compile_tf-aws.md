@@ -92,7 +92,7 @@ module.exports = function({ $Source, $logHistory }) {
 
 ## inflight.$Closure6.js
 ```js
-module.exports = function({ $Util }) {
+module.exports = function({ $std_Duration, $util_Util }) {
   class $Closure6 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -105,7 +105,7 @@ module.exports = function({ $Util }) {
         if ((await pred())) {
           return true;
         }
-        (await $Util.sleep(10000));
+        (await $util_Util.sleep((await $std_Duration.fromSeconds(10))));
         i = (i + 1);
       }
       return false;
@@ -173,21 +173,6 @@ module.exports = function({ $Source, $b, $checkHitCount, $util_Util, $wait }) {
     }
   }
   return $Closure8;
-}
-
-```
-
-## inflight.Util.js
-```js
-module.exports = function({  }) {
-  class Util {
-    constructor({  }) {
-    }
-    static async sleep(milli) {
-      return (require("<ABSOLUTE_PATH>/sleep.js")["sleep"])(milli)
-    }
-  }
-  return Util;
 }
 
 ```
@@ -1071,29 +1056,6 @@ const util = require('@winglang/sdk').util;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
-    class Util extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
-        this._addInflightOps("sleep", "$inflight_init");
-      }
-      static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.Util.js")({
-          })
-        `);
-      }
-      _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
-          (await (async () => {
-            const UtilClient = ${Util._toInflightType(this).text};
-            const client = new UtilClient({
-            });
-            if (client.$inflight_init) { await client.$inflight_init(); }
-            return client;
-          })())
-        `);
-      }
-    }
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
@@ -1264,7 +1226,8 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure6.js")({
-            $Util: ${context._lift(Util)},
+            $std_Duration: ${context._lift(std.Duration)},
+            $util_Util: ${context._lift(util.Util)},
           })
         `);
       }
@@ -1278,12 +1241,6 @@ class $Root extends $stdlib.std.Resource {
             return client;
           })())
         `);
-      }
-      _registerBind(host, ops) {
-        if (ops.includes("handle")) {
-          $Closure6._registerBindObject(Util, host, ["sleep"]);
-        }
-        super._registerBind(host, ops);
       }
     }
     class $Closure7 extends $stdlib.std.Resource {

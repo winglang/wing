@@ -1,12 +1,8 @@
 bring cloud;
+bring util;
 
 let q = new cloud.Queue();
-class TestHelper {
-  init(){}
-  extern "../external/sleep.js" inflight sleep(milli: num);
-}
 
-let js = new TestHelper();
 
 test "purge" {
   q.push("foo");
@@ -20,7 +16,7 @@ test "purge" {
         return true;
       } 
   
-      js.sleep(100);
+      util.sleep(1s);
       i = i + 1;
     }
   
