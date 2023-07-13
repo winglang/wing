@@ -72,6 +72,16 @@ module.exports = function({ $_id, $api_url, $body, $http_PATCH, $http_Util, $std
     }
   },
   "data": {
+    "aws_partition": {
+      "Partition": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Partition",
+            "uniqueId": "Partition"
+          }
+        }
+      }
+    },
     "aws_region": {
       "Region": {
         "//": {
@@ -94,6 +104,20 @@ module.exports = function({ $_id, $api_url, $body, $http_PATCH, $http_Util, $std
     ]
   },
   "resource": {
+    "aws_api_gateway_account": {
+      "cloudApi_CloudWatchAccount_EE548AC8": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/cloud.Api/CloudWatchAccount",
+            "uniqueId": "cloudApi_CloudWatchAccount_EE548AC8"
+          }
+        },
+        "cloudwatch_role_arn": "${aws_iam_role.cloudApi_CloudWatchRole_F76078FB.arn}",
+        "depends_on": [
+          "aws_api_gateway_rest_api.cloudApi_api_2B334D75"
+        ]
+      }
+    },
     "aws_api_gateway_deployment": {
       "cloudApi_api_deployment_545514BF": {
         "//": {
@@ -107,7 +131,7 @@ module.exports = function({ $_id, $api_url, $body, $http_PATCH, $http_Util, $std
         },
         "rest_api_id": "${aws_api_gateway_rest_api.cloudApi_api_2B334D75.id}",
         "triggers": {
-          "redeployment": "fea7e9f182aa5daf0c90efdf632bb2737c4ef5c4"
+          "redeployment": "7be3fe86b840ae601451c2ba5431a5b298f5d6cf"
         }
       }
     },
@@ -137,6 +161,18 @@ module.exports = function({ $_id, $api_url, $body, $http_PATCH, $http_Util, $std
       }
     },
     "aws_iam_role": {
+      "cloudApi_CloudWatchRole_F76078FB": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/cloud.Api/CloudWatchRole",
+            "uniqueId": "cloudApi_CloudWatchRole_F76078FB"
+          }
+        },
+        "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"apigateway.amazonaws.com\"},\"Effect\":\"Allow\"}]}",
+        "managed_policy_arns": [
+          "arn:${data.aws_partition.Partition.partition}:iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs"
+        ]
+      },
       "cloudApi_cloudApi-OnRequest-cdafee6e_IamRole_4382C442": {
         "//": {
           "metadata": {

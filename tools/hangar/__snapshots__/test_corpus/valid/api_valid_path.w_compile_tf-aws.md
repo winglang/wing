@@ -41,6 +41,16 @@ module.exports = function({  }) {
     }
   },
   "data": {
+    "aws_partition": {
+      "Partition": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Partition",
+            "uniqueId": "Partition"
+          }
+        }
+      }
+    },
     "aws_region": {
       "Region": {
         "//": {
@@ -63,6 +73,20 @@ module.exports = function({  }) {
     ]
   },
   "resource": {
+    "aws_api_gateway_account": {
+      "cloudApi_CloudWatchAccount_EE548AC8": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/cloud.Api/CloudWatchAccount",
+            "uniqueId": "cloudApi_CloudWatchAccount_EE548AC8"
+          }
+        },
+        "cloudwatch_role_arn": "${aws_iam_role.cloudApi_CloudWatchRole_F76078FB.arn}",
+        "depends_on": [
+          "aws_api_gateway_rest_api.cloudApi_api_2B334D75"
+        ]
+      }
+    },
     "aws_api_gateway_deployment": {
       "cloudApi_api_deployment_545514BF": {
         "//": {
@@ -76,7 +100,7 @@ module.exports = function({  }) {
         },
         "rest_api_id": "${aws_api_gateway_rest_api.cloudApi_api_2B334D75.id}",
         "triggers": {
-          "redeployment": "934e9973d7d898c43f960c4bc11231cc4be43a56"
+          "redeployment": "2dcc6de2659ee185d117201f9a9a777ce27a7922"
         }
       }
     },
@@ -106,6 +130,18 @@ module.exports = function({  }) {
       }
     },
     "aws_iam_role": {
+      "cloudApi_CloudWatchRole_F76078FB": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/cloud.Api/CloudWatchRole",
+            "uniqueId": "cloudApi_CloudWatchRole_F76078FB"
+          }
+        },
+        "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"apigateway.amazonaws.com\"},\"Effect\":\"Allow\"}]}",
+        "managed_policy_arns": [
+          "arn:${data.aws_partition.Partition.partition}:iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs"
+        ]
+      },
       "cloudApi_cloudApi-OnRequest-cdafee6e_IamRole_4382C442": {
         "//": {
           "metadata": {

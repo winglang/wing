@@ -98,6 +98,16 @@ module.exports = function({  }) {
     }
   },
   "data": {
+    "aws_partition": {
+      "Partition": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Partition",
+            "uniqueId": "Partition"
+          }
+        }
+      }
+    },
     "aws_region": {
       "Region": {
         "//": {
@@ -120,6 +130,32 @@ module.exports = function({  }) {
     ]
   },
   "resource": {
+    "aws_api_gateway_account": {
+      "A_cloudApi_CloudWatchAccount_F90C639A": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/A/cloud.Api/CloudWatchAccount",
+            "uniqueId": "A_cloudApi_CloudWatchAccount_F90C639A"
+          }
+        },
+        "cloudwatch_role_arn": "${aws_iam_role.A_cloudApi_CloudWatchRole_0E9696C1.arn}",
+        "depends_on": [
+          "aws_api_gateway_rest_api.A_cloudApi_api_37FCEF91"
+        ]
+      },
+      "cloudApi_CloudWatchAccount_EE548AC8": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/cloud.Api/CloudWatchAccount",
+            "uniqueId": "cloudApi_CloudWatchAccount_EE548AC8"
+          }
+        },
+        "cloudwatch_role_arn": "${aws_iam_role.cloudApi_CloudWatchRole_F76078FB.arn}",
+        "depends_on": [
+          "aws_api_gateway_rest_api.cloudApi_api_2B334D75"
+        ]
+      }
+    },
     "aws_api_gateway_deployment": {
       "A_cloudApi_api_deployment_8CFEA08D": {
         "//": {
@@ -133,7 +169,7 @@ module.exports = function({  }) {
         },
         "rest_api_id": "${aws_api_gateway_rest_api.A_cloudApi_api_37FCEF91.id}",
         "triggers": {
-          "redeployment": "ee737a93987c97858ba9524a5b87b2ff1b0e62e4"
+          "redeployment": "c0ec3bc00032615ba1c0e921f47eab99dcce7c0c"
         }
       },
       "cloudApi_api_deployment_545514BF": {
@@ -148,7 +184,7 @@ module.exports = function({  }) {
         },
         "rest_api_id": "${aws_api_gateway_rest_api.cloudApi_api_2B334D75.id}",
         "triggers": {
-          "redeployment": "06d5d79d88a464ffe5666fff8744c6bcc926732c"
+          "redeployment": "46da36fc7d5752d34fb24a7ffda55eac34708412"
         }
       }
     },
@@ -218,6 +254,18 @@ module.exports = function({  }) {
       }
     },
     "aws_iam_role": {
+      "A_cloudApi_CloudWatchRole_0E9696C1": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/A/cloud.Api/CloudWatchRole",
+            "uniqueId": "A_cloudApi_CloudWatchRole_0E9696C1"
+          }
+        },
+        "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"apigateway.amazonaws.com\"},\"Effect\":\"Allow\"}]}",
+        "managed_policy_arns": [
+          "arn:${data.aws_partition.Partition.partition}:iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs"
+        ]
+      },
       "A_cloudApi_cloudApi-OnRequest-73c5308f_IamRole_318C449E": {
         "//": {
           "metadata": {
@@ -226,6 +274,18 @@ module.exports = function({  }) {
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
+      },
+      "cloudApi_CloudWatchRole_F76078FB": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/cloud.Api/CloudWatchRole",
+            "uniqueId": "cloudApi_CloudWatchRole_F76078FB"
+          }
+        },
+        "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"apigateway.amazonaws.com\"},\"Effect\":\"Allow\"}]}",
+        "managed_policy_arns": [
+          "arn:${data.aws_partition.Partition.partition}:iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs"
+        ]
       },
       "cloudApi_cloudApi-OnRequest-cdafee6e_IamRole_4382C442": {
         "//": {
@@ -322,7 +382,7 @@ module.exports = function({  }) {
           "variables": {
             "WING_FUNCTION_NAME": "cloud-Api-OnRequest-73c5308f-c85168bb",
             "WING_TARGET": "tf-aws",
-            "WING_TOKEN_TFTOKEN_TOKEN_42": "${jsonencode(aws_api_gateway_stage.A_cloudApi_api_stage_6D822CCE.invoke_url)}"
+            "WING_TOKEN_TFTOKEN_TOKEN_48": "${jsonencode(aws_api_gateway_stage.A_cloudApi_api_stage_6D822CCE.invoke_url)}"
           }
         },
         "function_name": "cloud-Api-OnRequest-73c5308f-c85168bb",
@@ -376,7 +436,7 @@ module.exports = function({  }) {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c8315524",
             "WING_TARGET": "tf-aws",
-            "WING_TOKEN_TFTOKEN_TOKEN_21": "${jsonencode(aws_api_gateway_stage.cloudApi_api_stage_BBB283E4.invoke_url)}"
+            "WING_TOKEN_TFTOKEN_TOKEN_24": "${jsonencode(aws_api_gateway_stage.cloudApi_api_stage_BBB283E4.invoke_url)}"
           }
         },
         "function_name": "Handler-c8315524",
