@@ -98,6 +98,7 @@ const project = new cdk.JsiiProject({
     "tar",
     "express",
     "uuid",
+    "nanoid@^3.3.6",
     "cron-parser",
     // shared client dependencies
     "ioredis",

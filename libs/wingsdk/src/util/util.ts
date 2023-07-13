@@ -1,3 +1,6 @@
+import { createHash } from "crypto";
+import { nanoid, customAlphabet } from "nanoid";
+import { v4 } from "uuid";
 import { Code, InflightClient } from "../core";
 import { Duration, IResource } from "../std";
 
@@ -22,7 +25,7 @@ export interface WaitUntilProps {
  * `util.busyWait`.
  * @inflight `@winglang/sdk.util.IPredicateHandlerClient`
  */
-export interface IPredicateHandler extends IResource {}
+export interface IPredicateHandler extends IResource { }
 
 /**
  * Inflight client for `IPredicateHandler`.
@@ -33,6 +36,21 @@ export interface IPredicateHandlerClient {
    * @inflight
    */
   handle(): Promise<boolean>;
+}
+
+/**
+ * Options to generating a unique ID
+ */
+export interface NanoidOptions {
+  /**
+   * Size of ID
+   * @default 21
+   */
+  readonly size?: number;
+  /**
+   * Characters that make up the alphabet to generate the ID, limited to 256 characters or fewer.
+   */
+  readonly alphabet?: string;
 }
 
 /**
@@ -98,10 +116,37 @@ export class Util {
   }
 
   /**
+   * Computes the SHA256 hash of the given data.
+   * @param data - The string to be hashed.
+   */
+  public static sha256(data: string): string {
+    return createHash("sha256").update(data).digest("hex"); //SHA256(data).toString();
+  }
+
+  /**
+   * Generates a version 4 UUID.
+   */
+  public static uuidv4(): string {
+    return v4();
+  }
+
+  /**
+   * Generates a unique ID using the nanoid library.
+   * @param options - Optional options object for generating the ID.
+   */
+  public static nanoid(options?: NanoidOptions): string {
+    const size = options?.size ?? 21;
+    const nano = options?.alphabet
+      ? customAlphabet(options.alphabet, size)
+      : undefined;
+    return nano ? nano(size) : nanoid(size);
+  }
+
+  /**
    * @internal
    */
   public static _toInflightType(): Code {
     return InflightClient.forType(__filename, this.name);
   }
-  private constructor() {}
+  private constructor() { }
 }
