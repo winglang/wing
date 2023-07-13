@@ -25,7 +25,7 @@ export interface WaitUntilProps {
  * `util.busyWait`.
  * @inflight `@winglang/sdk.util.IPredicateHandlerClient`
  */
-export interface IPredicateHandler extends IResource { }
+export interface IPredicateHandler extends IResource {}
 
 /**
  * Inflight client for `IPredicateHandler`.
@@ -148,5 +148,5 @@ export class Util {
   public static _toInflightType(): Code {
     return InflightClient.forType(__filename, this.name);
   }
-  private constructor() { }
+  private constructor() {}
 }
