@@ -28,6 +28,7 @@ let queue = new cloud.Queue();
 
 queue.setConsumer(inflight (message: str) => {
   bucket.put("wing.txt", "Hello, ${message}");
+  log("file created");
 });
 ```
 
