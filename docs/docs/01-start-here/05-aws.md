@@ -82,31 +82,59 @@ Now we are ready to deploy to our AWS account:
 terraform apply
 ```
 
-You'll be asked to confirm the provisioning of all of these resources:
+You should expect output similar to this: 
+```sh
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  + create
 
-```
-aws_iam_role.root_cloudQueue_AddConsumerf9e5f4b154bf0692_IamRole_0F5B0FAB
-aws_iam_role_policy.root_cloudQueue_AddConsumerf9e5f4b154bf0692_IamRolePolicy_D4EB5385
-aws_iam_role_policy_attachment.root_cloudQueue_AddConsumerf9e5f4b154bf0692_IamRolePolicyAttachment_EEE67DAF
-aws_lambda_event_source_mapping.root_cloudQueue_EventSourceMapping_A2041279
-aws_lambda_function.root_cloudQueue_AddConsumerf9e5f4b154bf0692_7D66EFB8
-aws_s3_bucket.root_cloudBucket_4F3C4F53
-aws_s3_bucket.root_cloudQueue_AddConsumerf9e5f4b154bf0692_Bucket_22152053
-aws_s3_bucket_public_access_block.root_cloudBucket_PublicAccessBlock_319C1C2E
-aws_s3_bucket_server_side_encryption_configuration.root_cloudBucket_Encryption_8ED0CD9C
-aws_s3_object.root_cloudQueue_AddConsumerf9e5f4b154bf0692_S3Object_A34E0128
-aws_sqs_queue.root_cloudQueue_E3597F7A
+Terraform will perform the following actions:
+
+  # aws_iam_role.cloudQueue-SetConsumer-cdafee6e_IamRole_2548D828 will be created
+  + resource "aws_iam_role" "cloudQueue-SetConsumer-cdafee6e_IamRole_2548D828" {...}
+
+  # aws_iam_role_policy.cloudQueue-SetConsumer-cdafee6e_IamRolePolicy_37133937 will be created
+  + resource "aws_iam_role_policy" "cloudQueue-SetConsumer-cdafee6e_IamRolePolicy_37133937" {...}
+
+  # aws_iam_role_policy_attachment.cloudQueue-SetConsumer-cdafee6e_IamRolePolicyAttachment_45079F65 will be created
+  + resource "aws_iam_role_policy_attachment" "cloudQueue-SetConsumer-cdafee6e_IamRolePolicyAttachment_45079F65" {...}
+
+  # aws_lambda_event_source_mapping.cloudQueue_EventSourceMapping_41814136 will be created
+  + resource "aws_lambda_event_source_mapping" "cloudQueue_EventSourceMapping_41814136" {...}
+
+  # aws_lambda_function.cloudQueue-SetConsumer-cdafee6e will be created
+  + resource "aws_lambda_function" "cloudQueue-SetConsumer-cdafee6e" {...}
+
+  # aws_s3_bucket.Code will be created
+  + resource "aws_s3_bucket" "Code" {...}
+
+  # aws_s3_bucket.cloudBucket will be created
+  + resource "aws_s3_bucket" "cloudBucket" {...}
+
+  # aws_s3_bucket_public_access_block.cloudBucket_PublicAccessBlock_5946CCE8 will be created
+  + resource "aws_s3_bucket_public_access_block" "cloudBucket_PublicAccessBlock_5946CCE8" {...}
+
+  # aws_s3_bucket_server_side_encryption_configuration.cloudBucket_Encryption_77B6AEEF will be created
+  + resource "aws_s3_bucket_server_side_encryption_configuration" "cloudBucket_Encryption_77B6AEEF" {...}
+
+  # aws_s3_object.cloudQueue-SetConsumer-cdafee6e_S3Object_8868B9FB will be created
+  + resource "aws_s3_object" "cloudQueue-SetConsumer-cdafee6e_S3Object_8868B9FB" {...}
+
+  # aws_sqs_queue.cloudQueue will be created
+  + resource "aws_sqs_queue" "cloudQueue" {...}
+
+Plan: 11 to add, 0 to change, 0 to destroy.
 ```
 
 > This is a good opportunity to observe how much complexity the Wing compiler
 > was able to abstract away for you when you wrote your Wing code. Just
 > saying...
 
-And Terraform will do its magic and will create all of these resources in your
+If you choose to proceed, Terraform will do its magic and will create all of these resources in your
 account.
 
-```
-Apply complete! Resources: 8 added, 0 changed, 0 destroyed.
+```  
+Apply complete! Resources: 11 added, 0 changed, 0 destroyed.
 ```
 
 ## Explore your app on AWS
