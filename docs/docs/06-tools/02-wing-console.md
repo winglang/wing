@@ -42,14 +42,19 @@ When you click on a resource in either the Explorer or Map view, the resource in
 side of the Console will automatically update. This panel enables you to conveniently interact with the selected resource.
 
 From there, you can perform various actions such as sending messages to queues, downloading files from buckets, making API requests to your API resource, and more.
+
 ![The Wing Console Interaction view](console-interaction-1.png 'Wing Console Interaction')
 
 ## Run Tests
+
 The Console enables you to run the tests you wrote for your Wing application and view the results of these tests in real-time.
+
 ![The Wing Console Tests](console-tests-1.png 'Wing Console Tests')
 
 ## Logs
+
 In addition to Interaction abilities, the Console includes a dedicated Logs view, designed for testing and debugging purposes. This view presents real-time logs of your application.
 
 Any logs that you generate within your Wing Application will be automatically displayed within the Logs view, providing you with convenient monitoring of your application's behavior.
+
 ![The Wing Console Logs](console-logs-1.png 'Wing Console Logs')
