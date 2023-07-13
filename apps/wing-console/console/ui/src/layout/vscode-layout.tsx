@@ -62,10 +62,6 @@ export const VscodeLayout = ({ cloudAppState, wingVersion }: LayoutProps) => {
     document.title = title;
   }, [title]);
 
-  const showError = useMemo(() => {
-    return cloudAppState === "error";
-  }, [cloudAppState]);
-
   const showTerms = useMemo(() => {
     if (!termsConfig.data) {
       return false;
@@ -93,12 +89,13 @@ export const VscodeLayout = ({ cloudAppState, wingVersion }: LayoutProps) => {
       >
         <Header title={wingfile.data ?? ""} />
         <div className="flex-1 flex relative">
-          <BlueScreenOfDeath
-            hidden={showError === false}
-            title={"An error has occurred:"}
-            error={errorMessage.data ?? ""}
-          />
-          {!showError && (
+          {cloudAppState === "error" && (
+            <BlueScreenOfDeath
+              title={"An error has occurred:"}
+              error={errorMessage.data ?? ""}
+            />
+          )}
+          {cloudAppState !== "error" && (
             <>
               {loading && (
                 <div
