@@ -12,7 +12,7 @@ You may not feel comfortable sharing this data with us, and that is ok. The gath
 
 ### Opting out
 
-If you would like to opt out of the analytics gathering, then you can do so by simply setting the environment variable `WING_CLI_DISABLE_ANALYTICS=1`. You can also use the flag `--no-analytics` when running any command.
+If you would like to opt out of the analytics gathering, then you can do so by simply setting the environment variable `WING_DISABLE_ANALYTICS=1`. You can also use the flag `--no-analytics` when running any command.
 
 ```sh
 wing compile -t sim app.w --no-analytics
