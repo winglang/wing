@@ -115,9 +115,7 @@ export class Bucket extends cloud.Bucket {
       throw new Error("buckets can only be bound by tfaws.Function for now");
     }
 
-    host.addPolicyStatements(
-      ...calculateBucketPermissions(this.bucket.arn, ops)
-    );
+    host.addPolicyStatements(calculateBucketPermissions(this.bucket.arn, ops));
 
     // The bucket name needs to be passed through an environment variable since
     // it may not be resolved until deployment time.

@@ -16,7 +16,7 @@ export const createAnalytics = (options: CreateAnalyticsOptions): Analytics => {
     track(event: string, properties?: Record<string, any>) {
       segment.track({
         anonymousId: options.anonymousId,
-        event,
+        event: event.toLowerCase(),
         properties,
         integrations: {
           "Actions Amplitude": {

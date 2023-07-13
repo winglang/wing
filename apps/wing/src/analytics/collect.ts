@@ -18,11 +18,16 @@ export async function collectCommandAnalytics(cmd: Command): Promise<string | un
   const osCollector = new OSCollector();
   const nodeCollector = new NodeCollector();
   const ciCollector = new CICollector();
-  const gitCollector = new GitCollector();
   const cliCollector = new CLICollector(cmd);
 
+  // If entrypoint to app is provided, we will give that to git collector to use for
+  // running queries against the git repo, otherwise we will use the current working directory
+  const gitCollector = new GitCollector({
+    appEntrypoint: cmd.args.length > 0 ? cmd.args[0] : '.'
+  });
+  
   const eventName = `cli_${cmd.opts().target ?? ''}_${cmd.name()}`;
-
+  
   let event: AnalyticEvent = {
     event: eventName.replace(/[^a-zA-Z_]/g, ""),
     properties: {
@@ -33,7 +38,6 @@ export async function collectCommandAnalytics(cmd: Command): Promise<string | un
       anonymous_repo_id: (await gitCollector.collect())?.anonymous_repo_id
     }
   }
-
   const storage = new AnalyticsStorage({debug: process.env.DEBUG ? true : false});
   
   let analyticFilePath = storage.storeAnalyticEvent(event);
