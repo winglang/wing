@@ -27,7 +27,7 @@ You are now able to run your IDE and the Wing Console side-by-side and watch how
 
 ## The Wing Console view
 
-In the console [map view](../tools/wing-console#view-and-explore-your-wing-application) you'll see three resources: a **Queue**, a **Function** and a **Bucket**.
+In the console [map view](../tools/wing-console#map-view) you'll see three resources: a **Queue**, a **Function** and a **Bucket**.
 The Queue and the Bucket are connected through the Function resource, which serves as a message handler and is set as the consumer for the Queue.
 
 Click on the Queue resource and pay attention to the right hand panel. This is the [resource interaction panel](../tools/wing-console#interact-with-your-wing-application).
