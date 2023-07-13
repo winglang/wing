@@ -2,7 +2,15 @@
 title: Counter
 id: counter
 description: A built-in resource for representing an container for numbers in the cloud.
-keywords: [Wing reference, Wing language, language, Wing standard library, Wing programming language, Counter]
+keywords:
+  [
+    Wing reference,
+    Wing language,
+    language,
+    Wing standard library,
+    Wing programming language,
+    Counter,
+  ]
 sidebar_position: 1
 ---
 
@@ -62,7 +70,3 @@ The AWS implementation of `cloud.Counter` uses [Amazon DynamoDB](https://aws.ama
 ### GCP (`tf-gcp`)
 
 🚧 Not supported yet (tracking issue: [#628](https://github.com/winglang/wing/issues/628))
-
-## API Reference
-
-The full list of APIs for `cloud.Counter` is available in the [API Reference](./api-reference).

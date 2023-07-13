@@ -10,6 +10,7 @@ interface AttributeProps {
   type?: "url";
   url?: string;
   noLeftPadding?: boolean;
+  dataTestId?: string;
 }
 
 export const Attribute = ({
@@ -19,6 +20,7 @@ export const Attribute = ({
   url,
   children,
   noLeftPadding = false,
+  dataTestId,
 }: PropsWithChildren<AttributeProps>) => {
   const { theme } = useTheme();
   const id = useId();
@@ -34,7 +36,7 @@ export const Attribute = ({
       </label>
       {value !== undefined && type === "url" && (
         <div className="truncate">
-          <Link id={id} href={url}>
+          <Link id={id} href={url} dataTestid={dataTestId}>
             {value}
           </Link>
         </div>
@@ -52,6 +54,7 @@ export const Attribute = ({
           )}
           value={value}
           readOnly
+          data-testid={dataTestId}
         />
       )}
       {value === undefined && (

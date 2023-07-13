@@ -5,6 +5,6 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nFoo\n```\n---"
+    value: "```wing\nstruct Foo\n```\n---"
   sortText: hh|Foo
 

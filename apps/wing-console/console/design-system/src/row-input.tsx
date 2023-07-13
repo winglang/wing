@@ -14,6 +14,7 @@ export const RowInput = ({
   onBlur,
   disabled,
   error,
+  dataTestId,
 }: {
   inputRef?: RefObject<HTMLInputElement>;
   type: string;
@@ -25,6 +26,7 @@ export const RowInput = ({
   onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void;
   disabled?: boolean;
   error?: boolean;
+  dataTestId?: string;
 }) => {
   const { theme } = useTheme();
 
@@ -80,6 +82,7 @@ export const RowInput = ({
         setActive(false);
         onBlur?.(event);
       }}
+      data-testid={dataTestId}
     />
   );
 };

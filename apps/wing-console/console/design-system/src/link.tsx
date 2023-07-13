@@ -4,7 +4,9 @@ export interface LinkProps
   extends React.DetailedHTMLProps<
     React.AnchorHTMLAttributes<HTMLAnchorElement>,
     HTMLAnchorElement
-  > {}
+  > {
+  dataTestid?: string;
+}
 
 export const Link = ({ className, children, ...props }: LinkProps) => {
   return (
