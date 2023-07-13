@@ -1,6 +1,6 @@
 ---
-title: Flow controls
-id: flow-controls
+title: Flow control
+id: flow-control
 keywords: [Wing example]
 ---
 
