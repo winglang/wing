@@ -43,8 +43,10 @@ aws s3api create-bucket --bucket <bucket-name> --region <region> --create-bucket
 This could be looking like the following when replacing the placeholder `<bucket-name>` and `<region>`
 
 ```sh
-aws s3api create-bucket --bucket my-tfstate-bucket-with-a-uniue-name --region us-east-1 --create-bucket-configuration LocationConstraint=us-east-1
+aws s3api create-bucket --bucket my-tfstate-bucket-with-a-uniue-name --region us-east-2 --create-bucket-configuration LocationConstraint=us-east-2
 ```
+
+(If you are using us-east-1, you must omit the `--create-bucket-configuration` flag since it is the default region.)
 
 ## Step 2: Enable Versioning
 
