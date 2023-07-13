@@ -51,7 +51,7 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
         let labels: Label[] = [];
 
         // file_id might be "" if the span is synthetic (see #2521)
-        if (span !== null && span.file_id) {
+        if (span?.file_id) {
           // `span` should only be null if source file couldn't be read etc.
           const source = await fsPromise.readFile(span.file_id, "utf8");
           const start = byteOffsetFromLineAndColumn(source, span.start.line, span.start.col);
