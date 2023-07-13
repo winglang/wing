@@ -36,7 +36,9 @@ Click :thumbsup: on the relevant issue and tell us what you think.
 In order to deploy to AWS, you will need:
 
 * [Terraform](https://terraform.io/downloads)
-* [AWS account] and the [AWS CLI] with [AWS credentials]
+* AWS CLI with configured credentials. See
+[here](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html)
+for more information.
 
 ## Compile to Terraform/AWS
 
