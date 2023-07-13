@@ -1,35 +1,34 @@
 // for WebAssembly typings:
 /// <reference lib="dom" />
 
-import { compile, docs, test, checkForUpdates, run } from "./commands";
 import { satisfies } from "compare-versions";
 
 import { Command, Option } from "commander";
-import { run_server } from "./commands/lsp";
 
 import { collectCommandAnalytics } from "./analytics/collect";
 import { exportAnalytics } from "./analytics/export";
 import { optionallyDisplayDisclaimer } from "./analytics/disclaimer";
+import { currentPackage } from "./util";
 
-
-export const PACKAGE_VERSION = require("../package.json").version as string;
+export const PACKAGE_VERSION = currentPackage.version;
 let analyticsExportFile: Promise<string | undefined>;
 
 if (PACKAGE_VERSION == "0.0.0" && !process.env.DEBUG) {
   process.env.WING_DISABLE_ANALYTICS = "1";
 }
 
-const SUPPORTED_NODE_VERSION = require("../package.json").engines.node as string;
+const SUPPORTED_NODE_VERSION = currentPackage.engines.node;
 if (!SUPPORTED_NODE_VERSION) {
   throw new Error("couldn't parse engines.node version from package.json");
 }
 
-function actionErrorHandler(fn: (...args: any[]) => Promise<any>) {
+function runSubCommand(subCommand: string) {
   return async (...args: any[]) => {
     try {
       await exportAnalyticsHook();
-      const exitCode = await fn(...args);
+      const exitCode = await import(`./commands/${subCommand}`).then((m) => m[subCommand](...args));
       if (exitCode === 1) {
+        await exportAnalyticsHook();
         process.exit(1);
       }
     } catch (err) {
@@ -40,7 +39,9 @@ function actionErrorHandler(fn: (...args: any[]) => Promise<any>) {
 }
 
 async function collectAnalyticsHook(cmd: Command) {
-  if (process.env.WING_DISABLE_ANALYTICS) { return; }
+  if (process.env.WING_DISABLE_ANALYTICS) {
+    return;
+  }
   // Fail silently if collection fails
   try {
     optionallyDisplayDisclaimer();
@@ -53,7 +54,9 @@ async function collectAnalyticsHook(cmd: Command) {
 }
 
 async function exportAnalyticsHook() {
-  if (process.env.WING_DISABLE_ANALYTICS) { return; }
+  if (process.env.WING_DISABLE_ANALYTICS) {
+    return;
+  }
   // Fail silently if export fails
   try {
     if (analyticsExportFile) {
@@ -73,28 +76,22 @@ async function main() {
 
   program.name("wing").version(PACKAGE_VERSION);
 
-  program.option("--debug", "Enable debug logging (same as DEBUG=1)", () => {
-    process.env.DEBUG = "1";
-  });
-
-  program.option("--progress", "Show compilation progress", () => {
-    process.env.PROGRESS = "1";
-  });
-
-  program.option("--no-analytics", "Disable analytics collection (same as WING_DISABLE_ANALYTICS=1)", () => {
-    process.env.WING_DISABLE_ANALYTICS = "1";
-  });
-
   program
+    .option("--debug", "Enable debug logging (same as DEBUG=1)", () => {
+      process.env.DEBUG = "1";
+    })
+    .option("--progress", "Show compilation progress", () => {
+      process.env.PROGRESS = "1";
+    })
     .option("--no-progress", "Hide show compilation progress")
     .option("--no-update-check", "Skip checking for toolchain updates")
-    .hook("preAction", async (cmd) => {
-      const updateCheck = cmd.opts().updateCheck;
-      if (updateCheck) {
-        // most of the update check is network bound, so we don't want to block the rest of the CLI
-        void checkForUpdates();
+    .option(
+      "--no-analytics",
+      "Disable analytics collection (same as WING_DISABLE_ANALYTICS=1)",
+      () => {
+        process.env.WING_DISABLE_ANALYTICS = "1";
       }
-    });
+    );
 
   async function progressHook(cmd: Command) {
     const target = cmd.opts().target;
@@ -104,6 +101,16 @@ async function main() {
     }
   }
 
+  async function updateHook(cmd: Command) {
+    const updateCheck = cmd.opts().updateCheck;
+    if (updateCheck) {
+      // most of the update check is network bound, so we don't want to block the rest of the CLI
+      void import("./commands/upgrade").then((m) => m.checkForUpdates());
+    }
+  }
+
+  program.hook("preAction", updateHook);
+
   program
     .command("run")
     .alias("it")
@@ -112,9 +119,13 @@ async function main() {
     .option("-p, --port <port>", "specify port")
     .option("--no-open", "Do not open the Wing Console in the browser")
     .hook("preAction", collectAnalyticsHook)
-    .action(run);
+    .action(runSubCommand("run"));
 
-  program.command("lsp").description("Run the Wing language server on stdio").hook("preAction", collectAnalyticsHook).action(run_server);
+  program
+    .command("lsp")
+    .description("Run the Wing language server on stdio")
+    .hook("preAction", collectAnalyticsHook)
+    .action(runSubCommand("lsp"));
 
   program
     .command("compile")
@@ -128,7 +139,7 @@ async function main() {
     .option("-p, --plugins [plugin...]", "Compiler plugins")
     .hook("preAction", progressHook)
     .hook("preAction", collectAnalyticsHook)
-    .action(actionErrorHandler(compile));
+    .action(runSubCommand("compile"));
 
   program
     .command("test")
@@ -144,11 +155,16 @@ async function main() {
     .option("-p, --plugins [plugin...]", "Compiler plugins")
     .hook("preAction", progressHook)
     .hook("preAction", collectAnalyticsHook)
-    .action(actionErrorHandler(test));
+    .action(runSubCommand("test"));
 
-  program.command("docs").description("Open the Wing documentation").hook("preAction", collectAnalyticsHook).action(docs);
-  
-  program.hook("postAction", exportAnalyticsHook)
+  program
+    .command("docs")
+    .description("Open the Wing documentation")
+    .hook("preAction", collectAnalyticsHook)
+    .action(runSubCommand("docs"));
+
+  program.hook("postAction", exportAnalyticsHook);
+
   program.parse();
 }
 

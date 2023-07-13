@@ -64,8 +64,6 @@ AWS implementations of `cloud.Website` uses [Amazon S3](https://aws.amazon.com/s
 
 ### Website <a name="Website" id="@winglang/sdk.cloud.Website"></a>
 
-**Inflight client:** [@winglang/sdk.cloud.IWebsiteClient](#@winglang/sdk.cloud.IWebsiteClient)
-
 A cloud static website.
 
 #### Initializers <a name="Initializers" id="@winglang/sdk.cloud.Website.Initializer"></a>
@@ -89,6 +87,8 @@ new cloud.Website(props: WebsiteProps);
 ---
 
 #### Methods <a name="Methods" id="Methods"></a>
+
+##### Preflight Methods
 
 | **Name** | **Description** |
 | --- | --- |
@@ -244,15 +244,6 @@ The website's custom domain name.
 ```wing
 "example.com"
 ```
-
-
-## Protocols <a name="Protocols" id="Protocols"></a>
-
-### IWebsiteClient <a name="IWebsiteClient" id="@winglang/sdk.cloud.IWebsiteClient"></a>
-
-- *Implemented By:* <a href="#@winglang/sdk.cloud.IWebsiteClient">IWebsiteClient</a>
-
-Inflight methods and members of `cloud.Website`.
 
 
 

@@ -43,9 +43,7 @@ export class Counter extends cloud.Counter {
       throw new Error("counters can only be bound by tfaws.Function for now");
     }
 
-    host.addPolicyStatements(
-      ...calculateCounterPermissions(this.table.arn, ops)
-    );
+    host.addPolicyStatements(calculateCounterPermissions(this.table.arn, ops));
 
     host.addEnvironment(this.envName(), this.table.name);
 

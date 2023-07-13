@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+
 import { describe } from "../describe.js";
 import { getResourceNode } from "../helpers.js";
 
@@ -10,7 +11,7 @@ describe(`${__dirname}/index.w`, () => {
 
     const preview = page.getByTestId("cloud.bucket:file-preview");
 
-    await expect(preview).toContainText("Hello World!");
+    await expect(preview).toHaveText("Hello World!");
   });
 
   test("deletes a file", async ({ page }) => {

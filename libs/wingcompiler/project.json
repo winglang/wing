@@ -5,13 +5,8 @@
   "targets": {
     "copy": {
       "options": {
-        "command": "cp -v ../../target/wasm32-wasi/debug/wingc.wasm ./",
+        "command": "cp -v ../../target/wasm32-wasi/release/wingc.wasm ./",
         "cwd": "libs/wingcompiler"
-      },
-      "configurations": {
-        "release": {
-          "command": "cp -v ../../target/wasm32-wasi/release/wingc.wasm ./"
-        }
       }
     },
     "build": {

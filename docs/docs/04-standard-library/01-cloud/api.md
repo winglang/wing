@@ -144,6 +144,8 @@ new cloud.Api(props?: ApiProps);
 
 #### Methods <a name="Methods" id="Methods"></a>
 
+##### Preflight Methods
+
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.Api.connect">connect</a></code> | Add a inflight handler to the api for CONNECT requests on the given path. |
@@ -737,14 +739,6 @@ The response's headers.
 ---
 
 ## Protocols <a name="Protocols" id="Protocols"></a>
-
-### IApiClient <a name="IApiClient" id="@winglang/sdk.cloud.IApiClient"></a>
-
-- *Implemented By:* <a href="#@winglang/sdk.cloud.IApiClient">IApiClient</a>
-
-Inflight methods and members of `cloud.Api`.
-
-
 
 ### IApiEndpointHandler <a name="IApiEndpointHandler" id="@winglang/sdk.cloud.IApiEndpointHandler"></a>
 

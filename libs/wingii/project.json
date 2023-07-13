@@ -13,18 +13,10 @@
       "options": {
         "commands": [
           "cargo fmt",
-          "cargo clippy --fix --no-deps --allow-dirty --target wasm32-wasi"
+          "cargo clippy --fix --no-deps --allow-dirty --target wasm32-wasi --release"
         ],
         "cwd": "libs/wingii",
         "parallel": false
-      },
-      "configurations": {
-        "release": {
-          "commands": [
-            "cargo fmt",
-            "cargo clippy --fix --no-deps --allow-dirty --target wasm32-wasi --release"
-          ]
-        }
       }
     },
     "build": {
