@@ -6,9 +6,11 @@ import { Construct } from "constructs";
 import { App } from "./app";
 import { Function } from "./function";
 import { core } from "..";
+import { ApiGatewayAccount } from "../.gen/providers/aws/api-gateway-account";
 import { ApiGatewayDeployment } from "../.gen/providers/aws/api-gateway-deployment";
 import { ApiGatewayRestApi } from "../.gen/providers/aws/api-gateway-rest-api";
 import { ApiGatewayStage } from "../.gen/providers/aws/api-gateway-stage";
+import { IamRole } from "../.gen/providers/aws/iam-role";
 import { LambdaPermission } from "../.gen/providers/aws/lambda-permission";
 import * as cloud from "../cloud";
 import { OpenApiSpec } from "../cloud";
@@ -43,6 +45,30 @@ export class Api extends cloud.Api {
     super(scope, id, props);
     this.api = new WingRestApi(this, "api", {
       apiSpec: this._getApiSpec(),
+    });
+
+    // create a role for the API Gateway to push logs to CloudWatch
+    const partition = (App.of(this) as App).partition;
+    const cloudWatchRole = new IamRole(this, "CloudWatchRole", {
+      assumeRolePolicy: JSON.stringify({
+        Version: "2012-10-17",
+        Statement: [
+          {
+            Action: "sts:AssumeRole",
+            Principal: {
+              Service: "apigateway.amazonaws.com",
+            },
+            Effect: "Allow",
+          },
+        ],
+      }),
+      managedPolicyArns: [
+        `arn:${partition}:iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs`,
+      ],
+    });
+    new ApiGatewayAccount(this, "CloudWatchAccount", {
+      cloudwatchRoleArn: cloudWatchRole.arn,
+      dependsOn: [this.api.api],
     });
   }
 

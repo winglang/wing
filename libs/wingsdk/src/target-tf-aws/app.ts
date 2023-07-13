@@ -12,6 +12,7 @@ import { TestRunner } from "./test-runner";
 import { Topic } from "./topic";
 import { Website } from "./website";
 import { DataAwsCallerIdentity } from "../.gen/providers/aws/data-aws-caller-identity";
+import { DataAwsPartition } from "../.gen/providers/aws/data-aws-partition";
 import { DataAwsRegion } from "../.gen/providers/aws/data-aws-region";
 import { Eip } from "../.gen/providers/aws/eip";
 import { InternetGateway } from "../.gen/providers/aws/internet-gateway";
@@ -51,6 +52,7 @@ export class App extends CdktfApp {
 
   private awsRegionProvider?: DataAwsRegion;
   private awsAccountIdProvider?: DataAwsCallerIdentity;
+  private awsPartitionProvider?: DataAwsPartition;
   private _vpc?: Vpc;
   private _codeBucket?: S3Bucket;
 
@@ -133,6 +135,16 @@ export class App extends CdktfApp {
       this.awsRegionProvider = new DataAwsRegion(this, "Region");
     }
     return this.awsRegionProvider.name;
+  }
+
+  /**
+   * The AWS partition of the App
+   */
+  public get partition(): string {
+    if (!this.awsPartitionProvider) {
+      this.awsPartitionProvider = new DataAwsPartition(this, "Partition");
+    }
+    return this.awsPartitionProvider.partition;
   }
 
   public get codeBucket(): S3Bucket {

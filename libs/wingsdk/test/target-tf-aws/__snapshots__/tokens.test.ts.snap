@@ -13,15 +13,18 @@ return class Handler {
   }
 };
 })())({
-str: JSON.parse(process.env[\\"WING_TOKEN_TFTOKEN_TOKEN_7\\"]),
-num: JSON.parse(process.env[\\"WING_TOKEN_8_109562212591386E_298\\"]),
-list: JSON.parse(process.env[\\"WING_TOKEN_TFTOKEN_TOKEN_9\\"])
+str: JSON.parse(process.env[\\"WING_TOKEN_TFTOKEN_TOKEN_10\\"]),
+num: JSON.parse(process.env[\\"WING_TOKEN_8_109562212591389E_298\\"]),
+list: JSON.parse(process.env[\\"WING_TOKEN_TFTOKEN_TOKEN_12\\"])
 })"
 `;
 
 exports[`captures tokens 2`] = `
 "{
   \\"data\\": {
+    \\"aws_partition\\": {
+      \\"Partition\\": {}
+    },
     \\"aws_region\\": {
       \\"Region\\": {}
     }
@@ -32,6 +35,14 @@ exports[`captures tokens 2`] = `
     }
   },
   \\"resource\\": {
+    \\"aws_api_gateway_account\\": {
+      \\"Api_CloudWatchAccount_528ED331\\": {
+        \\"cloudwatch_role_arn\\": \\"\${aws_iam_role.Api_CloudWatchRole_639D55FF.arn}\\",
+        \\"depends_on\\": [
+          \\"aws_api_gateway_rest_api.Api_api_91C07D84\\"
+        ]
+      }
+    },
     \\"aws_api_gateway_deployment\\": {
       \\"Api_api_deployment_7FB64CC4\\": {
         \\"lifecycle\\": {
@@ -39,7 +50,7 @@ exports[`captures tokens 2`] = `
         },
         \\"rest_api_id\\": \\"\${aws_api_gateway_rest_api.Api_api_91C07D84.id}\\",
         \\"triggers\\": {
-          \\"redeployment\\": \\"5c0f11f0478884e3d7859fa987b8b7ecf8f2f6bc\\"
+          \\"redeployment\\": \\"bb379d327939ff71b405ed3a288776d8680ca1e0\\"
         }
       }
     },
@@ -59,6 +70,12 @@ exports[`captures tokens 2`] = `
     \\"aws_iam_role\\": {
       \\"Api_Api-OnRequest-c5395e41_IamRole_9427E0ED\\": {
         \\"assume_role_policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":\\\\\\"sts:AssumeRole\\\\\\",\\\\\\"Principal\\\\\\":{\\\\\\"Service\\\\\\":\\\\\\"lambda.amazonaws.com\\\\\\"},\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\"
+      },
+      \\"Api_CloudWatchRole_639D55FF\\": {
+        \\"assume_role_policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":\\\\\\"sts:AssumeRole\\\\\\",\\\\\\"Principal\\\\\\":{\\\\\\"Service\\\\\\":\\\\\\"apigateway.amazonaws.com\\\\\\"},\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\",
+        \\"managed_policy_arns\\": [
+          \\"arn:\${data.aws_partition.Partition.partition}:iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs\\"
+        ]
       }
     },
     \\"aws_iam_role_policy\\": {
@@ -78,9 +95,9 @@ exports[`captures tokens 2`] = `
         \\"environment\\": {
           \\"variables\\": {
             \\"WING_FUNCTION_NAME\\": \\"Api-OnRequest-c5395e41-c8f26cae\\",
-            \\"WING_TOKEN_8_109562212591386E_298\\": \\"\${jsonencode(var.Number)}\\",
-            \\"WING_TOKEN_TFTOKEN_TOKEN_7\\": \\"\${jsonencode(aws_api_gateway_stage.Api_api_stage_E0FA39D6.invoke_url)}\\",
-            \\"WING_TOKEN_TFTOKEN_TOKEN_9\\": \\"\${jsonencode(var.List)}\\"
+            \\"WING_TOKEN_8_109562212591389E_298\\": \\"\${jsonencode(var.Number)}\\",
+            \\"WING_TOKEN_TFTOKEN_TOKEN_10\\": \\"\${jsonencode(aws_api_gateway_stage.Api_api_stage_E0FA39D6.invoke_url)}\\",
+            \\"WING_TOKEN_TFTOKEN_TOKEN_12\\": \\"\${jsonencode(var.List)}\\"
           }
         },
         \\"function_name\\": \\"Api-OnRequest-c5395e41-c8f26cae\\",
