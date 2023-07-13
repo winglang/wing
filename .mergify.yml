@@ -1,9 +1,9 @@
 # See https://doc.mergify.io
 queue_rules:
   - name: default
+    speculative_checks: 2
     conditions:
       - -files=.mergify.yml
-      - status-success=Validate PR title
       - or:
         - status-success=Quality Gate
         - -files~=^(?!docs/|logo/)

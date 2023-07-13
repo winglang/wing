@@ -155,6 +155,11 @@ through the AWS Management Console.
 
 ## Cleanup
 
+Terraform doesn't allow destroying a non-empty bucket by default. To prepare for
+easy cleanup, you may delete the newly created file by marking the checkbox next
+to `wing.txt`, clicking the `Delete` button, typing `permanently delete` in the
+confirmation box and clicking the `Delete objects` button.
+
 Once you're done, you can destroy all of the resources that were created on your AWS account by running:
 
 ```sh
