@@ -967,6 +967,12 @@ impl<'a> JSifier<'a> {
 		code.add_code(self.jsify_to_inflight_type_method(&class, ctx));
 		code.add_code(self.jsify_to_inflight_method(&class.name, ctx));
 
+		let mut fake_super = CodeMaker::default();
+		fake_super.open("fakeSuper(property, args) {");
+		fake_super.line("return super[property](...args);".to_string());
+		fake_super.close("}");
+		code.add_code(fake_super);
+
 		// emit `_registerBindObject` to register bindings (for type & instance binds)
 		code.add_code(self.jsify_register_bind_method(class, class_type, BindMethod::Instance, ctx));
 		code.add_code(self.jsify_register_bind_method(class, class_type, BindMethod::Type, ctx));
@@ -1028,7 +1034,7 @@ impl<'a> JSifier<'a> {
 				.chain(inflight_field_names.iter())
 				.map(|name| format!("\"{}\"", name))
 				.join(", ");
-			code.line(format!("this._addInflightOps({inflight_ops_string});"));
+			code.line(format!("this._addInflightOps(\"fakeSuper\", {inflight_ops_string});"));
 		}
 
 		code.close("}");
@@ -1135,6 +1141,14 @@ impl<'a> JSifier<'a> {
 				class_code.line(self.jsify_function(Some(class), &class.inflight_initializer, &mut ctx));
 			}
 		}
+
+		// emit fakeSuper method
+		class_code.open("fakeSuper(property, args) {");
+		class_code.line(format!(
+			"return Object.getPrototypeOf({}.prototype)[property].apply(this, args);",
+			name
+		));
+		class_code.close("}");
 
 		class_code.close("}");
 		class_code

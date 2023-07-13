@@ -68,7 +68,15 @@ export interface IResource extends IInspectable, IConstruct {
 }
 
 /**
+ * Inflight client for `Resource`.
+ */
+export interface IResourceClient {
+  fakeSuper(property: string): any;
+}
+
+/**
  * Shared behavior between all Wing SDK resources.
+ * @inflight `@winglang/sdk.std.IResourceClient`
  * @skipDocs
  */
 export abstract class Resource extends Construct implements IResource {
