@@ -1,4 +1,5 @@
 bring cloud;
+bring util;
 
 // every minute
 let from_cron = new cloud.Schedule( cron: "* * * * ?" ) as "from_cron";
@@ -15,9 +16,6 @@ from_rate.onTick(inflight () => {
     c2.inc();
 });
 
-class Utils {
-    extern "../external/sleep.js" static inflight sleep(milli: num);
-}
 
 // std.Test is used setting the timeout property
 new std.Test(inflight () => {
@@ -26,7 +24,7 @@ new std.Test(inflight () => {
     assert(c2.peek() == 0);
 
     // wait at least one minute
-    Utils.sleep(60 * 1000 * 1.1);
+    util.sleep(1.1m);
 
     // check that both counters have been incremented
     assert(c1.peek() >= 1);

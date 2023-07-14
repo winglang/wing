@@ -11,7 +11,7 @@
     },
     "test": {
       "options": {
-        "command": "pnpm vitest",
+        "commands": ["pnpm vitest", "pnpm eslint"],
         "cwd": "apps/wing-console/console/server"
       }
     },

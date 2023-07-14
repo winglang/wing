@@ -784,12 +784,12 @@ to format as string.
 ##### `tryParse` <a name="tryParse" id="@winglang/sdk.std.Json.tryParse"></a>
 
 ```wing
-Json.tryParse(str: str);
+Json.tryParse(str?: str);
 ```
 
 Try to parse a string into a Json.
 
-###### `str`<sup>Required</sup> <a name="str" id="@winglang/sdk.std.Json.tryParse.parameter.str"></a>
+###### `str`<sup>Optional</sup> <a name="str" id="@winglang/sdk.std.Json.tryParse.parameter.str"></a>
 
 - *Type:* str
 

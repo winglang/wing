@@ -87,10 +87,10 @@ source: libs/wingc/src/lsp/completions.rs
     command: editor.action.triggerParameterHints
 - label: tryParse
   kind: 2
-  detail: "(str: str): Json?"
+  detail: "(str: str?): Json?"
   documentation:
     kind: markdown
-    value: "```wing\nstatic tryParse: (str: str): Json?\n```\n---\nTry to parse a string into a Json.\n\n\n### Returns\nJson representation of the string or undefined if string is not parsable"
+    value: "```wing\nstatic tryParse: (str: str?): Json?\n```\n---\nTry to parse a string into a Json.\n\n\n### Returns\nJson representation of the string or undefined if string is not parsable"
   sortText: ff|tryParse
   insertText: tryParse($0)
   insertTextFormat: 2
