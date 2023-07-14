@@ -14,14 +14,14 @@ export const BlueScreenOfDeath = ({
   displayLinks?: boolean;
   displayWingTitle?: boolean;
 }) => {
-  const [formattedPathsError, setFormttedPathsError] = useState<string>("");
+  const [formattedPathsError, setFormattedPathsError] = useState("");
 
   useEffect(() => {
     if (!displayLinks) {
-      setFormttedPathsError(error);
+      setFormattedPathsError(error);
       return;
     }
-    setFormttedPathsError(
+    setFormattedPathsError(
       formatAbsolutePaths(
         error,
         "underline text-slate-300 hover:text-slate-400",
