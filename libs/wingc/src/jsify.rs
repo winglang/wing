@@ -571,9 +571,19 @@ impl<'a> JSifier<'a> {
 					}
 				))
 			}
-			StmtKind::Module { name: _, statements: _ } => {
-				// TODO
-				CodeMaker::default()
+			StmtKind::Module { name, statements } => {
+				let mut code = CodeMaker::default();
+				code.open(format!("const {} = (() => {{", name.name));
+				code.add_code(self.jsify_scope_body(statements, ctx));
+
+				let exports = get_public_symbols(statements);
+				code.line(format!(
+					"return {{ {} }};",
+					exports.iter().map(ToString::to_string).join(", ")
+				));
+
+				code.close("})();");
+				code
 			}
 			StmtKind::SuperConstructor { arg_list } => {
 				let args = self.jsify_arg_list(&arg_list, None, None, ctx);
@@ -1247,6 +1257,47 @@ impl<'a> JSifier<'a> {
 		bind_method.close("}");
 		bind_method
 	}
+}
+
+fn get_public_symbols(scope: &Scope) -> Vec<Symbol> {
+	let mut symbols = Vec::new();
+
+	for stmt in &scope.statements {
+		match &stmt.kind {
+			StmtKind::Bring { .. } => {}
+			StmtKind::Module { name, .. } => {
+				symbols.push(name.clone());
+			}
+			StmtKind::SuperConstructor { .. } => {}
+			StmtKind::Let { .. } => {}
+			StmtKind::ForLoop { .. } => {}
+			StmtKind::While { .. } => {}
+			StmtKind::IfLet { .. } => {}
+			StmtKind::If { .. } => {}
+			StmtKind::Break => {}
+			StmtKind::Continue => {}
+			StmtKind::Return(_) => {}
+			StmtKind::Expression(_) => {}
+			StmtKind::Assignment { .. } => {}
+			StmtKind::Scope(_) => {}
+			StmtKind::Class(class) => {
+				symbols.push(class.name.clone());
+			}
+			StmtKind::Interface(iface) => {
+				symbols.push(iface.name.clone());
+			}
+			StmtKind::Struct { name, .. } => {
+				symbols.push(name.clone());
+			}
+			StmtKind::Enum { name, .. } => {
+				symbols.push(name.clone());
+			}
+			StmtKind::TryCatch { .. } => {}
+			StmtKind::CompilerDebugEnv => {}
+		}
+	}
+
+	symbols
 }
 
 fn inflight_filename(class: &AstClass) -> String {
