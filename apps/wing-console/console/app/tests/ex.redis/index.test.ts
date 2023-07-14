@@ -15,11 +15,14 @@ const isDockerAvailable = () => {
 };
 
 describe(`${__dirname}/index.w`, () => {
-  test("opens redis help", async ({ page }) => {
+  test.beforeAll(async () => {
     if (!isDockerAvailable()) {
       test.skip();
       return;
     }
+  });
+
+  test("opens redis help", async ({ page }) => {
     await getResourceNode(page, "root/Default/ex.Redis").click();
 
     const input = page.getByTestId("ex.redis:input");
@@ -38,10 +41,6 @@ describe(`${__dirname}/index.w`, () => {
   });
 
   test("navigates history", async ({ page }) => {
-    if (!isDockerAvailable()) {
-      test.skip();
-      return;
-    }
     await getResourceNode(page, "root/Default/ex.Redis").click();
 
     const input = page.getByTestId("ex.redis:input");
