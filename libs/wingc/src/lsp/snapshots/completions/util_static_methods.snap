@@ -18,7 +18,7 @@ source: libs/wingc/src/lsp/completions.rs
   detail: "(options: NanoidOptions?): str"
   documentation:
     kind: markdown
-    value: "```wing\nstatic nanoid: (options: NanoidOptions?): str\n```\n---\nGenerates a unique ID using the nanoid library."
+    value: "```wing\nstatic nanoid: (options: NanoidOptions?): str\n```\n---\nGenerates a unique ID using the nanoid library.\n\n\n### Remarks\n# @link https://github.com/ai/nanoid"
   sortText: ff|nanoid
   insertText: nanoid($0)
   insertTextFormat: 2
