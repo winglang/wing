@@ -3051,8 +3051,19 @@ impl<'a> TypeChecker<'a> {
 			StmtKind::SuperConstructor { arg_list } => {
 				self.type_check_arg_list(arg_list, env);
 			}
-			StmtKind::Module { name: _, statements: _ } => {
-				// TODO
+			StmtKind::Module { name: _, statements } => {
+				// why doesn't this work?
+				// self.type_check_scope(statements);
+
+				statements.set_env(SymbolEnv::new(
+					Some(env.get_ref()),
+					env.return_type,
+					false,
+					false,
+					env.phase,
+					stmt.idx,
+				));
+				self.inner_scopes.push(statements);
 			}
 		}
 	}

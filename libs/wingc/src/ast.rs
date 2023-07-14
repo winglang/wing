@@ -632,7 +632,7 @@ pub enum InterpolatedStringPart {
 	Expr(Expr),
 }
 
-#[derive(Derivative)]
+#[derive(Derivative, Default)]
 #[derivative(Debug)]
 pub struct Scope {
 	pub statements: Vec<Stmt>,

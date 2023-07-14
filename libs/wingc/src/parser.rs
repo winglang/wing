@@ -2,7 +2,8 @@ use indexmap::{IndexMap, IndexSet};
 use phf::{phf_map, phf_set};
 use std::cell::RefCell;
 use std::collections::HashSet;
-use std::{str, vec};
+use std::path::Path;
+use std::{fs, str, vec};
 use tree_sitter::Node;
 use tree_sitter_traversal::{traverse, Order};
 
@@ -567,13 +568,56 @@ impl<'s> Parser<'s> {
 	}
 
 	fn build_bring_statement(&self, statement_node: &Node) -> DiagnosticResult<StmtKind> {
-		Ok(StmtKind::Bring {
-			module_name: self.node_symbol(&statement_node.child_by_field_name("module_name").unwrap())?,
-			identifier: if let Some(identifier) = statement_node.child_by_field_name("alias") {
-				Some(self.check_reserved_symbol(&identifier)?)
+		let module_name = self.node_symbol(&statement_node.child_by_field_name("module_name").unwrap())?;
+		let alias = if let Some(identifier) = statement_node.child_by_field_name("alias") {
+			Some(self.check_reserved_symbol(&identifier)?)
+		} else {
+			None
+		};
+
+		// if the module name is a path ending in .w, create a new Parser to parse it as a new Scope,
+		// and create a StmtKind::Module instead
+		if module_name.name.ends_with(".w\"") {
+			let source_path = Path::new(&module_name.name[1..module_name.name.len() - 1]);
+			let scope = match fs::read(&source_path) {
+				Ok(source) => {
+					let parser = Parser::new(&source, module_name.name.clone());
+					let language = tree_sitter_wing::language();
+					let mut tree_sitter_parser = tree_sitter::Parser::new();
+					tree_sitter_parser.set_language(language).unwrap();
+					let tree = match tree_sitter_parser.parse(&source, None) {
+						Some(tree) => tree,
+						None => {
+							panic!("Failed parsing source file: {}", source_path.display());
+						}
+					};
+					parser.wingit(&tree.root_node())
+				}
+				Err(err) => {
+					report_diagnostic(Diagnostic {
+						message: format!("Error reading source file: {}: {:?}", source_path.display(), err),
+						span: None,
+					});
+					Scope::default()
+				}
+			};
+
+			// parse error if no alias is provided
+			let module = if let Some(alias) = alias {
+				Ok(StmtKind::Module {
+					name: alias,
+					statements: scope,
+				})
 			} else {
-				None
-			},
+				self.with_error::<StmtKind>("No alias provided for module", statement_node)
+			};
+
+			return module;
+		}
+
+		Ok(StmtKind::Bring {
+			module_name,
+			identifier: alias,
 		})
 	}
 
