@@ -424,6 +424,10 @@ pub enum StmtKind {
 		module_name: Symbol, // Reference?
 		identifier: Option<Symbol>,
 	},
+	Module {
+		name: Symbol,
+		statements: Scope,
+	},
 	SuperConstructor {
 		arg_list: ArgList,
 	},

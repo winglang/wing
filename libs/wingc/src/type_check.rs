@@ -3051,6 +3051,9 @@ impl<'a> TypeChecker<'a> {
 			StmtKind::SuperConstructor { arg_list } => {
 				self.type_check_arg_list(arg_list, env);
 			}
+			StmtKind::Module { name: _, statements: _ } => {
+				// TODO
+			}
 		}
 	}
 

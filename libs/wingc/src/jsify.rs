@@ -548,13 +548,6 @@ impl<'a> JSifier<'a> {
 	fn jsify_statement(&self, env: &SymbolEnv, statement: &Stmt, ctx: &mut JSifyContext) -> CodeMaker {
 		CompilationContext::set(CompilationPhase::Jsifying, &statement.span);
 		match &statement.kind {
-			StmtKind::SuperConstructor { arg_list } => {
-				let args = self.jsify_arg_list(&arg_list, None, None, ctx);
-				match ctx.phase {
-					Phase::Preflight => CodeMaker::one_line(format!("super(scope,id,{});", args)),
-					_ => CodeMaker::one_line(format!("super({});", args)),
-				}
-			}
 			StmtKind::Bring {
 				module_name,
 				identifier,
@@ -577,6 +570,17 @@ impl<'a> JSifier<'a> {
 						format!("require('{}').{}", STDLIB_MODULE, module_name.name)
 					}
 				))
+			}
+			StmtKind::Module { name: _, statements: _ } => {
+				// TODO
+				CodeMaker::default()
+			}
+			StmtKind::SuperConstructor { arg_list } => {
+				let args = self.jsify_arg_list(&arg_list, None, None, ctx);
+				match ctx.phase {
+					Phase::Preflight => CodeMaker::one_line(format!("super(scope,id,{});", args)),
+					_ => CodeMaker::one_line(format!("super({});", args)),
+				}
 			}
 			StmtKind::Let {
 				reassignable,

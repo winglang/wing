@@ -327,7 +327,7 @@ impl<'s> Parser<'s> {
 		let span = self.node_span(statement_node);
 		CompilationContext::set(CompilationPhase::Parsing, &span);
 		let stmt_kind = match statement_node.kind() {
-			"short_import_statement" => self.build_bring_statement(statement_node)?,
+			"import_statement" => self.build_bring_statement(statement_node)?,
 
 			"variable_definition_statement" => self.build_variable_def_statement(statement_node, phase)?,
 			"variable_assignment_statement" => self.build_assignment_statement(statement_node, phase)?,
