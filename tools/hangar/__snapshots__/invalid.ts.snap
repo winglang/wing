@@ -7,7 +7,12 @@ exports[`access_hidden_namespace.w 1`] = `
 7 | new core.NodeJsCode(\\"/tmp/test.txt\\"); // This should fail even though \`fs.TextFile\` extends \`core.FileBase\` because we didn't bring in \`core\` explicitly.
   |     ^^^^^^^^^^^^^^^ Unknown symbol \\"core\\"
 
-"
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`access_static_from_instance.w 1`] = `
@@ -59,7 +64,12 @@ error: Unknown symbol \\"this\\"
 8 |     this.f = 1; // Can't access static fields through \`this\`
   |     ^^^^ Unknown symbol \\"this\\"
 
-"
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`bring.w 1`] = `
@@ -83,7 +93,12 @@ error: \\"fs\\" is not a built-in module
 6 | bring fs;
   | ^^^^^^^^^ \\"fs\\" is not a built-in module
 
-"
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`bring_jsii.w 1`] = `
@@ -100,7 +115,12 @@ error: Cannot find module \\"foobar\\" in source directory: Unable to load \\"fo
 4 | bring \\"foobar\\" as baz;
   | ^^^^^^^^^^^^^^^^^^^^^^ Cannot find module \\"foobar\\" in source directory: Unable to load \\"foobar\\": Module not found in \\"../../../examples/tests/invalid\\"
 
-"
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`bring_non_std_construct.w 1`] = `
@@ -124,7 +144,12 @@ error: Cannot set scope of non-standard preflight class \\"S3Backend\\" using \`
 15 |     new cdktf.S3Backend(this, cdktf.S3BackendConfig {bucket: \\"foo\\", key: \\"bar\\"}) in this;
    |                                                                                     ^^^^ Cannot set scope of non-standard preflight class \\"S3Backend\\" using \`in\`
 
-"
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`capture_redefinition.w 1`] = `
@@ -134,7 +159,12 @@ exports[`capture_redefinition.w 1`] = `
 14 |     log(y);
    |         ^ Cannot capture symbol \\"y\\" because it is shadowed by another symbol with the same name
 
-"
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`class.w 1`] = `
@@ -333,7 +363,12 @@ error: Variable cannot be reassigned from inflight
 61 |     this.y = 1;
    |     ^^^^^^^^^^^ Variable cannot be reassigned from inflight
 
-"
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`cloud_function_expects_inflight.w 1`] = `
@@ -357,7 +392,12 @@ error: Expected type to be \\"inflight (message: str): void\\", but got \\"infli
 12 | | });
    | \\\\-^ Expected type to be \\"inflight (message: str): void\\", but got \\"inflight (x: num): void\\" instead
 
-"
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`container_types.w 1`] = `
@@ -486,7 +526,12 @@ error: Expected type to be \\"Array<str>\\", but got \\"MutArray<str>\\" instead
 23 | let a: Array<str> = MutArray<str>[];
    |                     ^^^^^^^^^^^^^^^ Expected type to be \\"Array<str>\\", but got \\"MutArray<str>\\" instead
 
-"
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`diags_with_multibyte_chars.w 1`] = `
@@ -496,7 +541,12 @@ exports[`diags_with_multibyte_chars.w 1`] = `
 4 | asdf;
   | ^^^^ Unknown symbol \\"asdf\\"
 
-"
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`enums.w 1`] = `
@@ -513,7 +563,12 @@ error: Property not found
 8 | let two = SomeEnum.TWO.TWO;
   |                        ^^^ Property not found
 
-"
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`extern.w 1`] = `
@@ -530,7 +585,12 @@ error: Failed to resolve extern \\"not-installed\\": Not Found
 4 |   extern \\"not-installed\\" static tooBad(): bool;
   |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Failed to resolve extern \\"not-installed\\": Not Found
 
-"
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`for_loop.w 1`] = `
@@ -547,7 +607,12 @@ error: Unable to iterate over \\"Bucket\\"
 5 | for test in bucket {
   |             ^^^^^^ Unable to iterate over \\"Bucket\\"
 
-"
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`function_type.w 1`] = `
@@ -564,7 +629,12 @@ error: Expected function return type
 4 | let my_func2 = (callback: ((num)): (str)) => {  };
   |                            ^^^^^ Expected function return type
 
-"
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`immutable_container_types.w 1`] = `
@@ -574,7 +644,12 @@ exports[`immutable_container_types.w 1`] = `
 3 | m1.set(\\"a\\", \\"bye\\");
   |    ^^^ Unknown symbol \\"set\\"
 
-"
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`impl_interface.w 1`] = `
@@ -619,7 +694,12 @@ error: Class \\"r\\" does not implement method \\"method3\\" of interface \\"I3\
 30 | class r impl I3 {
    |       ^ Class \\"r\\" does not implement method \\"method3\\" of interface \\"I3\\"
 
-"
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`inflight_class_created_in_preflight.w 1`] = `
@@ -657,7 +737,12 @@ error: Cannot qualify access to a lifted object of type \\"PreflightClass\\" (se
 19 |   new PreflightClass();
    |   ^^^^^^^^^^^^^^^^^^^^ Cannot qualify access to a lifted object of type \\"PreflightClass\\" (see https://github.com/winglang/wing/issues/76 for more details)
 
-"
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`inflight_class_dup_init.w 1`] = `
@@ -669,7 +754,12 @@ exports[`inflight_class_dup_init.w 1`] = `
 8 | |   }
   | \\\\---^ Multiple inflight initializers defined in class Foo
 
-"
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`inflight_class_in_preflight.w 1`] = `
@@ -679,7 +769,12 @@ exports[`inflight_class_in_preflight.w 1`] = `
 5 | new Foo();
   | ^^^^^^^^^ Cannot create inflight class \\"Foo\\" in preflight phase
 
-"
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`inflight_class_interface_structural_typing.w 1`] = `
@@ -689,7 +784,12 @@ exports[`inflight_class_interface_structural_typing.w 1`] = `
 26 |   let x: IGoo = new NotGoo();
    |                 ^^^^^^^^^^^^ Expected type to be \\"IGoo\\", but got \\"NotGoo\\" instead
 
-"
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`inflight_reassign.w 1`] = `
@@ -706,7 +806,12 @@ error: Variable is not reassignable
 8 |   ylet = 456;
   |   ^^^^ Variable is not reassignable
 
-"
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`inflight_ref_explicit_ops.w 1`] = `
@@ -730,7 +835,12 @@ error: Cannot qualify access to a lifted object of type \\"Bucket\\" (see https:
 47 |     let b = this.array.at(1);
    |             ^^^^^^^^^^^^^^^^ Cannot qualify access to a lifted object of type \\"Bucket\\" (see https://github.com/winglang/wing/issues/76 for more details)
 
-"
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`inflight_ref_resource_sub_method.w 1`] = `
@@ -747,7 +857,12 @@ error: Cannot qualify access to a lifted object of type \\"Queue\\" (see https:/
 18 |     return globalQueue;
    |            ^^^^^^^^^^^ Cannot qualify access to a lifted object of type \\"Queue\\" (see https://github.com/winglang/wing/issues/76 for more details)
 
-"
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`inflight_ref_unknown_op.w 1`] = `
@@ -764,7 +879,12 @@ error: Cannot qualify access to a lifted object of type \\"Bucket\\" (see https:
 17 |     let y = globalB;
    |             ^^^^^^^ Cannot qualify access to a lifted object of type \\"Bucket\\" (see https://github.com/winglang/wing/issues/76 for more details)
 
-"
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`interface.w 1`] = `
@@ -809,7 +929,12 @@ error: Symbol \\"foo\\" already defined in this scope
 25 |     foo(): num;
    |     ^^^ Symbol \\"foo\\" already defined in this scope
 
-"
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`issue_2767.w 1`] = `
@@ -819,7 +944,12 @@ exports[`issue_2767.w 1`] = `
 4 | x.set(\\"hello\\", new cloud.Bucket());
   |                ^^^^^^^^^^^^^^^^^^ Expected type to be \\"MutJson\\", but got \\"Bucket\\" instead
 
-"
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`json.w 1`] = `
@@ -913,7 +1043,12 @@ error: Expected type to be \\"bool?\\", but got \\"num?\\" instead
 39 | let tryBool: bool? = j.tryAsNum();
    |                      ^^^^^^^^^^^^ Expected type to be \\"bool?\\", but got \\"num?\\" instead
 
-"
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`json_static.w 1`] = `
@@ -923,7 +1058,12 @@ exports[`json_static.w 1`] = `
 4 | immutObj.set(\\"a\\", \\"foo\\");
   |          ^^^ Unknown symbol \\"set\\"
 
-"
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`missing_semicolon.w 1`] = `
@@ -947,7 +1087,12 @@ error: Expected '}'
 19 | if (x > 10) {
    |              ^ Expected '}'
 
-"
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`mut_container_types.w 1`] = `
@@ -1048,7 +1193,12 @@ error: Expected type to be \\"MutMap<str>\\", but got \\"MutMap<num>\\" instead
 25 | let m5: MutMap<str> = m4;
    |                       ^^ Expected type to be \\"MutMap<str>\\", but got \\"MutMap<num>\\" instead
 
-"
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`nil.w 1`] = `
@@ -1086,7 +1236,12 @@ error: Expected type to be \\"num\\", but got \\"nil\\" instead (hint: to allow 
 20 |   foo.setBar(nil);
    |              ^^^ Expected type to be \\"num\\", but got \\"nil\\" instead (hint: to allow \\"nil\\" assignment use optional type: \\"num?\\")
 
-"
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`optionals.w 1`] = `
@@ -1173,7 +1328,12 @@ error: Variable is not reassignable
 46 |   hi = \\"bye\\";
    |   ^^ Variable is not reassignable
 
-"
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`panic.w 1`] = `
@@ -1183,7 +1343,12 @@ exports[`panic.w 1`] = `
 6 | 😱;
   | ^^ Compiler bug (panicked at 'User invoked panic', libs/wingc/src/type_check.rs:LINE:COL) during type-checking, please report at https://www.winglang.io/contributing/start-here/bugs
 
-"
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`panic.w 2`] = `"Panicked, backtrace not captured: Unsupported"`;
@@ -1195,7 +1360,12 @@ exports[`preflight_from_inflight.w 1`] = `
 15 |     this.r.myPreflight();
    |     ^^^^^^^^^^^^^^^^^^^^ Cannot call into preflight phase while inflight
 
-"
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`primitives.w 1`] = `
@@ -1226,7 +1396,12 @@ error: Expected type to be \\"str\\", but got \\"num\\" instead
 13 | let n: str = arr.at(0);
    |              ^^^^^^^^^ Expected type to be \\"str\\", but got \\"num\\" instead
 
-"
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`reassign_to_nonreassignable.w 1`] = `
@@ -1264,7 +1439,12 @@ error: Variable is not reassignable
 42 |   arg = 0;
    |   ^^^ Variable is not reassignable
 
-"
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`resource_access_field_as_method.w 1`] = `
@@ -1274,7 +1454,12 @@ exports[`resource_access_field_as_method.w 1`] = `
 9 | x.name();
   | ^^^^^^ Expected a function or method, found \\"str\\"
 
-"
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`resource_captures.w 1`] = `
@@ -1284,7 +1469,12 @@ exports[`resource_captures.w 1`] = `
 13 |     let b = this.bucket;
    |             ^^^^^^^^^^^ Cannot qualify access to a lifted object of type \\"Bucket\\" (see https://github.com/winglang/wing/issues/76 for more details)
 
-"
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`resource_inflight.w 1`] = `
@@ -1301,7 +1491,12 @@ error: Cannot qualify access to a lifted object of type \\"Bucket\\" (see https:
 4 |   new cloud.Bucket(); // Should fail because we can't create resources inflight
   |   ^^^^^^^^^^^^^^^^^^ Cannot qualify access to a lifted object of type \\"Bucket\\" (see https://github.com/winglang/wing/issues/76 for more details)
 
-"
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`resource_init.w 1`] = `
@@ -1332,7 +1527,12 @@ error: Inflight initializers cannot have parameters
 9 |   inflight init(x: num) {}
   |                ^^^^^^^^ Inflight initializers cannot have parameters
 
-"
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`return_types.w 1`] = `
@@ -1370,7 +1570,12 @@ error: Unexpected return value from void function
 19 |     return 9;
    |     ^^^^^^^^^ Unexpected return value from void function
 
-"
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`scope_and_id.w 1`] = `
@@ -1401,7 +1606,12 @@ error: Inflight classes cannot have a scope
 17 |   new InflightClass() in pc;
    |                          ^^ Inflight classes cannot have a scope
 
-"
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`sorted_errors_no_span.w 1`] = `
@@ -1432,7 +1642,12 @@ error: Expected \\"b\\" to be a type but it's a variable
 5 | inflight class e extends b {}
   |                          ^ Expected \\"b\\" to be a type but it's a variable
 
-"
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`statement_invalid_scope.w 1`] = `
@@ -1463,7 +1678,12 @@ error: Expected continue statement to be inside of a loop (while/for)
 15 |     continue;
    |     ^^^^^^^^^ Expected continue statement to be inside of a loop (while/for)
 
-"
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`statements_if.w 1`] = `
@@ -1487,7 +1707,12 @@ error: Expected type to be \\"bool\\", but got \\"num\\" instead
 8 | if !n || true {}
   |     ^ Expected type to be \\"bool\\", but got \\"num\\" instead
 
-"
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`std_containers.w 1`] = `
@@ -1497,7 +1722,12 @@ exports[`std_containers.w 1`] = `
 3 | let c = a.concat(b); 
   |                  ^ Expected type to be \\"Array<num>\\", but got \\"Array<str>\\" instead
 
-"
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`struct_expansion.w 1`] = `
@@ -1550,7 +1780,12 @@ error: Expected 2 positional argument(s) but got 1
 11 |   bucket1.put(file: \\"file.txt\\", \\"data\\");
    |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected 2 positional argument(s) but got 1
 
-"
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`structs.w 1`] = `
@@ -1602,7 +1837,12 @@ error: Cannot instantiate type \\"BucketProps\\" because it is a struct and not 
 47 | let x = new cloud.BucketProps(1);
    |         ^^^^^^^^^^^^^^^^^^^^^^^^ Cannot instantiate type \\"BucketProps\\" because it is a struct and not a class. Use struct instantiation instead.
 
-"
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`try_no_catch_or_finally.w 1`] = `
@@ -1614,7 +1854,12 @@ exports[`try_no_catch_or_finally.w 1`] = `
 3 | | }
   | \\\\-^ Missing \`catch\` or \`finally\` blocks for this try statement
 
-"
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`types_strings_arithmetic.w 1`] = `
@@ -1638,7 +1883,12 @@ error: Expected type to be \\"num\\", but got \\"str\\" instead
 10 | let e3 = \\"\${strExample}!\\" * numExample;
    |          ^^^^^^^^^^^^^^^^ Expected type to be \\"num\\", but got \\"str\\" instead
 
-"
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`unimplemented_grammar.w 1`] = `
@@ -1669,7 +1919,12 @@ error: expression \\"await_expression\\" is not supported yet see https://github
 4 | let d = await c;
   |         ^^^^^^^ expression \\"await_expression\\" is not supported yet see https://github.com/winglang/wing/issues/116
 
-"
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`unknown_field.w 1`] = `
@@ -1679,7 +1934,12 @@ exports[`unknown_field.w 1`] = `
 1 | std.String.a.b.c.fromJson();
   |            ^ No member \\"a\\" in class \\"String\\"
 
-"
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`unknown_submodule.w 1`] = `
@@ -1689,7 +1949,12 @@ exports[`unknown_submodule.w 1`] = `
 1 | std.random.String.fromJson(\\"hello\\");
   | ^^^ Expected identifier \\"std\\" to be a variable, but it's a namespace
 
-"
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`unknown_symbol.w 1`] = `
@@ -1762,7 +2027,12 @@ error: Unknown symbol \\"methodWhichIsNotPartOfBucketApi\\"
 23 |     return this.bucket.methodWhichIsNotPartOfBucketApi(id);
    |                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Unknown symbol \\"methodWhichIsNotPartOfBucketApi\\"
 
-"
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`use_before_defined.w 1`] = `
@@ -1779,7 +2049,12 @@ error: Symbol \\"x\\" used before being defined
 5 |   log(\\"\${x}\\");
   |          ^ Symbol \\"x\\" used before being defined
 
-"
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`variable_scoping.w 1`] = `
@@ -1789,7 +2064,12 @@ exports[`variable_scoping.w 1`] = `
 6 |   let z = x;
   |           ^ Unknown symbol \\"x\\"
 
-"
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;
 
 exports[`void_in_expression_position.w 1`] = `
@@ -1813,5 +2093,10 @@ error: Cannot assign expression of type \\"void\\" to a variable
 11 | let z = returnsNothing();
    |     ^ Cannot assign expression of type \\"void\\" to a variable
 
-"
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
 `;

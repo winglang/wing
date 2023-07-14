@@ -80,8 +80,7 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
         );
         result.push(diagnosticText);
       }
-      console.log(result.join("\n"));
-      process.exit(1);
+      throw new Error(result.join("\n"));
     } else if (error instanceof wingCompiler.PreflightError) {
       const causedBy = annotatePreflightError(error.causedBy);
 
@@ -121,8 +120,7 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
         output.push(error.stack ?? "");
       }
 
-      console.log(output.join("\n"));
-      process.exit(1);
+      throw new Error(output.join("\n"));
     } else {
       throw error;
     }
