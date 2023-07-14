@@ -63,6 +63,8 @@ util.nanoid(options?: NanoidOptions);
 
 Generates a unique ID using the nanoid library.
 
+# @link https://github.com/ai/nanoid
+
 ###### `options`<sup>Optional</sup> <a name="options" id="@winglang/sdk.util.Util.nanoid.parameter.options"></a>
 
 - *Type:* <a href="#@winglang/sdk.util.NanoidOptions">NanoidOptions</a>
