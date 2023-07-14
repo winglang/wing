@@ -1,10 +1,25 @@
+import { execSync } from "node:child_process";
+
 import { expect, test } from "@playwright/test";
 
 import { describe } from "../describe.js";
 import { getResourceNode } from "../helpers.js";
 
+const isDockerAvailable = () => {
+  try {
+    execSync("docker ps");
+    return true;
+  } catch {
+    return false;
+  }
+};
+
 describe(`${__dirname}/index.w`, () => {
-  test.skip("opens redis help", async ({ page }) => {
+  test("opens redis help", async ({ page }) => {
+    if (!isDockerAvailable()) {
+      test.skip();
+      return;
+    }
     await getResourceNode(page, "root/Default/ex.Redis").click();
 
     const input = page.getByTestId("ex.redis:input");
@@ -22,7 +37,11 @@ describe(`${__dirname}/index.w`, () => {
     );
   });
 
-  test.skip("navigates history", async ({ page }) => {
+  test("navigates history", async ({ page }) => {
+    if (!isDockerAvailable()) {
+      test.skip();
+      return;
+    }
     await getResourceNode(page, "root/Default/ex.Redis").click();
 
     const input = page.getByTestId("ex.redis:input");
