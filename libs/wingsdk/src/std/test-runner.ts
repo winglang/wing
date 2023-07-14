@@ -11,6 +11,7 @@ export const TEST_RUNNER_FQN = fqnForType("cloud.TestRunner");
 
 /**
  * Properties for `TestRunner`.
+ * @skipDocs
  */
 export interface TestRunnerProps {}
 
@@ -18,6 +19,7 @@ export interface TestRunnerProps {}
  * A test engine.
  *
  * @inflight `@winglang/sdk.std.ITestRunnerClient`
+ * @skipDocs
  */
 export abstract class TestRunner extends Resource {
   /**
@@ -57,6 +59,7 @@ export abstract class TestRunner extends Resource {
 
 /**
  * Inflight interface for `TestRunner`.
+ * @skipDocs
  */
 export interface ITestRunnerClient {
   /**
@@ -77,6 +80,7 @@ export interface ITestRunnerClient {
 
 /**
  * A result of a single test.
+ * @skipDocs
  */
 export interface TestResult {
   /**
@@ -102,6 +106,7 @@ export interface TestResult {
 
 /**
  * A trace emitted during simulation.
+ * @skipDocs
  */
 export interface Trace {
   /**
@@ -133,6 +138,7 @@ export interface Trace {
 
 /**
  * The type of a trace.
+ * @skipDocs
  */
 export enum TraceType {
   /**
