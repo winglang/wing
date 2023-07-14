@@ -31,7 +31,7 @@ function runSubCommand(subCommand: string) {
         process.exit(1);
       }
     } catch (err) {
-      console.error((err as any).message);
+      console.error((err as any)?.message ?? err);
       process.exit(1);
     }
   };
