@@ -1,6 +1,7 @@
 import { Construct } from "constructs";
 import { test, expect } from "vitest";
 import * as cloud from "../../src/cloud";
+import { TraceType } from "../../src/std";
 import { Testing } from "../../src/testing";
 import { SimApp } from "../sim-app";
 
@@ -59,7 +60,7 @@ test("pushing messages through a queue", async () => {
 
   // THEN
   await s.stop();
-  expect(s.listTraces().filter((t) => t.type === cloud.TraceType.LOG)).toEqual([
+  expect(s.listTraces().filter((t) => t.type === TraceType.LOG)).toEqual([
     {
       data: { message: "Hello, world!" },
       sourcePath: "root/HelloWorld/Function",

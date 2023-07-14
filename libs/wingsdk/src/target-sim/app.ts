@@ -25,7 +25,6 @@ import {
   SCHEDULE_FQN,
   SECRET_FQN,
   SERVICE_FQN,
-  TEST_RUNNER_FQN,
   TOPIC_FQN,
   WEBSITE_FQN,
 } from "../cloud";
@@ -33,6 +32,7 @@ import { SDK_VERSION } from "../constants";
 import * as core from "../core";
 import { preSynthesizeAllConstructs } from "../core/app";
 import { TABLE_FQN, REDIS_FQN } from "../ex";
+import { TEST_RUNNER_FQN } from "../std";
 import { WingSimulatorSchema } from "../testing/simulator";
 
 /**
@@ -63,6 +63,8 @@ export class App extends core.App {
     this._tokens = new SimTokens();
 
     this.testRunner = new TestRunner(this, "cloud.TestRunner");
+
+    this.synthRoots(props, this.testRunner);
   }
 
   protected tryNew(

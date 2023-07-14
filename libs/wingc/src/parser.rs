@@ -8,7 +8,7 @@ use tree_sitter_traversal::{traverse, Order};
 
 use crate::ast::{
 	ArgList, BinaryOperator, CatchBlock, Class, ClassField, ElifBlock, Expr, ExprKind, FunctionBody, FunctionDefinition,
-	FunctionParameter, FunctionSignature, Interface, InterpolatedString, InterpolatedStringPart, Literal, Phase,
+	FunctionParameter, FunctionSignature, Interface, InterpolatedString, InterpolatedStringPart, Literal, NewExpr, Phase,
 	Reference, Scope, Stmt, StmtKind, StructField, Symbol, TypeAnnotation, TypeAnnotationKind, UnaryOperator,
 	UserDefinedType,
 };
@@ -1343,12 +1343,12 @@ impl<'s> Parser<'s> {
 				};
 
 				Ok(Expr::new(
-					ExprKind::New {
+					ExprKind::New(NewExpr {
 						class: Box::new(class_udt_exp),
 						obj_id,
 						arg_list: arg_list?,
 						obj_scope,
-					},
+					}),
 					expression_span,
 				))
 			}
@@ -1860,7 +1860,7 @@ impl<'s> Parser<'s> {
 
 		let type_span = self.node_span(&statement_node.child(0).unwrap());
 		Ok(StmtKind::Expression(Expr::new(
-			ExprKind::New {
+			ExprKind::New(NewExpr {
 				class: Box::new(Expr::new(
 					ExprKind::Reference(Reference::TypeReference(UserDefinedType {
 						root: Symbol::global(WINGSDK_STD_MODULE),
@@ -1876,7 +1876,7 @@ impl<'s> Parser<'s> {
 					named_args: IndexMap::new(),
 					span: type_span.clone(),
 				},
-			},
+			}),
 			span,
 		)))
 	}
