@@ -180,17 +180,6 @@ pub fn parse(source_path: &Path) -> (Files, Scope) {
 		}
 	};
 
-	let mut files = Files::new();
-	match files.add_file(
-		source_path.to_path_buf(),
-		String::from_utf8(source.clone()).expect("Invalid UTF-8 sequence"),
-	) {
-		Ok(_) => {}
-		Err(err) => {
-			panic!("Failed adding source file to parser: {}", err);
-		}
-	}
-
 	let tree = match parser.parse(&source, None) {
 		Some(tree) => tree,
 		None => {
@@ -198,9 +187,11 @@ pub fn parse(source_path: &Path) -> (Files, Scope) {
 		}
 	};
 
-	let wing_parser = Parser::new(&source, source_path.to_str().unwrap().to_string());
+	let mut files = Files::new();
+	let wing_parser = Parser::new(&source, source_path.to_str().unwrap().to_string(), &mut files);
+	let scope = wing_parser.wingit(&tree.root_node());
 
-	(files, wing_parser.wingit(&tree.root_node()))
+	(files, scope)
 }
 
 pub fn type_check(
