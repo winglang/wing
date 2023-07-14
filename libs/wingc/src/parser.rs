@@ -579,6 +579,11 @@ impl<'s> Parser<'s> {
 		// and create a StmtKind::Module instead
 		if module_name.name.ends_with(".w\"") {
 			let source_path = Path::new(&module_name.name[1..module_name.name.len() - 1]);
+			let source_path = if source_path.is_absolute() {
+				source_path.to_path_buf()
+			} else {
+				Path::new(&self.source_name).parent().unwrap().join(source_path)
+			};
 			let scope = match fs::read(&source_path) {
 				Ok(source) => {
 					let parser = Parser::new(&source, module_name.name.clone());

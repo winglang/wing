@@ -3064,6 +3064,19 @@ impl<'a> TypeChecker<'a> {
 					stmt.idx,
 				));
 				self.inner_scopes.push(statements);
+
+				// let statement_env = statements.env.borrow().unwrap();
+				// let ns = self.types.add_namespace(Namespace {
+				// 	name: name.to_string(),
+				// 	env: statement_env.get_ref(),
+				// 	loaded: true,
+				// });
+				// match env.define(name, SymbolKind::Namespace(ns), StatementIdx::Top) {
+				// 	Err(type_error) => {
+				// 		self.type_error(type_error);
+				// 	}
+				// 	_ => {}
+				// };
 			}
 		}
 	}
