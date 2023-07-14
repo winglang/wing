@@ -15,8 +15,6 @@ sidebar_position: 100
 
 ### TestRunner <a name="TestRunner" id="@winglang/sdk.std.TestRunner"></a>
 
-**Inflight client:** [@winglang/sdk.cloud.ITestRunnerClient](#@winglang/sdk.cloud.ITestRunnerClient)
-
 A test engine.
 
 #### Initializers <a name="Initializers" id="@winglang/sdk.std.TestRunner.Initializer"></a>
@@ -39,9 +37,18 @@ new TestRunner(props?: TestRunnerProps);
 
 #### Methods <a name="Methods" id="Methods"></a>
 
+##### Preflight Methods
+
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/sdk.std.TestRunner.findTests">findTests</a></code> | Find all tests in the construct tree. |
+
+##### Inflight Methods
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.std.ITestRunnerClient.listTests">listTests</a></code> | List all tests available for this test engine. |
+| <code><a href="#@winglang/sdk.std.ITestRunnerClient.runTest">runTest</a></code> | Run a test with a given path and return the result. |
 
 ---
 
@@ -52,6 +59,28 @@ findTests(): MutArray<Test>
 ```
 
 Find all tests in the construct tree.
+
+##### `listTests` <a name="listTests" id="@winglang/sdk.std.ITestRunnerClient.listTests"></a>
+
+```wing
+inflight listTests(): MutArray<str>
+```
+
+List all tests available for this test engine.
+
+##### `runTest` <a name="runTest" id="@winglang/sdk.std.ITestRunnerClient.runTest"></a>
+
+```wing
+inflight runTest(path: str): TestResult
+```
+
+Run a test with a given path and return the result.
+
+###### `path`<sup>Required</sup> <a name="path" id="@winglang/sdk.std.ITestRunnerClient.runTest.parameter.path"></a>
+
+- *Type:* str
+
+---
 
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -2031,45 +2060,6 @@ type: TraceType;
 - *Type:* <a href="#@winglang/sdk.std.TraceType">TraceType</a>
 
 The type of a trace.
-
----
-
-## Protocols <a name="Protocols" id="Protocols"></a>
-
-### ITestRunnerClient <a name="ITestRunnerClient" id="@winglang/sdk.std.ITestRunnerClient"></a>
-
-- *Implemented By:* <a href="#@winglang/sdk.std.ITestRunnerClient">ITestRunnerClient</a>
-
-Inflight interface for `TestRunner`.
-
-#### Methods <a name="Methods" id="Methods"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@winglang/sdk.std.ITestRunnerClient.listTests">listTests</a></code> | List all tests available for this test engine. |
-| <code><a href="#@winglang/sdk.std.ITestRunnerClient.runTest">runTest</a></code> | Run a test with a given path and return the result. |
-
----
-
-##### `listTests` <a name="listTests" id="@winglang/sdk.std.ITestRunnerClient.listTests"></a>
-
-```wing
-inflight listTests(): MutArray<str>
-```
-
-List all tests available for this test engine.
-
-##### `runTest` <a name="runTest" id="@winglang/sdk.std.ITestRunnerClient.runTest"></a>
-
-```wing
-inflight runTest(path: str): TestResult
-```
-
-Run a test with a given path and return the result.
-
-###### `path`<sup>Required</sup> <a name="path" id="@winglang/sdk.std.ITestRunnerClient.runTest.parameter.path"></a>
-
-- *Type:* str
 
 ---
 

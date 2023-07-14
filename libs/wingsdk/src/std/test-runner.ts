@@ -17,7 +17,7 @@ export interface TestRunnerProps {}
 /**
  * A test engine.
  *
- * @inflight `@winglang/sdk.cloud.ITestRunnerClient`
+ * @inflight `@winglang/sdk.std.ITestRunnerClient`
  */
 export abstract class TestRunner extends Resource {
   /**
