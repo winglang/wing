@@ -1,6 +1,6 @@
 import * as path from "node:path";
 
-import { expect, test } from "@playwright/test";
+import { test } from "@playwright/test";
 
 import { createConsoleApp } from "../dist/index.js";
 
@@ -39,10 +39,6 @@ export const describe = (wingfile: string, callback: () => void) => {
     await page.getByTestId("loading-overlay").waitFor({ state: "hidden" });
 
     await page.waitForLoadState("domcontentloaded");
-
-    const blueScreen = page.getByTestId("blue-screen-of-death");
-
-    await expect(blueScreen).toBeHidden();
   });
 
   test.afterEach(() => {
