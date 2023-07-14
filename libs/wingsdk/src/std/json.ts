@@ -109,7 +109,7 @@ export class Json {
   /**
    * Try to parse a string into a Json
    *
-   * @macro ((args) => { try { return args && JSON.parse(args); } catch (err) { return undefined; } })($args$)
+   * @macro ((args) => { try { return (args === undefined) ? undefined : JSON.parse(args); } catch (err) { return undefined; } })($args$)
    *
    * @param str to parse as Json
    * @returns Json representation of the string or undefined if string is not parsable
@@ -133,7 +133,7 @@ export class Json {
     key;
     throw new Error("Macro");
   }
-  private constructor() {}
+  private constructor() { }
 
   /**
    * Returns a specified element from the Json.
@@ -264,7 +264,7 @@ export class MutJson {
   public static _toInflightType(): Code {
     return InflightClient.forType(__filename, this.name);
   }
-  private constructor() {}
+  private constructor() { }
 
   /**
    * Returns a specified element from the Json.

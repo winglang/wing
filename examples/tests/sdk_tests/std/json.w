@@ -36,8 +36,8 @@ test "setAt()" {
 //-----------------------------------------------------------------------------
 // tryParse()
 assert(Json.tryParse(nil) == nil);
-assert(Json.tryParse(12) == 12);
 assert(Json.tryParse("boom") == nil);
+assert(Json.tryParse("") == nil);
 
 
 /*
