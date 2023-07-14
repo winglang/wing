@@ -300,6 +300,9 @@ class $Root extends $stdlib.std.Resource {
     const e = (a)[2];
     {((cond) => {if (!cond) throw new Error("assertion failed: e.get(\"d\") == 3")})(((e)["d"] === 3))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:setAt()",new $Closure2(this,"$Closure2"));
+    {((cond) => {if (!cond) throw new Error("assertion failed: Json.tryParse(nil) == nil")})((((args) => { try { return (args === undefined) ? undefined : JSON.parse(args); } catch (err) { return undefined; } })(undefined) === undefined))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: Json.tryParse(\"boom\") == nil")})((((args) => { try { return (args === undefined) ? undefined : JSON.parse(args); } catch (err) { return undefined; } })("boom") === undefined))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: Json.tryParse(\"\") == nil")})((((args) => { try { return (args === undefined) ? undefined : JSON.parse(args); } catch (err) { return undefined; } })("") === undefined))};
   }
 }
 class $App extends $AppBase {
