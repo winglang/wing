@@ -7,7 +7,9 @@ import { getResourceNode } from "../helpers.js";
 
 const isDockerAvailable = () => {
   try {
-    execSync("docker ps");
+    execSync("docker ps", {
+      stdio: "ignore",
+    });
     return true;
   } catch {
     return false;
@@ -16,10 +18,7 @@ const isDockerAvailable = () => {
 
 describe(`${__dirname}/index.w`, () => {
   test.beforeAll(async () => {
-    if (!isDockerAvailable()) {
-      test.skip();
-      return;
-    }
+    test.skip(!isDockerAvailable(), "Docker is not available");
   });
 
   test("opens redis help", async ({ page }) => {
