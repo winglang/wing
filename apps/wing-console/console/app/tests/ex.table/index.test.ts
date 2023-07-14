@@ -1,10 +1,10 @@
-import { expect, test } from "@playwright/test";
+import { Page, expect, test } from "@playwright/test";
 
 import { describe } from "../describe.js";
 import { getResourceNode } from "../helpers.js";
 
 const addRow = async (
-  page,
+  page: Page,
   rowId: string,
   data?: {
     key: string;
