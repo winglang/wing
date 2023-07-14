@@ -211,7 +211,7 @@ pub fn type_check(
 	jsii_imports: &mut Vec<JsiiImportSpec>,
 ) {
 	assert!(scope.env.borrow().is_none(), "Scope should not have an env yet");
-	let env = SymbolEnv::new(None, types.void(), false, false, Phase::Preflight, 0);
+	let env = types.add_symbol_env(SymbolEnv::new(None, types.void(), false, false, Phase::Preflight, 0));
 	scope.set_env(env);
 
 	// note: Globals are emitted here and wrapped in "{ ... }" blocks. Wrapping makes these emissions, actual

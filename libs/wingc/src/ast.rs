@@ -8,7 +8,7 @@ use indexmap::{Equivalent, IndexMap, IndexSet};
 use itertools::Itertools;
 
 use crate::diagnostic::WingSpan;
-use crate::type_check::symbol_env::SymbolEnv;
+use crate::type_check::symbol_env::SymbolEnvRef;
 use crate::type_check::CLOSURE_CLASS_HANDLE_METHOD;
 
 static EXPR_COUNTER: AtomicUsize = AtomicUsize::new(0);
@@ -638,7 +638,7 @@ pub struct Scope {
 	pub statements: Vec<Stmt>,
 	pub span: WingSpan,
 	#[derivative(Debug = "ignore")]
-	pub env: RefCell<Option<SymbolEnv>>, // None after parsing, set to Some during type checking phase
+	pub env: RefCell<Option<SymbolEnvRef>>, // None after parsing, set to Some during type checking phase
 }
 
 impl Scope {
@@ -650,7 +650,7 @@ impl Scope {
 		}
 	}
 
-	pub fn set_env(&self, new_env: SymbolEnv) {
+	pub fn set_env(&self, new_env: SymbolEnvRef) {
 		let mut env = self.env.borrow_mut();
 		assert!((*env).is_none());
 		*env = Some(new_env);
