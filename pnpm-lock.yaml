@@ -954,6 +954,15 @@ importers:
         specifier: 1.7.0
         version: 1.7.0
 
+  examples/tests/sdk_tests:
+    dependencies:
+      nanoid:
+        specifier: ^3.3.6
+        version: 3.3.6
+      uuid:
+        specifier: ^9.0.0
+        version: 9.0.0
+
   examples/tests/valid:
     dependencies:
       '@aws-cdk/asset-awscli-v1':
@@ -12645,7 +12654,7 @@ packages:
     dependencies:
       semver: 7.5.2
       shelljs: 0.8.5
-      typescript: 5.2.0-dev.20230713
+      typescript: 5.2.0-dev.20230714
     dev: true
 
   /dset@3.1.2:
@@ -21627,8 +21636,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  /typescript@5.2.0-dev.20230713:
-    resolution: {integrity: sha512-A/crla7nXo4d7TVRlV4CUzxW218b2WupUrIMnnGBV1o0SQnckrszm0CUMRAYeKAB9lFIo/B1Gx1cBdvNQYiD4A==}
+  /typescript@5.2.0-dev.20230714:
+    resolution: {integrity: sha512-BZAU6XIqRwO7gRelEoc6iunX6belf+IGyqA79LQqldafiBahXQKYTeyW8V0/ABk7/FpWWk4qRIDDCy8DKWo4XQ==}
     engines: {node: '>=14.17'}
     hasBin: true
     dev: true
