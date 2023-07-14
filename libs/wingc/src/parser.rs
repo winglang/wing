@@ -592,15 +592,23 @@ impl<'s> Parser<'s> {
 		// and create a StmtKind::Module instead
 		if module_name.name.ends_with(".w\"") {
 			let source_path = Path::new(&module_name.name[1..module_name.name.len() - 1]);
+			let source_path = if source_path.starts_with("./") {
+				source_path.strip_prefix("./").unwrap()
+			} else {
+				source_path
+			};
 			let source_path = if source_path.is_absolute() {
 				source_path.to_path_buf()
 			} else {
 				Path::new(&self.source_name).parent().unwrap().join(source_path)
 			};
+			if source_path == Path::new(&self.source_name) {
+				return self.with_error("Cannot bring in the current module", statement_node);
+			}
 			let scope = match fs::read(&source_path) {
 				Ok(source) => {
 					let mut files = self.files.borrow_mut();
-					let parser = Parser::new(&source, module_name.name.clone(), *files);
+					let parser = Parser::new(&source, source_path.to_string_lossy().to_string(), *files);
 					let language = tree_sitter_wing::language();
 					let mut tree_sitter_parser = tree_sitter::Parser::new();
 					tree_sitter_parser.set_language(language).unwrap();
