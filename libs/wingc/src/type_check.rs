@@ -15,7 +15,7 @@ use crate::docs::Docs;
 use crate::{
 	dbg_panic, debug, WINGSDK_ARRAY, WINGSDK_ASSEMBLY_NAME, WINGSDK_BRINGABLE_MODULES, WINGSDK_DURATION, WINGSDK_JSON,
 	WINGSDK_MAP, WINGSDK_MUT_ARRAY, WINGSDK_MUT_JSON, WINGSDK_MUT_MAP, WINGSDK_MUT_SET, WINGSDK_RESOURCE, WINGSDK_SET,
-	WINGSDK_STD_MODULE, WINGSDK_STRING,
+	WINGSDK_STD_MODULE, WINGSDK_STRING, WINGSDK_STRUCT,
 };
 use derivative::Derivative;
 use indexmap::{IndexMap, IndexSet};
@@ -3981,7 +3981,10 @@ impl<'a> TypeChecker<'a> {
 					.unwrap(),
 				property,
 			),
-			Type::Struct(ref s) => self.get_property_from_class_like(s, property),
+			Type::Struct(ref s) => {
+        let new_class = self.hydrate_class_type_arguments(env, WINGSDK_STRUCT, vec![]);
+        self.get_property_from_class_like(new_class.as_class().unwrap(), property)
+      },
 			_ => {
 				self
 					.spanned_error_with_var(property, "Property not found".to_string())
