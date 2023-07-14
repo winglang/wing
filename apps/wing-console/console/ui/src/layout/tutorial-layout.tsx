@@ -101,13 +101,14 @@ export const TutorialLayout = ({ cloudAppState }: LayoutProps) => {
           },
         )}
       >
-        <BlueScreenOfDeath
-          hidden={cloudAppState !== "error"}
-          title={"An error has occurred:"}
-          error={errorMessage.data ?? ""}
-          displayLinks={false}
-          displayWingTitle={false}
-        />
+        {cloudAppState === "error" && (
+          <BlueScreenOfDeath
+            title={"An error has occurred:"}
+            error={errorMessage.data ?? ""}
+            displayLinks={false}
+            displayWingTitle={false}
+          />
+        )}
         <div
           className={classNames(
             theme.border3,
