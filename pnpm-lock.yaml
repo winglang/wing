@@ -954,6 +954,15 @@ importers:
         specifier: 1.7.0
         version: 1.7.0
 
+  examples/tests/sdk_tests:
+    dependencies:
+      nanoid:
+        specifier: ^3.3.6
+        version: 3.3.6
+      uuid:
+        specifier: ^9.0.0
+        version: 9.0.0
+
   examples/tests/valid:
     dependencies:
       '@aws-cdk/asset-awscli-v1':
@@ -1105,6 +1114,9 @@ importers:
       mime-types:
         specifier: ^2.1.35
         version: 2.1.35
+      nanoid:
+        specifier: ^3.3.6
+        version: 3.3.6
       safe-stable-stringify:
         specifier: ^2.4.3
         version: 2.4.3
@@ -1196,9 +1208,6 @@ importers:
       jsii-pacmak:
         specifier: ^1.73.0
         version: 1.84.0
-      nanoid:
-        specifier: ^3.3.4
-        version: 3.3.4
       npm-check-updates:
         specifier: ^16
         version: 16.0.0
@@ -12645,7 +12654,7 @@ packages:
     dependencies:
       semver: 7.5.2
       shelljs: 0.8.5
-      typescript: 5.2.0-dev.20230712
+      typescript: 5.2.0-dev.20230714
     dev: true
 
   /dset@3.1.2:
@@ -17914,12 +17923,6 @@ packages:
     resolution: {integrity: sha512-2ZTgtl0nJsO0KQCjEpxcIr5D+Yv90plTitZt9JBfQvVJDS5seMl3FOvsh3+9CoYWXf/1l5OaZzzF6nDm4cagaQ==}
     dev: true
 
-  /nanoid@3.3.4:
-    resolution: {integrity: sha512-MqBkQh/OHTS2egovRtLk45wEyNXwF+cokD+1YPf9u5VfJiRdAiRwB2froX5Co9Rh20xs4siNPm8naNotSD6RBw==}
-    engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
-    hasBin: true
-    dev: true
-
   /nanoid@3.3.6:
     resolution: {integrity: sha512-BGcqMMJuToF7i1rt+2PWSNVnWIkGCU78jBG3RxO/bZlnZPK2Cmi2QaffxGO/2RvWi9sL+FAiRiXMgsyxQ1DIDA==}
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
@@ -21633,8 +21636,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  /typescript@5.2.0-dev.20230712:
-    resolution: {integrity: sha512-F/VND6YrBGr8RvnmpFpTDC5sT0Hh5cuXFWurGEhSBjwXodW+POmfGU0uLn+s/Rl0+Yvffpd2WRrpYC7bSDQS/Q==}
+  /typescript@5.2.0-dev.20230714:
+    resolution: {integrity: sha512-BZAU6XIqRwO7gRelEoc6iunX6belf+IGyqA79LQqldafiBahXQKYTeyW8V0/ABk7/FpWWk4qRIDDCy8DKWo4XQ==}
     engines: {node: '>=14.17'}
     hasBin: true
     dev: true
