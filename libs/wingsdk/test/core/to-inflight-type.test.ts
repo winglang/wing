@@ -9,6 +9,10 @@ const skip = [
   "std.TEST_FQN",
   "std.Display",
   "std.Test",
+  "std.TestRunner",
+  "std.TestRunnerInflightMethods",
+  "std.TraceType",
+  "std.TEST_RUNNER_FQN",
   "std.Resource",
   "util.RequestCache", // an enum
   "util.RequestRedirect", // an enum

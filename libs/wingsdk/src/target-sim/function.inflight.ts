@@ -8,8 +8,9 @@ import {
   FunctionAttributes,
   FunctionSchema,
 } from "./schema-resources";
-import { IFunctionClient, TraceType } from "../cloud";
+import { IFunctionClient } from "../cloud";
 import { Bundle, createBundle } from "../shared/bundling";
+import { TraceType } from "../std";
 import {
   ISimulatorContext,
   ISimulatorResourceInstance,

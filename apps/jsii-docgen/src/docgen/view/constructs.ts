@@ -17,6 +17,11 @@ export class Constructs {
     this.constructs = classes
       .filter((c) => Class.isConstruct(c))
       .map((c) => {
+        if (c.inflightFqn && !interfaces[c.inflightFqn]) {
+          throw new Error(
+            `Inflight interface "${c.inflightFqn}" not found for class "${c.fqn}"`
+          );
+        }
         return new Construct(
           transpile,
           c,

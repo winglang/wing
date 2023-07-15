@@ -3,7 +3,8 @@ use indexmap::IndexMap;
 use crate::{
 	ast::{
 		ArgList, Class, ClassField, Expr, ExprKind, FunctionBody, FunctionDefinition, FunctionParameter, FunctionSignature,
-		Literal, Phase, Reference, Scope, Stmt, StmtKind, Symbol, TypeAnnotation, TypeAnnotationKind, UserDefinedType,
+		Literal, NewExpr, Phase, Reference, Scope, Stmt, StmtKind, Symbol, TypeAnnotation, TypeAnnotationKind,
+		UserDefinedType,
 	},
 	diagnostic::WingSpan,
 	fold::{self, Fold},
@@ -285,7 +286,7 @@ impl Fold for ClosureTransformer {
 				// new <new_class_name>();
 				// ```
 				let new_class_instance = Expr::new(
-					ExprKind::New {
+					ExprKind::New(NewExpr {
 						class: Box::new(class_udt.to_expression()),
 						arg_list: ArgList {
 							named_args: IndexMap::new(),
@@ -294,7 +295,7 @@ impl Fold for ClosureTransformer {
 						},
 						obj_id: None,
 						obj_scope: None,
-					},
+					}),
 					expr.span.clone(), // <<-- span of original expression
 				);
 

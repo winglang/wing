@@ -3,7 +3,8 @@ import {
   ServiceAttributes,
   ServiceSchema,
 } from "./schema-resources";
-import { IFunctionClient, IServiceClient, TraceType } from "../cloud";
+import { IFunctionClient, IServiceClient } from "../cloud";
+import { TraceType } from "../std";
 import { ISimulatorContext, ISimulatorResourceInstance } from "../testing";
 
 export class Service implements IServiceClient, ISimulatorResourceInstance {

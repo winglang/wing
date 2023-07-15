@@ -214,8 +214,12 @@ impl<'a> Visit<'a> for HoverVisitor<'a> {
 		self.current_expr = Some(node);
 
 		match &node.kind {
-			ExprKind::New { arg_list, .. } => {
-				let x = arg_list.named_args.iter().find(|a| a.0.span.contains(&self.position));
+			ExprKind::New(new_expr) => {
+				let x = new_expr
+					.arg_list
+					.named_args
+					.iter()
+					.find(|a| a.0.span.contains(&self.position));
 				if let Some((arg_name, ..)) = x {
 					// we need to get the struct type from the class constructor
 					let class_type = self.types.get_expr_type(node);

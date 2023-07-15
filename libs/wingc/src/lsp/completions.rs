@@ -276,7 +276,9 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 		{
 			if let Some(callish_expr) = scope_visitor.expression_trail.iter().rev().find_map(|e| match &e.kind {
 				ExprKind::Call { arg_list, callee } => Some((types.get_expr_type(&callee), arg_list)),
-				ExprKind::New { class, arg_list, .. } => Some((types.get_expr_type(&class), arg_list)),
+				ExprKind::New(new_expr) => {
+					Some((types.get_expr_type(&new_expr.class), &new_expr.arg_list))
+				}
 				_ => None,
 			}) {
 				let mut completions = get_current_scope_completions(&scope_visitor, &node_to_complete, preceding_text);

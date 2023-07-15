@@ -2,8 +2,8 @@ import { Server } from "http";
 import { AddressInfo } from "net";
 import express from "express";
 import { ApiAttributes, WebsiteSchema, WEBSITE_TYPE } from "./schema-resources";
-import { TraceType, IWebsiteClient } from "../cloud";
-import { Json } from "../std";
+import { IWebsiteClient } from "../cloud";
+import { Json, TraceType } from "../std";
 import {
   ISimulatorContext,
   ISimulatorResourceInstance,

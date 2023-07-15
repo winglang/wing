@@ -1,4 +1,4 @@
-import { TestResult } from "@winglang/sdk/lib/cloud";
+import { TestResult } from "@winglang/sdk/lib/std";
 import { z } from "zod";
 
 import { ConsoleLogger } from "../consoleLogger.js";

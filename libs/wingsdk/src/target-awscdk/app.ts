@@ -19,11 +19,11 @@ import {
   FUNCTION_FQN,
   QUEUE_FQN,
   SECRET_FQN,
-  TEST_RUNNER_FQN,
   TOPIC_FQN,
 } from "../cloud";
 import { App as CoreApp, AppProps, preSynthesizeAllConstructs } from "../core";
 import { PluginManager } from "../core/plugin-manager";
+import { TEST_RUNNER_FQN } from "../std";
 
 /**
  * AWS-CDK App props
@@ -100,6 +100,8 @@ export class App extends CoreApp {
     this.isTestEnvironment = props.isTestEnvironment ?? false;
     this._tokens = new CdkTokens();
     this.testRunner = new TestRunner(this, "cloud.TestRunner");
+
+    this.synthRoots(props, this.testRunner);
   }
 
   /**
