@@ -19,7 +19,7 @@ export class BucketClient implements IBucketClient {
   constructor(
     private readonly bucketName: string,
     private readonly s3Client = new S3Client({})
-  ) {}
+  ) { }
 
   /**
    * Check if an object exists in the bucket
@@ -85,8 +85,7 @@ export class BucketClient implements IBucketClient {
       return await consumers.text(resp.Body as Readable);
     } catch (e) {
       throw new Error(
-        `Object contents could not be read as text (key=${key}): ${
-          (e as Error).stack
+        `Object contents could not be read as text (key=${key}): ${(e as Error).stack
         })}`
       );
     }
@@ -205,6 +204,7 @@ export class BucketClient implements IBucketClient {
     }
     return list;
   }
+
   /**
    * checks if the bucket is public
    * @returns true if the bucket is public and false otherwise
@@ -252,7 +252,7 @@ export class BucketClient implements IBucketClient {
    * @param key The key to reach
    * @param duration Time until expires
    */
-  public async signed_url(key: string, duration?: Duration): Promise<string> {
+  public async signedUrl(key: string, duration?: Duration): Promise<string> {
     // for signed_url take a look here: https://docs.aws.amazon.com/sdk-for-javascript/v3/developer-guide/s3-example-creating-buckets.html#s3-create-presigendurl-get
     throw new Error(
       `signed_url is not implemented yet (key=${key}, duration=${duration})`
