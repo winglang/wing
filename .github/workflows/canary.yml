@@ -10,6 +10,8 @@ on:
 jobs:
   install:
     name: Installation User Flow
+    env:
+      WING_DISABLE_ANALYTICS: true
     strategy:
       fail-fast: true
       matrix:
