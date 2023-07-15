@@ -43,6 +43,7 @@ export class Function extends cloud.Function {
       timeout: props.timeout
         ? Duration.seconds(props.timeout.seconds)
         : Duration.minutes(0.5),
+      memorySize: props.memory ? props.memory : undefined,
     });
 
     this.arn = this.function.functionArn;
