@@ -272,10 +272,7 @@ where
 		ExprKind::Call { callee, arg_list } => ExprKind::Call {
 			callee: match callee {
 				CalleeKind::Expr(expr) => CalleeKind::Expr(Box::new(f.fold_expr(*expr))),
-				CalleeKind::SuperCall { method, alternate_this } => CalleeKind::SuperCall {
-					method: f.fold_symbol(method),
-					alternate_this: alternate_this,
-				},
+				CalleeKind::SuperCall(method) => CalleeKind::SuperCall(f.fold_symbol(method)),
 			},
 			arg_list: f.fold_args(arg_list),
 		},

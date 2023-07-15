@@ -561,21 +561,14 @@ pub enum CalleeKind {
 	/// The callee is any expression
 	Expr(Box<Expr>),
 	/// The callee is a method in our super class
-	SuperCall {
-		method: Symbol,
-
-		/// Special case: When we transform a closure to a class (closure_transofrm.rs), we replace `this` access with the outer
-		/// class instance by generating an alrenate `this` identifier. We need to know the name of this identifier to generate
-		/// correct access to the super class method after the closure transformation.
-		alternate_this: Option<String>,
-	},
+	SuperCall(Symbol),
 }
 
 impl Spanned for CalleeKind {
 	fn span(&self) -> WingSpan {
 		match self {
 			CalleeKind::Expr(e) => e.span.clone(),
-			CalleeKind::SuperCall { method, .. } => method.span(),
+			CalleeKind::SuperCall(method) => method.span(),
 		}
 	}
 }

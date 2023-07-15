@@ -66,10 +66,8 @@ pub fn on_signature_help(params: lsp_types::SignatureHelpParams) -> Option<Signa
 			ExprKind::Call { callee, arg_list } => {
 				let t = match callee {
 					crate::ast::CalleeKind::Expr(expr) => file_data.types.get_expr_type(expr),
-					crate::ast::CalleeKind::SuperCall { method, alternate_this } => {
-						resolve_super_method(method, alternate_this, &env, &file_data.types)
-							.ok()
-							.map(|t| t.0)
+					crate::ast::CalleeKind::SuperCall(method) => {
+						resolve_super_method(method, &env, &file_data.types).ok().map(|t| t.0)
 					}
 				};
 

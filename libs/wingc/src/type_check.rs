@@ -1615,12 +1615,10 @@ impl<'a> TypeChecker<'a> {
 				// Resolve the function's reference (either a method in the class's env or a function in the current env)
 				let (func_type, callee_phase) = match callee {
 					CalleeKind::Expr(expr) => self.type_check_exp(expr, env),
-					CalleeKind::SuperCall { method, alternate_this } => {
-						resolve_super_method(method, alternate_this, env, &self.types).unwrap_or_else(|e| {
-							self.type_error(e);
-							self.resolved_error()
-						})
-					}
+					CalleeKind::SuperCall(method) => resolve_super_method(method, env, &self.types).unwrap_or_else(|e| {
+						self.type_error(e);
+						self.resolved_error()
+					}),
 				};
 				let is_option = func_type.is_option();
 				let func_type = func_type.maybe_unwrap_option();
@@ -4190,13 +4188,8 @@ pub fn resolve_user_defined_type(
 	}
 }
 
-pub fn resolve_super_method(
-	method: &Symbol,
-	this_name: &Option<String>,
-	env: &SymbolEnv,
-	types: &Types,
-) -> Result<(TypeRef, Phase), TypeError> {
-	let this_type = env.lookup(&Symbol::global(this_name.as_ref().unwrap_or(&"this".to_string())), None);
+pub fn resolve_super_method(method: &Symbol, env: &SymbolEnv, types: &Types) -> Result<(TypeRef, Phase), TypeError> {
+	let this_type = env.lookup(&Symbol::global("this"), None);
 	if let Some(SymbolKind::Variable(VariableInfo {
 		type_,
 		kind: VariableKind::Free,

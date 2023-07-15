@@ -2,11 +2,10 @@ use indexmap::IndexMap;
 
 use crate::{
 	ast::{
-		ArgList, CalleeKind, Class, ClassField, Expr, ExprKind, FunctionBody, FunctionDefinition, FunctionParameter,
-		FunctionSignature, Literal, Phase, Reference, Scope, Stmt, StmtKind, Symbol, TypeAnnotation, TypeAnnotationKind,
-		UserDefinedType,
+		ArgList, Class, ClassField, Expr, ExprKind, FunctionBody, FunctionDefinition, FunctionParameter, FunctionSignature,
+		Literal, Phase, Reference, Scope, Stmt, StmtKind, Symbol, TypeAnnotation, TypeAnnotationKind, UserDefinedType,
 	},
-	diagnostic::{report_diagnostic, Diagnostic, WingSpan},
+	diagnostic::WingSpan,
 	fold::{self, Fold},
 	type_check::{CLASS_INFLIGHT_INIT_NAME, CLASS_INIT_NAME, CLOSURE_CLASS_HANDLE_METHOD},
 };

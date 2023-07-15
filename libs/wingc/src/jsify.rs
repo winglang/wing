@@ -415,14 +415,14 @@ impl<'a> JSifier<'a> {
 
 				let function_type = match callee {
 					CalleeKind::Expr(expr) => self.get_expr_type(expr),
-					CalleeKind::SuperCall{method,alternate_this} => resolve_super_method(method, alternate_this, ctx.visit_ctx.current_env().expect("an env"), self.types).expect("valid super method").0
+					CalleeKind::SuperCall(method) => resolve_super_method(method, ctx.visit_ctx.current_env().expect("an env"), self.types).expect("valid super method").0
 				};
 				let is_option = function_type.is_option();
 				let function_type = function_type.maybe_unwrap_option();
 				let function_sig = function_type.as_function_sig();
 				let expr_string = match callee {
         		CalleeKind::Expr(expr) => self.jsify_expression(expr, ctx),
-        		CalleeKind::SuperCall{method, ..} => format!("super.{}", method),
+        		CalleeKind::SuperCall(method) => format!("super.{}", method),
     		}; 
 				let args_string = self.jsify_arg_list(&arg_list, None, None, ctx);
 				let mut args_text_string = lookup_span(&arg_list.span, &self.source_files);
