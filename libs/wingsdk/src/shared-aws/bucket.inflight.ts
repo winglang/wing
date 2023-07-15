@@ -19,7 +19,7 @@ export class BucketClient implements IBucketClient {
   constructor(
     private readonly bucketName: string,
     private readonly s3Client = new S3Client({})
-  ) { }
+  ) {}
 
   /**
    * Check if an object exists in the bucket
@@ -85,7 +85,8 @@ export class BucketClient implements IBucketClient {
       return await consumers.text(resp.Body as Readable);
     } catch (e) {
       throw new Error(
-        `Object contents could not be read as text (key=${key}): ${(e as Error).stack
+        `Object contents could not be read as text (key=${key}): ${
+          (e as Error).stack
         })}`
       );
     }
