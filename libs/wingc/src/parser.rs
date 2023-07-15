@@ -1497,7 +1497,10 @@ impl<'s> Parser<'s> {
 			"call" => {
 				let caller_node = expression_node.child_by_field_name("caller").unwrap();
 				let callee = if caller_node.kind() == "super_call" {
-					CalleeKind::SuperCall(self.node_symbol(&caller_node.child_by_field_name("method").unwrap())?)
+					CalleeKind::SuperCall {
+						method: self.node_symbol(&caller_node.child_by_field_name("method").unwrap())?,
+						alternate_this: None,
+					}
 				} else {
 					CalleeKind::Expr(Box::new(self.build_expression(&caller_node, phase)?))
 				};

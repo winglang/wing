@@ -321,7 +321,7 @@ where
 		ExprKind::Call { callee, arg_list } => {
 			match callee {
 				CalleeKind::Expr(expr) => v.visit_expr(expr),
-				CalleeKind::SuperCall(method) => v.visit_symbol(method),
+				CalleeKind::SuperCall { method, .. } => v.visit_symbol(method),
 			}
 			v.visit_args(arg_list);
 		}

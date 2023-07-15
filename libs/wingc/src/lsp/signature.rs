@@ -4,13 +4,13 @@ use lsp_types::{
 	SignatureInformation,
 };
 
-use crate::ast::{Class, Expr, ExprKind, Symbol};
+use crate::ast::{Expr, ExprKind, Symbol};
 use crate::docs::Documented;
 use crate::lsp::sync::FILES;
 
 use crate::type_check::symbol_env::SymbolEnvRef;
 use crate::type_check::{resolve_super_method, resolve_user_defined_type, CLASS_INIT_NAME};
-use crate::visit::{visit_class, visit_expr, visit_scope, Visit};
+use crate::visit::{visit_expr, visit_scope, Visit};
 use crate::wasm_util::{ptr_to_string, string_to_combined_ptr, WASM_RETURN_ERROR};
 
 #[no_mangle]
@@ -66,8 +66,10 @@ pub fn on_signature_help(params: lsp_types::SignatureHelpParams) -> Option<Signa
 			ExprKind::Call { callee, arg_list } => {
 				let t = match callee {
 					crate::ast::CalleeKind::Expr(expr) => file_data.types.get_expr_type(expr),
-					crate::ast::CalleeKind::SuperCall(method) => {
-						resolve_super_method(method, &env, &file_data.types).ok().map(|t| t.0)
+					crate::ast::CalleeKind::SuperCall { method, alternate_this } => {
+						resolve_super_method(method, alternate_this, &env, &file_data.types)
+							.ok()
+							.map(|t| t.0)
 					}
 				};
 
@@ -212,7 +214,7 @@ impl<'a> Visit<'a> for ScopeVisitor<'a> {
 			match node.kind {
 				ExprKind::Call { .. } | ExprKind::New { .. } => {
 					self.call_expr = Some(node);
-					self.call_env = Some(self.curr_env.last().unwrap().clone());
+					self.call_env = Some(*self.curr_env.last().unwrap());
 				}
 				_ => {}
 			}

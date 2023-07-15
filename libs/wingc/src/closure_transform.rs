@@ -2,10 +2,11 @@ use indexmap::IndexMap;
 
 use crate::{
 	ast::{
-		ArgList, Class, ClassField, Expr, ExprKind, FunctionBody, FunctionDefinition, FunctionParameter, FunctionSignature,
-		Literal, Phase, Reference, Scope, Stmt, StmtKind, Symbol, TypeAnnotation, TypeAnnotationKind, UserDefinedType,
+		ArgList, CalleeKind, Class, ClassField, Expr, ExprKind, FunctionBody, FunctionDefinition, FunctionParameter,
+		FunctionSignature, Literal, Phase, Reference, Scope, Stmt, StmtKind, Symbol, TypeAnnotation, TypeAnnotationKind,
+		UserDefinedType,
 	},
-	diagnostic::WingSpan,
+	diagnostic::{report_diagnostic, Diagnostic, WingSpan},
 	fold::{self, Fold},
 	type_check::{CLASS_INFLIGHT_INIT_NAME, CLASS_INIT_NAME, CLOSURE_CLASS_HANDLE_METHOD},
 };
@@ -159,7 +160,6 @@ impl Fold for ClosureTransformer {
 					// to `this` with `__parent_this_${CLOSURE_COUNT}` so that they can access the parent class's fields.
 					let parent_this = format!("{}_{}", PARENT_THIS_NAME, self.closure_counter);
 					let mut this_transform = RenameThisTransformer {
-						from: "this",
 						to: parent_this.as_str(),
 						inside_class: false,
 					};
@@ -309,7 +309,6 @@ impl Fold for ClosureTransformer {
 
 /// Rename all occurrences of an identifier inside an inflight closure to a new name.
 struct RenameThisTransformer<'a> {
-	from: &'a str,
 	to: &'a str,
 	// The transform shouldn't change references to `this` inside inflight classes since
 	// they refer to different objects.
@@ -319,7 +318,6 @@ struct RenameThisTransformer<'a> {
 impl Default for RenameThisTransformer<'_> {
 	fn default() -> Self {
 		Self {
-			from: "this",
 			to: PARENT_THIS_NAME,
 			inside_class: false,
 		}
@@ -338,7 +336,7 @@ impl<'a> Fold for RenameThisTransformer<'a> {
 	fn fold_reference(&mut self, node: Reference) -> Reference {
 		match node {
 			Reference::Identifier(ident) => {
-				if !self.inside_class && ident.name == self.from {
+				if !self.inside_class && ident.name == "this" {
 					Reference::Identifier(Symbol {
 						name: self.to.to_string(),
 						span: ident.span,
@@ -351,5 +349,65 @@ impl<'a> Fold for RenameThisTransformer<'a> {
 				fold::fold_reference(self, node)
 			}
 		}
+	}
+
+	fn fold_expr(&mut self, node: Expr) -> Expr {
+		// Super calls inside inflight closures isn't currently supported, because we don't have access to the containing class's
+		// `super`.
+		// if matches!(
+		// 	node,
+		// 	Expr {
+		// 		kind: ExprKind::Call {
+		// 			callee: CalleeKind::SuperCall { .. },
+		// 			..
+		// 		},
+		// 		..
+		// 	}
+		// ) {
+		// 	report_diagnostic(Diagnostic {
+		// 		message: "`super` calls inside inflight closures not supported yet, see:".to_string(),
+		// 		span: Some(node.span.clone()),
+		// 	});
+		// }
+		return fold::fold_expr(self, node);
+
+		// // If this is anything but a super call, we don't need to do anything
+		// let Expr {kind: ExprKind::Call { callee: CalleeKind::SuperCall{method, ..}, arg_list }, ..} = node else {
+		// 		return fold::fold_expr(self, node);
+		// 	};
+
+		// Expr {
+		// 	kind: ExprKind::Call {
+		// 		callee: CalleeKind::SuperCall {
+		// 			method,
+		// 			alternate_this: Some(self.to.to_string()),
+		// 		},
+		// 		arg_list,
+		// 	},
+		// 	..node
+		// }
+		// super.do() -> ExtendedClass::do(other_self,...)
+
+		// Create a method call on the parent of the renamed `this`
+		// Expr::new(
+		// 	ExprKind::Call {
+		// 		callee: CalleeKind::Expr(Box::new(Expr::new(
+		// 			ExprKind::Reference(Reference::InstanceMember {
+		// 				object: Box::new(Expr::new(
+		// 					ExprKind::Reference(Reference::Identifier(Symbol {
+		// 						name: self.to.to_string(),
+		// 						span: node.span.clone(),
+		// 					})),
+		// 					node.span.clone(),
+		// 				)),
+		// 				property: fold::fold_symbol(self, method),
+		// 				optional_accessor: false,
+		// 			}),
+		// 			node.span.clone(),
+		// 		))),
+		// 		arg_list: fold::fold_args(self, arg_list),
+		// 	},
+		// 	node.span.clone(),
+		// )
 	}
 }
