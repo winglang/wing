@@ -226,7 +226,7 @@ While inflight code can't call preflight code, it's perfectly ok to reference da
 For example, the `cloud.Api` class has a preflight field named `url`.
 Since it's a piece of static data, it can be directly referenced inflight:
 
-```js playground
+```js
 bring cloud;
 bring http;
 
@@ -259,7 +259,8 @@ names.push("Jack"); // OK
 
 inflight () => {
   count = count + 1; // error: Variable cannot be reassigned from inflight
-  names.push("Jill"); // error: variable "names" cannot be mutated in inflight
+  names.push("Jill"); // error: variable "names" cannot be mutated in inflight - error message not 
+                      // implemented yet, see https://github.com/winglang/wing/issues/3069
 };
 ```
 
