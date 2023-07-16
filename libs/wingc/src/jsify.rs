@@ -929,26 +929,6 @@ impl<'a> JSifier<'a> {
 	}
 
 	fn jsify_class(&self, env: &SymbolEnv, class: &AstClass, ctx: &mut JSifyContext) -> CodeMaker {
-		// extract the "env" from the class initializer and push it to the context
-		// because this is the environment in which we want to resolve references
-		// as oppose to the environment of the class definition itself.
-		let init_env = if let FunctionBody::Statements(ref s) = class.initializer.body {
-			Some(s.env.borrow().as_ref().unwrap().get_ref())
-		} else {
-			None
-		};
-		ctx.visit_ctx.push_class(
-			UserDefinedType {
-				root: class.name.clone(),
-				fields: vec![],
-				span: class.name.span.clone(),
-			},
-			// TODO: this is a bit weird, we preserve the phase instead of using the phase of the class so we can distinguish between
-			// an inflight class defined in preflight and an inflight class defined in inflight.
-			&ctx.visit_ctx.current_phase(),
-			init_env,
-		);
-
 		// lookup the class type
 		let class_type = env.lookup(&class.name, None).unwrap().as_type().unwrap();
 
@@ -972,7 +952,6 @@ impl<'a> JSifier<'a> {
 		// if this is inflight/independent, class, just emit the inflight class code inline and move on
 		// with your life.
 		if ctx.visit_ctx.current_phase() != Phase::Preflight {
-			ctx.visit_ctx.pop_class();
 			return inflight_class_code;
 		}
 
@@ -1011,7 +990,6 @@ impl<'a> JSifier<'a> {
 		code.add_code(self.jsify_register_bind_method(class, class_type, BindMethod::Type, ctx));
 
 		code.close("}");
-		ctx.visit_ctx.pop_class();
 		code
 	}
 
