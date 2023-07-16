@@ -80,7 +80,7 @@ new cloud.Function(inflight ()=> {
     log("Running on the cloud, sleeping for 30s");
     util.sleep(30s);
   }
-  log("Function invoked ${invokationCounter.peek()} times");
+  log("Function invoked ${invocationCounter.peek()} times");
 });
 ```
 
