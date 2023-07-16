@@ -9,6 +9,7 @@ import { Counter } from "./counter";
 import { Function } from "./function";
 import { Queue } from "./queue";
 import { Secret } from "./secret";
+import { Schedule } from "./schedule";
 import { TestRunner } from "./test-runner";
 import { CdkTokens } from "./tokens";
 import { Topic } from "./topic";
@@ -20,6 +21,7 @@ import {
   QUEUE_FQN,
   SECRET_FQN,
   TOPIC_FQN,
+  SCHEDULE_FQN,
 } from "../cloud";
 import { App as CoreApp, AppProps, preSynthesizeAllConstructs } from "../core";
 import { PluginManager } from "../core/plugin-manager";
@@ -144,6 +146,9 @@ export class App extends CoreApp {
 
       case COUNTER_FQN:
         return new Counter(scope, id, args[0]);
+
+      case SCHEDULE_FQN:
+        return new Schedule(scope, id, args[0]);
 
       case QUEUE_FQN:
         return new Queue(scope, id, args[0]);
