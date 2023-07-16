@@ -82,6 +82,7 @@ Each method creates a new `cloud.Function` resource which will be triggered by t
 
 ```js playground
 bring cloud;
+
 let store = new cloud.Bucket();
 let copies = new cloud.Bucket() as "Backup";
 
