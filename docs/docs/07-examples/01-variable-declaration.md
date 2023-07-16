@@ -21,7 +21,7 @@ let x2: num = 12; // equivalent
 ```
 
 ### Optionals
-```ts playground
+```ts
 let var x1 = "Hello"; // type str, value "Hello"
 let var x2: str = "Hello"; // same as above 
 let var x3: str? = "Hello"; // type str? (optional), value "Hello"
