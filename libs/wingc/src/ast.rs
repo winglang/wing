@@ -232,7 +232,13 @@ impl Display for FunctionSignature {
 		let params_str = self
 			.parameters
 			.iter()
-			.map(|a| format!("{}: {}", a.name, a.type_annotation))
+			.map(|a| {
+				if a.name.name.is_empty() {
+					format!("{}", a.type_annotation)
+				} else {
+					format!("{}: {}", a.name, a.type_annotation)
+				}
+			})
 			.collect::<Vec<String>>()
 			.join(", ");
 

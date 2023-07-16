@@ -40,12 +40,14 @@ export interface FilePreviewProps {
   filename: string;
   content: string;
   className?: string;
+  dataTestid?: string;
 }
 
 export const FilePreview = ({
   filename,
   content,
   className,
+  dataTestid,
 }: FilePreviewProps) => {
   const { theme } = useTheme();
 
@@ -67,6 +69,7 @@ export const FilePreview = ({
             theme.focusInput,
             "flex flex-col grow",
           )}
+          data-testid={dataTestid}
         >
           {type === "image" && (
             <img
@@ -127,6 +130,7 @@ export const FilePreview = ({
           )}
           text={content}
           json
+          dataTestid={dataTestid}
         />
       )}
     </>

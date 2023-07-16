@@ -65,13 +65,15 @@ const WINGSDK_CLOUD_MODULE: &'static str = "cloud";
 const WINGSDK_UTIL_MODULE: &'static str = "util";
 const WINGSDK_HTTP_MODULE: &'static str = "http";
 const WINGSDK_MATH_MODULE: &'static str = "math";
+const WINGSDK_AWS_MODULE: &'static str = "aws";
 const WINGSDK_EX_MODULE: &'static str = "ex";
 
-const WINGSDK_BRINGABLE_MODULES: [&'static str; 5] = [
+const WINGSDK_BRINGABLE_MODULES: [&'static str; 6] = [
 	WINGSDK_CLOUD_MODULE,
 	WINGSDK_UTIL_MODULE,
 	WINGSDK_HTTP_MODULE,
 	WINGSDK_MATH_MODULE,
+	WINGSDK_AWS_MODULE,
 	WINGSDK_EX_MODULE,
 ];
 

@@ -178,7 +178,7 @@ impl<'a> Fold for LiftTransform<'a> {
 		CompilationContext::set(CompilationPhase::Lifting, &node.span);
 
 		let expr_phase = self.jsify.types.get_expr_phase(&node).unwrap();
-		let expr_type = self.jsify.types.get_expr_type(&node).unwrap();
+		let expr_type = self.jsify.types.get_expr_type(&node);
 
 		// this whole thing only applies to inflight expressions
 		if self.ctx.current_phase() == Phase::Preflight {

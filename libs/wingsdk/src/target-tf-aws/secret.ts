@@ -55,9 +55,7 @@ export class Secret extends cloud.Secret {
       throw new Error("secrets can only be bound by tfaws.Function for now");
     }
 
-    host.addPolicyStatements(
-      ...calculateSecretPermissions(this.secret.arn, ops)
-    );
+    host.addPolicyStatements(calculateSecretPermissions(this.secret.arn, ops));
 
     host.addEnvironment(this.envName(), this.secret.arn);
 

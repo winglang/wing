@@ -27,8 +27,7 @@ The toolchain includes three tools:
 
 To install Wing, you will need the following setup:
 
-* [Node.js](https://nodejs.org/en/) (v18 or later)
-    * We recommend [volta](https://volta.sh) to manage node tools
+* [Node.js](https://nodejs.org/en/) (>= 18.13.0)
 * [VSCode]
     * Not required, but currently supported with an [extension](#wing-ide-extension)
 
@@ -64,6 +63,7 @@ You can also just delete `~/.npmrc` if there are no other registries that you ar
 </details>
 
 <br/>
+
 Install the Wing CLI through npm:
 
 ```sh

@@ -71,16 +71,18 @@ export class Queue extends cloud.Queue {
       throw new Error("Queue only supports creating tfaws.Function right now");
     }
 
-    fn.addPolicyStatements({
-      actions: [
-        "sqs:ReceiveMessage",
-        "sqs:ChangeMessageVisibility",
-        "sqs:GetQueueUrl",
-        "sqs:DeleteMessage",
-        "sqs:GetQueueAttributes",
-      ],
-      resources: [this.queue.arn],
-    });
+    fn.addPolicyStatements([
+      {
+        actions: [
+          "sqs:ReceiveMessage",
+          "sqs:ChangeMessageVisibility",
+          "sqs:GetQueueUrl",
+          "sqs:DeleteMessage",
+          "sqs:GetQueueAttributes",
+        ],
+        resources: [this.queue.arn],
+      },
+    ]);
 
     new LambdaEventSourceMapping(this, "EventSourceMapping", {
       functionName: fn._functionName,
@@ -105,7 +107,7 @@ export class Queue extends cloud.Queue {
 
     const env = this.envName();
 
-    host.addPolicyStatements(...calculateQueuePermissions(this.queue.arn, ops));
+    host.addPolicyStatements(calculateQueuePermissions(this.queue.arn, ops));
 
     // The queue url needs to be passed through an environment variable since
     // it may not be resolved until deployment time.
