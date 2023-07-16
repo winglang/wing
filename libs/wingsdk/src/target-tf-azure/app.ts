@@ -82,6 +82,15 @@ export class App extends CdktfApp {
       enumerable: false,
       writable: false,
     });
+
+    if (props.rootConstruct) {
+      const Root = props.rootConstruct;
+      if (this.isTestEnvironment) {
+        throw new Error("wing test not supported for tf-azure target yet");
+      } else {
+        new Root(this, "Default");
+      }
+    }
   }
 
   /**

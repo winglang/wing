@@ -20,9 +20,9 @@ export const createAnalytics = (options: CreateAnalyticsOptions): Analytics => {
         properties,
         integrations: {
           "Actions Amplitude": {
-            "session_id": sessionId
+            session_id: sessionId,
           },
-        }
+        },
       });
     },
   };

@@ -1,10 +1,9 @@
+const forms = require("@tailwindcss/forms");
 const colors = require("tailwindcss/colors");
 const defaultTheme = require("tailwindcss/defaultTheme");
 const flattenColorPalette = require("tailwindcss/lib/util/flattenColorPalette.js");
 const toColorValue = require("tailwindcss/lib/util/toColorValue.js");
 const plugin = require("tailwindcss/plugin");
-
-const forms = require("@tailwindcss/forms");
 
 /**
  * Extracts the value of the RGB components an hexadecimal color.

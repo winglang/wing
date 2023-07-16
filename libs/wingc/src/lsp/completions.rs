@@ -283,7 +283,9 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 						CalleeKind::SuperCall(method) => resolve_super_method(method, found_env, types).map_or(types.error(), |(t,_)| t),
 					}
 					, arg_list)),
-				ExprKind::New { class, arg_list, .. } => Some((types.get_expr_type(&class), arg_list)),
+				ExprKind::New(new_expr) => {
+					Some((types.get_expr_type(&new_expr.class), &new_expr.arg_list))
+				}
 				_ => None,
 			}) {
 				let mut completions = get_current_scope_completions(&scope_visitor, &node_to_complete, preceding_text);

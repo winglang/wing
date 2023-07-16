@@ -505,12 +505,7 @@ pub struct StructField {
 
 #[derive(Debug)]
 pub enum ExprKind {
-	New {
-		class: Box<Expr>, // expression must be a reference to a user defined type
-		obj_id: Option<Box<Expr>>,
-		obj_scope: Option<Box<Expr>>,
-		arg_list: ArgList,
-	},
+	New(NewExpr),
 	Literal(Literal),
 	Range {
 		start: Box<Expr>,
@@ -603,6 +598,14 @@ impl Expr {
 			_ => None,
 		}
 	}
+}
+
+#[derive(Debug)]
+pub struct NewExpr {
+	pub class: Box<Expr>, // expression must be a reference to a user defined type
+	pub obj_id: Option<Box<Expr>>,
+	pub obj_scope: Option<Box<Expr>>,
+	pub arg_list: ArgList,
 }
 
 #[derive(Debug)]

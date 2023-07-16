@@ -49,12 +49,6 @@ source: libs/wingc/src/lsp/completions.rs
     kind: markdown
     value: "```wing\nclass Service\n```\n---\nA long-running service."
   sortText: gg|Service
-- label: TestRunner
-  kind: 7
-  documentation:
-    kind: markdown
-    value: "```wing\nclass TestRunner\n```\n---\nA test engine."
-  sortText: gg|TestRunner
 - label: Topic
   kind: 7
   documentation:
@@ -235,18 +229,6 @@ source: libs/wingc/src/lsp/completions.rs
     kind: markdown
     value: "```wing\nstruct ServiceProps\n```\n---\nProperties for `Service`.\n### Fields\n- `autoStart?` — Whether the service should start automatically.\n- `onStart` — Handler to run with the service starts.\n- `onStop?` — Handler to run with the service stops."
   sortText: hh|ServiceProps
-- label: TestResult
-  kind: 22
-  documentation:
-    kind: markdown
-    value: "```wing\nstruct TestResult\n```\n---\nA result of a single test.\n### Fields\n- `error?` — The error message if the test failed.\n- `pass` — Whether the test passed.\n- `path` — The path of the test.\n- `traces` — List of traces emitted during the test."
-  sortText: hh|TestResult
-- label: TestRunnerProps
-  kind: 22
-  documentation:
-    kind: markdown
-    value: "```wing\nstruct TestRunnerProps\n```\n---\nProperties for `TestRunner`."
-  sortText: hh|TestRunnerProps
 - label: TopicOnMessageProps
   kind: 22
   documentation:
@@ -259,12 +241,6 @@ source: libs/wingc/src/lsp/completions.rs
     kind: markdown
     value: "```wing\nstruct TopicProps\n```\n---\nProperties for `Topic`."
   sortText: hh|TopicProps
-- label: Trace
-  kind: 22
-  documentation:
-    kind: markdown
-    value: "```wing\nstruct Trace\n```\n---\nA trace emitted during simulation.\n### Fields\n- `data` — A JSON blob with structured data.\n- `sourcePath` — The path of the resource that emitted the trace.\n- `sourceType` — The type of the source that emitted the trace.\n- `timestamp` — The timestamp of the event, in ISO 8601 format.\n- `type` — The type of a trace."
-  sortText: hh|Trace
 - label: WebsiteProps
   kind: 22
   documentation:
@@ -391,12 +367,6 @@ source: libs/wingc/src/lsp/completions.rs
     kind: markdown
     value: "```wing\ninterface IServiceOnEventHandler extends IResource\n```\n---\nA resource with an inflight \"handle\" method that can be passed to `ServiceProps.on_start` || `ServiceProps.on_stop`.\n### Methods\n- `handle` — Function that will be called for service events."
   sortText: ii|IServiceOnEventHandler
-- label: ITestRunnerClient
-  kind: 8
-  documentation:
-    kind: markdown
-    value: "```wing\ninterface ITestRunnerClient\n```\n---\nInflight interface for `TestRunner`.\n### Methods\n- `listTests` — List all tests available for this test engine.\n- `runTest` — Run a test with a given path and return the result."
-  sortText: ii|ITestRunnerClient
 - label: ITopicClient
   kind: 8
   documentation:
@@ -433,10 +403,4 @@ source: libs/wingc/src/lsp/completions.rs
     kind: markdown
     value: "```wing\nenum HttpMethod\n```\n---\nAllowed HTTP methods for a endpoint.\n- `GET`\n- `HEAD`\n- `POST`\n- `PUT`\n- `DELETE`\n- `CONNECT`\n- `OPTIONS`\n- `PATCH`"
   sortText: jj|HttpMethod
-- label: TraceType
-  kind: 13
-  documentation:
-    kind: markdown
-    value: "```wing\nenum TraceType\n```\n---\nThe type of a trace.\n- `RESOURCE`\n- `LOG`"
-  sortText: jj|TraceType
 

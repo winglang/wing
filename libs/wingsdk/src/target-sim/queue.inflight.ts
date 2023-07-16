@@ -7,7 +7,8 @@ import {
   EventSubscription,
   FunctionHandle,
 } from "./schema-resources";
-import { IFunctionClient, IQueueClient, TraceType } from "../cloud";
+import { IFunctionClient, IQueueClient } from "../cloud";
+import { TraceType } from "../std";
 import {
   ISimulatorContext,
   ISimulatorResourceInstance,

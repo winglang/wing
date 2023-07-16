@@ -17,6 +17,7 @@ sidebar_position: 1
 
 The `cloud.Schedule` resource is used to trigger events at a regular interval.
 Schedules are useful for periodic tasks, such as running backups or sending daily reports.
+The timezone used in cron expressions is always UTC.
 
 ## Usage
 
@@ -246,6 +247,7 @@ cron: str;
 
 Trigger events according to a cron schedule using the UNIX cron format.
 
+Timezone is UTC.
 [minute] [hour] [day of month] [month] [day of week]
 
 ---

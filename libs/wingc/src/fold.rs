@@ -1,8 +1,8 @@
 use crate::{
 	ast::{
-		ArgList, CalleeKind, CatchBlock, Class, ClassField, ElifBlock, Expr, ExprKind, FunctionBody, FunctionDefinition,
-		FunctionParameter, FunctionSignature, Interface, InterpolatedString, InterpolatedStringPart, Literal, Reference,
-		Scope, Stmt, StmtKind, StructField, Symbol, TypeAnnotation, TypeAnnotationKind, UserDefinedType,
+		ArgList, CatchBlock, Class, ClassField, ElifBlock, Expr, ExprKind, FunctionBody, FunctionDefinition,
+		FunctionParameter, FunctionSignature, Interface, InterpolatedString, InterpolatedStringPart, Literal, NewExpr,
+		Reference, Scope, Stmt, StmtKind, StructField, Symbol, TypeAnnotation, TypeAnnotationKind, UserDefinedType,
 	},
 	dbg_panic,
 };
@@ -31,6 +31,9 @@ pub trait Fold {
 	}
 	fn fold_expr(&mut self, node: Expr) -> Expr {
 		fold_expr(self, node)
+	}
+	fn fold_new_expr(&mut self, node: NewExpr) -> NewExpr {
+		fold_new_expr(self, node)
 	}
 	fn fold_literal(&mut self, node: Literal) -> Literal {
 		fold_literal(self, node)
@@ -251,17 +254,7 @@ where
 	F: Fold + ?Sized,
 {
 	let kind = match node.kind {
-		ExprKind::New {
-			class,
-			obj_id,
-			obj_scope,
-			arg_list,
-		} => ExprKind::New {
-			class: Box::new(f.fold_expr(*class)),
-			obj_id,
-			obj_scope: obj_scope.map(|scope| Box::new(f.fold_expr(*scope))),
-			arg_list: f.fold_args(arg_list),
-		},
+		ExprKind::New(new_expr) => ExprKind::New(f.fold_new_expr(new_expr)),
 		ExprKind::Literal(literal) => ExprKind::Literal(f.fold_literal(literal)),
 		ExprKind::Range { start, inclusive, end } => ExprKind::Range {
 			start: Box::new(f.fold_expr(*start)),
@@ -327,6 +320,18 @@ where
 		id: node.id,
 		kind,
 		span: node.span,
+	}
+}
+
+pub fn fold_new_expr<F>(f: &mut F, node: NewExpr) -> NewExpr
+where
+	F: Fold + ?Sized,
+{
+	NewExpr {
+		class: Box::new(f.fold_expr(*node.class)),
+		obj_id: node.obj_id,
+		arg_list: f.fold_args(node.arg_list),
+		obj_scope: node.obj_scope,
 	}
 }
 

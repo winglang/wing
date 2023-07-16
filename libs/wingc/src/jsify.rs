@@ -10,8 +10,8 @@ use std::{borrow::Borrow, cmp::Ordering, collections::BTreeMap, path::Path, vec}
 use crate::{
 	ast::{
 		ArgList, BinaryOperator, Class as AstClass, Expr, ExprKind, FunctionBody, FunctionDefinition,
-		InterpolatedStringPart, Literal, Phase, Reference, Scope, Stmt, StmtKind, Symbol, TypeAnnotationKind,
-		UnaryOperator, UserDefinedType, CalleeKind,
+		InterpolatedStringPart, Literal, NewExpr, Phase, Reference, Scope, Stmt, StmtKind, Symbol, TypeAnnotationKind,
+		UnaryOperator, UserDefinedType,
 	},
 	comp_ctx::{CompilationContext, CompilationPhase},
 	dbg_panic, debug,
@@ -33,13 +33,8 @@ const STDLIB: &str = "$stdlib";
 const STDLIB_CORE_RESOURCE: &str = formatcp!("{}.{}", STDLIB, WINGSDK_RESOURCE);
 const STDLIB_MODULE: &str = WINGSDK_ASSEMBLY_NAME;
 
-const TARGET_CODE: &str = "const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);";
-
 const ENV_WING_IS_TEST: &str = "$wing_is_test";
 const OUTDIR_VAR: &str = "$outdir";
-
-const APP_CLASS: &str = "$App";
-const APP_BASE_CLASS: &str = "$AppBase";
 
 const ROOT_CLASS: &str = "$Root";
 const JS_CONSTRUCTOR: &str = "constructor";
@@ -131,7 +126,6 @@ impl<'a> JSifier<'a> {
 				"const {} = process.env.WING_IS_TEST === \"true\";",
 				ENV_WING_IS_TEST
 			));
-			output.line(TARGET_CODE.to_owned());
 		}
 
 		output.add_code(imports);
@@ -145,31 +139,12 @@ impl<'a> JSifier<'a> {
 			root_class.close("}");
 			root_class.close("}");
 
-			let mut app_wrapper = CodeMaker::default();
-			app_wrapper.open(format!("class {} extends {} {{", APP_CLASS, APP_BASE_CLASS));
-			app_wrapper.open(format!("{JS_CONSTRUCTOR}() {{"));
-			app_wrapper.line(format!(
-				"super({{ outdir: {}, name: \"{}\", plugins: $plugins, isTestEnvironment: {} }});",
-				OUTDIR_VAR, self.app_name, ENV_WING_IS_TEST
-			));
-			app_wrapper.open(format!("if ({}) {{", ENV_WING_IS_TEST));
-			app_wrapper.line(format!("new {}(this, \"env0\");", ROOT_CLASS));
-			app_wrapper.line("const $test_runner = this.testRunner;");
-			app_wrapper.line("const $tests = $test_runner.findTests();");
-			app_wrapper.open("for (let $i = 1; $i < $tests.length; $i++) {");
-			app_wrapper.line(format!("new {}(this, \"env\" + $i);", ROOT_CLASS));
-			app_wrapper.close("}");
-			app_wrapper.close("} else {");
-			app_wrapper.indent();
-			app_wrapper.line(format!("new {}(this, \"Default\");", ROOT_CLASS));
-			app_wrapper.close("}");
-			app_wrapper.close("}");
-			app_wrapper.close("}");
-
 			output.add_code(root_class);
-			output.add_code(app_wrapper);
-
-			output.line(format!("new {}().synth();", APP_CLASS));
+			output.line("const $App = $stdlib.core.App.for(process.env.WING_TARGET);".to_string());
+			output.line(format!(
+				"new $App({{ outdir: {}, name: \"{}\", rootConstruct: {}, plugins: $plugins, isTestEnvironment: {} }}).synth();",
+				OUTDIR_VAR, self.app_name, ROOT_CLASS, ENV_WING_IS_TEST
+			));
 		} else {
 			output.add_code(js);
 		}
@@ -295,12 +270,9 @@ impl<'a> JSifier<'a> {
 			_ => "",
 		};
 		match &expression.kind {
-			ExprKind::New {
-				class,
-				obj_id,
-				arg_list,
-				obj_scope
-			} => {
+			ExprKind::New(new_expr) => {
+				let NewExpr { class, obj_id, arg_list, obj_scope } = new_expr;
+
 				let expression_type = self.types.get_expr_type(&expression);
 				let is_preflight_class = expression_type.is_preflight_class();
 
