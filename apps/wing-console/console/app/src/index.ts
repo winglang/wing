@@ -39,15 +39,17 @@ export interface CreateConsoleAppOptions {
 const staticDir = `${__dirname}/vite`;
 
 const SEGMENT_WRITE_KEY = process.env.SEGMENT_WRITE_KEY;
+const WING_DISABLE_ANALYTICS = process.env.WING_DISABLE_ANALYTICS;
 
 export const createConsoleApp = async (options: CreateConsoleAppOptions) => {
   const analyticsStorage = new AnalyticsStorage();
-  const analytics = SEGMENT_WRITE_KEY
-    ? createAnalytics({
-        anonymousId: analyticsStorage.getAnonymousId(),
-        segmentWriteKey: SEGMENT_WRITE_KEY,
-      })
-    : undefined;
+  const analytics =
+    SEGMENT_WRITE_KEY && !WING_DISABLE_ANALYTICS
+      ? createAnalytics({
+          anonymousId: analyticsStorage.getAnonymousId(),
+          segmentWriteKey: SEGMENT_WRITE_KEY,
+        })
+      : undefined;
 
   analytics?.track("console_session_start");
 
