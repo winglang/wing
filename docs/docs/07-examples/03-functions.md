@@ -7,7 +7,7 @@ keywords: [Wing example]
 
 ### Preflight function
 
-```ts playground
+```ts 
 // preflight function - when declared in preflight context
 let dup = (s: str, count: num): str => {
   // code
@@ -18,7 +18,7 @@ let dup = (s: str, count: num): str => {
 
 Inflight functions are Wing's distributed computing primitive. They are isolated code blocks which can be packaged and executed on compute platforms in the cloud (such as containers, Lambda/Cloud Function, etc..).
 
-```ts playground
+```ts 
 
 let handler = inflight (message: str): void => {
   // using the inflight modifier 
@@ -33,19 +33,23 @@ let handler = inflight (message: str): void => {
 ```
 ### Struct Expansion
 ```ts playground
-struct Options {
-  prefix: str?;
-  delim: str;
-}
+bring cloud;
 
-let join_str = (a: Array<str>, opts: Options):str => {
-  let prefix = opts.prefix ?? "";
-  return prefix + a.join(opts.delim);
-};
-
-log(join_str(["hello", "world"], delim: ", ")); //  "!hello.world"
-
-// also OK to pass an object
-let opts = Options { delim: "/" , prefix: "!!" };
-log(join_str(["hello", "world"], opts)); // "!!hello/world");
+new cloud.Function(inflight () => {
+  struct Options {
+    prefix: str?;
+    delim: str;
+  }
+  
+  let join_str = (a: Array<str>, opts: Options):str => {
+    let prefix = opts.prefix ?? "";
+    return prefix + a.join(opts.delim);
+  };
+  
+  log(join_str(["hello", "world"], delim: ", ")); //  "!hello.world"
+  
+  // also OK to pass an object
+  let opts = Options { delim: "/" , prefix: "!!" };
+  log(join_str(["hello", "world"], opts)); // "!!hello/world");
+}) as "main";
 ```
