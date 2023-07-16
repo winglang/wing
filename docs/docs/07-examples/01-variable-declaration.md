@@ -8,7 +8,7 @@ keywords: [Wing example]
 
 ```ts 
 let x = 12;
-x = 77; // ERROR: x is non reassignable
+x = 77; // error: Variable is not reassignable
 
 let var y = "hello";
 y = "world"; // OK (y is reassignable)
@@ -31,7 +31,7 @@ x1 = nil; // ERROR: Expected type to be "str", but got "nil" instead
 x3 = nil; // OK (x3 is optional)
 ```
 ### Scopes
-```ts playground
+```ts
 let s = "parent";
 log(s); // prints parent
 if true {
