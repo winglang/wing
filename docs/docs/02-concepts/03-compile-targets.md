@@ -66,7 +66,7 @@ let invokationCounter = new cloud.Counter();
 let queue = new cloud.Queue();
 
 queue.setConsumer(inflight (msg: str) => {
-  invokationCounter.inc();
+  invocationCounter.inc();
 });
 
 new cloud.Function(inflight ()=> { 
