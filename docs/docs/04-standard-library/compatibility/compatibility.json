@@ -140,13 +140,6 @@
       "tf-gcp": {"implemented": false},
       "aws-cdk": {"implemented": true}
     },
-    "checkIfPublic": {
-      "sim": {"implemented": false},
-      "tf-aws": {"implemented": true},
-      "tf-azure": {"implemented": false},
-      "tf-gcp": {"implemented": false},
-      "aws-cdk": {"implemented": true}
-    }
     "publicUrl": {
       "sim": {"implemented": true},
       "tf-aws": {"implemented": true},
@@ -156,13 +149,6 @@
     },
     "signedUrl": {
       "sim": {"implemented": false, "issue": 1383},
-      "tf-aws": {"implemented": true},
-      "tf-azure": {"implemented": false},
-      "tf-gcp": {"implemented": false},
-      "aws-cdk": {"implemented": true}
-    },
-    "getLocation": {
-      "sim": {"implemented": false},
       "tf-aws": {"implemented": true},
       "tf-azure": {"implemented": false},
       "tf-gcp": {"implemented": false},
