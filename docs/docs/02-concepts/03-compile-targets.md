@@ -58,7 +58,7 @@ There might be times when you need to write code that is specific to a compiler 
 
 With the Wing `util` library, you can access environment variables. The `WING_TARGET` environment variable contains the current compiler target, which you can use to conditionally run target-specific code. See the example below:
 
-```js play
+```js playground
 bring cloud;
 bring util;
 
