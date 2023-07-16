@@ -63,6 +63,15 @@ export class App extends CdktfApp {
       project: this.projectId,
     });
     new RandomProvider(this, "random");
+
+    if (props.rootConstruct) {
+      const Root = props.rootConstruct;
+      if (this.isTestEnvironment) {
+        throw new Error("wing test not supported for tf-gcp target yet");
+      } else {
+        new Root(this, "Default");
+      }
+    }
   }
 
   protected tryNew(

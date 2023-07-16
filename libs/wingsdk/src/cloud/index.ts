@@ -6,6 +6,5 @@ export * from "./queue";
 export * from "./schedule";
 export * from "./secret";
 export * from "./service";
-export * from "./test-runner";
 export * from "./topic";
 export * from "./website";

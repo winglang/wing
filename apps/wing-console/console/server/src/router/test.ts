@@ -1,4 +1,4 @@
-import { TestResult } from "@winglang/sdk/lib/cloud";
+import { TestResult } from "@winglang/sdk/lib/std";
 import { z } from "zod";
 
 import { ConsoleLogger } from "../consoleLogger.js";
@@ -45,7 +45,7 @@ const runTest = async (
       ...result,
       ...t,
     };
-    if(result.error) {
+    if (result.error) {
       throw new Error(result.error);
     }
     logger.log(
@@ -59,7 +59,9 @@ const runTest = async (
     );
   } catch {
     logger.log(
-      `Test "${getTestName(resourcePath)}" failed (${Date.now() - startTime}ms)`,
+      `Test "${getTestName(resourcePath)}" failed (${
+        Date.now() - startTime
+      }ms)`,
       "console",
       {
         messageType: "fail",

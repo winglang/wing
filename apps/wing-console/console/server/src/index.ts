@@ -1,5 +1,5 @@
 import type { inferRouterInputs } from "@trpc/server";
-import type { Trace } from "@winglang/sdk/lib/cloud/test-runner.js";
+import type { Trace } from "@winglang/sdk/lib/std/test-runner.js";
 import Emittery from "emittery";
 import type { Application as ExpressApplication } from "express";
 
@@ -14,7 +14,7 @@ import { createCompiler } from "./utils/compiler.js";
 import type { LogInterface } from "./utils/LogInterface.js";
 import { createSimulator } from "./utils/simulator.js";
 
-export type { Trace } from "@winglang/sdk/lib/cloud/test-runner.js";
+export type { Trace } from "@winglang/sdk/lib/std/test-runner.js";
 export type { LogInterface } from "./utils/LogInterface.js";
 export type { LogEntry, LogLevel } from "./consoleLogger.js";
 export type { ExplorerItem } from "./router/app.js";

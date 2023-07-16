@@ -2,7 +2,7 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ $js, $q }) {
+module.exports = function({ $q, $std_Duration, $util_Util }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -19,7 +19,7 @@ module.exports = function({ $js, $q }) {
           if ((await pred())) {
             return true;
           }
-          (await $js.sleep(100));
+          (await $util_Util.sleep((await $std_Duration.fromSeconds(1))));
           i = (i + 1);
         }
         return false;
@@ -37,21 +37,6 @@ module.exports = function({ $js, $q }) {
     }
   }
   return $Closure1;
-}
-
-```
-
-## inflight.TestHelper.js
-```js
-module.exports = function({  }) {
-  class TestHelper {
-    constructor({  }) {
-    }
-    async sleep(milli) {
-      return (require("<ABSOLUTE_PATH>/sleep.js")["sleep"])(milli)
-    }
-  }
-  return TestHelper;
 }
 
 ```
@@ -195,34 +180,11 @@ const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
-const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 const cloud = require('@winglang/sdk').cloud;
+const util = require('@winglang/sdk').util;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
-    class TestHelper extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
-        this._addInflightOps("sleep", "$inflight_init");
-      }
-      static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.TestHelper.js")({
-          })
-        `);
-      }
-      _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
-          (await (async () => {
-            const TestHelperClient = ${TestHelper._toInflightType(this).text};
-            const client = new TestHelperClient({
-            });
-            if (client.$inflight_init) { await client.$inflight_init(); }
-            return client;
-          })())
-        `);
-      }
-    }
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
@@ -232,8 +194,9 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure1.js")({
-            $js: ${context._lift(js)},
             $q: ${context._lift(q)},
+            $std_Duration: ${context._lift(std.Duration)},
+            $util_Util: ${context._lift(util.Util)},
           })
         `);
       }
@@ -250,33 +213,17 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(js, host, ["sleep"]);
           $Closure1._registerBindObject(q, host, ["approxSize", "purge", "push"]);
         }
         super._registerBind(host, ops);
       }
     }
     const q = this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this,"cloud.Queue");
-    const js = new TestHelper(this,"TestHelper");
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:purge",new $Closure1(this,"$Closure1"));
   }
 }
-class $App extends $AppBase {
-  constructor() {
-    super({ outdir: $outdir, name: "purge", plugins: $plugins, isTestEnvironment: $wing_is_test });
-    if ($wing_is_test) {
-      new $Root(this, "env0");
-      const $test_runner = this.testRunner;
-      const $tests = $test_runner.findTests();
-      for (let $i = 1; $i < $tests.length; $i++) {
-        new $Root(this, "env" + $i);
-      }
-    } else {
-      new $Root(this, "Default");
-    }
-  }
-}
-new $App().synth();
+const $App = $stdlib.core.App.for(process.env.WING_TARGET);
+new $App({ outdir: $outdir, name: "purge", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test }).synth();
 
 ```
 

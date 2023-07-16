@@ -84,3 +84,23 @@ test("basic function with timeout explicitly set", () => {
   );
   expect(template.toJSON()).toMatchSnapshot();
 });
+
+test("basic function with memory size specified", () => {
+  // GIVEN
+  const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
+  const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
+  Function._newFunction(app, "Function", inflight, { memory: 512 });
+  const output = app.synth();
+
+  // THEN
+  const template = Template.fromJSON(JSON.parse(output));
+  template.hasResourceProperties(
+    "AWS::Lambda::Function",
+    Match.objectLike({
+      Handler: "index.handler",
+      Runtime: "nodejs18.x",
+      MemorySize: 512,
+    })
+  );
+  expect(template.toJSON()).toMatchSnapshot();
+});

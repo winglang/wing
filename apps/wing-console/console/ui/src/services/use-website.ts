@@ -1,5 +1,6 @@
-import { trpc } from "./trpc.js";
 import { useEffect, useState } from "react";
+
+import { trpc } from "./trpc.js";
 
 export interface UseWebsiteOptions {
   resourcePath: string;
