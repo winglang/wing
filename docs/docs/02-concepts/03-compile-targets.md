@@ -62,7 +62,7 @@ With the Wing `util` library, you can access environment variables. The `WING_TA
 bring cloud;
 bring util;
 
-let invokationCounter = new cloud.Counter();
+let invocationCounter = new cloud.Counter();
 let queue = new cloud.Queue();
 
 queue.setConsumer(inflight (msg: str) => {
