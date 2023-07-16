@@ -84,7 +84,7 @@ new cloud.Function(inflight ()=> {
 });
 ```
 
-In this example, we're want to sleep briefly for the Simulator target and for 30 seconds for cloud targets, this is done according to `WING_TARGET` environment variable. 
+In this example, we want to sleep briefly for the Simulator target and for 30 seconds for cloud targets, this is achieved using the `WING_TARGET` environment variable. 
 
 ## Compiler plugins
 
