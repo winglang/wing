@@ -7,18 +7,22 @@ keywords: [Wing example]
 ### For in
 
 ```ts playground
-let iterable = ["a", "b", "c", "d", "e", "f", "g", "h"];
-for value in iterable {
-  if value == "g" {
-    // stoping at g
-    break;
+bring cloud;
+
+new cloud.Function(inflight () => {
+  let iterable = ["a", "b", "c", "d", "e", "f", "g", "h"];
+  for value in iterable {
+    if value == "g" {
+      // stoping at g
+      break;
+    }
+    if value == "b" {
+      // skipping b
+      continue;
+    }
+    log(value);
   }
-  if value == "b" {
-    // skipping b
-    continue;
-  }
-  log(value);
-}
+}) as 'main';
 /** 
  * prints
  a
@@ -32,16 +36,23 @@ for value in iterable {
 ### For through a range
 
 ```ts playground
-// print numbers from 0 to 9
-for value in 0..10 {
-  log("${value}");
-}
+bring cloud;
+
+new cloud.Function(inflight () => {
+  // print numbers from 0 to 9
+  for value in 0..10 {
+    log("${value}");
+  }
+}) as 'main';
 ```
 
 ### If elif else
 
 ```ts playground
-let grade = (score: num): str => {
+bring cloud;
+
+new cloud.Function(inflight () => {
+  let grade = (score: num): str => {
     // Parentheses are optional in conditions.
     // However, curly braces are required in `if/else` statements.
     if 0 < score && score < 55 {
@@ -55,43 +66,47 @@ let grade = (score: num): str => {
     } else {
         return "Invalid grade";
     }
-};
-
-log("54 is ${grade(54)}"); // 54 is F
-log("62 is ${grade(62)}"); // 62 is C
-log("68 is ${grade(68)}"); // 68 is B
-log("99 is ${grade(99)}"); // 99 is A
-log("101 is ${grade(101)}"); // 101 is Invalid grade
+  };
+  
+  log("54 is ${grade(54)}"); // 54 is F
+  log("62 is ${grade(62)}"); // 62 is C
+  log("68 is ${grade(68)}"); // 68 is B
+  log("99 is ${grade(99)}"); // 99 is A
+  log("101 is ${grade(101)}"); // 101 is Invalid grade
+}) as 'main';
 ```
 
 ### While 
 
 ```ts playground
-let var i = 0;
-while i < 100 {
-  i = i + 1;
-  if i == 20 {
-    // although the while loop goes to 100, we break it at 20
-    break;
-  }
-  if i % 2 == 0 {
-    // continue for even numbers
-    continue;
-  }
-  log("${i}");
-}
-/** 
- * prints
-  1
-  3
-  5
-  7
-  9
-  11
-  13
-  15
-  17
-  19
-**/
-```
+bring cloud;
 
+new cloud.Function(inflight () => {
+  let var i = 0;
+  while i < 100 {
+    i = i + 1;
+    if i == 20 {
+      // although the while loop goes to 100, we break it at 20
+      break;
+    }
+    if i % 2 == 0 {
+      // continue for even numbers
+      continue;
+    }
+    log("${i}");
+  }
+  /** 
+   * prints
+    1
+    3
+    5
+    7
+    9
+    11
+    13
+    15
+    17
+    19
+  **/
+}) as 'main';
+```
