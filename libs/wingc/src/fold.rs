@@ -1,6 +1,6 @@
 use crate::{
 	ast::{
-		ArgList, CatchBlock, Class, ClassField, ElifBlock, Expr, ExprKind, FunctionBody, FunctionDefinition,
+		ArgList, CalleeKind, CatchBlock, Class, ClassField, ElifBlock, Expr, ExprKind, FunctionBody, FunctionDefinition,
 		FunctionParameter, FunctionSignature, Interface, InterpolatedString, InterpolatedStringPart, Literal, NewExpr,
 		Reference, Scope, Stmt, StmtKind, StructField, Symbol, TypeAnnotation, TypeAnnotationKind, UserDefinedType,
 	},

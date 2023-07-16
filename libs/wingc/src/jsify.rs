@@ -11,7 +11,7 @@ use crate::{
 	ast::{
 		ArgList, BinaryOperator, Class as AstClass, Expr, ExprKind, FunctionBody, FunctionDefinition,
 		InterpolatedStringPart, Literal, NewExpr, Phase, Reference, Scope, Stmt, StmtKind, Symbol, TypeAnnotationKind,
-		UnaryOperator, UserDefinedType,
+		UnaryOperator, UserDefinedType, CalleeKind,
 	},
 	comp_ctx::{CompilationContext, CompilationPhase},
 	dbg_panic, debug,

@@ -4,7 +4,7 @@ use lsp_types::{
 	SignatureInformation,
 };
 
-use crate::ast::{Expr, ExprKind, NewExpr, Symbol};
+use crate::ast::{CalleeKind, Expr, ExprKind, NewExpr, Symbol};
 use crate::docs::Documented;
 use crate::lsp::sync::FILES;
 

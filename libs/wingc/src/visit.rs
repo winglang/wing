@@ -1,7 +1,7 @@
 use crate::{
 	ast::{
-		ArgList, Class, Expr, ExprKind, FunctionBody, FunctionDefinition, FunctionParameter, FunctionSignature, Interface,
-		InterpolatedStringPart, Literal, NewExpr, Reference, Scope, Stmt, StmtKind, Symbol, TypeAnnotation,
+		ArgList, CalleeKind, Class, Expr, ExprKind, FunctionBody, FunctionDefinition, FunctionParameter, FunctionSignature,
+		Interface, InterpolatedStringPart, Literal, NewExpr, Reference, Scope, Stmt, StmtKind, Symbol, TypeAnnotation,
 		TypeAnnotationKind, UserDefinedType,
 	},
 	dbg_panic,

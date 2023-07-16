@@ -3,7 +3,7 @@ pub(crate) mod jsii_importer;
 pub mod lifts;
 pub mod symbol_env;
 
-use crate::ast::{self, ClassField, FunctionDefinition, NewExpr, TypeAnnotationKind};
+use crate::ast::{self, CalleeKind, ClassField, FunctionDefinition, NewExpr, TypeAnnotationKind};
 use crate::ast::{
 	ArgList, BinaryOperator, Class as AstClass, Expr, ExprKind, FunctionBody, FunctionParameter as AstFunctionParameter,
 	Interface as AstInterface, InterpolatedStringPart, Literal, Phase, Reference, Scope, Spanned, Stmt, StmtKind, Symbol,
