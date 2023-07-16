@@ -71,6 +71,7 @@ queue.setConsumer(inflight (msg: str) => {
   bucket.put("file-${i}.txt", msg);
 });
 
+<<<<<<< HEAD
 // only create this verbose logger if our Wing target is sim
 if util.env("WING_TARGET") == "sim" {
   let verboseLogger = new cloud.Service(
@@ -88,6 +89,21 @@ if util.env("WING_TARGET") == "sim" {
     }
   );
 }
+=======
+new cloud.Function(inflight ()=> { 
+  // push a message to queue
+  queue.push("m");
+  // sleep according to target 
+  if util.env("WING_TARGET") == "sim" {
+    log("Running on Simulator, sleeping for 1s");
+    util.sleep(1s);
+  } else {
+    log("Running on the cloud, sleeping for 30s");
+    util.sleep(30s);
+  }
+  log("Function invoked ${invocationCounter.peek()} times");
+});
+>>>>>>> a6f90e85 (fix(docs): typo in docs (#3467))
 ```
 
 In this example, we're creating a verbose logger service only when the `WING_TARGET` environment variable is set to "sim". The `onStart` function of this service lists the files in the bucket and logs them every 10 seconds.
