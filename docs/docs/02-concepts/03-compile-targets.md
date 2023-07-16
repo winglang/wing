@@ -58,39 +58,33 @@ There might be times when you need to write code that is specific to a compiler 
 
 With the Wing `util` library, you can access environment variables. The `WING_TARGET` environment variable contains the current compiler target, which you can use to conditionally run target-specific code. See the example below:
 
-```js
+```js play
 bring cloud;
 bring util;
 
-let bucket = new cloud.Bucket();
-let counter = new cloud.Counter();
+let invokationCounter = new cloud.Counter();
 let queue = new cloud.Queue();
 
 queue.setConsumer(inflight (msg: str) => {
-  let i = counter.inc();
-  bucket.put("file-${i}.txt", msg);
+  invokationCounter.inc();
 });
 
-// only create this verbose logger if our Wing target is sim
-if util.env("WING_TARGET") == "sim" {
-  let verboseLogger = new cloud.Service(
-    onStart: inflight() => {
-      // Continuously log the files in the bucket every 10 seconds
-      while true {
-        util.sleep(10s);
-        log("Files in bucket");
-        log("==================");
-        for f in bucket.list() {
-          log(f);
-        }
-        log("===================");
-      }
-    }
-  );
-}
+new cloud.Function(inflight ()=> { 
+  // push a message to queue
+  queue.push("m");
+  // sleep according to target 
+  if util.env("WING_TARGET") == "sim" {
+    log("Running on Simulator, sleeping for 1s");
+    util.sleep(1s);
+  } else {
+    log("Running on the cloud, sleeping for 30s");
+    util.sleep(30s);
+  }
+  log("Function invoked ${invokationCounter.peek()} times");
+});
 ```
 
-In this example, we're creating a verbose logger service only when the `WING_TARGET` environment variable is set to "sim". The `onStart` function of this service lists the files in the bucket and logs them every 10 seconds.
+In this example, we're want to sleep briefly for the Simulator target and for 30 seconds for cloud targets, this is done according to `WING_TARGET` environment variable. 
 
 ## Compiler plugins
 
