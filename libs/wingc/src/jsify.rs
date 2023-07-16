@@ -9,16 +9,17 @@ use std::{borrow::Borrow, cmp::Ordering, collections::BTreeMap, path::Path, vec}
 
 use crate::{
 	ast::{
-		ArgList, BinaryOperator, Class as AstClass, Expr, ExprKind, FunctionBody, FunctionDefinition,
+		ArgList, BinaryOperator, CalleeKind, Class as AstClass, Expr, ExprKind, FunctionBody, FunctionDefinition,
 		InterpolatedStringPart, Literal, NewExpr, Phase, Reference, Scope, Stmt, StmtKind, Symbol, TypeAnnotationKind,
-		UnaryOperator, UserDefinedType, CalleeKind,
+		UnaryOperator, UserDefinedType,
 	},
 	comp_ctx::{CompilationContext, CompilationPhase},
 	dbg_panic, debug,
 	diagnostic::{report_diagnostic, Diagnostic, WingSpan},
 	files::Files,
 	type_check::{
-		lifts::Lifts, symbol_env::SymbolEnv, ClassLike, Type, TypeRef, Types, VariableKind, CLASS_INFLIGHT_INIT_NAME, resolve_super_method,
+		lifts::Lifts, resolve_super_method, symbol_env::SymbolEnv, ClassLike, Type, TypeRef, Types, VariableKind,
+		CLASS_INFLIGHT_INIT_NAME,
 	},
 	visit_context::VisitContext,
 	MACRO_REPLACE_ARGS, MACRO_REPLACE_ARGS_TEXT, MACRO_REPLACE_SELF, WINGSDK_ASSEMBLY_NAME, WINGSDK_RESOURCE,
@@ -95,7 +96,9 @@ impl<'a> JSifier<'a> {
 			files: &mut files,
 			lifts: None,
 		};
-		jsify_context.visit_ctx.push_env(scope.env.borrow().as_ref().unwrap().get_ref());
+		jsify_context
+			.visit_ctx
+			.push_env(scope.env.borrow().as_ref().unwrap().get_ref());
 		for statement in scope.statements.iter().sorted_by(|a, b| match (&a.kind, &b.kind) {
 			// Put type definitions first so JS won't complain of unknown types
 			(StmtKind::Class(AstClass { .. }), StmtKind::Class(AstClass { .. })) => Ordering::Equal,
@@ -390,7 +393,7 @@ impl<'a> JSifier<'a> {
 				let expr_string = match callee {
         		CalleeKind::Expr(expr) => self.jsify_expression(expr, ctx),
         		CalleeKind::SuperCall(method) => format!("super.{}", method),
-    		}; 
+    		};
 				let args_string = self.jsify_arg_list(&arg_list, None, None, ctx);
 				let mut args_text_string = lookup_span(&arg_list.span, &self.source_files);
 				if args_text_string.len() > 0 {
@@ -410,7 +413,7 @@ impl<'a> JSifier<'a> {
 								}
 								_ => expr_string,
 							}
-							CalleeKind::SuperCall{..} => 
+							CalleeKind::SuperCall{..} =>
 								// Note: in case of a $self$ macro override of a super call there's no clear definition of what $self$ should be,
 								// "this" is a decent option because it'll refer to the object where "super" was used, but depending on how 
 								// $self$ is used in the macro it might lead to unexpected results if $self$.some_method() is called and is
