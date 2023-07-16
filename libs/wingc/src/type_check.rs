@@ -4198,7 +4198,9 @@ pub fn resolve_super_method(method: &Symbol, env: &SymbolEnv, types: &Types) -> 
 	{
 		if type_.is_closure() {
 			return Err(TypeError {
-				message: "`super` calls inside inflight closures not supported yet, see:".to_string(),
+				message:
+					"`super` calls inside inflight closures not supported yet, see: https://github.com/winglang/wing/issues/3474"
+						.to_string(),
 				span: method.span.clone(),
 			});
 		}

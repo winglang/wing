@@ -33,7 +33,7 @@ super.do();
     //^^ Cannot call super method because we're not in an instance method ("super" is unknown in this context)
 
 
-// Verify correct error message when inflight closure tries to access super (this isn't suported yet see:XXX)
+// Verify correct error message when inflight closure tries to access super (this isn't suported yet see: https://github.com/winglang/wing/issues/3474)
 // Once it is, this test should be moved to "valid"
 class BaseClass {
   inflight m1(): str {
@@ -50,10 +50,12 @@ class ExtendedClass extends BaseClass {
   get_func(): cloud.Function {
     let inflight_closure = inflight (s:str): str => {
       return "this: ${this.m1()}, super: ${super.m1()}";
+                                               //^^ `super` calls inside inflight closures not supported yet, see: https://github.com/winglang/wing/issues/3474
     };
     return new cloud.Function(inflight_closure);
   }
 }
+// TODO: uncomment and move to valid tests once this: https://github.com/winglang/wing/issues/3474 is fixed
 // let y = new ExtendedClass().get_func();
 // test "inflight closure accesses super" {
 //   assert(y.invoke("") == "this: extended inflight m1, super: base inflight m1");
