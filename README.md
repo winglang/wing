@@ -34,6 +34,8 @@ We also provide you with a set of tools that let you test your code locally, sig
 
 Wing is built by [Elad Ben-Israel](https://github.com/eladb), the guy behind the [AWS CDK](https://github.com/aws/aws-cdk), the gang at the [Wing Cloud team](https://www.wing.cloud/) and an amazing [community](https://t.winglang.io/slack) of contributors (also known as Wingnuts).
 
+Click [here](https://www.youtube.com/watch?v=5_RhWwgGue0) to watch a short video introduction to the Wing language.
+
 ## Why do we think the cloud needs a programming language? 🤔
 
 Cloud applications are fundamentally different from applications that run on a single machine - 
@@ -71,6 +73,7 @@ through their *inflight methods* (`counter.inc()` and `bucket.put()`). These met
 called from inflight scopes.
 
 ### Very cool, but what here cannot be done by a library or compiler extension?
+
 In existing languages, where there is no way to distinguish between multiple execution phases, it is impossible to naturally represent this idea that an object has methods that can only be executed from within a specific execution phase (or within certain scopes of the program).
 You are welcome to read more about it [here](https://www.winglang.io/docs/faq/why-a-language) (including code samples that show the same app built in Wing vs. other solutions).
 
