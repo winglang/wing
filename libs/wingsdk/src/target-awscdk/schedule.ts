@@ -1,14 +1,16 @@
+import { join } from "path";
+import { Duration } from "aws-cdk-lib";
+import { Rule, Schedule as EventSchedule } from "aws-cdk-lib/aws-events";
+import {
+  LambdaFunction,
+  addLambdaPermission,
+} from "aws-cdk-lib/aws-events-targets";
 import { Construct } from "constructs";
+import { Function } from "./function";
 import * as cloud from "../cloud";
 import * as core from "../core";
-import { Rule, Schedule as EventSchedule } from "aws-cdk-lib/aws-events";
-import { Duration } from "aws-cdk-lib";
 import { convertBetweenHandlers } from "../shared/convert";
-import { join } from "path";
-import { Function } from "./function";
 import { Resource } from "../std";
-import { LambdaFunction } from "aws-cdk-lib/aws-events-targets";
-import { addLambdaPermission } from "aws-cdk-lib/aws-events-targets";
 
 /**
  * AWS implementation of `cloud.Schedule`.
@@ -33,25 +35,36 @@ export class Schedule extends cloud.Schedule {
      */
     if (cron) {
       const cronArr = cron.split(" ");
-      this.scheduleExpression = EventSchedule.cron({
+      let cronOpt: { [k: string]: string } = {
         minute: cronArr[0],
         hour: cronArr[1],
-        day: cronArr[2],
         month: cronArr[3],
-        weekDay: cronArr[4],
-        year: "*"
-      });
+        year: "*",
+      };
+      if (cronArr[2] !== "?") {
+        cronOpt.day = cronArr[2];
+      }
+      if (cronArr[4] !== "?") {
+        cronOpt.weekDay = cronArr[4];
+      }
+
+      this.scheduleExpression = EventSchedule.cron(cronOpt);
     } else {
-      this.scheduleExpression = EventSchedule.rate(Duration.minutes(rate!.minutes));
+      this.scheduleExpression = EventSchedule.rate(
+        Duration.minutes(rate!.minutes)
+      );
     }
 
     this.rule = new Rule(this, "Schedule", {
       enabled: true,
-      schedule: this.scheduleExpression
+      schedule: this.scheduleExpression,
     });
   }
 
-  public onTick(inflight: cloud.IScheduleOnTickHandler, props?: cloud.ScheduleOnTickProps | undefined): cloud.Function {
+  public onTick(
+    inflight: cloud.IScheduleOnTickHandler,
+    props?: cloud.ScheduleOnTickProps | undefined
+  ): cloud.Function {
     const hash = inflight.node.addr.slice(-8);
     const functionHandler = convertBetweenHandlers(
       this.node.scope!, // ok since we're not a tree root
@@ -73,7 +86,9 @@ export class Schedule extends cloud.Schedule {
 
     // TODO: remove this constraint by adding generic permission APIs to cloud.Function
     if (!(fn instanceof Function)) {
-      throw new Error("Schedule only supports creating awscdk.Function right now");
+      throw new Error(
+        "Schedule only supports creating awscdk.Function right now"
+      );
     }
 
     this.rule.addTarget(new LambdaFunction(fn._function));
