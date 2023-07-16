@@ -561,7 +561,7 @@ impl<'a> JSifier<'a> {
 				if self.types.get_expr_type(expression).is_mutable_collection() || ctx.visit_ctx.in_json() {
 					// json maps dont need frozen in the nested level
 					format!("{{{}}}", f)
-				} else {types
+				} else {
 					format!("Object.freeze({{{}}})", f)
 				}
 			}

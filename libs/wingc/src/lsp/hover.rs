@@ -1,12 +1,12 @@
 use crate::ast::{
-	Class, Expr, ExprKind, FunctionBody, FunctionDefinition, Phase, Reference, Scope, Stmt, StmtKind, Symbol,
+	CalleeKind, Class, Expr, ExprKind, FunctionBody, FunctionDefinition, Phase, Reference, Scope, Stmt, StmtKind, Symbol,
 	TypeAnnotation, TypeAnnotationKind,
 };
 use crate::diagnostic::WingSpan;
 use crate::docs::Documented;
 use crate::lsp::sync::FILES;
 use crate::type_check::symbol_env::LookupResult;
-use crate::type_check::{ClassLike, Type, Types, CLASS_INFLIGHT_INIT_NAME, CLASS_INIT_NAME};
+use crate::type_check::{resolve_super_method, ClassLike, Type, Types, CLASS_INFLIGHT_INIT_NAME, CLASS_INIT_NAME};
 use crate::visit::{self, Visit};
 use crate::wasm_util::WASM_RETURN_ERROR;
 use crate::wasm_util::{ptr_to_string, string_to_combined_ptr};
@@ -236,8 +236,16 @@ impl<'a> Visit<'a> for HoverVisitor<'a> {
 			ExprKind::Call { arg_list, callee } => {
 				let x = arg_list.named_args.iter().find(|a| a.0.span.contains(&self.position));
 				if let Some((arg_name, ..)) = x {
+					let curr_env = self.current_scope.env.borrow();
+					let env = curr_env.as_ref().expect("an env");
 					// we need to get the struct type from the callee
-					let callee_type = self.types.get_expr_type(callee);
+					let callee_type = match callee {
+						CalleeKind::Expr(expr) => self.types.get_expr_type(expr),
+						CalleeKind::SuperCall(method) => resolve_super_method(method, env, &self.types)
+							.ok()
+							.map_or(self.types.error(), |t| t.0),
+					};
+
 					if let Some(structy) = callee_type.get_function_struct_arg() {
 						self.found = Some((arg_name.span.clone(), docs_from_classlike_property(structy, arg_name)));
 					}

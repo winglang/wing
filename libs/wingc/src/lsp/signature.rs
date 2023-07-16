@@ -4,7 +4,7 @@ use lsp_types::{
 	SignatureInformation,
 };
 
-use crate::ast::{Expr, ExprKind, Symbol};
+use crate::ast::{CalleeKind, Expr, ExprKind, Symbol};
 use crate::docs::Documented;
 use crate::lsp::sync::FILES;
 
@@ -65,10 +65,10 @@ pub fn on_signature_help(params: lsp_types::SignatureHelpParams) -> Option<Signa
 			}
 			ExprKind::Call { callee, arg_list } => {
 				let t = match callee {
-					crate::ast::CalleeKind::Expr(expr) => file_data.types.get_expr_type(expr),
-					crate::ast::CalleeKind::SuperCall(method) => {
-						resolve_super_method(method, &env, &file_data.types).ok().map(|t| t.0)
-					}
+					CalleeKind::Expr(expr) => file_data.types.get_expr_type(expr),
+					CalleeKind::SuperCall(method) => resolve_super_method(method, &env, &file_data.types)
+						.ok()
+						.map_or(file_data.types.error(), |t| t.0),
 				};
 
 				(t, arg_list)
