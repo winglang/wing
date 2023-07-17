@@ -110,7 +110,7 @@ jobs:
 
             const prNumber = pulls.data[0].number;
             const labels = ["⚠️ pr/review-mutation"];
-            
+
             await github.rest.issues.addLabels({
               owner: context.repo.owner,
               repo: context.repo.repo,
