@@ -1283,12 +1283,8 @@ fn get_public_symbols(scope: &Scope) -> Vec<Symbol> {
 			StmtKind::Class(class) => {
 				symbols.push(class.name.clone());
 			}
-			StmtKind::Interface(iface) => {
-				symbols.push(iface.name.clone());
-			}
-			StmtKind::Struct { name, .. } => {
-				symbols.push(name.clone());
-			}
+			StmtKind::Interface(_) => {}
+			StmtKind::Struct { .. } => {}
 			StmtKind::Enum { name, .. } => {
 				symbols.push(name.clone());
 			}

@@ -123,6 +123,21 @@ Test Files 1 failed (1)
 Duration <DURATION>"
 `;
 
+exports[`bring_local_self.w 1`] = `
+"error: Cannot bring a module into itself
+  --> ../../../examples/tests/invalid/bring_local_self.w:1:1
+  |
+1 | bring \\"./bring_local_self.w\\" as foo;
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Cannot bring a module into itself
+
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
+
 exports[`bring_non_std_construct.w 1`] = `
 "error: Expected 1 positional argument(s) but got 0
   --> ../../../examples/tests/invalid/bring_non_std_construct.w:8:1

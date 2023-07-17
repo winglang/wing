@@ -603,7 +603,7 @@ impl<'s> Parser<'s> {
 				Path::new(&self.source_name).parent().unwrap().join(source_path)
 			};
 			if source_path == Path::new(&self.source_name) {
-				return self.with_error("Cannot bring in the current module", statement_node);
+				return self.with_error("Cannot bring a module into itself", statement_node);
 			}
 			let scope = match fs::read(&source_path) {
 				Ok(source) => {
