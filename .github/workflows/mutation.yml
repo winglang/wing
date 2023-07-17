@@ -22,7 +22,7 @@ jobs:
   mutate:
     runs-on: ubuntu-latest
     # Run if the workflow run is a pull request
-    if: github.event.workflow_run.conclusion == 'failure' && (contains(fromJSON('["main", "dev"]'), github.event.workflow_run.head_branch) || github.event.workflow_run.head_repository.fork)
+    if: github.event.workflow_run.conclusion == 'failure' && (!contains(fromJSON('["main", "dev"]'), github.event.workflow_run.head_branch) || github.event.workflow_run.head_repository.fork)
     steps:
       - name: Download artifacts
         id: download-artifacts
