@@ -31,6 +31,7 @@ The following example shows a complete REST API implementation using `cloud.Api`
 
 ```ts playground
 bring cloud;
+bring ex;
 
 let api = new cloud.Api();
 // Used for generating unique id

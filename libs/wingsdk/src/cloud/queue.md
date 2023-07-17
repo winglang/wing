@@ -31,7 +31,7 @@ bring cloud;
 let q = new cloud.Queue();
 
 q.setConsumer(inflight (m: str) => {
-  log("messgae ${m} consumed")
+  log("message ${m} consumed");
 });
 
 new cloud.Function(inflight () => {
