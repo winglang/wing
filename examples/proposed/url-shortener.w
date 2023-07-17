@@ -147,6 +147,8 @@ test "redirect sends to correct page" {
   if let newUrl = Json.tryParse(createResponse.body ?? "")?.get("shortenedUrl")?.asStr() {
     let redirectedResponse = http.get(newUrl);
     assert(redirectedResponse.body?.contains("<title>Hacker News</title>") ?? false);
+  } else {
+    assert(false);
   }
 }
 
