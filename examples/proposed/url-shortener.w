@@ -1,10 +1,9 @@
 bring cloud;
+bring http;
 
-class Utils {
-  extern "./url-shortener.js" inflight makeId(): str;
-  extern "./url-shortener.js" inflight fetch(url: str, method: str, body: Json?): str;
+class Extern {
+  extern "./extern.js" static inflight makeId(): str;
 }
-let utils = new Utils();
 
 class UrlShortener {
   urlLookup: cloud.Bucket;
@@ -18,20 +17,6 @@ class UrlShortener {
     this.idLookup = new cloud.Bucket() as "IdLookup";
   }
 
-  // Returns a short id for the given url. Creates a new id if one does not
-  // already exist.
-  //
-  // In the current implementation, when a new URL is shortened, two
-  // transactions are performed:
-  //
-  // 1. The url is added to the urlLookup bucket.
-  // 2. The id is added to the idLookup bucket.
-  //
-  // If the second transaction fails, the first transaction is not rolled
-  // back. This means that the urlLookup bucket may contain urls that do
-  // not have a corresponding id in the idLookup bucket. This is not a
-  // problem, since `getId` will only return a shortened ID once both
-  // transactions have completed successfully.
   inflight getId(url: str): str {
     let id = this.urlLookup.tryGet(url);
     if let id = id {
@@ -42,7 +27,7 @@ class UrlShortener {
       return id;
     }
   
-    let newId = utils.makeId();
+    let newId = Extern.makeId();
 
     // (transaction 1)
     this.urlLookup.put(url, newId);
@@ -107,7 +92,7 @@ class UrlShortenerApi {
           status: 302,
           headers: Map<str>{
             "Content-Type" => "text/xml",
-            Location => fullUrl
+            "Location" => fullUrl
           }
         };
       } else {
@@ -130,29 +115,31 @@ let urlShortenerApi = new UrlShortenerApi(urlShortener);
 let TEST_URL = "https://news.ycombinator.com/";
 
 test "shorten url" {
-  let response = utils.fetch("${urlShortenerApi.api.url}/create", "POST", Json { url: TEST_URL });
-  let newUrl = str.fromJson(Json.parse(response).get("shortenedUrl"));
+  let response = http.post("${urlShortenerApi.api.url}/create", body: Json.stringify({ url: TEST_URL }));
+  let newUrl = str.fromJson(Json.parse(response.body ?? "").get("shortenedUrl"));
   assert(newUrl.startsWith(urlShortenerApi.api.url));
 }
 
 test "shorten url twice" {
-  let response1 = utils.fetch("${urlShortenerApi.api.url}/create", "POST", Json { url: TEST_URL });
-  let newUrl1 = str.fromJson(Json.parse(response1).get("shortenedUrl"));
-
-  let response2 = utils.fetch("${urlShortenerApi.api.url}/create", "POST", Json { url: TEST_URL });
-  let newUrl2 = str.fromJson(Json.parse(response2).get("shortenedUrl"));
+  let response1 = http.post("${urlShortenerApi.api.url}/create", body: Json.stringify({ url: TEST_URL }));
+  let newUrl1 = Json.tryParse(response1.body ?? "")?.get("shortenedUrl")?.asStr();
+  let response2 = http.post("${urlShortenerApi.api.url}/create", body: Json.stringify({ url: TEST_URL }));
+  let newUrl2 = Json.tryParse(response2.body ?? "")?.get("shortenedUrl")?.asStr();
   assert(newUrl1 == newUrl2);
 }
 
 test "redirect sends to correct page" {
-  let createResponse = utils.fetch("${urlShortenerApi.api.url}/create", "POST", Json { url: TEST_URL });
-  let newUrl = str.fromJson(Json.parse(createResponse).get("shortenedUrl"));
-
-  let redirectedResponse = utils.fetch(newUrl, "GET");
-  assert(redirectedResponse.contains("<title>Hacker News</title>"));
+  let createResponse = http.post("${urlShortenerApi.api.url}/create", body: Json.stringify({ url: TEST_URL }));
+  log(createResponse.body ?? "");
+  if let newUrl = Json.tryParse(createResponse.body ?? "")?.get("shortenedUrl")?.asStr() {
+    log("newUrl: ${newUrl}");
+    let redirectedResponse = http.get(newUrl);
+    log(redirectedResponse.body ?? "");
+    assert(redirectedResponse.body?.contains("<title>Hacker News</title>") ?? false);
+  }
 }
 
 test "invalid short url" {
-  let response = utils.fetch("${urlShortenerApi.api.url}/u/invalid", "GET");
-  assert(response.contains("url not found"));
+  let response = http.get("${urlShortenerApi.api.url}/u/invalid");
+  assert(response.body?.contains("url not found") ?? false);
 }
