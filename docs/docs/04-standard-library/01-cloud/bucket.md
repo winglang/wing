@@ -48,12 +48,12 @@ bucket.addObject("my-file.txt", "Hello, world!");
 
 ### Using a bucket inflight
 
-```js
+```js playground
 bring cloud;
 
 let bucket = new cloud.Bucket();
 
-inflight () => {
+let bucketFunc = inflight () => {
   bucket.put("file.txt", "Hello, world!");
   bucket.putJson("person.json", Json { name: "Alice" });
 
@@ -69,6 +69,8 @@ inflight () => {
 
   bucket.delete("file.txt");
 };
+
+new cloud.Function(bucketFunc);
 ```
 
 ### Run code on bucket events
@@ -78,7 +80,9 @@ Use the `onEvent` method for responding to any event.
 
 Each method creates a new `cloud.Function` resource which will be triggered by the given event type.
 
-```js
+```js playground
+bring cloud;
+
 let store = new cloud.Bucket();
 let copies = new cloud.Bucket() as "Backup";
 

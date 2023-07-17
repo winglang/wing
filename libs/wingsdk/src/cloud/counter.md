@@ -30,12 +30,12 @@ let counter = new cloud.Counter(
 
 ### Using a counter inflight
 
-```js
+```js playground
 bring cloud;
 
 let counter = new cloud.Counter();
 
-inflight () => {
+let counterFunc = inflight () => {
   let prev = counter.inc(); // increment by 1 and return previous value
   counter.inc(5); // increment by 5
   counter.dec(); // decrement by 1
@@ -45,6 +45,8 @@ inflight () => {
 
   counter.set(100); // set to a specific value
 };
+
+new cloud.Function(counterFunc);
 ```
 
 ### Using keys to manage multiple counter values
