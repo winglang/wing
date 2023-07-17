@@ -1,6 +1,6 @@
-label: Cloud resources
+label: Cloud library
 collapsible: true
 collapsed: true
 link:
   type: generated-index
-  title: Wing cloud resources
+  title: Wing Cloud Library

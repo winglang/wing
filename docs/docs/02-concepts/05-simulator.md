@@ -24,7 +24,7 @@ is provided below.
 > Note: The simulator APIs are currently experimental and are subject to
 > breaking changes in the future.
 
-## Quick start guide
+## Using the low-level simulator APIs (experimental)
 
 ### Compile a Wing application for the simulator
 
