@@ -1078,7 +1078,7 @@ The loop invariant in for loops is implicitly re-assignable (`var`).
 > for item in arr {
 >   log("${item}");
 > }
-> for item: num in set {
+> for item in set {
 >   log("${item}");
 > }
 > for item in 0..100 {
