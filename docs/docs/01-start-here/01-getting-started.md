@@ -98,7 +98,7 @@ scalable, highly-available, and robust.
 
 The cloud has evolved to become a ubiquitous platform for running many types of applications.
 However, the cloud has also introduced a new set of challenges for developers.
-Writing applications often requires understanding low-level details of cloud services, and barriers between the spaces of infrastructure and runtime code make it increasingly difficult to to test and debug applications locally.
+Writing applications often requires understanding low-level details of cloud services, and barriers between the spaces of infrastructure and runtime code make it increasingly difficult to test and debug applications locally.
 
 Wing addresses these challenges through several key pillars:
 
