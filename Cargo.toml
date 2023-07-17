@@ -4,3 +4,8 @@ members = [
   "libs/wingc",
   "libs/wingii",
 ]
+
+# For use with `cargo flamegraph --profile flamegraph`
+[profile.flamegraph]
+inherits = "release"
+debug = true
