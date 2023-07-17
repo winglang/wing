@@ -5,7 +5,7 @@ members = [
   "libs/wingii",
 ]
 
-# For use with `cargo flamegraph --profile flamegraph
+# For use with `cargo flamegraph --profile flamegraph`
 [profile.flamegraph]
 inherits = "release"
 debug = true
