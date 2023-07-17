@@ -2,7 +2,7 @@ bring cloud;
 bring http;
 
 class Extern {
-  extern "./extern.js" static inflight makeId(): str;
+  extern "./url-shortener.js" static inflight makeId(): str;
 }
 
 class UrlShortener {
