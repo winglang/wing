@@ -25,7 +25,7 @@ The mission of Winglang is to bring back your creative flow and close the gap be
 
 Developing for the cloud today requires mastering various layers of cloud stack, IAM roles, networking, and numerous tools, along with finding creative ways to test and debug code. In addition, long deployment times hinder iteration cycles and take developers out of their creative flow. 
 
-Winglang addresses these pains by letting you to work at a higher level of abstraction, and allowing you focus on business logic instead of cloud mechanics, only surfacing low-level details when its needed.
+Winglang addresses these pains by letting you work at a higher level of abstraction and allowing you to focus on business logic instead of cloud mechanics, only surfacing low-level details when its needed.
 We also provide you with a set of tools that let you test your code locally, significantly faster than before.
 
 <p align="center">
