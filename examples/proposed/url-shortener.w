@@ -144,11 +144,8 @@ test "shorten url twice" {
 
 test "redirect sends to correct page" {
   let createResponse = http.post("${urlShortenerApi.api.url}/create", body: Json.stringify({ url: TEST_URL }));
-  log(createResponse.body ?? "");
   if let newUrl = Json.tryParse(createResponse.body ?? "")?.get("shortenedUrl")?.asStr() {
-    log("newUrl: ${newUrl}");
     let redirectedResponse = http.get(newUrl);
-    log(redirectedResponse.body ?? "");
     assert(redirectedResponse.body?.contains("<title>Hacker News</title>") ?? false);
   }
 }
