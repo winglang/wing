@@ -21,7 +21,7 @@ use crate::{
 		lifts::Lifts, symbol_env::SymbolEnv, ClassLike, Type, TypeRef, Types, VariableKind, CLASS_INFLIGHT_INIT_NAME,
 	},
 	MACRO_REPLACE_ARGS, MACRO_REPLACE_ARGS_TEXT, MACRO_REPLACE_SELF, WINGSDK_ASSEMBLY_NAME, WINGSDK_RESOURCE,
-	WINGSDK_STD_MODULE,
+	WINGSDK_STD_MODULE, MACRO_REPLACE_STRUCT_FIELDS, MACRO_REPLACE_STRUCT_NAME,
 };
 
 use self::codemaker::CodeMaker;
@@ -248,9 +248,29 @@ impl<'a> JSifier<'a> {
 	fn jsify_type(&self, typ: &TypeAnnotationKind) -> String {
 		match typ {
 			TypeAnnotationKind::UserDefined(t) => self.jsify_user_defined_type(&t),
-			_ => todo!(),
+      TypeAnnotationKind::String => "string".to_string(),
+      TypeAnnotationKind::Number => "number".to_string(),
+      TypeAnnotationKind::Optional(t) => self.jsify_type(&t.kind) + " | undefined",
+      TypeAnnotationKind::Bool => "boolean".to_string(),
+			_ => {
+        todo!();
+      },
 		}
 	}
+
+  fn jsify_struct_type_schemas(&self, typ: &TypeAnnotationKind) -> String {
+    match typ {
+			TypeAnnotationKind::UserDefined(t) => format!("__{}_Schema", self.jsify_user_defined_type(&t)),
+      TypeAnnotationKind::String => "\"string\"".to_string(),
+      TypeAnnotationKind::Number => "\"number\"".to_string(),
+      TypeAnnotationKind::Optional(t) => format!("\"{}\"", self.jsify_type(&t.kind) + " | undefined"),
+      TypeAnnotationKind::Bool => "\"boolean\"".to_string(),
+			_ => {
+        dbg!(typ);
+        todo!();
+      },
+		}
+  }
 
 	fn jsify_user_defined_type(&self, udt: &UserDefinedType) -> String {
 		udt.full_path_str()
@@ -425,10 +445,12 @@ impl<'a> JSifier<'a> {
 								self.jsify_expression(object, ctx)
 							}
 
-							_ => expr_string,
+							_ => expr_string.clone(),
 						};
-						let patterns = &[MACRO_REPLACE_SELF, MACRO_REPLACE_ARGS, MACRO_REPLACE_ARGS_TEXT];
-						let replace_with = &[self_string, &args_string, &args_text_string];
+            let root_expr_string = expr_string.clone().split(".").next().unwrap().to_string();
+            let struct_fields = format!("__{}_Schema", root_expr_string);
+						let patterns = &[MACRO_REPLACE_SELF, MACRO_REPLACE_ARGS, MACRO_REPLACE_ARGS_TEXT, MACRO_REPLACE_STRUCT_NAME, MACRO_REPLACE_STRUCT_FIELDS];
+						let replace_with = &[self_string, &args_string, &args_text_string, &root_expr_string, &struct_fields];
 						let ac = AhoCorasick::new(patterns);
 						return ac.replace_all(js_override, replace_with);
 					}
@@ -753,9 +775,18 @@ impl<'a> JSifier<'a> {
 				// This is a no-op in JS
 				CodeMaker::default()
 			}
-			StmtKind::Struct { .. } => {
+			StmtKind::Struct {name, fields, extends } => {
 				// This is a no-op in JS
-				CodeMaker::default()
+        let mut code = CodeMaker::default();
+        code.open(format!("const __{}_Schema = {{", name));
+        for e in extends {
+          code.line(format!("...__{}_Schema,", e));
+        }
+        for field in fields {
+          code.line(format!("{}: {},", field.name, self.jsify_struct_type_schemas(&field.member_type.kind)));
+        }
+        code.close("};");
+        code
 			}
 			StmtKind::Enum { name, values } => {
 				let mut code = CodeMaker::default();

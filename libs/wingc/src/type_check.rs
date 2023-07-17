@@ -3866,6 +3866,14 @@ impl<'a> TypeChecker<'a> {
 							)
 						}
 					}
+          Type::Struct(ref s) => {
+            let l = env.lookup(&s.name, None);
+            let t = l.unwrap().as_type().unwrap();
+
+            let new_class = self.hydrate_class_type_arguments(env, WINGSDK_STRUCT, vec![t]); // TODO: cant be anything
+            let v = self.get_property_from_class_like(new_class.as_class().unwrap(), property);
+            (v, Phase::Independent)
+          }
 					Type::Class(ref c) => match c.env.lookup(&property, None) {
 						Some(SymbolKind::Variable(v)) => {
 							if let VariableKind::StaticMember = v.kind {
@@ -3982,8 +3990,7 @@ impl<'a> TypeChecker<'a> {
 				property,
 			),
 			Type::Struct(ref s) => {
-        let new_class = self.hydrate_class_type_arguments(env, WINGSDK_STRUCT, vec![]);
-        self.get_property_from_class_like(new_class.as_class().unwrap(), property)
+        self.get_property_from_class_like(s, property)
       },
 			_ => {
 				self
@@ -3999,12 +4006,13 @@ impl<'a> TypeChecker<'a> {
 		if let LookupResult::Found(field, _) = lookup_res {
 			let var = field.as_variable().expect("Expected property to be a variable");
 			if let VariableKind::StaticMember = var.kind {
-				self
-					.spanned_error_with_var(
-						property,
-						format!("Cannot access static property \"{property}\" from instance"),
-					)
-					.0
+        var
+				// self
+				// 	.spanned_error_with_var(
+				// 		property,
+				// 		format!("Cannot access static property \"{property}\" from instance"),
+				// 	)
+				// 	.0
 			} else {
 				var
 			}

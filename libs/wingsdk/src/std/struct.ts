@@ -20,7 +20,7 @@ export class BaseStruct {
   /**
    * Converts a json to struct
    * 
-   * @macro console.log("Fuck yea");
+   * @macro (function validateSchema(j, s, p = "") { for (const key in s) { const type = s[key]; let jsonValueAtKey = j[key]; let jsonValueType = typeof jsonValueAtKey; if(typeof type === "object") {const valid = validateSchema(jsonValueAtKey, type, `${p}.${key}`); continue;}; if (!type.includes(jsonValueType)) {throw new Error(`key \"${p}.${key}\" expected type of \"${type}\", but received type of: \"${jsonValueType}\"`);}}return j;})($args$, $struct_fields$, "$struct_name$")
    */
   public static fromJson(json: Json): T1 {
     json;
