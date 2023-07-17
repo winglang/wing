@@ -9,21 +9,6 @@ hide_title: true
 
 # Welcome Wingnuts! :wave: 
 
-:::note This is a pre-release 🧪
-
-We are working hard to make this a great tool, but there's still a pretty good 
-chance you'll encounter missing pieces, rough edges, performance issues and even,
-god forbid, bugs 🐞. 
-
-Please don't hesitate to ping us on [Slack](https://t.winglang.io/slack) or 
-[file an issue](https://github.com/winglang/wing). We promise to do our best to
-respond quickly and help out.
-
-Our <a href="https://www.winglang.io/contributing/status">Project Status</a> page includes
-more information about stability and roadmap 👷‍♀️ 
-
-:::
-
 This handbook is your ultimate guide for learning about the Wing language. It is
 organized like a book, so you can read it by going from top to bottom by
 clicking "Next" at the bottom of each page. Alternatively, you can browse topics
@@ -116,6 +101,19 @@ Wing addresses these challenges through several key pillars:
 * **Infrastructure as policy** - Infrastructure concerns such as deployment,
   networking, security, and observability can be applied horizontally through
   policies instead of inside the application code.
+
+## This is a pre-release 🧪
+
+We are working hard to make this a great tool, but there's still a pretty good 
+chance you'll encounter missing pieces, rough edges, performance issues and even,
+god forbid, bugs 🐞. 
+
+Please don't hesitate to ping us on [Slack](https://t.winglang.io/slack) or 
+[file an issue](https://github.com/winglang/wing). We promise to do our best to
+respond quickly and help out.
+
+Our <a href="https://www.winglang.io/contributing/status">Project Status</a> page includes
+more information about stability and roadmap 👷‍♀️ 
 
 [Terraform]: https://www.terraform.io/
 [JavaScript]: https://developer.mozilla.org/en-US/docs/Web/JavaScript
