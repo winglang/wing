@@ -629,7 +629,7 @@ Duration <DURATION>"
 exports[`file_with_variables.w 1`] = `
 "ERROR: dummy error
 
-../../../examples/tests/invalid/target/test/file_with_variables.wsim.593156.tmp/.wing/preflight.js:34
+../../../examples/tests/invalid/target/test/file_with_variables.wsim.947632.tmp/.wing/preflight.js:34
        const y = Object.freeze([\\"hello\\", \\"world\\"]);
        const z = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Bucket\\",this,\\"cloud.Bucket\\");
 >>     {((msg) => {throw new Error(msg)})(\\"dummy error\\")};
