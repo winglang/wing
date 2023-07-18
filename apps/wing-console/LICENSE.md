@@ -1,7 +1,7 @@
 CONSOLE SOFTWARE 
 LICENSE AGREEMENT
 
-(last updated July 14, 2023)
+(last updated July 17, 2023)
 
 **THIS IS A LICENSE, NOT A SALE**
 
