@@ -271,9 +271,6 @@ importers:
       '@winglang/sdk':
         specifier: workspace:^
         version: link:../../libs/wingsdk
-      base64url:
-        specifier: ^3.0.1
-        version: 3.0.1
       chalk:
         specifier: ^4.1.2
         version: 4.1.2
@@ -10854,11 +10851,6 @@ packages:
   /base64-js@1.5.1:
     resolution: {integrity: sha512-AKpaYlHn8t4SVbOHCy+b5+KKgvR4vrsD8vbvrbiQJps7fKDTkjkDry6ji0rUJjC0kzbNePLwzxq8iypo41qeWA==}
 
-  /base64url@3.0.1:
-    resolution: {integrity: sha512-ir1UPr3dkwexU7FdV8qBBbNDRUhMmIekYMFZfi+C/sLNnRESKPl23nB9b2pltqfOQNnGzsDdId90AEtG5tCx4A==}
-    engines: {node: '>=6.0.0'}
-    dev: false
-
   /better-opn@2.1.1:
     resolution: {integrity: sha512-kIPXZS5qwyKiX/HcRvDYfmBQUa8XP17I0mYZZ0y4UhpYOSvtsLHDYqmomS+Mj20aDvD3knEiQ0ecQy2nhio3yA==}
     engines: {node: '>8.0.0'}
@@ -12662,7 +12654,7 @@ packages:
     dependencies:
       semver: 7.5.2
       shelljs: 0.8.5
-      typescript: 5.2.0-dev.20230718
+      typescript: 5.2.0-dev.20230714
     dev: true
 
   /dset@3.1.2:
@@ -21644,8 +21636,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  /typescript@5.2.0-dev.20230718:
-    resolution: {integrity: sha512-ED1Vm+2UzdbtKui+0lVswEuAX94fQXeoghXyy/+aTNers8X/WB81r5sFg6nA4e43nVQ2MP/Qsa7/XJRFuHR+Cg==}
+  /typescript@5.2.0-dev.20230714:
+    resolution: {integrity: sha512-BZAU6XIqRwO7gRelEoc6iunX6belf+IGyqA79LQqldafiBahXQKYTeyW8V0/ABk7/FpWWk4qRIDDCy8DKWo4XQ==}
     engines: {node: '>=14.17'}
     hasBin: true
     dev: true

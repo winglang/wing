@@ -1,7 +1,6 @@
 import { copyFileSync, promises as fsPromise, readFileSync, cpSync } from "fs";
 import { basename, join, resolve } from "path";
 import { tmpdir } from "os";
-import base64url from "base64url";
 
 /**
  * Normalize windows paths to be posix-like.
@@ -100,14 +99,14 @@ export function parseNumericString(text?: string) {
  * Converts a binary string to a base64/base64url string
  */
 export function base64Encode(stringToEncode: string, url?: boolean): string {
-	return Buffer.from(stringToEncode).toString(url ? "base64url" : "base64");
+  return Buffer.from(stringToEncode).toString(url ? "base64url" : "base64");
 }
 
 /**
  * Converts a base64/base64url string to a binary string
  */
 export function base64Decode(stringToDecode: string, url?: boolean): string {
-	return Buffer.from(stringToDecode, url ? "base64url" : "base64").toString("utf8")
+  return Buffer.from(stringToDecode, url ? "base64url" : "base64").toString("utf8");
 }
 
 export const currentPackage: {
