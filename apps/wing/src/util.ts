@@ -100,14 +100,14 @@ export function parseNumericString(text?: string) {
  * Converts a binary string to a base64/base64url string
  */
 export function base64Encode(stringToEncode: string, url?: boolean): string {
-  return url ? base64url(stringToEncode) : btoa(stringToEncode);
+	return Buffer.from(stringToEncode).toString(url ? "base64url" : "base64");
 }
 
 /**
  * Converts a base64/base64url string to a binary string
  */
 export function base64Decode(stringToDecode: string, url?: boolean): string {
-  return url ? base64url.decode(stringToDecode) : atob(stringToDecode);
+	return Buffer.from(stringToDecode, url ? "base64url" : "base64").toString("utf8")
 }
 
 export const currentPackage: {
