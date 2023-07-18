@@ -8,15 +8,3 @@ exports.makeId = function() {
 
     return id;
 }
-
-exports.fetch = async function(url, method, body) {
-    const response = await fetch(url, {
-        method,
-        body: body ? JSON.stringify(body) : undefined,
-        headers: {
-            "Content-Type": "application/json"
-        }
-    });
-    const text = await response.text();
-    return text;
-}
