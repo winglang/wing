@@ -274,6 +274,9 @@ importers:
       chalk:
         specifier: ^4.1.2
         version: 4.1.2
+      chokidar:
+        specifier: ^3.5.3
+        version: 3.5.3
       codespan-wasm:
         specifier: 0.4.0
         version: 0.4.0
@@ -12654,7 +12657,7 @@ packages:
     dependencies:
       semver: 7.5.2
       shelljs: 0.8.5
-      typescript: 5.2.0-dev.20230714
+      typescript: 5.2.0-dev.20230718
     dev: true
 
   /dset@3.1.2:
@@ -21636,8 +21639,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  /typescript@5.2.0-dev.20230714:
-    resolution: {integrity: sha512-BZAU6XIqRwO7gRelEoc6iunX6belf+IGyqA79LQqldafiBahXQKYTeyW8V0/ABk7/FpWWk4qRIDDCy8DKWo4XQ==}
+  /typescript@5.2.0-dev.20230718:
+    resolution: {integrity: sha512-ED1Vm+2UzdbtKui+0lVswEuAX94fQXeoghXyy/+aTNers8X/WB81r5sFg6nA4e43nVQ2MP/Qsa7/XJRFuHR+Cg==}
     engines: {node: '>=14.17'}
     hasBin: true
     dev: true

@@ -34,6 +34,7 @@
     "@winglang/compiler": "workspace:^",
     "@winglang/sdk": "workspace:^",
     "chalk": "^4.1.2",
+    "chokidar": "^3.5.3",
     "codespan-wasm": "0.4.0",
     "commander": "^10.0.0",
     "compare-versions": "^5.0.3",
