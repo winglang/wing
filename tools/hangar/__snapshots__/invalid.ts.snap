@@ -139,7 +139,7 @@ Duration <DURATION>"
 `;
 
 exports[`bring_local_variables.w 1`] = `
-"error: Cannot bring \\"\\"./file_with_variables.w\\"\\" - only modules that declare classes, interfaces, enums, and structs be brought
+"error: Cannot bring \\"\\"./file_with_variables.w\\"\\" - modules with statements besides classes, interfaces, enums, and structs cannot be brought
 
 
 error: Unknown symbol \\"Bar\\"
@@ -629,7 +629,7 @@ Duration <DURATION>"
 exports[`file_with_variables.w 1`] = `
 "ERROR: dummy error
 
-../../../examples/tests/invalid/target/test/file_with_variables.wsim.460094.tmp/.wing/preflight.js:34
+../../../examples/tests/invalid/target/test/file_with_variables.wsim.291799.tmp/.wing/preflight.js:34
        const y = Object.freeze([\\"hello\\", \\"world\\"]);
        const z = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Bucket\\",this,\\"cloud.Bucket\\");
 >>     {((msg) => {throw new Error(msg)})(\\"dummy error\\")};
