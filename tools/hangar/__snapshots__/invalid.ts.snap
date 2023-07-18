@@ -138,6 +138,24 @@ Test Files 1 failed (1)
 Duration <DURATION>"
 `;
 
+exports[`bring_local_variables.w 1`] = `
+"error: Cannot bring \\"\\"./file_with_variables.w\\"\\" - only modules that declare classes, interfaces, enums, and structs be brought
+
+
+error: Unknown symbol \\"Bar\\"
+  --> ../../../examples/tests/invalid/bring_local_variables.w:3:5
+  |
+3 | new stuff.Bar();
+  |     ^^^^^^^^^ Unknown symbol \\"Bar\\"
+
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
+
 exports[`bring_non_std_construct.w 1`] = `
 "error: Expected 1 positional argument(s) but got 0
   --> ../../../examples/tests/invalid/bring_non_std_construct.w:8:1
@@ -600,6 +618,23 @@ error: Failed to resolve extern \\"not-installed\\": Not Found
 4 |   extern \\"not-installed\\" static tooBad(): bool;
   |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Failed to resolve extern \\"not-installed\\": Not Found
 
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
+
+exports[`file_with_variables.w 1`] = `
+"ERROR: dummy error
+
+../../../examples/tests/invalid/target/test/file_with_variables.wsim.460094.tmp/.wing/preflight.js:34
+       const y = Object.freeze([\\"hello\\", \\"world\\"]);
+       const z = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Bucket\\",this,\\"cloud.Bucket\\");
+>>     {((msg) => {throw new Error(msg)})(\\"dummy error\\")};
+     }
+   }
 
  
  

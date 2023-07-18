@@ -629,6 +629,21 @@ impl<'s> Parser<'s> {
 				}
 			};
 
+			// Check that the module only declares bringable items (classes, interfaces, enums, structs)
+			// and not variables or functions
+			let scope = if !is_bringable(&scope) {
+				report_diagnostic(Diagnostic {
+					message: format!(
+						"Cannot bring \"{}\" - modules with statements besides classes, interfaces, enums, and structs cannot be brought",
+						module_name.name
+					),
+					span: None,
+				});
+				Scope::default()
+			} else {
+				scope
+			};
+
 			// parse error if no alias is provided
 			let module = if let Some(alias) = alias {
 				Ok(StmtKind::Module {
@@ -1951,4 +1966,35 @@ impl<'s> Parser<'s> {
 			span,
 		)))
 	}
+}
+
+fn is_bringable(scope: &Scope) -> bool {
+	let invalid_stmt = |stmt: &Stmt| match stmt.kind {
+		// these statements are ok
+		StmtKind::Bring { .. } => false,
+		StmtKind::Module { .. } => false,
+		StmtKind::Class(_) => false,
+		StmtKind::Interface(_) => false,
+		StmtKind::Struct { .. } => false,
+		StmtKind::Enum { .. } => false,
+		StmtKind::CompilerDebugEnv => false,
+		// these statements are invalid
+		StmtKind::SuperConstructor { .. } => true,
+		StmtKind::Let { .. } => true,
+		StmtKind::ForLoop { .. } => true,
+		StmtKind::While { .. } => true,
+		StmtKind::IfLet { .. } => true,
+		StmtKind::If { .. } => true,
+		StmtKind::Break => true,
+		StmtKind::Continue => true,
+		StmtKind::Return(_) => true,
+		StmtKind::Expression(_) => true,
+		StmtKind::Assignment { .. } => true,
+		StmtKind::Scope(_) => true,
+		StmtKind::TryCatch { .. } => true,
+	};
+
+	// A module is bringable if it doesn't have any invalid statement kinds
+	// (rough heuristic for now)
+	!scope.statements.iter().any(invalid_stmt)
 }
