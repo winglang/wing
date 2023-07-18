@@ -1,19 +1,7 @@
 import assert from "assert";
 import { execa } from "execa";
 import fs from "fs/promises";
-import {
-  npmBin,
-  npmCacheDir,
-  targetWingSDKSpec,
-  targetWingCompilerSpec,
-  targetWingSpec,
-  targetWingConsoleAppSpec,
-  targetWingConsoleServerSpec,
-  targetWingConsoleDesignSystemSpec,
-  targetWingConsoleUiSpec,
-  tmpDir,
-  wingBin,
-} from "./paths";
+import { npmBin, npmCacheDir, tarballFiles, tmpDir, wingBin } from "./paths";
 
 const shellEnv = {
   ...process.env,
@@ -45,13 +33,7 @@ export default async function () {
     "install",
     "--no-package-lock",
     "--install-links=false",
-    targetWingSDKSpec,
-    targetWingCompilerSpec,
-    targetWingSpec,
-    targetWingConsoleAppSpec,
-    targetWingConsoleServerSpec,
-    targetWingConsoleDesignSystemSpec,
-    targetWingConsoleUiSpec,
+    ...tarballFiles,
   ];
   const installResult = await execa(npmBin, installArgs, {
     cwd: tmpDir,
