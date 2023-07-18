@@ -15,12 +15,12 @@ mkdir hello-wing
 cd hello-wing
 ```
 
-## Your application entrypoint
+## The entrypoint file
 
 Add a new file called `hello.w` with the following code. This file is the
 entrypoint of your Wing application.
 
-```ts
+```js
 bring cloud;
 
 let bucket = new cloud.Bucket();
@@ -35,5 +35,4 @@ queue.setConsumer(inflight (message: str) => {
 This code should be mostly self explanatory. We define a queue, and every time a
 message is added to the queue, a handler is triggered and creates a file named `wing.txt` with `"Hello, ${message}!"` content .
 
-Now that we've written this program, let's run and test it using the Wing Console.
-
+Now that we've written this program, let's run and test it using the **Wing Console**.
