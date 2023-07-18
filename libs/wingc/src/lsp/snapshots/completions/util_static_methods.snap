@@ -37,18 +37,6 @@ source: libs/wingc/src/lsp/completions.rs
   command:
     title: triggerParameterHints
     command: editor.action.triggerParameterHints
-- label: sleep
-  kind: 2
-  detail: "(delay: duration): void"
-  documentation:
-    kind: markdown
-    value: "```wing\nstatic sleep: (delay: duration): void\n```\n---\nSuspends execution for a given duration."
-  sortText: ff|sleep
-  insertText: sleep($0)
-  insertTextFormat: 2
-  command:
-    title: triggerParameterHints
-    command: editor.action.triggerParameterHints
 - label: tryEnv
   kind: 2
   detail: "(name: str): str?"
@@ -69,18 +57,6 @@ source: libs/wingc/src/lsp/completions.rs
     value: "```wing\nstatic uuidv4: (): str\n```\n---\nGenerates a version 4 UUID."
   sortText: ff|uuidv4
   insertText: uuidv4()
-- label: waitUntil
-  kind: 2
-  detail: "(predicate: inflight (): bool, props: WaitUntilProps?): bool"
-  documentation:
-    kind: markdown
-    value: "```wing\nstatic waitUntil: (predicate: inflight (): bool, props: WaitUntilProps?): bool\n```\n---\nRun a predicate repeatedly, waiting until it returns true or until the timeout elapses.\n\n\n### Returns\nTrue if predicate is truthful within timeout.\n\n*@throws* *Will throw if the given predicate throws.*"
-  sortText: ff|waitUntil
-  insertText: waitUntil($0)
-  insertTextFormat: 2
-  command:
-    title: triggerParameterHints
-    command: editor.action.triggerParameterHints
 - label: Util
   kind: 7
   documentation:
