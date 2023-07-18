@@ -1,6 +1,7 @@
 import { copyFileSync, promises as fsPromise, readFileSync, cpSync } from "fs";
 import { basename, join, resolve } from "path";
 import { tmpdir } from "os";
+import base64url from "base64url";
 
 /**
  * Normalize windows paths to be posix-like.
@@ -95,4 +96,22 @@ export function parseNumericString(text?: string) {
   return number;
 }
 
-export const currentPackage: { name: string, version: string, engines: { node: string } } = require("../package.json");
+/**
+ * Converts a binary string to a base64/base64url string
+ */
+export function base64Encode(stringToEncode: string, url?: boolean): string {
+  return url ? base64url(stringToEncode) : btoa(stringToEncode);
+}
+
+/**
+ * Converts a base64/base64url string to a binary string
+ */
+export function base64Decode(stringToDecode: string, url?: boolean): string {
+  return url ? base64url.decode(stringToDecode) : atob(stringToDecode);
+}
+
+export const currentPackage: {
+  name: string;
+  version: string;
+  engines: { node: string };
+} = require("../package.json");

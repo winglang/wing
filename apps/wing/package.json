@@ -33,6 +33,7 @@
     "@wingconsole/app": "workspace:^",
     "@winglang/compiler": "workspace:^",
     "@winglang/sdk": "workspace:^",
+    "base64url": "^3.0.1",
     "chalk": "^4.1.2",
     "codespan-wasm": "0.4.0",
     "commander": "^10.0.0",
