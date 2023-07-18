@@ -2,24 +2,38 @@
 
 **Last revised on July 17<sup>th</sup>, 2023**
 
-Acceptance of Terms
+**1. Acceptance of Terms**
 
-Monada Inc., a Delaware corporation and/or its affiliates (dba “Wing Cloud”) (“Company”) may operate release and operate certain projects under an open-source licensing regime (the “Project(s)”). If you wish to contribute to or otherwise participate in any such Project, please read carefully the following Contributors Terms of Service (“CTS”). NOTE: This document does not apply to or govern the use of (and/or contributions to) any Company’s licensed products or services which are subject to separate license agreements. For example, the Company Console Software Application, is governed by the Company Console Software License Agreement (the current versions of which could be found **[here](https://github.com/winglang/wing/blob/main/apps/wing-console/LICENSE.md)**).
+1.1. Monada Inc., a Delaware corporation and/or its affiliates (dba “Wing Cloud”) (“Company”) may operate release and operate certain projects under an open-source licensing regime (the “Project(s)”). If you wish to contribute to or otherwise participate in any such Project, please read carefully the following Contributors Terms of Service (“CTS”). NOTE: This document does not apply to or govern the use of (and/or contributions to) any Company’s licensed products or services which are subject to separate license agreements. For example, the Company Console Software Application, is governed by the Company Console Software License Agreement (the current versions of which could be found **[here](https://github.com/winglang/wing/blob/main/apps/wing-console/LICENSE.md)**).
 
-BY CLICKING THE BOX INDICATING YOUR ACCEPTANCE OF THIS CTS, BY CONTRIBUTING ANY CONTENT TO THE PROJECTS OR BY OTHERWISE PARTICIPATING IN A PROJECT, YOU ACKNOWLEDGE THAT YOU HAVE READ AND UNDERSTOOD THE FOLLOWING TERMS AND YOU AGREE TO BE BOUND BY THEM AND TO COMPLY WITH ALL APPLICABLE LAWS AND REGULATIONS REGARDING YOUR PARTICIPATION IN OR ENGAGEMENT WITH THE PROJECT, AND YOU ACKNOWLEDGE THAT THESE TERMS CONSTITUTE A BINDING AND ENFORCEABLE LEGAL CONTRACT BETWEEN COMPANY AND YOU. IF YOU ACCEPT THESE CTS ON BEHALF OF AN ORGANIZATION, YOU REPRESENT THAT YOU HAVE THE AUTHORITY TO BIND YOUR ORGANIZATION BY THESE CTS. IF YOU DO NOT HAVE SUCH AUTHORITY, OR IF YOU DO NOT AGREE WITH THIS CTS, DO NOT CLICK ON THE ACCEPT BOX AND DO NOT CONTRIBUT ANY MATERIALS TO OR ENGAGE WITH THE PROJECTS.
-Registration Obligations
-In order to contribute to the Projects, you may be required to register to the Project and create your personal account. By doing so, you represent that you are of legal age to do so. The registration is free of charge.
 
-You should provide only true and accurate information during the registration and you agree to keep your Account information up to date and accurate.
+1.2. BY CLICKING THE BOX INDICATING YOUR ACCEPTANCE OF THIS CTS, BY CONTRIBUTING ANY CONTENT TO THE PROJECTS OR BY OTHERWISE PARTICIPATING IN A PROJECT, YOU ACKNOWLEDGE THAT YOU HAVE READ AND UNDERSTOOD THE FOLLOWING TERMS AND YOU AGREE TO BE BOUND BY THEM AND TO COMPLY WITH ALL APPLICABLE LAWS AND REGULATIONS REGARDING YOUR PARTICIPATION IN OR ENGAGEMENT WITH THE PROJECT, AND YOU ACKNOWLEDGE THAT THESE TERMS CONSTITUTE A BINDING AND ENFORCEABLE LEGAL CONTRACT BETWEEN COMPANY AND YOU. IF YOU ACCEPT THESE CTS ON BEHALF OF AN ORGANIZATION, YOU REPRESENT THAT YOU HAVE THE AUTHORITY TO BIND YOUR ORGANIZATION BY THESE CTS. IF YOU DO NOT HAVE SUCH AUTHORITY, OR IF YOU DO NOT AGREE WITH THIS CTS, DO NOT CLICK ON THE ACCEPT BOX AND DO NOT CONTRIBUT ANY MATERIALS TO OR ENGAGE WITH THE PROJECTS.
 
-You should provide only information which you are entitled to provide. Company may publish your name and corporate affiliation, as well as other information you provide, in connection with your Contribution, for the purpose of the Project or as part of Company’s business operation, including but not limited to as part of its marketing materials or in any media.
 
-You should not reveal your password or assign the rights to use your account to anyone else, and agree to immediately notify Company of any unauthorized use of your account or password. You are responsible for all activity on your account.
+**2. Registration Obligations**
 
-If you wish to either change your user name or close your account you can contact us at: help@Company.co Your account will terminate within a reasonable timeframe following your request.
 
-Company shall retain your personal information, in accordance with its privacy policy (available on its website).
-Code of Conduct
+2.1. In order to contribute to the Projects, you may be required to register to the Project and create your personal account. By doing so, you represent that you are of legal age to do so. The registration is free of charge.
+
+
+2.2. You should provide only true and accurate information during the registration and you agree to keep your Account information up to date and accurate.
+
+
+2.3. You should provide only information which you are entitled to provide. Company may publish your name and corporate affiliation, as well as other information you provide, in connection with your Contribution, for the purpose of the Project or as part of Company’s business operation, including but not limited to as part of its marketing materials or in any media.
+
+
+2.4. You should not reveal your password or assign the rights to use your account to anyone else, and agree to immediately notify Company of any unauthorized use of your account or password. You are responsible for all activity on your account.
+
+
+2.5. If you wish to either change your user name or close your account you can contact us at: help@Company.co Your account will terminate within a reasonable timeframe following your request.
+
+
+2.6.Company shall retain your personal information, in accordance with its privacy policy (available on its website).
+
+
+**3. Code of Conduct**
+
+
 There are certain conducts which are strictly prohibited in connection with any Project. Please read the following restrictions carefully. Your failure to comply with the provisions set forth may result (without derogating from any other remedy provided to Company or any third party under applicable law), at Company’s sole discretion- without obligation, in the termination of your access to the Project and may also expose you to civil and/or criminal liability. You may not, whether by yourself or through anyone on your behalf:
 
 to engage in any activity which is unlawful, harmful, threatening, abusive, harassing, tortuous, defamatory, vulgar, obscene, libellous, invasive of another's privacy, hateful, or racially, ethnically or otherwise objectionable or harm minors;
