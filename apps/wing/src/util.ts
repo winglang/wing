@@ -95,22 +95,4 @@ export function parseNumericString(text?: string) {
   return number;
 }
 
-/**
- * Converts a binary string to a base64/base64url string
- */
-export function base64Encode(stringToEncode: string, url?: boolean): string {
-  return Buffer.from(stringToEncode).toString(url ? "base64url" : "base64");
-}
-
-/**
- * Converts a base64/base64url string to a binary string
- */
-export function base64Decode(stringToDecode: string, url?: boolean): string {
-  return Buffer.from(stringToDecode, url ? "base64url" : "base64").toString("utf8");
-}
-
-export const currentPackage: {
-  name: string;
-  version: string;
-  engines: { node: string };
-} = require("../package.json");
+export const currentPackage: { name: string, version: string, engines: { node: string } } = require("../package.json");

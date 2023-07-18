@@ -79,6 +79,26 @@ export class Util {
   }
 
   /**
+   * Converts a string from UTF-8 to base64.
+   * @param name The name of the UTF8 string to encode.
+   * @returns The base64 string.
+   */
+  public static base64Encode(stringToEncode: string, url?: boolean): string {
+    return Buffer.from(stringToEncode).toString(url ? "base64url" : "base64");
+  }
+
+  /**
+   * Converts a string from base64 to UTF-8.
+   * @param name The name of the base64 string to decode.
+   * @returns The UTF-8 string.
+   */
+  public static base64Decode(stringToDecode: string, url?: boolean): string {
+    return Buffer.from(stringToDecode, url ? "base64url" : "base64").toString(
+      "utf8"
+    );
+  }
+
+  /**
    * Suspends execution for a given duration.
    * @param delay The time to suspend execution.
    * @inflight
