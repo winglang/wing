@@ -114,7 +114,7 @@ async function main() {
 
       watcher.on("change", async () => {
         log(`Wing source file changed, rerunning tests…`);
-        await import(`./commands/test`).then((m) => m["test"](cmd.args, cmd.opts()));
+        await import(`./commands/test`).then((m) => m["test"](cmd.args, cmd.optsWithGlobals()));
       });
 
       watcher.on("error", (error) => {
