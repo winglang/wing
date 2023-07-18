@@ -1,0 +1,13 @@
+{
+  "$schema": "https://turborepo.org/schema.json",
+  "extends": ["//"],
+  "pipeline": {
+    "compile": {
+      "inputs": ["src/**"],
+      "outputs": ["lib/**"]
+    },
+    "package": {
+      "outputs": ["vscode-wing.vsix"]
+    }
+  }
+}

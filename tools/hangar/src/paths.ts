@@ -18,27 +18,6 @@ export const wingBin = path.join(tmpDir, "node_modules/.bin/wing");
 
 export const snapshotDir = path.join(hangarDir, "__snapshots__");
 
-export const targetWingSpec =
-  process.env.HANGAR_WING_SPEC ?? `file:${path.join(repoRoot, `apps/wing`)}`;
-export const targetWingConsoleAppSpec =
-  process.env.HANGAR_WINGCONSOLE_APP_SPEC ??
-  `file:${path.join(repoRoot, `apps/wing-console/console/app`)}`;
-export const targetWingConsoleServerSpec =
-  process.env.HANGAR_WINGCONSOLE_SERVER_SPEC ??
-  `file:${path.join(repoRoot, `apps/wing-console/console/server`)}`;
-export const targetWingConsoleDesignSystemSpec =
-  process.env.HANGAR_WINGCONSOLE_DESIGN_SYSTEM_SPEC ??
-  `file:${path.join(repoRoot, `apps/wing-console/console/design-system`)}`;
-export const targetWingConsoleUiSpec =
-  process.env.HANGAR_WINGCONSOLE_UI_SPEC ??
-  `file:${path.join(repoRoot, `apps/wing-console/console/ui`)}`;
-export const targetWingCompilerSpec =
-  process.env.HANGAR_WINGCOMPILER_SPEC ??
-  `file:${path.join(repoRoot, `libs/wingcompiler`)}`;
-export const targetWingSDKSpec =
-  process.env.HANGAR_WINGSDK_SPEC ??
-  `file:${path.join(repoRoot, `libs/wingsdk`)}`;
-
 export const validWingFiles = fs
   .readdirSync(validTestDir)
   .filter((f) => f.endsWith(".w"))

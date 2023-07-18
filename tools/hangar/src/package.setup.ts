@@ -1,19 +1,12 @@
-import assert from "assert";
+import assert from "node:assert";
 import { execa } from "execa";
-import fs from "fs/promises";
-import {
-  npmBin,
-  npmCacheDir,
-  targetWingSDKSpec,
-  targetWingCompilerSpec,
-  targetWingSpec,
-  targetWingConsoleAppSpec,
-  targetWingConsoleServerSpec,
-  targetWingConsoleDesignSystemSpec,
-  targetWingConsoleUiSpec,
-  tmpDir,
-  wingBin,
-} from "./paths";
+import * as fs from "node:fs/promises";
+import * as path from "node:path";
+import { npmBin, npmCacheDir, tmpDir, wingBin } from "./paths";
+
+// Tell the Wing Compiler to not use colors. See the following crate for more info:
+// https://docs.rs/crate/colored/latest
+process.env.NO_COLOR = "1";
 
 const shellEnv = {
   ...process.env,
@@ -27,10 +20,6 @@ const shellEnv = {
 
 export default async function () {
   Object.assign(process.env, shellEnv);
-  // Explicitly remove FORCE_COLOR from env, this is because NX sets it to true, so when we run
-  // under NX build we get color output in the snapshots, which is not what we want.
-  // Might be related to https://github.com/nrwl/nx/issues/8051#issuecomment-1047061889
-  delete process.env.FORCE_COLOR;
 
   // reset tmpDir
   await fs.rm(tmpDir, { recursive: true, force: true });
@@ -40,18 +29,16 @@ export default async function () {
   });
 
   // use execSync to install npm deps in tmpDir
+  const tarballsDir = path.resolve(`${__dirname}/../../../dist`);
+  const tarballs = (await fs.readdir(tarballsDir))
+    .filter((filename) => filename.endsWith(".tgz"))
+    .map((tarball) => `file:${tarballsDir}/${tarball}`);
   console.debug(`Installing npm deps into ${tmpDir}...`);
   const installArgs = [
     "install",
     "--no-package-lock",
     "--install-links=false",
-    targetWingSDKSpec,
-    targetWingCompilerSpec,
-    targetWingSpec,
-    targetWingConsoleAppSpec,
-    targetWingConsoleServerSpec,
-    targetWingConsoleDesignSystemSpec,
-    targetWingConsoleUiSpec,
+    ...tarballs,
   ];
   const installResult = await execa(npmBin, installArgs, {
     cwd: tmpDir,

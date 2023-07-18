@@ -1,3 +1,4 @@
+// import * as path from "node:path";
 import { IgnoreFile } from "projen";
 import { NodePackageManager } from "projen/lib/javascript";
 import { TypeScriptAppProject } from "projen/lib/typescript";
@@ -185,5 +186,12 @@ project.addFields({
 
 project.package.file.addDeletionOverride("pnpm");
 project.tryRemoveFile(".npmrc");
+
+// const WING_BIN = path.resolve(__dirname, "../wing/bin/wing");
+// const EXTENSION_DEVELOPMENT_PATH = path.resolve(__dirname, "..");
+project.addTask("dev").exec(
+  // `RUST_BACKTRACE=1 WING_BIN="${WING_BIN}" code ../../examples --disable-extensions --extensionDevelopmentPath=${EXTENSION_DEVELOPMENT_PATH}`
+  `RUST_BACKTRACE=1 WING_BIN="../wing/bin/wing" code ../../examples --disable-extensions --extensionDevelopmentPath=..`
+);
 
 project.synth();

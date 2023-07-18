@@ -74,6 +74,14 @@
         }
       ]
     },
+    "dev": {
+      "name": "dev",
+      "steps": [
+        {
+          "exec": "RUST_BACKTRACE=1 WING_BIN=\"../wing/bin/wing\" code ../../examples --disable-extensions --extensionDevelopmentPath=.."
+        }
+      ]
+    },
     "eject": {
       "name": "eject",
       "description": "Remove projen from the project",

@@ -1,0 +1,8 @@
+{
+  "extends": ["//"],
+  "pipeline": {
+    "compile": {
+      "outputs": ["lib/**"]
+    }
+  }
+}

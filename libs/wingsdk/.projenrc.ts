@@ -106,8 +106,8 @@ const project = new cdk.JsiiProject({
   ],
   devDeps: [
     `@cdktf/provider-aws@^15.0.0`, // only for testing Wing plugins
-    "wing-api-checker@workspace:^",
-    "bump-pack@workspace:^",
+    "wing-api-checker",
+    "bump-pack",
     "@types/aws-lambda",
     "@types/fs-extra",
     "@types/mime-types",
@@ -147,7 +147,7 @@ project.eslint?.addOverride({
 
 // use fork of jsii-docgen with wing-ish support
 project.deps.removeDependency("jsii-docgen");
-project.addDevDeps("@winglang/jsii-docgen@workspace:^");
+project.addDevDeps("@winglang/jsii-docgen");
 
 enum Zone {
   PREFLIGHT = "preflight",
@@ -309,5 +309,7 @@ project.preCompileTask.exec("cdktf get");
 
 project.package.file.addDeletionOverride("pnpm");
 project.tryRemoveFile(".npmrc");
+
+project.packageTask.reset("bump-pack -b");
 
 project.synth();

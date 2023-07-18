@@ -1,0 +1,14 @@
+{
+  "$schema": "https://turborepo.org/schema.json",
+  "extends": ["//"],
+  "pipeline": {
+    "compile": {
+      "inputs": ["src/**"],
+      "outputs": ["target/wasm32-wasi/release/wingc.wasm"]
+    },
+    "lint": {},
+    "eslint": {
+      "dependsOn": ["lint"]
+    }
+  }
+}
