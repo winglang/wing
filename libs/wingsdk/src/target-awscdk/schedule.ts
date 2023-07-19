@@ -38,11 +38,15 @@ export class Schedule extends cloud.Schedule {
       let cronOpt: { [k: string]: string } = {
         minute: cronArr[0],
         hour: cronArr[1],
-        day: cronArr[2],
         month: cronArr[3],
-        weekDay: cronArr[4],
         year: "*",
       };
+      if (cronArr[2] !== "?") {
+        cronOpt.day = cronArr[2];
+      }
+      if (cronArr[4] !== "?") {
+        cronOpt.weekDay = cronArr[4];
+      }
 
       this.scheduleExpression = EventSchedule.cron(cronOpt);
     } else {
