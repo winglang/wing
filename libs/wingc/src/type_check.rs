@@ -3866,14 +3866,14 @@ impl<'a> TypeChecker<'a> {
 							)
 						}
 					}
-          Type::Struct(ref s) => {
-            let l = env.lookup(&s.name, None);
-            let t = l.unwrap().as_type().unwrap();
+					Type::Struct(ref s) => {
+						let l = env.lookup(&s.name, None);
+						let t = l.unwrap().as_type().unwrap();
 
-            let new_class = self.hydrate_class_type_arguments(env, WINGSDK_STRUCT, vec![t]); // TODO: cant be anything
-            let v = self.get_property_from_class_like(new_class.as_class().unwrap(), property);
-            (v, Phase::Independent)
-          }
+						let new_class = self.hydrate_class_type_arguments(env, WINGSDK_STRUCT, vec![t]); // TODO: cant be anything
+						let v = self.get_property_from_class_like(new_class.as_class().unwrap(), property);
+						(v.clone(), Phase::Independent)
+					}
 					Type::Class(ref c) => match c.env.lookup(&property, None) {
 						Some(SymbolKind::Variable(v)) => {
 							if let VariableKind::StaticMember = v.kind {
@@ -3989,9 +3989,7 @@ impl<'a> TypeChecker<'a> {
 					.unwrap(),
 				property,
 			),
-			Type::Struct(ref s) => {
-        self.get_property_from_class_like(s, property)
-      },
+			Type::Struct(ref s) => self.get_property_from_class_like(s, property),
 			_ => {
 				self
 					.spanned_error_with_var(property, "Property not found".to_string())
@@ -4006,13 +4004,14 @@ impl<'a> TypeChecker<'a> {
 		if let LookupResult::Found(field, _) = lookup_res {
 			let var = field.as_variable().expect("Expected property to be a variable");
 			if let VariableKind::StaticMember = var.kind {
-        var
-				// self
-				// 	.spanned_error_with_var(
-				// 		property,
-				// 		format!("Cannot access static property \"{property}\" from instance"),
-				// 	)
-				// 	.0
+        dbg!(&var);
+				var
+			// self
+			// 	.spanned_error_with_var(
+			// 		property,
+			// 		format!("Cannot access static property \"{property}\" from instance"),
+			// 	)
+			// 	.0
 			} else {
 				var
 			}

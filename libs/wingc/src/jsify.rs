@@ -18,10 +18,11 @@ use crate::{
 	diagnostic::{report_diagnostic, Diagnostic, WingSpan},
 	files::Files,
 	type_check::{
-		lifts::Lifts, symbol_env::SymbolEnv, ClassLike, Type, TypeRef, Types, VariableKind, CLASS_INFLIGHT_INIT_NAME,
+		lifts::Lifts, symbol_env::SymbolEnv, ClassLike, Type, TypeRef, Types, VariableKind,
+		CLASS_INFLIGHT_INIT_NAME,
 	},
-	MACRO_REPLACE_ARGS, MACRO_REPLACE_ARGS_TEXT, MACRO_REPLACE_SELF, WINGSDK_ASSEMBLY_NAME, WINGSDK_RESOURCE,
-	WINGSDK_STD_MODULE, MACRO_REPLACE_STRUCT_FIELDS, MACRO_REPLACE_STRUCT_NAME,
+	MACRO_REPLACE_ARGS, MACRO_REPLACE_ARGS_TEXT, MACRO_REPLACE_SELF, MACRO_REPLACE_STRUCT_FIELDS,
+	MACRO_REPLACE_STRUCT_NAME, WINGSDK_ASSEMBLY_NAME, WINGSDK_RESOURCE, WINGSDK_STD_MODULE,
 };
 
 use self::codemaker::CodeMaker;
@@ -248,29 +249,29 @@ impl<'a> JSifier<'a> {
 	fn jsify_type(&self, typ: &TypeAnnotationKind) -> String {
 		match typ {
 			TypeAnnotationKind::UserDefined(t) => self.jsify_user_defined_type(&t),
-      TypeAnnotationKind::String => "string".to_string(),
-      TypeAnnotationKind::Number => "number".to_string(),
-      TypeAnnotationKind::Optional(t) => self.jsify_type(&t.kind) + " | undefined",
-      TypeAnnotationKind::Bool => "boolean".to_string(),
+			TypeAnnotationKind::String => "string".to_string(),
+			TypeAnnotationKind::Number => "number".to_string(),
+			TypeAnnotationKind::Optional(t) => self.jsify_type(&t.kind) + " | undefined",
+			TypeAnnotationKind::Bool => "boolean".to_string(),
 			_ => {
-        todo!();
-      },
+				todo!();
+			}
 		}
 	}
 
-  fn jsify_struct_type_schemas(&self, typ: &TypeAnnotationKind) -> String {
-    match typ {
+	fn jsify_struct_type_schemas(&self, typ: &TypeAnnotationKind) -> String {
+		match typ {
 			TypeAnnotationKind::UserDefined(t) => format!("__{}_Schema", self.jsify_user_defined_type(&t)),
-      TypeAnnotationKind::String => "\"string\"".to_string(),
-      TypeAnnotationKind::Number => "\"number\"".to_string(),
-      TypeAnnotationKind::Optional(t) => format!("\"{}\"", self.jsify_type(&t.kind) + " | undefined"),
-      TypeAnnotationKind::Bool => "\"boolean\"".to_string(),
+			TypeAnnotationKind::String => "\"string\"".to_string(),
+			TypeAnnotationKind::Number => "\"number\"".to_string(),
+			TypeAnnotationKind::Optional(t) => format!("\"{}\"", self.jsify_type(&t.kind) + " | undefined"),
+			TypeAnnotationKind::Bool => "\"boolean\"".to_string(),
 			_ => {
-        dbg!(typ);
-        todo!();
-      },
+				dbg!(typ);
+				todo!();
+			}
 		}
-  }
+	}
 
 	fn jsify_user_defined_type(&self, udt: &UserDefinedType) -> String {
 		udt.full_path_str()
@@ -295,6 +296,7 @@ impl<'a> JSifier<'a> {
 		// inflight variable). in this case we need to bail out.
 		if ctx.phase == Phase::Preflight {
 			if let Some(expr_phase) = self.types.get_expr_phase(expression) {
+        dbg!(&expr_phase);
 				if expr_phase == Phase::Inflight {
 					report_diagnostic(Diagnostic {
 						message: "Cannot reference an inflight value from within a preflight expression".to_string(),
@@ -443,12 +445,16 @@ impl<'a> JSifier<'a> {
 							ExprKind::Reference(Reference::Identifier(_)) => "global".to_string(),
 							ExprKind::Reference(Reference::InstanceMember { object, .. }) => {
 								self.jsify_expression(object, ctx)
-							}
+              }
+              ExprKind::Reference(Reference::TypeMember { .. }) => {
+                expr_string.clone().split(".").next().unwrap().to_string()
+              },
 
 							_ => expr_string.clone(),
 						};
             let root_expr_string = expr_string.clone().split(".").next().unwrap().to_string();
             let struct_fields = format!("__{}_Schema", root_expr_string);
+            // TODO: try to stringify the schema and pass that maybe.
 						let patterns = &[MACRO_REPLACE_SELF, MACRO_REPLACE_ARGS, MACRO_REPLACE_ARGS_TEXT, MACRO_REPLACE_STRUCT_NAME, MACRO_REPLACE_STRUCT_FIELDS];
 						let replace_with = &[self_string, &args_string, &args_text_string, &root_expr_string, &struct_fields];
 						let ac = AhoCorasick::new(patterns);
@@ -775,18 +781,37 @@ impl<'a> JSifier<'a> {
 				// This is a no-op in JS
 				CodeMaker::default()
 			}
-			StmtKind::Struct {name, fields, extends } => {
-				// This is a no-op in JS
-        let mut code = CodeMaker::default();
-        code.open(format!("const __{}_Schema = {{", name));
+			StmtKind::Struct { name, fields, extends } => {
+				let mut code = CodeMaker::default();
+				code.open(format!("exports.schema = {{"));
         for e in extends {
-          code.line(format!("...__{}_Schema,", e));
-        }
-        for field in fields {
-          code.line(format!("{}: {},", field.name, self.jsify_struct_type_schemas(&field.member_type.kind)));
-        }
+					code.line(format!("...(require(\"./{}.js\").schema),", e));
+				}
+				for field in fields {
+					code.line(format!(
+						"{}: {},",
+						field.name,
+						self.jsify_struct_type_schemas(&field.member_type.kind)
+					));
+				}
         code.close("};");
-        code
+        
+        // // Create schema validation function
+        // code.open(format!("static validateSchema(obj) {{"));
+        // code.open("for (const key in this.schema) {");
+        // code.line("const expectedType = this.schema[key];");
+        // code.line("const actualType = typeof obj[key];");
+        // code.open("if (!expectedType.includes(actualType)) {");
+        // code.line("throw new Error(`key \"${key}\" expected type of \"${expectedType}\", but received type of: \"${actualType}\"`);");
+        // code.close("}");
+        // code.close("}");
+        // code.close("}");
+
+				self.emit_struct_file(name, code, ctx);
+
+				let mut codeTwo = CodeMaker::default();
+        codeTwo.line(format!("const {} = require(\"{}\").schema;", name, struct_filename(name)));
+        codeTwo
 			}
 			StmtKind::Enum { name, values } => {
 				let mut code = CodeMaker::default();
@@ -1171,6 +1196,15 @@ impl<'a> JSifier<'a> {
 		class_code
 	}
 
+	fn emit_struct_file(&self, name: &Symbol, struct_code: CodeMaker, ctx: &mut JSifyContext) {
+		let mut code = CodeMaker::default();
+		code.add_code(struct_code);
+		match ctx.files.add_file(struct_filename(name), code.to_string()) {
+			Ok(()) => {}
+			Err(err) => report_diagnostic(err.into()),
+		}
+	}
+
 	fn emit_inflight_file(&self, class: &AstClass, inflight_class_code: CodeMaker, ctx: &mut JSifyContext) {
 		let name = &class.name.name;
 		let mut code = CodeMaker::default();
@@ -1306,6 +1340,10 @@ impl<'a> JSifier<'a> {
 
 fn inflight_filename(class: &AstClass) -> String {
 	format!("./inflight.{}.js", class.name.name)
+}
+
+fn struct_filename(s: &Symbol) -> String {
+	format!("./{}.js", s.name)
 }
 
 fn lookup_span(span: &WingSpan, files: &Files) -> String {
