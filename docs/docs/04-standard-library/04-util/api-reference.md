@@ -55,6 +55,8 @@ Converts a string from base64 to UTF-8.
 
 - *Type:* bool
 
+Whether the string should be treated as an url.
+
 ---
 
 ##### `base64Encode` <a name="base64Encode" id="@winglang/sdk.util.Util.base64Encode"></a>
@@ -76,6 +78,8 @@ Converts a string from UTF-8 to base64.
 ###### `url`<sup>Optional</sup> <a name="url" id="@winglang/sdk.util.Util.base64Encode.parameter.url"></a>
 
 - *Type:* bool
+
+Whether the string should be treated as an url.
 
 ---
 
