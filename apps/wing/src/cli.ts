@@ -9,7 +9,6 @@ import { collectCommandAnalytics } from "./analytics/collect";
 import { exportAnalytics } from "./analytics/export";
 import { optionallyDisplayDisclaimer } from "./analytics/disclaimer";
 import { currentPackage } from "./util";
-import * as chokidar from "chokidar";
 
 export const PACKAGE_VERSION = currentPackage.version;
 let analyticsExportFile: Promise<string | undefined>;
@@ -101,27 +100,6 @@ async function main() {
     }
   }
 
-  async function watchHook(cmd: Command) {
-    const entrypoint = cmd.args[0];
-    const watch = cmd.opts().watch;
-    if (watch) {
-      const watcher = chokidar.watch(entrypoint, {
-        ignoreInitial: true,
-      });
-
-      console.log(`Starting to watch ${entrypoint}`);
-
-      watcher.on("change", async () => {
-        console.log(`Wing source file changed, rerunning tests…`);
-        await import(`./commands/test`).then((m) => m["test"](cmd.args, cmd.optsWithGlobals()));
-      });
-
-      watcher.on("error", (error) => {
-        console.error("Error watching Wing source file", error);
-      });
-    }
-  }
-
   async function updateHook(cmd: Command) {
     const updateCheck = cmd.opts().updateCheck;
     if (updateCheck) {
@@ -176,7 +154,6 @@ async function main() {
     .option("-p, --plugins [plugin...]", "Compiler plugins")
     .option("-w, --watch", "Watch Wing source files for changes and rerun tests")
     .hook("preAction", progressHook)
-    .hook("preAction", watchHook)
     .hook("preAction", collectAnalyticsHook)
     .action(runSubCommand("test"));
 

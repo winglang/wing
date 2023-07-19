@@ -8,11 +8,14 @@ import { promisify } from "util";
 import { generateTmpDir, withSpinner } from "../util";
 import { Target } from "@winglang/compiler";
 import { readFile, rm, rmSync } from "fs";
+import * as chokidar from "chokidar";
 
 const log = debug("wing:test");
 
 const ENV_WING_TEST_RUNNER_FUNCTION_ARNS = "WING_TEST_RUNNER_FUNCTION_ARNS";
 const ENV_WING_TEST_RUNNER_FUNCTION_ARNS_AWSCDK = "WingTestRunnerFunctionArns";
+
+let isWatching = false;
 
 /**
  * @param path path to the test/s file
@@ -23,9 +26,28 @@ const generateTestName = (path: string) => path.split(sep).slice(-2).join("/");
 /**
  * Options for the `test` command.
  */
-export interface TestOptions extends CompileOptions {}
+export interface TestOptions extends CompileOptions {
+  readonly watch?: boolean;
+}
 
 export async function test(entrypoints: string[], options: TestOptions): Promise<number> {
+  if (!isWatching && options.watch) {
+    const watcher = chokidar.watch(entrypoints, {
+      ignoreInitial: true,
+    });
+
+    console.log(`Watching ${entrypoints}`);
+
+    watcher.on("change", async () => {
+      console.log(`Wing source file changed, rerunning tests…`);
+      await test(entrypoints, options);
+    });
+
+    watcher.on("error", (error) => {
+      console.error("Error watching Wing source files", error);
+    });
+  }
+
   const startTime = Date.now();
   const results: { testName: string; results: std.TestResult[] }[] = [];
   for (const entrypoint of entrypoints) {
