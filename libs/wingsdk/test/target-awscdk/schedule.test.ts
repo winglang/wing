@@ -139,3 +139,17 @@ test("schedule with rate less than 1 minute", () => {
     })
   ).toThrow("rate can not be set to less than 1 minute.");
 });
+
+test("cron with Day-of-month and Day-of-week setting with *", () => {
+  // GIVEN
+  const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
+
+  // THEN
+  expect(() =>
+    Schedule._newSchedule(app, "Schedule", {
+      cron: "0/1 * * * *",
+    })
+  ).toThrow(
+    "cannot use * in both the Day-of-month and Day-of-week fields. If you use it in one, you must use ? in the other"
+  );
+});
