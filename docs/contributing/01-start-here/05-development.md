@@ -16,16 +16,16 @@ You can open up this repo just using the badge below. It is recommended to selec
 Here is a list of minimal tools you should install to build the Wing repo in your development
 environment:
 
-* [Node.js] v18 and [PNPM] v8
-  * We recommend [volta] to manage node tools
-* [Rust]
-  * We recommend using [rustup] to manage your Rust installation
-* [AWS CLI]
-  * Only needed for integration tests - make sure to do the setup part to create credentials
-* [Terraform CLI]
-  * Only needed for integration tests
-* [Docker]
-  * Needed to build the grammar as WASM for the web-based playground and to run unit tests
+- [Node.js] v18 and [PNPM] v8
+  - We recommend [volta] to manage node tools
+- [Rust]
+  - We recommend using [rustup] to manage your Rust installation
+- [AWS CLI]
+  - Only needed for integration tests - make sure to do the setup part to create credentials
+- [Terraform CLI]
+  - Only needed for integration tests
+- [Docker]
+  - Needed to build the grammar as WASM for the web-based playground and to run unit tests
 
 Installation:
 
@@ -35,22 +35,22 @@ cd wing
 pnpm install
 ```
 
-:::note Nx Commands
-[Nx] commands in this document are structured as
+:::note Turbo Commands
+[Turbo] commands in this document are structured as
 
 ```sh
-pnpm nx <target> <project>
+pnpm turbo <target>
 # or
-pnpm nx <target> <project> -- <args>
+pnpm turbo <target> --filter=<project>
 ```
 
-- `pnpm` can be omitted if [Nx] is installed globally
-- `<project>` may be omitted if the current working directory is within the given project directory. If not within any project directory, it will default to the `winglang` CLI project
-- If any paths are present in `<args>`, ensure they are either absolute or relative to the project directory
+- `pnpm` can be omitted if [Turbo] is installed globally
+- `--filter=<project>` may be used to filter to a specific project (and it's dependencies)
+- Running `turbo <target>` inside of a project directory will automatically filter to that project
 
 :::
 
-[Nx]: https://nx.dev/
+[Turbo]: https://turbo.build/repo
 [Node.js]: https://nodejs.org/en/
 [Rust]: https://www.rust-lang.org/
 [rustup]: https://rustup.rs/
@@ -71,11 +71,10 @@ pnpm build
 
 It will run the `build`, `test` and `package` targets on all modules.
 
-
 ## 🏠 What's the recommended development workflow?
 
-The `pnpm nx wing` command can be executed from the root of the repository in order to build and run the
-compiler, SDK (standard library) and the Wing CLI. Nx is configured to make sure only the changed components are built
+The `pnpm wing` command can be executed from the root of the repository in order to build and run the
+compiler, SDK (standard library) and the Wing CLI. Turbo is configured to make sure only the changed components are built
 every time.
 
 To get full diagnostics, use these exports:
@@ -89,10 +88,10 @@ Now, you can edit a source file anywhere across the stack and run the compiler w
 For example:
 
 ```sh
-pnpm nx wing -- test ../../examples/tests/valid/captures.w
+pnpm wing -- test examples/tests/valid/captures.w
 ```
 
-This command runs the full Wing CLI with the given arguments. Nx will ensure the CLI build is updated.
+This command runs the full Wing CLI with the given arguments. Turbo will ensure the CLI build is updated.
 
 ## How is the repository structured?
 
@@ -102,17 +101,17 @@ that are primarily meant to be consumed as libraries are in the `libs` directory
 written in Rust, while others are written in TypeScript. Each has a README explaining what it does
 and how to use it. (If you see one missing, please open an issue and let us know!)
 
-The Wing monorepo uses [Nx] to run commands across all code packages in the `libs` and `apps`
+The Wing monorepo uses [Turbo] to run commands across all code packages in the `libs` and `apps`
 folders. This means it includes packages that form the entire toolchain (compiler, standard library, IDE
 extension, etc), and the build and release bind them all together.
 
-Nx will be installed alongside the rest of the project's dependencies after you run `pnpm install`
-from the root directory, and can be accessed with `pnpm nx` if [Nx] is not installed globally.
+Turbo will be installed alongside the rest of the project's dependencies after you run `pnpm install`
+from the root directory, and can be accessed with `pnpm turbo` if [Turbo] is not installed globally.
 
 :::note
 
 The first time you run `pnpm install` it may take extra time to install the
- [wasi-sdk](https://github.com/WebAssembly/wasi-sdk) for you. This is needed to compile Wing for WASM.
+[wasi-sdk](https://github.com/WebAssembly/wasi-sdk) for you. This is needed to compile Wing for WASM.
 
 If you wish to install it manually, you may do so by running `scripts/setup_wasi.sh`
 
@@ -126,7 +125,7 @@ wing](#-how-do-i-build-wing).
 To run the tests (and update snapshots), run the following command from anywhere in the monorepo:
 
 ```sh
-pnpm nx test hangar
+pnpm turbo test --filter=hangar
 ```
 
 ### Test Meta-Comments
@@ -153,7 +152,7 @@ This is useful if, for example, the test requires docker. In our CI only linux s
 Benchmark files are located in `examples/tests/valid/benchmarks`. To run the benchmarks, run the following command from anywhere in the monorepo:
 
 ```sh
-pnpm nx bench hangar
+pnpm turbo bench
 ```
 
 Benchmark files should ideally have a meta-comment with the `cases` key. For example:
@@ -168,7 +167,7 @@ cases:
 \*/
 ```
 
-Given each of these cases, the current purpose is to provide a maxMeanTime (milliseconds) per compilation target. 
+Given each of these cases, the current purpose is to provide a maxMeanTime (milliseconds) per compilation target.
 If the average time for compiling to this target takes longer than the maxMeanTime, the test will fail.
 Note: In CI, tests likely run much slower than on your local machine, so you may need to observe the CI results to determine the correct maxMeanTime.
 
@@ -179,21 +178,21 @@ The following command runs the rust tests in wingc, including verification that 
 It will also make sure to update any snapshots.
 
 ```sh
-pnpm nx test wingc
+pnpm turbo test --filter=wingc
 ```
 
-The following command runs `wingc` on a file. This performs all the compilation steps. Run from the root or `apps/wing`.
+The following command runs `wingc` on a file. This performs all the compilation steps. Run from the root.
 
 ```sh
-pnpm nx wing -- compile <path to a .w file (full path, or relative to the location of the apps/wing folder)>
+pnpm wing -- compile <path to a .w file (full path, or relative to the location of the apps/wing folder)>
 ```
 
-You can find the compilation artifacts in the apps/wing/targets folder.
+You can find the compilation artifacts in the `apps/wing/target` folder.
 
 To check that your code passes all the lints, run:
 
 ```sh
-pnpm nx lint wingc
+pnpm turbo lint --filter=wingc
 ```
 
 ### Optional VSCode extensions for working on the compiler
@@ -214,37 +213,37 @@ Open the `.w` file you wish to debug compilation for (e.g. `${workspaceFolder}/e
 After making changes to `grammar.js`, run:
 
 ```sh
-pnpm nx build tree-sitter-wing
+pnpm turbo compile --filter=tree-sitter-wing
 ```
 
 To run the grammar tests (that are located in the `test` folder):
 
 ```sh
-pnpm nx test tree-sitter-wing
+pnpm turbo test --filter=tree-sitter-wing
 ```
 
 To use the wasm grammar to run a web-based playground where you can explore the AST and test out
 highlight queries, run:
 
 ```sh
-pnpm nx dev tree-sitter-wing
+pnpm turbo playground --filter=tree-sitter-wing
 ```
 
 ## 🔨 How do I build the VSCode extension?
 
 The VSCode extension is located in `apps/vscode-wing`. Most of the "logic" is in the language server, which
-is located in the Wing CLI at `apps/wing/src/commands/lsp.ts`. 
+is located in the Wing CLI at `apps/wing/src/commands/lsp.ts`.
 
-To build the extension (also creates an installable `.vsix` file):
+To compile the extension (also creates an installable `.vsix` file):
 
 ```sh
-pnpm nx build vscode-wing
+pnpm turbo compile --filter=vscode-wing
 ```
 
 To run a new isolated VSCode instance with the extension installed:
 
 ```sh
-pnpm nx dev vscode-wing
+pnpm turbo dev --filter=vscode-wing
 ```
 
 To modify the package.json, make sure to edit `.projenrc.ts` and rebuild.
@@ -256,7 +255,7 @@ Tip: if you want to print debug messages in your code while developing, you shou
 To lint Rust code, you can run the `lint` target on the `wingc` or `wingii` projects:
 
 ```sh
-pnpm nx lint wingc
+pnpm turbo lint --filter=wingc
 ```
 
 It's also possible to lint by running `cargo clippy` directly.

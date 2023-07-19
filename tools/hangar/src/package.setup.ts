@@ -18,6 +18,28 @@ const shellEnv = {
   npm_config_foreground_scripts: "true",
 };
 
+const getInstallArgs = async () => {
+  if (process.env.CI) {
+    const tarballsDir = path.resolve(`${__dirname}/../../../dist`);
+    const tarballs = (await fs.readdir(tarballsDir))
+      .filter((filename) => filename.endsWith(".tgz"))
+      .map((tarball) => `file:${tarballsDir}/${tarball}`);
+    return [
+      "install",
+      "--no-package-lock",
+      "--install-links=false",
+      ...tarballs,
+    ];
+  }
+
+  return [
+    "install",
+    "--no-package-lock",
+    "--install-links=false",
+    `file:../../../apps/wing`,
+  ];
+};
+
 export default async function () {
   Object.assign(process.env, shellEnv);
 
@@ -29,17 +51,8 @@ export default async function () {
   });
 
   // use execSync to install npm deps in tmpDir
-  const tarballsDir = path.resolve(`${__dirname}/../../../dist`);
-  const tarballs = (await fs.readdir(tarballsDir))
-    .filter((filename) => filename.endsWith(".tgz"))
-    .map((tarball) => `file:${tarballsDir}/${tarball}`);
+  const installArgs = await getInstallArgs();
   console.debug(`Installing npm deps into ${tmpDir}...`);
-  const installArgs = [
-    "install",
-    "--no-package-lock",
-    "--install-links=false",
-    ...tarballs,
-  ];
   const installResult = await execa(npmBin, installArgs, {
     cwd: tmpDir,
   });

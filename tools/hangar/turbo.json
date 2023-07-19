@@ -8,9 +8,14 @@
       "cache": false
     },
     "test": {
-      "dependsOn": ["test:generate"],
-      "inputs": ["tmp/**", "src/**"],
-      "outputs": ["reports/**"]
+      "dependsOn": ["^compile", "test:generate"],
+      "inputs": ["src/**"],
+      "cache": false
+    },
+    "bench": {
+      "dependsOn": ["^compile"],
+      "inputs": ["src/**"],
+      "cache": false
     }
   }
 }

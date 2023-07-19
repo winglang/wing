@@ -3,10 +3,9 @@
   "version": "0.0.0",
   "description": "wing test suite",
   "scripts": {
-    "test": "vitest run",
+    "test": "vitest run --update",
     "test:generate": "tsx src/generate_tests.ts",
     "test:watch": "vitest watch",
-    "test:update": "vitest run --update",
     "bench": "vitest bench --run"
   },
   "author": "Monada",
@@ -17,6 +16,7 @@
     "npm": "^9.6.4",
     "tsx": "^3.12.6",
     "vitest": "^0.30.1",
+    "winglang": "link:../../apps/wing",
     "yaml": "^2.2.1"
   }
 }

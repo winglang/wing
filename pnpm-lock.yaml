@@ -1298,6 +1298,9 @@ importers:
       vitest:
         specifier: ^0.30.1
         version: 0.30.1
+      winglang:
+        specifier: link:../../apps/wing
+        version: link:../../apps/wing
       yaml:
         specifier: ^2.2.1
         version: 2.2.1
@@ -12494,7 +12497,7 @@ packages:
     dependencies:
       semver: 7.5.3
       shelljs: 0.8.5
-      typescript: 5.2.0-dev.20230714
+      typescript: 5.2.0-dev.20230719
     dev: true
 
   /dset@3.1.2:
@@ -21403,8 +21406,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  /typescript@5.2.0-dev.20230714:
-    resolution: {integrity: sha512-BZAU6XIqRwO7gRelEoc6iunX6belf+IGyqA79LQqldafiBahXQKYTeyW8V0/ABk7/FpWWk4qRIDDCy8DKWo4XQ==}
+  /typescript@5.2.0-dev.20230719:
+    resolution: {integrity: sha512-GOt7vOkrLjQ7hGNUO+9VyV4nf7/gQz3NM37f6r8RVeXY1Wu+McCi7IO94ZuQWYUYrO+h/WjoTSk8HjhEVhEESQ==}
     engines: {node: '>=14.17'}
     hasBin: true
     dev: true
