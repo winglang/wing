@@ -1,5 +1,6 @@
 {
   "name": "@wingconsole/ui",
+  "repository": "https://github.com/winglang/wing",
   "license": "SEE LICENSE IN LICENSE.md",
   "version": "0.0.0",
   "type": "module",

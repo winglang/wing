@@ -233,7 +233,7 @@
       "tf-aws": {"implemented": true},
       "tf-azure": {"implemented": false},
       "tf-gcp": {"implemented": false},
-      "aws-cdk": {"implemented": false}
+      "aws-cdk": {"implemented": true}
     },
     "FunctionProps.concurrency": {
       "sim": {"implemented": false},
@@ -247,7 +247,7 @@
       "tf-aws": {"implemented": true},
       "tf-azure": {"implemented": false},
       "tf-gcp": {"implemented": false},
-      "aws-cdk": {"implemented": false}
+      "aws-cdk": {"implemented": true}
     },
     "timeout": {
       "sim": {"implemented": true},
@@ -275,7 +275,7 @@
       "tf-aws": {"implemented": true},
       "tf-azure": {"implemented": false},
       "tf-gcp": {"implemented": false},
-      "aws-cdk": {"implemented": false}
+      "aws-cdk": {"implemented": true}
     },
     "invoke": {
       "sim": {"implemented": true},

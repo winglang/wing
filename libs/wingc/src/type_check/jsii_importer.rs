@@ -441,6 +441,11 @@ impl<'a> JsiiImporter<'a> {
 					self.wing_types.void()
 				};
 
+				// Check if there's an explicit inflight phase override on this method
+				let member_phase = extract_docstring_tag(&m.docs, "inflight")
+					.map(|_| Phase::Inflight)
+					.unwrap_or(member_phase);
+
 				let mut fn_params = vec![];
 
 				// Define the rest of the arguments and create the method signature

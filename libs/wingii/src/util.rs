@@ -3,15 +3,16 @@ extern crate serde_json;
 
 pub mod package_json {
 	use std::{
+		collections::HashSet,
 		fs,
 		path::{Path, PathBuf},
 	};
 
 	use crate::node_resolve::{is_path_dependency, resolve_from};
 
-	pub fn dependencies_of(package_json: &serde_json::Value) -> Vec<String> {
+	pub fn dependencies_of(package_json: &serde_json::Value) -> HashSet<String> {
 		// merge both dependencies and peerDependencies and return the list of keys
-		let mut deps = Vec::new();
+		let mut deps = HashSet::new();
 		if let Some(deps_obj) = package_json.get("dependencies") {
 			deps.extend(deps_obj.as_object().unwrap().keys().cloned());
 		}

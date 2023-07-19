@@ -26,7 +26,7 @@ let handler = inflight (message: str): void => {
     // code
   };
   // inflight modifier is not required when function is declared in inflight context
-  let dup = (s: str, count: num): str => {
+  let sup = (s: str, count: num): str => {
     // code
   };
 };
