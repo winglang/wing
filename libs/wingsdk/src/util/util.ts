@@ -81,6 +81,7 @@ export class Util {
   /**
    * Converts a string from UTF-8 to base64.
    * @param name The name of the UTF-8 string to encode.
+   * @param url Whether the string should be treated as an url.
    * @returns The base64 string.
    */
   public static base64Encode(stringToEncode: string, url?: boolean): string {
@@ -90,6 +91,7 @@ export class Util {
   /**
    * Converts a string from base64 to UTF-8.
    * @param name The name of the base64 string to decode.
+   * @param url Whether the string should be treated as an url.
    * @returns The UTF-8 string.
    */
   public static base64Decode(stringToDecode: string, url?: boolean): string {
