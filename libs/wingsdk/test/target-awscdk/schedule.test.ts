@@ -1,16 +1,16 @@
-import { test, expect } from "vitest";
-import { mkdtemp } from "../util";
-import * as awscdk from "../../src/target-awscdk";
-import { Schedule } from "../../src/cloud";
-import { Testing } from "../../src/testing";
-import * as std from "../../src/std";
 import { Match, Template, MatchResult } from "aws-cdk-lib/assertions";
+import { test, expect } from "vitest";
+import { Schedule } from "../../src/cloud";
+import * as std from "../../src/std";
+import * as awscdk from "../../src/target-awscdk";
+import { Testing } from "../../src/testing";
+import { mkdtemp } from "../util";
 
 const CDK_APP_OPTS = {
   stackName: "my-project",
 };
 
-test('schedule behavior with rate', () => {
+test("schedule behavior with rate", () => {
   // GIVEN
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
   const fn = Testing.makeHandler(
@@ -79,7 +79,63 @@ test("schedule with two functions", () => {
   // THEN
   const template = Template.fromJSON(JSON.parse(output));
   template.hasResourceProperties("AWS::Events::Rule", {
-    Targets: MatchResult.length
+    Targets: Match.arrayWith([
+      Match.objectLike({
+        Id: "Target0",
+      }),
+      Match.objectLike({
+        Id: "Target1",
+      }),
+    ]),
   });
   expect(template.toJSON()).toMatchSnapshot();
+});
+
+test("schedule with rate and cron simultaneously", () => {
+  // GIVEN
+  const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
+
+  // THEN
+  expect(() =>
+    Schedule._newSchedule(app, "Schedule", {
+      rate: std.Duration.fromSeconds(30),
+      cron: "0/1 * ? * *",
+    })
+  ).toThrow("rate and cron cannot be configured simultaneously.");
+});
+
+test("cron with more than five values", () => {
+  // GIVEN
+  const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
+
+  // THEN
+  expect(() =>
+    Schedule._newSchedule(app, "Schedule", {
+      cron: "0/1 * ? * * *",
+    })
+  ).toThrow(
+    "cron string must be UNIX cron format [minute] [hour] [day of month] [month] [day of week]"
+  );
+});
+
+test("schedule without rate or cron", () => {
+  // GIVEN
+  const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
+
+  // THEN
+  expect(() => Schedule._newSchedule(app, "Schedule")).toThrow(
+    "rate or cron need to be filled."
+  );
+});
+
+test("schedule with rate less than 1 minute", () => {
+  // GIVEN
+  const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
+
+  // THEN
+  expect(() =>
+    Schedule._newSchedule(app, "Schedule", {
+      rate: std.Duration.fromSeconds(30),
+    })
+  ).toThrow("rate can not be set to less than 1 minute.");
 });
