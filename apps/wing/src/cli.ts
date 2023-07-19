@@ -9,7 +9,6 @@ import { collectCommandAnalytics } from "./analytics/collect";
 import { exportAnalytics } from "./analytics/export";
 import { optionallyDisplayDisclaimer } from "./analytics/disclaimer";
 import { currentPackage } from "./util";
-import { log } from "console";
 import * as chokidar from "chokidar";
 
 export const PACKAGE_VERSION = currentPackage.version;
@@ -110,10 +109,10 @@ async function main() {
         ignoreInitial: true,
       });
 
-      log(`Starting to watch ${entrypoint}`);
+      console.log(`Starting to watch ${entrypoint}`);
 
       watcher.on("change", async () => {
-        log(`Wing source file changed, rerunning tests…`);
+        console.log(`Wing source file changed, rerunning tests…`);
         await import(`./commands/test`).then((m) => m["test"](cmd.args, cmd.optsWithGlobals()));
       });
 
