@@ -39,14 +39,14 @@ pnpm install
 [Turbo] commands in this document are structured as
 
 ```sh
-pnpm turbo <target>
+pnpm turbo <task>
 # or
-pnpm turbo <target> --filter=<project>
+pnpm turbo <task> --filter=<project>
 ```
 
 - `pnpm` can be omitted if [Turbo] is installed globally
 - `--filter=<project>` may be used to filter to a specific project (and it's dependencies)
-- Running `turbo <target>` inside of a project directory will automatically filter to that project
+- Running `turbo <task>` inside of a project directory will automatically filter to that project
 
 :::
 
@@ -69,7 +69,7 @@ If you wish to perform a full build (similar to the one CI is running), just run
 pnpm build
 ```
 
-It will run the `build`, `test` and `package` targets on all modules.
+It will compile, lint, test and package all modules.
 
 ## 🏠 What's the recommended development workflow?
 
