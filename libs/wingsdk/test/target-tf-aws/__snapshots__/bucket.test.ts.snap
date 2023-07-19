@@ -17,6 +17,9 @@ exports[`bucket is public 1`] = `
     \\"aws_s3_bucket_policy\\": {
       \\"my_bucket_PublicPolicy_AF351571\\": {
         \\"bucket\\": \\"\${aws_s3_bucket.my_bucket.bucket}\\",
+        \\"depends_on\\": [
+          \\"aws_s3_bucket_public_access_block.my_bucket_PublicAccessBlock_538547C0\\"
+        ],
         \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Principal\\\\\\":\\\\\\"*\\\\\\",\\\\\\"Action\\\\\\":[\\\\\\"s3:GetObject\\\\\\"],\\\\\\"Resource\\\\\\":[\\\\\\"\${aws_s3_bucket.my_bucket.arn}/*\\\\\\"]}]}\\"
       }
     },
@@ -571,6 +574,9 @@ exports[`bucket with onCreate method 1`] = `
     \\"aws_s3_bucket_policy\\": {
       \\"my_bucket_PublicPolicy_AF351571\\": {
         \\"bucket\\": \\"\${aws_s3_bucket.my_bucket.bucket}\\",
+        \\"depends_on\\": [
+          \\"aws_s3_bucket_public_access_block.my_bucket_PublicAccessBlock_538547C0\\"
+        ],
         \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Principal\\\\\\":\\\\\\"*\\\\\\",\\\\\\"Action\\\\\\":[\\\\\\"s3:GetObject\\\\\\"],\\\\\\"Resource\\\\\\":[\\\\\\"\${aws_s3_bucket.my_bucket.arn}/*\\\\\\"]}]}\\"
       }
     },
@@ -1085,6 +1091,9 @@ exports[`bucket with onDelete method 1`] = `
     \\"aws_s3_bucket_policy\\": {
       \\"my_bucket_PublicPolicy_AF351571\\": {
         \\"bucket\\": \\"\${aws_s3_bucket.my_bucket.bucket}\\",
+        \\"depends_on\\": [
+          \\"aws_s3_bucket_public_access_block.my_bucket_PublicAccessBlock_538547C0\\"
+        ],
         \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Principal\\\\\\":\\\\\\"*\\\\\\",\\\\\\"Action\\\\\\":[\\\\\\"s3:GetObject\\\\\\"],\\\\\\"Resource\\\\\\":[\\\\\\"\${aws_s3_bucket.my_bucket.arn}/*\\\\\\"]}]}\\"
       }
     },
@@ -1687,6 +1696,9 @@ exports[`bucket with onEvent method 1`] = `
     \\"aws_s3_bucket_policy\\": {
       \\"my_bucket_PublicPolicy_AF351571\\": {
         \\"bucket\\": \\"\${aws_s3_bucket.my_bucket.bucket}\\",
+        \\"depends_on\\": [
+          \\"aws_s3_bucket_public_access_block.my_bucket_PublicAccessBlock_538547C0\\"
+        ],
         \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Principal\\\\\\":\\\\\\"*\\\\\\",\\\\\\"Action\\\\\\":[\\\\\\"s3:GetObject\\\\\\"],\\\\\\"Resource\\\\\\":[\\\\\\"\${aws_s3_bucket.my_bucket.arn}/*\\\\\\"]}]}\\"
       }
     },
@@ -2669,6 +2681,9 @@ exports[`bucket with onUpdate method 1`] = `
     \\"aws_s3_bucket_policy\\": {
       \\"my_bucket_PublicPolicy_AF351571\\": {
         \\"bucket\\": \\"\${aws_s3_bucket.my_bucket.bucket}\\",
+        \\"depends_on\\": [
+          \\"aws_s3_bucket_public_access_block.my_bucket_PublicAccessBlock_538547C0\\"
+        ],
         \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Principal\\\\\\":\\\\\\"*\\\\\\",\\\\\\"Action\\\\\\":[\\\\\\"s3:GetObject\\\\\\"],\\\\\\"Resource\\\\\\":[\\\\\\"\${aws_s3_bucket.my_bucket.arn}/*\\\\\\"]}]}\\"
       }
     },
@@ -3117,6 +3132,9 @@ exports[`bucket with two preflight objects 1`] = `
     \\"aws_s3_bucket_policy\\": {
       \\"my_bucket_PublicPolicy_AF351571\\": {
         \\"bucket\\": \\"\${aws_s3_bucket.my_bucket.bucket}\\",
+        \\"depends_on\\": [
+          \\"aws_s3_bucket_public_access_block.my_bucket_PublicAccessBlock_538547C0\\"
+        ],
         \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Principal\\\\\\":\\\\\\"*\\\\\\",\\\\\\"Action\\\\\\":[\\\\\\"s3:GetObject\\\\\\"],\\\\\\"Resource\\\\\\":[\\\\\\"\${aws_s3_bucket.my_bucket.arn}/*\\\\\\"]}]}\\"
       }
     },
