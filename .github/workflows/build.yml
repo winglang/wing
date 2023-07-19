@@ -214,7 +214,7 @@ jobs:
         runner: [windows, macos, ubuntu]
         node: ["18", "20"]
         # shard: ["1/2", "2/2"]
-        shard: ["1/4", "2/4", "3/4", "4/4"]
+        shard: ["1/8", "2/8", "3/8", "4/8", "5/8", "6/8", "7/8", "8/8"]
         full_run:
           # Do a full run on push or when the PR is labeled "pr/e2e-full"
           - ${{ github.event_name == 'push' || contains(github.event.pull_request.labels.*.name, '🧪 pr/e2e-full') }}
