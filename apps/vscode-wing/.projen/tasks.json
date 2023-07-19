@@ -78,7 +78,7 @@
       "name": "dev",
       "steps": [
         {
-          "exec": "RUST_BACKTRACE=1 WING_BIN=\"../wing/bin/wing\" code ../../examples --disable-extensions --extensionDevelopmentPath=.."
+          "exec": "node scripts/dev.mjs"
         }
       ]
     },

@@ -6,6 +6,9 @@
       "inputs": ["src/**"],
       "outputs": ["lib/**"]
     },
+    "dev": {
+      "dependsOn": ["compile"]
+    },
     "package": {
       "outputs": ["vscode-wing.vsix"]
     }
