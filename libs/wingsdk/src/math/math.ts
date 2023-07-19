@@ -371,5 +371,14 @@ export class Util {
     return Math.atan(1 / value);
   }
 
+  /**
+   * Generates a pseudo-random number between 0 and max (default of 1).
+   * @param max - The maximum value of the random number.
+   * @returns A pseudo-random number between 0 and max.
+   */
+  public static random(max: number | undefined): number {
+    return Math.random() * (max || 1);
+  }
+
   private constructor() {}
 }

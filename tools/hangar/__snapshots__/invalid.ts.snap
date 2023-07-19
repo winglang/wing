@@ -152,6 +152,28 @@ Test Files 1 failed (1)
 Duration <DURATION>"
 `;
 
+exports[`call_inflight_from_preflight.w 1`] = `
+"error: Cannot call into inflight phase while preflight
+  --> ../../../examples/tests/invalid/call_inflight_from_preflight.w:4:1
+  |
+4 | util.sleep(1s);
+  | ^^^^^^^^^^^^^^ Cannot call into inflight phase while preflight
+
+
+error: Cannot call into inflight phase while preflight
+   --> ../../../examples/tests/invalid/call_inflight_from_preflight.w:12:1
+   |
+12 | foo.do();
+   | ^^^^^^^^ Cannot call into inflight phase while preflight
+
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
+
 exports[`capture_redefinition.w 1`] = `
 "error: Cannot capture symbol \\"y\\" because it is shadowed by another symbol with the same name
    --> ../../../examples/tests/invalid/capture_redefinition.w:14:9
