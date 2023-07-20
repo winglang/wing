@@ -14,13 +14,15 @@ export const TEST_FQN = fqnForType("std.Test");
  * Properties for `Test`.
  *
  * This is the type users see when constructing a std.Test instance.
+ * @skipDocs
  */
 export interface TestProps extends FunctionProps {}
 
 /**
- * Represents a unit test.
+ * A unit test.
  *
  * @inflight `@winglang/sdk.cloud.ITestClient`
+ * @skipDocs
  */
 export class Test extends Resource implements IInflightHost {
   /**
@@ -70,11 +72,13 @@ export class Test extends Resource implements IInflightHost {
  * a `std.Test`.
  *
  * @inflight `@winglang/sdk.std.ITestHandlerClient`
+ * @skipDocs
  */
 export interface ITestHandler extends IResource {}
 
 /**
  * Inflight client for `ITestHandler`.
+ * @skipDocs
  */
 export interface ITestHandlerClient {
   /**

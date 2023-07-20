@@ -17,6 +17,7 @@ export interface TreeProps {
   onOpenEntry?: () => void;
   className?: string;
   selectedEntries: string[];
+  dataTestid?: string;
 }
 
 interface UseSelectionRangeOptions {
@@ -151,6 +152,7 @@ export const Tree = ({
   onCurrentChange,
   onOpenEntry,
   className,
+  dataTestid,
 }: TreeProps) => {
   const { theme } = useTheme();
 
@@ -270,6 +272,7 @@ export const Tree = ({
                 selectTo(index, { additive: event.shiftKey });
               }
             }}
+            data-testid={`${dataTestid}-entry-${entry.name}`}
           >
             {entry.name}
           </button>

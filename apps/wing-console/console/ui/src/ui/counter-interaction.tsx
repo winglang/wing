@@ -36,6 +36,7 @@ export const CounterInteraction = ({
             icon={MinusSmallIcon}
             className="px-0.5"
             onClick={() => handleDecrement()}
+            dataTestid="cloud.counter:decrease"
           />
           <input
             id={actualValueElementId}
@@ -48,12 +49,14 @@ export const CounterInteraction = ({
             )}
             value={currentValue}
             readOnly
+            data-testid="cloud.counter:current-value"
           />
           <Button
             small
             icon={PlusSmallIcon}
             className="px-0.5"
             onClick={() => handleIncrement()}
+            dataTestid="cloud.counter:increase"
           />
         </div>
       </div>
@@ -70,6 +73,7 @@ export const CounterInteraction = ({
           title="Reset value"
           label="Reset value"
           onClick={() => handleReset()}
+          dataTestid="cloud.counter:reset"
         />
       </div>
     </div>

@@ -1,5 +1,5 @@
 import { TableAttributes, TableSchema } from "./schema-resources";
-import { ColumnType, ITableClient } from "../cloud";
+import { ColumnType, ITableClient } from "../ex";
 import { validateRow } from "../shared/table-utils";
 import { Json } from "../std";
 import {
@@ -99,6 +99,7 @@ export class Table implements ITableClient, ISimulatorResourceInstance {
       },
     });
   }
+
   public async list(): Promise<Array<Json>> {
     return this.context.withTrace({
       message: `list all rows from table ${this.name}.`,

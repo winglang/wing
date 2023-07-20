@@ -51,6 +51,22 @@ module.exports = function({  }) {
 
 ```
 
+## inflight.Terrier.js
+```js
+module.exports = function({ $Dog }) {
+  class Terrier extends $Dog {
+    constructor({  }) {
+      super({  });
+    }
+    async eat() {
+      return;
+    }
+  }
+  return Terrier;
+}
+
+```
+
 ## inflight.r.js
 ```js
 module.exports = function({  }) {
@@ -215,9 +231,34 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
     }
+    class Terrier extends Dog {
+      constructor(scope, id, ) {
+        super(scope, id);
+        this._addInflightOps("eat", "$inflight_init");
+      }
+      static _toInflightType(context) {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("./inflight.Terrier.js")({
+            $Dog: ${context._lift(Dog)},
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const TerrierClient = ${Terrier._toInflightType(this).text};
+            const client = new TerrierClient({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+    }
     const x = new A(this,"A");
     const y = new $Closure1(this,"$Closure1");
     const z = new Dog(this,"Dog");
+    const w = new Terrier(this,"Terrier");
   }
 }
 class $App extends $AppBase {

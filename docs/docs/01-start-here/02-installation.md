@@ -17,72 +17,36 @@ know as soon as possible.
 
 ::: 
 
-In this section you will install the Wing toolchain on your system.
+In this section you will install Wing on your system. This includes:
 
-The toolchain includes three tools:
+1. **Wing Toolchain**: The Wing development toolchain which includes the **Wing CLI**, **Wing Compiler** and the **Wing Console**.
+2. **Wing VSCode Extension**: An extension for developing Wing code in the VSCode IDE.
 
-1. **Wing CLI** - the compiler toolchain
-2. **Wing VSCode Extension** - IDE support for Wing
-3. **Wing Console** - a web application for viewing and interacting with your Wing programs.
+## Prerequisites
 
 To install Wing, you will need the following setup:
 
-* [Node.js](https://nodejs.org/en/) (v18 or later)
-    * We recommend [volta](https://volta.sh) to manage node tools
-* [VSCode]
-    * Not required, but currently supported with an [extension](#wing-ide-extension)
+* [Node.js](https://nodejs.org/en/) (>= 18.13.0)
+* [VSCode] (not required, but currently supported with an [extension](#wing-ide-extension))
 
-## Wing CLI
+## Wing Toolchain
 
-<br/>
-<details>
-  <summary><b>!Caution If you were in our closed alpha</b></summary>
-<br/>
-
-If you installed Wing as part of our closed alpha, please make sure to uninstall the existing version
-and clean up your `~/.npmrc` before continuing. Otherwise you will see the following error when trying
-to install `winglang`:
-
-```
-Not Found - GET https://npm.pkg.github.com/@winglang%2fsdk
-```
-
-First, uninstall Wing from your system:
-
-```sh
-npm uninstall -g @winglang/wing
-```
-
-Now, edit `~/.npmrc` and remove this line:
-
-```
-@winglang:registry=https://npm.pkg.github.com/
-```
-
-You can also just delete `~/.npmrc` if there are no other registries that you are signed into.
-
-</details>
-
-<br/>
-Install the Wing CLI through npm:
+The Wing Toolchain is distributed via [npm](https://www.npmjs.com/):
 
 ```sh
 npm install -g winglang
 ```
 
-Check that the installation was successful:
+Verify your installation:
 
 ```sh
 wing --version
 ```
 
-## Wing IDE Extension
+## Wing VSCode Extension
 
-This extension adds syntax highlighting and other conveniences for the Wing language in [VSCode]. You don't *have*
-to use it, but it's great. It's available through the VSCode Marketplace [here](https://marketplace.visualstudio.com/items?itemName=Monada.vscode-wing).
+The Wing VSCode Extension adds syntax highlighting and other conveniences for the Wing Programming Language in [VSCode].
 
-[AWS account]: https://portal.aws.amazon.com/billing/signup
-[AWS CLI]: https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html
-[AWS credentials]: https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html
-[personal access token]: https://github.com/settings/tokens/new?description=Winglang%20Beta&scopes=repo,read:packages
+To install the Wing VSCode extension, [download](https://marketplace.visualstudio.com/items?itemName=Monada.vscode-wing) it from the VSCode Marketplace. It is distributed via the VSCode Marketplace.
+
 [VSCode]: https://code.visualstudio.com/

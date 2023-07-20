@@ -37,7 +37,7 @@ module.exports = function({ $api_url, $http_DELETE, $http_Util }) {
     async handle() {
       const url = String.raw({ raw: ["", "/path?all=true&page=6"] }, $api_url);
       const response = (await $http_Util.delete(url));
-      const fetchResponse = (await $http_Util.fetch(url,Object.freeze({"method":$http_DELETE})));
+      const fetchResponse = (await $http_Util.fetch(url,{ method: $http_DELETE }));
       {((cond) => {if (!cond) throw new Error("assertion failed: response.body == \"6\"")})((response.body === "6"))};
       {((cond) => {if (!cond) throw new Error("assertion failed: response.status == 200")})((response.status === 200))};
       {((cond) => {if (!cond) throw new Error("assertion failed: response.url == url")})((response.url === url))};
@@ -84,7 +84,7 @@ module.exports = function({ $api_url, $http_DELETE, $http_Util }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:http.delete and http.fetch can preform a call to an api\",\"${aws_lambda_function.testhttpdeleteandhttpfetchcanpreformacalltoanapi_Handler_98044CDF.arn}\"]]"
+      "value": "[]"
     }
   },
   "provider": {
@@ -144,15 +144,6 @@ module.exports = function({ $api_url, $http_DELETE, $http_Util }) {
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
-      },
-      "testhttpdeleteandhttpfetchcanpreformacalltoanapi_Handler_IamRole_F3B23120": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:http.delete and http.fetch can preform a call to an api/Handler/IamRole",
-            "uniqueId": "testhttpdeleteandhttpfetchcanpreformacalltoanapi_Handler_IamRole_F3B23120"
-          }
-        },
-        "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
@@ -165,16 +156,6 @@ module.exports = function({ $api_url, $http_DELETE, $http_Util }) {
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
         "role": "${aws_iam_role.cloudApi_cloudApi-OnRequest-cdafee6e_IamRole_4382C442.name}"
-      },
-      "testhttpdeleteandhttpfetchcanpreformacalltoanapi_Handler_IamRolePolicy_03683652": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:http.delete and http.fetch can preform a call to an api/Handler/IamRolePolicy",
-            "uniqueId": "testhttpdeleteandhttpfetchcanpreformacalltoanapi_Handler_IamRolePolicy_03683652"
-          }
-        },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
-        "role": "${aws_iam_role.testhttpdeleteandhttpfetchcanpreformacalltoanapi_Handler_IamRole_F3B23120.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
@@ -187,16 +168,6 @@ module.exports = function({ $api_url, $http_DELETE, $http_Util }) {
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
         "role": "${aws_iam_role.cloudApi_cloudApi-OnRequest-cdafee6e_IamRole_4382C442.name}"
-      },
-      "testhttpdeleteandhttpfetchcanpreformacalltoanapi_Handler_IamRolePolicyAttachment_A5AE872D": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:http.delete and http.fetch can preform a call to an api/Handler/IamRolePolicyAttachment",
-            "uniqueId": "testhttpdeleteandhttpfetchcanpreformacalltoanapi_Handler_IamRolePolicyAttachment_A5AE872D"
-          }
-        },
-        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.testhttpdeleteandhttpfetchcanpreformacalltoanapi_Handler_IamRole_F3B23120.name}"
       }
     },
     "aws_lambda_function": {
@@ -220,33 +191,6 @@ module.exports = function({ $api_url, $http_DELETE, $http_Util }) {
         "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",
         "s3_key": "${aws_s3_object.cloudApi_cloudApi-OnRequest-cdafee6e_S3Object_5DAAA0EF.key}",
-        "timeout": 30,
-        "vpc_config": {
-          "security_group_ids": [],
-          "subnet_ids": []
-        }
-      },
-      "testhttpdeleteandhttpfetchcanpreformacalltoanapi_Handler_98044CDF": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:http.delete and http.fetch can preform a call to an api/Handler/Default",
-            "uniqueId": "testhttpdeleteandhttpfetchcanpreformacalltoanapi_Handler_98044CDF"
-          }
-        },
-        "environment": {
-          "variables": {
-            "WING_FUNCTION_NAME": "Handler-c897cd38",
-            "WING_TARGET": "tf-aws",
-            "WING_TOKEN_TFTOKEN_TOKEN_21": "${jsonencode(aws_api_gateway_stage.cloudApi_api_stage_BBB283E4.invoke_url)}"
-          }
-        },
-        "function_name": "Handler-c897cd38",
-        "handler": "index.handler",
-        "publish": true,
-        "role": "${aws_iam_role.testhttpdeleteandhttpfetchcanpreformacalltoanapi_Handler_IamRole_F3B23120.arn}",
-        "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
-        "s3_key": "${aws_s3_object.testhttpdeleteandhttpfetchcanpreformacalltoanapi_Handler_S3Object_64313242.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -291,17 +235,6 @@ module.exports = function({ $api_url, $http_DELETE, $http_Util }) {
         "bucket": "${aws_s3_bucket.Code.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
-      },
-      "testhttpdeleteandhttpfetchcanpreformacalltoanapi_Handler_S3Object_64313242": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/test:http.delete and http.fetch can preform a call to an api/Handler/S3Object",
-            "uniqueId": "testhttpdeleteandhttpfetchcanpreformacalltoanapi_Handler_S3Object_64313242"
-          }
-        },
-        "bucket": "${aws_s3_bucket.Code.bucket}",
-        "key": "<ASSET_KEY>",
-        "source": "<ASSET_SOURCE>"
       }
     }
   }
@@ -317,6 +250,7 @@ const $wing_is_test = process.env.WING_IS_TEST === "true";
 const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 const cloud = require('@winglang/sdk').cloud;
 const http = require('@winglang/sdk').http;
+const util = require('@winglang/sdk').util;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
@@ -351,45 +285,47 @@ class $Root extends $stdlib.std.Resource {
         super._registerBind(host, ops);
       }
     }
-    class $Closure2 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
-        super(scope, id);
-        this.display.hidden = true;
-        this._addInflightOps("handle", "$inflight_init");
-      }
-      static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure2.js")({
-            $api_url: ${context._lift(api.url)},
-            $http_DELETE: ${context._lift(http_DELETE)},
-            $http_Util: ${context._lift(http.Util)},
-          })
-        `);
-      }
-      _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
-          (await (async () => {
-            const $Closure2Client = ${$Closure2._toInflightType(this).text};
-            const client = new $Closure2Client({
-            });
-            if (client.$inflight_init) { await client.$inflight_init(); }
-            return client;
-          })())
-        `);
-      }
-      _registerBind(host, ops) {
-        if (ops.includes("handle")) {
-          $Closure2._registerBindObject(api.url, host, []);
-          $Closure2._registerBindObject(http_DELETE, host, []);
-        }
-        super._registerBind(host, ops);
-      }
-    }
     const http_DELETE = http.HttpMethod.DELETE;
     const api_DELETE = cloud.HttpMethod.DELETE;
     const api = this.node.root.newAbstract("@winglang/sdk.cloud.Api",this,"cloud.Api");
     (api.delete("/path",new $Closure1(this,"$Closure1")));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:http.delete and http.fetch can preform a call to an api",new $Closure2(this,"$Closure2"));
+    if (((util.Util.env("WING_TARGET")) !== "tf-aws")) {
+      class $Closure2 extends $stdlib.std.Resource {
+        constructor(scope, id, ) {
+          super(scope, id);
+          this.display.hidden = true;
+          this._addInflightOps("handle", "$inflight_init");
+        }
+        static _toInflightType(context) {
+          return $stdlib.core.NodeJsCode.fromInline(`
+            require("./inflight.$Closure2.js")({
+              $api_url: ${context._lift(api.url)},
+              $http_DELETE: ${context._lift(http_DELETE)},
+              $http_Util: ${context._lift(http.Util)},
+            })
+          `);
+        }
+        _toInflight() {
+          return $stdlib.core.NodeJsCode.fromInline(`
+            (await (async () => {
+              const $Closure2Client = ${$Closure2._toInflightType(this).text};
+              const client = new $Closure2Client({
+              });
+              if (client.$inflight_init) { await client.$inflight_init(); }
+              return client;
+            })())
+          `);
+        }
+        _registerBind(host, ops) {
+          if (ops.includes("handle")) {
+            $Closure2._registerBindObject(api.url, host, []);
+            $Closure2._registerBindObject(http_DELETE, host, []);
+          }
+          super._registerBind(host, ops);
+        }
+      }
+      this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:http.delete and http.fetch can preform a call to an api",new $Closure2(this,"$Closure2"));
+    }
   }
 }
 class $App extends $AppBase {

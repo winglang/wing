@@ -59,6 +59,7 @@ export type TableRowProps = {
   rowClassName?: string;
   columnClassName?: string;
   actionsClassName?: string;
+  dataTestid?: string;
 };
 
 export const TableRow = ({
@@ -77,6 +78,7 @@ export const TableRow = ({
   rowClassName,
   columnClassName,
   actionsClassName,
+  dataTestid,
 }: TableRowProps) => {
   return (
     <tr
@@ -87,6 +89,7 @@ export const TableRow = ({
           "dark:ring-red-500/50 dark:border-red-500/50",
         ],
       )}
+      data-testid={dataTestid}
     >
       {columns.map(({ name: column, type }, index) => {
         const inputType = getInputType(type);
@@ -120,6 +123,7 @@ export const TableRow = ({
                 (!newRow && column === primaryKey) || disabled || readonly
               }
               error={!readonly && hasError(row[column], type)}
+              dataTestId={`${dataTestid}-column-${column}`}
             />
           </td>
         );

@@ -482,6 +482,12 @@ exports[`topic with subscriber function 3`] = `
                       "relationship": "handle",
                       "resource": "root/Default/Topic-OnMessage-c5395e41",
                     },
+                    {
+                      "direction": "inbound",
+                      "implicit": false,
+                      "relationship": "$inflight_init",
+                      "resource": "root/Default/Topic-OnMessage-c5395e41",
+                    },
                   ],
                 },
                 "constructInfo": {
@@ -543,6 +549,12 @@ exports[`topic with subscriber function 3`] = `
                       "direction": "outbound",
                       "implicit": false,
                       "relationship": "handle",
+                      "resource": "root/Default/Handler",
+                    },
+                    {
+                      "direction": "outbound",
+                      "implicit": false,
+                      "relationship": "$inflight_init",
                       "resource": "root/Default/Handler",
                     },
                     {

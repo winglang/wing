@@ -7,7 +7,7 @@ keywords: [Wing example]
 
 ## Str
 ### Concat and Interpolate 
-```ts playground
+```ts 
 let s1 = "Hello Wing String";
 log(s1); // prints Hello Wing String
 let s2 = "Interpolate: ${s1}"; // string interpolation
@@ -17,7 +17,7 @@ log(s3); // prints Concat: Hello Wing String
 ```
 
 ### Str methods
-```ts playground
+```ts 
 let s = "Hello to a new Wing world";
 
 // lets start with split
@@ -45,7 +45,7 @@ for w in s.split(" ") {
 
 ## Num
 
-```ts playground
+```ts 
 let n1 = 10;
 log("${n1}"); // 10
 
@@ -68,7 +68,7 @@ log("${n6}"); // The meaning of the universe
 
 ## Bool
 
-```ts playground
+```ts 
 let b1 = true;
 let b2 = false;
 

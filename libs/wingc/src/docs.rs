@@ -4,10 +4,11 @@ use itertools::Itertools;
 
 use crate::{
 	ast::Phase,
+	closure_transform::CLOSURE_CLASS_PREFIX,
 	jsify::codemaker::CodeMaker,
 	type_check::{
-		jsii_importer::is_construct_base, Class, FunctionSignature, Interface, Namespace, Struct, SymbolKind, Type,
-		TypeRef, VariableInfo, VariableKind,
+		jsii_importer::is_construct_base, Class, ClassLike, Enum, FunctionSignature, Interface, Namespace, Struct,
+		SymbolKind, Type, TypeRef, VariableInfo, VariableKind,
 	},
 };
 
@@ -66,6 +67,7 @@ impl Documented for TypeRef {
 			Type::Interface(i) => render_interface(i),
 			Type::Struct(s) => render_struct(s),
 			Type::Optional(t) => t.render_docs(),
+			Type::Enum(e) => render_enum(e),
 
 			// primitive types don't have docs yet
 			Type::Anything
@@ -83,9 +85,7 @@ impl Documented for TypeRef {
 			| Type::Map(_)
 			| Type::MutMap(_)
 			| Type::Set(_)
-			| Type::MutSet(_)
-			// TODO enums may have docs
-			| Type::Enum(_) => "".to_string(),
+			| Type::MutSet(_) => "".to_string(),
 		}
 	}
 }
@@ -109,17 +109,42 @@ impl Documented for VariableInfo {
 		}
 
 		let modifiers_str = modifiers.join(" ");
+		let name_str = if modifiers.is_empty() {
+			self.name.name.clone()
+		} else {
+			format!("{} {}", modifiers_str, self.name)
+		};
 
 		let mut markdown = CodeMaker::default();
 		markdown.line("```wing");
-		markdown.line(format!("{modifiers_str} {}: {}", self.name, self.type_.to_string()));
-		markdown.line("```");
-		markdown.line("---");
+		markdown.line(format!("{name_str}: {}", self.type_.to_string()));
 
-		let type_docs = self.type_.render_docs();
+		if let Some(d) = &self.docs {
+			markdown.line("```");
 
-		if !type_docs.is_empty() {
-			markdown.line(type_docs);
+			markdown.line("---");
+
+			if let Some(summary) = &d.summary {
+				markdown.line(summary);
+				markdown.empty_line();
+			}
+
+			render_docs(&mut markdown, d);
+		} else {
+			let type_docs = self.type_.render_docs();
+
+			if !type_docs.is_empty() {
+				if type_docs.starts_with("```wing") {
+					// skip the first line to combine the code block
+					markdown.line(type_docs.lines().skip(1).join("\n"));
+				} else {
+					markdown.line("```");
+					markdown.line("---");
+					markdown.line(type_docs);
+				}
+			} else {
+				markdown.line("```");
+			}
 		}
 
 		markdown.to_string().trim().to_string()
@@ -142,7 +167,8 @@ fn render_docs(markdown: &mut CodeMaker, docs: &Docs) {
 	if let Some(s) = &docs.example {
 		markdown.empty_line();
 		markdown.line("### Example");
-		markdown.line("```wing");
+		// For now, the examples are all still in typescript
+		markdown.line("```ts");
 		markdown.line(s);
 		markdown.line("```");
 	}
@@ -159,6 +185,10 @@ fn render_docs(markdown: &mut CodeMaker, docs: &Docs) {
 			return;
 		}
 		if k == "macro" {
+			return;
+		}
+		// marking types that are skipped/changed in the documentation, irrelevant to the language server
+		if k == "skipDocs" || k == "wingType" {
 			return;
 		}
 
@@ -189,12 +219,12 @@ fn render_function(f: &FunctionSignature) -> String {
 
 		for p in &f.parameters {
 			let summary = if let Some(s) = &p.docs.summary {
-				format!(" - {}", s)
+				format!(" — {}", s)
 			} else {
 				String::default()
 			};
 
-			markdown.line(format!(" - *{}*{}", p.name, summary));
+			markdown.line(format!("- `{}`{}", p.name, summary));
 		}
 	}
 
@@ -210,13 +240,37 @@ fn has_parameters_documentation(f: &FunctionSignature) -> bool {
 fn render_struct(s: &Struct) -> String {
 	let mut markdown = CodeMaker::default();
 
+	let extends = s.extends.iter().map(ToString::to_string).join(", ");
+	let extends = if extends.is_empty() {
+		String::default()
+	} else {
+		format!(" extends {}", extends)
+	};
+
 	markdown.line("```wing");
-	markdown.line(format!("{}", s.name));
+	markdown.line(format!("struct {}{extends}", s.name));
 	markdown.line("```");
 	markdown.line("---");
 
 	if let Some(s) = &s.docs.summary {
 		markdown.line(s);
+	}
+
+	if s.fields(true).count() > 0 {
+		markdown.line("### Fields");
+	}
+
+	for field in s.env.iter(true) {
+		let Some(variable) = field.1.as_variable() else { continue };
+		let optional = if variable.type_.is_option() { "?" } else { "" };
+		markdown.line(&format!(
+			"- `{}{optional}` — {}\n",
+			field.0,
+			variable
+				.docs
+				.and_then(|d| d.summary)
+				.unwrap_or(format!("{}", variable.type_))
+		));
 	}
 
 	render_docs(&mut markdown, &s.docs);
@@ -227,8 +281,21 @@ fn render_struct(s: &Struct) -> String {
 fn render_interface(i: &Interface) -> String {
 	let mut markdown = CodeMaker::default();
 
+	let extends = i
+		.extends
+		.iter()
+		.map(|i| render_typeref(&Some(*i)))
+		.map(|i| i.unwrap_or_default())
+		.collect_vec();
+
+	let extends = if !extends.is_empty() {
+		format!(" extends {}", extends.join(", "))
+	} else {
+		String::default()
+	};
+
 	markdown.line("```wing");
-	markdown.line(format!("{}", i.name));
+	markdown.line(format!("interface {}{extends}", i.name));
 	markdown.line("```");
 	markdown.line("---");
 
@@ -236,12 +303,56 @@ fn render_interface(i: &Interface) -> String {
 		markdown.line(s);
 	}
 
+	if i.env.iter(true).next().is_some() {
+		markdown.line("### Methods");
+	}
+
+	for prop in i.env.iter(true) {
+		let prop_docs = prop.1.as_variable().and_then(|v| v.docs.and_then(|d| d.summary));
+		markdown.line(&format!(
+			"- `{}` — {}\n",
+			prop.0,
+			prop_docs.unwrap_or(format!("`{}`", prop.1.as_variable().unwrap().type_))
+		));
+	}
+
+	markdown.empty_line();
+
 	render_docs(&mut markdown, &i.docs);
 
 	markdown.to_string().trim().to_string()
 }
 
+fn render_enum(e: &Enum) -> String {
+	let mut markdown = CodeMaker::default();
+
+	markdown.line("```wing");
+	markdown.line(format!("enum {}", e.name));
+	markdown.line("```");
+	markdown.line("---");
+
+	if let Some(s) = &e.docs.summary {
+		markdown.line(s);
+	}
+
+	for prop in e.values.iter() {
+		markdown.line(&format!("- `{}`\n", prop));
+	}
+
+	markdown.empty_line();
+
+	render_docs(&mut markdown, &e.docs);
+
+	markdown.to_string().trim().to_string()
+}
+
 fn render_class(c: &Class) -> String {
+	if c.name.name.starts_with(CLOSURE_CLASS_PREFIX) {
+		if let Some(closure) = c.get_closure_method() {
+			return closure.maybe_unwrap_option().render_docs();
+		}
+	}
+
 	let mut markdown = CodeMaker::default();
 
 	markdown.line("```wing");

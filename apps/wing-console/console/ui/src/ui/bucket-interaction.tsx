@@ -15,7 +15,9 @@ import {
   useTheme,
 } from "@wingconsole/design-system";
 import classNames from "classnames";
-import { FormEvent, useMemo, useRef, useState } from "react";
+import { FormEvent, useContext, useMemo, useRef, useState } from "react";
+
+import { LayoutContext, LayoutType } from "../layout/layout-provider.js";
 
 export interface BucketInteractionProps {
   selectedEntries: string[];
@@ -62,6 +64,8 @@ export const BucketInteraction = ({
     currentRef.current?.focus();
   };
 
+  const layoutType = useContext(LayoutContext);
+
   return (
     <div className="h-full flex-1 flex flex-col text-sm space-y-1.5">
       <div className="flex justify-between items-center gap-1">
@@ -70,11 +74,13 @@ export const BucketInteraction = ({
             label="Download"
             disabled={selectedEntries.length === 0}
             onClick={onDownloadSelectedFilesClick}
+            dataTestid="cloud.bucket:download"
           />
           <Button
             label="Delete"
             disabled={selectedEntries.length === 0}
             onClick={onDeleteSelectedFilesClick}
+            dataTestid="cloud.bucket:delete-file"
           />
         </div>
 
@@ -92,6 +98,7 @@ export const BucketInteraction = ({
             onClick={() => {
               fileInputRef.current?.click();
             }}
+            dataTestid="cloud.bucket:upload"
           />
         </div>
       </div>
@@ -105,6 +112,7 @@ export const BucketInteraction = ({
             "px-2.5 py-1.5",
             "outline-none rounded text-center inline-block w-full text-xs",
           )}
+          data-testId="cloud.bucket:empty-state"
         >
           No files
         </div>
@@ -121,7 +129,12 @@ export const BucketInteraction = ({
               setShowPreview(true);
             }
           }}
-          className="min-h-[6rem] h-48 overflow-y-auto resize-y"
+          dataTestid="cloud.bucket:files"
+          className={classNames(
+            "overflow-y-auto resize-y",
+            layoutType === LayoutType.Tutorial && "min-h-[4rem]",
+            layoutType !== LayoutType.Tutorial && "h-48 min-h-[6rem]",
+          )}
         />
       )}
 
@@ -151,6 +164,7 @@ export const BucketInteraction = ({
                 previewType === "text" &&
                   "max-h-[30rem] resize-y overflow-y-auto",
               )}
+              dataTestid="cloud.bucket:file-preview"
             />
           </ResponseInput>
         </div>

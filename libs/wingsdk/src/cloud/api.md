@@ -27,19 +27,21 @@ When a client invokes a route, the corresponding event handler function executes
 
 ### REST API
 
-The following example shows a complete REST API implemetnation using `cloud.Api`, `cloud.Table` & `cloud.Counter`
+The following example shows a complete REST API implementation using `cloud.Api`, `ex.Table` & `cloud.Counter`
+
 ```ts playground
 bring cloud;
+bring ex;
 
 let api = new cloud.Api();
 // Used for generating unique id
 let counter = new cloud.Counter();
 // our employee database
-let db = new cloud.Table(
+let db = new ex.Table(
   name: "employees",
   primaryKey: "id",
   columns: {
-    "name" => cloud.ColumnType.STRING
+    "name" => ex.ColumnType.STRING
   }
 );
 
@@ -95,7 +97,7 @@ api.delete("/employees/{id}", inflight (request: cloud.ApiRequest): cloud.ApiRes
   return cloud.ApiResponse {
     status: 204
   };
-}); 
+});
 ```
 
 ## Target-specific details
@@ -115,8 +117,3 @@ The AWS implementation of `cloud.Api` uses [Amazon API Gateway](https://aws.amaz
 ### GCP (`tf-gcp`)
 
 🚧 Not supported yet (tracking issue: [#624](https://github.com/winglang/wing/issues/624))
-
-
-## API Reference
-
-The full list of APIs for `cloud.Api` is available in the [API Reference](./api-reference).

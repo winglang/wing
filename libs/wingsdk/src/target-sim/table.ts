@@ -2,24 +2,24 @@ import { Construct } from "constructs";
 import { ISimulatorResource } from "./resource";
 import { TableSchema, TABLE_TYPE } from "./schema-resources";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
-import * as cloud from "../cloud";
 import * as core from "../core";
+import * as ex from "../ex";
 import { Json, IInflightHost } from "../std";
 import { BaseResourceSchema } from "../testing/simulator";
 
 /**
- * Simulator implementation of `cloud.Table`.
+ * Simulator implementation of `ex.Table`.
  *
- * @inflight `@winglang/sdk.cloud.ITableClient`
+ * @inflight `@winglang/sdk.ex.ITableClient`
  */
-export class Table extends cloud.Table implements ISimulatorResource {
+export class Table extends ex.Table implements ISimulatorResource {
   private readonly initialRows: Record<string, Json> = {};
-  constructor(scope: Construct, id: string, props: cloud.TableProps = {}) {
+  constructor(scope: Construct, id: string, props: ex.TableProps = {}) {
     super(scope, id, props);
   }
 
   public addRow(key: string, row: Json): void {
-    this.initialRows[key] = row;
+    this.initialRows[key] = { ...row, [this.primaryKey]: key } as Json;
   }
 
   public toSimulator(): BaseResourceSchema {

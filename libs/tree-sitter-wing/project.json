@@ -15,13 +15,8 @@
     },
     "build": {
       "options": {
-        "command": "cargo wasi build",
+        "command": "cargo wasi build --release",
         "cwd": "libs/tree-sitter-wing"
-      },
-      "configurations": {
-        "release": {
-          "command": "cargo wasi build --release"
-        }
       }
     },
     "dev": {

@@ -1,4 +1,27 @@
+import { readdirSync } from "fs";
 import { JsonFile, cdk, javascript } from "projen";
+
+const UNDOCUMENTED_CLOUD_FILES = ["index", "test-runner"];
+
+const cloudFiles = readdirSync("./src/cloud");
+
+const cloudResources: Set<string> = new Set(
+  cloudFiles.map((filename) => filename.split(".").slice(0, -1).join("."))
+);
+
+UNDOCUMENTED_CLOUD_FILES.forEach((file) => cloudResources.delete(file));
+
+const undocumentedResources = Array.from(cloudResources).filter(
+  (file) => !cloudFiles.includes(`${file}.md`)
+);
+
+if (undocumentedResources.length) {
+  throw new Error(
+    `Detected undocumented resources: ${undocumentedResources.join(
+      ", "
+    )}. Please add the corresponding .md files in ./src/cloud folder.`
+  );
+}
 
 const JSII_DEPS = ["constructs@~10.1.314"];
 const CDKTF_VERSION = "0.17.0";
@@ -10,7 +33,9 @@ const CDKTF_PROVIDERS = [
   "google@~>4.63.1",
 ];
 
-const PUBLIC_MODULES = ["cloud", "std", "http", "util", "redis"];
+const PUBLIC_MODULES = ["std", "http", "util", "aws", "ex"];
+
+const CLOUD_DOCS_PREFIX = "../../docs/docs/04-standard-library/01-cloud/";
 
 // defines the list of dependencies required for each compilation target that is not built into the
 // compiler (like Terraform targets).
@@ -218,17 +243,22 @@ const docgen = project.tasks.tryFind("docgen")!;
 docgen.reset();
 
 // copy readme docs
-docgen.exec(
-  `cp -r src/cloud/*.md ../../docs/docs/04-standard-library/01-cloud/`
-);
+docgen.exec(`cp -r src/cloud/*.md ${CLOUD_DOCS_PREFIX}`);
 
 // generate api reference for each submodule
 for (const mod of PUBLIC_MODULES) {
-  const prefix = docsPrefix(PUBLIC_MODULES.indexOf(mod) + 1, mod);
+  const prefix = docsPrefix(PUBLIC_MODULES.indexOf(mod) + 2, mod);
   const docsPath = prefix + "/api-reference.md";
   docgen.exec(`jsii-docgen -o API.md -l wing --submodule ${mod}`);
   docgen.exec(`mkdir -p ${prefix}`);
   docgen.exec(`echo '${docsFrontMatter(mod)}' > ${docsPath}`);
+  docgen.exec(`cat API.md >> ${docsPath}`);
+}
+
+// generate api reference for each cloud/submodule and append it to the doc file
+for (const mod of cloudResources) {
+  const docsPath = `${CLOUD_DOCS_PREFIX}${mod}.md`;
+  docgen.exec(`jsii-docgen -o API.md -l wing --submodule cloud/${mod}`);
   docgen.exec(`cat API.md >> ${docsPath}`);
 }
 

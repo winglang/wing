@@ -25,6 +25,7 @@ export interface ComboboxProps {
   filter?: boolean;
   showSelected?: boolean;
   renderItem?: (item: Item) => JSX.Element;
+  dataTestid?: string;
 }
 
 export const Combobox = ({
@@ -41,6 +42,7 @@ export const Combobox = ({
   filter = true,
   showSelected = true,
   renderItem,
+  dataTestid,
 }: ComboboxProps) => {
   const { theme } = useTheme();
 
@@ -103,6 +105,7 @@ export const Combobox = ({
               }}
               onKeyUp={onKeyUp}
               readOnly={readonly}
+              data-testid={dataTestid}
             />
           </div>
           <Transition
