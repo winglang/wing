@@ -309,12 +309,17 @@ export const ElkMap = <T extends unknown = undefined>({
     }
 
     const observer = new IntersectionObserver(
-      () => {
-        zoomToNode("root");
+      (entries) => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting) {
+            zoomToNode("root");
+            return;
+          }
+        }
       },
       {
         root: zoomPane.current,
-        threshold: 0.35,
+        rootMargin: "-50px",
       },
     );
     observer.observe(rootElement.current);
