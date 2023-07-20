@@ -1868,11 +1868,11 @@ Duration <DURATION>"
 `;
 
 exports[`super_call.w 1`] = `
-"error: Cannot call super method because we're not in an instance method (\\"super\\" is unknown in this context)
+"error: \\"super\\" can only be used inside of classes
    --> ../../../examples/tests/invalid/super_call.w:32:7
    |
 32 | super.do();
-   |       ^^ Cannot call super method because we're not in an instance method (\\"super\\" is unknown in this context)
+   |       ^^ \\"super\\" can only be used inside of classes
 
 
 error: Cannot call super method because class A has no parent
@@ -1896,11 +1896,11 @@ error: super class \\"A\\" does not have a method named \\"child_method\\"
    |           ^^^^^^^^^^^^ super class \\"A\\" does not have a method named \\"child_method\\"
 
 
-error: Cannot call super method because we're not in an instance method (\\"super\\" is unknown in this context)
+error: Cannot call super method inside of a static method
    --> ../../../examples/tests/invalid/super_call.w:26:11
    |
 26 |     super.method();
-   |           ^^^^^^ Cannot call super method because we're not in an instance method (\\"super\\" is unknown in this context)
+   |           ^^^^^^ Cannot call super method inside of a static method
 
 
 error: \`super\` calls inside inflight closures not supported yet, see: https://github.com/winglang/wing/issues/3474

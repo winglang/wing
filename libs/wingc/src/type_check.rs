@@ -4304,7 +4304,12 @@ pub fn resolve_super_method(method: &Symbol, env: &SymbolEnv, types: &Types) -> 
 		}
 	} else {
 		Err(TypeError {
-			message: "Cannot call super method because we're not in an instance".to_string(),
+			message: (if env.is_function {
+				"Cannot call super method inside of a static method"
+			} else {
+				"\"super\" can only be used inside of classes"
+			})
+			.to_string(),
 			span: method.span.clone(),
 		})
 	}
