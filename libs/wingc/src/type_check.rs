@@ -1751,15 +1751,6 @@ impl<'a> TypeChecker<'a> {
 					}
 				}
 
-				if let CalleeKind::Expr(call_expr) = callee {
-					if let ExprKind::Reference(Reference::Identifier(ident)) = &call_expr.kind {
-						if ident.name == "wingc_env" {
-							println!("[symbol environment at {}]", exp.span().to_string());
-							println!("{}", env.to_string());
-						}
-					}
-				}
-
 				if is_option {
 					// When calling a an optional function, the return type is always optional
 					// To allow this to be both safe and unsurprising,
