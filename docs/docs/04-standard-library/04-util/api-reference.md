@@ -49,13 +49,15 @@ Converts a string from base64 to UTF-8.
 
 - *Type:* str
 
+base64 string to decode.
+
 ---
 
 ###### `url`<sup>Optional</sup> <a name="url" id="@winglang/sdk.util.Util.base64Decode.parameter.url"></a>
 
 - *Type:* bool
 
-Whether the string should be treated as an url.
+If `true`, the source is expected to be a URL-safe base64 string.
 
 ---
 
@@ -79,7 +81,7 @@ Converts a string from UTF-8 to base64.
 
 - *Type:* bool
 
-Whether the string should be treated as an url.
+If `true`, a URL-safe base64 is returned.
 
 ---
 
