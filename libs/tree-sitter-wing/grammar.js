@@ -96,7 +96,7 @@ module.exports = grammar({
     _statement: ($) =>
       choice(
         $.test_statement,
-        $.short_import_statement,
+        $.import_statement,
         $.expression_statement,
         $.variable_definition_statement,
         $.variable_assignment_statement,
@@ -117,7 +117,7 @@ module.exports = grammar({
         $.super_constructor_statement
       ),
 
-    short_import_statement: ($) =>
+    import_statement: ($) =>
       seq(
         "bring",
         field("module_name", choice($.identifier, $.string)),
