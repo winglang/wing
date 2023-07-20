@@ -1,4 +1,4 @@
-import { Match, Template } from "aws-cdk-lib/assertions";
+import { Template } from "aws-cdk-lib/assertions";
 import { test, expect } from "vitest";
 import { Queue } from "../../src/cloud";
 import * as std from "../../src/std";
