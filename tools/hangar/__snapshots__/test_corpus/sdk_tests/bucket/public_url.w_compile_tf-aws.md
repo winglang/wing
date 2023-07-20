@@ -168,6 +168,9 @@ module.exports = function({ $http_Util, $privateBucket, $publicBucket, $util_Uti
           }
         },
         "bucket": "${aws_s3_bucket.publicBucket.bucket}",
+        "depends_on": [
+          "aws_s3_bucket_public_access_block.publicBucket_PublicAccessBlock_54D9EFBA"
+        ],
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":\"*\",\"Action\":[\"s3:GetObject\"],\"Resource\":[\"${aws_s3_bucket.publicBucket.arn}/*\"]}]}"
       }
     },
