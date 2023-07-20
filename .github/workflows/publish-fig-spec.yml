@@ -41,9 +41,7 @@ jobs:
 
       - name: Generate the fig spec
         if: ${{ steps.git-diff-wing-cli.outputs.diff == 'true' }}
-        run: |
-          global_node_modules=$(npm root -g)
-          node $global_node_modules/winglang/dist/cli.js generate-fig-spec >> new-fig-cli-generated.ts
+        run: node $(npm root -g)/winglang/dist/cli.js generate-fig-spec >> new-fig-cli-generated.ts
 
       - name: Create Autocomplete PR
         if: ${{ steps.git-diff-wing-cli.outputs.diff == 'true' }}
