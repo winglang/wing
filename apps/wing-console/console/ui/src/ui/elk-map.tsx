@@ -319,7 +319,7 @@ export const ElkMap = <T extends unknown = undefined>({
       },
       {
         root: zoomPane.current,
-        rootMargin: "-50px",
+        rootMargin: "-20px",
       },
     );
     observer.observe(rootElement.current);
