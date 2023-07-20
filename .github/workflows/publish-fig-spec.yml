@@ -39,6 +39,10 @@ jobs:
         if: ${{ steps.git-diff-wing-cli.outputs.diff == 'true' }}
         run: wing --version
 
+      - name: Get npm global bin directory
+        id: npm-global-bin
+        run: echo "::set-output name=dir::$(npm bin -g)"
+
       - name: Generate the fig spec
         if: ${{ steps.git-diff-wing-cli.outputs.diff == 'true' }}
         run: node usr/local/lib/node_module/dist/cli.js generate-fig-spec >> new-fig-cli-generated.ts
