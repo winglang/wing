@@ -146,6 +146,10 @@ jobs:
       - name: Install Wing CLI
         run: npm i -g winglang
 
+      - name: Get npm global bin directory
+        id: npm-global-bin
+        run: echo "::set-output name=dir::$(npm bin -g)"
+
       - name: Generate the fig spec
         run: node usr/local/lib/node_module/dist/cli.js generate-fig-spec >> new-fig-cli-generated.ts
 
