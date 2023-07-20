@@ -14,7 +14,7 @@ There are many ways to contribute to Wing:
 * Writing [documentation and guides](https://github.com/winglang/wing/issues?q=is:issue+is:open+sort:updated-desc+label:documentation) or adding [examples](/contributing/start-here/docs#%EF%B8%8F-how-do-i-add-an-example)
 * Setting up your [development environment](/contributing/start-here/development) and working on the code
 * Submitting [pull requests](/contributing/start-here/pull_requests) for new features or helping with [reviews](https://github.com/winglang/wing/pulls)
-* Picking up a [good first issue](https://github.com/winglang/wing/issues?q=is%3Aissue+is%3Aopen+label%3A%221%EF%B8%8F%E2%83%A3+good+first+issue%22+no%3Aassignee+sort%3Aupdated-desc) to work on
+* Picking up a [good first issue](https://github.com/winglang/wing/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22+no%3Aassignee+sort%3Aupdated-desc+) to work on
 * Reporting and fixing [bugs](/contributing/start-here/bugs)
 * Contributing to the [Wing SDK (standard library)](/contributing/start-here/wingsdk)
 * Find solutions to common issues in our [troubleshooting guide](/contributing/start-here/troubleshooting)
