@@ -90,7 +90,7 @@ export class Util {
 
   /**
    * Converts a string from base64 to UTF-8.
-   * @param name The name of the base64 string to decode.
+   * @param stringToDecode base64 string to decode.
    * @param url Whether the string should be treated as an url.
    * @returns The UTF-8 string.
    */
