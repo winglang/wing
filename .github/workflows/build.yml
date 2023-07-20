@@ -144,7 +144,7 @@ jobs:
           fi
 
       - name: Install Wing CLI
-        run: npm i-g winglang
+        run: npm i -g winglang
 
       - name: Get npm global bin directory
         id: npm-global-bin
