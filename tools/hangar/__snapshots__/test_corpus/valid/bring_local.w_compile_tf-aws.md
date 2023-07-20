@@ -18,6 +18,18 @@ module.exports = function({ $store }) {
 
 ```
 
+## inflight.Q.js
+```js
+module.exports = function({  }) {
+  class Q {
+    constructor({  }) {
+    }
+  }
+  return Q;
+}
+
+```
+
 ## inflight.Store.js
 ```js
 module.exports = function({  }) {
@@ -323,7 +335,37 @@ class $Root extends $stdlib.std.Resource {
       ;
       return { Store, Color };
     })();
+    const file2 = (() => {
+      class Q extends $stdlib.std.Resource {
+        constructor(scope, id, ) {
+          super(scope, id);
+          this._addInflightOps("$inflight_init");
+        }
+        static _toInflightType(context) {
+          return $stdlib.core.NodeJsCode.fromInline(`
+            require("./inflight.Q.js")({
+            })
+          `);
+        }
+        _toInflight() {
+          return $stdlib.core.NodeJsCode.fromInline(`
+            (await (async () => {
+              const QClient = ${Q._toInflightType(this).text};
+              const client = new QClient({
+              });
+              if (client.$inflight_init) { await client.$inflight_init(); }
+              return client;
+            })())
+          `);
+        }
+      }
+      return { Q };
+    })();
+    const file3 = (() => {
+      return {  };
+    })();
     const store = new file1.Store(this,"file1.Store");
+    const q = new file2.Q(this,"file2.Q");
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:add data to store",new $Closure1(this,"$Closure1"));
     const s = {
     "x": 1,
