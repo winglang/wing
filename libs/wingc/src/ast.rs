@@ -514,7 +514,7 @@ pub enum ExprKind {
 	},
 	Reference(Reference),
 	Call {
-		callee: Box<Expr>,
+		callee: CalleeKind,
 		arg_list: ArgList,
 	},
 	Unary {
@@ -555,6 +555,23 @@ pub enum ExprKind {
 	},
 	FunctionClosure(FunctionDefinition),
 	CompilerDebugPanic,
+}
+
+#[derive(Debug)]
+pub enum CalleeKind {
+	/// The callee is any expression
+	Expr(Box<Expr>),
+	/// The callee is a method in our super class
+	SuperCall(Symbol),
+}
+
+impl Spanned for CalleeKind {
+	fn span(&self) -> WingSpan {
+		match self {
+			CalleeKind::Expr(e) => e.span.clone(),
+			CalleeKind::SuperCall(method) => method.span(),
+		}
+	}
 }
 
 #[derive(Debug)]

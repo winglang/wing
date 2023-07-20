@@ -380,19 +380,13 @@ module.exports = grammar({
     compiler_dbg_panic: ($) => "😱",
     compiler_dbg_env: ($) => seq("🗺️", optional(";")),
 
-    _callable_expression: ($) =>
-      choice(
-        $.nested_identifier,
-        $.identifier,
-        $.call,
-        $.parenthesized_expression
-      ),
-
     call: ($) =>
       prec.left(
         PREC.CALL,
-        seq(field("caller", $.expression), field("args", $.argument_list))
+        seq(field("caller", choice($.expression, $.super_call)), field("args", $.argument_list))
       ),
+
+    super_call: ($) => seq($._super, ".", field("method", $.identifier)),
 
     argument_list: ($) =>
       seq(

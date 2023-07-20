@@ -1867,6 +1867,56 @@ Test Files 1 failed (1)
 Duration <DURATION>"
 `;
 
+exports[`super_call.w 1`] = `
+"error: \\"super\\" can only be used inside of classes
+   --> ../../../examples/tests/invalid/super_call.w:32:7
+   |
+32 | super.do();
+   |       ^^ \\"super\\" can only be used inside of classes
+
+
+error: Cannot call super method because class A has no parent
+  --> ../../../examples/tests/invalid/super_call.w:4:11
+  |
+4 |     super.method();
+  |           ^^^^^^ Cannot call super method because class A has no parent
+
+
+error: Cannot call super method because class InflightA has no parent
+   --> ../../../examples/tests/invalid/super_call.w:12:11
+   |
+12 |     super.method();
+   |           ^^^^^^ Cannot call super method because class InflightA has no parent
+
+
+error: super class \\"A\\" does not have a method named \\"child_method\\"
+   --> ../../../examples/tests/invalid/super_call.w:20:11
+   |
+20 |     super.child_method();
+   |           ^^^^^^^^^^^^ super class \\"A\\" does not have a method named \\"child_method\\"
+
+
+error: Cannot call super method inside of a static method
+   --> ../../../examples/tests/invalid/super_call.w:26:11
+   |
+26 |     super.method();
+   |           ^^^^^^ Cannot call super method inside of a static method
+
+
+error: \`super\` calls inside inflight closures not supported yet, see: https://github.com/winglang/wing/issues/3474
+   --> ../../../examples/tests/invalid/super_call.w:52:50
+   |
+52 |       return \\"this: \${this.m1()}, super: \${super.m1()}\\";
+   |                                                  ^^ \`super\` calls inside inflight closures not supported yet, see: https://github.com/winglang/wing/issues/3474
+
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
+
 exports[`try_no_catch_or_finally.w 1`] = `
 "error: Missing \`catch\` or \`finally\` blocks for this try statement
   --> ../../../examples/tests/invalid/try_no_catch_or_finally.w:1:1
