@@ -144,14 +144,14 @@ jobs:
           fi
 
       - name: Install Wing CLI
-        run: npm i -g winglang
+        run: npm i winglang
 
       - name: Get npm global bin directory
         id: npm-global-bin
-        run: echo "::set-output name=dir::$(npm bin -g)"
+        run: ls -l `which npm`
 
       - name: Generate the fig spec
-        run: node usr/local/lib/node_module/dist/cli.js generate-fig-spec >> new-fig-cli-generated.ts
+        run: node node_modules/winglang/dist/cli.js generate-fig-spec >> new-fig-cli-generated.ts
 
       - name: Upload Extension
         uses: actions/upload-artifact@v3
@@ -259,7 +259,7 @@ jobs:
         uses: pnpm/action-setup@v2.2.4
         with:
           version: ${{ env.PNPM_VERSION }}
-        
+
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
