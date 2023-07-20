@@ -148,7 +148,10 @@ jobs:
 
       - name: Get npm global bin directory
         id: npm-global-bin
-        run: npm root -g
+        run: |
+          npm root -g
+          global_node_modules=$(npm root -g)
+          (ls $global_node_modules/winglang/dist/cli.js && echo yes) || echo no
 
       - name: Generate the fig spec
         run: cd apps/wing && node dist/cli.js generate-fig-spec >> new-fig-cli-generated.ts
