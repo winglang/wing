@@ -1,7 +1,7 @@
 use crate::{
 	ast::{
-		ArgList, Class, Expr, ExprKind, FunctionBody, FunctionDefinition, FunctionParameter, FunctionSignature, Interface,
-		InterpolatedStringPart, Literal, NewExpr, Reference, Scope, Stmt, StmtKind, Symbol, TypeAnnotation,
+		ArgList, CalleeKind, Class, Expr, ExprKind, FunctionBody, FunctionDefinition, FunctionParameter, FunctionSignature,
+		Interface, InterpolatedStringPart, Literal, NewExpr, Reference, Scope, Stmt, StmtKind, Symbol, TypeAnnotation,
 		TypeAnnotationKind, UserDefinedType,
 	},
 	dbg_panic,
@@ -301,7 +301,10 @@ where
 			v.visit_reference(ref_);
 		}
 		ExprKind::Call { callee, arg_list } => {
-			v.visit_expr(callee);
+			match callee {
+				CalleeKind::Expr(expr) => v.visit_expr(expr),
+				CalleeKind::SuperCall(method) => v.visit_symbol(method),
+			}
 			v.visit_args(arg_list);
 		}
 		ExprKind::Unary { op: _, exp } => {

@@ -3,7 +3,7 @@ pub(crate) mod jsii_importer;
 pub mod lifts;
 pub mod symbol_env;
 
-use crate::ast::{self, ClassField, FunctionDefinition, NewExpr, TypeAnnotationKind};
+use crate::ast::{self, CalleeKind, ClassField, FunctionDefinition, NewExpr, TypeAnnotationKind};
 use crate::ast::{
 	ArgList, BinaryOperator, Class as AstClass, Expr, ExprKind, FunctionBody, FunctionParameter as AstFunctionParameter,
 	Interface as AstInterface, InterpolatedStringPart, Literal, Phase, Reference, Scope, Spanned, Stmt, StmtKind, Symbol,
@@ -71,7 +71,7 @@ pub type TypeRef = UnsafeRef<Type>;
 
 #[derive(Debug)]
 pub enum SymbolKind {
-	Type(TypeRef),
+	Type(TypeRef), // TODO: <- deprecated since we treat types as a VeriableInfo of kind VariableKind::Type
 	Variable(VariableInfo),
 	Namespace(NamespaceRef),
 }
@@ -1100,8 +1100,6 @@ pub struct Types {
 	err_idx: usize,
 
 	type_for_expr: Vec<Option<ResolvedExpression>>,
-
-	resource_base_type: Option<TypeRef>,
 }
 
 impl Types {
@@ -1148,7 +1146,6 @@ impl Types {
 			nil_idx,
 			err_idx,
 			type_for_expr: Vec::new(),
-			resource_base_type: None,
 		}
 	}
 
@@ -1235,22 +1232,15 @@ impl Types {
 		UnsafeRef::<Namespace>(&**t as *const Namespace)
 	}
 
-	fn resource_base_type(&mut self) -> TypeRef {
-		// cache the resource base type ref
-		if self.resource_base_type.is_none() {
-			let resource_fqn = format!("{}.{}", WINGSDK_ASSEMBLY_NAME, WINGSDK_RESOURCE);
-			self.resource_base_type = Some(
-				self
-					.libraries
-					.lookup_nested_str(&resource_fqn, None)
-					.unwrap()
-					.0
-					.as_type()
-					.unwrap(),
-			);
-		}
-
-		self.resource_base_type.unwrap()
+	pub fn resource_base_type(&self) -> TypeRef {
+		let resource_fqn = format!("{}.{}", WINGSDK_ASSEMBLY_NAME, WINGSDK_RESOURCE);
+		self
+			.libraries
+			.lookup_nested_str(&resource_fqn, None)
+			.expect("Resouce base class to be loaded")
+			.0
+			.as_type()
+			.expect("Resouce base class to be a type")
 	}
 
 	/// Stores the type and phase of a given expression node.
@@ -1685,7 +1675,13 @@ impl<'a> TypeChecker<'a> {
 			}
 			ExprKind::Call { callee, arg_list } => {
 				// Resolve the function's reference (either a method in the class's env or a function in the current env)
-				let (func_type, callee_phase) = self.type_check_exp(callee, env);
+				let (func_type, callee_phase) = match callee {
+					CalleeKind::Expr(expr) => self.type_check_exp(expr, env),
+					CalleeKind::SuperCall(method) => resolve_super_method(method, env, &self.types).unwrap_or_else(|e| {
+						self.type_error(e);
+						self.resolved_error()
+					}),
+				};
 				let is_option = func_type.is_option();
 				let func_type = func_type.maybe_unwrap_option();
 
@@ -1746,10 +1742,21 @@ impl<'a> TypeChecker<'a> {
 				}
 
 				// If the function is "wingc_env", then print out the current environment
-				if let ExprKind::Reference(Reference::Identifier(ident)) = &callee.kind {
-					if ident.name == "wingc_env" {
-						println!("[symbol environment at {}]", exp.span().to_string());
-						println!("{}", env.to_string());
+				if let CalleeKind::Expr(call_expr) = callee {
+					if let ExprKind::Reference(Reference::Identifier(ident)) = &call_expr.kind {
+						if ident.name == "wingc_env" {
+							println!("[symbol environment at {}]", exp.span().to_string());
+							println!("{}", env.to_string());
+						}
+					}
+				}
+
+				if let CalleeKind::Expr(call_expr) = callee {
+					if let ExprKind::Reference(Reference::Identifier(ident)) = &call_expr.kind {
+						if ident.name == "wingc_env" {
+							println!("[symbol environment at {}]", exp.span().to_string());
+							println!("{}", env.to_string());
+						}
 					}
 				}
 
@@ -1757,11 +1764,17 @@ impl<'a> TypeChecker<'a> {
 					// When calling a an optional function, the return type is always optional
 					// To allow this to be both safe and unsurprising,
 					// the callee must be a reference with an optional accessor
-					if let ExprKind::Reference(Reference::InstanceMember { optional_accessor, .. }) = &callee.kind {
-						if *optional_accessor {
-							(self.types.make_option(func_sig.return_type), func_phase)
+					if let CalleeKind::Expr(call_expr) = callee {
+						if let ExprKind::Reference(Reference::InstanceMember { optional_accessor, .. }) = &call_expr.kind {
+							if *optional_accessor {
+								(self.types.make_option(func_sig.return_type), func_phase)
+							} else {
+								// No additional error is needed here, since the type checker will already have errored without optional chaining
+								(self.types.error(), func_phase)
+							}
 						} else {
-							// No additional error is needed here, since the type checker will already have errored without optional chaining
+							// TODO do we want syntax for this? e.g. `foo?.()`
+							self.spanned_error(callee, "Cannot call an optional function");
 							(self.types.error(), func_phase)
 						}
 					} else {
@@ -4246,6 +4259,59 @@ pub fn resolve_user_defined_type(
 		}
 	} else {
 		Err(lookup_result_to_type_error(lookup_result, user_defined_type))
+	}
+}
+
+pub fn resolve_super_method(method: &Symbol, env: &SymbolEnv, types: &Types) -> Result<(TypeRef, Phase), TypeError> {
+	let this_type = env.lookup(&Symbol::global("this"), None);
+	if let Some(SymbolKind::Variable(VariableInfo {
+		type_,
+		kind: VariableKind::Free,
+		..
+	})) = this_type
+	{
+		if type_.is_closure() {
+			return Err(TypeError {
+				message:
+					"`super` calls inside inflight closures not supported yet, see: https://github.com/winglang/wing/issues/3474"
+						.to_string(),
+				span: method.span.clone(),
+			});
+		}
+		// Get the parent type of "this" (if it's a preflight class that's directly derived from `std.Resource` it's an implicit derive so we'll treat it as if there's no parent)
+		let parent_type = type_
+			.as_class()
+			.expect("Expected \"this\" to be a class")
+			.parent
+			.filter(|t| !(t.is_preflight_class() && t.is_same_type_as(&types.resource_base_type())));
+		if let Some(parent_type) = parent_type {
+			if let Some(method_info) = parent_type.as_class().unwrap().get_method(method) {
+				Ok((method_info.type_, method_info.phase))
+			} else {
+				Err(TypeError {
+					message: format!(
+						"super class \"{}\" does not have a method named \"{}\"",
+						parent_type, method
+					),
+					span: method.span.clone(),
+				})
+			}
+		} else {
+			Err(TypeError {
+				message: format!("Cannot call super method because class {} has no parent", type_),
+				span: method.span.clone(),
+			})
+		}
+	} else {
+		Err(TypeError {
+			message: (if env.is_function {
+				"Cannot call super method inside of a static method"
+			} else {
+				"\"super\" can only be used inside of classes"
+			})
+			.to_string(),
+			span: method.span.clone(),
+		})
 	}
 }
 
