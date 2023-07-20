@@ -1,7 +1,10 @@
 bring "./store.w" as file1;
+bring "./subdir/subfile.w" as file2;
+bring "./subdir/empty.w" as file3;
 
 // classes from other files can be used
 let store = new file1.Store();
+let q = new file2.Q();
 
 test "add data to store" {
   store.store("foo");

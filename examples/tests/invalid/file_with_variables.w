@@ -6,6 +6,7 @@ let x = 5;
 let y = ["hello", "world"];
 let z = new cloud.Bucket();
 
-class Bar {}
+class Bar {
+  x: num;
+}
 
-throw("dummy error");

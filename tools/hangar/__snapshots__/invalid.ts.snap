@@ -627,14 +627,12 @@ Duration <DURATION>"
 `;
 
 exports[`file_with_variables.w 1`] = `
-"ERROR: dummy error
+"error: Preflight field \\"x\\" is not initialized
+   --> ../../../examples/tests/invalid/file_with_variables.w:10:3
+   |
+10 |   x: num;
+   |   ^ Preflight field \\"x\\" is not initialized
 
-../../../examples/tests/invalid/target/test/file_with_variables.wsim.023247.tmp/.wing/preflight.js:34
-       const y = Object.freeze([\\"hello\\", \\"world\\"]);
-       const z = this.node.root.newAbstract(\\"@winglang/sdk.cloud.Bucket\\",this,\\"cloud.Bucket\\");
->>     {((msg) => {throw new Error(msg)})(\\"dummy error\\")};
-     }
-   }
 
  
  
