@@ -81,7 +81,7 @@ export class Util {
   /**
    * Converts a string from UTF-8 to base64.
    * @param name The name of the UTF-8 string to encode.
-   * @param url Whether the string should be treated as an url.
+   * @param url If `true`, a URL-safe base64 is returned.
    * @returns The base64 string.
    */
   public static base64Encode(stringToEncode: string, url?: boolean): string {
