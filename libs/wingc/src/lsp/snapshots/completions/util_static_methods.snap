@@ -1,6 +1,30 @@
 ---
 source: libs/wingc/src/lsp/completions.rs
 ---
+- label: base64Decode
+  kind: 2
+  detail: "(stringToDecode: str, url: bool?): str"
+  documentation:
+    kind: markdown
+    value: "```wing\nstatic base64Decode: (stringToDecode: str, url: bool?): str\n```\n---\nConverts a string from base64 to UTF-8.\n\n\n### Returns\nThe UTF-8 string."
+  sortText: ff|base64Decode
+  insertText: base64Decode($0)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: base64Encode
+  kind: 2
+  detail: "(stringToEncode: str, url: bool?): str"
+  documentation:
+    kind: markdown
+    value: "```wing\nstatic base64Encode: (stringToEncode: str, url: bool?): str\n```\n---\nConverts a string from UTF-8 to base64.\n\n\n### Returns\nThe base64 string."
+  sortText: ff|base64Encode
+  insertText: base64Encode($0)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
 - label: env
   kind: 2
   detail: "(name: str): str"
