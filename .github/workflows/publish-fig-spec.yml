@@ -7,9 +7,9 @@ on:
       - synchronize
       - reopened
       - edited
-  # release:
-  #   types:
-  #     - published
+  release:
+    types:
+      - published
 
 jobs:
   publish:
@@ -41,14 +41,16 @@ jobs:
 
       - name: Generate the fig spec
         if: ${{ steps.git-diff-wing-cli.outputs.diff == 'true' }}
-        run: node usr/local/lib/node_module/dist/cli.js generate-fig-spec >> new-fig-cli-generated.ts
+        run: |
+          global_node_modules=$(npm root -g)
+          node $global_node_modules/winglang/dist/cli.js generate-fig-spec >> new-fig-cli-generated.ts
 
-      # - name: Create Autocomplete PR
-      #   if: ${{ steps.git-diff-wing-cli.outputs.diff == 'true' }}
-      #   uses: withfig/push-to-fig-autocomplete-action@v1
-      #   with:
-      #     token: ${{ secrets.PROJEN_GITHUB_TOKEN }}
-      #     autocomplete-spec-name: wing
-      #     spec-path: usr/local/lib/node_module/dist/new-fig-cli-generated.ts
-      #     integration: commander
-      #     new-spec-version: ${{ steps.wing-version.outputs.version }}
+      - name: Create Autocomplete PR
+        if: ${{ steps.git-diff-wing-cli.outputs.diff == 'true' }}
+        uses: withfig/push-to-fig-autocomplete-action@v1
+        with:
+          token: ${{ secrets.PROJEN_GITHUB_TOKEN }}
+          autocomplete-spec-name: wing
+          spec-path: $(npm root -g)/winglang/dist/new-fig-cli-generated.ts
+          integration: commander
+          new-spec-version: ${{ steps.wing-version.outputs.version }}
