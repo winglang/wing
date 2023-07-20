@@ -87,6 +87,10 @@ where
 			module_name: f.fold_symbol(module_name),
 			identifier: identifier.map(|id| f.fold_symbol(id)),
 		},
+		StmtKind::Module { name, statements } => StmtKind::Module {
+			name: f.fold_symbol(name),
+			statements: f.fold_scope(statements),
+		},
 		StmtKind::Let {
 			reassignable,
 			var_name,
