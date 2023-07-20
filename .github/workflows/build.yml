@@ -148,10 +148,12 @@ jobs:
 
       - name: Get npm global bin directory
         id: npm-global-bin
-        run: ls -l `which npm`
+        run: npm root -g
 
       - name: Generate the fig spec
-        run: node node_modules/winglang/dist/cli.js generate-fig-spec >> new-fig-cli-generated.ts
+        run: |
+          global_node_modules=$(npm root -g)
+          node $global_node_modules/winglang/dist/cli.js generate-fig-spec >> new-fig-cli-generated.ts
 
       - name: Upload Extension
         uses: actions/upload-artifact@v3
