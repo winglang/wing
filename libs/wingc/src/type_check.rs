@@ -4304,9 +4304,7 @@ pub fn resolve_super_method(method: &Symbol, env: &SymbolEnv, types: &Types) -> 
 		}
 	} else {
 		Err(TypeError {
-			message:
-				"Cannot call super method because we're not in an instance method (\"super\" is unknown in this context)"
-					.to_string(),
+			message: "Cannot call super method because we're not in an instance".to_string(),
 			span: method.span.clone(),
 		})
 	}

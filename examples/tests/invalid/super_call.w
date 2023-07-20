@@ -24,13 +24,13 @@ class B extends A {
   static static_method() {
     // super doesn't make sense in static context
     super.method();
-        //^^^^^ Cannot call super method because we're not in an instance method ("super" is unknown in this context)
+        //^^^^^ Cannot call super method because we're not in an instance
   }
 }
 
 // super doesn't make sense in global context
 super.do();
-    //^^ Cannot call super method because we're not in an instance method ("super" is unknown in this context)
+    //^^ Cannot call super method because we're not in an instance
 
 
 // Verify correct error message when inflight closure tries to access super (this isn't suported yet see: https://github.com/winglang/wing/issues/3474)
