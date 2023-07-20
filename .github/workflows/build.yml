@@ -151,9 +151,10 @@ jobs:
         run: npm root -g
 
       - name: Generate the fig spec
-        run: |
-          global_node_modules=$(npm root -g)
-          node $global_node_modules/winglang/dist/cli.js generate-fig-spec >> new-fig-cli-generated.ts
+        run: cd apps/wing && node dist/cli.js generate-fig-spec >> new-fig-cli-generated.ts
+        # run: |
+        #   global_node_modules=$(npm root -g)
+        #   node $global_node_modules/winglang/dist/cli.js generate-fig-spec >> new-fig-cli-generated.ts
 
       - name: Upload Extension
         uses: actions/upload-artifact@v3
