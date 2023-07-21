@@ -1,10 +1,10 @@
 import { existsSync } from "fs";
 import { join } from "path";
 import { Tree } from "./tree";
-import { Trace, TraceType } from "../cloud";
 import { SDK_VERSION } from "../constants";
 import { ConstructTree } from "../core";
 import { readJsonSync } from "../shared/misc";
+import { Trace, TraceType } from "../std";
 // eslint-disable-next-line import/no-restricted-paths
 import { DefaultSimulatorFactory } from "../target-sim/factory.inflight";
 import { isToken } from "../target-sim/tokens";

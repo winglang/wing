@@ -1,6 +1,30 @@
 ---
 source: libs/wingc/src/lsp/completions.rs
 ---
+- label: base64Decode
+  kind: 2
+  detail: "(stringToDecode: str, url: bool?): str"
+  documentation:
+    kind: markdown
+    value: "```wing\nstatic base64Decode: (stringToDecode: str, url: bool?): str\n```\n---\nConverts a string from base64 to UTF-8.\n\n\n### Returns\nThe UTF-8 string."
+  sortText: ff|base64Decode
+  insertText: base64Decode($0)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: base64Encode
+  kind: 2
+  detail: "(stringToEncode: str, url: bool?): str"
+  documentation:
+    kind: markdown
+    value: "```wing\nstatic base64Encode: (stringToEncode: str, url: bool?): str\n```\n---\nConverts a string from UTF-8 to base64.\n\n\n### Returns\nThe base64 string."
+  sortText: ff|base64Encode
+  insertText: base64Encode($0)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
 - label: env
   kind: 2
   detail: "(name: str): str"
@@ -13,14 +37,26 @@ source: libs/wingc/src/lsp/completions.rs
   command:
     title: triggerParameterHints
     command: editor.action.triggerParameterHints
-- label: sleep
+- label: nanoid
   kind: 2
-  detail: "(delay: duration): void"
+  detail: "(options: NanoidOptions?): str"
   documentation:
     kind: markdown
-    value: "```wing\nstatic sleep: (delay: duration): void\n```\n---\nSuspends execution for a given duration."
-  sortText: ff|sleep
-  insertText: sleep($0)
+    value: "```wing\nstatic nanoid: (options: NanoidOptions?): str\n```\n---\nGenerates a unique ID using the nanoid library.\n\n\n### Remarks\n# @link https://github.com/ai/nanoid"
+  sortText: ff|nanoid
+  insertText: nanoid($0)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
+- label: sha256
+  kind: 2
+  detail: "(data: str): str"
+  documentation:
+    kind: markdown
+    value: "```wing\nstatic sha256: (data: str): str\n```\n---\nComputes the SHA256 hash of the given data."
+  sortText: ff|sha256
+  insertText: sha256($0)
   insertTextFormat: 2
   command:
     title: triggerParameterHints
@@ -37,24 +73,26 @@ source: libs/wingc/src/lsp/completions.rs
   command:
     title: triggerParameterHints
     command: editor.action.triggerParameterHints
-- label: waitUntil
+- label: uuidv4
   kind: 2
-  detail: "(predicate: inflight (): bool, props: WaitUntilProps?): bool"
+  detail: "(): str"
   documentation:
     kind: markdown
-    value: "```wing\nstatic waitUntil: (predicate: inflight (): bool, props: WaitUntilProps?): bool\n```\n---\nRun a predicate repeatedly, waiting until it returns true or until the timeout elapses.\n\n\n### Returns\nTrue if predicate is truthful within timeout.\n\n*@throws* *Will throw if the given predicate throws.*"
-  sortText: ff|waitUntil
-  insertText: waitUntil($0)
-  insertTextFormat: 2
-  command:
-    title: triggerParameterHints
-    command: editor.action.triggerParameterHints
+    value: "```wing\nstatic uuidv4: (): str\n```\n---\nGenerates a version 4 UUID."
+  sortText: ff|uuidv4
+  insertText: uuidv4()
 - label: Util
   kind: 7
   documentation:
     kind: markdown
     value: "```wing\nclass Util\n```\n---\nUtility functions."
   sortText: gg|Util
+- label: NanoidOptions
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nstruct NanoidOptions\n```\n---\nOptions to generating a unique ID.\n### Fields\n- `alphabet?` — Characters that make up the alphabet to generate the ID, limited to 256 characters or fewer.\n- `size?` — Size of ID."
+  sortText: hh|NanoidOptions
 - label: WaitUntilProps
   kind: 22
   documentation:

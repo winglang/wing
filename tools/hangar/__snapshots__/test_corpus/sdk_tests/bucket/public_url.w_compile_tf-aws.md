@@ -168,6 +168,9 @@ module.exports = function({ $http_Util, $privateBucket, $publicBucket, $util_Uti
           }
         },
         "bucket": "${aws_s3_bucket.publicBucket.bucket}",
+        "depends_on": [
+          "aws_s3_bucket_public_access_block.publicBucket_PublicAccessBlock_54D9EFBA"
+        ],
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":\"*\",\"Action\":[\"s3:GetObject\"],\"Resource\":[\"${aws_s3_bucket.publicBucket.arn}/*\"]}]}"
       }
     },
@@ -256,7 +259,6 @@ const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
-const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 const cloud = require('@winglang/sdk').cloud;
 const http = require('@winglang/sdk').http;
 const util = require('@winglang/sdk').util;
@@ -303,22 +305,8 @@ class $Root extends $stdlib.std.Resource {
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:publicUrl",new $Closure1(this,"$Closure1"));
   }
 }
-class $App extends $AppBase {
-  constructor() {
-    super({ outdir: $outdir, name: "public_url", plugins: $plugins, isTestEnvironment: $wing_is_test });
-    if ($wing_is_test) {
-      new $Root(this, "env0");
-      const $test_runner = this.testRunner;
-      const $tests = $test_runner.findTests();
-      for (let $i = 1; $i < $tests.length; $i++) {
-        new $Root(this, "env" + $i);
-      }
-    } else {
-      new $Root(this, "Default");
-    }
-  }
-}
-new $App().synth();
+const $App = $stdlib.core.App.for(process.env.WING_TARGET);
+new $App({ outdir: $outdir, name: "public_url", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test }).synth();
 
 ```
 

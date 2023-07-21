@@ -1,9 +1,8 @@
 bring cloud;
+bring math;
 bring http;
 
-class Extern {
-  extern "./url-shortener.js" static inflight makeId(): str;
-}
+let ALPHANUMERIC_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
 class UrlShortener {
   urlLookup: cloud.Bucket;
@@ -41,7 +40,7 @@ class UrlShortener {
       return id;
     }
   
-    let newId = Extern.makeId();
+    let newId = this._makeId();
 
     // (transaction 1)
     this.urlLookup.put(url, newId);
@@ -56,6 +55,17 @@ class UrlShortener {
   // corresponding id.
   inflight getUrl(id: str): str? {
     return this.idLookup.tryGet(id);
+  }
+
+  inflight _makeId(): str {
+    let var id = "";
+
+    for i in 0..5 {
+      let randomIndex = math.floor(math.random() * ALPHANUMERIC_CHARS.length);
+      id = id + ALPHANUMERIC_CHARS.at(randomIndex);
+    }
+
+    return id;
   }
 }
 

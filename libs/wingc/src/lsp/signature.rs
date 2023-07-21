@@ -4,12 +4,13 @@ use lsp_types::{
 	SignatureInformation,
 };
 
-use crate::ast::{Expr, ExprKind, Symbol};
+use crate::ast::{CalleeKind, Expr, ExprKind, NewExpr, Symbol};
 use crate::docs::Documented;
 use crate::lsp::sync::FILES;
 
-use crate::type_check::{resolve_user_defined_type, CLASS_INIT_NAME};
-use crate::visit::{visit_expr, Visit};
+use crate::type_check::symbol_env::SymbolEnvRef;
+use crate::type_check::{resolve_super_method, resolve_user_defined_type, CLASS_INIT_NAME};
+use crate::visit::{visit_expr, visit_scope, Visit};
 use crate::wasm_util::{ptr_to_string, string_to_combined_ptr, WASM_RETURN_ERROR};
 
 #[no_mangle]
@@ -37,12 +38,14 @@ pub fn on_signature_help(params: lsp_types::SignatureHelpParams) -> Option<Signa
 		let mut scope_visitor = ScopeVisitor::new(params.text_document_position_params.position);
 		scope_visitor.visit_scope(root_scope);
 		let expr = scope_visitor.call_expr?;
+		let env = scope_visitor.call_env?;
 
 		let sig_data: (
 			crate::type_check::UnsafeRef<crate::type_check::Type>,
 			&crate::ast::ArgList,
 		) = match &expr.kind {
-			ExprKind::New { class, arg_list, .. } => {
+			ExprKind::New(new_expr) => {
+				let NewExpr { class, arg_list, .. } = new_expr;
 				let Some(udt) = class.as_type_reference() else {
 					return None;
 				};
@@ -62,7 +65,13 @@ pub fn on_signature_help(params: lsp_types::SignatureHelpParams) -> Option<Signa
 				(init_lookup?.as_variable()?.type_, arg_list)
 			}
 			ExprKind::Call { callee, arg_list } => {
-				let t = file_data.types.get_expr_type(callee);
+				let t = match callee {
+					CalleeKind::Expr(expr) => file_data.types.get_expr_type(expr),
+					CalleeKind::SuperCall(method) => resolve_super_method(method, &env, &file_data.types)
+						.ok()
+						.map_or(file_data.types.error(), |t| t.0),
+				};
+
 				(t, arg_list)
 			}
 			_ => return None,
@@ -173,6 +182,10 @@ pub struct ScopeVisitor<'a> {
 	pub location: Position,
 	/// The nearest expression before (or containing) the target location
 	pub call_expr: Option<&'a Expr>,
+	// The env of the found expression
+	pub call_env: Option<SymbolEnvRef>,
+	/// The current symbol env we're in
+	curr_env: Vec<SymbolEnvRef>,
 }
 
 impl<'a> ScopeVisitor<'a> {
@@ -180,6 +193,8 @@ impl<'a> ScopeVisitor<'a> {
 		Self {
 			location,
 			call_expr: None,
+			call_env: None,
+			curr_env: vec![],
 		}
 	}
 }
@@ -194,12 +209,19 @@ impl<'a> Visit<'a> for ScopeVisitor<'a> {
 			match node.kind {
 				ExprKind::Call { .. } | ExprKind::New { .. } => {
 					self.call_expr = Some(node);
+					self.call_env = Some(*self.curr_env.last().unwrap());
 				}
 				_ => {}
 			}
 		}
 
 		visit_expr(self, node);
+	}
+
+	fn visit_scope(&mut self, node: &'a crate::ast::Scope) {
+		self.curr_env.push(node.env.borrow().as_ref().unwrap().get_ref());
+		visit_scope(self, node);
+		self.curr_env.pop();
 	}
 }
 

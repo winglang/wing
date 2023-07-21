@@ -8,6 +8,7 @@ import { Bucket } from "./bucket";
 import { Counter } from "./counter";
 import { Function } from "./function";
 import { Queue } from "./queue";
+import { Schedule } from "./schedule";
 import { Secret } from "./secret";
 import { TestRunner } from "./test-runner";
 import { CdkTokens } from "./tokens";
@@ -19,11 +20,12 @@ import {
   FUNCTION_FQN,
   QUEUE_FQN,
   SECRET_FQN,
-  TEST_RUNNER_FQN,
   TOPIC_FQN,
+  SCHEDULE_FQN,
 } from "../cloud";
 import { App as CoreApp, AppProps, preSynthesizeAllConstructs } from "../core";
 import { PluginManager } from "../core/plugin-manager";
+import { TEST_RUNNER_FQN } from "../std";
 
 /**
  * AWS-CDK App props
@@ -100,6 +102,8 @@ export class App extends CoreApp {
     this.isTestEnvironment = props.isTestEnvironment ?? false;
     this._tokens = new CdkTokens();
     this.testRunner = new TestRunner(this, "cloud.TestRunner");
+
+    this.synthRoots(props, this.testRunner);
   }
 
   /**
@@ -142,6 +146,9 @@ export class App extends CoreApp {
 
       case COUNTER_FQN:
         return new Counter(scope, id, args[0]);
+
+      case SCHEDULE_FQN:
+        return new Schedule(scope, id, args[0]);
 
       case QUEUE_FQN:
         return new Queue(scope, id, args[0]);

@@ -6,15 +6,17 @@ use lsp_types::{
 use std::cmp::max;
 use tree_sitter::{Node, Point};
 
-use crate::ast::{Expr, ExprKind, Phase, Scope, Symbol, TypeAnnotation, TypeAnnotationKind, UserDefinedType};
+use crate::ast::{
+	CalleeKind, Expr, ExprKind, Phase, Scope, Symbol, TypeAnnotation, TypeAnnotationKind, UserDefinedType,
+};
 use crate::closure_transform::{CLOSURE_CLASS_PREFIX, PARENT_THIS_NAME};
 use crate::diagnostic::{WingLocation, WingSpan};
 use crate::docs::Documented;
 use crate::lsp::sync::{FILES, JSII_TYPES};
 use crate::type_check::symbol_env::{LookupResult, StatementIdx};
 use crate::type_check::{
-	fully_qualify_std_type, import_udt_from_jsii, resolve_user_defined_type, ClassLike, Namespace, Struct, SymbolKind,
-	Type, Types, UnsafeRef, VariableKind, CLASS_INFLIGHT_INIT_NAME, CLASS_INIT_NAME,
+	fully_qualify_std_type, import_udt_from_jsii, resolve_super_method, resolve_user_defined_type, ClassLike, Namespace,
+	Struct, SymbolKind, Type, Types, UnsafeRef, VariableKind, CLASS_INFLIGHT_INIT_NAME, CLASS_INIT_NAME,
 };
 use crate::visit::{visit_expr, visit_type_annotation, Visit};
 use crate::wasm_util::{ptr_to_string, string_to_combined_ptr, WASM_RETURN_ERROR};
@@ -275,8 +277,15 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 				|| matches!(nearest_non_reference_parent, Some(p) if p.kind() == "argument_list" || p.kind() == "positional_argument"))
 		{
 			if let Some(callish_expr) = scope_visitor.expression_trail.iter().rev().find_map(|e| match &e.kind {
-				ExprKind::Call { arg_list, callee } => Some((types.get_expr_type(&callee), arg_list)),
-				ExprKind::New { class, arg_list, .. } => Some((types.get_expr_type(&class), arg_list)),
+				ExprKind::Call { arg_list, callee } => Some((
+					match callee {
+						CalleeKind::Expr(expr) => types.get_expr_type(expr),
+						CalleeKind::SuperCall(method) => resolve_super_method(method, found_env, types).map_or(types.error(), |(t,_)| t),
+					}
+					, arg_list)),
+				ExprKind::New(new_expr) => {
+					Some((types.get_expr_type(&new_expr.class), &new_expr.arg_list))
+				}
 				_ => None,
 			}) {
 				let mut completions = get_current_scope_completions(&scope_visitor, &node_to_complete, preceding_text);

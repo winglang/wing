@@ -1,6 +1,6 @@
 import { initTRPC } from "@trpc/server";
 import { testing } from "@winglang/sdk";
-import { Trace } from "@winglang/sdk/lib/cloud/test-runner.js";
+import { Trace } from "@winglang/sdk/lib/std/test-runner.js";
 import Emittery from "emittery";
 
 import { Config } from "../config.js";

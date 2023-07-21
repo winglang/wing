@@ -126,7 +126,7 @@ module.exports = function({  }) {
         },
         "rest_api_id": "${aws_api_gateway_rest_api.cloudApi_api_2B334D75.id}",
         "triggers": {
-          "redeployment": "67854313abc040abe4f906782a46948864d75773"
+          "redeployment": "c46535d385dc86a1ba350f23ab28b58821f513fc"
         }
       }
     },
@@ -474,6 +474,9 @@ module.exports = function({  }) {
           }
         },
         "bucket": "${aws_s3_bucket.cloudWebsite_WebsiteBucket_EB03D355.bucket}",
+        "depends_on": [
+          "aws_s3_bucket_public_access_block.cloudWebsite_PublicAccessBlock_18A70311"
+        ],
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":\"*\",\"Action\":[\"s3:GetObject\"],\"Resource\":[\"${aws_s3_bucket.cloudWebsite_WebsiteBucket_EB03D355.arn}/*\"]}]}"
       }
     },
@@ -599,7 +602,6 @@ const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
-const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 const cloud = require('@winglang/sdk').cloud;
 const ex = require('@winglang/sdk').ex;
 class $Root extends $stdlib.std.Resource {
@@ -705,22 +707,8 @@ class $Root extends $stdlib.std.Resource {
     (website.addJson("config.json",Object.freeze({"apiUrl":api.url})));
   }
 }
-class $App extends $AppBase {
-  constructor() {
-    super({ outdir: $outdir, name: "website_with_api", plugins: $plugins, isTestEnvironment: $wing_is_test });
-    if ($wing_is_test) {
-      new $Root(this, "env0");
-      const $test_runner = this.testRunner;
-      const $tests = $test_runner.findTests();
-      for (let $i = 1; $i < $tests.length; $i++) {
-        new $Root(this, "env" + $i);
-      }
-    } else {
-      new $Root(this, "Default");
-    }
-  }
-}
-new $App().synth();
+const $App = $stdlib.core.App.for(process.env.WING_TARGET);
+new $App({ outdir: $outdir, name: "website_with_api", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test }).synth();
 
 ```
 

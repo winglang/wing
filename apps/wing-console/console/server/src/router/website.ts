@@ -1,5 +1,6 @@
-import { createProcedure, createRouter } from "../utils/createRouter";
 import { z } from "zod";
+
+import { createProcedure, createRouter } from "../utils/createRouter.js";
 import { WebsiteSchema } from "../wingsdk.js";
 
 export const createWebsiteRouter = () => {

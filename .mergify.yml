@@ -1,8 +1,9 @@
 # See https://doc.mergify.io
 queue_rules:
   - name: default
+    speculative_checks: 2
     conditions:
-      - status-success=Validate PR title
+      - -files=.mergify.yml
       - or:
         - status-success=Quality Gate
         - -files~=^(?!docs/|logo/)
@@ -19,7 +20,8 @@ pull_request_rules:
           {{ title }} (#{{ number }})
           {{ body }}
     conditions:
-      - -title~=(WIP|wip)
+      - -files=.mergify.yml
+      - -title~=(?i)wip
       - -label~=(🚧 pr/do-not-merge|⚠️ pr/review-mutation)
       - -merged
       - -closed

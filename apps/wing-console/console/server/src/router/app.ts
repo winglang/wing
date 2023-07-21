@@ -1,6 +1,6 @@
 import { TRPCError } from "@trpc/server";
 import { observable } from "@trpc/server/observable";
-import { Trace } from "@winglang/sdk/lib/cloud/test-runner.js";
+import { Trace } from "@winglang/sdk/lib/std/test-runner.js";
 import uniqby from "lodash.uniqby";
 import { z } from "zod";
 

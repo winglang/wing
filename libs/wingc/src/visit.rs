@@ -1,8 +1,8 @@
 use crate::{
 	ast::{
-		ArgList, Class, Expr, ExprKind, FunctionBody, FunctionDefinition, FunctionParameter, FunctionSignature, Interface,
-		InterpolatedStringPart, Literal, Reference, Scope, Stmt, StmtKind, Symbol, TypeAnnotation, TypeAnnotationKind,
-		UserDefinedType,
+		ArgList, CalleeKind, Class, Expr, ExprKind, FunctionBody, FunctionDefinition, FunctionParameter, FunctionSignature,
+		Interface, InterpolatedStringPart, Literal, NewExpr, Reference, Scope, Stmt, StmtKind, Symbol, TypeAnnotation,
+		TypeAnnotationKind, UserDefinedType,
 	},
 	dbg_panic,
 };
@@ -48,15 +48,8 @@ pub trait Visit<'ast> {
 	fn visit_expr(&mut self, node: &'ast Expr) {
 		visit_expr(self, node);
 	}
-	fn visit_expr_new(
-		&mut self,
-		node: &'ast Expr,
-		class: &'ast Expr,
-		obj_id: &'ast Option<Box<Expr>>,
-		obj_scope: &'ast Option<Box<Expr>>,
-		arg_list: &'ast ArgList,
-	) {
-		visit_expr_new(self, node, &class, obj_id, obj_scope, arg_list);
+	fn visit_new_expr(&mut self, node: &'ast NewExpr) {
+		visit_new_expr(self, node);
 	}
 	fn visit_literal(&mut self, node: &'ast Literal) {
 		visit_literal(self, node);
@@ -101,7 +94,6 @@ where
 	V: Visit<'ast> + ?Sized,
 {
 	match &node.kind {
-		StmtKind::SuperConstructor { arg_list } => v.visit_args(arg_list),
 		StmtKind::Bring {
 			module_name,
 			identifier,
@@ -111,6 +103,11 @@ where
 				v.visit_symbol(identifier);
 			}
 		}
+		StmtKind::Module { name, statements } => {
+			v.visit_symbol(name);
+			v.visit_scope(statements);
+		}
+		StmtKind::SuperConstructor { arg_list } => v.visit_args(arg_list),
 		StmtKind::Let {
 			reassignable: _,
 			var_name,
@@ -271,22 +268,16 @@ where
 	}
 }
 
-pub fn visit_expr_new<'ast, V>(
-	v: &mut V,
-	_node: &'ast Expr,
-	class: &'ast Expr,
-	obj_id: &'ast Option<Box<Expr>>,
-	obj_scope: &'ast Option<Box<Expr>>,
-	arg_list: &'ast ArgList,
-) where
+pub fn visit_new_expr<'ast, V>(v: &mut V, node: &'ast NewExpr)
+where
 	V: Visit<'ast> + ?Sized,
 {
-	v.visit_expr(class);
-	v.visit_args(arg_list);
-	if let Some(id) = obj_id {
+	v.visit_expr(&node.class);
+	v.visit_args(&node.arg_list);
+	if let Some(id) = &node.obj_id {
 		v.visit_expr(&id);
 	}
-	if let Some(scope) = obj_scope {
+	if let Some(scope) = &node.obj_scope {
 		v.visit_expr(&scope);
 	}
 }
@@ -296,13 +287,8 @@ where
 	V: Visit<'ast> + ?Sized,
 {
 	match &node.kind {
-		ExprKind::New {
-			class,
-			obj_id,
-			obj_scope,
-			arg_list,
-		} => {
-			v.visit_expr_new(node, class, obj_id, obj_scope, &arg_list);
+		ExprKind::New(new_expr) => {
+			v.visit_new_expr(new_expr);
 		}
 		ExprKind::Literal(lit) => {
 			v.visit_literal(lit);
@@ -319,7 +305,10 @@ where
 			v.visit_reference(ref_);
 		}
 		ExprKind::Call { callee, arg_list } => {
-			v.visit_expr(callee);
+			match callee {
+				CalleeKind::Expr(expr) => v.visit_expr(expr),
+				CalleeKind::SuperCall(method) => v.visit_symbol(method),
+			}
 			v.visit_args(arg_list);
 		}
 		ExprKind::Unary { op: _, exp } => {

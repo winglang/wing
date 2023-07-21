@@ -1,7 +1,7 @@
 import { describe, test, expect, beforeEach, afterEach } from "vitest";
 import { renderTestReport } from "./test";
 
-import { TestResult, TraceType } from "@winglang/sdk/lib/cloud";
+import { TestResult, TraceType } from "@winglang/sdk/lib/std";
 import chalk from "chalk";
 
 const defaultChalkLevel = chalk.level;
