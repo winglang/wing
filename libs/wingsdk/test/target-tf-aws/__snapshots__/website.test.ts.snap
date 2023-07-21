@@ -37,6 +37,7 @@ exports[`default website behavior 1`] = `
         \\"origin\\": [
           {
             \\"domain_name\\": \\"\${aws_s3_bucket.Website_WebsiteBucket_3C0321F0.bucket_regional_domain_name}\\",
+            \\"origin_access_control_id\\": \\"\${aws_cloudfront_origin_access_control.Website_CloudfrontOac_756836A4.id}\\",
             \\"origin_id\\": \\"s3Origin\\"
           }
         ],
@@ -50,6 +51,20 @@ exports[`default website behavior 1`] = `
         \\"viewer_certificate\\": {
           \\"cloudfront_default_certificate\\": true
         }
+      }
+    },
+    \\"aws_cloudfront_origin_access_control\\": {
+      \\"Website_CloudfrontOac_756836A4\\": {
+        \\"name\\": \\"cloudfront-oac\\",
+        \\"origin_access_control_origin_type\\": \\"s3\\",
+        \\"signing_behavior\\": \\"always\\",
+        \\"signing_protocol\\": \\"sigv4\\"
+      }
+    },
+    \\"aws_iam_policy\\": {
+      \\"Website_CloudFrontOacPolicy_5DF027E8\\": {
+        \\"name\\": \\"cloufront-oac-policy\\",
+        \\"policy\\": \\"{\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Principal\\\\\\":{\\\\\\"Service\\\\\\":\\\\\\"cloudfront.amazonaws.com\\\\\\"},\\\\\\"Action\\\\\\":\\\\\\"s3:GetObject\\\\\\",\\\\\\"Resource\\\\\\":[\\\\\\"\${aws_s3_bucket.Website_WebsiteBucket_3C0321F0.arn}/*\\\\\\"],\\\\\\"Condition\\\\\\":{\\\\\\"StringEquals\\\\\\":{\\\\\\"AWS:SourceArn\\\\\\":\\\\\\"\${aws_cloudfront_distribution.Website_Distribution_5E840E42.arn}\\\\\\"}}}]}\\"
       }
     },
     \\"aws_s3_bucket\\": {
@@ -140,6 +155,22 @@ exports[`default website behavior 2`] = `
                     },
                     "id": "BucketWebsiteConfiguration",
                     "path": "root/Default/Website/BucketWebsiteConfiguration",
+                  },
+                  "CloudFrontOacPolicy": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.17.0",
+                    },
+                    "id": "CloudFrontOacPolicy",
+                    "path": "root/Default/Website/CloudFrontOacPolicy",
+                  },
+                  "CloudfrontOac": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.17.0",
+                    },
+                    "id": "CloudfrontOac",
+                    "path": "root/Default/Website/CloudfrontOac",
                   },
                   "Distribution": {
                     "constructInfo": {
@@ -316,6 +347,7 @@ exports[`website with add_json 1`] = `
         \\"origin\\": [
           {
             \\"domain_name\\": \\"\${aws_s3_bucket.Website_WebsiteBucket_3C0321F0.bucket_regional_domain_name}\\",
+            \\"origin_access_control_id\\": \\"\${aws_cloudfront_origin_access_control.Website_CloudfrontOac_756836A4.id}\\",
             \\"origin_id\\": \\"s3Origin\\"
           }
         ],
@@ -329,6 +361,20 @@ exports[`website with add_json 1`] = `
         \\"viewer_certificate\\": {
           \\"cloudfront_default_certificate\\": true
         }
+      }
+    },
+    \\"aws_cloudfront_origin_access_control\\": {
+      \\"Website_CloudfrontOac_756836A4\\": {
+        \\"name\\": \\"cloudfront-oac\\",
+        \\"origin_access_control_origin_type\\": \\"s3\\",
+        \\"signing_behavior\\": \\"always\\",
+        \\"signing_protocol\\": \\"sigv4\\"
+      }
+    },
+    \\"aws_iam_policy\\": {
+      \\"Website_CloudFrontOacPolicy_5DF027E8\\": {
+        \\"name\\": \\"cloufront-oac-policy\\",
+        \\"policy\\": \\"{\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Principal\\\\\\":{\\\\\\"Service\\\\\\":\\\\\\"cloudfront.amazonaws.com\\\\\\"},\\\\\\"Action\\\\\\":\\\\\\"s3:GetObject\\\\\\",\\\\\\"Resource\\\\\\":[\\\\\\"\${aws_s3_bucket.Website_WebsiteBucket_3C0321F0.arn}/*\\\\\\"],\\\\\\"Condition\\\\\\":{\\\\\\"StringEquals\\\\\\":{\\\\\\"AWS:SourceArn\\\\\\":\\\\\\"\${aws_cloudfront_distribution.Website_Distribution_5E840E42.arn}\\\\\\"}}}]}\\"
       }
     },
     \\"aws_s3_bucket\\": {
@@ -428,6 +474,22 @@ exports[`website with add_json 2`] = `
                     },
                     "id": "BucketWebsiteConfiguration",
                     "path": "root/Default/Website/BucketWebsiteConfiguration",
+                  },
+                  "CloudFrontOacPolicy": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.17.0",
+                    },
+                    "id": "CloudFrontOacPolicy",
+                    "path": "root/Default/Website/CloudFrontOacPolicy",
+                  },
+                  "CloudfrontOac": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.17.0",
+                    },
+                    "id": "CloudfrontOac",
+                    "path": "root/Default/Website/CloudfrontOac",
                   },
                   "Distribution": {
                     "constructInfo": {
