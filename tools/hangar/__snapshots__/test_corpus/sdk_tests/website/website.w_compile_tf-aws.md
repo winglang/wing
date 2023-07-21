@@ -101,6 +101,7 @@ module.exports = function({  }) {
         "origin": [
           {
             "domain_name": "${aws_s3_bucket.cloudWebsite_WebsiteBucket_EB03D355.bucket_regional_domain_name}",
+            "origin_access_control_id": "${aws_cloudfront_origin_access_control.cloudWebsite_CloudfrontOac_C956968B.id}",
             "origin_id": "s3Origin"
           }
         ],
@@ -114,6 +115,32 @@ module.exports = function({  }) {
         "viewer_certificate": {
           "cloudfront_default_certificate": true
         }
+      }
+    },
+    "aws_cloudfront_origin_access_control": {
+      "cloudWebsite_CloudfrontOac_C956968B": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/cloud.Website/CloudfrontOac",
+            "uniqueId": "cloudWebsite_CloudfrontOac_C956968B"
+          }
+        },
+        "name": "cloudfront-oac",
+        "origin_access_control_origin_type": "s3",
+        "signing_behavior": "always",
+        "signing_protocol": "sigv4"
+      }
+    },
+    "aws_iam_policy": {
+      "cloudWebsite_CloudFrontOacPolicy_8099FC29": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/cloud.Website/CloudFrontOacPolicy",
+            "uniqueId": "cloudWebsite_CloudFrontOacPolicy_8099FC29"
+          }
+        },
+        "name": "cloufront-oac-policy",
+        "policy": "{\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"cloudfront.amazonaws.com\"},\"Action\":\"s3:GetObject\",\"Resource\":[\"${aws_s3_bucket.cloudWebsite_WebsiteBucket_EB03D355.arn}/*\"],\"Condition\":{\"StringEquals\":{\"AWS:SourceArn\":\"${aws_cloudfront_distribution.cloudWebsite_Distribution_083B5AF9.arn}\"}}}]}"
       }
     },
     "aws_iam_role": {
@@ -163,7 +190,7 @@ module.exports = function({  }) {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c867c4e0",
             "WING_TARGET": "tf-aws",
-            "WING_TOKEN_TFTOKEN_TOKEN_12": "${jsonencode(aws_cloudfront_distribution.cloudWebsite_Distribution_083B5AF9.domain_name)}"
+            "WING_TOKEN_TFTOKEN_TOKEN_15": "${jsonencode(aws_cloudfront_distribution.cloudWebsite_Distribution_083B5AF9.domain_name)}"
           }
         },
         "function_name": "Handler-c867c4e0",
