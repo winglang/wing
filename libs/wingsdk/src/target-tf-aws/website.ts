@@ -5,6 +5,8 @@ import { Construct } from "constructs";
 import mime from "mime-types";
 import { createEncryptedBucket } from "./bucket";
 import { core } from "..";
+import { IamPolicy } from "../.gen/providers/aws/iam-policy";
+import { CloudfrontOriginAccessControl } from "../.gen/providers/aws/cloudfront-origin-access-control";
 import { CloudfrontDistribution } from "../.gen/providers/aws/cloudfront-distribution";
 import { S3Bucket } from "../.gen/providers/aws/s3-bucket";
 import { S3BucketWebsiteConfiguration } from "../.gen/providers/aws/s3-bucket-website-configuration";
@@ -35,6 +37,18 @@ export class Website extends cloud.Website {
 
     this.uploadFiles(this.path);
 
+    // create a cloudfront oac
+    const cloudfrontOac = new CloudfrontOriginAccessControl(
+      this,
+      "CloudfrontOac",
+      {
+        name: "cloudfront-oac",
+        originAccessControlOriginType: "s3",
+        signingBehavior: "always",
+        signingProtocol: "sigv4",
+      }
+    );
+
     // create a cloudFront distribution
     const distribution = new CloudfrontDistribution(this, "Distribution", {
       enabled: true,
@@ -43,6 +57,7 @@ export class Website extends cloud.Website {
         {
           domainName: this.bucket.bucketRegionalDomainName,
           originId: "s3Origin",
+          originAccessControlId: cloudfrontOac.id,
         },
       ],
       defaultRootObject: INDEX_FILE,
@@ -68,6 +83,28 @@ export class Website extends cloud.Website {
       },
       priceClass: "PriceClass_100",
       viewerCertificate: { cloudfrontDefaultCertificate: true },
+    });
+
+    // create iam policy to allow cloudfront to access s3 bucket securely
+    new IamPolicy(this, "CloudFrontOacPolicy", {
+      name: "cloufront-oac-policy",
+      policy: JSON.stringify({
+        Statement: [
+          {
+            Effect: "Allow",
+            Principal: {
+              Service: "cloudfront.amazonaws.com",
+            },
+            Action: "s3:GetObject",
+            Resource: [`${this.bucket.arn}/*`],
+            Condition: {
+              StringEquals: {
+                "AWS:SourceArn": distribution.arn,
+              },
+            },
+          },
+        ],
+      }),
     });
 
     this._url = distribution.domainName;
