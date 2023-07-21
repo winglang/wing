@@ -127,16 +127,18 @@ impl<'a> LiftTransform<'a> {
 		return true;
 	}
 
-	fn jsify_expr(&self, node: &Expr, phase: Phase) -> String {
-		self.jsify.jsify_expression(
+	fn jsify_expr(&mut self, node: &Expr, phase: Phase) -> String {
+		self.ctx.push_phase(phase);
+		let res = self.jsify.jsify_expression(
 			&node,
 			&mut JSifyContext {
-				in_json: false,
-				phase: phase,
 				files: &mut Files::default(),
 				lifts: None,
+				visit_ctx: &mut self.ctx,
 			},
-		)
+		);
+		self.ctx.pop_phase();
+		res
 	}
 }
 

@@ -8,10 +8,10 @@ use tree_sitter::Node;
 use tree_sitter_traversal::{traverse, Order};
 
 use crate::ast::{
-	ArgList, BinaryOperator, CatchBlock, Class, ClassField, ElifBlock, Expr, ExprKind, FunctionBody, FunctionDefinition,
-	FunctionParameter, FunctionSignature, Interface, InterpolatedString, InterpolatedStringPart, Literal, NewExpr, Phase,
-	Reference, Scope, Stmt, StmtKind, StructField, Symbol, TypeAnnotation, TypeAnnotationKind, UnaryOperator,
-	UserDefinedType,
+	ArgList, BinaryOperator, CalleeKind, CatchBlock, Class, ClassField, ElifBlock, Expr, ExprKind, FunctionBody,
+	FunctionDefinition, FunctionParameter, FunctionSignature, Interface, InterpolatedString, InterpolatedStringPart,
+	Literal, NewExpr, Phase, Reference, Scope, Stmt, StmtKind, StructField, Symbol, TypeAnnotation, TypeAnnotationKind,
+	UnaryOperator, UserDefinedType,
 };
 use crate::comp_ctx::{CompilationContext, CompilationPhase};
 use crate::diagnostic::{report_diagnostic, Diagnostic, DiagnosticResult, WingSpan};
@@ -283,7 +283,7 @@ impl<'s> Parser<'s> {
 		// represent duration literals as the AST equivalent of `duration.fromSeconds(value)`
 		Ok(Expr::new(
 			ExprKind::Call {
-				callee: Box::new(Expr::new(
+				callee: CalleeKind::Expr(Box::new(Expr::new(
 					ExprKind::Reference(Reference::InstanceMember {
 						object: Box::new(Expr::new(
 							ExprKind::Reference(Reference::Identifier(Symbol {
@@ -299,7 +299,7 @@ impl<'s> Parser<'s> {
 						optional_accessor: false,
 					}),
 					span.clone(),
-				)),
+				))),
 				arg_list: ArgList {
 					pos_args: vec![Expr::new(ExprKind::Literal(Literal::Number(seconds)), span.clone())],
 					named_args: IndexMap::new(),
@@ -1580,13 +1580,21 @@ impl<'s> Parser<'s> {
 			"reference" => self.build_reference(&expression_node, phase),
 			"positional_argument" => self.build_expression(&expression_node.named_child(0).unwrap(), phase),
 			"keyword_argument_value" => self.build_expression(&expression_node.named_child(0).unwrap(), phase),
-			"call" => Ok(Expr::new(
-				ExprKind::Call {
-					callee: Box::new(self.build_expression(&expression_node.child_by_field_name("caller").unwrap(), phase)?),
-					arg_list: self.build_arg_list(&expression_node.child_by_field_name("args").unwrap(), phase)?,
-				},
-				expression_span,
-			)),
+			"call" => {
+				let caller_node = expression_node.child_by_field_name("caller").unwrap();
+				let callee = if caller_node.kind() == "super_call" {
+					CalleeKind::SuperCall(self.node_symbol(&caller_node.child_by_field_name("method").unwrap())?)
+				} else {
+					CalleeKind::Expr(Box::new(self.build_expression(&caller_node, phase)?))
+				};
+				Ok(Expr::new(
+					ExprKind::Call {
+						callee,
+						arg_list: self.build_arg_list(&expression_node.child_by_field_name("args").unwrap(), phase)?,
+					},
+					expression_span,
+				))
+			}
 			"parenthesized_expression" => self.build_expression(&expression_node.named_child(0).unwrap(), phase),
 			"preflight_closure" => Ok(Expr::new(
 				ExprKind::FunctionClosure(self.build_anonymous_closure(&expression_node, phase)?),
