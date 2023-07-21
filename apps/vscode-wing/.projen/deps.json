@@ -24,10 +24,6 @@
       "type": "build"
     },
     {
-      "name": "esbuild",
-      "type": "build"
-    },
-    {
       "name": "eslint-config-prettier",
       "type": "build"
     },
@@ -70,12 +66,20 @@
       "type": "build"
     },
     {
+      "name": "tsup",
+      "type": "build"
+    },
+    {
       "name": "typescript",
       "type": "build"
     },
     {
       "name": "@types/vscode",
       "version": "^1.70.0",
+      "type": "runtime"
+    },
+    {
+      "name": "@wingconsole/app",
       "type": "runtime"
     },
     {

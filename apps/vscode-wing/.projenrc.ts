@@ -36,7 +36,7 @@ const project = new TypeScriptAppProject({
   jest: false,
   github: false,
   npmignoreEnabled: false,
-  entrypoint: "lib/index.js",
+  entrypoint: "lib/extension.js",
   eslintOptions: {
     dirs: ["src"],
     prettier: true,
@@ -55,8 +55,9 @@ const project = new TypeScriptAppProject({
     `@types/vscode@^${VSCODE_BASE_VERSION}`,
     "vscode-languageclient",
     "which",
+    "@wingconsole/app",
   ],
-  devDeps: ["@types/node", "@types/which", "esbuild", "@vscode/vsce"],
+  devDeps: ["@types/node", "@types/which", "@vscode/vsce"],
 });
 
 project.addGitIgnore("*.vsix");
@@ -166,11 +167,11 @@ project.addFields({
   contributes,
 });
 
-const esbuildComment =
-  "esbuild src/extension.ts --outfile=lib/index.js --external:node-gyp --external:vscode --format=cjs --platform=node --bundle";
+project.addDevDeps("tsup");
+
 project.compileTask.reset();
-project.compileTask.exec(esbuildComment);
-project.watchTask.reset(`${esbuildComment} --watch`);
+project.compileTask.exec("tsup");
+project.watchTask.reset("tsup --watch");
 
 project.packageTask.reset(
   "pnpm version ${PROJEN_BUMP_VERSION:-0.0.0} --allow-same-version"

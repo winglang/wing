@@ -61,7 +61,7 @@
       "description": "Only compile",
       "steps": [
         {
-          "exec": "esbuild src/extension.ts --outfile=lib/index.js --external:node-gyp --external:vscode --format=cjs --platform=node --bundle"
+          "exec": "tsup"
         }
       ]
     },
@@ -190,7 +190,7 @@
       "description": "Watch & compile in the background",
       "steps": [
         {
-          "exec": "esbuild src/extension.ts --outfile=lib/index.js --external:node-gyp --external:vscode --format=cjs --platform=node --bundle --watch"
+          "exec": "tsup --watch"
         }
       ]
     }

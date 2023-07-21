@@ -1,5 +1,7 @@
 import { spawn } from "child_process";
+import { log } from "console";
 import path from "path";
+import { Trace, createConsoleApp } from "@wingconsole/app";
 import {
   ExtensionContext,
   WebviewPanel,
@@ -10,6 +12,12 @@ import {
 } from "vscode";
 import { getWingBinAndArgs } from "./bin-helper";
 import { VIEW_TYPE_CONSOLE } from "./constants";
+
+const getLogger = ({ show = false }) => {
+  const logger = window.createOutputChannel("Wing Console");
+  logger.show(show);
+  return logger;
+};
 
 export class WingConsoleManager {
   consolePanels: Record<string, WebviewPanel> = {};
@@ -35,78 +43,76 @@ export class WingConsoleManager {
       return;
     }
 
-    const args = await getWingBinAndArgs(this.context);
-    if (!args) {
-      return;
-    }
-
-    const filename = path.basename(uri.fsPath);
+    const wingfile = path.basename(uri.fsPath);
     let panel: WebviewPanel;
 
-    args.push("it", "--no-open", uri.fsPath);
+    const logger = getLogger({ show: true });
 
-    const cp = spawn(args[0]!, args.slice(1), {
-      stdio: ["ignore", "pipe", "pipe"],
-      windowsHide: true,
-      shell: false,
+    const { port, close } = await createConsoleApp({
+      wingfile: uri.fsPath,
+      hostUtils: {
+        openExternal: async (url: string) => {
+          //await open(url);
+        },
+      },
+      log: {
+        info: (message: string) => {
+          logger.appendLine(message);
+        },
+        error: (message: string) => {
+          logger.appendLine(message);
+        },
+        verbose: (message: string) => {
+          logger.appendLine(message);
+        },
+      },
     });
 
-    cp.on("error", (err) => {
-      if (err) {
-        void window.showErrorMessage(err.message);
+    const url = `http://localhost:${port}/?layout=2`;
 
-        panel?.dispose();
+    logger.appendLine(`Wing Console is running at ${url}`);
+
+    logger.appendLine(`wingfile: ${wingfile}`);
+
+    panel = window.createWebviewPanel(
+      VIEW_TYPE_CONSOLE,
+      `${wingfile} [Console]`,
+      ViewColumn.Beside,
+      {
+        enableScripts: true,
+        enableCommandUris: true,
+        portMapping: [{ webviewPort: port, extensionHostPort: port }],
       }
-    });
-    cp.stdout?.once("data", (data) => {
-      // get localhost url from stdout
-      const url = data.toString().match(/http:\/\/localhost:\d+/);
-      if (!url) {
-        // there should be an error message in a different event
-        return;
-      }
+    );
+    panel.iconPath = {
+      light: Uri.joinPath(
+        this.context.extensionUri,
+        "resources",
+        "icon-light.png"
+      ),
+      dark: Uri.joinPath(
+        this.context.extensionUri,
+        "resources",
+        "icon-dark.png"
+      ),
+    };
 
-      const port = parseInt(url[0].split(":")[2]);
-
-      panel = window.createWebviewPanel(
-        VIEW_TYPE_CONSOLE,
-        `${filename} [Console]`,
-        ViewColumn.Beside,
-        {
-          enableScripts: true,
-          enableCommandUris: true,
-          portMapping: [{ webviewPort: port, extensionHostPort: port }],
-        }
-      );
-      panel.iconPath = {
-        light: Uri.joinPath(
-          this.context.extensionUri,
-          "resources",
-          "icon-light.png"
-        ),
-        dark: Uri.joinPath(
-          this.context.extensionUri,
-          "resources",
-          "icon-dark.png"
-        ),
-      };
-
-      this.consolePanels[uri.fsPath] = panel;
-      this.activeConsolePanel = uri.fsPath;
-      panel.onDidChangeViewState(() => {
-        if (panel.active) {
-          this.activeConsolePanel = uri.fsPath;
-        } else if (this.activeConsolePanel === uri.fsPath) {
-          this.activeConsolePanel = undefined;
-        }
-      });
-
-      panel.onDidDispose(() => {
-        delete this.consolePanels[uri.fsPath];
+    this.consolePanels[uri.fsPath] = panel;
+    this.activeConsolePanel = uri.fsPath;
+    panel.onDidChangeViewState(() => {
+      if (panel.active) {
+        this.activeConsolePanel = uri.fsPath;
+      } else if (this.activeConsolePanel === uri.fsPath) {
         this.activeConsolePanel = undefined;
-        cp.kill();
-      });
-      panel.webview.html = `\
+      }
+    });
+
+    panel.onDidDispose(async () => {
+      delete this.consolePanels[uri.fsPath];
+      this.activeConsolePanel = undefined;
+      await close();
+    });
+    panel.webview.html = `\
       <!DOCTYPE html>
         <html lang="en"">
         <head>
@@ -116,9 +122,10 @@ export class WingConsoleManager {
               iframe { display: block; height: 100vh; width: 100vw; border: none; }
             </style>
         </head>
-        <body><iframe src="${url[0]}/"></iframe></body>
+        <body>
+          <iframe src="${url}/"/>
+        </body>
       </html>`;
-    });
   }
 
   public async openFile() {

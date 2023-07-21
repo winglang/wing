@@ -33,7 +33,6 @@
     "@typescript-eslint/eslint-plugin": "^5",
     "@typescript-eslint/parser": "^5",
     "@vscode/vsce": "^2.16.0",
-    "esbuild": "^0.17.4",
     "eslint": "^8",
     "eslint-config-prettier": "^8.6.0",
     "eslint-import-resolver-node": "^0.3.7",
@@ -44,10 +43,12 @@
     "prettier": "^2.8.3",
     "projen": "^0.71.60",
     "ts-node": "^10.9.1",
+    "tsup": "^6.7.0",
     "typescript": "^4.9.4"
   },
   "dependencies": {
     "@types/vscode": "^1.70.0",
+    "@wingconsole/app": "^0.2.187",
     "vscode-languageclient": "^8.0.2",
     "which": "^3.0.0"
   },
@@ -64,14 +65,14 @@
   "engines": {
     "vscode": "^1.70.0"
   },
-  "main": "lib/index.js",
+  "main": "lib/extension.js",
   "license": "MIT",
   "homepage": "https://winglang.io",
   "version": "0.0.0",
   "bugs": {
     "url": "https://github.com/winglang/wing/issues"
   },
-  "types": "lib/index.d.ts",
+  "types": "lib/extension.d.ts",
   "publisher": "Monada",
   "preview": true,
   "private": true,
