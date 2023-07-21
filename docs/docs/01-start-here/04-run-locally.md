@@ -41,7 +41,7 @@ On the interaction panel, Type a message in the `Push Message` text area (let's 
 
 Now, click on the bucket in the map view. Notice that the interaction panel has changed and now shows the bucket's interaction view.
 
-When you click on the `wing.txt` file, you should be able to see its contents.
+When you click on the `wing-1.txt` file, you should be able to see its contents.
 
 ![Bucket resource view in Wing Console](./console-bucket-1.png 'Bucket resource')
 

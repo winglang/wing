@@ -90,6 +90,9 @@ plan. Resource actions are indicated with the following symbols:
 
 Terraform will perform the following actions:
 
+  # aws_dynamodb_table.cloudCounter will be created
+  + resource "aws_dynamodb_table" "cloudCounter" {...}
+
   # aws_iam_role.cloudQueue-SetConsumer-cdafee6e_IamRole_2548D828 will be created
   + resource "aws_iam_role" "cloudQueue-SetConsumer-cdafee6e_IamRole_2548D828" {...}
 
@@ -123,7 +126,7 @@ Terraform will perform the following actions:
   # aws_sqs_queue.cloudQueue will be created
   + resource "aws_sqs_queue" "cloudQueue" {...}
 
-Plan: 11 to add, 0 to change, 0 to destroy.
+Plan: 12 to add, 0 to change, 0 to destroy.
 ```
 
 > This is a good opportunity to observe how much complexity the Wing compiler
@@ -134,7 +137,7 @@ If you choose to proceed, Terraform will do its magic and will create all of the
 account.
 
 ```  
-Apply complete! Resources: 11 added, 0 changed, 0 destroyed.
+Apply complete! Resources: 12 added, 0 changed, 0 destroyed.
 ```
 
 ## Explore your app on AWS
@@ -149,15 +152,15 @@ through the AWS Management Console.
 5. In the **Message Body** box type `cloud` and hit **Send message**.
 6. Jump over to the [S3 Console](https://s3.console.aws.amazon.com/s3/buckets) 
 7. There should be some buckets prefixed with `cloud-bucket-`. 
-8. Cycle through the buckets until you find one that contains `wing.txt`.
-9. Click `wing.txt` then click the `Open` button.
+8. Cycle through the buckets until you find one that contains `wing-1.txt`.
+9. Click `wing-1.txt` then click the `Open` button.
 10. The file should contain `Hello, cloud`.
 
 ## Cleanup
 
 Terraform doesn't allow destroying a non-empty bucket by default. To prepare for
 easy cleanup, you may delete the newly created file by marking the checkbox next
-to `wing.txt`, clicking the `Delete` button, typing `permanently delete` in the
+to `wing-1.txt`, clicking the `Delete` button, typing `permanently delete` in the
 confirmation box and clicking the `Delete objects` button.
 
 Once you're done, you can destroy all of the resources that were created on your AWS account by running:
