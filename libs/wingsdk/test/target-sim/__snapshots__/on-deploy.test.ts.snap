@@ -10,7 +10,7 @@ return class Handler {
       this[name] = client;
     }
   }
-  async handle() { console.log(\\"Hello world!\\"); }
+  async handle() { console.log(\\"super duper success\\"); }
 };
 })())({
 
@@ -126,4 +126,18 @@ return class Handler {
     "version": "tree-0.1",
   },
 }
+`;
+
+exports[`create an OnDeploy 2`] = `
+[
+  "wingsdk.cloud.TestRunner created.",
+  "wingsdk.cloud.Function created.",
+  "super duper success",
+  "Invoke (payload=\\"\\").",
+  "OnDeploy invoked.",
+  "wingsdk.cloud.OnDeploy created.",
+  "wingsdk.cloud.OnDeploy deleted.",
+  "wingsdk.cloud.Function deleted.",
+  "wingsdk.cloud.TestRunner deleted.",
+]
 `;

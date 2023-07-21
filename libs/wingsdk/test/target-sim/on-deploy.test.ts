@@ -1,9 +1,10 @@
 import { test, expect } from "vitest";
+import { listMessages } from "./util";
 import * as cloud from "../../src/cloud";
 import { Testing } from "../../src/testing";
 import { SimApp } from "../sim-app";
 
-const INFLIGHT_CODE = `async handle() { console.log("Hello world!"); }`;
+const INFLIGHT_CODE = `async handle() { console.log("super duper success"); }`;
 
 test("create an OnDeploy", async () => {
   // GIVEN
@@ -23,7 +24,10 @@ test("create an OnDeploy", async () => {
     },
     type: "wingsdk.cloud.OnDeploy",
   });
-  await s.stop();
 
+  await s.stop();
   expect(app.snapshot()).toMatchSnapshot();
+  const messages = listMessages(s);
+  expect(messages).toMatchSnapshot();
+  expect(messages).toContain("super duper success");
 });
