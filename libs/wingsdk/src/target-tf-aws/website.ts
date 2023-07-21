@@ -28,7 +28,7 @@ export class Website extends cloud.Website {
   constructor(scope: Construct, id: string, props: cloud.WebsiteProps) {
     super(scope, id, props);
 
-    this.bucket = createEncryptedBucket(this, true, "WebsiteBucket");
+    this.bucket = createEncryptedBucket(this, false, "WebsiteBucket");
 
     new S3BucketWebsiteConfiguration(this, "BucketWebsiteConfiguration", {
       bucket: this.bucket.bucket,
@@ -85,10 +85,11 @@ export class Website extends cloud.Website {
       viewerCertificate: { cloudfrontDefaultCertificate: true },
     });
 
-    // create iam policy to allow cloudfront to access s3 bucket securely
-    new IamPolicy(this, "CloudFrontOacPolicy", {
-      name: "cloufront-oac-policy",
+    // allow cloudfront distribution to read from private s3 bucket
+    new IamPolicy(this, "CloudfrontOacPolicyS3", {
+      name: "cloufront-oac-policy-s3",
       policy: JSON.stringify({
+        Version: "2012-10-17",
         Statement: [
           {
             Effect: "Allow",
