@@ -1,8 +1,8 @@
 import { Construct } from "constructs";
-import { FunctionProps, IFunctionHandler } from "./function";
+import { FunctionProps } from "./function";
 import { fqnForType } from "../constants";
 import { App } from "../core";
-import { Resource } from "../std";
+import { IResource, Resource } from "../std";
 
 /**
  * Global identifier for `OnDeploy`.
@@ -16,12 +16,12 @@ export interface OnDeployProps extends FunctionProps {
   /**
    * Execute this trigger only after these resources have been provisioned.
    */
-  executeAfter?: Construct[];
+  readonly executeAfter?: Construct[];
 
   /**
    * Adds this trigger as a dependency on other constructs.
    */
-  executeBefore?: Construct[];
+  readonly executeBefore?: Construct[];
 }
 
 /**
@@ -38,7 +38,7 @@ export abstract class OnDeploy extends Resource {
   public static _newOnDeploy(
     scope: Construct,
     id: string,
-    handler: IFunctionHandler,
+    handler: IOnDeployHandler,
     props: OnDeployProps = {}
   ): OnDeploy {
     return App.of(scope).newAbstract(ON_DEPLOY_FQN, scope, id, handler, props);
@@ -47,7 +47,7 @@ export abstract class OnDeploy extends Resource {
   constructor(
     scope: Construct,
     id: string,
-    handler: IFunctionHandler,
+    handler: IOnDeployHandler,
     props: OnDeployProps = {}
   ) {
     super(scope, id);
@@ -58,6 +58,24 @@ export abstract class OnDeploy extends Resource {
     handler;
     props;
   }
+}
+
+/**
+ * A resource with an inflight "handle" method that can be used by `cloud.OnDeploy`.
+ *
+ * @inflight `@winglang/sdk.cloud.IOnDeployHandlerClient`
+ */
+export interface IOnDeployHandler extends IResource {}
+
+/**
+ * Inflight client for `IOnDeployHandler`.
+ */
+export interface IOnDeployHandlerClient {
+  /**
+   * Entrypoint function that will be called when the cloud function is invoked.
+   * @inflight
+   */
+  handle(): Promise<void>;
 }
 
 /**

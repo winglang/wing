@@ -20,7 +20,7 @@ export class OnDeploy extends cloud.OnDeploy {
   constructor(
     scope: Construct,
     id: string,
-    handler: cloud.IFunctionHandler,
+    handler: cloud.IOnDeployHandler,
     props: cloud.OnDeployProps = {}
   ) {
     super(scope, id, handler, props);
