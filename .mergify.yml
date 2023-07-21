@@ -30,13 +30,7 @@ pull_request_rules:
       - "#review-threads-unresolved=0"
       - -approved-reviews-by~=author
       - check-success=Validate PR title
-      - or:
-        -  base=main
-        -  base=dev
-      - or:
-        # Code freeze at 7am utc July 13th 2023
-        - updated-at<=2023-07-13T07:00:00Z
-        - base=dev
+      - base=main
       - or:
         - check-success=Quality Gate
         - -files~=^(?!docs/|logo/)
@@ -54,12 +48,7 @@ pull_request_rules:
       - -approved-reviews-by~=author
       - check-success=Validate PR title
       - check-success=Quality Gate
-      - or:
-        -  base=main
-        -  base=dev
-      - or:
-        - updated-at<=2023-07-13T07:00:00Z
-        - base=dev
+      - base=main
     actions:
       comment:
         message: Thank you for contributing! Your pull request contains mergify configuration changes and needs manual merge from a maintainer (be sure to [allow changes to be pushed to your fork](https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/allowing-changes-to-a-pull-request-branch-created-from-a-fork)).
@@ -69,35 +58,3 @@ pull_request_rules:
       request_reviews:
         teams:
           - "@winglang/maintainers"
-
-  - name: backport change to main
-    conditions:
-      - base=dev
-      - label=pr/backport
-    actions:
-      backport:
-        branches:
-          - main
-
-  - name: documentation backport
-    conditions:
-      - base=dev
-      - updated-at > 2023-07-13T07:00:00Z
-      - -files~=^(?!docs/|logo/)
-    actions:
-      label:
-        add:
-          - pr/backport
-
-  - name: Inform about code freeze
-    conditions:
-      - base=main
-      - updated-at > 2023-07-13T07:00:00Z
-      - -author=mergify[bot]
-    actions:
-      comment:
-        message: |
-          :warning: **Code freeze in effect!** :warning:
-
-          The `main` branch is currently frozen. Only critical fixes or documentation updates will be merged.
-          Please submit your pull request against the `dev` branch instead.
