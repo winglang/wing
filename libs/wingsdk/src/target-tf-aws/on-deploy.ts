@@ -33,6 +33,9 @@ export class OnDeploy extends cloud.OnDeploy {
       this.node.addDependency(c);
     }
 
+    // currently using the aws_lambda_invocation *data source* since it runs on every terraform apply.
+    // if we want OnDeploy to only run code conditionally,
+    // we can use the aws_lambda_invocation *resource* instead.
     const lambdaInvocation = new DataAwsLambdaInvocation(this, "Invocation", {
       functionName: awsFn.functionName,
       input: JSON.stringify({}), // call the function with an empty object
