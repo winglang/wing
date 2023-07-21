@@ -1,10 +1,14 @@
 import { Construct } from "constructs";
+import { ON_DEPLOY_TYPE, OnDeploySchema } from "./schema-resources";
+import { simulatorHandleToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
 import * as core from "../core";
 import { IInflightHost } from "../std";
+import { BaseResourceSchema } from "../testing";
 
 export class OnDeploy extends cloud.OnDeploy {
+  private readonly fn: cloud.Function;
   constructor(
     scope: Construct,
     id: string,
@@ -13,7 +17,8 @@ export class OnDeploy extends cloud.OnDeploy {
   ) {
     super(scope, id, handler, props);
 
-    cloud.Function._newFunction(this, "Function", handler, props);
+    this.fn = cloud.Function._newFunction(this, "Function", handler, props);
+    this.node.addDependency(this.fn);
 
     for (const c of props.executeBefore ?? []) {
       c.node.addDependency(this);
@@ -22,6 +27,18 @@ export class OnDeploy extends cloud.OnDeploy {
     for (const c of props.executeAfter ?? []) {
       this.node.addDependency(c);
     }
+  }
+
+  public toSimulator(): BaseResourceSchema {
+    const schema: OnDeploySchema = {
+      type: ON_DEPLOY_TYPE,
+      path: this.node.path,
+      props: {
+        functionHandle: simulatorHandleToken(this.fn),
+      },
+      attrs: {},
+    };
+    return schema;
   }
 
   /** @internal */
