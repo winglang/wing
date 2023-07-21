@@ -565,13 +565,6 @@ impl<'a> JSifier<'a> {
 	fn jsify_statement(&self, env: &SymbolEnv, statement: &Stmt, ctx: &mut JSifyContext) -> CodeMaker {
 		CompilationContext::set(CompilationPhase::Jsifying, &statement.span);
 		match &statement.kind {
-			StmtKind::SuperConstructor { arg_list } => {
-				let args = self.jsify_arg_list(&arg_list, None, None, ctx);
-				match ctx.visit_ctx.current_phase() {
-					Phase::Preflight => CodeMaker::one_line(format!("super(scope,id,{});", args)),
-					_ => CodeMaker::one_line(format!("super({});", args)),
-				}
-			}
 			StmtKind::Bring {
 				module_name,
 				identifier,
@@ -594,6 +587,27 @@ impl<'a> JSifier<'a> {
 						format!("require('{}').{}", STDLIB_MODULE, module_name.name)
 					}
 				))
+			}
+			StmtKind::Module { name, statements } => {
+				let mut code = CodeMaker::default();
+				code.open(format!("const {} = (() => {{", name.name));
+				code.add_code(self.jsify_scope_body(statements, ctx));
+
+				let exports = get_public_symbols(statements);
+				code.line(format!(
+					"return {{ {} }};",
+					exports.iter().map(ToString::to_string).join(", ")
+				));
+
+				code.close("})();");
+				code
+			}
+			StmtKind::SuperConstructor { arg_list } => {
+				let args = self.jsify_arg_list(&arg_list, None, None, ctx);
+				match ctx.visit_ctx.current_phase() {
+					Phase::Preflight => CodeMaker::one_line(format!("super(scope,id,{});", args)),
+					_ => CodeMaker::one_line(format!("super({});", args)),
+				}
 			}
 			StmtKind::Let {
 				reassignable,
@@ -1255,6 +1269,43 @@ impl<'a> JSifier<'a> {
 		bind_method.close("}");
 		bind_method
 	}
+}
+
+fn get_public_symbols(scope: &Scope) -> Vec<Symbol> {
+	let mut symbols = Vec::new();
+
+	for stmt in &scope.statements {
+		match &stmt.kind {
+			StmtKind::Bring { .. } => {}
+			StmtKind::Module { name, .. } => {
+				symbols.push(name.clone());
+			}
+			StmtKind::SuperConstructor { .. } => {}
+			StmtKind::Let { .. } => {}
+			StmtKind::ForLoop { .. } => {}
+			StmtKind::While { .. } => {}
+			StmtKind::IfLet { .. } => {}
+			StmtKind::If { .. } => {}
+			StmtKind::Break => {}
+			StmtKind::Continue => {}
+			StmtKind::Return(_) => {}
+			StmtKind::Expression(_) => {}
+			StmtKind::Assignment { .. } => {}
+			StmtKind::Scope(_) => {}
+			StmtKind::Class(class) => {
+				symbols.push(class.name.clone());
+			}
+			StmtKind::Interface(_) => {}
+			StmtKind::Struct { .. } => {}
+			StmtKind::Enum { name, .. } => {
+				symbols.push(name.clone());
+			}
+			StmtKind::TryCatch { .. } => {}
+			StmtKind::CompilerDebugEnv => {}
+		}
+	}
+
+	symbols
 }
 
 fn inflight_filename(class: &AstClass) -> String {

@@ -1,5 +1,5 @@
 use crate::{
-	ast::{Class, Expr, ExprKind, FunctionBody, FunctionDefinition, Phase, Reference, UserDefinedType},
+	ast::{Class, Expr, ExprKind, FunctionBody, FunctionDefinition, Phase, Reference, Scope, Stmt, UserDefinedType},
 	comp_ctx::{CompilationContext, CompilationPhase},
 	diagnostic::{report_diagnostic, Diagnostic, WingSpan},
 	files::Files,
@@ -357,14 +357,14 @@ impl<'a> Fold for LiftTransform<'a> {
 		result
 	}
 
-	fn fold_scope(&mut self, node: crate::ast::Scope) -> crate::ast::Scope {
+	fn fold_scope(&mut self, node: Scope) -> Scope {
 		self.ctx.push_env(node.env.borrow().as_ref().unwrap().get_ref());
 		let result = fold::fold_scope(self, node);
 		self.ctx.pop_env();
 		result
 	}
 
-	fn fold_stmt(&mut self, node: crate::ast::Stmt) -> crate::ast::Stmt {
+	fn fold_stmt(&mut self, node: Stmt) -> Stmt {
 		CompilationContext::set(CompilationPhase::Lifting, &node.span);
 
 		self.ctx.push_stmt(node.idx);

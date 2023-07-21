@@ -2,7 +2,8 @@ use indexmap::{IndexMap, IndexSet};
 use phf::{phf_map, phf_set};
 use std::cell::RefCell;
 use std::collections::HashSet;
-use std::{str, vec};
+use std::path::{Path, PathBuf};
+use std::{fs, str, vec};
 use tree_sitter::Node;
 use tree_sitter_traversal::{traverse, Order};
 
@@ -14,18 +15,9 @@ use crate::ast::{
 };
 use crate::comp_ctx::{CompilationContext, CompilationPhase};
 use crate::diagnostic::{report_diagnostic, Diagnostic, DiagnosticResult, WingSpan};
+use crate::files::Files;
 use crate::type_check::{CLASS_INFLIGHT_INIT_NAME, CLASS_INIT_NAME};
 use crate::{dbg_panic, WINGSDK_STD_MODULE, WINGSDK_TEST_CLASS_NAME};
-
-pub struct Parser<'a> {
-	pub source: &'a [u8],
-	pub source_name: String,
-	pub error_nodes: RefCell<HashSet<usize>>,
-	// Nesting level within JSON literals, a value larger than 0 means we're currently in a JSON literal
-	in_json: RefCell<u64>,
-	is_in_mut_json: RefCell<bool>,
-	is_in_loop: RefCell<bool>,
-}
 
 // A custom struct could be used to better maintain metadata and issue tracking, though ideally
 // this is meant to serve as a bandaide to be removed once wing is further developed.
@@ -139,11 +131,23 @@ static RESERVED_WORDS: phf::Set<&'static str> = phf_set! {
 	"Object",
 };
 
+pub struct Parser<'a> {
+	pub source: &'a [u8],
+	pub source_name: String,
+	pub error_nodes: RefCell<HashSet<usize>>,
+	files: RefCell<&'a mut Files>,
+	// Nesting level within JSON literals, a value larger than 0 means we're currently in a JSON literal
+	in_json: RefCell<u64>,
+	is_in_mut_json: RefCell<bool>,
+	is_in_loop: RefCell<bool>,
+}
+
 impl<'s> Parser<'s> {
-	pub fn new(source: &'s [u8], source_name: String) -> Self {
+	pub fn new(source: &'s [u8], source_name: String, files: &'s mut Files) -> Self {
 		Self {
 			source,
 			source_name,
+			files: RefCell::new(files),
 			error_nodes: RefCell::new(HashSet::new()),
 			is_in_loop: RefCell::new(false),
 			// This is similar to what we do in the type_checker, but we need to know 2 things when
@@ -156,6 +160,16 @@ impl<'s> Parser<'s> {
 	}
 
 	pub fn wingit(&self, root: &Node) -> Scope {
+		match self.files.borrow_mut().add_file(
+			PathBuf::from(self.source_name.clone()),
+			String::from_utf8(self.source.to_vec()).expect("Invalid UTF-8 sequence"),
+		) {
+			Ok(_) => {}
+			Err(err) => {
+				panic!("Failed adding source file to parser: {}", err);
+			}
+		}
+
 		let scope = match root.kind() {
 			"source" => self.build_scope(&root, Phase::Preflight),
 			_ => Scope {
@@ -327,7 +341,7 @@ impl<'s> Parser<'s> {
 		let span = self.node_span(statement_node);
 		CompilationContext::set(CompilationPhase::Parsing, &span);
 		let stmt_kind = match statement_node.kind() {
-			"short_import_statement" => self.build_bring_statement(statement_node)?,
+			"import_statement" => self.build_bring_statement(statement_node)?,
 
 			"variable_definition_statement" => self.build_variable_def_statement(statement_node, phase)?,
 			"variable_assignment_statement" => self.build_assignment_statement(statement_node, phase)?,
@@ -567,13 +581,85 @@ impl<'s> Parser<'s> {
 	}
 
 	fn build_bring_statement(&self, statement_node: &Node) -> DiagnosticResult<StmtKind> {
-		Ok(StmtKind::Bring {
-			module_name: self.node_symbol(&statement_node.child_by_field_name("module_name").unwrap())?,
-			identifier: if let Some(identifier) = statement_node.child_by_field_name("alias") {
-				Some(self.check_reserved_symbol(&identifier)?)
+		let module_name = self.node_symbol(&statement_node.child_by_field_name("module_name").unwrap())?;
+		let alias = if let Some(identifier) = statement_node.child_by_field_name("alias") {
+			Some(self.check_reserved_symbol(&identifier)?)
+		} else {
+			None
+		};
+
+		// if the module name is a path ending in .w, create a new Parser to parse it as a new Scope,
+		// and create a StmtKind::Module instead
+		if module_name.name.ends_with(".w\"") {
+			let source_path = Path::new(&module_name.name[1..module_name.name.len() - 1]);
+			let source_path = if source_path.starts_with("./") {
+				source_path.strip_prefix("./").unwrap()
 			} else {
-				None
-			},
+				source_path
+			};
+			let source_path = if source_path.is_absolute() {
+				source_path.to_path_buf()
+			} else {
+				Path::new(&self.source_name).parent().unwrap().join(source_path)
+			};
+			if source_path == Path::new(&self.source_name) {
+				return self.with_error("Cannot bring a module into itself", statement_node);
+			}
+			let scope = match fs::read(&source_path) {
+				Ok(source) => {
+					let mut files = self.files.borrow_mut();
+					let parser = Parser::new(&source, source_path.to_string_lossy().to_string(), *files);
+					let language = tree_sitter_wing::language();
+					let mut tree_sitter_parser = tree_sitter::Parser::new();
+					tree_sitter_parser.set_language(language).unwrap();
+					let tree = match tree_sitter_parser.parse(&source, None) {
+						Some(tree) => tree,
+						None => {
+							panic!("Failed parsing source file: {}", source_path.display());
+						}
+					};
+					parser.wingit(&tree.root_node())
+				}
+				Err(err) => {
+					report_diagnostic(Diagnostic {
+						message: format!("Error reading source file: {}: {:?}", source_path.display(), err),
+						span: None,
+					});
+					Scope::default()
+				}
+			};
+
+			// Check that the module only declares bringable items (classes, interfaces, enums, structs)
+			// and not variables or functions
+			let scope = if !is_bringable(&scope) {
+				report_diagnostic(Diagnostic {
+					message: format!(
+						"Cannot bring \"{}\" - modules with statements besides classes, interfaces, enums, and structs cannot be brought",
+						module_name.name
+					),
+					span: None,
+				});
+				Scope::default()
+			} else {
+				scope
+			};
+
+			// parse error if no alias is provided
+			let module = if let Some(alias) = alias {
+				Ok(StmtKind::Module {
+					name: alias,
+					statements: scope,
+				})
+			} else {
+				self.with_error::<StmtKind>("No alias provided for module", statement_node)
+			};
+
+			return module;
+		}
+
+		Ok(StmtKind::Bring {
+			module_name,
+			identifier: alias,
 		})
 	}
 
@@ -1888,4 +1974,35 @@ impl<'s> Parser<'s> {
 			span,
 		)))
 	}
+}
+
+fn is_bringable(scope: &Scope) -> bool {
+	let invalid_stmt = |stmt: &Stmt| match stmt.kind {
+		// these statements are ok
+		StmtKind::Bring { .. } => false,
+		StmtKind::Module { .. } => false,
+		StmtKind::Class(_) => false,
+		StmtKind::Interface(_) => false,
+		StmtKind::Struct { .. } => false,
+		StmtKind::Enum { .. } => false,
+		StmtKind::CompilerDebugEnv => false,
+		// these statements are invalid
+		StmtKind::SuperConstructor { .. } => true,
+		StmtKind::Let { .. } => true,
+		StmtKind::ForLoop { .. } => true,
+		StmtKind::While { .. } => true,
+		StmtKind::IfLet { .. } => true,
+		StmtKind::If { .. } => true,
+		StmtKind::Break => true,
+		StmtKind::Continue => true,
+		StmtKind::Return(_) => true,
+		StmtKind::Expression(_) => true,
+		StmtKind::Assignment { .. } => true,
+		StmtKind::Scope(_) => true,
+		StmtKind::TryCatch { .. } => true,
+	};
+
+	// A module is bringable if it doesn't have any invalid statement kinds
+	// (rough heuristic for now)
+	!scope.statements.iter().any(invalid_stmt)
 }
