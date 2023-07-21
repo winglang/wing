@@ -25,8 +25,7 @@ export interface OnDeployProps extends FunctionProps {
 }
 
 /**
- * A function that runs during the app's deployment. The function will be run
- * on every deployment.
+ * Run code every time the app is deployed.
  *
  * @inflight `@winglang/sdk.cloud.IOnDeployClient`
  */
@@ -72,7 +71,7 @@ export interface IOnDeployHandler extends IResource {}
  */
 export interface IOnDeployHandlerClient {
   /**
-   * Entrypoint function that will be called when the cloud function is invoked.
+   * Entrypoint function that will be called when the app is deployed.
    * @inflight
    */
   handle(): Promise<void>;

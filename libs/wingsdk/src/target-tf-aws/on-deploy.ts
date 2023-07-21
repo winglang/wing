@@ -1,15 +1,9 @@
-import { ITerraformDependable } from "cdktf";
+import { ITerraformDependable, ITerraformResource } from "cdktf";
 import { Construct, IConstruct } from "constructs";
 import { Function as AwsFunction } from "./function";
 import { DataAwsLambdaInvocation } from "../.gen/providers/aws/data-aws-lambda-invocation";
 import * as cloud from "../cloud";
 import * as core from "../core";
-
-function isTerraformDependable(
-  x: IConstruct
-): x is ITerraformDependable & IConstruct {
-  return "fqn" in x;
-}
 
 /**
  * AWS implementation of `cloud.OnDeploy`.
@@ -28,21 +22,35 @@ export class OnDeploy extends cloud.OnDeploy {
     let fn = cloud.Function._newFunction(this, "Function", handler, props);
     const awsFn = fn as AwsFunction;
 
-    const dependencies: Array<ITerraformDependable> = [];
+    // add all of the children of the construct to the dependencies
+    const dependsOn: Array<ITerraformDependable> = [];
     for (const c of props.executeAfter ?? []) {
-      // add all of the children of the construct to the dependencies
       for (const child of c.node.findAll()) {
         if (isTerraformDependable(child)) {
-          dependencies.push(child);
+          dependsOn.push(child);
         }
       }
+      this.node.addDependency(c);
     }
 
-    new DataAwsLambdaInvocation(this, "Invocation", {
+    const lambdaInvocation = new DataAwsLambdaInvocation(this, "Invocation", {
       functionName: awsFn.functionName,
       input: JSON.stringify({}), // call the function with an empty object
-      dependsOn: dependencies,
+      dependsOn,
     });
+
+    for (const c of props.executeBefore ?? []) {
+      // add the invocation as a dependency on all of the children of the construct
+      for (const child of c.node.findAll()) {
+        if (isTerraformResource(child)) {
+          if (child.dependsOn === undefined) {
+            child.dependsOn = [];
+          }
+          child.dependsOn.push(lambdaInvocation.fqn);
+        }
+      }
+      c.node.addDependency(this);
+    }
   }
 
   /** @internal */
@@ -54,4 +62,16 @@ export class OnDeploy extends cloud.OnDeploy {
       []
     );
   }
+}
+
+function isTerraformDependable(
+  x: IConstruct
+): x is ITerraformDependable & IConstruct {
+  return "fqn" in x;
+}
+
+function isTerraformResource(
+  x: IConstruct
+): x is ITerraformResource & IConstruct {
+  return "terraformResourceType" in x;
 }
