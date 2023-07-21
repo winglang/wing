@@ -12,10 +12,21 @@ export const ON_DEPLOY_FQN = fqnForType("cloud.OnDeploy");
 /**
  * Options for `OnDeploy`.
  */
-export interface OnDeployProps extends FunctionProps {}
+export interface OnDeployProps extends FunctionProps {
+  /**
+   * Execute this trigger only after these resources have been provisioned.
+   */
+  executeAfter?: Construct[];
+
+  /**
+   * Adds this trigger as a dependency on other constructs.
+   */
+  executeBefore?: Construct[];
+}
 
 /**
- * A cloud object store.
+ * A function that runs during the app's deployment. The function will be run
+ * on every deployment.
  *
  * @inflight `@winglang/sdk.cloud.IOnDeployClient`
  */
@@ -33,12 +44,18 @@ export abstract class OnDeploy extends Resource {
     return App.of(scope).newAbstract(ON_DEPLOY_FQN, scope, id, handler, props);
   }
 
-  constructor(scope: Construct, id: string, props: OnDeployProps = {}) {
+  constructor(
+    scope: Construct,
+    id: string,
+    handler: IFunctionHandler,
+    props: OnDeployProps = {}
+  ) {
     super(scope, id);
 
     this.display.title = "OnDeploy";
     this.display.description = "Run code during the app's deployment.";
 
+    handler;
     props;
   }
 }

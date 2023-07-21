@@ -1,0 +1,597 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`create an OnDeploy 1`] = `
+"{
+  \\"data\\": {
+    \\"aws_lambda_invocation\\": {
+      \\"my_on_deploy_Invocation_1A26E3B9\\": {
+        \\"depends_on\\": [],
+        \\"function_name\\": \\"\${aws_lambda_function.my_on_deploy_Function_59669FC0.function_name}\\",
+        \\"input\\": \\"{}\\"
+      }
+    }
+  },
+  \\"output\\": {
+    \\"WING_TEST_RUNNER_FUNCTION_ARNS\\": {
+      \\"value\\": \\"[]\\"
+    }
+  },
+  \\"resource\\": {
+    \\"aws_iam_role\\": {
+      \\"my_on_deploy_Function_IamRole_76DF13CA\\": {
+        \\"assume_role_policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":\\\\\\"sts:AssumeRole\\\\\\",\\\\\\"Principal\\\\\\":{\\\\\\"Service\\\\\\":\\\\\\"lambda.amazonaws.com\\\\\\"},\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\"
+      }
+    },
+    \\"aws_iam_role_policy\\": {
+      \\"my_on_deploy_Function_IamRolePolicy_AA6273E9\\": {
+        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Action\\\\\\":\\\\\\"none:null\\\\\\",\\\\\\"Resource\\\\\\":\\\\\\"*\\\\\\"}]}\\",
+        \\"role\\": \\"\${aws_iam_role.my_on_deploy_Function_IamRole_76DF13CA.name}\\"
+      }
+    },
+    \\"aws_iam_role_policy_attachment\\": {
+      \\"my_on_deploy_Function_IamRolePolicyAttachment_505E5C37\\": {
+        \\"policy_arn\\": \\"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole\\",
+        \\"role\\": \\"\${aws_iam_role.my_on_deploy_Function_IamRole_76DF13CA.name}\\"
+      }
+    },
+    \\"aws_lambda_function\\": {
+      \\"my_on_deploy_Function_59669FC0\\": {
+        \\"environment\\": {
+          \\"variables\\": {
+            \\"WING_FUNCTION_NAME\\": \\"Function-c88c90bc\\"
+          }
+        },
+        \\"function_name\\": \\"Function-c88c90bc\\",
+        \\"handler\\": \\"index.handler\\",
+        \\"publish\\": true,
+        \\"role\\": \\"\${aws_iam_role.my_on_deploy_Function_IamRole_76DF13CA.arn}\\",
+        \\"runtime\\": \\"nodejs18.x\\",
+        \\"s3_bucket\\": \\"\${aws_s3_bucket.Code.bucket}\\",
+        \\"s3_key\\": \\"\${aws_s3_object.my_on_deploy_Function_S3Object_69D52AC4.key}\\",
+        \\"timeout\\": 30,
+        \\"vpc_config\\": {
+          \\"security_group_ids\\": [],
+          \\"subnet_ids\\": []
+        }
+      }
+    },
+    \\"aws_s3_bucket\\": {
+      \\"Code\\": {
+        \\"bucket_prefix\\": \\"code-c84a50b1-\\"
+      }
+    },
+    \\"aws_s3_object\\": {
+      \\"my_on_deploy_Function_S3Object_69D52AC4\\": {
+        \\"bucket\\": \\"\${aws_s3_bucket.Code.bucket}\\",
+        \\"key\\": \\"<key>\\",
+        \\"source\\": \\"<source>\\"
+      }
+    }
+  }
+}"
+`;
+
+exports[`create an OnDeploy 2`] = `
+{
+  "tree": {
+    "children": {
+      "root": {
+        "children": {
+          "Default": {
+            "children": {
+              "Code": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformResource",
+                  "version": "0.17.0",
+                },
+                "id": "Code",
+                "path": "root/Default/Code",
+              },
+              "Handler": {
+                "attributes": {
+                  "wing:resource:connections": [],
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.1.314",
+                },
+                "display": {
+                  "description": "An inflight resource",
+                  "hidden": true,
+                  "title": "Inflight",
+                },
+                "id": "Handler",
+                "path": "root/Default/Handler",
+              },
+              "aws": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformProvider",
+                  "version": "0.17.0",
+                },
+                "id": "aws",
+                "path": "root/Default/aws",
+              },
+              "cloud.TestRunner": {
+                "attributes": {
+                  "wing:resource:connections": [],
+                },
+                "children": {
+                  "TestFunctionArns": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformOutput",
+                      "version": "0.17.0",
+                    },
+                    "id": "TestFunctionArns",
+                    "path": "root/Default/cloud.TestRunner/TestFunctionArns",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.1.314",
+                },
+                "display": {
+                  "description": "A suite of APIs for running tests and collecting results.",
+                  "hidden": true,
+                  "title": "TestRunner",
+                },
+                "id": "cloud.TestRunner",
+                "path": "root/Default/cloud.TestRunner",
+              },
+              "my_on_deploy": {
+                "attributes": {
+                  "wing:resource:connections": [],
+                },
+                "children": {
+                  "Function": {
+                    "attributes": {
+                      "wing:resource:connections": [],
+                    },
+                    "children": {
+                      "Asset": {
+                        "constructInfo": {
+                          "fqn": "cdktf.TerraformAsset",
+                          "version": "0.17.0",
+                        },
+                        "id": "Asset",
+                        "path": "root/Default/my_on_deploy/Function/Asset",
+                      },
+                      "Default": {
+                        "constructInfo": {
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.17.0",
+                        },
+                        "id": "Default",
+                        "path": "root/Default/my_on_deploy/Function/Default",
+                      },
+                      "IamRole": {
+                        "constructInfo": {
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.17.0",
+                        },
+                        "id": "IamRole",
+                        "path": "root/Default/my_on_deploy/Function/IamRole",
+                      },
+                      "IamRolePolicy": {
+                        "constructInfo": {
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.17.0",
+                        },
+                        "id": "IamRolePolicy",
+                        "path": "root/Default/my_on_deploy/Function/IamRolePolicy",
+                      },
+                      "IamRolePolicyAttachment": {
+                        "constructInfo": {
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.17.0",
+                        },
+                        "id": "IamRolePolicyAttachment",
+                        "path": "root/Default/my_on_deploy/Function/IamRolePolicyAttachment",
+                      },
+                      "S3Object": {
+                        "constructInfo": {
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.17.0",
+                        },
+                        "id": "S3Object",
+                        "path": "root/Default/my_on_deploy/Function/S3Object",
+                      },
+                    },
+                    "constructInfo": {
+                      "fqn": "constructs.Construct",
+                      "version": "10.1.314",
+                    },
+                    "display": {
+                      "description": "A cloud function (FaaS)",
+                      "title": "Function",
+                    },
+                    "id": "Function",
+                    "path": "root/Default/my_on_deploy/Function",
+                  },
+                  "Invocation": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformDataSource",
+                      "version": "0.17.0",
+                    },
+                    "id": "Invocation",
+                    "path": "root/Default/my_on_deploy/Invocation",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.1.314",
+                },
+                "display": {
+                  "description": "Run code during the app's deployment.",
+                  "title": "OnDeploy",
+                },
+                "id": "my_on_deploy",
+                "path": "root/Default/my_on_deploy",
+              },
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.1.314",
+            },
+            "id": "Default",
+            "path": "root/Default",
+          },
+          "backend": {
+            "constructInfo": {
+              "fqn": "cdktf.LocalBackend",
+              "version": "0.17.0",
+            },
+            "id": "backend",
+            "path": "root/backend",
+          },
+        },
+        "constructInfo": {
+          "fqn": "cdktf.TerraformStack",
+          "version": "0.17.0",
+        },
+        "id": "root",
+        "path": "root",
+      },
+    },
+    "constructInfo": {
+      "fqn": "cdktf.App",
+      "version": "0.17.0",
+    },
+    "id": "App",
+    "path": "",
+  },
+  "version": "tree-0.1",
+}
+`;
+
+exports[`execute OnDeploy after other resources 1`] = `
+"{
+  \\"data\\": {
+    \\"aws_lambda_invocation\\": {
+      \\"my_on_deploy_Invocation_1A26E3B9\\": {
+        \\"depends_on\\": [
+          \\"aws_s3_bucket.my_bucket\\",
+          \\"aws_s3_bucket_server_side_encryption_configuration.my_bucket_Encryption_3B1569A4\\",
+          \\"aws_s3_bucket_public_access_block.my_bucket_PublicAccessBlock_538547C0\\"
+        ],
+        \\"function_name\\": \\"\${aws_lambda_function.my_on_deploy_Function_59669FC0.function_name}\\",
+        \\"input\\": \\"{}\\"
+      }
+    }
+  },
+  \\"output\\": {
+    \\"WING_TEST_RUNNER_FUNCTION_ARNS\\": {
+      \\"value\\": \\"[]\\"
+    }
+  },
+  \\"resource\\": {
+    \\"aws_iam_role\\": {
+      \\"my_on_deploy_Function_IamRole_76DF13CA\\": {
+        \\"assume_role_policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":\\\\\\"sts:AssumeRole\\\\\\",\\\\\\"Principal\\\\\\":{\\\\\\"Service\\\\\\":\\\\\\"lambda.amazonaws.com\\\\\\"},\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\"
+      }
+    },
+    \\"aws_iam_role_policy\\": {
+      \\"my_on_deploy_Function_IamRolePolicy_AA6273E9\\": {
+        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Action\\\\\\":\\\\\\"none:null\\\\\\",\\\\\\"Resource\\\\\\":\\\\\\"*\\\\\\"}]}\\",
+        \\"role\\": \\"\${aws_iam_role.my_on_deploy_Function_IamRole_76DF13CA.name}\\"
+      }
+    },
+    \\"aws_iam_role_policy_attachment\\": {
+      \\"my_on_deploy_Function_IamRolePolicyAttachment_505E5C37\\": {
+        \\"policy_arn\\": \\"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole\\",
+        \\"role\\": \\"\${aws_iam_role.my_on_deploy_Function_IamRole_76DF13CA.name}\\"
+      }
+    },
+    \\"aws_lambda_function\\": {
+      \\"my_on_deploy_Function_59669FC0\\": {
+        \\"environment\\": {
+          \\"variables\\": {
+            \\"WING_FUNCTION_NAME\\": \\"Function-c88c90bc\\"
+          }
+        },
+        \\"function_name\\": \\"Function-c88c90bc\\",
+        \\"handler\\": \\"index.handler\\",
+        \\"publish\\": true,
+        \\"role\\": \\"\${aws_iam_role.my_on_deploy_Function_IamRole_76DF13CA.arn}\\",
+        \\"runtime\\": \\"nodejs18.x\\",
+        \\"s3_bucket\\": \\"\${aws_s3_bucket.Code.bucket}\\",
+        \\"s3_key\\": \\"\${aws_s3_object.my_on_deploy_Function_S3Object_69D52AC4.key}\\",
+        \\"timeout\\": 30,
+        \\"vpc_config\\": {
+          \\"security_group_ids\\": [],
+          \\"subnet_ids\\": []
+        }
+      }
+    },
+    \\"aws_s3_bucket\\": {
+      \\"Code\\": {
+        \\"bucket_prefix\\": \\"code-c84a50b1-\\"
+      },
+      \\"my_bucket\\": {
+        \\"bucket_prefix\\": \\"my-bucket-c8045fcc-\\",
+        \\"force_destroy\\": false
+      }
+    },
+    \\"aws_s3_bucket_public_access_block\\": {
+      \\"my_bucket_PublicAccessBlock_538547C0\\": {
+        \\"block_public_acls\\": true,
+        \\"block_public_policy\\": true,
+        \\"bucket\\": \\"\${aws_s3_bucket.my_bucket.bucket}\\",
+        \\"ignore_public_acls\\": true,
+        \\"restrict_public_buckets\\": true
+      }
+    },
+    \\"aws_s3_bucket_server_side_encryption_configuration\\": {
+      \\"my_bucket_Encryption_3B1569A4\\": {
+        \\"bucket\\": \\"\${aws_s3_bucket.my_bucket.bucket}\\",
+        \\"rule\\": [
+          {
+            \\"apply_server_side_encryption_by_default\\": {
+              \\"sse_algorithm\\": \\"AES256\\"
+            }
+          }
+        ]
+      }
+    },
+    \\"aws_s3_object\\": {
+      \\"my_on_deploy_Function_S3Object_69D52AC4\\": {
+        \\"bucket\\": \\"\${aws_s3_bucket.Code.bucket}\\",
+        \\"key\\": \\"<key>\\",
+        \\"source\\": \\"<source>\\"
+      }
+    }
+  }
+}"
+`;
+
+exports[`execute OnDeploy after other resources 2`] = `
+{
+  "tree": {
+    "children": {
+      "root": {
+        "children": {
+          "Default": {
+            "children": {
+              "Code": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformResource",
+                  "version": "0.17.0",
+                },
+                "id": "Code",
+                "path": "root/Default/Code",
+              },
+              "Handler": {
+                "attributes": {
+                  "wing:resource:connections": [],
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.1.314",
+                },
+                "display": {
+                  "description": "An inflight resource",
+                  "hidden": true,
+                  "title": "Inflight",
+                },
+                "id": "Handler",
+                "path": "root/Default/Handler",
+              },
+              "aws": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformProvider",
+                  "version": "0.17.0",
+                },
+                "id": "aws",
+                "path": "root/Default/aws",
+              },
+              "cloud.TestRunner": {
+                "attributes": {
+                  "wing:resource:connections": [],
+                },
+                "children": {
+                  "TestFunctionArns": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformOutput",
+                      "version": "0.17.0",
+                    },
+                    "id": "TestFunctionArns",
+                    "path": "root/Default/cloud.TestRunner/TestFunctionArns",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.1.314",
+                },
+                "display": {
+                  "description": "A suite of APIs for running tests and collecting results.",
+                  "hidden": true,
+                  "title": "TestRunner",
+                },
+                "id": "cloud.TestRunner",
+                "path": "root/Default/cloud.TestRunner",
+              },
+              "my_bucket": {
+                "attributes": {
+                  "wing:resource:connections": [],
+                },
+                "children": {
+                  "Default": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.17.0",
+                    },
+                    "id": "Default",
+                    "path": "root/Default/my_bucket/Default",
+                  },
+                  "Encryption": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.17.0",
+                    },
+                    "id": "Encryption",
+                    "path": "root/Default/my_bucket/Encryption",
+                  },
+                  "PublicAccessBlock": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.17.0",
+                    },
+                    "id": "PublicAccessBlock",
+                    "path": "root/Default/my_bucket/PublicAccessBlock",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.1.314",
+                },
+                "display": {
+                  "description": "A cloud object store",
+                  "title": "Bucket",
+                },
+                "id": "my_bucket",
+                "path": "root/Default/my_bucket",
+              },
+              "my_on_deploy": {
+                "attributes": {
+                  "wing:resource:connections": [],
+                },
+                "children": {
+                  "Function": {
+                    "attributes": {
+                      "wing:resource:connections": [],
+                    },
+                    "children": {
+                      "Asset": {
+                        "constructInfo": {
+                          "fqn": "cdktf.TerraformAsset",
+                          "version": "0.17.0",
+                        },
+                        "id": "Asset",
+                        "path": "root/Default/my_on_deploy/Function/Asset",
+                      },
+                      "Default": {
+                        "constructInfo": {
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.17.0",
+                        },
+                        "id": "Default",
+                        "path": "root/Default/my_on_deploy/Function/Default",
+                      },
+                      "IamRole": {
+                        "constructInfo": {
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.17.0",
+                        },
+                        "id": "IamRole",
+                        "path": "root/Default/my_on_deploy/Function/IamRole",
+                      },
+                      "IamRolePolicy": {
+                        "constructInfo": {
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.17.0",
+                        },
+                        "id": "IamRolePolicy",
+                        "path": "root/Default/my_on_deploy/Function/IamRolePolicy",
+                      },
+                      "IamRolePolicyAttachment": {
+                        "constructInfo": {
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.17.0",
+                        },
+                        "id": "IamRolePolicyAttachment",
+                        "path": "root/Default/my_on_deploy/Function/IamRolePolicyAttachment",
+                      },
+                      "S3Object": {
+                        "constructInfo": {
+                          "fqn": "cdktf.TerraformResource",
+                          "version": "0.17.0",
+                        },
+                        "id": "S3Object",
+                        "path": "root/Default/my_on_deploy/Function/S3Object",
+                      },
+                    },
+                    "constructInfo": {
+                      "fqn": "constructs.Construct",
+                      "version": "10.1.314",
+                    },
+                    "display": {
+                      "description": "A cloud function (FaaS)",
+                      "title": "Function",
+                    },
+                    "id": "Function",
+                    "path": "root/Default/my_on_deploy/Function",
+                  },
+                  "Invocation": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformDataSource",
+                      "version": "0.17.0",
+                    },
+                    "id": "Invocation",
+                    "path": "root/Default/my_on_deploy/Invocation",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.1.314",
+                },
+                "display": {
+                  "description": "Run code during the app's deployment.",
+                  "title": "OnDeploy",
+                },
+                "id": "my_on_deploy",
+                "path": "root/Default/my_on_deploy",
+              },
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.1.314",
+            },
+            "id": "Default",
+            "path": "root/Default",
+          },
+          "backend": {
+            "constructInfo": {
+              "fqn": "cdktf.LocalBackend",
+              "version": "0.17.0",
+            },
+            "id": "backend",
+            "path": "root/backend",
+          },
+        },
+        "constructInfo": {
+          "fqn": "cdktf.TerraformStack",
+          "version": "0.17.0",
+        },
+        "id": "root",
+        "path": "root",
+      },
+    },
+    "constructInfo": {
+      "fqn": "cdktf.App",
+      "version": "0.17.0",
+    },
+    "id": "App",
+    "path": "",
+  },
+  "version": "tree-0.1",
+}
+`;
