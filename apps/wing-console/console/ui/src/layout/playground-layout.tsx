@@ -14,9 +14,9 @@ import { TestsTreeView } from "../features/tests-tree-view.js";
 import { BlueScreenOfDeath } from "../ui/blue-screen-of-death.js";
 import { ResourceMetadata } from "../ui/resource-metadata.js";
 
+import { LayoutProps } from "./default-layout.js";
 import { StatusBar } from "./status-bar.js";
 import { useLayout } from "./use-layout.js";
-import { LayoutProps } from "./vscode-layout.js";
 
 export const PlaygroundLayout = ({
   cloudAppState,

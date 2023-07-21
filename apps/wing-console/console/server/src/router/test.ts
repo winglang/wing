@@ -81,7 +81,13 @@ export const createTestRouter = () => {
   return createRouter({
     "test.list": createProcedure.query(async ({ input, ctx }) => {
       const simulator = await ctx.simulator();
-      return listTests(simulator);
+      const list = await listTests(simulator);
+      return list.map((resourcePath) => {
+        return {
+          id: resourcePath,
+          label: getTestName(resourcePath),
+        };
+      });
     }),
     "test.run": createProcedure
       .input(

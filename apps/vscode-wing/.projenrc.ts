@@ -48,6 +48,7 @@ const project = new TypeScriptAppProject({
   tsconfig: {
     compilerOptions: {
       noUncheckedIndexedAccess: true,
+      lib: ["es2021"],
     },
   },
 
@@ -55,9 +56,12 @@ const project = new TypeScriptAppProject({
     `@types/vscode@^${VSCODE_BASE_VERSION}`,
     "vscode-languageclient",
     "which",
-    "@wingconsole/app",
+    "@wingconsole/app@workspace:^",
+    "@wingconsole/server@workspace:^",
+    "@trpc/client",
+    "node-fetch@2",
   ],
-  devDeps: ["@types/node", "@types/which", "@vscode/vsce"],
+  devDeps: ["@types/node", "@types/which", "@vscode/vsce", "@types/node-fetch"],
 });
 
 project.addGitIgnore("*.vsix");

@@ -1,5 +1,11 @@
 import path from "path";
-import { Trace, createConsoleApp } from "@wingconsole/app";
+import { createConsoleApp } from "@wingconsole/app";
+
+import fetch from "node-fetch";
+
+const globalAny = global as any;
+globalAny.fetch = fetch;
+
 import {
   ExtensionContext,
   WebviewPanel,
@@ -11,9 +17,10 @@ import {
 import { VIEW_TYPE_CONSOLE } from "./constants";
 
 import { ResourcesExplorerProvider } from "./ResourcesExplorerProvider";
+import { createTRPCClient } from "./services/trpc";
 import { TestsExplorerProvider } from "./TestsExplorerProvider";
 
-const getLogger = ({ show = false }) => {
+const createLogger = ({ show = false }) => {
   const logger = window.createOutputChannel("Wing Console");
   logger.show(show);
   return logger;
@@ -46,7 +53,7 @@ export class WingConsoleManager {
     const wingfile = path.basename(uri.fsPath);
     let panel: WebviewPanel;
 
-    const logger = getLogger({ show: true });
+    const logger = createLogger({ show: true });
 
     const { port, close } = await createConsoleApp({
       wingfile: uri.fsPath,
@@ -68,11 +75,11 @@ export class WingConsoleManager {
       },
     });
 
-    const url = `http://localhost:${port}/?layout=2`;
+    const url = `http://localhost:${port}`;
+
+    const client = createTRPCClient(url);
 
     logger.appendLine(`Wing Console is running at ${url}`);
-
-    logger.appendLine(`wingfile: ${wingfile}`);
 
     panel = window.createWebviewPanel(
       VIEW_TYPE_CONSOLE,
@@ -123,18 +130,21 @@ export class WingConsoleManager {
             </style>
         </head>
         <body>
-          <iframe src="${url}/"/>
+          <iframe src="${url}/?layout=4"/>
         </body>
       </html>`;
 
+    const tree = await client["app.explorerTree"].query();
+    logger.appendLine(JSON.stringify(tree, null, 2));
     window.registerTreeDataProvider(
       "consoleExplorer",
-      new ResourcesExplorerProvider("")
+      new ResourcesExplorerProvider(tree)
     );
 
+    const tests = await client["test.list"].query();
     window.registerTreeDataProvider(
       "consoleTestsExplorer",
-      new TestsExplorerProvider("")
+      new TestsExplorerProvider(tests)
     );
   }
 

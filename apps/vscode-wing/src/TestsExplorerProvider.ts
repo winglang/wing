@@ -1,25 +1,37 @@
-import * as path from "path";
-import * as vscode from "vscode";
+import { TreeDataProvider, TreeItem, TreeItemCollapsibleState } from "vscode";
 
-export class TestsExplorerProvider
-  implements vscode.TreeDataProvider<ResourceItem>
-{
-  getTreeItem(element: ResourceItem): vscode.TreeItem {
+export class TestsExplorerProvider implements TreeDataProvider<ResourceItem> {
+  public readonly tests: {
+    id: string;
+    label: string;
+  }[] = [];
+
+  constructor(
+    private testList: {
+      id: string;
+      label: string;
+    }[]
+  ) {
+    this.tests = testList;
+  }
+
+  getTreeItem(element: ResourceItem): TreeItem {
     return element;
   }
 
   getChildren(element?: ResourceItem): Thenable<ResourceItem[]> {
-    return Promise.resolve([
-      new ResourceItem("Test 1"),
-      new ResourceItem("Test 2"),
-    ]);
+    return Promise.resolve(
+      this.tests.map((test) => {
+        return new ResourceItem(test.label, TreeItemCollapsibleState.None);
+      })
+    );
   }
 }
 
-class ResourceItem extends vscode.TreeItem {
+class ResourceItem extends TreeItem {
   constructor(
     public readonly label: string,
-    public readonly collapsibleState?: vscode.TreeItemCollapsibleState
+    public readonly collapsibleState?: TreeItemCollapsibleState
   ) {
     super(label, collapsibleState);
     this.tooltip = `${this.label}`;

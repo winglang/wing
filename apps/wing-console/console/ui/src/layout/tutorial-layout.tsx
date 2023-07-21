@@ -12,8 +12,8 @@ import { MapView } from "../features/map-view.js";
 import { BlueScreenOfDeath } from "../ui/blue-screen-of-death.js";
 import { ResourceMetadata } from "../ui/resource-metadata.js";
 
+import { LayoutProps } from "./default-layout.js";
 import { useLayout } from "./use-layout.js";
-import { LayoutProps } from "./vscode-layout.js";
 
 export const TutorialLayout = ({ cloudAppState }: LayoutProps) => {
   const {

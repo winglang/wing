@@ -8,11 +8,6 @@ import { trpc } from "./trpc.js";
 
 type RouterOutput = inferRouterOutputs<Router>;
 
-const getTestName = (testPath: string) => {
-  const test = testPath.split("/").pop() ?? testPath;
-  return test.replaceAll("test:", "");
-};
-
 export const useTests = () => {
   const [testList, setTestList] = useState<TestItem[]>([]);
   const testListQuery = trpc["test.list"].useQuery();
@@ -39,10 +34,9 @@ export const useTests = () => {
       return;
     }
     setTestList(
-      testListQuery.data.map((resourcePath) => {
+      testListQuery.data.map((test: { id: string; label: string }) => {
         return {
-          id: resourcePath,
-          label: getTestName(resourcePath),
+          ...test,
           status: "pending",
         };
       }),

@@ -1,6 +1,10 @@
 {
   "dependencies": [
     {
+      "name": "@types/node-fetch",
+      "type": "build"
+    },
+    {
       "name": "@types/node",
       "version": "^16",
       "type": "build"
@@ -74,12 +78,27 @@
       "type": "build"
     },
     {
+      "name": "@trpc/client",
+      "type": "runtime"
+    },
+    {
       "name": "@types/vscode",
       "version": "^1.70.0",
       "type": "runtime"
     },
     {
       "name": "@wingconsole/app",
+      "version": "workspace:^",
+      "type": "runtime"
+    },
+    {
+      "name": "@wingconsole/server",
+      "version": "workspace:^",
+      "type": "runtime"
+    },
+    {
+      "name": "node-fetch",
+      "version": "2",
       "type": "runtime"
     },
     {

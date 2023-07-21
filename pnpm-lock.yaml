@@ -195,12 +195,21 @@ importers:
 
   apps/vscode-wing:
     dependencies:
+      '@trpc/client':
+        specifier: ^10.30.0
+        version: 10.30.0(@trpc/server@10.30.0)
       '@types/vscode':
         specifier: ^1.70.0
         version: 1.70.0
       '@wingconsole/app':
-        specifier: ^0.2.187
-        version: 0.2.187(constructs@10.1.314)
+        specifier: workspace:^
+        version: link:../wing-console/console/app
+      '@wingconsole/server':
+        specifier: workspace:^
+        version: link:../wing-console/console/server
+      node-fetch:
+        specifier: '2'
+        version: 2.6.12
       vscode-languageclient:
         specifier: ^8.0.2
         version: 8.0.2
@@ -211,6 +220,9 @@ importers:
       '@types/node':
         specifier: ^16
         version: 16.0.0
+      '@types/node-fetch':
+        specifier: ^2.6.4
+        version: 2.6.4
       '@types/which':
         specifier: ^2.0.2
         version: 2.0.2
@@ -9985,114 +9997,6 @@ packages:
       '@xtuc/long': 4.2.2
     dev: true
 
-  /@wingconsole/app@0.2.187(constructs@10.1.314):
-    resolution: {integrity: sha512-JmQ5x75YSFAcidv5XRHmIcc5RWpGWI8QVUkPvojq+sJfdBKMf+yeumAxu58nCI/en4lgx/YAXFp1QFnV1QfhlQ==}
-    dependencies:
-      '@wingconsole/server': 0.2.194(constructs@10.1.314)
-      express: 4.18.2
-    transitivePeerDependencies:
-      - '@aws-sdk/signature-v4-crt'
-      - aws-crt
-      - constructs
-      - encoding
-      - supports-color
-    dev: false
-
-  /@wingconsole/server@0.2.194(constructs@10.1.314):
-    resolution: {integrity: sha512-j7jhdCIi6gn69+zwOcZZNYSF/vwI8Kqlvarq5M7dQiy6qDw6h1tmFdlJQWpKtIzMnv7qEjigaoUDIz+ATwI0LA==}
-    dependencies:
-      '@winglang/compiler': 0.21.23(constructs@10.1.314)
-      '@winglang/sdk': 0.21.23(constructs@10.1.314)
-      codespan-wasm: 0.4.0
-      debug: 4.3.4
-      ms: 2.1.3
-    transitivePeerDependencies:
-      - '@aws-sdk/signature-v4-crt'
-      - aws-crt
-      - constructs
-      - encoding
-      - supports-color
-    dev: false
-
-  /@winglang/compiler@0.21.23(constructs@10.1.314):
-    resolution: {integrity: sha512-Z2kPqNqb7vLEBCFnaGq9cKqHc8KUPkLpmKQsZv8TLEtAUDFVS3rzwwZu0jc9/sIKIh0U48bVhQhqZxtyltPdOA==}
-    engines: {node: '>=v18.0.0'}
-    dependencies:
-      '@winglang/sdk': 0.21.23(constructs@10.1.314)
-      wasi-js: 1.7.3(patch_hash=rmwvp46j2ligfusbdx5dzh4a3q)
-    transitivePeerDependencies:
-      - '@aws-sdk/signature-v4-crt'
-      - aws-crt
-      - constructs
-      - encoding
-      - supports-color
-    dev: false
-    bundledDependencies:
-      - wasi-js
-
-  /@winglang/sdk@0.21.23(constructs@10.1.314):
-    resolution: {integrity: sha512-E2fk0/75y693MSVoyXvm2Jaoj4+HhaWJtM/FexDIcqa0BgjjhKHaud2QkRjZpezrel2orzb+Y0o7c6//mfS0/g==}
-    engines: {node: '>= 16.16.0'}
-    peerDependencies:
-      constructs: ~10.1.228
-    dependencies:
-      '@aws-sdk/client-cloudwatch-logs': 3.354.0
-      '@aws-sdk/client-dynamodb': 3.354.0
-      '@aws-sdk/client-elasticache': 3.354.0
-      '@aws-sdk/client-lambda': 3.354.0
-      '@aws-sdk/client-s3': 3.354.0
-      '@aws-sdk/client-secrets-manager': 3.354.0
-      '@aws-sdk/client-sns': 3.354.0
-      '@aws-sdk/client-sqs': 3.354.0
-      '@aws-sdk/types': 3.347.0
-      '@aws-sdk/util-dynamodb': 3.354.0
-      '@aws-sdk/util-stream-node': 3.350.0
-      '@aws-sdk/util-utf8-node': 3.259.0(patch_hash=ip4wqmy432gtjtcha5gcn4zeu4)
-      '@azure/core-paging': 1.4.0
-      '@azure/identity': 3.1.3
-      '@azure/storage-blob': 12.14.0
-      cdktf: 0.15.2(constructs@10.1.314)
-      constructs: 10.1.314
-      cron-parser: 4.8.1
-      esbuild-wasm: 0.18.5(patch_hash=t2ef2z2cxi7d6lxkcfsq2qtq3m)
-      express: 4.18.2
-      ioredis: 5.3.1
-      mime-types: 2.1.35
-      safe-stable-stringify: 1.1.1
-      tar: 6.1.13
-      uuid: 8.3.2
-    transitivePeerDependencies:
-      - '@aws-sdk/signature-v4-crt'
-      - aws-crt
-      - encoding
-      - supports-color
-    dev: false
-    bundledDependencies:
-      - '@aws-sdk/client-cloudwatch-logs'
-      - '@aws-sdk/client-dynamodb'
-      - '@aws-sdk/client-elasticache'
-      - '@aws-sdk/client-lambda'
-      - '@aws-sdk/client-s3'
-      - '@aws-sdk/client-secrets-manager'
-      - '@aws-sdk/client-sns'
-      - '@aws-sdk/client-sqs'
-      - '@aws-sdk/types'
-      - '@aws-sdk/util-dynamodb'
-      - '@aws-sdk/util-stream-node'
-      - '@aws-sdk/util-utf8-node'
-      - '@azure/core-paging'
-      - '@azure/identity'
-      - '@azure/storage-blob'
-      - cdktf
-      - cron-parser
-      - esbuild-wasm
-      - express
-      - ioredis
-      - mime-types
-      - safe-stable-stringify
-      - tar
-      - uuid
-
   /@xmldom/xmldom@0.8.8:
     resolution: {integrity: sha512-0LNz4EY8B/8xXY86wMrQ4tz6zEHZv9ehFMJPm8u2gq5lQ71cfRKdaKyxfJAx5aUoyzx0qzgURblTisPGgz3d+Q==}
     engines: {node: '>=10.0.0'}
@@ -11391,21 +11295,6 @@ packages:
       - supports-color
       - utf-8-validate
     dev: true
-
-  /cdktf@0.15.2(constructs@10.1.314):
-    resolution: {integrity: sha512-1V8u4nMtcgwfHq7V7+a+VkotMDDZUk6JJQ7BKPZyraN7MfiBjkUQUQo9PYJQdRONABFugwyggjy1Aqw8dto7Vw==}
-    peerDependencies:
-      constructs: ^10.0.25
-    dependencies:
-      archiver: 5.3.1
-      constructs: 10.1.314
-      json-stable-stringify: 1.0.2
-      semver: 7.5.3
-    dev: false
-    bundledDependencies:
-      - archiver
-      - json-stable-stringify
-      - semver
 
   /cdktf@0.17.0(constructs@10.1.314):
     resolution: {integrity: sha512-4R57uBLBqeb8NgfKZdn/az8UE3yXxGHyzH6Xjsz1Oo9kNvSkPibX7YqNLUpuCgdYNVgU2fdaNoHj9h4LXc6iCw==}
@@ -20294,10 +20183,6 @@ packages:
     resolution: {integrity: sha512-rx+x8AMzKb5Q5lQ95Zoi6ZbJqwCLkqi3XuJXp5P3rT8OEc6sZCJG5AE5dU3lsgRr/F4Bs31jSlVN+j5KrsGu9A==}
     dependencies:
       regexp-tree: 0.1.27
-    dev: false
-
-  /safe-stable-stringify@1.1.1:
-    resolution: {integrity: sha512-ERq4hUjKDbJfE4+XtZLFPCDi8Vb1JqaxAPTxWFLBx8XcAlf9Bda/ZJdVezs/NAfsMQScyIlUMx+Yeu7P7rx5jw==}
     dev: false
 
   /safe-stable-stringify@2.4.3:

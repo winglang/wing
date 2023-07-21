@@ -1,26 +1,54 @@
-import { SpinnerLoader, LeftResizableWidget } from "@wingconsole/design-system";
+import {
+  SpinnerLoader,
+  LeftResizableWidget,
+  RightResizableWidget,
+  ScrollableArea,
+  TopResizableWidget,
+} from "@wingconsole/design-system";
+import { State } from "@wingconsole/server";
 import classNames from "classnames";
 import { useEffect, useMemo } from "react";
 
+import { ConsoleLogsFilters } from "../features/console-logs-filters.js";
+import { ConsoleLogs } from "../features/console-logs.js";
 import { MapView } from "../features/map-view.js";
+import { TestsTreeView } from "../features/tests-tree-view.js";
 import { BlueScreenOfDeath } from "../ui/blue-screen-of-death.js";
+import { Explorer } from "../ui/explorer.js";
 import { ResourceMetadata } from "../ui/resource-metadata.js";
 
-import { LayoutProps } from "./default-layout.js";
+import { Header } from "./header.js";
 import { StatusBar } from "./status-bar.js";
 import { TermsAndConditionsModal } from "./terms-and-conditions-modal.js";
 import { useLayout } from "./use-layout.js";
 
-export const VscodeLayout = ({ cloudAppState, wingVersion }: LayoutProps) => {
+export interface LayoutProps {
+  cloudAppState: State;
+  wingVersion: string | undefined;
+}
+
+export const DefaultLayout = ({ cloudAppState, wingVersion }: LayoutProps) => {
   const {
+    items,
     selectedItems,
     setSelectedItems,
+    expandedItems,
+    setExpandedItems,
     expand,
+    expandAll,
+    collapseAll,
     theme,
     errorMessage,
     loading,
     metadata,
+    setSearchText,
+    selectedLogTypeFilters,
+    setSelectedLogTypeFilters,
+    setLogsTimeFilter,
     showTests,
+    logsRef,
+    logs,
+    onResourceClick,
     title,
     wingfile,
     termsConfig,
@@ -59,6 +87,8 @@ export const VscodeLayout = ({ cloudAppState, wingVersion }: LayoutProps) => {
           showTerms && "blur-sm",
         )}
       >
+        <Header title={wingfile.data ?? ""} />
+
         {cloudAppState === "error" && (
           <div className="flex-1 flex relative">
             <BlueScreenOfDeath
@@ -83,6 +113,32 @@ export const VscodeLayout = ({ cloudAppState, wingVersion }: LayoutProps) => {
                   </div>
                 </div>
               )}
+
+              <RightResizableWidget
+                className={classNames(
+                  theme.border3,
+                  "h-full flex flex-col w-80 min-w-[10rem] min-h-[10rem] border-r",
+                )}
+              >
+                <div className="flex grow">
+                  <Explorer
+                    loading={loading}
+                    items={items}
+                    selectedItems={selectedItems}
+                    onSelectedItemsChange={setSelectedItems}
+                    expandedItems={expandedItems}
+                    onExpandedItemsChange={setExpandedItems}
+                    onExpandAll={expandAll}
+                    onCollapseAll={collapseAll}
+                    data-testid="explorer-tree-menu"
+                  />
+                </div>
+                <TopResizableWidget
+                  className={classNames(theme.border3, "h-1/3 border-t")}
+                >
+                  <TestsTreeView />
+                </TopResizableWidget>
+              </RightResizableWidget>
 
               <div className="flex-1 flex flex-col">
                 <div className="flex-1 flex">
@@ -118,6 +174,44 @@ export const VscodeLayout = ({ cloudAppState, wingVersion }: LayoutProps) => {
                 </div>
               </div>
             </div>
+            <TopResizableWidget
+              className={classNames(
+                theme.border3,
+                "border-t min-h-[5rem] h-[15rem]",
+                theme.bg3,
+                theme.text2,
+              )}
+            >
+              <div className="relative h-full flex flex-col gap-2">
+                {loading && (
+                  <div
+                    className={classNames(
+                      "absolute h-full w-full z-50 bg-white/70 dark:bg-slate-600/70",
+                      theme.text2,
+                    )}
+                  />
+                )}
+                <ConsoleLogsFilters
+                  selectedLogTypeFilters={selectedLogTypeFilters}
+                  setSelectedLogTypeFilters={setSelectedLogTypeFilters}
+                  clearLogs={() => setLogsTimeFilter(Date.now())}
+                  isLoading={loading}
+                  onSearch={setSearchText}
+                />
+                <div className="relative h-full">
+                  <ScrollableArea
+                    ref={logsRef}
+                    overflowY
+                    className={classNames("pb-1.5", theme.bg3, theme.text2)}
+                  >
+                    <ConsoleLogs
+                      logs={logs.data ?? []}
+                      onResourceClick={onResourceClick}
+                    />
+                  </ScrollableArea>
+                </div>
+              </div>
+            </TopResizableWidget>
           </>
         )}
 
@@ -125,7 +219,6 @@ export const VscodeLayout = ({ cloudAppState, wingVersion }: LayoutProps) => {
           wingVersion={wingVersion}
           cloudAppState={cloudAppState}
           isError={cloudAppState === "error"}
-          showThemeToggle={true}
         />
       </div>
     </>
