@@ -52,33 +52,26 @@ pub mod spec {
 		}
 	}
 
-	fn try_load_from_cache(hash: &str, compression: Option<&str>) -> Option<Assembly> {
+	fn try_load_from_cache(hash: &str) -> Option<Assembly> {
 		let file_path = format!("{CACHE_FILE_DIR}/{hash}.{CACHE_FILE_EXT}");
-		if Some("gzip") == compression {
-			let file = File::open(file_path).ok()?;
-			let mut assembly_gz = GzDecoder::new(file);
-			let mut data = Vec::new();
-			assembly_gz.read_to_end(&mut data).ok()?;
-			rmp_serde::decode::from_slice(&data).ok()?
-		} else {
-			let data = fs::read(file_path).ok()?;
-			rmp_serde::decode::from_slice(&data).ok()?
-		}
+		let data = fs::read(file_path).ok()?;
+		rmp_serde::decode::from_slice(&data).ok()?
 	}
 
 	pub fn load_assembly_from_file(path_to_file: &str, compression: Option<&str>) -> Result<Assembly> {
 		let assembly_path = Path::new(path_to_file);
 
 		let manifest = if Some("gzip") == compression {
-			let assembly_path_gz = File::open(assembly_path)?;
-			let mut assembly_gz = GzDecoder::new(assembly_path_gz);
-			let mut data = Vec::new();
-			assembly_gz.read_to_end(&mut data)?;
+			let gz_data = fs::read(assembly_path)?;
+			let hash = blake3::hash(&gz_data).to_string();
 
-			let hash = blake3::hash(&data).to_string();
-			if let Some(cached_manifest) = try_load_from_cache(&hash, compression) {
+			if let Some(cached_manifest) = try_load_from_cache(&hash) {
 				JsiiFile::Assembly(cached_manifest)
 			} else {
+				let gz_data_reader = std::io::Cursor::new(gz_data);
+				let mut assembly_gz = GzDecoder::new(gz_data_reader);
+				let mut data = Vec::new();
+				assembly_gz.read_to_end(&mut data)?;
 				let manifest = serde_json::from_slice(&data)?;
 				if let JsiiFile::Assembly(manifest) = &manifest {
 					let _ = cache_manifest(manifest, &hash);
@@ -87,7 +80,7 @@ pub mod spec {
 			}
 		} else {
 			if let Some(fingerprint) = get_manifest_fingerprint(assembly_path) {
-				if let Some(cached_manifest) = try_load_from_cache(&fingerprint, compression) {
+				if let Some(cached_manifest) = try_load_from_cache(&fingerprint) {
 					JsiiFile::Assembly(cached_manifest)
 				} else {
 					let manifest = fs::read_to_string(assembly_path)?;
