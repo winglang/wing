@@ -15,11 +15,13 @@ export const ON_DEPLOY_FQN = fqnForType("cloud.OnDeploy");
 export interface OnDeployProps extends FunctionProps {
   /**
    * Execute this trigger only after these resources have been provisioned.
+   * @default - no additional dependencies
    */
   readonly executeAfter?: Construct[];
 
   /**
    * Adds this trigger as a dependency on other constructs.
+   * @default - no additional dependencies
    */
   readonly executeBefore?: Construct[];
 }

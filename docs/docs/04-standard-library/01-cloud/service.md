@@ -270,7 +270,7 @@ The maximum amount of time the function can run.
 
 ### ServiceProps <a name="ServiceProps" id="@winglang/sdk.cloud.ServiceProps"></a>
 
-Properties for `Service`.
+Options for `Service`.
 
 #### Initializer <a name="Initializer" id="@winglang/sdk.cloud.ServiceProps.Initializer"></a>
 
