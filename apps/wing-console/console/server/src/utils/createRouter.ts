@@ -25,6 +25,23 @@ export type RouterEvents = {
   invalidateQuery: QueryNames;
 };
 
+export interface LayoutConfig {
+  header?: {
+    show?: boolean;
+    themeToggle?: boolean;
+  };
+  tree?: {
+    show?: boolean;
+  };
+  logs?: {
+    show?: boolean;
+  };
+  footer?: {
+    show?: boolean;
+    themeToggle?: boolean;
+  };
+}
+
 export interface RouterContext {
   simulator(): Promise<testing.Simulator>;
   appDetails(): Promise<{
@@ -42,6 +59,7 @@ export interface RouterContext {
   hostUtils?: HostUtils;
   wingfile: string;
   requireAcceptTerms?: boolean;
+  layoutConfig?: LayoutConfig;
 }
 
 const t = initTRPC.context<RouterContext>().create();

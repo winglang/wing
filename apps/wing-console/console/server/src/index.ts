@@ -11,6 +11,7 @@ import type { Router } from "./router/index.js";
 import type { State } from "./types.js";
 import type { Updater } from "./updater.js";
 import { createCompiler } from "./utils/compiler.js";
+import { LayoutConfig } from "./utils/createRouter.js";
 import type { LogInterface } from "./utils/LogInterface.js";
 import { createSimulator } from "./utils/simulator.js";
 
@@ -29,6 +30,7 @@ export type { MapNode, MapEdge } from "./router/app.js";
 export type { InternalTestResult } from "./router/test.js";
 export type { Column } from "./router/table.js";
 export type { NodeDisplay } from "./utils/constructTreeNodeMap.js";
+export type { LayoutConfig } from "./utils/createRouter.js";
 
 export type RouteNames = keyof inferRouterInputs<Router> | undefined;
 
@@ -44,6 +46,7 @@ export interface CreateConsoleServerOptions {
   onTrace?: (trace: Trace) => void;
   onExpressCreated?: (app: ExpressApplication) => void;
   requireAcceptTerms?: boolean;
+  layoutConfig?: LayoutConfig;
 }
 
 export const createConsoleServer = async ({
@@ -56,6 +59,7 @@ export const createConsoleServer = async ({
   onTrace,
   onExpressCreated,
   requireAcceptTerms,
+  layoutConfig,
 }: CreateConsoleServerOptions) => {
   const emitter = new Emittery<{
     invalidateQuery: RouteNames;
@@ -181,6 +185,7 @@ export const createConsoleServer = async ({
     onExpressCreated,
     wingfile,
     requireAcceptTerms,
+    layoutConfig,
   });
 
   const close = async () => {
