@@ -21,6 +21,7 @@ export const REDIS_TYPE = "wingsdk.redis.Redis"; // for backwards compat
 export const WEBSITE_TYPE = "wingsdk.cloud.Website";
 export const SECRET_TYPE = "wingsdk.cloud.Secret";
 export const SERVICE_TYPE = "wingsdk.cloud.Service";
+export const ON_DEPLOY_TYPE = "wingsdk.cloud.OnDeploy";
 
 export type FunctionHandle = string;
 export type PublisherHandle = string;
@@ -254,3 +255,15 @@ export interface SecretSchema extends BaseResourceSchema {
 
 /** Runtime attributes for cloud.Secret */
 export interface SecretAttributes {}
+
+/** Schema for cloud.OnDeploy */
+export interface OnDeploySchema extends BaseResourceSchema {
+  readonly type: typeof ON_DEPLOY_TYPE;
+  readonly props: {
+    /** The function to run on deploy. */
+    readonly functionHandle: FunctionHandle;
+  };
+}
+
+/** Runtime attributes for cloud.OnDeploy */
+export interface OnDeployAttributes {}
