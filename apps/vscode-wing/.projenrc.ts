@@ -151,6 +151,18 @@ const contributes: VSCodeExtensionContributions = {
       },
     },
   ],
+  views: {
+    explorer: [
+      {
+        id: "consoleExplorer",
+        name: "Console Explorer",
+      },
+      {
+        id: "consoleTestsExplorer",
+        name: "Console Tests",
+      },
+    ],
+  },
 };
 
 project.addFields({

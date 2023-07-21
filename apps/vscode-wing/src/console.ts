@@ -1,5 +1,3 @@
-import { spawn } from "child_process";
-import { log } from "console";
 import path from "path";
 import { Trace, createConsoleApp } from "@wingconsole/app";
 import {
@@ -10,8 +8,10 @@ import {
   window,
   workspace,
 } from "vscode";
-import { getWingBinAndArgs } from "./bin-helper";
 import { VIEW_TYPE_CONSOLE } from "./constants";
+
+import { ResourcesExplorerProvider } from "./ResourcesExplorerProvider";
+import { TestsExplorerProvider } from "./TestsExplorerProvider";
 
 const getLogger = ({ show = false }) => {
   const logger = window.createOutputChannel("Wing Console");
@@ -126,6 +126,16 @@ export class WingConsoleManager {
           <iframe src="${url}/"/>
         </body>
       </html>`;
+
+    window.registerTreeDataProvider(
+      "consoleExplorer",
+      new ResourcesExplorerProvider("")
+    );
+
+    window.registerTreeDataProvider(
+      "consoleTestsExplorer",
+      new TestsExplorerProvider("")
+    );
   }
 
   public async openFile() {

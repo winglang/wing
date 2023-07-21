@@ -163,7 +163,19 @@
           }
         }
       }
-    ]
+    ],
+    "views": {
+      "explorer": [
+        {
+          "id": "consoleExplorer",
+          "name": "Console Explorer"
+        },
+        {
+          "id": "consoleTestsExplorer",
+          "name": "Console Tests"
+        }
+      ]
+    }
   },
   "volta": {
     "extends": "../../package.json"
