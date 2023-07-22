@@ -94,7 +94,7 @@ pub mod spec {
 		match manifest {
 			JsiiFile::Assembly(asm) => Ok(asm),
 			JsiiFile::AssemblyRedirect(asm_redirect) => {
-				// new path is relative to the folder of the original assemblyResult
+				// new path is relative to the folder of the original assembly
 				let path = assembly_path
 					.parent()
 					.expect("Assembly path has no parent")
