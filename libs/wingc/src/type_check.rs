@@ -3,7 +3,7 @@ pub(crate) mod jsii_importer;
 pub mod lifts;
 pub mod symbol_env;
 
-use crate::ast::{self, ClassField, FunctionDefinition, NewExpr, TypeAnnotationKind};
+use crate::ast::{self, CalleeKind, ClassField, FunctionDefinition, NewExpr, TypeAnnotationKind};
 use crate::ast::{
 	ArgList, BinaryOperator, Class as AstClass, Expr, ExprKind, FunctionBody, FunctionParameter as AstFunctionParameter,
 	Interface as AstInterface, InterpolatedStringPart, Literal, Phase, Reference, Scope, Spanned, Stmt, StmtKind, Symbol,
@@ -71,7 +71,7 @@ pub type TypeRef = UnsafeRef<Type>;
 
 #[derive(Debug)]
 pub enum SymbolKind {
-	Type(TypeRef),
+	Type(TypeRef), // TODO: <- deprecated since we treat types as a VeriableInfo of kind VariableKind::Type
 	Variable(VariableInfo),
 	Namespace(NamespaceRef),
 }
@@ -1087,7 +1087,8 @@ pub struct Types {
 	// Note: we need the box so reallocations of the vec while growing won't change the addresses of the types since they are referenced from the TypeRef struct
 	types: Vec<Box<Type>>,
 	namespaces: Vec<Box<Namespace>>,
-	pub libraries: SymbolEnv,
+	symbol_envs: Vec<Box<SymbolEnv>>,
+	pub libraries: SymbolEnv, // ?
 	numeric_idx: usize,
 	string_idx: usize,
 	bool_idx: usize,
@@ -1100,8 +1101,6 @@ pub struct Types {
 	err_idx: usize,
 
 	type_for_expr: Vec<Option<ResolvedExpression>>,
-
-	resource_base_type: Option<TypeRef>,
 }
 
 impl Types {
@@ -1136,6 +1135,7 @@ impl Types {
 		Self {
 			types,
 			namespaces: Vec::new(),
+			symbol_envs: Vec::new(),
 			libraries,
 			numeric_idx,
 			string_idx,
@@ -1148,7 +1148,6 @@ impl Types {
 			nil_idx,
 			err_idx,
 			type_for_expr: Vec::new(),
-			resource_base_type: None,
 		}
 	}
 
@@ -1235,22 +1234,25 @@ impl Types {
 		UnsafeRef::<Namespace>(&**t as *const Namespace)
 	}
 
-	fn resource_base_type(&mut self) -> TypeRef {
-		// cache the resource base type ref
-		if self.resource_base_type.is_none() {
-			let resource_fqn = format!("{}.{}", WINGSDK_ASSEMBLY_NAME, WINGSDK_RESOURCE);
-			self.resource_base_type = Some(
-				self
-					.libraries
-					.lookup_nested_str(&resource_fqn, None)
-					.unwrap()
-					.0
-					.as_type()
-					.unwrap(),
-			);
-		}
+	pub fn add_symbol_env(&mut self, s: SymbolEnv) -> SymbolEnvRef {
+		self.symbol_envs.push(Box::new(s));
+		self.get_symbolenvref(self.symbol_envs.len() - 1)
+	}
 
-		self.resource_base_type.unwrap()
+	fn get_symbolenvref(&self, idx: usize) -> SymbolEnvRef {
+		let t = &self.symbol_envs[idx];
+		UnsafeRef::<SymbolEnv>(&**t as *const SymbolEnv)
+	}
+
+	pub fn resource_base_type(&self) -> TypeRef {
+		let resource_fqn = format!("{}.{}", WINGSDK_ASSEMBLY_NAME, WINGSDK_RESOURCE);
+		self
+			.libraries
+			.lookup_nested_str(&resource_fqn, None)
+			.expect("Resouce base class to be loaded")
+			.0
+			.as_type()
+			.expect("Resouce base class to be a type")
 	}
 
 	/// Stores the type and phase of a given expression node.
@@ -1685,7 +1687,13 @@ impl<'a> TypeChecker<'a> {
 			}
 			ExprKind::Call { callee, arg_list } => {
 				// Resolve the function's reference (either a method in the class's env or a function in the current env)
-				let (func_type, callee_phase) = self.type_check_exp(callee, env);
+				let (func_type, callee_phase) = match callee {
+					CalleeKind::Expr(expr) => self.type_check_exp(expr, env),
+					CalleeKind::SuperCall(method) => resolve_super_method(method, env, &self.types).unwrap_or_else(|e| {
+						self.type_error(e);
+						self.resolved_error()
+					}),
+				};
 				let is_option = func_type.is_option();
 				let func_type = func_type.maybe_unwrap_option();
 
@@ -1746,10 +1754,12 @@ impl<'a> TypeChecker<'a> {
 				}
 
 				// If the function is "wingc_env", then print out the current environment
-				if let ExprKind::Reference(Reference::Identifier(ident)) = &callee.kind {
-					if ident.name == "wingc_env" {
-						println!("[symbol environment at {}]", exp.span().to_string());
-						println!("{}", env.to_string());
+				if let CalleeKind::Expr(call_expr) = callee {
+					if let ExprKind::Reference(Reference::Identifier(ident)) = &call_expr.kind {
+						if ident.name == "wingc_env" {
+							println!("[symbol environment at {}]", exp.span().to_string());
+							println!("{}", env.to_string());
+						}
 					}
 				}
 
@@ -1757,11 +1767,17 @@ impl<'a> TypeChecker<'a> {
 					// When calling a an optional function, the return type is always optional
 					// To allow this to be both safe and unsurprising,
 					// the callee must be a reference with an optional accessor
-					if let ExprKind::Reference(Reference::InstanceMember { optional_accessor, .. }) = &callee.kind {
-						if *optional_accessor {
-							(self.types.make_option(func_sig.return_type), func_phase)
+					if let CalleeKind::Expr(call_expr) = callee {
+						if let ExprKind::Reference(Reference::InstanceMember { optional_accessor, .. }) = &call_expr.kind {
+							if *optional_accessor {
+								(self.types.make_option(func_sig.return_type), func_phase)
+							} else {
+								// No additional error is needed here, since the type checker will already have errored without optional chaining
+								(self.types.error(), func_phase)
+							}
 						} else {
-							// No additional error is needed here, since the type checker will already have errored without optional chaining
+							// TODO do we want syntax for this? e.g. `foo?.()`
+							self.spanned_error(callee, "Cannot call an optional function");
 							(self.types.error(), func_phase)
 						}
 					} else {
@@ -2075,14 +2091,14 @@ impl<'a> TypeChecker<'a> {
 		let sig = function_type.as_function_sig().unwrap();
 
 		// Create an environment for the function
-		let mut function_env = SymbolEnv::new(
+		let mut function_env = self.types.add_symbol_env(SymbolEnv::new(
 			Some(env.get_ref()),
 			sig.return_type,
 			false,
 			true,
 			func_def.signature.phase,
 			self.statement_idx,
-		);
+		));
 		self.add_arguments_to_env(&func_def.signature.parameters, &sig, &mut function_env);
 
 		// Type check the function body
@@ -2425,7 +2441,14 @@ impl<'a> TypeChecker<'a> {
 					_t => self.types.error(),
 				};
 
-				let mut scope_env = SymbolEnv::new(Some(env.get_ref()), env.return_type, false, false, env.phase, stmt.idx);
+				let mut scope_env = self.types.add_symbol_env(SymbolEnv::new(
+					Some(env.get_ref()),
+					env.return_type,
+					false,
+					false,
+					env.phase,
+					stmt.idx,
+				));
 				match scope_env.define(
 					&iterator,
 					SymbolKind::make_free_variable(iterator.clone(), iterator_type, false, env.phase),
@@ -2444,7 +2467,7 @@ impl<'a> TypeChecker<'a> {
 				let (cond_type, _) = self.type_check_exp(condition, env);
 				self.validate_type(cond_type, self.types.bool(), condition);
 
-				statements.set_env(SymbolEnv::new(
+				let scope_env = self.types.add_symbol_env(SymbolEnv::new(
 					Some(env.get_ref()),
 					env.return_type,
 					false,
@@ -2452,6 +2475,7 @@ impl<'a> TypeChecker<'a> {
 					env.phase,
 					stmt.idx,
 				));
+				statements.set_env(scope_env);
 
 				self.inner_scopes.push(statements);
 			}
@@ -2477,7 +2501,14 @@ impl<'a> TypeChecker<'a> {
 				// and complete the type checking process for additional errors.
 				let var_type = *cond_type.maybe_unwrap_option();
 
-				let mut stmt_env = SymbolEnv::new(Some(env.get_ref()), env.return_type, false, false, env.phase, stmt.idx);
+				let mut stmt_env = self.types.add_symbol_env(SymbolEnv::new(
+					Some(env.get_ref()),
+					env.return_type,
+					false,
+					false,
+					env.phase,
+					stmt.idx,
+				));
 
 				// Add the variable to if block scope
 				match stmt_env.define(
@@ -2495,7 +2526,7 @@ impl<'a> TypeChecker<'a> {
 				self.inner_scopes.push(statements);
 
 				if let Some(else_scope) = else_statements {
-					else_scope.set_env(SymbolEnv::new(
+					let else_scope_env = self.types.add_symbol_env(SymbolEnv::new(
 						Some(env.get_ref()),
 						env.return_type,
 						false,
@@ -2503,6 +2534,7 @@ impl<'a> TypeChecker<'a> {
 						env.phase,
 						stmt.idx,
 					));
+					else_scope.set_env(else_scope_env);
 					self.inner_scopes.push(else_scope);
 				}
 			}
@@ -2515,7 +2547,7 @@ impl<'a> TypeChecker<'a> {
 				let (cond_type, _) = self.type_check_exp(condition, env);
 				self.validate_type(cond_type, self.types.bool(), condition);
 
-				statements.set_env(SymbolEnv::new(
+				let if_scope_env = self.types.add_symbol_env(SymbolEnv::new(
 					Some(env.get_ref()),
 					env.return_type,
 					false,
@@ -2523,13 +2555,14 @@ impl<'a> TypeChecker<'a> {
 					env.phase,
 					stmt.idx,
 				));
+				statements.set_env(if_scope_env);
 				self.inner_scopes.push(statements);
 
 				for elif_scope in elif_statements {
 					let (cond_type, _) = self.type_check_exp(&elif_scope.condition, env);
 					self.validate_type(cond_type, self.types.bool(), condition);
 
-					(&elif_scope.statements).set_env(SymbolEnv::new(
+					let elif_scope_env = self.types.add_symbol_env(SymbolEnv::new(
 						Some(env.get_ref()),
 						env.return_type,
 						false,
@@ -2537,11 +2570,12 @@ impl<'a> TypeChecker<'a> {
 						env.phase,
 						stmt.idx,
 					));
+					elif_scope.statements.set_env(elif_scope_env);
 					self.inner_scopes.push(&elif_scope.statements);
 				}
 
 				if let Some(else_scope) = else_statements {
-					else_scope.set_env(SymbolEnv::new(
+					let else_scope_env = self.types.add_symbol_env(SymbolEnv::new(
 						Some(env.get_ref()),
 						env.return_type,
 						false,
@@ -2549,6 +2583,7 @@ impl<'a> TypeChecker<'a> {
 						env.phase,
 						stmt.idx,
 					));
+					else_scope.set_env(else_scope_env);
 					self.inner_scopes.push(else_scope);
 				}
 			}
@@ -2623,7 +2658,7 @@ impl<'a> TypeChecker<'a> {
 				self.add_module_to_env(env, library_name, namespace_filter, &alias, Some(&stmt));
 			}
 			StmtKind::Scope(scope) => {
-				scope.set_env(SymbolEnv::new(
+				let scope_env = self.types.add_symbol_env(SymbolEnv::new(
 					Some(env.get_ref()),
 					env.return_type,
 					false,
@@ -2631,6 +2666,7 @@ impl<'a> TypeChecker<'a> {
 					env.phase,
 					stmt.idx,
 				));
+				scope.set_env(scope_env);
 				self.inner_scopes.push(scope)
 			}
 			StmtKind::Return(exp) => {
@@ -3012,13 +3048,27 @@ impl<'a> TypeChecker<'a> {
 				finally_statements,
 			} => {
 				// Create a new environment for the try block
-				let try_env = SymbolEnv::new(Some(env.get_ref()), env.return_type, false, false, env.phase, stmt.idx);
+				let try_env = self.types.add_symbol_env(SymbolEnv::new(
+					Some(env.get_ref()),
+					env.return_type,
+					false,
+					false,
+					env.phase,
+					stmt.idx,
+				));
 				try_statements.set_env(try_env);
 				self.inner_scopes.push(try_statements);
 
 				// Create a new environment for the catch block
 				if let Some(catch_block) = catch_block {
-					let mut catch_env = SymbolEnv::new(Some(env.get_ref()), env.return_type, false, false, env.phase, stmt.idx);
+					let mut catch_env = self.types.add_symbol_env(SymbolEnv::new(
+						Some(env.get_ref()),
+						env.return_type,
+						false,
+						false,
+						env.phase,
+						stmt.idx,
+					));
 
 					// Add the exception variable to the catch block
 					if let Some(exception_var) = &catch_block.exception_var {
@@ -3039,7 +3089,14 @@ impl<'a> TypeChecker<'a> {
 
 				// Create a new environment for the finally block
 				if let Some(finally_statements) = finally_statements {
-					let finally_env = SymbolEnv::new(Some(env.get_ref()), env.return_type, false, false, env.phase, stmt.idx);
+					let finally_env = self.types.add_symbol_env(SymbolEnv::new(
+						Some(env.get_ref()),
+						env.return_type,
+						false,
+						false,
+						env.phase,
+						stmt.idx,
+					));
 					finally_statements.set_env(finally_env);
 					self.inner_scopes.push(finally_statements);
 				}
@@ -3050,6 +3107,26 @@ impl<'a> TypeChecker<'a> {
 			}
 			StmtKind::SuperConstructor { arg_list } => {
 				self.type_check_arg_list(arg_list, env);
+			}
+			StmtKind::Module { name, statements } => {
+				let ns = self.types.add_namespace(Namespace {
+					name: name.to_string(),
+					env: SymbolEnv::new(Some(env.get_ref()), env.return_type, false, false, env.phase, stmt.idx),
+					loaded: true,
+				});
+				statements.set_env(ns.env.get_ref());
+
+				// instead of pushing `statements` into `self.inner_scopes`,
+				// we need to type check the statements in the module's namespace
+				// so that subsequence statements can reference symbols inside the module
+				self.type_check_scope(statements);
+
+				match env.define(name, SymbolKind::Namespace(ns), StatementIdx::Index(stmt.idx)) {
+					Err(type_error) => {
+						self.type_error(type_error);
+					}
+					_ => {}
+				};
 			}
 		}
 	}
@@ -3195,14 +3272,14 @@ impl<'a> TypeChecker<'a> {
 
 		// Create method environment and prime it with args
 		let is_init = method_name.name == CLASS_INIT_NAME || method_name.name == CLASS_INFLIGHT_INIT_NAME;
-		let mut method_env = SymbolEnv::new(
+		let mut method_env = self.types.add_symbol_env(SymbolEnv::new(
 			Some(parent_env.get_ref()),
 			method_sig.return_type,
 			is_init,
 			true,
 			method_sig.phase,
 			statement_idx,
-		);
+		));
 		// Prime the method environment with `this`
 		if !method_def.is_static || is_init {
 			method_env
@@ -4246,6 +4323,59 @@ pub fn resolve_user_defined_type(
 		}
 	} else {
 		Err(lookup_result_to_type_error(lookup_result, user_defined_type))
+	}
+}
+
+pub fn resolve_super_method(method: &Symbol, env: &SymbolEnv, types: &Types) -> Result<(TypeRef, Phase), TypeError> {
+	let this_type = env.lookup(&Symbol::global("this"), None);
+	if let Some(SymbolKind::Variable(VariableInfo {
+		type_,
+		kind: VariableKind::Free,
+		..
+	})) = this_type
+	{
+		if type_.is_closure() {
+			return Err(TypeError {
+				message:
+					"`super` calls inside inflight closures not supported yet, see: https://github.com/winglang/wing/issues/3474"
+						.to_string(),
+				span: method.span.clone(),
+			});
+		}
+		// Get the parent type of "this" (if it's a preflight class that's directly derived from `std.Resource` it's an implicit derive so we'll treat it as if there's no parent)
+		let parent_type = type_
+			.as_class()
+			.expect("Expected \"this\" to be a class")
+			.parent
+			.filter(|t| !(t.is_preflight_class() && t.is_same_type_as(&types.resource_base_type())));
+		if let Some(parent_type) = parent_type {
+			if let Some(method_info) = parent_type.as_class().unwrap().get_method(method) {
+				Ok((method_info.type_, method_info.phase))
+			} else {
+				Err(TypeError {
+					message: format!(
+						"super class \"{}\" does not have a method named \"{}\"",
+						parent_type, method
+					),
+					span: method.span.clone(),
+				})
+			}
+		} else {
+			Err(TypeError {
+				message: format!("Cannot call super method because class {} has no parent", type_),
+				span: method.span.clone(),
+			})
+		}
+	} else {
+		Err(TypeError {
+			message: (if env.is_function {
+				"Cannot call super method inside of a static method"
+			} else {
+				"\"super\" can only be used inside of classes"
+			})
+			.to_string(),
+			span: method.span.clone(),
+		})
 	}
 }
 

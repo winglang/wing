@@ -307,6 +307,9 @@ module.exports = function({ $bucket1, $bucket2, $bucket3 }) {
           }
         },
         "bucket": "${aws_s3_bucket.PublicBucket.bucket}",
+        "depends_on": [
+          "aws_s3_bucket_public_access_block.PublicBucket_PublicAccessBlock_4FE1A1A3"
+        ],
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":\"*\",\"Action\":[\"s3:GetObject\"],\"Resource\":[\"${aws_s3_bucket.PublicBucket.arn}/*\"]}]}"
       }
     },
