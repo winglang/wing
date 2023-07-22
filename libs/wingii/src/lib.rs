@@ -23,9 +23,10 @@ pub type Result<T> = std::result::Result<T, Box<dyn Error>>;
 pub mod spec {
 	use flate2::read::GzDecoder;
 	use std::fs::File;
-	use std::io::prelude::*;
 	use std::io::Read;
-	use std::io::SeekFrom;
+	use std::path::PathBuf;
+	use std::time::Duration;
+	use std::time::SystemTime;
 
 	use crate::jsii::{Assembly, JsiiFile};
 	use crate::Result;
@@ -61,39 +62,35 @@ pub mod spec {
 	pub fn load_assembly_from_file(path_to_file: &str, compression: Option<&str>) -> Result<Assembly> {
 		let assembly_path = Path::new(path_to_file);
 
-		let manifest = if Some("gzip") == compression {
-			let gz_data = fs::read(assembly_path)?;
-			let hash = blake3::hash(&gz_data).to_string();
+		// First try loading the manifest from the cache
+		let fingerprint = get_manifest_fingerprint(assembly_path);
+		let maybe_manifest = fingerprint
+			.as_ref()
+			.and_then(|fingerprint| try_load_from_cache(&fingerprint))
+			.map(|assembly| JsiiFile::Assembly(assembly));
 
-			if let Some(cached_manifest) = try_load_from_cache(&hash) {
-				JsiiFile::Assembly(cached_manifest)
-			} else {
-				let gz_data_reader = std::io::Cursor::new(gz_data);
-				let mut assembly_gz = GzDecoder::new(gz_data_reader);
-				let mut data = Vec::new();
-				assembly_gz.read_to_end(&mut data)?;
-				let manifest = serde_json::from_slice(&data)?;
-				if let JsiiFile::Assembly(manifest) = &manifest {
-					let _ = cache_manifest(manifest, &hash);
-				}
-				manifest
-			}
+		let manifest = if let Some(manifest) = maybe_manifest {
+			manifest
 		} else {
-			if let Some(fingerprint) = get_manifest_fingerprint(assembly_path) {
-				if let Some(cached_manifest) = try_load_from_cache(&fingerprint) {
-					JsiiFile::Assembly(cached_manifest)
-				} else {
-					let manifest = fs::read_to_string(assembly_path)?;
-					let manifest = serde_json::from_str(&manifest)?;
-					if let JsiiFile::Assembly(assmbly) = &manifest {
-						let _ = cache_manifest(assmbly, &fingerprint);
-					}
-					manifest
-				}
+			// Load the manifest from the file
+			let manifest = if Some("gzip") == compression {
+				let gz_data_reader = std::io::Cursor::new(fs::read(assembly_path)?);
+				let mut manifest_data_gz = GzDecoder::new(gz_data_reader);
+				let mut data = Vec::new();
+				manifest_data_gz.read_to_end(&mut data)?;
+				serde_json::from_slice(&data)?
 			} else {
 				serde_json::from_str(&fs::read_to_string(assembly_path)?)?
+			};
+			// Attempt to cache the manifest
+			if let JsiiFile::Assembly(assmbly) = &manifest {
+				if let Some(fingerprint) = &fingerprint {
+					let _ = cache_manifest(assmbly, fingerprint);
+				}
 			}
+			manifest
 		};
+
 		match manifest {
 			JsiiFile::Assembly(asm) => Ok(asm),
 			JsiiFile::AssemblyRedirect(asm_redirect) => {
@@ -111,18 +108,24 @@ pub mod spec {
 	}
 
 	fn get_manifest_fingerprint(assembly_path: &Path) -> Option<String> {
-		let mut f = File::open(assembly_path).ok()?;
-		f.seek(SeekFrom::End(-100)).ok()?;
-		let mut buf: [u8; 100] = [0; 100];
-		let _ = f.read_exact(&mut buf).ok()?;
-		let buf = String::from_utf8_lossy(&buf);
-		let fpregx = regex::Regex::new(
-			r#"(?m)\"fingerprint\"\s*:\s*"((?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?)""#,
-		)
-		.unwrap();
-		fpregx
-			.captures(&buf)
-			.map(|cap| blake3::hash(cap.get(1).unwrap().as_str().as_bytes()).to_string())
+		struct FpData {
+			canonic_name: PathBuf,
+			modified_time: Duration,
+			len: u64,
+		}
+		let metadata = fs::metadata(assembly_path).ok()?;
+		let fp_data = FpData {
+			canonic_name: fs::canonicalize(assembly_path).ok()?,
+			modified_time: metadata.modified().ok()?.duration_since(SystemTime::UNIX_EPOCH).ok()?,
+			len: metadata.len(),
+		};
+		let fp_raw_str = format!(
+			"{}-{}-{}",
+			fp_data.canonic_name.to_string_lossy(),
+			fp_data.modified_time.as_nanos(),
+			fp_data.len
+		);
+		Some(blake3::hash(&fp_raw_str.as_bytes()).to_string())
 	}
 
 	fn cache_manifest(manifest: &Assembly, hash: &str) -> Result<()> {
