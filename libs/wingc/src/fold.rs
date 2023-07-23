@@ -1,8 +1,9 @@
 use crate::{
 	ast::{
-		ArgList, CalleeKind, CatchBlock, Class, ClassField, ElifBlock, Expr, ExprKind, FunctionBody, FunctionDefinition,
-		FunctionParameter, FunctionSignature, Interface, InterpolatedString, InterpolatedStringPart, Literal, NewExpr,
-		Reference, Scope, Stmt, StmtKind, StructField, Symbol, TypeAnnotation, TypeAnnotationKind, UserDefinedType,
+		ArgList, BringSource, CalleeKind, CatchBlock, Class, ClassField, ElifBlock, Expr, ExprKind, FunctionBody,
+		FunctionDefinition, FunctionParameter, FunctionSignature, Interface, InterpolatedString, InterpolatedStringPart,
+		Literal, NewExpr, Reference, Scope, Stmt, StmtKind, StructField, Symbol, TypeAnnotation, TypeAnnotationKind,
+		UserDefinedType,
 	},
 	dbg_panic,
 };
@@ -80,11 +81,12 @@ where
 	F: Fold + ?Sized,
 {
 	let kind = match node.kind {
-		StmtKind::Bring {
-			module_name,
-			identifier,
-		} => StmtKind::Bring {
-			module_name: f.fold_symbol(module_name),
+		StmtKind::Bring { source, identifier } => StmtKind::Bring {
+			source: match source {
+				BringSource::BuiltinModule(name) => BringSource::BuiltinModule(f.fold_symbol(name)),
+				BringSource::JsiiModule(name) => BringSource::JsiiModule(f.fold_symbol(name)),
+				BringSource::WingFile(name) => BringSource::WingFile(f.fold_symbol(name)),
+			},
 			identifier: identifier.map(|id| f.fold_symbol(id)),
 		},
 		StmtKind::Module { name, statements } => StmtKind::Module {

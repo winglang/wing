@@ -2609,10 +2609,7 @@ impl<'a> TypeChecker<'a> {
 
 				self.validate_type(exp_type, var_type, value);
 			}
-			StmtKind::Bring {
-				module_name,
-				identifier,
-			} => {
+			StmtKind::Bring { source, identifier } => {
 				// library_name is the name of the library we are importing from the JSII world
 				let library_name: String;
 				// namespace_filter describes what types we are importing from the library
@@ -2622,40 +2619,41 @@ impl<'a> TypeChecker<'a> {
 				// alias is the symbol we are giving to the imported library or namespace
 				let alias: &Symbol;
 
-				if module_name.name.starts_with('"') && module_name.name.ends_with('"') {
-					// case 1: bring "library_name" as identifier;
-					if identifier.is_none() {
-						self.spanned_error(
-							stmt,
-							format!(
-								"bring {} must be assigned to an identifier (e.g. bring \"foo\" as foo)",
-								module_name.name
-							),
-						);
-						return;
+				match &source {
+					ast::BringSource::BuiltinModule(name) => {
+						if WINGSDK_BRINGABLE_MODULES.contains(&name.name.as_str()) {
+							library_name = WINGSDK_ASSEMBLY_NAME.to_string();
+							namespace_filter = vec![name.name.clone()];
+							alias = identifier.as_ref().unwrap_or(&name);
+						} else if name.name.as_str() == WINGSDK_STD_MODULE {
+							self.spanned_error(stmt, format!("Redundant bring of \"{}\"", WINGSDK_STD_MODULE));
+							return;
+						} else {
+							self.spanned_error(stmt, format!("\"{}\" is not a built-in module", name));
+							return;
+						}
 					}
-					// We assume we have a jsii library and we use `module_name` as the library name, and set no
-					// namespace filter (we only support importing a full library at the moment)
-					library_name = module_name.name[1..module_name.name.len() - 1].to_string();
-					namespace_filter = vec![];
-					alias = identifier.as_ref().unwrap();
-				} else {
-					// case 2: bring module_name;
-					// case 3: bring module_name as identifier;
-					if WINGSDK_BRINGABLE_MODULES.contains(&module_name.name.as_str()) {
-						library_name = WINGSDK_ASSEMBLY_NAME.to_string();
-						namespace_filter = vec![module_name.name.clone()];
-						alias = identifier.as_ref().unwrap_or(&module_name);
-					} else if module_name.name.as_str() == WINGSDK_STD_MODULE {
-						self.spanned_error(stmt, format!("Redundant bring of \"{}\"", WINGSDK_STD_MODULE));
-						return;
-					} else {
-						self.spanned_error(stmt, format!("\"{}\" is not a built-in module", module_name.name));
-						return;
+					ast::BringSource::JsiiModule(name) => {
+						if identifier.is_none() {
+							self.spanned_error(
+								stmt,
+								format!(
+									"bring \"{}\" must be assigned to an identifier (e.g. bring \"foo\" as foo)",
+									name
+								),
+							);
+							return;
+						}
+						// We assume we have a jsii library and we use `module_name` as the library name, and set no
+						// namespace filter (we only support importing a full library at the moment)
+						library_name = name.name.to_string();
+						namespace_filter = vec![];
+						alias = identifier.as_ref().unwrap();
 					}
-				};
+					ast::BringSource::WingFile(_) => todo!(),
+				}
 
-				self.add_module_to_env(env, library_name, namespace_filter, &alias, Some(&stmt));
+				self.add_module_to_env(env, library_name, namespace_filter, alias, Some(&stmt));
 			}
 			StmtKind::Scope(scope) => {
 				let scope_env = self.types.add_symbol_env(SymbolEnv::new(

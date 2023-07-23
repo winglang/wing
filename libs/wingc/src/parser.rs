@@ -8,10 +8,10 @@ use tree_sitter::Node;
 use tree_sitter_traversal::{traverse, Order};
 
 use crate::ast::{
-	ArgList, BinaryOperator, CalleeKind, CatchBlock, Class, ClassField, ElifBlock, Expr, ExprKind, FunctionBody,
-	FunctionDefinition, FunctionParameter, FunctionSignature, Interface, InterpolatedString, InterpolatedStringPart,
-	Literal, NewExpr, Phase, Reference, Scope, Stmt, StmtKind, StructField, Symbol, TypeAnnotation, TypeAnnotationKind,
-	UnaryOperator, UserDefinedType,
+	ArgList, BinaryOperator, BringSource, CalleeKind, CatchBlock, Class, ClassField, ElifBlock, Expr, ExprKind,
+	FunctionBody, FunctionDefinition, FunctionParameter, FunctionSignature, Interface, InterpolatedString,
+	InterpolatedStringPart, Literal, NewExpr, Phase, Reference, Scope, Stmt, StmtKind, StructField, Symbol,
+	TypeAnnotation, TypeAnnotationKind, UnaryOperator, UserDefinedType,
 };
 use crate::comp_ctx::{CompilationContext, CompilationPhase};
 use crate::diagnostic::{report_diagnostic, Diagnostic, DiagnosticResult, WingSpan};
@@ -587,7 +587,7 @@ impl<'s> Parser<'s> {
 
 		// if the module name is a path ending in .w, create a new Parser to parse it as a new Scope,
 		// and create a StmtKind::Module instead
-		if module_name.name.ends_with(".w\"") {
+		if module_name.name.starts_with("\"") && module_name.name.ends_with(".w\"") {
 			let source_path = Path::new(&module_name.name[1..module_name.name.len() - 1]);
 			let source_path = if source_path.starts_with("./") {
 				source_path.strip_prefix("./").unwrap()
@@ -654,8 +654,18 @@ impl<'s> Parser<'s> {
 			return module;
 		}
 
+		if module_name.name.starts_with("\"") && module_name.name.ends_with("\"") {
+			return Ok(StmtKind::Bring {
+				source: BringSource::JsiiModule(Symbol {
+					name: module_name.name[1..module_name.name.len() - 1].to_string(),
+					span: module_name.span,
+				}),
+				identifier: alias,
+			});
+		}
+
 		Ok(StmtKind::Bring {
-			module_name,
+			source: BringSource::BuiltinModule(module_name),
 			identifier: alias,
 		})
 	}

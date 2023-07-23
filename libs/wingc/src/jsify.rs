@@ -9,9 +9,9 @@ use std::{borrow::Borrow, cmp::Ordering, collections::BTreeMap, path::Path, vec}
 
 use crate::{
 	ast::{
-		ArgList, BinaryOperator, CalleeKind, Class as AstClass, Expr, ExprKind, FunctionBody, FunctionDefinition,
-		InterpolatedStringPart, Literal, NewExpr, Phase, Reference, Scope, Stmt, StmtKind, Symbol, TypeAnnotationKind,
-		UnaryOperator, UserDefinedType,
+		ArgList, BinaryOperator, BringSource, CalleeKind, Class as AstClass, Expr, ExprKind, FunctionBody,
+		FunctionDefinition, InterpolatedStringPart, Literal, NewExpr, Phase, Reference, Scope, Stmt, StmtKind, Symbol,
+		TypeAnnotationKind, UnaryOperator, UserDefinedType,
 	},
 	comp_ctx::{CompilationContext, CompilationPhase},
 	dbg_panic, debug,
@@ -109,7 +109,7 @@ impl<'a> JSifier<'a> {
 			let s = self.jsify_statement(scope.env.borrow().as_ref().unwrap(), statement, &mut jsify_context); // top level statements are always preflight
 			if let StmtKind::Bring {
 				identifier: _,
-				module_name: _,
+				source: _,
 			} = statement.kind
 			{
 				imports.add_code(s);
@@ -565,29 +565,17 @@ impl<'a> JSifier<'a> {
 	fn jsify_statement(&self, env: &SymbolEnv, statement: &Stmt, ctx: &mut JSifyContext) -> CodeMaker {
 		CompilationContext::set(CompilationPhase::Jsifying, &statement.span);
 		match &statement.kind {
-			StmtKind::Bring {
-				module_name,
-				identifier,
-			} => {
-				CodeMaker::one_line(format!(
-					"const {} = {};",
-					if let Some(identifier) = identifier {
-						// use alias
-						identifier
-					} else {
-						module_name
-					},
-					if module_name.name.starts_with("\"") {
-						// TODO so many assumptions here, would only work with a JS file, see:
-						// https://github.com/winglang/wing/issues/477
-						// https://github.com/winglang/wing/issues/478
-						// https://github.com/winglang/wing/issues/1027
-						format!("require({})", module_name.name)
-					} else {
-						format!("require('{}').{}", STDLIB_MODULE, module_name.name)
-					}
-				))
-			}
+			StmtKind::Bring { source, identifier } => match source {
+				BringSource::BuiltinModule(name) => {
+					CodeMaker::one_line(format!("const {} = require(\"{}\").{}", name, STDLIB_MODULE, name))
+				}
+				BringSource::JsiiModule(name) => CodeMaker::one_line(format!(
+					"const {} = require(\"{}\")",
+					identifier.as_ref().expect("bring jsii module requires an alias"),
+					name
+				)),
+				BringSource::WingFile(_) => todo!(),
+			},
 			StmtKind::Module { name, statements } => {
 				let mut code = CodeMaker::default();
 				code.open(format!("const {} = (() => {{", name.name));
