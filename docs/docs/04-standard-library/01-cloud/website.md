@@ -188,7 +188,7 @@ The website's url.
 
 ### WebsiteProps <a name="WebsiteProps" id="@winglang/sdk.cloud.WebsiteProps"></a>
 
-website props.
+Options for `Website`.
 
 #### Initializer <a name="Initializer" id="@winglang/sdk.cloud.WebsiteProps.Initializer"></a>
 

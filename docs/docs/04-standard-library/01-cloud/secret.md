@@ -221,7 +221,7 @@ Whether to cache the value.
 
 ### SecretProps <a name="SecretProps" id="@winglang/sdk.cloud.SecretProps"></a>
 
-Properties for `Secret`.
+Options for `Secret`.
 
 #### Initializer <a name="Initializer" id="@winglang/sdk.cloud.SecretProps.Initializer"></a>
 

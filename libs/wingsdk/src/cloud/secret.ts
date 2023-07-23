@@ -9,7 +9,7 @@ import { Json, Resource } from "../std";
 export const SECRET_FQN = fqnForType("cloud.Secret");
 
 /**
- * Properties for `Secret`.
+ * Options for `Secret`.
  */
 export interface SecretProps {
   /**

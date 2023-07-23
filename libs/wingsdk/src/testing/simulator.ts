@@ -610,6 +610,7 @@ export interface BaseResourceSchema {
   readonly props: { [key: string]: any };
   /** The resource-specific attributes that are set after the resource is created. */
   readonly attrs: Record<string, any>;
+  // TODO: model dependencies
 }
 
 /** Schema for resource attributes */
