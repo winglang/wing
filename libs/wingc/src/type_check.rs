@@ -2644,9 +2644,8 @@ impl<'a> TypeChecker<'a> {
 							);
 							return;
 						}
-						// We assume we have a jsii library and we use `module_name` as the library name, and set no
-						// namespace filter (we only support importing a full library at the moment)
 						library_name = name.name.to_string();
+						// no namespace filter (we only support importing entire libraries at the moment)
 						namespace_filter = vec![];
 						alias = identifier.as_ref().unwrap();
 					}
