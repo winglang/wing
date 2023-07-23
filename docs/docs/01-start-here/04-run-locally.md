@@ -27,7 +27,7 @@ In the Wing Console window, you will see the following view of you application:
 
 ## The Map View
 
-In the console [map view](../06-tools/02-wing-console.md#map-view) you'll see three resources: a **Queue**, a **Function** and a **Bucket**. The queue and the bucket are connected through the function resource, which serves as a message handler and is set as the consumer for the queue.
+In the console [map view](../06-tools/02-wing-console.md#map-view) you'll see three resources: a **Queue**, a **Counter**, a **Function** and a **Bucket**. The queue, the counter and the bucket are connected through the function resource, which serves as a message handler and is set as the consumer for the queue.
 
 Click on the queue resource and check out to the right-hand panel. This is the [resource interaction panel](../tools/wing-console#interact-with-your-wing-application).
 
@@ -48,6 +48,10 @@ When you click on the `wing-1.txt` file, you should be able to see its contents.
 You can also download the file, using the **Download** button.
 
 The downloaded file should contain `Hello, Wing it` text (as you already saw in the preview).
+
+You can push any number of messages to the queue and watch it fill up. You can also see in the counter resource that the counter value (`Actual value`) is incremented each time a message is pushed. It is even possible to reset the counter value if you wish (use the `Reset value` button).
+
+![Counter resource view in Wing Console](./console-counter.png 'Counter resource')
 
 ## Congrats! :clap:
 

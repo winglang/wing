@@ -147,7 +147,7 @@ through the AWS Management Console.
 
 1. Open the [Amazon SQS Console](https://console.aws.amazon.com/sqs)
 2. Select your AWS region
-3. You should be able to see that you have a queue there
+3. You should be able to see that you have a queue there prefixed with `cloud-Queue-`
 4. Click **Send and receive messages**.
 5. In the **Message Body** box type `cloud` and hit **Send message**.
 6. Jump over to the [S3 Console](https://s3.console.aws.amazon.com/s3/buckets) 
@@ -155,12 +155,16 @@ through the AWS Management Console.
 8. Cycle through the buckets until you find one that contains `wing-1.txt`.
 9. Click `wing-1.txt` then click the `Open` button.
 10. The file should contain `Hello, cloud`.
+11. Open the [Amazon Dynamo DB Console](https://console.aws.amazon.com/dynamodb), and search for a table prefixed with `wing-counter-cloud`.
+12. Observe the value of the `id` attribute, which represents the counter's current value.
+13. Optional - repeat step 5 as many times as you want, and see how the bucket is filling up.
+
 
 ## Cleanup
 
 Terraform doesn't allow destroying a non-empty bucket by default. To prepare for
 easy cleanup, you may delete the newly created file by marking the checkbox next
-to `wing-1.txt`, clicking the `Delete` button, typing `permanently delete` in the
+to `wing-*.txt`, clicking the `Delete` button, typing `permanently delete` in the
 confirmation box and clicking the `Delete objects` button.
 
 Once you're done, you can destroy all of the resources that were created on your AWS account by running:
