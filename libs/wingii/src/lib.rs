@@ -56,7 +56,8 @@ pub mod spec {
 	fn try_load_from_cache(hash: &str) -> Option<Assembly> {
 		let file_path = format!("{CACHE_FILE_DIR}/{hash}.{CACHE_FILE_EXT}");
 		let data = fs::read(file_path).ok()?;
-		bincode::decode_from_slice(&data, bincode::config::standard()).ok()?.0
+		let (asm, _): (Assembly, usize) = bincode::decode_from_slice(&data, bincode::config::standard()).ok()?;
+		Some(asm)
 	}
 
 	pub fn load_assembly_from_file(path_to_file: &str, compression: Option<&str>) -> Result<Assembly> {
