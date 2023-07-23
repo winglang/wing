@@ -132,15 +132,15 @@ module.exports = function({  }) {
       }
     },
     "aws_iam_policy": {
-      "cloudWebsite_CloudFrontOacPolicy_8099FC29": {
+      "cloudWebsite_CloudfrontOacPolicyS3_787EE7B4": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Website/CloudFrontOacPolicy",
-            "uniqueId": "cloudWebsite_CloudFrontOacPolicy_8099FC29"
+            "path": "root/Default/Default/cloud.Website/CloudfrontOacPolicyS3",
+            "uniqueId": "cloudWebsite_CloudfrontOacPolicyS3_787EE7B4"
           }
         },
-        "name": "cloufront-oac-policy",
-        "policy": "{\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"cloudfront.amazonaws.com\"},\"Action\":\"s3:GetObject\",\"Resource\":[\"${aws_s3_bucket.cloudWebsite_WebsiteBucket_EB03D355.arn}/*\"],\"Condition\":{\"StringEquals\":{\"AWS:SourceArn\":\"${aws_cloudfront_distribution.cloudWebsite_Distribution_083B5AF9.arn}\"}}}]}"
+        "name": "cloufront-oac-policy-s3",
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"cloudfront.amazonaws.com\"},\"Action\":\"s3:GetObject\",\"Resource\":[\"${aws_s3_bucket.cloudWebsite_WebsiteBucket_EB03D355.arn}/*\"],\"Condition\":{\"StringEquals\":{\"AWS:SourceArn\":\"${aws_cloudfront_distribution.cloudWebsite_Distribution_083B5AF9.arn}\"}}}]}"
       }
     },
     "aws_iam_role": {
@@ -190,7 +190,7 @@ module.exports = function({  }) {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c867c4e0",
             "WING_TARGET": "tf-aws",
-            "WING_TOKEN_TFTOKEN_TOKEN_15": "${jsonencode(aws_cloudfront_distribution.cloudWebsite_Distribution_083B5AF9.domain_name)}"
+            "WING_TOKEN_TFTOKEN_TOKEN_12": "${jsonencode(aws_cloudfront_distribution.cloudWebsite_Distribution_083B5AF9.domain_name)}"
           }
         },
         "function_name": "Handler-c867c4e0",
@@ -228,21 +228,6 @@ module.exports = function({  }) {
         "force_destroy": false
       }
     },
-    "aws_s3_bucket_policy": {
-      "cloudWebsite_PublicPolicy_44BB71F3": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/cloud.Website/PublicPolicy",
-            "uniqueId": "cloudWebsite_PublicPolicy_44BB71F3"
-          }
-        },
-        "bucket": "${aws_s3_bucket.cloudWebsite_WebsiteBucket_EB03D355.bucket}",
-        "depends_on": [
-          "aws_s3_bucket_public_access_block.cloudWebsite_PublicAccessBlock_18A70311"
-        ],
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":\"*\",\"Action\":[\"s3:GetObject\"],\"Resource\":[\"${aws_s3_bucket.cloudWebsite_WebsiteBucket_EB03D355.arn}/*\"]}]}"
-      }
-    },
     "aws_s3_bucket_public_access_block": {
       "cloudWebsite_PublicAccessBlock_18A70311": {
         "//": {
@@ -251,11 +236,11 @@ module.exports = function({  }) {
             "uniqueId": "cloudWebsite_PublicAccessBlock_18A70311"
           }
         },
-        "block_public_acls": false,
-        "block_public_policy": false,
+        "block_public_acls": true,
+        "block_public_policy": true,
         "bucket": "${aws_s3_bucket.cloudWebsite_WebsiteBucket_EB03D355.bucket}",
-        "ignore_public_acls": false,
-        "restrict_public_buckets": false
+        "ignore_public_acls": true,
+        "restrict_public_buckets": true
       }
     },
     "aws_s3_bucket_server_side_encryption_configuration": {

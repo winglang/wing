@@ -62,9 +62,9 @@ exports[`default website behavior 1`] = `
       }
     },
     \\"aws_iam_policy\\": {
-      \\"Website_CloudfrontOacPolicy_56DCCB85\\": {
-        \\"name\\": \\"cloufront-oac-policy\\",
-        \\"policy\\": \\"{\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Principal\\\\\\":{\\\\\\"Service\\\\\\":\\\\\\"cloudfront.amazonaws.com\\\\\\"},\\\\\\"Action\\\\\\":\\\\\\"s3:GetObject\\\\\\",\\\\\\"Resource\\\\\\":[\\\\\\"\${aws_s3_bucket.Website_WebsiteBucket_3C0321F0.arn}/*\\\\\\"],\\\\\\"Condition\\\\\\":{\\\\\\"StringEquals\\\\\\":{\\\\\\"AWS:SourceArn\\\\\\":\\\\\\"\${aws_cloudfront_distribution.Website_Distribution_5E840E42.arn}\\\\\\"}}}]}\\"
+      \\"Website_CloudfrontOacPolicyS3_E60EFDEE\\": {
+        \\"name\\": \\"cloufront-oac-policy-s3\\",
+        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Principal\\\\\\":{\\\\\\"Service\\\\\\":\\\\\\"cloudfront.amazonaws.com\\\\\\"},\\\\\\"Action\\\\\\":\\\\\\"s3:GetObject\\\\\\",\\\\\\"Resource\\\\\\":[\\\\\\"\${aws_s3_bucket.Website_WebsiteBucket_3C0321F0.arn}/*\\\\\\"],\\\\\\"Condition\\\\\\":{\\\\\\"StringEquals\\\\\\":{\\\\\\"AWS:SourceArn\\\\\\":\\\\\\"\${aws_cloudfront_distribution.Website_Distribution_5E840E42.arn}\\\\\\"}}}]}\\"
       }
     },
     \\"aws_s3_bucket\\": {
@@ -155,13 +155,13 @@ exports[`default website behavior 2`] = `
                     "id": "CloudfrontOac",
                     "path": "root/Default/Website/CloudfrontOac",
                   },
-                  "CloudfrontOacPolicy": {
+                  "CloudfrontOacPolicyS3": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
                       "version": "0.17.0",
                     },
-                    "id": "CloudfrontOacPolicy",
-                    "path": "root/Default/Website/CloudfrontOacPolicy",
+                    "id": "CloudfrontOacPolicyS3",
+                    "path": "root/Default/Website/CloudfrontOacPolicyS3",
                   },
                   "Distribution": {
                     "constructInfo": {
@@ -355,9 +355,9 @@ exports[`website with add_json 1`] = `
       }
     },
     \\"aws_iam_policy\\": {
-      \\"Website_CloudfrontOacPolicy_56DCCB85\\": {
-        \\"name\\": \\"cloufront-oac-policy\\",
-        \\"policy\\": \\"{\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Principal\\\\\\":{\\\\\\"Service\\\\\\":\\\\\\"cloudfront.amazonaws.com\\\\\\"},\\\\\\"Action\\\\\\":\\\\\\"s3:GetObject\\\\\\",\\\\\\"Resource\\\\\\":[\\\\\\"\${aws_s3_bucket.Website_WebsiteBucket_3C0321F0.arn}/*\\\\\\"],\\\\\\"Condition\\\\\\":{\\\\\\"StringEquals\\\\\\":{\\\\\\"AWS:SourceArn\\\\\\":\\\\\\"\${aws_cloudfront_distribution.Website_Distribution_5E840E42.arn}\\\\\\"}}}]}\\"
+      \\"Website_CloudfrontOacPolicyS3_E60EFDEE\\": {
+        \\"name\\": \\"cloufront-oac-policy-s3\\",
+        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Principal\\\\\\":{\\\\\\"Service\\\\\\":\\\\\\"cloudfront.amazonaws.com\\\\\\"},\\\\\\"Action\\\\\\":\\\\\\"s3:GetObject\\\\\\",\\\\\\"Resource\\\\\\":[\\\\\\"\${aws_s3_bucket.Website_WebsiteBucket_3C0321F0.arn}/*\\\\\\"],\\\\\\"Condition\\\\\\":{\\\\\\"StringEquals\\\\\\":{\\\\\\"AWS:SourceArn\\\\\\":\\\\\\"\${aws_cloudfront_distribution.Website_Distribution_5E840E42.arn}\\\\\\"}}}]}\\"
       }
     },
     \\"aws_s3_bucket\\": {
@@ -457,13 +457,13 @@ exports[`website with add_json 2`] = `
                     "id": "CloudfrontOac",
                     "path": "root/Default/Website/CloudfrontOac",
                   },
-                  "CloudfrontOacPolicy": {
+                  "CloudfrontOacPolicyS3": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
                       "version": "0.17.0",
                     },
-                    "id": "CloudfrontOacPolicy",
-                    "path": "root/Default/Website/CloudfrontOacPolicy",
+                    "id": "CloudfrontOacPolicyS3",
+                    "path": "root/Default/Website/CloudfrontOacPolicyS3",
                   },
                   "Distribution": {
                     "constructInfo": {
