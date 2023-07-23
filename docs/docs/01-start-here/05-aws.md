@@ -156,8 +156,8 @@ through the AWS Management Console.
 9. Click `wing-1.txt` then click the `Open` button.
 10. The file should contain `Hello, cloud`.
 11. Open the [Amazon Dynamo DB Console](https://console.aws.amazon.com/dynamodb), and search for a table prefixed with `wing-counter-cloud`.
-12. Observe the value of the `id` attribute, which represents the counter's current value.
-13. Optional - repeat step 5 as many times as you want, and see how the bucket is filling up.
+12. Observe the value of the `counter` id attribute which represents the counter's current value, using the `Explore table items` button.
+13. Optional - repeat step 5 as many times as you want, and see how the bucket is filling up, and also see how the `counter` id increments.
 
 
 ## Cleanup
@@ -171,4 +171,8 @@ Once you're done, you can destroy all of the resources that were created on your
 
 ```sh
 terraform destroy
+
+{...}
+
+Destroy complete! Resources: 12 destroyed.
 ```
