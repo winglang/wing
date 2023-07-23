@@ -1,0 +1,249 @@
+# [datetime.w](../../../../../../examples/tests/sdk_tests/std/datetime.w) | compile | tf-aws
+
+## inflight.$Closure1.js
+```js
+module.exports = function({ $_d4_toUtc____hours, $d1_timestamp, $d2_timestamp, $d4_hours, $d4_timezone, $math_Util, $std_Datetime, $std_Duration, $util_Util }) {
+  class $Closure1 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async handle() {
+      const d5 = (await $std_Datetime.utcNow());
+      const d6 = (await $std_Datetime.systemNow());
+      {((cond) => {if (!cond) throw new Error("assertion failed: d2.timestamp == d1.timestamp")})(($d2_timestamp === $d1_timestamp))};
+      const d7 = (await $std_Datetime.fromIso("2023-07-18T20:18:25.177+03:00"));
+      const d8 = (await $std_Datetime.fromComponents({ year: 2023, month: 6, day: 18, hour: 20, min: 18, sec: 25, ms: 177, tz: (-180) }));
+      {((cond) => {if (!cond) throw new Error("assertion failed: d7.timestampMs == 1689700705177")})((d7.timestampMs === 1689700705177))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: d7.hours == 17")})((d7.hours === 17))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: d7.min == 18")})((d7.min === 18))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: d7.sec == 25")})((d7.sec === 25))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: d7.ms == 177")})((d7.ms === 177))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: d7.dayOfMonth == 18")})((d7.dayOfMonth === 18))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: d7.dayOfWeek == 2")})((d7.dayOfWeek === 2))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: d7.month == 6")})((d7.month === 6))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: d7.year == 2023")})((d7.year === 2023))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: d7.timestamp == d8.timestamp")})((d7.timestamp === d8.timestamp))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: d4.toUtc().hours == (d4.hours + (d4.timezone / 60))")})(($_d4_toUtc____hours === ($d4_hours + ($d4_timezone / 60))))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: d8.toUtc().hours == (d8.hours + (d8.timezone / 60))")})(((await d8.toUtc()).hours === (d8.hours + (d8.timezone / 60))))};
+      const beforeSleep = (await $std_Datetime.systemNow());
+      (await $util_Util.sleep((await $std_Duration.fromSeconds(1))));
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.floor(datetime.systemNow().timestamp - beforeSleep.timestamp) == 1")})(((await $math_Util.floor(((await $std_Datetime.systemNow()).timestamp - beforeSleep.timestamp))) === 1))};
+    }
+  }
+  return $Closure1;
+}
+
+```
+
+## main.tf.json
+```json
+{
+  "//": {
+    "metadata": {
+      "backend": "local",
+      "stackName": "root",
+      "version": "0.17.0"
+    },
+    "outputs": {
+      "root": {
+        "Default": {
+          "cloud.TestRunner": {
+            "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS"
+          }
+        }
+      }
+    }
+  },
+  "output": {
+    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+      "value": "[[\"root/Default/Default/test:inflight datetime\",\"${aws_lambda_function.testinflightdatetime_Handler_CCA19CA1.arn}\"]]"
+    }
+  },
+  "provider": {
+    "aws": [
+      {}
+    ]
+  },
+  "resource": {
+    "aws_iam_role": {
+      "testinflightdatetime_Handler_IamRole_F29772B9": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:inflight datetime/Handler/IamRole",
+            "uniqueId": "testinflightdatetime_Handler_IamRole_F29772B9"
+          }
+        },
+        "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
+      }
+    },
+    "aws_iam_role_policy": {
+      "testinflightdatetime_Handler_IamRolePolicy_BA52AB3F": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:inflight datetime/Handler/IamRolePolicy",
+            "uniqueId": "testinflightdatetime_Handler_IamRolePolicy_BA52AB3F"
+          }
+        },
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
+        "role": "${aws_iam_role.testinflightdatetime_Handler_IamRole_F29772B9.name}"
+      }
+    },
+    "aws_iam_role_policy_attachment": {
+      "testinflightdatetime_Handler_IamRolePolicyAttachment_BBFA8051": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:inflight datetime/Handler/IamRolePolicyAttachment",
+            "uniqueId": "testinflightdatetime_Handler_IamRolePolicyAttachment_BBFA8051"
+          }
+        },
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "${aws_iam_role.testinflightdatetime_Handler_IamRole_F29772B9.name}"
+      }
+    },
+    "aws_lambda_function": {
+      "testinflightdatetime_Handler_CCA19CA1": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:inflight datetime/Handler/Default",
+            "uniqueId": "testinflightdatetime_Handler_CCA19CA1"
+          }
+        },
+        "environment": {
+          "variables": {
+            "WING_FUNCTION_NAME": "Handler-c8211bab",
+            "WING_TARGET": "tf-aws"
+          }
+        },
+        "function_name": "Handler-c8211bab",
+        "handler": "index.handler",
+        "publish": true,
+        "role": "${aws_iam_role.testinflightdatetime_Handler_IamRole_F29772B9.arn}",
+        "runtime": "nodejs18.x",
+        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
+        "s3_key": "${aws_s3_object.testinflightdatetime_Handler_S3Object_972D133E.key}",
+        "timeout": 30,
+        "vpc_config": {
+          "security_group_ids": [],
+          "subnet_ids": []
+        }
+      }
+    },
+    "aws_s3_bucket": {
+      "Code": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Code",
+            "uniqueId": "Code"
+          }
+        },
+        "bucket_prefix": "code-c84a50b1-"
+      }
+    },
+    "aws_s3_object": {
+      "testinflightdatetime_Handler_S3Object_972D133E": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:inflight datetime/Handler/S3Object",
+            "uniqueId": "testinflightdatetime_Handler_S3Object_972D133E"
+          }
+        },
+        "bucket": "${aws_s3_bucket.Code.bucket}",
+        "key": "<ASSET_KEY>",
+        "source": "<ASSET_SOURCE>"
+      }
+    }
+  }
+}
+```
+
+## preflight.js
+```js
+const $stdlib = require('@winglang/sdk');
+const $outdir = process.env.WING_SYNTH_DIR ?? ".";
+const std = $stdlib.std;
+const $wing_is_test = process.env.WING_IS_TEST === "true";
+const cloud = require('@winglang/sdk').cloud;
+const util = require('@winglang/sdk').util;
+const math = require('@winglang/sdk').math;
+class $Root extends $stdlib.std.Resource {
+  constructor(scope, id) {
+    super(scope, id);
+    class $Closure1 extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        this.display.hidden = true;
+        this._addInflightOps("handle", "$inflight_init");
+      }
+      static _toInflightType(context) {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("./inflight.$Closure1.js")({
+            $_d4_toUtc____hours: ${context._lift((d4.toUtc()).hours)},
+            $d1_timestamp: ${context._lift(d1.timestamp)},
+            $d2_timestamp: ${context._lift(d2.timestamp)},
+            $d4_hours: ${context._lift(d4.hours)},
+            $d4_timezone: ${context._lift(d4.timezone)},
+            $math_Util: ${context._lift(math.Util)},
+            $std_Datetime: ${context._lift(std.Datetime)},
+            $std_Duration: ${context._lift(std.Duration)},
+            $util_Util: ${context._lift(util.Util)},
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const $Closure1Client = ${$Closure1._toInflightType(this).text};
+            const client = new $Closure1Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("handle")) {
+          $Closure1._registerBindObject((d4.toUtc()).hours, host, []);
+          $Closure1._registerBindObject(d1.timestamp, host, []);
+          $Closure1._registerBindObject(d2.timestamp, host, []);
+          $Closure1._registerBindObject(d4.hours, host, []);
+          $Closure1._registerBindObject(d4.timezone, host, []);
+        }
+        super._registerBind(host, ops);
+      }
+    }
+    const d1 = (std.Datetime.utcNow());
+    const d2 = (std.Datetime.systemNow());
+    {((cond) => {if (!cond) throw new Error("assertion failed: d2.toUtc().toIso() == d1.toIso()")})((((d2.toUtc()).toIso()) === (d1.toIso())))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: d2.timestamp == d1.timestamp")})((d2.timestamp === d1.timestamp))};
+    const d3 = (std.Datetime.fromIso("2023-07-18T20:18:25.177+03:00"));
+    {((cond) => {if (!cond) throw new Error("assertion failed: d3.timestampMs == 1689700705177")})((d3.timestampMs === 1689700705177))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: d3.hours == 17")})((d3.hours === 17))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: d3.min == 18")})((d3.min === 18))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: d3.sec == 25")})((d3.sec === 25))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: d3.ms == 177")})((d3.ms === 177))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: d3.dayOfMonth == 18")})((d3.dayOfMonth === 18))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: d3.dayOfWeek == 2")})((d3.dayOfWeek === 2))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: d3.month == 6")})((d3.month === 6))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: d3.year == 2023")})((d3.year === 2023))};
+    const d4 = (std.Datetime.fromComponents({ year: 2023, month: 6, day: 18, hour: 20, min: 18, sec: 25, ms: 177, tz: (-180) }));
+    {((cond) => {if (!cond) throw new Error("assertion failed: d4.timezone == -180")})((d4.timezone === (-180)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: d4.timestampMs == 1689700705177")})((d4.timestampMs === 1689700705177))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: d4.hours == 20")})((d4.hours === 20))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: d4.min == 18")})((d4.min === 18))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: d4.sec == 25")})((d4.sec === 25))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: d4.ms == 177")})((d4.ms === 177))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: d4.dayOfMonth == 18")})((d4.dayOfMonth === 18))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: d4.dayOfWeek == 2")})((d4.dayOfWeek === 2))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: d4.month == 6")})((d4.month === 6))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: d4.year == 2023")})((d4.year === 2023))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: d4.toUtc().hours == (d4.hours + (d4.timezone / 60))")})(((d4.toUtc()).hours === (d4.hours + (d4.timezone / 60))))};
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:inflight datetime",new $Closure1(this,"$Closure1"));
+  }
+}
+const $App = $stdlib.core.App.for(process.env.WING_TARGET);
+new $App({ outdir: $outdir, name: "datetime", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test }).synth();
+
+```
+
