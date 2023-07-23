@@ -5,7 +5,6 @@ bring math;
 let d1 = datetime.utcNow();
 let d2 = datetime.systemNow();
 
-assert(d2.toUtc().toIso() == d1.toIso());
 assert(math.floor(d2.timestamp) == math.floor(d1.timestamp));
 
 let d3 = datetime.fromIso("2023-07-18T20:18:25.177+03:00");

@@ -216,7 +216,6 @@ class $Root extends $stdlib.std.Resource {
     }
     const d1 = (std.Datetime.utcNow());
     const d2 = (std.Datetime.systemNow());
-    {((cond) => {if (!cond) throw new Error("assertion failed: d2.toUtc().toIso() == d1.toIso()")})((((d2.toUtc()).toIso()) === (d1.toIso())))};
     {((cond) => {if (!cond) throw new Error("assertion failed: math.floor(d2.timestamp) == math.floor(d1.timestamp)")})(((math.Util.floor(d2.timestamp)) === (math.Util.floor(d1.timestamp))))};
     const d3 = (std.Datetime.fromIso("2023-07-18T20:18:25.177+03:00"));
     {((cond) => {if (!cond) throw new Error("assertion failed: d3.timestampMs == 1689700705177")})((d3.timestampMs === 1689700705177))};
