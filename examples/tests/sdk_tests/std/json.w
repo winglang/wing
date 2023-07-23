@@ -39,6 +39,20 @@ assert(Json.tryParse(nil) == nil);
 assert(Json.tryParse("boom") == nil);
 assert(Json.tryParse("") == nil);
 
+//-----------------------------------------------------------------------------
+// isEquals()
+let jsonA = Json { numbers: [1, 2, 3], something: "else" };
+let jsonB = MutJson { something: "else", numbers: [1, 2, 3] };
+let jsonC = MutJson { something: "different", numbers: [1, 2, 3, 4] };
+
+assert(Json.isEquals(jsonA, jsonA) == true);
+assert(Json.isEquals(jsonA, Json.deepCopy(jsonB)) == true);
+assert(Json.isEquals(jsonA, Json.deepCopy(jsonC)) == false);
+
+assert(MutJson.isEquals(jsonB, jsonB) == true);
+assert(MutJson.isEquals(Json.deepCopyMut(jsonA), jsonB) == true);
+assert(MutJson.isEquals(jsonB, jsonC) == false);
+
 
 /*
 Will add test later:
