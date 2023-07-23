@@ -141,10 +141,36 @@ export class Json {
    * @returns Boolean value corresponding if the Json objects are equal
    */
   public static isEquals(jsonA: Json, jsonB: Json): boolean {
-    return isEquals(jsonA, jsonB);
+    if (jsonA === jsonB) {
+      return true;
+    }
+    if (!jsonA || !jsonB) {
+      return false;
+    }
+    const aKeys = Object.keys(jsonA).sort((a, b) => a.localeCompare(b));
+    const bKeys = Object.keys(jsonB).sort((a, b) => a.localeCompare(b));
+    if (aKeys.length !== bKeys.length) {
+      return false;
+    }
+    for (let i = 0; i < aKeys.length; i++) {
+      if (aKeys[i] !== bKeys[i]) {
+        return false;
+      }
+    }
+    for (let i = 0; i < Object.keys(jsonA).length; i++) {
+      const key = Object.keys(jsonA)[i] as keyof typeof jsonA;
+      if (typeof jsonA[key] === "object" && typeof jsonB[key] === "object") {
+        if (this.isEquals(jsonA[key] as any, jsonB[key] as any) === false) {
+          return false;
+        }
+      } else if (jsonA[key] !== jsonB[key]) {
+        return false;
+      }
+    }
+    return true;
   }
 
-  private constructor() { }
+  private constructor() {}
 
   /**
    * Returns a specified element from the Json.
@@ -276,17 +302,7 @@ export class MutJson {
     return InflightClient.forType(__filename, this.name);
   }
 
-  /**
-   * A recursive deep comparison of two MutJson objects to determine if they are equal.
-   * @param jsonA The first MutJson object to compare
-   * @param jsonB The second MutJson object to compare
-   * @returns Boolean value corresponding if the Json objects are equal
-   */
-  public static isEquals(jsonA: MutJson, jsonB: MutJson): boolean {
-    return isEquals(jsonA, jsonB);
-  }
-
-  private constructor() { }
+  private constructor() {}
 
   /**
    * Returns a specified element from the Json.
@@ -432,34 +448,4 @@ export class MutJson {
   public tryAsBool(): boolean | undefined {
     throw new Error("Macro");
   }
-}
-
-const isEquals = (objA: any, objB: any): boolean => {
-  if (objA === objB) {
-    return true;
-  }
-  if (!objA || !objB) {
-    return false;
-  }
-  const aKeys = Object.keys(objA).sort((a, b) => a.localeCompare(b));
-  const bKeys = Object.keys(objB).sort((a, b) => a.localeCompare(b));
-  if (aKeys.length !== bKeys.length) {
-    return false;
-  }
-  for (let i = 0; i < aKeys.length; i++) {
-    if (aKeys[i] !== bKeys[i]) {
-      return false;
-    }
-  }
-  for (let i = 0; i < Object.keys(objA).length; i++) {
-    const key = Object.keys(objA)[i] as keyof typeof objA;
-    if (typeof objA[key] === "object" && typeof objB[key] === "object") {
-      if (isEquals(objA[key] as any, objB[key] as any) === false) {
-        return false;
-      }
-    } else if (objA[key] !== objB[key]) {
-      return false;
-    }
-  }
-  return true;
 }

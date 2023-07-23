@@ -302,6 +302,12 @@ class $Root extends $stdlib.std.Resource {
     {((cond) => {if (!cond) throw new Error("assertion failed: Json.tryParse(nil) == nil")})((((args) => { try { return (args === undefined) ? undefined : JSON.parse(args); } catch (err) { return undefined; } })(undefined) === undefined))};
     {((cond) => {if (!cond) throw new Error("assertion failed: Json.tryParse(\"boom\") == nil")})((((args) => { try { return (args === undefined) ? undefined : JSON.parse(args); } catch (err) { return undefined; } })("boom") === undefined))};
     {((cond) => {if (!cond) throw new Error("assertion failed: Json.tryParse(\"\") == nil")})((((args) => { try { return (args === undefined) ? undefined : JSON.parse(args); } catch (err) { return undefined; } })("") === undefined))};
+    const jsonA = Object.freeze({"numbers":[1, 2, 3],"something":"else"});
+    const jsonB = {"something":"else","numbers":[1, 2, 3]};
+    const jsonC = {"something":"different","numbers":[1, 2, 3, 4]};
+    {((cond) => {if (!cond) throw new Error("assertion failed: Json.isEquals(jsonA, jsonA) == true")})(((std.Json.isEquals(jsonA,jsonA)) === true))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: Json.isEquals(jsonA, Json.deepCopy(jsonB)) == true")})(((std.Json.isEquals(jsonA,Object.freeze(JSON.parse(JSON.stringify(jsonB))))) === true))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: Json.isEquals(jsonA, Json.deepCopy(jsonC)) == false")})(((std.Json.isEquals(jsonA,Object.freeze(JSON.parse(JSON.stringify(jsonC))))) === false))};
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);

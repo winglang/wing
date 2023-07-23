@@ -49,6 +49,18 @@ source: libs/wingc/src/lsp/completions.rs
   command:
     title: triggerParameterHints
     command: editor.action.triggerParameterHints
+- label: isEquals
+  kind: 2
+  detail: "(jsonA: Json, jsonB: Json): bool"
+  documentation:
+    kind: markdown
+    value: "```wing\nstatic isEquals: (jsonA: Json, jsonB: Json): bool\n```\n---\nA recursive deep comparison of two Json objects to determine if they are equal.\n\n\n### Returns\nBoolean value corresponding if the Json objects are equal"
+  sortText: ff|isEquals
+  insertText: isEquals($0)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
 - label: keys
   kind: 2
   detail: "(json: any): Array<str>"

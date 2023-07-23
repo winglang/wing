@@ -49,11 +49,6 @@ assert(Json.isEquals(jsonA, jsonA) == true);
 assert(Json.isEquals(jsonA, Json.deepCopy(jsonB)) == true);
 assert(Json.isEquals(jsonA, Json.deepCopy(jsonC)) == false);
 
-assert(MutJson.isEquals(jsonB, jsonB) == true);
-assert(MutJson.isEquals(Json.deepCopyMut(jsonA), jsonB) == true);
-assert(MutJson.isEquals(jsonB, jsonC) == false);
-
-
 /*
 Will add test later:
 test "setWithNonMutJsonObject()" {
