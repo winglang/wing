@@ -33,6 +33,21 @@ let setup = new cloud.OnDeploy(inflight () => {
 });
 ```
 
+To specify that the `cloud.OnDeploy` resource should be run before or after another resource is created or updated, use the `executeBefore` or `executeAfter` properties:
+
+```ts playground
+bring cloud;
+
+let counter = new cloud.Counter();
+
+let setup2 = new cloud.OnDeploy(inflight () => {
+  counter.inc();
+}) as "setup2";
+let setup1 = new cloud.OnDeploy(inflight () => {
+  counter.set(10);
+}, executeBefore: [setup2]) as "setup1";
+```
+
 ## Target-specific details
 
 ### Simulator (`sim`)
