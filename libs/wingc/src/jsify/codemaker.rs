@@ -58,6 +58,12 @@ impl CodeMaker {
 		self.indent += 1;
 	}
 
+	pub fn insert_line(&mut self, index: usize, line: String) {
+		// get the indent of the current line at that index
+		let indent = self.lines.get(index).map(|(indent, _)| *indent).unwrap_or(self.indent);
+		self.lines.insert(index, (indent, line));
+	}
+
 	pub fn one_line<S: Into<String>>(s: S) -> CodeMaker {
 		let mut code = CodeMaker::default();
 		code.line(s);
