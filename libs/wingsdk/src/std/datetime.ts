@@ -47,14 +47,17 @@ export class Datetime {
    * returns the current time in UTC timezone
    */
   static utcNow(): Datetime {
-    return new Datetime(new Date(), 0);
+    return new Datetime();
   }
 
   /**
    * returns the current time in system timezone
    */
   static systemNow(): Datetime {
-    return new Datetime();
+    const date = new Date();
+    date.setTime(date.getTime() - date.getTimezoneOffset() * 60 * 1000);
+
+    return new Datetime(date, date.getTimezoneOffset());
   }
 
   /**
@@ -62,7 +65,7 @@ export class Datetime {
    * @param iso ISO-8601 string
    */
   static fromIso(iso: string): Datetime {
-    return new Datetime(new Date(iso), 0);
+    return new Datetime(new Date(iso));
   }
 
   /**
@@ -73,7 +76,6 @@ export class Datetime {
     const date = new Date(
       Date.UTC(c.year, c.month, c.day, c.hour, c.min, c.sec, c.ms)
     );
-    date.setTime(date.getTime() + c.tz * 60 * 1000);
 
     return new Datetime(date, c.tz);
   }
@@ -90,10 +92,7 @@ export class Datetime {
   /** @internal */
   private readonly _timezoneOffset: number = 0;
 
-  private constructor(
-    date: Date = new Date(),
-    timezoneOffset = date.getTimezoneOffset()
-  ) {
+  private constructor(date: Date = new Date(), timezoneOffset = 0) {
     this._date = date;
     this._timezoneOffset = timezoneOffset;
   }
@@ -102,104 +101,94 @@ export class Datetime {
    *  returns a timestamp of non-leap seconds since epoch
    */
   get timestamp(): number {
-    return this._date.valueOf() / 1000;
+    return this.timestampMs / 1000;
   }
 
   /**
    *  returns a timestamp of non-leap milliseconds since epoch
    */
   get timestampMs(): number {
-    return this._date.valueOf();
+    // since converting between timezones/ declaring a date in a timezone other than the local or UTC
+    // isn't native to js, we keep the date in a UTC time, then retrieving back the the original timestamp,
+    // this way the date components (hours, month, day, minutes, etc..) are persistent
+    // and retrieved in the same order for all of the different constructing methods and the timestamp is correct.
+    return this._date.valueOf() + this._timezoneOffset * 60 * 1000;
   }
 
   /**
    * returns the hour of the local machine time or in utc
    */
   get hours(): number {
-    return !this._timezoneOffset
-      ? this._date.getUTCHours()
-      : this._date.getHours();
+    return this._date.getUTCHours();
   }
 
   /**
    * returns the minute of the local machine time or in utc
    */
   get min(): number {
-    return !this._timezoneOffset
-      ? this._date.getUTCMinutes()
-      : this._date.getMinutes();
+    return this._date.getUTCMinutes();
   }
 
   /**
    * returns the seconds of the local machine time or in utc
    */
   get sec(): number {
-    return !this._timezoneOffset
-      ? this._date.getUTCSeconds()
-      : this._date.getSeconds();
+    return this._date.getUTCSeconds();
   }
 
   /**
    * returns the milliseconds of the local machine time or in utc
    */
   get ms(): number {
-    return !this._timezoneOffset
-      ? this._date.getUTCMilliseconds()
-      : this._date.getMilliseconds();
+    return this._date.getUTCMilliseconds();
   }
 
   /**
    * returns the day of month in the local machine time or in utc (1 - 31)
    */
   get dayOfMonth(): number {
-    return !this._timezoneOffset
-      ? this._date.getUTCDate()
-      : this._date.getDate();
+    return this._date.getUTCDate();
   }
 
   /**
    * returns the day in month of the local machine time or in utc (0 - 6)
    */
   get dayOfWeek(): number {
-    return !this._timezoneOffset ? this._date.getUTCDay() : this._date.getDay();
+    return this._date.getUTCDay();
   }
 
   /**
    * returns the month of the local machine time or in utc (0 - 11)
    */
   get month(): number {
-    return !this._timezoneOffset
-      ? this._date.getUTCMonth()
-      : this._date.getMonth();
+    return this._date.getUTCMonth();
   }
 
   /**
    * returns the year of the local machine time or in utc
    */
   get year(): number {
-    return !this._timezoneOffset
-      ? this._date.getUTCFullYear()
-      : this._date.getFullYear();
+    return this._date.getUTCFullYear();
   }
 
   /**
    * returns the offset in minutes from UTC
    */
   get timezone(): number {
-    return this._date.getTimezoneOffset();
+    return this._timezoneOffset;
   }
 
   /**
    * returns a Datetime represents the same date in utc
    */
   toUtc(): Datetime {
-    return new Datetime(new Date(this._date), 0);
+    return new Datetime(new Date(this.timestampMs));
   }
 
   /**
    * returns ISO-8601 string
    */
   toIso(): string {
-    return this._date.toISOString();
+    return new Date(this.timestampMs).toISOString();
   }
 }
