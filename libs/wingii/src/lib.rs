@@ -35,7 +35,7 @@ pub mod spec {
 
 	pub const SPEC_FILE_NAME: &str = ".jsii";
 	pub const REDIRECT_FIELD: &str = "jsii/file-redirect";
-	const CACHE_FILE_EXT: &str = "msgpack";
+	const CACHE_FILE_EXT: &str = "bincode";
 	const CACHE_FILE_DIR: &str = "/tmp/.wing/jsii_manifest_cache";
 
 	pub fn find_assembly_file(directory: &str) -> Result<String> {
@@ -56,7 +56,7 @@ pub mod spec {
 	fn try_load_from_cache(hash: &str) -> Option<Assembly> {
 		let file_path = format!("{CACHE_FILE_DIR}/{hash}.{CACHE_FILE_EXT}");
 		let data = fs::read(file_path).ok()?;
-		rmp_serde::decode::from_slice(&data).ok()?
+		bincode::decode_from_slice(&data, bincode::config::standard()).ok()?.0
 	}
 
 	pub fn load_assembly_from_file(path_to_file: &str, compression: Option<&str>) -> Result<Assembly> {
@@ -131,7 +131,7 @@ pub mod spec {
 	fn cache_manifest(manifest: &Assembly, hash: &str) -> Result<()> {
 		fs::create_dir_all(CACHE_FILE_DIR)?;
 		let mut writer = File::create(format!("{CACHE_FILE_DIR}/{hash}.{CACHE_FILE_EXT}"))?;
-		rmp_serde::encode::write(&mut writer, manifest)?;
+		bincode::encode_into_std_write(manifest, &mut writer, bincode::config::standard())?;
 		Ok(())
 	}
 }
