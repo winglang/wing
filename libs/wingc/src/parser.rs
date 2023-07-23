@@ -23,15 +23,12 @@ use crate::{dbg_panic, WINGSDK_STD_MODULE, WINGSDK_TEST_CLASS_NAME};
 // this is meant to serve as a bandaide to be removed once wing is further developed.
 // k=grammar, v=optional_message, example: ("generic", "targed impl: 1.0.0")
 static UNIMPLEMENTED_GRAMMARS: phf::Map<&'static str, &'static str> = phf_map! {
-	"any" => "see https://github.com/winglang/wing/issues/434",
-	"Promise" => "see https://github.com/winglang/wing/issues/529",
-	"preflight_closure" => "see https://github.com/winglang/wing/issues/474",
-	"pure_closure" => "see https://github.com/winglang/wing/issues/474",
-	"storage_modifier" => "see https://github.com/winglang/wing/issues/107",
-	"access_modifier" => "see https://github.com/winglang/wing/issues/108",
-	"await_expression" => "see https://github.com/winglang/wing/issues/116",
-	"defer_expression" => "see https://github.com/winglang/wing/issues/116",
-	"=>" => "see https://github.com/winglang/wing/issues/474",
+	"any" => "https://github.com/winglang/wing/issues/434",
+	"Promise" => "https://github.com/winglang/wing/issues/529",
+	"storage_modifier" => "https://github.com/winglang/wing/issues/107",
+	"access_modifier" => "https://github.com/winglang/wing/issues/108",
+	"await_expression" => "https://github.com/winglang/wing/issues/116",
+	"defer_expression" => "https://github.com/winglang/wing/issues/116",
 };
 
 static RESERVED_WORDS: phf::Set<&'static str> = phf_set! {
@@ -221,7 +218,7 @@ impl<'s> Parser<'s> {
 		if let Some(entry) = UNIMPLEMENTED_GRAMMARS.get(&grammar_element) {
 			self.with_error(
 				format!(
-					"{} \"{}\" is not supported yet {}",
+					"{} \"{}\" is not supported yet - see {}",
 					grammar_context, grammar_element, entry
 				),
 				node,
@@ -1604,7 +1601,6 @@ impl<'s> Parser<'s> {
 				ExprKind::FunctionClosure(self.build_anonymous_closure(&expression_node, Phase::Inflight)?),
 				expression_span,
 			)),
-			"pure_closure" => self.with_error("Pure phased anonymous closures not implemented yet", expression_node),
 			"array_literal" => {
 				let array_type = if let Some(type_node) = expression_node.child_by_field_name("type") {
 					Some(self.build_type_annotation(&type_node, phase)?)
