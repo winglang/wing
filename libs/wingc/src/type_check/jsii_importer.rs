@@ -1,3 +1,5 @@
+use std::collections::BTreeMap;
+
 use crate::{
 	ast::{Phase, Symbol},
 	debug,
@@ -1022,18 +1024,16 @@ impl From<&Option<jsii::Docs>> for Docs {
 			return Docs::default()
 		};
 
-		let docs = docs.clone();
-
 		Docs {
-			custom: docs.custom.unwrap_or_default(),
-			remarks: docs.remarks,
-			summary: docs.summary,
-			default: docs.default,
-			deprecated: docs.deprecated,
-			example: docs.example,
-			see: docs.see,
-			returns: docs.returns,
-			stability: docs.stability,
+			custom: docs.custom.as_ref().unwrap_or(&BTreeMap::default()).clone(),
+			remarks: docs.remarks.clone(),
+			summary: docs.summary.clone(),
+			default: docs.default.clone(),
+			deprecated: docs.deprecated.clone(),
+			example: docs.example.clone(),
+			see: docs.see.clone(),
+			returns: docs.returns.clone(),
+			stability: docs.stability.clone(),
 			subclassable: docs.subclassable,
 		}
 	}

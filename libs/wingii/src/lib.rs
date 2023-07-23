@@ -206,10 +206,11 @@ pub mod type_system {
 		}
 
 		fn add_assembly(&mut self, assembly: Assembly) -> Result<AssemblyName> {
-			if !self.assemblies.contains_key(&assembly.name) {
-				self.assemblies.insert(assembly.name.clone(), assembly.clone());
+			let name = assembly.name.clone();
+			if !self.assemblies.contains_key(&name) {
+				self.assemblies.insert(name.clone(), assembly);
 			}
-			Ok(assembly.name)
+			Ok(name)
 		}
 
 		pub fn load_dep(&mut self, dep: &str, search_start: &str) -> Result<AssemblyName> {
