@@ -58,10 +58,11 @@ impl CodeMaker {
 		self.indent += 1;
 	}
 
-	pub fn insert_line(&mut self, index: usize, line: String) {
+	/// Insert a line at the given index.
+	pub fn insert_line<S: Into<String>>(&mut self, index: usize, line: S) {
 		// get the indent of the current line at that index
 		let indent = self.lines.get(index).map(|(indent, _)| *indent).unwrap_or(self.indent);
-		self.lines.insert(index, (indent, line));
+		self.lines.insert(index, (indent, line.into()));
 	}
 
 	pub fn one_line<S: Into<String>>(s: S) -> CodeMaker {
@@ -148,6 +149,24 @@ mod tests {
 				  hello
 				  world
 				>
+			"#}
+		);
+	}
+
+	#[test]
+	fn codemaker_insert_line() {
+		let mut code = CodeMaker::default();
+		code.open("if true {");
+		code.line("let b = 2;");
+		code.close("}");
+		code.insert_line(1, "let a = 1;");
+		assert_eq!(
+			code.to_string(),
+			indoc! {r#"
+				if true {
+				  let a = 1;
+				  let b = 2;
+				}
 			"#}
 		);
 	}
