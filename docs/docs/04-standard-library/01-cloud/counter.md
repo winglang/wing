@@ -255,7 +255,7 @@ The initial value of the counter.
 
 ### CounterProps <a name="CounterProps" id="@winglang/sdk.cloud.CounterProps"></a>
 
-Properties for `Counter`.
+Options for `Counter`.
 
 #### Initializer <a name="Initializer" id="@winglang/sdk.cloud.CounterProps.Initializer"></a>
 

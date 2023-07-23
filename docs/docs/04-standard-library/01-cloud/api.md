@@ -560,7 +560,7 @@ let ApiPostProps = cloud.ApiPostProps{ ... };
 
 ### ApiProps <a name="ApiProps" id="@winglang/sdk.cloud.ApiProps"></a>
 
-Properties for `Api`.
+Options for `Api`.
 
 #### Initializer <a name="Initializer" id="@winglang/sdk.cloud.ApiProps.Initializer"></a>
 

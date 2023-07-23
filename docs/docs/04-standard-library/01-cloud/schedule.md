@@ -217,7 +217,7 @@ The maximum amount of time the function can run.
 
 ### ScheduleProps <a name="ScheduleProps" id="@winglang/sdk.cloud.ScheduleProps"></a>
 
-Properties for `Schedule`.
+Options for `Schedule`.
 
 #### Initializer <a name="Initializer" id="@winglang/sdk.cloud.ScheduleProps.Initializer"></a>
 
