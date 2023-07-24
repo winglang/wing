@@ -6,9 +6,14 @@ import {
   TopResizableWidget,
 } from "@wingconsole/design-system";
 import { State } from "@wingconsole/server";
-import { LayoutConfig } from "@wingconsole/server";
+import {
+  LayoutConfig,
+  LayoutComponentType,
+  LayoutComponent,
+} from "@wingconsole/server";
 import classNames from "classnames";
-import { useEffect, useMemo } from "react";
+import { RenderComponent } from "framer-motion";
+import { useCallback, useEffect, useMemo } from "react";
 
 import { ConsoleLogsFilters } from "../features/console-logs-filters.js";
 import { ConsoleLogs } from "../features/console-logs.js";
@@ -19,6 +24,7 @@ import { Explorer } from "../ui/explorer.js";
 import { ResourceMetadata } from "../ui/resource-metadata.js";
 
 import { Header } from "./header.js";
+import { LeftPanel } from "./left-panel.js";
 import { StatusBar } from "./status-bar.js";
 import { TermsAndConditionsModal } from "./terms-and-conditions-modal.js";
 import { useLayout } from "./use-layout.js";
@@ -26,7 +32,7 @@ import { useLayout } from "./use-layout.js";
 export interface LayoutProps {
   cloudAppState: State;
   wingVersion: string | undefined;
-  layoutConfig?: LayoutConfig;
+  layoutConfig: LayoutConfig;
 }
 
 const defaultLayoutConfig: LayoutConfig = {
@@ -34,15 +40,22 @@ const defaultLayoutConfig: LayoutConfig = {
     hide: false,
     showThemeToggle: true,
   },
-  explorer: {
-    hide: false,
+  leftPanel: {
+    components: [
+      {
+        type: "explorer",
+      },
+      {
+        type: "tests",
+      },
+    ],
   },
-  testsTree: {
-    hide: false,
-  },
-  logs: {
-    hide: false,
-    size: "default",
+  bottomPanel: {
+    components: [
+      {
+        type: "logs",
+      },
+    ],
   },
   statusBar: {
     hide: false,
@@ -108,6 +121,91 @@ export const DefaultLayout = ({
     };
   }, [layoutConfig]);
 
+  const renderLayoutComponent = useCallback(
+    (component: LayoutComponent) => {
+      switch (component.type) {
+        case "explorer": {
+          return (
+            <div key={component.type} className="flex grow">
+              <Explorer
+                loading={loading}
+                items={items}
+                selectedItems={selectedItems}
+                onSelectedItemsChange={setSelectedItems}
+                expandedItems={expandedItems}
+                onExpandedItemsChange={setExpandedItems}
+                onExpandAll={expandAll}
+                onCollapseAll={collapseAll}
+                data-testid="explorer-tree-menu"
+              />
+            </div>
+          );
+        }
+        case "tests": {
+          return <TestsTreeView key={component.type} />;
+        }
+        case "logs": {
+          return (
+            <div
+              key={component.type}
+              className={classNames(
+                "flex-1 flex flex-col min-w-[10rem] min-h-[15rem]",
+              )}
+            >
+              <div className="relative h-full flex flex-col gap-2">
+                {loading && (
+                  <div
+                    className={classNames(
+                      "absolute h-full w-full z-50 bg-white/70 dark:bg-slate-600/70",
+                      theme.text2,
+                    )}
+                  />
+                )}
+                <ConsoleLogsFilters
+                  selectedLogTypeFilters={selectedLogTypeFilters}
+                  setSelectedLogTypeFilters={setSelectedLogTypeFilters}
+                  clearLogs={() => setLogsTimeFilter(Date.now())}
+                  isLoading={loading}
+                  onSearch={setSearchText}
+                />
+                <div className="relative h-full">
+                  <ScrollableArea
+                    ref={logsRef}
+                    overflowY
+                    className={classNames("pb-1.5", theme.bg3, theme.text2)}
+                  >
+                    <ConsoleLogs
+                      logs={logs.data ?? []}
+                      onResourceClick={onResourceClick}
+                    />
+                  </ScrollableArea>
+                </div>
+              </div>
+            </div>
+          );
+        }
+      }
+    },
+    [
+      loading,
+      items,
+      selectedItems,
+      expandedItems,
+      logs.data,
+      theme,
+      logsRef,
+      onResourceClick,
+      selectedLogTypeFilters,
+      setSelectedLogTypeFilters,
+      setLogsTimeFilter,
+      setSearchText,
+      expandAll,
+      collapseAll,
+      setSelectedItems,
+      setExpandedItems,
+    ],
+  );
+
   return (
     <>
       {showTerms && (
@@ -159,40 +257,36 @@ export const DefaultLayout = ({
                 </div>
               )}
 
-              {(!layout.explorer?.hide ||
-                (!layout.testsTree?.hide &&
-                  layout.testsTree?.position === "default")) && (
-                <RightResizableWidget
-                  className={classNames(
-                    theme.border3,
-                    "h-full flex flex-col w-80 min-w-[10rem] min-h-[10rem] border-r",
-                  )}
-                >
-                  <div className="flex grow">
-                    {!layout.explorer?.hide && (
-                      <Explorer
-                        loading={loading}
-                        items={items}
-                        selectedItems={selectedItems}
-                        onSelectedItemsChange={setSelectedItems}
-                        expandedItems={expandedItems}
-                        onExpandedItemsChange={setExpandedItems}
-                        onExpandAll={expandAll}
-                        onCollapseAll={collapseAll}
-                        data-testid="explorer-tree-menu"
-                      />
+              {!layout.leftPanel?.hide &&
+                layout.leftPanel?.components?.length && (
+                  <RightResizableWidget
+                    className={classNames(
+                      theme.border3,
+                      "h-full flex flex-col w-80 min-w-[10rem] min-h-[10rem] border-r",
                     )}
-                  </div>
-                  {!layout.testsTree?.hide &&
-                    layout.testsTree?.position === "default" && (
-                      <TopResizableWidget
-                        className={classNames(theme.border3, "h-1/3 border-t")}
-                      >
-                        <TestsTreeView />
-                      </TopResizableWidget>
+                  >
+                    {layout.leftPanel?.components.map(
+                      (component: LayoutComponent, index: number) => {
+                        const panelComponent = renderLayoutComponent(component);
+
+                        if (index > 0) {
+                          return (
+                            <TopResizableWidget
+                              key={component.type}
+                              className={classNames(
+                                theme.border3,
+                                "h-1/3 border-t",
+                              )}
+                            >
+                              {panelComponent}
+                            </TopResizableWidget>
+                          );
+                        }
+                        return panelComponent;
+                      },
                     )}
-                </RightResizableWidget>
-              )}
+                  </RightResizableWidget>
+                )}
 
               <div className="flex-1 flex flex-col">
                 <div className="flex-1 flex">
@@ -229,7 +323,7 @@ export const DefaultLayout = ({
               </div>
             </div>
 
-            {!layout.logs?.hide && (
+            {!layout.bottomPanel?.hide && (
               <TopResizableWidget
                 className={classNames(
                   theme.border3,
@@ -237,11 +331,11 @@ export const DefaultLayout = ({
                   theme.bg3,
                   theme.text2,
                   "min-h-[5rem]",
-                  layout.logs?.size === "small" && {
+                  layout.bottomPanel?.size === "small" && {
                     "h-[30rem]": cloudAppState === "error",
                     "h-[8rem]": cloudAppState !== "error",
                   },
-                  layout.logs?.size === "default" && "h-[15rem]",
+                  layout.bottomPanel?.size === "default" && "h-[15rem]",
                 )}
               >
                 {cloudAppState === "error" &&
@@ -256,53 +350,29 @@ export const DefaultLayout = ({
                     </div>
                   )}
 
-                {!layout.testsTree?.hide &&
-                  layout.testsTree?.position === "bottom" && (
-                    <RightResizableWidget
-                      className={classNames(
-                        theme.border3,
-                        "h-full w-1/4 flex flex-col min-w-[10rem] min-h-[10rem] border-r",
-                      )}
-                    >
-                      <TestsTreeView />
-                    </RightResizableWidget>
-                  )}
+                {layout.bottomPanel?.components.map(
+                  (component: LayoutComponent, index: number) => {
+                    const panelComponent = renderLayoutComponent(component);
 
-                <div
-                  className={classNames(
-                    "flex-1 flex flex-col min-w-[10rem] min-h-[15rem] border-b border-slate-300",
-                  )}
-                >
-                  <div className="relative h-full flex flex-col gap-2">
-                    {loading && (
-                      <div
-                        className={classNames(
-                          "absolute h-full w-full z-50 bg-white/70 dark:bg-slate-600/70",
-                          theme.text2,
-                        )}
-                      />
-                    )}
-                    <ConsoleLogsFilters
-                      selectedLogTypeFilters={selectedLogTypeFilters}
-                      setSelectedLogTypeFilters={setSelectedLogTypeFilters}
-                      clearLogs={() => setLogsTimeFilter(Date.now())}
-                      isLoading={loading}
-                      onSearch={setSearchText}
-                    />
-                    <div className="relative h-full">
-                      <ScrollableArea
-                        ref={logsRef}
-                        overflowY
-                        className={classNames("pb-1.5", theme.bg3, theme.text2)}
-                      >
-                        <ConsoleLogs
-                          logs={logs.data ?? []}
-                          onResourceClick={onResourceClick}
-                        />
-                      </ScrollableArea>
-                    </div>
-                  </div>
-                </div>
+                    if (
+                      layout.bottomPanel?.components.length > 1 &&
+                      index !== layout.bottomPanel?.components.length - 1
+                    ) {
+                      return (
+                        <RightResizableWidget
+                          key={component.type}
+                          className={classNames(
+                            theme.border3,
+                            "h-full w-1/4 flex flex-col min-w-[10rem] min-h-[10rem] border-r",
+                          )}
+                        >
+                          {panelComponent}
+                        </RightResizableWidget>
+                      );
+                    }
+                    return panelComponent;
+                  },
+                )}
               </TopResizableWidget>
             )}
           </>

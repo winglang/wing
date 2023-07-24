@@ -29,11 +29,18 @@ export function LayoutProvider({
         header: {
           hide: true,
         },
-        explorer: {
+        leftPanel: {
           hide: true,
         },
-        testsTree: {
-          position: "bottom",
+        bottomPanel: {
+          components: [
+            {
+              type: "tests",
+            },
+            {
+              type: "logs",
+            },
+          ],
         },
       };
 
@@ -44,14 +51,16 @@ export function LayoutProvider({
         header: {
           hide: true,
         },
-        explorer: {
+        leftPanel: {
           hide: true,
         },
-        testsTree: {
-          hide: true,
-        },
-        logs: {
+        bottomPanel: {
           size: "small",
+          components: [
+            {
+              type: "logs",
+            },
+          ],
         },
         errorScreen: {
           position: "bottom",

@@ -25,22 +25,25 @@ export type RouterEvents = {
   invalidateQuery: QueryNames;
 };
 
+export type LayoutComponentType = "explorer" | "tests" | "logs";
+
+export interface LayoutComponent {
+  type: LayoutComponentType;
+}
+
+export interface LayoutPanel {
+  hide?: boolean;
+  components: LayoutComponent[];
+  size?: "small" | "default";
+}
+
 export interface LayoutConfig {
   header?: {
     hide?: boolean;
     showThemeToggle?: boolean;
   };
-  explorer?: {
-    hide?: boolean;
-  };
-  testsTree?: {
-    hide?: boolean;
-    position?: "default" | "bottom";
-  };
-  logs?: {
-    hide?: boolean;
-    size?: "default" | "small";
-  };
+  leftPanel?: LayoutPanel;
+  bottomPanel?: LayoutPanel;
   statusBar?: {
     hide?: boolean;
     showThemeToggle?: boolean;
