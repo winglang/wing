@@ -5,14 +5,8 @@ import {
   ScrollableArea,
   TopResizableWidget,
 } from "@wingconsole/design-system";
-import { State } from "@wingconsole/server";
-import {
-  LayoutConfig,
-  LayoutComponentType,
-  LayoutComponent,
-} from "@wingconsole/server";
+import { State, LayoutConfig, LayoutComponent } from "@wingconsole/server";
 import classNames from "classnames";
-import { RenderComponent } from "framer-motion";
 import { useCallback, useEffect, useMemo } from "react";
 
 import { ConsoleLogsFilters } from "../features/console-logs-filters.js";
@@ -24,7 +18,6 @@ import { Explorer } from "../ui/explorer.js";
 import { ResourceMetadata } from "../ui/resource-metadata.js";
 
 import { Header } from "./header.js";
-import { LeftPanel } from "./left-panel.js";
 import { StatusBar } from "./status-bar.js";
 import { TermsAndConditionsModal } from "./terms-and-conditions-modal.js";
 import { useLayout } from "./use-layout.js";
@@ -121,6 +114,12 @@ export const DefaultLayout = ({
     };
   }, [layoutConfig]);
 
+  const renderApp = useMemo(() => {
+    return !(
+      layout.errorScreen?.position === "default" && cloudAppState === "error"
+    );
+  }, [layout.errorScreen?.position, cloudAppState]);
+
   const renderLayoutComponent = useCallback(
     (component: LayoutComponent) => {
       switch (component.type) {
@@ -148,9 +147,7 @@ export const DefaultLayout = ({
           return (
             <div
               key={component.type}
-              className={classNames(
-                "flex-1 flex flex-col min-w-[10rem] min-h-[15rem]",
-              )}
+              className={classNames("flex-1 flex flex-col min-w-[10rem]")}
             >
               <div className="relative h-full flex flex-col gap-2">
                 {loading && (
@@ -231,7 +228,7 @@ export const DefaultLayout = ({
           />
         )}
 
-        {(cloudAppState === "error" &&
+        {cloudAppState === "error" &&
           layout.errorScreen?.position === "default" && (
             <div className="flex-1 flex relative">
               <BlueScreenOfDeath
@@ -241,7 +238,9 @@ export const DefaultLayout = ({
                 displayWingTitle={layout.errorScreen?.displayTitle}
               />
             </div>
-          )) || (
+          )}
+
+        {renderApp && (
           <>
             <div className="flex-1 flex relative">
               {loading && (
@@ -331,32 +330,17 @@ export const DefaultLayout = ({
                   theme.bg3,
                   theme.text2,
                   "min-h-[5rem]",
-                  layout.bottomPanel?.size === "small" && {
-                    "h-[30rem]": cloudAppState === "error",
-                    "h-[8rem]": cloudAppState !== "error",
-                  },
-                  layout.bottomPanel?.size === "default" && "h-[15rem]",
+                  (layout.bottomPanel?.size === "small" && "h-[8rem]") ||
+                    "h-[15rem]",
                 )}
               >
-                {cloudAppState === "error" &&
-                  layout.errorScreen?.position === "bottom" && (
-                    <div className="flex-1 flex relative">
-                      <BlueScreenOfDeath
-                        title={"An error has occurred:"}
-                        error={errorMessage.data ?? ""}
-                        displayLinks={layout.errorScreen?.displayLinks}
-                        displayWingTitle={layout.errorScreen?.displayTitle}
-                      />
-                    </div>
-                  )}
-
                 {layout.bottomPanel?.components.map(
                   (component: LayoutComponent, index: number) => {
                     const panelComponent = renderLayoutComponent(component);
-
                     if (
-                      layout.bottomPanel?.components.length > 1 &&
-                      index !== layout.bottomPanel?.components.length - 1
+                      layout.bottomPanel?.components.length &&
+                      layout.bottomPanel.components.length > 1 &&
+                      index !== layout.bottomPanel.components.length - 1
                     ) {
                       return (
                         <RightResizableWidget
@@ -375,6 +359,32 @@ export const DefaultLayout = ({
                 )}
               </TopResizableWidget>
             )}
+
+            {cloudAppState === "error" &&
+              layout.errorScreen?.position === "bottom" && (
+                <>
+                  <div className="fixed inset-0 flex justify-center items-center z-50 bg-black bg-opacity-40" />
+
+                  <div className="fixed bottom-0 max-h-[80vh] w-full z-50">
+                    <TopResizableWidget
+                      className={classNames(
+                        theme.border3,
+                        "border-t absolute flex",
+                        theme.bg3,
+                        theme.text2,
+                        "min-h-[5rem] h-[30rem]",
+                      )}
+                    >
+                      <BlueScreenOfDeath
+                        title={"An error has occurred:"}
+                        error={errorMessage.data ?? ""}
+                        displayLinks={layout.errorScreen?.displayLinks}
+                        displayWingTitle={layout.errorScreen?.displayTitle}
+                      />
+                    </TopResizableWidget>
+                  </div>
+                </>
+              )}
           </>
         )}
 
