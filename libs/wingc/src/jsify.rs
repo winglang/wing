@@ -130,8 +130,8 @@ impl<'a> JSifier<'a> {
 
 		if jsify_context.is_entrypoint_file {
 			output.line(format!("const {} = require('{}');", STDLIB, STDLIB_MODULE));
-			output.line(format!("const std = {STDLIB}.{WINGSDK_STD_MODULE};"));
 			output.line(format!("const {} = process.env.WING_SYNTH_DIR ?? \".\";", OUTDIR_VAR));
+			output.line(format!("const std = {STDLIB}.{WINGSDK_STD_MODULE};"));
 			// "std" is implicitly imported
 			output.line(format!(
 				"const {} = process.env.WING_IS_TEST === \"true\";",
