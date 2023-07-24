@@ -151,6 +151,24 @@ export class String {
   }
 
   /**
+   * Replaces occurrences of a substring within a string.
+   *
+   * @macro $self$.replace($args$)
+   *
+   * @param searchString The substring to search for.
+   * @param replaceString The replacement substring.
+   * @returns The modified string after replacement.
+   */
+  public stringReplace(
+    searchString: string | RegExp,
+    replaceString: string
+  ): string {
+    searchString;
+    replaceString;
+    throw new Error("Abstract");
+  }
+
+  /**
    * Removes white spaces from start and end of this string.
    *
    * @returns a new string with white spaces removed from start and end.
