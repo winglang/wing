@@ -1,3 +1,5 @@
+bring "./subdir/empty.w" as file3;
+
 bring cloud;
 
 class Store {

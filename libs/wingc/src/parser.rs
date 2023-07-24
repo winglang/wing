@@ -1,4 +1,6 @@
 use indexmap::{IndexMap, IndexSet};
+use petgraph::algo::toposort;
+use petgraph::prelude::DiGraph;
 use phf::{phf_map, phf_set};
 use std::cell::RefCell;
 use std::collections::HashSet;
@@ -128,14 +130,38 @@ static RESERVED_WORDS: phf::Set<&'static str> = phf_set! {
 	"Object",
 };
 
+pub fn toposort_wing_modules() {
+	let g = DiGraph::<&Path, ()>::new();
+	let output = toposort(&g, None);
+	if let Ok(output) = output {
+		for x in output {
+			let foo = g[x];
+			dbg!(&foo);
+		}
+	}
+}
+
+pub struct ParseProjectOutput {
+	pub files: Files,
+	pub tree_sitter_trees: IndexMap<PathBuf, tree_sitter::Tree>,
+	pub asts: IndexMap<PathBuf, Scope>,
+	pub topo_sorted_files: Vec<PathBuf>,
+}
+
 // TODO: handle errors
-pub fn parse_wing_project(init_path: &Path) -> (Files, IndexMap<PathBuf, Scope>) {
+pub fn parse_wing_project(init_path: &Path) -> ParseProjectOutput {
 	// a stack of files that need to be parsed
 	let mut needs_parsing: Vec<PathBuf> = vec![init_path.to_path_buf()];
 	// store all source files in memory so we can look up spans
 	let mut files = Files::new();
+	// collect all tree sitter trees in case they are needed by the LSP
+	let mut tree_sitter_trees = IndexMap::new();
 	// collect all parsed trees so they can be passed to later phases of the compiler
-	let mut trees = IndexMap::new();
+	let mut asts = IndexMap::new();
+	// build a dependency graph of all files
+	let mut dep_graph = DiGraph::<PathBuf, ()>::new();
+	// keep track of mapping from paths to node indices in the graph
+	let mut path_to_node: IndexMap<PathBuf, petgraph::graph::NodeIndex> = IndexMap::new();
 
 	// we can reuse the tree sitter parser
 	let language = tree_sitter_wing::language();
@@ -162,13 +188,47 @@ pub fn parse_wing_project(init_path: &Path) -> (Files, IndexMap<PathBuf, Scope>)
 				panic!("Error parsing source file: {}", source_path.display());
 			}
 		};
+		tree_sitter_trees.insert(source_path.clone(), tree_sitter_tree.clone());
 
 		let tree_sitter_root = tree_sitter_tree.root_node();
-		let scope = parser.parse(&tree_sitter_root);
-		trees.insert(source_path, scope);
+
+		// Parse the single file, and collect a list of all wing files that it references
+		let (scope, dependent_wing_files) = parser.parse(&tree_sitter_root);
+
+		let curr_node = *path_to_node.entry(source_path.clone()).or_insert_with(|| {
+			let node = dep_graph.add_node(source_path.clone());
+			node
+		});
+
+		for dep in dependent_wing_files {
+			let dep_node = *path_to_node.entry(dep.clone()).or_insert_with(|| {
+				let node = dep_graph.add_node(dep.clone());
+				node
+			});
+			dep_graph.add_edge(dep_node, curr_node, ());
+			needs_parsing.push(dep);
+		}
+
+		asts.insert(source_path, scope);
 	}
 
-	(files, trees)
+	println!("{:?}", dep_graph);
+
+	let topo_sorted_files = match toposort(&dep_graph, None) {
+		Ok(indices) => indices.into_iter().map(|n| dep_graph[n].clone()).collect::<Vec<_>>(),
+		Err(err) => {
+			panic!("Error sorting files: {:?}", err);
+		}
+	};
+
+	println!("{:?}", topo_sorted_files);
+
+	ParseProjectOutput {
+		files,
+		asts,
+		tree_sitter_trees,
+		topo_sorted_files,
+	}
 }
 
 pub struct Parser<'a> {
@@ -203,7 +263,7 @@ impl<'s> Parser<'s> {
 		}
 	}
 
-	pub fn parse(&self, root: &Node) -> Scope {
+	pub fn parse(self, root: &Node) -> (Scope, Vec<PathBuf>) {
 		match self.files.borrow_mut().add_file(
 			PathBuf::from(self.source_name.clone()),
 			String::from_utf8(self.source.to_vec()).expect("Invalid UTF-8 sequence"),
@@ -225,7 +285,7 @@ impl<'s> Parser<'s> {
 
 		self.report_unhandled_errors(&root);
 
-		scope
+		(scope, self.referenced_wing_files.into_inner())
 	}
 
 	fn add_error_from_span(&self, message: impl ToString, span: WingSpan) {

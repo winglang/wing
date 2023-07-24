@@ -7,16 +7,15 @@
 #[macro_use]
 extern crate lazy_static;
 
-use ast::{Scope, Stmt, Symbol, UtilityFunctions};
+use ast::{Scope, Symbol, UtilityFunctions};
 use closure_transform::ClosureTransformer;
 use comp_ctx::set_custom_panic_hook;
 use diagnostic::{found_errors, report_diagnostic, Diagnostic};
-use files::Files;
 use fold::Fold;
 use indexmap::IndexMap;
 use jsify::JSifier;
 use lifting::LiftTransform;
-use parser::parse_wing_project;
+use parser::{parse_wing_project, ParseProjectOutput};
 use type_check::jsii_importer::JsiiImportSpec;
 use type_check::symbol_env::StatementIdx;
 use type_check::{FunctionSignature, SymbolKind, Type};
@@ -25,11 +24,8 @@ use wasm_util::{ptr_to_string, string_to_combined_ptr, WASM_RETURN_ERROR};
 use wingii::type_system::TypeSystem;
 
 use crate::docs::Docs;
-use crate::parser::Parser;
 use std::alloc::{alloc, dealloc, Layout};
-use std::cell::RefCell;
 
-use std::fs;
 use std::mem;
 use std::path::{Path, PathBuf};
 
@@ -331,12 +327,17 @@ pub fn compile(
 	let out_dir = out_dir.unwrap_or(default_out_dir.as_ref());
 
 	// -- PARSING PHASE --
-	let (files, trees) = parse_wing_project(&source_path);
+	let ParseProjectOutput {
+		files,
+		asts,
+		topo_sorted_files,
+		..
+	} = parse_wing_project(&source_path);
 
 	// -- DESUGARING PHASE --
 
 	// Transform all inflight closures defined in preflight into single-method resources
-	let mut trees = trees
+	let asts = asts
 		.into_iter()
 		.map(|(path, scope)| {
 			let mut inflight_transformer = ClosureTransformer::new();
@@ -344,6 +345,9 @@ pub fn compile(
 			(path, scope)
 		})
 		.collect::<IndexMap<PathBuf, Scope>>();
+
+	// TODO: remove
+	let mut scope = asts.into_iter().next().unwrap().1;
 
 	// -- TYPECHECKING PHASE --
 

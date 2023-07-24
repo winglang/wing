@@ -1,16 +1,16 @@
+use indexmap::IndexMap;
 use lsp_types::{DidChangeTextDocumentParams, DidOpenTextDocumentParams, Url};
 use wingii::type_system::TypeSystem;
 
-use std::path::Path;
+use std::path::{Path, PathBuf};
 use std::{cell::RefCell, collections::HashMap};
 use tree_sitter::Tree;
 
 use crate::closure_transform::ClosureTransformer;
 use crate::diagnostic::{get_diagnostics, reset_diagnostics, Diagnostic};
-use crate::files::Files;
 use crate::fold::Fold;
 use crate::jsify::JSifier;
-use crate::parser::Parser;
+use crate::parser::{parse_wing_project, ParseProjectOutput};
 use crate::type_check;
 use crate::type_check::jsii_importer::JsiiImportSpec;
 use crate::{ast::Scope, type_check::Types, wasm_util::ptr_to_string};
@@ -54,9 +54,8 @@ pub fn on_document_did_open(params: DidOpenTextDocumentParams) {
 		FILES.with(|files| {
 			let uri = params.text_document.uri;
 			let uri_path = uri.to_file_path().unwrap();
-			let path = uri_path.to_str().unwrap();
 
-			let result = partial_compile(path, params.text_document.text.as_bytes(), &mut jsii_types.borrow_mut());
+			let result = partial_compile(&uri_path, &mut jsii_types.borrow_mut());
 			files.borrow_mut().insert(uri, result);
 		});
 	});
@@ -76,72 +75,82 @@ pub fn on_document_did_change(params: DidChangeTextDocumentParams) {
 		FILES.with(|files| {
 			let uri = params.text_document.uri;
 			let uri_path = uri.to_file_path().unwrap();
-			let path = uri_path.to_str().unwrap();
 
-			let result = partial_compile(
-				path,
-				params.content_changes[0].text.as_bytes(),
-				&mut jsii_types.borrow_mut(),
-			);
+			let result = partial_compile(&uri_path, &mut jsii_types.borrow_mut());
 			files.borrow_mut().insert(uri, result);
 		});
 	})
 }
 
 /// Runs several phases of the wing compile on a file, including: parsing, type checking, and capturing
-fn partial_compile(source_file: &str, text: &[u8], jsii_types: &mut TypeSystem) -> FileData {
+fn partial_compile(source_path: &Path, jsii_types: &mut TypeSystem) -> FileData {
 	// Reset diagnostics before new compilation (`partial_compile` can be called multiple)
 	reset_diagnostics();
 
 	let mut types = type_check::Types::new();
 
-	let language = tree_sitter_wing::language();
-	let mut parser = tree_sitter::Parser::new();
-	parser.set_language(language).unwrap();
+	// let language = tree_sitter_wing::language();
+	// let mut parser = tree_sitter::Parser::new();
+	// parser.set_language(language).unwrap();
 
-	let tree = match parser.parse(text, None) {
-		Some(tree) => tree,
-		None => {
-			panic!("Failed parsing source file: {}", source_file);
-		}
-	};
+	// let tree = match parser.parse(text, None) {
+	// 	Some(tree) => tree,
+	// 	None => {
+	// 		panic!("Failed parsing source file: {}", source_file);
+	// 	}
+	// };
 
-	let mut files = Files::new();
-	let wing_parser = Parser::new(text, source_file.to_string(), &mut files);
+	// let mut files = Files::new();
+	// let wing_parser = Parser::new(text, source_file.to_string(), &mut files);
 
-	let scope = wing_parser.parse(&tree.root_node());
+	// let scope = wing_parser.parse(&tree.root_node());
+
+	let ParseProjectOutput {
+		files,
+		asts,
+		tree_sitter_trees,
+		topo_sorted_files: _,
+	} = parse_wing_project(&source_path);
 
 	// -- DESUGARING PHASE --
 
 	// Transform all inflight closures defined in preflight into single-method resources
-	let mut inflight_transformer = ClosureTransformer::new();
-	// Note: The scope is intentionally boxed here to force heap allocation
-	// Otherwise, the scope will be moved during type checking and we'll be left with dangling references elsewhere
-	let mut scope = Box::new(inflight_transformer.fold_scope(scope));
+	let asts = asts
+		.into_iter()
+		.map(|(path, scope)| {
+			let mut inflight_transformer = ClosureTransformer::new();
+			// Note: The scope is intentionally boxed here to force heap allocation
+			// Otherwise, the scope will be moved during type checking and we'll be left with dangling references elsewhere
+			let scope = Box::new(inflight_transformer.fold_scope(scope));
+			(path, scope)
+		})
+		.collect::<IndexMap<PathBuf, Box<Scope>>>();
+
+	// TODO: remove
+	let mut scope = asts.into_iter().next().expect("Expected exactly one AST").1;
 
 	// -- TYPECHECKING PHASE --
 	let mut jsii_imports = vec![];
 
-	type_check(
-		&mut scope,
-		&mut types,
-		&Path::new(source_file),
-		jsii_types,
-		&mut jsii_imports,
-	);
+	type_check(&mut scope, &mut types, &source_path, jsii_types, &mut jsii_imports);
 
 	// -- JSIFICATION PHASE --
 
 	// source_file will never be "" because it is the path to the file being compiled and lsp does not allow empty paths
-	let source_path = Path::new(source_file);
 	let app_name = source_path.file_stem().expect("Empty filename").to_str().unwrap();
 	let project_dir = source_path.parent().expect("Empty filename");
 
 	let mut jsifier = JSifier::new(&mut types, &files, app_name, &project_dir, true);
 	jsifier.jsify(&scope);
 
+	let tree = tree_sitter_trees
+		.into_iter()
+		.next()
+		.expect("Expected exactly one tree-sitter tree")
+		.1;
+
 	return FileData {
-		contents: String::from_utf8(text.to_vec()).unwrap(),
+		contents: files.get_file(source_path).unwrap().clone(),
 		tree,
 		diagnostics: get_diagnostics(),
 		scope,
