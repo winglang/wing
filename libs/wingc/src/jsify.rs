@@ -51,6 +51,7 @@ pub struct JSifyContext<'a> {
 	pub lifts: Option<&'a Lifts>,
 	pub visit_ctx: &'a mut VisitContext,
 	pub source_path: PathBuf,
+	pub is_entrypoint_file: bool,
 }
 
 pub struct JSifier<'a> {
@@ -62,7 +63,6 @@ pub struct JSifier<'a> {
 	/// Root of the project, used for resolving extern modules
 	absolute_project_root: &'a Path,
 	entrypoint_file_path: &'a Path,
-	shim: bool,
 }
 
 /// Preflight classes have two types of host binding methods:
@@ -79,13 +79,11 @@ impl<'a> JSifier<'a> {
 		source_files: &'a Files,
 		entrypoint_file_path: &'a Path,
 		absolute_project_root: &'a Path,
-		shim: bool,
 	) -> Self {
 		let output_files = Files::default();
 		Self {
 			types,
 			source_files,
-			shim,
 			entrypoint_file_path,
 			absolute_project_root,
 			preflight_file_counter: RefCell::new(0),
@@ -104,6 +102,7 @@ impl<'a> JSifier<'a> {
 			visit_ctx: &mut visit_ctx,
 			lifts: None,
 			source_path: source_path.to_path_buf(),
+			is_entrypoint_file: source_path == self.entrypoint_file_path,
 		};
 		jsify_context
 			.visit_ctx
@@ -129,20 +128,23 @@ impl<'a> JSifier<'a> {
 
 		let mut output = CodeMaker::default();
 
-		if self.shim {
+		if jsify_context.is_entrypoint_file {
 			output.line(format!("const {} = require('{}');", STDLIB, STDLIB_MODULE));
+			output.line(format!("const std = {STDLIB}.{WINGSDK_STD_MODULE};"));
 			output.line(format!("const {} = process.env.WING_SYNTH_DIR ?? \".\";", OUTDIR_VAR));
 			// "std" is implicitly imported
-			output.line(format!("const std = {STDLIB}.{WINGSDK_STD_MODULE};"));
 			output.line(format!(
 				"const {} = process.env.WING_IS_TEST === \"true\";",
 				ENV_WING_IS_TEST
 			));
+		} else {
+			output.open(format!("module.exports = function({{ {} }}) {{", STDLIB));
+			output.line(format!("const std = {STDLIB}.{WINGSDK_STD_MODULE};"));
 		}
 
 		output.add_code(imports);
 
-		if self.shim {
+		if jsify_context.is_entrypoint_file {
 			let mut root_class = CodeMaker::default();
 			root_class.open(format!("class {} extends {} {{", ROOT_CLASS, STDLIB_CORE_RESOURCE));
 			root_class.open(format!("{JS_CONSTRUCTOR}(scope, id) {{"));
@@ -160,9 +162,15 @@ impl<'a> JSifier<'a> {
 			));
 		} else {
 			output.add_code(js);
+			let exports = get_public_symbols(&scope);
+			output.line(format!(
+				"return {{ {} }};",
+				exports.iter().map(ToString::to_string).join(", ")
+			));
+			output.close("};");
 		}
 
-		let preflight_file_name = if jsify_context.source_path == self.entrypoint_file_path {
+		let preflight_file_name = if jsify_context.is_entrypoint_file {
 			PREFLIGHT_FILENAME.to_string()
 		} else {
 			// remove all non-alphanumeric characters
@@ -610,9 +618,10 @@ impl<'a> JSifier<'a> {
 					let preflight_file_map = self.preflight_file_map.borrow();
 					let preflight_file_name = preflight_file_map.get(Path::new(&name.name)).unwrap();
 					CodeMaker::one_line(format!(
-						"const {} = require(\"./{}\");",
+						"const {} = require(\"./{}\")({{ {} }});",
 						identifier.as_ref().expect("bring wing file requires an alias"),
-						preflight_file_name
+						preflight_file_name,
+						STDLIB,
 					))
 				}
 			},
@@ -956,6 +965,7 @@ impl<'a> JSifier<'a> {
 			lifts,
 			visit_ctx: &mut ctx.visit_ctx,
 			source_path: ctx.source_path.clone(),
+			is_entrypoint_file: ctx.is_entrypoint_file,
 		};
 
 		// emit the inflight side of the class into a separate file
@@ -982,7 +992,7 @@ impl<'a> JSifier<'a> {
 			format!(" extends {}", STDLIB_CORE_RESOURCE)
 		};
 
-		code.open(format!("class {}{extends} {{", class.name.name));
+		code.open(format!("class {}{extends} {{", class.name));
 
 		// emit the preflight constructor
 		code.add_code(self.jsify_preflight_constructor(&class, ctx));

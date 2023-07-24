@@ -139,7 +139,7 @@ fn partial_compile(source_path: &Path, jsii_types: &mut TypeSystem) -> FileData 
 	// source_file will never be "" because it is the path to the file being compiled and lsp does not allow empty paths
 	let project_dir = source_path.parent().expect("Empty filename");
 
-	let mut jsifier = JSifier::new(&mut types, &files, &source_path, &project_dir, true);
+	let mut jsifier = JSifier::new(&mut types, &files, &source_path, &project_dir);
 	jsifier.jsify(source_path, &scope);
 
 	let tree = tree_sitter_trees

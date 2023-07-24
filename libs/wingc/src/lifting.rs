@@ -136,6 +136,7 @@ impl<'a> LiftTransform<'a> {
 				lifts: None,
 				visit_ctx: &mut self.ctx,
 				source_path: PathBuf::from(""), // TODO
+				is_entrypoint_file: false,      // TODO
 			},
 		);
 		self.ctx.pop_phase();

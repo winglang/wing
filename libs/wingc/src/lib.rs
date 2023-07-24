@@ -378,7 +378,7 @@ pub fn compile(
 		return Err(());
 	}
 
-	let mut jsifier = JSifier::new(&mut types, &files, &source_path, &project_dir, true);
+	let mut jsifier = JSifier::new(&mut types, &files, &source_path, &project_dir);
 
 	// -- LIFTING PHASE --
 
