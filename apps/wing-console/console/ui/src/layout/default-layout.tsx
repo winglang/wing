@@ -6,6 +6,7 @@ import {
   TopResizableWidget,
 } from "@wingconsole/design-system";
 import { State } from "@wingconsole/server";
+import { LayoutConfig } from "@wingconsole/server";
 import classNames from "classnames";
 import { useEffect, useMemo } from "react";
 
@@ -25,9 +26,40 @@ import { useLayout } from "./use-layout.js";
 export interface LayoutProps {
   cloudAppState: State;
   wingVersion: string | undefined;
+  layoutConfig?: LayoutConfig;
 }
 
-export const DefaultLayout = ({ cloudAppState, wingVersion }: LayoutProps) => {
+const defaultLayoutConfig: LayoutConfig = {
+  header: {
+    hide: false,
+    showThemeToggle: true,
+  },
+  explorer: {
+    hide: false,
+  },
+  testsTree: {
+    hide: false,
+  },
+  logs: {
+    hide: false,
+    size: "default",
+  },
+  statusBar: {
+    hide: false,
+    showThemeToggle: false,
+  },
+  errorScreen: {
+    position: "default",
+    displayTitle: true,
+    displayLinks: true,
+  },
+};
+
+export const DefaultLayout = ({
+  cloudAppState,
+  wingVersion,
+  layoutConfig,
+}: LayoutProps) => {
   const {
     items,
     selectedItems,
@@ -69,6 +101,13 @@ export const DefaultLayout = ({ cloudAppState, wingVersion }: LayoutProps) => {
     return termsConfig.data.requireAcceptTerms && !termsConfig.data.accepted;
   }, [termsConfig.data]);
 
+  const layout = useMemo(() => {
+    return {
+      ...defaultLayoutConfig,
+      ...layoutConfig,
+    };
+  }, [layoutConfig]);
+
   return (
     <>
       {showTerms && (
@@ -87,18 +126,24 @@ export const DefaultLayout = ({ cloudAppState, wingVersion }: LayoutProps) => {
           showTerms && "blur-sm",
         )}
       >
-        <Header title={wingfile.data ?? ""} />
-
-        {cloudAppState === "error" && (
-          <div className="flex-1 flex relative">
-            <BlueScreenOfDeath
-              title={"An error has occurred:"}
-              error={errorMessage.data ?? ""}
-            />
-          </div>
+        {!layout.header?.hide && (
+          <Header
+            title={wingfile.data ?? ""}
+            showThemeToggle={layout.header?.showThemeToggle}
+          />
         )}
 
-        {cloudAppState !== "error" && (
+        {(cloudAppState === "error" &&
+          layout.errorScreen?.position === "default" && (
+            <div className="flex-1 flex relative">
+              <BlueScreenOfDeath
+                title={"An error has occurred:"}
+                error={errorMessage.data ?? ""}
+                displayLinks={layout.errorScreen?.displayLinks}
+                displayWingTitle={layout.errorScreen?.displayTitle}
+              />
+            </div>
+          )) || (
           <>
             <div className="flex-1 flex relative">
               {loading && (
@@ -114,31 +159,40 @@ export const DefaultLayout = ({ cloudAppState, wingVersion }: LayoutProps) => {
                 </div>
               )}
 
-              <RightResizableWidget
-                className={classNames(
-                  theme.border3,
-                  "h-full flex flex-col w-80 min-w-[10rem] min-h-[10rem] border-r",
-                )}
-              >
-                <div className="flex grow">
-                  <Explorer
-                    loading={loading}
-                    items={items}
-                    selectedItems={selectedItems}
-                    onSelectedItemsChange={setSelectedItems}
-                    expandedItems={expandedItems}
-                    onExpandedItemsChange={setExpandedItems}
-                    onExpandAll={expandAll}
-                    onCollapseAll={collapseAll}
-                    data-testid="explorer-tree-menu"
-                  />
-                </div>
-                <TopResizableWidget
-                  className={classNames(theme.border3, "h-1/3 border-t")}
+              {(!layout.explorer?.hide ||
+                (!layout.testsTree?.hide &&
+                  layout.testsTree?.position === "default")) && (
+                <RightResizableWidget
+                  className={classNames(
+                    theme.border3,
+                    "h-full flex flex-col w-80 min-w-[10rem] min-h-[10rem] border-r",
+                  )}
                 >
-                  <TestsTreeView />
-                </TopResizableWidget>
-              </RightResizableWidget>
+                  <div className="flex grow">
+                    {!layout.explorer?.hide && (
+                      <Explorer
+                        loading={loading}
+                        items={items}
+                        selectedItems={selectedItems}
+                        onSelectedItemsChange={setSelectedItems}
+                        expandedItems={expandedItems}
+                        onExpandedItemsChange={setExpandedItems}
+                        onExpandAll={expandAll}
+                        onCollapseAll={collapseAll}
+                        data-testid="explorer-tree-menu"
+                      />
+                    )}
+                  </div>
+                  {!layout.testsTree?.hide &&
+                    layout.testsTree?.position === "default" && (
+                      <TopResizableWidget
+                        className={classNames(theme.border3, "h-1/3 border-t")}
+                      >
+                        <TestsTreeView />
+                      </TopResizableWidget>
+                    )}
+                </RightResizableWidget>
+              )}
 
               <div className="flex-1 flex flex-col">
                 <div className="flex-1 flex">
@@ -174,52 +228,94 @@ export const DefaultLayout = ({ cloudAppState, wingVersion }: LayoutProps) => {
                 </div>
               </div>
             </div>
-            <TopResizableWidget
-              className={classNames(
-                theme.border3,
-                "border-t min-h-[5rem] h-[15rem]",
-                theme.bg3,
-                theme.text2,
-              )}
-            >
-              <div className="relative h-full flex flex-col gap-2">
-                {loading && (
-                  <div
-                    className={classNames(
-                      "absolute h-full w-full z-50 bg-white/70 dark:bg-slate-600/70",
-                      theme.text2,
-                    )}
-                  />
+
+            {!layout.logs?.hide && (
+              <TopResizableWidget
+                className={classNames(
+                  theme.border3,
+                  "border-t relative flex",
+                  theme.bg3,
+                  theme.text2,
+                  "min-h-[5rem]",
+                  layout.logs?.size === "small" && {
+                    "h-[30rem]": cloudAppState === "error",
+                    "h-[8rem]": cloudAppState !== "error",
+                  },
+                  layout.logs?.size === "default" && "h-[15rem]",
                 )}
-                <ConsoleLogsFilters
-                  selectedLogTypeFilters={selectedLogTypeFilters}
-                  setSelectedLogTypeFilters={setSelectedLogTypeFilters}
-                  clearLogs={() => setLogsTimeFilter(Date.now())}
-                  isLoading={loading}
-                  onSearch={setSearchText}
-                />
-                <div className="relative h-full">
-                  <ScrollableArea
-                    ref={logsRef}
-                    overflowY
-                    className={classNames("pb-1.5", theme.bg3, theme.text2)}
-                  >
-                    <ConsoleLogs
-                      logs={logs.data ?? []}
-                      onResourceClick={onResourceClick}
+              >
+                {cloudAppState === "error" &&
+                  layout.errorScreen?.position === "bottom" && (
+                    <div className="flex-1 flex relative">
+                      <BlueScreenOfDeath
+                        title={"An error has occurred:"}
+                        error={errorMessage.data ?? ""}
+                        displayLinks={layout.errorScreen?.displayLinks}
+                        displayWingTitle={layout.errorScreen?.displayTitle}
+                      />
+                    </div>
+                  )}
+
+                {!layout.testsTree?.hide &&
+                  layout.testsTree?.position === "bottom" && (
+                    <RightResizableWidget
+                      className={classNames(
+                        theme.border3,
+                        "h-full w-1/4 flex flex-col min-w-[10rem] min-h-[10rem] border-r",
+                      )}
+                    >
+                      <TestsTreeView />
+                    </RightResizableWidget>
+                  )}
+
+                <div
+                  className={classNames(
+                    "flex-1 flex flex-col min-w-[10rem] min-h-[15rem] border-b border-slate-300",
+                  )}
+                >
+                  <div className="relative h-full flex flex-col gap-2">
+                    {loading && (
+                      <div
+                        className={classNames(
+                          "absolute h-full w-full z-50 bg-white/70 dark:bg-slate-600/70",
+                          theme.text2,
+                        )}
+                      />
+                    )}
+                    <ConsoleLogsFilters
+                      selectedLogTypeFilters={selectedLogTypeFilters}
+                      setSelectedLogTypeFilters={setSelectedLogTypeFilters}
+                      clearLogs={() => setLogsTimeFilter(Date.now())}
+                      isLoading={loading}
+                      onSearch={setSearchText}
                     />
-                  </ScrollableArea>
+                    <div className="relative h-full">
+                      <ScrollableArea
+                        ref={logsRef}
+                        overflowY
+                        className={classNames("pb-1.5", theme.bg3, theme.text2)}
+                      >
+                        <ConsoleLogs
+                          logs={logs.data ?? []}
+                          onResourceClick={onResourceClick}
+                        />
+                      </ScrollableArea>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </TopResizableWidget>
+              </TopResizableWidget>
+            )}
           </>
         )}
 
-        <StatusBar
-          wingVersion={wingVersion}
-          cloudAppState={cloudAppState}
-          isError={cloudAppState === "error"}
-        />
+        {!layout.statusBar?.hide && (
+          <StatusBar
+            wingVersion={wingVersion}
+            cloudAppState={cloudAppState}
+            isError={cloudAppState === "error"}
+            showThemeToggle={layout.statusBar?.showThemeToggle}
+          />
+        )}
       </div>
     </>
   );

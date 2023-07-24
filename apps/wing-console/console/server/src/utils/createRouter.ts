@@ -27,18 +27,28 @@ export type RouterEvents = {
 
 export interface LayoutConfig {
   header?: {
-    show?: boolean;
-    themeToggle?: boolean;
+    hide?: boolean;
+    showThemeToggle?: boolean;
   };
-  tree?: {
-    show?: boolean;
+  explorer?: {
+    hide?: boolean;
+  };
+  testsTree?: {
+    hide?: boolean;
+    position?: "default" | "bottom";
   };
   logs?: {
-    show?: boolean;
+    hide?: boolean;
+    size?: "default" | "small";
   };
-  footer?: {
-    show?: boolean;
-    themeToggle?: boolean;
+  statusBar?: {
+    hide?: boolean;
+    showThemeToggle?: boolean;
+  };
+  errorScreen?: {
+    position?: "default" | "bottom";
+    displayTitle?: boolean;
+    displayLinks?: boolean;
   };
 }
 

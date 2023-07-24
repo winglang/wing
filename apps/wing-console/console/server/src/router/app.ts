@@ -62,6 +62,11 @@ export const createAppRouter = () => {
     "app.acceptTerms": createProcedure.mutation(() => {
       acceptTerms(true);
     }),
+    "app.layoutConfig": createProcedure.query(async ({ ctx }) => {
+      return {
+        config: ctx.layoutConfig,
+      };
+    }),
     "app.logs": createProcedure
       .input(
         z.object({

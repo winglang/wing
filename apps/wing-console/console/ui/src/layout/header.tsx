@@ -5,9 +5,10 @@ import { ThemeToggle } from "./theme-toggle.js";
 
 export interface HeaderProps {
   title: string;
+  showThemeToggle?: boolean;
 }
 
-export const Header = ({ title }: HeaderProps) => {
+export const Header = ({ title, showThemeToggle = true }: HeaderProps) => {
   const { theme } = useTheme();
 
   return (
@@ -24,7 +25,7 @@ export const Header = ({ title }: HeaderProps) => {
         <div>{title}</div>
       </div>
       <div className="w-1/3 flex space-x-1 justify-end">
-        <ThemeToggle />
+        {showThemeToggle && <ThemeToggle />}
       </div>
     </div>
   );

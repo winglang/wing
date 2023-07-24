@@ -66,8 +66,8 @@ export const StatusBar = ({
       {/*right side*/}
       <div className="w-full flex space-x-0 justify-end">
         <AutoUpdater />
+        {showThemeToggle && <ThemeToggle />}
       </div>
-      {showThemeToggle && <ThemeToggle />}
     </footer>
   );
 };

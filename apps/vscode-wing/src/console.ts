@@ -73,6 +73,23 @@ export class WingConsoleManager {
           logger.appendLine(message);
         },
       },
+      layoutConfig: {
+        header: {
+          hide: true,
+        },
+        explorer: {
+          hide: true,
+        },
+        testsTree: {
+          hide: true,
+        },
+        logs: {
+          hide: true,
+        },
+        statusBar: {
+          showThemeToggle: true,
+        },
+      },
     });
 
     const url = `http://localhost:${port}`;
@@ -130,7 +147,7 @@ export class WingConsoleManager {
             </style>
         </head>
         <body>
-          <iframe src="${url}/?layout=4"/>
+          <iframe src="${url}"/>
         </body>
       </html>`;
 

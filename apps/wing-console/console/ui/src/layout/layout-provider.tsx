@@ -1,9 +1,6 @@
 import { createContext } from "react";
 
 import { DefaultLayout, LayoutProps } from "./default-layout.js";
-import { PlaygroundLayout } from "./playground-layout.js";
-import { TutorialLayout } from "./tutorial-layout.js";
-import { VscodeLayout } from "./vscode-layout.js";
 
 export enum LayoutType {
   Default = 1,
@@ -23,21 +20,48 @@ export function LayoutProvider({
   layoutType,
   layoutProps,
 }: LayoutProviderProps) {
+  let layoutConfig = layoutProps.layoutConfig;
   let Layout = DefaultLayout;
+
   switch (layoutType) {
     case LayoutType.Playground: {
-      Layout = PlaygroundLayout;
+      layoutConfig = {
+        header: {
+          hide: true,
+        },
+        explorer: {
+          hide: true,
+        },
+        testsTree: {
+          position: "bottom",
+        },
+      };
 
       break;
     }
     case LayoutType.Tutorial: {
-      Layout = TutorialLayout;
-
-      break;
-    }
-    case LayoutType.Vscode: {
-      Layout = VscodeLayout;
-
+      layoutConfig = {
+        header: {
+          hide: true,
+        },
+        explorer: {
+          hide: true,
+        },
+        testsTree: {
+          hide: true,
+        },
+        logs: {
+          size: "small",
+        },
+        errorScreen: {
+          position: "bottom",
+          displayTitle: false,
+          displayLinks: false,
+        },
+        statusBar: {
+          hide: true,
+        },
+      };
       break;
     }
   }
@@ -47,6 +71,7 @@ export function LayoutProvider({
       <Layout
         cloudAppState={layoutProps.cloudAppState}
         wingVersion={layoutProps.wingVersion}
+        layoutConfig={layoutConfig}
       />
     </LayoutContext.Provider>
   );
