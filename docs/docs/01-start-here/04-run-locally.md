@@ -49,7 +49,7 @@ You can also download the file, using the **Download** button.
 
 The downloaded file should contain `Hello, Wing it` text (as you already saw in the preview).
 
-You can push any number of messages to the queue and watch it fill up. You can also see in the counter resource that the counter value (`Actual value`) is incremented each time a message is pushed. It is even possible to reset the counter value if you wish (use the `Reset value` button).
+You can push any number of messages to the queue and watch it fill up. Each time a message is pushed to the queue, you can see the counter's value is incremented via the `Actual value` field in the counter resource. It is even possible to reset the counter value with the `Reset value` button.
 
 ![Counter resource view in Wing Console](./console-counter.png 'Counter resource')
 
