@@ -26,7 +26,7 @@ ${chalk.redBright("(This message will self-destruct after the first run)")}
 `;
 
 export const WING_OPT_OUT_CONFIRMATION = `
-🙉 🙈 🙊 Wing analytics are disabled, no data will be collected this run. 🙉 🙈 🙊
+🙈 Wing analytics are disabled, no data will be collected this run. 🙈
 `;
 
 function displayDisclaimer() {
