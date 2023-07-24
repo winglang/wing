@@ -131,17 +131,6 @@ static RESERVED_WORDS: phf::Set<&'static str> = phf_set! {
 	"Object",
 };
 
-pub fn toposort_wing_modules() {
-	let g = DiGraph::<&Path, ()>::new();
-	let output = toposort(&g, None);
-	if let Ok(output) = output {
-		for x in output {
-			let foo = g[x];
-			dbg!(&foo);
-		}
-	}
-}
-
 pub struct ParseProjectOutput {
 	pub files: Files,
 	pub tree_sitter_trees: IndexMap<PathBuf, tree_sitter::Tree>,
@@ -230,6 +219,11 @@ pub fn parse_wing_project(init_path: &Path) -> ParseProjectOutput {
 
 	println!("{:?}", dep_graph);
 
+	// produce a list of files in a topological ordering[1], so that we can type check
+	// source files that don't depend on any others first, then the ones that depend
+	// on those, and so on
+	//
+	// [1] https://en.wikipedia.org/wiki/Topological_sorting
 	let topo_sorted_files = match toposort(&dep_graph, None) {
 		Ok(indices) => indices.into_iter().map(|n| dep_graph[n].clone()).collect::<Vec<_>>(),
 		Err(err) => {

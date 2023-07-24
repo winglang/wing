@@ -355,9 +355,9 @@ pub fn compile(
 	// Create a universal JSII import spec (need to keep this alive during entire compilation)
 	let mut jsii_imports = vec![];
 
-	for file in topo_sorted_files {
+	for file in &topo_sorted_files {
 		// Type check everything and build typed symbol environment
-		let mut scope = asts.get_mut(&file).expect("matching AST not found");
+		let mut scope = asts.get_mut(file).expect("matching AST not found");
 		type_check(&mut scope, &mut types, &file, &mut jsii_types, &mut jsii_imports);
 
 		// Validate the type checker didn't miss anything - see `TypeCheckAssert` for details
@@ -385,19 +385,27 @@ pub fn compile(
 
 	// -- LIFTING PHASE --
 
-	// TODO: remove
-	let scope = asts.into_iter().next().unwrap().1;
-
-	let mut lift = LiftTransform::new(&jsifier);
-	let scope = Box::new(lift.fold_scope(scope));
+	let mut asts = asts
+		.into_iter()
+		.map(|(path, scope)| {
+			let mut lift = LiftTransform::new(&jsifier);
+			let scope = lift.fold_scope(scope); // TODO: does this need to be boxed?
+			(path, scope)
+		})
+		.collect::<IndexMap<PathBuf, Scope>>();
 
 	// bail out now (before jsification) if there are errors (no point in jsifying)
 	if found_errors() {
 		return Err(());
 	}
 
-	let files = jsifier.jsify(&scope);
+	for file in &topo_sorted_files {
+		println!("jsifying \"{}\"", file.display());
+		let scope = asts.get_mut(file).expect("matching AST not found");
+		jsifier.jsify(file, &scope);
+	}
 
+	let files = jsifier.output_files.borrow_mut();
 	match files.emit_files(out_dir) {
 		Ok(()) => {}
 		Err(err) => report_diagnostic(err.into()),

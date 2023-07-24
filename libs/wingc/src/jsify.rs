@@ -2,10 +2,17 @@ pub mod codemaker;
 mod tests;
 use aho_corasick::AhoCorasick;
 use const_format::formatcp;
-use indexmap::IndexSet;
+use indexmap::{IndexMap, IndexSet};
 use itertools::Itertools;
 
-use std::{borrow::Borrow, cmp::Ordering, collections::BTreeMap, path::Path, vec};
+use std::{
+	borrow::Borrow,
+	cell::RefCell,
+	cmp::Ordering,
+	collections::BTreeMap,
+	path::{Path, PathBuf},
+	vec,
+};
 
 use crate::{
 	ast::{
@@ -28,8 +35,6 @@ use crate::{
 
 use self::codemaker::CodeMaker;
 
-const PREFLIGHT_FILE_NAME: &str = "preflight.js";
-
 const STDLIB: &str = "$stdlib";
 const STDLIB_CORE_RESOURCE: &str = formatcp!("{}.{}", STDLIB, WINGSDK_RESOURCE);
 const STDLIB_MODULE: &str = WINGSDK_ASSEMBLY_NAME;
@@ -41,17 +46,16 @@ const ROOT_CLASS: &str = "$Root";
 const JS_CONSTRUCTOR: &str = "constructor";
 
 pub struct JSifyContext<'a> {
-	/// The current execution phase of the AST traversal.
-	/// The root of any Wing app starts with the preflight phase, and
-	/// the `inflight` keyword specifies scopes that are inflight.
-	pub files: &'a mut Files,
 	pub lifts: Option<&'a Lifts>,
-
 	pub visit_ctx: &'a mut VisitContext,
+	pub source_path: PathBuf,
 }
 
 pub struct JSifier<'a> {
 	pub types: &'a mut Types,
+	pub output_files: RefCell<Files>,
+	preflight_file_counter: RefCell<usize>,
+	preflight_file_map: RefCell<IndexMap<PathBuf, String>>,
 	source_files: &'a Files,
 	/// Root of the project, used for resolving extern modules
 	absolute_project_root: &'a Path,
@@ -75,26 +79,29 @@ impl<'a> JSifier<'a> {
 		absolute_project_root: &'a Path,
 		shim: bool,
 	) -> Self {
+		let output_files = Files::default();
 		Self {
 			types,
 			source_files,
 			shim,
 			app_name,
 			absolute_project_root,
+			preflight_file_counter: RefCell::new(0),
+			preflight_file_map: RefCell::new(IndexMap::new()),
+			output_files: RefCell::new(output_files),
 		}
 	}
 
-	pub fn jsify(&mut self, scope: &Scope) -> Files {
+	pub fn jsify(&mut self, source_path: &Path, scope: &Scope) {
 		CompilationContext::set(CompilationPhase::Jsifying, &scope.span);
-		let mut files = Files::default();
 		let mut js = CodeMaker::default();
 		let mut imports = CodeMaker::default();
 
 		let mut visit_ctx = VisitContext::new();
 		let mut jsify_context = JSifyContext {
 			visit_ctx: &mut visit_ctx,
-			files: &mut files,
 			lifts: None,
+			source_path: source_path.to_path_buf(),
 		};
 		jsify_context
 			.visit_ctx
@@ -152,12 +159,21 @@ impl<'a> JSifier<'a> {
 			output.add_code(js);
 		}
 
-		match files.add_file(PREFLIGHT_FILE_NAME, output.to_string()) {
+		let mut preflight_file_counter = self.preflight_file_counter.borrow_mut();
+		*preflight_file_counter += 1;
+		let preflight_file_name = format!("preflight{}.js", preflight_file_counter);
+		self
+			.preflight_file_map
+			.borrow_mut()
+			.insert(jsify_context.source_path, preflight_file_name.clone());
+		match self
+			.output_files
+			.borrow_mut()
+			.add_file(preflight_file_name, output.to_string())
+		{
 			Ok(()) => {}
 			Err(err) => report_diagnostic(err.into()),
 		}
-
-		files
 	}
 
 	fn jsify_scope_body(&self, scope: &Scope, ctx: &mut JSifyContext) -> CodeMaker {
@@ -574,7 +590,15 @@ impl<'a> JSifier<'a> {
 					identifier.as_ref().expect("bring jsii module requires an alias"),
 					name
 				)),
-				BringSource::WingFile(_) => todo!(),
+				BringSource::WingFile(name) => {
+					let preflight_file_map = self.preflight_file_map.borrow();
+					let preflight_file_name = preflight_file_map.get(Path::new(&name.name)).unwrap();
+					CodeMaker::one_line(format!(
+						"const {} = require(\"{}\")",
+						identifier.as_ref().expect("bring wing file requires an alias"),
+						preflight_file_name
+					))
+				}
 			},
 			StmtKind::Module { name, statements } => {
 				let mut code = CodeMaker::default();
@@ -913,9 +937,9 @@ impl<'a> JSifier<'a> {
 		};
 
 		let ctx = &mut JSifyContext {
-			files: ctx.files,
 			lifts,
 			visit_ctx: &mut ctx.visit_ctx,
+			source_path: ctx.source_path.clone(),
 		};
 
 		// emit the inflight side of the class into a separate file
@@ -1142,7 +1166,11 @@ impl<'a> JSifier<'a> {
 		code.close("}");
 
 		// emit the inflight class to a file
-		match ctx.files.add_file(inflight_filename(class), code.to_string()) {
+		match self
+			.output_files
+			.borrow_mut()
+			.add_file(inflight_filename(class), code.to_string())
+		{
 			Ok(()) => {}
 			Err(err) => report_diagnostic(err.into()),
 		}

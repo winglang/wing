@@ -2262,7 +2262,6 @@ impl<'a> TypeChecker<'a> {
 	}
 
 	pub fn type_check_module(&mut self, source_path: &Path, scope: &Scope) {
-		dbg!(&source_path);
 		CompilationContext::set(CompilationPhase::TypeChecking, &scope.span);
 		self.type_check_scope(scope);
 
@@ -2275,7 +2274,6 @@ impl<'a> TypeChecker<'a> {
 			env: SymbolEnv::new(Some(env.get_ref()), env.return_type, false, false, env.phase, 0),
 			loaded: true,
 		});
-		dbg!(&sanitized_path);
 		if let Err(e) = self.types.libraries.define(
 			&Symbol {
 				name: sanitized_path,
@@ -2688,7 +2686,6 @@ impl<'a> TypeChecker<'a> {
 						}
 
 						let lookup_name = sanitize_dots(&name.name);
-						dbg!(&lookup_name);
 						let lookup_result = self.types.libraries.lookup_nested_str(&lookup_name, None);
 						match lookup_result {
 							LookupResult::Found(kind, _) => match kind {

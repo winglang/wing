@@ -132,7 +132,7 @@ fn partial_compile(source_path: &Path, jsii_types: &mut TypeSystem) -> FileData 
 	// -- TYPECHECKING PHASE --
 	let mut jsii_imports = vec![];
 
-	type_check(&mut scope, &mut types, &source_path, jsii_types, &mut jsii_imports);
+	type_check(&mut scope, &mut types, source_path, jsii_types, &mut jsii_imports);
 
 	// -- JSIFICATION PHASE --
 
@@ -141,7 +141,7 @@ fn partial_compile(source_path: &Path, jsii_types: &mut TypeSystem) -> FileData 
 	let project_dir = source_path.parent().expect("Empty filename");
 
 	let mut jsifier = JSifier::new(&mut types, &files, app_name, &project_dir, true);
-	jsifier.jsify(&scope);
+	jsifier.jsify(source_path, &scope);
 
 	let tree = tree_sitter_trees
 		.into_iter()
