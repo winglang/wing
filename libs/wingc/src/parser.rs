@@ -217,8 +217,6 @@ pub fn parse_wing_project(init_path: &Path) -> ParseProjectOutput {
 		asts.insert(curr_path, scope);
 	}
 
-	println!("{:?}", dep_graph);
-
 	// produce a list of files in a topological ordering[1], so that we can type check
 	// source files that don't depend on any others first, then the ones that depend
 	// on those, and so on
@@ -230,8 +228,6 @@ pub fn parse_wing_project(init_path: &Path) -> ParseProjectOutput {
 			panic!("Error sorting files: {:?}", err);
 		}
 	};
-
-	println!("{:?}", topo_sorted_files);
 
 	ParseProjectOutput {
 		files,

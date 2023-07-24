@@ -365,9 +365,6 @@ pub fn compile(
 		tc_assert.check(&scope);
 	}
 
-	// -- JSIFICATION PHASE --
-
-	let app_name = source_path.file_stem().unwrap().to_str().unwrap();
 	let project_dir = absolute_project_root
 		.unwrap_or(source_path.parent().unwrap())
 		.to_path_buf();
@@ -381,7 +378,7 @@ pub fn compile(
 		return Err(());
 	}
 
-	let mut jsifier = JSifier::new(&mut types, &files, app_name, &project_dir, true);
+	let mut jsifier = JSifier::new(&mut types, &files, &source_path, &project_dir, true);
 
 	// -- LIFTING PHASE --
 
@@ -399,8 +396,9 @@ pub fn compile(
 		return Err(());
 	}
 
+	// -- JSIFICATION PHASE --
+
 	for file in &topo_sorted_files {
-		println!("jsifying \"{}\"", file.display());
 		let scope = asts.get_mut(file).expect("matching AST not found");
 		jsifier.jsify(file, &scope);
 	}

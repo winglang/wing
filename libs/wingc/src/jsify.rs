@@ -35,6 +35,8 @@ use crate::{
 
 use self::codemaker::CodeMaker;
 
+const PREFLIGHT_FILENAME: &str = "preflight.js";
+
 const STDLIB: &str = "$stdlib";
 const STDLIB_CORE_RESOURCE: &str = formatcp!("{}.{}", STDLIB, WINGSDK_RESOURCE);
 const STDLIB_MODULE: &str = WINGSDK_ASSEMBLY_NAME;
@@ -59,8 +61,8 @@ pub struct JSifier<'a> {
 	source_files: &'a Files,
 	/// Root of the project, used for resolving extern modules
 	absolute_project_root: &'a Path,
+	entrypoint_file_path: &'a Path,
 	shim: bool,
-	app_name: &'a str,
 }
 
 /// Preflight classes have two types of host binding methods:
@@ -75,7 +77,7 @@ impl<'a> JSifier<'a> {
 	pub fn new(
 		types: &'a mut Types,
 		source_files: &'a Files,
-		app_name: &'a str,
+		entrypoint_file_path: &'a Path,
 		absolute_project_root: &'a Path,
 		shim: bool,
 	) -> Self {
@@ -84,7 +86,7 @@ impl<'a> JSifier<'a> {
 			types,
 			source_files,
 			shim,
-			app_name,
+			entrypoint_file_path,
 			absolute_project_root,
 			preflight_file_counter: RefCell::new(0),
 			preflight_file_map: RefCell::new(IndexMap::new()),
@@ -151,17 +153,31 @@ impl<'a> JSifier<'a> {
 
 			output.add_code(root_class);
 			output.line("const $App = $stdlib.core.App.for(process.env.WING_TARGET);".to_string());
+			let app_name = self.entrypoint_file_path.file_stem().unwrap().to_string_lossy();
 			output.line(format!(
 				"new $App({{ outdir: {}, name: \"{}\", rootConstruct: {}, plugins: $plugins, isTestEnvironment: {} }}).synth();",
-				OUTDIR_VAR, self.app_name, ROOT_CLASS, ENV_WING_IS_TEST
+				OUTDIR_VAR, app_name, ROOT_CLASS, ENV_WING_IS_TEST
 			));
 		} else {
 			output.add_code(js);
 		}
 
-		let mut preflight_file_counter = self.preflight_file_counter.borrow_mut();
-		*preflight_file_counter += 1;
-		let preflight_file_name = format!("preflight{}.js", preflight_file_counter);
+		let preflight_file_name = if jsify_context.source_path == self.entrypoint_file_path {
+			PREFLIGHT_FILENAME.to_string()
+		} else {
+			// remove all non-alphanumeric characters
+			let sanitized_name = source_path
+				.file_stem()
+				.unwrap()
+				.to_string_lossy()
+				.chars()
+				.filter(|c| c.is_alphanumeric())
+				.collect::<String>();
+			// add a number to the end to avoid collisions
+			let mut preflight_file_counter = self.preflight_file_counter.borrow_mut();
+			*preflight_file_counter += 1;
+			format!("preflight.{}-{}.js", sanitized_name, preflight_file_counter)
+		};
 		self
 			.preflight_file_map
 			.borrow_mut()
@@ -583,10 +599,10 @@ impl<'a> JSifier<'a> {
 		match &statement.kind {
 			StmtKind::Bring { source, identifier } => match source {
 				BringSource::BuiltinModule(name) => {
-					CodeMaker::one_line(format!("const {} = require(\"{}\").{}", name, STDLIB_MODULE, name))
+					CodeMaker::one_line(format!("const {} = require(\"{}\").{};", name, STDLIB_MODULE, name))
 				}
 				BringSource::JsiiModule(name) => CodeMaker::one_line(format!(
-					"const {} = require(\"{}\")",
+					"const {} = require(\"{}\");",
 					identifier.as_ref().expect("bring jsii module requires an alias"),
 					name
 				)),
@@ -594,7 +610,7 @@ impl<'a> JSifier<'a> {
 					let preflight_file_map = self.preflight_file_map.borrow();
 					let preflight_file_name = preflight_file_map.get(Path::new(&name.name)).unwrap();
 					CodeMaker::one_line(format!(
-						"const {} = require(\"{}\")",
+						"const {} = require(\"./{}\");",
 						identifier.as_ref().expect("bring wing file requires an alias"),
 						preflight_file_name
 					))
