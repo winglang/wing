@@ -337,7 +337,7 @@ pub fn compile(
 	// -- DESUGARING PHASE --
 
 	// Transform all inflight closures defined in preflight into single-method resources
-	let asts = asts
+	let mut asts = asts
 		.into_iter()
 		.map(|(path, scope)| {
 			let mut inflight_transformer = ClosureTransformer::new();
@@ -345,9 +345,6 @@ pub fn compile(
 			(path, scope)
 		})
 		.collect::<IndexMap<PathBuf, Scope>>();
-
-	// TODO: remove
-	let mut scope = asts.into_iter().next().unwrap().1;
 
 	// -- TYPECHECKING PHASE --
 
@@ -358,12 +355,15 @@ pub fn compile(
 	// Create a universal JSII import spec (need to keep this alive during entire compilation)
 	let mut jsii_imports = vec![];
 
-	// Type check everything and build typed symbol environment
-	type_check(&mut scope, &mut types, &source_path, &mut jsii_types, &mut jsii_imports);
+	for file in topo_sorted_files {
+		// Type check everything and build typed symbol environment
+		let mut scope = asts.get_mut(&file).expect("matching AST not found");
+		type_check(&mut scope, &mut types, &source_path, &mut jsii_types, &mut jsii_imports);
 
-	// Validate the type checker didn't miss anything see `TypeCheckAssert` for details
-	let mut tc_assert = TypeCheckAssert::new(&types, found_errors());
-	tc_assert.check(&scope);
+		// Validate the type checker didn't miss anything - see `TypeCheckAssert` for details
+		let mut tc_assert = TypeCheckAssert::new(&types, found_errors());
+		tc_assert.check(&scope);
+	}
 
 	// -- JSIFICATION PHASE --
 
@@ -384,6 +384,9 @@ pub fn compile(
 	let mut jsifier = JSifier::new(&mut types, &files, app_name, &project_dir, true);
 
 	// -- LIFTING PHASE --
+
+	// TODO: remove
+	let scope = asts.into_iter().next().unwrap().1;
 
 	let mut lift = LiftTransform::new(&jsifier);
 	let scope = Box::new(lift.fold_scope(scope));

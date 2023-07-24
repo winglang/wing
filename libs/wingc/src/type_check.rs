@@ -1294,7 +1294,7 @@ impl Types {
 	/// but the std lib sometimes doesn't have the same names as the builtin types
 	/// https://github.com/winglang/wing/issues/1780
 	///
-	/// Note: This Doesn't handle generics (i.e. this keeps the `T1`)
+	/// Note: This doesn't handle generics (i.e. this keeps the `T1`)
 	pub fn get_std_class(&self, type_: &str) -> Option<(&SymbolKind, symbol_env::SymbolLookupInfo)> {
 		let type_name = fully_qualify_std_type(type_);
 
@@ -2649,7 +2649,42 @@ impl<'a> TypeChecker<'a> {
 						namespace_filter = vec![];
 						alias = identifier.as_ref().unwrap();
 					}
-					ast::BringSource::WingFile(_) => todo!(),
+					ast::BringSource::WingFile(name) => {
+						if identifier.is_none() {
+							self.spanned_error(
+								stmt,
+								format!(
+									"bring \"{}\" must be assigned to an identifier (e.g. bring \"foo\" as foo)",
+									name
+								),
+							);
+							return;
+						}
+
+						let lookup_name = sanitize_dots(&name.name);
+						let lookup_result = self.types.libraries.lookup_nested_str(&lookup_name, None);
+						match lookup_result {
+							LookupResult::Found(kind, _) => match kind {
+								SymbolKind::Type(_) => panic!("expected a namespace, found a type"),
+								SymbolKind::Variable(_) => panic!("expected a namespace, found a variable"),
+								SymbolKind::Namespace(nsref) => {
+									if let Err(e) = env.define(
+										identifier.as_ref().unwrap(),
+										SymbolKind::Namespace(*nsref),
+										StatementIdx::Top,
+									) {
+										self.type_error(e);
+									}
+								}
+							},
+							LookupResult::NotFound(_) => {
+								self.spanned_error(stmt, format!("could not find types for \"{}\" (compiler bug)", name))
+							}
+							LookupResult::DefinedLater => panic!("defined later error"),
+							LookupResult::ExpectedNamespace(_) => panic!("expected namespace error"),
+						}
+						return;
+					}
 				}
 
 				self.add_module_to_env(env, library_name, namespace_filter, alias, Some(&stmt));
@@ -4407,7 +4442,7 @@ pub fn import_udt_from_jsii(
 /// But the std lib sometimes doesn't have the same names as the builtin types
 ///
 /// https://github.com/winglang/wing/issues/1780
-pub fn fully_qualify_std_type(type_: &str) -> std::string::String {
+pub fn fully_qualify_std_type(type_: &str) -> String {
 	// Additionally, this doesn't handle for generics
 	let type_name = type_.to_string();
 	let type_name = if let Some((prefix, _)) = type_name.split_once("<") {
@@ -4429,6 +4464,12 @@ pub fn fully_qualify_std_type(type_: &str) -> std::string::String {
 		| "Boolean" | "Number" => format!("{WINGSDK_STD_MODULE}.{type_name}"),
 		_ => type_name.to_string(),
 	}
+}
+
+fn sanitize_dots(s: &str) -> String {
+	let mut s = s.to_string();
+	s = s.replace(".", "-");
+	s
 }
 
 #[cfg(test)]
