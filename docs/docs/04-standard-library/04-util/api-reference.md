@@ -75,6 +75,8 @@ Converts a string from UTF-8 to base64.
 
 - *Type:* str
 
+The name of the UTF-8 string to encode.
+
 ---
 
 ###### `url`<sup>Optional</sup> <a name="url" id="@winglang/sdk.util.Util.base64Encode.parameter.url"></a>
