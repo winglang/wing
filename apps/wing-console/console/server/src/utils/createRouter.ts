@@ -33,7 +33,7 @@ export interface LayoutComponent {
 
 export interface LayoutPanel {
   hide?: boolean;
-  components: LayoutComponent[];
+  components?: LayoutComponent[];
   size?: "small" | "default";
 }
 

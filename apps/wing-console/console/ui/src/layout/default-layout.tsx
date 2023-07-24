@@ -334,11 +334,11 @@ export const DefaultLayout = ({
                     "h-[15rem]",
                 )}
               >
-                {layout.bottomPanel?.components.map(
+                {layout.bottomPanel?.components?.map(
                   (component: LayoutComponent, index: number) => {
                     const panelComponent = renderLayoutComponent(component);
                     if (
-                      layout.bottomPanel?.components.length &&
+                      layout.bottomPanel?.components?.length &&
                       layout.bottomPanel.components.length > 1 &&
                       index !== layout.bottomPanel.components.length - 1
                     ) {
