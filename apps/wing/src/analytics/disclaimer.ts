@@ -25,8 +25,16 @@ For more information see ${chalk.blueBright.bold.underline("https://winglang.io/
 ${chalk.redBright("(This message will self-destruct after the first run)")}
 `;
 
+export const WING_OPT_OUT_CONFIRMATION = `
+🙉 🙈 🙊 Wing analytics are disabled, no data will be collected this run. 🙉 🙈 🙊
+`;
+
 function displayDisclaimer() {
   console.log(`${chalk.hex("#2AD5C1")(WING_DISCLAIMER)}`);
+}
+
+export function displayOptOutConfirmation() {
+  console.log(`${chalk.hex("#2AD5C1")(WING_OPT_OUT_CONFIRMATION)}`);
 }
 
 export function shouldDisplayDisclaimer(config: AnalyticsConfig): boolean {
