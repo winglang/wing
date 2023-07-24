@@ -77,13 +77,10 @@ export class WingConsoleManager {
         header: {
           hide: true,
         },
-        explorer: {
+        leftPanel: {
           hide: true,
         },
-        testsTree: {
-          hide: true,
-        },
-        logs: {
+        bottomPanel: {
           hide: true,
         },
         statusBar: {
