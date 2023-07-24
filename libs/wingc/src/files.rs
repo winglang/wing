@@ -58,6 +58,10 @@ impl Files {
 		self.data.get(path.as_ref())
 	}
 
+	pub fn contains_file<S: AsRef<Path>>(&self, path: S) -> bool {
+		self.data.contains_key(path.as_ref())
+	}
+
 	pub fn emit_files(&self, out_dir: &Path) -> Result<(), FilesError> {
 		for (path, content) in &self.data {
 			let full_path = out_dir.join(path);

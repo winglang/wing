@@ -13,8 +13,10 @@ use comp_ctx::set_custom_panic_hook;
 use diagnostic::{found_errors, report_diagnostic, Diagnostic};
 use files::Files;
 use fold::Fold;
+use indexmap::IndexMap;
 use jsify::JSifier;
 use lifting::LiftTransform;
+use parser::parse_wing_project;
 use type_check::jsii_importer::JsiiImportSpec;
 use type_check::symbol_env::StatementIdx;
 use type_check::{FunctionSignature, SymbolKind, Type};
@@ -157,42 +159,42 @@ pub unsafe extern "C" fn wingc_compile(ptr: u32, len: u32) -> u64 {
 	}
 }
 
-pub fn parse(source_path: &Path) -> (Files, Scope) {
-	let language = tree_sitter_wing::language();
-	let mut parser = tree_sitter::Parser::new();
-	parser.set_language(language).unwrap();
+// pub fn parse(source_path: &Path) -> (Files, Scope) {
+// 	let language = tree_sitter_wing::language();
+// 	let mut parser = tree_sitter::Parser::new();
+// 	parser.set_language(language).unwrap();
 
-	let source = match fs::read(&source_path) {
-		Ok(source) => source,
-		Err(err) => {
-			report_diagnostic(Diagnostic {
-				message: format!("Error reading source file: {}: {:?}", source_path.display(), err),
-				span: None,
-			});
+// 	let source = match fs::read(&source_path) {
+// 		Ok(source) => source,
+// 		Err(err) => {
+// 			report_diagnostic(Diagnostic {
+// 				message: format!("Error reading source file: {}: {:?}", source_path.display(), err),
+// 				span: None,
+// 			});
 
-			// Set up a dummy scope to return
-			let empty_scope = Scope {
-				statements: Vec::<Stmt>::new(),
-				env: RefCell::new(None),
-				span: Default::default(),
-			};
-			return (Files::default(), empty_scope);
-		}
-	};
+// 			// Set up a dummy scope to return
+// 			let empty_scope = Scope {
+// 				statements: Vec::<Stmt>::new(),
+// 				env: RefCell::new(None),
+// 				span: Default::default(),
+// 			};
+// 			return (Files::default(), empty_scope);
+// 		}
+// 	};
 
-	let tree = match parser.parse(&source, None) {
-		Some(tree) => tree,
-		None => {
-			panic!("Failed parsing source file: {}", source_path.display());
-		}
-	};
+// 	let tree = match parser.parse(&source, None) {
+// 		Some(tree) => tree,
+// 		None => {
+// 			panic!("Failed parsing source file: {}", source_path.display());
+// 		}
+// 	};
 
-	let mut files = Files::new();
-	let wing_parser = Parser::new(&source, source_path.to_str().unwrap().to_string(), &mut files);
-	let scope = wing_parser.wingit(&tree.root_node());
+// 	let mut files = Files::new();
+// 	let wing_parser = Parser::new(&source, source_path.to_str().unwrap().to_string(), &mut files);
+// 	let scope = wing_parser.parse(&tree.root_node());
 
-	(files, scope)
-}
+// 	(files, scope)
+// }
 
 pub fn type_check(
 	scope: &mut Scope,
@@ -329,13 +331,19 @@ pub fn compile(
 	let out_dir = out_dir.unwrap_or(default_out_dir.as_ref());
 
 	// -- PARSING PHASE --
-	let (files, scope) = parse(&source_path);
+	let (files, trees) = parse_wing_project(&source_path);
 
 	// -- DESUGARING PHASE --
 
 	// Transform all inflight closures defined in preflight into single-method resources
-	let mut inflight_transformer = ClosureTransformer::new();
-	let mut scope = inflight_transformer.fold_scope(scope);
+	let mut trees = trees
+		.into_iter()
+		.map(|(path, scope)| {
+			let mut inflight_transformer = ClosureTransformer::new();
+			let scope = inflight_transformer.fold_scope(scope);
+			(path, scope)
+		})
+		.collect::<IndexMap<PathBuf, Scope>>();
 
 	// -- TYPECHECKING PHASE --
 

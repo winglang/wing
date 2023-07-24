@@ -128,6 +128,49 @@ static RESERVED_WORDS: phf::Set<&'static str> = phf_set! {
 	"Object",
 };
 
+// TODO: handle errors
+pub fn parse_wing_project(init_path: &Path) -> (Files, IndexMap<PathBuf, Scope>) {
+	// a stack of files that need to be parsed
+	let mut needs_parsing: Vec<PathBuf> = vec![init_path.to_path_buf()];
+	// store all source files in memory so we can look up spans
+	let mut files = Files::new();
+	// collect all parsed trees so they can be passed to later phases of the compiler
+	let mut trees = IndexMap::new();
+
+	// we can reuse the tree sitter parser
+	let language = tree_sitter_wing::language();
+	let mut tree_sitter_parser = tree_sitter::Parser::new();
+	tree_sitter_parser.set_language(language).unwrap();
+
+	while !needs_parsing.is_empty() {
+		let source_path = needs_parsing.remove(0);
+		if files.contains_file(&source_path) {
+			continue;
+		}
+
+		let source = match fs::read(&source_path) {
+			Ok(source) => source,
+			Err(err) => {
+				panic!("Error reading source file: {}: {:?}", source_path.display(), err);
+			}
+		};
+
+		let parser = Parser::new(&source, source_path.to_string_lossy().to_string(), &mut files);
+		let tree_sitter_tree = match tree_sitter_parser.parse(&source, None) {
+			Some(tree) => tree,
+			None => {
+				panic!("Error parsing source file: {}", source_path.display());
+			}
+		};
+
+		let tree_sitter_root = tree_sitter_tree.root_node();
+		let scope = parser.parse(&tree_sitter_root);
+		trees.insert(source_path, scope);
+	}
+
+	(files, trees)
+}
+
 pub struct Parser<'a> {
 	pub source: &'a [u8],
 	pub source_name: String,
@@ -137,6 +180,9 @@ pub struct Parser<'a> {
 	in_json: RefCell<u64>,
 	is_in_mut_json: RefCell<bool>,
 	is_in_loop: RefCell<bool>,
+	/// Track all file paths that have been found while parsing the current file.
+	/// These will need to be eventually parsed
+	referenced_wing_files: RefCell<Vec<PathBuf>>,
 }
 
 impl<'s> Parser<'s> {
@@ -153,10 +199,11 @@ impl<'s> Parser<'s> {
 			// mutability from the root of the Json literal.
 			in_json: RefCell::new(0),
 			is_in_mut_json: RefCell::new(false),
+			referenced_wing_files: RefCell::new(Vec::new()),
 		}
 	}
 
-	pub fn wingit(&self, root: &Node) -> Scope {
+	pub fn parse(&self, root: &Node) -> Scope {
 		match self.files.borrow_mut().add_file(
 			PathBuf::from(self.source_name.clone()),
 			String::from_utf8(self.source.to_vec()).expect("Invalid UTF-8 sequence"),
@@ -602,50 +649,31 @@ impl<'s> Parser<'s> {
 			if source_path == Path::new(&self.source_name) {
 				return self.with_error("Cannot bring a module into itself", statement_node);
 			}
-			let scope = match fs::read(&source_path) {
-				Ok(source) => {
-					let mut files = self.files.borrow_mut();
-					let parser = Parser::new(&source, source_path.to_string_lossy().to_string(), *files);
-					let language = tree_sitter_wing::language();
-					let mut tree_sitter_parser = tree_sitter::Parser::new();
-					tree_sitter_parser.set_language(language).unwrap();
-					let tree = match tree_sitter_parser.parse(&source, None) {
-						Some(tree) => tree,
-						None => {
-							panic!("Failed parsing source file: {}", source_path.display());
-						}
-					};
-					parser.wingit(&tree.root_node())
-				}
-				Err(err) => {
-					report_diagnostic(Diagnostic {
-						message: format!("Error reading source file: {}: {:?}", source_path.display(), err),
-						span: None,
-					});
-					Scope::default()
-				}
-			};
+			self.referenced_wing_files.borrow_mut().push(source_path);
 
-			// Check that the module only declares bringable items (classes, interfaces, enums, structs)
-			// and not variables or functions
-			let scope = if !is_bringable(&scope) {
-				report_diagnostic(Diagnostic {
-					message: format!(
-						"Cannot bring \"{}\" - modules with statements besides classes, interfaces, enums, and structs cannot be brought",
-						module_name.name
-					),
-					span: None,
-				});
-				Scope::default()
-			} else {
-				scope
-			};
+			// // Check that the module only declares bringable items (classes, interfaces, enums, structs)
+			// // and not variables or functions
+			// let scope = if !is_bringable(&scope) {
+			// 	report_diagnostic(Diagnostic {
+			// 		message: format!(
+			// 			"Cannot bring \"{}\" - modules with statements besides classes, interfaces, enums, and structs cannot be brought",
+			// 			module_name.name
+			// 		),
+			// 		span: None,
+			// 	});
+			// 	Scope::default()
+			// } else {
+			// 	scope
+			// };
 
 			// parse error if no alias is provided
 			let module = if let Some(alias) = alias {
-				Ok(StmtKind::Module {
-					name: alias,
-					statements: scope,
+				Ok(StmtKind::Bring {
+					source: BringSource::WingFile(Symbol {
+						name: module_name.name[1..module_name.name.len() - 1].to_string(),
+						span: module_name.span,
+					}),
+					identifier: Some(alias),
 				})
 			} else {
 				self.with_error::<StmtKind>("No alias provided for module", statement_node)
@@ -655,13 +683,17 @@ impl<'s> Parser<'s> {
 		}
 
 		if module_name.name.starts_with("\"") && module_name.name.ends_with("\"") {
-			return Ok(StmtKind::Bring {
-				source: BringSource::JsiiModule(Symbol {
-					name: module_name.name[1..module_name.name.len() - 1].to_string(),
-					span: module_name.span,
-				}),
-				identifier: alias,
-			});
+			return if let Some(alias) = alias {
+				Ok(StmtKind::Bring {
+					source: BringSource::JsiiModule(Symbol {
+						name: module_name.name[1..module_name.name.len() - 1].to_string(),
+						span: module_name.span,
+					}),
+					identifier: Some(alias),
+				})
+			} else {
+				self.with_error::<StmtKind>("No alias provided for imported module", statement_node)
+			};
 		}
 
 		Ok(StmtKind::Bring {

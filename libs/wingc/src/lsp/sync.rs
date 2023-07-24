@@ -109,7 +109,7 @@ fn partial_compile(source_file: &str, text: &[u8], jsii_types: &mut TypeSystem) 
 	let mut files = Files::new();
 	let wing_parser = Parser::new(text, source_file.to_string(), &mut files);
 
-	let scope = wing_parser.wingit(&tree.root_node());
+	let scope = wing_parser.parse(&tree.root_node());
 
 	// -- DESUGARING PHASE --
 
