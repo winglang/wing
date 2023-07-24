@@ -134,42 +134,6 @@ export class Json {
     throw new Error("Macro");
   }
 
-  /**
-   * A recursive deep comparison of two Json objects to determine if they are equal.
-   * @param jsonA The first Json object to compare
-   * @param jsonB The second Json object to compare
-   * @returns Boolean value corresponding if the Json objects are equal
-   */
-  public static isEquals(jsonA: Json, jsonB: Json): boolean {
-    if (jsonA === jsonB) {
-      return true;
-    }
-    if (!jsonA || !jsonB) {
-      return false;
-    }
-    const aKeys = Object.keys(jsonA).sort((a, b) => a.localeCompare(b));
-    const bKeys = Object.keys(jsonB).sort((a, b) => a.localeCompare(b));
-    if (aKeys.length !== bKeys.length) {
-      return false;
-    }
-    for (let i = 0; i < aKeys.length; i++) {
-      if (aKeys[i] !== bKeys[i]) {
-        return false;
-      }
-    }
-    for (let i = 0; i < Object.keys(jsonA).length; i++) {
-      const key = Object.keys(jsonA)[i] as keyof typeof jsonA;
-      if (typeof jsonA[key] === "object" && typeof jsonB[key] === "object") {
-        if (this.isEquals(jsonA[key] as any, jsonB[key] as any) === false) {
-          return false;
-        }
-      } else if (jsonA[key] !== jsonB[key]) {
-        return false;
-      }
-    }
-    return true;
-  }
-
   private constructor() {}
 
   /**

@@ -36,7 +36,7 @@ module.exports = function({ $api_url, $http_Util, $std_Json }) {
       const res = (await $http_Util.get(($api_url + "/foo")));
       const body = (JSON.parse((res.body ?? "")));
       const a1 = (body)[0];
-      {((cond) => {if (!cond) throw new Error("assertion failed: a1.get(\"foo\") == \"bar\"")})(((a1)["foo"] === "bar"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: a1.get(\"foo\") == \"bar\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((a1)["foo"],"bar")))};
     }
   }
   return $Closure2;

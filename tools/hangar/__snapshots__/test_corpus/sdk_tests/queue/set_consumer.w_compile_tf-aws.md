@@ -55,7 +55,7 @@ module.exports = function({  }) {
       this.$this_c = $this_c;
     }
     async test() {
-      return ((await this.$this_c.peek()) === 2);
+      return (((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await this.$this_c.peek()),2));
     }
   }
   return Predicate;

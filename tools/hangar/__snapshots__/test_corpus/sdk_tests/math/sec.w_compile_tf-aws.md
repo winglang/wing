@@ -10,12 +10,12 @@ module.exports = function({ $math_Util }) {
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.sec(-0) == 1")})(((await $math_Util.sec((-0))) === 1))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.sec(0) == 1")})(((await $math_Util.sec(0)) === 1))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.sec(1) == 1.8508157176809255")})(((await $math_Util.sec(1)) === 1.8508157176809255))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.sec(-5) == 3.5253200858160887")})(((await $math_Util.sec((-5))) === 3.5253200858160887))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.sec(math.PI) == -1")})(((await $math_Util.sec($math_Util.PI)) === (-1)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.sec(math.TAU) == 1")})(((await $math_Util.sec($math_Util.TAU)) === 1))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.sec(-0) == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.sec((-0))),1)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.sec(0) == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.sec(0)),1)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.sec(1) == 1.8508157176809255")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.sec(1)),1.8508157176809255)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.sec(-5) == 3.5253200858160887")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.sec((-5))),3.5253200858160887)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.sec(math.PI) == -1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.sec($math_Util.PI)),(-1))))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.sec(math.TAU) == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.sec($math_Util.TAU)),1)))};
     }
   }
   return $Closure1;
@@ -179,12 +179,12 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
     }
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.sec(-0) == 1")})(((math.Util.sec((-0))) === 1))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.sec(0) == 1")})(((math.Util.sec(0)) === 1))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.sec(1) == 1.8508157176809255")})(((math.Util.sec(1)) === 1.8508157176809255))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.sec(-5) == 3.5253200858160887")})(((math.Util.sec((-5))) === 3.5253200858160887))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.sec(math.PI) == -1")})(((math.Util.sec(math.Util.PI)) === (-1)))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.sec(math.TAU) == 1")})(((math.Util.sec(math.Util.TAU)) === 1))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.sec(-0) == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.sec((-0))),1)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.sec(0) == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.sec(0)),1)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.sec(1) == 1.8508157176809255")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.sec(1)),1.8508157176809255)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.sec(-5) == 3.5253200858160887")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.sec((-5))),3.5253200858160887)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.sec(math.PI) == -1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.sec(math.Util.PI)),(-1))))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.sec(math.TAU) == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.sec(math.Util.TAU)),1)))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:inflight secant",new $Closure1(this,"$Closure1"));
   }
 }

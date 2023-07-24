@@ -10,8 +10,8 @@ module.exports = function({ $math_Util, $x, $y }) {
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.abs(x - y) == 2")})(((await $math_Util.abs(($x - $y))) === 2))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.abs(y - x) == 2")})(((await $math_Util.abs(($y - $x))) === 2))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.abs(x - y) == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.abs(($x - $y))),2)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.abs(y - x) == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.abs(($y - $x))),2)))};
     }
   }
   return $Closure1;
@@ -186,8 +186,8 @@ class $Root extends $stdlib.std.Resource {
     }
     const x = 3;
     const y = 5;
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.abs(y - x) == 2")})(((math.Util.abs((y - x))) === 2))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.abs(x - y) == 2")})(((math.Util.abs((x - y))) === 2))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.abs(y - x) == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.abs((y - x))),2)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.abs(x - y) == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.abs((x - y))),2)))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:inflight absolute",new $Closure1(this,"$Closure1"));
   }
 }

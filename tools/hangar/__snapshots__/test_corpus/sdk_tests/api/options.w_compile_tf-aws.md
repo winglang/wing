@@ -10,8 +10,8 @@ module.exports = function({ $api_OPTIONS, $path }) {
       return $obj;
     }
     async handle(req) {
-      {((cond) => {if (!cond) throw new Error("assertion failed: req.method == api_OPTIONS")})((req.method === $api_OPTIONS))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: req.path == path")})((req.path === $path))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: req.method == api_OPTIONS")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(req.method,$api_OPTIONS)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: req.path == path")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(req.path,$path)))};
       return {
       "status": 204,}
       ;
@@ -32,8 +32,8 @@ module.exports = function({ $api_HEAD, $path }) {
       return $obj;
     }
     async handle(req) {
-      {((cond) => {if (!cond) throw new Error("assertion failed: req.method == api_HEAD")})((req.method === $api_HEAD))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: req.path == path")})((req.path === $path))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: req.method == api_HEAD")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(req.method,$api_HEAD)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: req.path == path")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(req.path,$path)))};
       return {
       "status": 204,}
       ;
@@ -77,8 +77,8 @@ module.exports = function({ $api_url, $http_HEAD, $http_OPTIONS, $http_Util, $pa
       const url = ($api_url + $path);
       const options = (await $http_Util.fetch(url,{ method: $http_OPTIONS }));
       const head = (await $http_Util.fetch(url,{ method: $http_HEAD }));
-      {((cond) => {if (!cond) throw new Error("assertion failed: options.status == 204")})((options.status === 204))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: options.url == url")})((options.url === url))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: options.status == 204")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(options.status,204)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: options.url == url")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(options.url,url)))};
     }
   }
   return $Closure4;

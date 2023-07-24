@@ -24,7 +24,7 @@ module.exports = function({ $std_Json, $std_String }) {
     }
     async handle() {
       {console.log(((args) => { if (typeof args !== "string") {throw new Error("unable to parse " + typeof args + " " + args + " as a string")}; return JSON.parse(JSON.stringify(args)) })("hello"))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: Json.values(Json {}).length == 0")})(((Object.values(Object.freeze({}))).length === 0))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: Json.values(Json {}).length == 0")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((Object.values(Object.freeze({}))).length,0)))};
     }
   }
   return $Closure1;

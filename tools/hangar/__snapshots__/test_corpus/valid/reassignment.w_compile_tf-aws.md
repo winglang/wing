@@ -84,19 +84,19 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     let x = 5;
-    {((cond) => {if (!cond) throw new Error("assertion failed: x == 5")})((x === 5))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: x == 5")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(x,5)))};
     x = (x + 1);
-    {((cond) => {if (!cond) throw new Error("assertion failed: x == 6")})((x === 6))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: x == 6")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(x,6)))};
     const r = new R(this,"R");
     (r.inc());
-    {((cond) => {if (!cond) throw new Error("assertion failed: r.f == 2")})((r.f === 2))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: r.f == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(r.f,2)))};
     const f = ((arg) => {
       arg = 0;
       return arg;
     });
     const y = 1;
-    {((cond) => {if (!cond) throw new Error("assertion failed: f(y) == 0")})(((f(y)) === 0))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: y == 1")})((y === 1))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: f(y) == 0")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((f(y)),0)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: y == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(y,1)))};
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);

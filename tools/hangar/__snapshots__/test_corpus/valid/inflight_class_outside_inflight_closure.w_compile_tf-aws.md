@@ -11,7 +11,7 @@ module.exports = function({ $BinaryOperation }) {
     }
     async handle() {
       const op = new $BinaryOperation(10,20);
-      {((cond) => {if (!cond) throw new Error("assertion failed: op.add() == 30")})(((await op.add()) === 30))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: op.add() == 30")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await op.add()),30)))};
     }
   }
   return $Closure1;

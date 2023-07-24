@@ -11,15 +11,15 @@ module.exports = function({ $PARSE_ERROR, $std_Boolean, $std_Json }) {
     }
     async handle() {
       const t = (await $std_Boolean.fromJson((JSON.parse("true"))));
-      {((cond) => {if (!cond) throw new Error("assertion failed: t == true")})((t === true))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: t == true")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(t,true)))};
       const f = (await $std_Boolean.fromJson((JSON.parse("false"))));
-      {((cond) => {if (!cond) throw new Error("assertion failed: f == false")})((f === false))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: f == false")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(f,false)))};
       try {
         (await $std_Boolean.fromJson(123));
       }
       catch ($error_s) {
         const s = $error_s.message;
-        {((cond) => {if (!cond) throw new Error("assertion failed: s == PARSE_ERROR")})((s === $PARSE_ERROR))};
+        {((cond) => {if (!cond) throw new Error("assertion failed: s == PARSE_ERROR")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(s,$PARSE_ERROR)))};
       }
     }
   }
@@ -198,19 +198,19 @@ class $Root extends $stdlib.std.Resource {
       }
       catch ($error_actual) {
         const actual = $error_actual.message;
-        {((cond) => {if (!cond) throw new Error("assertion failed: actual == expected")})((actual === expected))};
+        {((cond) => {if (!cond) throw new Error("assertion failed: actual == expected")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(actual,expected)))};
         error = true;
       }
       {((cond) => {if (!cond) throw new Error("assertion failed: error")})(error)};
     });
     const PARSE_ERROR = "unable to parse number 123 as a boolean";
     const t = (std.Boolean.fromJson((JSON.parse("true"))));
-    {((cond) => {if (!cond) throw new Error("assertion failed: t == true")})((t === true))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: t == true")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(t,true)))};
     (assertThrows(PARSE_ERROR,(() => {
       (std.Boolean.fromJson(123));
     })));
     const f = (std.Boolean.fromJson((JSON.parse("false"))));
-    {((cond) => {if (!cond) throw new Error("assertion failed: f == false")})((f === false))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: f == false")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(f,false)))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:fromJson()",new $Closure1(this,"$Closure1"));
   }
 }

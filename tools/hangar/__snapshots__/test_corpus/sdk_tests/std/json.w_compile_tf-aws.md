@@ -13,7 +13,7 @@ module.exports = function({  }) {
       const x = {"a":1};
       ((obj, args) => { obj[args[0]] = args[1]; })(x, ["b",2]);
       const y = (x)["b"];
-      {((cond) => {if (!cond) throw new Error("assertion failed: y == 2")})((y === 2))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: y == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(y,2)))};
     }
   }
   return $Closure1;
@@ -35,7 +35,7 @@ module.exports = function({  }) {
       const a = {"c":3};
       ((obj, args) => { obj[args[0]] = args[1]; })(x, [2,a]);
       const d = (x)[2];
-      {((cond) => {if (!cond) throw new Error("assertion failed: d.get(\"c\") == 3")})(((d)["c"] === 3))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: d.get(\"c\") == 3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((d)["c"],3)))};
     }
   }
   return $Closure2;
@@ -292,22 +292,16 @@ class $Root extends $stdlib.std.Resource {
     const b = {"b":2};
     ((obj, args) => { obj[args[0]] = args[1]; })(a, ["c",b]);
     const c = (a)["c"];
-    {((cond) => {if (!cond) throw new Error("assertion failed: c.get(\"b\") == 2")})(((c)["b"] === 2))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: c.get(\"b\") == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((c)["b"],2)))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:set()",new $Closure1(this,"$Closure1"));
     const d = {"d":3};
     ((obj, args) => { obj[args[0]] = args[1]; })(a, [2,d]);
     const e = (a)[2];
-    {((cond) => {if (!cond) throw new Error("assertion failed: e.get(\"d\") == 3")})(((e)["d"] === 3))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: e.get(\"d\") == 3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((e)["d"],3)))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:setAt()",new $Closure2(this,"$Closure2"));
-    {((cond) => {if (!cond) throw new Error("assertion failed: Json.tryParse(nil) == nil")})((((args) => { try { return (args === undefined) ? undefined : JSON.parse(args); } catch (err) { return undefined; } })(undefined) === undefined))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: Json.tryParse(\"boom\") == nil")})((((args) => { try { return (args === undefined) ? undefined : JSON.parse(args); } catch (err) { return undefined; } })("boom") === undefined))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: Json.tryParse(\"\") == nil")})((((args) => { try { return (args === undefined) ? undefined : JSON.parse(args); } catch (err) { return undefined; } })("") === undefined))};
-    const jsonA = Object.freeze({"numbers":[1, 2, 3],"something":"else"});
-    const jsonB = {"something":"else","numbers":[1, 2, 3]};
-    const jsonC = {"something":"different","numbers":[1, 2, 3, 4]};
-    {((cond) => {if (!cond) throw new Error("assertion failed: Json.isEquals(jsonA, jsonA) == true")})(((std.Json.isEquals(jsonA,jsonA)) === true))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: Json.isEquals(jsonA, Json.deepCopy(jsonB)) == true")})(((std.Json.isEquals(jsonA,Object.freeze(JSON.parse(JSON.stringify(jsonB))))) === true))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: Json.isEquals(jsonA, Json.deepCopy(jsonC)) == false")})(((std.Json.isEquals(jsonA,Object.freeze(JSON.parse(JSON.stringify(jsonC))))) === false))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: Json.tryParse(nil) == nil")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((args) => { try { return (args === undefined) ? undefined : JSON.parse(args); } catch (err) { return undefined; } })(undefined),undefined)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: Json.tryParse(\"boom\") == nil")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((args) => { try { return (args === undefined) ? undefined : JSON.parse(args); } catch (err) { return undefined; } })("boom"),undefined)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: Json.tryParse(\"\") == nil")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((args) => { try { return (args === undefined) ? undefined : JSON.parse(args); } catch (err) { return undefined; } })(""),undefined)))};
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);

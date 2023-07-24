@@ -15,10 +15,10 @@ module.exports = function({ $util_Util }) {
       const base64urlEncode = (await $util_Util.base64Encode(string,true));
       const base64Decode = (await $util_Util.base64Decode("aHR0cHM6Ly93d3cud2luZ2xhbmcuaW8vZG9jcw=="));
       const base64urlDecode = (await $util_Util.base64Decode("aHR0cHM6Ly93d3cud2luZ2xhbmcuaW8vZG9jcw",true));
-      {((cond) => {if (!cond) throw new Error("assertion failed: base64Encode == \"aHR0cHM6Ly93d3cud2luZ2xhbmcuaW8vZG9jcw==\"")})((base64Encode === "aHR0cHM6Ly93d3cud2luZ2xhbmcuaW8vZG9jcw=="))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: base64urlEncode == \"aHR0cHM6Ly93d3cud2luZ2xhbmcuaW8vZG9jcw\"")})((base64urlEncode === "aHR0cHM6Ly93d3cud2luZ2xhbmcuaW8vZG9jcw"))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: base64Decode == string")})((base64Decode === string))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: base64urlDecode == string")})((base64urlDecode === string))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: base64Encode == \"aHR0cHM6Ly93d3cud2luZ2xhbmcuaW8vZG9jcw==\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(base64Encode,"aHR0cHM6Ly93d3cud2luZ2xhbmcuaW8vZG9jcw==")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: base64urlEncode == \"aHR0cHM6Ly93d3cud2luZ2xhbmcuaW8vZG9jcw\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(base64urlEncode,"aHR0cHM6Ly93d3cud2luZ2xhbmcuaW8vZG9jcw")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: base64Decode == string")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(base64Decode,string)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: base64urlDecode == string")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(base64urlDecode,string)))};
     }
   }
   return $Closure1;
@@ -187,10 +187,10 @@ class $Root extends $stdlib.std.Resource {
     const base64urlEncode = (util.Util.base64Encode(string,true));
     const base64Decode = (util.Util.base64Decode("aHR0cHM6Ly93d3cud2luZ2xhbmcuaW8vZG9jcw=="));
     const base64urlDecode = (util.Util.base64Decode("aHR0cHM6Ly93d3cud2luZ2xhbmcuaW8vZG9jcw",true));
-    {((cond) => {if (!cond) throw new Error("assertion failed: base64Encode == \"aHR0cHM6Ly93d3cud2luZ2xhbmcuaW8vZG9jcw==\"")})((base64Encode === "aHR0cHM6Ly93d3cud2luZ2xhbmcuaW8vZG9jcw=="))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: base64urlEncode == \"aHR0cHM6Ly93d3cud2luZ2xhbmcuaW8vZG9jcw\"")})((base64urlEncode === "aHR0cHM6Ly93d3cud2luZ2xhbmcuaW8vZG9jcw"))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: base64Decode == string")})((base64Decode === string))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: base64urlDecode == string")})((base64urlDecode === string))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: base64Encode == \"aHR0cHM6Ly93d3cud2luZ2xhbmcuaW8vZG9jcw==\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(base64Encode,"aHR0cHM6Ly93d3cud2luZ2xhbmcuaW8vZG9jcw==")))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: base64urlEncode == \"aHR0cHM6Ly93d3cud2luZ2xhbmcuaW8vZG9jcw\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(base64urlEncode,"aHR0cHM6Ly93d3cud2luZ2xhbmcuaW8vZG9jcw")))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: base64Decode == string")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(base64Decode,string)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: base64urlDecode == string")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(base64urlDecode,string)))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:inflight base64",new $Closure1(this,"$Closure1"));
   }
 }

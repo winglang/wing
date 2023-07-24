@@ -16,7 +16,7 @@ module.exports = function({ $http_Util, $privateBucket, $publicBucket, $util_Uti
       const publicUrl = (await $publicBucket.publicUrl("file1.txt"));
       {((cond) => {if (!cond) throw new Error("assertion failed: publicUrl != \"\"")})((publicUrl !== ""))};
       if (((await $util_Util.env("WING_TARGET")) !== "sim")) {
-        {((cond) => {if (!cond) throw new Error("assertion failed: http.get(publicUrl).body ==  \"Foo\"")})(((await $http_Util.get(publicUrl)).body === "Foo"))};
+        {((cond) => {if (!cond) throw new Error("assertion failed: http.get(publicUrl).body ==  \"Foo\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $http_Util.get(publicUrl)).body,"Foo")))};
       }
       try {
         (await $privateBucket.publicUrl("file2.txt"));
@@ -25,7 +25,7 @@ module.exports = function({ $http_Util, $privateBucket, $publicBucket, $util_Uti
         const e = $error_e.message;
         error = e;
       }
-      {((cond) => {if (!cond) throw new Error("assertion failed: error == \"Cannot provide public url for a non-public bucket\"")})((error === "Cannot provide public url for a non-public bucket"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: error == \"Cannot provide public url for a non-public bucket\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(error,"Cannot provide public url for a non-public bucket")))};
     }
   }
   return $Closure1;

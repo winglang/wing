@@ -12,7 +12,7 @@ module.exports = function({ $bar, $bar_foo, $initCount }) {
     async handle() {
       (await $bar.callFoo());
       (await $bar_foo.method());
-      {((cond) => {if (!cond) throw new Error("assertion failed: initCount.peek() == /*1*/ 2")})(((await $initCount.peek()) === 2))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: initCount.peek() == /*1*/ 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $initCount.peek()),2)))};
     }
   }
   return $Closure1;

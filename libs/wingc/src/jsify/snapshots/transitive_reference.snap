@@ -59,7 +59,7 @@ module.exports = function({  }) {
       this.$this_b = $this_b;
     }
     async isEmpty() {
-      return ((await this.$this_b.list()).length === 0);
+      return (((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await this.$this_b.list()).length,0));
     }
     async checkIfEmpty() {
       if ((await this.isEmpty())) {
