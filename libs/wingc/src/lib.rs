@@ -279,7 +279,7 @@ pub fn type_check(
 	let mut tc = TypeChecker::new(types, source_path, jsii_types, jsii_imports);
 	tc.add_globals(scope);
 
-	tc.type_check_scope(scope);
+	tc.type_check_module(source_path, scope);
 }
 
 // TODO: refactor this (why is scope needed?) (move to separate module?)
@@ -358,7 +358,7 @@ pub fn compile(
 	for file in topo_sorted_files {
 		// Type check everything and build typed symbol environment
 		let mut scope = asts.get_mut(&file).expect("matching AST not found");
-		type_check(&mut scope, &mut types, &source_path, &mut jsii_types, &mut jsii_imports);
+		type_check(&mut scope, &mut types, &file, &mut jsii_types, &mut jsii_imports);
 
 		// Validate the type checker didn't miss anything - see `TypeCheckAssert` for details
 		let mut tc_assert = TypeCheckAssert::new(&types, found_errors());

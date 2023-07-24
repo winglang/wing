@@ -1,5 +1,6 @@
 use indexmap::{IndexMap, IndexSet};
 use petgraph::algo::toposort;
+use petgraph::graph::NodeIndex;
 use petgraph::prelude::DiGraph;
 use phf::{phf_map, phf_set};
 use std::cell::RefCell;
@@ -148,10 +149,25 @@ pub struct ParseProjectOutput {
 	pub topo_sorted_files: Vec<PathBuf>,
 }
 
+fn normalize_path(path: &Path, relative_to: Option<&Path>) -> PathBuf {
+	let path = if path.starts_with("./") {
+		path.strip_prefix("./").unwrap()
+	} else {
+		path
+	};
+	if path.is_absolute() {
+		path.to_path_buf()
+	} else {
+		relative_to
+			.map(|p| p.parent().unwrap_or_else(|| Path::new(".")).join(path))
+			.unwrap_or_else(|| path.to_path_buf())
+	}
+}
+
 // TODO: handle errors
 pub fn parse_wing_project(init_path: &Path) -> ParseProjectOutput {
 	// a stack of files that need to be parsed
-	let mut needs_parsing: Vec<PathBuf> = vec![init_path.to_path_buf()];
+	let mut needs_parsing: Vec<PathBuf> = vec![normalize_path(init_path, None)];
 	// store all source files in memory so we can look up spans
 	let mut files = Files::new();
 	// collect all tree sitter trees in case they are needed by the LSP
@@ -161,7 +177,7 @@ pub fn parse_wing_project(init_path: &Path) -> ParseProjectOutput {
 	// build a dependency graph of all files
 	let mut dep_graph = DiGraph::<PathBuf, ()>::new();
 	// keep track of mapping from paths to node indices in the graph
-	let mut path_to_node: IndexMap<PathBuf, petgraph::graph::NodeIndex> = IndexMap::new();
+	let mut path_to_node: IndexMap<PathBuf, NodeIndex> = IndexMap::new();
 
 	// we can reuse the tree sitter parser
 	let language = tree_sitter_wing::language();
@@ -169,34 +185,34 @@ pub fn parse_wing_project(init_path: &Path) -> ParseProjectOutput {
 	tree_sitter_parser.set_language(language).unwrap();
 
 	while !needs_parsing.is_empty() {
-		let source_path = needs_parsing.remove(0);
-		if files.contains_file(&source_path) {
+		let curr_path = needs_parsing.remove(0);
+		if files.contains_file(&curr_path) {
 			continue;
 		}
 
-		let source = match fs::read(&source_path) {
+		let source = match fs::read(&curr_path) {
 			Ok(source) => source,
 			Err(err) => {
-				panic!("Error reading source file: {}: {:?}", source_path.display(), err);
+				panic!("Error reading source file: {}: {:?}", curr_path.display(), err);
 			}
 		};
 
-		let parser = Parser::new(&source, source_path.to_string_lossy().to_string(), &mut files);
+		let parser = Parser::new(&source, curr_path.to_string_lossy().to_string(), &mut files);
 		let tree_sitter_tree = match tree_sitter_parser.parse(&source, None) {
 			Some(tree) => tree,
 			None => {
-				panic!("Error parsing source file: {}", source_path.display());
+				panic!("Error parsing source file: {}", curr_path.display());
 			}
 		};
-		tree_sitter_trees.insert(source_path.clone(), tree_sitter_tree.clone());
+		tree_sitter_trees.insert(curr_path.clone(), tree_sitter_tree.clone());
 
 		let tree_sitter_root = tree_sitter_tree.root_node();
 
 		// Parse the single file, and collect a list of all wing files that it references
 		let (scope, dependent_wing_files) = parser.parse(&tree_sitter_root);
 
-		let curr_node = *path_to_node.entry(source_path.clone()).or_insert_with(|| {
-			let node = dep_graph.add_node(source_path.clone());
+		let curr_node = *path_to_node.entry(curr_path.clone()).or_insert_with(|| {
+			let node = dep_graph.add_node(curr_path.clone());
 			node
 		});
 
@@ -209,7 +225,7 @@ pub fn parse_wing_project(init_path: &Path) -> ParseProjectOutput {
 			needs_parsing.push(dep);
 		}
 
-		asts.insert(source_path, scope);
+		asts.insert(curr_path, scope);
 	}
 
 	println!("{:?}", dep_graph);
@@ -696,20 +712,11 @@ impl<'s> Parser<'s> {
 		// and create a StmtKind::Module instead
 		if module_name.name.starts_with("\"") && module_name.name.ends_with(".w\"") {
 			let source_path = Path::new(&module_name.name[1..module_name.name.len() - 1]);
-			let source_path = if source_path.starts_with("./") {
-				source_path.strip_prefix("./").unwrap()
-			} else {
-				source_path
-			};
-			let source_path = if source_path.is_absolute() {
-				source_path.to_path_buf()
-			} else {
-				Path::new(&self.source_name).parent().unwrap().join(source_path)
-			};
+			let source_path = normalize_path(source_path, Some(&Path::new(&self.source_name)));
 			if source_path == Path::new(&self.source_name) {
 				return self.with_error("Cannot bring a module into itself", statement_node);
 			}
-			self.referenced_wing_files.borrow_mut().push(source_path);
+			self.referenced_wing_files.borrow_mut().push(source_path.clone());
 
 			// // Check that the module only declares bringable items (classes, interfaces, enums, structs)
 			// // and not variables or functions
@@ -730,7 +737,7 @@ impl<'s> Parser<'s> {
 			let module = if let Some(alias) = alias {
 				Ok(StmtKind::Bring {
 					source: BringSource::WingFile(Symbol {
-						name: module_name.name[1..module_name.name.len() - 1].to_string(),
+						name: source_path.to_string_lossy().to_string(),
 						span: module_name.span,
 					}),
 					identifier: Some(alias),
@@ -2074,33 +2081,33 @@ impl<'s> Parser<'s> {
 	}
 }
 
-fn is_bringable(scope: &Scope) -> bool {
-	let invalid_stmt = |stmt: &Stmt| match stmt.kind {
-		// these statements are ok
-		StmtKind::Bring { .. } => false,
-		StmtKind::Module { .. } => false,
-		StmtKind::Class(_) => false,
-		StmtKind::Interface(_) => false,
-		StmtKind::Struct { .. } => false,
-		StmtKind::Enum { .. } => false,
-		StmtKind::CompilerDebugEnv => false,
-		// these statements are invalid
-		StmtKind::SuperConstructor { .. } => true,
-		StmtKind::Let { .. } => true,
-		StmtKind::ForLoop { .. } => true,
-		StmtKind::While { .. } => true,
-		StmtKind::IfLet { .. } => true,
-		StmtKind::If { .. } => true,
-		StmtKind::Break => true,
-		StmtKind::Continue => true,
-		StmtKind::Return(_) => true,
-		StmtKind::Expression(_) => true,
-		StmtKind::Assignment { .. } => true,
-		StmtKind::Scope(_) => true,
-		StmtKind::TryCatch { .. } => true,
-	};
+// fn is_bringable(scope: &Scope) -> bool {
+// 	let invalid_stmt = |stmt: &Stmt| match stmt.kind {
+// 		// these statements are ok
+// 		StmtKind::Bring { .. } => false,
+// 		StmtKind::Module { .. } => false,
+// 		StmtKind::Class(_) => false,
+// 		StmtKind::Interface(_) => false,
+// 		StmtKind::Struct { .. } => false,
+// 		StmtKind::Enum { .. } => false,
+// 		StmtKind::CompilerDebugEnv => false,
+// 		// these statements are invalid
+// 		StmtKind::SuperConstructor { .. } => true,
+// 		StmtKind::Let { .. } => true,
+// 		StmtKind::ForLoop { .. } => true,
+// 		StmtKind::While { .. } => true,
+// 		StmtKind::IfLet { .. } => true,
+// 		StmtKind::If { .. } => true,
+// 		StmtKind::Break => true,
+// 		StmtKind::Continue => true,
+// 		StmtKind::Return(_) => true,
+// 		StmtKind::Expression(_) => true,
+// 		StmtKind::Assignment { .. } => true,
+// 		StmtKind::Scope(_) => true,
+// 		StmtKind::TryCatch { .. } => true,
+// 	};
 
-	// A module is bringable if it doesn't have any invalid statement kinds
-	// (rough heuristic for now)
-	!scope.statements.iter().any(invalid_stmt)
-}
+// 	// A module is bringable if it doesn't have any invalid statement kinds
+// 	// (rough heuristic for now)
+// 	!scope.statements.iter().any(invalid_stmt)
+// }

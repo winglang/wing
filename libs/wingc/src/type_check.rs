@@ -2261,8 +2261,34 @@ impl<'a> TypeChecker<'a> {
 		expected_types[0]
 	}
 
-	pub fn type_check_scope(&mut self, scope: &Scope) {
+	pub fn type_check_module(&mut self, source_path: &Path, scope: &Scope) {
+		dbg!(&source_path);
 		CompilationContext::set(CompilationPhase::TypeChecking, &scope.span);
+		self.type_check_scope(scope);
+
+		// Save the module's symbol environment to `self.types.libraries`
+		// so it can be looked up when another file tries to `bring` this module
+		let sanitized_path = sanitize_dots(source_path.to_str().expect("not a safe file path"));
+		let env = scope.env.borrow().unwrap();
+		let ns = self.types.add_namespace(Namespace {
+			name: sanitized_path.clone(),
+			env: SymbolEnv::new(Some(env.get_ref()), env.return_type, false, false, env.phase, 0),
+			loaded: true,
+		});
+		dbg!(&sanitized_path);
+		if let Err(e) = self.types.libraries.define(
+			&Symbol {
+				name: sanitized_path,
+				span: WingSpan::default(),
+			},
+			SymbolKind::Namespace(ns),
+			StatementIdx::Top,
+		) {
+			self.type_error(e);
+		}
+	}
+
+	fn type_check_scope(&mut self, scope: &Scope) {
 		assert!(self.inner_scopes.is_empty());
 		for statement in scope.statements.iter() {
 			self.type_check_statement(statement, scope.env.borrow_mut().as_mut().unwrap());
@@ -2662,6 +2688,7 @@ impl<'a> TypeChecker<'a> {
 						}
 
 						let lookup_name = sanitize_dots(&name.name);
+						dbg!(&lookup_name);
 						let lookup_result = self.types.libraries.lookup_nested_str(&lookup_name, None);
 						match lookup_result {
 							LookupResult::Found(kind, _) => match kind {
