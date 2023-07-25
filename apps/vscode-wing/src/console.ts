@@ -20,6 +20,7 @@ import { VIEW_TYPE_CONSOLE } from "./constants";
 import { ResourcesExplorerProvider } from "./ResourcesExplorerProvider";
 import { createTRPCClient } from "./services/trpc";
 import { TestsExplorerProvider } from "./TestsExplorerProvider";
+import { log } from "console";
 
 const createLogger = ({ show = false }) => {
   const logger = window.createOutputChannel("Wing Console");
@@ -63,17 +64,17 @@ export class WingConsoleManager {
           //await open(url);
         },
       },
-      log: {
-        info: (message: string) => {
-          logger.appendLine(message);
-        },
-        error: (message: string) => {
-          logger.appendLine(message);
-        },
-        verbose: (message: string) => {
-          logger.appendLine(message);
-        },
-      },
+      // log: {
+      //   info: (message: string) => {
+      //     logger.appendLine(message);
+      //   },
+      //   error: (message: string) => {
+      //     logger.appendLine(message);
+      //   },
+      //   verbose: (message: string) => {
+      //     logger.appendLine(message);
+      //   },
+      // },
       layoutConfig: {
         header: {
           hide: true,
@@ -150,10 +151,16 @@ export class WingConsoleManager {
       </html>`;
 
     const tree = await client["app.explorerTree"].query();
+    const selectedNode = await client["app.selectedNode"].query();
 
-    commands.registerCommand("wingConsole.openResource", (resource) => {
-      const id = resource.id;
-      //await client[""]
+    logger.appendLine(`Selected node ${selectedNode}`);
+    const tests = await client["test.list"].query();
+
+    commands.registerCommand("wingConsole.openResource", async (resourceId) => {
+      logger.appendLine(`Selecting resource ${resourceId}`);
+      await client["app.selectNode"].mutate({
+        path: resourceId,
+      });
     });
 
     window.registerTreeDataProvider(
@@ -161,7 +168,6 @@ export class WingConsoleManager {
       new ResourcesExplorerProvider(tree)
     );
 
-    const tests = await client["test.list"].query();
     window.registerTreeDataProvider(
       "consoleTestsExplorer",
       new TestsExplorerProvider(tests)

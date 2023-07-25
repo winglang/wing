@@ -101,6 +101,8 @@ export const createConsoleServer = async ({
   });
 
   let lastErrorMessage = "";
+  let selectedNode = "";
+
   let appState: State = "compiling";
   compiler.on("compiling", () => {
     lastErrorMessage = "";
@@ -190,6 +192,12 @@ export const createConsoleServer = async ({
     wingfile,
     requireAcceptTerms,
     layoutConfig,
+    getSelectedNode: () => {
+      return selectedNode;
+    },
+    setSelectedNode: (node: string) => {
+      selectedNode = node;
+    },
   });
 
   const close = async () => {

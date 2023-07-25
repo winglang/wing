@@ -30,6 +30,8 @@ export class ResourcesExplorerProvider
 
   getTreeItem(element: ResourceItem): TreeItem {
     return {
+      id: element.id,
+      label: element.label,
       command: {
         command: "wingConsole.openResource",
         arguments: [element.id],
@@ -43,7 +45,7 @@ export class ResourcesExplorerProvider
       return Promise.resolve(
         this.node.childItems?.map((child: ExplorerItem) => {
           return new ResourceItem(
-            //  child.id,
+            child.id,
             child.label,
             child.childItems?.length && child.childItems.length > 0
               ? TreeItemCollapsibleState.Expanded
@@ -64,7 +66,7 @@ export class ResourcesExplorerProvider
     return Promise.resolve(
       childItem.childItems.map((child: ExplorerItem) => {
         return new ResourceItem(
-          // child.id,
+          child.id,
           child.label,
           child.childItems?.length && child.childItems.length > 0
             ? TreeItemCollapsibleState.Expanded
@@ -96,12 +98,12 @@ class ResourceItem extends TreeItem {
   };
 
   constructor(
-    //public readonly id: string,
+    public readonly id: string,
     public readonly label: string,
     public readonly collapsibleState: TreeItemCollapsibleState
   ) {
     super(label, collapsibleState);
     this.tooltip = this.label;
-    //this.id = id;
+    this.id = id;
   }
 }

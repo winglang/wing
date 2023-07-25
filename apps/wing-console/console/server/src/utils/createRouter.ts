@@ -73,6 +73,8 @@ export interface RouterContext {
   wingfile: string;
   requireAcceptTerms?: boolean;
   layoutConfig?: LayoutConfig;
+  getSelectedNode?: () => string | undefined;
+  setSelectedNode?: (node: string) => void;
 }
 
 const t = initTRPC.context<RouterContext>().create();

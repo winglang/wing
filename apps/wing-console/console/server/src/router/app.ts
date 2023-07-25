@@ -114,6 +114,18 @@ export const createAppRouter = () => {
           input?.showTests,
         );
       }),
+    "app.selectNode": createProcedure
+      .input(
+        z.object({
+          path: z.string().optional(),
+        }),
+      )
+      .mutation(async ({ ctx, input }) => {
+        ctx.setSelectedNode?.(input.path ?? "");
+      }),
+    "app.selectedNode": createProcedure.query(async ({ ctx }) => {
+      return ctx.getSelectedNode?.();
+    }),
     "app.childRelationships": createProcedure
       .input(
         z.object({

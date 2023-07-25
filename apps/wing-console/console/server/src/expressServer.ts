@@ -36,6 +36,8 @@ export interface CreateExpressServerOptions {
   wingfile: string;
   requireAcceptTerms?: boolean;
   layoutConfig?: LayoutConfig;
+  getSelectedNode?: () => string | undefined;
+  setSelectedNode?: (node: string) => void;
 }
 
 export const createExpressServer = async ({
@@ -53,6 +55,8 @@ export const createExpressServer = async ({
   wingfile,
   requireAcceptTerms = false,
   layoutConfig,
+  getSelectedNode,
+  setSelectedNode,
 }: CreateExpressServerOptions) => {
   const app = express();
   app.use(cors());
@@ -80,6 +84,8 @@ export const createExpressServer = async ({
       wingfile: wingfile ?? "",
       requireAcceptTerms,
       layoutConfig,
+      getSelectedNode,
+      setSelectedNode,
     };
   };
   app.use(

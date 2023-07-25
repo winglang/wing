@@ -396,6 +396,7 @@ export const DefaultLayout = ({
             showThemeToggle={layout.statusBar?.showThemeToggle}
           />
         )}
+        <div>{selectedItems[0]}</div>
       </div>
     </>
   );
