@@ -35,7 +35,7 @@ use crate::{
 
 use self::codemaker::CodeMaker;
 
-const PREFLIGHT_FILENAME: &str = "preflight.js";
+const PREFLIGHT_FILE_NAME: &str = "preflight.js";
 
 const STDLIB: &str = "$stdlib";
 const STDLIB_CORE_RESOURCE: &str = formatcp!("{}.{}", STDLIB, WINGSDK_RESOURCE);
@@ -171,7 +171,7 @@ impl<'a> JSifier<'a> {
 		}
 
 		let preflight_file_name = if jsify_context.is_entrypoint_file {
-			PREFLIGHT_FILENAME.to_string()
+			PREFLIGHT_FILE_NAME.to_string()
 		} else {
 			// remove all non-alphanumeric characters
 			let sanitized_name = source_path
