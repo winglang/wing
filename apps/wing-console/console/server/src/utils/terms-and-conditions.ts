@@ -1,8 +1,8 @@
-// @ts-ignore-next-line
-import Conf from "conf";
+import * as fs from "node:fs";
+import * as path from "node:path";
 
 // @ts-ignore-next-line
-import License from "../../LICENSE.md?raw";
+import Conf from "conf";
 
 const PROJECT_NAME = "@wingconsole/server";
 const CONFIG_KEY = "termsAndConditions";
@@ -25,5 +25,8 @@ export const acceptTerms = (value: boolean) => {
 };
 
 export const getLicense = (): string => {
-  return License;
+  return fs.readFileSync(
+    path.resolve(__dirname, process.env.LICENSE_FILE ?? "../../LICENSE.md"),
+    "utf8",
+  );
 };
