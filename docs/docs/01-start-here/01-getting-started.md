@@ -96,7 +96,7 @@ Wing addresses these challenges through several key pillars:
   resources. This allows developers to build complete cloud applications without
   having to be infrastructure experts.
 * **Distributed computing support** - Traditional languages are designed to tell a single machine what to do, but the cloud at its core is a big distributed system.
-  Wing allows cloud applications to be written more naturally through the concepts of [preflight and inflight code](../concepts/inflights), which allow infrastructure and runtime code to be interleaved while
+  Wing allows cloud applications to be written more naturally through the concepts of [preflight and inflight code](https://www.winglang.io/docs/concepts/inflights), which allow infrastructure and runtime code to be interleaved while
   giving developers the speed safety they expect from modern tooling.
 * **Infrastructure as policy** - Infrastructure concerns such as deployment,
   networking, security, and observability can be applied horizontally through
