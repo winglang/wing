@@ -7,12 +7,14 @@ use std::{cell::RefCell, collections::HashMap};
 use tree_sitter::Tree;
 
 use crate::closure_transform::ClosureTransformer;
-use crate::diagnostic::{get_diagnostics, reset_diagnostics, Diagnostic};
+use crate::diagnostic::{found_errors, get_diagnostics, reset_diagnostics, Diagnostic};
 use crate::fold::Fold;
 use crate::jsify::JSifier;
+use crate::lifting::LiftTransform;
 use crate::parser::{parse_wing_project, ParseProjectOutput};
 use crate::type_check;
 use crate::type_check::jsii_importer::JsiiImportSpec;
+use crate::type_check_assert::TypeCheckAssert;
 use crate::{ast::Scope, type_check::Types, wasm_util::ptr_to_string};
 
 /// The result of running wingc on a file
@@ -89,70 +91,66 @@ fn partial_compile(source_path: &Path, jsii_types: &mut TypeSystem) -> FileData 
 
 	let mut types = type_check::Types::new();
 
-	// let language = tree_sitter_wing::language();
-	// let mut parser = tree_sitter::Parser::new();
-	// parser.set_language(language).unwrap();
-
-	// let tree = match parser.parse(text, None) {
-	// 	Some(tree) => tree,
-	// 	None => {
-	// 		panic!("Failed parsing source file: {}", source_file);
-	// 	}
-	// };
-
-	// let mut files = Files::new();
-	// let wing_parser = Parser::new(text, source_file.to_string(), &mut files);
-
-	// let scope = wing_parser.parse(&tree.root_node());
-
 	let ParseProjectOutput {
 		files,
 		asts,
-		tree_sitter_trees,
-		topo_sorted_files: _,
+		mut tree_sitter_trees,
+		topo_sorted_files,
 	} = parse_wing_project(&source_path);
 
 	// -- DESUGARING PHASE --
 
 	// Transform all inflight closures defined in preflight into single-method resources
-	let asts = asts
+	let mut asts = asts
 		.into_iter()
 		.map(|(path, scope)| {
 			let mut inflight_transformer = ClosureTransformer::new();
 			// Note: The scope is intentionally boxed here to force heap allocation
 			// Otherwise, the scope will be moved during type checking and we'll be left with dangling references elsewhere
-			let scope = Box::new(inflight_transformer.fold_scope(scope));
+			let scope = inflight_transformer.fold_scope(scope); // TODO: do we need to box this?
 			(path, scope)
 		})
-		.collect::<IndexMap<PathBuf, Box<Scope>>>();
-
-	// TODO: remove
-	let mut scope = asts.into_iter().next().expect("Expected exactly one AST").1;
+		.collect::<IndexMap<PathBuf, Scope>>();
 
 	// -- TYPECHECKING PHASE --
 	let mut jsii_imports = vec![];
 
-	type_check(&mut scope, &mut types, source_path, jsii_types, &mut jsii_imports);
+	// Type check all files in topological order (start with files that don't require any other
+	// Wing files, then move on to files that depend on those, etc.)
+	for file in &topo_sorted_files {
+		let mut scope = asts.get_mut(file).expect("matching AST not found");
+		type_check(&mut scope, &mut types, &file, jsii_types, &mut jsii_imports);
 
-	// -- JSIFICATION PHASE --
+		// Validate the type checker didn't miss anything - see `TypeCheckAssert` for details
+		let mut tc_assert = TypeCheckAssert::new(&types, found_errors());
+		tc_assert.check(&scope);
+	}
+
+	// -- LIFTING PHASE --
 
 	// source_file will never be "" because it is the path to the file being compiled and lsp does not allow empty paths
 	let project_dir = source_path.parent().expect("Empty filename");
 
 	let mut jsifier = JSifier::new(&mut types, &files, &source_path, &project_dir);
-	jsifier.jsify(source_path, &scope);
-
-	let tree = tree_sitter_trees
+	let mut asts = asts
 		.into_iter()
-		.next()
-		.expect("Expected exactly one tree-sitter tree")
-		.1;
+		.map(|(path, scope)| {
+			let mut lift = LiftTransform::new(&jsifier);
+			let scope = lift.fold_scope(scope);
+			(path, scope)
+		})
+		.collect::<IndexMap<PathBuf, Scope>>();
+
+	for file in &topo_sorted_files {
+		let scope = asts.get_mut(file).expect("matching AST not found");
+		jsifier.jsify(file, &scope);
+	}
 
 	return FileData {
 		contents: files.get_file(source_path).unwrap().clone(),
-		tree,
+		tree: tree_sitter_trees.remove(source_path).unwrap(),
 		diagnostics: get_diagnostics(),
-		scope,
+		scope: Box::new(asts.remove(source_path).unwrap()),
 		types,
 		jsii_imports,
 	};
