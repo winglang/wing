@@ -22,6 +22,7 @@ pub type Result<T> = std::result::Result<T, Box<dyn Error>>;
 
 pub mod spec {
 	use flate2::read::GzDecoder;
+	use std::env::temp_dir;
 	use std::fs::File;
 	use std::io::Read;
 	use std::path::PathBuf;
@@ -36,7 +37,7 @@ pub mod spec {
 	pub const SPEC_FILE_NAME: &str = ".jsii";
 	pub const REDIRECT_FIELD: &str = "jsii/file-redirect";
 	const CACHE_FILE_EXT: &str = "bincode";
-	const CACHE_FILE_DIR: &str = "/tmp/.wing/jsii_manifest_cache";
+	const CACHE_FILE_DIR: &str = ".wing/jsii_manifest_cache";
 
 	pub fn find_assembly_file(directory: &str) -> Result<String> {
 		let dot_jsii_file = Path::new(directory).join(SPEC_FILE_NAME);
@@ -54,7 +55,8 @@ pub mod spec {
 	}
 
 	fn try_load_from_cache(hash: &str) -> Option<Assembly> {
-		let file_path = format!("{CACHE_FILE_DIR}/{hash}.{CACHE_FILE_EXT}");
+		let mut file_path = temp_dir();
+		file_path.push(format!("{CACHE_FILE_DIR}/{hash}.{CACHE_FILE_EXT}"));
 		let data = fs::read(file_path).ok()?;
 		let (asm, _): (Assembly, usize) = bincode::decode_from_slice(&data, bincode::config::standard()).ok()?;
 		Some(asm)
