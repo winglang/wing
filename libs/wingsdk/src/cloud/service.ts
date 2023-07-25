@@ -10,7 +10,7 @@ import { IResource, Resource } from "../std";
 export const SERVICE_FQN = fqnForType("cloud.Service");
 
 /**
- * Properties for `Service`.
+ * Options for `Service`.
  */
 export interface ServiceProps {
   /**

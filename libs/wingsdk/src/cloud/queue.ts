@@ -10,7 +10,7 @@ import { Duration, IResource, Resource } from "../std";
 export const QUEUE_FQN = fqnForType("cloud.Queue");
 
 /**
- * Properties for `Queue`.
+ * Options for `Queue`.
  */
 export interface QueueProps {
   /**

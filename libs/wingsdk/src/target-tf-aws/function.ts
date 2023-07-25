@@ -218,6 +218,10 @@ export class Function extends cloud.Function implements IAwsFunction {
     this.addEnvironment("WING_FUNCTION_NAME", name);
   }
 
+  public get functionName(): string {
+    return this.function.functionName;
+  }
+
   /** @internal */
   public _bind(host: IInflightHost, ops: string[]): void {
     if (!(host instanceof Function)) {

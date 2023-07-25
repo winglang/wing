@@ -56,8 +56,8 @@ class $Root extends $stdlib.std.Resource {
     class R extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this.f = "Hello World!!!";
         this._addInflightOps("$inflight_init");
+        this.f = "Hello World!!!";
       }
       method2() {
         (this.method1());

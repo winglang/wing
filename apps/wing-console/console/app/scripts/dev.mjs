@@ -15,19 +15,11 @@ const options = parseArgs({
   },
 });
 
-const vite = await createViteServer({
-  ...viteConfig,
-  server: { middlewareMode: true },
-});
-
-const { port } = await createConsoleServer({
+const consoleServer = await createConsoleServer({
   wingfile:
     options.values.wingfile ??
     fileURLToPath(new URL("../demo/index.w", import.meta.url)),
   requestedPort: 1214,
-  async onExpressCreated(app) {
-    app.use(vite.middlewares);
-  },
   log: {
     info: console.log,
     error: console.error,
@@ -49,6 +41,18 @@ const { port } = await createConsoleServer({
   requireAcceptTerms: true,
 });
 
-await open(`http://localhost:${port}`);
+const vite = await createViteServer({
+  ...viteConfig,
+  server: {
+    proxy: {
+      "/trpc": {
+        target: `http://localhost:${consoleServer.port}`,
+        changeOrigin: true,
+        ws: true,
+      },
+    },
+    open: true,
+  },
+});
 
-console.log(`Wing Console is running on http://localhost:${port}/`);
+await vite.listen();

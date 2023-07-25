@@ -645,7 +645,7 @@ let BucketOnUpdateProps = cloud.BucketOnUpdateProps{ ... };
 
 ### BucketProps <a name="BucketProps" id="@winglang/sdk.cloud.BucketProps"></a>
 
-Properties for `Bucket`.
+Options for `Bucket`.
 
 #### Initializer <a name="Initializer" id="@winglang/sdk.cloud.BucketProps.Initializer"></a>
 
