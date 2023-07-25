@@ -422,7 +422,7 @@ pub struct Interface {
 pub enum BringSource {
 	BuiltinModule(Symbol),
 	JsiiModule(Symbol),
-	WingFile(Symbol),
+	WingFile(Symbol), // should we store both the resolved path and the path the user typed?
 }
 
 #[derive(Debug)]
