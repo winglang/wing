@@ -5,6 +5,7 @@ import { Api } from "./api";
 import { Bucket } from "./bucket";
 import { Counter } from "./counter";
 import { Function } from "./function";
+import { OnDeploy } from "./on-deploy";
 import { Queue } from "./queue";
 import { Redis } from "./redis";
 import { isSimulatorResource } from "./resource";
@@ -21,6 +22,7 @@ import {
   BUCKET_FQN,
   COUNTER_FQN,
   FUNCTION_FQN,
+  ON_DEPLOY_FQN,
   QUEUE_FQN,
   SCHEDULE_FQN,
   SECRET_FQN,
@@ -112,6 +114,9 @@ export class App extends core.App {
 
       case SERVICE_FQN:
         return new Service(scope, id, args[0]);
+
+      case ON_DEPLOY_FQN:
+        return new OnDeploy(scope, id, args[0], args[1]);
     }
 
     return undefined;

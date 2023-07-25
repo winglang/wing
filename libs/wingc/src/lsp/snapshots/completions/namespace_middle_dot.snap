@@ -25,6 +25,12 @@ source: libs/wingc/src/lsp/completions.rs
     kind: markdown
     value: "```wing\nclass Function impl IInflightHost\n```\n---\nA function."
   sortText: gg|Function
+- label: OnDeploy
+  kind: 7
+  documentation:
+    kind: markdown
+    value: "```wing\nclass OnDeploy\n```\n---\nRun code every time the app is deployed."
+  sortText: gg|OnDeploy
 - label: Queue
   kind: 7
   documentation:
@@ -107,7 +113,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct ApiProps\n```\n---\nProperties for `Api`."
+    value: "```wing\nstruct ApiProps\n```\n---\nOptions for `Api`."
   sortText: hh|ApiProps
 - label: ApiPutProps
   kind: 22
@@ -167,19 +173,19 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct BucketProps\n```\n---\nProperties for `Bucket`.\n### Fields\n- `public?` — Whether the bucket's objects should be publicly accessible."
+    value: "```wing\nstruct BucketProps\n```\n---\nOptions for `Bucket`.\n### Fields\n- `public?` — Whether the bucket's objects should be publicly accessible."
   sortText: hh|BucketProps
 - label: CounterProps
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct CounterProps\n```\n---\nProperties for `Counter`.\n### Fields\n- `initial?` — The initial value of the counter."
+    value: "```wing\nstruct CounterProps\n```\n---\nOptions for `Counter`.\n### Fields\n- `initial?` — The initial value of the counter."
   sortText: hh|CounterProps
 - label: FunctionProps
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct FunctionProps\n```\n---\nProperties for `Function`.\n### Fields\n- `env?` — Environment variables to pass to the function.\n- `memory?` — The amount of memory to allocate to the function, in MB.\n- `timeout?` — The maximum amount of time the function can run.\n\n### Remarks\nThis is the type users see when constructing a cloud.Function instance."
+    value: "```wing\nstruct FunctionProps\n```\n---\nOptions for `Function`.\n### Fields\n- `env?` — Environment variables to pass to the function.\n- `memory?` — The amount of memory to allocate to the function, in MB.\n- `timeout?` — The maximum amount of time the function can run."
   sortText: hh|FunctionProps
 - label: GetSecretValueOptions
   kind: 22
@@ -187,11 +193,17 @@ source: libs/wingc/src/lsp/completions.rs
     kind: markdown
     value: "```wing\nstruct GetSecretValueOptions\n```\n---\nOptions when getting a secret value.\n### Fields\n- `cache?` — Whether to cache the value."
   sortText: hh|GetSecretValueOptions
+- label: OnDeployProps
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nstruct OnDeployProps extends FunctionProps\n```\n---\nOptions for `OnDeploy`.\n### Fields\n- `env?` — Map<str>?\n- `executeAfter?` — Execute this trigger only after these resources have been provisioned.\n- `executeBefore?` — Adds this trigger as a dependency on other constructs.\n- `memory?` — num?\n- `timeout?` — duration?"
+  sortText: hh|OnDeployProps
 - label: QueueProps
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct QueueProps\n```\n---\nProperties for `Queue`.\n### Fields\n- `initialMessages?` — Initialize the queue with a set of messages.\n- `retentionPeriod?` — How long a queue retains a message.\n- `timeout?` — How long a queue's consumers have to process a message."
+    value: "```wing\nstruct QueueProps\n```\n---\nOptions for `Queue`.\n### Fields\n- `initialMessages?` — Initialize the queue with a set of messages.\n- `retentionPeriod?` — How long a queue retains a message.\n- `timeout?` — How long a queue's consumers have to process a message."
   sortText: hh|QueueProps
 - label: QueueSetConsumerProps
   kind: 22
@@ -209,13 +221,13 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct ScheduleProps\n```\n---\nProperties for `Schedule`.\n### Fields\n- `cron?` — Trigger events according to a cron schedule using the UNIX cron format.\n- `rate?` — Trigger events at a periodic rate."
+    value: "```wing\nstruct ScheduleProps\n```\n---\nOptions for `Schedule`.\n### Fields\n- `cron?` — Trigger events according to a cron schedule using the UNIX cron format.\n- `rate?` — Trigger events at a periodic rate."
   sortText: hh|ScheduleProps
 - label: SecretProps
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct SecretProps\n```\n---\nProperties for `Secret`.\n### Fields\n- `name?` — The secret's name."
+    value: "```wing\nstruct SecretProps\n```\n---\nOptions for `Secret`.\n### Fields\n- `name?` — The secret's name."
   sortText: hh|SecretProps
 - label: ServiceOnStartProps
   kind: 22
@@ -227,7 +239,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct ServiceProps\n```\n---\nProperties for `Service`.\n### Fields\n- `autoStart?` — Whether the service should start automatically.\n- `onStart` — Handler to run with the service starts.\n- `onStop?` — Handler to run with the service stops."
+    value: "```wing\nstruct ServiceProps\n```\n---\nOptions for `Service`.\n### Fields\n- `autoStart?` — Whether the service should start automatically.\n- `onStart` — Handler to run with the service starts.\n- `onStop?` — Handler to run with the service stops."
   sortText: hh|ServiceProps
 - label: TopicOnMessageProps
   kind: 22
@@ -239,13 +251,13 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct TopicProps\n```\n---\nProperties for `Topic`."
+    value: "```wing\nstruct TopicProps\n```\n---\nOptions for `Topic`."
   sortText: hh|TopicProps
 - label: WebsiteProps
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct WebsiteProps\n```\n---\nwebsite props.\n### Fields\n- `domain?` — The website's custom domain name.\n- `path` — Local path to the website's static files, relative to the Wing source file or absolute."
+    value: "```wing\nstruct WebsiteProps\n```\n---\nOptions for `Website`.\n### Fields\n- `domain?` — The website's custom domain name.\n- `path` — Local path to the website's static files, relative to the Wing source file or absolute."
   sortText: hh|WebsiteProps
 - label: IApiClient
   kind: 8
@@ -307,6 +319,24 @@ source: libs/wingc/src/lsp/completions.rs
     kind: markdown
     value: "```wing\ninterface IFunctionHandlerClient\n```\n---\nInflight client for `IFunctionHandler`.\n### Methods\n- `handle` — Entrypoint function that will be called when the cloud function is invoked."
   sortText: ii|IFunctionHandlerClient
+- label: IOnDeployClient
+  kind: 8
+  documentation:
+    kind: markdown
+    value: "```wing\ninterface IOnDeployClient\n```\n---\nInflight interface for `OnDeploy`."
+  sortText: ii|IOnDeployClient
+- label: IOnDeployHandler
+  kind: 8
+  documentation:
+    kind: markdown
+    value: "```wing\ninterface IOnDeployHandler extends IResource\n```\n---\nA resource with an inflight \"handle\" method that can be used by `cloud.OnDeploy`.\n### Methods\n- `handle` — Entrypoint function that will be called when the app is deployed."
+  sortText: ii|IOnDeployHandler
+- label: IOnDeployHandlerClient
+  kind: 8
+  documentation:
+    kind: markdown
+    value: "```wing\ninterface IOnDeployHandlerClient\n```\n---\nInflight client for `IOnDeployHandler`.\n### Methods\n- `handle` — Entrypoint function that will be called when the app is deployed."
+  sortText: ii|IOnDeployHandlerClient
 - label: IQueueClient
   kind: 8
   documentation:

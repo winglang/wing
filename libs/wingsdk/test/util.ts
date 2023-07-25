@@ -12,11 +12,32 @@ export function tfResourcesOf(templateStr: string): string[] {
   return Object.keys(JSON.parse(templateStr).resource).sort();
 }
 
+export function tfDataSourcesOf(templateStr: string): string[] {
+  return Object.keys(JSON.parse(templateStr).data).sort();
+}
+
 export function tfResourcesOfCount(
   templateStr: string,
   resourceId: string
 ): number {
-  return Object.values(JSON.parse(templateStr).resource[resourceId]).length;
+  const template = JSON.parse(templateStr);
+  const resource = template.resource[resourceId];
+  if (!resource) {
+    return 0;
+  }
+  return Object.values(resource).length;
+}
+
+export function tfDataSourcesOfCount(
+  templateStr: string,
+  dataSourceId: string
+): number {
+  const template = JSON.parse(templateStr);
+  const dataSource = template.data[dataSourceId];
+  if (!dataSource) {
+    return 0;
+  }
+  return Object.values(dataSource).length;
 }
 
 export function tfResourcesWithProperty(
@@ -45,8 +66,24 @@ export function getTfResource(
   index?: number
 ): any {
   const resources = JSON.parse(templateStr).resource[resourceId];
+  if (!resources) {
+    return undefined;
+  }
   const key = Object.keys(resources)[index ?? 0];
   return resources[key];
+}
+
+export function getTfDataSource(
+  templateStr: string,
+  dataSourceId: string,
+  index?: number
+): any {
+  const dataSources = JSON.parse(templateStr).data[dataSourceId];
+  if (!dataSources) {
+    return undefined;
+  }
+  const key = Object.keys(dataSources)[index ?? 0];
+  return dataSources[key];
 }
 
 export function tfSanitize(templateStr: string): string {

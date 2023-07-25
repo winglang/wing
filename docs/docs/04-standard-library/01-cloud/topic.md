@@ -281,7 +281,7 @@ The maximum amount of time the function can run.
 
 ### TopicProps <a name="TopicProps" id="@winglang/sdk.cloud.TopicProps"></a>
 
-Properties for `Topic`.
+Options for `Topic`.
 
 #### Initializer <a name="Initializer" id="@winglang/sdk.cloud.TopicProps.Initializer"></a>
 

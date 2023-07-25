@@ -1005,16 +1005,14 @@ impl<'a> JSifier<'a> {
 			false
 		};
 
+		let mut body_code = CodeMaker::default();
+
 		// we always need a super() call because even if the class doesn't have an explicit parent, it
 		// will inherit from core.Resource.
 		if !super_called {
-			code.line("super(scope, id);");
+			body_code.line("super(scope, id);");
 		}
-
-		// We must jsify the statements in the constructor before adding any additional code blew
-		// this is to ensure if there are calls to super constructor within the statements,
-		// they will be jsified before any attempts to call `this` are made.
-		code.add_code(self.jsify_scope_body(&init_statements, ctx));
+		body_code.add_code(self.jsify_scope_body(&init_statements, ctx));
 
 		let inflight_fields = class.inflight_fields();
 		let inflight_methods = class.inflight_methods(true);
@@ -1032,8 +1030,12 @@ impl<'a> JSifier<'a> {
 				.chain(inflight_field_names.iter())
 				.map(|name| format!("\"{}\"", name))
 				.join(", ");
-			code.line(format!("this._addInflightOps({inflight_ops_string});"));
+
+			// insert as the first statement after the super() call
+			body_code.insert_line(1, format!("this._addInflightOps({inflight_ops_string});"));
 		}
+
+		code.add_code(body_code);
 
 		code.close("}");
 		code

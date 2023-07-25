@@ -10,7 +10,7 @@ import { IResource, Resource } from "../std/resource";
 export const API_FQN = fqnForType("cloud.Api");
 
 /**
- * Properties for `Api`.
+ * Options for `Api`.
  */
 
 export interface ApiProps {}

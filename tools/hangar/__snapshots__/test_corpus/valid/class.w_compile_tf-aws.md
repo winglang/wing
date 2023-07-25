@@ -642,8 +642,8 @@ class $Root extends $stdlib.std.Resource {
     class C2 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this.x = 1;
         this._addInflightOps("$inflight_init");
+        this.x = 1;
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
@@ -666,11 +666,11 @@ class $Root extends $stdlib.std.Resource {
     class C3 extends $stdlib.std.Resource {
       constructor(scope, id, a, b) {
         super(scope, id);
+        this._addInflightOps("$inflight_init");
         this.x = a;
         if (true) {
           this.y = b;
         }
-        this._addInflightOps("$inflight_init");
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
@@ -742,8 +742,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this.display.hidden = true;
         this._addInflightOps("handle", "$inflight_init");
+        this.display.hidden = true;
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
@@ -773,8 +773,8 @@ class $Root extends $stdlib.std.Resource {
     class Person extends $stdlib.std.Resource {
       constructor(scope, id, name) {
         super(scope, id);
-        this.name = name;
         this._addInflightOps("$inflight_init");
+        this.name = name;
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
@@ -797,8 +797,8 @@ class $Root extends $stdlib.std.Resource {
     class Student extends Person {
       constructor(scope, id, name, major) {
         super(scope,id,name);
-        this.major = major;
         this._addInflightOps("$inflight_init");
+        this.major = major;
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
@@ -822,8 +822,8 @@ class $Root extends $stdlib.std.Resource {
     class PaidStudent extends Student {
       constructor(scope, id, name, major, hrlyWage) {
         super(scope,id,name,major);
-        this.hrlyWage = hrlyWage;
         this._addInflightOps("$inflight_init");
+        this.hrlyWage = hrlyWage;
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
@@ -847,8 +847,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure2 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this.display.hidden = true;
         this._addInflightOps("handle", "$inflight_init");
+        this.display.hidden = true;
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
@@ -882,8 +882,8 @@ class $Root extends $stdlib.std.Resource {
     class TeacherAid extends PaidStudent {
       constructor(scope, id, name, major, hrlyWage) {
         super(scope,id,name,major,hrlyWage);
-        this.hrlyWage = 10;
         this._addInflightOps("$inflight_init");
+        this.hrlyWage = 10;
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
@@ -907,8 +907,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure3 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this.display.hidden = true;
         this._addInflightOps("handle", "$inflight_init");
+        this.display.hidden = true;
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
@@ -991,8 +991,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure4 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this.display.hidden = true;
         this._addInflightOps("handle", "$inflight_init");
+        this.display.hidden = true;
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`

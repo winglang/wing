@@ -73,17 +73,17 @@ A function.
 ```wing
 bring cloud;
 
-new cloud.Function(inflight: IFunctionHandler, props?: FunctionProps);
+new cloud.Function(handler: IFunctionHandler, props?: FunctionProps);
 ```
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.Function.Initializer.parameter.inflight">inflight</a></code> | <code><a href="#@winglang/sdk.cloud.IFunctionHandler">IFunctionHandler</a></code> | *No description.* |
+| <code><a href="#@winglang/sdk.cloud.Function.Initializer.parameter.handler">handler</a></code> | <code><a href="#@winglang/sdk.cloud.IFunctionHandler">IFunctionHandler</a></code> | *No description.* |
 | <code><a href="#@winglang/sdk.cloud.Function.Initializer.parameter.props">props</a></code> | <code><a href="#@winglang/sdk.cloud.FunctionProps">FunctionProps</a></code> | *No description.* |
 
 ---
 
-##### `inflight`<sup>Required</sup> <a name="inflight" id="@winglang/sdk.cloud.Function.Initializer.parameter.inflight"></a>
+##### `handler`<sup>Required</sup> <a name="handler" id="@winglang/sdk.cloud.Function.Initializer.parameter.handler"></a>
 
 - *Type:* <a href="#@winglang/sdk.cloud.IFunctionHandler">IFunctionHandler</a>
 
@@ -198,9 +198,7 @@ Returns the set of environment variables for this function.
 
 ### FunctionProps <a name="FunctionProps" id="@winglang/sdk.cloud.FunctionProps"></a>
 
-Properties for `Function`.
-
-This is the type users see when constructing a cloud.Function instance.
+Options for `Function`.
 
 #### Initializer <a name="Initializer" id="@winglang/sdk.cloud.FunctionProps.Initializer"></a>
 

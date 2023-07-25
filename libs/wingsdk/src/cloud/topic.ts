@@ -7,7 +7,7 @@ import { IResource, Resource } from "../std";
 export const TOPIC_FQN = fqnForType("cloud.Topic");
 
 /**
- * Properties for `Topic`.
+ * Options for `Topic`.
  */
 export interface TopicProps {}
 
