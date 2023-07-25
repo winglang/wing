@@ -146,6 +146,13 @@ exports[`bring_local_variables.w 1`] = `
    |   ^ Preflight field \\"x\\" is not initialized
 
 
+error: Cannot bring \\"../../../examples/tests/invalid/file_with_variables.w\\" - modules with statements besides classes, interfaces, enums, and structs cannot be brought
+  --> ../../../examples/tests/invalid/bring_local_variables.w:1:7
+  |
+1 | bring \\"./file_with_variables.w\\" as stuff;
+  |       ^^^^^^^^^^^^^^^^^^^^^^^^^ Cannot bring \\"../../../examples/tests/invalid/file_with_variables.w\\" - modules with statements besides classes, interfaces, enums, and structs cannot be brought
+
+
  
  
 Tests 1 failed (1)
