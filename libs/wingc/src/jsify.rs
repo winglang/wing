@@ -636,20 +636,6 @@ impl<'a> JSifier<'a> {
 					))
 				}
 			},
-			StmtKind::Module { name, statements } => {
-				let mut code = CodeMaker::default();
-				code.open(format!("const {} = (() => {{", name.name));
-				code.add_code(self.jsify_scope_body(statements, ctx));
-
-				let exports = get_public_symbols(statements);
-				code.line(format!(
-					"return {{ {} }};",
-					exports.iter().map(ToString::to_string).join(", ")
-				));
-
-				code.close("})();");
-				code
-			}
 			StmtKind::SuperConstructor { arg_list } => {
 				let args = self.jsify_arg_list(&arg_list, None, None, ctx);
 				match ctx.visit_ctx.current_phase() {
@@ -1332,9 +1318,6 @@ fn get_public_symbols(scope: &Scope) -> Vec<Symbol> {
 	for stmt in &scope.statements {
 		match &stmt.kind {
 			StmtKind::Bring { .. } => {}
-			StmtKind::Module { name, .. } => {
-				symbols.push(name.clone());
-			}
 			StmtKind::SuperConstructor { .. } => {}
 			StmtKind::Let { .. } => {}
 			StmtKind::ForLoop { .. } => {}

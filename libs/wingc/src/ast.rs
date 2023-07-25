@@ -431,10 +431,6 @@ pub enum StmtKind {
 		source: BringSource,
 		identifier: Option<Symbol>,
 	},
-	Module {
-		name: Symbol,
-		statements: Scope,
-	},
 	SuperConstructor {
 		arg_list: ArgList,
 	},

@@ -104,10 +104,6 @@ where
 				v.visit_symbol(identifier);
 			}
 		}
-		StmtKind::Module { name, statements } => {
-			v.visit_symbol(name);
-			v.visit_scope(statements);
-		}
 		StmtKind::SuperConstructor { arg_list } => v.visit_args(arg_list),
 		StmtKind::Let {
 			reassignable: _,

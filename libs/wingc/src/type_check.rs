@@ -3164,26 +3164,6 @@ impl<'a> TypeChecker<'a> {
 			StmtKind::SuperConstructor { arg_list } => {
 				self.type_check_arg_list(arg_list, env);
 			}
-			StmtKind::Module { name, statements } => {
-				let ns = self.types.add_namespace(Namespace {
-					name: name.to_string(),
-					env: SymbolEnv::new(Some(env.get_ref()), env.return_type, false, false, env.phase, stmt.idx),
-					loaded: true,
-				});
-				statements.set_env(ns.env.get_ref());
-
-				// instead of pushing `statements` into `self.inner_scopes`,
-				// we need to type check the statements in the module's namespace
-				// so that subsequence statements can reference symbols inside the module
-				self.type_check_scope(statements);
-
-				match env.define(name, SymbolKind::Namespace(ns), StatementIdx::Index(stmt.idx)) {
-					Err(type_error) => {
-						self.type_error(type_error);
-					}
-					_ => {}
-				};
-			}
 		}
 	}
 
