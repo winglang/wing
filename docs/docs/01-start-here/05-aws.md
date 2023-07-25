@@ -155,9 +155,11 @@ through the AWS Management Console.
 8. Cycle through the buckets until you find one that contains `wing-1.txt`.
 9. Click `wing-1.txt` then click the `Open` button.
 10. The file should contain `Hello, cloud`.
-11. Open the [Amazon Dynamo DB Console](https://console.aws.amazon.com/dynamodb), and search for a table prefixed with `wing-counter-cloud`.
-12. Use the `Explore table items` button to view the value of the `counter` id attribute, which represents the current value of the counter.
-13. Optional - repeat step 5 as many times as you want, and see how the bucket is filling up, and also see how the `counter` id increments.
+
+### Exploring the counter on AWS
+1. Open the [Amazon Dynamo DB Console](https://console.aws.amazon.com/dynamodb), and search for a table prefixed with `wing-counter-cloud`.
+2. Use the `Explore table items` button to view the value of the `counter` id attribute, which represents the current value of the counter.
+3. Optional - repeat step 5 from the above list as many times as you want. While doing it, see how the bucket fills and how the `counter` id increments.
 
 
 ## Cleanup
