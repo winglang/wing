@@ -155,43 +155,6 @@ pub unsafe extern "C" fn wingc_compile(ptr: u32, len: u32) -> u64 {
 	}
 }
 
-// pub fn parse(source_path: &Path) -> (Files, Scope) {
-// 	let language = tree_sitter_wing::language();
-// 	let mut parser = tree_sitter::Parser::new();
-// 	parser.set_language(language).unwrap();
-
-// 	let source = match fs::read(&source_path) {
-// 		Ok(source) => source,
-// 		Err(err) => {
-// 			report_diagnostic(Diagnostic {
-// 				message: format!("Error reading source file: {}: {:?}", source_path.display(), err),
-// 				span: None,
-// 			});
-
-// 			// Set up a dummy scope to return
-// 			let empty_scope = Scope {
-// 				statements: Vec::<Stmt>::new(),
-// 				env: RefCell::new(None),
-// 				span: Default::default(),
-// 			};
-// 			return (Files::default(), empty_scope);
-// 		}
-// 	};
-
-// 	let tree = match parser.parse(&source, None) {
-// 		Some(tree) => tree,
-// 		None => {
-// 			panic!("Failed parsing source file: {}", source_path.display());
-// 		}
-// 	};
-
-// 	let mut files = Files::new();
-// 	let wing_parser = Parser::new(&source, source_path.to_str().unwrap().to_string(), &mut files);
-// 	let scope = wing_parser.parse(&tree.root_node());
-
-// 	(files, scope)
-// }
-
 pub fn type_check(
 	scope: &mut Scope,
 	types: &mut Types,
@@ -355,8 +318,9 @@ pub fn compile(
 	// Create a universal JSII import spec (need to keep this alive during entire compilation)
 	let mut jsii_imports = vec![];
 
+	// Type check all files in topological order (start with files that don't require any other
+	// Wing files, then move on to files that depend on those, etc.)
 	for file in &topo_sorted_files {
-		// Type check everything and build typed symbol environment
 		let mut scope = asts.get_mut(file).expect("matching AST not found");
 		type_check(&mut scope, &mut types, &file, &mut jsii_types, &mut jsii_imports);
 

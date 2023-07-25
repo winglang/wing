@@ -50,18 +50,23 @@ const JS_CONSTRUCTOR: &str = "constructor";
 pub struct JSifyContext<'a> {
 	pub lifts: Option<&'a Lifts>,
 	pub visit_ctx: &'a mut VisitContext,
+	/// The current source file being jsified.
 	pub source_path: PathBuf,
+	/// Whether the current source file matches the JSifier's
+	/// entrypoint file (`entrypoint_file_path`).
 	pub is_entrypoint_file: bool,
 }
 
 pub struct JSifier<'a> {
 	pub types: &'a mut Types,
+	/// Store the output files here.
 	pub output_files: RefCell<Files>,
 	preflight_file_counter: RefCell<usize>,
 	preflight_file_map: RefCell<IndexMap<PathBuf, String>>,
 	source_files: &'a Files,
 	/// Root of the project, used for resolving extern modules
 	absolute_project_root: &'a Path,
+	/// The entrypoint file of the Wing application.
 	entrypoint_file_path: &'a Path,
 }
 
@@ -131,8 +136,8 @@ impl<'a> JSifier<'a> {
 		if jsify_context.is_entrypoint_file {
 			output.line(format!("const {} = require('{}');", STDLIB, STDLIB_MODULE));
 			output.line(format!("const {} = process.env.WING_SYNTH_DIR ?? \".\";", OUTDIR_VAR));
-			output.line(format!("const std = {STDLIB}.{WINGSDK_STD_MODULE};"));
 			// "std" is implicitly imported
+			output.line(format!("const std = {STDLIB}.{WINGSDK_STD_MODULE};"));
 			output.line(format!(
 				"const {} = process.env.WING_IS_TEST === \"true\";",
 				ENV_WING_IS_TEST
@@ -170,6 +175,7 @@ impl<'a> JSifier<'a> {
 			output.close("};");
 		}
 
+		// Generate a name for the JS file this preflight code will be written to
 		let preflight_file_name = if jsify_context.is_entrypoint_file {
 			PREFLIGHT_FILE_NAME.to_string()
 		} else {
@@ -181,15 +187,20 @@ impl<'a> JSifier<'a> {
 				.chars()
 				.filter(|c| c.is_alphanumeric())
 				.collect::<String>();
-			// add a number to the end to avoid collisions
+			// add a number to the end to avoid name collisions
 			let mut preflight_file_counter = self.preflight_file_counter.borrow_mut();
 			*preflight_file_counter += 1;
 			format!("preflight.{}-{}.js", sanitized_name, preflight_file_counter)
 		};
+
+		// Store the file name in a map so if anyone tries to "bring" it as a module,
+		// we can look up what JS file needs to be imported.
 		self
 			.preflight_file_map
 			.borrow_mut()
 			.insert(jsify_context.source_path, preflight_file_name.clone());
+
+		// Emit the file
 		match self
 			.output_files
 			.borrow_mut()
@@ -609,6 +620,7 @@ impl<'a> JSifier<'a> {
 				BringSource::BuiltinModule(name) => CodeMaker::one_line(format!("const {} = {}.{};", name, STDLIB, name)),
 				BringSource::JsiiModule(name) => CodeMaker::one_line(format!(
 					"const {} = require(\"{}\");",
+					// checked during type checking
 					identifier.as_ref().expect("bring jsii module requires an alias"),
 					name
 				)),
@@ -617,6 +629,7 @@ impl<'a> JSifier<'a> {
 					let preflight_file_name = preflight_file_map.get(Path::new(&name.name)).unwrap();
 					CodeMaker::one_line(format!(
 						"const {} = require(\"./{}\")({{ {} }});",
+						// checked during type checking
 						identifier.as_ref().expect("bring wing file requires an alias"),
 						preflight_file_name,
 						STDLIB,
