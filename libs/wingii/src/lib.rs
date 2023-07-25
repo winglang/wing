@@ -26,7 +26,6 @@ pub mod spec {
 	use std::fs::File;
 	use std::io::Read;
 	use std::path::PathBuf;
-	use std::time::Duration;
 	use std::time::SystemTime;
 
 	use crate::jsii::{Assembly, JsiiFile};
@@ -60,11 +59,16 @@ pub mod spec {
 		Some(asm)
 	}
 
-	pub fn load_assembly_from_file(path_to_file: &str, compression: Option<&str>) -> Result<Assembly> {
+	pub fn load_assembly_from_file(
+		name: &str,
+		path_to_file: &str,
+		compression: Option<&str>,
+		module_version: &Option<String>,
+	) -> Result<Assembly> {
 		let assembly_path = Path::new(path_to_file);
 
 		// First try loading the manifest from the cache
-		let fingerprint = get_manifest_fingerprint(assembly_path);
+		let fingerprint = get_manifest_fingerprint(name, assembly_path, module_version);
 		let maybe_manifest = fingerprint
 			.as_ref()
 			.and_then(|fingerprint| try_load_from_cache(&fingerprint))
@@ -101,30 +105,27 @@ pub mod spec {
 					.expect("Assembly path has no parent")
 					.join(&asm_redirect.filename);
 				load_assembly_from_file(
+					name,
 					path.to_str().expect("JSII redirect path invalid"),
 					Some(&asm_redirect.compression),
+					module_version,
 				)
 			}
 		}
 	}
 
-	fn get_manifest_fingerprint(assembly_path: &Path) -> Option<String> {
-		struct FpData {
-			canonic_name: PathBuf,
-			modified_time: Duration,
-			len: u64,
-		}
+	fn get_manifest_fingerprint(name: &str, assembly_path: &Path, module_version: &Option<String>) -> Option<String> {
+		let module_version = module_version.as_ref()?;
 		let metadata = fs::metadata(assembly_path).ok()?;
-		let fp_data = FpData {
-			canonic_name: fs::canonicalize(assembly_path).ok()?,
-			modified_time: metadata.modified().ok()?.duration_since(SystemTime::UNIX_EPOCH).ok()?,
-			len: metadata.len(),
-		};
 		let fp_raw_str = format!(
-			"{}-{}-{}",
-			fp_data.canonic_name.to_string_lossy(),
-			fp_data.modified_time.as_nanos(),
-			fp_data.len
+			"{name}-{}-{}-{module_version}",
+			metadata
+				.modified()
+				.ok()?
+				.duration_since(SystemTime::UNIX_EPOCH)
+				.ok()?
+				.as_nanos(),
+			metadata.len(),
 		);
 		Some(blake3::hash(&fp_raw_str.as_bytes()).to_string())
 	}
@@ -146,6 +147,8 @@ pub mod spec {
 
 pub mod type_system {
 	type AssemblyName = String;
+
+	use serde_json::Value;
 
 	use crate::fqn::FQN;
 	use crate::jsii;
@@ -208,10 +211,6 @@ pub mod type_system {
 			}
 		}
 
-		fn load_assembly(&self, path: &str) -> Result<Assembly> {
-			spec::load_assembly_from_file(path, None)
-		}
-
 		fn add_assembly(&mut self, assembly: Assembly) -> Result<AssemblyName> {
 			let name = assembly.name.clone();
 			if !self.assemblies.contains_key(&name) {
@@ -245,7 +244,15 @@ pub mod type_system {
 				return Ok(name.to_string());
 			}
 
-			let asm = self.load_assembly(&assembly_file)?;
+			// Get the module version, this is used for fingerprinting the JSII manifest
+			// needed for comparing it to the JSII manifest cache
+			let module_version = if let Some(Value::String(ver_str)) = package.get("version") {
+				Some(ver_str.clone())
+			} else {
+				None
+			};
+
+			let asm = spec::load_assembly_from_file(name, &assembly_file, None, &module_version)?;
 			let root = self.add_assembly(asm)?;
 			let bundled = package_json::bundled_dependencies_of(&package);
 			let deps = package_json::dependencies_of(&package);

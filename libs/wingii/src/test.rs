@@ -20,13 +20,13 @@ mod tests {
 
 	#[test]
 	fn does_not_blow_up() {
-		let assembly_path = create_temp_assembly();
+		let (_, assembly_path) = create_temp_assembly();
 		remove_temp_assembly(assembly_path);
 	}
 
 	#[test]
 	fn can_correctly_tell_redirects() {
-		let assembly_path = create_temp_assembly();
+		let (_, assembly_path) = create_temp_assembly();
 		let manifest: JsiiFile = serde_json::from_str(&fs::read_to_string(assembly_path.clone()).unwrap()).unwrap();
 		assert_eq!(matches!(manifest, JsiiFile::AssemblyRedirect(..)), false);
 		remove_temp_assembly(assembly_path);
@@ -34,15 +34,15 @@ mod tests {
 
 	#[test]
 	fn can_load_assembly_from_single_file() {
-		let assembly_path = create_temp_assembly();
-		let assembly = spec::load_assembly_from_file(assembly_path.to_str().unwrap(), None).unwrap();
+		let (name, assembly_path) = create_temp_assembly();
+		let assembly = spec::load_assembly_from_file(&name, assembly_path.to_str().unwrap(), None, &None).unwrap();
 		assert_eq!(assembly.name, "jsii-test-dep"); // TODO: write a better test
 		remove_temp_assembly(assembly_path);
 	}
 
 	#[test]
 	fn can_load_assembly_from_single_file_compressed() {
-		let assembly_path_pre = create_temp_assembly();
+		let (name, assembly_path_pre) = create_temp_assembly();
 		let assembly_path = assembly_path_pre.with_extension("jsii.gz");
 
 		// gzip the file
@@ -53,15 +53,15 @@ mod tests {
 		gz.write_all(&buffer).unwrap();
 		gz.finish().unwrap();
 
-		let assembly = spec::load_assembly_from_file(assembly_path.to_str().unwrap(), Some("gzip")).unwrap();
+		let assembly = spec::load_assembly_from_file(&name, assembly_path.to_str().unwrap(), Some("gzip"), &None).unwrap();
 		assert_eq!(assembly.name, "jsii-test-dep"); // TODO: write a better test
 		remove_temp_assembly(assembly_path);
 	}
 
 	#[test]
 	fn can_load_assembly_from_file() {
-		let assembly_path = create_temp_assembly();
-		let assembly = spec::load_assembly_from_file(&assembly_path.to_str().unwrap(), None).unwrap();
+		let (name, assembly_path) = create_temp_assembly();
+		let assembly = spec::load_assembly_from_file(&name, &assembly_path.to_str().unwrap(), None, &None).unwrap();
 		assert_eq!(assembly.name, "jsii-test-dep"); // TODO: write a better test
 		remove_temp_assembly(assembly_path);
 	}
@@ -103,16 +103,17 @@ mod tests {
 	}
 }
 
-fn create_temp_assembly() -> PathBuf {
+fn create_temp_assembly() -> (String, PathBuf) {
 	let temp_dir = env::temp_dir();
 	let mut temp_assembly_dir = temp_dir.clone();
 	let mut rng = rand::thread_rng();
 	temp_assembly_dir.push(format!("ass-{}", rng.gen::<u32>()));
 	fs::create_dir(&temp_assembly_dir).unwrap();
 	let assembly_path = temp_assembly_dir.join(spec::SPEC_FILE_NAME);
+	let name = "jsii-test-dep".to_string();
 	let assembly = json!({
 		"schema": "jsii/0.10.0",
-		"name": "jsii-test-dep",
+		"name": name,
 		"version": "1.2.4",
 		"license": "Apache-2.0",
 		"description": "A test assembly",
@@ -132,7 +133,7 @@ fn create_temp_assembly() -> PathBuf {
 	});
 	let assembly_file = File::create(&assembly_path).unwrap();
 	serde_json::to_writer_pretty(assembly_file, &assembly).unwrap();
-	assembly_path
+	(name, assembly_path)
 }
 
 fn remove_temp_assembly(assembly_path: PathBuf) {
