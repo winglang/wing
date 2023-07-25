@@ -1,5 +1,3 @@
-use std::path::PathBuf;
-
 use crate::{
 	ast::{Class, Expr, ExprKind, FunctionBody, FunctionDefinition, Phase, Reference, Scope, Stmt, UserDefinedType},
 	comp_ctx::{CompilationContext, CompilationPhase},
@@ -135,8 +133,6 @@ impl<'a> LiftTransform<'a> {
 			&mut JSifyContext {
 				lifts: None,
 				visit_ctx: &mut self.ctx,
-				source_path: PathBuf::from(""), // TODO
-				is_entrypoint_file: false,      // TODO
 			},
 		);
 		self.ctx.pop_phase();

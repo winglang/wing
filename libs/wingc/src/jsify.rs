@@ -50,11 +50,6 @@ const JS_CONSTRUCTOR: &str = "constructor";
 pub struct JSifyContext<'a> {
 	pub lifts: Option<&'a Lifts>,
 	pub visit_ctx: &'a mut VisitContext,
-	/// The current source file being jsified.
-	pub source_path: PathBuf,
-	/// Whether the current source file matches the JSifier's
-	/// entrypoint file (`entrypoint_file_path`).
-	pub is_entrypoint_file: bool,
 }
 
 pub struct JSifier<'a> {
@@ -106,8 +101,6 @@ impl<'a> JSifier<'a> {
 		let mut jsify_context = JSifyContext {
 			visit_ctx: &mut visit_ctx,
 			lifts: None,
-			source_path: source_path.to_path_buf(),
-			is_entrypoint_file: source_path == self.entrypoint_file_path,
 		};
 		jsify_context
 			.visit_ctx
@@ -133,7 +126,9 @@ impl<'a> JSifier<'a> {
 
 		let mut output = CodeMaker::default();
 
-		if jsify_context.is_entrypoint_file {
+		let is_entrypoint_file = source_path == self.entrypoint_file_path;
+
+		if is_entrypoint_file {
 			output.line(format!("const {} = require('{}');", STDLIB, STDLIB_MODULE));
 			output.line(format!("const {} = process.env.WING_SYNTH_DIR ?? \".\";", OUTDIR_VAR));
 			// "std" is implicitly imported
@@ -149,7 +144,7 @@ impl<'a> JSifier<'a> {
 
 		output.add_code(imports);
 
-		if jsify_context.is_entrypoint_file {
+		if is_entrypoint_file {
 			let mut root_class = CodeMaker::default();
 			root_class.open(format!("class {} extends {} {{", ROOT_CLASS, STDLIB_CORE_RESOURCE));
 			root_class.open(format!("{JS_CONSTRUCTOR}(scope, id) {{"));
@@ -176,7 +171,7 @@ impl<'a> JSifier<'a> {
 		}
 
 		// Generate a name for the JS file this preflight code will be written to
-		let preflight_file_name = if jsify_context.is_entrypoint_file {
+		let preflight_file_name = if is_entrypoint_file {
 			PREFLIGHT_FILE_NAME.to_string()
 		} else {
 			// remove all non-alphanumeric characters
@@ -198,7 +193,7 @@ impl<'a> JSifier<'a> {
 		self
 			.preflight_file_map
 			.borrow_mut()
-			.insert(jsify_context.source_path, preflight_file_name.clone());
+			.insert(source_path.to_path_buf(), preflight_file_name.clone());
 
 		// Emit the file
 		match self
@@ -961,8 +956,6 @@ impl<'a> JSifier<'a> {
 		let ctx = &mut JSifyContext {
 			lifts,
 			visit_ctx: &mut ctx.visit_ctx,
-			source_path: ctx.source_path.clone(),
-			is_entrypoint_file: ctx.is_entrypoint_file,
 		};
 
 		// emit the inflight side of the class into a separate file
