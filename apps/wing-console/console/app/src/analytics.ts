@@ -14,16 +14,20 @@ export const createAnalytics = (options: CreateAnalyticsOptions): Analytics => {
   const sessionId = Date.now();
   return {
     track(event: string, properties?: Record<string, any>) {
-      segment.track({
-        anonymousId: options.anonymousId,
-        event: event.toLowerCase().replaceAll(/\s/g, ""),
-        properties,
-        integrations: {
-          "Actions Amplitude": {
-            session_id: sessionId,
+      try {
+        segment.track({
+          anonymousId: options.anonymousId,
+          event: event.toLowerCase().replaceAll(/\s/g, ""),
+          properties,
+          integrations: {
+            "Actions Amplitude": {
+              session_id: sessionId,
+            },
           },
-        },
-      });
+        });
+      } catch (error) {
+        console.debug("failed to send analytics", error);
+      }
     },
   };
 };
