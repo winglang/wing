@@ -17,21 +17,19 @@ export class ResourcesExplorerProvider
 
   getChildren(element?: ResourceItem): Thenable<ResourceItem[]> {
     if (!element) {
-      // return Promise.resolve([
-      //   new ResourceItem(this.node.label, TreeItemCollapsibleState.Expanded),
-      // ]);
       return Promise.resolve(
-        this.node.childItems?.map((child) => {
+        this.node.childItems?.map((child: ExplorerItem) => {
           return new ResourceItem(
             child.label,
-            TreeItemCollapsibleState.Expanded
+            child.childItems?.length > 0
+              ? TreeItemCollapsibleState.Expanded
+              : TreeItemCollapsibleState.None
           );
         }) || []
       );
     }
 
-    // find the child item recursively in the node.childItems
-    const childItem = this.node.childItems.find((child) => {
+    const childItem = this.node.childItems.find((child: ExplorerItem) => {
       return child.label === element.label;
     });
 
@@ -40,8 +38,13 @@ export class ResourcesExplorerProvider
     }
 
     return Promise.resolve(
-      childItem.childItems.map((child) => {
-        return new ResourceItem(child.label, TreeItemCollapsibleState.Expanded);
+      childItem.childItems.map((child: ExplorerItem) => {
+        return new ResourceItem(
+          child.label,
+          child.childItems?.length > 0
+            ? TreeItemCollapsibleState.Expanded
+            : TreeItemCollapsibleState.None
+        );
       })
     );
   }
@@ -73,6 +76,6 @@ class ResourceItem extends TreeItem {
   ) {
     super(label, collapsibleState);
     this.tooltip = `${this.label}`;
-    this.description = this.label;
+    //this.description = this.label;
   }
 }
