@@ -183,7 +183,7 @@ class $Root extends $stdlib.std.Resource {
         super._registerBind(host, ops);
       }
     }
-    const SomeEnum = 
+    const SomeEnum =
       Object.freeze((function (tmp) {
         tmp[tmp["ONE"] = 0] = "ONE";
         tmp[tmp["TWO"] = 1] = "TWO";

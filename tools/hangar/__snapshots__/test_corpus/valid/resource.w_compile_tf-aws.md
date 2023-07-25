@@ -1229,7 +1229,7 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
     }
-    const MyEnum = 
+    const MyEnum =
       Object.freeze((function (tmp) {
         tmp[tmp["A"] = 0] = "A";
         tmp[tmp["B"] = 1] = "B";

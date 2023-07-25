@@ -791,7 +791,7 @@ impl<'a> JSifier<'a> {
 			}
 			StmtKind::Enum { name, values } => {
 				let mut code = CodeMaker::default();
-				code.open(format!("const {name} = "));
+				code.open(format!("const {name} ="));
 				code.add_code(self.jsify_enum(values));
 				code.close(";");
 				code

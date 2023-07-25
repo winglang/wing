@@ -48,6 +48,15 @@ module.exports = function({  }) {
 }
 ```
 
+## preflight.empty-1.js
+```js
+module.exports = function({ $stdlib }) {
+  const std = $stdlib.std;
+  return {  };
+};
+
+```
+
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
@@ -93,7 +102,7 @@ class $Root extends $stdlib.std.Resource {
         super._registerBind(host, ops);
       }
     }
-    const Color = 
+    const Color =
       Object.freeze((function (tmp) {
         tmp[tmp["RED"] = 0] = "RED";
         tmp[tmp["GREEN"] = 1] = "GREEN";

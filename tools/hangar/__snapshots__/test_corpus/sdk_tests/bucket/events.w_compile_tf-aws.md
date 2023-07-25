@@ -1310,7 +1310,7 @@ class $Root extends $stdlib.std.Resource {
         super._registerBind(host, ops);
       }
     }
-    const Source = 
+    const Source =
       Object.freeze((function (tmp) {
         tmp[tmp["anyEvent"] = 0] = "anyEvent";
         tmp[tmp["onEvent"] = 1] = "onEvent";
