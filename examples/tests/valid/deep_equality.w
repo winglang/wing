@@ -110,3 +110,30 @@ test "Array with different values" {
     assert(e == "assertion failed: arrayA == arrayC");
   }
 }
+
+//-----------------------------------------------------------------------------
+// Struct
+//-----------------------------------------------------------------------------
+struct Cat {
+  name: str;
+  age: num;
+}
+
+let cat1 = Cat { name: "Mittens", age: 3 };
+let cat2 = Cat { name: "Mittens", age: 3 };
+let cat3 = Cat { name: "Simba", age: 5 };
+
+assert(cat1 == cat2);
+
+test "Struct with the same value" {
+  assert(cat1 == cat1);
+  assert(cat1 == cat2);
+}
+
+test "Struct with different values" {
+  try {
+    assert(cat1 == cat3);
+  } catch e {
+    assert(e == "assertion failed: cat1 == cat3");
+  }
+}

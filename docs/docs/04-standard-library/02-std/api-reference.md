@@ -561,7 +561,6 @@ The index of the element in the Json Array to return.
 | <code><a href="#@winglang/sdk.std.Json.deepCopyMut">deepCopyMut</a></code> | Creates a mutable deep copy of the Json. |
 | <code><a href="#@winglang/sdk.std.Json.delete">delete</a></code> | Deletes a key in a given Json. |
 | <code><a href="#@winglang/sdk.std.Json.has">has</a></code> | Checks if a Json object has a given key. |
-| <code><a href="#@winglang/sdk.std.Json.isEquals">isEquals</a></code> | A recursive deep comparison of two Json objects to determine if they are equal. |
 | <code><a href="#@winglang/sdk.std.Json.keys">keys</a></code> | Returns the keys from the Json object. |
 | <code><a href="#@winglang/sdk.std.Json.parse">parse</a></code> | Parse a string into a Json. |
 | <code><a href="#@winglang/sdk.std.Json.stringify">stringify</a></code> | Formats Json as string. |
@@ -647,30 +646,6 @@ The json object to inspect.
 - *Type:* str
 
 The key to check.
-
----
-
-##### `isEquals` <a name="isEquals" id="@winglang/sdk.std.Json.isEquals"></a>
-
-```wing
-Json.isEquals(jsonA: Json, jsonB: Json);
-```
-
-A recursive deep comparison of two Json objects to determine if they are equal.
-
-###### `jsonA`<sup>Required</sup> <a name="jsonA" id="@winglang/sdk.std.Json.isEquals.parameter.jsonA"></a>
-
-- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
-
-The first Json object to compare.
-
----
-
-###### `jsonB`<sup>Required</sup> <a name="jsonB" id="@winglang/sdk.std.Json.isEquals.parameter.jsonB"></a>
-
-- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
-
-The second Json object to compare.
 
 ---
 

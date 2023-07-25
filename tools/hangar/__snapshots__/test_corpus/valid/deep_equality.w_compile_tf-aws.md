@@ -45,6 +45,49 @@ module.exports = function({ $arrayA, $arrayC }) {
 
 ```
 
+## inflight.$Closure11.js
+```js
+module.exports = function({ $cat1, $cat2 }) {
+  class $Closure11 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async handle() {
+      {((cond) => {if (!cond) throw new Error("assertion failed: cat1 == cat1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($cat1,$cat1)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: cat1 == cat2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($cat1,$cat2)))};
+    }
+  }
+  return $Closure11;
+}
+
+```
+
+## inflight.$Closure12.js
+```js
+module.exports = function({ $cat1, $cat3 }) {
+  class $Closure12 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async handle() {
+      try {
+        {((cond) => {if (!cond) throw new Error("assertion failed: cat1 == cat3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($cat1,$cat3)))};
+      }
+      catch ($error_e) {
+        const e = $error_e.message;
+        {((cond) => {if (!cond) throw new Error("assertion failed: e == \"assertion failed: cat1 == cat3\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(e,"assertion failed: cat1 == cat3")))};
+      }
+    }
+  }
+  return $Closure12;
+}
+
+```
+
 ## inflight.$Closure2.js
 ```js
 module.exports = function({ $numA, $numC, $strA, $strC }) {
@@ -245,7 +288,7 @@ module.exports = function({ $Object_freeze______arrayB___, $arrayA }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:Primitive types with the same value\",\"${aws_lambda_function.testPrimitivetypeswiththesamevalue_Handler_E7430682.arn}\"],[\"root/Default/Default/test:Primitive types with different values\",\"${aws_lambda_function.testPrimitivetypeswithdifferentvalues_Handler_1CD5AE77.arn}\"],[\"root/Default/Default/test:Json with the same value\",\"${aws_lambda_function.testJsonwiththesamevalue_Handler_0A930AF7.arn}\"],[\"root/Default/Default/test:Json with different values\",\"${aws_lambda_function.testJsonwithdifferentvalues_Handler_7CBC98A6.arn}\"],[\"root/Default/Default/test:Set types with the same value\",\"${aws_lambda_function.testSettypeswiththesamevalue_Handler_16147212.arn}\"],[\"root/Default/Default/test:Set types with different values\",\"${aws_lambda_function.testSettypeswithdifferentvalues_Handler_827F38F3.arn}\"],[\"root/Default/Default/test:Map with the same value\",\"${aws_lambda_function.testMapwiththesamevalue_Handler_74DC4830.arn}\"],[\"root/Default/Default/test:Map with different values\",\"${aws_lambda_function.testMapwithdifferentvalues_Handler_E889ADD0.arn}\"],[\"root/Default/Default/test:Array with the same value\",\"${aws_lambda_function.testArraywiththesamevalue_Handler_7A26272F.arn}\"],[\"root/Default/Default/test:Array with different values\",\"${aws_lambda_function.testArraywithdifferentvalues_Handler_2422390C.arn}\"]]"
+      "value": "[[\"root/Default/Default/test:Primitive types with the same value\",\"${aws_lambda_function.testPrimitivetypeswiththesamevalue_Handler_E7430682.arn}\"],[\"root/Default/Default/test:Primitive types with different values\",\"${aws_lambda_function.testPrimitivetypeswithdifferentvalues_Handler_1CD5AE77.arn}\"],[\"root/Default/Default/test:Json with the same value\",\"${aws_lambda_function.testJsonwiththesamevalue_Handler_0A930AF7.arn}\"],[\"root/Default/Default/test:Json with different values\",\"${aws_lambda_function.testJsonwithdifferentvalues_Handler_7CBC98A6.arn}\"],[\"root/Default/Default/test:Set types with the same value\",\"${aws_lambda_function.testSettypeswiththesamevalue_Handler_16147212.arn}\"],[\"root/Default/Default/test:Set types with different values\",\"${aws_lambda_function.testSettypeswithdifferentvalues_Handler_827F38F3.arn}\"],[\"root/Default/Default/test:Map with the same value\",\"${aws_lambda_function.testMapwiththesamevalue_Handler_74DC4830.arn}\"],[\"root/Default/Default/test:Map with different values\",\"${aws_lambda_function.testMapwithdifferentvalues_Handler_E889ADD0.arn}\"],[\"root/Default/Default/test:Array with the same value\",\"${aws_lambda_function.testArraywiththesamevalue_Handler_7A26272F.arn}\"],[\"root/Default/Default/test:Array with different values\",\"${aws_lambda_function.testArraywithdifferentvalues_Handler_2422390C.arn}\"],[\"root/Default/Default/test:Struct with the same value\",\"${aws_lambda_function.testStructwiththesamevalue_Handler_4436CF3A.arn}\"],[\"root/Default/Default/test:Struct with different values\",\"${aws_lambda_function.testStructwithdifferentvalues_Handler_A8DC5651.arn}\"]]"
     }
   },
   "provider": {
@@ -341,6 +384,24 @@ module.exports = function({ $Object_freeze______arrayB___, $arrayA }) {
           "metadata": {
             "path": "root/Default/Default/test:Set types with the same value/Handler/IamRole",
             "uniqueId": "testSettypeswiththesamevalue_Handler_IamRole_058FC879"
+          }
+        },
+        "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
+      },
+      "testStructwithdifferentvalues_Handler_IamRole_A1B66D3F": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:Struct with different values/Handler/IamRole",
+            "uniqueId": "testStructwithdifferentvalues_Handler_IamRole_A1B66D3F"
+          }
+        },
+        "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
+      },
+      "testStructwiththesamevalue_Handler_IamRole_705BC42B": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:Struct with the same value/Handler/IamRole",
+            "uniqueId": "testStructwiththesamevalue_Handler_IamRole_705BC42B"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
@@ -446,6 +507,26 @@ module.exports = function({ $Object_freeze______arrayB___, $arrayA }) {
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
         "role": "${aws_iam_role.testSettypeswiththesamevalue_Handler_IamRole_058FC879.name}"
+      },
+      "testStructwithdifferentvalues_Handler_IamRolePolicy_B2AB1519": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:Struct with different values/Handler/IamRolePolicy",
+            "uniqueId": "testStructwithdifferentvalues_Handler_IamRolePolicy_B2AB1519"
+          }
+        },
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
+        "role": "${aws_iam_role.testStructwithdifferentvalues_Handler_IamRole_A1B66D3F.name}"
+      },
+      "testStructwiththesamevalue_Handler_IamRolePolicy_475F7032": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:Struct with the same value/Handler/IamRolePolicy",
+            "uniqueId": "testStructwiththesamevalue_Handler_IamRolePolicy_475F7032"
+          }
+        },
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
+        "role": "${aws_iam_role.testStructwiththesamevalue_Handler_IamRole_705BC42B.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
@@ -548,6 +629,26 @@ module.exports = function({ $Object_freeze______arrayB___, $arrayA }) {
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
         "role": "${aws_iam_role.testSettypeswiththesamevalue_Handler_IamRole_058FC879.name}"
+      },
+      "testStructwithdifferentvalues_Handler_IamRolePolicyAttachment_1EA2F024": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:Struct with different values/Handler/IamRolePolicyAttachment",
+            "uniqueId": "testStructwithdifferentvalues_Handler_IamRolePolicyAttachment_1EA2F024"
+          }
+        },
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "${aws_iam_role.testStructwithdifferentvalues_Handler_IamRole_A1B66D3F.name}"
+      },
+      "testStructwiththesamevalue_Handler_IamRolePolicyAttachment_1E4F5BA8": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:Struct with the same value/Handler/IamRolePolicyAttachment",
+            "uniqueId": "testStructwiththesamevalue_Handler_IamRolePolicyAttachment_1E4F5BA8"
+          }
+        },
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "${aws_iam_role.testStructwiththesamevalue_Handler_IamRole_705BC42B.name}"
       }
     },
     "aws_lambda_function": {
@@ -810,6 +911,58 @@ module.exports = function({ $Object_freeze______arrayB___, $arrayA }) {
           "security_group_ids": [],
           "subnet_ids": []
         }
+      },
+      "testStructwithdifferentvalues_Handler_A8DC5651": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:Struct with different values/Handler/Default",
+            "uniqueId": "testStructwithdifferentvalues_Handler_A8DC5651"
+          }
+        },
+        "environment": {
+          "variables": {
+            "WING_FUNCTION_NAME": "Handler-c8546ffd",
+            "WING_TARGET": "tf-aws"
+          }
+        },
+        "function_name": "Handler-c8546ffd",
+        "handler": "index.handler",
+        "publish": true,
+        "role": "${aws_iam_role.testStructwithdifferentvalues_Handler_IamRole_A1B66D3F.arn}",
+        "runtime": "nodejs18.x",
+        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
+        "s3_key": "${aws_s3_object.testStructwithdifferentvalues_Handler_S3Object_29250ADD.key}",
+        "timeout": 30,
+        "vpc_config": {
+          "security_group_ids": [],
+          "subnet_ids": []
+        }
+      },
+      "testStructwiththesamevalue_Handler_4436CF3A": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:Struct with the same value/Handler/Default",
+            "uniqueId": "testStructwiththesamevalue_Handler_4436CF3A"
+          }
+        },
+        "environment": {
+          "variables": {
+            "WING_FUNCTION_NAME": "Handler-c8c23fc1",
+            "WING_TARGET": "tf-aws"
+          }
+        },
+        "function_name": "Handler-c8c23fc1",
+        "handler": "index.handler",
+        "publish": true,
+        "role": "${aws_iam_role.testStructwiththesamevalue_Handler_IamRole_705BC42B.arn}",
+        "runtime": "nodejs18.x",
+        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
+        "s3_key": "${aws_s3_object.testStructwiththesamevalue_Handler_S3Object_4846898F.key}",
+        "timeout": 30,
+        "vpc_config": {
+          "security_group_ids": [],
+          "subnet_ids": []
+        }
       }
     },
     "aws_s3_bucket": {
@@ -928,6 +1081,28 @@ module.exports = function({ $Object_freeze______arrayB___, $arrayA }) {
           "metadata": {
             "path": "root/Default/Default/test:Set types with the same value/Handler/S3Object",
             "uniqueId": "testSettypeswiththesamevalue_Handler_S3Object_E7A37201"
+          }
+        },
+        "bucket": "${aws_s3_bucket.Code.bucket}",
+        "key": "<ASSET_KEY>",
+        "source": "<ASSET_SOURCE>"
+      },
+      "testStructwithdifferentvalues_Handler_S3Object_29250ADD": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:Struct with different values/Handler/S3Object",
+            "uniqueId": "testStructwithdifferentvalues_Handler_S3Object_29250ADD"
+          }
+        },
+        "bucket": "${aws_s3_bucket.Code.bucket}",
+        "key": "<ASSET_KEY>",
+        "source": "<ASSET_SOURCE>"
+      },
+      "testStructwiththesamevalue_Handler_S3Object_4846898F": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:Struct with the same value/Handler/S3Object",
+            "uniqueId": "testStructwiththesamevalue_Handler_S3Object_4846898F"
           }
         },
         "bucket": "${aws_s3_bucket.Code.bucket}",
@@ -1286,6 +1461,72 @@ class $Root extends $stdlib.std.Resource {
         super._registerBind(host, ops);
       }
     }
+    class $Closure11 extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        this.display.hidden = true;
+        this._addInflightOps("handle", "$inflight_init");
+      }
+      static _toInflightType(context) {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("./inflight.$Closure11.js")({
+            $cat1: ${context._lift(cat1)},
+            $cat2: ${context._lift(cat2)},
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const $Closure11Client = ${$Closure11._toInflightType(this).text};
+            const client = new $Closure11Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("handle")) {
+          $Closure11._registerBindObject(cat1, host, []);
+          $Closure11._registerBindObject(cat2, host, []);
+        }
+        super._registerBind(host, ops);
+      }
+    }
+    class $Closure12 extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        this.display.hidden = true;
+        this._addInflightOps("handle", "$inflight_init");
+      }
+      static _toInflightType(context) {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("./inflight.$Closure12.js")({
+            $cat1: ${context._lift(cat1)},
+            $cat3: ${context._lift(cat3)},
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const $Closure12Client = ${$Closure12._toInflightType(this).text};
+            const client = new $Closure12Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("handle")) {
+          $Closure12._registerBindObject(cat1, host, []);
+          $Closure12._registerBindObject(cat3, host, []);
+        }
+        super._registerBind(host, ops);
+      }
+    }
     const numA = 1;
     const numB = 1;
     const numC = 10;
@@ -1314,6 +1555,21 @@ class $Root extends $stdlib.std.Resource {
     const arrayC = Object.freeze([4, 5, 6]);
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:Array with the same value",new $Closure9(this,"$Closure9"));
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:Array with different values",new $Closure10(this,"$Closure10"));
+    const cat1 = {
+    "name": "Mittens",
+    "age": 3,}
+    ;
+    const cat2 = {
+    "name": "Mittens",
+    "age": 3,}
+    ;
+    const cat3 = {
+    "name": "Simba",
+    "age": 5,}
+    ;
+    {((cond) => {if (!cond) throw new Error("assertion failed: cat1 == cat2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(cat1,cat2)))};
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:Struct with the same value",new $Closure11(this,"$Closure11"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:Struct with different values",new $Closure12(this,"$Closure12"));
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
