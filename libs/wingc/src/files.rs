@@ -93,6 +93,20 @@ mod tests {
 	}
 
 	#[test]
+	fn test_contains_file() {
+		let mut files = Files::new();
+		files
+			.add_file("file1", "content1".to_owned())
+			.expect("Failed to add file");
+		files
+			.add_file("file2", "content2".to_owned())
+			.expect("Failed to add file");
+		assert!(files.contains_file("file1"));
+		assert!(files.contains_file("file2"));
+		assert!(!files.contains_file("file3"));
+	}
+
+	#[test]
 	fn test_emit_files() {
 		let temp_dir = tempfile::tempdir().expect("Failed to create temporary directory");
 		let out_dir = temp_dir.path();
