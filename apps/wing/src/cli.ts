@@ -7,7 +7,7 @@ import { Command, Option } from "commander";
 
 import { collectCommandAnalytics } from "./analytics/collect";
 import { exportAnalytics } from "./analytics/export";
-import { displayOptOutConfirmation, optionallyDisplayDisclaimer } from "./analytics/disclaimer";
+import { optionallyDisplayDisclaimer } from "./analytics/disclaimer";
 import { currentPackage } from "./util";
 
 export const PACKAGE_VERSION = currentPackage.version;
@@ -39,7 +39,6 @@ function runSubCommand(subCommand: string) {
 
 async function collectAnalyticsHook(cmd: Command) {
   if (process.env.WING_DISABLE_ANALYTICS) {
-    if (PACKAGE_VERSION !== "0.0.0") { displayOptOutConfirmation(); }
     return;
   }
   // Fail silently if collection fails

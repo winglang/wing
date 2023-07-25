@@ -18,10 +18,6 @@ If you would like to opt out of the analytics gathering, then you can do so by s
 wing compile -t sim app.w --no-analytics
 ```
 
-For piece of mind, the Wing cli will output a friendly confirmation message when you opt out of analytics collection.
-
-![Wing analytics opt out confirmation](./analytics-opt-out.png)
-
 ### What data is collected
 
 Each run of the Wing cli collects information about various aspects of the environment it is running in. Below are the analytics we gather. As well
