@@ -10,10 +10,18 @@ export interface Analytics {
 }
 
 export const createAnalytics = (options: CreateAnalyticsOptions): Analytics => {
-  const segment = new Segment(options.segmentWriteKey);
+  let segment: Segment;
   const sessionId = Date.now();
+  try {
+    segment = new Segment(options.segmentWriteKey);
+  } catch (error) {
+    console.debug("failed to initialize analytics", error);
+  }
   return {
     track(event: string, properties?: Record<string, any>) {
+      if (!segment) {
+        return;
+      }
       try {
         segment.track({
           anonymousId: options.anonymousId,
