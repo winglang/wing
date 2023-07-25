@@ -350,7 +350,7 @@ pub fn compile(
 		.into_iter()
 		.map(|(path, scope)| {
 			let mut lift = LiftTransform::new(&jsifier);
-			let scope = lift.fold_scope(scope); // TODO: does this need to be boxed?
+			let scope = lift.fold_scope(scope);
 			(path, scope)
 		})
 		.collect::<IndexMap<PathBuf, Scope>>();
