@@ -102,11 +102,11 @@ Duration <DURATION>"
 `;
 
 exports[`bring_jsii.w 1`] = `
-"error: bring \\"jsii-code-samples\\" must be assigned to an identifier (e.g. bring \\"foo\\" as foo)
+"error: No alias provided for imported module
   --> ../../../examples/tests/invalid/bring_jsii.w:1:1
   |
 1 | bring \\"jsii-code-samples\\";
-  | ^^^^^^^^^^^^^^^^^^^^^^^^^^ bring \\"jsii-code-samples\\" must be assigned to an identifier (e.g. bring \\"foo\\" as foo)
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^ No alias provided for imported module
 
 
 error: Cannot find module \\"foobar\\" in source directory: Unable to load \\"foobar\\": Module not found in \\"../../../examples/tests/invalid\\"
@@ -139,14 +139,11 @@ Duration <DURATION>"
 `;
 
 exports[`bring_local_variables.w 1`] = `
-"error: Cannot bring \\"\\"./file_with_variables.w\\"\\" - modules with statements besides classes, interfaces, enums, and structs cannot be brought
-
-
-error: Unknown symbol \\"Bar\\"
-  --> ../../../examples/tests/invalid/bring_local_variables.w:3:5
-  |
-3 | new stuff.Bar();
-  |     ^^^^^^^^^ Unknown symbol \\"Bar\\"
+"error: Preflight field \\"x\\" is not initialized
+   --> ../../../examples/tests/invalid/file_with_variables.w:10:3
+   |
+10 |   x: num;
+   |   ^ Preflight field \\"x\\" is not initialized
 
 
  
@@ -2012,32 +2009,32 @@ Duration <DURATION>"
 `;
 
 exports[`unimplemented_grammar.w 1`] = `
-"error: builtin \\"any\\" is not supported yet see https://github.com/winglang/wing/issues/434
+"error: builtin \\"any\\" is not supported yet - see https://github.com/winglang/wing/issues/434
   --> ../../../examples/tests/invalid/unimplemented_grammar.w:1:8
   |
 1 | let b: any = 0;
-  |        ^^^ builtin \\"any\\" is not supported yet see https://github.com/winglang/wing/issues/434
+  |        ^^^ builtin \\"any\\" is not supported yet - see https://github.com/winglang/wing/issues/434
 
 
-error: builtin container type \\"Promise\\" is not supported yet see https://github.com/winglang/wing/issues/529
+error: builtin container type \\"Promise\\" is not supported yet - see https://github.com/winglang/wing/issues/529
   --> ../../../examples/tests/invalid/unimplemented_grammar.w:2:19
   |
 2 | let somePromise = Promise<str>{};
-  |                   ^^^^^^^^^^^^ builtin container type \\"Promise\\" is not supported yet see https://github.com/winglang/wing/issues/529
+  |                   ^^^^^^^^^^^^ builtin container type \\"Promise\\" is not supported yet - see https://github.com/winglang/wing/issues/529
 
 
-error: expression \\"defer_expression\\" is not supported yet see https://github.com/winglang/wing/issues/116
+error: expression \\"defer_expression\\" is not supported yet - see https://github.com/winglang/wing/issues/116
   --> ../../../examples/tests/invalid/unimplemented_grammar.w:3:9
   |
 3 | let c = defer somePromise();
-  |         ^^^^^^^^^^^^^^^^^^^ expression \\"defer_expression\\" is not supported yet see https://github.com/winglang/wing/issues/116
+  |         ^^^^^^^^^^^^^^^^^^^ expression \\"defer_expression\\" is not supported yet - see https://github.com/winglang/wing/issues/116
 
 
-error: expression \\"await_expression\\" is not supported yet see https://github.com/winglang/wing/issues/116
+error: expression \\"await_expression\\" is not supported yet - see https://github.com/winglang/wing/issues/116
   --> ../../../examples/tests/invalid/unimplemented_grammar.w:4:9
   |
 4 | let d = await c;
-  |         ^^^^^^^ expression \\"await_expression\\" is not supported yet see https://github.com/winglang/wing/issues/116
+  |         ^^^^^^^ expression \\"await_expression\\" is not supported yet - see https://github.com/winglang/wing/issues/116
 
 
  

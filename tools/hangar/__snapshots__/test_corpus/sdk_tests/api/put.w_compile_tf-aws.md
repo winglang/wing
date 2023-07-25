@@ -253,9 +253,9 @@ const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
-const cloud = require('@winglang/sdk').cloud;
-const http = require('@winglang/sdk').http;
-const util = require('@winglang/sdk').util;
+const cloud = $stdlib.cloud;
+const http = $stdlib.http;
+const util = $stdlib.util;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);

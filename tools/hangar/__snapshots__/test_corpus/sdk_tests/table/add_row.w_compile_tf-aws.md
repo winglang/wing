@@ -196,8 +196,8 @@ const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
-const ex = require('@winglang/sdk').ex;
-const util = require('@winglang/sdk').util;
+const ex = $stdlib.ex;
+const util = $stdlib.util;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);

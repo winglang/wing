@@ -606,9 +606,7 @@ impl<'a> JSifier<'a> {
 		CompilationContext::set(CompilationPhase::Jsifying, &statement.span);
 		match &statement.kind {
 			StmtKind::Bring { source, identifier } => match source {
-				BringSource::BuiltinModule(name) => {
-					CodeMaker::one_line(format!("const {} = require(\"{}\").{};", name, STDLIB_MODULE, name))
-				}
+				BringSource::BuiltinModule(name) => CodeMaker::one_line(format!("const {} = {}.{};", name, STDLIB, name)),
 				BringSource::JsiiModule(name) => CodeMaker::one_line(format!(
 					"const {} = require(\"{}\");",
 					identifier.as_ref().expect("bring jsii module requires an alias"),
