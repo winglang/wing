@@ -13,6 +13,7 @@ import {
   ViewColumn,
   window,
   workspace,
+  commands,
 } from "vscode";
 import { VIEW_TYPE_CONSOLE } from "./constants";
 
@@ -149,7 +150,12 @@ export class WingConsoleManager {
       </html>`;
 
     const tree = await client["app.explorerTree"].query();
-    logger.appendLine(JSON.stringify(tree, null, 2));
+
+    commands.registerCommand("wingConsole.openResource", (resource) => {
+      const id = resource.id;
+      //await client[""]
+    });
+
     window.registerTreeDataProvider(
       "consoleExplorer",
       new ResourcesExplorerProvider(tree)

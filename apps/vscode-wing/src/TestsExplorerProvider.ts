@@ -1,13 +1,13 @@
 import { TreeDataProvider, TreeItem, TreeItemCollapsibleState } from "vscode";
 
-export class TestsExplorerProvider implements TreeDataProvider<ResourceItem> {
-  public readonly tests: {
+export class TestsExplorerProvider implements TreeDataProvider<TestItem> {
+  public tests: {
     id: string;
     label: string;
   }[] = [];
 
   constructor(
-    private testList: {
+    testList: {
       id: string;
       label: string;
     }[]
@@ -15,26 +15,26 @@ export class TestsExplorerProvider implements TreeDataProvider<ResourceItem> {
     this.tests = testList;
   }
 
-  getTreeItem(element: ResourceItem): TreeItem {
+  getTreeItem(element: TestItem): TreeItem {
     return element;
   }
 
-  getChildren(element?: ResourceItem): Thenable<ResourceItem[]> {
+  getChildren(element?: TestItem): Thenable<TestItem[]> {
     return Promise.resolve(
       this.tests.map((test) => {
-        return new ResourceItem(test.label, TreeItemCollapsibleState.None);
+        return new TestItem(test.label, TreeItemCollapsibleState.None);
       })
     );
   }
 }
 
-class ResourceItem extends TreeItem {
+class TestItem extends TreeItem {
   constructor(
     public readonly label: string,
     public readonly collapsibleState?: TreeItemCollapsibleState
   ) {
     super(label, collapsibleState);
-    this.tooltip = `${this.label}`;
-    this.description = this.label;
+    this.tooltip = this.label;
+    //this.description = this.label;
   }
 }

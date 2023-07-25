@@ -1,18 +1,41 @@
 import path from "path";
 import { ExplorerItem } from "@wingconsole/server";
-import { TreeItemCollapsibleState, TreeItem, TreeDataProvider } from "vscode";
+import {
+  TreeItemCollapsibleState,
+  TreeItem,
+  TreeDataProvider,
+  Event,
+  EventEmitter,
+} from "vscode";
 
 export class ResourcesExplorerProvider
   implements TreeDataProvider<ResourceItem>
 {
-  public readonly node: ExplorerItem;
+  public node: ExplorerItem;
 
-  constructor(private item: ExplorerItem) {
+  private _onDidChangeTreeData: EventEmitter<
+    ResourceItem | undefined | null | void
+  > = new EventEmitter<ResourceItem | undefined | null | void>();
+
+  readonly onDidChangeTreeData: Event<ResourceItem | undefined | null | void> =
+    this._onDidChangeTreeData.event;
+
+  constructor(item: ExplorerItem) {
     this.node = item;
   }
 
+  refresh(): void {
+    this._onDidChangeTreeData.fire();
+  }
+
   getTreeItem(element: ResourceItem): TreeItem {
-    return element;
+    return {
+      command: {
+        command: "wingConsole.openResource",
+        arguments: [element.id],
+        title: "Select Resource",
+      },
+    };
   }
 
   getChildren(element?: ResourceItem): Thenable<ResourceItem[]> {
@@ -20,8 +43,9 @@ export class ResourcesExplorerProvider
       return Promise.resolve(
         this.node.childItems?.map((child: ExplorerItem) => {
           return new ResourceItem(
+            //  child.id,
             child.label,
-            child.childItems?.length > 0
+            child.childItems?.length && child.childItems.length > 0
               ? TreeItemCollapsibleState.Expanded
               : TreeItemCollapsibleState.None
           );
@@ -29,7 +53,7 @@ export class ResourcesExplorerProvider
       );
     }
 
-    const childItem = this.node.childItems.find((child: ExplorerItem) => {
+    const childItem = this.node.childItems?.find((child: ExplorerItem) => {
       return child.label === element.label;
     });
 
@@ -40,8 +64,9 @@ export class ResourcesExplorerProvider
     return Promise.resolve(
       childItem.childItems.map((child: ExplorerItem) => {
         return new ResourceItem(
+          // child.id,
           child.label,
-          child.childItems?.length > 0
+          child.childItems?.length && child.childItems.length > 0
             ? TreeItemCollapsibleState.Expanded
             : TreeItemCollapsibleState.None
         );
@@ -71,11 +96,12 @@ class ResourceItem extends TreeItem {
   };
 
   constructor(
+    //public readonly id: string,
     public readonly label: string,
     public readonly collapsibleState: TreeItemCollapsibleState
   ) {
     super(label, collapsibleState);
-    this.tooltip = `${this.label}`;
-    //this.description = this.label;
+    this.tooltip = this.label;
+    //this.id = id;
   }
 }

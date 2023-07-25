@@ -127,6 +127,18 @@ const contributes: VSCodeExtensionContributions = {
         dark: "resources/icon-dark.png",
       },
     },
+    {
+      command: "wingConsole.openResource",
+      title: "Open resource",
+    },
+    {
+      command: "wingConsole.runTest",
+      title: "Run test",
+      icon: {
+        light: "resources/play-light.svg",
+        dark: "resources/play-dark.svg",
+      },
+    },
   ],
   menus: {
     "editor/title": [
@@ -139,6 +151,13 @@ const contributes: VSCodeExtensionContributions = {
         when: "resourceLangId != wing && activeWebviewPanelId == 'wing.console'",
         command: "wing.openFile",
         group: "navigation",
+      },
+    ],
+    "view/item/context": [
+      {
+        command: "wingConsole.runTest",
+        when: "view == consoleTestsExplorer",
+        group: "inline",
       },
     ],
   },
