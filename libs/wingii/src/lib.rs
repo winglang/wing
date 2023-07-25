@@ -55,9 +55,7 @@ pub mod spec {
 	}
 
 	fn try_load_from_cache(hash: &str) -> Option<Assembly> {
-		let mut file_path = temp_dir();
-		file_path.push(format!("{CACHE_FILE_DIR}/{hash}.{CACHE_FILE_EXT}"));
-		let data = fs::read(file_path).ok()?;
+		let data = fs::read(get_cache_file_dir().join(format!("{hash}.{CACHE_FILE_EXT}"))).ok()?;
 		let (asm, _): (Assembly, usize) = bincode::decode_from_slice(&data, bincode::config::standard()).ok()?;
 		Some(asm)
 	}
@@ -131,9 +129,16 @@ pub mod spec {
 		Some(blake3::hash(&fp_raw_str.as_bytes()).to_string())
 	}
 
+	fn get_cache_file_dir() -> PathBuf {
+		let mut dir = temp_dir();
+		dir.push(CACHE_FILE_DIR);
+		dir
+	}
+
 	fn cache_manifest(manifest: &Assembly, hash: &str) -> Result<()> {
-		fs::create_dir_all(CACHE_FILE_DIR)?;
-		let mut writer = File::create(format!("{CACHE_FILE_DIR}/{hash}.{CACHE_FILE_EXT}"))?;
+		let cache_file_dir = get_cache_file_dir();
+		fs::create_dir_all(&cache_file_dir)?;
+		let mut writer = File::create(cache_file_dir.join(format!("{hash}.{CACHE_FILE_EXT}")))?;
 		bincode::encode_into_std_write(manifest, &mut writer, bincode::config::standard())?;
 		Ok(())
 	}
