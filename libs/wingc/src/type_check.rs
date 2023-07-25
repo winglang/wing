@@ -228,6 +228,9 @@ pub struct Namespace {
 	// the types after initial compilation.
 	#[derivative(Debug = "ignore")]
 	pub loaded: bool,
+
+	// Flag to track if the namespace refers to a module that is safe to bring
+	pub is_bringable: bool,
 }
 
 pub type NamespaceRef = UnsafeRef<Namespace>;
@@ -2265,6 +2268,8 @@ impl<'a> TypeChecker<'a> {
 		CompilationContext::set(CompilationPhase::TypeChecking, &scope.span);
 		self.type_check_scope(scope);
 
+		let is_bringable = check_is_bringable(scope);
+
 		// Save the module's symbol environment to `self.types.libraries`
 		// so it can be looked up when another file tries to `bring` this module
 		let sanitized_path = sanitize_dots(source_path.to_str().expect("not a safe file path"));
@@ -2273,6 +2278,7 @@ impl<'a> TypeChecker<'a> {
 			name: sanitized_path.clone(),
 			env: SymbolEnv::new(Some(env.get_ref()), env.return_type, false, false, env.phase, 0),
 			loaded: true,
+			is_bringable,
 		});
 		if let Err(e) = self.types.libraries.define(
 			&Symbol {
@@ -2692,6 +2698,9 @@ impl<'a> TypeChecker<'a> {
 								SymbolKind::Type(_) => panic!("expected a namespace, found a type"),
 								SymbolKind::Variable(_) => panic!("expected a namespace, found a variable"),
 								SymbolKind::Namespace(nsref) => {
+									if !nsref.is_bringable {
+										self.spanned_error(name, format!("Cannot bring \"{}\" - modules with statements besides classes, interfaces, enums, and structs cannot be brought", name));
+									}
 									if let Err(e) = env.define(
 										identifier.as_ref().unwrap(),
 										SymbolKind::Namespace(*nsref),
@@ -4468,6 +4477,33 @@ pub fn fully_qualify_std_type(type_: &str) -> String {
 		| "Boolean" | "Number" => format!("{WINGSDK_STD_MODULE}.{type_name}"),
 		_ => type_name.to_string(),
 	}
+}
+
+fn check_is_bringable(scope: &Scope) -> bool {
+	let valid_stmt = |stmt: &Stmt| match stmt.kind {
+		StmtKind::Bring { .. } => true,
+		StmtKind::Class(_) => true,
+		StmtKind::Interface(_) => true,
+		StmtKind::Struct { .. } => true,
+		StmtKind::Enum { .. } => true,
+		StmtKind::CompilerDebugEnv => true,
+		StmtKind::SuperConstructor { .. } => false,
+		StmtKind::Let { .. } => false,
+		StmtKind::ForLoop { .. } => false,
+		StmtKind::While { .. } => false,
+		StmtKind::IfLet { .. } => false,
+		StmtKind::If { .. } => false,
+		StmtKind::Break => false,
+		StmtKind::Continue => false,
+		StmtKind::Return(_) => false,
+		StmtKind::Expression(_) => false,
+		StmtKind::Assignment { .. } => false,
+		StmtKind::Scope(_) => false,
+		StmtKind::TryCatch { .. } => false,
+	};
+
+	// A module is bringable if it only contains valid statement kinds
+	scope.statements.iter().all(valid_stmt)
 }
 
 fn sanitize_dots(s: &str) -> String {

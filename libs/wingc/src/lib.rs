@@ -158,7 +158,7 @@ pub unsafe extern "C" fn wingc_compile(ptr: u32, len: u32) -> u64 {
 pub fn type_check(
 	scope: &mut Scope,
 	types: &mut Types,
-	source_path: &Path,
+	file_path: &Path,
 	jsii_types: &mut TypeSystem,
 	jsii_imports: &mut Vec<JsiiImportSpec>,
 ) {
@@ -239,10 +239,10 @@ pub fn type_check(
 		types,
 	);
 
-	let mut tc = TypeChecker::new(types, source_path, jsii_types, jsii_imports);
+	let mut tc = TypeChecker::new(types, file_path, jsii_types, jsii_imports);
 	tc.add_globals(scope);
 
-	tc.type_check_module(source_path, scope);
+	tc.type_check_module(file_path, scope);
 }
 
 // TODO: refactor this (why is scope needed?) (move to separate module?)

@@ -1326,7 +1326,9 @@ fn get_public_symbols(scope: &Scope) -> Vec<Symbol> {
 			StmtKind::Class(class) => {
 				symbols.push(class.name.clone());
 			}
+			// interfaces are bringable, but there's nothing to emit
 			StmtKind::Interface(_) => {}
+			// structs are bringable, but there's nothing to emit
 			StmtKind::Struct { .. } => {}
 			StmtKind::Enum { name, .. } => {
 				symbols.push(name.clone());
