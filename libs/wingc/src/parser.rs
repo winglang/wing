@@ -733,7 +733,13 @@ impl<'s> Parser<'s> {
 					identifier: Some(alias),
 				})
 			} else {
-				self.with_error::<StmtKind>("No alias provided for module", statement_node)
+				self.with_error::<StmtKind>(
+					format!(
+						"bring {} must be assigned to an identifier (e.g. bring \"foo\" as foo)",
+						module_name
+					),
+					statement_node,
+				)
 			};
 
 			return module;
@@ -749,7 +755,13 @@ impl<'s> Parser<'s> {
 					identifier: Some(alias),
 				})
 			} else {
-				self.with_error::<StmtKind>("No alias provided for imported module", statement_node)
+				self.with_error::<StmtKind>(
+					format!(
+						"bring {} must be assigned to an identifier (e.g. bring \"foo\" as foo)",
+						module_name
+					),
+					statement_node,
+				)
 			};
 		}
 

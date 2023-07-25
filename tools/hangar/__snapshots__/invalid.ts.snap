@@ -102,11 +102,11 @@ Duration <DURATION>"
 `;
 
 exports[`bring_jsii.w 1`] = `
-"error: No alias provided for imported module
+"error: bring \\"jsii-code-samples\\" must be assigned to an identifier (e.g. bring \\"foo\\" as foo)
   --> ../../../examples/tests/invalid/bring_jsii.w:1:1
   |
 1 | bring \\"jsii-code-samples\\";
-  | ^^^^^^^^^^^^^^^^^^^^^^^^^^ No alias provided for imported module
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^ bring \\"jsii-code-samples\\" must be assigned to an identifier (e.g. bring \\"foo\\" as foo)
 
 
 error: Cannot find module \\"foobar\\" in source directory: Unable to load \\"foobar\\": Module not found in \\"../../../examples/tests/invalid\\"

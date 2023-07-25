@@ -3,7 +3,7 @@ pub(crate) mod jsii_importer;
 pub mod lifts;
 pub mod symbol_env;
 
-use crate::ast::{self, CalleeKind, ClassField, FunctionDefinition, NewExpr, TypeAnnotationKind};
+use crate::ast::{self, BringSource, CalleeKind, ClassField, FunctionDefinition, NewExpr, TypeAnnotationKind};
 use crate::ast::{
 	ArgList, BinaryOperator, Class as AstClass, Expr, ExprKind, FunctionBody, FunctionParameter as AstFunctionParameter,
 	Interface as AstInterface, InterpolatedStringPart, Literal, Phase, Reference, Scope, Spanned, Stmt, StmtKind, Symbol,
@@ -2644,7 +2644,7 @@ impl<'a> TypeChecker<'a> {
 				let alias: &Symbol;
 
 				match &source {
-					ast::BringSource::BuiltinModule(name) => {
+					BringSource::BuiltinModule(name) => {
 						if WINGSDK_BRINGABLE_MODULES.contains(&name.name.as_str()) {
 							library_name = WINGSDK_ASSEMBLY_NAME.to_string();
 							namespace_filter = vec![name.name.clone()];
@@ -2657,7 +2657,7 @@ impl<'a> TypeChecker<'a> {
 							return;
 						}
 					}
-					ast::BringSource::JsiiModule(name) => {
+					BringSource::JsiiModule(name) => {
 						if identifier.is_none() {
 							self.spanned_error(
 								stmt,
@@ -2673,7 +2673,7 @@ impl<'a> TypeChecker<'a> {
 						namespace_filter = vec![];
 						alias = identifier.as_ref().unwrap();
 					}
-					ast::BringSource::WingFile(name) => {
+					BringSource::WingFile(name) => {
 						if identifier.is_none() {
 							self.spanned_error(
 								stmt,
