@@ -3,7 +3,7 @@ import { createTRPCProxyClient, httpLink } from "@trpc/client";
 import type { ExplorerItem, Router } from "@wingconsole/server";
 
 export interface Client {
-  selectedNode: () => Promise<string>;
+  selectedNode: () => Promise<string | undefined>;
   setSelectedNode: (resourcePath: string) => Promise<void>;
   listTests: () => Promise<any[]>;
   runTest: (resourcePath: string) => Promise<any>;
