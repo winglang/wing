@@ -1,4 +1,5 @@
 use indexmap::{IndexMap, IndexSet};
+use petgraph::algo::tarjan_scc;
 use petgraph::algo::toposort;
 use petgraph::graph::NodeIndex;
 use petgraph::prelude::DiGraph;
@@ -153,7 +154,6 @@ fn normalize_path(path: &Path, relative_to: Option<&Path>) -> PathBuf {
 	}
 }
 
-// TODO: handle errors
 pub fn parse_wing_project(init_path: &Path) -> ParseProjectOutput {
 	// a stack of files that need to be parsed
 	let mut needs_parsing: Vec<PathBuf> = vec![normalize_path(init_path, None)];
@@ -182,7 +182,11 @@ pub fn parse_wing_project(init_path: &Path) -> ParseProjectOutput {
 		let source = match fs::read(&curr_path) {
 			Ok(source) => source,
 			Err(err) => {
-				panic!("Error reading source file: {}: {:?}", curr_path.display(), err);
+				report_diagnostic(Diagnostic {
+					message: format!("Error reading source file: {}: {:?}", curr_path.display(), err),
+					span: None,
+				});
+				continue;
 			}
 		};
 
@@ -190,7 +194,11 @@ pub fn parse_wing_project(init_path: &Path) -> ParseProjectOutput {
 		let tree_sitter_tree = match tree_sitter_parser.parse(&source, None) {
 			Some(tree) => tree,
 			None => {
-				panic!("Error parsing source file: {}", curr_path.display());
+				report_diagnostic(Diagnostic {
+					message: format!("Error parsing source file: {}", curr_path.display()),
+					span: None,
+				});
+				continue;
 			}
 		};
 		tree_sitter_trees.insert(curr_path.clone(), tree_sitter_tree.clone());
@@ -217,15 +225,34 @@ pub fn parse_wing_project(init_path: &Path) -> ParseProjectOutput {
 		asts.insert(curr_path, scope);
 	}
 
-	// produce a list of files in a topological ordering[1], so that we can type check
+	// produce a list of files in a topological ordering, so that we can type check
 	// source files that don't depend on any others first, then the ones that depend
 	// on those, and so on
-	//
-	// [1] https://en.wikipedia.org/wiki/Topological_sorting
 	let topo_sorted_files = match toposort(&dep_graph, None) {
 		Ok(indices) => indices.into_iter().map(|n| dep_graph[n].clone()).collect::<Vec<_>>(),
-		Err(err) => {
-			panic!("Error sorting files: {:?}", err);
+		Err(_) => {
+			// toposort function in the `petgraph` library doesn't return the cycle itself,
+			// so we need to use Tarjan's algorithm to find one instead
+			let strongly_connected_components = tarjan_scc(&dep_graph);
+			let component1 = strongly_connected_components[0]
+				.iter()
+				.map(|n| format!("- {}\n", dep_graph[*n].to_str().unwrap()))
+				.collect::<String>();
+			let component1 = component1.trim_end();
+
+			report_diagnostic(Diagnostic {
+				message: format!(
+					"Could not compile \"{}\" due to cyclic bring statements:\n{}",
+					init_path.display(),
+					component1
+				),
+				span: None,
+			});
+			// just return the files in the order they were parsed
+			dep_graph
+				.node_indices()
+				.map(|n| dep_graph[n].clone())
+				.collect::<Vec<_>>()
 		}
 	};
 
@@ -707,21 +734,6 @@ impl<'s> Parser<'s> {
 				return self.with_error("Cannot bring a module into itself", statement_node);
 			}
 			self.referenced_wing_files.borrow_mut().push(source_path.clone());
-
-			// // Check that the module only declares bringable items (classes, interfaces, enums, structs)
-			// // and not variables or functions
-			// let scope = if !is_bringable(&scope) {
-			// 	report_diagnostic(Diagnostic {
-			// 		message: format!(
-			// 			"Cannot bring \"{}\" - modules with statements besides classes, interfaces, enums, and structs cannot be brought",
-			// 			module_name.name
-			// 		),
-			// 		span: None,
-			// 	});
-			// 	Scope::default()
-			// } else {
-			// 	scope
-			// };
 
 			// parse error if no alias is provided
 			let module = if let Some(alias) = alias {
