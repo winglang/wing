@@ -56,7 +56,10 @@ pub struct JSifier<'a> {
 	pub types: &'a mut Types,
 	/// Store the output files here.
 	pub output_files: RefCell<Files>,
+	/// Counter for generating unique preflight file names.
 	preflight_file_counter: RefCell<usize>,
+	/// Map from source file paths to the JS file names they are emitted to.
+	/// e.g. "bucket.w" -> "preflight.bucket-1.js"
 	preflight_file_map: RefCell<IndexMap<PathBuf, String>>,
 	source_files: &'a Files,
 	/// Root of the project, used for resolving extern modules
