@@ -22,7 +22,6 @@ pub type Result<T> = std::result::Result<T, Box<dyn Error>>;
 
 pub mod spec {
 	use flate2::read::GzDecoder;
-	use std::env::temp_dir;
 	use std::fs::File;
 	use std::io::Read;
 	use std::path::PathBuf;
@@ -35,8 +34,7 @@ pub mod spec {
 
 	pub const SPEC_FILE_NAME: &str = ".jsii";
 	pub const REDIRECT_FIELD: &str = "jsii/file-redirect";
-	const CACHE_FILE_EXT: &str = "bincode";
-	const CACHE_FILE_DIR: &str = ".wing/jsii_manifest_cache";
+	const CACHE_FILE_EXT: &str = "jsii.bincode";
 
 	pub fn find_assembly_file(directory: &str) -> Result<String> {
 		let dot_jsii_file = Path::new(directory).join(SPEC_FILE_NAME);
@@ -53,8 +51,8 @@ pub mod spec {
 		}
 	}
 
-	fn try_load_from_cache(hash: &str) -> Option<Assembly> {
-		let data = fs::read(get_cache_file_dir().join(format!("{hash}.{CACHE_FILE_EXT}"))).ok()?;
+	fn try_load_from_cache(manifest_path: &Path, hash: &str) -> Option<Assembly> {
+		let data = fs::read(get_cache_file_dir(manifest_path).join(format!("{hash}.{CACHE_FILE_EXT}"))).ok()?;
 		let (asm, _): (Assembly, usize) = bincode::decode_from_slice(&data, bincode::config::standard()).ok()?;
 		Some(asm)
 	}
@@ -71,7 +69,7 @@ pub mod spec {
 		let fingerprint = get_manifest_fingerprint(name, assembly_path, module_version);
 		let maybe_manifest = fingerprint
 			.as_ref()
-			.and_then(|fingerprint| try_load_from_cache(&fingerprint))
+			.and_then(|fingerprint| try_load_from_cache(assembly_path, &fingerprint))
 			.map(|assembly| JsiiFile::Assembly(assembly));
 
 		let manifest = if let Some(manifest) = maybe_manifest {
@@ -90,7 +88,7 @@ pub mod spec {
 			// Attempt to cache the manifest
 			if let JsiiFile::Assembly(assmbly) = &manifest {
 				if let Some(fingerprint) = &fingerprint {
-					let _ = cache_manifest(assmbly, fingerprint);
+					let _ = cache_manifest(&assembly_path, assmbly, fingerprint);
 				}
 			}
 			manifest
@@ -124,21 +122,27 @@ pub mod spec {
 				.ok()?
 				.duration_since(SystemTime::UNIX_EPOCH)
 				.ok()?
-				.as_nanos(),
+				// Use micros and not nanos for better cross platform compatibility (WASM vs native don't produce the same nanos)
+				.as_micros(),
 			metadata.len(),
 		);
 		Some(blake3::hash(&fp_raw_str.as_bytes()).to_string())
 	}
 
-	fn get_cache_file_dir() -> PathBuf {
-		let mut dir = temp_dir();
-		dir.push(CACHE_FILE_DIR);
-		dir
+	fn get_cache_file_dir(manifest_path: &Path) -> PathBuf {
+		manifest_path.parent().unwrap().to_path_buf()
 	}
 
-	fn cache_manifest(manifest: &Assembly, hash: &str) -> Result<()> {
-		let cache_file_dir = get_cache_file_dir();
-		fs::create_dir_all(&cache_file_dir)?;
+	fn cache_manifest(manifest_path: &Path, manifest: &Assembly, hash: &str) -> Result<()> {
+		let cache_file_dir = get_cache_file_dir(manifest_path);
+		// Remove old cache files if they exists
+		for old_file in fs::read_dir(cache_file_dir.clone()).unwrap().filter(|f| {
+			f.as_ref()
+				.map(|f| f.file_name().to_str().unwrap().ends_with(CACHE_FILE_EXT))
+				.unwrap_or(false)
+		}) {
+			_ = fs::remove_file(old_file.unwrap().path());
+		}
 		let mut writer = File::create(cache_file_dir.join(format!("{hash}.{CACHE_FILE_EXT}")))?;
 		bincode::encode_into_std_write(manifest, &mut writer, bincode::config::standard())?;
 		Ok(())
