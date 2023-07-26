@@ -121,7 +121,7 @@ export const createAppRouter = () => {
         }),
       )
       .mutation(async ({ ctx, input }) => {
-        ctx.setSelectedNode?.(input.resourcePath ?? "");
+        ctx.setSelectedNode(input.resourcePath ?? "");
       }),
     "app.selectedNode": createProcedure.query(async ({ ctx }) => {
       return ctx.getSelectedNode();

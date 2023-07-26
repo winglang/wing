@@ -19,10 +19,7 @@ import { openResource } from "./commands/open-resource";
 import { runTest } from "./commands/run-test";
 import { VIEW_TYPE_CONSOLE } from "./constants";
 
-import {
-  ResourceItem,
-  ResourcesExplorerProvider,
-} from "./ResourcesExplorerProvider";
+import { ResourcesExplorerProvider } from "./ResourcesExplorerProvider";
 import { createTRPCClient } from "./services/trpc";
 import { TestItem, TestsExplorerProvider } from "./TestsExplorerProvider";
 
@@ -141,6 +138,7 @@ export class WingConsoleManager {
     panel.onDidDispose(async () => {
       delete this.consolePanels[uri.fsPath];
       this.activeConsolePanel = undefined;
+
       await close();
     });
     panel.webview.html = `\
@@ -159,9 +157,7 @@ export class WingConsoleManager {
       </html>`;
 
     // Resources Explorer logic
-    const resourcesExplorer = new ResourcesExplorerProvider(
-      await client.listResources()
-    );
+    const resourcesExplorer = new ResourcesExplorerProvider();
 
     const explorerTreeview = window.createTreeView("consoleExplorer", {
       treeDataProvider: resourcesExplorer,
@@ -172,7 +168,7 @@ export class WingConsoleManager {
     });
 
     // Tests Explorer logic
-    const testsExplorer = new TestsExplorerProvider(await client.listTests());
+    const testsExplorer = new TestsExplorerProvider();
 
     window.createTreeView("consoleTestsExplorer", {
       treeDataProvider: testsExplorer,
@@ -185,17 +181,8 @@ export class WingConsoleManager {
     onLog = async (message: string) => {
       logger.appendLine(message);
 
-      if (message.includes("Server")) {
-        resourcesExplorer.update(await client.listResources());
-        testsExplorer.update(await client.listTests());
-      }
-
-      const selectedItemId = await client.selectedNode();
-      const selectedItem = resourcesExplorer.getItemById(selectedItemId);
-
-      logger.appendLine(selectedItemId);
-
-      await explorerTreeview.reveal(selectedItem);
+      resourcesExplorer.update(await client.listResources());
+      //testsExplorer.update(await client.listTests());
     };
   }
 

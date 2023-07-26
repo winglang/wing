@@ -1,4 +1,3 @@
-import path from "path";
 import { ExplorerItem } from "@wingconsole/server";
 import {
   TreeItemCollapsibleState,
@@ -11,7 +10,7 @@ import {
 export class ResourcesExplorerProvider
   implements TreeDataProvider<ResourceItem>
 {
-  private node: ExplorerItem;
+  private node?: ExplorerItem;
 
   private _onDidChangeTreeData: EventEmitter<
     ResourceItem | undefined | null | void
@@ -20,10 +19,6 @@ export class ResourcesExplorerProvider
   readonly onDidChangeTreeData: Event<ResourceItem | undefined | null | void> =
     this._onDidChangeTreeData.event;
 
-  constructor(item: ExplorerItem) {
-    this.node = item;
-  }
-
   refresh(): void {
     this._onDidChangeTreeData.fire();
   }
@@ -31,23 +26,6 @@ export class ResourcesExplorerProvider
   update(item: ExplorerItem): void {
     this.node = item;
     this.refresh();
-  }
-
-  getTreeItems(): ExplorerItem {
-    return this.node;
-  }
-
-  getItemById(itemId: string): ExplorerItem | undefined {
-    return this.node.childItems?.find((child: ExplorerItem) => {
-      return child.id === itemId;
-    });
-  }
-
-  reveal(itemId: string): void {
-    const element = this.node.childItems?.find((child: ExplorerItem) => {
-      return child.id === itemId;
-    });
-    this._onDidChangeTreeData.fire(element);
   }
 
   getTreeItem(element: ResourceItem): TreeItem {
@@ -64,7 +42,7 @@ export class ResourcesExplorerProvider
   getChildren(element?: ResourceItem): Thenable<ResourceItem[]> {
     if (!element) {
       return Promise.resolve(
-        this.node.childItems?.map((child: ExplorerItem) => {
+        this.node?.childItems?.map((child: ExplorerItem) => {
           return new ResourceItem(
             child.id,
             child.label,
@@ -76,7 +54,7 @@ export class ResourcesExplorerProvider
       );
     }
 
-    const childItem = this.node.childItems?.find((child: ExplorerItem) => {
+    const childItem = this.node?.childItems?.find((child: ExplorerItem) => {
       return child.label === element.label;
     });
 
@@ -99,31 +77,12 @@ export class ResourcesExplorerProvider
 }
 
 export class ResourceItem extends TreeItem {
-  iconPath = {
-    light: path.join(
-      __filename,
-      "..",
-      "..",
-      "resources",
-      "light",
-      "dependency.svg"
-    ),
-    dark: path.join(
-      __filename,
-      "..",
-      "..",
-      "resources",
-      "dark",
-      "dependency.svg"
-    ),
-  };
-
   constructor(
     public readonly id: string,
-    public readonly label: string,
-    public readonly collapsibleState: TreeItemCollapsibleState
+    public readonly label?: string,
+    public readonly collapsibleState?: TreeItemCollapsibleState
   ) {
-    super(label, collapsibleState);
+    super(label || "", collapsibleState);
     this.tooltip = this.label;
     this.id = id;
   }

@@ -52,7 +52,7 @@ export const useExplorer = () => {
       }
       setSelectedItems(selectedItems);
       setSelectedNode.mutate({
-        path: selectedItems[0],
+        resourcePath: selectedItems[0],
       });
     },
     [setSelectedNode, setSelectedItems],
@@ -65,7 +65,7 @@ export const useExplorer = () => {
     setItems([createTreeMenuItemFromExplorerTreeItem(tree.data)]);
 
     setSelectedNode.mutate({
-      path: "root",
+      resourcePath: "root",
     });
   }, [tree.data, setItems]);
 

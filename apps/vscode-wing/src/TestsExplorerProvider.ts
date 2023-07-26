@@ -26,10 +26,6 @@ export class TestsExplorerProvider implements TreeDataProvider<TestItem> {
   readonly onDidChangeTreeData: Event<TestItem | undefined | null | void> =
     this._onDidChangeTreeData.event;
 
-  constructor(testList: Test[]) {
-    this.tests = testList;
-  }
-
   refresh(): void {
     this._onDidChangeTreeData.fire();
   }
@@ -44,7 +40,14 @@ export class TestsExplorerProvider implements TreeDataProvider<TestItem> {
   }
 
   getTreeItem(element: TestItem): TreeItem {
-    return element;
+    return {
+      ...element,
+      command: {
+        command: "wingConsole.runTest",
+        arguments: [element],
+        title: "Select Resource",
+      },
+    };
   }
 
   getChildren(element?: TestItem): Thenable<TestItem[]> {
@@ -62,7 +65,7 @@ export class TestsExplorerProvider implements TreeDataProvider<TestItem> {
   }
 }
 
-class TestItem extends TreeItem {
+export class TestItem extends TreeItem {
   constructor(
     public readonly id: string,
     public readonly label: string,
