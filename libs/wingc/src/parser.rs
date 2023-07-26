@@ -190,7 +190,6 @@ pub fn parse_wing_project(init_path: &Path) -> ParseProjectOutput {
 			}
 		};
 
-		let parser = Parser::new(&source, curr_path.to_string_lossy().to_string(), &mut files);
 		let tree_sitter_tree = match tree_sitter_parser.parse(&source, None) {
 			Some(tree) => tree,
 			None => {
@@ -206,6 +205,7 @@ pub fn parse_wing_project(init_path: &Path) -> ParseProjectOutput {
 		let tree_sitter_root = tree_sitter_tree.root_node();
 
 		// Parse the single file, and collect a list of all wing files that it references
+		let parser = Parser::new(&source, curr_path.to_string_lossy().to_string(), &mut files);
 		let (scope, dependent_wing_files) = parser.parse(&tree_sitter_root);
 
 		let curr_node = *path_to_node.entry(curr_path.clone()).or_insert_with(|| {
