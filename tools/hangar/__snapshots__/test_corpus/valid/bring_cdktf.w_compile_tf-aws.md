@@ -75,11 +75,11 @@ class $Root extends $stdlib.std.Resource {
     class Foo extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
+        this._addInflightOps("$inflight_init");
         this.node.root.new("cdktf.S3Backend",cdktf.S3Backend,this,{
         "bucket": "foo",
         "key": "bar",}
         );
-        this._addInflightOps("$inflight_init");
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
