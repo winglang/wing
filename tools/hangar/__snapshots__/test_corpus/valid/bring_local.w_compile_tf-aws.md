@@ -241,6 +241,7 @@ const $wing_is_test = process.env.WING_IS_TEST === "true";
 const file1 = require("./preflight.store-3.js")({ $stdlib });
 const file2 = require("./preflight.subfile-2.js")({ $stdlib });
 const file3 = require("./preflight.empty-1.js")({ $stdlib });
+const math = $stdlib.math;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
@@ -323,6 +324,7 @@ new $App({ outdir: $outdir, name: "bring_local", rootConstruct: $Root, plugins: 
 module.exports = function({ $stdlib }) {
   const std = $stdlib.std;
   const file3 = require("./preflight.empty-1.js")({ $stdlib });
+  const math = $stdlib.math;
   const cloud = $stdlib.cloud;
   class Store extends $stdlib.std.Resource {
     constructor(scope, id, ) {
@@ -375,6 +377,7 @@ module.exports = function({ $stdlib }) {
 ```js
 module.exports = function({ $stdlib }) {
   const std = $stdlib.std;
+  const math = $stdlib.math;
   class Q extends $stdlib.std.Resource {
     constructor(scope, id, ) {
       super(scope, id);
