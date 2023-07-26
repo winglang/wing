@@ -59,7 +59,7 @@ export class Topic extends cloud.Topic {
       inflight,
       join(
         __dirname.replace("target-tf-aws", "shared-aws"),
-        "topic.onmessage.inflight.js"
+        "topic.onmessage.inflight.cjs"
       ),
       "TopicOnMessageHandlerClient"
     );

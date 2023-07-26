@@ -59,7 +59,7 @@ export class Service extends cloud.Service implements ISimulatorResource {
       this.node.scope!,
       `${this.node.id}-${id}-${onStartHash}`,
       handler,
-      join(__dirname, "service.onevent.inflight.js"),
+      join(__dirname, "service.onevent.inflight.cjs"),
       "ServiceOnEventHandler"
     );
 

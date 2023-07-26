@@ -56,7 +56,7 @@ export class Bucket extends cloud.Bucket {
   }
 
   protected eventHandlerLocation(): string {
-    return join(__dirname, "bucket.onevent.inflight.js");
+    return join(__dirname, "bucket.onevent.inflight.cjs");
   }
 
   private onEventFunction(

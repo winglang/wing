@@ -52,7 +52,7 @@ export class Schedule extends cloud.Schedule {
       inflight,
       join(
         __dirname.replace("target-tf-aws", "shared-aws"),
-        "schedule.ontick.inflight.js"
+        "schedule.ontick.inflight.cjs"
       ),
       "ScheduleOnTickHandlerClient"
     );

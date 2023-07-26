@@ -39,7 +39,7 @@ export class Schedule extends cloud.Schedule implements ISimulatorResource {
       this.node.scope!,
       `${this.node.id}OnTickHandler${hash}`,
       inflight,
-      join(__dirname, "schedule.ontick.inflight.js"),
+      join(__dirname, "schedule.ontick.inflight.cjs"),
       "ScheduleOnTickHandlerClient"
     );
 

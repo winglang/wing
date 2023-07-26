@@ -141,7 +141,7 @@ export function directorySnapshot(initialRoot: string) {
             snapshot[key] = JSON.parse(data);
             break;
 
-          case ".js":
+          case ".cjs":
             const code = readFileSync(abspath, "utf-8");
             snapshot[key] = sanitizeCodeText(code);
             break;

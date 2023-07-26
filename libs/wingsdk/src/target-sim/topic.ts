@@ -30,7 +30,7 @@ export class Topic extends cloud.Topic implements ISimulatorResource {
       this.node.scope!, // ok since we're not a tree root
       `${this.node.id}-OnMessageHandler-${hash}`,
       inflight,
-      join(__dirname, "topic.onmessage.inflight.js"),
+      join(__dirname, "topic.onmessage.inflight.cjs"),
       "TopicOnMessageHandlerClient"
     );
 

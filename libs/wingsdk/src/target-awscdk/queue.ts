@@ -48,7 +48,7 @@ export class Queue extends cloud.Queue {
       inflight,
       join(
         __dirname.replace("target-awscdk", "shared-aws"),
-        "queue.setconsumer.inflight.js"
+        "queue.setconsumer.inflight.cjs"
       ),
       "QueueSetConsumerHandlerClient"
     );

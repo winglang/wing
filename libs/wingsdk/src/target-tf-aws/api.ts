@@ -322,7 +322,7 @@ export class Api extends cloud.Api {
       inflight,
       join(
         __dirname.replace("target-tf-aws", "shared-aws"),
-        "api.onrequest.inflight.js"
+        "api.onrequest.inflight.cjs"
       ),
       "ApiOnRequestHandlerClient"
     );

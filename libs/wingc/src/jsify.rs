@@ -28,7 +28,7 @@ use crate::{
 
 use self::codemaker::CodeMaker;
 
-const PREFLIGHT_FILE_NAME: &str = "preflight.js";
+const PREFLIGHT_FILE_NAME: &str = "preflight.cjs";
 
 const STDLIB: &str = "$stdlib";
 const STDLIB_CORE_RESOURCE: &str = formatcp!("{}.{}", STDLIB, WINGSDK_RESOURCE);
@@ -1311,7 +1311,7 @@ fn get_public_symbols(scope: &Scope) -> Vec<Symbol> {
 }
 
 fn inflight_filename(class: &AstClass) -> String {
-	format!("./inflight.{}.js", class.name.name)
+	format!("./inflight.{}.cjs", class.name.name)
 }
 
 fn lookup_span(span: &WingSpan, files: &Files) -> String {
