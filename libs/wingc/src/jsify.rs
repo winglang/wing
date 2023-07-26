@@ -132,16 +132,15 @@ impl<'a> JSifier<'a> {
 			output.line(format!("const {} = require('{}');", STDLIB, STDLIB_MODULE));
 			output.line(format!("const {} = process.env.WING_SYNTH_DIR ?? \".\";", OUTDIR_VAR));
 			// "std" is implicitly imported
-			output.line(format!("const std = {STDLIB}.{WINGSDK_STD_MODULE};"));
 			output.line(format!(
 				"const {} = process.env.WING_IS_TEST === \"true\";",
 				ENV_WING_IS_TEST
 			));
 		} else {
 			output.open(format!("module.exports = function({{ {} }}) {{", STDLIB));
-			output.line(format!("const std = {STDLIB}.{WINGSDK_STD_MODULE};"));
 		}
 
+		output.line(format!("const std = {STDLIB}.{WINGSDK_STD_MODULE};"));
 		output.add_code(imports);
 
 		if is_entrypoint_file {
