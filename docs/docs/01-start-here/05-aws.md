@@ -147,7 +147,7 @@ through the AWS Management Console.
 
 1. Open the [Amazon SQS Console](https://console.aws.amazon.com/sqs)
 2. Select your AWS region
-3. You should be able to see that you have a queue there
+3. You should be able to see that you have a queue there prefixed with `cloud-Queue-`
 4. Click **Send and receive messages**.
 5. In the **Message Body** box type `cloud` and hit **Send message**.
 6. Jump over to the [S3 Console](https://s3.console.aws.amazon.com/s3/buckets) 
@@ -156,15 +156,25 @@ through the AWS Management Console.
 9. Click `wing-1.txt` then click the `Open` button.
 10. The file should contain `Hello, cloud`.
 
+### Exploring the counter on AWS
+1. Open the [Amazon Dynamo DB Console](https://console.aws.amazon.com/dynamodb), and search for a table prefixed with `wing-counter-cloud`.
+2. Use the `Explore table items` button to view the value of the `counter` id attribute, which represents the current value of the counter.
+3. Optional - repeat step 5 from the above list as many times as you want. While doing it, see how the bucket fills and how the `counter` id increments.
+
+
 ## Cleanup
 
 Terraform doesn't allow destroying a non-empty bucket by default. To prepare for
-easy cleanup, you may delete the newly created file by marking the checkbox next
-to `wing-1.txt`, clicking the `Delete` button, typing `permanently delete` in the
-confirmation box and clicking the `Delete objects` button.
+easy cleanup, you may delete the newly created file(s) by marking the checkbox next
+to the bucket name on the S3 console, clicking the `Empty` button, typing `permanently delete` in the
+confirmation box and clicking the `Empty` button.
 
 Once you're done, you can destroy all of the resources that were created on your AWS account by running:
 
 ```sh
 terraform destroy
+
+{...}
+
+Destroy complete! Resources: 12 destroyed.
 ```
