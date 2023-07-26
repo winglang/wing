@@ -2,6 +2,39 @@
 
 exports[`default website behavior 1`] = `
 "{
+  \\"data\\": {
+    \\"aws_iam_policy_document\\": {
+      \\"Website_AllowDistributionReadOnly_24CFF6C0\\": {
+        \\"statement\\": [
+          {
+            \\"actions\\": [
+              \\"s3:GetObject\\"
+            ],
+            \\"condition\\": [
+              {
+                \\"test\\": \\"StringEquals\\",
+                \\"values\\": [
+                  \\"\${aws_cloudfront_distribution.Website_Distribution_5E840E42.arn}\\"
+                ],
+                \\"variable\\": \\"AWS:SourceArn\\"
+              }
+            ],
+            \\"principals\\": [
+              {
+                \\"identifiers\\": [
+                  \\"cloudfront.amazonaws.com\\"
+                ],
+                \\"type\\": \\"Service\\"
+              }
+            ],
+            \\"resources\\": [
+              \\"\${aws_s3_bucket.Website_WebsiteBucket_3C0321F0.arn}/*\\"
+            ]
+          }
+        ]
+      }
+    }
+  },
   \\"output\\": {
     \\"WING_TEST_RUNNER_FUNCTION_ARNS\\": {
       \\"value\\": \\"[]\\"
@@ -61,16 +94,16 @@ exports[`default website behavior 1`] = `
         \\"signing_protocol\\": \\"sigv4\\"
       }
     },
-    \\"aws_iam_policy\\": {
-      \\"Website_CloudfrontOacPolicyS3_E60EFDEE\\": {
-        \\"name\\": \\"cloufront-oac-policy-s3\\",
-        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Principal\\\\\\":{\\\\\\"Service\\\\\\":\\\\\\"cloudfront.amazonaws.com\\\\\\"},\\\\\\"Action\\\\\\":\\\\\\"s3:GetObject\\\\\\",\\\\\\"Resource\\\\\\":[\\\\\\"\${aws_s3_bucket.Website_WebsiteBucket_3C0321F0.arn}/*\\\\\\"],\\\\\\"Condition\\\\\\":{\\\\\\"StringEquals\\\\\\":{\\\\\\"AWS:SourceArn\\\\\\":\\\\\\"\${aws_cloudfront_distribution.Website_Distribution_5E840E42.arn}\\\\\\"}}}]}\\"
-      }
-    },
     \\"aws_s3_bucket\\": {
       \\"Website_WebsiteBucket_3C0321F0\\": {
         \\"bucket_prefix\\": \\"website-c80d509a-\\",
         \\"force_destroy\\": false
+      }
+    },
+    \\"aws_s3_bucket_policy\\": {
+      \\"Website_DistributionS3BucketPolicy_09AE0BCA\\": {
+        \\"bucket\\": \\"\${aws_s3_bucket.Website_WebsiteBucket_3C0321F0.id}\\",
+        \\"policy\\": \\"\${data.aws_iam_policy_document.Website_AllowDistributionReadOnly_24CFF6C0.json}\\"
       }
     },
     \\"aws_s3_bucket_public_access_block\\": {
@@ -139,6 +172,14 @@ exports[`default website behavior 2`] = `
                   "wing:resource:connections": [],
                 },
                 "children": {
+                  "AllowDistributionReadOnly": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformDataSource",
+                      "version": "0.17.0",
+                    },
+                    "id": "AllowDistributionReadOnly",
+                    "path": "root/Default/Website/AllowDistributionReadOnly",
+                  },
                   "BucketWebsiteConfiguration": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
@@ -155,14 +196,6 @@ exports[`default website behavior 2`] = `
                     "id": "CloudfrontOac",
                     "path": "root/Default/Website/CloudfrontOac",
                   },
-                  "CloudfrontOacPolicyS3": {
-                    "constructInfo": {
-                      "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
-                    },
-                    "id": "CloudfrontOacPolicyS3",
-                    "path": "root/Default/Website/CloudfrontOacPolicyS3",
-                  },
                   "Distribution": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
@@ -170,6 +203,14 @@ exports[`default website behavior 2`] = `
                     },
                     "id": "Distribution",
                     "path": "root/Default/Website/Distribution",
+                  },
+                  "DistributionS3BucketPolicy": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.17.0",
+                    },
+                    "id": "DistributionS3BucketPolicy",
+                    "path": "root/Default/Website/DistributionS3BucketPolicy",
                   },
                   "Encryption": {
                     "constructInfo": {
@@ -295,6 +336,39 @@ exports[`default website behavior 2`] = `
 
 exports[`website with add_json 1`] = `
 "{
+  \\"data\\": {
+    \\"aws_iam_policy_document\\": {
+      \\"Website_AllowDistributionReadOnly_24CFF6C0\\": {
+        \\"statement\\": [
+          {
+            \\"actions\\": [
+              \\"s3:GetObject\\"
+            ],
+            \\"condition\\": [
+              {
+                \\"test\\": \\"StringEquals\\",
+                \\"values\\": [
+                  \\"\${aws_cloudfront_distribution.Website_Distribution_5E840E42.arn}\\"
+                ],
+                \\"variable\\": \\"AWS:SourceArn\\"
+              }
+            ],
+            \\"principals\\": [
+              {
+                \\"identifiers\\": [
+                  \\"cloudfront.amazonaws.com\\"
+                ],
+                \\"type\\": \\"Service\\"
+              }
+            ],
+            \\"resources\\": [
+              \\"\${aws_s3_bucket.Website_WebsiteBucket_3C0321F0.arn}/*\\"
+            ]
+          }
+        ]
+      }
+    }
+  },
   \\"output\\": {
     \\"WING_TEST_RUNNER_FUNCTION_ARNS\\": {
       \\"value\\": \\"[]\\"
@@ -354,16 +428,16 @@ exports[`website with add_json 1`] = `
         \\"signing_protocol\\": \\"sigv4\\"
       }
     },
-    \\"aws_iam_policy\\": {
-      \\"Website_CloudfrontOacPolicyS3_E60EFDEE\\": {
-        \\"name\\": \\"cloufront-oac-policy-s3\\",
-        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Principal\\\\\\":{\\\\\\"Service\\\\\\":\\\\\\"cloudfront.amazonaws.com\\\\\\"},\\\\\\"Action\\\\\\":\\\\\\"s3:GetObject\\\\\\",\\\\\\"Resource\\\\\\":[\\\\\\"\${aws_s3_bucket.Website_WebsiteBucket_3C0321F0.arn}/*\\\\\\"],\\\\\\"Condition\\\\\\":{\\\\\\"StringEquals\\\\\\":{\\\\\\"AWS:SourceArn\\\\\\":\\\\\\"\${aws_cloudfront_distribution.Website_Distribution_5E840E42.arn}\\\\\\"}}}]}\\"
-      }
-    },
     \\"aws_s3_bucket\\": {
       \\"Website_WebsiteBucket_3C0321F0\\": {
         \\"bucket_prefix\\": \\"website-c80d509a-\\",
         \\"force_destroy\\": false
+      }
+    },
+    \\"aws_s3_bucket_policy\\": {
+      \\"Website_DistributionS3BucketPolicy_09AE0BCA\\": {
+        \\"bucket\\": \\"\${aws_s3_bucket.Website_WebsiteBucket_3C0321F0.id}\\",
+        \\"policy\\": \\"\${data.aws_iam_policy_document.Website_AllowDistributionReadOnly_24CFF6C0.json}\\"
       }
     },
     \\"aws_s3_bucket_public_access_block\\": {
@@ -441,6 +515,14 @@ exports[`website with add_json 2`] = `
                   "wing:resource:connections": [],
                 },
                 "children": {
+                  "AllowDistributionReadOnly": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformDataSource",
+                      "version": "0.17.0",
+                    },
+                    "id": "AllowDistributionReadOnly",
+                    "path": "root/Default/Website/AllowDistributionReadOnly",
+                  },
                   "BucketWebsiteConfiguration": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
@@ -457,14 +539,6 @@ exports[`website with add_json 2`] = `
                     "id": "CloudfrontOac",
                     "path": "root/Default/Website/CloudfrontOac",
                   },
-                  "CloudfrontOacPolicyS3": {
-                    "constructInfo": {
-                      "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
-                    },
-                    "id": "CloudfrontOacPolicyS3",
-                    "path": "root/Default/Website/CloudfrontOacPolicyS3",
-                  },
                   "Distribution": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
@@ -472,6 +546,14 @@ exports[`website with add_json 2`] = `
                     },
                     "id": "Distribution",
                     "path": "root/Default/Website/Distribution",
+                  },
+                  "DistributionS3BucketPolicy": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.17.0",
+                    },
+                    "id": "DistributionS3BucketPolicy",
+                    "path": "root/Default/Website/DistributionS3BucketPolicy",
                   },
                   "Encryption": {
                     "constructInfo": {

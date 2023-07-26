@@ -7,7 +7,8 @@ import { createEncryptedBucket } from "./bucket";
 import { core } from "..";
 import { CloudfrontDistribution } from "../.gen/providers/aws/cloudfront-distribution";
 import { CloudfrontOriginAccessControl } from "../.gen/providers/aws/cloudfront-origin-access-control";
-import { IamPolicy } from "../.gen/providers/aws/iam-policy";
+import { DataAwsIamPolicyDocument } from "../.gen/providers/aws/data-aws-iam-policy-document";
+import { S3BucketPolicy } from "../.gen/providers/aws/s3-bucket-policy";
 import { S3Bucket } from "../.gen/providers/aws/s3-bucket";
 import { S3BucketWebsiteConfiguration } from "../.gen/providers/aws/s3-bucket-website-configuration";
 import { S3Object } from "../.gen/providers/aws/s3-object";
@@ -86,26 +87,36 @@ export class Website extends cloud.Website {
     });
 
     // allow cloudfront distribution to read from private s3 bucket
-    new IamPolicy(this, "CloudfrontOacPolicyS3", {
-      name: "cloufront-oac-policy-s3",
-      policy: JSON.stringify({
-        Version: "2012-10-17",
-        Statement: [
+    const allowDistributionReadOnly = new DataAwsIamPolicyDocument(
+      this,
+      "AllowDistributionReadOnly",
+      {
+        statement: [
           {
-            Effect: "Allow",
-            Principal: {
-              Service: "cloudfront.amazonaws.com",
-            },
-            Action: "s3:GetObject",
-            Resource: [`${this.bucket.arn}/*`],
-            Condition: {
-              StringEquals: {
-                "AWS:SourceArn": distribution.arn,
+            actions: ["s3:GetObject"],
+            condition: [
+              {
+                test: "StringEquals",
+                values: [distribution.arn],
+                variable: "AWS:SourceArn",
               },
-            },
+            ],
+            principals: [
+              {
+                identifiers: ["cloudfront.amazonaws.com"],
+                type: "Service",
+              },
+            ],
+            resources: [`${this.bucket.arn}/*`],
           },
         ],
-      }),
+      }
+    );
+
+    // attach policy to s3 bucket
+    new S3BucketPolicy(this, "DistributionS3BucketPolicy", {
+      bucket: this.bucket.id,
+      policy: allowDistributionReadOnly.json,
     });
 
     this._url = distribution.domainName;
