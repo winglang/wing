@@ -2664,33 +2664,12 @@ impl<'a> TypeChecker<'a> {
 						}
 					}
 					BringSource::JsiiModule(name) => {
-						if identifier.is_none() {
-							self.spanned_error(
-								stmt,
-								format!(
-									"bring \"{}\" must be assigned to an identifier (e.g. bring \"foo\" as foo)",
-									name
-								),
-							);
-							return;
-						}
 						library_name = name.name.to_string();
 						// no namespace filter (we only support importing entire libraries at the moment)
 						namespace_filter = vec![];
 						alias = identifier.as_ref().unwrap();
 					}
 					BringSource::WingFile(name) => {
-						if identifier.is_none() {
-							self.spanned_error(
-								stmt,
-								format!(
-									"bring \"{}\" must be assigned to an identifier (e.g. bring \"foo\" as foo)",
-									name
-								),
-							);
-							return;
-						}
-
 						let lookup_name = sanitize_dots(&name.name);
 						let lookup_result = self.types.libraries.lookup_nested_str(&lookup_name, None);
 						match lookup_result {
