@@ -4,6 +4,7 @@ import {
   RightResizableWidget,
   ScrollableArea,
   TopResizableWidget,
+  Button,
 } from "@wingconsole/design-system";
 import { State, LayoutConfig, LayoutComponent } from "@wingconsole/server";
 import classNames from "classnames";
@@ -13,6 +14,7 @@ import { ConsoleLogsFilters } from "../features/console-logs-filters.js";
 import { ConsoleLogs } from "../features/console-logs.js";
 import { MapView } from "../features/map-view.js";
 import { TestsTreeView } from "../features/tests-tree-view.js";
+import { trpc } from "../services/trpc.js";
 import { BlueScreenOfDeath } from "../ui/blue-screen-of-death.js";
 import { Explorer } from "../ui/explorer.js";
 import { ResourceMetadata } from "../ui/resource-metadata.js";
@@ -203,6 +205,8 @@ export const DefaultLayout = ({
     ],
   );
 
+  const selectNode = trpc["app.selectNode"].useMutation();
+
   return (
     <>
       {showTerms && (
@@ -221,6 +225,15 @@ export const DefaultLayout = ({
           showTerms && "blur-sm",
         )}
       >
+        <Button
+          onClick={() => {
+            selectNode.mutate({
+              path: "root",
+            });
+          }}
+          label={`ITEM: ${selectedItems[0]}`}
+        />
+
         {!layout.header?.hide && (
           <Header
             title={wingfile.data ?? ""}
@@ -396,7 +409,6 @@ export const DefaultLayout = ({
             showThemeToggle={layout.statusBar?.showThemeToggle}
           />
         )}
-        <div>{selectedItems[0]}</div>
       </div>
     </>
   );

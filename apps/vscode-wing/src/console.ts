@@ -158,6 +158,7 @@ export class WingConsoleManager {
 
     commands.registerCommand("wingConsole.openResource", async (resourceId) => {
       logger.appendLine(`Selecting resource ${resourceId}`);
+
       await client["app.selectNode"].mutate({
         path: resourceId,
       });
