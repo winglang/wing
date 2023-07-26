@@ -60,8 +60,16 @@ const project = new TypeScriptAppProject({
     "@wingconsole/server@workspace:^",
     "@trpc/client",
     "node-fetch@2",
+    "ws",
   ],
-  devDeps: ["@types/node", "@types/which", "@vscode/vsce", "@types/node-fetch"],
+  devDeps: [
+    "@types/node",
+    "@types/which",
+    "@vscode/vsce",
+    "@types/node-fetch",
+    "@types/ws",
+    "@wingconsole/app",
+  ],
 });
 
 project.addGitIgnore("*.vsix");

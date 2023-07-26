@@ -31,9 +31,11 @@
     "@types/node": "^16",
     "@types/node-fetch": "^2.6.4",
     "@types/which": "^2.0.2",
+    "@types/ws": "^8.5.5",
     "@typescript-eslint/eslint-plugin": "^5",
     "@typescript-eslint/parser": "^5",
     "@vscode/vsce": "^2.16.0",
+    "@wingconsole/app": "^0.0.0",
     "eslint": "^8",
     "eslint-config-prettier": "^8.6.0",
     "eslint-import-resolver-node": "^0.3.7",
@@ -54,7 +56,8 @@
     "@wingconsole/server": "workspace:^",
     "node-fetch": "2",
     "vscode-languageclient": "^8.0.2",
-    "which": "^3.0.0"
+    "which": "^3.0.0",
+    "ws": "^8.13.0"
   },
   "keywords": [
     "cdk",

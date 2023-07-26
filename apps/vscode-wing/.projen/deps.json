@@ -14,6 +14,10 @@
       "type": "build"
     },
     {
+      "name": "@types/ws",
+      "type": "build"
+    },
+    {
       "name": "@typescript-eslint/eslint-plugin",
       "version": "^5",
       "type": "build"
@@ -25,6 +29,10 @@
     },
     {
       "name": "@vscode/vsce",
+      "type": "build"
+    },
+    {
+      "name": "@wingconsole/app",
       "type": "build"
     },
     {
@@ -107,6 +115,10 @@
     },
     {
       "name": "which",
+      "type": "runtime"
+    },
+    {
+      "name": "ws",
       "type": "runtime"
     }
   ],

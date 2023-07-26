@@ -2,9 +2,11 @@ import path from "path";
 import { createConsoleApp } from "@wingconsole/app";
 
 import fetch from "node-fetch";
+import ws from "ws";
 
 const globalAny = global as any;
 globalAny.fetch = fetch;
+globalAny.WebSocket = ws;
 
 import {
   ExtensionContext,
@@ -158,6 +160,7 @@ export class WingConsoleManager {
 
     // Resources Explorer logic
     const resourcesExplorer = new ResourcesExplorerProvider();
+    resourcesExplorer.update(await client.listResources());
 
     const explorerTreeview = window.createTreeView("consoleExplorer", {
       treeDataProvider: resourcesExplorer,
@@ -169,6 +172,7 @@ export class WingConsoleManager {
 
     // Tests Explorer logic
     const testsExplorer = new TestsExplorerProvider();
+    testsExplorer.update(await client.listTests());
 
     window.createTreeView("consoleTestsExplorer", {
       treeDataProvider: testsExplorer,
@@ -178,12 +182,20 @@ export class WingConsoleManager {
       await runTest(client, testsExplorer).run(test);
     });
 
-    onLog = async (message: string) => {
-      logger.appendLine(message);
-
-      resourcesExplorer.update(await client.listResources());
-      //testsExplorer.update(await client.listTests());
-    };
+    await new Promise<void>((resolve) => {
+      const subscription = client.onInvalidateQuery({
+        onData: async (data) => {
+          logger.appendLine(`subscription: ${JSON.stringify(data, null, 2)}}`);
+          resourcesExplorer.update(await client.listResources());
+          testsExplorer.update(await client.listTests());
+          subscription.unsubscribe();
+          resolve();
+        },
+        onError: (err) => {
+          logger.appendLine(err);
+        },
+      });
+    });
   }
 
   public async openFile() {

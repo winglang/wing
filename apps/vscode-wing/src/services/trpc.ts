@@ -1,6 +1,18 @@
-import { createTRPCProxyClient, httpLink } from "@trpc/client";
+import {
+  createTRPCProxyClient,
+  httpLink,
+  createWSClient,
+  splitLink,
+  wsLink,
+} from "@trpc/client";
 
 import type { ExplorerItem, Router } from "@wingconsole/server";
+import ws from "ws";
+
+export interface SubscriptionOptions {
+  onData: (data: any) => void;
+  onError: (error: any) => void;
+}
 
 export interface Client {
   selectedNode: () => Promise<string | undefined>;
@@ -9,13 +21,26 @@ export interface Client {
   runTest: (resourcePath: string) => Promise<any>;
   listResources: () => Promise<ExplorerItem>;
   invalidateQueries: () => Promise<void>;
+  onInvalidateQuery: (options: SubscriptionOptions) => ws.Subscription;
 }
 
 export const createTRPCClient = (url: string): Client => {
+  const trpcUrl = `${url}/trpc`;
+  const wsClient = createWSClient({
+    url: `ws:${trpcUrl}`,
+  });
   const client = createTRPCProxyClient<Router>({
     links: [
-      httpLink({
-        url: `${url}/trpc`,
+      splitLink({
+        condition(op) {
+          return op.type === "subscription";
+        },
+        true: wsLink({
+          client: wsClient,
+        }),
+        false: httpLink({
+          url: trpcUrl,
+        }),
       }),
     ],
   });
@@ -48,6 +73,10 @@ export const createTRPCClient = (url: string): Client => {
     return client["app.invalidateQueries"].mutate();
   };
 
+  const onInvalidateQuery = (options: SubscriptionOptions) => {
+    return client["app.invalidateQuery"].subscribe(undefined, options);
+  };
+
   return {
     selectedNode,
     setSelectedNode,
@@ -55,5 +84,6 @@ export const createTRPCClient = (url: string): Client => {
     runTest,
     listResources,
     invalidateQueries,
+    onInvalidateQuery,
   };
 };

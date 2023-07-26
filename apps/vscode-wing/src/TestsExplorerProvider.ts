@@ -40,14 +40,7 @@ export class TestsExplorerProvider implements TreeDataProvider<TestItem> {
   }
 
   getTreeItem(element: TestItem): TreeItem {
-    return {
-      ...element,
-      command: {
-        command: "wingConsole.runTest",
-        arguments: [element],
-        title: "Select Resource",
-      },
-    };
+    return element;
   }
 
   getChildren(element?: TestItem): Thenable<TestItem[]> {
