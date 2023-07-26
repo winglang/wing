@@ -11,7 +11,7 @@ import {
 export class ResourcesExplorerProvider
   implements TreeDataProvider<ResourceItem>
 {
-  public node: ExplorerItem;
+  private node: ExplorerItem;
 
   private _onDidChangeTreeData: EventEmitter<
     ResourceItem | undefined | null | void
@@ -28,10 +28,31 @@ export class ResourcesExplorerProvider
     this._onDidChangeTreeData.fire();
   }
 
+  update(item: ExplorerItem): void {
+    this.node = item;
+    this.refresh();
+  }
+
+  getTreeItems(): ExplorerItem {
+    return this.node;
+  }
+
+  getItemById(itemId: string): ExplorerItem | undefined {
+    return this.node.childItems?.find((child: ExplorerItem) => {
+      return child.id === itemId;
+    });
+  }
+
+  reveal(itemId: string): void {
+    const element = this.node.childItems?.find((child: ExplorerItem) => {
+      return child.id === itemId;
+    });
+    this._onDidChangeTreeData.fire(element);
+  }
+
   getTreeItem(element: ResourceItem): TreeItem {
     return {
-      id: element.id,
-      label: element.label,
+      ...element,
       command: {
         command: "wingConsole.openResource",
         arguments: [element.id],
@@ -77,7 +98,7 @@ export class ResourcesExplorerProvider
   }
 }
 
-class ResourceItem extends TreeItem {
+export class ResourceItem extends TreeItem {
   iconPath = {
     light: path.join(
       __filename,

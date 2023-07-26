@@ -117,15 +117,14 @@ export const createAppRouter = () => {
     "app.selectNode": createProcedure
       .input(
         z.object({
-          path: z.string().optional(),
+          resourcePath: z.string().optional(),
         }),
       )
       .mutation(async ({ ctx, input }) => {
-        ctx.setSelectedNode?.(input.path ?? "");
-        await ctx.emitter.emit("invalidateQuery", "app.selectedNode");
+        ctx.setSelectedNode?.(input.resourcePath ?? "");
       }),
     "app.selectedNode": createProcedure.query(async ({ ctx }) => {
-      return ctx.getSelectedNode?.();
+      return ctx.getSelectedNode();
     }),
     "app.childRelationships": createProcedure
       .input(
@@ -381,6 +380,9 @@ export const createAppRouter = () => {
             }),
         };
       }),
+    "app.invalidateQueries": createProcedure.mutation(async ({ ctx }) => {
+      await ctx.emitter.emit("invalidateQuery", undefined);
+    }),
     "app.invalidateQuery": createProcedure.subscription(({ ctx }) => {
       return observable<string | undefined>((emit) => {
         ctx.emitter.on("invalidateQuery", emit.next);

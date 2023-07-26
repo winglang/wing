@@ -36,8 +36,8 @@ export interface CreateExpressServerOptions {
   wingfile: string;
   requireAcceptTerms?: boolean;
   layoutConfig?: LayoutConfig;
-  getSelectedNode?: () => string | undefined;
-  setSelectedNode?: (node: string) => void;
+  getSelectedNode: () => string | undefined;
+  setSelectedNode: (node: string) => void;
 }
 
 export const createExpressServer = async ({

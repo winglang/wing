@@ -15,12 +15,16 @@ import {
   workspace,
   commands,
 } from "vscode";
+import { openResource } from "./commands/open-resource";
+import { runTest } from "./commands/run-test";
 import { VIEW_TYPE_CONSOLE } from "./constants";
 
-import { ResourcesExplorerProvider } from "./ResourcesExplorerProvider";
+import {
+  ResourceItem,
+  ResourcesExplorerProvider,
+} from "./ResourcesExplorerProvider";
 import { createTRPCClient } from "./services/trpc";
-import { TestsExplorerProvider } from "./TestsExplorerProvider";
-import { log } from "console";
+import { TestItem, TestsExplorerProvider } from "./TestsExplorerProvider";
 
 const createLogger = ({ show = false }) => {
   const logger = window.createOutputChannel("Wing Console");
@@ -57,6 +61,10 @@ export class WingConsoleManager {
 
     const logger = createLogger({ show: true });
 
+    let onLog = (message: string) => {
+      logger.appendLine(message);
+    };
+
     const { port, close } = await createConsoleApp({
       wingfile: uri.fsPath,
       hostUtils: {
@@ -66,13 +74,13 @@ export class WingConsoleManager {
       },
       log: {
         info: (message: string) => {
-          logger.appendLine(message);
+          onLog(message);
         },
         error: (message: string) => {
-          logger.appendLine(message);
+          onLog(message);
         },
         verbose: (message: string) => {
-          logger.appendLine(message);
+          onLog(message);
         },
       },
       layoutConfig: {
@@ -150,29 +158,45 @@ export class WingConsoleManager {
         </body>
       </html>`;
 
-    const tree = await client["app.explorerTree"].query();
-    const selectedNode = await client["app.selectedNode"].query();
+    // Resources Explorer logic
+    const resourcesExplorer = new ResourcesExplorerProvider(
+      await client.listResources()
+    );
 
-    logger.appendLine(`Selected node ${selectedNode}`);
-    const tests = await client["test.list"].query();
-
-    commands.registerCommand("wingConsole.openResource", async (resourceId) => {
-      logger.appendLine(`Selecting resource ${resourceId}`);
-
-      await client["app.selectNode"].mutate({
-        path: resourceId,
-      });
+    const explorerTreeview = window.createTreeView("consoleExplorer", {
+      treeDataProvider: resourcesExplorer,
     });
 
-    window.registerTreeDataProvider(
-      "consoleExplorer",
-      new ResourcesExplorerProvider(tree)
-    );
+    commands.registerCommand("wingConsole.openResource", async (resourceId) => {
+      await openResource(client).run(resourceId);
+    });
 
-    window.registerTreeDataProvider(
-      "consoleTestsExplorer",
-      new TestsExplorerProvider(tests)
-    );
+    // Tests Explorer logic
+    const testsExplorer = new TestsExplorerProvider(await client.listTests());
+
+    window.createTreeView("consoleTestsExplorer", {
+      treeDataProvider: testsExplorer,
+    });
+
+    commands.registerCommand("wingConsole.runTest", async (test: TestItem) => {
+      await runTest(client, testsExplorer).run(test);
+    });
+
+    onLog = async (message: string) => {
+      logger.appendLine(message);
+
+      if (message.includes("Server")) {
+        resourcesExplorer.update(await client.listResources());
+        testsExplorer.update(await client.listTests());
+      }
+
+      const selectedItemId = await client.selectedNode();
+      const selectedItem = resourcesExplorer.getItemById(selectedItemId);
+
+      logger.appendLine(selectedItemId);
+
+      await explorerTreeview.reveal(selectedItem);
+    };
   }
 
   public async openFile() {
