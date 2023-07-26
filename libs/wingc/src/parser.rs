@@ -183,7 +183,7 @@ pub fn parse_wing_project(init_path: &Path) -> ParseProjectOutput {
 			Ok(source) => source,
 			Err(err) => {
 				report_diagnostic(Diagnostic {
-					message: format!("Error reading source file: {}: {:?}", curr_path.display(), err),
+					message: format!("Error reading source file: {}: {}", curr_path.display(), err),
 					span: None,
 				});
 				continue;
