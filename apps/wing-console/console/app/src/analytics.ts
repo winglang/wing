@@ -14,9 +14,7 @@ export const createAnalytics = (options: CreateAnalyticsOptions): Analytics => {
   const sessionId = Date.now();
   try {
     segment = new Segment(options.segmentWriteKey);
-  } catch (error) {
-    console.debug("failed to initialize analytics", error);
-  }
+  } catch {}
   return {
     track(event: string, properties?: Record<string, any>) {
       if (!segment) {
@@ -33,9 +31,7 @@ export const createAnalytics = (options: CreateAnalyticsOptions): Analytics => {
             },
           },
         });
-      } catch (error) {
-        console.debug("failed to send analytics", error);
-      }
+      } catch {}
     },
   };
 };
