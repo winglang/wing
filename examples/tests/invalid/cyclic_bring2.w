@@ -1,1 +1,1 @@
-bring "./cyclic_bring1.w" as foo;
+bring "./cyclic_bring3.w" as foo;

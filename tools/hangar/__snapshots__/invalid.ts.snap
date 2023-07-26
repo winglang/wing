@@ -596,6 +596,7 @@ Duration <DURATION>"
 exports[`cyclic_bring1.w 1`] = `
 "error: Could not compile \\"../../../examples/tests/invalid/cyclic_bring1.w\\" due to cyclic bring statements:
 - ../../../examples/tests/invalid/cyclic_bring2.w
+- ../../../examples/tests/invalid/cyclic_bring3.w
 - ../../../examples/tests/invalid/cyclic_bring1.w
 
 
@@ -604,6 +605,13 @@ error: could not find types for \\"../../../examples/tests/invalid/cyclic_bring2
   |
 1 | bring \\"./cyclic_bring2.w\\" as foo;
   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ could not find types for \\"../../../examples/tests/invalid/cyclic_bring2.w\\" (compiler bug)
+
+
+error: could not find types for \\"../../../examples/tests/invalid/cyclic_bring3.w\\" (compiler bug)
+  --> ../../../examples/tests/invalid/cyclic_bring2.w:1:1
+  |
+1 | bring \\"./cyclic_bring3.w\\" as foo;
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ could not find types for \\"../../../examples/tests/invalid/cyclic_bring3.w\\" (compiler bug)
 
 
  
@@ -615,15 +623,51 @@ Duration <DURATION>"
 
 exports[`cyclic_bring2.w 1`] = `
 "error: Could not compile \\"../../../examples/tests/invalid/cyclic_bring2.w\\" due to cyclic bring statements:
+- ../../../examples/tests/invalid/cyclic_bring3.w
 - ../../../examples/tests/invalid/cyclic_bring1.w
 - ../../../examples/tests/invalid/cyclic_bring2.w
 
 
-error: could not find types for \\"../../../examples/tests/invalid/cyclic_bring1.w\\" (compiler bug)
+error: could not find types for \\"../../../examples/tests/invalid/cyclic_bring3.w\\" (compiler bug)
   --> ../../../examples/tests/invalid/cyclic_bring2.w:1:1
+  |
+1 | bring \\"./cyclic_bring3.w\\" as foo;
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ could not find types for \\"../../../examples/tests/invalid/cyclic_bring3.w\\" (compiler bug)
+
+
+error: could not find types for \\"../../../examples/tests/invalid/cyclic_bring1.w\\" (compiler bug)
+  --> ../../../examples/tests/invalid/cyclic_bring3.w:1:1
   |
 1 | bring \\"./cyclic_bring1.w\\" as foo;
   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ could not find types for \\"../../../examples/tests/invalid/cyclic_bring1.w\\" (compiler bug)
+
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
+
+exports[`cyclic_bring3.w 1`] = `
+"error: Could not compile \\"../../../examples/tests/invalid/cyclic_bring3.w\\" due to cyclic bring statements:
+- ../../../examples/tests/invalid/cyclic_bring1.w
+- ../../../examples/tests/invalid/cyclic_bring2.w
+- ../../../examples/tests/invalid/cyclic_bring3.w
+
+
+error: could not find types for \\"../../../examples/tests/invalid/cyclic_bring1.w\\" (compiler bug)
+  --> ../../../examples/tests/invalid/cyclic_bring3.w:1:1
+  |
+1 | bring \\"./cyclic_bring1.w\\" as foo;
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ could not find types for \\"../../../examples/tests/invalid/cyclic_bring1.w\\" (compiler bug)
+
+
+error: could not find types for \\"../../../examples/tests/invalid/cyclic_bring2.w\\" (compiler bug)
+  --> ../../../examples/tests/invalid/cyclic_bring1.w:1:1
+  |
+1 | bring \\"./cyclic_bring2.w\\" as foo;
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ could not find types for \\"../../../examples/tests/invalid/cyclic_bring2.w\\" (compiler bug)
 
 
  
