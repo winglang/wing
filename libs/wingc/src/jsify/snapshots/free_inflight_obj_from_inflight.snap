@@ -31,7 +31,7 @@ module.exports = function({  }) {
       const y = "hello";
       class A {
         constructor() {
-          {console.log(y)};
+          {console.log("inflight" === 'inflight' && process.env.WING_TARGET !== 'sim' ? 'winglogstart:' + (y) + ':winglogend': (y))};
         }
       }
     }

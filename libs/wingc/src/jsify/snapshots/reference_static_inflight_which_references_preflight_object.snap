@@ -33,7 +33,7 @@ module.exports = function({ $MyType }) {
       return $obj;
     }
     async handle() {
-      {console.log((await $MyType.staticMethod()))};
+      {console.log("inflight" === 'inflight' && process.env.WING_TARGET !== 'sim' ? 'winglogstart:' + ((await $MyType.staticMethod())) + ':winglogend': ((await $MyType.staticMethod())))};
     }
   }
   return $Closure1;

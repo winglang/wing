@@ -34,7 +34,7 @@ module.exports = function({  }) {
     async handle() {
       class A {
         static async foo() {
-          {console.log("hello")};
+          {console.log("inflight" === 'inflight' && process.env.WING_TARGET !== 'sim' ? 'winglogstart:' + ("hello") + ':winglogend': ("hello"))};
         }
       }
       class B {

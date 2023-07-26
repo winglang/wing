@@ -51,7 +51,7 @@ module.exports = function({ $Foo }) {
 module.exports = function({ $s }) {
   class Foo {
     async foofoo1() {
-      {console.log($s)};
+      {console.log("inflight" === 'inflight' && process.env.WING_TARGET !== 'sim' ? 'winglogstart:' + ($s) + ':winglogend': ($s))};
     }
   }
   return Foo;

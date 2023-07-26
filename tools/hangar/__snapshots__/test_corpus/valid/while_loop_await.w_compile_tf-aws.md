@@ -16,7 +16,7 @@ module.exports = function({  }) {
       }
       ;
       while (((await iterator(i)) < 3)) {
-        {console.log(String.raw({ raw: ["", ""] }, i))};
+        {console.log("inflight" === 'inflight' && process.env.WING_TARGET !== 'sim' ? 'winglogstart:' + (String.raw({ raw: ["", ""] }, i)) + ':winglogend': (String.raw({ raw: ["", ""] }, i)))};
       }
     }
   }

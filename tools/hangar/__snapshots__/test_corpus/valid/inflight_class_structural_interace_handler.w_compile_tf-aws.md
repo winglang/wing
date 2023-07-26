@@ -15,7 +15,7 @@ module.exports = function({ $NotGoo }) {
           return 456;
         }
         async anotherMethod() {
-          {console.log("also fine")};
+          {console.log("inflight" === 'inflight' && process.env.WING_TARGET !== 'sim' ? 'winglogstart:' + ("also fine") + ':winglogend': ("also fine"))};
         }
       }
       const y = new YesGoo();

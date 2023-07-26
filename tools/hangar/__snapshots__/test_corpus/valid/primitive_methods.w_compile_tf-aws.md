@@ -46,9 +46,9 @@ class $Root extends $stdlib.std.Resource {
     const f = ((d) => {
     });
     const stringy = String.raw({ raw: ["", ":", ""] }, dur.minutes, dur.seconds);
-    {console.log(stringy)};
+    {console.log("preflight" === 'inflight' && process.env.WING_TARGET !== 'sim' ? 'winglogstart:' + (stringy) + ':winglogend': (stringy))};
     if ((stringy.includes("60") && (((stringy.split(":")).at(0)) === "60"))) {
-      {console.log(String.raw({ raw: ["", "!"] }, stringy.length))};
+      {console.log("preflight" === 'inflight' && process.env.WING_TARGET !== 'sim' ? 'winglogstart:' + (String.raw({ raw: ["", "!"] }, stringy.length)) + ':winglogend': (String.raw({ raw: ["", "!"] }, stringy.length)))};
     }
     {((cond) => {if (!cond) throw new Error("assertion failed: num.fromStr(\"123\") == 123")})((((args) => { if (isNaN(args)) {throw new Error("unable to parse \"" + args + "\" as a number")}; return parseInt(args) })("123") === 123))};
   }

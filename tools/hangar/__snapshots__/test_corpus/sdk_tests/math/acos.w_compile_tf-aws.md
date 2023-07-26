@@ -11,7 +11,7 @@ module.exports = function({ $math_Util }) {
     }
     async handle() {
       try {
-        {console.log(String.raw({ raw: ["", ""] }, (await $math_Util.acos((-2)))))};
+        {console.log("inflight" === 'inflight' && process.env.WING_TARGET !== 'sim' ? 'winglogstart:' + (String.raw({ raw: ["", ""] }, (await $math_Util.acos((-2))))) + ':winglogend': (String.raw({ raw: ["", ""] }, (await $math_Util.acos((-2))))))};
       }
       catch ($error_e) {
         const e = $error_e.message;
@@ -23,7 +23,7 @@ module.exports = function({ $math_Util }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: math.acos(0.5) == 1.0471975511965979")})(((await $math_Util.acos(0.5)) === 1.0471975511965979))};
       {((cond) => {if (!cond) throw new Error("assertion failed: math.acos(1) == 0")})(((await $math_Util.acos(1)) === 0))};
       try {
-        {console.log(String.raw({ raw: ["", ""] }, (await $math_Util.acos(2))))};
+        {console.log("inflight" === 'inflight' && process.env.WING_TARGET !== 'sim' ? 'winglogstart:' + (String.raw({ raw: ["", ""] }, (await $math_Util.acos(2)))) + ':winglogend': (String.raw({ raw: ["", ""] }, (await $math_Util.acos(2)))))};
       }
       catch ($error_e) {
         const e = $error_e.message;
@@ -193,7 +193,7 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     try {
-      {console.log(String.raw({ raw: ["", ""] }, (math.Util.acos((-2)))))};
+      {console.log("preflight" === 'inflight' && process.env.WING_TARGET !== 'sim' ? 'winglogstart:' + (String.raw({ raw: ["", ""] }, (math.Util.acos((-2))))) + ':winglogend': (String.raw({ raw: ["", ""] }, (math.Util.acos((-2))))))};
     }
     catch ($error_e) {
       const e = $error_e.message;
@@ -205,7 +205,7 @@ class $Root extends $stdlib.std.Resource {
     {((cond) => {if (!cond) throw new Error("assertion failed: math.acos(0.5) == 1.0471975511965979")})(((math.Util.acos(0.5)) === 1.0471975511965979))};
     {((cond) => {if (!cond) throw new Error("assertion failed: math.acos(1) == 0")})(((math.Util.acos(1)) === 0))};
     try {
-      {console.log(String.raw({ raw: ["", ""] }, (math.Util.acos(2))))};
+      {console.log("preflight" === 'inflight' && process.env.WING_TARGET !== 'sim' ? 'winglogstart:' + (String.raw({ raw: ["", ""] }, (math.Util.acos(2)))) + ':winglogend': (String.raw({ raw: ["", ""] }, (math.Util.acos(2)))))};
     }
     catch ($error_e) {
       const e = $error_e.message;

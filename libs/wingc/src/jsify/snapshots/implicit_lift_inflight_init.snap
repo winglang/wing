@@ -42,7 +42,7 @@ module.exports = function({  }) {
       (await this.$this_c.inc());
     }
     async dontTouchCounter() {
-      {console.log("hello")};
+      {console.log("inflight" === 'inflight' && process.env.WING_TARGET !== 'sim' ? 'winglogstart:' + ("hello") + ':winglogend': ("hello"))};
     }
     async $inflight_init() {
       this.myField2 = "hello";

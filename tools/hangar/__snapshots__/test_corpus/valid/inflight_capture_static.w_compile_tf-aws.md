@@ -73,7 +73,7 @@ module.exports = function({ $util_Util }) {
         const $IF_LET_VALUE = (await $util_Util.tryEnv("WING_TARGET"));
         if ($IF_LET_VALUE != undefined) {
           const target = $IF_LET_VALUE;
-          {console.log(String.raw({ raw: ["WING_TARGET=", ""] }, target))};
+          {console.log("inflight" === 'inflight' && process.env.WING_TARGET !== 'sim' ? 'winglogstart:' + (String.raw({ raw: ["WING_TARGET=", ""] }, target)) + ':winglogend': (String.raw({ raw: ["WING_TARGET=", ""] }, target)))};
         }
         else {
           {((cond) => {if (!cond) throw new Error("assertion failed: false /* target not defined*/")})(false)};

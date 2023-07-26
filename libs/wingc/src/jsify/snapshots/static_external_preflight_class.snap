@@ -49,7 +49,7 @@ module.exports = function({  }) {
     constructor({  }) {
     }
     static async foo() {
-      {console.log("hello")};
+      {console.log("inflight" === 'inflight' && process.env.WING_TARGET !== 'sim' ? 'winglogstart:' + ("hello") + ':winglogend': ("hello"))};
     }
   }
   return A;

@@ -68,11 +68,11 @@ module.exports = function({ $bucket2 }) {
       return $obj;
     }
     async handle() {
-      {console.log("handle called")};
+      {console.log("inflight" === 'inflight' && process.env.WING_TARGET !== 'sim' ? 'winglogstart:' + ("handle called") + ':winglogend': ("handle called"))};
       (await this.putFile());
     }
     async putFile() {
-      {console.log("putFile called")};
+      {console.log("inflight" === 'inflight' && process.env.WING_TARGET !== 'sim' ? 'winglogstart:' + ("putFile called") + ':winglogend': ("putFile called"))};
       (await this.$this_bucket.put("hello","world"));
     }
     async listFiles() {

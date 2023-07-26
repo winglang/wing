@@ -22,7 +22,7 @@ module.exports = function({  }) {
       return $obj;
     }
     async handle() {
-      {console.log("hello")};
+      {console.log("inflight" === 'inflight' && process.env.WING_TARGET !== 'sim' ? 'winglogstart:' + ("hello") + ':winglogend': ("hello"))};
     }
   }
   return $Closure1;

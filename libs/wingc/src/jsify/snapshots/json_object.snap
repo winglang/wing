@@ -24,7 +24,7 @@ module.exports = function({ $jsonObj1, $std_Json }) {
       return $obj;
     }
     async handle() {
-      {console.log(((args) => { return JSON.stringify(args[0], null, args[1]) })([$jsonObj1]))};
+      {console.log("inflight" === 'inflight' && process.env.WING_TARGET !== 'sim' ? 'winglogstart:' + (((args) => { return JSON.stringify(args[0], null, args[1]) })([$jsonObj1])) + ':winglogend': (((args) => { return JSON.stringify(args[0], null, args[1]) })([$jsonObj1])))};
     }
   }
   return $Closure1;

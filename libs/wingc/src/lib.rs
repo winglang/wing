@@ -95,6 +95,8 @@ const CONSTRUCT_BASE_CLASS: &'static str = "constructs.Construct";
 const MACRO_REPLACE_SELF: &'static str = "$self$";
 const MACRO_REPLACE_ARGS: &'static str = "$args$";
 const MACRO_REPLACE_ARGS_TEXT: &'static str = "$args_text$";
+const MACRO_REPLACE_PHASE: &'static str = "$phase$";
+const MACRO_REPLACE_TARGET: &'static str = "$target$";
 
 pub struct CompilerOutput {}
 
@@ -218,7 +220,7 @@ pub fn type_check(
 			}],
 			return_type: types.void(),
 			phase: Phase::Independent,
-			js_override: Some("{console.log($args$)}".to_string()),
+      js_override: Some("{console.log($phase$ === 'inflight' && $target$ !== 'sim' ? 'winglogstart:' + ($args$) + ':winglogend': ($args$))}".to_string()),
 			docs: Docs::with_summary("Logs a message"),
 		}),
 		scope,

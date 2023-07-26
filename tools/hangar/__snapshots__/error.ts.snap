@@ -121,7 +121,7 @@ exports[`utilities.w 1`] = `
      constructor(scope, id) {
        super(scope, id);
 >>     {((cond) => {if (!cond) throw new Error(\\"assertion failed: false\\")})(false)};
-       {console.log(\\"W\\")};
+       {console.log(\\"preflight\\" === 'inflight' && process.env.WING_TARGET !== 'sim' ? 'winglogstart:' + (\\"W\\") + ':winglogend': (\\"W\\"))};
        {((msg) => {throw new Error(msg)})(\\"me\\")};
 
  

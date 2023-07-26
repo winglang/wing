@@ -26,7 +26,7 @@ module.exports = function({  }) {
     constructor({  }) {
     }
     async method() {
-      {console.log(this.x)};
+      {console.log("inflight" === 'inflight' && process.env.WING_TARGET !== 'sim' ? 'winglogstart:' + (this.x) + ':winglogend': (this.x))};
     }
     async $inflight_init() {
       this.x = "hello";

@@ -23,7 +23,7 @@ module.exports = function({ $std_Json, $std_String }) {
       return $obj;
     }
     async handle() {
-      {console.log(((args) => { if (typeof args !== "string") {throw new Error("unable to parse " + typeof args + " " + args + " as a string")}; return JSON.parse(JSON.stringify(args)) })("hello"))};
+      {console.log("inflight" === 'inflight' && process.env.WING_TARGET !== 'sim' ? 'winglogstart:' + (((args) => { if (typeof args !== "string") {throw new Error("unable to parse " + typeof args + " " + args + " as a string")}; return JSON.parse(JSON.stringify(args)) })("hello")) + ':winglogend': (((args) => { if (typeof args !== "string") {throw new Error("unable to parse " + typeof args + " " + args + " as a string")}; return JSON.parse(JSON.stringify(args)) })("hello")))};
       {((cond) => {if (!cond) throw new Error("assertion failed: Json.values(Json {}).length == 0")})(((Object.values(Object.freeze({}))).length === 0))};
     }
   }

@@ -36,9 +36,9 @@ module.exports = function({ $t_last, $t_name, $t_name_length }) {
       return $obj;
     }
     async handle() {
-      {console.log($t_name)};
+      {console.log("inflight" === 'inflight' && process.env.WING_TARGET !== 'sim' ? 'winglogstart:' + ($t_name) + ':winglogend': ($t_name))};
       {((cond) => {if (!cond) throw new Error("assertion failed: t.name.length > 0")})(($t_name_length > 0))};
-      {console.log($t_last)};
+      {console.log("inflight" === 'inflight' && process.env.WING_TARGET !== 'sim' ? 'winglogstart:' + ($t_last) + ':winglogend': ($t_last))};
     }
   }
   return $Closure1;

@@ -10,15 +10,15 @@ module.exports = function({ $myBool, $myDur_hours, $myDur_minutes, $myDur_second
       return $obj;
     }
     async handle(s) {
-      {console.log($myStr)};
+      {console.log("inflight" === 'inflight' && process.env.WING_TARGET !== 'sim' ? 'winglogstart:' + ($myStr) + ':winglogend': ($myStr))};
       const n = $myNum;
-      {console.log(String.raw({ raw: ["", ""] }, n))};
+      {console.log("inflight" === 'inflight' && process.env.WING_TARGET !== 'sim' ? 'winglogstart:' + (String.raw({ raw: ["", ""] }, n)) + ':winglogend': (String.raw({ raw: ["", ""] }, n)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: mySecondBool == false")})(($mySecondBool === false))};
       if ($myBool) {
-        {console.log("bool=true")};
+        {console.log("inflight" === 'inflight' && process.env.WING_TARGET !== 'sim' ? 'winglogstart:' + ("bool=true") + ':winglogend': ("bool=true"))};
       }
       else {
-        {console.log("bool=false")};
+        {console.log("inflight" === 'inflight' && process.env.WING_TARGET !== 'sim' ? 'winglogstart:' + ("bool=false") + ':winglogend': ("bool=false"))};
       }
       const min = $myDur_minutes;
       const sec = $myDur_seconds;

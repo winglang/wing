@@ -86,7 +86,7 @@ module.exports = function({  }) {
     async testNoCapture() {
       const arr = Object.freeze([1, 2, 3]);
       {((cond) => {if (!cond) throw new Error("assertion failed: arr.length == 3")})((arr.length === 3))};
-      {console.log(String.raw({ raw: ["array.len=", ""] }, arr.length))};
+      {console.log("inflight" === 'inflight' && process.env.WING_TARGET !== 'sim' ? 'winglogstart:' + (String.raw({ raw: ["array.len=", ""] }, arr.length)) + ':winglogend': (String.raw({ raw: ["array.len=", ""] }, arr.length)))};
     }
     async testCaptureCollectionsOfData() {
       {((cond) => {if (!cond) throw new Error("assertion failed: this.arrayOfStr.length == 2")})((this.$this_arrayOfStr_length === 2))};
@@ -113,12 +113,12 @@ module.exports = function({  }) {
     }
     async testNestedInflightField() {
       {((cond) => {if (!cond) throw new Error("assertion failed: this.another.myField == \"hello!\"")})((this.$this_another_myField === "hello!"))};
-      {console.log(String.raw({ raw: ["field=", ""] }, this.$this_another_myField))};
+      {console.log("inflight" === 'inflight' && process.env.WING_TARGET !== 'sim' ? 'winglogstart:' + (String.raw({ raw: ["field=", ""] }, this.$this_another_myField)) + ':winglogend': (String.raw({ raw: ["field=", ""] }, this.$this_another_myField)))};
     }
     async testNestedResource() {
       {((cond) => {if (!cond) throw new Error("assertion failed: this.another.first.myResource.list().length == 0")})(((await this.$this_another_first_myResource.list()).length === 0))};
       (await this.$this_another_first_myResource.put("hello",this.$this_myStr));
-      {console.log(String.raw({ raw: ["this.another.first.myResource:", ""] }, (await this.$this_another_first_myResource.get("hello"))))};
+      {console.log("inflight" === 'inflight' && process.env.WING_TARGET !== 'sim' ? 'winglogstart:' + (String.raw({ raw: ["this.another.first.myResource:", ""] }, (await this.$this_another_first_myResource.get("hello")))) + ':winglogend': (String.raw({ raw: ["this.another.first.myResource:", ""] }, (await this.$this_another_first_myResource.get("hello")))))};
     }
     async testExpressionRecursive() {
       (await this.$this_myQueue.push(this.$this_myStr));
