@@ -10,20 +10,28 @@ export interface Analytics {
 }
 
 export const createAnalytics = (options: CreateAnalyticsOptions): Analytics => {
-  const segment = new Segment(options.segmentWriteKey);
+  let segment: Segment;
   const sessionId = Date.now();
+  try {
+    segment = new Segment(options.segmentWriteKey);
+  } catch {}
   return {
     track(event: string, properties?: Record<string, any>) {
-      segment.track({
-        anonymousId: options.anonymousId,
-        event: event.toLowerCase().replaceAll(/\s/g, ""),
-        properties,
-        integrations: {
-          "Actions Amplitude": {
-            session_id: sessionId,
+      if (!segment) {
+        return;
+      }
+      try {
+        segment.track({
+          anonymousId: options.anonymousId,
+          event: event.toLowerCase().replaceAll(/\s/g, ""),
+          properties,
+          integrations: {
+            "Actions Amplitude": {
+              session_id: sessionId,
+            },
           },
-        },
-      });
+        });
+      } catch {}
     },
   };
 };

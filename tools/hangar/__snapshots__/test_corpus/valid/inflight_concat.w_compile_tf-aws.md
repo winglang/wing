@@ -61,8 +61,8 @@ class $Root extends $stdlib.std.Resource {
     class R extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this.s1 = "hello";
         this._addInflightOps("foo", "$inflight_init");
+        this.s1 = "hello";
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`

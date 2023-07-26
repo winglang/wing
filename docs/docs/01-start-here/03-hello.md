@@ -24,9 +24,7 @@ entrypoint of your Wing application.
 bring cloud;
 
 let bucket = new cloud.Bucket();
-let counter = new cloud.Counter(
-  initial: 1
-);
+let counter = new cloud.Counter(initial: 1);
 let queue = new cloud.Queue();
 
 queue.setConsumer(inflight (message: str) => {
