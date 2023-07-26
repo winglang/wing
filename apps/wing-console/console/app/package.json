@@ -4,11 +4,16 @@
   "repository": "https://github.com/winglang/wing",
   "license": "SEE LICENSE IN LICENSE.md",
   "version": "0.0.0",
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
-  "files": [
-    "dist"
-  ],
+  "type": "module",
+  "exports": "./src/index.ts",
+  "types": "./src/index.ts",
+  "publishConfig": {
+    "exports": "./dist/index.js",
+    "types": "./dist/index.d.ts",
+    "files": [
+      "dist"
+    ]
+  },
   "scripts": {
     "preview": "node scripts/preview.mjs",
     "dev": "tsx watch scripts/dev.ts",

@@ -3,7 +3,7 @@ import { expect, test } from "@playwright/test";
 import { describe } from "../describe.js";
 import { getResourceNode } from "../helpers.js";
 
-describe(`${__dirname}/index.w`, () => {
+describe(new URL("index.w", import.meta.url), () => {
   test("increase counter", async ({ page }) => {
     await getResourceNode(page, "root/Default/cloud.Counter").click();
 

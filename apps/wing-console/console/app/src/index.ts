@@ -36,7 +36,7 @@ export interface CreateConsoleAppOptions {
   requireAcceptTerms?: boolean;
 }
 
-const staticDir = `${__dirname}/vite`;
+const staticDir = new URL("vite", import.meta.url).pathname;
 
 const SEGMENT_WRITE_KEY = process.env.SEGMENT_WRITE_KEY;
 const WING_DISABLE_ANALYTICS = process.env.WING_DISABLE_ANALYTICS;

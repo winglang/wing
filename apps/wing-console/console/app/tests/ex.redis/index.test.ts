@@ -16,7 +16,7 @@ const isDockerAvailable = () => {
   }
 };
 
-describe(`${__dirname}/index.w`, () => {
+describe(new URL("index.w", import.meta.url), () => {
   test.beforeAll(async () => {
     test.skip(!isDockerAvailable(), "Docker is not available");
   });

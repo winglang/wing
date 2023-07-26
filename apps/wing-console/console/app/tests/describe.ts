@@ -2,7 +2,7 @@ import * as path from "node:path";
 
 import { test } from "@playwright/test";
 
-import { createConsoleApp } from "../dist/index.js";
+import { createConsoleApp } from "../src/index.js";
 
 /**
  * Declares a group of console tests.
@@ -26,12 +26,12 @@ import { createConsoleApp } from "../dist/index.js";
  * `describe(wingfile, callback)`. Any tests added in
  * this callback will belong to the group.
  */
-export const describe = (wingfile: string, callback: () => void) => {
+export const describe = (wingfile: URL, callback: () => void) => {
   let server: { port: number; close: () => void } | undefined;
 
   test.beforeEach(async ({ page }) => {
     server = await createConsoleApp({
-      wingfile: path.resolve(__dirname, wingfile),
+      wingfile: new URL(wingfile, import.meta.url).pathname,
     });
 
     await page.goto(`http://localhost:${server.port}/`);

@@ -28,7 +28,7 @@ const addRow = async (
   await expect(row).toBeVisible();
 };
 
-describe(`${__dirname}/index.w`, () => {
+describe(new URL("index.w", import.meta.url), () => {
   test("adds new row", async ({ page }) => {
     await getResourceNode(page, "root/Default/ex.Table").click();
 
