@@ -13,6 +13,9 @@ node_modules/
 # Generated wing output
 *.w.out/
 
+# Generated wingc .jsii binary cache
+*.jsii.bincode
+
 # cargo output
 ## will have compiled files and executables from cargo
 debug/
