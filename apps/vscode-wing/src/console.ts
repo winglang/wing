@@ -64,17 +64,17 @@ export class WingConsoleManager {
           //await open(url);
         },
       },
-      // log: {
-      //   info: (message: string) => {
-      //     logger.appendLine(message);
-      //   },
-      //   error: (message: string) => {
-      //     logger.appendLine(message);
-      //   },
-      //   verbose: (message: string) => {
-      //     logger.appendLine(message);
-      //   },
-      // },
+      log: {
+        info: (message: string) => {
+          logger.appendLine(message);
+        },
+        error: (message: string) => {
+          logger.appendLine(message);
+        },
+        verbose: (message: string) => {
+          logger.appendLine(message);
+        },
+      },
       layoutConfig: {
         header: {
           hide: true,

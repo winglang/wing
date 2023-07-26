@@ -122,6 +122,7 @@ export const createAppRouter = () => {
       )
       .mutation(async ({ ctx, input }) => {
         ctx.setSelectedNode?.(input.path ?? "");
+        await ctx.emitter.emit("invalidateQuery", "app.selectedNode");
       }),
     "app.selectedNode": createProcedure.query(async ({ ctx }) => {
       return ctx.getSelectedNode?.();
