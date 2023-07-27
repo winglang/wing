@@ -1,5 +1,26 @@
 # [structs.w](../../../../../examples/tests/valid/structs.w) | compile | tf-aws
 
+## inflight.$Closure1.js
+```js
+module.exports = function({  }) {
+  class $Closure1 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async handle() {
+      const s2 = {
+      "a": "foo",}
+      ;
+      {((cond) => {if (!cond) throw new Error("assertion failed: s2.a == \"foo\"")})((s2.a === "foo"))};
+    }
+  }
+  return $Closure1;
+}
+
+```
+
 ## inflight.Foo.js
 ```js
 module.exports = function({  }) {
@@ -37,13 +58,102 @@ module.exports = function({  }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[]"
+      "value": "[[\"root/Default/Default/test:struct definitions are phase independant\",\"${aws_lambda_function.teststructdefinitionsarephaseindependant_Handler_F8CACE9E.arn}\"]]"
     }
   },
   "provider": {
     "aws": [
       {}
     ]
+  },
+  "resource": {
+    "aws_iam_role": {
+      "teststructdefinitionsarephaseindependant_Handler_IamRole_4609E5D7": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:struct definitions are phase independant/Handler/IamRole",
+            "uniqueId": "teststructdefinitionsarephaseindependant_Handler_IamRole_4609E5D7"
+          }
+        },
+        "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
+      }
+    },
+    "aws_iam_role_policy": {
+      "teststructdefinitionsarephaseindependant_Handler_IamRolePolicy_25856004": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:struct definitions are phase independant/Handler/IamRolePolicy",
+            "uniqueId": "teststructdefinitionsarephaseindependant_Handler_IamRolePolicy_25856004"
+          }
+        },
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
+        "role": "${aws_iam_role.teststructdefinitionsarephaseindependant_Handler_IamRole_4609E5D7.name}"
+      }
+    },
+    "aws_iam_role_policy_attachment": {
+      "teststructdefinitionsarephaseindependant_Handler_IamRolePolicyAttachment_E9A6A66B": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:struct definitions are phase independant/Handler/IamRolePolicyAttachment",
+            "uniqueId": "teststructdefinitionsarephaseindependant_Handler_IamRolePolicyAttachment_E9A6A66B"
+          }
+        },
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "${aws_iam_role.teststructdefinitionsarephaseindependant_Handler_IamRole_4609E5D7.name}"
+      }
+    },
+    "aws_lambda_function": {
+      "teststructdefinitionsarephaseindependant_Handler_F8CACE9E": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:struct definitions are phase independant/Handler/Default",
+            "uniqueId": "teststructdefinitionsarephaseindependant_Handler_F8CACE9E"
+          }
+        },
+        "environment": {
+          "variables": {
+            "WING_FUNCTION_NAME": "Handler-c8158c42",
+            "WING_TARGET": "tf-aws"
+          }
+        },
+        "function_name": "Handler-c8158c42",
+        "handler": "index.handler",
+        "publish": true,
+        "role": "${aws_iam_role.teststructdefinitionsarephaseindependant_Handler_IamRole_4609E5D7.arn}",
+        "runtime": "nodejs18.x",
+        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
+        "s3_key": "${aws_s3_object.teststructdefinitionsarephaseindependant_Handler_S3Object_9394B2A7.key}",
+        "timeout": 30,
+        "vpc_config": {
+          "security_group_ids": [],
+          "subnet_ids": []
+        }
+      }
+    },
+    "aws_s3_bucket": {
+      "Code": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Code",
+            "uniqueId": "Code"
+          }
+        },
+        "bucket_prefix": "code-c84a50b1-"
+      }
+    },
+    "aws_s3_object": {
+      "teststructdefinitionsarephaseindependant_Handler_S3Object_9394B2A7": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:struct definitions are phase independant/Handler/S3Object",
+            "uniqueId": "teststructdefinitionsarephaseindependant_Handler_S3Object_9394B2A7"
+          }
+        },
+        "bucket": "${aws_s3_bucket.Code.bucket}",
+        "key": "<ASSET_KEY>",
+        "source": "<ASSET_SOURCE>"
+      }
+    }
   }
 }
 ```
@@ -91,6 +201,30 @@ class $Root extends $stdlib.std.Resource {
         super._registerBind(host, ops);
       }
     }
+    class $Closure1 extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        this._addInflightOps("handle", "$inflight_init");
+        this.display.hidden = true;
+      }
+      static _toInflightType(context) {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("./inflight.$Closure1.js")({
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const $Closure1Client = ${$Closure1._toInflightType(this).text};
+            const client = new $Closure1Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+    }
     const x = {
     "field0": "Sup",}
     ;
@@ -108,6 +242,7 @@ class $Root extends $stdlib.std.Resource {
     const s = {
     "a": "Boom baby",}
     ;
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:struct definitions are phase independant",new $Closure1(this,"$Closure1"));
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
