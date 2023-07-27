@@ -3,7 +3,6 @@ import * as path from "path";
 import fs from "fs/promises";
 import { validTestDir, wingSdkDir } from "./paths";
 import { runWingCommand } from "./utils";
-import * as os from "os";
 
 test("JSII manifest cache", async () => {
   // Used awscdk test because it has manifest file redirects and uses gzip compression which is a good test case
