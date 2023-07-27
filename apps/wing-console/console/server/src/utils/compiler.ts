@@ -2,7 +2,6 @@ import path from "node:path";
 
 import * as wing from "@winglang/compiler";
 import chokidar from "chokidar";
-import Emittery from "emittery";
 
 import { formatWingError } from "./format-wing-error.js";
 
@@ -21,7 +20,8 @@ export interface Compiler {
   ): void;
 }
 
-export const createCompiler = (wingfile: string): Compiler => {
+export const createCompiler = async (wingfile: string): Promise<Compiler> => {
+  const { default: Emittery } = await import("emittery");
   const events = new Emittery<CompilerEvents>();
   let isCompiling = false;
   let shouldCompileAgain = false;

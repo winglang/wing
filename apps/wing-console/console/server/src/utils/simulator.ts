@@ -1,5 +1,5 @@
 import { testing, cloud } from "@winglang/sdk";
-import Emittery from "emittery";
+import type Emitter from "emittery";
 
 import type { Trace } from "../types.js";
 
@@ -31,7 +31,8 @@ const stopSilently = async (simulator: testing.Simulator) => {
   }
 };
 
-export const createSimulator = (): Simulator => {
+export const createSimulator = async (): Promise<Simulator> => {
+  const { default: Emittery } = await import("emittery");
   const events = new Emittery<SimulatorEvents>();
   let instance: testing.Simulator | undefined;
   const start = async (simfile: string) => {

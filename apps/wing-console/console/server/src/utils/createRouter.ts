@@ -1,6 +1,6 @@
 import { initTRPC } from "@trpc/server";
 import { testing } from "@winglang/sdk";
-import Emittery from "emittery";
+import type Emittery from "emittery";
 
 import { Config } from "../config.js";
 import { ConsoleLogger } from "../consoleLogger.js";

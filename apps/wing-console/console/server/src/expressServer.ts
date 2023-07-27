@@ -2,7 +2,7 @@ import * as trpcExpress from "@trpc/server/adapters/express";
 import { applyWSSHandler } from "@trpc/server/adapters/ws";
 import { testing } from "@winglang/sdk";
 import cors from "cors";
-import Emittery from "emittery";
+import type Emittery from "emittery";
 import express from "express";
 import getPort, { portNumbers } from "get-port";
 import { WebSocketServer } from "ws";

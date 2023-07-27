@@ -1,5 +1,5 @@
 import type { inferRouterInputs } from "@trpc/server";
-import Emittery from "emittery";
+import type Emittery from "emittery";
 import type { Application as ExpressApplication } from "express";
 
 import type { Config } from "./config.js";
@@ -56,6 +56,8 @@ export const createConsoleServer = async ({
   onExpressCreated,
   requireAcceptTerms,
 }: CreateConsoleServerOptions) => {
+  const { default: Emittery } = await import("emittery");
+
   const emitter = new Emittery<{
     invalidateQuery: RouteNames;
     trace: Trace;
@@ -82,8 +84,10 @@ export const createConsoleServer = async ({
     log,
   });
 
-  const compiler = createCompiler(wingfile);
-  const simulator = createSimulator();
+  const [compiler, simulator] = await Promise.all([
+    createCompiler(wingfile),
+    createSimulator(),
+  ]);
   if (onTrace) {
     simulator.on("trace", onTrace);
   }
