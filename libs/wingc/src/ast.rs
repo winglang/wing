@@ -269,9 +269,10 @@ pub struct FunctionParameter {
 	pub name: Symbol,
 	pub type_annotation: TypeAnnotation,
 	pub reassignable: bool,
+	pub variadic: bool,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum FunctionBody {
 	/// The function body implemented within a Wing scope.
 	Statements(Scope),
@@ -279,7 +280,7 @@ pub enum FunctionBody {
 	External(String),
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FunctionDefinition {
 	/// The name of the function ('None' if this is a closure).
 	pub name: Option<Symbol>,
@@ -292,7 +293,7 @@ pub struct FunctionDefinition {
 	pub span: WingSpan,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Stmt {
 	pub kind: StmtKind,
 	pub span: WingSpan,
@@ -330,13 +331,13 @@ impl Display for UtilityFunctions {
 	}
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ElifBlock {
 	pub condition: Expr,
 	pub statements: Scope,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Class {
 	pub name: Symbol,
 	pub fields: Vec<ClassField>,
@@ -411,14 +412,14 @@ impl Class {
 	}
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Interface {
 	pub name: Symbol,
 	pub methods: Vec<(Symbol, FunctionSignature)>,
 	pub extends: Vec<UserDefinedType>,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum StmtKind {
 	Bring {
 		module_name: Symbol, // Reference?
@@ -486,13 +487,13 @@ pub enum StmtKind {
 	CompilerDebugEnv,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct CatchBlock {
 	pub statements: Scope,
 	pub exception_var: Option<Symbol>,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ClassField {
 	pub name: Symbol,
 	pub member_type: TypeAnnotation,
@@ -501,13 +502,13 @@ pub struct ClassField {
 	pub is_static: bool,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct StructField {
 	pub name: Symbol,
 	pub member_type: TypeAnnotation,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum ExprKind {
 	New(NewExpr),
 	Literal(Literal),
@@ -561,7 +562,7 @@ pub enum ExprKind {
 	CompilerDebugPanic,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum CalleeKind {
 	/// The callee is any expression
 	Expr(Box<Expr>),
@@ -578,7 +579,7 @@ impl Spanned for CalleeKind {
 	}
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Expr {
 	/// An identifier that is unique among all expressions in the AST.
 	pub id: usize,
@@ -604,7 +605,7 @@ impl Expr {
 	}
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct NewExpr {
 	pub class: Box<Expr>, // expression must be a reference to a user defined type
 	pub obj_id: Option<Box<Expr>>,
@@ -612,7 +613,7 @@ pub struct NewExpr {
 	pub arg_list: ArgList,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ArgList {
 	pub pos_args: Vec<Expr>,
 	pub named_args: IndexMap<Symbol, Expr>,
@@ -629,7 +630,7 @@ impl ArgList {
 	}
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum Literal {
 	String(String),
 	InterpolatedString(InterpolatedString),
@@ -638,18 +639,18 @@ pub enum Literal {
 	Nil,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct InterpolatedString {
 	pub parts: Vec<InterpolatedStringPart>,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum InterpolatedStringPart {
 	Static(String),
 	Expr(Expr),
 }
 
-#[derive(Derivative, Default)]
+#[derive(Derivative, Default, Clone)]
 #[derivative(Debug)]
 pub struct Scope {
 	pub statements: Vec<Stmt>,
@@ -674,14 +675,14 @@ impl Scope {
 	}
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum UnaryOperator {
 	Minus,
 	Not,
 	OptionalTest,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum BinaryOperator {
 	AddOrConcat,
 	Sub,
@@ -701,7 +702,7 @@ pub enum BinaryOperator {
 	UnwrapOr,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum Reference {
 	/// A simple identifier: `x`
 	Identifier(Symbol),

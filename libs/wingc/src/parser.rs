@@ -1085,16 +1085,20 @@ impl<'s> Parser<'s> {
 	fn build_parameter_list(&self, parameter_list_node: &Node, phase: Phase) -> DiagnosticResult<Vec<FunctionParameter>> {
 		let mut res = vec![];
 		let mut cursor = parameter_list_node.walk();
-		for parameter_definition_node in parameter_list_node.named_children(&mut cursor) {
-			if parameter_definition_node.is_extra() {
+		for definition_node in parameter_list_node.named_children(&mut cursor) {
+			if definition_node.is_extra() {
 				continue;
 			}
 
 			res.push(FunctionParameter {
-				name: self.check_reserved_symbol(&parameter_definition_node.child_by_field_name("name").unwrap())?,
-				type_annotation: self
-					.build_type_annotation(&parameter_definition_node.child_by_field_name("type").unwrap(), phase)?,
-				reassignable: parameter_definition_node.child_by_field_name("reassignable").is_some(),
+				name: self.check_reserved_symbol(&definition_node.child_by_field_name("name").unwrap())?,
+				type_annotation: self.build_type_annotation(&definition_node.child_by_field_name("type").unwrap(), phase)?,
+				reassignable: definition_node.child_by_field_name("reassignable").is_some(),
+				variadic: if definition_node.kind() == "variadic_definition" {
+					true
+				} else {
+					false
+				},
 			});
 		}
 
@@ -1125,7 +1129,7 @@ impl<'s> Parser<'s> {
 
 				Ok(udt)
 			}
-			"mutable_container_type" | "immutable_container_type" => {
+			"mutable_container_type" | "immutable_container_type" | "variadic_container_type" => {
 				let container_type = self.node_text(&type_node.child_by_field_name("collection_type").unwrap());
 				match container_type {
 					"ERROR" => self.with_error("Expected builtin container type", type_node)?,
@@ -1195,6 +1199,7 @@ impl<'s> Parser<'s> {
 						name: "".into(),
 						type_annotation: t,
 						reassignable: false,
+						variadic: false,
 					})
 				}
 
@@ -1228,7 +1233,7 @@ impl<'s> Parser<'s> {
 					other => self.with_error(format!("invalid json container type {}", other), &type_node),
 				}
 			}
-			"mutable_container_type" | "immutable_container_type" => {
+			"mutable_container_type" | "immutable_container_type" | "variadic_container_type" => {
 				let container_type = self.node_text(&type_node.child_by_field_name("collection_type").unwrap());
 				let element_type = type_node.child_by_field_name("type_parameter").unwrap();
 				match container_type {
