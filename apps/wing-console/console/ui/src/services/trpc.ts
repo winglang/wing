@@ -17,8 +17,6 @@ export const trpc = createTRPCReact<Router>({
          **/
         // Calls the `onSuccess` defined in the `useQuery()`-options:
         await options.originalFn();
-        // Invalidate all queries in the react-query cache:
-        await options.queryClient.invalidateQueries();
       },
     },
   },

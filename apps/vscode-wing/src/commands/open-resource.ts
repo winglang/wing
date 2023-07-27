@@ -1,11 +1,5 @@
 import { Client } from "../services/trpc";
 
-export const openResource = (client: Client) => {
-  const run = async (resourcePath: string) => {
-    await client.setSelectedNode(resourcePath);
-    await client.invalidateQueries();
-  };
-  return {
-    run,
-  };
+export const openResource = async (client: Client, resourcePath: string) => {
+  await client.setSelectedNode(resourcePath);
 };

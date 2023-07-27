@@ -19,13 +19,19 @@ export class ResourcesExplorerProvider
   readonly onDidChangeTreeData: Event<ResourceItem | undefined | null | void> =
     this._onDidChangeTreeData.event;
 
+  constructor(node?: ExplorerItem) {
+    this.node = node;
+  }
+
   refresh(): void {
     this._onDidChangeTreeData.fire();
   }
 
   update(item: ExplorerItem): void {
-    this.node = item;
-    this.refresh();
+    if (this.node !== item) {
+      this.node = item;
+      this.refresh();
+    }
   }
 
   getTreeItem(element: ResourceItem): TreeItem {

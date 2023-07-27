@@ -11,13 +11,13 @@ export type TestStatus = "success" | "error" | "running" | "pending";
 export interface Test {
   id: string;
   label: string;
-  status: TestStatus;
+  status?: TestStatus;
   time?: number;
   runAllDisabled?: boolean;
 }
 
 export class TestsExplorerProvider implements TreeDataProvider<TestItem> {
-  private tests: Test[] = [];
+  private tests: TestItem[] = [];
 
   private _onDidChangeTreeData: EventEmitter<
     TestItem | undefined | null | void
@@ -26,16 +26,26 @@ export class TestsExplorerProvider implements TreeDataProvider<TestItem> {
   readonly onDidChangeTreeData: Event<TestItem | undefined | null | void> =
     this._onDidChangeTreeData.event;
 
+  constructor(tests?: TestItem[]) {
+    this.tests = tests || [];
+  }
+
   refresh(): void {
     this._onDidChangeTreeData.fire();
   }
 
-  update(tests: Test[]): void {
-    this.tests = tests;
+  update(tests: TestItem[]): void {
+    this.tests = tests.map((test) => {
+      const currentState = this.tests.find((t) => t.id === test.id);
+      if (currentState && test.status === "pending") {
+        return currentState;
+      }
+      return test;
+    });
     this.refresh();
   }
 
-  getTests(): Test[] {
+  getTests(): TestItem[] {
     return this.tests;
   }
 

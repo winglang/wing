@@ -105,6 +105,10 @@
       "type": "runtime"
     },
     {
+      "name": "heroicons",
+      "type": "runtime"
+    },
+    {
       "name": "node-fetch",
       "version": "2",
       "type": "runtime"

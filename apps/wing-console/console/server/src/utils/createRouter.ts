@@ -80,4 +80,16 @@ export interface RouterContext {
 const t = initTRPC.context<RouterContext>().create();
 export const createRouter = t.router;
 export const mergeRouters = t.mergeRouters;
-export const createProcedure = t.procedure;
+export const middleware = t.middleware;
+
+const invalidateQueriesAfterMutation = middleware(async (options) => {
+  const result = await options.next();
+
+  if (options.type === "mutation") {
+    options.ctx.emitter.emit("invalidateQuery", undefined);
+  }
+
+  return result;
+});
+
+export const createProcedure = t.procedure.use(invalidateQueriesAfterMutation);

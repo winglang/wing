@@ -380,9 +380,6 @@ export const createAppRouter = () => {
             }),
         };
       }),
-    "app.invalidateQueries": createProcedure.mutation(async ({ ctx }) => {
-      await ctx.emitter.emit("invalidateQuery", undefined);
-    }),
     "app.invalidateQuery": createProcedure.subscription(({ ctx }) => {
       return observable<string | undefined>((emit) => {
         ctx.emitter.on("invalidateQuery", emit.next);

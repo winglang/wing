@@ -7,7 +7,7 @@ import {
 } from "@trpc/client";
 
 import type { ExplorerItem, Router } from "@wingconsole/server";
-import ws from "ws";
+import { TestItem } from "../TestsExplorerProvider";
 
 export interface SubscriptionOptions {
   onData: (data: any) => void;
@@ -17,18 +17,20 @@ export interface SubscriptionOptions {
 export interface Client {
   selectedNode: () => Promise<string | undefined>;
   setSelectedNode: (resourcePath: string) => Promise<void>;
-  listTests: () => Promise<any[]>;
+  listTests: () => Promise<TestItem[]>;
   runTest: (resourcePath: string) => Promise<any>;
   listResources: () => Promise<ExplorerItem>;
-  invalidateQueries: () => Promise<void>;
-  onInvalidateQuery: (options: SubscriptionOptions) => ws.Subscription;
+  onInvalidateQuery: (options: SubscriptionOptions) => void;
+  close: () => void;
 }
 
-export const createTRPCClient = (url: string): Client => {
-  const trpcUrl = `${url}/trpc`;
+export const createTRPCClient = (host: string): Client => {
+  const url = `${host}/trpc`;
+
   const wsClient = createWSClient({
-    url: `ws:${trpcUrl}`,
+    url: `ws://${url}`,
   });
+
   const client = createTRPCProxyClient<Router>({
     links: [
       splitLink({
@@ -39,7 +41,7 @@ export const createTRPCClient = (url: string): Client => {
           client: wsClient,
         }),
         false: httpLink({
-          url: trpcUrl,
+          url: `http://${url}`,
         }),
       }),
     ],
@@ -55,8 +57,17 @@ export const createTRPCClient = (url: string): Client => {
     });
   };
 
-  const listTests = () => {
-    return client["test.list"].query();
+  const listTests = (): Promise<TestItem[]> => {
+    return client["test.list"].query().then((res: any) =>
+      res.map((test: any) => {
+        return {
+          id: test.id,
+          label: test.label,
+          status: "pending",
+          time: 0,
+        };
+      })
+    );
   };
 
   const runTest = (resourcePath: string) => {
@@ -69,12 +80,12 @@ export const createTRPCClient = (url: string): Client => {
     return client["app.explorerTree"].query();
   };
 
-  const invalidateQueries = () => {
-    return client["app.invalidateQueries"].mutate();
-  };
-
   const onInvalidateQuery = (options: SubscriptionOptions) => {
     return client["app.invalidateQuery"].subscribe(undefined, options);
+  };
+
+  const close = () => {
+    wsClient.close();
   };
 
   return {
@@ -83,7 +94,7 @@ export const createTRPCClient = (url: string): Client => {
     listTests,
     runTest,
     listResources,
-    invalidateQueries,
     onInvalidateQuery,
+    close,
   };
 };
