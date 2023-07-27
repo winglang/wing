@@ -419,14 +419,17 @@ pub struct Interface {
 }
 
 #[derive(Debug)]
+pub enum BringSource {
+	BuiltinModule(Symbol),
+	JsiiModule(Symbol),
+	WingFile(Symbol),
+}
+
+#[derive(Debug)]
 pub enum StmtKind {
 	Bring {
-		module_name: Symbol, // Reference?
+		source: BringSource,
 		identifier: Option<Symbol>,
-	},
-	Module {
-		name: Symbol,
-		statements: Scope,
 	},
 	SuperConstructor {
 		arg_list: ArgList,
