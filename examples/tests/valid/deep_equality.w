@@ -35,11 +35,7 @@ test "Json with the same value" {
 }
 
 test "Json with different values" {
-  try {
-    assert(jsonA == jsonC);
-  } catch e {
-    assert(e == "assertion failed: jsonA == jsonC");
-  }
+  assert(jsonA != jsonC);
 }
 
 //-----------------------------------------------------------------------------
