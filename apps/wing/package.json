@@ -20,10 +20,10 @@
     "url": "git+https://github.com/winglang/wing.git"
   },
   "scripts": {
-    "build": "tsc && pnpm copy-root-readme",
+    "build": "tsup && pnpm copy-root-readme",
     "copy-root-readme": "cp ../../README.md ./README.md && pnpm copy-root-assets",
     "copy-root-assets": "cp ../../logo/demo.gif ./logo/demo.gif",
-    "watch": "tsc --watch",
+    "watch": "tsup --watch",
     "test": "vitest run",
     "dev": "pnpm build && ./bin/wing",
     "package": "bump-pack -b"
@@ -52,6 +52,7 @@
     "@types/uuid": "^8.3.2",
     "bump-pack": "workspace:^",
     "esbuild": "^0.17.19",
+    "tsup": "^7.1.0",
     "typescript": "^4.9.4",
     "vitest": "^0.30.1"
   },
