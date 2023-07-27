@@ -16,7 +16,7 @@ Error.stackTraceLimit = 50;
 
 // const log = debug("wing:compile");
 const WINGC_COMPILE = "wingc_compile";
-const WINGC_PREFLIGHT = "preflight.js";
+const WINGC_PREFLIGHT = "preflight.cjs";
 
 const DEFAULT_SYNTH_DIR_SUFFIX: Record<Target, string | undefined> = {
   [Target.TF_AWS]: "tfaws",
@@ -123,16 +123,13 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
     imports: {
       env: {
         send_diagnostic,
-      }
-    }
+      },
+    },
   });
 
   const errors: wingCompiler.WingDiagnostic[] = [];
 
-  function send_diagnostic(
-    data_ptr: number,
-    data_len: number
-  ) {
+  function send_diagnostic(data_ptr: number, data_len: number) {
     const data_buf = Buffer.from(
       (wingc.exports.memory as WebAssembly.Memory).buffer,
       data_ptr,
@@ -148,7 +145,7 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
   try {
     compileSuccess = wingCompiler.invoke(wingc, WINGC_COMPILE, arg) !== 0;
   } catch (error) {
-    // This is a bug in the compiler, indicate a compilation failure. 
+    // This is a bug in the compiler, indicate a compilation failure.
     // The bug details should be part of the diagnostics handling below.
     compileSuccess = false;
   }
