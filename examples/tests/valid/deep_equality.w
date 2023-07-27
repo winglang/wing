@@ -52,11 +52,7 @@ test "Set types with the same value" {
 }
 
 test "Set types with different values" {
-  try {
-    assert(setA == setC);
-  } catch e {
-    assert(e == "assertion failed: setA == setC");
-  }
+  assert(setA != setC);
 }
 
 //-----------------------------------------------------------------------------
@@ -72,11 +68,7 @@ test "Map with the same value" {
 }
 
 test "Map with different values" {
-  try {
-    assert(mapA == mapC);
-  } catch e {
-    assert(e == "assertion failed: mapA == mapC");
-  }
+  assert(mapA != mapC);
 }
 
 //-----------------------------------------------------------------------------
@@ -92,11 +84,7 @@ test "Array with the same value" {
 }
 
 test "Array with different values" {
-  try {
-    assert(arrayA == arrayC);
-  } catch e {
-    assert(e == "assertion failed: arrayA == arrayC");
-  }
+  assert(arrayA != arrayC);
 }
 
 //-----------------------------------------------------------------------------
@@ -111,17 +99,11 @@ let cat1 = Cat { name: "Mittens", age: 3 };
 let cat2 = Cat { name: "Mittens", age: 3 };
 let cat3 = Cat { name: "Simba", age: 5 };
 
-assert(cat1 == cat2);
-
 test "Struct with the same value" {
   assert(cat1 == cat1);
   assert(cat1 == cat2);
 }
 
 test "Struct with different values" {
-  try {
-    assert(cat1 == cat3);
-  } catch e {
-    assert(e == "assertion failed: cat1 == cat3");
-  }
+  assert(cat1 != cat3);
 }

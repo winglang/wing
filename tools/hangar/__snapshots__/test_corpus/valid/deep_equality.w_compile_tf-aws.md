@@ -31,13 +31,7 @@ module.exports = function({ $arrayA, $arrayC }) {
       return $obj;
     }
     async handle() {
-      try {
-        {((cond) => {if (!cond) throw new Error("assertion failed: arrayA == arrayC")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($arrayA,$arrayC)))};
-      }
-      catch ($error_e) {
-        const e = $error_e.message;
-        {((cond) => {if (!cond) throw new Error("assertion failed: e == \"assertion failed: arrayA == arrayC\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(e,"assertion failed: arrayA == arrayC")))};
-      }
+      {((cond) => {if (!cond) throw new Error("assertion failed: arrayA != arrayC")})(($arrayA !== $arrayC))};
     }
   }
   return $Closure10;
@@ -74,13 +68,7 @@ module.exports = function({ $cat1, $cat3 }) {
       return $obj;
     }
     async handle() {
-      try {
-        {((cond) => {if (!cond) throw new Error("assertion failed: cat1 == cat3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($cat1,$cat3)))};
-      }
-      catch ($error_e) {
-        const e = $error_e.message;
-        {((cond) => {if (!cond) throw new Error("assertion failed: e == \"assertion failed: cat1 == cat3\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(e,"assertion failed: cat1 == cat3")))};
-      }
+      {((cond) => {if (!cond) throw new Error("assertion failed: cat1 != cat3")})(($cat1 !== $cat3))};
     }
   }
   return $Closure12;
@@ -98,20 +86,8 @@ module.exports = function({ $numA, $numC, $strA, $strC }) {
       return $obj;
     }
     async handle() {
-      try {
-        {((cond) => {if (!cond) throw new Error("assertion failed: numA == numC")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($numA,$numC)))};
-      }
-      catch ($error_e) {
-        const e = $error_e.message;
-        {((cond) => {if (!cond) throw new Error("assertion failed: e == \"assertion failed: numA == numC\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(e,"assertion failed: numA == numC")))};
-      }
-      try {
-        {((cond) => {if (!cond) throw new Error("assertion failed: strA == strC")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($strA,$strC)))};
-      }
-      catch ($error_e) {
-        const e = $error_e.message;
-        {((cond) => {if (!cond) throw new Error("assertion failed: e == \"assertion failed: strA == strC\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(e,"assertion failed: strA == strC")))};
-      }
+      {((cond) => {if (!cond) throw new Error("assertion failed: numA != numC")})(($numA !== $numC))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: strA != strC")})(($strA !== $strC))};
     }
   }
   return $Closure2;
@@ -148,13 +124,7 @@ module.exports = function({ $jsonA, $jsonC }) {
       return $obj;
     }
     async handle() {
-      try {
-        {((cond) => {if (!cond) throw new Error("assertion failed: jsonA == jsonC")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($jsonA,$jsonC)))};
-      }
-      catch ($error_e) {
-        const e = $error_e.message;
-        {((cond) => {if (!cond) throw new Error("assertion failed: e == \"assertion failed: jsonA == jsonC\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(e,"assertion failed: jsonA == jsonC")))};
-      }
+      {((cond) => {if (!cond) throw new Error("assertion failed: jsonA != jsonC")})(($jsonA !== $jsonC))};
     }
   }
   return $Closure4;
@@ -191,13 +161,7 @@ module.exports = function({ $setA, $setC }) {
       return $obj;
     }
     async handle() {
-      try {
-        {((cond) => {if (!cond) throw new Error("assertion failed: setA == setC")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($setA,$setC)))};
-      }
-      catch ($error_e) {
-        const e = $error_e.message;
-        {((cond) => {if (!cond) throw new Error("assertion failed: e == \"assertion failed: setA == setC\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(e,"assertion failed: setA == setC")))};
-      }
+      {((cond) => {if (!cond) throw new Error("assertion failed: setA != setC")})(($setA !== $setC))};
     }
   }
   return $Closure6;
@@ -234,13 +198,7 @@ module.exports = function({ $mapA, $mapC }) {
       return $obj;
     }
     async handle() {
-      try {
-        {((cond) => {if (!cond) throw new Error("assertion failed: mapA == mapC")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($mapA,$mapC)))};
-      }
-      catch ($error_e) {
-        const e = $error_e.message;
-        {((cond) => {if (!cond) throw new Error("assertion failed: e == \"assertion failed: mapA == mapC\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(e,"assertion failed: mapA == mapC")))};
-      }
+      {((cond) => {if (!cond) throw new Error("assertion failed: mapA != mapC")})(($mapA !== $mapC))};
     }
   }
   return $Closure8;
@@ -1567,7 +1525,6 @@ class $Root extends $stdlib.std.Resource {
     "name": "Simba",
     "age": 5,}
     ;
-    {((cond) => {if (!cond) throw new Error("assertion failed: cat1 == cat2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(cat1,cat2)))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:Struct with the same value",new $Closure11(this,"$Closure11"));
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:Struct with different values",new $Closure12(this,"$Closure12"));
   }
