@@ -2057,43 +2057,17 @@ impl<'a> TypeChecker<'a> {
 			.take_while(|arg| arg.typeref.is_option())
 			.count();
 
-		let mut new_arg_list: Vec<Expr> = Vec::new();
-		let mut new_arg_list_types: Vec<TypeRef> = Vec::new();
-		if let Some(index) = func_sig.parameters.iter().position(|o| o.variadic) {
-			for i in 0..index {
-				new_arg_list.push(arg_list.pos_args.get(i).unwrap().clone());
-				new_arg_list_types.push(arg_list_types.pos_args.get(i).unwrap().clone());
-			}
-			let mut x: Vec<Expr> = Vec::new();
-			for i in index..arg_list.pos_args.len() {
-				x.push(arg_list.pos_args.get(i).unwrap().clone());
-			}
-			new_arg_list.push(Expr::new(
-				ExprKind::ArrayLiteral { type_: None, items: x },
-				WingSpan::default(),
-			));
-
-			let g = arg_list_types.pos_args.get(index).unwrap().clone();
-
-			// let a = type_check::UnsafeRef(&Type::Array(type_check::UnsafeRef(&Type::Number)) as *const Type);
-			let a = Type::Array(g);
-
-			new_arg_list_types.push(UnsafeRef(&a));
-			println!("new_arg_list {:#?}", new_arg_list);
-			println!("new_arg_list_types {:#?}", new_arg_list_types);
-		}
-
-		let final_arg_list = if new_arg_list.len() > 0 {
-			new_arg_list
+		let variadic_index = func_sig.parameters.iter().position(|o| o.variadic);
+		let index_last_item = if variadic_index.is_some() {
+			variadic_index.unwrap()
 		} else {
-			arg_list.pos_args.clone()
+			arg_list_types.pos_args.len()
 		};
-
-		println!("arg_list_types.pos_args {:#?}", arg_list_types.pos_args);
 
 		// Verify arity
 		// let arg_count = arg_list.pos_args.len() + (if arg_list.named_args.is_empty() { 0 } else { 1 });
-		let arg_count = final_arg_list.len() + (if arg_list.named_args.is_empty() { 0 } else { 1 });
+		// let arg_count = a.len() + (if arg_list.named_args.is_empty() { 0 } else { 1 });
+		let arg_count = (index_last_item + 1) + (if arg_list.named_args.is_empty() { 0 } else { 1 });
 		let min_args = func_sig.parameters.len() - num_optionals;
 		let max_args = func_sig.parameters.len();
 		if arg_count < min_args || arg_count > max_args {
@@ -2112,11 +2086,34 @@ impl<'a> TypeChecker<'a> {
 			.iter()
 			.take(func_sig.parameters.len() - num_optionals);
 
-		// Verify passed positional arguments match the function's parameter types
-		// for (arg_expr, arg_type, param) in izip!(arg_list.pos_args.iter(), arg_list_types.pos_args.iter(), params) {
-		for (arg_expr, arg_type, param) in izip!(final_arg_list.iter(), new_arg_list_types.iter(), params) {
-			self.validate_type(*arg_type, param.typeref, arg_expr);
-		}
+		if index_last_item == arg_list_types.pos_args.len() {
+			for (arg_expr, arg_type, param) in izip!(arg_list.pos_args.iter(), arg_list_types.pos_args.iter(), params) {
+				self.validate_type(*arg_type, param.typeref, arg_expr);
+			}
+		} else {
+			let mut new_arg_list: Vec<Expr> = Vec::new();
+			let mut new_arg_list_types: Vec<TypeRef> = Vec::new();
+			for i in 0..index_last_item {
+				new_arg_list.push(arg_list.pos_args.get(i).unwrap().clone());
+				new_arg_list_types.push(arg_list_types.pos_args.get(i).unwrap().clone());
+			}
+			let mut variadic_arg_list: Vec<Expr> = Vec::new();
+			for i in index_last_item..arg_list.pos_args.len() {
+				variadic_arg_list.push(arg_list.pos_args.get(i).unwrap().clone());
+			}
+			new_arg_list.push(Expr::new(
+				ExprKind::ArrayLiteral {
+					type_: None,
+					items: variadic_arg_list,
+				},
+				WingSpan::default(),
+			));
+			let variadic_array_type = Type::Array(arg_list_types.pos_args.get(index_last_item).unwrap().clone());
+			new_arg_list_types.push(UnsafeRef(&variadic_array_type));
+			for (arg_expr, arg_type, param) in izip!(new_arg_list.iter(), new_arg_list_types.iter(), params) {
+				self.validate_type(*arg_type, param.typeref, arg_expr);
+			}
+		};
 		None
 	}
 
