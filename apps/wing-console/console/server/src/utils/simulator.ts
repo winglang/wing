@@ -1,4 +1,5 @@
-import { testing, cloud } from "@winglang/sdk";
+import { testing } from "@winglang/sdk";
+import Emittery from "emittery";
 
 import type { Trace } from "../types.js";
 
