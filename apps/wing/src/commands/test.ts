@@ -1,4 +1,4 @@
-import { basename, sep } from "path";
+import { basename, resolve, sep } from "path";
 import { compile, CompileOptions } from "./compile";
 import chalk from "chalk";
 import { std, testing } from "@winglang/sdk";
@@ -23,7 +23,9 @@ const generateTestName = (path: string) => path.split(sep).slice(-2).join("/");
 /**
  * Options for the `test` command.
  */
-export interface TestOptions extends CompileOptions {}
+export interface TestOptions extends CompileOptions {
+  clean: boolean;
+}
 
 export async function test(entrypoints: string[], options: TestOptions): Promise<number> {
   const startTime = Date.now();
@@ -129,7 +131,8 @@ function printResults(
 async function testOne(entrypoint: string, options: TestOptions) {
   // since the test cleans up after each run, it's essential to create a temporary directory-
   // at least one that is different then the usual compilation dir,  otherwise we might end up cleaning up the user's actual resources.
-  const tempFile: string = Target.SIM ? entrypoint : await generateTmpDir(entrypoint);
+  const tempFile: string =
+    options.target === Target.SIM ? entrypoint : await generateTmpDir(entrypoint);
   const synthDir = await withSpinner(
     `Compiling ${generateTestName(entrypoint)} to ${options.target}...`,
     () =>
@@ -141,11 +144,11 @@ async function testOne(entrypoint: string, options: TestOptions) {
 
   switch (options.target) {
     case Target.SIM:
-      return await testSimulator(synthDir);
+      return await testSimulator(synthDir, options.clean);
     case Target.TF_AWS:
-      return await testTfAws(synthDir);
+      return await testTfAws(synthDir, options.clean);
     case Target.AWSCDK:
-      return await testAwsCdk(synthDir);
+      return await testAwsCdk(synthDir, options.clean);
     default:
       throw new Error(`unsupported target ${options.target}`);
   }
@@ -235,7 +238,15 @@ function testResultsContainsFailure(results: std.TestResult[]): boolean {
   return results.some((r) => !r.pass);
 }
 
-async function testSimulator(synthDir: string) {
+function noCleanUp(synthDir: string) {
+  console.log(
+    chalk.yellowBright.bold(
+      `Clean up is disabled!\nplease review test files at ${resolve(synthDir)}`
+    )
+  );
+}
+
+async function testSimulator(synthDir: string, shouldClean: boolean) {
   const s = new testing.Simulator({ simfile: synthDir });
   await s.start();
 
@@ -254,12 +265,16 @@ async function testSimulator(synthDir: string) {
   const testReport = renderTestReport(synthDir, results);
   console.log(testReport);
 
-  rmSync(synthDir, { recursive: true, force: true });
+  if (shouldClean) {
+    rmSync(synthDir, { recursive: true, force: true });
+  } else {
+    noCleanUp(synthDir);
+  }
 
   return results;
 }
 
-async function testAwsCdk(synthDir: string): Promise<std.TestResult[]> {
+async function testAwsCdk(synthDir: string, shouldClean: boolean): Promise<std.TestResult[]> {
   try {
     isAwsCdkInstalled(synthDir);
 
@@ -301,7 +316,11 @@ async function testAwsCdk(synthDir: string): Promise<std.TestResult[]> {
     console.warn((err as Error).message);
     return [{ pass: false, path: "", error: (err as Error).message, traces: [] }];
   } finally {
-    await cleanupCdk(synthDir);
+    if (shouldClean) {
+      await cleanupCdk(synthDir);
+    } else {
+      noCleanUp(synthDir);
+    }
   }
 }
 
@@ -339,7 +358,7 @@ async function awsCdkOutput(synthDir: string, name: string, stackName: string) {
   return parsed[stackName][name];
 }
 
-async function testTfAws(synthDir: string): Promise<std.TestResult[] | void> {
+async function testTfAws(synthDir: string, shouldClean: boolean): Promise<std.TestResult[] | void> {
   try {
     if (!isTerraformInstalled(synthDir)) {
       throw new Error(
@@ -382,7 +401,11 @@ async function testTfAws(synthDir: string): Promise<std.TestResult[] | void> {
     console.warn((err as Error).message);
     return [{ pass: false, path: "", error: (err as Error).message, traces: [] }];
   } finally {
-    await cleanupTf(synthDir);
+    if (shouldClean) {
+      await cleanupTf(synthDir);
+    } else {
+      noCleanUp(synthDir);
+    }
   }
 }
 
