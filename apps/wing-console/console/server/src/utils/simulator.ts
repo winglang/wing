@@ -1,5 +1,6 @@
 import { testing, cloud } from "@winglang/sdk";
-import Emittery from "emittery";
+
+import type { Trace } from "../types.js";
 
 import { formatWingError } from "./format-wing-error.js";
 
@@ -8,7 +9,7 @@ export interface SimulatorEvents {
   started: undefined;
   error: Error;
   stopping: undefined;
-  trace: cloud.Trace;
+  trace: Trace;
 }
 
 export interface Simulator {
