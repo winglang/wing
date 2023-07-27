@@ -18,17 +18,8 @@ test "Primitive types with the same value" {
 }
 
 test "Primitive types with different values" {
-  try {
-    assert(numA == numC);
-  } catch e {
-    assert(e == "assertion failed: numA == numC");
-  }
-  
-  try {
-    assert(strA == strC);
-  } catch e {
-    assert(e == "assertion failed: strA == strC");
-  }  
+  assert(numA != numC);
+  assert(strA != strC);
 }
 
 //-----------------------------------------------------------------------------
