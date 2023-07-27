@@ -86,7 +86,7 @@ pub fn on_document_did_change(params: DidChangeTextDocumentParams) {
 
 /// Runs several phases of the wing compile on a file, including: parsing, type checking, and capturing
 fn partial_compile(source_path: &Path, jsii_types: &mut TypeSystem) -> FileData {
-	// Reset diagnostics before new compilation (`partial_compile` can be called multiple)
+	// Reset diagnostics before new compilation (`partial_compile` can be called multiple times)
 	reset_diagnostics();
 
 	let mut types = type_check::Types::new();
@@ -107,7 +107,7 @@ fn partial_compile(source_path: &Path, jsii_types: &mut TypeSystem) -> FileData 
 			let mut inflight_transformer = ClosureTransformer::new();
 			// Note: The scope is intentionally boxed here to force heap allocation
 			// Otherwise, the scope will be moved during type checking and we'll be left with dangling references elsewhere
-			let scope = inflight_transformer.fold_scope(scope); // TODO: do we need to box this?
+			let scope = inflight_transformer.fold_scope(scope);
 			(path, scope)
 		})
 		.collect::<IndexMap<PathBuf, Scope>>();
