@@ -1,12 +1,11 @@
 import { initTRPC } from "@trpc/server";
 import { testing } from "@winglang/sdk";
-import { Trace } from "@winglang/sdk/lib/std/test-runner.js";
 import Emittery from "emittery";
 
 import { Config } from "../config.js";
 import { ConsoleLogger } from "../consoleLogger.js";
 import { HostUtils } from "../hostUtils.js";
-import { State } from "../types.js";
+import type { State, Trace } from "../types.js";
 import { Updater } from "../updater.js";
 
 export type QueryNames = {

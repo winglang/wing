@@ -1,7 +1,6 @@
 import * as trpcExpress from "@trpc/server/adapters/express";
 import { applyWSSHandler } from "@trpc/server/adapters/ws";
 import { testing } from "@winglang/sdk";
-import { Trace } from "@winglang/sdk/lib/cloud/index.js";
 import cors from "cors";
 import Emittery from "emittery";
 import express from "express";
