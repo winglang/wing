@@ -1,19 +1,21 @@
-import Segment from "analytics-node";
+import Analytics from "@segment/analytics-node";
 
 export interface CreateAnalyticsOptions {
   anonymousId: string;
   segmentWriteKey: string;
 }
 
-export interface Analytics {
+export interface IAnalytics {
   track(event: string, properties?: Record<string, any>): void;
 }
 
-export const createAnalytics = (options: CreateAnalyticsOptions): Analytics => {
-  let segment: Segment;
+export const createAnalytics = (
+  options: CreateAnalyticsOptions,
+): IAnalytics => {
+  let segment: Analytics;
   const sessionId = Date.now();
   try {
-    segment = new Segment(options.segmentWriteKey);
+    segment = new Analytics({ writeKey: options.segmentWriteKey });
   } catch {}
   return {
     track(event: string, properties?: Record<string, any>) {
