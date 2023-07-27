@@ -520,20 +520,15 @@ module.exports = grammar({
 
     variadic_container_type: ($) => seq(field("collection_type", choice("Array")), $._container_value_type),
 
-    _variadic_type_annotation: ($) => seq(":", $.variadic_container_type),
-
-    _variadic_identifier: ($) => seq("...", field("name", $.identifier),),
-
     variadic_definition: ($) => seq(
-      ",",
-      $._variadic_identifier,
-      field("type", $._variadic_type_annotation),
+      seq("...", field("name", $.identifier)),
+      seq(":", field("type", $.variadic_container_type)),
     ),
 
     parameter_list: ($) => seq(
       "(",
       commaSep($.parameter_definition),
-      optional($.variadic_definition),
+      optional(seq(",", $.variadic_definition)),
       ")"
     ),
 
