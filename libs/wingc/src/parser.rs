@@ -6,7 +6,7 @@ use petgraph::prelude::DiGraph;
 use phf::{phf_map, phf_set};
 use std::cell::RefCell;
 use std::collections::HashSet;
-use std::path::{Path, PathBuf};
+use std::path::{Component as PathComponent, Path, PathBuf};
 use std::{fs, str, vec};
 use tree_sitter::Node;
 use tree_sitter_traversal::{traverse, Order};
@@ -137,21 +137,6 @@ pub struct ParseProjectOutput {
 	pub tree_sitter_trees: IndexMap<PathBuf, tree_sitter::Tree>,
 	pub asts: IndexMap<PathBuf, Scope>,
 	pub topo_sorted_files: Vec<PathBuf>,
-}
-
-fn normalize_path(path: &Path, relative_to: Option<&Path>) -> PathBuf {
-	let path = if path.starts_with("./") {
-		path.strip_prefix("./").unwrap()
-	} else {
-		path
-	};
-	if path.is_absolute() {
-		path.to_path_buf()
-	} else {
-		relative_to
-			.map(|p| p.parent().unwrap_or_else(|| Path::new(".")).join(path))
-			.unwrap_or_else(|| path.to_path_buf())
-	}
 }
 
 pub fn parse_wing_project(init_path: &Path) -> ParseProjectOutput {
@@ -728,8 +713,8 @@ impl<'s> Parser<'s> {
 		// if the module name is a path ending in .w, create a new Parser to parse it as a new Scope,
 		// and create a StmtKind::Module instead
 		if module_name.name.starts_with("\"") && module_name.name.ends_with(".w\"") {
-			let source_path = Path::new(&module_name.name[1..module_name.name.len() - 1]);
-			let source_path = normalize_path(source_path, Some(&Path::new(&self.source_name)));
+			let module_path = Path::new(&module_name.name[1..module_name.name.len() - 1]);
+			let source_path = normalize_path(module_path, Some(&Path::new(&self.source_name)));
 			if source_path == Path::new(&self.source_name) {
 				return self.with_error("Cannot bring a module into itself", statement_node);
 			}
@@ -2092,5 +2077,116 @@ impl<'s> Parser<'s> {
 			}),
 			span,
 		)))
+	}
+}
+
+// TODO: this function seems fragile
+// use inodes as source of truth instead https://github.com/winglang/wing/issues/3627
+fn normalize_path(path: &Path, relative_to: Option<&Path>) -> PathBuf {
+	let path = if path.is_absolute() {
+		// if the path is absolute, we ignore "relative_to"
+		path.to_path_buf()
+	} else {
+		relative_to
+			.map(|p| p.parent().unwrap_or_else(|| Path::new(".")).join(path))
+			.unwrap_or_else(|| path.to_path_buf())
+	};
+
+	// Remove excess components like `/./` and `/../`.
+	// This is tricky because ".." usually means we pop the last component
+	// but if a path starts with ".." or looks like "a/../../b" we need to track
+	// how many components we've popped and add them later.
+	let mut normalized = PathBuf::new();
+	let mut extra_pops = PathBuf::new();
+	for part in path.components() {
+		match part {
+			PathComponent::Prefix(ref prefix) => {
+				normalized.push(prefix.as_os_str());
+			}
+			PathComponent::RootDir => {
+				normalized.push("/");
+			}
+			PathComponent::ParentDir => {
+				let popped = normalized.pop();
+				if !popped {
+					extra_pops.push("..");
+				}
+			}
+			PathComponent::CurDir => {
+				// Nothing
+			}
+			PathComponent::Normal(name) => {
+				if extra_pops.components().next().is_some() {
+					normalized = extra_pops;
+					extra_pops = PathBuf::new();
+					normalized.push(name);
+				} else {
+					normalized.push(name);
+				}
+			}
+		}
+	}
+
+	normalized
+}
+
+#[cfg(test)]
+mod tests {
+	use super::*;
+
+	#[test]
+	fn normalize_path_relative_to_nothing() {
+		let file_path = Path::new("/a/b/c/d/e.f");
+		assert_eq!(normalize_path(file_path, None), file_path);
+
+		let file_path = Path::new("/a/b/./c/../d/e.f");
+		assert_eq!(normalize_path(file_path, None), Path::new("/a/b/d/e.f"));
+
+		let file_path = Path::new("a/b/c/d/e.f");
+		assert_eq!(normalize_path(file_path, None), Path::new("a/b/c/d/e.f"));
+
+		let file_path = Path::new("a/b/./c/../d/e.f");
+		assert_eq!(normalize_path(file_path, None), Path::new("a/b/d/e.f"));
+
+		let file_path = Path::new("a/../e.f");
+		assert_eq!(normalize_path(file_path, None), Path::new("e.f"));
+
+		let file_path = Path::new("a/../../../e.f");
+		assert_eq!(normalize_path(file_path, None), Path::new("../../e.f"));
+
+		let file_path = Path::new("./e.f");
+		assert_eq!(normalize_path(file_path, None), Path::new("e.f"));
+
+		let file_path = Path::new("../e.f");
+		assert_eq!(normalize_path(file_path, None), Path::new("../e.f"));
+
+		let file_path = Path::new("../foo/.././e.f");
+		assert_eq!(normalize_path(file_path, None), Path::new("../e.f"));
+	}
+
+	#[test]
+	fn normalize_path_relative_to_something() {
+		// If the path is absolute, we ignore "relative_to"
+		let file_path = Path::new("/a/b/c/d/e.f");
+		let relative_to = Path::new("/g/h/i");
+		assert_eq!(normalize_path(file_path, Some(relative_to)), file_path);
+
+		let file_path = Path::new("a/b/c/d/e.f");
+		let relative_to = Path::new("/g/h/i");
+		assert_eq!(
+			normalize_path(file_path, Some(relative_to)),
+			Path::new("/g/h/a/b/c/d/e.f")
+		);
+
+		let file_path = Path::new("a/b/c/d/e.f");
+		let relative_to = Path::new("g/h/i");
+		assert_eq!(
+			normalize_path(file_path, Some(relative_to)),
+			Path::new("g/h/a/b/c/d/e.f")
+		);
+
+		let file_path = Path::new("../foo.w");
+		let relative_to = Path::new("subdir/bar.w");
+		assert_eq!(normalize_path(file_path, Some(relative_to)), Path::new("foo.w"));
 	}
 }
