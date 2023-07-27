@@ -1,7 +1,6 @@
 import * as trpcExpress from "@trpc/server/adapters/express";
 import { applyWSSHandler } from "@trpc/server/adapters/ws";
 import { testing } from "@winglang/sdk";
-import { Trace } from "@winglang/sdk/lib/cloud/index.js";
 import cors from "cors";
 import Emittery from "emittery";
 import express from "express";
@@ -12,7 +11,7 @@ import { Config } from "./config.js";
 import { ConsoleLogger } from "./consoleLogger.js";
 import { HostUtils } from "./hostUtils.js";
 import { mergeAllRouters } from "./router/index.js";
-import { State } from "./types.js";
+import { State, Trace } from "./types.js";
 import { Updater } from "./updater.js";
 import { RouterContext } from "./utils/createRouter.js";
 import { getWingVersion } from "./utils/getWingVersion.js";
