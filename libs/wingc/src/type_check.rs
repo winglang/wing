@@ -3,7 +3,7 @@ pub(crate) mod jsii_importer;
 pub mod lifts;
 pub mod symbol_env;
 
-use crate::ast::{self, CalleeKind, ClassField, FunctionDefinition, NewExpr, TypeAnnotationKind};
+use crate::ast::{self, BringSource, CalleeKind, ClassField, FunctionDefinition, NewExpr, TypeAnnotationKind};
 use crate::ast::{
 	ArgList, BinaryOperator, Class as AstClass, Expr, ExprKind, FunctionBody, FunctionParameter as AstFunctionParameter,
 	Interface as AstInterface, InterpolatedStringPart, Literal, Phase, Reference, Scope, Spanned, Stmt, StmtKind, Symbol,
@@ -228,6 +228,9 @@ pub struct Namespace {
 	// the types after initial compilation.
 	#[derivative(Debug = "ignore")]
 	pub loaded: bool,
+
+	// Flag to track if the namespace refers to a module that is safe to bring
+	pub is_bringable: bool,
 }
 
 pub type NamespaceRef = UnsafeRef<Namespace>;
@@ -1294,7 +1297,7 @@ impl Types {
 	/// but the std lib sometimes doesn't have the same names as the builtin types
 	/// https://github.com/winglang/wing/issues/1780
 	///
-	/// Note: This Doesn't handle generics (i.e. this keeps the `T1`)
+	/// Note: This doesn't handle generics (i.e. this keeps the `T1`)
 	pub fn get_std_class(&self, type_: &str) -> Option<(&SymbolKind, symbol_env::SymbolLookupInfo)> {
 		let type_name = fully_qualify_std_type(type_);
 
@@ -2261,8 +2264,35 @@ impl<'a> TypeChecker<'a> {
 		expected_types[0]
 	}
 
-	pub fn type_check_scope(&mut self, scope: &Scope) {
+	pub fn type_check_module(&mut self, source_path: &Path, scope: &Scope) {
 		CompilationContext::set(CompilationPhase::TypeChecking, &scope.span);
+		self.type_check_scope(scope);
+
+		let is_bringable = check_is_bringable(scope);
+
+		// Save the module's symbol environment to `self.types.libraries`
+		// so it can be looked up when another file tries to `bring` this module
+		let sanitized_path = sanitize_dots(source_path.to_str().expect("not a safe file path"));
+		let env = scope.env.borrow().unwrap();
+		let ns = self.types.add_namespace(Namespace {
+			name: sanitized_path.clone(),
+			env: SymbolEnv::new(Some(env.get_ref()), env.return_type, false, false, env.phase, 0),
+			loaded: true,
+			is_bringable,
+		});
+		if let Err(e) = self.types.libraries.define(
+			&Symbol {
+				name: sanitized_path,
+				span: WingSpan::default(),
+			},
+			SymbolKind::Namespace(ns),
+			StatementIdx::Top,
+		) {
+			self.type_error(e);
+		}
+	}
+
+	fn type_check_scope(&mut self, scope: &Scope) {
 		assert!(self.inner_scopes.is_empty());
 		for statement in scope.statements.iter() {
 			self.type_check_statement(statement, scope.env.borrow_mut().as_mut().unwrap());
@@ -2609,10 +2639,7 @@ impl<'a> TypeChecker<'a> {
 
 				self.validate_type(exp_type, var_type, value);
 			}
-			StmtKind::Bring {
-				module_name,
-				identifier,
-			} => {
+			StmtKind::Bring { source, identifier } => {
 				// library_name is the name of the library we are importing from the JSII world
 				let library_name: String;
 				// namespace_filter describes what types we are importing from the library
@@ -2622,40 +2649,57 @@ impl<'a> TypeChecker<'a> {
 				// alias is the symbol we are giving to the imported library or namespace
 				let alias: &Symbol;
 
-				if module_name.name.starts_with('"') && module_name.name.ends_with('"') {
-					// case 1: bring "library_name" as identifier;
-					if identifier.is_none() {
-						self.spanned_error(
-							stmt,
-							format!(
-								"bring {} must be assigned to an identifier (e.g. bring \"foo\" as foo)",
-								module_name.name
-							),
-						);
+				match &source {
+					BringSource::BuiltinModule(name) => {
+						if WINGSDK_BRINGABLE_MODULES.contains(&name.name.as_str()) {
+							library_name = WINGSDK_ASSEMBLY_NAME.to_string();
+							namespace_filter = vec![name.name.clone()];
+							alias = identifier.as_ref().unwrap_or(&name);
+						} else if name.name.as_str() == WINGSDK_STD_MODULE {
+							self.spanned_error(stmt, format!("Redundant bring of \"{}\"", WINGSDK_STD_MODULE));
+							return;
+						} else {
+							self.spanned_error(stmt, format!("\"{}\" is not a built-in module", name));
+							return;
+						}
+					}
+					BringSource::JsiiModule(name) => {
+						library_name = name.name.to_string();
+						// no namespace filter (we only support importing entire libraries at the moment)
+						namespace_filter = vec![];
+						alias = identifier.as_ref().unwrap();
+					}
+					BringSource::WingFile(name) => {
+						let lookup_name = sanitize_dots(&name.name);
+						let lookup_result = self.types.libraries.lookup_nested_str(&lookup_name, None);
+						match lookup_result {
+							LookupResult::Found(kind, _) => match kind {
+								SymbolKind::Type(_) => panic!("expected a namespace, found a type"),
+								SymbolKind::Variable(_) => panic!("expected a namespace, found a variable"),
+								SymbolKind::Namespace(nsref) => {
+									if !nsref.is_bringable {
+										self.spanned_error(name, format!("Cannot bring \"{}\" - modules with statements besides classes, interfaces, enums, and structs cannot be brought", name));
+									}
+									if let Err(e) = env.define(
+										identifier.as_ref().unwrap(),
+										SymbolKind::Namespace(*nsref),
+										StatementIdx::Top,
+									) {
+										self.type_error(e);
+									}
+								}
+							},
+							LookupResult::NotFound(_) => {
+								self.spanned_error(stmt, format!("could not find types for \"{}\" (compiler bug)", name))
+							}
+							LookupResult::DefinedLater => panic!("defined later error"),
+							LookupResult::ExpectedNamespace(_) => panic!("expected namespace error"),
+						}
 						return;
 					}
-					// We assume we have a jsii library and we use `module_name` as the library name, and set no
-					// namespace filter (we only support importing a full library at the moment)
-					library_name = module_name.name[1..module_name.name.len() - 1].to_string();
-					namespace_filter = vec![];
-					alias = identifier.as_ref().unwrap();
-				} else {
-					// case 2: bring module_name;
-					// case 3: bring module_name as identifier;
-					if WINGSDK_BRINGABLE_MODULES.contains(&module_name.name.as_str()) {
-						library_name = WINGSDK_ASSEMBLY_NAME.to_string();
-						namespace_filter = vec![module_name.name.clone()];
-						alias = identifier.as_ref().unwrap_or(&module_name);
-					} else if module_name.name.as_str() == WINGSDK_STD_MODULE {
-						self.spanned_error(stmt, format!("Redundant bring of \"{}\"", WINGSDK_STD_MODULE));
-						return;
-					} else {
-						self.spanned_error(stmt, format!("\"{}\" is not a built-in module", module_name.name));
-						return;
-					}
-				};
+				}
 
-				self.add_module_to_env(env, library_name, namespace_filter, &alias, Some(&stmt));
+				self.add_module_to_env(env, library_name, namespace_filter, alias, Some(&stmt));
 			}
 			StmtKind::Scope(scope) => {
 				let scope_env = self.types.add_symbol_env(SymbolEnv::new(
@@ -3107,26 +3151,6 @@ impl<'a> TypeChecker<'a> {
 			}
 			StmtKind::SuperConstructor { arg_list } => {
 				self.type_check_arg_list(arg_list, env);
-			}
-			StmtKind::Module { name, statements } => {
-				let ns = self.types.add_namespace(Namespace {
-					name: name.to_string(),
-					env: SymbolEnv::new(Some(env.get_ref()), env.return_type, false, false, env.phase, stmt.idx),
-					loaded: true,
-				});
-				statements.set_env(ns.env.get_ref());
-
-				// instead of pushing `statements` into `self.inner_scopes`,
-				// we need to type check the statements in the module's namespace
-				// so that subsequence statements can reference symbols inside the module
-				self.type_check_scope(statements);
-
-				match env.define(name, SymbolKind::Namespace(ns), StatementIdx::Index(stmt.idx)) {
-					Err(type_error) => {
-						self.type_error(type_error);
-					}
-					_ => {}
-				};
 			}
 		}
 	}
@@ -4410,7 +4434,7 @@ pub fn import_udt_from_jsii(
 /// But the std lib sometimes doesn't have the same names as the builtin types
 ///
 /// https://github.com/winglang/wing/issues/1780
-pub fn fully_qualify_std_type(type_: &str) -> std::string::String {
+pub fn fully_qualify_std_type(type_: &str) -> String {
 	// Additionally, this doesn't handle for generics
 	let type_name = type_.to_string();
 	let type_name = if let Some((prefix, _)) = type_name.split_once("<") {
@@ -4432,6 +4456,39 @@ pub fn fully_qualify_std_type(type_: &str) -> std::string::String {
 		| "Boolean" | "Number" => format!("{WINGSDK_STD_MODULE}.{type_name}"),
 		_ => type_name.to_string(),
 	}
+}
+
+fn check_is_bringable(scope: &Scope) -> bool {
+	let valid_stmt = |stmt: &Stmt| match stmt.kind {
+		StmtKind::Bring { .. } => true,
+		StmtKind::Class(_) => true,
+		StmtKind::Interface(_) => true,
+		StmtKind::Struct { .. } => true,
+		StmtKind::Enum { .. } => true,
+		StmtKind::CompilerDebugEnv => true,
+		StmtKind::SuperConstructor { .. } => false,
+		StmtKind::Let { .. } => false,
+		StmtKind::ForLoop { .. } => false,
+		StmtKind::While { .. } => false,
+		StmtKind::IfLet { .. } => false,
+		StmtKind::If { .. } => false,
+		StmtKind::Break => false,
+		StmtKind::Continue => false,
+		StmtKind::Return(_) => false,
+		StmtKind::Expression(_) => false,
+		StmtKind::Assignment { .. } => false,
+		StmtKind::Scope(_) => false,
+		StmtKind::TryCatch { .. } => false,
+	};
+
+	// A module is bringable if it only contains valid statement kinds
+	scope.statements.iter().all(valid_stmt)
+}
+
+fn sanitize_dots(s: &str) -> String {
+	let mut s = s.to_string();
+	s = s.replace(".", "-");
+	s
 }
 
 #[cfg(test)]

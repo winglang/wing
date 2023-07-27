@@ -2,7 +2,6 @@ use crate::{
 	ast::{Class, Expr, ExprKind, FunctionBody, FunctionDefinition, Phase, Reference, Scope, Stmt, UserDefinedType},
 	comp_ctx::{CompilationContext, CompilationPhase},
 	diagnostic::{report_diagnostic, Diagnostic, WingSpan},
-	files::Files,
 	fold::{self, Fold},
 	jsify::{JSifier, JSifyContext},
 	type_check::{
@@ -132,7 +131,6 @@ impl<'a> LiftTransform<'a> {
 		let res = self.jsify.jsify_expression(
 			&node,
 			&mut JSifyContext {
-				files: &mut Files::default(),
 				lifts: None,
 				visit_ctx: &mut self.ctx,
 			},

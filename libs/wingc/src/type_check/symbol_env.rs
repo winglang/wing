@@ -566,6 +566,7 @@ mod tests {
 			name: "ns1".to_string(),
 			env: SymbolEnv::new(None, types.void(), false, false, Phase::Independent, 0),
 			loaded: false,
+			is_bringable: true,
 		});
 		let ns2 = types.add_namespace(Namespace {
 			name: "ns2".to_string(),
@@ -578,6 +579,7 @@ mod tests {
 				0,
 			),
 			loaded: false,
+			is_bringable: true,
 		});
 
 		// Define ns2 in n1's env
