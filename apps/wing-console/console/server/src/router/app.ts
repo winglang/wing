@@ -3,6 +3,7 @@ import { observable } from "@trpc/server/observable";
 import uniqby from "lodash.uniqby";
 import { z } from "zod";
 
+import type { Trace } from "../types.js";
 import { ConstructTreeNode } from "../utils/construct-tree.js";
 import {
   Node,
