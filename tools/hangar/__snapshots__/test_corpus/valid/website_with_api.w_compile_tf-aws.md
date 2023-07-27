@@ -91,6 +91,43 @@ module.exports = function({  }) {
     }
   },
   "data": {
+    "aws_iam_policy_document": {
+      "cloudWebsite_AllowDistributionReadOnly_89DC4FD0": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/cloud.Website/AllowDistributionReadOnly",
+            "uniqueId": "cloudWebsite_AllowDistributionReadOnly_89DC4FD0"
+          }
+        },
+        "statement": [
+          {
+            "actions": [
+              "s3:GetObject"
+            ],
+            "condition": [
+              {
+                "test": "StringEquals",
+                "values": [
+                  "${aws_cloudfront_distribution.cloudWebsite_Distribution_083B5AF9.arn}"
+                ],
+                "variable": "AWS:SourceArn"
+              }
+            ],
+            "principals": [
+              {
+                "identifiers": [
+                  "cloudfront.amazonaws.com"
+                ],
+                "type": "Service"
+              }
+            ],
+            "resources": [
+              "${aws_s3_bucket.cloudWebsite_WebsiteBucket_EB03D355.arn}/*"
+            ]
+          }
+        ]
+      }
+    },
     "aws_region": {
       "Region": {
         "//": {
@@ -126,7 +163,7 @@ module.exports = function({  }) {
         },
         "rest_api_id": "${aws_api_gateway_rest_api.cloudApi_api_2B334D75.id}",
         "triggers": {
-          "redeployment": "c46535d385dc86a1ba350f23ab28b58821f513fc"
+          "redeployment": "cdd4e9e04bfdff956629a1812b4cef862849e475"
         }
       }
     },
@@ -237,18 +274,6 @@ module.exports = function({  }) {
         "billing_mode": "PAY_PER_REQUEST",
         "hash_key": "id",
         "name": "users-tableex.Table-c840a49c"
-      }
-    },
-    "aws_iam_policy": {
-      "cloudWebsite_CloudfrontOacPolicyS3_787EE7B4": {
-        "//": {
-          "metadata": {
-            "path": "root/Default/Default/cloud.Website/CloudfrontOacPolicyS3",
-            "uniqueId": "cloudWebsite_CloudfrontOacPolicyS3_787EE7B4"
-          }
-        },
-        "name": "cloufront-oac-policy-s3",
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"cloudfront.amazonaws.com\"},\"Action\":\"s3:GetObject\",\"Resource\":[\"${aws_s3_bucket.cloudWebsite_WebsiteBucket_EB03D355.arn}/*\"],\"Condition\":{\"StringEquals\":{\"AWS:SourceArn\":\"${aws_cloudfront_distribution.cloudWebsite_Distribution_083B5AF9.arn}\"}}}]}"
       }
     },
     "aws_iam_role": {
@@ -490,6 +515,18 @@ module.exports = function({  }) {
         },
         "bucket_prefix": "cloud-website-c8e58765-",
         "force_destroy": false
+      }
+    },
+    "aws_s3_bucket_policy": {
+      "cloudWebsite_DistributionS3BucketPolicy_32B029AE": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/cloud.Website/DistributionS3BucketPolicy",
+            "uniqueId": "cloudWebsite_DistributionS3BucketPolicy_32B029AE"
+          }
+        },
+        "bucket": "${aws_s3_bucket.cloudWebsite_WebsiteBucket_EB03D355.id}",
+        "policy": "${data.aws_iam_policy_document.cloudWebsite_AllowDistributionReadOnly_89DC4FD0.json}"
       }
     },
     "aws_s3_bucket_public_access_block": {
