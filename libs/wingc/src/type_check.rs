@@ -688,6 +688,7 @@ pub struct FunctionParameter {
 	pub name: String,
 	pub typeref: TypeRef,
 	pub docs: Docs,
+	pub variadic: bool,
 }
 
 #[derive(Clone, Debug)]
@@ -2056,8 +2057,43 @@ impl<'a> TypeChecker<'a> {
 			.take_while(|arg| arg.typeref.is_option())
 			.count();
 
+		let mut new_arg_list: Vec<Expr> = Vec::new();
+		let mut new_arg_list_types: Vec<TypeRef> = Vec::new();
+		if let Some(index) = func_sig.parameters.iter().position(|o| o.variadic) {
+			for i in 0..index {
+				new_arg_list.push(arg_list.pos_args.get(i).unwrap().clone());
+				new_arg_list_types.push(arg_list_types.pos_args.get(i).unwrap().clone());
+			}
+			let mut x: Vec<Expr> = Vec::new();
+			for i in index..arg_list.pos_args.len() {
+				x.push(arg_list.pos_args.get(i).unwrap().clone());
+			}
+			new_arg_list.push(Expr::new(
+				ExprKind::ArrayLiteral { type_: None, items: x },
+				WingSpan::default(),
+			));
+
+			let g = arg_list_types.pos_args.get(index).unwrap().clone();
+
+			// let a = type_check::UnsafeRef(&Type::Array(type_check::UnsafeRef(&Type::Number)) as *const Type);
+			let a = Type::Array(g);
+
+			new_arg_list_types.push(UnsafeRef(&a));
+			println!("new_arg_list {:#?}", new_arg_list);
+			println!("new_arg_list_types {:#?}", new_arg_list_types);
+		}
+
+		let final_arg_list = if new_arg_list.len() > 0 {
+			new_arg_list
+		} else {
+			arg_list.pos_args.clone()
+		};
+
+		println!("arg_list_types.pos_args {:#?}", arg_list_types.pos_args);
+
 		// Verify arity
-		let arg_count = arg_list.pos_args.len() + (if arg_list.named_args.is_empty() { 0 } else { 1 });
+		// let arg_count = arg_list.pos_args.len() + (if arg_list.named_args.is_empty() { 0 } else { 1 });
+		let arg_count = final_arg_list.len() + (if arg_list.named_args.is_empty() { 0 } else { 1 });
 		let min_args = func_sig.parameters.len() - num_optionals;
 		let max_args = func_sig.parameters.len();
 		if arg_count < min_args || arg_count > max_args {
@@ -2077,7 +2113,8 @@ impl<'a> TypeChecker<'a> {
 			.take(func_sig.parameters.len() - num_optionals);
 
 		// Verify passed positional arguments match the function's parameter types
-		for (arg_expr, arg_type, param) in izip!(arg_list.pos_args.iter(), arg_list_types.pos_args.iter(), params) {
+		// for (arg_expr, arg_type, param) in izip!(arg_list.pos_args.iter(), arg_list_types.pos_args.iter(), params) {
+		for (arg_expr, arg_type, param) in izip!(final_arg_list.iter(), new_arg_list_types.iter(), params) {
 			self.validate_type(*arg_type, param.typeref, arg_expr);
 		}
 		None
@@ -2293,6 +2330,7 @@ impl<'a> TypeChecker<'a> {
 						name: p.name.name.clone(),
 						typeref: self.resolve_type_annotation(&p.type_annotation, env),
 						docs: Docs::default(),
+						variadic: p.variadic,
 					});
 				}
 				let sig = FunctionSignature {
@@ -3554,6 +3592,7 @@ impl<'a> TypeChecker<'a> {
 								name: param.name.clone(),
 								docs: param.docs.clone(),
 								typeref: self.get_concrete_type_for_generic(param.typeref, &types_map),
+								variadic: param.variadic,
 							})
 							.collect();
 
@@ -4509,6 +4548,7 @@ mod tests {
 				typeref: num,
 				docs: Docs::default(),
 				name: "p1".into(),
+				variadic: false,
 			}],
 			void,
 			Phase::Inflight,
@@ -4518,6 +4558,7 @@ mod tests {
 				typeref: string,
 				docs: Docs::default(),
 				name: "p1".into(),
+				variadic: false,
 			}],
 			void,
 			Phase::Inflight,
@@ -4556,6 +4597,7 @@ mod tests {
 				typeref: string,
 				docs: Docs::default(),
 				name: "p1".into(),
+				variadic: false,
 			}],
 			void,
 			Phase::Inflight,
@@ -4565,6 +4607,7 @@ mod tests {
 				typeref: opt_string,
 				docs: Docs::default(),
 				name: "p1".into(),
+				variadic: false,
 			}],
 			void,
 			Phase::Inflight,
