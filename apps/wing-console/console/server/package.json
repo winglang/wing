@@ -4,11 +4,15 @@
   "repository": "https://github.com/winglang/wing",
   "license": "SEE LICENSE IN LICENSE.md",
   "version": "0.0.0",
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
-  "files": [
-    "dist"
-  ],
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "publishConfig": {
+    "main": "./dist/index.js",
+    "types": "./dist/index.d.ts",
+    "files": [
+      "dist"
+    ]
+  },
   "scripts": {
     "dev": "tsup --watch",
     "compile": "tsup",
@@ -40,7 +44,6 @@
     "constructs": "^10.2.51",
     "cors": "^2.8.5",
     "emittery": "^1.0.1",
-    "esbuild-plugin-raw": "^0.1.7",
     "eslint": "^8.42.0",
     "express": "^4.18.2",
     "get-port": "^6.1.2",

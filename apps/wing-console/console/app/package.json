@@ -11,7 +11,7 @@
   ],
   "scripts": {
     "preview": "node scripts/preview.mjs",
-    "dev": "tsx watch scripts/dev.mjs",
+    "dev": "tsx watch scripts/dev.js",
     "compile": "tsup",
     "eslint": "eslint --ext .js,.cjs,.ts,.cts,.mts,.tsx --no-error-on-unmatched-pattern . --fix",
     "test": "playwright test --update-snapshots",
