@@ -1,5 +1,5 @@
 ---
-title: What are the main differences between Wing and Pulumi?
+title: Pulumi vs. Wing [Main differences]
 sidebar_label: Pulumi
 id: differences-from-pulumi
 keywords: [faq, winglang, Wing programming language, Wing language, Pulumi, IAC]
