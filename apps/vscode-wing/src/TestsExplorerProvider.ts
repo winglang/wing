@@ -35,13 +35,8 @@ export class TestsExplorerProvider implements TreeDataProvider<TestItem> {
   }
 
   update(tests: TestItem[]): void {
-    this.tests = tests.map((test) => {
-      const currentState = this.tests.find((t) => t.id === test.id);
-      if (currentState && test.status === "pending") {
-        return currentState;
-      }
-      return test;
-    });
+    this.tests = tests;
+
     this.refresh();
   }
 

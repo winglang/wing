@@ -18,19 +18,5 @@ export const runTest = async (
       return testItem;
     })
   );
-
-  const response = await client.runTest(test.id);
-
-  testsExplorer.update(
-    tests.map((testItem) => {
-      if (testItem.id === test.id) {
-        return {
-          ...test,
-          time: response.time,
-          status: response.error || !response.pass ? "error" : "success",
-        };
-      }
-      return testItem;
-    })
-  );
+  await client.runTest(test.id);
 };

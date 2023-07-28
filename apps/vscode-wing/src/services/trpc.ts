@@ -58,16 +58,7 @@ export const createTRPCClient = (host: string): Client => {
   };
 
   const listTests = (): Promise<TestItem[]> => {
-    return client["test.list"].query().then((res: any) =>
-      res.map((test: any) => {
-        return {
-          id: test.id,
-          label: test.label,
-          status: "pending",
-          time: 0,
-        };
-      })
-    );
+    return client["test.list"].query();
   };
 
   const runTest = (resourcePath: string) => {

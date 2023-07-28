@@ -82,10 +82,17 @@ export const createTestRouter = () => {
     "test.list": createProcedure.query(async ({ input, ctx }) => {
       const simulator = await ctx.simulator();
       const list = await listTests(simulator);
+
+      const testsState = ctx.testsStateManager();
+      const tests = testsState.getTests();
+
       return list.map((resourcePath) => {
+        const test = tests.find((t) => t.id === resourcePath);
         return {
           id: resourcePath,
           label: getTestName(resourcePath),
+          status: test?.status ?? "pending",
+          time: test?.time ?? 0,
         };
       });
     }),
@@ -96,18 +103,37 @@ export const createTestRouter = () => {
         }),
       )
       .mutation(async ({ input, ctx }) => {
-        return await runTest(
+        const response = await runTest(
           await ctx.simulator(),
           input.resourcePath,
           ctx.logger,
         );
+
+        const testsState = ctx.testsStateManager();
+        testsState.setTest({
+          id: input.resourcePath,
+          label: getTestName(input.resourcePath),
+          status: response.error ? "error" : "success",
+          time: response.time,
+        });
+
+        return response;
       }),
     "test.runAll": createProcedure.mutation(async ({ ctx }) => {
       const simulator = await ctx.simulator();
+      const testsState = ctx.testsStateManager();
+
       const testList = await listTests(simulator);
       const result: InternalTestResult[] = [];
       for (const resourcePath of testList) {
-        result.push(await runTest(simulator, resourcePath, ctx.logger));
+        const response = await runTest(simulator, resourcePath, ctx.logger);
+        result.push(response);
+        testsState.setTest({
+          id: resourcePath,
+          label: getTestName(resourcePath),
+          status: response.error ? "error" : "success",
+          time: response.time,
+        });
       }
 
       const testPassed = result.filter((r) => r.error === undefined);

@@ -55,6 +55,21 @@ export interface LayoutConfig {
   };
 }
 
+export type TestStatus = "pending" | "running" | "success" | "error";
+
+export interface TestItem {
+  id: string;
+  label: string;
+  status: TestStatus;
+  time?: number;
+}
+
+export interface TestsStateManager {
+  getTests: () => TestItem[];
+  setTests: (tests: TestItem[]) => void;
+  setTest: (test: TestItem) => void;
+}
+
 export interface RouterContext {
   simulator(): Promise<testing.Simulator>;
   appDetails(): Promise<{
@@ -75,6 +90,7 @@ export interface RouterContext {
   layoutConfig?: LayoutConfig;
   getSelectedNode: () => string | undefined;
   setSelectedNode: (node: string) => void;
+  testsStateManager: () => TestsStateManager;
 }
 
 const t = initTRPC.context<RouterContext>().create();

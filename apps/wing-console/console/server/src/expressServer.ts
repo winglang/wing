@@ -14,7 +14,11 @@ import { HostUtils } from "./hostUtils.js";
 import { mergeAllRouters } from "./router/index.js";
 import { State } from "./types.js";
 import { Updater } from "./updater.js";
-import { LayoutConfig, RouterContext } from "./utils/createRouter.js";
+import {
+  LayoutConfig,
+  RouterContext,
+  TestsStateManager,
+} from "./utils/createRouter.js";
 import { getWingVersion } from "./utils/getWingVersion.js";
 import { LogInterface } from "./utils/LogInterface.js";
 
@@ -38,6 +42,7 @@ export interface CreateExpressServerOptions {
   layoutConfig?: LayoutConfig;
   getSelectedNode: () => string | undefined;
   setSelectedNode: (node: string) => void;
+  testsStateManager: () => TestsStateManager;
 }
 
 export const createExpressServer = async ({
@@ -57,6 +62,7 @@ export const createExpressServer = async ({
   layoutConfig,
   getSelectedNode,
   setSelectedNode,
+  testsStateManager,
 }: CreateExpressServerOptions) => {
   const app = express();
   app.use(cors());
@@ -86,6 +92,7 @@ export const createExpressServer = async ({
       layoutConfig,
       getSelectedNode,
       setSelectedNode,
+      testsStateManager,
     };
   };
   app.use(

@@ -39,22 +39,96 @@ export class WingConsoleManager {
     {
       panel: WebviewPanel;
       url: string;
-      logs: string[];
       tests: TestItem[];
     }
   > = {};
 
   consoleCommands: Record<string, Disposable> = {};
 
+  client: Client | undefined;
+
+  logger: OutputChannel = createLogger({ show: true });
+
+  resourcesExplorer: ResourcesExplorerProvider =
+    new ResourcesExplorerProvider();
+
+  testsExplorer: TestsExplorerProvider = new TestsExplorerProvider();
+
   activeConsolePanel: string | undefined;
 
-  constructor(public readonly context: ExtensionContext) {}
+  constructor(public readonly context: ExtensionContext) {
+    window.createTreeView("consoleExplorer", {
+      treeDataProvider: this.resourcesExplorer,
+    });
 
-  private registerCommands(id: string, callback: (...args: any[]) => any) {
+    window.createTreeView("consoleTestsExplorer", {
+      treeDataProvider: this.testsExplorer,
+    });
+  }
+
+  private registerCommand(id: string, callback: (...args: any[]) => any) {
     this.consoleCommands[id]?.dispose();
 
     const disposable = commands.registerCommand(id, callback);
     this.consoleCommands[id] = disposable;
+  }
+
+  private unregisterCommands() {
+    Object.keys(this.consoleCommands).forEach((key) => {
+      if (this.consoleCommands?.[key]) {
+        this.consoleCommands[key]?.dispose();
+      }
+    });
+  }
+
+  private async setupActivePanel() {
+    const editor = window.activeTextEditor;
+    if (!editor) {
+      return;
+    }
+
+    const document = editor.document;
+    if (document.languageId !== "wing") {
+      return;
+    }
+    const uri = document.uri;
+
+    const activePanel = this.consolePanels[uri.fsPath];
+    if (!activePanel) {
+      return;
+    }
+    activePanel.panel.reveal();
+
+    const url = activePanel.url;
+
+    this.client?.close();
+    this.client = createTRPCClient(url);
+
+    const client = this.client;
+    this.resourcesExplorer.update(await client.listResources());
+    this.testsExplorer.update(await client.listTests());
+
+    client.onInvalidateQuery({
+      onData: async () => {
+        this.resourcesExplorer.update(await client.listResources());
+        this.testsExplorer.update(await client.listTests());
+      },
+      onError: (err) => {
+        this.logger.appendLine(err);
+      },
+    });
+
+    this.registerCommand("wingConsole.openResource", async (resourceId) => {
+      await openResource(client, resourceId);
+    });
+
+    this.registerCommand("wingConsole.runTest", async (test: TestItem) => {
+      await runTest(client, test, this.testsExplorer);
+      if (this.consolePanels[uri.fsPath]) {
+        // @ts-ignore-next-line
+        this.consolePanels[uri.fsPath].tests = this.testsExplorer.getTests();
+      }
+    });
   }
 
   public async openConsole() {
@@ -70,21 +144,9 @@ export class WingConsoleManager {
     const uri = document.uri;
 
     let panel: WebviewPanel;
-    let client: Client;
-    const logger = createLogger({ show: true });
-    let resourcesExplorer: ResourcesExplorerProvider;
-    let testsExplorer: TestsExplorerProvider;
 
     const log = (type: string, message: string) => {
-      const line = `[${type}] ${message}`;
-      logger.appendLine(line);
-      const logs = this.consolePanels[uri.fsPath]?.logs || [];
-
-      if (!this.consolePanels[uri.fsPath]) {
-        return;
-      }
-      // @ts-ignore
-      this.consolePanels[uri.fsPath].logs = [...logs, line];
+      this.logger.appendLine(`[${type}] ${message}`);
     };
 
     const existingPanel = this.consolePanels[uri.fsPath];
@@ -132,9 +194,7 @@ export class WingConsoleManager {
 
     const url = `localhost:${port}`;
 
-    client = createTRPCClient(url);
-
-    logger.appendLine(`Wing Console is running at ${url}`);
+    this.logger.appendLine(`Wing Console is running at ${url}`);
 
     panel = window.createWebviewPanel(
       VIEW_TYPE_CONSOLE,
@@ -162,7 +222,6 @@ export class WingConsoleManager {
     this.consolePanels[uri.fsPath] = {
       panel: panel,
       url: url,
-      logs: [],
       tests: [],
     };
     this.activeConsolePanel = uri.fsPath;
@@ -178,15 +237,10 @@ export class WingConsoleManager {
     panel.onDidDispose(async () => {
       delete this.consolePanels[uri.fsPath];
       this.activeConsolePanel = undefined;
-
-      Object.keys(this.consoleCommands).forEach((key) => {
-        if (this.consoleCommands?.[key]) {
-          this.consoleCommands[key]?.dispose();
-        }
-      });
-
+      this.unregisterCommands();
       await close();
     });
+
     panel.webview.html = `\
       <!DOCTYPE html>
         <html lang="en"">
@@ -202,76 +256,18 @@ export class WingConsoleManager {
         </body>
       </html>`;
 
-    resourcesExplorer = new ResourcesExplorerProvider(
-      await client.listResources()
-    );
-    testsExplorer = new TestsExplorerProvider(await client.listTests());
-
-    window.createTreeView("consoleExplorer", {
-      treeDataProvider: resourcesExplorer,
+    await this.setupActivePanel();
+    // on change current active extension panel
+    
+    
+    window.onDidChangeActiveTextEditor(async () => {
+      await this.setupActivePanel();
     });
-
-    window.createTreeView("consoleTestsExplorer", {
-      treeDataProvider: testsExplorer,
-    });
-
-    client.onInvalidateQuery({
-      onData: async () => {
-        resourcesExplorer.update(await client.listResources());
-        testsExplorer.update(await client.listTests());
-      },
-      onError: (err) => {
-        logger.appendLine(err);
-      },
-    });
-
-    this.registerCommands("wingConsole.openResource", async (resourceId) => {
-      await openResource(client, resourceId);
-    });
-
-    this.registerCommands("wingConsole.runTest", async (test: TestItem) => {
-      await runTest(client, test, testsExplorer);
-      if (this.consolePanels[uri.fsPath]) {
-        // @ts-ignore
-        this.consolePanels[uri.fsPath].tests = testsExplorer.getTests();
-      }
-    });
-
-    window.onDidChangeActiveTextEditor(async (activeEditor) => {
-      if (!activeEditor) {
-        return;
-      }
-      const activeDocument = activeEditor.document;
-      if (activeDocument.languageId === "wing") {
-        const activeUri = activeDocument.uri;
-        const panelExists = this.consolePanels[activeUri.fsPath];
-        if (!panelExists) {
-          return;
-        }
-        panelExists.panel.reveal();
-        client?.close();
-        client = createTRPCClient(panelExists.url);
-
-        logger.clear();
-        panelExists.logs?.forEach((line) => {
-          logger.appendLine(line);
-        });
-
-        resourcesExplorer.update(await client.listResources());
-        testsExplorer.update(
-          this.consolePanels[uri.fsPath]?.tests || (await client.listTests())
-        );
-        client.onInvalidateQuery({
-          onData: async () => {
-            resourcesExplorer.update(await client.listResources());
-            testsExplorer.update(await client.listTests());
-          },
-          onError: (err) => {
-            logger.appendLine(err);
-          },
-        });
-      }
-    });
+    
+    window.onDidChangeActiveWebviewPanel(async () => {
+      await this.setupActivePanel();
+    }
+    
   }
 
   public async openFile() {

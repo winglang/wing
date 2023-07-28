@@ -11,7 +11,12 @@ import type { Router } from "./router/index.js";
 import type { State } from "./types.js";
 import type { Updater } from "./updater.js";
 import { createCompiler } from "./utils/compiler.js";
-import { LayoutConfig } from "./utils/createRouter.js";
+import {
+  LayoutConfig,
+  TestItem,
+  TestsStateManager,
+  TestStatus,
+} from "./utils/createRouter.js";
 import type { LogInterface } from "./utils/LogInterface.js";
 import { createSimulator } from "./utils/simulator.js";
 
@@ -102,6 +107,26 @@ export const createConsoleServer = async ({
 
   let lastErrorMessage = "";
   let selectedNode = "";
+  let tests: TestItem[] = [];
+
+  const testsStateManager = () => {
+    return {
+      getTests: () => {
+        return tests;
+      },
+      setTests: (newTests: TestItem[]) => {
+        tests = newTests;
+      },
+      setTest: (test: TestItem) => {
+        const index = tests.findIndex((t) => t.id === test.id);
+        if (index === -1) {
+          tests.push(test);
+        } else {
+          tests[index] = test;
+        }
+      },
+    };
+  };
 
   let appState: State = "compiling";
   compiler.on("compiling", () => {
@@ -198,6 +223,7 @@ export const createConsoleServer = async ({
     setSelectedNode: (node: string) => {
       selectedNode = node;
     },
+    testsStateManager,
   });
 
   const close = async () => {
