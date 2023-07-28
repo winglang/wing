@@ -194,10 +194,10 @@ module.exports = function({ $_marioInfo___gender__, $_marioInfo___role__, $_peac
 ```js
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
-const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
-const ex = $stdlib.ex;
-const util = $stdlib.util;
+const $wing_is_test = process.env.WING_IS_TEST === "true";
+const ex = require('@winglang/sdk').ex;
+const util = require('@winglang/sdk').util;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);

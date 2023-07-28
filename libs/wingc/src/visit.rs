@@ -1,8 +1,8 @@
 use crate::{
 	ast::{
-		ArgList, BringSource, CalleeKind, Class, Expr, ExprKind, FunctionBody, FunctionDefinition, FunctionParameter,
-		FunctionSignature, Interface, InterpolatedStringPart, Literal, NewExpr, Reference, Scope, Stmt, StmtKind, Symbol,
-		TypeAnnotation, TypeAnnotationKind, UserDefinedType,
+		ArgList, CalleeKind, Class, Expr, ExprKind, FunctionBody, FunctionDefinition, FunctionParameter, FunctionSignature,
+		Interface, InterpolatedStringPart, Literal, NewExpr, Reference, Scope, Stmt, StmtKind, Symbol, TypeAnnotation,
+		TypeAnnotationKind, UserDefinedType,
 	},
 	dbg_panic,
 };
@@ -94,15 +94,18 @@ where
 	V: Visit<'ast> + ?Sized,
 {
 	match &node.kind {
-		StmtKind::Bring { source, identifier } => {
-			match &source {
-				BringSource::BuiltinModule(name) => v.visit_symbol(name),
-				BringSource::JsiiModule(name) => v.visit_symbol(name),
-				BringSource::WingFile(name) => v.visit_symbol(name),
-			}
+		StmtKind::Bring {
+			module_name,
+			identifier,
+		} => {
+			v.visit_symbol(module_name);
 			if let Some(identifier) = identifier {
 				v.visit_symbol(identifier);
 			}
+		}
+		StmtKind::Module { name, statements } => {
+			v.visit_symbol(name);
+			v.visit_scope(statements);
 		}
 		StmtKind::SuperConstructor { arg_list } => v.visit_args(arg_list),
 		StmtKind::Let {

@@ -139,18 +139,14 @@ Duration <DURATION>"
 `;
 
 exports[`bring_local_variables.w 1`] = `
-"error: Preflight field \\"x\\" is not initialized
-   --> ../../../examples/tests/invalid/file_with_variables.w:10:3
-   |
-10 |   x: num;
-   |   ^ Preflight field \\"x\\" is not initialized
+"error: Cannot bring \\"\\"./file_with_variables.w\\"\\" - modules with statements besides classes, interfaces, enums, and structs cannot be brought
 
 
-error: Cannot bring \\"../../../examples/tests/invalid/file_with_variables.w\\" - modules with statements besides classes, interfaces, enums, and structs cannot be brought
-  --> ../../../examples/tests/invalid/bring_local_variables.w:1:7
+error: Unknown symbol \\"Bar\\"
+  --> ../../../examples/tests/invalid/bring_local_variables.w:3:5
   |
-1 | bring \\"./file_with_variables.w\\" as stuff;
-  |       ^^^^^^^^^^^^^^^^^^^^^^^^^ Cannot bring \\"../../../examples/tests/invalid/file_with_variables.w\\" - modules with statements besides classes, interfaces, enums, and structs cannot be brought
+3 | new stuff.Bar();
+  |     ^^^^^^^^^ Unknown symbol \\"Bar\\"
 
 
  
@@ -584,90 +580,6 @@ error: Expected type to be \\"Array<str>\\", but got \\"MutArray<str>\\" instead
    |
 23 | let a: Array<str> = MutArray<str>[];
    |                     ^^^^^^^^^^^^^^^ Expected type to be \\"Array<str>\\", but got \\"MutArray<str>\\" instead
-
-
- 
- 
-Tests 1 failed (1)
-Test Files 1 failed (1)
-Duration <DURATION>"
-`;
-
-exports[`cyclic_bring1.w 1`] = `
-"error: Could not compile \\"../../../examples/tests/invalid/cyclic_bring1.w\\" due to cyclic bring statements:
-- ../../../examples/tests/invalid/cyclic_bring2.w
-- ../../../examples/tests/invalid/cyclic_bring3.w
-- ../../../examples/tests/invalid/cyclic_bring1.w
-
-
-error: could not find types for \\"../../../examples/tests/invalid/cyclic_bring2.w\\" (compiler bug)
-  --> ../../../examples/tests/invalid/cyclic_bring1.w:1:1
-  |
-1 | bring \\"./cyclic_bring2.w\\" as foo;
-  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ could not find types for \\"../../../examples/tests/invalid/cyclic_bring2.w\\" (compiler bug)
-
-
-error: could not find types for \\"../../../examples/tests/invalid/cyclic_bring3.w\\" (compiler bug)
-  --> ../../../examples/tests/invalid/cyclic_bring2.w:1:1
-  |
-1 | bring \\"./cyclic_bring3.w\\" as foo;
-  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ could not find types for \\"../../../examples/tests/invalid/cyclic_bring3.w\\" (compiler bug)
-
-
- 
- 
-Tests 1 failed (1)
-Test Files 1 failed (1)
-Duration <DURATION>"
-`;
-
-exports[`cyclic_bring2.w 1`] = `
-"error: Could not compile \\"../../../examples/tests/invalid/cyclic_bring2.w\\" due to cyclic bring statements:
-- ../../../examples/tests/invalid/cyclic_bring3.w
-- ../../../examples/tests/invalid/cyclic_bring1.w
-- ../../../examples/tests/invalid/cyclic_bring2.w
-
-
-error: could not find types for \\"../../../examples/tests/invalid/cyclic_bring3.w\\" (compiler bug)
-  --> ../../../examples/tests/invalid/cyclic_bring2.w:1:1
-  |
-1 | bring \\"./cyclic_bring3.w\\" as foo;
-  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ could not find types for \\"../../../examples/tests/invalid/cyclic_bring3.w\\" (compiler bug)
-
-
-error: could not find types for \\"../../../examples/tests/invalid/cyclic_bring1.w\\" (compiler bug)
-  --> ../../../examples/tests/invalid/cyclic_bring3.w:1:1
-  |
-1 | bring \\"./cyclic_bring1.w\\" as foo;
-  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ could not find types for \\"../../../examples/tests/invalid/cyclic_bring1.w\\" (compiler bug)
-
-
- 
- 
-Tests 1 failed (1)
-Test Files 1 failed (1)
-Duration <DURATION>"
-`;
-
-exports[`cyclic_bring3.w 1`] = `
-"error: Could not compile \\"../../../examples/tests/invalid/cyclic_bring3.w\\" due to cyclic bring statements:
-- ../../../examples/tests/invalid/cyclic_bring1.w
-- ../../../examples/tests/invalid/cyclic_bring2.w
-- ../../../examples/tests/invalid/cyclic_bring3.w
-
-
-error: could not find types for \\"../../../examples/tests/invalid/cyclic_bring1.w\\" (compiler bug)
-  --> ../../../examples/tests/invalid/cyclic_bring3.w:1:1
-  |
-1 | bring \\"./cyclic_bring1.w\\" as foo;
-  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ could not find types for \\"../../../examples/tests/invalid/cyclic_bring1.w\\" (compiler bug)
-
-
-error: could not find types for \\"../../../examples/tests/invalid/cyclic_bring2.w\\" (compiler bug)
-  --> ../../../examples/tests/invalid/cyclic_bring1.w:1:1
-  |
-1 | bring \\"./cyclic_bring2.w\\" as foo;
-  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ could not find types for \\"../../../examples/tests/invalid/cyclic_bring2.w\\" (compiler bug)
 
 
  
@@ -2100,32 +2012,32 @@ Duration <DURATION>"
 `;
 
 exports[`unimplemented_grammar.w 1`] = `
-"error: builtin \\"any\\" is not supported yet - see https://github.com/winglang/wing/issues/434
+"error: builtin \\"any\\" is not supported yet see https://github.com/winglang/wing/issues/434
   --> ../../../examples/tests/invalid/unimplemented_grammar.w:1:8
   |
 1 | let b: any = 0;
-  |        ^^^ builtin \\"any\\" is not supported yet - see https://github.com/winglang/wing/issues/434
+  |        ^^^ builtin \\"any\\" is not supported yet see https://github.com/winglang/wing/issues/434
 
 
-error: builtin container type \\"Promise\\" is not supported yet - see https://github.com/winglang/wing/issues/529
+error: builtin container type \\"Promise\\" is not supported yet see https://github.com/winglang/wing/issues/529
   --> ../../../examples/tests/invalid/unimplemented_grammar.w:2:19
   |
 2 | let somePromise = Promise<str>{};
-  |                   ^^^^^^^^^^^^ builtin container type \\"Promise\\" is not supported yet - see https://github.com/winglang/wing/issues/529
+  |                   ^^^^^^^^^^^^ builtin container type \\"Promise\\" is not supported yet see https://github.com/winglang/wing/issues/529
 
 
-error: expression \\"defer_expression\\" is not supported yet - see https://github.com/winglang/wing/issues/116
+error: expression \\"defer_expression\\" is not supported yet see https://github.com/winglang/wing/issues/116
   --> ../../../examples/tests/invalid/unimplemented_grammar.w:3:9
   |
 3 | let c = defer somePromise();
-  |         ^^^^^^^^^^^^^^^^^^^ expression \\"defer_expression\\" is not supported yet - see https://github.com/winglang/wing/issues/116
+  |         ^^^^^^^^^^^^^^^^^^^ expression \\"defer_expression\\" is not supported yet see https://github.com/winglang/wing/issues/116
 
 
-error: expression \\"await_expression\\" is not supported yet - see https://github.com/winglang/wing/issues/116
+error: expression \\"await_expression\\" is not supported yet see https://github.com/winglang/wing/issues/116
   --> ../../../examples/tests/invalid/unimplemented_grammar.w:4:9
   |
 4 | let d = await c;
-  |         ^^^^^^^ expression \\"await_expression\\" is not supported yet - see https://github.com/winglang/wing/issues/116
+  |         ^^^^^^^ expression \\"await_expression\\" is not supported yet see https://github.com/winglang/wing/issues/116
 
 
  
