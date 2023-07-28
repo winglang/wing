@@ -257,17 +257,9 @@ export class WingConsoleManager {
       </html>`;
 
     await this.setupActivePanel();
-    // on change current active extension panel
-    
-    
     window.onDidChangeActiveTextEditor(async () => {
       await this.setupActivePanel();
     });
-    
-    window.onDidChangeActiveWebviewPanel(async () => {
-      await this.setupActivePanel();
-    }
-    
   }
 
   public async openFile() {
