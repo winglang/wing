@@ -73,31 +73,16 @@ export class WingConsoleManager {
     this.consoleCommands[id] = disposable;
   }
 
-  private unregisterCommands() {
-    Object.keys(this.consoleCommands).forEach((key) => {
-      if (this.consoleCommands?.[key]) {
-        this.consoleCommands[key]?.dispose();
-      }
-    });
-  }
-
-  private async setupActivePanel() {
-    const editor = window.activeTextEditor;
-    if (!editor) {
-      return;
-    }
-
-    const document = editor.document;
-    if (document.languageId !== "wing") {
-      return;
-    }
-    const uri = document.uri;
-
-    const activePanel = this.consolePanels[uri.fsPath];
+  private async setupActivePanel(panelId: string) {
+    const activePanel = this.consolePanels[panelId];
     if (!activePanel) {
       return;
     }
-    activePanel.panel.reveal();
+
+    if (this.activeConsolePanel !== panelId) {
+      activePanel.panel.reveal();
+      this.activeConsolePanel = panelId;
+    }
 
     const url = activePanel.url;
 
@@ -124,11 +109,24 @@ export class WingConsoleManager {
 
     this.registerCommand("wingConsole.runTest", async (test: TestItem) => {
       await runTest(client, test, this.testsExplorer);
-      if (this.consolePanels[uri.fsPath]) {
+      if (this.consolePanels[panelId]) {
         // @ts-ignore-next-line
-        this.consolePanels[uri.fsPath].tests = this.testsExplorer.getTests();
+        this.consolePanels[panelId].tests = this.testsExplorer.getTests();
       }
     });
+  }
+
+  private closePanel(panelId: string) {
+    const activePanel = this.consolePanels[panelId];
+    if (!activePanel) {
+      return;
+    }
+    delete this.consolePanels[panelId];
+    activePanel.panel.dispose();
+
+    if (this.activeConsolePanel === panelId) {
+      this.activeConsolePanel = undefined;
+    }
   }
 
   public async openConsole() {
@@ -228,17 +226,15 @@ export class WingConsoleManager {
 
     panel.onDidChangeViewState(async () => {
       if (panel.active) {
-        this.activeConsolePanel = uri.fsPath;
+        await this.setupActivePanel(uri.fsPath);
       } else if (this.activeConsolePanel === uri.fsPath) {
         this.activeConsolePanel = undefined;
       }
     });
 
     panel.onDidDispose(async () => {
-      delete this.consolePanels[uri.fsPath];
-      this.activeConsolePanel = undefined;
-      this.unregisterCommands();
       await close();
+      this.closePanel(uri.fsPath);
     });
 
     panel.webview.html = `\
@@ -256,9 +252,20 @@ export class WingConsoleManager {
         </body>
       </html>`;
 
-    await this.setupActivePanel();
-    window.onDidChangeActiveTextEditor(async () => {
-      await this.setupActivePanel();
+    await this.setupActivePanel(uri.fsPath);
+
+    window.onDidChangeActiveTextEditor(async (textEditor) => {
+      if (textEditor?.document?.languageId !== "wing") {
+        return;
+      }
+      await this.setupActivePanel(textEditor?.document.uri.fsPath);
+    });
+
+    workspace.onDidCloseTextDocument(async (textDocument) => {
+      if (textDocument.languageId !== "wing") {
+        return;
+      }
+      this.closePanel(textDocument.uri.fsPath);
     });
   }
 
