@@ -234,15 +234,15 @@ class $Root extends $stdlib.std.Resource {
         {((cond) => {if (!cond) throw new Error("assertion failed: number > 0")})((number > 0))};
         {console.log(String.raw({ raw: ["", ": ", ""] }, word, number))};
         preBreakHits = (preBreakHits + 1);
-        if ((number === 2)) {
+        if ((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(number,2))) {
           break;
         }
         postBreakHits = (postBreakHits + 1);
       }
-      {((cond) => {if (!cond) throw new Error("assertion failed: preBreakHits == 2")})((preBreakHits === 2))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: postBreakHits == 1")})((postBreakHits === 1))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: preBreakHits == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(preBreakHits,2)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: postBreakHits == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(postBreakHits,1)))};
     }
-    {((cond) => {if (!cond) throw new Error("assertion failed: i == 3")})((i === 3))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: i == 3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(i,3)))};
     let j = 0;
     for (const word of words) {
       j = (j + 1);
@@ -257,10 +257,10 @@ class $Root extends $stdlib.std.Resource {
         }
         postContinueHits = (postContinueHits + 1);
       }
-      {((cond) => {if (!cond) throw new Error("assertion failed: preContinueHits == 3")})((preContinueHits === 3))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: postContinueHits == 0")})((postContinueHits === 0))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: preContinueHits == 3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(preContinueHits,3)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: postContinueHits == 0")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(postContinueHits,0)))};
     }
-    {((cond) => {if (!cond) throw new Error("assertion failed: j == 3")})((j === 3))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: j == 3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(j,3)))};
     {console.log("---\nfor x in 0..0 { ... }")};
     for (const x of $stdlib.std.Range.of(0, 0, false)) {
       {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
@@ -268,7 +268,7 @@ class $Root extends $stdlib.std.Resource {
     {console.log("there's no value to iterate")};
     {console.log("---\nfor x in 0..=0 { ... }")};
     for (const x of $stdlib.std.Range.of(0, 0, true)) {
-      {((cond) => {if (!cond) throw new Error("assertion failed: x == 0")})((x === 0))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: x == 0")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(x,0)))};
       {console.log(String.raw({ raw: ["", ""] }, x))};
     }
     {console.log("---\nfor x in 0..2 { ... }")};

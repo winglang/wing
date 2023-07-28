@@ -10,17 +10,17 @@ module.exports = function({ $math_Util }) {
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.fibonacci(0) == 0")})(((await $math_Util.fibonacci(0)) === 0))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.fibonacci(1) == 1")})(((await $math_Util.fibonacci(1)) === 1))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.fibonacci(2) == 1")})(((await $math_Util.fibonacci(2)) === 1))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.fibonacci(3) == 2")})(((await $math_Util.fibonacci(3)) === 2))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.fibonacci(4) == 3")})(((await $math_Util.fibonacci(4)) === 3))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.fibonacci(5) == 5")})(((await $math_Util.fibonacci(5)) === 5))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.fibonacci(6) == 8")})(((await $math_Util.fibonacci(6)) === 8))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.fibonacci(7) == 13")})(((await $math_Util.fibonacci(7)) === 13))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.fibonacci(8) == 21")})(((await $math_Util.fibonacci(8)) === 21))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.fibonacci(9) == 34")})(((await $math_Util.fibonacci(9)) === 34))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.fibonacci(10) == 55")})(((await $math_Util.fibonacci(10)) === 55))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.fibonacci(0) == 0")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.fibonacci(0)),0)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.fibonacci(1) == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.fibonacci(1)),1)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.fibonacci(2) == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.fibonacci(2)),1)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.fibonacci(3) == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.fibonacci(3)),2)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.fibonacci(4) == 3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.fibonacci(4)),3)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.fibonacci(5) == 5")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.fibonacci(5)),5)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.fibonacci(6) == 8")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.fibonacci(6)),8)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.fibonacci(7) == 13")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.fibonacci(7)),13)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.fibonacci(8) == 21")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.fibonacci(8)),21)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.fibonacci(9) == 34")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.fibonacci(9)),34)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.fibonacci(10) == 55")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.fibonacci(10)),55)))};
     }
   }
   return $Closure1;
@@ -184,17 +184,17 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
     }
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.fibonacci(0) == 0")})(((math.Util.fibonacci(0)) === 0))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.fibonacci(1) == 1")})(((math.Util.fibonacci(1)) === 1))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.fibonacci(2) == 1")})(((math.Util.fibonacci(2)) === 1))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.fibonacci(3) == 2")})(((math.Util.fibonacci(3)) === 2))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.fibonacci(4) == 3")})(((math.Util.fibonacci(4)) === 3))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.fibonacci(5) == 5")})(((math.Util.fibonacci(5)) === 5))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.fibonacci(6) == 8")})(((math.Util.fibonacci(6)) === 8))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.fibonacci(7) == 13")})(((math.Util.fibonacci(7)) === 13))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.fibonacci(8) == 21")})(((math.Util.fibonacci(8)) === 21))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.fibonacci(9) == 34")})(((math.Util.fibonacci(9)) === 34))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.fibonacci(10) == 55")})(((math.Util.fibonacci(10)) === 55))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.fibonacci(0) == 0")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.fibonacci(0)),0)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.fibonacci(1) == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.fibonacci(1)),1)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.fibonacci(2) == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.fibonacci(2)),1)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.fibonacci(3) == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.fibonacci(3)),2)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.fibonacci(4) == 3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.fibonacci(4)),3)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.fibonacci(5) == 5")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.fibonacci(5)),5)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.fibonacci(6) == 8")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.fibonacci(6)),8)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.fibonacci(7) == 13")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.fibonacci(7)),13)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.fibonacci(8) == 21")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.fibonacci(8)),21)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.fibonacci(9) == 34")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.fibonacci(9)),34)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.fibonacci(10) == 55")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.fibonacci(10)),55)))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:inflight fibonacci",new $Closure1(this,"$Closure1"));
   }
 }

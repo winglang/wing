@@ -43,18 +43,18 @@ class $Root extends $stdlib.std.Resource {
     super(scope, id);
     const mySet = Object.freeze(new Set([1, 2, 3]));
     const myArrayFromSet = Object.freeze([...(mySet)]);
-    {((cond) => {if (!cond) throw new Error("assertion failed: myArrayFromSet.at(0) == 1")})(((myArrayFromSet.at(0)) === 1))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: myArrayFromSet.at(1) == 2")})(((myArrayFromSet.at(1)) === 2))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: myArrayFromSet.at(2) == 3")})(((myArrayFromSet.at(2)) === 3))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: myArrayFromSet.length == mySet.size")})((myArrayFromSet.length === mySet.size))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: myArrayFromSet.length == 3")})((myArrayFromSet.length === 3))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: myArrayFromSet.at(0) == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((myArrayFromSet.at(0)),1)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: myArrayFromSet.at(1) == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((myArrayFromSet.at(1)),2)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: myArrayFromSet.at(2) == 3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((myArrayFromSet.at(2)),3)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: myArrayFromSet.length == mySet.size")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(myArrayFromSet.length,mySet.size)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: myArrayFromSet.length == 3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(myArrayFromSet.length,3)))};
     const myMutSet = new Set(["a", "b", "c"]);
     const myArrayFromMutSet = Object.freeze([...(myMutSet)]);
-    {((cond) => {if (!cond) throw new Error("assertion failed: myArrayFromMutSet.at(0) == \"a\"")})(((myArrayFromMutSet.at(0)) === "a"))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: myArrayFromMutSet.at(1) == \"b\"")})(((myArrayFromMutSet.at(1)) === "b"))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: myArrayFromMutSet.at(2) == \"c\"")})(((myArrayFromMutSet.at(2)) === "c"))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: myArrayFromMutSet.length == myMutSet.size")})((myArrayFromMutSet.length === myMutSet.size))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: myArrayFromMutSet.length == 3")})((myArrayFromMutSet.length === 3))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: myArrayFromMutSet.at(0) == \"a\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((myArrayFromMutSet.at(0)),"a")))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: myArrayFromMutSet.at(1) == \"b\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((myArrayFromMutSet.at(1)),"b")))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: myArrayFromMutSet.at(2) == \"c\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((myArrayFromMutSet.at(2)),"c")))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: myArrayFromMutSet.length == myMutSet.size")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(myArrayFromMutSet.length,myMutSet.size)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: myArrayFromMutSet.length == 3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(myArrayFromMutSet.length,3)))};
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);

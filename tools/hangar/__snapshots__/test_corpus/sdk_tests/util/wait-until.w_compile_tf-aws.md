@@ -133,7 +133,7 @@ module.exports = function({ $invokeCounter, $util_Util }) {
         {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
       }
       catch {
-        {((cond) => {if (!cond) throw new Error("assertion failed: invokeCounter.peek() == 1")})(((await $invokeCounter.peek()) === 1))};
+        {((cond) => {if (!cond) throw new Error("assertion failed: invokeCounter.peek() == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $invokeCounter.peek()),1)))};
       }
     }
   }

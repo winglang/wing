@@ -31,7 +31,7 @@ module.exports = function({ $f }) {
     }
     async handle() {
       const x = (await $f.invoke("hello"));
-      {((cond) => {if (!cond) throw new Error("assertion failed: x == \"hello-response\"")})((x === "hello-response"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: x == \"hello-response\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(x,"hello-response")))};
     }
   }
   return $Closure2;
