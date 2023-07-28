@@ -3,7 +3,6 @@ bring cloud;
 let bucket = new cloud.Bucket();
 let counter = new cloud.Counter() as "my counter";
 
-
 test "Print"{
   log("Hello World!");
   assert(true);
