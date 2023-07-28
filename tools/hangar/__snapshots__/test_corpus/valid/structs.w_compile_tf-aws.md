@@ -13,7 +13,7 @@ module.exports = function({  }) {
       const s2 = {
       "a": "foo",}
       ;
-      {((cond) => {if (!cond) throw new Error("assertion failed: s2.a == \"foo\"")})((s2.a === "foo"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: s2.a == \"foo\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(s2.a,"foo")))};
     }
   }
   return $Closure1;
