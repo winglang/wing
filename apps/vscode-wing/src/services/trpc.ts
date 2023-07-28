@@ -19,6 +19,7 @@ export interface Client {
   setSelectedNode: (resourcePath: string) => Promise<void>;
   listTests: () => Promise<TestItem[]>;
   runTest: (resourcePath: string) => Promise<any>;
+  runAllTests: () => Promise<any>;
   listResources: () => Promise<ExplorerItem>;
   onInvalidateQuery: (options: SubscriptionOptions) => void;
   close: () => void;
@@ -67,6 +68,10 @@ export const createTRPCClient = (host: string): Client => {
     });
   };
 
+  const runAllTests = () => {
+    return client["test.runAll"].mutate({});
+  };
+
   const listResources = () => {
     return client["app.explorerTree"].query();
   };
@@ -84,6 +89,7 @@ export const createTRPCClient = (host: string): Client => {
     setSelectedNode,
     listTests,
     runTest,
+    runAllTests,
     listResources,
     onInvalidateQuery,
     close,

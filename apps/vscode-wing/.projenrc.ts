@@ -148,6 +148,14 @@ const contributes: VSCodeExtensionContributions = {
         dark: "resources/play-dark.svg",
       },
     },
+    {
+      command: "wingConsole.runAllTests",
+      title: "Run all test",
+      icon: {
+        light: "resources/play-light.svg",
+        dark: "resources/play-dark.svg",
+      },
+    },
   ],
   menus: {
     "editor/title": [
@@ -165,6 +173,13 @@ const contributes: VSCodeExtensionContributions = {
     "view/item/context": [
       {
         command: "wingConsole.runTest",
+        when: "view == consoleTestsExplorer",
+        group: "inline",
+      },
+    ],
+    "explorer/context": [
+      {
+        command: "wingConsole.runAllTests",
         when: "view == consoleTestsExplorer",
         group: "inline",
       },
