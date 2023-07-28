@@ -20,24 +20,20 @@ impl DocumentSymbolVisitor {
 impl Visit<'_> for DocumentSymbolVisitor {
 	fn visit_stmt(&mut self, statement: &Stmt) {
 		match &statement.kind {
-			StmtKind::Bring { source, identifier } => {
+			StmtKind::Bring {
+				module_name,
+				identifier,
+			} => {
 				if let Some(identifier) = identifier {
 					let symbol = identifier;
 					self
 						.document_symbols
 						.push(create_document_symbol(symbol, SymbolKind::VARIABLE));
 				} else {
-					match &source {
-						BringSource::BuiltinModule(name) => {
-							self
-								.document_symbols
-								.push(create_document_symbol(name, SymbolKind::MODULE));
-						}
-						// in these cases, an alias is required (like "bring foo as bar;")
-						// so we don't need to add a symbol for the module itself
-						BringSource::JsiiModule(_) => {}
-						BringSource::WingFile(_) => {}
-					};
+					let mod_symbol = module_name;
+					self
+						.document_symbols
+						.push(create_document_symbol(mod_symbol, SymbolKind::MODULE));
 				}
 			}
 			StmtKind::Let { var_name, .. } => {

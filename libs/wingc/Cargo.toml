@@ -25,7 +25,6 @@ indoc = "2.0.0"
 const_format = "0.2.30"
 duplicate = "1.0.0"
 strum = { version = "0.24", features = ["derive"] }
-petgraph = "0.6.3"
 
 [lib]
 crate-type = ["rlib", "cdylib"]

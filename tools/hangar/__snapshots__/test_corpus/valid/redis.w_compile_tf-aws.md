@@ -472,10 +472,10 @@ module.exports = function({ $r, $r2 }) {
 ```js
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
-const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
-const cloud = $stdlib.cloud;
-const ex = $stdlib.ex;
+const $wing_is_test = process.env.WING_IS_TEST === "true";
+const cloud = require('@winglang/sdk').cloud;
+const ex = require('@winglang/sdk').ex;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
