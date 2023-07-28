@@ -10,9 +10,9 @@ module.exports = function({ $y }) {
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: y == \"hello\"")})(($y === "hello"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: y == \"hello\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($y,"hello")))};
       const y = "z";
-      {((cond) => {if (!cond) throw new Error("assertion failed: y == \"z\"")})((y === "z"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: y == \"z\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(y,"z")))};
     }
   }
   return $Closure1;

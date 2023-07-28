@@ -133,6 +133,7 @@ export class Json {
     key;
     throw new Error("Macro");
   }
+
   private constructor() {}
 
   /**
@@ -264,6 +265,7 @@ export class MutJson {
   public static _toInflightType(): Code {
     return InflightClient.forType(__filename, this.name);
   }
+
   private constructor() {}
 
   /**

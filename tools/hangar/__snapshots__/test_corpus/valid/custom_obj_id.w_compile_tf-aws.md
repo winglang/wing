@@ -78,8 +78,8 @@ class $Root extends $stdlib.std.Resource {
     }
     const foo1 = new Foo(this,"Foo");
     const bar2 = new Foo(this,"bar2");
-    {((cond) => {if (!cond) throw new Error("assertion failed: foo1.node.id == \"Foo\"")})((foo1.node.id === "Foo"))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: bar2.node.id == \"bar2\"")})((bar2.node.id === "bar2"))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: foo1.node.id == \"Foo\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(foo1.node.id,"Foo")))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: bar2.node.id == \"bar2\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(bar2.node.id,"bar2")))};
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);

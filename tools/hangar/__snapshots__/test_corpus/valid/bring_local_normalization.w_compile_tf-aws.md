@@ -193,11 +193,11 @@ const baz = require("./preflight.baz-1.js")({ $stdlib });
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
-    {((cond) => {if (!cond) throw new Error("assertion failed: foo.Foo.foo() == \"foo\"")})(((foo.Foo.foo()) === "foo"))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: foo.Foo.bar() == \"bar\"")})(((foo.Foo.bar()) === "bar"))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: foo.Foo.baz() == \"baz\"")})(((foo.Foo.baz()) === "baz"))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: bar.Bar.bar() == \"bar\"")})(((bar.Bar.bar()) === "bar"))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: baz.Baz.baz() == \"baz\"")})(((baz.Baz.baz()) === "baz"))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: foo.Foo.foo() == \"foo\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((foo.Foo.foo()),"foo")))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: foo.Foo.bar() == \"bar\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((foo.Foo.bar()),"bar")))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: foo.Foo.baz() == \"baz\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((foo.Foo.baz()),"baz")))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: bar.Bar.bar() == \"bar\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((bar.Bar.bar()),"bar")))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: baz.Baz.baz() == \"baz\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((baz.Baz.baz()),"baz")))};
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);

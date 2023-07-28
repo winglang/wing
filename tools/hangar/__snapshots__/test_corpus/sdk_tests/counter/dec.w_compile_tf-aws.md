@@ -10,13 +10,13 @@ module.exports = function({ $counter }) {
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: counter.peek() == 1")})(((await $counter.peek()) === 1))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: counter.peek() == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $counter.peek()),1)))};
       const dec1 = (await $counter.dec());
-      {((cond) => {if (!cond) throw new Error("assertion failed: counter.peek() == 0")})(((await $counter.peek()) === 0))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: dec1 == 1")})((dec1 === 1))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: counter.peek() == 0")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $counter.peek()),0)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: dec1 == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(dec1,1)))};
       const dec2 = (await $counter.dec(2));
-      {((cond) => {if (!cond) throw new Error("assertion failed: counter.peek() == -2")})(((await $counter.peek()) === (-2)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: dec2 == 0")})((dec2 === 0))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: counter.peek() == -2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $counter.peek()),(-2))))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: dec2 == 0")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(dec2,0)))};
     }
   }
   return $Closure1;
@@ -35,13 +35,13 @@ module.exports = function({ $counter }) {
     }
     async handle() {
       const key = "my-key";
-      {((cond) => {if (!cond) throw new Error("assertion failed: counter.peek(key) == 1")})(((await $counter.peek(key)) === 1))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: counter.peek(key) == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $counter.peek(key)),1)))};
       const dec1 = (await $counter.dec(undefined,key));
-      {((cond) => {if (!cond) throw new Error("assertion failed: counter.peek(key) == 0")})(((await $counter.peek(key)) === 0))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: dec1 == 1")})((dec1 === 1))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: counter.peek(key) == 0")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $counter.peek(key)),0)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: dec1 == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(dec1,1)))};
       const dec2 = (await $counter.dec(2,key));
-      {((cond) => {if (!cond) throw new Error("assertion failed: counter.peek(key) == -2")})(((await $counter.peek(key)) === (-2)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: dec2 == 0")})((dec2 === 0))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: counter.peek(key) == -2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $counter.peek(key)),(-2))))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: dec2 == 0")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(dec2,0)))};
     }
   }
   return $Closure2;

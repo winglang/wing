@@ -11,7 +11,7 @@ module.exports = function({  }) {
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: foo_this.value == \"hello\"")})((this.$foo_this_value === "hello"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: foo_this.value == \"hello\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(this.$foo_this_value,"hello")))};
     }
   }
   return $Closure1;

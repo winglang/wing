@@ -43,9 +43,9 @@ class $Root extends $stdlib.std.Resource {
     super(scope, id);
     const obj = Object.freeze({"strValue":"test","numValue":1});
     const notStringifyStrValue = String.raw({ raw: ["string: ", ""] }, ((e) => typeof e === 'string' ? e : JSON.stringify(e, null, 2))((obj)["strValue"]));
-    {((cond) => {if (!cond) throw new Error("assertion failed: notStringifyStrValue == \"string: test\"")})((notStringifyStrValue === "string: test"))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: notStringifyStrValue == \"string: test\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(notStringifyStrValue,"string: test")))};
     const stringifyNumValue = String.raw({ raw: ["number: ", ""] }, ((e) => typeof e === 'string' ? e : JSON.stringify(e, null, 2))((obj)["numValue"]));
-    {((cond) => {if (!cond) throw new Error("assertion failed: stringifyNumValue == \"number: 1\"")})((stringifyNumValue === "number: 1"))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: stringifyNumValue == \"number: 1\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(stringifyNumValue,"number: 1")))};
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);

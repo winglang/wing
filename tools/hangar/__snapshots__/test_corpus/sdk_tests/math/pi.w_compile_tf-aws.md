@@ -28,7 +28,7 @@ module.exports = function({ $circumference, $math_Util, $r }) {
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.round(circumference(r), decimalPlaces: 2) == 62.83")})(((await $math_Util.round((await $circumference($r)),{ decimalPlaces: 2 })) === 62.83))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.round(circumference(r), decimalPlaces: 2) == 62.83")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.round((await $circumference($r)),{ decimalPlaces: 2 })),62.83)))};
     }
   }
   return $Closure2;
@@ -228,7 +228,7 @@ class $Root extends $stdlib.std.Resource {
     }
     const r = 10;
     const circumference = new $Closure1(this,"$Closure1");
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.PI, decimalPlaces: 3) == 3.142")})(((math.Util.round(math.Util.PI,{ decimalPlaces: 3 })) === 3.142))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.PI, decimalPlaces: 3) == 3.142")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.round(math.Util.PI,{ decimalPlaces: 3 })),3.142)))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:PI",new $Closure2(this,"$Closure2"));
   }
 }

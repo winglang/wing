@@ -13,7 +13,7 @@ module.exports = function({  }) {
       const s2 = {
       "a": "foo",}
       ;
-      {((cond) => {if (!cond) throw new Error("assertion failed: s2.a == \"foo\"")})((s2.a === "foo"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: s2.a == \"foo\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(s2.a,"foo")))};
     }
   }
   return $Closure1;
@@ -236,9 +236,9 @@ class $Root extends $stdlib.std.Resource {
     "field0": "foo",}
     ,}
     ;
-    {((cond) => {if (!cond) throw new Error("assertion failed: x.field0 == \"Sup\"")})((x.field0 === "Sup"))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: y.field1 == 1")})((y.field1 === 1))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: y.field3.field0 == \"foo\"")})((y.field3.field0 === "foo"))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: x.field0 == \"Sup\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(x.field0,"Sup")))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: y.field1 == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(y.field1,1)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: y.field3.field0 == \"foo\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(y.field3.field0,"foo")))};
     const s = {
     "a": "Boom baby",}
     ;

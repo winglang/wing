@@ -32,7 +32,7 @@ module.exports = function({ $std_Json, $usersTable }) {
     }
     async handle(req) {
       const body = (JSON.parse((req.body ?? ((args) => { return JSON.stringify(args[0], null, args[1]) })([Object.freeze({"name":"","age":"","id":""})]))));
-      if (((((body)["name"] === "") || ((body)["age"] === "")) || ((body)["id"] === ""))) {
+      if ((((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((body)["name"],"")) || (((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((body)["age"],""))) || (((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((body)["id"],"")))) {
         return {
         "body": ((args) => { return JSON.stringify(args[0], null, args[1]) })([Object.freeze({"error":"incomplete details"})]),
         "status": 400,}

@@ -46,7 +46,7 @@ module.exports = function({ $counter }) {
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: counter.peek() == 11")})(((await $counter.peek()) === 11))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: counter.peek() == 11")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $counter.peek()),11)))};
     }
   }
   return $Closure3;
