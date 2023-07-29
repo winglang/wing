@@ -84,11 +84,7 @@ mod tests {
 			.unwrap()
 			.filter(|entry| {
 				let entry = entry.as_ref().unwrap();
-				entry
-					.file_name()
-					.to_str()
-					.unwrap()
-					.ends_with(&format!(".{}", spec::CACHE_FILE_EXT))
+				entry.file_name().to_str().unwrap().ends_with(spec::CACHE_FILE_EXT)
 			})
 			.map(|entry| entry.unwrap())
 			.collect::<Vec<_>>();
@@ -107,11 +103,7 @@ mod tests {
 			.unwrap()
 			.filter(|entry| {
 				let entry = entry.as_ref().unwrap();
-				entry
-					.file_name()
-					.to_str()
-					.unwrap()
-					.ends_with(&format!(".{}", spec::CACHE_FILE_EXT))
+				entry.file_name().to_str().unwrap().ends_with(spec::CACHE_FILE_EXT)
 			})
 			.map(|entry| entry.unwrap())
 			.collect::<Vec<_>>();

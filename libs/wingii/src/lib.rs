@@ -34,7 +34,7 @@ pub mod spec {
 
 	pub const SPEC_FILE_NAME: &str = ".jsii";
 	pub const REDIRECT_FIELD: &str = "jsii/file-redirect";
-	pub(crate) const CACHE_FILE_EXT: &str = "jsii.bincode";
+	pub(crate) const CACHE_FILE_EXT: &str = ".jsii.bincode";
 
 	pub fn find_assembly_file(directory: &str) -> Result<String> {
 		let dot_jsii_file = Path::new(directory).join(SPEC_FILE_NAME);
@@ -56,7 +56,7 @@ pub mod spec {
 			.parent()
 			.unwrap()
 			.to_path_buf()
-			.join(format!("{hash}.{CACHE_FILE_EXT}"))
+			.join(format!("{hash}{CACHE_FILE_EXT}"))
 	}
 
 	pub(crate) fn try_load_from_cache(manifest_path: &Path, hash: &str) -> Option<Assembly> {
@@ -97,7 +97,9 @@ pub mod spec {
 			// Attempt to cache the manifest
 			if let JsiiFile::Assembly(assmbly) = &manifest {
 				if let Some(fingerprint) = &fingerprint {
-					let _ = cache_manifest(&assembly_path, assmbly, fingerprint);
+					if let Err(e) = cache_manifest(&assembly_path, assmbly, fingerprint) {
+						println!("Failed to cache manifest: {}", e);
+					}
 				}
 			}
 			manifest
@@ -144,16 +146,25 @@ pub mod spec {
 
 	fn cache_manifest(manifest_path: &Path, manifest: &Assembly, hash: &str) -> Result<()> {
 		let cache_file_dir = manifest_path.parent().unwrap().to_path_buf();
-		// Remove old cache files if they exists
+		let cache_file_name = format!("{hash}{CACHE_FILE_EXT}");
+
+		// Write the new cache file
+		let mut writer = File::create(cache_file_dir.join(&cache_file_name))?;
+		bincode::encode_into_std_write(manifest, &mut writer, bincode::config::standard())?;
+
+		// Remove all old cache files (except the new one)
+		// We remove after creating the new cache file to avoid a race with other processes
 		for old_file in fs::read_dir(cache_file_dir.clone()).unwrap().filter(|f| {
 			f.as_ref()
-				.map(|f| f.file_name().to_str().unwrap().ends_with(CACHE_FILE_EXT))
+				.map(|f| {
+					f.file_name().to_str().unwrap().ends_with(CACHE_FILE_EXT)
+						&& f.file_name().to_str().unwrap() != cache_file_name.as_str()
+				})
 				.unwrap_or(false)
 		}) {
 			_ = fs::remove_file(old_file.unwrap().path());
 		}
-		let mut writer = File::create(cache_file_dir.join(format!("{hash}.{CACHE_FILE_EXT}")))?;
-		bincode::encode_into_std_write(manifest, &mut writer, bincode::config::standard())?;
+
 		Ok(())
 	}
 }
