@@ -2065,8 +2065,6 @@ impl<'a> TypeChecker<'a> {
 		};
 
 		// Verify arity
-		// let arg_count = arg_list.pos_args.len() + (if arg_list.named_args.is_empty() { 0 } else { 1 });
-		// let arg_count = a.len() + (if arg_list.named_args.is_empty() { 0 } else { 1 });
 		let arg_count = (index_last_item + 1) + (if arg_list.named_args.is_empty() { 0 } else { 1 });
 		let min_args = func_sig.parameters.len() - num_optionals;
 		let max_args = func_sig.parameters.len();

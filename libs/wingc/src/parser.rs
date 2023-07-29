@@ -1094,11 +1094,7 @@ impl<'s> Parser<'s> {
 				name: self.check_reserved_symbol(&definition_node.child_by_field_name("name").unwrap())?,
 				type_annotation: self.build_type_annotation(&definition_node.child_by_field_name("type").unwrap(), phase)?,
 				reassignable: definition_node.child_by_field_name("reassignable").is_some(),
-				variadic: if definition_node.kind() == "variadic_definition" {
-					true
-				} else {
-					false
-				},
+				variadic: definition_node.child_by_field_name("variadic").is_some(),
 			});
 		}
 

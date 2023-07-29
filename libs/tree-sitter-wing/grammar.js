@@ -511,19 +511,22 @@ module.exports = grammar({
 
     access_modifier: ($) => choice("public", "private", "protected"),
 
+    variadic: ($) => "...",
+
+    variadic_container_type: ($) => seq(field("collection_type", choice("Array")), $._container_value_type),
+
+    variadic_definition: ($) => seq(
+      field("variadic", $.variadic),
+      field("name", $.identifier),
+      seq(":", field("type", $.variadic_container_type)),
+    ),
+
     parameter_definition: ($) =>
       seq(
         optional(field("reassignable", $.reassignable)),
         field("name", $.identifier),
         $._type_annotation
       ),
-
-    variadic_container_type: ($) => seq(field("collection_type", choice("Array")), $._container_value_type),
-
-    variadic_definition: ($) => seq(
-      seq("...", field("name", $.identifier)),
-      seq(":", field("type", $.variadic_container_type)),
-    ),
 
     parameter_list: ($) => seq(
       "(",
