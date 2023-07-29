@@ -14,7 +14,7 @@ mod tests {
 
 	use super::*;
 	use std::{
-		fs,
+		fs::{self},
 		io::{Read, Write},
 	};
 
@@ -42,20 +42,131 @@ mod tests {
 
 	#[test]
 	fn can_load_assembly_from_single_file_compressed() {
+		let (name, assembly_path) = create_temp_gz_assembly();
+
+		let assembly = spec::load_assembly_from_file(&name, assembly_path.to_str().unwrap(), Some("gzip"), &None).unwrap();
+		assert_eq!(assembly.name, "jsii-test-dep"); // TODO: write a better test
+		remove_temp_assembly(assembly_path);
+	}
+
+	#[test]
+	fn can_load_assembly_from_redirect_manifest() {
+		let (name, assembly_path) = create_temp_redirect_assembly();
+
+		let assembly = spec::load_assembly_from_file(&name, assembly_path.to_str().unwrap(), None, &None).unwrap();
+		assert_eq!(assembly.name, "jsii-test-dep"); // TODO: write a better test
+		remove_temp_assembly(assembly_path);
+	}
+
+	#[test]
+	fn cache_assembly() {
+		// Create temp assembly for test
+		let (name, assembly_path) = create_temp_assembly();
+
+		// Load the assembly and verify a cache file was created
+		let dummy_version = Some("1.2.3".to_string());
+		let assembly = spec::load_assembly_from_file(&name, assembly_path.to_str().unwrap(), None, &dummy_version).unwrap();
+		let fingerprint = spec::get_manifest_fingerprint(&name, &assembly_path, &dummy_version).unwrap();
+		let cached_assembly = spec::try_load_from_cache(&assembly_path, &fingerprint).unwrap();
+		assert_eq!(assembly, cached_assembly);
+
+		// Get the timestamp of the cache file
+		let cache_file_path = spec::get_cache_file_path(&assembly_path, &fingerprint);
+		let cache_file_metadata = fs::metadata(cache_file_path).unwrap();
+		let cache_file_timestamp = cache_file_metadata.modified().unwrap();
+
+		// Wait a bit and load the assembly again
+		std::thread::sleep(std::time::Duration::from_millis(2));
+		_ = spec::load_assembly_from_file(&name, assembly_path.to_str().unwrap(), None, &dummy_version).unwrap();
+
+		// Verify there's only a single cache file in the directory
+		let cache_files = fs::read_dir(assembly_path.parent().unwrap())
+			.unwrap()
+			.filter(|entry| {
+				let entry = entry.as_ref().unwrap();
+				entry
+					.file_name()
+					.to_str()
+					.unwrap()
+					.ends_with(&format!(".{}", spec::CACHE_FILE_EXT))
+			})
+			.map(|entry| entry.unwrap())
+			.collect::<Vec<_>>();
+		assert!(cache_files.len() == 1);
+		// Verify the file has the same timestamp as before
+		assert!(cache_files[0].metadata().unwrap().modified().unwrap() == cache_file_timestamp);
+
+		// Touch the assembly file and load the assembly again to verify the cache file was updated
+		std::thread::sleep(std::time::Duration::from_millis(2));
+		filetime::set_file_mtime(&assembly_path, filetime::FileTime::now()).unwrap();
+
+		_ = spec::load_assembly_from_file(&name, assembly_path.to_str().unwrap(), None, &dummy_version).unwrap();
+
+		// Verify there's still only a single cache file in the directory but it has a different timestamp
+		let cache_files = fs::read_dir(assembly_path.parent().unwrap())
+			.unwrap()
+			.filter(|entry| {
+				let entry = entry.as_ref().unwrap();
+				entry
+					.file_name()
+					.to_str()
+					.unwrap()
+					.ends_with(&format!(".{}", spec::CACHE_FILE_EXT))
+			})
+			.map(|entry| entry.unwrap())
+			.collect::<Vec<_>>();
+		assert!(cache_files.len() == 1);
+		assert!(cache_files[0].metadata().unwrap().modified().unwrap() > cache_file_timestamp);
+	}
+
+	#[test]
+	fn cache_redireted_assembly() {
+		// Create temp assembly for test
+		let (name, assembly_path) = create_temp_redirect_assembly();
+		// Get the target assembly path
+		let redirect_jsii = serde_json::from_str::<JsiiFile>(&fs::read_to_string(assembly_path.clone()).unwrap()).unwrap();
+		let target_file = match redirect_jsii {
+			JsiiFile::AssemblyRedirect(redirect) => redirect.filename,
+			_ => panic!("Expected AssemblyRedirect"),
+		};
+		let target_assembly_path = assembly_path.parent().unwrap().join(target_file);
+
+		// Load the assembly and verify a cache file was created
+		let dummy_version = Some("1.2.3".to_string());
+		let assembly = spec::load_assembly_from_file(&name, assembly_path.to_str().unwrap(), None, &dummy_version).unwrap();
+		let fingerprint = spec::get_manifest_fingerprint(&name, &target_assembly_path, &dummy_version).unwrap();
+		let cached_assembly = spec::try_load_from_cache(&target_assembly_path, &fingerprint).unwrap();
+		assert_eq!(assembly, cached_assembly);
+	}
+
+	fn create_temp_gz_assembly() -> (String, PathBuf) {
 		let (name, assembly_path_pre) = create_temp_assembly();
-		let assembly_path = assembly_path_pre.with_extension("jsii.gz");
 
 		// gzip the file
+		let assembly_path = assembly_path_pre.with_extension("gz");
 		let mut gz = GzEncoder::new(File::create(&assembly_path).unwrap(), Compression::default());
 		let mut file = File::open(&assembly_path_pre).unwrap();
 		let mut buffer = Vec::new();
 		file.read_to_end(&mut buffer).unwrap();
 		gz.write_all(&buffer).unwrap();
 		gz.finish().unwrap();
+		(name, assembly_path)
+	}
 
-		let assembly = spec::load_assembly_from_file(&name, assembly_path.to_str().unwrap(), Some("gzip"), &None).unwrap();
-		assert_eq!(assembly.name, "jsii-test-dep"); // TODO: write a better test
-		remove_temp_assembly(assembly_path);
+	fn create_temp_redirect_assembly() -> (String, PathBuf) {
+		// Create the actual gzipped assembly
+		let (name, assembly_path) = create_temp_gz_assembly();
+		// Create the redirect manifest
+		let target_file = assembly_path.file_name().unwrap().to_str().unwrap();
+		let redirect_assembly = json!({
+			"schema": "jsii/file-redirect",
+			"compression": "gzip",
+			"filename": target_file
+		});
+		let redirect_file_path = assembly_path.parent().unwrap().join(spec::SPEC_FILE_NAME);
+		let redirect_file = File::create(&redirect_file_path).unwrap();
+		serde_json::to_writer_pretty(redirect_file, &redirect_assembly).unwrap();
+		(name, redirect_file_path)
 	}
 
 	#[test]

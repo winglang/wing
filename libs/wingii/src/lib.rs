@@ -34,7 +34,7 @@ pub mod spec {
 
 	pub const SPEC_FILE_NAME: &str = ".jsii";
 	pub const REDIRECT_FIELD: &str = "jsii/file-redirect";
-	const CACHE_FILE_EXT: &str = "jsii.bincode";
+	pub(crate) const CACHE_FILE_EXT: &str = "jsii.bincode";
 
 	pub fn find_assembly_file(directory: &str) -> Result<String> {
 		let dot_jsii_file = Path::new(directory).join(SPEC_FILE_NAME);
@@ -51,8 +51,17 @@ pub mod spec {
 		}
 	}
 
-	fn try_load_from_cache(manifest_path: &Path, hash: &str) -> Option<Assembly> {
-		let data = fs::read(get_cache_file_dir(manifest_path).join(format!("{hash}.{CACHE_FILE_EXT}"))).ok()?;
+	pub(crate) fn get_cache_file_path(manifest_path: &Path, hash: &str) -> PathBuf {
+		manifest_path
+			.parent()
+			.unwrap()
+			.to_path_buf()
+			.join(format!("{hash}.{CACHE_FILE_EXT}"))
+	}
+
+	pub(crate) fn try_load_from_cache(manifest_path: &Path, hash: &str) -> Option<Assembly> {
+		let path = get_cache_file_path(manifest_path, hash);
+		let data = fs::read(path).ok()?;
 		let (asm, _): (Assembly, usize) = bincode::decode_from_slice(&data, bincode::config::standard()).ok()?;
 		Some(asm)
 	}
@@ -112,7 +121,11 @@ pub mod spec {
 		}
 	}
 
-	fn get_manifest_fingerprint(name: &str, assembly_path: &Path, module_version: &Option<String>) -> Option<String> {
+	pub(crate) fn get_manifest_fingerprint(
+		name: &str,
+		assembly_path: &Path,
+		module_version: &Option<String>,
+	) -> Option<String> {
 		let module_version = module_version.as_ref()?;
 		let metadata = fs::metadata(assembly_path).ok()?;
 		let fp_raw_str = format!(
@@ -129,12 +142,8 @@ pub mod spec {
 		Some(blake3::hash(&fp_raw_str.as_bytes()).to_string())
 	}
 
-	fn get_cache_file_dir(manifest_path: &Path) -> PathBuf {
-		manifest_path.parent().unwrap().to_path_buf()
-	}
-
 	fn cache_manifest(manifest_path: &Path, manifest: &Assembly, hash: &str) -> Result<()> {
-		let cache_file_dir = get_cache_file_dir(manifest_path);
+		let cache_file_dir = manifest_path.parent().unwrap().to_path_buf();
 		// Remove old cache files if they exists
 		for old_file in fs::read_dir(cache_file_dir.clone()).unwrap().filter(|f| {
 			f.as_ref()
