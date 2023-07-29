@@ -215,6 +215,27 @@ inflight (callback: (num,num):bool) => {};
       block: (block))))
 
 ================================================================================
+Inflight closure with variadic argument
+================================================================================
+
+inflight (...z: Array<num>):bool => {};
+
+--------------------------------------------------------------------------------
+
+(source
+  (expression_statement
+    (inflight_closure
+      (inflight_specifier)
+      parameter_list: (parameter_list
+        (variadic_definition
+          variadic: (variadic)
+          name: (identifier)
+          type: (variadic_container_type
+            type_parameter: (builtin_type))))
+      type: (builtin_type)
+      block: (block))))
+
+================================================================================
 Inflight closure with parameter and variadic argument
 ================================================================================
 

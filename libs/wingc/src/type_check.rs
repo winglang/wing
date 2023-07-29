@@ -2065,7 +2065,12 @@ impl<'a> TypeChecker<'a> {
 		};
 
 		// Verify arity
-		let arg_count = (index_last_item + 1) + (if arg_list.named_args.is_empty() { 0 } else { 1 });
+		let arg_count = if variadic_index.is_some() {
+			(index_last_item + 1) + (if arg_list.named_args.is_empty() { 0 } else { 1 })
+		} else {
+			(index_last_item) + (if arg_list.named_args.is_empty() { 0 } else { 1 })
+		};
+		// let arg_count = (index_last_item) + (if arg_list.named_args.is_empty() { 0 } else { 1 });
 		let min_args = func_sig.parameters.len() - num_optionals;
 		let max_args = func_sig.parameters.len();
 		if arg_count < min_args || arg_count > max_args {
