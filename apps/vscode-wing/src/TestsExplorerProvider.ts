@@ -4,6 +4,7 @@ import {
   TreeItemCollapsibleState,
   Event,
   EventEmitter,
+  ThemeIcon,
 } from "vscode";
 
 export type TestStatus = "success" | "error" | "running" | "pending";
@@ -36,7 +37,6 @@ export class TestsExplorerProvider implements TreeDataProvider<TestItem> {
 
   update(tests: TestItem[]): void {
     this.tests = tests;
-
     this.refresh();
   }
 
@@ -80,5 +80,15 @@ export class TestItem extends TreeItem {
       description = `${description} (${this.time}ms)`;
     }
     this.description = description;
+
+    let iconName = "issues";
+    if (this.status === "success") {
+      iconName = "check";
+    } else if (this.status === "error") {
+      iconName = "error";
+    } else if (this.status === "running") {
+      iconName = "sync~spin";
+    }
+    this.iconPath = new ThemeIcon(iconName);
   }
 }
