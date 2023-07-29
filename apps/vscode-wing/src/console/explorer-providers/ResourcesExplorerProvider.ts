@@ -6,6 +6,7 @@ import {
   TreeDataProvider,
   Event,
   EventEmitter,
+  ThemeIcon,
 } from "vscode";
 
 export class ResourcesExplorerProvider
@@ -96,11 +97,18 @@ export class ResourceItem extends TreeItem {
     this.id = id;
     this.tooltip = this.label;
     this.resourceType = resourceType;
-    this.iconPath = path.join(
-      __filename,
-      "../../node_modules/heroicons/24/outline",
-      `${this.getResourceIconName(resourceType, id)}.svg`
-    );
+    this.iconPath = {
+      light: path.join(
+        __filename,
+        "../../resources/resource-icons/light",
+        `${this.getResourceIconName(resourceType, id)}.svg`
+      ),
+      dark: path.join(
+        __filename,
+        "../../resources/resource-icons/dark",
+        `${this.getResourceIconName(resourceType, id)}.svg`
+      ),
+    };
   }
 
   private matchTest = (resourceId: string) => {

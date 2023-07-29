@@ -59,7 +59,6 @@ const project = new TypeScriptAppProject({
     "@wingconsole/app@workspace:^",
     "@wingconsole/server@workspace:^",
     "@trpc/client",
-    "heroicons",
     "node-fetch@2",
     "ws",
     "open",
