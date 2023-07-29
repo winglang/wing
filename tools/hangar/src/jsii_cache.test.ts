@@ -33,7 +33,7 @@ test("JSII manifest cache", async () => {
 
     // Make sure the manifest cache file was generated
     let files = (await fs.readdir(module_dir)).filter((file) => file.endsWith(manifestCacheExt));
-    assert(files.length === 1);
+    assert(files.length === 1, `Expected 1 manifest cache file, found ${files}`);
     let cache_file = files[0];
     let stat = await fs.stat(path.join(module_dir, cache_file));
     assert(stat.size > 0);
