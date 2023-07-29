@@ -831,7 +831,7 @@ impl<'a> JSifier<'a> {
 		let mut parameter_list = vec![];
 
 		for p in &func_def.signature.parameters {
-			if p.variadic == true {
+			if p.variadic {
 				parameter_list.push("...".to_string() + &p.name.to_string());
 			} else {
 				parameter_list.push(p.name.to_string());

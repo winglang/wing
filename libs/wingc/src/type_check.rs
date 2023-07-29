@@ -2098,7 +2098,7 @@ impl<'a> TypeChecker<'a> {
 			let mut new_arg_list_types: Vec<TypeRef> = Vec::new();
 			for i in 0..index_last_item {
 				new_arg_list.push(arg_list.pos_args.get(i).unwrap().clone());
-				new_arg_list_types.push(arg_list_types.pos_args.get(i).unwrap().clone());
+				new_arg_list_types.push(*arg_list_types.pos_args.get(i).unwrap());
 			}
 			let mut variadic_arg_list: Vec<Expr> = Vec::new();
 			for i in index_last_item..arg_list.pos_args.len() {
@@ -2111,7 +2111,7 @@ impl<'a> TypeChecker<'a> {
 				},
 				WingSpan::default(),
 			));
-			let variadic_array_type = Type::Array(arg_list_types.pos_args.get(index_last_item).unwrap().clone());
+			let variadic_array_type = Type::Array(*arg_list_types.pos_args.get(index_last_item).unwrap());
 			new_arg_list_types.push(UnsafeRef(&variadic_array_type));
 			for (arg_expr, arg_type, param) in izip!(new_arg_list.iter(), new_arg_list_types.iter(), params) {
 				self.validate_type(*arg_type, param.typeref, arg_expr);

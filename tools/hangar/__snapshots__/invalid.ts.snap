@@ -707,6 +707,21 @@ Test Files 1 failed (1)
 Duration <DURATION>"
 `;
 
+exports[`function_variadic_definition.w 1`] = `
+"error: Unexpected 'variadic_definition'
+  --> ../../../examples/tests/invalid/function_variadic_definition.w:1:10
+  |
+1 | let f = (...args: Array<num>, x:num) => {};
+  |          ^^^^^^^^^^^^^^^^^^^ Unexpected 'variadic_definition'
+
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
+
 exports[`immutable_container_types.w 1`] = `
 "error: Unknown symbol \\"set\\"
   --> ../../../examples/tests/invalid/immutable_container_types.w:3:4
