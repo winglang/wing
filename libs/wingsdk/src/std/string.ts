@@ -159,7 +159,7 @@ export class String {
    * @param replaceString The replacement substring.
    * @returns The modified string after replacement.
    */
-  public replace(searchString: string | RegExp, replaceString: string): string {
+  public replace(searchString: string, replaceString: string): string {
     searchString;
     replaceString;
     throw new Error("Abstract");
