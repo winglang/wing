@@ -167,7 +167,7 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
   // This is necessary because the Wing app may have installed dependencies in
   // the project directory.
   const requireResolve = (path: string) =>
-    require.resolve(path, { paths: [workDir, __dirname, wingDir] });
+    require.resolve(path, { paths: [__dirname, wingDir, workDir] });
   const preflightRequire = (path: string) => require(requireResolve(path));
   preflightRequire.resolve = requireResolve;
 
