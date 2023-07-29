@@ -98,7 +98,7 @@ pub mod spec {
 			if let JsiiFile::Assembly(assmbly) = &manifest {
 				if let Some(fingerprint) = &fingerprint {
 					if let Err(e) = cache_manifest(&assembly_path, assmbly, fingerprint) {
-						println!("Failed to cache manifest: {}", e);
+						eprintln!("Failed to cache manifest: {}", e);
 					}
 				}
 			}
