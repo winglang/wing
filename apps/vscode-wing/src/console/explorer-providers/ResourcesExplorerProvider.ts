@@ -1,3 +1,4 @@
+import path from "path";
 import { ExplorerItem } from "@wingconsole/server";
 import {
   TreeItemCollapsibleState,
@@ -52,6 +53,7 @@ export class ResourcesExplorerProvider
           return new ResourceItem(
             child.id,
             child.label,
+            child.type || "",
             child.childItems?.length && child.childItems.length > 0
               ? TreeItemCollapsibleState.Expanded
               : TreeItemCollapsibleState.None
@@ -73,6 +75,7 @@ export class ResourcesExplorerProvider
         return new ResourceItem(
           child.id,
           child.label,
+          child.type || "",
           child.childItems?.length && child.childItems.length > 0
             ? TreeItemCollapsibleState.Expanded
             : TreeItemCollapsibleState.None
@@ -85,12 +88,73 @@ export class ResourcesExplorerProvider
 export class ResourceItem extends TreeItem {
   constructor(
     public readonly id: string,
-    public readonly label?: string,
+    public readonly label: string,
+    public readonly resourceType: string,
     public readonly collapsibleState?: TreeItemCollapsibleState
   ) {
     super(label || "", collapsibleState);
-    this.iconPath = "../resources/play-light.svg";
-    this.tooltip = this.label;
     this.id = id;
+    this.tooltip = this.label;
+    this.resourceType = resourceType;
+    this.iconPath = path.join(
+      __filename,
+      "../../node_modules/heroicons/24/outline",
+      `${this.getResourceIconName(resourceType, id)}.svg`
+    );
   }
+
+  private matchTest = (resourceId: string) => {
+    const isTest = /(\/test$|\/test:([^/\\])+$)/;
+    const isTestHandler = /(\/test$|\/test:.*\/Handler$)/;
+
+    return isTest.test(resourceId) || isTestHandler.test(resourceId);
+  };
+
+  private getResourceIconName = (
+    resourceType: string | undefined,
+    resourceId?: string
+  ) => {
+    if (resourceId && this.matchTest(resourceId)) {
+      return "beaker";
+    }
+    switch (resourceType) {
+      case "wingsdk.cloud.Bucket": {
+        return "archive-box";
+      }
+      case "wingsdk.cloud.Function": {
+        return "bolt";
+      }
+      case "wingsdk.cloud.Queue": {
+        return "queue-list";
+      }
+      case "wingsdk.cloud.Website":
+      case "wingsdk.cloud.Endpoint": {
+        return "globe-alt";
+      }
+      case "wingsdk.cloud.Counter": {
+        return "calculator";
+      }
+      case "wingsdk.cloud.Topic": {
+        return "megaphone";
+      }
+      case "wingsdk.cloud.Api": {
+        return "cloud";
+      }
+      case "wingsdk.cloud.Table": {
+        return "table-cells";
+      }
+      case "wingsdk.cloud.Schedule": {
+        return "clock";
+      }
+      case "wingsdk.redis.Redis": {
+        return "redis";
+      }
+      case "wingsdk.cloud.Test": {
+        return "beaker";
+      }
+      default: {
+        return "cube";
+      }
+    }
+  };
 }

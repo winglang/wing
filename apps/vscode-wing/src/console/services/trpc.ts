@@ -7,7 +7,7 @@ import {
 } from "@trpc/client";
 
 import type { ExplorerItem, Router } from "@wingconsole/server";
-import { TestItem } from "../TestsExplorerProvider";
+import { TestItem } from "../explorer-providers/TestsExplorerProvider";
 
 export interface SubscriptionOptions {
   onData: (data: any) => void;
@@ -69,7 +69,7 @@ export const createTRPCClient = (host: string): Client => {
   };
 
   const runAllTests = () => {
-    return client["test.runAll"].mutate({});
+    return client["test.runAll"].mutate();
   };
 
   const listResources = () => {

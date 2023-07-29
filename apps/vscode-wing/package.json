@@ -162,8 +162,8 @@
         "command": "wingConsole.runAllTests",
         "title": "Run all test",
         "icon": {
-          "light": "resources/play-light.svg",
-          "dark": "resources/play-dark.svg"
+          "light": "resources/play-all-light.svg",
+          "dark": "resources/play-all-dark.svg"
         }
       }
     ],

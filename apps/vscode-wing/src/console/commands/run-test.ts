@@ -1,5 +1,8 @@
+import {
+  TestItem,
+  TestsExplorerProvider,
+} from "../explorer-providers/TestsExplorerProvider";
 import { Client } from "../services/trpc";
-import { TestItem, TestsExplorerProvider } from "../TestsExplorerProvider";
 
 export const runTest = async (
   client: Client,

@@ -18,14 +18,14 @@ import {
   workspace,
   OutputChannel,
 } from "vscode";
-import { ConsolePanelsManager } from "./console-panels-manager";
-import { VIEW_TYPE_CONSOLE } from "./constants";
-import { ResourcesExplorerProvider } from "./ResourcesExplorerProvider";
+import { ResourcesExplorerProvider } from "./explorer-providers/ResourcesExplorerProvider";
+import { TestsExplorerProvider } from "./explorer-providers/TestsExplorerProvider";
+import { PanelsManager } from "./panels-manager";
 import { createTRPCClient } from "./services/trpc";
-import { TestsExplorerProvider } from "./TestsExplorerProvider";
+import { VIEW_TYPE_CONSOLE } from "../constants";
 
 export class WingConsoleManager {
-  consolePanelsManager: ConsolePanelsManager;
+  panelsManager: PanelsManager;
 
   logger: OutputChannel = window.createOutputChannel("Wing Console");
 
@@ -34,7 +34,7 @@ export class WingConsoleManager {
 
     const testsExplorer = new TestsExplorerProvider();
 
-    this.consolePanelsManager = new ConsolePanelsManager(
+    this.panelsManager = new PanelsManager(
       this.logger,
       resourcesExplorer,
       testsExplorer
@@ -52,7 +52,7 @@ export class WingConsoleManager {
       if (textEditor?.document?.languageId !== "wing") {
         return;
       }
-      await this.consolePanelsManager.setActiveConsolePanel(
+      await this.panelsManager.setActiveConsolePanel(
         textEditor?.document.uri.fsPath
       );
     });
@@ -61,7 +61,7 @@ export class WingConsoleManager {
       if (textDocument.languageId !== "wing") {
         return;
       }
-      this.consolePanelsManager.closeConsolePanel(textDocument.uri.fsPath);
+      this.panelsManager.closeConsolePanel(textDocument.uri.fsPath);
     });
   }
 
@@ -83,14 +83,14 @@ export class WingConsoleManager {
     };
 
     // Use Console as a singleton
-    const activePanelId = this.consolePanelsManager?.getActiveConsolePanelId();
+    const activePanelId = this.panelsManager?.getActiveConsolePanelId();
     if (activePanelId) {
-      this.consolePanelsManager.closeConsolePanel(activePanelId);
+      this.panelsManager.closeConsolePanel(activePanelId);
     }
 
-    if (this.consolePanelsManager.getConsolePanel(uri.fsPath)) {
+    if (this.panelsManager.getConsolePanel(uri.fsPath)) {
       this.logger.appendLine(`Wing Console is already running`);
-      await this.consolePanelsManager.setActiveConsolePanel(uri.fsPath);
+      await this.panelsManager.setActiveConsolePanel(uri.fsPath);
       return;
     }
 
@@ -159,13 +159,13 @@ export class WingConsoleManager {
 
     panel.onDidChangeViewState(async () => {
       if (panel.active) {
-        await this.consolePanelsManager?.setActiveConsolePanel(uri.fsPath);
+        await this.panelsManager?.setActiveConsolePanel(uri.fsPath);
       }
     });
 
     panel.onDidDispose(async () => {
       await close();
-      this.consolePanelsManager?.closeConsolePanel(uri.fsPath);
+      this.panelsManager?.closeConsolePanel(uri.fsPath);
     });
 
     panel.webview.html = `\
@@ -183,17 +183,17 @@ export class WingConsoleManager {
         </body>
       </html>`;
 
-    this.consolePanelsManager.addConsolePanel({
+    this.panelsManager.addConsolePanel({
       id: uri.fsPath,
       panel: panel,
       client: createTRPCClient(url),
     });
 
-    await this.consolePanelsManager.setActiveConsolePanel(uri.fsPath);
+    await this.panelsManager.setActiveConsolePanel(uri.fsPath);
   }
 
   public async openFile() {
-    const activePanel = this.consolePanelsManager?.getActiveConsolePanelId();
+    const activePanel = this.panelsManager?.getActiveConsolePanelId();
     if (activePanel) {
       const document = await workspace.openTextDocument(activePanel);
 

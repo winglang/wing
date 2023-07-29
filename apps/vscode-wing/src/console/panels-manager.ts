@@ -1,17 +1,14 @@
-import {
-  WebviewPanel,
-  window,
-  commands,
-  Disposable,
-  OutputChannel,
-} from "vscode";
+import { WebviewPanel, commands, OutputChannel } from "vscode";
 
 import { openResource } from "./commands/open-resource";
 import { runAllTests } from "./commands/run-all-test";
 import { runTest } from "./commands/run-test";
-import { ResourcesExplorerProvider } from "./ResourcesExplorerProvider";
+import { ResourcesExplorerProvider } from "./explorer-providers/ResourcesExplorerProvider";
+import {
+  TestItem,
+  TestsExplorerProvider,
+} from "./explorer-providers/TestsExplorerProvider";
 import { Client } from "./services/trpc";
-import { TestItem, TestsExplorerProvider } from "./TestsExplorerProvider";
 
 export interface ConsolePanel {
   id: string;
@@ -19,7 +16,7 @@ export interface ConsolePanel {
   client: Client;
 }
 
-export class ConsolePanelsManager {
+export class PanelsManager {
   private consolePanels: Record<string, ConsolePanel> = {};
 
   private resourcesExplorer: ResourcesExplorerProvider;
