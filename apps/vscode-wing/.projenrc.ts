@@ -62,6 +62,7 @@ const project = new TypeScriptAppProject({
     "heroicons",
     "node-fetch@2",
     "ws",
+    "open",
   ],
   devDeps: [
     "@types/node",

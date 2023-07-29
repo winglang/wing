@@ -3,6 +3,7 @@ import { createConsoleApp } from "@wingconsole/app";
 
 import fetch from "node-fetch";
 import ws from "ws";
+import open from "open";
 
 const globalAny = global as any;
 globalAny.fetch = fetch;
@@ -81,6 +82,12 @@ export class WingConsoleManager {
       this.logger.appendLine(`[${type}] ${message}`);
     };
 
+    // Use Console as a singleton
+    const activePanelId = this.consolePanelsManager?.getActiveConsolePanelId();
+    if (activePanelId) {
+      this.consolePanelsManager.closeConsolePanel(activePanelId);
+    }
+
     if (this.consolePanelsManager.getConsolePanel(uri.fsPath)) {
       this.logger.appendLine(`Wing Console is already running`);
       await this.consolePanelsManager.setActiveConsolePanel(uri.fsPath);
@@ -93,7 +100,7 @@ export class WingConsoleManager {
       wingfile: uri.fsPath,
       hostUtils: {
         openExternal: async (url: string) => {
-          //await open(url);
+          await open(url);
         },
       },
       log: {

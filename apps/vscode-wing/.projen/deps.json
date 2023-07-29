@@ -114,6 +114,10 @@
       "type": "runtime"
     },
     {
+      "name": "open",
+      "type": "runtime"
+    },
+    {
       "name": "vscode-languageclient",
       "type": "runtime"
     },

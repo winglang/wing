@@ -213,6 +213,9 @@ importers:
       node-fetch:
         specifier: '2'
         version: 2.6.12
+      open:
+        specifier: ^8.4.0
+        version: 8.4.0
       vscode-languageclient:
         specifier: ^8.0.2
         version: 8.0.2
@@ -12678,7 +12681,7 @@ packages:
     dependencies:
       semver: 7.5.2
       shelljs: 0.8.5
-      typescript: 5.2.0-dev.20230726
+      typescript: 5.2.0-dev.20230729
     dev: true
 
   /dset@3.1.2:
@@ -21717,8 +21720,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  /typescript@5.2.0-dev.20230726:
-    resolution: {integrity: sha512-WXVjQVYHgcJwZh0r5TzBl42dzg6ap9VS0+8dm76/i0T/BhLnmC3CIBsLHZ5WQ3l1CqO/W5kSuywX94xVg98otA==}
+  /typescript@5.2.0-dev.20230729:
+    resolution: {integrity: sha512-PUbdfeYxptkWvHyvE7umkPHIyiE8GR/ZqZkjVZmPOu4GVHA8Yxdv74dEHl0AP8WvgVtes66Rxc2TdMnHp9LeEw==}
     engines: {node: '>=14.17'}
     hasBin: true
     dev: true

@@ -89,6 +89,7 @@ export class ResourceItem extends TreeItem {
     public readonly collapsibleState?: TreeItemCollapsibleState
   ) {
     super(label || "", collapsibleState);
+    this.iconPath = "../resources/play-light.svg";
     this.tooltip = this.label;
     this.id = id;
   }

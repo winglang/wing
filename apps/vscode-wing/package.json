@@ -56,6 +56,7 @@
     "@wingconsole/server": "workspace:^",
     "heroicons": "^0.0.0-insiders.1511059",
     "node-fetch": "2",
+    "open": "^8.4.0",
     "vscode-languageclient": "^8.0.2",
     "which": "^3.0.0",
     "ws": "^8.13.0"
