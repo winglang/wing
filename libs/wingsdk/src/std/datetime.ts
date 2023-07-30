@@ -113,7 +113,9 @@ export class Datetime {
   }
 
   /**
-   *  returns a timestamp of non-leap milliseconds since epoch
+   * Return a timestamp of non-leap year milliseconds since epoch
+   *
+   * @returns a number representing the current timestamp in milliseconds
    */
   get timestampMs(): number {
     // since converting between timezones/ declaring a date in a timezone other than the local or UTC
