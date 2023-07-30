@@ -106,7 +106,9 @@ export class Datetime {
   }
 
   /**
-   *  returns a timestamp of non-leap seconds since epoch
+   * Retrun a timestamp of non-leap year seconds since epoch
+   * 
+   * @returns a number representing the current timestamp in seconds
    */
   get timestamp(): number {
     return this.timestampMs / 1000;
