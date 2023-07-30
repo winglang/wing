@@ -112,7 +112,7 @@ mod tests {
 	}
 
 	#[test]
-	fn cache_redireted_assembly() {
+	fn cache_redirected_assembly() {
 		// Create temp assembly for test
 		let (name, assembly_path) = create_temp_redirect_assembly();
 		// Get the target assembly path
