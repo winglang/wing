@@ -8,12 +8,15 @@ keywords: [Wing test, multi-cloud]
 Winglang incorporates a lightweight testing framework, which is built around the `wing test` command and the `test` keyword. It lets you to run the same tests, in isolation, on both the Wing simulator and in the cloud.
 
 ### How to create a test
+
 You can create a test by adding the following code structure to any Winglang file (.w):
+
 ```ts wing
 test "<test-name>" {
-  // test code 
+  // test code
 }
 ```
+
 If a test throws an exception (typically using the `assert` function), it's considered to have failed.
 
 Here's an example:
@@ -28,13 +31,14 @@ test "abs" {
 ```
 
 ### Running tests in the Simulator
+
 You can execute all tests in a `.w` file in the simulator using the following command:
 
 ```sh
-% wing test example.w --target sim 
+% wing test example.w --target sim
 pass ─ example.wsim » root/env0/test:abs
 
- 
+
 Tests 1 passed (1)
 Test Files 1 passed (1)
 Duration 0m0.54s
@@ -43,6 +47,7 @@ Duration 0m0.54s
 **Notice:** The `--target sim` argument can be omitted as it's the default target for the wing test command.
 
 ### Tests run in isolation
+
 Every Winglang test is executed in complete isolation. Take a look at the following code:
 
 ```ts playground
@@ -92,9 +97,10 @@ test "bucket onCreate" {
 
 ```
 
-Running the test on the tf-aws target 
+Running the test on the tf-aws target
+
 ```sh
-% wing test example.w -t tf-aws 
+% wing test example.w -t tf-aws
 ✔ Compiling example.w to tf-aws...
 ✔ terraform init
 ✔ terraform apply
@@ -102,8 +108,27 @@ Running the test on the tf-aws target
 ✔ Running tests...
 pass ─ example.tfaws » root/Default/env0/test:bucket onCreate
 ✔ terraform destroy
- 
- 
+
+
+Tests 1 passed (1)
+Test Files 1 passed (1)
+Duration 1m31.44s
+```
+
+By default, the tested resources will be destroyed at the end of the test. You can use the `--no-clean` to keep them up. This way, the path to the randomized directory, containing the output files, will be display at the end of the test.
+
+```sh
+% wing test example.w -t tf-aws --no-clean
+✔ Compiling example.w to tf-aws...
+✔ terraform init
+✔ terraform apply
+✔ Setting up test runner...
+✔ Running tests...
+pass ─ example.tfaws » root/Default/env0/test:bucket onCreate
+✔ terraform destroy
+Clean up is disabled!
+please review the output files at /var/folders/1m/..../example.tfaws
+
 Tests 1 passed (1)
 Test Files 1 passed (1)
 Duration 1m31.44s
@@ -113,7 +138,8 @@ Duration 1m31.44s
 
 Wing Console provides a straightforward method to run either a single test or all your tests.
 
-Consider the following code: 
+Consider the following code:
+
 ```ts playground
 // example.w
 bring cloud;
@@ -138,5 +164,3 @@ test "this test should fail" {
 
 Refer to the TESTS section in the image below. You have the option to run all tests or a single test.
 ![image](https://github.com/winglang/wing/assets/1727147/7d5ebc00-9316-41d1-9a3c-0e28e195d077)
-
-
