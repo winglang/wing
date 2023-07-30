@@ -75,8 +75,10 @@ export class Datetime {
   }
 
   /**
-   * returns an instance of Date time created from DatetimeComponents
+   * Create a Datetime from Datetime components
+   * 
    * @param c DatetimeComponents
+   * @returns a new `Datetime`
    */
   static fromComponents(c: DatetimeComponents): Datetime {
     const date = new Date(
