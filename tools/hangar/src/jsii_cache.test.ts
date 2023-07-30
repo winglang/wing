@@ -23,6 +23,17 @@ test("JSII manifest cache", async () => {
     // Make sure the module lib dir exists and we have access to it (will throw otherwise)
     await fs.access(module_dir, fs.constants.W_OK | fs.constants.R_OK);
 
+    // Write temporary file to the module lib dir to make sure we have write access
+    const tmpFile = path.join(module_dir, "tmp.txt");
+    try {
+      await fs.writeFile(tmpFile, "tmp");
+    } catch (e) {
+      assert(false, `Failed to write to ${module_dir}: ${e}`);
+    }
+    // Make sure we can read the file
+    let x = await fs.readFile(tmpFile);
+    assert(x.toString() === "tmp", `Expected "tmp" in ${tmpFile}, found ${x.toString()}`);
+
     // Compile the example (this should generate the manifest cache)
     await runWingCommand({
       cwd: validTestDir,
