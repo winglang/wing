@@ -53,7 +53,9 @@ export class Datetime {
   }
 
   /**
-   * returns the current time in system timezone
+   * Create a Datetime from local system timezone
+   *
+   * @returns a new `Datetime` from current time in system timezone
    */
   static systemNow(): Datetime {
     const date = new Date();
