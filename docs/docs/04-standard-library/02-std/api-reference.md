@@ -198,8 +198,8 @@ Represents a local or UTC date object.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.std.Datetime.toIso">toIso</a></code> | returns ISO-8601 string. |
-| <code><a href="#@winglang/sdk.std.Datetime.toUtc">toUtc</a></code> | returns a Datetime represents the same date in utc. |
+| <code><a href="#@winglang/sdk.std.Datetime.toIso">toIso</a></code> | Returns ISO-8601 string. |
+| <code><a href="#@winglang/sdk.std.Datetime.toUtc">toUtc</a></code> | Returns a Datetime represents the same date in utc. |
 
 ---
 
@@ -209,7 +209,7 @@ Represents a local or UTC date object.
 toIso(): str
 ```
 
-returns ISO-8601 string.
+Returns ISO-8601 string.
 
 ##### `toUtc` <a name="toUtc" id="@winglang/sdk.std.Datetime.toUtc"></a>
 
@@ -217,16 +217,16 @@ returns ISO-8601 string.
 toUtc(): datetime
 ```
 
-returns a Datetime represents the same date in utc.
+Returns a Datetime represents the same date in utc.
 
 #### Static Functions <a name="Static Functions" id="Static Functions"></a>
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.std.Datetime.fromComponents">fromComponents</a></code> | returns an instance of Date time created from DatetimeComponents. |
-| <code><a href="#@winglang/sdk.std.Datetime.fromIso">fromIso</a></code> | returns an instance of Date time created from an ISO-8601 string, represents the time in UTC. |
-| <code><a href="#@winglang/sdk.std.Datetime.systemNow">systemNow</a></code> | returns the current time in system timezone. |
-| <code><a href="#@winglang/sdk.std.Datetime.utcNow">utcNow</a></code> | returns the current time in UTC timezone. |
+| <code><a href="#@winglang/sdk.std.Datetime.fromComponents">fromComponents</a></code> | Create a Datetime from Datetime components. |
+| <code><a href="#@winglang/sdk.std.Datetime.fromIso">fromIso</a></code> | Create a Datetime from an ISO-8601 string. |
+| <code><a href="#@winglang/sdk.std.Datetime.systemNow">systemNow</a></code> | Create a Datetime from local system timezone. |
+| <code><a href="#@winglang/sdk.std.Datetime.utcNow">utcNow</a></code> | Create a Datetime from UTC timezone. |
 
 ---
 
@@ -236,7 +236,7 @@ returns a Datetime represents the same date in utc.
 datetime.fromComponents(c: DatetimeComponents);
 ```
 
-returns an instance of Date time created from DatetimeComponents.
+Create a Datetime from Datetime components.
 
 ###### `c`<sup>Required</sup> <a name="c" id="@winglang/sdk.std.Datetime.fromComponents.parameter.c"></a>
 
@@ -252,7 +252,7 @@ DatetimeComponents.
 datetime.fromIso(iso: str);
 ```
 
-returns an instance of Date time created from an ISO-8601 string, represents the time in UTC.
+Create a Datetime from an ISO-8601 string.
 
 ###### `iso`<sup>Required</sup> <a name="iso" id="@winglang/sdk.std.Datetime.fromIso.parameter.iso"></a>
 
@@ -268,7 +268,7 @@ ISO-8601 string.
 datetime.systemNow();
 ```
 
-returns the current time in system timezone.
+Create a Datetime from local system timezone.
 
 ##### `utcNow` <a name="utcNow" id="@winglang/sdk.std.Datetime.utcNow"></a>
 
@@ -276,23 +276,23 @@ returns the current time in system timezone.
 datetime.utcNow();
 ```
 
-returns the current time in UTC timezone.
+Create a Datetime from UTC timezone.
 
 #### Properties <a name="Properties" id="Properties"></a>
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.std.Datetime.property.dayOfMonth">dayOfMonth</a></code> | <code>num</code> | returns the day of month in the local machine time or in utc (1 - 31). |
-| <code><a href="#@winglang/sdk.std.Datetime.property.dayOfWeek">dayOfWeek</a></code> | <code>num</code> | returns the day in month of the local machine time or in utc (0 - 6). |
-| <code><a href="#@winglang/sdk.std.Datetime.property.hours">hours</a></code> | <code>num</code> | returns the hour of the local machine time or in utc. |
-| <code><a href="#@winglang/sdk.std.Datetime.property.min">min</a></code> | <code>num</code> | returns the minute of the local machine time or in utc. |
-| <code><a href="#@winglang/sdk.std.Datetime.property.month">month</a></code> | <code>num</code> | returns the month of the local machine time or in utc (0 - 11). |
-| <code><a href="#@winglang/sdk.std.Datetime.property.ms">ms</a></code> | <code>num</code> | returns the milliseconds of the local machine time or in utc. |
-| <code><a href="#@winglang/sdk.std.Datetime.property.sec">sec</a></code> | <code>num</code> | returns the seconds of the local machine time or in utc. |
-| <code><a href="#@winglang/sdk.std.Datetime.property.timestamp">timestamp</a></code> | <code>num</code> | returns a timestamp of non-leap seconds since epoch. |
-| <code><a href="#@winglang/sdk.std.Datetime.property.timestampMs">timestampMs</a></code> | <code>num</code> | returns a timestamp of non-leap milliseconds since epoch. |
+| <code><a href="#@winglang/sdk.std.Datetime.property.dayOfMonth">dayOfMonth</a></code> | <code>num</code> | Returns the day of month in the local machine time or in utc (1 - 31). |
+| <code><a href="#@winglang/sdk.std.Datetime.property.dayOfWeek">dayOfWeek</a></code> | <code>num</code> | Returns the day in month of the local machine time or in utc (0 - 6). |
+| <code><a href="#@winglang/sdk.std.Datetime.property.hours">hours</a></code> | <code>num</code> | Returns the hour of the local machine time or in utc. |
+| <code><a href="#@winglang/sdk.std.Datetime.property.min">min</a></code> | <code>num</code> | Returns the minute of the local machine time or in utc. |
+| <code><a href="#@winglang/sdk.std.Datetime.property.month">month</a></code> | <code>num</code> | Returns the month of the local machine time or in utc (0 - 11). |
+| <code><a href="#@winglang/sdk.std.Datetime.property.ms">ms</a></code> | <code>num</code> | Returns the milliseconds of the local machine time or in utc  *. |
+| <code><a href="#@winglang/sdk.std.Datetime.property.sec">sec</a></code> | <code>num</code> | Returns the seconds of the local machine time or in utc. |
+| <code><a href="#@winglang/sdk.std.Datetime.property.timestamp">timestamp</a></code> | <code>num</code> | Return a timestamp of non-leap year seconds since epoch. |
+| <code><a href="#@winglang/sdk.std.Datetime.property.timestampMs">timestampMs</a></code> | <code>num</code> | Return a timestamp of non-leap year milliseconds since epoch. |
 | <code><a href="#@winglang/sdk.std.Datetime.property.timezone">timezone</a></code> | <code>num</code> | returns the offset in minutes from UTC. |
-| <code><a href="#@winglang/sdk.std.Datetime.property.year">year</a></code> | <code>num</code> | returns the year of the local machine time or in utc. |
+| <code><a href="#@winglang/sdk.std.Datetime.property.year">year</a></code> | <code>num</code> | Returns the year of the local machine time or in utc. |
 
 ---
 
@@ -304,7 +304,7 @@ dayOfMonth: num;
 
 - *Type:* num
 
-returns the day of month in the local machine time or in utc (1 - 31).
+Returns the day of month in the local machine time or in utc (1 - 31).
 
 ---
 
@@ -316,7 +316,7 @@ dayOfWeek: num;
 
 - *Type:* num
 
-returns the day in month of the local machine time or in utc (0 - 6).
+Returns the day in month of the local machine time or in utc (0 - 6).
 
 ---
 
@@ -328,7 +328,7 @@ hours: num;
 
 - *Type:* num
 
-returns the hour of the local machine time or in utc.
+Returns the hour of the local machine time or in utc.
 
 ---
 
@@ -340,7 +340,7 @@ min: num;
 
 - *Type:* num
 
-returns the minute of the local machine time or in utc.
+Returns the minute of the local machine time or in utc.
 
 ---
 
@@ -352,7 +352,7 @@ month: num;
 
 - *Type:* num
 
-returns the month of the local machine time or in utc (0 - 11).
+Returns the month of the local machine time or in utc (0 - 11).
 
 ---
 
@@ -364,7 +364,7 @@ ms: num;
 
 - *Type:* num
 
-returns the milliseconds of the local machine time or in utc.
+Returns the milliseconds of the local machine time or in utc  *.
 
 ---
 
@@ -376,7 +376,7 @@ sec: num;
 
 - *Type:* num
 
-returns the seconds of the local machine time or in utc.
+Returns the seconds of the local machine time or in utc.
 
 ---
 
@@ -388,7 +388,7 @@ timestamp: num;
 
 - *Type:* num
 
-returns a timestamp of non-leap seconds since epoch.
+Return a timestamp of non-leap year seconds since epoch.
 
 ---
 
@@ -400,7 +400,7 @@ timestampMs: num;
 
 - *Type:* num
 
-returns a timestamp of non-leap milliseconds since epoch.
+Return a timestamp of non-leap year milliseconds since epoch.
 
 ---
 
@@ -424,7 +424,7 @@ year: num;
 
 - *Type:* num
 
-returns the year of the local machine time or in utc.
+Returns the year of the local machine time or in utc.
 
 ---
 

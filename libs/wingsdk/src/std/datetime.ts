@@ -44,11 +44,17 @@ export interface DatetimeComponents {
  */
 export class Datetime {
   /**
+   * @internal
+   */
+  public static _toInflightType(): Code {
+    return InflightClient.forType(__filename, this.name);
+  }
+  /**
    * Create a Datetime from UTC timezone
    *
    * @returns a new `Datetime` from current time in UTC timezone
    */
-  static utcNow(): Datetime {
+  public static utcNow(): Datetime {
     return new Datetime();
   }
 
@@ -57,7 +63,7 @@ export class Datetime {
    *
    * @returns a new `Datetime` from current time in system timezone
    */
-  static systemNow(): Datetime {
+  public static systemNow(): Datetime {
     const date = new Date();
     date.setTime(date.getTime() - date.getTimezoneOffset() * 60 * 1000);
 
@@ -70,29 +76,22 @@ export class Datetime {
    * @returns a new `Datetime` in UTC timezone
    * @param iso ISO-8601 string
    */
-  static fromIso(iso: string): Datetime {
+  public static fromIso(iso: string): Datetime {
     return new Datetime(new Date(iso));
   }
 
   /**
    * Create a Datetime from Datetime components
-   * 
+   *
    * @param c DatetimeComponents
    * @returns a new `Datetime`
    */
-  static fromComponents(c: DatetimeComponents): Datetime {
+  public static fromComponents(c: DatetimeComponents): Datetime {
     const date = new Date(
       Date.UTC(c.year, c.month, c.day, c.hour, c.min, c.sec, c.ms)
     );
 
     return new Datetime(date, c.tz);
-  }
-
-  /**
-   * @internal
-   */
-  public static _toInflightType(): Code {
-    return InflightClient.forType(__filename, this.name);
   }
 
   /** @internal */
@@ -106,11 +105,11 @@ export class Datetime {
   }
 
   /**
-   * Retrun a timestamp of non-leap year seconds since epoch
-   * 
+   * Return a timestamp of non-leap year seconds since epoch
+   *
    * @returns a number representing the current timestamp in seconds
    */
-  get timestamp(): number {
+  public get timestamp(): number {
     return this.timestampMs / 1000;
   }
 
@@ -119,7 +118,7 @@ export class Datetime {
    *
    * @returns a number representing the current timestamp in milliseconds
    */
-  get timestampMs(): number {
+  public get timestampMs(): number {
     // since converting between timezones/ declaring a date in a timezone other than the local or UTC
     // isn't native to js, we keep the date in a UTC time, then retrieving back the the original timestamp,
     // this way the date components (hours, month, day, minutes, etc..) are persistent
@@ -128,79 +127,101 @@ export class Datetime {
   }
 
   /**
-   * returns the hour of the local machine time or in utc
+   * Returns the hour of the local machine time or in utc
+   *
+   * @returns a number representing the datetime's hour
    */
-  get hours(): number {
+  public get hours(): number {
     return this._date.getUTCHours();
   }
 
   /**
-   * returns the minute of the local machine time or in utc
+   * Returns the minute of the local machine time or in utc
+   *
+   * @returns a number representing the datetime's minute
    */
-  get min(): number {
+  public get min(): number {
     return this._date.getUTCMinutes();
   }
 
   /**
-   * returns the seconds of the local machine time or in utc
+   * Returns the seconds of the local machine time or in utc
+   *
+   * @returns a number representing the datetime's seconds
    */
-  get sec(): number {
+  public get sec(): number {
     return this._date.getUTCSeconds();
   }
 
   /**
-   * returns the milliseconds of the local machine time or in utc
+   * Returns the milliseconds of the local machine time or in utc
+   *  *
+   * @returns a number representing the datetime's milliseconds
    */
-  get ms(): number {
+  public get ms(): number {
     return this._date.getUTCMilliseconds();
   }
 
   /**
-   * returns the day of month in the local machine time or in utc (1 - 31)
+   * Returns the day of month in the local machine time or in utc (1 - 31)
+   *
+   * @returns a number representing the datetime's day of month
    */
-  get dayOfMonth(): number {
+  public get dayOfMonth(): number {
     return this._date.getUTCDate();
   }
 
   /**
-   * returns the day in month of the local machine time or in utc (0 - 6)
+   * Returns the day in month of the local machine time or in utc (0 - 6)
+   *
+   * @returns a number representing the datetime's day of week
    */
-  get dayOfWeek(): number {
+  public get dayOfWeek(): number {
     return this._date.getUTCDay();
   }
 
   /**
-   * returns the month of the local machine time or in utc (0 - 11)
+   * Returns the month of the local machine time or in utc (0 - 11)
+   *
+   * @returns a number representing the datetime's month
    */
-  get month(): number {
+  public get month(): number {
     return this._date.getUTCMonth();
   }
 
   /**
-   * returns the year of the local machine time or in utc
+   * Returns the year of the local machine time or in utc
+   *
+   * @returns a number representing the datetime's year
    */
-  get year(): number {
+  public get year(): number {
     return this._date.getUTCFullYear();
   }
 
   /**
    * returns the offset in minutes from UTC
+   *
+   * @returns a number representing the datetime's offset in minutes from UTC
    */
-  get timezone(): number {
+  public get timezone(): number {
     return this._timezoneOffset;
   }
 
   /**
-   * returns a Datetime represents the same date in utc
+   * Returns a Datetime represents the same date in utc
+   *
+   * @returns a datetime representing the datetime's date in UTC
    */
-  toUtc(): Datetime {
+  public toUtc(): Datetime {
     return new Datetime(new Date(this.timestampMs));
   }
 
   /**
-   * returns ISO-8601 string
+   * Returns ISO-8601 string
+   *
+   * @returns a ISO-8601 string representation of the datetime
    */
-  toIso(): string {
+  public toIso(): string {
     return new Date(this.timestampMs).toISOString();
   }
 }
