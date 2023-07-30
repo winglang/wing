@@ -2135,8 +2135,10 @@ impl<'a> TypeChecker<'a> {
 			for i in index_last_item..arg_list.pos_args.len() {
 				let variadic_arg = arg_list.pos_args.get(i).unwrap().clone();
 				if variadic_arg_types != *arg_list_types.pos_args.get(i).unwrap() {
-					let err_text = format!("All elements of a variadic argument must be of the same type.");
-					self.spanned_error(&variadic_arg.span, err_text);
+					self.spanned_error(
+						&variadic_arg.span,
+						"All elements of a variadic argument must be of the same type.".to_string(),
+					);
 				}
 				variadic_arg_list.push(variadic_arg);
 			}
