@@ -69,6 +69,12 @@ where
 
 pub type TypeRef = UnsafeRef<Type>;
 
+impl PartialEq for TypeRef {
+	fn eq(&self, other: &Self) -> bool {
+		self.0 == other.0
+	}
+}
+
 #[derive(Debug)]
 pub enum SymbolKind {
 	Type(TypeRef), // TODO: <- deprecated since we treat types as a VeriableInfo of kind VariableKind::Type
@@ -184,7 +190,7 @@ impl SymbolKind {
 	}
 }
 
-#[derive(Debug)]
+#[derive(PartialEq, Debug)]
 pub enum Type {
 	Anything,
 	Number,
@@ -274,6 +280,12 @@ impl Class {
 	}
 }
 
+impl PartialEq for Class {
+	fn eq(&self, other: &Self) -> bool {
+		self.name == other.name
+	}
+}
+
 #[derive(Derivative)]
 #[derivative(Debug)]
 pub struct Interface {
@@ -282,6 +294,12 @@ pub struct Interface {
 	pub extends: Vec<TypeRef>, // Must be a Type::Interface type
 	#[derivative(Debug = "ignore")]
 	pub env: SymbolEnv,
+}
+
+impl PartialEq for Interface {
+	fn eq(&self, other: &Self) -> bool {
+		self.name == other.name
+	}
 }
 
 impl Interface {
@@ -394,11 +412,23 @@ pub struct Struct {
 	pub env: SymbolEnv,
 }
 
+impl PartialEq for Struct {
+	fn eq(&self, other: &Self) -> bool {
+		self.name == other.name
+	}
+}
+
 #[derive(Debug)]
 pub struct Enum {
 	pub name: Symbol,
 	pub docs: Docs,
 	pub values: IndexSet<Symbol>,
+}
+
+impl PartialEq for Enum {
+	fn eq(&self, other: &Self) -> bool {
+		self.name == other.name
+	}
 }
 
 #[derive(Debug)]
@@ -2099,9 +2129,16 @@ impl<'a> TypeChecker<'a> {
 				new_arg_list.push(arg_list.pos_args.get(i).unwrap().clone());
 				new_arg_list_types.push(*arg_list_types.pos_args.get(i).unwrap());
 			}
+
 			let mut variadic_arg_list: Vec<Expr> = Vec::new();
+			let variadic_arg_types = *arg_list_types.pos_args.get(index_last_item).unwrap();
 			for i in index_last_item..arg_list.pos_args.len() {
-				variadic_arg_list.push(arg_list.pos_args.get(i).unwrap().clone());
+				let variadic_arg = arg_list.pos_args.get(i).unwrap().clone();
+				if variadic_arg_types != *arg_list_types.pos_args.get(i).unwrap() {
+					let err_text = format!("All elements of a variadic argument must be of the same type.");
+					self.spanned_error(&variadic_arg.span, err_text);
+				}
+				variadic_arg_list.push(variadic_arg);
 			}
 			new_arg_list.push(Expr::new(
 				ExprKind::ArrayLiteral {
