@@ -709,10 +709,17 @@ Duration <DURATION>"
 
 exports[`function_variadic_definition.w 1`] = `
 "error: Unexpected 'variadic_definition'
-  --> ../../../examples/tests/invalid/function_variadic_definition.w:1:10
+  --> ../../../examples/tests/invalid/function_variadic_definition.w:1:11
   |
-1 | let f = (...args: Array<num>, x:num) => {};
-  |          ^^^^^^^^^^^^^^^^^^^ Unexpected 'variadic_definition'
+1 | let f1 = (...args: Array<num>, x:num) => {};
+  |           ^^^^^^^^^^^^^^^^^^^ Unexpected 'variadic_definition'
+
+
+error: All elements of a variadic argument must be of the same type.
+  --> ../../../examples/tests/invalid/function_variadic_definition.w:5:7
+  |
+5 | f2(1, true, 2);
+  |       ^^^^ All elements of a variadic argument must be of the same type.
 
 
  
