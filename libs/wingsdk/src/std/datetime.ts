@@ -44,7 +44,9 @@ export interface DatetimeComponents {
  */
 export class Datetime {
   /**
-   * returns the current time in UTC timezone
+   * Create a Datetime from UTC timezone
+   *
+   * @returns a new `Datetime` from current time in UTC timezone
    */
   static utcNow(): Datetime {
     return new Datetime();
