@@ -22,7 +22,7 @@ pub type Result<T> = std::result::Result<T, Box<dyn Error>>;
 
 pub mod spec {
 	use flate2::read::GzDecoder;
-	use std::fs::File;
+	use speedy::{Readable, Writable};
 	use std::io::Read;
 	use std::path::PathBuf;
 	use std::time::SystemTime;
@@ -34,7 +34,7 @@ pub mod spec {
 
 	pub const SPEC_FILE_NAME: &str = ".jsii";
 	pub const REDIRECT_FIELD: &str = "jsii/file-redirect";
-	pub(crate) const CACHE_FILE_EXT: &str = ".jsii.bincode";
+	pub(crate) const CACHE_FILE_EXT: &str = ".jsii.speedy";
 
 	pub fn find_assembly_file(directory: &str) -> Result<String> {
 		let dot_jsii_file = Path::new(directory).join(SPEC_FILE_NAME);
@@ -62,7 +62,7 @@ pub mod spec {
 	pub(crate) fn try_load_from_cache(manifest_path: &Path, hash: &str) -> Option<Assembly> {
 		let path = get_cache_file_path(manifest_path, hash);
 		let data = fs::read(path).ok()?;
-		let (asm, _): (Assembly, usize) = bincode::decode_from_slice(&data, bincode::config::standard()).ok()?;
+		let asm = Assembly::read_from_buffer(&data).ok()?;
 		Some(asm)
 	}
 
@@ -147,8 +147,7 @@ pub mod spec {
 		let cache_file_name = format!("{hash}{CACHE_FILE_EXT}");
 
 		// Write the new cache file
-		let mut writer = File::create(cache_file_dir.join(&cache_file_name))?;
-		bincode::encode_into_std_write(manifest, &mut writer, bincode::config::standard())?;
+		manifest.write_to_file(&cache_file_dir.join(&cache_file_name))?;
 
 		// Remove all old cache files (except the new one)
 		// We remove after creating the new cache file to avoid a race with other processes

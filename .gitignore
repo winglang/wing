@@ -14,7 +14,7 @@ node_modules/
 *.w.out/
 
 # Generated wingc .jsii binary cache
-**/*.jsii.bincode
+**/*.jsii.speedy
 
 # cargo output
 ## will have compiled files and executables from cargo

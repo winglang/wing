@@ -10,7 +10,7 @@ test("JSII manifest cache", async () => {
   const app = "bring_awscdk.w";
   const appFile = path.join(validTestDir, app);
   const args = ["compile", "--target", "sim"];
-  const manifestCacheExt = ".jsii.bincode";
+  const manifestCacheExt = ".jsii.speedy";
 
   const awscdkLibDir = path.join(validTestDir, "node_modules", "aws-cdk-lib");
 
