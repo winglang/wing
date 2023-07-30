@@ -4,24 +4,6 @@ import fs from "fs/promises";
 import { validTestDir, wingSdkDir } from "./paths";
 import { runWingCommand } from "./utils";
 
-// const getAllCacheFiles = async function (dirPath: string): Promise<string[]> {
-//   const files = await fs.readdir(dirPath);
-
-//   let arrayOfFiles = [];
-
-//   for (var file of files) {
-//     if ((await fs.stat(dirPath + "/" + file)).isDirectory()) {
-//       const subFiles = await getAllCacheFiles(dirPath + "/" + file);
-//       for (var f of subFiles) {
-//         arrayOfFiles.push(f);
-//       }
-//     } else if (file.endsWith(".jsii.bincode")) {
-//       arrayOfFiles.push(path.join(__dirname, dirPath, "/", file));
-//     }
-//   }
-
-//   return arrayOfFiles;
-// }
 test("JSII manifest cache", async () => {
   // Use awscdk test because it has manifest file redirects and uses gzip compression which is a good test case
   // in addtion to regular manifest files
@@ -38,7 +20,6 @@ test("JSII manifest cache", async () => {
   await testManifestCache(wingSdkDir);
 
   async function testManifestCache(module_dir: string) {
-    console.log(`Testing manifest cache in ${module_dir}`);
     // Make sure the module lib dir exists and we have access to it (will throw otherwise)
     await fs.access(module_dir, fs.constants.W_OK | fs.constants.R_OK);
 
@@ -52,10 +33,6 @@ test("JSII manifest cache", async () => {
 
     // Make sure the manifest cache file was generated
     let files = (await fs.readdir(module_dir)).filter((file) => file.endsWith(manifestCacheExt));
-
-    // Get recursive list of all files under root
-    // const allFiles = await getAllCacheFiles(repoRoot);
-    //console.log(`All files: ${allFiles.join("\n")}`);
     assert(files.length === 1, `Expected 1 manifest cache file in ${module_dir}, found ${files.length}: ${files}`);
     let cache_file = files[0];
     let stat = await fs.stat(path.join(module_dir, cache_file));

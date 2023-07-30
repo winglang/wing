@@ -80,5 +80,5 @@ function generateTests(
   }
 }
 
-//generateTests(validTestDir, generatedTestDir, false);
-//generateTests(sdkTests, generatedSDKTestDir);
+generateTests(validTestDir, generatedTestDir, false);
+generateTests(sdkTests, generatedSDKTestDir);
