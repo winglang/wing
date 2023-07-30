@@ -220,7 +220,7 @@ pub fn type_check(
 			}],
 			return_type: types.void(),
 			phase: Phase::Independent,
-      js_override: Some("{console.log($phase$ === 'inflight' && $target$ !== 'sim' ? 'winglogstart:' + ($args$) + ':winglogend': ($args$))}".to_string()),
+			js_override: Some("{console.log($phase$ === 'inflight' && $target$ !== 'sim' ? 'winglogstart:' + ($args$) + ':winglogend': ($args$))}".to_string()),
 			docs: Docs::with_summary("Logs a message"),
 		}),
 		scope,
