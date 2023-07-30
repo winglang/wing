@@ -12,25 +12,25 @@ module.exports = function({ $_d4_toUtc____hours, $d1_timestamp, $d2_timestamp, $
     async handle() {
       const d5 = (await $std_Datetime.utcNow());
       const d6 = (await $std_Datetime.systemNow());
-      {((cond) => {if (!cond) throw new Error("assertion failed: d2.timestamp == d1.timestamp")})(($d2_timestamp === $d1_timestamp))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: d2.timestamp == d1.timestamp")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($d2_timestamp,$d1_timestamp)))};
       const d7 = (await $std_Datetime.fromIso("2023-07-18T20:18:25.177-03:00"));
       const d8 = (await $std_Datetime.fromComponents({ year: 2023, month: 6, day: 18, hour: 20, min: 18, sec: 25, ms: 177, tz: 180 }));
-      {((cond) => {if (!cond) throw new Error("assertion failed: d7.timestampMs == 1689722305177")})((d7.timestampMs === 1689722305177))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: d7.hours == 23")})((d7.hours === 23))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: d7.min == 18")})((d7.min === 18))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: d7.sec == 25")})((d7.sec === 25))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: d7.ms == 177")})((d7.ms === 177))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: d7.dayOfMonth == 18")})((d7.dayOfMonth === 18))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: d7.dayOfWeek == 2")})((d7.dayOfWeek === 2))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: d7.month == 6")})((d7.month === 6))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: d7.year == 2023")})((d7.year === 2023))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: d8.hours == 20")})((d8.hours === 20))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.floor(d7.timestamp) == math.floor(d8.timestamp)")})(((await $math_Util.floor(d7.timestamp)) === (await $math_Util.floor(d8.timestamp))))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: d4.toUtc().hours == (d4.hours + (d4.timezone / 60))")})(($_d4_toUtc____hours === ($d4_hours + ($d4_timezone / 60))))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: d8.toUtc().hours == (d8.hours + (d8.timezone / 60))")})(((await d8.toUtc()).hours === (d8.hours + (d8.timezone / 60))))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: d7.timestampMs == 1689722305177")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(d7.timestampMs,1689722305177)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: d7.hours == 23")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(d7.hours,23)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: d7.min == 18")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(d7.min,18)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: d7.sec == 25")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(d7.sec,25)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: d7.ms == 177")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(d7.ms,177)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: d7.dayOfMonth == 18")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(d7.dayOfMonth,18)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: d7.dayOfWeek == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(d7.dayOfWeek,2)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: d7.month == 6")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(d7.month,6)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: d7.year == 2023")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(d7.year,2023)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: d8.hours == 20")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(d8.hours,20)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.floor(d7.timestamp) == math.floor(d8.timestamp)")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.floor(d7.timestamp)),(await $math_Util.floor(d8.timestamp)))))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: d4.toUtc().hours == (d4.hours + (d4.timezone / 60))")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($_d4_toUtc____hours,($d4_hours + ($d4_timezone / 60)))))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: d8.toUtc().hours == (d8.hours + (d8.timezone / 60))")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await d8.toUtc()).hours,(d8.hours + (d8.timezone / 60)))))};
       const beforeSleep = (await $std_Datetime.systemNow());
       (await $util_Util.sleep((await $std_Duration.fromSeconds(1))));
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.floor(datetime.systemNow().timestamp - beforeSleep.timestamp) == 1")})(((await $math_Util.floor(((await $std_Datetime.systemNow()).timestamp - beforeSleep.timestamp))) === 1))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.floor(datetime.systemNow().timestamp - beforeSleep.timestamp) == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.floor(((await $std_Datetime.systemNow()).timestamp - beforeSleep.timestamp))),1)))};
     }
   }
   return $Closure1;
@@ -174,8 +174,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this.display.hidden = true;
         this._addInflightOps("handle", "$inflight_init");
+        this.display.hidden = true;
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
@@ -216,29 +216,29 @@ class $Root extends $stdlib.std.Resource {
     }
     const d1 = (std.Datetime.utcNow());
     const d2 = (std.Datetime.systemNow());
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.floor(d2.timestamp) == math.floor(d1.timestamp)")})(((math.Util.floor(d2.timestamp)) === (math.Util.floor(d1.timestamp))))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.floor(d2.timestamp) == math.floor(d1.timestamp)")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.floor(d2.timestamp)),(math.Util.floor(d1.timestamp)))))};
     const d3 = (std.Datetime.fromIso("2023-07-18T20:18:25.177+03:00"));
-    {((cond) => {if (!cond) throw new Error("assertion failed: d3.timestampMs == 1689700705177")})((d3.timestampMs === 1689700705177))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: d3.hours == 17")})((d3.hours === 17))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: d3.min == 18")})((d3.min === 18))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: d3.sec == 25")})((d3.sec === 25))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: d3.ms == 177")})((d3.ms === 177))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: d3.dayOfMonth == 18")})((d3.dayOfMonth === 18))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: d3.dayOfWeek == 2")})((d3.dayOfWeek === 2))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: d3.month == 6")})((d3.month === 6))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: d3.year == 2023")})((d3.year === 2023))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: d3.timestampMs == 1689700705177")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(d3.timestampMs,1689700705177)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: d3.hours == 17")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(d3.hours,17)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: d3.min == 18")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(d3.min,18)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: d3.sec == 25")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(d3.sec,25)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: d3.ms == 177")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(d3.ms,177)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: d3.dayOfMonth == 18")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(d3.dayOfMonth,18)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: d3.dayOfWeek == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(d3.dayOfWeek,2)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: d3.month == 6")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(d3.month,6)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: d3.year == 2023")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(d3.year,2023)))};
     const d4 = (std.Datetime.fromComponents({ year: 2023, month: 6, day: 18, hour: 19, min: 18, sec: 25, ms: 177, tz: (-120) }));
-    {((cond) => {if (!cond) throw new Error("assertion failed: d4.timezone == -120")})((d4.timezone === (-120)))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: d4.timestampMs == 1689700705177")})((d4.timestampMs === 1689700705177))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: d4.hours == 19")})((d4.hours === 19))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: d4.min == 18")})((d4.min === 18))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: d4.sec == 25")})((d4.sec === 25))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: d4.ms == 177")})((d4.ms === 177))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: d4.dayOfMonth == 18")})((d4.dayOfMonth === 18))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: d4.dayOfWeek == 2")})((d4.dayOfWeek === 2))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: d4.month == 6")})((d4.month === 6))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: d4.year == 2023")})((d4.year === 2023))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: d4.toUtc().hours == (d4.hours + (d4.timezone / 60))")})(((d4.toUtc()).hours === (d4.hours + (d4.timezone / 60))))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: d4.timezone == -120")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(d4.timezone,(-120))))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: d4.timestampMs == 1689700705177")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(d4.timestampMs,1689700705177)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: d4.hours == 19")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(d4.hours,19)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: d4.min == 18")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(d4.min,18)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: d4.sec == 25")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(d4.sec,25)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: d4.ms == 177")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(d4.ms,177)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: d4.dayOfMonth == 18")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(d4.dayOfMonth,18)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: d4.dayOfWeek == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(d4.dayOfWeek,2)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: d4.month == 6")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(d4.month,6)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: d4.year == 2023")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(d4.year,2023)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: d4.toUtc().hours == (d4.hours + (d4.timezone / 60))")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((d4.toUtc()).hours,(d4.hours + (d4.timezone / 60)))))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:inflight datetime",new $Closure1(this,"$Closure1"));
   }
 }
