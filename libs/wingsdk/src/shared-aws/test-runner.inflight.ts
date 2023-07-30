@@ -24,13 +24,14 @@ export class TestRunnerClient implements ITestRunnerClient {
     if (!functionArn) {
       throw new Error(`No test found with path "${path}"`);
     }
-    const client = new FunctionClient(functionArn);
-    const traces: Trace[] = [];
+    const client = new FunctionClient(functionArn, path);
+    let traces: Trace[] = [];
     let pass = false;
     let error: string | undefined;
 
     try {
-      await client.invoke("", traces);
+      const [_, functionTraces] = await client.invokeWithLogs("");
+      traces.push(...functionTraces);
       pass = true;
     } catch (e) {
       error = (e as any).stack;

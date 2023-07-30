@@ -2,8 +2,8 @@
 
 exports[`create an OnDeploy 1`] = `
 {
-  ".wing/function_c83fbf14.js": "exports.handler = async function(event) {
-  return await (new ((function(){
+  ".wing/function_c83fbf14.js": "exports.handler = async function(event, context) {
+  return { payload: (await (new ((function(){
 return class Handler {
   constructor(clients) {
     for (const [name, client] of Object.entries(clients)) {
@@ -14,7 +14,7 @@ return class Handler {
 };
 })())({
 
-})).handle(event);
+})).handle(event)) ?? \\"\\", context };
 };",
   "simulator.json": {
     "resources": [

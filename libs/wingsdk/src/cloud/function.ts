@@ -85,8 +85,10 @@ export abstract class Function extends Resource implements IInflightHost {
     const inflightClient = handler._toInflight();
     const lines = new Array<string>();
 
-    lines.push("exports.handler = async function(event) {");
-    lines.push(`  return await (${inflightClient.text}).handle(event);`);
+    lines.push("exports.handler = async function(event, context) {");
+    lines.push(
+      `  return { payload: (await (${inflightClient.text}).handle(event)) ?? "", context };`
+    );
     lines.push("};");
 
     const assetName = ResourceNames.generateName(this, {

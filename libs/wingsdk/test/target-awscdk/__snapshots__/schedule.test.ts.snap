@@ -61,7 +61,7 @@ exports[`schedule behavior with cron 1`] = `
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "99cc55258c346f62db746a74a3b335f909d0326a46c142758fdf8f8d189b2678.zip",
+          "S3Key": "094a8c280a386dc108f2f6a81fba3e9bed700be31191f78cf682dc4bd25f1342.zip",
         },
         "Handler": "index.handler",
         "Role": {
@@ -198,7 +198,7 @@ exports[`schedule behavior with rate 1`] = `
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "99cc55258c346f62db746a74a3b335f909d0326a46c142758fdf8f8d189b2678.zip",
+          "S3Key": "094a8c280a386dc108f2f6a81fba3e9bed700be31191f78cf682dc4bd25f1342.zip",
         },
         "Handler": "index.handler",
         "Role": {
@@ -363,7 +363,7 @@ exports[`schedule with two functions 1`] = `
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "99cc55258c346f62db746a74a3b335f909d0326a46c142758fdf8f8d189b2678.zip",
+          "S3Key": "094a8c280a386dc108f2f6a81fba3e9bed700be31191f78cf682dc4bd25f1342.zip",
         },
         "Handler": "index.handler",
         "Role": {
@@ -417,7 +417,7 @@ exports[`schedule with two functions 1`] = `
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "99cc55258c346f62db746a74a3b335f909d0326a46c142758fdf8f8d189b2678.zip",
+          "S3Key": "094a8c280a386dc108f2f6a81fba3e9bed700be31191f78cf682dc4bd25f1342.zip",
         },
         "Handler": "index.handler",
         "Role": {

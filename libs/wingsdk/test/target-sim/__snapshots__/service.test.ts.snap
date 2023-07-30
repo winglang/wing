@@ -2,8 +2,8 @@
 
 exports[`create a service with on start method 1`] = `
 {
-  ".wing/my_service-serviceonstartef2b13b9_c8cb6e3a.js": "exports.handler = async function(event) {
-  return await (new (require(\\"[REDACTED]/wingsdk/src/target-sim/service.onevent.inflight.js\\")).ServiceOnEventHandler({ handler: new ((function(){
+  ".wing/my_service-serviceonstartef2b13b9_c8cb6e3a.js": "exports.handler = async function(event, context) {
+  return { payload: (await (new (require(\\"[REDACTED]/wingsdk/src/target-sim/service.onevent.inflight.js\\")).ServiceOnEventHandler({ handler: new ((function(){
 return class Handler {
   constructor(clients) {
     for (const [name, client] of Object.entries(clients)) {
@@ -17,7 +17,7 @@ async handle(message) {
 };
 })())({
 
-}), args: {} })).handle(event);
+}), args: {} })).handle(event)) ?? \\"\\", context };
 };",
   "simulator.json": {
     "resources": [

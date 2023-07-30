@@ -2,8 +2,8 @@
 
 exports[`array 1`] = `
 {
-  ".wing/function_c8e6b4af.js": "exports.handler = async function(event) {
-  return await (new ((function(){
+  ".wing/function_c8e6b4af.js": "exports.handler = async function(event, context) {
+  return { payload: (await (new ((function(){
 return class Handler {
   constructor(clients) {
     for (const [name, client] of Object.entries(clients)) {
@@ -19,7 +19,7 @@ if (!(this.my_capture[1] === \\"dude\\")) { throw new Error(\`assertion failed: 
 };
 })())({
 my_capture: [\\"hello\\",\\"dude\\"]
-})).handle(event);
+})).handle(event)) ?? \\"\\", context };
 };",
   "simulator.json": {
     "resources": [
@@ -110,8 +110,8 @@ my_capture: [\\"hello\\",\\"dude\\"]
 
 exports[`array of buckets 1`] = `
 {
-  ".wing/function_c8e6b4af.js": "exports.handler = async function(event) {
-  return await (new ((function(){
+  ".wing/function_c8e6b4af.js": "exports.handler = async function(event, context) {
+  return { payload: (await (new ((function(){
 return class Handler {
   constructor(clients) {
     for (const [name, client] of Object.entries(clients)) {
@@ -142,7 +142,7 @@ my_buckets: [(function(env) {
         }
         return $simulator.findInstance(handle);
       })(\\"BUCKET_HANDLE_300e8055\\")]
-})).handle(event);
+})).handle(event)) ?? \\"\\", context };
 };",
   "simulator.json": {
     "resources": [
@@ -313,8 +313,8 @@ my_buckets: [(function(env) {
 
 exports[`array of durations 1`] = `
 {
-  ".wing/function_c8e6b4af.js": "exports.handler = async function(event) {
-  return await (new ((function(){
+  ".wing/function_c8e6b4af.js": "exports.handler = async function(event, context) {
+  return { payload: (await (new ((function(){
 return class Handler {
   constructor(clients) {
     for (const [name, client] of Object.entries(clients)) {
@@ -330,7 +330,7 @@ if (!(this.my_array[1].minutes === 20)) { throw new Error(\`assertion failed: \\
 };
 })())({
 my_array: [{seconds: 600,minutes: 10,hours: 0.16666666666666666,},{seconds: 1200,minutes: 20,hours: 0.3333333333333333,}]
-})).handle(event);
+})).handle(event)) ?? \\"\\", context };
 };",
   "simulator.json": {
     "resources": [
@@ -421,8 +421,8 @@ my_array: [{seconds: 600,minutes: 10,hours: 0.16666666666666666,},{seconds: 1200
 
 exports[`array of maps 1`] = `
 {
-  ".wing/function_c8e6b4af.js": "exports.handler = async function(event) {
-  return await (new ((function(){
+  ".wing/function_c8e6b4af.js": "exports.handler = async function(event, context) {
+  return { payload: (await (new ((function(){
 return class Handler {
   constructor(clients) {
     for (const [name, client] of Object.entries(clients)) {
@@ -437,7 +437,7 @@ if (!(this.my_array[1].get('bar') === 4)) { throw new Error(\`assertion failed: 
 };
 })())({
 my_array: [new Map([[\\"foo\\",1],[\\"bar\\",2]]),new Map([[\\"foo\\",3],[\\"bar\\",4]])]
-})).handle(event);
+})).handle(event)) ?? \\"\\", context };
 };",
   "simulator.json": {
     "resources": [
@@ -528,8 +528,8 @@ my_array: [new Map([[\\"foo\\",1],[\\"bar\\",2]]),new Map([[\\"foo\\",3],[\\"bar
 
 exports[`boolean 1`] = `
 {
-  ".wing/function_c8e6b4af.js": "exports.handler = async function(event) {
-  return await (new ((function(){
+  ".wing/function_c8e6b4af.js": "exports.handler = async function(event, context) {
+  return { payload: (await (new ((function(){
 return class Handler {
   constructor(clients) {
     for (const [name, client] of Object.entries(clients)) {
@@ -543,7 +543,7 @@ if (!(this.my_capture === false)) { throw new Error(\`assertion failed: \\"this.
 };
 })())({
 my_capture: false
-})).handle(event);
+})).handle(event)) ?? \\"\\", context };
 };",
   "simulator.json": {
     "resources": [
@@ -634,8 +634,8 @@ my_capture: false
 
 exports[`duration 1`] = `
 {
-  ".wing/function_c8e6b4af.js": "exports.handler = async function(event) {
-  return await (new ((function(){
+  ".wing/function_c8e6b4af.js": "exports.handler = async function(event, context) {
+  return { payload: (await (new ((function(){
 return class Handler {
   constructor(clients) {
     for (const [name, client] of Object.entries(clients)) {
@@ -651,7 +651,7 @@ if (!(this.my_capture.hours === 2)) { throw new Error(\`assertion failed: \\"thi
 };
 })())({
 my_capture: {seconds: 7200,minutes: 120,hours: 2,}
-})).handle(event);
+})).handle(event)) ?? \\"\\", context };
 };",
   "simulator.json": {
     "resources": [
@@ -742,8 +742,8 @@ my_capture: {seconds: 7200,minutes: 120,hours: 2,}
 
 exports[`map 1`] = `
 {
-  ".wing/function_c8e6b4af.js": "exports.handler = async function(event) {
-  return await (new ((function(){
+  ".wing/function_c8e6b4af.js": "exports.handler = async function(event, context) {
+  return { payload: (await (new ((function(){
 return class Handler {
   constructor(clients) {
     for (const [name, client] of Object.entries(clients)) {
@@ -761,7 +761,7 @@ if (!(this.my_capture.get(\\"bar\\") === 456)) { throw new Error(\`assertion fai
 };
 })())({
 my_capture: new Map([[\\"foo\\",123],[\\"bar\\",456]])
-})).handle(event);
+})).handle(event)) ?? \\"\\", context };
 };",
   "simulator.json": {
     "resources": [
@@ -852,8 +852,8 @@ my_capture: new Map([[\\"foo\\",123],[\\"bar\\",456]])
 
 exports[`map of arrays 1`] = `
 {
-  ".wing/function_c8e6b4af.js": "exports.handler = async function(event) {
-  return await (new ((function(){
+  ".wing/function_c8e6b4af.js": "exports.handler = async function(event, context) {
+  return { payload: (await (new ((function(){
 return class Handler {
   constructor(clients) {
     for (const [name, client] of Object.entries(clients)) {
@@ -873,7 +873,7 @@ if (!(this.my_map.get(\\"bar\\")[1] === 4)) { throw new Error(\`assertion failed
 };
 })())({
 my_map: new Map([[\\"foo\\",[1,2]],[\\"bar\\",[3,4]]])
-})).handle(event);
+})).handle(event)) ?? \\"\\", context };
 };",
   "simulator.json": {
     "resources": [
@@ -964,8 +964,8 @@ my_map: new Map([[\\"foo\\",[1,2]],[\\"bar\\",[3,4]]])
 
 exports[`map of arrays of durations 1`] = `
 {
-  ".wing/function_c8e6b4af.js": "exports.handler = async function(event) {
-  return await (new ((function(){
+  ".wing/function_c8e6b4af.js": "exports.handler = async function(event, context) {
+  return { payload: (await (new ((function(){
 return class Handler {
   constructor(clients) {
     for (const [name, client] of Object.entries(clients)) {
@@ -982,7 +982,7 @@ if (!(this.my_map.get('bar')[1].seconds === 40 * 60)) { throw new Error(\`assert
 };
 })())({
 my_map: new Map([[\\"foo\\",[{seconds: 600,minutes: 10,hours: 0.16666666666666666,},{seconds: 1200,minutes: 20,hours: 0.3333333333333333,}]],[\\"bar\\",[{seconds: 1800,minutes: 30,hours: 0.5,},{seconds: 2400,minutes: 40,hours: 0.6666666666666666,}]]])
-})).handle(event);
+})).handle(event)) ?? \\"\\", context };
 };",
   "simulator.json": {
     "resources": [
@@ -1073,8 +1073,8 @@ my_map: new Map([[\\"foo\\",[{seconds: 600,minutes: 10,hours: 0.1666666666666666
 
 exports[`map of buckets 1`] = `
 {
-  ".wing/function_c8e6b4af.js": "exports.handler = async function(event) {
-  return await (new ((function(){
+  ".wing/function_c8e6b4af.js": "exports.handler = async function(event, context) {
+  return { payload: (await (new ((function(){
 return class Handler {
   constructor(clients) {
     for (const [name, client] of Object.entries(clients)) {
@@ -1102,7 +1102,7 @@ my_map: new Map([[\\"foo\\",(function(env) {
         }
         return $simulator.findInstance(handle);
       })(\\"BUCKET_HANDLE_300e8055\\")]])
-})).handle(event);
+})).handle(event)) ?? \\"\\", context };
 };",
   "simulator.json": {
     "resources": [
@@ -1273,8 +1273,8 @@ my_map: new Map([[\\"foo\\",(function(env) {
 
 exports[`number 1`] = `
 {
-  ".wing/function_c8e6b4af.js": "exports.handler = async function(event) {
-  return await (new ((function(){
+  ".wing/function_c8e6b4af.js": "exports.handler = async function(event, context) {
+  return { payload: (await (new ((function(){
 return class Handler {
   constructor(clients) {
     for (const [name, client] of Object.entries(clients)) {
@@ -1288,7 +1288,7 @@ if (!(this.my_capture + 20 === 143)) { throw new Error(\`assertion failed: \\"th
 };
 })())({
 my_capture: 123
-})).handle(event);
+})).handle(event)) ?? \\"\\", context };
 };",
   "simulator.json": {
     "resources": [
@@ -1379,8 +1379,8 @@ my_capture: 123
 
 exports[`set 1`] = `
 {
-  ".wing/function_c8e6b4af.js": "exports.handler = async function(event) {
-  return await (new ((function(){
+  ".wing/function_c8e6b4af.js": "exports.handler = async function(event, context) {
+  return { payload: (await (new ((function(){
 return class Handler {
   constructor(clients) {
     for (const [name, client] of Object.entries(clients)) {
@@ -1397,7 +1397,7 @@ if (!(this.my_capture.size === 3)) { throw new Error(\`assertion failed: \\"this
 };
 })())({
 my_capture: new Set([\\"boom\\",\\"bam\\",\\"bang\\"])
-})).handle(event);
+})).handle(event)) ?? \\"\\", context };
 };",
   "simulator.json": {
     "resources": [
@@ -1488,8 +1488,8 @@ my_capture: new Set([\\"boom\\",\\"bam\\",\\"bang\\"])
 
 exports[`set of durations 1`] = `
 {
-  ".wing/function_c8e6b4af.js": "exports.handler = async function(event) {
-  return await (new ((function(){
+  ".wing/function_c8e6b4af.js": "exports.handler = async function(event, context) {
+  return { payload: (await (new ((function(){
 return class Handler {
   constructor(clients) {
     for (const [name, client] of Object.entries(clients)) {
@@ -1505,7 +1505,7 @@ if (!(Array.from(this.my_set)[1].seconds === 1200)) { throw new Error(\`assertio
 };
 })())({
 my_set: new Set([{seconds: 600,minutes: 10,hours: 0.16666666666666666,},{seconds: 1200,minutes: 20,hours: 0.3333333333333333,}])
-})).handle(event);
+})).handle(event)) ?? \\"\\", context };
 };",
   "simulator.json": {
     "resources": [
@@ -1596,8 +1596,8 @@ my_set: new Set([{seconds: 600,minutes: 10,hours: 0.16666666666666666,},{seconds
 
 exports[`string 1`] = `
 {
-  ".wing/function_c8e6b4af.js": "exports.handler = async function(event) {
-  return await (new ((function(){
+  ".wing/function_c8e6b4af.js": "exports.handler = async function(event, context) {
+  return { payload: (await (new ((function(){
 return class Handler {
   constructor(clients) {
     for (const [name, client] of Object.entries(clients)) {
@@ -1612,7 +1612,7 @@ if (!(this.my_capture === \\"bam bam bam\\")) { throw new Error(\`assertion fail
 };
 })())({
 my_capture: \\"bam bam bam\\"
-})).handle(event);
+})).handle(event)) ?? \\"\\", context };
 };",
   "simulator.json": {
     "resources": [
@@ -1703,8 +1703,8 @@ my_capture: \\"bam bam bam\\"
 
 exports[`struct 1`] = `
 {
-  ".wing/function_c8e6b4af.js": "exports.handler = async function(event) {
-  return await (new ((function(){
+  ".wing/function_c8e6b4af.js": "exports.handler = async function(event, context) {
+  return { payload: (await (new ((function(){
 return class Handler {
   constructor(clients) {
     for (const [name, client] of Object.entries(clients)) {
@@ -1721,7 +1721,7 @@ if (!(Object.keys(this.my_capture).length === 3)) { throw new Error(\`assertion 
 };
 })())({
 my_capture: {hello: \\"dude\\",world: \\"cup\\",foo: \\"bar\\",}
-})).handle(event);
+})).handle(event)) ?? \\"\\", context };
 };",
   "simulator.json": {
     "resources": [
@@ -1812,8 +1812,8 @@ my_capture: {hello: \\"dude\\",world: \\"cup\\",foo: \\"bar\\",}
 
 exports[`struct of maps 1`] = `
 {
-  ".wing/function_c8e6b4af.js": "exports.handler = async function(event) {
-  return await (new ((function(){
+  ".wing/function_c8e6b4af.js": "exports.handler = async function(event, context) {
+  return { payload: (await (new ((function(){
 return class Handler {
   constructor(clients) {
     for (const [name, client] of Object.entries(clients)) {
@@ -1830,7 +1830,7 @@ if (!(this.my_struct.bar.get('bar') === 4)) { throw new Error(\`assertion failed
 };
 })())({
 my_struct: {foo: new Map([[\\"foo\\",1],[\\"bar\\",2]]),bar: new Map([[\\"foo\\",3],[\\"bar\\",4]]),}
-})).handle(event);
+})).handle(event)) ?? \\"\\", context };
 };",
   "simulator.json": {
     "resources": [
@@ -1921,8 +1921,8 @@ my_struct: {foo: new Map([[\\"foo\\",1],[\\"bar\\",2]]),bar: new Map([[\\"foo\\"
 
 exports[`struct with resources 1`] = `
 {
-  ".wing/function_c8e6b4af.js": "exports.handler = async function(event) {
-  return await (new ((function(){
+  ".wing/function_c8e6b4af.js": "exports.handler = async function(event, context) {
+  return { payload: (await (new ((function(){
 return class Handler {
   constructor(clients) {
     for (const [name, client] of Object.entries(clients)) {
@@ -1973,7 +1973,7 @@ my_struct: {bucky: (function(env) {
         }
         return $simulator.findInstance(handle);
       })(\\"BUCKET_HANDLE_1d7ab674\\")],},}
-})).handle(event);
+})).handle(event)) ?? \\"\\", context };
 };",
   "simulator.json": {
     "resources": [

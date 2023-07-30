@@ -2,8 +2,8 @@
 
 exports[`create a test 1`] = `
 {
-  ".wing/handler_c818e9be.js": "exports.handler = async function(event) {
-  return await (new ((function(){
+  ".wing/handler_c818e9be.js": "exports.handler = async function(event, context) {
+  return { payload: (await (new ((function(){
 return class Handler {
   constructor(clients) {
     for (const [name, client] of Object.entries(clients)) {
@@ -17,7 +17,7 @@ async handle(event) {
 };
 })())({
 
-})).handle(event);
+})).handle(event)) ?? \\"\\", context };
 };",
   "simulator.json": {
     "resources": [
