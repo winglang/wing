@@ -65,7 +65,9 @@ export class Datetime {
   }
 
   /**
-   * returns an instance of Date time created from an ISO-8601 string, represents the time in UTC
+   * Create a Datetime from an ISO-8601 string
+   *
+   * @returns a new `Datetime` in UTC timezone
    * @param iso ISO-8601 string
    */
   static fromIso(iso: string): Datetime {
