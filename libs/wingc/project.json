@@ -28,8 +28,9 @@
       }
     },
     "dev": {
+      "dependsOn": ["^build"],
       "options": {
-        "command": "cargo run --example compile --release",
+        "command": "cargo run --example compile",
         "cwd": "libs/wingc"
       }
     }
