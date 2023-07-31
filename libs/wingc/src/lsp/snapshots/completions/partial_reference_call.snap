@@ -76,6 +76,18 @@ source: libs/wingc/src/lsp/completions.rs
     value: "```wing\nlowercase: (): str\n```\n---\nReturns this string in lower case.\n\n\n### Returns\na new lower case string."
   sortText: ff|lowercase
   insertText: lowercase()
+- label: replace
+  kind: 2
+  detail: "(searchString: str, replaceString: str): str"
+  documentation:
+    kind: markdown
+    value: "```wing\nreplace: (searchString: str, replaceString: str): str\n```\n---\nReplaces occurrences of a substring within a string.\n\n\n### Returns\nThe modified string after replacement."
+  sortText: ff|replace
+  insertText: replace($0)
+  insertTextFormat: 2
+  command:
+    title: triggerParameterHints
+    command: editor.action.triggerParameterHints
 - label: split
   kind: 2
   detail: "(separator: str): Array<str>"
