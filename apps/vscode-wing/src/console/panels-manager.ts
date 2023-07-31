@@ -19,11 +19,11 @@ export interface ConsolePanel {
 export class PanelsManager {
   private consolePanels: Record<string, ConsolePanel> = {};
 
+  private activeConsolePanel: string | undefined;
+
   private resourcesExplorer: ResourcesExplorerProvider;
 
   private testsExplorer: TestsExplorerProvider;
-
-  private activeConsolePanel: string | undefined;
 
   private logger: OutputChannel | undefined;
 

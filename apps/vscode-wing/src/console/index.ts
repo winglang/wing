@@ -52,9 +52,12 @@ export class WingConsoleManager {
       if (textEditor?.document?.languageId !== "wing") {
         return;
       }
-      await this.panelsManager.setActiveConsolePanel(
-        textEditor?.document.uri.fsPath
-      );
+
+      const currentPanel = this.panelsManager.getActiveConsolePanelId();
+      if (currentPanel) {
+        this.panelsManager.closeConsolePanel(currentPanel);
+        await this.openConsole();
+      }
     });
 
     workspace.onDidCloseTextDocument(async (textDocument) => {
@@ -168,9 +171,9 @@ export class WingConsoleManager {
       this.panelsManager?.closeConsolePanel(uri.fsPath);
     });
 
-    panel.webview.html = `\
+    panel.webview.html = `
       <!DOCTYPE html>
-        <html lang="en"">
+        <html lang="en">
         <head>
             <meta charset="UTF-8">
             <style>
