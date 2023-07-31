@@ -69,12 +69,6 @@ where
 
 pub type TypeRef = UnsafeRef<Type>;
 
-impl PartialEq for TypeRef {
-	fn eq(&self, other: &Self) -> bool {
-		self.0 == other.0
-	}
-}
-
 #[derive(Debug)]
 pub enum SymbolKind {
 	Type(TypeRef), // TODO: <- deprecated since we treat types as a VeriableInfo of kind VariableKind::Type
@@ -190,7 +184,7 @@ impl SymbolKind {
 	}
 }
 
-#[derive(PartialEq, Debug)]
+#[derive(Debug)]
 pub enum Type {
 	Anything,
 	Number,
@@ -280,12 +274,6 @@ impl Class {
 	}
 }
 
-impl PartialEq for Class {
-	fn eq(&self, other: &Self) -> bool {
-		self.name == other.name
-	}
-}
-
 #[derive(Derivative)]
 #[derivative(Debug)]
 pub struct Interface {
@@ -294,12 +282,6 @@ pub struct Interface {
 	pub extends: Vec<TypeRef>, // Must be a Type::Interface type
 	#[derivative(Debug = "ignore")]
 	pub env: SymbolEnv,
-}
-
-impl PartialEq for Interface {
-	fn eq(&self, other: &Self) -> bool {
-		self.name == other.name
-	}
 }
 
 impl Interface {
@@ -412,23 +394,11 @@ pub struct Struct {
 	pub env: SymbolEnv,
 }
 
-impl PartialEq for Struct {
-	fn eq(&self, other: &Self) -> bool {
-		self.name == other.name
-	}
-}
-
 #[derive(Debug)]
 pub struct Enum {
 	pub name: Symbol,
 	pub docs: Docs,
 	pub values: IndexSet<Symbol>,
-}
-
-impl PartialEq for Enum {
-	fn eq(&self, other: &Self) -> bool {
-		self.name == other.name
-	}
 }
 
 #[derive(Debug)]
@@ -2088,11 +2058,13 @@ impl<'a> TypeChecker<'a> {
 			.count();
 
 		// Verify arity
+
+		// check if there is a variadic parameter, get its index
 		let variadic_index = func_sig.parameters.iter().position(|o| o.variadic);
-		let (index_last_item, arg_count) = if variadic_index.is_some() {
+		let (index_last_item, arg_count) = if let Some(variadic_index) = variadic_index {
 			(
-				variadic_index.unwrap(),
-				(variadic_index.unwrap() + 1) + (if arg_list.named_args.is_empty() { 0 } else { 1 }),
+				variadic_index,
+				(variadic_index + 1) + (if arg_list.named_args.is_empty() { 0 } else { 1 }),
 			)
 		} else {
 			(
@@ -2123,18 +2095,18 @@ impl<'a> TypeChecker<'a> {
 				self.validate_type(*arg_type, param.typeref, arg_expr);
 			}
 		} else {
-			let mut new_arg_list: Vec<Expr> = Vec::new();
+			let mut new_arg_list: Vec<&Expr> = Vec::new();
 			let mut new_arg_list_types: Vec<TypeRef> = Vec::new();
 			for i in 0..index_last_item {
-				new_arg_list.push(arg_list.pos_args.get(i).unwrap().clone());
+				new_arg_list.push(arg_list.pos_args.get(i).unwrap());
 				new_arg_list_types.push(*arg_list_types.pos_args.get(i).unwrap());
 			}
 
-			let mut variadic_arg_list: Vec<Expr> = Vec::new();
+			let mut variadic_arg_list: Vec<&Expr> = Vec::new();
 			let variadic_arg_types = *arg_list_types.pos_args.get(index_last_item).unwrap();
 			for i in index_last_item..arg_list.pos_args.len() {
-				let variadic_arg = arg_list.pos_args.get(i).unwrap().clone();
-				if variadic_arg_types != *arg_list_types.pos_args.get(i).unwrap() {
+				let variadic_arg = arg_list.pos_args.get(i).unwrap();
+				if !variadic_arg_types.is_same_type_as(arg_list_types.pos_args.get(i).unwrap()) {
 					self.spanned_error(
 						&variadic_arg.span,
 						"All elements of a variadic argument must be of the same type.".to_string(),
@@ -2142,17 +2114,13 @@ impl<'a> TypeChecker<'a> {
 				}
 				variadic_arg_list.push(variadic_arg);
 			}
-			new_arg_list.push(Expr::new(
-				ExprKind::ArrayLiteral {
-					type_: None,
-					items: variadic_arg_list,
-				},
-				WingSpan::default(),
-			));
-			let variadic_array_type = Type::Array(*arg_list_types.pos_args.get(index_last_item).unwrap());
-			new_arg_list_types.push(UnsafeRef(&variadic_array_type));
+			let variadic_array_inner_type = *arg_list_types.pos_args.get(index_last_item).unwrap();
 			for (arg_expr, arg_type, param) in izip!(new_arg_list.iter(), new_arg_list_types.iter(), params) {
-				self.validate_type(*arg_type, param.typeref, arg_expr);
+				self.validate_type(*arg_type, param.typeref, *arg_expr);
+			}
+			// assert that each the extra args are of the same type as the variadic array type
+			for arg_expr in variadic_arg_list.iter() {
+				self.validate_type(variadic_array_inner_type, variadic_array_inner_type, *arg_expr);
 			}
 		};
 		None
