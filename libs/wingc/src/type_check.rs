@@ -1279,11 +1279,16 @@ impl Types {
 				new_type = self.maybe_unwrap_inference(new_type);
 			}
 		}
-		self
-			.inferences
-			.get_mut(id)
-			.expect("Inference id out of bounds")
-			.replace(new_type);
+
+		let existing_type = self.inferences.get_mut(id).expect("Inference id out of bounds");
+
+		if existing_type.is_none() {
+			existing_type.replace(new_type);
+		} else {
+			// We already have a type for this inference
+			return;
+		}
+
 		for expr_type in self.type_for_expr.iter_mut().flatten() {
 			match &mut (*expr_type.type_) {
 				Type::Function(func) => {
@@ -2399,7 +2404,6 @@ impl<'a> TypeChecker<'a> {
 	///
 	/// Return true if any inference exists in the target type, false otherwise
 	fn deep_inference(&mut self, target: TypeRef, expected: Option<TypeRef>) -> bool {
-		let expected = expected.filter(|&expected| expected.is_inferred() || target.is_subtype_of(&expected));
 		match &*target {
 			Type::Anything
 			| Type::Number
@@ -2473,7 +2477,7 @@ impl<'a> TypeChecker<'a> {
 				if let Some(expected) = expected {
 					// special case: If both types are an inference, check to see if either already has a type (prefer expected type)
 					if let Type::Inferred(m) = &*expected {
-						if self.types.get_inference_by_id(*m).is_none() {
+						if m != n && self.types.get_inference_by_id(*m).is_none() {
 							self.types.update_inferred_type(*m, target);
 						}
 					} else {
@@ -2538,34 +2542,35 @@ impl<'a> TypeChecker<'a> {
 	/// Returns the given type on success, otherwise returns one of the expected types.
 	fn validate_type_in(&mut self, actual_type: TypeRef, expected_types: &[TypeRef], span: &impl Spanned) -> TypeRef {
 		assert!(expected_types.len() > 0);
+		let mut return_type = actual_type;
+
+		if self.deep_inference(actual_type, Some(expected_types[0])) {
+			return_type = expected_types[0];
+		} else {
+			self.deep_inference(expected_types[0], Some(actual_type));
+		}
 
 		// If the actual type is anything or any of the expected types then we're good
-		if actual_type.is_anything() || expected_types.iter().any(|t| actual_type.is_subtype_of(t)) {
-			if self.deep_inference(actual_type, Some(expected_types[0])) {
-				return expected_types[0];
-			}
-			if self.deep_inference(expected_types[0], Some(actual_type)) {
-				return actual_type;
-			}
-			return actual_type;
+		if return_type.is_anything() || expected_types.iter().any(|t| return_type.is_subtype_of(t)) {
+			return return_type;
 		}
 
 		// If the actual type is an error (a type we failed to resolve) then we silently ignore it assuming
 		// the error was already reported.
-		if actual_type.is_unresolved() {
-			return actual_type;
+		if return_type.is_unresolved() {
+			return return_type;
 		}
 
 		// If any of the expected types are errors (types we failed to resolve) then we silently ignore it
 		// assuming the error was already reported.
 		if expected_types.iter().any(|t| t.is_unresolved()) {
-			return actual_type;
+			return return_type;
 		}
 
 		// If the expected type is Json and the actual type is a Json legal value then we're good
 		if expected_types.iter().any(|t| t.is_json()) {
-			if actual_type.is_json_legal_value() {
-				return actual_type;
+			if return_type.is_json_legal_value() {
+				return return_type;
 			}
 		}
 
@@ -2582,9 +2587,9 @@ impl<'a> TypeChecker<'a> {
 
 		let mut message = format!(
 			"Expected type to be {}, but got \"{}\" instead",
-			expected_type_str, actual_type
+			expected_type_str, return_type
 		);
-		if actual_type.is_nil() && expected_types.len() == 1 {
+		if return_type.is_nil() && expected_types.len() == 1 {
 			message = format!(
 				"{} (hint: to allow \"nil\" assignment use optional type: \"{}?\")",
 				message, expected_types[0]
@@ -2617,7 +2622,7 @@ impl<'a> TypeChecker<'a> {
 		}
 		if env.is_function {
 			if let Type::Inferred(n) = &*env.return_type {
-				// TODO if function types don't return anything then we should set the return type to void
+				// If function types don't return anything then we should set the return type to void
 				self.types.update_inferred_type(*n, self.types.void());
 				self.deep_update_inference(&mut env.return_type);
 			}
@@ -3035,24 +3040,18 @@ impl<'a> TypeChecker<'a> {
 				self.inner_scopes.push(scope)
 			}
 			StmtKind::Return(exp) => {
-				let mut expected_return_type = env.return_type;
-				self.deep_update_inference(&mut expected_return_type);
+				self.deep_update_inference(&mut env.return_type);
 				if let Some(return_expression) = exp {
 					let (return_type, _) = self.type_check_exp(return_expression, env);
-					if !expected_return_type.is_void() {
-						self.validate_type(return_type, expected_return_type, return_expression);
+					if !env.return_type.is_void() {
+						self.validate_type(return_type, env.return_type, return_expression);
 					} else if env.is_in_function() {
 						self.spanned_error(stmt, "Unexpected return value from void function");
 					} else {
 						self.spanned_error(stmt, "Return statement outside of function cannot return a value");
 					}
 				} else {
-					if !expected_return_type.is_void() && !expected_return_type.is_inferred() {
-						self.spanned_error(
-							stmt,
-							format!("Expected return statement to return type {}", expected_return_type),
-						);
-					}
+					self.validate_type(self.types.void(), env.return_type, stmt);
 				}
 			}
 			StmtKind::Class(AstClass {

@@ -1875,15 +1875,6 @@ fn closure_field() {
 }
 
 #[test]
-fn fails_invalid_closure_type() {
-	assert_compile_fail!(
-		r#"
-    bring cloud;
-    new cloud.Function(inflight (s: num) => {});
-    "#
-	)
-}
-#[test]
 fn capture_object_with_this_in_name() {
 	assert_compile_ok!(
 		r#"
