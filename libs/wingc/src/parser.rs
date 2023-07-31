@@ -25,7 +25,6 @@ use crate::{dbg_panic, WINGSDK_STD_MODULE, WINGSDK_TEST_CLASS_NAME};
 static UNIMPLEMENTED_GRAMMARS: phf::Map<&'static str, &'static str> = phf_map! {
 	"any" => "see https://github.com/winglang/wing/issues/434",
 	"Promise" => "see https://github.com/winglang/wing/issues/529",
-	"preflight_closure" => "see https://github.com/winglang/wing/issues/474",
 	"pure_closure" => "see https://github.com/winglang/wing/issues/474",
 	"storage_modifier" => "see https://github.com/winglang/wing/issues/107",
 	"access_modifier" => "see https://github.com/winglang/wing/issues/108",
@@ -535,17 +534,17 @@ impl<'s> Parser<'s> {
 
 		for field_node in statement_node.children_by_field_name("field", &mut cursor) {
 			let identifier = self.node_symbol(&self.get_child_field(&field_node, "name")?)?;
-			let type_ = &self.get_child_field(&field_node, "type")?;
+			let type_ = self.get_child_field(&field_node, "type").ok();
 			let f = StructField {
 				name: identifier,
-				member_type: self.build_type_annotation(&type_, phase)?,
+				member_type: self.build_type_annotation(type_, phase)?,
 			};
 			members.push(f);
 		}
 
 		let mut extends = vec![];
 		for super_node in statement_node.children_by_field_name("extends", &mut cursor) {
-			let super_type = self.build_type_annotation(&super_node, phase)?;
+			let super_type = self.build_type_annotation(Some(super_node), phase)?;
 			match super_type.kind {
 				TypeAnnotationKind::UserDefined(t) => {
 					extends.push(t);
@@ -568,7 +567,7 @@ impl<'s> Parser<'s> {
 
 	fn build_variable_def_statement(&self, statement_node: &Node, phase: Phase) -> DiagnosticResult<StmtKind> {
 		let type_ = if let Some(type_node) = statement_node.child_by_field_name("type") {
-			Some(self.build_type_annotation(&type_node, phase)?)
+			Some(self.build_type_annotation(Some(type_node), phase)?)
 		} else {
 			None
 		};
@@ -730,6 +729,13 @@ impl<'s> Parser<'s> {
 						continue;
 					};
 
+					// make sure all the parameters have type annotations
+					for param in &func_def.signature.parameters {
+						if matches!(param.type_annotation.kind, TypeAnnotationKind::Inferred) {
+							self.add_error_from_span("Missing type annotation", param.name.span.clone());
+						}
+					}
+
 					methods.push((method_name, func_def))
 				}
 				"class_field" => {
@@ -751,7 +757,7 @@ impl<'s> Parser<'s> {
 
 					fields.push(ClassField {
 						name: self.node_symbol(&class_element.child_by_field_name("name").unwrap())?,
-						member_type: self.build_type_annotation(&class_element.child_by_field_name("type").unwrap(), phase)?,
+						member_type: self.build_type_annotation(class_element.child_by_field_name("type"), phase)?,
 						reassignable: class_element.child_by_field_name("reassignable").is_some(),
 						is_static,
 						phase,
@@ -892,7 +898,7 @@ impl<'s> Parser<'s> {
 		};
 
 		let parent = if let Some(parent_node) = statement_node.child_by_field_name("parent") {
-			let parent_type = self.build_type_annotation(&parent_node, class_phase)?;
+			let parent_type = self.build_type_annotation(Some(parent_node), class_phase)?;
 			match parent_type.kind {
 				TypeAnnotationKind::UserDefined(parent_type) => Some(Expr::new(
 					ExprKind::Reference(Reference::TypeReference(parent_type)),
@@ -922,7 +928,7 @@ impl<'s> Parser<'s> {
 				continue;
 			}
 
-			let interface_type = self.build_type_annotation(&type_node, class_phase)?;
+			let interface_type = self.build_type_annotation(Some(type_node), class_phase)?;
 			match interface_type.kind {
 				TypeAnnotationKind::UserDefined(interface_type) => implements.push(interface_type),
 				_ => {
@@ -1033,11 +1039,18 @@ impl<'s> Parser<'s> {
 	fn build_function_signature(&self, func_sig_node: &Node, phase: Phase) -> DiagnosticResult<FunctionSignature> {
 		let parameters = self.build_parameter_list(&func_sig_node.child_by_field_name("parameter_list").unwrap(), phase)?;
 		let return_type = if let Some(rt) = func_sig_node.child_by_field_name("type") {
-			self.build_type_annotation(&rt, phase)?
+			self.build_type_annotation(Some(rt), phase)?
 		} else {
-			TypeAnnotation {
-				kind: TypeAnnotationKind::Void,
-				span: Default::default(),
+			if func_sig_node.kind().ends_with("_closure") {
+				TypeAnnotation {
+					kind: TypeAnnotationKind::Inferred,
+					span: Default::default(),
+				}
+			} else {
+				TypeAnnotation {
+					kind: TypeAnnotationKind::Void,
+					span: Default::default(),
+				}
 			}
 		};
 
@@ -1092,8 +1105,7 @@ impl<'s> Parser<'s> {
 
 			res.push(FunctionParameter {
 				name: self.check_reserved_symbol(&parameter_definition_node.child_by_field_name("name").unwrap())?,
-				type_annotation: self
-					.build_type_annotation(&parameter_definition_node.child_by_field_name("type").unwrap(), phase)?,
+				type_annotation: self.build_type_annotation(parameter_definition_node.child_by_field_name("type"), phase)?,
 				reassignable: parameter_definition_node.child_by_field_name("reassignable").is_some(),
 			});
 		}
@@ -1146,7 +1158,17 @@ impl<'s> Parser<'s> {
 		}
 	}
 
-	fn build_type_annotation(&self, type_node: &Node, phase: Phase) -> DiagnosticResult<TypeAnnotation> {
+	fn build_type_annotation(&self, type_node: Option<Node>, phase: Phase) -> DiagnosticResult<TypeAnnotation> {
+		let type_node = &match type_node {
+			Some(node) => node,
+			None => {
+				return Ok(TypeAnnotation {
+					kind: TypeAnnotationKind::Inferred,
+					span: Default::default(),
+				})
+			}
+		};
+
 		let span = self.node_span(type_node);
 		match type_node.kind() {
 			"builtin_type" => match self.node_text(type_node) {
@@ -1174,9 +1196,7 @@ impl<'s> Parser<'s> {
 				other => return self.report_unimplemented_grammar(other, "builtin", type_node),
 			},
 			"optional" => {
-				let inner_type = self
-					.build_type_annotation(&type_node.named_child(0).unwrap(), phase)
-					.unwrap();
+				let inner_type = self.build_type_annotation(type_node.named_child(0), phase).unwrap();
 				Ok(TypeAnnotation {
 					kind: TypeAnnotationKind::Optional(Box::new(inner_type)),
 					span,
@@ -1189,7 +1209,7 @@ impl<'s> Parser<'s> {
 
 				let mut parameters = vec![];
 				for param_type in param_type_list_node.named_children(&mut cursor) {
-					let t = self.build_type_annotation(&param_type, phase)?;
+					let t = self.build_type_annotation(Some(param_type), phase)?;
 
 					parameters.push(FunctionParameter {
 						name: "".into(),
@@ -1202,7 +1222,7 @@ impl<'s> Parser<'s> {
 					Some(return_type) => Ok(TypeAnnotation {
 						kind: TypeAnnotationKind::Function(FunctionSignature {
 							parameters,
-							return_type: Box::new(self.build_type_annotation(&return_type, phase)?),
+							return_type: Box::new(self.build_type_annotation(Some(return_type), phase)?),
 							phase: if type_node.child_by_field_name("inflight").is_some() {
 								Phase::Inflight
 							} else {
@@ -1230,30 +1250,30 @@ impl<'s> Parser<'s> {
 			}
 			"mutable_container_type" | "immutable_container_type" => {
 				let container_type = self.node_text(&type_node.child_by_field_name("collection_type").unwrap());
-				let element_type = type_node.child_by_field_name("type_parameter").unwrap();
+				let element_type = type_node.child_by_field_name("type_parameter");
 				match container_type {
 					"Map" => Ok(TypeAnnotation {
-						kind: TypeAnnotationKind::Map(Box::new(self.build_type_annotation(&element_type, phase)?)),
+						kind: TypeAnnotationKind::Map(Box::new(self.build_type_annotation(element_type, phase)?)),
 						span,
 					}),
 					"MutMap" => Ok(TypeAnnotation {
-						kind: TypeAnnotationKind::MutMap(Box::new(self.build_type_annotation(&element_type, phase)?)),
+						kind: TypeAnnotationKind::MutMap(Box::new(self.build_type_annotation(element_type, phase)?)),
 						span,
 					}),
 					"Array" => Ok(TypeAnnotation {
-						kind: TypeAnnotationKind::Array(Box::new(self.build_type_annotation(&element_type, phase)?)),
+						kind: TypeAnnotationKind::Array(Box::new(self.build_type_annotation(element_type, phase)?)),
 						span,
 					}),
 					"MutArray" => Ok(TypeAnnotation {
-						kind: TypeAnnotationKind::MutArray(Box::new(self.build_type_annotation(&element_type, phase)?)),
+						kind: TypeAnnotationKind::MutArray(Box::new(self.build_type_annotation(element_type, phase)?)),
 						span,
 					}),
 					"Set" => Ok(TypeAnnotation {
-						kind: TypeAnnotationKind::Set(Box::new(self.build_type_annotation(&element_type, phase)?)),
+						kind: TypeAnnotationKind::Set(Box::new(self.build_type_annotation(element_type, phase)?)),
 						span,
 					}),
 					"MutSet" => Ok(TypeAnnotation {
-						kind: TypeAnnotationKind::MutSet(Box::new(self.build_type_annotation(&element_type, phase)?)),
+						kind: TypeAnnotationKind::MutSet(Box::new(self.build_type_annotation(element_type, phase)?)),
 						span,
 					}),
 					"ERROR" => self.with_error("Expected builtin container type", type_node)?,
@@ -1607,7 +1627,7 @@ impl<'s> Parser<'s> {
 			"pure_closure" => self.with_error("Pure phased anonymous closures not implemented yet", expression_node),
 			"array_literal" => {
 				let array_type = if let Some(type_node) = expression_node.child_by_field_name("type") {
-					Some(self.build_type_annotation(&type_node, phase)?)
+					self.build_type_annotation(Some(type_node), phase).ok()
 				} else {
 					None
 				};
@@ -1631,14 +1651,22 @@ impl<'s> Parser<'s> {
 				Ok(Expr::new(ExprKind::JsonMapLiteral { fields }, expression_span))
 			}
 			"map_literal" => {
-				let map_type = if let Some(type_node) = expression_node.child_by_field_name("type") {
-					Some(self.build_type_annotation(&type_node, phase)?)
-				} else {
-					None
-				};
+				let mut map_type = self
+					.build_type_annotation(expression_node.child_by_field_name("type"), phase)
+					.ok();
 
 				let fields = self.build_map_fields(expression_node, phase)?;
-
+				if let Some(TypeAnnotation { kind, span }) = &map_type {
+					if matches!(kind, TypeAnnotationKind::Inferred) {
+						map_type.replace(TypeAnnotation {
+							kind: TypeAnnotationKind::Map(Box::new(TypeAnnotation {
+								kind: TypeAnnotationKind::Inferred,
+								span: Default::default(),
+							})),
+							span: span.clone(),
+						});
+					}
+				}
 				// Special case: empty {} (which is detected as map by tree-sitter) -
 				// if it is annotated as a Set/MutSet we should treat it as a set literal
 				if let Some(TypeAnnotation { kind, .. }) = &map_type {
@@ -1700,7 +1728,7 @@ impl<'s> Parser<'s> {
 			}
 			"set_literal" => self.build_set_literal(expression_node, phase),
 			"struct_literal" => {
-				let type_ = self.build_type_annotation(&expression_node.child_by_field_name("type").unwrap(), phase);
+				let type_ = self.build_type_annotation(expression_node.child_by_field_name("type"), phase);
 				let mut fields = IndexMap::new();
 				let mut cursor = expression_node.walk();
 				for field in expression_node.children_by_field_name("fields", &mut cursor) {
@@ -1771,11 +1799,21 @@ impl<'s> Parser<'s> {
 
 	fn build_set_literal(&self, expression_node: &Node, phase: Phase) -> Result<Expr, ()> {
 		let expression_span = self.node_span(expression_node);
-		let set_type = if let Some(type_node) = expression_node.child_by_field_name("type") {
-			Some(self.build_type_annotation(&type_node, phase)?)
-		} else {
-			None
-		};
+		let mut set_type = self
+			.build_type_annotation(expression_node.child_by_field_name("type"), phase)
+			.ok();
+
+		if let Some(TypeAnnotation { kind, span }) = &set_type {
+			if matches!(kind, TypeAnnotationKind::Inferred) {
+				set_type.replace(TypeAnnotation {
+					kind: TypeAnnotationKind::Set(Box::new(TypeAnnotation {
+						kind: TypeAnnotationKind::Inferred,
+						span: Default::default(),
+					})),
+					span: span.clone(),
+				});
+			}
+		}
 		let mut items = Vec::new();
 		let mut cursor = expression_node.walk();
 		for element_node in expression_node.children_by_field_name("element", &mut cursor) {
