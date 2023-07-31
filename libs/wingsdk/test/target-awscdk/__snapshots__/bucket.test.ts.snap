@@ -371,7 +371,7 @@ def submit_response(event: dict, context, response_status: str, error_message: s
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "5d160cc9fa1db8633acd482be1c89e80651da9388c9457c0b6f8ce80b6830dfe.zip",
+          "S3Key": "b9deba0f7dc17e61cf9f7e0fa901af6e57ec811a13882b7048ee9aa75797378d.zip",
         },
         "Handler": "index.handler",
         "Role": {
@@ -722,7 +722,7 @@ def submit_response(event: dict, context, response_status: str, error_message: s
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "5d160cc9fa1db8633acd482be1c89e80651da9388c9457c0b6f8ce80b6830dfe.zip",
+          "S3Key": "b9deba0f7dc17e61cf9f7e0fa901af6e57ec811a13882b7048ee9aa75797378d.zip",
         },
         "Handler": "index.handler",
         "Role": {
@@ -1095,7 +1095,7 @@ def submit_response(event: dict, context, response_status: str, error_message: s
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "5d160cc9fa1db8633acd482be1c89e80651da9388c9457c0b6f8ce80b6830dfe.zip",
+          "S3Key": "b9deba0f7dc17e61cf9f7e0fa901af6e57ec811a13882b7048ee9aa75797378d.zip",
         },
         "Handler": "index.handler",
         "Role": {
@@ -1446,7 +1446,7 @@ def submit_response(event: dict, context, response_status: str, error_message: s
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "5d160cc9fa1db8633acd482be1c89e80651da9388c9457c0b6f8ce80b6830dfe.zip",
+          "S3Key": "b9deba0f7dc17e61cf9f7e0fa901af6e57ec811a13882b7048ee9aa75797378d.zip",
         },
         "Handler": "index.handler",
         "Role": {

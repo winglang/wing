@@ -222,6 +222,25 @@ export class Function extends cloud.Function implements IAwsFunction {
     return this.function.functionName;
   }
 
+  /**
+   * Generates the code lines for the cloud function,
+   * overridden by the tf-aws target to have the function context too
+   * @param inflightClient inflight client code
+   * @returns cloud function code string
+   * @internal
+   */
+  protected _generateLines(inflightClient: core.Code): string[] {
+    const lines = new Array<string>();
+
+    lines.push("exports.handler = async function(event, context) {");
+    lines.push(
+      `  return { payload: (await (${inflightClient.text}).handle(event)) ?? "", context };`
+    );
+    lines.push("};");
+
+    return lines;
+  }
+
   /** @internal */
   public _bind(host: IInflightHost, ops: string[]): void {
     if (!(host instanceof Function)) {

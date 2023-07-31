@@ -1,13 +1,13 @@
-import { InvokeCommand, LambdaClient } from "@aws-sdk/client-lambda";
-import { fromUtf8, toUtf8 } from "@aws-sdk/util-utf8-node";
-import { IFunctionClient } from "../cloud";
-import { Trace, TraceType } from "../std";
-import { FUNCTION_TYPE } from "../target-sim/schema-resources";
 import {
   CloudWatchLogsClient,
   GetLogEventsCommand,
 } from "@aws-sdk/client-cloudwatch-logs";
+import { InvokeCommand, LambdaClient } from "@aws-sdk/client-lambda";
+import { fromUtf8, toUtf8 } from "@aws-sdk/util-utf8-node";
 import { Context } from "aws-lambda";
+import { IFunctionClient } from "../cloud";
+import { Trace, TraceType } from "../std";
+import { FUNCTION_TYPE } from "../target-sim/schema-resources";
 
 export class FunctionClient implements IFunctionClient {
   private readonly cloudWatchClient = new CloudWatchLogsClient({});
@@ -76,7 +76,7 @@ export class FunctionClient implements IFunctionClient {
 
     return [
       ...logsCollector,
-      ...logs.reduce((acc, logs) => [...acc, ...logs], []),
+      ...logs.reduce((acc, logsItem) => [...acc, ...logsItem], []),
     ];
   }
 

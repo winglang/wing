@@ -71,13 +71,32 @@ export class Function extends cloud.Function {
     super._bind(host, ops);
   }
 
+  /**
+   * Generates the code lines for the cloud function,
+   * overridden by the awscdk target to have the function context too
+   * @param inflightClient inflight client code
+   * @returns cloud function code string
+   * @internal
+   */
+  protected _generateLines(inflightClient: core.Code): string[] {
+    const lines = new Array<string>();
+
+    lines.push("exports.handler = async function(event, context) {");
+    lines.push(
+      `  return { payload: (await (${inflightClient.text}).handle(event)) ?? "", context };`
+    );
+    lines.push("};");
+
+    return lines;
+  }
+
   /** @internal */
   public _toInflight(): core.Code {
     return core.InflightClient.for(
       __dirname.replace("target-awscdk", "shared-aws"),
       __filename,
       "FunctionClient",
-      [`process.env["${this.envName()}"]`]
+      [`process.env["${this.envName()}"], "${this.node.path}"`]
     );
   }
 
