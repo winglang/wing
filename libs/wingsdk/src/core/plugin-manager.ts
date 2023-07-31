@@ -49,7 +49,10 @@ export class PluginManager {
    */
   public add(pluginAbsolutePath: string) {
     // maybe we support other plugin types in the future (e.g. npm modules)
-    if (!pluginAbsolutePath.endsWith(".js")) {
+    if (
+      !pluginAbsolutePath.endsWith(".js") ||
+      !pluginAbsolutePath.endsWith(".cjs")
+    ) {
       throw new Error(
         `Currently only javascript files are supported as plugins. Got: ${pluginAbsolutePath}`
       );

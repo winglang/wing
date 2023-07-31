@@ -101,7 +101,7 @@ export abstract class Function extends Resource implements IInflightHost {
 
     const workdir = App.of(this).workdir;
     mkdirSync(workdir, { recursive: true });
-    const entrypoint = join(workdir, `${assetName}.js`);
+    const entrypoint = join(workdir, `${assetName}.cjs`);
     writeFileSync(entrypoint, lines.join("\n"));
     this.entrypoint = entrypoint;
 
