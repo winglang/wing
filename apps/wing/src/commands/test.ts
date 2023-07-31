@@ -32,20 +32,7 @@ export interface TestOptions extends CompileOptions {
 
 export async function test(entrypoints: string[], options: TestOptions): Promise<number> {
   if (!isWatching && options.watch) {
-    const watcher = chokidar.watch(entrypoints, {
-      ignoreInitial: true,
-    });
-
-    console.log(`Watching ${entrypoints}`);
-
-    watcher.on("change", async () => {
-      console.log(`Wing source file changed, rerunning tests…`);
-      await test(entrypoints, options);
-    });
-
-    watcher.on("error", (error) => {
-      console.error("Error watching Wing source files", error);
-    });
+    await watchForChanges(entrypoints, options);
   }
 
   const startTime = Date.now();
@@ -75,6 +62,23 @@ export async function test(entrypoints: string[], options: TestOptions): Promise
   }
 
   return 0;
+}
+
+async function watchForChanges(entrypoints: string[], options: TestOptions) {
+  const watcher = chokidar.watch(entrypoints, {
+    ignoreInitial: true,
+  });
+
+  console.log(`Watching ${entrypoints}`);
+
+  watcher.on("change", async () => {
+    console.log(`Wing source file changed, rerunning tests…`);
+    await test(entrypoints, options);
+  });
+
+  watcher.on("error", (error) => {
+    console.error("Error watching Wing source files", error);
+  });
 }
 
 function printResults(
