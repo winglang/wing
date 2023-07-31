@@ -9,52 +9,25 @@ const globalAny = global as any;
 globalAny.fetch = fetch;
 globalAny.WebSocket = ws;
 
-import {
-  ExtensionContext,
-  WebviewPanel,
-  Uri,
-  ViewColumn,
-  window,
-  workspace,
-  OutputChannel,
-} from "vscode";
-import { ResourcesExplorerProvider } from "./explorer-providers/ResourcesExplorerProvider";
-import { TestsExplorerProvider } from "./explorer-providers/TestsExplorerProvider";
-import { PanelsManager } from "./panels-manager";
+import { ExtensionContext, window, workspace, OutputChannel } from "vscode";
+import { ConsoleManager } from "./console-manager";
 import { createTRPCClient } from "./services/trpc";
-import { VIEW_TYPE_CONSOLE } from "../constants";
 
 export class WingConsoleManager {
-  panelsManager: PanelsManager;
+  consoleManager: ConsoleManager;
 
   logger: OutputChannel = window.createOutputChannel("Wing Console");
 
   constructor(public readonly context: ExtensionContext) {
-    const resourcesExplorer = new ResourcesExplorerProvider();
-
-    const testsExplorer = new TestsExplorerProvider();
-
-    this.panelsManager = new PanelsManager(
-      this.logger,
-      resourcesExplorer,
-      testsExplorer
-    );
+    this.consoleManager = new ConsoleManager(this.context, this.logger);
 
     window.onDidChangeActiveTextEditor(async (textEditor) => {
       if (textEditor?.document?.languageId !== "wing") {
         return;
       }
-
-      await this.panelsManager.setActiveConsolePanel(
-        textEditor.document.uri.fsPath
-      );
-    });
-
-    workspace.onDidCloseTextDocument(async (textDocument) => {
-      if (textDocument.languageId !== "wing") {
-        return;
+      if (this.consoleManager.getActiveInstance()) {
+        await this.openConsole();
       }
-      this.panelsManager.closeConsolePanel(textDocument.uri.fsPath);
     });
   }
 
@@ -75,15 +48,15 @@ export class WingConsoleManager {
       this.logger.appendLine(`[${type}] ${message}`);
     };
 
-    if (this.panelsManager.getConsolePanel(uri.fsPath)) {
+    if (this.consoleManager.getConsoleInstance(uri.fsPath)) {
       this.logger.appendLine(`Wing Console is already running`);
-      await this.panelsManager.setActiveConsolePanel(uri.fsPath);
+      await this.consoleManager.setActiveInstance(uri.fsPath);
       return;
     }
 
     const wingfile = path.basename(uri.fsPath);
 
-    const { port, close } = await createConsoleApp({
+    const { port } = await createConsoleApp({
       wingfile: uri.fsPath,
       hostUtils: {
         openExternal: async (url: string) => {
@@ -121,68 +94,20 @@ export class WingConsoleManager {
 
     this.logger.appendLine(`Wing Console is running at ${url}`);
 
-    const panel: WebviewPanel = window.createWebviewPanel(
-      VIEW_TYPE_CONSOLE,
-      `${wingfile} [Console]`,
-      ViewColumn.Beside,
-      {
-        enableScripts: true,
-        enableCommandUris: true,
-        portMapping: [{ webviewPort: port, extensionHostPort: port }],
-      }
-    );
-    panel.iconPath = {
-      light: Uri.joinPath(
-        this.context.extensionUri,
-        "resources",
-        "icon-light.png"
-      ),
-      dark: Uri.joinPath(
-        this.context.extensionUri,
-        "resources",
-        "icon-dark.png"
-      ),
-    };
-
-    panel.onDidChangeViewState(async () => {
-      if (panel.active) {
-        await this.panelsManager?.setActiveConsolePanel(uri.fsPath);
-      }
-    });
-
-    panel.onDidDispose(async () => {
-      await close();
-      this.panelsManager?.closeConsolePanel(uri.fsPath);
-    });
-
-    panel.webview.html = `
-      <!DOCTYPE html>
-        <html lang="en">
-        <head>
-            <meta charset="UTF-8">
-            <style>
-              body { margin: 0; padding: 0; }
-              iframe { display: block; height: 100vh; width: 100vw; border: none; }
-            </style>
-        </head>
-        <body>
-          <iframe src="http://${url}"/>
-        </body>
-      </html>`;
-
-    this.panelsManager.addConsolePanel({
+    this.consoleManager.addInstance({
       id: uri.fsPath,
-      panel: panel,
+      wingfile,
+      url,
       client: createTRPCClient(url),
     });
 
-    await this.panelsManager.setActiveConsolePanel(uri.fsPath);
+    await this.consoleManager.setActiveInstance(uri.fsPath);
   }
 
   public async openFile() {
-    const activePanel = this.panelsManager?.getActiveConsolePanelId();
-    if (activePanel) {
-      const document = await workspace.openTextDocument(activePanel);
+    const activePanelId = this.consoleManager?.getActiveInstanceId();
+    if (activePanelId) {
+      const document = await workspace.openTextDocument(activePanelId);
 
       await window.showTextDocument(document);
     }

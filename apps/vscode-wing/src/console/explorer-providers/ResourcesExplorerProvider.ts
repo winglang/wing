@@ -29,11 +29,16 @@ export class ResourcesExplorerProvider
     this._onDidChangeTreeData.fire();
   }
 
-  public update(item: ExplorerItem): void {
+  public update(item?: ExplorerItem): void {
     if (this.node !== item) {
       this.node = item;
       this.refresh();
     }
+  }
+
+  public clear(): void {
+    this.node = undefined;
+    this.refresh();
   }
 
   public getTreeItem(element: ResourceItem): TreeItem {

@@ -40,6 +40,11 @@ export class TestsExplorerProvider implements TreeDataProvider<TestItem> {
     this.refresh();
   }
 
+  public clear(): void {
+    this.tests = [];
+    this.refresh();
+  }
+
   public getTests(): TestItem[] {
     return this.tests;
   }
