@@ -5,11 +5,14 @@ const WING_BIN = fileURLToPath(new URL("../../wing/bin/wing", import.meta.url));
 const EXTENSION_DEVELOPMENT_PATH = fileURLToPath(
   new URL("..", import.meta.url)
 );
+const EXAMPLES_PATH = fileURLToPath(
+  new URL("../../../examples", import.meta.url)
+);
 
 spawnSync(
   "code",
   [
-    "../../examples",
+    EXAMPLES_PATH,
     "--disable-extensions",
     `--extensionDevelopmentPath=${EXTENSION_DEVELOPMENT_PATH}`,
   ],
