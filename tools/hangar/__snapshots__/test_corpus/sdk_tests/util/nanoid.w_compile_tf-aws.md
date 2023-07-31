@@ -11,13 +11,13 @@ module.exports = function({ $util_Util }) {
     }
     async handle() {
       const standard_id = (await $util_Util.nanoid());
-      {((cond) => {if (!cond) throw new Error("assertion failed: standard_id.length == 21")})((standard_id.length === 21))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: standard_id.length == 21")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(standard_id.length,21)))};
       const id_size10 = (await $util_Util.nanoid({ size: 10 }));
-      {((cond) => {if (!cond) throw new Error("assertion failed: id_size10.length == 10")})((id_size10.length === 10))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: id_size10.length == 10")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(id_size10.length,10)))};
       const id_custom = (await $util_Util.nanoid({ alphabet: "01*/ab" }));
-      {((cond) => {if (!cond) throw new Error("assertion failed: id_custom.length == 21")})((id_custom.length === 21))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: id_custom.length == 21")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(id_custom.length,21)))};
       for (const i of ((s,e,i) => { function* iterator(start,end,inclusive) { let i = start; let limit = inclusive ? ((end < start) ? end - 1 : end + 1) : end; while (i < limit) yield i++; while (i > limit) yield i--; }; return iterator(s,e,i); })(0,id_custom.length,false)) {
-        if (((((((((args) => { if (i >= id_custom.length || i + id_custom.length < 0) {throw new Error("index out of bounds")}; return id_custom.at(i) })(i) === "0") || (((args) => { if (i >= id_custom.length || i + id_custom.length < 0) {throw new Error("index out of bounds")}; return id_custom.at(i) })(i) === "1")) || (((args) => { if (i >= id_custom.length || i + id_custom.length < 0) {throw new Error("index out of bounds")}; return id_custom.at(i) })(i) === "*")) || (((args) => { if (i >= id_custom.length || i + id_custom.length < 0) {throw new Error("index out of bounds")}; return id_custom.at(i) })(i) === "/")) || (((args) => { if (i >= id_custom.length || i + id_custom.length < 0) {throw new Error("index out of bounds")}; return id_custom.at(i) })(i) === "a")) || (((args) => { if (i >= id_custom.length || i + id_custom.length < 0) {throw new Error("index out of bounds")}; return id_custom.at(i) })(i) === "b"))) {
+        if (((((((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((args) => { if (i >= id_custom.length || i + id_custom.length < 0) {throw new Error("index out of bounds")}; return id_custom.at(i) })(i),"0")) || (((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((args) => { if (i >= id_custom.length || i + id_custom.length < 0) {throw new Error("index out of bounds")}; return id_custom.at(i) })(i),"1"))) || (((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((args) => { if (i >= id_custom.length || i + id_custom.length < 0) {throw new Error("index out of bounds")}; return id_custom.at(i) })(i),"*"))) || (((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((args) => { if (i >= id_custom.length || i + id_custom.length < 0) {throw new Error("index out of bounds")}; return id_custom.at(i) })(i),"/"))) || (((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((args) => { if (i >= id_custom.length || i + id_custom.length < 0) {throw new Error("index out of bounds")}; return id_custom.at(i) })(i),"a"))) || (((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((args) => { if (i >= id_custom.length || i + id_custom.length < 0) {throw new Error("index out of bounds")}; return id_custom.at(i) })(i),"b")))) {
           {((cond) => {if (!cond) throw new Error("assertion failed: true")})(true)};
         }
         else {
@@ -165,8 +165,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this.display.hidden = true;
         this._addInflightOps("handle", "$inflight_init");
+        this.display.hidden = true;
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
@@ -188,13 +188,13 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     const standard_id = (util.Util.nanoid());
-    {((cond) => {if (!cond) throw new Error("assertion failed: standard_id.length == 21")})((standard_id.length === 21))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: standard_id.length == 21")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(standard_id.length,21)))};
     const id_size10 = (util.Util.nanoid({ size: 10 }));
-    {((cond) => {if (!cond) throw new Error("assertion failed: id_size10.length == 10")})((id_size10.length === 10))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: id_size10.length == 10")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(id_size10.length,10)))};
     const id_custom = (util.Util.nanoid({ alphabet: "01*/ab" }));
-    {((cond) => {if (!cond) throw new Error("assertion failed: id_custom.length == 21")})((id_custom.length === 21))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: id_custom.length == 21")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(id_custom.length,21)))};
     for (const i of $stdlib.std.Range.of(0, id_custom.length, false)) {
-      if (((((((((args) => { if (i >= id_custom.length || i + id_custom.length < 0) {throw new Error("index out of bounds")}; return id_custom.at(i) })(i) === "0") || (((args) => { if (i >= id_custom.length || i + id_custom.length < 0) {throw new Error("index out of bounds")}; return id_custom.at(i) })(i) === "1")) || (((args) => { if (i >= id_custom.length || i + id_custom.length < 0) {throw new Error("index out of bounds")}; return id_custom.at(i) })(i) === "*")) || (((args) => { if (i >= id_custom.length || i + id_custom.length < 0) {throw new Error("index out of bounds")}; return id_custom.at(i) })(i) === "/")) || (((args) => { if (i >= id_custom.length || i + id_custom.length < 0) {throw new Error("index out of bounds")}; return id_custom.at(i) })(i) === "a")) || (((args) => { if (i >= id_custom.length || i + id_custom.length < 0) {throw new Error("index out of bounds")}; return id_custom.at(i) })(i) === "b"))) {
+      if (((((((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((args) => { if (i >= id_custom.length || i + id_custom.length < 0) {throw new Error("index out of bounds")}; return id_custom.at(i) })(i),"0")) || (((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((args) => { if (i >= id_custom.length || i + id_custom.length < 0) {throw new Error("index out of bounds")}; return id_custom.at(i) })(i),"1"))) || (((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((args) => { if (i >= id_custom.length || i + id_custom.length < 0) {throw new Error("index out of bounds")}; return id_custom.at(i) })(i),"*"))) || (((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((args) => { if (i >= id_custom.length || i + id_custom.length < 0) {throw new Error("index out of bounds")}; return id_custom.at(i) })(i),"/"))) || (((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((args) => { if (i >= id_custom.length || i + id_custom.length < 0) {throw new Error("index out of bounds")}; return id_custom.at(i) })(i),"a"))) || (((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((args) => { if (i >= id_custom.length || i + id_custom.length < 0) {throw new Error("index out of bounds")}; return id_custom.at(i) })(i),"b")))) {
         {((cond) => {if (!cond) throw new Error("assertion failed: true")})(true)};
       }
       else {

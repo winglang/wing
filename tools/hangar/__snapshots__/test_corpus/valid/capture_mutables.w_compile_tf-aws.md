@@ -10,10 +10,10 @@ module.exports = function({ $Object_keys_m__length, $aCloned_length, $a_length, 
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: a.length == 1")})(($a_length === 1))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: s.size == 1")})(($s_size === 1))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: m.size() == 1")})(($Object_keys_m__length === 1))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: aCloned.length == 1")})(($aCloned_length === 1))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: a.length == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($a_length,1)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: s.size == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($s_size,1)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: m.size() == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($Object_keys_m__length,1)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: aCloned.length == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($aCloned_length,1)))};
     }
   }
   return $Closure1;
@@ -172,8 +172,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this.display.hidden = true;
         this._addInflightOps("handle", "$inflight_init");
+        this.display.hidden = true;
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
@@ -209,8 +209,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure2 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this.display.hidden = true;
         this._addInflightOps("handle", "$inflight_init");
+        this.display.hidden = true;
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`

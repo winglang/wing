@@ -10,17 +10,17 @@ module.exports = function({ $__x_, $__y_, $math_Util, $x, $y }) {
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.floor(x) == 5")})(((await $math_Util.floor($x)) === 5))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.ceil(x) == 6")})(((await $math_Util.ceil($x)) === 6))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.round(x) == 5")})(((await $math_Util.round($x)) === 5))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.round(y) == 6")})(((await $math_Util.round($y)) === 6))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.round(-x) == -5")})(((await $math_Util.round($__x_)) === (-5)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.round(-y) == -6")})(((await $math_Util.round($__y_)) === (-6)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.E, decimalPlaces: 1) == 2.7")})(((await $math_Util.round($math_Util.E,{ decimalPlaces: 1 })) === 2.7))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.E, decimalPlaces: 2) == 2.72")})(((await $math_Util.round($math_Util.E,{ decimalPlaces: 2 })) === 2.72))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.E, decimalPlaces: 3) == 2.718")})(((await $math_Util.round($math_Util.E,{ decimalPlaces: 3 })) === 2.718))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.E, decimalPlaces: 4) == 2.7183")})(((await $math_Util.round($math_Util.E,{ decimalPlaces: 4 })) === 2.7183))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.E, decimalPlaces: 5) == 2.71828")})(((await $math_Util.round($math_Util.E,{ decimalPlaces: 5 })) === 2.71828))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.floor(x) == 5")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.floor($x)),5)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.ceil(x) == 6")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.ceil($x)),6)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.round(x) == 5")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.round($x)),5)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.round(y) == 6")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.round($y)),6)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.round(-x) == -5")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.round($__x_)),(-5))))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.round(-y) == -6")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.round($__y_)),(-6))))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.E, decimalPlaces: 1) == 2.7")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.round($math_Util.E,{ decimalPlaces: 1 })),2.7)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.E, decimalPlaces: 2) == 2.72")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.round($math_Util.E,{ decimalPlaces: 2 })),2.72)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.E, decimalPlaces: 3) == 2.718")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.round($math_Util.E,{ decimalPlaces: 3 })),2.718)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.E, decimalPlaces: 4) == 2.7183")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.round($math_Util.E,{ decimalPlaces: 4 })),2.7183)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.E, decimalPlaces: 5) == 2.71828")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.round($math_Util.E,{ decimalPlaces: 5 })),2.71828)))};
     }
   }
   return $Closure1;
@@ -162,8 +162,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this.display.hidden = true;
         this._addInflightOps("handle", "$inflight_init");
+        this.display.hidden = true;
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
@@ -199,18 +199,18 @@ class $Root extends $stdlib.std.Resource {
     }
     const x = 5.05;
     const y = 5.95;
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.floor(x) == 5")})(((math.Util.floor(x)) === 5))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.ceil(x) == 6")})(((math.Util.ceil(x)) === 6))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.round(x) == 5")})(((math.Util.round(x)) === 5))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.round(y) == 6")})(((math.Util.round(y)) === 6))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.round(-x) == -5")})(((math.Util.round((-x))) === (-5)))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.round(-y) == -6")})(((math.Util.round((-y))) === (-6)))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.E) == 3")})(((math.Util.round(math.Util.E)) === 3))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.E, decimalPlaces: 1) == 2.7")})(((math.Util.round(math.Util.E,{ decimalPlaces: 1 })) === 2.7))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.E, decimalPlaces: 2) == 2.72")})(((math.Util.round(math.Util.E,{ decimalPlaces: 2 })) === 2.72))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.E, decimalPlaces: 3) == 2.718")})(((math.Util.round(math.Util.E,{ decimalPlaces: 3 })) === 2.718))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.E, decimalPlaces: 4) == 2.7183")})(((math.Util.round(math.Util.E,{ decimalPlaces: 4 })) === 2.7183))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.E, decimalPlaces: 5) == 2.71828")})(((math.Util.round(math.Util.E,{ decimalPlaces: 5 })) === 2.71828))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.floor(x) == 5")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.floor(x)),5)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.ceil(x) == 6")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.ceil(x)),6)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.round(x) == 5")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.round(x)),5)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.round(y) == 6")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.round(y)),6)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.round(-x) == -5")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.round((-x))),(-5))))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.round(-y) == -6")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.round((-y))),(-6))))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.E) == 3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.round(math.Util.E)),3)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.E, decimalPlaces: 1) == 2.7")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.round(math.Util.E,{ decimalPlaces: 1 })),2.7)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.E, decimalPlaces: 2) == 2.72")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.round(math.Util.E,{ decimalPlaces: 2 })),2.72)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.E, decimalPlaces: 3) == 2.718")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.round(math.Util.E,{ decimalPlaces: 3 })),2.718)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.E, decimalPlaces: 4) == 2.7183")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.round(math.Util.E,{ decimalPlaces: 4 })),2.7183)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.E, decimalPlaces: 5) == 2.71828")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.round(math.Util.E,{ decimalPlaces: 5 })),2.71828)))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:inflight floor/ceil/round",new $Closure1(this,"$Closure1"));
   }
 }

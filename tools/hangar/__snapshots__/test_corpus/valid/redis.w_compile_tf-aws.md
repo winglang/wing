@@ -13,10 +13,10 @@ module.exports = function({ $r, $r2 }) {
       const connection = (await $r.rawClient());
       (await connection.set("wing","does redis"));
       const value = (await connection.get("wing"));
-      {((cond) => {if (!cond) throw new Error("assertion failed: value == \"does redis\"")})((value === "does redis"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: value == \"does redis\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(value,"does redis")))};
       (await $r2.set("wing","does redis again"));
       const value2 = (await $r2.get("wing"));
-      {((cond) => {if (!cond) throw new Error("assertion failed: value2 == \"does redis again\"")})((value2 === "does redis again"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: value2 == \"does redis again\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(value2,"does redis again")))};
     }
   }
   return $Closure1;
@@ -482,8 +482,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this.display.hidden = true;
         this._addInflightOps("handle", "$inflight_init");
+        this.display.hidden = true;
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`

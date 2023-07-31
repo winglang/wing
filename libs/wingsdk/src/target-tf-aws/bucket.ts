@@ -180,13 +180,17 @@ export function createEncryptedBucket(
   });
 
   if (isPublic) {
-    new S3BucketPublicAccessBlock(scope, "PublicAccessBlock", {
-      bucket: bucket.bucket,
-      blockPublicAcls: false,
-      blockPublicPolicy: false,
-      ignorePublicAcls: false,
-      restrictPublicBuckets: false,
-    });
+    const publicAccessBlock = new S3BucketPublicAccessBlock(
+      scope,
+      "PublicAccessBlock",
+      {
+        bucket: bucket.bucket,
+        blockPublicAcls: false,
+        blockPublicPolicy: false,
+        ignorePublicAcls: false,
+        restrictPublicBuckets: false,
+      }
+    );
     const policy = {
       Version: "2012-10-17",
       Statement: [
@@ -201,6 +205,7 @@ export function createEncryptedBucket(
     new S3BucketPolicy(scope, "PublicPolicy", {
       bucket: bucket.bucket,
       policy: JSON.stringify(policy),
+      dependsOn: [publicAccessBlock],
     });
   } else {
     new S3BucketPublicAccessBlock(scope, "PublicAccessBlock", {

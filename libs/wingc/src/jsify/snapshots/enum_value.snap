@@ -27,7 +27,7 @@ module.exports = function({ $MyEnum, $x }) {
     }
     async handle() {
       {((cond) => {if (!cond) throw new Error("assertion failed: MyEnum.B != MyEnum.C")})(($MyEnum.B !== $MyEnum.C))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: x == MyEnum.C")})(($x === $MyEnum.C))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: x == MyEnum.C")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($x,$MyEnum.C)))};
     }
   }
   return $Closure1;
@@ -47,8 +47,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this.display.hidden = true;
         this._addInflightOps("handle", "$inflight_init");
+        this.display.hidden = true;
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`

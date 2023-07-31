@@ -11,7 +11,7 @@ module.exports = function({ $BinaryOperation }) {
     }
     async handle() {
       const op = new $BinaryOperation(10,20);
-      {((cond) => {if (!cond) throw new Error("assertion failed: op.add() == 30")})(((await op.add()) === 30))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: op.add() == 30")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await op.add()),30)))};
     }
   }
   return $Closure1;
@@ -202,8 +202,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this.display.hidden = true;
         this._addInflightOps("handle", "$inflight_init");
+        this.display.hidden = true;
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`

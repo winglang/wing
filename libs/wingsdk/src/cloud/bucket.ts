@@ -11,7 +11,7 @@ import { Json, IResource, Resource } from "../std";
 export const BUCKET_FQN = fqnForType("cloud.Bucket");
 
 /**
- * Properties for `Bucket`.
+ * Options for `Bucket`.
  */
 export interface BucketProps {
   /**

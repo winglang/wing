@@ -11,7 +11,7 @@ module.exports = function({ $b }) {
     }
     async handle() {
       const jsonObj1 = Object.freeze({"key1":"value1"});
-      {((cond) => {if (!cond) throw new Error("assertion failed: b.list().length == 1")})(((await $b.list()).length === 1))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: b.list().length == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $b.list()).length,1)))};
       (await $b.putJson("file1.json",jsonObj1));
       (await $b.put("file2.txt","Bar"));
       (await $b.put("random","Buz"));
@@ -25,8 +25,8 @@ module.exports = function({ $b }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: objs2.contains(\"file2.txt\")")})(objs2.includes("file2.txt"))};
       {((cond) => {if (!cond) throw new Error("assertion failed: objs2.contains(\"file3.txt\")")})(objs2.includes("file3.txt"))};
       {((cond) => {if (!cond) throw new Error("assertion failed: !objs2.contains(\"random\")")})((!objs2.includes("random")))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: objs.length == 4")})((objs.length === 4))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: objs2.length == 3")})((objs2.length === 3))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: objs.length == 4")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(objs.length,4)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: objs2.length == 3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(objs2.length,3)))};
     }
   }
   return $Closure1;
@@ -223,8 +223,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this.display.hidden = true;
         this._addInflightOps("handle", "$inflight_init");
+        this.display.hidden = true;
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`

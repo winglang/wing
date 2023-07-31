@@ -16,7 +16,7 @@ module.exports = function({  }) {
         }
       }
       const c = new C();
-      {((cond) => {if (!cond) throw new Error("assertion failed: c.foo() == \"c1\"")})(((await c.foo()) === "c1"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: c.foo() == \"c1\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await c.foo()),"c1")))};
     }
   }
   return $Closure1;
@@ -52,12 +52,12 @@ module.exports = function({ $B, $a, $d, $fn, $innerD }) {
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: a.goo() == \"a2\"")})(((await $a.goo()) === "a2"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: a.goo() == \"a2\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $a.goo()),"a2")))};
       const b = new $B();
-      {((cond) => {if (!cond) throw new Error("assertion failed: b.foo() == \"b1\"")})(((await b.foo()) === "b1"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: b.foo() == \"b1\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await b.foo()),"b1")))};
       (await $fn());
-      {((cond) => {if (!cond) throw new Error("assertion failed: d.callInner() == \"f1\"")})(((await $d.callInner()) === "f1"))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: innerD() == \"f1\"")})(((await $innerD()) === "f1"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: d.callInner() == \"f1\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $d.callInner()),"f1")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: innerD() == \"f1\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $innerD()),"f1")))};
     }
   }
   return $Closure3;
@@ -316,8 +316,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this.display.hidden = true;
         this._addInflightOps("handle", "$inflight_init");
+        this.display.hidden = true;
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
@@ -340,6 +340,7 @@ class $Root extends $stdlib.std.Resource {
     class D extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
+        this._addInflightOps("callInner", "$inflight_init");
         class E extends $stdlib.std.Resource {
           constructor(scope, id, ) {
             super(scope, id);
@@ -367,7 +368,7 @@ class $Root extends $stdlib.std.Resource {
           }
         }
         const pb = new E(this,"E");
-        {((cond) => {if (!cond) throw new Error("assertion failed: pb.foo() == \"e1\"")})(((pb.foo()) === "e1"))};
+        {((cond) => {if (!cond) throw new Error("assertion failed: pb.foo() == \"e1\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((pb.foo()),"e1")))};
         class F extends $stdlib.std.Resource {
           constructor(scope, id, ) {
             super(scope, id);
@@ -395,8 +396,8 @@ class $Root extends $stdlib.std.Resource {
         class $Closure2 extends $stdlib.std.Resource {
           constructor(scope, id, ) {
             super(scope, id);
-            this.display.hidden = true;
             this._addInflightOps("handle", "$inflight_init");
+            this.display.hidden = true;
           }
           static _toInflightType(context) {
             return $stdlib.core.NodeJsCode.fromInline(`
@@ -418,7 +419,6 @@ class $Root extends $stdlib.std.Resource {
           }
         }
         this.inner = new $Closure2(this,"$Closure2");
-        this._addInflightOps("callInner", "$inflight_init");
       }
       getInner() {
         return this.inner;
@@ -454,8 +454,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure3 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this.display.hidden = true;
         this._addInflightOps("handle", "$inflight_init");
+        this.display.hidden = true;
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
@@ -490,7 +490,7 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     const a = new A(this,"A");
-    {((cond) => {if (!cond) throw new Error("assertion failed: a.foo() == \"a1\"")})(((a.foo()) === "a1"))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: a.foo() == \"a1\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((a.foo()),"a1")))};
     const fn = new $Closure1(this,"$Closure1");
     const d = new D(this,"D");
     const innerD = (d.getInner());

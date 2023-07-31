@@ -10,15 +10,15 @@ module.exports = function({ $Object_keys_myMap__length, $__bang__in___arrOfMap_a
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: arr.at(0) == \"hello\"")})(($_arr_at_0__ === "hello"))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: arr.at(1) == \"world\"")})(($_arr_at_1__ === "world"))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: arr.length == 2")})(($arr_length === 2))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: arr.at(0) == \"hello\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($_arr_at_0__,"hello")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: arr.at(1) == \"world\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($_arr_at_1__,"world")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: arr.length == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($arr_length,2)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: mySet.has(\"my\")")})($_mySet_has__my___)};
-      {((cond) => {if (!cond) throw new Error("assertion failed: mySet.size == 2")})(($mySet_size === 2))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: mySet.size == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($mySet_size,2)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: myMap.has(\"world\")")})($__world__in__myMap__)};
-      {((cond) => {if (!cond) throw new Error("assertion failed: myMap.size() == 2")})(($Object_keys_myMap__length === 2))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: myMap.size() == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($Object_keys_myMap__length,2)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: arrOfMap.at(0).has(\"bang\")")})($__bang__in___arrOfMap_at_0____)};
-      {((cond) => {if (!cond) throw new Error("assertion failed: j.get(\"b\") == \"world\"")})(($_j___b__ === "world"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: j.get(\"b\") == \"world\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($_j___b__,"world")))};
     }
   }
   return $Closure1;
@@ -160,8 +160,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this.display.hidden = true;
         this._addInflightOps("handle", "$inflight_init");
+        this.display.hidden = true;
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`

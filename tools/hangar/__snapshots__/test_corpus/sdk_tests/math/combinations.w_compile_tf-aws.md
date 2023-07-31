@@ -10,7 +10,7 @@ module.exports = function({ $math_Util, $population, $subset }) {
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.combinations(population, subset) == 10")})(((await $math_Util.combinations($population,$subset)) === 10))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.combinations(population, subset) == 10")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.combinations($population,$subset)),10)))};
     }
   }
   return $Closure1;
@@ -152,8 +152,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this.display.hidden = true;
         this._addInflightOps("handle", "$inflight_init");
+        this.display.hidden = true;
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
@@ -185,7 +185,7 @@ class $Root extends $stdlib.std.Resource {
     }
     const population = 5;
     const subset = 3;
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.combinations(population, subset) == 10")})(((math.Util.combinations(population,subset)) === 10))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.combinations(population, subset) == 10")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.combinations(population,subset)),10)))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:inflight combinations",new $Closure1(this,"$Closure1"));
   }
 }

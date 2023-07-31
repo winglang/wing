@@ -10,9 +10,9 @@ module.exports = function({ $api_GET, $body }) {
       return $obj;
     }
     async handle(req) {
-      {((cond) => {if (!cond) throw new Error("assertion failed: req.method == api_GET")})((req.method === $api_GET))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: req.path == \"/path\"")})((req.path === "/path"))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: req.headers?.get(\"content-type\") == \"application/json\"")})(((req.headers)["content-type"] === "application/json"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: req.method == api_GET")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(req.method,$api_GET)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: req.path == \"/path\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(req.path,"/path")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: req.headers?.get(\"content-type\") == \"application/json\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((req.headers)["content-type"],"application/json")))};
       return {
       "status": 200,
       "body": $body,}
@@ -38,15 +38,15 @@ module.exports = function({ $api_url, $body, $http_GET, $http_Util }) {
       const getResponse = (await $http_Util.get(url,{ headers: Object.freeze({"content-type":"application/json"}) }));
       const fetchResponse = (await $http_Util.fetch(url,{ method: $http_GET, headers: Object.freeze({"content-type":"application/json"}) }));
       const fetchResponseNoMethod = (await $http_Util.fetch(url,{ headers: Object.freeze({"content-type":"application/json"}) }));
-      {((cond) => {if (!cond) throw new Error("assertion failed: getResponse.body == body")})((getResponse.body === $body))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: getResponse.status == 200")})((getResponse.status === 200))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: getResponse.url == url")})((getResponse.url === url))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: fetchResponse.body == body")})((fetchResponse.body === $body))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: fetchResponse.status == 200")})((fetchResponse.status === 200))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: fetchResponse.url == url")})((fetchResponse.url === url))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: fetchResponseNoMethod.body == body")})((fetchResponseNoMethod.body === $body))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: fetchResponseNoMethod.status == 200")})((fetchResponseNoMethod.status === 200))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: fetchResponseNoMethod.url == url")})((fetchResponseNoMethod.url === url))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: getResponse.body == body")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(getResponse.body,$body)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: getResponse.status == 200")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(getResponse.status,200)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: getResponse.url == url")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(getResponse.url,url)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: fetchResponse.body == body")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(fetchResponse.body,$body)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: fetchResponse.status == 200")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(fetchResponse.status,200)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: fetchResponse.url == url")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(fetchResponse.url,url)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: fetchResponseNoMethod.body == body")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(fetchResponseNoMethod.body,$body)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: fetchResponseNoMethod.status == 200")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(fetchResponseNoMethod.status,200)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: fetchResponseNoMethod.url == url")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(fetchResponseNoMethod.url,url)))};
     }
   }
   return $Closure2;
@@ -259,8 +259,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this.display.hidden = true;
         this._addInflightOps("handle", "$inflight_init");
+        this.display.hidden = true;
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
@@ -298,8 +298,8 @@ class $Root extends $stdlib.std.Resource {
       class $Closure2 extends $stdlib.std.Resource {
         constructor(scope, id, ) {
           super(scope, id);
-          this.display.hidden = true;
           this._addInflightOps("handle", "$inflight_init");
+          this.display.hidden = true;
         }
         static _toInflightType(context) {
           return $stdlib.core.NodeJsCode.fromInline(`

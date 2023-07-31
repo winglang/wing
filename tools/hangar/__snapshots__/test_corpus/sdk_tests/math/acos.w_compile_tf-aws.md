@@ -15,19 +15,19 @@ module.exports = function({ $math_Util }) {
       }
       catch ($error_e) {
         const e = $error_e.message;
-        {((cond) => {if (!cond) throw new Error("assertion failed: e == \"Input value must be between -1 and 1, inclusive.\"")})((e === "Input value must be between -1 and 1, inclusive."))};
+        {((cond) => {if (!cond) throw new Error("assertion failed: e == \"Input value must be between -1 and 1, inclusive.\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(e,"Input value must be between -1 and 1, inclusive.")))};
       }
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.acos(-1) == math.PI")})(((await $math_Util.acos((-1))) === $math_Util.PI))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.acos(-0) == 1.5707963267948966")})(((await $math_Util.acos((-0))) === 1.5707963267948966))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.acos(0) == 1.5707963267948966")})(((await $math_Util.acos(0)) === 1.5707963267948966))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.acos(0.5) == 1.0471975511965979")})(((await $math_Util.acos(0.5)) === 1.0471975511965979))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.acos(1) == 0")})(((await $math_Util.acos(1)) === 0))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.acos(-1) == math.PI")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.acos((-1))),$math_Util.PI)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.acos(-0) == 1.5707963267948966")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.acos((-0))),1.5707963267948966)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.acos(0) == 1.5707963267948966")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.acos(0)),1.5707963267948966)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.acos(0.5) == 1.0471975511965979")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.acos(0.5)),1.0471975511965979)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.acos(1) == 0")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.acos(1)),0)))};
       try {
         {console.log(String.raw({ raw: ["", ""] }, (await $math_Util.acos(2))))};
       }
       catch ($error_e) {
         const e = $error_e.message;
-        {((cond) => {if (!cond) throw new Error("assertion failed: e == \"Input value must be between -1 and 1, inclusive.\"")})((e === "Input value must be between -1 and 1, inclusive."))};
+        {((cond) => {if (!cond) throw new Error("assertion failed: e == \"Input value must be between -1 and 1, inclusive.\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(e,"Input value must be between -1 and 1, inclusive.")))};
       }
     }
   }
@@ -170,8 +170,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this.display.hidden = true;
         this._addInflightOps("handle", "$inflight_init");
+        this.display.hidden = true;
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
@@ -197,19 +197,19 @@ class $Root extends $stdlib.std.Resource {
     }
     catch ($error_e) {
       const e = $error_e.message;
-      {((cond) => {if (!cond) throw new Error("assertion failed: e == \"Input value must be between -1 and 1, inclusive.\"")})((e === "Input value must be between -1 and 1, inclusive."))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: e == \"Input value must be between -1 and 1, inclusive.\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(e,"Input value must be between -1 and 1, inclusive.")))};
     }
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.acos(-1) == math.PI")})(((math.Util.acos((-1))) === math.Util.PI))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.acos(-0) == 1.5707963267948966")})(((math.Util.acos((-0))) === 1.5707963267948966))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.acos(0) == 1.5707963267948966")})(((math.Util.acos(0)) === 1.5707963267948966))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.acos(0.5) == 1.0471975511965979")})(((math.Util.acos(0.5)) === 1.0471975511965979))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.acos(1) == 0")})(((math.Util.acos(1)) === 0))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.acos(-1) == math.PI")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.acos((-1))),math.Util.PI)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.acos(-0) == 1.5707963267948966")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.acos((-0))),1.5707963267948966)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.acos(0) == 1.5707963267948966")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.acos(0)),1.5707963267948966)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.acos(0.5) == 1.0471975511965979")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.acos(0.5)),1.0471975511965979)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.acos(1) == 0")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.acos(1)),0)))};
     try {
       {console.log(String.raw({ raw: ["", ""] }, (math.Util.acos(2))))};
     }
     catch ($error_e) {
       const e = $error_e.message;
-      {((cond) => {if (!cond) throw new Error("assertion failed: e == \"Input value must be between -1 and 1, inclusive.\"")})((e === "Input value must be between -1 and 1, inclusive."))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: e == \"Input value must be between -1 and 1, inclusive.\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(e,"Input value must be between -1 and 1, inclusive.")))};
     }
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:inflight arc cosine",new $Closure1(this,"$Closure1"));
   }

@@ -12,7 +12,7 @@ module.exports = function({  }) {
     async handle() {
       const iFn = async (s) => {
         return async () => {
-          return (s === "wing");
+          return (((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(s,"wing"));
         }
         ;
       }
@@ -162,8 +162,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this.display.hidden = true;
         this._addInflightOps("handle", "$inflight_init");
+        this.display.hidden = true;
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
@@ -185,7 +185,7 @@ class $Root extends $stdlib.std.Resource {
     }
     const fn = ((s) => {
       return (() => {
-        return (s === "wing");
+        return (((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(s,"wing"));
       });
     });
     const wingFn = (fn("wing"));

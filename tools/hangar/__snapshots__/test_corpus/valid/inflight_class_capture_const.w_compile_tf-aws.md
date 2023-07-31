@@ -11,7 +11,7 @@ module.exports = function({ $Foo, $myConst }) {
     }
     async handle() {
       const x = new $Foo();
-      {((cond) => {if (!cond) throw new Error("assertion failed: x.getValue() == myConst")})(((await x.getValue()) === $myConst))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: x.getValue() == myConst")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await x.getValue()),$myConst)))};
     }
   }
   return $Closure1;
@@ -196,8 +196,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this.display.hidden = true;
         this._addInflightOps("handle", "$inflight_init");
+        this.display.hidden = true;
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`

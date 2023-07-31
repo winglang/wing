@@ -12,7 +12,7 @@ module.exports = function({ $bar, $bar_foo, $initCount }) {
     async handle() {
       (await $bar.callFoo());
       (await $bar_foo.method());
-      {((cond) => {if (!cond) throw new Error("assertion failed: initCount.peek() == /*1*/ 2")})(((await $initCount.peek()) === 2))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: initCount.peek() == /*1*/ 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $initCount.peek()),2)))};
     }
   }
   return $Closure1;
@@ -237,8 +237,8 @@ class $Root extends $stdlib.std.Resource {
     class Bar extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this.foo = new Foo(this,"Foo");
         this._addInflightOps("callFoo", "$inflight_init");
+        this.foo = new Foo(this,"Foo");
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
@@ -271,8 +271,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this.display.hidden = true;
         this._addInflightOps("handle", "$inflight_init");
+        this.display.hidden = true;
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`

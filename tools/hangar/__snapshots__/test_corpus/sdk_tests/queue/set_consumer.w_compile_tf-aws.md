@@ -55,7 +55,7 @@ module.exports = function({  }) {
       this.$this_c = $this_c;
     }
     async test() {
-      return ((await this.$this_c.peek()) === 2);
+      return (((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await this.$this_c.peek()),2));
     }
   }
   return Predicate;
@@ -310,8 +310,8 @@ class $Root extends $stdlib.std.Resource {
     class Predicate extends $stdlib.std.Resource {
       constructor(scope, id, c) {
         super(scope, id);
-        this.c = c;
         this._addInflightOps("test", "$inflight_init");
+        this.c = c;
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
@@ -344,8 +344,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this.display.hidden = true;
         this._addInflightOps("handle", "$inflight_init");
+        this.display.hidden = true;
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
@@ -375,8 +375,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure2 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this.display.hidden = true;
         this._addInflightOps("handle", "$inflight_init");
+        this.display.hidden = true;
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`

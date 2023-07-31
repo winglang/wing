@@ -10,10 +10,10 @@ module.exports = function({ $api_DELETE }) {
       return $obj;
     }
     async handle(req) {
-      {((cond) => {if (!cond) throw new Error("assertion failed: req.method == api_DELETE")})((req.method === $api_DELETE))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: req.query?.get(\"all\") == \"true\"")})(((req.query)["all"] === "true"))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: req.query?.get(\"page\") == \"6\"")})(((req.query)["page"] === "6"))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: req.path == \"/path\"")})((req.path === "/path"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: req.method == api_DELETE")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(req.method,$api_DELETE)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: req.query?.get(\"all\") == \"true\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((req.query)["all"],"true")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: req.query?.get(\"page\") == \"6\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((req.query)["page"],"6")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: req.path == \"/path\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(req.path,"/path")))};
       return {
       "status": 200,
       "body": (req.query)["page"],}
@@ -38,12 +38,12 @@ module.exports = function({ $api_url, $http_DELETE, $http_Util }) {
       const url = String.raw({ raw: ["", "/path?all=true&page=6"] }, $api_url);
       const response = (await $http_Util.delete(url));
       const fetchResponse = (await $http_Util.fetch(url,{ method: $http_DELETE }));
-      {((cond) => {if (!cond) throw new Error("assertion failed: response.body == \"6\"")})((response.body === "6"))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: response.status == 200")})((response.status === 200))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: response.url == url")})((response.url === url))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: fetchResponse.body == \"6\"")})((fetchResponse.body === "6"))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: fetchResponse.status == 200")})((fetchResponse.status === 200))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: fetchResponse.url == url")})((fetchResponse.url === url))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: response.body == \"6\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(response.body,"6")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: response.status == 200")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(response.status,200)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: response.url == url")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(response.url,url)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: fetchResponse.body == \"6\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(fetchResponse.body,"6")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: fetchResponse.status == 200")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(fetchResponse.status,200)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: fetchResponse.url == url")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(fetchResponse.url,url)))};
     }
   }
   return $Closure2;
@@ -256,8 +256,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this.display.hidden = true;
         this._addInflightOps("handle", "$inflight_init");
+        this.display.hidden = true;
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
@@ -292,8 +292,8 @@ class $Root extends $stdlib.std.Resource {
       class $Closure2 extends $stdlib.std.Resource {
         constructor(scope, id, ) {
           super(scope, id);
-          this.display.hidden = true;
           this._addInflightOps("handle", "$inflight_init");
+          this.display.hidden = true;
         }
         static _toInflightType(context) {
           return $stdlib.core.NodeJsCode.fromInline(`

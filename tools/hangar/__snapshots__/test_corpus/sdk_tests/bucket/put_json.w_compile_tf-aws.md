@@ -16,16 +16,16 @@ module.exports = function({ $b }) {
       (await $b.putJson("test2.txt",jsonObj2));
       const testJson1 = (await $b.getJson("test1.txt"));
       const testJson2 = (await $b.getJson("test2.txt"));
-      {((cond) => {if (!cond) throw new Error("assertion failed: testJson1.get(\"test\") == jsonObj1.get(\"test\")")})(((testJson1)["test"] === (jsonObj1)["test"]))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: testJson2.get(\"test\") == jsonObj2.get(\"test\")")})(((testJson2)["test"] === (jsonObj2)["test"]))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: testJson1.get(\"test\") == jsonObj1.get(\"test\")")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((testJson1)["test"],(jsonObj1)["test"])))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: testJson2.get(\"test\") == jsonObj2.get(\"test\")")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((testJson2)["test"],(jsonObj2)["test"])))};
       const jsonObj3 = Object.freeze({"test":"test3"});
       (await $b.putJson("test3.txt",jsonObj3));
       const testJson3 = (await $b.getJson("test3.txt"));
-      {((cond) => {if (!cond) throw new Error("assertion failed: testJson3.get(\"test\") == jsonObj3.get(\"test\")")})(((testJson3)["test"] === (jsonObj3)["test"]))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: testJson3.get(\"test\") == jsonObj3.get(\"test\")")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((testJson3)["test"],(jsonObj3)["test"])))};
       (await $b.delete("test1.txt"));
       const files = (await $b.list());
-      {((cond) => {if (!cond) throw new Error("assertion failed: files.contains(\"test1.txt\") == false")})((files.includes("test1.txt") === false))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: files.contains(\"test2.txt\") == true")})((files.includes("test2.txt") === true))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: files.contains(\"test1.txt\") == false")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(files.includes("test1.txt"),false)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: files.contains(\"test2.txt\") == true")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(files.includes("test2.txt"),true)))};
     }
   }
   return $Closure1;
@@ -211,8 +211,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this.display.hidden = true;
         this._addInflightOps("handle", "$inflight_init");
+        this.display.hidden = true;
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`

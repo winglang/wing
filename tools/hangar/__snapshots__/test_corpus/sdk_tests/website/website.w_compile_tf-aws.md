@@ -14,9 +14,9 @@ module.exports = function({ $config, $http_Util, $indexFile, $otherFile, $std_Js
       if ((!url.startsWith("http"))) {
         url = ("http://" + url);
       }
-      {((cond) => {if (!cond) throw new Error("assertion failed: http.get(url).body == indexFile")})(((await $http_Util.get(url)).body === $indexFile))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: http.get(url + \"/inner-folder/other.html\").body == otherFile")})(((await $http_Util.get((url + "/inner-folder/other.html"))).body === $otherFile))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: http.get(url + \"/config.json\").body == Json.stringify(config)")})(((await $http_Util.get((url + "/config.json"))).body === ((args) => { return JSON.stringify(args[0], null, args[1]) })([$config])))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: http.get(url).body == indexFile")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $http_Util.get(url)).body,$indexFile)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: http.get(url + \"/inner-folder/other.html\").body == otherFile")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $http_Util.get((url + "/inner-folder/other.html"))).body,$otherFile)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: http.get(url + \"/config.json\").body == Json.stringify(config)")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $http_Util.get((url + "/config.json"))).body,((args) => { return JSON.stringify(args[0], null, args[1]) })([$config]))))};
     }
   }
   return $Closure1;
@@ -52,6 +52,45 @@ module.exports = function({  }) {
             "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS"
           }
         }
+      }
+    }
+  },
+  "data": {
+    "aws_iam_policy_document": {
+      "cloudWebsite_AllowDistributionReadOnly_89DC4FD0": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/cloud.Website/AllowDistributionReadOnly",
+            "uniqueId": "cloudWebsite_AllowDistributionReadOnly_89DC4FD0"
+          }
+        },
+        "statement": [
+          {
+            "actions": [
+              "s3:GetObject"
+            ],
+            "condition": [
+              {
+                "test": "StringEquals",
+                "values": [
+                  "${aws_cloudfront_distribution.cloudWebsite_Distribution_083B5AF9.arn}"
+                ],
+                "variable": "AWS:SourceArn"
+              }
+            ],
+            "principals": [
+              {
+                "identifiers": [
+                  "cloudfront.amazonaws.com"
+                ],
+                "type": "Service"
+              }
+            ],
+            "resources": [
+              "${aws_s3_bucket.cloudWebsite_WebsiteBucket_EB03D355.arn}/*"
+            ]
+          }
+        ]
       }
     }
   },
@@ -101,6 +140,7 @@ module.exports = function({  }) {
         "origin": [
           {
             "domain_name": "${aws_s3_bucket.cloudWebsite_WebsiteBucket_EB03D355.bucket_regional_domain_name}",
+            "origin_access_control_id": "${aws_cloudfront_origin_access_control.cloudWebsite_CloudfrontOac_C956968B.id}",
             "origin_id": "s3Origin"
           }
         ],
@@ -114,6 +154,20 @@ module.exports = function({  }) {
         "viewer_certificate": {
           "cloudfront_default_certificate": true
         }
+      }
+    },
+    "aws_cloudfront_origin_access_control": {
+      "cloudWebsite_CloudfrontOac_C956968B": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/cloud.Website/CloudfrontOac",
+            "uniqueId": "cloudWebsite_CloudfrontOac_C956968B"
+          }
+        },
+        "name": "cloudfront-oac",
+        "origin_access_control_origin_type": "s3",
+        "signing_behavior": "always",
+        "signing_protocol": "sigv4"
       }
     },
     "aws_iam_role": {
@@ -163,7 +217,7 @@ module.exports = function({  }) {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c867c4e0",
             "WING_TARGET": "tf-aws",
-            "WING_TOKEN_TFTOKEN_TOKEN_11": "${jsonencode(aws_cloudfront_distribution.cloudWebsite_Distribution_083B5AF9.domain_name)}"
+            "WING_TOKEN_TFTOKEN_TOKEN_14": "${jsonencode(aws_cloudfront_distribution.cloudWebsite_Distribution_083B5AF9.domain_name)}"
           }
         },
         "function_name": "Handler-c867c4e0",
@@ -202,15 +256,15 @@ module.exports = function({  }) {
       }
     },
     "aws_s3_bucket_policy": {
-      "cloudWebsite_PublicPolicy_44BB71F3": {
+      "cloudWebsite_DistributionS3BucketPolicy_32B029AE": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Website/PublicPolicy",
-            "uniqueId": "cloudWebsite_PublicPolicy_44BB71F3"
+            "path": "root/Default/Default/cloud.Website/DistributionS3BucketPolicy",
+            "uniqueId": "cloudWebsite_DistributionS3BucketPolicy_32B029AE"
           }
         },
-        "bucket": "${aws_s3_bucket.cloudWebsite_WebsiteBucket_EB03D355.bucket}",
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":\"*\",\"Action\":[\"s3:GetObject\"],\"Resource\":[\"${aws_s3_bucket.cloudWebsite_WebsiteBucket_EB03D355.arn}/*\"]}]}"
+        "bucket": "${aws_s3_bucket.cloudWebsite_WebsiteBucket_EB03D355.id}",
+        "policy": "${data.aws_iam_policy_document.cloudWebsite_AllowDistributionReadOnly_89DC4FD0.json}"
       }
     },
     "aws_s3_bucket_public_access_block": {
@@ -221,11 +275,11 @@ module.exports = function({  }) {
             "uniqueId": "cloudWebsite_PublicAccessBlock_18A70311"
           }
         },
-        "block_public_acls": false,
-        "block_public_policy": false,
+        "block_public_acls": true,
+        "block_public_policy": true,
         "bucket": "${aws_s3_bucket.cloudWebsite_WebsiteBucket_EB03D355.bucket}",
-        "ignore_public_acls": false,
-        "restrict_public_buckets": false
+        "ignore_public_acls": true,
+        "restrict_public_buckets": true
       }
     },
     "aws_s3_bucket_server_side_encryption_configuration": {
@@ -362,8 +416,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this.display.hidden = true;
         this._addInflightOps("handle", "$inflight_init");
+        this.display.hidden = true;
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`

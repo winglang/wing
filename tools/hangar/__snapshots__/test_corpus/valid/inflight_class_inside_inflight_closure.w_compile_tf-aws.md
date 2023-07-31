@@ -13,7 +13,7 @@ module.exports = function({ $__parent_this_1_b }) {
       (await $__parent_this_1_b.put("k","v"));
       class InflightClass {
         async method() {
-          {((cond) => {if (!cond) throw new Error("assertion failed: this.field == \"value\"")})((this.field === "value"))};
+          {((cond) => {if (!cond) throw new Error("assertion failed: this.field == \"value\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(this.field,"value")))};
         }
         constructor() {
           this.field = "value";
@@ -64,7 +64,7 @@ module.exports = function({  }) {
       }
       const foo = new Foo();
       const y = (await foo.getX());
-      {((cond) => {if (!cond) throw new Error("assertion failed: y == 12")})((y === 12))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: y == 12")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(y,12)))};
     }
   }
   return $Closure3;
@@ -395,16 +395,16 @@ class $Root extends $stdlib.std.Resource {
     class PreflightClass extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this.b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
         this._addInflightOps("$inflight_init");
+        this.b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
       }
       preflight_method() {
         const __parent_this_1 = this;
         class $Closure1 extends $stdlib.std.Resource {
           constructor(scope, id, ) {
             super(scope, id);
-            this.display.hidden = true;
             this._addInflightOps("handle", "$inflight_init");
+            this.display.hidden = true;
           }
           static _toInflightType(context) {
             return $stdlib.core.NodeJsCode.fromInline(`
@@ -455,8 +455,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure2 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this.display.hidden = true;
         this._addInflightOps("handle", "$inflight_init");
+        this.display.hidden = true;
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
@@ -486,8 +486,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure3 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this.display.hidden = true;
         this._addInflightOps("handle", "$inflight_init");
+        this.display.hidden = true;
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`

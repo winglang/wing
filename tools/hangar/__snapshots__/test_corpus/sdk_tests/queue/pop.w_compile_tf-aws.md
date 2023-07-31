@@ -19,7 +19,7 @@ module.exports = function({ $NIL, $q }) {
       const third = ((await $q.pop()) ?? $NIL);
       {((cond) => {if (!cond) throw new Error("assertion failed: msgs.contains(first)")})(msgs.includes(first))};
       {((cond) => {if (!cond) throw new Error("assertion failed: msgs.contains(second)")})(msgs.includes(second))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: third == NIL")})((third === $NIL))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: third == NIL")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(third,$NIL)))};
     }
   }
   return $Closure1;
@@ -173,8 +173,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this.display.hidden = true;
         this._addInflightOps("handle", "$inflight_init");
+        this.display.hidden = true;
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`

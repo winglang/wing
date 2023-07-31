@@ -9,7 +9,7 @@ import { Resource } from "../std";
 export const COUNTER_FQN = fqnForType("cloud.Counter");
 
 /**
- * Properties for `Counter`.
+ * Options for `Counter`.
  */
 export interface CounterProps {
   /**

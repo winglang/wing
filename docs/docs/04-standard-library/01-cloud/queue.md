@@ -225,7 +225,7 @@ Information on how to display a resource in the UI.
 
 ### QueueProps <a name="QueueProps" id="@winglang/sdk.cloud.QueueProps"></a>
 
-Properties for `Queue`.
+Options for `Queue`.
 
 #### Initializer <a name="Initializer" id="@winglang/sdk.cloud.QueueProps.Initializer"></a>
 

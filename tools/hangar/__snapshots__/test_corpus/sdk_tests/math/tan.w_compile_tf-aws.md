@@ -10,10 +10,10 @@ module.exports = function({ $math_Util }) {
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.tan(-0) == -0")})(((await $math_Util.tan((-0))) === (-0)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.tan(0) == 0")})(((await $math_Util.tan(0)) === 0))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.tan(1) == 1.5574077246549023")})(((await $math_Util.tan(1)) === 1.5574077246549023))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.tan(math.PI / 4) == 0.9999999999999999")})(((await $math_Util.tan(($math_Util.PI / 4))) === 0.9999999999999999))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.tan(-0) == -0")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.tan((-0))),(-0))))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.tan(0) == 0")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.tan(0)),0)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.tan(1) == 1.5574077246549023")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.tan(1)),1.5574077246549023)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.tan(math.PI / 4) == 0.9999999999999999")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.tan(($math_Util.PI / 4))),0.9999999999999999)))};
     }
   }
   return $Closure1;
@@ -155,8 +155,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this.display.hidden = true;
         this._addInflightOps("handle", "$inflight_init");
+        this.display.hidden = true;
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
@@ -177,10 +177,10 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
     }
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.tan(-0) == -0")})(((math.Util.tan((-0))) === (-0)))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.tan(0) == 0")})(((math.Util.tan(0)) === 0))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.tan(1) == 1.5574077246549023")})(((math.Util.tan(1)) === 1.5574077246549023))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.tan(math.PI / 4) == 0.9999999999999999")})(((math.Util.tan((math.Util.PI / 4))) === 0.9999999999999999))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.tan(-0) == -0")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.tan((-0))),(-0))))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.tan(0) == 0")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.tan(0)),0)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.tan(1) == 1.5574077246549023")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.tan(1)),1.5574077246549023)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.tan(math.PI / 4) == 0.9999999999999999")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.tan((math.Util.PI / 4))),0.9999999999999999)))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:inflight tangent",new $Closure1(this,"$Closure1"));
   }
 }

@@ -10,7 +10,7 @@ import { Duration, IResource, Resource } from "../std";
 export const SCHEDULE_FQN = fqnForType("cloud.Schedule");
 
 /**
- * Properties for `Schedule`.
+ * Options for `Schedule`.
  */
 export interface ScheduleProps {
   /**

@@ -9,7 +9,7 @@ use std::{borrow::Borrow, cmp::Ordering, collections::BTreeMap, path::Path, vec}
 
 use crate::{
 	ast::{
-		ArgList, BinaryOperator, Class as AstClass, Expr, ExprKind, FunctionBody, FunctionDefinition,
+		ArgList, BinaryOperator, CalleeKind, Class as AstClass, Expr, ExprKind, FunctionBody, FunctionDefinition,
 		InterpolatedStringPart, Literal, NewExpr, Phase, Reference, Scope, Stmt, StmtKind, Symbol, TypeAnnotationKind,
 		UnaryOperator, UserDefinedType,
 	},
@@ -18,8 +18,10 @@ use crate::{
 	diagnostic::{report_diagnostic, Diagnostic, WingSpan},
 	files::Files,
 	type_check::{
-		lifts::Lifts, symbol_env::SymbolEnv, ClassLike, Type, TypeRef, Types, VariableKind, CLASS_INFLIGHT_INIT_NAME,
+		lifts::Lifts, resolve_super_method, symbol_env::SymbolEnv, ClassLike, Type, TypeRef, Types, VariableKind,
+		CLASS_INFLIGHT_INIT_NAME,
 	},
+	visit_context::VisitContext,
 	MACRO_REPLACE_ARGS, MACRO_REPLACE_ARGS_TEXT, MACRO_REPLACE_SELF, WINGSDK_ASSEMBLY_NAME, WINGSDK_RESOURCE,
 	WINGSDK_STD_MODULE,
 };
@@ -39,13 +41,13 @@ const ROOT_CLASS: &str = "$Root";
 const JS_CONSTRUCTOR: &str = "constructor";
 
 pub struct JSifyContext<'a> {
-	pub in_json: bool,
 	/// The current execution phase of the AST traversal.
 	/// The root of any Wing app starts with the preflight phase, and
 	/// the `inflight` keyword specifies scopes that are inflight.
-	pub phase: Phase,
 	pub files: &'a mut Files,
 	pub lifts: Option<&'a Lifts>,
+
+	pub visit_ctx: &'a mut VisitContext,
 }
 
 pub struct JSifier<'a> {
@@ -88,6 +90,15 @@ impl<'a> JSifier<'a> {
 		let mut js = CodeMaker::default();
 		let mut imports = CodeMaker::default();
 
+		let mut visit_ctx = VisitContext::new();
+		let mut jsify_context = JSifyContext {
+			visit_ctx: &mut visit_ctx,
+			files: &mut files,
+			lifts: None,
+		};
+		jsify_context
+			.visit_ctx
+			.push_env(scope.env.borrow().as_ref().unwrap().get_ref());
 		for statement in scope.statements.iter().sorted_by(|a, b| match (&a.kind, &b.kind) {
 			// Put type definitions first so JS won't complain of unknown types
 			(StmtKind::Class(AstClass { .. }), StmtKind::Class(AstClass { .. })) => Ordering::Equal,
@@ -95,12 +106,6 @@ impl<'a> JSifier<'a> {
 			(_, StmtKind::Class(AstClass { .. })) => Ordering::Greater,
 			_ => Ordering::Equal,
 		}) {
-			let mut jsify_context = JSifyContext {
-				in_json: false,
-				phase: Phase::Preflight,
-				files: &mut files,
-				lifts: None,
-			};
 			let s = self.jsify_statement(scope.env.borrow().as_ref().unwrap(), statement, &mut jsify_context); // top level statements are always preflight
 			if let StmtKind::Bring {
 				identifier: _,
@@ -159,10 +164,12 @@ impl<'a> JSifier<'a> {
 		CompilationContext::set(CompilationPhase::Jsifying, &scope.span);
 		let mut code = CodeMaker::default();
 
+		ctx.visit_ctx.push_env(scope.env.borrow().as_ref().unwrap().get_ref());
 		for statement in scope.statements.iter() {
 			let statement_code = self.jsify_statement(scope.env.borrow().as_ref().unwrap(), statement, ctx);
 			code.add_code(statement_code);
 		}
+		ctx.visit_ctx.pop_env();
 
 		code
 	}
@@ -236,7 +243,7 @@ impl<'a> JSifier<'a> {
 
 		// if we are in inflight and there's a lifting/capturing token associated with this expression
 		// then emit the token instead of the expression.
-		if ctx.phase == Phase::Inflight {
+		if ctx.visit_ctx.current_phase() == Phase::Inflight {
 			if let Some(lifts) = &ctx.lifts {
 				if let Some(t) = lifts.token_for_expr(&expression.id) {
 					return t.clone();
@@ -248,7 +255,7 @@ impl<'a> JSifier<'a> {
 		// this is an error. this can happen if we render a lifted preflight expression that references
 		// an e.g. variable from inflight (`myarr.get(i)` where `myarr` is preflight and `i` is an
 		// inflight variable). in this case we need to bail out.
-		if ctx.phase == Phase::Preflight {
+		if ctx.visit_ctx.current_phase() == Phase::Preflight {
 			if let Some(expr_phase) = self.types.get_expr_phase(expression) {
 				if expr_phase == Phase::Inflight {
 					report_diagnostic(Diagnostic {
@@ -261,7 +268,7 @@ impl<'a> JSifier<'a> {
 			}
 		}
 
-		let auto_await = match ctx.phase {
+		let auto_await = match ctx.visit_ctx.current_phase() {
 			Phase::Inflight => "await ",
 			_ => "",
 		};
@@ -357,7 +364,7 @@ impl<'a> JSifier<'a> {
 				Literal::Boolean(b) => (if *b { "true" } else { "false" }).to_string(),
 			},
 			ExprKind::Range { start, inclusive, end } => {
-				match ctx.phase {
+				match ctx.visit_ctx.current_phase() {
 					Phase::Inflight => format!(
 						"((s,e,i) => {{ function* iterator(start,end,inclusive) {{ let i = start; let limit = inclusive ? ((end < start) ? end - 1 : end + 1) : end; while (i < limit) yield i++; while (i > limit) yield i--; }}; return iterator(s,e,i); }})({},{},{})",
 						self.jsify_expression(start, ctx),
@@ -375,11 +382,18 @@ impl<'a> JSifier<'a> {
 			}
 			ExprKind::Reference(_ref) => self.jsify_reference(&_ref, ctx),
 			ExprKind::Call { callee, arg_list } => {
-				let function_type = self.types.get_expr_type(callee);
+
+				let function_type = match callee {
+					CalleeKind::Expr(expr) => self.types.get_expr_type(expr),
+					CalleeKind::SuperCall(method) => resolve_super_method(method, ctx.visit_ctx.current_env().expect("an env"), self.types).expect("valid super method").0
+				};
 				let is_option = function_type.is_option();
 				let function_type = function_type.maybe_unwrap_option();
 				let function_sig = function_type.as_function_sig();
-				let expr_string = self.jsify_expression(callee, ctx);
+				let expr_string = match callee {
+        		CalleeKind::Expr(expr) => self.jsify_expression(expr, ctx),
+        		CalleeKind::SuperCall(method) => format!("super.{}", method),
+    		};
 				let args_string = self.jsify_arg_list(&arg_list, None, None, ctx);
 				let mut args_text_string = lookup_span(&arg_list.span, &self.source_files);
 				if args_text_string.len() > 0 {
@@ -390,17 +404,24 @@ impl<'a> JSifier<'a> {
 
 				if let Some(function_sig) = function_sig {
 					if let Some(js_override) = &function_sig.js_override {
-						let self_string = &match &callee.kind {
-							// for "loose" macros, e.g. `print()`, $self$ is the global object
-							ExprKind::Reference(Reference::Identifier(_)) => "global".to_string(),
-							ExprKind::Reference(Reference::InstanceMember { object, .. }) => {
-								self.jsify_expression(object, ctx)
+						let self_string = match callee {
+							CalleeKind::Expr(expr) => match &expr.kind {
+								// for "loose" macros, e.g. `print()`, $self$ is the global object
+								ExprKind::Reference(Reference::Identifier(_)) => "global".to_string(),
+								ExprKind::Reference(Reference::InstanceMember { object, .. }) => {
+									self.jsify_expression(&object, ctx)
+								}
+								_ => expr_string,
 							}
-
-							_ => expr_string,
+							CalleeKind::SuperCall{..} =>
+								// Note: in case of a $self$ macro override of a super call there's no clear definition of what $self$ should be,
+								// "this" is a decent option because it'll refer to the object where "super" was used, but depending on how 
+								// $self$ is used in the macro it might lead to unexpected results if $self$.some_method() is called and is
+								// defined differently in the parent class of "this".
+								"this".to_string(),
 						};
 						let patterns = &[MACRO_REPLACE_SELF, MACRO_REPLACE_ARGS, MACRO_REPLACE_ARGS_TEXT];
-						let replace_with = &[self_string, &args_string, &args_text_string];
+						let replace_with = &[self_string, args_string, args_text_string];
 						let ac = AhoCorasick::new(patterns);
 						return ac.replace_all(js_override, replace_with);
 					}
@@ -445,7 +466,9 @@ impl<'a> JSifier<'a> {
 					BinaryOperator::GreaterOrEqual => ">=",
 					BinaryOperator::Less => "<",
 					BinaryOperator::LessOrEqual => "<=",
-					BinaryOperator::Equal => "===",
+					BinaryOperator::Equal => {
+						return format!("(((a,b) => {{ try {{ return require('assert').deepStrictEqual(a,b) === undefined; }} catch {{ return false; }} }})({},{}))", js_left, js_right)
+					},
 					BinaryOperator::NotEqual => "!==",
 					BinaryOperator::LogicalAnd => "&&",
 					BinaryOperator::LogicalOr => "||",
@@ -464,7 +487,7 @@ impl<'a> JSifier<'a> {
 					.collect::<Vec<String>>()
 					.join(", ");
 
-				if self.types.get_expr_type(expression).is_mutable_collection() || ctx.in_json {
+				if self.types.get_expr_type(expression).is_mutable_collection() || ctx.visit_ctx.in_json() {
 					// json arrays dont need frozen at nested level
 					format!("[{}]", item_list)
 				} else {
@@ -482,22 +505,18 @@ impl<'a> JSifier<'a> {
 				)
 			}
 			ExprKind::JsonLiteral { is_mut, element } => {
-				let json_context = &mut JSifyContext {
-					in_json: true,
-					phase: ctx.phase,
-					files: ctx.files,
-					lifts: ctx.lifts,
-				};
+				ctx.visit_ctx.push_json();
 				let js_out = match &element.kind {
 					ExprKind::JsonMapLiteral { .. } => {
 						if *is_mut {
-							self.jsify_expression(element, json_context)
+							self.jsify_expression(element, ctx)
 						} else {
-							format!("Object.freeze({})", self.jsify_expression(element, json_context))
+							format!("Object.freeze({})", self.jsify_expression(element, ctx))
 						}
 					}
-					_ => self.jsify_expression(element, json_context)
+					_ => self.jsify_expression(element, ctx)
 				};
+				ctx.visit_ctx.pop_json();
 				js_out
 			}
       ExprKind::JsonMapLiteral { fields } => {
@@ -516,7 +535,7 @@ impl<'a> JSifier<'a> {
 					.collect::<Vec<String>>()
 					.join(",");
 
-				if self.types.get_expr_type(expression).is_mutable_collection() || ctx.in_json {
+				if self.types.get_expr_type(expression).is_mutable_collection() || ctx.visit_ctx.in_json() {
 					// json maps dont need frozen in the nested level
 					format!("{{{}}}", f)
 				} else {
@@ -548,13 +567,6 @@ impl<'a> JSifier<'a> {
 	fn jsify_statement(&self, env: &SymbolEnv, statement: &Stmt, ctx: &mut JSifyContext) -> CodeMaker {
 		CompilationContext::set(CompilationPhase::Jsifying, &statement.span);
 		match &statement.kind {
-			StmtKind::SuperConstructor { arg_list } => {
-				let args = self.jsify_arg_list(&arg_list, None, None, ctx);
-				match ctx.phase {
-					Phase::Preflight => CodeMaker::one_line(format!("super(scope,id,{});", args)),
-					_ => CodeMaker::one_line(format!("super({});", args)),
-				}
-			}
 			StmtKind::Bring {
 				module_name,
 				identifier,
@@ -577,6 +589,27 @@ impl<'a> JSifier<'a> {
 						format!("require('{}').{}", STDLIB_MODULE, module_name.name)
 					}
 				))
+			}
+			StmtKind::Module { name, statements } => {
+				let mut code = CodeMaker::default();
+				code.open(format!("const {} = (() => {{", name.name));
+				code.add_code(self.jsify_scope_body(statements, ctx));
+
+				let exports = get_public_symbols(statements);
+				code.line(format!(
+					"return {{ {} }};",
+					exports.iter().map(ToString::to_string).join(", ")
+				));
+
+				code.close("})();");
+				code
+			}
+			StmtKind::SuperConstructor { arg_list } => {
+				let args = self.jsify_arg_list(&arg_list, None, None, ctx);
+				match ctx.visit_ctx.current_phase() {
+					Phase::Preflight => CodeMaker::one_line(format!("super(scope,id,{});", args)),
+					_ => CodeMaker::one_line(format!("super({});", args)),
+				}
 			}
 			StmtKind::Let {
 				reassignable,
@@ -894,10 +927,9 @@ impl<'a> JSifier<'a> {
 		};
 
 		let ctx = &mut JSifyContext {
-			in_json: ctx.in_json,
-			phase: ctx.phase,
 			files: ctx.files,
 			lifts,
+			visit_ctx: &mut ctx.visit_ctx,
 		};
 
 		// emit the inflight side of the class into a separate file
@@ -905,7 +937,7 @@ impl<'a> JSifier<'a> {
 
 		// if this is inflight/independent, class, just emit the inflight class code inline and move on
 		// with your life.
-		if ctx.phase != Phase::Preflight {
+		if ctx.visit_ctx.current_phase() != Phase::Preflight {
 			return inflight_class_code;
 		}
 
@@ -973,16 +1005,14 @@ impl<'a> JSifier<'a> {
 			false
 		};
 
+		let mut body_code = CodeMaker::default();
+
 		// we always need a super() call because even if the class doesn't have an explicit parent, it
 		// will inherit from core.Resource.
 		if !super_called {
-			code.line("super(scope, id);");
+			body_code.line("super(scope, id);");
 		}
-
-		// We must jsify the statements in the constructor before adding any additional code blew
-		// this is to ensure if there are calls to super constructor within the statements,
-		// they will be jsified before any attempts to call `this` are made.
-		code.add_code(self.jsify_scope_body(&init_statements, ctx));
+		body_code.add_code(self.jsify_scope_body(&init_statements, ctx));
 
 		let inflight_fields = class.inflight_fields();
 		let inflight_methods = class.inflight_methods(true);
@@ -1000,8 +1030,12 @@ impl<'a> JSifier<'a> {
 				.chain(inflight_field_names.iter())
 				.map(|name| format!("\"{}\"", name))
 				.join(", ");
-			code.line(format!("this._addInflightOps({inflight_ops_string});"));
+
+			// insert as the first statement after the super() call
+			body_code.insert_line(1, format!("this._addInflightOps({inflight_ops_string});"));
 		}
+
+		code.add_code(body_code);
 
 		code.close("}");
 		code
@@ -1072,13 +1106,8 @@ impl<'a> JSifier<'a> {
 	}
 
 	// Write a class's inflight to a file
-	fn jsify_class_inflight(&self, class: &AstClass, ctx: &mut JSifyContext) -> CodeMaker {
-		let mut ctx = JSifyContext {
-			phase: Phase::Inflight,
-			in_json: false,
-			files: ctx.files,
-			lifts: ctx.lifts,
-		};
+	fn jsify_class_inflight(&self, class: &AstClass, mut ctx: &mut JSifyContext) -> CodeMaker {
+		ctx.visit_ctx.push_phase(Phase::Inflight);
 
 		let mut class_code = CodeMaker::default();
 
@@ -1109,6 +1138,7 @@ impl<'a> JSifier<'a> {
 		}
 
 		class_code.close("}");
+		ctx.visit_ctx.pop_phase();
 		class_code
 	}
 
@@ -1243,6 +1273,43 @@ impl<'a> JSifier<'a> {
 		bind_method.close("}");
 		bind_method
 	}
+}
+
+fn get_public_symbols(scope: &Scope) -> Vec<Symbol> {
+	let mut symbols = Vec::new();
+
+	for stmt in &scope.statements {
+		match &stmt.kind {
+			StmtKind::Bring { .. } => {}
+			StmtKind::Module { name, .. } => {
+				symbols.push(name.clone());
+			}
+			StmtKind::SuperConstructor { .. } => {}
+			StmtKind::Let { .. } => {}
+			StmtKind::ForLoop { .. } => {}
+			StmtKind::While { .. } => {}
+			StmtKind::IfLet { .. } => {}
+			StmtKind::If { .. } => {}
+			StmtKind::Break => {}
+			StmtKind::Continue => {}
+			StmtKind::Return(_) => {}
+			StmtKind::Expression(_) => {}
+			StmtKind::Assignment { .. } => {}
+			StmtKind::Scope(_) => {}
+			StmtKind::Class(class) => {
+				symbols.push(class.name.clone());
+			}
+			StmtKind::Interface(_) => {}
+			StmtKind::Struct { .. } => {}
+			StmtKind::Enum { name, .. } => {
+				symbols.push(name.clone());
+			}
+			StmtKind::TryCatch { .. } => {}
+			StmtKind::CompilerDebugEnv => {}
+		}
+	}
+
+	symbols
 }
 
 fn inflight_filename(class: &AstClass) -> String {

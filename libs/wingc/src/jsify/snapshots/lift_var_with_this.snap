@@ -29,7 +29,7 @@ module.exports = function({  }) {
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: foo_this.value == \"hello\"")})((this.$foo_this_value === "hello"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: foo_this.value == \"hello\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(this.$foo_this_value,"hello")))};
     }
   }
   return $Closure1;
@@ -61,8 +61,8 @@ class $Root extends $stdlib.std.Resource {
     class Foo extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this.value = "hello";
         this._addInflightOps("$inflight_init");
+        this.value = "hello";
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
@@ -85,8 +85,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this.display.hidden = true;
         this._addInflightOps("handle", "$inflight_init");
+        this.display.hidden = true;
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`

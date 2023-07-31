@@ -10,10 +10,10 @@ module.exports = function({ $c }) {
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: c.peek() == 0")})(((await $c.peek()) === 0))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: c.peek() == 0")})(((await $c.peek()) === 0))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: c.peek() == 0")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $c.peek()),0)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: c.peek() == 0")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $c.peek()),0)))};
       (await $c.inc());
-      {((cond) => {if (!cond) throw new Error("assertion failed: c.peek() == 1")})(((await $c.peek()) === 1))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: c.peek() == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $c.peek()),1)))};
     }
   }
   return $Closure1;
@@ -32,10 +32,10 @@ module.exports = function({ $c }) {
     }
     async handle() {
       const key = "my-key";
-      {((cond) => {if (!cond) throw new Error("assertion failed: c.peek(key) == 0")})(((await $c.peek(key)) === 0))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: c.peek(key) == 0")})(((await $c.peek(key)) === 0))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: c.peek(key) == 0")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $c.peek(key)),0)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: c.peek(key) == 0")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $c.peek(key)),0)))};
       (await $c.inc(undefined,key));
-      {((cond) => {if (!cond) throw new Error("assertion failed: c.peek(key) == 1")})(((await $c.peek(key)) === 1))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: c.peek(key) == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $c.peek(key)),1)))};
     }
   }
   return $Closure2;
@@ -264,8 +264,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this.display.hidden = true;
         this._addInflightOps("handle", "$inflight_init");
+        this.display.hidden = true;
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
@@ -295,8 +295,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure2 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this.display.hidden = true;
         this._addInflightOps("handle", "$inflight_init");
+        this.display.hidden = true;
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`

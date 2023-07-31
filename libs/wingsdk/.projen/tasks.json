@@ -208,6 +208,12 @@
           "exec": "cat API.md >> ../../docs/docs/04-standard-library/01-cloud/function.md"
         },
         {
+          "exec": "jsii-docgen -o API.md -l wing --submodule cloud/on-deploy"
+        },
+        {
+          "exec": "cat API.md >> ../../docs/docs/04-standard-library/01-cloud/on-deploy.md"
+        },
+        {
           "exec": "jsii-docgen -o API.md -l wing --submodule cloud/queue"
         },
         {

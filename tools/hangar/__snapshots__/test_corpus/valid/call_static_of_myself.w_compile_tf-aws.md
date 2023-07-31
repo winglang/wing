@@ -16,11 +16,11 @@ module.exports = function({ $Bar, $Foo, $foo }) {
         }
       }
       const bar = new $Bar();
-      {((cond) => {if (!cond) throw new Error("assertion failed: Foo.foo() == 1")})(((await $Foo.foo()) === 1))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: Bar.bar() == 2")})(((await $Bar.bar()) === 2))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: Zoo.zoo() == 3")})(((await Zoo.zoo()) === 3))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: foo.callThis() == 1")})(((await $foo.callThis()) === 1))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: bar.callThis() == 2")})(((await bar.callThis()) === 2))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: Foo.foo() == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $Foo.foo()),1)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: Bar.bar() == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $Bar.bar()),2)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: Zoo.zoo() == 3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await Zoo.zoo()),3)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: foo.callThis() == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $foo.callThis()),1)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: bar.callThis() == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await bar.callThis()),2)))};
     }
   }
   return $Closure1;
@@ -244,8 +244,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this.display.hidden = true;
         this._addInflightOps("handle", "$inflight_init");
+        this.display.hidden = true;
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`

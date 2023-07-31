@@ -23,6 +23,8 @@ Utility functions.
 
 | **Name** | **Description** |
 | --- | --- |
+| <code><a href="#@winglang/sdk.util.Util.base64Decode">base64Decode</a></code> | Converts a string from base64 to UTF-8. |
+| <code><a href="#@winglang/sdk.util.Util.base64Encode">base64Encode</a></code> | Converts a string from UTF-8 to base64. |
 | <code><a href="#@winglang/sdk.util.Util.env">env</a></code> | Returns the value of an environment variable. |
 | <code><a href="#@winglang/sdk.util.Util.nanoid">nanoid</a></code> | Generates a unique ID using the nanoid library. |
 | <code><a href="#@winglang/sdk.util.Util.sha256">sha256</a></code> | Computes the SHA256 hash of the given data. |
@@ -30,6 +32,58 @@ Utility functions.
 | <code><a href="#@winglang/sdk.util.Util.tryEnv">tryEnv</a></code> | Returns the value of an environment variable. |
 | <code><a href="#@winglang/sdk.util.Util.uuidv4">uuidv4</a></code> | Generates a version 4 UUID. |
 | <code><a href="#@winglang/sdk.util.Util.waitUntil">waitUntil</a></code> | Run a predicate repeatedly, waiting until it returns true or until the timeout elapses. |
+
+---
+
+##### `base64Decode` <a name="base64Decode" id="@winglang/sdk.util.Util.base64Decode"></a>
+
+```wing
+bring util;
+
+util.base64Decode(stringToDecode: str, url?: bool);
+```
+
+Converts a string from base64 to UTF-8.
+
+###### `stringToDecode`<sup>Required</sup> <a name="stringToDecode" id="@winglang/sdk.util.Util.base64Decode.parameter.stringToDecode"></a>
+
+- *Type:* str
+
+base64 string to decode.
+
+---
+
+###### `url`<sup>Optional</sup> <a name="url" id="@winglang/sdk.util.Util.base64Decode.parameter.url"></a>
+
+- *Type:* bool
+
+If `true`, the source is expected to be a URL-safe base64 string.
+
+---
+
+##### `base64Encode` <a name="base64Encode" id="@winglang/sdk.util.Util.base64Encode"></a>
+
+```wing
+bring util;
+
+util.base64Encode(stringToEncode: str, url?: bool);
+```
+
+Converts a string from UTF-8 to base64.
+
+###### `stringToEncode`<sup>Required</sup> <a name="stringToEncode" id="@winglang/sdk.util.Util.base64Encode.parameter.stringToEncode"></a>
+
+- *Type:* str
+
+The name of the UTF-8 string to encode.
+
+---
+
+###### `url`<sup>Optional</sup> <a name="url" id="@winglang/sdk.util.Util.base64Encode.parameter.url"></a>
+
+- *Type:* bool
+
+If `true`, a URL-safe base64 is returned.
 
 ---
 

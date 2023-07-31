@@ -10,10 +10,10 @@ module.exports = function({ $c5 }) {
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: c5.x == 123")})(($c5.x === 123))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: c5.y == 321")})(($c5.y === 321))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: c5.x == 123")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($c5.x,123)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: c5.y == 321")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($c5.y,321)))};
       (await $c5.set(111));
-      {((cond) => {if (!cond) throw new Error("assertion failed: c5.y == 111")})(($c5.y === 111))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: c5.y == 111")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($c5.y,111)))};
     }
   }
   return $Closure1;
@@ -31,9 +31,9 @@ module.exports = function({ $student_hrlyWage, $student_major, $student_name }) 
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: student.name == \"Tom\"")})(($student_name === "Tom"))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: student.major == \"MySpace\"")})(($student_major === "MySpace"))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: student.hrlyWage == 38")})(($student_hrlyWage === 38))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: student.name == \"Tom\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($student_name,"Tom")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: student.major == \"MySpace\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($student_major,"MySpace")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: student.hrlyWage == 38")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($student_hrlyWage,38)))};
     }
   }
   return $Closure2;
@@ -51,7 +51,7 @@ module.exports = function({ $ta_hrlyWage }) {
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: ta.hrlyWage == 10")})(($ta_hrlyWage === 10))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: ta.hrlyWage == 10")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($ta_hrlyWage,10)))};
     }
   }
   return $Closure3;
@@ -70,7 +70,7 @@ module.exports = function({ $B }) {
     }
     async handle() {
       const b = new $B("ba");
-      {((cond) => {if (!cond) throw new Error("assertion failed: b.sound == \"ba\"")})((b.sound === "ba"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: b.sound == \"ba\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(b.sound,"ba")))};
     }
   }
   return $Closure4;
@@ -642,8 +642,8 @@ class $Root extends $stdlib.std.Resource {
     class C2 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this.x = 1;
         this._addInflightOps("$inflight_init");
+        this.x = 1;
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
@@ -666,11 +666,11 @@ class $Root extends $stdlib.std.Resource {
     class C3 extends $stdlib.std.Resource {
       constructor(scope, id, a, b) {
         super(scope, id);
+        this._addInflightOps("$inflight_init");
         this.x = a;
         if (true) {
           this.y = b;
         }
-        this._addInflightOps("$inflight_init");
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
@@ -742,8 +742,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this.display.hidden = true;
         this._addInflightOps("handle", "$inflight_init");
+        this.display.hidden = true;
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
@@ -773,8 +773,8 @@ class $Root extends $stdlib.std.Resource {
     class Person extends $stdlib.std.Resource {
       constructor(scope, id, name) {
         super(scope, id);
-        this.name = name;
         this._addInflightOps("$inflight_init");
+        this.name = name;
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
@@ -797,8 +797,8 @@ class $Root extends $stdlib.std.Resource {
     class Student extends Person {
       constructor(scope, id, name, major) {
         super(scope,id,name);
-        this.major = major;
         this._addInflightOps("$inflight_init");
+        this.major = major;
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
@@ -822,8 +822,8 @@ class $Root extends $stdlib.std.Resource {
     class PaidStudent extends Student {
       constructor(scope, id, name, major, hrlyWage) {
         super(scope,id,name,major);
-        this.hrlyWage = hrlyWage;
         this._addInflightOps("$inflight_init");
+        this.hrlyWage = hrlyWage;
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
@@ -847,8 +847,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure2 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this.display.hidden = true;
         this._addInflightOps("handle", "$inflight_init");
+        this.display.hidden = true;
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
@@ -882,8 +882,8 @@ class $Root extends $stdlib.std.Resource {
     class TeacherAid extends PaidStudent {
       constructor(scope, id, name, major, hrlyWage) {
         super(scope,id,name,major,hrlyWage);
-        this.hrlyWage = 10;
         this._addInflightOps("$inflight_init");
+        this.hrlyWage = 10;
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
@@ -907,8 +907,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure3 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this.display.hidden = true;
         this._addInflightOps("handle", "$inflight_init");
+        this.display.hidden = true;
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
@@ -991,8 +991,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure4 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this.display.hidden = true;
         this._addInflightOps("handle", "$inflight_init");
+        this.display.hidden = true;
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
@@ -1133,11 +1133,11 @@ class $Root extends $stdlib.std.Resource {
     }
     new C1(this,"C1");
     const c2 = new C2(this,"C2");
-    {((cond) => {if (!cond) throw new Error("assertion failed: c2.x == 1")})((c2.x === 1))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: c2.x == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(c2.x,1)))};
     const c3 = new C3(this,"C3",1,2);
-    {((cond) => {if (!cond) throw new Error("assertion failed: c3.x == 1")})((c3.x === 1))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: c3.y == 2")})((c3.y === 2))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: C4.m() == 1")})(((C4.m()) === 1))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: c3.x == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(c3.x,1)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: c3.y == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(c3.y,2)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: C4.m() == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((C4.m()),1)))};
     const c5 = new C5(this,"C5");
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:access inflight field",new $Closure1(this,"$Closure1"));
     const student = new PaidStudent(this,"PaidStudent","Tom","MySpace",38);

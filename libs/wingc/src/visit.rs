@@ -1,7 +1,7 @@
 use crate::{
 	ast::{
-		ArgList, Class, Expr, ExprKind, FunctionBody, FunctionDefinition, FunctionParameter, FunctionSignature, Interface,
-		InterpolatedStringPart, Literal, NewExpr, Reference, Scope, Stmt, StmtKind, Symbol, TypeAnnotation,
+		ArgList, CalleeKind, Class, Expr, ExprKind, FunctionBody, FunctionDefinition, FunctionParameter, FunctionSignature,
+		Interface, InterpolatedStringPart, Literal, NewExpr, Reference, Scope, Stmt, StmtKind, Symbol, TypeAnnotation,
 		TypeAnnotationKind, UserDefinedType,
 	},
 	dbg_panic,
@@ -94,7 +94,6 @@ where
 	V: Visit<'ast> + ?Sized,
 {
 	match &node.kind {
-		StmtKind::SuperConstructor { arg_list } => v.visit_args(arg_list),
 		StmtKind::Bring {
 			module_name,
 			identifier,
@@ -104,6 +103,11 @@ where
 				v.visit_symbol(identifier);
 			}
 		}
+		StmtKind::Module { name, statements } => {
+			v.visit_symbol(name);
+			v.visit_scope(statements);
+		}
+		StmtKind::SuperConstructor { arg_list } => v.visit_args(arg_list),
 		StmtKind::Let {
 			reassignable: _,
 			var_name,
@@ -301,7 +305,10 @@ where
 			v.visit_reference(ref_);
 		}
 		ExprKind::Call { callee, arg_list } => {
-			v.visit_expr(callee);
+			match callee {
+				CalleeKind::Expr(expr) => v.visit_expr(expr),
+				CalleeKind::SuperCall(method) => v.visit_symbol(method),
+			}
 			v.visit_args(arg_list);
 		}
 		ExprKind::Unary { op: _, exp } => {

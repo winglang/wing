@@ -10,12 +10,12 @@ module.exports = function({ $math_Util }) {
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.factorial(0) == 1")})(((await $math_Util.factorial(0)) === 1))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.factorial(1) == 1")})(((await $math_Util.factorial(1)) === 1))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.factorial(2) == 2")})(((await $math_Util.factorial(2)) === 2))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.factorial(3) == 6")})(((await $math_Util.factorial(3)) === 6))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.factorial(4) == 24")})(((await $math_Util.factorial(4)) === 24))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.factorial(5) == 120")})(((await $math_Util.factorial(5)) === 120))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.factorial(0) == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.factorial(0)),1)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.factorial(1) == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.factorial(1)),1)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.factorial(2) == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.factorial(2)),2)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.factorial(3) == 6")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.factorial(3)),6)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.factorial(4) == 24")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.factorial(4)),24)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.factorial(5) == 120")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.factorial(5)),120)))};
     }
   }
   return $Closure1;
@@ -157,8 +157,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this.display.hidden = true;
         this._addInflightOps("handle", "$inflight_init");
+        this.display.hidden = true;
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
@@ -179,12 +179,12 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
     }
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.factorial(0) == 1")})(((math.Util.factorial(0)) === 1))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.factorial(1) == 1")})(((math.Util.factorial(1)) === 1))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.factorial(2) == 2")})(((math.Util.factorial(2)) === 2))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.factorial(3) == 6")})(((math.Util.factorial(3)) === 6))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.factorial(4) == 24")})(((math.Util.factorial(4)) === 24))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.factorial(5) == 120")})(((math.Util.factorial(5)) === 120))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.factorial(0) == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.factorial(0)),1)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.factorial(1) == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.factorial(1)),1)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.factorial(2) == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.factorial(2)),2)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.factorial(3) == 6")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.factorial(3)),6)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.factorial(4) == 24")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.factorial(4)),24)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.factorial(5) == 120")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.factorial(5)),120)))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:inflight factorial",new $Closure1(this,"$Closure1"));
   }
 }

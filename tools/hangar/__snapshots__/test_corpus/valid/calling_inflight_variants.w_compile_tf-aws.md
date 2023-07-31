@@ -28,8 +28,8 @@ module.exports = function({ $foo }) {
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: foo.callFn(true) == 1")})(((await $foo.callFn(true)) === 1))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: foo.callFn(false) == 2")})(((await $foo.callFn(false)) === 2))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: foo.callFn(true) == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $foo.callFn(true)),1)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: foo.callFn(false) == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $foo.callFn(false)),2)))};
       (await $foo.callFn2());
     }
   }
@@ -46,7 +46,7 @@ module.exports = function({  }) {
       this.$this_inflight1 = $this_inflight1;
     }
     async makeFn(x) {
-      if ((x === true)) {
+      if ((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(x,true))) {
         return this.$this_inflight1;
       }
       else {
@@ -60,8 +60,8 @@ module.exports = function({  }) {
     async callFn2() {
       const one = (await this.$this_inflight1());
       const two = (await this.inflight2());
-      {((cond) => {if (!cond) throw new Error("assertion failed: one == 1")})((one === 1))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: two == 2")})((two === 2))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: one == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(one,1)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: two == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(two,2)))};
     }
     async $inflight_init() {
       this.inflight2 = async () => {
@@ -69,7 +69,7 @@ module.exports = function({  }) {
       }
       ;
       const ret = (await this.inflight2());
-      {((cond) => {if (!cond) throw new Error("assertion failed: ret == 2")})((ret === 2))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: ret == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(ret,2)))};
     }
   }
   return Foo;
@@ -210,12 +210,13 @@ class $Root extends $stdlib.std.Resource {
     class Foo extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
+        this._addInflightOps("makeFn", "callFn", "callFn2", "$inflight_init", "inflight2");
         const __parent_this_1 = this;
         class $Closure1 extends $stdlib.std.Resource {
           constructor(scope, id, ) {
             super(scope, id);
-            this.display.hidden = true;
             this._addInflightOps("handle", "$inflight_init");
+            this.display.hidden = true;
           }
           static _toInflightType(context) {
             return $stdlib.core.NodeJsCode.fromInline(`
@@ -236,7 +237,6 @@ class $Root extends $stdlib.std.Resource {
           }
         }
         this.inflight1 = new $Closure1(this,"$Closure1");
-        this._addInflightOps("makeFn", "callFn", "callFn2", "$inflight_init", "inflight2");
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
@@ -278,8 +278,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure2 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this.display.hidden = true;
         this._addInflightOps("handle", "$inflight_init");
+        this.display.hidden = true;
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`

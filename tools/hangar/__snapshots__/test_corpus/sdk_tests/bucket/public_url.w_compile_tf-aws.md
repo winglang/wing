@@ -16,7 +16,7 @@ module.exports = function({ $http_Util, $privateBucket, $publicBucket, $util_Uti
       const publicUrl = (await $publicBucket.publicUrl("file1.txt"));
       {((cond) => {if (!cond) throw new Error("assertion failed: publicUrl != \"\"")})((publicUrl !== ""))};
       if (((await $util_Util.env("WING_TARGET")) !== "sim")) {
-        {((cond) => {if (!cond) throw new Error("assertion failed: http.get(publicUrl).body ==  \"Foo\"")})(((await $http_Util.get(publicUrl)).body === "Foo"))};
+        {((cond) => {if (!cond) throw new Error("assertion failed: http.get(publicUrl).body ==  \"Foo\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $http_Util.get(publicUrl)).body,"Foo")))};
       }
       try {
         (await $privateBucket.publicUrl("file2.txt"));
@@ -25,7 +25,7 @@ module.exports = function({ $http_Util, $privateBucket, $publicBucket, $util_Uti
         const e = $error_e.message;
         error = e;
       }
-      {((cond) => {if (!cond) throw new Error("assertion failed: error == \"Cannot provide public url for a non-public bucket\"")})((error === "Cannot provide public url for a non-public bucket"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: error == \"Cannot provide public url for a non-public bucket\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(error,"Cannot provide public url for a non-public bucket")))};
     }
   }
   return $Closure1;
@@ -168,6 +168,9 @@ module.exports = function({ $http_Util, $privateBucket, $publicBucket, $util_Uti
           }
         },
         "bucket": "${aws_s3_bucket.publicBucket.bucket}",
+        "depends_on": [
+          "aws_s3_bucket_public_access_block.publicBucket_PublicAccessBlock_54D9EFBA"
+        ],
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":\"*\",\"Action\":[\"s3:GetObject\"],\"Resource\":[\"${aws_s3_bucket.publicBucket.arn}/*\"]}]}"
       }
     },
@@ -265,8 +268,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this.display.hidden = true;
         this._addInflightOps("handle", "$inflight_init");
+        this.display.hidden = true;
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`

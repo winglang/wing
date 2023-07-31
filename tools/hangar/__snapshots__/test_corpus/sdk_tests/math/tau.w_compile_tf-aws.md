@@ -10,10 +10,10 @@ module.exports = function({ $math_Util }) {
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.TAU / 4 == math.PI / 2")})((($math_Util.TAU / 4) === ($math_Util.PI / 2)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.TAU / 2 == math.PI")})((($math_Util.TAU / 2) === $math_Util.PI))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.TAU * 3 / 4 == math.PI * 3 / 2")})(((($math_Util.TAU * 3) / 4) === (($math_Util.PI * 3) / 2)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.TAU == math.PI * 2")})(($math_Util.TAU === ($math_Util.PI * 2)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.TAU / 4 == math.PI / 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(($math_Util.TAU / 4),($math_Util.PI / 2))))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.TAU / 2 == math.PI")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(($math_Util.TAU / 2),$math_Util.PI)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.TAU * 3 / 4 == math.PI * 3 / 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((($math_Util.TAU * 3) / 4),(($math_Util.PI * 3) / 2))))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.TAU == math.PI * 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($math_Util.TAU,($math_Util.PI * 2))))};
     }
   }
   return $Closure1;
@@ -155,8 +155,8 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this.display.hidden = true;
         this._addInflightOps("handle", "$inflight_init");
+        this.display.hidden = true;
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
@@ -177,10 +177,10 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
     }
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.TAU / 4 == math.PI / 2")})(((math.Util.TAU / 4) === (math.Util.PI / 2)))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.TAU / 2 == math.PI")})(((math.Util.TAU / 2) === math.Util.PI))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.TAU * 3 / 4 == math.PI * 3 / 2")})((((math.Util.TAU * 3) / 4) === ((math.Util.PI * 3) / 2)))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.TAU == math.PI * 2")})((math.Util.TAU === (math.Util.PI * 2)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.TAU / 4 == math.PI / 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.TAU / 4),(math.Util.PI / 2))))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.TAU / 2 == math.PI")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.TAU / 2),math.Util.PI)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.TAU * 3 / 4 == math.PI * 3 / 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((math.Util.TAU * 3) / 4),((math.Util.PI * 3) / 2))))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.TAU == math.PI * 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(math.Util.TAU,(math.Util.PI * 2))))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:TAU",new $Closure1(this,"$Closure1"));
   }
 }
