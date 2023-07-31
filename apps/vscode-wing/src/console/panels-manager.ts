@@ -1,9 +1,15 @@
-import { WebviewPanel, commands, OutputChannel } from "vscode";
+import {
+  window,
+  WebviewPanel,
+  commands,
+  OutputChannel,
+  TreeView,
+} from "vscode";
 
-import { openResource } from "./commands/open-resource";
-import { runAllTests } from "./commands/run-all-test";
-import { runTest } from "./commands/run-test";
-import { ResourcesExplorerProvider } from "./explorer-providers/ResourcesExplorerProvider";
+import {
+  ResourceItem,
+  ResourcesExplorerProvider,
+} from "./explorer-providers/ResourcesExplorerProvider";
 import {
   TestItem,
   TestsExplorerProvider,
@@ -14,6 +20,7 @@ export interface ConsolePanel {
   id: string;
   panel: WebviewPanel;
   client: Client;
+  selectedNode: string | undefined;
 }
 
 export class PanelsManager {
@@ -27,6 +34,8 @@ export class PanelsManager {
 
   private logger: OutputChannel | undefined;
 
+  private explorerView: TreeView<ResourceItem>;
+
   constructor(
     logger: OutputChannel,
     resourcesExplorer: ResourcesExplorerProvider,
@@ -36,6 +45,14 @@ export class PanelsManager {
     this.resourcesExplorer = resourcesExplorer;
     this.testsExplorer = testsExplorer;
     this.registerCommands();
+
+    this.explorerView = window.createTreeView("consoleExplorer", {
+      treeDataProvider: resourcesExplorer,
+    });
+
+    window.createTreeView("consoleTestsExplorer", {
+      treeDataProvider: testsExplorer,
+    });
   }
 
   public getActiveConsolePanel() {
@@ -55,7 +72,8 @@ export class PanelsManager {
       if (!activePanel) {
         return;
       }
-      await openResource(activePanel.client, resourceId);
+      await activePanel.client.setSelectedNode(resourceId);
+      activePanel.selectedNode = resourceId;
     });
 
     commands.registerCommand("wingConsole.runTest", async (test: TestItem) => {
@@ -63,7 +81,19 @@ export class PanelsManager {
       if (!activePanel) {
         return;
       }
-      await runTest(activePanel.client, test, this.testsExplorer);
+      const tests = this.testsExplorer.getTests();
+      this.testsExplorer.update(
+        tests.map((testItem) => {
+          if (testItem.id === test.id) {
+            return {
+              ...test,
+              status: "running",
+            };
+          }
+          return testItem;
+        })
+      );
+      await activePanel.client.runTest(test.id);
     });
 
     commands.registerCommand("wingConsole.runAllTests", async () => {
@@ -71,7 +101,18 @@ export class PanelsManager {
       if (!activePanel) {
         return;
       }
-      await runAllTests(activePanel.client, this.testsExplorer);
+      const tests = this.testsExplorer.getTests();
+      this.testsExplorer.update(
+        tests.map((testItem) => {
+          return {
+            ...testItem,
+            status: "running",
+          };
+
+          return testItem;
+        })
+      );
+      await activePanel.client.runAllTests();
     });
   }
 
@@ -122,7 +163,18 @@ export class PanelsManager {
       consolePanel.panel.reveal();
       this.activeConsolePanel = panelId;
     }
-    this.resourcesExplorer.update(await consolePanel.client.listResources());
+
+    const node = await consolePanel.client.listResources();
+    this.resourcesExplorer.update(node);
+
+    const resourceId = consolePanel.selectedNode || "root";
+    await this.explorerView.reveal(
+      new ResourceItem({
+        id: resourceId,
+      })
+    );
+    await consolePanel.client.setSelectedNode(resourceId);
+
     this.testsExplorer.update(await consolePanel.client.listTests());
   }
 }

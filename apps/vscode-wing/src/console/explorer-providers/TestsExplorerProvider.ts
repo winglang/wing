@@ -31,35 +31,38 @@ export class TestsExplorerProvider implements TreeDataProvider<TestItem> {
     this.tests = tests || [];
   }
 
-  refresh(): void {
+  public refresh(): void {
     this._onDidChangeTreeData.fire();
   }
 
-  update(tests: TestItem[]): void {
+  public update(tests: TestItem[]): void {
     this.tests = tests;
     this.refresh();
   }
 
-  getTests(): TestItem[] {
+  public getTests(): TestItem[] {
     return this.tests;
   }
 
-  getTreeItem(element: TestItem): TreeItem {
+  public getTreeItem(element: TestItem): TreeItem {
     return element;
   }
 
-  getChildren(element?: TestItem): Thenable<TestItem[]> {
-    return Promise.resolve(
-      this.tests.map((test) => {
-        return new TestItem(
-          test.id,
-          test.label,
-          test.time || 0,
-          test.status || "pending",
-          TreeItemCollapsibleState.None
-        );
-      })
-    );
+  public getChildren(element?: TestItem): Thenable<TestItem[]> {
+    if (!element) {
+      return Promise.resolve(
+        this.tests.map((test) => {
+          return new TestItem(
+            test.id,
+            test.label,
+            test.time || 0,
+            test.status || "pending",
+            TreeItemCollapsibleState.None
+          );
+        })
+      );
+    }
+    return Promise.resolve([]);
   }
 }
 
