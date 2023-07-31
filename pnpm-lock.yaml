@@ -180,9 +180,6 @@ importers:
       jsii:
         specifier: ~5.0.0
         version: 5.0.11(patch_hash=zhi5puwzi5jiulxnmqgkd4wl2a)
-      jsii-pacmak:
-        specifier: ^1.84.0
-        version: 1.84.0
       typescript:
         specifier: ^4.3.4
         version: 4.9.4

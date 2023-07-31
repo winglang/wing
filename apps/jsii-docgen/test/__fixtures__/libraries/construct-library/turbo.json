@@ -5,9 +5,6 @@
     "compile": {
       "inputs": ["lib/**"],
       "outputs": [".jsii"]
-    },
-    "package": {
-      "outputs": ["dist/**"]
     }
   }
 }
