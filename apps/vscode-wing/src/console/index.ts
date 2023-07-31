@@ -48,13 +48,6 @@ export class WingConsoleManager {
       await this.panelsManager.setActiveConsolePanel(
         textEditor.document.uri.fsPath
       );
-
-      // Use Console as a singleton
-      // const currentPanel = this.panelsManager.getActiveConsolePanelId();
-      // if (currentPanel) {
-      //   this.panelsManager.closeConsolePanel(currentPanel);
-      //   await this.openConsole();
-      // }
     });
 
     workspace.onDidCloseTextDocument(async (textDocument) => {
