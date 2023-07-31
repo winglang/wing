@@ -19,9 +19,9 @@ module.exports = function({ $NotGoo }) {
         }
       }
       const y = new YesGoo();
-      {((cond) => {if (!cond) throw new Error("assertion failed: y.handle() == 456")})(((await y.handle()) === 456))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: y.handle() == 456")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await y.handle()),456)))};
       const x = new $NotGoo();
-      {((cond) => {if (!cond) throw new Error("assertion failed: x.handle() == 123")})(((await x.handle()) === 123))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: x.handle() == 123")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await x.handle()),123)))};
     }
   }
   return $Closure1;

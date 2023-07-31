@@ -2975,7 +2975,7 @@ impl<'a> TypeChecker<'a> {
 				//   fail type checking.
 
 				// Create an environment for the struct
-				let mut struct_env = SymbolEnv::new(None, self.types.void(), false, false, env.phase, stmt.idx);
+				let mut struct_env = SymbolEnv::new(None, self.types.void(), false, false, Phase::Independent, stmt.idx);
 
 				// Add fields to the struct env
 				for field in fields.iter() {

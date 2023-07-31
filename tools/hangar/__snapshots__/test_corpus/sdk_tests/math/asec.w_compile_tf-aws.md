@@ -15,14 +15,14 @@ module.exports = function({ $math_Util }) {
       }
       catch ($error_e) {
         const e = $error_e.message;
-        {((cond) => {if (!cond) throw new Error("assertion failed: e == \"Input value must be equal or greater than |1|.\"")})((e === "Input value must be equal or greater than |1|."))};
+        {((cond) => {if (!cond) throw new Error("assertion failed: e == \"Input value must be equal or greater than |1|.\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(e,"Input value must be equal or greater than |1|.")))};
       }
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.asec(2) == 1.0471975511965979")})(((await $math_Util.asec(2)) === 1.0471975511965979))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.asec(1) == 0")})(((await $math_Util.asec(1)) === 0))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.asec(math.PI) == 1.2468502198629159")})(((await $math_Util.asec($math_Util.PI)) === 1.2468502198629159))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.asec(-math.PI) == 1.8947424337268775")})(((await $math_Util.asec((-$math_Util.PI))) === 1.8947424337268775))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.asec(-1) == math.PI")})(((await $math_Util.asec((-1))) === $math_Util.PI))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.asec(-2) == 2.0943951023931957")})(((await $math_Util.asec((-2))) === 2.0943951023931957))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.asec(2) == 1.0471975511965979")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.asec(2)),1.0471975511965979)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.asec(1) == 0")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.asec(1)),0)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.asec(math.PI) == 1.2468502198629159")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.asec($math_Util.PI)),1.2468502198629159)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.asec(-math.PI) == 1.8947424337268775")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.asec((-$math_Util.PI))),1.8947424337268775)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.asec(-1) == math.PI")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.asec((-1))),$math_Util.PI)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.asec(-2) == 2.0943951023931957")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.asec((-2))),2.0943951023931957)))};
     }
   }
   return $Closure1;
@@ -191,14 +191,14 @@ class $Root extends $stdlib.std.Resource {
     }
     catch ($error_e) {
       const e = $error_e.message;
-      {((cond) => {if (!cond) throw new Error("assertion failed: e == \"Input value must be equal or greater than |1|.\"")})((e === "Input value must be equal or greater than |1|."))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: e == \"Input value must be equal or greater than |1|.\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(e,"Input value must be equal or greater than |1|.")))};
     }
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.asec(2) == 1.0471975511965979")})(((math.Util.asec(2)) === 1.0471975511965979))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.asec(1) == 0")})(((math.Util.asec(1)) === 0))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.asec(math.PI) == 1.2468502198629159")})(((math.Util.asec(math.Util.PI)) === 1.2468502198629159))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.asec(-math.PI) == 1.8947424337268775")})(((math.Util.asec((-math.Util.PI))) === 1.8947424337268775))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.asec(-1) == math.PI")})(((math.Util.asec((-1))) === math.Util.PI))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.asec(-2) == 2.0943951023931957")})(((math.Util.asec((-2))) === 2.0943951023931957))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.asec(2) == 1.0471975511965979")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.asec(2)),1.0471975511965979)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.asec(1) == 0")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.asec(1)),0)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.asec(math.PI) == 1.2468502198629159")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.asec(math.Util.PI)),1.2468502198629159)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.asec(-math.PI) == 1.8947424337268775")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.asec((-math.Util.PI))),1.8947424337268775)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.asec(-1) == math.PI")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.asec((-1))),math.Util.PI)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.asec(-2) == 2.0943951023931957")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.asec((-2))),2.0943951023931957)))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:inflight arc cosecant",new $Closure1(this,"$Closure1"));
   }
 }

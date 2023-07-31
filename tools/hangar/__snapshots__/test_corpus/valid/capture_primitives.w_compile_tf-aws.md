@@ -13,7 +13,7 @@ module.exports = function({ $myBool, $myDur_hours, $myDur_minutes, $myDur_second
       {console.log("inflight" === 'inflight' && process.env.WING_TARGET !== 'sim' ? 'winglogstart:' + ($myStr) + ':winglogend': ($myStr))};
       const n = $myNum;
       {console.log("inflight" === 'inflight' && process.env.WING_TARGET !== 'sim' ? 'winglogstart:' + (String.raw({ raw: ["", ""] }, n)) + ':winglogend': (String.raw({ raw: ["", ""] }, n)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: mySecondBool == false")})(($mySecondBool === false))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: mySecondBool == false")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($mySecondBool,false)))};
       if ($myBool) {
         {console.log("inflight" === 'inflight' && process.env.WING_TARGET !== 'sim' ? 'winglogstart:' + ("bool=true") + ':winglogend': ("bool=true"))};
       }
@@ -24,7 +24,7 @@ module.exports = function({ $myBool, $myDur_hours, $myDur_minutes, $myDur_second
       const sec = $myDur_seconds;
       const hr = $myDur_hours;
       const split = (await String.raw({ raw: ["min=", " sec=", " hr=", ""] }, min, sec, hr).split(" "));
-      {((cond) => {if (!cond) throw new Error("assertion failed: split.length == 3")})((split.length === 3))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: split.length == 3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(split.length,3)))};
     }
   }
   return $Closure1;

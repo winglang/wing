@@ -33,7 +33,7 @@ module.exports = function({ $f }) {
     async handle() {
       {console.log("inflight" === 'inflight' && process.env.WING_TARGET !== 'sim' ? 'winglogstart:' + ("log inside test") + ':winglogend': ("log inside test"))};
       const x = (await $f.invoke("hello"));
-      {((cond) => {if (!cond) throw new Error("assertion failed: x == \"hello-response\"")})((x === "hello-response"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: x == \"hello-response\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(x,"hello-response")))};
     }
   }
   return $Closure2;
