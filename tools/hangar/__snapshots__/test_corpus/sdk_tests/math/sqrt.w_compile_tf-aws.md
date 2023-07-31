@@ -15,14 +15,14 @@ module.exports = function({ $math_Util }) {
       }
       catch ($error_e) {
         const e = $error_e.message;
-        {((cond) => {if (!cond) throw new Error("assertion failed: e == \"Input value must be greater than or equal to 0.\"")})((e === "Input value must be greater than or equal to 0."))};
+        {((cond) => {if (!cond) throw new Error("assertion failed: e == \"Input value must be greater than or equal to 0.\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(e,"Input value must be greater than or equal to 0.")))};
       }
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.sqrt(-0) == -0")})(((await $math_Util.sqrt((-0))) === (-0)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.sqrt(0) == 0")})(((await $math_Util.sqrt(0)) === 0))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.sqrt(1) == 1")})(((await $math_Util.sqrt(1)) === 1))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.sqrt(2) == 1.4142135623730951")})(((await $math_Util.sqrt(2)) === 1.4142135623730951))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.sqrt(9) == 3")})(((await $math_Util.sqrt(9)) === 3))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.sqrt(math.INF) == math.INF")})(((await $math_Util.sqrt($math_Util.INF)) === $math_Util.INF))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.sqrt(-0) == -0")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.sqrt((-0))),(-0))))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.sqrt(0) == 0")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.sqrt(0)),0)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.sqrt(1) == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.sqrt(1)),1)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.sqrt(2) == 1.4142135623730951")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.sqrt(2)),1.4142135623730951)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.sqrt(9) == 3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.sqrt(9)),3)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.sqrt(math.INF) == math.INF")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.sqrt($math_Util.INF)),$math_Util.INF)))};
     }
   }
   return $Closure1;
@@ -191,14 +191,14 @@ class $Root extends $stdlib.std.Resource {
     }
     catch ($error_e) {
       const e = $error_e.message;
-      {((cond) => {if (!cond) throw new Error("assertion failed: e == \"Input value must be greater than or equal to 0.\"")})((e === "Input value must be greater than or equal to 0."))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: e == \"Input value must be greater than or equal to 0.\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(e,"Input value must be greater than or equal to 0.")))};
     }
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.sqrt(-0) == -0")})(((math.Util.sqrt((-0))) === (-0)))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.sqrt(0) == 0")})(((math.Util.sqrt(0)) === 0))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.sqrt(1) == 1")})(((math.Util.sqrt(1)) === 1))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.sqrt(2) == 1.4142135623730951")})(((math.Util.sqrt(2)) === 1.4142135623730951))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.sqrt(9) == 3")})(((math.Util.sqrt(9)) === 3))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.sqrt(math.INF) == math.INF")})(((math.Util.sqrt(math.Util.INF)) === math.Util.INF))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.sqrt(-0) == -0")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.sqrt((-0))),(-0))))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.sqrt(0) == 0")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.sqrt(0)),0)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.sqrt(1) == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.sqrt(1)),1)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.sqrt(2) == 1.4142135623730951")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.sqrt(2)),1.4142135623730951)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.sqrt(9) == 3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.sqrt(9)),3)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.sqrt(math.INF) == math.INF")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.sqrt(math.Util.INF)),math.Util.INF)))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:inflight square root",new $Closure1(this,"$Closure1"));
   }
 }

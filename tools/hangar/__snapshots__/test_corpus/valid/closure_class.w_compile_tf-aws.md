@@ -10,8 +10,8 @@ module.exports = function({ $fn }) {
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: fn() == 42")})(((await $fn()) === 42))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: fn.another() == \"hello\"")})(((await $fn.another()) === "hello"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: fn() == 42")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $fn()),42)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: fn.another() == \"hello\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $fn.another()),"hello")))};
     }
   }
   return $Closure1;

@@ -26,12 +26,12 @@ module.exports = function({ $q, $std_Duration, $util_Util }) {
       }
       ;
       {((cond) => {if (!cond) throw new Error("assertion failed: wait(inflight (): bool => { \n    return q.approxSize() == 3;\n  })")})((await wait(async () => {
-        return ((await $q.approxSize()) === 3);
+        return (((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $q.approxSize()),3));
       }
       )))};
       (await $q.purge());
       {((cond) => {if (!cond) throw new Error("assertion failed: wait(inflight (): bool => {\n    return q.approxSize() == 0;\n  })")})((await wait(async () => {
-        return ((await $q.approxSize()) === 0);
+        return (((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $q.approxSize()),0));
       }
       )))};
     }

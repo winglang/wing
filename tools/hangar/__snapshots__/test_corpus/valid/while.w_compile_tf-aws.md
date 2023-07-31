@@ -55,7 +55,7 @@ class $Root extends $stdlib.std.Resource {
         break;
       }
     }
-    {((cond) => {if (!cond) throw new Error("assertion failed: z == 3")})((z === 3))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: z == 3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(z,3)))};
     while (true) {
       break;
     }
@@ -63,13 +63,13 @@ class $Root extends $stdlib.std.Resource {
     let i = 0;
     while ((i < 10)) {
       i = (i + 1);
-      if (((i % 2) === 0)) {
+      if ((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((i % 2),0))) {
         continue;
       }
       v = (v + 1);
     }
-    {((cond) => {if (!cond) throw new Error("assertion failed: i == 10")})((i === 10))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: v == 5")})((v === 5))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: i == 10")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(i,10)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: v == 5")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(v,5)))};
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
