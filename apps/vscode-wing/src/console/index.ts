@@ -17,16 +17,9 @@ import {
   window,
   workspace,
   OutputChannel,
-  TreeView,
 } from "vscode";
-import {
-  ResourceItem,
-  ResourcesExplorerProvider,
-} from "./explorer-providers/ResourcesExplorerProvider";
-import {
-  TestItem,
-  TestsExplorerProvider,
-} from "./explorer-providers/TestsExplorerProvider";
+import { ResourcesExplorerProvider } from "./explorer-providers/ResourcesExplorerProvider";
+import { TestsExplorerProvider } from "./explorer-providers/TestsExplorerProvider";
 import { PanelsManager } from "./panels-manager";
 import { createTRPCClient } from "./services/trpc";
 import { VIEW_TYPE_CONSOLE } from "../constants";
@@ -35,10 +28,6 @@ export class WingConsoleManager {
   panelsManager: PanelsManager;
 
   logger: OutputChannel = window.createOutputChannel("Wing Console");
-
-  explorerView: TreeView<ResourceItem>;
-
-  testsView: TreeView<TestItem>;
 
   constructor(public readonly context: ExtensionContext) {
     const resourcesExplorer = new ResourcesExplorerProvider();
@@ -50,14 +39,6 @@ export class WingConsoleManager {
       resourcesExplorer,
       testsExplorer
     );
-
-    this.explorerView = window.createTreeView("consoleExplorer", {
-      treeDataProvider: resourcesExplorer,
-    });
-
-    this.testsView = window.createTreeView("consoleTestsExplorer", {
-      treeDataProvider: testsExplorer,
-    });
 
     window.onDidChangeActiveTextEditor(async (textEditor) => {
       if (textEditor?.document?.languageId !== "wing") {
@@ -173,20 +154,12 @@ export class WingConsoleManager {
     panel.onDidChangeViewState(async () => {
       if (panel.active) {
         await this.panelsManager?.setActiveConsolePanel(uri.fsPath);
-        //this.explorerView.reveal({ uri: uri });
-        //this.testsView.reveal({ uri: uri });
-
-        const textEditor = window.visibleTextEditors.find(
-          (openedEditor) => openedEditor.document.uri.fsPath === uri.fsPath
-        );
       }
     });
 
     panel.onDidDispose(async () => {
       await close();
       this.panelsManager?.closeConsolePanel(uri.fsPath);
-      this.explorerView.dispose();
-      this.testsView.dispose();
     });
 
     panel.webview.html = `

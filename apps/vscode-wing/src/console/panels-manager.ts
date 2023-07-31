@@ -20,7 +20,7 @@ export interface ConsolePanel {
   id: string;
   panel: WebviewPanel;
   client: Client;
-  selectedNode: string | undefined;
+  selectedNode?: string | undefined;
 }
 
 export class PanelsManager {
