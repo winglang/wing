@@ -11,7 +11,7 @@ module.exports = function({ $InflightB }) {
     }
     async handle() {
       const b = new $InflightB();
-      {((cond) => {if (!cond) throw new Error("assertion failed: b.description() == \"InflightB extends InflightA\"")})(((await b.description()) === "InflightB extends InflightA"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: b.description() == \"InflightB extends InflightA\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await b.description()),"InflightB extends InflightA")))};
     }
   }
   return $Closure1;
@@ -29,7 +29,7 @@ module.exports = function({ $extended }) {
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: extended.do() == \"value\"")})(((await $extended.do()) === "value"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: extended.do() == \"value\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $extended.do()),"value")))};
     }
   }
   return $Closure2;
@@ -694,7 +694,7 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     const e = new E(this,"E");
-    {((cond) => {if (!cond) throw new Error("assertion failed: e.description() == \"E extends C extends B\"")})(((e.description()) === "E extends C extends B"))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: e.description() == \"E extends C extends B\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((e.description()),"E extends C extends B")))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:super call inflight",new $Closure1(this,"$Closure1"));
     const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
     const extended = new ExtendedClass(this,"ExtendedClass");
