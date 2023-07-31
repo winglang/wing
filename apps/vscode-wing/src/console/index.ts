@@ -53,11 +53,16 @@ export class WingConsoleManager {
         return;
       }
 
-      const currentPanel = this.panelsManager.getActiveConsolePanelId();
-      if (currentPanel) {
-        this.panelsManager.closeConsolePanel(currentPanel);
-        await this.openConsole();
-      }
+      await this.panelsManager.setActiveConsolePanel(
+        textEditor.document.uri.fsPath
+      );
+
+      // Use Console as a singleton
+      // const currentPanel = this.panelsManager.getActiveConsolePanelId();
+      // if (currentPanel) {
+      //   this.panelsManager.closeConsolePanel(currentPanel);
+      //   await this.openConsole();
+      // }
     });
 
     workspace.onDidCloseTextDocument(async (textDocument) => {
@@ -84,12 +89,6 @@ export class WingConsoleManager {
     const log = (type: string, message: string) => {
       this.logger.appendLine(`[${type}] ${message}`);
     };
-
-    // Use Console as a singleton
-    const activePanelId = this.panelsManager?.getActiveConsolePanelId();
-    if (activePanelId) {
-      this.panelsManager.closeConsolePanel(activePanelId);
-    }
 
     if (this.panelsManager.getConsolePanel(uri.fsPath)) {
       this.logger.appendLine(`Wing Console is already running`);
