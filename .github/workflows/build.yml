@@ -93,10 +93,14 @@ jobs:
           name: wingc
           path: libs/wingcompiler/wingc.wasm
 
+      - name: Derive appropriate SHAs for base and head for `nx affected` commands
+        id: setSHAs
+        uses: nrwl/nx-set-shas@v3
+
       - name: Check git diff of VSCode Extension
         id: git-diff-vscode-wing
         run: |
-          if git diff --quiet origin/${{ github.base_ref }} ${{ github.sha }} -- apps/vscode-wing; then
+          if git diff --quiet ${{ steps.setSHAs.outputs.base }} ${{ github.sha }} -- apps/vscode-wing; then
             echo "diff=false" >> "$GITHUB_OUTPUT"
           else
             echo "diff=true" >> "$GITHUB_OUTPUT"
