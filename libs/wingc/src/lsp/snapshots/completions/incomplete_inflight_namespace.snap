@@ -433,4 +433,10 @@ source: libs/wingc/src/lsp/completions.rs
     kind: markdown
     value: "```wing\nenum HttpMethod\n```\n---\nAllowed HTTP methods for a endpoint.\n- `GET`\n- `HEAD`\n- `POST`\n- `PUT`\n- `DELETE`\n- `CONNECT`\n- `OPTIONS`\n- `PATCH`"
   sortText: jj|HttpMethod
+- label: LogType
+  kind: 13
+  documentation:
+    kind: markdown
+    value: "```wing\nenum LogType\n```\n---\nCloud Function log type (currently implemented only for tf-aws and awscdk targets.).\n- `NONE`\n- `DEFAULT`\n- `EXTENDED`"
+  sortText: jj|LogType
 

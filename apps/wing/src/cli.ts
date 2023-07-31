@@ -9,6 +9,7 @@ import { collectCommandAnalytics } from "./analytics/collect";
 import { exportAnalytics } from "./analytics/export";
 import { optionallyDisplayDisclaimer } from "./analytics/disclaimer";
 import { currentPackage } from "./util";
+import { LogType } from "@winglang/sdk/lib/cloud";
 
 export const PACKAGE_VERSION = currentPackage.version;
 let analyticsExportFile: Promise<string | undefined>;
@@ -150,6 +151,11 @@ async function main() {
       new Option("-t, --target <target>", "Target platform")
         .choices(["tf-aws", "tf-azure", "tf-gcp", "sim", "awscdk"])
         .default("sim")
+    )
+    .addOption(
+      new Option("-l, --log <LogType>", "Log type")
+        .choices([LogType.DEFAULT, LogType.NONE, LogType.EXTENDED])
+        .default(LogType.DEFAULT)
     )
     .option("-p, --plugins [plugin...]", "Compiler plugins")
     .hook("preAction", progressHook)

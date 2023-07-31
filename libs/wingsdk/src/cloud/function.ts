@@ -9,6 +9,26 @@ import { Duration } from "../std/duration";
 import { IInflightHost, IResource, Resource } from "../std/resource";
 
 /**
+ * Cloud Function log type
+ * (currently implemented only for tf-aws and awscdk targets.)
+ */
+export enum LogType {
+  /**
+   * No function logs will be displayed
+   */
+  NONE = "none",
+  /**
+   * Only the user created logs will be displayed.
+   * To create a log use the `log(...)` method
+   */
+  DEFAULT = "default",
+  /**
+   * All logs will be displayed, including those that are created by the cloud vendor
+   */
+  EXTENDED = "extended",
+}
+
+/**
  * Global identifier for `Function`.
  */
 export const FUNCTION_FQN = fqnForType("cloud.Function");

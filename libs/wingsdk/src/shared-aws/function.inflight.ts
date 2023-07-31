@@ -5,7 +5,7 @@ import {
 import { InvokeCommand, LambdaClient } from "@aws-sdk/client-lambda";
 import { fromUtf8, toUtf8 } from "@aws-sdk/util-utf8-node";
 import { Context } from "aws-lambda";
-import { IFunctionClient } from "../cloud";
+import { IFunctionClient, LogType } from "../cloud";
 import { Trace, TraceType } from "../std";
 import { FUNCTION_TYPE } from "../target-sim/schema-resources";
 
@@ -30,7 +30,8 @@ export class FunctionClient implements IFunctionClient {
   private async readLogs(
     logGroupName: string,
     logStreamName: string,
-    constructPath: string
+    constructPath: string,
+    logType: LogType
   ): Promise<Trace[]> {
     const logsCollector: Trace[] = [];
 
@@ -55,8 +56,7 @@ export class FunctionClient implements IFunctionClient {
             ? new Date(event.timestamp).toISOString()
             : "n/a",
         });
-      }
-      if (invocationLog) {
+      } else if (invocationLog) {
         const logData = event.message?.split("\t") ?? [];
         const parsedData = JSON.parse(
           Buffer.from(logData[logData.length - 1], "base64").toString("binary")
@@ -66,9 +66,24 @@ export class FunctionClient implements IFunctionClient {
           this.readLogs(
             parsedData.logGroupName,
             parsedData.logStreamName,
-            parsedData.constructPath
+            parsedData.constructPath,
+            logType
           )
         );
+      } else {
+        if (logType === LogType.EXTENDED) {
+          const logData = event.message?.split("\t") ?? [];
+
+          logsCollector.push({
+            data: { message: logData },
+            sourceType: FUNCTION_TYPE,
+            sourcePath: constructPath,
+            type: TraceType.LOG,
+            timestamp: event.timestamp
+              ? new Date(event.timestamp).toISOString()
+              : "n/a",
+          });
+        }
       }
     }
 
@@ -149,19 +164,27 @@ export class FunctionClient implements IFunctionClient {
    *
    * @returns the function returned payload and logs
    */
-  public async invokeWithLogs(payload: string): Promise<[string, Trace[]]> {
+  public async invokeWithLogs(
+    payload: string,
+    logType: LogType = LogType.DEFAULT
+  ): Promise<[string, Trace[]]> {
     const traces: Trace[] = [];
 
     const value = await this.executeFunction(payload);
 
-    if (value?.context?.logGroupName && value?.context?.logStreamName) {
+    if (
+      value?.context?.logGroupName &&
+      value?.context?.logStreamName &&
+      logType !== LogType.NONE
+    ) {
       // waiting for the logs to be created
       await new Promise((resolve) => setTimeout(resolve, 10000));
       traces.push(
         ...(await this.readLogs(
           value?.context?.logGroupName,
           value?.context?.logStreamName,
-          this.constructPath
+          this.constructPath,
+          logType
         ))
       );
     }
