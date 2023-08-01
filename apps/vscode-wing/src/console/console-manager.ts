@@ -17,7 +17,7 @@ import {
   TestItem,
   TestsExplorerProvider,
 } from "./explorer-providers/TestsExplorerProvider";
-import { Client } from "./services/trpc";
+import { Client } from "./services/client";
 import { VIEW_TYPE_CONSOLE } from "../constants";
 
 export interface ConsoleInstance {

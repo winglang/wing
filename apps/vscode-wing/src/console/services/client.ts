@@ -25,7 +25,7 @@ export interface Client {
   close: () => void;
 }
 
-export const createTRPCClient = (host: string): Client => {
+export const createClient = (host: string): Client => {
   const url = `${host}/trpc`;
 
   const wsClient = createWSClient({

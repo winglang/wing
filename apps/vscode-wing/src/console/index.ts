@@ -1,5 +1,6 @@
 import path from "path";
 import { createConsoleApp } from "@wingconsole/app";
+// import createConsoleApp using the command wing console-path
 
 import fetch from "node-fetch";
 import ws from "ws";
@@ -11,7 +12,7 @@ globalAny.WebSocket = ws;
 
 import { ExtensionContext, window, workspace, OutputChannel } from "vscode";
 import { ConsoleManager } from "./console-manager";
-import { createTRPCClient } from "./services/trpc";
+import { createClient } from "./services/client";
 
 export class WingConsoleManager {
   consoleManager: ConsoleManager;
@@ -111,7 +112,7 @@ export class WingConsoleManager {
       id: uri.fsPath,
       wingfile,
       url,
-      client: createTRPCClient(url),
+      client: createClient(url),
     });
 
     await this.consoleManager.setActiveInstance(uri.fsPath);

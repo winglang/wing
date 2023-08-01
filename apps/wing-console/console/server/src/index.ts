@@ -15,11 +15,15 @@ import {
   LayoutConfig,
   TestItem,
   TestsStateManager,
-  TestStatus,
 } from "./utils/createRouter.js";
 import type { LogInterface } from "./utils/LogInterface.js";
 import { createSimulator } from "./utils/simulator.js";
 
+export type {
+  TestsStateManager,
+  TestStatus,
+  TestItem,
+} from "./utils/createRouter.js";
 export type { Trace, State } from "./types.js";
 export type { LogInterface } from "./utils/LogInterface.js";
 export type { LogEntry, LogLevel } from "./consoleLogger.js";
@@ -108,7 +112,7 @@ export const createConsoleServer = async ({
   let selectedNode = "";
   let tests: TestItem[] = [];
 
-  const testsStateManager = () => {
+  const testsStateManager = (): TestsStateManager => {
     return {
       getTests: () => {
         return tests;
