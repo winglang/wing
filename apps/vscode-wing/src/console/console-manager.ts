@@ -196,7 +196,6 @@ export class ConsoleManager {
             </style>
         </head>
         <body>
-          <div>${instance.url}</div>
           <iframe src="http://${instance.url}"/>
         </body>
       </html>`;
