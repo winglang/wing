@@ -36,24 +36,22 @@ export class WingConsoleManager {
   constructor(public readonly context: ExtensionContext) {
     this.consoleManager = new ConsoleManager(this.context, this.logger);
 
-    window.onDidChangeActiveTextEditor(async (textEditor) => {
-      if (textEditor?.document?.languageId !== "wing") {
-        return;
-      }
-      if (this.consoleManager.getActiveInstance()) {
+    window.onDidChangeActiveTextEditor(async () => {
+      if (this.consoleManager.getActiveInstanceId()) {
         await this.openConsole();
       }
     });
+
     workspace.onDidCloseTextDocument(async (textDocument) => {
       if (textDocument.languageId !== "wing") {
         return;
       }
-      const instanceId = this.consoleManager?.getInstance(
+      const instance = this.consoleManager?.getInstance(
         textDocument.uri.fsPath
       );
-      if (instanceId) {
-        this.log(`Closing Console instance '${instanceId.wingfile}'`);
-        await this.consoleManager.closeInstance(instanceId.id);
+      if (instance) {
+        this.log(`Closing Console instance '${instance.wingfile}'`);
+        await this.consoleManager.closeInstance(instance.id);
       }
     });
   }
@@ -72,20 +70,20 @@ export class WingConsoleManager {
     if (document.languageId !== "wing") {
       return;
     }
-    const uri = document.uri;
+    const instanceId = document.uri.fsPath;
 
-    const instance = this.consoleManager?.getInstance(uri.fsPath);
+    const instance = this.consoleManager?.getInstance(instanceId);
     if (instance) {
       this.log(`Opening existing Console instance for'${instance.wingfile}'`);
-      await this.consoleManager.setActiveInstance(uri.fsPath);
+      await this.consoleManager.setActiveInstance(instanceId);
       return;
     }
 
-    const wingfile = path.basename(uri.fsPath);
+    const wingfile = path.basename(instanceId);
 
     this.log(`Creating a new Console instance for '${wingfile}'`);
     const { port } = await createConsoleApp({
-      wingfile: uri.fsPath,
+      wingfile: instanceId,
       hostUtils: {
         openExternal: async (url: string) => {
           await open(url);
@@ -121,15 +119,12 @@ export class WingConsoleManager {
     const url = `localhost:${port}`;
 
     this.log(`Wing Console is running at ${url}`);
-
-    this.consoleManager.addInstance({
-      id: uri.fsPath,
+    await this.consoleManager.addInstance({
+      id: instanceId,
       wingfile,
       url,
       client: createClient(url),
     });
-
-    await this.consoleManager.setActiveInstance(uri.fsPath);
   }
 
   public async openFile() {

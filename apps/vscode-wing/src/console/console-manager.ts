@@ -54,7 +54,7 @@ export class ConsoleManager {
 
   private registerCommands() {
     commands.registerCommand("wingConsole.openResource", async (resourceId) => {
-      const activePanel = this.getActiveInstance();
+      const activePanel = this.getInstance(this.activeInstanceId);
       if (!activePanel) {
         return;
       }
@@ -62,7 +62,7 @@ export class ConsoleManager {
     });
 
     commands.registerCommand("wingConsole.runTest", async (test: TestItem) => {
-      const activePanel = this.getActiveInstance();
+      const activePanel = this.getInstance(this.activeInstanceId);
       if (!activePanel) {
         return;
       }
@@ -82,7 +82,7 @@ export class ConsoleManager {
     });
 
     commands.registerCommand("wingConsole.runAllTests", async () => {
-      const activePanel = this.getActiveInstance();
+      const activePanel = this.getInstance(this.activeInstanceId);
       if (!activePanel) {
         return;
       }
@@ -144,43 +144,38 @@ export class ConsoleManager {
     });
   }
 
-  public getActiveInstance() {
-    if (!this.activeInstanceId) {
-      return;
-    }
-    return this.consoleInstances[this.activeInstanceId];
-  }
-
   public getActiveInstanceId() {
     return this.activeInstanceId;
   }
 
-  public addInstance(consoleInstance: ConsoleInstance) {
-    consoleInstance.client.onInvalidateQuery({
+  public getInstance(instanceId?: string) {
+    if (!instanceId) {
+      return;
+    }
+    return this.consoleInstances[instanceId];
+  }
+
+  public async addInstance(instance: ConsoleInstance) {
+    instance.client.onInvalidateQuery({
       onData: async () => {
-        if (this.activeInstanceId !== consoleInstance.id) {
+        if (this.activeInstanceId !== instance.id) {
           return;
         }
-
-        this.resourcesExplorer.update(
-          await consoleInstance.client.listResources()
-        );
-        this.testsExplorer.update(await consoleInstance.client.listTests());
+        this.resourcesExplorer.update(await instance.client.listResources());
+        this.testsExplorer.update(await instance.client.listTests());
       },
       onError: (err) => {
         this.logger?.appendLine(err);
       },
     });
-    this.consoleInstances[consoleInstance.id] = consoleInstance;
-  }
+    this.consoleInstances[instance.id] = instance;
 
-  public getInstance(instanceId: string) {
-    return this.consoleInstances[instanceId];
+    await this.setActiveInstance(instance.id);
   }
 
   public async setActiveInstance(instanceId: string) {
-    const consoleInstance = this.consoleInstances[instanceId];
-    if (!consoleInstance) {
+    const instance = this.getInstance(instanceId);
+    if (!instance) {
       return;
     }
 
@@ -189,7 +184,7 @@ export class ConsoleManager {
       return;
     }
     this.activeInstanceId = instanceId;
-    this.webviewPanel.title = `${consoleInstance.wingfile} - [console]`;
+    this.webviewPanel.title = `${instance.wingfile} - [console]`;
     this.webviewPanel.webview.html = `
       <!DOCTYPE html>
         <html lang="en">
@@ -201,7 +196,7 @@ export class ConsoleManager {
             </style>
         </head>
         <body>
-          <iframe src="http://${consoleInstance.url}"/>
+          <iframe src="http://${instance.url}"/>
         </body>
       </html>`;
     const node = await this.resourcesExplorer.getChildren();
@@ -220,11 +215,11 @@ export class ConsoleManager {
       this.webviewPanel?.dispose();
       this.webviewPanel = undefined;
     }
-    const consoleInstance = this.consoleInstances[instanceId];
-    if (!consoleInstance) {
+    const instance = this.getInstance(instanceId);
+    if (!instance) {
       return;
     }
-    consoleInstance.client.close();
+    instance.client.close();
     this.resourcesExplorer.clear();
     this.testsExplorer.clear();
     delete this.consoleInstances[instanceId];

@@ -16,6 +16,7 @@ export interface SubscriptionOptions {
 }
 
 export interface Client {
+  url: string;
   selectedNode: () => Promise<string | undefined>;
   setSelectedNode: (resourcePath: string) => Promise<void>;
   listTests: () => Promise<TestItem[]>;
@@ -86,6 +87,7 @@ export const createClient = (host: string): Client => {
   };
 
   return {
+    url,
     selectedNode,
     setSelectedNode,
     listTests,
