@@ -3,6 +3,8 @@ import open from "open";
 
 export const { createConsoleApp } = importConsoleApp();
 
+import type { CreateConsoleAppOptions } from "@wingconsole/app";
+
 const globalAny = global as any;
 globalAny.fetch = fetch;
 globalAny.WebSocket = ws;
@@ -95,7 +97,7 @@ export class WingConsoleManager {
           showThemeToggle: true,
         },
       },
-    });
+    } as CreateConsoleAppOptions);
 
     const url = `localhost:${port}`;
 
