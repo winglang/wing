@@ -11,7 +11,7 @@ module.exports = function({ $JSHelperInflight, $util_Util }) {
     }
     async handle() {
       const data = (await $util_Util.uuidv4());
-      {((cond) => {if (!cond) throw new Error("assertion failed: JSHelperInflight.validateUUIDv4(data) == true")})(((await $JSHelperInflight.validateUUIDv4(data)) === true))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: JSHelperInflight.validateUUIDv4(data) == true")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $JSHelperInflight.validateUUIDv4(data)),true)))};
     }
   }
   return $Closure1;
@@ -259,7 +259,7 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     const data = (util.Util.uuidv4());
-    {((cond) => {if (!cond) throw new Error("assertion failed: JSHelper.validateUUIDv4(data) == true")})(((JSHelper.validateUUIDv4(data)) === true))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: JSHelper.validateUUIDv4(data) == true")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((JSHelper.validateUUIDv4(data)),true)))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:inflight uuidv4",new $Closure1(this,"$Closure1"));
   }
 }

@@ -12,7 +12,7 @@ module.exports = function({ $NIL, $RANDOM, $util_Util }) {
     async handle() {
       {((cond) => {if (!cond) throw new Error("assertion failed: util.env(\"WING_TARGET\").length > 0")})(((await $util_Util.env("WING_TARGET")).length > 0))};
       const noValue = ((await $util_Util.tryEnv($RANDOM)) ?? $NIL);
-      {((cond) => {if (!cond) throw new Error("assertion failed: noValue == NIL")})((noValue === $NIL))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: noValue == NIL")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(noValue,$NIL)))};
     }
   }
   return $Closure1;
@@ -189,7 +189,7 @@ class $Root extends $stdlib.std.Resource {
     const NIL = "<<NIL>>";
     {((cond) => {if (!cond) throw new Error("assertion failed: util.env(\"PATH\").length > 0")})(((util.Util.env("PATH")).length > 0))};
     if (((util.Util.tryEnv("MY_VAR")) !== undefined)) {
-      {((cond) => {if (!cond) throw new Error("assertion failed: util.env(\"MY_VAR\") == \"my value\"")})(((util.Util.env("MY_VAR")) === "my value"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: util.env(\"MY_VAR\") == \"my value\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((util.Util.env("MY_VAR")),"my value")))};
     }
     let failed = false;
     try {
@@ -200,7 +200,7 @@ class $Root extends $stdlib.std.Resource {
     }
     {((cond) => {if (!cond) throw new Error("assertion failed: failed")})(failed)};
     const no_value = ((util.Util.tryEnv(RANDOM)) ?? NIL);
-    {((cond) => {if (!cond) throw new Error("assertion failed: no_value == NIL")})((no_value === NIL))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: no_value == NIL")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(no_value,NIL)))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:use util from inflight",new $Closure1(this,"$Closure1"));
   }
 }

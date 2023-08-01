@@ -10,7 +10,7 @@ module.exports = function({ $fn }) {
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: fn.invoke(\"test\") == \"hello world!\"")})(((await $fn.invoke("test")) === "hello world!"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: fn.invoke(\"test\") == \"hello world!\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $fn.invoke("test")),"hello world!")))};
     }
   }
   return $Closure1;

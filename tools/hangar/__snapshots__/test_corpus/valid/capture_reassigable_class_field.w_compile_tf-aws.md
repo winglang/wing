@@ -51,11 +51,11 @@ module.exports = function({ $counter, $kv, $util_Util }) {
       (await $kv.get("k"));
       (await $kv.get("k2"));
       {((cond) => {if (!cond) throw new Error("assertion failed: util.waitUntil((): bool => {\n    return counter.peek(\"k\") == 2;\n  })")})((await $util_Util.waitUntil(async () => {
-        return ((await $counter.peek("k")) === 2);
+        return (((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $counter.peek("k")),2));
       }
       )))};
       {((cond) => {if (!cond) throw new Error("assertion failed: util.waitUntil((): bool => {\n    return counter.peek(\"k2\") == 1;\n  })")})((await $util_Util.waitUntil(async () => {
-        return ((await $counter.peek("k2")) === 1);
+        return (((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $counter.peek("k2")),1));
       }
       )))};
     }
