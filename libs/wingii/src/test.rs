@@ -36,7 +36,7 @@ mod tests {
 	fn can_load_assembly_from_single_file() {
 		let (name, assembly_path) = create_temp_assembly();
 		let assembly = spec::load_assembly_from_file(&name, assembly_path.to_str().unwrap(), None, &None).unwrap();
-		assert_eq!(assembly.name, "jsii-test-dep"); // TODO: write a better test
+		assert_eq!(assembly.name, "jsii-test-dep");
 		remove_temp_assembly(assembly_path);
 	}
 
@@ -45,7 +45,7 @@ mod tests {
 		let (name, assembly_path) = create_temp_gz_assembly();
 
 		let assembly = spec::load_assembly_from_file(&name, assembly_path.to_str().unwrap(), Some("gzip"), &None).unwrap();
-		assert_eq!(assembly.name, "jsii-test-dep"); // TODO: write a better test
+		assert_eq!(assembly.name, "jsii-test-dep");
 		remove_temp_assembly(assembly_path);
 	}
 
@@ -54,7 +54,7 @@ mod tests {
 		let (name, assembly_path) = create_temp_redirect_assembly();
 
 		let assembly = spec::load_assembly_from_file(&name, assembly_path.to_str().unwrap(), None, &None).unwrap();
-		assert_eq!(assembly.name, "jsii-test-dep"); // TODO: write a better test
+		assert_eq!(assembly.name, "jsii-test-dep");
 		remove_temp_assembly(assembly_path);
 	}
 
@@ -109,11 +109,13 @@ mod tests {
 			.collect::<Vec<_>>();
 		assert!(cache_files.len() == 1);
 		assert!(cache_files[0].metadata().unwrap().modified().unwrap() > cache_file_timestamp);
+
+		remove_temp_assembly(assembly_path);
 	}
 
 	#[test]
 	fn cache_redirected_assembly() {
-		// Create temp assembly for test
+		// Create temp assembly with redirects for test
 		let (name, assembly_path) = create_temp_redirect_assembly();
 		// Get the target assembly path
 		let redirect_jsii = serde_json::from_str::<JsiiFile>(&fs::read_to_string(assembly_path.clone()).unwrap()).unwrap();
@@ -129,6 +131,8 @@ mod tests {
 		let fingerprint = spec::get_manifest_fingerprint(&name, &target_assembly_path, &dummy_version).unwrap();
 		let cached_assembly = spec::try_load_from_cache(&target_assembly_path, &fingerprint).unwrap();
 		assert_eq!(assembly, cached_assembly);
+
+		remove_temp_assembly(assembly_path);
 	}
 
 	fn create_temp_gz_assembly() -> (String, PathBuf) {
@@ -165,7 +169,7 @@ mod tests {
 	fn can_load_assembly_from_file() {
 		let (name, assembly_path) = create_temp_assembly();
 		let assembly = spec::load_assembly_from_file(&name, &assembly_path.to_str().unwrap(), None, &None).unwrap();
-		assert_eq!(assembly.name, "jsii-test-dep"); // TODO: write a better test
+		assert_eq!(assembly.name, "jsii-test-dep");
 		remove_temp_assembly(assembly_path);
 	}
 
