@@ -83,7 +83,7 @@ The name of the UTF-8 string to encode.
 
 - *Type:* bool
 
-If `true`, a URL-safe base64 is returned.
+If `true`, a URL-safe base64 string is returned.
 
 ---
 
