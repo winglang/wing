@@ -241,7 +241,7 @@ function testResultsContainsFailure(results: std.TestResult[]): boolean {
 function noCleanUp(synthDir: string) {
   console.log(
     chalk.yellowBright.bold(
-      `Clean up is disabled!\nplease review the output files at ${resolve(synthDir)}`
+      `Cleanup is disabled! Output files available at ${resolve(synthDir)}`
     )
   );
 }
