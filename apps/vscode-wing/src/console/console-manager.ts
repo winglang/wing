@@ -1,3 +1,4 @@
+import path from "path";
 import {
   window,
   WebviewPanel,
@@ -22,7 +23,6 @@ import { VIEW_TYPE_CONSOLE } from "../constants";
 
 export interface ConsoleInstance {
   id: string;
-  wingfile: string;
   url: string;
   client: Client;
 }
@@ -183,8 +183,8 @@ export class ConsoleManager {
     if (!this.webviewPanel) {
       return;
     }
-    this.activeInstanceId = instanceId;
-    this.webviewPanel.title = `${instance.wingfile} - [console]`;
+    this.activeInstanceId = instance.id;
+    this.webviewPanel.title = `${path.basename(instance.id)} - [console]`;
     this.webviewPanel.webview.html = `
       <!DOCTYPE html>
         <html lang="en">
@@ -196,6 +196,7 @@ export class ConsoleManager {
             </style>
         </head>
         <body>
+          <div>${instance.url}</div>
           <iframe src="http://${instance.url}"/>
         </body>
       </html>`;

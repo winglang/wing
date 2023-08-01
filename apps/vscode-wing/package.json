@@ -35,6 +35,8 @@
     "@typescript-eslint/eslint-plugin": "^5",
     "@typescript-eslint/parser": "^5",
     "@vscode/vsce": "^2.16.0",
+    "@wingconsole/app": "^0.2.187",
+    "@wingconsole/server": "^0.0.0",
     "eslint": "^8",
     "eslint-config-prettier": "^8.6.0",
     "eslint-import-resolver-node": "^0.3.7",

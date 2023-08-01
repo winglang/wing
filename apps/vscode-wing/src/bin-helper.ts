@@ -1,4 +1,4 @@
-import { exec } from "child_process";
+import { exec, execSync } from "child_process";
 import { env } from "process";
 import {
   StatusBarItem,
@@ -123,3 +123,13 @@ export async function getWingBinAndArgs(context: ExtensionContext) {
 
   return [wingBin, ...args];
 }
+
+export const importConsoleApp = () => {
+  const packagePath = execSync("wing console-app-path").toString().trim();
+
+  const createConsoleApp =
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    require(packagePath) as typeof import("@wingconsole/app");
+
+  return createConsoleApp;
+};

@@ -1,23 +1,7 @@
-import { execSync } from "child_process";
-import path from "path";
-
 import fetch from "node-fetch";
 import open from "open";
 
-const getConsoleAppPath = () => {
-  return path.resolve(execSync("wing console-app-path").toString().trim());
-};
-
-let createConsoleApp: any;
-
-import(getConsoleAppPath())
-  .then((consoleModule) => {
-    const { createConsoleApp: absolutePath } = consoleModule;
-    createConsoleApp = absolutePath;
-  })
-  .catch((err) => {
-    console.error("Error importing the console module:", err);
-  });
+export const { createConsoleApp } = importConsoleApp();
 
 const globalAny = global as any;
 globalAny.fetch = fetch;
@@ -27,6 +11,7 @@ import { ExtensionContext, window, workspace, OutputChannel } from "vscode";
 import ws from "ws";
 import { ConsoleManager } from "./console-manager";
 import { createClient } from "./services/client";
+import { importConsoleApp } from "../bin-helper";
 
 export class WingConsoleManager {
   consoleManager: ConsoleManager;
@@ -50,7 +35,7 @@ export class WingConsoleManager {
         textDocument.uri.fsPath
       );
       if (instance) {
-        this.log(`Closing Console instance '${instance.wingfile}'`);
+        this.log(`Closing Console instance '${instance.id}'`);
         await this.consoleManager.closeInstance(instance.id);
       }
     });
@@ -70,20 +55,16 @@ export class WingConsoleManager {
     if (document.languageId !== "wing") {
       return;
     }
-    const instanceId = document.uri.fsPath;
+    const wingfile = document.uri.fsPath;
 
-    const instance = this.consoleManager?.getInstance(instanceId);
-    if (instance) {
-      this.log(`Opening existing Console instance for'${instance.wingfile}'`);
-      await this.consoleManager.setActiveInstance(instanceId);
+    if (this.consoleManager?.getInstance(wingfile)) {
+      this.log(`Activating Console instance '${wingfile}'`);
+      await this.consoleManager.setActiveInstance(wingfile);
       return;
     }
 
-    const wingfile = path.basename(instanceId);
-
-    this.log(`Creating a new Console instance for '${wingfile}'`);
     const { port } = await createConsoleApp({
-      wingfile: instanceId,
+      wingfile,
       hostUtils: {
         openExternal: async (url: string) => {
           await open(url);
@@ -120,8 +101,7 @@ export class WingConsoleManager {
 
     this.log(`Wing Console is running at ${url}`);
     await this.consoleManager.addInstance({
-      id: instanceId,
-      wingfile,
+      id: wingfile,
       url,
       client: createClient(url),
     });
