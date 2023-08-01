@@ -109,12 +109,12 @@ export class ResourcesExplorerProvider
       return;
     }
 
-    return new ResourceItem({
-      id: parentItem.id,
-      label: parentItem.label,
-      type: parentItem.type,
-      state: TreeItemCollapsibleState.Expanded,
-    });
+    return new ResourceItem(
+      parentItem.id,
+      parentItem.label,
+      parentItem.type,
+      TreeItemCollapsibleState.Expanded
+    );
   }
 
   public getChildren(element?: ResourceItem): Thenable<ResourceItem[]> {
@@ -123,12 +123,12 @@ export class ResourcesExplorerProvider
     }
     if (!element || !element.id) {
       return Promise.resolve([
-        new ResourceItem({
-          id: this.node.id,
-          label: this.node.label,
-          type: this.node.type,
-          state: TreeItemCollapsibleState.Expanded,
-        }),
+        new ResourceItem(
+          this.node.id,
+          this.node.label,
+          this.node.type,
+          TreeItemCollapsibleState.Expanded
+        ),
       ]);
     }
 
@@ -140,32 +140,26 @@ export class ResourcesExplorerProvider
 
     return Promise.resolve(
       childItem.childItems.map((child: ExplorerItem) => {
-        return new ResourceItem({
-          id: child.id,
-          label: child.label,
-          type: child.type || "",
-          state:
-            child.childItems?.length && child.childItems.length > 0
-              ? TreeItemCollapsibleState.Expanded
-              : TreeItemCollapsibleState.None,
-        });
+        return new ResourceItem(
+          child.id,
+          child.label,
+          child.type || "",
+          child.childItems?.length && child.childItems.length > 0
+            ? TreeItemCollapsibleState.Expanded
+            : TreeItemCollapsibleState.None
+        );
       })
     );
   }
 }
 
 export class ResourceItem extends TreeItem {
-  constructor({
-    id,
-    label,
-    type,
-    state,
-  }: {
-    id?: string;
-    label?: string;
-    type?: string;
-    state?: TreeItemCollapsibleState;
-  }) {
+  constructor(
+    id: string,
+    label?: string,
+    type?: string,
+    state?: TreeItemCollapsibleState
+  ) {
     super(label || "", state);
 
     this.id = id;

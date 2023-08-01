@@ -30,7 +30,7 @@ export interface ConsoleInstance {
 export class ConsoleManager {
   private context: ExtensionContext;
 
-  private consoleInstances: Record<string, ConsoleInstance> = {};
+  private instances: Record<string, ConsoleInstance> = {};
 
   private activeInstanceId: string | undefined;
 
@@ -43,6 +43,8 @@ export class ConsoleManager {
   private logger: OutputChannel | undefined;
 
   private explorerView: TreeView<ResourceItem> | undefined;
+
+  private testsExplorerView: TreeView<TestItem> | undefined;
 
   constructor(context: ExtensionContext, logger: OutputChannel) {
     this.context = context;
@@ -110,7 +112,7 @@ export class ConsoleManager {
       treeDataProvider: this.resourcesExplorer,
     });
 
-    window.createTreeView("consoleTestsExplorer", {
+    this.testsExplorerView = window.createTreeView("consoleTestsExplorer", {
       treeDataProvider: this.testsExplorer,
     });
 
@@ -142,6 +144,12 @@ export class ConsoleManager {
       this.webviewPanel = undefined;
       this.activeInstanceId = undefined;
     });
+
+    this.context.subscriptions.push(
+      this.webviewPanel,
+      this.explorerView,
+      this.testsExplorerView
+    );
   }
 
   public getActiveInstanceId() {
@@ -152,7 +160,7 @@ export class ConsoleManager {
     if (!instanceId) {
       return;
     }
-    return this.consoleInstances[instanceId];
+    return this.instances[instanceId];
   }
 
   public async addInstance(instance: ConsoleInstance) {
@@ -168,7 +176,7 @@ export class ConsoleManager {
         this.logger?.appendLine(err);
       },
     });
-    this.consoleInstances[instance.id] = instance;
+    this.instances[instance.id] = instance;
 
     await this.setActiveInstance(instance.id);
   }
@@ -199,14 +207,18 @@ export class ConsoleManager {
           <iframe src="http://${instance.url}"/>
         </body>
       </html>`;
+
     const node = await this.resourcesExplorer.getChildren();
-    if (node[0]) {
-      await this.explorerView?.reveal(
-        new ResourceItem({
-          id: node[0].id,
-        })
-      );
+    if (node[0]?.id) {
+      await this.explorerView?.reveal(new ResourceItem(node[0].id));
     }
+
+    const tests = await instance.client.listTests();
+    if (tests[0]?.id) {
+      await this.testsExplorerView?.reveal(new TestItem(tests[0].id));
+    }
+
+    this.logger?.show();
   }
 
   public async closeInstance(instanceId: string) {
@@ -222,6 +234,6 @@ export class ConsoleManager {
     instance.client.close();
     this.resourcesExplorer.clear();
     this.testsExplorer.clear();
-    delete this.consoleInstances[instanceId];
+    delete this.instances[instanceId];
   }
 }
