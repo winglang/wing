@@ -1527,19 +1527,8 @@ impl<'a> TypeChecker<'a> {
 		let (mut t, phase) = self.type_check_exp_helper(&exp, env);
 		self.types.assign_type_to_expr(exp, t, phase);
 
-		if self.deep_update_inference(&mut t) {
-			// If a type was inferred, we need to ensure all symbols have their references updated as well
-
-			let mut env_to_update = Some(env);
-			while let Some(env) = env_to_update {
-				for entry in env.symbol_map.iter_mut() {
-					if let SymbolKind::Variable(ref mut var_info) = entry.1 .1 {
-						self.deep_update_inference(&mut var_info.type_);
-					}
-				}
-				env_to_update = env.parent.as_deref_mut();
-			}
-		}
+		// In case any type inferences were updated during this check, ensure all related inferences are updated
+		self.deep_update_inference(&mut t);
 
 		(t, phase)
 	}
@@ -4096,7 +4085,6 @@ impl<'a> TypeChecker<'a> {
 				let lookup_res = env.lookup_ext_mut(symbol, Some(self.statement_idx));
 				if let LookupResultMut::Found(var, _) = lookup_res {
 					if let Some(var) = var.as_variable_mut() {
-						// self.deep_update_inference(&mut var.type_);
 						let phase = var.phase;
 						self.deep_update_inference(&mut var.type_);
 						(var.clone(), phase)
