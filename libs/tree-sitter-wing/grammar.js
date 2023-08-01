@@ -513,32 +513,42 @@ module.exports = grammar({
 
     variadic: ($) => "...",
 
-    variadic_container_type: ($) => seq(field("collection_type", choice("Array")), $._container_value_type),
-
-    variadic_definition: ($) => seq(
-      field("variadic", $.variadic),
-      field("name", $.identifier),
-      seq(":", field("type", $.variadic_container_type)),
-    ),
-
     parameter_definition: ($) =>
       seq(
         optional(field("reassignable", $.reassignable)),
+        optional(field("variadic", $.variadic)),
         field("name", $.identifier),
         $._type_annotation
       ),
 
-    parameter_list: ($) => seq(
-      "(",
-      choice(
-        seq(
-          commaSep($.parameter_definition),
-          optional(seq(",", $.variadic_definition)),
-        ),
-        $.variadic_definition,
-      ),
-      ")"
-    ),
+    parameter_list: ($) => seq("(", commaSep($.parameter_definition), ")"),
+
+    // variadic_container_type: ($) => seq(field("collection_type", choice("Array")), $._container_value_type),
+
+    // variadic_definition: ($) => seq(
+    //   field("variadic", $.variadic),
+    //   field("name", $.identifier),
+    //   seq(":", field("type", $.variadic_container_type)),
+    // ),
+
+    // parameter_definition: ($) =>
+    //   seq(
+    //     optional(field("reassignable", $.reassignable)),
+    //     field("name", $.identifier),
+    //     $._type_annotation
+    //   ),
+
+    // parameter_list: ($) => seq(
+    //   "(",
+    //   choice(
+    //     seq(
+    //       commaSep($.parameter_definition),
+    //       optional(seq(",", $.variadic_definition)),
+    //     ),
+    //     $.variadic_definition,
+    //   ),
+    //   ")"
+    // ),
 
     immutable_container_type: ($) =>
       seq(

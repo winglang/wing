@@ -218,7 +218,7 @@ inflight (callback: (num,num):bool) => {};
 Inflight closure with variadic argument
 ================================================================================
 
-inflight (...z: Array<num>):bool => {};
+inflight (var ...z: MutArray<num>):bool => {};
 
 --------------------------------------------------------------------------------
 
@@ -227,10 +227,11 @@ inflight (...z: Array<num>):bool => {};
     (inflight_closure
       (inflight_specifier)
       parameter_list: (parameter_list
-        (variadic_definition
+        (parameter_definition
+          reassignable: (reassignable)
           variadic: (variadic)
           name: (identifier)
-          type: (variadic_container_type
+          type: (mutable_container_type
             type_parameter: (builtin_type))))
       type: (builtin_type)
       block: (block))))
@@ -256,10 +257,10 @@ inflight (var x: num, y: Array<num>, ...z: Array<num>):bool => {};
           name: (identifier)
           type: (immutable_container_type
             type_parameter: (builtin_type)))
-        (variadic_definition
+        (parameter_definition
           variadic: (variadic)
           name: (identifier)
-          type: (variadic_container_type
+          type: (immutable_container_type
             type_parameter: (builtin_type))))
       type: (builtin_type)
       block: (block))))

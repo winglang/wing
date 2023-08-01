@@ -2107,10 +2107,12 @@ impl<'a> TypeChecker<'a> {
 			for i in index_last_item..arg_list.pos_args.len() {
 				let variadic_arg = arg_list.pos_args.get(i).unwrap();
 				if !variadic_arg_types.is_same_type_as(arg_list_types.pos_args.get(i).unwrap()) {
-					self.spanned_error(
-						&variadic_arg.span,
-						"All elements of a variadic argument must be of the same type.".to_string(),
+					let error = format!(
+						"Expected type to be {}, but got {} instead.",
+						variadic_arg_types,
+						arg_list_types.pos_args.get(i).unwrap()
 					);
+					self.spanned_error(&variadic_arg.span, error);
 				}
 				variadic_arg_list.push(variadic_arg);
 			}
@@ -2331,6 +2333,15 @@ impl<'a> TypeChecker<'a> {
 			}
 			TypeAnnotationKind::Function(ast_sig) => {
 				let mut parameters = vec![];
+				for i in 0..ast_sig.parameters.len() {
+					let p = ast_sig.parameters.get(i).unwrap();
+					if p.variadic && i != (ast_sig.parameters.len() - 1) {
+						self.spanned_error(
+							&ast_sig.parameters.get(i).unwrap().name.span,
+							"Variadic parameters must always be the last parameter in a function.".to_string(),
+						);
+					}
+				}
 				for p in ast_sig.parameters.iter() {
 					parameters.push(FunctionParameter {
 						name: p.name.name.clone(),
