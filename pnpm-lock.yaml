@@ -241,6 +241,9 @@ importers:
       '@vscode/vsce':
         specifier: ^2.16.0
         version: 2.16.0
+      '@wingconsole/app':
+        specifier: ^0.2.187
+        version: 0.2.187(constructs@10.1.314)
       eslint:
         specifier: ^8
         version: 8.42.0
@@ -9992,6 +9995,74 @@ packages:
       '@xtuc/long': 4.2.2
     dev: true
 
+  /@wingconsole/app@0.2.187(constructs@10.1.314):
+    resolution: {integrity: sha512-JmQ5x75YSFAcidv5XRHmIcc5RWpGWI8QVUkPvojq+sJfdBKMf+yeumAxu58nCI/en4lgx/YAXFp1QFnV1QfhlQ==}
+    dependencies:
+      '@wingconsole/server': 0.2.194(constructs@10.1.314)
+      express: 4.18.2
+    transitivePeerDependencies:
+      - constructs
+      - supports-color
+    dev: true
+
+  /@wingconsole/server@0.2.194(constructs@10.1.314):
+    resolution: {integrity: sha512-j7jhdCIi6gn69+zwOcZZNYSF/vwI8Kqlvarq5M7dQiy6qDw6h1tmFdlJQWpKtIzMnv7qEjigaoUDIz+ATwI0LA==}
+    dependencies:
+      '@winglang/compiler': 0.21.23(constructs@10.1.314)
+      '@winglang/sdk': 0.21.23(constructs@10.1.314)
+      codespan-wasm: 0.4.0
+      debug: 4.3.4
+      ms: 2.1.3
+    transitivePeerDependencies:
+      - constructs
+      - supports-color
+    dev: true
+
+  /@winglang/compiler@0.21.23(constructs@10.1.314):
+    resolution: {integrity: sha512-Z2kPqNqb7vLEBCFnaGq9cKqHc8KUPkLpmKQsZv8TLEtAUDFVS3rzwwZu0jc9/sIKIh0U48bVhQhqZxtyltPdOA==}
+    engines: {node: '>=v18.0.0'}
+    dependencies:
+      '@winglang/sdk': 0.21.23(constructs@10.1.314)
+    transitivePeerDependencies:
+      - constructs
+    dev: true
+    bundledDependencies:
+      - wasi-js
+
+  /@winglang/sdk@0.21.23(constructs@10.1.314):
+    resolution: {integrity: sha512-E2fk0/75y693MSVoyXvm2Jaoj4+HhaWJtM/FexDIcqa0BgjjhKHaud2QkRjZpezrel2orzb+Y0o7c6//mfS0/g==}
+    engines: {node: '>= 16.16.0'}
+    peerDependencies:
+      constructs: ~10.1.228
+    dependencies:
+      constructs: 10.1.314
+    dev: true
+    bundledDependencies:
+      - '@aws-sdk/client-cloudwatch-logs'
+      - '@aws-sdk/client-dynamodb'
+      - '@aws-sdk/client-elasticache'
+      - '@aws-sdk/client-lambda'
+      - '@aws-sdk/client-s3'
+      - '@aws-sdk/client-secrets-manager'
+      - '@aws-sdk/client-sns'
+      - '@aws-sdk/client-sqs'
+      - '@aws-sdk/types'
+      - '@aws-sdk/util-dynamodb'
+      - '@aws-sdk/util-stream-node'
+      - '@aws-sdk/util-utf8-node'
+      - '@azure/core-paging'
+      - '@azure/identity'
+      - '@azure/storage-blob'
+      - cdktf
+      - cron-parser
+      - esbuild-wasm
+      - express
+      - ioredis
+      - mime-types
+      - safe-stable-stringify
+      - tar
+      - uuid
+
   /@xmldom/xmldom@0.8.8:
     resolution: {integrity: sha512-0LNz4EY8B/8xXY86wMrQ4tz6zEHZv9ehFMJPm8u2gq5lQ71cfRKdaKyxfJAx5aUoyzx0qzgURblTisPGgz3d+Q==}
     engines: {node: '>=10.0.0'}
@@ -11578,7 +11649,6 @@ packages:
       debug: 4.3.4
     transitivePeerDependencies:
       - supports-color
-    dev: false
 
   /collect-v8-coverage@1.0.1:
     resolution: {integrity: sha512-iBPtljfCNcTKNAto0KEtDfZ3qzjJvqE3aTGZsbhjSBlorqpXJlaWWtPO35D+ZImoC3KWejX64o+yPGxhWSTzfg==}
