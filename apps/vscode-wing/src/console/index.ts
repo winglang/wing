@@ -1,9 +1,9 @@
+import type { CreateConsoleAppOptions } from "@wingconsole/app";
+
 import fetch from "node-fetch";
 import open from "open";
 
 export const { createConsoleApp } = importConsoleApp();
-
-import type { CreateConsoleAppOptions } from "@wingconsole/app";
 
 const globalAny = global as any;
 globalAny.fetch = fetch;
