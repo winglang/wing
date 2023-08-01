@@ -99,11 +99,28 @@ export class BucketClient implements IBucketClient {
    * @returns Json content of the object
    */
   public async tryGet(key: string): Promise<string | undefined> {
-    if (await this.exists(key)) {
-      return this.get(key);
+    const command = new GetObjectCommand({
+      Bucket: this.bucketName,
+      Key: key,
+    });
+    let resp: GetObjectOutput;
+    try {
+      resp = await this.s3Client.send(command);
+    } catch (e: any) {
+      if (e.name === "NoSuchKey") {
+        return undefined;
+      }
+      throw new Error((e as Error).stack);
     }
-
-    return undefined;
+    try {
+      return await consumers.text(resp.Body as Readable);
+    } catch (e) {
+      throw new Error(
+        `Object contents could not be read as text (key=${key}): ${
+          (e as Error).stack
+        })}`
+      );
+    }
   }
 
   /**
@@ -235,7 +252,7 @@ export class BucketClient implements IBucketClient {
 
     if (!(await this.exists(key))) {
       throw new Error(
-        `Cannot provide public url for an non-existent key (key=${key})`
+        `Cannot provide public url for a non-existent key (key=${key})`
       );
     }
 
