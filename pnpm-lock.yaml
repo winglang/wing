@@ -741,6 +741,9 @@ importers:
       '@wingconsole/design-system':
         specifier: workspace:^
         version: link:../design-system
+      '@wingconsole/server':
+        specifier: workspace:^
+        version: link:../server
       classnames:
         specifier: ^2.3.2
         version: 2.3.2
@@ -838,9 +841,6 @@ importers:
       '@wingconsole/eslint-plugin':
         specifier: workspace:^
         version: link:../../tools/eslint-plugin
-      '@wingconsole/server':
-        specifier: workspace:^
-        version: link:../server
       '@wingconsole/tsconfig':
         specifier: workspace:^
         version: link:../../tools/tsconfig
