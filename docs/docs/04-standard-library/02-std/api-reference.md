@@ -1574,6 +1574,7 @@ String.
 | <code><a href="#@winglang/sdk.std.String.endsWith">endsWith</a></code> | Does this string end with the given searchString? |
 | <code><a href="#@winglang/sdk.std.String.indexOf">indexOf</a></code> | Returns the index of the first occurrence of searchString found. |
 | <code><a href="#@winglang/sdk.std.String.lowercase">lowercase</a></code> | Returns this string in lower case. |
+| <code><a href="#@winglang/sdk.std.String.replace">replace</a></code> | Replaces occurrences of a substring within a string. |
 | <code><a href="#@winglang/sdk.std.String.split">split</a></code> | Splits string by separator. |
 | <code><a href="#@winglang/sdk.std.String.startsWith">startsWith</a></code> | Does this string start with the given searchString? |
 | <code><a href="#@winglang/sdk.std.String.substring">substring</a></code> | Returns a string between indexStart, indexEnd. |
@@ -1669,6 +1670,30 @@ lowercase(): str
 ```
 
 Returns this string in lower case.
+
+##### `replace` <a name="replace" id="@winglang/sdk.std.String.replace"></a>
+
+```wing
+replace(searchString: str, replaceString: str): str
+```
+
+Replaces occurrences of a substring within a string.
+
+###### `searchString`<sup>Required</sup> <a name="searchString" id="@winglang/sdk.std.String.replace.parameter.searchString"></a>
+
+- *Type:* str
+
+The substring to search for.
+
+---
+
+###### `replaceString`<sup>Required</sup> <a name="replaceString" id="@winglang/sdk.std.String.replace.parameter.replaceString"></a>
+
+- *Type:* str
+
+The replacement substring.
+
+---
 
 ##### `split` <a name="split" id="@winglang/sdk.std.String.split"></a>
 

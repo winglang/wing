@@ -105,6 +105,28 @@ module.exports = function({  }) {
 
 ```
 
+## inflight.$Closure14.js
+```js
+module.exports = function({  }) {
+  class $Closure14 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async handle() {
+      {((cond) => {if (!cond) throw new Error("assertion failed: \"hello world\".replace(\"world\", \"wing\") == \"hello wing\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })("hello world".replace("world","wing"),"hello wing")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: \"pʅɹoʍ oʅʅǝɥ\".replace(\"pʅɹoʍ\", \"ɓuᴉʍ\") == \"ɓuᴉʍ oʅʅǝɥ\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })("pʅɹoʍ oʅʅǝɥ".replace("pʅɹoʍ","ɓuᴉʍ"),"ɓuᴉʍ oʅʅǝɥ")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: \"hello world\".replace(\"wing\", \"☁\") == \"hello world\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })("hello world".replace("wing","☁"),"hello world")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: \"hello world\".replace(\" \", \"-\") == \"hello-world\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })("hello world".replace(" ","-"),"hello-world")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: \"\".replace(\"\", \"hello world\") == \"hello world\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })("".replace("","hello world"),"hello world")))};
+    }
+  }
+  return $Closure14;
+}
+
+```
+
 ## inflight.$Closure2.js
 ```js
 module.exports = function({  }) {
@@ -301,7 +323,7 @@ module.exports = function({  }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:fromJson\",\"${aws_lambda_function.testfromJson_Handler_CA86BEEA.arn}\"],[\"root/Default/Default/test:length\",\"${aws_lambda_function.testlength_Handler_BFD8933F.arn}\"],[\"root/Default/Default/test:at()\",\"${aws_lambda_function.testat_Handler_E4F013BC.arn}\"],[\"root/Default/Default/test:concat()\",\"${aws_lambda_function.testconcat_Handler_E184D86A.arn}\"],[\"root/Default/Default/test:endsWith()\",\"${aws_lambda_function.testendsWith_Handler_9BA42993.arn}\"],[\"root/Default/Default/test:indexOf()\",\"${aws_lambda_function.testindexOf_Handler_BD91EA6F.arn}\"],[\"root/Default/Default/test:lowercase()\",\"${aws_lambda_function.testlowercase_Handler_EAADE79D.arn}\"],[\"root/Default/Default/test:uppercase()\",\"${aws_lambda_function.testuppercase_Handler_352FFA2E.arn}\"],[\"root/Default/Default/test:split()\",\"${aws_lambda_function.testsplit_Handler_4FAF6D9E.arn}\"],[\"root/Default/Default/test:startsWith()\",\"${aws_lambda_function.teststartsWith_Handler_C8752245.arn}\"],[\"root/Default/Default/test:substring()\",\"${aws_lambda_function.testsubstring_Handler_E6617207.arn}\"],[\"root/Default/Default/test:trim()\",\"${aws_lambda_function.testtrim_Handler_403ED8AD.arn}\"],[\"root/Default/Default/test:contains()\",\"${aws_lambda_function.testcontains_Handler_F60865D9.arn}\"]]"
+      "value": "[[\"root/Default/Default/test:fromJson\",\"${aws_lambda_function.testfromJson_Handler_CA86BEEA.arn}\"],[\"root/Default/Default/test:length\",\"${aws_lambda_function.testlength_Handler_BFD8933F.arn}\"],[\"root/Default/Default/test:at()\",\"${aws_lambda_function.testat_Handler_E4F013BC.arn}\"],[\"root/Default/Default/test:concat()\",\"${aws_lambda_function.testconcat_Handler_E184D86A.arn}\"],[\"root/Default/Default/test:endsWith()\",\"${aws_lambda_function.testendsWith_Handler_9BA42993.arn}\"],[\"root/Default/Default/test:indexOf()\",\"${aws_lambda_function.testindexOf_Handler_BD91EA6F.arn}\"],[\"root/Default/Default/test:lowercase()\",\"${aws_lambda_function.testlowercase_Handler_EAADE79D.arn}\"],[\"root/Default/Default/test:uppercase()\",\"${aws_lambda_function.testuppercase_Handler_352FFA2E.arn}\"],[\"root/Default/Default/test:split()\",\"${aws_lambda_function.testsplit_Handler_4FAF6D9E.arn}\"],[\"root/Default/Default/test:startsWith()\",\"${aws_lambda_function.teststartsWith_Handler_C8752245.arn}\"],[\"root/Default/Default/test:substring()\",\"${aws_lambda_function.testsubstring_Handler_E6617207.arn}\"],[\"root/Default/Default/test:trim()\",\"${aws_lambda_function.testtrim_Handler_403ED8AD.arn}\"],[\"root/Default/Default/test:contains()\",\"${aws_lambda_function.testcontains_Handler_F60865D9.arn}\"],[\"root/Default/Default/test:replace()\",\"${aws_lambda_function.testreplace_Handler_83836186.arn}\"]]"
     }
   },
   "provider": {
@@ -379,6 +401,15 @@ module.exports = function({  }) {
           "metadata": {
             "path": "root/Default/Default/test:lowercase()/Handler/IamRole",
             "uniqueId": "testlowercase_Handler_IamRole_AD4BFFD1"
+          }
+        },
+        "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
+      },
+      "testreplace_Handler_IamRole_8269B4F2": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:replace()/Handler/IamRole",
+            "uniqueId": "testreplace_Handler_IamRole_8269B4F2"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
@@ -509,6 +540,16 @@ module.exports = function({  }) {
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
         "role": "${aws_iam_role.testlowercase_Handler_IamRole_AD4BFFD1.name}"
+      },
+      "testreplace_Handler_IamRolePolicy_B1BDF250": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:replace()/Handler/IamRolePolicy",
+            "uniqueId": "testreplace_Handler_IamRolePolicy_B1BDF250"
+          }
+        },
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
+        "role": "${aws_iam_role.testreplace_Handler_IamRole_8269B4F2.name}"
       },
       "testsplit_Handler_IamRolePolicy_2CBFEABE": {
         "//": {
@@ -641,6 +682,16 @@ module.exports = function({  }) {
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
         "role": "${aws_iam_role.testlowercase_Handler_IamRole_AD4BFFD1.name}"
+      },
+      "testreplace_Handler_IamRolePolicyAttachment_3A28D781": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:replace()/Handler/IamRolePolicyAttachment",
+            "uniqueId": "testreplace_Handler_IamRolePolicyAttachment_3A28D781"
+          }
+        },
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "${aws_iam_role.testreplace_Handler_IamRole_8269B4F2.name}"
       },
       "testsplit_Handler_IamRolePolicyAttachment_50460D67": {
         "//": {
@@ -902,6 +953,32 @@ module.exports = function({  }) {
           "subnet_ids": []
         }
       },
+      "testreplace_Handler_83836186": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:replace()/Handler/Default",
+            "uniqueId": "testreplace_Handler_83836186"
+          }
+        },
+        "environment": {
+          "variables": {
+            "WING_FUNCTION_NAME": "Handler-c876baf0",
+            "WING_TARGET": "tf-aws"
+          }
+        },
+        "function_name": "Handler-c876baf0",
+        "handler": "index.handler",
+        "publish": true,
+        "role": "${aws_iam_role.testreplace_Handler_IamRole_8269B4F2.arn}",
+        "runtime": "nodejs18.x",
+        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
+        "s3_key": "${aws_s3_object.testreplace_Handler_S3Object_20DF2856.key}",
+        "timeout": 30,
+        "vpc_config": {
+          "security_group_ids": [],
+          "subnet_ids": []
+        }
+      },
       "testsplit_Handler_4FAF6D9E": {
         "//": {
           "metadata": {
@@ -1127,6 +1204,17 @@ module.exports = function({  }) {
           "metadata": {
             "path": "root/Default/Default/test:lowercase()/Handler/S3Object",
             "uniqueId": "testlowercase_Handler_S3Object_41A6B15B"
+          }
+        },
+        "bucket": "${aws_s3_bucket.Code.bucket}",
+        "key": "<ASSET_KEY>",
+        "source": "<ASSET_SOURCE>"
+      },
+      "testreplace_Handler_S3Object_20DF2856": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:replace()/Handler/S3Object",
+            "uniqueId": "testreplace_Handler_S3Object_20DF2856"
           }
         },
         "bucket": "${aws_s3_bucket.Code.bucket}",
@@ -1529,6 +1617,30 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
     }
+    class $Closure14 extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        this._addInflightOps("handle", "$inflight_init");
+        this.display.hidden = true;
+      }
+      static _toInflightType(context) {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("./inflight.$Closure14.js")({
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const $Closure14Client = ${$Closure14._toInflightType(this).text};
+            const client = new $Closure14Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+    }
     const assertThrows = ((expected, block) => {
       let error = false;
       try {
@@ -1603,6 +1715,12 @@ class $Root extends $stdlib.std.Resource {
     {((cond) => {if (!cond) throw new Error("assertion failed: !\"hello wing\".contains(\"Hello\")")})((!"hello wing".includes("Hello")))};
     {((cond) => {if (!cond) throw new Error("assertion failed: \"hello wing\".contains(\"w\")")})("hello wing".includes("w"))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:contains()",new $Closure13(this,"$Closure13"));
+    {((cond) => {if (!cond) throw new Error("assertion failed: \"hello world\".replace(\"world\", \"wing\") == \"hello wing\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })("hello world".replace("world","wing"),"hello wing")))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: \"pʅɹoʍ oʅʅǝɥ\".replace(\"pʅɹoʍ\", \"ɓuᴉʍ\") == \"ɓuᴉʍ oʅʅǝɥ\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })("pʅɹoʍ oʅʅǝɥ".replace("pʅɹoʍ","ɓuᴉʍ"),"ɓuᴉʍ oʅʅǝɥ")))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: \"hello world\".replace(\"wing\", \"☁\") == \"hello world\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })("hello world".replace("wing","☁"),"hello world")))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: \"hello world\".replace(\" \", \"-\") == \"hello-world\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })("hello world".replace(" ","-"),"hello-world")))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: \"\".replace(\"\", \"hello world\") == \"hello world\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })("".replace("","hello world"),"hello world")))};
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:replace()",new $Closure14(this,"$Closure14"));
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
