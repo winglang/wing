@@ -252,11 +252,11 @@ class $Root extends $stdlib.std.Resource {
     const emptyArray = Object.freeze([]);
     const num_array = emptyArray;
     const emptyArray2 = Object.freeze([]);
-    const clonedArray = [...(emptyArray2)];
-    (clonedArray.push(1));
-    (clonedArray.push(2));
-    (clonedArray.push(((clonedArray.at(0)) + (clonedArray.at(1)))));
-    {((cond) => {if (!cond) throw new Error("assertion failed: clonedArray.at(2) == 3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((clonedArray.at(2)),3)))};
+    const clonedArray2 = [...(emptyArray2)];
+    (clonedArray2.push(1));
+    (clonedArray2.push(2));
+    (clonedArray2.push(((clonedArray2.at(0)) + (clonedArray2.at(1)))));
+    {((cond) => {if (!cond) throw new Error("assertion failed: clonedArray2.at(2) == 3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((clonedArray2.at(2)),3)))};
     const api = this.node.root.newAbstract("@winglang/sdk.cloud.Api",this,"cloud.Api");
     const func = new $Closure1(this,"$Closure1");
     if (true) {

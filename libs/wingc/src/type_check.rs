@@ -2167,7 +2167,7 @@ impl<'a> TypeChecker<'a> {
 					self.types.add_type(Type::Set(inferred))
 				};
 
-				let element_type = match *container_type {
+				let mut element_type = match *container_type {
 					Type::Set(t) => t,
 					Type::MutSet(t) => t,
 					_ => {
@@ -2179,7 +2179,7 @@ impl<'a> TypeChecker<'a> {
 				// Verify all types are the same as the inferred type
 				for v in items.iter() {
 					let (t, _) = self.type_check_exp(v, env);
-					self.validate_type(t, element_type, v);
+					element_type = self.validate_type(t, element_type, v);
 				}
 
 				(container_type, env.phase)
