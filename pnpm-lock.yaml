@@ -201,9 +201,6 @@ importers:
       '@types/vscode':
         specifier: ^1.70.0
         version: 1.70.0
-      '@wingconsole/app':
-        specifier: workspace:^
-        version: link:../wing-console/console/app
       '@wingconsole/server':
         specifier: workspace:^
         version: link:../wing-console/console/server
@@ -289,6 +286,9 @@ importers:
       '@wingconsole/app':
         specifier: workspace:^
         version: link:../wing-console/console/app
+      '@wingconsole/server':
+        specifier: workspace:^
+        version: link:../wing-console/console/server
       '@winglang/compiler':
         specifier: workspace:^
         version: link:../../libs/wingcompiler
@@ -12621,7 +12621,7 @@ packages:
     dependencies:
       semver: 7.5.2
       shelljs: 0.8.5
-      typescript: 5.2.0-dev.20230731
+      typescript: 5.2.0-dev.20230801
     dev: true
 
   /dset@3.1.2:
@@ -21628,8 +21628,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  /typescript@5.2.0-dev.20230731:
-    resolution: {integrity: sha512-RJVLgnDgu67ZrohYy0aBea+5TICfRod36+24zw0bR/KJDQJO9mlIjTC0k+/PKw87fXP5JuUHqepEk15PvFya7A==}
+  /typescript@5.2.0-dev.20230801:
+    resolution: {integrity: sha512-f8FmzL+1+agawPPUzsd38vTiZD/z+RtGax/3+tzxsBP15O/4lMsliTEXRXF7ESC7a1s/f9HsNNRMne438PPZsw==}
     engines: {node: '>=14.17'}
     hasBin: true
     dev: true

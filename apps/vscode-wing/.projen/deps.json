@@ -32,10 +32,6 @@
       "type": "build"
     },
     {
-      "name": "@wingconsole/app",
-      "type": "build"
-    },
-    {
       "name": "eslint-config-prettier",
       "type": "build"
     },
@@ -92,11 +88,6 @@
     {
       "name": "@types/vscode",
       "version": "^1.70.0",
-      "type": "runtime"
-    },
-    {
-      "name": "@wingconsole/app",
-      "version": "workspace:^",
       "type": "runtime"
     },
     {

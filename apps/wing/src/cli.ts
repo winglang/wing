@@ -163,10 +163,10 @@ async function main() {
     .action(runSubCommand("docs"));
 
   program
-    .command("console-path")
-    .description("Print the path to the Wing Console")
+    .command("console-app-path")
+    .description("Print the path to the Wing Console App package")
     .hook("preAction", collectAnalyticsHook)
-    .action(runSubCommand("consolePath"));
+    .action(runSubCommand("consoleAppPath"));
 
   program.hook("postAction", exportAnalyticsHook);
 

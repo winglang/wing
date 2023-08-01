@@ -4,13 +4,13 @@ import path from "path";
 import fetch from "node-fetch";
 import open from "open";
 
-const getConsolePath = () => {
-  const consolePath = execSync("wing console-path").toString().trim();
-  return path.resolve(consolePath);
+const getConsoleAppPath = () => {
+  return path.resolve(execSync("wing console-app-path").toString().trim());
 };
 
 let createConsoleApp: any;
-import(getConsolePath())
+
+import(getConsoleAppPath())
   .then((consoleModule) => {
     const { createConsoleApp: absolutePath } = consoleModule;
     createConsoleApp = absolutePath;
