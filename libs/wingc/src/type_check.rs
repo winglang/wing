@@ -25,7 +25,7 @@ use jsii_importer::JsiiImporter;
 use std::collections::HashMap;
 use std::fmt::{Debug, Display};
 use std::iter::FilterMap;
-use std::path::Path;
+use std::path::{Path, PathBuf};
 use symbol_env::{StatementIdx, SymbolEnv};
 use wingii::fqn::FQN;
 use wingii::type_system::TypeSystem;
@@ -228,9 +228,6 @@ pub struct Namespace {
 	// the types after initial compilation.
 	#[derivative(Debug = "ignore")]
 	pub loaded: bool,
-
-	// Flag to track if the namespace refers to a module that is safe to bring
-	pub is_bringable: bool,
 }
 
 pub type NamespaceRef = UnsafeRef<Namespace>;
@@ -1085,12 +1082,15 @@ struct ResolvedExpression {
 	type_: TypeRef,
 	phase: Phase,
 }
+
 pub struct Types {
 	// TODO: Remove the box and change TypeRef and NamespaceRef to just be indices into the types array and namespaces array respectively
 	// Note: we need the box so reallocations of the vec while growing won't change the addresses of the types since they are referenced from the TypeRef struct
 	types: Vec<Box<Type>>,
 	namespaces: Vec<Box<Namespace>>,
 	symbol_envs: Vec<Box<SymbolEnv>>,
+	/// A map from source file name to the symbol environment for that file (and whether that file is safe to bring)
+	source_file_envs: IndexMap<PathBuf, (SymbolEnvRef, bool)>,
 	pub libraries: SymbolEnv, // ?
 	numeric_idx: usize,
 	string_idx: usize,
@@ -1139,6 +1139,7 @@ impl Types {
 			types,
 			namespaces: Vec::new(),
 			symbol_envs: Vec::new(),
+			source_file_envs: IndexMap::new(),
 			libraries,
 			numeric_idx,
 			string_idx,
@@ -2264,32 +2265,21 @@ impl<'a> TypeChecker<'a> {
 		expected_types[0]
 	}
 
-	pub fn type_check_module(&mut self, source_path: &Path, scope: &Scope) {
+	pub fn type_check_file(&mut self, source_path: &Path, scope: &Scope) {
 		CompilationContext::set(CompilationPhase::TypeChecking, &scope.span);
 		self.type_check_scope(scope);
 
 		let is_bringable = check_is_bringable(scope);
 
-		// Save the module's symbol environment to `self.types.libraries`
-		// so it can be looked up when another file tries to `bring` this module
-		let sanitized_path = sanitize_dots(source_path.to_str().expect("not a safe file path"));
+		// TODO: remove is_bringable field from Namespace
+
+		// Save the module's symbol environment to `self.types.source_file_envs`
+		// (replacing any existing ones if there was already a SymbolEnv from a previous compilation)
 		let env = scope.env.borrow().unwrap();
-		let ns = self.types.add_namespace(Namespace {
-			name: sanitized_path.clone(),
-			env: SymbolEnv::new(Some(env.get_ref()), env.return_type, false, false, env.phase, 0),
-			loaded: true,
-			is_bringable,
-		});
-		if let Err(e) = self.types.libraries.define(
-			&Symbol {
-				name: sanitized_path,
-				span: WingSpan::default(),
-			},
-			SymbolKind::Namespace(ns),
-			StatementIdx::Top,
-		) {
-			self.type_error(e);
-		}
+		self
+			.types
+			.source_file_envs
+			.insert(source_path.to_owned(), (env, is_bringable));
 	}
 
 	fn type_check_scope(&mut self, scope: &Scope) {
@@ -2670,30 +2660,28 @@ impl<'a> TypeChecker<'a> {
 						alias = identifier.as_ref().unwrap();
 					}
 					BringSource::WingFile(name) => {
-						let lookup_name = sanitize_dots(&name.name);
-						let lookup_result = self.types.libraries.lookup_nested_str(&lookup_name, None);
-						match lookup_result {
-							LookupResult::Found(kind, _) => match kind {
-								SymbolKind::Type(_) => panic!("expected a namespace, found a type"),
-								SymbolKind::Variable(_) => panic!("expected a namespace, found a variable"),
-								SymbolKind::Namespace(nsref) => {
-									if !nsref.is_bringable {
-										self.spanned_error(name, format!("Cannot bring \"{}\" - modules with statements besides classes, interfaces, enums, and structs cannot be brought", name));
-									}
-									if let Err(e) = env.define(
-										identifier.as_ref().unwrap(),
-										SymbolKind::Namespace(*nsref),
-										StatementIdx::Top,
-									) {
-										self.type_error(e);
-									}
-								}
-							},
-							LookupResult::NotFound(_) => {
-								self.spanned_error(stmt, format!("could not find types for \"{}\" (compiler bug)", name))
+						let (mut env, is_bringable) = match self.types.source_file_envs.get(Path::new(&name.name)) {
+							Some((env, is_bringable)) => (*env, *is_bringable),
+							None => {
+								self.spanned_error(stmt, format!("Could not find Wing file \"{}\"", name));
+								return;
 							}
-							LookupResult::DefinedLater => panic!("defined later error"),
-							LookupResult::ExpectedNamespace(_) => panic!("expected namespace error"),
+						};
+						if !is_bringable {
+							self.spanned_error(stmt, format!("Cannot bring \"{}\" - modules with statements besides classes, interfaces, enums, and structs cannot be brought", name));
+							return;
+						}
+						let ns = self.types.add_namespace(Namespace {
+							name: name.name.to_string(),
+							env: SymbolEnv::new(Some(env.get_ref()), env.return_type, false, false, env.phase, 0),
+							loaded: true,
+						});
+						if let Err(e) = env.define(
+							identifier.as_ref().unwrap(),
+							SymbolKind::Namespace(ns),
+							StatementIdx::Top,
+						) {
+							self.type_error(e);
 						}
 						return;
 					}
@@ -4405,7 +4393,7 @@ pub fn resolve_super_method(method: &Symbol, env: &SymbolEnv, types: &Types) -> 
 
 pub fn import_udt_from_jsii(
 	wing_types: &mut Types,
-	jsii_types: &mut TypeSystem,
+	jsii_types: &TypeSystem,
 	user_defined_type: &UserDefinedType,
 	jsii_imports: &[JsiiImportSpec],
 ) -> bool {
@@ -4483,12 +4471,6 @@ fn check_is_bringable(scope: &Scope) -> bool {
 
 	// A module is bringable if it only contains valid statement kinds
 	scope.statements.iter().all(valid_stmt)
-}
-
-fn sanitize_dots(s: &str) -> String {
-	let mut s = s.to_string();
-	s = s.replace(".", "-");
-	s
 }
 
 #[cfg(test)]

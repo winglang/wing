@@ -1,6 +1,6 @@
 use crate::ast::*;
 use crate::closure_transform::{CLOSURE_CLASS_PREFIX, PARENT_THIS_NAME};
-use crate::lsp::sync::FILES;
+use crate::lsp::sync::PROJECT_DATA;
 use crate::visit::Visit;
 use crate::wasm_util::{ptr_to_string, string_to_combined_ptr, WASM_RETURN_ERROR};
 use lsp_types::{DocumentSymbol, SymbolKind};
@@ -90,21 +90,22 @@ pub unsafe extern "C" fn wingc_on_document_symbol(ptr: u32, len: u32) -> u64 {
 }
 
 pub fn on_document_symbols(params: lsp_types::DocumentSymbolParams) -> Vec<DocumentSymbol> {
-	FILES.with(|files| {
-		let files = files.borrow();
-		let parse_result = files.get(&params.text_document.uri);
-		let parse_result = parse_result.unwrap();
-		let scope = &parse_result.scope;
+	vec![]
+	// FILES.with(|files| {
+	// 	let files = files.borrow();
+	// 	let parse_result = files.get(&params.text_document.uri);
+	// 	let parse_result = parse_result.unwrap();
+	// 	let scope = &parse_result.scope;
 
-		let mut visitor = DocumentSymbolVisitor::new();
-		visitor.visit_scope(scope);
+	// 	let mut visitor = DocumentSymbolVisitor::new();
+	// 	visitor.visit_scope(scope);
 
-		visitor
-			.document_symbols
-			.into_iter()
-			.filter(|sym| filter_symbol(sym))
-			.collect()
-	})
+	// 	visitor
+	// 		.document_symbols
+	// 		.into_iter()
+	// 		.filter(|sym| filter_symbol(sym))
+	// 		.collect()
+	// })
 }
 
 fn filter_symbol(symbol: &DocumentSymbol) -> bool {

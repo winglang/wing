@@ -202,7 +202,6 @@ impl<'a> JsiiImporter<'a> {
 				name: type_name.assembly().to_string(),
 				env: SymbolEnv::new(None, self.wing_types.void(), false, false, Phase::Preflight, 0),
 				loaded: false,
-				is_bringable: true,
 			});
 			self
 				.wing_types
@@ -245,7 +244,6 @@ impl<'a> JsiiImporter<'a> {
 					name: namespace_name.to_string(),
 					env: SymbolEnv::new(None, self.wing_types.void(), false, false, Phase::Preflight, 0),
 					loaded: false,
-					is_bringable: true,
 				});
 				parent_ns
 					.env
@@ -927,7 +925,6 @@ impl<'a> JsiiImporter<'a> {
 					name: assembly.name.clone(),
 					env: SymbolEnv::new(None, self.wing_types.void(), false, false, Phase::Preflight, 0),
 					loaded: false,
-					is_bringable: true,
 				});
 				self
 					.wing_types

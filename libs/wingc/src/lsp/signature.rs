@@ -6,7 +6,7 @@ use lsp_types::{
 
 use crate::ast::{CalleeKind, Expr, ExprKind, NewExpr, Symbol};
 use crate::docs::Documented;
-use crate::lsp::sync::FILES;
+use crate::lsp::sync::PROJECT_DATA;
 
 use crate::type_check::symbol_env::SymbolEnvRef;
 use crate::type_check::{resolve_super_method, resolve_user_defined_type, CLASS_INIT_NAME};
@@ -28,151 +28,153 @@ pub unsafe extern "C" fn wingc_on_signature_help(ptr: u32, len: u32) -> u64 {
 }
 
 pub fn on_signature_help(params: lsp_types::SignatureHelpParams) -> Option<SignatureHelp> {
-	FILES.with(|files| {
-		let files = files.borrow();
-		let uri = params.text_document_position_params.text_document.uri;
-		let file_data = files.get(&uri).expect("File must be open to get completions");
+	None
+	// PROJECT_DATA.with(|files| {
+	// 	let files = files.borrow();
+	// 	let uri = params.text_document_position_params.text_document.uri;
+	// 	let file_data = files.get(&uri).expect("File must be open to get completions");
 
-		let root_scope = &file_data.scope;
+	// 	let file = uri.to_file_path().ok().expect("LSP only works on real filesystems");
+	// 	let root_scope = &file_data.asts.get(&file).unwrap();
 
-		let mut scope_visitor = ScopeVisitor::new(params.text_document_position_params.position);
-		scope_visitor.visit_scope(root_scope);
-		let expr = scope_visitor.call_expr?;
-		let env = scope_visitor.call_env?;
+	// 	let mut scope_visitor = ScopeVisitor::new(params.text_document_position_params.position);
+	// 	scope_visitor.visit_scope(root_scope);
+	// 	let expr = scope_visitor.call_expr?;
+	// 	let env = scope_visitor.call_env?;
 
-		let sig_data: (
-			crate::type_check::UnsafeRef<crate::type_check::Type>,
-			&crate::ast::ArgList,
-		) = match &expr.kind {
-			ExprKind::New(new_expr) => {
-				let NewExpr { class, arg_list, .. } = new_expr;
-				let Some(udt) = class.as_type_reference() else {
-					return None;
-				};
+	// 	let sig_data: (
+	// 		crate::type_check::UnsafeRef<crate::type_check::Type>,
+	// 		&crate::ast::ArgList,
+	// 	) = match &expr.kind {
+	// 		ExprKind::New(new_expr) => {
+	// 			let NewExpr { class, arg_list, .. } = new_expr;
+	// 			let Some(udt) = class.as_type_reference() else {
+	// 				return None;
+	// 			};
 
-				let Some(t) = resolve_user_defined_type(&udt, root_scope.env.borrow().as_ref()?, 0).ok() else {
-					return None;
-				};
+	// 			let Some(t) = resolve_user_defined_type(&udt, root_scope.env.borrow().as_ref()?, 0).ok() else {
+	// 				return None;
+	// 			};
 
-				let init_lookup = t.as_class()?.env.lookup(
-					&Symbol {
-						name: CLASS_INIT_NAME.into(),
-						span: Default::default(),
-					},
-					None,
-				);
+	// 			let init_lookup = t.as_class()?.env.lookup(
+	// 				&Symbol {
+	// 					name: CLASS_INIT_NAME.into(),
+	// 					span: Default::default(),
+	// 				},
+	// 				None,
+	// 			);
 
-				(init_lookup?.as_variable()?.type_, arg_list)
-			}
-			ExprKind::Call { callee, arg_list } => {
-				let t = match callee {
-					CalleeKind::Expr(expr) => file_data.types.get_expr_type(expr),
-					CalleeKind::SuperCall(method) => resolve_super_method(method, &env, &file_data.types)
-						.ok()
-						.map_or(file_data.types.error(), |t| t.0),
-				};
+	// 			(init_lookup?.as_variable()?.type_, arg_list)
+	// 		}
+	// 		ExprKind::Call { callee, arg_list } => {
+	// 			let t = match callee {
+	// 				CalleeKind::Expr(expr) => file_data.types.get_expr_type(expr),
+	// 				CalleeKind::SuperCall(method) => resolve_super_method(method, &env, &file_data.types)
+	// 					.ok()
+	// 					.map_or(file_data.types.error(), |t| t.0),
+	// 			};
 
-				(t, arg_list)
-			}
-			_ => return None,
-		};
+	// 			(t, arg_list)
+	// 		}
+	// 		_ => return None,
+	// 	};
 
-		let sig = sig_data.0.as_function_sig()?;
-		let provided_args = sig_data.1;
+	// 	let sig = sig_data.0.as_function_sig()?;
+	// 	let provided_args = sig_data.1;
 
-		let positional_arg_pos = provided_args
-			.pos_args
-			.iter()
-			.enumerate()
-			.filter(|(_, arg)| params.text_document_position_params.position <= arg.span.end.into())
-			.count();
-		let named_arg_pos = provided_args
-			.named_args
-			.iter()
-			.find(|arg| arg.1.span.contains(&params.text_document_position_params.position));
+	// 	let positional_arg_pos = provided_args
+	// 		.pos_args
+	// 		.iter()
+	// 		.enumerate()
+	// 		.filter(|(_, arg)| params.text_document_position_params.position <= arg.span.end.into())
+	// 		.count();
+	// 	let named_arg_pos = provided_args
+	// 		.named_args
+	// 		.iter()
+	// 		.find(|arg| arg.1.span.contains(&params.text_document_position_params.position));
 
-		let param_data = sig
-			.parameters
-			.iter()
-			.enumerate()
-			.map(|p| {
-				if p.0 == sig.parameters.len() - 1 && p.1.typeref.maybe_unwrap_option().is_struct() {
-					format!("...{}", p.1.name)
-				} else {
-					format!("{}: {}", p.1.name, p.1.typeref)
-				}
-			})
-			.collect_vec();
+	// 	let param_data = sig
+	// 		.parameters
+	// 		.iter()
+	// 		.enumerate()
+	// 		.map(|p| {
+	// 			if p.0 == sig.parameters.len() - 1 && p.1.typeref.maybe_unwrap_option().is_struct() {
+	// 				format!("...{}", p.1.name)
+	// 			} else {
+	// 				format!("{}: {}", p.1.name, p.1.typeref)
+	// 			}
+	// 		})
+	// 		.collect_vec();
 
-		let active_parameter = if named_arg_pos.is_some() {
-			sig.parameters.len() - 1
-		} else {
-			provided_args.pos_args.len() - positional_arg_pos
-		}
-		.min(param_data.len() - 1)
-		.max(0);
+	// 	let active_parameter = if named_arg_pos.is_some() {
+	// 		sig.parameters.len() - 1
+	// 	} else {
+	// 		provided_args.pos_args.len() - positional_arg_pos
+	// 	}
+	// 	.min(param_data.len() - 1)
+	// 	.max(0);
 
-		let param_text = param_data.join(", ");
-		let label = format!("({}): {}", param_text, sig.return_type);
+	// 	let param_text = param_data.join(", ");
+	// 	let label = format!("({}): {}", param_text, sig.return_type);
 
-		let signature_info = SignatureInformation {
-			label,
-			documentation: Some(Documentation::MarkupContent(MarkupContent {
-				kind: MarkupKind::Markdown,
-				value: sig_data.0.render_docs(),
-			})),
-			parameters: Some(
-				sig
-					.parameters
-					.iter()
-					.enumerate()
-					.map(|p| {
-						let last_arg = p.0 == sig.parameters.len() - 1;
-						let p_type = p.1.typeref;
-						let structy = p_type.maybe_unwrap_option();
-						let structy = structy.as_struct();
-						let p_docs = p_type.render_docs();
-						let p_docs = if p_docs.is_empty() {
-							None
-						} else {
-							Some(Documentation::MarkupContent(MarkupContent {
-								kind: MarkupKind::Markdown,
-								value: p_docs,
-							}))
-						};
-						ParameterInformation {
-							label: if last_arg && structy.is_some() {
-								ParameterLabel::Simple(format!("...{}", p.1.name))
-							} else {
-								ParameterLabel::Simple(param_data.get(p.0).unwrap_or(&format!("{}: {}", p.0, p_type)).clone())
-							},
-							documentation: if structy.is_some() {
-								//check if this is the last arg, allowing for expansion syntax
-								if p.0 == sig.parameters.len() - 1 {
-									Some(Documentation::MarkupContent(MarkupContent {
-										kind: MarkupKind::Markdown,
-										value: p_type.render_docs(),
-									}))
-								} else {
-									p_docs
-								}
-							} else {
-								p_docs
-							},
-						}
-					})
-					.collect(),
-			),
+	// 	let signature_info = SignatureInformation {
+	// 		label,
+	// 		documentation: Some(Documentation::MarkupContent(MarkupContent {
+	// 			kind: MarkupKind::Markdown,
+	// 			value: sig_data.0.render_docs(),
+	// 		})),
+	// 		parameters: Some(
+	// 			sig
+	// 				.parameters
+	// 				.iter()
+	// 				.enumerate()
+	// 				.map(|p| {
+	// 					let last_arg = p.0 == sig.parameters.len() - 1;
+	// 					let p_type = p.1.typeref;
+	// 					let structy = p_type.maybe_unwrap_option();
+	// 					let structy = structy.as_struct();
+	// 					let p_docs = p_type.render_docs();
+	// 					let p_docs = if p_docs.is_empty() {
+	// 						None
+	// 					} else {
+	// 						Some(Documentation::MarkupContent(MarkupContent {
+	// 							kind: MarkupKind::Markdown,
+	// 							value: p_docs,
+	// 						}))
+	// 					};
+	// 					ParameterInformation {
+	// 						label: if last_arg && structy.is_some() {
+	// 							ParameterLabel::Simple(format!("...{}", p.1.name))
+	// 						} else {
+	// 							ParameterLabel::Simple(param_data.get(p.0).unwrap_or(&format!("{}: {}", p.0, p_type)).clone())
+	// 						},
+	// 						documentation: if structy.is_some() {
+	// 							//check if this is the last arg, allowing for expansion syntax
+	// 							if p.0 == sig.parameters.len() - 1 {
+	// 								Some(Documentation::MarkupContent(MarkupContent {
+	// 									kind: MarkupKind::Markdown,
+	// 									value: p_type.render_docs(),
+	// 								}))
+	// 							} else {
+	// 								p_docs
+	// 							}
+	// 						} else {
+	// 							p_docs
+	// 						},
+	// 					}
+	// 				})
+	// 				.collect(),
+	// 		),
 
-			active_parameter: Some(active_parameter as u32),
-		};
+	// 		active_parameter: Some(active_parameter as u32),
+	// 	};
 
-		Some(SignatureHelp {
-			signatures: vec![signature_info],
-			active_signature: None,
-			active_parameter: None,
-		})
-	})
+	// 	Some(SignatureHelp {
+	// 		signatures: vec![signature_info],
+	// 		active_signature: None,
+	// 		active_parameter: None,
+	// 	})
+	// })
 }
 
 /// This visitor is used to find the scope

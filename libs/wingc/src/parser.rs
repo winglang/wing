@@ -1,8 +1,7 @@
 use indexmap::{IndexMap, IndexSet};
 use petgraph::algo::tarjan_scc;
 use petgraph::algo::toposort;
-use petgraph::graph::NodeIndex;
-use petgraph::prelude::DiGraph;
+use petgraph::visit::EdgeRef;
 use phf::{phf_map, phf_set};
 use std::cell::RefCell;
 use std::collections::HashSet;
@@ -132,128 +131,186 @@ static RESERVED_WORDS: phf::Set<&'static str> = phf_set! {
 	"Object",
 };
 
-pub struct ParseProjectOutput {
-	pub files: Files,
-	pub tree_sitter_trees: IndexMap<PathBuf, tree_sitter::Tree>,
-	pub asts: IndexMap<PathBuf, Scope>,
-	pub topo_sorted_files: Vec<PathBuf>,
+#[derive(Default)]
+pub struct FileGraph {
+	graph: petgraph::graph::DiGraph<PathBuf, ()>,
+	path_to_node_index: IndexMap<PathBuf, petgraph::graph::NodeIndex>,
 }
 
-pub fn parse_wing_project(init_path: &Path) -> ParseProjectOutput {
-	// a stack of files that need to be parsed
-	let mut needs_parsing: Vec<PathBuf> = vec![normalize_path(init_path, None)];
-	// store all source files in memory so we can look up spans
-	let mut files = Files::new();
-	// collect all tree sitter trees in case they are needed by the LSP
-	let mut tree_sitter_trees = IndexMap::new();
-	// collect all parsed trees so they can be passed to later phases of the compiler
-	let mut asts = IndexMap::new();
-	// build a dependency graph of all files
-	let mut dep_graph = DiGraph::<PathBuf, ()>::new();
-	// keep track of mapping from paths to node indices in the graph
-	let mut path_to_node: IndexMap<PathBuf, NodeIndex> = IndexMap::new();
+impl FileGraph {
+	/// Updates the graph to reflect the new file structure
+	/// e.g. if file A depended on B, and now it depends on C, then
+	/// this function will remove the edge from A to B, and add an edge
+	/// from A to C.
+	fn update_file(&mut self, from_path: &Path, to_paths: &[PathBuf]) {
+		let from_node_index = self.get_or_insert_node_index(from_path);
 
-	// we can reuse the tree sitter parser
-	let language = tree_sitter_wing::language();
-	let mut tree_sitter_parser = tree_sitter::Parser::new();
-	tree_sitter_parser.set_language(language).unwrap();
+		// remove all edges from this node
+		let outgoing_edges = self
+			.graph
+			.edges_directed(from_node_index, petgraph::Direction::Outgoing)
+			.map(|edge| edge.id())
+			.collect::<Vec<_>>();
+		for edge in outgoing_edges {
+			self.graph.remove_edge(edge);
+		}
 
-	while !needs_parsing.is_empty() {
-		let curr_path = needs_parsing.remove(0);
-		if files.contains_file(&curr_path) {
+		// add new edges from this node
+		for to_path in to_paths {
+			let to_node_index = self.get_or_insert_node_index(to_path);
+			self.graph.add_edge(from_node_index, to_node_index, ());
+		}
+	}
+
+	fn get_or_insert_node_index(&mut self, path: &Path) -> petgraph::graph::NodeIndex {
+		if let Some(node_index) = self.path_to_node_index.get(path) {
+			return *node_index;
+		}
+
+		let node_index = self.graph.add_node(path.to_owned());
+		self.path_to_node_index.insert(path.to_owned(), node_index);
+		node_index
+	}
+
+	/// Returns a list of files in the order they should be compiled
+	/// Or a list of files that are part of a cycle, if one exists
+	fn toposort(&self) -> Result<Vec<PathBuf>, Vec<PathBuf>> {
+		match toposort(&self.graph, None) {
+			Ok(indices) => Ok(indices.into_iter().map(|n| self.graph[n].clone()).collect::<Vec<_>>()),
+			Err(_) => {
+				// toposort function in the `petgraph` library doesn't return the cycle itself,
+				// so we need to use Tarjan's algorithm to find one instead
+				let strongly_connected_components = tarjan_scc(&self.graph);
+				Err(
+					strongly_connected_components[0]
+						.iter()
+						.map(|n| self.graph[*n].clone())
+						.collect::<Vec<_>>(),
+				)
+			}
+		}
+	}
+}
+
+/// Parse a Wing file and all of the Wing files it depends on into a collection of ASTs.
+/// The file's text can be passed in directly through `source_text` for use cases like the
+/// LSP (where the file may not be saved to disk yet), otherwise the file will be
+/// read from disk.
+///
+/// Returns a topological ordering of Wing files, where each file only depends on
+/// files that come before it in the ordering.
+pub fn parse_wing_project(
+	init_path: &Path,
+	init_text: Option<String>,
+	files: &mut Files,
+	file_graph: &mut FileGraph,
+	tree_sitter_trees: &mut IndexMap<PathBuf, tree_sitter::Tree>,
+	asts: &mut IndexMap<PathBuf, Scope>,
+) -> Vec<PathBuf> {
+	// Fetch the initial file's text from disk if it wasn't passed in directly
+	let source_text = init_text.unwrap_or_else(|| get_source_text(&init_path));
+
+	// Parse the initial file (even if we have already seen it before)
+	let (tree_sitter_tree, ast, dependent_wing_files) = parse_wing_file(init_path, &source_text);
+
+	// Update our files collection with the new source text. For a fresh compilation,
+	// this will be the first time we've seen this file. In the LSP we might already have
+	// text from a previous compilation, so we'll replace the contents.
+	files.update_file(&init_path, source_text);
+
+	// Update our collections of trees and ASTs and our file graph
+	tree_sitter_trees.insert(init_path.to_owned(), tree_sitter_tree);
+	asts.insert(init_path.to_owned(), ast);
+	file_graph.update_file(init_path, &dependent_wing_files);
+
+	// Track which files still need parsing in a queue
+	let mut files_to_parse = dependent_wing_files;
+
+	// Parse all remaining files in the project (skipping files we have seen before)
+	while let Some(file_to_parse) = files_to_parse.pop() {
+		// Check if the file is already stored, in which case we've parsed it before
+		if files.contains_file(&file_to_parse) {
 			continue;
 		}
 
-		let source = match fs::read(&curr_path) {
-			Ok(source) => source,
-			Err(err) => {
-				report_diagnostic(Diagnostic {
-					message: format!("Error reading source file: {}: {}", curr_path.display(), err),
-					span: None,
-				});
-				continue;
-			}
-		};
+		// Fetch the file's text from disk
+		let file_text = get_source_text(&file_to_parse);
 
-		let tree_sitter_tree = match tree_sitter_parser.parse(&source, None) {
-			Some(tree) => tree,
-			None => {
-				report_diagnostic(Diagnostic {
-					message: format!("Error parsing source file: {}", curr_path.display()),
-					span: None,
-				});
-				continue;
-			}
-		};
-		tree_sitter_trees.insert(curr_path.clone(), tree_sitter_tree.clone());
+		// Parse the file
+		let (tree_sitter_tree, ast, dependent_wing_files) = parse_wing_file(&file_to_parse, &file_text);
 
-		let tree_sitter_root = tree_sitter_tree.root_node();
+		// Update the file text in our collection
+		files.update_file(&file_to_parse, file_text);
 
-		// Parse the single file, and collect a list of all wing files that it references
-		let parser = Parser::new(&source, curr_path.to_string_lossy().to_string(), &mut files);
-		let (scope, dependent_wing_files) = parser.parse(&tree_sitter_root);
+		// Update our collections of trees and ASTs and our file graph
+		tree_sitter_trees.insert(file_to_parse.clone(), tree_sitter_tree);
+		asts.insert(file_to_parse.clone(), ast);
+		file_graph.update_file(&file_to_parse, &dependent_wing_files);
 
-		let curr_node = *path_to_node.entry(curr_path.clone()).or_insert_with(|| {
-			let node = dep_graph.add_node(curr_path.clone());
-			node
-		});
-
-		for dep in dependent_wing_files {
-			let dep_node = *path_to_node.entry(dep.clone()).or_insert_with(|| {
-				let node = dep_graph.add_node(dep.clone());
-				node
-			});
-			dep_graph.add_edge(dep_node, curr_node, ());
-			needs_parsing.push(dep);
-		}
-
-		asts.insert(curr_path, scope);
+		// Add the file's dependencies to the list of files to parse
+		files_to_parse.extend(dependent_wing_files);
 	}
 
-	// produce a list of files in a topological ordering, so that we can type check
-	// source files that don't depend on any others first, then the ones that depend
-	// on those, and so on
-	let topo_sorted_files = match toposort(&dep_graph, None) {
-		Ok(indices) => indices.into_iter().map(|n| dep_graph[n].clone()).collect::<Vec<_>>(),
-		Err(_) => {
-			// toposort function in the `petgraph` library doesn't return the cycle itself,
-			// so we need to use Tarjan's algorithm to find one instead
-			let strongly_connected_components = tarjan_scc(&dep_graph);
-			let component1 = strongly_connected_components[0]
+	// Return the files in the order they should be compiled
+	match file_graph.toposort() {
+		Ok(files) => files,
+		Err(cycle) => {
+			let formatted_cycle = cycle
 				.iter()
-				.map(|n| format!("- {}\n", dep_graph[*n].to_str().unwrap()))
+				.map(|path| format!("- {}\n", path.to_str().unwrap()))
 				.collect::<String>();
-			let component1 = component1.trim_end();
 
 			report_diagnostic(Diagnostic {
 				message: format!(
 					"Could not compile \"{}\" due to cyclic bring statements:\n{}",
 					init_path.display(),
-					component1
+					formatted_cycle.trim_end()
 				),
 				span: None,
 			});
-			// just return the files in the order they were parsed
-			dep_graph
-				.node_indices()
-				.map(|n| dep_graph[n].clone())
-				.collect::<Vec<_>>()
+			vec![]
 		}
-	};
-
-	ParseProjectOutput {
-		files,
-		asts,
-		tree_sitter_trees,
-		topo_sorted_files,
 	}
 }
 
+fn parse_wing_file(source_path: &Path, source_text: &str) -> (tree_sitter::Tree, Scope, Vec<PathBuf>) {
+	let language = tree_sitter_wing::language();
+	let mut tree_sitter_parser = tree_sitter::Parser::new();
+	tree_sitter_parser.set_language(language).unwrap();
+
+	let tree_sitter_tree = match tree_sitter_parser.parse(&source_text.as_bytes(), None) {
+		Some(tree) => tree,
+		None => {
+			panic!("Error parsing source file with tree-sitter: {}", source_path.display());
+		}
+	};
+
+	let tree_sitter_root = tree_sitter_tree.root_node();
+
+	let parser = Parser::new(&source_text.as_bytes(), source_path.to_string_lossy().to_string());
+	let (scope, dependent_wing_files) = parser.parse(&tree_sitter_root);
+	(tree_sitter_tree, scope, dependent_wing_files)
+}
+
+fn get_source_text(source_path: &Path) -> String {
+	match fs::read_to_string(&source_path) {
+		Ok(source) => source,
+		Err(e) => {
+			report_diagnostic(Diagnostic {
+				message: format!("Failed to read file: {}", e),
+				span: None,
+			});
+			String::new()
+		}
+	}
+}
+
+/// Parses a single Wing source file.
 pub struct Parser<'a> {
+	/// Source code of the file being parsed
 	pub source: &'a [u8],
 	pub source_name: String,
 	pub error_nodes: RefCell<HashSet<usize>>,
-	files: RefCell<&'a mut Files>,
 	// Nesting level within JSON literals, a value larger than 0 means we're currently in a JSON literal
 	in_json: RefCell<u64>,
 	is_in_mut_json: RefCell<bool>,
@@ -264,11 +321,10 @@ pub struct Parser<'a> {
 }
 
 impl<'s> Parser<'s> {
-	pub fn new(source: &'s [u8], source_name: String, files: &'s mut Files) -> Self {
+	pub fn new(source: &'s [u8], source_name: String) -> Self {
 		Self {
 			source,
 			source_name,
-			files: RefCell::new(files),
 			error_nodes: RefCell::new(HashSet::new()),
 			is_in_loop: RefCell::new(false),
 			// This is similar to what we do in the type_checker, but we need to know 2 things when
@@ -282,16 +338,6 @@ impl<'s> Parser<'s> {
 	}
 
 	pub fn parse(self, root: &Node) -> (Scope, Vec<PathBuf>) {
-		match self.files.borrow_mut().add_file(
-			PathBuf::from(self.source_name.clone()),
-			String::from_utf8(self.source.to_vec()).expect("Invalid UTF-8 sequence"),
-		) {
-			Ok(_) => {}
-			Err(err) => {
-				panic!("Failed adding source file to parser: {}", err);
-			}
-		}
-
 		let scope = match root.kind() {
 			"source" => self.build_scope(&root, Phase::Preflight),
 			_ => Scope {
@@ -437,7 +483,6 @@ impl<'s> Parser<'s> {
 		WingSpan {
 			start: node_range.start_point.into(),
 			end: node_range.end_point.into(),
-			// TODO: Implement multi-file support
 			file_id: self.source_name.to_string(),
 		}
 	}

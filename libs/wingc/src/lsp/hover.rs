@@ -4,7 +4,7 @@ use crate::ast::{
 };
 use crate::diagnostic::WingSpan;
 use crate::docs::Documented;
-use crate::lsp::sync::FILES;
+use crate::lsp::sync::PROJECT_DATA;
 use crate::type_check::symbol_env::LookupResult;
 use crate::type_check::{resolve_super_method, ClassLike, Type, Types, CLASS_INFLIGHT_INIT_NAME, CLASS_INIT_NAME};
 use crate::visit::{self, Visit};
@@ -382,36 +382,39 @@ pub unsafe extern "C" fn wingc_on_hover(ptr: u32, len: u32) -> u64 {
 	}
 }
 pub fn on_hover(params: lsp_types::HoverParams) -> Option<Hover> {
-	FILES.with(|files| {
-		let files = files.borrow();
-		let file_data = files.get(&params.text_document_position_params.text_document.uri.clone());
-		let file_data = file_data.expect(
-			format!(
-				"Compiled data not found for \"{}\"",
-				params.text_document_position_params.text_document.uri
-			)
-			.as_str(),
-		);
+	None
+	// PROJECT_DATA.with(|files| {
+	// 	let files = files.borrow();
+	// 	let uri = params.text_document_position_params.text_document.uri.clone();
+	// 	let file_data = files.get(&params.text_document_position_params.text_document.uri.clone());
+	// 	let file_data = file_data.expect(
+	// 		format!(
+	// 			"Compiled data not found for \"{}\"",
+	// 			params.text_document_position_params.text_document.uri
+	// 		)
+	// 		.as_str(),
+	// 	);
 
-		let root_scope = &file_data.scope;
+	// 	let file = uri.to_file_path().ok().expect("LSP only works on real filesystems");
+	// 	let root_scope = &file_data.asts.get(&file).unwrap();
 
-		let mut hover_visitor = HoverVisitor::new(
-			params.text_document_position_params.position,
-			&root_scope,
-			&file_data.types,
-		);
-		if let Some((span, Some(docs))) = hover_visitor.visit() {
-			Some(Hover {
-				contents: HoverContents::Markup(MarkupContent {
-					kind: MarkupKind::Markdown,
-					value: docs,
-				}),
-				range: Some(span.clone().into()),
-			})
-		} else {
-			None
-		}
-	})
+	// 	let mut hover_visitor = HoverVisitor::new(
+	// 		params.text_document_position_params.position,
+	// 		&root_scope,
+	// 		&file_data.types,
+	// 	);
+	// 	if let Some((span, Some(docs))) = hover_visitor.visit() {
+	// 		Some(Hover {
+	// 			contents: HoverContents::Markup(MarkupContent {
+	// 				kind: MarkupKind::Markdown,
+	// 				value: docs,
+	// 			}),
+	// 			range: Some(span.clone().into()),
+	// 		})
+	// 	} else {
+	// 		None
+	// 	}
+	// })
 }
 
 fn docs_from_classlike_property(classlike: &impl ClassLike, property: &Symbol) -> Option<String> {

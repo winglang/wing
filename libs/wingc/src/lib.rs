@@ -11,11 +11,12 @@ use ast::{Scope, Symbol, UtilityFunctions};
 use closure_transform::ClosureTransformer;
 use comp_ctx::set_custom_panic_hook;
 use diagnostic::{found_errors, report_diagnostic, Diagnostic};
+use files::Files;
 use fold::Fold;
 use indexmap::IndexMap;
 use jsify::JSifier;
 use lifting::LiftTransform;
-use parser::{parse_wing_project, ParseProjectOutput};
+use parser::{parse_wing_project, FileGraph};
 use type_check::jsii_importer::JsiiImportSpec;
 use type_check::symbol_env::StatementIdx;
 use type_check::{FunctionSignature, SymbolKind, Type};
@@ -242,7 +243,7 @@ pub fn type_check(
 	let mut tc = TypeChecker::new(types, file_path, jsii_types, jsii_imports);
 	tc.add_globals(scope);
 
-	tc.type_check_module(file_path, scope);
+	tc.type_check_file(file_path, scope);
 }
 
 // TODO: refactor this (why is scope needed?) (move to separate module?)
@@ -290,12 +291,18 @@ pub fn compile(
 	let out_dir = out_dir.unwrap_or(default_out_dir.as_ref());
 
 	// -- PARSING PHASE --
-	let ParseProjectOutput {
-		files,
-		asts,
-		topo_sorted_files,
-		..
-	} = parse_wing_project(&source_path);
+	let mut files = Files::new();
+	let mut file_graph = FileGraph::default();
+	let mut tree_sitter_trees = IndexMap::new();
+	let mut asts = IndexMap::new();
+	let topo_sorted_files = parse_wing_project(
+		&source_path,
+		None,
+		&mut files,
+		&mut file_graph,
+		&mut tree_sitter_trees,
+		&mut asts,
+	);
 
 	// -- DESUGARING PHASE --
 
