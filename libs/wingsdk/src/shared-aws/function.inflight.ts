@@ -5,7 +5,7 @@ import {
 import { InvokeCommand, LambdaClient } from "@aws-sdk/client-lambda";
 import { fromUtf8, toUtf8 } from "@aws-sdk/util-utf8-node";
 import { Context } from "aws-lambda";
-import { IFunctionClient, LogType } from "../cloud";
+import { IFunctionClient } from "../cloud";
 import { Trace, TraceType } from "../std";
 import { FUNCTION_TYPE } from "../target-sim/schema-resources";
 
@@ -31,16 +31,36 @@ export class FunctionClient implements IFunctionClient {
     logGroupName: string,
     logStreamName: string,
     constructPath: string,
-    logType: LogType
+    extendedLogging: boolean
   ): Promise<Trace[]> {
     const logsCollector: Trace[] = [];
 
     const command = new GetLogEventsCommand({ logGroupName, logStreamName });
-    const response = await this.cloudWatchClient.send(command);
+    let response;
+    while (
+      // the last log doesn't exist
+      // TODO: replace to findLast when this es2023 is available
+      !response?.events?.find(({ message }) =>
+        message?.startsWith("REPORT RequestId: ")
+      )
+    ) {
+      try {
+        response = await this.cloudWatchClient.send(command);
+      } catch (error) {
+        // waiting for the logs to be created
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+        if (
+          (error as Error).message !==
+          "The specified log stream does not exist."
+        ) {
+          throw error;
+        }
+      }
+    }
 
     const reads: Promise<Trace[]>[] = [];
 
-    for (const event of response.events ?? []) {
+    for (const event of response?.events ?? []) {
       const wingLog = event.message?.match(
         /(?<=winglogstart:)[\s\S]*?(?=:winglogend)/
       );
@@ -67,11 +87,11 @@ export class FunctionClient implements IFunctionClient {
             parsedData.logGroupName,
             parsedData.logStreamName,
             parsedData.constructPath,
-            logType
+            extendedLogging
           )
         );
       } else {
-        if (logType === LogType.EXTENDED) {
+        if (extendedLogging) {
           const logData = event.message?.split("\t") ?? [];
 
           logsCollector.push({
@@ -166,25 +186,19 @@ export class FunctionClient implements IFunctionClient {
    */
   public async invokeWithLogs(
     payload: string,
-    logType: LogType = LogType.DEFAULT
+    extendedLogging: boolean
   ): Promise<[string, Trace[]]> {
     const traces: Trace[] = [];
 
     const value = await this.executeFunction(payload);
 
-    if (
-      value?.context?.logGroupName &&
-      value?.context?.logStreamName &&
-      logType !== LogType.NONE
-    ) {
-      // waiting for the logs to be created
-      await new Promise((resolve) => setTimeout(resolve, 10000));
+    if (value?.context?.logGroupName && value?.context?.logStreamName) {
       traces.push(
         ...(await this.readLogs(
           value?.context?.logGroupName,
           value?.context?.logStreamName,
           this.constructPath,
-          logType
+          extendedLogging
         ))
       );
     }

@@ -8,7 +8,6 @@ import { promisify } from "util";
 import { generateTmpDir, withSpinner } from "../util";
 import { Target } from "@winglang/compiler";
 import { readFile, rm, rmSync } from "fs";
-import { LogType } from "@winglang/sdk/lib/cloud";
 
 const log = debug("wing:test");
 
@@ -24,9 +23,7 @@ const generateTestName = (path: string) => path.split(sep).slice(-2).join("/");
 /**
  * Options for the `test` command.
  */
-export interface TestOptions extends CompileOptions {
-  log: LogType;
-}
+export interface TestOptions extends CompileOptions {}
 
 export async function test(entrypoints: string[], options: TestOptions): Promise<number> {
   const startTime = Date.now();
@@ -146,9 +143,9 @@ async function testOne(entrypoint: string, options: TestOptions) {
     case Target.SIM:
       return await testSimulator(synthDir);
     case Target.TF_AWS:
-      return await testTfAws(synthDir, options.log);
+      return await testTfAws(synthDir);
     case Target.AWSCDK:
-      return await testAwsCdk(synthDir, options.log);
+      return await testAwsCdk(synthDir);
     default:
       throw new Error(`unsupported target ${options.target}`);
   }
@@ -262,7 +259,7 @@ async function testSimulator(synthDir: string) {
   return results;
 }
 
-async function testAwsCdk(synthDir: string, logType: LogType): Promise<std.TestResult[]> {
+async function testAwsCdk(synthDir: string): Promise<std.TestResult[]> {
   try {
     isAwsCdkInstalled(synthDir);
 
@@ -278,7 +275,7 @@ async function testAwsCdk(synthDir: string, logType: LogType): Promise<std.TestR
       const { TestRunnerClient } = await import(
         "@winglang/sdk/lib/shared-aws/test-runner.inflight"
       );
-      const testRunner = new TestRunnerClient(testArns, logType);
+      const testRunner = new TestRunnerClient(testArns, process.env.DEBUG === "1");
 
       const tests = await testRunner.listTests();
       return [testRunner, pickOneTestPerEnvironment(tests)];
@@ -342,7 +339,7 @@ async function awsCdkOutput(synthDir: string, name: string, stackName: string) {
   return parsed[stackName][name];
 }
 
-async function testTfAws(synthDir: string, logType: LogType): Promise<std.TestResult[] | void> {
+async function testTfAws(synthDir: string): Promise<std.TestResult[] | void> {
   try {
     if (!isTerraformInstalled(synthDir)) {
       throw new Error(
@@ -359,7 +356,7 @@ async function testTfAws(synthDir: string, logType: LogType): Promise<std.TestRe
       const { TestRunnerClient } = await import(
         "@winglang/sdk/lib/shared-aws/test-runner.inflight"
       );
-      const testRunner = new TestRunnerClient(testArns, logType);
+      const testRunner = new TestRunnerClient(testArns, process.env.DEBUG === "1");
 
       const tests = await testRunner.listTests();
       return [testRunner, pickOneTestPerEnvironment(tests)];

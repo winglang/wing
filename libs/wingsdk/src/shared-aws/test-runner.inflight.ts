@@ -1,13 +1,12 @@
 import { FunctionClient } from "./function.inflight";
-import { LogType } from "../cloud";
 import { ITestRunnerClient, TestResult, Trace } from "../std";
 
 export class TestRunnerClient implements ITestRunnerClient {
   // A map from test names to their corresponding function ARNs.
   private readonly tests: Map<string, string>;
-  private readonly logType: LogType;
+  private readonly extendedLogging: boolean;
 
-  constructor(tests: string, logType: LogType = LogType.DEFAULT) {
+  constructor(tests: string, extendedLogging: boolean) {
     // Expects a JSON string of the form:
     // [
     //   ["testPath1", "functionArn1"],
@@ -15,7 +14,7 @@ export class TestRunnerClient implements ITestRunnerClient {
     //   ...
     // ]
     this.tests = new Map(JSON.parse(tests) as [string, string][]);
-    this.logType = logType;
+    this.extendedLogging = extendedLogging;
   }
 
   public async listTests(): Promise<string[]> {
@@ -33,7 +32,10 @@ export class TestRunnerClient implements ITestRunnerClient {
     let error: string | undefined;
 
     try {
-      const [_, functionTraces] = await client.invokeWithLogs("", this.logType);
+      const [_, functionTraces] = await client.invokeWithLogs(
+        "",
+        this.extendedLogging
+      );
       traces.push(...functionTraces);
       pass = true;
     } catch (e) {
