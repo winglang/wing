@@ -115,7 +115,7 @@ Test Files 1 passed (1)
 Duration 1m31.44s
 ```
 
-By default, the tested resources will be destroyed at the end of the test. You can use the `--no-clean` to keep them up. This way, the path to the randomized directory, containing the output files, will be display at the end of the test.
+By default, the tested resources will be destroyed at the end of the test. You can use the `--no-clean` to keep them up. The path to the randomized directory containing the output files will be displayed at the end of the test.
 
 ```sh
 % wing test example.w -t tf-aws --no-clean
