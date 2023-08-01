@@ -107,4 +107,6 @@ const invalidateQueriesAfterMutation = middleware(async (options) => {
   return result;
 });
 
-export const createProcedure = t.procedure.use(invalidateQueriesAfterMutation);
+export const createProcedure = t.procedure.use(
+  invalidateQueriesAfterMutation,
+) as typeof t.procedure;
