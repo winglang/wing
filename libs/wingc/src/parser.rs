@@ -732,7 +732,10 @@ impl<'s> Parser<'s> {
 					// make sure all the parameters have type annotations
 					for param in &func_def.signature.parameters {
 						if matches!(param.type_annotation.kind, TypeAnnotationKind::Inferred) {
-							self.add_error_from_span("Missing type annotation", param.name.span.clone());
+							self.add_error_from_span(
+								"Missing required type annotation for method signature",
+								param.name.span.clone(),
+							);
 						}
 					}
 
@@ -1041,7 +1044,8 @@ impl<'s> Parser<'s> {
 		let return_type = if let Some(rt) = func_sig_node.child_by_field_name("type") {
 			self.build_type_annotation(Some(rt), phase)?
 		} else {
-			if func_sig_node.kind().ends_with("_closure") {
+			let func_sig_kind = func_sig_node.kind();
+			if func_sig_kind == "inflight_closure" || func_sig_kind == "preflight_closure" {
 				TypeAnnotation {
 					kind: TypeAnnotationKind::Inferred,
 					span: Default::default(),
@@ -1651,22 +1655,14 @@ impl<'s> Parser<'s> {
 				Ok(Expr::new(ExprKind::JsonMapLiteral { fields }, expression_span))
 			}
 			"map_literal" => {
-				let mut map_type = self
-					.build_type_annotation(expression_node.child_by_field_name("type"), phase)
-					.ok();
+				let map_type = if let Some(type_node) = expression_node.child_by_field_name("type") {
+					self.build_type_annotation(Some(type_node), phase).ok()
+				} else {
+					None
+				};
 
 				let fields = self.build_map_fields(expression_node, phase)?;
-				if let Some(TypeAnnotation { kind, span }) = &map_type {
-					if matches!(kind, TypeAnnotationKind::Inferred) {
-						map_type.replace(TypeAnnotation {
-							kind: TypeAnnotationKind::Map(Box::new(TypeAnnotation {
-								kind: TypeAnnotationKind::Inferred,
-								span: Default::default(),
-							})),
-							span: span.clone(),
-						});
-					}
-				}
+
 				// Special case: empty {} (which is detected as map by tree-sitter) -
 				// if it is annotated as a Set/MutSet we should treat it as a set literal
 				if let Some(TypeAnnotation { kind, .. }) = &map_type {

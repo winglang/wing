@@ -6,12 +6,11 @@ let emptyArray = [];
 let num_array: Array<num> = emptyArray;
 
 let emptyArray2 = [];
-let clonedArray = emptyArray2.copyMut();
-clonedArray.push(1);
-clonedArray.push(2);
-clonedArray.push(clonedArray.at(0) + clonedArray.at(1));
-
-assert(clonedArray.at(2) == 3);
+let clonedArray2 = emptyArray2.copyMut();
+clonedArray2.push(1);
+clonedArray2.push(2);
+clonedArray2.push(clonedArray2.at(0) + clonedArray2.at(1));
+assert(clonedArray2.at(2) == 3);
 
 let api = new cloud.Api();
 let func = inflight (request) => {

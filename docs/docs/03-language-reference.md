@@ -853,7 +853,7 @@ r-value refers to the right hand side of an assignment here.
 All defined symbols are immutable (constant) by default.  
 Type casting is generally not allowed unless otherwise specified.
 
-Function arguments and their return type are always required.
+Type annotations are required for method arguments and their return value but optional for anonymous closures.
 
 > ```TS
 > let i = 5;

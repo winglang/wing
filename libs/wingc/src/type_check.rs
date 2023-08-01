@@ -19,6 +19,7 @@ use crate::{
 	WINGSDK_STD_MODULE, WINGSDK_STRING,
 };
 use derivative::Derivative;
+use duplicate::duplicate_item;
 use indexmap::{IndexMap, IndexSet};
 use itertools::{izip, Itertools};
 use jsii_importer::JsiiImporter;
@@ -788,7 +789,6 @@ impl Display for Type {
 			Type::MutJson => write!(f, "MutJson"),
 			Type::Nil => write!(f, "nil"),
 			Type::Unresolved => write!(f, "unresolved"),
-			// TODO should probably just be called `uninferred`
 			Type::Inferred(_) => write!(f, "unknown"),
 			Type::Optional(v) => write!(f, "{}?", v),
 			Type::Function(sig) => write!(f, "{}", sig),
@@ -1282,12 +1282,9 @@ impl Types {
 
 		let existing_type = self.inferences.get_mut(id).expect("Inference id out of bounds");
 
-		if existing_type.is_none() {
-			existing_type.replace(new_type);
-		} else {
-			// We already have a type for this inference
-			return;
-		}
+		assert!(existing_type.is_none(), "Inference id already has a type");
+
+		existing_type.replace(new_type);
 
 		for expr_type in self.type_for_expr.iter_mut().flatten() {
 			match &mut (*expr_type.type_) {
@@ -1310,14 +1307,14 @@ impl Types {
 					if let Some(ref mut closure_method) = class.get_closure_method() {
 						let func = closure_method.as_mut_function_sig().unwrap();
 						for param in func.parameters.iter_mut() {
-							if let Type::Inferred(expr_id) = &*param.typeref {
-								if *expr_id == id {
+							if let Type::Inferred(inference_id) = &*param.typeref {
+								if *inference_id == id {
 									param.typeref = t;
 								}
 							}
 						}
-						if let Type::Inferred(expr_id) = &*func.return_type {
-							if *expr_id == id {
+						if let Type::Inferred(inference_id) = &*func.return_type {
+							if *inference_id == id {
 								func.return_type = t;
 							}
 						}
@@ -2622,8 +2619,10 @@ impl<'a> TypeChecker<'a> {
 		}
 		if env.is_function {
 			if let Type::Inferred(n) = &*env.return_type {
-				// If function types don't return anything then we should set the return type to void
-				self.types.update_inferred_type(*n, self.types.void());
+				if self.types.get_inference_by_id(*n).is_none() {
+					// If function types don't return anything then we should set the return type to void
+					self.types.update_inferred_type(*n, self.types.void());
+				}
 				self.deep_update_inference(&mut env.return_type);
 			}
 		}
@@ -2635,6 +2634,7 @@ impl<'a> TypeChecker<'a> {
 				self.deep_update_inference(&mut var_info.type_);
 
 				// If we found a variable with an inferred type, this is an error because it means we failed to infer its type
+				// Ignores any transient (no file_id) variables e.g. `this`. Those failed inferences are cascading errors and not useful to the user
 				if self.deep_inference(var_info.type_, None) && !var_info.name.span.file_id.is_empty() {
 					self.spanned_error(&var_info.name, "Unable to infer type".to_string());
 				}
@@ -3040,13 +3040,20 @@ impl<'a> TypeChecker<'a> {
 				self.inner_scopes.push(scope)
 			}
 			StmtKind::Return(exp) => {
-				self.deep_update_inference(&mut env.return_type);
+				let return_type_inferred = self.deep_update_inference(&mut env.return_type);
 				if let Some(return_expression) = exp {
 					let (return_type, _) = self.type_check_exp(return_expression, env);
 					if !env.return_type.is_void() {
 						self.validate_type(return_type, env.return_type, return_expression);
 					} else if env.is_in_function() {
-						self.spanned_error(stmt, "Unexpected return value from void function");
+						if return_type_inferred {
+							self.spanned_error(stmt, "Unexpected return value from void function");
+						} else {
+							self.spanned_error(
+								stmt,
+								"Unexpected return value from void function. Return type annotations are required for methods.",
+							);
+						}
 					} else {
 						self.spanned_error(stmt, "Return statement outside of function cannot return a value");
 					}
@@ -4655,25 +4662,11 @@ fn add_parent_members_to_iface_env(
 	Ok(())
 }
 
-fn lookup_result_mut_to_type_error<T>(lookup_result: LookupResultMut, looked_up_object: &T) -> TypeError
-where
-	T: Spanned + Display,
-{
-	let (message, span) = match lookup_result {
-		LookupResultMut::NotFound(s) => (format!("Unknown symbol \"{s}\""), s.span()),
-		LookupResultMut::DefinedLater => (
-			format!("Symbol \"{looked_up_object}\" used before being defined"),
-			looked_up_object.span(),
-		),
-		LookupResultMut::ExpectedNamespace(ns_name) => (
-			format!("Expected \"{ns_name}\" in \"{looked_up_object}\" to be a namespace"),
-			ns_name.span(),
-		),
-		LookupResultMut::Found(..) => panic!("Expected a lookup error, but found a successful lookup"),
-	};
-	TypeError { message, span }
-}
-
+#[duplicate_item(
+	lookup_result_to_type_error LookupResult;
+	[lookup_result_to_type_error] [LookupResult];
+	[lookup_result_mut_to_type_error] [LookupResultMut];
+)]
 fn lookup_result_to_type_error<T>(lookup_result: LookupResult, looked_up_object: &T) -> TypeError
 where
 	T: Spanned + Display,
