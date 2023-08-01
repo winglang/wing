@@ -12,6 +12,7 @@ export const errorTestDir = path.join(testDir, "error");
 export const hangarDir = path.join(repoRoot, "tools/hangar");
 export const tmpDir = path.join(hangarDir, "tmp");
 export const npmCacheDir = path.join(tmpDir, ".npm");
+export const wingSdkDir = path.join(tmpDir, "node_modules/@winglang/sdk");
 
 export const npmBin = path.join(hangarDir, "node_modules/.bin/npm");
 export const wingBin = path.join(tmpDir, "node_modules/.bin/wing");
