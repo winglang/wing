@@ -130,7 +130,7 @@ export const ZoomPaneProvider: FunctionComponent<ZoomPaneProviderProps> = (
       const x1 = x0 + viewport.width;
       const y1 = y0 + viewport.height;
 
-      const defaultScale = 1;
+      const defaultScale = 1.25;
 
       const scale = Math.min(
         8,
