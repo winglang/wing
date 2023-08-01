@@ -38,7 +38,7 @@ export interface ZoomPaneContextValue {
   transform: d3Zoom.ZoomTransform;
   zoomIn(): void;
   zoomOut(): void;
-  zoomToFit(viewport?: Viewport): void;
+  zoomToFit(viewport?: Viewport, skipAnimation?: boolean): void;
 }
 
 const ZoomPaneContext = createContext<ZoomPaneContextValue>({
@@ -106,7 +106,7 @@ export const ZoomPaneProvider: FunctionComponent<ZoomPaneProviderProps> = (
   );
 
   const zoomToFit = useCallback(
-    (viewport?: Viewport) => {
+    (viewport?: Viewport, skipAnimation?: boolean) => {
       const node = selection?.node();
       if (!selection || !node) {
         return;
@@ -137,13 +137,15 @@ export const ZoomPaneProvider: FunctionComponent<ZoomPaneProviderProps> = (
         0.9 / Math.max((x1 - x0) / width, (y1 - y0) / height),
       );
 
-      selectionTransition(selection, 500).call(
-        zoom.transform,
-        d3Zoom.zoomIdentity
-          .translate(width / 2, height / 2)
-          .scale(Math.min(defaultScale, scale))
-          .translate(-(x0 + x1) / 2, -(y0 + y1) / 2),
-      );
+      const newTransform = d3Zoom.zoomIdentity
+        .translate(width / 2, height / 2)
+        .scale(Math.min(defaultScale, scale))
+        .translate(-(x0 + x1) / 2, -(y0 + y1) / 2);
+      if (skipAnimation) {
+        zoom.transform(selection, newTransform);
+      } else {
+        selectionTransition(selection, 500).call(zoom.transform, newTransform);
+      }
     },
     [selection, zoom, targetRef],
   );
