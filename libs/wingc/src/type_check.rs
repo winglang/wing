@@ -4049,6 +4049,10 @@ impl<'a> TypeChecker<'a> {
 				name: "Duration".to_string(),
 				span: symbol.span.clone(),
 			}),
+			"datetime" => Some(Symbol {
+				name: "Datetime".to_string(),
+				span: symbol.span.clone(),
+			}),
 			"str" => Some(Symbol {
 				name: "String".to_string(),
 				span: symbol.span.clone(),
@@ -4809,6 +4813,7 @@ pub fn fully_qualify_std_type(type_: &str) -> std::string::String {
 	let type_name = match type_name {
 		"str" => "String",
 		"duration" => "Duration",
+		"datetime" => "Datetime",
 		"bool" => "Boolean",
 		"num" => "Number",
 		_ => type_name,

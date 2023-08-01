@@ -197,3 +197,20 @@ test "contains()" {
   assert(!"hello wing".contains("Hello"));
   assert("hello wing".contains("w"));
 }
+
+//-----------------------------------------------------------------------------
+// replace()
+
+assert("hello world".replace("world", "wing") == "hello wing");
+assert("pʅɹoʍ oʅʅǝɥ".replace("pʅɹoʍ", "ɓuᴉʍ") == "ɓuᴉʍ oʅʅǝɥ");
+assert("hello world".replace("wing", "☁") == "hello world");
+assert("hello world".replace(" ", "-") == "hello-world");
+assert("".replace("", "hello world") == "hello world");
+
+test "replace()" {
+  assert("hello world".replace("world", "wing") == "hello wing");
+  assert("pʅɹoʍ oʅʅǝɥ".replace("pʅɹoʍ", "ɓuᴉʍ") == "ɓuᴉʍ oʅʅǝɥ");
+  assert("hello world".replace("wing", "☁") == "hello world");
+  assert("hello world".replace(" ", "-") == "hello-world");
+  assert("".replace("", "hello world") == "hello world");
+}

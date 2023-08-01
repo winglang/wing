@@ -62,10 +62,10 @@ export class BucketClient implements IBucketClient {
   }
 
   /**
-   * Get a Json object from the bucket
+   * Get an object from the bucket
    *
    * @param key Key of the object
-   * @returns Json content of the object
+   * @returns content of the object
    */
   public async get(key: string): Promise<string> {
     // See https://github.com/aws/aws-sdk-js-v3/issues/1877
@@ -93,10 +93,10 @@ export class BucketClient implements IBucketClient {
   }
 
   /**
-   * Get a Json object from the bucket if it exists
+   * Get an object from the bucket if it exists
    *
    * @param key Key of the object
-   * @returns Json content of the object
+   * @returns content of the object
    */
   public async tryGet(key: string): Promise<string | undefined> {
     if (await this.exists(key)) {
