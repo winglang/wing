@@ -5,7 +5,7 @@ import {
   ScrollableArea,
   TopResizableWidget,
 } from "@wingconsole/design-system";
-import { State, LayoutConfig, LayoutComponent } from "@wingconsole/server";
+import type { State, LayoutConfig, LayoutComponent } from "@wingconsole/server";
 import classNames from "classnames";
 import { useCallback, useEffect, useMemo } from "react";
 
@@ -25,7 +25,7 @@ import { useLayout } from "./use-layout.js";
 export interface LayoutProps {
   cloudAppState: State;
   wingVersion: string | undefined;
-  layoutConfig: LayoutConfig;
+  layoutConfig?: LayoutConfig;
 }
 
 const defaultLayoutConfig: LayoutConfig = {
