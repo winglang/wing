@@ -39,6 +39,9 @@ export interface CompileOptions {
    */
   readonly testing?: boolean;
   readonly log?: (...args: any[]) => void;
+
+  /// Enable/disable color output for the compiler (subject to terminal detection)
+  readonly color?: boolean;
 }
 
 /**
@@ -113,13 +116,16 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
     fs.mkdir(tmpSynthDir, { recursive: true }),
   ]);
 
+  let env: Record<string, string> = {
+    RUST_BACKTRACE: "full",
+    WING_SYNTH_DIR: normalPath(tmpSynthDir),
+  };
+  if (options.color !== undefined) {
+    env.CLICOLOR = options.color ? "1" : "0";
+  }
+
   const wingc = await wingCompiler.load({
-    env: {
-      RUST_BACKTRACE: "full",
-      WING_SYNTH_DIR: normalPath(tmpSynthDir),
-      // TODO: Use an option?
-      // CLICOLOR_FORCE: chalk.supportsColor ? "1" : "0",
-    },
+    env,
     imports: {
       env: {
         send_diagnostic,
