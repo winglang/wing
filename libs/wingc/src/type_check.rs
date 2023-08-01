@@ -719,7 +719,7 @@ impl FunctionSignature {
 			.iter()
 			.rev()
 			// TODO - as a hack we treat `anything` arguments like optionals so that () => {} can be a subtype of (any) => {}
-			.take_while(|arg| arg.typeref.is_option() || arg.typeref.is_struct() || arg.typeref.is_anything())
+			.take_while(|arg| arg.typeref.is_option() || arg.typeref.is_struct() || arg.typeref.is_anything() || arg.variadic)
 			.count();
 
 		self.parameters.len() - num_optionals
@@ -2340,6 +2340,16 @@ impl<'a> TypeChecker<'a> {
 							&ast_sig.parameters.get(i).unwrap().name.span,
 							"Variadic parameters must always be the last parameter in a function.".to_string(),
 						);
+					}
+
+					if p.variadic {
+						match &p.type_annotation.kind {
+							TypeAnnotationKind::Array(_) | TypeAnnotationKind::MutArray(_) => {}
+							_ => self.spanned_error(
+								&ast_sig.parameters.get(i).unwrap().name.span,
+								"Variadic parameters must be type Array or MutArray.".to_string(),
+							),
+						};
 					}
 				}
 				for p in ast_sig.parameters.iter() {

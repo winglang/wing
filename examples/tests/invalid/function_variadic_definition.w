@@ -13,3 +13,6 @@ let funcBucket = (...buckets: Array<cloud.Bucket>) => {
 };
 funcBucket(bucket1, true, bucket2);
 //                  ^^^^ Expected type to be Bucket, but got bool instead.
+
+let f3 = (...args: Set<num>) => {};
+//           ^^^^ Variadic parameters must be type Array or MutArray.

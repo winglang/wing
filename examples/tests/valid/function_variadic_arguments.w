@@ -18,3 +18,13 @@ let func1 = (var x: num, y: str?, var ...args: MutArray<num>) => {
 };
 func1(1, "something", 1, 2, 3, 4);
 func1(1, nil, 1, 2, 3, 4);
+
+let addNums = (...nums: MutArray<num>):num => {
+  let var total = 0;
+  for n in nums {
+    total = total + n;
+  }
+  return total;
+};
+assert(addNums(1, 2, 3) == 6);
+assert(addNums() == 0);
