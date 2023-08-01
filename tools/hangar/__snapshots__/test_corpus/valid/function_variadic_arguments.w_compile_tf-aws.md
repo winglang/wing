@@ -146,6 +146,15 @@ class $Root extends $stdlib.std.Resource {
     });
     (func1(1,"something",1,2,3,4));
     (func1(1,undefined,1,2,3,4));
+    const addNums = ((...nums) => {
+      let total = 0;
+      for (const n of nums) {
+        total = (total + n);
+      }
+      return total;
+    });
+    {((cond) => {if (!cond) throw new Error("assertion failed: addNums(1, 2, 3) == 6")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((addNums(1,2,3)),6)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: addNums() == 0")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((addNums()),0)))};
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
