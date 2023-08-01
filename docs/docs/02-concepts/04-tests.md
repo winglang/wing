@@ -127,7 +127,7 @@ By default, the tested resources will be destroyed at the end of the test. You c
 pass ─ example.tfaws » root/Default/env0/test:bucket onCreate
 ✔ terraform destroy
 Clean up is disabled!
-please review the output files at /var/folders/1m/..../example.tfaws
+Output files available at /var/folders/1m/..../example.tfaws
 
 Tests 1 passed (1)
 Test Files 1 passed (1)

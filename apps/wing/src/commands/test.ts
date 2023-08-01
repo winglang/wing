@@ -144,11 +144,11 @@ async function testOne(entrypoint: string, options: TestOptions) {
 
   switch (options.target) {
     case Target.SIM:
-      return await testSimulator(synthDir, options.clean);
+      return await testSimulator(synthDir, options);
     case Target.TF_AWS:
-      return await testTfAws(synthDir, options.clean);
+      return await testTfAws(synthDir, options);
     case Target.AWSCDK:
-      return await testAwsCdk(synthDir, options.clean);
+      return await testAwsCdk(synthDir, options);
     default:
       throw new Error(`unsupported target ${options.target}`);
   }
@@ -240,14 +240,13 @@ function testResultsContainsFailure(results: std.TestResult[]): boolean {
 
 function noCleanUp(synthDir: string) {
   console.log(
-    chalk.yellowBright.bold(
-      `Cleanup is disabled! Output files available at ${resolve(synthDir)}`
-    )
+    chalk.yellowBright.bold(`Cleanup is disabled!\nOutput files available at ${resolve(synthDir)}`)
   );
 }
 
-async function testSimulator(synthDir: string, shouldClean: boolean) {
+async function testSimulator(synthDir: string, options: TestOptions) {
   const s = new testing.Simulator({ simfile: synthDir });
+  const { clean } = options;
   await s.start();
 
   const testRunner = s.getResource("root/cloud.TestRunner") as std.ITestRunnerClient;
@@ -265,7 +264,7 @@ async function testSimulator(synthDir: string, shouldClean: boolean) {
   const testReport = renderTestReport(synthDir, results);
   console.log(testReport);
 
-  if (shouldClean) {
+  if (clean) {
     rmSync(synthDir, { recursive: true, force: true });
   } else {
     noCleanUp(synthDir);
@@ -274,7 +273,8 @@ async function testSimulator(synthDir: string, shouldClean: boolean) {
   return results;
 }
 
-async function testAwsCdk(synthDir: string, shouldClean: boolean): Promise<std.TestResult[]> {
+async function testAwsCdk(synthDir: string, options: TestOptions): Promise<std.TestResult[]> {
+  const { clean } = options;
   try {
     isAwsCdkInstalled(synthDir);
 
@@ -316,7 +316,7 @@ async function testAwsCdk(synthDir: string, shouldClean: boolean): Promise<std.T
     console.warn((err as Error).message);
     return [{ pass: false, path: "", error: (err as Error).message, traces: [] }];
   } finally {
-    if (shouldClean) {
+    if (clean) {
       await cleanupCdk(synthDir);
     } else {
       noCleanUp(synthDir);
@@ -358,7 +358,8 @@ async function awsCdkOutput(synthDir: string, name: string, stackName: string) {
   return parsed[stackName][name];
 }
 
-async function testTfAws(synthDir: string, shouldClean: boolean): Promise<std.TestResult[] | void> {
+async function testTfAws(synthDir: string, options: TestOptions): Promise<std.TestResult[] | void> {
+  const { clean } = options;
   try {
     if (!isTerraformInstalled(synthDir)) {
       throw new Error(
@@ -401,7 +402,7 @@ async function testTfAws(synthDir: string, shouldClean: boolean): Promise<std.Te
     console.warn((err as Error).message);
     return [{ pass: false, path: "", error: (err as Error).message, traces: [] }];
   } finally {
-    if (shouldClean) {
+    if (clean) {
       await cleanupTf(synthDir);
     } else {
       noCleanUp(synthDir);
