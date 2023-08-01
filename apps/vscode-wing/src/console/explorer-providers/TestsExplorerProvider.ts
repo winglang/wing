@@ -9,14 +9,6 @@ import {
 
 export type TestStatus = "success" | "error" | "running" | "pending";
 
-export interface Test {
-  id: string;
-  label: string;
-  status?: TestStatus;
-  time?: number;
-  runAllDisabled?: boolean;
-}
-
 export class TestsExplorerProvider implements TreeDataProvider<TestItem> {
   private tests: TestItem[] = [];
 
@@ -35,13 +27,13 @@ export class TestsExplorerProvider implements TreeDataProvider<TestItem> {
     this._onDidChangeTreeData.fire();
   }
 
-  public update(tests: TestItem[] = []): void {
+  public update(tests: TestItem[]): void {
     this.tests = tests;
     this.refresh();
   }
 
   public clear(): void {
-    this.update();
+    this.update([]);
   }
 
   public getTests(): TestItem[] {
@@ -56,13 +48,7 @@ export class TestsExplorerProvider implements TreeDataProvider<TestItem> {
     if (!element) {
       return Promise.resolve(
         this.tests.map((test) => {
-          return new TestItem(
-            test.id,
-            test.label,
-            test.time || 0,
-            test.status || "pending",
-            TreeItemCollapsibleState.None
-          );
+          return new TestItem(test.id, test.label, test.time, test.status);
         })
       );
     }
@@ -73,12 +59,11 @@ export class TestsExplorerProvider implements TreeDataProvider<TestItem> {
 export class TestItem extends TreeItem {
   constructor(
     public readonly id: string,
-    public readonly label: string,
-    public readonly time: number,
-    public readonly status: string,
-    public readonly collapsibleState?: TreeItemCollapsibleState
+    public readonly label?: string,
+    public readonly time?: number,
+    public readonly status?: TestStatus
   ) {
-    super(label, collapsibleState);
+    super(label || "", TreeItemCollapsibleState.None);
     this.tooltip = this.label;
     this.id = id;
 
@@ -86,11 +71,11 @@ export class TestItem extends TreeItem {
       time && status !== "pending" ? `${status} (${time}ms)` : "";
 
     let iconName = "issues";
-    if (this.status === "success") {
+    if (status === "success") {
       iconName = "check";
-    } else if (this.status === "error") {
+    } else if (status === "error") {
       iconName = "error";
-    } else if (this.status === "running") {
+    } else if (status === "running") {
       iconName = "sync~spin";
     }
     this.iconPath = new ThemeIcon(iconName);
