@@ -162,6 +162,12 @@ async function main() {
     .hook("preAction", collectAnalyticsHook)
     .action(runSubCommand("docs"));
 
+  program
+    .command("console-path")
+    .description("Print the path to the Wing Console")
+    .hook("preAction", collectAnalyticsHook)
+    .action(runSubCommand("consolePath"));
+
   program.hook("postAction", exportAnalyticsHook);
 
   program.parse();
