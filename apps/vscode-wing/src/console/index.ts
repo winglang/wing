@@ -29,10 +29,25 @@ export class WingConsoleManager {
         await this.openConsole();
       }
     });
+    workspace.onDidCloseTextDocument(async (textDocument) => {
+      if (textDocument.languageId !== "wing") {
+        return;
+      }
+      const instanceId = this.consoleManager?.getInstance(
+        textDocument.uri.fsPath
+      );
+      if (instanceId) {
+        this.log(`Closing Console instance '${instanceId.wingfile}'`);
+        await this.consoleManager.closeInstance(instanceId.id);
+      }
+    });
+  }
+
+  private log(message: string, type: string = "info") {
+    this.logger.appendLine(`[${type}] ${message}`);
   }
 
   public async openConsole() {
-    this.logger.appendLine("Opening Wing Console");
     // get the current active file
     const editor = window.activeTextEditor;
     if (!editor) {
@@ -44,18 +59,16 @@ export class WingConsoleManager {
     }
     const uri = document.uri;
 
-    const log = (type: string, message: string) => {
-      this.logger.appendLine(`[${type}] ${message}`);
-    };
-
-    if (this.consoleManager.getConsoleInstance(uri.fsPath)) {
-      this.logger.appendLine(`Wing Console is already running`);
+    const instance = this.consoleManager?.getInstance(uri.fsPath);
+    if (instance) {
+      this.log(`Opening existing Console instance for'${instance.wingfile}'`);
       await this.consoleManager.setActiveInstance(uri.fsPath);
       return;
     }
 
     const wingfile = path.basename(uri.fsPath);
 
+    this.log(`Creating a new Console instance for '${wingfile}'`);
     const { port } = await createConsoleApp({
       wingfile: uri.fsPath,
       hostUtils: {
@@ -65,13 +78,13 @@ export class WingConsoleManager {
       },
       log: {
         info: (message: string) => {
-          log("info", message);
+          this.log(message, "info");
         },
         error: (message: string) => {
-          log("error", message);
+          this.log(message, "error");
         },
         verbose: (message: string) => {
-          log("verbose", message);
+          this.log(message, "verbose");
         },
       },
       layoutConfig: {
@@ -92,7 +105,7 @@ export class WingConsoleManager {
 
     const url = `localhost:${port}`;
 
-    this.logger.appendLine(`Wing Console is running at ${url}`);
+    this.log(`Wing Console is running at ${url}`);
 
     this.consoleManager.addInstance({
       id: uri.fsPath,

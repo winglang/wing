@@ -30,15 +30,12 @@ export class ResourcesExplorerProvider
   }
 
   public update(item?: ExplorerItem): void {
-    if (this.node !== item) {
-      this.node = item;
-      this.refresh();
-    }
+    this.node = item;
+    this.refresh();
   }
 
   public clear(): void {
-    this.node = undefined;
-    this.refresh();
+    this.update();
   }
 
   public getTreeItem(element: ResourceItem): TreeItem {

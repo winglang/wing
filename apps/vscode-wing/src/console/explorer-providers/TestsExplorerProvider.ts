@@ -35,14 +35,13 @@ export class TestsExplorerProvider implements TreeDataProvider<TestItem> {
     this._onDidChangeTreeData.fire();
   }
 
-  public update(tests: TestItem[]): void {
+  public update(tests: TestItem[] = []): void {
     this.tests = tests;
     this.refresh();
   }
 
   public clear(): void {
-    this.tests = [];
-    this.refresh();
+    this.update();
   }
 
   public getTests(): TestItem[] {
@@ -83,11 +82,8 @@ export class TestItem extends TreeItem {
     this.tooltip = this.label;
     this.id = id;
 
-    let description = this.status;
-    if (this.time) {
-      description = `${description} (${this.time}ms)`;
-    }
-    this.description = description;
+    this.description =
+      time && status !== "pending" ? `${status} (${time}ms)` : "";
 
     let iconName = "issues";
     if (this.status === "success") {

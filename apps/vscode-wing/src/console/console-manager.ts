@@ -28,11 +28,11 @@ export interface ConsoleInstance {
 }
 
 export class ConsoleManager {
+  private context: ExtensionContext;
+
   private consoleInstances: Record<string, ConsoleInstance> = {};
 
   private activeInstanceId: string | undefined;
-
-  private context: ExtensionContext;
 
   private webviewPanel: WebviewPanel | undefined;
 
@@ -103,7 +103,6 @@ export class ConsoleManager {
 
   private openWebview() {
     if (this.webviewPanel) {
-      this.webviewPanel.reveal();
       return;
     }
 
@@ -115,7 +114,7 @@ export class ConsoleManager {
       treeDataProvider: this.testsExplorer,
     });
 
-    const panel: WebviewPanel = window.createWebviewPanel(
+    this.webviewPanel = window.createWebviewPanel(
       VIEW_TYPE_CONSOLE,
       `Console`,
       ViewColumn.Beside,
@@ -125,7 +124,7 @@ export class ConsoleManager {
       }
     );
 
-    panel.iconPath = {
+    this.webviewPanel.iconPath = {
       light: Uri.joinPath(
         this.context.extensionUri,
         "resources",
@@ -137,14 +136,11 @@ export class ConsoleManager {
         "icon-dark.png"
       ),
     };
-
-    this.webviewPanel = panel;
-
-    panel.onDidDispose(async () => {
-      this.webviewPanel = undefined;
-      this.activeInstanceId = undefined;
+    this.webviewPanel.onDidDispose(async () => {
       this.resourcesExplorer.clear();
       this.testsExplorer.clear();
+      this.webviewPanel = undefined;
+      this.activeInstanceId = undefined;
     });
   }
 
@@ -178,7 +174,7 @@ export class ConsoleManager {
     this.consoleInstances[consoleInstance.id] = consoleInstance;
   }
 
-  public getConsoleInstance(instanceId: string) {
+  public getInstance(instanceId: string) {
     return this.consoleInstances[instanceId];
   }
 
@@ -208,16 +204,29 @@ export class ConsoleManager {
           <iframe src="http://${consoleInstance.url}"/>
         </body>
       </html>`;
+    const node = await this.resourcesExplorer.getChildren();
+    if (node[0]) {
+      await this.explorerView?.reveal(
+        new ResourceItem({
+          id: node[0].id,
+        })
+      );
+    }
+  }
 
-    const node = await consoleInstance.client.listResources();
-    this.resourcesExplorer.update(node);
-
-    await this.explorerView?.reveal(
-      new ResourceItem({
-        id: "root",
-      })
-    );
-
-    this.testsExplorer.update(await consoleInstance.client.listTests());
+  public async closeInstance(instanceId: string) {
+    if (this.activeInstanceId === instanceId) {
+      this.activeInstanceId = undefined;
+      this.webviewPanel?.dispose();
+      this.webviewPanel = undefined;
+    }
+    const consoleInstance = this.consoleInstances[instanceId];
+    if (!consoleInstance) {
+      return;
+    }
+    consoleInstance.client.close();
+    this.resourcesExplorer.clear();
+    this.testsExplorer.clear();
+    delete this.consoleInstances[instanceId];
   }
 }
