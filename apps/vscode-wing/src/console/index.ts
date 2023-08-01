@@ -1,16 +1,30 @@
+import { execSync } from "child_process";
 import path from "path";
-import { createConsoleApp } from "@wingconsole/app";
-// import createConsoleApp using the command wing console-path
 
 import fetch from "node-fetch";
-import ws from "ws";
 import open from "open";
+
+const getConsolePath = () => {
+  const consolePath = execSync("wing console-path").toString().trim();
+  return path.resolve(consolePath);
+};
+
+let createConsoleApp: any;
+import(getConsolePath())
+  .then((consoleModule) => {
+    const { createConsoleApp: absolutePath } = consoleModule;
+    createConsoleApp = absolutePath;
+  })
+  .catch((err) => {
+    console.error("Error importing the console module:", err);
+  });
 
 const globalAny = global as any;
 globalAny.fetch = fetch;
 globalAny.WebSocket = ws;
 
 import { ExtensionContext, window, workspace, OutputChannel } from "vscode";
+import ws from "ws";
 import { ConsoleManager } from "./console-manager";
 import { createClient } from "./services/client";
 
