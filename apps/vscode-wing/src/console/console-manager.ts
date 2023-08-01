@@ -40,7 +40,7 @@ export class ConsoleManager {
 
   private testsExplorer: TestsExplorerProvider;
 
-  private logger: OutputChannel | undefined;
+  private logger: OutputChannel;
 
   private explorerView: TreeView<ResourceItem> | undefined;
 
@@ -103,55 +103,6 @@ export class ConsoleManager {
     });
   }
 
-  private openWebview() {
-    if (this.webviewPanel) {
-      return;
-    }
-
-    this.explorerView = window.createTreeView("consoleExplorer", {
-      treeDataProvider: this.resourcesExplorer,
-    });
-
-    this.testsExplorerView = window.createTreeView("consoleTestsExplorer", {
-      treeDataProvider: this.testsExplorer,
-    });
-
-    this.webviewPanel = window.createWebviewPanel(
-      VIEW_TYPE_CONSOLE,
-      `Console`,
-      ViewColumn.Beside,
-      {
-        enableScripts: true,
-        enableCommandUris: true,
-      }
-    );
-
-    this.webviewPanel.iconPath = {
-      light: Uri.joinPath(
-        this.context.extensionUri,
-        "resources",
-        "icon-light.png"
-      ),
-      dark: Uri.joinPath(
-        this.context.extensionUri,
-        "resources",
-        "icon-dark.png"
-      ),
-    };
-    this.webviewPanel.onDidDispose(async () => {
-      this.resourcesExplorer.clear();
-      this.testsExplorer.clear();
-      this.webviewPanel = undefined;
-      this.activeInstanceId = undefined;
-    });
-
-    this.context.subscriptions.push(
-      this.webviewPanel,
-      this.explorerView,
-      this.testsExplorerView
-    );
-  }
-
   public getActiveInstanceId() {
     return this.activeInstanceId;
   }
@@ -173,7 +124,7 @@ export class ConsoleManager {
         this.testsExplorer.update(await instance.client.listTests());
       },
       onError: (err) => {
-        this.logger?.appendLine(err);
+        this.logger.appendLine(err);
       },
     });
     this.instances[instance.id] = instance;
@@ -187,13 +138,45 @@ export class ConsoleManager {
       return;
     }
 
-    this.openWebview();
-    if (!this.webviewPanel || this.activeInstanceId === instance.id) {
-      return;
+    if (!this.webviewPanel) {
+      this.webviewPanel = window.createWebviewPanel(
+        VIEW_TYPE_CONSOLE,
+        `Console`,
+        ViewColumn.Beside,
+        {
+          enableScripts: true,
+          enableCommandUris: true,
+        }
+      );
+
+      this.webviewPanel.iconPath = {
+        light: Uri.joinPath(
+          this.context.extensionUri,
+          "resources",
+          "icon-light.png"
+        ),
+        dark: Uri.joinPath(
+          this.context.extensionUri,
+          "resources",
+          "icon-dark.png"
+        ),
+      };
+
+      this.webviewPanel.onDidDispose(async () => {
+        this.resourcesExplorer.clear();
+        this.testsExplorer.clear();
+        this.webviewPanel = undefined;
+        this.activeInstanceId = undefined;
+      });
+      this.logger.show();
     }
-    this.activeInstanceId = instance.id;
-    this.webviewPanel.title = `${path.basename(instance.id)} - [console]`;
-    this.webviewPanel.webview.html = `
+
+    if (this.activeInstanceId !== instanceId) {
+      this.logger.appendLine(`activeInstanceId${this.activeInstanceId}`);
+      this.logger.appendLine(`Instance id: ${instanceId}`);
+
+      this.webviewPanel.title = `${path.basename(instance.id)} - [console]`;
+      this.webviewPanel.webview.html = `
       <!DOCTYPE html>
         <html lang="en">
         <head>
@@ -207,12 +190,28 @@ export class ConsoleManager {
           <iframe src="http://${instance.url}"/>
         </body>
       </html>`;
+    }
+
+    this.explorerView = window.createTreeView("consoleExplorer", {
+      treeDataProvider: this.resourcesExplorer,
+    });
+
+    this.testsExplorerView = window.createTreeView("consoleTestsExplorer", {
+      treeDataProvider: this.testsExplorer,
+    });
+
+    this.context.subscriptions.push(
+      this.webviewPanel,
+      this.explorerView,
+      this.testsExplorerView
+    );
 
     const node = await this.resourcesExplorer.getChildren();
     if (node[0]?.id) {
       await this.explorerView?.reveal(new ResourceItem(node[0].id));
     }
-    this.logger?.show();
+
+    this.activeInstanceId = instanceId;
   }
 
   public async closeInstance(instanceId: string) {
