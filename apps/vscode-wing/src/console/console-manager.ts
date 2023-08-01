@@ -188,7 +188,7 @@ export class ConsoleManager {
     }
 
     this.openWebview();
-    if (!this.webviewPanel) {
+    if (!this.webviewPanel || this.activeInstanceId === instance.id) {
       return;
     }
     this.activeInstanceId = instance.id;
@@ -212,12 +212,6 @@ export class ConsoleManager {
     if (node[0]?.id) {
       await this.explorerView?.reveal(new ResourceItem(node[0].id));
     }
-
-    const tests = await instance.client.listTests();
-    if (tests[0]?.id) {
-      await this.testsExplorerView?.reveal(new TestItem(tests[0].id));
-    }
-
     this.logger?.show();
   }
 
