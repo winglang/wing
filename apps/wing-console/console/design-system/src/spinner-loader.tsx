@@ -9,7 +9,7 @@ export interface SpinnerLoaderProps {
 
 export const SpinnerLoader = ({ size = "md" }: SpinnerLoaderProps) => {
   return (
-    <div role="status" data-testid="main-view-loader">
+    <div role="status">
       <svg
         aria-hidden="true"
         className={classNames(
