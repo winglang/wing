@@ -708,18 +708,25 @@ Duration <DURATION>"
 `;
 
 exports[`function_variadic_definition.w 1`] = `
-"error: Unexpected 'variadic_definition'
-  --> ../../../examples/tests/invalid/function_variadic_definition.w:1:11
+"error: Variadic parameters must always be the last parameter in a function.
+  --> ../../../examples/tests/invalid/function_variadic_definition.w:1:14
   |
 1 | let f1 = (...args: Array<num>, x:num) => {};
-  |           ^^^^^^^^^^^^^^^^^^^ Unexpected 'variadic_definition'
+  |              ^^^^ Variadic parameters must always be the last parameter in a function.
 
 
-error: All elements of a variadic argument must be of the same type.
+error: Expected type to be num, but got bool instead.
   --> ../../../examples/tests/invalid/function_variadic_definition.w:5:7
   |
 5 | f2(1, true, 2);
-  |       ^^^^ All elements of a variadic argument must be of the same type.
+  |       ^^^^ Expected type to be num, but got bool instead.
+
+
+error: Expected type to be Bucket, but got bool instead.
+   --> ../../../examples/tests/invalid/function_variadic_definition.w:14:21
+   |
+14 | funcBucket(bucket1, true, bucket2);
+   |                     ^^^^ Expected type to be Bucket, but got bool instead.
 
 
  
