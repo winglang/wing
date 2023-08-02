@@ -1,9 +1,5 @@
-import type { CreateConsoleAppOptions } from "@wingconsole/app";
-
+import { spawn } from "child_process";
 import fetch from "node-fetch";
-import open from "open";
-
-export const { createConsoleApp } = importConsoleApp();
 
 const globalAny = global as any;
 globalAny.fetch = fetch;
@@ -13,7 +9,7 @@ import { ExtensionContext, window, workspace, OutputChannel } from "vscode";
 import ws from "ws";
 import { ConsoleManager } from "./console-manager";
 import { createClient } from "./services/client";
-import { importConsoleApp } from "../bin-helper";
+import { getWingBinAndArgs } from "../bin-helper";
 
 export class WingConsoleManager {
   consoleManager: ConsoleManager;
@@ -65,48 +61,43 @@ export class WingConsoleManager {
       return;
     }
 
-    const { close, port } = await createConsoleApp({
-      wingfile,
-      hostUtils: {
-        openExternal: async (url: string) => {
-          await open(url);
-        },
-      },
-      log: {
-        info: (message: string) => {
-          this.log(message, "info");
-        },
-        error: (message: string) => {
-          this.log(message, "error");
-        },
-        verbose: (message: string) => {
-          this.log(message, "verbose");
-        },
-      },
-      layoutConfig: {
-        header: {
-          hide: true,
-        },
-        leftPanel: {
-          hide: true,
-        },
-        bottomPanel: {
-          hide: true,
-        },
-        statusBar: {
-          showThemeToggle: true,
-        },
-      },
-    } as CreateConsoleAppOptions);
+    const args = await getWingBinAndArgs(this.context);
+    if (!args) {
+      return;
+    }
 
-    const url = `localhost:${port}`;
+    args.push("it", "--no-open", wingfile);
 
-    this.log(`Wing Console is running at ${url}`);
-    await this.consoleManager.addInstance({
-      id: wingfile,
-      url,
-      client: createClient(url),
-      onDidClose: close,
+    const cp = spawn(args[0]!, args.slice(1), {
+      stdio: ["ignore", "pipe", "pipe"],
+      windowsHide: true,
+      shell: false,
+    });
+
+    cp.on("error", async (err) => {
+      if (err) {
+        await this.consoleManager.closeInstance(wingfile);
+      }
+    });
+    cp.stdout?.once("data", async (data) => {
+      // get localhost url from stdout
+      const urlMatch = data.toString().match(/http:\/\/localhost:\d+/);
+      // get localhost and port only
+      if (!urlMatch) {
+        // there should be an error message in a different event
+        return;
+      }
+      const url = urlMatch[0];
+
+      this.log(`Wing Console is running at ${url}`);
+      await this.consoleManager.addInstance({
+        id: wingfile,
+        url,
+        client: createClient(url),
+        onDidClose: () => {
+          cp.kill();
+        },
+      });
     });
   }
 
