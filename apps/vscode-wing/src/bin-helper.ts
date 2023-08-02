@@ -124,7 +124,7 @@ export async function getWingBinAndArgs(context: ExtensionContext) {
   return [wingBin, ...args];
 }
 
-export const importConsoleApp = () => {
+export const importCreateConsoleApp = () => {
   const packagePath = execSync("wing console-app-path").toString().trim();
 
   const createConsoleApp =
