@@ -332,8 +332,7 @@ pub struct Parser<'a> {
 	in_json: RefCell<u64>,
 	is_in_mut_json: RefCell<bool>,
 	is_in_loop: RefCell<bool>,
-	/// Track all file paths that have been found while parsing the current file, along with the
-	/// span of the `bring` statement that referenced them.
+	/// Track all file paths that have been found while parsing the current file
 	/// These will need to be eventually parsed (or diagnostics will be reported if they don't exist)
 	referenced_wing_files: RefCell<Vec<PathBuf>>,
 }
