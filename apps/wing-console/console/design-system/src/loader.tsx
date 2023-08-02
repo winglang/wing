@@ -1,15 +1,18 @@
-import { SpinnerLoader } from "./spinner-loader.js";
+import { SpinnerLoader, SpinnerLoaderSize } from "./spinner-loader.js";
 
-export const Loader = ({}: {
+export const Loader = ({
+  size,
+  className,
+  text,
+}: {
   /**
    * @deprecated
    */
   text?: string;
 
-  /**
-   * @deprecated
-   */
-  size: string;
+  size?: SpinnerLoaderSize;
+
+  className?: string;
 }) => {
-  return <SpinnerLoader size="sm" />;
+  return <SpinnerLoader size={size || "sm"} className={className} />;
 };

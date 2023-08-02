@@ -1,19 +1,27 @@
 import classNames from "classnames";
 
+export type SpinnerLoaderSize = "xs" | "sm" | "md" | "lg";
+
 export interface SpinnerLoaderProps {
   /**
    * The size of the progress bar.
    */
-  size?: "sm" | "md" | "lg";
+  size?: SpinnerLoaderSize;
+  /**
+   * className
+   */
+  className?: string;
 }
 
-export const SpinnerLoader = ({ size = "md" }: SpinnerLoaderProps) => {
+export const SpinnerLoader = ({ className, size = "md" }: SpinnerLoaderProps) => {
   return (
-    <div role="status">
+    <div role="status" className={"self-center"}>
       <svg
         aria-hidden="true"
         className={classNames(
           "text-slate-200 animate-spin dark:text-slate-600 fill-slate-600 dark:fill-slate-200",
+          className,
+          size === "xs" && "w-4 h-4",
           size === "sm" && "w-5 h-5",
           size === "md" && "w-8 h-8",
           size === "lg" && "w-10 h-10",
