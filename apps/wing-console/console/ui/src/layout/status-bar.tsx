@@ -57,7 +57,7 @@ export const StatusBar = ({
                 "flex",
               ])}
             >
-              {loading && <Loader size="1rem" />}
+              {loading && <Loader size="xs" className={"mr-1"} />}
               {cloudAppStateString[cloudAppState]}
             </span>
           </span>

@@ -49,7 +49,6 @@
     "nanoid": "^4.0.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-lottie-player": "^1.5.4",
     "zod": "^3.21.4"
   },
   "devDependencies": {
