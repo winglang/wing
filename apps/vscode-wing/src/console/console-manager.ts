@@ -184,6 +184,10 @@ export const createConsoleManager = (
         testsExplorer.clear();
         webviewPanel = undefined;
         activeInstanceId = undefined;
+
+        Object.keys(instances).forEach(async (id) => {
+          await closeInstance(id);
+        });
       });
       logger.show();
     }
