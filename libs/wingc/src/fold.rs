@@ -423,6 +423,7 @@ where
 		name: f.fold_symbol(node.name),
 		type_annotation: f.fold_type_annotation(node.type_annotation),
 		reassignable: node.reassignable,
+		variadic: node.variadic,
 	}
 }
 

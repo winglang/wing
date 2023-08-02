@@ -514,9 +514,12 @@ module.exports = grammar({
 
     access_modifier: ($) => choice("public", "private", "protected"),
 
+    variadic: ($) => "...",
+
     parameter_definition: ($) =>
       seq(
         optional(field("reassignable", $.reassignable)),
+        optional(field("variadic", $.variadic)),
         field("name", $.identifier),
         optional($._type_annotation),
       ),
