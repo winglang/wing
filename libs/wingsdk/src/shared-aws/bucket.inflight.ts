@@ -237,7 +237,7 @@ export class BucketClient implements IBucketClient {
 
     if (!(await this.exists(key))) {
       throw new Error(
-        `Cannot provide public url for an non-existent key (key=${key})`
+        `Cannot provide public url for a non-existent key (key=${key})`
       );
     }
 
