@@ -10,7 +10,6 @@ use std::{fs, str, vec};
 use tree_sitter::Node;
 use tree_sitter_traversal::{traverse, Order};
 
-use crate::ast::Spanned;
 use crate::ast::{
 	ArgList, BinaryOperator, BringSource, CalleeKind, CatchBlock, Class, ClassField, ElifBlock, Expr, ExprKind,
 	FunctionBody, FunctionDefinition, FunctionParameter, FunctionSignature, Interface, InterpolatedString,

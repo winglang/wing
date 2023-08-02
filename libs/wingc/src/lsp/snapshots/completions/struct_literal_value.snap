@@ -1,64 +1,16 @@
 ---
 source: libs/wingc/src/lsp/completions.rs
 ---
-- label: assert
-  kind: 3
-  detail: "(condition: bool): void"
+- label: "y:"
+  kind: 5
+  detail: num
   documentation:
     kind: markdown
-    value: "```wing\nassert: (condition: bool): void\n```\n---\nAsserts that a condition is true\n\n### Parameters\n- `condition` — The condition to assert"
-  sortText: cc|assert
-  insertText: assert($0)
+    value: "```wing\ny: num\n```"
+  sortText: "ab|y:"
+  insertText: "y: $1"
   insertTextFormat: 2
   command:
-    title: triggerParameterHints
-    command: editor.action.triggerParameterHints
-- label: log
-  kind: 3
-  detail: "(message: str): void"
-  documentation:
-    kind: markdown
-    value: "```wing\nlog: (message: str): void\n```\n---\nLogs a message\n\n### Parameters\n- `message` — The message to log"
-  sortText: cc|log
-  insertText: log($0)
-  insertTextFormat: 2
-  command:
-    title: triggerParameterHints
-    command: editor.action.triggerParameterHints
-- label: panic
-  kind: 3
-  detail: "(message: str): void"
-  documentation:
-    kind: markdown
-    value: "```wing\npanic: (message: str): void\n```\n---\npanics with an error\n\n### Parameters\n- `message` — The message to panic with"
-  sortText: cc|panic
-  insertText: panic($0)
-  insertTextFormat: 2
-  command:
-    title: triggerParameterHints
-    command: editor.action.triggerParameterHints
-- label: throw
-  kind: 3
-  detail: "(message: str): void"
-  documentation:
-    kind: markdown
-    value: "```wing\nthrow: (message: str): void\n```\n---\nthrows an error\n\n### Parameters\n- `message` — The message to throw"
-  sortText: cc|throw
-  insertText: throw($0)
-  insertTextFormat: 2
-  command:
-    title: triggerParameterHints
-    command: editor.action.triggerParameterHints
-- label: Foo
-  kind: 22
-  documentation:
-    kind: markdown
-    value: "```wing\nstruct Foo\n```\n---\n### Fields\n- `x` — str\n- `y` — num"
-  sortText: hh|Foo
-- label: "inflight () => {}"
-  kind: 15
-  sortText: "ll|inflight () => {}"
-  filterText: inflight
-  insertText: "inflight ($1) => {$2}"
-  insertTextFormat: 2
+    title: triggerCompletion
+    command: editor.action.triggerSuggest
 

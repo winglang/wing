@@ -90,22 +90,21 @@ pub unsafe extern "C" fn wingc_on_document_symbol(ptr: u32, len: u32) -> u64 {
 }
 
 pub fn on_document_symbols(params: lsp_types::DocumentSymbolParams) -> Vec<DocumentSymbol> {
-	vec![]
-	// FILES.with(|files| {
-	// 	let files = files.borrow();
-	// 	let parse_result = files.get(&params.text_document.uri);
-	// 	let parse_result = parse_result.unwrap();
-	// 	let scope = &parse_result.scope;
+	PROJECT_DATA.with(|project_data| {
+		let project_data = project_data.borrow();
+		let uri = params.text_document.uri;
+		let file = uri.to_file_path().ok().expect("LSP only works on real filesystems");
+		let scope = project_data.asts.get(&file).unwrap();
 
-	// 	let mut visitor = DocumentSymbolVisitor::new();
-	// 	visitor.visit_scope(scope);
+		let mut visitor = DocumentSymbolVisitor::new();
+		visitor.visit_scope(scope);
 
-	// 	visitor
-	// 		.document_symbols
-	// 		.into_iter()
-	// 		.filter(|sym| filter_symbol(sym))
-	// 		.collect()
-	// })
+		visitor
+			.document_symbols
+			.into_iter()
+			.filter(|sym| filter_symbol(sym))
+			.collect()
+	})
 }
 
 fn filter_symbol(symbol: &DocumentSymbol) -> bool {

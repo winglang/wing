@@ -15,7 +15,7 @@ export async function lsp() {
   let wingc = await wingCompiler.load({
     imports: {
       env: {
-        send_diagnostic
+        send_diagnostic,
       },
     },
   });
@@ -23,10 +23,7 @@ export async function lsp() {
 
   const raw_diagnostics: wingCompiler.WingDiagnostic[] = [];
 
-  function send_diagnostic(
-    data_ptr: number,
-    data_len: number
-  ) {
+  function send_diagnostic(data_ptr: number, data_len: number) {
     const data_buf = Buffer.from(
       (wingc.exports.memory as WebAssembly.Memory).buffer,
       data_ptr,
@@ -99,7 +96,11 @@ export async function lsp() {
     return result;
   });
 
-  async function handle_event_and_update_diagnostics(wingc_handler_name: wingCompiler.WingCompilerFunction, params: any, uri: DocumentUri) {
+  async function handle_event_and_update_diagnostics(
+    wingc_handler_name: wingCompiler.WingCompilerFunction,
+    params: any,
+    uri: DocumentUri
+  ) {
     if (badState) {
       wingc = await wingCompiler.load({
         imports: {
@@ -117,21 +118,37 @@ export async function lsp() {
     // purposely not awaiting this, notifications are fire-and-forget
     connection.sendDiagnostics({
       uri,
-      diagnostics: raw_diagnostics.map((rd) => {
-        if(rd.span) {
-          return Diagnostic.create(Range.create(rd.span.start.line, rd.span.start.col, rd.span.end.line, rd.span.end.col), rd.message)
+      diagnostics: filterMap(raw_diagnostics, (rd) => {
+        if (rd.span) {
+          // skip if file_id doesn't match uri
+          const diagnosticUri = "file://" + rd.span.file_id;
+          if (diagnosticUri !== uri) {
+            return null;
+          }
+          return Diagnostic.create(
+            Range.create(rd.span.start.line, rd.span.start.col, rd.span.end.line, rd.span.end.col),
+            rd.message
+          );
         } else {
-          return Diagnostic.create(Range.create(0, 0, 0, 0), rd.message)
+          return Diagnostic.create(Range.create(0, 0, 0, 0), rd.message);
         }
-      })
+      }),
     });
   }
 
   connection.onDidOpenTextDocument(async (params) => {
-    handle_event_and_update_diagnostics("wingc_on_did_open_text_document", params, params.textDocument.uri);
+    handle_event_and_update_diagnostics(
+      "wingc_on_did_open_text_document",
+      params,
+      params.textDocument.uri
+    );
   });
   connection.onDidChangeTextDocument(async (params) => {
-    handle_event_and_update_diagnostics("wingc_on_did_change_text_document", params, params.textDocument.uri);
+    handle_event_and_update_diagnostics(
+      "wingc_on_did_change_text_document",
+      params,
+      params.textDocument.uri
+    );
   });
   connection.onCompletion(async (params) => {
     return callWing("wingc_on_completion", params);
@@ -150,4 +167,15 @@ export async function lsp() {
   });
 
   connection.listen();
+}
+
+function filterMap<T, U>(arr: T[], fn: (item: T) => U | null): U[] {
+  const result: U[] = [];
+  for (const item of arr) {
+    const mapped = fn(item);
+    if (mapped !== null) {
+      result.push(mapped);
+    }
+  }
+  return result;
 }
