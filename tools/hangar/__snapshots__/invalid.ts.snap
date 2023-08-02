@@ -131,6 +131,13 @@ exports[`bring_local_self.w 1`] = `
   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Cannot bring a module into itself
 
 
+error: Cannot find module \\"../../../examples/tests/invalid/non-existent.w\\"
+  --> ../../../examples/tests/invalid/bring_local_self.w:4:1
+  |
+4 | bring \\"./non-existent.w\\" as bar;
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Cannot find module \\"../../../examples/tests/invalid/non-existent.w\\"
+
+
  
  
 Tests 1 failed (1)
@@ -147,10 +154,17 @@ exports[`bring_local_variables.w 1`] = `
 
 
 error: Cannot bring \\"../../../examples/tests/invalid/file_with_variables.w\\" - modules with statements besides classes, interfaces, enums, and structs cannot be brought
-  --> ../../../examples/tests/invalid/bring_local_variables.w:1:7
+  --> ../../../examples/tests/invalid/bring_local_variables.w:1:1
   |
 1 | bring \\"./file_with_variables.w\\" as stuff;
-  |       ^^^^^^^^^^^^^^^^^^^^^^^^^ Cannot bring \\"../../../examples/tests/invalid/file_with_variables.w\\" - modules with statements besides classes, interfaces, enums, and structs cannot be brought
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Cannot bring \\"../../../examples/tests/invalid/file_with_variables.w\\" - modules with statements besides classes, interfaces, enums, and structs cannot be brought
+
+
+error: Unknown symbol \\"stuff\\"
+  --> ../../../examples/tests/invalid/bring_local_variables.w:3:5
+  |
+3 | new stuff.Bar();
+  |     ^^^^^^^^^ Unknown symbol \\"stuff\\"
 
 
  
@@ -595,23 +609,23 @@ Duration <DURATION>"
 
 exports[`cyclic_bring1.w 1`] = `
 "error: Could not compile \\"../../../examples/tests/invalid/cyclic_bring1.w\\" due to cyclic bring statements:
-- ../../../examples/tests/invalid/cyclic_bring2.w
 - ../../../examples/tests/invalid/cyclic_bring3.w
+- ../../../examples/tests/invalid/cyclic_bring2.w
 - ../../../examples/tests/invalid/cyclic_bring1.w
 
 
-error: could not find types for \\"../../../examples/tests/invalid/cyclic_bring2.w\\" (compiler bug)
+error: Could not find Wing module \\"../../../examples/tests/invalid/cyclic_bring2.w\\"
   --> ../../../examples/tests/invalid/cyclic_bring1.w:1:1
   |
 1 | bring \\"./cyclic_bring2.w\\" as foo;
-  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ could not find types for \\"../../../examples/tests/invalid/cyclic_bring2.w\\" (compiler bug)
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Could not find Wing module \\"../../../examples/tests/invalid/cyclic_bring2.w\\"
 
 
-error: could not find types for \\"../../../examples/tests/invalid/cyclic_bring3.w\\" (compiler bug)
+error: Could not find Wing module \\"../../../examples/tests/invalid/cyclic_bring3.w\\"
   --> ../../../examples/tests/invalid/cyclic_bring2.w:1:1
   |
 1 | bring \\"./cyclic_bring3.w\\" as foo;
-  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ could not find types for \\"../../../examples/tests/invalid/cyclic_bring3.w\\" (compiler bug)
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Could not find Wing module \\"../../../examples/tests/invalid/cyclic_bring3.w\\"
 
 
  
@@ -623,23 +637,23 @@ Duration <DURATION>"
 
 exports[`cyclic_bring2.w 1`] = `
 "error: Could not compile \\"../../../examples/tests/invalid/cyclic_bring2.w\\" due to cyclic bring statements:
-- ../../../examples/tests/invalid/cyclic_bring3.w
 - ../../../examples/tests/invalid/cyclic_bring1.w
+- ../../../examples/tests/invalid/cyclic_bring3.w
 - ../../../examples/tests/invalid/cyclic_bring2.w
 
 
-error: could not find types for \\"../../../examples/tests/invalid/cyclic_bring3.w\\" (compiler bug)
+error: Could not find Wing module \\"../../../examples/tests/invalid/cyclic_bring3.w\\"
   --> ../../../examples/tests/invalid/cyclic_bring2.w:1:1
   |
 1 | bring \\"./cyclic_bring3.w\\" as foo;
-  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ could not find types for \\"../../../examples/tests/invalid/cyclic_bring3.w\\" (compiler bug)
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Could not find Wing module \\"../../../examples/tests/invalid/cyclic_bring3.w\\"
 
 
-error: could not find types for \\"../../../examples/tests/invalid/cyclic_bring1.w\\" (compiler bug)
+error: Could not find Wing module \\"../../../examples/tests/invalid/cyclic_bring1.w\\"
   --> ../../../examples/tests/invalid/cyclic_bring3.w:1:1
   |
 1 | bring \\"./cyclic_bring1.w\\" as foo;
-  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ could not find types for \\"../../../examples/tests/invalid/cyclic_bring1.w\\" (compiler bug)
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Could not find Wing module \\"../../../examples/tests/invalid/cyclic_bring1.w\\"
 
 
  
@@ -651,23 +665,23 @@ Duration <DURATION>"
 
 exports[`cyclic_bring3.w 1`] = `
 "error: Could not compile \\"../../../examples/tests/invalid/cyclic_bring3.w\\" due to cyclic bring statements:
-- ../../../examples/tests/invalid/cyclic_bring1.w
 - ../../../examples/tests/invalid/cyclic_bring2.w
+- ../../../examples/tests/invalid/cyclic_bring1.w
 - ../../../examples/tests/invalid/cyclic_bring3.w
 
 
-error: could not find types for \\"../../../examples/tests/invalid/cyclic_bring1.w\\" (compiler bug)
+error: Could not find Wing module \\"../../../examples/tests/invalid/cyclic_bring1.w\\"
   --> ../../../examples/tests/invalid/cyclic_bring3.w:1:1
   |
 1 | bring \\"./cyclic_bring1.w\\" as foo;
-  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ could not find types for \\"../../../examples/tests/invalid/cyclic_bring1.w\\" (compiler bug)
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Could not find Wing module \\"../../../examples/tests/invalid/cyclic_bring1.w\\"
 
 
-error: could not find types for \\"../../../examples/tests/invalid/cyclic_bring2.w\\" (compiler bug)
+error: Could not find Wing module \\"../../../examples/tests/invalid/cyclic_bring2.w\\"
   --> ../../../examples/tests/invalid/cyclic_bring1.w:1:1
   |
 1 | bring \\"./cyclic_bring2.w\\" as foo;
-  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ could not find types for \\"../../../examples/tests/invalid/cyclic_bring2.w\\" (compiler bug)
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Could not find Wing module \\"../../../examples/tests/invalid/cyclic_bring2.w\\"
 
 
  
