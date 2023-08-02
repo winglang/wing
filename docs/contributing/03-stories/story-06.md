@@ -2,7 +2,7 @@
 
 > **Status**: Done
 
-This is the story of Wing Cloud Sprint 6.
+This is the story of Monada Sprint 6.
 
 The primary goal of this sprint is to create a self service journey from someone who doesn't have access to wing repo into someone that has all that she needs in order to contribute or use wing.
 
