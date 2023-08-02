@@ -150,7 +150,7 @@ const contributes: VSCodeExtensionContributions = {
     },
     {
       command: "wingConsole.runAllTests",
-      title: "Run all test",
+      title: "Run all tests",
       icon: {
         light: "resources/play-all-light.svg",
         dark: "resources/play-all-dark.svg",
