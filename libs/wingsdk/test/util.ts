@@ -1,7 +1,6 @@
 import { mkdtempSync, readFileSync, readdirSync, statSync } from "fs";
 import { tmpdir } from "os";
 import { extname, isAbsolute, join } from "path";
-import * as tar from "tar";
 import { App, Code } from "../src/core";
 
 export function treeJsonOf(outdir: string): any {
@@ -144,18 +143,6 @@ export function directorySnapshot(initialRoot: string) {
           case ".js":
             const code = readFileSync(abspath, "utf-8");
             snapshot[key] = sanitizeCodeText(code);
-            break;
-
-          case ".wsim":
-            const workdir = mkdtemp();
-
-            tar.extract({
-              cwd: workdir,
-              sync: true,
-              file: abspath,
-            });
-
-            visit(workdir, ".", key + "/");
             break;
 
           default:

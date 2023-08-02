@@ -96,7 +96,6 @@ const project = new cdk.JsiiProject({
     "@azure/identity@3.1.3",
     "@azure/core-paging",
     // simulator dependencies
-    "tar",
     "express",
     "uuid",
     // using version 3 because starting from version 4, it no longer works with CommonJS.
@@ -111,7 +110,6 @@ const project = new cdk.JsiiProject({
     "bump-pack@workspace:^",
     "@types/fs-extra",
     "@types/mime-types",
-    "@types/tar",
     "@types/express",
     "aws-sdk-client-mock",
     "aws-sdk-client-mock-jest",

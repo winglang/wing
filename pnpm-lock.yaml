@@ -1,4 +1,4 @@
-lockfileVersion: "6.1"
+lockfileVersion: "6.0"
 
 settings:
   autoInstallPeers: true
@@ -1025,7 +1025,7 @@ importers:
         version: link:../../tools/bump-pack
       tsup:
         specifier: ^6.7.0
-        version: 6.7.0(postcss@8.4.24)(typescript@5.1.3)
+        version: 6.7.0(typescript@4.9.4)
       typescript:
         specifier: ^4.9.4
         version: 4.9.4
@@ -1119,9 +1119,6 @@ importers:
       safe-stable-stringify:
         specifier: ^2.4.3
         version: 2.4.3
-      tar:
-        specifier: ^6.1.13
-        version: 6.1.13
       uuid:
         specifier: ^8.3.2
         version: 8.3.2
@@ -1141,9 +1138,6 @@ importers:
       "@types/node":
         specifier: ^18
         version: 18.16.18
-      "@types/tar":
-        specifier: ^6.1.3
-        version: 6.1.3
       "@types/uuid":
         specifier: ^9.0.1
         version: 9.0.1
@@ -9319,13 +9313,6 @@ packages:
     resolution: {integrity: sha512-Hl219/BT5fLAaz6NDkSuhzasy49dwQS/DSdu4MdggFB8zcXv7vflBI3xp7FEmkmdDkBUI2bPUNeMttp2knYdxw==}
     dev: true
 
-  /@types/tar@6.1.3:
-    resolution: {integrity: sha512-YzDOr5kdAeqS8dcO6NTTHTMJ44MUCBDoLEIyPtwEn7PssKqUYL49R1iCVJPeiPzPlKi6DbH33eZkpeJ27e4vHg==}
-    dependencies:
-      "@types/node": 18.16.18
-      minipass: 3.3.6
-    dev: true
-
   /@types/tunnel@0.0.3:
     resolution: {integrity: sha512-sOUTGn6h1SfQ+gbgqC364jLFBw2lnFqkgF3q0WovEHRLMrVD1sd5aufqi/aJObLekJO+Aq5z646U4Oxy6shXMA==}
     dependencies:
@@ -12595,7 +12582,7 @@ packages:
     dependencies:
       semver: 7.5.2
       shelljs: 0.8.5
-      typescript: 5.2.0-dev.20230727
+      typescript: 5.2.0-dev.20230801
     dev: true
 
   /dset@3.1.2:
@@ -21322,6 +21309,42 @@ packages:
       - ts-node
     dev: true
 
+  /tsup@6.7.0(typescript@4.9.4):
+    resolution: {integrity: sha512-L3o8hGkaHnu5TdJns+mCqFsDBo83bJ44rlK7e6VdanIvpea4ArPcU3swWGsLVbXak1PqQx/V+SSmFPujBK+zEQ==}
+    engines: {node: ">=14.18"}
+    hasBin: true
+    peerDependencies:
+      "@swc/core": ^1
+      postcss: ^8.4.12
+      typescript: ">=4.1.0"
+    peerDependenciesMeta:
+      "@swc/core":
+        optional: true
+      postcss:
+        optional: true
+      typescript:
+        optional: true
+    dependencies:
+      bundle-require: 4.0.1(esbuild@0.17.19)
+      cac: 6.7.14
+      chokidar: 3.5.3
+      debug: 4.3.4
+      esbuild: 0.17.19
+      execa: 5.1.1
+      globby: 11.1.0
+      joycon: 3.1.1
+      postcss-load-config: 3.1.4(postcss@8.4.24)
+      resolve-from: 5.0.0
+      rollup: 3.25.3
+      source-map: 0.8.0-beta.0
+      sucrase: 3.32.0
+      tree-kill: 1.2.2
+      typescript: 4.9.4
+    transitivePeerDependencies:
+      - supports-color
+      - ts-node
+    dev: true
+
   /tsup@7.1.0(postcss@8.4.24)(typescript@5.1.3):
     resolution: {integrity: sha512-mazl/GRAk70j8S43/AbSYXGgvRP54oQeX8Un4iZxzATHt0roW0t6HYDVZIXMw0ZQIpvr1nFMniIVnN5186lW7w==}
     engines: {node: ">=16.14"}
@@ -21513,8 +21536,8 @@ packages:
     engines: {node: ">=14.17"}
     hasBin: true
 
-  /typescript@5.2.0-dev.20230727:
-    resolution: {integrity: sha512-HTNqxwU5roYnvWrrdTxKLREZ+fygKOpf7q2DAhfZntqgyQNxZzZdDypigMS8tNmeQN2X/ohbNzX9PnhHoCCmfw==}
+  /typescript@5.2.0-dev.20230801:
+    resolution: {integrity: sha512-f8FmzL+1+agawPPUzsd38vTiZD/z+RtGax/3+tzxsBP15O/4lMsliTEXRXF7ESC7a1s/f9HsNNRMne438PPZsw==}
     engines: {node: ">=14.17"}
     hasBin: true
     dev: true

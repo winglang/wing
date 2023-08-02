@@ -7,6 +7,7 @@ pass ─ string.wsim » root/env1/test:length
 pass ─ string.wsim » root/env10/test:substring()
 pass ─ string.wsim » root/env11/test:trim()     
 pass ─ string.wsim » root/env12/test:contains() 
+pass ─ string.wsim » root/env13/test:replace()  
 pass ─ string.wsim » root/env2/test:at()        
 pass ─ string.wsim » root/env3/test:concat()    
 pass ─ string.wsim » root/env4/test:endsWith()  
@@ -17,7 +18,7 @@ pass ─ string.wsim » root/env8/test:split()
 pass ─ string.wsim » root/env9/test:startsWith()
  
  
-Tests 13 passed (13)
+Tests 14 passed (14)
 Test Files 1 passed (1)
 Duration <DURATION>
 ```

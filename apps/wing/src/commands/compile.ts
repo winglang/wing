@@ -33,17 +33,18 @@ export interface CompileOptions {
  * @returns the output directory
  */
 export async function compile(entrypoint: string, options: CompileOptions): Promise<string> {
+  const coloring = chalk.supportsColor ? chalk.supportsColor.hasBasic : false;
   try {
     return await wingCompiler.compile(entrypoint, {
       ...options,
       log,
+      color: coloring,
     });
   } catch (error) {
     if (error instanceof wingCompiler.CompileError) {
       // This is a bug in the user's code. Print the compiler diagnostics.
       const errors = error.diagnostics;
       const result = [];
-      const coloring = chalk.supportsColor ? chalk.supportsColor.hasBasic : false;
 
       for (const error of errors) {
         const { message, span } = error;
