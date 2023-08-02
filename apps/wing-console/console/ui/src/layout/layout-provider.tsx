@@ -84,7 +84,7 @@ export function LayoutProvider({
         bottomPanel: {
           hide: true,
         },
-        statusbar: {
+        statusBar: {
           hide: true,
         },
       };
