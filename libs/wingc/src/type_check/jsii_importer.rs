@@ -467,6 +467,7 @@ impl<'a> JsiiImporter<'a> {
 							name: param.name.clone(),
 							typeref: self.parameter_to_wing_type(&param),
 							docs: Docs::from(&param.docs),
+							variadic: param.variadic.unwrap_or(false),
 						});
 					}
 				}
@@ -726,6 +727,7 @@ impl<'a> JsiiImporter<'a> {
 						name: param.name.clone(),
 						typeref: self.parameter_to_wing_type(&param),
 						docs: Docs::from(&param.docs),
+						variadic: param.variadic.unwrap_or(false),
 					});
 				}
 			}
