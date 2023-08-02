@@ -22,8 +22,8 @@ use crate::{
 		CLASS_INFLIGHT_INIT_NAME,
 	},
 	visit_context::VisitContext,
-	MACRO_REPLACE_ARGS, MACRO_REPLACE_ARGS_TEXT, MACRO_REPLACE_PHASE, MACRO_REPLACE_SELF, MACRO_REPLACE_TARGET,
-	WINGSDK_ASSEMBLY_NAME, WINGSDK_RESOURCE, WINGSDK_STD_MODULE,
+	MACRO_REPLACE_ARGS, MACRO_REPLACE_ARGS_TEXT, MACRO_REPLACE_SELF, WINGSDK_ASSEMBLY_NAME, WINGSDK_RESOURCE,
+	WINGSDK_STD_MODULE,
 };
 
 use self::codemaker::CodeMaker;
@@ -420,9 +420,8 @@ impl<'a> JSifier<'a> {
 								// defined differently in the parent class of "this".
 								"this".to_string(),
 						};
-						let patterns = &[MACRO_REPLACE_SELF, MACRO_REPLACE_ARGS, MACRO_REPLACE_ARGS_TEXT, MACRO_REPLACE_PHASE, MACRO_REPLACE_TARGET];
-            let phase: String = format!("\"{}\"", ctx.visit_ctx.current_phase());
-						let replace_with = &[self_string, args_string, args_text_string, phase, "process.env.WING_TARGET".to_string()];
+						let patterns = &[MACRO_REPLACE_SELF, MACRO_REPLACE_ARGS, MACRO_REPLACE_ARGS_TEXT];
+						let replace_with = &[self_string, args_string, args_text_string];
 						let ac = AhoCorasick::new(patterns);
 						return ac.replace_all(js_override, replace_with);
 					}

@@ -95,8 +95,6 @@ const CONSTRUCT_BASE_CLASS: &'static str = "constructs.Construct";
 const MACRO_REPLACE_SELF: &'static str = "$self$";
 const MACRO_REPLACE_ARGS: &'static str = "$args$";
 const MACRO_REPLACE_ARGS_TEXT: &'static str = "$args_text$";
-const MACRO_REPLACE_PHASE: &'static str = "$phase$";
-const MACRO_REPLACE_TARGET: &'static str = "$target$";
 
 pub struct CompilerOutput {}
 
