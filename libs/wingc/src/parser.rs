@@ -242,7 +242,7 @@ pub fn parse_wing_project(
 	let mut files_to_parse = dependent_wing_files;
 	let mut files_parsed = HashSet::new();
 
-	// Parse all remaining files in the project (skipping files we have seen before)
+	// Parse all remaining files in the project (skipping files we have already parsed)
 	while let Some(file_to_parse) = files_to_parse.pop() {
 		if files_parsed.contains(&file_to_parse) {
 			continue;
