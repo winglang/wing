@@ -27,10 +27,6 @@
       "type": "build"
     },
     {
-      "name": "@types/tar",
-      "type": "build"
-    },
-    {
       "name": "@types/uuid",
       "type": "build"
     },
@@ -282,10 +278,6 @@
     },
     {
       "name": "safe-stable-stringify",
-      "type": "bundled"
-    },
-    {
-      "name": "tar",
       "type": "bundled"
     },
     {
