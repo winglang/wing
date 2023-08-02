@@ -10,7 +10,7 @@ module.exports = function({ $a, $a_field }) {
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: \"hey\" == a.field")})(("hey" === $a_field))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: \"hey\" == a.field")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })("hey",$a_field)))};
       (await $a.bar());
     }
   }

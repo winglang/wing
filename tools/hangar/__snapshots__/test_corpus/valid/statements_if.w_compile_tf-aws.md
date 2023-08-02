@@ -12,14 +12,14 @@ module.exports = function({  }) {
     async handle() {
       if (true) {
         const x = 2;
-        if ((true && ((x + 2) === 4))) {
-          if ((true && ((x + 3) === 4))) {
+        if ((true && (((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((x + 2),4)))) {
+          if ((true && (((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((x + 3),4)))) {
             {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
           }
-          else if ((true && ((x + 3) === 6))) {
+          else if ((true && (((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((x + 3),6)))) {
             {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
           }
-          else if ((false || ((x + 3) === 5))) {
+          else if ((false || (((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((x + 3),5)))) {
             {((cond) => {if (!cond) throw new Error("assertion failed: true")})(true)};
           }
           else {
@@ -195,14 +195,14 @@ class $Root extends $stdlib.std.Resource {
     if (true) {
       const x = 2;
       const f = false;
-      if ((true && ((x + 2) === 4))) {
-        if ((true && ((x + 3) === 4))) {
+      if ((true && (((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((x + 2),4)))) {
+        if ((true && (((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((x + 3),4)))) {
           {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
         }
-        else if ((true && ((x + 3) === 6))) {
+        else if ((true && (((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((x + 3),6)))) {
           {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
         }
-        else if ((false || ((x + 3) === 5))) {
+        else if ((false || (((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((x + 3),5)))) {
           {((cond) => {if (!cond) throw new Error("assertion failed: true")})(true)};
         }
         else if ((!f)) {

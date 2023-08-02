@@ -10,10 +10,10 @@ module.exports = function({ $math_Util }) {
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.cot(0) == math.INF")})(((await $math_Util.cot(0)) === $math_Util.INF))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.cot(math.PI / 4)) == 1")})(((await $math_Util.round((await $math_Util.cot(($math_Util.PI / 4))))) === 1))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.cot(math.PI * 3 / 4)) == -1")})(((await $math_Util.round((await $math_Util.cot((($math_Util.PI * 3) / 4))))) === (-1)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.cot(-0) == -math.INF")})(((await $math_Util.cot((-0))) === (-$math_Util.INF)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.cot(0) == math.INF")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.cot(0)),$math_Util.INF)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.cot(math.PI / 4)) == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.round((await $math_Util.cot(($math_Util.PI / 4))))),1)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.cot(math.PI * 3 / 4)) == -1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.round((await $math_Util.cot((($math_Util.PI * 3) / 4))))),(-1))))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.cot(-0) == -math.INF")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.cot((-0))),(-$math_Util.INF))))};
     }
   }
   return $Closure1;
@@ -177,10 +177,10 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
     }
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.cot(0) == math.INF")})(((math.Util.cot(0)) === math.Util.INF))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.cot(math.PI / 4)) == 1")})(((math.Util.round((math.Util.cot((math.Util.PI / 4))))) === 1))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.cot(math.PI * 3 / 4)) == -1")})(((math.Util.round((math.Util.cot(((math.Util.PI * 3) / 4))))) === (-1)))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.cot(-0) == -math.INF")})(((math.Util.cot((-0))) === (-math.Util.INF)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.cot(0) == math.INF")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.cot(0)),math.Util.INF)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.cot(math.PI / 4)) == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.round((math.Util.cot((math.Util.PI / 4))))),1)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.cot(math.PI * 3 / 4)) == -1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.round((math.Util.cot(((math.Util.PI * 3) / 4))))),(-1))))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.cot(-0) == -math.INF")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.cot((-0))),(-math.Util.INF))))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:inflight cotangent",new $Closure1(this,"$Closure1"));
   }
 }

@@ -309,7 +309,7 @@ class $Root extends $stdlib.std.Resource {
         const e = $error_e.message;
         error = e;
       }
-      {((cond) => {if (!cond) throw new Error("assertion failed: error == expected")})((error === expected))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: error == expected")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(error,expected)))};
     });
     const testValidPath = ((path) => {
       let error = "";
@@ -320,7 +320,7 @@ class $Root extends $stdlib.std.Resource {
         const e = $error_e.message;
         error = e;
       }
-      {((cond) => {if (!cond) throw new Error("assertion failed: error == \"\"")})((error === ""))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: error == \"\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(error,"")))};
     });
     (testInvalidPath("/test/{sup:er/:annoying//path}"));
     (testInvalidPath("/test/{::another:annoying:path}"));

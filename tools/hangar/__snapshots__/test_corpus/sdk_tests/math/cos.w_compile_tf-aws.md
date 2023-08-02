@@ -10,12 +10,12 @@ module.exports = function({ $math_Util }) {
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.cos(-0) == 1")})(((await $math_Util.cos((-0))) === 1))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.cos(0) == 1")})(((await $math_Util.cos(0)) === 1))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.cos(1) == 0.5403023058681398")})(((await $math_Util.cos(1)) === 0.5403023058681398))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.cos(-5) == 0.28366218546322625")})(((await $math_Util.cos((-5))) === 0.28366218546322625))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.cos(math.PI) == -1")})(((await $math_Util.cos($math_Util.PI)) === (-1)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.cos(math.PI * 2) == 1")})(((await $math_Util.cos(($math_Util.PI * 2))) === 1))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.cos(-0) == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.cos((-0))),1)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.cos(0) == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.cos(0)),1)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.cos(1) == 0.5403023058681398")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.cos(1)),0.5403023058681398)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.cos(-5) == 0.28366218546322625")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.cos((-5))),0.28366218546322625)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.cos(math.PI) == -1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.cos($math_Util.PI)),(-1))))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.cos(math.PI * 2) == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.cos(($math_Util.PI * 2))),1)))};
     }
   }
   return $Closure1;
@@ -179,12 +179,12 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
     }
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.cos(-0) == 1")})(((math.Util.cos((-0))) === 1))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.cos(0) == 1")})(((math.Util.cos(0)) === 1))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.cos(1) == 0.5403023058681398")})(((math.Util.cos(1)) === 0.5403023058681398))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.cos(-5) == 0.28366218546322625")})(((math.Util.cos((-5))) === 0.28366218546322625))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.cos(math.PI) == -1")})(((math.Util.cos(math.Util.PI)) === (-1)))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.cos(math.PI * 2) == 1")})(((math.Util.cos((math.Util.PI * 2))) === 1))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.cos(-0) == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.cos((-0))),1)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.cos(0) == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.cos(0)),1)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.cos(1) == 0.5403023058681398")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.cos(1)),0.5403023058681398)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.cos(-5) == 0.28366218546322625")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.cos((-5))),0.28366218546322625)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.cos(math.PI) == -1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.cos(math.Util.PI)),(-1))))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.cos(math.PI * 2) == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.cos((math.Util.PI * 2))),1)))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:inflight cosine",new $Closure1(this,"$Closure1"));
   }
 }

@@ -10,7 +10,7 @@ module.exports = function({ $counterA }) {
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: counterA.peek() == 0")})(((await $counterA.peek()) === 0))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: counterA.peek() == 0")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $counterA.peek()),0)))};
     }
   }
   return $Closure1;
@@ -28,7 +28,7 @@ module.exports = function({ $counterB }) {
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: counterB.peek() == 500")})(((await $counterB.peek()) === 500))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: counterB.peek() == 500")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $counterB.peek()),500)))};
     }
   }
   return $Closure2;
@@ -46,7 +46,7 @@ module.exports = function({ $counterC }) {
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: counterC.peek() == -198")})(((await $counterC.peek()) === (-198)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: counterC.peek() == -198")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $counterC.peek()),(-198))))};
     }
   }
   return $Closure3;

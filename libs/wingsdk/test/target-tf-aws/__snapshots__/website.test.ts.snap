@@ -2,6 +2,39 @@
 
 exports[`default website behavior 1`] = `
 "{
+  \\"data\\": {
+    \\"aws_iam_policy_document\\": {
+      \\"Website_AllowDistributionReadOnly_24CFF6C0\\": {
+        \\"statement\\": [
+          {
+            \\"actions\\": [
+              \\"s3:GetObject\\"
+            ],
+            \\"condition\\": [
+              {
+                \\"test\\": \\"StringEquals\\",
+                \\"values\\": [
+                  \\"\${aws_cloudfront_distribution.Website_Distribution_5E840E42.arn}\\"
+                ],
+                \\"variable\\": \\"AWS:SourceArn\\"
+              }
+            ],
+            \\"principals\\": [
+              {
+                \\"identifiers\\": [
+                  \\"cloudfront.amazonaws.com\\"
+                ],
+                \\"type\\": \\"Service\\"
+              }
+            ],
+            \\"resources\\": [
+              \\"\${aws_s3_bucket.Website_WebsiteBucket_3C0321F0.arn}/*\\"
+            ]
+          }
+        ]
+      }
+    }
+  },
   \\"output\\": {
     \\"WING_TEST_RUNNER_FUNCTION_ARNS\\": {
       \\"value\\": \\"[]\\"
@@ -37,6 +70,7 @@ exports[`default website behavior 1`] = `
         \\"origin\\": [
           {
             \\"domain_name\\": \\"\${aws_s3_bucket.Website_WebsiteBucket_3C0321F0.bucket_regional_domain_name}\\",
+            \\"origin_access_control_id\\": \\"\${aws_cloudfront_origin_access_control.Website_CloudfrontOac_756836A4.id}\\",
             \\"origin_id\\": \\"s3Origin\\"
           }
         ],
@@ -52,6 +86,14 @@ exports[`default website behavior 1`] = `
         }
       }
     },
+    \\"aws_cloudfront_origin_access_control\\": {
+      \\"Website_CloudfrontOac_756836A4\\": {
+        \\"name\\": \\"cloudfront-oac\\",
+        \\"origin_access_control_origin_type\\": \\"s3\\",
+        \\"signing_behavior\\": \\"always\\",
+        \\"signing_protocol\\": \\"sigv4\\"
+      }
+    },
     \\"aws_s3_bucket\\": {
       \\"Website_WebsiteBucket_3C0321F0\\": {
         \\"bucket_prefix\\": \\"website-c80d509a-\\",
@@ -59,21 +101,18 @@ exports[`default website behavior 1`] = `
       }
     },
     \\"aws_s3_bucket_policy\\": {
-      \\"Website_PublicPolicy_FF8AB959\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.Website_WebsiteBucket_3C0321F0.bucket}\\",
-        \\"depends_on\\": [
-          \\"aws_s3_bucket_public_access_block.Website_PublicAccessBlock_C196C11D\\"
-        ],
-        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Principal\\\\\\":\\\\\\"*\\\\\\",\\\\\\"Action\\\\\\":[\\\\\\"s3:GetObject\\\\\\"],\\\\\\"Resource\\\\\\":[\\\\\\"\${aws_s3_bucket.Website_WebsiteBucket_3C0321F0.arn}/*\\\\\\"]}]}\\"
+      \\"Website_DistributionS3BucketPolicy_09AE0BCA\\": {
+        \\"bucket\\": \\"\${aws_s3_bucket.Website_WebsiteBucket_3C0321F0.id}\\",
+        \\"policy\\": \\"\${data.aws_iam_policy_document.Website_AllowDistributionReadOnly_24CFF6C0.json}\\"
       }
     },
     \\"aws_s3_bucket_public_access_block\\": {
       \\"Website_PublicAccessBlock_C196C11D\\": {
-        \\"block_public_acls\\": false,
-        \\"block_public_policy\\": false,
+        \\"block_public_acls\\": true,
+        \\"block_public_policy\\": true,
         \\"bucket\\": \\"\${aws_s3_bucket.Website_WebsiteBucket_3C0321F0.bucket}\\",
-        \\"ignore_public_acls\\": false,
-        \\"restrict_public_buckets\\": false
+        \\"ignore_public_acls\\": true,
+        \\"restrict_public_buckets\\": true
       }
     },
     \\"aws_s3_bucket_server_side_encryption_configuration\\": {
@@ -133,6 +172,14 @@ exports[`default website behavior 2`] = `
                   "wing:resource:connections": [],
                 },
                 "children": {
+                  "AllowDistributionReadOnly": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformDataSource",
+                      "version": "0.17.0",
+                    },
+                    "id": "AllowDistributionReadOnly",
+                    "path": "root/Default/Website/AllowDistributionReadOnly",
+                  },
                   "BucketWebsiteConfiguration": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
@@ -141,6 +188,14 @@ exports[`default website behavior 2`] = `
                     "id": "BucketWebsiteConfiguration",
                     "path": "root/Default/Website/BucketWebsiteConfiguration",
                   },
+                  "CloudfrontOac": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.17.0",
+                    },
+                    "id": "CloudfrontOac",
+                    "path": "root/Default/Website/CloudfrontOac",
+                  },
                   "Distribution": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
@@ -148,6 +203,14 @@ exports[`default website behavior 2`] = `
                     },
                     "id": "Distribution",
                     "path": "root/Default/Website/Distribution",
+                  },
+                  "DistributionS3BucketPolicy": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.17.0",
+                    },
+                    "id": "DistributionS3BucketPolicy",
+                    "path": "root/Default/Website/DistributionS3BucketPolicy",
                   },
                   "Encryption": {
                     "constructInfo": {
@@ -180,14 +243,6 @@ exports[`default website behavior 2`] = `
                     },
                     "id": "PublicAccessBlock",
                     "path": "root/Default/Website/PublicAccessBlock",
-                  },
-                  "PublicPolicy": {
-                    "constructInfo": {
-                      "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
-                    },
-                    "id": "PublicPolicy",
-                    "path": "root/Default/Website/PublicPolicy",
                   },
                   "WebsiteBucket": {
                     "constructInfo": {
@@ -281,6 +336,39 @@ exports[`default website behavior 2`] = `
 
 exports[`website with add_json 1`] = `
 "{
+  \\"data\\": {
+    \\"aws_iam_policy_document\\": {
+      \\"Website_AllowDistributionReadOnly_24CFF6C0\\": {
+        \\"statement\\": [
+          {
+            \\"actions\\": [
+              \\"s3:GetObject\\"
+            ],
+            \\"condition\\": [
+              {
+                \\"test\\": \\"StringEquals\\",
+                \\"values\\": [
+                  \\"\${aws_cloudfront_distribution.Website_Distribution_5E840E42.arn}\\"
+                ],
+                \\"variable\\": \\"AWS:SourceArn\\"
+              }
+            ],
+            \\"principals\\": [
+              {
+                \\"identifiers\\": [
+                  \\"cloudfront.amazonaws.com\\"
+                ],
+                \\"type\\": \\"Service\\"
+              }
+            ],
+            \\"resources\\": [
+              \\"\${aws_s3_bucket.Website_WebsiteBucket_3C0321F0.arn}/*\\"
+            ]
+          }
+        ]
+      }
+    }
+  },
   \\"output\\": {
     \\"WING_TEST_RUNNER_FUNCTION_ARNS\\": {
       \\"value\\": \\"[]\\"
@@ -316,6 +404,7 @@ exports[`website with add_json 1`] = `
         \\"origin\\": [
           {
             \\"domain_name\\": \\"\${aws_s3_bucket.Website_WebsiteBucket_3C0321F0.bucket_regional_domain_name}\\",
+            \\"origin_access_control_id\\": \\"\${aws_cloudfront_origin_access_control.Website_CloudfrontOac_756836A4.id}\\",
             \\"origin_id\\": \\"s3Origin\\"
           }
         ],
@@ -331,6 +420,14 @@ exports[`website with add_json 1`] = `
         }
       }
     },
+    \\"aws_cloudfront_origin_access_control\\": {
+      \\"Website_CloudfrontOac_756836A4\\": {
+        \\"name\\": \\"cloudfront-oac\\",
+        \\"origin_access_control_origin_type\\": \\"s3\\",
+        \\"signing_behavior\\": \\"always\\",
+        \\"signing_protocol\\": \\"sigv4\\"
+      }
+    },
     \\"aws_s3_bucket\\": {
       \\"Website_WebsiteBucket_3C0321F0\\": {
         \\"bucket_prefix\\": \\"website-c80d509a-\\",
@@ -338,21 +435,18 @@ exports[`website with add_json 1`] = `
       }
     },
     \\"aws_s3_bucket_policy\\": {
-      \\"Website_PublicPolicy_FF8AB959\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.Website_WebsiteBucket_3C0321F0.bucket}\\",
-        \\"depends_on\\": [
-          \\"aws_s3_bucket_public_access_block.Website_PublicAccessBlock_C196C11D\\"
-        ],
-        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Principal\\\\\\":\\\\\\"*\\\\\\",\\\\\\"Action\\\\\\":[\\\\\\"s3:GetObject\\\\\\"],\\\\\\"Resource\\\\\\":[\\\\\\"\${aws_s3_bucket.Website_WebsiteBucket_3C0321F0.arn}/*\\\\\\"]}]}\\"
+      \\"Website_DistributionS3BucketPolicy_09AE0BCA\\": {
+        \\"bucket\\": \\"\${aws_s3_bucket.Website_WebsiteBucket_3C0321F0.id}\\",
+        \\"policy\\": \\"\${data.aws_iam_policy_document.Website_AllowDistributionReadOnly_24CFF6C0.json}\\"
       }
     },
     \\"aws_s3_bucket_public_access_block\\": {
       \\"Website_PublicAccessBlock_C196C11D\\": {
-        \\"block_public_acls\\": false,
-        \\"block_public_policy\\": false,
+        \\"block_public_acls\\": true,
+        \\"block_public_policy\\": true,
         \\"bucket\\": \\"\${aws_s3_bucket.Website_WebsiteBucket_3C0321F0.bucket}\\",
-        \\"ignore_public_acls\\": false,
-        \\"restrict_public_buckets\\": false
+        \\"ignore_public_acls\\": true,
+        \\"restrict_public_buckets\\": true
       }
     },
     \\"aws_s3_bucket_server_side_encryption_configuration\\": {
@@ -421,6 +515,14 @@ exports[`website with add_json 2`] = `
                   "wing:resource:connections": [],
                 },
                 "children": {
+                  "AllowDistributionReadOnly": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformDataSource",
+                      "version": "0.17.0",
+                    },
+                    "id": "AllowDistributionReadOnly",
+                    "path": "root/Default/Website/AllowDistributionReadOnly",
+                  },
                   "BucketWebsiteConfiguration": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
@@ -429,6 +531,14 @@ exports[`website with add_json 2`] = `
                     "id": "BucketWebsiteConfiguration",
                     "path": "root/Default/Website/BucketWebsiteConfiguration",
                   },
+                  "CloudfrontOac": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.17.0",
+                    },
+                    "id": "CloudfrontOac",
+                    "path": "root/Default/Website/CloudfrontOac",
+                  },
                   "Distribution": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
@@ -436,6 +546,14 @@ exports[`website with add_json 2`] = `
                     },
                     "id": "Distribution",
                     "path": "root/Default/Website/Distribution",
+                  },
+                  "DistributionS3BucketPolicy": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.17.0",
+                    },
+                    "id": "DistributionS3BucketPolicy",
+                    "path": "root/Default/Website/DistributionS3BucketPolicy",
                   },
                   "Encryption": {
                     "constructInfo": {
@@ -476,14 +594,6 @@ exports[`website with add_json 2`] = `
                     },
                     "id": "PublicAccessBlock",
                     "path": "root/Default/Website/PublicAccessBlock",
-                  },
-                  "PublicPolicy": {
-                    "constructInfo": {
-                      "fqn": "cdktf.TerraformResource",
-                      "version": "0.17.0",
-                    },
-                    "id": "PublicPolicy",
-                    "path": "root/Default/Website/PublicPolicy",
                   },
                   "WebsiteBucket": {
                     "constructInfo": {

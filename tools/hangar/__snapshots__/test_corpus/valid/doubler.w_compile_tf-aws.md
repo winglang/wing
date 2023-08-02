@@ -68,7 +68,7 @@ module.exports = function({ $f }) {
     }
     async handle() {
       const result = (await $f.invoke("2"));
-      {((cond) => {if (!cond) throw new Error("assertion failed: result == \"8\"")})((result === "8"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: result == \"8\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(result,"8")))};
     }
   }
   return $Closure4;

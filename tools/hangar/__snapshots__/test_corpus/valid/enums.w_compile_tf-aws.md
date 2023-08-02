@@ -10,8 +10,8 @@ module.exports = function({ $SomeEnum, $one, $two }) {
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: one == SomeEnum.ONE")})(($one === $SomeEnum.ONE))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: two == SomeEnum.TWO")})(($two === $SomeEnum.TWO))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: one == SomeEnum.ONE")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($one,$SomeEnum.ONE)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: two == SomeEnum.TWO")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($two,$SomeEnum.TWO)))};
     }
   }
   return $Closure1;

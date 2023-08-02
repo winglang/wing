@@ -10,11 +10,11 @@ module.exports = function({ $math_Util }) {
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.acot(0) == 1.5707963267948966")})(((await $math_Util.acot(0)) === 1.5707963267948966))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.acot(math.PI / 2) == 0.5669115049410094")})(((await $math_Util.acot(($math_Util.PI / 2))) === 0.5669115049410094))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.acot(math.PI) == 0.30816907111598496")})(((await $math_Util.acot($math_Util.PI)) === 0.30816907111598496))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.acot(math.TAU) == 0.15783119028815887")})(((await $math_Util.acot($math_Util.TAU)) === 0.15783119028815887))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.acot(-0) == -1.5707963267948966")})(((await $math_Util.acot((-0))) === (-1.5707963267948966)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.acot(0) == 1.5707963267948966")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.acot(0)),1.5707963267948966)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.acot(math.PI / 2) == 0.5669115049410094")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.acot(($math_Util.PI / 2))),0.5669115049410094)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.acot(math.PI) == 0.30816907111598496")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.acot($math_Util.PI)),0.30816907111598496)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.acot(math.TAU) == 0.15783119028815887")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.acot($math_Util.TAU)),0.15783119028815887)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.acot(-0) == -1.5707963267948966")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.acot((-0))),(-1.5707963267948966))))};
     }
   }
   return $Closure1;
@@ -178,11 +178,11 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
     }
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.acot(0) == 1.5707963267948966")})(((math.Util.acot(0)) === 1.5707963267948966))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.acot(math.PI / 2) == 0.5669115049410094")})(((math.Util.acot((math.Util.PI / 2))) === 0.5669115049410094))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.acot(math.PI) == 0.30816907111598496")})(((math.Util.acot(math.Util.PI)) === 0.30816907111598496))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.acot(math.TAU) == 0.15783119028815887")})(((math.Util.acot(math.Util.TAU)) === 0.15783119028815887))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.acot(-0) == -1.5707963267948966")})(((math.Util.acot((-0))) === (-1.5707963267948966)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.acot(0) == 1.5707963267948966")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.acot(0)),1.5707963267948966)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.acot(math.PI / 2) == 0.5669115049410094")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.acot((math.Util.PI / 2))),0.5669115049410094)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.acot(math.PI) == 0.30816907111598496")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.acot(math.Util.PI)),0.30816907111598496)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.acot(math.TAU) == 0.15783119028815887")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.acot(math.Util.TAU)),0.15783119028815887)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.acot(-0) == -1.5707963267948966")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.acot((-0))),(-1.5707963267948966))))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:inflight arc cotgent",new $Closure1(this,"$Closure1"));
   }
 }

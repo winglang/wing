@@ -46,8 +46,8 @@ module.exports = function({ $c1, $c2, $std_Duration, $util_Util }) {
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: c1.peek() == 0")})(((await $c1.peek()) === 0))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: c2.peek() == 0")})(((await $c2.peek()) === 0))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: c1.peek() == 0")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $c1.peek()),0)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: c2.peek() == 0")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $c2.peek()),0)))};
       (await $util_Util.sleep((await $std_Duration.fromSeconds(66))));
       {((cond) => {if (!cond) throw new Error("assertion failed: c1.peek() >= 1")})(((await $c1.peek()) >= 1))};
       {((cond) => {if (!cond) throw new Error("assertion failed: c2.peek() >= 1")})(((await $c2.peek()) >= 1))};

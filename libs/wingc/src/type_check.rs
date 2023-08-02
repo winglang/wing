@@ -3009,7 +3009,7 @@ impl<'a> TypeChecker<'a> {
 				//   fail type checking.
 
 				// Create an environment for the struct
-				let mut struct_env = SymbolEnv::new(None, self.types.void(), false, false, env.phase, stmt.idx);
+				let mut struct_env = SymbolEnv::new(None, self.types.void(), false, false, Phase::Independent, stmt.idx);
 
 				// Add fields to the struct env
 				for field in fields.iter() {
@@ -3683,6 +3683,10 @@ impl<'a> TypeChecker<'a> {
 			"Json" => Some(symbol.clone()),
 			"duration" => Some(Symbol {
 				name: "Duration".to_string(),
+				span: symbol.span.clone(),
+			}),
+			"datetime" => Some(Symbol {
+				name: "Datetime".to_string(),
 				span: symbol.span.clone(),
 			}),
 			"str" => Some(Symbol {
@@ -4438,6 +4442,7 @@ pub fn fully_qualify_std_type(type_: &str) -> String {
 	let type_name = match type_name {
 		"str" => "String",
 		"duration" => "Duration",
+		"datetime" => "Datetime",
 		"bool" => "Boolean",
 		"num" => "Number",
 		_ => type_name,

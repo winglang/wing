@@ -51,7 +51,7 @@ class $Root extends $stdlib.std.Resource {
     });
     (myfunc(1));
     (((x) => {
-      {((cond) => {if (!cond) throw new Error("assertion failed: x == 1")})((x === 1))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: x == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(x,1)))};
     })(1));
   }
 }
