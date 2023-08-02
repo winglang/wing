@@ -25,6 +25,7 @@ export interface ConsoleInstance {
   id: string;
   url: string;
   client: Client;
+  onDidClose: () => void;
 }
 
 export class ConsoleManager {
@@ -225,6 +226,7 @@ export class ConsoleManager {
       return;
     }
     instance.client.close();
+    instance.onDidClose();
     this.resourcesExplorer.clear();
     this.testsExplorer.clear();
     delete this.instances[instanceId];

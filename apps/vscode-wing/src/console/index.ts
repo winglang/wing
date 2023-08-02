@@ -65,7 +65,7 @@ export class WingConsoleManager {
       return;
     }
 
-    const { port } = await createConsoleApp({
+    const { close, port } = await createConsoleApp({
       wingfile,
       hostUtils: {
         openExternal: async (url: string) => {
@@ -106,6 +106,7 @@ export class WingConsoleManager {
       id: wingfile,
       url,
       client: createClient(url),
+      onDidClose: close,
     });
   }
 
