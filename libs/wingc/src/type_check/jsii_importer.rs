@@ -465,11 +465,7 @@ impl<'a> JsiiImporter<'a> {
 							name: param.name.clone(),
 							typeref: self.parameter_to_wing_type(&param),
 							docs: Docs::from(&param.docs),
-							variadic: if param.variadic.is_some() {
-								param.variadic.unwrap()
-							} else {
-								false
-							},
+							variadic: param.variadic.unwrap_or(false),
 						});
 					}
 				}
