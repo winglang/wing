@@ -1125,7 +1125,7 @@ impl<'s> Parser<'s> {
 
 				Ok(udt)
 			}
-			"mutable_container_type" | "immutable_container_type" | "variadic_container_type" => {
+			"mutable_container_type" | "immutable_container_type" => {
 				let container_type = self.node_text(&type_node.child_by_field_name("collection_type").unwrap());
 				match container_type {
 					"ERROR" => self.with_error("Expected builtin container type", type_node)?,
@@ -1229,7 +1229,7 @@ impl<'s> Parser<'s> {
 					other => self.with_error(format!("invalid json container type {}", other), &type_node),
 				}
 			}
-			"mutable_container_type" | "immutable_container_type" | "variadic_container_type" => {
+			"mutable_container_type" | "immutable_container_type" => {
 				let container_type = self.node_text(&type_node.child_by_field_name("collection_type").unwrap());
 				let element_type = type_node.child_by_field_name("type_parameter").unwrap();
 				match container_type {
