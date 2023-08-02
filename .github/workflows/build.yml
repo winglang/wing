@@ -198,7 +198,7 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
 
       - name: Install Dependencies
-        run: pnpm install --frozen-lockfile --filter hangar --filter examples-valid --filter examples-invalid
+        run: pnpm install --ignore-scripts --frozen-lockfile --filter hangar --filter examples-valid --filter examples-invalid
 
       - name: Run E2E Benchmarks
         run: pnpm bench
