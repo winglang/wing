@@ -25,7 +25,7 @@ module.exports = function({ $_a_at_0__, $a_length }) {
     }
     async handle() {
       {((cond) => {if (!cond) throw new Error("assertion failed: a.length == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($a_length,2)))};
-      {console.log("inflight" === 'inflight' && process.env.WING_TARGET !== 'sim' ? 'winglogstart:' + ($_a_at_0__) + ':winglogend': ($_a_at_0__))};
+      {console.log($_a_at_0__)};
     }
   }
   return $Closure1;

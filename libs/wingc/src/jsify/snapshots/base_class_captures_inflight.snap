@@ -29,7 +29,7 @@ module.exports = function({ $x }) {
     constructor({  }) {
     }
     async bar() {
-      {console.log("inflight" === 'inflight' && process.env.WING_TARGET !== 'sim' ? 'winglogstart:' + ($x) + ':winglogend': ($x))};
+      {console.log($x)};
     }
   }
   return Base;

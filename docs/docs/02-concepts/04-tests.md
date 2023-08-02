@@ -115,12 +115,6 @@ Test Files 1 passed (1)
 Duration 1m31.44s
 ```
 
-#### Logs
-
-By default, only the logs defined by the user (using the `log(...)` method) will be displayed in the inflight test scope.
-For disable logging, use the `--log none` or `-l none` flag.
-For showing all logs, both user defined, and logs created by the cloud vendor, use the `--log extended` or `-l extended` flag.
-
 ### Running tests in the console
 
 Wing Console provides a straightforward method to run either a single test or all your tests.

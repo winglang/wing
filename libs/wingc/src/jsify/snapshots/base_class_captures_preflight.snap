@@ -62,7 +62,7 @@ class $Root extends $stdlib.std.Resource {
         this._addInflightOps("$inflight_init");
       }
       bar() {
-        {console.log("preflight" === 'inflight' && process.env.WING_TARGET !== 'sim' ? 'winglogstart:' + (x) + ':winglogend': (x))};
+        {console.log(x)};
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`

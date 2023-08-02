@@ -26,7 +26,7 @@ module.exports = function({ $Foo }) {
       return $obj;
     }
     async handle() {
-      {console.log("inflight" === 'inflight' && process.env.WING_TARGET !== 'sim' ? 'winglogstart:' + ((await $Foo.a())) + ':winglogend': ((await $Foo.a())))};
+      {console.log((await $Foo.a()))};
     }
   }
   return $Closure1;
