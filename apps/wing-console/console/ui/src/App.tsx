@@ -43,10 +43,7 @@ export const App = ({ layout, theme, onTrace }: AppProps) => {
   const themeMode = trpc["config.getThemeMode"].useQuery();
 
   return (
-    <ThemeProvider
-      mode={theme || themeMode?.data?.mode || "auto"}
-      theme={DefaultTheme}
-    >
+    <ThemeProvider mode={theme || themeMode?.data?.mode} theme={DefaultTheme}>
       <NotificationsProvider>
         <TestsContextProvider>
           <LayoutProvider
