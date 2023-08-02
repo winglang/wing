@@ -13,6 +13,7 @@ use crate::closure_transform::CLOSURE_CLASS_PREFIX;
 use crate::comp_ctx::{CompilationContext, CompilationPhase};
 use crate::diagnostic::{report_diagnostic, Diagnostic, TypeError, WingSpan};
 use crate::docs::Docs;
+use crate::visit_types::VisitType;
 use crate::{
 	dbg_panic, debug, WINGSDK_ARRAY, WINGSDK_ASSEMBLY_NAME, WINGSDK_BRINGABLE_MODULES, WINGSDK_DURATION, WINGSDK_JSON,
 	WINGSDK_MAP, WINGSDK_MUT_ARRAY, WINGSDK_MUT_JSON, WINGSDK_MUT_MAP, WINGSDK_MUT_SET, WINGSDK_RESOURCE, WINGSDK_SET,
@@ -218,6 +219,145 @@ pub enum Type {
 	Interface(Interface),
 	Struct(Struct),
 	Enum(Enum),
+}
+
+struct InferenceVisitor<'a> {
+	types: &'a mut Types,
+	expected_type: Option<&'a TypeRef>,
+	found_inference: bool,
+}
+
+impl<'a> InferenceVisitor<'a> {
+	pub fn new(types: &'a mut Types) -> Self {
+		Self {
+			types,
+			expected_type: None,
+			found_inference: false,
+		}
+	}
+
+	pub fn visit(&mut self, node: &'a TypeRef, expected_type: Option<&'a TypeRef>) {
+		self.found_inference = false;
+		self.expected_type = expected_type;
+		self.visit_typeref(node);
+	}
+}
+
+impl<'a> crate::visit_types::VisitType<'_> for InferenceVisitor<'a> {
+	fn visit_typeref(&mut self, node: &'_ TypeRef) {
+		if let Some(expected) = self.expected_type {
+			match &**expected {
+				// unwrap the simple "wrapper" types to correspond to diving into the actual type we're looking at
+				Type::Optional(t)
+				| Type::Array(t)
+				| Type::MutArray(t)
+				| Type::Map(t)
+				| Type::MutMap(t)
+				| Type::Set(t)
+				| Type::MutSet(t) =>
+				// If the type we're looking at is also a wrapper type, then we need to unwrap it
+				{
+					match &**node {
+						Type::Optional(_)
+						| Type::Array(_)
+						| Type::MutArray(_)
+						| Type::Map(_)
+						| Type::MutMap(_)
+						| Type::Set(_)
+						| Type::MutSet(_) => {
+							self.expected_type = Some(t);
+						}
+						_ => {}
+					}
+				}
+
+				Type::Anything
+				| Type::Number
+				| Type::String
+				| Type::Duration
+				| Type::Boolean
+				| Type::Void
+				| Type::Json
+				| Type::MutJson
+				| Type::Nil
+				| Type::Unresolved
+				| Type::Function(_)
+				| Type::Class(_)
+				| Type::Interface(_)
+				| Type::Struct(_)
+				| Type::Inferred(_)
+				| Type::Enum(_) => {}
+			}
+		}
+
+		crate::visit_types::visit_typeref(self, node);
+	}
+
+	// structs and interfaces cannot have inferences
+	fn visit_interface(&mut self, _node: &'_ Interface) {}
+	fn visit_struct(&mut self, _node: &'_ Struct) {}
+
+	fn visit_class(&mut self, node: &'_ Class) {
+		// We only care about visiting a class if it represent an inflight closure, where inference is possible.
+		// In which case, we need to visit the function signature of the handle method
+		if let Some(method) = node.get_closure_method() {
+			self.visit_typeref(&method);
+		}
+	}
+
+	fn visit_function_signature(&mut self, node: &'_ FunctionSignature) {
+		let original_expected = self.expected_type;
+
+		let expected_function_sig = if let Some(ref expected) = self.expected_type {
+			expected.as_deep_function_sig()
+		} else {
+			None
+		};
+
+		for (idx, param) in node.parameters.iter().enumerate() {
+			self.expected_type = expected_function_sig.and_then(|f| f.parameters.get(idx).map(|p| &p.typeref));
+			self.visit_typeref(&param.typeref);
+		}
+
+		self.expected_type = expected_function_sig.map(|f| &f.return_type);
+		self.visit_typeref(&node.return_type);
+
+		self.expected_type = original_expected;
+	}
+
+	fn visit_inference(&mut self, node: &'_ usize) {
+		// 		if let Some(expected) = expected {
+		// 			// special case: If both types are an inference, check to see if either already has a type (prefer expected type)
+		// 			if let Type::Inferred(m) = &*expected {
+		// 				if m != n && self.types.get_inference_by_id(*m).is_none() {
+		// 					self.types.update_inferred_type(*m, target);
+		// 				}
+		// 			} else {
+		// 				self.types.update_inferred_type(*n, expected);
+		// 			}
+		// 		}
+		// 		true
+
+		self.found_inference = true;
+
+		// dbg!(node, self.new_type);
+		// if let Some(new_type) = self.new_type {
+		// 	// replace the inference with the new type
+		// 	self.types.update_inferred_type(*node, *new_type);
+		// }
+
+		if let Some(expected) = self.expected_type {
+			// special case: If both types are an inference, check to see if either already has a type (prefer expected type)
+			if let Type::Inferred(m) = &**expected {
+				if m != node && self.types.get_inference_by_id(*m).is_none() {
+					dbg!("HERE");
+					// self.types.update_inferred_type(*m, target);
+				}
+			} else {
+				self.types.update_inferred_type(*node, *expected);
+			}
+		}
+	}
 }
 
 pub const CLASS_INIT_NAME: &'static str = "init";
@@ -2313,89 +2453,11 @@ impl<'a> TypeChecker<'a> {
 	///
 	/// Return true if any inference exists in the target type, false otherwise
 	fn deep_inference(&mut self, target: TypeRef, expected: Option<TypeRef>) -> bool {
-		match &*target {
-			Type::Anything
-			| Type::Number
-			| Type::String
-			| Type::Duration
-			| Type::Boolean
-			| Type::Void
-			| Type::Json
-			| Type::MutJson
-			| Type::Nil
-			| Type::Unresolved
-			| Type::Enum(_)
-			| Type::Struct(_)
-			| Type::Interface(_) => false,
+		let mut visitor = InferenceVisitor::new(&mut self.types);
 
-			Type::Optional(t)
-			| Type::Array(t)
-			| Type::MutArray(t)
-			| Type::Map(t)
-			| Type::MutMap(t)
-			| Type::Set(t)
-			| Type::MutSet(t) => {
-				if let Some(expected) = expected {
-					match &*expected {
-						Type::Optional(inner_expected)
-						| Type::Array(inner_expected)
-						| Type::MutArray(inner_expected)
-						| Type::Map(inner_expected)
-						| Type::MutMap(inner_expected)
-						| Type::Set(inner_expected)
-						| Type::MutSet(inner_expected) => {
-							return self.deep_inference(*t, Some(*inner_expected));
-						}
-						_ => {}
-					}
-				}
+		visitor.visit(&target, expected.as_ref());
 
-				self.deep_inference(*t, expected)
-			}
-			Type::Class(c) => {
-				// check if this is a closure class
-				if let Some(target) = c.get_closure_method() {
-					self.deep_inference(target, expected)
-				} else {
-					false
-				}
-			}
-			Type::Function(function_signature) => {
-				let mut infer_happened = false;
-
-				let expected_function_sig = if let Some(ref expected) = expected {
-					expected.as_deep_function_sig()
-				} else {
-					None
-				};
-
-				for (idx, param) in function_signature.parameters.iter().enumerate() {
-					infer_happened = self.deep_inference(
-						param.typeref,
-						expected_function_sig.and_then(|f| f.parameters.get(idx).map(|p| p.typeref)),
-					) || infer_happened;
-				}
-
-				self.deep_inference(
-					function_signature.return_type,
-					expected_function_sig.map(|f| f.return_type),
-				) || infer_happened
-			}
-
-			Type::Inferred(n) => {
-				if let Some(expected) = expected {
-					// special case: If both types are an inference, check to see if either already has a type (prefer expected type)
-					if let Type::Inferred(m) = &*expected {
-						if m != n && self.types.get_inference_by_id(*m).is_none() {
-							self.types.update_inferred_type(*m, target);
-						}
-					} else {
-						self.types.update_inferred_type(*n, expected);
-					}
-				}
-				true
-			}
-		}
+		visitor.found_inference
 	}
 
 	fn deep_update_inference(&mut self, target: &mut TypeRef) -> bool {

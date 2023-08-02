@@ -56,6 +56,7 @@ pub mod type_check;
 mod type_check_assert;
 pub mod visit;
 mod visit_context;
+mod visit_types;
 mod wasm_util;
 
 const WINGSDK_ASSEMBLY_NAME: &'static str = "@winglang/sdk";
