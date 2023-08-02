@@ -73,6 +73,23 @@ export function LayoutProvider({
       };
       break;
     }
+    case LayoutType.Vscode: {
+      layoutConfig = {
+        header: {
+          hide: true,
+        },
+        leftPanel: {
+          hide: true,
+        },
+        bottomPanel: {
+          hide: true,
+        },
+        statusBar: {
+          showThemeToggle: true,
+        },
+      };
+      break;
+    }
   }
 
   return (

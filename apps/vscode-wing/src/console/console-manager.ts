@@ -1,4 +1,3 @@
-import path from "path";
 import {
   window,
   WebviewPanel,
@@ -23,41 +22,39 @@ import { VIEW_TYPE_CONSOLE } from "../constants";
 
 export interface ConsoleInstance {
   id: string;
+  wingfile: string;
   url: string;
   client: Client;
   onDidClose: () => void;
 }
 
-export class ConsoleManager {
-  private context: ExtensionContext;
+export interface ConsoleManager {
+  addInstance: (instance: ConsoleInstance) => Promise<void>;
+  getInstance: (instanceId: string) => ConsoleInstance | undefined;
+  closeInstance: (instanceId: string) => void;
+  setActiveInstance: (instanceId: string) => Promise<void>;
+  activeInstances: () => boolean;
+  getActiveInstanceId: () => string | undefined;
+}
 
-  private instances: Record<string, ConsoleInstance> = {};
+export const createConsoleManager = (
+  context: ExtensionContext,
+  logger: OutputChannel
+): ConsoleManager => {
+  const instances: Record<string, ConsoleInstance> = {};
+  let activeInstanceId: string | undefined;
+  let webviewPanel: WebviewPanel | undefined;
+  const resourcesExplorer = new ResourcesExplorerProvider();
+  const testsExplorer = new TestsExplorerProvider();
+  let explorerView: TreeView<ResourceItem> | undefined;
+  let testsExplorerView: TreeView<TestItem> | undefined;
 
-  private activeInstanceId: string | undefined;
-
-  private webviewPanel: WebviewPanel | undefined;
-
-  private resourcesExplorer: ResourcesExplorerProvider;
-
-  private testsExplorer: TestsExplorerProvider;
-
-  private logger: OutputChannel;
-
-  private explorerView: TreeView<ResourceItem> | undefined;
-
-  private testsExplorerView: TreeView<TestItem> | undefined;
-
-  constructor(context: ExtensionContext, logger: OutputChannel) {
-    this.context = context;
-    this.logger = logger;
-    this.resourcesExplorer = new ResourcesExplorerProvider();
-    this.testsExplorer = new TestsExplorerProvider();
-    this.registerCommands();
-  }
-
-  private registerCommands() {
+  const registerCommands = () => {
     commands.registerCommand("wingConsole.openResource", async (resourceId) => {
-      const activePanel = this.getInstance(this.activeInstanceId);
+      if (!activeInstanceId) {
+        return;
+      }
+      const activePanel = getInstance(activeInstanceId);
       if (!activePanel) {
         return;
       }
@@ -65,12 +62,15 @@ export class ConsoleManager {
     });
 
     commands.registerCommand("wingConsole.runTest", async (test: TestItem) => {
-      const activePanel = this.getInstance(this.activeInstanceId);
+      if (!activeInstanceId) {
+        return;
+      }
+      const activePanel = getInstance(activeInstanceId);
       if (!activePanel) {
         return;
       }
-      const tests = this.testsExplorer.getTests();
-      this.testsExplorer.update(
+      const tests = testsExplorer.getTests();
+      testsExplorer.update(
         tests.map((testItem) => {
           if (testItem.id === test.id) {
             return {
@@ -85,62 +85,59 @@ export class ConsoleManager {
     });
 
     commands.registerCommand("wingConsole.runAllTests", async () => {
-      const activePanel = this.getInstance(this.activeInstanceId);
+      if (!activeInstanceId) {
+        return;
+      }
+      const activePanel = getInstance(activeInstanceId);
       if (!activePanel) {
         return;
       }
-      const tests = this.testsExplorer.getTests();
-      this.testsExplorer.update(
+      const tests = testsExplorer.getTests();
+      testsExplorer.update(
         tests.map((testItem) => {
           return {
             ...testItem,
             status: "running",
           };
-
-          return testItem;
         })
       );
       await activePanel.client.runAllTests();
     });
-  }
+  };
 
-  public getActiveInstanceId() {
-    return this.activeInstanceId;
-  }
+  const addInstance = async (instance: ConsoleInstance) => {
+    instance.client.onInvalidateQuery({
+      onData: async () => {
+        if (activeInstanceId !== instance.id) {
+          return;
+        }
+        resourcesExplorer.update(await instance.client.listResources());
+        testsExplorer.update(await instance.client.listTests());
+      },
+      onError: (err) => {
+        logger.appendLine(err);
+      },
+    });
+    instances[instance.id] = instance;
 
-  public getInstance(instanceId?: string) {
+    await setActiveInstance(instance.id);
+  };
+
+  const getInstance = (instanceId: string) => {
     if (!instanceId) {
       return;
     }
-    return this.instances[instanceId];
-  }
+    return instances[instanceId];
+  };
 
-  public async addInstance(instance: ConsoleInstance) {
-    instance.client.onInvalidateQuery({
-      onData: async () => {
-        if (this.activeInstanceId !== instance.id) {
-          return;
-        }
-        this.resourcesExplorer.update(await instance.client.listResources());
-        this.testsExplorer.update(await instance.client.listTests());
-      },
-      onError: (err) => {
-        this.logger.appendLine(err);
-      },
-    });
-    this.instances[instance.id] = instance;
-
-    await this.setActiveInstance(instance.id);
-  }
-
-  public async setActiveInstance(instanceId: string) {
-    const instance = this.getInstance(instanceId);
+  const setActiveInstance = async (instanceId: string) => {
+    const instance = getInstance(instanceId);
     if (!instance) {
       return;
     }
 
-    if (!this.webviewPanel) {
-      this.webviewPanel = window.createWebviewPanel(
+    if (!webviewPanel) {
+      webviewPanel = window.createWebviewPanel(
         VIEW_TYPE_CONSOLE,
         `Console`,
         ViewColumn.Beside,
@@ -150,34 +147,27 @@ export class ConsoleManager {
         }
       );
 
-      this.webviewPanel.iconPath = {
+      webviewPanel.iconPath = {
         light: Uri.joinPath(
-          this.context.extensionUri,
+          context.extensionUri,
           "resources",
           "icon-light.png"
         ),
-        dark: Uri.joinPath(
-          this.context.extensionUri,
-          "resources",
-          "icon-dark.png"
-        ),
+        dark: Uri.joinPath(context.extensionUri, "resources", "icon-dark.png"),
       };
 
-      this.webviewPanel.onDidDispose(async () => {
-        this.resourcesExplorer.clear();
-        this.testsExplorer.clear();
-        this.webviewPanel = undefined;
-        this.activeInstanceId = undefined;
+      webviewPanel.onDidDispose(async () => {
+        resourcesExplorer.clear();
+        testsExplorer.clear();
+        webviewPanel = undefined;
+        activeInstanceId = undefined;
       });
-      this.logger.show();
+      logger.show();
     }
 
-    if (this.activeInstanceId !== instanceId) {
-      this.logger.appendLine(`activeInstanceId${this.activeInstanceId}`);
-      this.logger.appendLine(`Instance id: ${instanceId}`);
-
-      this.webviewPanel.title = `${path.basename(instance.id)} - [console]`;
-      this.webviewPanel.webview.html = `
+    if (activeInstanceId !== instance.id) {
+      webviewPanel.title = `${instance.wingfile} - [console]`;
+      webviewPanel.webview.html = `
       <!DOCTYPE html>
         <html lang="en">
         <head>
@@ -188,47 +178,59 @@ export class ConsoleManager {
             </style>
         </head>
         <body>
-          <iframe src="http://${instance.url}"/>
+          <iframe src="http://${instance.url}?layout=4"/>
         </body>
       </html>`;
     }
 
-    this.explorerView = window.createTreeView("consoleExplorer", {
-      treeDataProvider: this.resourcesExplorer,
+    explorerView = window.createTreeView("consoleExplorer", {
+      treeDataProvider: resourcesExplorer,
     });
 
-    this.testsExplorerView = window.createTreeView("consoleTestsExplorer", {
-      treeDataProvider: this.testsExplorer,
+    testsExplorerView = window.createTreeView("consoleTestsExplorer", {
+      treeDataProvider: testsExplorer,
     });
 
-    this.context.subscriptions.push(
-      this.webviewPanel,
-      this.explorerView,
-      this.testsExplorerView
-    );
+    context.subscriptions.push(webviewPanel, explorerView, testsExplorerView);
 
-    const node = await this.resourcesExplorer.getChildren();
+    const node = await resourcesExplorer.getChildren();
     if (node[0]?.id) {
-      await this.explorerView?.reveal(new ResourceItem(node[0].id));
+      await explorerView?.reveal(new ResourceItem(node[0].id));
     }
 
-    this.activeInstanceId = instanceId;
-  }
+    activeInstanceId = instanceId;
+  };
 
-  public async closeInstance(instanceId: string) {
-    if (this.activeInstanceId === instanceId) {
-      this.activeInstanceId = undefined;
-      this.webviewPanel?.dispose();
-      this.webviewPanel = undefined;
-    }
-    const instance = this.getInstance(instanceId);
+  const closeInstance = async (instanceId: string) => {
+    const instance = getInstance(instanceId);
     if (!instance) {
       return;
     }
     instance.client.close();
     instance.onDidClose();
-    this.resourcesExplorer.clear();
-    this.testsExplorer.clear();
-    delete this.instances[instanceId];
-  }
-}
+    resourcesExplorer.clear();
+    testsExplorer.clear();
+    activeInstanceId = undefined;
+    delete instances[instanceId];
+
+    if (Object.keys(instances).length === 0) {
+      webviewPanel?.dispose();
+      webviewPanel = undefined;
+    }
+  };
+
+  registerCommands();
+
+  return {
+    addInstance,
+    getInstance,
+    closeInstance,
+    setActiveInstance,
+    activeInstances: () => {
+      return Object.keys(instances).length > 0;
+    },
+    getActiveInstanceId: () => {
+      return activeInstanceId;
+    },
+  };
+};

@@ -1,4 +1,5 @@
 import { spawn } from "child_process";
+import path from "path";
 import fetch from "node-fetch";
 
 const globalAny = global as any;
@@ -7,7 +8,7 @@ globalAny.WebSocket = ws;
 
 import { ExtensionContext, window, workspace, OutputChannel } from "vscode";
 import ws from "ws";
-import { ConsoleManager } from "./console-manager";
+import { type ConsoleManager, createConsoleManager } from "./console-manager";
 import { createClient } from "./services/client";
 import { getWingBinAndArgs } from "../bin-helper";
 
@@ -17,10 +18,10 @@ export class WingConsoleManager {
   logger: OutputChannel = window.createOutputChannel("Wing Console");
 
   constructor(public readonly context: ExtensionContext) {
-    this.consoleManager = new ConsoleManager(this.context, this.logger);
+    this.consoleManager = createConsoleManager(this.context, this.logger);
 
     window.onDidChangeActiveTextEditor(async () => {
-      if (this.consoleManager.getActiveInstanceId()) {
+      if (this.consoleManager.activeInstances()) {
         await this.openConsole();
       }
     });
@@ -29,12 +30,10 @@ export class WingConsoleManager {
       if (textDocument.languageId !== "wing") {
         return;
       }
-      const instance = this.consoleManager?.getInstance(
-        textDocument.uri.fsPath
-      );
+      const instance = this.consoleManager.getInstance(textDocument.uri.fsPath);
       if (instance) {
-        this.log(`Closing Console instance '${instance.id}'`);
-        await this.consoleManager.closeInstance(instance.id);
+        this.log(`Closing Console instance: '${instance.wingfile}'`);
+        this.consoleManager.closeInstance(instance.id);
       }
     });
   }
@@ -53,11 +52,11 @@ export class WingConsoleManager {
     if (document.languageId !== "wing") {
       return;
     }
-    const wingfile = document.uri.fsPath;
+    const wingfilePath = document.uri.fsPath;
+    const wingfile = path.basename(wingfilePath);
 
-    if (this.consoleManager?.getInstance(wingfile)) {
-      this.log(`Activating Console instance '${wingfile}'`);
-      await this.consoleManager.setActiveInstance(wingfile);
+    if (this.consoleManager.getInstance(wingfilePath)) {
+      await this.consoleManager.setActiveInstance(wingfilePath);
       return;
     }
 
@@ -66,7 +65,7 @@ export class WingConsoleManager {
       return;
     }
 
-    args.push("it", "--no-open", wingfile);
+    args.push("it", "--no-open", wingfilePath);
 
     const cp = spawn(args[0]!, args.slice(1), {
       stdio: ["ignore", "pipe", "pipe"],
@@ -76,13 +75,12 @@ export class WingConsoleManager {
 
     cp.on("error", async (err) => {
       if (err) {
-        await this.consoleManager.closeInstance(wingfile);
+        await this.consoleManager.closeInstance(wingfilePath);
       }
     });
     cp.stdout?.once("data", async (data) => {
       // get localhost url from stdout
-      const urlMatch = data.toString().match(/http:\/\/localhost:\d+/);
-      // get localhost and port only
+      const urlMatch = data.toString().match(/localhost:\d+/);
       if (!urlMatch) {
         // there should be an error message in a different event
         return;
@@ -91,7 +89,8 @@ export class WingConsoleManager {
 
       this.log(`Wing Console is running at ${url}`);
       await this.consoleManager.addInstance({
-        id: wingfile,
+        id: wingfilePath,
+        wingfile,
         url,
         client: createClient(url),
         onDidClose: () => {
