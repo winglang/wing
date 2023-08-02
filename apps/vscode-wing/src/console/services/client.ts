@@ -6,7 +6,7 @@ import {
   wsLink,
 } from "@trpc/client";
 
-import type { ExplorerItem, Router } from "@wingconsole/server";
+import type { ExplorerItem, Router, LogEntry } from "@wingconsole/server";
 
 import { TestItem } from "../explorer-providers/TestsExplorerProvider";
 
@@ -17,6 +17,7 @@ export interface SubscriptionOptions {
 
 export interface Client {
   url: string;
+  getLogs: ({ time }: { time?: number }) => Promise<LogEntry[]>;
   selectedNode: () => Promise<string | undefined>;
   setSelectedNode: (resourcePath: string) => Promise<void>;
   listTests: () => Promise<TestItem[]>;
@@ -49,6 +50,21 @@ export const createClient = (host: string): Client => {
       }),
     ],
   });
+
+  const getLogs = ({ time }: { time?: number }) => {
+    return client["app.logs"].query({
+      filters: {
+        level: {
+          verbose: true,
+          info: true,
+          warn: true,
+          error: true,
+        },
+        text: "",
+        timestamp: time || 0,
+      },
+    });
+  };
 
   const selectedNode = () => {
     return client["app.selectedNode"].query();
@@ -88,6 +104,7 @@ export const createClient = (host: string): Client => {
 
   return {
     url,
+    getLogs,
     selectedNode,
     setSelectedNode,
     listTests,

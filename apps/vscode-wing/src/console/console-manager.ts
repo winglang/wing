@@ -50,6 +50,9 @@ export const createConsoleManager = (
   let explorerView: TreeView<ResourceItem> | undefined;
   let testsExplorerView: TreeView<TestItem> | undefined;
 
+  let timeout: NodeJS.Timeout | undefined;
+  let logsTimestamp: number = 0;
+
   const registerCommands = () => {
     commands.registerCommand("wingConsole.openResource", async (resourceId) => {
       if (!activeInstanceId) {
@@ -106,14 +109,33 @@ export const createConsoleManager = (
     });
   };
 
+  const updateLogs = async (instance: ConsoleInstance) => {
+    const logs = await instance.client.getLogs({ time: logsTimestamp });
+
+    logs.forEach((log) => {
+      logger.appendLine(`[${log.level}] ${log.message}`);
+    });
+    logsTimestamp = Date.now();
+  };
+
   const addInstance = async (instance: ConsoleInstance) => {
+    logger.appendLine(`Wing Console is running at http://${instance.url}`);
+
     instance.client.onInvalidateQuery({
-      onData: async () => {
+      onData: async (key) => {
         if (activeInstanceId !== instance.id) {
           return;
         }
-        resourcesExplorer.update(await instance.client.listResources());
-        testsExplorer.update(await instance.client.listTests());
+        if (timeout) {
+          clearTimeout(timeout);
+        }
+        timeout = setTimeout(async () => {
+          if (!key || key === "app.logs") {
+            await updateLogs(instance);
+          }
+          resourcesExplorer.update(await instance.client.listResources());
+          testsExplorer.update(await instance.client.listTests());
+        }, 100);
       },
       onError: (err) => {
         logger.appendLine(err);
@@ -207,6 +229,8 @@ export const createConsoleManager = (
     if (!instance) {
       return;
     }
+    logger.appendLine(`Closing Console instance: '${instance.wingfile}'`);
+
     instance.client.close();
     instance.onDidClose();
     resourcesExplorer.clear();

@@ -32,14 +32,9 @@ export class WingConsoleManager {
       }
       const instance = this.consoleManager.getInstance(textDocument.uri.fsPath);
       if (instance) {
-        this.log(`Closing Console instance: '${instance.wingfile}'`);
         this.consoleManager.closeInstance(instance.id);
       }
     });
-  }
-
-  private log(message: string, type: string = "info") {
-    this.logger.appendLine(`[${type}] ${message}`);
   }
 
   public async openConsole() {
@@ -87,7 +82,6 @@ export class WingConsoleManager {
       }
       const url = urlMatch[0];
 
-      this.log(`Wing Console is running at ${url}`);
       await this.consoleManager.addInstance({
         id: wingfilePath,
         wingfile,
