@@ -122,7 +122,7 @@ where
 		}
 	}
 }
-pub fn visit_inference<'a, V>(v: &mut V, node: &'a usize)
+pub fn visit_inference<'a, V>(_v: &mut V, _node: &'a usize)
 where
 	V: VisitType<'a> + ?Sized,
 {
@@ -171,7 +171,7 @@ where
 		}
 	}
 }
-pub fn visit_inference_mut<'a, V>(v: &mut V, node: &'a mut usize)
+pub fn visit_inference_mut<'a, V>(_v: &mut V, _node: &'a mut usize)
 where
 	V: VisitTypeMut<'a> + ?Sized,
 {

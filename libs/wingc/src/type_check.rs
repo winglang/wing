@@ -13,7 +13,7 @@ use crate::closure_transform::CLOSURE_CLASS_PREFIX;
 use crate::comp_ctx::{CompilationContext, CompilationPhase};
 use crate::diagnostic::{report_diagnostic, Diagnostic, TypeError, WingSpan};
 use crate::docs::Docs;
-use crate::visit_types::VisitType;
+use crate::visit_types::{VisitType, VisitTypeMut};
 use crate::{
 	dbg_panic, debug, WINGSDK_ARRAY, WINGSDK_ASSEMBLY_NAME, WINGSDK_BRINGABLE_MODULES, WINGSDK_DURATION, WINGSDK_JSON,
 	WINGSDK_MAP, WINGSDK_MUT_ARRAY, WINGSDK_MUT_JSON, WINGSDK_MUT_MAP, WINGSDK_MUT_SET, WINGSDK_RESOURCE, WINGSDK_SET,
@@ -227,19 +227,35 @@ struct InferenceVisitor<'a> {
 	found_inference: bool,
 }
 
-impl<'a> InferenceVisitor<'a> {
-	pub fn new(types: &'a mut Types) -> Self {
-		Self {
-			types,
-			expected_type: None,
-			found_inference: false,
+impl<'a> crate::visit_types::VisitTypeMut<'_> for InferenceVisitor<'a> {
+	fn visit_typeref_mut(&mut self, node: &'_ mut TypeRef) {
+		if matches!(**node, Type::Inferred(_)) {
+			*node = self.types.maybe_unwrap_inference(*node);
+		} else {
+			crate::visit_types::visit_typeref_mut(self, node);
 		}
 	}
 
-	pub fn visit(&mut self, node: &'a TypeRef, expected_type: Option<&'a TypeRef>) {
-		self.found_inference = false;
-		self.expected_type = expected_type;
-		self.visit_typeref(node);
+	// structs and interfaces cannot have inferences
+	fn visit_interface_mut(&mut self, _node: &'_ mut Interface) {}
+	fn visit_struct_mut(&mut self, _node: &'_ mut Struct) {}
+
+	fn visit_class_mut(&mut self, node: &'_ mut Class) {
+		// We only care about visiting a class if it represent an inflight closure, where inference is possible.
+		// In which case, we need to visit the function signature of the handle method
+		if node.name.name.starts_with(CLOSURE_CLASS_PREFIX) {
+			if let Some(handle) = node.env.lookup_mut(&Symbol::global(CLOSURE_CLASS_HANDLE_METHOD), None) {
+				self.visit_typeref_mut(&mut handle.as_variable_mut().unwrap().type_);
+			}
+		}
+	}
+
+	fn visit_function_signature_mut(&mut self, node: &'_ mut FunctionSignature) {
+		for param in node.parameters.iter_mut() {
+			self.visit_typeref_mut(&mut param.typeref);
+		}
+
+		self.visit_typeref_mut(&mut node.return_type);
 	}
 }
 
@@ -285,8 +301,12 @@ impl<'a> crate::visit_types::VisitType<'_> for InferenceVisitor<'a> {
 				| Type::Class(_)
 				| Type::Interface(_)
 				| Type::Struct(_)
-				| Type::Inferred(_)
 				| Type::Enum(_) => {}
+
+				Type::Inferred(_) => {
+					// Inferences are not a useful expected type
+					self.expected_type = None;
+				}
 			}
 		}
 
@@ -306,8 +326,6 @@ impl<'a> crate::visit_types::VisitType<'_> for InferenceVisitor<'a> {
 	}
 
 	fn visit_function_signature(&mut self, node: &'_ FunctionSignature) {
-		let original_expected = self.expected_type;
-
 		let expected_function_sig = if let Some(ref expected) = self.expected_type {
 			expected.as_deep_function_sig()
 		} else {
@@ -321,41 +339,13 @@ impl<'a> crate::visit_types::VisitType<'_> for InferenceVisitor<'a> {
 
 		self.expected_type = expected_function_sig.map(|f| &f.return_type);
 		self.visit_typeref(&node.return_type);
-
-		self.expected_type = original_expected;
 	}
 
 	fn visit_inference(&mut self, node: &'_ usize) {
-		// 		if let Some(expected) = expected {
-		// 			// special case: If both types are an inference, check to see if either already has a type (prefer expected type)
-		// 			if let Type::Inferred(m) = &*expected {
-		// 				if m != n && self.types.get_inference_by_id(*m).is_none() {
-		// 					self.types.update_inferred_type(*m, target);
-		// 				}
-		// 			} else {
-		// 				self.types.update_inferred_type(*n, expected);
-		// 			}
-		// 		}
-		// 		true
-
 		self.found_inference = true;
 
-		// dbg!(node, self.new_type);
-		// if let Some(new_type) = self.new_type {
-		// 	// replace the inference with the new type
-		// 	self.types.update_inferred_type(*node, *new_type);
-		// }
-
 		if let Some(expected) = self.expected_type {
-			// special case: If both types are an inference, check to see if either already has a type (prefer expected type)
-			if let Type::Inferred(m) = &**expected {
-				if m != node && self.types.get_inference_by_id(*m).is_none() {
-					dbg!("HERE");
-					// self.types.update_inferred_type(*m, target);
-				}
-			} else {
-				self.types.update_inferred_type(*node, *expected);
-			}
+			self.types.update_inferred_type(*node, *expected);
 		}
 	}
 }
@@ -1607,6 +1597,52 @@ impl<'a> TypeChecker<'a> {
 		}
 	}
 
+	/// Recursively check if a type is or contains a type inference.
+	///
+	/// Returns true if any inferences were found.
+	fn check_for_inferences(&mut self, node: &TypeRef) -> bool {
+		let mut visitor = InferenceVisitor {
+			types: self.types,
+			found_inference: false,
+			expected_type: None,
+		};
+
+		visitor.visit_typeref(node);
+
+		visitor.found_inference
+	}
+
+	/// Recursively check if a type is or contains a type inference.
+	/// If it does, use the expected type to update the list of known inferences.
+	///
+	/// Returns true if any inferences were found.
+	fn add_new_inference(&mut self, node: &TypeRef, expected_type: &TypeRef) -> bool {
+		let mut visitor = InferenceVisitor {
+			types: self.types,
+			found_inference: false,
+			expected_type: Some(expected_type),
+		};
+
+		visitor.visit_typeref(node);
+
+		visitor.found_inference
+	}
+
+	/// Recursively replaces any inferences in the given type with it's known type, if any.
+	///
+	/// Returns true if any inferences were found.
+	fn update_known_inferences(&mut self, node: &mut TypeRef) -> bool {
+		let mut visitor = InferenceVisitor {
+			types: self.types,
+			found_inference: false,
+			expected_type: None,
+		};
+
+		visitor.visit_typeref_mut(node);
+
+		visitor.found_inference
+	}
+
 	pub fn add_globals(&mut self, scope: &Scope) {
 		self.add_module_to_env(
 			scope.env.borrow_mut().as_mut().unwrap(),
@@ -1668,7 +1704,7 @@ impl<'a> TypeChecker<'a> {
 		self.types.assign_type_to_expr(exp, t, phase);
 
 		// In case any type inferences were updated during this check, ensure all related inferences are updated
-		self.deep_update_inference(&mut t);
+		self.update_known_inferences(&mut t);
 
 		(t, phase)
 	}
@@ -2449,65 +2485,6 @@ impl<'a> TypeChecker<'a> {
 		self.validate_type_in(actual_type, &[expected_type], span)
 	}
 
-	/// Deeply find and replace inferred types with the expected type
-	///
-	/// Return true if any inference exists in the target type, false otherwise
-	fn deep_inference(&mut self, target: TypeRef, expected: Option<TypeRef>) -> bool {
-		let mut visitor = InferenceVisitor::new(&mut self.types);
-
-		visitor.visit(&target, expected.as_ref());
-
-		visitor.found_inference
-	}
-
-	fn deep_update_inference(&mut self, target: &mut TypeRef) -> bool {
-		match &mut **target {
-			Type::Anything
-			| Type::Number
-			| Type::String
-			| Type::Duration
-			| Type::Boolean
-			| Type::Void
-			| Type::Json
-			| Type::MutJson
-			| Type::Nil
-			| Type::Unresolved
-			| Type::Enum(_) => false,
-
-			Type::Optional(t)
-			| Type::Array(t)
-			| Type::MutArray(t)
-			| Type::Map(t)
-			| Type::MutMap(t)
-			| Type::Set(t)
-			| Type::MutSet(t) => self.deep_update_inference(t),
-			Type::Struct(_) => false,
-			Type::Interface(_) => false,
-			Type::Class(c) => {
-				if c.name.name.starts_with(CLOSURE_CLASS_PREFIX) {
-					if let Some(handle) = c.env.lookup_mut(&Symbol::global(CLOSURE_CLASS_HANDLE_METHOD), None) {
-						return self.deep_update_inference(&mut handle.as_variable_mut().unwrap().type_);
-					}
-				}
-
-				false
-			}
-			Type::Function(function_signature) => {
-				let mut infer_happened = false;
-				for param in function_signature.parameters.iter_mut() {
-					infer_happened = self.deep_update_inference(&mut param.typeref) || infer_happened;
-				}
-
-				self.deep_update_inference(&mut function_signature.return_type) || infer_happened
-			}
-
-			Type::Inferred(_) => {
-				*target = self.types.maybe_unwrap_inference(*target);
-				true
-			}
-		}
-	}
-
 	/// Validate that the given type is a subtype (or same) as the one of the expected types. If not, add
 	/// an error to the diagnostics.
 	/// Returns the given type on success, otherwise returns one of the expected types.
@@ -2515,10 +2492,10 @@ impl<'a> TypeChecker<'a> {
 		assert!(expected_types.len() > 0);
 		let mut return_type = actual_type;
 
-		if self.deep_inference(actual_type, Some(expected_types[0])) {
+		if self.add_new_inference(&actual_type, &expected_types[0]) {
 			return_type = expected_types[0];
 		} else {
-			self.deep_inference(expected_types[0], Some(actual_type));
+			self.add_new_inference(&expected_types[0], &actual_type);
 		}
 
 		// If the actual type is anything or any of the expected types then we're good
@@ -2597,7 +2574,7 @@ impl<'a> TypeChecker<'a> {
 					// If function types don't return anything then we should set the return type to void
 					self.types.update_inferred_type(*n, self.types.void());
 				}
-				self.deep_update_inference(&mut env.return_type);
+				self.update_known_inferences(&mut env.return_type);
 			}
 		}
 
@@ -2605,11 +2582,11 @@ impl<'a> TypeChecker<'a> {
 			if let SymbolKind::Variable(ref mut var_info) = entry.1 .1 {
 				// Update any possible inferred types in this variable.
 				// This must be called before checking for un-inferred types because some variable were not used in this scope so they did not get a chance to get updated.
-				self.deep_update_inference(&mut var_info.type_);
+				self.update_known_inferences(&mut var_info.type_);
 
 				// If we found a variable with an inferred type, this is an error because it means we failed to infer its type
 				// Ignores any transient (no file_id) variables e.g. `this`. Those failed inferences are cascading errors and not useful to the user
-				if self.deep_inference(var_info.type_, None) && !var_info.name.span.file_id.is_empty() {
+				if self.check_for_inferences(&var_info.type_) && !var_info.name.span.file_id.is_empty() {
 					self.spanned_error(&var_info.name, "Unable to infer type".to_string());
 				}
 			}
@@ -3014,7 +2991,7 @@ impl<'a> TypeChecker<'a> {
 				self.inner_scopes.push(scope)
 			}
 			StmtKind::Return(exp) => {
-				let return_type_inferred = self.deep_update_inference(&mut env.return_type);
+				let return_type_inferred = self.update_known_inferences(&mut env.return_type);
 				if let Some(return_expression) = exp {
 					let (return_type, _) = self.type_check_exp(return_expression, env);
 					if !env.return_type.is_void() {
@@ -4148,7 +4125,7 @@ impl<'a> TypeChecker<'a> {
 				if let LookupResultMut::Found(var, _) = lookup_res {
 					if let Some(var) = var.as_variable_mut() {
 						let phase = var.phase;
-						self.deep_update_inference(&mut var.type_);
+						self.update_known_inferences(&mut var.type_);
 						(var.clone(), phase)
 					} else {
 						self.spanned_error_with_var(
