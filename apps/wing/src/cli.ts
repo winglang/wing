@@ -162,11 +162,12 @@ async function main() {
     .hook("preAction", collectAnalyticsHook)
     .action(runSubCommand("docs"));
 
-  program
-    .command("console-app-path")
-    .description("Print the path to the Wing Console App package")
-    .hook("preAction", collectAnalyticsHook)
-    .action(runSubCommand("consoleAppPath"));
+  // TODO: https://github.com/winglang/wing/issues/3678
+  // program
+  //   .command("console-app-path")
+  //   .description("Print the path to the Wing Console App package")
+  //   .hook("preAction", collectAnalyticsHook)
+  //   .action(runSubCommand("consoleAppPath"));
 
   program.hook("postAction", exportAnalyticsHook);
 

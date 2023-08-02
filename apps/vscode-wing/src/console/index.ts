@@ -20,8 +20,12 @@ export class WingConsoleManager {
   constructor(public readonly context: ExtensionContext) {
     this.consoleManager = createConsoleManager(this.context, this.logger);
 
-    window.onDidChangeActiveTextEditor(async () => {
-      if (this.consoleManager.activeInstances()) {
+    window.onDidChangeActiveTextEditor(async (editor) => {
+      const instanceId = editor?.document.uri.fsPath;
+      if (
+        this.consoleManager.activeInstances() &&
+        this.consoleManager.getActiveInstanceId() !== instanceId
+      ) {
         await this.openConsole();
       }
     });
@@ -55,6 +59,7 @@ export class WingConsoleManager {
       return;
     }
 
+    // TODO: Use createConsoleApp from "bin-helper" instead of spawn to open the console after fixing after fixing https://github.com/winglang/wing/issues/3678
     const args = await getWingBinAndArgs(this.context);
     if (!args) {
       return;

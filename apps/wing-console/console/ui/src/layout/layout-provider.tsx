@@ -84,9 +84,6 @@ export function LayoutProvider({
         bottomPanel: {
           hide: true,
         },
-        statusBar: {
-          showThemeToggle: true,
-        },
       };
       break;
     }

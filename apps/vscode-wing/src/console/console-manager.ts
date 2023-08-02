@@ -118,6 +118,21 @@ export const createConsoleManager = (
     logsTimestamp = Date.now();
   };
 
+  const getTheme = () => {
+    const theme = window.activeColorTheme.kind;
+    if (theme === 1) {
+      return "light";
+    }
+    return "dark";
+  };
+
+  // if theme changes, update the webview
+  window.onDidChangeActiveColorTheme(async () => {
+    if (activeInstanceId) {
+      await setActiveInstance(activeInstanceId);
+    }
+  });
+
   const addInstance = async (instance: ConsoleInstance) => {
     logger.appendLine(`Wing Console is running at http://${instance.url}`);
 
@@ -192,9 +207,8 @@ export const createConsoleManager = (
       logger.show();
     }
 
-    if (activeInstanceId !== instance.id) {
-      webviewPanel.title = `${instance.wingfile} - [console]`;
-      webviewPanel.webview.html = `
+    webviewPanel.title = `${instance.wingfile} - [console]`;
+    webviewPanel.webview.html = `
       <!DOCTYPE html>
         <html lang="en">
         <head>
@@ -205,10 +219,9 @@ export const createConsoleManager = (
             </style>
         </head>
         <body>
-          <iframe src="http://${instance.url}?layout=4"/>
+          <iframe src="http://${instance.url}?layout=4&theme=${getTheme()}"/>
         </body>
       </html>`;
-    }
 
     explorerView = window.createTreeView("consoleExplorer", {
       treeDataProvider: resourcesExplorer,
