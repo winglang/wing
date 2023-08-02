@@ -75,7 +75,7 @@ export class WingConsoleManager {
 
     cp.on("error", async (err) => {
       if (err) {
-        await this.consoleManager.closeInstance(wingfilePath);
+        this.consoleManager.closeInstance(wingfilePath);
       }
     });
     cp.stdout?.once("data", async (data) => {
