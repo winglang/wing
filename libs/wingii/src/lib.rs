@@ -22,8 +22,10 @@ pub type Result<T> = std::result::Result<T, Box<dyn Error>>;
 
 pub mod spec {
 	use flate2::read::GzDecoder;
-	use std::fs::File;
+	use speedy::{Readable, Writable};
 	use std::io::Read;
+	use std::path::PathBuf;
+	use std::time::SystemTime;
 
 	use crate::jsii::{Assembly, JsiiFile};
 	use crate::Result;
@@ -32,6 +34,7 @@ pub mod spec {
 
 	pub const SPEC_FILE_NAME: &str = ".jsii";
 	pub const REDIRECT_FIELD: &str = "jsii/file-redirect";
+	pub(crate) const CACHE_FILE_EXT: &str = ".jsii.speedy";
 
 	pub fn find_assembly_file(directory: &str) -> Result<String> {
 		let dot_jsii_file = Path::new(directory).join(SPEC_FILE_NAME);
@@ -48,20 +51,58 @@ pub mod spec {
 		}
 	}
 
-	pub fn load_assembly_from_file(path_to_file: &str, compression: Option<&str>) -> Result<Assembly> {
+	pub(crate) fn get_cache_file_path(manifest_path: &Path, hash: &str) -> PathBuf {
+		manifest_path
+			.parent()
+			.unwrap()
+			.to_path_buf()
+			.join(format!("{hash}{CACHE_FILE_EXT}"))
+	}
+
+	pub(crate) fn try_load_from_cache(manifest_path: &Path, hash: &str) -> Option<Assembly> {
+		let path = get_cache_file_path(manifest_path, hash);
+		let data = fs::read(path).ok()?;
+		let asm = Assembly::read_from_buffer(&data).ok()?;
+		Some(asm)
+	}
+
+	pub fn load_assembly_from_file(
+		name: &str,
+		path_to_file: &str,
+		compression: Option<&str>,
+		module_version: &Option<String>,
+	) -> Result<Assembly> {
 		let assembly_path = Path::new(path_to_file);
 
-		let manifest = if Some("gzip") == compression {
-			let assembly_path_gz = File::open(assembly_path)?;
-			let mut assembly_gz = GzDecoder::new(assembly_path_gz);
-			let mut data = Vec::new();
-			assembly_gz.read_to_end(&mut data)?;
+		// First try loading the manifest from the cache
+		let fingerprint = get_manifest_fingerprint(name, assembly_path, module_version);
+		let maybe_manifest = fingerprint
+			.as_ref()
+			.and_then(|fingerprint| try_load_from_cache(assembly_path, &fingerprint))
+			.map(|assembly| JsiiFile::Assembly(assembly));
 
-			serde_json::from_slice(&data)?
+		let manifest = if let Some(manifest) = maybe_manifest {
+			manifest
 		} else {
-			let manifest = fs::read_to_string(assembly_path)?;
-			serde_json::from_str(&manifest)?
+			// Load the manifest from the file
+			let manifest = if Some("gzip") == compression {
+				let gz_data_reader = std::io::Cursor::new(fs::read(assembly_path)?);
+				let mut manifest_data_gz = GzDecoder::new(gz_data_reader);
+				let mut data = Vec::new();
+				manifest_data_gz.read_to_end(&mut data)?;
+				serde_json::from_slice(&data)?
+			} else {
+				serde_json::from_str(&fs::read_to_string(assembly_path)?)?
+			};
+			// Attempt to cache the manifest
+			if let JsiiFile::Assembly(assmbly) = &manifest {
+				if let Some(fingerprint) = &fingerprint {
+					let _ = cache_manifest(&assembly_path, assmbly, fingerprint);
+				}
+			}
+			manifest
 		};
+
 		match manifest {
 			JsiiFile::Assembly(asm) => Ok(asm),
 			JsiiFile::AssemblyRedirect(asm_redirect) => {
@@ -71,16 +112,64 @@ pub mod spec {
 					.expect("Assembly path has no parent")
 					.join(&asm_redirect.filename);
 				load_assembly_from_file(
+					name,
 					path.to_str().expect("JSII redirect path invalid"),
 					Some(&asm_redirect.compression),
+					module_version,
 				)
 			}
 		}
+	}
+
+	pub(crate) fn get_manifest_fingerprint(
+		name: &str,
+		assembly_path: &Path,
+		module_version: &Option<String>,
+	) -> Option<String> {
+		let module_version = module_version.as_ref()?;
+		let metadata = fs::metadata(assembly_path).ok()?;
+		let fp_raw_str = format!(
+			"{name}-{}-{}-{module_version}",
+			metadata
+				.modified()
+				.ok()?
+				.duration_since(SystemTime::UNIX_EPOCH)
+				.ok()?
+				// Use micros and not nanos for better cross platform compatibility (WASM vs native don't produce the same nanos)
+				.as_micros(),
+			metadata.len(),
+		);
+		Some(blake3::hash(&fp_raw_str.as_bytes()).to_string())
+	}
+
+	fn cache_manifest(manifest_path: &Path, manifest: &Assembly, hash: &str) -> Result<()> {
+		let cache_file_dir = manifest_path.parent().unwrap().to_path_buf();
+		let cache_file_name = format!("{hash}{CACHE_FILE_EXT}");
+
+		// Write the new cache file
+		manifest.write_to_file(&cache_file_dir.join(&cache_file_name))?;
+
+		// Remove all old cache files (except the new one)
+		// We remove after creating the new cache file to avoid a race with other processes
+		for old_file in fs::read_dir(cache_file_dir.clone()).unwrap().filter(|f| {
+			f.as_ref()
+				.map(|f| {
+					f.file_name().to_str().unwrap().ends_with(CACHE_FILE_EXT)
+						&& f.file_name().to_str().unwrap() != cache_file_name.as_str()
+				})
+				.unwrap_or(false)
+		}) {
+			_ = fs::remove_file(old_file.unwrap().path());
+		}
+
+		Ok(())
 	}
 }
 
 pub mod type_system {
 	type AssemblyName = String;
+
+	use serde_json::Value;
 
 	use crate::fqn::FQN;
 	use crate::jsii;
@@ -143,15 +232,12 @@ pub mod type_system {
 			}
 		}
 
-		fn load_assembly(&self, path: &str) -> Result<Assembly> {
-			spec::load_assembly_from_file(path, None)
-		}
-
 		fn add_assembly(&mut self, assembly: Assembly) -> Result<AssemblyName> {
-			if !self.assemblies.contains_key(&assembly.name) {
-				self.assemblies.insert(assembly.name.clone(), assembly.clone());
+			let name = assembly.name.clone();
+			if !self.assemblies.contains_key(&name) {
+				self.assemblies.insert(name.clone(), assembly);
 			}
-			Ok(assembly.name)
+			Ok(name)
 		}
 
 		pub fn load_dep(&mut self, dep: &str, search_start: &str) -> Result<AssemblyName> {
@@ -179,7 +265,15 @@ pub mod type_system {
 				return Ok(name.to_string());
 			}
 
-			let asm = self.load_assembly(&assembly_file)?;
+			// Get the module version, this is used for fingerprinting the JSII manifest
+			// needed for comparing it to the JSII manifest cache
+			let module_version = if let Some(Value::String(ver_str)) = package.get("version") {
+				Some(ver_str.clone())
+			} else {
+				None
+			};
+
+			let asm = spec::load_assembly_from_file(name, &assembly_file, None, &module_version)?;
 			let root = self.add_assembly(asm)?;
 			let bundled = package_json::bundled_dependencies_of(&package);
 			let deps = package_json::dependencies_of(&package);

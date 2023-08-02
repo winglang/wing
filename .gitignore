@@ -5,6 +5,14 @@ node_modules/
 *.tfstate.*
 
 # Generated wing output
+*.w.out/
+
+# Generated wingc .jsii binary cache
+**/*.jsii.speedy
+
+# cargo output
+## will have compiled files and executables from cargo
+debug/
 target/
 
 # Packaged npm files

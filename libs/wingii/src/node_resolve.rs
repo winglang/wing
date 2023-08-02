@@ -5,7 +5,7 @@
 
 use std::{
 	error::Error,
-	fs::File,
+	fs::{self},
 	path::{Path, PathBuf},
 };
 
@@ -140,8 +140,7 @@ fn resolve_as_directory(path: &Path) -> Result<PathBuf, Box<dyn Error>> {
 /// Resolve using the package.json "main" key.
 fn resolve_package_main(pkg_path: &Path) -> Result<PathBuf, Box<dyn Error>> {
 	let pkg_dir = pkg_path.parent().unwrap_or_else(|| Path::new(ROOT));
-	let file = File::open(pkg_path)?;
-	let pkg: Value = serde_json::from_reader(file)?;
+	let pkg: Value = serde_json::from_slice(&fs::read(pkg_path)?)?;
 	if !pkg.is_object() {
 		return Err(String::from("package.json is not an object").into());
 	}

@@ -109,7 +109,7 @@ export const VscodeLayout = ({ cloudAppState, wingVersion }: LayoutProps) => {
                   data-testid="loading-overlay"
                 >
                   <div className=" absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                    <SpinnerLoader />
+                    <SpinnerLoader data-testid="main-view-loader" />
                   </div>
                 </div>
               )}

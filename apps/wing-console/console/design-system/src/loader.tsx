@@ -1,23 +1,18 @@
-import Lottie from "react-lottie-player";
-
-import lottieJson from "./assets/wingLoader.json";
+import { SpinnerLoader, SpinnerLoaderSize } from "./spinner-loader.js";
 
 export const Loader = ({
-  text = "",
   size,
+  className,
+  text,
 }: {
+  /**
+   * @deprecated
+   */
   text?: string;
-  size: string;
+
+  size?: SpinnerLoaderSize;
+
+  className?: string;
 }) => {
-  return (
-    <div className="flex pointer-events-none space-x-1">
-      <Lottie
-        loop
-        animationData={lottieJson}
-        play
-        style={{ width: size, height: size }}
-      />
-      <span>{text}</span>
-    </div>
-  );
+  return <SpinnerLoader size={size || "sm"} className={className} />;
 };
