@@ -126,12 +126,12 @@ export const createConsoleManager = (
     return "dark";
   };
 
-  // if theme changes, update the webview
-  window.onDidChangeActiveColorTheme(async () => {
-    if (activeInstanceId) {
-      await setActiveInstance(activeInstanceId);
+  const getInstance = (instanceId: string) => {
+    if (!instanceId) {
+      return;
     }
-  });
+    return instances[instanceId];
+  };
 
   const addInstance = async (instance: ConsoleInstance) => {
     logger.appendLine(`Wing Console is running at http://${instance.url}`);
@@ -150,7 +150,7 @@ export const createConsoleManager = (
           }
           resourcesExplorer.update(await instance.client.listResources());
           testsExplorer.update(await instance.client.listTests());
-        }, 100);
+        }, 300);
       },
       onError: (err) => {
         logger.appendLine(err);
@@ -159,13 +159,6 @@ export const createConsoleManager = (
     instances[instance.id] = instance;
 
     await setActiveInstance(instance.id);
-  };
-
-  const getInstance = (instanceId: string) => {
-    if (!instanceId) {
-      return;
-    }
-    return instances[instanceId];
   };
 
   const setActiveInstance = async (instanceId: string) => {
@@ -223,6 +216,10 @@ export const createConsoleManager = (
         </body>
       </html>`;
 
+    resourcesExplorer.update(await instance.client.listResources());
+    testsExplorer.update(await instance.client.listTests());
+    await updateLogs(instance);
+
     explorerView = window.createTreeView("consoleExplorer", {
       treeDataProvider: resourcesExplorer,
     });
@@ -237,7 +234,6 @@ export const createConsoleManager = (
     if (node[0]?.id) {
       await explorerView?.reveal(new ResourceItem(node[0].id));
     }
-
     activeInstanceId = instanceId;
   };
 

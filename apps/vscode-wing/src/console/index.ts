@@ -30,6 +30,13 @@ export class WingConsoleManager {
       }
     });
 
+    window.onDidChangeActiveColorTheme(async () => {
+      const activeInstanceId = this.consoleManager.getActiveInstanceId();
+      if (activeInstanceId) {
+        await this.consoleManager.setActiveInstance(activeInstanceId);
+      }
+    });
+
     workspace.onDidCloseTextDocument(async (textDocument) => {
       if (textDocument.languageId !== "wing") {
         return;
