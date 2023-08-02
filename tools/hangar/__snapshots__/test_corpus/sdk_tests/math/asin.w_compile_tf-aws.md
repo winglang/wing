@@ -11,7 +11,7 @@ module.exports = function({ $math_Util }) {
     }
     async handle() {
       try {
-        {console.log("inflight" === 'inflight' && process.env.WING_TARGET !== 'sim' ? 'winglogstart:' + (String.raw({ raw: ["", ""] }, (await $math_Util.asin((-2))))) + ':winglogend': (String.raw({ raw: ["", ""] }, (await $math_Util.asin((-2))))))};
+        {console.log(String.raw({ raw: ["", ""] }, (await $math_Util.asin((-2)))))};
       }
       catch ($error_e) {
         const e = $error_e.message;
@@ -23,7 +23,7 @@ module.exports = function({ $math_Util }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: math.asin(0.5) == 0.5235987755982989")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.asin(0.5)),0.5235987755982989)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: math.asin(1) == 1.5707963267948966")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.asin(1)),1.5707963267948966)))};
       try {
-        {console.log("inflight" === 'inflight' && process.env.WING_TARGET !== 'sim' ? 'winglogstart:' + (String.raw({ raw: ["", ""] }, (await $math_Util.asin(2)))) + ':winglogend': (String.raw({ raw: ["", ""] }, (await $math_Util.asin(2)))))};
+        {console.log(String.raw({ raw: ["", ""] }, (await $math_Util.asin(2))))};
       }
       catch ($error_e) {
         const e = $error_e.message;
@@ -193,7 +193,7 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     try {
-      {console.log("preflight" === 'inflight' && process.env.WING_TARGET !== 'sim' ? 'winglogstart:' + (String.raw({ raw: ["", ""] }, (math.Util.asin((-2))))) + ':winglogend': (String.raw({ raw: ["", ""] }, (math.Util.asin((-2))))))};
+      {console.log(String.raw({ raw: ["", ""] }, (math.Util.asin((-2)))))};
     }
     catch ($error_e) {
       const e = $error_e.message;
@@ -205,7 +205,7 @@ class $Root extends $stdlib.std.Resource {
     {((cond) => {if (!cond) throw new Error("assertion failed: math.asin(0.5) == 0.5235987755982989")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.asin(0.5)),0.5235987755982989)))};
     {((cond) => {if (!cond) throw new Error("assertion failed: math.asin(1) == 1.5707963267948966")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.asin(1)),1.5707963267948966)))};
     try {
-      {console.log("preflight" === 'inflight' && process.env.WING_TARGET !== 'sim' ? 'winglogstart:' + (String.raw({ raw: ["", ""] }, (math.Util.asin(2)))) + ':winglogend': (String.raw({ raw: ["", ""] }, (math.Util.asin(2)))))};
+      {console.log(String.raw({ raw: ["", ""] }, (math.Util.asin(2))))};
     }
     catch ($error_e) {
       const e = $error_e.message;

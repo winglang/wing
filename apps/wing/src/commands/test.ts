@@ -275,7 +275,7 @@ async function testAwsCdk(synthDir: string): Promise<std.TestResult[]> {
       const { TestRunnerClient } = await import(
         "@winglang/sdk/lib/shared-aws/test-runner.inflight"
       );
-      const testRunner = new TestRunnerClient(testArns, process.env.DEBUG === "1");
+      const testRunner = new TestRunnerClient(testArns);
 
       const tests = await testRunner.listTests();
       return [testRunner, pickOneTestPerEnvironment(tests)];
@@ -356,7 +356,7 @@ async function testTfAws(synthDir: string): Promise<std.TestResult[] | void> {
       const { TestRunnerClient } = await import(
         "@winglang/sdk/lib/shared-aws/test-runner.inflight"
       );
-      const testRunner = new TestRunnerClient(testArns, process.env.DEBUG === "1");
+      const testRunner = new TestRunnerClient(testArns);
 
       const tests = await testRunner.listTests();
       return [testRunner, pickOneTestPerEnvironment(tests)];

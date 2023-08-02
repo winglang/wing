@@ -10,7 +10,7 @@ module.exports = function({  }) {
       return $obj;
     }
     async handle() {
-      {console.log("inflight" === 'inflight' && process.env.WING_TARGET !== 'sim' ? 'winglogstart:' + ("hello, world") + ':winglogend': ("hello, world"))};
+      {console.log("hello, world")};
     }
   }
   return $Closure1;
@@ -28,7 +28,7 @@ module.exports = function({  }) {
       return $obj;
     }
     async handle() {
-      {console.log("inflight" === 'inflight' && process.env.WING_TARGET !== 'sim' ? 'winglogstart:' + ("hello, world") + ':winglogend': ("hello, world"))};
+      {console.log("hello, world")};
     }
   }
   return $Closure2;

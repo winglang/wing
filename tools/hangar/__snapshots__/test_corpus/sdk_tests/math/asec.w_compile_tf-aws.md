@@ -11,7 +11,7 @@ module.exports = function({ $math_Util }) {
     }
     async handle() {
       try {
-        {console.log("inflight" === 'inflight' && process.env.WING_TARGET !== 'sim' ? 'winglogstart:' + (String.raw({ raw: ["", ""] }, (await $math_Util.asec(0.5)))) + ':winglogend': (String.raw({ raw: ["", ""] }, (await $math_Util.asec(0.5)))))};
+        {console.log(String.raw({ raw: ["", ""] }, (await $math_Util.asec(0.5))))};
       }
       catch ($error_e) {
         const e = $error_e.message;
@@ -187,7 +187,7 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     try {
-      {console.log("preflight" === 'inflight' && process.env.WING_TARGET !== 'sim' ? 'winglogstart:' + (String.raw({ raw: ["", ""] }, (math.Util.asec(0.5)))) + ':winglogend': (String.raw({ raw: ["", ""] }, (math.Util.asec(0.5)))))};
+      {console.log(String.raw({ raw: ["", ""] }, (math.Util.asec(0.5))))};
     }
     catch ($error_e) {
       const e = $error_e.message;

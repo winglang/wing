@@ -10,7 +10,7 @@ module.exports = function({  }) {
       return $obj;
     }
     async handle(key) {
-      {console.log("inflight" === 'inflight' && process.env.WING_TARGET !== 'sim' ? 'winglogstart:' + (String.raw({ raw: ["deleted ", ""] }, key)) + ':winglogend': (String.raw({ raw: ["deleted ", ""] }, key)))};
+      {console.log(String.raw({ raw: ["deleted ", ""] }, key))};
     }
   }
   return $Closure1;
@@ -28,7 +28,7 @@ module.exports = function({  }) {
       return $obj;
     }
     async handle(key) {
-      {console.log("inflight" === 'inflight' && process.env.WING_TARGET !== 'sim' ? 'winglogstart:' + (String.raw({ raw: ["updated ", ""] }, key)) + ':winglogend': (String.raw({ raw: ["updated ", ""] }, key)))};
+      {console.log(String.raw({ raw: ["updated ", ""] }, key))};
     }
   }
   return $Closure2;
@@ -46,7 +46,7 @@ module.exports = function({  }) {
       return $obj;
     }
     async handle(key) {
-      {console.log("inflight" === 'inflight' && process.env.WING_TARGET !== 'sim' ? 'winglogstart:' + (String.raw({ raw: ["created ", ""] }, key)) + ':winglogend': (String.raw({ raw: ["created ", ""] }, key)))};
+      {console.log(String.raw({ raw: ["created ", ""] }, key))};
     }
   }
   return $Closure3;
@@ -82,7 +82,7 @@ module.exports = function({  }) {
       return $obj;
     }
     async handle(key) {
-      {console.log("inflight" === 'inflight' && process.env.WING_TARGET !== 'sim' ? 'winglogstart:' + ("other bucket event called!") + ':winglogend': ("other bucket event called!"))};
+      {console.log("other bucket event called!")};
     }
   }
   return $Closure5;

@@ -10,7 +10,7 @@ module.exports = function({ $util_Util }) {
       return $obj;
     }
     async handle(input) {
-      {console.log("inflight" === 'inflight' && process.env.WING_TARGET !== 'sim' ? 'winglogstart:' + ("log inside function\ncontains 2 lines") + ':winglogend': ("log inside function\ncontains 2 lines"))};
+      {console.log("log inside function\ncontains 2 lines")};
       const target = (await $util_Util.tryEnv("WING_TARGET"));
       {((cond) => {if (!cond) throw new Error("assertion failed: target?")})(((target) != null))};
       return String.raw({ raw: ["", "-response"] }, input);
@@ -31,7 +31,7 @@ module.exports = function({ $f }) {
       return $obj;
     }
     async handle() {
-      {console.log("inflight" === 'inflight' && process.env.WING_TARGET !== 'sim' ? 'winglogstart:' + ("log inside test") + ':winglogend': ("log inside test"))};
+      {console.log("log inside test")};
       const x = (await $f.invoke("hello"));
       {((cond) => {if (!cond) throw new Error("assertion failed: x == \"hello-response\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(x,"hello-response")))};
     }
@@ -297,7 +297,7 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     const payload = "hello";
-    {console.log("preflight" === 'inflight' && process.env.WING_TARGET !== 'sim' ? 'winglogstart:' + ("log preflight") + ':winglogend': ("log preflight"))};
+    {console.log("log preflight")};
     const f = this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"cloud.Function",new $Closure1(this,"$Closure1"));
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:invoke",new $Closure2(this,"$Closure2"));
   }

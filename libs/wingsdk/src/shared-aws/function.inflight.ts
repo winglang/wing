@@ -1,16 +1,10 @@
-import {
-  CloudWatchLogsClient,
-  GetLogEventsCommand,
-} from "@aws-sdk/client-cloudwatch-logs";
 import { InvokeCommand, LambdaClient } from "@aws-sdk/client-lambda";
 import { fromUtf8, toUtf8 } from "@aws-sdk/util-utf8-node";
 import { Context } from "aws-lambda";
 import { IFunctionClient } from "../cloud";
-import { Trace, TraceType } from "../std";
-import { FUNCTION_TYPE } from "../target-sim/schema-resources";
+import { Trace } from "../std";
 
 export class FunctionClient implements IFunctionClient {
-  private readonly cloudWatchClient = new CloudWatchLogsClient({});
   constructor(
     private readonly functionArn: string,
     private readonly constructPath: string,
@@ -27,92 +21,28 @@ export class FunctionClient implements IFunctionClient {
    * @returns a list of Traces
    */
 
-  private async readLogs(
-    logGroupName: string,
-    logStreamName: string,
-    constructPath: string,
-    extendedLogging: boolean
-  ): Promise<Trace[]> {
+  private readLogs(logs: Trace[]): Trace[] {
     const logsCollector: Trace[] = [];
 
-    const command = new GetLogEventsCommand({ logGroupName, logStreamName });
-    let response;
-    while (
-      // the last log doesn't exist
-      // TODO: replace to findLast when this es2023 is available
-      !response?.events?.find(({ message }) =>
-        message?.startsWith("REPORT RequestId: ")
-      )
-    ) {
-      try {
-        response = await this.cloudWatchClient.send(command);
-      } catch (error) {
-        // waiting for the logs to be created
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-        if (
-          (error as Error).message !==
-          "The specified log stream does not exist."
-        ) {
-          throw error;
-        }
-      }
-    }
+    for (const log of logs) {
+      const invocationLog = log.data.message?.match(/Invoking .*:/gm);
 
-    const reads: Promise<Trace[]>[] = [];
+      if (invocationLog) {
+        const logData = log.data.message.split("\t") ?? [];
+        const parsedLogs: Trace[] =
+          JSON.parse(
+            Buffer.from(logData[logData.length - 1], "base64").toString(
+              "binary"
+            )
+          )?.logs ?? [];
 
-    for (const event of response?.events ?? []) {
-      const wingLog = event.message?.match(
-        /(?<=winglogstart:)[\s\S]*?(?=:winglogend)/
-      );
-      const invocationLog = event.message?.match(/Invoking .*:/gm);
-
-      if (wingLog) {
-        logsCollector.push({
-          data: { message: wingLog[0] },
-          sourceType: FUNCTION_TYPE,
-          sourcePath: constructPath,
-          type: TraceType.LOG,
-          timestamp: event.timestamp
-            ? new Date(event.timestamp).toISOString()
-            : "n/a",
-        });
-      } else if (invocationLog) {
-        const logData = event.message?.split("\t") ?? [];
-        const parsedData = JSON.parse(
-          Buffer.from(logData[logData.length - 1], "base64").toString("binary")
-        );
-
-        reads.push(
-          this.readLogs(
-            parsedData.logGroupName,
-            parsedData.logStreamName,
-            parsedData.constructPath,
-            extendedLogging
-          )
-        );
+        logsCollector.push(...this.readLogs(parsedLogs));
       } else {
-        if (extendedLogging) {
-          const logData = event.message?.split("\t") ?? [];
-
-          logsCollector.push({
-            data: { message: logData },
-            sourceType: FUNCTION_TYPE,
-            sourcePath: constructPath,
-            type: TraceType.LOG,
-            timestamp: event.timestamp
-              ? new Date(event.timestamp).toISOString()
-              : "n/a",
-          });
-        }
+        logsCollector.push(log);
       }
     }
 
-    const logs = await Promise.all(reads);
-
-    return [
-      ...logsCollector,
-      ...logs.reduce((acc, logsItem) => [...acc, ...logsItem], []),
-    ];
+    return logsCollector;
   }
 
   /**
@@ -132,12 +62,19 @@ export class FunctionClient implements IFunctionClient {
   /**
    * Invoke the function
    */
-  private async executeFunction(
-    payload: string
-  ): Promise<{ context?: Context; payload: string }> {
+  private async executeFunction(payload: string): Promise<{
+    context?: Context & {
+      logs: Trace[];
+    };
+    payload: string;
+  }> {
     const command = new InvokeCommand({
       FunctionName: this.functionArn,
       Payload: fromUtf8(JSON.stringify(payload)),
+      ClientContext: Buffer.from(
+        JSON.stringify({ constructPath: this.constructPath }),
+        "binary"
+      ).toString("base64"),
     });
     const response = await this.lambdaClient.send(command);
 
@@ -160,17 +97,14 @@ export class FunctionClient implements IFunctionClient {
    *  @returns the function returned payload only
    */
   public async invoke(payload: string): Promise<string> {
-    const arnParts = this.functionArn.split(":");
-    const functionName = arnParts[arnParts.indexOf("function") + 1];
     const value = await this.executeFunction(payload);
+    const functionName = value?.context?.functionName;
 
     // kind of hacky, but this is the most convenient way to pass those arguments to the calling function
     console.log(
       `Invoking ${functionName}:\t${Buffer.from(
         JSON.stringify({
-          logGroupName: value?.context?.logGroupName,
-          logStreamName: value?.context?.logStreamName,
-          constructPath: this.constructPath,
+          logs: value?.context?.logs,
         }),
         "binary"
       ).toString("base64")}`
@@ -184,23 +118,13 @@ export class FunctionClient implements IFunctionClient {
    *
    * @returns the function returned payload and logs
    */
-  public async invokeWithLogs(
-    payload: string,
-    extendedLogging: boolean
-  ): Promise<[string, Trace[]]> {
+  public async invokeWithLogs(payload: string): Promise<[string, Trace[]]> {
     const traces: Trace[] = [];
 
     const value = await this.executeFunction(payload);
 
-    if (value?.context?.logGroupName && value?.context?.logStreamName) {
-      traces.push(
-        ...(await this.readLogs(
-          value?.context?.logGroupName,
-          value?.context?.logStreamName,
-          this.constructPath,
-          extendedLogging
-        ))
-      );
+    if (value.context?.logs) {
+      traces.push(...this.readLogs(value.context.logs));
     }
 
     return [this.verify(value), traces];

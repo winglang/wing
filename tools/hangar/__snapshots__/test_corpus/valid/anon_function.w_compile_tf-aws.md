@@ -42,7 +42,7 @@ class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
     const myfunc = ((x) => {
-      {console.log("preflight" === 'inflight' && process.env.WING_TARGET !== 'sim' ? 'winglogstart:' + (String.raw({ raw: ["", ""] }, x)) + ':winglogend': (String.raw({ raw: ["", ""] }, x)))};
+      {console.log(String.raw({ raw: ["", ""] }, x))};
       x = (x + 1);
       if ((x > 3.14)) {
         return;

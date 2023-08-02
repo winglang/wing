@@ -28,7 +28,7 @@ module.exports = function({ $strToStr }) {
     }
     async handle(s) {
       (await $strToStr.invoke("one"));
-      {console.log("inflight" === 'inflight' && process.env.WING_TARGET !== 'sim' ? 'winglogstart:' + ((await $strToStr.invoke("two"))) + ':winglogend': ((await $strToStr.invoke("two"))))};
+      {console.log((await $strToStr.invoke("two")))};
     }
   }
   return $Closure2;

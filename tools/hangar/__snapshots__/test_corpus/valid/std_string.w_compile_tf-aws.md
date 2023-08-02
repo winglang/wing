@@ -10,9 +10,9 @@ module.exports = function({ $__s1_split_______at_1__, $_s1_concat_s2__, $s1_inde
       return $obj;
     }
     async handle() {
-      {console.log("inflight" === 'inflight' && process.env.WING_TARGET !== 'sim' ? 'winglogstart:' + (String.raw({ raw: ["index of \"s\" in s1 is ", ""] }, $s1_indexOf__s__)) + ':winglogend': (String.raw({ raw: ["index of \"s\" in s1 is ", ""] }, $s1_indexOf__s__)))};
-      {console.log("inflight" === 'inflight' && process.env.WING_TARGET !== 'sim' ? 'winglogstart:' + ($__s1_split_______at_1__) + ':winglogend': ($__s1_split_______at_1__))};
-      {console.log("inflight" === 'inflight' && process.env.WING_TARGET !== 'sim' ? 'winglogstart:' + ($_s1_concat_s2__) + ':winglogend': ($_s1_concat_s2__))};
+      {console.log(String.raw({ raw: ["index of \"s\" in s1 is ", ""] }, $s1_indexOf__s__))};
+      {console.log($__s1_split_______at_1__)};
+      {console.log($_s1_concat_s2__)};
     }
   }
   return $Closure1;

@@ -61,7 +61,7 @@ class $Root extends $stdlib.std.Resource {
       }
       method2() {
         (this.method1());
-        {console.log("preflight" === 'inflight' && process.env.WING_TARGET !== 'sim' ? 'winglogstart:' + (String.raw({ raw: ["", ""] }, this.f)) + ':winglogend': (String.raw({ raw: ["", ""] }, this.f)))};
+        {console.log(String.raw({ raw: ["", ""] }, this.f))};
         (this.method2());
       }
       method1() {
@@ -86,7 +86,7 @@ class $Root extends $stdlib.std.Resource {
     }
     const x = "hi";
     if (true) {
-      {console.log("preflight" === 'inflight' && process.env.WING_TARGET !== 'sim' ? 'winglogstart:' + (String.raw({ raw: ["", ""] }, x)) + ':winglogend': (String.raw({ raw: ["", ""] }, x)))};
+      {console.log(String.raw({ raw: ["", ""] }, x))};
       const y = new R(this,"R");
     }
   }
