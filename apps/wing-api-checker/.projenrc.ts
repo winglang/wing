@@ -8,7 +8,7 @@ const project = new typescript.TypeScriptProject({
     "wing-api-check": "bin/wing-api-check",
   },
   license: "MIT",
-  authorName: "Wing Cloud",
+  authorName: "Monada",
   authorEmail: "ping@monada.co",
   authorOrganization: true,
   authorUrl: "https://wing.cloud",
