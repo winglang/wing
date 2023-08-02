@@ -42,10 +42,11 @@ export const createConsoleManager = (
   logger: OutputChannel
 ): ConsoleManager => {
   const instances: Record<string, ConsoleInstance> = {};
-  let activeInstanceId: string | undefined;
-  let webviewPanel: WebviewPanel | undefined;
   const resourcesExplorer = new ResourcesExplorerProvider();
   const testsExplorer = new TestsExplorerProvider();
+
+  let activeInstanceId: string | undefined;
+  let webviewPanel: WebviewPanel | undefined;
   let explorerView: TreeView<ResourceItem> | undefined;
   let testsExplorerView: TreeView<TestItem> | undefined;
 
