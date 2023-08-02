@@ -50,18 +50,6 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 			let contents = project_data.files.get_file(&file).expect("file not found");
 
 			// get all character from file_data.contents up to the current position
-			// let preceding_text = contents
-			// 	.lines()
-			// 	.enumerate()
-			// 	.take_while(|(i, _)| *i <= params.text_document_position.position.line as usize)
-			// 	.map(|(i, s)| {
-			// 		if i == params.text_document_position.position.line as usize {
-			// 			&s[..params.text_document_position.position.character as usize].trim_end()
-			// 		} else {
-			// 			s
-			// 		}
-			// 	})
-			// 	.join("\n");
 			let mut preceding_text = String::new();
 			for (i, line) in contents.lines().enumerate() {
 				if i > params.text_document_position.position.line as usize {
@@ -74,7 +62,6 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 					line.trim_end().chars().take(params.text_document_position.position.character as usize).for_each(|c| {
 						preceding_text.push(c);
 					});
-					// preceding_text.push_str(&line[..params.text_document_position.position.character as usize].trim_end());
 				} else {
 					preceding_text.push_str(line);
 				}
