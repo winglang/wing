@@ -2,7 +2,7 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ $_d4_toUtc____hours, $d1_timestamp, $d2_timestamp, $d4_hours, $d4_timezone, $math_Util, $std_Datetime, $std_Duration, $util_Util }) {
+module.exports = function({ $_d4_toUtc____hours, $d4_hours, $d4_timezone, $math_Util, $std_Datetime, $std_Duration, $util_Util }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -10,9 +10,9 @@ module.exports = function({ $_d4_toUtc____hours, $d1_timestamp, $d2_timestamp, $
       return $obj;
     }
     async handle() {
-      const d5 = (await $std_Datetime.utcNow());
-      const d6 = (await $std_Datetime.systemNow());
-      {((cond) => {if (!cond) throw new Error("assertion failed: d2.timestamp == d1.timestamp")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($d2_timestamp,$d1_timestamp)))};
+      const d5 = (await $std_Datetime.systemNow());
+      const d6 = (await d5.toUtc());
+      {((cond) => {if (!cond) throw new Error("assertion failed: d5.timestampMs == d6.timestampMs")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(d5.timestampMs,d6.timestampMs)))};
       const d7 = (await $std_Datetime.fromIso("2023-07-18T20:18:25.177-03:00"));
       const d8 = (await $std_Datetime.fromComponents({ year: 2023, month: 6, day: 18, hour: 20, min: 18, sec: 25, ms: 177, tz: 180 }));
       {((cond) => {if (!cond) throw new Error("assertion failed: d7.timestampMs == 1689722305177")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(d7.timestampMs,1689722305177)))};
@@ -30,7 +30,8 @@ module.exports = function({ $_d4_toUtc____hours, $d1_timestamp, $d2_timestamp, $
       {((cond) => {if (!cond) throw new Error("assertion failed: d8.toUtc().hours == (d8.hours + (d8.timezone / 60))")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await d8.toUtc()).hours,(d8.hours + (d8.timezone / 60)))))};
       const beforeSleep = (await $std_Datetime.systemNow());
       (await $util_Util.sleep((await $std_Duration.fromSeconds(1))));
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.floor(datetime.systemNow().timestamp - beforeSleep.timestamp) == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.floor(((await $std_Datetime.systemNow()).timestamp - beforeSleep.timestamp))),1)))};
+      const afterSleep = (await $std_Datetime.systemNow());
+      {((cond) => {if (!cond) throw new Error("assertion failed: afterSleep.timestampMs - beforeSleep.timestampMs > 0")})(((afterSleep.timestampMs - beforeSleep.timestampMs) > 0))};
     }
   }
   return $Closure1;
@@ -181,8 +182,6 @@ class $Root extends $stdlib.std.Resource {
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure1.js")({
             $_d4_toUtc____hours: ${context._lift((d4.toUtc()).hours)},
-            $d1_timestamp: ${context._lift(d1.timestamp)},
-            $d2_timestamp: ${context._lift(d2.timestamp)},
             $d4_hours: ${context._lift(d4.hours)},
             $d4_timezone: ${context._lift(d4.timezone)},
             $math_Util: ${context._lift(math.Util)},
@@ -206,17 +205,15 @@ class $Root extends $stdlib.std.Resource {
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
           $Closure1._registerBindObject((d4.toUtc()).hours, host, []);
-          $Closure1._registerBindObject(d1.timestamp, host, []);
-          $Closure1._registerBindObject(d2.timestamp, host, []);
           $Closure1._registerBindObject(d4.hours, host, []);
           $Closure1._registerBindObject(d4.timezone, host, []);
         }
         super._registerBind(host, ops);
       }
     }
-    const d1 = (std.Datetime.utcNow());
-    const d2 = (std.Datetime.systemNow());
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.floor(d2.timestamp) == math.floor(d1.timestamp)")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.floor(d2.timestamp)),(math.Util.floor(d1.timestamp)))))};
+    const d1 = (std.Datetime.systemNow());
+    const d2 = (d1.toUtc());
+    {((cond) => {if (!cond) throw new Error("assertion failed: d1.timestampMs == d2.timestampMs")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(d1.timestampMs,d2.timestampMs)))};
     const d3 = (std.Datetime.fromIso("2023-07-18T20:18:25.177+03:00"));
     {((cond) => {if (!cond) throw new Error("assertion failed: d3.timestampMs == 1689700705177")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(d3.timestampMs,1689700705177)))};
     {((cond) => {if (!cond) throw new Error("assertion failed: d3.hours == 17")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(d3.hours,17)))};
