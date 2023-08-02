@@ -160,6 +160,7 @@ fn partial_compile(
 	// Wing files, then move on to files that depend on those, etc.)
 	for file in &topo_sorted_files {
 		let mut scope = project_data.asts.get_mut(file).expect("matching AST not found");
+		scope.env.borrow_mut().take();
 		type_check(&mut scope, &mut types, &file, jsii_types, &mut jsii_imports);
 
 		// Validate the type checker didn't miss anything - see `TypeCheckAssert` for details
@@ -172,7 +173,7 @@ fn partial_compile(
 	// source_file will never be "" because it is the path to the file being compiled and lsp does not allow empty paths
 	let project_dir = source_path.parent().expect("Empty filename");
 
-	let mut jsifier = JSifier::new(&mut types, &project_data.files, &source_path, &project_dir);
+	let jsifier = JSifier::new(&mut types, &project_data.files, &source_path, &project_dir);
 	for file in &topo_sorted_files {
 		let mut lift = LiftTransform::new(&jsifier);
 		let scope = project_data.asts.remove(file).expect("matching AST not found");
@@ -180,10 +181,7 @@ fn partial_compile(
 		project_data.asts.insert(file.clone(), new_scope);
 	}
 
-	for file in &topo_sorted_files {
-		let scope = project_data.asts.get_mut(file).expect("matching AST not found");
-		jsifier.jsify(file, &scope);
-	}
+	// no need to JSify in the LSP
 }
 
 #[cfg(test)]

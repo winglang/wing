@@ -10,6 +10,7 @@ use std::{fs, str, vec};
 use tree_sitter::Node;
 use tree_sitter_traversal::{traverse, Order};
 
+use crate::ast::Spanned;
 use crate::ast::{
 	ArgList, BinaryOperator, BringSource, CalleeKind, CatchBlock, Class, ClassField, ElifBlock, Expr, ExprKind,
 	FunctionBody, FunctionDefinition, FunctionParameter, FunctionSignature, Interface, InterpolatedString,
@@ -176,7 +177,13 @@ impl FileGraph {
 	/// Or a list of files that are part of a cycle, if one exists
 	fn toposort(&self) -> Result<Vec<PathBuf>, Vec<PathBuf>> {
 		match toposort(&self.graph, None) {
-			Ok(indices) => Ok(indices.into_iter().map(|n| self.graph[n].clone()).collect::<Vec<_>>()),
+			Ok(indices) => Ok(
+				indices
+					.into_iter()
+					.rev()
+					.map(|n| self.graph[n].clone())
+					.collect::<Vec<_>>(),
+			),
 			Err(_) => {
 				// toposort function in the `petgraph` library doesn't return the cycle itself,
 				// so we need to use Tarjan's algorithm to find one instead
@@ -208,7 +215,16 @@ pub fn parse_wing_project(
 	asts: &mut IndexMap<PathBuf, Scope>,
 ) -> Vec<PathBuf> {
 	// Fetch the initial file's text from disk if it wasn't passed in directly
-	let source_text = init_text.unwrap_or_else(|| get_source_text(&init_path));
+	let source_text = init_text.unwrap_or_else(|| match fs::read_to_string(&init_path) {
+		Ok(text) => text,
+		Err(e) => {
+			report_diagnostic(Diagnostic {
+				message: format!("Could not read file \"{}\": {}", init_path.display(), e),
+				span: None,
+			});
+			String::new()
+		}
+	});
 
 	// Parse the initial file (even if we have already seen it before)
 	let (tree_sitter_tree, ast, dependent_wing_files) = parse_wing_file(init_path, &source_text);
@@ -223,24 +239,34 @@ pub fn parse_wing_project(
 	asts.insert(init_path.to_owned(), ast);
 	file_graph.update_file(init_path, &dependent_wing_files);
 
-	// Track which files still need parsing in a queue
+	// Track which files we have parsed and which still need parsing
 	let mut files_to_parse = dependent_wing_files;
+	let mut files_parsed = HashSet::new();
 
 	// Parse all remaining files in the project (skipping files we have seen before)
 	while let Some(file_to_parse) = files_to_parse.pop() {
-		// Check if the file is already stored, in which case we've parsed it before
-		if files.contains_file(&file_to_parse) {
+		if files_parsed.contains(&file_to_parse) {
 			continue;
 		}
 
-		// Fetch the file's text from disk
-		let file_text = get_source_text(&file_to_parse);
+		// TODO: skip the re-parsing a file if we have already have an AST saved from a previous compilation
+		// This requires more refactoring since currently we store some type-checking information
+		// (SymbolEnv) on the ASTs, so we can't just re-use the ASTs
+
+		let file_text = if files.contains_file(&file_to_parse) {
+			// Get the file's text if we already have it
+			// (the text here could be more fresh than the text on disk)
+			files.get_file(&file_to_parse).unwrap()
+		} else {
+			// Otherwise, fetch the file's text from disk
+			// Error handling is handled in `parse_wing_file` since it has span information
+			let file_text = fs::read_to_string(&file_to_parse).unwrap_or(String::new());
+			files.add_file(&file_to_parse, file_text).unwrap();
+			files.get_file(&file_to_parse).unwrap()
+		};
 
 		// Parse the file
 		let (tree_sitter_tree, ast, dependent_wing_files) = parse_wing_file(&file_to_parse, &file_text);
-
-		// Update the file text in our collection
-		files.update_file(&file_to_parse, file_text);
 
 		// Update our collections of trees and ASTs and our file graph
 		tree_sitter_trees.insert(file_to_parse.clone(), tree_sitter_tree);
@@ -249,6 +275,9 @@ pub fn parse_wing_project(
 
 		// Add the file's dependencies to the list of files to parse
 		files_to_parse.extend(dependent_wing_files);
+
+		// Mark the file as parsed
+		files_parsed.insert(file_to_parse);
 	}
 
 	// Return the files in the order they should be compiled
@@ -268,7 +297,9 @@ pub fn parse_wing_project(
 				),
 				span: None,
 			});
-			vec![]
+
+			// return a list of all files just so we can continue type-checking
+			asts.keys().cloned().collect::<Vec<_>>()
 		}
 	}
 }
@@ -292,19 +323,6 @@ fn parse_wing_file(source_path: &Path, source_text: &str) -> (tree_sitter::Tree,
 	(tree_sitter_tree, scope, dependent_wing_files)
 }
 
-fn get_source_text(source_path: &Path) -> String {
-	match fs::read_to_string(&source_path) {
-		Ok(source) => source,
-		Err(e) => {
-			report_diagnostic(Diagnostic {
-				message: format!("Failed to read file: {}", e),
-				span: None,
-			});
-			String::new()
-		}
-	}
-}
-
 /// Parses a single Wing source file.
 pub struct Parser<'a> {
 	/// Source code of the file being parsed
@@ -315,8 +333,9 @@ pub struct Parser<'a> {
 	in_json: RefCell<u64>,
 	is_in_mut_json: RefCell<bool>,
 	is_in_loop: RefCell<bool>,
-	/// Track all file paths that have been found while parsing the current file.
-	/// These will need to be eventually parsed
+	/// Track all file paths that have been found while parsing the current file, along with the
+	/// span of the `bring` statement that referenced them.
+	/// These will need to be eventually parsed (or diagnostics will be reported if they don't exist)
 	referenced_wing_files: RefCell<Vec<PathBuf>>,
 }
 
@@ -762,6 +781,18 @@ impl<'s> Parser<'s> {
 			let source_path = normalize_path(module_path, Some(&Path::new(&self.source_name)));
 			if source_path == Path::new(&self.source_name) {
 				return self.with_error("Cannot bring a module into itself", statement_node);
+			}
+			if !source_path.exists() {
+				return self.with_error(
+					format!("Cannot find module \"{}\"", source_path.display()),
+					statement_node,
+				);
+			}
+			if !source_path.is_file() {
+				return self.with_error(
+					format!("Cannot bring module \"{}\": not a file", source_path.display()),
+					statement_node,
+				);
 			}
 			self.referenced_wing_files.borrow_mut().push(source_path.clone());
 
@@ -2127,7 +2158,7 @@ impl<'s> Parser<'s> {
 
 // TODO: this function seems fragile
 // use inodes as source of truth instead https://github.com/winglang/wing/issues/3627
-fn normalize_path(path: &Path, relative_to: Option<&Path>) -> PathBuf {
+pub fn normalize_path(path: &Path, relative_to: Option<&Path>) -> PathBuf {
 	let path = if path.is_absolute() {
 		// if the path is absolute, we ignore "relative_to"
 		path.to_path_buf()

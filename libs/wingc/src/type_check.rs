@@ -2269,13 +2269,10 @@ impl<'a> TypeChecker<'a> {
 		CompilationContext::set(CompilationPhase::TypeChecking, &scope.span);
 		self.type_check_scope(scope);
 
-		let is_bringable = check_is_bringable(scope);
-
-		// TODO: remove is_bringable field from Namespace
-
 		// Save the module's symbol environment to `self.types.source_file_envs`
 		// (replacing any existing ones if there was already a SymbolEnv from a previous compilation)
 		let env = scope.env.borrow().unwrap();
+		let is_bringable = check_is_bringable(scope);
 		self
 			.types
 			.source_file_envs
@@ -2660,10 +2657,10 @@ impl<'a> TypeChecker<'a> {
 						alias = identifier.as_ref().unwrap();
 					}
 					BringSource::WingFile(name) => {
-						let (mut env, is_bringable) = match self.types.source_file_envs.get(Path::new(&name.name)) {
+						let (brought_env, is_bringable) = match self.types.source_file_envs.get(Path::new(&name.name)) {
 							Some((env, is_bringable)) => (*env, *is_bringable),
 							None => {
-								self.spanned_error(stmt, format!("Could not find Wing file \"{}\"", name));
+								self.spanned_error(stmt, format!("Could not find Wing module \"{}\"", name));
 								return;
 							}
 						};
@@ -2673,7 +2670,14 @@ impl<'a> TypeChecker<'a> {
 						}
 						let ns = self.types.add_namespace(Namespace {
 							name: name.name.to_string(),
-							env: SymbolEnv::new(Some(env.get_ref()), env.return_type, false, false, env.phase, 0),
+							env: SymbolEnv::new(
+								Some(brought_env.get_ref()),
+								brought_env.return_type,
+								false,
+								false,
+								brought_env.phase,
+								0,
+							),
 							loaded: true,
 						});
 						if let Err(e) = env.define(
