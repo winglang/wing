@@ -2,17 +2,17 @@
 
 > **Status**: Done
 
-This is the story of Monada Sprint 4. It is told from the perspective of Mona
+This is the story of Wing Cloud Sprint 4. It is told from the perspective of Mona
 Lisa, a 28-year-old programmer who works at a successful startup in San
 Francisco. Mona is the lead engineer at the backend team of her company. She
 loves her job and is very passionate about software and technology. She believes
-in the power of the cloud and open-source. She heard about Monada from a friend
+in the power of the cloud and open-source. She heard about Wing Cloud from a friend
 and registered to the beta program. She is excited to try it out and see how it
 can help her and her team.
 
 **Damn, I am so excited!** Just got an email telling me that I was invited to
-join beta program for Monada. Can't wait to see what these guys are up to! The
-email links to https://github.com/monadahq/winglang, so I jump right in and this
+join beta program for Wing Cloud. Can't wait to see what these guys are up to! The
+email links to https://github.com/winglang/wing, so I jump right in and this
 is what I see...
 
 ---
@@ -61,7 +61,7 @@ In order to deploy the "Hello, World" example below to AWS, you will also need:
 
 #### Authenticate to GitHub Packages
 
-Since Wing is currently in private beta and distributed through a Monada's
+Since Wing is currently in private beta and distributed through a Wing Cloud's
 private npm registry, you will need to login to the registry before installing:
 
 ```sh
@@ -88,7 +88,7 @@ configured on your system.
 Now you should be able to install the **Wing CLI**:
 
 ```sh
-npm install -g @monadahq/wing
+npm install -g winglang
 ```
 
 Next, install the **Wing Extension for VSCode**:
@@ -184,12 +184,12 @@ resources to help you get started:
 
 The entire Wing toolchain is continuously released. We follow [semantic
 versioning](https://semver.org/) and release notes are available in the
-[Releases](https://github.com/monadahq/winglang/releases) pages on GitHub.
+[Releases](https://github.com/winglang/wing/releases) pages on GitHub.
 
 To update the toolchain to the latest, run the following command:
 
 ```sh
-$ npm update -g @monadahq/wing
+$ npm update -g winglang
 ```
 
 Our VSCode extension has automatic updates, as well as the Wing Console.
@@ -219,10 +219,10 @@ and contributors to the project.
 
 As such, our focus for this sprint is:
 
-- Consolidate everything related to Wing into the [monadahq/winglang](https://github.com/monadahq/winglang/) GitHub repo. This includes:
-  - The [Wing SDK](https://github.com/monadahq/wingsdk)
-  - The [language spec](https://github.com/monadahq/winglang-spec) - should go under `docs/winglang-spec.md`
-  - The [language requirements RFC](https://www.winglang.io/contributing/rfcs/2022-05-28-winglang-reqs) - 
+- Consolidate everything related to Wing into the [winglang/wing](https://github.com/winglang/wing) GitHub repo. This includes:
+  - The [Wing SDK](https://github.com/winglang/wing/tree/main/libs/wingsdk)
+  - The [language spec](https://github.com/winglang/wing/blob/main/docs/contributing/999-rfcs/2023-06-12-language-spec.md)
+  - The [language requirements RFC](https://github.com/winglang/wing/blob/main/docs/contributing/999-rfcs/2022-05-28-winglang-reqs.md) - 
     should go under `rfcs/winglang-reqs.md`
   - All issues should also be transfered into this repository.
 - Updating the main README file to match this RFC as close as possible.

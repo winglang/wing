@@ -153,7 +153,7 @@ const contributes: VSCodeExtensionContributions = {
 };
 
 project.addFields({
-  publisher: "Monada",
+  publisher: "Wing Cloud",
   preview: true,
   private: true,
   displayName: "Wing",

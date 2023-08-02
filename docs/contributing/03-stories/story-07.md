@@ -13,7 +13,7 @@ For the above to be successful we need to complete the following user stories
 
 We want to make sure that all our public assets meet our standards of good UX (performance, experience, branded design) 
 
-**Websites:**  winglang.io, winglang.io/blog, winglang.io/docs,  monada.co
+**Websites:**  winglang.io, winglang.io/blog, winglang.io/docs,  wing.cloud
 
 **Guides:** README.md, Contributing.md, winglang.io/docs
 
@@ -25,7 +25,7 @@ We want to make sure that all our public assets meet our standards of good UX (p
 
 ## Tracking visitors and their onboarding process [#507](https://github.com/winglang/wing/issues/507) 
 
-When a visitor goes into winglang.io or any.winglang.io or monada.co we report page load to Segment that reports it to Google Analytics and Mixpanel, it keeps track of the utm_\* and HTTP referer attributes to determine where they came from, we also track their registration to preview , completing the form, and successfully clicking on the email.
+When a visitor goes into winglang.io or any.winglang.io or wing.cloud we report page load to Segment that reports it to Google Analytics and Mixpanel, it keeps track of the utm_\* and HTTP referer attributes to determine where they came from, we also track their registration to preview , completing the form, and successfully clicking on the email.
 
 We are able to answer the following questions:
 - How many visitors seen our web pages

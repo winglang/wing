@@ -72,7 +72,7 @@
     "url": "https://github.com/winglang/wing/issues"
   },
   "types": "lib/index.d.ts",
-  "publisher": "Monada",
+  "publisher": "Wing Cloud",
   "preview": true,
   "private": true,
   "displayName": "Wing",

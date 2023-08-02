@@ -9,7 +9,7 @@
     "test:update": "vitest run --update",
     "bench": "vitest bench --run"
   },
-  "author": "Monada",
+  "author": "Wing Cloud",
   "license": "Apache-2.0",
   "devDependencies": {
     "cdktf": "^0.17.0",
