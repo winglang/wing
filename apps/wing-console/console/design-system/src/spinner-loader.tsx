@@ -13,7 +13,10 @@ export interface SpinnerLoaderProps {
   className?: string;
 }
 
-export const SpinnerLoader = ({ className, size = "md" }: SpinnerLoaderProps) => {
+export const SpinnerLoader = ({
+  className,
+  size = "md",
+}: SpinnerLoaderProps) => {
   return (
     <div role="status" className={"self-center"}>
       <svg
