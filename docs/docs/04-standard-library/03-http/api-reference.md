@@ -16,7 +16,7 @@ sidebar_position: 100
 
 ### Http <a name="Http" id="@winglang/sdk.http.Util"></a>
 
-the Http class is used for calling different HTTP methods and requesting and sending information online,  as well as testing public accessible resources.
+The Http class is used for calling different HTTP methods and requesting and sending information online,  as well as testing public accessible resources.
 
 
 #### Static Functions <a name="Static Functions" id="Static Functions"></a>
@@ -214,7 +214,7 @@ let RequestOptions = http.RequestOptions{ ... };
 | <code><a href="#@winglang/sdk.http.RequestOptions.property.cache">cache</a></code> | <code><a href="#@winglang/sdk.http.RequestCache">RequestCache</a></code> | The cache mode you want to use for the request. |
 | <code><a href="#@winglang/sdk.http.RequestOptions.property.headers">headers</a></code> | <code>MutMap&lt;str&gt;</code> | Any headers you want to add to your request. |
 | <code><a href="#@winglang/sdk.http.RequestOptions.property.method">method</a></code> | <code><a href="#@winglang/sdk.http.HttpMethod">HttpMethod</a></code> | The request method, e.g., GET, POST. The default is GET. |
-| <code><a href="#@winglang/sdk.http.RequestOptions.property.redirect">redirect</a></code> | <code><a href="#@winglang/sdk.http.RequestRedirect">RequestRedirect</a></code> | he redirect mode to use: follow, error. |
+| <code><a href="#@winglang/sdk.http.RequestOptions.property.redirect">redirect</a></code> | <code><a href="#@winglang/sdk.http.RequestRedirect">RequestRedirect</a></code> | Redirect mode to use: follow, error. |
 | <code><a href="#@winglang/sdk.http.RequestOptions.property.referrer">referrer</a></code> | <code>str</code> | A string specifying "no-referrer", client, or a URL. |
 
 ---
@@ -279,7 +279,7 @@ redirect: RequestRedirect;
 - *Type:* <a href="#@winglang/sdk.http.RequestRedirect">RequestRedirect</a>
 - *Default:* follow
 
-he redirect mode to use: follow, error.
+Redirect mode to use: follow, error.
 
 The default is follow.
 

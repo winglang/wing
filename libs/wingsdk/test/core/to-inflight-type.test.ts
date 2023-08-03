@@ -14,12 +14,12 @@ const skip = [
   "std.TraceType",
   "std.TEST_RUNNER_FQN",
   "std.Resource",
-  "util.RequestCache", // an enum
-  "util.RequestRedirect", // an enum
-  "util.HttpMethod", // an enum
+  "util.RequestCache", // An enum
+  "util.RequestRedirect", // An enum
+  "util.HttpMethod", // An enum
 ];
 
-// checks that the class `className` in module `module` has a `_toInflightType()` method and that it
+// Checks that the class `className` in module `module` has a `_toInflightType()` method and that it
 // returns the same class when the returned code is evaluated.
 function makeTest(module: any, moduleName: string, className: string) {
   const p = `${moduleName}.${className}`;

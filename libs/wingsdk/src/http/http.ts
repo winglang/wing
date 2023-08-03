@@ -110,7 +110,7 @@ export interface RequestOptions {
    */
   readonly cache?: RequestCache;
   /**
-   * he redirect mode to use: follow, error. The default is follow.
+   * Redirect mode to use: follow, error. The default is follow.
    * @default follow
    */
   readonly redirect?: RequestRedirect;
@@ -147,7 +147,7 @@ export interface Response {
 }
 
 /**
- * default options to attach to any request
+ * Default options to attach to any request
  */
 const defaultOptions: RequestOptions = {
   method: HttpMethod.GET,
@@ -157,7 +157,7 @@ const defaultOptions: RequestOptions = {
 };
 
 /**
- * the Http class is used for calling different HTTP methods and requesting and sending information online,
+ * The Http class is used for calling different HTTP methods and requesting and sending information online,
  *  as well as testing public accessible resources
  * @inflight
  */
@@ -177,7 +177,10 @@ export class Util {
    * @inflight
    * @returns the formatted response of the call
    */
-  static async fetch(url: string, options?: RequestOptions): Promise<Response> {
+  public static async fetch(
+    url: string,
+    options?: RequestOptions
+  ): Promise<Response> {
     const res = await fetch(url, { ...defaultOptions, ...options });
     return this._formatResponse(res);
   }
@@ -188,7 +191,10 @@ export class Util {
    * @inflight
    * @returns the formatted response of the call
    */
-  static async get(url: string, options?: RequestOptions): Promise<Response> {
+  public static async get(
+    url: string,
+    options?: RequestOptions
+  ): Promise<Response> {
     return this.fetch(url, {
       ...defaultOptions,
       ...options,
@@ -202,7 +208,10 @@ export class Util {
    * @inflight
    * @returns the formatted response of the call
    */
-  static async post(url: string, options?: RequestOptions): Promise<Response> {
+  public static async post(
+    url: string,
+    options?: RequestOptions
+  ): Promise<Response> {
     return this.fetch(url, {
       ...defaultOptions,
       ...options,
@@ -216,7 +225,10 @@ export class Util {
    * @inflight
    * @returns the formatted response of the call
    */
-  static async put(url: string, options?: RequestOptions): Promise<Response> {
+  public static async put(
+    url: string,
+    options?: RequestOptions
+  ): Promise<Response> {
     return this.fetch(url, {
       ...defaultOptions,
       ...options,
@@ -230,7 +242,10 @@ export class Util {
    * @inflight
    * @returns the formatted response of the call
    */
-  static async patch(url: string, options?: RequestOptions): Promise<Response> {
+  public static async patch(
+    url: string,
+    options?: RequestOptions
+  ): Promise<Response> {
     return this.fetch(url, {
       ...defaultOptions,
       ...options,
@@ -245,7 +260,7 @@ export class Util {
    * @inflight
    * @returns the formatted response of the call
    */
-  static async delete(
+  public static async delete(
     url: string,
     options?: RequestOptions
   ): Promise<Response> {
@@ -259,7 +274,7 @@ export class Util {
   private static async _formatResponse(
     response: globalThis.Response
   ): Promise<Response> {
-    // convert Headers object into a plain JS object
+    // Converts Headers object into a plain JS object
     const headers: Record<string, string> = {};
     response.headers?.forEach((val: string, key: string) => {
       headers[key] = val;

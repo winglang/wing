@@ -20,9 +20,9 @@ test("create a bucket", () => {
 
   // THEN
   expect(tfResourcesOf(output)).toEqual([
-    "aws_s3_bucket", // main bucket
-    "aws_s3_bucket_public_access_block", // ensure bucket is private
-    "aws_s3_bucket_server_side_encryption_configuration", // server side encryption
+    "aws_s3_bucket", // Main bucket
+    "aws_s3_bucket_public_access_block", // Ensure bucket is private
+    "aws_s3_bucket_server_side_encryption_configuration", // Server side encryption
   ]);
   expect(tfSanitize(output)).toMatchSnapshot();
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
@@ -48,10 +48,10 @@ test("bucket is public", () => {
 
   // THEN
   expect(tfResourcesOf(output)).toEqual([
-    "aws_s3_bucket", // main bucket
-    "aws_s3_bucket_policy", // resource policy to grant read access to anyone
-    "aws_s3_bucket_public_access_block", // allow public access to an s3 bucket
-    "aws_s3_bucket_server_side_encryption_configuration", // server side encryption
+    "aws_s3_bucket", // Main bucket
+    "aws_s3_bucket_policy", // Resource policy to grant read access to anyone
+    "aws_s3_bucket_public_access_block", // Allow public access to an s3 bucket
+    "aws_s3_bucket_server_side_encryption_configuration", // Server side encryption
   ]);
   expect(tfSanitize(output)).toMatchSnapshot();
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
@@ -67,11 +67,11 @@ test("bucket with two preflight objects", () => {
 
   // THEN
   expect(tfResourcesOf(output)).toEqual([
-    "aws_s3_bucket", // main bucket
-    "aws_s3_bucket_policy", // resource policy to grant read access to anyone
-    "aws_s3_bucket_public_access_block", // allow public access to an s3 bucket
-    "aws_s3_bucket_server_side_encryption_configuration", // server side encryption
-    "aws_s3_object", // file1.txt
+    "aws_s3_bucket", // Main bucket
+    "aws_s3_bucket_policy", // Resource policy to grant read access to anyone
+    "aws_s3_bucket_public_access_block", // Allow public access to an s3 bucket
+    "aws_s3_bucket_server_side_encryption_configuration", // Server side encryption
+    "aws_s3_object", // File1.txt
   ]);
   expect(tfResourcesOfCount(output, "aws_s3_object")).toEqual(2);
   expect(tfSanitize(output)).toMatchSnapshot();
@@ -143,17 +143,17 @@ test("bucket with onCreate method", () => {
     "aws_iam_role",
     "aws_iam_role_policy",
     "aws_iam_role_policy_attachment",
-    "aws_lambda_function", // inflight subscriber
-    "aws_lambda_permission", // permission of the topic to invoke lambda
-    "aws_s3_bucket", // main bucket
+    "aws_lambda_function", // Inflight subscriber
+    "aws_lambda_permission", // Permission of the topic to invoke lambda
+    "aws_s3_bucket", // Main bucket
     "aws_s3_bucket_notification",
-    "aws_s3_bucket_policy", // resource policy to grant read access to anyone
-    "aws_s3_bucket_public_access_block", // allow public access to an s3 bucket
-    "aws_s3_bucket_server_side_encryption_configuration", // server side encryption
+    "aws_s3_bucket_policy", // Resource policy to grant read access to anyone
+    "aws_s3_bucket_public_access_block", // Allow public access to an s3 bucket
+    "aws_s3_bucket_server_side_encryption_configuration", // Server side encryption
     "aws_s3_object",
-    "aws_sns_topic", // topic to subscribe to bucket events
-    "aws_sns_topic_policy", //permission of the bucket to publish events
-    "aws_sns_topic_subscription", // subscription to events
+    "aws_sns_topic", // Topic to subscribe to bucket events
+    "aws_sns_topic_policy", //Permission of the bucket to publish events
+    "aws_sns_topic_subscription", // Subscription to events
   ]);
 
   expect(tfResourcesOfCount(output, "aws_sns_topic")).toEqual(1);
@@ -182,17 +182,17 @@ test("bucket with onDelete method", () => {
     "aws_iam_role",
     "aws_iam_role_policy",
     "aws_iam_role_policy_attachment",
-    "aws_lambda_function", // inflight subscriber
-    "aws_lambda_permission", // permission of the topic to invoke lambda
-    "aws_s3_bucket", // main bucket
+    "aws_lambda_function", // Inflight subscriber
+    "aws_lambda_permission", // Permission of the topic to invoke lambda
+    "aws_s3_bucket", // Main bucket
     "aws_s3_bucket_notification",
-    "aws_s3_bucket_policy", // resource policy to grant read access to anyone
-    "aws_s3_bucket_public_access_block", // allow public access to an s3 bucket
-    "aws_s3_bucket_server_side_encryption_configuration", // server side encryption
+    "aws_s3_bucket_policy", // Resource policy to grant read access to anyone
+    "aws_s3_bucket_public_access_block", // Allow public access to an s3 bucket
+    "aws_s3_bucket_server_side_encryption_configuration", // Server side encryption
     "aws_s3_object",
-    "aws_sns_topic", // topic to subscribe to bucket events
-    "aws_sns_topic_policy", //permission of the bucket to publish events
-    "aws_sns_topic_subscription", // subscription to events
+    "aws_sns_topic", // Topic to subscribe to bucket events
+    "aws_sns_topic_policy", //Permission of the bucket to publish events
+    "aws_sns_topic_subscription", // Subscription to events
   ]);
 
   expect(tfResourcesOfCount(output, "aws_sns_topic")).toEqual(1);
@@ -221,17 +221,17 @@ test("bucket with onUpdate method", () => {
     "aws_iam_role",
     "aws_iam_role_policy",
     "aws_iam_role_policy_attachment",
-    "aws_lambda_function", // inflight subscriber
-    "aws_lambda_permission", // permission of the topic to invoke lambda
-    "aws_s3_bucket", // main bucket
+    "aws_lambda_function", // Inflight subscriber
+    "aws_lambda_permission", // Permission of the topic to invoke lambda
+    "aws_s3_bucket", // Main bucket
     "aws_s3_bucket_notification",
-    "aws_s3_bucket_policy", // resource policy to grant read access to anyone
-    "aws_s3_bucket_public_access_block", // allow public access to an s3 bucket
-    "aws_s3_bucket_server_side_encryption_configuration", // server side encryption
+    "aws_s3_bucket_policy", // Resource policy to grant read access to anyone
+    "aws_s3_bucket_public_access_block", // Allow public access to an s3 bucket
+    "aws_s3_bucket_server_side_encryption_configuration", // Server side encryption
     "aws_s3_object",
-    "aws_sns_topic", // topic to subscribe to bucket events
-    "aws_sns_topic_policy", //permission of the bucket to publish events
-    "aws_sns_topic_subscription", // subscription to events
+    "aws_sns_topic", // Topic to subscribe to bucket events
+    "aws_sns_topic_policy", //Permission of the bucket to publish events
+    "aws_sns_topic_subscription", // Subscription to events
   ]);
 
   expect(tfResourcesOfCount(output, "aws_sns_topic")).toEqual(1);
@@ -260,17 +260,17 @@ test("bucket with onEvent method", () => {
     "aws_iam_role",
     "aws_iam_role_policy",
     "aws_iam_role_policy_attachment",
-    "aws_lambda_function", // inflight subscriber
-    "aws_lambda_permission", // permission of the topic to invoke lambda
-    "aws_s3_bucket", // main bucket
+    "aws_lambda_function", // Inflight subscriber
+    "aws_lambda_permission", // Permission of the topic to invoke lambda
+    "aws_s3_bucket", // Main bucket
     "aws_s3_bucket_notification",
-    "aws_s3_bucket_policy", // resource policy to grant read access to anyone
-    "aws_s3_bucket_public_access_block", // allow public access to an s3 bucket
-    "aws_s3_bucket_server_side_encryption_configuration", // server side encryption
+    "aws_s3_bucket_policy", // Resource policy to grant read access to anyone
+    "aws_s3_bucket_public_access_block", // Allow public access to an s3 bucket
+    "aws_s3_bucket_server_side_encryption_configuration", // Server side encryption
     "aws_s3_object",
-    "aws_sns_topic", // topic to subscribe to bucket events
-    "aws_sns_topic_policy", //permission of the bucket to publish events
-    "aws_sns_topic_subscription", // subscription to events
+    "aws_sns_topic", // Topic to subscribe to bucket events
+    "aws_sns_topic_policy", //Permission of the bucket to publish events
+    "aws_sns_topic_subscription", // Subscription to events
   ]);
   expect(tfResourcesOfCount(output, "aws_sns_topic")).toEqual(3); // 3 topics will be created- one per event
   expect(tfResourcesOfCount(output, "aws_s3_bucket_notification")).toEqual(1);

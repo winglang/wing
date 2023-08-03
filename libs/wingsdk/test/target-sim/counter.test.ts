@@ -41,7 +41,7 @@ test("inc", async () => {
   const client = s.getResource("/my_counter") as ICounterClient;
 
   const value0 = await client.inc();
-  expect(value0).toEqual(123); // always returns the value before inc (like "i++");
+  expect(value0).toEqual(123); // Always returns the value before inc (like "i++");
 
   const value1 = await client.inc();
   expect(value1).toEqual(123 + 1);
@@ -67,7 +67,7 @@ test("key inc", async () => {
   const client = s.getResource("/my_counter") as ICounterClient;
 
   const value0 = await client.inc(1, "my-key");
-  expect(value0).toEqual(0); // always returns the value before inc (like "i++");
+  expect(value0).toEqual(0); // Always returns the value before inc (like "i++");
 
   const value1 = await client.inc(undefined, "my-key");
   expect(value1).toEqual(1);
@@ -95,7 +95,7 @@ test("dec", async () => {
   const client = s.getResource("/my_counter") as ICounterClient;
 
   const value0 = await client.dec();
-  expect(value0).toEqual(123); // always returns the value before inc (like "i--");
+  expect(value0).toEqual(123); // Always returns the value before inc (like "i--");
 
   const value1 = await client.dec();
   expect(value1).toEqual(123 - 1);
@@ -121,7 +121,7 @@ test("key dec", async () => {
   const client = s.getResource("/my_counter") as ICounterClient;
 
   const value0 = await client.dec(1, "my-key");
-  expect(value0).toEqual(0); // always returns the value before inc (like "i--");
+  expect(value0).toEqual(0); // Always returns the value before inc (like "i--");
 
   const value1 = await client.dec(undefined, "my-key");
   expect(value1).toEqual(-1);

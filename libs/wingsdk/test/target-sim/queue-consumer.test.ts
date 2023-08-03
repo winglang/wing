@@ -51,7 +51,7 @@ test("pushing messages through a queue", async () => {
     "root/HelloWorld/Queue-SetConsumer-13c4eaf1"
   ) as cloud.IFunctionClient;
 
-  // warm up the consumer so timing is more predictable
+  // Warm up the consumer so timing is more predictable
   await consumer.invoke(JSON.stringify({ messages: [] }));
 
   // WHEN

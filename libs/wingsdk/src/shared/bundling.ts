@@ -25,7 +25,7 @@ export function createBundle(entrypoint: string, outputDir?: string): Bundle {
     bundle: true,
     entryPoints: [normalPath(resolve(entrypoint))],
     outfile: normalPath(outfile),
-    // if the user has specified a node_modules directory to resolve from
+    // If the user has specified a node_modules directory to resolve from
     nodePaths: process.env.WING_NODE_MODULES
       ? [normalPath(process.env.WING_NODE_MODULES as string)]
       : undefined,
@@ -40,7 +40,7 @@ export function createBundle(entrypoint: string, outputDir?: string): Bundle {
     throw new Error(`Failed to bundle function: ${errors}`);
   }
 
-  // the bundled contains line comments with file paths, which are not useful for us, especially
+  // The bundled contains line comments with file paths, which are not useful for us, especially
   // since they may contain system-specific paths. sadly, esbuild doesn't have a way to disable
   // this, so we simply filter those out from the bundle.
   const outlines = readFileSync(outfile, "utf-8").split("\n");
@@ -48,7 +48,7 @@ export function createBundle(entrypoint: string, outputDir?: string): Bundle {
   const final = outlines.filter(isNotLineComment).join("\n");
   writeFileSync(outfile, final);
 
-  // calculate a md5 hash of the contents of asset.path
+  // Calculate a md5 hash of the contents of asset.path
   const codeHash = crypto.createHash("md5").update(final).digest("hex");
 
   return {

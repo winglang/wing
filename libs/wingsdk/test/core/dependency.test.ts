@@ -68,7 +68,7 @@ test("children of root contains all orphans", () => {
     expected.add(c.value!)
   );
 
-  // chart1 and obj1 are orphans because no one depends on them (no parents)
+  // Chart1 and obj1 are orphans because no one depends on them (no parents)
   // they should be dependency roots, i.e chidren of the dummy root.
   expect(expected).toEqual(new Set<IConstruct>([group, obj1]));
 });
@@ -84,11 +84,11 @@ test("ignores cross-scope nodes", () => {
 
   Node.of(obj1).addDependency(obj2);
 
-  // this is a cross-scope dependency since 'obj2' is
+  // This is a cross-scope dependency since 'obj2' is
   // not inside the scope of 'chart1'
   Node.of(obj2).addDependency(obj3);
 
-  // we expect obj3 to not be part of the graph
+  // We expect obj3 to not be part of the graph
   const graph = new DependencyGraph(Node.of(group1));
 
   expect(graph.topology()).toEqual([group1, obj2, obj1]);

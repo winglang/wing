@@ -88,7 +88,7 @@ export function getTfDataSource(
 export function tfSanitize(templateStr: string): string {
   const template = JSON.parse(templateStr);
 
-  // remove names of assets whose hashes are sensitive to changes based
+  // Remove names of assets whose hashes are sensitive to changes based
   // on the file system layout
   return JSON.stringify(
     template,
@@ -124,7 +124,7 @@ export function directorySnapshot(initialRoot: string) {
   const visit = (root: string, subdir: string, prefix = "") => {
     const files = readdirSync(join(root, subdir));
     for (const f of files) {
-      // skip node_modules because we are symlinking them into sim apps
+      // Skip node_modules because we are symlinking them into sim apps
       if (f === "node_modules") {
         continue;
       }
@@ -164,7 +164,7 @@ export function sanitizeCodeText(code: string): string {
   function removeAbsolutePaths(text: string) {
     const regex = /".+\/libs\/wingsdk\/(.+)"/g;
 
-    // replace first group with static text
+    // Replace first group with static text
     return text.replace(regex, '"[REDACTED]/wingsdk/$1"');
   }
 

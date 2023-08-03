@@ -37,7 +37,7 @@ export class CounterClient implements ICounterClient {
       throw new Error(`${VALUE_ATTRIBUTE} attribute not found on table.`);
     }
 
-    // return the old value
+    // Return the old value
     return parseInt(newValue) - amount;
   }
 

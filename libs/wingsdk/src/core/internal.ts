@@ -4,7 +4,7 @@ import { Duration } from "../std/duration";
 import { IResource } from "../std/resource";
 
 export function liftObject(scope: IConstruct, obj: any): string {
-  // since typeof(null) is "object", we cover all nullity cases (undefined and null) apriori.
+  // Since typeof(null) is "object", we cover all nullity cases (undefined and null) apriori.
   if (obj == null) {
     return JSON.stringify(obj);
   }
@@ -14,7 +14,7 @@ export function liftObject(scope: IConstruct, obj: any): string {
     return tokens.lift(obj);
   }
 
-  // if the object is a type, and it has a "_toInflightType" method, we use it to serialize
+  // If the object is a type, and it has a "_toInflightType" method, we use it to serialize
   // fyi, typeof(obj) in this case is a "function".
   if (typeof obj?._toInflightType === "function") {
     return obj._toInflightType(scope).text;
@@ -47,13 +47,13 @@ export function liftObject(scope: IConstruct, obj: any): string {
         return `new Map(${liftObject(scope, Array.from(obj))})`;
       }
 
-      // if the object is a resource (i.e. has a "_toInflight" method"), we use it to serialize
+      // If the object is a resource (i.e. has a "_toInflight" method"), we use it to serialize
       // itself.
       if (typeof (obj as IResource)._toInflight === "function") {
         return (obj as IResource)._toInflight().text;
       }
 
-      // structs are just plain objects
+      // Structs are just plain objects
       if (obj.constructor.name === "Object") {
         const lines = [];
         lines.push("{");

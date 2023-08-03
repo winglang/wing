@@ -31,18 +31,18 @@ const FUNCTION_NAME_OPTS: NameOptions = {
  * that should be used when a function is deployed within a VPC.
  */
 export interface FunctionNetworkConfig {
-  /** list of subnets to attach on function */
+  /** List of subnets to attach on function */
   readonly subnetIds: string[];
-  /** list of security groups to place function in */
+  /** List of security groups to place function in */
   readonly securityGroupIds: string[];
 }
 
 /**
- * options for granting invoke permissions to the current function
+ * Options for granting invoke permissions to the current function
  */
 export interface FunctionPermissionsOptions {
   /**
-   * used for keeping function's versioning.
+   * Used for keeping function's versioning.
    */
   readonly qualifier?: string;
 }
@@ -82,7 +82,7 @@ export class Function extends cloud.Function implements IAwsFunction {
   ) {
     super(scope, id, inflight, props);
 
-    // bundled code is guaranteed to be in a fresh directory
+    // Bundled code is guaranteed to be in a fresh directory
     const bundle = createBundle(this.entrypoint);
 
     // Create Lambda executable
@@ -105,7 +105,7 @@ export class Function extends cloud.Function implements IAwsFunction {
     const lambdaArchive = new S3Object(this, "S3Object", {
       bucket: bucket.bucket,
       key: objectKey,
-      source: asset.path, // returns a posix path
+      source: asset.path, // Returns a posix path
     });
 
     // Create Lambda role
@@ -151,7 +151,7 @@ export class Function extends cloud.Function implements IAwsFunction {
               Statement: this.policyStatements,
             });
           }
-          // policy must contain at least one statement, so include a no-op statement
+          // Policy must contain at least one statement, so include a no-op statement
           return JSON.stringify({
             Version: "2012-10-17",
             Statement: [
@@ -175,7 +175,7 @@ export class Function extends cloud.Function implements IAwsFunction {
 
     const name = ResourceNames.generateName(this, FUNCTION_NAME_OPTS);
 
-    // validate memory size
+    // Validate memory size
     if (props.memory && (props.memory < 128 || props.memory > 10240)) {
       throw new Error(
         "Memory for AWS Lambda function should be in between 128 and 10240"
@@ -214,7 +214,7 @@ export class Function extends cloud.Function implements IAwsFunction {
     this.qualifiedArn = this.function.qualifiedArn;
     this.invokeArn = this.function.invokeArn;
 
-    // terraform rejects templates with zero environment variables
+    // Terraform rejects templates with zero environment variables
     this.addEnvironment("WING_FUNCTION_NAME", name);
   }
 
@@ -270,7 +270,7 @@ export class Function extends cloud.Function implements IAwsFunction {
    * Add a policy statement to the Lambda role.
    */
   public addPolicyStatements(statements: PolicyStatement[]) {
-    // we do lazy initialization here because addPolicyStatements() might be called through the
+    // We do lazy initialization here because addPolicyStatements() might be called through the
     // constructor chain of the Function base class which means that our constructor might not have
     // been called yet... yes, ugly.
     if (!this.policyStatements) {

@@ -207,7 +207,7 @@ test("runtime environment tests", async () => {
     return p.get("topic");
   `);
 
-  // check that fetch is a function (we can't really make network calls here)
+  // Check that fetch is a function (we can't really make network calls here)
   const fetchFn = app.newCloudFunction(`
     return fetch;
   `);
@@ -217,7 +217,7 @@ test("runtime environment tests", async () => {
     return c.createHash;
   `);
 
-  // check that we can import ESM modules
+  // Check that we can import ESM modules
   const esmModulesFn = app.newCloudFunction(`
     const { nanoid } = await import("nanoid");
     return nanoid();

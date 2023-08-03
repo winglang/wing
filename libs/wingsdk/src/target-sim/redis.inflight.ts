@@ -22,7 +22,7 @@ export class Redis
   private connection_url?: string = undefined;
   private connection?: any;
 
-  public constructor(_props: RedisSchema["props"], context: ISimulatorContext) {
+  constructor(_props: RedisSchema["props"], context: ISimulatorContext) {
     super();
     this.context = context;
     this.container_name = `wing-sim-redis-${this.context.resourcePath.replace(
@@ -55,7 +55,7 @@ export class Redis
       const hostPort =
         JSON.parse(out)[0].NetworkSettings.Ports["6379/tcp"][0].HostPort;
 
-      // redis url based on host port
+      // Redis url based on host port
       this.connection_url = `redis://0.0.0.0:${hostPort}`;
       return {};
     } catch (e) {
@@ -65,9 +65,9 @@ export class Redis
   }
 
   public async cleanup(): Promise<void> {
-    // disconnect from the redis server
+    // Disconnect from the redis server
     await this.connection?.disconnect();
-    // stop the redis container
+    // Stop the redis container
     await runCommand("docker", ["rm", "-f", `${this.container_name}`]);
   }
 

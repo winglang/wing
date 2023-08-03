@@ -32,7 +32,7 @@ export class Function extends cloud.Function {
   ) {
     super(scope, id, inflight, props);
 
-    // bundled code is guaranteed to be in a fresh directory
+    // Bundled code is guaranteed to be in a fresh directory
     const bundle = createBundle(this.entrypoint);
 
     this.function = new CdkFunction(this, "Default", {

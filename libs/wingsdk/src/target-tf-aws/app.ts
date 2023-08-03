@@ -168,7 +168,7 @@ export class App extends CdktfApp {
 
     const identifier = ResourceNames.generateName(this, VPC_NAME_OPTS);
 
-    // create the app wide VPC
+    // Create the app wide VPC
     this._vpc = new Vpc(this, "VPC", {
       cidrBlock: "10.0.0.0/16",
       enableDnsHostnames: true,

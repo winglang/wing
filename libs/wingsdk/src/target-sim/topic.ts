@@ -27,7 +27,7 @@ export class Topic extends cloud.Topic implements ISimulatorResource {
   ): cloud.Function {
     const hash = inflight.node.addr.slice(-8);
     const functionHandler = convertBetweenHandlers(
-      this.node.scope!, // ok since we're not a tree root
+      this.node.scope!, // Ok since we're not a tree root
       `${this.node.id}-OnMessageHandler-${hash}`,
       inflight,
       join(__dirname, "topic.onmessage.inflight.js"),
@@ -35,7 +35,7 @@ export class Topic extends cloud.Topic implements ISimulatorResource {
     );
 
     const fn = Function._newFunction(
-      this.node.scope!, // ok since we're not a tree root
+      this.node.scope!, // Ok since we're not a tree root
       `${this.node.id}-OnMessage-${hash}`,
       functionHandler,
       props

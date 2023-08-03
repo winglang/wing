@@ -84,7 +84,7 @@ export class Function extends cloud.Function {
     fs.mkdirSync(`${codeDir}/${functionName}`);
     fs.renameSync(bundle.entrypointPath, `${outDir}/index.js`);
 
-    // throw an error if props.memory is defined for an Azure function
+    // Throw an error if props.memory is defined for an Azure function
     if (props.memory) {
       throw new Error("memory is an invalid parameter on Azure");
     }
@@ -210,7 +210,7 @@ export class Function extends cloud.Function {
         this.permissions.has(uniqueId) &&
         this.permissions.get(uniqueId)?.has(scopedRoleAssignment)
       ) {
-        return; // already exists
+        return; // Already exists
       }
 
       new RoleAssignment(

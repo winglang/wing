@@ -47,7 +47,7 @@ export class TestRunnerClient
     } catch (e) {
       error = (e as any).stack;
     }
-    // only return traces that were added after the test was run
+    // Only return traces that were added after the test was run
     const newTraces = this.context.listTraces().slice(previousTraces);
     return {
       path,

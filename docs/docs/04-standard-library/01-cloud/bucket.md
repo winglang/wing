@@ -548,7 +548,7 @@ Check failures on the method and retrieve errors if any.
 
 ### BucketEvent <a name="BucketEvent" id="@winglang/sdk.cloud.BucketEvent"></a>
 
-on_event notification payload- will be in use after solving issue: https://github.com/winglang/wing/issues/1927.
+`onEvent` notification payload.
 
 #### Initializer <a name="Initializer" id="@winglang/sdk.cloud.BucketEvent.Initializer"></a>
 
@@ -562,8 +562,8 @@ let BucketEvent = cloud.BucketEvent{ ... };
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.BucketEvent.property.key">key</a></code> | <code>str</code> | the bucket key that triggered the event. |
-| <code><a href="#@winglang/sdk.cloud.BucketEvent.property.type">type</a></code> | <code><a href="#@winglang/sdk.cloud.BucketEventType">BucketEventType</a></code> | type of event. |
+| <code><a href="#@winglang/sdk.cloud.BucketEvent.property.key">key</a></code> | <code>str</code> | The bucket key that triggered the event. |
+| <code><a href="#@winglang/sdk.cloud.BucketEvent.property.type">type</a></code> | <code><a href="#@winglang/sdk.cloud.BucketEventType">BucketEventType</a></code> | Type of event. |
 
 ---
 
@@ -575,7 +575,7 @@ key: str;
 
 - *Type:* str
 
-the bucket key that triggered the event.
+The bucket key that triggered the event.
 
 ---
 
@@ -587,13 +587,13 @@ type: BucketEventType;
 
 - *Type:* <a href="#@winglang/sdk.cloud.BucketEventType">BucketEventType</a>
 
-type of event.
+Type of event.
 
 ---
 
 ### BucketOnCreateProps <a name="BucketOnCreateProps" id="@winglang/sdk.cloud.BucketOnCreateProps"></a>
 
-on create event options.
+On create event options.
 
 #### Initializer <a name="Initializer" id="@winglang/sdk.cloud.BucketOnCreateProps.Initializer"></a>
 
@@ -606,7 +606,7 @@ let BucketOnCreateProps = cloud.BucketOnCreateProps{ ... };
 
 ### BucketOnDeleteProps <a name="BucketOnDeleteProps" id="@winglang/sdk.cloud.BucketOnDeleteProps"></a>
 
-on delete event options.
+On delete event options.
 
 #### Initializer <a name="Initializer" id="@winglang/sdk.cloud.BucketOnDeleteProps.Initializer"></a>
 
@@ -619,7 +619,7 @@ let BucketOnDeleteProps = cloud.BucketOnDeleteProps{ ... };
 
 ### BucketOnEventProps <a name="BucketOnEventProps" id="@winglang/sdk.cloud.BucketOnEventProps"></a>
 
-on any event options.
+On any event options.
 
 #### Initializer <a name="Initializer" id="@winglang/sdk.cloud.BucketOnEventProps.Initializer"></a>
 
@@ -632,7 +632,7 @@ let BucketOnEventProps = cloud.BucketOnEventProps{ ... };
 
 ### BucketOnUpdateProps <a name="BucketOnUpdateProps" id="@winglang/sdk.cloud.BucketOnUpdateProps"></a>
 
-on update event options.
+On update event options.
 
 #### Initializer <a name="Initializer" id="@winglang/sdk.cloud.BucketOnUpdateProps.Initializer"></a>
 
@@ -761,35 +761,35 @@ Function that will be called when an event notification is fired.
 
 ### BucketEventType <a name="BucketEventType" id="@winglang/sdk.cloud.BucketEventType"></a>
 
-bucket events to subscribe to.
+Bucket events to subscribe to.
 
 #### Members <a name="Members" id="Members"></a>
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.BucketEventType.CREATE">CREATE</a></code> | create. |
-| <code><a href="#@winglang/sdk.cloud.BucketEventType.DELETE">DELETE</a></code> | delete. |
-| <code><a href="#@winglang/sdk.cloud.BucketEventType.UPDATE">UPDATE</a></code> | update. |
+| <code><a href="#@winglang/sdk.cloud.BucketEventType.CREATE">CREATE</a></code> | Create. |
+| <code><a href="#@winglang/sdk.cloud.BucketEventType.DELETE">DELETE</a></code> | Delete. |
+| <code><a href="#@winglang/sdk.cloud.BucketEventType.UPDATE">UPDATE</a></code> | Update. |
 
 ---
 
 ##### `CREATE` <a name="CREATE" id="@winglang/sdk.cloud.BucketEventType.CREATE"></a>
 
-create.
+Create.
 
 ---
 
 
 ##### `DELETE` <a name="DELETE" id="@winglang/sdk.cloud.BucketEventType.DELETE"></a>
 
-delete.
+Delete.
 
 ---
 
 
 ##### `UPDATE` <a name="UPDATE" id="@winglang/sdk.cloud.BucketEventType.UPDATE"></a>
 
-update.
+Update.
 
 ---
 

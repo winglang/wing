@@ -62,11 +62,11 @@ export function makeSimulatorJsClient(filename: string, resource: Resource) {
   );
 }
 
-// helper function to convert duration to a cron string
+// Helper function to convert duration to a cron string
 // maybe this belongs in a util library but for now it's here
 export function convertDurationToCronExpression(dur: Duration): string {
   if (dur.minutes % 1 !== 0) {
-    // our cron expression format is [minute] [hour] [day] [month] [year]
+    // Our cron expression format is [minute] [hour] [day] [month] [year]
     throw new Error("Cron expressions with second precision are not supported");
   }
 
@@ -78,10 +78,10 @@ export function convertDurationToCronExpression(dur: Duration): string {
   const minute = m != 0 ? `*/${m}` : "*";
   const hour = h != 0 ? `*/${h}` : "*";
   // TODO: Support longer durations once we implement https://github.com/winglang/wing/issues/2243
-  // for now we just use * for day, month, and year
+  // For now we just use * for day, month, and year
   const dayInMonth = "*";
   const month = "*";
-  // if day of month is "*", day of week should be "?"
+  // If day of month is "*", day of week should be "?"
   // https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/ScheduledEvents.html
   const dayOfWeek = "?";
 

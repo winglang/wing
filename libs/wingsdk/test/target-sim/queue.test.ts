@@ -123,7 +123,7 @@ test("messages are requeued if the function fails after timeout", async () => {
   queue.setConsumer(handler);
   const s = await app.startSimulator();
 
-  // warm up the function so timing is more predictable
+  // Warm up the function so timing is more predictable
   const fn = s.getResource(
     "root/my_queue-SetConsumer-e645076f"
   ) as cloud.IFunctionClient;
@@ -159,7 +159,7 @@ test("messages are not requeued if the function fails before timeout", async () 
   queue.setConsumer(handler);
   const s = await app.startSimulator();
 
-  // warm up the function so timing is more predictable
+  // Warm up the function so timing is more predictable
   const fn = s.getResource(
     "root/my_queue-SetConsumer-e645076f"
   ) as cloud.IFunctionClient;
@@ -202,7 +202,7 @@ test("messages are not requeued if the function fails after retention timeout", 
   queue.setConsumer(handler);
   const s = await app.startSimulator();
 
-  // warm up the function so timing is more predictable
+  // Warm up the function so timing is more predictable
   const fn = s.getResource(
     "root/my_queue-SetConsumer-e645076f"
   ) as cloud.IFunctionClient;

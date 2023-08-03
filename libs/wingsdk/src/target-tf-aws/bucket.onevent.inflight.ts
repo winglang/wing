@@ -18,7 +18,7 @@ export class BucketEventHandlerClient implements IBucketEventHandlerClient {
     try {
       const message = JSON.parse(event);
       if (message?.Event === "s3:TestEvent") {
-        // aws sends a test event to the topic before of the actual one, we're ignoring it for now
+        // Aws sends a test event to the topic before of the actual one, we're ignoring it for now
         return;
       }
       return await this.handler.handle(

@@ -73,14 +73,14 @@ async handle(event) {
   expect(sanitizeCode(processorFn._toInflight())).toMatchSnapshot();
 
   expect(tfResourcesOf(output)).toEqual([
-    "aws_iam_role", // role for function
-    "aws_iam_role_policy", // policy for role
-    "aws_iam_role_policy_attachment", // execution policy for role
-    "aws_lambda_event_source_mapping", // connection between queue and function
-    "aws_lambda_function", // processor function
+    "aws_iam_role", // Role for function
+    "aws_iam_role_policy", // Policy for role
+    "aws_iam_role_policy_attachment", // Execution policy for role
+    "aws_lambda_event_source_mapping", // Connection between queue and function
+    "aws_lambda_function", // Processor function
     "aws_s3_bucket", // S3 bucket for code
     "aws_s3_object", // S3 object for code
-    "aws_sqs_queue", // main queue
+    "aws_sqs_queue", // Main queue
   ]);
   expect(tfSanitize(output)).toMatchSnapshot();
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();

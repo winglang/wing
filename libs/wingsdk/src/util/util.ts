@@ -129,7 +129,7 @@ export class Util {
       if (await f()) {
         return true;
       }
-      // not taking account the real elapsed time just the sum of intervals till timeout
+      // Not taking account the real elapsed time just the sum of intervals till timeout
       // it might be that predicate takes a long time and it is not considered inside timeout
       elapsed += interval.seconds;
       await this.sleep(interval);

@@ -17,7 +17,7 @@ export class TestRunner extends std.TestRunner {
     super(scope, id, props);
 
     // This output is created so the CLI's `wing test` command can obtain a list
-    // of all ARNs of test functions by running `terraform output`.
+    // Of all ARNs of test functions by running `terraform output`.
     const output = new TerraformOutput(this, "TestFunctionArns", {
       value: Lazy.stringValue({
         produce: () => {
@@ -55,7 +55,7 @@ export class TestRunner extends std.TestRunner {
 
   /** @internal */
   public _preSynthesize(): void {
-    // add a dependency on each test function
+    // Add a dependency on each test function
     for (const test of this.findTests()) {
       this.node.addDependency(test._fn);
     }

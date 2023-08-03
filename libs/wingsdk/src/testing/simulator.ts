@@ -115,12 +115,12 @@ export interface ITraceSubscriber {
  * A simulator that can be used to test your application locally.
  */
 export class Simulator {
-  // fields that are same between simulation runs / reloads
+  // Fields that are same between simulation runs / reloads
   private readonly _factory: ISimulatorFactory;
   private _config: WingSimulatorSchema;
   private readonly simdir: string;
 
-  // fields that change between simulation runs / reloads
+  // Fields that change between simulation runs / reloads
   private _running: boolean;
   private readonly _handles: HandleManager;
   private _traces: Array<Trace>;
@@ -185,7 +185,7 @@ export class Simulator {
       );
     }
 
-    // create a copy of the resource list to be used as an init queue.
+    // Create a copy of the resource list to be used as an init queue.
     const initQueue: (BaseResourceSchema & { _attempts?: number })[] = [
       ...this._config.resources,
     ];
@@ -196,21 +196,21 @@ export class Simulator {
         break;
       }
 
-      // we couldn't start this resource yet, so decrement the retry counter and put it back in
+      // We couldn't start this resource yet, so decrement the retry counter and put it back in
       // the init queue.
       if (!(await this.tryStartResource(next))) {
-        // we couldn't start this resource yet, so decrement the attempt counter
+        // We couldn't start this resource yet, so decrement the attempt counter
         next._attempts = next._attempts ?? START_ATTEMPT_COUNT;
         next._attempts--;
 
-        // if we've tried too many times, give up (might be a dependency cycle or a bad reference)
+        // If we've tried too many times, give up (might be a dependency cycle or a bad reference)
         if (next._attempts === 0) {
           throw new Error(
             `Could not start resource ${next.path} after ${START_ATTEMPT_COUNT} attempts. This could be due to a dependency cycle or an invalid attribute reference.`
           );
         }
 
-        // put back in the queue for another round
+        // Put back in the queue for another round
         initQueue.push(next);
       }
     }
@@ -310,7 +310,7 @@ export class Simulator {
    * @returns The resource configuration or undefined if not found
    */
   public tryGetResourceConfig(path: string): BaseResourceSchema | undefined {
-    // shorthand - assume tree root is named "root" by default
+    // Shorthand - assume tree root is named "root" by default
     if (path.startsWith("/")) {
       path = `root${path}`;
     }
@@ -363,28 +363,28 @@ export class Simulator {
         timestamp: new Date().toISOString(),
       });
 
-      // this means the resource has a dependency that hasn't been started yet (hopefully). return
+      // This means the resource has a dependency that hasn't been started yet (hopefully). return
       // it to the init queue.
       return false;
     }
 
-    // create the resource based on its type
+    // Create the resource based on its type
     const resourceObject = this._factory.resolve(
       resourceConfig.type,
       resolvedProps,
       context
     );
 
-    // go ahead and initialize the resource
+    // Go ahead and initialize the resource
     const attrs = await resourceObject.init();
 
-    // allocate a handle for the resource so others can find it
+    // Allocate a handle for the resource so others can find it
     const handle = this._handles.allocate(resourceObject);
 
-    // update the resource configuration with new attrs returned after initialization
+    // Update the resource configuration with new attrs returned after initialization
     (resourceConfig as any).attrs = { ...attrs, handle };
 
-    // trace the resource creation
+    // Trace the resource creation
     this._addTrace({
       type: TraceType.RESOURCE,
       data: { message: `${resourceConfig.type} created.` },
@@ -472,7 +472,7 @@ export class Simulator {
           const attrName = rest.slice(6);
           const attr = config?.attrs[attrName];
 
-          // we couldn't find the attribute. this doesn't mean it doesn't exist, it's just likely
+          // We couldn't find the attribute. this doesn't mean it doesn't exist, it's just likely
           // that this resource haven't been started yet. so return `undefined`, which will cause
           // this resource to go back to the init queue.
           if (!attr) {

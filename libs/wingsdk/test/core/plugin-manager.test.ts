@@ -65,7 +65,7 @@ test("preSynth can add resources to construct tree", () => {
   fs.writeFileSync(pluginFile, PLUGIN_CODE);
 
   // WHEN
-  const app = new tfaws.App({ outdir: tmpDir }); // exclude plugins from constructor for control
+  const app = new tfaws.App({ outdir: tmpDir }); // Exclude plugins from constructor for control
   const pm = new PluginManager([pluginFile]);
   pm.preSynth(app);
   const output = app.synth();
@@ -86,13 +86,13 @@ test("postSynth can modify terraform config", () => {
   fs.writeFileSync(pluginFile, PLUGIN_CODE);
 
   // WHEN
-  const app = new tfaws.App({ outdir: tmpDir }); // exclude plugins from constructor for control
+  const app = new tfaws.App({ outdir: tmpDir }); // Exclude plugins from constructor for control
   const pm = new PluginManager([pluginFile]);
   new tfaws.Bucket(app, "Bucket", {});
 
   const synthOutput = app.synth();
   const synthesizedStackPath = `${app.terraformManifestPath}`;
-  // apply postSynth plugins
+  // Apply postSynth plugins
   pm.postSynth(JSON.parse(synthOutput), synthesizedStackPath);
   const postSynthOutput = fs.readFileSync(synthesizedStackPath, "utf-8");
 
@@ -103,7 +103,7 @@ test("postSynth can modify terraform config", () => {
         "plugin-tag": "plugin-value",
       },
     })
-  ).toEqual(false); // original output should not have tags
+  ).toEqual(false); // Original output should not have tags
 
   expect(
     cdktf.Testing.toHaveResourceWithProperties(
@@ -115,7 +115,7 @@ test("postSynth can modify terraform config", () => {
         },
       }
     )
-  ).toEqual(true); // postSynth output should have tags
+  ).toEqual(true); // PostSynth output should have tags
 });
 
 test("postSynth return is ignored if undefined", () => {
@@ -125,7 +125,7 @@ test("postSynth return is ignored if undefined", () => {
   fs.writeFileSync(pluginFile, RETURN_NULL_CONFIG_CODE);
 
   // WHEN
-  const app = new tfaws.App({ outdir: tmpDir }); // exclude plugins from constructor for control
+  const app = new tfaws.App({ outdir: tmpDir }); // Exclude plugins from constructor for control
   const pm = new PluginManager([pluginFile]);
   new tfaws.Bucket(app, "Bucket", {});
 
@@ -136,7 +136,7 @@ test("postSynth return is ignored if undefined", () => {
   const postSynthOutput = fs.readFileSync(synthesizedStackPath, "utf-8");
 
   // THEN
-  expect(synthOutput).toEqual(postSynthOutput); // nothing should have changed
+  expect(synthOutput).toEqual(postSynthOutput); // Nothing should have changed
 });
 
 test("validate can throw an error", () => {
@@ -146,7 +146,7 @@ test("validate can throw an error", () => {
   fs.writeFileSync(pluginFile, PLUGIN_CODE);
 
   // WHEN
-  const app = new tfaws.App({ outdir: tmpDir }); // exclude plugins from constructor for control
+  const app = new tfaws.App({ outdir: tmpDir }); // Exclude plugins from constructor for control
   const pm = new PluginManager([pluginFile]);
 
   // THEN
@@ -160,7 +160,7 @@ test("validate cannot modify config", () => {
   fs.writeFileSync(pluginFile, ATTEMPT_TO_MODIFY_CONFIG_IN_VALIDATE_CODE);
 
   // WHEN
-  const app = new tfaws.App({ outdir: tmpDir }); // exclude plugins from constructor for control
+  const app = new tfaws.App({ outdir: tmpDir }); // Exclude plugins from constructor for control
   const pm = new PluginManager([pluginFile]);
   new tfaws.Bucket(app, "Bucket", {});
 
@@ -171,7 +171,7 @@ test("validate cannot modify config", () => {
   const postSynthOutput = fs.readFileSync(synthesizedStackPath, "utf-8");
 
   // THEN
-  expect(synthOutput).toEqual(postSynthOutput); // nothing should have changed
+  expect(synthOutput).toEqual(postSynthOutput); // Nothing should have changed
 });
 
 test("plugins are run in order they are passed in", () => {

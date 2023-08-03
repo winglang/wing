@@ -55,7 +55,7 @@ export class TestRunner extends std.TestRunner {
 
   /** @internal */
   public _preSynthesize(): void {
-    // add a dependency on each test function
+    // Add a dependency on each test function
     for (const test of this.findTests()) {
       this.node.addDependency(test._fn);
     }

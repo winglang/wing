@@ -37,13 +37,13 @@ const PUBLIC_MODULES = ["std", "http", "util", "aws", "ex"];
 
 const CLOUD_DOCS_PREFIX = "../../docs/docs/04-standard-library/01-cloud/";
 
-// defines the list of dependencies required for each compilation target that is not built into the
+// Defines the list of dependencies required for each compilation target that is not built into the
 // compiler (like Terraform targets).
 const TARGET_DEPS = {
   awscdk: ["aws-cdk-lib@^2.64.0"],
 };
 
-// we treat all the non-builtin dependencies as "side loaded". this means that we will remove them
+// We treat all the non-builtin dependencies as "side loaded". this means that we will remove them
 // from the "package.json" just before we bundle the package and the Wing CLI will require the user
 // to install them at runtime
 const sideLoad = Object.values(TARGET_DEPS).flat();
@@ -68,10 +68,10 @@ const project = new cdk.JsiiProject({
   bundledDeps: [
     `cdktf@${CDKTF_VERSION}`,
     ...sideLoad,
-    // preflight dependencies
+    // Preflight dependencies
     "esbuild-wasm",
     "safe-stable-stringify",
-    // aws client dependencies
+    // Aws client dependencies
     // (note: these should always be updated together, otherwise they will
     // conflict with each other)
     "@aws-sdk/client-cloudwatch-logs@3.354.0",
@@ -86,25 +86,25 @@ const project = new cdk.JsiiProject({
     "@aws-sdk/types@3.347.0",
     "@aws-sdk/util-stream-node@3.350.0",
     "@aws-sdk/util-utf8-node@3.259.0",
-    // the following 2 deps are required by @aws-sdk/util-utf8-node
+    // The following 2 deps are required by @aws-sdk/util-utf8-node
     "@aws-sdk/util-buffer-from@3.208.0",
     "@aws-sdk/is-array-buffer@3.201.0",
     "mime-types",
-    // azure client dependencies
+    // Azure client dependencies
     "@azure/storage-blob@12.14.0",
     "@azure/identity@3.1.3",
     "@azure/core-paging",
-    // simulator dependencies
+    // Simulator dependencies
     "express",
     "uuid",
-    // using version 3 because starting from version 4, it no longer works with CommonJS.
+    // Using version 3 because starting from version 4, it no longer works with CommonJS.
     "nanoid@^3.3.6",
     "cron-parser",
-    // shared client dependencies
+    // Shared client dependencies
     "ioredis",
   ],
   devDeps: [
-    `@cdktf/provider-aws@^15.0.0`, // only for testing Wing plugins
+    `@cdktf/provider-aws@^15.0.0`, // Only for testing Wing plugins
     "wing-api-checker@workspace:^",
     "bump-pack@workspace:^",
     "@types/aws-lambda",
@@ -119,7 +119,7 @@ const project = new cdk.JsiiProject({
     "vitest",
     "@types/uuid",
     "@vitest/coverage-v8",
-    "nanoid", // for ESM import test in target-sim/function.test.ts
+    "nanoid", // For ESM import test in target-sim/function.test.ts
     ...JSII_DEPS,
   ],
   jest: false,
@@ -143,7 +143,7 @@ project.eslint?.addOverride({
   },
 });
 
-// use fork of jsii-docgen with wing-ish support
+// Use fork of jsii-docgen with wing-ish support
 project.deps.removeDependency("jsii-docgen");
 project.addDevDeps("@winglang/jsii-docgen@workspace:^");
 
@@ -189,16 +189,39 @@ function disallowImportsRule(target: Zone, from: Zone): DisallowImportsRule {
   };
 }
 
-// Prevent unsafe imports between preflight and inflight and simulator code
 project.eslint!.addRules({
   "import/no-restricted-paths": [
     "error",
     {
       zones: [
-        // avoid importing inflight or simulator code into preflight code since
+        // Avoid importing inflight or simulator code into preflight code since
         // preflight code gets compiled with JSII
         disallowImportsRule(Zone.PREFLIGHT, Zone.INFLIGHT),
       ],
+    },
+  ],
+  // Makes sure that all methods and properties are marked with the right member accessibility- public, protected or private
+  "@typescript-eslint/explicit-member-accessibility": [
+    "error",
+    {
+      accessibility: "explicit",
+      overrides: {
+        accessors: "off",
+        constructors: "off",
+        methods: "explicit",
+        properties: "explicit",
+        parameterProperties: "explicit",
+      },
+    },
+  ],
+  // Makes sure comments and doc strings are capitalized
+  "capitalized-comments": [
+    "error",
+    "always",
+    {
+      ignoreConsecutiveComments: true,
+      ignorePattern: "pragma|ignored",
+      ignoreInlineComments: true,
     },
   ],
 });
@@ -242,10 +265,10 @@ sidebar_position: 100
 const docgen = project.tasks.tryFind("docgen")!;
 docgen.reset();
 
-// copy readme docs
+// Copy readme docs
 docgen.exec(`cp -r src/cloud/*.md ${CLOUD_DOCS_PREFIX}`);
 
-// generate api reference for each submodule
+// Generate api reference for each submodule
 for (const mod of PUBLIC_MODULES) {
   const prefix = docsPrefix(PUBLIC_MODULES.indexOf(mod) + 2, mod);
   const docsPath = prefix + "/api-reference.md";
@@ -255,7 +278,7 @@ for (const mod of PUBLIC_MODULES) {
   docgen.exec(`cat API.md >> ${docsPath}`);
 }
 
-// generate api reference for each cloud/submodule and append it to the doc file
+// Generate api reference for each cloud/submodule and append it to the doc file
 for (const mod of cloudResources) {
   const docsPath = `${CLOUD_DOCS_PREFIX}${mod}.md`;
   docgen.exec(`jsii-docgen -o API.md -l wing --submodule cloud/${mod}`);
@@ -266,7 +289,7 @@ docgen.exec("rm API.md");
 
 // --------------- end of docs -----------------
 
-// set up vitest related config
+// Set up vitest related config
 project.addGitIgnore("/coverage/");
 project.testTask.reset("vitest run --coverage --update --passWithNoTests");
 const testWatch = project.addTask("test:watch");
@@ -291,7 +314,7 @@ project.addFields({
 
 project.gitignore.addPatterns("src/**/*.js", "src/**/*.d.ts");
 
-// generate CDKTF bindings
+// Generate CDKTF bindings
 new JsonFile(project, "cdktf.json", {
   obj: {
     language: "typescript",

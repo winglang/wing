@@ -86,9 +86,9 @@ export function calculateBucketPermissions(
   ops: string[]
 ): PolicyStatement[] {
   const actions: string[] = [];
-  // const policies: PolicyStatement[] = [];
+  // Const policies: PolicyStatement[] = [];
 
-  // contains a check if an object exists/list
+  // Contains a check if an object exists/list
   if (
     ops.includes(cloud.BucketInflightMethods.PUBLIC_URL) ||
     ops.includes(cloud.BucketInflightMethods.LIST) ||
@@ -96,14 +96,14 @@ export function calculateBucketPermissions(
     ops.includes(cloud.BucketInflightMethods.TRY_GET) ||
     ops.includes(cloud.BucketInflightMethods.TRY_GET_JSON) ||
     ops.includes(cloud.BucketInflightMethods.TRY_DELETE) ||
-    // get requires list permissions too https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/client/s3/command/GetObjectCommand/
+    // Get requires list permissions too https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/client/s3/command/GetObjectCommand/
     ops.includes(cloud.BucketInflightMethods.GET) ||
     ops.includes(cloud.BucketInflightMethods.GET_JSON)
   ) {
     actions.push("s3:List*");
   }
 
-  // putting an object
+  // Putting an object
   if (
     ops.includes(cloud.BucketInflightMethods.PUT) ||
     ops.includes(cloud.BucketInflightMethods.PUT_JSON)
@@ -111,7 +111,7 @@ export function calculateBucketPermissions(
     actions.push(...["s3:PutObject*", "s3:Abort*"]);
   }
 
-  // getting an object
+  // Getting an object
   if (
     ops.includes(cloud.BucketInflightMethods.GET) ||
     ops.includes(cloud.BucketInflightMethods.GET_JSON) ||
@@ -124,12 +124,12 @@ export function calculateBucketPermissions(
     actions.push(...["s3:GetObject*", "s3:GetBucket*"]);
   }
 
-  // accessing the publicAccessBlock
+  // Accessing the publicAccessBlock
   if (ops.includes(cloud.BucketInflightMethods.PUBLIC_URL)) {
     actions.push(...["s3:GetBucketPublicAccessBlock"]);
   }
 
-  // deleting an object
+  // Deleting an object
   if (
     ops.includes(cloud.BucketInflightMethods.TRY_DELETE) ||
     ops.includes(cloud.BucketInflightMethods.DELETE)

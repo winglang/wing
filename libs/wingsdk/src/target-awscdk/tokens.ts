@@ -65,7 +65,7 @@ export class CdkTokens extends Tokens {
     }
 
     const envName = this.envName(value.toString());
-    // the same token might be bound multiple times by different variables/inflight contexts
+    // The same token might be bound multiple times by different variables/inflight contexts
     if (host.env[envName] === undefined) {
       host.addEnvironment(envName, envValue);
     }

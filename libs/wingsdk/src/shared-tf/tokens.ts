@@ -35,7 +35,7 @@ export class CdkTfTokens extends Tokens {
 
     const envName = this.envName(JSON.stringify(value));
     const envValue = Fn.jsonencode(value);
-    // the same token might be bound multiple times by different variables/inflight contexts
+    // The same token might be bound multiple times by different variables/inflight contexts
     if (host.env[envName] === undefined) {
       host.addEnvironment(envName, envValue);
     }

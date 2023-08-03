@@ -136,13 +136,13 @@ export abstract class App extends Construct {
     id: string,
     ...args: any[]
   ): any {
-    // delegate to "tryNew" first, which will allow derived classes to inject
+    // Delegate to "tryNew" first, which will allow derived classes to inject
     const instance = this.tryNew(fqn, scope, id, ...args);
     if (instance) {
       return instance;
     }
 
-    // no injection, so we'll just create a new instance
+    // No injection, so we'll just create a new instance
     return new ctor(scope, id, ...args);
   }
 
@@ -155,7 +155,7 @@ export abstract class App extends Construct {
     id: string,
     ...args: any[]
   ): any {
-    // delegate to "tryNew" first, which will allow derived classes to inject
+    // Delegate to "tryNew" first, which will allow derived classes to inject
     const instance = this.tryNew(fqn, scope, id, ...args);
     if (!instance) {
       throw new Error(
