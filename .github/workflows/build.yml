@@ -180,7 +180,7 @@ jobs:
             echo "diff=true" >> $GITHUB_OUTPUT
           fi
 
-      - name: Upload Diff
+      - name: Upload patch
         if: steps.diff.outputs.diff == 'true'
         uses: actions/upload-artifact@v3
         with:
