@@ -3,17 +3,18 @@
   "extends": ["//"],
   "pipeline": {
     "test:generate": {
+      "dependsOn": ["^package"],
       "inputs": ["src/generate_tests.ts", "src/generated_test_targets.ts"],
       "outputs": ["src/test_corpus/**"],
       "cache": false
     },
     "test": {
-      "dependsOn": ["^compile", "test:generate"],
+      "dependsOn": ["test:generate"],
       "inputs": ["src/**"],
       "cache": false
     },
     "bench": {
-      "dependsOn": ["^compile"],
+      "dependsOn": ["^package"],
       "inputs": ["src/**"],
       "cache": false
     }

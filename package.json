@@ -8,10 +8,10 @@
     "turbo": "^1.10.12"
   },
   "scripts": {
-    "build": "turbo compile post-compile lint eslint test package --filter=!hangar",
-    "compile": "turbo compile --filter=!hangar",
-    "test": "turbo lint eslint test --filter=!hangar",
-    "package": "turbo package --filter=!hangar",
+    "build": "turbo compile post-compile lint eslint test package",
+    "compile": "turbo compile",
+    "test": "turbo lint eslint test",
+    "package": "turbo package",
     "docs": "./scripts/docsite.sh",
     "changelog": "bump-pack",
     "install": "bash scripts/setup_wasi.sh",

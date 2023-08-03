@@ -1265,9 +1265,27 @@ importers:
 
   tools/hangar:
     devDependencies:
+      '@wingconsole/app':
+        specifier: workspace:^
+        version: link:../../apps/wing-console/console/app
+      '@wingconsole/design-system':
+        specifier: workspace:^
+        version: link:../../apps/wing-console/console/design-system
+      '@wingconsole/server':
+        specifier: workspace:^
+        version: link:../../apps/wing-console/console/server
+      '@wingconsole/ui':
+        specifier: workspace:^
+        version: link:../../apps/wing-console/console/ui
+      '@winglang/compiler':
+        specifier: workspace:^
+        version: link:../../libs/wingcompiler
+      '@winglang/sdk':
+        specifier: workspace:^
+        version: link:../../libs/wingsdk
       cdktf:
         specifier: ^0.17.0
-        version: 0.17.0(constructs@10.2.69)
+        version: 0.17.0(constructs@10.2.51)
       execa:
         specifier: ^7.1.1
         version: 7.1.1
@@ -11221,21 +11239,6 @@ packages:
       - json-stable-stringify
       - semver
 
-  /cdktf@0.17.0(constructs@10.2.69):
-    resolution: {integrity: sha512-4R57uBLBqeb8NgfKZdn/az8UE3yXxGHyzH6Xjsz1Oo9kNvSkPibX7YqNLUpuCgdYNVgU2fdaNoHj9h4LXc6iCw==}
-    peerDependencies:
-      constructs: ^10.0.25
-    dependencies:
-      archiver: 5.3.1
-      constructs: 10.2.69
-      json-stable-stringify: 1.0.2
-      semver: 7.5.3
-    dev: true
-    bundledDependencies:
-      - archiver
-      - json-stable-stringify
-      - semver
-
   /chai@4.3.7:
     resolution: {integrity: sha512-HLnAzZ2iupm25PlN0xFreAlBA5zaBSv3og0DdeGA4Ar6h6rJ3A0rolRUKJhSF2V10GZKDgWF/VmAEsNWjCRB+A==}
     engines: {node: '>=4'}
@@ -11742,11 +11745,6 @@ packages:
   /constructs@10.2.51:
     resolution: {integrity: sha512-vB96JQJzno7k0e+dX7Y9UmV4NDxqdr+2qnD5izDi552u7uFSpRF88GAEJjtv2eAWHG4WCDNu9+lV59Z3fYHlRQ==}
     engines: {node: '>= 16.14.0'}
-
-  /constructs@10.2.69:
-    resolution: {integrity: sha512-0AiM/uQe5Uk6JVe/62oolmSN2MjbFQkOlYrM3fFGZLKuT+g7xlAI10EebFhyCcZwI2JAcWuWCmmCAyCothxjuw==}
-    engines: {node: '>= 16.14.0'}
-    dev: true
 
   /constructs@3.3.69:
     resolution: {integrity: sha512-mfU72Bb1N57UVwdxDzdhSFAt6DIFnPHSkeAMtTlCUpBYOfSPS3iK6Kh06RvpESM4x9m1x0PZP7k00ZjaAkjSyg==}

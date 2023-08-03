@@ -36,7 +36,8 @@ const getInstallArgs = async () => {
     "install",
     "--no-package-lock",
     "--install-links=false",
-    `file:../../../apps/wing`,
+    "file:../../../apps/wing",
+    "file:../../../libs/wingsdk",
   ];
 };
 

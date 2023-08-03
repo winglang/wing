@@ -11,6 +11,12 @@
   "author": "Monada",
   "license": "Apache-2.0",
   "devDependencies": {
+    "@wingconsole/app": "workspace:^",
+    "@wingconsole/design-system": "workspace:^",
+    "@wingconsole/server": "workspace:^",
+    "@wingconsole/ui": "workspace:^",
+    "@winglang/compiler": "workspace:^",
+    "@winglang/sdk": "workspace:^",
     "cdktf": "^0.17.0",
     "execa": "^7.1.1",
     "npm": "^9.6.4",
