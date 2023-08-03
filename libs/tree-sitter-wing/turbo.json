@@ -8,7 +8,7 @@
     },
     "build:wasm": {
       "dependsOn": ["build:generate"],
-      "inputs": ["src/**", "bindings/**", "binding.gyp"],
+      "inputs": ["Cargo.*", "src/**", "bindings/**", "binding.gyp"],
       "outputs": ["tree-sitter-wing.wasm"]
     },
     "compile": {
