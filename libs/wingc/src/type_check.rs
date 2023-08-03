@@ -206,6 +206,8 @@ pub enum Type {
 	MutJson,
 	Nil,
 	Unresolved,
+	/// A type that is inferred from the context.
+	/// The usize is a unique identifier for the inference
 	Inferred(usize),
 	Optional(TypeRef),
 	Array(TypeRef),
@@ -2541,10 +2543,15 @@ impl<'a> TypeChecker<'a> {
 		assert!(expected_types.len() > 0);
 		let mut return_type = actual_type;
 
-		if self.add_new_inference(&actual_type, &expected_types[0]) {
-			return_type = expected_types[0];
-		} else {
-			self.add_new_inference(&expected_types[0], &actual_type);
+		// To avoid ambiguity, only do inference if there is one expected type
+		if expected_types.len() == 1 {
+			// First check if the actual type is an inference that can be replaced with the expected type
+			if self.add_new_inference(&actual_type, &expected_types[0]) {
+				return_type = expected_types[0];
+			} else {
+				// otherwise, check if the expected type is an inference that can be replaced with the actual type
+				self.add_new_inference(&expected_types[0], &actual_type);
+			}
 		}
 
 		// If the actual type is anything or any of the expected types then we're good

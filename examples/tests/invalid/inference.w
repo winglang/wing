@@ -2,8 +2,17 @@ bring cloud;
 let api = new cloud.Api();
 
 let preflightClosureArgs = (nice) => { return true; };
-                          //^^^^ Unable to infer type
-  
+//  ^^^^^^^^^^^^^^^^^^^^    ^^^^ Unable to infer type
+
+let recursiveClosure = (nice) => {
+  if false {
+    return recursiveClosure(nice);
+  }
+};
+recursiveClosure(2);
+recursiveClosure("");
+//               ^^ Expected num, got str
+
 let emptyArray = [];
 //  ^^^^^^^^^^^ Unable to infer type
 let numArray = emptyArray;
@@ -12,6 +21,11 @@ let numArray = emptyArray;
 let clonedArray = emptyArray.copyMut();
 //  ^^^^^^^^^^^^ Unable to infer type
 
+
+let stringInterpolationCannotBeInferred = (nice) => {
+//  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^ Unable to infer type
+  return "Hello, ${nice}";
+};
 
 let stringArray2 = [].copyMut();
 stringArray2.push("1");

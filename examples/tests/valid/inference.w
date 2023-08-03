@@ -1,7 +1,14 @@
 bring cloud;
 
 let preflightClosure = (nice) => { log(nice); return true; };
-  
+
+let recursiveClosure = (nice) => {
+  if false {
+    return recursiveClosure(nice);
+  }
+};
+recursiveClosure(2);
+
 let emptyArray = [];
 let num_array: Array<num> = emptyArray;
 
