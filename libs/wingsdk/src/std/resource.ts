@@ -329,7 +329,7 @@ export abstract class Resource extends Construct implements IResource {
   public _preSynthesize(): void {
     // Perform the live bindings betweeen resources and hosts
     // By aggregating the binding operations, we can avoid performing
-    // multiple bindings for the same resource-host pairs.
+    // Multiple bindings for the same resource-host pairs.
     for (const [host, ops] of this.bindMap.entries()) {
       this._bind(host, Array.from(ops));
     }

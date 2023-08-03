@@ -65,7 +65,7 @@ export class Function extends cloud.Function {
     }
 
     // The function name needs to be passed through an environment variable since
-    // it may not be resolved until deployment time.
+    // It may not be resolved until deployment time.
     host.addEnvironment(this.envName(), this.function.functionArn);
 
     super._bind(host, ops);

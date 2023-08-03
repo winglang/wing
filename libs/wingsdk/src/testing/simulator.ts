@@ -42,11 +42,11 @@ export interface ISimulatorLifecycleHooks {
 
 // Since we are using JSII we cannot use generics to type this right now:
 //
-// export interface WithTraceProps<T> {
-//   readonly activity: () => Promise<T>;
+// Export interface WithTraceProps<T> {
+//   Readonly activity: () => Promise<T>;
 // }
 // ...
-// withTrace(event: WithTraceProps<T>): Promise<T>;
+// WithTrace(event: WithTraceProps<T>): Promise<T>;
 
 /**
  * Props for `ISimulatorContext.withTrace`.

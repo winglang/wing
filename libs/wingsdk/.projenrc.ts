@@ -73,7 +73,7 @@ const project = new cdk.JsiiProject({
     "safe-stable-stringify",
     // Aws client dependencies
     // (note: these should always be updated together, otherwise they will
-    // conflict with each other)
+    // Conflict with each other)
     "@aws-sdk/client-cloudwatch-logs@3.354.0",
     "@aws-sdk/client-dynamodb@3.354.0",
     "@aws-sdk/client-elasticache@3.354.0",
@@ -190,6 +190,7 @@ function disallowImportsRule(target: Zone, from: Zone): DisallowImportsRule {
 }
 
 project.eslint!.addRules({
+  // Prevent unsafe imports between preflight and inflight and simulator code
   "import/no-restricted-paths": [
     "error",
     {

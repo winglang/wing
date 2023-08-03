@@ -118,7 +118,7 @@ export class Bucket extends cloud.Bucket {
     host.addPolicyStatements(calculateBucketPermissions(this.bucket.arn, ops));
 
     // The bucket name needs to be passed through an environment variable since
-    // it may not be resolved until deployment time.
+    // It may not be resolved until deployment time.
     host.addEnvironment(this.envName(), this.bucket.bucket);
 
     super._bind(host, ops);

@@ -101,7 +101,7 @@ export class Queue
     do {
       processedMessages = false;
       // Randomize the order of subscribers to avoid user code making
-      // assumptions on the order that subscribers process messages.
+      // Assumptions on the order that subscribers process messages.
       for (const subscriber of new RandomArrayIterator(this.subscribers)) {
         const messages = this.messages.splice(0, subscriber.batchSize);
         const messagesPayload = messages.map((m) => m.payload);

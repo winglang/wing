@@ -125,13 +125,13 @@ export class Function extends cloud.Function implements IAwsFunction {
     });
 
     // Add policy to Lambda role for any custom policy statements, such as
-    // those needed by bound resources
+    // Those needed by bound resources
     new IamRolePolicy(this, "IamRolePolicy", {
       role: this.role.name,
       policy: Lazy.stringValue({
         produce: () => {
           // If there are subnets to attach then the role needs to be able to
-          // create network interfaces
+          // Create network interfaces
           if ((this.subnets?.size ?? 0) !== 0) {
             this.policyStatements?.push({
               Effect: "Allow",
@@ -238,7 +238,7 @@ export class Function extends cloud.Function implements IAwsFunction {
     }
 
     // The function name needs to be passed through an environment variable since
-    // it may not be resolved until deployment time.
+    // It may not be resolved until deployment time.
     host.addEnvironment(this.envName(), this.function.arn);
 
     super._bind(host, ops);
