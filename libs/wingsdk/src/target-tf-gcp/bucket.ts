@@ -47,11 +47,11 @@ export class Bucket extends cloud.Bucket {
     const bucketName = ResourceNames.generateName(this, BUCKET_NAME_OPTS);
 
     // GCP bucket names must be globally unique, but the Terraform resource
-    // provider doesn't provide a mechanism like `bucketPrefix` as AWS does,
-    // so we must generate a random string to append to the bucket name.
+    // Provider doesn't provide a mechanism like `bucketPrefix` as AWS does,
+    // So we must generate a random string to append to the bucket name.
     //
     // The random string must be managed in Terraform state so that it doesn't
-    // change on every subsequent compile or deployment.
+    // Change on every subsequent compile or deployment.
     const randomId = new Id(this, "Id", {
       byteLength: 4, // 4 bytes = 8 hex characters
     });
@@ -59,7 +59,7 @@ export class Bucket extends cloud.Bucket {
     this.bucket = new StorageBucket(this, "Default", {
       name: bucketName + "-" + randomId.hex,
       location: (App.of(this) as App).storageLocation,
-      // recommended by GCP: https://cloud.google.com/storage/docs/uniform-bucket-level-access#should-you-use
+      // Recommended by GCP: https://cloud.google.com/storage/docs/uniform-bucket-level-access#should-you-use
       uniformBucketLevelAccess: true,
       publicAccessPrevention: props.public ? "inherited" : "enforced",
     });

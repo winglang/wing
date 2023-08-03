@@ -334,7 +334,7 @@ test("tryGetJson an existing non-Json object from the bucket", async () => {
   TEST_PATH = "sadJson";
 
   // THEN
-  // it seems to throw a different error per OS/ node version
+  // It seems to throw a different error per OS/ node version
   await expect(() => client.tryGetJson(KEY)).rejects.toThrowError();
 });
 
@@ -382,7 +382,7 @@ test("tryDelete a non-existent object from the bucket", async () => {
 
 // Mock Clients
 class MockBlobClient extends BlobClient {
-  download(): Promise<BlobDownloadResponseParsed> {
+  public download(): Promise<BlobDownloadResponseParsed> {
     switch (TEST_PATH) {
       case "happy":
         return Promise.resolve({
@@ -406,7 +406,7 @@ class MockBlobClient extends BlobClient {
     }
   }
 
-  exists(options?: BlobExistsOptions | undefined): Promise<boolean> {
+  public exists(options?: BlobExistsOptions | undefined): Promise<boolean> {
     options;
     switch (TEST_PATH) {
       case "happy":
@@ -422,25 +422,25 @@ class MockBlobClient extends BlobClient {
 }
 
 class MockBlockBlobClient extends BlockBlobClient {
-  upload(): Promise<BlockBlobUploadResponse> {
+  public upload(): Promise<BlockBlobUploadResponse> {
     return Promise.resolve({} as any);
   }
 
-  delete(): Promise<BlobDeleteResponse> {
+  public delete(): Promise<BlobDeleteResponse> {
     return Promise.resolve({} as any);
   }
 }
 
 class MockContainerClient extends ContainerClient {
-  getBlobClient(key: string): BlobClient {
+  public getBlobClient(key: string): BlobClient {
     return new MockBlobClient(key);
   }
 
-  getBlockBlobClient(blobName: string): BlockBlobClient {
+  public getBlockBlobClient(blobName: string): BlockBlobClient {
     return new MockBlockBlobClient(blobName);
   }
 
-  listBlobsFlat(
+  public listBlobsFlat(
     options?: ContainerListBlobsOptions | undefined
   ): PagedAsyncIterableIterator<
     BlobItem,

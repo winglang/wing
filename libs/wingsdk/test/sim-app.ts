@@ -19,7 +19,7 @@ export class SimApp extends sim.App {
   constructor() {
     super({ outdir: mkdtemp() });
 
-    // symlink the node_modules so we can test imports and stuffs
+    // Symlink the node_modules so we can test imports and stuffs
     fs.symlinkSync(
       join(__dirname, "..", "node_modules"),
       join(this.outdir, "node_modules")
@@ -46,7 +46,7 @@ export class SimApp extends sim.App {
       )
     );
 
-    // returns an "invoker" for this function
+    // Returns an "invoker" for this function
     return async (s: Simulator) => {
       const fn = s.getResource("/" + id) as IFunctionClient;
       return fn.invoke("");

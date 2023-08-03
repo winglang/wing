@@ -15,9 +15,9 @@ test("basic function", () => {
   const output = app.synth();
 
   expect(tfResourcesOf(output)).toEqual([
-    "aws_iam_role", // role for Lambda
-    "aws_iam_role_policy", // policy for role
-    "aws_iam_role_policy_attachment", // execution policy for role
+    "aws_iam_role", // Role for Lambda
+    "aws_iam_role_policy", // Policy for role
+    "aws_iam_role_policy_attachment", // Execution policy for role
     "aws_lambda_function", // Lambda
     "aws_s3_bucket", // S3 bucket for code
     "aws_s3_object", // S3 object for code
@@ -107,9 +107,9 @@ test("basic function with memory size specified", () => {
   const output = app.synth();
 
   expect(tfResourcesOf(output)).toEqual([
-    "aws_iam_role", // role for Lambda
-    "aws_iam_role_policy", // policy for role
-    "aws_iam_role_policy_attachment", // execution policy for role
+    "aws_iam_role", // Role for Lambda
+    "aws_iam_role_policy", // Policy for role
+    "aws_iam_role_policy_attachment", // Execution policy for role
     "aws_lambda_function", // Lambda
     "aws_s3_bucket", // S3 bucket for code
     "aws_s3_object", // S3 object for code

@@ -41,15 +41,15 @@ test("topic with subscriber function", () => {
   // THEN
   expect(sanitizeCode(subscriber._toInflight())).toMatchSnapshot();
   expect(tfResourcesOf(output)).toEqual([
-    "aws_iam_role", // role for subscriber function
-    "aws_iam_role_policy", // policy for subscriber function role
-    "aws_iam_role_policy_attachment", // execution policy for subscriber role
-    "aws_lambda_function", // subscriber function
-    "aws_lambda_permission", // policy allowing sns to publsh to subscriber lambda
+    "aws_iam_role", // Role for subscriber function
+    "aws_iam_role_policy", // Policy for subscriber function role
+    "aws_iam_role_policy_attachment", // Execution policy for subscriber role
+    "aws_lambda_function", // Subscriber function
+    "aws_lambda_permission", // Policy allowing sns to publsh to subscriber lambda
     "aws_s3_bucket", // S3 bucket for code
     "aws_s3_object", // S3 object for code
-    "aws_sns_topic", // main topic
-    "aws_sns_topic_subscription", // subscriber lambda subscription to topic
+    "aws_sns_topic", // Main topic
+    "aws_sns_topic_subscription", // Subscriber lambda subscription to topic
   ]);
   expect(tfSanitize(output)).toMatchSnapshot();
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();

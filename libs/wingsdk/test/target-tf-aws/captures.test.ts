@@ -14,7 +14,7 @@ describe("function with bucket binding", () => {
     const policies = config.resource.aws_iam_role_policy;
 
     // This is dangerous because it checks for any policy in the entire config to contain the actions
-    // its safe for the tests here because we are really only checking 1 policy.
+    // Its safe for the tests here because we are really only checking 1 policy.
     for (const policy of Object.keys(policies)) {
       for (const statement of JSON.parse(policies[policy].policy).Statement) {
         if (statement.Effect !== effect) {

@@ -128,7 +128,7 @@ export abstract class Resource extends Construct implements IResource {
    *
    * @internal
    */
-  static _registerTypeBind(host: IInflightHost, ops: string[]): void {
+  public static _registerTypeBind(host: IInflightHost, ops: string[]): void {
     // Do nothing by default
     host;
     ops;
@@ -188,15 +188,15 @@ export abstract class Resource extends Construct implements IResource {
           return;
         }
 
-        // if the object is a resource (i.e. has a "_bind" method"), register a binding between it and the host.
+        // If the object is a resource (i.e. has a "_bind" method"), register a binding between it and the host.
         if (isResource(obj)) {
           // Explicitly register the resource's `$inflight_init` op, which is a special op that can be used to makes sure
-          // the host can instantiate a client for this resource.
+          // The host can instantiate a client for this resource.
           obj._addBind(host, [...ops, "$inflight_init"]);
           return;
         }
 
-        // structs are just plain objects
+        // Structs are just plain objects
         if (obj.constructor.name === "Object") {
           Object.values(obj).forEach((item) =>
             this._registerBindObject(item, host, ops)
@@ -302,13 +302,13 @@ export abstract class Resource extends Construct implements IResource {
       }
 
       if (!opsForHost.has(op)) {
-        // first add the operation to the set of operations for the host so that we can avoid
-        // infinite recursion.
+        // First add the operation to the set of operations for the host so that we can avoid
+        // Infinite recursion.
         opsForHost.add(op);
 
         this._registerBind(host, [op]);
 
-        // add connection metadata
+        // Add connection metadata
         Resource.addConnection({
           from: host,
           to: this,
@@ -329,7 +329,7 @@ export abstract class Resource extends Construct implements IResource {
   public _preSynthesize(): void {
     // Perform the live bindings betweeen resources and hosts
     // By aggregating the binding operations, we can avoid performing
-    // multiple bindings for the same resource-host pairs.
+    // Multiple bindings for the same resource-host pairs.
     for (const [host, ops] of this.bindMap.entries()) {
       this._bind(host, Array.from(ops));
     }
@@ -511,7 +511,7 @@ export class Display {
    */
   public hidden?: boolean;
 
-  public constructor(props?: DisplayProps) {
+  constructor(props?: DisplayProps) {
     this.title = props?.title;
     this.description = props?.description;
     this.hidden = props?.hidden;

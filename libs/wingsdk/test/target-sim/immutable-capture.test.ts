@@ -129,7 +129,7 @@ captureTest("map of arrays", () => ({
   ],
 }));
 
-// array of maps
+// Array of maps
 captureTest("array of maps", () => ({
   bindings: {
     my_array: {
@@ -155,7 +155,7 @@ captureTest("array of maps", () => ({
   ],
 }));
 
-// set of durations
+// Set of durations
 captureTest("set of durations", () => ({
   bindings: {
     my_set: {
@@ -169,7 +169,7 @@ captureTest("set of durations", () => ({
   ],
 }));
 
-// map of arrays of durations
+// Map of arrays of durations
 captureTest("map of arrays of durations", () => ({
   bindings: {
     my_map: {
@@ -189,7 +189,7 @@ captureTest("map of arrays of durations", () => ({
   ],
 }));
 
-// struct of maps
+// Struct of maps
 captureTest("struct of maps", () => ({
   bindings: {
     my_struct: {
@@ -217,7 +217,7 @@ captureTest("struct of maps", () => ({
   ],
 }));
 
-// array of buckets
+// Array of buckets
 captureTest("array of buckets", (scope) => ({
   bindings: {
     my_buckets: {
@@ -234,7 +234,7 @@ captureTest("array of buckets", (scope) => ({
   ],
 }));
 
-// map of buckets
+// Map of buckets
 captureTest("map of buckets", (scope) => ({
   bindings: {
     my_map: {
@@ -253,7 +253,7 @@ captureTest("map of buckets", (scope) => ({
   ],
 }));
 
-// struct with resources
+// Struct with resources
 captureTest("struct with resources", (scope) => ({
   bindings: {
     my_struct: {

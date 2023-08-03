@@ -26,7 +26,7 @@ function createMockStream(text: string): SdkStream<Readable> {
   const stream = new Readable();
   stream._read = () => {};
   stream.push(text);
-  stream.push(null); // indicate end of file
+  stream.push(null); // Indicate end of file
   const sdkStream = sdkStreamMixin(stream);
   return sdkStream;
 }
@@ -442,7 +442,7 @@ test("tryGetJson an existing non-Json object from the bucket", async () => {
   const client = new BucketClient(BUCKET_NAME);
 
   // THEN
-  // it seems to throw a different error per OS/ node version
+  // It seems to throw a different error per OS/ node version
   await expect(() => client.tryGetJson(KEY)).rejects.toThrowError();
 });
 

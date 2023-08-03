@@ -1,39 +1,39 @@
 import { Code, InflightClient } from "../core";
 
 /**
- * interface that is used for setting Datetime date
+ * Interface that is used for setting Datetime date
  */
 export interface DatetimeComponents {
   /**
-   * year
+   * Year
    */
   readonly year: number;
   /**
-   * month
+   * Month
    */
   readonly month: number;
   /**
-   * day
+   * Day
    */
   readonly day: number;
   /**
-   * hours
+   * Hours
    */
   readonly hour: number;
   /**
-   * minutes
+   * Minutes
    */
   readonly min: number;
   /**
-   * seconds
+   * Seconds
    */
   readonly sec: number;
   /**
-   * milliseconds
+   * Milliseconds
    */
   readonly ms: number;
   /**
-   *  timezone offset in minutes from UTC
+   *  Timezone offset in minutes from UTC
    */
   readonly tz: number;
 }
@@ -119,10 +119,10 @@ export class Datetime {
    * @returns a number representing the current timestamp in milliseconds
    */
   public get timestampMs(): number {
-    // since converting between timezones/ declaring a date in a timezone other than the local or UTC
-    // isn't native to js, we keep the date in a UTC time, then retrieving back the the original timestamp,
-    // this way the date components (hours, month, day, minutes, etc..) are persistent
-    // and retrieved in the same order for all of the different constructing methods and the timestamp is correct.
+    // Since converting between timezones/ declaring a date in a timezone other than the local or UTC
+    // Isn't native to js, we keep the date in a UTC time, then retrieving back the the original timestamp,
+    // This way the date components (hours, month, day, minutes, etc..) are persistent
+    // And retrieved in the same order for all of the different constructing methods and the timestamp is correct.
     return this._date.valueOf() + this._timezoneOffset * 60 * 1000;
   }
 
@@ -199,7 +199,7 @@ export class Datetime {
   }
 
   /**
-   * returns the offset in minutes from UTC
+   * Returns the offset in minutes from UTC
    *
    * @returns a number representing the datetime's offset in minutes from UTC
    */

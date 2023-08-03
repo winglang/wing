@@ -78,8 +78,8 @@ export abstract class Function extends Resource implements IInflightHost {
       this.addEnvironment(key, value);
     }
 
-    // indicates that we are calling the inflight constructor and the
-    // inflight "handle" method on the handler resource.
+    // Indicates that we are calling the inflight constructor and the
+    // Inflight "handle" method on the handler resource.
     handler._registerBind(this, ["handle", "$inflight_init"]);
 
     const inflightClient = handler._toInflight();
@@ -96,7 +96,7 @@ export abstract class Function extends Resource implements IInflightHost {
       sep: "_",
     });
 
-    // write the entrypoint next to the partial inflight code emitted by the compiler, so that
+    // Write the entrypoint next to the partial inflight code emitted by the compiler, so that
     // `require` resolves naturally.
 
     const workdir = App.of(this).workdir;

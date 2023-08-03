@@ -80,19 +80,19 @@ export class Function extends cloud.Function {
     const outDir = `${codeDir}/${functionName}`;
 
     // Move index.js to function name directory. Every Azure function in a function app
-    // must be in its own folder containing an index.js and function.json files
+    // Must be in its own folder containing an index.js and function.json files
     fs.mkdirSync(`${codeDir}/${functionName}`);
     fs.renameSync(bundle.entrypointPath, `${outDir}/index.js`);
 
-    // throw an error if props.memory is defined for an Azure function
+    // Throw an error if props.memory is defined for an Azure function
     if (props.memory) {
       throw new Error("memory is an invalid parameter on Azure");
     }
 
     // As per documentation "a function must have exactly one trigger" so for now
-    // by default a function will support http get requests
-    // when we bind other resources like queues or topics this function.json will need to
-    // be overwritten with the correct trigger
+    // By default a function will support http get requests
+    // When we bind other resources like queues or topics this function.json will need to
+    // Be overwritten with the correct trigger
     // https://learn.microsoft.com/en-us/azure/azure-functions/functions-triggers-bindings?tabs=csharp
     fs.writeFileSync(
       `${outDir}/function.json`,
@@ -117,7 +117,7 @@ export class Function extends cloud.Function {
     if (props.timeout) {
       // Write host.json file to set function timeout (must be set in root of function app)
       // https://learn.microsoft.com/en-us/azure/azure-functions/functions-host-json
-      // this means that timeout is set for all functions in the function app
+      // This means that timeout is set for all functions in the function app
       fs.writeFileSync(
         `${codeDir}/host.json`,
         JSON.stringify({
@@ -210,7 +210,7 @@ export class Function extends cloud.Function {
         this.permissions.has(uniqueId) &&
         this.permissions.get(uniqueId)?.has(scopedRoleAssignment)
       ) {
-        return; // already exists
+        return; // Already exists
       }
 
       new RoleAssignment(

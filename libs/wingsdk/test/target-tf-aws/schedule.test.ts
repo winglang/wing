@@ -22,13 +22,13 @@ test("schedule behavior with rate", () => {
 
   // THEN
   expect(tfResourcesOf(output)).toEqual([
-    "aws_cloudwatch_event_rule", // main schedule event
-    "aws_cloudwatch_event_target", // schedule target
-    "aws_iam_role", // role for function
-    "aws_iam_role_policy", // policy for role
-    "aws_iam_role_policy_attachment", // execution policy for role
-    "aws_lambda_function", // processor function
-    "aws_lambda_permission", // function permission
+    "aws_cloudwatch_event_rule", // Main schedule event
+    "aws_cloudwatch_event_target", // Schedule target
+    "aws_iam_role", // Role for function
+    "aws_iam_role_policy", // Policy for role
+    "aws_iam_role_policy_attachment", // Execution policy for role
+    "aws_lambda_function", // Processor function
+    "aws_lambda_permission", // Function permission
     "aws_s3_bucket", // S3 bucket for code
     "aws_s3_object", // S3 object for code
   ]);
@@ -61,13 +61,13 @@ test("schedule behavior with cron", () => {
 
   // THEN
   expect(tfResourcesOf(output)).toEqual([
-    "aws_cloudwatch_event_rule", // main schedule event
-    "aws_cloudwatch_event_target", // schedule target
-    "aws_iam_role", // role for function
-    "aws_iam_role_policy", // policy for role
-    "aws_iam_role_policy_attachment", // execution policy for role
-    "aws_lambda_function", // processor function
-    "aws_lambda_permission", // function permission
+    "aws_cloudwatch_event_rule", // Main schedule event
+    "aws_cloudwatch_event_target", // Schedule target
+    "aws_iam_role", // Role for function
+    "aws_iam_role_policy", // Policy for role
+    "aws_iam_role_policy_attachment", // Execution policy for role
+    "aws_lambda_function", // Processor function
+    "aws_lambda_permission", // Function permission
     "aws_s3_bucket", // S3 bucket for code
     "aws_s3_object", // S3 object for code
   ]);
@@ -106,13 +106,13 @@ test("schedule with two functions", () => {
 
   // THEN
   expect(tfResourcesOf(output)).toEqual([
-    "aws_cloudwatch_event_rule", // main schedule event
-    "aws_cloudwatch_event_target", // schedule target
-    "aws_iam_role", // role for function
-    "aws_iam_role_policy", // policy for role
-    "aws_iam_role_policy_attachment", // execution policy for role
-    "aws_lambda_function", // processor function
-    "aws_lambda_permission", // function permission
+    "aws_cloudwatch_event_rule", // Main schedule event
+    "aws_cloudwatch_event_target", // Schedule target
+    "aws_iam_role", // Role for function
+    "aws_iam_role_policy", // Policy for role
+    "aws_iam_role_policy_attachment", // Execution policy for role
+    "aws_lambda_function", // Processor function
+    "aws_lambda_permission", // Function permission
     "aws_s3_bucket", // S3 bucket for code
     "aws_s3_object", // S3 object for code
   ]);

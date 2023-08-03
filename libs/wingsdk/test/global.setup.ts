@@ -3,14 +3,14 @@ import fs from "fs/promises";
 import path from "path";
 
 export async function setup() {
-  // compile src/**/*.on*.inflight.ts to .js because these are going to be
-  // injected into our javascript vm and cannot be resolved via vitest
+  // Compile src/**/*.on*.inflight.ts to .js because these are going to be
+  // Injected into our javascript vm and cannot be resolved via vitest
   execSync("pnpm tsc -p tsconfig.test.json", { stdio: "inherit" });
   return () => {};
 }
 
-// remove all the compiled .js and .d.ts files after the tests are done
-// so that we don't have a ocean of files to sift through
+// Remove all the compiled .js and .d.ts files after the tests are done
+// So that we don't have a ocean of files to sift through
 export async function teardown() {
   // Skip teardown (why? I dunno maybe you like the mess)
   if (process.env.WING_SDK_VITEST_SKIP_TEARDOWN) {

@@ -61,7 +61,7 @@ test("schedule with one task using rate of 10m", async () => {
   const schedule = cloud.Schedule._newSchedule(app, "my_schedule", {
     rate: Duration.fromMinutes(10),
   });
-  const expectedCron = "*/10 * * * ?"; // every 10 minutes cron expression
+  const expectedCron = "*/10 * * * ?"; // Every 10 minutes cron expression
   schedule.onTick(handler);
   const s = await app.startSimulator();
 
@@ -87,7 +87,7 @@ test("schedule with one task using rate of 3h", async () => {
   const schedule = cloud.Schedule._newSchedule(app, "my_schedule", {
     rate: Duration.fromHours(3),
   });
-  const expectedCron = "* */3 * * ?"; // every 3 hours cron expression
+  const expectedCron = "* */3 * * ?"; // Every 3 hours cron expression
   schedule.onTick(handler);
   const s = await app.startSimulator();
 

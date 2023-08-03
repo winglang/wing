@@ -54,11 +54,11 @@ test("function with a counter binding", () => {
 
   expect(sanitizeCode(inflight._toInflight())).toMatchSnapshot();
   expect(tfResourcesOf(output)).toEqual([
-    "aws_dynamodb_table", // table for the counter
-    "aws_iam_role", // role for function
-    "aws_iam_role_policy", // policy for role
-    "aws_iam_role_policy_attachment", // execution policy for role
-    "aws_lambda_function", // processor function
+    "aws_dynamodb_table", // Table for the counter
+    "aws_iam_role", // Role for function
+    "aws_iam_role_policy", // Policy for role
+    "aws_iam_role_policy_attachment", // Execution policy for role
+    "aws_lambda_function", // Processor function
     "aws_s3_bucket", // S3 bucket for code
     "aws_s3_object", // S3 object for code
   ]);

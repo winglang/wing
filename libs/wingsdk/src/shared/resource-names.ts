@@ -91,8 +91,8 @@ export class ResourceNames {
 
     name = `${name}${hash}${suffix}`;
 
-    // apply case conversion again in case the prefix, suffix, or hash is not
-    // case-conformant
+    // Apply case conversion again in case the prefix, suffix, or hash is not
+    // Case-conformant
     name = applyCaseConversion(name, props.case);
 
     return name;

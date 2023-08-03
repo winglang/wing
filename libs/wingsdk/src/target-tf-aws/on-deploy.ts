@@ -22,7 +22,7 @@ export class OnDeploy extends cloud.OnDeploy {
     let fn = cloud.Function._newFunction(this, "Function", handler, props);
     const awsFn = fn as AwsFunction;
 
-    // add all of the children of the construct to the dependencies
+    // Add all of the children of the construct to the dependencies
     const dependsOn: Array<ITerraformDependable> = [];
     for (const c of props.executeAfter ?? []) {
       for (const child of c.node.findAll()) {
@@ -33,17 +33,17 @@ export class OnDeploy extends cloud.OnDeploy {
       this.node.addDependency(c);
     }
 
-    // currently using the aws_lambda_invocation *data source* since it runs on every terraform apply.
-    // if we want OnDeploy to only run code conditionally,
-    // we can use the aws_lambda_invocation *resource* instead.
+    // Currently using the aws_lambda_invocation *data source* since it runs on every terraform apply.
+    // If we want OnDeploy to only run code conditionally,
+    // We can use the aws_lambda_invocation *resource* instead.
     const lambdaInvocation = new DataAwsLambdaInvocation(this, "Invocation", {
       functionName: awsFn.functionName,
-      input: JSON.stringify({}), // call the function with an empty object
+      input: JSON.stringify({}), // Call the function with an empty object
       dependsOn,
     });
 
     for (const c of props.executeBefore ?? []) {
-      // add the invocation as a dependency on all of the children of the construct
+      // Add the invocation as a dependency on all of the children of the construct
       for (const child of c.node.findAll()) {
         if (isTerraformResource(child)) {
           if (child.dependsOn === undefined) {

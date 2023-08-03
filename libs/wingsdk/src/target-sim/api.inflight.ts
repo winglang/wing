@@ -42,8 +42,8 @@ export class Api
     // Set up an express server that handles the routes.
     this.app = express();
 
-    // we parse all requests as text and leave the parsing to the inflight handler
-    // matching the limit to aws api gateway's payload size limit:
+    // We parse all requests as text and leave the parsing to the inflight handler
+    // Matching the limit to aws api gateway's payload size limit:
     // https://docs.aws.amazon.com/apigateway/latest/developerguide/limits.html
     this.app.use(express.text({ limit: "10mb", type: "*/*" }));
   }
@@ -131,8 +131,8 @@ export class Api
 
   public async init(): Promise<ApiAttributes> {
     // `server.address()` returns `null` until the server is listening
-    // on a port. We use a promise to wait for the server to start
-    // listening before returning the URL.
+    // On a port. We use a promise to wait for the server to start
+    // Listening before returning the URL.
     const addrInfo: AddressInfo = await new Promise((resolve, reject) => {
       this.server = this.app.listen(0, LOCALHOST_ADDRESS, () => {
         const addr = this.server?.address();
@@ -188,6 +188,6 @@ function transformRequest(req: express.Request): ApiRequest {
 }
 
 function transformRoutePath(route: string): string {
-  // route validation is done in the preflight file
+  // Route validation is done in the preflight file
   return route.replace(/{/g, ":").replace(/}/g, "");
 }

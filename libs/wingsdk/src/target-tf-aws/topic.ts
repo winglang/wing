@@ -28,7 +28,7 @@ const NAME_OPTS: NameOptions = {
 export class Topic extends cloud.Topic {
   private readonly topic: SnsTopic;
   /**
-   * topic's publishing permissions. can be use as a dependency of another resource.
+   * Topic's publishing permissions. can be use as a dependency of another resource.
    * (the one that got the permissions to publish)
    * */
   public permissions!: SnsTopicPolicy;
@@ -42,7 +42,7 @@ export class Topic extends cloud.Topic {
   }
 
   /**
-   * topic's arn
+   * Topic's arn
    */
   public get arn(): string {
     return this.topic.arn;
@@ -54,7 +54,7 @@ export class Topic extends cloud.Topic {
   ): cloud.Function {
     const hash = inflight.node.addr.slice(-8);
     const functionHandler = convertBetweenHandlers(
-      this.node.scope!, // ok since we're not a tree root
+      this.node.scope!, // Ok since we're not a tree root
       `${this.node.id}-OnMessageHandler-${hash}`,
       inflight,
       join(
@@ -65,7 +65,7 @@ export class Topic extends cloud.Topic {
     );
 
     const fn = Function._newFunction(
-      this.node.scope!, // ok since we're not a tree root
+      this.node.scope!, // Ok since we're not a tree root
       `${this.node.id}-OnMessage-${hash}`,
       functionHandler,
       props

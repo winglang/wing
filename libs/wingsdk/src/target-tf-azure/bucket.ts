@@ -66,7 +66,7 @@ export class Bucket extends cloud.Bucket {
       BUCKET_NAME_OPTS
     );
 
-    // name must begin and end with alphanumeric character
+    // Name must begin and end with alphanumeric character
     if (storageContainerName.match(/(^\W{1,})|(\W{1,}$)/g)?.length) {
       throw new Error(
         "Bucket names must begin and end with alphanumeric character."

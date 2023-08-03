@@ -35,7 +35,7 @@ export class Queue
 
     this.timeout = props.timeout;
     this.retentionPeriod = props.retentionPeriod;
-    this.intervalId = setInterval(() => this.processMessages(), 100); // every 0.1 seconds
+    this.intervalId = setInterval(() => this.processMessages(), 100); // Every 0.1 seconds
     this.context = context;
   }
 
@@ -101,7 +101,7 @@ export class Queue
     do {
       processedMessages = false;
       // Randomize the order of subscribers to avoid user code making
-      // assumptions on the order that subscribers process messages.
+      // Assumptions on the order that subscribers process messages.
       for (const subscriber of new RandomArrayIterator(this.subscribers)) {
         const messages = this.messages.splice(0, subscriber.batchSize);
         const messagesPayload = messages.map((m) => m.payload);
@@ -178,8 +178,8 @@ export class Queue
 }
 
 class QueueMessage {
-  retentionTimeout: Date;
-  payload: string;
+  public retentionTimeout: Date;
+  public payload: string;
 
   constructor(retentionPeriod: number, message: string) {
     const currentTime = new Date();
@@ -195,7 +195,7 @@ class RandomArrayIterator<T = any> implements Iterable<T> {
     this.length = this.values.length;
   }
 
-  next(): IteratorResult<T> {
+  public next(): IteratorResult<T> {
     if (this.length === 0) {
       return { done: true, value: undefined };
     }
@@ -210,7 +210,7 @@ class RandomArrayIterator<T = any> implements Iterable<T> {
     return { value };
   }
 
-  [Symbol.iterator]() {
+  public [Symbol.iterator]() {
     return this;
   }
 }

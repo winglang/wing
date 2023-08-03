@@ -38,7 +38,7 @@ export class Website extends cloud.Website {
 
     this.uploadFiles(this.path);
 
-    // create a cloudfront oac
+    // Create a cloudfront oac
     const cloudfrontOac = new CloudfrontOriginAccessControl(
       this,
       "CloudfrontOac",
@@ -50,7 +50,7 @@ export class Website extends cloud.Website {
       }
     );
 
-    // create a cloudFront distribution
+    // Create a cloudFront distribution
     const distribution = new CloudfrontDistribution(this, "Distribution", {
       enabled: true,
       ...(this._domain && { aliases: [this._domain] }),
@@ -86,7 +86,7 @@ export class Website extends cloud.Website {
       viewerCertificate: { cloudfrontDefaultCertificate: true },
     });
 
-    // allow cloudfront distribution to read from private s3 bucket
+    // Allow cloudfront distribution to read from private s3 bucket
     const allowDistributionReadOnly = new DataAwsIamPolicyDocument(
       this,
       "AllowDistributionReadOnly",
@@ -113,7 +113,7 @@ export class Website extends cloud.Website {
       }
     );
 
-    // attach policy to s3 bucket
+    // Attach policy to s3 bucket
     new S3BucketPolicy(this, "DistributionS3BucketPolicy", {
       bucket: this.bucket.id,
       policy: allowDistributionReadOnly.json,

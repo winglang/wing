@@ -133,13 +133,13 @@ export class App extends core.App {
 
     fs.mkdirSync(this.outdir, { recursive: true });
 
-    // call preSynthesize() on every construct in the tree
+    // Call preSynthesize() on every construct in the tree
     preSynthesizeAllConstructs(this);
 
-    // write simulator.json file into workdir
+    // Write simulator.json file into workdir
     this.synthSimulatorFile(this.outdir);
 
-    // write tree.json file into workdir
+    // Write tree.json file into workdir
     core.synthesizeTree(this, this.outdir);
 
     this.synthed = true;
@@ -158,7 +158,7 @@ export class App extends core.App {
       sdkVersion: SDK_VERSION,
     };
 
-    // write simulator.json file
+    // Write simulator.json file
     fs.writeFileSync(
       path.join(outdir, SIMULATOR_FILE_PATH),
       JSON.stringify(contents, undefined, 2),

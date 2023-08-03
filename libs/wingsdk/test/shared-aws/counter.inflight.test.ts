@@ -34,7 +34,7 @@ test("inc(1)", async () => {
   const response = await client.inc();
 
   // THEN
-  expect(response).toEqual(prevValue); // returns previous value
+  expect(response).toEqual(prevValue); // Returns previous value
 });
 
 test("inc(5)", async () => {
@@ -52,7 +52,7 @@ test("inc(5)", async () => {
   const response = await client.inc(5);
 
   // THEN
-  expect(response).toEqual(prevValue); // returns previous value
+  expect(response).toEqual(prevValue); // Returns previous value
 });
 
 test("key inc(1)", async () => {
@@ -71,7 +71,7 @@ test("key inc(1)", async () => {
   const response = await client.inc(undefined, "my-key");
 
   // THEN
-  expect(response).toEqual(prevValue); // returns previous value
+  expect(response).toEqual(prevValue); // Returns previous value
 });
 
 test("key inc(5)", async () => {
@@ -90,7 +90,7 @@ test("key inc(5)", async () => {
   const response = await client.inc(5, "my-key");
 
   // THEN
-  expect(response).toEqual(prevValue); // returns previous value
+  expect(response).toEqual(prevValue); // Returns previous value
 });
 
 test("set(0)", async () => {

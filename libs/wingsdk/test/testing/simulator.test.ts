@@ -132,7 +132,7 @@ function removePathsFromTraceLine(line?: string) {
     return undefined;
   }
 
-  // replace any paths in the log line with "foo/bar.ts" instead of "/Users/eladb/code/wing2/libs/wingsdk/src/target-sim/foo/bar.ts"
+  // Replace any paths in the log line with "foo/bar.ts" instead of "/Users/eladb/code/wing2/libs/wingsdk/src/target-sim/foo/bar.ts"
   if (line.includes("/")) {
     return "<sanitized>";
   }
@@ -156,7 +156,7 @@ function sanitizeResult(result: TestResult): TestResult {
       .map(removePathsFromTraceLine)
       .map(removeLineNumbers);
 
-    // remove all lines after "at Simulator.runTest" since they are platform-dependent
+    // Remove all lines after "at Simulator.runTest" since they are platform-dependent
     let lastLine = lines.findIndex((line) =>
       line?.includes("Simulator.runTest")
     );

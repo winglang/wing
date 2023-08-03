@@ -199,7 +199,7 @@ export class BucketClient implements IBucketClient {
    * @Throws if the file is not public or if object does not exist.
    */
   public async publicUrl(key: string): Promise<string> {
-    this._public; // a little help for implementing public_url later on
+    this._public; // A little help for implementing public_url later on
     throw new Error(`publicUrl is not supported yet. (key=${key})`);
   }
 

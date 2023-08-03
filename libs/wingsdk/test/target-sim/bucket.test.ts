@@ -315,10 +315,10 @@ test("remove object from a bucket with mustExist as option", async () => {
 
   // THEN
 
-  // create file
+  // Create file
   await client.put(fileName, JSON.stringify({ msg: "Hello world!" }));
 
-  // delete file
+  // Delete file
   const response = await client.delete(fileName, { mustExist: true });
 
   await s.stop();
@@ -344,10 +344,10 @@ test("removing a key will call onDelete method", async () => {
 
   // THEN
 
-  // create file
+  // Create file
   await client.put(fileName, JSON.stringify({ msg: "Hello world!" }));
 
-  // delete file
+  // Delete file
   //@ts-expect-error
   const notifyListeners = vi.spyOn(client, "notifyListeners");
   const response = await client.delete(fileName);
@@ -380,10 +380,10 @@ test("remove object from a bucket", async () => {
 
   // THEN
 
-  // create file
+  // Create file
   await client.put(fileName, JSON.stringify({ msg: "Hello world!" }));
 
-  // delete file
+  // Delete file
   const response = await client.delete(fileName);
 
   await s.stop();
@@ -645,7 +645,7 @@ test("tryGetJson an existing non-Json object from bucket", async () => {
   await client.put(KEY, VALUE);
 
   // THEN
-  // it seems to throw a different error per OS/ node version
+  // It seems to throw a different error per OS/ node version
   await expect(() => client.tryGetJson(KEY)).rejects.toThrowError();
   await s.stop();
 });

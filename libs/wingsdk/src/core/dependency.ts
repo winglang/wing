@@ -31,7 +31,7 @@ export class DependencyGraph {
       return nodes[Node.of(construct).path];
     }
 
-    // create all vertices of the graph.
+    // Create all vertices of the graph.
     for (const n of node.findAll()) {
       putVertex(n);
     }
@@ -43,13 +43,13 @@ export class DependencyGraph {
       }
     }
 
-    // create all the edges of the graph.
+    // Create all the edges of the graph.
     for (const dep of deps) {
       if (!getVertex(dep.target)) {
-        // dont cross scope boundaries.
-        // since charts only renders its own children, this is ok and
-        // has the benefit of simplifying the graph. we should reconsider this behavior when moving
-        // to a more general purpose use-case.
+        // Dont cross scope boundaries.
+        // Since charts only renders its own children, this is ok and
+        // Has the benefit of simplifying the graph. we should reconsider this behavior when moving
+        // To a more general purpose use-case.
         continue;
       }
 
@@ -59,10 +59,10 @@ export class DependencyGraph {
       sourceDepNode.addChild(targetDepNode);
     }
 
-    // create the root.
+    // Create the root.
     for (const n of Object.values(nodes)) {
       if (n.inbound.length === 0) {
-        // orphans are dependency roots. lets adopt them!
+        // Orphans are dependency roots. lets adopt them!
         this._fosterParent.addChild(n);
       }
     }

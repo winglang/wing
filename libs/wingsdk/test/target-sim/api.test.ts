@@ -147,7 +147,7 @@ test("api supports every method type", async () => {
   const s = await app.startSimulator();
   const apiUrl = getApiUrl(s, "/my_api");
 
-  // send all requests (we don't do that in parallel in order to avoid non-deterministic test behavior)
+  // Send all requests (we don't do that in parallel in order to avoid non-deterministic test behavior)
   const responses = new Array<Response>();
   for (const method of METHODS) {
     const r = await fetch(apiUrl + ROUTE, { method });

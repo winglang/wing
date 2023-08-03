@@ -18,13 +18,13 @@ test("basic function", () => {
 
   // THEN
   expect(tfResourcesOf(output)).toEqual([
-    "azurerm_linux_function_app", // function app
-    "azurerm_resource_group", // resource group
-    "azurerm_role_assignment", // role assignment for function app
-    "azurerm_service_plan", // service plan for function app
-    "azurerm_storage_account", // storage account
-    "azurerm_storage_blob", // storage blob for code
-    "azurerm_storage_container", // storage container for code
+    "azurerm_linux_function_app", // Function app
+    "azurerm_resource_group", // Resource group
+    "azurerm_role_assignment", // Role assignment for function app
+    "azurerm_service_plan", // Service plan for function app
+    "azurerm_storage_account", // Storage account
+    "azurerm_storage_blob", // Storage blob for code
+    "azurerm_storage_container", // Storage container for code
   ]);
   expect(tfSanitize(output)).toMatchSnapshot();
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();

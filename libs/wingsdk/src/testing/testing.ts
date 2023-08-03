@@ -33,12 +33,12 @@ export class Testing {
       clients[k] = liftObject(scope, v.obj);
     }
 
-    // implements IFunctionHandler
+    // Implements IFunctionHandler
     class Handler extends Resource {
       constructor() {
         super(scope, id);
 
-        // pretend as if we have a field for each binding
+        // Pretend as if we have a field for each binding
         for (const [field, value] of Object.entries(bindings)) {
           (this as any)[field] = value.obj;
         }

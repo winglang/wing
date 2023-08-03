@@ -149,14 +149,14 @@ export function synthesizeTree(app: App, outdir: string) {
 function synthAttributes(
   construct: IConstruct
 ): { [key: string]: any } | undefined {
-  // check if a construct implements IInspectable
+  // Check if a construct implements IInspectable
   function canInspect(inspectable: any): inspectable is IInspectable {
     return inspectable._inspect !== undefined;
   }
 
   const inspector = new TreeInspector();
 
-  // get attributes from the inspector
+  // Get attributes from the inspector
   if (canInspect(construct)) {
     construct._inspect(inspector);
     return inspector.attributes;

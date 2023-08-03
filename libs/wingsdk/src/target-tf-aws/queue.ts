@@ -49,7 +49,7 @@ export class Queue extends cloud.Queue {
   ): cloud.Function {
     const hash = inflight.node.addr.slice(-8);
     const functionHandler = convertBetweenHandlers(
-      this.node.scope!, // ok since we're not a tree root
+      this.node.scope!, // Ok since we're not a tree root
       `${this.node.id}-SetConsumerHandler-${hash}`,
       inflight,
       join(
@@ -60,7 +60,7 @@ export class Queue extends cloud.Queue {
     );
 
     const fn = Function._newFunction(
-      this.node.scope!, // ok since we're not a tree root
+      this.node.scope!, // Ok since we're not a tree root
       `${this.node.id}-SetConsumer-${hash}`,
       functionHandler,
       props
@@ -110,7 +110,7 @@ export class Queue extends cloud.Queue {
     host.addPolicyStatements(calculateQueuePermissions(this.queue.arn, ops));
 
     // The queue url needs to be passed through an environment variable since
-    // it may not be resolved until deployment time.
+    // It may not be resolved until deployment time.
     host.addEnvironment(env, this.queue.url);
 
     super._bind(host, ops);

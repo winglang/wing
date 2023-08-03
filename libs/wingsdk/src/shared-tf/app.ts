@@ -53,7 +53,7 @@ export abstract class CdktfApp extends App {
     this._tokens = new CdkTfTokens();
 
     // HACK: monkey patch the `new` method on the cdktf app (which is the root of the tree) so that
-    // we can intercept the creation of resources and replace them with our own.
+    // We can intercept the creation of resources and replace them with our own.
     (cdktfApp as any).new = (
       fqn: string,
       ctor: any,
@@ -89,29 +89,29 @@ export abstract class CdktfApp extends App {
       return this.synthedOutput!;
     }
 
-    // call preSynthesize() on every construct in the tree
+    // Call preSynthesize() on every construct in the tree
     preSynthesizeAllConstructs(this);
 
-    // synthesize Terraform files in `outdir/.tmp.cdktf.out/stacks/root`
+    // Synthesize Terraform files in `outdir/.tmp.cdktf.out/stacks/root`
     this.pluginManager.preSynth(this);
     this.cdktfApp.synth();
 
-    // move Terraform files from `outdir/.tmp.cdktf.out/stacks/root` to `outdir`
+    // Move Terraform files from `outdir/.tmp.cdktf.out/stacks/root` to `outdir`
     this.moveCdktfArtifactsToOutdir();
 
-    // rename `outdir/cdk.tf.json` to `outdir/main.tf.json`
+    // Rename `outdir/cdk.tf.json` to `outdir/main.tf.json`
     renameSync(
       join(this.outdir, "cdk.tf.json"),
       join(this.outdir, `main.tf.json`)
     );
 
-    // delete `outdir/.tmp.cdktf.out`
+    // Delete `outdir/.tmp.cdktf.out`
     rmSync(this.cdktfApp.outdir, { recursive: true, force: true });
 
-    // write `outdir/tree.json`
+    // Write `outdir/tree.json`
     synthesizeTree(this, this.outdir);
 
-    // return a cleaned snapshot of the resulting Terraform manifest for unit testing
+    // Return a cleaned snapshot of the resulting Terraform manifest for unit testing
     const tfConfig = this.cdktfStack.toTerraform();
     const cleaned = cleanTerraformConfig(tfConfig);
 
@@ -143,7 +143,7 @@ export abstract class CdktfApp extends App {
         const destination = join(this.outdir, file.name);
 
         // If the file is a directory we need to delete contents of previous synthesis
-        // or rename will fail
+        // Or rename will fail
         if (existsSync(destination)) {
           rmSync(destination, { recursive: true });
         }
@@ -166,7 +166,7 @@ function cleanTerraformConfig(template: any): any {
       }
 
       const cleanedItem = Object.entries(item)
-        // order alphabetically
+        // Order alphabetically
         .sort(([a], [b]) => a.localeCompare(b))
         .reduce(
           (acc, [key, value]) => ({
