@@ -53,7 +53,6 @@
   "dependencies": {
     "@trpc/client": "^10.30.0",
     "@types/vscode": "^1.70.0",
-    "@wingconsole/server": "workspace:^",
     "node-fetch": "2",
     "open": "^8.4.0",
     "vscode-languageclient": "^8.0.2",

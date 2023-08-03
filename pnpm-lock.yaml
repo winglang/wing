@@ -201,9 +201,6 @@ importers:
       '@types/vscode':
         specifier: ^1.70.0
         version: 1.70.0
-      '@wingconsole/server':
-        specifier: workspace:^
-        version: link:../wing-console/console/server
       node-fetch:
         specifier: '2'
         version: 2.6.12
@@ -244,6 +241,9 @@ importers:
       '@wingconsole/app':
         specifier: workspace:^
         version: link:../wing-console/console/app
+      '@wingconsole/server':
+        specifier: workspace:^
+        version: link:../wing-console/console/server
       eslint:
         specifier: ^8
         version: 8.42.0

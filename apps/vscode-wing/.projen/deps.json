@@ -101,10 +101,6 @@
       "type": "runtime"
     },
     {
-      "name": "@wingconsole/server",
-      "type": "runtime"
-    },
-    {
       "name": "node-fetch",
       "version": "2",
       "type": "runtime"
