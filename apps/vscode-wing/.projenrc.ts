@@ -56,7 +56,6 @@ const project = new TypeScriptAppProject({
     `@types/vscode@^${VSCODE_BASE_VERSION}`,
     "vscode-languageclient",
     "which",
-    "@wingconsole/server",
     "@trpc/client",
     "node-fetch@2",
     "ws",
