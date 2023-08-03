@@ -1,7 +1,7 @@
 import * as reflect from "jsii-reflect";
+import { Interface } from "./interface";
 import { InterfaceSchema } from "../schema";
 import { Transpile } from "../transpile/transpile";
-import { Interface } from "./interface";
 
 export class Interfaces {
   private readonly interfaces: Interface[];

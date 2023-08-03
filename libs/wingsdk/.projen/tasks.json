@@ -298,7 +298,7 @@
       "description": "Creates the distribution package",
       "steps": [
         {
-          "exec": "if [ ! -z ${CI} ]; then rsync -a . .repo --exclude .git --exclude node_modules && rm -rf dist && mv .repo dist; else pnpm exec projen package-all; fi"
+          "exec": "bump-pack -b"
         }
       ]
     },
@@ -417,19 +417,19 @@
           "exec": "pnpm update npm-check-updates"
         },
         {
-          "exec": "npm-check-updates --dep dev --upgrade --target=minor --reject='@winglang/jsii-docgen,bump-pack,cdktf-cli,constructs,jsii,wing-api-checker,@aws-sdk/client-cloudwatch-logs,@aws-sdk/client-dynamodb,@aws-sdk/client-elasticache,@aws-sdk/client-lambda,@aws-sdk/client-s3,@aws-sdk/client-secrets-manager,@aws-sdk/client-sns,@aws-sdk/client-sqs,@aws-sdk/is-array-buffer,@aws-sdk/types,@aws-sdk/util-buffer-from,@aws-sdk/util-dynamodb,@aws-sdk/util-stream-node,@aws-sdk/util-utf8-node,@azure/identity,@azure/storage-blob,cdktf'"
+          "exec": "npm-check-updates --dep dev --upgrade --target=minor --reject='@winglang/jsii-docgen,cdktf-cli,constructs,jsii,@aws-sdk/client-cloudwatch-logs,@aws-sdk/client-dynamodb,@aws-sdk/client-elasticache,@aws-sdk/client-lambda,@aws-sdk/client-s3,@aws-sdk/client-secrets-manager,@aws-sdk/client-sns,@aws-sdk/client-sqs,@aws-sdk/is-array-buffer,@aws-sdk/types,@aws-sdk/util-buffer-from,@aws-sdk/util-dynamodb,@aws-sdk/util-stream-node,@aws-sdk/util-utf8-node,@azure/identity,@azure/storage-blob,cdktf'"
         },
         {
-          "exec": "npm-check-updates --dep optional --upgrade --target=minor --reject='@winglang/jsii-docgen,bump-pack,cdktf-cli,constructs,jsii,wing-api-checker,@aws-sdk/client-cloudwatch-logs,@aws-sdk/client-dynamodb,@aws-sdk/client-elasticache,@aws-sdk/client-lambda,@aws-sdk/client-s3,@aws-sdk/client-secrets-manager,@aws-sdk/client-sns,@aws-sdk/client-sqs,@aws-sdk/is-array-buffer,@aws-sdk/types,@aws-sdk/util-buffer-from,@aws-sdk/util-dynamodb,@aws-sdk/util-stream-node,@aws-sdk/util-utf8-node,@azure/identity,@azure/storage-blob,cdktf'"
+          "exec": "npm-check-updates --dep optional --upgrade --target=minor --reject='@winglang/jsii-docgen,cdktf-cli,constructs,jsii,@aws-sdk/client-cloudwatch-logs,@aws-sdk/client-dynamodb,@aws-sdk/client-elasticache,@aws-sdk/client-lambda,@aws-sdk/client-s3,@aws-sdk/client-secrets-manager,@aws-sdk/client-sns,@aws-sdk/client-sqs,@aws-sdk/is-array-buffer,@aws-sdk/types,@aws-sdk/util-buffer-from,@aws-sdk/util-dynamodb,@aws-sdk/util-stream-node,@aws-sdk/util-utf8-node,@azure/identity,@azure/storage-blob,cdktf'"
         },
         {
-          "exec": "npm-check-updates --dep peer --upgrade --target=minor --reject='@winglang/jsii-docgen,bump-pack,cdktf-cli,constructs,jsii,wing-api-checker,@aws-sdk/client-cloudwatch-logs,@aws-sdk/client-dynamodb,@aws-sdk/client-elasticache,@aws-sdk/client-lambda,@aws-sdk/client-s3,@aws-sdk/client-secrets-manager,@aws-sdk/client-sns,@aws-sdk/client-sqs,@aws-sdk/is-array-buffer,@aws-sdk/types,@aws-sdk/util-buffer-from,@aws-sdk/util-dynamodb,@aws-sdk/util-stream-node,@aws-sdk/util-utf8-node,@azure/identity,@azure/storage-blob,cdktf'"
+          "exec": "npm-check-updates --dep peer --upgrade --target=minor --reject='@winglang/jsii-docgen,cdktf-cli,constructs,jsii,@aws-sdk/client-cloudwatch-logs,@aws-sdk/client-dynamodb,@aws-sdk/client-elasticache,@aws-sdk/client-lambda,@aws-sdk/client-s3,@aws-sdk/client-secrets-manager,@aws-sdk/client-sns,@aws-sdk/client-sqs,@aws-sdk/is-array-buffer,@aws-sdk/types,@aws-sdk/util-buffer-from,@aws-sdk/util-dynamodb,@aws-sdk/util-stream-node,@aws-sdk/util-utf8-node,@azure/identity,@azure/storage-blob,cdktf'"
         },
         {
-          "exec": "npm-check-updates --dep prod --upgrade --target=minor --reject='@winglang/jsii-docgen,bump-pack,cdktf-cli,constructs,jsii,wing-api-checker,@aws-sdk/client-cloudwatch-logs,@aws-sdk/client-dynamodb,@aws-sdk/client-elasticache,@aws-sdk/client-lambda,@aws-sdk/client-s3,@aws-sdk/client-secrets-manager,@aws-sdk/client-sns,@aws-sdk/client-sqs,@aws-sdk/is-array-buffer,@aws-sdk/types,@aws-sdk/util-buffer-from,@aws-sdk/util-dynamodb,@aws-sdk/util-stream-node,@aws-sdk/util-utf8-node,@azure/identity,@azure/storage-blob,cdktf'"
+          "exec": "npm-check-updates --dep prod --upgrade --target=minor --reject='@winglang/jsii-docgen,cdktf-cli,constructs,jsii,@aws-sdk/client-cloudwatch-logs,@aws-sdk/client-dynamodb,@aws-sdk/client-elasticache,@aws-sdk/client-lambda,@aws-sdk/client-s3,@aws-sdk/client-secrets-manager,@aws-sdk/client-sns,@aws-sdk/client-sqs,@aws-sdk/is-array-buffer,@aws-sdk/types,@aws-sdk/util-buffer-from,@aws-sdk/util-dynamodb,@aws-sdk/util-stream-node,@aws-sdk/util-utf8-node,@azure/identity,@azure/storage-blob,cdktf'"
         },
         {
-          "exec": "npm-check-updates --dep bundle --upgrade --target=minor --reject='@winglang/jsii-docgen,bump-pack,cdktf-cli,constructs,jsii,wing-api-checker,@aws-sdk/client-cloudwatch-logs,@aws-sdk/client-dynamodb,@aws-sdk/client-elasticache,@aws-sdk/client-lambda,@aws-sdk/client-s3,@aws-sdk/client-secrets-manager,@aws-sdk/client-sns,@aws-sdk/client-sqs,@aws-sdk/is-array-buffer,@aws-sdk/types,@aws-sdk/util-buffer-from,@aws-sdk/util-dynamodb,@aws-sdk/util-stream-node,@aws-sdk/util-utf8-node,@azure/identity,@azure/storage-blob,cdktf'"
+          "exec": "npm-check-updates --dep bundle --upgrade --target=minor --reject='@winglang/jsii-docgen,cdktf-cli,constructs,jsii,@aws-sdk/client-cloudwatch-logs,@aws-sdk/client-dynamodb,@aws-sdk/client-elasticache,@aws-sdk/client-lambda,@aws-sdk/client-s3,@aws-sdk/client-secrets-manager,@aws-sdk/client-sns,@aws-sdk/client-sqs,@aws-sdk/is-array-buffer,@aws-sdk/types,@aws-sdk/util-buffer-from,@aws-sdk/util-dynamodb,@aws-sdk/util-stream-node,@aws-sdk/util-utf8-node,@azure/identity,@azure/storage-blob,cdktf'"
         },
         {
           "exec": "pnpm i --no-frozen-lockfile"

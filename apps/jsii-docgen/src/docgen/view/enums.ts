@@ -1,7 +1,7 @@
 import * as reflect from "jsii-reflect";
+import { Enum } from "./enum";
 import { EnumSchema } from "../schema";
 import { Transpile } from "../transpile/transpile";
-import { Enum } from "./enum";
 
 export class Enums {
   private readonly enums: Enum[];
