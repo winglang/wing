@@ -68,8 +68,8 @@ const project = new TypeScriptAppProject({
     "@vscode/vsce",
     "@types/node-fetch",
     "@types/ws",
-    "@wingconsole/app",
-    "@wingconsole/server",
+    "@wingconsole/app@workspace:^",
+    "@wingconsole/server@workspace:^",
   ],
 });
 
@@ -202,7 +202,7 @@ const contributes: VSCodeExtensionContributions = {
     explorer: [
       {
         id: "consoleExplorer",
-        name: "Wing Explorer",
+        name: "Wing Resources",
       },
       {
         id: "consoleTestsExplorer",
