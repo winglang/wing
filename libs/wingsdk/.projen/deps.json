@@ -6,10 +6,6 @@
       "type": "build"
     },
     {
-      "name": "@types/aws-lambda",
-      "type": "build"
-    },
-    {
       "name": "@types/express",
       "type": "build"
     },
@@ -237,6 +233,10 @@
     {
       "name": "@azure/storage-blob",
       "version": "12.14.0",
+      "type": "bundled"
+    },
+    {
+      "name": "@types/aws-lambda",
       "type": "bundled"
     },
     {
