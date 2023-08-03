@@ -41,7 +41,7 @@ pnpm install
 ```sh
 pnpm turbo <task>
 # or
-pnpm turbo <task> --filter=<project>
+pnpm turbo <task> --filter=<project> -- <args>
 ```
 
 - `pnpm` can be omitted if [Turbo] is installed globally
