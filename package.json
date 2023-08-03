@@ -8,7 +8,6 @@
     "turbo": "^1.10.12"
   },
   "scripts": {
-    "compile": "turbo compile --filter=!hangar",
     "build": "turbo compile post-compile lint eslint test package --filter=!hangar",
     "test": "turbo lint eslint test --filter=!hangar",
     "package": "turbo package --filter=!hangar",
