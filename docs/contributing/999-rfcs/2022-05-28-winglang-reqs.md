@@ -1,5 +1,5 @@
 ---
-title: (Approved) Language Requirements
+title: #3690 Language Requirements (Approved)
 description: The original requirements documents for the wing language experience
 ---
 
