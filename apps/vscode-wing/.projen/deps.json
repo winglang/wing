@@ -1,12 +1,20 @@
 {
   "dependencies": [
     {
+      "name": "@types/node-fetch",
+      "type": "build"
+    },
+    {
       "name": "@types/node",
       "version": "^16",
       "type": "build"
     },
     {
       "name": "@types/which",
+      "type": "build"
+    },
+    {
+      "name": "@types/ws",
       "type": "build"
     },
     {
@@ -24,7 +32,13 @@
       "type": "build"
     },
     {
-      "name": "esbuild",
+      "name": "@wingconsole/app",
+      "version": "workspace:^",
+      "type": "build"
+    },
+    {
+      "name": "@wingconsole/server",
+      "version": "workspace:^",
       "type": "build"
     },
     {
@@ -70,12 +84,29 @@
       "type": "build"
     },
     {
+      "name": "tsup",
+      "type": "build"
+    },
+    {
       "name": "typescript",
       "type": "build"
     },
     {
+      "name": "@trpc/client",
+      "type": "runtime"
+    },
+    {
       "name": "@types/vscode",
       "version": "^1.70.0",
+      "type": "runtime"
+    },
+    {
+      "name": "node-fetch",
+      "version": "2",
+      "type": "runtime"
+    },
+    {
+      "name": "open",
       "type": "runtime"
     },
     {
@@ -84,6 +115,10 @@
     },
     {
       "name": "which",
+      "type": "runtime"
+    },
+    {
+      "name": "ws",
       "type": "runtime"
     }
   ],
