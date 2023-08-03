@@ -37,6 +37,7 @@ export const App = ({ layout, theme, onTrace }: AppProps) => {
     },
   });
 
+  const layoutConfig = trpc["app.layoutConfig"].useQuery();
   const appDetails = trpc["app.details"].useQuery();
   const appState = trpc["app.state"].useQuery();
   const themeMode = trpc["config.getThemeMode"].useQuery();
@@ -50,6 +51,7 @@ export const App = ({ layout, theme, onTrace }: AppProps) => {
             layoutProps={{
               cloudAppState: appState.data ?? "compiling",
               wingVersion: appDetails.data?.wingVersion,
+              layoutConfig: layoutConfig.data?.config,
             }}
           ></LayoutProvider>
         </TestsContextProvider>
