@@ -241,6 +241,7 @@ pub fn parse_wing_project(
 	// Track which files we have parsed and which still need parsing
 	let mut files_to_parse = dependent_wing_files;
 	let mut files_parsed = HashSet::new();
+	files_parsed.insert(init_path.to_owned());
 
 	// Parse all remaining files in the project (skipping files we have already parsed)
 	while let Some(file_to_parse) = files_to_parse.pop() {
