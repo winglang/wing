@@ -6,17 +6,8 @@
       "outputs": ["target/wasm32-wasi/release/wingc.wasm"]
     },
     "test": {
-      "dependsOn": ["compile", "^compile"],
-      "inputs": [
-        "*.json",
-        "*.toml",
-        "*.lock",
-        "src/**",
-        "test/**",
-        "../../examples/tests/**",
-        "!../../examples/**/target/**",
-        "!../../examples/node_modules/**"
-      ]
+      "dependsOn": ["compile", "examples-valid#topo", "examples-invalid#topo"],
+      "inputs": ["*.json", "*.toml", "*.lock", "src/**", "test/**"]
     },
     "lint": {},
     "eslint": {

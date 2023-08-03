@@ -11,7 +11,8 @@
         "../../examples/tests/**",
         "!../../examples/**/target/**",
         "!../../examples/node_modules/**"
-      ]
+      ],
+      "dependsOn": ["examples-valid#topo"]
     },
     "compile": {
       "outputs": ["dist/**"]

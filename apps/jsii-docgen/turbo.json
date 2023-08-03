@@ -5,6 +5,9 @@
     "compile": {
       "outputs": ["lib/**"]
     },
+    "test": {
+      "dependsOn": ["compile"]
+    },
     "package": {
       "outputs": ["dist/**"]
     }

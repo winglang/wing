@@ -5,6 +5,9 @@
     "compile": {
       "outputs": ["dist/**"],
       "env": ["SEGMENT_WRITE_KEY"]
+    },
+    "test": {
+      "dependsOn": ["compile"]
     }
   }
 }

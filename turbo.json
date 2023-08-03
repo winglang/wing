@@ -1,19 +1,32 @@
 {
   "$schema": "https://turborepo.org/schema.json",
-  "globalDependencies": [
-    "*.json",
-    "*.toml",
-    ".node-version",
-    "insta.yaml"
-  ],
+  "globalDependencies": ["*.json", "*.toml", ".node-version", "insta.yaml"],
   "pipeline": {
     "compile": {
       "dependsOn": ["^compile"],
-      "inputs": ["bin/*", "*.ts", "*.js", "*.cjs", "*.json", "*.toml", "*.lock", "src/**"]
+      "inputs": [
+        "bin/*",
+        "*.ts",
+        "*.js",
+        "*.cjs",
+        "*.json",
+        "*.toml",
+        "*.lock",
+        "src/**"
+      ]
     },
     "test": {
       "dependsOn": ["^compile"],
-      "inputs": ["*.ts", "*.js", "*.cjs", "*.json", "*.toml", "*.lock", "src/**", "test/**"]
+      "inputs": [
+        "*.ts",
+        "*.js",
+        "*.cjs",
+        "*.json",
+        "*.toml",
+        "*.lock",
+        "src/**",
+        "test/**"
+      ]
     },
     "post-compile": {
       "dependsOn": ["compile"]
@@ -27,6 +40,17 @@
     "package": {
       "dependsOn": ["compile", "post-compile"],
       "cache": false
+    },
+    "topo": {
+      "dependsOn": ["^topo"]
+    },
+    "examples-tests": {
+      "dependsOn": ["topo"],
+      "inputs": [
+        "examples/tests/**",
+        "!examples/tests/valid/**/node_modules/**",
+        "!examples/tests/valid/**/target/**"
+      ]
     }
   }
 }

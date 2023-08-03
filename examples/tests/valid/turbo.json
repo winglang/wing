@@ -2,11 +2,8 @@
   "$schema": "https://turborepo.org/schema.json",
   "extends": ["//"],
   "pipeline": {
-    "compile": {
-      "outputs": ["lib/**"]
-    },
-    "test": {
-      "dependsOn": ["compile"]
+    "topo": {
+      "inputs": ["**", "!node_modules/**", "!**/target/**"]
     }
   }
 }

@@ -13,9 +13,13 @@
     },
     "post-compile": {
       "dependsOn": ["compile"],
-      "cache": false
+      "inputs": [".jsii", "src/**/*.md"],
+      "outputs": ["../../docs/docs/04-standard-library/*/*.md"]
     },
     "eslint": {
+      "dependsOn": ["pre-compile"]
+    },
+    "test": {
       "dependsOn": ["pre-compile"]
     }
   }

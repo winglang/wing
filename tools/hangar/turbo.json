@@ -3,25 +3,28 @@
   "extends": ["//"],
   "pipeline": {
     "test:generate": {
-      "dependsOn": ["^package"],
       "inputs": [
         "*.ts",
         "*.json",
         "src/generate_tests.ts",
-        "src/generated_test_targets.ts",
-        "../../examples/tests/**/*.w"
+        "src/generated_test_targets.ts"
       ],
-      "outputs": ["src/test_corpus/**"],
-      "cache": false
+      "dependsOn": [
+        "examples-valid#topo",
+        "examples-invalid#topo",
+        "examples-error#topo",
+        "examples-sdk#topo"
+      ],
+      "outputs": ["src/test_corpus/**"]
     },
     "test": {
-      "dependsOn": ["test:generate"],
+      "dependsOn": ["^package", "test:generate"],
       "inputs": ["src/**", "../../examples/tests/**/*.w"],
       "cache": false
     },
     "bench": {
-      "dependsOn": ["^package"],
-      "inputs": ["src/**", "../../examples/tests/valid/benchmarks/*.w"],
+      "dependsOn": ["^package", "examples-valid#topo"],
+      "inputs": ["src/**"],
       "cache": false
     }
   }
