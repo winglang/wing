@@ -3,8 +3,20 @@
   "extends": ["//"],
   "pipeline": {
     "compile": {
-      "inputs": ["Cargo.*", "src/**"],
       "outputs": ["target/wasm32-wasi/release/wingc.wasm"]
+    },
+    "test": {
+      "dependsOn": ["compile", "^compile"],
+      "inputs": [
+        "*.json",
+        "*.toml",
+        "*.lock",
+        "src/**",
+        "test/**",
+        "../../examples/tests/**",
+        "!../../examples/**/target/**",
+        "!../../examples/node_modules/**"
+      ]
     },
     "lint": {},
     "eslint": {

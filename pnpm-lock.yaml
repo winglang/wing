@@ -996,6 +996,9 @@ importers:
 
   libs/wingc:
     devDependencies:
+      '@winglang/sdk':
+        specifier: workspace:^
+        version: link:../wingsdk
       '@winglang/tree-sitter-wing':
         specifier: workspace:^
         version: link:../tree-sitter-wing

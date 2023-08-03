@@ -1,23 +1,28 @@
 {
   "$schema": "https://turborepo.org/schema.json",
+  "globalDependencies": [
+    "*.json",
+    "*.toml",
+    ".node-version",
+    "insta.yaml"
+  ],
   "pipeline": {
     "compile": {
       "dependsOn": ["^compile"],
-      "inputs": ["src/**"]
+      "inputs": ["bin/*", "*.ts", "*.js", "*.cjs", "*.json", "*.toml", "*.lock", "src/**"]
     },
     "test": {
-      "dependsOn": ["compile"],
-      "inputs": ["src/**", "test/**"]
+      "dependsOn": ["^compile"],
+      "inputs": ["*.ts", "*.js", "*.cjs", "*.json", "*.toml", "*.lock", "src/**", "test/**"]
     },
     "post-compile": {
-      "dependsOn": ["compile"],
-      "cache": false
+      "dependsOn": ["compile"]
     },
     "lint": {
-      "inputs": ["src/**"]
+      "inputs": ["*.ts", "*.json", "*.toml", "*.lock", "src/**", "test/**"]
     },
     "eslint": {
-      "inputs": ["src/**"]
+      "inputs": ["*.ts", "*.json", "*.toml", "*.lock", "src/**", "test/**"]
     },
     "package": {
       "dependsOn": ["compile", "post-compile"],

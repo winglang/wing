@@ -4,18 +4,24 @@
   "pipeline": {
     "test:generate": {
       "dependsOn": ["^package"],
-      "inputs": ["src/generate_tests.ts", "src/generated_test_targets.ts"],
+      "inputs": [
+        "*.ts",
+        "*.json",
+        "src/generate_tests.ts",
+        "src/generated_test_targets.ts",
+        "../../examples/tests/**/*.w"
+      ],
       "outputs": ["src/test_corpus/**"],
       "cache": false
     },
     "test": {
       "dependsOn": ["test:generate"],
-      "inputs": ["src/**"],
+      "inputs": ["src/**", "../../examples/tests/**/*.w"],
       "cache": false
     },
     "bench": {
       "dependsOn": ["^package"],
-      "inputs": ["src/**"],
+      "inputs": ["src/**", "../../examples/tests/valid/benchmarks/*.w"],
       "cache": false
     }
   }

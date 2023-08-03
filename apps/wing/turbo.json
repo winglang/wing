@@ -2,11 +2,19 @@
   "$schema": "https://turborepo.org/schema.json",
   "extends": ["//"],
   "pipeline": {
+    "test": {
+      "inputs": [
+        "*.ts",
+        "*.json",
+        "src/**",
+        "test/**",
+        "../../examples/tests/**",
+        "!../../examples/**/target/**",
+        "!../../examples/node_modules/**"
+      ]
+    },
     "compile": {
       "outputs": ["dist/**"]
-    },
-    "test": {
-      "dependsOn": ["compile"]
     }
   }
 }
