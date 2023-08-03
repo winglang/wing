@@ -169,6 +169,24 @@ jobs:
       - name: Test
         run: pnpm test:ci
 
+      - name: Create git patch
+        id: diff
+        run: |
+          git add --all
+          git diff --staged --binary --patch > build.diff
+          if [ -s build.diff ]; then
+            echo "Diff found, creating a patch to apply later"
+            cat build.diff
+            echo "diff=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Upload Diff
+        if: steps.diff.outputs.diff == 'true'
+        uses: actions/upload-artifact@v3
+        with:
+          name: build.diff
+          path: build.diff
+
   benchmark:
     name: Benchmark
     runs-on: ubuntu-latest
