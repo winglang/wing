@@ -1108,6 +1108,9 @@ importers:
       '@azure/storage-blob':
         specifier: 12.14.0
         version: 12.14.0
+      '@types/aws-lambda':
+        specifier: ^8.10.109
+        version: 8.10.109
       aws-cdk-lib:
         specifier: ^2.64.0
         version: 2.64.0(constructs@10.1.314)
@@ -1145,9 +1148,6 @@ importers:
       '@cdktf/provider-aws':
         specifier: ^15.0.0
         version: 15.0.0(cdktf@0.17.0)(constructs@10.1.314)
-      '@types/aws-lambda':
-        specifier: ^8.10.109
-        version: 8.10.109
       '@types/express':
         specifier: ^4.17.17
         version: 4.17.17
@@ -8924,7 +8924,7 @@ packages:
 
   /@types/aws-lambda@8.10.109:
     resolution: {integrity: sha512-/ME92FneNyXQzrAfcnQQlW1XkCZGPDlpi2ao1MJwecN+6SbeonKeggU8eybv1DfKli90FAVT1MlIZVXfwVuCyg==}
-    dev: true
+    dev: false
 
   /@types/babel__core@7.20.1:
     resolution: {integrity: sha512-aACu/U/omhdk15O4Nfb+fHgH/z3QsfQzpnvRZhYhThms83ZnAOZz7zZAWO7mn2yyNQaA4xTO8GLK3uqFU4bYYw==}

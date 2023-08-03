@@ -22,11 +22,11 @@ test("invoke - happy path", async () => {
     })
     .resolves({
       StatusCode: 200,
-      Payload: fromUtf8(JSON.stringify(RESPONSE)),
+      Payload: fromUtf8(JSON.stringify({ payload: RESPONSE, context: {} })),
     });
 
   // WHEN
-  const client = new FunctionClient(FUNCTION_NAME);
+  const client = new FunctionClient(FUNCTION_NAME, "root/Function");
   const response = await client.invoke(PAYLOAD);
 
   // THEN
@@ -54,11 +54,13 @@ test("invoke - sad path", async () => {
     .resolves({
       StatusCode: 200,
       FunctionError: "Unhandled",
-      Payload: fromUtf8(JSON.stringify(RESPONSE_PAYLOAD)),
+      Payload: fromUtf8(
+        JSON.stringify({ payload: RESPONSE_PAYLOAD, context: {} })
+      ),
     });
 
   // THEN
-  const client = new FunctionClient("FUNCTION_NAME");
+  const client = new FunctionClient("FUNCTION_NAME", "root/Function");
   await expect(client.invoke(PAYLOAD)).rejects.toThrow(
     /Invoke failed with message: "Unhandled". Full error:/
   );

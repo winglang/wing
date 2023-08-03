@@ -12,7 +12,11 @@ import * as cloud from "../cloud";
 import * as core from "../core";
 import { createBundle } from "../shared/bundling";
 import { NameOptions, ResourceNames } from "../shared/resource-names";
-import { IAwsFunction, PolicyStatement } from "../shared-aws";
+import {
+  IAwsFunction,
+  PolicyStatement,
+  _generateAwsFunctionLines,
+} from "../shared-aws";
 import { IInflightHost, Resource } from "../std";
 import { Duration } from "../std/duration";
 
@@ -222,6 +226,17 @@ export class Function extends cloud.Function implements IAwsFunction {
     return this.function.functionName;
   }
 
+  /**
+   * Generates the code lines for the cloud function,
+   * overridden by the tf-aws target to have the function context too
+   * @param inflightClient inflight client code
+   * @returns cloud function code string
+   * @internal
+   */
+  protected _generateLines(inflightClient: core.Code): string[] {
+    return _generateAwsFunctionLines(inflightClient);
+  }
+
   /** @internal */
   public _bind(host: IInflightHost, ops: string[]): void {
     if (!(host instanceof Function)) {
@@ -250,7 +265,7 @@ export class Function extends cloud.Function implements IAwsFunction {
       __dirname.replace("target-tf-aws", "shared-aws"),
       __filename,
       "FunctionClient",
-      [`process.env["${this.envName()}"]`]
+      [`process.env["${this.envName()}"], "${this.node.path}"`]
     );
   }
 
