@@ -81,20 +81,7 @@ export const createTestRouter = () => {
   return createRouter({
     "test.list": createProcedure.query(async ({ input, ctx }) => {
       const simulator = await ctx.simulator();
-      const list = await listTests(simulator);
-
-      const testsState = ctx.testsStateManager();
-      const tests = testsState.getTests();
-
-      return list.map((resourcePath) => {
-        const test = tests.find((t) => t.id === resourcePath);
-        return {
-          id: resourcePath,
-          label: getTestName(resourcePath),
-          status: test?.status ?? "pending",
-          time: test?.time ?? 0,
-        };
-      });
+      return listTests(simulator);
     }),
     "test.run": createProcedure
       .input(
@@ -103,37 +90,18 @@ export const createTestRouter = () => {
         }),
       )
       .mutation(async ({ input, ctx }) => {
-        const response = await runTest(
+        return await runTest(
           await ctx.simulator(),
           input.resourcePath,
           ctx.logger,
         );
-
-        const testsState = ctx.testsStateManager();
-        testsState.setTest({
-          id: input.resourcePath,
-          label: getTestName(input.resourcePath),
-          status: response.error ? "error" : "success",
-          time: response.time,
-        });
-
-        return response;
       }),
     "test.runAll": createProcedure.mutation(async ({ ctx }) => {
       const simulator = await ctx.simulator();
-      const testsState = ctx.testsStateManager();
-
       const testList = await listTests(simulator);
       const result: InternalTestResult[] = [];
       for (const resourcePath of testList) {
-        const response = await runTest(simulator, resourcePath, ctx.logger);
-        result.push(response);
-        testsState.setTest({
-          id: resourcePath,
-          label: getTestName(resourcePath),
-          status: response.error ? "error" : "success",
-          time: response.time,
-        });
+        result.push(await runTest(simulator, resourcePath, ctx.logger));
       }
 
       const testPassed = result.filter((r) => r.error === undefined);

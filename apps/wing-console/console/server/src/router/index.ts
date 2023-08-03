@@ -1,4 +1,4 @@
-import { mergeRouters, middleware } from "../utils/createRouter.js";
+import { mergeRouters } from "../utils/createRouter.js";
 
 import { createApiRouter } from "./api.js";
 import { createAppRouter } from "./app.js";

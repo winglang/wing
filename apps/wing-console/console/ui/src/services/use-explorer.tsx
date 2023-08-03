@@ -1,6 +1,6 @@
 import { ResourceIcon } from "@wingconsole/design-system";
 import { ExplorerItem } from "@wingconsole/server";
-import { useCallback, useEffect } from "react";
+import { useEffect } from "react";
 
 import { TreeMenuItem, useTreeMenuItems } from "../ui/use-tree-menu-items.js";
 
@@ -41,40 +41,13 @@ export const useExplorer = () => {
   });
 
   const tree = trpc["app.explorerTree"].useQuery();
-
-  const setSelectedNode = trpc["app.selectNode"].useMutation();
-  const selectedNode = trpc["app.selectedNode"].useQuery();
-
-  const onSelectedItemsChange = useCallback(
-    (selectedItems: string[]) => {
-      if (selectedItems.length === 0 || !selectedItems[0]) {
-        return;
-      }
-      setSelectedItems(selectedItems);
-      setSelectedNode.mutate({
-        resourcePath: selectedItems[0],
-      });
-    },
-    [setSelectedNode, setSelectedItems],
-  );
-
   useEffect(() => {
     if (!tree.data) {
       return;
     }
     setItems([createTreeMenuItemFromExplorerTreeItem(tree.data)]);
-
-    setSelectedNode.mutate({
-      resourcePath: "root",
-    });
-  }, [tree.data, setItems]);
-
-  useEffect(() => {
-    if (!selectedNode.data) {
-      return;
-    }
-    setSelectedItems([selectedNode.data]);
-  }, [selectedNode.data, setSelectedItems]);
+    setSelectedItems(["root"]);
+  }, [tree.data, setItems, setSelectedItems]);
 
   useEffect(() => {
     expandAll();
@@ -83,7 +56,7 @@ export const useExplorer = () => {
   return {
     items,
     selectedItems,
-    setSelectedItems: onSelectedItemsChange,
+    setSelectedItems,
     expandedItems,
     setExpandedItems,
     expand,

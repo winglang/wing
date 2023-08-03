@@ -10,7 +10,7 @@
     "inlineSourceMap": true,
     "inlineSources": true,
     "lib": [
-      "es2021"
+      "es2019"
     ],
     "module": "CommonJS",
     "noEmitOnError": false,
