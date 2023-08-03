@@ -106,7 +106,7 @@ exports[`topic with multiple subscribers 3`] = `
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "47205a7a13de539261d227d4cc2a215266d79777ddbec715181079e7c1f0155c.zip",
+          "S3Key": "11ca6e50b19d67cc0384225dfc640e5f6333d2aed875fe12aa9c517bde39740c.zip",
         },
         "Handler": "index.handler",
         "Role": {
@@ -191,7 +191,7 @@ exports[`topic with multiple subscribers 3`] = `
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "5ba6360e677201892eb22b02c9448f0be6a2eba551df9d95b12226f81615a0b9.zip",
+          "S3Key": "9e4bbeacac1fa631705a6f11c8112c95c304a704af2ee5bf9642e5831afdc694.zip",
         },
         "Handler": "index.handler",
         "Role": {
@@ -340,7 +340,7 @@ exports[`topic with subscriber function 2`] = `
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "f2d4efd862d8b99d6599b7cc376a8dbb7163c13e22d9d1024cf24c872a5cf799.zip",
+          "S3Key": "6a7bd7a896baf5ae1b05de3dbd1651bb4b7f702e418250016a73cf395de687a5.zip",
         },
         "Handler": "index.handler",
         "Role": {

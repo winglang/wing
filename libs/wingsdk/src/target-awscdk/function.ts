@@ -11,9 +11,8 @@ import { Construct } from "constructs";
 import * as cloud from "../cloud";
 import * as core from "../core";
 import { createBundle } from "../shared/bundling";
-import { PolicyStatement } from "../shared-aws";
-import { IInflightHost, TraceType } from "../std";
-import { FUNCTION_TYPE } from "../target-sim/schema-resources";
+import { PolicyStatement, _generateAwsFunctionLines } from "../shared-aws";
+import { IInflightHost } from "../std";
 
 /**
  * AWS implementation of `cloud.Function`.
@@ -80,31 +79,7 @@ export class Function extends cloud.Function {
    * @internal
    */
   protected _generateLines(inflightClient: core.Code): string[] {
-    const lines = new Array<string>();
-
-    lines.push("exports.handler = async function(event, context) {");
-    lines.push(`
-  const console_log = console.log.bind({});
-    
-  console.log = (...args) => {
-  const logs = args.map(item => ({
-    data: { message: item },
-    sourceType: "${FUNCTION_TYPE}",
-    sourcePath: context?.clientContext?.constructPath,
-    type: "${TraceType.LOG}",
-    timestamp: new Date().toISOString()
-    }));
-  !context.logs ? context.logs = [...logs] : context.logs.push(...logs);
-    
-  console_log(args);
-  };`);
-
-    lines.push(
-      `  return { payload: (await (${inflightClient.text}).handle(event)) ?? "", context };`
-    );
-    lines.push("};");
-
-    return lines;
+    return _generateAwsFunctionLines(inflightClient);
   }
 
   /** @internal */
