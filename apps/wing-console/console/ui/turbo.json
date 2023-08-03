@@ -4,6 +4,9 @@
   "pipeline": {
     "compile": {
       "outputs": ["dist/**"]
+    },
+    "package": {
+      "outputs": ["../../../../dist/wingconsole-ui-*.tgz"]
     }
   }
 }

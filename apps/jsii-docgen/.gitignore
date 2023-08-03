@@ -33,8 +33,6 @@ jspm_packages/
 /test-reports/
 junit.xml
 /coverage/
-/dist/changelog.md
-/dist/version.txt
 !/.prettierignore
 !/.prettierrc.json
 !/.npmrc

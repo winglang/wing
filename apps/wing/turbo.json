@@ -16,6 +16,9 @@
     },
     "compile": {
       "outputs": ["dist/**"]
+    },
+    "package": {
+      "outputs": ["../../dist/winglang-*.tgz"]
     }
   }
 }

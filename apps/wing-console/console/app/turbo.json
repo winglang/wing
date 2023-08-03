@@ -8,6 +8,9 @@
     },
     "test": {
       "dependsOn": ["compile"]
+    },
+    "package": {
+      "outputs": ["../../../../dist/wingconsole-app-*.tgz"]
     }
   }
 }

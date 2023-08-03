@@ -32,14 +32,32 @@
       "dependsOn": ["compile"]
     },
     "lint": {
-      "inputs": ["*.ts", "*.json", "*.toml", "*.lock", "src/**", "test/**"]
+      "inputs": [
+        "*.ts",
+        "*.js",
+        "*.cjs",
+        "*.json",
+        "*.toml",
+        "*.lock",
+        "src/**",
+        "test/**"
+      ]
     },
     "eslint": {
-      "inputs": ["*.ts", "*.json", "*.toml", "*.lock", "src/**", "test/**"]
+      "inputs": [
+        "*.ts",
+        "*.js",
+        "*.cjs",
+        "*.json",
+        "*.toml",
+        "*.lock",
+        "src/**",
+        "test/**"
+      ]
     },
     "package": {
       "dependsOn": ["compile", "post-compile"],
-      "cache": false
+      "env": ["PROJEN_BUMP_VERSION"]
     },
     "topo": {
       "dependsOn": ["^topo"]

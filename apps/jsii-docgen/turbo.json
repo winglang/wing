@@ -7,9 +7,6 @@
     },
     "test": {
       "dependsOn": ["compile"]
-    },
-    "package": {
-      "outputs": ["dist/**"]
     }
   }
 }
