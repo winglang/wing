@@ -1,5 +1,5 @@
 ---
-title: Overview
+title: RFC Workflow
 id: overview
 keywords: [rfcs, rfc, overview, process]
 ---
