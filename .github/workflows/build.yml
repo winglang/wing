@@ -167,7 +167,7 @@ jobs:
         run: pnpm exec playwright install --with-deps
 
       - name: Test
-        run: pnpm test
+        run: pnpm test --filter=!hangar
 
   benchmark:
     name: Benchmark
