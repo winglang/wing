@@ -14,6 +14,9 @@
     "compile": {
       "dependsOn": ["build:wasm"]
     },
+    "test": {
+      "dependsOn": ["build:generate"]
+    },
     "playground": {
       "dependsOn": ["build:wasm"],
       "persistent": true
