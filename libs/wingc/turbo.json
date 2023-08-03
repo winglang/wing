@@ -3,7 +3,10 @@
   "extends": ["//"],
   "pipeline": {
     "compile": {
-      "outputs": ["target/wasm32-wasi/release/wingc.wasm"]
+      "outputs": [
+        "../../target/wasm32-wasi/release/wingc.wasm",
+        "../../target/wasm32-wasi/release/libwingc.*"
+      ]
     },
     "test": {
       "dependsOn": ["compile", "examples-valid#topo", "examples-invalid#topo"],

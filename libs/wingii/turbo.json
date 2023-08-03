@@ -3,7 +3,7 @@
   "extends": ["//"],
   "pipeline": {
     "compile": {
-      "outputs": ["target/wasm32-wasi/release/libwingii.*"]
+      "outputs": ["../../target/wasm32-wasi/release/libwingii.*"]
     },
     "lint": {},
     "eslint": {
