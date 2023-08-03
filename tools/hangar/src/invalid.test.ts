@@ -30,7 +30,7 @@ invalidWingFiles.forEach((wingFile) => {
         // Remove absolute paths to wing files
         .replaceAll(relativeWingFile, relativeWingFile.replaceAll("\\", "/"))
         // Remove absolute paths to source code
-        .replaceAll(/(libs\/wingc.+\.rs):\d+:\d+/g, "$1:LINE:COL")
+        .replaceAll(/(src\/.+\.rs):\d+:\d+/g, "$1:LINE:COL")
         // Normalize line endings
         .replaceAll("\r\n", "\n");
 

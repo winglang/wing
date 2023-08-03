@@ -29,7 +29,7 @@ return class Handler {
     }
 };
 })())({
-function: new (require(\\"[REDACTED]/wingsdk/src/shared-aws/function.inflight\\")).FunctionClient(process.env[\\"FUNCTION_NAME_50735b21\\"])
+function: new (require(\\"[REDACTED]/wingsdk/src/shared-aws/function.inflight\\")).FunctionClient(process.env[\\"FUNCTION_NAME_50735b21\\"], \\"root/Default/Function1\\")
 })"
 `;
 

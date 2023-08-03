@@ -1,5 +1,5 @@
 ---
-title: Wing Plugins
+title: #3693 Wing Plugins (approved)
 description: How to implement wing plugins
 ---
 

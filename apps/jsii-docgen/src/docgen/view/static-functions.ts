@@ -1,7 +1,7 @@
 import * as reflect from "jsii-reflect";
+import { StaticFunction } from "./static-function";
 import { MethodSchema } from "../schema";
 import { Transpile } from "../transpile/transpile";
-import { StaticFunction } from "./static-function";
 
 export class StaticFunctions {
   private readonly staticFunctions: StaticFunction[];

@@ -809,6 +809,63 @@ Test Files 1 failed (1)
 Duration <DURATION>"
 `;
 
+exports[`function_variadic_definition.w 1`] = `
+"error: Unknown parser error
+   --> ../../../examples/tests/invalid/function_variadic_definition.w:15:13
+   |
+15 | f5(args: 1, 2);
+   |             ^ Unknown parser error
+
+
+error: Variadic parameters must always be the last parameter in a function.
+  --> ../../../examples/tests/invalid/function_variadic_definition.w:1:14
+  |
+1 | let f1 = (...args: Array<num>, x:num) => {};
+  |              ^^^^ Variadic parameters must always be the last parameter in a function.
+
+
+error: Variadic parameters must always be the last parameter in a function.
+  --> ../../../examples/tests/invalid/function_variadic_definition.w:4:14
+  |
+4 | let f2 = (...nums: Array<num>, ...strs: Array<str>) => {};
+  |              ^^^^ Variadic parameters must always be the last parameter in a function.
+
+
+error: Expected type to be num, but got bool instead.
+  --> ../../../examples/tests/invalid/function_variadic_definition.w:8:7
+  |
+8 | f3(1, true, 2);
+  |       ^^^^ Expected type to be num, but got bool instead.
+
+
+error: Variadic parameters must be type Array or MutArray.
+   --> ../../../examples/tests/invalid/function_variadic_definition.w:11:14
+   |
+11 | let f4 = (...args: Set<num>) => {};
+   |              ^^^^ Variadic parameters must be type Array or MutArray.
+
+
+error: No named arguments expected
+   --> ../../../examples/tests/invalid/function_variadic_definition.w:15:1
+   |
+15 | f5(args: 1, 2);
+   | ^^^^^^^^^^^^^^ No named arguments expected
+
+
+error: Expected type to be Bucket, but got bool instead.
+   --> ../../../examples/tests/invalid/function_variadic_definition.w:24:21
+   |
+24 | funcBucket(bucket1, true, bucket2);
+   |                     ^^^^ Expected type to be Bucket, but got bool instead.
+
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
+
 exports[`immutable_container_types.w 1`] = `
 "error: Unknown symbol \\"set\\"
   --> ../../../examples/tests/invalid/immutable_container_types.w:3:4
@@ -1509,11 +1566,11 @@ Duration <DURATION>"
 `;
 
 exports[`panic.w 1`] = `
-"error: Compiler bug (panicked at 'User invoked panic', libs/wingc/src/type_check.rs:LINE:COL) during type-checking, please report at https://www.winglang.io/contributing/start-here/bugs
+"error: Compiler bug (panicked at 'User invoked panic', src/type_check.rs:LINE:COL) during type-checking, please report at https://www.winglang.io/contributing/start-here/bugs
   --> ../../../examples/tests/invalid/panic.w:6:1
   |
 6 | 😱;
-  | ^^ Compiler bug (panicked at 'User invoked panic', libs/wingc/src/type_check.rs:LINE:COL) during type-checking, please report at https://www.winglang.io/contributing/start-here/bugs
+  | ^^ Compiler bug (panicked at 'User invoked panic', src/type_check.rs:LINE:COL) during type-checking, please report at https://www.winglang.io/contributing/start-here/bugs
 
 
  

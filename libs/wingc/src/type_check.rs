@@ -688,6 +688,7 @@ pub struct FunctionParameter {
 	pub name: String,
 	pub typeref: TypeRef,
 	pub docs: Docs,
+	pub variadic: bool,
 }
 
 #[derive(Clone, Debug)]
@@ -718,7 +719,7 @@ impl FunctionSignature {
 			.iter()
 			.rev()
 			// TODO - as a hack we treat `anything` arguments like optionals so that () => {} can be a subtype of (any) => {}
-			.take_while(|arg| arg.typeref.is_option() || arg.typeref.is_struct() || arg.typeref.is_anything())
+			.take_while(|arg| arg.typeref.is_option() || arg.typeref.is_struct() || arg.typeref.is_anything() || arg.variadic)
 			.count();
 
 		self.parameters.len() - num_optionals
@@ -2061,7 +2062,20 @@ impl<'a> TypeChecker<'a> {
 			.count();
 
 		// Verify arity
-		let arg_count = arg_list.pos_args.len() + (if arg_list.named_args.is_empty() { 0 } else { 1 });
+
+		// check if there is a variadic parameter, get its index
+		let variadic_index = func_sig.parameters.iter().position(|o| o.variadic);
+		let (index_last_item, arg_count) = if let Some(variadic_index) = variadic_index {
+			(
+				variadic_index,
+				(variadic_index + 1) + (if arg_list.named_args.is_empty() { 0 } else { 1 }),
+			)
+		} else {
+			(
+				arg_list_types.pos_args.len(),
+				(arg_list_types.pos_args.len()) + (if arg_list.named_args.is_empty() { 0 } else { 1 }),
+			)
+		};
 		let min_args = func_sig.parameters.len() - num_optionals;
 		let max_args = func_sig.parameters.len();
 		if arg_count < min_args || arg_count > max_args {
@@ -2080,10 +2094,41 @@ impl<'a> TypeChecker<'a> {
 			.iter()
 			.take(func_sig.parameters.len() - num_optionals);
 
-		// Verify passed positional arguments match the function's parameter types
-		for (arg_expr, arg_type, param) in izip!(arg_list.pos_args.iter(), arg_list_types.pos_args.iter(), params) {
-			self.validate_type(*arg_type, param.typeref, arg_expr);
-		}
+		if index_last_item == arg_list_types.pos_args.len() {
+			for (arg_expr, arg_type, param) in izip!(arg_list.pos_args.iter(), arg_list_types.pos_args.iter(), params) {
+				self.validate_type(*arg_type, param.typeref, arg_expr);
+			}
+		} else {
+			let mut new_arg_list: Vec<&Expr> = Vec::new();
+			let mut new_arg_list_types: Vec<TypeRef> = Vec::new();
+			for i in 0..index_last_item {
+				new_arg_list.push(arg_list.pos_args.get(i).unwrap());
+				new_arg_list_types.push(*arg_list_types.pos_args.get(i).unwrap());
+			}
+
+			let mut variadic_arg_list: Vec<&Expr> = Vec::new();
+			let variadic_arg_types = *arg_list_types.pos_args.get(index_last_item).unwrap();
+			for i in index_last_item..arg_list.pos_args.len() {
+				let variadic_arg = arg_list.pos_args.get(i).unwrap();
+				if !variadic_arg_types.is_same_type_as(arg_list_types.pos_args.get(i).unwrap()) {
+					let error = format!(
+						"Expected type to be {}, but got {} instead.",
+						variadic_arg_types,
+						arg_list_types.pos_args.get(i).unwrap()
+					);
+					self.spanned_error(&variadic_arg.span, error);
+				}
+				variadic_arg_list.push(variadic_arg);
+			}
+			let variadic_array_inner_type = *arg_list_types.pos_args.get(index_last_item).unwrap();
+			for (arg_expr, arg_type, param) in izip!(new_arg_list.iter(), new_arg_list_types.iter(), params) {
+				self.validate_type(*arg_type, param.typeref, *arg_expr);
+			}
+			// assert that each the extra args are of the same type as the variadic array type
+			for arg_expr in variadic_arg_list.iter() {
+				self.validate_type(variadic_array_inner_type, variadic_array_inner_type, *arg_expr);
+			}
+		};
 		None
 	}
 
@@ -2305,11 +2350,31 @@ impl<'a> TypeChecker<'a> {
 			}
 			TypeAnnotationKind::Function(ast_sig) => {
 				let mut parameters = vec![];
+				for i in 0..ast_sig.parameters.len() {
+					let p = ast_sig.parameters.get(i).unwrap();
+					if p.variadic && i != (ast_sig.parameters.len() - 1) {
+						self.spanned_error(
+							&ast_sig.parameters.get(i).unwrap().name.span,
+							"Variadic parameters must always be the last parameter in a function.".to_string(),
+						);
+					}
+
+					if p.variadic {
+						match &p.type_annotation.kind {
+							TypeAnnotationKind::Array(_) | TypeAnnotationKind::MutArray(_) => {}
+							_ => self.spanned_error(
+								&ast_sig.parameters.get(i).unwrap().name.span,
+								"Variadic parameters must be type Array or MutArray.".to_string(),
+							),
+						};
+					}
+				}
 				for p in ast_sig.parameters.iter() {
 					parameters.push(FunctionParameter {
 						name: p.name.name.clone(),
 						typeref: self.resolve_type_annotation(&p.type_annotation, env),
 						docs: Docs::default(),
+						variadic: p.variadic,
 					});
 				}
 				let sig = FunctionSignature {
@@ -3570,6 +3635,7 @@ impl<'a> TypeChecker<'a> {
 								name: param.name.clone(),
 								docs: param.docs.clone(),
 								typeref: self.get_concrete_type_for_generic(param.typeref, &types_map),
+								variadic: param.variadic,
 							})
 							.collect();
 
@@ -4557,6 +4623,7 @@ mod tests {
 				typeref: num,
 				docs: Docs::default(),
 				name: "p1".into(),
+				variadic: false,
 			}],
 			void,
 			Phase::Inflight,
@@ -4566,6 +4633,7 @@ mod tests {
 				typeref: string,
 				docs: Docs::default(),
 				name: "p1".into(),
+				variadic: false,
 			}],
 			void,
 			Phase::Inflight,
@@ -4604,6 +4672,7 @@ mod tests {
 				typeref: string,
 				docs: Docs::default(),
 				name: "p1".into(),
+				variadic: false,
 			}],
 			void,
 			Phase::Inflight,
@@ -4613,6 +4682,7 @@ mod tests {
 				typeref: opt_string,
 				docs: Docs::default(),
 				name: "p1".into(),
+				variadic: false,
 			}],
 			void,
 			Phase::Inflight,

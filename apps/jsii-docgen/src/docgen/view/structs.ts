@@ -1,8 +1,8 @@
 import * as reflect from "jsii-reflect";
-import { StructSchema } from "../schema";
-import { Transpile } from "../transpile/transpile";
 import { Interface } from "./interface";
 import { Struct } from "./struct";
+import { StructSchema } from "../schema";
+import { Transpile } from "../transpile/transpile";
 
 export class Structs {
   private readonly structs: Struct[];
