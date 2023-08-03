@@ -269,6 +269,7 @@ pub struct FunctionParameter {
 	pub name: Symbol,
 	pub type_annotation: TypeAnnotation,
 	pub reassignable: bool,
+	pub variadic: bool,
 }
 
 #[derive(Debug)]

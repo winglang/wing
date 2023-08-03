@@ -152,6 +152,7 @@ async function main() {
         .default("sim")
     )
     .option("-p, --plugins [plugin...]", "Compiler plugins")
+    .option("--no-clean", "Keep build output")
     .hook("preAction", progressHook)
     .hook("preAction", collectAnalyticsHook)
     .action(runSubCommand("test"));

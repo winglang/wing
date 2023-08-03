@@ -115,6 +115,25 @@ Test Files 1 passed (1)
 Duration 1m31.44s
 ```
 
+By default, the tested resources will be destroyed at the end of the test. You can use the `--no-clean` to keep them up. The path to the randomized directory containing the output files will be displayed at the end of the test.
+
+```sh
+% wing test example.w -t tf-aws --no-clean
+✔ Compiling example.w to tf-aws...
+✔ terraform init
+✔ terraform apply
+✔ Setting up test runner...
+✔ Running tests...
+pass ─ example.tfaws » root/Default/env0/test:bucket onCreate
+✔ terraform destroy
+Clean up is disabled!
+Output files available at /var/folders/1m/..../example.tfaws
+
+Tests 1 passed (1)
+Test Files 1 passed (1)
+Duration 1m31.44s
+```
+
 ### Running tests in the console
 
 Wing Console provides a straightforward method to run either a single test or all your tests.
