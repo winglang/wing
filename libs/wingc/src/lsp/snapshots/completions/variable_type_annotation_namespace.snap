@@ -149,25 +149,25 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct BucketOnCreateProps\n```\n---\nOn create event options."
+    value: "```wing\nstruct BucketOnCreateProps\n```\n---\n`onCreate` event options."
   sortText: hh|BucketOnCreateProps
 - label: BucketOnDeleteProps
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct BucketOnDeleteProps\n```\n---\nOn delete event options."
+    value: "```wing\nstruct BucketOnDeleteProps\n```\n---\n`onDelete` event options."
   sortText: hh|BucketOnDeleteProps
 - label: BucketOnEventProps
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct BucketOnEventProps\n```\n---\nOn any event options."
+    value: "```wing\nstruct BucketOnEventProps\n```\n---\n`onEvent` options."
   sortText: hh|BucketOnEventProps
 - label: BucketOnUpdateProps
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct BucketOnUpdateProps\n```\n---\nOn update event options."
+    value: "```wing\nstruct BucketOnUpdateProps\n```\n---\n`onUpdate` event options."
   sortText: hh|BucketOnUpdateProps
 - label: BucketProps
   kind: 22
