@@ -5,6 +5,9 @@ import * as fs from "fs-extra";
 import * as glob from "glob-promise";
 import * as reflect from "jsii-reflect";
 import { TargetLanguage } from "jsii-rosetta";
+import { Npm } from "./_npm";
+import { ApiReference } from "./api-reference";
+import { Readme } from "./readme";
 import { CorruptedAssemblyError, LanguageNotSupportedError } from "../..";
 import { Json } from "../render/json";
 import { MarkdownDocument } from "../render/markdown-doc";
@@ -20,9 +23,6 @@ import { PythonTranspile } from "../transpile/python";
 import { Transpile, Language } from "../transpile/transpile";
 import { TypeScriptTranspile } from "../transpile/typescript";
 import { WingTranspile } from "../transpile/wing";
-import { Npm } from "./_npm";
-import { ApiReference } from "./api-reference";
-import { Readme } from "./readme";
 
 // https://github.com/aws/jsii/blob/main/packages/jsii-reflect/lib/assembly.ts#L175
 const NOT_FOUND_IN_ASSEMBLY_REGEX =

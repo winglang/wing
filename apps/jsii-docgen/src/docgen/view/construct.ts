@@ -1,8 +1,8 @@
 import * as reflect from "jsii-reflect";
-import { ConstructSchema } from "../schema";
-import { Transpile } from "../transpile/transpile";
 import { Class } from "./class";
 import { Interface } from "./interface";
+import { ConstructSchema } from "../schema";
+import { Transpile } from "../transpile/transpile";
 
 export class Construct {
   private readonly construct: Class;

@@ -1,7 +1,7 @@
 import * as reflect from "jsii-reflect";
+import { Property } from "./property";
 import { PropertySchema } from "../schema";
 import { Transpile } from "../transpile/transpile";
-import { Property } from "./property";
 
 export class Constant {
   private readonly constant: Property;

@@ -1,0 +1,22 @@
+{
+  "$schema": "https://turborepo.org/schema.json",
+  "extends": ["//"],
+  "pipeline": {
+    "test:generate": {
+      "dependsOn": ["^package"],
+      "inputs": ["src/generate_tests.ts", "src/generated_test_targets.ts"],
+      "outputs": ["src/test_corpus/**"],
+      "cache": false
+    },
+    "test": {
+      "dependsOn": ["test:generate"],
+      "inputs": ["src/**"],
+      "cache": false
+    },
+    "bench": {
+      "dependsOn": ["^package"],
+      "inputs": ["src/**"],
+      "cache": false
+    }
+  }
+}

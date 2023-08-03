@@ -74,6 +74,14 @@
         }
       ]
     },
+    "dev": {
+      "name": "dev",
+      "steps": [
+        {
+          "exec": "node scripts/dev.mjs"
+        }
+      ]
+    },
     "eject": {
       "name": "eject",
       "description": "Remove projen from the project",

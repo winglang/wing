@@ -186,4 +186,6 @@ project.addFields({
 project.package.file.addDeletionOverride("pnpm");
 project.tryRemoveFile(".npmrc");
 
+project.addTask("dev").exec("node scripts/dev.mjs");
+
 project.synth();

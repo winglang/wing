@@ -55,7 +55,6 @@
     },
     {
       "name": "bump-pack",
-      "version": "workspace:^",
       "type": "build"
     },
     {
@@ -150,7 +149,6 @@
     },
     {
       "name": "wing-api-checker",
-      "version": "workspace:^",
       "type": "build"
     },
     {
