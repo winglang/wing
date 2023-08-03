@@ -70,11 +70,10 @@ export const TestTree = ({
                     label={
                       <div className="flex items-center gap-1">
                         <span className="truncate">{test.label}</span>
-                        {test.time && (
-                          <span className={classNames(theme.text2, "text-xs")}>
-                            {test.time}ms
-                          </span>
-                        )}
+
+                        <span className={classNames(theme.text2, "text-xs")}>
+                          {test.time && test.time > 0 ? `${test.time}ms` : ""}
+                        </span>
                       </div>
                     }
                     secondaryLabel={

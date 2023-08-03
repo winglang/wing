@@ -11,7 +11,7 @@ import { trpc } from "./services/trpc.js";
 export const Console = ({
   trpcUrl,
   wsUrl,
-  layout = LayoutType.Vscode,
+  layout = LayoutType.Default,
   title,
   theme,
   onTrace,
@@ -56,7 +56,7 @@ export const Console = ({
 
   let windowTitle = title ?? "Wing Console";
 
-  const appMode = layout === LayoutType.Vscode ? "local" : "remote";
+  const appMode = layout === LayoutType.Default ? "local" : "remote";
   return (
     <AppContext.Provider value={{ appMode, title: windowTitle }}>
       <trpc.Provider client={trpcClient} queryClient={queryClient}>

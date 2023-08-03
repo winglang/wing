@@ -58,6 +58,7 @@
         "devDependencies": [
           "**/test/**",
           "**/build-tools/**",
+          "src/**",
           ".projenrc.ts",
           "projenrc/**/*.ts"
         ],
