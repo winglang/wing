@@ -5,7 +5,7 @@
     "bump-pack": "workspace:^",
     "changelogen": "^0.5.3",
     "semver": "^7.3.8",
-    "turbo": "^1.10.7"
+    "turbo": "^1.10.12"
   },
   "scripts": {
     "compile": "turbo compile --filter=!hangar",
