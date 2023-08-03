@@ -249,6 +249,12 @@ class $Root extends $stdlib.std.Resource {
       {console.log(nice)};
       return true;
     });
+    const recursiveClosure = ((nice) => {
+      if (false) {
+        return (recursiveClosure(nice));
+      }
+    });
+    (recursiveClosure(2));
     const emptyArray = Object.freeze([]);
     const num_array = emptyArray;
     const emptyArray2 = Object.freeze([]);

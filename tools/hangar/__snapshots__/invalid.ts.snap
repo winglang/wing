@@ -827,73 +827,87 @@ Duration <DURATION>"
 
 exports[`inference.w 1`] = `
 "error: Missing required type annotation for method signature
-   --> ../../../examples/tests/invalid/inference.w:65:8
+   --> ../../../examples/tests/invalid/inference.w:79:8
    |
-65 |   args(nice) {
+79 |   args(nice) {
    |        ^^^^ Missing required type annotation for method signature
 
 
-error: Expected type to be \\"str\\", but got \\"num\\" instead
-   --> ../../../examples/tests/invalid/inference.w:18:19
+error: Expected type to be \\"num\\", but got \\"str\\" instead
+   --> ../../../examples/tests/invalid/inference.w:13:18
    |
-18 | stringArray2.push(2);
+13 | recursiveClosure(\\"\\");
+   |                  ^^ Expected type to be \\"num\\", but got \\"str\\" instead
+
+
+error: Expected type to be \\"str\\", but got \\"num\\" instead
+   --> ../../../examples/tests/invalid/inference.w:32:19
+   |
+32 | stringArray2.push(2);
    |                   ^ Expected type to be \\"str\\", but got \\"num\\" instead
 
 
 error: Expected type to be \\"num\\", but got \\"str\\" instead
-   --> ../../../examples/tests/invalid/inference.w:24:16
+   --> ../../../examples/tests/invalid/inference.w:38:16
    |
-24 | numArray2.push(\\"2\\");
+38 | numArray2.push(\\"2\\");
    |                ^^^ Expected type to be \\"num\\", but got \\"str\\" instead
 
 
 error: Expected type to be \\"num\\", but got \\"str\\" instead
-   --> ../../../examples/tests/invalid/inference.w:28:40
+   --> ../../../examples/tests/invalid/inference.w:42:40
    |
-28 | let dependentArray = [numArray2.at(0), stringArray2.at(1)];
+42 | let dependentArray = [numArray2.at(0), stringArray2.at(1)];
    |                                        ^^^^^^^^^^^^^^^^^^ Expected type to be \\"num\\", but got \\"str\\" instead
 
 
 error: Expected type to be \\"num\\", but got \\"str\\" instead
-   --> ../../../examples/tests/invalid/inference.w:31:60
+   --> ../../../examples/tests/invalid/inference.w:45:60
    |
-31 | let dependentMap = { \\"cool\\" => numArray2.at(0), \\"cool2\\" => stringArray2.at(1) };
+45 | let dependentMap = { \\"cool\\" => numArray2.at(0), \\"cool2\\" => stringArray2.at(1) };
    |                                                            ^^^^^^^^^^^^^^^^^^ Expected type to be \\"num\\", but got \\"str\\" instead
 
 
 error: Expected type to be \\"inflight (key: str, type: BucketEventType): void\\", but got \\"inflight (request: ApiRequest): ApiResponse\\" instead
-   --> ../../../examples/tests/invalid/inference.w:43:31
+   --> ../../../examples/tests/invalid/inference.w:57:31
    |
-43 | (new cloud.Bucket()).onCreate(func);
+57 | (new cloud.Bucket()).onCreate(func);
    |                               ^^^^ Expected type to be \\"inflight (key: str, type: BucketEventType): void\\", but got \\"inflight (request: ApiRequest): ApiResponse\\" instead
 
 
 error: Expected \\"Json\\" elements to be Json values (https://www.json.org/json-en.html), but got \\"Array<unknown>\\" which is not a Json value
-   --> ../../../examples/tests/invalid/inference.w:57:14
+   --> ../../../examples/tests/invalid/inference.w:71:14
    |
-57 | Json { cool: anotherEmptyArray };
+71 | Json { cool: anotherEmptyArray };
    |              ^^^^^^^^^^^^^^^^^ Expected \\"Json\\" elements to be Json values (https://www.json.org/json-en.html), but got \\"Array<unknown>\\" which is not a Json value
 
 
 error: Unexpected return value from void function. Return type annotations are required for methods.
-   --> ../../../examples/tests/invalid/inference.w:62:5
+   --> ../../../examples/tests/invalid/inference.w:76:5
    |
-62 |     return true;
+76 |     return true;
    |     ^^^^^^^^^^^^ Unexpected return value from void function. Return type annotations are required for methods.
 
 
 error: Property not found
-   --> ../../../examples/tests/invalid/inference.w:49:19
+   --> ../../../examples/tests/invalid/inference.w:63:19
    |
-49 |     body: request.body,
+63 |     body: request.body,
    |                   ^^^^ Property not found
 
 
 error: Unable to infer type
-   --> ../../../examples/tests/invalid/inference.w:46:23
+   --> ../../../examples/tests/invalid/inference.w:60:23
    |
-46 | let func2 = inflight (request) => {
+60 | let func2 = inflight (request) => {
    |                       ^^^^^^^ Unable to infer type
+
+
+error: Unable to infer type
+   --> ../../../examples/tests/invalid/inference.w:25:44
+   |
+25 | let stringInterpolationCannotBeInferred = (nice) => {
+   |                                            ^^^^ Unable to infer type
 
 
 error: Unable to infer type
@@ -904,38 +918,38 @@ error: Unable to infer type
 
 
 error: Unable to infer type
-   --> ../../../examples/tests/invalid/inference.w:55:5
+   --> ../../../examples/tests/invalid/inference.w:69:5
    |
-55 | let anotherEmptyArray = [];
+69 | let anotherEmptyArray = [];
    |     ^^^^^^^^^^^^^^^^^ Unable to infer type
 
 
 error: Unable to infer type
-   --> ../../../examples/tests/invalid/inference.w:12:5
+   --> ../../../examples/tests/invalid/inference.w:21:5
    |
-12 | let clonedArray = emptyArray.copyMut();
+21 | let clonedArray = emptyArray.copyMut();
    |     ^^^^^^^^^^^ Unable to infer type
 
 
 error: Unable to infer type
-  --> ../../../examples/tests/invalid/inference.w:7:5
-  |
-7 | let emptyArray = [];
-  |     ^^^^^^^^^^ Unable to infer type
+   --> ../../../examples/tests/invalid/inference.w:16:5
+   |
+16 | let emptyArray = [];
+   |     ^^^^^^^^^^ Unable to infer type
 
 
 error: Unable to infer type
-   --> ../../../examples/tests/invalid/inference.w:46:5
+   --> ../../../examples/tests/invalid/inference.w:60:5
    |
-46 | let func2 = inflight (request) => {
+60 | let func2 = inflight (request) => {
    |     ^^^^^ Unable to infer type
 
 
 error: Unable to infer type
-  --> ../../../examples/tests/invalid/inference.w:9:5
-  |
-9 | let numArray = emptyArray;
-  |     ^^^^^^^^ Unable to infer type
+   --> ../../../examples/tests/invalid/inference.w:18:5
+   |
+18 | let numArray = emptyArray;
+   |     ^^^^^^^^ Unable to infer type
 
 
 error: Unable to infer type
@@ -943,6 +957,13 @@ error: Unable to infer type
   |
 4 | let preflightClosureArgs = (nice) => { return true; };
   |     ^^^^^^^^^^^^^^^^^^^^ Unable to infer type
+
+
+error: Unable to infer type
+   --> ../../../examples/tests/invalid/inference.w:25:5
+   |
+25 | let stringInterpolationCannotBeInferred = (nice) => {
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Unable to infer type
 
 
  
