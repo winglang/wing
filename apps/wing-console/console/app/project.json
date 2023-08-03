@@ -5,19 +5,27 @@
   "targets": {
     "build": {
       "options": {
-        "command": "npm run compile",
+        "command": "pnpm compile",
+        "cwd": "apps/wing-console/console/app"
+      }
+    },
+    "install-playwright": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": ["pnpm playwright install --with-deps"],
         "cwd": "apps/wing-console/console/app"
       }
     },
     "test": {
+      "dependsOn": ["build", "install-playwright"],
       "options": {
-        "command": "npm run vitest",
+        "commands": ["pnpm test", "pnpm eslint"],
         "cwd": "apps/wing-console/console/app"
       }
     },
     "package": {
       "options": {
-        "command": "npm run package",
+        "command": "pnpm package",
         "cwd": "apps/wing-console/console/app"
       }
     }

@@ -2,19 +2,17 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ s1, s2 }) {
+module.exports = function({ $__s1_split_______at_1__, $_s1_concat_s2__, $s1_indexOf__s__ }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      {console.log(String.raw({ raw: ["index of \"s\" in s1 is ", ""] }, s1.indexOf("s")))};
-      {console.log((await (await s1.split(" ")).at(1)))};
-      {console.log((await s1.concat(s2)))};
+    async handle() {
+      {console.log(String.raw({ raw: ["index of \"s\" in s1 is ", ""] }, $s1_indexOf__s__))};
+      {console.log($__s1_split_______at_1__)};
+      {console.log($_s1_concat_s2__)};
     }
   }
   return $Closure1;
@@ -29,7 +27,7 @@ module.exports = function({ s1, s2 }) {
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.2"
+      "version": "0.17.0"
     },
     "outputs": {
       "root": {
@@ -43,7 +41,7 @@ module.exports = function({ s1, s2 }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:string\",\"${aws_lambda_function.root_teststring_Handler_0FEC3C02.arn}\"]]"
+      "value": "[[\"root/Default/Default/test:string\",\"${aws_lambda_function.teststring_Handler_2FEE704D.arn}\"]]"
     }
   },
   "provider": {
@@ -53,46 +51,46 @@ module.exports = function({ s1, s2 }) {
   },
   "resource": {
     "aws_iam_role": {
-      "root_teststring_Handler_IamRole_5A8EA2E8": {
+      "teststring_Handler_IamRole_4BEC53AF": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:string/Handler/IamRole",
-            "uniqueId": "root_teststring_Handler_IamRole_5A8EA2E8"
+            "uniqueId": "teststring_Handler_IamRole_4BEC53AF"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
-      "root_teststring_Handler_IamRolePolicy_6CA5C6A2": {
+      "teststring_Handler_IamRolePolicy_A9C266F9": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:string/Handler/IamRolePolicy",
-            "uniqueId": "root_teststring_Handler_IamRolePolicy_6CA5C6A2"
+            "uniqueId": "teststring_Handler_IamRolePolicy_A9C266F9"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
-        "role": "${aws_iam_role.root_teststring_Handler_IamRole_5A8EA2E8.name}"
+        "role": "${aws_iam_role.teststring_Handler_IamRole_4BEC53AF.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
-      "root_teststring_Handler_IamRolePolicyAttachment_FACB7AC7": {
+      "teststring_Handler_IamRolePolicyAttachment_5EFE3004": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:string/Handler/IamRolePolicyAttachment",
-            "uniqueId": "root_teststring_Handler_IamRolePolicyAttachment_FACB7AC7"
+            "uniqueId": "teststring_Handler_IamRolePolicyAttachment_5EFE3004"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.root_teststring_Handler_IamRole_5A8EA2E8.name}"
+        "role": "${aws_iam_role.teststring_Handler_IamRole_4BEC53AF.name}"
       }
     },
     "aws_lambda_function": {
-      "root_teststring_Handler_0FEC3C02": {
+      "teststring_Handler_2FEE704D": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:string/Handler/Default",
-            "uniqueId": "root_teststring_Handler_0FEC3C02"
+            "uniqueId": "teststring_Handler_2FEE704D"
           }
         },
         "environment": {
@@ -104,10 +102,10 @@ module.exports = function({ s1, s2 }) {
         "function_name": "Handler-c8a1f7f0",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.root_teststring_Handler_IamRole_5A8EA2E8.arn}",
+        "role": "${aws_iam_role.teststring_Handler_IamRole_4BEC53AF.arn}",
         "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
-        "s3_key": "${aws_s3_object.root_teststring_Handler_S3Object_01023DE4.key}",
+        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
+        "s3_key": "${aws_s3_object.teststring_Handler_S3Object_F47B31DA.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -116,25 +114,25 @@ module.exports = function({ s1, s2 }) {
       }
     },
     "aws_s3_bucket": {
-      "root_Code_02F3C603": {
+      "Code": {
         "//": {
           "metadata": {
             "path": "root/Default/Code",
-            "uniqueId": "root_Code_02F3C603"
+            "uniqueId": "Code"
           }
         },
         "bucket_prefix": "code-c84a50b1-"
       }
     },
     "aws_s3_object": {
-      "root_teststring_Handler_S3Object_01023DE4": {
+      "teststring_Handler_S3Object_F47B31DA": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:string/Handler/S3Object",
-            "uniqueId": "root_teststring_Handler_S3Object_01023DE4"
+            "uniqueId": "teststring_Handler_S3Object_F47B31DA"
           }
         },
-        "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
+        "bucket": "${aws_s3_bucket.Code.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       }
@@ -149,24 +147,21 @@ const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
-const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
+        this._addInflightOps("handle", "$inflight_init");
         this.display.hidden = true;
-        this._addInflightOps("handle");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const s1_client = context._lift(s1);
-        const s2_client = context._lift(s2);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            s1: ${s1_client},
-            s2: ${s2_client},
+          require("./inflight.$Closure1.js")({
+            $__s1_split_______at_1__: ${context._lift(((s1.split(" ")).at(1)))},
+            $_s1_concat_s2__: ${context._lift((s1.concat(s2)))},
+            $s1_indexOf__s__: ${context._lift(s1.indexOf("s"))},
           })
         `);
       }
@@ -182,54 +177,37 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure1._registerBindObject(s1, host, []);
-          $Closure1._registerBindObject(s2, host, []);
-        }
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(s1, host, []);
-          $Closure1._registerBindObject(s2, host, []);
+          $Closure1._registerBindObject(((s1.split(" ")).at(1)), host, []);
+          $Closure1._registerBindObject((s1.concat(s2)), host, []);
+          $Closure1._registerBindObject(s1.indexOf("s"), host, []);
         }
         super._registerBind(host, ops);
       }
     }
     const s1 = "some string";
     const s2 = "s are immutable";
-    {((cond) => {if (!cond) throw new Error("assertion failed: s1.length == 11")})((s1.length === 11))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: s1.at(7) == \"r\"")})(((s1.at(7)) === "r"))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: s1.concat(s2) == \"some strings are immutable\"")})(((s1.concat(s2)) === "some strings are immutable"))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: s1.length == 11")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(s1.length,11)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: s1.at(7) == \"r\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((args) => { if (7 >= s1.length || 7 + s1.length < 0) {throw new Error("index out of bounds")}; return s1.at(7) })(7),"r")))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: s1.concat(s2) == \"some strings are immutable\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((s1.concat(s2)),"some strings are immutable")))};
     {((cond) => {if (!cond) throw new Error("assertion failed: s1.contains(\"some\")")})(s1.includes("some"))};
     {((cond) => {if (!cond) throw new Error("assertion failed: !\"some\".contains(s1)")})((!"some".includes(s1)))};
     {((cond) => {if (!cond) throw new Error("assertion failed: s1.endsWith(\"string\")")})(s1.endsWith("string"))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: s1.indexOf(\"s\") == 0")})((s1.indexOf("s") === 0))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: \"Some String\".lowercase() == \"some string\"")})(("Some String".toLocaleLowerCase() === "some string"))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: s1.split(\" \").at(0) == \"some\"")})((((s1.split(" ")).at(0)) === "some"))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: s1.indexOf(\"s\") == 0")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(s1.indexOf("s"),0)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: \"Some String\".lowercase() == \"some string\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })("Some String".toLocaleLowerCase(),"some string")))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: s1.split(\" \").at(0) == \"some\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((s1.split(" ")).at(0)),"some")))};
     {((cond) => {if (!cond) throw new Error("assertion failed: s1.startsWith(\"some\")")})(s1.startsWith("some"))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: s1.substring(5) == \"string\"")})(((s1.substring(5)) === "string"))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: s1.substring(5, 7) == \"st\"")})(((s1.substring(5,7)) === "st"))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: \"   some string   \".trim() == \"some string\"")})((("   some string   ".trim()) === "some string"))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: \"Some String\".uppercase() == \"SOME STRING\"")})(("Some String".toLocaleUpperCase() === "SOME STRING"))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: \"hello\" + \" world\" == \"hello world\"")})((("hello" + " world") === "hello world"))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: \n\"hello ${\"funky\"}\n world\" == \"hello funky\\n world\"")})((String.raw({ raw: ["hello ", "\n world"] }, "funky") === "hello funky\n world"))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: s1.substring(5) == \"string\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((s1.substring(5)),"string")))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: s1.substring(5, 7) == \"st\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((s1.substring(5,7)),"st")))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: \"   some string   \".trim() == \"some string\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(("   some string   ".trim()),"some string")))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: \"Some String\".uppercase() == \"SOME STRING\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })("Some String".toLocaleUpperCase(),"SOME STRING")))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: \"hello\" + \" world\" == \"hello world\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(("hello" + " world"),"hello world")))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: \n\"hello ${\"funky\"}\n world\" == \"hello funky\\n world\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(String.raw({ raw: ["hello ", "\n world"] }, "funky"),"hello funky\n world")))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:string",new $Closure1(this,"$Closure1"));
   }
 }
-class $App extends $AppBase {
-  constructor() {
-    super({ outdir: $outdir, name: "std_string", plugins: $plugins, isTestEnvironment: $wing_is_test });
-    if ($wing_is_test) {
-      new $Root(this, "env0");
-      const $test_runner = this.testRunner;
-      const $tests = $test_runner.findTests();
-      for (let $i = 1; $i < $tests.length; $i++) {
-        new $Root(this, "env" + $i);
-      }
-    } else {
-      new $Root(this, "Default");
-    }
-  }
-}
-new $App().synth();
+const $App = $stdlib.core.App.for(process.env.WING_TARGET);
+new $App({ outdir: $outdir, name: "std_string", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test }).synth();
 
 ```
 

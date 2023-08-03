@@ -5,16 +5,17 @@ description: "Wing's two execution phases: preflight and inflight"
 keywords: [Inflights, Inflight functions, Preflight, Preflight code]
 ---
 
-Wing has two execution phases:
+> This content is also available in an [interactive tutorial](https://www.winglang.io/learn/preflight-inflight)
 
-- **preflight**: code that runs once, at compile time, to generate the infrastructure configuration of your cloud application. For example, setting up databases, queues, storage buckets, API endpoints, etc.
-- **inflight**: code that runs at runtime to perform your application logic. For example, handling API requests, processing queue messages, etc. Inflight code can be executed on compute platforms in the cloud, such as function services (lambda), containers, VMs or physical servers.
+One of the main differences between Wing and other languages is that it unifies both infrastructure definitions and application logic under the same programming model. 
+This is enabled by the concepts of the *preflight* and *inflight* execution phases:
 
-One of the main differences between Wing and other languages is that it unifies both execution phases under the same programming model, through the concepts of preflight code and inflight code.
+- **Preflight**: Code that runs once, at compile time, and generates the infrastructure configuration of your cloud application. For example, setting up databases, queues, storage buckets, API endpoints, etc.
+- **Inflight**: Code that runs at runtime and implements your application's behavior. For example, handling API requests, processing queue messages, etc. Inflight code can be executed on various compute platforms in the cloud, such as function services (such as AWS Lambda or Azure Functions), containers (such as ECS or Kubernetes), VMs or even physical servers.
 
 ## Preflight code
 
-Preflight code is code that runs once, at compile time, to generate the app's infrastructure configuration.
+Your preflight code runs once, at compile time, and defines your application's infrastructure configuration. This configuration is then consumed by an infrastructure provisioning engine such as Terraform, CloudFormation, Pulumi or Kubernetes.
 
 For example, this code snippet defines a storage bucket using a class from the standard library:
 
@@ -47,7 +48,7 @@ bucket.addObject("file1.txt", "Hello world!");
 There are a few global functions with specific behaviors in preflight.
 For example, adding a `log()` statement to your preflight code will result in Wing printing the string to the console after compilation.
 
-```js playground
+```js
 // hello.w
 log("7 * 6 = ${7 * 6}");
 ```
@@ -79,7 +80,7 @@ Let's walk through some examples.
 
 Inflight code is always contained inside a block that starts with the word `inflight`.
 
-```js playground
+```js
 let greeting = inflight () => {
   log("Hello from the cloud!");
 };
@@ -122,7 +123,7 @@ Today, inflights are typically compiled into JavaScript, but Wing may also be ab
 Inflight code cannot be executed during preflight, because inflight APIs assume all resources have already been deployed.
 
 ```js
-firstObject(); // error: method "firstObject" cannot be called in preflight phase
+firstObject(); // error: Cannot call into inflight phase while preflight
 ```
 
 Likewise, inflight code cannot call preflight code, because preflight code has the capability to modify your application's infrastructure configuration, which is disallowed after deployment.
@@ -134,7 +135,7 @@ bring cloud;
 let bucket = new cloud.Bucket();
 
 let saveCalculation = inflight () => {
-  bucket.addObject("file1", "${2 ** 10}"); // error: method "addObject" cannot be called in inflight phase
+  bucket.addObject("file1", "${2 ** 10}"); // error: Cannot call into preflight phase while inflight
 };
 ```
 
@@ -146,7 +147,7 @@ Since a class's initializer is just a special kind of preflight function, it als
 bring cloud;
 
 inflight () => {
-  new cloud.Bucket(); // error: preflight class "Bucket" cannot be created in inflight
+  new cloud.Bucket(); // error: Cannot create preflight class "Bucket" in inflight phase
 };
 ```
 
@@ -159,6 +160,8 @@ Here's a class that models a queue that can replay its messages.
 A `cloud.Bucket` stores the history of messages, and a `cloud.Counter` helps with sequencing each new message as it's added to the queue.
 
 ```js playground
+bring cloud;
+
 class ReplayableQueue {
   queue: cloud.Queue;
   bucket: cloud.Bucket; 
@@ -185,6 +188,8 @@ class ReplayableQueue {
     }
   }
 }
+
+let rq = new ReplayableQueue();
 ```
 
 It's also possible to define inflight classes.
@@ -197,9 +202,9 @@ For example, this inflight class can be created in an inflight contexts, and its
 inflight () => {
   class Person {
     name: str;
-    age: int;
+    age: num;
 
-    init(name: str, age: int) {
+    init(name: str, age: num) {
       this.name = name;
       this.age = age;
     }
@@ -221,7 +226,7 @@ While inflight code can't call preflight code, it's perfectly ok to reference da
 For example, the `cloud.Api` class has a preflight field named `url`.
 Since it's a piece of static data, it can be directly referenced inflight:
 
-```js playground
+```js
 bring cloud;
 bring http;
 
@@ -253,8 +258,9 @@ count = count + 1; // OK
 names.push("Jack"); // OK
 
 inflight () => {
-  count = count + 1; // error: variable "count" cannot be reassigned in inflight
-  names.push("Jill"); // error: variable "names" cannot be mutated in inflight
+  count = count + 1; // error: Variable cannot be reassigned from inflight
+  names.push("Jill"); // error: variable "names" cannot be mutated in inflight - error message not 
+                      // implemented yet, see https://github.com/winglang/wing/issues/3069
 };
 ```
 

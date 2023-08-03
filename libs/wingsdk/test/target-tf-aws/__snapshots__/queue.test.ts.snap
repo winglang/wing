@@ -9,7 +9,7 @@ exports[`default queue behavior 1`] = `
   },
   \\"resource\\": {
     \\"aws_sqs_queue\\": {
-      \\"root_Queue_7193B145\\": {
+      \\"Queue\\": {
         \\"name\\": \\"Queue-c822c726\\"
       }
     }
@@ -33,7 +33,7 @@ exports[`default queue behavior 2`] = `
                   "Default": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.15.2",
+                      "version": "0.17.0",
                     },
                     "id": "Default",
                     "path": "root/Default/Queue/Default",
@@ -53,7 +53,7 @@ exports[`default queue behavior 2`] = `
               "aws": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.15.2",
+                  "version": "0.17.0",
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
@@ -66,7 +66,7 @@ exports[`default queue behavior 2`] = `
                   "TestFunctionArns": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformOutput",
-                      "version": "0.15.2",
+                      "version": "0.17.0",
                     },
                     "id": "TestFunctionArns",
                     "path": "root/Default/cloud.TestRunner/TestFunctionArns",
@@ -95,7 +95,7 @@ exports[`default queue behavior 2`] = `
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.15.2",
+              "version": "0.17.0",
             },
             "id": "backend",
             "path": "root/backend",
@@ -103,7 +103,7 @@ exports[`default queue behavior 2`] = `
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.15.2",
+          "version": "0.17.0",
         },
         "id": "root",
         "path": "root",
@@ -111,7 +111,7 @@ exports[`default queue behavior 2`] = `
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.15.2",
+      "version": "0.17.0",
     },
     "id": "App",
     "path": "",
@@ -129,7 +129,7 @@ exports[`queue name valid 1`] = `
   },
   \\"resource\\": {
     \\"aws_sqs_queue\\": {
-      \\"root_TheIncredibleQueue01_032AFBF2\\": {
+      \\"The-Incredible_Queue-01\\": {
         \\"name\\": \\"The-Incredible_Queue-01-c8d1a14d\\"
       }
     }
@@ -153,7 +153,7 @@ exports[`queue name valid 2`] = `
                   "Default": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.15.2",
+                      "version": "0.17.0",
                     },
                     "id": "Default",
                     "path": "root/Default/The-Incredible_Queue-01/Default",
@@ -173,7 +173,7 @@ exports[`queue name valid 2`] = `
               "aws": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.15.2",
+                  "version": "0.17.0",
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
@@ -186,7 +186,7 @@ exports[`queue name valid 2`] = `
                   "TestFunctionArns": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformOutput",
-                      "version": "0.15.2",
+                      "version": "0.17.0",
                     },
                     "id": "TestFunctionArns",
                     "path": "root/Default/cloud.TestRunner/TestFunctionArns",
@@ -215,7 +215,7 @@ exports[`queue name valid 2`] = `
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.15.2",
+              "version": "0.17.0",
             },
             "id": "backend",
             "path": "root/backend",
@@ -223,7 +223,7 @@ exports[`queue name valid 2`] = `
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.15.2",
+          "version": "0.17.0",
         },
         "id": "root",
         "path": "root",
@@ -231,7 +231,7 @@ exports[`queue name valid 2`] = `
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.15.2",
+      "version": "0.17.0",
     },
     "id": "App",
     "path": "",
@@ -251,31 +251,31 @@ exports[`queue with a consumer function 2`] = `
   },
   \\"resource\\": {
     \\"aws_iam_role\\": {
-      \\"root_QueueSetConsumerc5395e41_IamRole_6967FE84\\": {
+      \\"Queue-SetConsumer-c5395e41_IamRole_75E61A87\\": {
         \\"assume_role_policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":\\\\\\"sts:AssumeRole\\\\\\",\\\\\\"Principal\\\\\\":{\\\\\\"Service\\\\\\":\\\\\\"lambda.amazonaws.com\\\\\\"},\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\"
       }
     },
     \\"aws_iam_role_policy\\": {
-      \\"root_QueueSetConsumerc5395e41_IamRolePolicy_AF589C3F\\": {
-        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":[\\\\\\"sqs:ReceiveMessage\\\\\\",\\\\\\"sqs:ChangeMessageVisibility\\\\\\",\\\\\\"sqs:GetQueueUrl\\\\\\",\\\\\\"sqs:DeleteMessage\\\\\\",\\\\\\"sqs:GetQueueAttributes\\\\\\"],\\\\\\"Resource\\\\\\":[\\\\\\"\${aws_sqs_queue.root_Queue_7193B145.arn}\\\\\\"],\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\",
-        \\"role\\": \\"\${aws_iam_role.root_QueueSetConsumerc5395e41_IamRole_6967FE84.name}\\"
+      \\"Queue-SetConsumer-c5395e41_IamRolePolicy_489AB5A9\\": {
+        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":[\\\\\\"sqs:ReceiveMessage\\\\\\",\\\\\\"sqs:ChangeMessageVisibility\\\\\\",\\\\\\"sqs:GetQueueUrl\\\\\\",\\\\\\"sqs:DeleteMessage\\\\\\",\\\\\\"sqs:GetQueueAttributes\\\\\\"],\\\\\\"Resource\\\\\\":[\\\\\\"\${aws_sqs_queue.Queue.arn}\\\\\\"],\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\",
+        \\"role\\": \\"\${aws_iam_role.Queue-SetConsumer-c5395e41_IamRole_75E61A87.name}\\"
       }
     },
     \\"aws_iam_role_policy_attachment\\": {
-      \\"root_QueueSetConsumerc5395e41_IamRolePolicyAttachment_D12693FB\\": {
+      \\"Queue-SetConsumer-c5395e41_IamRolePolicyAttachment_FD666537\\": {
         \\"policy_arn\\": \\"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole\\",
-        \\"role\\": \\"\${aws_iam_role.root_QueueSetConsumerc5395e41_IamRole_6967FE84.name}\\"
+        \\"role\\": \\"\${aws_iam_role.Queue-SetConsumer-c5395e41_IamRole_75E61A87.name}\\"
       }
     },
     \\"aws_lambda_event_source_mapping\\": {
-      \\"root_Queue_EventSourceMapping_A20C741D\\": {
+      \\"Queue_EventSourceMapping_8332F7DC\\": {
         \\"batch_size\\": 1,
-        \\"event_source_arn\\": \\"\${aws_sqs_queue.root_Queue_7193B145.arn}\\",
-        \\"function_name\\": \\"\${aws_lambda_function.root_QueueSetConsumerc5395e41_27F87AD5.function_name}\\"
+        \\"event_source_arn\\": \\"\${aws_sqs_queue.Queue.arn}\\",
+        \\"function_name\\": \\"\${aws_lambda_function.Queue-SetConsumer-c5395e41.function_name}\\"
       }
     },
     \\"aws_lambda_function\\": {
-      \\"root_QueueSetConsumerc5395e41_27F87AD5\\": {
+      \\"Queue-SetConsumer-c5395e41\\": {
         \\"environment\\": {
           \\"variables\\": {
             \\"WING_FUNCTION_NAME\\": \\"Queue-SetConsumer-c5395e41-c80c3bf7\\"
@@ -284,10 +284,10 @@ exports[`queue with a consumer function 2`] = `
         \\"function_name\\": \\"Queue-SetConsumer-c5395e41-c80c3bf7\\",
         \\"handler\\": \\"index.handler\\",
         \\"publish\\": true,
-        \\"role\\": \\"\${aws_iam_role.root_QueueSetConsumerc5395e41_IamRole_6967FE84.arn}\\",
+        \\"role\\": \\"\${aws_iam_role.Queue-SetConsumer-c5395e41_IamRole_75E61A87.arn}\\",
         \\"runtime\\": \\"nodejs18.x\\",
-        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Code_02F3C603.bucket}\\",
-        \\"s3_key\\": \\"\${aws_s3_object.root_QueueSetConsumerc5395e41_S3Object_DA7F3CB4.key}\\",
+        \\"s3_bucket\\": \\"\${aws_s3_bucket.Code.bucket}\\",
+        \\"s3_key\\": \\"\${aws_s3_object.Queue-SetConsumer-c5395e41_S3Object_D8D7B631.key}\\",
         \\"timeout\\": 30,
         \\"vpc_config\\": {
           \\"security_group_ids\\": [],
@@ -296,19 +296,19 @@ exports[`queue with a consumer function 2`] = `
       }
     },
     \\"aws_s3_bucket\\": {
-      \\"root_Code_02F3C603\\": {
+      \\"Code\\": {
         \\"bucket_prefix\\": \\"code-c84a50b1-\\"
       }
     },
     \\"aws_s3_object\\": {
-      \\"root_QueueSetConsumerc5395e41_S3Object_DA7F3CB4\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.root_Code_02F3C603.bucket}\\",
+      \\"Queue-SetConsumer-c5395e41_S3Object_D8D7B631\\": {
+        \\"bucket\\": \\"\${aws_s3_bucket.Code.bucket}\\",
         \\"key\\": \\"<key>\\",
         \\"source\\": \\"<source>\\"
       }
     },
     \\"aws_sqs_queue\\": {
-      \\"root_Queue_7193B145\\": {
+      \\"Queue\\": {
         \\"name\\": \\"Queue-c822c726\\",
         \\"visibility_timeout_seconds\\": 30
       }
@@ -328,7 +328,7 @@ exports[`queue with a consumer function 3`] = `
               "Code": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformResource",
-                  "version": "0.15.2",
+                  "version": "0.17.0",
                 },
                 "id": "Code",
                 "path": "root/Default/Code",
@@ -340,6 +340,12 @@ exports[`queue with a consumer function 3`] = `
                       "direction": "inbound",
                       "implicit": false,
                       "relationship": "handle",
+                      "resource": "root/Default/Queue-SetConsumer-c5395e41",
+                    },
+                    {
+                      "direction": "inbound",
+                      "implicit": false,
+                      "relationship": "$inflight_init",
                       "resource": "root/Default/Queue-SetConsumer-c5395e41",
                     },
                   ],
@@ -371,7 +377,7 @@ exports[`queue with a consumer function 3`] = `
                   "Default": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.15.2",
+                      "version": "0.17.0",
                     },
                     "id": "Default",
                     "path": "root/Default/Queue/Default",
@@ -379,7 +385,7 @@ exports[`queue with a consumer function 3`] = `
                   "EventSourceMapping": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.15.2",
+                      "version": "0.17.0",
                     },
                     "id": "EventSourceMapping",
                     "path": "root/Default/Queue/EventSourceMapping",
@@ -406,6 +412,12 @@ exports[`queue with a consumer function 3`] = `
                       "resource": "root/Default/Handler",
                     },
                     {
+                      "direction": "outbound",
+                      "implicit": false,
+                      "relationship": "$inflight_init",
+                      "resource": "root/Default/Handler",
+                    },
+                    {
                       "direction": "inbound",
                       "implicit": false,
                       "relationship": "setConsumer",
@@ -417,7 +429,7 @@ exports[`queue with a consumer function 3`] = `
                   "Asset": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformAsset",
-                      "version": "0.15.2",
+                      "version": "0.17.0",
                     },
                     "id": "Asset",
                     "path": "root/Default/Queue-SetConsumer-c5395e41/Asset",
@@ -425,7 +437,7 @@ exports[`queue with a consumer function 3`] = `
                   "Default": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.15.2",
+                      "version": "0.17.0",
                     },
                     "id": "Default",
                     "path": "root/Default/Queue-SetConsumer-c5395e41/Default",
@@ -433,7 +445,7 @@ exports[`queue with a consumer function 3`] = `
                   "IamRole": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.15.2",
+                      "version": "0.17.0",
                     },
                     "id": "IamRole",
                     "path": "root/Default/Queue-SetConsumer-c5395e41/IamRole",
@@ -441,7 +453,7 @@ exports[`queue with a consumer function 3`] = `
                   "IamRolePolicy": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.15.2",
+                      "version": "0.17.0",
                     },
                     "id": "IamRolePolicy",
                     "path": "root/Default/Queue-SetConsumer-c5395e41/IamRolePolicy",
@@ -449,7 +461,7 @@ exports[`queue with a consumer function 3`] = `
                   "IamRolePolicyAttachment": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.15.2",
+                      "version": "0.17.0",
                     },
                     "id": "IamRolePolicyAttachment",
                     "path": "root/Default/Queue-SetConsumer-c5395e41/IamRolePolicyAttachment",
@@ -457,7 +469,7 @@ exports[`queue with a consumer function 3`] = `
                   "S3Object": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.15.2",
+                      "version": "0.17.0",
                     },
                     "id": "S3Object",
                     "path": "root/Default/Queue-SetConsumer-c5395e41/S3Object",
@@ -491,7 +503,7 @@ exports[`queue with a consumer function 3`] = `
               "aws": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.15.2",
+                  "version": "0.17.0",
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
@@ -504,7 +516,7 @@ exports[`queue with a consumer function 3`] = `
                   "TestFunctionArns": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformOutput",
-                      "version": "0.15.2",
+                      "version": "0.17.0",
                     },
                     "id": "TestFunctionArns",
                     "path": "root/Default/cloud.TestRunner/TestFunctionArns",
@@ -533,7 +545,7 @@ exports[`queue with a consumer function 3`] = `
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.15.2",
+              "version": "0.17.0",
             },
             "id": "backend",
             "path": "root/backend",
@@ -541,7 +553,7 @@ exports[`queue with a consumer function 3`] = `
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.15.2",
+          "version": "0.17.0",
         },
         "id": "root",
         "path": "root",
@@ -549,7 +561,7 @@ exports[`queue with a consumer function 3`] = `
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.15.2",
+      "version": "0.17.0",
     },
     "id": "App",
     "path": "",
@@ -567,7 +579,7 @@ exports[`queue with custom retention 1`] = `
   },
   \\"resource\\": {
     \\"aws_sqs_queue\\": {
-      \\"root_Queue_7193B145\\": {
+      \\"Queue\\": {
         \\"message_retention_seconds\\": 1800,
         \\"name\\": \\"Queue-c822c726\\"
       }
@@ -592,7 +604,7 @@ exports[`queue with custom retention 2`] = `
                   "Default": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.15.2",
+                      "version": "0.17.0",
                     },
                     "id": "Default",
                     "path": "root/Default/Queue/Default",
@@ -612,7 +624,7 @@ exports[`queue with custom retention 2`] = `
               "aws": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.15.2",
+                  "version": "0.17.0",
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
@@ -625,7 +637,7 @@ exports[`queue with custom retention 2`] = `
                   "TestFunctionArns": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformOutput",
-                      "version": "0.15.2",
+                      "version": "0.17.0",
                     },
                     "id": "TestFunctionArns",
                     "path": "root/Default/cloud.TestRunner/TestFunctionArns",
@@ -654,7 +666,7 @@ exports[`queue with custom retention 2`] = `
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.15.2",
+              "version": "0.17.0",
             },
             "id": "backend",
             "path": "root/backend",
@@ -662,7 +674,7 @@ exports[`queue with custom retention 2`] = `
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.15.2",
+          "version": "0.17.0",
         },
         "id": "root",
         "path": "root",
@@ -670,7 +682,7 @@ exports[`queue with custom retention 2`] = `
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.15.2",
+      "version": "0.17.0",
     },
     "id": "App",
     "path": "",
@@ -688,7 +700,7 @@ exports[`queue with custom timeout 1`] = `
   },
   \\"resource\\": {
     \\"aws_sqs_queue\\": {
-      \\"root_Queue_7193B145\\": {
+      \\"Queue\\": {
         \\"name\\": \\"Queue-c822c726\\",
         \\"visibility_timeout_seconds\\": 30
       }
@@ -713,7 +725,7 @@ exports[`queue with custom timeout 2`] = `
                   "Default": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.15.2",
+                      "version": "0.17.0",
                     },
                     "id": "Default",
                     "path": "root/Default/Queue/Default",
@@ -733,7 +745,7 @@ exports[`queue with custom timeout 2`] = `
               "aws": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.15.2",
+                  "version": "0.17.0",
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
@@ -746,7 +758,7 @@ exports[`queue with custom timeout 2`] = `
                   "TestFunctionArns": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformOutput",
-                      "version": "0.15.2",
+                      "version": "0.17.0",
                     },
                     "id": "TestFunctionArns",
                     "path": "root/Default/cloud.TestRunner/TestFunctionArns",
@@ -775,7 +787,7 @@ exports[`queue with custom timeout 2`] = `
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.15.2",
+              "version": "0.17.0",
             },
             "id": "backend",
             "path": "root/backend",
@@ -783,7 +795,7 @@ exports[`queue with custom timeout 2`] = `
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.15.2",
+          "version": "0.17.0",
         },
         "id": "root",
         "path": "root",
@@ -791,7 +803,7 @@ exports[`queue with custom timeout 2`] = `
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.15.2",
+      "version": "0.17.0",
     },
     "id": "App",
     "path": "",
@@ -809,7 +821,7 @@ exports[`replace invalid character from queue name 1`] = `
   },
   \\"resource\\": {
     \\"aws_sqs_queue\\": {
-      \\"root_TheIncredibleQueue_453F8E34\\": {
+      \\"TheIncredibleQueue\\": {
         \\"name\\": \\"The-Incredible-Queue-c8305287\\"
       }
     }
@@ -833,7 +845,7 @@ exports[`replace invalid character from queue name 2`] = `
                   "Default": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformResource",
-                      "version": "0.15.2",
+                      "version": "0.17.0",
                     },
                     "id": "Default",
                     "path": "root/Default/The*Incredible$Queue/Default",
@@ -853,7 +865,7 @@ exports[`replace invalid character from queue name 2`] = `
               "aws": {
                 "constructInfo": {
                   "fqn": "cdktf.TerraformProvider",
-                  "version": "0.15.2",
+                  "version": "0.17.0",
                 },
                 "id": "aws",
                 "path": "root/Default/aws",
@@ -866,7 +878,7 @@ exports[`replace invalid character from queue name 2`] = `
                   "TestFunctionArns": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformOutput",
-                      "version": "0.15.2",
+                      "version": "0.17.0",
                     },
                     "id": "TestFunctionArns",
                     "path": "root/Default/cloud.TestRunner/TestFunctionArns",
@@ -895,7 +907,7 @@ exports[`replace invalid character from queue name 2`] = `
           "backend": {
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.15.2",
+              "version": "0.17.0",
             },
             "id": "backend",
             "path": "root/backend",
@@ -903,7 +915,7 @@ exports[`replace invalid character from queue name 2`] = `
         },
         "constructInfo": {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.15.2",
+          "version": "0.17.0",
         },
         "id": "root",
         "path": "root",
@@ -911,7 +923,7 @@ exports[`replace invalid character from queue name 2`] = `
     },
     "constructInfo": {
       "fqn": "cdktf.App",
-      "version": "0.15.2",
+      "version": "0.17.0",
     },
     "id": "App",
     "path": "",

@@ -2,22 +2,20 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ math_Util }) {
+module.exports = function({ $math_Util }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.cos(-0) == 1")})(((await math_Util.cos((-0))) === 1))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.cos(0) == 1")})(((await math_Util.cos(0)) === 1))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.cos(1) == 0.5403023058681398")})(((await math_Util.cos(1)) === 0.5403023058681398))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.cos(-5) == 0.28366218546322625")})(((await math_Util.cos((-5))) === 0.28366218546322625))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.cos(math.PI) == -1")})(((await math_Util.cos(math_Util.PI)) === (-1)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.cos(math.PI * 2) == 1")})(((await math_Util.cos((math_Util.PI * 2))) === 1))};
+    async handle() {
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.cos(-0) == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.cos((-0))),1)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.cos(0) == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.cos(0)),1)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.cos(1) == 0.5403023058681398")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.cos(1)),0.5403023058681398)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.cos(-5) == 0.28366218546322625")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.cos((-5))),0.28366218546322625)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.cos(math.PI) == -1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.cos($math_Util.PI)),(-1))))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.cos(math.PI * 2) == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.cos(($math_Util.PI * 2))),1)))};
     }
   }
   return $Closure1;
@@ -32,7 +30,7 @@ module.exports = function({ math_Util }) {
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.2"
+      "version": "0.17.0"
     },
     "outputs": {
       "root": {
@@ -46,7 +44,7 @@ module.exports = function({ math_Util }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:inflight cosine\",\"${aws_lambda_function.root_testinflightcosine_Handler_EC0E770F.arn}\"]]"
+      "value": "[[\"root/Default/Default/test:inflight cosine\",\"${aws_lambda_function.testinflightcosine_Handler_8C1A066C.arn}\"]]"
     }
   },
   "provider": {
@@ -56,46 +54,46 @@ module.exports = function({ math_Util }) {
   },
   "resource": {
     "aws_iam_role": {
-      "root_testinflightcosine_Handler_IamRole_E9D41860": {
+      "testinflightcosine_Handler_IamRole_3CB91B01": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:inflight cosine/Handler/IamRole",
-            "uniqueId": "root_testinflightcosine_Handler_IamRole_E9D41860"
+            "uniqueId": "testinflightcosine_Handler_IamRole_3CB91B01"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
-      "root_testinflightcosine_Handler_IamRolePolicy_014DE4C7": {
+      "testinflightcosine_Handler_IamRolePolicy_DEC09071": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:inflight cosine/Handler/IamRolePolicy",
-            "uniqueId": "root_testinflightcosine_Handler_IamRolePolicy_014DE4C7"
+            "uniqueId": "testinflightcosine_Handler_IamRolePolicy_DEC09071"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
-        "role": "${aws_iam_role.root_testinflightcosine_Handler_IamRole_E9D41860.name}"
+        "role": "${aws_iam_role.testinflightcosine_Handler_IamRole_3CB91B01.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
-      "root_testinflightcosine_Handler_IamRolePolicyAttachment_A4B1FCF8": {
+      "testinflightcosine_Handler_IamRolePolicyAttachment_30BBA33F": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:inflight cosine/Handler/IamRolePolicyAttachment",
-            "uniqueId": "root_testinflightcosine_Handler_IamRolePolicyAttachment_A4B1FCF8"
+            "uniqueId": "testinflightcosine_Handler_IamRolePolicyAttachment_30BBA33F"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.root_testinflightcosine_Handler_IamRole_E9D41860.name}"
+        "role": "${aws_iam_role.testinflightcosine_Handler_IamRole_3CB91B01.name}"
       }
     },
     "aws_lambda_function": {
-      "root_testinflightcosine_Handler_EC0E770F": {
+      "testinflightcosine_Handler_8C1A066C": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:inflight cosine/Handler/Default",
-            "uniqueId": "root_testinflightcosine_Handler_EC0E770F"
+            "uniqueId": "testinflightcosine_Handler_8C1A066C"
           }
         },
         "environment": {
@@ -107,10 +105,10 @@ module.exports = function({ math_Util }) {
         "function_name": "Handler-c81ebe2a",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.root_testinflightcosine_Handler_IamRole_E9D41860.arn}",
+        "role": "${aws_iam_role.testinflightcosine_Handler_IamRole_3CB91B01.arn}",
         "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
-        "s3_key": "${aws_s3_object.root_testinflightcosine_Handler_S3Object_72EAA0EB.key}",
+        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
+        "s3_key": "${aws_s3_object.testinflightcosine_Handler_S3Object_20AE5FC3.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -119,25 +117,25 @@ module.exports = function({ math_Util }) {
       }
     },
     "aws_s3_bucket": {
-      "root_Code_02F3C603": {
+      "Code": {
         "//": {
           "metadata": {
             "path": "root/Default/Code",
-            "uniqueId": "root_Code_02F3C603"
+            "uniqueId": "Code"
           }
         },
         "bucket_prefix": "code-c84a50b1-"
       }
     },
     "aws_s3_object": {
-      "root_testinflightcosine_Handler_S3Object_72EAA0EB": {
+      "testinflightcosine_Handler_S3Object_20AE5FC3": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:inflight cosine/Handler/S3Object",
-            "uniqueId": "root_testinflightcosine_Handler_S3Object_72EAA0EB"
+            "uniqueId": "testinflightcosine_Handler_S3Object_20AE5FC3"
           }
         },
-        "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
+        "bucket": "${aws_s3_bucket.Code.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       }
@@ -152,7 +150,6 @@ const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
-const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 const math = require('@winglang/sdk').math;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
@@ -160,15 +157,13 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
+        this._addInflightOps("handle", "$inflight_init");
         this.display.hidden = true;
-        this._addInflightOps("handle");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const math_UtilClient = math.Util._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            math_Util: ${math_UtilClient.text},
+          require("./inflight.$Closure1.js")({
+            $math_Util: ${context._lift(math.Util)},
           })
         `);
       }
@@ -183,39 +178,18 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-        }
-        if (ops.includes("handle")) {
-        }
-        super._registerBind(host, ops);
-      }
     }
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.cos(-0) == 1")})(((math.Util.cos((-0))) === 1))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.cos(0) == 1")})(((math.Util.cos(0)) === 1))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.cos(1) == 0.5403023058681398")})(((math.Util.cos(1)) === 0.5403023058681398))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.cos(-5) == 0.28366218546322625")})(((math.Util.cos((-5))) === 0.28366218546322625))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.cos(math.PI) == -1")})(((math.Util.cos(math.Util.PI)) === (-1)))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.cos(math.PI * 2) == 1")})(((math.Util.cos((math.Util.PI * 2))) === 1))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.cos(-0) == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.cos((-0))),1)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.cos(0) == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.cos(0)),1)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.cos(1) == 0.5403023058681398")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.cos(1)),0.5403023058681398)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.cos(-5) == 0.28366218546322625")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.cos((-5))),0.28366218546322625)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.cos(math.PI) == -1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.cos(math.Util.PI)),(-1))))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.cos(math.PI * 2) == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.cos((math.Util.PI * 2))),1)))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:inflight cosine",new $Closure1(this,"$Closure1"));
   }
 }
-class $App extends $AppBase {
-  constructor() {
-    super({ outdir: $outdir, name: "cos", plugins: $plugins, isTestEnvironment: $wing_is_test });
-    if ($wing_is_test) {
-      new $Root(this, "env0");
-      const $test_runner = this.testRunner;
-      const $tests = $test_runner.findTests();
-      for (let $i = 1; $i < $tests.length; $i++) {
-        new $Root(this, "env" + $i);
-      }
-    } else {
-      new $Root(this, "Default");
-    }
-  }
-}
-new $App().synth();
+const $App = $stdlib.core.App.for(process.env.WING_TARGET);
+new $App({ outdir: $outdir, name: "cos", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test }).synth();
 
 ```
 

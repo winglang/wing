@@ -12,7 +12,7 @@ import * as cloud from "../cloud";
 import * as core from "../core";
 import { createBundle } from "../shared/bundling";
 import { NameOptions, ResourceNames } from "../shared/resource-names";
-import { PolicyStatement } from "../shared-aws";
+import { IAwsFunction, PolicyStatement } from "../shared-aws";
 import { IInflightHost, Resource } from "../std";
 import { Duration } from "../std/duration";
 
@@ -52,7 +52,7 @@ export interface FunctionPermissionsOptions {
  *
  * @inflight `@winglang/sdk.cloud.IFunctionClient`
  */
-export class Function extends cloud.Function {
+export class Function extends cloud.Function implements IAwsFunction {
   private readonly function: LambdaFunction;
   private readonly role: IamRole;
   private policyStatements?: any[];
@@ -218,6 +218,10 @@ export class Function extends cloud.Function {
     this.addEnvironment("WING_FUNCTION_NAME", name);
   }
 
+  public get functionName(): string {
+    return this.function.functionName;
+  }
+
   /** @internal */
   public _bind(host: IInflightHost, ops: string[]): void {
     if (!(host instanceof Function)) {
@@ -225,10 +229,12 @@ export class Function extends cloud.Function {
     }
 
     if (ops.includes(cloud.FunctionInflightMethods.INVOKE)) {
-      host.addPolicyStatements({
-        actions: ["lambda:InvokeFunction"],
-        resources: [`${this.function.arn}`],
-      });
+      host.addPolicyStatements([
+        {
+          actions: ["lambda:InvokeFunction"],
+          resources: [`${this.function.arn}`],
+        },
+      ]);
     }
 
     // The function name needs to be passed through an environment variable since
@@ -263,7 +269,7 @@ export class Function extends cloud.Function {
   /**
    * Add a policy statement to the Lambda role.
    */
-  public addPolicyStatements(...statements: PolicyStatement[]) {
+  public addPolicyStatements(statements: PolicyStatement[]) {
     // we do lazy initialization here because addPolicyStatements() might be called through the
     // constructor chain of the Function base class which means that our constructor might not have
     // been called yet... yes, ugly.

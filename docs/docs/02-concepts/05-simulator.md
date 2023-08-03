@@ -5,7 +5,7 @@ description: A facility for executing Wing applications on the local machine for
 keywords: [Wing simulator, simulator]
 ---
 
-The simulator is a [compiler target](./05-compile-targets.md) that comes
+The simulator is a [compiler target](./03-compile-targets.md) that comes
 provided in Wing for testing applications locally. The simulator does not
 require you to deploy resources to any cloud providers. Since it's a simulation,
 the simulator does not provide the same guarantees as running your application
@@ -24,13 +24,13 @@ is provided below.
 > Note: The simulator APIs are currently experimental and are subject to
 > breaking changes in the future.
 
-## Quick start guide
+## Using the low-level simulator APIs (experimental)
 
 ### Compile a Wing application for the simulator
 
 To use the simulator, you will need a Wing program
 that has beem compiled to the simulator (with `wing compile --target sim <file>`).
-Check out the [Wing Getting Started Guide](/) for more information on how to write your
+Check out the [Wing Getting Started Guide](/docs) for more information on how to write your
 first Wing program.
 
 The output will typically be located in the `target` directory of your Wing project,

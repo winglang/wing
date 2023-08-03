@@ -97,17 +97,18 @@ export const TutorialLayout = ({ cloudAppState }: LayoutProps) => {
           "flex relative border-t border-slate-300 bg-slate-50",
           {
             "min-h-[5rem] h-[30rem]": cloudAppState === "error",
-            "min-h-[5rem] h-[15rem]": cloudAppState !== "error",
+            "min-h-[5rem] h-[8rem]": cloudAppState !== "error",
           },
         )}
       >
-        <BlueScreenOfDeath
-          hidden={cloudAppState !== "error"}
-          title={"An error has occurred:"}
-          error={errorMessage.data ?? ""}
-          displayLinks={false}
-          displayWingTitle={false}
-        />
+        {cloudAppState === "error" && (
+          <BlueScreenOfDeath
+            title={"An error has occurred:"}
+            error={errorMessage.data ?? ""}
+            displayLinks={false}
+            displayWingTitle={false}
+          />
+        )}
         <div
           className={classNames(
             theme.border3,

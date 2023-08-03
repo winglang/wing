@@ -7,6 +7,7 @@ import { Code, InflightClient } from "../core";
 
 /**
  * String
+ * @wingType str
  */
 export class String {
   /**
@@ -40,6 +41,8 @@ export class String {
 
   /**
    * Returns the character at the specified index.
+   *
+   * @macro ((args) => { if ($args$ >= $self$.length || $args$ + $self$.length < 0) {throw new Error("index out of bounds")}; return $self$.at($args$) })($args$)
    *
    * @param index position of the character.
    * @returns string at the specified index.
@@ -144,6 +147,21 @@ export class String {
   public substring(indexStart: number, indexEnd?: number): string {
     indexStart;
     indexEnd;
+    throw new Error("Abstract");
+  }
+
+  /**
+   * Replaces occurrences of a substring within a string.
+   *
+   * @macro $self$.replace($args$)
+   *
+   * @param searchString The substring to search for.
+   * @param replaceString The replacement substring.
+   * @returns The modified string after replacement.
+   */
+  public replace(searchString: string, replaceString: string): string {
+    searchString;
+    replaceString;
     throw new Error("Abstract");
   }
 

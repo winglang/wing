@@ -5,6 +5,7 @@ import { Api } from "./api";
 import { Bucket } from "./bucket";
 import { Counter } from "./counter";
 import { Function } from "./function";
+import { OnDeploy } from "./on-deploy";
 import { Queue } from "./queue";
 import { Redis } from "./redis";
 import { isSimulatorResource } from "./resource";
@@ -21,19 +22,19 @@ import {
   BUCKET_FQN,
   COUNTER_FQN,
   FUNCTION_FQN,
+  ON_DEPLOY_FQN,
   QUEUE_FQN,
   SCHEDULE_FQN,
   SECRET_FQN,
   SERVICE_FQN,
-  TABLE_FQN,
-  TEST_RUNNER_FQN,
   TOPIC_FQN,
   WEBSITE_FQN,
 } from "../cloud";
 import { SDK_VERSION } from "../constants";
 import * as core from "../core";
 import { preSynthesizeAllConstructs } from "../core/app";
-import { REDIS_FQN } from "../redis";
+import { TABLE_FQN, REDIS_FQN } from "../ex";
+import { TEST_RUNNER_FQN } from "../std";
 import { WingSimulatorSchema } from "../testing/simulator";
 
 /**
@@ -64,6 +65,8 @@ export class App extends core.App {
     this._tokens = new SimTokens();
 
     this.testRunner = new TestRunner(this, "cloud.TestRunner");
+
+    this.synthRoots(props, this.testRunner);
   }
 
   protected tryNew(
@@ -111,6 +114,9 @@ export class App extends core.App {
 
       case SERVICE_FQN:
         return new Service(scope, id, args[0]);
+
+      case ON_DEPLOY_FQN:
+        return new OnDeploy(scope, id, args[0], args[1]);
     }
 
     return undefined;

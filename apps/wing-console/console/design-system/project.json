@@ -5,13 +5,19 @@
   "targets": {
     "build": {
       "options": {
-        "command": "npm run compile",
+        "command": "pnpm compile",
+        "cwd": "apps/wing-console/console/design-system"
+      }
+    },
+    "test": {
+      "options": {
+        "command": "pnpm eslint",
         "cwd": "apps/wing-console/console/design-system"
       }
     },
     "package": {
       "options": {
-        "command": "npm run package",
+        "command": "pnpm package",
         "cwd": "apps/wing-console/console/design-system"
       }
     }

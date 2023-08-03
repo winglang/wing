@@ -202,6 +202,7 @@ export const TableInteraction = ({
                           )}
                           onClick={() => onRemoveRow(index)}
                           disabled={disabled}
+                          data-testid={`ex.table:remove-row-${row[primaryKey]}`}
                         >
                           <TrashIcon className="w-4 h-4" />
                         </button>
@@ -209,6 +210,7 @@ export const TableInteraction = ({
                     </>
                   );
                 }}
+                dataTestid={`ex.table:row-${row[primaryKey]}`}
               />
             ))}
             {!readonly && columns.length > 0 && (
@@ -220,7 +222,7 @@ export const TableInteraction = ({
                         className={classNames(
                           "inline-block whitespace-nowrap",
                           theme.bg3,
-                          "text-[0.60rem] font-semibold tracking-wide text-slate-400 dark:text-slate-350",
+                          "text-[0.60rem] font-medium tracking-wide text-slate-400 dark:text-slate-350",
                           "leading-none px-2 pt-1.5 pb-1",
                           "rounded-t",
                         )}
@@ -253,6 +255,7 @@ export const TableInteraction = ({
                   readonly={readonly}
                   saveRow={addRow}
                   updateRow={(key, value) => updateNewRow(key, value)}
+                  dataTestid="ex.table:new-row"
                   actions={() => {
                     return (
                       <button
@@ -268,6 +271,7 @@ export const TableInteraction = ({
                         )}
                         onClick={addRow}
                         disabled={disabled || !newRow.data[primaryKey]}
+                        data-testid="ex.table:add-row"
                       >
                         <PlusIcon className="w-4 h-4" />
                       </button>

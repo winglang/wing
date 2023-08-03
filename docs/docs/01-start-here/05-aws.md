@@ -23,7 +23,7 @@ resources, using Terraform as the provisioning engine.
 
 :::info Under Construction
 
-:construction: We plan to support [AWS](https://github.com/winglang/wing/issues?q=is:issue+is:open+sort:updated-desc+label:aws), [Azure](https://github.com/winglang/wing/issues?q=is:issue+is:open+sort:updated-desc+label:azure) and [Google Cloud](https://github.com/winglang/wing/issues?q=is:issue+is:open+sort:updated-desc+label:gcp) as targets out of
+:construction: We plan to also support [Azure](https://github.com/winglang/wing/issues?q=is:issue+is:open+sort:updated-desc+label:azure) and [Google Cloud](https://github.com/winglang/wing/issues?q=is:issue+is:open+sort:updated-desc+label:gcp) as targets out of
 the box. In addition, we are planning support for other provisioning engines
 such as AWS CloudFormation and Kubernetes.
 
@@ -36,7 +36,9 @@ Click :thumbsup: on the relevant issue and tell us what you think.
 In order to deploy to AWS, you will need:
 
 * [Terraform](https://terraform.io/downloads)
-* [AWS account] and the [AWS CLI] with [AWS credentials]
+* AWS CLI with configured credentials. See
+[here](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html)
+for more information.
 
 ## Compile to Terraform/AWS
 
@@ -80,31 +82,62 @@ Now we are ready to deploy to our AWS account:
 terraform apply
 ```
 
-You'll be asked to confirm the provisioning of all of these resources:
+You should expect output similar to this: 
+```sh
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  + create
 
-```
-aws_iam_role.root_cloudQueue_AddConsumerf9e5f4b154bf0692_IamRole_0F5B0FAB
-aws_iam_role_policy.root_cloudQueue_AddConsumerf9e5f4b154bf0692_IamRolePolicy_D4EB5385
-aws_iam_role_policy_attachment.root_cloudQueue_AddConsumerf9e5f4b154bf0692_IamRolePolicyAttachment_EEE67DAF
-aws_lambda_event_source_mapping.root_cloudQueue_EventSourceMapping_A2041279
-aws_lambda_function.root_cloudQueue_AddConsumerf9e5f4b154bf0692_7D66EFB8
-aws_s3_bucket.root_cloudBucket_4F3C4F53
-aws_s3_bucket.root_cloudQueue_AddConsumerf9e5f4b154bf0692_Bucket_22152053
-aws_s3_bucket_public_access_block.root_cloudBucket_PublicAccessBlock_319C1C2E
-aws_s3_bucket_server_side_encryption_configuration.root_cloudBucket_Encryption_8ED0CD9C
-aws_s3_object.root_cloudQueue_AddConsumerf9e5f4b154bf0692_S3Object_A34E0128
-aws_sqs_queue.root_cloudQueue_E3597F7A
+Terraform will perform the following actions:
+
+  # aws_dynamodb_table.cloudCounter will be created
+  + resource "aws_dynamodb_table" "cloudCounter" {...}
+
+  # aws_iam_role.cloudQueue-SetConsumer-cdafee6e_IamRole_2548D828 will be created
+  + resource "aws_iam_role" "cloudQueue-SetConsumer-cdafee6e_IamRole_2548D828" {...}
+
+  # aws_iam_role_policy.cloudQueue-SetConsumer-cdafee6e_IamRolePolicy_37133937 will be created
+  + resource "aws_iam_role_policy" "cloudQueue-SetConsumer-cdafee6e_IamRolePolicy_37133937" {...}
+
+  # aws_iam_role_policy_attachment.cloudQueue-SetConsumer-cdafee6e_IamRolePolicyAttachment_45079F65 will be created
+  + resource "aws_iam_role_policy_attachment" "cloudQueue-SetConsumer-cdafee6e_IamRolePolicyAttachment_45079F65" {...}
+
+  # aws_lambda_event_source_mapping.cloudQueue_EventSourceMapping_41814136 will be created
+  + resource "aws_lambda_event_source_mapping" "cloudQueue_EventSourceMapping_41814136" {...}
+
+  # aws_lambda_function.cloudQueue-SetConsumer-cdafee6e will be created
+  + resource "aws_lambda_function" "cloudQueue-SetConsumer-cdafee6e" {...}
+
+  # aws_s3_bucket.Code will be created
+  + resource "aws_s3_bucket" "Code" {...}
+
+  # aws_s3_bucket.cloudBucket will be created
+  + resource "aws_s3_bucket" "cloudBucket" {...}
+
+  # aws_s3_bucket_public_access_block.cloudBucket_PublicAccessBlock_5946CCE8 will be created
+  + resource "aws_s3_bucket_public_access_block" "cloudBucket_PublicAccessBlock_5946CCE8" {...}
+
+  # aws_s3_bucket_server_side_encryption_configuration.cloudBucket_Encryption_77B6AEEF will be created
+  + resource "aws_s3_bucket_server_side_encryption_configuration" "cloudBucket_Encryption_77B6AEEF" {...}
+
+  # aws_s3_object.cloudQueue-SetConsumer-cdafee6e_S3Object_8868B9FB will be created
+  + resource "aws_s3_object" "cloudQueue-SetConsumer-cdafee6e_S3Object_8868B9FB" {...}
+
+  # aws_sqs_queue.cloudQueue will be created
+  + resource "aws_sqs_queue" "cloudQueue" {...}
+
+Plan: 12 to add, 0 to change, 0 to destroy.
 ```
 
 > This is a good opportunity to observe how much complexity the Wing compiler
 > was able to abstract away for you when you wrote your Wing code. Just
 > saying...
 
-And Terraform will do its magic and will create all of these resources in your
+If you choose to proceed, Terraform will do its magic and will create all of these resources in your
 account.
 
-```
-Apply complete! Resources: 8 added, 0 changed, 0 destroyed.
+```  
+Apply complete! Resources: 12 added, 0 changed, 0 destroyed.
 ```
 
 ## Explore your app on AWS
@@ -114,11 +147,34 @@ through the AWS Management Console.
 
 1. Open the [Amazon SQS Console](https://console.aws.amazon.com/sqs)
 2. Select your AWS region
-3. You should be able to see that you have a queue there
+3. You should be able to see that you have a queue there prefixed with `cloud-Queue-`
 4. Click **Send and receive messages**.
 5. In the **Message Body** box type `cloud` and hit **Send message**.
 6. Jump over to the [S3 Console](https://s3.console.aws.amazon.com/s3/buckets) 
-7. There should be some buckets prefixed with `terraform-202`. 
-8. Cycle through the buckets until you find one that contains `wing.txt`.
-9. Click `wing.txt` then click the `Open` button.
+7. There should be some buckets prefixed with `cloud-bucket-`. 
+8. Cycle through the buckets until you find one that contains `wing-1.txt`.
+9. Click `wing-1.txt` then click the `Open` button.
 10. The file should contain `Hello, cloud`.
+
+### Exploring the counter on AWS
+1. Open the [Amazon Dynamo DB Console](https://console.aws.amazon.com/dynamodb), and search for a table prefixed with `wing-counter-cloud`.
+2. Use the `Explore table items` button to view the value of the `counter` id attribute, which represents the current value of the counter.
+3. Optional - repeat step 5 from the above list as many times as you want. While doing it, see how the bucket fills and how the `counter` id increments.
+
+
+## Cleanup
+
+Terraform doesn't allow destroying a non-empty bucket by default. To prepare for
+easy cleanup, you may delete the newly created file(s) by marking the checkbox next
+to the bucket name on the S3 console, clicking the `Empty` button, typing `permanently delete` in the
+confirmation box and clicking the `Empty` button.
+
+Once you're done, you can destroy all of the resources that were created on your AWS account by running:
+
+```sh
+terraform destroy
+
+{...}
+
+Destroy complete! Resources: 12 destroyed.
+```

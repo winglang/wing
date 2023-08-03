@@ -2,13 +2,21 @@
 title: Topic
 id: topic
 description: A built-in resource for publishing messages to subscribers.
-keywords: [Wing reference, Wing language, language, Wing standard library, Wing programming language, topics]
+keywords:
+  [
+    Wing reference,
+    Wing language,
+    language,
+    Wing standard library,
+    Wing programming language,
+    topics,
+  ]
 sidebar_position: 1
 ---
 
 The `cloud.Topic` class represents a subject of data that is open for subscription.
 
-Topics are a staple of event-driven architectures, especially those that rely on pub-sub messaging to decouple producers of data and the consumers of said data. 
+Topics are a staple of event-driven architectures, especially those that rely on pub-sub messaging to decouple producers of data and the consumers of said data.
 
 ## Usage
 
@@ -35,6 +43,7 @@ topic.onMessage(inflight (message: str) => {
 ### Publishing to a topic
 
 The inflight method `publish` sends a message to all of the topic's subscribers.
+
 ```js
 bring cloud;
 
@@ -93,7 +102,3 @@ AWS implementations of `cloud.Topic` use [AWS SNS](https://docs.aws.amazon.com/s
 ### GCP (`tf-gcp`)
 
 🚧 Not supported yet (tracking issue: [#620](https://github.com/winglang/wing/issues/620))
-
-## API Reference
-
-The full list of APIs for `cloud.Topic` is available in the [API Reference](../api-reference).

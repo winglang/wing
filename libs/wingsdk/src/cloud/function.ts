@@ -13,9 +13,7 @@ import { IInflightHost, IResource, Resource } from "../std/resource";
 export const FUNCTION_FQN = fqnForType("cloud.Function");
 
 /**
- * Properties for `Function`.
- *
- * This is the type users see when constructing a cloud.Function instance.
+ * Options for `Function`.
  */
 export interface FunctionProps {
   /**
@@ -38,7 +36,7 @@ export interface FunctionProps {
 }
 
 /**
- * Represents a function.
+ * A function.
  *
  * @inflight `@winglang/sdk.cloud.IFunctionClient`
  */
@@ -50,10 +48,10 @@ export abstract class Function extends Resource implements IInflightHost {
   public static _newFunction(
     scope: Construct,
     id: string,
-    inflight: IFunctionHandler,
+    handler: IFunctionHandler,
     props: FunctionProps = {}
   ): Function {
-    return App.of(scope).newAbstract(FUNCTION_FQN, scope, id, inflight, props);
+    return App.of(scope).newAbstract(FUNCTION_FQN, scope, id, handler, props);
   }
 
   private readonly _env: Record<string, string> = {};
@@ -66,7 +64,7 @@ export abstract class Function extends Resource implements IInflightHost {
   constructor(
     scope: Construct,
     id: string,
-    inflight: IFunctionHandler,
+    handler: IFunctionHandler,
     props: FunctionProps = {}
   ) {
     super(scope, id);
@@ -82,9 +80,9 @@ export abstract class Function extends Resource implements IInflightHost {
 
     // indicates that we are calling the inflight constructor and the
     // inflight "handle" method on the handler resource.
-    inflight._registerBind(this, ["handle", "$inflight_init"]);
+    handler._registerBind(this, ["handle", "$inflight_init"]);
 
-    const inflightClient = inflight._toInflight();
+    const inflightClient = handler._toInflight();
     const lines = new Array<string>();
 
     lines.push("exports.handler = async function(event) {");
@@ -142,7 +140,7 @@ export interface IFunctionClient {
 }
 
 /**
- * Represents a resource with an inflight "handle" method that can be used to
+ * A resource with an inflight "handle" method that can be used to
  * create a `cloud.Function`.
  *
  * @inflight `@winglang/sdk.cloud.IFunctionHandlerClient`

@@ -48,12 +48,12 @@ bucket.addObject("my-file.txt", "Hello, world!");
 
 ### Using a bucket inflight
 
-```js
+```js playground
 bring cloud;
 
 let bucket = new cloud.Bucket();
 
-inflight () => {
+let bucketFunc = inflight () => {
   bucket.put("file.txt", "Hello, world!");
   bucket.putJson("person.json", Json { name: "Alice" });
 
@@ -69,6 +69,8 @@ inflight () => {
 
   bucket.delete("file.txt");
 };
+
+new cloud.Function(bucketFunc);
 ```
 
 ### Run code on bucket events
@@ -78,7 +80,9 @@ Use the `onEvent` method for responding to any event.
 
 Each method creates a new `cloud.Function` resource which will be triggered by the given event type.
 
-```js
+```js playground
+bring cloud;
+
 let store = new cloud.Bucket();
 let copies = new cloud.Bucket() as "Backup";
 
@@ -114,7 +118,3 @@ The Azure implementation of `cloud.Bucket` uses [Azure Blob Storage](https://lea
 ### GCP (`tf-gcp`)
 
 The Google Cloud implementation of `cloud.Bucket` uses [Google Cloud Storage](https://cloud.google.com/storage).
-
-## API Reference
-
-The full list of APIs for `cloud.Bucket` is available in the [API Reference](../api-reference).

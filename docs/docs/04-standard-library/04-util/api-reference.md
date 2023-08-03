@@ -12,83 +12,78 @@ sidebar_position: 100
 # API Reference <a name="API Reference" id="api-reference"></a>
 
 
-## Structs <a name="Structs" id="Structs"></a>
-
-### WaitUntilProps <a name="WaitUntilProps" id="@winglang/sdk.util.WaitUntilProps"></a>
-
-Properties for `util.waitUntil`.
-
-#### Initializer <a name="Initializer" id="@winglang/sdk.util.WaitUntilProps.Initializer"></a>
-
-```wing
-bring util;
-
-let WaitUntilProps = util.WaitUntilProps{ ... }
-```
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@winglang/sdk.util.WaitUntilProps.property.interval">interval</a></code> | <code><a href="#@winglang/sdk.std.Duration">Duration</a></code> | Interval between predicate retries. |
-| <code><a href="#@winglang/sdk.util.WaitUntilProps.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">Duration</a></code> | The timeout for keep trying predicate. |
-
----
-
-##### `interval`<sup>Optional</sup> <a name="interval" id="@winglang/sdk.util.WaitUntilProps.property.interval"></a>
-
-```wing
-interval: Duration;
-```
-
-- *Type:* <a href="#@winglang/sdk.std.Duration">Duration</a>
-- *Default:* 0.1s
-
-Interval between predicate retries.
-
----
-
-##### `timeout`<sup>Optional</sup> <a name="timeout" id="@winglang/sdk.util.WaitUntilProps.property.timeout"></a>
-
-```wing
-timeout: Duration;
-```
-
-- *Type:* <a href="#@winglang/sdk.std.Duration">Duration</a>
-- *Default:* 1m
-
-The timeout for keep trying predicate.
-
----
-
 ## Classes <a name="Classes" id="Classes"></a>
 
 ### Util <a name="Util" id="@winglang/sdk.util.Util"></a>
 
 Utility functions.
 
-#### Initializers <a name="Initializers" id="@winglang/sdk.util.Util.Initializer"></a>
-
-```wing
-bring util;
-
-new util.Util()
-```
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-
----
-
 
 #### Static Functions <a name="Static Functions" id="Static Functions"></a>
 
 | **Name** | **Description** |
 | --- | --- |
+| <code><a href="#@winglang/sdk.util.Util.base64Decode">base64Decode</a></code> | Converts a string from base64 to UTF-8. |
+| <code><a href="#@winglang/sdk.util.Util.base64Encode">base64Encode</a></code> | Converts a string from UTF-8 to base64. |
 | <code><a href="#@winglang/sdk.util.Util.env">env</a></code> | Returns the value of an environment variable. |
+| <code><a href="#@winglang/sdk.util.Util.nanoid">nanoid</a></code> | Generates a unique ID using the nanoid library. |
+| <code><a href="#@winglang/sdk.util.Util.sha256">sha256</a></code> | Computes the SHA256 hash of the given data. |
 | <code><a href="#@winglang/sdk.util.Util.sleep">sleep</a></code> | Suspends execution for a given duration. |
 | <code><a href="#@winglang/sdk.util.Util.tryEnv">tryEnv</a></code> | Returns the value of an environment variable. |
+| <code><a href="#@winglang/sdk.util.Util.uuidv4">uuidv4</a></code> | Generates a version 4 UUID. |
 | <code><a href="#@winglang/sdk.util.Util.waitUntil">waitUntil</a></code> | Run a predicate repeatedly, waiting until it returns true or until the timeout elapses. |
+
+---
+
+##### `base64Decode` <a name="base64Decode" id="@winglang/sdk.util.Util.base64Decode"></a>
+
+```wing
+bring util;
+
+util.base64Decode(stringToDecode: str, url?: bool);
+```
+
+Converts a string from base64 to UTF-8.
+
+###### `stringToDecode`<sup>Required</sup> <a name="stringToDecode" id="@winglang/sdk.util.Util.base64Decode.parameter.stringToDecode"></a>
+
+- *Type:* str
+
+base64 string to decode.
+
+---
+
+###### `url`<sup>Optional</sup> <a name="url" id="@winglang/sdk.util.Util.base64Decode.parameter.url"></a>
+
+- *Type:* bool
+
+If `true`, the source is expected to be a URL-safe base64 string.
+
+---
+
+##### `base64Encode` <a name="base64Encode" id="@winglang/sdk.util.Util.base64Encode"></a>
+
+```wing
+bring util;
+
+util.base64Encode(stringToEncode: str, url?: bool);
+```
+
+Converts a string from UTF-8 to base64.
+
+###### `stringToEncode`<sup>Required</sup> <a name="stringToEncode" id="@winglang/sdk.util.Util.base64Encode.parameter.stringToEncode"></a>
+
+- *Type:* str
+
+The name of the UTF-8 string to encode.
+
+---
+
+###### `url`<sup>Optional</sup> <a name="url" id="@winglang/sdk.util.Util.base64Encode.parameter.url"></a>
+
+- *Type:* bool
+
+If `true`, a URL-safe base64 string is returned.
 
 ---
 
@@ -97,7 +92,7 @@ new util.Util()
 ```wing
 bring util;
 
-util.Util.env(name: str)
+util.env(name: str);
 ```
 
 Returns the value of an environment variable.
@@ -112,21 +107,57 @@ The name of the environment variable.
 
 ---
 
+##### `nanoid` <a name="nanoid" id="@winglang/sdk.util.Util.nanoid"></a>
+
+```wing
+bring util;
+
+util.nanoid(options?: NanoidOptions);
+```
+
+Generates a unique ID using the nanoid library.
+
+# @link https://github.com/ai/nanoid
+
+###### `options`<sup>Optional</sup> <a name="options" id="@winglang/sdk.util.Util.nanoid.parameter.options"></a>
+
+- *Type:* <a href="#@winglang/sdk.util.NanoidOptions">NanoidOptions</a>
+
+Optional options object for generating the ID.
+
+---
+
+##### `sha256` <a name="sha256" id="@winglang/sdk.util.Util.sha256"></a>
+
+```wing
+bring util;
+
+util.sha256(data: str);
+```
+
+Computes the SHA256 hash of the given data.
+
+###### `data`<sup>Required</sup> <a name="data" id="@winglang/sdk.util.Util.sha256.parameter.data"></a>
+
+- *Type:* str
+
+The string to be hashed.
+
+---
+
 ##### `sleep` <a name="sleep" id="@winglang/sdk.util.Util.sleep"></a>
 
 ```wing
 bring util;
 
-util.Util.sleep(delay: Duration)
+util.sleep(delay: duration);
 ```
-
-**Inflight client:** [true](#true)
 
 Suspends execution for a given duration.
 
 ###### `delay`<sup>Required</sup> <a name="delay" id="@winglang/sdk.util.Util.sleep.parameter.delay"></a>
 
-- *Type:* <a href="#@winglang/sdk.std.Duration">Duration</a>
+- *Type:* <a href="#@winglang/sdk.std.Duration">duration</a>
 
 The time to suspend execution.
 
@@ -137,7 +168,7 @@ The time to suspend execution.
 ```wing
 bring util;
 
-util.Util.tryEnv(name: str)
+util.tryEnv(name: str);
 ```
 
 Returns the value of an environment variable.
@@ -152,15 +183,23 @@ The name of the environment variable.
 
 ---
 
+##### `uuidv4` <a name="uuidv4" id="@winglang/sdk.util.Util.uuidv4"></a>
+
+```wing
+bring util;
+
+util.uuidv4();
+```
+
+Generates a version 4 UUID.
+
 ##### `waitUntil` <a name="waitUntil" id="@winglang/sdk.util.Util.waitUntil"></a>
 
 ```wing
 bring util;
 
-util.Util.waitUntil(predicate: IPredicateHandler, props?: WaitUntilProps)
+util.waitUntil(predicate: IPredicateHandler, props?: WaitUntilProps);
 ```
-
-**Inflight client:** [true](#true)
 
 Run a predicate repeatedly, waiting until it returns true or until the timeout elapses.
 
@@ -182,6 +221,101 @@ Timeout and interval values, default to one 1m timeout and 0.1sec interval.
 
 
 
+## Structs <a name="Structs" id="Structs"></a>
+
+### NanoidOptions <a name="NanoidOptions" id="@winglang/sdk.util.NanoidOptions"></a>
+
+Options to generating a unique ID.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.util.NanoidOptions.Initializer"></a>
+
+```wing
+bring util;
+
+let NanoidOptions = util.NanoidOptions{ ... };
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.util.NanoidOptions.property.alphabet">alphabet</a></code> | <code>str</code> | Characters that make up the alphabet to generate the ID, limited to 256 characters or fewer. |
+| <code><a href="#@winglang/sdk.util.NanoidOptions.property.size">size</a></code> | <code>num</code> | Size of ID. |
+
+---
+
+##### `alphabet`<sup>Optional</sup> <a name="alphabet" id="@winglang/sdk.util.NanoidOptions.property.alphabet"></a>
+
+```wing
+alphabet: str;
+```
+
+- *Type:* str
+
+Characters that make up the alphabet to generate the ID, limited to 256 characters or fewer.
+
+---
+
+##### `size`<sup>Optional</sup> <a name="size" id="@winglang/sdk.util.NanoidOptions.property.size"></a>
+
+```wing
+size: num;
+```
+
+- *Type:* num
+- *Default:* 21
+
+Size of ID.
+
+---
+
+### WaitUntilProps <a name="WaitUntilProps" id="@winglang/sdk.util.WaitUntilProps"></a>
+
+Properties for `util.waitUntil`.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.util.WaitUntilProps.Initializer"></a>
+
+```wing
+bring util;
+
+let WaitUntilProps = util.WaitUntilProps{ ... };
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.util.WaitUntilProps.property.interval">interval</a></code> | <code><a href="#@winglang/sdk.std.Duration">duration</a></code> | Interval between predicate retries. |
+| <code><a href="#@winglang/sdk.util.WaitUntilProps.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">duration</a></code> | The timeout for keep trying predicate. |
+
+---
+
+##### `interval`<sup>Optional</sup> <a name="interval" id="@winglang/sdk.util.WaitUntilProps.property.interval"></a>
+
+```wing
+interval: duration;
+```
+
+- *Type:* <a href="#@winglang/sdk.std.Duration">duration</a>
+- *Default:* 0.1s
+
+Interval between predicate retries.
+
+---
+
+##### `timeout`<sup>Optional</sup> <a name="timeout" id="@winglang/sdk.util.WaitUntilProps.property.timeout"></a>
+
+```wing
+timeout: duration;
+```
+
+- *Type:* <a href="#@winglang/sdk.std.Duration">duration</a>
+- *Default:* 1m
+
+The timeout for keep trying predicate.
+
+---
+
 ## Protocols <a name="Protocols" id="Protocols"></a>
 
 ### IPredicateHandler <a name="IPredicateHandler" id="@winglang/sdk.util.IPredicateHandler"></a>
@@ -192,7 +326,7 @@ Timeout and interval values, default to one 1m timeout and 0.1sec interval.
 
 **Inflight client:** [@winglang/sdk.util.IPredicateHandlerClient](#@winglang/sdk.util.IPredicateHandlerClient)
 
-Represents a predicate with an inflight "handle" method that can be passed to `util.busyWait`.
+A predicate with an inflight "handle" method that can be passed to `util.busyWait`.
 
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -245,10 +379,8 @@ Inflight client for `IPredicateHandler`.
 ##### `handle` <a name="handle" id="@winglang/sdk.util.IPredicateHandlerClient.handle"></a>
 
 ```wing
-handle(): bool
+inflight handle(): bool
 ```
-
-**Inflight client:** [true](#true)
 
 The Predicate function that is called.
 

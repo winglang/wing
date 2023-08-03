@@ -210,7 +210,7 @@ const HIGH_MASK = BigInt(32);
 // From diagnostic.rs
 export interface WingDiagnostic {
   message: string;
-  span: {
+  span?: {
     start: {
       line: number;
       col: number;

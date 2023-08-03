@@ -1,4 +1,5 @@
 bring cloud;
+bring ex;
 // bring redis;
 
 let bucket = new cloud.Bucket();
@@ -54,17 +55,16 @@ topic.onMessage(inflight (message: str): str => {
 //   return r.url();
 // }) as "Redis interaction";
 
-
-let table = new cloud.Table(cloud.TableProps{
+let table = new ex.Table(
   name: "simple-table",
   primaryKey: "id",
   columns: {
-    id: cloud.ColumnType.STRING,
-    name: cloud.ColumnType.STRING,
-    date: cloud.ColumnType.DATE,
-    active: cloud.ColumnType.BOOLEAN,
+    "id" => ex.ColumnType.STRING,
+    "name" => ex.ColumnType.STRING,
+    "date" => ex.ColumnType.DATE,
+    "active" => ex.ColumnType.BOOLEAN,
   },
-});
+);
 
 let rateSchedule = new cloud.Schedule(cloud.ScheduleProps{
   rate: 5m

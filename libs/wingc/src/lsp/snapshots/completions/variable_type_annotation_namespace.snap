@@ -11,456 +11,426 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 7
   documentation:
     kind: markdown
-    value: "```wing\nclass Bucket\n```\n---\nRepresents a cloud object store."
+    value: "```wing\nclass Bucket\n```\n---\nA cloud object store."
   sortText: gg|Bucket
 - label: Counter
   kind: 7
   documentation:
     kind: markdown
-    value: "```wing\nclass Counter\n```\n---\nRepresents a distributed atomic counter."
+    value: "```wing\nclass Counter\n```\n---\nA distributed atomic counter."
   sortText: gg|Counter
 - label: Function
   kind: 7
   documentation:
     kind: markdown
-    value: "```wing\nclass Function impl IInflightHost\n```\n---\nRepresents a function."
+    value: "```wing\nclass Function impl IInflightHost\n```\n---\nA function."
   sortText: gg|Function
+- label: OnDeploy
+  kind: 7
+  documentation:
+    kind: markdown
+    value: "```wing\nclass OnDeploy\n```\n---\nRun code every time the app is deployed."
+  sortText: gg|OnDeploy
 - label: Queue
   kind: 7
   documentation:
     kind: markdown
-    value: "```wing\nclass Queue\n```\n---\nRepresents a queue."
+    value: "```wing\nclass Queue\n```\n---\nA queue."
   sortText: gg|Queue
 - label: Schedule
   kind: 7
   documentation:
     kind: markdown
-    value: "```wing\nclass Schedule\n```\n---\nRepresents a schedule."
+    value: "```wing\nclass Schedule\n```\n---\nA schedule."
   sortText: gg|Schedule
 - label: Secret
   kind: 7
   documentation:
     kind: markdown
-    value: "```wing\nclass Secret\n```\n---\nRepresents a cloud secret."
+    value: "```wing\nclass Secret\n```\n---\nA cloud secret."
   sortText: gg|Secret
 - label: Service
   kind: 7
   documentation:
     kind: markdown
-    value: "```wing\nclass Service\n```\n---\nRepresents a service."
+    value: "```wing\nclass Service\n```\n---\nA long-running service."
   sortText: gg|Service
-- label: Table
-  kind: 7
-  documentation:
-    kind: markdown
-    value: "```wing\nclass Table\n```\n---\nRepresents a NoSQL database table that can be used to store and query data."
-  sortText: gg|Table
-- label: TestRunner
-  kind: 7
-  documentation:
-    kind: markdown
-    value: "```wing\nclass TestRunner\n```\n---\nRepresents a test engine."
-  sortText: gg|TestRunner
 - label: Topic
   kind: 7
   documentation:
     kind: markdown
-    value: "```wing\nclass Topic\n```\n---\nRepresents a topic."
+    value: "```wing\nclass Topic\n```\n---\nA topic."
   sortText: gg|Topic
 - label: Website
   kind: 7
   documentation:
     kind: markdown
-    value: "```wing\nclass Website\n```\n---\nRepresents a cloud static website."
+    value: "```wing\nclass Website\n```\n---\nA cloud static website."
   sortText: gg|Website
 - label: ApiConnectProps
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nApiConnectProps\n```\n---\nOptions for Api patch endpoint."
+    value: "```wing\nstruct ApiConnectProps\n```\n---\nOptions for Api patch endpoint."
   sortText: hh|ApiConnectProps
 - label: ApiDeleteProps
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nApiDeleteProps\n```\n---\nOptions for Api put endpoint."
+    value: "```wing\nstruct ApiDeleteProps\n```\n---\nOptions for Api put endpoint."
   sortText: hh|ApiDeleteProps
 - label: ApiGetProps
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nApiGetProps\n```\n---\nOptions for Api get endpoint."
+    value: "```wing\nstruct ApiGetProps\n```\n---\nOptions for Api get endpoint."
   sortText: hh|ApiGetProps
 - label: ApiHeadProps
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nApiHeadProps\n```\n---\nOptions for Api patch endpoint."
+    value: "```wing\nstruct ApiHeadProps\n```\n---\nOptions for Api patch endpoint."
   sortText: hh|ApiHeadProps
 - label: ApiOptionsProps
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nApiOptionsProps\n```\n---\nOptions for Api patch endpoint."
+    value: "```wing\nstruct ApiOptionsProps\n```\n---\nOptions for Api patch endpoint."
   sortText: hh|ApiOptionsProps
 - label: ApiPatchProps
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nApiPatchProps\n```\n---\nOptions for Api patch endpoint."
+    value: "```wing\nstruct ApiPatchProps\n```\n---\nOptions for Api patch endpoint."
   sortText: hh|ApiPatchProps
 - label: ApiPostProps
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nApiPostProps\n```\n---\nOptions for Api post endpoint."
+    value: "```wing\nstruct ApiPostProps\n```\n---\nOptions for Api post endpoint."
   sortText: hh|ApiPostProps
 - label: ApiProps
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nApiProps\n```\n---\nProperties for `Api`."
+    value: "```wing\nstruct ApiProps\n```\n---\nOptions for `Api`."
   sortText: hh|ApiProps
 - label: ApiPutProps
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nApiPutProps\n```\n---\nOptions for Api put endpoint."
+    value: "```wing\nstruct ApiPutProps\n```\n---\nOptions for Api put endpoint."
   sortText: hh|ApiPutProps
 - label: ApiRequest
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nApiRequest\n```\n---\nShape of a request to an inflight handler."
+    value: "```wing\nstruct ApiRequest\n```\n---\nShape of a request to an inflight handler.\n### Fields\n- `body?` — The request's body.\n- `headers?` — The request's headers.\n- `method` — The request's HTTP method.\n- `path` — The request's path.\n- `query` — The request's query string values.\n- `vars` — The path variables."
   sortText: hh|ApiRequest
 - label: ApiResponse
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nApiResponse\n```\n---\nShape of a response from a inflight handler."
+    value: "```wing\nstruct ApiResponse\n```\n---\nShape of a response from a inflight handler.\n### Fields\n- `body?` — The response's body.\n- `headers?` — The response's headers.\n- `status` — The response's status code."
   sortText: hh|ApiResponse
 - label: BucketDeleteOptions
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nBucketDeleteOptions\n```\n---\nInterface for delete method inside `Bucket`."
+    value: "```wing\nstruct BucketDeleteOptions\n```\n---\nInterface for delete method inside `Bucket`.\n### Fields\n- `mustExist?` — Check failures on the method and retrieve errors if any."
   sortText: hh|BucketDeleteOptions
 - label: BucketEvent
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nBucketEvent\n```\n---\non_event notification payload- will be in use after solving issue: https://github.com/winglang/wing/issues/1927."
+    value: "```wing\nstruct BucketEvent\n```\n---\non_event notification payload- will be in use after solving issue: https://github.com/winglang/wing/issues/1927.\n### Fields\n- `key` — the bucket key that triggered the event.\n- `type` — type of event."
   sortText: hh|BucketEvent
 - label: BucketOnCreateProps
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nBucketOnCreateProps\n```\n---\non create event options."
+    value: "```wing\nstruct BucketOnCreateProps\n```\n---\non create event options."
   sortText: hh|BucketOnCreateProps
 - label: BucketOnDeleteProps
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nBucketOnDeleteProps\n```\n---\non delete event options."
+    value: "```wing\nstruct BucketOnDeleteProps\n```\n---\non delete event options."
   sortText: hh|BucketOnDeleteProps
 - label: BucketOnEventProps
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nBucketOnEventProps\n```\n---\non any event options."
+    value: "```wing\nstruct BucketOnEventProps\n```\n---\non any event options."
   sortText: hh|BucketOnEventProps
 - label: BucketOnUpdateProps
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nBucketOnUpdateProps\n```\n---\non update event options."
+    value: "```wing\nstruct BucketOnUpdateProps\n```\n---\non update event options."
   sortText: hh|BucketOnUpdateProps
 - label: BucketProps
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nBucketProps\n```\n---\nProperties for `Bucket`."
+    value: "```wing\nstruct BucketProps\n```\n---\nOptions for `Bucket`.\n### Fields\n- `public?` — Whether the bucket's objects should be publicly accessible."
   sortText: hh|BucketProps
 - label: CounterProps
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nCounterProps\n```\n---\nProperties for `Counter`."
+    value: "```wing\nstruct CounterProps\n```\n---\nOptions for `Counter`.\n### Fields\n- `initial?` — The initial value of the counter."
   sortText: hh|CounterProps
 - label: FunctionProps
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nFunctionProps\n```\n---\nProperties for `Function`.\n\n### Remarks\nThis is the type users see when constructing a cloud.Function instance."
+    value: "```wing\nstruct FunctionProps\n```\n---\nOptions for `Function`.\n### Fields\n- `env?` — Environment variables to pass to the function.\n- `memory?` — The amount of memory to allocate to the function, in MB.\n- `timeout?` — The maximum amount of time the function can run."
   sortText: hh|FunctionProps
 - label: GetSecretValueOptions
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nGetSecretValueOptions\n```\n---\nOptions when getting a secret value."
+    value: "```wing\nstruct GetSecretValueOptions\n```\n---\nOptions when getting a secret value.\n### Fields\n- `cache?` — Whether to cache the value."
   sortText: hh|GetSecretValueOptions
+- label: OnDeployProps
+  kind: 22
+  documentation:
+    kind: markdown
+    value: "```wing\nstruct OnDeployProps extends FunctionProps\n```\n---\nOptions for `OnDeploy`.\n### Fields\n- `env?` — Map<str>?\n- `executeAfter?` — Execute this trigger only after these resources have been provisioned.\n- `executeBefore?` — Adds this trigger as a dependency on other constructs.\n- `memory?` — num?\n- `timeout?` — duration?"
+  sortText: hh|OnDeployProps
 - label: QueueProps
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nQueueProps\n```\n---\nProperties for `Queue`."
+    value: "```wing\nstruct QueueProps\n```\n---\nOptions for `Queue`.\n### Fields\n- `initialMessages?` — Initialize the queue with a set of messages.\n- `retentionPeriod?` — How long a queue retains a message.\n- `timeout?` — How long a queue's consumers have to process a message."
   sortText: hh|QueueProps
 - label: QueueSetConsumerProps
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nQueueSetConsumerProps\n```\n---\nOptions for Queue.setConsumer."
+    value: "```wing\nstruct QueueSetConsumerProps extends FunctionProps\n```\n---\nOptions for Queue.setConsumer.\n### Fields\n- `batchSize?` — The maximum number of messages to send to subscribers at once.\n- `env?` — Map<str>?\n- `memory?` — num?\n- `timeout?` — duration?"
   sortText: hh|QueueSetConsumerProps
 - label: ScheduleOnTickProps
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nScheduleOnTickProps\n```\n---\nOptions for Schedule.onTick."
+    value: "```wing\nstruct ScheduleOnTickProps extends FunctionProps\n```\n---\nOptions for Schedule.onTick.\n### Fields\n- `env?` — Map<str>?\n- `memory?` — num?\n- `timeout?` — duration?"
   sortText: hh|ScheduleOnTickProps
 - label: ScheduleProps
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nScheduleProps\n```\n---\nProperties for `Schedule`."
+    value: "```wing\nstruct ScheduleProps\n```\n---\nOptions for `Schedule`.\n### Fields\n- `cron?` — Trigger events according to a cron schedule using the UNIX cron format.\n- `rate?` — Trigger events at a periodic rate."
   sortText: hh|ScheduleProps
 - label: SecretProps
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nSecretProps\n```\n---\nProperties for `Secret`."
+    value: "```wing\nstruct SecretProps\n```\n---\nOptions for `Secret`.\n### Fields\n- `name?` — The secret's name."
   sortText: hh|SecretProps
 - label: ServiceOnStartProps
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nServiceOnStartProps\n```\n---\nOptions for Service.onStart."
+    value: "```wing\nstruct ServiceOnStartProps extends FunctionProps\n```\n---\nOptions for Service.onStart.\n### Fields\n- `env?` — Map<str>?\n- `memory?` — num?\n- `timeout?` — duration?"
   sortText: hh|ServiceOnStartProps
 - label: ServiceProps
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nServiceProps\n```\n---\nProperties for `Service`."
+    value: "```wing\nstruct ServiceProps\n```\n---\nOptions for `Service`.\n### Fields\n- `autoStart?` — Whether the service should start automatically.\n- `onStart` — Handler to run with the service starts.\n- `onStop?` — Handler to run with the service stops."
   sortText: hh|ServiceProps
-- label: TableProps
-  kind: 22
-  documentation:
-    kind: markdown
-    value: "```wing\nTableProps\n```\n---\nProperties for `Table`."
-  sortText: hh|TableProps
-- label: TestResult
-  kind: 22
-  documentation:
-    kind: markdown
-    value: "```wing\nTestResult\n```\n---\nA result of a single test."
-  sortText: hh|TestResult
-- label: TestRunnerProps
-  kind: 22
-  documentation:
-    kind: markdown
-    value: "```wing\nTestRunnerProps\n```\n---\nProperties for `TestRunner`."
-  sortText: hh|TestRunnerProps
 - label: TopicOnMessageProps
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nTopicOnMessageProps\n```\n---\nOptions for `Topic.onMessage`."
+    value: "```wing\nstruct TopicOnMessageProps extends FunctionProps\n```\n---\nOptions for `Topic.onMessage`.\n### Fields\n- `env?` — Map<str>?\n- `memory?` — num?\n- `timeout?` — duration?"
   sortText: hh|TopicOnMessageProps
 - label: TopicProps
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nTopicProps\n```\n---\nProperties for `Topic`."
+    value: "```wing\nstruct TopicProps\n```\n---\nOptions for `Topic`."
   sortText: hh|TopicProps
-- label: Trace
-  kind: 22
-  documentation:
-    kind: markdown
-    value: "```wing\nTrace\n```\n---\nRepresents an trace emitted during simulation."
-  sortText: hh|Trace
 - label: WebsiteProps
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nWebsiteProps\n```\n---\nwebsite props."
+    value: "```wing\nstruct WebsiteProps\n```\n---\nOptions for `Website`.\n### Fields\n- `domain?` — The website's custom domain name.\n- `path` — Local path to the website's static files, relative to the Wing source file or absolute."
   sortText: hh|WebsiteProps
 - label: IApiClient
   kind: 8
   documentation:
     kind: markdown
-    value: "```wing\nIApiClient\n```\n---\nInflight methods and members of `cloud.Api`."
+    value: "```wing\ninterface IApiClient\n```\n---\nInflight methods and members of `cloud.Api`."
   sortText: ii|IApiClient
 - label: IApiEndpointHandler
   kind: 8
   documentation:
     kind: markdown
-    value: "```wing\nIApiEndpointHandler\n```\n---\nRepresents a resource with an inflight \"handle\" method that can be passed to one of the `Api` request preflight methods."
+    value: "```wing\ninterface IApiEndpointHandler extends IResource\n```\n---\nA resource with an inflight \"handle\" method that can be passed to one of the `Api` request preflight methods.\n### Methods\n- `handle` — Inflight that will be called when a request is made to the endpoint."
   sortText: ii|IApiEndpointHandler
 - label: IApiEndpointHandlerClient
   kind: 8
   documentation:
     kind: markdown
-    value: "```wing\nIApiEndpointHandlerClient\n```\n---\nInflight client for `IApiEndpointHandler`."
+    value: "```wing\ninterface IApiEndpointHandlerClient\n```\n---\nInflight client for `IApiEndpointHandler`.\n### Methods\n- `handle` — Inflight that will be called when a request is made to the endpoint."
   sortText: ii|IApiEndpointHandlerClient
 - label: IBucketClient
   kind: 8
   documentation:
     kind: markdown
-    value: "```wing\nIBucketClient\n```\n---\nInflight interface for `Bucket`."
+    value: "```wing\ninterface IBucketClient\n```\n---\nInflight interface for `Bucket`.\n### Methods\n- `delete` — Delete an existing object using a key from the bucket.\n- `exists` — Check if an object exists in the bucket.\n- `get` — Retrieve an object from the bucket.\n- `getJson` — Retrieve a Json object from the bucket.\n- `list` — Retrieve existing objects keys from the bucket.\n- `publicUrl` — Returns a url to the given file.\n- `put` — Put an object in the bucket.\n- `putJson` — Put a Json object in the bucket.\n- `tryDelete` — Delete an object from the bucket if it exists.\n- `tryGet` — Get an object from the bucket if it exists.\n- `tryGetJson` — Gets an object from the bucket if it exists, parsing it as Json."
   sortText: ii|IBucketClient
 - label: IBucketEventHandler
   kind: 8
   documentation:
     kind: markdown
-    value: "```wing\nIBucketEventHandler\n```\n---\nRepresents a resource with an inflight \"handle\" method that can be passed to the bucket events."
+    value: "```wing\ninterface IBucketEventHandler extends IResource\n```\n---\nA resource with an inflight \"handle\" method that can be passed to the bucket events.\n### Methods\n- `handle` — Function that will be called when an event notification is fired."
   sortText: ii|IBucketEventHandler
 - label: IBucketEventHandlerClient
   kind: 8
   documentation:
     kind: markdown
-    value: "```wing\nIBucketEventHandlerClient\n```\n---\nRepresents a resource with an inflight \"handle\" method that can be passed to the bucket events."
+    value: "```wing\ninterface IBucketEventHandlerClient\n```\n---\nA resource with an inflight \"handle\" method that can be passed to the bucket events.\n### Methods\n- `handle` — Function that will be called when an event notification is fired."
   sortText: ii|IBucketEventHandlerClient
 - label: ICounterClient
   kind: 8
   documentation:
     kind: markdown
-    value: "```wing\nICounterClient\n```\n---\nInflight interface for `Counter`."
+    value: "```wing\ninterface ICounterClient\n```\n---\nInflight interface for `Counter`.\n### Methods\n- `dec` — Decrement the counter, returning the previous value.\n- `inc` — Increments the counter atomically by a certain amount and returns the previous value.\n- `peek` — Get the current value of the counter.\n- `set` — Set a counter to a given value."
   sortText: ii|ICounterClient
 - label: IFunctionClient
   kind: 8
   documentation:
     kind: markdown
-    value: "```wing\nIFunctionClient\n```\n---\nInflight interface for `Function`."
+    value: "```wing\ninterface IFunctionClient\n```\n---\nInflight interface for `Function`.\n### Methods\n- `invoke` — Invoke the function asynchronously with a given payload."
   sortText: ii|IFunctionClient
 - label: IFunctionHandler
   kind: 8
   documentation:
     kind: markdown
-    value: "```wing\nIFunctionHandler\n```\n---\nRepresents a resource with an inflight \"handle\" method that can be used to create a `cloud.Function`."
+    value: "```wing\ninterface IFunctionHandler extends IResource\n```\n---\nA resource with an inflight \"handle\" method that can be used to create a `cloud.Function`.\n### Methods\n- `handle` — Entrypoint function that will be called when the cloud function is invoked."
   sortText: ii|IFunctionHandler
 - label: IFunctionHandlerClient
   kind: 8
   documentation:
     kind: markdown
-    value: "```wing\nIFunctionHandlerClient\n```\n---\nInflight client for `IFunctionHandler`."
+    value: "```wing\ninterface IFunctionHandlerClient\n```\n---\nInflight client for `IFunctionHandler`.\n### Methods\n- `handle` — Entrypoint function that will be called when the cloud function is invoked."
   sortText: ii|IFunctionHandlerClient
+- label: IOnDeployClient
+  kind: 8
+  documentation:
+    kind: markdown
+    value: "```wing\ninterface IOnDeployClient\n```\n---\nInflight interface for `OnDeploy`."
+  sortText: ii|IOnDeployClient
+- label: IOnDeployHandler
+  kind: 8
+  documentation:
+    kind: markdown
+    value: "```wing\ninterface IOnDeployHandler extends IResource\n```\n---\nA resource with an inflight \"handle\" method that can be used by `cloud.OnDeploy`.\n### Methods\n- `handle` — Entrypoint function that will be called when the app is deployed."
+  sortText: ii|IOnDeployHandler
+- label: IOnDeployHandlerClient
+  kind: 8
+  documentation:
+    kind: markdown
+    value: "```wing\ninterface IOnDeployHandlerClient\n```\n---\nInflight client for `IOnDeployHandler`.\n### Methods\n- `handle` — Entrypoint function that will be called when the app is deployed."
+  sortText: ii|IOnDeployHandlerClient
 - label: IQueueClient
   kind: 8
   documentation:
     kind: markdown
-    value: "```wing\nIQueueClient\n```\n---\nInflight interface for `Queue`."
+    value: "```wing\ninterface IQueueClient\n```\n---\nInflight interface for `Queue`.\n### Methods\n- `approxSize` — Retrieve the approximate number of messages in the queue.\n- `pop` — Pop a message from the queue.\n- `purge` — Purge all of the messages in the queue.\n- `push` — Push a message to the queue."
   sortText: ii|IQueueClient
 - label: IQueueSetConsumerHandler
   kind: 8
   documentation:
     kind: markdown
-    value: "```wing\nIQueueSetConsumerHandler\n```\n---\nRepresents a resource with an inflight \"handle\" method that can be passed to `Queue.setConsumer`."
+    value: "```wing\ninterface IQueueSetConsumerHandler extends IResource\n```\n---\nA resource with an inflight \"handle\" method that can be passed to `Queue.setConsumer`.\n### Methods\n- `handle` — Function that will be called when a message is received from the queue."
   sortText: ii|IQueueSetConsumerHandler
 - label: IQueueSetConsumerHandlerClient
   kind: 8
   documentation:
     kind: markdown
-    value: "```wing\nIQueueSetConsumerHandlerClient\n```\n---\nInflight client for `IQueueSetConsumerHandler`."
+    value: "```wing\ninterface IQueueSetConsumerHandlerClient\n```\n---\nInflight client for `IQueueSetConsumerHandler`.\n### Methods\n- `handle` — Function that will be called when a message is received from the queue."
   sortText: ii|IQueueSetConsumerHandlerClient
 - label: IScheduleClient
   kind: 8
   documentation:
     kind: markdown
-    value: "```wing\nIScheduleClient\n```\n---\nInflight interface for `Schedule`."
+    value: "```wing\ninterface IScheduleClient\n```\n---\nInflight interface for `Schedule`."
   sortText: ii|IScheduleClient
 - label: IScheduleOnTickHandler
   kind: 8
   documentation:
     kind: markdown
-    value: "```wing\nIScheduleOnTickHandler\n```\n---\nRepresents a resource with an inflight \"handle\" method that can be passed to `Schedule.on_tick`."
+    value: "```wing\ninterface IScheduleOnTickHandler extends IResource\n```\n---\nA resource with an inflight \"handle\" method that can be passed to `Schedule.on_tick`.\n### Methods\n- `handle` — Function that will be called when a message is received from the schedule."
   sortText: ii|IScheduleOnTickHandler
 - label: IScheduleOnTickHandlerClient
   kind: 8
   documentation:
     kind: markdown
-    value: "```wing\nIScheduleOnTickHandlerClient\n```\n---\nInflight client for `IScheduleOnTickHandler`."
+    value: "```wing\ninterface IScheduleOnTickHandlerClient\n```\n---\nInflight client for `IScheduleOnTickHandler`.\n### Methods\n- `handle` — Function that will be called when a message is received from the schedule."
   sortText: ii|IScheduleOnTickHandlerClient
 - label: ISecretClient
   kind: 8
   documentation:
     kind: markdown
-    value: "```wing\nISecretClient\n```\n---\nInflight interface for `Secret`."
+    value: "```wing\ninterface ISecretClient\n```\n---\nInflight interface for `Secret`.\n### Methods\n- `value` — Retrieve the value of the secret.\n- `valueJson` — Retrieve the Json value of the secret."
   sortText: ii|ISecretClient
 - label: IServiceClient
   kind: 8
   documentation:
     kind: markdown
-    value: "```wing\nIServiceClient\n```\n---\nInflight interface for `Service`."
+    value: "```wing\ninterface IServiceClient\n```\n---\nInflight interface for `Service`.\n### Methods\n- `start` — Start the service.\n- `stop` — Stop the service."
   sortText: ii|IServiceClient
 - label: IServiceOnEventClient
   kind: 8
   documentation:
     kind: markdown
-    value: "```wing\nIServiceOnEventClient\n```\n---\nInflight client for `IServiceOnEventHandler`."
+    value: "```wing\ninterface IServiceOnEventClient\n```\n---\nInflight client for `IServiceOnEventHandler`.\n### Methods\n- `handle` — Function that will be called for service events."
   sortText: ii|IServiceOnEventClient
 - label: IServiceOnEventHandler
   kind: 8
   documentation:
     kind: markdown
-    value: "```wing\nIServiceOnEventHandler\n```\n---\nRepresents a resource with an inflight \"handle\" method that can be passed to `ServiceProps.on_start` || `ServiceProps.on_stop`."
+    value: "```wing\ninterface IServiceOnEventHandler extends IResource\n```\n---\nA resource with an inflight \"handle\" method that can be passed to `ServiceProps.on_start` || `ServiceProps.on_stop`.\n### Methods\n- `handle` — Function that will be called for service events."
   sortText: ii|IServiceOnEventHandler
-- label: ITableClient
-  kind: 8
-  documentation:
-    kind: markdown
-    value: "```wing\nITableClient\n```\n---\nInflight interface for `Table`."
-  sortText: ii|ITableClient
-- label: ITestRunnerClient
-  kind: 8
-  documentation:
-    kind: markdown
-    value: "```wing\nITestRunnerClient\n```\n---\nInflight interface for `TestRunner`."
-  sortText: ii|ITestRunnerClient
 - label: ITopicClient
   kind: 8
   documentation:
     kind: markdown
-    value: "```wing\nITopicClient\n```\n---\nInflight interface for `Topic`."
+    value: "```wing\ninterface ITopicClient\n```\n---\nInflight interface for `Topic`.\n### Methods\n- `publish` — Publish message to topic."
   sortText: ii|ITopicClient
 - label: ITopicOnMessageHandler
   kind: 8
   documentation:
     kind: markdown
-    value: "```wing\nITopicOnMessageHandler\n```\n---\nRepresents a resource with an inflight \"handle\" method that can be passed to `Topic.on_message`."
+    value: "```wing\ninterface ITopicOnMessageHandler extends IResource\n```\n---\nA resource with an inflight \"handle\" method that can be passed to `Topic.on_message`.\n### Methods\n- `handle` — Function that will be called when a message is received from the topic."
   sortText: ii|ITopicOnMessageHandler
 - label: ITopicOnMessageHandlerClient
   kind: 8
   documentation:
     kind: markdown
-    value: "```wing\nITopicOnMessageHandlerClient\n```\n---\nInflight client for `ITopicOnMessageHandler`."
+    value: "```wing\ninterface ITopicOnMessageHandlerClient\n```\n---\nInflight client for `ITopicOnMessageHandler`.\n### Methods\n- `handle` — Function that will be called when a message is received from the topic."
   sortText: ii|ITopicOnMessageHandlerClient
 - label: IWebsiteClient
   kind: 8
   documentation:
     kind: markdown
-    value: "```wing\nIWebsiteClient\n```\n---\nInflight methods and members of `cloud.Website`."
+    value: "```wing\ninterface IWebsiteClient\n```\n---\nInflight methods and members of `cloud.Website`."
   sortText: ii|IWebsiteClient
 - label: BucketEventType
   kind: 13
   documentation:
     kind: markdown
-    value: ""
+    value: "```wing\nenum BucketEventType\n```\n---\nbucket events to subscribe to.\n- `CREATE`\n- `DELETE`\n- `UPDATE`"
   sortText: jj|BucketEventType
-- label: ColumnType
-  kind: 13
-  documentation:
-    kind: markdown
-    value: ""
-  sortText: jj|ColumnType
 - label: HttpMethod
   kind: 13
   documentation:
     kind: markdown
-    value: ""
+    value: "```wing\nenum HttpMethod\n```\n---\nAllowed HTTP methods for a endpoint.\n- `GET`\n- `HEAD`\n- `POST`\n- `PUT`\n- `DELETE`\n- `CONNECT`\n- `OPTIONS`\n- `PATCH`"
   sortText: jj|HttpMethod
-- label: TraceType
-  kind: 13
-  documentation:
-    kind: markdown
-    value: ""
-  sortText: jj|TraceType
 

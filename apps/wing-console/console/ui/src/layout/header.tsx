@@ -19,6 +19,7 @@ export const Header = ({ title }: HeaderProps) => {
 
   const toggleThemeMode = useCallback(() => {
     const newMode =
+      // eslint-disable-next-line unicorn/no-nested-ternary
       mode === "light" ? "auto" : mode === "auto" ? "dark" : "light";
     setThemeMode?.(newMode);
   }, [setThemeMode, mode]);

@@ -2,21 +2,21 @@
 
 // Also js files are js.txt files until we find a way to make Docusaurus not minify them
 
-import pulumiIndexPath from '!file-loader!./pulumi/index.js.txt';
-import pulumiMainPath from '!file-loader!./pulumi/main.ts';
-import pulumiPulumiPath from '!file-loader!./pulumi/pulumi.yaml';
+import pulumiIndexPath from '!file-loader?outputPath=docs!./pulumi/index.js.txt';
+import pulumiMainPath from '!file-loader?outputPath=docs!./pulumi/main.ts';
+import pulumiPulumiPath from '!file-loader?outputPath=docs!./pulumi/pulumi.yaml';
 
-import terraformIndexPath from '!file-loader!./terraform/index.js.txt';
-import terraformMainPath from '!file-loader!./terraform/main.tf';
+import terraformIndexPath from '!file-loader?outputPath=docs!./terraform/index.js.txt';
+import terraformMainPath from '!file-loader?outputPath=docs!./terraform/main.tf';
 
-import cdkHelloPath from '!file-loader!./aws-cdk/hello.js.txt';
-import cdkIndexPath from '!file-loader!./aws-cdk/index.js.txt';
+import cdkHelloPath from '!file-loader?outputPath=docs!./aws-cdk/hello.js.txt';
+import cdkIndexPath from '!file-loader?outputPath=docs!./aws-cdk/index.js.txt';
 
-import cdktfIndexPath from '!file-loader!./cdktf/index.js.txt';
-import cdktfMainPath from '!file-loader!./cdktf/main.ts';
+import cdktfIndexPath from '!file-loader?outputPath=docs!./cdktf/index.js.txt';
+import cdktfMainPath from '!file-loader?outputPath=docs!./cdktf/main.ts';
 
-import cloudformationIndexPath from '!file-loader!./cloudformation/index.js.txt';
-import cloudformationTemplatePath from '!file-loader!./cloudformation/template.yaml';
+import cloudformationIndexPath from '!file-loader?outputPath=docs!./cloudformation/index.js.txt';
+import cloudformationTemplatePath from '!file-loader?outputPath=docs!./cloudformation/template.yaml';
 
 const allPlatforms = [
   {

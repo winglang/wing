@@ -9,35 +9,22 @@ module.exports = function({  }) {
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
-    async handle()  {
+    async handle() {
       const y = [1];
       let i = 10;
-      const Inner = require("./inflight.Inner.js")({y, i});
-      {((cond) => {if (!cond) throw new Error("assertion failed: new Inner().dang() == 11")})(((await new Inner().dang()) === 11))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: y.at(1) == 2")})(((await y.at(1)) === 2))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: i == 10")})((i === 10))};
+      class Inner {
+        async dang() {
+          (await y.push(2));
+          i = (i + 1);
+          return ((await y.at(0)) + 10);
+        }
+      }
+      {((cond) => {if (!cond) throw new Error("assertion failed: new Inner().dang() == 11")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await new Inner().dang()),11)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: y.at(1) == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await y.at(1)),2)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: i == 11")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(i,11)))};
     }
   }
   return $Closure1;
-}
-
-```
-
-## inflight.Inner.js
-```js
-module.exports = function({ y, i }) {
-  class Inner {
-     constructor()  {
-    }
-    async dang()  {
-      (await y.push(2));
-      i = (i + 1);
-      return ((await y.at(0)) + 10);
-    }
-  }
-  return Inner;
 }
 
 ```
@@ -49,7 +36,7 @@ module.exports = function({ y, i }) {
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.2"
+      "version": "0.17.0"
     },
     "outputs": {
       "root": {
@@ -63,7 +50,7 @@ module.exports = function({ y, i }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:inner inflight class capture immutable\",\"${aws_lambda_function.root_testinnerinflightclasscaptureimmutable_Handler_C3337584.arn}\"]]"
+      "value": "[[\"root/Default/Default/test:inner inflight class capture immutable\",\"${aws_lambda_function.testinnerinflightclasscaptureimmutable_Handler_8A6A0444.arn}\"]]"
     }
   },
   "provider": {
@@ -73,46 +60,46 @@ module.exports = function({ y, i }) {
   },
   "resource": {
     "aws_iam_role": {
-      "root_testinnerinflightclasscaptureimmutable_Handler_IamRole_EC2815FE": {
+      "testinnerinflightclasscaptureimmutable_Handler_IamRole_A23BAF06": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:inner inflight class capture immutable/Handler/IamRole",
-            "uniqueId": "root_testinnerinflightclasscaptureimmutable_Handler_IamRole_EC2815FE"
+            "uniqueId": "testinnerinflightclasscaptureimmutable_Handler_IamRole_A23BAF06"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
-      "root_testinnerinflightclasscaptureimmutable_Handler_IamRolePolicy_DE3303E1": {
+      "testinnerinflightclasscaptureimmutable_Handler_IamRolePolicy_64E9740C": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:inner inflight class capture immutable/Handler/IamRolePolicy",
-            "uniqueId": "root_testinnerinflightclasscaptureimmutable_Handler_IamRolePolicy_DE3303E1"
+            "uniqueId": "testinnerinflightclasscaptureimmutable_Handler_IamRolePolicy_64E9740C"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
-        "role": "${aws_iam_role.root_testinnerinflightclasscaptureimmutable_Handler_IamRole_EC2815FE.name}"
+        "role": "${aws_iam_role.testinnerinflightclasscaptureimmutable_Handler_IamRole_A23BAF06.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
-      "root_testinnerinflightclasscaptureimmutable_Handler_IamRolePolicyAttachment_F9D25435": {
+      "testinnerinflightclasscaptureimmutable_Handler_IamRolePolicyAttachment_333DB9F1": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:inner inflight class capture immutable/Handler/IamRolePolicyAttachment",
-            "uniqueId": "root_testinnerinflightclasscaptureimmutable_Handler_IamRolePolicyAttachment_F9D25435"
+            "uniqueId": "testinnerinflightclasscaptureimmutable_Handler_IamRolePolicyAttachment_333DB9F1"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.root_testinnerinflightclasscaptureimmutable_Handler_IamRole_EC2815FE.name}"
+        "role": "${aws_iam_role.testinnerinflightclasscaptureimmutable_Handler_IamRole_A23BAF06.name}"
       }
     },
     "aws_lambda_function": {
-      "root_testinnerinflightclasscaptureimmutable_Handler_C3337584": {
+      "testinnerinflightclasscaptureimmutable_Handler_8A6A0444": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:inner inflight class capture immutable/Handler/Default",
-            "uniqueId": "root_testinnerinflightclasscaptureimmutable_Handler_C3337584"
+            "uniqueId": "testinnerinflightclasscaptureimmutable_Handler_8A6A0444"
           }
         },
         "environment": {
@@ -124,10 +111,10 @@ module.exports = function({ y, i }) {
         "function_name": "Handler-c88a8b71",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.root_testinnerinflightclasscaptureimmutable_Handler_IamRole_EC2815FE.arn}",
+        "role": "${aws_iam_role.testinnerinflightclasscaptureimmutable_Handler_IamRole_A23BAF06.arn}",
         "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
-        "s3_key": "${aws_s3_object.root_testinnerinflightclasscaptureimmutable_Handler_S3Object_BD655752.key}",
+        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
+        "s3_key": "${aws_s3_object.testinnerinflightclasscaptureimmutable_Handler_S3Object_9B7C45EF.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -136,25 +123,25 @@ module.exports = function({ y, i }) {
       }
     },
     "aws_s3_bucket": {
-      "root_Code_02F3C603": {
+      "Code": {
         "//": {
           "metadata": {
             "path": "root/Default/Code",
-            "uniqueId": "root_Code_02F3C603"
+            "uniqueId": "Code"
           }
         },
         "bucket_prefix": "code-c84a50b1-"
       }
     },
     "aws_s3_object": {
-      "root_testinnerinflightclasscaptureimmutable_Handler_S3Object_BD655752": {
+      "testinnerinflightclasscaptureimmutable_Handler_S3Object_9B7C45EF": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:inner inflight class capture immutable/Handler/S3Object",
-            "uniqueId": "root_testinnerinflightclasscaptureimmutable_Handler_S3Object_BD655752"
+            "uniqueId": "testinnerinflightclasscaptureimmutable_Handler_S3Object_9B7C45EF"
           }
         },
-        "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
+        "bucket": "${aws_s3_bucket.Code.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       }
@@ -169,7 +156,6 @@ const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
-const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 const cloud = require('@winglang/sdk').cloud;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
@@ -177,13 +163,12 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
+        this._addInflightOps("handle", "$inflight_init");
         this.display.hidden = true;
-        this._addInflightOps("handle");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.$Closure1.js")({
           })
         `);
       }
@@ -198,33 +183,12 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-        }
-        if (ops.includes("handle")) {
-        }
-        super._registerBind(host, ops);
-      }
     }
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:inner inflight class capture immutable",new $Closure1(this,"$Closure1"));
   }
 }
-class $App extends $AppBase {
-  constructor() {
-    super({ outdir: $outdir, name: "inflight_class_inner_capture_mutable", plugins: $plugins, isTestEnvironment: $wing_is_test });
-    if ($wing_is_test) {
-      new $Root(this, "env0");
-      const $test_runner = this.testRunner;
-      const $tests = $test_runner.findTests();
-      for (let $i = 1; $i < $tests.length; $i++) {
-        new $Root(this, "env" + $i);
-      }
-    } else {
-      new $Root(this, "Default");
-    }
-  }
-}
-new $App().synth();
+const $App = $stdlib.core.App.for(process.env.WING_TARGET);
+new $App({ outdir: $outdir, name: "inflight_class_inner_capture_mutable", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test }).synth();
 
 ```
 

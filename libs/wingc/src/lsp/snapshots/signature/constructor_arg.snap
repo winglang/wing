@@ -2,14 +2,14 @@
 source: libs/wingc/src/lsp/signature.rs
 ---
 signatures:
-  - label: "(props: BucketProps?): Bucket"
+  - label: "(...props): Bucket"
     documentation:
       kind: markdown
       value: ""
     parameters:
-      - label: "props: BucketProps?"
+      - label: "...props"
         documentation:
           kind: markdown
-          value: "Properties for `Bucket`.\n```wing\npublic: bool?\n```\n"
+          value: "```wing\nstruct BucketProps\n```\n---\nOptions for `Bucket`.\n### Fields\n- `public?` — Whether the bucket's objects should be publicly accessible."
     activeParameter: 0
 

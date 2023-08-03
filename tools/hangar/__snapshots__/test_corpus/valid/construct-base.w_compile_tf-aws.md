@@ -6,8 +6,6 @@ module.exports = function({  }) {
   class WingResource {
     constructor({  }) {
     }
-    async $inflight_init()  {
-    }
   }
   return WingResource;
 }
@@ -21,7 +19,7 @@ module.exports = function({  }) {
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.2"
+      "version": "0.17.0"
     },
     "outputs": {
       "root": {
@@ -45,11 +43,11 @@ module.exports = function({  }) {
   },
   "resource": {
     "aws_sqs_queue": {
-      "root_awssqsQueueSqsQueue_47BDCAE4": {
+      "awssqsQueueSqsQueue": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/aws.sqsQueue.SqsQueue",
-            "uniqueId": "root_awssqsQueueSqsQueue_47BDCAE4"
+            "uniqueId": "awssqsQueueSqsQueue"
           }
         }
       }
@@ -64,7 +62,6 @@ const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
-const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 const cloud = require('@winglang/sdk').cloud;
 const cx = require("constructs");
 const aws = require("@cdktf/provider-aws");
@@ -74,12 +71,12 @@ class $Root extends $stdlib.std.Resource {
     class WingResource extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
+        this._addInflightOps("$inflight_init");
         {console.log(String.raw({ raw: ["my id is ", ""] }, this.node.id))};
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.WingResource.js";
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.WingResource.js")({
           })
         `);
       }
@@ -94,20 +91,13 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-        }
-        super._registerBind(host, ops);
-      }
     }
-    const getPath =  (c) =>  {
+    const getPath = ((c) => {
       return c.node.path;
-    }
-    ;
-    const getDisplayName =  (r) =>  {
+    });
+    const getDisplayName = ((r) => {
       return r.display.title;
-    }
-    ;
+    });
     const q = this.node.root.new("@cdktf/provider-aws.sqsQueue.SqsQueue",aws.sqsQueue.SqsQueue,this,"aws.sqsQueue.SqsQueue");
     const wr = new WingResource(this,"WingResource");
     const another_resource = wr;
@@ -117,22 +107,8 @@ class $Root extends $stdlib.std.Resource {
     {console.log(String.raw({ raw: ["display name of wing resource: ", ""] }, title))};
   }
 }
-class $App extends $AppBase {
-  constructor() {
-    super({ outdir: $outdir, name: "construct-base", plugins: $plugins, isTestEnvironment: $wing_is_test });
-    if ($wing_is_test) {
-      new $Root(this, "env0");
-      const $test_runner = this.testRunner;
-      const $tests = $test_runner.findTests();
-      for (let $i = 1; $i < $tests.length; $i++) {
-        new $Root(this, "env" + $i);
-      }
-    } else {
-      new $Root(this, "Default");
-    }
-  }
-}
-new $App().synth();
+const $App = $stdlib.core.App.for(process.env.WING_TARGET);
+new $App({ outdir: $outdir, name: "construct-base", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test }).synth();
 
 ```
 

@@ -7,7 +7,7 @@ import { SecurityGroup } from "../.gen/providers/aws/security-group";
 import { Subnet } from "../.gen/providers/aws/subnet";
 import { Code } from "../core";
 import * as core from "../core";
-import * as redis from "../redis";
+import * as ex from "../ex";
 import {
   CaseConventions,
   NameOptions,
@@ -21,7 +21,7 @@ const ELASTICACHE_NAME_OPTS: NameOptions = {
   case: CaseConventions.LOWERCASE,
 };
 
-export class Redis extends redis.Redis {
+export class Redis extends ex.Redis {
   private readonly clusterId: string;
   private readonly clusterArn: string;
   private readonly securityGroup: SecurityGroup;
@@ -104,10 +104,12 @@ export class Redis extends redis.Redis {
     // Ops do not matter here since the client connects directly to the cluster.
     // The only thing that we need to use AWS API for is to get the cluster endpoint
     // from the cluster ID.
-    host.addPolicyStatements({
-      actions: ["elasticache:Describe*"],
-      resources: [this.clusterArn],
-    });
+    host.addPolicyStatements([
+      {
+        actions: ["elasticache:Describe*"],
+        resources: [this.clusterArn],
+      },
+    ]);
 
     host.addEnvironment(env, this.clusterId);
     host.addNetworkConfig({

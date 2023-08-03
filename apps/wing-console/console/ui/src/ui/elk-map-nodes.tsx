@@ -44,6 +44,7 @@ const getResourceBorderColor = (
 };
 
 export interface ContainerNodeProps {
+  nodeId: string;
   name: string | undefined;
   icon?: IconComponent;
   open?: boolean;
@@ -140,6 +141,7 @@ export const ContainerNode = ({
               "rounded-l": !Icon,
             },
           )}
+          data-testid={`map-node:${props.nodeId}`}
         >
           <div className="flex flex-col">
             <div
@@ -156,7 +158,6 @@ export const ContainerNode = ({
           </div>
         </div>
       </div>
-
       {open && (
         <div
           className={classNames(

@@ -7,7 +7,7 @@
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.2"
+      "version": "0.17.0"
     },
     "outputs": {
       "root": {
@@ -38,7 +38,6 @@ const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
-const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
@@ -56,7 +55,7 @@ class $Root extends $stdlib.std.Resource {
         break;
       }
     }
-    {((cond) => {if (!cond) throw new Error("assertion failed: z == 3")})((z === 3))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: z == 3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(z,3)))};
     while (true) {
       break;
     }
@@ -64,31 +63,17 @@ class $Root extends $stdlib.std.Resource {
     let i = 0;
     while ((i < 10)) {
       i = (i + 1);
-      if (((i % 2) === 0)) {
+      if ((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((i % 2),0))) {
         continue;
       }
       v = (v + 1);
     }
-    {((cond) => {if (!cond) throw new Error("assertion failed: i == 10")})((i === 10))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: v == 5")})((v === 5))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: i == 10")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(i,10)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: v == 5")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(v,5)))};
   }
 }
-class $App extends $AppBase {
-  constructor() {
-    super({ outdir: $outdir, name: "while", plugins: $plugins, isTestEnvironment: $wing_is_test });
-    if ($wing_is_test) {
-      new $Root(this, "env0");
-      const $test_runner = this.testRunner;
-      const $tests = $test_runner.findTests();
-      for (let $i = 1; $i < $tests.length; $i++) {
-        new $Root(this, "env" + $i);
-      }
-    } else {
-      new $Root(this, "Default");
-    }
-  }
-}
-new $App().synth();
+const $App = $stdlib.core.App.for(process.env.WING_TARGET);
+new $App({ outdir: $outdir, name: "while", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test }).synth();
 
 ```
 

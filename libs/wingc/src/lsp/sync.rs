@@ -106,19 +106,10 @@ fn partial_compile(source_file: &str, text: &[u8], jsii_types: &mut TypeSystem) 
 		}
 	};
 
-	let wing_parser = Parser::new(text, source_file.to_string());
+	let mut files = Files::new();
+	let wing_parser = Parser::new(text, source_file.to_string(), &mut files);
 
 	let scope = wing_parser.wingit(&tree.root_node());
-	let mut files = Files::new();
-	match files.add_file(
-		source_file,
-		String::from_utf8(text.to_vec()).expect("Invalid utf-8 sequence"),
-	) {
-		Ok(_) => {}
-		Err(err) => {
-			panic!("Failed adding source file to parser: {}", err);
-		}
-	}
 
 	// -- DESUGARING PHASE --
 
@@ -146,7 +137,7 @@ fn partial_compile(source_file: &str, text: &[u8], jsii_types: &mut TypeSystem) 
 	let app_name = source_path.file_stem().expect("Empty filename").to_str().unwrap();
 	let project_dir = source_path.parent().expect("Empty filename");
 
-	let mut jsifier = JSifier::new(&types, &files, app_name, &project_dir, true);
+	let mut jsifier = JSifier::new(&mut types, &files, app_name, &project_dir, true);
 	jsifier.jsify(&scope);
 
 	return FileData {

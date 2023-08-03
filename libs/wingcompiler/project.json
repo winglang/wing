@@ -5,32 +5,27 @@
   "targets": {
     "copy": {
       "options": {
-        "command": "cp -v ../../target/wasm32-wasi/debug/wingc.wasm ./",
+        "command": "cp -v ../../target/wasm32-wasi/release/wingc.wasm ./",
         "cwd": "libs/wingcompiler"
-      },
-      "configurations": {
-        "release": {
-          "command": "cp -v ../../target/wasm32-wasi/release/wingc.wasm ./"
-        }
       }
     },
     "build": {
       "dependsOn": ["^build", "copy"],
       "options": {
-        "command": "npm run build",
+        "command": "pnpm build",
         "cwd": "libs/wingcompiler"
       }
     },
     "test": {
       "dependsOn": ["copy"],
       "options": {
-        "command": "npm run test",
+        "command": "pnpm test",
         "cwd": "libs/wingcompiler"
       }
     },
     "package": {
       "options": {
-        "commands": ["npx patch-package", "npm run package"],
+        "command": "pnpm package",
         "cwd": "libs/wingcompiler",
         "parallel": false
       }

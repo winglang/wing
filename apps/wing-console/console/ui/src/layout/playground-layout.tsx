@@ -108,13 +108,14 @@ export const PlaygroundLayout = ({
             },
           )}
         >
-          <BlueScreenOfDeath
-            hidden={cloudAppState !== "error"}
-            title={"An error has occurred:"}
-            error={errorMessage.data ?? ""}
-            displayLinks={false}
-            displayWingTitle={false}
-          />
+          {cloudAppState === "error" && (
+            <BlueScreenOfDeath
+              title={"An error has occurred:"}
+              error={errorMessage.data ?? ""}
+              displayLinks={false}
+              displayWingTitle={false}
+            />
+          )}
           <RightResizableWidget
             className={classNames(
               theme.border3,

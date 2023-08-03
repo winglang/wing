@@ -7,7 +7,7 @@
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.2"
+      "version": "0.17.0"
     },
     "outputs": {
       "root": {
@@ -31,31 +31,31 @@
   },
   "resource": {
     "aws_s3_bucket": {
-      "root_bucket1_3A77B9B4": {
+      "bucket1": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/bucket1/Default",
-            "uniqueId": "root_bucket1_3A77B9B4"
+            "uniqueId": "bucket1"
           }
         },
         "bucket_prefix": "bucket1-c81ed215-",
         "force_destroy": false
       },
-      "root_bucket2_E39F70EE": {
+      "bucket2": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/bucket2/Default",
-            "uniqueId": "root_bucket2_E39F70EE"
+            "uniqueId": "bucket2"
           }
         },
         "bucket_prefix": "bucket2-c83a0be6-",
         "force_destroy": false
       },
-      "root_bucket3_A0C568EA": {
+      "bucket3": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/bucket3/Default",
-            "uniqueId": "root_bucket3_A0C568EA"
+            "uniqueId": "bucket3"
           }
         },
         "bucket_prefix": "bucket3-c8b6c706-",
@@ -63,55 +63,55 @@
       }
     },
     "aws_s3_bucket_public_access_block": {
-      "root_bucket1_PublicAccessBlock_6C5071C0": {
+      "bucket1_PublicAccessBlock_01FA69AD": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/bucket1/PublicAccessBlock",
-            "uniqueId": "root_bucket1_PublicAccessBlock_6C5071C0"
+            "uniqueId": "bucket1_PublicAccessBlock_01FA69AD"
           }
         },
         "block_public_acls": true,
         "block_public_policy": true,
-        "bucket": "${aws_s3_bucket.root_bucket1_3A77B9B4.bucket}",
+        "bucket": "${aws_s3_bucket.bucket1.bucket}",
         "ignore_public_acls": true,
         "restrict_public_buckets": true
       },
-      "root_bucket2_PublicAccessBlock_BC328E84": {
+      "bucket2_PublicAccessBlock_063D91B9": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/bucket2/PublicAccessBlock",
-            "uniqueId": "root_bucket2_PublicAccessBlock_BC328E84"
+            "uniqueId": "bucket2_PublicAccessBlock_063D91B9"
           }
         },
         "block_public_acls": true,
         "block_public_policy": true,
-        "bucket": "${aws_s3_bucket.root_bucket2_E39F70EE.bucket}",
+        "bucket": "${aws_s3_bucket.bucket2.bucket}",
         "ignore_public_acls": true,
         "restrict_public_buckets": true
       },
-      "root_bucket3_PublicAccessBlock_CF2593D4": {
+      "bucket3_PublicAccessBlock_D66B79BF": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/bucket3/PublicAccessBlock",
-            "uniqueId": "root_bucket3_PublicAccessBlock_CF2593D4"
+            "uniqueId": "bucket3_PublicAccessBlock_D66B79BF"
           }
         },
         "block_public_acls": true,
         "block_public_policy": true,
-        "bucket": "${aws_s3_bucket.root_bucket3_A0C568EA.bucket}",
+        "bucket": "${aws_s3_bucket.bucket3.bucket}",
         "ignore_public_acls": true,
         "restrict_public_buckets": true
       }
     },
     "aws_s3_bucket_server_side_encryption_configuration": {
-      "root_bucket1_Encryption_33CABC1A": {
+      "bucket1_Encryption_4417F366": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/bucket1/Encryption",
-            "uniqueId": "root_bucket1_Encryption_33CABC1A"
+            "uniqueId": "bucket1_Encryption_4417F366"
           }
         },
-        "bucket": "${aws_s3_bucket.root_bucket1_3A77B9B4.bucket}",
+        "bucket": "${aws_s3_bucket.bucket1.bucket}",
         "rule": [
           {
             "apply_server_side_encryption_by_default": {
@@ -120,14 +120,14 @@
           }
         ]
       },
-      "root_bucket2_Encryption_A83E82F9": {
+      "bucket2_Encryption_6F02F3D7": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/bucket2/Encryption",
-            "uniqueId": "root_bucket2_Encryption_A83E82F9"
+            "uniqueId": "bucket2_Encryption_6F02F3D7"
           }
         },
-        "bucket": "${aws_s3_bucket.root_bucket2_E39F70EE.bucket}",
+        "bucket": "${aws_s3_bucket.bucket2.bucket}",
         "rule": [
           {
             "apply_server_side_encryption_by_default": {
@@ -136,14 +136,14 @@
           }
         ]
       },
-      "root_bucket3_Encryption_A2A51E22": {
+      "bucket3_Encryption_43A64F29": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/bucket3/Encryption",
-            "uniqueId": "root_bucket3_Encryption_A2A51E22"
+            "uniqueId": "bucket3_Encryption_43A64F29"
           }
         },
-        "bucket": "${aws_s3_bucket.root_bucket3_A0C568EA.bucket}",
+        "bucket": "${aws_s3_bucket.bucket3.bucket}",
         "rule": [
           {
             "apply_server_side_encryption_by_default": {
@@ -163,7 +163,6 @@ const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
-const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 const cloud = require('@winglang/sdk').cloud;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
@@ -178,9 +177,9 @@ class $Root extends $stdlib.std.Resource {
     (arr1.push("a"));
     (arr2.push(4));
     (arr3.push(bucket3));
-    {((cond) => {if (!cond) throw new Error("assertion failed: arr2.pop() == 4")})(((arr2.pop()) === 4))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: arr1.length == 4")})((arr1.length === 4))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: arr4.at(0) == \"a\"")})(((arr4.at(0)) === "a"))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: arr2.pop() == 4")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((arr2.pop()),4)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: arr1.length == 4")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(arr1.length,4)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: arr4.at(0) == \"a\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((arr4.at(0)),"a")))};
     const s1 = new Set([1, 2, 3, 3]);
     const s2 = new Set(["hello", "world", "hello"]);
     const s3 = new Set([bucket1, bucket2, bucket2]);
@@ -197,34 +196,20 @@ class $Root extends $stdlib.std.Resource {
     const m5 = {"goodbye":"world"};
     const m6 = {"a":m1,"b":m5};
     {((cond) => {if (!cond) throw new Error("assertion failed: m1.has(\"hello\")")})(("hello" in (m1)))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: m2.size() == 1")})((Object.keys(m2).length === 1))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: m3.get(\"b1\") == bucket1")})(((m3)["b1"] === bucket1))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: m4.size() == 1")})((Object.keys(m4).length === 1))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: m6.get(\"a\").get(\"hello\") == \"world\"")})((((m6)["a"])["hello"] === "world"))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: m2.size() == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(Object.keys(m2).length,1)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: m3.get(\"b1\") == bucket1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((m3)["b1"],bucket1)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: m4.size() == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(Object.keys(m4).length,1)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: m6.get(\"a\").get(\"hello\") == \"world\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((m6)["a"])["hello"],"world")))};
     ((obj, args) => { obj[args[0]] = args[1]; })(m1, ["hello","goodbye"]);
     ((obj, args) => { obj[args[0]] = args[1]; })(m6, ["a",{"foo":"bar"}]);
     ((map) => { for(const k in map){delete map[k]}; })(m2);
-    {((cond) => {if (!cond) throw new Error("assertion failed: m2.size() == 0")})((Object.keys(m2).length === 0))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: m1.get(\"hello\") == \"goodbye\"")})(((m1)["hello"] === "goodbye"))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: m6.get(\"a\").get(\"foo\") == \"bar\"")})((((m6)["a"])["foo"] === "bar"))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: m2.size() == 0")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(Object.keys(m2).length,0)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: m1.get(\"hello\") == \"goodbye\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((m1)["hello"],"goodbye")))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: m6.get(\"a\").get(\"foo\") == \"bar\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((m6)["a"])["foo"],"bar")))};
   }
 }
-class $App extends $AppBase {
-  constructor() {
-    super({ outdir: $outdir, name: "mut_container_types", plugins: $plugins, isTestEnvironment: $wing_is_test });
-    if ($wing_is_test) {
-      new $Root(this, "env0");
-      const $test_runner = this.testRunner;
-      const $tests = $test_runner.findTests();
-      for (let $i = 1; $i < $tests.length; $i++) {
-        new $Root(this, "env" + $i);
-      }
-    } else {
-      new $Root(this, "Default");
-    }
-  }
-}
-new $App().synth();
+const $App = $stdlib.core.App.for(process.env.WING_TARGET);
+new $App({ outdir: $outdir, name: "mut_container_types", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test }).synth();
 
 ```
 

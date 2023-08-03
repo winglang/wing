@@ -1,9 +1,13 @@
-bring cloud;
+bring ex;
+bring util;
 
-let table = new cloud.Table( 
-    name: "users", 
+let table = new ex.Table(
+    name: "users",
     primaryKey: "name", 
-    columns: { "gender" => cloud.ColumnType.STRING } 
+    columns: { 
+      "gender" => ex.ColumnType.STRING,
+      "role" => ex.ColumnType.STRING 
+    } 
 );
 
 let marioInfo = Json { gender: "male", role: "plumber" };
@@ -13,6 +17,11 @@ table.addRow("peach", peachInfo);
 
 
 test "addRow" {
-    assert(Json.stringify(table.get("mario")) == Json.stringify(marioInfo));
-    assert(Json.stringify(table.get("peach")) == Json.stringify(peachInfo));
+  assert(table.get("mario").get("name") == "mario");
+  assert(table.get("mario").get("role") == marioInfo.get("role"));
+  assert(table.get("mario").get("gender") == marioInfo.get("gender"));
+
+  assert(table.get("peach").get("name") == "peach");
+  assert(table.get("peach").get("role") == peachInfo.get("role"));
+  assert(table.get("peach").get("gender") == peachInfo.get("gender"));
 }

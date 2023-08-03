@@ -187,7 +187,7 @@ export class Bucket extends cloud.Bucket {
     }
 
     host.addPolicyStatements(
-      ...calculateBucketPermissions(this.bucket.bucketArn, ops)
+      calculateBucketPermissions(this.bucket.bucketArn, ops)
     );
 
     // The bucket name needs to be passed through an environment variable since

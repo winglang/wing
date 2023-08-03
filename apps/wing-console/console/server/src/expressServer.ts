@@ -1,22 +1,21 @@
 import * as trpcExpress from "@trpc/server/adapters/express";
 import { applyWSSHandler } from "@trpc/server/adapters/ws";
 import { testing } from "@winglang/sdk";
-import { Trace } from "@winglang/sdk/lib/cloud/index.js";
 import cors from "cors";
-import Emittery from "emittery";
+import type Emittery from "emittery";
 import express from "express";
-import getPort from "get-port";
+import getPort, { portNumbers } from "get-port";
 import { WebSocketServer } from "ws";
 
-import { Config } from "./config.js";
-import { ConsoleLogger } from "./consoleLogger.js";
-import { HostUtils } from "./hostUtils.js";
+import type { Config } from "./config.js";
+import type { ConsoleLogger } from "./consoleLogger.js";
+import type { HostUtils } from "./hostUtils.js";
 import { mergeAllRouters } from "./router/index.js";
-import { State } from "./types.js";
-import { Updater } from "./updater.js";
-import { RouterContext } from "./utils/createRouter.js";
+import type { State, Trace } from "./types.js";
+import type { Updater } from "./updater.js";
+import type { RouterContext } from "./utils/createRouter.js";
 import { getWingVersion } from "./utils/getWingVersion.js";
-import { LogInterface } from "./utils/LogInterface.js";
+import type { LogInterface } from "./utils/LogInterface.js";
 
 export interface CreateExpressServerOptions {
   simulatorInstance(): Promise<testing.Simulator>;
@@ -34,6 +33,7 @@ export interface CreateExpressServerOptions {
   hostUtils?: HostUtils;
   onExpressCreated?: (app: express.Express) => void;
   wingfile: string;
+  requireAcceptTerms?: boolean;
 }
 
 export const createExpressServer = async ({
@@ -49,6 +49,7 @@ export const createExpressServer = async ({
   hostUtils,
   onExpressCreated,
   wingfile,
+  requireAcceptTerms = false,
 }: CreateExpressServerOptions) => {
   const app = express();
   app.use(cors());
@@ -74,6 +75,7 @@ export const createExpressServer = async ({
       appState,
       hostUtils,
       wingfile: wingfile ?? "",
+      requireAcceptTerms,
     };
   };
   app.use(
@@ -88,12 +90,21 @@ export const createExpressServer = async ({
   // Allow extending the express app (after trpc is set up).
   onExpressCreated?.(app);
 
-  log.info("Looking for an open port");
-  const port = await getPort({ port: requestedPort });
-  const server = app.listen(port);
+  const server = app.listen(
+    requestedPort
+      ? await getPort({
+          port: portNumbers(requestedPort, requestedPort + 100),
+        })
+      : undefined,
+  );
   await new Promise<void>((resolve) => {
     server.on("listening", resolve);
   });
+  const address = server.address();
+  if (!address || typeof address === "string") {
+    throw new Error("Server address is not available");
+  }
+  const { port } = address;
   log.info(`Server is listening on port ${port}`);
 
   const wss = new WebSocketServer({ server });

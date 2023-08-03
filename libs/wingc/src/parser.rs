@@ -2,29 +2,22 @@ use indexmap::{IndexMap, IndexSet};
 use phf::{phf_map, phf_set};
 use std::cell::RefCell;
 use std::collections::HashSet;
-use std::{str, vec};
+use std::path::{Path, PathBuf};
+use std::{fs, str, vec};
 use tree_sitter::Node;
 use tree_sitter_traversal::{traverse, Order};
 
 use crate::ast::{
-	ArgList, BinaryOperator, CatchBlock, Class, ClassField, ElifBlock, Expr, ExprKind, FunctionBody, FunctionDefinition,
-	FunctionParameter, FunctionSignature, Interface, InterpolatedString, InterpolatedStringPart, Literal, Phase,
-	Reference, Scope, Stmt, StmtKind, StructField, Symbol, TypeAnnotation, TypeAnnotationKind, UnaryOperator,
-	UserDefinedType,
+	ArgList, BinaryOperator, CalleeKind, CatchBlock, Class, ClassField, ElifBlock, Expr, ExprKind, FunctionBody,
+	FunctionDefinition, FunctionParameter, FunctionSignature, Interface, InterpolatedString, InterpolatedStringPart,
+	Literal, NewExpr, Phase, Reference, Scope, Stmt, StmtKind, StructField, Symbol, TypeAnnotation, TypeAnnotationKind,
+	UnaryOperator, UserDefinedType,
 };
 use crate::comp_ctx::{CompilationContext, CompilationPhase};
 use crate::diagnostic::{report_diagnostic, Diagnostic, DiagnosticResult, WingSpan};
+use crate::files::Files;
+use crate::type_check::{CLASS_INFLIGHT_INIT_NAME, CLASS_INIT_NAME};
 use crate::{dbg_panic, WINGSDK_STD_MODULE, WINGSDK_TEST_CLASS_NAME};
-
-pub struct Parser<'a> {
-	pub source: &'a [u8],
-	pub source_name: String,
-	pub error_nodes: RefCell<HashSet<usize>>,
-	// Nesting level within JSON literals, a value larger than 0 means we're currently in a JSON literal
-	in_json: RefCell<u64>,
-	is_in_mut_json: RefCell<bool>,
-	is_in_loop: RefCell<bool>,
-}
 
 // A custom struct could be used to better maintain metadata and issue tracking, though ideally
 // this is meant to serve as a bandaide to be removed once wing is further developed.
@@ -138,11 +131,23 @@ static RESERVED_WORDS: phf::Set<&'static str> = phf_set! {
 	"Object",
 };
 
+pub struct Parser<'a> {
+	pub source: &'a [u8],
+	pub source_name: String,
+	pub error_nodes: RefCell<HashSet<usize>>,
+	files: RefCell<&'a mut Files>,
+	// Nesting level within JSON literals, a value larger than 0 means we're currently in a JSON literal
+	in_json: RefCell<u64>,
+	is_in_mut_json: RefCell<bool>,
+	is_in_loop: RefCell<bool>,
+}
+
 impl<'s> Parser<'s> {
-	pub fn new(source: &'s [u8], source_name: String) -> Self {
+	pub fn new(source: &'s [u8], source_name: String, files: &'s mut Files) -> Self {
 		Self {
 			source,
 			source_name,
+			files: RefCell::new(files),
 			error_nodes: RefCell::new(HashSet::new()),
 			is_in_loop: RefCell::new(false),
 			// This is similar to what we do in the type_checker, but we need to know 2 things when
@@ -155,6 +160,16 @@ impl<'s> Parser<'s> {
 	}
 
 	pub fn wingit(&self, root: &Node) -> Scope {
+		match self.files.borrow_mut().add_file(
+			PathBuf::from(self.source_name.clone()),
+			String::from_utf8(self.source.to_vec()).expect("Invalid UTF-8 sequence"),
+		) {
+			Ok(_) => {}
+			Err(err) => {
+				panic!("Failed adding source file to parser: {}", err);
+			}
+		}
+
 		let scope = match root.kind() {
 			"source" => self.build_scope(&root, Phase::Preflight),
 			_ => Scope {
@@ -268,7 +283,7 @@ impl<'s> Parser<'s> {
 		// represent duration literals as the AST equivalent of `duration.fromSeconds(value)`
 		Ok(Expr::new(
 			ExprKind::Call {
-				callee: Box::new(Expr::new(
+				callee: CalleeKind::Expr(Box::new(Expr::new(
 					ExprKind::Reference(Reference::InstanceMember {
 						object: Box::new(Expr::new(
 							ExprKind::Reference(Reference::Identifier(Symbol {
@@ -284,7 +299,7 @@ impl<'s> Parser<'s> {
 						optional_accessor: false,
 					}),
 					span.clone(),
-				)),
+				))),
 				arg_list: ArgList {
 					pos_args: vec![Expr::new(ExprKind::Literal(Literal::Number(seconds)), span.clone())],
 					named_args: IndexMap::new(),
@@ -326,7 +341,7 @@ impl<'s> Parser<'s> {
 		let span = self.node_span(statement_node);
 		CompilationContext::set(CompilationPhase::Parsing, &span);
 		let stmt_kind = match statement_node.kind() {
-			"short_import_statement" => self.build_bring_statement(statement_node)?,
+			"import_statement" => self.build_bring_statement(statement_node)?,
 
 			"variable_definition_statement" => self.build_variable_def_statement(statement_node, phase)?,
 			"variable_assignment_statement" => self.build_assignment_statement(statement_node, phase)?,
@@ -566,13 +581,85 @@ impl<'s> Parser<'s> {
 	}
 
 	fn build_bring_statement(&self, statement_node: &Node) -> DiagnosticResult<StmtKind> {
-		Ok(StmtKind::Bring {
-			module_name: self.node_symbol(&statement_node.child_by_field_name("module_name").unwrap())?,
-			identifier: if let Some(identifier) = statement_node.child_by_field_name("alias") {
-				Some(self.check_reserved_symbol(&identifier)?)
+		let module_name = self.node_symbol(&statement_node.child_by_field_name("module_name").unwrap())?;
+		let alias = if let Some(identifier) = statement_node.child_by_field_name("alias") {
+			Some(self.check_reserved_symbol(&identifier)?)
+		} else {
+			None
+		};
+
+		// if the module name is a path ending in .w, create a new Parser to parse it as a new Scope,
+		// and create a StmtKind::Module instead
+		if module_name.name.ends_with(".w\"") {
+			let source_path = Path::new(&module_name.name[1..module_name.name.len() - 1]);
+			let source_path = if source_path.starts_with("./") {
+				source_path.strip_prefix("./").unwrap()
 			} else {
-				None
-			},
+				source_path
+			};
+			let source_path = if source_path.is_absolute() {
+				source_path.to_path_buf()
+			} else {
+				Path::new(&self.source_name).parent().unwrap().join(source_path)
+			};
+			if source_path == Path::new(&self.source_name) {
+				return self.with_error("Cannot bring a module into itself", statement_node);
+			}
+			let scope = match fs::read(&source_path) {
+				Ok(source) => {
+					let mut files = self.files.borrow_mut();
+					let parser = Parser::new(&source, source_path.to_string_lossy().to_string(), *files);
+					let language = tree_sitter_wing::language();
+					let mut tree_sitter_parser = tree_sitter::Parser::new();
+					tree_sitter_parser.set_language(language).unwrap();
+					let tree = match tree_sitter_parser.parse(&source, None) {
+						Some(tree) => tree,
+						None => {
+							panic!("Failed parsing source file: {}", source_path.display());
+						}
+					};
+					parser.wingit(&tree.root_node())
+				}
+				Err(err) => {
+					report_diagnostic(Diagnostic {
+						message: format!("Error reading source file: {}: {:?}", source_path.display(), err),
+						span: None,
+					});
+					Scope::default()
+				}
+			};
+
+			// Check that the module only declares bringable items (classes, interfaces, enums, structs)
+			// and not variables or functions
+			let scope = if !is_bringable(&scope) {
+				report_diagnostic(Diagnostic {
+					message: format!(
+						"Cannot bring \"{}\" - modules with statements besides classes, interfaces, enums, and structs cannot be brought",
+						module_name.name
+					),
+					span: None,
+				});
+				Scope::default()
+			} else {
+				scope
+			};
+
+			// parse error if no alias is provided
+			let module = if let Some(alias) = alias {
+				Ok(StmtKind::Module {
+					name: alias,
+					statements: scope,
+				})
+			} else {
+				self.with_error::<StmtKind>("No alias provided for module", statement_node)
+			};
+
+			return module;
+		}
+
+		Ok(StmtKind::Bring {
+			module_name,
+			identifier: alias,
 		})
 	}
 
@@ -628,23 +715,22 @@ impl<'s> Parser<'s> {
 				continue;
 			}
 			match class_element.kind() {
-				"method_definition" => {
-					let method_name = self.node_symbol(&class_element.child_by_field_name("name").unwrap());
-					let is_static = class_element.child_by_field_name("static").is_some();
-					let func_def = self.build_function_definition(&class_element, class_phase, is_static);
-					match (method_name, func_def) {
-						(Ok(method_name), Ok(func_def)) => methods.push((method_name, func_def)),
-						_ => {}
+				"method_definition" | "inflight_method_definition" => {
+					let mut phase = class_phase;
+					if class_element.kind() == "inflight_method_definition" {
+						phase = Phase::Inflight;
 					}
-				}
-				"inflight_method_definition" => {
-					let method_name = self.node_symbol(&class_element.child_by_field_name("name").unwrap());
+
 					let is_static = class_element.child_by_field_name("static").is_some();
-					let func_def = self.build_function_definition(&class_element, Phase::Inflight, is_static);
-					match (method_name, func_def) {
-						(Ok(method_name), Ok(func_def)) => methods.push((method_name, func_def)),
-						_ => {}
-					}
+					let Ok(method_name) = self.node_symbol(&class_element.child_by_field_name("name").unwrap()) else {
+						continue;
+					};
+
+					let Ok(func_def) = self.build_function_definition(Some(method_name.clone()), &class_element, phase, is_static) else {
+						continue;
+					};
+
+					methods.push((method_name, func_def))
 				}
 				"class_field" => {
 					let is_static = class_element.child_by_field_name("static").is_some();
@@ -710,6 +796,7 @@ impl<'s> Parser<'s> {
 
 					if is_inflight {
 						inflight_initializer = Some(FunctionDefinition {
+							name: Some(CLASS_INFLIGHT_INIT_NAME.into()),
 							body: FunctionBody::Statements(
 								self.build_scope(&class_element.child_by_field_name("block").unwrap(), Phase::Inflight),
 							),
@@ -723,6 +810,7 @@ impl<'s> Parser<'s> {
 						})
 					} else {
 						initializer = Some(FunctionDefinition {
+							name: Some(CLASS_INIT_NAME.into()),
 							body: FunctionBody::Statements(
 								self.build_scope(&class_element.child_by_field_name("block").unwrap(), Phase::Preflight),
 							),
@@ -760,6 +848,7 @@ impl<'s> Parser<'s> {
 			Some(init) => init,
 			// add a default initializer if none is defined
 			None => FunctionDefinition {
+				name: Some(CLASS_INIT_NAME.into()),
 				signature: FunctionSignature {
 					parameters: vec![],
 					return_type: Box::new(TypeAnnotation {
@@ -783,6 +872,7 @@ impl<'s> Parser<'s> {
 
 			// add a default inflight initializer if none is defined
 			None => FunctionDefinition {
+				name: Some(CLASS_INFLIGHT_INIT_NAME.into()),
 				signature: FunctionSignature {
 					parameters: vec![],
 					return_type: Box::new(TypeAnnotation {
@@ -959,11 +1049,12 @@ impl<'s> Parser<'s> {
 	}
 
 	fn build_anonymous_closure(&self, anon_closure_node: &Node, phase: Phase) -> DiagnosticResult<FunctionDefinition> {
-		self.build_function_definition(anon_closure_node, phase, true)
+		self.build_function_definition(None, anon_closure_node, phase, true)
 	}
 
 	fn build_function_definition(
 		&self,
+		name: Option<Symbol>,
 		func_def_node: &Node,
 		phase: Phase,
 		is_static: bool,
@@ -978,6 +1069,7 @@ impl<'s> Parser<'s> {
 		};
 
 		Ok(FunctionDefinition {
+			name,
 			body: statements,
 			signature,
 			is_static,
@@ -993,16 +1085,16 @@ impl<'s> Parser<'s> {
 	fn build_parameter_list(&self, parameter_list_node: &Node, phase: Phase) -> DiagnosticResult<Vec<FunctionParameter>> {
 		let mut res = vec![];
 		let mut cursor = parameter_list_node.walk();
-		for parameter_definition_node in parameter_list_node.named_children(&mut cursor) {
-			if parameter_definition_node.is_extra() {
+		for definition_node in parameter_list_node.named_children(&mut cursor) {
+			if definition_node.is_extra() {
 				continue;
 			}
 
 			res.push(FunctionParameter {
-				name: self.check_reserved_symbol(&parameter_definition_node.child_by_field_name("name").unwrap())?,
-				type_annotation: self
-					.build_type_annotation(&parameter_definition_node.child_by_field_name("type").unwrap(), phase)?,
-				reassignable: parameter_definition_node.child_by_field_name("reassignable").is_some(),
+				name: self.check_reserved_symbol(&definition_node.child_by_field_name("name").unwrap())?,
+				type_annotation: self.build_type_annotation(&definition_node.child_by_field_name("type").unwrap(), phase)?,
+				reassignable: definition_node.child_by_field_name("reassignable").is_some(),
+				variadic: definition_node.child_by_field_name("variadic").is_some(),
 			});
 		}
 
@@ -1103,6 +1195,7 @@ impl<'s> Parser<'s> {
 						name: "".into(),
 						type_annotation: t,
 						reassignable: false,
+						variadic: false,
 					})
 				}
 
@@ -1279,7 +1372,7 @@ impl<'s> Parser<'s> {
 			match child.kind() {
 				"positional_argument" => {
 					if seen_keyword_args {
-						self.with_error("Positional arguments must come before named arguments", &child)?;
+						self.add_error("Positional arguments must come before named arguments", &child);
 					}
 					pos_args.push(self.build_expression(&child, phase)?);
 				}
@@ -1337,12 +1430,12 @@ impl<'s> Parser<'s> {
 				};
 
 				Ok(Expr::new(
-					ExprKind::New {
+					ExprKind::New(NewExpr {
 						class: Box::new(class_udt_exp),
 						obj_id,
 						arg_list: arg_list?,
 						obj_scope,
-					},
+					}),
 					expression_span,
 				))
 			}
@@ -1488,13 +1581,21 @@ impl<'s> Parser<'s> {
 			"reference" => self.build_reference(&expression_node, phase),
 			"positional_argument" => self.build_expression(&expression_node.named_child(0).unwrap(), phase),
 			"keyword_argument_value" => self.build_expression(&expression_node.named_child(0).unwrap(), phase),
-			"call" => Ok(Expr::new(
-				ExprKind::Call {
-					callee: Box::new(self.build_expression(&expression_node.child_by_field_name("caller").unwrap(), phase)?),
-					arg_list: self.build_arg_list(&expression_node.child_by_field_name("args").unwrap(), phase)?,
-				},
-				expression_span,
-			)),
+			"call" => {
+				let caller_node = expression_node.child_by_field_name("caller").unwrap();
+				let callee = if caller_node.kind() == "super_call" {
+					CalleeKind::SuperCall(self.node_symbol(&caller_node.child_by_field_name("method").unwrap())?)
+				} else {
+					CalleeKind::Expr(Box::new(self.build_expression(&caller_node, phase)?))
+				};
+				Ok(Expr::new(
+					ExprKind::Call {
+						callee,
+						arg_list: self.build_arg_list(&expression_node.child_by_field_name("args").unwrap(), phase)?,
+					},
+					expression_span,
+				))
+			}
 			"parenthesized_expression" => self.build_expression(&expression_node.named_child(0).unwrap(), phase),
 			"preflight_closure" => Ok(Expr::new(
 				ExprKind::FunctionClosure(self.build_anonymous_closure(&expression_node, phase)?),
@@ -1612,7 +1713,6 @@ impl<'s> Parser<'s> {
 					// Add fields to our struct literal, if some are missing or aren't part of the type we'll fail on type checking
 					if let (Ok(k), Ok(v)) = (field_name, field_value) {
 						if fields.contains_key(&k) {
-							// TODO: ugly, we need to change add_error to not return anything and have a wrapper `raise_error` that returns a Result
 							self.add_error(format!("Duplicate field {} in struct literal", k), expression_node);
 						} else {
 							fields.insert(k, v);
@@ -1837,6 +1937,7 @@ impl<'s> Parser<'s> {
 
 		let inflight_closure = Expr::new(
 			ExprKind::FunctionClosure(FunctionDefinition {
+				name: None,
 				body: FunctionBody::Statements(statements),
 				signature: FunctionSignature {
 					parameters: vec![],
@@ -1854,7 +1955,7 @@ impl<'s> Parser<'s> {
 
 		let type_span = self.node_span(&statement_node.child(0).unwrap());
 		Ok(StmtKind::Expression(Expr::new(
-			ExprKind::New {
+			ExprKind::New(NewExpr {
 				class: Box::new(Expr::new(
 					ExprKind::Reference(Reference::TypeReference(UserDefinedType {
 						root: Symbol::global(WINGSDK_STD_MODULE),
@@ -1870,8 +1971,39 @@ impl<'s> Parser<'s> {
 					named_args: IndexMap::new(),
 					span: type_span.clone(),
 				},
-			},
+			}),
 			span,
 		)))
 	}
+}
+
+fn is_bringable(scope: &Scope) -> bool {
+	let invalid_stmt = |stmt: &Stmt| match stmt.kind {
+		// these statements are ok
+		StmtKind::Bring { .. } => false,
+		StmtKind::Module { .. } => false,
+		StmtKind::Class(_) => false,
+		StmtKind::Interface(_) => false,
+		StmtKind::Struct { .. } => false,
+		StmtKind::Enum { .. } => false,
+		StmtKind::CompilerDebugEnv => false,
+		// these statements are invalid
+		StmtKind::SuperConstructor { .. } => true,
+		StmtKind::Let { .. } => true,
+		StmtKind::ForLoop { .. } => true,
+		StmtKind::While { .. } => true,
+		StmtKind::IfLet { .. } => true,
+		StmtKind::If { .. } => true,
+		StmtKind::Break => true,
+		StmtKind::Continue => true,
+		StmtKind::Return(_) => true,
+		StmtKind::Expression(_) => true,
+		StmtKind::Assignment { .. } => true,
+		StmtKind::Scope(_) => true,
+		StmtKind::TryCatch { .. } => true,
+	};
+
+	// A module is bringable if it doesn't have any invalid statement kinds
+	// (rough heuristic for now)
+	!scope.statements.iter().any(invalid_stmt)
 }

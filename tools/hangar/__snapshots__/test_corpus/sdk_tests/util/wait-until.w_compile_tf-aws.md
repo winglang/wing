@@ -2,22 +2,20 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ JSHelper, util_Util }) {
+module.exports = function({ $JSHelper, $util_Util }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      const start = (await JSHelper.getTime());
-      if ((await util_Util.waitUntil(async () =>  {
+    async handle() {
+      const start = (await $JSHelper.getTime());
+      if ((await $util_Util.waitUntil(async () => {
         return true;
       }
       ))) {
-        {((cond) => {if (!cond) throw new Error("assertion failed: JSHelper.getTime() - start < 1000")})((((await JSHelper.getTime()) - start) < 1000))};
+        {((cond) => {if (!cond) throw new Error("assertion failed: JSHelper.getTime() - start < 1000")})((((await $JSHelper.getTime()) - start) < 1000))};
       }
       else {
         {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
@@ -31,25 +29,23 @@ module.exports = function({ JSHelper, util_Util }) {
 
 ## inflight.$Closure2.js
 ```js
-module.exports = function({ oneSecond, JSHelper, util_Util }) {
+module.exports = function({ $JSHelper, $oneSecond, $util_Util }) {
   class $Closure2 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      const start = (await JSHelper.getTime());
-      if ((await util_Util.waitUntil(async () =>  {
+    async handle() {
+      const start = (await $JSHelper.getTime());
+      if ((await $util_Util.waitUntil(async () => {
         return false;
       }
-      ,{ timeout: oneSecond }))) {
+      ,{ timeout: $oneSecond }))) {
         {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
       }
       else {
-        {((cond) => {if (!cond) throw new Error("assertion failed: JSHelper.getTime() - start > 1 * 1000")})((((await JSHelper.getTime()) - start) > (1 * 1000)))};
+        {((cond) => {if (!cond) throw new Error("assertion failed: JSHelper.getTime() - start > 1 * 1000")})((((await $JSHelper.getTime()) - start) > (1 * 1000)))};
       }
     }
   }
@@ -60,24 +56,22 @@ module.exports = function({ oneSecond, JSHelper, util_Util }) {
 
 ## inflight.$Closure3.js
 ```js
-module.exports = function({ invokeCounter, oneSecond, JSHelper, util_Util }) {
+module.exports = function({ $JSHelper, $invokeCounter, $oneSecond, $util_Util }) {
   class $Closure3 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      const start = (await JSHelper.getTime());
-      const returnTrueAfter3Seconds = async () =>  {
-        (await invokeCounter.inc());
-        return (((await JSHelper.getTime()) - start) > (3 * 1000));
+    async handle() {
+      const start = (await $JSHelper.getTime());
+      const returnTrueAfter3Seconds = async () => {
+        (await $invokeCounter.inc());
+        return (((await $JSHelper.getTime()) - start) > (3 * 1000));
       }
       ;
-      if ((await util_Util.waitUntil(returnTrueAfter3Seconds,{ interval: oneSecond }))) {
-        const invocations = (await invokeCounter.peek());
+      if ((await $util_Util.waitUntil(returnTrueAfter3Seconds,{ interval: $oneSecond }))) {
+        const invocations = (await $invokeCounter.peek());
         {((cond) => {if (!cond) throw new Error("assertion failed:  invocations > 1 && invocations < 10 ")})(((invocations > 1) && (invocations < 10)))};
       }
       else {
@@ -92,27 +86,25 @@ module.exports = function({ invokeCounter, oneSecond, JSHelper, util_Util }) {
 
 ## inflight.$Closure4.js
 ```js
-module.exports = function({ invokeCounter, oneSecond, fiveSeconds, JSHelper, util_Util }) {
+module.exports = function({ $JSHelper, $fiveSeconds, $invokeCounter, $oneSecond, $util_Util }) {
   class $Closure4 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      const start = (await JSHelper.getTime());
-      const returnFalse = async () =>  {
-        (await invokeCounter.inc());
+    async handle() {
+      const start = (await $JSHelper.getTime());
+      const returnFalse = async () => {
+        (await $invokeCounter.inc());
         return false;
       }
       ;
-      if ((await util_Util.waitUntil(returnFalse,{ interval: oneSecond, timeout: fiveSeconds }))) {
+      if ((await $util_Util.waitUntil(returnFalse,{ interval: $oneSecond, timeout: $fiveSeconds }))) {
         {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
       }
       else {
-        const invokeCount = (await invokeCounter.peek());
+        const invokeCount = (await $invokeCounter.peek());
         {((cond) => {if (!cond) throw new Error("assertion failed: invokeCount > 3 && invokeCount < 7")})(((invokeCount > 3) && (invokeCount < 7)))};
       }
     }
@@ -124,26 +116,24 @@ module.exports = function({ invokeCounter, oneSecond, fiveSeconds, JSHelper, uti
 
 ## inflight.$Closure5.js
 ```js
-module.exports = function({ invokeCounter, util_Util }) {
+module.exports = function({ $invokeCounter, $util_Util }) {
   class $Closure5 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
-    async handle()  {
+    async handle() {
       try {
-        (await util_Util.waitUntil(async () =>  {
-          (await invokeCounter.inc());
+        (await $util_Util.waitUntil(async () => {
+          (await $invokeCounter.inc());
           {((msg) => {throw new Error(msg)})("ERROR")};
         }
         ));
         {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
       }
       catch {
-        {((cond) => {if (!cond) throw new Error("assertion failed: invokeCounter.peek() == 1")})(((await invokeCounter.peek()) === 1))};
+        {((cond) => {if (!cond) throw new Error("assertion failed: invokeCounter.peek() == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $invokeCounter.peek()),1)))};
       }
     }
   }
@@ -158,9 +148,7 @@ module.exports = function({  }) {
   class JSHelper {
     constructor({  }) {
     }
-    async $inflight_init()  {
-    }
-    static async getTime()  {
+    static async getTime() {
       return (require("<ABSOLUTE_PATH>/sleep-helper.js")["getTime"])()
     }
   }
@@ -176,7 +164,7 @@ module.exports = function({  }) {
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.2"
+      "version": "0.17.0"
     },
     "outputs": {
       "root": {
@@ -190,7 +178,7 @@ module.exports = function({  }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:returns true immediately\",\"${aws_lambda_function.root_testreturnstrueimmediately_Handler_962CBEF8.arn}\"],[\"root/Default/Default/test:returns false goes to timeout\",\"${aws_lambda_function.root_testreturnsfalsegoestotimeout_Handler_FAD74A50.arn}\"],[\"root/Default/Default/test:returns after some time waiting\",\"${aws_lambda_function.root_testreturnsaftersometimewaiting_Handler_841F8A7C.arn}\"],[\"root/Default/Default/test:setting props\",\"${aws_lambda_function.root_testsettingprops_Handler_999FF97B.arn}\"],[\"root/Default/Default/test:throwing exception from predicate should throw immediately\",\"${aws_lambda_function.root_testthrowingexceptionfrompredicateshouldthrowimmediately_Handler_5D10926A.arn}\"]]"
+      "value": "[[\"root/Default/Default/test:returns true immediately\",\"${aws_lambda_function.testreturnstrueimmediately_Handler_0210037F.arn}\"],[\"root/Default/Default/test:returns false goes to timeout\",\"${aws_lambda_function.testreturnsfalsegoestotimeout_Handler_A7F9DD9D.arn}\"],[\"root/Default/Default/test:returns after some time waiting\",\"${aws_lambda_function.testreturnsaftersometimewaiting_Handler_436A90C3.arn}\"],[\"root/Default/Default/test:setting props\",\"${aws_lambda_function.testsettingprops_Handler_8BB7DC9B.arn}\"],[\"root/Default/Default/test:throwing exception from predicate should throw immediately\",\"${aws_lambda_function.testthrowingexceptionfrompredicateshouldthrowimmediately_Handler_B4BADFD9.arn}\"]]"
     }
   },
   "provider": {
@@ -200,11 +188,11 @@ module.exports = function({  }) {
   },
   "resource": {
     "aws_dynamodb_table": {
-      "root_cloudCounter_E0AC1263": {
+      "cloudCounter": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/cloud.Counter/Default",
-            "uniqueId": "root_cloudCounter_E0AC1263"
+            "uniqueId": "cloudCounter"
           }
         },
         "attribute": [
@@ -219,167 +207,167 @@ module.exports = function({  }) {
       }
     },
     "aws_iam_role": {
-      "root_testreturnsaftersometimewaiting_Handler_IamRole_C8402523": {
+      "testreturnsaftersometimewaiting_Handler_IamRole_24ED1A3A": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:returns after some time waiting/Handler/IamRole",
-            "uniqueId": "root_testreturnsaftersometimewaiting_Handler_IamRole_C8402523"
+            "uniqueId": "testreturnsaftersometimewaiting_Handler_IamRole_24ED1A3A"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       },
-      "root_testreturnsfalsegoestotimeout_Handler_IamRole_B72AF0BC": {
+      "testreturnsfalsegoestotimeout_Handler_IamRole_57890A08": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:returns false goes to timeout/Handler/IamRole",
-            "uniqueId": "root_testreturnsfalsegoestotimeout_Handler_IamRole_B72AF0BC"
+            "uniqueId": "testreturnsfalsegoestotimeout_Handler_IamRole_57890A08"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       },
-      "root_testreturnstrueimmediately_Handler_IamRole_8EB3045D": {
+      "testreturnstrueimmediately_Handler_IamRole_62FB5976": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:returns true immediately/Handler/IamRole",
-            "uniqueId": "root_testreturnstrueimmediately_Handler_IamRole_8EB3045D"
+            "uniqueId": "testreturnstrueimmediately_Handler_IamRole_62FB5976"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       },
-      "root_testsettingprops_Handler_IamRole_0F23FB18": {
+      "testsettingprops_Handler_IamRole_6953F1F6": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:setting props/Handler/IamRole",
-            "uniqueId": "root_testsettingprops_Handler_IamRole_0F23FB18"
+            "uniqueId": "testsettingprops_Handler_IamRole_6953F1F6"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       },
-      "root_testthrowingexceptionfrompredicateshouldthrowimmediately_Handler_IamRole_F73F02AC": {
+      "testthrowingexceptionfrompredicateshouldthrowimmediately_Handler_IamRole_B0167A3F": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:throwing exception from predicate should throw immediately/Handler/IamRole",
-            "uniqueId": "root_testthrowingexceptionfrompredicateshouldthrowimmediately_Handler_IamRole_F73F02AC"
+            "uniqueId": "testthrowingexceptionfrompredicateshouldthrowimmediately_Handler_IamRole_B0167A3F"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
-      "root_testreturnsaftersometimewaiting_Handler_IamRolePolicy_7C85A8AA": {
+      "testreturnsaftersometimewaiting_Handler_IamRolePolicy_0EE22452": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:returns after some time waiting/Handler/IamRolePolicy",
-            "uniqueId": "root_testreturnsaftersometimewaiting_Handler_IamRolePolicy_7C85A8AA"
+            "uniqueId": "testreturnsaftersometimewaiting_Handler_IamRolePolicy_0EE22452"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.root_cloudCounter_E0AC1263.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:GetItem\"],\"Resource\":[\"${aws_dynamodb_table.root_cloudCounter_E0AC1263.arn}\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.root_testreturnsaftersometimewaiting_Handler_IamRole_C8402523.name}"
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.cloudCounter.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:GetItem\"],\"Resource\":[\"${aws_dynamodb_table.cloudCounter.arn}\"],\"Effect\":\"Allow\"}]}",
+        "role": "${aws_iam_role.testreturnsaftersometimewaiting_Handler_IamRole_24ED1A3A.name}"
       },
-      "root_testreturnsfalsegoestotimeout_Handler_IamRolePolicy_EB1C9370": {
+      "testreturnsfalsegoestotimeout_Handler_IamRolePolicy_25F86059": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:returns false goes to timeout/Handler/IamRolePolicy",
-            "uniqueId": "root_testreturnsfalsegoestotimeout_Handler_IamRolePolicy_EB1C9370"
+            "uniqueId": "testreturnsfalsegoestotimeout_Handler_IamRolePolicy_25F86059"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
-        "role": "${aws_iam_role.root_testreturnsfalsegoestotimeout_Handler_IamRole_B72AF0BC.name}"
+        "role": "${aws_iam_role.testreturnsfalsegoestotimeout_Handler_IamRole_57890A08.name}"
       },
-      "root_testreturnstrueimmediately_Handler_IamRolePolicy_F5736D4E": {
+      "testreturnstrueimmediately_Handler_IamRolePolicy_870CB70A": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:returns true immediately/Handler/IamRolePolicy",
-            "uniqueId": "root_testreturnstrueimmediately_Handler_IamRolePolicy_F5736D4E"
+            "uniqueId": "testreturnstrueimmediately_Handler_IamRolePolicy_870CB70A"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
-        "role": "${aws_iam_role.root_testreturnstrueimmediately_Handler_IamRole_8EB3045D.name}"
+        "role": "${aws_iam_role.testreturnstrueimmediately_Handler_IamRole_62FB5976.name}"
       },
-      "root_testsettingprops_Handler_IamRolePolicy_89F4FB12": {
+      "testsettingprops_Handler_IamRolePolicy_B2AEA6D4": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:setting props/Handler/IamRolePolicy",
-            "uniqueId": "root_testsettingprops_Handler_IamRolePolicy_89F4FB12"
+            "uniqueId": "testsettingprops_Handler_IamRolePolicy_B2AEA6D4"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.root_cloudCounter_E0AC1263.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:GetItem\"],\"Resource\":[\"${aws_dynamodb_table.root_cloudCounter_E0AC1263.arn}\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.root_testsettingprops_Handler_IamRole_0F23FB18.name}"
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.cloudCounter.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:GetItem\"],\"Resource\":[\"${aws_dynamodb_table.cloudCounter.arn}\"],\"Effect\":\"Allow\"}]}",
+        "role": "${aws_iam_role.testsettingprops_Handler_IamRole_6953F1F6.name}"
       },
-      "root_testthrowingexceptionfrompredicateshouldthrowimmediately_Handler_IamRolePolicy_839E1CD3": {
+      "testthrowingexceptionfrompredicateshouldthrowimmediately_Handler_IamRolePolicy_CEF05D37": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:throwing exception from predicate should throw immediately/Handler/IamRolePolicy",
-            "uniqueId": "root_testthrowingexceptionfrompredicateshouldthrowimmediately_Handler_IamRolePolicy_839E1CD3"
+            "uniqueId": "testthrowingexceptionfrompredicateshouldthrowimmediately_Handler_IamRolePolicy_CEF05D37"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.root_cloudCounter_E0AC1263.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:GetItem\"],\"Resource\":[\"${aws_dynamodb_table.root_cloudCounter_E0AC1263.arn}\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.root_testthrowingexceptionfrompredicateshouldthrowimmediately_Handler_IamRole_F73F02AC.name}"
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.cloudCounter.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:GetItem\"],\"Resource\":[\"${aws_dynamodb_table.cloudCounter.arn}\"],\"Effect\":\"Allow\"}]}",
+        "role": "${aws_iam_role.testthrowingexceptionfrompredicateshouldthrowimmediately_Handler_IamRole_B0167A3F.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
-      "root_testreturnsaftersometimewaiting_Handler_IamRolePolicyAttachment_4AA5D580": {
+      "testreturnsaftersometimewaiting_Handler_IamRolePolicyAttachment_2969D994": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:returns after some time waiting/Handler/IamRolePolicyAttachment",
-            "uniqueId": "root_testreturnsaftersometimewaiting_Handler_IamRolePolicyAttachment_4AA5D580"
+            "uniqueId": "testreturnsaftersometimewaiting_Handler_IamRolePolicyAttachment_2969D994"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.root_testreturnsaftersometimewaiting_Handler_IamRole_C8402523.name}"
+        "role": "${aws_iam_role.testreturnsaftersometimewaiting_Handler_IamRole_24ED1A3A.name}"
       },
-      "root_testreturnsfalsegoestotimeout_Handler_IamRolePolicyAttachment_E4CEA709": {
+      "testreturnsfalsegoestotimeout_Handler_IamRolePolicyAttachment_92041F39": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:returns false goes to timeout/Handler/IamRolePolicyAttachment",
-            "uniqueId": "root_testreturnsfalsegoestotimeout_Handler_IamRolePolicyAttachment_E4CEA709"
+            "uniqueId": "testreturnsfalsegoestotimeout_Handler_IamRolePolicyAttachment_92041F39"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.root_testreturnsfalsegoestotimeout_Handler_IamRole_B72AF0BC.name}"
+        "role": "${aws_iam_role.testreturnsfalsegoestotimeout_Handler_IamRole_57890A08.name}"
       },
-      "root_testreturnstrueimmediately_Handler_IamRolePolicyAttachment_B7B4C8AB": {
+      "testreturnstrueimmediately_Handler_IamRolePolicyAttachment_4674DB18": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:returns true immediately/Handler/IamRolePolicyAttachment",
-            "uniqueId": "root_testreturnstrueimmediately_Handler_IamRolePolicyAttachment_B7B4C8AB"
+            "uniqueId": "testreturnstrueimmediately_Handler_IamRolePolicyAttachment_4674DB18"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.root_testreturnstrueimmediately_Handler_IamRole_8EB3045D.name}"
+        "role": "${aws_iam_role.testreturnstrueimmediately_Handler_IamRole_62FB5976.name}"
       },
-      "root_testsettingprops_Handler_IamRolePolicyAttachment_A832C898": {
+      "testsettingprops_Handler_IamRolePolicyAttachment_EBCE864E": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:setting props/Handler/IamRolePolicyAttachment",
-            "uniqueId": "root_testsettingprops_Handler_IamRolePolicyAttachment_A832C898"
+            "uniqueId": "testsettingprops_Handler_IamRolePolicyAttachment_EBCE864E"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.root_testsettingprops_Handler_IamRole_0F23FB18.name}"
+        "role": "${aws_iam_role.testsettingprops_Handler_IamRole_6953F1F6.name}"
       },
-      "root_testthrowingexceptionfrompredicateshouldthrowimmediately_Handler_IamRolePolicyAttachment_199AAD62": {
+      "testthrowingexceptionfrompredicateshouldthrowimmediately_Handler_IamRolePolicyAttachment_5075162A": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:throwing exception from predicate should throw immediately/Handler/IamRolePolicyAttachment",
-            "uniqueId": "root_testthrowingexceptionfrompredicateshouldthrowimmediately_Handler_IamRolePolicyAttachment_199AAD62"
+            "uniqueId": "testthrowingexceptionfrompredicateshouldthrowimmediately_Handler_IamRolePolicyAttachment_5075162A"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.root_testthrowingexceptionfrompredicateshouldthrowimmediately_Handler_IamRole_F73F02AC.name}"
+        "role": "${aws_iam_role.testthrowingexceptionfrompredicateshouldthrowimmediately_Handler_IamRole_B0167A3F.name}"
       }
     },
     "aws_lambda_function": {
-      "root_testreturnsaftersometimewaiting_Handler_841F8A7C": {
+      "testreturnsaftersometimewaiting_Handler_436A90C3": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:returns after some time waiting/Handler/Default",
-            "uniqueId": "root_testreturnsaftersometimewaiting_Handler_841F8A7C"
+            "uniqueId": "testreturnsaftersometimewaiting_Handler_436A90C3"
           }
         },
         "environment": {
           "variables": {
-            "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.root_cloudCounter_E0AC1263.name}",
+            "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.cloudCounter.name}",
             "WING_FUNCTION_NAME": "Handler-c825136f",
             "WING_TARGET": "tf-aws"
           }
@@ -387,21 +375,21 @@ module.exports = function({  }) {
         "function_name": "Handler-c825136f",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.root_testreturnsaftersometimewaiting_Handler_IamRole_C8402523.arn}",
+        "role": "${aws_iam_role.testreturnsaftersometimewaiting_Handler_IamRole_24ED1A3A.arn}",
         "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
-        "s3_key": "${aws_s3_object.root_testreturnsaftersometimewaiting_Handler_S3Object_96239004.key}",
+        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
+        "s3_key": "${aws_s3_object.testreturnsaftersometimewaiting_Handler_S3Object_71DBD4AC.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
           "subnet_ids": []
         }
       },
-      "root_testreturnsfalsegoestotimeout_Handler_FAD74A50": {
+      "testreturnsfalsegoestotimeout_Handler_A7F9DD9D": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:returns false goes to timeout/Handler/Default",
-            "uniqueId": "root_testreturnsfalsegoestotimeout_Handler_FAD74A50"
+            "uniqueId": "testreturnsfalsegoestotimeout_Handler_A7F9DD9D"
           }
         },
         "environment": {
@@ -413,21 +401,21 @@ module.exports = function({  }) {
         "function_name": "Handler-c857ac6d",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.root_testreturnsfalsegoestotimeout_Handler_IamRole_B72AF0BC.arn}",
+        "role": "${aws_iam_role.testreturnsfalsegoestotimeout_Handler_IamRole_57890A08.arn}",
         "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
-        "s3_key": "${aws_s3_object.root_testreturnsfalsegoestotimeout_Handler_S3Object_B707877F.key}",
+        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
+        "s3_key": "${aws_s3_object.testreturnsfalsegoestotimeout_Handler_S3Object_1B345AEE.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
           "subnet_ids": []
         }
       },
-      "root_testreturnstrueimmediately_Handler_962CBEF8": {
+      "testreturnstrueimmediately_Handler_0210037F": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:returns true immediately/Handler/Default",
-            "uniqueId": "root_testreturnstrueimmediately_Handler_962CBEF8"
+            "uniqueId": "testreturnstrueimmediately_Handler_0210037F"
           }
         },
         "environment": {
@@ -439,26 +427,26 @@ module.exports = function({  }) {
         "function_name": "Handler-c85e05f6",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.root_testreturnstrueimmediately_Handler_IamRole_8EB3045D.arn}",
+        "role": "${aws_iam_role.testreturnstrueimmediately_Handler_IamRole_62FB5976.arn}",
         "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
-        "s3_key": "${aws_s3_object.root_testreturnstrueimmediately_Handler_S3Object_7DC76928.key}",
+        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
+        "s3_key": "${aws_s3_object.testreturnstrueimmediately_Handler_S3Object_BDE35D32.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
           "subnet_ids": []
         }
       },
-      "root_testsettingprops_Handler_999FF97B": {
+      "testsettingprops_Handler_8BB7DC9B": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:setting props/Handler/Default",
-            "uniqueId": "root_testsettingprops_Handler_999FF97B"
+            "uniqueId": "testsettingprops_Handler_8BB7DC9B"
           }
         },
         "environment": {
           "variables": {
-            "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.root_cloudCounter_E0AC1263.name}",
+            "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.cloudCounter.name}",
             "WING_FUNCTION_NAME": "Handler-c8da809f",
             "WING_TARGET": "tf-aws"
           }
@@ -466,26 +454,26 @@ module.exports = function({  }) {
         "function_name": "Handler-c8da809f",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.root_testsettingprops_Handler_IamRole_0F23FB18.arn}",
+        "role": "${aws_iam_role.testsettingprops_Handler_IamRole_6953F1F6.arn}",
         "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
-        "s3_key": "${aws_s3_object.root_testsettingprops_Handler_S3Object_09D35E71.key}",
+        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
+        "s3_key": "${aws_s3_object.testsettingprops_Handler_S3Object_EBE1EFD3.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
           "subnet_ids": []
         }
       },
-      "root_testthrowingexceptionfrompredicateshouldthrowimmediately_Handler_5D10926A": {
+      "testthrowingexceptionfrompredicateshouldthrowimmediately_Handler_B4BADFD9": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:throwing exception from predicate should throw immediately/Handler/Default",
-            "uniqueId": "root_testthrowingexceptionfrompredicateshouldthrowimmediately_Handler_5D10926A"
+            "uniqueId": "testthrowingexceptionfrompredicateshouldthrowimmediately_Handler_B4BADFD9"
           }
         },
         "environment": {
           "variables": {
-            "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.root_cloudCounter_E0AC1263.name}",
+            "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.cloudCounter.name}",
             "WING_FUNCTION_NAME": "Handler-c8a3878e",
             "WING_TARGET": "tf-aws"
           }
@@ -493,10 +481,10 @@ module.exports = function({  }) {
         "function_name": "Handler-c8a3878e",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.root_testthrowingexceptionfrompredicateshouldthrowimmediately_Handler_IamRole_F73F02AC.arn}",
+        "role": "${aws_iam_role.testthrowingexceptionfrompredicateshouldthrowimmediately_Handler_IamRole_B0167A3F.arn}",
         "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
-        "s3_key": "${aws_s3_object.root_testthrowingexceptionfrompredicateshouldthrowimmediately_Handler_S3Object_7309A47F.key}",
+        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
+        "s3_key": "${aws_s3_object.testthrowingexceptionfrompredicateshouldthrowimmediately_Handler_S3Object_EBADB0B5.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -505,69 +493,69 @@ module.exports = function({  }) {
       }
     },
     "aws_s3_bucket": {
-      "root_Code_02F3C603": {
+      "Code": {
         "//": {
           "metadata": {
             "path": "root/Default/Code",
-            "uniqueId": "root_Code_02F3C603"
+            "uniqueId": "Code"
           }
         },
         "bucket_prefix": "code-c84a50b1-"
       }
     },
     "aws_s3_object": {
-      "root_testreturnsaftersometimewaiting_Handler_S3Object_96239004": {
+      "testreturnsaftersometimewaiting_Handler_S3Object_71DBD4AC": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:returns after some time waiting/Handler/S3Object",
-            "uniqueId": "root_testreturnsaftersometimewaiting_Handler_S3Object_96239004"
+            "uniqueId": "testreturnsaftersometimewaiting_Handler_S3Object_71DBD4AC"
           }
         },
-        "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
+        "bucket": "${aws_s3_bucket.Code.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       },
-      "root_testreturnsfalsegoestotimeout_Handler_S3Object_B707877F": {
+      "testreturnsfalsegoestotimeout_Handler_S3Object_1B345AEE": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:returns false goes to timeout/Handler/S3Object",
-            "uniqueId": "root_testreturnsfalsegoestotimeout_Handler_S3Object_B707877F"
+            "uniqueId": "testreturnsfalsegoestotimeout_Handler_S3Object_1B345AEE"
           }
         },
-        "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
+        "bucket": "${aws_s3_bucket.Code.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       },
-      "root_testreturnstrueimmediately_Handler_S3Object_7DC76928": {
+      "testreturnstrueimmediately_Handler_S3Object_BDE35D32": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:returns true immediately/Handler/S3Object",
-            "uniqueId": "root_testreturnstrueimmediately_Handler_S3Object_7DC76928"
+            "uniqueId": "testreturnstrueimmediately_Handler_S3Object_BDE35D32"
           }
         },
-        "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
+        "bucket": "${aws_s3_bucket.Code.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       },
-      "root_testsettingprops_Handler_S3Object_09D35E71": {
+      "testsettingprops_Handler_S3Object_EBE1EFD3": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:setting props/Handler/S3Object",
-            "uniqueId": "root_testsettingprops_Handler_S3Object_09D35E71"
+            "uniqueId": "testsettingprops_Handler_S3Object_EBE1EFD3"
           }
         },
-        "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
+        "bucket": "${aws_s3_bucket.Code.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       },
-      "root_testthrowingexceptionfrompredicateshouldthrowimmediately_Handler_S3Object_7309A47F": {
+      "testthrowingexceptionfrompredicateshouldthrowimmediately_Handler_S3Object_EBADB0B5": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:throwing exception from predicate should throw immediately/Handler/S3Object",
-            "uniqueId": "root_testthrowingexceptionfrompredicateshouldthrowimmediately_Handler_S3Object_7309A47F"
+            "uniqueId": "testthrowingexceptionfrompredicateshouldthrowimmediately_Handler_S3Object_EBADB0B5"
           }
         },
-        "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
+        "bucket": "${aws_s3_bucket.Code.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       }
@@ -582,7 +570,6 @@ const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
-const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 const cloud = require('@winglang/sdk').cloud;
 const util = require('@winglang/sdk').util;
 class $Root extends $stdlib.std.Resource {
@@ -591,12 +578,11 @@ class $Root extends $stdlib.std.Resource {
     class JSHelper extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("getTime");
+        this._addInflightOps("getTime", "$inflight_init");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.JSHelper.js";
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
+          require("./inflight.JSHelper.js")({
           })
         `);
       }
@@ -611,31 +597,18 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-        }
-        super._registerBind(host, ops);
-      }
-      static _registerTypeBind(host, ops) {
-        if (ops.includes("getTime")) {
-        }
-        super._registerTypeBind(host, ops);
-      }
     }
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
+        this._addInflightOps("handle", "$inflight_init");
         this.display.hidden = true;
-        this._addInflightOps("handle");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const JSHelperClient = JSHelper._toInflightType(context);
-        const util_UtilClient = util.Util._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            JSHelper: ${JSHelperClient.text},
-            util_Util: ${util_UtilClient.text},
+          require("./inflight.$Closure1.js")({
+            $JSHelper: ${context._lift(JSHelper)},
+            $util_Util: ${context._lift(util.Util)},
           })
         `);
       }
@@ -651,8 +624,6 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-        }
         if (ops.includes("handle")) {
           $Closure1._registerBindObject(JSHelper, host, ["getTime"]);
         }
@@ -662,19 +633,15 @@ class $Root extends $stdlib.std.Resource {
     class $Closure2 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
+        this._addInflightOps("handle", "$inflight_init");
         this.display.hidden = true;
-        this._addInflightOps("handle");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure2.js";
-        const oneSecond_client = context._lift(oneSecond);
-        const JSHelperClient = JSHelper._toInflightType(context);
-        const util_UtilClient = util.Util._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            oneSecond: ${oneSecond_client},
-            JSHelper: ${JSHelperClient.text},
-            util_Util: ${util_UtilClient.text},
+          require("./inflight.$Closure2.js")({
+            $JSHelper: ${context._lift(JSHelper)},
+            $oneSecond: ${context._lift(oneSecond)},
+            $util_Util: ${context._lift(util.Util)},
           })
         `);
       }
@@ -690,9 +657,6 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure2._registerBindObject(oneSecond, host, []);
-        }
         if (ops.includes("handle")) {
           $Closure2._registerBindObject(JSHelper, host, ["getTime"]);
           $Closure2._registerBindObject(oneSecond, host, []);
@@ -703,21 +667,16 @@ class $Root extends $stdlib.std.Resource {
     class $Closure3 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
+        this._addInflightOps("handle", "$inflight_init");
         this.display.hidden = true;
-        this._addInflightOps("handle");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure3.js";
-        const invokeCounter_client = context._lift(invokeCounter);
-        const oneSecond_client = context._lift(oneSecond);
-        const JSHelperClient = JSHelper._toInflightType(context);
-        const util_UtilClient = util.Util._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            invokeCounter: ${invokeCounter_client},
-            oneSecond: ${oneSecond_client},
-            JSHelper: ${JSHelperClient.text},
-            util_Util: ${util_UtilClient.text},
+          require("./inflight.$Closure3.js")({
+            $JSHelper: ${context._lift(JSHelper)},
+            $invokeCounter: ${context._lift(invokeCounter)},
+            $oneSecond: ${context._lift(oneSecond)},
+            $util_Util: ${context._lift(util.Util)},
           })
         `);
       }
@@ -733,10 +692,6 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure3._registerBindObject(invokeCounter, host, []);
-          $Closure3._registerBindObject(oneSecond, host, []);
-        }
         if (ops.includes("handle")) {
           $Closure3._registerBindObject(JSHelper, host, ["getTime"]);
           $Closure3._registerBindObject(invokeCounter, host, ["inc", "peek"]);
@@ -748,23 +703,17 @@ class $Root extends $stdlib.std.Resource {
     class $Closure4 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
+        this._addInflightOps("handle", "$inflight_init");
         this.display.hidden = true;
-        this._addInflightOps("handle");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure4.js";
-        const invokeCounter_client = context._lift(invokeCounter);
-        const oneSecond_client = context._lift(oneSecond);
-        const fiveSeconds_client = context._lift(fiveSeconds);
-        const JSHelperClient = JSHelper._toInflightType(context);
-        const util_UtilClient = util.Util._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            invokeCounter: ${invokeCounter_client},
-            oneSecond: ${oneSecond_client},
-            fiveSeconds: ${fiveSeconds_client},
-            JSHelper: ${JSHelperClient.text},
-            util_Util: ${util_UtilClient.text},
+          require("./inflight.$Closure4.js")({
+            $JSHelper: ${context._lift(JSHelper)},
+            $fiveSeconds: ${context._lift(fiveSeconds)},
+            $invokeCounter: ${context._lift(invokeCounter)},
+            $oneSecond: ${context._lift(oneSecond)},
+            $util_Util: ${context._lift(util.Util)},
           })
         `);
       }
@@ -780,11 +729,6 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure4._registerBindObject(fiveSeconds, host, []);
-          $Closure4._registerBindObject(invokeCounter, host, []);
-          $Closure4._registerBindObject(oneSecond, host, []);
-        }
         if (ops.includes("handle")) {
           $Closure4._registerBindObject(JSHelper, host, ["getTime"]);
           $Closure4._registerBindObject(fiveSeconds, host, []);
@@ -797,17 +741,14 @@ class $Root extends $stdlib.std.Resource {
     class $Closure5 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
+        this._addInflightOps("handle", "$inflight_init");
         this.display.hidden = true;
-        this._addInflightOps("handle");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure5.js";
-        const invokeCounter_client = context._lift(invokeCounter);
-        const util_UtilClient = util.Util._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            invokeCounter: ${invokeCounter_client},
-            util_Util: ${util_UtilClient.text},
+          require("./inflight.$Closure5.js")({
+            $invokeCounter: ${context._lift(invokeCounter)},
+            $util_Util: ${context._lift(util.Util)},
           })
         `);
       }
@@ -823,9 +764,6 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure5._registerBindObject(invokeCounter, host, []);
-        }
         if (ops.includes("handle")) {
           $Closure5._registerBindObject(invokeCounter, host, ["inc", "peek"]);
         }
@@ -843,22 +781,8 @@ class $Root extends $stdlib.std.Resource {
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:throwing exception from predicate should throw immediately",new $Closure5(this,"$Closure5"));
   }
 }
-class $App extends $AppBase {
-  constructor() {
-    super({ outdir: $outdir, name: "wait-until", plugins: $plugins, isTestEnvironment: $wing_is_test });
-    if ($wing_is_test) {
-      new $Root(this, "env0");
-      const $test_runner = this.testRunner;
-      const $tests = $test_runner.findTests();
-      for (let $i = 1; $i < $tests.length; $i++) {
-        new $Root(this, "env" + $i);
-      }
-    } else {
-      new $Root(this, "Default");
-    }
-  }
-}
-new $App().synth();
+const $App = $stdlib.core.App.for(process.env.WING_TARGET);
+new $App({ outdir: $outdir, name: "wait-until", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test }).synth();
 
 ```
 

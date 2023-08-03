@@ -9,9 +9,9 @@ import {
   DocumentUri,
 } from "vscode-languageserver/node";
 
-import * as wingCompiler from "../wingc";
+import * as wingCompiler from "@winglang/compiler";
 
-export async function run_server() {
+export async function lsp() {
   let wingc = await wingCompiler.load({
     imports: {
       env: {
@@ -86,7 +86,7 @@ export async function run_server() {
       capabilities: {
         textDocumentSync: TextDocumentSyncKind.Full,
         completionProvider: {
-          triggerCharacters: ["."],
+          triggerCharacters: [".", ":"],
         },
         signatureHelpProvider: {
           triggerCharacters: ["(", ",", ")"],
@@ -118,7 +118,11 @@ export async function run_server() {
     connection.sendDiagnostics({
       uri,
       diagnostics: raw_diagnostics.map((rd) => {
-        return Diagnostic.create(Range.create(rd.span.start.line, rd.span.start.col, rd.span.end.line, rd.span.end.col), rd.message)
+        if(rd.span) {
+          return Diagnostic.create(Range.create(rd.span.start.line, rd.span.start.col, rd.span.end.line, rd.span.end.col), rd.message)
+        } else {
+          return Diagnostic.create(Range.create(0, 0, 0, 0), rd.message)
+        }
       })
     });
   }

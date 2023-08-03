@@ -33,17 +33,18 @@ export interface CompileOptions {
  * @returns the output directory
  */
 export async function compile(entrypoint: string, options: CompileOptions): Promise<string> {
+  const coloring = chalk.supportsColor ? chalk.supportsColor.hasBasic : false;
   try {
     return await wingCompiler.compile(entrypoint, {
       ...options,
       log,
+      color: coloring,
     });
   } catch (error) {
     if (error instanceof wingCompiler.CompileError) {
       // This is a bug in the user's code. Print the compiler diagnostics.
       const errors = error.diagnostics;
       const result = [];
-      const coloring = chalk.supportsColor ? chalk.supportsColor.hasBasic : false;
 
       for (const error of errors) {
         const { message, span } = error;
@@ -51,7 +52,7 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
         let labels: Label[] = [];
 
         // file_id might be "" if the span is synthetic (see #2521)
-        if (span !== null && span.file_id) {
+        if (span?.file_id) {
           // `span` should only be null if source file couldn't be read etc.
           const source = await fsPromise.readFile(span.file_id, "utf8");
           const start = byteOffsetFromLineAndColumn(source, span.start.line, span.start.col);
@@ -135,7 +136,9 @@ function annotatePreflightError(error: Error): Error {
       "hint: Every preflight object needs a unique identifier within its scope. You can assign one as shown:"
     );
     newMessage.push('> new cloud.Bucket() as "MyBucket";');
-    newMessage.push("For more information, see https://www.winglang.io/docs/language-guide/language-reference#33-preflight-classes");
+    newMessage.push(
+      "For more information, see https://www.winglang.io/docs/language-guide/language-reference#33-preflight-classes"
+    );
 
     const newError = new Error(newMessage.join("\n\n"), { cause: error });
     newError.stack = error.stack;

@@ -7,7 +7,7 @@
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.2"
+      "version": "0.17.0"
     },
     "outputs": {
       "root": {
@@ -38,7 +38,6 @@ const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
-const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
@@ -50,33 +49,19 @@ class $Root extends $stdlib.std.Resource {
     const yf = ((-20.22) * xf);
     const zf = ((xf + yf) - (-0.01));
     const fxzy = (5 ** (2 ** 3));
-    {((cond) => {if (!cond) throw new Error("assertion failed: fxzy == 390625")})((fxzy === 390625))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: fxzy == 390625")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(fxzy,390625)))};
     const xyzf = Math.trunc(501 / (99 + 1));
-    {((cond) => {if (!cond) throw new Error("assertion failed: xyzf == 5")})((xyzf === 5))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: xyzf == 5")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(xyzf,5)))};
     const xyznf = Math.trunc((-501) / (99 + 1));
-    {((cond) => {if (!cond) throw new Error("assertion failed: xyznf == -5")})((xyznf === (-5)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: xyznf == -5")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(xyznf,(-5))))};
     const xyznfj = Math.trunc(501.9 / ((-99.1) - 0.91));
-    {((cond) => {if (!cond) throw new Error("assertion failed: xyznfj == -5")})((xyznfj === (-5)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: xyznfj == -5")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(xyznfj,(-5))))};
     const xynfj = Math.trunc((-501.9) / ((-99.1) - 0.91));
-    {((cond) => {if (!cond) throw new Error("assertion failed: xynfj == 5")})((xynfj === 5))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: xynfj == 5")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(xynfj,5)))};
   }
 }
-class $App extends $AppBase {
-  constructor() {
-    super({ outdir: $outdir, name: "expressions_binary_operators", plugins: $plugins, isTestEnvironment: $wing_is_test });
-    if ($wing_is_test) {
-      new $Root(this, "env0");
-      const $test_runner = this.testRunner;
-      const $tests = $test_runner.findTests();
-      for (let $i = 1; $i < $tests.length; $i++) {
-        new $Root(this, "env" + $i);
-      }
-    } else {
-      new $Root(this, "Default");
-    }
-  }
-}
-new $App().synth();
+const $App = $stdlib.core.App.for(process.env.WING_TARGET);
+new $App({ outdir: $outdir, name: "expressions_binary_operators", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test }).synth();
 
 ```
 

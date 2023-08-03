@@ -7,7 +7,7 @@
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.2"
+      "version": "0.17.0"
     },
     "outputs": {
       "root": {
@@ -38,7 +38,6 @@ const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
-const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
@@ -49,14 +48,14 @@ class $Root extends $stdlib.std.Resource {
     }
     catch ($error_e) {
       const e = $error_e.message;
-      {((cond) => {if (!cond) throw new Error("assertion failed: e == \"hello\"")})((e === "hello"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: e == \"hello\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(e,"hello")))};
       x = "caught";
     }
     finally {
-      {((cond) => {if (!cond) throw new Error("assertion failed: x == \"caught\"")})((x === "caught"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: x == \"caught\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(x,"caught")))};
       x = "finally";
     }
-    {((cond) => {if (!cond) throw new Error("assertion failed: x == \"finally\"")})((x === "finally"))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: x == \"finally\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(x,"finally")))};
     try {
       x = "I got here";
     }
@@ -65,10 +64,10 @@ class $Root extends $stdlib.std.Resource {
       x = "caught";
     }
     finally {
-      {((cond) => {if (!cond) throw new Error("assertion failed: x == \"I got here\"")})((x === "I got here"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: x == \"I got here\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(x,"I got here")))};
       x = "finally";
     }
-    {((cond) => {if (!cond) throw new Error("assertion failed: x == \"finally\"")})((x === "finally"))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: x == \"finally\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(x,"finally")))};
     try {
       try {
         {((msg) => {throw new Error(msg)})("hello")};
@@ -76,7 +75,7 @@ class $Root extends $stdlib.std.Resource {
       finally {
         x = "finally with no catch";
       }
-      {((cond) => {if (!cond) throw new Error("assertion failed: x == \"finally with no catch\"")})((x === "finally with no catch"))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: x == \"finally with no catch\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(x,"finally with no catch")))};
     }
     catch {
     }
@@ -85,50 +84,33 @@ class $Root extends $stdlib.std.Resource {
     finally {
       x = "finally with no catch and no exception";
     }
-    {((cond) => {if (!cond) throw new Error("assertion failed: x == \"finally with no catch and no exception\"")})((x === "finally with no catch and no exception"))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: (():num => { try {} finally {return 1;}})() == 1")})(((( () =>  {
+    {((cond) => {if (!cond) throw new Error("assertion failed: x == \"finally with no catch and no exception\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(x,"finally with no catch and no exception")))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: (():num => { try {} finally {return 1;}})() == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((() => {
       try {
       }
       finally {
         return 1;
       }
-    }
-    )()) === 1))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: (():num => { try {throw(\"\");} catch {return 2;}})() == 2")})(((( () =>  {
+    })()),1)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: (():num => { try {throw(\"\");} catch {return 2;}})() == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((() => {
       try {
         {((msg) => {throw new Error(msg)})("")};
       }
       catch {
         return 2;
       }
-    }
-    )()) === 2))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: (():num => { try {return 3;} finally {}})() == 3")})(((( () =>  {
+    })()),2)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: (():num => { try {return 3;} finally {}})() == 3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((() => {
       try {
         return 3;
       }
       finally {
       }
-    }
-    )()) === 3))};
+    })()),3)))};
   }
 }
-class $App extends $AppBase {
-  constructor() {
-    super({ outdir: $outdir, name: "try_catch", plugins: $plugins, isTestEnvironment: $wing_is_test });
-    if ($wing_is_test) {
-      new $Root(this, "env0");
-      const $test_runner = this.testRunner;
-      const $tests = $test_runner.findTests();
-      for (let $i = 1; $i < $tests.length; $i++) {
-        new $Root(this, "env" + $i);
-      }
-    } else {
-      new $Root(this, "Default");
-    }
-  }
-}
-new $App().synth();
+const $App = $stdlib.core.App.for(process.env.WING_TARGET);
+new $App({ outdir: $outdir, name: "try_catch", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test }).synth();
 
 ```
 

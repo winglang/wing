@@ -1,7 +1,8 @@
-import { Attribute, useTheme } from "@wingconsole/design-system";
 import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/solid";
-import { AppMode } from "../AppContext.js";
+import { Attribute, useTheme } from "@wingconsole/design-system";
 import classNames from "classnames";
+
+import { AppMode } from "../AppContext.js";
 
 export interface WebsiteInteractionProps {
   url: string;
@@ -19,13 +20,19 @@ export const WebsiteInteraction = ({
       <div className="relative grow flex-row flex items-center">
         {appMode === "local" && (
           <>
-            <Attribute name="URL" value={url} noLeftPadding />
+            <Attribute
+              name="URL"
+              value={url}
+              noLeftPadding
+              dataTestId="cloud.website:url"
+            />
             <ArrowTopRightOnSquareIcon
               className={classNames(
                 theme.text2,
                 "text-sm flex ml-2 h-4 w-4 cursor-pointer",
               )}
               onClick={() => onUrlClick(url)}
+              data-testid="cloud.website:open-url"
             />
           </>
         )}

@@ -1,19 +1,22 @@
+use itertools::Itertools;
 use lsp_types::{
 	Command, CompletionItem, CompletionItemKind, CompletionResponse, Documentation, InsertTextFormat, MarkupContent,
-	MarkupKind,
+	MarkupKind, Position, Range, TextEdit,
 };
 use std::cmp::max;
-use tree_sitter::Point;
+use tree_sitter::{Node, Point};
 
-use crate::ast::{Expr, Phase, Scope, Symbol, TypeAnnotation, TypeAnnotationKind, UserDefinedType};
+use crate::ast::{
+	CalleeKind, Expr, ExprKind, Phase, Scope, Symbol, TypeAnnotation, TypeAnnotationKind, UserDefinedType,
+};
 use crate::closure_transform::{CLOSURE_CLASS_PREFIX, PARENT_THIS_NAME};
-use crate::diagnostic::WingSpan;
+use crate::diagnostic::{WingLocation, WingSpan};
 use crate::docs::Documented;
 use crate::lsp::sync::{FILES, JSII_TYPES};
 use crate::type_check::symbol_env::{LookupResult, StatementIdx};
 use crate::type_check::{
-	import_udt_from_jsii, resolve_user_defined_type, ClassLike, Namespace, SymbolKind, Type, Types, UnsafeRef,
-	VariableKind, CLASS_INFLIGHT_INIT_NAME, CLASS_INIT_NAME,
+	fully_qualify_std_type, import_udt_from_jsii, resolve_super_method, resolve_user_defined_type, ClassLike, Namespace,
+	Struct, SymbolKind, Type, Types, UnsafeRef, VariableKind, CLASS_INFLIGHT_INIT_NAME, CLASS_INIT_NAME,
 };
 use crate::visit::{visit_expr, visit_type_annotation, Visit};
 use crate::wasm_util::{ptr_to_string, string_to_combined_ptr, WASM_RETURN_ERROR};
@@ -44,6 +47,35 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 		let root_env = root_scope.env.borrow();
 		let root_env = root_env.as_ref().expect("The root scope must have an environment");
 		let file = uri.to_file_path().ok().expect("LSP only works on real filesystems");
+		let file_id = file.to_str().expect("File path must be valid utf8");
+
+		// get all character from file_data.contents up to the current position
+		let preceding_text = &file_data
+			.contents
+			.lines()
+			.enumerate()
+			.take_while(|(i, _)| *i <= params.text_document_position.position.line as usize)
+			.map(|(i, s)| {
+				if i == params.text_document_position.position.line as usize {
+					&s[..params.text_document_position.position.character as usize].trim_end()
+				} else {
+					s
+				}
+			})
+			.join("\n");
+		let last_char_is_colon = preceding_text.ends_with(':');
+
+		let true_point = Point::new(
+			params.text_document_position.position.line as usize,
+			params.text_document_position.position.character as usize,
+		);
+		let true_node = root_ts_node
+			.named_descendant_for_point_range(true_point, true_point)
+			.unwrap();
+		if true_node.is_extra() && !true_node.is_error() {
+			// this is a comment, so don't show anything
+			return vec![];
+		}
 
 		let node_to_complete = nearest_interesting_node(
 			Point::new(
@@ -54,7 +86,6 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 		);
 		let node_to_complete_kind = node_to_complete.kind();
 
-		let file_id = file.to_str().expect("File path must be valid utf8");
 		let mut scope_visitor = ScopeVisitor::new(
 			node_to_complete.parent().map(|parent| WingSpan {
 				start: parent.start_position().into(),
@@ -66,6 +97,7 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 				end: node_to_complete.end_position().into(),
 				file_id: file_id.to_string(),
 			},
+			params.text_document_position.position.into(),
 			&root_scope,
 		);
 		scope_visitor.visit();
@@ -73,26 +105,63 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 		let found_env = scope_visitor.found_scope.env.borrow();
 		let found_env = found_env.as_ref().unwrap();
 
-		if node_to_complete_kind == "." || node_to_complete_kind == "?." {
+		// references have a complicated hierarchy, so it's useful to know the nearest non-reference parent
+		let mut nearest_non_reference_parent = node_to_complete.parent();
+		while let Some(parent) = nearest_non_reference_parent {
+			if parent.kind() == "reference" || parent.kind() == "reference_identifier" {
+				nearest_non_reference_parent = parent.parent();
+			} else {
+				break;
+			}
+		}
+
+		if node_to_complete_kind == "." || node_to_complete_kind == "?." || node_to_complete_kind == "member_identifier" {
 			let parent = node_to_complete.parent().expect("A dot must have a parent");
 
 			if let Some(nearest_expr) = scope_visitor.nearest_expr {
-				let nearest_expr_type = types.get_expr_type(nearest_expr).unwrap();
+				let mut nearest_expr_type = types.get_expr_type(nearest_expr);
+				if let ExprKind::Call { .. } = &nearest_expr.kind {
+					if let Some(f) = nearest_expr_type.maybe_unwrap_option().as_function_sig() {
+						nearest_expr_type = f.return_type;
+					}
+				}
 
 				// If we are inside an incomplete reference, there is possibly a type error or an anything which has no completions
 				if !nearest_expr_type.is_unresolved() {
 					// We need to double-check for an invalid nested reference (e.g. If there are multiple dots in a row)
-					let mut previous_point = node_to_complete.start_position();
-					if previous_point.column > 0 {
-						previous_point.column -= 1;
-						let previous_node = nearest_interesting_node(previous_point, &root_ts_node);
+					if preceding_text.ends_with("..") || preceding_text.ends_with(".?.?") {
+						return vec![];
+					}
 
-						if previous_node.kind() == "." || previous_node.kind() == "?." {
-							return vec![];
+					let mut completions = get_completions_from_type(&nearest_expr_type, types, Some(found_env.phase), true);
+					if nearest_expr_type.is_option() {
+						// check to see if we need to add a ? to the completion
+						let replace_node = if node_to_complete_kind == "." {
+							Some(node_to_complete)
+						} else {
+							node_to_complete.prev_sibling().filter(|n| n.kind() == ".")
+						};
+						if let Some(replace_node) = replace_node {
+							let extra_edit = Some(vec![TextEdit {
+								new_text: "?.".to_string(),
+								range: Range {
+									start: Position {
+										character: replace_node.start_position().column as u32,
+										line: replace_node.start_position().row as u32,
+									},
+									end: Position {
+										character: replace_node.end_position().column as u32,
+										line: replace_node.end_position().row as u32,
+									},
+								},
+							}]);
+							for completion in completions.iter_mut() {
+								completion.additional_text_edits = extra_edit.clone();
+							}
 						}
 					}
 
-					return get_completions_from_type(&nearest_expr_type, types, Some(found_env.phase), true);
+					return completions;
 				}
 			}
 
@@ -150,10 +219,9 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 			}
 
 			// We're likely in a type reference of some kind, so let's use the raw text for a lookup
-			let wing_source_bytes = file_data.contents.as_bytes();
-			let reference_bytes = &wing_source_bytes[parent.start_byte()..node_to_complete.start_byte()];
+			let reference_bytes = &preceding_text.as_bytes()[parent.start_byte()..node_to_complete.start_byte()];
 			let reference_text =
-				add_std_namespace(std::str::from_utf8(reference_bytes).expect("Reference must be valid utf8"));
+				fully_qualify_std_type(std::str::from_utf8(reference_bytes).expect("Reference must be valid utf8"));
 
 			if let Some((lookup_thing, _)) = found_env
 				.lookup_nested_str(&reference_text, scope_visitor.found_stmt_index)
@@ -186,112 +254,81 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 			}
 
 			return vec![];
-		}
-
-		// we are somewhere but not entirely sure
-		// for now, lets just get all the symbols within the current scope
-		let mut completions = vec![];
-
-		let mut in_type = false;
-
-		match node_to_complete_kind {
-			// there are no possible completions that could follow ")"
-			")" => return vec![],
-
-			// This is the node we are in in the following case:
-			// inflight (stuff: ): num => {}
-			//                 ^
-			"parameter_list" => in_type = true,
-
-			// We are somewhere in the root of a file, so let's add some fun snippets
-			"source" => {
-				completions.push(CompletionItem {
-					label: "test \"\" { }".to_string(),
-					insert_text: Some("test \"$1\" {\n\t$2\n}".to_string()),
-					insert_text_format: Some(InsertTextFormat::SNIPPET),
-					kind: Some(CompletionItemKind::SNIPPET),
-					..Default::default()
-				});
+		} else if node_to_complete_kind == "struct_literal"
+			|| matches!(nearest_non_reference_parent, Some(p) if p.kind() == "struct_literal" || p.kind() == "struct_literal_member")
+		{
+			// check to see if ":" is the last character of the same line up to the cursor
+			// if it is, we want an expression instead of struct completions
+			if !last_char_is_colon {
+				if let Some(expr) = scope_visitor.expression_trail.iter().last() {
+					let type_ = types.get_expr_type(expr);
+					if let Some(t) = type_.maybe_unwrap_option().as_struct() {
+						if let ExprKind::StructLiteral { fields, .. } = &expr.kind {
+							return get_inner_struct_completions(
+								t,
+								&fields.keys().map(|f| f.name.clone()).collect(),
+							);
+						}
+					}
+				}
 			}
-			_ => {}
-		}
+		} else if !last_char_is_colon
+			&& (node_to_complete_kind == "argument_list"
+				|| matches!(nearest_non_reference_parent, Some(p) if p.kind() == "argument_list" || p.kind() == "positional_argument"))
+		{
+			if let Some(callish_expr) = scope_visitor.expression_trail.iter().rev().find_map(|e| match &e.kind {
+				ExprKind::Call { arg_list, callee } => Some((
+					match callee {
+						CalleeKind::Expr(expr) => types.get_expr_type(expr),
+						CalleeKind::SuperCall(method) => resolve_super_method(method, found_env, types).map_or(types.error(), |(t,_)| t),
+					}
+					, arg_list)),
+				ExprKind::New(new_expr) => {
+					Some((types.get_expr_type(&new_expr.class), &new_expr.arg_list))
+				}
+				_ => None,
+			}) {
+				let mut completions = get_current_scope_completions(&scope_visitor, &node_to_complete, preceding_text);
 
-		if let Some(parent) = node_to_complete.parent() {
-			match parent.kind() {
-				"ERROR" => {
-					if in_type || node_to_complete_kind == ":" {
-						in_type = true;
+				let arg_list_strings = &callish_expr
+					.1
+					.named_args
+					.iter()
+					.map(|(k, _)| k.name.clone())
+					.collect::<Vec<_>>();
+
+				// if we're in a function, get the struct expansion
+				if let Some(structy) = callish_expr.0.get_function_struct_arg() {
+					let func = callish_expr.0.maybe_unwrap_option().as_function_sig().unwrap();
+					if callish_expr.1.pos_args.iter().filter(|a| !types.get_expr_type(a).is_unresolved()).count() == func.parameters.len() - 1 {
+						completions.extend(get_inner_struct_completions(structy, arg_list_strings));
+					}
+				}
+
+				if let Some(class_type) = callish_expr.0.maybe_unwrap_option().as_class() {
+					let init_method = if found_env.phase == Phase::Preflight {
+						class_type.get_method(&Symbol::global(CLASS_INIT_NAME.to_string()))
+					} else if found_env.phase == Phase::Inflight {
+						class_type.get_method(&Symbol::global(CLASS_INFLIGHT_INIT_NAME.to_string()))
 					} else {
 						return vec![];
+					};
+					if let Some(init_method) = init_method {
+						let func = init_method.type_.maybe_unwrap_option().as_function_sig().unwrap();
+						if callish_expr.1.pos_args.iter().filter(|a| !types.get_expr_type(a).is_unresolved()).count() == func.parameters.len() - 1 {
+							if let Some(structy) = init_method.type_.get_function_struct_arg() {
+								completions.extend(get_inner_struct_completions(structy, arg_list_strings));
+							}
+						}
 					}
 				}
-				// we are inside a class definition, so for now let's show nothing at all
-				"resource_definition" | "class_definition" => {
-					return vec![CompletionItem {
-						label: "init".to_string(),
-						insert_text: Some("init($1) {\n\t$2\n}".to_string()),
-						insert_text_format: Some(InsertTextFormat::SNIPPET),
-						kind: Some(CompletionItemKind::SNIPPET),
-						..Default::default()
-					}];
-				}
 
-				"custom_type" => in_type = true,
-				_ => {}
+				return completions;
 			}
 		}
 
-		let found_stmt_index = scope_visitor.found_stmt_index.unwrap_or_default();
-
-		for symbol_data in found_env.symbol_map.iter().filter(|s| {
-			if let StatementIdx::Index(i) = s.1 .0 {
-				// within the found scope, we only want to show symbols that were defined before the current position
-				i <= found_stmt_index
-			} else {
-				true
-			}
-		}) {
-			let symbol_kind = &symbol_data.1 .1;
-
-			if let Some(completion) = format_symbol_kind_as_completion(symbol_data.0, symbol_kind) {
-				completions.push(completion);
-			}
-		}
-
-		if let Some(parent) = found_env.parent {
-			for data in parent.iter(true) {
-				if let Some(completion) = format_symbol_kind_as_completion(&data.0, &data.1) {
-					if completions.iter().all(|c| c.label != completion.label) {
-						completions.push(completion);
-					}
-				}
-			}
-		}
-
-		if !in_type {
-			completions.push(CompletionItem {
-				label: "inflight () => {}".to_string(),
-				insert_text: Some("inflight ($1) => {$2}".to_string()),
-				insert_text_format: Some(InsertTextFormat::SNIPPET),
-				kind: Some(CompletionItemKind::SNIPPET),
-				..Default::default()
-			});
-		}
-
-		if in_type {
-			// show only namespaces and types
-			completions
-				.into_iter()
-				.filter(|c| {
-					matches!(
-						c.kind,
-						Some(CompletionItemKind::CLASS) | Some(CompletionItemKind::MODULE)
-					)
-				})
-				.collect()
-		} else {
-			completions
-		}
+		// fallback: no special completions, just get stuff from the current scope
+		get_current_scope_completions(&scope_visitor, &node_to_complete, preceding_text)
 	});
 
 	final_completions = final_completions
@@ -304,6 +341,186 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 		.collect();
 
 	CompletionResponse::Array(final_completions)
+}
+
+/// Get symbols in the current scope as completion items
+fn get_current_scope_completions(
+	scope_visitor: &ScopeVisitor,
+	node_to_complete: &Node,
+	preceding_text: &String,
+) -> Vec<CompletionItem> {
+	let mut completions = vec![];
+
+	// by default assume being after a colon means we're looking for a type, but this is not always true
+	let mut in_type = preceding_text.ends_with(':');
+
+	match node_to_complete.kind() {
+		// there are no possible completions that could follow ")"
+		")" => return vec![],
+
+		"set_literal" | "struct_literal" => {
+			in_type = false;
+		}
+
+		"struct_definition" | "interface_implementation" => {
+			if preceding_text.ends_with("extends") {
+				// TODO Should only show namespaces and matching types
+				in_type = true;
+			} else if !in_type {
+				return vec![];
+			}
+		}
+
+		"resource_implementation" | "class_implementation" => {
+			if preceding_text.ends_with("impl") {
+				// TODO Should only show namespaces and classes
+				in_type = true;
+			} else if !in_type {
+				// we are inside a class definition, so for now let's show nothing at all
+				return vec![CompletionItem {
+					label: "init".to_string(),
+					insert_text: Some("init($1) {\n\t$2\n}".to_string()),
+					insert_text_format: Some(InsertTextFormat::SNIPPET),
+					kind: Some(CompletionItemKind::SNIPPET),
+					..Default::default()
+				}];
+			}
+		}
+
+		// We are somewhere in the root of a file, so let's add some fun snippets
+		"source" => {
+			completions.push(CompletionItem {
+				label: "test \"\" { }".to_string(),
+				filter_text: Some("test".to_string()),
+				insert_text: Some("test \"$1\" {\n\t$2\n}".to_string()),
+				insert_text_format: Some(InsertTextFormat::SNIPPET),
+				kind: Some(CompletionItemKind::SNIPPET),
+				..Default::default()
+			});
+		}
+
+		// in block-style statements, there are no possible completions that can follow the keyword
+		"interface" | "struct" | "class" | "test" => {
+			return vec![];
+		}
+
+		_ => {}
+	}
+
+	if let Some(parent) = node_to_complete.parent() {
+		let parent_kind = if parent.is_error() || parent.kind() == "reference" {
+			parent.parent().map(|p| p.kind()).unwrap_or("source")
+		} else {
+			parent.kind()
+		};
+
+		match parent_kind {
+			// Event if it looks like we want a type (e.g. we are following a ":"),
+			// we actually want an expression here
+			"argument_list"
+			| "call"
+			| "struct_literal"
+			| "set_literal"
+			| "struct_literal_member"
+			| "new_expression"
+			| "keyword_argument_value" => {
+				in_type = false;
+			}
+
+			"struct_definition" | "interface_implementation" => {
+				if !in_type {
+					return vec![];
+				}
+			}
+
+			"resource_implementation" | "class_implementation" => {
+				if !in_type {
+					// we are inside a class definition, so for now let's show nothing at all
+					return vec![CompletionItem {
+						label: "init".to_string(),
+						insert_text: Some("init($1) {\n\t$2\n}".to_string()),
+						insert_text_format: Some(InsertTextFormat::SNIPPET),
+						kind: Some(CompletionItemKind::SNIPPET),
+						..Default::default()
+					}];
+				}
+			}
+
+			"parameter_list" => {
+				return vec![];
+			}
+
+			"json_map_literal" => {
+				return vec![];
+			}
+
+			"custom_type" => in_type = true,
+			_ => {}
+		}
+	}
+
+	let found_stmt_index = scope_visitor.found_stmt_index.unwrap_or_default();
+	let found_env = scope_visitor.found_scope.env.borrow();
+	let found_env = found_env.as_ref().unwrap();
+
+	for symbol_data in found_env.symbol_map.iter().filter(|s| {
+		if let StatementIdx::Index(i) = s.1 .0 {
+			// within the found scope, we only want to show symbols that were defined before the current position
+			i < found_stmt_index
+		} else {
+			true
+		}
+	}) {
+		let symbol_kind = &symbol_data.1 .1;
+
+		if let Some(completion) = format_symbol_kind_as_completion(symbol_data.0, symbol_kind) {
+			completions.push(completion);
+		}
+	}
+
+	if let Some(parent) = found_env.parent {
+		for data in parent.iter(true) {
+			if let Some(completion) = format_symbol_kind_as_completion(&data.0, &data.1) {
+				if completions.iter().all(|c| c.label != completion.label) {
+					completions.push(completion);
+				}
+			}
+		}
+	}
+
+	if !in_type {
+		completions.push(CompletionItem {
+			label: "inflight () => {}".to_string(),
+			filter_text: Some("inflight".to_string()),
+			insert_text: Some("inflight ($1) => {$2}".to_string()),
+			insert_text_format: Some(InsertTextFormat::SNIPPET),
+			kind: Some(CompletionItemKind::SNIPPET),
+			..Default::default()
+		});
+	}
+
+	if in_type {
+		// show only namespaces and types
+		completions
+			.into_iter()
+			.filter(|c| {
+				matches!(
+					c.kind,
+					Some(CompletionItemKind::CLASS)
+						| Some(CompletionItemKind::MODULE)
+						| Some(CompletionItemKind::ENUM)
+						| Some(CompletionItemKind::STRUCT)
+						| Some(CompletionItemKind::INTERFACE)
+				)
+			})
+			.collect()
+	} else {
+		// we're not looking for a type, so hide things that can only result in types
+		completions
+			.into_iter()
+			.filter(|c| !matches!(c.kind, Some(CompletionItemKind::INTERFACE)))
+			.collect()
+	}
 }
 
 /// Within root_node, find the nearest (previous) node on the same line that is interesting for completion
@@ -340,10 +557,10 @@ fn completion_sort_text(completion_item: &CompletionItem) -> String {
 	let letter = if let Some(kind) = completion_kind {
 		match kind {
 			CompletionItemKind::ENUM_MEMBER => "aa",
+			CompletionItemKind::FIELD => "ab",
 			CompletionItemKind::VARIABLE => "bb",
 			CompletionItemKind::FUNCTION => "cc",
 			CompletionItemKind::PROPERTY => "dd",
-			CompletionItemKind::FIELD => "ee",
 			CompletionItemKind::METHOD => "ff",
 			CompletionItemKind::CLASS => "gg",
 			CompletionItemKind::STRUCT => "hh",
@@ -359,6 +576,30 @@ fn completion_sort_text(completion_item: &CompletionItem) -> String {
 	format!("{}|{}", letter, completion_item.label)
 }
 
+/// Create completion for fields within a struct.
+/// This can be used in calls (struct expansion) or in struct literals
+fn get_inner_struct_completions(struct_: &Struct, existing_fields: &Vec<String>) -> Vec<CompletionItem> {
+	let mut completions = vec![];
+
+	for field_data in struct_.env.iter(true) {
+		if !existing_fields.contains(&field_data.0) {
+			if let Some(mut base_completion) = format_symbol_kind_as_completion(&field_data.0, &field_data.1) {
+				base_completion.label = format!("{}:", base_completion.label);
+				base_completion.kind = Some(CompletionItemKind::FIELD);
+				base_completion.insert_text = Some(format!("{}: $1", field_data.0));
+				base_completion.insert_text_format = Some(InsertTextFormat::SNIPPET);
+				base_completion.command = Some(Command {
+					title: "triggerCompletion".to_string(),
+					command: "editor.action.triggerSuggest".to_string(),
+					arguments: None,
+				});
+				completions.push(base_completion);
+			}
+		}
+	}
+	return completions;
+}
+
 /// Gets accessible properties on a type as a list of CompletionItems
 fn get_completions_from_type(
 	type_: &UnsafeRef<Type>,
@@ -366,7 +607,8 @@ fn get_completions_from_type(
 	current_phase: Option<Phase>,
 	is_instance: bool,
 ) -> Vec<CompletionItem> {
-	match &**type_ {
+	let type_ = &**type_.maybe_unwrap_option();
+	match type_ {
 		Type::Class(c) => get_completions_from_class(c, current_phase, is_instance),
 		Type::Interface(i) => get_completions_from_class(i, current_phase, is_instance),
 		Type::Struct(s) => get_completions_from_class(s, current_phase, is_instance),
@@ -409,7 +651,7 @@ fn get_completions_from_type(
 				"num" => "Number",
 				_ => type_name,
 			};
-			let final_type_name = add_std_namespace(type_name);
+			let final_type_name = fully_qualify_std_type(type_name);
 			let final_type_name = final_type_name.as_str();
 
 			let fqn = format!("{WINGSDK_ASSEMBLY_NAME}.{final_type_name}");
@@ -419,37 +661,6 @@ fn get_completions_from_type(
 				vec![]
 			}
 		}
-	}
-}
-
-/// If the given type is from the std namespace, add the implicit `std.` to it
-fn add_std_namespace(type_: &str) -> std::string::String {
-	// This section of the code is hacky
-	// This is needed because our builtin types have no API
-	// So we have to get the API from the std lib
-	// But the std lib sometimes doesn't have the same names as the builtin types
-	// https://github.com/winglang/wing/issues/1780
-
-	// Additionally, this doesn't handle for generics
-	let type_name = type_.to_string();
-	let type_name = if let Some((prefix, _)) = type_name.split_once("<") {
-		prefix
-	} else {
-		&type_name
-	};
-
-	let type_name = match type_name {
-		"str" => "String",
-		"duration" => "Duration",
-		"bool" => "Boolean",
-		"num" => "Number",
-		_ => type_name,
-	};
-
-	match type_name {
-		"Json" | "MutJson" | "MutArray" | "MutMap" | "MutSet" | "Array" | "Map" | "Set" | "String" | "Duration"
-		| "Boolean" | "Number" => format!("{WINGSDK_STD_MODULE}.{type_name}"),
-		_ => type_name.to_string(),
 	}
 }
 
@@ -504,46 +715,31 @@ fn get_completions_from_class(
 				.as_variable()
 				.expect("Symbols in classes are always variables");
 
-			let is_static = if let VariableKind::StaticMember = variable.kind {
-				true
-			} else {
-				false
-			};
-
-			if is_static == is_instance {
+			// don't show static members if we're looking for instance members, and vice versa
+			if matches!(variable.kind, VariableKind::StaticMember) == is_instance {
 				return None;
 			}
 
-			let is_function = variable.type_.as_function_sig().is_some();
-
+			// See `Phase::can_call_to` for phase access rules
 			if let Some(current_phase) = current_phase {
-				if is_function && !current_phase.can_call_to(&variable.phase) {
+				if variable.type_.maybe_unwrap_option().as_function_sig().is_some()
+					&& !current_phase.can_call_to(&variable.phase)
+				{
 					return None;
 				}
 			}
 
-			let kind = if is_function {
-				Some(CompletionItemKind::METHOD)
+			let completion_item = format_symbol_kind_as_completion(&symbol_data.0, &symbol_data.1);
+			if let Some(mut completion_item) = completion_item {
+				completion_item.kind = match completion_item.kind {
+					Some(CompletionItemKind::FUNCTION) => Some(CompletionItemKind::METHOD),
+					Some(CompletionItemKind::VARIABLE) => Some(CompletionItemKind::FIELD),
+					_ => completion_item.kind,
+				};
+				Some(completion_item)
 			} else {
-				Some(CompletionItemKind::FIELD)
-			};
-			let is_method = kind == Some(CompletionItemKind::METHOD);
-
-			let mut completion_item = CompletionItem {
-				label: symbol_data.0,
-				documentation: Some(Documentation::MarkupContent(MarkupContent {
-					kind: MarkupKind::Markdown,
-					value: symbol_data.1.render_docs(),
-				})),
-				kind,
-				..Default::default()
-			};
-
-			if is_method {
-				convert_to_call_completion(&mut completion_item);
+				None
 			}
-
-			Some(completion_item)
 		})
 		.collect()
 }
@@ -590,7 +786,7 @@ fn format_symbol_kind_as_completion(name: &str, symbol_kind: &SymbolKind) -> Opt
 			..Default::default()
 		},
 		SymbolKind::Variable(v) => {
-			let kind = if v.type_.as_function_sig().is_some() {
+			let kind = if v.type_.maybe_unwrap_option().as_function_sig().is_some() {
 				Some(CompletionItemKind::FUNCTION)
 			} else {
 				Some(CompletionItemKind::VARIABLE)
@@ -599,13 +795,25 @@ fn format_symbol_kind_as_completion(name: &str, symbol_kind: &SymbolKind) -> Opt
 
 			let mut completion_item = CompletionItem {
 				label: name.to_string(),
+				detail: Some(v.type_.to_string()),
 				documentation,
 				kind,
 				..Default::default()
 			};
 
 			if is_method {
-				convert_to_call_completion(&mut completion_item);
+				if v
+					.type_
+					.maybe_unwrap_option()
+					.as_function_sig()
+					.unwrap()
+					.parameters
+					.is_empty()
+				{
+					completion_item.insert_text = Some(format!("{}()", name));
+				} else {
+					convert_to_call_completion(&mut completion_item);
+				}
 			}
 
 			completion_item
@@ -630,6 +838,7 @@ pub struct ScopeVisitor<'a> {
 	pub parent_span: Option<WingSpan>,
 	/// The target location we're looking for
 	pub target_span: WingSpan,
+	pub exact_position: WingLocation,
 	/// The index of the statement that contains the target location
 	/// or, the last valid statement before the target location
 	pub found_stmt_index: Option<usize>,
@@ -639,17 +848,25 @@ pub struct ScopeVisitor<'a> {
 	pub nearest_expr: Option<&'a Expr>,
 	/// The nearest type annotation before (or containing) the target location
 	pub nearest_type_annotation: Option<&'a TypeAnnotation>,
+	pub expression_trail: Vec<&'a Expr>,
 }
 
 impl<'a> ScopeVisitor<'a> {
-	pub fn new(parent_span: Option<WingSpan>, target_span: WingSpan, starting_scope: &'a Scope) -> Self {
+	pub fn new(
+		parent_span: Option<WingSpan>,
+		target_span: WingSpan,
+		exact_position: WingLocation,
+		starting_scope: &'a Scope,
+	) -> Self {
 		Self {
+			exact_position,
 			parent_span,
 			target_span,
 			found_stmt_index: None,
 			nearest_expr: None,
 			found_scope: starting_scope,
 			nearest_type_annotation: None,
+			expression_trail: vec![],
 		}
 	}
 
@@ -660,14 +877,14 @@ impl<'a> ScopeVisitor<'a> {
 
 impl<'a> Visit<'a> for ScopeVisitor<'a> {
 	fn visit_scope(&mut self, node: &'a Scope) {
-		if node.span.file_id != "" && node.span.contains(&self.target_span.start.into()) {
+		if node.span.file_id != "" && node.span.contains(&self.exact_position.into()) {
 			self.found_scope = node;
 
-			for (i, statement) in node.statements.iter().enumerate() {
-				if statement.span <= self.target_span {
+			for statement in node.statements.iter() {
+				if statement.span.start <= self.exact_position {
 					self.visit_stmt(&statement);
-				} else if self.found_stmt_index.is_none() {
-					self.found_stmt_index = Some(max(i as i64 - 1, 0) as usize);
+				} else if self.found_stmt_index.is_none() && statement.span.file_id != "" {
+					self.found_stmt_index = Some(statement.idx);
 				}
 			}
 			if self.found_stmt_index.is_none() {
@@ -678,10 +895,16 @@ impl<'a> Visit<'a> for ScopeVisitor<'a> {
 	}
 
 	fn visit_expr(&mut self, node: &'a Expr) {
+		let mut set_node = false;
+
+		// if the span is exactly the same, we want to set the node
+		if node.span.start == self.target_span.start && node.span.end == self.target_span.end {
+			set_node = true;
+		}
 		// We want to find the nearest expression to our target location
 		// i.e we want the expression that is to the left of it
 		if node.span.end == self.target_span.start {
-			self.nearest_expr = Some(node);
+			set_node = true;
 		}
 		// if we can't get an exact match, we want to find the nearest expression within the same node-ish
 		// (this is for cases like `(Json 5).`, since parentheses are not part of the span)
@@ -690,22 +913,27 @@ impl<'a> Visit<'a> for ScopeVisitor<'a> {
 				if parent.contains(&node.span.end.into()) {
 					if let Some(nearest_expr) = self.nearest_expr {
 						// If we already have a nearest expression, we want to find the one that is closest to our target location
-						if node.span.end > nearest_expr.span.end {
-							self.nearest_expr = Some(node);
+						if node.span.start > nearest_expr.span.start {
+							set_node = true;
 						}
 					} else {
-						self.nearest_expr = Some(node);
+						set_node = true;
 					}
 				}
 			}
 		}
 
-		// We don't want to visit the children of a reference expression
-		// as that will actually be a less useful piece of information
-		// e.g. With `a.b.c.` we are interested in `a.b.c` and not `a.b`
-		visit_expr(self, node);
-		// if !matches!(&node.kind, ExprKind::Reference(_)) {
-		// }
+		if node.span.contains(&self.exact_position.into()) {
+			self.expression_trail.push(node);
+		}
+
+		// if this node is possibly what we're looking for, no need to visit its children
+		// (we will still visit sibling expressions, just in case)
+		if set_node {
+			self.nearest_expr = Some(node);
+		} else {
+			visit_expr(self, node);
+		}
 	}
 
 	fn visit_type_annotation(&mut self, node: &'a TypeAnnotation) {
@@ -732,6 +960,9 @@ mod tests {
 	///
 	/// Result is a list of [CompletionItem]s
 	macro_rules! test_completion_list {
+		($name:ident, $code:literal) => {
+			test_completion_list!($name, $code,);
+		};
 		($name:ident, $code:literal, $($assertion:stmt)*) => {
 			#[test]
 			fn $name() {
@@ -826,7 +1057,8 @@ let c = 3;
 		r#"
 let a = MutMap<str> {};
 if a. 
-   //^"#,
+   //^
+"#,
 		assert!(!incomplete_if_statement.is_empty())
 	);
 
@@ -1006,5 +1238,176 @@ j.tryGet("")?.
             //^
 "#,
 		assert!(!optional_chaining.is_empty())
+	);
+
+	test_completion_list!(
+		optional_chaining_auto,
+		r#"
+let j = Json {};
+j.tryGet("").
+           //^
+"#,
+		assert!(!optional_chaining_auto.is_empty())
+	);
+
+	test_completion_list!(
+		type_annotation_shows_struct,
+		r#"
+struct Foo {}
+
+let x: 
+    //^
+"#,
+		assert!(type_annotation_shows_struct.len() == 1)
+		assert!(type_annotation_shows_struct.get(0).unwrap().label == "Foo")
+	);
+
+	test_completion_list!(
+		struct_definition_middle,
+		r#"
+struct Foo {
+   
+//^ 
+}
+"#,
+		assert!(struct_definition_middle.is_empty())
+	);
+
+	test_completion_list!(
+		struct_definition_types,
+		r#"
+bring cloud;
+
+struct Foo {
+	x:
+	//^ 
+}
+"#
+	);
+
+	test_completion_list!(
+		struct_literal_unused,
+		r#"
+struct Foo {
+	x: str;
+	y: num;
+}
+
+Foo { x: "hi", }
+            //^
+"#
+	);
+
+	test_completion_list!(
+		struct_literal_all,
+		r#"
+struct Foo {
+	x: str;
+	y: num;
+}
+
+Foo {  }
+    //^
+"#
+	);
+
+	test_completion_list!(
+		struct_literal_value,
+		r#"
+struct Foo {
+	x: str;
+	y: num;
+}
+
+Foo { x:   }
+       //^
+"#
+	);
+
+	test_completion_list!(
+		partial_reference_2,
+		r#"
+struct Inner {
+	durationThing: duration;
+}
+struct Outer {
+	bThing: Inner;
+}
+
+let x = Outer { bThing: Inner { durationThing: 2s } };
+
+x.bThi
+    //^
+"#
+	);
+
+	test_completion_list!(
+		partial_reference_3,
+		r#"
+struct Inner {
+	durationThing: duration;
+}
+struct Outer {
+	bThing: Inner;
+}
+
+let x = Outer { bThing: Inner { durationThing: 2s } };
+
+x.bThing.du
+         //^
+"#
+	);
+
+	test_completion_list!(
+		partial_reference_call,
+		r#"
+let j = Json "";
+j.asStr().leng
+            //^
+"#
+	);
+
+	test_completion_list!(
+		call_struct_expansion,
+		r#"
+struct A {
+	a: str;
+}
+
+let x = (arg1: A) => {};
+
+x( )
+//^
+"#
+	);
+
+	test_completion_list!(
+		call_struct_expansion_partial,
+		r#"
+struct A {
+	one: str;
+	two: str;
+}
+
+let x = (arg1: A) => {};
+
+x(one: "", )
+        //^
+"#
+	);
+
+	test_completion_list!(
+		nested_struct_literal,
+		r#"
+struct Inner {
+	durationThing: duration;
+}
+struct Outer {
+	bThing: Inner;
+}
+
+let x = Outer { bThing: Inner {  } };
+                              //^
+"#
 	);
 }

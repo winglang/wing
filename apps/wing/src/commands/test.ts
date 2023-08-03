@@ -1,9 +1,7 @@
-import { basename, sep } from "path";
+import { basename, resolve, sep } from "path";
 import { compile, CompileOptions } from "./compile";
 import chalk from "chalk";
-import * as sdk from "@winglang/sdk";
-import { ITestRunnerClient } from "@winglang/sdk/lib/cloud";
-import { TestRunnerClient } from "@winglang/sdk/lib/shared-aws/test-runner.inflight";
+import { std, testing } from "@winglang/sdk";
 import * as cp from "child_process";
 import debug from "debug";
 import { promisify } from "util";
@@ -25,15 +23,17 @@ const generateTestName = (path: string) => path.split(sep).slice(-2).join("/");
 /**
  * Options for the `test` command.
  */
-export interface TestOptions extends CompileOptions {}
+export interface TestOptions extends CompileOptions {
+  clean: boolean;
+}
 
 export async function test(entrypoints: string[], options: TestOptions): Promise<number> {
   const startTime = Date.now();
-  const results: { testName: string; results: sdk.cloud.TestResult[] }[] = [];
+  const results: { testName: string; results: std.TestResult[] }[] = [];
   for (const entrypoint of entrypoints) {
     const testName = generateTestName(entrypoint);
     try {
-      const singleTestResults: sdk.cloud.TestResult[] | void = await testOne(entrypoint, options);
+      const singleTestResults: std.TestResult[] | void = await testOne(entrypoint, options);
       results.push({ testName, results: singleTestResults ?? [] });
     } catch (error) {
       console.log((error as Error).message);
@@ -58,7 +58,7 @@ export async function test(entrypoints: string[], options: TestOptions): Promise
 }
 
 function printResults(
-  testResults: { testName: string; results: sdk.cloud.TestResult[] }[],
+  testResults: { testName: string; results: std.TestResult[] }[],
   duration: number
 ) {
   const durationInSeconds = duration / 1000;
@@ -131,7 +131,8 @@ function printResults(
 async function testOne(entrypoint: string, options: TestOptions) {
   // since the test cleans up after each run, it's essential to create a temporary directory-
   // at least one that is different then the usual compilation dir,  otherwise we might end up cleaning up the user's actual resources.
-  const tempFile: string = Target.SIM ? entrypoint : await generateTmpDir(entrypoint);
+  const tempFile: string =
+    options.target === Target.SIM ? entrypoint : await generateTmpDir(entrypoint);
   const synthDir = await withSpinner(
     `Compiling ${generateTestName(entrypoint)} to ${options.target}...`,
     () =>
@@ -143,11 +144,11 @@ async function testOne(entrypoint: string, options: TestOptions) {
 
   switch (options.target) {
     case Target.SIM:
-      return await testSimulator(synthDir);
+      return await testSimulator(synthDir, options);
     case Target.TF_AWS:
-      return await testTfAws(synthDir);
+      return await testTfAws(synthDir, options);
     case Target.AWSCDK:
-      return await testAwsCdk(synthDir);
+      return await testAwsCdk(synthDir, options);
     default:
       throw new Error(`unsupported target ${options.target}`);
   }
@@ -156,7 +157,7 @@ async function testOne(entrypoint: string, options: TestOptions) {
 /**
  * Render a test report for printing out to the console.
  */
-export function renderTestReport(entrypoint: string, results: sdk.cloud.TestResult[]): string {
+export function renderTestReport(entrypoint: string, results: std.TestResult[]): string {
   const out = new Array<string>();
 
   // find the longest `path` of all the tests
@@ -233,18 +234,25 @@ export function renderTestReport(entrypoint: string, results: sdk.cloud.TestResu
   return out.join("\n");
 }
 
-function testResultsContainsFailure(results: sdk.cloud.TestResult[]): boolean {
+function testResultsContainsFailure(results: std.TestResult[]): boolean {
   return results.some((r) => !r.pass);
 }
 
-async function testSimulator(synthDir: string) {
-  const s = new sdk.testing.Simulator({ simfile: synthDir });
+function noCleanUp(synthDir: string) {
+  console.log(
+    chalk.yellowBright.bold(`Cleanup is disabled!\nOutput files available at ${resolve(synthDir)}`)
+  );
+}
+
+async function testSimulator(synthDir: string, options: TestOptions) {
+  const s = new testing.Simulator({ simfile: synthDir });
+  const { clean } = options;
   await s.start();
 
-  const testRunner = s.getResource("root/cloud.TestRunner") as ITestRunnerClient;
+  const testRunner = s.getResource("root/cloud.TestRunner") as std.ITestRunnerClient;
   const tests = await testRunner.listTests();
   const filteredTests = pickOneTestPerEnvironment(tests);
-  const results = new Array<sdk.cloud.TestResult>();
+  const results = new Array<std.TestResult>();
 
   // TODO: run these tests in parallel
   for (const path of filteredTests) {
@@ -256,12 +264,17 @@ async function testSimulator(synthDir: string) {
   const testReport = renderTestReport(synthDir, results);
   console.log(testReport);
 
-  rmSync(synthDir, { recursive: true, force: true });
+  if (clean) {
+    rmSync(synthDir, { recursive: true, force: true });
+  } else {
+    noCleanUp(synthDir);
+  }
 
   return results;
 }
 
-async function testAwsCdk(synthDir: string): Promise<sdk.cloud.TestResult[]> {
+async function testAwsCdk(synthDir: string, options: TestOptions): Promise<std.TestResult[]> {
+  const { clean } = options;
   try {
     isAwsCdkInstalled(synthDir);
 
@@ -273,6 +286,10 @@ async function testAwsCdk(synthDir: string): Promise<sdk.cloud.TestResult[]> {
         ENV_WING_TEST_RUNNER_FUNCTION_ARNS_AWSCDK,
         process.env.CDK_STACK_NAME!
       );
+
+      const { TestRunnerClient } = await import(
+        "@winglang/sdk/lib/shared-aws/test-runner.inflight"
+      );
       const testRunner = new TestRunnerClient(testArns);
 
       const tests = await testRunner.listTests();
@@ -280,7 +297,7 @@ async function testAwsCdk(synthDir: string): Promise<sdk.cloud.TestResult[]> {
     });
 
     const results = await withSpinner("Running tests...", async () => {
-      const results = new Array<sdk.cloud.TestResult>();
+      const results = new Array<std.TestResult>();
       for (const path of tests) {
         results.push(await testRunner.runTest(path));
       }
@@ -299,7 +316,11 @@ async function testAwsCdk(synthDir: string): Promise<sdk.cloud.TestResult[]> {
     console.warn((err as Error).message);
     return [{ pass: false, path: "", error: (err as Error).message, traces: [] }];
   } finally {
-    await cleanupCdk(synthDir);
+    if (clean) {
+      await cleanupCdk(synthDir);
+    } else {
+      noCleanUp(synthDir);
+    }
   }
 }
 
@@ -337,7 +358,8 @@ async function awsCdkOutput(synthDir: string, name: string, stackName: string) {
   return parsed[stackName][name];
 }
 
-async function testTfAws(synthDir: string): Promise<sdk.cloud.TestResult[] | void> {
+async function testTfAws(synthDir: string, options: TestOptions): Promise<std.TestResult[] | void> {
+  const { clean } = options;
   try {
     if (!isTerraformInstalled(synthDir)) {
       throw new Error(
@@ -351,6 +373,9 @@ async function testTfAws(synthDir: string): Promise<sdk.cloud.TestResult[] | voi
 
     const [testRunner, tests] = await withSpinner("Setting up test runner...", async () => {
       const testArns = await terraformOutput(synthDir, ENV_WING_TEST_RUNNER_FUNCTION_ARNS);
+      const { TestRunnerClient } = await import(
+        "@winglang/sdk/lib/shared-aws/test-runner.inflight"
+      );
       const testRunner = new TestRunnerClient(testArns);
 
       const tests = await testRunner.listTests();
@@ -358,7 +383,7 @@ async function testTfAws(synthDir: string): Promise<sdk.cloud.TestResult[] | voi
     });
 
     const results = await withSpinner("Running tests...", async () => {
-      const results = new Array<sdk.cloud.TestResult>();
+      const results = new Array<std.TestResult>();
       for (const path of tests) {
         results.push(await testRunner.runTest(path));
       }
@@ -377,7 +402,11 @@ async function testTfAws(synthDir: string): Promise<sdk.cloud.TestResult[] | voi
     console.warn((err as Error).message);
     return [{ pass: false, path: "", error: (err as Error).message, traces: [] }];
   } finally {
-    await cleanupTf(synthDir);
+    if (clean) {
+      await cleanupTf(synthDir);
+    } else {
+      noCleanUp(synthDir);
+    }
   }
 }
 
@@ -456,7 +485,7 @@ function pickOneTestPerEnvironment(testPaths: string[]) {
   return Array.from(tests.values());
 }
 
-function sortTests(a: sdk.cloud.TestResult, b: sdk.cloud.TestResult) {
+function sortTests(a: std.TestResult, b: std.TestResult) {
   if (a.pass && !b.pass) {
     return -1;
   }

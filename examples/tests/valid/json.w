@@ -146,7 +146,7 @@ let jsonElements = Json {
   }
 };
 
-if let val = jsonElements.tryGet("strings")?.tryGet("single")?.tryAsStr() {
+if let val = jsonElements.tryGet("strings")?.tryGet("single")?.asStr() {
   assert(val == "Hello");
 } else {
   // This should not happen

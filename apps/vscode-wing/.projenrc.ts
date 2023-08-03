@@ -2,21 +2,21 @@ import { IgnoreFile } from "projen";
 import { NodePackageManager } from "projen/lib/javascript";
 import { TypeScriptAppProject } from "projen/lib/typescript";
 import { VSCodeExtensionContributions } from "./src/project/vscode_types";
-import rootPackageJson from "../../package.json";
 
 const VSCODE_BASE_VERSION = "1.70.0";
 
 const project = new TypeScriptAppProject({
   defaultReleaseBranch: "main",
   name: "vscode-wing",
-  authorName: "Monada",
-  authorEmail: "ping@monada.co",
+  authorName: "Wing Cloud",
+  authorEmail: "ping@wing.cloud",
   authorOrganization: true,
-  authorUrl: "https://monada.co",
+  authorUrl: "https://winglang.io",
   repository: "https://github.com/winglang/wing.git",
   bugsUrl: "https://github.com/winglang/wing/issues",
   homepage: "https://winglang.io",
   description: "Wing language support for VSCode",
+  projenCommand: "pnpm exec projen",
   keywords: [
     "cdk",
     "cdktf",
@@ -29,7 +29,7 @@ const project = new TypeScriptAppProject({
   ],
   license: "MIT",
 
-  packageManager: NodePackageManager.NPM,
+  packageManager: NodePackageManager.PNPM,
   projenrcTs: true,
   package: false,
   buildWorkflow: false,
@@ -105,6 +105,38 @@ const contributes: VSCodeExtensionContributions = {
       },
     },
   ],
+  commands: [
+    {
+      command: "wing.openConsole",
+      title: "Open in Wing Console",
+      icon: {
+        light: "resources/icon-light.png",
+        dark: "resources/icon-dark.png",
+      },
+    },
+    {
+      command: "wing.openFile",
+      title: "Open source file",
+      icon: {
+        light: "resources/icon-light.png",
+        dark: "resources/icon-dark.png",
+      },
+    },
+  ],
+  menus: {
+    "editor/title": [
+      {
+        when: "resourceLangId == wing && activeWebviewPanelId != 'wing.console'",
+        command: "wing.openConsole",
+        group: "navigation",
+      },
+      {
+        when: "resourceLangId != wing && activeWebviewPanelId == 'wing.console'",
+        command: "wing.openFile",
+        group: "navigation",
+      },
+    ],
+  },
   configuration: [
     {
       title: "Wing",
@@ -124,7 +156,7 @@ project.addFields({
   publisher: "Monada",
   preview: true,
   private: true,
-  displayName: "Wing [Alpha]",
+  displayName: "Wing",
   icon: "resources/logo.png",
   engines: {
     vscode: `^${VSCODE_BASE_VERSION}`,
@@ -141,12 +173,17 @@ project.compileTask.exec(esbuildComment);
 project.watchTask.reset(`${esbuildComment} --watch`);
 
 project.packageTask.reset(
-  "npm version ${PROJEN_BUMP_VERSION:-0.0.0} --allow-same-version"
+  "pnpm version ${PROJEN_BUMP_VERSION:-0.0.0} --allow-same-version"
 );
-project.packageTask.exec("vsce package -o vscode-wing.vsix");
+project.packageTask.exec("vsce package --no-dependencies -o vscode-wing.vsix");
 
 project.addFields({
-  volta: rootPackageJson.volta,
+  volta: {
+    extends: "../../package.json",
+  },
 });
+
+project.package.file.addDeletionOverride("pnpm");
+project.tryRemoveFile(".npmrc");
 
 project.synth();

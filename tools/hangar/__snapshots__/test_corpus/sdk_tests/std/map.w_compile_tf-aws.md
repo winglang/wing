@@ -7,7 +7,7 @@
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.2"
+      "version": "0.17.0"
     },
     "outputs": {
       "root": {
@@ -38,37 +38,22 @@ const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
-const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
     const m = Object.freeze({"hello":123,"world":99});
     const mkeys = Object.keys(m);
-    {((cond) => {if (!cond) throw new Error("assertion failed: mkeys.length == 2")})((mkeys.length === 2))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: mkeys.at(0) == \"hello\"")})(((mkeys.at(0)) === "hello"))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: mkeys.at(1) == \"world\"")})(((mkeys.at(1)) === "world"))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: mkeys.length == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(mkeys.length,2)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: mkeys.at(0) == \"hello\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((mkeys.at(0)),"hello")))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: mkeys.at(1) == \"world\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((mkeys.at(1)),"world")))};
     const mvalues = Object.values(m);
-    {((cond) => {if (!cond) throw new Error("assertion failed: mvalues.length == 2")})((mvalues.length === 2))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: mvalues.at(0) == 123")})(((mvalues.at(0)) === 123))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: mvalues.at(1) == 99")})(((mvalues.at(1)) === 99))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: mvalues.length == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(mvalues.length,2)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: mvalues.at(0) == 123")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((mvalues.at(0)),123)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: mvalues.at(1) == 99")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((mvalues.at(1)),99)))};
   }
 }
-class $App extends $AppBase {
-  constructor() {
-    super({ outdir: $outdir, name: "map", plugins: $plugins, isTestEnvironment: $wing_is_test });
-    if ($wing_is_test) {
-      new $Root(this, "env0");
-      const $test_runner = this.testRunner;
-      const $tests = $test_runner.findTests();
-      for (let $i = 1; $i < $tests.length; $i++) {
-        new $Root(this, "env" + $i);
-      }
-    } else {
-      new $Root(this, "Default");
-    }
-  }
-}
-new $App().synth();
+const $App = $stdlib.core.App.for(process.env.WING_TARGET);
+new $App({ outdir: $outdir, name: "map", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test }).synth();
 
 ```
 

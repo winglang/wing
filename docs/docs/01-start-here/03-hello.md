@@ -15,24 +15,26 @@ mkdir hello-wing
 cd hello-wing
 ```
 
-## Your application entrypoint
+## The entrypoint file
 
 Add a new file called `hello.w` with the following code. This file is the
 entrypoint of your Wing application.
 
-```ts
+```js
 bring cloud;
 
 let bucket = new cloud.Bucket();
+let counter = new cloud.Counter(initial: 1);
 let queue = new cloud.Queue();
 
 queue.setConsumer(inflight (message: str) => {
-  bucket.put("wing.txt", "Hello, ${message}");
+  let index = counter.inc();
+  bucket.put("wing-${index}.txt", "Hello, ${message}");
+  log("file wing-${index}.txt created");
 });
 ```
 
-This code should be mostly self explanatory. We define a queue, and every time a
-message is added to the queue, a handler is triggered and creates a file named `wing.txt` with `"Hello, ${message}!"` content .
+This code should be mostly self explanatory. We define a queue and a counter, and every time a
+message is added to the queue, a handler is triggered and creates a file named `wing-<counter-index>.txt` with `"Hello, ${message}!"` content, and the counter is incremented by 1.
 
-Now that we've written this program, let's run and test it using the Wing Console.
-
+Now that we've written this program, let's run and test it using the **Wing Console**.

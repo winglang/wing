@@ -1,20 +1,25 @@
-import { createConsoleServer } from "@wingconsole/server";
 import { fileURLToPath } from "node:url";
-import open from "open";
+import { parseArgs } from "node:util";
 
+import { createConsoleServer } from "@wingconsole/server";
+import open from "open";
 import { createServer as createViteServer } from "vite";
+
 import { viteConfig } from "./config.mjs";
 
-const vite = await createViteServer({
-  ...viteConfig,
-  server: { middlewareMode: true },
+const options = parseArgs({
+  options: {
+    wingfile: {
+      type: "string",
+    },
+  },
 });
 
-const { port } = await createConsoleServer({
-  wingfile: fileURLToPath(new URL("../demo/index.w", import.meta.url)),
-  async onExpressCreated(app) {
-    app.use(vite.middlewares);
-  },
+const consoleServer = await createConsoleServer({
+  wingfile:
+    options.values.wingfile ??
+    fileURLToPath(new URL("../demo/index.w", import.meta.url)),
+  requestedPort: 1214,
   log: {
     info: console.log,
     error: console.error,
@@ -24,7 +29,7 @@ const { port } = await createConsoleServer({
     addEventListener(event, listener) {},
     removeEventListener(event, listener) {},
     get(key) {
-      return undefined;
+      return;
     },
     set(key, value) {},
   },
@@ -33,8 +38,21 @@ const { port } = await createConsoleServer({
       await open(url);
     },
   },
+  requireAcceptTerms: true,
 });
 
-await open(`http://localhost:${port}`);
+const vite = await createViteServer({
+  ...viteConfig,
+  server: {
+    proxy: {
+      "/trpc": {
+        target: `http://localhost:${consoleServer.port}`,
+        changeOrigin: true,
+        ws: true,
+      },
+    },
+    open: true,
+  },
+});
 
-console.log(`Wing Console is running on http://localhost:${port}/`);
+await vite.listen();

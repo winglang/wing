@@ -1,12 +1,13 @@
 import * as reflect from "jsii-reflect";
 import { Classes } from "./classes";
-import { Constructs } from "./constructs";
+import { Constructs, WingClassType } from "./constructs";
 import { Enums } from "./enums";
 import { Interfaces } from "./interfaces";
 import { Structs } from "./structs";
-import { HIDDEN_CLASSES, VISIBLE_SUBMODULES } from "./wing-filters";
-import { ApiReferenceSchema } from "../schema";
+import { VISIBLE_SUBMODULES } from "./wing-filters";
+import { ApiReferenceSchema, getInflight, isSkipped } from "../schema";
 import { Transpile } from "../transpile/transpile";
+import { MarkdownDocument } from "../render/markdown-doc";
 
 /**
  * Render an API reference based on the jsii assembly.
@@ -23,7 +24,7 @@ export class ApiReference {
     submodule?: reflect.Submodule,
     allSubmodules?: boolean
   ) {
-    let classes: reflect.ClassType[];
+    let classes: WingClassType[];
     let interfaces: reflect.InterfaceType[];
     let enums: reflect.EnumType[];
 
@@ -41,7 +42,6 @@ export class ApiReference {
         ...assembly.classes,
         ...flatMap(submodules, (submod) => [...submod.classes]),
       ]);
-      classes = classes.filter((c) => !HIDDEN_CLASSES.includes(c.name));
       interfaces = this.sortByName([
         ...assembly.interfaces,
         ...flatMap(submodules, (submod) => [...submod.interfaces]),
@@ -60,10 +60,32 @@ export class ApiReference {
       enums = this.sortByName(submodule ? submodule.enums : assembly.enums);
     }
 
-    this.constructs = new Constructs(transpile, classes);
+    classes = classes.filter((item) => !isSkipped(item.docs));
+    interfaces = interfaces.filter((item) => !isSkipped(item.docs));
+    enums = enums.filter((item) => !isSkipped(item.docs));
+
+    classes.forEach((c) => {
+      const inflight = getInflight(c.docs);
+      if (inflight) {
+        c.inflightFqn = MarkdownDocument.sanitize(inflight);
+      }
+    });
+
+    const inflightFqns: string[] = classes
+      .map(({ inflightFqn }) => inflightFqn)
+      .filter((fqn) => typeof fqn === "string") as string[];
+
+    this.constructs = new Constructs(
+      transpile,
+      classes,
+      this.searchableInterfaces(interfaces)
+    );
     this.classes = new Classes(transpile, classes);
     this.structs = new Structs(transpile, interfaces);
-    this.interfaces = new Interfaces(transpile, interfaces);
+    this.interfaces = new Interfaces(
+      transpile,
+      this.filterOutInflightInterfaces(interfaces, inflightFqns)
+    );
     this.enums = new Enums(transpile, enums);
   }
 
@@ -78,6 +100,24 @@ export class ApiReference {
       interfaces: this.interfaces.toJson(),
       enums: this.enums.toJson(),
     };
+  }
+
+  private searchableInterfaces(
+    interfaces: reflect.InterfaceType[]
+  ): Record<string, reflect.InterfaceType> {
+    return interfaces.reduce(
+      (acc, iface) => ({ ...acc, [iface.fqn.replace(/ /g, "-")]: iface }),
+      {}
+    );
+  }
+
+  private filterOutInflightInterfaces(
+    interfaces: reflect.InterfaceType[],
+    inflightFqns: string[]
+  ): reflect.InterfaceType[] {
+    return interfaces.filter(
+      (iface) => !inflightFqns.includes(iface.fqn.replace(/ /g, "-"))
+    );
   }
 
   private sortByName<Type extends reflect.Type>(arr: readonly Type[]): Type[] {

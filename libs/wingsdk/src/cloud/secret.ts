@@ -9,7 +9,7 @@ import { Json, Resource } from "../std";
 export const SECRET_FQN = fqnForType("cloud.Secret");
 
 /**
- * Properties for `Secret`.
+ * Options for `Secret`.
  */
 export interface SecretProps {
   /**
@@ -25,7 +25,7 @@ export interface SecretProps {
 }
 
 /**
- * Represents a cloud secret.
+ * A cloud secret.
  *
  * @inflight `@winglang/sdk.cloud.ISecretClient`
  */

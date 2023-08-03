@@ -1,4 +1,5 @@
 bring cloud;
+bring util;
 
 let t = new cloud.Topic();
 let c = new cloud.Counter();
@@ -14,10 +15,6 @@ class Predicate {
   }
 }
 
-class TestHelper {
-  extern "../external/sleep.js" static inflight sleep(milli: num);
-}
-
 t.onMessage(inflight() => {
   c.inc();
 });
@@ -26,7 +23,6 @@ t.onMessage(inflight() => {
   c.inc();
 });
 
-let js = new TestHelper();
 
 let predicate = new Predicate(c);
 test "onMessage" {
@@ -40,7 +36,7 @@ test "onMessage" {
         assert(predicate.test());
         return;
       } 
-      TestHelper.sleep(100);
+      util.sleep(1s);
     }
     assert(predicate.test());
 }

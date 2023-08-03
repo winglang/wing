@@ -43,6 +43,7 @@ export class Function extends cloud.Function {
       timeout: props.timeout
         ? Duration.seconds(props.timeout.seconds)
         : Duration.minutes(0.5),
+      memorySize: props.memory ? props.memory : undefined,
     });
 
     this.arn = this.function.functionArn;
@@ -55,10 +56,12 @@ export class Function extends cloud.Function {
     }
 
     if (ops.includes(cloud.FunctionInflightMethods.INVOKE)) {
-      host.addPolicyStatements({
-        actions: ["lambda:InvokeFunction"],
-        resources: [`${this.function.functionArn}`],
-      });
+      host.addPolicyStatements([
+        {
+          actions: ["lambda:InvokeFunction"],
+          resources: [`${this.function.functionArn}`],
+        },
+      ]);
     }
 
     // The function name needs to be passed through an environment variable since
@@ -93,7 +96,7 @@ export class Function extends cloud.Function {
   /**
    * Add a policy statement to the Lambda role.
    */
-  public addPolicyStatements(...statements: PolicyStatement[]) {
+  public addPolicyStatements(statements: PolicyStatement[]) {
     for (const statement of statements) {
       this.function.addToRolePolicy(new CdkPolicyStatement(statement));
     }

@@ -15,16 +15,18 @@ export interface TextAreaProps {
   onInput?: React.FormEventHandler<HTMLTextAreaElement>;
   onFocus?: React.FocusEventHandler<HTMLTextAreaElement>;
   containerClassName?: string;
+  dataTestid?: string;
 }
 
 export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
-  ({ className, containerClassName, ...props }, ref) => {
+  ({ className, containerClassName, dataTestid, ...props }, ref) => {
     const { theme } = useTheme();
     return (
       <div className={classNames("relative rounded-md", containerClassName)}>
         <textarea
           ref={ref}
           {...props}
+          data-testid={dataTestid}
           className={classNames(
             theme.borderInput,
             "block w-full rounded-md outline-none transition ease-in-out",

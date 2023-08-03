@@ -25,22 +25,20 @@
   },
   "dependencies": {
     "wasi-js": "^1.7.3",
-    "@winglang/sdk": "file:../../libs/wingsdk"
-  },
-  "devDependencies": {
-    "@types/node": "^18.11.18",
-    "esbuild": "^0.17.19",
-    "tsup": "^6.7.0",
-    "patch-package": "^6.5.1",
-    "typescript": "^4.9.4",
-    "vitest": "^0.30.1",
-    "bump-pack": "file:../../tools/bump-pack"
+    "@winglang/sdk": "workspace:^"
   },
   "bundledDependencies": [
     "wasi-js"
   ],
+  "devDependencies": {
+    "@types/node": "^18.11.18",
+    "bump-pack": "workspace:^",
+    "tsup": "^6.7.0",
+    "typescript": "^4.9.4",
+    "vitest": "^0.30.1",
+    "wasi-js": "^1.7.3"
+  },
   "volta": {
-    "node": "18.16.0",
-    "npm": "8.19.3"
+    "extends": "../../package.json"
   }
 }

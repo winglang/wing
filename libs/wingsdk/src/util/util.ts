@@ -1,3 +1,6 @@
+import { createHash } from "crypto";
+import { nanoid, customAlphabet } from "nanoid";
+import { v4 } from "uuid";
 import { Code, InflightClient } from "../core";
 import { Duration, IResource } from "../std";
 
@@ -18,7 +21,7 @@ export interface WaitUntilProps {
 }
 
 /**
- * Represents a predicate with an inflight "handle" method that can be passed to
+ * A predicate with an inflight "handle" method that can be passed to
  * `util.busyWait`.
  * @inflight `@winglang/sdk.util.IPredicateHandlerClient`
  */
@@ -33,6 +36,21 @@ export interface IPredicateHandlerClient {
    * @inflight
    */
   handle(): Promise<boolean>;
+}
+
+/**
+ * Options to generating a unique ID
+ */
+export interface NanoidOptions {
+  /**
+   * Size of ID
+   * @default 21
+   */
+  readonly size?: number;
+  /**
+   * Characters that make up the alphabet to generate the ID, limited to 256 characters or fewer.
+   */
+  readonly alphabet?: string;
 }
 
 /**
@@ -58,6 +76,28 @@ export class Util {
    */
   public static tryEnv(name: string): string | undefined {
     return process.env[name];
+  }
+
+  /**
+   * Converts a string from UTF-8 to base64.
+   * @param stringToEncode The name of the UTF-8 string to encode.
+   * @param url If `true`, a URL-safe base64 string is returned.
+   * @returns The base64 string.
+   */
+  public static base64Encode(stringToEncode: string, url?: boolean): string {
+    return Buffer.from(stringToEncode).toString(url ? "base64url" : "base64");
+  }
+
+  /**
+   * Converts a string from base64 to UTF-8.
+   * @param stringToDecode base64 string to decode.
+   * @param url If `true`, the source is expected to be a URL-safe base64 string.
+   * @returns The UTF-8 string.
+   */
+  public static base64Decode(stringToDecode: string, url?: boolean): string {
+    return Buffer.from(stringToDecode, url ? "base64url" : "base64").toString(
+      "utf8"
+    );
   }
 
   /**
@@ -98,9 +138,38 @@ export class Util {
   }
 
   /**
+   * Computes the SHA256 hash of the given data.
+   * @param data - The string to be hashed.
+   */
+  public static sha256(data: string): string {
+    return createHash("sha256").update(data).digest("hex"); //SHA256(data).toString();
+  }
+
+  /**
+   * Generates a version 4 UUID.
+   */
+  public static uuidv4(): string {
+    return v4();
+  }
+
+  /**
+   * Generates a unique ID using the nanoid library.
+   # @link https://github.com/ai/nanoid
+   * @param options - Optional options object for generating the ID.
+   */
+  public static nanoid(options?: NanoidOptions): string {
+    const size = options?.size ?? 21;
+    const nano = options?.alphabet
+      ? customAlphabet(options.alphabet, size)
+      : undefined;
+    return nano ? nano(size) : nanoid(size);
+  }
+
+  /**
    * @internal
    */
   public static _toInflightType(): Code {
     return InflightClient.forType(__filename, this.name);
   }
+  private constructor() {}
 }

@@ -2,27 +2,25 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ x, y, math_Util }) {
+module.exports = function({ $__x_, $__y_, $math_Util, $x, $y }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.floor(x) == 5")})(((await math_Util.floor(x)) === 5))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.ceil(x) == 6")})(((await math_Util.ceil(x)) === 6))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.round(x) == 5")})(((await math_Util.round(x)) === 5))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.round(y) == 6")})(((await math_Util.round(y)) === 6))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.round(-x) == -5")})(((await math_Util.round((-x))) === (-5)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.round(-y) == -6")})(((await math_Util.round((-y))) === (-6)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.E, decimalPlaces: 1) == 2.7")})(((await math_Util.round(math_Util.E,{ decimalPlaces: 1 })) === 2.7))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.E, decimalPlaces: 2) == 2.72")})(((await math_Util.round(math_Util.E,{ decimalPlaces: 2 })) === 2.72))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.E, decimalPlaces: 3) == 2.718")})(((await math_Util.round(math_Util.E,{ decimalPlaces: 3 })) === 2.718))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.E, decimalPlaces: 4) == 2.7183")})(((await math_Util.round(math_Util.E,{ decimalPlaces: 4 })) === 2.7183))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.E, decimalPlaces: 5) == 2.71828")})(((await math_Util.round(math_Util.E,{ decimalPlaces: 5 })) === 2.71828))};
+    async handle() {
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.floor(x) == 5")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.floor($x)),5)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.ceil(x) == 6")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.ceil($x)),6)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.round(x) == 5")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.round($x)),5)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.round(y) == 6")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.round($y)),6)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.round(-x) == -5")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.round($__x_)),(-5))))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.round(-y) == -6")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.round($__y_)),(-6))))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.E, decimalPlaces: 1) == 2.7")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.round($math_Util.E,{ decimalPlaces: 1 })),2.7)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.E, decimalPlaces: 2) == 2.72")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.round($math_Util.E,{ decimalPlaces: 2 })),2.72)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.E, decimalPlaces: 3) == 2.718")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.round($math_Util.E,{ decimalPlaces: 3 })),2.718)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.E, decimalPlaces: 4) == 2.7183")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.round($math_Util.E,{ decimalPlaces: 4 })),2.7183)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.E, decimalPlaces: 5) == 2.71828")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.round($math_Util.E,{ decimalPlaces: 5 })),2.71828)))};
     }
   }
   return $Closure1;
@@ -37,7 +35,7 @@ module.exports = function({ x, y, math_Util }) {
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.2"
+      "version": "0.17.0"
     },
     "outputs": {
       "root": {
@@ -51,7 +49,7 @@ module.exports = function({ x, y, math_Util }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:inflight floor--ceil--round\",\"${aws_lambda_function.root_testinflightfloorceilround_Handler_76DC7965.arn}\"]]"
+      "value": "[[\"root/Default/Default/test:inflight floor--ceil--round\",\"${aws_lambda_function.testinflightfloor--ceil--round_Handler_90E85A3F.arn}\"]]"
     }
   },
   "provider": {
@@ -61,46 +59,46 @@ module.exports = function({ x, y, math_Util }) {
   },
   "resource": {
     "aws_iam_role": {
-      "root_testinflightfloorceilround_Handler_IamRole_CB79DA89": {
+      "testinflightfloor--ceil--round_Handler_IamRole_70C76120": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:inflight floor--ceil--round/Handler/IamRole",
-            "uniqueId": "root_testinflightfloorceilround_Handler_IamRole_CB79DA89"
+            "uniqueId": "testinflightfloor--ceil--round_Handler_IamRole_70C76120"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
-      "root_testinflightfloorceilround_Handler_IamRolePolicy_24AE8C0B": {
+      "testinflightfloor--ceil--round_Handler_IamRolePolicy_FA154202": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:inflight floor--ceil--round/Handler/IamRolePolicy",
-            "uniqueId": "root_testinflightfloorceilround_Handler_IamRolePolicy_24AE8C0B"
+            "uniqueId": "testinflightfloor--ceil--round_Handler_IamRolePolicy_FA154202"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
-        "role": "${aws_iam_role.root_testinflightfloorceilround_Handler_IamRole_CB79DA89.name}"
+        "role": "${aws_iam_role.testinflightfloor--ceil--round_Handler_IamRole_70C76120.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
-      "root_testinflightfloorceilround_Handler_IamRolePolicyAttachment_D9DEE6B2": {
+      "testinflightfloor--ceil--round_Handler_IamRolePolicyAttachment_A4FE3D1C": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:inflight floor--ceil--round/Handler/IamRolePolicyAttachment",
-            "uniqueId": "root_testinflightfloorceilround_Handler_IamRolePolicyAttachment_D9DEE6B2"
+            "uniqueId": "testinflightfloor--ceil--round_Handler_IamRolePolicyAttachment_A4FE3D1C"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.root_testinflightfloorceilround_Handler_IamRole_CB79DA89.name}"
+        "role": "${aws_iam_role.testinflightfloor--ceil--round_Handler_IamRole_70C76120.name}"
       }
     },
     "aws_lambda_function": {
-      "root_testinflightfloorceilround_Handler_76DC7965": {
+      "testinflightfloor--ceil--round_Handler_90E85A3F": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:inflight floor--ceil--round/Handler/Default",
-            "uniqueId": "root_testinflightfloorceilround_Handler_76DC7965"
+            "uniqueId": "testinflightfloor--ceil--round_Handler_90E85A3F"
           }
         },
         "environment": {
@@ -112,10 +110,10 @@ module.exports = function({ x, y, math_Util }) {
         "function_name": "Handler-c8bf255a",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.root_testinflightfloorceilround_Handler_IamRole_CB79DA89.arn}",
+        "role": "${aws_iam_role.testinflightfloor--ceil--round_Handler_IamRole_70C76120.arn}",
         "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
-        "s3_key": "${aws_s3_object.root_testinflightfloorceilround_Handler_S3Object_4406FBE6.key}",
+        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
+        "s3_key": "${aws_s3_object.testinflightfloor--ceil--round_Handler_S3Object_CBAFAFCF.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -124,25 +122,25 @@ module.exports = function({ x, y, math_Util }) {
       }
     },
     "aws_s3_bucket": {
-      "root_Code_02F3C603": {
+      "Code": {
         "//": {
           "metadata": {
             "path": "root/Default/Code",
-            "uniqueId": "root_Code_02F3C603"
+            "uniqueId": "Code"
           }
         },
         "bucket_prefix": "code-c84a50b1-"
       }
     },
     "aws_s3_object": {
-      "root_testinflightfloorceilround_Handler_S3Object_4406FBE6": {
+      "testinflightfloor--ceil--round_Handler_S3Object_CBAFAFCF": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:inflight floor--ceil--round/Handler/S3Object",
-            "uniqueId": "root_testinflightfloorceilround_Handler_S3Object_4406FBE6"
+            "uniqueId": "testinflightfloor--ceil--round_Handler_S3Object_CBAFAFCF"
           }
         },
-        "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
+        "bucket": "${aws_s3_bucket.Code.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       }
@@ -157,7 +155,6 @@ const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
-const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 const math = require('@winglang/sdk').math;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
@@ -165,19 +162,17 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
+        this._addInflightOps("handle", "$inflight_init");
         this.display.hidden = true;
-        this._addInflightOps("handle");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const x_client = context._lift(x);
-        const y_client = context._lift(y);
-        const math_UtilClient = math.Util._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            x: ${x_client},
-            y: ${y_client},
-            math_Util: ${math_UtilClient.text},
+          require("./inflight.$Closure1.js")({
+            $__x_: ${context._lift((-x))},
+            $__y_: ${context._lift((-y))},
+            $math_Util: ${context._lift(math.Util)},
+            $x: ${context._lift(x)},
+            $y: ${context._lift(y)},
           })
         `);
       }
@@ -193,11 +188,9 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-          $Closure1._registerBindObject(x, host, []);
-          $Closure1._registerBindObject(y, host, []);
-        }
         if (ops.includes("handle")) {
+          $Closure1._registerBindObject((-x), host, []);
+          $Closure1._registerBindObject((-y), host, []);
           $Closure1._registerBindObject(x, host, []);
           $Closure1._registerBindObject(y, host, []);
         }
@@ -206,37 +199,23 @@ class $Root extends $stdlib.std.Resource {
     }
     const x = 5.05;
     const y = 5.95;
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.floor(x) == 5")})(((math.Util.floor(x)) === 5))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.ceil(x) == 6")})(((math.Util.ceil(x)) === 6))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.round(x) == 5")})(((math.Util.round(x)) === 5))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.round(y) == 6")})(((math.Util.round(y)) === 6))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.round(-x) == -5")})(((math.Util.round((-x))) === (-5)))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.round(-y) == -6")})(((math.Util.round((-y))) === (-6)))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.E) == 3")})(((math.Util.round(math.Util.E)) === 3))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.E, decimalPlaces: 1) == 2.7")})(((math.Util.round(math.Util.E,{ decimalPlaces: 1 })) === 2.7))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.E, decimalPlaces: 2) == 2.72")})(((math.Util.round(math.Util.E,{ decimalPlaces: 2 })) === 2.72))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.E, decimalPlaces: 3) == 2.718")})(((math.Util.round(math.Util.E,{ decimalPlaces: 3 })) === 2.718))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.E, decimalPlaces: 4) == 2.7183")})(((math.Util.round(math.Util.E,{ decimalPlaces: 4 })) === 2.7183))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.E, decimalPlaces: 5) == 2.71828")})(((math.Util.round(math.Util.E,{ decimalPlaces: 5 })) === 2.71828))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.floor(x) == 5")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.floor(x)),5)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.ceil(x) == 6")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.ceil(x)),6)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.round(x) == 5")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.round(x)),5)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.round(y) == 6")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.round(y)),6)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.round(-x) == -5")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.round((-x))),(-5))))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.round(-y) == -6")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.round((-y))),(-6))))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.E) == 3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.round(math.Util.E)),3)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.E, decimalPlaces: 1) == 2.7")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.round(math.Util.E,{ decimalPlaces: 1 })),2.7)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.E, decimalPlaces: 2) == 2.72")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.round(math.Util.E,{ decimalPlaces: 2 })),2.72)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.E, decimalPlaces: 3) == 2.718")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.round(math.Util.E,{ decimalPlaces: 3 })),2.718)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.E, decimalPlaces: 4) == 2.7183")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.round(math.Util.E,{ decimalPlaces: 4 })),2.7183)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.round(math.E, decimalPlaces: 5) == 2.71828")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.round(math.Util.E,{ decimalPlaces: 5 })),2.71828)))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:inflight floor/ceil/round",new $Closure1(this,"$Closure1"));
   }
 }
-class $App extends $AppBase {
-  constructor() {
-    super({ outdir: $outdir, name: "floor_ceil_round", plugins: $plugins, isTestEnvironment: $wing_is_test });
-    if ($wing_is_test) {
-      new $Root(this, "env0");
-      const $test_runner = this.testRunner;
-      const $tests = $test_runner.findTests();
-      for (let $i = 1; $i < $tests.length; $i++) {
-        new $Root(this, "env" + $i);
-      }
-    } else {
-      new $Root(this, "Default");
-    }
-  }
-}
-new $App().synth();
+const $App = $stdlib.core.App.for(process.env.WING_TARGET);
+new $App({ outdir: $outdir, name: "floor_ceil_round", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test }).synth();
 
 ```
 

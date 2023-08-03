@@ -2,22 +2,20 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ math_Util }) {
+module.exports = function({ $math_Util }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
-    async $inflight_init()  {
-    }
-    async handle()  {
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.factorial(0) == 1")})(((await math_Util.factorial(0)) === 1))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.factorial(1) == 1")})(((await math_Util.factorial(1)) === 1))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.factorial(2) == 2")})(((await math_Util.factorial(2)) === 2))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.factorial(3) == 6")})(((await math_Util.factorial(3)) === 6))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.factorial(4) == 24")})(((await math_Util.factorial(4)) === 24))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: math.factorial(5) == 120")})(((await math_Util.factorial(5)) === 120))};
+    async handle() {
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.factorial(0) == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.factorial(0)),1)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.factorial(1) == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.factorial(1)),1)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.factorial(2) == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.factorial(2)),2)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.factorial(3) == 6")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.factorial(3)),6)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.factorial(4) == 24")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.factorial(4)),24)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: math.factorial(5) == 120")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $math_Util.factorial(5)),120)))};
     }
   }
   return $Closure1;
@@ -32,7 +30,7 @@ module.exports = function({ math_Util }) {
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.2"
+      "version": "0.17.0"
     },
     "outputs": {
       "root": {
@@ -46,7 +44,7 @@ module.exports = function({ math_Util }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:inflight factorial\",\"${aws_lambda_function.root_testinflightfactorial_Handler_8BCF64D0.arn}\"]]"
+      "value": "[[\"root/Default/Default/test:inflight factorial\",\"${aws_lambda_function.testinflightfactorial_Handler_23BDFAA4.arn}\"]]"
     }
   },
   "provider": {
@@ -56,46 +54,46 @@ module.exports = function({ math_Util }) {
   },
   "resource": {
     "aws_iam_role": {
-      "root_testinflightfactorial_Handler_IamRole_9D27D5FF": {
+      "testinflightfactorial_Handler_IamRole_80B0F8FB": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:inflight factorial/Handler/IamRole",
-            "uniqueId": "root_testinflightfactorial_Handler_IamRole_9D27D5FF"
+            "uniqueId": "testinflightfactorial_Handler_IamRole_80B0F8FB"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
-      "root_testinflightfactorial_Handler_IamRolePolicy_BED966C4": {
+      "testinflightfactorial_Handler_IamRolePolicy_B923CA7E": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:inflight factorial/Handler/IamRolePolicy",
-            "uniqueId": "root_testinflightfactorial_Handler_IamRolePolicy_BED966C4"
+            "uniqueId": "testinflightfactorial_Handler_IamRolePolicy_B923CA7E"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
-        "role": "${aws_iam_role.root_testinflightfactorial_Handler_IamRole_9D27D5FF.name}"
+        "role": "${aws_iam_role.testinflightfactorial_Handler_IamRole_80B0F8FB.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
-      "root_testinflightfactorial_Handler_IamRolePolicyAttachment_6B41E48A": {
+      "testinflightfactorial_Handler_IamRolePolicyAttachment_9BD211DB": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:inflight factorial/Handler/IamRolePolicyAttachment",
-            "uniqueId": "root_testinflightfactorial_Handler_IamRolePolicyAttachment_6B41E48A"
+            "uniqueId": "testinflightfactorial_Handler_IamRolePolicyAttachment_9BD211DB"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.root_testinflightfactorial_Handler_IamRole_9D27D5FF.name}"
+        "role": "${aws_iam_role.testinflightfactorial_Handler_IamRole_80B0F8FB.name}"
       }
     },
     "aws_lambda_function": {
-      "root_testinflightfactorial_Handler_8BCF64D0": {
+      "testinflightfactorial_Handler_23BDFAA4": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:inflight factorial/Handler/Default",
-            "uniqueId": "root_testinflightfactorial_Handler_8BCF64D0"
+            "uniqueId": "testinflightfactorial_Handler_23BDFAA4"
           }
         },
         "environment": {
@@ -107,10 +105,10 @@ module.exports = function({ math_Util }) {
         "function_name": "Handler-c818ed07",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.root_testinflightfactorial_Handler_IamRole_9D27D5FF.arn}",
+        "role": "${aws_iam_role.testinflightfactorial_Handler_IamRole_80B0F8FB.arn}",
         "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
-        "s3_key": "${aws_s3_object.root_testinflightfactorial_Handler_S3Object_645DEE08.key}",
+        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
+        "s3_key": "${aws_s3_object.testinflightfactorial_Handler_S3Object_AC36C24F.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -119,25 +117,25 @@ module.exports = function({ math_Util }) {
       }
     },
     "aws_s3_bucket": {
-      "root_Code_02F3C603": {
+      "Code": {
         "//": {
           "metadata": {
             "path": "root/Default/Code",
-            "uniqueId": "root_Code_02F3C603"
+            "uniqueId": "Code"
           }
         },
         "bucket_prefix": "code-c84a50b1-"
       }
     },
     "aws_s3_object": {
-      "root_testinflightfactorial_Handler_S3Object_645DEE08": {
+      "testinflightfactorial_Handler_S3Object_AC36C24F": {
         "//": {
           "metadata": {
             "path": "root/Default/Default/test:inflight factorial/Handler/S3Object",
-            "uniqueId": "root_testinflightfactorial_Handler_S3Object_645DEE08"
+            "uniqueId": "testinflightfactorial_Handler_S3Object_AC36C24F"
           }
         },
-        "bucket": "${aws_s3_bucket.root_Code_02F3C603.bucket}",
+        "bucket": "${aws_s3_bucket.Code.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       }
@@ -152,7 +150,6 @@ const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
-const $AppBase = $stdlib.core.App.for(process.env.WING_TARGET);
 const math = require('@winglang/sdk').math;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
@@ -160,15 +157,13 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
+        this._addInflightOps("handle", "$inflight_init");
         this.display.hidden = true;
-        this._addInflightOps("handle");
       }
       static _toInflightType(context) {
-        const self_client_path = "././inflight.$Closure1.js";
-        const math_UtilClient = math.Util._toInflightType(context);
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("${self_client_path}")({
-            math_Util: ${math_UtilClient.text},
+          require("./inflight.$Closure1.js")({
+            $math_Util: ${context._lift(math.Util)},
           })
         `);
       }
@@ -183,39 +178,18 @@ class $Root extends $stdlib.std.Resource {
           })())
         `);
       }
-      _registerBind(host, ops) {
-        if (ops.includes("$inflight_init")) {
-        }
-        if (ops.includes("handle")) {
-        }
-        super._registerBind(host, ops);
-      }
     }
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.factorial(0) == 1")})(((math.Util.factorial(0)) === 1))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.factorial(1) == 1")})(((math.Util.factorial(1)) === 1))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.factorial(2) == 2")})(((math.Util.factorial(2)) === 2))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.factorial(3) == 6")})(((math.Util.factorial(3)) === 6))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.factorial(4) == 24")})(((math.Util.factorial(4)) === 24))};
-    {((cond) => {if (!cond) throw new Error("assertion failed: math.factorial(5) == 120")})(((math.Util.factorial(5)) === 120))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.factorial(0) == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.factorial(0)),1)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.factorial(1) == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.factorial(1)),1)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.factorial(2) == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.factorial(2)),2)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.factorial(3) == 6")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.factorial(3)),6)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.factorial(4) == 24")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.factorial(4)),24)))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: math.factorial(5) == 120")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.factorial(5)),120)))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:inflight factorial",new $Closure1(this,"$Closure1"));
   }
 }
-class $App extends $AppBase {
-  constructor() {
-    super({ outdir: $outdir, name: "factorial", plugins: $plugins, isTestEnvironment: $wing_is_test });
-    if ($wing_is_test) {
-      new $Root(this, "env0");
-      const $test_runner = this.testRunner;
-      const $tests = $test_runner.findTests();
-      for (let $i = 1; $i < $tests.length; $i++) {
-        new $Root(this, "env" + $i);
-      }
-    } else {
-      new $Root(this, "Default");
-    }
-  }
-}
-new $App().synth();
+const $App = $stdlib.core.App.for(process.env.WING_TARGET);
+new $App({ outdir: $outdir, name: "factorial", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test }).synth();
 
 ```
 
