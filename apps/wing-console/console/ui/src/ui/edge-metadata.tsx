@@ -13,7 +13,8 @@ import {
 } from "@wingconsole/design-system";
 import classNames from "classnames";
 import { useMemo, useState } from "react";
-import { MetadataNode } from "./resource-metadata";
+
+import { MetadataNode } from "./resource-metadata.js";
 
 export interface EdgeMetadataProps {
   source: MetadataNode;
@@ -139,7 +140,7 @@ export const EdgeMetadata = ({
           </Attribute>
 
           <div className="border-t border-transparent">
-            <Attribute name="Inflights" centerLabel={false}>
+            <Attribute name="Access" centerLabel={false}>
               <div className="w-full">
                 <Tree
                   entries={entries}
