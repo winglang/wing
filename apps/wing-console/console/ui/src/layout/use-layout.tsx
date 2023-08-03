@@ -1,5 +1,5 @@
 import { useTheme } from "@wingconsole/design-system";
-import { LogEntry, LogLevel, State } from "@wingconsole/server";
+import type { LogEntry, LogLevel, State } from "@wingconsole/server";
 import { useLoading } from "@wingconsole/use-loading";
 import { useEffect, useState, useContext, useRef, useMemo } from "react";
 
