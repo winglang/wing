@@ -30,14 +30,11 @@
   },
   "devDependencies": {
     "@types/node": "^16",
-    "@types/node-fetch": "^2.6.4",
     "@types/which": "^2.0.2",
-    "@types/ws": "^8.5.5",
     "@typescript-eslint/eslint-plugin": "^5",
     "@typescript-eslint/parser": "^5",
     "@vscode/vsce": "^2.16.0",
-    "@wingconsole/app": "workspace:^",
-    "@wingconsole/server": "workspace:^",
+    "esbuild": "^0.17.4",
     "eslint": "^8",
     "eslint-config-prettier": "^8.6.0",
     "eslint-import-resolver-node": "^0.3.7",
@@ -48,17 +45,12 @@
     "prettier": "^2.8.3",
     "projen": "^0.71.60",
     "ts-node": "^10.9.1",
-    "tsup": "^6.7.0",
     "typescript": "^4.9.4"
   },
   "dependencies": {
-    "@trpc/client": "^10.30.0",
     "@types/vscode": "^1.70.0",
-    "node-fetch": "2",
-    "open": "^8.4.0",
     "vscode-languageclient": "^8.0.2",
-    "which": "^3.0.0",
-    "ws": "^8.13.0"
+    "which": "^3.0.0"
   },
   "keywords": [
     "cdk",
@@ -73,14 +65,14 @@
   "engines": {
     "vscode": "^1.70.0"
   },
-  "main": "lib/extension.js",
+  "main": "lib/index.js",
   "license": "MIT",
   "homepage": "https://winglang.io",
   "version": "0.0.0",
   "bugs": {
     "url": "https://github.com/winglang/wing/issues"
   },
-  "types": "lib/extension.d.ts",
+  "types": "lib/index.d.ts",
   "publisher": "Monada",
   "preview": true,
   "private": true,
@@ -144,26 +136,6 @@
           "light": "resources/icon-light.png",
           "dark": "resources/icon-dark.png"
         }
-      },
-      {
-        "command": "wingConsole.openResource",
-        "title": "Open resource"
-      },
-      {
-        "command": "wingConsole.runTest",
-        "title": "Run test",
-        "icon": {
-          "light": "resources/play-light.svg",
-          "dark": "resources/play-dark.svg"
-        }
-      },
-      {
-        "command": "wingConsole.runAllTests",
-        "title": "Run all tests",
-        "icon": {
-          "light": "resources/play-all-light.svg",
-          "dark": "resources/play-all-dark.svg"
-        }
       }
     ],
     "menus": {
@@ -178,20 +150,6 @@
           "command": "wing.openFile",
           "group": "navigation"
         }
-      ],
-      "view/item/context": [
-        {
-          "command": "wingConsole.runTest",
-          "when": "view == consoleTestsExplorer",
-          "group": "inline"
-        }
-      ],
-      "explorer/context": [
-        {
-          "command": "wingConsole.runAllTests",
-          "when": "view == consoleTestsExplorer",
-          "group": "inline"
-        }
       ]
     },
     "configuration": [
@@ -205,19 +163,7 @@
           }
         }
       }
-    ],
-    "views": {
-      "explorer": [
-        {
-          "id": "consoleExplorer",
-          "name": "Wing Resources"
-        },
-        {
-          "id": "consoleTestsExplorer",
-          "name": "Wing Tests"
-        }
-      ]
-    }
+    ]
   },
   "volta": {
     "extends": "../../package.json"
