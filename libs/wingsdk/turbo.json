@@ -1,0 +1,22 @@
+{
+  "$schema": "https://turborepo.org/schema.json",
+  "extends": ["//"],
+  "pipeline": {
+    "pre-compile": {
+      "inputs": ["cdktf.json"],
+      "outputs": ["src/.gen/**"]
+    },
+    "compile": {
+      "dependsOn": ["pre-compile"],
+      "inputs": ["src/**"],
+      "outputs": ["lib/**", ".jsii"]
+    },
+    "post-compile": {
+      "dependsOn": ["compile"],
+      "cache": false
+    },
+    "eslint": {
+      "dependsOn": ["pre-compile"]
+    }
+  }
+}

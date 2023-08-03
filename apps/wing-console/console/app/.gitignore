@@ -1,4 +1,5 @@
 /coverage
-/demo/target
-/playwright-report
-/test-results
+/**/target/*.wsim/
+/**/target/*.wsim.*/
+/playwright-report/
+/test-results/

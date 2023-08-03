@@ -10,6 +10,7 @@
     "clobber": "pnpm exec projen clobber",
     "compile": "pnpm exec projen compile",
     "default": "pnpm exec projen default",
+    "dev": "pnpm exec projen dev",
     "eject": "pnpm exec projen eject",
     "eslint": "pnpm exec projen eslint",
     "package": "pnpm exec projen package",
