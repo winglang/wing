@@ -92,7 +92,7 @@ export class Queue extends cloud.Queue {
     );
 
     // The queue url needs to be passed through an environment variable since
-    // It may not be resolved until deployment time.
+    // it may not be resolved until deployment time.
     host.addEnvironment(env, this.queue.queueUrl);
 
     super._bind(host, ops);

@@ -5,7 +5,12 @@
     "node": true
   },
   "root": true,
-  "plugins": ["@typescript-eslint", "import", "prettier", "sort-exports"],
+  "plugins": [
+    "@typescript-eslint",
+    "import",
+    "prettier",
+    "sort-exports"
+  ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "ecmaVersion": 2018,
@@ -19,7 +24,10 @@
   ],
   "settings": {
     "import/parsers": {
-      "@typescript-eslint/parser": [".ts", ".tsx"]
+      "@typescript-eslint/parser": [
+        ".ts",
+        ".tsx"
+      ]
     },
     "import/resolver": {
       "node": {},
@@ -39,8 +47,12 @@
     "!projenrc/**/*.ts"
   ],
   "rules": {
-    "prettier/prettier": ["error"],
-    "@typescript-eslint/no-require-imports": ["error"],
+    "prettier/prettier": [
+      "error"
+    ],
+    "@typescript-eslint/no-require-imports": [
+      "error"
+    ],
     "import/no-extraneous-dependencies": [
       "error",
       {
@@ -54,28 +66,55 @@
         "peerDependencies": true
       }
     ],
-    "import/no-unresolved": ["error"],
+    "import/no-unresolved": [
+      "error"
+    ],
     "import/order": [
       "warn",
       {
-        "groups": ["builtin", "external"],
+        "groups": [
+          "builtin",
+          "external"
+        ],
         "alphabetize": {
           "order": "asc",
           "caseInsensitive": true
         }
       }
     ],
-    "no-duplicate-imports": ["error"],
-    "no-shadow": ["off"],
-    "@typescript-eslint/no-shadow": ["error"],
-    "key-spacing": ["error"],
-    "no-multiple-empty-lines": ["error"],
-    "@typescript-eslint/no-floating-promises": ["error"],
-    "no-return-await": ["off"],
-    "@typescript-eslint/return-await": ["error"],
-    "no-trailing-spaces": ["error"],
-    "dot-notation": ["error"],
-    "no-bitwise": ["error"],
+    "no-duplicate-imports": [
+      "error"
+    ],
+    "no-shadow": [
+      "off"
+    ],
+    "@typescript-eslint/no-shadow": [
+      "error"
+    ],
+    "key-spacing": [
+      "error"
+    ],
+    "no-multiple-empty-lines": [
+      "error"
+    ],
+    "@typescript-eslint/no-floating-promises": [
+      "error"
+    ],
+    "no-return-await": [
+      "off"
+    ],
+    "@typescript-eslint/return-await": [
+      "error"
+    ],
+    "no-trailing-spaces": [
+      "error"
+    ],
+    "dot-notation": [
+      "error"
+    ],
+    "no-bitwise": [
+      "error"
+    ],
     "@typescript-eslint/member-ordering": [
       "error",
       {
@@ -129,7 +168,9 @@
   },
   "overrides": [
     {
-      "files": ["src/**/index.ts"],
+      "files": [
+        "src/**/index.ts"
+      ],
       "rules": {
         "sort-exports/sort-exports": [
           "error",
@@ -140,7 +181,9 @@
       }
     },
     {
-      "files": [".projenrc.ts"],
+      "files": [
+        ".projenrc.ts"
+      ],
       "rules": {
         "@typescript-eslint/no-require-imports": "off",
         "import/no-extraneous-dependencies": "off"

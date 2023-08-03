@@ -104,7 +104,6 @@ test("api with multiple GET route and one lambda", () => {
   const output = app.synth();
 
   // THEN
-  // Expect(tfResourcesOf(output)).toEqual(["aws_api_gateway_rest_api"]);
   expect(tfResourcesOfCount(output, "aws_api_gateway_rest_api")).toEqual(1);
   expect(tfResourcesOfCount(output, "aws_lambda_function")).toEqual(1);
   expect(extractApiSpec(output)).toMatchSnapshot();

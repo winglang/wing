@@ -42,7 +42,7 @@ export class App extends CdktfApp {
 
     this.projectId = props.projectId ?? process.env.GOOGLE_PROJECT_ID;
     // Using env variable for location is work around until we are
-    // Able to implement https://github.com/winglang/wing/issues/493 (policy as infrastructure)
+    // able to implement https://github.com/winglang/wing/issues/493 (policy as infrastructure)
     if (this.projectId === undefined) {
       throw new Error(
         "A Google Cloud project ID must be specified through the GOOGLE_PROJECT_ID environment variable."
@@ -52,7 +52,7 @@ export class App extends CdktfApp {
     this.storageLocation =
       props.storageLocation ?? process.env.GOOGLE_STORAGE_LOCATION;
     // Using env variable for location is work around until we are
-    // Able to implement https://github.com/winglang/wing/issues/493 (policy as infrastructure)
+    // able to implement https://github.com/winglang/wing/issues/493 (policy as infrastructure)
     if (this.storageLocation === undefined) {
       throw new Error(
         "A Google Cloud storage location must be specified through the GOOGLE_STORAGE_LOCATION environment variable."

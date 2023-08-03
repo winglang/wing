@@ -179,15 +179,15 @@ export class App extends CdktfApp {
     });
 
     // Create the subnets for the VPC, in order to ensure internet egress there
-    // Is a minimum requirement of 2 subnets, one public and one private. As well
-    // As a NAT gateway and internet gateway. The NAT gateway is required to
-    // Allow the private subnet to route traffic to the internet. The internet
-    // Gateway is required to allow the NAT gateway to route traffic to the
-    // Internet.
+    // is a minimum requirement of 2 subnets, one public and one private. As well
+    // as a NAT gateway and internet gateway. The NAT gateway is required to
+    // allow the private subnet to route traffic to the internet. The internet
+    // gateway is required to allow the NAT gateway to route traffic to the
+    // internet.
 
     // Create the public subnet.
     // This subnet is intentionally small since most resources will be behind
-    // Private subnets. Incase that assumption is wrong this leaves room for 3 more /24 public subnets
+    // private subnets. Incase that assumption is wrong this leaves room for 3 more /24 public subnets
     const publicSubnet = new Subnet(this, "PublicSubnet", {
       vpcId: this._vpc.id,
       cidrBlock: "10.0.0.0/24", // 10.0.0.0 - 10.0.0.255

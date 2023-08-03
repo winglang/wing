@@ -316,28 +316,28 @@ export interface IBucketClient {
 }
 
 /**
- * On create event options
+ * `onCreate` event options
  */
 export interface BucketOnCreateProps {
   /* Elided */
 }
 
 /**
- * On delete event options
+ * `onDelete` event options
  */
 export interface BucketOnDeleteProps {
   /* Elided */
 }
 
 /**
- * On update event options
+ * `onUpdate` event options
  */
 export interface BucketOnUpdateProps {
   /* Elided */
 }
 
 /**
- * On any event options
+ * `onEvent` options
  */
 export interface BucketOnEventProps {
   /* Elided */

@@ -68,7 +68,7 @@ export class App extends CdktfApp {
 
     this.location = props.location ?? process.env.AZURE_LOCATION;
     // Using env variable for location is work around until we are
-    // Able to implement https://github.com/winglang/wing/issues/493 (policy as infrastructure)
+    // able to implement https://github.com/winglang/wing/issues/493 (policy as infrastructure)
     if (this.location === undefined) {
       throw new Error(
         "Location must be specified in the AZURE_LOCATION environment variable"

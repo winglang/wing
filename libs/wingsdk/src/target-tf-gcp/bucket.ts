@@ -47,11 +47,11 @@ export class Bucket extends cloud.Bucket {
     const bucketName = ResourceNames.generateName(this, BUCKET_NAME_OPTS);
 
     // GCP bucket names must be globally unique, but the Terraform resource
-    // Provider doesn't provide a mechanism like `bucketPrefix` as AWS does,
-    // So we must generate a random string to append to the bucket name.
+    // provider doesn't provide a mechanism like `bucketPrefix` as AWS does,
+    // so we must generate a random string to append to the bucket name.
     //
     // The random string must be managed in Terraform state so that it doesn't
-    // Change on every subsequent compile or deployment.
+    // change on every subsequent compile or deployment.
     const randomId = new Id(this, "Id", {
       byteLength: 4, // 4 bytes = 8 hex characters
     });

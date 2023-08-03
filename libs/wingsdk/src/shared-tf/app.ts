@@ -143,7 +143,7 @@ export abstract class CdktfApp extends App {
         const destination = join(this.outdir, file.name);
 
         // If the file is a directory we need to delete contents of previous synthesis
-        // Or rename will fail
+        // or rename will fail
         if (existsSync(destination)) {
           rmSync(destination, { recursive: true });
         }

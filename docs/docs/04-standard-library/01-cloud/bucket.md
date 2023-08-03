@@ -2,7 +2,16 @@
 title: Bucket
 id: bucket
 description: A built-in resource for handling object storage in the cloud.
-keywords: [Wing reference, Wing language, language, Wing standard library, Wing programming language, Object storage, Buckets]
+keywords:
+  [
+    Wing reference,
+    Wing language,
+    language,
+    Wing standard library,
+    Wing programming language,
+    Object storage,
+    Buckets,
+  ]
 sidebar_position: 1
 ---
 
@@ -109,7 +118,6 @@ The Azure implementation of `cloud.Bucket` uses [Azure Blob Storage](https://lea
 ### GCP (`tf-gcp`)
 
 The Google Cloud implementation of `cloud.Bucket` uses [Google Cloud Storage](https://cloud.google.com/storage).
-
 ## API Reference <a name="API Reference" id="API Reference"></a>
 
 ### Bucket <a name="Bucket" id="@winglang/sdk.cloud.Bucket"></a>
@@ -124,15 +132,15 @@ bring cloud;
 new cloud.Bucket(props?: BucketProps);
 ```
 
-| **Name**                                                                                 | **Type**                                                                | **Description**   |
-| ---------------------------------------------------------------------------------------- | ----------------------------------------------------------------------- | ----------------- |
-| <code><a href="#@winglang/sdk.cloud.Bucket.Initializer.parameter.props">props</a></code> | <code><a href="#@winglang/sdk.cloud.BucketProps">BucketProps</a></code> | _No description._ |
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.Bucket.Initializer.parameter.props">props</a></code> | <code><a href="#@winglang/sdk.cloud.BucketProps">BucketProps</a></code> | *No description.* |
 
 ---
 
 ##### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.cloud.Bucket.Initializer.parameter.props"></a>
 
-- _Type:_ <a href="#@winglang/sdk.cloud.BucketProps">BucketProps</a>
+- *Type:* <a href="#@winglang/sdk.cloud.BucketProps">BucketProps</a>
 
 ---
 
@@ -140,28 +148,28 @@ new cloud.Bucket(props?: BucketProps);
 
 ##### Preflight Methods
 
-| **Name**                                                                   | **Description**                                                                    |
-| -------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- |
-| <code><a href="#@winglang/sdk.cloud.Bucket.addObject">addObject</a></code> | Add a file to the bucket that is uploaded when the app is deployed.                |
-| <code><a href="#@winglang/sdk.cloud.Bucket.onCreate">onCreate</a></code>   | Run an inflight whenever a file is uploaded to the bucket.                         |
-| <code><a href="#@winglang/sdk.cloud.Bucket.onDelete">onDelete</a></code>   | Run an inflight whenever a file is deleted from the bucket.                        |
-| <code><a href="#@winglang/sdk.cloud.Bucket.onEvent">onEvent</a></code>     | Run an inflight whenever a file is uploaded, modified, or deleted from the bucket. |
-| <code><a href="#@winglang/sdk.cloud.Bucket.onUpdate">onUpdate</a></code>   | Run an inflight whenever a file is updated in the bucket.                          |
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.cloud.Bucket.addObject">addObject</a></code> | Add a file to the bucket that is uploaded when the app is deployed. |
+| <code><a href="#@winglang/sdk.cloud.Bucket.onCreate">onCreate</a></code> | Run an inflight whenever a file is uploaded to the bucket. |
+| <code><a href="#@winglang/sdk.cloud.Bucket.onDelete">onDelete</a></code> | Run an inflight whenever a file is deleted from the bucket. |
+| <code><a href="#@winglang/sdk.cloud.Bucket.onEvent">onEvent</a></code> | Run an inflight whenever a file is uploaded, modified, or deleted from the bucket. |
+| <code><a href="#@winglang/sdk.cloud.Bucket.onUpdate">onUpdate</a></code> | Run an inflight whenever a file is updated in the bucket. |
 
 ##### Inflight Methods
 
-| **Name**                                                                            | **Description**                                                  |
-| ----------------------------------------------------------------------------------- | ---------------------------------------------------------------- |
-| <code><a href="#@winglang/sdk.cloud.IBucketClient.delete">delete</a></code>         | Delete an existing object using a key from the bucket.           |
-| <code><a href="#@winglang/sdk.cloud.IBucketClient.exists">exists</a></code>         | Check if an object exists in the bucket.                         |
-| <code><a href="#@winglang/sdk.cloud.IBucketClient.get">get</a></code>               | Retrieve an object from the bucket.                              |
-| <code><a href="#@winglang/sdk.cloud.IBucketClient.getJson">getJson</a></code>       | Retrieve a Json object from the bucket.                          |
-| <code><a href="#@winglang/sdk.cloud.IBucketClient.list">list</a></code>             | Retrieve existing objects keys from the bucket.                  |
-| <code><a href="#@winglang/sdk.cloud.IBucketClient.publicUrl">publicUrl</a></code>   | Returns a url to the given file.                                 |
-| <code><a href="#@winglang/sdk.cloud.IBucketClient.put">put</a></code>               | Put an object in the bucket.                                     |
-| <code><a href="#@winglang/sdk.cloud.IBucketClient.putJson">putJson</a></code>       | Put a Json object in the bucket.                                 |
-| <code><a href="#@winglang/sdk.cloud.IBucketClient.tryDelete">tryDelete</a></code>   | Delete an object from the bucket if it exists.                   |
-| <code><a href="#@winglang/sdk.cloud.IBucketClient.tryGet">tryGet</a></code>         | Get an object from the bucket if it exists.                      |
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.cloud.IBucketClient.delete">delete</a></code> | Delete an existing object using a key from the bucket. |
+| <code><a href="#@winglang/sdk.cloud.IBucketClient.exists">exists</a></code> | Check if an object exists in the bucket. |
+| <code><a href="#@winglang/sdk.cloud.IBucketClient.get">get</a></code> | Retrieve an object from the bucket. |
+| <code><a href="#@winglang/sdk.cloud.IBucketClient.getJson">getJson</a></code> | Retrieve a Json object from the bucket. |
+| <code><a href="#@winglang/sdk.cloud.IBucketClient.list">list</a></code> | Retrieve existing objects keys from the bucket. |
+| <code><a href="#@winglang/sdk.cloud.IBucketClient.publicUrl">publicUrl</a></code> | Returns a url to the given file. |
+| <code><a href="#@winglang/sdk.cloud.IBucketClient.put">put</a></code> | Put an object in the bucket. |
+| <code><a href="#@winglang/sdk.cloud.IBucketClient.putJson">putJson</a></code> | Put a Json object in the bucket. |
+| <code><a href="#@winglang/sdk.cloud.IBucketClient.tryDelete">tryDelete</a></code> | Delete an object from the bucket if it exists. |
+| <code><a href="#@winglang/sdk.cloud.IBucketClient.tryGet">tryGet</a></code> | Get an object from the bucket if it exists. |
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.tryGetJson">tryGetJson</a></code> | Gets an object from the bucket if it exists, parsing it as Json. |
 
 ---
@@ -179,13 +187,13 @@ referencing a file from the local filesystem.
 
 ###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.cloud.Bucket.addObject.parameter.key"></a>
 
-- _Type:_ str
+- *Type:* str
 
 ---
 
 ###### `body`<sup>Required</sup> <a name="body" id="@winglang/sdk.cloud.Bucket.addObject.parameter.body"></a>
 
-- _Type:_ str
+- *Type:* str
 
 ---
 
@@ -199,13 +207,13 @@ Run an inflight whenever a file is uploaded to the bucket.
 
 ###### `fn`<sup>Required</sup> <a name="fn" id="@winglang/sdk.cloud.Bucket.onCreate.parameter.fn"></a>
 
-- _Type:_ <a href="#@winglang/sdk.cloud.IBucketEventHandler">IBucketEventHandler</a>
+- *Type:* <a href="#@winglang/sdk.cloud.IBucketEventHandler">IBucketEventHandler</a>
 
 ---
 
 ###### `opts`<sup>Optional</sup> <a name="opts" id="@winglang/sdk.cloud.Bucket.onCreate.parameter.opts"></a>
 
-- _Type:_ <a href="#@winglang/sdk.cloud.BucketOnCreateProps">BucketOnCreateProps</a>
+- *Type:* <a href="#@winglang/sdk.cloud.BucketOnCreateProps">BucketOnCreateProps</a>
 
 ---
 
@@ -219,13 +227,13 @@ Run an inflight whenever a file is deleted from the bucket.
 
 ###### `fn`<sup>Required</sup> <a name="fn" id="@winglang/sdk.cloud.Bucket.onDelete.parameter.fn"></a>
 
-- _Type:_ <a href="#@winglang/sdk.cloud.IBucketEventHandler">IBucketEventHandler</a>
+- *Type:* <a href="#@winglang/sdk.cloud.IBucketEventHandler">IBucketEventHandler</a>
 
 ---
 
 ###### `opts`<sup>Optional</sup> <a name="opts" id="@winglang/sdk.cloud.Bucket.onDelete.parameter.opts"></a>
 
-- _Type:_ <a href="#@winglang/sdk.cloud.BucketOnDeleteProps">BucketOnDeleteProps</a>
+- *Type:* <a href="#@winglang/sdk.cloud.BucketOnDeleteProps">BucketOnDeleteProps</a>
 
 ---
 
@@ -239,13 +247,13 @@ Run an inflight whenever a file is uploaded, modified, or deleted from the bucke
 
 ###### `fn`<sup>Required</sup> <a name="fn" id="@winglang/sdk.cloud.Bucket.onEvent.parameter.fn"></a>
 
-- _Type:_ <a href="#@winglang/sdk.cloud.IBucketEventHandler">IBucketEventHandler</a>
+- *Type:* <a href="#@winglang/sdk.cloud.IBucketEventHandler">IBucketEventHandler</a>
 
 ---
 
 ###### `opts`<sup>Optional</sup> <a name="opts" id="@winglang/sdk.cloud.Bucket.onEvent.parameter.opts"></a>
 
-- _Type:_ <a href="#@winglang/sdk.cloud.BucketOnEventProps">BucketOnEventProps</a>
+- *Type:* <a href="#@winglang/sdk.cloud.BucketOnEventProps">BucketOnEventProps</a>
 
 ---
 
@@ -259,13 +267,13 @@ Run an inflight whenever a file is updated in the bucket.
 
 ###### `fn`<sup>Required</sup> <a name="fn" id="@winglang/sdk.cloud.Bucket.onUpdate.parameter.fn"></a>
 
-- _Type:_ <a href="#@winglang/sdk.cloud.IBucketEventHandler">IBucketEventHandler</a>
+- *Type:* <a href="#@winglang/sdk.cloud.IBucketEventHandler">IBucketEventHandler</a>
 
 ---
 
 ###### `opts`<sup>Optional</sup> <a name="opts" id="@winglang/sdk.cloud.Bucket.onUpdate.parameter.opts"></a>
 
-- _Type:_ <a href="#@winglang/sdk.cloud.BucketOnUpdateProps">BucketOnUpdateProps</a>
+- *Type:* <a href="#@winglang/sdk.cloud.BucketOnUpdateProps">BucketOnUpdateProps</a>
 
 ---
 
@@ -279,7 +287,7 @@ Delete an existing object using a key from the bucket.
 
 ###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.cloud.IBucketClient.delete.parameter.key"></a>
 
-- _Type:_ str
+- *Type:* str
 
 Key of the object.
 
@@ -287,7 +295,7 @@ Key of the object.
 
 ###### `opts`<sup>Optional</sup> <a name="opts" id="@winglang/sdk.cloud.IBucketClient.delete.parameter.opts"></a>
 
-- _Type:_ <a href="#@winglang/sdk.cloud.BucketDeleteOptions">BucketDeleteOptions</a>
+- *Type:* <a href="#@winglang/sdk.cloud.BucketDeleteOptions">BucketDeleteOptions</a>
 
 Options available for delete an item from a bucket.
 
@@ -303,7 +311,7 @@ Check if an object exists in the bucket.
 
 ###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.cloud.IBucketClient.exists.parameter.key"></a>
 
-- _Type:_ str
+- *Type:* str
 
 Key of the object.
 
@@ -319,7 +327,7 @@ Retrieve an object from the bucket.
 
 ###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.cloud.IBucketClient.get.parameter.key"></a>
 
-- _Type:_ str
+- *Type:* str
 
 Key of the object.
 
@@ -335,7 +343,7 @@ Retrieve a Json object from the bucket.
 
 ###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.cloud.IBucketClient.getJson.parameter.key"></a>
 
-- _Type:_ str
+- *Type:* str
 
 Key of the object.
 
@@ -351,7 +359,7 @@ Retrieve existing objects keys from the bucket.
 
 ###### `prefix`<sup>Optional</sup> <a name="prefix" id="@winglang/sdk.cloud.IBucketClient.list.parameter.prefix"></a>
 
-- _Type:_ str
+- *Type:* str
 
 Limits the response to keys that begin with the specified prefix.
 
@@ -367,7 +375,7 @@ Returns a url to the given file.
 
 ###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.cloud.IBucketClient.publicUrl.parameter.key"></a>
 
-- _Type:_ str
+- *Type:* str
 
 ---
 
@@ -381,7 +389,7 @@ Put an object in the bucket.
 
 ###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.cloud.IBucketClient.put.parameter.key"></a>
 
-- _Type:_ str
+- *Type:* str
 
 Key of the object.
 
@@ -389,7 +397,7 @@ Key of the object.
 
 ###### `body`<sup>Required</sup> <a name="body" id="@winglang/sdk.cloud.IBucketClient.put.parameter.body"></a>
 
-- _Type:_ str
+- *Type:* str
 
 Content of the object we want to store into the bucket.
 
@@ -405,7 +413,7 @@ Put a Json object in the bucket.
 
 ###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.cloud.IBucketClient.putJson.parameter.key"></a>
 
-- _Type:_ str
+- *Type:* str
 
 Key of the object.
 
@@ -413,7 +421,7 @@ Key of the object.
 
 ###### `body`<sup>Required</sup> <a name="body" id="@winglang/sdk.cloud.IBucketClient.putJson.parameter.body"></a>
 
-- _Type:_ <a href="#@winglang/sdk.std.Json">Json</a>
+- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
 
 Json object that we want to store into the bucket.
 
@@ -429,7 +437,7 @@ Delete an object from the bucket if it exists.
 
 ###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.cloud.IBucketClient.tryDelete.parameter.key"></a>
 
-- _Type:_ str
+- *Type:* str
 
 Key of the object.
 
@@ -445,7 +453,7 @@ Get an object from the bucket if it exists.
 
 ###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.cloud.IBucketClient.tryGet.parameter.key"></a>
 
-- _Type:_ str
+- *Type:* str
 
 Key of the object.
 
@@ -461,17 +469,18 @@ Gets an object from the bucket if it exists, parsing it as Json.
 
 ###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.cloud.IBucketClient.tryGetJson.parameter.key"></a>
 
-- _Type:_ str
+- *Type:* str
 
 Key of the object.
 
 ---
 
+
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name**                                                                        | **Type**                                                      | **Description**                                     |
-| ------------------------------------------------------------------------------- | ------------------------------------------------------------- | --------------------------------------------------- |
-| <code><a href="#@winglang/sdk.cloud.Bucket.property.node">node</a></code>       | <code>constructs.Node</code>                                  | The tree node.                                      |
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.Bucket.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
 | <code><a href="#@winglang/sdk.cloud.Bucket.property.display">display</a></code> | <code><a href="#@winglang/sdk.std.Display">Display</a></code> | Information on how to display a resource in the UI. |
 
 ---
@@ -482,7 +491,7 @@ Key of the object.
 node: Node;
 ```
 
-- _Type:_ constructs.Node
+- *Type:* constructs.Node
 
 The tree node.
 
@@ -494,11 +503,13 @@ The tree node.
 display: Display;
 ```
 
-- _Type:_ <a href="#@winglang/sdk.std.Display">Display</a>
+- *Type:* <a href="#@winglang/sdk.std.Display">Display</a>
 
 Information on how to display a resource in the UI.
 
 ---
+
+
 
 ## Structs <a name="Structs" id="Structs"></a>
 
@@ -516,8 +527,8 @@ let BucketDeleteOptions = cloud.BucketDeleteOptions{ ... };
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name**                                                                                         | **Type**          | **Description**                                          |
-| ------------------------------------------------------------------------------------------------ | ----------------- | -------------------------------------------------------- |
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.BucketDeleteOptions.property.mustExist">mustExist</a></code> | <code>bool</code> | Check failures on the method and retrieve errors if any. |
 
 ---
@@ -528,8 +539,8 @@ let BucketDeleteOptions = cloud.BucketDeleteOptions{ ... };
 mustExist: bool;
 ```
 
-- _Type:_ bool
-- _Default:_ false
+- *Type:* bool
+- *Default:* false
 
 Check failures on the method and retrieve errors if any.
 
@@ -549,10 +560,10 @@ let BucketEvent = cloud.BucketEvent{ ... };
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name**                                                                       | **Type**                                                                        | **Description**                          |
-| ------------------------------------------------------------------------------ | ------------------------------------------------------------------------------- | ---------------------------------------- |
-| <code><a href="#@winglang/sdk.cloud.BucketEvent.property.key">key</a></code>   | <code>str</code>                                                                | The bucket key that triggered the event. |
-| <code><a href="#@winglang/sdk.cloud.BucketEvent.property.type">type</a></code> | <code><a href="#@winglang/sdk.cloud.BucketEventType">BucketEventType</a></code> | Type of event.                           |
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.BucketEvent.property.key">key</a></code> | <code>str</code> | The bucket key that triggered the event. |
+| <code><a href="#@winglang/sdk.cloud.BucketEvent.property.type">type</a></code> | <code><a href="#@winglang/sdk.cloud.BucketEventType">BucketEventType</a></code> | Type of event. |
 
 ---
 
@@ -562,7 +573,7 @@ let BucketEvent = cloud.BucketEvent{ ... };
 key: str;
 ```
 
-- _Type:_ str
+- *Type:* str
 
 The bucket key that triggered the event.
 
@@ -574,7 +585,7 @@ The bucket key that triggered the event.
 type: BucketEventType;
 ```
 
-- _Type:_ <a href="#@winglang/sdk.cloud.BucketEventType">BucketEventType</a>
+- *Type:* <a href="#@winglang/sdk.cloud.BucketEventType">BucketEventType</a>
 
 Type of event.
 
@@ -582,7 +593,7 @@ Type of event.
 
 ### BucketOnCreateProps <a name="BucketOnCreateProps" id="@winglang/sdk.cloud.BucketOnCreateProps"></a>
 
-On create event options.
+`onCreate` event options.
 
 #### Initializer <a name="Initializer" id="@winglang/sdk.cloud.BucketOnCreateProps.Initializer"></a>
 
@@ -592,9 +603,10 @@ bring cloud;
 let BucketOnCreateProps = cloud.BucketOnCreateProps{ ... };
 ```
 
+
 ### BucketOnDeleteProps <a name="BucketOnDeleteProps" id="@winglang/sdk.cloud.BucketOnDeleteProps"></a>
 
-On delete event options.
+`onDelete` event options.
 
 #### Initializer <a name="Initializer" id="@winglang/sdk.cloud.BucketOnDeleteProps.Initializer"></a>
 
@@ -604,9 +616,10 @@ bring cloud;
 let BucketOnDeleteProps = cloud.BucketOnDeleteProps{ ... };
 ```
 
+
 ### BucketOnEventProps <a name="BucketOnEventProps" id="@winglang/sdk.cloud.BucketOnEventProps"></a>
 
-On any event options.
+`onEvent` options.
 
 #### Initializer <a name="Initializer" id="@winglang/sdk.cloud.BucketOnEventProps.Initializer"></a>
 
@@ -616,9 +629,10 @@ bring cloud;
 let BucketOnEventProps = cloud.BucketOnEventProps{ ... };
 ```
 
+
 ### BucketOnUpdateProps <a name="BucketOnUpdateProps" id="@winglang/sdk.cloud.BucketOnUpdateProps"></a>
 
-On update event options.
+`onUpdate` event options.
 
 #### Initializer <a name="Initializer" id="@winglang/sdk.cloud.BucketOnUpdateProps.Initializer"></a>
 
@@ -627,6 +641,7 @@ bring cloud;
 
 let BucketOnUpdateProps = cloud.BucketOnUpdateProps{ ... };
 ```
+
 
 ### BucketProps <a name="BucketProps" id="@winglang/sdk.cloud.BucketProps"></a>
 
@@ -642,8 +657,8 @@ let BucketProps = cloud.BucketProps{ ... };
 
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name**                                                                           | **Type**          | **Description**                                             |
-| ---------------------------------------------------------------------------------- | ----------------- | ----------------------------------------------------------- |
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.BucketProps.property.public">public</a></code> | <code>bool</code> | Whether the bucket's objects should be publicly accessible. |
 
 ---
@@ -654,8 +669,8 @@ let BucketProps = cloud.BucketProps{ ... };
 public: bool;
 ```
 
-- _Type:_ bool
-- _Default:_ false
+- *Type:* bool
+- *Default:* false
 
 Whether the bucket's objects should be publicly accessible.
 
@@ -665,19 +680,20 @@ Whether the bucket's objects should be publicly accessible.
 
 ### IBucketEventHandler <a name="IBucketEventHandler" id="@winglang/sdk.cloud.IBucketEventHandler"></a>
 
-- _Extends:_ <a href="#@winglang/sdk.std.IResource">IResource</a>
+- *Extends:* <a href="#@winglang/sdk.std.IResource">IResource</a>
 
-- _Implemented By:_ <a href="#@winglang/sdk.cloud.IBucketEventHandler">IBucketEventHandler</a>
+- *Implemented By:* <a href="#@winglang/sdk.cloud.IBucketEventHandler">IBucketEventHandler</a>
 
 **Inflight client:** [@winglang/sdk.cloud.IBucketEventHandlerClient](#@winglang/sdk.cloud.IBucketEventHandlerClient)
 
 A resource with an inflight "handle" method that can be passed to the bucket events.
 
+
 #### Properties <a name="Properties" id="Properties"></a>
 
-| **Name**                                                                                     | **Type**                                                      | **Description**                                     |
-| -------------------------------------------------------------------------------------------- | ------------------------------------------------------------- | --------------------------------------------------- |
-| <code><a href="#@winglang/sdk.cloud.IBucketEventHandler.property.node">node</a></code>       | <code>constructs.Node</code>                                  | The tree node.                                      |
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.IBucketEventHandler.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
 | <code><a href="#@winglang/sdk.cloud.IBucketEventHandler.property.display">display</a></code> | <code><a href="#@winglang/sdk.std.Display">Display</a></code> | Information on how to display a resource in the UI. |
 
 ---
@@ -688,7 +704,7 @@ A resource with an inflight "handle" method that can be passed to the bucket eve
 node: Node;
 ```
 
-- _Type:_ constructs.Node
+- *Type:* constructs.Node
 
 The tree node.
 
@@ -700,7 +716,7 @@ The tree node.
 display: Display;
 ```
 
-- _Type:_ <a href="#@winglang/sdk.std.Display">Display</a>
+- *Type:* <a href="#@winglang/sdk.std.Display">Display</a>
 
 Information on how to display a resource in the UI.
 
@@ -708,14 +724,14 @@ Information on how to display a resource in the UI.
 
 ### IBucketEventHandlerClient <a name="IBucketEventHandlerClient" id="@winglang/sdk.cloud.IBucketEventHandlerClient"></a>
 
-- _Implemented By:_ <a href="#@winglang/sdk.cloud.IBucketEventHandlerClient">IBucketEventHandlerClient</a>
+- *Implemented By:* <a href="#@winglang/sdk.cloud.IBucketEventHandlerClient">IBucketEventHandlerClient</a>
 
 A resource with an inflight "handle" method that can be passed to the bucket events.
 
 #### Methods <a name="Methods" id="Methods"></a>
 
-| **Name**                                                                                | **Description**                                                   |
-| --------------------------------------------------------------------------------------- | ----------------------------------------------------------------- |
+| **Name** | **Description** |
+| --- | --- |
 | <code><a href="#@winglang/sdk.cloud.IBucketEventHandlerClient.handle">handle</a></code> | Function that will be called when an event notification is fired. |
 
 ---
@@ -730,15 +746,16 @@ Function that will be called when an event notification is fired.
 
 ###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.cloud.IBucketEventHandlerClient.handle.parameter.key"></a>
 
-- _Type:_ str
+- *Type:* str
 
 ---
 
 ###### `type`<sup>Required</sup> <a name="type" id="@winglang/sdk.cloud.IBucketEventHandlerClient.handle.parameter.type"></a>
 
-- _Type:_ <a href="#@winglang/sdk.cloud.BucketEventType">BucketEventType</a>
+- *Type:* <a href="#@winglang/sdk.cloud.BucketEventType">BucketEventType</a>
 
 ---
+
 
 ## Enums <a name="Enums" id="Enums"></a>
 
@@ -748,11 +765,11 @@ Bucket events to subscribe to.
 
 #### Members <a name="Members" id="Members"></a>
 
-| **Name**                                                                      | **Description** |
-| ----------------------------------------------------------------------------- | --------------- |
-| <code><a href="#@winglang/sdk.cloud.BucketEventType.CREATE">CREATE</a></code> | Create.         |
-| <code><a href="#@winglang/sdk.cloud.BucketEventType.DELETE">DELETE</a></code> | Delete.         |
-| <code><a href="#@winglang/sdk.cloud.BucketEventType.UPDATE">UPDATE</a></code> | Update.         |
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.cloud.BucketEventType.CREATE">CREATE</a></code> | Create. |
+| <code><a href="#@winglang/sdk.cloud.BucketEventType.DELETE">DELETE</a></code> | Delete. |
+| <code><a href="#@winglang/sdk.cloud.BucketEventType.UPDATE">UPDATE</a></code> | Update. |
 
 ---
 
@@ -762,14 +779,17 @@ Create.
 
 ---
 
+
 ##### `DELETE` <a name="DELETE" id="@winglang/sdk.cloud.BucketEventType.DELETE"></a>
 
 Delete.
 
 ---
 
+
 ##### `UPDATE` <a name="UPDATE" id="@winglang/sdk.cloud.BucketEventType.UPDATE"></a>
 
 Update.
 
 ---
+

@@ -131,8 +131,8 @@ export class Api
 
   public async init(): Promise<ApiAttributes> {
     // `server.address()` returns `null` until the server is listening
-    // On a port. We use a promise to wait for the server to start
-    // Listening before returning the URL.
+    // on a port. We use a promise to wait for the server to start
+    // listening before returning the URL.
     const addrInfo: AddressInfo = await new Promise((resolve, reject) => {
       this.server = this.app.listen(0, LOCALHOST_ADDRESS, () => {
         const addr = this.server?.address();

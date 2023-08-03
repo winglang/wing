@@ -17,7 +17,7 @@ export class TestRunner extends std.TestRunner {
     super(scope, id, props);
 
     // This output is created so the CLI's `wing test` command can obtain a list
-    // Of all ARNs of test functions
+    // of all ARNs of test functions
     const output = new CfnOutput(this, "TestFunctionArns", {
       value: Lazy.string({
         produce: () => {
@@ -36,13 +36,13 @@ export class TestRunner extends std.TestRunner {
     }
 
     // Collect all of the test functions and their ARNs, and pass them to the
-    // Test engine so they can be invoked inflight.
+    // test engine so they can be invoked inflight.
     // TODO: are we going to run into AWS's 4KB environment variable limit here?
     // Some solutions:
-    // - base64 encode the string value
-    // - move the logic for picking one test from each isolated environment to
-    //   Here so that if there are N tests in the original app and N
-    //   Environments, we only need to output N test function ARNs instead of
+    // - Base64 encode the string value
+    // - Move the logic for picking one test from each isolated environment to
+    //   here so that if there are N tests in the original app and N
+    //   environments, we only need to output N test function ARNs instead of
     //   N * N
     const testFunctions = this.getTestFunctionArns();
     host.addEnvironment(

@@ -103,7 +103,7 @@ export class Redis extends ex.Redis {
     const env = this.envName();
     // Ops do not matter here since the client connects directly to the cluster.
     // The only thing that we need to use AWS API for is to get the cluster endpoint
-    // From the cluster ID.
+    // from the cluster ID.
     host.addPolicyStatements([
       {
         actions: ["elasticache:Describe*"],
