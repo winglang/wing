@@ -8,11 +8,12 @@ use tree_sitter::Tree;
 
 use crate::closure_transform::ClosureTransformer;
 use crate::diagnostic::{found_errors, reset_diagnostics, Diagnostic};
+use crate::file_graph::FileGraph;
 use crate::files::Files;
 use crate::fold::Fold;
 use crate::jsify::JSifier;
 use crate::lifting::LiftTransform;
-use crate::parser::{parse_wing_project, FileGraph};
+use crate::parser::parse_wing_project;
 use crate::type_check;
 use crate::type_check::jsii_importer::JsiiImportSpec;
 use crate::type_check_assert::TypeCheckAssert;

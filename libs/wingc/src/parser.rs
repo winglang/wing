@@ -1,7 +1,4 @@
 use indexmap::{IndexMap, IndexSet};
-use petgraph::algo::tarjan_scc;
-use petgraph::algo::toposort;
-use petgraph::visit::EdgeRef;
 use phf::{phf_map, phf_set};
 use std::cell::RefCell;
 use std::collections::HashSet;
@@ -18,6 +15,7 @@ use crate::ast::{
 };
 use crate::comp_ctx::{CompilationContext, CompilationPhase};
 use crate::diagnostic::{report_diagnostic, Diagnostic, DiagnosticResult, WingSpan};
+use crate::file_graph::FileGraph;
 use crate::files::Files;
 use crate::type_check::{CLASS_INFLIGHT_INIT_NAME, CLASS_INIT_NAME};
 use crate::{dbg_panic, WINGSDK_STD_MODULE, WINGSDK_TEST_CLASS_NAME};
@@ -130,73 +128,6 @@ static RESERVED_WORDS: phf::Set<&'static str> = phf_set! {
 	"process",
 	"Object",
 };
-
-#[derive(Default)]
-pub struct FileGraph {
-	graph: petgraph::graph::DiGraph<PathBuf, ()>,
-	path_to_node_index: IndexMap<PathBuf, petgraph::graph::NodeIndex>,
-}
-
-impl FileGraph {
-	/// Updates the graph to reflect the new file structure
-	/// e.g. if file A depended on B, and now it depends on C, then
-	/// this function will remove the edge from A to B, and add an edge
-	/// from A to C.
-	fn update_file(&mut self, from_path: &Path, to_paths: &[PathBuf]) {
-		let from_node_index = self.get_or_insert_node_index(from_path);
-
-		// remove all edges from this node
-		let outgoing_edges = self
-			.graph
-			.edges_directed(from_node_index, petgraph::Direction::Outgoing)
-			.map(|edge| edge.id())
-			.collect::<Vec<_>>();
-		for edge in outgoing_edges {
-			self.graph.remove_edge(edge);
-		}
-
-		// add new edges from this node
-		for to_path in to_paths {
-			let to_node_index = self.get_or_insert_node_index(to_path);
-			self.graph.add_edge(from_node_index, to_node_index, ());
-		}
-	}
-
-	fn get_or_insert_node_index(&mut self, path: &Path) -> petgraph::graph::NodeIndex {
-		if let Some(node_index) = self.path_to_node_index.get(path) {
-			return *node_index;
-		}
-
-		let node_index = self.graph.add_node(path.to_owned());
-		self.path_to_node_index.insert(path.to_owned(), node_index);
-		node_index
-	}
-
-	/// Returns a list of files in the order they should be compiled
-	/// Or a list of files that are part of a cycle, if one exists
-	fn toposort(&self) -> Result<Vec<PathBuf>, Vec<PathBuf>> {
-		match toposort(&self.graph, None) {
-			Ok(indices) => Ok(
-				indices
-					.into_iter()
-					.rev()
-					.map(|n| self.graph[n].clone())
-					.collect::<Vec<_>>(),
-			),
-			Err(_) => {
-				// toposort function in the `petgraph` library doesn't return the cycle itself,
-				// so we need to use Tarjan's algorithm to find one instead
-				let strongly_connected_components = tarjan_scc(&self.graph);
-				Err(
-					strongly_connected_components[0]
-						.iter()
-						.map(|n| self.graph[*n].clone())
-						.collect::<Vec<_>>(),
-				)
-			}
-		}
-	}
-}
 
 /// Parse a Wing file and all of the Wing files it depends on into a collection of ASTs.
 /// The file's text can be passed in directly through `source_text` for use cases like the
