@@ -1,5 +1,5 @@
 import path from "path";
-import { ExplorerItem } from "@wingconsole/server";
+import { type ExplorerItem } from "@wingconsole/server";
 import {
   TreeItemCollapsibleState,
   TreeItem,
