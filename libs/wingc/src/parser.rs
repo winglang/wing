@@ -250,8 +250,7 @@ pub fn parse_wing_project(
 		}
 
 		// TODO: skip the re-parsing a file if we have already have an AST saved from a previous compilation
-		// This requires more refactoring since currently we store some type-checking information
-		// (SymbolEnv) on the ASTs, so we can't just re-use the ASTs
+		// https://github.com/winglang/wing/issues/3700
 
 		let file_text = if files.contains_file(&file_to_parse) {
 			// Get the file's text if we already have it
