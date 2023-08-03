@@ -77,7 +77,7 @@ jobs:
         run: pnpm changelog
 
       - name: Build and Package
-        run: pnpm package --filter=!hangar
+        run: pnpm package -- --filter=!hangar
         env:
           SEGMENT_WRITE_KEY: ${{ secrets.SEGMENT_WRITE_KEY }}
 
@@ -167,7 +167,7 @@ jobs:
         run: pnpm exec playwright install --with-deps
 
       - name: Test
-        run: pnpm test --filter=!hangar
+        run: pnpm test -- --filter=!hangar
 
   benchmark:
     name: Benchmark
