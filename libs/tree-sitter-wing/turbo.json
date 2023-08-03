@@ -3,7 +3,7 @@
   "extends": ["//"],
   "pipeline": {
     "build:generate": {
-      "inputs": ["grammar.js"],
+      "inputs": ["grammar.js", "src/scanner.c"],
       "outputs": ["src/**", "!src/scanner.c", "bindings/**", "binding.gyp"]
     },
     "build:wasm": {
