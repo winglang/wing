@@ -12,6 +12,8 @@
     "compile": "turbo compile",
     "test": "turbo lint eslint test",
     "package": "turbo package",
+    "build:ci": "turbo compile package --filter=!hangar",
+    "test:ci": "turbo lint eslint test --filter=!hangar",
     "docs": "./scripts/docsite.sh",
     "changelog": "bump-pack",
     "install": "bash scripts/setup_wasi.sh",
