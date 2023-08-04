@@ -11,7 +11,7 @@ import { Construct } from "constructs";
 import * as cloud from "../cloud";
 import * as core from "../core";
 import { createBundle } from "../shared/bundling";
-import { PolicyStatement, _generateAwsFunctionLines } from "../shared-aws";
+import { PolicyStatement } from "../shared-aws";
 import { IInflightHost } from "../std";
 
 /**
@@ -69,17 +69,6 @@ export class Function extends cloud.Function {
     host.addEnvironment(this.envName(), this.function.functionArn);
 
     super._bind(host, ops);
-  }
-
-  /**
-   * Generates the code lines for the cloud function,
-   * overridden by the awscdk target to have the function context too
-   * @param inflightClient inflight client code
-   * @returns cloud function code string
-   * @internal
-   */
-  protected _generateLines(inflightClient: core.Code): string[] {
-    return _generateAwsFunctionLines(inflightClient);
   }
 
   /** @internal */
