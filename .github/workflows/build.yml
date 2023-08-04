@@ -93,7 +93,7 @@ jobs:
           name: wingc
           path: libs/wingcompiler/wingc.wasm
 
-      - name: Derive appropriate SHAs for base and head for `nx affected` commands
+      - name: Derive appropriate SHAs for base and head
         id: setSHAs
         uses: nrwl/nx-set-shas@v3
 
@@ -377,7 +377,7 @@ jobs:
 
       - name: Compute Checksums
         run: |
-          mv ./docs ./dist/docs.tgz
+          mv ./docs/*.tgz ./dist
           mv ./*/*.vsix ./dist
           mv ./*/*.wasm ./dist
           mv ./benchmarks/* ./dist
