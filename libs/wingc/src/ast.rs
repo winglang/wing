@@ -126,6 +126,7 @@ pub struct TypeAnnotation {
 
 #[derive(Debug, Clone)]
 pub enum TypeAnnotationKind {
+	Inferred,
 	Number,
 	String,
 	Bool,
@@ -194,6 +195,7 @@ impl Display for UserDefinedType {
 impl Display for TypeAnnotationKind {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		match self {
+			TypeAnnotationKind::Inferred => write!(f, "inferred"),
 			TypeAnnotationKind::Number => write!(f, "num"),
 			TypeAnnotationKind::String => write!(f, "str"),
 			TypeAnnotationKind::Bool => write!(f, "bool"),
@@ -267,6 +269,7 @@ pub struct FunctionParameter {
 	pub name: Symbol,
 	pub type_annotation: TypeAnnotation,
 	pub reassignable: bool,
+	pub variadic: bool,
 }
 
 #[derive(Debug)]

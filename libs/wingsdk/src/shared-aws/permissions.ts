@@ -118,7 +118,8 @@ export function calculateBucketPermissions(
     ops.includes(cloud.BucketInflightMethods.LIST) ||
     ops.includes(cloud.BucketInflightMethods.TRY_GET) ||
     ops.includes(cloud.BucketInflightMethods.TRY_GET_JSON) ||
-    ops.includes(cloud.BucketInflightMethods.PUBLIC_URL)
+    ops.includes(cloud.BucketInflightMethods.PUBLIC_URL) ||
+    ops.includes(cloud.BucketInflightMethods.EXISTS)
   ) {
     actions.push(...["s3:GetObject*", "s3:GetBucket*"]);
   }

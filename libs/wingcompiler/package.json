@@ -17,21 +17,22 @@
     "url": "git+https://github.com/winglang/wing.git"
   },
   "scripts": {
-    "copy-wingc-debug": "cp ../../target/wasm32-wasi/debug/wingc.wasm ./",
-    "build": "tsup-node",
+    "compile:copy-wingc-wasm": "cp ../../target/wasm32-wasi/release/wingc.wasm .",
+    "compile": "tsup-node",
     "watch": "tsup-node --watch",
     "test": "vitest run --passWithNoTests",
     "package": "bump-pack -b"
   },
   "dependencies": {
-    "wasi-js": "^1.7.3",
-    "@winglang/sdk": "workspace:^"
+    "@winglang/sdk": "workspace:^",
+    "wasi-js": "^1.7.3"
   },
   "bundledDependencies": [
     "wasi-js"
   ],
   "devDependencies": {
     "@types/node": "^18.11.18",
+    "@winglang/wingc": "workspace:^",
     "bump-pack": "workspace:^",
     "tsup": "^6.7.0",
     "typescript": "^4.9.4",

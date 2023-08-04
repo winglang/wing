@@ -1,4 +1,4 @@
-# #2819 - Wing Utility Library
+# #2819 Wing Utility Library (approved)
 
 - **Author(s):**: @eladb
 - **Submission Date**: 2023-06-07

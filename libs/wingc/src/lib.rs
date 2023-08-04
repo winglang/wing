@@ -55,6 +55,7 @@ pub mod type_check;
 mod type_check_assert;
 pub mod visit;
 mod visit_context;
+mod visit_types;
 mod wasm_util;
 
 const WINGSDK_ASSEMBLY_NAME: &'static str = "@winglang/sdk";
@@ -209,6 +210,7 @@ pub fn type_check(
 				name: "message".into(),
 				typeref: types.string(),
 				docs: Docs::with_summary("The message to log"),
+				variadic: false,
 			}],
 			return_type: types.void(),
 			phase: Phase::Independent,
@@ -226,6 +228,7 @@ pub fn type_check(
 				name: "condition".into(),
 				typeref: types.bool(),
 				docs: Docs::with_summary("The condition to assert"),
+				variadic: false,
 			}],
 			return_type: types.void(),
 			phase: Phase::Independent,
@@ -245,6 +248,7 @@ pub fn type_check(
 				typeref: types.string(),
 				name: "message".into(),
 				docs: Docs::with_summary("The message to throw"),
+				variadic: false,
 			}],
 			return_type: types.void(),
 			phase: Phase::Independent,
@@ -262,6 +266,7 @@ pub fn type_check(
 				typeref: types.string(),
 				name: "message".into(),
 				docs: Docs::with_summary("The message to panic with"),
+				variadic: false,
 			}],
 			return_type: types.void(),
 			phase: Phase::Independent,
