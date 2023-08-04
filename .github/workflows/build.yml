@@ -368,9 +368,6 @@ jobs:
           done
         working-directory: dist
 
-      - name: Rename Docs
-        run: mv docs "docs-${{ needs.build.outputs.version }}.tgz"
-
       - name: Write Changelog
         uses: DamianReeves/write-file-action@v1.2
         with:
@@ -380,6 +377,7 @@ jobs:
 
       - name: Compute Checksums
         run: |
+          mv ./docs ./dist/docs.tgz
           mv ./*/*.vsix ./dist
           mv ./*/*.wasm ./dist
           mv ./benchmarks/* ./dist
