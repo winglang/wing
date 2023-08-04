@@ -1,5 +1,5 @@
 ---
-title: #3690 Language Requirements (approved)
+title: "#3690 Language Requirements (approved)"
 description: The original requirements documents for the wing language experience
 ---
 
@@ -10,7 +10,7 @@ description: The original requirements documents for the wing language experienc
 
 ## About this Document
 
-This RFC lists the *requirements* from the wing language experience, not the
+This RFC lists the _requirements_ from the wing language experience, not the
 specific syntax/grammer or design of the language. The language design will
 follow in a separate RFC.
 
@@ -25,7 +25,7 @@ For example:
 
 ## Overview
 
-The wing programming language (aka *winglang*) is a general-purpose programming
+The wing programming language (aka _winglang_) is a general-purpose programming
 language designed for building applications for the cloud.
 
 **What makes wing special?** Traditional programming languages are designed
@@ -43,11 +43,10 @@ through the mechanics of the cloud.
 ## Programs
 
 When a wing program is compiled, the output is not an executable which runs on a
-single machine, it is a set of *files* which are **synthesized** during
+single machine, it is a set of _files_ which are **synthesized** during
 compilation by your wing code.
 
-> Reqtag: `w:program-output`
-<span id="w:program-output"/>
+> Reqtag: `w:program-output` > <span id="w:program-output"/>
 
 At the most basic level, the wing compiler can synthesize any file and directory
 structure. When used for creating cloud applications, these files are a set of
@@ -80,7 +79,7 @@ Now, let's update our code:
 
 ```ts
 let hello = std.TextFile("hello2.txt");
-hello.add_line("Hello, world!")
+hello.add_line("Hello, world!");
 ```
 
 When we run the compiler again:
@@ -132,11 +131,10 @@ output/1/file-1.txt
 output/2/file-2.txt
 ```
 
-Magic! Our compiler actually *deleted* files based on the new definition in our
+Magic! Our compiler actually _deleted_ files based on the new definition in our
 program.
 
-> Reqtag: `w:prune`
-<span id="w:prune"/>
+> Reqtag: `w:prune` > <span id="w:prune"/>
 
 One way to think about it is that wing programs define **desired state**
 through files, and the compiler manages these files across executions. This
@@ -157,8 +155,7 @@ generated files are always created as read-only, and their hash is stored
 in the state file. If a file is changed outside of wing, the compiler won't
 override it.
 
-> Reqtag: `w:readonly`
-<span id="w:readonly"/>
+> Reqtag: `w:readonly` > <span id="w:readonly"/>
 
 ## Resources
 
@@ -200,11 +197,10 @@ library used by all CDKs and enables interoperability across the ecosystem.
 In wing, resources are _defined_ (instantiated) like this:
 
 ```ts
-let my_resource = MyResource()
+let my_resource = MyResource();
 ```
 
-> Reqtag: `w:resource-definition`
-<span id="w:resource-definition"/>
+> Reqtag: `w:resource-definition` > <span id="w:resource-definition"/>
 
 As you may know, the first two initializer arguments for resources in
 programming languages like TypeScript, Java or Python, are `scope` and `id`.
@@ -231,21 +227,18 @@ initializer of `NotifyingBucket`, we didn't need to specify their `scope` and
 If not otherwise specified, wing will always use `this` as the `scope` and the
 type name as the `id`.
 
-> Reqtag: `w:resource-default-scope`
-<span id="w:resource-default-scope"/>
+> Reqtag: `w:resource-default-scope` > <span id="w:resource-default-scope"/>
 
-> Reqtag: `w:resource-default-id`
-<span id="w:resource-default-id"/>
+> Reqtag: `w:resource-default-id` > <span id="w:resource-default-id"/>
 
 For reference, this is the equivalent TypeScript version:
 
 ```ts
-const bucket = new s3.Bucket(this, 'Bucket');
-const topic = new sns.Topic(this, 'Topic');
+const bucket = new s3.Bucket(this, "Bucket");
+const topic = new sns.Topic(this, "Topic");
 ```
 
 This works in the majority of the cases, but can also be customized if needed.
-
 
 To explicitly specify the resource identifier, use the `be "ID"` syntax:
 
@@ -253,8 +246,7 @@ To explicitly specify the resource identifier, use the `be "ID"` syntax:
 let bucket = Bucket() be "MyBucket";
 ```
 
-> Reqtag: `w:resource-custom-id`
-<span id="w:resource-custom-id"/>
+> Reqtag: `w:resource-custom-id` > <span id="w:resource-custom-id"/>
 
 This is needed, for example, if there are multiple resources of the same type
 within the same scope:
@@ -276,11 +268,10 @@ for i in 0..10 {
 To explicitly specify the resource scope, use the `in SCOPE` syntax:
 
 ```ts
-Topic() in alternative_scope
+Topic() in alternative_scope;
 ```
 
-> Reqtag: `w:resource-custom-scope`
-<span id="w:resource-custom-scope"/>
+> Reqtag: `w:resource-custom-scope` > <span id="w:resource-custom-scope"/>
 
 This can be used, for example, to form resource trees on the fly. For example,
 in unit tests:
@@ -301,9 +292,7 @@ programming model for reflecting on the tree. The reflection API is available
 under the [`constructs.Node`] of each resource, and can be accessed via
 `node_of(c)`:
 
-> Reqtag: `w:resource-node`
-<span id="w:resource-node"/>
-
+> Reqtag: `w:resource-node` > <span id="w:resource-node"/>
 
 ```ts
 let node = node_of(my_bucket);
@@ -340,23 +329,20 @@ The equivalent in TypeScript:
 class Foo extends Construct {
   constructor(scope: Construct, id: string) {
     super(scope, id);
-
   }
 }
 ```
 
-> Reqtag: `w:resource-declaration`
-<span id="w:resource-declaration"/>
+> Reqtag: `w:resource-declaration` > <span id="w:resource-declaration"/>
 
 ### The root resource
 
 Every wing program has an implicit **root resource** which is the resource
-used as the `scope` for resources defined in the main program. 
+used as the `scope` for resources defined in the main program.
 
 > This is the equivalent of the CDK `App` construct.
 
-> Reqtag: `w:resource-implicit-root`
-<span id="w:resource-implicit-root"/>
+> Reqtag: `w:resource-implicit-root` > <span id="w:resource-implicit-root"/>
 
 The compiler manipulates the root resource based on its **compilation target**.
 
@@ -396,8 +382,7 @@ resources and the synthesis output is an AWS CloudFormation template.
 Alternatively, if one would use the `tf-gcp` target, the output will be a
 Terraform configuration for deploying the bucket on Google Cloud Platform.
 
-> Reqtag: `w:synthesis-target`
-<span id="w:synthesis-target"/>
+> Reqtag: `w:synthesis-target` > <span id="w:synthesis-target"/>
 
 The compiler is not opinionated about the concept of cloud providers (e.g. AWS,
 GCP, Azure) or provisioning engines (e.g. CloudFormation, Terraform, Pulumi),
@@ -411,8 +396,7 @@ like so:
 $ wingc test.w --target npm://@acme/wing-targets@^1.2.3/Default
 ```
 
-> Reqtag: `w:synthesis-target-custom`
-<span id="w:synthesis-target-custom"/>
+> Reqtag: `w:synthesis-target-custom` > <span id="w:synthesis-target-custom"/>
 
 ### Asynchronous Finalizers
 
@@ -420,8 +404,7 @@ There are use cases where a resource needs to execute an asynchronous operation
 just before the output is synthesized. An example use case is running an out of
 process bundler or some other 3rd party code that only has an async API:
 
-> Reqtag: `w:resource-async-finalizer`
-<span id="w:resource-async-finalizer"/>
+> Reqtag: `w:resource-async-finalizer` > <span id="w:resource-async-finalizer"/>
 
 ```ts
 resource MyResource {
@@ -440,8 +423,7 @@ finalizers should avoid mutating the tree because of that.
 If wing will support explicit mutability, the compiler will be able to ensure
 that mutations don't happen during finalization.
 
-> Reqtag: `w:resource-async-finalizer-immutability`
-<span id="w:resource-async-finalizer-immutability"/>
+> Reqtag: `w:resource-async-finalizer-immutability` > <span id="w:resource-async-finalizer-immutability"/>
 
 ## Inflight Functions ("inflights")
 
@@ -455,10 +437,10 @@ that executes after the system has been deployed by referring to them as
 **"preflight"** and **"inflight"** code respectively.
 
 > The ability to express runtime logic as an integral part of the desired-state
-definition, and naturally interact between the two execution domains is a unique
-and fundamental capability of the wing language.
+> definition, and naturally interact between the two execution domains is a unique
+> and fundamental capability of the wing language.
 
-The default (and implicit) execution context in wing is *preflight*. This is
+The default (and implicit) execution context in wing is _preflight_. This is
 because in cloud applications, the entrypoint is actually the definition of the
 app's architecture (and not the code that runs within a specific machine within
 this system).
@@ -469,8 +451,7 @@ packaged and executed later on various compute platforms. Inflights are able to
 naturally interact with resources which are defined outside of the inflight, and
 invoke runtime operations on them.
 
-> Reqtag: `w:inflight`
-<span id="w:inflight"/>
+> Reqtag: `w:inflight` > <span id="w:inflight"/>
 
 Let's look at an example `upload.w`:
 
@@ -525,13 +506,11 @@ to implement this application for AWS:
 Resources cannot be defined within inflight functions, because there is no
 synthesizer and no provisiong engine to deploy those resources.
 
-> Reqtag: `w:inflight-no-resource-definitions`
-<span id="w:inflight-no-resource-definitions"/>
-
+> Reqtag: `w:inflight-no-resource-definitions` > <span id="w:inflight-no-resource-definitions"/>
 
 ### Capturing resources
 
-An inflight can naturally interact with the **Runtime API* of resources that
+An inflight can naturally interact with the \*_Runtime API_ of resources that
 are defined outside of the inflight's code block (e.g. `topic` in the above
 example).
 
@@ -542,8 +521,7 @@ resources are captured by the inflight, and which methods are being called on
 its runtime API, so it can wire the desired information and add the appropriate
 permissions.
 
-> Reqtag: `w:inflight-capture-resources`
-<span id="w:inflight-capture-resources"/>
+> Reqtag: `w:inflight-capture-resources` > <span id="w:inflight-capture-resources"/>
 
 ### Capturing immutable data
 
@@ -555,8 +533,7 @@ Primitive values which include [tokens](#tokens) can be captured, and will be
 resolved during deployment by assigning them to environment variables (or other
 means of dynamic runtime values).
 
-> Reqtag: `w:inflight-capture-data`
-<span id="w:inflight-capture-data"/>
+> Reqtag: `w:inflight-capture-data` > <span id="w:inflight-capture-data"/>
 
 Bear in mind that when capturing collections (e.g. lists or maps), they can reference
 resources as well, in which case we need to capture those resources.
@@ -607,9 +584,7 @@ let handler = inflight (event) => {
 ];
 ```
 
-> Reqtag: `w:inflight-explicit-capture`
-<span id="w:inflight-explicit-capture"/>
-
+> Reqtag: `w:inflight-explicit-capture` > <span id="w:inflight-explicit-capture"/>
 
 ### Indirect resource captures
 
@@ -646,8 +621,7 @@ In the above example, `handler` captures `deny_list` which is a user-defined
 resource. Under the hood, this resource uses a bucket. When capturing
 `deny_list`, the compiler needs to implicitly capture the bucket behind it.
 
-> Reqtag: `w:inflight-capture-indirect`
-<span id="w:inflight-capture-indirect"/>
+> Reqtag: `w:inflight-capture-indirect` > <span id="w:inflight-capture-indirect"/>
 
 ### Capturing mutable objects is not allowed
 
@@ -660,7 +634,7 @@ method calls.
 > runtime client.
 
 > TODO: we can consider having explicit immutability for objects and then
-we can allow marshalling immutable objects as well.
+> we can allow marshalling immutable objects as well.
 
 This won't compile:
 
@@ -679,8 +653,7 @@ inflight fn bar() {
 }
 ```
 
-> Reqtag: `w:inflight-capture-forbid-mutable`
-<span id="w:inflight-capture-forbid-mutable"/>
+> Reqtag: `w:inflight-capture-forbid-mutable` > <span id="w:inflight-capture-forbid-mutable"/>
 
 ### Static variables within inflight code
 
@@ -702,9 +675,7 @@ In the above example, the `big_blob` object will be defined as a global variable
 of the AWS Lambda function and will be preserved across executions within the
 same AWS Lambda server.
 
-> Reqtag: `w:inflight-static`
-<span id="w:inflight-static"/>
-
+> Reqtag: `w:inflight-static` > <span id="w:inflight-static"/>
 
 ## Dependency Injection
 
@@ -747,8 +718,7 @@ Sketch:
 $ wingc prog.w --resolve "Bucket=aws.s3.Bucket"
 ```
 
-> Reqtag: `w:dependency-injection`
-<span id="w:dependency-injection"/>
+> Reqtag: `w:dependency-injection` > <span id="w:dependency-injection"/>
 
 ## Runtime Client APIs
 
@@ -797,8 +767,7 @@ new_users.add_consumer(cloud.Function(inflight (e) => {
 }));
 ```
 
-> Reqtag: `w:inflight-clients`
-<span id="w:inflight-clients"/>
+> Reqtag: `w:inflight-clients` > <span id="w:inflight-clients"/>
 
 ## Observability
 
@@ -818,17 +787,13 @@ observability features:
 
 wing embraces [Open Telemetry](https://opentelemetry.io/).
 
-> Reqtag: `w:observability-metrics`
-<span id="w:observability-metrics"/>
+> Reqtag: `w:observability-metrics` > <span id="w:observability-metrics"/>
 
-> Reqtag: `w:observability-alarms`
-<span id="w:observability-alarms"/>
+> Reqtag: `w:observability-alarms` > <span id="w:observability-alarms"/>
 
-> Reqtag: `w:observability-logs`
-<span id="w:observability-logs"/>
+> Reqtag: `w:observability-logs` > <span id="w:observability-logs"/>
 
-> Reqtag: `w:observability-tracing`
-<span id="w:observability-tracing"/>
+> Reqtag: `w:observability-tracing` > <span id="w:observability-tracing"/>
 
 ## Opaque Primitives (Tokens)
 
@@ -842,6 +807,7 @@ in order to protect users from accidentally tampering with those values.
 
 Maybe we could implement this by having `String` derive from `OpaqueString` and
 then the latter will not have `.length` or splitting or reading the contents.^
+
 ```ts
 bucket := Bucket()
 
@@ -855,30 +821,27 @@ inflight fn handler() {
 }
 ```
 
-> Reqtag: `w:tokens`
-<span id="w:tokens"/>
+> Reqtag: `w:tokens` > <span id="w:tokens"/>
 
 ## Interoperability
 
-* wing libraries are effectively JSII libraries
-* JSII libraries can be imported and used natively in wing code
-* CDK resources can be used naturally within wing resources and vice versa
-* It is possible to use any TypeScript library within wing. TypeScript type
+- wing libraries are effectively JSII libraries
+- JSII libraries can be imported and used natively in wing code
+- CDK resources can be used naturally within wing resources and vice versa
+- It is possible to use any TypeScript library within wing. TypeScript type
   information will be used to offer strong-typing.
 
-  * TODO: Use existing docker images/lambda bundles
+  - TODO: Use existing docker images/lambda bundles
 
-> Reqtag: `w:interop-jsii`
-<span id="w:interop-jsii"/>
+> Reqtag: `w:interop-jsii` > <span id="w:interop-jsii"/>
 
 ## Type System
 
-* Compatible with the JSII type system
-* Duration/Size literals (e.g `5s`, `19GiB`)
-* JSON literals
+- Compatible with the JSII type system
+- Duration/Size literals (e.g `5s`, `19GiB`)
+- JSON literals
 
-> Reqtag: `w:typesystem`
-<span id="w:typesystem"/>
+> Reqtag: `w:typesystem` > <span id="w:typesystem"/>
 
 ## Preflight Warnings and Errors
 
@@ -920,12 +883,11 @@ integral part of the contract (preconditions) for a certain type.
 
 Open issues:
 
-* It should be possible to distinguish between a warning and an error.
-* From a control-flow perspective, it makes sense to use something like `throw`/`raise` to escape the flow when there is an error, but not when there is a warning.
-* See [construct tree annotations](https://docs.aws.amazon.com/cdk/api/v1/docs/@aws-cdk_core.Annotations.html) in the AWS CDK as inspiration
+- It should be possible to distinguish between a warning and an error.
+- From a control-flow perspective, it makes sense to use something like `throw`/`raise` to escape the flow when there is an error, but not when there is a warning.
+- See [construct tree annotations](https://docs.aws.amazon.com/cdk/api/v1/docs/@aws-cdk_core.Annotations.html) in the AWS CDK as inspiration
 
-> Reqtag: `w:preflight-errors`
-<span id="w:preflight-errors"/>
+> Reqtag: `w:preflight-errors` > <span id="w:preflight-errors"/>
 
 ## Requirement List
 
@@ -934,54 +896,54 @@ Generated via this script:
 cat 0044-winglang-requirements.md | grep "Reqtag" | grep -v "my-tag" | cut -d"\`" -f2 | xargs -n1 -I{} echo "* [{}](#{})" | sort
 -->
 
-* [w:dependency-injection](#w:dependency-injection)
-* [w:inflight-capture-data](#w:inflight-capture-data)
-* [w:inflight-capture-forbid-mutable](#w:inflight-capture-forbid-mutable)
-* [w:inflight-capture-indirect](#w:inflight-capture-indirect)
-* [w:inflight-capture-resources](#w:inflight-capture-resources)
-* [w:inflight-clients](#w:inflight-clients)
-* [w:inflight-explicit-capture](#w:inflight-explicit-capture)
-* [w:inflight-no-resource-definitions](#w:inflight-no-resource-definitions)
-* [w:inflight-static](#w:inflight-static)
-* [w:inflight](#w:inflight)
-* [w:interop-jsii](#w:interop-jsii)
-* [w:observability-alarms](#w:observability-alarms)
-* [w:observability-logs](#w:observability-logs)
-* [w:observability-metrics](#w:observability-metrics)
-* [w:observability-tracing](#w:observability-tracing)
-* [w:preflight-errors](#w:preflight-errors)
-* [w:program-output](#w:program-output)
-* [w:prune](#w:prune)
-* [w:readonly](#w:readonly)
-* [w:resource-async-finalizer-immutability](#w:resource-async-finalizer-immutability)
-* [w:resource-async-finalizer](#w:resource-async-finalizer)
-* [w:resource-custom-id](#w:resource-custom-id)
-* [w:resource-custom-scope](#w:resource-custom-scope)
-* [w:resource-declaration](#w:resource-declaration)
-* [w:resource-default-id](#w:resource-default-id)
-* [w:resource-default-scope](#w:resource-default-scope)
-* [w:resource-definition](#w:resource-definition)
-* [w:resource-implicit-root](#w:resource-implicit-root)
-* [w:resource-node](#w:resource-node)
-* [w:synthesis-target-custom](#w:synthesis-target-custom)
-* [w:synthesis-target](#w:synthesis-target)
-* [w:tokens](#w:tokens)
-* [w:typesystem](#w:typesystem)
+- [w:dependency-injection](#w:dependency-injection)
+- [w:inflight-capture-data](#w:inflight-capture-data)
+- [w:inflight-capture-forbid-mutable](#w:inflight-capture-forbid-mutable)
+- [w:inflight-capture-indirect](#w:inflight-capture-indirect)
+- [w:inflight-capture-resources](#w:inflight-capture-resources)
+- [w:inflight-clients](#w:inflight-clients)
+- [w:inflight-explicit-capture](#w:inflight-explicit-capture)
+- [w:inflight-no-resource-definitions](#w:inflight-no-resource-definitions)
+- [w:inflight-static](#w:inflight-static)
+- [w:inflight](#w:inflight)
+- [w:interop-jsii](#w:interop-jsii)
+- [w:observability-alarms](#w:observability-alarms)
+- [w:observability-logs](#w:observability-logs)
+- [w:observability-metrics](#w:observability-metrics)
+- [w:observability-tracing](#w:observability-tracing)
+- [w:preflight-errors](#w:preflight-errors)
+- [w:program-output](#w:program-output)
+- [w:prune](#w:prune)
+- [w:readonly](#w:readonly)
+- [w:resource-async-finalizer-immutability](#w:resource-async-finalizer-immutability)
+- [w:resource-async-finalizer](#w:resource-async-finalizer)
+- [w:resource-custom-id](#w:resource-custom-id)
+- [w:resource-custom-scope](#w:resource-custom-scope)
+- [w:resource-declaration](#w:resource-declaration)
+- [w:resource-default-id](#w:resource-default-id)
+- [w:resource-default-scope](#w:resource-default-scope)
+- [w:resource-definition](#w:resource-definition)
+- [w:resource-implicit-root](#w:resource-implicit-root)
+- [w:resource-node](#w:resource-node)
+- [w:synthesis-target-custom](#w:synthesis-target-custom)
+- [w:synthesis-target](#w:synthesis-target)
+- [w:tokens](#w:tokens)
+- [w:typesystem](#w:typesystem)
 
 ## Wishlist
 
 This is a list of features we will consider for wing as it evolves:-
 
-* **Escpae Hatches** - we will consider a built-in mechanism for [escape
+- **Escpae Hatches** - we will consider a built-in mechanism for [escape
   hatching](https://docs.aws.amazon.com/cdk/v2/guide/cfn_layer.html) in wing.
 
-* **REST, GraphQL and Microservices** - wing allows developers to define GraphQL
+- **REST, GraphQL and Microservices** - wing allows developers to define GraphQL
   and REST endpoints using the type system and automatically generate OpenAPI or
   GraphQL specifications as well as multi-language client libraries. wing will
   reduce much of the boilerplate required to discover and interact across
   microservices by allowing two microservices to interact across API boundaries.
 
-* **Workflows**: wing allows preflight code to reflect on the code inside
+- **Workflows**: wing allows preflight code to reflect on the code inside
   `inflight` blocks in order to convert it to definitions for distributed
   workflow engines such as [AWS Step
   Functions](http://aws.amazon.com/step-functions) or [Apache
@@ -990,29 +952,29 @@ This is a list of features we will consider for wing as it evolves:-
   with TypeScript. This can also be used to generate things like CI/CD workflows
   such as GitHub Workflow.
 
-* **Web3**: Can wing be useful to build systems that include [blockchain smart
+- **Web3**: Can wing be useful to build systems that include [blockchain smart
   contracts](https://smartcontracts.org/) and/or compile to
   [Solidity](https://soliditylang.org/).
 
-* **Cloud data structures**: wing will be able to offer first-class language
+- **Cloud data structures**: wing will be able to offer first-class language
   primitives that implement data structures on the cloud. For example, a map can
   be implemented using a key-value store, a global variable can be implemented
   using a distributed counter, etc.
 
-* **Frontend development**: Websites are an integral part of cloud applications.
+- **Frontend development**: Websites are an integral part of cloud applications.
   As such the frontend logic is part of the app. We see a potential for wing to
   expand from the backend to also include the frontend logic and reduce the
   boilerplate and glue that exists today when crossing these domains.
 
 ## References
 
-* [Erlang](https://erlang.org/download/armstrong_thesis_2003.pdf)
-* [Grasshopper 3D](https://en.m.wikipedia.org/wiki/Grasshopper_3D) - a visual programming language
-* [A brief survey of programming paradigms](https://medium.com/@jingchenjc2019/a-brief-survey-of-programming-paradigms-207543a84e2b)
-* [Bytecode Alliance](https://bytecodealliance.org/) - WebAssembly
-* [Hindley–Milner type system](https://en.wikipedia.org/wiki/Hindley%E2%80%93Milner_type_system)
-* [Funarg problem](https://en.wikipedia.org/wiki/Funarg_problem)
-* [Multi-stage programming](https://en.wikipedia.org/wiki/Multi-stage_programming)
-* [Compiler Books](https://twitter.com/mikhailshilkov/status/1492801675068952576?s=21)
-* [Comprehending Monads](https://groups.csail.mit.edu/pag/OLD/reading-group/wadler-monads.pdf)
-* [Zaplib](https://zaplib.com/) (deprecated -- worth reading)
+- [Erlang](https://erlang.org/download/armstrong_thesis_2003.pdf)
+- [Grasshopper 3D](https://en.m.wikipedia.org/wiki/Grasshopper_3D) - a visual programming language
+- [A brief survey of programming paradigms](https://medium.com/@jingchenjc2019/a-brief-survey-of-programming-paradigms-207543a84e2b)
+- [Bytecode Alliance](https://bytecodealliance.org/) - WebAssembly
+- [Hindley–Milner type system](https://en.wikipedia.org/wiki/Hindley%E2%80%93Milner_type_system)
+- [Funarg problem](https://en.wikipedia.org/wiki/Funarg_problem)
+- [Multi-stage programming](https://en.wikipedia.org/wiki/Multi-stage_programming)
+- [Compiler Books](https://twitter.com/mikhailshilkov/status/1492801675068952576?s=21)
+- [Comprehending Monads](https://groups.csail.mit.edu/pag/OLD/reading-group/wadler-monads.pdf)
+- [Zaplib](https://zaplib.com/) (deprecated -- worth reading)
