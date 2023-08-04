@@ -172,11 +172,7 @@ impl<'s> Parser<'s> {
 
 		let scope = match root.kind() {
 			"source" => self.build_scope(&root, Phase::Preflight),
-			_ => Scope {
-				env: RefCell::new(None),
-				span: Default::default(),
-				statements: vec![],
-			},
+			_ => Scope::empty(),
 		};
 
 		self.report_unhandled_errors(&root);
@@ -325,16 +321,13 @@ impl<'s> Parser<'s> {
 		CompilationContext::set(CompilationPhase::Parsing, &span);
 		let mut cursor = scope_node.walk();
 
-		Scope {
-			statements: scope_node
-				.named_children(&mut cursor)
-				.filter(|child| !child.is_extra() && child.kind() != "AUTOMATIC_BLOCK")
-				.enumerate()
-				.filter_map(|(i, st_node)| self.build_statement(&st_node, i, phase).ok())
-				.collect(),
-			env: RefCell::new(None), // env should be set later when scope is type-checked
-			span,
-		}
+		let statements = scope_node
+			.named_children(&mut cursor)
+			.filter(|child| !child.is_extra() && child.kind() != "AUTOMATIC_BLOCK")
+			.enumerate()
+			.filter_map(|(i, st_node)| self.build_statement(&st_node, i, phase).ok())
+			.collect();
+		Scope::new(statements, span)
 	}
 
 	fn build_statement(&self, statement_node: &Node, idx: usize, phase: Phase) -> DiagnosticResult<Stmt> {
@@ -625,7 +618,7 @@ impl<'s> Parser<'s> {
 						message: format!("Error reading source file: {}: {:?}", source_path.display(), err),
 						span: None,
 					});
-					Scope::default()
+					Scope::empty()
 				}
 			};
 
@@ -639,7 +632,7 @@ impl<'s> Parser<'s> {
 					),
 					span: None,
 				});
-				Scope::default()
+				Scope::empty()
 			} else {
 				scope
 			};

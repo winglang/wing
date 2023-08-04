@@ -258,7 +258,7 @@ impl<'a> Fold for LiftTransform<'a> {
 				self.ctx.push_function_definition(
 					&node.name,
 					&node.signature.phase,
-					scope.env.borrow().as_ref().unwrap().get_ref(),
+					self.jsify.types.get_scope_env(&scope),
 				);
 
 				let result = FunctionDefinition {
@@ -310,7 +310,7 @@ impl<'a> Fold for LiftTransform<'a> {
 		// because this is the environment in which we want to resolve references
 		// as oppose to the environment of the class definition itself.
 		let init_env = if let FunctionBody::Statements(ref s) = node.initializer.body {
-			Some(s.env.borrow().as_ref().unwrap().get_ref())
+			Some(self.jsify.types.get_scope_env(&s))
 		} else {
 			None
 		};
@@ -358,7 +358,7 @@ impl<'a> Fold for LiftTransform<'a> {
 	}
 
 	fn fold_scope(&mut self, node: Scope) -> Scope {
-		self.ctx.push_env(node.env.borrow().as_ref().unwrap().get_ref());
+		self.ctx.push_env(self.jsify.types.get_scope_env(&node));
 		let result = fold::fold_scope(self, node);
 		self.ctx.pop_env();
 		result

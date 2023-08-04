@@ -92,9 +92,9 @@ impl Fold for ClosureTransformer {
 		}
 
 		Scope {
+			id: node.id,
 			statements,
 			span: node.span,
-			env: node.env,
 		}
 	}
 

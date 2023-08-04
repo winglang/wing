@@ -1088,7 +1088,7 @@ pub struct Types {
 	types: Vec<Box<Type>>,
 	namespaces: Vec<Box<Namespace>>,
 	symbol_envs: Vec<Box<SymbolEnv>>,
-	pub libraries: SymbolEnv, // ?
+	pub libraries: SymbolEnv,
 	numeric_idx: usize,
 	string_idx: usize,
 	bool_idx: usize,
@@ -1100,7 +1100,10 @@ pub struct Types {
 	nil_idx: usize,
 	err_idx: usize,
 
+	/// Lookup table from an Expr's `id` to its resolved type and phase
 	type_for_expr: Vec<Option<ResolvedExpression>>,
+	/// Lookup table from a Scope's `id` to its symbol environment
+	scope_envs: Vec<Option<SymbolEnvRef>>,
 }
 
 impl Types {
@@ -1148,6 +1151,7 @@ impl Types {
 			nil_idx,
 			err_idx,
 			type_for_expr: Vec::new(),
+			scope_envs: Vec::new(),
 		}
 	}
 
@@ -1271,6 +1275,22 @@ impl Types {
 			.expect("All expressions should have a type")
 	}
 
+	/// Sets the type environment for a given scope. Usually should be called soon
+	/// after the scope is created.
+	pub fn set_scope_env(&mut self, scope: &Scope, env: SymbolEnvRef) {
+		let scope_idx = scope.id;
+		if self.scope_envs.len() <= scope_idx {
+			self.scope_envs.resize_with(scope_idx + 1, || None);
+		}
+		self.scope_envs[scope_idx] = Some(env);
+	}
+
+	/// Obtain the type environment for a given scope.
+	pub fn get_scope_env(&self, scope: &Scope) -> SymbolEnvRef {
+		let scope_idx = scope.id;
+		self.scope_envs[scope_idx].expect("Scope should have an env")
+	}
+
 	/// Obtain the type of a given expression node. Returns None if the expression has not been type checked yet. If
 	/// this is called after type checking, it should always return Some.
 	pub fn try_get_expr_type(&self, expr: &Expr) -> Option<TypeRef> {
@@ -1353,16 +1373,6 @@ impl<'a> TypeChecker<'a> {
 			is_in_mut_json: false,
 			statement_idx: 0,
 		}
-	}
-
-	pub fn add_globals(&mut self, scope: &Scope) {
-		self.add_module_to_env(
-			scope.env.borrow_mut().as_mut().unwrap(),
-			WINGSDK_ASSEMBLY_NAME.to_string(),
-			vec![WINGSDK_STD_MODULE.to_string()],
-			&Symbol::global(WINGSDK_STD_MODULE),
-			None,
-		);
 	}
 
 	fn spanned_error_with_var<S: Into<String>>(&self, spanned: &impl Spanned, message: S) -> (VariableInfo, Phase) {
@@ -2103,7 +2113,7 @@ impl<'a> TypeChecker<'a> {
 
 		// Type check the function body
 		if let FunctionBody::Statements(scope) = &func_def.body {
-			scope.set_env(function_env);
+			self.types.set_scope_env(scope, function_env);
 
 			self.inner_scopes.push(scope);
 
@@ -2265,7 +2275,8 @@ impl<'a> TypeChecker<'a> {
 		CompilationContext::set(CompilationPhase::TypeChecking, &scope.span);
 		assert!(self.inner_scopes.is_empty());
 		for statement in scope.statements.iter() {
-			self.type_check_statement(statement, scope.env.borrow_mut().as_mut().unwrap());
+			let mut scope_env = self.types.get_scope_env(scope);
+			self.type_check_statement(statement, &mut scope_env);
 		}
 		let inner_scopes = self.inner_scopes.drain(..).collect::<Vec<_>>();
 		for inner_scope in inner_scopes {
@@ -2459,7 +2470,7 @@ impl<'a> TypeChecker<'a> {
 					}
 					_ => {}
 				};
-				statements.set_env(scope_env);
+				self.types.set_scope_env(statements, scope_env);
 
 				self.inner_scopes.push(statements);
 			}
@@ -2475,7 +2486,7 @@ impl<'a> TypeChecker<'a> {
 					env.phase,
 					stmt.idx,
 				));
-				statements.set_env(scope_env);
+				self.types.set_scope_env(statements, scope_env);
 
 				self.inner_scopes.push(statements);
 			}
@@ -2522,7 +2533,7 @@ impl<'a> TypeChecker<'a> {
 					_ => {}
 				}
 
-				statements.set_env(stmt_env);
+				self.types.set_scope_env(statements, stmt_env);
 				self.inner_scopes.push(statements);
 
 				if let Some(else_scope) = else_statements {
@@ -2534,7 +2545,7 @@ impl<'a> TypeChecker<'a> {
 						env.phase,
 						stmt.idx,
 					));
-					else_scope.set_env(else_scope_env);
+					self.types.set_scope_env(else_scope, else_scope_env);
 					self.inner_scopes.push(else_scope);
 				}
 			}
@@ -2555,7 +2566,7 @@ impl<'a> TypeChecker<'a> {
 					env.phase,
 					stmt.idx,
 				));
-				statements.set_env(if_scope_env);
+				self.types.set_scope_env(statements, if_scope_env);
 				self.inner_scopes.push(statements);
 
 				for elif_scope in elif_statements {
@@ -2570,7 +2581,7 @@ impl<'a> TypeChecker<'a> {
 						env.phase,
 						stmt.idx,
 					));
-					elif_scope.statements.set_env(elif_scope_env);
+					self.types.set_scope_env(&elif_scope.statements, elif_scope_env);
 					self.inner_scopes.push(&elif_scope.statements);
 				}
 
@@ -2583,7 +2594,7 @@ impl<'a> TypeChecker<'a> {
 						env.phase,
 						stmt.idx,
 					));
-					else_scope.set_env(else_scope_env);
+					self.types.set_scope_env(else_scope, else_scope_env);
 					self.inner_scopes.push(else_scope);
 				}
 			}
@@ -2666,7 +2677,7 @@ impl<'a> TypeChecker<'a> {
 					env.phase,
 					stmt.idx,
 				));
-				scope.set_env(scope_env);
+				self.types.set_scope_env(scope, scope_env);
 				self.inner_scopes.push(scope)
 			}
 			StmtKind::Return(exp) => {
@@ -3056,7 +3067,7 @@ impl<'a> TypeChecker<'a> {
 					env.phase,
 					stmt.idx,
 				));
-				try_statements.set_env(try_env);
+				self.types.set_scope_env(try_statements, try_env);
 				self.inner_scopes.push(try_statements);
 
 				// Create a new environment for the catch block
@@ -3083,7 +3094,7 @@ impl<'a> TypeChecker<'a> {
 							_ => {}
 						}
 					}
-					catch_block.statements.set_env(catch_env);
+					self.types.set_scope_env(&catch_block.statements, catch_env);
 					self.inner_scopes.push(&catch_block.statements);
 				}
 
@@ -3097,7 +3108,7 @@ impl<'a> TypeChecker<'a> {
 						env.phase,
 						stmt.idx,
 					));
-					finally_statements.set_env(finally_env);
+					self.types.set_scope_env(finally_statements, finally_env);
 					self.inner_scopes.push(finally_statements);
 				}
 			}
@@ -3114,7 +3125,7 @@ impl<'a> TypeChecker<'a> {
 					env: SymbolEnv::new(Some(env.get_ref()), env.return_type, false, false, env.phase, stmt.idx),
 					loaded: true,
 				});
-				statements.set_env(ns.env.get_ref());
+				self.types.set_scope_env(statements, ns.env.get_ref());
 
 				// instead of pushing `statements` into `self.inner_scopes`,
 				// we need to type check the statements in the module's namespace
@@ -3296,7 +3307,7 @@ impl<'a> TypeChecker<'a> {
 		self.add_arguments_to_env(&method_def.signature.parameters, method_sig, &mut method_env);
 
 		if let FunctionBody::Statements(scope) = &method_def.body {
-			scope.set_env(method_env);
+			self.types.set_scope_env(scope, method_env);
 			self.inner_scopes.push(scope);
 		}
 	}
@@ -3335,7 +3346,7 @@ impl<'a> TypeChecker<'a> {
 		};
 	}
 
-	fn add_module_to_env(
+	pub fn add_module_to_env(
 		&mut self,
 		env: &mut SymbolEnv,
 		library_name: String,
