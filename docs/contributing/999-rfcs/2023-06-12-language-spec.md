@@ -1,20 +1,13 @@
 ---
-title: "#3695 Wing Language Specification (approved)"
+title: #3695 Wing Language Specification (approved)
 id: language-spec
 description: The Wing Language Specification
-keywords:
-  [
-    Wing reference,
-    Wing language,
-    language,
-    Wing language spec,
-    Wing programming language,
-  ]
+keywords: [Wing reference, Wing language, language, Wing language spec, Wing programming language]
 ---
 
 :::caution Not fully implemented yet
 
-This document is a _specification_ of the programming language, and many features
+This document is a *specification* of the programming language, and many features
 are still not implemented (see [project board](https://github.com/orgs/winglang/projects/1)).
 
 :::
@@ -106,7 +99,7 @@ Almost all types can be implicitly resolved by the compiler except for "any".
 > const w: any = 1;
 > const q: number? = undefined;
 > ```
-
+  
 </details>
 
 [`▲ top`][top]
@@ -158,7 +151,7 @@ Almost all types can be implicitly resolved by the compiler except for "any".
 #### 1.1.3 Function Types
 
 Function type annotations are written as if they were closure declarations, with
-the difference that body is replaced with return type annotation.
+the difference that body is replaced with return type annotation. 
 
 The `inflight` modifier indicates that a function is an inflight function.  
 `inflight` in Wing implies `async` in JavaScript.
@@ -195,14 +188,14 @@ since Wing is statically-typed (type must be known during compilation) and JSON 
 Let's look at a quick example:
 
 ```js
-struct Employee {
+struct Employee { 
   id: str;
   name: str;
 }
 
-let response = httpGet("/employees");
+let response = httpGet("/employees"); 
  // returns something like { "items": [ { "id": "12234", "name": "bob" }, ... ] }
-
+ 
 let employees = Array<Employee>.fromJson(response.items);
 
 for e in employees {
@@ -228,7 +221,7 @@ let jsonBool    = Json true;
 let jsonArray   = Json [ 1, 2, 3 ];
 let jsonObj     = Json { boom: 123 };
 let jsonMutObj = MutJson {
-  hello: 123,
+  hello: 123, 
   world: [ 1, "cat", 3 ],       // <-- heterogenous array
   "boom boom": { hello: 1233 }  // <-- non-symbolic key
 };
@@ -263,7 +256,8 @@ Like in JavaScript, it is also possible to access object fields using `[]`:
 let foo = j["my-field"].yourField["their-field"];
 ```
 
-To obtain an array of all the keys within a JSON object use the `Json.keys(o)` method.
+To obtain an array of all the keys within a JSON object use the `Json.keys(o)` method. 
+
 
 ```js
 let j = Json { hello: 123, world: [ 1, 2, 3 ] };
@@ -305,7 +299,7 @@ let myNum: num = 183;
 let myBool: bool = true;
 let myArr: Array<num> = [1,2,3];
 
-let jsonObj = Json {
+let jsonObj = Json { 
   a: myString,
   b: myNum,
   c: myBool,
@@ -313,9 +307,10 @@ let jsonObj = Json {
 };
 ```
 
+
 ##### 1.1.4.5 Assignment to native types
 
-We only allow implicit assignment from _safe_ to _unsafe_ types because otherwise we cannot
+We only allow implicit assignment from *safe* to *unsafe* types because otherwise we cannot
 guarantee safety (e.g. from `str` to `Json` but not from `Json` to `str`), so this won't work:
 
 ```js
@@ -399,7 +394,7 @@ assert(x.last.len > 0);
 // RUNTIME ERROR: Cannot read properties of undefined (reading 'length')
 ```
 
-Struct parsing is _partial_ by default. This means that parsing is successful even if the `Json`
+Struct parsing is *partial* by default. This means that parsing is successful even if the `Json`
 includes extraneous fields:
 
 ```js
@@ -439,9 +434,9 @@ Now you can mutate the contents by assigning values:
 ```js
 let fooNum = 123;
 myObj.world = "world";
-myObj.dang = [1, 2, 3, 4];
+myObj.dang = [1,2,3,4];
 myObj.subObject = {};
-myObj.subObject.arr = [1, "hello", "world"];
+myObj.subObject.arr = [1,"hello","world"];
 myObj.foo = fooNum;
 ```
 
@@ -453,7 +448,7 @@ let foo = MutJson "hello";
 // ok what now?
 ```
 
-Use the `MutJson.deepCopy()` method to get an immutable _deep copy_ of the object:
+Use the `MutJson.deepCopy()` method to get an immutable *deep copy* of the object:
 
 ```js
 let mutObj = MutJson { hello: 123 };
@@ -507,7 +502,7 @@ let arr = Array<num>.fromJson(jArray);
 `Json.tryParse` returns an optional:
 
 ```js
-let o = Json.tryParse("xxx") ?? Json[(1, 2, 3)];
+let o = Json.tryParse("xxx") ?? Json [1,2,3];
 ```
 
 ##### 1.1.4.10 Equality, diff and patch
@@ -645,19 +640,18 @@ A few examples:
 
 ```js
 let now = Datetime.utcNow();
-log(
-  "It is now ${now.month}/${now.day}/${now.year} at ${now.hours}:${now.min}:${now.sec})"
-);
+log("It is now ${now.month}/${now.day}/${now.year} at ${now.hours}:${now.min}:${now.sec})");
 assert(now.timezone == 0); // UTC
 
 let t1 = DateTime.fromIso("2023-02-09T06:20:17.573Z");
 log("Timezone is GMT${d.timezone() / 60}"); // output: Timezone is GMT-2
-log("UTC: ${t1.utc.toIso())}"); // output: 2023-02-09T06:21:03.000Z
+log("UTC: ${t1.utc.toIso())}");            // output: 2023-02-09T06:21:03.000Z
 ```
 
 [`▲ top`][top]
 
 ---
+
 
 ### 1.2 Utility Functions
 
@@ -669,7 +663,7 @@ log("UTC: ${t1.utc.toIso())}"); // output: 2023-02-09T06:21:03.000Z
 | `assert` | checks a condition and _panics_ if evaluated to false    |
 
 Wing is a statically typed language, so attempting to redefine any of the above
-functions, just like any other "symbol" will result in a compile-time error.
+functions, just like any other "symbol" will result in a compile-time error. 
 
 The above functions can accept variadic arguments of any type except `throw` which
 only accepts one argument and that is the message to be contained in the error.
@@ -895,23 +889,23 @@ of "lack of value".
 
 Here's a quick summary of how optionality works in Wing:
 
-- `x: T?` marks `x` as "optional of T". This means that `x` can either be `nil` (without a value) or
+* `x: T?` marks `x` as "optional of T". This means that `x` can either be `nil` (without a value) or
   have a value of type `T`.
-- To test for a value, the unary expression `x?` returns a `true` if `x` has a value and `false`
+* To test for a value, the unary expression `x?` returns a `true` if `x` has a value and `false`
   otherwise.
-- `if let y = x { } else { }` is a special control flow statement which binds `y` inside the first
+* `if let y = x { } else { }` is a special control flow statement which binds `y` inside the first
   block only if `x` has a value. Otherwise, the `else` block will be executed.
-- The `x?.y?.z` notation can be used to access fields only if they have a value. The type of this
+* The `x?.y?.z` notation can be used to access fields only if they have a value. The type of this
   expression is `Z?` (an optional based on the type of the last component).
-- The `x ?? y ?? z` notation will return the value in `x` if there is one, `y` otherwise or `z`. The
+* The `x ?? y ?? z` notation will return the value in `x` if there is one, `y` otherwise or `z`. The
   last expression in a `??` chain (e.g. `z`) must be of type `T` (not `T?`).
-- The default value notation (`= y`) in declarations of struct fields or function arguments will use
+* The default value notation (`= y`) in declarations of struct fields or function arguments will use
   this value if a value is not provided, and implies type is `T` (not `T?`).
-- The `x ??= y` notation returns `x` if it has a value or assigns `x` with `y` and returns the value
+* The `x ??= y` notation returns `x` if it has a value or assigns `x` with `y` and returns the value
   of `y`.
-- The `x ?? throw(message)` and `x ?? return val` are special cases of `??` which can be used for
+* The `x ?? throw(message)` and `x ?? return val` are special cases of `??` which can be used for
   unwrapping (if a value exists) or early bailout.
-- The keyword `nil` can be used in assignment scenarios to indicate that an optional doesn't have a
+* The keyword `nil` can be used in assignment scenarios to indicate that an optional doesn't have a
   value. It cannot be used to test if an optional has a value or not.
 
 #### 1.7.1 Declaration
@@ -937,7 +931,7 @@ assert(david.address? == false);
 assert(jonathan.address? == true);
 ```
 
-The _default value notation_ (`=`) can also be used in struct declarations. If provided, the field
+The *default value notation* (`=`) can also be used in struct declarations. If provided, the field
 is also not required in a struct literal definition, and the default value will be implied. It also
 means that the type of the field must be `T` and not `T?`, because we can ensure it has a value (in
 the example below the field `radix` as a type of `num`).
@@ -1113,7 +1107,7 @@ if myPerson.address == nil {
 
 #### 1.7.3 Unwrapping using `if let`
 
-The `if let` statement can be used to test if an optional is defined and _unwrap_ it into a
+The `if let` statement can be used to test if an optional is defined and *unwrap* it into a
 non-optional variable defined inside the block:
 
 ```js
@@ -1162,11 +1156,11 @@ if let ip = ipAddress {
 
 In the future we will consider the following additional sugar syntax:
 
-- `x ?? throw("message")` to unwrap `x` or throw if `x` is not defined.
-- `x ??= value` returns `x` or assigns a value to it and returns it to support lazy
+* `x ?? throw("message")` to unwrap `x` or throw if `x` is not defined.
+* `x ??= value` returns `x` or assigns a value to it and returns it to support lazy
   evaluation/memoization (inspired by [Nullish coalescing
   assignment](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Nullish_coalescing_assignment)).
-- Support `??` for different types if they have a common ancestor (and also think of interfaces).
+* Support `??` for different types if they have a common ancestor (and also think of interfaces).
 
 [`▲ top`][top]
 
@@ -1253,7 +1247,7 @@ expected from a call and it is not being caught.
 >   console.log("done");
 > }
 > ```
-
+  
 </details>
 
 [`▲ top`][top]
@@ -1385,7 +1379,7 @@ while loops currently.
 >   console.log(i);
 > }
 > ```
-
+  
 </details>
 
 [`▲ top`][top]
@@ -1416,7 +1410,7 @@ includes for and while loops currently.
 >   console.log(i);
 > }
 > ```
-
+  
 </details>
 
 [`▲ top`][top]
@@ -1425,7 +1419,7 @@ includes for and while loops currently.
 
 ### 2.4 return
 
-**return** statement allows to return a value or exit from a called context.
+**return** statement allows to return a value or exit from a called context.  
 
 > ```TS
 > class MyClass {
@@ -1447,7 +1441,7 @@ includes for and while loops currently.
 >   public __wing_InternalMyInternalMethod(): string { return "hi!"; }
 > }
 > ```
-
+  
 </details>
 
 [`▲ top`][top]
@@ -1493,8 +1487,8 @@ Awaiting non promises in Wing is a no-op just like in JavaScript.
 >     return x;
 >   }
 > }
-> ```
-
+>  ```
+  
 </details>
 
 [`▲ top`][top]
@@ -1504,7 +1498,7 @@ Awaiting non promises in Wing is a no-op just like in JavaScript.
 ### 2.6 if
 
 Flow control can be done with `if/elif/else` statements.  
-The **if** statement is optionally followed by **elif** and **else**.
+The **if** statement is optionally followed by **elif** and **else**.  
 
 > ```TS
 > // Wing program:
@@ -1532,7 +1526,7 @@ The **if** statement is optionally followed by **elif** and **else**.
 >   console.log("x is 1 and y is sample");
 > }
 > ```
-
+  
 </details>
 
 [`▲ top`][top]
@@ -1582,7 +1576,7 @@ The loop invariant in for loops is implicitly re-assignable (`var`).
 >   console.log(val);
 > }
 > ```
-
+  
 </details>
 
 [`▲ top`][top]
@@ -1591,7 +1585,7 @@ The loop invariant in for loops is implicitly re-assignable (`var`).
 
 ### 2.8 while
 
-**while** statement is used to execute a block of code while a condition is true.
+**while** statement is used to execute a block of code while a condition is true.  
 
 > ```TS
 > // Wing program:
@@ -1607,7 +1601,7 @@ The loop invariant in for loops is implicitly re-assignable (`var`).
 >   console.log("hello");
 > }
 > ```
-
+  
 </details>
 
 [`▲ top`][top]
@@ -1646,7 +1640,7 @@ Structs can inherit from multiple other structs.
 > let s3 = MyDataModel2 { field3: 1 };
 > let s4 = MyDataModel3 {
 >   field1: 12,
->   field2: "sample",
+>   field2: "sample", 
 >   field3: 11,
 >   field4: false,
 >   field5: "sample"
@@ -1680,7 +1674,7 @@ Structs can inherit from multiple other structs.
 >   field6: 11
 > };
 > ```
-
+  
 </details>
 
 [`▲ top`][top]
@@ -1690,7 +1684,7 @@ Structs can inherit from multiple other structs.
 ### 3.2 Classes
 
 Similar to other object-oriented programming languages, Wing uses classes as its first-class
-composition pattern.
+composition pattern. 
 
 Classes consist of fields and methods in any order.  
 The class system is a single-dispatch class based object-orientated system.  
@@ -1701,7 +1695,7 @@ in which scope objects can be instantiated from this class.
 
 If a [phase modifier](#13-phase-modifiers) is not specified, the class inherits the phase from the
 scope in which it is declared. This implies that, if a class is declared at the root scope (e.g. the
-program's entrypoint), it will be a _preflight class_. If a class is declared within an inflight
+program's entrypoint), it will be a *preflight class*. If a class is declared within an inflight
 scope, it will be implicitly an inflight class.
 
 A method that has the name **init** is considered to be a class
@@ -1819,11 +1813,11 @@ final class Boo extends Foo {
 
 By default all methods are virtual. But if you are about to override a method,
 you need to explicitly provide the keyword **override**.  
-Static, private, and internal methods cannot be and are not virtual.
+Static, private, and internal methods cannot be and are not virtual.  
 
 Statics are not inherited. As a result, statics can be overridden mid hierarchy
-chain. Access to statics is through the class name that originally defined it:
-`<class name>.Foo`.
+chain. Access to statics is through the class name that originally defined it: 
+`<class name>.Foo`.  
 
 Child class must not introduce additional signatures (overloads) for overridden
 (virtual) methods.
@@ -1863,7 +1857,7 @@ class Foo {
   // preflight members
   foo(arg: num): num { return arg; }
   boo(): num { return 32; }
-
+  
   // preflight fields
   field4: num;
   field5: str;
@@ -1915,7 +1909,7 @@ Preflight classes can extend other preflight classes (but not [structs](#31-stru
 all of the implemented methods must be `inflight`.
 
 Declaration of fields of the same name with different phases is not allowed due to requirement of
-having inflight fields of same name being implicitly initialized by the compiler. But declaration
+having inflight fields of same name being implicitly initialized by the compiler. But declaration 
 of methods with different phases is allowed.
 
 [`▲ top`][top]
@@ -1994,7 +1988,7 @@ Interface fields are not supported.
 >   }
 > }
 > ```
-
+  
 </details>
 
 [`▲ top`][top]
@@ -2011,7 +2005,7 @@ let <name>[: <type>] = <value>;
 
 Assignment operator is `=`.  
 Assignment declaration keyword is `let`.  
-Type annotation is optional if a default value is given.
+Type annotation is optional if a default value is given.  
 
 > ```TS
 > let n = 10;
@@ -2024,7 +2018,7 @@ Type annotation is optional if a default value is given.
 > const n: number = 10;
 > const s: string = "hello";
 > ```
-
+  
 </details>
 
 [`▲ top`][top]
@@ -2074,7 +2068,7 @@ All `inflight` functions implicitly wrap their return type in `Promise<T>`.
 >   return await someCallForSchema();
 > }
 > ```
-
+  
 </details>
 
 [`▲ top`][top]
@@ -2152,7 +2146,7 @@ Arrays are similar to dynamically sized arrays or vectors in other languages.
 > const arr3: string[] = ["a1", "b2", "c3"];
 > const l = arr1.length + arr2.length + arr3.length + arr1[0];
 > ```
-
+  
 </details>
 
 [`▲ top`][top]
@@ -2190,7 +2184,7 @@ Naming convention for enums is to use "TitleCase" for name and ALL_CAPS for memb
 > const x: MyFoo = MyFoo.B;
 > const y: MyFoo = x;
 > ```
-
+  
 </details>
 
 `nameof` operator is used to get the name of a constant member at compile time.
@@ -2231,13 +2225,13 @@ if someVal == "ONE" {
 
 You may use the following syntax to define computed properties.  
 Computed properties are syntactic sugar for getters and setters which themselves
-are syntactic sugar for methods, therefore omitting either one is acceptable.
+are syntactic sugar for methods, therefore omitting either one is acceptable.  
 
 "Read block" must always return a value of the same type as the property.
 
 Keyword `new` can be used inside the write block to access the incoming r-value
 of the assignment (write) operation. `new` is always the same type as the type
-of the property itself.
+of the property itself.  
 
 Both preflight and inflight computed properties are allowed.  
 Keyword `var` behind computed properties is not allowed.
@@ -2289,7 +2283,7 @@ class Rect {
   }
 }
 ```
-
+  
 </details>
 
 [`▲ top`][top]
@@ -2402,7 +2396,7 @@ class TaskList {
 
   // Alternatively, you can use a module name
   extern "uuid" static inflight v6(): str;
-}
+} 
 
 // helpers.js
 const uuid = require("uuid");
@@ -2412,7 +2406,7 @@ exports.makeId = function() {
 };
 ```
 
-Given a method of name X, the compiler will map the method to the JavaScript export with the
+Given a method of name X, the compiler will map the method to the JavaScript export with the 
 matching name (without any case conversion).
 
 Initially we only support specifying `extern` for static methods (either inflight or preflight),
@@ -2434,30 +2428,30 @@ When calling **extern** function, the arguments are checked against these declar
 
 If [frozen](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/freeze#description), the value is expected to be immutable and will throw an error if any attempt is made to modify it.
 
-| Built-In Wing Type | JavaScript Type                                                       | Frozen? |
-| ------------------ | --------------------------------------------------------------------- | ------- |
-| `void`             | `undefined`                                                           |         |
-| `nil`              | `null`                                                                |         |
-| `any`              | `any`                                                                 |         |
-| `num`              | `number`                                                              |         |
-| `str`              | `string`                                                              |         |
-| `bool`             | `boolean`                                                             |         |
-| `Set<T>`           | `Set<T>`                                                              | Yes     |
-| `Map<T>`           | `{ [key: string]: T }`                                                | Yes     |
-| `Array<T>`         | `T[]`                                                                 | Yes     |
-| `MutSet<T>`        | `Set<T>`                                                              |         |
-| `MutMap<T>`        | `{ [key: string]: T }`                                                |         |
-| `MutArray<T>`      | `T[]`                                                                 |         |
-| `Promise<T>`       | `Promise<T>`                                                          |         |
-| `Json`             | `string ⏐ number ⏐ boolean ⏐ null ⏐ json[] ⏐ { [key: string]: json }` | Yes     |
-| `MutJson`          | `string ⏐ number ⏐ boolean ⏐ null ⏐ json[] ⏐ { [key: string]: json }` |         |
+| Built-In Wing Type     | JavaScript Type                                                       | Frozen? |
+|------------------------|-----------------------------------------------------------------------|---------|
+| `void`                 | `undefined`                                                           |         |
+| `nil`                  | `null`                                                                |         |
+| `any`                  | `any`                                                                 |         |
+| `num`                  | `number`                                                              |         |
+| `str`                  | `string`                                                              |         |
+| `bool`                 | `boolean`                                                             |         |
+| `Set<T>`               | `Set<T>`                                                              | Yes     |
+| `Map<T>`               | `{ [key: string]: T }`                                                | Yes     |
+| `Array<T>`             | `T[]`                                                                 | Yes     |
+| `MutSet<T>`            | `Set<T>`                                                              |         |
+| `MutMap<T>`            | `{ [key: string]: T }`                                                |         |
+| `MutArray<T>`          | `T[]`                                                                 |         |
+| `Promise<T>`           | `Promise<T>`                                                          |         |
+| `Json`                 | `string ⏐ number ⏐ boolean ⏐ null ⏐ json[] ⏐ { [key: string]: json }` | Yes     |
+| `MutJson`              | `string ⏐ number ⏐ boolean ⏐ null ⏐ json[] ⏐ { [key: string]: json }` |         |
 
-| User-Defined Wing Types | JavaScript Type                                                                      | Frozen? |
-| ----------------------- | ------------------------------------------------------------------------------------ | ------- |
-| `class`                 | `class`, only with members whose phase is compatible with the function signature     |         |
-| `interface`             | `interface`, only with members whose phase is compatible with the function signature |         |
-| `struct`                | `interface`                                                                          | Yes     |
-| `enum`                  | `string`-based enum-like `Object`                                                    | Yes     |
+| User-Defined Wing Types | JavaScript Type                                                                        | Frozen? |
+|-------------------------|----------------------------------------------------------------------------------------|---------|
+| `class`                 | `class`, only with members whose phase is compatible with the function signature       |         |
+| `interface`             | `interface`, only with members whose phase is compatible with the function signature   |         |
+| `struct`                | `interface`                                                                            | Yes     |
+| `enum`                  | `string`-based enum-like `Object`                                                      | Yes     |
 
 [`▲ top`][top]
 
@@ -2469,7 +2463,7 @@ If [frozen](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Gl
 
 String reference doc is available [here](https://www.winglang.io/docs/standard-library/std/api-reference#string-).
 Type of string is UTF-16 internally.  
-All string declaration variants are multi-line.
+All string declaration variants are multi-line.  
 
 [`▲ top`][top]
 
@@ -2507,7 +2501,7 @@ Processing unicode escape sequences happens in these strings.
 
 If string is enclosed with backticks, the contents of that string will be
 interpreted as a shell command and its output will be used as a string. `` `echo
-"Hello"` `` is equal to `"Hello"` for example.
+"Hello"` `` is equal to `"Hello"` for example.  
 
 Shell strings are invalid in the bring expression.
 
@@ -2529,7 +2523,7 @@ stderr is thrown as an exception.
 
 Single line comments start with a `//` and continue to the end of the line.  
 Multi-line comments are supported with the `/* ... */` syntax.  
-Commenting in Wing has a style that's described earlier in this document.
+Commenting in Wing has a style that's described earlier in this document. 
 
 > ```TS
 > // comment
@@ -2597,7 +2591,7 @@ Ternary or conditional operators are not supported.
 | Operator             | Notes                                             |
 | -------------------- | ------------------------------------------------- |
 | ()                   | Parentheses                                       |
-| \*\*                 | Power                                             |
+| **                   | Power                                    |
 | -x                   | Unary minus                                       |
 | \*, /, \\, %         | Multiplication, Division, Floor division, Modulus |
 | +, -                 | Addition, Subtraction                             |
@@ -2710,7 +2704,7 @@ class DenyList {
   _writeToFile(list: MutArray<DenyListRule>[],  filename: str): str {
     let tmpdir = fs.mkdtemp();
     let filepath = "${tmpdir}/${filename}";
-    let map = MutMap<DenyListRule>{};
+    let map = MutMap<DenyListRule>{}; 
     for rule in list {
       let suffix = DenyList._maybeSuffix(rule.version);
       let path = "${rule.packageName}${suffix}";
@@ -2720,11 +2714,11 @@ class DenyList {
     return tmpdir;
   }
 
-  inflight rules: MutMap<DenyListRule>{}?;
+  inflight rules: MutMap<DenyListRule>{}?; 
 
   inflight init() {
     // this._bucket is already initialized by the capture mechanic!
-    this.rules = this._bucket.get(this._objectKey) ?? MutMap<DenyListRule>{};
+    this.rules = this._bucket.get(this._objectKey) ?? MutMap<DenyListRule>{}; 
   }
 
   public inflight lookup(name: str, version: str): DenyListRule? {
@@ -2785,18 +2779,18 @@ queue.setConsumer(filter);
 
 ### 6.6 Credits
 
-- **Contributors (A-Z):**
-  - Chris R. ([@Chriscbr](https://github.com/Chriscbr))
-  - Elad B. ([@eladb](https://github.com/eladb))
-  - Eyal K. ([@ekeren](https://github.com/ekeren))
-  - Mark MC. ([@MarkMcCulloh](https://github.com/MarkMcCulloh))
-  - Sepehr L. ([@3p3r](https://github.com/3p3r))
-  - Shai B. ([@ShaiBer](https://github.com/ShaiBer))
-  - Uri B. ([@staycoolcall911](https://github.com/staycoolcall911))
-  - Yoav S. ([@yoav-steinberg](https://github.com/yoav-steinberg))
+* **Contributors (A-Z):**
+  * Chris R. ([@Chriscbr](https://github.com/Chriscbr))
+  * Elad B. ([@eladb](https://github.com/eladb))
+  * Eyal K. ([@ekeren](https://github.com/ekeren))
+  * Mark MC. ([@MarkMcCulloh](https://github.com/MarkMcCulloh))
+  * Sepehr L. ([@3p3r](https://github.com/3p3r))  
+  * Shai B. ([@ShaiBer](https://github.com/ShaiBer))
+  * Uri B. ([@staycoolcall911](https://github.com/staycoolcall911))
+  * Yoav S. ([@yoav-steinberg](https://github.com/yoav-steinberg))  
 
 Inspiration:
-
+  
 - <https://github.com/WheretIB/nullc>
 - <https://github.com/chaos-lang/chaos>
 - <https://github.com/BlazifyOrg/blazex>
@@ -2805,3 +2799,5 @@ Inspiration:
 - <https://github.com/vlang/v>
 
 [top]: #0-preface
+
+

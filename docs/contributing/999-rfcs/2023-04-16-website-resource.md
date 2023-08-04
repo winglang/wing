@@ -1,5 +1,5 @@
 ---
-title: "#3694 Website resource (approved)"
+title: #3694 Website resource (approved)
 description: How to implement the website resource
 ---
 
