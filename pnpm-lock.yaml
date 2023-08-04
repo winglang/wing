@@ -134,9 +134,6 @@ importers:
       projen:
         specifier: ^0.71.60
         version: 0.71.60
-      standard-version:
-        specifier: ^9
-        version: 9.0.0
       ts-jest:
         specifier: ^27
         version: 27.0.0(jest@27.0.0)(typescript@4.9.4)
@@ -950,6 +947,8 @@ importers:
         specifier: ^5.1.3
         version: 5.1.3
 
+  examples/tests/error: {}
+
   examples/tests/invalid:
     dependencies:
       cdktf:
@@ -1022,6 +1021,9 @@ importers:
 
   libs/wingc:
     devDependencies:
+      '@winglang/sdk':
+        specifier: workspace:^
+        version: link:../wingsdk
       '@winglang/tree-sitter-wing':
         specifier: workspace:^
         version: link:../tree-sitter-wing

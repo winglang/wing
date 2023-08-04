@@ -60,6 +60,15 @@ export async function pack(options: PackOptions) {
       fileURLToPath(new URL("../../../dist", import.meta.url))
     );
     await fs.ensureDir(distDir);
+
+    const packageMatcher = `${packageData.manifest.name?.replace("@", "")}-\\d+\\.\\d+\\.\\d+\\.tgz`;
+    const existingFiles = fs.readdirSync(distDir);
+    for (const file of existingFiles) {
+      if (file.match(packageMatcher)) {
+        await fs.remove(path.join(distDir, file));
+      }
+    }
+
     execSync(`pnpm pack --pack-destination ${distDir}`, {
       cwd: tmpDir,
       stdio: "inherit",

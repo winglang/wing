@@ -3,12 +3,13 @@
   "extends": ["//"],
   "pipeline": {
     "compile": {
-      "inputs": ["Cargo.*", "src/**"],
-      "outputs": ["target/wasm32-wasi/release/wingc.wasm"]
+      "outputs": [
+        "../../target/wasm32-wasi/release/wingc.wasm",
+        "../../target/wasm32-wasi/release/libwingc.*"
+      ]
     },
-    "lint": {},
-    "eslint": {
-      "dependsOn": ["lint"]
+    "test": {
+      "dependsOn": ["compile", "examples-valid#topo", "examples-invalid#topo"]
     }
   }
 }

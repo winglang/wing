@@ -1,6 +1,3 @@
-// for WebAssembly typings:
-/// <reference lib="dom" />
-
 import { satisfies } from "compare-versions";
 
 import { Command, Option } from "commander";
