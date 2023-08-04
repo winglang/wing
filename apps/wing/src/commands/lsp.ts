@@ -115,25 +115,27 @@ export async function lsp() {
     raw_diagnostics.length = 0;
     // Call wingc handler
     callWing(wingc_handler_name, params);
-    // purposely not awaiting this, notifications are fire-and-forget
-    connection.sendDiagnostics({
-      uri,
-      diagnostics: filterMap(raw_diagnostics, (rd) => {
-        if (rd.span) {
-          // skip if file_id doesn't match uri
-          const diagnosticUri = "file://" + rd.span.file_id;
-          if (diagnosticUri !== uri) {
-            return null;
-          }
-          return Diagnostic.create(
+
+    const diagnostics = [];
+    for (const rd of raw_diagnostics) {
+      if (rd.span) {
+        const diagnosticUri = "file://" + rd.span.file_id;
+        if (diagnosticUri === uri) {
+          const diag = Diagnostic.create(
             Range.create(rd.span.start.line, rd.span.start.col, rd.span.end.line, rd.span.end.col),
             rd.message
           );
+          diagnostics.push(diag);
         } else {
-          return Diagnostic.create(Range.create(0, 0, 0, 0), rd.message);
+          // skip if file_id doesn't match uri
         }
-      }),
-    });
+      } else {
+        diagnostics.push(Diagnostic.create(Range.create(0, 0, 0, 0), rd.message));
+      }
+    }
+
+    // purposely not awaiting this, notifications are fire-and-forget
+    connection.sendDiagnostics({ uri, diagnostics });
   }
 
   connection.onDidOpenTextDocument(async (params) => {
@@ -167,15 +169,4 @@ export async function lsp() {
   });
 
   connection.listen();
-}
-
-function filterMap<T, U>(arr: T[], fn: (item: T) => U | null): U[] {
-  const result: U[] = [];
-  for (const item of arr) {
-    const mapped = fn(item);
-    if (mapped !== null) {
-      result.push(mapped);
-    }
-  }
-  return result;
 }
