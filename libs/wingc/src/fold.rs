@@ -423,6 +423,7 @@ where
 		name: f.fold_symbol(node.name),
 		type_annotation: f.fold_type_annotation(node.type_annotation),
 		reassignable: node.reassignable,
+		variadic: node.variadic,
 	}
 }
 
@@ -466,6 +467,7 @@ where
 			phase: t.phase,
 		}),
 		TypeAnnotationKind::UserDefined(t) => TypeAnnotationKind::UserDefined(f.fold_user_defined_type(t)),
+		TypeAnnotationKind::Inferred => TypeAnnotationKind::Inferred,
 	};
 
 	TypeAnnotation { kind, span: node.span }

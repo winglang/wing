@@ -1,6 +1,8 @@
 import { Readable } from "stream";
 import * as consumers from "stream/consumers";
 import {
+  HeadObjectCommand,
+  HeadObjectCommandOutput,
   DeleteObjectCommand,
   GetObjectCommand,
   ListObjectsV2Command,
@@ -27,13 +29,13 @@ export class BucketClient implements IBucketClient {
    * @param key Key of the object
    */
   public async exists(key: string): Promise<boolean> {
-    const command = new ListObjectsV2Command({
+    const command = new HeadObjectCommand({
       Bucket: this.bucketName,
-      Prefix: key,
-      MaxKeys: 1,
+      Key: key,
     });
-    const resp: ListObjectsV2CommandOutput = await this.s3Client.send(command);
-    return !!resp.Contents && resp.Contents.length > 0;
+
+    const resp: HeadObjectCommandOutput = await this.s3Client.send(command);
+    return !!resp?.ContentLength;
   }
 
   /**
@@ -62,10 +64,10 @@ export class BucketClient implements IBucketClient {
   }
 
   /**
-   * Get a Json object from the bucket
+   * Get an object from the bucket
    *
    * @param key Key of the object
-   * @returns Json content of the object
+   * @returns content of the object
    */
   public async get(key: string): Promise<string> {
     // See https://github.com/aws/aws-sdk-js-v3/issues/1877
@@ -93,10 +95,10 @@ export class BucketClient implements IBucketClient {
   }
 
   /**
-   * Get a Json object from the bucket if it exists
+   * Get an object from the bucket if it exists
    *
    * @param key Key of the object
-   * @returns Json content of the object
+   * @returns content of the object
    */
   public async tryGet(key: string): Promise<string | undefined> {
     const command = new GetObjectCommand({

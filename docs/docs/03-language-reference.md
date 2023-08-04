@@ -413,11 +413,62 @@ assert(threeHours.minutes == 180);
 
 Duration objects are immutable and can be referenced across inflight context.
 
-#### 1.1.5.1 Roadmap
+#### 1.1.6 `Datetime`
 
-An additional built-in `datetime` type is planned and not yet implemented. `datetime` represents a single moment in time in a platform-independent
+The `Datetime` (alias `datetime`) type represents a single moment in time in a platform-independent
 format.
-See https://github.com/winglang/wing/issues/2102 to track.
+Datetime objects are immutable and can be referenced across inflight context.
+Here is the initial API for the Datetime type:
+
+```TS
+struct DatetimeComponents {
+  year: num;
+  month: num;
+  day: num;
+  hour: num;
+  min: num;
+  sec: num;
+  ms: num;
+  tz: num; // timezone offset in minutes from UTC
+}
+
+class Datetime {
+  static utcNow(): Datetime;             // returns the current time in UTC timezone
+  static systemNow(): Datetime;          // returns the current time in system timezone
+  static fromIso(iso: str): Datetime;    // creates an instance from an ISO-8601 string, represented in UTC timezone
+  static fromComponents(c: DatetimeComponents): Datetime;
+
+  timestamp: num;     // Date.valueOf()/1000 (non-leap seconds since epoch)
+  timestampMs: num;  // Date.valueOf() (non-leap milliseconds since epoch)
+
+  hours: num;         // Date.getHours()
+  min: num;           // Date.getMinutes()
+  sec: num;           // Date.getSeconds()
+  ms: num;            // Date.getMilliseconds()
+  dayOfMonth: num;    // Date.getDate()
+  dayOfWeek: num;     // Date.getDay()
+  month: num;         // Date.getMonth()
+  year: num;          // Date.getFullYear()
+
+  timezone: num;      // (offset in minutes from UTC)
+  utc: Datetime;      // returns the same time in UTC timezone
+
+  toIso(): str;      // returns ISO-8601 string
+}
+```
+
+A few examples:
+
+```TS
+let now = Datetime.utcNow();
+log("It is now ${now.month}/${now.dayOfMonth}/${now.year} at ${now.hours}:${now.min}:${now.sec})");
+assert(now.timezone == 0); // UTC
+
+let t1 = DateTime.fromIso("2023-02-09T06:20:17.573Z");
+log("Timezone is GMT${d.timezone() / 60}"); // output: Timezone is GMT-2
+log("UTC: ${t1.utc.toIso())}");            // output: 2023-02-09T06:21:03.000Z
+```
+
 
 ### 1.2 Utility Functions
 
@@ -853,7 +904,7 @@ r-value refers to the right hand side of an assignment here.
 All defined symbols are immutable (constant) by default.  
 Type casting is generally not allowed unless otherwise specified.
 
-Function arguments and their return type are always required.
+Type annotations are required for method arguments and their return value but optional for anonymous closures.
 
 > ```TS
 > let i = 5;

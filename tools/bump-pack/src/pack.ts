@@ -1,9 +1,10 @@
 import { execSync } from "node:child_process";
 import fs from "fs-extra";
-import { Project, findWorkspacePackages } from "@pnpm/workspace.find-packages";
+import { findWorkspacePackages } from "@pnpm/workspace.find-packages";
 import path from "node:path";
 import { tmpdir } from "node:os";
 import { setPackageVersion } from "./bump";
+import { fileURLToPath } from "node:url";
 
 export interface PackOptions {
   /**
@@ -55,7 +56,20 @@ export async function pack(options: PackOptions) {
     await preparePackageJson(tmpDir);
     await prepareBundledDeps(packageData.dir, tmpDir);
 
-    execSync(`pnpm pack --pack-destination ${packageDir}`, {
+    const distDir = path.resolve(
+      fileURLToPath(new URL("../../../dist", import.meta.url))
+    );
+    await fs.ensureDir(distDir);
+
+    const packageMatcher = `${packageData.manifest.name?.replace("@", "")}-\\d+\\.\\d+\\.\\d+\\.tgz`;
+    const existingFiles = fs.readdirSync(distDir);
+    for (const file of existingFiles) {
+      if (file.match(packageMatcher)) {
+        await fs.remove(path.join(distDir, file));
+      }
+    }
+
+    execSync(`pnpm pack --pack-destination ${distDir}`, {
       cwd: tmpDir,
       stdio: "inherit",
     });
@@ -103,10 +117,12 @@ async function preparePackageJson(tmpPackageDir: string) {
 
   const bumpPackConfig = packageJson["bump-pack"];
   if (bumpPackConfig) {
-    for(const depToRemove of bumpPackConfig.removeBundledDependencies ?? []) {
+    for (const depToRemove of bumpPackConfig.removeBundledDependencies ?? []) {
       console.log(`Removing bundled dependency "${depToRemove}"`);
       delete packageJson.dependencies[depToRemove];
-      packageJson.bundledDependencies = packageJson.bundledDependencies?.filter((d: string) => d !== depToRemove);
+      packageJson.bundledDependencies = packageJson.bundledDependencies?.filter(
+        (d: string) => d !== depToRemove
+      );
     }
   }
 

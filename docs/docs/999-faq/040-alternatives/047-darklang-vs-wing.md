@@ -1,5 +1,5 @@
 ---
-title: What are the main differences between Wing and Darklang?
+title: Darklang vs. Wing [Main differences]
 sidebar_label: Darklang
 id: differences-from-darklang
 keywords: [faq, winglang, Wing programming language, Wing language, Darklang]

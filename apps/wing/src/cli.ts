@@ -1,6 +1,3 @@
-// for WebAssembly typings:
-/// <reference lib="dom" />
-
 import { satisfies } from "compare-versions";
 
 import { Command, Option } from "commander";
@@ -152,6 +149,7 @@ async function main() {
         .default("sim")
     )
     .option("-p, --plugins [plugin...]", "Compiler plugins")
+    .option("--no-clean", "Keep build output")
     .hook("preAction", progressHook)
     .hook("preAction", collectAnalyticsHook)
     .action(runSubCommand("test"));

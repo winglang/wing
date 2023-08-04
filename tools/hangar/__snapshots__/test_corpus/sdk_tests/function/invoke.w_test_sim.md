@@ -2,7 +2,11 @@
 
 ## stdout.log
 ```log
-pass ─ invoke.wsim » root/env0/test:invoke
+log preflight
+pass ┌ invoke.wsim » root/env0/test:invoke
+     │ log inside test
+     └ log inside function
+contains 2 lines
  
  
 Tests 1 passed (1)

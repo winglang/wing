@@ -18,6 +18,7 @@ const project = new typescript.TypeScriptProject({
   github: false,
   projenrcTs: true,
   prettier: true,
+  package: false,
   deps: ["chalk", "chokidar", "glob-promise", "jsii-reflect", "yargs"],
   devDeps: ["@types/node@^18", "@types/yargs"],
 });

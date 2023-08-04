@@ -49,7 +49,6 @@
     "nanoid": "^4.0.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-lottie-player": "^1.5.4",
     "zod": "^3.21.4"
   },
   "devDependencies": {
@@ -72,9 +71,9 @@
     "@vitejs/plugin-react-swc": "^3.3.2",
     "@wingconsole/design-system": "workspace:^",
     "@wingconsole/eslint-plugin": "workspace:^",
-    "@wingconsole/server": "workspace:^",
     "@wingconsole/tsconfig": "workspace:^",
     "@wingconsole/use-loading": "workspace:^",
+    "@wingconsole/server": "workspace:^",
     "autoprefixer": "^10.4.14",
     "bump-pack": "workspace:^",
     "eslint": "^8.42.0",

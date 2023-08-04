@@ -1,0 +1,4 @@
+/src/*
+!/src/scanner.c
+/log.html
+/*.wasm

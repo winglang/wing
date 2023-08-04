@@ -62,6 +62,11 @@ export const createAppRouter = () => {
     "app.acceptTerms": createProcedure.mutation(() => {
       acceptTerms(true);
     }),
+    "app.layoutConfig": createProcedure.query(async ({ ctx }) => {
+      return {
+        config: ctx.layoutConfig,
+      };
+    }),
     "app.logs": createProcedure
       .input(
         z.object({
@@ -109,6 +114,18 @@ export const createAppRouter = () => {
           input?.showTests,
         );
       }),
+    "app.selectNode": createProcedure
+      .input(
+        z.object({
+          resourcePath: z.string().optional(),
+        }),
+      )
+      .mutation(async ({ ctx, input }) => {
+        ctx.setSelectedNode(input.resourcePath ?? "");
+      }),
+    "app.selectedNode": createProcedure.query(async ({ ctx }) => {
+      return ctx.getSelectedNode();
+    }),
     "app.childRelationships": createProcedure
       .input(
         z.object({

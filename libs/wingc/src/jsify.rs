@@ -831,7 +831,11 @@ impl<'a> JSifier<'a> {
 		let mut parameter_list = vec![];
 
 		for p in &func_def.signature.parameters {
-			parameter_list.push(p.name.to_string());
+			if p.variadic {
+				parameter_list.push("...".to_string() + &p.name.to_string());
+			} else {
+				parameter_list.push(p.name.to_string());
+			}
 		}
 
 		let (name, arrow) = match &func_def.name {
@@ -1240,10 +1244,11 @@ impl<'a> JSifier<'a> {
 		let lifts = lifts_per_method
 			.iter()
 			.filter(|(m, _)| {
-				let var_kind = class_type
+				let var_kind = &class_type
 					.as_class()
 					.unwrap()
 					.get_method(&m.as_str().into())
+					.as_ref()
 					.expect(&format!("method \"{m}\" doesn't exist in {class_name}"))
 					.kind;
 				let is_static = matches!(var_kind, VariableKind::StaticMember);

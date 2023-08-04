@@ -267,25 +267,35 @@ export const ElkMap = <T extends unknown = undefined>({
 
   const { zoomToFit } = useZoomPaneContext() ?? {};
   const zoomToNode = useCallback(
-    (nodeId: string | undefined) => {
+    (nodeId: string | undefined, skipAnimation?: boolean) => {
       const node = nodeList.find((node) => node.id === nodeId ?? "root");
       if (!node) {
         return;
       }
 
-      zoomToFit({
-        x: node.offset.x,
-        y: node.offset.y,
-        width: node.width,
-        height: node.height,
-      });
+      zoomToFit(
+        {
+          x: node.offset.x,
+          y: node.offset.y,
+          width: node.width,
+          height: node.height,
+        },
+        skipAnimation,
+      );
     },
     [nodeList, zoomToFit],
   );
 
   // Zoom to fit when map changes
+  const previousNodeList = useRef<NodeData[] | undefined>();
   useEffect(() => {
-    zoomToNode("root");
+    // Skip animation if there was no previous node list (eg, first render)
+    const skipAnimation =
+      !previousNodeList.current || previousNodeList.current.length === 0;
+
+    zoomToNode("root", skipAnimation);
+
+    previousNodeList.current = nodeList;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [nodeList]);
 
@@ -340,7 +350,11 @@ export const ElkMap = <T extends unknown = undefined>({
         <div ref={rootElement}>
           {graph && (
             <div
-              className={classNames("relative transition-all", durationClass)}
+              className={classNames(
+                "relative",
+                "transition-all",
+                durationClass,
+              )}
               style={{
                 width: graph.width,
                 height: graph.height,
