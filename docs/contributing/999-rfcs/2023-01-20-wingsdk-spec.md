@@ -1,5 +1,5 @@
 ---
-title: #662 SDK Spec (approved)
+title: "#662 SDK Spec (approved)"
 description: Specification for the Wing SDK
 ---
 
