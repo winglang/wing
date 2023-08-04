@@ -1543,16 +1543,6 @@ impl<'a> TypeChecker<'a> {
 		visitor.found_inference
 	}
 
-	pub fn add_globals(&mut self, scope: &Scope) {
-		self.add_module_to_env(
-			&mut self.types.get_scope_env(scope),
-			WINGSDK_ASSEMBLY_NAME.to_string(),
-			vec![WINGSDK_STD_MODULE.to_string()],
-			&Symbol::global(WINGSDK_STD_MODULE),
-			None,
-		);
-	}
-
 	fn spanned_error_with_var<S: Into<String>>(&self, spanned: &impl Spanned, message: S) -> (VariableInfo, Phase) {
 		report_diagnostic(Diagnostic {
 			message: message.into(),
