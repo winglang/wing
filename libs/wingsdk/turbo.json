@@ -8,15 +8,21 @@
     },
     "compile": {
       "dependsOn": ["pre-compile"],
-      "inputs": ["src/**"],
       "outputs": ["lib/**", ".jsii"]
     },
     "post-compile": {
       "dependsOn": ["compile"],
-      "cache": false
+      "inputs": [".jsii", "src/**/*.md"],
+      "outputs": ["../../docs/docs/04-standard-library/*/*.md"]
     },
     "eslint": {
       "dependsOn": ["pre-compile"]
+    },
+    "test": {
+      "dependsOn": ["pre-compile"]
+    },
+    "package": {
+      "outputs": ["../../dist/winglang-sdk-*.tgz"]
     }
   }
 }

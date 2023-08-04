@@ -3,13 +3,13 @@
   "extends": ["//"],
   "pipeline": {
     "compile": {
-      "inputs": ["src/**"],
       "outputs": ["lib/**"]
     },
     "dev": {
       "dependsOn": ["compile"]
     },
     "package": {
+      "inputs": ["syntaxes/**", "resources/**"],
       "outputs": ["vscode-wing.vsix"]
     }
   }

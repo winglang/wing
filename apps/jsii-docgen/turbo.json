@@ -4,9 +4,6 @@
   "pipeline": {
     "compile": {
       "outputs": ["lib/**"]
-    },
-    "package": {
-      "outputs": ["dist/**"]
     }
   }
 }

@@ -6,6 +6,10 @@
       "type": "build"
     },
     {
+      "name": "@types/aws-lambda",
+      "type": "build"
+    },
+    {
       "name": "@types/express",
       "type": "build"
     },
@@ -42,7 +46,6 @@
     },
     {
       "name": "@winglang/jsii-docgen",
-      "version": "workspace:^",
       "type": "build"
     },
     {
