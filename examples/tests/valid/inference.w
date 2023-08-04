@@ -21,9 +21,7 @@ assert(clonedArray2.at(2) == 3);
 
 let emptySet = {clonedArray2.at(2)};
 let clonedSet = emptySet.copyMut();
-clonedSet.push(1);
-clonedSet.push(2);
-clonedSet.push(clonedSet.at(0) + clonedSet.at(1));
+clonedSet.add(4);
 
 let api = new cloud.Api();
 let func = inflight (request) => {
