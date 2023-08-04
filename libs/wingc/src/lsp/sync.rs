@@ -14,6 +14,7 @@ use crate::fold::Fold;
 use crate::jsify::JSifier;
 use crate::lifting::LiftTransform;
 use crate::parser::parse_wing_project;
+use crate::reset::ScopeResetter;
 use crate::type_check;
 use crate::type_check::jsii_importer::JsiiImportSpec;
 use crate::type_check_assert::TypeCheckAssert;
@@ -152,6 +153,13 @@ fn partial_compile(
 		let scope = project_data.asts.remove(file).unwrap();
 		let new_scope = inflight_transformer.fold_scope(scope);
 		project_data.asts.insert(file.clone(), new_scope);
+	}
+
+	// Reset all type information
+	types.reset_expr_types();
+	let mut scope_resetter = ScopeResetter::new();
+	for scope in project_data.asts.values() {
+		scope_resetter.reset_scopes(scope);
 	}
 
 	// -- TYPECHECKING PHASE --

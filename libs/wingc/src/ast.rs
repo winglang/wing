@@ -678,6 +678,11 @@ impl Scope {
 		assert!((*env).is_none());
 		*env = Some(new_env);
 	}
+
+	pub fn reset_env(&self) {
+		let mut env = self.env.borrow_mut();
+		*env = None;
+	}
 }
 
 #[derive(Debug)]

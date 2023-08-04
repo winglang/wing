@@ -52,7 +52,7 @@ pub mod jsify;
 mod lifting;
 pub mod lsp;
 pub mod parser;
-
+mod reset;
 pub mod type_check;
 mod type_check_assert;
 pub mod visit;

@@ -1412,6 +1412,12 @@ impl Types {
 			.and_then(|t| t.as_ref().map(|t| t.phase))
 	}
 
+	pub fn reset_expr_types(&mut self) {
+		for elem in self.type_for_expr.iter_mut() {
+			*elem = None;
+		}
+	}
+
 	/// Given an unqualified type name of a builtin type, return the full type info.
 	///
 	/// This is needed because our builtin types have no API.
