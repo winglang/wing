@@ -610,18 +610,18 @@ exports[`cyclic_bring1.w 1`] = `
 - ../../../examples/tests/invalid/cyclic_bring1.w
 
 
-error: Could not find Wing module \\"../../../examples/tests/invalid/cyclic_bring2.w\\"
+error: Could not type check \\"../../../examples/tests/invalid/cyclic_bring2.w\\" due to cyclic bring statements
   --> ../../../examples/tests/invalid/cyclic_bring1.w:1:1
   |
 1 | bring \\"./cyclic_bring2.w\\" as foo;
-  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Could not find Wing module \\"../../../examples/tests/invalid/cyclic_bring2.w\\"
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Could not type check \\"../../../examples/tests/invalid/cyclic_bring2.w\\" due to cyclic bring statements
 
 
-error: Could not find Wing module \\"../../../examples/tests/invalid/cyclic_bring3.w\\"
+error: Could not type check \\"../../../examples/tests/invalid/cyclic_bring3.w\\" due to cyclic bring statements
   --> ../../../examples/tests/invalid/cyclic_bring2.w:1:1
   |
 1 | bring \\"./cyclic_bring3.w\\" as foo;
-  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Could not find Wing module \\"../../../examples/tests/invalid/cyclic_bring3.w\\"
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Could not type check \\"../../../examples/tests/invalid/cyclic_bring3.w\\" due to cyclic bring statements
 
 
  
@@ -638,18 +638,18 @@ exports[`cyclic_bring2.w 1`] = `
 - ../../../examples/tests/invalid/cyclic_bring2.w
 
 
-error: Could not find Wing module \\"../../../examples/tests/invalid/cyclic_bring3.w\\"
+error: Could not type check \\"../../../examples/tests/invalid/cyclic_bring3.w\\" due to cyclic bring statements
   --> ../../../examples/tests/invalid/cyclic_bring2.w:1:1
   |
 1 | bring \\"./cyclic_bring3.w\\" as foo;
-  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Could not find Wing module \\"../../../examples/tests/invalid/cyclic_bring3.w\\"
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Could not type check \\"../../../examples/tests/invalid/cyclic_bring3.w\\" due to cyclic bring statements
 
 
-error: Could not find Wing module \\"../../../examples/tests/invalid/cyclic_bring1.w\\"
+error: Could not type check \\"../../../examples/tests/invalid/cyclic_bring1.w\\" due to cyclic bring statements
   --> ../../../examples/tests/invalid/cyclic_bring3.w:1:1
   |
 1 | bring \\"./cyclic_bring1.w\\" as foo;
-  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Could not find Wing module \\"../../../examples/tests/invalid/cyclic_bring1.w\\"
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Could not type check \\"../../../examples/tests/invalid/cyclic_bring1.w\\" due to cyclic bring statements
 
 
  
@@ -666,18 +666,18 @@ exports[`cyclic_bring3.w 1`] = `
 - ../../../examples/tests/invalid/cyclic_bring3.w
 
 
-error: Could not find Wing module \\"../../../examples/tests/invalid/cyclic_bring1.w\\"
+error: Could not type check \\"../../../examples/tests/invalid/cyclic_bring1.w\\" due to cyclic bring statements
   --> ../../../examples/tests/invalid/cyclic_bring3.w:1:1
   |
 1 | bring \\"./cyclic_bring1.w\\" as foo;
-  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Could not find Wing module \\"../../../examples/tests/invalid/cyclic_bring1.w\\"
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Could not type check \\"../../../examples/tests/invalid/cyclic_bring1.w\\" due to cyclic bring statements
 
 
-error: Could not find Wing module \\"../../../examples/tests/invalid/cyclic_bring2.w\\"
+error: Could not type check \\"../../../examples/tests/invalid/cyclic_bring2.w\\" due to cyclic bring statements
   --> ../../../examples/tests/invalid/cyclic_bring1.w:1:1
   |
 1 | bring \\"./cyclic_bring2.w\\" as foo;
-  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Could not find Wing module \\"../../../examples/tests/invalid/cyclic_bring2.w\\"
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Could not type check \\"../../../examples/tests/invalid/cyclic_bring2.w\\" due to cyclic bring statements
 
 
  

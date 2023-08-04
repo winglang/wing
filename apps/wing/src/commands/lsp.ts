@@ -130,7 +130,7 @@ export async function lsp() {
           // skip if file_id doesn't match uri
         }
       } else {
-        diagnostics.push(Diagnostic.create(Range.create(0, 0, 0, 0), rd.message));
+        // skip if diagnostic is not associated with any file
       }
     }
 

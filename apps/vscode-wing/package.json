@@ -40,6 +40,7 @@
     "@vscode/vsce": "^2.16.0",
     "@wingconsole/app": "workspace:^",
     "@wingconsole/server": "workspace:^",
+    "winglang": "workspace:^",
     "eslint": "^8",
     "eslint-config-prettier": "^8.6.0",
     "eslint-import-resolver-node": "^0.3.7",

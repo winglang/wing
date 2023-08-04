@@ -2935,7 +2935,10 @@ impl<'a> TypeChecker<'a> {
 						let (brought_env, is_bringable) = match self.types.source_file_envs.get(Path::new(&name.name)) {
 							Some((env, is_bringable)) => (*env, *is_bringable),
 							None => {
-								self.spanned_error(stmt, format!("Could not find Wing module \"{}\"", name));
+								self.spanned_error(
+									stmt,
+									format!("Could not type check \"{}\" due to cyclic bring statements", name),
+								);
 								return;
 							}
 						};

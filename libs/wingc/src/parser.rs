@@ -169,45 +169,32 @@ pub fn parse_wing_project(
 	asts.insert(init_path.to_owned(), ast);
 	file_graph.update_file(init_path, &dependent_wing_files);
 
-	// Track which files we have parsed and which still need parsing
-	let mut files_to_parse = dependent_wing_files;
-	let mut files_parsed = HashSet::new();
-	files_parsed.insert(init_path.to_owned());
+	// Track which files still need parsing
+	let mut unparsed_files = dependent_wing_files;
 
-	// Parse all remaining files in the project (skipping files we have already parsed)
-	while let Some(file_to_parse) = files_to_parse.pop() {
-		if files_parsed.contains(&file_to_parse) {
+	// Parse all remaining files in the project
+	while let Some(file_path) = unparsed_files.pop() {
+		// Skip files that we have already seen before (they should already be parsed)
+		if files.contains_file(&file_path) {
+			assert!(tree_sitter_trees.contains_key(&file_path));
+			assert!(asts.contains_key(&file_path));
 			continue;
 		}
 
-		// TODO: skip the re-parsing a file if we have already have an AST saved from a previous compilation
-		// https://github.com/winglang/wing/issues/3700
-
-		let file_text = if files.contains_file(&file_to_parse) {
-			// Get the file's text if we already have it
-			// (the text here could be more fresh than the text on disk)
-			files.get_file(&file_to_parse).unwrap()
-		} else {
-			// Otherwise, fetch the file's text from disk
-			// Error handling is handled in `parse_wing_file` since it has span information
-			let file_text = fs::read_to_string(&file_to_parse).unwrap_or(String::new());
-			files.add_file(&file_to_parse, file_text).unwrap();
-			files.get_file(&file_to_parse).unwrap()
-		};
+		let file_text = fs::read_to_string(&file_path).unwrap_or(String::new());
+		files.add_file(&file_path, file_text.clone()).unwrap();
+		files.get_file(&file_path).unwrap();
 
 		// Parse the file
-		let (tree_sitter_tree, ast, dependent_wing_files) = parse_wing_file(&file_to_parse, &file_text);
+		let (tree_sitter_tree, ast, dependent_wing_files) = parse_wing_file(&file_path, &file_text);
 
 		// Update our collections of trees and ASTs and our file graph
-		tree_sitter_trees.insert(file_to_parse.clone(), tree_sitter_tree);
-		asts.insert(file_to_parse.clone(), ast);
-		file_graph.update_file(&file_to_parse, &dependent_wing_files);
+		tree_sitter_trees.insert(file_path.clone(), tree_sitter_tree);
+		asts.insert(file_path.clone(), ast);
+		file_graph.update_file(&file_path, &dependent_wing_files);
 
 		// Add the file's dependencies to the list of files to parse
-		files_to_parse.extend(dependent_wing_files);
-
-		// Mark the file as parsed
-		files_parsed.insert(file_to_parse);
+		unparsed_files.extend(dependent_wing_files);
 	}
 
 	// Return the files in the order they should be compiled

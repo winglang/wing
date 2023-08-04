@@ -1,6 +1,10 @@
-use std::path::{Path, PathBuf};
+use std::{
+	fmt::Display,
+	path::{Path, PathBuf},
+};
 
 use indexmap::IndexMap;
+use petgraph::visit::EdgeRef;
 
 #[derive(Default)]
 pub struct FileGraph {
@@ -49,12 +53,14 @@ impl FileGraph {
 				// toposort function in the `petgraph` library doesn't return the cycle itself,
 				// so we need to use Tarjan's algorithm to find one instead
 				let strongly_connected_components = petgraph::algo::tarjan_scc(&self.graph);
-				Err(
-					strongly_connected_components[0]
-						.iter()
-						.map(|n| self.graph[*n].clone())
-						.collect::<Vec<_>>(),
-				)
+
+				// a strongly connected component is a cycle if it has more than one node
+				// let's just return the first one we find
+				let cycle = strongly_connected_components
+					.into_iter()
+					.find(|component| component.len() > 1)
+					.unwrap();
+				Err(cycle.iter().map(|n| self.graph[*n].clone()).collect::<Vec<_>>())
 			}
 		}
 	}
@@ -67,6 +73,21 @@ impl FileGraph {
 		let node_index = self.graph.add_node(path.to_owned());
 		self.path_to_node_index.insert(path.to_owned(), node_index);
 		node_index
+	}
+}
+
+impl Display for FileGraph {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		for node_index in self.graph.node_indices() {
+			let node = &self.graph[node_index];
+			write!(f, "{{{} -> [", node.display())?;
+			for edge in self.graph.edges(node_index) {
+				let target = &self.graph[edge.target()];
+				write!(f, "{} ", target.display())?;
+			}
+			writeln!(f, "]}}")?;
+		}
+		Ok(())
 	}
 }
 
