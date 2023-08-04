@@ -1278,10 +1278,11 @@ impl<'a> JSifier<'a> {
 		let lifts = lifts_per_method
 			.iter()
 			.filter(|(m, _)| {
-				let var_kind = class_type
+				let var_kind = &class_type
 					.as_class()
 					.unwrap()
 					.get_method(&m.as_str().into())
+					.as_ref()
 					.expect(&format!("method \"{m}\" doesn't exist in {class_name}"))
 					.kind;
 				let is_static = matches!(var_kind, VariableKind::StaticMember);

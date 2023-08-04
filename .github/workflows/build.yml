@@ -77,7 +77,7 @@ jobs:
         run: pnpm changelog
 
       - name: Build and Package
-        run: pnpm build:ci
+        run: pnpm package:ci
         env:
           SEGMENT_WRITE_KEY: ${{ secrets.SEGMENT_WRITE_KEY }}
 
@@ -93,7 +93,7 @@ jobs:
           name: wingc
           path: libs/wingcompiler/wingc.wasm
 
-      - name: Derive appropriate SHAs for base and head for `nx affected` commands
+      - name: Derive appropriate SHAs for base and head
         id: setSHAs
         uses: nrwl/nx-set-shas@v3
 
@@ -168,6 +168,24 @@ jobs:
 
       - name: Test
         run: pnpm test:ci
+
+      - name: Create git patch
+        id: diff
+        run: |
+          git add --all
+          git diff --staged --binary --patch > build.diff
+          if [ -s build.diff ]; then
+            echo "Diff found, creating a patch to apply later"
+            cat build.diff
+            echo "diff=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Upload patch
+        if: steps.diff.outputs.diff == 'true'
+        uses: actions/upload-artifact@v3
+        with:
+          name: build.diff
+          path: build.diff
 
   benchmark:
     name: Benchmark
@@ -350,9 +368,6 @@ jobs:
           done
         working-directory: dist
 
-      - name: Rename Docs
-        run: mv docs "docs-${{ needs.build.outputs.version }}.tgz"
-
       - name: Write Changelog
         uses: DamianReeves/write-file-action@v1.2
         with:
@@ -362,6 +377,7 @@ jobs:
 
       - name: Compute Checksums
         run: |
+          mv ./docs/*.tgz ./dist
           mv ./*/*.vsix ./dist
           mv ./*/*.wasm ./dist
           mv ./benchmarks/* ./dist

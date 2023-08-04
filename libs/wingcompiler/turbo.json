@@ -8,8 +8,10 @@
     },
     "compile": {
       "dependsOn": ["compile:copy-wingc-wasm"],
-      "inputs": ["src/**"],
       "outputs": ["dist/**"]
+    },
+    "package": {
+      "outputs": ["../../dist/winglang-compiler-*.tgz"]
     }
   }
 }

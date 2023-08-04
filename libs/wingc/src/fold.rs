@@ -465,6 +465,7 @@ where
 			phase: t.phase,
 		}),
 		TypeAnnotationKind::UserDefined(t) => TypeAnnotationKind::UserDefined(f.fold_user_defined_type(t)),
+		TypeAnnotationKind::Inferred => TypeAnnotationKind::Inferred,
 	};
 
 	TypeAnnotation { kind, span: node.span }

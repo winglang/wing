@@ -1,5 +1,5 @@
 ---
-title: #831 Resource Naming (draft)
+title: "#831 Resource Naming (draft)"
 description: How should the Wing SDK assign "physical names" to resources on external cloud providers?
 ---
 

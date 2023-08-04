@@ -423,18 +423,18 @@ error: Expected 1 positional argument(s) but got 0
     |     ^^^^^^^^ Expected 1 positional argument(s) but got 0
 
 
-error: Expected type to be \\"num\\", but got \\"str\\" instead
-   --> ../../../examples/tests/invalid/class.w:31:14
-   |
-31 |     this.x = \\"Hi\\";
-   |              ^^^^ Expected type to be \\"num\\", but got \\"str\\" instead
-
-
 error: Variable cannot be reassigned from inflight
    --> ../../../examples/tests/invalid/class.w:61:5
    |
 61 |     this.y = 1;
    |     ^^^^^^^^^^^ Variable cannot be reassigned from inflight
+
+
+error: Expected type to be \\"num\\", but got \\"str\\" instead
+   --> ../../../examples/tests/invalid/class.w:31:14
+   |
+31 |     this.x = \\"Hi\\";
+   |              ^^^^ Expected type to be \\"num\\", but got \\"str\\" instead
 
 
  
@@ -453,17 +453,6 @@ exports[`cloud_function_expects_inflight.w 1`] = `
 4 | |   return \\"Hello \${name}\\";
 5 | | });
   | \\\\-^ Expected type to be \\"inflight (event: str): void\\", but got \\"preflight (name: str): str\\" instead
-
-
-error: Expected type to be \\"inflight (message: str): void\\", but got \\"inflight (x: num): void\\" instead
-   --> ../../../examples/tests/invalid/cloud_function_expects_inflight.w:9:15
-   |  
- 9 |   q.setConsumer(inflight (x: num) => {
-   | /---------------^
-10 | |                      // ^ \\"num\\" doesn't match the expected type \\"str\\"
-11 | |   return;
-12 | | });
-   | \\\\-^ Expected type to be \\"inflight (message: str): void\\", but got \\"inflight (x: num): void\\" instead
 
 
  
@@ -563,6 +552,13 @@ error: Expected \\"Array\\" type, found \\"Set<num>\\"
    |
 17 | let s2 = Set<num> [1, \\"2\\", 3];
    |          ^^^^^^^^^^^^^^^^^^^^ Expected \\"Array\\" type, found \\"Set<num>\\"
+
+
+error: Expected type to be \\"num\\", but got \\"str\\" instead
+   --> ../../../examples/tests/invalid/container_types.w:17:23
+   |
+17 | let s2 = Set<num> [1, \\"2\\", 3];
+   |                       ^^^ Expected type to be \\"num\\", but got \\"str\\" instead
 
 
 error: Expected type to be \\"num\\", but got \\"str\\" instead
@@ -931,6 +927,154 @@ Test Files 1 failed (1)
 Duration <DURATION>"
 `;
 
+exports[`inference.w 1`] = `
+"error: Missing required type annotation for method signature
+   --> ../../../examples/tests/invalid/inference.w:79:8
+   |
+79 |   args(nice) {
+   |        ^^^^ Missing required type annotation for method signature
+
+
+error: Expected type to be \\"num\\", but got \\"str\\" instead
+   --> ../../../examples/tests/invalid/inference.w:13:18
+   |
+13 | recursiveClosure(\\"\\");
+   |                  ^^ Expected type to be \\"num\\", but got \\"str\\" instead
+
+
+error: Expected type to be \\"str\\", but got \\"num\\" instead
+   --> ../../../examples/tests/invalid/inference.w:32:19
+   |
+32 | stringArray2.push(2);
+   |                   ^ Expected type to be \\"str\\", but got \\"num\\" instead
+
+
+error: Expected type to be \\"num\\", but got \\"str\\" instead
+   --> ../../../examples/tests/invalid/inference.w:38:16
+   |
+38 | numArray2.push(\\"2\\");
+   |                ^^^ Expected type to be \\"num\\", but got \\"str\\" instead
+
+
+error: Expected type to be \\"num\\", but got \\"str\\" instead
+   --> ../../../examples/tests/invalid/inference.w:42:40
+   |
+42 | let dependentArray = [numArray2.at(0), stringArray2.at(1)];
+   |                                        ^^^^^^^^^^^^^^^^^^ Expected type to be \\"num\\", but got \\"str\\" instead
+
+
+error: Expected type to be \\"num\\", but got \\"str\\" instead
+   --> ../../../examples/tests/invalid/inference.w:45:60
+   |
+45 | let dependentMap = { \\"cool\\" => numArray2.at(0), \\"cool2\\" => stringArray2.at(1) };
+   |                                                            ^^^^^^^^^^^^^^^^^^ Expected type to be \\"num\\", but got \\"str\\" instead
+
+
+error: Expected type to be \\"inflight (key: str, type: BucketEventType): void\\", but got \\"inflight (request: ApiRequest): ApiResponse\\" instead
+   --> ../../../examples/tests/invalid/inference.w:57:31
+   |
+57 | (new cloud.Bucket()).onCreate(func);
+   |                               ^^^^ Expected type to be \\"inflight (key: str, type: BucketEventType): void\\", but got \\"inflight (request: ApiRequest): ApiResponse\\" instead
+
+
+error: Expected \\"Json\\" elements to be Json values (https://www.json.org/json-en.html), but got \\"Array<unknown>\\" which is not a Json value
+   --> ../../../examples/tests/invalid/inference.w:71:14
+   |
+71 | Json { cool: anotherEmptyArray };
+   |              ^^^^^^^^^^^^^^^^^ Expected \\"Json\\" elements to be Json values (https://www.json.org/json-en.html), but got \\"Array<unknown>\\" which is not a Json value
+
+
+error: Unexpected return value from void function. Return type annotations are required for methods.
+   --> ../../../examples/tests/invalid/inference.w:76:5
+   |
+76 |     return true;
+   |     ^^^^^^^^^^^^ Unexpected return value from void function. Return type annotations are required for methods.
+
+
+error: Property not found
+   --> ../../../examples/tests/invalid/inference.w:63:19
+   |
+63 |     body: request.body,
+   |                   ^^^^ Property not found
+
+
+error: Unable to infer type
+   --> ../../../examples/tests/invalid/inference.w:60:23
+   |
+60 | let func2 = inflight (request) => {
+   |                       ^^^^^^^ Unable to infer type
+
+
+error: Unable to infer type
+   --> ../../../examples/tests/invalid/inference.w:25:44
+   |
+25 | let stringInterpolationCannotBeInferred = (nice) => {
+   |                                            ^^^^ Unable to infer type
+
+
+error: Unable to infer type
+  --> ../../../examples/tests/invalid/inference.w:4:29
+  |
+4 | let preflightClosureArgs = (nice) => { return true; };
+  |                             ^^^^ Unable to infer type
+
+
+error: Unable to infer type
+   --> ../../../examples/tests/invalid/inference.w:69:5
+   |
+69 | let anotherEmptyArray = [];
+   |     ^^^^^^^^^^^^^^^^^ Unable to infer type
+
+
+error: Unable to infer type
+   --> ../../../examples/tests/invalid/inference.w:21:5
+   |
+21 | let clonedArray = emptyArray.copyMut();
+   |     ^^^^^^^^^^^ Unable to infer type
+
+
+error: Unable to infer type
+   --> ../../../examples/tests/invalid/inference.w:16:5
+   |
+16 | let emptyArray = [];
+   |     ^^^^^^^^^^ Unable to infer type
+
+
+error: Unable to infer type
+   --> ../../../examples/tests/invalid/inference.w:60:5
+   |
+60 | let func2 = inflight (request) => {
+   |     ^^^^^ Unable to infer type
+
+
+error: Unable to infer type
+   --> ../../../examples/tests/invalid/inference.w:18:5
+   |
+18 | let numArray = emptyArray;
+   |     ^^^^^^^^ Unable to infer type
+
+
+error: Unable to infer type
+  --> ../../../examples/tests/invalid/inference.w:4:5
+  |
+4 | let preflightClosureArgs = (nice) => { return true; };
+  |     ^^^^^^^^^^^^^^^^^^^^ Unable to infer type
+
+
+error: Unable to infer type
+   --> ../../../examples/tests/invalid/inference.w:25:5
+   |
+25 | let stringInterpolationCannotBeInferred = (nice) => {
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Unable to infer type
+
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
+
 exports[`inflight_class_created_in_preflight.w 1`] = `
 "error: Cannot create inflight class \\"Foo\\" in preflight phase
   --> ../../../examples/tests/invalid/inflight_class_created_in_preflight.w:3:1
@@ -939,11 +1083,11 @@ exports[`inflight_class_created_in_preflight.w 1`] = `
   | ^^^^^^^^^ Cannot create inflight class \\"Foo\\" in preflight phase
 
 
-error: Cannot create inflight class \\"Foo\\" in preflight phase
-  --> ../../../examples/tests/invalid/inflight_class_created_in_preflight.w:8:5
-  |
-8 |     new Foo();
-  |     ^^^^^^^^^ Cannot create inflight class \\"Foo\\" in preflight phase
+error: Cannot create preflight class \\"PreflightClass\\" in inflight phase
+   --> ../../../examples/tests/invalid/inflight_class_created_in_preflight.w:19:3
+   |
+19 |   new PreflightClass();
+   |   ^^^^^^^^^^^^^^^^^^^^ Cannot create preflight class \\"PreflightClass\\" in inflight phase
 
 
 error: Cannot create inflight class \\"Foo\\" in preflight phase
@@ -953,11 +1097,11 @@ error: Cannot create inflight class \\"Foo\\" in preflight phase
    |     ^^^^^^^^^ Cannot create inflight class \\"Foo\\" in preflight phase
 
 
-error: Cannot create preflight class \\"PreflightClass\\" in inflight phase
-   --> ../../../examples/tests/invalid/inflight_class_created_in_preflight.w:19:3
-   |
-19 |   new PreflightClass();
-   |   ^^^^^^^^^^^^^^^^^^^^ Cannot create preflight class \\"PreflightClass\\" in inflight phase
+error: Cannot create inflight class \\"Foo\\" in preflight phase
+  --> ../../../examples/tests/invalid/inflight_class_created_in_preflight.w:8:5
+  |
+8 |     new Foo();
+  |     ^^^^^^^^^ Cannot create inflight class \\"Foo\\" in preflight phase
 
 
 error: Cannot qualify access to a lifted object of type \\"PreflightClass\\" (see https://github.com/winglang/wing/issues/76 for more details)
@@ -1374,6 +1518,13 @@ error: Expected \\"Array\\" type, found \\"MutSet<num>\\"
    |          ^^^^^^^^^^^^^^^^^^^^^^ Expected \\"Array\\" type, found \\"MutSet<num>\\"
 
 
+error: Expected type to be \\"num\\", but got \\"str\\" instead
+   --> ../../../examples/tests/invalid/mut_container_types.w:11:25
+   |
+11 | let s2 = MutSet<num>[1, \\"2\\", 3];
+   |                         ^^^ Expected type to be \\"num\\", but got \\"str\\" instead
+
+
 error: Expected type to be \\"MutSet<num>\\", but got \\"Set<num>\\" instead
    --> ../../../examples/tests/invalid/mut_container_types.w:12:23
    |
@@ -1566,11 +1717,11 @@ Duration <DURATION>"
 `;
 
 exports[`panic.w 1`] = `
-"error: Compiler bug (panicked at 'User invoked panic', src/type_check.rs:LINE:COL) during type-checking, please report at https://www.winglang.io/contributing/start-here/bugs
+"error: Compiler bug (panicked at 'User invoked panic', libs/wingc/src/type_check.rs:LINE:COL) during type-checking, please report at https://www.winglang.io/contributing/start-here/bugs
   --> ../../../examples/tests/invalid/panic.w:6:1
   |
 6 | 😱;
-  | ^^ Compiler bug (panicked at 'User invoked panic', src/type_check.rs:LINE:COL) during type-checking, please report at https://www.winglang.io/contributing/start-here/bugs
+  | ^^ Compiler bug (panicked at 'User invoked panic', libs/wingc/src/type_check.rs:LINE:COL) during type-checking, please report at https://www.winglang.io/contributing/start-here/bugs
 
 
  
@@ -1642,6 +1793,20 @@ exports[`reassign_to_nonreassignable.w 1`] = `
 
 
 error: Variable is not reassignable
+   --> ../../../examples/tests/invalid/reassign_to_nonreassignable.w:42:3
+   |
+42 |   arg = 0;
+   |   ^^^ Variable is not reassignable
+
+
+error: Variable is not reassignable
+   --> ../../../examples/tests/invalid/reassign_to_nonreassignable.w:35:5
+   |
+35 |     this.inflightF = this.inflightF + 1;
+   |     ^^^^^^^^^^^^^^ Variable is not reassignable
+
+
+error: Variable is not reassignable
    --> ../../../examples/tests/invalid/reassign_to_nonreassignable.w:28:5
    |
 28 |     this.f = this.f + 1;
@@ -1653,20 +1818,6 @@ error: Variable is not reassignable
    |
 30 |     this.innerR.inner = 2;
    |     ^^^^^^^^^^^^^^^^^ Variable is not reassignable
-
-
-error: Variable is not reassignable
-   --> ../../../examples/tests/invalid/reassign_to_nonreassignable.w:35:5
-   |
-35 |     this.inflightF = this.inflightF + 1;
-   |     ^^^^^^^^^^^^^^ Variable is not reassignable
-
-
-error: Variable is not reassignable
-   --> ../../../examples/tests/invalid/reassign_to_nonreassignable.w:42:3
-   |
-42 |   arg = 0;
-   |   ^^^ Variable is not reassignable
 
 
  
@@ -1772,32 +1923,32 @@ exports[`return_types.w 1`] = `
   |     ^^^^^^^^^ Return statement outside of function cannot return a value
 
 
+error: Unexpected return value from void function. Return type annotations are required for methods.
+   --> ../../../examples/tests/invalid/return_types.w:19:5
+   |
+19 |     return 9;
+   |     ^^^^^^^^^ Unexpected return value from void function. Return type annotations are required for methods.
+
+
+error: Unexpected return value from void function. Return type annotations are required for methods.
+  --> ../../../examples/tests/invalid/return_types.w:9:3
+  |
+9 |   return 9;
+  |   ^^^^^^^^^ Unexpected return value from void function. Return type annotations are required for methods.
+
+
+error: Unexpected return value from void function. Return type annotations are required for methods.
+   --> ../../../examples/tests/invalid/return_types.w:12:5
+   |
+12 |     return 9;
+   |     ^^^^^^^^^ Unexpected return value from void function. Return type annotations are required for methods.
+
+
 error: Return statement outside of function cannot return a value
   --> ../../../examples/tests/invalid/return_types.w:4:5
   |
 4 |     return 9;
   |     ^^^^^^^^^ Return statement outside of function cannot return a value
-
-
-error: Unexpected return value from void function
-  --> ../../../examples/tests/invalid/return_types.w:9:3
-  |
-9 |   return 9;
-  |   ^^^^^^^^^ Unexpected return value from void function
-
-
-error: Unexpected return value from void function
-   --> ../../../examples/tests/invalid/return_types.w:12:5
-   |
-12 |     return 9;
-   |     ^^^^^^^^^ Unexpected return value from void function
-
-
-error: Unexpected return value from void function
-   --> ../../../examples/tests/invalid/return_types.w:19:5
-   |
-19 |     return 9;
-   |     ^^^^^^^^^ Unexpected return value from void function
 
 
  
@@ -2082,25 +2233,11 @@ exports[`super_call.w 1`] = `
    |       ^^ \\"super\\" can only be used inside of classes
 
 
-error: Cannot call super method because class A has no parent
-  --> ../../../examples/tests/invalid/super_call.w:4:11
-  |
-4 |     super.method();
-  |           ^^^^^^ Cannot call super method because class A has no parent
-
-
-error: Cannot call super method because class InflightA has no parent
-   --> ../../../examples/tests/invalid/super_call.w:12:11
+error: \`super\` calls inside inflight closures not supported yet, see: https://github.com/winglang/wing/issues/3474
+   --> ../../../examples/tests/invalid/super_call.w:52:50
    |
-12 |     super.method();
-   |           ^^^^^^ Cannot call super method because class InflightA has no parent
-
-
-error: super class \\"A\\" does not have a method named \\"child_method\\"
-   --> ../../../examples/tests/invalid/super_call.w:20:11
-   |
-20 |     super.child_method();
-   |           ^^^^^^^^^^^^ super class \\"A\\" does not have a method named \\"child_method\\"
+52 |       return \\"this: \${this.m1()}, super: \${super.m1()}\\";
+   |                                                  ^^ \`super\` calls inside inflight closures not supported yet, see: https://github.com/winglang/wing/issues/3474
 
 
 error: Cannot call super method inside of a static method
@@ -2110,11 +2247,25 @@ error: Cannot call super method inside of a static method
    |           ^^^^^^ Cannot call super method inside of a static method
 
 
-error: \`super\` calls inside inflight closures not supported yet, see: https://github.com/winglang/wing/issues/3474
-   --> ../../../examples/tests/invalid/super_call.w:52:50
+error: super class \\"A\\" does not have a method named \\"child_method\\"
+   --> ../../../examples/tests/invalid/super_call.w:20:11
    |
-52 |       return \\"this: \${this.m1()}, super: \${super.m1()}\\";
-   |                                                  ^^ \`super\` calls inside inflight closures not supported yet, see: https://github.com/winglang/wing/issues/3474
+20 |     super.child_method();
+   |           ^^^^^^^^^^^^ super class \\"A\\" does not have a method named \\"child_method\\"
+
+
+error: Cannot call super method because class InflightA has no parent
+   --> ../../../examples/tests/invalid/super_call.w:12:11
+   |
+12 |     super.method();
+   |           ^^^^^^ Cannot call super method because class InflightA has no parent
+
+
+error: Cannot call super method because class A has no parent
+  --> ../../../examples/tests/invalid/super_call.w:4:11
+  |
+4 |     super.method();
+  |           ^^^^^^ Cannot call super method because class A has no parent
 
 
  
@@ -2197,6 +2348,13 @@ error: expression \\"await_expression\\" is not supported yet - see https://gith
   |
 4 | let d = await c;
   |         ^^^^^^^ expression \\"await_expression\\" is not supported yet - see https://github.com/winglang/wing/issues/116
+
+
+error: Unable to infer type
+  --> ../../../examples/tests/invalid/unimplemented_grammar.w:2:5
+  |
+2 | let somePromise = Promise<str>{};
+  |     ^^^^^^^^^^^ Unable to infer type
 
 
  
@@ -2364,13 +2522,6 @@ error: Binary operator '+' cannot be applied to operands of type 'num' and 'void
   |
 7 | let y = 5 + log(\\"hello\\");
   |         ^^^^^^^^^^^^^^^^ Binary operator '+' cannot be applied to operands of type 'num' and 'void'; only (num, num) and (str, str) are supported
-
-
-error: Cannot assign expression of type \\"void\\" to a variable
-   --> ../../../examples/tests/invalid/void_in_expression_position.w:11:5
-   |
-11 | let z = returnsNothing();
-   |     ^ Cannot assign expression of type \\"void\\" to a variable
 
 
  

@@ -3,8 +3,7 @@
   "extends": ["//"],
   "pipeline": {
     "compile": {
-      "inputs": ["Cargo.*", "src/**"],
-      "outputs": ["target/wasm32-wasi/release/libwingii.*"]
+      "outputs": ["../../target/wasm32-wasi/release/libwingii.*"]
     }
   }
 }

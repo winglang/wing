@@ -8,13 +8,13 @@
     },
     "build:wasm": {
       "dependsOn": ["build:generate"],
-      "inputs": ["Cargo.*", "src/**", "bindings/**", "binding.gyp"],
       "outputs": ["tree-sitter-wing.wasm"]
     },
     "compile": {
       "dependsOn": ["build:wasm"]
     },
     "test": {
+      "inputs": ["test/**"],
       "dependsOn": ["build:generate"]
     },
     "playground": {

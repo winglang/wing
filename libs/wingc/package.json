@@ -9,6 +9,7 @@
   },
   "devDependencies": {
     "@winglang/tree-sitter-wing": "workspace:^",
-    "@winglang/wingii": "workspace:^"
+    "@winglang/wingii": "workspace:^",
+    "@winglang/sdk": "workspace:^"
   }
 }

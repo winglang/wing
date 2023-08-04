@@ -52,16 +52,15 @@ const project = new TypeScriptAppProject({
     },
   },
 
-  deps: [
+  deps: [],
+  devDeps: [
     `@types/vscode@^${VSCODE_BASE_VERSION}`,
     "vscode-languageclient",
     "which",
     "@trpc/client",
-    "node-fetch@2",
     "ws",
     "open",
-  ],
-  devDeps: [
+    "node-fetch@2",
     "@types/node",
     "@types/which",
     "@vscode/vsce",
@@ -71,6 +70,9 @@ const project = new TypeScriptAppProject({
     "@wingconsole/server@workspace:^",
   ],
 });
+
+// because we're bundling, allow dev deps in src
+project.eslint?.allowDevDeps("src/**");
 
 project.addGitIgnore("*.vsix");
 
