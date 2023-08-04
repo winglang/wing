@@ -44,14 +44,11 @@ jobs:
         uses: actions/download-artifact@v3
 
       - run: ls -al .
-      - run: ls -al dist/
+      - run: mkdir dist
 
       - name: Compute Checksums
         run: |
           mv ./docs ./dist/docs.tgz
-          mv ./*/*.vsix ./dist
-          mv ./*/*.wasm ./dist
-          mv ./benchmarks/* ./dist
           cd dist
 
           echo '' >> ../CHANGELOG.md
