@@ -1797,21 +1797,12 @@ impl<'s> Parser<'s> {
 
 	fn build_set_literal(&self, expression_node: &Node, phase: Phase) -> Result<Expr, ()> {
 		let expression_span = self.node_span(expression_node);
-		let mut set_type = self
-			.build_type_annotation(expression_node.child_by_field_name("type"), phase)
-			.ok();
+		let set_type = if let Some(type_node) = expression_node.child_by_field_name("type") {
+			self.build_type_annotation(Some(type_node), phase).ok()
+		} else {
+			None
+		};
 
-		if let Some(TypeAnnotation { kind, span }) = &set_type {
-			if matches!(kind, TypeAnnotationKind::Inferred) {
-				set_type.replace(TypeAnnotation {
-					kind: TypeAnnotationKind::Set(Box::new(TypeAnnotation {
-						kind: TypeAnnotationKind::Inferred,
-						span: Default::default(),
-					})),
-					span: span.clone(),
-				});
-			}
-		}
 		let mut items = Vec::new();
 		let mut cursor = expression_node.walk();
 		for element_node in expression_node.children_by_field_name("element", &mut cursor) {

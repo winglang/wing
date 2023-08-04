@@ -4,9 +4,14 @@ use crate::{
 	type_check::{Class, FunctionSignature, Interface, Struct, Type, TypeRef, Types, CLOSURE_CLASS_HANDLE_METHOD},
 };
 
+/// Deeply visits a type and finds any inferences that can be resolved.
 pub struct InferenceVisitor<'a> {
+	/// Used for updating or unwrapping known inferences
 	pub types: &'a mut Types,
+	/// The expected type of the current node.
+	/// This changes as the visitor traverses a type to match any unwrapping of types (e.g. Map<T> -> T)
 	pub expected_type: Option<&'a TypeRef>,
+	/// Whether or not we found an inference during the entire visit
 	pub found_inference: bool,
 }
 

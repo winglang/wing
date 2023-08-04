@@ -2506,8 +2506,8 @@ impl<'a> TypeChecker<'a> {
 			}
 		}
 
-		for entry in env.symbol_map.iter_mut() {
-			if let SymbolKind::Variable(ref mut var_info) = entry.1 .1 {
+		for symbol_data in env.symbol_map.values_mut() {
+			if let SymbolKind::Variable(ref mut var_info) = symbol_data.1 {
 				// Update any possible inferred types in this variable.
 				// This must be called before checking for un-inferred types because some variable were not used in this scope so they did not get a chance to get updated.
 				self.update_known_inferences(&mut var_info.type_);
@@ -3528,7 +3528,7 @@ impl<'a> TypeChecker<'a> {
 
 	fn type_check_method(
 		&mut self,
-		class_type: UnsafeRef<Type>,
+		class_type: TypeRef,
 		method_name: &Symbol,
 		parent_env: &SymbolEnv, // the environment in which the class is declared
 		statement_idx: usize,
