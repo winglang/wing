@@ -48,7 +48,7 @@ jobs:
 
       - name: Compute Checksums
         run: |
-          mv ./docs ./dist/docs.tgz
+          mv ./docs.tgz ./dist/docs.tgz
           cd dist
 
           echo '' >> ../CHANGELOG.md
