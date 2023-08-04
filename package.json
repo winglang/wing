@@ -13,7 +13,7 @@
     "test": "turbo lint eslint test",
     "package": "turbo package",
     "package:ci": "turbo package --color",
-    "test:ci": "turbo default --concurrency 1 && turbo compile post-compile lint eslint test --color --filter=!hangar",
+    "test:ci": "turbo default --color --concurrency 1 && turbo compile post-compile lint eslint test --color --filter=!hangar",
     "docs": "./scripts/docsite.sh",
     "changelog": "bump-pack",
     "install": "bash scripts/setup_wasi.sh",

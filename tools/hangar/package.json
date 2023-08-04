@@ -17,6 +17,7 @@
     "@wingconsole/ui": "workspace:^",
     "@winglang/compiler": "workspace:^",
     "@winglang/sdk": "workspace:^",
+    "winglang": "workspace:^",
     "cdktf": "^0.17.0",
     "execa": "^7.1.1",
     "npm": "^9.6.4",

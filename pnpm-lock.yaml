@@ -1326,6 +1326,9 @@ importers:
       vitest:
         specifier: ^0.30.1
         version: 0.30.1
+      winglang:
+        specifier: workspace:^
+        version: link:../../apps/wing
       yaml:
         specifier: ^2.2.1
         version: 2.2.1
