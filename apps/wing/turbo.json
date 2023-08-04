@@ -3,7 +3,6 @@
   "extends": ["//"],
   "pipeline": {
     "test": {
-      "inputs": ["*.ts", "*.json", "src/**", "test/**"],
       "dependsOn": ["^compile", "examples-valid#topo"]
     },
     "compile": {

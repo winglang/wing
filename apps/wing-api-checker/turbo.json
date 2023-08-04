@@ -4,9 +4,6 @@
   "pipeline": {
     "compile": {
       "outputs": ["lib/**"]
-    },
-    "test": {
-      "dependsOn": ["compile"]
     }
   }
 }

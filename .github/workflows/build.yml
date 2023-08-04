@@ -77,7 +77,7 @@ jobs:
         run: pnpm changelog
 
       - name: Build and Package
-        run: pnpm package
+        run: pnpm package:ci
         env:
           SEGMENT_WRITE_KEY: ${{ secrets.SEGMENT_WRITE_KEY }}
 

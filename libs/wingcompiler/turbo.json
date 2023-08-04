@@ -8,7 +8,6 @@
     },
     "compile": {
       "dependsOn": ["compile:copy-wingc-wasm"],
-      "inputs": ["src/**"],
       "outputs": ["dist/**"]
     },
     "package": {

@@ -2,6 +2,9 @@
   "$schema": "https://turborepo.org/schema.json",
   "globalDependencies": ["*.json", "*.toml", ".node-version", "insta.yaml"],
   "pipeline": {
+    "default": {
+      "inputs": ["*.json", ".projenrc.ts"]
+    },
     "compile": {
       "dependsOn": ["^compile"],
       "inputs": [
@@ -16,7 +19,7 @@
       ]
     },
     "test": {
-      "dependsOn": ["^compile"],
+      "dependsOn": ["compile"],
       "inputs": [
         "*.ts",
         "*.js",

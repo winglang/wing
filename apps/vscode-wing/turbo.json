@@ -9,7 +9,7 @@
       "dependsOn": ["compile"]
     },
     "package": {
-      "inputs": ["syntaxes", "resources"],
+      "inputs": ["syntaxes/**", "resources/**"],
       "outputs": ["vscode-wing.vsix"]
     }
   }

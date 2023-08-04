@@ -9,12 +9,7 @@
       ]
     },
     "test": {
-      "dependsOn": ["compile", "examples-valid#topo", "examples-invalid#topo"],
-      "inputs": ["*.json", "*.toml", "*.lock", "src/**", "test/**"]
-    },
-    "lint": {},
-    "eslint": {
-      "dependsOn": ["lint"]
+      "dependsOn": ["compile", "examples-valid#topo", "examples-invalid#topo"]
     }
   }
 }

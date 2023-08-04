@@ -8,7 +8,6 @@
     },
     "compile": {
       "dependsOn": ["pre-compile"],
-      "inputs": ["src/**"],
       "outputs": ["lib/**", ".jsii"]
     },
     "post-compile": {
