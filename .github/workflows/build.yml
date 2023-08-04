@@ -25,14 +25,14 @@ jobs:
         with:
           fetch-depth: 1
 
-      # - name: Compress Docs
-      #   run: tar -czvf docs.tgz docs/*
+      - name: Compress Docs
+        run: tar -czvf mydocs.tgz docs/*
 
       - name: Upload Docs
         uses: actions/upload-artifact@v3
         with:
-          name: docs
-          path: docs
+          name: mydocs.tgz
+          path: mydocs.tgz
 
   publish:
     name: Publish
@@ -48,7 +48,7 @@ jobs:
 
       - name: Compute Checksums
         run: |
-          tar -czvf dist/docs.tgz docs/*
+          mv mydocs.tgz dist/docs.tgz
           cd dist
 
           echo '' >> ../CHANGELOG.md
