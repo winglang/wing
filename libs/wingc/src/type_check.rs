@@ -1282,6 +1282,7 @@ impl Types {
 		if self.scope_envs.len() <= scope_idx {
 			self.scope_envs.resize_with(scope_idx + 1, || None);
 		}
+		assert!(self.scope_envs[scope_idx].is_none());
 		self.scope_envs[scope_idx] = Some(env);
 	}
 
