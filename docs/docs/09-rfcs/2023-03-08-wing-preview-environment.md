@@ -18,7 +18,7 @@ Secondly, it seeks to enhance the winglang ecosystem and its toolchain by buildi
 
 ## Requirements
 Create the first production feature of Wing Cloud - Wing cloud Preview Environments.
-Build and Deploy wing applications to a Wing Console simulated environment.
+Build and deploy Wing applications to an ephemeral (simulated) environment and use the Wing Console UI to interact with it.
 Allow developers to iterate with their teammates using a shared Wing Console instance.
 Seamlessly integrating with GitHub.
 
