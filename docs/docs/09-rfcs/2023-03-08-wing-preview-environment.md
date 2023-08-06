@@ -17,13 +17,13 @@ The **Wing Cloud Preview Environments** project is designed to achieve two key o
 Secondly, it seeks to enhance the winglang ecosystem and its toolchain by building a production application using the language.
 
 ## Requirements
-Create the first production feature of Wing Cloud - Wing cloud Preview Environments.
 Build and deploy Wing applications to an ephemeral (simulated) environment and use the Wing Console UI to interact with it.
-Allow developers to iterate with their teammates using a shared Wing Console instance.
+Automatically run tests on the preview environment once created and provide a UI for viewing the test results.
+Allow developers to collaborate with their teammates using a shared environment.
 Seamlessly integrating with GitHub.
 
 ### Developer Experience
-A developer using winglang has the capability to integrate preview environments with his/her repository.
+A developer using winglang has the capability to integrate Wing Cloud Preview Environments with his/her repository.
 
 #### Sign Up and Installation
 In order to use Wing Cloud Preview Environments, you should sign up to Wing Cloud.
@@ -33,28 +33,32 @@ The signup and installation process is straightforward using GitHub application:
 2. Complete GitHub authentication.
 3. Grant repository access permission.
 4. You are now signed up and ready to use Wing Cloud Preview Environments.
+5. A welcome email will be sent to you with additional information and links to documentation.
 
 #### Preview Environment for production branch
 For the production branch, there is a single preview environment that will constantly be up-to-date with the latest code committed.
 A link to the preview environment is available in the repository main page ("About" section).
+Production branch environment url structure is: `https://<gh-repository>-<production-branch-name>.wing.cloud.app`
 
 #### Preview Environments for Pull Requests
-Upon each creation of a pull request, an automatic comment will be added to the PR and will guide the developer to a dedicated preview environment. The deployed preview environment will have a unique url for easy identification.
+Upon each creation of a pull request, an automatic comment will be added to the PR and will guide the developer to dedicated preview environments.
 To provide a streamlined process for updating a pull request preview environment, each PR code changes will redeploy the preview environment and also will:
-1. provide a real-time build and deployment updates
+1. provide a real-time build and deployment status updates
 2. each entry point will have a seperated preview environment
-3. ensure a consistent url for each preview environment
-4. provide the ability to download the preview environment deployment logs for debugging purposes in case of failure
+3. ensure a consistent and unique url for each preview environment. The url structure: `https://<gh-repository>-<gh-branch>-<pr-number>-<entry-point>.wing.cloud.app`
+4. provide the ability to download the preview environment deployment logs for debugging purposes in case of failure, logs urls structure is: `https://wing.cloud/gh-account/gh-repo/gh-branch/entry-file/logs/`
 
 PR comment example:
 
-| Entry Point     | Status | Preview | Updated (UTC)        |
-|-----------------| ------------- | ------------- |----------------------| 
-| main.w          |  ✅ Ready ([logs](https:/main-pr.wing-preview.com/logs)) | [Visit Preview](https:/main-pr.wing-preview.com) | Jul 31, 2023 8:01am  |
-| another.main.w  |  ✅ Ready ([logs](https:/main-pr.wing-preview.com/logs)) | [Visit Preview](https:/main-pr.wing-preview.com) | Jul 30, 2023 10:01am |
-| failed.main.w   | ❌ Failed ([logs](https:/main-pr.wing-preview.com/logs))  |  | Jul 31, 2023 8:01am  |
-| building.main.w |  🔄 Building ([logs](https:/main-pr.wing-preview.com/logs))  | | Jul 31, 2023 8:01am  |
-| stale.main.w    | ⏸️ Stale  ([lean more](https:/winglang.io/docs/preview))  | | Jul 31, 2023 8:01am  |
+| Entry Point     | Status                                                                                    | Preview                                                                          | Updated (UTC)        |
+|-----------------|-------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------|----------------------| 
+| main.w          | ✅ Ready ([logs](https://wing.cloud/gh-account/gh-repo/gh-branch/main/logs/))              | [Visit Preview](https:/gh-repository-gh-branch-3312-main.wing.cloud.app)         | Jul 31, 2023 8:01am  |
+| another.main.w  | ✅ Ready ([logs](https://wing.cloud/gh-account/gh-repo/gh-branch/another-main/logs/))      | [Visit Preview](https:/gh-repository-gh-branch-3312-another-main.wing.cloud.app) | Jul 30, 2023 10:01am |
+| failed.main.w   | ❌ Failed ([logs](https://wing.cloud/gh-account/gh-repo/gh-branch/entry-file/logs/))       |                                                                                  | Jul 31, 2023 8:01am  |
+| building.main.w | 🔄 Building ([logs](https://wing.cloud/gh-account/gh-repo/gh-branch/entry-file/logs/))    |                                                                                  | Jul 31, 2023 8:01am  |
+| stale.main.w    | ⏸️ Stale  ([lean more](https://wing.cloud/gh-account/gh-repo/gh-branch/entry-file/logs/)) |                                                                                  | Jul 31, 2023 8:01am  |
+
+TBD - tests results per entry point
 
 #### Multiple Entry Points
 A developer can configure multiple entry points in a single PR.
@@ -62,12 +66,18 @@ Every `*.main.w` file in the repository will be considered as an entry point and
 All preview environments will be available in the PR comment and will be updated upon code changes.
 
 #### Populate Environment with Initial Data
-TBD
+Out of scope for this project.
 
-#### Running Tests
+#### Automatically Running Tests
+Upon PR creation and code changes, Wing Cloud Preview Environments will automatically run all tests defined for each entry point.
+For each test run, a new simulator will be created and will be destroyed upon test completion.
+The test results will be available in the PR comment for each entry point.
+
+#### Running Tests Manually
 Running tests on your environment is easy using the Wing Console tests UI.
-To prevent disruption for other users, tests will operate within isolated simulator context.
-For each test run a new simulator will be created and will be destroyed upon test completion.
+Each test will reload the simulator to create a clean environment.
+
+Once the test is over it will **not** clean up the simulator data, so you can debug the environment and share outputs with your teammates. 
 
 #### User-Controlled Environments termination
 Closing a PR will terminate the corresponding preview environments.
