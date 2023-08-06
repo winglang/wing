@@ -1035,7 +1035,8 @@ impl<'a> JSifier<'a> {
 				.map(|name| format!("\"{}\"", name))
 				.join(", ");
 
-			// insert as the first statement after the super() call
+			// insert as the first statement after the super() call. We using "?.()" to avoid calling the
+			// method if it doesn't exist.
 			body_code.insert_line(1, format!("this._addInflightOps?.({inflight_ops_string});"));
 		}
 
