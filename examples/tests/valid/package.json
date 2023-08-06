@@ -8,6 +8,7 @@
     "@cdktf/provider-aws": "^15.0.0",
     "aws-cdk-lib": "^2.64.0",
     "cdktf": "0.17.0",
+    "cdk8s": "2.35.0",
     "constructs": "^10",
     "jsii-code-samples": "1.7.0",
     "projen": "^0.71.60",

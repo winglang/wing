@@ -1036,7 +1036,7 @@ impl<'a> JSifier<'a> {
 				.join(", ");
 
 			// insert as the first statement after the super() call
-			body_code.insert_line(1, format!("this._addInflightOps({inflight_ops_string});"));
+			body_code.insert_line(1, format!("this._addInflightOps?.({inflight_ops_string});"));
 		}
 
 		code.add_code(body_code);
