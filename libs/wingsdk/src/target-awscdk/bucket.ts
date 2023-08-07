@@ -98,7 +98,7 @@ export class Bucket extends cloud.Bucket {
     Resource.addConnection({
       from: this,
       to: fn,
-      relationship: "onCreate",
+      relationship: "onCreate()",
     });
 
     this.bucket.addEventNotification(
@@ -116,7 +116,7 @@ export class Bucket extends cloud.Bucket {
     Resource.addConnection({
       from: this,
       to: fn,
-      relationship: "onDelete",
+      relationship: "onDelete()",
     });
 
     this.bucket.addEventNotification(
@@ -134,7 +134,7 @@ export class Bucket extends cloud.Bucket {
     Resource.addConnection({
       from: this,
       to: fn,
-      relationship: "onUpdate",
+      relationship: "onUpdate()",
     });
 
     this.bucket.addEventNotification(
@@ -152,7 +152,7 @@ export class Bucket extends cloud.Bucket {
     Resource.addConnection({
       from: this,
       to: fn,
-      relationship: "onCreate",
+      relationship: "onCreate()",
     });
     this.bucket.addEventNotification(
       EVENTS[cloud.BucketEventType.CREATE],
@@ -162,7 +162,7 @@ export class Bucket extends cloud.Bucket {
     Resource.addConnection({
       from: this,
       to: fn,
-      relationship: "onDelete",
+      relationship: "onDelete()",
     });
     this.bucket.addEventNotification(
       EVENTS[cloud.BucketEventType.DELETE],
@@ -172,7 +172,7 @@ export class Bucket extends cloud.Bucket {
     Resource.addConnection({
       from: this,
       to: fn,
-      relationship: "onUpdate",
+      relationship: "onUpdate()",
     });
     this.bucket.addEventNotification(
       EVENTS[cloud.BucketEventType.UPDATE],

@@ -140,7 +140,7 @@ return class Handler {
               {
                 "direction": "outbound",
                 "implicit": false,
-                "relationship": "get",
+                "relationship": "get()",
                 "resource": "root/my_api/OnRequestHandler-e645076f",
               },
             ],
@@ -166,7 +166,7 @@ return class Handler {
                   {
                     "direction": "inbound",
                     "implicit": false,
-                    "relationship": "get",
+                    "relationship": "get()",
                     "resource": "root/my_api",
                   },
                 ],
@@ -347,7 +347,7 @@ return class Handler {
               {
                 "direction": "outbound",
                 "implicit": false,
-                "relationship": "get",
+                "relationship": "get()",
                 "resource": "root/my_api/OnRequestHandler-e645076f",
               },
             ],
@@ -373,7 +373,7 @@ return class Handler {
                   {
                     "direction": "inbound",
                     "implicit": false,
-                    "relationship": "get",
+                    "relationship": "get()",
                     "resource": "root/my_api",
                   },
                 ],
@@ -554,7 +554,7 @@ return class Handler {
               {
                 "direction": "outbound",
                 "implicit": false,
-                "relationship": "get",
+                "relationship": "get()",
                 "resource": "root/my_api/OnRequestHandler-e645076f",
               },
             ],
@@ -580,7 +580,7 @@ return class Handler {
                   {
                     "direction": "inbound",
                     "implicit": false,
-                    "relationship": "get",
+                    "relationship": "get()",
                     "resource": "root/my_api",
                   },
                 ],
@@ -761,7 +761,7 @@ return class Handler {
               {
                 "direction": "outbound",
                 "implicit": false,
-                "relationship": "get",
+                "relationship": "get()",
                 "resource": "root/my_api/OnRequestHandler-e645076f",
               },
             ],
@@ -787,7 +787,7 @@ return class Handler {
                   {
                     "direction": "inbound",
                     "implicit": false,
-                    "relationship": "get",
+                    "relationship": "get()",
                     "resource": "root/my_api",
                   },
                 ],
@@ -968,7 +968,7 @@ return class Handler {
               {
                 "direction": "outbound",
                 "implicit": false,
-                "relationship": "get",
+                "relationship": "get()",
                 "resource": "root/my_api/OnRequestHandler-e645076f",
               },
             ],
@@ -994,7 +994,7 @@ return class Handler {
                   {
                     "direction": "inbound",
                     "implicit": false,
-                    "relationship": "get",
+                    "relationship": "get()",
                     "resource": "root/my_api",
                   },
                 ],
@@ -1277,43 +1277,43 @@ return class Handler {
               {
                 "direction": "outbound",
                 "implicit": false,
-                "relationship": "get",
+                "relationship": "get()",
                 "resource": "root/my_api/OnRequestHandler-e645076f",
               },
               {
                 "direction": "outbound",
                 "implicit": false,
-                "relationship": "post",
+                "relationship": "post()",
                 "resource": "root/my_api/OnRequestHandler-e645076f",
               },
               {
                 "direction": "outbound",
                 "implicit": false,
-                "relationship": "put",
+                "relationship": "put()",
                 "resource": "root/my_api/OnRequestHandler-e645076f",
               },
               {
                 "direction": "outbound",
                 "implicit": false,
-                "relationship": "delete",
+                "relationship": "delete()",
                 "resource": "root/my_api/OnRequestHandler-e645076f",
               },
               {
                 "direction": "outbound",
                 "implicit": false,
-                "relationship": "head",
+                "relationship": "head()",
                 "resource": "root/my_api/OnRequestHandler-e645076f",
               },
               {
                 "direction": "outbound",
                 "implicit": false,
-                "relationship": "options",
+                "relationship": "options()",
                 "resource": "root/my_api/OnRequestHandler-e645076f",
               },
               {
                 "direction": "outbound",
                 "implicit": false,
-                "relationship": "patch",
+                "relationship": "patch()",
                 "resource": "root/my_api/OnRequestHandler-e645076f",
               },
             ],
@@ -1339,43 +1339,43 @@ return class Handler {
                   {
                     "direction": "inbound",
                     "implicit": false,
-                    "relationship": "get",
+                    "relationship": "get()",
                     "resource": "root/my_api",
                   },
                   {
                     "direction": "inbound",
                     "implicit": false,
-                    "relationship": "post",
+                    "relationship": "post()",
                     "resource": "root/my_api",
                   },
                   {
                     "direction": "inbound",
                     "implicit": false,
-                    "relationship": "put",
+                    "relationship": "put()",
                     "resource": "root/my_api",
                   },
                   {
                     "direction": "inbound",
                     "implicit": false,
-                    "relationship": "delete",
+                    "relationship": "delete()",
                     "resource": "root/my_api",
                   },
                   {
                     "direction": "inbound",
                     "implicit": false,
-                    "relationship": "head",
+                    "relationship": "head()",
                     "resource": "root/my_api",
                   },
                   {
                     "direction": "inbound",
                     "implicit": false,
-                    "relationship": "options",
+                    "relationship": "options()",
                     "resource": "root/my_api",
                   },
                   {
                     "direction": "inbound",
                     "implicit": false,
-                    "relationship": "patch",
+                    "relationship": "patch()",
                     "resource": "root/my_api",
                   },
                 ],
@@ -1554,7 +1554,7 @@ return class Handler {
               {
                 "direction": "outbound",
                 "implicit": false,
-                "relationship": "get",
+                "relationship": "get()",
                 "resource": "root/my_api/OnRequestHandler-e645076f",
               },
             ],
@@ -1580,7 +1580,7 @@ return class Handler {
                   {
                     "direction": "inbound",
                     "implicit": false,
-                    "relationship": "get",
+                    "relationship": "get()",
                     "resource": "root/my_api",
                   },
                 ],
@@ -1836,13 +1836,13 @@ return class Handler {
               {
                 "direction": "outbound",
                 "implicit": false,
-                "relationship": "get",
+                "relationship": "get()",
                 "resource": "root/my_api/OnRequestHandler-7c48a9f0",
               },
               {
                 "direction": "outbound",
                 "implicit": false,
-                "relationship": "post",
+                "relationship": "post()",
                 "resource": "root/my_api/OnRequestHandler-f6d90a7f",
               },
             ],
@@ -1882,7 +1882,7 @@ return class Handler {
                   {
                     "direction": "inbound",
                     "implicit": false,
-                    "relationship": "get",
+                    "relationship": "get()",
                     "resource": "root/my_api",
                   },
                 ],
@@ -1904,7 +1904,7 @@ return class Handler {
                   {
                     "direction": "inbound",
                     "implicit": false,
-                    "relationship": "post",
+                    "relationship": "post()",
                     "resource": "root/my_api",
                   },
                 ],
@@ -2162,13 +2162,13 @@ return class Handler {
               {
                 "direction": "outbound",
                 "implicit": false,
-                "relationship": "get",
+                "relationship": "get()",
                 "resource": "root/my_api/OnRequestHandler-7c48a9f0",
               },
               {
                 "direction": "outbound",
                 "implicit": false,
-                "relationship": "get",
+                "relationship": "get()",
                 "resource": "root/my_api/OnRequestHandler-f6d90a7f",
               },
             ],
@@ -2208,7 +2208,7 @@ return class Handler {
                   {
                     "direction": "inbound",
                     "implicit": false,
-                    "relationship": "get",
+                    "relationship": "get()",
                     "resource": "root/my_api",
                   },
                 ],
@@ -2230,7 +2230,7 @@ return class Handler {
                   {
                     "direction": "inbound",
                     "implicit": false,
-                    "relationship": "get",
+                    "relationship": "get()",
                     "resource": "root/my_api",
                   },
                 ],
@@ -2411,7 +2411,7 @@ return class Handler {
               {
                 "direction": "outbound",
                 "implicit": false,
-                "relationship": "get",
+                "relationship": "get()",
                 "resource": "root/my_api/OnRequestHandler-e645076f",
               },
             ],
@@ -2437,7 +2437,7 @@ return class Handler {
                   {
                     "direction": "inbound",
                     "implicit": false,
-                    "relationship": "get",
+                    "relationship": "get()",
                     "resource": "root/my_api",
                   },
                 ],
@@ -2627,7 +2627,7 @@ return class Handler {
               {
                 "direction": "outbound",
                 "implicit": false,
-                "relationship": "get",
+                "relationship": "get()",
                 "resource": "root/my_api/OnRequestHandler-e645076f",
               },
             ],
@@ -2653,7 +2653,7 @@ return class Handler {
                   {
                     "direction": "inbound",
                     "implicit": false,
-                    "relationship": "get",
+                    "relationship": "get()",
                     "resource": "root/my_api",
                   },
                 ],
@@ -2834,7 +2834,7 @@ return class Handler {
               {
                 "direction": "outbound",
                 "implicit": false,
-                "relationship": "post",
+                "relationship": "post()",
                 "resource": "root/my_api/OnRequestHandler-e645076f",
               },
             ],
@@ -2860,7 +2860,7 @@ return class Handler {
                   {
                     "direction": "inbound",
                     "implicit": false,
-                    "relationship": "post",
+                    "relationship": "post()",
                     "resource": "root/my_api",
                   },
                 ],

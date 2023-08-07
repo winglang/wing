@@ -73,7 +73,7 @@ export class Api extends cloud.Api {
     Resource.addConnection({
       from: this,
       to: fn,
-      relationship: "get",
+      relationship: "get()",
     });
   }
 
@@ -100,7 +100,7 @@ export class Api extends cloud.Api {
     Resource.addConnection({
       from: this,
       to: fn,
-      relationship: "post",
+      relationship: "post()",
     });
   }
 
@@ -127,7 +127,7 @@ export class Api extends cloud.Api {
     Resource.addConnection({
       from: this,
       to: fn,
-      relationship: "put",
+      relationship: "put()",
     });
   }
 
@@ -154,7 +154,7 @@ export class Api extends cloud.Api {
     Resource.addConnection({
       from: this,
       to: fn,
-      relationship: "delete",
+      relationship: "delete()",
     });
   }
 
@@ -181,7 +181,7 @@ export class Api extends cloud.Api {
     Resource.addConnection({
       from: this,
       to: fn,
-      relationship: "patch",
+      relationship: "patch()",
     });
   }
 
@@ -208,7 +208,7 @@ export class Api extends cloud.Api {
     Resource.addConnection({
       from: this,
       to: fn,
-      relationship: "options",
+      relationship: "options()",
     });
   }
 
@@ -235,7 +235,7 @@ export class Api extends cloud.Api {
     Resource.addConnection({
       from: this,
       to: fn,
-      relationship: "head",
+      relationship: "head()",
     });
   }
 
@@ -262,7 +262,7 @@ export class Api extends cloud.Api {
     Resource.addConnection({
       from: this,
       to: fn,
-      relationship: "connect",
+      relationship: "connect()",
     });
   }
 

@@ -134,7 +134,7 @@ exports[`schedule behavior with cron 2`] = `
                     {
                       "direction": "outbound",
                       "implicit": false,
-                      "relationship": "onTick",
+                      "relationship": "onTick()",
                       "resource": "root/Default/Schedule-OnTick-c5395e41",
                     },
                   ],
@@ -186,7 +186,7 @@ exports[`schedule behavior with cron 2`] = `
                     {
                       "direction": "inbound",
                       "implicit": false,
-                      "relationship": "onTick",
+                      "relationship": "onTick()",
                       "resource": "root/Default/Schedule",
                     },
                   ],
@@ -478,7 +478,7 @@ exports[`schedule behavior with rate 2`] = `
                     {
                       "direction": "outbound",
                       "implicit": false,
-                      "relationship": "onTick",
+                      "relationship": "onTick()",
                       "resource": "root/Default/Schedule-OnTick-c5395e41",
                     },
                   ],
@@ -530,7 +530,7 @@ exports[`schedule behavior with rate 2`] = `
                     {
                       "direction": "inbound",
                       "implicit": false,
-                      "relationship": "onTick",
+                      "relationship": "onTick()",
                       "resource": "root/Default/Schedule",
                     },
                   ],
@@ -897,13 +897,13 @@ exports[`schedule with two functions 2`] = `
                     {
                       "direction": "outbound",
                       "implicit": false,
-                      "relationship": "onTick",
+                      "relationship": "onTick()",
                       "resource": "root/Default/Schedule-OnTick-7b33bcba",
                     },
                     {
                       "direction": "outbound",
                       "implicit": false,
-                      "relationship": "onTick",
+                      "relationship": "onTick()",
                       "resource": "root/Default/Schedule-OnTick-0a615500",
                     },
                   ],
@@ -963,7 +963,7 @@ exports[`schedule with two functions 2`] = `
                     {
                       "direction": "inbound",
                       "implicit": false,
-                      "relationship": "onTick",
+                      "relationship": "onTick()",
                       "resource": "root/Default/Schedule",
                     },
                   ],
@@ -1055,7 +1055,7 @@ exports[`schedule with two functions 2`] = `
                     {
                       "direction": "inbound",
                       "implicit": false,
-                      "relationship": "onTick",
+                      "relationship": "onTick()",
                       "resource": "root/Default/Schedule",
                     },
                   ],

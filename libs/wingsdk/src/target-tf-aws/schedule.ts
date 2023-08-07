@@ -81,7 +81,7 @@ export class Schedule extends cloud.Schedule {
     Resource.addConnection({
       from: this,
       to: fn,
-      relationship: "onTick",
+      relationship: "onTick()",
     });
 
     return fn;

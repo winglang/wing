@@ -423,7 +423,7 @@ export const createAppRouter = () => {
                   return false;
                 }
 
-                if (relationship === "$inflight_init") {
+                if (relationship === "$inflight_init()") {
                   return false;
                 }
 

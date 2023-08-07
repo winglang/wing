@@ -385,15 +385,15 @@ export enum BucketEventType {
   /**
    * create
    */
-  CREATE = "onCreate",
+  CREATE = "onCreate()",
   /**
    * delete
    */
-  DELETE = "onDelete",
+  DELETE = "onDelete()",
   /**
    * update
    */
-  UPDATE = "onUpdate",
+  UPDATE = "onUpdate()",
 }
 
 /**

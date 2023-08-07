@@ -79,7 +79,7 @@ export class Api extends cloud.Api implements ISimulatorResource {
     Resource.addConnection({
       from: this,
       to: fn,
-      relationship: method.toLowerCase(),
+      relationship: `${method.toLowerCase()}()`,
     });
   }
 

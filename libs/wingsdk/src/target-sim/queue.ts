@@ -89,7 +89,7 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
     Resource.addConnection({
       from: this,
       to: fn,
-      relationship: "setConsumer",
+      relationship: "setConsumer()",
     });
 
     return fn;

@@ -63,7 +63,7 @@ export class Topic extends cloud.Topic {
     Resource.addConnection({
       from: this,
       to: fn,
-      relationship: "onMessage",
+      relationship: "onMessage()",
     });
 
     return fn;

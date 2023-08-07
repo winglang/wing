@@ -59,7 +59,7 @@ export class Schedule extends cloud.Schedule implements ISimulatorResource {
     Resource.addConnection({
       from: this,
       to: fn,
-      relationship: "onTick",
+      relationship: "onTick()",
     });
 
     return fn;
