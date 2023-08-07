@@ -2641,14 +2641,29 @@ impl<'a> TypeChecker<'a> {
 				json_type = inner;
 			}
 		}
+		if let Type::Map(inner) = **return_type.maybe_unwrap_option() {
+			if let Type::Json(Some(JsonData {
+				kind: JsonDataKind::Fields(field),
+				..
+			})) = &*inner
+			{
+				if field.is_empty() && expected_types.iter().all(|t| matches!(**t, Type::Map(_))) {
+					return return_type;
+				}
+				json_type = inner;
+			}
+		}
 
 		// if the actual type is a Json with known data, we can attempt to structurally type check
 		if expected_types.len() == 1 {
 			let expected_type = self.types.maybe_unwrap_inference(expected_types[0]);
 			let expected_type_unwrapped = expected_type.maybe_unwrap_option();
 			if let Type::Json(Some(data)) = &**json_type.maybe_unwrap_option() {
-				if expected_type_unwrapped.is_json_legal_value() || expected_type_unwrapped.is_struct() {
-					// we don't need to check the json-ability of this expr later because we know it's legal or it's being used as a struct
+				if expected_type_unwrapped.is_json_legal_value()
+					|| expected_type_unwrapped.is_struct()
+					|| matches!(**expected_type_unwrapped, Type::Map(_))
+				{
+					// we don't need to check the json-ability of this expr later because we know it's legal or it's being used as a struct/map
 					self.types.json_literal_casts.insert(data.expression_id, expected_type);
 				}
 				match &data.kind {
@@ -2658,7 +2673,12 @@ impl<'a> TypeChecker<'a> {
 					}
 					JsonDataKind::Fields(fields) => {
 						if expected_type_unwrapped.is_struct() {
-							self.validate_structural_type(fields, &expected_type, span);
+							self.validate_structural_type(fields, expected_type_unwrapped, span);
+							return return_type;
+						} else if let Type::Map(expected_map) = &**expected_type_unwrapped {
+							for field_info in fields.values() {
+								self.validate_type(field_info.type_, *expected_map, &field_info.span);
+							}
 							return return_type;
 						}
 					}

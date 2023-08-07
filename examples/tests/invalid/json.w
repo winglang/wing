@@ -49,6 +49,10 @@ struct StructyJson {
   maybe: InnerStructyJson;
 }
 
+struct StructyJsonMap {
+  stuff: Map<num>;
+}
+
 let notJsonMissingField: StructyJson = {
   foo: "bar",
   stuff: [],
@@ -71,4 +75,14 @@ let notJsonBadArray: StructyJson = {
   maybe: {
     good: true,
   }
+};
+
+
+let notJsonMap: StructyJsonMap = {
+  stuff: {
+    a: 1,
+    b: "",
+//     ^^ Expected type to be "num", but got "str" instead
+    c: 3,
+  },
 };
