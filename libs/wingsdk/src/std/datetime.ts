@@ -1,39 +1,39 @@
 import { Code, InflightClient } from "../core";
 
 /**
- * interface that is used for setting Datetime date
+ * Interface that is used for setting Datetime date
  */
 export interface DatetimeComponents {
   /**
-   * year
+   * Year
    */
   readonly year: number;
   /**
-   * month
+   * Month
    */
   readonly month: number;
   /**
-   * day
+   * Day
    */
   readonly day: number;
   /**
-   * hours
+   * Hours
    */
   readonly hour: number;
   /**
-   * minutes
+   * Minutes
    */
   readonly min: number;
   /**
-   * seconds
+   * Seconds
    */
   readonly sec: number;
   /**
-   * milliseconds
+   * Milliseconds
    */
   readonly ms: number;
   /**
-   *  timezone offset in minutes from UTC
+   *  Timezone offset in minutes from UTC
    */
   readonly tz: number;
 }
@@ -199,7 +199,7 @@ export class Datetime {
   }
 
   /**
-   * returns the offset in minutes from UTC
+   * Returns the offset in minutes from UTC
    *
    * @returns a number representing the datetime's offset in minutes from UTC
    */

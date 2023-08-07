@@ -159,7 +159,7 @@ export abstract class Api extends Resource {
     props?: ApiConnectProps
   ): void;
   /**
-   * validating path:
+   * Validating path:
    * if has curly brackets pairs- the part that inside the brackets is only letter, digit or _, not empty and placed before and after "/"
    * @param path
    * @throws if the path is invalid

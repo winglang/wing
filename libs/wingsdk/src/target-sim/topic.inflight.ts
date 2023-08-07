@@ -65,7 +65,7 @@ export class Topic
     }
   }
 
-  async addEventSubscription(
+  public async addEventSubscription(
     subscriber: FunctionHandle,
     subscriptionProps: EventSubscription
   ): Promise<void> {
@@ -76,7 +76,7 @@ export class Topic
     this.subscribers.push(s);
   }
 
-  async publish(message: string): Promise<void> {
+  public async publish(message: string): Promise<void> {
     this.context.addTrace({
       data: {
         message: `Publish (message=${message}).`,
