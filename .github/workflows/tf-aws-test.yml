@@ -77,13 +77,13 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
       - name: Execute wing test in matrix directory
-        env:
-          TF_LOG: info
-          TF_LOG_PATH: ${{ runner.workspace }}/terraform.log
+        # env:
+        #   TF_LOG: info
+        #   TF_LOG_PATH: ${{ runner.workspace }}/terraform.log
         run: cd ${{ matrix.example.directory }} && wing test -t sim /*.w
-      - name: Output Terraform log
-        if: failure()
-        run: cat ${{ runner.workspace }}/terraform.log
+      # - name: Output Terraform log
+        # if: failure()
+        # run: cat ${{ runner.workspace }}/terraform.log
     
     
     # steps:
