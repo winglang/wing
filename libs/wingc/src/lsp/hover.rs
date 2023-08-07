@@ -276,6 +276,11 @@ impl<'a> Visit<'a> for HoverVisitor<'a> {
 				if let Some(f) = fields.iter().find(|f| f.0.span.contains(&self.position)) {
 					let field_name = f.0;
 					let type_ = self.types.maybe_unwrap_inference(self.types.get_expr_type(node));
+					let type_ = if let Some(type_) = self.types.get_type_from_json_cast(node.id) {
+						*type_
+					} else {
+						type_
+					};
 					if let Some(structy) = type_.maybe_unwrap_option().as_struct() {
 						self.found = Some((
 							field_name.span.clone(),

@@ -9,7 +9,7 @@ use itertools::Itertools;
 
 use crate::diagnostic::WingSpan;
 use crate::type_check::symbol_env::SymbolEnvRef;
-use crate::type_check::CLOSURE_CLASS_HANDLE_METHOD;
+use crate::type_check::{ExprId, CLOSURE_CLASS_HANDLE_METHOD};
 
 static EXPR_COUNTER: AtomicUsize = AtomicUsize::new(0);
 
@@ -584,7 +584,7 @@ impl Spanned for CalleeKind {
 #[derive(Debug)]
 pub struct Expr {
 	/// An identifier that is unique among all expressions in the AST.
-	pub id: usize,
+	pub id: ExprId,
 	/// The kind of expression.
 	pub kind: ExprKind,
 	/// The span of the expression.
