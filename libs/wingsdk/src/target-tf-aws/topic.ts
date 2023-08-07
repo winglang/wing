@@ -28,7 +28,7 @@ const NAME_OPTS: NameOptions = {
 export class Topic extends cloud.Topic {
   private readonly topic: SnsTopic;
   /**
-   * topic's publishing permissions. can be use as a dependency of another resource.
+   * Topic's publishing permissions. can be use as a dependency of another resource.
    * (the one that got the permissions to publish)
    * */
   public permissions!: SnsTopicPolicy;
@@ -42,7 +42,7 @@ export class Topic extends cloud.Topic {
   }
 
   /**
-   * topic's arn
+   * Topic's arn
    */
   public get arn(): string {
     return this.topic.arn;
