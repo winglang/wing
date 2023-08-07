@@ -1,8 +1,7 @@
-import { InvokeCommand, LambdaClient } from "@aws-sdk/client-lambda";
+import { InvokeCommand, LambdaClient, LogType } from "@aws-sdk/client-lambda";
 import { fromUtf8, toUtf8 } from "@aws-sdk/util-utf8-node";
-import { Context } from "aws-lambda";
 import { IFunctionClient } from "../cloud";
-import { Trace } from "../std";
+import { Trace, TraceType } from "../std";
 
 export class FunctionClient implements IFunctionClient {
   constructor(
@@ -12,69 +11,13 @@ export class FunctionClient implements IFunctionClient {
   ) {}
 
   /**
-   * Reading the function's logs,
-   * along with any logs of a function that was called by the parent function
-   *
-   * @param logGroupName function's context logGroupName
-   * @param logStreamName function's context logGroupName
-   * @param constructPath cdk's path to construct
-   * @returns a list of Traces
+   * Invoke the function, passing the given payload as an argument.
+   *  @returns the function returned payload only
    */
-
-  private readLogs(logs: Trace[]): Trace[] {
-    const logsCollector: Trace[] = [];
-
-    for (const log of logs) {
-      const invocationLog = log.data.message?.match(/Invoking .*:/gm);
-
-      if (invocationLog) {
-        const logData = log.data.message.split("\t") ?? [];
-        const parsedLogs: Trace[] =
-          JSON.parse(
-            Buffer.from(logData[logData.length - 1], "base64").toString(
-              "binary"
-            )
-          )?.logs ?? [];
-
-        logsCollector.push(...this.readLogs(parsedLogs));
-      } else {
-        logsCollector.push(log);
-      }
-    }
-
-    return logsCollector;
-  }
-
-  /**
-   * Verify the function's return payload
-   *
-   * @returns the function's return payload, if verified
-   */
-  private verify(value: { context?: Context; payload: string }): string {
-    if (typeof value.payload !== "string") {
-      throw new Error(
-        `function returned value of type ${typeof value.payload}, not string`
-      );
-    }
-    return value.payload;
-  }
-
-  /**
-   * Invoke the function
-   */
-  private async executeFunction(payload: string): Promise<{
-    context?: Context & {
-      logs: Trace[];
-    };
-    payload: string;
-  }> {
+  public async invoke(payload: string): Promise<string> {
     const command = new InvokeCommand({
       FunctionName: this.functionArn,
       Payload: fromUtf8(JSON.stringify(payload)),
-      ClientContext: Buffer.from(
-        JSON.stringify({ constructPath: this.constructPath }),
-        "binary"
-      ).toString("base64"),
     });
     const response = await this.lambdaClient.send(command);
 
@@ -86,31 +29,15 @@ export class FunctionClient implements IFunctionClient {
       );
     }
     if (!response.Payload) {
-      return { payload: "" };
+      return "";
     }
     const value = JSON.parse(toUtf8(response.Payload)) ?? "";
+    if (typeof value !== "string") {
+      throw new Error(
+        `function returned value of type ${typeof value}, not string`
+      );
+    }
     return value;
-  }
-
-  /**
-   * Invoke the function, passing the given payload as an argument.
-   *  @returns the function returned payload only
-   */
-  public async invoke(payload: string): Promise<string> {
-    const value = await this.executeFunction(payload);
-    const functionName = value?.context?.functionName;
-
-    // kind of hacky, but this is the most convenient way to pass those arguments to the calling function
-    console.log(
-      `Invoking ${functionName}:\t${Buffer.from(
-        JSON.stringify({
-          logs: value?.context?.logs,
-        }),
-        "binary"
-      ).toString("base64")}`
-    );
-
-    return this.verify(value);
   }
 
   /**
@@ -119,14 +46,63 @@ export class FunctionClient implements IFunctionClient {
    * @returns the function returned payload and logs
    */
   public async invokeWithLogs(payload: string): Promise<[string, Trace[]]> {
-    const traces: Trace[] = [];
+    const command = new InvokeCommand({
+      FunctionName: this.functionArn,
+      Payload: fromUtf8(JSON.stringify(payload)),
+      LogType: LogType.Tail,
+    });
+    const response = await this.lambdaClient.send(command);
 
-    const value = await this.executeFunction(payload);
+    const logs = Buffer.from(response.LogResult ?? "", "base64").toString();
+    const traces = parseLogs(logs, this.constructPath);
 
-    if (value.context?.logs) {
-      traces.push(...this.readLogs(value.context.logs));
+    if (response.FunctionError) {
+      throw new Error(
+        `Invoke failed with message: "${
+          response.FunctionError
+        }". Full error: "${toUtf8(response.Payload!)}"`
+      );
     }
-
-    return [this.verify(value), traces];
+    if (!response.Payload) {
+      return ["", traces];
+    }
+    const value = JSON.parse(toUtf8(response.Payload)) ?? "";
+    if (typeof value !== "string") {
+      throw new Error(
+        `function returned value of type ${typeof value}, not string`
+      );
+    }
+    return ["", traces];
   }
+}
+
+export function parseLogs(logs: string, sourcePath: string) {
+  const lines = logs.split("\n");
+  const traces: Trace[] = [];
+  for (const line of lines) {
+    const parts = line.split("\t");
+    // 2023-08-04T16:40:47.309Z 6beb7628-d0c3-4fe9-bf5a-d64c559aa25f INFO hello
+    // 2023-08-04T16:40:47.309Z 6beb7628-d0c3-4fe9-bf5a-d64c559aa25f Task timed out after 3.0 seconds
+    if (
+      parts.length >= 3 &&
+      parts[0].match(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/) !==
+        null &&
+      parts[1].match(/^[0-9a-fA-F-]{36}$/) !== null
+    ) {
+      const timestamp = parts[0];
+      if (parts.slice(2).join(" ").startsWith("Task timed out after")) {
+        continue;
+      }
+      const message = parts.slice(3).join(" ");
+      const trace: Trace = {
+        data: { message },
+        timestamp,
+        sourceType: "wingsdk.cloud.Function",
+        sourcePath,
+        type: TraceType.LOG,
+      };
+      traces.push(trace);
+    }
+  }
+  return traces;
 }
