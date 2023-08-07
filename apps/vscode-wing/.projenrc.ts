@@ -68,6 +68,7 @@ const project = new TypeScriptAppProject({
     "@types/ws",
     "@wingconsole/app@workspace:^",
     "@wingconsole/server@workspace:^",
+    "winglang@workspace:^",
   ],
 });
 
