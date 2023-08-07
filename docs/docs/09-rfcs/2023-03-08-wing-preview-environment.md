@@ -35,6 +35,7 @@ Seamlessly integrating with GitHub.
 1. Wing Cloud Preview Environments will use GitHub for authentication and authorization.
 2. Developers will be able to install Wing Cloud Preview Environments on a repository only if they have the GitHub permissions.
 3. Developers will be able to create a PR with a preview environment only if they have the necessary GitHub permissions to the repository **and** their GitHub user is signed up to Wing Cloud.
+4. Everyone can view a preview environment if they have the url.
 
 ### Wing Cloud Preview Environments Developer Experience
 A developer using winglang has the capability to integrate Wing Cloud Preview Environments with their repository.
