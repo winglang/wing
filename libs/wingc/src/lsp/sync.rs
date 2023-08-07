@@ -7,7 +7,7 @@ use std::path::{Path, PathBuf};
 use tree_sitter::Tree;
 
 use crate::closure_transform::ClosureTransformer;
-use crate::diagnostic::{found_errors, reset_diagnostics, Diagnostic};
+use crate::diagnostic::{found_errors, reset_diagnostics};
 use crate::file_graph::FileGraph;
 use crate::files::Files;
 use crate::fold::Fold;
@@ -28,8 +28,6 @@ pub struct ProjectData {
 	pub file_graph: FileGraph,
 	/// tree-sitter trees
 	pub trees: IndexMap<PathBuf, Tree>,
-	/// The diagnostics returned by wingc
-	pub diagnostics: Vec<Diagnostic>,
 	/// AST for each file
 	pub asts: IndexMap<PathBuf, Scope>,
 	/// The JSII imports for the file. This is saved so we can load JSII types (for autocompletion for example)
@@ -43,7 +41,6 @@ impl ProjectData {
 			files: Files::new(),
 			file_graph: FileGraph::default(),
 			trees: IndexMap::new(),
-			diagnostics: Vec::new(),
 			asts: IndexMap::new(),
 			jsii_imports: Vec::new(),
 		}
