@@ -6,6 +6,12 @@
       "outputs": ["dist/**"],
       "env": ["SEGMENT_WRITE_KEY"]
     },
+    "pre-test": {
+      "dependsOn": ["compile"]
+    },
+    "test": {
+      "dependsOn": ["pre-test"]
+    },
     "package": {
       "outputs": ["../../../../dist/wingconsole-app-*.tgz"]
     }
