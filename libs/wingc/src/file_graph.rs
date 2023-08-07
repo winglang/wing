@@ -166,6 +166,41 @@ mod tests {
 	}
 
 	#[test]
+	fn toposort_two_cycles() {
+		// graph with six nodes, where {A,B,C} form a cycle and {D,E,F} form a cycle
+		let mut graph = FileGraph::default();
+		graph.update_file(Path::new("a"), &[PathBuf::from("b")]);
+		graph.update_file(Path::new("b"), &[PathBuf::from("c")]);
+		graph.update_file(Path::new("c"), &[PathBuf::from("a")]);
+		graph.update_file(Path::new("d"), &[PathBuf::from("e")]);
+		graph.update_file(Path::new("e"), &[PathBuf::from("f")]);
+		graph.update_file(Path::new("f"), &[PathBuf::from("d")]);
+
+		// we don't care about where the cycles start, so we sort the list
+		let mut err = graph.toposort().unwrap_err();
+		err.sort();
+
+		// note: if we returned the cycle {D,E,F} that would also be valid
+		assert_eq!(err, vec![PathBuf::from("a"), PathBuf::from("b"), PathBuf::from("c"),]);
+	}
+
+	#[test]
+	fn toposort_cycle_and_unrelated_component() {
+		// graph with 5 nodes, where A depends on B, and {C,D,E} form a cycle
+		let mut graph = FileGraph::default();
+		graph.update_file(Path::new("a"), &[PathBuf::from("b")]);
+		graph.update_file(Path::new("b"), &[]);
+		graph.update_file(Path::new("c"), &[PathBuf::from("d")]);
+		graph.update_file(Path::new("d"), &[PathBuf::from("e")]);
+		graph.update_file(Path::new("e"), &[PathBuf::from("c")]);
+
+		// we don't care about where the cycle starts, so we sort the list
+		let mut err = graph.toposort().unwrap_err();
+		err.sort();
+		assert_eq!(err, vec![PathBuf::from("c"), PathBuf::from("d"), PathBuf::from("e")]);
+	}
+
+	#[test]
 	fn toposort_update_edges() {
 		// graph with 3 nodes, A, B, and C, where A depends on B and C, and B depends on C
 		let mut graph = FileGraph::default();
