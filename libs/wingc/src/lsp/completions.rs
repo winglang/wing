@@ -1,3 +1,4 @@
+use itertools::Itertools;
 use lsp_types::{
 	Command, CompletionItem, CompletionItemKind, CompletionResponse, Documentation, InsertTextFormat, MarkupContent,
 	MarkupKind, Position, Range, TextEdit,
@@ -50,22 +51,18 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 			let contents = project_data.files.get_file(&file).expect("file not found");
 
 			// get all character from file_data.contents up to the current position
-			let mut preceding_text = String::new();
-			for (i, line) in contents.lines().enumerate() {
-				if i > params.text_document_position.position.line as usize {
-					break;
+			let preceding_text = contents
+				.lines()
+				.enumerate()
+				.take_while(|(i, _)| *i <= params.text_document_position.position.line as usize)
+				.map(|(i, s)| {
+					if i == params.text_document_position.position.line as usize {
+						&s[..params.text_document_position.position.character as usize].trim_end()
+					} else {
+						s
 				}
-				if i != 0 {
-					preceding_text.push('\n');
-				}
-				if i == params.text_document_position.position.line as usize {
-					line.trim_end().chars().take(params.text_document_position.position.character as usize).for_each(|c| {
-						preceding_text.push(c);
-					});
-				} else {
-					preceding_text.push_str(line);
-				}
-			}
+				})
+				.join("\n");
 			let last_char_is_colon = preceding_text.ends_with(':');
 
 			let true_point = Point::new(
