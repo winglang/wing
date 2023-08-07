@@ -827,9 +827,9 @@ Duration <DURATION>"
 
 exports[`inference.w 1`] = `
 "error: Missing required type annotation for method signature
-   --> ../../../examples/tests/invalid/inference.w:79:8
+   --> ../../../examples/tests/invalid/inference.w:78:8
    |
-79 |   args(nice) {
+78 |   args(nice) {
    |        ^^^^ Missing required type annotation for method signature
 
 
@@ -875,17 +875,10 @@ error: Expected type to be \\"inflight (key: str, type: BucketEventType): void\\
    |                               ^^^^ Expected type to be \\"inflight (key: str, type: BucketEventType): void\\", but got \\"inflight (request: ApiRequest): ApiResponse\\" instead
 
 
-error: Expected \\"Json\\" elements to be Json values (https://www.json.org/json-en.html), but got \\"Array<unknown>\\" which is not a Json value
-   --> ../../../examples/tests/invalid/inference.w:71:14
-   |
-71 | Json { cool: anotherEmptyArray };
-   |              ^^^^^^^^^^^^^^^^^ Expected \\"Json\\" elements to be Json values (https://www.json.org/json-en.html), but got \\"Array<unknown>\\" which is not a Json value
-
-
 error: Unexpected return value from void function. Return type annotations are required for methods.
-   --> ../../../examples/tests/invalid/inference.w:76:5
+   --> ../../../examples/tests/invalid/inference.w:75:5
    |
-76 |     return true;
+75 |     return true;
    |     ^^^^^^^^^^^^ Unexpected return value from void function. Return type annotations are required for methods.
 
 
@@ -1231,46 +1224,39 @@ exports[`json.w 1`] = `
    |                          ^ Json literal must have an element
 
 
-error: Expected type to be \\"str\\", but got \\"Json\\" instead
-  --> ../../../examples/tests/invalid/json.w:5:14
+error: Expected type to be \\"num\\", but got \\"str\\" instead
+  --> ../../../examples/tests/invalid/json.w:4:14
   |
-5 | let s: str = j;
-  |              ^ Expected type to be \\"str\\", but got \\"Json\\" instead
+4 | let j = Json \\"Hello\\";
+  |              ^^^^^^^ Expected type to be \\"num\\", but got \\"str\\" instead
 
 
-error: Expected type to be \\"num\\", but got \\"Json\\" instead
-  --> ../../../examples/tests/invalid/json.w:7:14
+error: Expected type to be \\"bool\\", but got \\"str\\" instead
+  --> ../../../examples/tests/invalid/json.w:4:14
   |
-7 | let n: num = j;
-  |              ^ Expected type to be \\"num\\", but got \\"Json\\" instead
+4 | let j = Json \\"Hello\\";
+  |              ^^^^^^^ Expected type to be \\"bool\\", but got \\"str\\" instead
 
 
-error: Expected type to be \\"bool\\", but got \\"Json\\" instead
-  --> ../../../examples/tests/invalid/json.w:9:15
+error: Expected type to be \\"Map<str>\\", but got \\"str\\" instead
+  --> ../../../examples/tests/invalid/json.w:4:14
   |
-9 | let b: bool = j;
-  |               ^ Expected type to be \\"bool\\", but got \\"Json\\" instead
+4 | let j = Json \\"Hello\\";
+  |              ^^^^^^^ Expected type to be \\"Map<str>\\", but got \\"str\\" instead
 
 
-error: Expected type to be \\"Map<str>\\", but got \\"Json\\" instead
-   --> ../../../examples/tests/invalid/json.w:11:19
-   |
-11 | let m: Map<str> = j;
-   |                   ^ Expected type to be \\"Map<str>\\", but got \\"Json\\" instead
+error: Expected type to be \\"Set<str>\\", but got \\"str\\" instead
+  --> ../../../examples/tests/invalid/json.w:4:14
+  |
+4 | let j = Json \\"Hello\\";
+  |              ^^^^^^^ Expected type to be \\"Set<str>\\", but got \\"str\\" instead
 
 
-error: Expected type to be \\"Set<str>\\", but got \\"Json\\" instead
-   --> ../../../examples/tests/invalid/json.w:13:20
-   |
-13 | let s2: Set<str> = j;
-   |                    ^ Expected type to be \\"Set<str>\\", but got \\"Json\\" instead
-
-
-error: Expected type to be \\"Array<str>\\", but got \\"Json\\" instead
-   --> ../../../examples/tests/invalid/json.w:15:21
-   |
-15 | let a: Array<str> = j;
-   |                     ^ Expected type to be \\"Array<str>\\", but got \\"Json\\" instead
+error: Expected type to be \\"Array<str>\\", but got \\"str\\" instead
+  --> ../../../examples/tests/invalid/json.w:4:14
+  |
+4 | let j = Json \\"Hello\\";
+  |              ^^^^^^^ Expected type to be \\"Array<str>\\", but got \\"str\\" instead
 
 
 error: Unknown symbol \\"set\\"
@@ -1278,20 +1264,6 @@ error: Unknown symbol \\"set\\"
    |
 20 | foreverJson.set(\\"a\\", \\"world!\\");
    |             ^^^ Unknown symbol \\"set\\"
-
-
-error: Expected \\"Json\\" elements to be Json values (https://www.json.org/json-en.html), but got \\"Bucket\\" which is not a Json value
-   --> ../../../examples/tests/invalid/json.w:24:18
-   |
-24 | let jArr = Json [bkt];
-   |                  ^^^ Expected \\"Json\\" elements to be Json values (https://www.json.org/json-en.html), but got \\"Bucket\\" which is not a Json value
-
-
-error: Expected \\"Json\\" elements to be Json values (https://www.json.org/json-en.html), but got \\"Bucket\\" which is not a Json value
-   --> ../../../examples/tests/invalid/json.w:27:28
-   |
-27 | let jsonObj = Json { boom: bkt };
-   |                            ^^^ Expected \\"Json\\" elements to be Json values (https://www.json.org/json-en.html), but got \\"Bucket\\" which is not a Json value
 
 
 error: Expected type to be \\"num?\\", but got \\"str?\\" instead
@@ -1313,6 +1285,45 @@ error: Expected type to be \\"bool?\\", but got \\"num?\\" instead
    |
 39 | let tryBool: bool? = j.tryAsNum();
    |                      ^^^^^^^^^^^^ Expected type to be \\"bool?\\", but got \\"num?\\" instead
+
+
+error: Missing required field \\"maybe\\" from \\"StructyJson\\"
+   --> ../../../examples/tests/invalid/json.w:52:40
+   |  
+52 |   let notJsonMissingField: StructyJson = {
+   | /----------------------------------------^
+53 | |   foo: \\"bar\\",
+54 | |   stuff: [],
+55 | | };
+   | \\\\-^ Missing required field \\"maybe\\" from \\"StructyJson\\"
+
+
+error: Expected type to be \\"bool\\", but got \\"num\\" instead
+   --> ../../../examples/tests/invalid/json.w:62:11
+   |
+62 |     good: 2,
+   |           ^ Expected type to be \\"bool\\", but got \\"num\\" instead
+
+
+error: Expected type to be \\"num\\", but got \\"str\\" instead
+   --> ../../../examples/tests/invalid/json.w:69:14
+   |
+69 |   stuff: [1, \\"hi\\", 3],
+   |              ^^^^ Expected type to be \\"num\\", but got \\"str\\" instead
+
+
+error: Field \`boom\` has type \\"Bucket\\", which is not a legal JSON value
+   --> ../../../examples/tests/invalid/json.w:27:28
+   |
+27 | let jsonObj = Json { boom: bkt };
+   |                            ^^^ Field \`boom\` has type \\"Bucket\\", which is not a legal JSON value
+
+
+error: Field \`boom\` has type \\"Bucket\\", which is not a legal JSON value
+   --> ../../../examples/tests/invalid/json.w:27:28
+   |
+27 | let jsonObj = Json { boom: bkt };
+   |                            ^^^ Field \`boom\` has type \\"Bucket\\", which is not a legal JSON value
 
 
  
