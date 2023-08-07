@@ -145,7 +145,7 @@ impl<'a> JSifier<'a> {
 			output.add_code(root_class);
 			output.line("const $App = $stdlib.core.App.for(process.env.WING_TARGET);".to_string());
 			output.line(format!(
-				"new $App({{ outdir: {}, name: \"{}\", rootConstruct: {}, plugins: $plugins, isTestEnvironment: {} }}).synth();",
+				"new $App({{ outdir: {}, name: \"{}\", rootConstruct: {}, plugins: $plugins, isTestEnvironment: {}, sourceDir: process.env['WING_SOURCE_DIR'] }}).synth();",
 				OUTDIR_VAR, self.app_name, ROOT_CLASS, ENV_WING_IS_TEST
 			));
 		} else {

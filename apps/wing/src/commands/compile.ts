@@ -24,6 +24,7 @@ export interface CompileOptions {
    * copies of the application resources in order to run tests in parallel.
    */
   readonly testing?: boolean;
+  readonly targetDir?: string;
 }
 
 /**
@@ -39,6 +40,7 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
       ...options,
       log,
       color: coloring,
+      targetDir: options.targetDir,
     });
   } catch (error) {
     if (error instanceof wingCompiler.CompileError) {

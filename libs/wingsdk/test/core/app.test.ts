@@ -1,6 +1,7 @@
 import { Construct } from "constructs";
 import { test, expect, describe } from "vitest";
 import { App } from "../../src/core/app";
+import { Tokens } from "../../src/core/tokens";
 import { App as AwsCdkApp } from "../../src/target-awscdk/app";
 import { App as SimApp } from "../../src/target-sim/app";
 import { App as TfAwsApp } from "../../src/target-tf-aws/app";
@@ -56,9 +57,11 @@ describe("appForTarget", () => {
 
 class MyApp extends App {
   public outdir: string = "outdir";
+  public isTestEnvironment: boolean = true;
+  public readonly _tokens: Tokens;
 
   constructor() {
-    super(undefined as any, "MyApp");
+    super(undefined as any, "MyApp", { sourceDir: __dirname });
   }
 
   public synth(): string {

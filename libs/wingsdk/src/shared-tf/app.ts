@@ -2,6 +2,7 @@ import { mkdirSync, readdirSync, renameSync, rmSync, existsSync } from "fs";
 import { join } from "path";
 import * as cdktf from "cdktf";
 import { Construct } from "constructs";
+import { nanoid } from "nanoid";
 import stringify from "safe-stable-stringify";
 import { CdkTfTokens } from "./tokens";
 import { App, AppProps, preSynthesizeAllConstructs } from "../core";
@@ -40,7 +41,10 @@ export abstract class CdktfApp extends App {
     const cdktfApp = new cdktf.App({ outdir: cdktfOutdir });
     const cdktfStack = new cdktf.TerraformStack(cdktfApp, TERRAFORM_STACK_NAME);
 
-    super(cdktfStack, "Default");
+    const rootId = props.isTestEnvironment
+      ? "Default_" + nanoid(10)
+      : "Default";
+    super(cdktfStack, rootId, props);
 
     // TODO: allow the user to specify custom backends
     // https://github.com/winglang/wing/issues/2003

@@ -30,7 +30,7 @@ export interface TestOptions extends CompileOptions {
 export async function test(entrypoints: string[], options: TestOptions): Promise<number> {
   const startTime = Date.now();
   const results: { testName: string; results: std.TestResult[] }[] = [];
-  for (const entrypoint of entrypoints) {
+  const testFile = async (entrypoint: string) => {
     const testName = generateTestName(entrypoint);
     try {
       const singleTestResults: std.TestResult[] | void = await testOne(entrypoint, options);
@@ -42,7 +42,8 @@ export async function test(entrypoints: string[], options: TestOptions): Promise
         results: [{ pass: false, path: "", error: (error as Error).message, traces: [] }],
       });
     }
-  }
+  };
+  await Promise.all(entrypoints.map(testFile));
   printResults(results, Date.now() - startTime);
 
   // if we have any failures, exit with 1
@@ -131,14 +132,14 @@ function printResults(
 async function testOne(entrypoint: string, options: TestOptions) {
   // since the test cleans up after each run, it's essential to create a temporary directory-
   // at least one that is different then the usual compilation dir,  otherwise we might end up cleaning up the user's actual resources.
-  const tempFile: string =
-    options.target === Target.SIM ? entrypoint : await generateTmpDir(entrypoint);
+  const tempFile: string = entrypoint;
   const synthDir = await withSpinner(
     `Compiling ${generateTestName(entrypoint)} to ${options.target}...`,
-    () =>
+    async () =>
       compile(tempFile, {
         ...options,
         testing: true,
+        ...(options.target !== Target.SIM && { targetDir: `${await generateTmpDir()}/target` }),
       })
   );
 

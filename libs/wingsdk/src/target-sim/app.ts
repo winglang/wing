@@ -59,7 +59,7 @@ export class App extends core.App {
   private synthed = false;
 
   constructor(props: core.AppProps) {
-    super(undefined as any, "root");
+    super(undefined as any, "root", props);
     this.outdir = props.outdir ?? ".";
     this.isTestEnvironment = props.isTestEnvironment ?? false;
     this._tokens = new SimTokens();

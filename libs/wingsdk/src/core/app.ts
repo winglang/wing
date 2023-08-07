@@ -47,6 +47,11 @@ export interface AppProps {
    * @default false
    */
   readonly isTestEnvironment?: boolean;
+
+  /**
+   * App's external context
+   */
+  readonly sourceDir: string;
 }
 
 /**
@@ -90,6 +95,11 @@ export abstract class App extends Construct {
   }
 
   /**
+   * Wing source files directory absolute path
+   */
+  public readonly sourceDir: string;
+
+  /**
    * The output directory.
    */
   public abstract readonly outdir: string;
@@ -104,6 +114,11 @@ export abstract class App extends Construct {
    * @internal
    */
   public abstract readonly _tokens: Tokens;
+
+  constructor(scope: Construct, id: string, props: AppProps) {
+    super(scope, id);
+    this.sourceDir = props.sourceDir;
+  }
 
   /**
    * The ".wing" directory, which is where the compiler emits its output. We are taking an implicit
