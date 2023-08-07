@@ -2595,6 +2595,7 @@ impl<'a> TypeChecker<'a> {
 		if expected_types.len() == 1 {
 			// First check if the actual type is an inference that can be replaced with the expected type
 			if self.add_new_inference(&actual_type, &expected_types[0]) {
+				// Update the type we validate and return
 				return_type = self.types.maybe_unwrap_inference(return_type);
 			} else {
 				// otherwise, check if the expected type is an inference that can be replaced with the actual type

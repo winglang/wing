@@ -80,3 +80,6 @@ class NeedAnnotations {
     log(nice);
   }
 }
+
+let badFunc: inflight (str): void = inflight (arg1: num) => {};
+//                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected type to be "inflight (str): void", but got "inflight (arg1: num): unknown" instead
