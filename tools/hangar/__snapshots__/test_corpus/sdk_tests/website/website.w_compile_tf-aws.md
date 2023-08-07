@@ -453,7 +453,7 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     const w = this.node.root.newAbstract("@winglang/sdk.cloud.Website",this,"cloud.Website",{ path: "./website" });
-    const config = Object.freeze({"json":1});
+    const config = ({"json": 1});
     const indexFile = (Util.readFile("./website/website/index.html"));
     const otherFile = (Util.readFile("./website/website/inner-folder/other.html"));
     (w.addJson("config.json",config));

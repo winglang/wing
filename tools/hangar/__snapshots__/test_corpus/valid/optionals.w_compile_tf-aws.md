@@ -390,10 +390,7 @@ class $Root extends $stdlib.std.Resource {
     const optionalSup = new Super(this,"Super");
     const s = (optionalSup ?? new Sub(this,"Sub"));
     {((cond) => {if (!cond) throw new Error("assertion failed: s.name == \"Super\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(s.name,"Super")))};
-    let name = {
-    "first": "John",
-    "last": "Doe",}
-    ;
+    let name = ({"first": "John","last": "Doe"});
     {
       const $IF_LET_VALUE = name;
       if ($IF_LET_VALUE != undefined) {
@@ -417,10 +414,7 @@ class $Root extends $stdlib.std.Resource {
       if ((parts.length < 1)) {
         return undefined;
       }
-      return {
-      "first": (parts.at(0)),
-      "last": (parts.at(1)),}
-      ;
+      return ({"first": (parts.at(0)),"last": (parts.at(1))});
     });
     {
       const $IF_LET_VALUE = (tryParseName("Good Name"));
@@ -509,13 +503,8 @@ class $Root extends $stdlib.std.Resource {
         {((cond) => {if (!cond) throw new Error("assertion failed: o.value == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(o.value,1)))};
       }
     }
-    const payloadWithoutOptions = {
-    "a": "a",}
-    ;
-    const payloadWithBucket = {
-    "a": "a",
-    "c": this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"orange bucket"),}
-    ;
+    const payloadWithoutOptions = ({"a": "a"});
+    const payloadWithBucket = ({"a": "a","c": this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"orange bucket")});
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:t",new $Closure1(this,"$Closure1"));
   }
 }

@@ -305,10 +305,7 @@ class $Root extends $stdlib.std.Resource {
     const store = new file1.Store(this,"file1.Store");
     const q = new file2.Q(this,"file2.Q");
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:add data to store",new $Closure1(this,"$Closure1"));
-    const s = {
-    "x": 1,
-    "y": 2,}
-    ;
+    const s = ({"x": 1,"y": 2});
     const c = file1.Color.BLUE;
     {((cond) => {if (!cond) throw new Error("assertion failed: c != file1.Color.RED")})((c !== file1.Color.RED))};
     const t = new Triangle(this,"Triangle");
@@ -361,12 +358,12 @@ module.exports = function({ $stdlib }) {
     }
   }
   const Color =
-    Object.freeze((function (tmp) {
+    (function (tmp) {
       tmp[tmp["RED"] = 0] = "RED";
       tmp[tmp["GREEN"] = 1] = "GREEN";
       tmp[tmp["BLUE"] = 2] = "BLUE";
       return tmp;
-    })({}))
+    })({})
   ;
   return { Store, Color };
 };

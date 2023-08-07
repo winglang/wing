@@ -10,9 +10,9 @@ module.exports = function({ $std_String, $table }) {
       return $obj;
     }
     async handle() {
-      (await $table.insert("eyal",Object.freeze({"gender":"male"})));
-      (await $table.insert("revital",Object.freeze({"gender":"female"})));
-      const unorderded = {};
+      (await $table.insert("eyal",({"gender": "male"})));
+      (await $table.insert("revital",({"gender": "female"})));
+      const unorderded = ({});
       for (const u of (await $table.list())) {
         ((obj, args) => { obj[args[0]] = args[1]; })(unorderded, [((args) => { if (typeof args !== "string") {throw new Error("unable to parse " + typeof args + " " + args + " as a string")}; return JSON.parse(JSON.stringify(args)) })((u)["name"]),u]);
       }
@@ -215,7 +215,7 @@ class $Root extends $stdlib.std.Resource {
         super._registerBind(host, ops);
       }
     }
-    const table = this.node.root.newAbstract("@winglang/sdk.ex.Table",this,"ex.Table",{ name: "users", primaryKey: "name", columns: Object.freeze({"gender":ex.ColumnType.STRING}) });
+    const table = this.node.root.newAbstract("@winglang/sdk.ex.Table",this,"ex.Table",{ name: "users", primaryKey: "name", columns: ({"gender": ex.ColumnType.STRING}) });
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:list",new $Closure1(this,"$Closure1"));
   }
 }

@@ -353,7 +353,7 @@ class $Root extends $stdlib.std.Resource {
     }
     const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
     const fileName = "file.json";
-    const j = Object.freeze({"persons":[Object.freeze({"age":30,"name":"hasan","fears":["heights", "failure"]})]});
+    const j = ({"persons": [({"age": 30,"name": "hasan","fears": ["heights", "failure"]})]});
     const getJson = this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"cloud.Function",new $Closure1(this,"$Closure1"));
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:put",new $Closure2(this,"$Closure2"));
   }

@@ -1230,12 +1230,12 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     const MyEnum =
-      Object.freeze((function (tmp) {
+      (function (tmp) {
         tmp[tmp["A"] = 0] = "A";
         tmp[tmp["B"] = 1] = "B";
         tmp[tmp["C"] = 2] = "C";
         return tmp;
-      })({}))
+      })({})
     ;
     const bucket = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
     const res = new Bar(this,"Bar","Arr",bucket,MyEnum.B);

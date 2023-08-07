@@ -765,9 +765,9 @@ class $Root extends $stdlib.std.Resource {
     const globalStr = "hello";
     const globalBool = true;
     const globalNum = 42;
-    const globalArrayOfStr = Object.freeze(["hello", "world"]);
-    const globalMapOfNum = Object.freeze({"a":(-5),"b":2});
-    const globalSetOfStr = Object.freeze(new Set(["a", "b"]));
+    const globalArrayOfStr = ["hello", "world"];
+    const globalMapOfNum = ({"a": (-5),"b": 2});
+    const globalSetOfStr = new Set(["a", "b"]);
     const globalAnother = new Another(this,"Another");
     const res = new MyResource(this,"MyResource");
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:test",new $Closure1(this,"$Closure1"));

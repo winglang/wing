@@ -12,9 +12,7 @@ module.exports = function({ $api_OPTIONS, $path }) {
     async handle(req) {
       {((cond) => {if (!cond) throw new Error("assertion failed: req.method == api_OPTIONS")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(req.method,$api_OPTIONS)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: req.path == path")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(req.path,$path)))};
-      return {
-      "status": 204,}
-      ;
+      return ({"status": 204});
     }
   }
   return $Closure1;
@@ -34,9 +32,7 @@ module.exports = function({ $api_HEAD, $path }) {
     async handle(req) {
       {((cond) => {if (!cond) throw new Error("assertion failed: req.method == api_HEAD")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(req.method,$api_HEAD)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: req.path == path")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(req.path,$path)))};
-      return {
-      "status": 204,}
-      ;
+      return ({"status": 204});
     }
   }
   return $Closure2;
@@ -54,9 +50,7 @@ module.exports = function({  }) {
       return $obj;
     }
     async handle(req) {
-      return {
-      "status": 204,}
-      ;
+      return ({"status": 204});
     }
   }
   return $Closure3;

@@ -18,7 +18,7 @@ module.exports = function({ $bar }) {
       }
       const foo = "bang";
       (await result.push(foo));
-      return Object.freeze([...(result)]);
+      return [...(result)];
     }
   }
   return $Closure1;

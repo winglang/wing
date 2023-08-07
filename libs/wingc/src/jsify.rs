@@ -439,9 +439,9 @@ impl<'a> JSifier<'a> {
 				let function_type = function_type.maybe_unwrap_option();
 				let function_sig = function_type.as_function_sig();
 				let expr_string = match callee {
-        		CalleeKind::Expr(expr) => self.jsify_expression(expr, ctx),
-        		CalleeKind::SuperCall(method) => format!("super.{}", method),
-    		};
+					CalleeKind::Expr(expr) => self.jsify_expression(expr, ctx),
+					CalleeKind::SuperCall(method) => format!("super.{}", method),
+				};
 				let args_string = self.jsify_arg_list(&arg_list, None, None, ctx);
 				let mut args_text_string = lookup_span(&arg_list.span, &self.source_files);
 				if args_text_string.len() > 0 {
@@ -535,60 +535,39 @@ impl<'a> JSifier<'a> {
 					.collect::<Vec<String>>()
 					.join(", ");
 
-				if self.types.get_expr_type(expression).is_mutable_collection() || ctx.visit_ctx.in_json() {
-					// json arrays dont need frozen at nested level
-					format!("[{}]", item_list)
-				} else {
-					format!("Object.freeze([{}])", item_list)
-				}
+				format!("[{}]", item_list)
 			}
 			ExprKind::StructLiteral { fields, .. } => {
 				format!(
-					"{{\n{}}}\n",
+					"({{{}}})",
 					fields
 						.iter()
-						.map(|(name, expr)| format!("\"{}\": {},", name.name, self.jsify_expression(expr, ctx)))
+						.map(|(name, expr)| format!("\"{}\": {}", name.name, self.jsify_expression(expr, ctx)))
 						.collect::<Vec<String>>()
-						.join("\n")
+						.join(",")
 				)
 			}
-			ExprKind::JsonLiteral { is_mut, element } => {
+			ExprKind::JsonLiteral { element, .. } => {
 				ctx.visit_ctx.push_json();
-				let js_out = match &element.kind {
-					ExprKind::JsonMapLiteral { .. } => {
-						if *is_mut {
-							self.jsify_expression(element, ctx)
-						} else {
-							format!("Object.freeze({})", self.jsify_expression(element, ctx))
-						}
-					}
-					_ => self.jsify_expression(element, ctx)
-				};
+				let js_out = self.jsify_expression(element, ctx);
 				ctx.visit_ctx.pop_json();
 				js_out
 			}
-      ExprKind::JsonMapLiteral { fields } => {
-        let f = fields
+			ExprKind::JsonMapLiteral { fields } => {
+				let f = fields
 					.iter()
-					.map(|(key, expr)| format!("\"{}\":{}", key, self.jsify_expression(expr, ctx)))
+					.map(|(key, expr)| format!("\"{}\": {}", key, self.jsify_expression(expr, ctx)))
 					.collect::<Vec<String>>()
 					.join(",");
-
-        format!("{{{}}}", f)
-      }
+				format!("({{{}}})", f)
+			}
 			ExprKind::MapLiteral { fields, .. } => {
 				let f = fields
 					.iter()
-					.map(|(key, expr)| format!("\"{}\":{}", key, self.jsify_expression(expr, ctx)))
+					.map(|(key, expr)| format!("\"{}\": {}", key, self.jsify_expression(expr, ctx)))
 					.collect::<Vec<String>>()
 					.join(",");
-
-				if self.types.get_expr_type(expression).is_mutable_collection() || ctx.visit_ctx.in_json() {
-					// json maps dont need frozen in the nested level
-					format!("{{{}}}", f)
-				} else {
-					format!("Object.freeze({{{}}})", f)
-				}
+				format!("({{{}}})", f)
 			}
 			ExprKind::SetLiteral { items, .. } => {
 				let item_list = items
@@ -596,12 +575,7 @@ impl<'a> JSifier<'a> {
 					.map(|expr| self.jsify_expression(expr, ctx))
 					.collect::<Vec<String>>()
 					.join(", ");
-
-				if self.types.get_expr_type(expression).is_mutable_collection() {
-					format!("new Set([{}])", item_list)
-				} else {
-					format!("Object.freeze(new Set([{}]))", item_list)
-				}
+				format!("new Set([{}])", item_list)
 			}
 			ExprKind::FunctionClosure(func_def) => self.jsify_function(None, func_def, ctx).to_string(),
 			ExprKind::CompilerDebugPanic => {
@@ -841,7 +815,7 @@ impl<'a> JSifier<'a> {
 		let mut code = CodeMaker::default();
 		let mut value_index = 0;
 
-		code.open("Object.freeze((function (tmp) {");
+		code.open("(function (tmp) {");
 
 		for value in values {
 			code.line(format!(
@@ -854,7 +828,7 @@ impl<'a> JSifier<'a> {
 
 		code.line("return tmp;");
 
-		code.close("})({}))");
+		code.close("})({})");
 		code
 	}
 

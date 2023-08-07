@@ -239,8 +239,8 @@ class $Root extends $stdlib.std.Resource {
     }
     const a = ["hello"];
     const s = new Set([12]);
-    const m = {"hello":true};
-    const aCloned = [...(Object.freeze(["hello"]))];
+    const m = ({"hello": true});
+    const aCloned = [...(["hello"])];
     const handler = new $Closure1(this,"$Closure1");
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:main",new $Closure2(this,"$Closure2"));
   }

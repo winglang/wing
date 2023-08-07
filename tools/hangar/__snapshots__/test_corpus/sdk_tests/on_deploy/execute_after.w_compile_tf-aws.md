@@ -467,7 +467,7 @@ class $Root extends $stdlib.std.Resource {
     }
     const counter = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"cloud.Counter");
     const init1 = this.node.root.newAbstract("@winglang/sdk.cloud.OnDeploy",this,"init1",new $Closure1(this,"$Closure1"));
-    const init2 = this.node.root.newAbstract("@winglang/sdk.cloud.OnDeploy",this,"init2",new $Closure2(this,"$Closure2"),{ executeAfter: Object.freeze([init1]) });
+    const init2 = this.node.root.newAbstract("@winglang/sdk.cloud.OnDeploy",this,"init2",new $Closure2(this,"$Closure2"),{ executeAfter: [init1] });
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:counter",new $Closure3(this,"$Closure3"));
   }
 }

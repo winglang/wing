@@ -10,11 +10,7 @@ module.exports = function({ $std_Json }) {
       return $obj;
     }
     async handle(req) {
-      return {
-      "body": ((args) => { return JSON.stringify(args[0], null, args[1]) })([Object.freeze({"user":(req.vars)["name"]})]),
-      "headers": Object.freeze({"content-type":"application/json"}),
-      "status": 200,}
-      ;
+      return ({"body": ((args) => { return JSON.stringify(args[0], null, args[1]) })([({"user": (req.vars)["name"]})]),"headers": ({"content-type": "application/json"}),"status": 200});
     }
   }
   return $Closure1;

@@ -10,7 +10,7 @@ module.exports = function({ $NIL, $q }) {
       return $obj;
     }
     async handle() {
-      const msgs = Object.freeze(["Foo", "Bar"]);
+      const msgs = ["Foo", "Bar"];
       for (const msg of msgs) {
         (await $q.push(msg));
       }

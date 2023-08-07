@@ -10,9 +10,7 @@ module.exports = function({ $Foo }) {
       return $obj;
     }
     async handle() {
-      return {
-      "foo": new $Foo(),}
-      ;
+      return ({"foo": new $Foo()});
     }
   }
   return $Closure1;

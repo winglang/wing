@@ -10,7 +10,7 @@ module.exports = function({ $b }) {
       return $obj;
     }
     async handle() {
-      const jsonObj1 = Object.freeze({"key1":"value1"});
+      const jsonObj1 = ({"key1": "value1"});
       {((cond) => {if (!cond) throw new Error("assertion failed: b.list().length == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $b.list()).length,1)))};
       (await $b.putJson("file1.json",jsonObj1));
       (await $b.put("file2.txt","Bar"));

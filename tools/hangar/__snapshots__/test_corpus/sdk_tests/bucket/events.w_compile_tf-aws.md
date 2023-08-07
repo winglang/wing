@@ -10,7 +10,7 @@ module.exports = function({ $idsCounter, $table }) {
       return $obj;
     }
     async handle(key, operation, source) {
-      (await $table.insert(String.raw({ raw: ["", ""] }, (await $idsCounter.inc())),Object.freeze({"key":key,"operation":operation,"source":String.raw({ raw: ["", ""] }, source)})));
+      (await $table.insert(String.raw({ raw: ["", ""] }, (await $idsCounter.inc())),({"key": key,"operation": operation,"source": String.raw({ raw: ["", ""] }, source)})));
     }
   }
   return $Closure1;
@@ -1311,15 +1311,15 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     const Source =
-      Object.freeze((function (tmp) {
+      (function (tmp) {
         tmp[tmp["anyEvent"] = 0] = "anyEvent";
         tmp[tmp["onEvent"] = 1] = "onEvent";
         return tmp;
-      })({}))
+      })({})
     ;
     const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
     const idsCounter = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"cloud.Counter");
-    const table = this.node.root.newAbstract("@winglang/sdk.ex.Table",this,"ex.Table",{ name: "key-history", primaryKey: "_id", columns: Object.freeze({"_id":ex.ColumnType.STRING,"key":ex.ColumnType.STRING,"operation":ex.ColumnType.STRING,"source":ex.ColumnType.STRING}) });
+    const table = this.node.root.newAbstract("@winglang/sdk.ex.Table",this,"ex.Table",{ name: "key-history", primaryKey: "_id", columns: ({"_id": ex.ColumnType.STRING,"key": ex.ColumnType.STRING,"operation": ex.ColumnType.STRING,"source": ex.ColumnType.STRING}) });
     const logHistory = new $Closure1(this,"$Closure1");
     (b.onDelete(new $Closure2(this,"$Closure2")));
     (b.onUpdate(new $Closure3(this,"$Closure3")));
