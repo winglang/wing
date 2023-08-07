@@ -6,8 +6,5 @@
     "dev": "cargo run --example compile --release",
     "test": "cargo test",
     "lint": "cargo fmt && cargo clippy --fix --no-deps --allow-dirty --target wasm32-wasi --release"
-  },
-  "dependencies": {
-    "winglang": "^0.24.78"
   }
 }
