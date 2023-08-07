@@ -21,6 +21,8 @@ export async function lsp() {
   });
   let badState = false;
 
+  const seenFiles = new Set<DocumentUri>();
+
   const raw_diagnostics: wingCompiler.WingDiagnostic[] = [];
 
   function send_diagnostic(data_ptr: number, data_len: number) {
@@ -99,7 +101,7 @@ export async function lsp() {
   async function handle_event_and_update_diagnostics(
     wingc_handler_name: wingCompiler.WingCompilerFunction,
     params: any,
-    uri: DocumentUri
+    _uri: DocumentUri
   ) {
     if (badState) {
       wingc = await wingCompiler.load({
@@ -116,26 +118,36 @@ export async function lsp() {
     // Call wingc handler
     callWing(wingc_handler_name, params);
 
-    const diagnostics = [];
+    const allDiagnostics = new Map<DocumentUri, Diagnostic[]>();
+
+    // set empty list of diagnostics for files that have been seen before
+    // this way even if we don't get a diagnostic for a file, we clear out the old ones
+    for (const uri of seenFiles) {
+      allDiagnostics.set(uri, []);
+    }
+
     for (const rd of raw_diagnostics) {
       if (rd.span) {
         const diagnosticUri = "file://" + rd.span.file_id;
-        if (diagnosticUri === uri) {
-          const diag = Diagnostic.create(
-            Range.create(rd.span.start.line, rd.span.start.col, rd.span.end.line, rd.span.end.col),
-            rd.message
-          );
-          diagnostics.push(diag);
-        } else {
-          // skip if file_id doesn't match uri
+        const diag = Diagnostic.create(
+          Range.create(rd.span.start.line, rd.span.start.col, rd.span.end.line, rd.span.end.col),
+          rd.message
+        );
+
+        if (!allDiagnostics.has(diagnosticUri)) {
+          allDiagnostics.set(diagnosticUri, []);
+          seenFiles.add(diagnosticUri);
         }
+        allDiagnostics.get(diagnosticUri)!.push(diag);
       } else {
         // skip if diagnostic is not associated with any file
       }
     }
 
-    // purposely not awaiting this, notifications are fire-and-forget
-    connection.sendDiagnostics({ uri, diagnostics });
+    // purposely not awaiting these calls, notifications are fire-and-forget
+    for (const [uri, diagnostics] of allDiagnostics.entries()) {
+      connection.sendDiagnostics({ uri, diagnostics });
+    }
   }
 
   connection.onDidOpenTextDocument(async (params) => {

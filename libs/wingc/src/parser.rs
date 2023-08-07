@@ -129,12 +129,19 @@ static RESERVED_WORDS: phf::Set<&'static str> = phf_set! {
 	"Object",
 };
 
-/// Parse a Wing file and all of the Wing files it depends on into a collection of ASTs.
-/// The file's text can be passed in directly through `source_text` for use cases like the
-/// LSP (where the file may not be saved to disk yet), otherwise the file will be
-/// read from disk.
+/// Parses a Wing file and the transitive closure of all files it depends on.
 ///
-/// Returns a topological ordering of Wing files, where each file only depends on
+/// Expects an initial Wing file to be parsed. For Wing's CLI, this is usually
+/// the file the user asked to compile, and in the case of the LSP, the file that was
+/// just opened or changed. The file's path and text can be passed through `init_path` and
+/// `init_text`, respectively.
+///
+/// Internally it parses the initial file, and then recursively parse all of the files that
+/// it depends on, storing all results in the `files`, `file_graph`, `tree_sitter_trees`,
+/// and `asts` parameters. It skips re-parsing any files that have already been parsed. function assumes all of these collections are kept in sync
+/// with each other.
+///
+/// Returns a topological ordering of all known Wing files, where each file only depends on
 /// files that come before it in the ordering.
 pub fn parse_wing_project(
 	init_path: &Path,
@@ -176,8 +183,15 @@ pub fn parse_wing_project(
 	while let Some(file_path) = unparsed_files.pop() {
 		// Skip files that we have already seen before (they should already be parsed)
 		if files.contains_file(&file_path) {
-			assert!(tree_sitter_trees.contains_key(&file_path));
-			assert!(asts.contains_key(&file_path));
+			assert!(
+				tree_sitter_trees.contains_key(&file_path),
+				"files is not in sync with tree_sitter_trees"
+			);
+			assert!(asts.contains_key(&file_path), "files is not in sync with asts");
+			assert!(
+				file_graph.contains_file(&file_path),
+				"files is not in sync with file_graph"
+			);
 			continue;
 		}
 

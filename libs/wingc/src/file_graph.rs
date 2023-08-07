@@ -6,6 +6,9 @@ use std::{
 use indexmap::IndexMap;
 use petgraph::visit::EdgeRef;
 
+/// A graph of files, where each file depends on zero or more other files.
+///
+/// TODO: support removing files from the graph
 #[derive(Default)]
 pub struct FileGraph {
 	graph: petgraph::stable_graph::StableDiGraph<PathBuf, ()>,
@@ -36,6 +39,11 @@ impl FileGraph {
 			let to_node_index = self.get_or_insert_node_index(to_path);
 			self.graph.add_edge(from_node_index, to_node_index, ());
 		}
+	}
+
+	/// Returns true if the given file is in the graph
+	pub fn contains_file(&mut self, path: &Path) -> bool {
+		self.path_to_node_index.contains_key(path)
 	}
 
 	/// Returns a list of files in the order they should be compiled
