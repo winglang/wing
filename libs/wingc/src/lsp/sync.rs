@@ -129,7 +129,7 @@ pub fn on_document_did_change(params: DidChangeTextDocumentParams) {
 fn partial_compile(
 	source_path: &Path,
 	source_text: String,
-	mut types: &mut Types,
+	mut types: &mut Types, // TODO: does this need to be shared between recompiles?
 	jsii_types: &mut TypeSystem,
 	project_data: &mut ProjectData,
 ) {
