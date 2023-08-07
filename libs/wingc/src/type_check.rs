@@ -4,7 +4,7 @@ pub(crate) mod jsii_importer;
 pub mod lifts;
 pub mod symbol_env;
 
-use crate::ast::{self, CalleeKind, ClassField, FunctionDefinition, NewExpr, TypeAnnotationKind};
+use crate::ast::{self, BringSource, CalleeKind, ClassField, FunctionDefinition, NewExpr, TypeAnnotationKind};
 use crate::ast::{
 	ArgList, BinaryOperator, Class as AstClass, Expr, ExprKind, FunctionBody, FunctionParameter as AstFunctionParameter,
 	Interface as AstInterface, InterpolatedStringPart, Literal, Phase, Reference, Scope, Spanned, Stmt, StmtKind, Symbol,
@@ -28,7 +28,7 @@ use jsii_importer::JsiiImporter;
 use std::collections::HashMap;
 use std::fmt::{Debug, Display};
 use std::iter::FilterMap;
-use std::path::Path;
+use std::path::{Path, PathBuf};
 use symbol_env::{StatementIdx, SymbolEnv};
 use wingii::fqn::FQN;
 use wingii::type_system::TypeSystem;
@@ -1141,12 +1141,15 @@ struct ResolvedExpression {
 	type_: TypeRef,
 	phase: Phase,
 }
+
 pub struct Types {
 	// TODO: Remove the box and change TypeRef and NamespaceRef to just be indices into the types array and namespaces array respectively
 	// Note: we need the box so reallocations of the vec while growing won't change the addresses of the types since they are referenced from the TypeRef struct
 	types: Vec<Box<Type>>,
 	namespaces: Vec<Box<Namespace>>,
 	symbol_envs: Vec<Box<SymbolEnv>>,
+	/// A map from source file name to the symbol environment for that file (and whether that file is safe to bring)
+	source_file_envs: IndexMap<PathBuf, (SymbolEnvRef, bool)>,
 	pub libraries: SymbolEnv, // ?
 	numeric_idx: usize,
 	string_idx: usize,
@@ -1196,6 +1199,7 @@ impl Types {
 			types,
 			namespaces: Vec::new(),
 			symbol_envs: Vec::new(),
+			source_file_envs: IndexMap::new(),
 			libraries,
 			numeric_idx,
 			string_idx,
@@ -1408,6 +1412,12 @@ impl Types {
 			.and_then(|t| t.as_ref().map(|t| t.phase))
 	}
 
+	pub fn reset_expr_types(&mut self) {
+		for elem in self.type_for_expr.iter_mut() {
+			*elem = None;
+		}
+	}
+
 	/// Given an unqualified type name of a builtin type, return the full type info.
 	///
 	/// This is needed because our builtin types have no API.
@@ -1415,7 +1425,7 @@ impl Types {
 	/// but the std lib sometimes doesn't have the same names as the builtin types
 	/// https://github.com/winglang/wing/issues/1780
 	///
-	/// Note: This Doesn't handle generics (i.e. this keeps the `T1`)
+	/// Note: This doesn't handle generics (i.e. this keeps the `T1`)
 	pub fn get_std_class(&self, type_: &str) -> Option<(&SymbolKind, symbol_env::SymbolLookupInfo)> {
 		let type_name = fully_qualify_std_type(type_);
 
@@ -2478,8 +2488,21 @@ impl<'a> TypeChecker<'a> {
 		expected_types[0]
 	}
 
-	pub fn type_check_scope(&mut self, scope: &Scope) {
+	pub fn type_check_file(&mut self, source_path: &Path, scope: &Scope) {
 		CompilationContext::set(CompilationPhase::TypeChecking, &scope.span);
+		self.type_check_scope(scope);
+
+		// Save the module's symbol environment to `self.types.source_file_envs`
+		// (replacing any existing ones if there was already a SymbolEnv from a previous compilation)
+		let env = scope.env.borrow().unwrap();
+		let is_bringable = check_is_bringable(scope);
+		self
+			.types
+			.source_file_envs
+			.insert(source_path.to_owned(), (env, is_bringable));
+	}
+
+	fn type_check_scope(&mut self, scope: &Scope) {
 		assert!(self.inner_scopes.is_empty());
 		let mut env = scope.env.borrow_mut();
 		let env = env.as_mut().unwrap();
@@ -2876,10 +2899,7 @@ impl<'a> TypeChecker<'a> {
 
 				self.validate_type(exp_type, var_type, value);
 			}
-			StmtKind::Bring {
-				module_name,
-				identifier,
-			} => {
+			StmtKind::Bring { source, identifier } => {
 				// library_name is the name of the library we are importing from the JSII world
 				let library_name: String;
 				// namespace_filter describes what types we are importing from the library
@@ -2889,40 +2909,65 @@ impl<'a> TypeChecker<'a> {
 				// alias is the symbol we are giving to the imported library or namespace
 				let alias: &Symbol;
 
-				if module_name.name.starts_with('"') && module_name.name.ends_with('"') {
-					// case 1: bring "library_name" as identifier;
-					if identifier.is_none() {
-						self.spanned_error(
-							stmt,
-							format!(
-								"bring {} must be assigned to an identifier (e.g. bring \"foo\" as foo)",
-								module_name.name
+				match &source {
+					BringSource::BuiltinModule(name) => {
+						if WINGSDK_BRINGABLE_MODULES.contains(&name.name.as_str()) {
+							library_name = WINGSDK_ASSEMBLY_NAME.to_string();
+							namespace_filter = vec![name.name.clone()];
+							alias = identifier.as_ref().unwrap_or(&name);
+						} else if name.name.as_str() == WINGSDK_STD_MODULE {
+							self.spanned_error(stmt, format!("Redundant bring of \"{}\"", WINGSDK_STD_MODULE));
+							return;
+						} else {
+							self.spanned_error(stmt, format!("\"{}\" is not a built-in module", name));
+							return;
+						}
+					}
+					BringSource::JsiiModule(name) => {
+						library_name = name.name.to_string();
+						// no namespace filter (we only support importing entire libraries at the moment)
+						namespace_filter = vec![];
+						alias = identifier.as_ref().unwrap();
+					}
+					BringSource::WingFile(name) => {
+						let (brought_env, is_bringable) = match self.types.source_file_envs.get(Path::new(&name.name)) {
+							Some((env, is_bringable)) => (*env, *is_bringable),
+							None => {
+								self.spanned_error(
+									stmt,
+									format!("Could not type check \"{}\" due to cyclic bring statements", name),
+								);
+								return;
+							}
+						};
+						if !is_bringable {
+							self.spanned_error(stmt, format!("Cannot bring \"{}\" - modules with statements besides classes, interfaces, enums, and structs cannot be brought", name));
+							return;
+						}
+						let ns = self.types.add_namespace(Namespace {
+							name: name.name.to_string(),
+							env: SymbolEnv::new(
+								Some(brought_env.get_ref()),
+								brought_env.return_type,
+								false,
+								false,
+								brought_env.phase,
+								0,
 							),
-						);
+							loaded: true,
+						});
+						if let Err(e) = env.define(
+							identifier.as_ref().unwrap(),
+							SymbolKind::Namespace(ns),
+							StatementIdx::Top,
+						) {
+							self.type_error(e);
+						}
 						return;
 					}
-					// We assume we have a jsii library and we use `module_name` as the library name, and set no
-					// namespace filter (we only support importing a full library at the moment)
-					library_name = module_name.name[1..module_name.name.len() - 1].to_string();
-					namespace_filter = vec![];
-					alias = identifier.as_ref().unwrap();
-				} else {
-					// case 2: bring module_name;
-					// case 3: bring module_name as identifier;
-					if WINGSDK_BRINGABLE_MODULES.contains(&module_name.name.as_str()) {
-						library_name = WINGSDK_ASSEMBLY_NAME.to_string();
-						namespace_filter = vec![module_name.name.clone()];
-						alias = identifier.as_ref().unwrap_or(&module_name);
-					} else if module_name.name.as_str() == WINGSDK_STD_MODULE {
-						self.spanned_error(stmt, format!("Redundant bring of \"{}\"", WINGSDK_STD_MODULE));
-						return;
-					} else {
-						self.spanned_error(stmt, format!("\"{}\" is not a built-in module", module_name.name));
-						return;
-					}
-				};
+				}
 
-				self.add_module_to_env(env, library_name, namespace_filter, &alias, Some(&stmt));
+				self.add_module_to_env(env, library_name, namespace_filter, alias, Some(&stmt));
 			}
 			StmtKind::Scope(scope) => {
 				let scope_env = self.types.add_symbol_env(SymbolEnv::new(
@@ -3384,26 +3429,6 @@ impl<'a> TypeChecker<'a> {
 			}
 			StmtKind::SuperConstructor { arg_list } => {
 				self.type_check_arg_list(arg_list, env);
-			}
-			StmtKind::Module { name, statements } => {
-				let ns = self.types.add_namespace(Namespace {
-					name: name.to_string(),
-					env: SymbolEnv::new(Some(env.get_ref()), env.return_type, false, false, env.phase, stmt.idx),
-					loaded: true,
-				});
-				statements.set_env(ns.env.get_ref());
-
-				// instead of pushing `statements` into `self.inner_scopes`,
-				// we need to type check the statements in the module's namespace
-				// so that subsequence statements can reference symbols inside the module
-				self.type_check_scope(statements);
-
-				match env.define(name, SymbolKind::Namespace(ns), StatementIdx::Index(stmt.idx)) {
-					Err(type_error) => {
-						self.type_error(type_error);
-					}
-					_ => {}
-				};
 			}
 		}
 	}
@@ -4669,7 +4694,7 @@ pub fn resolve_super_method(method: &Symbol, env: &SymbolEnv, types: &Types) -> 
 
 pub fn import_udt_from_jsii(
 	wing_types: &mut Types,
-	jsii_types: &mut TypeSystem,
+	jsii_types: &TypeSystem,
 	user_defined_type: &UserDefinedType,
 	jsii_imports: &[JsiiImportSpec],
 ) -> bool {
@@ -4698,7 +4723,7 @@ pub fn import_udt_from_jsii(
 /// But the std lib sometimes doesn't have the same names as the builtin types
 ///
 /// https://github.com/winglang/wing/issues/1780
-pub fn fully_qualify_std_type(type_: &str) -> std::string::String {
+pub fn fully_qualify_std_type(type_: &str) -> String {
 	// Additionally, this doesn't handle for generics
 	let type_name = type_.to_string();
 	let type_name = if let Some((prefix, _)) = type_name.split_once("<") {
@@ -4721,6 +4746,33 @@ pub fn fully_qualify_std_type(type_: &str) -> std::string::String {
 		| "Boolean" | "Number" => format!("{WINGSDK_STD_MODULE}.{type_name}"),
 		_ => type_name.to_string(),
 	}
+}
+
+fn check_is_bringable(scope: &Scope) -> bool {
+	let valid_stmt = |stmt: &Stmt| match stmt.kind {
+		StmtKind::Bring { .. } => true,
+		StmtKind::Class(_) => true,
+		StmtKind::Interface(_) => true,
+		StmtKind::Struct { .. } => true,
+		StmtKind::Enum { .. } => true,
+		StmtKind::CompilerDebugEnv => true,
+		StmtKind::SuperConstructor { .. } => false,
+		StmtKind::Let { .. } => false,
+		StmtKind::ForLoop { .. } => false,
+		StmtKind::While { .. } => false,
+		StmtKind::IfLet { .. } => false,
+		StmtKind::If { .. } => false,
+		StmtKind::Break => false,
+		StmtKind::Continue => false,
+		StmtKind::Return(_) => false,
+		StmtKind::Expression(_) => false,
+		StmtKind::Assignment { .. } => false,
+		StmtKind::Scope(_) => false,
+		StmtKind::TryCatch { .. } => false,
+	};
+
+	// A module is bringable if it only contains valid statement kinds
+	scope.statements.iter().all(valid_stmt)
 }
 
 #[cfg(test)]
