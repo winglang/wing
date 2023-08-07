@@ -80,7 +80,6 @@ export const DefaultLayout = ({
     errorMessage,
     loading,
     metadata,
-
     selectedEdgeId,
     setSelectedEdgeId,
     edgeMetadata,
