@@ -445,8 +445,8 @@ export const createAppRouter = () => {
             type: getResourceType(sourceNode, simulator),
           },
           target: {
-            id: targetNode?.id,
-            path: targetNode?.path,
+            id: targetNode?.id ?? "",
+            path: targetNode?.path ?? "",
             type: targetNode && getResourceType(targetNode, simulator),
           },
           test: simulator.tree,

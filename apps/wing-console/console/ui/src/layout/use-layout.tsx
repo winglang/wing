@@ -47,15 +47,16 @@ export const useLayout = ({
 
   const [selectedEdgeId, setSelectedEdgeId] = useState<string | undefined>();
 
-  const onSelectedEdgeIdChange = useCallback((edgeId: string | undefined) => {
-    setSelectedItems([]);
-    setSelectedEdgeId(edgeId);
-  }, []);
-
   const onSelectedItemsChange = useCallback((items: string[]) => {
     setSelectedEdgeId(undefined);
     setSelectedItems(items);
   }, []);
+
+  const onSelectedEdgeIdChange = useCallback((edgeId: string | undefined) => {
+    onSelectedItemsChange([]);
+    setSelectedEdgeId(edgeId);
+  }, []);
+
   const wingfile = trpc["app.wingfile"].useQuery();
   const title = useMemo(() => {
     if (!wingfile.data) {
