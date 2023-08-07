@@ -66,8 +66,8 @@ jobs:
         run: npm install -g winglang
       # - name: Check for package.json file
       #   run: |
-      #     if [[ -f "${{ matrix.example.directory }}/package.json" ]]; then
-      #     cd ${{ matrix.example.directory }}
+      #     if [[ -f "${{ matrix.test.directory }}/package.json" ]]; then
+      #     cd ${{ matrix.test.directory }}
       #     npm install
       #     fi
       - name: Configure AWS credentials
@@ -80,7 +80,7 @@ jobs:
         # env:
         #   TF_LOG: info
         #   TF_LOG_PATH: ${{ runner.workspace }}/terraform.log
-        run: wing test -t sim ${{ matrix.example.directory }}/*.w
+        run: wing test -t sim ${{ matrix.test.directory }}/*.w
       # - name: Output Terraform log
         # if: failure()
         # run: cat ${{ runner.workspace }}/terraform.log
