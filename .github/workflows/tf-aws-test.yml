@@ -65,11 +65,9 @@ jobs:
       - name: Install winglang globally
         run: npm install -g winglang
       - name: Check for package.json file
-        run: |
-          if [[ -f "../${{ matrix.test.directory }}/package.json" ]]; then
-          cd ${{ matrix.test.directory }}
+        run: | 
+          cd examples/tests/sdk_tests
           npm install
-          fi
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
