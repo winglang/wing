@@ -4,24 +4,16 @@ on:
     types:
       - published
   workflow_dispatch: {}
-  push:
-    branches:
-      - tsuf/sdk-sepc-tests-parallel-gh-action
 
 env:
   AWS_REGION : "us-east-1"
 
 jobs:
-  # install:
-  #   name: Installation & Test
-  #   strategy:
-  #     fail-fast: true
   setup:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v3
-   
     - name: Get list of directories
       id: setdirs
       shell: bash
@@ -30,7 +22,6 @@ jobs:
         processed_dirs=$(echo "{ \"directory\": $dirs }" | jq -c '[ .directory[] | {directory: ., name: (split("/") | last)}]')
         wrapped_dirs=$(echo "{ \"test\": $processed_dirs }" | jq -c .)
         echo "DIRS=$wrapped_dirs" >> $GITHUB_ENV
-  
     - name: Pass environment variable to output
       id: passenv
       run: |
@@ -45,19 +36,10 @@ jobs:
     strategy:
       fail-fast: false
       matrix: ${{ fromJson(needs.setup.outputs.tests) }}
-    name: ${{ matrix.test.name }} (AWS)
+    name: ${{ matrix.test.name }}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
-      # - name: Check for skip.ci file
-      #   id: check_skip
-      #   run: |
-      #     if [[ -f "${{ matrix.example.directory }}/skip.ci.aws" ]]; then
-      #       echo "skip.ci file detected. Skipping job."
-      #       echo "skip=true" >> $GITHUB_ENV
-      #     else
-      #       echo "skip=false" >> $GITHUB_ENV
-      #     fi
       - name: Setup Node.js v18
         uses: actions/setup-node@v3
         with:
@@ -83,35 +65,3 @@ jobs:
         if: failure()
         run: cat ${{ runner.workspace }}/terraform.log
     
-    
-    # steps:
-    #   - name: Checkout repository
-    #     uses: actions/checkout@v3
-
-    #   - name: Setup Node
-    #     uses: actions/setup-node@v3
-    #     with:
-    #       node-version: 20
-
-    #   - name: Configure AWS Credentials Action For GitHub Actions
-    #     uses: aws-actions/configure-aws-credentials@v1
-    #     with:
-    #       aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
-    #       aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-    #       aws-region: us-east-1
-
-    #   - name: Setup Terraform
-    #     uses: hashicorp/setup-terraform@v2
-    #     with:
-    #       terraform_wrapper: false #important! since we use terraform output command https://github.com/hashicorp/setup-terraform/issues/20#issuecomment-679424701
-
-    #   - name: Get Latest Wing Version
-    #     id: get-version
-    #     run: echo version=$(npm view winglang version) >> $GITHUB_OUTPUT
-
-    #   - name: Install Wing
-    #     run: npm install -g winglang@${{ steps.get-version.outputs.version }}
-
-    #   - name: Run tests
-    #     run: wing test -t tf-aws examples/tests/sdk_tests/*/*.w
-#
