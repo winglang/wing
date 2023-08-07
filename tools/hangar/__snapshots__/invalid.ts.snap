@@ -1225,38 +1225,38 @@ exports[`json.w 1`] = `
 
 
 error: Expected type to be \\"num\\", but got \\"str\\" instead
-  --> ../../../examples/tests/invalid/json.w:4:14
+  --> ../../../examples/tests/invalid/json.w:7:14
   |
-4 | let j = Json \\"Hello\\";
-  |              ^^^^^^^ Expected type to be \\"num\\", but got \\"str\\" instead
+7 | let n: num = j;
+  |              ^ Expected type to be \\"num\\", but got \\"str\\" instead
 
 
 error: Expected type to be \\"bool\\", but got \\"str\\" instead
-  --> ../../../examples/tests/invalid/json.w:4:14
+  --> ../../../examples/tests/invalid/json.w:9:15
   |
-4 | let j = Json \\"Hello\\";
-  |              ^^^^^^^ Expected type to be \\"bool\\", but got \\"str\\" instead
+9 | let b: bool = j;
+  |               ^ Expected type to be \\"bool\\", but got \\"str\\" instead
 
 
 error: Expected type to be \\"Map<str>\\", but got \\"str\\" instead
-  --> ../../../examples/tests/invalid/json.w:4:14
-  |
-4 | let j = Json \\"Hello\\";
-  |              ^^^^^^^ Expected type to be \\"Map<str>\\", but got \\"str\\" instead
+   --> ../../../examples/tests/invalid/json.w:11:19
+   |
+11 | let m: Map<str> = j;
+   |                   ^ Expected type to be \\"Map<str>\\", but got \\"str\\" instead
 
 
 error: Expected type to be \\"Set<str>\\", but got \\"str\\" instead
-  --> ../../../examples/tests/invalid/json.w:4:14
-  |
-4 | let j = Json \\"Hello\\";
-  |              ^^^^^^^ Expected type to be \\"Set<str>\\", but got \\"str\\" instead
+   --> ../../../examples/tests/invalid/json.w:13:20
+   |
+13 | let s2: Set<str> = j;
+   |                    ^ Expected type to be \\"Set<str>\\", but got \\"str\\" instead
 
 
 error: Expected type to be \\"Array<str>\\", but got \\"str\\" instead
-  --> ../../../examples/tests/invalid/json.w:4:14
-  |
-4 | let j = Json \\"Hello\\";
-  |              ^^^^^^^ Expected type to be \\"Array<str>\\", but got \\"str\\" instead
+   --> ../../../examples/tests/invalid/json.w:15:21
+   |
+15 | let a: Array<str> = j;
+   |                     ^ Expected type to be \\"Array<str>\\", but got \\"str\\" instead
 
 
 error: Unknown symbol \\"set\\"
@@ -1312,18 +1312,25 @@ error: Expected type to be \\"num\\", but got \\"str\\" instead
    |              ^^^^ Expected type to be \\"num\\", but got \\"str\\" instead
 
 
-error: Field \`boom\` has type \\"Bucket\\", which is not a legal JSON value
+error: \\"[Bucket]\\" is not a legal JSON value
+   --> ../../../examples/tests/invalid/json.w:24:17
+   |
+24 | let jArr = Json [bkt];
+   |                 ^^^^^ \\"[Bucket]\\" is not a legal JSON value
+
+
+error: \\"Bucket\\" is not a legal JSON value
    --> ../../../examples/tests/invalid/json.w:27:28
    |
 27 | let jsonObj = Json { boom: bkt };
-   |                            ^^^ Field \`boom\` has type \\"Bucket\\", which is not a legal JSON value
+   |                            ^^^ \\"Bucket\\" is not a legal JSON value
 
 
-error: Field \`boom\` has type \\"Bucket\\", which is not a legal JSON value
+error: \\"Bucket\\" is not a legal JSON value
    --> ../../../examples/tests/invalid/json.w:27:28
    |
 27 | let jsonObj = Json { boom: bkt };
-   |                            ^^^ Field \`boom\` has type \\"Bucket\\", which is not a legal JSON value
+   |                            ^^^ \\"Bucket\\" is not a legal JSON value
 
 
  
