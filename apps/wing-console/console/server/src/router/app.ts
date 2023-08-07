@@ -448,7 +448,7 @@ export const createAppRouter = () => {
           target: {
             id: targetNode?.id ?? "",
             path: targetNode?.path ?? "",
-            type: targetNode && getResourceType(targetNode, simulator),
+            type: (targetNode && getResourceType(targetNode, simulator)) ?? "",
           },
           inflights,
         };
