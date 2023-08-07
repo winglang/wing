@@ -38,7 +38,7 @@ export async function compileTest(
 
   // which files to include from the .wing directory
   const dotWing = join(targetDir, ".wing");
-  const include = ["preflight.js", "inflight.", "extern/", "proc"];
+  const include = ["preflight.", "inflight.", "extern/", "proc"];
 
   for await (const dotFile of walkdir(dotWing)) {
     const subpath = relative(dotWing, dotFile).replace(/\\/g, "/");
