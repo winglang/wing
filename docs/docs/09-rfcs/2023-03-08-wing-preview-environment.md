@@ -25,15 +25,19 @@ Seamlessly integrating with GitHub.
 ### Developer Experience
 A developer using winglang has the capability to integrate Wing Cloud Preview Environments with his/her repository.
 
-#### Sign Up and Installation
-In order to use Wing Cloud Preview Environments, you should sign up to Wing Cloud.
-The signup and installation process is straightforward using GitHub application:
+#### Sign Up to Wing Cloud
+TBD - should be in a different rfc
 
-1. Goto https://wing.cloud website and click "Deploy with Wing Cloud"
-2. Complete GitHub authentication.
-3. Grant repository access permission.
-4. You are now signed up and ready to use Wing Cloud Preview Environments.
-5. A welcome email will be sent to you with additional information and links to documentation.
+#### Installation
+In order to use Wing Cloud Preview Environments, you should sign up to Wing Cloud.
+The installation process is straightforward using GitHub application:
+
+1. Goto https://wing.cloud and log in
+2. Click on "Deploy with Wing Cloud"
+3. Complete GitHub authentication.
+4. Grant repository access permission.
+5. You are now ready to use Wing Cloud Preview Environments.
+6. A welcome email will be sent to you with additional information and links to documentation.
 
 #### Preview Environment for production branch
 For the production branch, there is a single preview environment that will constantly be up-to-date with the latest code committed.
@@ -41,8 +45,8 @@ A link to the preview environment is available in the repository main page ("Abo
 Production branch environment url structure is: `https://<gh-repository>-<production-branch-name>.wing.cloud.app`
 
 #### Preview Environments for Pull Requests
-Upon each creation of a pull request, an automatic comment will be added to the PR and will guide the developer to dedicated preview environments.
-To provide a streamlined process for updating a pull request preview environment, each PR code changes will redeploy the preview environment and also will:
+Upon each creation of a pull request an automatic comment will be added to the PR and will guide the developer to dedicated preview environments.
+provide a streamlined process for updating a pull request preview environment, each PR code changes will redeploy the preview environment and also will:
 1. provide a real-time build and deployment status updates
 2. each entry point will have a seperated preview environment
 3. ensure a consistent and unique url for each preview environment. The url structure: `https://<gh-repository>-<gh-branch>-<pr-number>-<entry-point>.wing.cloud.app`
@@ -59,6 +63,10 @@ PR comment example:
 | stale.main.w    | ⏸️ Stale  ([lean more](https://wing.cloud/gh-account/gh-repo/gh-branch/entry-file/logs/)) |                                                                                  | Jul 31, 2023 8:01am  |
 
 TBD - tests results per entry point
+
+**Disclaimer**: Developers that have write access and can create PRs but didn't signed-up to Wing Cloud will not be able to create a preview environments.
+In this case the above comment will contain a direct link for signing up to Wing Cloud.
+After signing up, the developer will be able to create a preview environment for the PR and one will be created automatically after the next code change.
 
 #### Multiple Entry Points
 A developer can configure multiple entry points in a single PR.
@@ -89,6 +97,11 @@ To ensure efficient resource utilization:
 2. The PR's preview environment comment will indicate its inactive status.
 3. Changes in code will trigger redeployment for all related preview environments in this PR.
 
+### Authentication and Authorization
+1. Wing Cloud Preview Environments will use GitHub for authentication and authorization.
+2. Developers will be able to install Wing Cloud Preview Environments on a repository only if they have write access to it.
+3. Developers will be able to create a PR with a preview environment only if they have write access to the repository and the user is signed up to Wing Cloud.
+
 ### Analytics and Logs
 To improve the product we are collecting data and monitoring the system.
 1. We collect preview environments usage analytics only. We won't collect anything about your code and project.
@@ -106,7 +119,7 @@ In our docs we have the following information:
 
 ### Security
 1. The preview environments shouldn’t be able to access files from other preview environments
-2. Only authenticated users should be able to use Wing Preview Environments
+2. Only Wing Cloud signed up developers with write access to the repository can create preview environments
 
 ## Technical Design
 TBD
