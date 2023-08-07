@@ -33,7 +33,10 @@ module.exports = grammar({
     [$.json_literal, $.structured_access_expression],
   ],
 
-  conflicts: ($) => [[$._reference_identifier, $._type_identifier]],
+  conflicts: ($) => [
+    [$._reference_identifier, $._type_identifier],
+    [$.parameter_definition, $._reference_identifier]
+  ],
 
   supertypes: ($) => [$.expression, $._literal],
 
@@ -518,7 +521,7 @@ module.exports = grammar({
         optional(field("reassignable", $.reassignable)),
         optional(field("variadic", $.variadic)),
         field("name", $.identifier),
-        $._type_annotation
+        optional($._type_annotation),
       ),
 
     parameter_list: ($) => seq("(", commaSep($.parameter_definition), ")"),

@@ -46,7 +46,6 @@
     },
     {
       "name": "@winglang/jsii-docgen",
-      "version": "workspace:^",
       "type": "build"
     },
     {
@@ -59,7 +58,6 @@
     },
     {
       "name": "bump-pack",
-      "version": "workspace:^",
       "type": "build"
     },
     {
@@ -154,7 +152,6 @@
     },
     {
       "name": "wing-api-checker",
-      "version": "workspace:^",
       "type": "build"
     },
     {
@@ -239,6 +236,10 @@
     {
       "name": "@azure/storage-blob",
       "version": "12.14.0",
+      "type": "bundled"
+    },
+    {
+      "name": "@types/aws-lambda",
       "type": "bundled"
     },
     {

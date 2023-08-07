@@ -250,7 +250,7 @@ export class Function extends cloud.Function implements IAwsFunction {
       __dirname.replace("target-tf-aws", "shared-aws"),
       __filename,
       "FunctionClient",
-      [`process.env["${this.envName()}"]`]
+      [`process.env["${this.envName()}"], "${this.node.path}"`]
     );
   }
 

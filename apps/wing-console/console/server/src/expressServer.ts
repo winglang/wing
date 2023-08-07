@@ -13,7 +13,11 @@ import type { HostUtils } from "./hostUtils.js";
 import { mergeAllRouters } from "./router/index.js";
 import type { State, Trace } from "./types.js";
 import type { Updater } from "./updater.js";
-import type { RouterContext } from "./utils/createRouter.js";
+import type {
+  LayoutConfig,
+  RouterContext,
+  TestsStateManager,
+} from "./utils/createRouter.js";
 import { getWingVersion } from "./utils/getWingVersion.js";
 import type { LogInterface } from "./utils/LogInterface.js";
 
@@ -34,6 +38,10 @@ export interface CreateExpressServerOptions {
   onExpressCreated?: (app: express.Express) => void;
   wingfile: string;
   requireAcceptTerms?: boolean;
+  layoutConfig?: LayoutConfig;
+  getSelectedNode: () => string | undefined;
+  setSelectedNode: (node: string) => void;
+  testsStateManager: () => TestsStateManager;
 }
 
 export const createExpressServer = async ({
@@ -50,6 +58,10 @@ export const createExpressServer = async ({
   onExpressCreated,
   wingfile,
   requireAcceptTerms = false,
+  layoutConfig,
+  getSelectedNode,
+  setSelectedNode,
+  testsStateManager,
 }: CreateExpressServerOptions) => {
   const app = express();
   app.use(cors());
@@ -76,6 +88,10 @@ export const createExpressServer = async ({
       hostUtils,
       wingfile: wingfile ?? "",
       requireAcceptTerms,
+      layoutConfig,
+      getSelectedNode,
+      setSelectedNode,
+      testsStateManager,
     };
   };
   app.use(

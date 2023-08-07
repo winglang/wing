@@ -240,7 +240,7 @@ exports[`queue name valid 2`] = `
 }
 `;
 
-exports[`queue with a consumer function 1`] = `"new (require(\\"[REDACTED]/wingsdk/src/shared-aws/function.inflight\\")).FunctionClient(process.env[\\"FUNCTION_NAME_75ee4dfb\\"])"`;
+exports[`queue with a consumer function 1`] = `"new (require(\\"[REDACTED]/wingsdk/src/shared-aws/function.inflight\\")).FunctionClient(process.env[\\"FUNCTION_NAME_75ee4dfb\\"], \\"root/Default/Queue-SetConsumer-c5395e41\\")"`;
 
 exports[`queue with a consumer function 2`] = `
 "{

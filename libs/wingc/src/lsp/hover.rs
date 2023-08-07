@@ -82,7 +82,7 @@ impl<'a> HoverVisitor<'a> {
 		if property.span.contains(&self.position) {
 			let new_span = self.current_expr.unwrap().span.clone();
 			match &**obj_type.maybe_unwrap_option() {
-				Type::Optional(_) | Type::Anything | Type::Void | Type::Nil | Type::Unresolved => {}
+				Type::Optional(_) | Type::Anything | Type::Void | Type::Nil | Type::Unresolved | Type::Inferred(_) => {}
 
 				Type::Array(_)
 				| Type::MutArray(_)

@@ -1,5 +1,5 @@
 {
-  "name": "examples-util",
+  "name": "examples-sdk",
   "dependencies": {
     "uuid": "^9.0.0",
     "nanoid": "^3.3.6"

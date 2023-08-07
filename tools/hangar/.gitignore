@@ -1,0 +1,7 @@
+/results/
+/tmp/
+/src/test_corpus/*
+/__snapshots__/**/proc.*/
+/.npmrc
+/nohup.out
+/nohup.err

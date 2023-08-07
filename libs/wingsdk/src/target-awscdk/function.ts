@@ -77,7 +77,7 @@ export class Function extends cloud.Function {
       __dirname.replace("target-awscdk", "shared-aws"),
       __filename,
       "FunctionClient",
-      [`process.env["${this.envName()}"]`]
+      [`process.env["${this.envName()}"], "${this.node.path}"`]
     );
   }
 
