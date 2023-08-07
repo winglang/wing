@@ -455,6 +455,17 @@ exports[`cloud_function_expects_inflight.w 1`] = `
   | \\\\-^ Expected type to be \\"inflight (event: str): void\\", but got \\"preflight (name: str): str\\" instead
 
 
+error: Expected type to be \\"inflight (message: str): void\\", but got \\"inflight (x: num): unknown\\" instead
+   --> ../../../examples/tests/invalid/cloud_function_expects_inflight.w:9:15
+   |  
+ 9 |   q.setConsumer(inflight (x: num) => {
+   | /---------------^
+10 | |                      // ^ \\"num\\" doesn't match the expected type \\"str\\"
+11 | |   return;
+12 | | });
+   | \\\\-^ Expected type to be \\"inflight (message: str): void\\", but got \\"inflight (x: num): unknown\\" instead
+
+
  
  
 Tests 1 failed (1)
@@ -982,6 +993,13 @@ error: Expected \\"Json\\" elements to be Json values (https://www.json.org/json
    |
 71 | Json { cool: anotherEmptyArray };
    |              ^^^^^^^^^^^^^^^^^ Expected \\"Json\\" elements to be Json values (https://www.json.org/json-en.html), but got \\"Array<unknown>\\" which is not a Json value
+
+
+error: Expected type to be \\"inflight (str): void\\", but got \\"inflight (arg1: num): unknown\\" instead
+   --> ../../../examples/tests/invalid/inference.w:85:37
+   |
+85 | let badFunc: inflight (str): void = inflight (arg1: num) => {};
+   |                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected type to be \\"inflight (str): void\\", but got \\"inflight (arg1: num): unknown\\" instead
 
 
 error: Unexpected return value from void function. Return type annotations are required for methods.
