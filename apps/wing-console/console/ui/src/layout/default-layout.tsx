@@ -301,6 +301,7 @@ export const DefaultLayout = ({
                       onSelectedNodeIdChange={(nodeId) =>
                         setSelectedItems(nodeId ? [nodeId] : [])
                       }
+                      selectedEdgeId={selectedEdgeId}
                       onSelectedEdgeIdChange={setSelectedEdgeId}
                     />
                   </div>

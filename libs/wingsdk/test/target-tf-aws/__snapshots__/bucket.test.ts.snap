@@ -500,36 +500,36 @@ exports[`bucket with onCreate method 1`] = `
   },
   \\"resource\\": {
     \\"aws_iam_role\\": {
-      \\"my_bucket_my_bucket-on_create-OnMessage-2c90a36b_IamRole_EFF20124\\": {
+      \\"my_bucket_my_bucket-oncreate-OnMessage-1000fbe7_IamRole_35A9A03F\\": {
         \\"assume_role_policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":\\\\\\"sts:AssumeRole\\\\\\",\\\\\\"Principal\\\\\\":{\\\\\\"Service\\\\\\":\\\\\\"lambda.amazonaws.com\\\\\\"},\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\"
       }
     },
     \\"aws_iam_role_policy\\": {
-      \\"my_bucket_my_bucket-on_create-OnMessage-2c90a36b_IamRolePolicy_E00CE47F\\": {
+      \\"my_bucket_my_bucket-oncreate-OnMessage-1000fbe7_IamRolePolicy_97F83F8D\\": {
         \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Action\\\\\\":\\\\\\"none:null\\\\\\",\\\\\\"Resource\\\\\\":\\\\\\"*\\\\\\"}]}\\",
-        \\"role\\": \\"\${aws_iam_role.my_bucket_my_bucket-on_create-OnMessage-2c90a36b_IamRole_EFF20124.name}\\"
+        \\"role\\": \\"\${aws_iam_role.my_bucket_my_bucket-oncreate-OnMessage-1000fbe7_IamRole_35A9A03F.name}\\"
       }
     },
     \\"aws_iam_role_policy_attachment\\": {
-      \\"my_bucket_my_bucket-on_create-OnMessage-2c90a36b_IamRolePolicyAttachment_02930F2C\\": {
+      \\"my_bucket_my_bucket-oncreate-OnMessage-1000fbe7_IamRolePolicyAttachment_66038538\\": {
         \\"policy_arn\\": \\"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole\\",
-        \\"role\\": \\"\${aws_iam_role.my_bucket_my_bucket-on_create-OnMessage-2c90a36b_IamRole_EFF20124.name}\\"
+        \\"role\\": \\"\${aws_iam_role.my_bucket_my_bucket-oncreate-OnMessage-1000fbe7_IamRole_35A9A03F.name}\\"
       }
     },
     \\"aws_lambda_function\\": {
-      \\"my_bucket_my_bucket-on_create-OnMessage-2c90a36b_ACD91BBA\\": {
+      \\"my_bucket_my_bucket-oncreate-OnMessage-1000fbe7_21FC0692\\": {
         \\"environment\\": {
           \\"variables\\": {
-            \\"WING_FUNCTION_NAME\\": \\"my_bucket-on_create-OnMessage-2c90a36b-c87c1659\\"
+            \\"WING_FUNCTION_NAME\\": \\"my_bucket-oncreate-OnMessage-1000fbe7-c8902807\\"
           }
         },
-        \\"function_name\\": \\"my_bucket-on_create-OnMessage-2c90a36b-c87c1659\\",
+        \\"function_name\\": \\"my_bucket-oncreate-OnMessage-1000fbe7-c8902807\\",
         \\"handler\\": \\"index.handler\\",
         \\"publish\\": true,
-        \\"role\\": \\"\${aws_iam_role.my_bucket_my_bucket-on_create-OnMessage-2c90a36b_IamRole_EFF20124.arn}\\",
+        \\"role\\": \\"\${aws_iam_role.my_bucket_my_bucket-oncreate-OnMessage-1000fbe7_IamRole_35A9A03F.arn}\\",
         \\"runtime\\": \\"nodejs18.x\\",
         \\"s3_bucket\\": \\"\${aws_s3_bucket.Code.bucket}\\",
-        \\"s3_key\\": \\"\${aws_s3_object.my_bucket_my_bucket-on_create-OnMessage-2c90a36b_S3Object_94BFE334.key}\\",
+        \\"s3_key\\": \\"\${aws_s3_object.my_bucket_my_bucket-oncreate-OnMessage-1000fbe7_S3Object_0EFF5E1C.key}\\",
         \\"timeout\\": 30,
         \\"vpc_config\\": {
           \\"security_group_ids\\": [],
@@ -538,11 +538,11 @@ exports[`bucket with onCreate method 1`] = `
       }
     },
     \\"aws_lambda_permission\\": {
-      \\"my_bucket_my_bucket-on_create-OnMessage-2c90a36b_InvokePermission-c8ab9ab84a159fe2b8ace0993118785a21c0508190_575B3554\\": {
+      \\"my_bucket_my_bucket-oncreate-OnMessage-1000fbe7_InvokePermission-c81e8728eb64a11308ced47594c2396d2467e4d9d3_9B4C34C5\\": {
         \\"action\\": \\"lambda:InvokeFunction\\",
-        \\"function_name\\": \\"\${aws_lambda_function.my_bucket_my_bucket-on_create-OnMessage-2c90a36b_ACD91BBA.function_name}\\",
+        \\"function_name\\": \\"\${aws_lambda_function.my_bucket_my_bucket-oncreate-OnMessage-1000fbe7_21FC0692.function_name}\\",
         \\"principal\\": \\"sns.amazonaws.com\\",
-        \\"source_arn\\": \\"\${aws_sns_topic.my_bucket_my_bucket-on_create_CA4D65D3.arn}\\"
+        \\"source_arn\\": \\"\${aws_sns_topic.my_bucket_my_bucket-oncreate_820372FA.arn}\\"
       }
     },
     \\"aws_s3_bucket\\": {
@@ -558,15 +558,15 @@ exports[`bucket with onCreate method 1`] = `
       \\"my_bucket_S3BucketNotification_DDA29E8F\\": {
         \\"bucket\\": \\"\${aws_s3_bucket.my_bucket.id}\\",
         \\"depends_on\\": [
-          \\"aws_sns_topic_policy.my_bucket_my_bucket-on_create_PublishPermission-c8045fccc85a7ef42d5391d87958e5ce36c53a401a_4338D29D\\"
+          \\"aws_sns_topic_policy.my_bucket_my_bucket-oncreate_PublishPermission-c8045fccc85a7ef42d5391d87958e5ce36c53a401a_DC469583\\"
         ],
         \\"topic\\": [
           {
             \\"events\\": [
               \\"s3:ObjectCreated:Put\\"
             ],
-            \\"id\\": \\"on-create-notification\\",
-            \\"topic_arn\\": \\"\${aws_sns_topic.my_bucket_my_bucket-on_create_CA4D65D3.arn}\\"
+            \\"id\\": \\"on-oncreate-notification\\",
+            \\"topic_arn\\": \\"\${aws_sns_topic.my_bucket_my_bucket-oncreate_820372FA.arn}\\"
           }
         ]
       }
@@ -602,28 +602,28 @@ exports[`bucket with onCreate method 1`] = `
       }
     },
     \\"aws_s3_object\\": {
-      \\"my_bucket_my_bucket-on_create-OnMessage-2c90a36b_S3Object_94BFE334\\": {
+      \\"my_bucket_my_bucket-oncreate-OnMessage-1000fbe7_S3Object_0EFF5E1C\\": {
         \\"bucket\\": \\"\${aws_s3_bucket.Code.bucket}\\",
         \\"key\\": \\"<key>\\",
         \\"source\\": \\"<source>\\"
       }
     },
     \\"aws_sns_topic\\": {
-      \\"my_bucket_my_bucket-on_create_CA4D65D3\\": {
-        \\"name\\": \\"my_bucket-on_create-c8ab9ab8\\"
+      \\"my_bucket_my_bucket-oncreate_820372FA\\": {
+        \\"name\\": \\"my_bucket-oncreate-c81e8728\\"
       }
     },
     \\"aws_sns_topic_policy\\": {
-      \\"my_bucket_my_bucket-on_create_PublishPermission-c8045fccc85a7ef42d5391d87958e5ce36c53a401a_4338D29D\\": {
-        \\"arn\\": \\"\${aws_sns_topic.my_bucket_my_bucket-on_create_CA4D65D3.arn}\\",
-        \\"policy\\": \\"{\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Principal\\\\\\":{\\\\\\"Service\\\\\\":\\\\\\"s3.amazonaws.com\\\\\\"},\\\\\\"Action\\\\\\":\\\\\\"sns:Publish\\\\\\",\\\\\\"Resource\\\\\\":\\\\\\"\${aws_sns_topic.my_bucket_my_bucket-on_create_CA4D65D3.arn}\\\\\\",\\\\\\"Condition\\\\\\":{\\\\\\"ArnEquals\\\\\\":{\\\\\\"aws:SourceArn\\\\\\":\\\\\\"\${aws_s3_bucket.my_bucket.arn}\\\\\\"}}}]}\\"
+      \\"my_bucket_my_bucket-oncreate_PublishPermission-c8045fccc85a7ef42d5391d87958e5ce36c53a401a_DC469583\\": {
+        \\"arn\\": \\"\${aws_sns_topic.my_bucket_my_bucket-oncreate_820372FA.arn}\\",
+        \\"policy\\": \\"{\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Principal\\\\\\":{\\\\\\"Service\\\\\\":\\\\\\"s3.amazonaws.com\\\\\\"},\\\\\\"Action\\\\\\":\\\\\\"sns:Publish\\\\\\",\\\\\\"Resource\\\\\\":\\\\\\"\${aws_sns_topic.my_bucket_my_bucket-oncreate_820372FA.arn}\\\\\\",\\\\\\"Condition\\\\\\":{\\\\\\"ArnEquals\\\\\\":{\\\\\\"aws:SourceArn\\\\\\":\\\\\\"\${aws_s3_bucket.my_bucket.arn}\\\\\\"}}}]}\\"
       }
     },
     \\"aws_sns_topic_subscription\\": {
-      \\"my_bucket_my_bucket-on_create_my_bucket-on_create-TopicSubscription-2c90a36b_155F87CA\\": {
-        \\"endpoint\\": \\"\${aws_lambda_function.my_bucket_my_bucket-on_create-OnMessage-2c90a36b_ACD91BBA.arn}\\",
+      \\"my_bucket_my_bucket-oncreate_my_bucket-oncreate-TopicSubscription-1000fbe7_9F6DDCDF\\": {
+        \\"endpoint\\": \\"\${aws_lambda_function.my_bucket_my_bucket-oncreate-OnMessage-1000fbe7_21FC0692.arn}\\",
         \\"protocol\\": \\"lambda\\",
-        \\"topic_arn\\": \\"\${aws_sns_topic.my_bucket_my_bucket-on_create_CA4D65D3.arn}\\"
+        \\"topic_arn\\": \\"\${aws_sns_topic.my_bucket_my_bucket-oncreate_820372FA.arn}\\"
       }
     }
   }
@@ -687,13 +687,13 @@ exports[`bucket with onCreate method 2`] = `
                       "direction": "inbound",
                       "implicit": false,
                       "relationship": "handle",
-                      "resource": "root/Default/my_bucket/my_bucket-on_create-OnMessage-2c90a36b",
+                      "resource": "root/Default/my_bucket/my_bucket-oncreate-OnMessage-1000fbe7",
                     },
                     {
                       "direction": "inbound",
                       "implicit": false,
                       "relationship": "$inflight_init",
-                      "resource": "root/Default/my_bucket/my_bucket-on_create-OnMessage-2c90a36b",
+                      "resource": "root/Default/my_bucket/my_bucket-oncreate-OnMessage-1000fbe7",
                     },
                   ],
                 },
@@ -715,8 +715,8 @@ exports[`bucket with onCreate method 2`] = `
                     {
                       "direction": "outbound",
                       "implicit": false,
-                      "relationship": "CREATE",
-                      "resource": "root/Default/my_bucket/my_bucket-on_create",
+                      "relationship": "onCreate",
+                      "resource": "root/Default/my_bucket/my_bucket-oncreate",
                     },
                   ],
                 },
@@ -761,20 +761,20 @@ exports[`bucket with onCreate method 2`] = `
                     "id": "S3BucketNotification",
                     "path": "root/Default/my_bucket/S3BucketNotification",
                   },
-                  "my_bucket-on_create": {
+                  "my_bucket-oncreate": {
                     "attributes": {
                       "wing:resource:connections": [
                         {
                           "direction": "inbound",
                           "implicit": false,
-                          "relationship": "CREATE",
+                          "relationship": "onCreate",
                           "resource": "root/Default/my_bucket",
                         },
                         {
                           "direction": "outbound",
                           "implicit": false,
                           "relationship": "onMessage",
-                          "resource": "root/Default/my_bucket/my_bucket-on_create-OnMessage-2c90a36b",
+                          "resource": "root/Default/my_bucket/my_bucket-oncreate-OnMessage-1000fbe7",
                         },
                       ],
                     },
@@ -785,7 +785,7 @@ exports[`bucket with onCreate method 2`] = `
                           "version": "0.17.0",
                         },
                         "id": "Default",
-                        "path": "root/Default/my_bucket/my_bucket-on_create/Default",
+                        "path": "root/Default/my_bucket/my_bucket-oncreate/Default",
                       },
                       "PublishPermission-c8045fccc85a7ef42d5391d87958e5ce36c53a401a": {
                         "constructInfo": {
@@ -793,15 +793,15 @@ exports[`bucket with onCreate method 2`] = `
                           "version": "0.17.0",
                         },
                         "id": "PublishPermission-c8045fccc85a7ef42d5391d87958e5ce36c53a401a",
-                        "path": "root/Default/my_bucket/my_bucket-on_create/PublishPermission-c8045fccc85a7ef42d5391d87958e5ce36c53a401a",
+                        "path": "root/Default/my_bucket/my_bucket-oncreate/PublishPermission-c8045fccc85a7ef42d5391d87958e5ce36c53a401a",
                       },
-                      "my_bucket-on_create-TopicSubscription-2c90a36b": {
+                      "my_bucket-oncreate-TopicSubscription-1000fbe7": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
                           "version": "0.17.0",
                         },
-                        "id": "my_bucket-on_create-TopicSubscription-2c90a36b",
-                        "path": "root/Default/my_bucket/my_bucket-on_create/my_bucket-on_create-TopicSubscription-2c90a36b",
+                        "id": "my_bucket-oncreate-TopicSubscription-1000fbe7",
+                        "path": "root/Default/my_bucket/my_bucket-oncreate/my_bucket-oncreate-TopicSubscription-1000fbe7",
                       },
                     },
                     "constructInfo": {
@@ -812,10 +812,10 @@ exports[`bucket with onCreate method 2`] = `
                       "description": "A pub/sub notification topic",
                       "title": "Topic",
                     },
-                    "id": "my_bucket-on_create",
-                    "path": "root/Default/my_bucket/my_bucket-on_create",
+                    "id": "my_bucket-oncreate",
+                    "path": "root/Default/my_bucket/my_bucket-oncreate",
                   },
-                  "my_bucket-on_create-OnMessage-2c90a36b": {
+                  "my_bucket-oncreate-OnMessage-1000fbe7": {
                     "attributes": {
                       "wing:resource:connections": [
                         {
@@ -834,19 +834,19 @@ exports[`bucket with onCreate method 2`] = `
                           "direction": "outbound",
                           "implicit": false,
                           "relationship": "handle",
-                          "resource": "root/Default/my_bucket-on_create-eventHandler-9eade8f6",
+                          "resource": "root/Default/my_bucket-oncreate-eventHandler-9eade8f6",
                         },
                         {
                           "direction": "outbound",
                           "implicit": false,
                           "relationship": "$inflight_init",
-                          "resource": "root/Default/my_bucket-on_create-eventHandler-9eade8f6",
+                          "resource": "root/Default/my_bucket-oncreate-eventHandler-9eade8f6",
                         },
                         {
                           "direction": "inbound",
                           "implicit": false,
                           "relationship": "onMessage",
-                          "resource": "root/Default/my_bucket/my_bucket-on_create",
+                          "resource": "root/Default/my_bucket/my_bucket-oncreate",
                         },
                       ],
                     },
@@ -857,7 +857,7 @@ exports[`bucket with onCreate method 2`] = `
                           "version": "0.17.0",
                         },
                         "id": "Asset",
-                        "path": "root/Default/my_bucket/my_bucket-on_create-OnMessage-2c90a36b/Asset",
+                        "path": "root/Default/my_bucket/my_bucket-oncreate-OnMessage-1000fbe7/Asset",
                       },
                       "Default": {
                         "constructInfo": {
@@ -865,7 +865,7 @@ exports[`bucket with onCreate method 2`] = `
                           "version": "0.17.0",
                         },
                         "id": "Default",
-                        "path": "root/Default/my_bucket/my_bucket-on_create-OnMessage-2c90a36b/Default",
+                        "path": "root/Default/my_bucket/my_bucket-oncreate-OnMessage-1000fbe7/Default",
                       },
                       "IamRole": {
                         "constructInfo": {
@@ -873,7 +873,7 @@ exports[`bucket with onCreate method 2`] = `
                           "version": "0.17.0",
                         },
                         "id": "IamRole",
-                        "path": "root/Default/my_bucket/my_bucket-on_create-OnMessage-2c90a36b/IamRole",
+                        "path": "root/Default/my_bucket/my_bucket-oncreate-OnMessage-1000fbe7/IamRole",
                       },
                       "IamRolePolicy": {
                         "constructInfo": {
@@ -881,7 +881,7 @@ exports[`bucket with onCreate method 2`] = `
                           "version": "0.17.0",
                         },
                         "id": "IamRolePolicy",
-                        "path": "root/Default/my_bucket/my_bucket-on_create-OnMessage-2c90a36b/IamRolePolicy",
+                        "path": "root/Default/my_bucket/my_bucket-oncreate-OnMessage-1000fbe7/IamRolePolicy",
                       },
                       "IamRolePolicyAttachment": {
                         "constructInfo": {
@@ -889,15 +889,15 @@ exports[`bucket with onCreate method 2`] = `
                           "version": "0.17.0",
                         },
                         "id": "IamRolePolicyAttachment",
-                        "path": "root/Default/my_bucket/my_bucket-on_create-OnMessage-2c90a36b/IamRolePolicyAttachment",
+                        "path": "root/Default/my_bucket/my_bucket-oncreate-OnMessage-1000fbe7/IamRolePolicyAttachment",
                       },
-                      "InvokePermission-c8ab9ab84a159fe2b8ace0993118785a21c0508190": {
+                      "InvokePermission-c81e8728eb64a11308ced47594c2396d2467e4d9d3": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
                           "version": "0.17.0",
                         },
-                        "id": "InvokePermission-c8ab9ab84a159fe2b8ace0993118785a21c0508190",
-                        "path": "root/Default/my_bucket/my_bucket-on_create-OnMessage-2c90a36b/InvokePermission-c8ab9ab84a159fe2b8ace0993118785a21c0508190",
+                        "id": "InvokePermission-c81e8728eb64a11308ced47594c2396d2467e4d9d3",
+                        "path": "root/Default/my_bucket/my_bucket-oncreate-OnMessage-1000fbe7/InvokePermission-c81e8728eb64a11308ced47594c2396d2467e4d9d3",
                       },
                       "S3Object": {
                         "constructInfo": {
@@ -905,7 +905,7 @@ exports[`bucket with onCreate method 2`] = `
                           "version": "0.17.0",
                         },
                         "id": "S3Object",
-                        "path": "root/Default/my_bucket/my_bucket-on_create-OnMessage-2c90a36b/S3Object",
+                        "path": "root/Default/my_bucket/my_bucket-oncreate-OnMessage-1000fbe7/S3Object",
                       },
                     },
                     "constructInfo": {
@@ -916,10 +916,10 @@ exports[`bucket with onCreate method 2`] = `
                       "description": "A cloud function (FaaS)",
                       "title": "Function",
                     },
-                    "id": "my_bucket-on_create-OnMessage-2c90a36b",
-                    "path": "root/Default/my_bucket/my_bucket-on_create-OnMessage-2c90a36b",
+                    "id": "my_bucket-oncreate-OnMessage-1000fbe7",
+                    "path": "root/Default/my_bucket/my_bucket-oncreate-OnMessage-1000fbe7",
                   },
-                  "my_bucket-on_create-OnMessageHandler-2c90a36b": {
+                  "my_bucket-oncreate-OnMessageHandler-1000fbe7": {
                     "attributes": {
                       "wing:resource:connections": [],
                     },
@@ -930,8 +930,8 @@ exports[`bucket with onCreate method 2`] = `
                     "display": {
                       "hidden": true,
                     },
-                    "id": "my_bucket-on_create-OnMessageHandler-2c90a36b",
-                    "path": "root/Default/my_bucket/my_bucket-on_create-OnMessageHandler-2c90a36b",
+                    "id": "my_bucket-oncreate-OnMessageHandler-1000fbe7",
+                    "path": "root/Default/my_bucket/my_bucket-oncreate-OnMessageHandler-1000fbe7",
                   },
                 },
                 "constructInfo": {
@@ -945,20 +945,20 @@ exports[`bucket with onCreate method 2`] = `
                 "id": "my_bucket",
                 "path": "root/Default/my_bucket",
               },
-              "my_bucket-on_create-eventHandler-9eade8f6": {
+              "my_bucket-oncreate-eventHandler-9eade8f6": {
                 "attributes": {
                   "wing:resource:connections": [
                     {
                       "direction": "inbound",
                       "implicit": false,
                       "relationship": "handle",
-                      "resource": "root/Default/my_bucket/my_bucket-on_create-OnMessage-2c90a36b",
+                      "resource": "root/Default/my_bucket/my_bucket-oncreate-OnMessage-1000fbe7",
                     },
                     {
                       "direction": "inbound",
                       "implicit": false,
                       "relationship": "$inflight_init",
-                      "resource": "root/Default/my_bucket/my_bucket-on_create-OnMessage-2c90a36b",
+                      "resource": "root/Default/my_bucket/my_bucket-oncreate-OnMessage-1000fbe7",
                     },
                   ],
                 },
@@ -969,8 +969,8 @@ exports[`bucket with onCreate method 2`] = `
                 "display": {
                   "hidden": true,
                 },
-                "id": "my_bucket-on_create-eventHandler-9eade8f6",
-                "path": "root/Default/my_bucket-on_create-eventHandler-9eade8f6",
+                "id": "my_bucket-oncreate-eventHandler-9eade8f6",
+                "path": "root/Default/my_bucket-oncreate-eventHandler-9eade8f6",
               },
             },
             "constructInfo": {
@@ -1017,36 +1017,36 @@ exports[`bucket with onDelete method 1`] = `
   },
   \\"resource\\": {
     \\"aws_iam_role\\": {
-      \\"my_bucket_my_bucket-on_delete-OnMessage-f22c8a47_IamRole_37BB9CC4\\": {
+      \\"my_bucket_my_bucket-ondelete-OnMessage-107fa7e8_IamRole_07615065\\": {
         \\"assume_role_policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":\\\\\\"sts:AssumeRole\\\\\\",\\\\\\"Principal\\\\\\":{\\\\\\"Service\\\\\\":\\\\\\"lambda.amazonaws.com\\\\\\"},\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\"
       }
     },
     \\"aws_iam_role_policy\\": {
-      \\"my_bucket_my_bucket-on_delete-OnMessage-f22c8a47_IamRolePolicy_860049B2\\": {
+      \\"my_bucket_my_bucket-ondelete-OnMessage-107fa7e8_IamRolePolicy_9B9E2210\\": {
         \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Action\\\\\\":\\\\\\"none:null\\\\\\",\\\\\\"Resource\\\\\\":\\\\\\"*\\\\\\"}]}\\",
-        \\"role\\": \\"\${aws_iam_role.my_bucket_my_bucket-on_delete-OnMessage-f22c8a47_IamRole_37BB9CC4.name}\\"
+        \\"role\\": \\"\${aws_iam_role.my_bucket_my_bucket-ondelete-OnMessage-107fa7e8_IamRole_07615065.name}\\"
       }
     },
     \\"aws_iam_role_policy_attachment\\": {
-      \\"my_bucket_my_bucket-on_delete-OnMessage-f22c8a47_IamRolePolicyAttachment_2EF1321B\\": {
+      \\"my_bucket_my_bucket-ondelete-OnMessage-107fa7e8_IamRolePolicyAttachment_DF48669C\\": {
         \\"policy_arn\\": \\"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole\\",
-        \\"role\\": \\"\${aws_iam_role.my_bucket_my_bucket-on_delete-OnMessage-f22c8a47_IamRole_37BB9CC4.name}\\"
+        \\"role\\": \\"\${aws_iam_role.my_bucket_my_bucket-ondelete-OnMessage-107fa7e8_IamRole_07615065.name}\\"
       }
     },
     \\"aws_lambda_function\\": {
-      \\"my_bucket_my_bucket-on_delete-OnMessage-f22c8a47_4AC25BA6\\": {
+      \\"my_bucket_my_bucket-ondelete-OnMessage-107fa7e8_F0204E1B\\": {
         \\"environment\\": {
           \\"variables\\": {
-            \\"WING_FUNCTION_NAME\\": \\"my_bucket-on_delete-OnMessage-f22c8a47-c8e50f60\\"
+            \\"WING_FUNCTION_NAME\\": \\"my_bucket-ondelete-OnMessage-107fa7e8-c8a44ddc\\"
           }
         },
-        \\"function_name\\": \\"my_bucket-on_delete-OnMessage-f22c8a47-c8e50f60\\",
+        \\"function_name\\": \\"my_bucket-ondelete-OnMessage-107fa7e8-c8a44ddc\\",
         \\"handler\\": \\"index.handler\\",
         \\"publish\\": true,
-        \\"role\\": \\"\${aws_iam_role.my_bucket_my_bucket-on_delete-OnMessage-f22c8a47_IamRole_37BB9CC4.arn}\\",
+        \\"role\\": \\"\${aws_iam_role.my_bucket_my_bucket-ondelete-OnMessage-107fa7e8_IamRole_07615065.arn}\\",
         \\"runtime\\": \\"nodejs18.x\\",
         \\"s3_bucket\\": \\"\${aws_s3_bucket.Code.bucket}\\",
-        \\"s3_key\\": \\"\${aws_s3_object.my_bucket_my_bucket-on_delete-OnMessage-f22c8a47_S3Object_621A589A.key}\\",
+        \\"s3_key\\": \\"\${aws_s3_object.my_bucket_my_bucket-ondelete-OnMessage-107fa7e8_S3Object_E3EEAE82.key}\\",
         \\"timeout\\": 30,
         \\"vpc_config\\": {
           \\"security_group_ids\\": [],
@@ -1055,11 +1055,11 @@ exports[`bucket with onDelete method 1`] = `
       }
     },
     \\"aws_lambda_permission\\": {
-      \\"my_bucket_my_bucket-on_delete-OnMessage-f22c8a47_InvokePermission-c80912e0ab47291ff9b0dd966e259f42a42646bcdc_B8B37FEC\\": {
+      \\"my_bucket_my_bucket-ondelete-OnMessage-107fa7e8_InvokePermission-c804d947f12e6d883f018387429c0ba10b852c46ba_ACC48827\\": {
         \\"action\\": \\"lambda:InvokeFunction\\",
-        \\"function_name\\": \\"\${aws_lambda_function.my_bucket_my_bucket-on_delete-OnMessage-f22c8a47_4AC25BA6.function_name}\\",
+        \\"function_name\\": \\"\${aws_lambda_function.my_bucket_my_bucket-ondelete-OnMessage-107fa7e8_F0204E1B.function_name}\\",
         \\"principal\\": \\"sns.amazonaws.com\\",
-        \\"source_arn\\": \\"\${aws_sns_topic.my_bucket_my_bucket-on_delete_C370DD5F.arn}\\"
+        \\"source_arn\\": \\"\${aws_sns_topic.my_bucket_my_bucket-ondelete_D8AB43D6.arn}\\"
       }
     },
     \\"aws_s3_bucket\\": {
@@ -1075,15 +1075,15 @@ exports[`bucket with onDelete method 1`] = `
       \\"my_bucket_S3BucketNotification_DDA29E8F\\": {
         \\"bucket\\": \\"\${aws_s3_bucket.my_bucket.id}\\",
         \\"depends_on\\": [
-          \\"aws_sns_topic_policy.my_bucket_my_bucket-on_delete_PublishPermission-c8045fccc85a7ef42d5391d87958e5ce36c53a401a_52CABBF1\\"
+          \\"aws_sns_topic_policy.my_bucket_my_bucket-ondelete_PublishPermission-c8045fccc85a7ef42d5391d87958e5ce36c53a401a_87361222\\"
         ],
         \\"topic\\": [
           {
             \\"events\\": [
               \\"s3:ObjectRemoved:*\\"
             ],
-            \\"id\\": \\"on-delete-notification\\",
-            \\"topic_arn\\": \\"\${aws_sns_topic.my_bucket_my_bucket-on_delete_C370DD5F.arn}\\"
+            \\"id\\": \\"on-ondelete-notification\\",
+            \\"topic_arn\\": \\"\${aws_sns_topic.my_bucket_my_bucket-ondelete_D8AB43D6.arn}\\"
           }
         ]
       }
@@ -1119,28 +1119,28 @@ exports[`bucket with onDelete method 1`] = `
       }
     },
     \\"aws_s3_object\\": {
-      \\"my_bucket_my_bucket-on_delete-OnMessage-f22c8a47_S3Object_621A589A\\": {
+      \\"my_bucket_my_bucket-ondelete-OnMessage-107fa7e8_S3Object_E3EEAE82\\": {
         \\"bucket\\": \\"\${aws_s3_bucket.Code.bucket}\\",
         \\"key\\": \\"<key>\\",
         \\"source\\": \\"<source>\\"
       }
     },
     \\"aws_sns_topic\\": {
-      \\"my_bucket_my_bucket-on_delete_C370DD5F\\": {
-        \\"name\\": \\"my_bucket-on_delete-c80912e0\\"
+      \\"my_bucket_my_bucket-ondelete_D8AB43D6\\": {
+        \\"name\\": \\"my_bucket-ondelete-c804d947\\"
       }
     },
     \\"aws_sns_topic_policy\\": {
-      \\"my_bucket_my_bucket-on_delete_PublishPermission-c8045fccc85a7ef42d5391d87958e5ce36c53a401a_52CABBF1\\": {
-        \\"arn\\": \\"\${aws_sns_topic.my_bucket_my_bucket-on_delete_C370DD5F.arn}\\",
-        \\"policy\\": \\"{\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Principal\\\\\\":{\\\\\\"Service\\\\\\":\\\\\\"s3.amazonaws.com\\\\\\"},\\\\\\"Action\\\\\\":\\\\\\"sns:Publish\\\\\\",\\\\\\"Resource\\\\\\":\\\\\\"\${aws_sns_topic.my_bucket_my_bucket-on_delete_C370DD5F.arn}\\\\\\",\\\\\\"Condition\\\\\\":{\\\\\\"ArnEquals\\\\\\":{\\\\\\"aws:SourceArn\\\\\\":\\\\\\"\${aws_s3_bucket.my_bucket.arn}\\\\\\"}}}]}\\"
+      \\"my_bucket_my_bucket-ondelete_PublishPermission-c8045fccc85a7ef42d5391d87958e5ce36c53a401a_87361222\\": {
+        \\"arn\\": \\"\${aws_sns_topic.my_bucket_my_bucket-ondelete_D8AB43D6.arn}\\",
+        \\"policy\\": \\"{\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Principal\\\\\\":{\\\\\\"Service\\\\\\":\\\\\\"s3.amazonaws.com\\\\\\"},\\\\\\"Action\\\\\\":\\\\\\"sns:Publish\\\\\\",\\\\\\"Resource\\\\\\":\\\\\\"\${aws_sns_topic.my_bucket_my_bucket-ondelete_D8AB43D6.arn}\\\\\\",\\\\\\"Condition\\\\\\":{\\\\\\"ArnEquals\\\\\\":{\\\\\\"aws:SourceArn\\\\\\":\\\\\\"\${aws_s3_bucket.my_bucket.arn}\\\\\\"}}}]}\\"
       }
     },
     \\"aws_sns_topic_subscription\\": {
-      \\"my_bucket_my_bucket-on_delete_my_bucket-on_delete-TopicSubscription-f22c8a47_66D78279\\": {
-        \\"endpoint\\": \\"\${aws_lambda_function.my_bucket_my_bucket-on_delete-OnMessage-f22c8a47_4AC25BA6.arn}\\",
+      \\"my_bucket_my_bucket-ondelete_my_bucket-ondelete-TopicSubscription-107fa7e8_AC27B137\\": {
+        \\"endpoint\\": \\"\${aws_lambda_function.my_bucket_my_bucket-ondelete-OnMessage-107fa7e8_F0204E1B.arn}\\",
         \\"protocol\\": \\"lambda\\",
-        \\"topic_arn\\": \\"\${aws_sns_topic.my_bucket_my_bucket-on_delete_C370DD5F.arn}\\"
+        \\"topic_arn\\": \\"\${aws_sns_topic.my_bucket_my_bucket-ondelete_D8AB43D6.arn}\\"
       }
     }
   }
@@ -1204,13 +1204,13 @@ exports[`bucket with onDelete method 2`] = `
                       "direction": "inbound",
                       "implicit": false,
                       "relationship": "handle",
-                      "resource": "root/Default/my_bucket/my_bucket-on_delete-OnMessage-f22c8a47",
+                      "resource": "root/Default/my_bucket/my_bucket-ondelete-OnMessage-107fa7e8",
                     },
                     {
                       "direction": "inbound",
                       "implicit": false,
                       "relationship": "$inflight_init",
-                      "resource": "root/Default/my_bucket/my_bucket-on_delete-OnMessage-f22c8a47",
+                      "resource": "root/Default/my_bucket/my_bucket-ondelete-OnMessage-107fa7e8",
                     },
                   ],
                 },
@@ -1232,8 +1232,8 @@ exports[`bucket with onDelete method 2`] = `
                     {
                       "direction": "outbound",
                       "implicit": false,
-                      "relationship": "DELETE",
-                      "resource": "root/Default/my_bucket/my_bucket-on_delete",
+                      "relationship": "onDelete",
+                      "resource": "root/Default/my_bucket/my_bucket-ondelete",
                     },
                   ],
                 },
@@ -1278,20 +1278,20 @@ exports[`bucket with onDelete method 2`] = `
                     "id": "S3BucketNotification",
                     "path": "root/Default/my_bucket/S3BucketNotification",
                   },
-                  "my_bucket-on_delete": {
+                  "my_bucket-ondelete": {
                     "attributes": {
                       "wing:resource:connections": [
                         {
                           "direction": "inbound",
                           "implicit": false,
-                          "relationship": "DELETE",
+                          "relationship": "onDelete",
                           "resource": "root/Default/my_bucket",
                         },
                         {
                           "direction": "outbound",
                           "implicit": false,
                           "relationship": "onMessage",
-                          "resource": "root/Default/my_bucket/my_bucket-on_delete-OnMessage-f22c8a47",
+                          "resource": "root/Default/my_bucket/my_bucket-ondelete-OnMessage-107fa7e8",
                         },
                       ],
                     },
@@ -1302,7 +1302,7 @@ exports[`bucket with onDelete method 2`] = `
                           "version": "0.17.0",
                         },
                         "id": "Default",
-                        "path": "root/Default/my_bucket/my_bucket-on_delete/Default",
+                        "path": "root/Default/my_bucket/my_bucket-ondelete/Default",
                       },
                       "PublishPermission-c8045fccc85a7ef42d5391d87958e5ce36c53a401a": {
                         "constructInfo": {
@@ -1310,15 +1310,15 @@ exports[`bucket with onDelete method 2`] = `
                           "version": "0.17.0",
                         },
                         "id": "PublishPermission-c8045fccc85a7ef42d5391d87958e5ce36c53a401a",
-                        "path": "root/Default/my_bucket/my_bucket-on_delete/PublishPermission-c8045fccc85a7ef42d5391d87958e5ce36c53a401a",
+                        "path": "root/Default/my_bucket/my_bucket-ondelete/PublishPermission-c8045fccc85a7ef42d5391d87958e5ce36c53a401a",
                       },
-                      "my_bucket-on_delete-TopicSubscription-f22c8a47": {
+                      "my_bucket-ondelete-TopicSubscription-107fa7e8": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
                           "version": "0.17.0",
                         },
-                        "id": "my_bucket-on_delete-TopicSubscription-f22c8a47",
-                        "path": "root/Default/my_bucket/my_bucket-on_delete/my_bucket-on_delete-TopicSubscription-f22c8a47",
+                        "id": "my_bucket-ondelete-TopicSubscription-107fa7e8",
+                        "path": "root/Default/my_bucket/my_bucket-ondelete/my_bucket-ondelete-TopicSubscription-107fa7e8",
                       },
                     },
                     "constructInfo": {
@@ -1329,10 +1329,10 @@ exports[`bucket with onDelete method 2`] = `
                       "description": "A pub/sub notification topic",
                       "title": "Topic",
                     },
-                    "id": "my_bucket-on_delete",
-                    "path": "root/Default/my_bucket/my_bucket-on_delete",
+                    "id": "my_bucket-ondelete",
+                    "path": "root/Default/my_bucket/my_bucket-ondelete",
                   },
-                  "my_bucket-on_delete-OnMessage-f22c8a47": {
+                  "my_bucket-ondelete-OnMessage-107fa7e8": {
                     "attributes": {
                       "wing:resource:connections": [
                         {
@@ -1351,19 +1351,19 @@ exports[`bucket with onDelete method 2`] = `
                           "direction": "outbound",
                           "implicit": false,
                           "relationship": "handle",
-                          "resource": "root/Default/my_bucket-on_delete-eventHandler-9eade8f6",
+                          "resource": "root/Default/my_bucket-ondelete-eventHandler-9eade8f6",
                         },
                         {
                           "direction": "outbound",
                           "implicit": false,
                           "relationship": "$inflight_init",
-                          "resource": "root/Default/my_bucket-on_delete-eventHandler-9eade8f6",
+                          "resource": "root/Default/my_bucket-ondelete-eventHandler-9eade8f6",
                         },
                         {
                           "direction": "inbound",
                           "implicit": false,
                           "relationship": "onMessage",
-                          "resource": "root/Default/my_bucket/my_bucket-on_delete",
+                          "resource": "root/Default/my_bucket/my_bucket-ondelete",
                         },
                       ],
                     },
@@ -1374,7 +1374,7 @@ exports[`bucket with onDelete method 2`] = `
                           "version": "0.17.0",
                         },
                         "id": "Asset",
-                        "path": "root/Default/my_bucket/my_bucket-on_delete-OnMessage-f22c8a47/Asset",
+                        "path": "root/Default/my_bucket/my_bucket-ondelete-OnMessage-107fa7e8/Asset",
                       },
                       "Default": {
                         "constructInfo": {
@@ -1382,7 +1382,7 @@ exports[`bucket with onDelete method 2`] = `
                           "version": "0.17.0",
                         },
                         "id": "Default",
-                        "path": "root/Default/my_bucket/my_bucket-on_delete-OnMessage-f22c8a47/Default",
+                        "path": "root/Default/my_bucket/my_bucket-ondelete-OnMessage-107fa7e8/Default",
                       },
                       "IamRole": {
                         "constructInfo": {
@@ -1390,7 +1390,7 @@ exports[`bucket with onDelete method 2`] = `
                           "version": "0.17.0",
                         },
                         "id": "IamRole",
-                        "path": "root/Default/my_bucket/my_bucket-on_delete-OnMessage-f22c8a47/IamRole",
+                        "path": "root/Default/my_bucket/my_bucket-ondelete-OnMessage-107fa7e8/IamRole",
                       },
                       "IamRolePolicy": {
                         "constructInfo": {
@@ -1398,7 +1398,7 @@ exports[`bucket with onDelete method 2`] = `
                           "version": "0.17.0",
                         },
                         "id": "IamRolePolicy",
-                        "path": "root/Default/my_bucket/my_bucket-on_delete-OnMessage-f22c8a47/IamRolePolicy",
+                        "path": "root/Default/my_bucket/my_bucket-ondelete-OnMessage-107fa7e8/IamRolePolicy",
                       },
                       "IamRolePolicyAttachment": {
                         "constructInfo": {
@@ -1406,15 +1406,15 @@ exports[`bucket with onDelete method 2`] = `
                           "version": "0.17.0",
                         },
                         "id": "IamRolePolicyAttachment",
-                        "path": "root/Default/my_bucket/my_bucket-on_delete-OnMessage-f22c8a47/IamRolePolicyAttachment",
+                        "path": "root/Default/my_bucket/my_bucket-ondelete-OnMessage-107fa7e8/IamRolePolicyAttachment",
                       },
-                      "InvokePermission-c80912e0ab47291ff9b0dd966e259f42a42646bcdc": {
+                      "InvokePermission-c804d947f12e6d883f018387429c0ba10b852c46ba": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
                           "version": "0.17.0",
                         },
-                        "id": "InvokePermission-c80912e0ab47291ff9b0dd966e259f42a42646bcdc",
-                        "path": "root/Default/my_bucket/my_bucket-on_delete-OnMessage-f22c8a47/InvokePermission-c80912e0ab47291ff9b0dd966e259f42a42646bcdc",
+                        "id": "InvokePermission-c804d947f12e6d883f018387429c0ba10b852c46ba",
+                        "path": "root/Default/my_bucket/my_bucket-ondelete-OnMessage-107fa7e8/InvokePermission-c804d947f12e6d883f018387429c0ba10b852c46ba",
                       },
                       "S3Object": {
                         "constructInfo": {
@@ -1422,7 +1422,7 @@ exports[`bucket with onDelete method 2`] = `
                           "version": "0.17.0",
                         },
                         "id": "S3Object",
-                        "path": "root/Default/my_bucket/my_bucket-on_delete-OnMessage-f22c8a47/S3Object",
+                        "path": "root/Default/my_bucket/my_bucket-ondelete-OnMessage-107fa7e8/S3Object",
                       },
                     },
                     "constructInfo": {
@@ -1433,10 +1433,10 @@ exports[`bucket with onDelete method 2`] = `
                       "description": "A cloud function (FaaS)",
                       "title": "Function",
                     },
-                    "id": "my_bucket-on_delete-OnMessage-f22c8a47",
-                    "path": "root/Default/my_bucket/my_bucket-on_delete-OnMessage-f22c8a47",
+                    "id": "my_bucket-ondelete-OnMessage-107fa7e8",
+                    "path": "root/Default/my_bucket/my_bucket-ondelete-OnMessage-107fa7e8",
                   },
-                  "my_bucket-on_delete-OnMessageHandler-f22c8a47": {
+                  "my_bucket-ondelete-OnMessageHandler-107fa7e8": {
                     "attributes": {
                       "wing:resource:connections": [],
                     },
@@ -1447,8 +1447,8 @@ exports[`bucket with onDelete method 2`] = `
                     "display": {
                       "hidden": true,
                     },
-                    "id": "my_bucket-on_delete-OnMessageHandler-f22c8a47",
-                    "path": "root/Default/my_bucket/my_bucket-on_delete-OnMessageHandler-f22c8a47",
+                    "id": "my_bucket-ondelete-OnMessageHandler-107fa7e8",
+                    "path": "root/Default/my_bucket/my_bucket-ondelete-OnMessageHandler-107fa7e8",
                   },
                 },
                 "constructInfo": {
@@ -1462,20 +1462,20 @@ exports[`bucket with onDelete method 2`] = `
                 "id": "my_bucket",
                 "path": "root/Default/my_bucket",
               },
-              "my_bucket-on_delete-eventHandler-9eade8f6": {
+              "my_bucket-ondelete-eventHandler-9eade8f6": {
                 "attributes": {
                   "wing:resource:connections": [
                     {
                       "direction": "inbound",
                       "implicit": false,
                       "relationship": "handle",
-                      "resource": "root/Default/my_bucket/my_bucket-on_delete-OnMessage-f22c8a47",
+                      "resource": "root/Default/my_bucket/my_bucket-ondelete-OnMessage-107fa7e8",
                     },
                     {
                       "direction": "inbound",
                       "implicit": false,
                       "relationship": "$inflight_init",
-                      "resource": "root/Default/my_bucket/my_bucket-on_delete-OnMessage-f22c8a47",
+                      "resource": "root/Default/my_bucket/my_bucket-ondelete-OnMessage-107fa7e8",
                     },
                   ],
                 },
@@ -1486,8 +1486,8 @@ exports[`bucket with onDelete method 2`] = `
                 "display": {
                   "hidden": true,
                 },
-                "id": "my_bucket-on_delete-eventHandler-9eade8f6",
-                "path": "root/Default/my_bucket-on_delete-eventHandler-9eade8f6",
+                "id": "my_bucket-ondelete-eventHandler-9eade8f6",
+                "path": "root/Default/my_bucket-ondelete-eventHandler-9eade8f6",
               },
             },
             "constructInfo": {
@@ -1534,96 +1534,96 @@ exports[`bucket with onEvent method 1`] = `
   },
   \\"resource\\": {
     \\"aws_iam_role\\": {
-      \\"my_bucket_my_bucket-on_create-OnMessage-2c90a36b_IamRole_EFF20124\\": {
+      \\"my_bucket_my_bucket-oncreate-OnMessage-1000fbe7_IamRole_35A9A03F\\": {
         \\"assume_role_policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":\\\\\\"sts:AssumeRole\\\\\\",\\\\\\"Principal\\\\\\":{\\\\\\"Service\\\\\\":\\\\\\"lambda.amazonaws.com\\\\\\"},\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\"
       },
-      \\"my_bucket_my_bucket-on_delete-OnMessage-f22c8a47_IamRole_37BB9CC4\\": {
+      \\"my_bucket_my_bucket-ondelete-OnMessage-107fa7e8_IamRole_07615065\\": {
         \\"assume_role_policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":\\\\\\"sts:AssumeRole\\\\\\",\\\\\\"Principal\\\\\\":{\\\\\\"Service\\\\\\":\\\\\\"lambda.amazonaws.com\\\\\\"},\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\"
       },
-      \\"my_bucket_my_bucket-on_update-OnMessage-32b7a290_IamRole_0D689265\\": {
+      \\"my_bucket_my_bucket-onupdate-OnMessage-02f87005_IamRole_33D65E9E\\": {
         \\"assume_role_policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":\\\\\\"sts:AssumeRole\\\\\\",\\\\\\"Principal\\\\\\":{\\\\\\"Service\\\\\\":\\\\\\"lambda.amazonaws.com\\\\\\"},\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\"
       }
     },
     \\"aws_iam_role_policy\\": {
-      \\"my_bucket_my_bucket-on_create-OnMessage-2c90a36b_IamRolePolicy_E00CE47F\\": {
+      \\"my_bucket_my_bucket-oncreate-OnMessage-1000fbe7_IamRolePolicy_97F83F8D\\": {
         \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Action\\\\\\":\\\\\\"none:null\\\\\\",\\\\\\"Resource\\\\\\":\\\\\\"*\\\\\\"}]}\\",
-        \\"role\\": \\"\${aws_iam_role.my_bucket_my_bucket-on_create-OnMessage-2c90a36b_IamRole_EFF20124.name}\\"
+        \\"role\\": \\"\${aws_iam_role.my_bucket_my_bucket-oncreate-OnMessage-1000fbe7_IamRole_35A9A03F.name}\\"
       },
-      \\"my_bucket_my_bucket-on_delete-OnMessage-f22c8a47_IamRolePolicy_860049B2\\": {
+      \\"my_bucket_my_bucket-ondelete-OnMessage-107fa7e8_IamRolePolicy_9B9E2210\\": {
         \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Action\\\\\\":\\\\\\"none:null\\\\\\",\\\\\\"Resource\\\\\\":\\\\\\"*\\\\\\"}]}\\",
-        \\"role\\": \\"\${aws_iam_role.my_bucket_my_bucket-on_delete-OnMessage-f22c8a47_IamRole_37BB9CC4.name}\\"
+        \\"role\\": \\"\${aws_iam_role.my_bucket_my_bucket-ondelete-OnMessage-107fa7e8_IamRole_07615065.name}\\"
       },
-      \\"my_bucket_my_bucket-on_update-OnMessage-32b7a290_IamRolePolicy_A968FB6D\\": {
+      \\"my_bucket_my_bucket-onupdate-OnMessage-02f87005_IamRolePolicy_26721ED9\\": {
         \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Action\\\\\\":\\\\\\"none:null\\\\\\",\\\\\\"Resource\\\\\\":\\\\\\"*\\\\\\"}]}\\",
-        \\"role\\": \\"\${aws_iam_role.my_bucket_my_bucket-on_update-OnMessage-32b7a290_IamRole_0D689265.name}\\"
+        \\"role\\": \\"\${aws_iam_role.my_bucket_my_bucket-onupdate-OnMessage-02f87005_IamRole_33D65E9E.name}\\"
       }
     },
     \\"aws_iam_role_policy_attachment\\": {
-      \\"my_bucket_my_bucket-on_create-OnMessage-2c90a36b_IamRolePolicyAttachment_02930F2C\\": {
+      \\"my_bucket_my_bucket-oncreate-OnMessage-1000fbe7_IamRolePolicyAttachment_66038538\\": {
         \\"policy_arn\\": \\"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole\\",
-        \\"role\\": \\"\${aws_iam_role.my_bucket_my_bucket-on_create-OnMessage-2c90a36b_IamRole_EFF20124.name}\\"
+        \\"role\\": \\"\${aws_iam_role.my_bucket_my_bucket-oncreate-OnMessage-1000fbe7_IamRole_35A9A03F.name}\\"
       },
-      \\"my_bucket_my_bucket-on_delete-OnMessage-f22c8a47_IamRolePolicyAttachment_2EF1321B\\": {
+      \\"my_bucket_my_bucket-ondelete-OnMessage-107fa7e8_IamRolePolicyAttachment_DF48669C\\": {
         \\"policy_arn\\": \\"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole\\",
-        \\"role\\": \\"\${aws_iam_role.my_bucket_my_bucket-on_delete-OnMessage-f22c8a47_IamRole_37BB9CC4.name}\\"
+        \\"role\\": \\"\${aws_iam_role.my_bucket_my_bucket-ondelete-OnMessage-107fa7e8_IamRole_07615065.name}\\"
       },
-      \\"my_bucket_my_bucket-on_update-OnMessage-32b7a290_IamRolePolicyAttachment_1B023209\\": {
+      \\"my_bucket_my_bucket-onupdate-OnMessage-02f87005_IamRolePolicyAttachment_2E33E422\\": {
         \\"policy_arn\\": \\"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole\\",
-        \\"role\\": \\"\${aws_iam_role.my_bucket_my_bucket-on_update-OnMessage-32b7a290_IamRole_0D689265.name}\\"
+        \\"role\\": \\"\${aws_iam_role.my_bucket_my_bucket-onupdate-OnMessage-02f87005_IamRole_33D65E9E.name}\\"
       }
     },
     \\"aws_lambda_function\\": {
-      \\"my_bucket_my_bucket-on_create-OnMessage-2c90a36b_ACD91BBA\\": {
+      \\"my_bucket_my_bucket-oncreate-OnMessage-1000fbe7_21FC0692\\": {
         \\"environment\\": {
           \\"variables\\": {
-            \\"WING_FUNCTION_NAME\\": \\"my_bucket-on_create-OnMessage-2c90a36b-c87c1659\\"
+            \\"WING_FUNCTION_NAME\\": \\"my_bucket-oncreate-OnMessage-1000fbe7-c8902807\\"
           }
         },
-        \\"function_name\\": \\"my_bucket-on_create-OnMessage-2c90a36b-c87c1659\\",
+        \\"function_name\\": \\"my_bucket-oncreate-OnMessage-1000fbe7-c8902807\\",
         \\"handler\\": \\"index.handler\\",
         \\"publish\\": true,
-        \\"role\\": \\"\${aws_iam_role.my_bucket_my_bucket-on_create-OnMessage-2c90a36b_IamRole_EFF20124.arn}\\",
+        \\"role\\": \\"\${aws_iam_role.my_bucket_my_bucket-oncreate-OnMessage-1000fbe7_IamRole_35A9A03F.arn}\\",
         \\"runtime\\": \\"nodejs18.x\\",
         \\"s3_bucket\\": \\"\${aws_s3_bucket.Code.bucket}\\",
-        \\"s3_key\\": \\"\${aws_s3_object.my_bucket_my_bucket-on_create-OnMessage-2c90a36b_S3Object_94BFE334.key}\\",
+        \\"s3_key\\": \\"\${aws_s3_object.my_bucket_my_bucket-oncreate-OnMessage-1000fbe7_S3Object_0EFF5E1C.key}\\",
         \\"timeout\\": 30,
         \\"vpc_config\\": {
           \\"security_group_ids\\": [],
           \\"subnet_ids\\": []
         }
       },
-      \\"my_bucket_my_bucket-on_delete-OnMessage-f22c8a47_4AC25BA6\\": {
+      \\"my_bucket_my_bucket-ondelete-OnMessage-107fa7e8_F0204E1B\\": {
         \\"environment\\": {
           \\"variables\\": {
-            \\"WING_FUNCTION_NAME\\": \\"my_bucket-on_delete-OnMessage-f22c8a47-c8e50f60\\"
+            \\"WING_FUNCTION_NAME\\": \\"my_bucket-ondelete-OnMessage-107fa7e8-c8a44ddc\\"
           }
         },
-        \\"function_name\\": \\"my_bucket-on_delete-OnMessage-f22c8a47-c8e50f60\\",
+        \\"function_name\\": \\"my_bucket-ondelete-OnMessage-107fa7e8-c8a44ddc\\",
         \\"handler\\": \\"index.handler\\",
         \\"publish\\": true,
-        \\"role\\": \\"\${aws_iam_role.my_bucket_my_bucket-on_delete-OnMessage-f22c8a47_IamRole_37BB9CC4.arn}\\",
+        \\"role\\": \\"\${aws_iam_role.my_bucket_my_bucket-ondelete-OnMessage-107fa7e8_IamRole_07615065.arn}\\",
         \\"runtime\\": \\"nodejs18.x\\",
         \\"s3_bucket\\": \\"\${aws_s3_bucket.Code.bucket}\\",
-        \\"s3_key\\": \\"\${aws_s3_object.my_bucket_my_bucket-on_delete-OnMessage-f22c8a47_S3Object_621A589A.key}\\",
+        \\"s3_key\\": \\"\${aws_s3_object.my_bucket_my_bucket-ondelete-OnMessage-107fa7e8_S3Object_E3EEAE82.key}\\",
         \\"timeout\\": 30,
         \\"vpc_config\\": {
           \\"security_group_ids\\": [],
           \\"subnet_ids\\": []
         }
       },
-      \\"my_bucket_my_bucket-on_update-OnMessage-32b7a290_ADBC7F74\\": {
+      \\"my_bucket_my_bucket-onupdate-OnMessage-02f87005_5A1876F6\\": {
         \\"environment\\": {
           \\"variables\\": {
-            \\"WING_FUNCTION_NAME\\": \\"my_bucket-on_update-OnMessage-32b7a290-c875bcdf\\"
+            \\"WING_FUNCTION_NAME\\": \\"my_bucket-onupdate-OnMessage-02f87005-c8addd34\\"
           }
         },
-        \\"function_name\\": \\"my_bucket-on_update-OnMessage-32b7a290-c875bcdf\\",
+        \\"function_name\\": \\"my_bucket-onupdate-OnMessage-02f87005-c8addd34\\",
         \\"handler\\": \\"index.handler\\",
         \\"publish\\": true,
-        \\"role\\": \\"\${aws_iam_role.my_bucket_my_bucket-on_update-OnMessage-32b7a290_IamRole_0D689265.arn}\\",
+        \\"role\\": \\"\${aws_iam_role.my_bucket_my_bucket-onupdate-OnMessage-02f87005_IamRole_33D65E9E.arn}\\",
         \\"runtime\\": \\"nodejs18.x\\",
         \\"s3_bucket\\": \\"\${aws_s3_bucket.Code.bucket}\\",
-        \\"s3_key\\": \\"\${aws_s3_object.my_bucket_my_bucket-on_update-OnMessage-32b7a290_S3Object_9A4C2C8F.key}\\",
+        \\"s3_key\\": \\"\${aws_s3_object.my_bucket_my_bucket-onupdate-OnMessage-02f87005_S3Object_22E0515D.key}\\",
         \\"timeout\\": 30,
         \\"vpc_config\\": {
           \\"security_group_ids\\": [],
@@ -1632,23 +1632,23 @@ exports[`bucket with onEvent method 1`] = `
       }
     },
     \\"aws_lambda_permission\\": {
-      \\"my_bucket_my_bucket-on_create-OnMessage-2c90a36b_InvokePermission-c8ab9ab84a159fe2b8ace0993118785a21c0508190_575B3554\\": {
+      \\"my_bucket_my_bucket-oncreate-OnMessage-1000fbe7_InvokePermission-c81e8728eb64a11308ced47594c2396d2467e4d9d3_9B4C34C5\\": {
         \\"action\\": \\"lambda:InvokeFunction\\",
-        \\"function_name\\": \\"\${aws_lambda_function.my_bucket_my_bucket-on_create-OnMessage-2c90a36b_ACD91BBA.function_name}\\",
+        \\"function_name\\": \\"\${aws_lambda_function.my_bucket_my_bucket-oncreate-OnMessage-1000fbe7_21FC0692.function_name}\\",
         \\"principal\\": \\"sns.amazonaws.com\\",
-        \\"source_arn\\": \\"\${aws_sns_topic.my_bucket_my_bucket-on_create_CA4D65D3.arn}\\"
+        \\"source_arn\\": \\"\${aws_sns_topic.my_bucket_my_bucket-oncreate_820372FA.arn}\\"
       },
-      \\"my_bucket_my_bucket-on_delete-OnMessage-f22c8a47_InvokePermission-c80912e0ab47291ff9b0dd966e259f42a42646bcdc_B8B37FEC\\": {
+      \\"my_bucket_my_bucket-ondelete-OnMessage-107fa7e8_InvokePermission-c804d947f12e6d883f018387429c0ba10b852c46ba_ACC48827\\": {
         \\"action\\": \\"lambda:InvokeFunction\\",
-        \\"function_name\\": \\"\${aws_lambda_function.my_bucket_my_bucket-on_delete-OnMessage-f22c8a47_4AC25BA6.function_name}\\",
+        \\"function_name\\": \\"\${aws_lambda_function.my_bucket_my_bucket-ondelete-OnMessage-107fa7e8_F0204E1B.function_name}\\",
         \\"principal\\": \\"sns.amazonaws.com\\",
-        \\"source_arn\\": \\"\${aws_sns_topic.my_bucket_my_bucket-on_delete_C370DD5F.arn}\\"
+        \\"source_arn\\": \\"\${aws_sns_topic.my_bucket_my_bucket-ondelete_D8AB43D6.arn}\\"
       },
-      \\"my_bucket_my_bucket-on_update-OnMessage-32b7a290_InvokePermission-c8c80ce55fb2dfdf6262f75ee093ef99cc30a57833_C11DA01C\\": {
+      \\"my_bucket_my_bucket-onupdate-OnMessage-02f87005_InvokePermission-c85a09033744f6af2426f88e40823fbfd778fbdc16_79677ADE\\": {
         \\"action\\": \\"lambda:InvokeFunction\\",
-        \\"function_name\\": \\"\${aws_lambda_function.my_bucket_my_bucket-on_update-OnMessage-32b7a290_ADBC7F74.function_name}\\",
+        \\"function_name\\": \\"\${aws_lambda_function.my_bucket_my_bucket-onupdate-OnMessage-02f87005_5A1876F6.function_name}\\",
         \\"principal\\": \\"sns.amazonaws.com\\",
-        \\"source_arn\\": \\"\${aws_sns_topic.my_bucket_my_bucket-on_update_C3D45260.arn}\\"
+        \\"source_arn\\": \\"\${aws_sns_topic.my_bucket_my_bucket-onupdate_ADC4AA5B.arn}\\"
       }
     },
     \\"aws_s3_bucket\\": {
@@ -1664,31 +1664,31 @@ exports[`bucket with onEvent method 1`] = `
       \\"my_bucket_S3BucketNotification_DDA29E8F\\": {
         \\"bucket\\": \\"\${aws_s3_bucket.my_bucket.id}\\",
         \\"depends_on\\": [
-          \\"aws_sns_topic_policy.my_bucket_my_bucket-on_create_PublishPermission-c8045fccc85a7ef42d5391d87958e5ce36c53a401a_4338D29D\\",
-          \\"aws_sns_topic_policy.my_bucket_my_bucket-on_update_PublishPermission-c8045fccc85a7ef42d5391d87958e5ce36c53a401a_A2248301\\",
-          \\"aws_sns_topic_policy.my_bucket_my_bucket-on_delete_PublishPermission-c8045fccc85a7ef42d5391d87958e5ce36c53a401a_52CABBF1\\"
+          \\"aws_sns_topic_policy.my_bucket_my_bucket-oncreate_PublishPermission-c8045fccc85a7ef42d5391d87958e5ce36c53a401a_DC469583\\",
+          \\"aws_sns_topic_policy.my_bucket_my_bucket-onupdate_PublishPermission-c8045fccc85a7ef42d5391d87958e5ce36c53a401a_CDA9888A\\",
+          \\"aws_sns_topic_policy.my_bucket_my_bucket-ondelete_PublishPermission-c8045fccc85a7ef42d5391d87958e5ce36c53a401a_87361222\\"
         ],
         \\"topic\\": [
           {
             \\"events\\": [
               \\"s3:ObjectCreated:Put\\"
             ],
-            \\"id\\": \\"on-create-notification\\",
-            \\"topic_arn\\": \\"\${aws_sns_topic.my_bucket_my_bucket-on_create_CA4D65D3.arn}\\"
+            \\"id\\": \\"on-oncreate-notification\\",
+            \\"topic_arn\\": \\"\${aws_sns_topic.my_bucket_my_bucket-oncreate_820372FA.arn}\\"
           },
           {
             \\"events\\": [
               \\"s3:ObjectCreated:Post\\"
             ],
-            \\"id\\": \\"on-update-notification\\",
-            \\"topic_arn\\": \\"\${aws_sns_topic.my_bucket_my_bucket-on_update_C3D45260.arn}\\"
+            \\"id\\": \\"on-onupdate-notification\\",
+            \\"topic_arn\\": \\"\${aws_sns_topic.my_bucket_my_bucket-onupdate_ADC4AA5B.arn}\\"
           },
           {
             \\"events\\": [
               \\"s3:ObjectRemoved:*\\"
             ],
-            \\"id\\": \\"on-delete-notification\\",
-            \\"topic_arn\\": \\"\${aws_sns_topic.my_bucket_my_bucket-on_delete_C370DD5F.arn}\\"
+            \\"id\\": \\"on-ondelete-notification\\",
+            \\"topic_arn\\": \\"\${aws_sns_topic.my_bucket_my_bucket-ondelete_D8AB43D6.arn}\\"
           }
         ]
       }
@@ -1724,62 +1724,62 @@ exports[`bucket with onEvent method 1`] = `
       }
     },
     \\"aws_s3_object\\": {
-      \\"my_bucket_my_bucket-on_create-OnMessage-2c90a36b_S3Object_94BFE334\\": {
+      \\"my_bucket_my_bucket-oncreate-OnMessage-1000fbe7_S3Object_0EFF5E1C\\": {
         \\"bucket\\": \\"\${aws_s3_bucket.Code.bucket}\\",
         \\"key\\": \\"<key>\\",
         \\"source\\": \\"<source>\\"
       },
-      \\"my_bucket_my_bucket-on_delete-OnMessage-f22c8a47_S3Object_621A589A\\": {
+      \\"my_bucket_my_bucket-ondelete-OnMessage-107fa7e8_S3Object_E3EEAE82\\": {
         \\"bucket\\": \\"\${aws_s3_bucket.Code.bucket}\\",
         \\"key\\": \\"<key>\\",
         \\"source\\": \\"<source>\\"
       },
-      \\"my_bucket_my_bucket-on_update-OnMessage-32b7a290_S3Object_9A4C2C8F\\": {
+      \\"my_bucket_my_bucket-onupdate-OnMessage-02f87005_S3Object_22E0515D\\": {
         \\"bucket\\": \\"\${aws_s3_bucket.Code.bucket}\\",
         \\"key\\": \\"<key>\\",
         \\"source\\": \\"<source>\\"
       }
     },
     \\"aws_sns_topic\\": {
-      \\"my_bucket_my_bucket-on_create_CA4D65D3\\": {
-        \\"name\\": \\"my_bucket-on_create-c8ab9ab8\\"
+      \\"my_bucket_my_bucket-oncreate_820372FA\\": {
+        \\"name\\": \\"my_bucket-oncreate-c81e8728\\"
       },
-      \\"my_bucket_my_bucket-on_delete_C370DD5F\\": {
-        \\"name\\": \\"my_bucket-on_delete-c80912e0\\"
+      \\"my_bucket_my_bucket-ondelete_D8AB43D6\\": {
+        \\"name\\": \\"my_bucket-ondelete-c804d947\\"
       },
-      \\"my_bucket_my_bucket-on_update_C3D45260\\": {
-        \\"name\\": \\"my_bucket-on_update-c8c80ce5\\"
+      \\"my_bucket_my_bucket-onupdate_ADC4AA5B\\": {
+        \\"name\\": \\"my_bucket-onupdate-c85a0903\\"
       }
     },
     \\"aws_sns_topic_policy\\": {
-      \\"my_bucket_my_bucket-on_create_PublishPermission-c8045fccc85a7ef42d5391d87958e5ce36c53a401a_4338D29D\\": {
-        \\"arn\\": \\"\${aws_sns_topic.my_bucket_my_bucket-on_create_CA4D65D3.arn}\\",
-        \\"policy\\": \\"{\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Principal\\\\\\":{\\\\\\"Service\\\\\\":\\\\\\"s3.amazonaws.com\\\\\\"},\\\\\\"Action\\\\\\":\\\\\\"sns:Publish\\\\\\",\\\\\\"Resource\\\\\\":\\\\\\"\${aws_sns_topic.my_bucket_my_bucket-on_create_CA4D65D3.arn}\\\\\\",\\\\\\"Condition\\\\\\":{\\\\\\"ArnEquals\\\\\\":{\\\\\\"aws:SourceArn\\\\\\":\\\\\\"\${aws_s3_bucket.my_bucket.arn}\\\\\\"}}}]}\\"
+      \\"my_bucket_my_bucket-oncreate_PublishPermission-c8045fccc85a7ef42d5391d87958e5ce36c53a401a_DC469583\\": {
+        \\"arn\\": \\"\${aws_sns_topic.my_bucket_my_bucket-oncreate_820372FA.arn}\\",
+        \\"policy\\": \\"{\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Principal\\\\\\":{\\\\\\"Service\\\\\\":\\\\\\"s3.amazonaws.com\\\\\\"},\\\\\\"Action\\\\\\":\\\\\\"sns:Publish\\\\\\",\\\\\\"Resource\\\\\\":\\\\\\"\${aws_sns_topic.my_bucket_my_bucket-oncreate_820372FA.arn}\\\\\\",\\\\\\"Condition\\\\\\":{\\\\\\"ArnEquals\\\\\\":{\\\\\\"aws:SourceArn\\\\\\":\\\\\\"\${aws_s3_bucket.my_bucket.arn}\\\\\\"}}}]}\\"
       },
-      \\"my_bucket_my_bucket-on_delete_PublishPermission-c8045fccc85a7ef42d5391d87958e5ce36c53a401a_52CABBF1\\": {
-        \\"arn\\": \\"\${aws_sns_topic.my_bucket_my_bucket-on_delete_C370DD5F.arn}\\",
-        \\"policy\\": \\"{\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Principal\\\\\\":{\\\\\\"Service\\\\\\":\\\\\\"s3.amazonaws.com\\\\\\"},\\\\\\"Action\\\\\\":\\\\\\"sns:Publish\\\\\\",\\\\\\"Resource\\\\\\":\\\\\\"\${aws_sns_topic.my_bucket_my_bucket-on_delete_C370DD5F.arn}\\\\\\",\\\\\\"Condition\\\\\\":{\\\\\\"ArnEquals\\\\\\":{\\\\\\"aws:SourceArn\\\\\\":\\\\\\"\${aws_s3_bucket.my_bucket.arn}\\\\\\"}}}]}\\"
+      \\"my_bucket_my_bucket-ondelete_PublishPermission-c8045fccc85a7ef42d5391d87958e5ce36c53a401a_87361222\\": {
+        \\"arn\\": \\"\${aws_sns_topic.my_bucket_my_bucket-ondelete_D8AB43D6.arn}\\",
+        \\"policy\\": \\"{\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Principal\\\\\\":{\\\\\\"Service\\\\\\":\\\\\\"s3.amazonaws.com\\\\\\"},\\\\\\"Action\\\\\\":\\\\\\"sns:Publish\\\\\\",\\\\\\"Resource\\\\\\":\\\\\\"\${aws_sns_topic.my_bucket_my_bucket-ondelete_D8AB43D6.arn}\\\\\\",\\\\\\"Condition\\\\\\":{\\\\\\"ArnEquals\\\\\\":{\\\\\\"aws:SourceArn\\\\\\":\\\\\\"\${aws_s3_bucket.my_bucket.arn}\\\\\\"}}}]}\\"
       },
-      \\"my_bucket_my_bucket-on_update_PublishPermission-c8045fccc85a7ef42d5391d87958e5ce36c53a401a_A2248301\\": {
-        \\"arn\\": \\"\${aws_sns_topic.my_bucket_my_bucket-on_update_C3D45260.arn}\\",
-        \\"policy\\": \\"{\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Principal\\\\\\":{\\\\\\"Service\\\\\\":\\\\\\"s3.amazonaws.com\\\\\\"},\\\\\\"Action\\\\\\":\\\\\\"sns:Publish\\\\\\",\\\\\\"Resource\\\\\\":\\\\\\"\${aws_sns_topic.my_bucket_my_bucket-on_update_C3D45260.arn}\\\\\\",\\\\\\"Condition\\\\\\":{\\\\\\"ArnEquals\\\\\\":{\\\\\\"aws:SourceArn\\\\\\":\\\\\\"\${aws_s3_bucket.my_bucket.arn}\\\\\\"}}}]}\\"
+      \\"my_bucket_my_bucket-onupdate_PublishPermission-c8045fccc85a7ef42d5391d87958e5ce36c53a401a_CDA9888A\\": {
+        \\"arn\\": \\"\${aws_sns_topic.my_bucket_my_bucket-onupdate_ADC4AA5B.arn}\\",
+        \\"policy\\": \\"{\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Principal\\\\\\":{\\\\\\"Service\\\\\\":\\\\\\"s3.amazonaws.com\\\\\\"},\\\\\\"Action\\\\\\":\\\\\\"sns:Publish\\\\\\",\\\\\\"Resource\\\\\\":\\\\\\"\${aws_sns_topic.my_bucket_my_bucket-onupdate_ADC4AA5B.arn}\\\\\\",\\\\\\"Condition\\\\\\":{\\\\\\"ArnEquals\\\\\\":{\\\\\\"aws:SourceArn\\\\\\":\\\\\\"\${aws_s3_bucket.my_bucket.arn}\\\\\\"}}}]}\\"
       }
     },
     \\"aws_sns_topic_subscription\\": {
-      \\"my_bucket_my_bucket-on_create_my_bucket-on_create-TopicSubscription-2c90a36b_155F87CA\\": {
-        \\"endpoint\\": \\"\${aws_lambda_function.my_bucket_my_bucket-on_create-OnMessage-2c90a36b_ACD91BBA.arn}\\",
+      \\"my_bucket_my_bucket-oncreate_my_bucket-oncreate-TopicSubscription-1000fbe7_9F6DDCDF\\": {
+        \\"endpoint\\": \\"\${aws_lambda_function.my_bucket_my_bucket-oncreate-OnMessage-1000fbe7_21FC0692.arn}\\",
         \\"protocol\\": \\"lambda\\",
-        \\"topic_arn\\": \\"\${aws_sns_topic.my_bucket_my_bucket-on_create_CA4D65D3.arn}\\"
+        \\"topic_arn\\": \\"\${aws_sns_topic.my_bucket_my_bucket-oncreate_820372FA.arn}\\"
       },
-      \\"my_bucket_my_bucket-on_delete_my_bucket-on_delete-TopicSubscription-f22c8a47_66D78279\\": {
-        \\"endpoint\\": \\"\${aws_lambda_function.my_bucket_my_bucket-on_delete-OnMessage-f22c8a47_4AC25BA6.arn}\\",
+      \\"my_bucket_my_bucket-ondelete_my_bucket-ondelete-TopicSubscription-107fa7e8_AC27B137\\": {
+        \\"endpoint\\": \\"\${aws_lambda_function.my_bucket_my_bucket-ondelete-OnMessage-107fa7e8_F0204E1B.arn}\\",
         \\"protocol\\": \\"lambda\\",
-        \\"topic_arn\\": \\"\${aws_sns_topic.my_bucket_my_bucket-on_delete_C370DD5F.arn}\\"
+        \\"topic_arn\\": \\"\${aws_sns_topic.my_bucket_my_bucket-ondelete_D8AB43D6.arn}\\"
       },
-      \\"my_bucket_my_bucket-on_update_my_bucket-on_update-TopicSubscription-32b7a290_D2ECBD87\\": {
-        \\"endpoint\\": \\"\${aws_lambda_function.my_bucket_my_bucket-on_update-OnMessage-32b7a290_ADBC7F74.arn}\\",
+      \\"my_bucket_my_bucket-onupdate_my_bucket-onupdate-TopicSubscription-02f87005_6CFFDD03\\": {
+        \\"endpoint\\": \\"\${aws_lambda_function.my_bucket_my_bucket-onupdate-OnMessage-02f87005_5A1876F6.arn}\\",
         \\"protocol\\": \\"lambda\\",
-        \\"topic_arn\\": \\"\${aws_sns_topic.my_bucket_my_bucket-on_update_C3D45260.arn}\\"
+        \\"topic_arn\\": \\"\${aws_sns_topic.my_bucket_my_bucket-onupdate_ADC4AA5B.arn}\\"
       }
     }
   }
@@ -1843,37 +1843,37 @@ exports[`bucket with onEvent method 2`] = `
                       "direction": "inbound",
                       "implicit": false,
                       "relationship": "handle",
-                      "resource": "root/Default/my_bucket/my_bucket-on_create-OnMessage-2c90a36b",
+                      "resource": "root/Default/my_bucket/my_bucket-oncreate-OnMessage-1000fbe7",
                     },
                     {
                       "direction": "inbound",
                       "implicit": false,
                       "relationship": "$inflight_init",
-                      "resource": "root/Default/my_bucket/my_bucket-on_create-OnMessage-2c90a36b",
+                      "resource": "root/Default/my_bucket/my_bucket-oncreate-OnMessage-1000fbe7",
                     },
                     {
                       "direction": "inbound",
                       "implicit": false,
                       "relationship": "handle",
-                      "resource": "root/Default/my_bucket/my_bucket-on_update-OnMessage-32b7a290",
+                      "resource": "root/Default/my_bucket/my_bucket-onupdate-OnMessage-02f87005",
                     },
                     {
                       "direction": "inbound",
                       "implicit": false,
                       "relationship": "$inflight_init",
-                      "resource": "root/Default/my_bucket/my_bucket-on_update-OnMessage-32b7a290",
+                      "resource": "root/Default/my_bucket/my_bucket-onupdate-OnMessage-02f87005",
                     },
                     {
                       "direction": "inbound",
                       "implicit": false,
                       "relationship": "handle",
-                      "resource": "root/Default/my_bucket/my_bucket-on_delete-OnMessage-f22c8a47",
+                      "resource": "root/Default/my_bucket/my_bucket-ondelete-OnMessage-107fa7e8",
                     },
                     {
                       "direction": "inbound",
                       "implicit": false,
                       "relationship": "$inflight_init",
-                      "resource": "root/Default/my_bucket/my_bucket-on_delete-OnMessage-f22c8a47",
+                      "resource": "root/Default/my_bucket/my_bucket-ondelete-OnMessage-107fa7e8",
                     },
                   ],
                 },
@@ -1895,20 +1895,20 @@ exports[`bucket with onEvent method 2`] = `
                     {
                       "direction": "outbound",
                       "implicit": false,
-                      "relationship": "CREATE",
-                      "resource": "root/Default/my_bucket/my_bucket-on_create",
+                      "relationship": "onCreate",
+                      "resource": "root/Default/my_bucket/my_bucket-oncreate",
                     },
                     {
                       "direction": "outbound",
                       "implicit": false,
-                      "relationship": "UPDATE",
-                      "resource": "root/Default/my_bucket/my_bucket-on_update",
+                      "relationship": "onUpdate",
+                      "resource": "root/Default/my_bucket/my_bucket-onupdate",
                     },
                     {
                       "direction": "outbound",
                       "implicit": false,
-                      "relationship": "DELETE",
-                      "resource": "root/Default/my_bucket/my_bucket-on_delete",
+                      "relationship": "onDelete",
+                      "resource": "root/Default/my_bucket/my_bucket-ondelete",
                     },
                   ],
                 },
@@ -1953,20 +1953,20 @@ exports[`bucket with onEvent method 2`] = `
                     "id": "S3BucketNotification",
                     "path": "root/Default/my_bucket/S3BucketNotification",
                   },
-                  "my_bucket-on_create": {
+                  "my_bucket-oncreate": {
                     "attributes": {
                       "wing:resource:connections": [
                         {
                           "direction": "inbound",
                           "implicit": false,
-                          "relationship": "CREATE",
+                          "relationship": "onCreate",
                           "resource": "root/Default/my_bucket",
                         },
                         {
                           "direction": "outbound",
                           "implicit": false,
                           "relationship": "onMessage",
-                          "resource": "root/Default/my_bucket/my_bucket-on_create-OnMessage-2c90a36b",
+                          "resource": "root/Default/my_bucket/my_bucket-oncreate-OnMessage-1000fbe7",
                         },
                       ],
                     },
@@ -1977,7 +1977,7 @@ exports[`bucket with onEvent method 2`] = `
                           "version": "0.17.0",
                         },
                         "id": "Default",
-                        "path": "root/Default/my_bucket/my_bucket-on_create/Default",
+                        "path": "root/Default/my_bucket/my_bucket-oncreate/Default",
                       },
                       "PublishPermission-c8045fccc85a7ef42d5391d87958e5ce36c53a401a": {
                         "constructInfo": {
@@ -1985,15 +1985,15 @@ exports[`bucket with onEvent method 2`] = `
                           "version": "0.17.0",
                         },
                         "id": "PublishPermission-c8045fccc85a7ef42d5391d87958e5ce36c53a401a",
-                        "path": "root/Default/my_bucket/my_bucket-on_create/PublishPermission-c8045fccc85a7ef42d5391d87958e5ce36c53a401a",
+                        "path": "root/Default/my_bucket/my_bucket-oncreate/PublishPermission-c8045fccc85a7ef42d5391d87958e5ce36c53a401a",
                       },
-                      "my_bucket-on_create-TopicSubscription-2c90a36b": {
+                      "my_bucket-oncreate-TopicSubscription-1000fbe7": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
                           "version": "0.17.0",
                         },
-                        "id": "my_bucket-on_create-TopicSubscription-2c90a36b",
-                        "path": "root/Default/my_bucket/my_bucket-on_create/my_bucket-on_create-TopicSubscription-2c90a36b",
+                        "id": "my_bucket-oncreate-TopicSubscription-1000fbe7",
+                        "path": "root/Default/my_bucket/my_bucket-oncreate/my_bucket-oncreate-TopicSubscription-1000fbe7",
                       },
                     },
                     "constructInfo": {
@@ -2004,10 +2004,10 @@ exports[`bucket with onEvent method 2`] = `
                       "description": "A pub/sub notification topic",
                       "title": "Topic",
                     },
-                    "id": "my_bucket-on_create",
-                    "path": "root/Default/my_bucket/my_bucket-on_create",
+                    "id": "my_bucket-oncreate",
+                    "path": "root/Default/my_bucket/my_bucket-oncreate",
                   },
-                  "my_bucket-on_create-OnMessage-2c90a36b": {
+                  "my_bucket-oncreate-OnMessage-1000fbe7": {
                     "attributes": {
                       "wing:resource:connections": [
                         {
@@ -2026,19 +2026,19 @@ exports[`bucket with onEvent method 2`] = `
                           "direction": "outbound",
                           "implicit": false,
                           "relationship": "handle",
-                          "resource": "root/Default/my_bucket-on_create-eventHandler-9eade8f6",
+                          "resource": "root/Default/my_bucket-oncreate-eventHandler-9eade8f6",
                         },
                         {
                           "direction": "outbound",
                           "implicit": false,
                           "relationship": "$inflight_init",
-                          "resource": "root/Default/my_bucket-on_create-eventHandler-9eade8f6",
+                          "resource": "root/Default/my_bucket-oncreate-eventHandler-9eade8f6",
                         },
                         {
                           "direction": "inbound",
                           "implicit": false,
                           "relationship": "onMessage",
-                          "resource": "root/Default/my_bucket/my_bucket-on_create",
+                          "resource": "root/Default/my_bucket/my_bucket-oncreate",
                         },
                       ],
                     },
@@ -2049,7 +2049,7 @@ exports[`bucket with onEvent method 2`] = `
                           "version": "0.17.0",
                         },
                         "id": "Asset",
-                        "path": "root/Default/my_bucket/my_bucket-on_create-OnMessage-2c90a36b/Asset",
+                        "path": "root/Default/my_bucket/my_bucket-oncreate-OnMessage-1000fbe7/Asset",
                       },
                       "Default": {
                         "constructInfo": {
@@ -2057,7 +2057,7 @@ exports[`bucket with onEvent method 2`] = `
                           "version": "0.17.0",
                         },
                         "id": "Default",
-                        "path": "root/Default/my_bucket/my_bucket-on_create-OnMessage-2c90a36b/Default",
+                        "path": "root/Default/my_bucket/my_bucket-oncreate-OnMessage-1000fbe7/Default",
                       },
                       "IamRole": {
                         "constructInfo": {
@@ -2065,7 +2065,7 @@ exports[`bucket with onEvent method 2`] = `
                           "version": "0.17.0",
                         },
                         "id": "IamRole",
-                        "path": "root/Default/my_bucket/my_bucket-on_create-OnMessage-2c90a36b/IamRole",
+                        "path": "root/Default/my_bucket/my_bucket-oncreate-OnMessage-1000fbe7/IamRole",
                       },
                       "IamRolePolicy": {
                         "constructInfo": {
@@ -2073,7 +2073,7 @@ exports[`bucket with onEvent method 2`] = `
                           "version": "0.17.0",
                         },
                         "id": "IamRolePolicy",
-                        "path": "root/Default/my_bucket/my_bucket-on_create-OnMessage-2c90a36b/IamRolePolicy",
+                        "path": "root/Default/my_bucket/my_bucket-oncreate-OnMessage-1000fbe7/IamRolePolicy",
                       },
                       "IamRolePolicyAttachment": {
                         "constructInfo": {
@@ -2081,15 +2081,15 @@ exports[`bucket with onEvent method 2`] = `
                           "version": "0.17.0",
                         },
                         "id": "IamRolePolicyAttachment",
-                        "path": "root/Default/my_bucket/my_bucket-on_create-OnMessage-2c90a36b/IamRolePolicyAttachment",
+                        "path": "root/Default/my_bucket/my_bucket-oncreate-OnMessage-1000fbe7/IamRolePolicyAttachment",
                       },
-                      "InvokePermission-c8ab9ab84a159fe2b8ace0993118785a21c0508190": {
+                      "InvokePermission-c81e8728eb64a11308ced47594c2396d2467e4d9d3": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
                           "version": "0.17.0",
                         },
-                        "id": "InvokePermission-c8ab9ab84a159fe2b8ace0993118785a21c0508190",
-                        "path": "root/Default/my_bucket/my_bucket-on_create-OnMessage-2c90a36b/InvokePermission-c8ab9ab84a159fe2b8ace0993118785a21c0508190",
+                        "id": "InvokePermission-c81e8728eb64a11308ced47594c2396d2467e4d9d3",
+                        "path": "root/Default/my_bucket/my_bucket-oncreate-OnMessage-1000fbe7/InvokePermission-c81e8728eb64a11308ced47594c2396d2467e4d9d3",
                       },
                       "S3Object": {
                         "constructInfo": {
@@ -2097,7 +2097,7 @@ exports[`bucket with onEvent method 2`] = `
                           "version": "0.17.0",
                         },
                         "id": "S3Object",
-                        "path": "root/Default/my_bucket/my_bucket-on_create-OnMessage-2c90a36b/S3Object",
+                        "path": "root/Default/my_bucket/my_bucket-oncreate-OnMessage-1000fbe7/S3Object",
                       },
                     },
                     "constructInfo": {
@@ -2108,10 +2108,10 @@ exports[`bucket with onEvent method 2`] = `
                       "description": "A cloud function (FaaS)",
                       "title": "Function",
                     },
-                    "id": "my_bucket-on_create-OnMessage-2c90a36b",
-                    "path": "root/Default/my_bucket/my_bucket-on_create-OnMessage-2c90a36b",
+                    "id": "my_bucket-oncreate-OnMessage-1000fbe7",
+                    "path": "root/Default/my_bucket/my_bucket-oncreate-OnMessage-1000fbe7",
                   },
-                  "my_bucket-on_create-OnMessageHandler-2c90a36b": {
+                  "my_bucket-oncreate-OnMessageHandler-1000fbe7": {
                     "attributes": {
                       "wing:resource:connections": [],
                     },
@@ -2122,23 +2122,23 @@ exports[`bucket with onEvent method 2`] = `
                     "display": {
                       "hidden": true,
                     },
-                    "id": "my_bucket-on_create-OnMessageHandler-2c90a36b",
-                    "path": "root/Default/my_bucket/my_bucket-on_create-OnMessageHandler-2c90a36b",
+                    "id": "my_bucket-oncreate-OnMessageHandler-1000fbe7",
+                    "path": "root/Default/my_bucket/my_bucket-oncreate-OnMessageHandler-1000fbe7",
                   },
-                  "my_bucket-on_delete": {
+                  "my_bucket-ondelete": {
                     "attributes": {
                       "wing:resource:connections": [
                         {
                           "direction": "inbound",
                           "implicit": false,
-                          "relationship": "DELETE",
+                          "relationship": "onDelete",
                           "resource": "root/Default/my_bucket",
                         },
                         {
                           "direction": "outbound",
                           "implicit": false,
                           "relationship": "onMessage",
-                          "resource": "root/Default/my_bucket/my_bucket-on_delete-OnMessage-f22c8a47",
+                          "resource": "root/Default/my_bucket/my_bucket-ondelete-OnMessage-107fa7e8",
                         },
                       ],
                     },
@@ -2149,7 +2149,7 @@ exports[`bucket with onEvent method 2`] = `
                           "version": "0.17.0",
                         },
                         "id": "Default",
-                        "path": "root/Default/my_bucket/my_bucket-on_delete/Default",
+                        "path": "root/Default/my_bucket/my_bucket-ondelete/Default",
                       },
                       "PublishPermission-c8045fccc85a7ef42d5391d87958e5ce36c53a401a": {
                         "constructInfo": {
@@ -2157,15 +2157,15 @@ exports[`bucket with onEvent method 2`] = `
                           "version": "0.17.0",
                         },
                         "id": "PublishPermission-c8045fccc85a7ef42d5391d87958e5ce36c53a401a",
-                        "path": "root/Default/my_bucket/my_bucket-on_delete/PublishPermission-c8045fccc85a7ef42d5391d87958e5ce36c53a401a",
+                        "path": "root/Default/my_bucket/my_bucket-ondelete/PublishPermission-c8045fccc85a7ef42d5391d87958e5ce36c53a401a",
                       },
-                      "my_bucket-on_delete-TopicSubscription-f22c8a47": {
+                      "my_bucket-ondelete-TopicSubscription-107fa7e8": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
                           "version": "0.17.0",
                         },
-                        "id": "my_bucket-on_delete-TopicSubscription-f22c8a47",
-                        "path": "root/Default/my_bucket/my_bucket-on_delete/my_bucket-on_delete-TopicSubscription-f22c8a47",
+                        "id": "my_bucket-ondelete-TopicSubscription-107fa7e8",
+                        "path": "root/Default/my_bucket/my_bucket-ondelete/my_bucket-ondelete-TopicSubscription-107fa7e8",
                       },
                     },
                     "constructInfo": {
@@ -2176,10 +2176,10 @@ exports[`bucket with onEvent method 2`] = `
                       "description": "A pub/sub notification topic",
                       "title": "Topic",
                     },
-                    "id": "my_bucket-on_delete",
-                    "path": "root/Default/my_bucket/my_bucket-on_delete",
+                    "id": "my_bucket-ondelete",
+                    "path": "root/Default/my_bucket/my_bucket-ondelete",
                   },
-                  "my_bucket-on_delete-OnMessage-f22c8a47": {
+                  "my_bucket-ondelete-OnMessage-107fa7e8": {
                     "attributes": {
                       "wing:resource:connections": [
                         {
@@ -2198,19 +2198,19 @@ exports[`bucket with onEvent method 2`] = `
                           "direction": "outbound",
                           "implicit": false,
                           "relationship": "handle",
-                          "resource": "root/Default/my_bucket-on_delete-eventHandler-9eade8f6",
+                          "resource": "root/Default/my_bucket-ondelete-eventHandler-9eade8f6",
                         },
                         {
                           "direction": "outbound",
                           "implicit": false,
                           "relationship": "$inflight_init",
-                          "resource": "root/Default/my_bucket-on_delete-eventHandler-9eade8f6",
+                          "resource": "root/Default/my_bucket-ondelete-eventHandler-9eade8f6",
                         },
                         {
                           "direction": "inbound",
                           "implicit": false,
                           "relationship": "onMessage",
-                          "resource": "root/Default/my_bucket/my_bucket-on_delete",
+                          "resource": "root/Default/my_bucket/my_bucket-ondelete",
                         },
                       ],
                     },
@@ -2221,7 +2221,7 @@ exports[`bucket with onEvent method 2`] = `
                           "version": "0.17.0",
                         },
                         "id": "Asset",
-                        "path": "root/Default/my_bucket/my_bucket-on_delete-OnMessage-f22c8a47/Asset",
+                        "path": "root/Default/my_bucket/my_bucket-ondelete-OnMessage-107fa7e8/Asset",
                       },
                       "Default": {
                         "constructInfo": {
@@ -2229,7 +2229,7 @@ exports[`bucket with onEvent method 2`] = `
                           "version": "0.17.0",
                         },
                         "id": "Default",
-                        "path": "root/Default/my_bucket/my_bucket-on_delete-OnMessage-f22c8a47/Default",
+                        "path": "root/Default/my_bucket/my_bucket-ondelete-OnMessage-107fa7e8/Default",
                       },
                       "IamRole": {
                         "constructInfo": {
@@ -2237,7 +2237,7 @@ exports[`bucket with onEvent method 2`] = `
                           "version": "0.17.0",
                         },
                         "id": "IamRole",
-                        "path": "root/Default/my_bucket/my_bucket-on_delete-OnMessage-f22c8a47/IamRole",
+                        "path": "root/Default/my_bucket/my_bucket-ondelete-OnMessage-107fa7e8/IamRole",
                       },
                       "IamRolePolicy": {
                         "constructInfo": {
@@ -2245,7 +2245,7 @@ exports[`bucket with onEvent method 2`] = `
                           "version": "0.17.0",
                         },
                         "id": "IamRolePolicy",
-                        "path": "root/Default/my_bucket/my_bucket-on_delete-OnMessage-f22c8a47/IamRolePolicy",
+                        "path": "root/Default/my_bucket/my_bucket-ondelete-OnMessage-107fa7e8/IamRolePolicy",
                       },
                       "IamRolePolicyAttachment": {
                         "constructInfo": {
@@ -2253,15 +2253,15 @@ exports[`bucket with onEvent method 2`] = `
                           "version": "0.17.0",
                         },
                         "id": "IamRolePolicyAttachment",
-                        "path": "root/Default/my_bucket/my_bucket-on_delete-OnMessage-f22c8a47/IamRolePolicyAttachment",
+                        "path": "root/Default/my_bucket/my_bucket-ondelete-OnMessage-107fa7e8/IamRolePolicyAttachment",
                       },
-                      "InvokePermission-c80912e0ab47291ff9b0dd966e259f42a42646bcdc": {
+                      "InvokePermission-c804d947f12e6d883f018387429c0ba10b852c46ba": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
                           "version": "0.17.0",
                         },
-                        "id": "InvokePermission-c80912e0ab47291ff9b0dd966e259f42a42646bcdc",
-                        "path": "root/Default/my_bucket/my_bucket-on_delete-OnMessage-f22c8a47/InvokePermission-c80912e0ab47291ff9b0dd966e259f42a42646bcdc",
+                        "id": "InvokePermission-c804d947f12e6d883f018387429c0ba10b852c46ba",
+                        "path": "root/Default/my_bucket/my_bucket-ondelete-OnMessage-107fa7e8/InvokePermission-c804d947f12e6d883f018387429c0ba10b852c46ba",
                       },
                       "S3Object": {
                         "constructInfo": {
@@ -2269,7 +2269,7 @@ exports[`bucket with onEvent method 2`] = `
                           "version": "0.17.0",
                         },
                         "id": "S3Object",
-                        "path": "root/Default/my_bucket/my_bucket-on_delete-OnMessage-f22c8a47/S3Object",
+                        "path": "root/Default/my_bucket/my_bucket-ondelete-OnMessage-107fa7e8/S3Object",
                       },
                     },
                     "constructInfo": {
@@ -2280,10 +2280,10 @@ exports[`bucket with onEvent method 2`] = `
                       "description": "A cloud function (FaaS)",
                       "title": "Function",
                     },
-                    "id": "my_bucket-on_delete-OnMessage-f22c8a47",
-                    "path": "root/Default/my_bucket/my_bucket-on_delete-OnMessage-f22c8a47",
+                    "id": "my_bucket-ondelete-OnMessage-107fa7e8",
+                    "path": "root/Default/my_bucket/my_bucket-ondelete-OnMessage-107fa7e8",
                   },
-                  "my_bucket-on_delete-OnMessageHandler-f22c8a47": {
+                  "my_bucket-ondelete-OnMessageHandler-107fa7e8": {
                     "attributes": {
                       "wing:resource:connections": [],
                     },
@@ -2294,23 +2294,23 @@ exports[`bucket with onEvent method 2`] = `
                     "display": {
                       "hidden": true,
                     },
-                    "id": "my_bucket-on_delete-OnMessageHandler-f22c8a47",
-                    "path": "root/Default/my_bucket/my_bucket-on_delete-OnMessageHandler-f22c8a47",
+                    "id": "my_bucket-ondelete-OnMessageHandler-107fa7e8",
+                    "path": "root/Default/my_bucket/my_bucket-ondelete-OnMessageHandler-107fa7e8",
                   },
-                  "my_bucket-on_update": {
+                  "my_bucket-onupdate": {
                     "attributes": {
                       "wing:resource:connections": [
                         {
                           "direction": "inbound",
                           "implicit": false,
-                          "relationship": "UPDATE",
+                          "relationship": "onUpdate",
                           "resource": "root/Default/my_bucket",
                         },
                         {
                           "direction": "outbound",
                           "implicit": false,
                           "relationship": "onMessage",
-                          "resource": "root/Default/my_bucket/my_bucket-on_update-OnMessage-32b7a290",
+                          "resource": "root/Default/my_bucket/my_bucket-onupdate-OnMessage-02f87005",
                         },
                       ],
                     },
@@ -2321,7 +2321,7 @@ exports[`bucket with onEvent method 2`] = `
                           "version": "0.17.0",
                         },
                         "id": "Default",
-                        "path": "root/Default/my_bucket/my_bucket-on_update/Default",
+                        "path": "root/Default/my_bucket/my_bucket-onupdate/Default",
                       },
                       "PublishPermission-c8045fccc85a7ef42d5391d87958e5ce36c53a401a": {
                         "constructInfo": {
@@ -2329,15 +2329,15 @@ exports[`bucket with onEvent method 2`] = `
                           "version": "0.17.0",
                         },
                         "id": "PublishPermission-c8045fccc85a7ef42d5391d87958e5ce36c53a401a",
-                        "path": "root/Default/my_bucket/my_bucket-on_update/PublishPermission-c8045fccc85a7ef42d5391d87958e5ce36c53a401a",
+                        "path": "root/Default/my_bucket/my_bucket-onupdate/PublishPermission-c8045fccc85a7ef42d5391d87958e5ce36c53a401a",
                       },
-                      "my_bucket-on_update-TopicSubscription-32b7a290": {
+                      "my_bucket-onupdate-TopicSubscription-02f87005": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
                           "version": "0.17.0",
                         },
-                        "id": "my_bucket-on_update-TopicSubscription-32b7a290",
-                        "path": "root/Default/my_bucket/my_bucket-on_update/my_bucket-on_update-TopicSubscription-32b7a290",
+                        "id": "my_bucket-onupdate-TopicSubscription-02f87005",
+                        "path": "root/Default/my_bucket/my_bucket-onupdate/my_bucket-onupdate-TopicSubscription-02f87005",
                       },
                     },
                     "constructInfo": {
@@ -2348,10 +2348,10 @@ exports[`bucket with onEvent method 2`] = `
                       "description": "A pub/sub notification topic",
                       "title": "Topic",
                     },
-                    "id": "my_bucket-on_update",
-                    "path": "root/Default/my_bucket/my_bucket-on_update",
+                    "id": "my_bucket-onupdate",
+                    "path": "root/Default/my_bucket/my_bucket-onupdate",
                   },
-                  "my_bucket-on_update-OnMessage-32b7a290": {
+                  "my_bucket-onupdate-OnMessage-02f87005": {
                     "attributes": {
                       "wing:resource:connections": [
                         {
@@ -2370,19 +2370,19 @@ exports[`bucket with onEvent method 2`] = `
                           "direction": "outbound",
                           "implicit": false,
                           "relationship": "handle",
-                          "resource": "root/Default/my_bucket-on_update-eventHandler-9eade8f6",
+                          "resource": "root/Default/my_bucket-onupdate-eventHandler-9eade8f6",
                         },
                         {
                           "direction": "outbound",
                           "implicit": false,
                           "relationship": "$inflight_init",
-                          "resource": "root/Default/my_bucket-on_update-eventHandler-9eade8f6",
+                          "resource": "root/Default/my_bucket-onupdate-eventHandler-9eade8f6",
                         },
                         {
                           "direction": "inbound",
                           "implicit": false,
                           "relationship": "onMessage",
-                          "resource": "root/Default/my_bucket/my_bucket-on_update",
+                          "resource": "root/Default/my_bucket/my_bucket-onupdate",
                         },
                       ],
                     },
@@ -2393,7 +2393,7 @@ exports[`bucket with onEvent method 2`] = `
                           "version": "0.17.0",
                         },
                         "id": "Asset",
-                        "path": "root/Default/my_bucket/my_bucket-on_update-OnMessage-32b7a290/Asset",
+                        "path": "root/Default/my_bucket/my_bucket-onupdate-OnMessage-02f87005/Asset",
                       },
                       "Default": {
                         "constructInfo": {
@@ -2401,7 +2401,7 @@ exports[`bucket with onEvent method 2`] = `
                           "version": "0.17.0",
                         },
                         "id": "Default",
-                        "path": "root/Default/my_bucket/my_bucket-on_update-OnMessage-32b7a290/Default",
+                        "path": "root/Default/my_bucket/my_bucket-onupdate-OnMessage-02f87005/Default",
                       },
                       "IamRole": {
                         "constructInfo": {
@@ -2409,7 +2409,7 @@ exports[`bucket with onEvent method 2`] = `
                           "version": "0.17.0",
                         },
                         "id": "IamRole",
-                        "path": "root/Default/my_bucket/my_bucket-on_update-OnMessage-32b7a290/IamRole",
+                        "path": "root/Default/my_bucket/my_bucket-onupdate-OnMessage-02f87005/IamRole",
                       },
                       "IamRolePolicy": {
                         "constructInfo": {
@@ -2417,7 +2417,7 @@ exports[`bucket with onEvent method 2`] = `
                           "version": "0.17.0",
                         },
                         "id": "IamRolePolicy",
-                        "path": "root/Default/my_bucket/my_bucket-on_update-OnMessage-32b7a290/IamRolePolicy",
+                        "path": "root/Default/my_bucket/my_bucket-onupdate-OnMessage-02f87005/IamRolePolicy",
                       },
                       "IamRolePolicyAttachment": {
                         "constructInfo": {
@@ -2425,15 +2425,15 @@ exports[`bucket with onEvent method 2`] = `
                           "version": "0.17.0",
                         },
                         "id": "IamRolePolicyAttachment",
-                        "path": "root/Default/my_bucket/my_bucket-on_update-OnMessage-32b7a290/IamRolePolicyAttachment",
+                        "path": "root/Default/my_bucket/my_bucket-onupdate-OnMessage-02f87005/IamRolePolicyAttachment",
                       },
-                      "InvokePermission-c8c80ce55fb2dfdf6262f75ee093ef99cc30a57833": {
+                      "InvokePermission-c85a09033744f6af2426f88e40823fbfd778fbdc16": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
                           "version": "0.17.0",
                         },
-                        "id": "InvokePermission-c8c80ce55fb2dfdf6262f75ee093ef99cc30a57833",
-                        "path": "root/Default/my_bucket/my_bucket-on_update-OnMessage-32b7a290/InvokePermission-c8c80ce55fb2dfdf6262f75ee093ef99cc30a57833",
+                        "id": "InvokePermission-c85a09033744f6af2426f88e40823fbfd778fbdc16",
+                        "path": "root/Default/my_bucket/my_bucket-onupdate-OnMessage-02f87005/InvokePermission-c85a09033744f6af2426f88e40823fbfd778fbdc16",
                       },
                       "S3Object": {
                         "constructInfo": {
@@ -2441,7 +2441,7 @@ exports[`bucket with onEvent method 2`] = `
                           "version": "0.17.0",
                         },
                         "id": "S3Object",
-                        "path": "root/Default/my_bucket/my_bucket-on_update-OnMessage-32b7a290/S3Object",
+                        "path": "root/Default/my_bucket/my_bucket-onupdate-OnMessage-02f87005/S3Object",
                       },
                     },
                     "constructInfo": {
@@ -2452,10 +2452,10 @@ exports[`bucket with onEvent method 2`] = `
                       "description": "A cloud function (FaaS)",
                       "title": "Function",
                     },
-                    "id": "my_bucket-on_update-OnMessage-32b7a290",
-                    "path": "root/Default/my_bucket/my_bucket-on_update-OnMessage-32b7a290",
+                    "id": "my_bucket-onupdate-OnMessage-02f87005",
+                    "path": "root/Default/my_bucket/my_bucket-onupdate-OnMessage-02f87005",
                   },
-                  "my_bucket-on_update-OnMessageHandler-32b7a290": {
+                  "my_bucket-onupdate-OnMessageHandler-02f87005": {
                     "attributes": {
                       "wing:resource:connections": [],
                     },
@@ -2466,8 +2466,8 @@ exports[`bucket with onEvent method 2`] = `
                     "display": {
                       "hidden": true,
                     },
-                    "id": "my_bucket-on_update-OnMessageHandler-32b7a290",
-                    "path": "root/Default/my_bucket/my_bucket-on_update-OnMessageHandler-32b7a290",
+                    "id": "my_bucket-onupdate-OnMessageHandler-02f87005",
+                    "path": "root/Default/my_bucket/my_bucket-onupdate-OnMessageHandler-02f87005",
                   },
                 },
                 "constructInfo": {
@@ -2481,20 +2481,20 @@ exports[`bucket with onEvent method 2`] = `
                 "id": "my_bucket",
                 "path": "root/Default/my_bucket",
               },
-              "my_bucket-on_create-eventHandler-9eade8f6": {
+              "my_bucket-oncreate-eventHandler-9eade8f6": {
                 "attributes": {
                   "wing:resource:connections": [
                     {
                       "direction": "inbound",
                       "implicit": false,
                       "relationship": "handle",
-                      "resource": "root/Default/my_bucket/my_bucket-on_create-OnMessage-2c90a36b",
+                      "resource": "root/Default/my_bucket/my_bucket-oncreate-OnMessage-1000fbe7",
                     },
                     {
                       "direction": "inbound",
                       "implicit": false,
                       "relationship": "$inflight_init",
-                      "resource": "root/Default/my_bucket/my_bucket-on_create-OnMessage-2c90a36b",
+                      "resource": "root/Default/my_bucket/my_bucket-oncreate-OnMessage-1000fbe7",
                     },
                   ],
                 },
@@ -2505,23 +2505,23 @@ exports[`bucket with onEvent method 2`] = `
                 "display": {
                   "hidden": true,
                 },
-                "id": "my_bucket-on_create-eventHandler-9eade8f6",
-                "path": "root/Default/my_bucket-on_create-eventHandler-9eade8f6",
+                "id": "my_bucket-oncreate-eventHandler-9eade8f6",
+                "path": "root/Default/my_bucket-oncreate-eventHandler-9eade8f6",
               },
-              "my_bucket-on_delete-eventHandler-9eade8f6": {
+              "my_bucket-ondelete-eventHandler-9eade8f6": {
                 "attributes": {
                   "wing:resource:connections": [
                     {
                       "direction": "inbound",
                       "implicit": false,
                       "relationship": "handle",
-                      "resource": "root/Default/my_bucket/my_bucket-on_delete-OnMessage-f22c8a47",
+                      "resource": "root/Default/my_bucket/my_bucket-ondelete-OnMessage-107fa7e8",
                     },
                     {
                       "direction": "inbound",
                       "implicit": false,
                       "relationship": "$inflight_init",
-                      "resource": "root/Default/my_bucket/my_bucket-on_delete-OnMessage-f22c8a47",
+                      "resource": "root/Default/my_bucket/my_bucket-ondelete-OnMessage-107fa7e8",
                     },
                   ],
                 },
@@ -2532,23 +2532,23 @@ exports[`bucket with onEvent method 2`] = `
                 "display": {
                   "hidden": true,
                 },
-                "id": "my_bucket-on_delete-eventHandler-9eade8f6",
-                "path": "root/Default/my_bucket-on_delete-eventHandler-9eade8f6",
+                "id": "my_bucket-ondelete-eventHandler-9eade8f6",
+                "path": "root/Default/my_bucket-ondelete-eventHandler-9eade8f6",
               },
-              "my_bucket-on_update-eventHandler-9eade8f6": {
+              "my_bucket-onupdate-eventHandler-9eade8f6": {
                 "attributes": {
                   "wing:resource:connections": [
                     {
                       "direction": "inbound",
                       "implicit": false,
                       "relationship": "handle",
-                      "resource": "root/Default/my_bucket/my_bucket-on_update-OnMessage-32b7a290",
+                      "resource": "root/Default/my_bucket/my_bucket-onupdate-OnMessage-02f87005",
                     },
                     {
                       "direction": "inbound",
                       "implicit": false,
                       "relationship": "$inflight_init",
-                      "resource": "root/Default/my_bucket/my_bucket-on_update-OnMessage-32b7a290",
+                      "resource": "root/Default/my_bucket/my_bucket-onupdate-OnMessage-02f87005",
                     },
                   ],
                 },
@@ -2559,8 +2559,8 @@ exports[`bucket with onEvent method 2`] = `
                 "display": {
                   "hidden": true,
                 },
-                "id": "my_bucket-on_update-eventHandler-9eade8f6",
-                "path": "root/Default/my_bucket-on_update-eventHandler-9eade8f6",
+                "id": "my_bucket-onupdate-eventHandler-9eade8f6",
+                "path": "root/Default/my_bucket-onupdate-eventHandler-9eade8f6",
               },
             },
             "constructInfo": {
@@ -2607,36 +2607,36 @@ exports[`bucket with onUpdate method 1`] = `
   },
   \\"resource\\": {
     \\"aws_iam_role\\": {
-      \\"my_bucket_my_bucket-on_update-OnMessage-32b7a290_IamRole_0D689265\\": {
+      \\"my_bucket_my_bucket-onupdate-OnMessage-02f87005_IamRole_33D65E9E\\": {
         \\"assume_role_policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":\\\\\\"sts:AssumeRole\\\\\\",\\\\\\"Principal\\\\\\":{\\\\\\"Service\\\\\\":\\\\\\"lambda.amazonaws.com\\\\\\"},\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\"
       }
     },
     \\"aws_iam_role_policy\\": {
-      \\"my_bucket_my_bucket-on_update-OnMessage-32b7a290_IamRolePolicy_A968FB6D\\": {
+      \\"my_bucket_my_bucket-onupdate-OnMessage-02f87005_IamRolePolicy_26721ED9\\": {
         \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Action\\\\\\":\\\\\\"none:null\\\\\\",\\\\\\"Resource\\\\\\":\\\\\\"*\\\\\\"}]}\\",
-        \\"role\\": \\"\${aws_iam_role.my_bucket_my_bucket-on_update-OnMessage-32b7a290_IamRole_0D689265.name}\\"
+        \\"role\\": \\"\${aws_iam_role.my_bucket_my_bucket-onupdate-OnMessage-02f87005_IamRole_33D65E9E.name}\\"
       }
     },
     \\"aws_iam_role_policy_attachment\\": {
-      \\"my_bucket_my_bucket-on_update-OnMessage-32b7a290_IamRolePolicyAttachment_1B023209\\": {
+      \\"my_bucket_my_bucket-onupdate-OnMessage-02f87005_IamRolePolicyAttachment_2E33E422\\": {
         \\"policy_arn\\": \\"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole\\",
-        \\"role\\": \\"\${aws_iam_role.my_bucket_my_bucket-on_update-OnMessage-32b7a290_IamRole_0D689265.name}\\"
+        \\"role\\": \\"\${aws_iam_role.my_bucket_my_bucket-onupdate-OnMessage-02f87005_IamRole_33D65E9E.name}\\"
       }
     },
     \\"aws_lambda_function\\": {
-      \\"my_bucket_my_bucket-on_update-OnMessage-32b7a290_ADBC7F74\\": {
+      \\"my_bucket_my_bucket-onupdate-OnMessage-02f87005_5A1876F6\\": {
         \\"environment\\": {
           \\"variables\\": {
-            \\"WING_FUNCTION_NAME\\": \\"my_bucket-on_update-OnMessage-32b7a290-c875bcdf\\"
+            \\"WING_FUNCTION_NAME\\": \\"my_bucket-onupdate-OnMessage-02f87005-c8addd34\\"
           }
         },
-        \\"function_name\\": \\"my_bucket-on_update-OnMessage-32b7a290-c875bcdf\\",
+        \\"function_name\\": \\"my_bucket-onupdate-OnMessage-02f87005-c8addd34\\",
         \\"handler\\": \\"index.handler\\",
         \\"publish\\": true,
-        \\"role\\": \\"\${aws_iam_role.my_bucket_my_bucket-on_update-OnMessage-32b7a290_IamRole_0D689265.arn}\\",
+        \\"role\\": \\"\${aws_iam_role.my_bucket_my_bucket-onupdate-OnMessage-02f87005_IamRole_33D65E9E.arn}\\",
         \\"runtime\\": \\"nodejs18.x\\",
         \\"s3_bucket\\": \\"\${aws_s3_bucket.Code.bucket}\\",
-        \\"s3_key\\": \\"\${aws_s3_object.my_bucket_my_bucket-on_update-OnMessage-32b7a290_S3Object_9A4C2C8F.key}\\",
+        \\"s3_key\\": \\"\${aws_s3_object.my_bucket_my_bucket-onupdate-OnMessage-02f87005_S3Object_22E0515D.key}\\",
         \\"timeout\\": 30,
         \\"vpc_config\\": {
           \\"security_group_ids\\": [],
@@ -2645,11 +2645,11 @@ exports[`bucket with onUpdate method 1`] = `
       }
     },
     \\"aws_lambda_permission\\": {
-      \\"my_bucket_my_bucket-on_update-OnMessage-32b7a290_InvokePermission-c8c80ce55fb2dfdf6262f75ee093ef99cc30a57833_C11DA01C\\": {
+      \\"my_bucket_my_bucket-onupdate-OnMessage-02f87005_InvokePermission-c85a09033744f6af2426f88e40823fbfd778fbdc16_79677ADE\\": {
         \\"action\\": \\"lambda:InvokeFunction\\",
-        \\"function_name\\": \\"\${aws_lambda_function.my_bucket_my_bucket-on_update-OnMessage-32b7a290_ADBC7F74.function_name}\\",
+        \\"function_name\\": \\"\${aws_lambda_function.my_bucket_my_bucket-onupdate-OnMessage-02f87005_5A1876F6.function_name}\\",
         \\"principal\\": \\"sns.amazonaws.com\\",
-        \\"source_arn\\": \\"\${aws_sns_topic.my_bucket_my_bucket-on_update_C3D45260.arn}\\"
+        \\"source_arn\\": \\"\${aws_sns_topic.my_bucket_my_bucket-onupdate_ADC4AA5B.arn}\\"
       }
     },
     \\"aws_s3_bucket\\": {
@@ -2665,15 +2665,15 @@ exports[`bucket with onUpdate method 1`] = `
       \\"my_bucket_S3BucketNotification_DDA29E8F\\": {
         \\"bucket\\": \\"\${aws_s3_bucket.my_bucket.id}\\",
         \\"depends_on\\": [
-          \\"aws_sns_topic_policy.my_bucket_my_bucket-on_update_PublishPermission-c8045fccc85a7ef42d5391d87958e5ce36c53a401a_A2248301\\"
+          \\"aws_sns_topic_policy.my_bucket_my_bucket-onupdate_PublishPermission-c8045fccc85a7ef42d5391d87958e5ce36c53a401a_CDA9888A\\"
         ],
         \\"topic\\": [
           {
             \\"events\\": [
               \\"s3:ObjectCreated:Post\\"
             ],
-            \\"id\\": \\"on-update-notification\\",
-            \\"topic_arn\\": \\"\${aws_sns_topic.my_bucket_my_bucket-on_update_C3D45260.arn}\\"
+            \\"id\\": \\"on-onupdate-notification\\",
+            \\"topic_arn\\": \\"\${aws_sns_topic.my_bucket_my_bucket-onupdate_ADC4AA5B.arn}\\"
           }
         ]
       }
@@ -2709,28 +2709,28 @@ exports[`bucket with onUpdate method 1`] = `
       }
     },
     \\"aws_s3_object\\": {
-      \\"my_bucket_my_bucket-on_update-OnMessage-32b7a290_S3Object_9A4C2C8F\\": {
+      \\"my_bucket_my_bucket-onupdate-OnMessage-02f87005_S3Object_22E0515D\\": {
         \\"bucket\\": \\"\${aws_s3_bucket.Code.bucket}\\",
         \\"key\\": \\"<key>\\",
         \\"source\\": \\"<source>\\"
       }
     },
     \\"aws_sns_topic\\": {
-      \\"my_bucket_my_bucket-on_update_C3D45260\\": {
-        \\"name\\": \\"my_bucket-on_update-c8c80ce5\\"
+      \\"my_bucket_my_bucket-onupdate_ADC4AA5B\\": {
+        \\"name\\": \\"my_bucket-onupdate-c85a0903\\"
       }
     },
     \\"aws_sns_topic_policy\\": {
-      \\"my_bucket_my_bucket-on_update_PublishPermission-c8045fccc85a7ef42d5391d87958e5ce36c53a401a_A2248301\\": {
-        \\"arn\\": \\"\${aws_sns_topic.my_bucket_my_bucket-on_update_C3D45260.arn}\\",
-        \\"policy\\": \\"{\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Principal\\\\\\":{\\\\\\"Service\\\\\\":\\\\\\"s3.amazonaws.com\\\\\\"},\\\\\\"Action\\\\\\":\\\\\\"sns:Publish\\\\\\",\\\\\\"Resource\\\\\\":\\\\\\"\${aws_sns_topic.my_bucket_my_bucket-on_update_C3D45260.arn}\\\\\\",\\\\\\"Condition\\\\\\":{\\\\\\"ArnEquals\\\\\\":{\\\\\\"aws:SourceArn\\\\\\":\\\\\\"\${aws_s3_bucket.my_bucket.arn}\\\\\\"}}}]}\\"
+      \\"my_bucket_my_bucket-onupdate_PublishPermission-c8045fccc85a7ef42d5391d87958e5ce36c53a401a_CDA9888A\\": {
+        \\"arn\\": \\"\${aws_sns_topic.my_bucket_my_bucket-onupdate_ADC4AA5B.arn}\\",
+        \\"policy\\": \\"{\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Principal\\\\\\":{\\\\\\"Service\\\\\\":\\\\\\"s3.amazonaws.com\\\\\\"},\\\\\\"Action\\\\\\":\\\\\\"sns:Publish\\\\\\",\\\\\\"Resource\\\\\\":\\\\\\"\${aws_sns_topic.my_bucket_my_bucket-onupdate_ADC4AA5B.arn}\\\\\\",\\\\\\"Condition\\\\\\":{\\\\\\"ArnEquals\\\\\\":{\\\\\\"aws:SourceArn\\\\\\":\\\\\\"\${aws_s3_bucket.my_bucket.arn}\\\\\\"}}}]}\\"
       }
     },
     \\"aws_sns_topic_subscription\\": {
-      \\"my_bucket_my_bucket-on_update_my_bucket-on_update-TopicSubscription-32b7a290_D2ECBD87\\": {
-        \\"endpoint\\": \\"\${aws_lambda_function.my_bucket_my_bucket-on_update-OnMessage-32b7a290_ADBC7F74.arn}\\",
+      \\"my_bucket_my_bucket-onupdate_my_bucket-onupdate-TopicSubscription-02f87005_6CFFDD03\\": {
+        \\"endpoint\\": \\"\${aws_lambda_function.my_bucket_my_bucket-onupdate-OnMessage-02f87005_5A1876F6.arn}\\",
         \\"protocol\\": \\"lambda\\",
-        \\"topic_arn\\": \\"\${aws_sns_topic.my_bucket_my_bucket-on_update_C3D45260.arn}\\"
+        \\"topic_arn\\": \\"\${aws_sns_topic.my_bucket_my_bucket-onupdate_ADC4AA5B.arn}\\"
       }
     }
   }
@@ -2794,13 +2794,13 @@ exports[`bucket with onUpdate method 2`] = `
                       "direction": "inbound",
                       "implicit": false,
                       "relationship": "handle",
-                      "resource": "root/Default/my_bucket/my_bucket-on_update-OnMessage-32b7a290",
+                      "resource": "root/Default/my_bucket/my_bucket-onupdate-OnMessage-02f87005",
                     },
                     {
                       "direction": "inbound",
                       "implicit": false,
                       "relationship": "$inflight_init",
-                      "resource": "root/Default/my_bucket/my_bucket-on_update-OnMessage-32b7a290",
+                      "resource": "root/Default/my_bucket/my_bucket-onupdate-OnMessage-02f87005",
                     },
                   ],
                 },
@@ -2822,8 +2822,8 @@ exports[`bucket with onUpdate method 2`] = `
                     {
                       "direction": "outbound",
                       "implicit": false,
-                      "relationship": "UPDATE",
-                      "resource": "root/Default/my_bucket/my_bucket-on_update",
+                      "relationship": "onUpdate",
+                      "resource": "root/Default/my_bucket/my_bucket-onupdate",
                     },
                   ],
                 },
@@ -2868,20 +2868,20 @@ exports[`bucket with onUpdate method 2`] = `
                     "id": "S3BucketNotification",
                     "path": "root/Default/my_bucket/S3BucketNotification",
                   },
-                  "my_bucket-on_update": {
+                  "my_bucket-onupdate": {
                     "attributes": {
                       "wing:resource:connections": [
                         {
                           "direction": "inbound",
                           "implicit": false,
-                          "relationship": "UPDATE",
+                          "relationship": "onUpdate",
                           "resource": "root/Default/my_bucket",
                         },
                         {
                           "direction": "outbound",
                           "implicit": false,
                           "relationship": "onMessage",
-                          "resource": "root/Default/my_bucket/my_bucket-on_update-OnMessage-32b7a290",
+                          "resource": "root/Default/my_bucket/my_bucket-onupdate-OnMessage-02f87005",
                         },
                       ],
                     },
@@ -2892,7 +2892,7 @@ exports[`bucket with onUpdate method 2`] = `
                           "version": "0.17.0",
                         },
                         "id": "Default",
-                        "path": "root/Default/my_bucket/my_bucket-on_update/Default",
+                        "path": "root/Default/my_bucket/my_bucket-onupdate/Default",
                       },
                       "PublishPermission-c8045fccc85a7ef42d5391d87958e5ce36c53a401a": {
                         "constructInfo": {
@@ -2900,15 +2900,15 @@ exports[`bucket with onUpdate method 2`] = `
                           "version": "0.17.0",
                         },
                         "id": "PublishPermission-c8045fccc85a7ef42d5391d87958e5ce36c53a401a",
-                        "path": "root/Default/my_bucket/my_bucket-on_update/PublishPermission-c8045fccc85a7ef42d5391d87958e5ce36c53a401a",
+                        "path": "root/Default/my_bucket/my_bucket-onupdate/PublishPermission-c8045fccc85a7ef42d5391d87958e5ce36c53a401a",
                       },
-                      "my_bucket-on_update-TopicSubscription-32b7a290": {
+                      "my_bucket-onupdate-TopicSubscription-02f87005": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
                           "version": "0.17.0",
                         },
-                        "id": "my_bucket-on_update-TopicSubscription-32b7a290",
-                        "path": "root/Default/my_bucket/my_bucket-on_update/my_bucket-on_update-TopicSubscription-32b7a290",
+                        "id": "my_bucket-onupdate-TopicSubscription-02f87005",
+                        "path": "root/Default/my_bucket/my_bucket-onupdate/my_bucket-onupdate-TopicSubscription-02f87005",
                       },
                     },
                     "constructInfo": {
@@ -2919,10 +2919,10 @@ exports[`bucket with onUpdate method 2`] = `
                       "description": "A pub/sub notification topic",
                       "title": "Topic",
                     },
-                    "id": "my_bucket-on_update",
-                    "path": "root/Default/my_bucket/my_bucket-on_update",
+                    "id": "my_bucket-onupdate",
+                    "path": "root/Default/my_bucket/my_bucket-onupdate",
                   },
-                  "my_bucket-on_update-OnMessage-32b7a290": {
+                  "my_bucket-onupdate-OnMessage-02f87005": {
                     "attributes": {
                       "wing:resource:connections": [
                         {
@@ -2941,19 +2941,19 @@ exports[`bucket with onUpdate method 2`] = `
                           "direction": "outbound",
                           "implicit": false,
                           "relationship": "handle",
-                          "resource": "root/Default/my_bucket-on_update-eventHandler-9eade8f6",
+                          "resource": "root/Default/my_bucket-onupdate-eventHandler-9eade8f6",
                         },
                         {
                           "direction": "outbound",
                           "implicit": false,
                           "relationship": "$inflight_init",
-                          "resource": "root/Default/my_bucket-on_update-eventHandler-9eade8f6",
+                          "resource": "root/Default/my_bucket-onupdate-eventHandler-9eade8f6",
                         },
                         {
                           "direction": "inbound",
                           "implicit": false,
                           "relationship": "onMessage",
-                          "resource": "root/Default/my_bucket/my_bucket-on_update",
+                          "resource": "root/Default/my_bucket/my_bucket-onupdate",
                         },
                       ],
                     },
@@ -2964,7 +2964,7 @@ exports[`bucket with onUpdate method 2`] = `
                           "version": "0.17.0",
                         },
                         "id": "Asset",
-                        "path": "root/Default/my_bucket/my_bucket-on_update-OnMessage-32b7a290/Asset",
+                        "path": "root/Default/my_bucket/my_bucket-onupdate-OnMessage-02f87005/Asset",
                       },
                       "Default": {
                         "constructInfo": {
@@ -2972,7 +2972,7 @@ exports[`bucket with onUpdate method 2`] = `
                           "version": "0.17.0",
                         },
                         "id": "Default",
-                        "path": "root/Default/my_bucket/my_bucket-on_update-OnMessage-32b7a290/Default",
+                        "path": "root/Default/my_bucket/my_bucket-onupdate-OnMessage-02f87005/Default",
                       },
                       "IamRole": {
                         "constructInfo": {
@@ -2980,7 +2980,7 @@ exports[`bucket with onUpdate method 2`] = `
                           "version": "0.17.0",
                         },
                         "id": "IamRole",
-                        "path": "root/Default/my_bucket/my_bucket-on_update-OnMessage-32b7a290/IamRole",
+                        "path": "root/Default/my_bucket/my_bucket-onupdate-OnMessage-02f87005/IamRole",
                       },
                       "IamRolePolicy": {
                         "constructInfo": {
@@ -2988,7 +2988,7 @@ exports[`bucket with onUpdate method 2`] = `
                           "version": "0.17.0",
                         },
                         "id": "IamRolePolicy",
-                        "path": "root/Default/my_bucket/my_bucket-on_update-OnMessage-32b7a290/IamRolePolicy",
+                        "path": "root/Default/my_bucket/my_bucket-onupdate-OnMessage-02f87005/IamRolePolicy",
                       },
                       "IamRolePolicyAttachment": {
                         "constructInfo": {
@@ -2996,15 +2996,15 @@ exports[`bucket with onUpdate method 2`] = `
                           "version": "0.17.0",
                         },
                         "id": "IamRolePolicyAttachment",
-                        "path": "root/Default/my_bucket/my_bucket-on_update-OnMessage-32b7a290/IamRolePolicyAttachment",
+                        "path": "root/Default/my_bucket/my_bucket-onupdate-OnMessage-02f87005/IamRolePolicyAttachment",
                       },
-                      "InvokePermission-c8c80ce55fb2dfdf6262f75ee093ef99cc30a57833": {
+                      "InvokePermission-c85a09033744f6af2426f88e40823fbfd778fbdc16": {
                         "constructInfo": {
                           "fqn": "cdktf.TerraformResource",
                           "version": "0.17.0",
                         },
-                        "id": "InvokePermission-c8c80ce55fb2dfdf6262f75ee093ef99cc30a57833",
-                        "path": "root/Default/my_bucket/my_bucket-on_update-OnMessage-32b7a290/InvokePermission-c8c80ce55fb2dfdf6262f75ee093ef99cc30a57833",
+                        "id": "InvokePermission-c85a09033744f6af2426f88e40823fbfd778fbdc16",
+                        "path": "root/Default/my_bucket/my_bucket-onupdate-OnMessage-02f87005/InvokePermission-c85a09033744f6af2426f88e40823fbfd778fbdc16",
                       },
                       "S3Object": {
                         "constructInfo": {
@@ -3012,7 +3012,7 @@ exports[`bucket with onUpdate method 2`] = `
                           "version": "0.17.0",
                         },
                         "id": "S3Object",
-                        "path": "root/Default/my_bucket/my_bucket-on_update-OnMessage-32b7a290/S3Object",
+                        "path": "root/Default/my_bucket/my_bucket-onupdate-OnMessage-02f87005/S3Object",
                       },
                     },
                     "constructInfo": {
@@ -3023,10 +3023,10 @@ exports[`bucket with onUpdate method 2`] = `
                       "description": "A cloud function (FaaS)",
                       "title": "Function",
                     },
-                    "id": "my_bucket-on_update-OnMessage-32b7a290",
-                    "path": "root/Default/my_bucket/my_bucket-on_update-OnMessage-32b7a290",
+                    "id": "my_bucket-onupdate-OnMessage-02f87005",
+                    "path": "root/Default/my_bucket/my_bucket-onupdate-OnMessage-02f87005",
                   },
-                  "my_bucket-on_update-OnMessageHandler-32b7a290": {
+                  "my_bucket-onupdate-OnMessageHandler-02f87005": {
                     "attributes": {
                       "wing:resource:connections": [],
                     },
@@ -3037,8 +3037,8 @@ exports[`bucket with onUpdate method 2`] = `
                     "display": {
                       "hidden": true,
                     },
-                    "id": "my_bucket-on_update-OnMessageHandler-32b7a290",
-                    "path": "root/Default/my_bucket/my_bucket-on_update-OnMessageHandler-32b7a290",
+                    "id": "my_bucket-onupdate-OnMessageHandler-02f87005",
+                    "path": "root/Default/my_bucket/my_bucket-onupdate-OnMessageHandler-02f87005",
                   },
                 },
                 "constructInfo": {
@@ -3052,20 +3052,20 @@ exports[`bucket with onUpdate method 2`] = `
                 "id": "my_bucket",
                 "path": "root/Default/my_bucket",
               },
-              "my_bucket-on_update-eventHandler-9eade8f6": {
+              "my_bucket-onupdate-eventHandler-9eade8f6": {
                 "attributes": {
                   "wing:resource:connections": [
                     {
                       "direction": "inbound",
                       "implicit": false,
                       "relationship": "handle",
-                      "resource": "root/Default/my_bucket/my_bucket-on_update-OnMessage-32b7a290",
+                      "resource": "root/Default/my_bucket/my_bucket-onupdate-OnMessage-02f87005",
                     },
                     {
                       "direction": "inbound",
                       "implicit": false,
                       "relationship": "$inflight_init",
-                      "resource": "root/Default/my_bucket/my_bucket-on_update-OnMessage-32b7a290",
+                      "resource": "root/Default/my_bucket/my_bucket-onupdate-OnMessage-02f87005",
                     },
                   ],
                 },
@@ -3076,8 +3076,8 @@ exports[`bucket with onUpdate method 2`] = `
                 "display": {
                   "hidden": true,
                 },
-                "id": "my_bucket-on_update-eventHandler-9eade8f6",
-                "path": "root/Default/my_bucket-on_update-eventHandler-9eade8f6",
+                "id": "my_bucket-onupdate-eventHandler-9eade8f6",
+                "path": "root/Default/my_bucket-onupdate-eventHandler-9eade8f6",
               },
             },
             "constructInfo": {

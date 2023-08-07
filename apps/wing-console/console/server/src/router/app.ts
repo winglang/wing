@@ -411,32 +411,33 @@ export const createAppRouter = () => {
         );
         const targetNode = nodeMap.get(targetResource?.resource);
 
-        const inflights =
-          connections
-            ?.filter(({ direction, resource }) => {
-              if (direction !== "outbound") {
-                return false;
-              }
+        const inflights = sourceNode.display?.hidden
+          ? []
+          : connections
+              ?.filter(({ direction, resource, relationship }) => {
+                if (direction !== "outbound") {
+                  return false;
+                }
 
-              if (sourceNode.display?.hidden) {
-                return false;
-              }
+                if (resource !== targetPath) {
+                  return false;
+                }
 
-              if (!showTests && matchTest(sourceNode.path)) {
-                return false;
-              }
+                if (relationship === "$inflight_init") {
+                  return false;
+                }
 
-              if (resource !== targetPath) {
-                return false;
-              }
+                if (!showTests && matchTest(sourceNode.path)) {
+                  return false;
+                }
 
-              return true;
-            })
-            .map((connection) => {
-              return {
-                name: connection.relationship,
-              };
-            }) ?? [];
+                return true;
+              })
+              .map((connection) => {
+                return {
+                  name: connection.relationship,
+                };
+              }) ?? [];
 
         return {
           source: {
@@ -449,7 +450,6 @@ export const createAppRouter = () => {
             path: targetNode?.path ?? "",
             type: targetNode && getResourceType(targetNode, simulator),
           },
-          test: simulator.tree,
           inflights,
         };
       }),
