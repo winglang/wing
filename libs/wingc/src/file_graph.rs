@@ -159,14 +159,37 @@ mod tests {
 		graph.update_file(Path::new("b"), &[PathBuf::from("c")]);
 		graph.update_file(Path::new("c"), &[PathBuf::from("a")]);
 
-		// we don't care about where the cycle starts, so we sort the list
 		let mut err = graph.toposort().unwrap_err();
 		err.sort();
 		assert_eq!(err, vec![PathBuf::from("a"), PathBuf::from("b"), PathBuf::from("c")]);
 	}
 
 	#[test]
-	fn toposort_two_cycles() {
+	fn toposort_two_cycles_with_shared_node() {
+		// graph where A is part of two cycles, {A,B,C} and {A,X,Y}
+		let mut graph = FileGraph::default();
+		graph.update_file(Path::new("a"), &[PathBuf::from("b"), PathBuf::from("x")]);
+		graph.update_file(Path::new("b"), &[PathBuf::from("c")]);
+		graph.update_file(Path::new("c"), &[PathBuf::from("a")]);
+		graph.update_file(Path::new("x"), &[PathBuf::from("y")]);
+		graph.update_file(Path::new("y"), &[PathBuf::from("a")]);
+
+		let mut err = graph.toposort().unwrap_err();
+		err.sort();
+		assert_eq!(
+			err,
+			vec![
+				PathBuf::from("a"),
+				PathBuf::from("b"),
+				PathBuf::from("c"),
+				PathBuf::from("x"),
+				PathBuf::from("y")
+			]
+		);
+	}
+
+	#[test]
+	fn toposort_two_distinct_cycles() {
 		// graph with six nodes, where {A,B,C} form a cycle and {D,E,F} form a cycle
 		let mut graph = FileGraph::default();
 		graph.update_file(Path::new("a"), &[PathBuf::from("b")]);
@@ -176,7 +199,6 @@ mod tests {
 		graph.update_file(Path::new("e"), &[PathBuf::from("f")]);
 		graph.update_file(Path::new("f"), &[PathBuf::from("d")]);
 
-		// we don't care about where the cycles start, so we sort the list
 		let mut err = graph.toposort().unwrap_err();
 		err.sort();
 
