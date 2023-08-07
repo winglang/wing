@@ -16,9 +16,9 @@ module.exports = function({ $b }) {
       (await $b.delete("file1.txt"));
       {((cond) => {if (!cond) throw new Error("assertion failed: b.exists(\"file1.json\")")})((await $b.exists("file1.json")))};
       {((cond) => {if (!cond) throw new Error("assertion failed: b.exists(\"file2.txt\")")})((await $b.exists("file2.txt")))};
-      (await $b.delete("file1.json",Object.freeze({"mustExist":true})));
+      (await $b.delete("file1.json",{ mustExist: true }));
       try {
-        (await $b.delete("file1.json",Object.freeze({"mustExist":true})));
+        (await $b.delete("file1.json",{ mustExist: true }));
       }
       catch ($error_e) {
         const e = $error_e.message;

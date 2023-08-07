@@ -2246,10 +2246,7 @@ impl<'a> TypeChecker<'a> {
 			};
 			self.spanned_error(exp, err_text);
 		}
-		let params = func_sig
-			.parameters
-			.iter()
-			.take(func_sig.parameters.len() - num_optionals);
+		let params = func_sig.parameters.iter();
 
 		if index_last_item == arg_list_types.pos_args.len() {
 			for (arg_expr, arg_type, param) in izip!(arg_list.pos_args.iter(), arg_list_types.pos_args.iter(), params) {
