@@ -1713,8 +1713,6 @@ impl<'s> Parser<'s> {
 					self.build_expression(&element_node, phase)?
 				};
 
-				let element = Box::new(exp);
-
 				*self.in_json.borrow_mut() -= 1;
 
 				// Only set mutability back to false if we are no longer parsing nested json
@@ -1722,6 +1720,12 @@ impl<'s> Parser<'s> {
 					*self.is_in_mut_json.borrow_mut() = false;
 				}
 
+				// avoid unnecessary wrapping of json elements
+				if matches!(exp.kind, ExprKind::JsonLiteral { .. }) {
+					return Ok(exp);
+				}
+
+				let element = Box::new(exp);
 				Ok(Expr::new(ExprKind::JsonLiteral { is_mut, element }, expression_span))
 			}
 			"set_literal" => self.build_set_literal(expression_node, phase),
@@ -1768,7 +1772,7 @@ impl<'s> Parser<'s> {
 		}
 	}
 
-	fn build_map_fields(&self, expression_node: &Node<'_>, phase: Phase) -> Result<IndexMap<String, Expr>, ()> {
+	fn build_map_fields(&self, expression_node: &Node<'_>, phase: Phase) -> Result<IndexMap<Symbol, Expr>, ()> {
 		let mut fields = IndexMap::new();
 		let mut cursor = expression_node.walk();
 		for field_node in expression_node.children_by_field_name("member", &mut cursor) {
@@ -1780,9 +1784,10 @@ impl<'s> Parser<'s> {
 				"string" => {
 					let s = self.node_text(&key_node);
 					// Remove quotes, we assume this is a valid key for a map
-					s[1..s.len() - 1].to_string()
+					let s = s[1..s.len() - 1].to_string();
+					Symbol::new(s, self.node_span(&key_node))
 				}
-				"identifier" => self.node_text(&key_node).to_string(),
+				"identifier" => self.node_symbol(&key_node)?,
 				other => panic!("Unexpected map key type {} at {:?}", other, key_node),
 			};
 			let value_node = field_node.named_child(1).unwrap();

@@ -6,13 +6,14 @@ use std::{cell::RefCell, collections::HashMap};
 use tree_sitter::Tree;
 
 use crate::closure_transform::ClosureTransformer;
-use crate::diagnostic::{get_diagnostics, reset_diagnostics, Diagnostic};
+use crate::diagnostic::{found_errors, get_diagnostics, reset_diagnostics, Diagnostic};
 use crate::files::Files;
 use crate::fold::Fold;
 use crate::jsify::JSifier;
 use crate::parser::Parser;
 use crate::type_check;
 use crate::type_check::jsii_importer::JsiiImportSpec;
+use crate::type_check_assert::TypeCheckAssert;
 use crate::{ast::Scope, type_check::Types, wasm_util::ptr_to_string};
 
 /// The result of running wingc on a file
@@ -129,6 +130,10 @@ fn partial_compile(source_file: &str, text: &[u8], jsii_types: &mut TypeSystem) 
 		jsii_types,
 		&mut jsii_imports,
 	);
+
+	// Validate the type checker didn't miss anything see `TypeCheckAssert` for details
+	let mut tc_assert = TypeCheckAssert::new(&types, found_errors());
+	tc_assert.check(&scope);
 
 	// -- JSIFICATION PHASE --
 

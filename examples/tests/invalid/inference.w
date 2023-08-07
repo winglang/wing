@@ -14,12 +14,12 @@ recursiveClosure("");
 //               ^^ Expected num, got str
 
 let emptyArray = [];
-//  ^^^^^^^^^^^ Unable to infer type
+//  ^^^^^^^^^^ Unable to infer type
 let numArray = emptyArray;
-//  ^^^^^^^^^ Unable to infer type
+//  ^^^^^^^^ Unable to infer type
 
 let clonedArray = emptyArray.copyMut();
-//  ^^^^^^^^^^^^ Unable to infer type
+//  ^^^^^^^^^^^ Unable to infer type
 
 
 let stringInterpolationCannotBeInferred = (nice) => {
@@ -67,9 +67,8 @@ let func2 = inflight (request) => {
 };
 
 let anotherEmptyArray = [];
-//  ^^^^^^^^^^^^^^^^^^^ Unable to infer type
+//  ^^^^^^^^^^^^^^^^^ Unable to infer type
 Json { cool: anotherEmptyArray };
-//           ^^^^^^^^^^^^^^^^^^^ Not a valid JSON element
 
 class NeedAnnotations {
   returns() {

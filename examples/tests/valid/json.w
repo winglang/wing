@@ -199,3 +199,25 @@ assert(notSpecified.get("foo") == "bar");
 // Check that empty {} is a Json
 let empty = {};
 assert(Json.has(empty, "something") == false);
+
+struct InnerStructyJson  {
+  good: bool;
+}
+
+struct StructyJson {
+  foo: str;
+  stuff: Array<num>;
+  maybe: InnerStructyJson?;
+}
+
+let notJsonMissingField: StructyJson = {
+  foo: "bar",
+  stuff: [],
+};
+let notJson: StructyJson = {
+  foo: "bar",
+  stuff: [1, 2, 3],
+  maybe: {
+    good: true,
+  }
+};

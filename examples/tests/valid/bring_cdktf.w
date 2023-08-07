@@ -3,7 +3,7 @@ bring "cdktf" as cdktf;
 
 new aws.s3Bucket.S3Bucket(
   bucketPrefix: "hello",
-  versioning: aws.s3Bucket.S3BucketVersioning {
+  versioning: {
     enabled: true,
     mfaDelete: true,
   },

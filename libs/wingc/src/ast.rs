@@ -545,12 +545,12 @@ pub enum ExprKind {
 		fields: IndexMap<Symbol, Expr>,
 	},
 	JsonMapLiteral {
-		fields: IndexMap<String, Expr>,
+		fields: IndexMap<Symbol, Expr>,
 	},
 	MapLiteral {
 		type_: Option<TypeAnnotation>,
 		// We're using a map implementation with reliable iteration to guarantee deterministic compiler output. See discussion: https://github.com/winglang/wing/discussions/887.
-		fields: IndexMap<String, Expr>,
+		fields: IndexMap<Symbol, Expr>,
 	},
 	SetLiteral {
 		type_: Option<TypeAnnotation>,

@@ -203,13 +203,13 @@ pub enum Type {
 	Duration,
 	Boolean,
 	Void,
-	Json,
+	Json(Option<JsonData>),
 	MutJson,
 	Nil,
 	Unresolved,
 	/// A type that is inferred from the context.
 	/// The usize is a unique identifier for the inference
-	Inferred(usize),
+	Inferred(InferenceId),
 	Optional(TypeRef),
 	Array(TypeRef),
 	MutArray(TypeRef),
@@ -228,6 +228,73 @@ pub const CLASS_INIT_NAME: &'static str = "init";
 pub const CLASS_INFLIGHT_INIT_NAME: &'static str = "$inflight_init";
 
 pub const CLOSURE_CLASS_HANDLE_METHOD: &'static str = "handle";
+
+#[derive(Debug)]
+pub enum JsonDataKind {
+	Type(SpannedTypeInfo),
+	Fields(IndexMap<Symbol, SpannedTypeInfo>),
+	List(Vec<SpannedTypeInfo>),
+}
+
+#[derive(Debug)]
+pub struct JsonData {
+	pub expression_id: ExprId,
+	pub kind: JsonDataKind,
+}
+
+#[derive(Debug)]
+pub struct SpannedTypeInfo {
+	pub type_: TypeRef,
+	pub span: WingSpan,
+}
+
+impl Display for JsonData {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		write!(f, "{}", self.kind)
+	}
+}
+
+impl Display for SpannedTypeInfo {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		write!(f, "{}", self.type_)
+	}
+}
+
+impl Display for JsonDataKind {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		match self {
+			JsonDataKind::Type(t) => write!(f, "{}", t),
+			JsonDataKind::Fields(fields) => {
+				if fields.len() == 0 {
+					write!(f, "{{}}")
+				} else {
+					write!(f, "{{ ")?;
+					for (i, (name, type_)) in fields.iter().enumerate() {
+						if i > 0 {
+							write!(f, ", ")?;
+						}
+						write!(f, "{}: {}", name.name, type_)?;
+					}
+					write!(f, " }}")
+				}
+			}
+			JsonDataKind::List(types) => {
+				if types.len() == 0 {
+					write!(f, "[]")
+				} else {
+					write!(f, "[")?;
+					for (i, type_) in types.iter().enumerate() {
+						if i > 0 {
+							write!(f, ", ")?;
+						}
+						write!(f, "{}", type_)?;
+					}
+					write!(f, "]")
+				}
+			}
+		}
+	}
+}
 
 #[derive(Derivative)]
 #[derivative(Debug)]
@@ -395,7 +462,7 @@ impl ClassLike for Struct {
 /// Intermediate struct for storing the evaluated types of arguments in a function call or constructor call.
 pub struct ArgListTypes {
 	pub pos_args: Vec<TypeRef>,
-	pub named_args: IndexMap<Symbol, TypeRef>,
+	pub named_args: IndexMap<Symbol, SpannedTypeInfo>,
 }
 
 #[derive(Derivative)]
@@ -794,7 +861,13 @@ impl Display for Type {
 			Type::Duration => write!(f, "duration"),
 			Type::Boolean => write!(f, "bool"),
 			Type::Void => write!(f, "void"),
-			Type::Json => write!(f, "Json"),
+			Type::Json(t) => {
+				if let Some(t) = t {
+					write!(f, "Json {}", t)
+				} else {
+					write!(f, "Json")
+				}
+			}
 			Type::MutJson => write!(f, "MutJson"),
 			Type::Nil => write!(f, "nil"),
 			Type::Unresolved => write!(f, "unresolved"),
@@ -805,7 +878,14 @@ impl Display for Type {
 
 			Type::Interface(iface) => write!(f, "{}", iface),
 			Type::Struct(s) => write!(f, "{}", s.name.name),
-			Type::Array(v) => write!(f, "Array<{}>", v),
+			Type::Array(v) => {
+				// special case: json array with known data
+				if let Type::Json(Some(data)) = &**v {
+					write!(f, "{data}")
+				} else {
+					write!(f, "Array<{v}>")
+				}
+			}
 			Type::MutArray(v) => write!(f, "MutArray<{}>", v),
 			Type::Map(v) => write!(f, "Map<{}>", v),
 			Type::MutMap(v) => write!(f, "MutMap<{}>", v),
@@ -955,7 +1035,7 @@ impl TypeRef {
 	}
 
 	pub fn is_json(&self) -> bool {
-		if let Type::Json | Type::MutJson = **self {
+		if let Type::Json(_) | Type::MutJson = **self {
 			return true;
 		} else {
 			false
@@ -1053,7 +1133,7 @@ impl TypeRef {
 			Type::String => true,
 			Type::Duration => true,
 			Type::Boolean => true,
-			Type::Json => true,
+			Type::Json(_) => true,
 			Type::Nil => true,
 			Type::Array(v) => v.is_capturable(),
 			Type::Map(v) => v.is_capturable(),
@@ -1104,14 +1184,41 @@ impl TypeRef {
 	}
 
 	pub fn is_json_legal_value(&self) -> bool {
-		match **self {
+		match &**self {
 			Type::Number => true,
 			Type::String => true,
 			Type::Boolean => true,
-			Type::Inferred(..) => false,
-			Type::Json | Type::MutJson => true,
+			Type::MutJson | Type::Json(None) => true,
+			Type::Inferred(..) => true,
 			Type::Array(v) => v.is_json_legal_value(),
 			Type::Optional(v) => v.is_json_legal_value(),
+			Type::Struct(ref s) => {
+				for (_, t) in s.fields(true) {
+					if !t.is_json_legal_value() {
+						return false;
+					}
+				}
+				true
+			}
+			Type::Json(Some(v)) => match &v.kind {
+				JsonDataKind::Type(SpannedTypeInfo { type_, .. }) => type_.is_json_legal_value(),
+				JsonDataKind::Fields(fields) => {
+					for (_, SpannedTypeInfo { type_, .. }) in fields {
+						if !type_.is_json_legal_value() {
+							return false;
+						}
+					}
+					true
+				}
+				JsonDataKind::List(list) => {
+					for SpannedTypeInfo { type_, .. } in list {
+						if !type_.is_json_legal_value() {
+							return false;
+						}
+					}
+					true
+				}
+			},
 			_ => false,
 		}
 	}
@@ -1141,6 +1248,13 @@ struct ResolvedExpression {
 	type_: TypeRef,
 	phase: Phase,
 }
+
+/// File-unique identifier for each expression. This is an index of the Types.expr_types vec.
+/// After type checking, each expression will have a type in that vec.
+pub type ExprId = usize;
+/// File-unique identifier for each necessary inference while type checking. This is an index of the Types.inferences vec.
+/// There will always be an entry for each InferenceId.
+pub type InferenceId = usize;
 pub struct Types {
 	// TODO: Remove the box and change TypeRef and NamespaceRef to just be indices into the types array and namespaces array respectively
 	// Note: we need the box so reallocations of the vec while growing won't change the addresses of the types since they are referenced from the TypeRef struct
@@ -1161,6 +1275,7 @@ pub struct Types {
 
 	inferences: Vec<Option<TypeRef>>,
 	type_for_expr: Vec<Option<ResolvedExpression>>,
+	json_literal_casts: IndexMap<ExprId, TypeRef>,
 }
 
 impl Types {
@@ -1178,7 +1293,7 @@ impl Types {
 		let anything_idx = types.len() - 1;
 		types.push(Box::new(Type::Void));
 		let void_idx = types.len() - 1;
-		types.push(Box::new(Type::Json));
+		types.push(Box::new(Type::Json(None)));
 		let json_idx = types.len() - 1;
 		types.push(Box::new(Type::MutJson));
 		let mut_json_idx = types.len() - 1;
@@ -1208,6 +1323,7 @@ impl Types {
 			nil_idx,
 			err_idx,
 			type_for_expr: Vec::new(),
+			json_literal_casts: IndexMap::new(),
 			inferences: Vec::new(),
 		}
 	}
@@ -1256,11 +1372,13 @@ impl Types {
 	pub fn maybe_unwrap_inference(&self, t: TypeRef) -> TypeRef {
 		if let Type::Inferred(id) = &*t {
 			if let Some(t) = self.get_inference_by_id(*id) {
-				return self.maybe_unwrap_inference(t);
+				self.maybe_unwrap_inference(t)
+			} else {
+				t
 			}
+		} else {
+			t
 		}
-
-		t
 	}
 
 	/// If the given type is inferred and the real type is known, return it
@@ -1273,7 +1391,7 @@ impl Types {
 	}
 
 	/// If the real type is known for the given inference id, return it
-	pub fn get_inference_by_id(&self, id: usize) -> Option<TypeRef> {
+	pub fn get_inference_by_id(&self, id: InferenceId) -> Option<TypeRef> {
 		if let Some(t) = self.inferences.get(id).expect("Inference id out of bounds") {
 			return Some(*t);
 		}
@@ -1281,7 +1399,7 @@ impl Types {
 		None
 	}
 
-	pub fn update_inferred_type(&mut self, id: usize, t: TypeRef) {
+	pub fn update_inferred_type(&mut self, id: InferenceId, t: TypeRef) {
 		let mut new_type = t;
 		if let Type::Inferred(n) = &*new_type {
 			if *n != id {
@@ -1291,7 +1409,19 @@ impl Types {
 
 		let existing_type = self.inferences.get_mut(id).expect("Inference id out of bounds");
 
-		assert!(existing_type.is_none(), "Inference id already has a type");
+		if let Some(existing_type) = existing_type {
+			// if the types are the same, ok, otherwise error
+			if std::ptr::eq(&**existing_type, &*new_type) {
+				// this can happen when we have a type that can have multiple references to the same inference inside it
+				// e.g. function, json
+				return;
+			} else {
+				report_diagnostic(Diagnostic {
+					message: format!("Inferred type {new_type} conflicts with already inferred type {existing_type}"),
+					span: None,
+				});
+			}
+		}
 
 		existing_type.replace(new_type);
 	}
@@ -1302,7 +1432,7 @@ impl Types {
 		self.add_type(Type::Inferred(id))
 	}
 
-	pub fn as_inference(&mut self, t: TypeRef) -> Option<usize> {
+	pub fn as_inference(&mut self, t: TypeRef) -> Option<InferenceId> {
 		match *t {
 			Type::Inferred(id) => Some(id),
 			_ => None,
@@ -1406,6 +1536,11 @@ impl Types {
 			.type_for_expr
 			.get(expr.id)
 			.and_then(|t| t.as_ref().map(|t| t.phase))
+	}
+
+	/// Get the type that a JSON literal expression was cast to.
+	pub fn get_type_from_json_cast(&self, expr_id: ExprId) -> Option<&TypeRef> {
+		self.json_literal_casts.get(&expr_id)
 	}
 
 	/// Given an unqualified type name of a builtin type, return the full type info.
@@ -1966,7 +2101,12 @@ impl<'a> TypeChecker<'a> {
 					self.resolve_type_annotation(type_, env)
 				} else {
 					if self.in_json > 0 {
-						self.types.add_type(Type::Array(self.types.json()))
+						let json_data = JsonData {
+							expression_id: exp.id,
+							kind: JsonDataKind::List(vec![]),
+						};
+						let inner_type = self.types.add_type(Type::Json(Some(json_data)));
+						self.types.add_type(Type::Array(inner_type))
 					} else {
 						let inner_type = self.types.make_inference();
 						self.types.add_type(Type::Array(inner_type))
@@ -1985,6 +2125,14 @@ impl<'a> TypeChecker<'a> {
 				// Verify all types are the same as the inferred type
 				for v in items.iter() {
 					let (t, _) = self.type_check_exp(v, env);
+					if let Type::Json(Some(JsonData { ref mut kind, .. })) = &mut *element_type {
+						if let JsonDataKind::List(ref mut json_list) = kind {
+							json_list.push(SpannedTypeInfo {
+								type_: t,
+								span: v.span(),
+							});
+						}
+					}
 					element_type = self.check_json_serializable_or_validate_type(t, element_type, v);
 				}
 
@@ -2047,7 +2195,7 @@ impl<'a> TypeChecker<'a> {
 				}
 
 				self.in_json += 1;
-				self.type_check_exp(&element, env);
+				let (known_type, _) = self.type_check_exp(&element, env);
 				self.in_json -= 1;
 
 				// When we are no longer in a Json literal, we reset the is_in_mut_json flag
@@ -2058,15 +2206,30 @@ impl<'a> TypeChecker<'a> {
 				if *is_mut {
 					(self.types.mut_json(), env.phase)
 				} else {
-					(self.types.json(), env.phase)
+					if known_type.is_json() {
+						(known_type, env.phase)
+					} else {
+						(
+							self.types.add_type(Type::Json(Some(JsonData {
+								expression_id: exp.id,
+								kind: JsonDataKind::Type(SpannedTypeInfo {
+									type_: known_type,
+									span: element.span(),
+								}),
+							}))),
+							env.phase,
+						)
+					}
 				}
 			}
 			ExprKind::JsonMapLiteral { fields } => {
-				fields.iter().for_each(|(_, v)| {
-					let (t, _) = self.type_check_exp(v, env);
-					// Ensure we dont allow MutJson to Json or vice versa
-					match *t {
-						Type::Json => {
+				let mut known_types = IndexMap::new();
+				fields.iter().for_each(|(name, v)| {
+					let (known_type, _) = self.type_check_exp(v, env);
+					known_types.insert(name.clone(), SpannedTypeInfo { type_: known_type, span: v.span() });
+					// Ensure we don't allow MutJson to Json or vice versa
+					match *known_type {
+						Type::Json(_) => {
 							if self.is_in_mut_json {
 								self.spanned_error(
 									v,
@@ -2086,18 +2249,24 @@ impl<'a> TypeChecker<'a> {
 						_ => {}
 					};
 
-          if !t.is_json_legal_value() {
+          if self.is_in_mut_json && !known_type.is_json_legal_value() {
             self.spanned_error(
               v,
               format!(
                 "Expected \"Json\" elements to be Json values (https://www.json.org/json-en.html), but got \"{}\" which is not a Json value",
-                t
+                known_type
               ),
             );
-          }
+					}
 				});
 
-				(self.types.json(), env.phase)
+				(
+					self.types.add_type(Type::Json(Some(JsonData {
+						expression_id: exp.id,
+						kind: JsonDataKind::Fields(known_types),
+					}))),
+					env.phase,
+				)
 			}
 			ExprKind::MapLiteral { fields, type_ } => {
 				// Infer type based on either the explicit type or the value in one of the fields
@@ -2206,7 +2375,7 @@ impl<'a> TypeChecker<'a> {
 				return Some(self.types.error());
 			}
 
-			self.validate_structural_type(&arg_list.named_args, &arg_list_types.named_args, &last_arg, exp);
+			self.validate_structural_type(&arg_list_types.named_args, &last_arg, exp);
 		}
 
 		// Count number of optional parameters from the end of the function's params
@@ -2322,15 +2491,14 @@ impl<'a> TypeChecker<'a> {
 	/// Validate that a given map can be assigned to a variable of given struct type
 	fn validate_structural_type(
 		&mut self,
-		object: &IndexMap<Symbol, Expr>,
-		object_types: &IndexMap<Symbol, TypeRef>,
+		object_types: &IndexMap<Symbol, SpannedTypeInfo>,
 		expected_type: &TypeRef,
 		value: &impl Spanned,
 	) {
-		let expected_struct = if let Some(expected_struct) = expected_type.as_struct() {
+		let expected_struct = if let Some(expected_struct) = expected_type.maybe_unwrap_option().as_struct() {
 			expected_struct
 		} else {
-			self.spanned_error(value, "Named arguments provided for non-struct argument");
+			self.spanned_error(value, format!("{expected_type} is not a struct so it has no fields"));
 			return;
 		};
 
@@ -2360,9 +2528,17 @@ impl<'a> TypeChecker<'a> {
 			)
 		}) {
 			if let Some((symb, expected_field_type)) = field_map.get(&k) {
-				let provided_exp = object.get(*symb).unwrap();
 				let t = object_types.get(*symb).unwrap();
-				self.validate_type(*t, *expected_field_type, provided_exp);
+				let t = if let Type::Json(Some(JsonData {
+					kind: JsonDataKind::Type(type_info),
+					..
+				})) = &*t.type_
+				{
+					type_info
+				} else {
+					t
+				};
+				self.validate_type(t.type_, *expected_field_type, &t.span);
 			} else if !v.is_option() {
 				self.spanned_error(
 					value,
@@ -2386,7 +2562,7 @@ impl<'a> TypeChecker<'a> {
 			return self.validate_type(actual_type, expected_type, exp);
 		}
 
-		if !actual_type.is_json_legal_value() {
+		if self.is_in_mut_json && !actual_type.is_json_legal_value() {
 			self.spanned_error(
 				exp,
 				format!(
@@ -2397,7 +2573,7 @@ impl<'a> TypeChecker<'a> {
 			return self.types.error();
 		}
 
-		actual_type
+		expected_type
 	}
 
 	/// Validate that the given type is a subtype (or same) as the expected type. If not, add an error
@@ -2447,6 +2623,57 @@ impl<'a> TypeChecker<'a> {
 		if expected_types.iter().any(|t| t.is_json()) {
 			if return_type.is_json_legal_value() {
 				return return_type;
+			}
+		}
+
+		// if the actual type is an empty array of json, it can be assigned to any array
+		let mut json_type = return_type;
+		if let Type::Array(inner) = **return_type.maybe_unwrap_option() {
+			if let Type::Json(Some(JsonData {
+				kind: JsonDataKind::List(list),
+				..
+			})) = &*inner
+			{
+				if list.is_empty() && expected_types.iter().all(|t| matches!(**t, Type::Array(_))) {
+					return return_type;
+				}
+				json_type = inner;
+			}
+		}
+
+		// if the actual type is a Json with known data, we can attempt to structurally type check
+		if expected_types.len() == 1 {
+			let expected_type = self.types.maybe_unwrap_inference(expected_types[0]);
+			let expected_type_unwrapped = expected_type.maybe_unwrap_option();
+			dbg!(
+				expected_type_unwrapped.is_json_legal_value() || expected_type_unwrapped.is_struct(),
+				expected_type_unwrapped,
+			);
+			if let Type::Json(Some(data)) = &**json_type.maybe_unwrap_option() {
+				if expected_type_unwrapped.is_json_legal_value() || expected_type_unwrapped.is_struct() {
+					// we don't need to check the json-ability of this expr later because we know it's legal or it's being used as a struct
+					self.types.json_literal_casts.insert(data.expression_id, expected_type);
+				}
+				match &data.kind {
+					JsonDataKind::Type(t) => {
+						self.validate_type(t.type_, expected_type, span);
+						return return_type;
+					}
+					JsonDataKind::Fields(fields) => {
+						if expected_type_unwrapped.is_struct() {
+							self.validate_structural_type(fields, &expected_type, span);
+							return return_type;
+						}
+					}
+					JsonDataKind::List(list) => {
+						if let Type::Array(expected_inner) = **expected_type_unwrapped {
+							for t in list {
+								self.validate_type(t.type_, expected_inner, &t.span);
+							}
+							return return_type;
+						}
+					}
+				};
 			}
 		}
 
@@ -2625,7 +2852,13 @@ impl<'a> TypeChecker<'a> {
 			.iter()
 			.map(|(sym, expr)| {
 				let arg_type = self.type_check_exp(&expr, env).0;
-				(sym.clone(), arg_type)
+				(
+					sym.clone(),
+					SpannedTypeInfo {
+						type_: arg_type,
+						span: expr.span.clone(),
+					},
+				)
 			})
 			.collect::<IndexMap<_, _>>();
 
@@ -2650,7 +2883,7 @@ impl<'a> TypeChecker<'a> {
 				type_,
 			} => {
 				let explicit_type = type_.as_ref().map(|t| self.resolve_type_annotation(t, env));
-				let (inferred_type, _) = self.type_check_exp(initial_value, env);
+				let (mut inferred_type, _) = self.type_check_exp(initial_value, env);
 				if inferred_type.is_void() {
 					self.spanned_error(
 						var_name,
@@ -2663,11 +2896,23 @@ impl<'a> TypeChecker<'a> {
 						"Cannot assign nil value to variables without explicit optional type",
 					);
 				}
+				if *reassignable && inferred_type.is_json() {
+					if let Type::Json(ref mut data) = *inferred_type {
+						// We do not have the required analysis to know the type of the Json data after reassignment
+						data.take();
+					}
+				}
 				if let Some(explicit_type) = explicit_type {
 					self.validate_type(inferred_type, explicit_type, initial_value);
+					let final_type = if explicit_type.is_json() && inferred_type.is_json() {
+						// If both types are Json, use the inferred type in case it has more information
+						inferred_type
+					} else {
+						explicit_type
+					};
 					match env.define(
 						var_name,
-						SymbolKind::make_free_variable(var_name.clone(), explicit_type, *reassignable, env.phase),
+						SymbolKind::make_free_variable(var_name.clone(), final_type, *reassignable, env.phase),
 						StatementIdx::Index(stmt.idx),
 					) {
 						Err(type_error) => {
@@ -4148,15 +4393,14 @@ impl<'a> TypeChecker<'a> {
 				};
 
 				// Check if the object is an optional type. If it is ensure the use of optional chaining.
-				let object_type = self.types.get_expr_type(object);
-				let object_is_option = object_type.is_option();
+				let object_is_option = instance_type.is_option();
 
 				if object_is_option && !optional_accessor {
 					self.spanned_error(
 						object,
 						format!(
 							"Property access on optional type \"{}\" requires optional accessor: \"?.\"",
-							object_type
+							instance_type
 						),
 					);
 				}
@@ -4300,7 +4544,7 @@ impl<'a> TypeChecker<'a> {
 				let new_class = self.hydrate_class_type_arguments(env, WINGSDK_MUT_MAP, vec![t]);
 				self.get_property_from_class_like(new_class.as_class().unwrap(), property)
 			}
-			Type::Json => self.get_property_from_class_like(
+			Type::Json(_) => self.get_property_from_class_like(
 				env
 					.lookup_nested_str(WINGSDK_JSON, None)
 					.unwrap()
@@ -4703,6 +4947,11 @@ pub fn import_udt_from_jsii(
 pub fn fully_qualify_std_type(type_: &str) -> std::string::String {
 	// Additionally, this doesn't handle for generics
 	let type_name = type_.to_string();
+	let type_name = if let Some((prefix, _)) = type_name.split_once(" ") {
+		prefix
+	} else {
+		&type_name
+	};
 	let type_name = if let Some((prefix, _)) = type_name.split_once("<") {
 		prefix
 	} else {
