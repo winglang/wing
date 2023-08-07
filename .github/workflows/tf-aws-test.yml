@@ -64,7 +64,7 @@ jobs:
           node-version: 18
       - name: Install winglang globally
         run: npm install -g winglang
-      - name: Check for package.json file
+      - name: Installing external js modules
         run: | 
           cd examples/tests/sdk_tests
           npm install
@@ -75,13 +75,13 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
       - name: Execute wing test in matrix directory
-        # env:
-        #   TF_LOG: info
-        #   TF_LOG_PATH: ${{ runner.workspace }}/terraform.log
-        run: wing test -t sim ${{ matrix.test.directory }}/*.w
-      # - name: Output Terraform log
-        # if: failure()
-        # run: cat ${{ runner.workspace }}/terraform.log
+        env:
+          TF_LOG: info
+          TF_LOG_PATH: ${{ runner.workspace }}/terraform.log
+        run: wing test -t tf-aws ${{ matrix.test.directory }}/*.w
+      - name: Output Terraform log
+        if: failure()
+        run: cat ${{ runner.workspace }}/terraform.log
     
     
     # steps:
