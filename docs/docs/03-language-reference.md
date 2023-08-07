@@ -264,6 +264,9 @@ to assign it to a variable of that type with no runtime cost:
 ```TS
 let j = Json "hello";
 let s: str = j;
+
+struct J2 { a: num; }
+let j2: J2 = { a: 2 }
 ```
 
 This can only be done when the `Json` literal is present in the program. Otherwise, we cannot
