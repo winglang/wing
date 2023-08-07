@@ -6,7 +6,7 @@ on:
   workflow_dispatch: {}
   push:
     branches:
-      -tsuf/sdk-spec-tests-parallel-gh-action
+      - tsuf/sdk-spec-tests-parallel-gh-action
 
 env:
   AWS_REGION : "us-east-1"
