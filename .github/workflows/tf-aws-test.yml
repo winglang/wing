@@ -28,7 +28,7 @@ jobs:
       run: |
         dirs=$(ls -d examples/*/ | sed 's/\/$//' | grep -v "provider-specific" | jq -R -s -c 'split("\n")[:-1]')
         processed_dirs=$(echo "{ \"directory\": $dirs }" | jq -c '[ .directory[] | {directory: ., name: (split("/") | last)}]')
-        wrapped_dirs=$(echo "{ \"example\": $processed_dirs }" | jq -c .)
+        wrapped_dirs=$(echo "{ \"sdk_tests\": $processed_dirs }" | jq -c .)
         echo "DIRS=$wrapped_dirs" >> $GITHUB_ENV
   
     - name: Pass environment variable to output
