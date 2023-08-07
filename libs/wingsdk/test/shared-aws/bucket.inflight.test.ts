@@ -8,6 +8,7 @@ import {
   ListObjectsV2Command,
   PutObjectCommand,
   S3Client,
+  NoSuchKey,
 } from "@aws-sdk/client-s3";
 import { SdkStream } from "@aws-sdk/types";
 import { sdkStreamMixin } from "@aws-sdk/util-stream-node";
@@ -359,20 +360,13 @@ test("tryGet an existing object from the bucket", async () => {
 });
 
 test("tryGet a non-existent object from the bucket", async () => {
-  // ERROR
-  class NoSuchKey extends Error {
-    constructor(message) {
-      super(message);
-      this.name = "NoSuchKey";
-    }
-  }
   // GIVEN
   const BUCKET_NAME = "BUCKET_NAME";
   const KEY = "KEY";
   const VALUE = "VALUE";
   s3Mock
     .on(GetObjectCommand, { Bucket: BUCKET_NAME, Key: KEY })
-    .rejects(new NoSuchKey("fake error"));
+    .rejects(new NoSuchKey({ message: "fake error", $metadata: {} }));
   s3Mock.on(HeadObjectCommand, { Bucket: BUCKET_NAME, Key: KEY }).resolves({});
 
   // WHEN

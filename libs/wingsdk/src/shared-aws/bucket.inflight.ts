@@ -13,6 +13,7 @@ import {
   GetPublicAccessBlockCommandOutput,
   S3Client,
   GetObjectOutput,
+  NoSuchKey,
 } from "@aws-sdk/client-s3";
 import { BucketDeleteOptions, IBucketClient } from "../cloud";
 import { Duration, Json } from "../std";
@@ -108,8 +109,8 @@ export class BucketClient implements IBucketClient {
     let resp: GetObjectOutput;
     try {
       resp = await this.s3Client.send(command);
-    } catch (e: any) {
-      if (e.name === "NoSuchKey") {
+    } catch (e) {
+      if (e instanceof NoSuchKey) {
         return undefined;
       }
       throw new Error((e as Error).stack);
@@ -169,13 +170,12 @@ export class BucketClient implements IBucketClient {
 
     try {
       await this.s3Client.send(command);
-    } catch (er) {
-      const error = er as any;
-      if (!mustExist && error.name === "NoSuchKey") {
+    } catch (e: any) {
+      if (!mustExist && e instanceof NoSuchKey) {
         return;
       }
 
-      throw new Error(`Unable to delete "${key}": ${error.message}`);
+      throw new Error(`Unable to delete "${key}": ${e.message}`);
     }
   }
 
