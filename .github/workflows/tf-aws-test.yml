@@ -80,7 +80,7 @@ jobs:
         # env:
         #   TF_LOG: info
         #   TF_LOG_PATH: ${{ runner.workspace }}/terraform.log
-        run: cd ${{ matrix.example.directory }} && wing test -t sim /*.w
+        run: wing test -t sim ${{ matrix.example.directory }}/*.w
       # - name: Output Terraform log
         # if: failure()
         # run: cat ${{ runner.workspace }}/terraform.log
