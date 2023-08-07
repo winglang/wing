@@ -2595,7 +2595,7 @@ impl<'a> TypeChecker<'a> {
 		if expected_types.len() == 1 {
 			// First check if the actual type is an inference that can be replaced with the expected type
 			if self.add_new_inference(&actual_type, &expected_types[0]) {
-				return_type = expected_types[0];
+				return_type = self.types.maybe_unwrap_inference(return_type);
 			} else {
 				// otherwise, check if the expected type is an inference that can be replaced with the actual type
 				self.add_new_inference(&expected_types[0], &actual_type);
@@ -2645,10 +2645,6 @@ impl<'a> TypeChecker<'a> {
 		if expected_types.len() == 1 {
 			let expected_type = self.types.maybe_unwrap_inference(expected_types[0]);
 			let expected_type_unwrapped = expected_type.maybe_unwrap_option();
-			dbg!(
-				expected_type_unwrapped.is_json_legal_value() || expected_type_unwrapped.is_struct(),
-				expected_type_unwrapped,
-			);
 			if let Type::Json(Some(data)) = &**json_type.maybe_unwrap_option() {
 				if expected_type_unwrapped.is_json_legal_value() || expected_type_unwrapped.is_struct() {
 					// we don't need to check the json-ability of this expr later because we know it's legal or it's being used as a struct
