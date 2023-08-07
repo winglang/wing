@@ -258,16 +258,24 @@ let jsonObj = Json {
 
 ##### 1.1.4.4 Assignment to native types
 
-We only allow implicit assignment from *safe* to *unsafe* types because otherwise we cannot
-guarantee safety (e.g. from `str` to `Json` but not from `Json` to `str`), so this won't work:
+If the `Json` object is statically known to structurally match a certain type, it is possible 
+to assign it to a variable of that type with no runtime cost:
 
 ```TS
 let j = Json "hello";
 let s: str = j;
+```
+
+This can only be done when the `Json` literal is present in the program. Otherwise, we cannot
+guarantee safety.
+
+```TS
+let response = http.get("/employees");
+let s: str = response;
 //           ^ cannot assign `Json` to `str`.
 ```
 
-To assign a `Json` to a strong-type variable, use the `fromJson()` static method on the target
+To dynamically assign a `Json` to a strong-type variable, use the `fromJson()` static method on the target
 type:
 
 ```TS

@@ -886,17 +886,10 @@ error: Expected type to be \\"inflight (key: str, type: BucketEventType): void\\
    |                               ^^^^ Expected type to be \\"inflight (key: str, type: BucketEventType): void\\", but got \\"inflight (request: ApiRequest): ApiResponse\\" instead
 
 
-error: Expected \\"Json\\" elements to be Json values (https://www.json.org/json-en.html), but got \\"Array<unknown>\\" which is not a Json value
-   --> ../../../examples/tests/invalid/inference.w:71:14
-   |
-71 | Json { cool: anotherEmptyArray };
-   |              ^^^^^^^^^^^^^^^^^ Expected \\"Json\\" elements to be Json values (https://www.json.org/json-en.html), but got \\"Array<unknown>\\" which is not a Json value
-
-
 error: Expected type to be \\"inflight (str): void\\", but got \\"inflight (arg1: num): unknown\\" instead
-   --> ../../../examples/tests/invalid/inference.w:85:37
+   --> ../../../examples/tests/invalid/inference.w:84:37
    |
-85 | let badFunc: inflight (str): void = inflight (arg1: num) => {};
+84 | let badFunc: inflight (str): void = inflight (arg1: num) => {};
    |                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected type to be \\"inflight (str): void\\", but got \\"inflight (arg1: num): unknown\\" instead
 
 
