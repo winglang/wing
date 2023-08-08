@@ -202,6 +202,36 @@ project.eslint!.addRules({
       ],
     },
   ],
+  // Makes sure that all methods and properties are marked with the right member accessibility- public, protected or private
+  "@typescript-eslint/explicit-member-accessibility": [
+    "error",
+    {
+      accessibility: "explicit",
+      overrides: {
+        accessors: "off",
+        constructors: "off",
+        methods: "explicit",
+        properties: "explicit",
+        parameterProperties: "explicit",
+      },
+    },
+  ],
+  // Makes sure comments and doc strings are capitalized
+  "capitalized-comments": [
+    "error",
+    "always",
+    {
+      line: {
+        // ignore everything
+        ignorePattern: ".*",
+      },
+      block: {
+        ignoreConsecutiveComments: true,
+        ignorePattern: "pragma|ignored",
+        ignoreInlineComments: true,
+      },
+    },
+  ],
 });
 
 project.npmignore?.addPatterns(".prettierignore", ".prettierrc.json", "*.tgz");

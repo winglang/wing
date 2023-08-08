@@ -112,7 +112,7 @@ export class App extends CoreApp {
    * This method returns a cleaned snapshot of the resulting CDK template
    * for unit testing.
    */
-  synth(): string {
+  public synth(): string {
     if (this.synthed) {
       return this.synthedOutput!;
     }

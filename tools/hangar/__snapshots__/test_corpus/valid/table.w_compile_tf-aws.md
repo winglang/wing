@@ -57,13 +57,13 @@
 ```js
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
-const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
-const ex = require('@winglang/sdk').ex;
+const std = $stdlib.std;
+const ex = $stdlib.ex;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
-    const t = this.node.root.newAbstract("@winglang/sdk.ex.Table",this,"ex.Table",{ name: "simple-table", primaryKey: "id", columns: Object.freeze({"id":ex.ColumnType.STRING,"name":ex.ColumnType.STRING,"age":ex.ColumnType.NUMBER}) });
+    const t = this.node.root.newAbstract("@winglang/sdk.ex.Table",this,"ex.Table",{ name: "simple-table", primaryKey: "id", columns: ({"id": ex.ColumnType.STRING,"name": ex.ColumnType.STRING,"age": ex.ColumnType.NUMBER}) });
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);

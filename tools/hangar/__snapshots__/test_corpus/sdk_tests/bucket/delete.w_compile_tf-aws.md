@@ -11,14 +11,14 @@ module.exports = function({ $b }) {
     }
     async handle() {
       let error = "";
-      const jsonObj1 = Object.freeze({"key1":"value1"});
+      const jsonObj1 = ({"key1": "value1"});
       (await $b.putJson("file1.json",jsonObj1));
       (await $b.delete("file1.txt"));
       {((cond) => {if (!cond) throw new Error("assertion failed: b.exists(\"file1.json\")")})((await $b.exists("file1.json")))};
       {((cond) => {if (!cond) throw new Error("assertion failed: b.exists(\"file2.txt\")")})((await $b.exists("file2.txt")))};
-      (await $b.delete("file1.json",Object.freeze({"mustExist":true})));
+      (await $b.delete("file1.json",{ mustExist: true }));
       try {
-        (await $b.delete("file1.json",Object.freeze({"mustExist":true})));
+        (await $b.delete("file1.json",{ mustExist: true }));
       }
       catch ($error_e) {
         const e = $error_e.message;
@@ -215,9 +215,9 @@ module.exports = function({ $b }) {
 ```js
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
-const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
-const cloud = require('@winglang/sdk').cloud;
+const std = $stdlib.std;
+const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);

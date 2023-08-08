@@ -10,9 +10,7 @@ module.exports = function({  }) {
       return $obj;
     }
     async handle() {
-      const s2 = {
-      "a": "foo",}
-      ;
+      const s2 = ({"a": "foo"});
       {((cond) => {if (!cond) throw new Error("assertion failed: s2.a == \"foo\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(s2.a,"foo")))};
     }
   }
@@ -162,8 +160,8 @@ module.exports = function({  }) {
 ```js
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
-const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
+const std = $stdlib.std;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
@@ -225,23 +223,12 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
     }
-    const x = {
-    "field0": "Sup",}
-    ;
-    const y = {
-    "field0": "hello",
-    "field1": 1,
-    "field2": "world",
-    "field3": {
-    "field0": "foo",}
-    ,}
-    ;
+    const x = ({"field0": "Sup"});
+    const y = ({"field0": "hello","field1": 1,"field2": "world","field3": ({"field0": "foo"})});
     {((cond) => {if (!cond) throw new Error("assertion failed: x.field0 == \"Sup\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(x.field0,"Sup")))};
     {((cond) => {if (!cond) throw new Error("assertion failed: y.field1 == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(y.field1,1)))};
     {((cond) => {if (!cond) throw new Error("assertion failed: y.field3.field0 == \"foo\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(y.field3.field0,"foo")))};
-    const s = {
-    "a": "Boom baby",}
-    ;
+    const s = ({"a": "Boom baby"});
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:struct definitions are phase independant",new $Closure1(this,"$Closure1"));
   }
 }

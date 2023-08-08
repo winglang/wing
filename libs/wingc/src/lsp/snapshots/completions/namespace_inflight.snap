@@ -77,13 +77,13 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 7
   documentation:
     kind: markdown
-    value: "```wing\nclass Util\n```\n---\nthe Http class is used for calling different HTTP methods and requesting and sending information online,  as well as testing public accessible resources."
+    value: "```wing\nclass Util\n```\n---\nThe Http class is used for calling different HTTP methods and requesting and sending information online,  as well as testing public accessible resources."
   sortText: gg|Util
 - label: RequestOptions
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct RequestOptions\n```\n---\nAn object containing any custom settings that you want to apply to the request.\n### Fields\n- `body?` — Any body that you want to add to your request.\n- `cache?` — The cache mode you want to use for the request.\n- `headers?` — Any headers you want to add to your request.\n- `method?` — The request method, e.g., GET, POST. The default is GET.\n- `redirect?` — he redirect mode to use: follow, error.\n- `referrer?` — A string specifying \"no-referrer\", client, or a URL."
+    value: "```wing\nstruct RequestOptions\n```\n---\nAn object containing any custom settings that you want to apply to the request.\n### Fields\n- `body?` — Any body that you want to add to your request.\n- `cache?` — The cache mode you want to use for the request.\n- `headers?` — Any headers you want to add to your request.\n- `method?` — The request method, e.g., GET, POST. The default is GET.\n- `redirect?` — The redirect mode to use: follow, error.\n- `referrer?` — A string specifying \"no-referrer\", client, or a URL."
   sortText: hh|RequestOptions
 - label: Response
   kind: 22

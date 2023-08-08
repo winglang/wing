@@ -61,13 +61,13 @@ async handle(message) {
               {
                 "direction": "inbound",
                 "implicit": false,
-                "relationship": "handle",
+                "relationship": "handle()",
                 "resource": "root/my_service-ServiceOnStartef2b13b9",
               },
               {
                 "direction": "inbound",
                 "implicit": false,
-                "relationship": "$inflight_init",
+                "relationship": "$inflight_init()",
                 "resource": "root/my_service-ServiceOnStartef2b13b9",
               },
             ],
@@ -106,7 +106,7 @@ async handle(message) {
               {
                 "direction": "outbound",
                 "implicit": false,
-                "relationship": "on_start",
+                "relationship": "onStart()",
                 "resource": "root/my_service-ServiceOnStartef2b13b9",
               },
             ],
@@ -142,19 +142,19 @@ async handle(message) {
               {
                 "direction": "outbound",
                 "implicit": false,
-                "relationship": "handle",
+                "relationship": "handle()",
                 "resource": "root/OnStartHandler",
               },
               {
                 "direction": "outbound",
                 "implicit": false,
-                "relationship": "$inflight_init",
+                "relationship": "$inflight_init()",
                 "resource": "root/OnStartHandler",
               },
               {
                 "direction": "inbound",
                 "implicit": false,
-                "relationship": "on_start",
+                "relationship": "onStart()",
                 "resource": "root/my_service",
               },
             ],
