@@ -21,7 +21,7 @@ source: libs/wingc/src/jsify/tests.rs
     
 ```
 
-## inflight.$Closure1-d8a4d687.js
+## inflight.$Closure1-01364893.js
 
 ```js
 module.exports = function({ $a_bucky }) {
@@ -39,7 +39,7 @@ module.exports = function({ $a_bucky }) {
 }
 ```
 
-## inflight.A-d8a4d687.js
+## inflight.A-01364893.js
 
 ```js
 module.exports = function({  }) {
@@ -70,7 +70,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.A-d8a4d687.js")({
+          require("./inflight.A-01364893.js")({
           })
         `);
       }
@@ -94,7 +94,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1-d8a4d687.js")({
+          require("./inflight.$Closure1-01364893.js")({
             $a_bucky: ${context._lift(a.bucky)},
           })
         `);
