@@ -21,8 +21,8 @@ export interface TestTreeProps {
   testList: TestItem[];
   handleRunAllTests: () => void;
   handleRunTest: (testPath: string) => void;
-  onSelectedItemsChange: (ids: string[]) => void;
-  selectedItems: string[];
+  onSelectedItemsChange?: (ids: string[]) => void;
+  selectedItems?: string[];
 }
 export const TestTree = ({
   testList,
