@@ -105,13 +105,13 @@ exports[`schedule behavior with cron 2`] = `
                     {
                       "direction": "inbound",
                       "implicit": false,
-                      "relationship": "handle",
+                      "relationship": "handle()",
                       "resource": "root/Default/Schedule-OnTick-c5395e41",
                     },
                     {
                       "direction": "inbound",
                       "implicit": false,
-                      "relationship": "$inflight_init",
+                      "relationship": "$inflight_init()",
                       "resource": "root/Default/Schedule-OnTick-c5395e41",
                     },
                   ],
@@ -174,13 +174,13 @@ exports[`schedule behavior with cron 2`] = `
                     {
                       "direction": "outbound",
                       "implicit": false,
-                      "relationship": "handle",
+                      "relationship": "handle()",
                       "resource": "root/Default/Handler",
                     },
                     {
                       "direction": "outbound",
                       "implicit": false,
-                      "relationship": "$inflight_init",
+                      "relationship": "$inflight_init()",
                       "resource": "root/Default/Handler",
                     },
                     {
@@ -449,13 +449,13 @@ exports[`schedule behavior with rate 2`] = `
                     {
                       "direction": "inbound",
                       "implicit": false,
-                      "relationship": "handle",
+                      "relationship": "handle()",
                       "resource": "root/Default/Schedule-OnTick-c5395e41",
                     },
                     {
                       "direction": "inbound",
                       "implicit": false,
-                      "relationship": "$inflight_init",
+                      "relationship": "$inflight_init()",
                       "resource": "root/Default/Schedule-OnTick-c5395e41",
                     },
                   ],
@@ -518,13 +518,13 @@ exports[`schedule behavior with rate 2`] = `
                     {
                       "direction": "outbound",
                       "implicit": false,
-                      "relationship": "handle",
+                      "relationship": "handle()",
                       "resource": "root/Default/Handler",
                     },
                     {
                       "direction": "outbound",
                       "implicit": false,
-                      "relationship": "$inflight_init",
+                      "relationship": "$inflight_init()",
                       "resource": "root/Default/Handler",
                     },
                     {
@@ -839,13 +839,13 @@ exports[`schedule with two functions 2`] = `
                     {
                       "direction": "inbound",
                       "implicit": false,
-                      "relationship": "handle",
+                      "relationship": "handle()",
                       "resource": "root/Default/Schedule-OnTick-7b33bcba",
                     },
                     {
                       "direction": "inbound",
                       "implicit": false,
-                      "relationship": "$inflight_init",
+                      "relationship": "$inflight_init()",
                       "resource": "root/Default/Schedule-OnTick-7b33bcba",
                     },
                   ],
@@ -868,13 +868,13 @@ exports[`schedule with two functions 2`] = `
                     {
                       "direction": "inbound",
                       "implicit": false,
-                      "relationship": "handle",
+                      "relationship": "handle()",
                       "resource": "root/Default/Schedule-OnTick-0a615500",
                     },
                     {
                       "direction": "inbound",
                       "implicit": false,
-                      "relationship": "$inflight_init",
+                      "relationship": "$inflight_init()",
                       "resource": "root/Default/Schedule-OnTick-0a615500",
                     },
                   ],
@@ -951,13 +951,13 @@ exports[`schedule with two functions 2`] = `
                     {
                       "direction": "outbound",
                       "implicit": false,
-                      "relationship": "handle",
+                      "relationship": "handle()",
                       "resource": "root/Default/Handler2",
                     },
                     {
                       "direction": "outbound",
                       "implicit": false,
-                      "relationship": "$inflight_init",
+                      "relationship": "$inflight_init()",
                       "resource": "root/Default/Handler2",
                     },
                     {
@@ -1043,13 +1043,13 @@ exports[`schedule with two functions 2`] = `
                     {
                       "direction": "outbound",
                       "implicit": false,
-                      "relationship": "handle",
+                      "relationship": "handle()",
                       "resource": "root/Default/Handler1",
                     },
                     {
                       "direction": "outbound",
                       "implicit": false,
-                      "relationship": "$inflight_init",
+                      "relationship": "$inflight_init()",
                       "resource": "root/Default/Handler1",
                     },
                     {

@@ -41,7 +41,7 @@ b.onCreate(inflight (key: str) => {
 });
 
 b.onEvent(inflight (key: str, event: cloud.BucketEventType) => { 
-  logHistory(key, "${event}()", Source.onEvent);
+  logHistory(key, "${event}", Source.onEvent);
 });
 
 let wait = inflight (pred: inflight (): bool): bool => {

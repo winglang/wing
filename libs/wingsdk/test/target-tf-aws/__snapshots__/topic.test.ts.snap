@@ -479,13 +479,13 @@ exports[`topic with subscriber function 3`] = `
                     {
                       "direction": "inbound",
                       "implicit": false,
-                      "relationship": "handle",
+                      "relationship": "handle()",
                       "resource": "root/Default/Topic-OnMessage-c5395e41",
                     },
                     {
                       "direction": "inbound",
                       "implicit": false,
-                      "relationship": "$inflight_init",
+                      "relationship": "$inflight_init()",
                       "resource": "root/Default/Topic-OnMessage-c5395e41",
                     },
                   ],
@@ -548,13 +548,13 @@ exports[`topic with subscriber function 3`] = `
                     {
                       "direction": "outbound",
                       "implicit": false,
-                      "relationship": "handle",
+                      "relationship": "handle()",
                       "resource": "root/Default/Handler",
                     },
                     {
                       "direction": "outbound",
                       "implicit": false,
-                      "relationship": "$inflight_init",
+                      "relationship": "$inflight_init()",
                       "resource": "root/Default/Handler",
                     },
                     {
