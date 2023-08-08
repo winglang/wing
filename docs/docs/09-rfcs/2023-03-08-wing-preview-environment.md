@@ -176,7 +176,29 @@ In our docs we have the following information:
   - The Wing Cloud projects and their config
   - The related Flyio projects
 
-#### Workflow: Processing GitHub Events
+#### Process: Sign Up and Sign In
+
+We can use the GitHub app as an OAuth provider for Wing Cloud. A set of pages will be needed:
+
+```mermaid
+sequenceDiagram
+    wing.cloud/login->>Wing Cloud Platform GitHub App: Redirect
+    Wing Cloud Platform GitHub App-->>Wing Cloud Platform GitHub App: Login to GitHub
+    Wing Cloud Platform GitHub App-->>wing.cloud/login/callback: Redirect (with some tokens)
+    wing.cloud/login/callback-->>wing.cloud/login/callback: Generate a new user ID on our tables, if it doesn't exist
+    wing.cloud/login/callback-->>wing.cloud/login/callback: Exchange tokens and encode them in a cookie for https://wing.cloud
+    wing.cloud/login/callback-)wing.cloud: Redirect (now with the authenticated cookie)
+```
+
+> **Important Note:** Since we don't ask for information during the sign up process, both the sign up and sign in flows are the same.
+
+#### Process: Authentication and Authorization
+
+The website https://wing.cloud will use a secure HTTP-only cookie that safely encodes a JWT containing the Wing Cloud user ID. We could use the Github user ID, but we may want to support other authentication providers in the future.
+
+Every possible interaction with the Wing Cloud will be through an API. Any request to the API will be authenticated using this cookie. The API will then use the user ID to check if the user has the necessary permissions to perform the action.
+
+#### Process: Processing GitHub Events
 
 A Cloud.Function will listen to GitHub events and will process them. Based on the event, the function will create, update or delete preview environments on Flyio.
 
@@ -209,9 +231,11 @@ graph LR
     fn --> rest[...]
 ```
 
-#### Workflow: Deleting Stale Environments
+The probot npm package will take care of ensuring the events received are legitimate.
 
-A scheduler will run every 24 hours and will delete stale environments.
+#### Process: Deleting Stale Environments
+
+A scheduler will run periodically and will delete stale environments.
 
 ```mermaid
 graph LR
@@ -221,7 +245,3 @@ graph LR
     scheduler -- On Tick --> fn
     fn -- Delete Preview Environment --> flyio
 ```
-
-#### Workflow: Authenticating Preview Environments
-
-TBD.
