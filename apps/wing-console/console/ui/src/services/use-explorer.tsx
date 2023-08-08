@@ -47,12 +47,9 @@ export const useExplorer = () => {
 
   const onSelectedItemsChange = useCallback(
     (selectedItems: string[]) => {
-      if (selectedItems.length === 0 || !selectedItems[0]) {
-        return;
-      }
       setSelectedItems(selectedItems);
       setSelectedNode.mutate({
-        resourcePath: selectedItems[0],
+        resourcePath: selectedItems[0] ?? "",
       });
     },
     [setSelectedNode, setSelectedItems],
