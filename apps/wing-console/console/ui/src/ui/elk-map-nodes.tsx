@@ -151,10 +151,10 @@ export const ContainerNode = ({
               <div
                 className={classNames(
                   "leading-tight",
-                  "text-xs",
                   "truncate",
                   "transition-all",
                   theme.text1,
+                  (display?.name && "font-mono text-2xs") || "text-xs",
                 )}
               >
                 {display?.name || props.name}
