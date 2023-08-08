@@ -20,7 +20,7 @@ source: libs/wingc/src/jsify/tests.rs
     
 ```
 
-## inflight.Foo-ba3a5523.js
+## inflight.Foo-065bf60f.js
 
 ```js
 module.exports = function({ $b }) {
@@ -56,7 +56,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.Foo-ba3a5523.js")({
+          require("./inflight.Foo-065bf60f.js")({
             $b: ${context._lift(b)},
           })
         `);

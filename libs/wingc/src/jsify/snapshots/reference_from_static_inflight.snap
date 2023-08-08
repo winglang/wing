@@ -15,7 +15,7 @@ source: libs/wingc/src/jsify/tests.rs
     
 ```
 
-## inflight.MyType-fbf25e2f.js
+## inflight.MyType-89c7917e.js
 
 ```js
 module.exports = function({ $s }) {
@@ -47,7 +47,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.MyType-fbf25e2f.js")({
+          require("./inflight.MyType-89c7917e.js")({
             $s: ${context._lift(s)},
           })
         `);
