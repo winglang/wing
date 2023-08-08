@@ -1,6 +1,6 @@
 # [bring_jsii_path.w](../../../../../examples/tests/valid/bring_jsii_path.w) | compile | tf-aws
 
-## inflight.$Closure1-bf5a2189.js
+## inflight.$Closure1-f5412375.js
 ```js
 module.exports = function({ $greeting }) {
   class $Closure1 {
@@ -158,7 +158,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1-bf5a2189.js")({
+          require("./inflight.$Closure1-f5412375.js")({
             $greeting: ${context._lift(greeting)},
           })
         `);

@@ -1,6 +1,6 @@
 # [inc.w](../../../../../../examples/tests/sdk_tests/counter/inc.w) | compile | tf-aws
 
-## inflight.$Closure1-cfee8e4d.js
+## inflight.$Closure1-e07c8c75.js
 ```js
 module.exports = function({ $counter }) {
   class $Closure1 {
@@ -29,7 +29,7 @@ module.exports = function({ $counter }) {
 
 ```
 
-## inflight.$Closure2-cfee8e4d.js
+## inflight.$Closure2-e07c8c75.js
 ```js
 module.exports = function({ $counter }) {
   class $Closure2 {
@@ -285,7 +285,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1-cfee8e4d.js")({
+          require("./inflight.$Closure1-e07c8c75.js")({
             $counter: ${context._lift(counter)},
           })
         `);
@@ -316,7 +316,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure2-cfee8e4d.js")({
+          require("./inflight.$Closure2-e07c8c75.js")({
             $counter: ${context._lift(counter)},
           })
         `);

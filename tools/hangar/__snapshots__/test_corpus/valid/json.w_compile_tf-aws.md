@@ -1,6 +1,6 @@
 # [json.w](../../../../../examples/tests/valid/json.w) | compile | tf-aws
 
-## inflight.Foo-85f86925.js
+## inflight.Foo-f3aba240.js
 ```js
 module.exports = function({  }) {
   class Foo {
@@ -61,7 +61,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.Foo-85f86925.js")({
+          require("./inflight.Foo-f3aba240.js")({
           })
         `);
       }

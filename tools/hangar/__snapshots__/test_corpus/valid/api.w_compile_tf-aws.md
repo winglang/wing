@@ -1,6 +1,6 @@
 # [api.w](../../../../../examples/tests/valid/api.w) | compile | tf-aws
 
-## inflight.$Closure1-a88e889f.js
+## inflight.$Closure1-01fdac1e.js
 ```js
 module.exports = function({ $counter, $std_Json }) {
   class $Closure1 {
@@ -21,7 +21,7 @@ module.exports = function({ $counter, $std_Json }) {
 
 ```
 
-## inflight.$Closure2-a88e889f.js
+## inflight.$Closure2-01fdac1e.js
 ```js
 module.exports = function({ $api_url }) {
   class $Closure2 {
@@ -40,7 +40,7 @@ module.exports = function({ $api_url }) {
 
 ```
 
-## inflight.$Closure3-a88e889f.js
+## inflight.$Closure3-01fdac1e.js
 ```js
 module.exports = function({ $__parent_this_3_api_url }) {
   class $Closure3 {
@@ -59,7 +59,7 @@ module.exports = function({ $__parent_this_3_api_url }) {
 
 ```
 
-## inflight.A-a88e889f.js
+## inflight.A-01fdac1e.js
 ```js
 module.exports = function({  }) {
   class A {
@@ -482,7 +482,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1-a88e889f.js")({
+          require("./inflight.$Closure1-01fdac1e.js")({
             $counter: ${context._lift(counter)},
             $std_Json: ${context._lift(std.Json)},
           })
@@ -514,7 +514,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure2-a88e889f.js")({
+          require("./inflight.$Closure2-01fdac1e.js")({
             $api_url: ${context._lift(api.url)},
           })
         `);
@@ -551,7 +551,7 @@ class $Root extends $stdlib.std.Resource {
           }
           static _toInflightType(context) {
             return $stdlib.core.NodeJsCode.fromInline(`
-              require("./inflight.$Closure3-a88e889f.js")({
+              require("./inflight.$Closure3-01fdac1e.js")({
                 $__parent_this_3_api_url: ${context._lift(__parent_this_3.api.url)},
               })
             `);
@@ -578,7 +578,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.A-a88e889f.js")({
+          require("./inflight.A-01fdac1e.js")({
           })
         `);
       }

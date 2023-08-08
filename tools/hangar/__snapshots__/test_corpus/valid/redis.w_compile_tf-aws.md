@@ -1,6 +1,6 @@
 # [redis.w](../../../../../examples/tests/valid/redis.w) | compile | tf-aws
 
-## inflight.$Closure1-a1e8bde7.js
+## inflight.$Closure1-af885720.js
 ```js
 module.exports = function({ $r, $r2 }) {
   class $Closure1 {
@@ -487,7 +487,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1-a1e8bde7.js")({
+          require("./inflight.$Closure1-af885720.js")({
             $r: ${context._lift(r)},
             $r2: ${context._lift(r2)},
           })

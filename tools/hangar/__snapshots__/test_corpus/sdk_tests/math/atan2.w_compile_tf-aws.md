@@ -1,6 +1,6 @@
 # [atan2.w](../../../../../../examples/tests/sdk_tests/math/atan2.w) | compile | tf-aws
 
-## inflight.$Closure1-16e69afb.js
+## inflight.$Closure1-a3d0ec2c.js
 ```js
 module.exports = function({ $math_Util }) {
   class $Closure1 {
@@ -163,7 +163,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1-16e69afb.js")({
+          require("./inflight.$Closure1-a3d0ec2c.js")({
             $math_Util: ${context._lift(math.Util)},
           })
         `);

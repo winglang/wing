@@ -1,6 +1,6 @@
 # [resource_call_static.w](../../../../../examples/tests/valid/resource_call_static.w) | compile | tf-aws
 
-## inflight.$Closure1-108b3053.js
+## inflight.$Closure1-fc8e451c.js
 ```js
 module.exports = function({ $Another }) {
   class $Closure1 {
@@ -18,7 +18,7 @@ module.exports = function({ $Another }) {
 
 ```
 
-## inflight.Another-108b3053.js
+## inflight.Another-fc8e451c.js
 ```js
 module.exports = function({ $globalCounter }) {
   class Another {
@@ -191,7 +191,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.Another-108b3053.js")({
+          require("./inflight.Another-fc8e451c.js")({
             $globalCounter: ${context._lift(globalCounter)},
           })
         `);
@@ -222,7 +222,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1-108b3053.js")({
+          require("./inflight.$Closure1-fc8e451c.js")({
             $Another: ${context._lift(Another)},
           })
         `);

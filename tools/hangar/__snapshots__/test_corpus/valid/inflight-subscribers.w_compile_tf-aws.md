@@ -1,6 +1,6 @@
 # [inflight-subscribers.w](../../../../../examples/tests/valid/inflight-subscribers.w) | compile | tf-aws
 
-## inflight.$Closure1-d7da69e2.js
+## inflight.$Closure1-db75359b.js
 ```js
 module.exports = function({  }) {
   class $Closure1 {
@@ -18,7 +18,7 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.$Closure2-d7da69e2.js
+## inflight.$Closure2-db75359b.js
 ```js
 module.exports = function({  }) {
   class $Closure2 {
@@ -303,7 +303,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1-d7da69e2.js")({
+          require("./inflight.$Closure1-db75359b.js")({
           })
         `);
       }
@@ -327,7 +327,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure2-d7da69e2.js")({
+          require("./inflight.$Closure2-db75359b.js")({
           })
         `);
       }

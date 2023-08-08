@@ -1,24 +1,6 @@
 # [bring_local.w](../../../../../examples/tests/valid/bring_local.w) | compile | tf-aws
 
-## inflight.$Closure1-25318830.js
-```js
-module.exports = function({ $__parent_this_1_b }) {
-  class $Closure1 {
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
-    }
-    async handle() {
-      (await $__parent_this_1_b.put("data.txt","<empty>"));
-    }
-  }
-  return $Closure1;
-}
-
-```
-
-## inflight.$Closure1-3cbbf6f9.js
+## inflight.$Closure1-4c629e82.js
 ```js
 module.exports = function({ $store }) {
   class $Closure1 {
@@ -36,7 +18,25 @@ module.exports = function({ $store }) {
 
 ```
 
-## inflight.Q-aa96061e.js
+## inflight.$Closure1-63c7cfb6.js
+```js
+module.exports = function({ $__parent_this_1_b }) {
+  class $Closure1 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async handle() {
+      (await $__parent_this_1_b.put("data.txt","<empty>"));
+    }
+  }
+  return $Closure1;
+}
+
+```
+
+## inflight.Q-95d33055.js
 ```js
 module.exports = function({  }) {
   class Q {
@@ -48,7 +48,7 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.Store-25318830.js
+## inflight.Store-63c7cfb6.js
 ```js
 module.exports = function({  }) {
   class Store {
@@ -64,7 +64,7 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.Triangle-3cbbf6f9.js
+## inflight.Triangle-4c629e82.js
 ```js
 module.exports = function({  }) {
   class Triangle {
@@ -76,7 +76,7 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.Util-25318830.js
+## inflight.Util-4c629e82.js
 ```js
 module.exports = function({  }) {
   class Util {
@@ -88,7 +88,7 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.Util-3cbbf6f9.js
+## inflight.Util-63c7cfb6.js
 ```js
 module.exports = function({  }) {
   class Util {
@@ -377,7 +377,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1-3cbbf6f9.js")({
+          require("./inflight.$Closure1-4c629e82.js")({
             $store: ${context._lift(store)},
           })
         `);
@@ -410,7 +410,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.Triangle-3cbbf6f9.js")({
+          require("./inflight.Triangle-4c629e82.js")({
           })
         `);
       }
@@ -433,7 +433,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.Util-3cbbf6f9.js")({
+          require("./inflight.Util-4c629e82.js")({
           })
         `);
       }
@@ -477,7 +477,7 @@ module.exports = function({ $stdlib }) {
     }
     static _toInflightType(context) {
       return $stdlib.core.NodeJsCode.fromInline(`
-        require("./inflight.Util-25318830.js")({
+        require("./inflight.Util-63c7cfb6.js")({
         })
       `);
     }
@@ -507,7 +507,7 @@ module.exports = function({ $stdlib }) {
         }
         static _toInflightType(context) {
           return $stdlib.core.NodeJsCode.fromInline(`
-            require("./inflight.$Closure1-25318830.js")({
+            require("./inflight.$Closure1-63c7cfb6.js")({
               $__parent_this_1_b: ${context._lift(__parent_this_1.b)},
             })
           `);
@@ -534,7 +534,7 @@ module.exports = function({ $stdlib }) {
     }
     static _toInflightType(context) {
       return $stdlib.core.NodeJsCode.fromInline(`
-        require("./inflight.Store-25318830.js")({
+        require("./inflight.Store-63c7cfb6.js")({
         })
       `);
     }
@@ -585,7 +585,7 @@ module.exports = function({ $stdlib }) {
     }
     static _toInflightType(context) {
       return $stdlib.core.NodeJsCode.fromInline(`
-        require("./inflight.Q-aa96061e.js")({
+        require("./inflight.Q-95d33055.js")({
         })
       `);
     }

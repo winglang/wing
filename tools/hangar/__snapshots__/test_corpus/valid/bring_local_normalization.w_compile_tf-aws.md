@@ -1,6 +1,6 @@
 # [bring_local_normalization.w](../../../../../examples/tests/valid/bring_local_normalization.w) | compile | tf-aws
 
-## inflight.Bar-bd83ea8e.js
+## inflight.Bar-5d1fb023.js
 ```js
 module.exports = function({  }) {
   class Bar {
@@ -12,7 +12,7 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.Baz-dd41d2e9.js
+## inflight.Baz-38492ea1.js
 ```js
 module.exports = function({  }) {
   class Baz {
@@ -24,7 +24,7 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.Foo-4828c337.js
+## inflight.Foo-a950a411.js
 ```js
 module.exports = function({  }) {
   class Foo {
@@ -82,7 +82,7 @@ module.exports = function({ $stdlib }) {
     }
     static _toInflightType(context) {
       return $stdlib.core.NodeJsCode.fromInline(`
-        require("./inflight.Bar-bd83ea8e.js")({
+        require("./inflight.Bar-5d1fb023.js")({
         })
       `);
     }
@@ -117,7 +117,7 @@ module.exports = function({ $stdlib }) {
     }
     static _toInflightType(context) {
       return $stdlib.core.NodeJsCode.fromInline(`
-        require("./inflight.Baz-dd41d2e9.js")({
+        require("./inflight.Baz-38492ea1.js")({
         })
       `);
     }
@@ -160,7 +160,7 @@ module.exports = function({ $stdlib }) {
     }
     static _toInflightType(context) {
       return $stdlib.core.NodeJsCode.fromInline(`
-        require("./inflight.Foo-4828c337.js")({
+        require("./inflight.Foo-a950a411.js")({
         })
       `);
     }

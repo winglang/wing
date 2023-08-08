@@ -1,6 +1,6 @@
 # [angular_conversion.w](../../../../../../examples/tests/sdk_tests/math/angular_conversion.w) | compile | tf-aws
 
-## inflight.$Closure1-47abd6be.js
+## inflight.$Closure1-f3cf09df.js
 ```js
 module.exports = function({ $math_Util }) {
   class $Closure1 {
@@ -168,7 +168,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1-47abd6be.js")({
+          require("./inflight.$Closure1-f3cf09df.js")({
             $math_Util: ${context._lift(math.Util)},
           })
         `);

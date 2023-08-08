@@ -1,6 +1,6 @@
 # [nanoid.w](../../../../../../examples/tests/sdk_tests/util/nanoid.w) | compile | tf-aws
 
-## inflight.$Closure1-4a1b9583.js
+## inflight.$Closure1-d9eb877d.js
 ```js
 module.exports = function({ $util_Util }) {
   class $Closure1 {
@@ -170,7 +170,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1-4a1b9583.js")({
+          require("./inflight.$Closure1-d9eb877d.js")({
             $util_Util: ${context._lift(util.Util)},
           })
         `);

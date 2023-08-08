@@ -1,6 +1,6 @@
 # [captures.w](../../../../../examples/tests/valid/captures.w) | compile | tf-aws
 
-## inflight.$Closure1-4d398cc9.js
+## inflight.$Closure1-2ee423ee.js
 ```js
 module.exports = function({ $bucket1, $bucket2, $bucket3 }) {
   class $Closure1 {
@@ -472,7 +472,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1-4d398cc9.js")({
+          require("./inflight.$Closure1-2ee423ee.js")({
             $bucket1: ${context._lift(bucket1)},
             $bucket2: ${context._lift(bucket2)},
             $bucket3: ${context._lift(bucket3)},

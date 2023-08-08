@@ -1,6 +1,6 @@
 # [asin.w](../../../../../../examples/tests/sdk_tests/math/asin.w) | compile | tf-aws
 
-## inflight.$Closure1-3aacaef5.js
+## inflight.$Closure1-8f261835.js
 ```js
 module.exports = function({ $math_Util }) {
   class $Closure1 {
@@ -175,7 +175,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1-3aacaef5.js")({
+          require("./inflight.$Closure1-8f261835.js")({
             $math_Util: ${context._lift(math.Util)},
           })
         `);

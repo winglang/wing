@@ -1,6 +1,6 @@
 # [cot.w](../../../../../../examples/tests/sdk_tests/math/cot.w) | compile | tf-aws
 
-## inflight.$Closure1-e25e27d2.js
+## inflight.$Closure1-ce45e782.js
 ```js
 module.exports = function({ $math_Util }) {
   class $Closure1 {
@@ -160,7 +160,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1-e25e27d2.js")({
+          require("./inflight.$Closure1-ce45e782.js")({
             $math_Util: ${context._lift(math.Util)},
           })
         `);

@@ -1,6 +1,6 @@
 # [extern_implementation.w](../../../../../examples/tests/valid/extern_implementation.w) | compile | tf-aws
 
-## inflight.$Closure1-0b43f31b.js
+## inflight.$Closure1-84de453c.js
 ```js
 module.exports = function({ $f }) {
   class $Closure1 {
@@ -18,7 +18,7 @@ module.exports = function({ $f }) {
 
 ```
 
-## inflight.$Closure2-0b43f31b.js
+## inflight.$Closure2-84de453c.js
 ```js
 module.exports = function({ $f }) {
   class $Closure2 {
@@ -36,7 +36,7 @@ module.exports = function({ $f }) {
 
 ```
 
-## inflight.Foo-0b43f31b.js
+## inflight.Foo-84de453c.js
 ```js
 module.exports = function({  }) {
   class Foo {
@@ -276,7 +276,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.Foo-0b43f31b.js")({
+          require("./inflight.Foo-84de453c.js")({
           })
         `);
       }
@@ -300,7 +300,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1-0b43f31b.js")({
+          require("./inflight.$Closure1-84de453c.js")({
             $f: ${context._lift(f)},
           })
         `);
@@ -331,7 +331,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure2-0b43f31b.js")({
+          require("./inflight.$Closure2-84de453c.js")({
             $f: ${context._lift(f)},
           })
         `);

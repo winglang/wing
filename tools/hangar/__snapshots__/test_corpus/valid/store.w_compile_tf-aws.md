@@ -1,6 +1,6 @@
 # [store.w](../../../../../examples/tests/valid/store.w) | compile | tf-aws
 
-## inflight.$Closure1-25318830.js
+## inflight.$Closure1-63c7cfb6.js
 ```js
 module.exports = function({ $__parent_this_1_b }) {
   class $Closure1 {
@@ -18,7 +18,7 @@ module.exports = function({ $__parent_this_1_b }) {
 
 ```
 
-## inflight.Store-25318830.js
+## inflight.Store-63c7cfb6.js
 ```js
 module.exports = function({  }) {
   class Store {
@@ -34,7 +34,7 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.Util-25318830.js
+## inflight.Util-63c7cfb6.js
 ```js
 module.exports = function({  }) {
   class Util {
@@ -106,7 +106,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.Util-25318830.js")({
+          require("./inflight.Util-63c7cfb6.js")({
           })
         `);
       }
@@ -136,7 +136,7 @@ class $Root extends $stdlib.std.Resource {
           }
           static _toInflightType(context) {
             return $stdlib.core.NodeJsCode.fromInline(`
-              require("./inflight.$Closure1-25318830.js")({
+              require("./inflight.$Closure1-63c7cfb6.js")({
                 $__parent_this_1_b: ${context._lift(__parent_this_1.b)},
               })
             `);
@@ -163,7 +163,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.Store-25318830.js")({
+          require("./inflight.Store-63c7cfb6.js")({
           })
         `);
       }

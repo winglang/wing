@@ -1,6 +1,6 @@
 # [fibonacci.w](../../../../../../examples/tests/sdk_tests/math/fibonacci.w) | compile | tf-aws
 
-## inflight.$Closure1-5d3aefd1.js
+## inflight.$Closure1-9cc3cd55.js
 ```js
 module.exports = function({ $math_Util }) {
   class $Closure1 {
@@ -167,7 +167,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1-5d3aefd1.js")({
+          require("./inflight.$Closure1-9cc3cd55.js")({
             $math_Util: ${context._lift(math.Util)},
           })
         `);

@@ -1,6 +1,6 @@
 # [issue_2889.w](../../../../../examples/tests/valid/issue_2889.w) | compile | tf-aws
 
-## inflight.$Closure1-f3c83cb4.js
+## inflight.$Closure1-7ef8f85c.js
 ```js
 module.exports = function({ $std_Json }) {
   class $Closure1 {
@@ -19,7 +19,7 @@ module.exports = function({ $std_Json }) {
 
 ```
 
-## inflight.$Closure2-f3c83cb4.js
+## inflight.$Closure2-7ef8f85c.js
 ```js
 module.exports = function({ $api_url, $http_Util, $std_Json }) {
   class $Closure2 {
@@ -316,7 +316,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1-f3c83cb4.js")({
+          require("./inflight.$Closure1-7ef8f85c.js")({
             $std_Json: ${context._lift(std.Json)},
           })
         `);
@@ -341,7 +341,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure2-f3c83cb4.js")({
+          require("./inflight.$Closure2-7ef8f85c.js")({
             $api_url: ${context._lift(api.url)},
             $http_Util: ${context._lift(http.Util)},
             $std_Json: ${context._lift(std.Json)},

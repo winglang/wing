@@ -1,6 +1,6 @@
 # [call_static_of_myself.w](../../../../../examples/tests/valid/call_static_of_myself.w) | compile | tf-aws
 
-## inflight.$Closure1-aefcde80.js
+## inflight.$Closure1-036a5fae.js
 ```js
 module.exports = function({ $Bar, $Foo, $foo }) {
   class $Closure1 {
@@ -28,7 +28,7 @@ module.exports = function({ $Bar, $Foo, $foo }) {
 
 ```
 
-## inflight.Bar-aefcde80.js
+## inflight.Bar-036a5fae.js
 ```js
 module.exports = function({  }) {
   class Bar {
@@ -44,7 +44,7 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.Foo-aefcde80.js
+## inflight.Foo-036a5fae.js
 ```js
 module.exports = function({  }) {
   class Foo {
@@ -202,7 +202,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.Foo-aefcde80.js")({
+          require("./inflight.Foo-036a5fae.js")({
           })
         `);
       }
@@ -225,7 +225,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.Bar-aefcde80.js")({
+          require("./inflight.Bar-036a5fae.js")({
           })
         `);
       }
@@ -249,7 +249,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1-aefcde80.js")({
+          require("./inflight.$Closure1-036a5fae.js")({
             $Bar: ${context._lift(Bar)},
             $Foo: ${context._lift(Foo)},
             $foo: ${context._lift(foo)},

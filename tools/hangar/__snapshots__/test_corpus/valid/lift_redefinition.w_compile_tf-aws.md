@@ -1,6 +1,6 @@
 # [lift_redefinition.w](../../../../../examples/tests/valid/lift_redefinition.w) | compile | tf-aws
 
-## inflight.$Closure1-71890cfd.js
+## inflight.$Closure1-13cebb0b.js
 ```js
 module.exports = function({ $y }) {
   class $Closure1 {
@@ -158,7 +158,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1-71890cfd.js")({
+          require("./inflight.$Closure1-13cebb0b.js")({
             $y: ${context._lift(y)},
           })
         `);

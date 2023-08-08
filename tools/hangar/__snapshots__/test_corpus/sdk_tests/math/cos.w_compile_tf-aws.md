@@ -1,6 +1,6 @@
 # [cos.w](../../../../../../examples/tests/sdk_tests/math/cos.w) | compile | tf-aws
 
-## inflight.$Closure1-58a54233.js
+## inflight.$Closure1-5ea81c56.js
 ```js
 module.exports = function({ $math_Util }) {
   class $Closure1 {
@@ -162,7 +162,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1-58a54233.js")({
+          require("./inflight.$Closure1-5ea81c56.js")({
             $math_Util: ${context._lift(math.Util)},
           })
         `);

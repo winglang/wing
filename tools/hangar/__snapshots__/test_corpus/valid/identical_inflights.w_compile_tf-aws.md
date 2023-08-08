@@ -1,6 +1,6 @@
 # [identical_inflights.w](../../../../../examples/tests/valid/identical_inflights.w) | compile | tf-aws
 
-## inflight.$Closure1-da5263bf.js
+## inflight.$Closure1-2565c7b2.js
 ```js
 module.exports = function({  }) {
   class $Closure1 {
@@ -17,7 +17,7 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.$Closure2-da5263bf.js
+## inflight.$Closure2-2565c7b2.js
 ```js
 module.exports = function({  }) {
   class $Closure2 {
@@ -83,7 +83,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1-da5263bf.js")({
+          require("./inflight.$Closure1-2565c7b2.js")({
           })
         `);
       }
@@ -107,7 +107,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure2-da5263bf.js")({
+          require("./inflight.$Closure2-2565c7b2.js")({
           })
         `);
       }

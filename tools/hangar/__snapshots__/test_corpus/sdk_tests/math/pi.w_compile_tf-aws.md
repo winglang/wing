@@ -1,6 +1,6 @@
 # [pi.w](../../../../../../examples/tests/sdk_tests/math/pi.w) | compile | tf-aws
 
-## inflight.$Closure1-e8808376.js
+## inflight.$Closure1-38317e46.js
 ```js
 module.exports = function({ $math_Util }) {
   class $Closure1 {
@@ -18,7 +18,7 @@ module.exports = function({ $math_Util }) {
 
 ```
 
-## inflight.$Closure2-e8808376.js
+## inflight.$Closure2-38317e46.js
 ```js
 module.exports = function({ $circumference, $math_Util, $r }) {
   class $Closure2 {
@@ -175,7 +175,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1-e8808376.js")({
+          require("./inflight.$Closure1-38317e46.js")({
             $math_Util: ${context._lift(math.Util)},
           })
         `);
@@ -200,7 +200,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure2-e8808376.js")({
+          require("./inflight.$Closure2-38317e46.js")({
             $circumference: ${context._lift(circumference)},
             $math_Util: ${context._lift(math.Util)},
             $r: ${context._lift(r)},
