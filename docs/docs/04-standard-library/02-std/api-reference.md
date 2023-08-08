@@ -29,7 +29,7 @@ Immutable Array.
 | <code><a href="#@winglang/sdk.std.Array.indexOf">indexOf</a></code> | Returns the index of the first occurrence of searchElement found. |
 | <code><a href="#@winglang/sdk.std.Array.join">join</a></code> | Returns a new string containing the concatenated values in this array, separated by commas or a specified separator string. |
 | <code><a href="#@winglang/sdk.std.Array.lastIndexOf">lastIndexOf</a></code> | Returns the index of the last occurrence of searchElement found. |
-| <code><a href="#@winglang/sdk.std.Array.tryAt">tryAt</a></code> | Try to get the value at the given index. |
+| <code><a href="#@winglang/sdk.std.Array.tryAt">tryAt</a></code> | Get the value at the given index, returning nil if the index is out of bounds. |
 
 ---
 
@@ -144,7 +144,7 @@ to search for.
 tryAt(index: num): <T>
 ```
 
-Try to get the value at the given index.
+Get the value at the given index, returning nil if the index is out of bounds.
 
 ###### `index`<sup>Required</sup> <a name="index" id="@winglang/sdk.std.Array.tryAt.parameter.index"></a>
 

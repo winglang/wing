@@ -39,7 +39,7 @@ export class Array {
   }
 
   /**
-   * Try to get the value at the given index
+   * Get the value at the given index, returning nil if the index is out of bounds.
    *
    * @macro ($self$.at($args$))
    *
