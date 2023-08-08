@@ -41,7 +41,7 @@ export class Array {
   /**
    * Try to get the value at the given index
    *
-   * @macro ($self$[$args$])
+   * @macro ($self$.at($args$))
    *
    * @param index index of the value to get
    * @returns the value at the given index, or undefined if the index is out of bounds

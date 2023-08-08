@@ -3931,38 +3931,34 @@ impl<'a> TypeChecker<'a> {
 		} else {
 			// Handle generic return types
 			// TODO: If a generic class has a method that returns another generic, it must be a builtin
+			if let Type::Optional(t) = *type_to_maybe_replace {
+				let concrete_t = self.get_concrete_type_for_generic(t, types_map);
+				return self.types.add_type(Type::Optional(concrete_t));
+			}
 
-			match *type_to_maybe_replace {
-				Type::Optional(t) => {
-					let concrete_t = self.get_concrete_type_for_generic(t, types_map);
-					return self.types.add_type(Type::Optional(concrete_t));
-				}
-				_ => {
-					if let Some(c) = type_to_maybe_replace.as_class() {
-						if let Some(type_parameters) = &c.type_parameters {
-							// For now all our generics only have a single type parameter so use the first type parameter as our "T1"
-							let t1 = type_parameters[0];
-							let t1_replacement = *types_map
-								.get(&format!("{t1}"))
-								.filter(|(o, _)| t1.is_same_type_as(o))
-								.map(|(_, n)| n)
-								.expect("generic must have a type parameter");
-							let fqn = format!("{}.{}", WINGSDK_STD_MODULE, c.name.name);
+			if let Some(c) = type_to_maybe_replace.as_class() {
+				if let Some(type_parameters) = &c.type_parameters {
+					// For now all our generics only have a single type parameter so use the first type parameter as our "T1"
+					let t1 = type_parameters[0];
+					let t1_replacement = *types_map
+						.get(&format!("{t1}"))
+						.filter(|(o, _)| t1.is_same_type_as(o))
+						.map(|(_, n)| n)
+						.expect("generic must have a type parameter");
+					let fqn = format!("{}.{}", WINGSDK_STD_MODULE, c.name.name);
 
-							return match fqn.as_str() {
-								WINGSDK_MUT_ARRAY => self.types.add_type(Type::MutArray(t1_replacement)),
-								WINGSDK_ARRAY => self.types.add_type(Type::Array(t1_replacement)),
-								WINGSDK_MAP => self.types.add_type(Type::Map(t1_replacement)),
-								WINGSDK_MUT_MAP => self.types.add_type(Type::MutMap(t1_replacement)),
-								WINGSDK_SET => self.types.add_type(Type::Set(t1_replacement)),
-								WINGSDK_MUT_SET => self.types.add_type(Type::MutSet(t1_replacement)),
-								_ => {
-									self.unspanned_error(format!("\"{}\" is not a supported generic return type", fqn));
-									self.types.error()
-								}
-							};
+					return match fqn.as_str() {
+						WINGSDK_MUT_ARRAY => self.types.add_type(Type::MutArray(t1_replacement)),
+						WINGSDK_ARRAY => self.types.add_type(Type::Array(t1_replacement)),
+						WINGSDK_MAP => self.types.add_type(Type::Map(t1_replacement)),
+						WINGSDK_MUT_MAP => self.types.add_type(Type::MutMap(t1_replacement)),
+						WINGSDK_SET => self.types.add_type(Type::Set(t1_replacement)),
+						WINGSDK_MUT_SET => self.types.add_type(Type::MutSet(t1_replacement)),
+						_ => {
+							self.unspanned_error(format!("\"{}\" is not a supported generic return type", fqn));
+							self.types.error()
 						}
-					}
+					};
 				}
 			}
 		}
