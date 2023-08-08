@@ -61,7 +61,7 @@ The installation process is straightforward using GitHub application:
 
 For the production branch, there is a single preview environment that will constantly be up-to-date with the latest code committed.
 A link to the preview environment is available in the repository main page ("About" section).
-Production branch environment url structure is: `https://<gh-repository>-<gh-branch>-<entry-point>.wing.cloud.app`
+Production branch environment url structure is: `https://<gh-repository>-<gh-branch>-<entry-point>.wingcloud.app`
 
 #### Preview Environments for Pull Requests
 
@@ -70,7 +70,7 @@ provide a streamlined process for updating a pull request preview environment, e
 
 1. provide a real-time build and deployment status updates
 2. each entry point will have a seperated preview environment
-3. ensure a consistent and unique url for each preview environment. The url structure: `https://<gh-repository>-<gh-branch>-<entry-point>-<pr-number>.wing.cloud.app`
+3. ensure a consistent and unique url for each preview environment. The url structure: `https://<gh-repository>-<gh-branch>-<entry-point>-<pr-number>.wingcloud.app`
 4. provide the ability to download the preview environment deployment logs for debugging purposes in case of failure, logs urls structure is: `https://wing.cloud/gh-account/gh-repo/gh-branch/entry-file/logs/`
 
 PR comment example:
@@ -235,9 +235,42 @@ graph LR
 
 The probot npm package will take care of ensuring the events received are legitimate.
 
+#### Process: Creating Preview Environments
+
+When a GitHub event `pull_request.opened` is received, we will look for `*.main.w` files and create a preview environment for each of them. We will use the Flyio API to create a new project(s) and deploy the code to it (the Flyio specifics may change).
+
+During this process, we will also create new entries in the Cloud.Table to store the Flyio project ID, the GitHub PR ID, and the entry point.
+
+Additionally, new subdomains will be created for each preview environment:
+
+- `<gh-repository>-<nanoid>.wingcloud.app`
+- `<gh-repository>-<gh-branch>-<entry-point>.wingcloud.app`, as an alias of the above, if available. Otherwise, a random ID could be added somewhere, such as in `<gh-repository>-<gh-branch>-<nanoid>-<entry-point>.wingcloud.app`
+
+The technical details on how the subdomain resolution will work at DNS level are still to be determined.
+
+A special comment will be added to the PR with the list of preview environments and their status. The comment will be updated as the preview environments are created.
+
+#### Process: Updating Preview Environments
+
+When a GitHub event `pull_request.synchronize` is received, we will look again for `*.main.w` files. We will then update the Flyio project(s) with the new code.
+
+New entrypoints will require new preview environments to be created. We will use the same process as the one described in the previous section.
+
+Entrypoints that aren't there anymore will require the preview environment to be deleted. We will use the same process as the one described in the next section.
+
+The entries in the Cloud.Table will be updated to update the last time the preview environment was updated.
+
+The special comment in the PR will be updated accordingly.
+
+#### Process: Deleting Preview Environments
+
+When a GitHub event `pull_request.closed` is received, we will stop every Flyio project associated with the PR. We will also update the entries in the Cloud.Table to reflect this status.
+
+The special comment in the PR will be updated accordingly.
+
 #### Process: Deleting Stale Environments
 
-A scheduler will run periodically and will delete stale environments.
+A scheduler will run periodically and will delete stale environments (in a process similar to the one above).
 
 ```mermaid
 graph LR
