@@ -1,6 +1,6 @@
 # [reassignment.w](../../../../../examples/tests/valid/reassignment.w) | compile | tf-aws
 
-## inflight.R-254830df.js
+## inflight.R-85a23554.js
 ```js
 module.exports = function({  }) {
   class R {
@@ -67,7 +67,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.R-254830df.js")({
+          require("./inflight.R-85a23554.js")({
           })
         `);
       }

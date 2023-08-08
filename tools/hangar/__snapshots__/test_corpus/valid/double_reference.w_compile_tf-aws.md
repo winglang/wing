@@ -1,6 +1,6 @@
 # [double_reference.w](../../../../../examples/tests/valid/double_reference.w) | compile | tf-aws
 
-## inflight.$Closure1-0e19e446.js
+## inflight.$Closure1-265ad9b3.js
 ```js
 module.exports = function({ $bar, $bar_foo, $initCount }) {
   class $Closure1 {
@@ -20,7 +20,7 @@ module.exports = function({ $bar, $bar_foo, $initCount }) {
 
 ```
 
-## inflight.Bar-0e19e446.js
+## inflight.Bar-265ad9b3.js
 ```js
 module.exports = function({  }) {
   class Bar {
@@ -36,7 +36,7 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.Foo-0e19e446.js
+## inflight.Foo-265ad9b3.js
 ```js
 module.exports = function({ $initCount }) {
   class Foo {
@@ -211,7 +211,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.Foo-0e19e446.js")({
+          require("./inflight.Foo-265ad9b3.js")({
             $initCount: ${context._lift(initCount)},
           })
         `);
@@ -242,7 +242,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.Bar-0e19e446.js")({
+          require("./inflight.Bar-265ad9b3.js")({
           })
         `);
       }
@@ -276,7 +276,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1-0e19e446.js")({
+          require("./inflight.$Closure1-265ad9b3.js")({
             $bar: ${context._lift(bar)},
             $bar_foo: ${context._lift(bar.foo)},
             $initCount: ${context._lift(initCount)},

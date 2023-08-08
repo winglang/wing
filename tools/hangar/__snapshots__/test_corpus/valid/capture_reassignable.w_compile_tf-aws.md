@@ -1,6 +1,6 @@
 # [capture_reassignable.w](../../../../../examples/tests/valid/capture_reassignable.w) | compile | tf-aws
 
-## inflight.$Closure1-6568a497.js
+## inflight.$Closure1-14642631.js
 ```js
 module.exports = function({ $x }) {
   class $Closure1 {
@@ -18,7 +18,7 @@ module.exports = function({ $x }) {
 
 ```
 
-## inflight.$Closure2-6568a497.js
+## inflight.$Closure2-14642631.js
 ```js
 module.exports = function({ $handler }) {
   class $Closure2 {
@@ -175,7 +175,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1-6568a497.js")({
+          require("./inflight.$Closure1-14642631.js")({
             $x: ${context._lift(x)},
           })
         `);
@@ -206,7 +206,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure2-6568a497.js")({
+          require("./inflight.$Closure2-14642631.js")({
             $handler: ${context._lift(handler)},
           })
         `);
