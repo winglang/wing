@@ -128,7 +128,7 @@ export abstract class Resource extends Construct implements IResource {
    *
    * @internal
    */
-  static _registerTypeBind(host: IInflightHost, ops: string[]): void {
+  public static _registerTypeBind(host: IInflightHost, ops: string[]): void {
     // Do nothing by default
     host;
     ops;

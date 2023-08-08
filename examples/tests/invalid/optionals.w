@@ -2,10 +2,17 @@ let f = (x: num) => {
   // do something
 };
 
+let fOptional = (x: num?) => {
+  // do something
+};
+
 let x: num? = 1;
 
 f(x);
 //^ error: x is num? but f expects num
+
+fOptional("");
+//        ^^ error: expected num?, got str
 
 let y = true;
 if y? {

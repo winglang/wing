@@ -74,7 +74,7 @@ export abstract class Bucket extends Resource {
   public abstract addObject(key: string, body: string): void;
 
   /**
-   * creates a topic for subscribing to notification events
+   * Creates a topic for subscribing to notification events
    * @param actionType
    * @returns the created topi
    */
@@ -96,7 +96,7 @@ export abstract class Bucket extends Resource {
   }
 
   /**
-   * gets topic form the topics map, or creates if not exists
+   * Gets topic form the topics map, or creates if not exists
    * @param actionType
    * @returns
    */
@@ -108,7 +108,7 @@ export abstract class Bucket extends Resource {
   }
 
   /**
-   * resolves the path to the bucket.onevent.inflight file
+   * Resolves the path to the bucket.onevent.inflight file
    */
   protected eventHandlerLocation(): string {
     throw new Error(
@@ -117,7 +117,7 @@ export abstract class Bucket extends Resource {
   }
 
   /**
-   * creates an inflight handler from inflight code
+   * Creates an inflight handler from inflight code
    * @param eventType
    * @param inflight
    * @returns
@@ -139,7 +139,7 @@ export abstract class Bucket extends Resource {
   }
 
   /**
-   * creates a bucket event notifier
+   * Creates a bucket event notifier
    * @param eventNames the events to subscribe the inflight function to
    * @param inflight the code to run upon event
    * @param opts
@@ -316,31 +316,31 @@ export interface IBucketClient {
 }
 
 /**
- * on create event options
+ * `onCreate` event options
  */
 export interface BucketOnCreateProps {
-  /* elided */
+  /* Elided */
 }
 
 /**
- * on delete event options
+ * `onDelete` event options
  */
 export interface BucketOnDeleteProps {
-  /* elided */
+  /* Elided */
 }
 
 /**
- * on update event options
+ * `onUpdate` event options
  */
 export interface BucketOnUpdateProps {
-  /* elided */
+  /* Elided */
 }
 
 /**
- * on any event options
+ * `onEvent` options
  */
 export interface BucketOnEventProps {
-  /* elided */
+  /* Elided */
 }
 
 /**
@@ -365,33 +365,33 @@ export interface IBucketEventHandlerClient {
 }
 
 /**
- * on_event notification payload- will be in use after solving issue: https://github.com/winglang/wing/issues/1927
+ * On_event notification payload- will be in use after solving issue: https://github.com/winglang/wing/issues/1927
  */
 export interface BucketEvent {
   /**
-   * the bucket key that triggered the event
+   * The bucket key that triggered the event
    */
   readonly key: string;
   /**
-   * type of event
+   * Type of event
    */
   readonly type: BucketEventType;
 }
 
 /**
- * bucket events to subscribe to
+ * Bucket events to subscribe to
  */
 export enum BucketEventType {
   /**
-   * create
+   * Create
    */
   CREATE = "CREATE",
   /**
-   * delete
+   * Delete
    */
   DELETE = "DELETE",
   /**
-   * update
+   * Update
    */
   UPDATE = "UPDATE",
 }

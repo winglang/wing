@@ -12,11 +12,7 @@ import * as cloud from "../cloud";
 import * as core from "../core";
 import { createBundle } from "../shared/bundling";
 import { NameOptions, ResourceNames } from "../shared/resource-names";
-import {
-  IAwsFunction,
-  PolicyStatement,
-  _generateAwsFunctionLines,
-} from "../shared-aws";
+import { IAwsFunction, PolicyStatement } from "../shared-aws";
 import { IInflightHost, Resource } from "../std";
 import { Duration } from "../std/duration";
 
@@ -35,18 +31,18 @@ const FUNCTION_NAME_OPTS: NameOptions = {
  * that should be used when a function is deployed within a VPC.
  */
 export interface FunctionNetworkConfig {
-  /** list of subnets to attach on function */
+  /** List of subnets to attach on function */
   readonly subnetIds: string[];
-  /** list of security groups to place function in */
+  /** List of security groups to place function in */
   readonly securityGroupIds: string[];
 }
 
 /**
- * options for granting invoke permissions to the current function
+ * Options for granting invoke permissions to the current function
  */
 export interface FunctionPermissionsOptions {
   /**
-   * used for keeping function's versioning.
+   * Used for keeping function's versioning.
    */
   readonly qualifier?: string;
 }
@@ -224,17 +220,6 @@ export class Function extends cloud.Function implements IAwsFunction {
 
   public get functionName(): string {
     return this.function.functionName;
-  }
-
-  /**
-   * Generates the code lines for the cloud function,
-   * overridden by the tf-aws target to have the function context too
-   * @param inflightClient inflight client code
-   * @returns cloud function code string
-   * @internal
-   */
-  protected _generateLines(inflightClient: core.Code): string[] {
-    return _generateAwsFunctionLines(inflightClient);
   }
 
   /** @internal */

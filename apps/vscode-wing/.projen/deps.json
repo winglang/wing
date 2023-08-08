@@ -118,6 +118,11 @@
       "type": "build"
     },
     {
+      "name": "winglang",
+      "version": "workspace:^",
+      "type": "build"
+    },
+    {
       "name": "ws",
       "type": "build"
     }

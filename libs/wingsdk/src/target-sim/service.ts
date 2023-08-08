@@ -74,7 +74,7 @@ export class Service extends cloud.Service implements ISimulatorResource {
     return fn;
   }
 
-  toSimulator(): BaseResourceSchema {
+  public toSimulator(): BaseResourceSchema {
     const schema: ServiceSchema = {
       type: SERVICE_TYPE,
       path: this.node.path,

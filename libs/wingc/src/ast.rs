@@ -128,6 +128,7 @@ pub struct TypeAnnotation {
 
 #[derive(Debug, Clone)]
 pub enum TypeAnnotationKind {
+	Inferred,
 	Number,
 	String,
 	Bool,
@@ -196,6 +197,7 @@ impl Display for UserDefinedType {
 impl Display for TypeAnnotationKind {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		match self {
+			TypeAnnotationKind::Inferred => write!(f, "inferred"),
 			TypeAnnotationKind::Number => write!(f, "num"),
 			TypeAnnotationKind::String => write!(f, "str"),
 			TypeAnnotationKind::Bool => write!(f, "bool"),
@@ -420,14 +422,17 @@ pub struct Interface {
 }
 
 #[derive(Debug)]
+pub enum BringSource {
+	BuiltinModule(Symbol),
+	JsiiModule(Symbol),
+	WingFile(Symbol),
+}
+
+#[derive(Debug)]
 pub enum StmtKind {
 	Bring {
-		module_name: Symbol, // Reference?
+		source: BringSource,
 		identifier: Option<Symbol>,
-	},
-	Module {
-		name: Symbol,
-		statements: Scope,
 	},
 	SuperConstructor {
 		arg_list: ArgList,
@@ -672,6 +677,11 @@ impl Scope {
 		let mut env = self.env.borrow_mut();
 		assert!((*env).is_none());
 		*env = Some(new_env);
+	}
+
+	pub fn reset_env(&self) {
+		let mut env = self.env.borrow_mut();
+		*env = None;
 	}
 }
 

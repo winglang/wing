@@ -7,14 +7,17 @@
 #[macro_use]
 extern crate lazy_static;
 
-use ast::{Scope, Stmt, Symbol, UtilityFunctions};
+use ast::{Scope, Symbol, UtilityFunctions};
 use closure_transform::ClosureTransformer;
 use comp_ctx::set_custom_panic_hook;
 use diagnostic::{found_errors, report_diagnostic, Diagnostic};
+use file_graph::FileGraph;
 use files::Files;
 use fold::Fold;
+use indexmap::IndexMap;
 use jsify::JSifier;
 use lifting::LiftTransform;
+use parser::parse_wing_project;
 use type_check::jsii_importer::JsiiImportSpec;
 use type_check::symbol_env::StatementIdx;
 use type_check::{FunctionSignature, SymbolKind, Type};
@@ -23,11 +26,8 @@ use wasm_util::{ptr_to_string, string_to_combined_ptr, WASM_RETURN_ERROR};
 use wingii::type_system::TypeSystem;
 
 use crate::docs::Docs;
-use crate::parser::Parser;
 use std::alloc::{alloc, dealloc, Layout};
-use std::cell::RefCell;
 
-use std::fs;
 use std::mem;
 use std::path::{Path, PathBuf};
 
@@ -45,17 +45,19 @@ mod comp_ctx;
 pub mod debug;
 pub mod diagnostic;
 mod docs;
+mod file_graph;
 mod files;
 pub mod fold;
 pub mod jsify;
 mod lifting;
 pub mod lsp;
 pub mod parser;
-
+mod reset;
 pub mod type_check;
 mod type_check_assert;
 pub mod visit;
 mod visit_context;
+mod visit_types;
 mod wasm_util;
 
 const WINGSDK_ASSEMBLY_NAME: &'static str = "@winglang/sdk";
@@ -157,47 +159,10 @@ pub unsafe extern "C" fn wingc_compile(ptr: u32, len: u32) -> u64 {
 	}
 }
 
-pub fn parse(source_path: &Path) -> (Files, Scope) {
-	let language = tree_sitter_wing::language();
-	let mut parser = tree_sitter::Parser::new();
-	parser.set_language(language).unwrap();
-
-	let source = match fs::read(&source_path) {
-		Ok(source) => source,
-		Err(err) => {
-			report_diagnostic(Diagnostic {
-				message: format!("Error reading source file: {}: {:?}", source_path.display(), err),
-				span: None,
-			});
-
-			// Set up a dummy scope to return
-			let empty_scope = Scope {
-				statements: Vec::<Stmt>::new(),
-				env: RefCell::new(None),
-				span: Default::default(),
-			};
-			return (Files::default(), empty_scope);
-		}
-	};
-
-	let tree = match parser.parse(&source, None) {
-		Some(tree) => tree,
-		None => {
-			panic!("Failed parsing source file: {}", source_path.display());
-		}
-	};
-
-	let mut files = Files::new();
-	let wing_parser = Parser::new(&source, source_path.to_str().unwrap().to_string(), &mut files);
-	let scope = wing_parser.wingit(&tree.root_node());
-
-	(files, scope)
-}
-
 pub fn type_check(
 	scope: &mut Scope,
 	types: &mut Types,
-	source_path: &Path,
+	file_path: &Path,
 	jsii_types: &mut TypeSystem,
 	jsii_imports: &mut Vec<JsiiImportSpec>,
 ) {
@@ -282,10 +247,10 @@ pub fn type_check(
 		types,
 	);
 
-	let mut tc = TypeChecker::new(types, source_path, jsii_types, jsii_imports);
+	let mut tc = TypeChecker::new(types, file_path, jsii_types, jsii_imports);
 	tc.add_globals(scope);
 
-	tc.type_check_scope(scope);
+	tc.type_check_file(file_path, scope);
 }
 
 // TODO: refactor this (why is scope needed?) (move to separate module?)
@@ -333,13 +298,30 @@ pub fn compile(
 	let out_dir = out_dir.unwrap_or(default_out_dir.as_ref());
 
 	// -- PARSING PHASE --
-	let (files, scope) = parse(&source_path);
+	let mut files = Files::new();
+	let mut file_graph = FileGraph::default();
+	let mut tree_sitter_trees = IndexMap::new();
+	let mut asts = IndexMap::new();
+	let topo_sorted_files = parse_wing_project(
+		&source_path,
+		None,
+		&mut files,
+		&mut file_graph,
+		&mut tree_sitter_trees,
+		&mut asts,
+	);
 
 	// -- DESUGARING PHASE --
 
 	// Transform all inflight closures defined in preflight into single-method resources
-	let mut inflight_transformer = ClosureTransformer::new();
-	let mut scope = inflight_transformer.fold_scope(scope);
+	let mut asts = asts
+		.into_iter()
+		.map(|(path, scope)| {
+			let mut inflight_transformer = ClosureTransformer::new();
+			let scope = inflight_transformer.fold_scope(scope);
+			(path, scope)
+		})
+		.collect::<IndexMap<PathBuf, Scope>>();
 
 	// -- TYPECHECKING PHASE --
 
@@ -350,16 +332,17 @@ pub fn compile(
 	// Create a universal JSII import spec (need to keep this alive during entire compilation)
 	let mut jsii_imports = vec![];
 
-	// Type check everything and build typed symbol environment
-	type_check(&mut scope, &mut types, &source_path, &mut jsii_types, &mut jsii_imports);
+	// Type check all files in topological order (start with files that don't require any other
+	// Wing files, then move on to files that depend on those, etc.)
+	for file in &topo_sorted_files {
+		let mut scope = asts.get_mut(file).expect("matching AST not found");
+		type_check(&mut scope, &mut types, &file, &mut jsii_types, &mut jsii_imports);
 
-	// Validate the type checker didn't miss anything see `TypeCheckAssert` for details
-	let mut tc_assert = TypeCheckAssert::new(&types, found_errors());
-	tc_assert.check(&scope);
+		// Validate the type checker didn't miss anything - see `TypeCheckAssert` for details
+		let mut tc_assert = TypeCheckAssert::new(&types, found_errors());
+		tc_assert.check(&scope);
+	}
 
-	// -- JSIFICATION PHASE --
-
-	let app_name = source_path.file_stem().unwrap().to_str().unwrap();
 	let project_dir = absolute_project_root
 		.unwrap_or(source_path.parent().unwrap())
 		.to_path_buf();
@@ -373,20 +356,32 @@ pub fn compile(
 		return Err(());
 	}
 
-	let mut jsifier = JSifier::new(&mut types, &files, app_name, &project_dir, true);
+	let mut jsifier = JSifier::new(&mut types, &files, &source_path, &project_dir);
 
 	// -- LIFTING PHASE --
 
-	let mut lift = LiftTransform::new(&jsifier);
-	let scope = Box::new(lift.fold_scope(scope));
+	let mut asts = asts
+		.into_iter()
+		.map(|(path, scope)| {
+			let mut lift = LiftTransform::new(&jsifier);
+			let scope = lift.fold_scope(scope);
+			(path, scope)
+		})
+		.collect::<IndexMap<PathBuf, Scope>>();
 
 	// bail out now (before jsification) if there are errors (no point in jsifying)
 	if found_errors() {
 		return Err(());
 	}
 
-	let files = jsifier.jsify(&scope);
+	// -- JSIFICATION PHASE --
 
+	for file in &topo_sorted_files {
+		let scope = asts.get_mut(file).expect("matching AST not found");
+		jsifier.jsify(file, &scope);
+	}
+
+	let files = jsifier.output_files.borrow_mut();
 	match files.emit_files(out_dir) {
 		Ok(()) => {}
 		Err(err) => report_diagnostic(err.into()),

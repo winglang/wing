@@ -2,7 +2,10 @@ import { InvokeCommand, LambdaClient } from "@aws-sdk/client-lambda";
 import { fromUtf8 } from "@aws-sdk/util-utf8-node";
 import { mockClient } from "aws-sdk-client-mock";
 import { test, expect, beforeEach } from "vitest";
-import { FunctionClient } from "../../src/shared-aws/function.inflight";
+import {
+  FunctionClient,
+  parseLogs,
+} from "../../src/shared-aws/function.inflight";
 
 const lambdaMock = mockClient(LambdaClient);
 
@@ -22,7 +25,7 @@ test("invoke - happy path", async () => {
     })
     .resolves({
       StatusCode: 200,
-      Payload: fromUtf8(JSON.stringify({ payload: RESPONSE, context: {} })),
+      Payload: fromUtf8(JSON.stringify(RESPONSE)),
     });
 
   // WHEN
@@ -54,9 +57,7 @@ test("invoke - sad path", async () => {
     .resolves({
       StatusCode: 200,
       FunctionError: "Unhandled",
-      Payload: fromUtf8(
-        JSON.stringify({ payload: RESPONSE_PAYLOAD, context: {} })
-      ),
+      Payload: fromUtf8(JSON.stringify(RESPONSE_PAYLOAD)),
     });
 
   // THEN
@@ -64,4 +65,27 @@ test("invoke - sad path", async () => {
   await expect(client.invoke(PAYLOAD)).rejects.toThrow(
     /Invoke failed with message: "Unhandled". Full error:/
   );
+});
+
+test("parse logs", () => {
+  const traces = parseLogs(
+    "START RequestId: 6beb7628-d0c3-4fe9-bf5a-d64c559aa25f Version: $LATEST\n2023-08-04T16:40:47.309Z\t6beb7628-d0c3-4fe9-bf5a-d64c559aa25f\tINFO\thello world\n2023-08-04T16:40:50.691Z\t6beb7628-d0c3-4fe9-bf5a-d64c559aa25f\tINFO\thello world\nEND RequestId: 6beb7628-d0c3-4fe9-bf5a-d64c559aa25f\nREPORT RequestId: 6beb7628-d0c3-4fe9-bf5a-d64c559aa25f\tDuration: 4958.93 ms\tBilled Duration: 4959 ms\tMemory Size: 128 MB\tMax Memory Used: 82 MB\tInit Duration: 249.40 ms\t\n",
+    "fake-source"
+  );
+  expect(traces).toEqual([
+    {
+      data: { message: "hello world" },
+      timestamp: "2023-08-04T16:40:47.309Z",
+      sourceType: "wingsdk.cloud.Function",
+      sourcePath: "fake-source",
+      type: "log",
+    },
+    {
+      data: { message: "hello world" },
+      timestamp: "2023-08-04T16:40:50.691Z",
+      sourceType: "wingsdk.cloud.Function",
+      sourcePath: "fake-source",
+      type: "log",
+    },
+  ]);
 });
