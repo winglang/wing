@@ -64,7 +64,7 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
      * wrapper code directly?
      */
     const functionHandler = convertBetweenHandlers(
-      this,
+      this.node.scope!, // ok since we're not a tree root
       `${this.node.id}-SetConsumerHandler-${hash}`,
       inflight,
       join(__dirname, "queue.setconsumer.inflight.js"),

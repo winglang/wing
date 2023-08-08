@@ -56,7 +56,7 @@ export class Service extends cloud.Service implements ISimulatorResource {
     const onStartHash = handler.node.addr.slice(-8);
 
     const onStartFunctionHandler = convertBetweenHandlers(
-      this,
+      this.node.scope!,
       `${this.node.id}-${id}-${onStartHash}`,
       handler,
       join(__dirname, "service.onevent.inflight.js"),
@@ -64,7 +64,7 @@ export class Service extends cloud.Service implements ISimulatorResource {
     );
 
     const fn = Function._newFunction(
-      this.node.scope!, // ok since we're not a tree root
+      this.node.scope!,
       `${this.node.id}-${id}${onStartHash}`,
       onStartFunctionHandler,
       {}

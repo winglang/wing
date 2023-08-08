@@ -128,7 +128,7 @@ export abstract class Bucket extends Resource {
   ): IResource {
     const hash = inflight.node.addr.slice(-8);
     return convertBetweenHandlers(
-      this,
+      this.node.scope!, // ok since we're not a tree root
       `${this.getTopic(eventType).node.id}-eventHandler-${hash}`,
       inflight,
       // since uses __dirname should be specified under the target directory
