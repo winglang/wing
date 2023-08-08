@@ -194,8 +194,8 @@ class $Root extends $stdlib.std.Resource {
     {((cond) => {if (!cond) throw new Error("assertion failed: notSpecified.get(\"foo\") == \"bar\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((notSpecified)["foo"],"bar")))};
     const empty = ({});
     {((cond) => {if (!cond) throw new Error("assertion failed: Json.has(empty, \"something\") == false")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((args) => { return args[0].hasOwnProperty(args[1]); })([empty,"something"]),false)))};
-    const notJsonMissingField = Object.freeze({"foo":"bar","stuff":[]});
-    const notJson = Object.freeze({"foo":"bar","stuff":[1, 2, 3],"maybe":Object.freeze({"good":true})});
+    const notJsonMissingField = ({"foo": "bar","stuff": []});
+    const notJson = ({"foo": "bar","stuff": [1, 2, 3],"maybe": ({"good": true})});
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);

@@ -96,11 +96,7 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
     }
-<<<<<<< HEAD
-    this.node.root.new("@cdktf/provider-aws.s3Bucket.S3Bucket",aws.s3Bucket.S3Bucket,this,"Bucket",{ bucketPrefix: "hello", versioning: Object.freeze({"enabled":true,"mfaDelete":true}) });
-=======
     this.node.root.new("@cdktf/provider-aws.s3Bucket.S3Bucket",aws.s3Bucket.S3Bucket,this,"Bucket",{ bucketPrefix: "hello", versioning: ({"enabled": true,"mfaDelete": true}) });
->>>>>>> af35df371d663a3f84dba15f652c9e3ea2aa26c3
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);

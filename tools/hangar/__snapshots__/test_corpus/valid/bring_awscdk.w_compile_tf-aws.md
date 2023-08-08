@@ -58,11 +58,7 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("$inflight_init");
-<<<<<<< HEAD
-        this.function = this.node.root.new("aws-cdk-lib.aws_lambda.DockerImageFunction",awscdk.aws_lambda.DockerImageFunction,this,"DockerImageFunction",Object.freeze({"code":(awscdk.aws_lambda.DockerImageCode.fromImageAsset("./test.ts"))}));
-=======
         this.function = this.node.root.new("aws-cdk-lib.aws_lambda.DockerImageFunction",awscdk.aws_lambda.DockerImageFunction,this,"DockerImageFunction",({"code": (awscdk.aws_lambda.DockerImageCode.fromImageAsset("./test.ts"))}));
->>>>>>> af35df371d663a3f84dba15f652c9e3ea2aa26c3
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
