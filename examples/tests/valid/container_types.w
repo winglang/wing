@@ -31,6 +31,16 @@ let arr7: Array<num> = arr4;
 assert(arr7.length == 3);
 assert(arr7.at(1) == 2);
 
+if let val = emptyArray.tryAt(0) {
+  assert(false); // Should not happen
+}
+
+if let val = arr1.tryAt(0) {
+  assert(val == 1);
+} else {
+  assert(false); // Should not happen
+}
+
 //Map tests
 let emptyMap = Map<num>{};
 assert(emptyMap.size() == 0);

@@ -461,23 +461,23 @@ Duration <DURATION>"
 
 exports[`container_types.w 1`] = `
 "error: Unknown parser error
-   --> ../../../examples/tests/invalid/container_types.w:10:25
+   --> ../../../examples/tests/invalid/container_types.w:14:25
    |
-10 | let m2: Map<num> = [\\"a\\" => 1, \\"b\\" => \\"2\\", \\"c\\" => 3];
+14 | let m2: Map<num> = [\\"a\\" => 1, \\"b\\" => \\"2\\", \\"c\\" => 3];
    |                         ^^^^ Unknown parser error
 
 
 error: Unexpected 'string'
-   --> ../../../examples/tests/invalid/container_types.w:10:31
+   --> ../../../examples/tests/invalid/container_types.w:14:31
    |
-10 | let m2: Map<num> = [\\"a\\" => 1, \\"b\\" => \\"2\\", \\"c\\" => 3];
+14 | let m2: Map<num> = [\\"a\\" => 1, \\"b\\" => \\"2\\", \\"c\\" => 3];
    |                               ^^^ Unexpected 'string'
 
 
 error: Unknown parser error
-   --> ../../../examples/tests/invalid/container_types.w:10:47
+   --> ../../../examples/tests/invalid/container_types.w:14:47
    |
-10 | let m2: Map<num> = [\\"a\\" => 1, \\"b\\" => \\"2\\", \\"c\\" => 3];
+14 | let m2: Map<num> = [\\"a\\" => 1, \\"b\\" => \\"2\\", \\"c\\" => 3];
    |                                               ^^^^ Unknown parser error
 
 
@@ -509,87 +509,94 @@ error: Unknown symbol \\"someRandomMethod\\"
   |      ^^^^^^^^^^^^^^^^ Unknown symbol \\"someRandomMethod\\"
 
 
-error: Expected type to be \\"num\\", but got \\"str\\" instead
-  --> ../../../examples/tests/invalid/container_types.w:9:38
+error: Expected type to be \\"num\\", but got \\"num?\\" instead
+  --> ../../../examples/tests/invalid/container_types.w:9:16
   |
-9 | let m1: Map<num> = {\\"a\\" => 1, \\"b\\" => \\"2\\", \\"c\\" => 3};
-  |                                      ^^^ Expected type to be \\"num\\", but got \\"str\\" instead
+9 | let val: num = arr5.tryAt(0);
+  |                ^^^^^^^^^^^^^ Expected type to be \\"num\\", but got \\"num?\\" instead
+
+
+error: Expected type to be \\"num\\", but got \\"str\\" instead
+   --> ../../../examples/tests/invalid/container_types.w:13:38
+   |
+13 | let m1: Map<num> = {\\"a\\" => 1, \\"b\\" => \\"2\\", \\"c\\" => 3};
+   |                                      ^^^ Expected type to be \\"num\\", but got \\"str\\" instead
 
 
 error: Expected type to be \\"Map<num>\\", but got \\"Array<str>\\" instead
-   --> ../../../examples/tests/invalid/container_types.w:10:20
+   --> ../../../examples/tests/invalid/container_types.w:14:20
    |
-10 | let m2: Map<num> = [\\"a\\" => 1, \\"b\\" => \\"2\\", \\"c\\" => 3];
+14 | let m2: Map<num> = [\\"a\\" => 1, \\"b\\" => \\"2\\", \\"c\\" => 3];
    |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected type to be \\"Map<num>\\", but got \\"Array<str>\\" instead
 
 
 error: Expected type to be \\"Map<num>\\", but got \\"Map<str>\\" instead
-   --> ../../../examples/tests/invalid/container_types.w:12:20
+   --> ../../../examples/tests/invalid/container_types.w:16:20
    |
-12 | let m4: Map<num> = m3;
+16 | let m4: Map<num> = m3;
    |                    ^^ Expected type to be \\"Map<num>\\", but got \\"Map<str>\\" instead
 
 
 error: Unknown symbol \\"someRandomMethod\\"
-   --> ../../../examples/tests/invalid/container_types.w:13:4
+   --> ../../../examples/tests/invalid/container_types.w:17:4
    |
-13 | m1.someRandomMethod();
+17 | m1.someRandomMethod();
    |    ^^^^^^^^^^^^^^^^ Unknown symbol \\"someRandomMethod\\"
 
 
 error: Expected type to be \\"num\\", but got \\"str\\" instead
-   --> ../../../examples/tests/invalid/container_types.w:16:24
+   --> ../../../examples/tests/invalid/container_types.w:20:24
    |
-16 | let s1: Set<num> = {1, \\"2\\", 3};
+20 | let s1: Set<num> = {1, \\"2\\", 3};
    |                        ^^^ Expected type to be \\"num\\", but got \\"str\\" instead
 
 
 error: Expected \\"Array\\" type, found \\"Set<num>\\"
-   --> ../../../examples/tests/invalid/container_types.w:17:10
+   --> ../../../examples/tests/invalid/container_types.w:21:10
    |
-17 | let s2 = Set<num> [1, \\"2\\", 3];
+21 | let s2 = Set<num> [1, \\"2\\", 3];
    |          ^^^^^^^^^^^^^^^^^^^^ Expected \\"Array\\" type, found \\"Set<num>\\"
 
 
 error: Expected type to be \\"num\\", but got \\"str\\" instead
-   --> ../../../examples/tests/invalid/container_types.w:17:23
+   --> ../../../examples/tests/invalid/container_types.w:21:23
    |
-17 | let s2 = Set<num> [1, \\"2\\", 3];
+21 | let s2 = Set<num> [1, \\"2\\", 3];
    |                       ^^^ Expected type to be \\"num\\", but got \\"str\\" instead
 
 
 error: Expected type to be \\"num\\", but got \\"str\\" instead
-   --> ../../../examples/tests/invalid/container_types.w:18:24
+   --> ../../../examples/tests/invalid/container_types.w:22:24
    |
-18 | let s3: Set<num> = [1, \\"2\\", 3];
+22 | let s3: Set<num> = [1, \\"2\\", 3];
    |                        ^^^ Expected type to be \\"num\\", but got \\"str\\" instead
 
 
 error: Expected type to be \\"Set<num>\\", but got \\"Array<num>\\" instead
-   --> ../../../examples/tests/invalid/container_types.w:18:20
+   --> ../../../examples/tests/invalid/container_types.w:22:20
    |
-18 | let s3: Set<num> = [1, \\"2\\", 3];
+22 | let s3: Set<num> = [1, \\"2\\", 3];
    |                    ^^^^^^^^^^^ Expected type to be \\"Set<num>\\", but got \\"Array<num>\\" instead
 
 
 error: Expected type to be \\"Set<str>\\", but got \\"Set<num>\\" instead
-   --> ../../../examples/tests/invalid/container_types.w:20:20
+   --> ../../../examples/tests/invalid/container_types.w:24:20
    |
-20 | let s5: Set<str> = s4;
+24 | let s5: Set<str> = s4;
    |                    ^^ Expected type to be \\"Set<str>\\", but got \\"Set<num>\\" instead
 
 
 error: Unknown symbol \\"someRandomMethod\\"
-   --> ../../../examples/tests/invalid/container_types.w:21:4
+   --> ../../../examples/tests/invalid/container_types.w:25:4
    |
-21 | s1.someRandomMethod();
+25 | s1.someRandomMethod();
    |    ^^^^^^^^^^^^^^^^ Unknown symbol \\"someRandomMethod\\"
 
 
 error: Expected type to be \\"Array<str>\\", but got \\"MutArray<str>\\" instead
-   --> ../../../examples/tests/invalid/container_types.w:23:21
+   --> ../../../examples/tests/invalid/container_types.w:27:21
    |
-23 | let a: Array<str> = MutArray<str>[];
+27 | let a: Array<str> = MutArray<str>[];
    |                     ^^^^^^^^^^^^^^^ Expected type to be \\"Array<str>\\", but got \\"MutArray<str>\\" instead
 
 
