@@ -12,12 +12,13 @@ use crate::file_graph::FileGraph;
 use crate::files::Files;
 use crate::fold::Fold;
 use crate::jsify::JSifier;
-use crate::lifting::LiftTransform;
+use crate::lifting::LiftVisitor;
 use crate::parser::parse_wing_project;
 use crate::reset::ScopeResetter;
 use crate::type_check;
 use crate::type_check::jsii_importer::JsiiImportSpec;
 use crate::type_check_assert::TypeCheckAssert;
+use crate::visit::Visit;
 use crate::{ast::Scope, type_check::Types, wasm_util::ptr_to_string};
 
 /// The output of compiling a Wing project with one or more files
@@ -181,10 +182,10 @@ fn partial_compile(
 
 	let jsifier = JSifier::new(&mut types, &project_data.files, &source_path, &project_dir);
 	for file in &topo_sorted_files {
-		let mut lift = LiftTransform::new(&jsifier);
+		let mut lift = LiftVisitor::new(&jsifier);
 		let scope = project_data.asts.remove(file).expect("matching AST not found");
-		let new_scope = lift.fold_scope(scope);
-		project_data.asts.insert(file.clone(), new_scope);
+		lift.visit_scope(&scope);
+		project_data.asts.insert(file.clone(), scope);
 	}
 
 	// no need to JSify in the LSP

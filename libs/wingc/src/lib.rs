@@ -16,12 +16,13 @@ use files::Files;
 use fold::Fold;
 use indexmap::IndexMap;
 use jsify::JSifier;
-use lifting::LiftTransform;
+use lifting::LiftVisitor;
 use parser::parse_wing_project;
 use type_check::jsii_importer::JsiiImportSpec;
 use type_check::symbol_env::StatementIdx;
 use type_check::{FunctionSignature, SymbolKind, Type};
 use type_check_assert::TypeCheckAssert;
+use visit::Visit;
 use wasm_util::{ptr_to_string, string_to_combined_ptr, WASM_RETURN_ERROR};
 use wingii::type_system::TypeSystem;
 
@@ -363,8 +364,8 @@ pub fn compile(
 	let mut asts = asts
 		.into_iter()
 		.map(|(path, scope)| {
-			let mut lift = LiftTransform::new(&jsifier);
-			let scope = lift.fold_scope(scope);
+			let mut lift = LiftVisitor::new(&jsifier);
+			lift.visit_scope(&scope);
 			(path, scope)
 		})
 		.collect::<IndexMap<PathBuf, Scope>>();
