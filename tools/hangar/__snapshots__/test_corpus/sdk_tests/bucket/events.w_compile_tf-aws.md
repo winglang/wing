@@ -1326,6 +1326,7 @@ class $Root extends $stdlib.std.Resource {
     (b.onCreate(new $Closure4(this,"$Closure4")));
     (b.onEvent(new $Closure5(this,"$Closure5")));
     const wait = new $Closure6(this,"$Closure6");
+    const CheckHitCountOptions = require("./CheckHitCountOptions.Struct.js")($stdlib.std.Struct, $stdlib.core.NodeJsCode.fromInline);
     const checkHitCount = new $Closure7(this,"$Closure7");
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"hitCount is incremented according to the bucket event",new $Closure8(this,"$Closure8"),{ timeout: (std.Duration.fromSeconds(480)) });
   }

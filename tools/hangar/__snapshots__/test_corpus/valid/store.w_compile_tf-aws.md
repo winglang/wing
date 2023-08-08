@@ -197,6 +197,7 @@ class $Root extends $stdlib.std.Resource {
         return tmp;
       })({})
     ;
+    const Point = require("./Point.Struct.js")($stdlib.std.Struct, $stdlib.core.NodeJsCode.fromInline);
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);

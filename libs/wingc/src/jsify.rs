@@ -17,8 +17,8 @@ use std::{
 use crate::{
 	ast::{
 		ArgList, BinaryOperator, BringSource, CalleeKind, Class as AstClass, Expr, ExprKind, FunctionBody,
-		FunctionDefinition, InterpolatedStringPart, Literal, NewExpr, Phase, Reference, Scope, Stmt, StmtKind, Symbol,
-		TypeAnnotationKind, UnaryOperator, UserDefinedType,
+		FunctionDefinition, InterpolatedStringPart, Literal, NewExpr, Phase, Reference, Scope, Stmt, StmtKind, StructField,
+		Symbol, TypeAnnotationKind, UnaryOperator, UserDefinedType,
 	},
 	comp_ctx::{CompilationContext, CompilationPhase},
 	dbg_panic, debug,
@@ -238,7 +238,7 @@ impl<'a> JSifier<'a> {
 				property,
 				optional_accessor,
 			} => self.jsify_expression(object, ctx) + (if *optional_accessor { "?." } else { "." }) + &property.to_string(),
-			Reference::TypeReference(udt) => self.jsify_type(&TypeAnnotationKind::UserDefined(udt.clone())),
+			Reference::TypeReference(udt) => self.jsify_user_defined_type(&udt),
 			Reference::TypeMember { typeobject, property } => {
 				let typename = self.jsify_expression(typeobject, ctx);
 				typename + "." + &property.to_string()
@@ -283,10 +283,83 @@ impl<'a> JSifier<'a> {
 		}
 	}
 
-	fn jsify_type(&self, typ: &TypeAnnotationKind) -> String {
+	fn jsify_type(&self, typ: &TypeAnnotationKind) -> Option<String> {
 		match typ {
-			TypeAnnotationKind::UserDefined(t) => self.jsify_user_defined_type(&t),
-			_ => todo!(),
+			TypeAnnotationKind::UserDefined(t) => Some(self.jsify_user_defined_type(&t)),
+			TypeAnnotationKind::String => Some("string".to_string()),
+			TypeAnnotationKind::Number => Some("number".to_string()),
+			TypeAnnotationKind::Bool => Some("boolean".to_string()),
+			TypeAnnotationKind::Array(t) => {
+				if let Some(inner) = self.jsify_type(&t.kind) {
+					Some(format!("{}[]", inner))
+				} else {
+					None
+				}
+			}
+			TypeAnnotationKind::Optional(t) => {
+				if let Some(inner) = self.jsify_type(&t.kind) {
+					Some(format!("{}?", inner))
+				} else {
+					None
+				}
+			}
+			_ => None,
+		}
+	}
+
+	// This helper determines what requirement and dependency to add to the struct schema based
+	// on the type annotation of the field.
+	// I.E. if a struct has a field named "foo" with a type "OtherStruct", then we want to add
+	// the field "foo" as a required  and the struct "OtherStruct" as a dependency. so the result is
+	// a tuple (required, dependency)
+	fn extract_struct_field_schema_dependency(
+		&self,
+		typ: &TypeAnnotationKind,
+		field_name: &String,
+	) -> (Option<String>, Option<String>) {
+		match typ {
+			TypeAnnotationKind::UserDefined(udt) => (Some(field_name.clone()), Some(udt.root.name.clone())),
+			TypeAnnotationKind::Array(t) | TypeAnnotationKind::Set(t) | TypeAnnotationKind::Map(t) => {
+				self.extract_struct_field_schema_dependency(&t.kind, field_name)
+			}
+			TypeAnnotationKind::Optional(t) => {
+				let deps = self.extract_struct_field_schema_dependency(&t.kind, field_name);
+				// We never want to add an optional to the required block
+				(None, deps.1)
+			}
+			_ => (Some(field_name.clone()), None),
+		}
+	}
+
+	fn jsify_struct_field_to_json_schema_type(&self, typ: &TypeAnnotationKind) -> String {
+		match typ {
+			TypeAnnotationKind::Bool | TypeAnnotationKind::Number | TypeAnnotationKind::String => {
+				format!("type: \"{}\"", self.jsify_type(typ).unwrap())
+			}
+			TypeAnnotationKind::UserDefined(udt) => {
+				format!("\"$ref\": \"/{}\"", udt.root.name)
+			}
+			TypeAnnotationKind::Json => "type: \"object\"".to_string(),
+			TypeAnnotationKind::Map(t) => {
+				let map_type = self.jsify_type(&t.kind);
+				// Ensure all keys are of some type
+				format!(
+					"type: \"object\", patternProperties: {{ \".*\": {{ type: \"{}\" }} }}",
+					map_type.unwrap_or("null".to_string())
+				)
+			}
+			TypeAnnotationKind::Array(t) | TypeAnnotationKind::Set(t) => {
+				format!(
+					"type: \"array\", {} items: {{ {} }}",
+					match typ {
+						TypeAnnotationKind::Set(_) => "uniqueItems: true,".to_string(),
+						_ => "".to_string(),
+					},
+					self.jsify_struct_field_to_json_schema_type(&t.kind)
+				)
+			}
+			TypeAnnotationKind::Optional(t) => self.jsify_struct_field_to_json_schema_type(&t.kind),
+			_ => "type: \"null\"".to_string(),
 		}
 	}
 
@@ -466,7 +539,10 @@ impl<'a> JSifier<'a> {
 								ExprKind::Reference(Reference::Identifier(_)) => "global".to_string(),
 								ExprKind::Reference(Reference::InstanceMember { object, .. }) => {
 									self.jsify_expression(&object, ctx)
-								}
+								},
+                ExprKind::Reference(Reference::TypeMember { .. }) => {
+                  expr_string.clone().split(".").next().unwrap_or("").to_string()
+                },
 								_ => expr_string,
 							}
 							CalleeKind::SuperCall{..} =>
@@ -592,6 +668,108 @@ impl<'a> JSifier<'a> {
 				"".to_string()
 			},
 		}
+	}
+
+	pub fn jsify_struct(&self, name: &Symbol, fields: &Vec<StructField>, extends: &Vec<UserDefinedType>) -> CodeMaker {
+		// To allow for struct validation at runtime this will generate a JS class that has a static
+		// getValidator method that will create a json schema validator.
+		let mut code = CodeMaker::default();
+
+		code.open("module.exports = function(stdStruct, fromInline) {".to_string());
+		code.open(format!("class {} {{", name));
+
+		// create schema
+		let mut required: Vec<String> = vec![]; // fields that are required
+		let mut dependencies: Vec<String> = vec![]; // schemas that need added to validator
+
+		code.open("static _schema = {".to_string());
+		code.line(format!("id: \"/{}\",", name));
+		code.line("type: \"object\",".to_string());
+
+		code.open("properties: {");
+		// get parent fields
+		for e in extends {
+			code.line(format!(
+				"...require(\"{}\")()._schema.properties,",
+				struct_filename(&e.root.name)
+			));
+		}
+
+		// determine which fields are required, and which schemas need to be added to validator
+		for field in fields {
+			let dep = self.extract_struct_field_schema_dependency(&field.member_type.kind, &field.name.name);
+			if let Some(req) = dep.0 {
+				required.push(req);
+			}
+			if let Some(dep) = dep.1 {
+				dependencies.push(dep);
+			}
+			code.line(format!(
+				"{}: {{ {} }},",
+				field.name.name,
+				self.jsify_struct_field_to_json_schema_type(&field.member_type.kind)
+			));
+		}
+		code.close("},");
+
+		// Add all required field names to schema
+		code.open("required: [");
+		for name in required {
+			code.line(format!("\"{}\",", name));
+		}
+
+		// pull in all required fields from parent structs
+		for e in extends {
+			code.line(format!(
+				"...require(\"{}\")()._schema.required,",
+				struct_filename(&e.root.name)
+			));
+		}
+
+		code.close("]");
+		code.close("}");
+
+		// create a function to retrieve all dependant schemas
+		code.open("static _getDependencies() {");
+		code.open("return {");
+		for dep in &dependencies {
+			// Add dependency
+			code.line(format!(
+				"\"/{}\": require(\"{}\")()._schema,",
+				dep,
+				struct_filename(&dep)
+			));
+			// Add dependency's dependencies
+			code.line(format!(
+				"...require(\"{}\")()._getDependencies(),",
+				struct_filename(&dep)
+			));
+		}
+		code.close("}");
+		code.close("}");
+
+		// create _validate() function
+		code.open("static _validate(obj) {");
+		code.line("const validator = stdStruct._getValidator(this._getDependencies());");
+		code.line("const errors = validator.validate(obj, this._schema).errors;");
+		code.open("if (errors.length > 0) {");
+		code.line("throw new Error(`unable to parse ${this.name}:\\n ${errors.join(\"\\n- \")}`);");
+		code.close("}");
+		code.line("return obj;");
+		code.close("}");
+
+		// create _toInflightType function that just requires the generated struct file
+		code.open("static _toInflightType(context) {".to_string());
+		code.line(format!(
+			"return fromInline(`require(\"{}\")(${{ context._lift(stdStruct) }})`);",
+			struct_filename(&name.name)
+		));
+		code.close("}");
+		code.close("}");
+		code.line(format!("return {};", name));
+		code.close("};");
+
+		code
 	}
 
 	fn jsify_statement(&self, env: &SymbolEnv, statement: &Stmt, ctx: &mut JSifyContext) -> CodeMaker {
@@ -771,9 +949,21 @@ impl<'a> JSifier<'a> {
 				// This is a no-op in JS
 				CodeMaker::default()
 			}
-			StmtKind::Struct { .. } => {
-				// This is a no-op in JS
-				CodeMaker::default()
+			StmtKind::Struct { name, fields, extends } => {
+				let mut code = self.jsify_struct(name, fields, extends);
+				// Emits struct class file
+				self.emit_struct_file(name, code, ctx);
+
+				// Reset the code maker for code to be inserted in preflight.js
+				code = CodeMaker::default();
+				code.line(format!(
+					"const {} = require(\"{}\")({}.std.Struct, {}.core.NodeJsCode.fromInline);",
+					name,
+					struct_filename(&name.name),
+					STDLIB,
+					STDLIB
+				));
+				code
 			}
 			StmtKind::Enum { name, values } => {
 				let mut code = CodeMaker::default();
@@ -1158,6 +1348,19 @@ impl<'a> JSifier<'a> {
 		class_code
 	}
 
+	fn emit_struct_file(&self, name: &Symbol, struct_code: CodeMaker, _ctx: &mut JSifyContext) {
+		let mut code = CodeMaker::default();
+		code.add_code(struct_code);
+		match self
+			.output_files
+			.borrow_mut()
+			.add_file(struct_filename(&name.name), code.to_string())
+		{
+			Ok(()) => {}
+			Err(err) => report_diagnostic(err.into()),
+		}
+	}
+
 	fn emit_inflight_file(&self, class: &AstClass, inflight_class_code: CodeMaker, ctx: &mut JSifyContext) {
 		let name = &class.name.name;
 		let mut code = CodeMaker::default();
@@ -1343,6 +1546,14 @@ fn get_public_symbols(scope: &Scope) -> Vec<Symbol> {
 	}
 
 	symbols
+}
+
+fn inflight_filename(class: &AstClass) -> String {
+	format!("./inflight.{}.js", class.name.name)
+}
+
+fn struct_filename(s: &String) -> String {
+	format!("./{}.Struct.js", s)
 }
 
 fn lookup_span(span: &WingSpan, files: &Files) -> String {

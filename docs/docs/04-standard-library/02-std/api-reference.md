@@ -2068,6 +2068,37 @@ The length of the string.
 ---
 
 
+### Struct <a name="Struct" id="@winglang/sdk.std.Struct"></a>
+
+Shared behavior for all structs.
+
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.std.Struct.fromJson">fromJson</a></code> | Converts a Json to a Struct. |
+
+---
+
+##### `fromJson` <a name="fromJson" id="@winglang/sdk.std.Struct.fromJson"></a>
+
+```wing
+Struct.fromJson(json: Json);
+```
+
+Converts a Json to a Struct.
+
+This macro takes a Json object and the Struct definition file name then calls the validate method
+
+###### `json`<sup>Required</sup> <a name="json" id="@winglang/sdk.std.Struct.fromJson.parameter.json"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
+
+---
+
+
+
 ## Structs <a name="Structs" id="Structs"></a>
 
 ### DatetimeComponents <a name="DatetimeComponents" id="@winglang/sdk.std.DatetimeComponents"></a>

@@ -17,7 +17,7 @@ use crate::visit_types::{VisitType, VisitTypeMut};
 use crate::{
 	dbg_panic, debug, WINGSDK_ARRAY, WINGSDK_ASSEMBLY_NAME, WINGSDK_BRINGABLE_MODULES, WINGSDK_DURATION, WINGSDK_JSON,
 	WINGSDK_MAP, WINGSDK_MUT_ARRAY, WINGSDK_MUT_JSON, WINGSDK_MUT_MAP, WINGSDK_MUT_SET, WINGSDK_RESOURCE, WINGSDK_SET,
-	WINGSDK_STD_MODULE, WINGSDK_STRING,
+	WINGSDK_STD_MODULE, WINGSDK_STRING, WINGSDK_STRUCT,
 };
 use derivative::Derivative;
 use duplicate::duplicate_item;
@@ -1113,6 +1113,25 @@ impl TypeRef {
 			Type::Array(v) => v.is_json_legal_value(),
 			Type::Optional(v) => v.is_json_legal_value(),
 			_ => false,
+		}
+	}
+
+	// This is slightly different than is_json_legal_value in that its purpose
+	// is to determine if a type can be represented in JSON before we allow users to attempt
+	// convert from Json
+	pub fn has_json_representation(&self) -> bool {
+		match &**self {
+			Type::Struct(s) => {
+				// check all its fields are json compatible
+				for (_, field) in s.fields(true) {
+					if !field.has_json_representation() {
+						return false;
+					}
+				}
+				true
+			}
+			Type::Optional(t) | Type::Array(t) | Type::Set(t) | Type::Map(t) => t.has_json_representation(),
+			_ => self.is_json_legal_value(),
 		}
 	}
 }
@@ -4270,6 +4289,29 @@ impl<'a> TypeChecker<'a> {
 							)
 						}
 					}
+					Type::Struct(ref s) => {
+						if property.name == "fromJson" {
+							// we need to validate that only structs with all valid json fields can have a fromJson method
+							for (name, field) in s.fields(true) {
+								if !field.has_json_representation() {
+									self.spanned_error_with_var(
+										property,
+										format!(
+											"Struct \"{}\" contains field \"{}\" which cannot be represented in Json",
+											type_, name
+										),
+									);
+									return (self.make_error_variable_info(), Phase::Independent);
+								}
+							}
+						}
+						let lookup = env.lookup(&s.name, None);
+						let type_ = lookup.unwrap().as_type().unwrap();
+
+						let new_class = self.hydrate_class_type_arguments(env, WINGSDK_STRUCT, vec![type_]);
+						let v = self.get_property_from_class_like(new_class.as_class().unwrap(), property, true);
+						(v, Phase::Independent)
+					}
 					Type::Class(ref c) => match c.env.lookup(&property, None) {
 						Some(SymbolKind::Variable(v)) => {
 							if let VariableKind::StaticMember = v.kind {
@@ -4305,8 +4347,8 @@ impl<'a> TypeChecker<'a> {
 	) -> VariableInfo {
 		match *instance_type {
 			Type::Optional(t) => self.resolve_variable_from_instance_type(t, property, env, _object),
-			Type::Class(ref class) => self.get_property_from_class_like(class, property),
-			Type::Interface(ref interface) => self.get_property_from_class_like(interface, property),
+			Type::Class(ref class) => self.get_property_from_class_like(class, property, false),
+			Type::Interface(ref interface) => self.get_property_from_class_like(interface, property, false),
 			Type::Anything => VariableInfo {
 				name: property.clone(),
 				type_: instance_type,
@@ -4319,27 +4361,27 @@ impl<'a> TypeChecker<'a> {
 			// Lookup wingsdk std types, hydrating generics if necessary
 			Type::Array(t) => {
 				let new_class = self.hydrate_class_type_arguments(env, WINGSDK_ARRAY, vec![t]);
-				self.get_property_from_class_like(new_class.as_class().unwrap(), property)
+				self.get_property_from_class_like(new_class.as_class().unwrap(), property, false)
 			}
 			Type::MutArray(t) => {
 				let new_class = self.hydrate_class_type_arguments(env, WINGSDK_MUT_ARRAY, vec![t]);
-				self.get_property_from_class_like(new_class.as_class().unwrap(), property)
+				self.get_property_from_class_like(new_class.as_class().unwrap(), property, false)
 			}
 			Type::Set(t) => {
 				let new_class = self.hydrate_class_type_arguments(env, WINGSDK_SET, vec![t]);
-				self.get_property_from_class_like(new_class.as_class().unwrap(), property)
+				self.get_property_from_class_like(new_class.as_class().unwrap(), property, false)
 			}
 			Type::MutSet(t) => {
 				let new_class = self.hydrate_class_type_arguments(env, WINGSDK_MUT_SET, vec![t]);
-				self.get_property_from_class_like(new_class.as_class().unwrap(), property)
+				self.get_property_from_class_like(new_class.as_class().unwrap(), property, false)
 			}
 			Type::Map(t) => {
 				let new_class = self.hydrate_class_type_arguments(env, WINGSDK_MAP, vec![t]);
-				self.get_property_from_class_like(new_class.as_class().unwrap(), property)
+				self.get_property_from_class_like(new_class.as_class().unwrap(), property, false)
 			}
 			Type::MutMap(t) => {
 				let new_class = self.hydrate_class_type_arguments(env, WINGSDK_MUT_MAP, vec![t]);
-				self.get_property_from_class_like(new_class.as_class().unwrap(), property)
+				self.get_property_from_class_like(new_class.as_class().unwrap(), property, false)
 			}
 			Type::Json => self.get_property_from_class_like(
 				env
@@ -4351,6 +4393,7 @@ impl<'a> TypeChecker<'a> {
 					.as_class()
 					.unwrap(),
 				property,
+				false,
 			),
 			Type::MutJson => self.get_property_from_class_like(
 				env
@@ -4362,6 +4405,7 @@ impl<'a> TypeChecker<'a> {
 					.as_class()
 					.unwrap(),
 				property,
+				false,
 			),
 			Type::String => self.get_property_from_class_like(
 				env
@@ -4373,6 +4417,7 @@ impl<'a> TypeChecker<'a> {
 					.as_class()
 					.unwrap(),
 				property,
+				false,
 			),
 			Type::Duration => self.get_property_from_class_like(
 				env
@@ -4384,8 +4429,9 @@ impl<'a> TypeChecker<'a> {
 					.as_class()
 					.unwrap(),
 				property,
+				false,
 			),
-			Type::Struct(ref s) => self.get_property_from_class_like(s, property),
+			Type::Struct(ref s) => self.get_property_from_class_like(s, property, true),
 			_ => {
 				self
 					.spanned_error_with_var(property, "Property not found".to_string())
@@ -4395,11 +4441,19 @@ impl<'a> TypeChecker<'a> {
 	}
 
 	/// Get's the type of an instance variable in a class
-	fn get_property_from_class_like(&mut self, class: &impl ClassLike, property: &Symbol) -> VariableInfo {
+	fn get_property_from_class_like(
+		&mut self,
+		class: &impl ClassLike,
+		property: &Symbol,
+		allow_static: bool,
+	) -> VariableInfo {
 		let lookup_res = class.get_env().lookup_ext(property, None);
 		if let LookupResult::Found(field, _) = lookup_res {
 			let var = field.as_variable().expect("Expected property to be a variable");
 			if let VariableKind::StaticMember = var.kind {
+				if allow_static {
+					return var.clone();
+				}
 				self
 					.spanned_error_with_var(
 						property,

@@ -259,6 +259,7 @@ class $Root extends $stdlib.std.Resource {
         super._registerBind(host, ops);
       }
     }
+    const Bar = require("./Bar.Struct.js")($stdlib.std.Struct, $stdlib.core.NodeJsCode.fromInline);
     const getBar = new $Closure1(this,"$Closure1");
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:test",new $Closure2(this,"$Closure2"));
   }

@@ -35,6 +35,54 @@ module.exports = function({  }) {
 
 ```
 
+## lotsOfTypes.Struct.js
+```js
+module.exports = function(stdStruct, fromInline) {
+  class lotsOfTypes {
+    static _schema = {
+      id: "/lotsOfTypes",
+      type: "object",
+      properties: {
+        a: { type: "string" },
+        b: { type: "number" },
+        c: { type: "array",  items: { type: "string" } },
+        d: { type: "object", patternProperties: { ".*": { type: "string" } } },
+        e: { type: "object" },
+        f: { type: "boolean" },
+        g: { type: "string" },
+        h: { type: "array",  items: { type: "object", patternProperties: { ".*": { type: "number" } } } },
+      },
+      required: [
+        "a",
+        "b",
+        "c",
+        "d",
+        "e",
+        "f",
+        "h",
+      ]
+    }
+    static _getDependencies() {
+      return {
+      }
+    }
+    static _validate(obj) {
+      const validator = stdStruct._getValidator(this._getDependencies());
+      const errors = validator.validate(obj, this._schema).errors;
+      if (errors.length > 0) {
+        throw new Error(`unable to parse ${this.name}:\n ${errors.join("\n- ")}`);
+      }
+      return obj;
+    }
+    static _toInflightType(context) {
+      return fromInline(`require("./lotsOfTypes.Struct.js")(${ context._lift(stdStruct) })`);
+    }
+  }
+  return lotsOfTypes;
+};
+
+```
+
 ## main.tf.json
 ```json
 {
