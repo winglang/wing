@@ -653,11 +653,13 @@ pub enum InterpolatedStringPart {
 	Expr(Expr),
 }
 
+pub type ScopeId = usize;
+
 // do not derive Default, as we want to explicitly generate IDs
 #[derive(Debug)]
 pub struct Scope {
 	/// An identifier that is unique among all scopes in the AST.
-	pub id: usize,
+	pub id: ScopeId,
 	pub statements: Vec<Stmt>,
 	pub span: WingSpan,
 }

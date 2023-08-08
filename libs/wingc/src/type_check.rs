@@ -1403,18 +1403,18 @@ impl Types {
 	/// Sets the type environment for a given scope. Usually should be called soon
 	/// after the scope is created.
 	pub fn set_scope_env(&mut self, scope: &Scope, env: SymbolEnvRef) {
-		let scope_idx = scope.id;
-		if self.scope_envs.len() <= scope_idx {
-			self.scope_envs.resize_with(scope_idx + 1, || None);
+		let scope_id = scope.id;
+		if self.scope_envs.len() <= scope_id {
+			self.scope_envs.resize_with(scope_id + 1, || None);
 		}
-		assert!(self.scope_envs[scope_idx].is_none());
-		self.scope_envs[scope_idx] = Some(env);
+		assert!(self.scope_envs[scope_id].is_none());
+		self.scope_envs[scope_id] = Some(env);
 	}
 
 	/// Obtain the type environment for a given scope.
 	pub fn get_scope_env(&self, scope: &Scope) -> SymbolEnvRef {
-		let scope_idx = scope.id;
-		self.scope_envs[scope_idx].expect("Scope should have an env")
+		let scope_id = scope.id;
+		self.scope_envs[scope_id].expect("Scope should have an env")
 	}
 
 	pub fn reset_scope_envs(&mut self) {
