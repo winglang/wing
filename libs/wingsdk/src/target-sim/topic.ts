@@ -35,7 +35,7 @@ export class Topic extends cloud.Topic implements ISimulatorResource {
     );
 
     const fn = Function._newFunction(
-      this,
+      this.node.scope!, // ok since we're not a tree root
       `${this.node.id}-OnMessage-${hash}`,
       functionHandler,
       props

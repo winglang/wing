@@ -60,7 +60,7 @@ export class Queue extends cloud.Queue {
     );
 
     const fn = Function._newFunction(
-      this,
+      this.node.scope!, // ok since we're not a tree root
       `${this.node.id}-SetConsumer-${hash}`,
       functionHandler,
       props

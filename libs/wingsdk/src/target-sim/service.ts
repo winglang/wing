@@ -64,7 +64,7 @@ export class Service extends cloud.Service implements ISimulatorResource {
     );
 
     const fn = Function._newFunction(
-      this,
+      this.node.scope!, // ok since we're not a tree root
       `${this.node.id}-${id}${onStartHash}`,
       onStartFunctionHandler,
       {}

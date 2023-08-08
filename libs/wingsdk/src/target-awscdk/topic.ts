@@ -46,7 +46,7 @@ export class Topic extends cloud.Topic {
     );
 
     const fn = Function._newFunction(
-      this,
+      this.node.scope!,
       `${this.node.id}-OnMessage-${hash}`,
       functionHandler,
       props

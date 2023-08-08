@@ -58,7 +58,7 @@ export class Schedule extends cloud.Schedule {
     );
 
     const fn = Function._newFunction(
-      this,
+      this.node.scope!, // ok since we're not a tree root
       `${this.node.id}-OnTick-${hash}`,
       functionHandler,
       props
