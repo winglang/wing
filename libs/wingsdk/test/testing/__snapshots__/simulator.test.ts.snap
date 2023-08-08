@@ -16,6 +16,7 @@ exports[`provides raw tree data 1`] = `
           "description": "A suite of APIs for running tests and collecting results.",
           "hidden": true,
           "title": "TestRunner",
+          "type": "user-named",
         },
         "id": "cloud.TestRunner",
         "path": "root/cloud.TestRunner",
@@ -36,6 +37,7 @@ exports[`provides raw tree data 1`] = `
             "display": {
               "description": "A cloud function (FaaS)",
               "title": "Function",
+              "type": "user-named",
             },
             "id": "Handler",
             "path": "root/test/Handler",
@@ -48,6 +50,7 @@ exports[`provides raw tree data 1`] = `
         "display": {
           "description": "A cloud unit test.",
           "title": "Test",
+          "type": "user-named",
         },
         "id": "test",
         "path": "root/test",
@@ -64,6 +67,7 @@ exports[`provides raw tree data 1`] = `
           "description": "An inflight resource",
           "hidden": true,
           "title": "Inflight",
+          "type": "user-named",
         },
         "id": "test.handler",
         "path": "root/test.handler",

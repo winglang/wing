@@ -86,6 +86,7 @@ exports[`bucket is public 2`] = `
                   "description": "A suite of APIs for running tests and collecting results.",
                   "hidden": true,
                   "title": "TestRunner",
+                  "type": "user-named",
                 },
                 "id": "cloud.TestRunner",
                 "path": "root/Default/cloud.TestRunner",
@@ -135,6 +136,7 @@ exports[`bucket is public 2`] = `
                 "display": {
                   "description": "A cloud object store",
                   "title": "Bucket",
+                  "type": "user-named",
                 },
                 "id": "my_bucket",
                 "path": "root/Default/my_bucket",
@@ -259,6 +261,7 @@ exports[`bucket prefix must be lowercase 2`] = `
                 "display": {
                   "description": "A cloud object store",
                   "title": "Bucket",
+                  "type": "user-named",
                 },
                 "id": "The-Uncanny.Bucket",
                 "path": "root/Default/The-Uncanny.Bucket",
@@ -293,6 +296,7 @@ exports[`bucket prefix must be lowercase 2`] = `
                   "description": "A suite of APIs for running tests and collecting results.",
                   "hidden": true,
                   "title": "TestRunner",
+                  "type": "user-named",
                 },
                 "id": "cloud.TestRunner",
                 "path": "root/Default/cloud.TestRunner",
@@ -410,6 +414,7 @@ exports[`bucket prefix valid 2`] = `
                   "description": "A suite of APIs for running tests and collecting results.",
                   "hidden": true,
                   "title": "TestRunner",
+                  "type": "user-named",
                 },
                 "id": "cloud.TestRunner",
                 "path": "root/Default/cloud.TestRunner",
@@ -451,6 +456,7 @@ exports[`bucket prefix valid 2`] = `
                 "display": {
                   "description": "A cloud object store",
                   "title": "Bucket",
+                  "type": "user-named",
                 },
                 "id": "the-uncanny.bucket",
                 "path": "root/Default/the-uncanny.bucket",
@@ -676,6 +682,7 @@ exports[`bucket with onCreate method 2`] = `
                   "description": "A suite of APIs for running tests and collecting results.",
                   "hidden": true,
                   "title": "TestRunner",
+                  "type": "user-named",
                 },
                 "id": "cloud.TestRunner",
                 "path": "root/Default/cloud.TestRunner",
@@ -705,6 +712,7 @@ exports[`bucket with onCreate method 2`] = `
                   "description": "An inflight resource",
                   "hidden": true,
                   "title": "Inflight",
+                  "type": "user-named",
                 },
                 "id": "inflight",
                 "path": "root/Default/inflight",
@@ -811,6 +819,7 @@ exports[`bucket with onCreate method 2`] = `
                     "display": {
                       "description": "A pub/sub notification topic",
                       "title": "Topic",
+                      "type": "user-named",
                     },
                     "id": "my_bucket-oncreate",
                     "path": "root/Default/my_bucket/my_bucket-oncreate",
@@ -915,6 +924,7 @@ exports[`bucket with onCreate method 2`] = `
                     "display": {
                       "description": "A cloud function (FaaS)",
                       "title": "Function",
+                      "type": "compiler-named",
                     },
                     "id": "my_bucket-oncreate-OnMessage-1000fbe7",
                     "path": "root/Default/my_bucket/my_bucket-oncreate-OnMessage-1000fbe7",
@@ -929,6 +939,7 @@ exports[`bucket with onCreate method 2`] = `
                     },
                     "display": {
                       "hidden": true,
+                      "type": "user-named",
                     },
                     "id": "my_bucket-oncreate-OnMessageHandler-1000fbe7",
                     "path": "root/Default/my_bucket/my_bucket-oncreate-OnMessageHandler-1000fbe7",
@@ -941,6 +952,7 @@ exports[`bucket with onCreate method 2`] = `
                 "display": {
                   "description": "A cloud object store",
                   "title": "Bucket",
+                  "type": "user-named",
                 },
                 "id": "my_bucket",
                 "path": "root/Default/my_bucket",
@@ -968,6 +980,7 @@ exports[`bucket with onCreate method 2`] = `
                 },
                 "display": {
                   "hidden": true,
+                  "type": "user-named",
                 },
                 "id": "my_bucket-oncreate-eventHandler-9eade8f6",
                 "path": "root/Default/my_bucket-oncreate-eventHandler-9eade8f6",
@@ -1193,6 +1206,7 @@ exports[`bucket with onDelete method 2`] = `
                   "description": "A suite of APIs for running tests and collecting results.",
                   "hidden": true,
                   "title": "TestRunner",
+                  "type": "user-named",
                 },
                 "id": "cloud.TestRunner",
                 "path": "root/Default/cloud.TestRunner",
@@ -1222,6 +1236,7 @@ exports[`bucket with onDelete method 2`] = `
                   "description": "An inflight resource",
                   "hidden": true,
                   "title": "Inflight",
+                  "type": "user-named",
                 },
                 "id": "inflight",
                 "path": "root/Default/inflight",
@@ -1328,6 +1343,7 @@ exports[`bucket with onDelete method 2`] = `
                     "display": {
                       "description": "A pub/sub notification topic",
                       "title": "Topic",
+                      "type": "user-named",
                     },
                     "id": "my_bucket-ondelete",
                     "path": "root/Default/my_bucket/my_bucket-ondelete",
@@ -1432,6 +1448,7 @@ exports[`bucket with onDelete method 2`] = `
                     "display": {
                       "description": "A cloud function (FaaS)",
                       "title": "Function",
+                      "type": "compiler-named",
                     },
                     "id": "my_bucket-ondelete-OnMessage-107fa7e8",
                     "path": "root/Default/my_bucket/my_bucket-ondelete-OnMessage-107fa7e8",
@@ -1446,6 +1463,7 @@ exports[`bucket with onDelete method 2`] = `
                     },
                     "display": {
                       "hidden": true,
+                      "type": "user-named",
                     },
                     "id": "my_bucket-ondelete-OnMessageHandler-107fa7e8",
                     "path": "root/Default/my_bucket/my_bucket-ondelete-OnMessageHandler-107fa7e8",
@@ -1458,6 +1476,7 @@ exports[`bucket with onDelete method 2`] = `
                 "display": {
                   "description": "A cloud object store",
                   "title": "Bucket",
+                  "type": "user-named",
                 },
                 "id": "my_bucket",
                 "path": "root/Default/my_bucket",
@@ -1485,6 +1504,7 @@ exports[`bucket with onDelete method 2`] = `
                 },
                 "display": {
                   "hidden": true,
+                  "type": "user-named",
                 },
                 "id": "my_bucket-ondelete-eventHandler-9eade8f6",
                 "path": "root/Default/my_bucket-ondelete-eventHandler-9eade8f6",
@@ -1832,6 +1852,7 @@ exports[`bucket with onEvent method 2`] = `
                   "description": "A suite of APIs for running tests and collecting results.",
                   "hidden": true,
                   "title": "TestRunner",
+                  "type": "user-named",
                 },
                 "id": "cloud.TestRunner",
                 "path": "root/Default/cloud.TestRunner",
@@ -1885,6 +1906,7 @@ exports[`bucket with onEvent method 2`] = `
                   "description": "An inflight resource",
                   "hidden": true,
                   "title": "Inflight",
+                  "type": "user-named",
                 },
                 "id": "inflight",
                 "path": "root/Default/inflight",
@@ -2003,6 +2025,7 @@ exports[`bucket with onEvent method 2`] = `
                     "display": {
                       "description": "A pub/sub notification topic",
                       "title": "Topic",
+                      "type": "user-named",
                     },
                     "id": "my_bucket-oncreate",
                     "path": "root/Default/my_bucket/my_bucket-oncreate",
@@ -2107,6 +2130,7 @@ exports[`bucket with onEvent method 2`] = `
                     "display": {
                       "description": "A cloud function (FaaS)",
                       "title": "Function",
+                      "type": "compiler-named",
                     },
                     "id": "my_bucket-oncreate-OnMessage-1000fbe7",
                     "path": "root/Default/my_bucket/my_bucket-oncreate-OnMessage-1000fbe7",
@@ -2121,6 +2145,7 @@ exports[`bucket with onEvent method 2`] = `
                     },
                     "display": {
                       "hidden": true,
+                      "type": "user-named",
                     },
                     "id": "my_bucket-oncreate-OnMessageHandler-1000fbe7",
                     "path": "root/Default/my_bucket/my_bucket-oncreate-OnMessageHandler-1000fbe7",
@@ -2175,6 +2200,7 @@ exports[`bucket with onEvent method 2`] = `
                     "display": {
                       "description": "A pub/sub notification topic",
                       "title": "Topic",
+                      "type": "user-named",
                     },
                     "id": "my_bucket-ondelete",
                     "path": "root/Default/my_bucket/my_bucket-ondelete",
@@ -2279,6 +2305,7 @@ exports[`bucket with onEvent method 2`] = `
                     "display": {
                       "description": "A cloud function (FaaS)",
                       "title": "Function",
+                      "type": "compiler-named",
                     },
                     "id": "my_bucket-ondelete-OnMessage-107fa7e8",
                     "path": "root/Default/my_bucket/my_bucket-ondelete-OnMessage-107fa7e8",
@@ -2293,6 +2320,7 @@ exports[`bucket with onEvent method 2`] = `
                     },
                     "display": {
                       "hidden": true,
+                      "type": "user-named",
                     },
                     "id": "my_bucket-ondelete-OnMessageHandler-107fa7e8",
                     "path": "root/Default/my_bucket/my_bucket-ondelete-OnMessageHandler-107fa7e8",
@@ -2347,6 +2375,7 @@ exports[`bucket with onEvent method 2`] = `
                     "display": {
                       "description": "A pub/sub notification topic",
                       "title": "Topic",
+                      "type": "user-named",
                     },
                     "id": "my_bucket-onupdate",
                     "path": "root/Default/my_bucket/my_bucket-onupdate",
@@ -2451,6 +2480,7 @@ exports[`bucket with onEvent method 2`] = `
                     "display": {
                       "description": "A cloud function (FaaS)",
                       "title": "Function",
+                      "type": "compiler-named",
                     },
                     "id": "my_bucket-onupdate-OnMessage-02f87005",
                     "path": "root/Default/my_bucket/my_bucket-onupdate-OnMessage-02f87005",
@@ -2465,6 +2495,7 @@ exports[`bucket with onEvent method 2`] = `
                     },
                     "display": {
                       "hidden": true,
+                      "type": "user-named",
                     },
                     "id": "my_bucket-onupdate-OnMessageHandler-02f87005",
                     "path": "root/Default/my_bucket/my_bucket-onupdate-OnMessageHandler-02f87005",
@@ -2477,6 +2508,7 @@ exports[`bucket with onEvent method 2`] = `
                 "display": {
                   "description": "A cloud object store",
                   "title": "Bucket",
+                  "type": "user-named",
                 },
                 "id": "my_bucket",
                 "path": "root/Default/my_bucket",
@@ -2504,6 +2536,7 @@ exports[`bucket with onEvent method 2`] = `
                 },
                 "display": {
                   "hidden": true,
+                  "type": "user-named",
                 },
                 "id": "my_bucket-oncreate-eventHandler-9eade8f6",
                 "path": "root/Default/my_bucket-oncreate-eventHandler-9eade8f6",
@@ -2531,6 +2564,7 @@ exports[`bucket with onEvent method 2`] = `
                 },
                 "display": {
                   "hidden": true,
+                  "type": "user-named",
                 },
                 "id": "my_bucket-ondelete-eventHandler-9eade8f6",
                 "path": "root/Default/my_bucket-ondelete-eventHandler-9eade8f6",
@@ -2558,6 +2592,7 @@ exports[`bucket with onEvent method 2`] = `
                 },
                 "display": {
                   "hidden": true,
+                  "type": "user-named",
                 },
                 "id": "my_bucket-onupdate-eventHandler-9eade8f6",
                 "path": "root/Default/my_bucket-onupdate-eventHandler-9eade8f6",
@@ -2783,6 +2818,7 @@ exports[`bucket with onUpdate method 2`] = `
                   "description": "A suite of APIs for running tests and collecting results.",
                   "hidden": true,
                   "title": "TestRunner",
+                  "type": "user-named",
                 },
                 "id": "cloud.TestRunner",
                 "path": "root/Default/cloud.TestRunner",
@@ -2812,6 +2848,7 @@ exports[`bucket with onUpdate method 2`] = `
                   "description": "An inflight resource",
                   "hidden": true,
                   "title": "Inflight",
+                  "type": "user-named",
                 },
                 "id": "inflight",
                 "path": "root/Default/inflight",
@@ -2918,6 +2955,7 @@ exports[`bucket with onUpdate method 2`] = `
                     "display": {
                       "description": "A pub/sub notification topic",
                       "title": "Topic",
+                      "type": "user-named",
                     },
                     "id": "my_bucket-onupdate",
                     "path": "root/Default/my_bucket/my_bucket-onupdate",
@@ -3022,6 +3060,7 @@ exports[`bucket with onUpdate method 2`] = `
                     "display": {
                       "description": "A cloud function (FaaS)",
                       "title": "Function",
+                      "type": "compiler-named",
                     },
                     "id": "my_bucket-onupdate-OnMessage-02f87005",
                     "path": "root/Default/my_bucket/my_bucket-onupdate-OnMessage-02f87005",
@@ -3036,6 +3075,7 @@ exports[`bucket with onUpdate method 2`] = `
                     },
                     "display": {
                       "hidden": true,
+                      "type": "user-named",
                     },
                     "id": "my_bucket-onupdate-OnMessageHandler-02f87005",
                     "path": "root/Default/my_bucket/my_bucket-onupdate-OnMessageHandler-02f87005",
@@ -3048,6 +3088,7 @@ exports[`bucket with onUpdate method 2`] = `
                 "display": {
                   "description": "A cloud object store",
                   "title": "Bucket",
+                  "type": "user-named",
                 },
                 "id": "my_bucket",
                 "path": "root/Default/my_bucket",
@@ -3075,6 +3116,7 @@ exports[`bucket with onUpdate method 2`] = `
                 },
                 "display": {
                   "hidden": true,
+                  "type": "user-named",
                 },
                 "id": "my_bucket-onupdate-eventHandler-9eade8f6",
                 "path": "root/Default/my_bucket-onupdate-eventHandler-9eade8f6",
@@ -3213,6 +3255,7 @@ exports[`bucket with two preflight objects 2`] = `
                   "description": "A suite of APIs for running tests and collecting results.",
                   "hidden": true,
                   "title": "TestRunner",
+                  "type": "user-named",
                 },
                 "id": "cloud.TestRunner",
                 "path": "root/Default/cloud.TestRunner",
@@ -3278,6 +3321,7 @@ exports[`bucket with two preflight objects 2`] = `
                 "display": {
                   "description": "A cloud object store",
                   "title": "Bucket",
+                  "type": "user-named",
                 },
                 "id": "my_bucket",
                 "path": "root/Default/my_bucket",
@@ -3395,6 +3439,7 @@ exports[`create a bucket 2`] = `
                   "description": "A suite of APIs for running tests and collecting results.",
                   "hidden": true,
                   "title": "TestRunner",
+                  "type": "user-named",
                 },
                 "id": "cloud.TestRunner",
                 "path": "root/Default/cloud.TestRunner",
@@ -3436,6 +3481,7 @@ exports[`create a bucket 2`] = `
                 "display": {
                   "description": "A cloud object store",
                   "title": "Bucket",
+                  "type": "user-named",
                 },
                 "id": "my_bucket",
                 "path": "root/Default/my_bucket",

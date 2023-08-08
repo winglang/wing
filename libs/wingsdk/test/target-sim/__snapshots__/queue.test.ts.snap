@@ -40,6 +40,7 @@ exports[`create a queue 1`] = `
             "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
             "title": "TestRunner",
+            "type": "user-named",
           },
           "id": "cloud.TestRunner",
           "path": "root/cloud.TestRunner",
@@ -55,6 +56,7 @@ exports[`create a queue 1`] = `
           "display": {
             "description": "A distributed message queue",
             "title": "Queue",
+            "type": "user-named",
           },
           "id": "my_queue",
           "path": "root/my_queue",
@@ -185,6 +187,7 @@ async handle(message) {
             "description": "An inflight resource",
             "hidden": true,
             "title": "Inflight",
+            "type": "user-named",
           },
           "id": "Handler",
           "path": "root/Handler",
@@ -201,6 +204,7 @@ async handle(message) {
             "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
             "title": "TestRunner",
+            "type": "user-named",
           },
           "id": "cloud.TestRunner",
           "path": "root/cloud.TestRunner",
@@ -227,6 +231,7 @@ async handle(message) {
               },
               "display": {
                 "hidden": true,
+                "type": "user-named",
               },
               "id": "my_queue-QueueEventMapping-e645076f",
               "path": "root/my_queue/my_queue-QueueEventMapping-e645076f",
@@ -239,6 +244,7 @@ async handle(message) {
           "display": {
             "description": "A distributed message queue",
             "title": "Queue",
+            "type": "user-named",
           },
           "id": "my_queue",
           "path": "root/my_queue",
@@ -273,6 +279,7 @@ async handle(message) {
           "display": {
             "description": "A cloud function (FaaS)",
             "title": "Function",
+            "type": "compiler-named",
           },
           "id": "my_queue-SetConsumer-e645076f",
           "path": "root/my_queue-SetConsumer-e645076f",
@@ -287,6 +294,7 @@ async handle(message) {
           },
           "display": {
             "hidden": true,
+            "type": "user-named",
           },
           "id": "my_queue-SetConsumerHandler-e645076f",
           "path": "root/my_queue-SetConsumerHandler-e645076f",
@@ -417,6 +425,7 @@ async handle(message) {
             "description": "An inflight resource",
             "hidden": true,
             "title": "Inflight",
+            "type": "user-named",
           },
           "id": "Handler",
           "path": "root/Handler",
@@ -433,6 +442,7 @@ async handle(message) {
             "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
             "title": "TestRunner",
+            "type": "user-named",
           },
           "id": "cloud.TestRunner",
           "path": "root/cloud.TestRunner",
@@ -459,6 +469,7 @@ async handle(message) {
               },
               "display": {
                 "hidden": true,
+                "type": "user-named",
               },
               "id": "my_queue-QueueEventMapping-e645076f",
               "path": "root/my_queue/my_queue-QueueEventMapping-e645076f",
@@ -471,6 +482,7 @@ async handle(message) {
           "display": {
             "description": "A distributed message queue",
             "title": "Queue",
+            "type": "user-named",
           },
           "id": "my_queue",
           "path": "root/my_queue",
@@ -505,6 +517,7 @@ async handle(message) {
           "display": {
             "description": "A cloud function (FaaS)",
             "title": "Function",
+            "type": "compiler-named",
           },
           "id": "my_queue-SetConsumer-e645076f",
           "path": "root/my_queue-SetConsumer-e645076f",
@@ -519,6 +532,7 @@ async handle(message) {
           },
           "display": {
             "hidden": true,
+            "type": "user-named",
           },
           "id": "my_queue-SetConsumerHandler-e645076f",
           "path": "root/my_queue-SetConsumerHandler-e645076f",
@@ -653,6 +667,7 @@ async handle(message) {
             "description": "An inflight resource",
             "hidden": true,
             "title": "Inflight",
+            "type": "user-named",
           },
           "id": "Handler",
           "path": "root/Handler",
@@ -669,6 +684,7 @@ async handle(message) {
             "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
             "title": "TestRunner",
+            "type": "user-named",
           },
           "id": "cloud.TestRunner",
           "path": "root/cloud.TestRunner",
@@ -695,6 +711,7 @@ async handle(message) {
               },
               "display": {
                 "hidden": true,
+                "type": "user-named",
               },
               "id": "my_queue-QueueEventMapping-e645076f",
               "path": "root/my_queue/my_queue-QueueEventMapping-e645076f",
@@ -707,6 +724,7 @@ async handle(message) {
           "display": {
             "description": "A distributed message queue",
             "title": "Queue",
+            "type": "user-named",
           },
           "id": "my_queue",
           "path": "root/my_queue",
@@ -741,6 +759,7 @@ async handle(message) {
           "display": {
             "description": "A cloud function (FaaS)",
             "title": "Function",
+            "type": "compiler-named",
           },
           "id": "my_queue-SetConsumer-e645076f",
           "path": "root/my_queue-SetConsumer-e645076f",
@@ -755,6 +774,7 @@ async handle(message) {
           },
           "display": {
             "hidden": true,
+            "type": "user-named",
           },
           "id": "my_queue-SetConsumerHandler-e645076f",
           "path": "root/my_queue-SetConsumerHandler-e645076f",
@@ -826,6 +846,7 @@ exports[`queue batch size of 2, purge the queue 2`] = `
             "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
             "title": "TestRunner",
+            "type": "user-named",
           },
           "id": "cloud.TestRunner",
           "path": "root/cloud.TestRunner",
@@ -841,6 +862,7 @@ exports[`queue batch size of 2, purge the queue 2`] = `
           "display": {
             "description": "A distributed message queue",
             "title": "Queue",
+            "type": "user-named",
           },
           "id": "my_queue",
           "path": "root/my_queue",
@@ -975,6 +997,7 @@ async handle(message) {
             "description": "An inflight resource",
             "hidden": true,
             "title": "Inflight",
+            "type": "user-named",
           },
           "id": "Handler",
           "path": "root/Handler",
@@ -991,6 +1014,7 @@ async handle(message) {
             "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
             "title": "TestRunner",
+            "type": "user-named",
           },
           "id": "cloud.TestRunner",
           "path": "root/cloud.TestRunner",
@@ -1017,6 +1041,7 @@ async handle(message) {
               },
               "display": {
                 "hidden": true,
+                "type": "user-named",
               },
               "id": "my_queue-QueueEventMapping-e645076f",
               "path": "root/my_queue/my_queue-QueueEventMapping-e645076f",
@@ -1029,6 +1054,7 @@ async handle(message) {
           "display": {
             "description": "A distributed message queue",
             "title": "Queue",
+            "type": "user-named",
           },
           "id": "my_queue",
           "path": "root/my_queue",
@@ -1063,6 +1089,7 @@ async handle(message) {
           "display": {
             "description": "A cloud function (FaaS)",
             "title": "Function",
+            "type": "compiler-named",
           },
           "id": "my_queue-SetConsumer-e645076f",
           "path": "root/my_queue-SetConsumer-e645076f",
@@ -1077,6 +1104,7 @@ async handle(message) {
           },
           "display": {
             "hidden": true,
+            "type": "user-named",
           },
           "id": "my_queue-SetConsumerHandler-e645076f",
           "path": "root/my_queue-SetConsumerHandler-e645076f",
@@ -1206,6 +1234,7 @@ async handle(message) {
             "description": "An inflight resource",
             "hidden": true,
             "title": "Inflight",
+            "type": "user-named",
           },
           "id": "Handler",
           "path": "root/Handler",
@@ -1222,6 +1251,7 @@ async handle(message) {
             "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
             "title": "TestRunner",
+            "type": "user-named",
           },
           "id": "cloud.TestRunner",
           "path": "root/cloud.TestRunner",
@@ -1248,6 +1278,7 @@ async handle(message) {
               },
               "display": {
                 "hidden": true,
+                "type": "user-named",
               },
               "id": "my_queue-QueueEventMapping-e645076f",
               "path": "root/my_queue/my_queue-QueueEventMapping-e645076f",
@@ -1260,6 +1291,7 @@ async handle(message) {
           "display": {
             "description": "A distributed message queue",
             "title": "Queue",
+            "type": "user-named",
           },
           "id": "my_queue",
           "path": "root/my_queue",
@@ -1294,6 +1326,7 @@ async handle(message) {
           "display": {
             "description": "A cloud function (FaaS)",
             "title": "Function",
+            "type": "compiler-named",
           },
           "id": "my_queue-SetConsumer-e645076f",
           "path": "root/my_queue-SetConsumer-e645076f",
@@ -1308,6 +1341,7 @@ async handle(message) {
           },
           "display": {
             "hidden": true,
+            "type": "user-named",
           },
           "id": "my_queue-SetConsumerHandler-e645076f",
           "path": "root/my_queue-SetConsumerHandler-e645076f",

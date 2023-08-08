@@ -36,6 +36,7 @@ exports[`create a Redis resource 1`] = `
             "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
             "title": "TestRunner",
+            "type": "user-named",
           },
           "id": "cloud.TestRunner",
           "path": "root/cloud.TestRunner",
@@ -51,6 +52,7 @@ exports[`create a Redis resource 1`] = `
           "display": {
             "description": "A Redis server",
             "title": "Redis",
+            "type": "user-named",
           },
           "id": "my_redis",
           "path": "root/my_redis",

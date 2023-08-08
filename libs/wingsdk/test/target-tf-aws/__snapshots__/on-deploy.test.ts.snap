@@ -99,6 +99,7 @@ exports[`create an OnDeploy 2`] = `
                   "description": "An inflight resource",
                   "hidden": true,
                   "title": "Inflight",
+                  "type": "user-named",
                 },
                 "id": "Handler",
                 "path": "root/Default/Handler",
@@ -133,6 +134,7 @@ exports[`create an OnDeploy 2`] = `
                   "description": "A suite of APIs for running tests and collecting results.",
                   "hidden": true,
                   "title": "TestRunner",
+                  "type": "user-named",
                 },
                 "id": "cloud.TestRunner",
                 "path": "root/Default/cloud.TestRunner",
@@ -203,6 +205,7 @@ exports[`create an OnDeploy 2`] = `
                     "display": {
                       "description": "A cloud function (FaaS)",
                       "title": "Function",
+                      "type": "user-named",
                     },
                     "id": "Function",
                     "path": "root/Default/my_on_deploy/Function",
@@ -223,6 +226,7 @@ exports[`create an OnDeploy 2`] = `
                 "display": {
                   "description": "Run code during the app's deployment.",
                   "title": "OnDeploy",
+                  "type": "user-named",
                 },
                 "id": "my_on_deploy",
                 "path": "root/Default/my_on_deploy",
@@ -391,6 +395,7 @@ exports[`execute OnDeploy after other resources 2`] = `
                   "description": "An inflight resource",
                   "hidden": true,
                   "title": "Inflight",
+                  "type": "user-named",
                 },
                 "id": "Handler",
                 "path": "root/Default/Handler",
@@ -425,6 +430,7 @@ exports[`execute OnDeploy after other resources 2`] = `
                   "description": "A suite of APIs for running tests and collecting results.",
                   "hidden": true,
                   "title": "TestRunner",
+                  "type": "user-named",
                 },
                 "id": "cloud.TestRunner",
                 "path": "root/Default/cloud.TestRunner",
@@ -466,6 +472,7 @@ exports[`execute OnDeploy after other resources 2`] = `
                 "display": {
                   "description": "A cloud object store",
                   "title": "Bucket",
+                  "type": "user-named",
                 },
                 "id": "my_bucket",
                 "path": "root/Default/my_bucket",
@@ -536,6 +543,7 @@ exports[`execute OnDeploy after other resources 2`] = `
                     "display": {
                       "description": "A cloud function (FaaS)",
                       "title": "Function",
+                      "type": "user-named",
                     },
                     "id": "Function",
                     "path": "root/Default/my_on_deploy/Function",
@@ -556,6 +564,7 @@ exports[`execute OnDeploy after other resources 2`] = `
                 "display": {
                   "description": "Run code during the app's deployment.",
                   "title": "OnDeploy",
+                  "type": "user-named",
                 },
                 "id": "my_on_deploy",
                 "path": "root/Default/my_on_deploy",
@@ -729,6 +738,7 @@ exports[`execute OnDeploy before other resources 2`] = `
                   "description": "An inflight resource",
                   "hidden": true,
                   "title": "Inflight",
+                  "type": "user-named",
                 },
                 "id": "Handler",
                 "path": "root/Default/Handler",
@@ -763,6 +773,7 @@ exports[`execute OnDeploy before other resources 2`] = `
                   "description": "A suite of APIs for running tests and collecting results.",
                   "hidden": true,
                   "title": "TestRunner",
+                  "type": "user-named",
                 },
                 "id": "cloud.TestRunner",
                 "path": "root/Default/cloud.TestRunner",
@@ -804,6 +815,7 @@ exports[`execute OnDeploy before other resources 2`] = `
                 "display": {
                   "description": "A cloud object store",
                   "title": "Bucket",
+                  "type": "user-named",
                 },
                 "id": "my_bucket",
                 "path": "root/Default/my_bucket",
@@ -874,6 +886,7 @@ exports[`execute OnDeploy before other resources 2`] = `
                     "display": {
                       "description": "A cloud function (FaaS)",
                       "title": "Function",
+                      "type": "user-named",
                     },
                     "id": "Function",
                     "path": "root/Default/my_on_deploy/Function",
@@ -894,6 +907,7 @@ exports[`execute OnDeploy before other resources 2`] = `
                 "display": {
                   "description": "Run code during the app's deployment.",
                   "title": "OnDeploy",
+                  "type": "user-named",
                 },
                 "id": "my_on_deploy",
                 "path": "root/Default/my_on_deploy",
