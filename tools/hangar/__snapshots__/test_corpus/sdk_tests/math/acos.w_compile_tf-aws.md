@@ -1,6 +1,6 @@
 # [acos.w](../../../../../../examples/tests/sdk_tests/math/acos.w) | compile | tf-aws
 
-## inflight.$Closure1.js
+## inflight.$Closure1-c79d1b41.js
 ```js
 module.exports = function({ $math_Util }) {
   class $Closure1 {
@@ -175,7 +175,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1.js")({
+          require("./inflight.$Closure1-c79d1b41.js")({
             $math_Util: ${context._lift(math.Util)},
           })
         `);

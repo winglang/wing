@@ -1,6 +1,6 @@
 # [number.w](../../../../../../examples/tests/sdk_tests/std/number.w) | compile | tf-aws
 
-## inflight.$Closure1.js
+## inflight.$Closure1-43e98b89.js
 ```js
 module.exports = function({ $std_Number }) {
   class $Closure1 {
@@ -18,7 +18,7 @@ module.exports = function({ $std_Number }) {
 
 ```
 
-## inflight.$Closure2.js
+## inflight.$Closure2-43e98b89.js
 ```js
 module.exports = function({ $std_Number }) {
   class $Closure2 {
@@ -240,7 +240,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1.js")({
+          require("./inflight.$Closure1-43e98b89.js")({
             $std_Number: ${context._lift(std.Number)},
           })
         `);
@@ -265,7 +265,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure2.js")({
+          require("./inflight.$Closure2-43e98b89.js")({
             $std_Number: ${context._lift(std.Number)},
           })
         `);

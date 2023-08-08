@@ -1,6 +1,6 @@
 # [calling_inflight_variants.w](../../../../../examples/tests/valid/calling_inflight_variants.w) | compile | tf-aws
 
-## inflight.$Closure1.js
+## inflight.$Closure1-b408fc27.js
 ```js
 module.exports = function({  }) {
   class $Closure1 {
@@ -18,7 +18,7 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.$Closure2.js
+## inflight.$Closure2-b408fc27.js
 ```js
 module.exports = function({ $foo }) {
   class $Closure2 {
@@ -38,7 +38,7 @@ module.exports = function({ $foo }) {
 
 ```
 
-## inflight.Foo.js
+## inflight.Foo-b408fc27.js
 ```js
 module.exports = function({  }) {
   class Foo {
@@ -220,7 +220,7 @@ class $Root extends $stdlib.std.Resource {
           }
           static _toInflightType(context) {
             return $stdlib.core.NodeJsCode.fromInline(`
-              require("./inflight.$Closure1.js")({
+              require("./inflight.$Closure1-b408fc27.js")({
               })
             `);
           }
@@ -240,7 +240,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.Foo.js")({
+          require("./inflight.Foo-b408fc27.js")({
           })
         `);
       }
@@ -283,7 +283,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure2.js")({
+          require("./inflight.$Closure2-b408fc27.js")({
             $foo: ${context._lift(foo)},
           })
         `);

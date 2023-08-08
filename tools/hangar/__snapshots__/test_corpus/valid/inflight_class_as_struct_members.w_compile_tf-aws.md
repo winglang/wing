@@ -1,6 +1,6 @@
 # [inflight_class_as_struct_members.w](../../../../../examples/tests/valid/inflight_class_as_struct_members.w) | compile | tf-aws
 
-## inflight.$Closure1.js
+## inflight.$Closure1-dabf7c24.js
 ```js
 module.exports = function({ $Foo }) {
   class $Closure1 {
@@ -18,7 +18,7 @@ module.exports = function({ $Foo }) {
 
 ```
 
-## inflight.$Closure2.js
+## inflight.$Closure2-dabf7c24.js
 ```js
 module.exports = function({ $getBar }) {
   class $Closure2 {
@@ -37,7 +37,7 @@ module.exports = function({ $getBar }) {
 
 ```
 
-## inflight.Foo.js
+## inflight.Foo-dabf7c24.js
 ```js
 module.exports = function({  }) {
   class Foo {
@@ -187,7 +187,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.Foo.js")({
+          require("./inflight.Foo-dabf7c24.js")({
           })
         `);
       }
@@ -211,7 +211,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1.js")({
+          require("./inflight.$Closure1-dabf7c24.js")({
             $Foo: ${context._lift(Foo)},
           })
         `);
@@ -236,7 +236,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure2.js")({
+          require("./inflight.$Closure2-dabf7c24.js")({
             $getBar: ${context._lift(getBar)},
           })
         `);

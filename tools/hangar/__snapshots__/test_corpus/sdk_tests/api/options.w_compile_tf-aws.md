@@ -1,6 +1,6 @@
 # [options.w](../../../../../../examples/tests/sdk_tests/api/options.w) | compile | tf-aws
 
-## inflight.$Closure1.js
+## inflight.$Closure1-8e66fdf2.js
 ```js
 module.exports = function({ $api_OPTIONS, $path }) {
   class $Closure1 {
@@ -20,7 +20,7 @@ module.exports = function({ $api_OPTIONS, $path }) {
 
 ```
 
-## inflight.$Closure2.js
+## inflight.$Closure2-8e66fdf2.js
 ```js
 module.exports = function({ $api_HEAD, $path }) {
   class $Closure2 {
@@ -40,7 +40,7 @@ module.exports = function({ $api_HEAD, $path }) {
 
 ```
 
-## inflight.$Closure3.js
+## inflight.$Closure3-8e66fdf2.js
 ```js
 module.exports = function({  }) {
   class $Closure3 {
@@ -58,7 +58,7 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.$Closure4.js
+## inflight.$Closure4-8e66fdf2.js
 ```js
 module.exports = function({ $api_url, $http_HEAD, $http_OPTIONS, $http_Util, $path }) {
   class $Closure4 {
@@ -448,7 +448,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1.js")({
+          require("./inflight.$Closure1-8e66fdf2.js")({
             $api_OPTIONS: ${context._lift(api_OPTIONS)},
             $path: ${context._lift(path)},
           })
@@ -481,7 +481,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure2.js")({
+          require("./inflight.$Closure2-8e66fdf2.js")({
             $api_HEAD: ${context._lift(api_HEAD)},
             $path: ${context._lift(path)},
           })
@@ -514,7 +514,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure3.js")({
+          require("./inflight.$Closure3-8e66fdf2.js")({
           })
         `);
       }
@@ -549,7 +549,7 @@ class $Root extends $stdlib.std.Resource {
         }
         static _toInflightType(context) {
           return $stdlib.core.NodeJsCode.fromInline(`
-            require("./inflight.$Closure4.js")({
+            require("./inflight.$Closure4-8e66fdf2.js")({
               $api_url: ${context._lift(api.url)},
               $http_HEAD: ${context._lift(http_HEAD)},
               $http_OPTIONS: ${context._lift(http_OPTIONS)},

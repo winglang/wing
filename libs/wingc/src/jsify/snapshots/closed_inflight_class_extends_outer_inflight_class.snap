@@ -14,7 +14,7 @@ source: libs/wingc/src/jsify/tests.rs
     
 ```
 
-## inflight.$Closure1.js
+## inflight.$Closure1-6b63a948.js
 
 ```js
 module.exports = function({ $Base }) {
@@ -34,7 +34,7 @@ module.exports = function({ $Base }) {
 }
 ```
 
-## inflight.Base.js
+## inflight.Base-6b63a948.js
 
 ```js
 module.exports = function({  }) {
@@ -61,7 +61,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.Base.js")({
+          require("./inflight.Base-6b63a948.js")({
           })
         `);
       }
@@ -85,7 +85,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1.js")({
+          require("./inflight.$Closure1-6b63a948.js")({
             $Base: ${context._lift(Base)},
           })
         `);

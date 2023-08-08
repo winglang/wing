@@ -1,6 +1,6 @@
 # [wait-until.w](../../../../../../examples/tests/sdk_tests/util/wait-until.w) | compile | tf-aws
 
-## inflight.$Closure1.js
+## inflight.$Closure1-7e69d6bb.js
 ```js
 module.exports = function({ $JSHelper, $util_Util }) {
   class $Closure1 {
@@ -27,7 +27,7 @@ module.exports = function({ $JSHelper, $util_Util }) {
 
 ```
 
-## inflight.$Closure2.js
+## inflight.$Closure2-7e69d6bb.js
 ```js
 module.exports = function({ $JSHelper, $oneSecond, $util_Util }) {
   class $Closure2 {
@@ -54,7 +54,7 @@ module.exports = function({ $JSHelper, $oneSecond, $util_Util }) {
 
 ```
 
-## inflight.$Closure3.js
+## inflight.$Closure3-7e69d6bb.js
 ```js
 module.exports = function({ $JSHelper, $invokeCounter, $oneSecond, $util_Util }) {
   class $Closure3 {
@@ -84,7 +84,7 @@ module.exports = function({ $JSHelper, $invokeCounter, $oneSecond, $util_Util })
 
 ```
 
-## inflight.$Closure4.js
+## inflight.$Closure4-7e69d6bb.js
 ```js
 module.exports = function({ $JSHelper, $fiveSeconds, $invokeCounter, $oneSecond, $util_Util }) {
   class $Closure4 {
@@ -114,7 +114,7 @@ module.exports = function({ $JSHelper, $fiveSeconds, $invokeCounter, $oneSecond,
 
 ```
 
-## inflight.$Closure5.js
+## inflight.$Closure5-7e69d6bb.js
 ```js
 module.exports = function({ $invokeCounter, $util_Util }) {
   class $Closure5 {
@@ -142,7 +142,7 @@ module.exports = function({ $invokeCounter, $util_Util }) {
 
 ```
 
-## inflight.JSHelper.js
+## inflight.JSHelper-7e69d6bb.js
 ```js
 module.exports = function({  }) {
   class JSHelper {
@@ -582,7 +582,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.JSHelper.js")({
+          require("./inflight.JSHelper-7e69d6bb.js")({
           })
         `);
       }
@@ -606,7 +606,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1.js")({
+          require("./inflight.$Closure1-7e69d6bb.js")({
             $JSHelper: ${context._lift(JSHelper)},
             $util_Util: ${context._lift(util.Util)},
           })
@@ -638,7 +638,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure2.js")({
+          require("./inflight.$Closure2-7e69d6bb.js")({
             $JSHelper: ${context._lift(JSHelper)},
             $oneSecond: ${context._lift(oneSecond)},
             $util_Util: ${context._lift(util.Util)},
@@ -672,7 +672,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure3.js")({
+          require("./inflight.$Closure3-7e69d6bb.js")({
             $JSHelper: ${context._lift(JSHelper)},
             $invokeCounter: ${context._lift(invokeCounter)},
             $oneSecond: ${context._lift(oneSecond)},
@@ -708,7 +708,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure4.js")({
+          require("./inflight.$Closure4-7e69d6bb.js")({
             $JSHelper: ${context._lift(JSHelper)},
             $fiveSeconds: ${context._lift(fiveSeconds)},
             $invokeCounter: ${context._lift(invokeCounter)},
@@ -746,7 +746,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure5.js")({
+          require("./inflight.$Closure5-7e69d6bb.js")({
             $invokeCounter: ${context._lift(invokeCounter)},
             $util_Util: ${context._lift(util.Util)},
           })

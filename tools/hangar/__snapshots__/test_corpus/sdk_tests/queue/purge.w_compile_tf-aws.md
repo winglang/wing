@@ -1,6 +1,6 @@
 # [purge.w](../../../../../../examples/tests/sdk_tests/queue/purge.w) | compile | tf-aws
 
-## inflight.$Closure1.js
+## inflight.$Closure1-a5547e3e.js
 ```js
 module.exports = function({ $q, $std_Duration, $util_Util }) {
   class $Closure1 {
@@ -193,7 +193,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1.js")({
+          require("./inflight.$Closure1-a5547e3e.js")({
             $q: ${context._lift(q)},
             $std_Duration: ${context._lift(std.Duration)},
             $util_Util: ${context._lift(util.Util)},

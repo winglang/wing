@@ -1,6 +1,6 @@
 # [doubler.w](../../../../../examples/tests/valid/doubler.w) | compile | tf-aws
 
-## inflight.$Closure1.js
+## inflight.$Closure1-b3ea419e.js
 ```js
 module.exports = function({  }) {
   class $Closure1 {
@@ -18,7 +18,7 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.$Closure2.js
+## inflight.$Closure2-b3ea419e.js
 ```js
 module.exports = function({ $handler, $std_Json, $std_Number }) {
   class $Closure2 {
@@ -39,7 +39,7 @@ module.exports = function({ $handler, $std_Json, $std_Number }) {
 
 ```
 
-## inflight.$Closure3.js
+## inflight.$Closure3-b3ea419e.js
 ```js
 module.exports = function({  }) {
   class $Closure3 {
@@ -57,7 +57,7 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.$Closure4.js
+## inflight.$Closure4-b3ea419e.js
 ```js
 module.exports = function({ $f }) {
   class $Closure4 {
@@ -76,7 +76,7 @@ module.exports = function({ $f }) {
 
 ```
 
-## inflight.Doubler.js
+## inflight.Doubler-b3ea419e.js
 ```js
 module.exports = function({  }) {
   class Doubler {
@@ -93,7 +93,7 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.Doubler2.js
+## inflight.Doubler2-b3ea419e.js
 ```js
 module.exports = function({  }) {
   class Doubler2 {
@@ -311,7 +311,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.Doubler.js")({
+          require("./inflight.Doubler-b3ea419e.js")({
           })
         `);
       }
@@ -345,7 +345,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1.js")({
+          require("./inflight.$Closure1-b3ea419e.js")({
           })
         `);
       }
@@ -376,7 +376,7 @@ class $Root extends $stdlib.std.Resource {
           }
           static _toInflightType(context) {
             return $stdlib.core.NodeJsCode.fromInline(`
-              require("./inflight.$Closure2.js")({
+              require("./inflight.$Closure2-b3ea419e.js")({
                 $handler: ${context._lift(handler)},
                 $std_Json: ${context._lift(std.Json)},
                 $std_Number: ${context._lift(std.Number)},
@@ -405,7 +405,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.Doubler2.js")({
+          require("./inflight.Doubler2-b3ea419e.js")({
           })
         `);
       }
@@ -429,7 +429,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure3.js")({
+          require("./inflight.$Closure3-b3ea419e.js")({
           })
         `);
       }
@@ -453,7 +453,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure4.js")({
+          require("./inflight.$Closure4-b3ea419e.js")({
             $f: ${context._lift(f)},
           })
         `);

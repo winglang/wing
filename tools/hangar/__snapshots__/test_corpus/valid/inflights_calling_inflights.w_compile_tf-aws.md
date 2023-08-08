@@ -1,6 +1,6 @@
 # [inflights_calling_inflights.w](../../../../../examples/tests/valid/inflights_calling_inflights.w) | compile | tf-aws
 
-## inflight.$Closure1.js
+## inflight.$Closure1-ddee017f.js
 ```js
 module.exports = function({ $globalBucket }) {
   class $Closure1 {
@@ -18,7 +18,7 @@ module.exports = function({ $globalBucket }) {
 
 ```
 
-## inflight.$Closure2.js
+## inflight.$Closure2-ddee017f.js
 ```js
 module.exports = function({ $storeInBucket }) {
   class $Closure2 {
@@ -36,7 +36,7 @@ module.exports = function({ $storeInBucket }) {
 
 ```
 
-## inflight.$Closure3.js
+## inflight.$Closure3-ddee017f.js
 ```js
 module.exports = function({ $func1, $globalBucket }) {
   class $Closure3 {
@@ -55,7 +55,7 @@ module.exports = function({ $func1, $globalBucket }) {
 
 ```
 
-## inflight.$Closure4.js
+## inflight.$Closure4-ddee017f.js
 ```js
 module.exports = function({ $globalBucket }) {
   class $Closure4 {
@@ -74,7 +74,7 @@ module.exports = function({ $globalBucket }) {
 
 ```
 
-## inflight.$Closure5.js
+## inflight.$Closure5-ddee017f.js
 ```js
 module.exports = function({ $x }) {
   class $Closure5 {
@@ -93,7 +93,7 @@ module.exports = function({ $x }) {
 
 ```
 
-## inflight.MyResource.js
+## inflight.MyResource-ddee017f.js
 ```js
 module.exports = function({  }) {
   class MyResource {
@@ -427,7 +427,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1.js")({
+          require("./inflight.$Closure1-ddee017f.js")({
             $globalBucket: ${context._lift(globalBucket)},
           })
         `);
@@ -458,7 +458,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure2.js")({
+          require("./inflight.$Closure2-ddee017f.js")({
             $storeInBucket: ${context._lift(storeInBucket)},
           })
         `);
@@ -489,7 +489,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure3.js")({
+          require("./inflight.$Closure3-ddee017f.js")({
             $func1: ${context._lift(func1)},
             $globalBucket: ${context._lift(globalBucket)},
           })
@@ -527,7 +527,7 @@ class $Root extends $stdlib.std.Resource {
           }
           static _toInflightType(context) {
             return $stdlib.core.NodeJsCode.fromInline(`
-              require("./inflight.$Closure4.js")({
+              require("./inflight.$Closure4-ddee017f.js")({
                 $globalBucket: ${context._lift(globalBucket)},
               })
             `);
@@ -554,7 +554,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.MyResource.js")({
+          require("./inflight.MyResource-ddee017f.js")({
           })
         `);
       }
@@ -588,7 +588,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure5.js")({
+          require("./inflight.$Closure5-ddee017f.js")({
             $x: ${context._lift(x)},
           })
         `);

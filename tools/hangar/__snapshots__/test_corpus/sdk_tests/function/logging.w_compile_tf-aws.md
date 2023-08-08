@@ -1,6 +1,6 @@
 # [logging.w](../../../../../../examples/tests/sdk_tests/function/logging.w) | compile | tf-aws
 
-## inflight.$Closure1.js
+## inflight.$Closure1-4625f10b.js
 ```js
 module.exports = function({  }) {
   class $Closure1 {
@@ -18,7 +18,7 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.$Closure2.js
+## inflight.$Closure2-4625f10b.js
 ```js
 module.exports = function({ $f1 }) {
   class $Closure2 {
@@ -38,7 +38,7 @@ module.exports = function({ $f1 }) {
 
 ```
 
-## inflight.$Closure3.js
+## inflight.$Closure3-4625f10b.js
 ```js
 module.exports = function({ $Util, $f2 }) {
   class $Closure3 {
@@ -59,7 +59,7 @@ module.exports = function({ $Util, $f2 }) {
 
 ```
 
-## inflight.Util.js
+## inflight.Util-4625f10b.js
 ```js
 module.exports = function({  }) {
   class Util {
@@ -346,7 +346,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.Util.js")({
+          require("./inflight.Util-4625f10b.js")({
           })
         `);
       }
@@ -370,7 +370,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1.js")({
+          require("./inflight.$Closure1-4625f10b.js")({
           })
         `);
       }
@@ -394,7 +394,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure2.js")({
+          require("./inflight.$Closure2-4625f10b.js")({
             $f1: ${context._lift(f1)},
           })
         `);
@@ -425,7 +425,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure3.js")({
+          require("./inflight.$Closure3-4625f10b.js")({
             $Util: ${context._lift(Util)},
             $f2: ${context._lift(f2)},
           })

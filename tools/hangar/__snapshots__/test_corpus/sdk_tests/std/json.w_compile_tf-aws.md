@@ -1,6 +1,6 @@
 # [json.w](../../../../../../examples/tests/sdk_tests/std/json.w) | compile | tf-aws
 
-## inflight.$Closure1.js
+## inflight.$Closure1-94625c96.js
 ```js
 module.exports = function({  }) {
   class $Closure1 {
@@ -21,7 +21,7 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.$Closure2.js
+## inflight.$Closure2-94625c96.js
 ```js
 module.exports = function({  }) {
   class $Closure2 {
@@ -248,7 +248,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1.js")({
+          require("./inflight.$Closure1-94625c96.js")({
           })
         `);
       }
@@ -272,7 +272,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure2.js")({
+          require("./inflight.$Closure2-94625c96.js")({
           })
         `);
       }

@@ -1,6 +1,6 @@
 # [for_loop.w](../../../../../examples/tests/valid/for_loop.w) | compile | tf-aws
 
-## inflight.$Closure1.js
+## inflight.$Closure1-d8986e22.js
 ```js
 module.exports = function({  }) {
   class $Closure1 {
@@ -22,7 +22,7 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.Foo.js
+## inflight.Foo-d8986e22.js
 ```js
 module.exports = function({  }) {
   class Foo {
@@ -178,7 +178,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1.js")({
+          require("./inflight.$Closure1-d8986e22.js")({
           })
         `);
       }
@@ -201,7 +201,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.Foo.js")({
+          require("./inflight.Foo-d8986e22.js")({
           })
         `);
       }
