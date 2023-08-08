@@ -10,7 +10,7 @@ module.exports = function({ $b }) {
       return $obj;
     }
     async handle() {
-      const jsonObj2 = Object.freeze({"key2":"value2"});
+      const jsonObj2 = ({"key2": "value2"});
       (await $b.put("file1.txt","Foo"));
       {((cond) => {if (!cond) throw new Error("assertion failed: b.tryDelete(\"file1.txt\") == true")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $b.tryDelete("file1.txt")),true)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: b.tryDelete(\"file1.txt\") == false")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $b.tryDelete("file1.txt")),false)))};

@@ -11,12 +11,8 @@ module.exports = function({ $counter, $std_Json }) {
     }
     async handle(request) {
       const count = (await $counter.inc());
-      const bodyResponse = Object.freeze({"count":count});
-      const resp = {
-      "body": ((args) => { return JSON.stringify(args[0], null, args[1]) })([bodyResponse]),
-      "headers": Object.freeze({"content-type":"application/json"}),
-      "status": 200,}
-      ;
+      const bodyResponse = ({"count": count});
+      const resp = ({"body": ((args) => { return JSON.stringify(args[0], null, args[1]) })([bodyResponse]),"headers": ({"content-type": "application/json"}),"status": 200});
       return resp;
     }
   }
@@ -55,10 +51,7 @@ module.exports = function({ $__parent_this_3_api_url }) {
     }
     async handle(req) {
       const text = String.raw({ raw: ["", "/endpoint2"] }, $__parent_this_3_api_url);
-      return {
-      "status": 200,
-      "body": text,}
-      ;
+      return ({"status": 200,"body": text});
     }
   }
   return $Closure3;

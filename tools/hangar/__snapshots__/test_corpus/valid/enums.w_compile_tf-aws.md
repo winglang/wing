@@ -184,12 +184,12 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     const SomeEnum =
-      Object.freeze((function (tmp) {
+      (function (tmp) {
         tmp[tmp["ONE"] = 0] = "ONE";
         tmp[tmp["TWO"] = 1] = "TWO";
         tmp[tmp["THREE"] = 2] = "THREE";
         return tmp;
-      })({}))
+      })({})
     ;
     const one = SomeEnum.ONE;
     const two = SomeEnum.TWO;

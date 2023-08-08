@@ -45,8 +45,8 @@ module.exports = function({ $counter, $kv, $util_Util }) {
       return $obj;
     }
     async handle() {
-      (await $kv.set("k",Object.freeze({"value":"v"})));
-      (await $kv.set("k2",Object.freeze({"value":"v"})));
+      (await $kv.set("k",({"value": "v"})));
+      (await $kv.set("k2",({"value": "v"})));
       (await $kv.get("k"));
       (await $kv.get("k"));
       (await $kv.get("k2"));

@@ -80,15 +80,15 @@ class $Root extends $stdlib.std.Resource {
     const jsonNumber = 123;
     const jsonBool = true;
     const jsonArray = [1, 2, 3];
-    const jsonObj = Object.freeze({"boom":123});
-    const jsonMutObj = {"hello":123,"world":[1, "cat", 3],"boom boom":{"hello":1233}};
+    const jsonObj = ({"boom": 123});
+    const jsonMutObj = ({"hello": 123,"world": [1, "cat", 3],"boom boom": ({"hello": 1233})});
     const message = "Coolness";
     ((obj, args) => { obj[args[0]] = args[1]; })(jsonMutObj, ["hello",message]);
     {((cond) => {if (!cond) throw new Error("assertion failed: jsonMutObj.get(\"hello\") == message")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((jsonMutObj)["hello"],message)))};
     const someNumber = 999;
     const jj = someNumber;
-    const jj1 = Object.freeze({"foo":someNumber});
-    const jj2 = [someNumber, Object.freeze({"bar":someNumber})];
+    const jj1 = ({"foo": someNumber});
+    const jj2 = [someNumber, ({"bar": someNumber})];
     const getStr = (() => {
       return "hello";
     });
@@ -97,12 +97,12 @@ class $Root extends $stdlib.std.Resource {
     const f = new Foo(this,"Foo");
     const jj4 = f.SumStr;
     {((cond) => {if (!cond) throw new Error("assertion failed: jj4 == Json \"wow!\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(jj4,"wow!")))};
-    const someJson = {"x":someNumber};
+    const someJson = ({"x": someNumber});
     {((cond) => {if (!cond) throw new Error("assertion failed: someJson.get(\"x\") == someNumber")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((someJson)["x"],someNumber)))};
     ((obj, args) => { obj[args[0]] = args[1]; })(someJson, ["x",111]);
     {((cond) => {if (!cond) throw new Error("assertion failed: someJson.get(\"x\") == 111")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((someJson)["x"],111)))};
-    const x = Object.freeze({"cool":"beans"});
-    const nestedJson = {"a":"hello","b":{"c":"world","d":{"foo":"foo","bar":123}}};
+    const x = ({"cool": "beans"});
+    const nestedJson = ({"a": "hello","b": ({"c": "world","d": ({"foo": "foo","bar": 123})})});
     ((obj, args) => { obj[args[0]] = args[1]; })(((nestedJson)["b"])["d"], ["foo","tastic"]);
     {((cond) => {if (!cond) throw new Error("assertion failed: nestedJson.get(\"b\").get(\"d\").get(\"foo\") == \"tastic\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((((nestedJson)["b"])["d"])["foo"],"tastic")))};
     {((cond) => {if (!cond) throw new Error("assertion failed: nestedJson.get(\"b\").get(\"d\").get(\"bar\") == 123")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((((nestedJson)["b"])["d"])["bar"],123)))};
@@ -111,22 +111,22 @@ class $Root extends $stdlib.std.Resource {
     {((cond) => {if (!cond) throw new Error("assertion failed: arr.getAt(0) == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((arr)[0],1)))};
     {((cond) => {if (!cond) throw new Error("assertion failed: arr.getAt(2) == b")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((arr)[2],b)))};
     {((cond) => {if (!cond) throw new Error("assertion failed: arr.getAt(7).getAt(0) == \"shut\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((arr)[7])[0],"shut")))};
-    Object.freeze({"a":[1, 2, "world"],"b":[1, 2, "world"]});
-    const emptyJson = Object.freeze({});
+    ({"a": [1, 2, "world"],"b": [1, 2, "world"]});
+    const emptyJson = ({});
     const emptyJsonArr = [];
-    const emptyMutJson = {};
+    const emptyMutJson = ({});
     const emptyMutJsonArr = [];
-    ((obj, args) => { obj[args[0]] = args[1]; })(emptyMutJson, ["cool",{"a":1,"b":2}]);
+    ((obj, args) => { obj[args[0]] = args[1]; })(emptyMutJson, ["cool",({"a": 1,"b": 2})]);
     ((obj, args) => { obj[args[0]] = args[1]; })((emptyMutJson)["cool"], ["a",3]);
-    ((obj, args) => { obj[args[0]] = args[1]; })(emptyMutJsonArr, [0,{"a":1,"b":2}]);
+    ((obj, args) => { obj[args[0]] = args[1]; })(emptyMutJsonArr, [0,({"a": 1,"b": 2})]);
     ((obj, args) => { obj[args[0]] = args[1]; })((emptyMutJsonArr)[0], ["a",3]);
-    const theTowerOfJson = {"a":{},"b":{"c":{},"d":[[[{}]]]},"e":{"f":{"g":{},"h":[{}, []]}}};
+    const theTowerOfJson = ({"a": ({}),"b": ({"c": ({}),"d": [[[({})]]]}),"e": ({"f": ({"g": ({}),"h": [({}), []]})})});
     ((obj, args) => { obj[args[0]] = args[1]; })(((((theTowerOfJson)["e"])["f"])["h"])[0], ["a",1]);
     const thatSuperNestedValue = (((((theTowerOfJson)["e"])["f"])["h"])[0])["a"];
     {((cond) => {if (!cond) throw new Error("assertion failed: num.fromJson(thatSuperNestedValue) == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((args) => { if (typeof args !== "number") {throw new Error("unable to parse " + typeof args + " " + args + " as a number")}; return JSON.parse(JSON.stringify(args)) })(thatSuperNestedValue),1)))};
     const unestedJsonArr = [1, 2, 3];
     {((cond) => {if (!cond) throw new Error("assertion failed: unestedJsonArr.getAt(0) == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((unestedJsonArr)[0],1)))};
-    const jsonElements = Object.freeze({"strings":Object.freeze({"single":"Hello","array":["Hello", "World", "!"]}),"numbers":Object.freeze({"one":1,"two":2,"three":3}),"bools":Object.freeze({"t":true,"f":false})});
+    const jsonElements = ({"strings": ({"single": "Hello","array": ["Hello", "World", "!"]}),"numbers": ({"one": 1,"two": 2,"three": 3}),"bools": ({"t": true,"f": false})});
     {
       const $IF_LET_VALUE = ((arg) => { if (typeof arg !== "string") {throw new Error("unable to parse " + typeof arg + " " + arg + " as a string")}; return JSON.parse(JSON.stringify(arg)) })(((jsonElements)?.["strings"])?.["single"]);
       if ($IF_LET_VALUE != undefined) {
@@ -190,9 +190,9 @@ class $Root extends $stdlib.std.Resource {
         {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
       }
     }
-    const notSpecified = Object.freeze({"foo":"bar"});
+    const notSpecified = ({"foo": "bar"});
     {((cond) => {if (!cond) throw new Error("assertion failed: notSpecified.get(\"foo\") == \"bar\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((notSpecified)["foo"],"bar")))};
-    const empty = Object.freeze({});
+    const empty = ({});
     {((cond) => {if (!cond) throw new Error("assertion failed: Json.has(empty, \"something\") == false")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((args) => { return args[0].hasOwnProperty(args[1]); })([empty,"something"]),false)))};
   }
 }

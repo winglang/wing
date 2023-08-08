@@ -204,11 +204,11 @@ class $Root extends $stdlib.std.Resource {
         super._registerBind(host, ops);
       }
     }
-    const arr = Object.freeze(["hello", "world"]);
-    const mySet = Object.freeze(new Set(["my", "my", "set"]));
-    const myMap = Object.freeze({"hello":123,"world":999});
-    const arrOfMap = Object.freeze([Object.freeze({"bang":123})]);
-    const j = Object.freeze({"a":"hello","b":"world"});
+    const arr = ["hello", "world"];
+    const mySet = new Set(["my", "my", "set"]);
+    const myMap = ({"hello": 123,"world": 999});
+    const arrOfMap = [({"bang": 123})];
+    const j = ({"a": "hello","b": "world"});
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:capture_containers",new $Closure1(this,"$Closure1"));
   }
 }

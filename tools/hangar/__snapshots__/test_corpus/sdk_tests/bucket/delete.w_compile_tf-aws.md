@@ -11,7 +11,7 @@ module.exports = function({ $b }) {
     }
     async handle() {
       let error = "";
-      const jsonObj1 = Object.freeze({"key1":"value1"});
+      const jsonObj1 = ({"key1": "value1"});
       (await $b.putJson("file1.json",jsonObj1));
       (await $b.delete("file1.txt"));
       {((cond) => {if (!cond) throw new Error("assertion failed: b.exists(\"file1.json\")")})((await $b.exists("file1.json")))};

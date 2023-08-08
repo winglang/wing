@@ -73,7 +73,7 @@ class $Root extends $stdlib.std.Resource {
         super._registerBind(host, ops);
       }
     }
-    const jsonObj1 = Object.freeze({"key1":"value1"});
+    const jsonObj1 = ({"key1": "value1"});
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:test",new $Closure1(this,"$Closure1"));
   }
 }

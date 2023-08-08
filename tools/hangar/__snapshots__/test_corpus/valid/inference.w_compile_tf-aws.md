@@ -10,10 +10,7 @@ module.exports = function({  }) {
       return $obj;
     }
     async handle(request) {
-      return {
-      "body": request.body,
-      "status": 200,}
-      ;
+      return ({"body": request.body,"status": 200});
     }
   }
   return $Closure1;
@@ -255,15 +252,15 @@ class $Root extends $stdlib.std.Resource {
       }
     });
     (recursiveClosure(2));
-    const emptyArray = Object.freeze([]);
+    const emptyArray = [];
     const num_array = emptyArray;
-    const emptyArray2 = Object.freeze([]);
+    const emptyArray2 = [];
     const clonedArray2 = [...(emptyArray2)];
     (clonedArray2.push(1));
     (clonedArray2.push(2));
     (clonedArray2.push(((clonedArray2.at(0)) + (clonedArray2.at(1)))));
     {((cond) => {if (!cond) throw new Error("assertion failed: clonedArray2.at(2) == 3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((clonedArray2.at(2)),3)))};
-    const emptySet = Object.freeze(new Set([(clonedArray2.at(2))]));
+    const emptySet = new Set([(clonedArray2.at(2))]);
     const clonedSet = new Set(emptySet);
     (clonedSet.add(4));
     const api = this.node.root.newAbstract("@winglang/sdk.cloud.Api",this,"cloud.Api");

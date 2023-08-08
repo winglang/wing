@@ -240,9 +240,9 @@ class $Root extends $stdlib.std.Resource {
         super._registerBind(host, ops);
       }
     }
-    const table = this.node.root.newAbstract("@winglang/sdk.ex.Table",this,"ex.Table",{ name: "users", primaryKey: "name", columns: Object.freeze({"gender":ex.ColumnType.STRING,"role":ex.ColumnType.STRING}) });
-    const marioInfo = Object.freeze({"gender":"male","role":"plumber"});
-    const peachInfo = Object.freeze({"gender":"female","role":"princess"});
+    const table = this.node.root.newAbstract("@winglang/sdk.ex.Table",this,"ex.Table",{ name: "users", primaryKey: "name", columns: ({"gender": ex.ColumnType.STRING,"role": ex.ColumnType.STRING}) });
+    const marioInfo = ({"gender": "male","role": "plumber"});
+    const peachInfo = ({"gender": "female","role": "princess"});
     (table.addRow("mario",marioInfo));
     (table.addRow("peach",peachInfo));
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:addRow",new $Closure1(this,"$Closure1"));

@@ -10,10 +10,7 @@ module.exports = function({  }) {
       return $obj;
     }
     async handle(req) {
-      return {
-      "body": "ok",
-      "status": 200,}
-      ;
+      return ({"body": "ok","status": 200});
     }
   }
   return $Closure1;

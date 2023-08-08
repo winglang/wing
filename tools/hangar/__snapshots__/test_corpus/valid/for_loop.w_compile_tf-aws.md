@@ -29,7 +29,7 @@ module.exports = function({  }) {
     constructor({  }) {
     }
     async hello() {
-      for (const p of Object.freeze(["hello"])) {
+      for (const p of ["hello"]) {
         {console.log(p)};
       }
     }
@@ -217,8 +217,8 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
     }
-    const words = Object.freeze(["wing", "lang", "dang"]);
-    const uniqueNumbers = Object.freeze(new Set([1, 2, 3]));
+    const words = ["wing", "lang", "dang"];
+    const uniqueNumbers = new Set([1, 2, 3]);
     for (const word of words) {
       for (const number of uniqueNumbers) {
         {((cond) => {if (!cond) throw new Error("assertion failed: number > 0")})((number > 0))};

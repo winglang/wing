@@ -104,12 +104,12 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     const Color =
-      Object.freeze((function (tmp) {
+      (function (tmp) {
         tmp[tmp["RED"] = 0] = "RED";
         tmp[tmp["GREEN"] = 1] = "GREEN";
         tmp[tmp["BLUE"] = 2] = "BLUE";
         return tmp;
-      })({}))
+      })({})
     ;
   }
 }
