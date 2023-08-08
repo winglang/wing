@@ -2882,22 +2882,19 @@ impl<'a> TypeChecker<'a> {
 			}
 			StmtKind::Assignment { variable, value } => {
 				let (exp_type, _) = self.type_check_exp(value, env);
-				let (var_type, var_phase) = self.type_check_exp(variable, env);
 
 				// TODO: we need to verify that if this variable is defined in a parent environment (i.e.
 				// being captured) it cannot be reassigned: https://github.com/winglang/wing/issues/3069
 
-				if let ExprKind::Reference(r) = &variable.kind {
-					let (var, _) = self.resolve_reference(&r, env);
+				let (var, var_phase) = self.resolve_reference(&variable, env);
 
-					if !var_type.is_unresolved() && !var.reassignable {
-						self.spanned_error(variable, "Variable is not reassignable".to_string());
-					} else if var_phase == Phase::Preflight && env.phase == Phase::Inflight {
-						self.spanned_error(stmt, "Variable cannot be reassigned from inflight".to_string());
-					}
+				if !var.type_.is_unresolved() && !var.reassignable {
+					self.spanned_error(variable, "Variable is not reassignable".to_string());
+				} else if var_phase == Phase::Preflight && env.phase == Phase::Inflight {
+					self.spanned_error(stmt, "Variable cannot be reassigned from inflight".to_string());
 				}
 
-				self.validate_type(exp_type, var_type, value);
+				self.validate_type(exp_type, var.type_, value);
 			}
 			StmtKind::Bring { source, identifier } => {
 				// library_name is the name of the library we are importing from the JSII world
