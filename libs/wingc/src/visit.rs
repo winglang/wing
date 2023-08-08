@@ -164,7 +164,7 @@ where
 			v.visit_expr(&expr);
 		}
 		StmtKind::Assignment { variable, value } => {
-			v.visit_expr(variable);
+			v.visit_reference(variable);
 			v.visit_expr(value);
 		}
 		StmtKind::Return(expr) => {
