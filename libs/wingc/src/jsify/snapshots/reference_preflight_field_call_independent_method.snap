@@ -19,7 +19,7 @@ source: libs/wingc/src/jsify/tests.rs
     
 ```
 
-## inflight.Foo-fcbbabed.js
+## inflight.Foo-eb709cd8.js
 
 ```js
 module.exports = function({  }) {
@@ -53,7 +53,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.Foo-fcbbabed.js")({
+          require("./inflight.Foo-eb709cd8.js")({
           })
         `);
       }

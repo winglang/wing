@@ -27,7 +27,7 @@ source: libs/wingc/src/jsify/tests.rs
     
 ```
 
-## inflight.$Closure1-5904dd17.js
+## inflight.$Closure1-03d9c83e.js
 
 ```js
 module.exports = function({ $t_y_b }) {
@@ -45,7 +45,7 @@ module.exports = function({ $t_y_b }) {
 }
 ```
 
-## inflight.MyType-5904dd17.js
+## inflight.MyType-03d9c83e.js
 
 ```js
 module.exports = function({  }) {
@@ -57,7 +57,7 @@ module.exports = function({  }) {
 }
 ```
 
-## inflight.YourType-5904dd17.js
+## inflight.YourType-03d9c83e.js
 
 ```js
 module.exports = function({  }) {
@@ -88,7 +88,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.YourType-5904dd17.js")({
+          require("./inflight.YourType-03d9c83e.js")({
           })
         `);
       }
@@ -112,7 +112,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.MyType-5904dd17.js")({
+          require("./inflight.MyType-03d9c83e.js")({
           })
         `);
       }
@@ -136,7 +136,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1-5904dd17.js")({
+          require("./inflight.$Closure1-03d9c83e.js")({
             $t_y_b: ${context._lift(t.y.b)},
           })
         `);

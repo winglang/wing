@@ -12,7 +12,7 @@ source: libs/wingc/src/jsify/tests.rs
     }
 ```
 
-## inflight.$Closure1-36a0d69f.js
+## inflight.$Closure1-e9b6bc1f.js
 
 ```js
 module.exports = function({ $api_url }) {
@@ -49,7 +49,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1-36a0d69f.js")({
+          require("./inflight.$Closure1-e9b6bc1f.js")({
             $api_url: ${context._lift(api.url)},
           })
         `);
