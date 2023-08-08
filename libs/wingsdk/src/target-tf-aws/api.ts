@@ -317,7 +317,7 @@ export class Api extends cloud.Api {
     const inflightNodeHash = inflight.node.addr.slice(-8);
 
     const functionHandler = convertBetweenHandlers(
-      this.node.scope!, // ok since we're not a tree root
+      this,
       `${this.node.id}-OnRequestHandler-${inflightNodeHash}`,
       inflight,
       join(
@@ -327,7 +327,7 @@ export class Api extends cloud.Api {
       "ApiOnRequestHandlerClient"
     );
     const fn = Function._newFunction(
-      this.node.scope!, // ok since we're not a tree root
+      this,
       `${this.node.id}-OnRequest-${inflightNodeHash}`,
       functionHandler
     );
