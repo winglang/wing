@@ -203,13 +203,13 @@ exports[`tree.json for an app with many resources 1`] = `
                               "direction": "inbound",
                               "implicit": false,
                               "relationship": "handle()",
-                              "resource": "root/Default/Default/BigPublisher/cloud.Topic/cloud.Topic-OnMessage-113c9059",
+                              "resource": "root/Default/Default/BigPublisher/cloud.Topic-OnMessage-113c9059",
                             },
                             {
                               "direction": "inbound",
                               "implicit": false,
                               "relationship": "$inflight_init()",
-                              "resource": "root/Default/Default/BigPublisher/cloud.Topic/cloud.Topic-OnMessage-113c9059",
+                              "resource": "root/Default/Default/BigPublisher/cloud.Topic-OnMessage-113c9059",
                             },
                           ],
                         },
@@ -231,13 +231,13 @@ exports[`tree.json for an app with many resources 1`] = `
                               "direction": "inbound",
                               "implicit": false,
                               "relationship": "handle()",
-                              "resource": "root/Default/Default/BigPublisher/cloud.Queue/cloud.Queue-SetConsumer-c50bc9ef",
+                              "resource": "root/Default/Default/BigPublisher/cloud.Queue-SetConsumer-c50bc9ef",
                             },
                             {
                               "direction": "inbound",
                               "implicit": false,
                               "relationship": "$inflight_init()",
-                              "resource": "root/Default/Default/BigPublisher/cloud.Queue/cloud.Queue-SetConsumer-c50bc9ef",
+                              "resource": "root/Default/Default/BigPublisher/cloud.Queue-SetConsumer-c50bc9ef",
                             },
                           ],
                         },
@@ -259,13 +259,13 @@ exports[`tree.json for an app with many resources 1`] = `
                               "direction": "inbound",
                               "implicit": false,
                               "relationship": "handle()",
-                              "resource": "root/Default/Default/BigPublisher/b2/b2-oncreate/b2-oncreate-OnMessage-59543b60",
+                              "resource": "root/Default/Default/BigPublisher/b2/b2-oncreate-OnMessage-9a6e41f8",
                             },
                             {
                               "direction": "inbound",
                               "implicit": false,
                               "relationship": "$inflight_init()",
-                              "resource": "root/Default/Default/BigPublisher/b2/b2-oncreate/b2-oncreate-OnMessage-59543b60",
+                              "resource": "root/Default/Default/BigPublisher/b2/b2-oncreate-OnMessage-9a6e41f8",
                             },
                           ],
                         },
@@ -349,7 +349,7 @@ exports[`tree.json for an app with many resources 1`] = `
                                   "direction": "outbound",
                                   "implicit": false,
                                   "relationship": "onMessage()",
-                                  "resource": "root/Default/Default/BigPublisher/b2/b2-oncreate/b2-oncreate-OnMessage-59543b60",
+                                  "resource": "root/Default/Default/BigPublisher/b2/b2-oncreate-OnMessage-9a6e41f8",
                                 },
                               ],
                             },
@@ -370,145 +370,13 @@ exports[`tree.json for an app with many resources 1`] = `
                                 "id": "PublishPermission-c851683a81379a8ef8351c83fe31924055584271ad",
                                 "path": "root/Default/Default/BigPublisher/b2/b2-oncreate/PublishPermission-c851683a81379a8ef8351c83fe31924055584271ad",
                               },
-                              "b2-oncreate-OnMessage-59543b60": {
-                                "attributes": {
-                                  "wing:resource:connections": [
-                                    {
-                                      "direction": "outbound",
-                                      "implicit": false,
-                                      "relationship": "push()",
-                                      "resource": "root/Default/Default/BigPublisher/cloud.Queue",
-                                    },
-                                    {
-                                      "direction": "outbound",
-                                      "implicit": false,
-                                      "relationship": "$inflight_init()",
-                                      "resource": "root/Default/Default/BigPublisher/cloud.Queue",
-                                    },
-                                    {
-                                      "direction": "outbound",
-                                      "implicit": false,
-                                      "relationship": "handle()",
-                                      "resource": "root/Default/Default/BigPublisher/$Closure4",
-                                    },
-                                    {
-                                      "direction": "outbound",
-                                      "implicit": false,
-                                      "relationship": "$inflight_init()",
-                                      "resource": "root/Default/Default/BigPublisher/$Closure4",
-                                    },
-                                    {
-                                      "direction": "outbound",
-                                      "implicit": false,
-                                      "relationship": "handle()",
-                                      "resource": "root/Default/Default/BigPublisher/b2/b2-oncreate-eventHandler-fe70cb1e",
-                                    },
-                                    {
-                                      "direction": "outbound",
-                                      "implicit": false,
-                                      "relationship": "$inflight_init()",
-                                      "resource": "root/Default/Default/BigPublisher/b2/b2-oncreate-eventHandler-fe70cb1e",
-                                    },
-                                    {
-                                      "direction": "inbound",
-                                      "implicit": false,
-                                      "relationship": "onMessage()",
-                                      "resource": "root/Default/Default/BigPublisher/b2/b2-oncreate",
-                                    },
-                                  ],
-                                },
-                                "children": {
-                                  "Asset": {
-                                    "constructInfo": {
-                                      "fqn": "cdktf.TerraformAsset",
-                                      "version": "0.17.0",
-                                    },
-                                    "id": "Asset",
-                                    "path": "root/Default/Default/BigPublisher/b2/b2-oncreate/b2-oncreate-OnMessage-59543b60/Asset",
-                                  },
-                                  "Default": {
-                                    "constructInfo": {
-                                      "fqn": "cdktf.TerraformResource",
-                                      "version": "0.17.0",
-                                    },
-                                    "id": "Default",
-                                    "path": "root/Default/Default/BigPublisher/b2/b2-oncreate/b2-oncreate-OnMessage-59543b60/Default",
-                                  },
-                                  "IamRole": {
-                                    "constructInfo": {
-                                      "fqn": "cdktf.TerraformResource",
-                                      "version": "0.17.0",
-                                    },
-                                    "id": "IamRole",
-                                    "path": "root/Default/Default/BigPublisher/b2/b2-oncreate/b2-oncreate-OnMessage-59543b60/IamRole",
-                                  },
-                                  "IamRolePolicy": {
-                                    "constructInfo": {
-                                      "fqn": "cdktf.TerraformResource",
-                                      "version": "0.17.0",
-                                    },
-                                    "id": "IamRolePolicy",
-                                    "path": "root/Default/Default/BigPublisher/b2/b2-oncreate/b2-oncreate-OnMessage-59543b60/IamRolePolicy",
-                                  },
-                                  "IamRolePolicyAttachment": {
-                                    "constructInfo": {
-                                      "fqn": "cdktf.TerraformResource",
-                                      "version": "0.17.0",
-                                    },
-                                    "id": "IamRolePolicyAttachment",
-                                    "path": "root/Default/Default/BigPublisher/b2/b2-oncreate/b2-oncreate-OnMessage-59543b60/IamRolePolicyAttachment",
-                                  },
-                                  "InvokePermission-c85dfafbf5013871aa3434b4c0d215d292753b3141": {
-                                    "constructInfo": {
-                                      "fqn": "cdktf.TerraformResource",
-                                      "version": "0.17.0",
-                                    },
-                                    "id": "InvokePermission-c85dfafbf5013871aa3434b4c0d215d292753b3141",
-                                    "path": "root/Default/Default/BigPublisher/b2/b2-oncreate/b2-oncreate-OnMessage-59543b60/InvokePermission-c85dfafbf5013871aa3434b4c0d215d292753b3141",
-                                  },
-                                  "S3Object": {
-                                    "constructInfo": {
-                                      "fqn": "cdktf.TerraformResource",
-                                      "version": "0.17.0",
-                                    },
-                                    "id": "S3Object",
-                                    "path": "root/Default/Default/BigPublisher/b2/b2-oncreate/b2-oncreate-OnMessage-59543b60/S3Object",
-                                  },
-                                },
-                                "constructInfo": {
-                                  "fqn": "@winglang/sdk.cloud.Function",
-                                  "version": "0.0.0",
-                                },
-                                "display": {
-                                  "description": "A cloud function (FaaS)",
-                                  "title": "Function",
-                                  "type": "compiler-named",
-                                },
-                                "id": "b2-oncreate-OnMessage-59543b60",
-                                "path": "root/Default/Default/BigPublisher/b2/b2-oncreate/b2-oncreate-OnMessage-59543b60",
-                              },
-                              "b2-oncreate-OnMessageHandler-59543b60": {
-                                "attributes": {
-                                  "wing:resource:connections": [],
-                                },
-                                "constructInfo": {
-                                  "fqn": "@winglang/sdk.std.Resource",
-                                  "version": "0.0.0",
-                                },
-                                "display": {
-                                  "hidden": true,
-                                  "type": "user-named",
-                                },
-                                "id": "b2-oncreate-OnMessageHandler-59543b60",
-                                "path": "root/Default/Default/BigPublisher/b2/b2-oncreate/b2-oncreate-OnMessageHandler-59543b60",
-                              },
-                              "b2-oncreate-TopicSubscription-59543b60": {
+                              "b2-oncreate-TopicSubscription-9a6e41f8": {
                                 "constructInfo": {
                                   "fqn": "cdktf.TerraformResource",
                                   "version": "0.17.0",
                                 },
-                                "id": "b2-oncreate-TopicSubscription-59543b60",
-                                "path": "root/Default/Default/BigPublisher/b2/b2-oncreate/b2-oncreate-TopicSubscription-59543b60",
+                                "id": "b2-oncreate-TopicSubscription-9a6e41f8",
+                                "path": "root/Default/Default/BigPublisher/b2/b2-oncreate/b2-oncreate-TopicSubscription-9a6e41f8",
                               },
                             },
                             "constructInfo": {
@@ -523,22 +391,126 @@ exports[`tree.json for an app with many resources 1`] = `
                             "id": "b2-oncreate",
                             "path": "root/Default/Default/BigPublisher/b2/b2-oncreate",
                           },
-                          "b2-oncreate-eventHandler-fe70cb1e": {
+                          "b2-oncreate-OnMessage-9a6e41f8": {
                             "attributes": {
                               "wing:resource:connections": [
                                 {
-                                  "direction": "inbound",
+                                  "direction": "outbound",
+                                  "implicit": false,
+                                  "relationship": "push()",
+                                  "resource": "root/Default/Default/BigPublisher/cloud.Queue",
+                                },
+                                {
+                                  "direction": "outbound",
+                                  "implicit": false,
+                                  "relationship": "$inflight_init()",
+                                  "resource": "root/Default/Default/BigPublisher/cloud.Queue",
+                                },
+                                {
+                                  "direction": "outbound",
                                   "implicit": false,
                                   "relationship": "handle()",
-                                  "resource": "root/Default/Default/BigPublisher/b2/b2-oncreate/b2-oncreate-OnMessage-59543b60",
+                                  "resource": "root/Default/Default/BigPublisher/$Closure4",
+                                },
+                                {
+                                  "direction": "outbound",
+                                  "implicit": false,
+                                  "relationship": "$inflight_init()",
+                                  "resource": "root/Default/Default/BigPublisher/$Closure4",
+                                },
+                                {
+                                  "direction": "outbound",
+                                  "implicit": false,
+                                  "relationship": "handle()",
+                                  "resource": "root/Default/Default/BigPublisher/b2-oncreate-eventHandler-fe70cb1e",
+                                },
+                                {
+                                  "direction": "outbound",
+                                  "implicit": false,
+                                  "relationship": "$inflight_init()",
+                                  "resource": "root/Default/Default/BigPublisher/b2-oncreate-eventHandler-fe70cb1e",
                                 },
                                 {
                                   "direction": "inbound",
                                   "implicit": false,
-                                  "relationship": "$inflight_init()",
-                                  "resource": "root/Default/Default/BigPublisher/b2/b2-oncreate/b2-oncreate-OnMessage-59543b60",
+                                  "relationship": "onMessage()",
+                                  "resource": "root/Default/Default/BigPublisher/b2/b2-oncreate",
                                 },
                               ],
+                            },
+                            "children": {
+                              "Asset": {
+                                "constructInfo": {
+                                  "fqn": "cdktf.TerraformAsset",
+                                  "version": "0.17.0",
+                                },
+                                "id": "Asset",
+                                "path": "root/Default/Default/BigPublisher/b2/b2-oncreate-OnMessage-9a6e41f8/Asset",
+                              },
+                              "Default": {
+                                "constructInfo": {
+                                  "fqn": "cdktf.TerraformResource",
+                                  "version": "0.17.0",
+                                },
+                                "id": "Default",
+                                "path": "root/Default/Default/BigPublisher/b2/b2-oncreate-OnMessage-9a6e41f8/Default",
+                              },
+                              "IamRole": {
+                                "constructInfo": {
+                                  "fqn": "cdktf.TerraformResource",
+                                  "version": "0.17.0",
+                                },
+                                "id": "IamRole",
+                                "path": "root/Default/Default/BigPublisher/b2/b2-oncreate-OnMessage-9a6e41f8/IamRole",
+                              },
+                              "IamRolePolicy": {
+                                "constructInfo": {
+                                  "fqn": "cdktf.TerraformResource",
+                                  "version": "0.17.0",
+                                },
+                                "id": "IamRolePolicy",
+                                "path": "root/Default/Default/BigPublisher/b2/b2-oncreate-OnMessage-9a6e41f8/IamRolePolicy",
+                              },
+                              "IamRolePolicyAttachment": {
+                                "constructInfo": {
+                                  "fqn": "cdktf.TerraformResource",
+                                  "version": "0.17.0",
+                                },
+                                "id": "IamRolePolicyAttachment",
+                                "path": "root/Default/Default/BigPublisher/b2/b2-oncreate-OnMessage-9a6e41f8/IamRolePolicyAttachment",
+                              },
+                              "InvokePermission-c85dfafbf5013871aa3434b4c0d215d292753b3141": {
+                                "constructInfo": {
+                                  "fqn": "cdktf.TerraformResource",
+                                  "version": "0.17.0",
+                                },
+                                "id": "InvokePermission-c85dfafbf5013871aa3434b4c0d215d292753b3141",
+                                "path": "root/Default/Default/BigPublisher/b2/b2-oncreate-OnMessage-9a6e41f8/InvokePermission-c85dfafbf5013871aa3434b4c0d215d292753b3141",
+                              },
+                              "S3Object": {
+                                "constructInfo": {
+                                  "fqn": "cdktf.TerraformResource",
+                                  "version": "0.17.0",
+                                },
+                                "id": "S3Object",
+                                "path": "root/Default/Default/BigPublisher/b2/b2-oncreate-OnMessage-9a6e41f8/S3Object",
+                              },
+                            },
+                            "constructInfo": {
+                              "fqn": "@winglang/sdk.cloud.Function",
+                              "version": "0.0.0",
+                            },
+                            "display": {
+                              "description": "A cloud function (FaaS)",
+                              "title": "Function",
+                              "type": "compiler-named",
+                            },
+                            "id": "b2-oncreate-OnMessage-9a6e41f8",
+                            "path": "root/Default/Default/BigPublisher/b2/b2-oncreate-OnMessage-9a6e41f8",
+                          },
+                          "b2-oncreate-OnMessageHandler-9a6e41f8": {
+                            "attributes": {
+                              "wing:resource:connections": [],
                             },
                             "constructInfo": {
                               "fqn": "@winglang/sdk.std.Resource",
@@ -548,8 +520,8 @@ exports[`tree.json for an app with many resources 1`] = `
                               "hidden": true,
                               "type": "user-named",
                             },
-                            "id": "b2-oncreate-eventHandler-fe70cb1e",
-                            "path": "root/Default/Default/BigPublisher/b2/b2-oncreate-eventHandler-fe70cb1e",
+                            "id": "b2-oncreate-OnMessageHandler-9a6e41f8",
+                            "path": "root/Default/Default/BigPublisher/b2/b2-oncreate-OnMessageHandler-9a6e41f8",
                           },
                         },
                         "constructInfo": {
@@ -564,6 +536,34 @@ exports[`tree.json for an app with many resources 1`] = `
                         "id": "b2",
                         "path": "root/Default/Default/BigPublisher/b2",
                       },
+                      "b2-oncreate-eventHandler-fe70cb1e": {
+                        "attributes": {
+                          "wing:resource:connections": [
+                            {
+                              "direction": "inbound",
+                              "implicit": false,
+                              "relationship": "handle()",
+                              "resource": "root/Default/Default/BigPublisher/b2/b2-oncreate-OnMessage-9a6e41f8",
+                            },
+                            {
+                              "direction": "inbound",
+                              "implicit": false,
+                              "relationship": "$inflight_init()",
+                              "resource": "root/Default/Default/BigPublisher/b2/b2-oncreate-OnMessage-9a6e41f8",
+                            },
+                          ],
+                        },
+                        "constructInfo": {
+                          "fqn": "@winglang/sdk.std.Resource",
+                          "version": "0.0.0",
+                        },
+                        "display": {
+                          "hidden": true,
+                          "type": "user-named",
+                        },
+                        "id": "b2-oncreate-eventHandler-fe70cb1e",
+                        "path": "root/Default/Default/BigPublisher/b2-oncreate-eventHandler-fe70cb1e",
+                      },
                       "cloud.Bucket": {
                         "attributes": {
                           "wing:resource:connections": [
@@ -571,25 +571,25 @@ exports[`tree.json for an app with many resources 1`] = `
                               "direction": "inbound",
                               "implicit": false,
                               "relationship": "put()",
-                              "resource": "root/Default/Default/BigPublisher/cloud.Topic/cloud.Topic-OnMessage-113c9059",
+                              "resource": "root/Default/Default/BigPublisher/cloud.Topic-OnMessage-113c9059",
                             },
                             {
                               "direction": "inbound",
                               "implicit": false,
                               "relationship": "$inflight_init()",
-                              "resource": "root/Default/Default/BigPublisher/cloud.Topic/cloud.Topic-OnMessage-113c9059",
+                              "resource": "root/Default/Default/BigPublisher/cloud.Topic-OnMessage-113c9059",
                             },
                             {
                               "direction": "inbound",
                               "implicit": false,
                               "relationship": "put()",
-                              "resource": "root/Default/Default/BigPublisher/cloud.Queue/cloud.Queue-SetConsumer-c50bc9ef",
+                              "resource": "root/Default/Default/BigPublisher/cloud.Queue-SetConsumer-c50bc9ef",
                             },
                             {
                               "direction": "inbound",
                               "implicit": false,
                               "relationship": "$inflight_init()",
-                              "resource": "root/Default/Default/BigPublisher/cloud.Queue/cloud.Queue-SetConsumer-c50bc9ef",
+                              "resource": "root/Default/Default/BigPublisher/cloud.Queue-SetConsumer-c50bc9ef",
                             },
                             {
                               "direction": "inbound",
@@ -650,19 +650,19 @@ exports[`tree.json for an app with many resources 1`] = `
                               "direction": "outbound",
                               "implicit": false,
                               "relationship": "setConsumer()",
-                              "resource": "root/Default/Default/BigPublisher/cloud.Queue/cloud.Queue-SetConsumer-c50bc9ef",
+                              "resource": "root/Default/Default/BigPublisher/cloud.Queue-SetConsumer-c50bc9ef",
                             },
                             {
                               "direction": "inbound",
                               "implicit": false,
                               "relationship": "push()",
-                              "resource": "root/Default/Default/BigPublisher/b2/b2-oncreate/b2-oncreate-OnMessage-59543b60",
+                              "resource": "root/Default/Default/BigPublisher/b2/b2-oncreate-OnMessage-9a6e41f8",
                             },
                             {
                               "direction": "inbound",
                               "implicit": false,
                               "relationship": "$inflight_init()",
-                              "resource": "root/Default/Default/BigPublisher/b2/b2-oncreate/b2-oncreate-OnMessage-59543b60",
+                              "resource": "root/Default/Default/BigPublisher/b2/b2-oncreate-OnMessage-9a6e41f8",
                             },
                             {
                               "direction": "inbound",
@@ -695,118 +695,6 @@ exports[`tree.json for an app with many resources 1`] = `
                             "id": "EventSourceMapping",
                             "path": "root/Default/Default/BigPublisher/cloud.Queue/EventSourceMapping",
                           },
-                          "cloud.Queue-SetConsumer-c50bc9ef": {
-                            "attributes": {
-                              "wing:resource:connections": [
-                                {
-                                  "direction": "outbound",
-                                  "implicit": false,
-                                  "relationship": "put()",
-                                  "resource": "root/Default/Default/BigPublisher/cloud.Bucket",
-                                },
-                                {
-                                  "direction": "outbound",
-                                  "implicit": false,
-                                  "relationship": "$inflight_init()",
-                                  "resource": "root/Default/Default/BigPublisher/cloud.Bucket",
-                                },
-                                {
-                                  "direction": "outbound",
-                                  "implicit": false,
-                                  "relationship": "handle()",
-                                  "resource": "root/Default/Default/BigPublisher/$Closure3",
-                                },
-                                {
-                                  "direction": "outbound",
-                                  "implicit": false,
-                                  "relationship": "$inflight_init()",
-                                  "resource": "root/Default/Default/BigPublisher/$Closure3",
-                                },
-                                {
-                                  "direction": "inbound",
-                                  "implicit": false,
-                                  "relationship": "setConsumer()",
-                                  "resource": "root/Default/Default/BigPublisher/cloud.Queue",
-                                },
-                              ],
-                            },
-                            "children": {
-                              "Asset": {
-                                "constructInfo": {
-                                  "fqn": "cdktf.TerraformAsset",
-                                  "version": "0.17.0",
-                                },
-                                "id": "Asset",
-                                "path": "root/Default/Default/BigPublisher/cloud.Queue/cloud.Queue-SetConsumer-c50bc9ef/Asset",
-                              },
-                              "Default": {
-                                "constructInfo": {
-                                  "fqn": "cdktf.TerraformResource",
-                                  "version": "0.17.0",
-                                },
-                                "id": "Default",
-                                "path": "root/Default/Default/BigPublisher/cloud.Queue/cloud.Queue-SetConsumer-c50bc9ef/Default",
-                              },
-                              "IamRole": {
-                                "constructInfo": {
-                                  "fqn": "cdktf.TerraformResource",
-                                  "version": "0.17.0",
-                                },
-                                "id": "IamRole",
-                                "path": "root/Default/Default/BigPublisher/cloud.Queue/cloud.Queue-SetConsumer-c50bc9ef/IamRole",
-                              },
-                              "IamRolePolicy": {
-                                "constructInfo": {
-                                  "fqn": "cdktf.TerraformResource",
-                                  "version": "0.17.0",
-                                },
-                                "id": "IamRolePolicy",
-                                "path": "root/Default/Default/BigPublisher/cloud.Queue/cloud.Queue-SetConsumer-c50bc9ef/IamRolePolicy",
-                              },
-                              "IamRolePolicyAttachment": {
-                                "constructInfo": {
-                                  "fqn": "cdktf.TerraformResource",
-                                  "version": "0.17.0",
-                                },
-                                "id": "IamRolePolicyAttachment",
-                                "path": "root/Default/Default/BigPublisher/cloud.Queue/cloud.Queue-SetConsumer-c50bc9ef/IamRolePolicyAttachment",
-                              },
-                              "S3Object": {
-                                "constructInfo": {
-                                  "fqn": "cdktf.TerraformResource",
-                                  "version": "0.17.0",
-                                },
-                                "id": "S3Object",
-                                "path": "root/Default/Default/BigPublisher/cloud.Queue/cloud.Queue-SetConsumer-c50bc9ef/S3Object",
-                              },
-                            },
-                            "constructInfo": {
-                              "fqn": "@winglang/sdk.cloud.Function",
-                              "version": "0.0.0",
-                            },
-                            "display": {
-                              "description": "A cloud function (FaaS)",
-                              "title": "Function",
-                              "type": "compiler-named",
-                            },
-                            "id": "cloud.Queue-SetConsumer-c50bc9ef",
-                            "path": "root/Default/Default/BigPublisher/cloud.Queue/cloud.Queue-SetConsumer-c50bc9ef",
-                          },
-                          "cloud.Queue-SetConsumerHandler-c50bc9ef": {
-                            "attributes": {
-                              "wing:resource:connections": [],
-                            },
-                            "constructInfo": {
-                              "fqn": "@winglang/sdk.std.Resource",
-                              "version": "0.0.0",
-                            },
-                            "display": {
-                              "hidden": true,
-                              "type": "user-named",
-                            },
-                            "id": "cloud.Queue-SetConsumerHandler-c50bc9ef",
-                            "path": "root/Default/Default/BigPublisher/cloud.Queue/cloud.Queue-SetConsumerHandler-c50bc9ef",
-                          },
                         },
                         "constructInfo": {
                           "fqn": "@winglang/sdk.cloud.Queue",
@@ -820,6 +708,118 @@ exports[`tree.json for an app with many resources 1`] = `
                         "id": "cloud.Queue",
                         "path": "root/Default/Default/BigPublisher/cloud.Queue",
                       },
+                      "cloud.Queue-SetConsumer-c50bc9ef": {
+                        "attributes": {
+                          "wing:resource:connections": [
+                            {
+                              "direction": "outbound",
+                              "implicit": false,
+                              "relationship": "put()",
+                              "resource": "root/Default/Default/BigPublisher/cloud.Bucket",
+                            },
+                            {
+                              "direction": "outbound",
+                              "implicit": false,
+                              "relationship": "$inflight_init()",
+                              "resource": "root/Default/Default/BigPublisher/cloud.Bucket",
+                            },
+                            {
+                              "direction": "outbound",
+                              "implicit": false,
+                              "relationship": "handle()",
+                              "resource": "root/Default/Default/BigPublisher/$Closure3",
+                            },
+                            {
+                              "direction": "outbound",
+                              "implicit": false,
+                              "relationship": "$inflight_init()",
+                              "resource": "root/Default/Default/BigPublisher/$Closure3",
+                            },
+                            {
+                              "direction": "inbound",
+                              "implicit": false,
+                              "relationship": "setConsumer()",
+                              "resource": "root/Default/Default/BigPublisher/cloud.Queue",
+                            },
+                          ],
+                        },
+                        "children": {
+                          "Asset": {
+                            "constructInfo": {
+                              "fqn": "cdktf.TerraformAsset",
+                              "version": "0.17.0",
+                            },
+                            "id": "Asset",
+                            "path": "root/Default/Default/BigPublisher/cloud.Queue-SetConsumer-c50bc9ef/Asset",
+                          },
+                          "Default": {
+                            "constructInfo": {
+                              "fqn": "cdktf.TerraformResource",
+                              "version": "0.17.0",
+                            },
+                            "id": "Default",
+                            "path": "root/Default/Default/BigPublisher/cloud.Queue-SetConsumer-c50bc9ef/Default",
+                          },
+                          "IamRole": {
+                            "constructInfo": {
+                              "fqn": "cdktf.TerraformResource",
+                              "version": "0.17.0",
+                            },
+                            "id": "IamRole",
+                            "path": "root/Default/Default/BigPublisher/cloud.Queue-SetConsumer-c50bc9ef/IamRole",
+                          },
+                          "IamRolePolicy": {
+                            "constructInfo": {
+                              "fqn": "cdktf.TerraformResource",
+                              "version": "0.17.0",
+                            },
+                            "id": "IamRolePolicy",
+                            "path": "root/Default/Default/BigPublisher/cloud.Queue-SetConsumer-c50bc9ef/IamRolePolicy",
+                          },
+                          "IamRolePolicyAttachment": {
+                            "constructInfo": {
+                              "fqn": "cdktf.TerraformResource",
+                              "version": "0.17.0",
+                            },
+                            "id": "IamRolePolicyAttachment",
+                            "path": "root/Default/Default/BigPublisher/cloud.Queue-SetConsumer-c50bc9ef/IamRolePolicyAttachment",
+                          },
+                          "S3Object": {
+                            "constructInfo": {
+                              "fqn": "cdktf.TerraformResource",
+                              "version": "0.17.0",
+                            },
+                            "id": "S3Object",
+                            "path": "root/Default/Default/BigPublisher/cloud.Queue-SetConsumer-c50bc9ef/S3Object",
+                          },
+                        },
+                        "constructInfo": {
+                          "fqn": "@winglang/sdk.cloud.Function",
+                          "version": "0.0.0",
+                        },
+                        "display": {
+                          "description": "A cloud function (FaaS)",
+                          "title": "Function",
+                          "type": "compiler-named",
+                        },
+                        "id": "cloud.Queue-SetConsumer-c50bc9ef",
+                        "path": "root/Default/Default/BigPublisher/cloud.Queue-SetConsumer-c50bc9ef",
+                      },
+                      "cloud.Queue-SetConsumerHandler-c50bc9ef": {
+                        "attributes": {
+                          "wing:resource:connections": [],
+                        },
+                        "constructInfo": {
+                          "fqn": "@winglang/sdk.std.Resource",
+                          "version": "0.0.0",
+                        },
+                        "display": {
+                          "hidden": true,
+                          "type": "user-named",
+                        },
+                        "id": "cloud.Queue-SetConsumerHandler-c50bc9ef",
+                        "path": "root/Default/Default/BigPublisher/cloud.Queue-SetConsumerHandler-c50bc9ef",
+                      },
                       "cloud.Topic": {
                         "attributes": {
                           "wing:resource:connections": [
@@ -827,7 +827,7 @@ exports[`tree.json for an app with many resources 1`] = `
                               "direction": "outbound",
                               "implicit": false,
                               "relationship": "onMessage()",
-                              "resource": "root/Default/Default/BigPublisher/cloud.Topic/cloud.Topic-OnMessage-113c9059",
+                              "resource": "root/Default/Default/BigPublisher/cloud.Topic-OnMessage-113c9059",
                             },
                             {
                               "direction": "inbound",
@@ -852,126 +852,6 @@ exports[`tree.json for an app with many resources 1`] = `
                             "id": "Default",
                             "path": "root/Default/Default/BigPublisher/cloud.Topic/Default",
                           },
-                          "cloud.Topic-OnMessage-113c9059": {
-                            "attributes": {
-                              "wing:resource:connections": [
-                                {
-                                  "direction": "outbound",
-                                  "implicit": false,
-                                  "relationship": "put()",
-                                  "resource": "root/Default/Default/BigPublisher/cloud.Bucket",
-                                },
-                                {
-                                  "direction": "outbound",
-                                  "implicit": false,
-                                  "relationship": "$inflight_init()",
-                                  "resource": "root/Default/Default/BigPublisher/cloud.Bucket",
-                                },
-                                {
-                                  "direction": "outbound",
-                                  "implicit": false,
-                                  "relationship": "handle()",
-                                  "resource": "root/Default/Default/BigPublisher/$Closure2",
-                                },
-                                {
-                                  "direction": "outbound",
-                                  "implicit": false,
-                                  "relationship": "$inflight_init()",
-                                  "resource": "root/Default/Default/BigPublisher/$Closure2",
-                                },
-                                {
-                                  "direction": "inbound",
-                                  "implicit": false,
-                                  "relationship": "onMessage()",
-                                  "resource": "root/Default/Default/BigPublisher/cloud.Topic",
-                                },
-                              ],
-                            },
-                            "children": {
-                              "Asset": {
-                                "constructInfo": {
-                                  "fqn": "cdktf.TerraformAsset",
-                                  "version": "0.17.0",
-                                },
-                                "id": "Asset",
-                                "path": "root/Default/Default/BigPublisher/cloud.Topic/cloud.Topic-OnMessage-113c9059/Asset",
-                              },
-                              "Default": {
-                                "constructInfo": {
-                                  "fqn": "cdktf.TerraformResource",
-                                  "version": "0.17.0",
-                                },
-                                "id": "Default",
-                                "path": "root/Default/Default/BigPublisher/cloud.Topic/cloud.Topic-OnMessage-113c9059/Default",
-                              },
-                              "IamRole": {
-                                "constructInfo": {
-                                  "fqn": "cdktf.TerraformResource",
-                                  "version": "0.17.0",
-                                },
-                                "id": "IamRole",
-                                "path": "root/Default/Default/BigPublisher/cloud.Topic/cloud.Topic-OnMessage-113c9059/IamRole",
-                              },
-                              "IamRolePolicy": {
-                                "constructInfo": {
-                                  "fqn": "cdktf.TerraformResource",
-                                  "version": "0.17.0",
-                                },
-                                "id": "IamRolePolicy",
-                                "path": "root/Default/Default/BigPublisher/cloud.Topic/cloud.Topic-OnMessage-113c9059/IamRolePolicy",
-                              },
-                              "IamRolePolicyAttachment": {
-                                "constructInfo": {
-                                  "fqn": "cdktf.TerraformResource",
-                                  "version": "0.17.0",
-                                },
-                                "id": "IamRolePolicyAttachment",
-                                "path": "root/Default/Default/BigPublisher/cloud.Topic/cloud.Topic-OnMessage-113c9059/IamRolePolicyAttachment",
-                              },
-                              "InvokePermission-c86b6469dec0edbe23d2827b4ea7006182eb0072ec": {
-                                "constructInfo": {
-                                  "fqn": "cdktf.TerraformResource",
-                                  "version": "0.17.0",
-                                },
-                                "id": "InvokePermission-c86b6469dec0edbe23d2827b4ea7006182eb0072ec",
-                                "path": "root/Default/Default/BigPublisher/cloud.Topic/cloud.Topic-OnMessage-113c9059/InvokePermission-c86b6469dec0edbe23d2827b4ea7006182eb0072ec",
-                              },
-                              "S3Object": {
-                                "constructInfo": {
-                                  "fqn": "cdktf.TerraformResource",
-                                  "version": "0.17.0",
-                                },
-                                "id": "S3Object",
-                                "path": "root/Default/Default/BigPublisher/cloud.Topic/cloud.Topic-OnMessage-113c9059/S3Object",
-                              },
-                            },
-                            "constructInfo": {
-                              "fqn": "@winglang/sdk.cloud.Function",
-                              "version": "0.0.0",
-                            },
-                            "display": {
-                              "description": "A cloud function (FaaS)",
-                              "title": "Function",
-                              "type": "compiler-named",
-                            },
-                            "id": "cloud.Topic-OnMessage-113c9059",
-                            "path": "root/Default/Default/BigPublisher/cloud.Topic/cloud.Topic-OnMessage-113c9059",
-                          },
-                          "cloud.Topic-OnMessageHandler-113c9059": {
-                            "attributes": {
-                              "wing:resource:connections": [],
-                            },
-                            "constructInfo": {
-                              "fqn": "@winglang/sdk.std.Resource",
-                              "version": "0.0.0",
-                            },
-                            "display": {
-                              "hidden": true,
-                              "type": "user-named",
-                            },
-                            "id": "cloud.Topic-OnMessageHandler-113c9059",
-                            "path": "root/Default/Default/BigPublisher/cloud.Topic/cloud.Topic-OnMessageHandler-113c9059",
-                          },
                           "cloud.Topic-TopicSubscription-113c9059": {
                             "constructInfo": {
                               "fqn": "cdktf.TerraformResource",
@@ -992,6 +872,126 @@ exports[`tree.json for an app with many resources 1`] = `
                         },
                         "id": "cloud.Topic",
                         "path": "root/Default/Default/BigPublisher/cloud.Topic",
+                      },
+                      "cloud.Topic-OnMessage-113c9059": {
+                        "attributes": {
+                          "wing:resource:connections": [
+                            {
+                              "direction": "outbound",
+                              "implicit": false,
+                              "relationship": "put()",
+                              "resource": "root/Default/Default/BigPublisher/cloud.Bucket",
+                            },
+                            {
+                              "direction": "outbound",
+                              "implicit": false,
+                              "relationship": "$inflight_init()",
+                              "resource": "root/Default/Default/BigPublisher/cloud.Bucket",
+                            },
+                            {
+                              "direction": "outbound",
+                              "implicit": false,
+                              "relationship": "handle()",
+                              "resource": "root/Default/Default/BigPublisher/$Closure2",
+                            },
+                            {
+                              "direction": "outbound",
+                              "implicit": false,
+                              "relationship": "$inflight_init()",
+                              "resource": "root/Default/Default/BigPublisher/$Closure2",
+                            },
+                            {
+                              "direction": "inbound",
+                              "implicit": false,
+                              "relationship": "onMessage()",
+                              "resource": "root/Default/Default/BigPublisher/cloud.Topic",
+                            },
+                          ],
+                        },
+                        "children": {
+                          "Asset": {
+                            "constructInfo": {
+                              "fqn": "cdktf.TerraformAsset",
+                              "version": "0.17.0",
+                            },
+                            "id": "Asset",
+                            "path": "root/Default/Default/BigPublisher/cloud.Topic-OnMessage-113c9059/Asset",
+                          },
+                          "Default": {
+                            "constructInfo": {
+                              "fqn": "cdktf.TerraformResource",
+                              "version": "0.17.0",
+                            },
+                            "id": "Default",
+                            "path": "root/Default/Default/BigPublisher/cloud.Topic-OnMessage-113c9059/Default",
+                          },
+                          "IamRole": {
+                            "constructInfo": {
+                              "fqn": "cdktf.TerraformResource",
+                              "version": "0.17.0",
+                            },
+                            "id": "IamRole",
+                            "path": "root/Default/Default/BigPublisher/cloud.Topic-OnMessage-113c9059/IamRole",
+                          },
+                          "IamRolePolicy": {
+                            "constructInfo": {
+                              "fqn": "cdktf.TerraformResource",
+                              "version": "0.17.0",
+                            },
+                            "id": "IamRolePolicy",
+                            "path": "root/Default/Default/BigPublisher/cloud.Topic-OnMessage-113c9059/IamRolePolicy",
+                          },
+                          "IamRolePolicyAttachment": {
+                            "constructInfo": {
+                              "fqn": "cdktf.TerraformResource",
+                              "version": "0.17.0",
+                            },
+                            "id": "IamRolePolicyAttachment",
+                            "path": "root/Default/Default/BigPublisher/cloud.Topic-OnMessage-113c9059/IamRolePolicyAttachment",
+                          },
+                          "InvokePermission-c86b6469dec0edbe23d2827b4ea7006182eb0072ec": {
+                            "constructInfo": {
+                              "fqn": "cdktf.TerraformResource",
+                              "version": "0.17.0",
+                            },
+                            "id": "InvokePermission-c86b6469dec0edbe23d2827b4ea7006182eb0072ec",
+                            "path": "root/Default/Default/BigPublisher/cloud.Topic-OnMessage-113c9059/InvokePermission-c86b6469dec0edbe23d2827b4ea7006182eb0072ec",
+                          },
+                          "S3Object": {
+                            "constructInfo": {
+                              "fqn": "cdktf.TerraformResource",
+                              "version": "0.17.0",
+                            },
+                            "id": "S3Object",
+                            "path": "root/Default/Default/BigPublisher/cloud.Topic-OnMessage-113c9059/S3Object",
+                          },
+                        },
+                        "constructInfo": {
+                          "fqn": "@winglang/sdk.cloud.Function",
+                          "version": "0.0.0",
+                        },
+                        "display": {
+                          "description": "A cloud function (FaaS)",
+                          "title": "Function",
+                          "type": "compiler-named",
+                        },
+                        "id": "cloud.Topic-OnMessage-113c9059",
+                        "path": "root/Default/Default/BigPublisher/cloud.Topic-OnMessage-113c9059",
+                      },
+                      "cloud.Topic-OnMessageHandler-113c9059": {
+                        "attributes": {
+                          "wing:resource:connections": [],
+                        },
+                        "constructInfo": {
+                          "fqn": "@winglang/sdk.std.Resource",
+                          "version": "0.0.0",
+                        },
+                        "display": {
+                          "hidden": true,
+                          "type": "user-named",
+                        },
+                        "id": "cloud.Topic-OnMessageHandler-113c9059",
+                        "path": "root/Default/Default/BigPublisher/cloud.Topic-OnMessageHandler-113c9059",
                       },
                     },
                     "constructInfo": {

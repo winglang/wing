@@ -129,6 +129,7 @@ bucket: (function(env) {
               "display": {
                 "description": "A cloud object store",
                 "title": "Bucket",
+                "type": "user-named",
               },
               "id": "Bucket",
               "path": "root/HelloWorld/Bucket",
@@ -157,6 +158,7 @@ bucket: (function(env) {
               "display": {
                 "description": "A distributed atomic counter",
                 "title": "Counter",
+                "type": "user-named",
               },
               "id": "Counter",
               "path": "root/HelloWorld/Counter",
@@ -186,6 +188,7 @@ bucket: (function(env) {
                 "description": "An inflight resource",
                 "hidden": true,
                 "title": "Inflight",
+                "type": "user-named",
               },
               "id": "Processor",
               "path": "root/HelloWorld/Processor",
@@ -212,6 +215,7 @@ bucket: (function(env) {
                   },
                   "display": {
                     "hidden": true,
+                    "type": "user-named",
                   },
                   "id": "Queue-QueueEventMapping-401ee792",
                   "path": "root/HelloWorld/Queue/Queue-QueueEventMapping-401ee792",
@@ -224,6 +228,7 @@ bucket: (function(env) {
               "display": {
                 "description": "A distributed message queue",
                 "title": "Queue",
+                "type": "user-named",
               },
               "id": "Queue",
               "path": "root/HelloWorld/Queue",
@@ -282,6 +287,7 @@ bucket: (function(env) {
               "display": {
                 "description": "A cloud function (FaaS)",
                 "title": "Function",
+                "type": "compiler-named",
               },
               "id": "Queue-SetConsumer-401ee792",
               "path": "root/HelloWorld/Queue-SetConsumer-401ee792",
@@ -296,6 +302,7 @@ bucket: (function(env) {
               },
               "display": {
                 "hidden": true,
+                "type": "user-named",
               },
               "id": "Queue-SetConsumerHandler-401ee792",
               "path": "root/HelloWorld/Queue-SetConsumerHandler-401ee792",
@@ -320,6 +327,7 @@ bucket: (function(env) {
             "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
             "title": "TestRunner",
+            "type": "user-named",
           },
           "id": "cloud.TestRunner",
           "path": "root/cloud.TestRunner",

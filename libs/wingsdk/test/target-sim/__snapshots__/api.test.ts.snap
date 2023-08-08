@@ -114,6 +114,7 @@ return class Handler {
             "description": "An inflight resource",
             "hidden": true,
             "title": "Inflight",
+            "type": "user-named",
           },
           "id": "Handler",
           "path": "root/Handler",
@@ -130,6 +131,7 @@ return class Handler {
             "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
             "title": "TestRunner",
+            "type": "user-named",
           },
           "id": "cloud.TestRunner",
           "path": "root/cloud.TestRunner",
@@ -156,6 +158,7 @@ return class Handler {
               },
               "display": {
                 "hidden": true,
+                "type": "user-named",
               },
               "id": "ApiEventMapping-e645076f",
               "path": "root/my_api/ApiEventMapping-e645076f",
@@ -178,6 +181,7 @@ return class Handler {
               "display": {
                 "description": "A cloud function (FaaS)",
                 "title": "Function",
+                "type": "compiler-named",
               },
               "id": "OnRequestHandler-e645076f",
               "path": "root/my_api/OnRequestHandler-e645076f",
@@ -190,6 +194,7 @@ return class Handler {
           "display": {
             "description": "A REST API endpoint",
             "title": "Api",
+            "type": "user-named",
           },
           "id": "my_api",
           "path": "root/my_api",
@@ -321,6 +326,7 @@ return class Handler {
             "description": "An inflight resource",
             "hidden": true,
             "title": "Inflight",
+            "type": "user-named",
           },
           "id": "Handler",
           "path": "root/Handler",
@@ -337,6 +343,7 @@ return class Handler {
             "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
             "title": "TestRunner",
+            "type": "user-named",
           },
           "id": "cloud.TestRunner",
           "path": "root/cloud.TestRunner",
@@ -363,6 +370,7 @@ return class Handler {
               },
               "display": {
                 "hidden": true,
+                "type": "user-named",
               },
               "id": "ApiEventMapping-e645076f",
               "path": "root/my_api/ApiEventMapping-e645076f",
@@ -385,6 +393,7 @@ return class Handler {
               "display": {
                 "description": "A cloud function (FaaS)",
                 "title": "Function",
+                "type": "compiler-named",
               },
               "id": "OnRequestHandler-e645076f",
               "path": "root/my_api/OnRequestHandler-e645076f",
@@ -397,6 +406,7 @@ return class Handler {
           "display": {
             "description": "A REST API endpoint",
             "title": "Api",
+            "type": "user-named",
           },
           "id": "my_api",
           "path": "root/my_api",
@@ -528,6 +538,7 @@ return class Handler {
             "description": "An inflight resource",
             "hidden": true,
             "title": "Inflight",
+            "type": "user-named",
           },
           "id": "Handler",
           "path": "root/Handler",
@@ -544,6 +555,7 @@ return class Handler {
             "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
             "title": "TestRunner",
+            "type": "user-named",
           },
           "id": "cloud.TestRunner",
           "path": "root/cloud.TestRunner",
@@ -570,6 +582,7 @@ return class Handler {
               },
               "display": {
                 "hidden": true,
+                "type": "user-named",
               },
               "id": "ApiEventMapping-e645076f",
               "path": "root/my_api/ApiEventMapping-e645076f",
@@ -592,6 +605,7 @@ return class Handler {
               "display": {
                 "description": "A cloud function (FaaS)",
                 "title": "Function",
+                "type": "compiler-named",
               },
               "id": "OnRequestHandler-e645076f",
               "path": "root/my_api/OnRequestHandler-e645076f",
@@ -604,6 +618,7 @@ return class Handler {
           "display": {
             "description": "A REST API endpoint",
             "title": "Api",
+            "type": "user-named",
           },
           "id": "my_api",
           "path": "root/my_api",
@@ -735,6 +750,7 @@ return class Handler {
             "description": "An inflight resource",
             "hidden": true,
             "title": "Inflight",
+            "type": "user-named",
           },
           "id": "Handler",
           "path": "root/Handler",
@@ -751,6 +767,7 @@ return class Handler {
             "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
             "title": "TestRunner",
+            "type": "user-named",
           },
           "id": "cloud.TestRunner",
           "path": "root/cloud.TestRunner",
@@ -777,6 +794,7 @@ return class Handler {
               },
               "display": {
                 "hidden": true,
+                "type": "user-named",
               },
               "id": "ApiEventMapping-e645076f",
               "path": "root/my_api/ApiEventMapping-e645076f",
@@ -799,6 +817,7 @@ return class Handler {
               "display": {
                 "description": "A cloud function (FaaS)",
                 "title": "Function",
+                "type": "compiler-named",
               },
               "id": "OnRequestHandler-e645076f",
               "path": "root/my_api/OnRequestHandler-e645076f",
@@ -811,6 +830,7 @@ return class Handler {
           "display": {
             "description": "A REST API endpoint",
             "title": "Api",
+            "type": "user-named",
           },
           "id": "my_api",
           "path": "root/my_api",
@@ -942,6 +962,7 @@ return class Handler {
             "description": "An inflight resource",
             "hidden": true,
             "title": "Inflight",
+            "type": "user-named",
           },
           "id": "Handler",
           "path": "root/Handler",
@@ -958,6 +979,7 @@ return class Handler {
             "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
             "title": "TestRunner",
+            "type": "user-named",
           },
           "id": "cloud.TestRunner",
           "path": "root/cloud.TestRunner",
@@ -984,6 +1006,7 @@ return class Handler {
               },
               "display": {
                 "hidden": true,
+                "type": "user-named",
               },
               "id": "ApiEventMapping-e645076f",
               "path": "root/my_api/ApiEventMapping-e645076f",
@@ -1006,6 +1029,7 @@ return class Handler {
               "display": {
                 "description": "A cloud function (FaaS)",
                 "title": "Function",
+                "type": "compiler-named",
               },
               "id": "OnRequestHandler-e645076f",
               "path": "root/my_api/OnRequestHandler-e645076f",
@@ -1018,6 +1042,7 @@ return class Handler {
           "display": {
             "description": "A REST API endpoint",
             "title": "Api",
+            "type": "user-named",
           },
           "id": "my_api",
           "path": "root/my_api",
@@ -1251,6 +1276,7 @@ return class Handler {
             "description": "An inflight resource",
             "hidden": true,
             "title": "Inflight",
+            "type": "user-named",
           },
           "id": "Handler",
           "path": "root/Handler",
@@ -1267,6 +1293,7 @@ return class Handler {
             "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
             "title": "TestRunner",
+            "type": "user-named",
           },
           "id": "cloud.TestRunner",
           "path": "root/cloud.TestRunner",
@@ -1329,6 +1356,7 @@ return class Handler {
               },
               "display": {
                 "hidden": true,
+                "type": "user-named",
               },
               "id": "ApiEventMapping-e645076f",
               "path": "root/my_api/ApiEventMapping-e645076f",
@@ -1387,6 +1415,7 @@ return class Handler {
               "display": {
                 "description": "A cloud function (FaaS)",
                 "title": "Function",
+                "type": "compiler-named",
               },
               "id": "OnRequestHandler-e645076f",
               "path": "root/my_api/OnRequestHandler-e645076f",
@@ -1399,6 +1428,7 @@ return class Handler {
           "display": {
             "description": "A REST API endpoint",
             "title": "Api",
+            "type": "user-named",
           },
           "id": "my_api",
           "path": "root/my_api",
@@ -1528,6 +1558,7 @@ return class Handler {
             "description": "An inflight resource",
             "hidden": true,
             "title": "Inflight",
+            "type": "user-named",
           },
           "id": "Handler",
           "path": "root/Handler",
@@ -1544,6 +1575,7 @@ return class Handler {
             "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
             "title": "TestRunner",
+            "type": "user-named",
           },
           "id": "cloud.TestRunner",
           "path": "root/cloud.TestRunner",
@@ -1570,6 +1602,7 @@ return class Handler {
               },
               "display": {
                 "hidden": true,
+                "type": "user-named",
               },
               "id": "ApiEventMapping-e645076f",
               "path": "root/my_api/ApiEventMapping-e645076f",
@@ -1592,6 +1625,7 @@ return class Handler {
               "display": {
                 "description": "A cloud function (FaaS)",
                 "title": "Function",
+                "type": "compiler-named",
               },
               "id": "OnRequestHandler-e645076f",
               "path": "root/my_api/OnRequestHandler-e645076f",
@@ -1604,6 +1638,7 @@ return class Handler {
           "display": {
             "description": "A REST API endpoint",
             "title": "Api",
+            "type": "user-named",
           },
           "id": "my_api",
           "path": "root/my_api",
@@ -1794,6 +1829,7 @@ return class Handler {
             "description": "An inflight resource",
             "hidden": true,
             "title": "Inflight",
+            "type": "user-named",
           },
           "id": "Handler1",
           "path": "root/Handler1",
@@ -1810,6 +1846,7 @@ return class Handler {
             "description": "An inflight resource",
             "hidden": true,
             "title": "Inflight",
+            "type": "user-named",
           },
           "id": "Handler2",
           "path": "root/Handler2",
@@ -1826,6 +1863,7 @@ return class Handler {
             "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
             "title": "TestRunner",
+            "type": "user-named",
           },
           "id": "cloud.TestRunner",
           "path": "root/cloud.TestRunner",
@@ -1858,6 +1896,7 @@ return class Handler {
               },
               "display": {
                 "hidden": true,
+                "type": "user-named",
               },
               "id": "ApiEventMapping-7c48a9f0",
               "path": "root/my_api/ApiEventMapping-7c48a9f0",
@@ -1872,6 +1911,7 @@ return class Handler {
               },
               "display": {
                 "hidden": true,
+                "type": "user-named",
               },
               "id": "ApiEventMapping-f6d90a7f",
               "path": "root/my_api/ApiEventMapping-f6d90a7f",
@@ -1894,6 +1934,7 @@ return class Handler {
               "display": {
                 "description": "A cloud function (FaaS)",
                 "title": "Function",
+                "type": "compiler-named",
               },
               "id": "OnRequestHandler-7c48a9f0",
               "path": "root/my_api/OnRequestHandler-7c48a9f0",
@@ -1916,6 +1957,7 @@ return class Handler {
               "display": {
                 "description": "A cloud function (FaaS)",
                 "title": "Function",
+                "type": "compiler-named",
               },
               "id": "OnRequestHandler-f6d90a7f",
               "path": "root/my_api/OnRequestHandler-f6d90a7f",
@@ -1928,6 +1970,7 @@ return class Handler {
           "display": {
             "description": "A REST API endpoint",
             "title": "Api",
+            "type": "user-named",
           },
           "id": "my_api",
           "path": "root/my_api",
@@ -2120,6 +2163,7 @@ return class Handler {
             "description": "An inflight resource",
             "hidden": true,
             "title": "Inflight",
+            "type": "user-named",
           },
           "id": "Handler1",
           "path": "root/Handler1",
@@ -2136,6 +2180,7 @@ return class Handler {
             "description": "An inflight resource",
             "hidden": true,
             "title": "Inflight",
+            "type": "user-named",
           },
           "id": "Handler2",
           "path": "root/Handler2",
@@ -2152,6 +2197,7 @@ return class Handler {
             "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
             "title": "TestRunner",
+            "type": "user-named",
           },
           "id": "cloud.TestRunner",
           "path": "root/cloud.TestRunner",
@@ -2184,6 +2230,7 @@ return class Handler {
               },
               "display": {
                 "hidden": true,
+                "type": "user-named",
               },
               "id": "ApiEventMapping-7c48a9f0",
               "path": "root/my_api/ApiEventMapping-7c48a9f0",
@@ -2198,6 +2245,7 @@ return class Handler {
               },
               "display": {
                 "hidden": true,
+                "type": "user-named",
               },
               "id": "ApiEventMapping-f6d90a7f",
               "path": "root/my_api/ApiEventMapping-f6d90a7f",
@@ -2220,6 +2268,7 @@ return class Handler {
               "display": {
                 "description": "A cloud function (FaaS)",
                 "title": "Function",
+                "type": "compiler-named",
               },
               "id": "OnRequestHandler-7c48a9f0",
               "path": "root/my_api/OnRequestHandler-7c48a9f0",
@@ -2242,6 +2291,7 @@ return class Handler {
               "display": {
                 "description": "A cloud function (FaaS)",
                 "title": "Function",
+                "type": "compiler-named",
               },
               "id": "OnRequestHandler-f6d90a7f",
               "path": "root/my_api/OnRequestHandler-f6d90a7f",
@@ -2254,6 +2304,7 @@ return class Handler {
           "display": {
             "description": "A REST API endpoint",
             "title": "Api",
+            "type": "user-named",
           },
           "id": "my_api",
           "path": "root/my_api",
@@ -2385,6 +2436,7 @@ return class Handler {
             "description": "An inflight resource",
             "hidden": true,
             "title": "Inflight",
+            "type": "user-named",
           },
           "id": "Handler",
           "path": "root/Handler",
@@ -2401,6 +2453,7 @@ return class Handler {
             "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
             "title": "TestRunner",
+            "type": "user-named",
           },
           "id": "cloud.TestRunner",
           "path": "root/cloud.TestRunner",
@@ -2427,6 +2480,7 @@ return class Handler {
               },
               "display": {
                 "hidden": true,
+                "type": "user-named",
               },
               "id": "ApiEventMapping-e645076f",
               "path": "root/my_api/ApiEventMapping-e645076f",
@@ -2449,6 +2503,7 @@ return class Handler {
               "display": {
                 "description": "A cloud function (FaaS)",
                 "title": "Function",
+                "type": "compiler-named",
               },
               "id": "OnRequestHandler-e645076f",
               "path": "root/my_api/OnRequestHandler-e645076f",
@@ -2461,6 +2516,7 @@ return class Handler {
           "display": {
             "description": "A REST API endpoint",
             "title": "Api",
+            "type": "user-named",
           },
           "id": "my_api",
           "path": "root/my_api",
@@ -2601,6 +2657,7 @@ return class Handler {
             "description": "An inflight resource",
             "hidden": true,
             "title": "Inflight",
+            "type": "user-named",
           },
           "id": "Handler",
           "path": "root/Handler",
@@ -2617,6 +2674,7 @@ return class Handler {
             "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
             "title": "TestRunner",
+            "type": "user-named",
           },
           "id": "cloud.TestRunner",
           "path": "root/cloud.TestRunner",
@@ -2643,6 +2701,7 @@ return class Handler {
               },
               "display": {
                 "hidden": true,
+                "type": "user-named",
               },
               "id": "ApiEventMapping-e645076f",
               "path": "root/my_api/ApiEventMapping-e645076f",
@@ -2665,6 +2724,7 @@ return class Handler {
               "display": {
                 "description": "A cloud function (FaaS)",
                 "title": "Function",
+                "type": "compiler-named",
               },
               "id": "OnRequestHandler-e645076f",
               "path": "root/my_api/OnRequestHandler-e645076f",
@@ -2677,6 +2737,7 @@ return class Handler {
           "display": {
             "description": "A REST API endpoint",
             "title": "Api",
+            "type": "user-named",
           },
           "id": "my_api",
           "path": "root/my_api",
@@ -2808,6 +2869,7 @@ return class Handler {
             "description": "An inflight resource",
             "hidden": true,
             "title": "Inflight",
+            "type": "user-named",
           },
           "id": "Handler",
           "path": "root/Handler",
@@ -2824,6 +2886,7 @@ return class Handler {
             "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
             "title": "TestRunner",
+            "type": "user-named",
           },
           "id": "cloud.TestRunner",
           "path": "root/cloud.TestRunner",
@@ -2850,6 +2913,7 @@ return class Handler {
               },
               "display": {
                 "hidden": true,
+                "type": "user-named",
               },
               "id": "ApiEventMapping-e645076f",
               "path": "root/my_api/ApiEventMapping-e645076f",
@@ -2872,6 +2936,7 @@ return class Handler {
               "display": {
                 "description": "A cloud function (FaaS)",
                 "title": "Function",
+                "type": "compiler-named",
               },
               "id": "OnRequestHandler-e645076f",
               "path": "root/my_api/OnRequestHandler-e645076f",
@@ -2884,6 +2949,7 @@ return class Handler {
           "display": {
             "description": "A REST API endpoint",
             "title": "Api",
+            "type": "user-named",
           },
           "id": "my_api",
           "path": "root/my_api",
@@ -2942,6 +3008,7 @@ exports[`create an api 1`] = `
             "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
             "title": "TestRunner",
+            "type": "user-named",
           },
           "id": "cloud.TestRunner",
           "path": "root/cloud.TestRunner",
@@ -2957,6 +3024,7 @@ exports[`create an api 1`] = `
           "display": {
             "description": "A REST API endpoint",
             "title": "Api",
+            "type": "user-named",
           },
           "id": "my_api",
           "path": "root/my_api",
