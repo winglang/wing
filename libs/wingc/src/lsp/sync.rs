@@ -7,7 +7,7 @@ use std::path::{Path, PathBuf};
 use tree_sitter::Tree;
 
 use crate::closure_transform::ClosureTransformer;
-use crate::diagnostic::{found_errors, get_diagnostics, reset_diagnostics, Diagnostic};
+use crate::diagnostic::{found_errors, reset_diagnostics};
 use crate::file_graph::FileGraph;
 use crate::files::Files;
 use crate::fold::Fold;
