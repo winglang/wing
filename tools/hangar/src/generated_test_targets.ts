@@ -81,6 +81,7 @@ export async function testTest(
   });
 
   fileMap["stdout.log"] = out.stdout;
+  fileMap["stderr.log"] = out.stderr;
 
   await createMarkdownSnapshot(fileMap, filePath, "test", "sim");
 }
