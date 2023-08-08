@@ -131,24 +131,29 @@ impl Fold for ClosureTransformer {
 			ExprKind::FunctionClosure(func_def) => {
 				self.closure_counter += 1;
 
+				// we are creating AST nodes out of thin air so most won't have real spans, but we try to
+				// preserve the original file ID for jsification & error reporting
+				let mut fake_span = WingSpan::default();
+				fake_span.file_id = expr.span.file_id.clone();
+
 				let new_class_name = Symbol {
 					name: format!("{}{}", CLOSURE_CLASS_PREFIX, self.closure_counter),
-					span: WingSpan::default(),
+					span: fake_span.clone(),
 				};
 				let handle_name = Symbol {
 					name: CLOSURE_CLASS_HANDLE_METHOD.to_string(),
-					span: WingSpan::default(),
+					span: fake_span.clone(),
 				};
 
 				let class_udt = UserDefinedType {
 					root: new_class_name.clone(),
 					fields: vec![],
-					span: WingSpan::default(),
+					span: fake_span.clone(),
 				};
 
 				let class_type_annotation = TypeAnnotation {
 					kind: TypeAnnotationKind::UserDefined(class_udt.clone()),
-					span: WingSpan::default(),
+					span: fake_span.clone(),
 				};
 
 				let class_fields: Vec<ClassField> = vec![];
@@ -191,21 +196,21 @@ impl Fold for ClosureTransformer {
 							object: Box::new(Expr::new(
 								ExprKind::Reference(Reference::InstanceMember {
 									object: Box::new(Expr::new(
-										ExprKind::Reference(Reference::Identifier(Symbol::new("this", WingSpan::default()))),
-										WingSpan::default(),
+										ExprKind::Reference(Reference::Identifier(Symbol::new("this", fake_span.clone()))),
+										fake_span.clone(),
 									)),
-									property: Symbol::new("display", WingSpan::default()),
+									property: Symbol::new("display", fake_span.clone()),
 									optional_accessor: false,
 								}),
-								WingSpan::default(),
+								fake_span.clone(),
 							)),
-							property: Symbol::new("hidden", WingSpan::default()),
+							property: Symbol::new("hidden", fake_span.clone()),
 							optional_accessor: false,
 						},
 
-						value: Expr::new(ExprKind::Literal(Literal::Boolean(true)), WingSpan::default()),
+						value: Expr::new(ExprKind::Literal(Literal::Boolean(true)), fake_span.clone()),
 					},
-					span: WingSpan::default(),
+					span: fake_span.clone(),
 				}];
 
 				// If we are inside a scope with "this", add define `let __parent_this_${CLOSURE_COUNT} = this` which can be
@@ -213,20 +218,17 @@ impl Fold for ClosureTransformer {
 				if self.inside_scope_with_this {
 					let parent_this_name = Symbol::new(
 						format!("{}_{}", PARENT_THIS_NAME, self.closure_counter),
-						WingSpan::default(),
+						fake_span.clone(),
 					);
-					let this_name = Symbol::new("this", WingSpan::default());
+					let this_name = Symbol::new("this", fake_span.clone());
 					let parent_this_def = Stmt {
 						kind: StmtKind::Let {
 							reassignable: false,
 							var_name: parent_this_name,
-							initial_value: Expr::new(
-								ExprKind::Reference(Reference::Identifier(this_name)),
-								WingSpan::default(),
-							),
+							initial_value: Expr::new(ExprKind::Reference(Reference::Identifier(this_name)), fake_span.clone()),
 							type_: None,
 						},
-						span: WingSpan::default(),
+						span: fake_span.clone(),
 						idx: 0,
 					};
 					self.class_statements.push(parent_this_def);
@@ -253,8 +255,8 @@ impl Fold for ClosureTransformer {
 								phase: Phase::Preflight,
 							},
 							is_static: true,
-							body: FunctionBody::Statements(Scope::new(class_init_body, WingSpan::default())),
-							span: WingSpan::default(),
+							body: FunctionBody::Statements(Scope::new(class_init_body, fake_span.clone())),
+							span: fake_span.clone(),
 						},
 						fields: class_fields,
 						implements: vec![],
@@ -266,17 +268,17 @@ impl Fold for ClosureTransformer {
 								parameters: vec![],
 								return_type: Box::new(TypeAnnotation {
 									kind: TypeAnnotationKind::Void,
-									span: Default::default(),
+									span: fake_span.clone(),
 								}),
 								phase: Phase::Inflight,
 							},
 							is_static: false,
-							body: FunctionBody::Statements(Scope::new(vec![], WingSpan::default())),
-							span: WingSpan::default(),
+							body: FunctionBody::Statements(Scope::new(vec![], fake_span.clone())),
+							span: fake_span.clone(),
 						},
 					}),
 					idx: self.nearest_stmt_idx,
-					span: WingSpan::default(),
+					span: fake_span.clone(),
 				};
 
 				// new_class_instance :=
@@ -289,7 +291,7 @@ impl Fold for ClosureTransformer {
 						arg_list: ArgList {
 							named_args: IndexMap::new(),
 							pos_args: vec![],
-							span: WingSpan::default(),
+							span: fake_span.clone(),
 						},
 						obj_id: None,
 						obj_scope: None,
