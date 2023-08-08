@@ -59,6 +59,7 @@ export const MapView = ({
                     icon={(props) => (
                       <ResourceIcon
                         resourceType={node.data?.type}
+                        resourcePath={node.data?.path}
                         solid
                         {...props}
                       />

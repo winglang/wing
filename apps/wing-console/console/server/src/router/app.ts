@@ -550,6 +550,7 @@ export interface MapNode {
   data: {
     label?: string;
     type?: string;
+    path?: string;
     display?: NodeDisplay;
   };
   children?: MapNode[];
@@ -565,6 +566,7 @@ function createMapNodeFromConstructTreeNode(
     data: {
       label: node.id,
       type: getResourceType(node, simulator),
+      path: node.path,
       display: node.display,
     },
     children: node.children
