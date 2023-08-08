@@ -105,9 +105,7 @@ impl<'a> JSifier<'a> {
 			visit_ctx: &mut visit_ctx,
 			lifts: None,
 		};
-		jsify_context
-			.visit_ctx
-			.push_env(scope.env.borrow().as_ref().unwrap().get_ref());
+		jsify_context.visit_ctx.push_env(self.types.get_scope_env(&scope));
 		for statement in scope.statements.iter().sorted_by(|a, b| match (&a.kind, &b.kind) {
 			// Put type definitions first so JS won't complain of unknown types
 			(StmtKind::Class(AstClass { .. }), StmtKind::Class(AstClass { .. })) => Ordering::Equal,
@@ -115,7 +113,8 @@ impl<'a> JSifier<'a> {
 			(_, StmtKind::Class(AstClass { .. })) => Ordering::Greater,
 			_ => Ordering::Equal,
 		}) {
-			let s = self.jsify_statement(scope.env.borrow().as_ref().unwrap(), statement, &mut jsify_context); // top level statements are always preflight
+			let scope_env = self.types.get_scope_env(&scope);
+			let s = self.jsify_statement(&scope_env, statement, &mut jsify_context); // top level statements are always preflight
 			if let StmtKind::Bring {
 				identifier: _,
 				source: _,
@@ -212,9 +211,10 @@ impl<'a> JSifier<'a> {
 		CompilationContext::set(CompilationPhase::Jsifying, &scope.span);
 		let mut code = CodeMaker::default();
 
-		ctx.visit_ctx.push_env(scope.env.borrow().as_ref().unwrap().get_ref());
+		let scope_env = self.types.get_scope_env(&scope);
+		ctx.visit_ctx.push_env(scope_env);
 		for statement in scope.statements.iter() {
-			let statement_code = self.jsify_statement(scope.env.borrow().as_ref().unwrap(), statement, ctx);
+			let statement_code = self.jsify_statement(&scope_env, statement, ctx);
 			code.add_code(statement_code);
 		}
 		ctx.visit_ctx.pop_env();

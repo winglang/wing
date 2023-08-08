@@ -1,17 +1,15 @@
-use std::cell::RefCell;
 use std::fmt::{Debug, Display};
 use std::hash::{Hash, Hasher};
 use std::sync::atomic::{AtomicUsize, Ordering};
 
-use derivative::Derivative;
 use indexmap::{Equivalent, IndexMap, IndexSet};
 use itertools::Itertools;
 
 use crate::diagnostic::WingSpan;
-use crate::type_check::symbol_env::SymbolEnvRef;
 use crate::type_check::CLOSURE_CLASS_HANDLE_METHOD;
 
 static EXPR_COUNTER: AtomicUsize = AtomicUsize::new(0);
+static SCOPE_COUNTER: AtomicUsize = AtomicUsize::new(0);
 
 #[derive(Debug, Eq, Clone)]
 pub struct Symbol {
@@ -584,6 +582,7 @@ impl Spanned for CalleeKind {
 	}
 }
 
+// do not derive Default, we want to be explicit about generating ids
 #[derive(Debug)]
 pub struct Expr {
 	/// An identifier that is unique among all expressions in the AST.
@@ -597,7 +596,6 @@ pub struct Expr {
 impl Expr {
 	pub fn new(kind: ExprKind, span: WingSpan) -> Self {
 		let id = EXPR_COUNTER.fetch_add(1, Ordering::SeqCst);
-
 		Self { id, kind, span }
 	}
 
@@ -655,33 +653,29 @@ pub enum InterpolatedStringPart {
 	Expr(Expr),
 }
 
-#[derive(Derivative, Default)]
-#[derivative(Debug)]
+pub type ScopeId = usize;
+
+// do not derive Default, as we want to explicitly generate IDs
+#[derive(Debug)]
 pub struct Scope {
+	/// An identifier that is unique among all scopes in the AST.
+	pub id: ScopeId,
 	pub statements: Vec<Stmt>,
 	pub span: WingSpan,
-	#[derivative(Debug = "ignore")]
-	pub env: RefCell<Option<SymbolEnvRef>>, // None after parsing, set to Some during type checking phase
 }
 
 impl Scope {
-	pub fn new(statements: Vec<Stmt>, span: WingSpan) -> Self {
+	pub fn empty() -> Self {
 		Self {
-			statements,
-			span,
-			env: RefCell::new(None),
+			id: SCOPE_COUNTER.fetch_add(1, Ordering::SeqCst),
+			statements: vec![],
+			span: WingSpan::default(),
 		}
 	}
 
-	pub fn set_env(&self, new_env: SymbolEnvRef) {
-		let mut env = self.env.borrow_mut();
-		assert!((*env).is_none());
-		*env = Some(new_env);
-	}
-
-	pub fn reset_env(&self) {
-		let mut env = self.env.borrow_mut();
-		*env = None;
+	pub fn new(statements: Vec<Stmt>, span: WingSpan) -> Self {
+		let id = SCOPE_COUNTER.fetch_add(1, Ordering::SeqCst);
+		Self { id, statements, span }
 	}
 }
 
