@@ -326,13 +326,11 @@ export class Api extends cloud.Api {
       ),
       "ApiOnRequestHandlerClient"
     );
-    const fn = Function._newFunction(
+    return Function._newFunction(
       this,
       `${this.node.id}-OnRequest-${inflightNodeHash}`,
       functionHandler
     );
-    fn.display.type = "compiler-named";
-    return fn;
   }
 
   /** @internal */

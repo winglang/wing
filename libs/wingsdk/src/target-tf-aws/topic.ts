@@ -70,7 +70,6 @@ export class Topic extends cloud.Topic {
       functionHandler,
       props
     );
-    fn.display.type = "compiler-named";
 
     // TODO: remove this constraint by adding geric permission APIs to cloud.Function
     if (!(fn instanceof Function)) {

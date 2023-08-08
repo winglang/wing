@@ -79,7 +79,6 @@ export class Bucket extends cloud.Bucket {
       functionHandler,
       opts
     );
-    fn.display.type = "compiler-named";
 
     if (!(fn instanceof Function)) {
       throw new Error(

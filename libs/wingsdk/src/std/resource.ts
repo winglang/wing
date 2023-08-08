@@ -489,6 +489,13 @@ export interface DisplayProps {
    * @default - "user-named".
    */
   readonly type?: "user-named" | "compiler-named";
+
+  /**
+   * The name of the resource.
+   * @default - No name.
+   */
+  readonly name?: string;
+
   /**
    * Whether the resource should be hidden from the UI.
    * @default - Undefined
@@ -515,6 +522,11 @@ export class Display {
    * Whether the resource is user-named or compiler-named.
    */
   public type?: "user-named" | "compiler-named";
+
+  /**
+   * The name of the resource.
+   */
+  public name?: string;
 
   /**
    * Whether the resource should be hidden from the UI.

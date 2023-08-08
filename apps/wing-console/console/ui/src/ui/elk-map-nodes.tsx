@@ -118,7 +118,8 @@ export const ContainerNode = ({
               "transition-all",
               "rounded-bl",
               open && "rounded-bl-none",
-              display?.type !== "compiler-named" && "border-r",
+              (display?.type !== "compiler-named" || display.name) &&
+                "border-r",
               {
                 [theme.border3]: !selected,
                 "border-sky-300 dark:border-sky-500": selected,
@@ -128,7 +129,7 @@ export const ContainerNode = ({
             <Icon className="w-5 h-5" />
           </div>
         )}
-        {display?.type !== "compiler-named" && (
+        {(display?.type !== "compiler-named" || display.name) && (
           <div
             className={classNames(
               "flex-1 flex items-center",
@@ -156,7 +157,7 @@ export const ContainerNode = ({
                   theme.text1,
                 )}
               >
-                {props.name}
+                {display?.name || props.name}
               </div>
             </div>
           </div>

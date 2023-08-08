@@ -50,6 +50,7 @@ export class Schedule extends cloud.Schedule implements ISimulatorResource {
       props
     );
     fn.display.type = "compiler-named";
+    fn.display.name = "onTick";
 
     new EventMapping(this, `${this.node.id}-OnTickMapping-${hash}`, {
       subscriber: fn,

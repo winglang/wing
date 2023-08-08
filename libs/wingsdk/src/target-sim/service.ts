@@ -70,6 +70,7 @@ export class Service extends cloud.Service implements ISimulatorResource {
       {}
     );
     fn.display.type = "compiler-named";
+    fn.display.name = "onStart";
 
     this.node.addDependency(fn);
     return fn;

@@ -41,6 +41,7 @@ export class Topic extends cloud.Topic implements ISimulatorResource {
       props
     );
     fn.display.type = "compiler-named";
+    fn.display.name = "onMessage";
 
     new EventMapping(this, `${this.node.id}-TopicEventMapping-${hash}`, {
       subscriber: fn,

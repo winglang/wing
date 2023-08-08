@@ -65,7 +65,6 @@ export class Queue extends cloud.Queue {
       functionHandler,
       props
     );
-    fn.display.type = "compiler-named";
 
     // TODO: remove this constraint by adding generic permission APIs to cloud.Function
     if (!(fn instanceof Function)) {

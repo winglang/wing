@@ -4,6 +4,7 @@ export interface NodeDisplay {
   title?: string;
   description?: string;
   type?: "user-named" | "compiler-named";
+  name?: string;
   hidden?: boolean;
 }
 
