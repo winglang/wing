@@ -195,6 +195,23 @@ class $Root extends $stdlib.std.Resource {
     const arr7 = arr4;
     {((cond) => {if (!cond) throw new Error("assertion failed: arr7.length == 3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(arr7.length,3)))};
     {((cond) => {if (!cond) throw new Error("assertion failed: arr7.at(1) == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((arr7.at(1)),2)))};
+    {
+      const $IF_LET_VALUE = (emptyArray[0]);
+      if ($IF_LET_VALUE != undefined) {
+        const val = $IF_LET_VALUE;
+        {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
+      }
+    }
+    {
+      const $IF_LET_VALUE = (arr1[0]);
+      if ($IF_LET_VALUE != undefined) {
+        const val = $IF_LET_VALUE;
+        {((cond) => {if (!cond) throw new Error("assertion failed: val == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(val,1)))};
+      }
+      else {
+        {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
+      }
+    }
     const emptyMap = ({});
     {((cond) => {if (!cond) throw new Error("assertion failed: emptyMap.size() == 0")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(Object.keys(emptyMap).length,0)))};
     const emptyMap2 = ({});
