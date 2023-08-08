@@ -1554,7 +1554,6 @@ let f = (x: num, ...args: Array<num>) => {
 // last arguments are expanded into their array
 f(4, 8, 15, 16, 23, 42); // logs 9
 ```
-```
 
 [`▲ top`][top]
 
