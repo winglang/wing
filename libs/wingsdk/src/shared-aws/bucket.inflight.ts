@@ -143,11 +143,28 @@ export class BucketClient implements IBucketClient {
    * @returns Json content of the object
    */
   public async tryGetJson(key: string): Promise<Json | undefined> {
-    if (await this.exists(key)) {
-      return this.getJson(key);
+    const command = new GetObjectCommand({
+      Bucket: this.bucketName,
+      Key: key,
+    });
+    let resp: GetObjectOutput;
+    try {
+      resp = await this.s3Client.send(command);
+    } catch (e) {
+      if (e instanceof NoSuchKey) {
+        return undefined;
+      }
+      throw new Error((e as Error).stack);
     }
-
-    return undefined;
+    try {
+      return JSON.parse(await consumers.text(resp.Body as Readable));
+    } catch (e) {
+      throw new Error(
+        `Object contents could not be read as text (key=${key}): ${
+          (e as Error).stack
+        })}`
+      );
+    }
   }
 
   /**
