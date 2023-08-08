@@ -47,6 +47,7 @@ export class Api extends cloud.Api implements ISimulatorResource {
     }
 
     const fn = Function._newFunction(this, fnPath, inflight, props) as Function;
+    fn.display.type = "compiler-named";
 
     const eventMapping = new EventMapping(this, eventId, {
       publisher: this,

@@ -51,6 +51,7 @@ export const MapView = ({
                 <div className="h-full flex flex-col relative">
                   <ContainerNode
                     nodeId={node.id}
+                    display={node.data?.display}
                     name={node.data?.label}
                     open={node.children && node.children?.length > 0}
                     selected={node.id === selectedNodeId}

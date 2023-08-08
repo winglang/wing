@@ -47,7 +47,7 @@ export class Schedule extends cloud.Schedule {
   ): cloud.Function {
     const hash = inflight.node.addr.slice(-8);
     const functionHandler = convertBetweenHandlers(
-      this.node.scope!, // ok since we're not a tree root
+      this,
       `${this.node.id}-OnTickHandler-${hash}`,
       inflight,
       join(
@@ -58,11 +58,12 @@ export class Schedule extends cloud.Schedule {
     );
 
     const fn = Function._newFunction(
-      this.node.scope!, // ok since we're not a tree root
+      this,
       `${this.node.id}-OnTick-${hash}`,
       functionHandler,
       props
     );
+    fn.display.type = "compiler-named";
 
     // TODO: remove this constraint by adding generic permission APIs to cloud.Function
     if (!(fn instanceof Function)) {

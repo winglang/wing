@@ -1,5 +1,5 @@
 import { useTheme, IconComponent } from "@wingconsole/design-system";
-import { BaseResourceSchema } from "@wingconsole/server";
+import { BaseResourceSchema, NodeDisplay } from "@wingconsole/server";
 import classNames from "classnames";
 import { PropsWithChildren } from "react";
 
@@ -46,6 +46,7 @@ const getResourceBorderColor = (
 export interface ContainerNodeProps {
   nodeId: string;
   name: string | undefined;
+  display?: NodeDisplay;
   icon?: IconComponent;
   open?: boolean;
   hideBottomBar?: boolean;
@@ -65,6 +66,7 @@ export const ContainerNode = ({
   onMouseEnter,
   resourceType,
   depth,
+  display,
   ...props
 }: PropsWithChildren<ContainerNodeProps>) => {
   const { theme } = useTheme();
@@ -116,7 +118,7 @@ export const ContainerNode = ({
               "transition-all",
               "rounded-bl",
               open && "rounded-bl-none",
-              "border-r",
+              display?.type !== "compiler-named" && "border-r",
               {
                 [theme.border3]: !selected,
                 "border-sky-300 dark:border-sky-500": selected,
@@ -126,37 +128,39 @@ export const ContainerNode = ({
             <Icon className="w-5 h-5" />
           </div>
         )}
-        <div
-          className={classNames(
-            "flex-1 flex items-center",
-            "px-2.5 py-2",
-            "rounded-br",
-            !borderColor && "rounded-tr",
-            "group-focus:border-sky-300 dark:group-focus:border-sky-500",
-            "transition-all",
-            theme.bg3,
-            {
-              "border-sky-300 dark:border-sky-500": selected,
-              "rounded-br-none": open,
-              "rounded-l": !Icon,
-            },
-          )}
-          data-testid={`map-node:${props.nodeId}`}
-        >
-          <div className="flex flex-col">
-            <div
-              className={classNames(
-                "leading-tight",
-                "text-xs",
-                "truncate",
-                "transition-all",
-                theme.text1,
-              )}
-            >
-              {props.name}
+        {display?.type !== "compiler-named" && (
+          <div
+            className={classNames(
+              "flex-1 flex items-center",
+              "px-2.5 py-2",
+              "rounded-br",
+              !borderColor && "rounded-tr",
+              "group-focus:border-sky-300 dark:group-focus:border-sky-500",
+              "transition-all",
+              theme.bg3,
+              {
+                "border-sky-300 dark:border-sky-500": selected,
+                "rounded-br-none": open,
+                "rounded-l": !Icon,
+              },
+            )}
+            data-testid={`map-node:${props.nodeId}`}
+          >
+            <div className="flex flex-col">
+              <div
+                className={classNames(
+                  "leading-tight",
+                  "text-xs",
+                  "truncate",
+                  "transition-all",
+                  theme.text1,
+                )}
+              >
+                {props.name}
+              </div>
             </div>
           </div>
-        </div>
+        )}
       </div>
       {open && (
         <div

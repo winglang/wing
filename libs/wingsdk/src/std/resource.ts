@@ -485,6 +485,11 @@ export interface DisplayProps {
   readonly description?: string;
 
   /**
+   * Whether the resource is user-named or compiler-named.
+   * @default - "user-named".
+   */
+  readonly type?: "user-named" | "compiler-named";
+  /**
    * Whether the resource should be hidden from the UI.
    * @default - Undefined
    */
@@ -507,6 +512,11 @@ export class Display {
   public description?: string;
 
   /**
+   * Whether the resource is user-named or compiler-named.
+   */
+  public type?: "user-named" | "compiler-named";
+
+  /**
    * Whether the resource should be hidden from the UI.
    */
   public hidden?: boolean;
@@ -515,6 +525,7 @@ export class Display {
     this.title = props?.title;
     this.description = props?.description;
     this.hidden = props?.hidden;
+    this.type = props?.type ?? "user-named";
   }
 }
 

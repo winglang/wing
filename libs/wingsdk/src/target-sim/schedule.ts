@@ -36,7 +36,7 @@ export class Schedule extends cloud.Schedule implements ISimulatorResource {
   ): cloud.Function {
     const hash = inflight.node.addr.slice(-8);
     const functionHandler = convertBetweenHandlers(
-      this.node.scope!,
+      this,
       `${this.node.id}OnTickHandler${hash}`,
       inflight,
       join(__dirname, "schedule.ontick.inflight.js"),
@@ -44,11 +44,12 @@ export class Schedule extends cloud.Schedule implements ISimulatorResource {
     );
 
     const fn = Function._newFunction(
-      this.node.scope!,
+      this,
       `${this.node.id}-OnTick-${hash}`,
       functionHandler,
       props
     );
+    fn.display.type = "compiler-named";
 
     new EventMapping(this, `${this.node.id}-OnTickMapping-${hash}`, {
       subscriber: fn,

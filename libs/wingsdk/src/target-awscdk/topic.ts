@@ -35,7 +35,7 @@ export class Topic extends cloud.Topic {
   ): cloud.Function {
     const hash = inflight.node.addr.slice(-8);
     const functionHandler = convertBetweenHandlers(
-      this.node.scope!, // ok since we're not a tree root
+      this,
       `${this.node.id}-OnMessageHandler-${hash}`,
       inflight,
       join(
@@ -46,11 +46,12 @@ export class Topic extends cloud.Topic {
     );
 
     const fn = Function._newFunction(
-      this.node.scope!, // ok since we're not a tree root
+      this,
       `${this.node.id}-OnMessage-${hash}`,
       functionHandler,
       props
     );
+    fn.display.type = "compiler-named";
 
     // TODO: remove this constraint by adding geric permission APIs to cloud.Function
     if (!(fn instanceof Function)) {

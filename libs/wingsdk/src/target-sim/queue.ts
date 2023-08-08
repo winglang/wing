@@ -64,7 +64,7 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
      * wrapper code directly?
      */
     const functionHandler = convertBetweenHandlers(
-      this.node.scope!, // ok since we're not a tree root
+      this,
       `${this.node.id}-SetConsumerHandler-${hash}`,
       inflight,
       join(__dirname, "queue.setconsumer.inflight.js"),
@@ -72,11 +72,12 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
     );
 
     const fn = Function._newFunction(
-      this.node.scope!, // ok since we're not a tree root
+      this,
       `${this.node.id}-SetConsumer-${hash}`,
       functionHandler,
       props
     );
+    fn.display.type = "compiler-named";
 
     new EventMapping(this, `${this.node.id}-QueueEventMapping-${hash}`, {
       subscriber: fn,
