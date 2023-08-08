@@ -1998,6 +1998,13 @@ error: Inflight classes cannot have a scope
    |                          ^^ Inflight classes cannot have a scope
 
 
+error: Cannot qualify access to a lifted object of type \\"PreflightClass\\" (see https://github.com/winglang/wing/issues/76 for more details)
+   --> ../../../examples/tests/invalid/scope_and_id.w:17:26
+   |
+17 |   new InflightClass() in pc;
+   |                          ^^ Cannot qualify access to a lifted object of type \\"PreflightClass\\" (see https://github.com/winglang/wing/issues/76 for more details)
+
+
  
  
 Tests 1 failed (1)
