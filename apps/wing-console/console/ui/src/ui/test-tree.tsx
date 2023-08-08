@@ -21,11 +21,15 @@ export interface TestTreeProps {
   testList: TestItem[];
   handleRunAllTests: () => void;
   handleRunTest: (testPath: string) => void;
+  onSelectedItemsChange: (ids: string[]) => void;
+  selectedItems: string[];
 }
 export const TestTree = ({
   testList,
   handleRunTest,
   handleRunAllTests,
+  onSelectedItemsChange,
+  selectedItems,
 }: TestTreeProps) => {
   const { theme } = useTheme();
 
@@ -62,7 +66,10 @@ export const TestTree = ({
                   No Tests
                 </div>
               )}
-              <TreeView>
+              <TreeView
+                selectedItems={selectedItems}
+                onSelectedItemsChange={onSelectedItemsChange}
+              >
                 {testList.map((test) => (
                   <TreeItem
                     key={test.id}
