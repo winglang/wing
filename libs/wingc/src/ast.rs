@@ -464,7 +464,7 @@ pub enum StmtKind {
 	Return(Option<Expr>),
 	Expression(Expr),
 	Assignment {
-		variable: Expr,
+		variable: Reference,
 		value: Expr,
 	},
 	Scope(Scope),
@@ -716,6 +716,21 @@ pub enum Reference {
 	TypeReference(UserDefinedType),
 	/// A reference to a member inside a type: `MyType.x` or `MyEnum.A`
 	TypeMember { typeobject: Box<Expr>, property: Symbol },
+}
+
+impl Spanned for Reference {
+	fn span(&self) -> WingSpan {
+		match self {
+			Reference::Identifier(symb) => symb.span(),
+			Reference::InstanceMember {
+				object,
+				property,
+				optional_accessor: _,
+			} => object.span().merge(&property.span()),
+			Reference::TypeReference(type_) => type_.span(),
+			Reference::TypeMember { typeobject, property } => typeobject.span().merge(&property.span()),
+		}
+	}
 }
 
 impl Display for Reference {

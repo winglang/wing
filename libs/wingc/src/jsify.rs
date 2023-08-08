@@ -734,7 +734,7 @@ impl<'a> JSifier<'a> {
 			StmtKind::Expression(e) => CodeMaker::one_line(format!("{};", self.jsify_expression(e, ctx))),
 			StmtKind::Assignment { variable, value } => CodeMaker::one_line(format!(
 				"{} = {};",
-				self.jsify_expression(variable, ctx),
+				self.jsify_reference(variable, ctx),
 				self.jsify_expression(value, ctx)
 			)),
 			StmtKind::Scope(scope) => {
