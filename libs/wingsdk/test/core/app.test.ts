@@ -61,7 +61,7 @@ class MyApp extends App {
   public readonly _tokens: Tokens;
 
   constructor() {
-    super(undefined as any, "MyApp", { sourceDir: __dirname });
+    super(undefined as any, "MyApp", { entrypointDir: __dirname });
   }
 
   public synth(): string {

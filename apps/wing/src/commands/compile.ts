@@ -19,11 +19,16 @@ const log = debug("wing:compile");
 export interface CompileOptions {
   readonly target: wingCompiler.Target;
   readonly plugins?: string[];
+  readonly rootId?: string;
   /**
    * Whether to run the compiler in `wing test` mode. This may create multiple
    * copies of the application resources in order to run tests in parallel.
    */
   readonly testing?: boolean;
+  /**
+   * The location to save the compilation output
+   * @default "./target"
+   */
   readonly targetDir?: string;
 }
 

@@ -7,6 +7,7 @@ import debug from "debug";
 import { promisify } from "util";
 import { generateTmpDir, withSpinner } from "../util";
 import { Target } from "@winglang/compiler";
+import { nanoid } from "nanoid";
 import { readFile, rm, rmSync } from "fs";
 
 const log = debug("wing:test");
@@ -138,6 +139,7 @@ async function testOne(entrypoint: string, options: TestOptions) {
     async () =>
       compile(tempFile, {
         ...options,
+        rootId: options.rootId ?? `Test.${nanoid(10)}`,
         testing: true,
         ...(options.target !== Target.SIM && { targetDir: `${await generateTmpDir()}/target` }),
       })

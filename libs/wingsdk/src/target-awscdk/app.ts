@@ -3,7 +3,6 @@ import { join } from "path";
 import * as cdk from "aws-cdk-lib";
 import { Template } from "aws-cdk-lib/assertions";
 import { Construct } from "constructs";
-import { nanoid } from "nanoid";
 import stringify from "safe-stable-stringify";
 import { Bucket } from "./bucket";
 import { Counter } from "./counter";
@@ -75,10 +74,7 @@ export class App extends CoreApp {
     const cdkApp = new cdk.App({ outdir: cdkOutdir });
     const cdkStack = new cdk.Stack(cdkApp, stackName);
 
-    const rootId = props.isTestEnvironment
-      ? "Default_" + nanoid(10)
-      : "Default";
-    super(cdkStack, rootId, props);
+    super(cdkStack, props.rootId ?? "Default", props);
 
     // HACK: monkey patch the `new` method on the cdk app (which is the root of the tree) so that
     // we can intercept the creation of resources and replace them with our own.

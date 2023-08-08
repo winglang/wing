@@ -33,6 +33,7 @@ const DEFAULT_SYNTH_DIR_SUFFIX: Record<Target, string | undefined> = {
 export interface CompileOptions {
   readonly target: Target;
   readonly plugins?: string[];
+  readonly rootId?: string;
   /**
    * Whether to run the compiler in `wing test` mode. This may create multiple
    * copies of the application resources in order to run tests in parallel.
@@ -100,6 +101,7 @@ export async function compile(entrypoint: string, options: CompileOptions): Prom
   // in the future we may look for a unified approach
   process.env["WING_TARGET"] = options.target;
   process.env["WING_IS_TEST"] = testing.toString();
+  process.env["WING_ROOT_ID"] = options.rootId;
 
   const tempProcess: { env: Record<string, string | undefined> } = { env: { ...process.env } };
 

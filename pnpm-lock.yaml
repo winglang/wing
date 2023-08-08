@@ -300,6 +300,9 @@ importers:
       debug:
         specifier: ^4.3.4
         version: 4.3.4
+      nanoid:
+        specifier: ^3.3.6
+        version: 3.3.6
       open:
         specifier: ^8.4.0
         version: 8.4.0
@@ -12464,7 +12467,7 @@ packages:
     dependencies:
       semver: 7.5.3
       shelljs: 0.8.5
-      typescript: 5.2.0-dev.20230803
+      typescript: 5.3.0-dev.20230808
     dev: true
 
   /dset@3.1.2:
@@ -21383,8 +21386,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  /typescript@5.2.0-dev.20230803:
-    resolution: {integrity: sha512-DwCyutWHyT7Il7xpJCxtx4/S5F4qjAo2SE6QDRSLhEUtBFGwGHTHCvuyfm9KNrdwn67jGitdlw4gpbSTVVjoww==}
+  /typescript@5.3.0-dev.20230808:
+    resolution: {integrity: sha512-skwlatDWwjIHttX+Yg1vH1XRyFJWy8m1LxrP+3VEpAso05fW0y61dQbzqDzdtTjPKUDLf5um7IMwWBS6gVx08A==}
     engines: {node: '>=14.17'}
     hasBin: true
     dev: true

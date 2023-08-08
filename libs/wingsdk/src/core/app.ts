@@ -49,9 +49,15 @@ export interface AppProps {
   readonly isTestEnvironment?: boolean;
 
   /**
-   * App's external context
+   *  The absolute directory location for the wing entry point file
    */
-  readonly sourceDir: string;
+  readonly entrypointDir: string;
+
+  /**
+   *  The App root id
+   * @default Default
+   */
+  readonly rootId?: string;
 }
 
 /**
@@ -97,7 +103,7 @@ export abstract class App extends Construct {
   /**
    * Wing source files directory absolute path
    */
-  public readonly sourceDir: string;
+  public readonly entrypointDir: string;
 
   /**
    * The output directory.
@@ -117,7 +123,7 @@ export abstract class App extends Construct {
 
   constructor(scope: Construct, id: string, props: AppProps) {
     super(scope, id);
-    this.sourceDir = props.sourceDir;
+    this.entrypointDir = props.entrypointDir;
   }
 
   /**
