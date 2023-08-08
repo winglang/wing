@@ -1,5 +1,15 @@
 # [set_consumer.w](../../../../../../examples/tests/sdk_tests/queue/set_consumer.w) | test | sim
 
+## stderr.log
+```log
+[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/sdk_tests/queue/set_consumer.w"
+[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/sdk_tests/queue/set_consumer.w"
+[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/sdk_tests/queue/set_consumer.w"
+[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/sdk_tests/queue/set_consumer.w"
+[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/sdk_tests/queue/set_consumer.w"
+[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/sdk_tests/queue/set_consumer.w"
+```
+
 ## stdout.log
 ```log
 pass ─ set_consumer.wsim » root/env0/test:setConsumer

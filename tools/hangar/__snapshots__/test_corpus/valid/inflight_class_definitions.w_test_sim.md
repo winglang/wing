@@ -1,5 +1,25 @@
 # [inflight_class_definitions.w](../../../../../examples/tests/valid/inflight_class_definitions.w) | test | sim
 
+## stderr.log
+```log
+[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/valid/inflight_class_definitions.w"
+[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/valid/inflight_class_definitions.w"
+[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/valid/inflight_class_definitions.w"
+[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/valid/inflight_class_definitions.w"
+[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/valid/inflight_class_definitions.w"
+[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/valid/inflight_class_definitions.w"
+[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/valid/inflight_class_definitions.w"
+[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/valid/inflight_class_definitions.w"
+[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/valid/inflight_class_definitions.w"
+[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/valid/inflight_class_definitions.w"
+[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/valid/inflight_class_definitions.w"
+[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/valid/inflight_class_definitions.w"
+[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/valid/inflight_class_definitions.w"
+[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/valid/inflight_class_definitions.w"
+[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/valid/inflight_class_definitions.w"
+[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/valid/inflight_class_definitions.w"
+```
+
 ## stdout.log
 ```log
 pass ─ inflight_class_definitions.wsim » root/env0/test:test

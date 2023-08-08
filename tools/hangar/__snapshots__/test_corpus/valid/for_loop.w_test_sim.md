@@ -1,5 +1,13 @@
 # [for_loop.w](../../../../../examples/tests/valid/for_loop.w) | test | sim
 
+## stderr.log
+```log
+[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/valid/for_loop.w"
+[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/valid/for_loop.w"
+[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/valid/for_loop.w"
+[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/valid/for_loop.w"
+```
+
 ## stdout.log
 ```log
 wing: 1

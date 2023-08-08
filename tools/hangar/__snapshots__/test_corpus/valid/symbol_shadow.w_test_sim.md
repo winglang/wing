@@ -1,5 +1,19 @@
 # [symbol_shadow.w](../../../../../examples/tests/valid/symbol_shadow.w) | test | sim
 
+## stderr.log
+```log
+[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/valid/symbol_shadow.w"
+[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/valid/symbol_shadow.w"
+[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/valid/symbol_shadow.w"
+[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/valid/symbol_shadow.w"
+[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/valid/symbol_shadow.w"
+[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/valid/symbol_shadow.w"
+[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/valid/symbol_shadow.w"
+[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/valid/symbol_shadow.w"
+[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/valid/symbol_shadow.w"
+[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/valid/symbol_shadow.w"
+```
+
 ## stdout.log
 ```log
 pass ─ symbol_shadow.wsim » root/env0/test:inflight nested should not capture the shadowed var       

@@ -1,5 +1,10 @@
 # [table.w](../../../../../examples/tests/valid/table.w) | test | sim
 
+## stderr.log
+```log
+
+```
+
 ## stdout.log
 ```log
 pass ─ table.wsim (no tests)

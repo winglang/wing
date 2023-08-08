@@ -1,5 +1,10 @@
 # [anon_function.w](../../../../../examples/tests/valid/anon_function.w) | test | sim
 
+## stderr.log
+```log
+
+```
+
 ## stdout.log
 ```log
 1

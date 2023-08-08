@@ -1,5 +1,13 @@
 # [sleep.w](../../../../../../examples/tests/sdk_tests/util/sleep.w) | test | sim
 
+## stderr.log
+```log
+[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/sdk_tests/util/sleep.w"
+[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/sdk_tests/util/sleep.w"
+[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/sdk_tests/util/sleep.w"
+[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/sdk_tests/util/sleep.w"
+```
+
 ## stdout.log
 ```log
 pass ─ sleep.wsim » root/env0/test:sleep 100 mili seconds

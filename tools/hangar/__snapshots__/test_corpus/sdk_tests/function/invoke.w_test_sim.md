@@ -1,5 +1,13 @@
 # [invoke.w](../../../../../../examples/tests/sdk_tests/function/invoke.w) | test | sim
 
+## stderr.log
+```log
+[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/sdk_tests/function/invoke.w"
+[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/sdk_tests/function/invoke.w"
+[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/sdk_tests/function/invoke.w"
+[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/sdk_tests/function/invoke.w"
+```
+
 ## stdout.log
 ```log
 log preflight

@@ -1,5 +1,13 @@
 # [peek.w](../../../../../../examples/tests/sdk_tests/counter/peek.w) | test | sim
 
+## stderr.log
+```log
+[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/sdk_tests/counter/peek.w"
+[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/sdk_tests/counter/peek.w"
+[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/sdk_tests/counter/peek.w"
+[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/sdk_tests/counter/peek.w"
+```
+
 ## stdout.log
 ```log
 pass ─ peek.wsim » root/env0/test:peek    

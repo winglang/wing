@@ -1,5 +1,10 @@
 # [primitive_methods.w](../../../../../examples/tests/valid/primitive_methods.w) | test | sim
 
+## stderr.log
+```log
+
+```
+
 ## stdout.log
 ```log
 1:60

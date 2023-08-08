@@ -1,5 +1,11 @@
 # [delete.w](../../../../../../examples/tests/sdk_tests/bucket/delete.w) | test | sim
 
+## stderr.log
+```log
+[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/sdk_tests/bucket/delete.w"
+[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/sdk_tests/bucket/delete.w"
+```
+
 ## stdout.log
 ```log
 pass ─ delete.wsim » root/env0/test:delete
