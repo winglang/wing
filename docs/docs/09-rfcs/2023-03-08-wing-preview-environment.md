@@ -18,6 +18,7 @@ The **Wing Cloud Preview Environments** project is designed to achieve two key o
 Secondly, it seeks to enhance the winglang ecosystem and its toolchain by building a production application using the language.
 
 ## Requirements
+
 Wing Cloud users can build and deploy Wing applications to an ephemeral (simulated) environment and use the Wing Console UI to interact with it.
 Automatically run tests on the preview environment once created and provide a UI for viewing the test results.
 Allow developers to collaborate with their teammates using a shared environment.
@@ -28,17 +29,20 @@ Seamlessly integrating with GitHub.
 1. Goto https://wing.cloud and click on sign up.
 2. sign up to Wing Cloud using GitHub authentication.
 
-### Sing In to Wing Cloud
+### Sign In to Wing Cloud
+
 1. Goto https://wing.cloud and click on sign in.
 2. If a developer was already signed in before, he will be automatically signed in to Wing Cloud.
 
 ### Authentication and Authorization
+
 1. Wing Cloud Preview Environments will use GitHub for authentication and authorization.
 2. Developers will be able to install Wing Cloud Preview Environments on a repository only if they have the GitHub permissions.
 3. Developers will be able to create a PR with a preview environment only if they have the necessary GitHub permissions to the repository **and** their GitHub user is signed up to Wing Cloud.
 4. Everyone can view a preview environment if they have the url.
 
 ### Wing Cloud Preview Environments Developer Experience
+
 A developer using winglang has the capability to integrate Wing Cloud Preview Environments with their repository.
 
 #### Installation
@@ -146,6 +150,7 @@ In our docs we have the following information:
 2. Only Wing Cloud signed up developers with write access to the repository can create preview environments
 
 ## NON Requirements
+
 1. Preview environments will require authentication to view.
 2. Assign users to Teams.
 3. enable preview environments viewers to add comments in the environment itself
