@@ -638,7 +638,7 @@ exports[`topic with subscriber function 3`] = `
                 "display": {
                   "description": "A cloud function (FaaS)",
                   "title": "Function",
-                  "type": "compiler-named",
+                  "type": "user-named",
                 },
                 "id": "Topic-OnMessage-c5395e41",
                 "path": "root/Default/Topic-OnMessage-c5395e41",
