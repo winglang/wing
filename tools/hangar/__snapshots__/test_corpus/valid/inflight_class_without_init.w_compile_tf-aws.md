@@ -1,6 +1,6 @@
 # [inflight_class_without_init.w](../../../../../examples/tests/valid/inflight_class_without_init.w) | compile | tf-aws
 
-## inflight.$Closure1-e3a0dc7c.js
+## inflight.$Closure1-16a0823e.js
 ```js
 module.exports = function({ $Foo }) {
   class $Closure1 {
@@ -18,7 +18,7 @@ module.exports = function({ $Foo }) {
 
 ```
 
-## inflight.Foo-e3a0dc7c.js
+## inflight.Foo-16a0823e.js
 ```js
 module.exports = function({  }) {
   class Foo {
@@ -166,7 +166,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.Foo-e3a0dc7c.js")({
+          require("./inflight.Foo-16a0823e.js")({
           })
         `);
       }
@@ -190,7 +190,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1-e3a0dc7c.js")({
+          require("./inflight.$Closure1-16a0823e.js")({
             $Foo: ${context._lift(Foo)},
           })
         `);

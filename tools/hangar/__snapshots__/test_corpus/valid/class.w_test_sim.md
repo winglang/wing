@@ -1,49 +1,5 @@
 # [class.w](../../../../../examples/tests/valid/class.w) | test | sim
 
-## stderr.log
-```log
-[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/valid/class.w"
-[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/valid/class.w"
-[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/valid/class.w"
-[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/valid/class.w"
-[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/valid/class.w"
-[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/valid/class.w"
-[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/valid/class.w"
-[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/valid/class.w"
-[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/valid/class.w"
-[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/valid/class.w"
-[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/valid/class.w"
-[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/valid/class.w"
-[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/valid/class.w"
-[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/valid/class.w"
-[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/valid/class.w"
-[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/valid/class.w"
-[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/valid/class.w"
-[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/valid/class.w"
-[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/valid/class.w"
-[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/valid/class.w"
-[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/valid/class.w"
-[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/valid/class.w"
-[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/valid/class.w"
-[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/valid/class.w"
-[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/valid/class.w"
-[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/valid/class.w"
-[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/valid/class.w"
-[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/valid/class.w"
-[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/valid/class.w"
-[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/valid/class.w"
-[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/valid/class.w"
-[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/valid/class.w"
-[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/valid/class.w"
-[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/valid/class.w"
-[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/valid/class.w"
-[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/valid/class.w"
-[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/valid/class.w"
-[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/valid/class.w"
-[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/valid/class.w"
-[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/valid/class.w"
-```
-
 ## stdout.log
 ```log
 pass ─ class.wsim » root/env0/test:access inflight field                      

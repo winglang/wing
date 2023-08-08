@@ -1,6 +1,6 @@
 # [website_with_api.w](../../../../../examples/tests/valid/website_with_api.w) | compile | tf-aws
 
-## inflight.$Closure1-73c8ce3e.js
+## inflight.$Closure1-a1605d2f.js
 ```js
 module.exports = function({ $std_Json, $usersTable }) {
   class $Closure1 {
@@ -18,7 +18,7 @@ module.exports = function({ $std_Json, $usersTable }) {
 
 ```
 
-## inflight.$Closure2-73c8ce3e.js
+## inflight.$Closure2-a1605d2f.js
 ```js
 module.exports = function({ $std_Json, $usersTable }) {
   class $Closure2 {
@@ -41,7 +41,7 @@ module.exports = function({ $std_Json, $usersTable }) {
 
 ```
 
-## inflight.$Closure3-73c8ce3e.js
+## inflight.$Closure3-a1605d2f.js
 ```js
 module.exports = function({  }) {
   class $Closure3 {
@@ -652,7 +652,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1-73c8ce3e.js")({
+          require("./inflight.$Closure1-a1605d2f.js")({
             $std_Json: ${context._lift(std.Json)},
             $usersTable: ${context._lift(usersTable)},
           })
@@ -684,7 +684,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure2-73c8ce3e.js")({
+          require("./inflight.$Closure2-a1605d2f.js")({
             $std_Json: ${context._lift(std.Json)},
             $usersTable: ${context._lift(usersTable)},
           })
@@ -716,7 +716,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure3-73c8ce3e.js")({
+          require("./inflight.$Closure3-a1605d2f.js")({
           })
         `);
       }

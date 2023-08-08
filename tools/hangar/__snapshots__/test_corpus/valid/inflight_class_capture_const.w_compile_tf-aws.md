@@ -1,6 +1,6 @@
 # [inflight_class_capture_const.w](../../../../../examples/tests/valid/inflight_class_capture_const.w) | compile | tf-aws
 
-## inflight.$Closure1-5a9313db.js
+## inflight.$Closure1-2bc5e415.js
 ```js
 module.exports = function({ $Foo, $myConst }) {
   class $Closure1 {
@@ -19,7 +19,7 @@ module.exports = function({ $Foo, $myConst }) {
 
 ```
 
-## inflight.Foo-5a9313db.js
+## inflight.Foo-2bc5e415.js
 ```js
 module.exports = function({ $myConst }) {
   class Foo {
@@ -170,7 +170,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.Foo-5a9313db.js")({
+          require("./inflight.Foo-2bc5e415.js")({
             $myConst: ${context._lift(myConst)},
           })
         `);
@@ -201,7 +201,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1-5a9313db.js")({
+          require("./inflight.$Closure1-2bc5e415.js")({
             $Foo: ${context._lift(Foo)},
             $myConst: ${context._lift(myConst)},
           })

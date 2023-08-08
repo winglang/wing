@@ -1,13 +1,5 @@
 # [identical_inflights.w](../../../../../examples/tests/valid/identical_inflights.w) | test | sim
 
-## stderr.log
-```log
-[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/valid/identical_inflights.w"
-[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/valid/identical_inflights.w"
-[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/valid/identical_inflights.w"
-[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/valid/identical_inflights.w"
-```
-
 ## stdout.log
 ```log
 pass ─ identical_inflights.wsim (no tests)

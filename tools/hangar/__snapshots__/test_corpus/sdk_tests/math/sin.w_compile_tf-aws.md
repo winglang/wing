@@ -1,6 +1,6 @@
 # [sin.w](../../../../../../examples/tests/sdk_tests/math/sin.w) | compile | tf-aws
 
-## inflight.$Closure1-cad5eb6d.js
+## inflight.$Closure1-89452b93.js
 ```js
 module.exports = function({ $math_Util }) {
   class $Closure1 {
@@ -161,7 +161,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1-cad5eb6d.js")({
+          require("./inflight.$Closure1-89452b93.js")({
             $math_Util: ${context._lift(math.Util)},
           })
         `);

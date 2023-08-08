@@ -1,13 +1,5 @@
 # [resource_as_inflight_literal.w](../../../../../examples/tests/valid/resource_as_inflight_literal.w) | test | sim
 
-## stderr.log
-```log
-[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/valid/resource_as_inflight_literal.w"
-[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/valid/resource_as_inflight_literal.w"
-[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/valid/resource_as_inflight_literal.w"
-[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/valid/resource_as_inflight_literal.w"
-```
-
 ## stdout.log
 ```log
 pass ─ resource_as_inflight_literal.wsim » root/env0/test:test

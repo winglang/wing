@@ -1,6 +1,6 @@
 # [prime.w](../../../../../../examples/tests/sdk_tests/math/prime.w) | compile | tf-aws
 
-## inflight.$Closure1-05c14aaf.js
+## inflight.$Closure1-a97011ac.js
 ```js
 module.exports = function({ $math_Util }) {
   class $Closure1 {
@@ -163,7 +163,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1-05c14aaf.js")({
+          require("./inflight.$Closure1-a97011ac.js")({
             $math_Util: ${context._lift(math.Util)},
           })
         `);

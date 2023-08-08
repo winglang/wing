@@ -1,6 +1,6 @@
 # [min_max.w](../../../../../../examples/tests/sdk_tests/math/min_max.w) | compile | tf-aws
 
-## inflight.$Closure1-d18f02f0.js
+## inflight.$Closure1-7ab8d69e.js
 ```js
 module.exports = function({ $math_Util, $myArray }) {
   class $Closure1 {
@@ -158,7 +158,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1-d18f02f0.js")({
+          require("./inflight.$Closure1-7ab8d69e.js")({
             $math_Util: ${context._lift(math.Util)},
             $myArray: ${context._lift(myArray)},
           })

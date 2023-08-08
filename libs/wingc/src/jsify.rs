@@ -4,13 +4,13 @@ use aho_corasick::AhoCorasick;
 use const_format::formatcp;
 use indexmap::{IndexMap, IndexSet};
 use itertools::Itertools;
+use sha1::{Digest, Sha1};
 
 use std::{
 	borrow::Borrow,
 	cell::RefCell,
 	cmp::Ordering,
 	collections::BTreeMap,
-	hash::{Hash, Hasher},
 	path::{Path, PathBuf},
 	vec,
 };
@@ -1326,12 +1326,9 @@ fn get_public_symbols(scope: &Scope) -> Vec<Symbol> {
 }
 
 fn inflight_filename(class: &AstClass) -> String {
-	let mut hasher = std::collections::hash_map::DefaultHasher::new();
-	class.name.span.file_id.hash(&mut hasher);
-	dbg!(&class.name.span.file_id);
-	let finished = hasher.finish();
-	dbg!(&finished);
-	let hash = format!("{:x}", finished); // convert to hex
+	let mut hasher = Sha1::new();
+	hasher.update(&class.name.span.file_id);
+	let hash = format!("{:x}", hasher.finalize()); // convert to hex
 	format!("./inflight.{}-{}.js", class.name.name, &hash[hash.len() - 8..])
 }
 

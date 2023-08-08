@@ -1,10 +1,5 @@
 # [std_containers.w](../../../../../examples/tests/valid/std_containers.w) | test | sim
 
-## stderr.log
-```log
-
-```
-
 ## stdout.log
 ```log
 pass ─ std_containers.wsim (no tests)

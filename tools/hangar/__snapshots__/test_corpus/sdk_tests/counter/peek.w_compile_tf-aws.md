@@ -1,6 +1,6 @@
 # [peek.w](../../../../../../examples/tests/sdk_tests/counter/peek.w) | compile | tf-aws
 
-## inflight.$Closure1-0bd956eb.js
+## inflight.$Closure1-ca495981.js
 ```js
 module.exports = function({ $c }) {
   class $Closure1 {
@@ -21,7 +21,7 @@ module.exports = function({ $c }) {
 
 ```
 
-## inflight.$Closure2-0bd956eb.js
+## inflight.$Closure2-ca495981.js
 ```js
 module.exports = function({ $c }) {
   class $Closure2 {
@@ -269,7 +269,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1-0bd956eb.js")({
+          require("./inflight.$Closure1-ca495981.js")({
             $c: ${context._lift(c)},
           })
         `);
@@ -300,7 +300,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure2-0bd956eb.js")({
+          require("./inflight.$Closure2-ca495981.js")({
             $c: ${context._lift(c)},
           })
         `);

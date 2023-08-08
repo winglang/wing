@@ -1,11 +1,5 @@
 # [captures.w](../../../../../examples/tests/valid/captures.w) | test | sim
 
-## stderr.log
-```log
-[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/valid/captures.w"
-[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/valid/captures.w"
-```
-
 ## stdout.log
 ```log
 pass ─ captures.wsim (no tests)

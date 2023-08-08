@@ -1,6 +1,6 @@
 # [lift_this.w](../../../../../examples/tests/valid/lift_this.w) | compile | tf-aws
 
-## inflight.$Closure1-2f9e9ed1.js
+## inflight.$Closure1-79e343bb.js
 ```js
 module.exports = function({ $f }) {
   class $Closure1 {
@@ -18,7 +18,7 @@ module.exports = function({ $f }) {
 
 ```
 
-## inflight.Foo-2f9e9ed1.js
+## inflight.Foo-79e343bb.js
 ```js
 module.exports = function({  }) {
   class Foo {
@@ -176,7 +176,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.Foo-2f9e9ed1.js")({
+          require("./inflight.Foo-79e343bb.js")({
           })
         `);
       }
@@ -206,7 +206,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1-2f9e9ed1.js")({
+          require("./inflight.$Closure1-79e343bb.js")({
             $f: ${context._lift(f)},
           })
         `);

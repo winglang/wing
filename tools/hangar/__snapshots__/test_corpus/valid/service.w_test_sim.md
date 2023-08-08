@@ -1,10 +1,5 @@
 # [service.w](../../../../../examples/tests/valid/service.w) | test | sim
 
-## stderr.log
-```log
-
-```
-
 ## stdout.log
 ```log
 pass ─ service.wsim (no tests)

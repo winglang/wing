@@ -1,6 +1,6 @@
 # [while_loop_await.w](../../../../../examples/tests/valid/while_loop_await.w) | compile | tf-aws
 
-## inflight.$Closure1-349733c8.js
+## inflight.$Closure1-957fdbd4.js
 ```js
 module.exports = function({  }) {
   class $Closure1 {
@@ -188,7 +188,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1-349733c8.js")({
+          require("./inflight.$Closure1-957fdbd4.js")({
           })
         `);
       }

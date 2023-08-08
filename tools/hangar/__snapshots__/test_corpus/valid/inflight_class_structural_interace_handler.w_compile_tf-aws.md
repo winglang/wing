@@ -1,6 +1,6 @@
 # [inflight_class_structural_interace_handler.w](../../../../../examples/tests/valid/inflight_class_structural_interace_handler.w) | compile | tf-aws
 
-## inflight.$Closure1-9580e250.js
+## inflight.$Closure1-e91aaeec.js
 ```js
 module.exports = function({ $NotGoo }) {
   class $Closure1 {
@@ -29,7 +29,7 @@ module.exports = function({ $NotGoo }) {
 
 ```
 
-## inflight.NotGoo-9580e250.js
+## inflight.NotGoo-e91aaeec.js
 ```js
 module.exports = function({  }) {
   class NotGoo {
@@ -180,7 +180,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.NotGoo-9580e250.js")({
+          require("./inflight.NotGoo-e91aaeec.js")({
           })
         `);
       }
@@ -204,7 +204,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1-9580e250.js")({
+          require("./inflight.$Closure1-e91aaeec.js")({
             $NotGoo: ${context._lift(NotGoo)},
           })
         `);

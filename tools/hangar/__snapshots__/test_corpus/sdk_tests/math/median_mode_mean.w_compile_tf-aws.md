@@ -1,6 +1,6 @@
 # [median_mode_mean.w](../../../../../../examples/tests/sdk_tests/math/median_mode_mean.w) | compile | tf-aws
 
-## inflight.$Closure1-98ecd17e.js
+## inflight.$Closure1-c6106aae.js
 ```js
 module.exports = function({ $even_arr, $math_Util, $odd_arr }) {
   class $Closure1 {
@@ -19,7 +19,7 @@ module.exports = function({ $even_arr, $math_Util, $odd_arr }) {
 
 ```
 
-## inflight.$Closure2-98ecd17e.js
+## inflight.$Closure2-c6106aae.js
 ```js
 module.exports = function({ $_bimodal_at_0__, $_bimodal_at_1__, $_multimodal_at_0__, $_multimodal_at_1__, $_multimodal_at_2__, $math_Util, $modal_arr }) {
   class $Closure2 {
@@ -42,7 +42,7 @@ module.exports = function({ $_bimodal_at_0__, $_bimodal_at_1__, $_multimodal_at_
 
 ```
 
-## inflight.$Closure3-98ecd17e.js
+## inflight.$Closure3-c6106aae.js
 ```js
 module.exports = function({ $math_Util, $mean_arr }) {
   class $Closure3 {
@@ -333,7 +333,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1-98ecd17e.js")({
+          require("./inflight.$Closure1-c6106aae.js")({
             $even_arr: ${context._lift(even_arr)},
             $math_Util: ${context._lift(math.Util)},
             $odd_arr: ${context._lift(odd_arr)},
@@ -367,7 +367,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure2-98ecd17e.js")({
+          require("./inflight.$Closure2-c6106aae.js")({
             $_bimodal_at_0__: ${context._lift((bimodal.at(0)))},
             $_bimodal_at_1__: ${context._lift((bimodal.at(1)))},
             $_multimodal_at_0__: ${context._lift((multimodal.at(0)))},
@@ -409,7 +409,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure3-98ecd17e.js")({
+          require("./inflight.$Closure3-c6106aae.js")({
             $math_Util: ${context._lift(math.Util)},
             $mean_arr: ${context._lift(mean_arr)},
           })

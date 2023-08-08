@@ -1,10 +1,5 @@
 # [range.w](../../../../../../examples/tests/sdk_tests/std/range.w) | test | sim
 
-## stderr.log
-```log
-
-```
-
 ## stdout.log
 ```log
 pass ─ range.wsim (no tests)

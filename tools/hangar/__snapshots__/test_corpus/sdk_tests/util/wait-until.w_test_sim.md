@@ -1,21 +1,5 @@
 # [wait-until.w](../../../../../../examples/tests/sdk_tests/util/wait-until.w) | test | sim
 
-## stderr.log
-```log
-[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/sdk_tests/util/wait-until.w"
-[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/sdk_tests/util/wait-until.w"
-[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/sdk_tests/util/wait-until.w"
-[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/sdk_tests/util/wait-until.w"
-[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/sdk_tests/util/wait-until.w"
-[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/sdk_tests/util/wait-until.w"
-[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/sdk_tests/util/wait-until.w"
-[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/sdk_tests/util/wait-until.w"
-[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/sdk_tests/util/wait-until.w"
-[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/sdk_tests/util/wait-until.w"
-[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/sdk_tests/util/wait-until.w"
-[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/sdk_tests/util/wait-until.w"
-```
-
 ## stdout.log
 ```log
 pass ─ wait-until.wsim » root/env0/test:returns true immediately                                  

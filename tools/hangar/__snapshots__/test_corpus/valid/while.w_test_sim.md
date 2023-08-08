@@ -1,10 +1,5 @@
 # [while.w](../../../../../examples/tests/valid/while.w) | test | sim
 
-## stderr.log
-```log
-
-```
-
 ## stdout.log
 ```log
 pass ─ while.wsim (no tests)

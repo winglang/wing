@@ -1,10 +1,5 @@
 # [expressions_binary_operators.w](../../../../../examples/tests/valid/expressions_binary_operators.w) | test | sim
 
-## stderr.log
-```log
-
-```
-
 ## stdout.log
 ```log
 pass ─ expressions_binary_operators.wsim (no tests)

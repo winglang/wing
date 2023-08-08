@@ -1,6 +1,6 @@
 # [set_consumer.w](../../../../../../examples/tests/sdk_tests/queue/set_consumer.w) | compile | tf-aws
 
-## inflight.$Closure1-6964f5cf.js
+## inflight.$Closure1-597e7629.js
 ```js
 module.exports = function({ $c }) {
   class $Closure1 {
@@ -18,7 +18,7 @@ module.exports = function({ $c }) {
 
 ```
 
-## inflight.$Closure2-6964f5cf.js
+## inflight.$Closure2-597e7629.js
 ```js
 module.exports = function({ $predicate, $q, $std_Duration, $util_Util }) {
   class $Closure2 {
@@ -47,7 +47,7 @@ module.exports = function({ $predicate, $q, $std_Duration, $util_Util }) {
 
 ```
 
-## inflight.Predicate-6964f5cf.js
+## inflight.Predicate-597e7629.js
 ```js
 module.exports = function({  }) {
   class Predicate {
@@ -315,7 +315,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.Predicate-6964f5cf.js")({
+          require("./inflight.Predicate-597e7629.js")({
           })
         `);
       }
@@ -349,7 +349,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1-6964f5cf.js")({
+          require("./inflight.$Closure1-597e7629.js")({
             $c: ${context._lift(c)},
           })
         `);
@@ -380,7 +380,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure2-6964f5cf.js")({
+          require("./inflight.$Closure2-597e7629.js")({
             $predicate: ${context._lift(predicate)},
             $q: ${context._lift(q)},
             $std_Duration: ${context._lift(std.Duration)},

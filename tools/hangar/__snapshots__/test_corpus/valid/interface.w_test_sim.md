@@ -1,10 +1,5 @@
 # [interface.w](../../../../../examples/tests/valid/interface.w) | test | sim
 
-## stderr.log
-```log
-
-```
-
 ## stdout.log
 ```log
 pass ─ interface.wsim (no tests)

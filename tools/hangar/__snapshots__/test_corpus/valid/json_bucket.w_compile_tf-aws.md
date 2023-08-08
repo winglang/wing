@@ -1,6 +1,6 @@
 # [json_bucket.w](../../../../../examples/tests/valid/json_bucket.w) | compile | tf-aws
 
-## inflight.$Closure1-9cb0b4a9.js
+## inflight.$Closure1-98b63a17.js
 ```js
 module.exports = function({ $b, $fileName }) {
   class $Closure1 {
@@ -19,7 +19,7 @@ module.exports = function({ $b, $fileName }) {
 
 ```
 
-## inflight.$Closure2-9cb0b4a9.js
+## inflight.$Closure2-98b63a17.js
 ```js
 module.exports = function({ $b, $fileName, $getJson, $j }) {
   class $Closure2 {
@@ -289,7 +289,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1-9cb0b4a9.js")({
+          require("./inflight.$Closure1-98b63a17.js")({
             $b: ${context._lift(b)},
             $fileName: ${context._lift(fileName)},
           })
@@ -322,7 +322,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure2-9cb0b4a9.js")({
+          require("./inflight.$Closure2-98b63a17.js")({
             $b: ${context._lift(b)},
             $fileName: ${context._lift(fileName)},
             $getJson: ${context._lift(getJson)},

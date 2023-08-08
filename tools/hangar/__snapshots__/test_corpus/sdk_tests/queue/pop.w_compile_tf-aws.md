@@ -1,6 +1,6 @@
 # [pop.w](../../../../../../examples/tests/sdk_tests/queue/pop.w) | compile | tf-aws
 
-## inflight.$Closure1-068456d2.js
+## inflight.$Closure1-7189ca11.js
 ```js
 module.exports = function({ $NIL, $q }) {
   class $Closure1 {
@@ -178,7 +178,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1-068456d2.js")({
+          require("./inflight.$Closure1-7189ca11.js")({
             $NIL: ${context._lift(NIL)},
             $q: ${context._lift(q)},
           })

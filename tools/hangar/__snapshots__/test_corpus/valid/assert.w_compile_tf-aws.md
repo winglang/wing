@@ -1,6 +1,6 @@
 # [assert.w](../../../../../examples/tests/valid/assert.w) | compile | tf-aws
 
-## inflight.$Closure1-7660901b.js
+## inflight.$Closure1-9b532f03.js
 ```js
 module.exports = function({ $s1, $s2 }) {
   class $Closure1 {
@@ -170,7 +170,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1-7660901b.js")({
+          require("./inflight.$Closure1-9b532f03.js")({
             $s1: ${context._lift(s1)},
             $s2: ${context._lift(s2)},
           })

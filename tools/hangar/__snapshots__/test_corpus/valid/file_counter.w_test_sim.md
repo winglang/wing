@@ -1,11 +1,5 @@
 # [file_counter.w](../../../../../examples/tests/valid/file_counter.w) | test | sim
 
-## stderr.log
-```log
-[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/valid/file_counter.w"
-[libs/wingc/src/jsify.rs:1330] &class.name.span.file_id = "../../../../examples/tests/valid/file_counter.w"
-```
-
 ## stdout.log
 ```log
 pass ─ file_counter.wsim (no tests)

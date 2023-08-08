@@ -1,6 +1,6 @@
 # [construct-base.w](../../../../../examples/tests/valid/construct-base.w) | compile | tf-aws
 
-## inflight.WingResource-9e64cd5f.js
+## inflight.WingResource-c31e0963.js
 ```js
 module.exports = function({  }) {
   class WingResource {
@@ -76,7 +76,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.WingResource-9e64cd5f.js")({
+          require("./inflight.WingResource-c31e0963.js")({
           })
         `);
       }

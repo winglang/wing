@@ -1,6 +1,6 @@
 # [patch.w](../../../../../../examples/tests/sdk_tests/api/patch.w) | compile | tf-aws
 
-## inflight.$Closure1-4d26eaed.js
+## inflight.$Closure1-c05b4cce.js
 ```js
 module.exports = function({ $_id, $api_PATCH, $body, $std_Json }) {
   class $Closure1 {
@@ -23,7 +23,7 @@ module.exports = function({ $_id, $api_PATCH, $body, $std_Json }) {
 
 ```
 
-## inflight.$Closure2-4d26eaed.js
+## inflight.$Closure2-c05b4cce.js
 ```js
 module.exports = function({ $_id, $api_url, $body, $http_PATCH, $http_Util, $std_Json }) {
   class $Closure2 {
@@ -259,7 +259,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1-4d26eaed.js")({
+          require("./inflight.$Closure1-c05b4cce.js")({
             $_id: ${context._lift(_id)},
             $api_PATCH: ${context._lift(api_PATCH)},
             $body: ${context._lift(body)},
@@ -302,7 +302,7 @@ class $Root extends $stdlib.std.Resource {
         }
         static _toInflightType(context) {
           return $stdlib.core.NodeJsCode.fromInline(`
-            require("./inflight.$Closure2-4d26eaed.js")({
+            require("./inflight.$Closure2-c05b4cce.js")({
               $_id: ${context._lift(_id)},
               $api_url: ${context._lift(api.url)},
               $body: ${context._lift(body)},
