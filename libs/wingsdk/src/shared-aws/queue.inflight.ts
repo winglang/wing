@@ -13,12 +13,14 @@ export class QueueClient implements IQueueClient {
     private readonly client: SQSClient = new SQSClient({})
   ) {}
 
-  public async push(message: string): Promise<void> {
-    const command = new SendMessageCommand({
-      QueueUrl: this.queueUrl,
-      MessageBody: message,
+  public async push(...messages: string[]): Promise<void> {
+    messages.forEach(async (message) => {
+      const command = new SendMessageCommand({
+        QueueUrl: this.queueUrl,
+        MessageBody: message,
+      });
+      await this.client.send(command);
     });
-    await this.client.send(command);
   }
 
   public async purge(): Promise<void> {

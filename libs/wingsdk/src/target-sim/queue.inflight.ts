@@ -58,13 +58,15 @@ export class Queue
     this.subscribers.push(s);
   }
 
-  public async push(message: string): Promise<void> {
-    // TODO: enforce maximum queue message size?
-    return this.context.withTrace({
-      message: `Push (message=${message}).`,
-      activity: async () => {
-        this.messages.push(new QueueMessage(this.retentionPeriod, message));
-      },
+  // TODO: enforce maximum queue message size?
+  public async push(...messages: string[]): Promise<void> {
+    messages.forEach(async (message) => {
+      await this.context.withTrace({
+        message: `Push (message=${message}).`,
+        activity: async () => {
+          this.messages.push(new QueueMessage(this.retentionPeriod, message));
+        },
+      });
     });
   }
 
