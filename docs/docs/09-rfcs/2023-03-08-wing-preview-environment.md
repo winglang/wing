@@ -30,6 +30,7 @@ Seamlessly integrating with GitHub.
 
 ### Sing In to Wing Cloud
 1. Goto https://wing.cloud and click on sign in.
+2. If a developer was already signed in before, he will be automatically signed in to Wing Cloud.
 
 ### Authentication and Authorization
 1. Wing Cloud Preview Environments will use GitHub for authentication and authorization.
@@ -143,6 +144,10 @@ In our docs we have the following information:
 
 1. The preview environments shouldn’t be able to access files from other preview environments
 2. Only Wing Cloud signed up developers with write access to the repository can create preview environments
+
+## NON Requirements
+1. Preview environments will require authentication to view.
+2. Assign users to Teams.
 
 ## Technical Design
 
