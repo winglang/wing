@@ -183,11 +183,11 @@ module.exports = function({ $_parentThis_localCounter, $globalCounter }) {
       }
     },
     "aws_iam_role": {
-      "MyResource_cloudTopic-OnMessage-f10eb240_IamRole_C06EFF5D": {
+      "MyResource_cloudTopic_cloudTopic-OnMessage-f10eb240_IamRole_84188E64": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/MyResource/cloud.Topic-OnMessage-f10eb240/IamRole",
-            "uniqueId": "MyResource_cloudTopic-OnMessage-f10eb240_IamRole_C06EFF5D"
+            "path": "root/Default/Default/MyResource/cloud.Topic/cloud.Topic-OnMessage-f10eb240/IamRole",
+            "uniqueId": "MyResource_cloudTopic_cloudTopic-OnMessage-f10eb240_IamRole_84188E64"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
@@ -212,15 +212,15 @@ module.exports = function({ $_parentThis_localCounter, $globalCounter }) {
       }
     },
     "aws_iam_role_policy": {
-      "MyResource_cloudTopic-OnMessage-f10eb240_IamRolePolicy_3BEB9061": {
+      "MyResource_cloudTopic_cloudTopic-OnMessage-f10eb240_IamRolePolicy_5CE6D969": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/MyResource/cloud.Topic-OnMessage-f10eb240/IamRolePolicy",
-            "uniqueId": "MyResource_cloudTopic-OnMessage-f10eb240_IamRolePolicy_3BEB9061"
+            "path": "root/Default/Default/MyResource/cloud.Topic/cloud.Topic-OnMessage-f10eb240/IamRolePolicy",
+            "uniqueId": "MyResource_cloudTopic_cloudTopic-OnMessage-f10eb240_IamRolePolicy_5CE6D969"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.cloudCounter.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.MyResource_cloudCounter_0782991D.arn}\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.MyResource_cloudTopic-OnMessage-f10eb240_IamRole_C06EFF5D.name}"
+        "role": "${aws_iam_role.MyResource_cloudTopic_cloudTopic-OnMessage-f10eb240_IamRole_84188E64.name}"
       },
       "testaccesscloudresourcethroughstaticmethodsonly_Handler_IamRolePolicy_A6861688": {
         "//": {
@@ -244,15 +244,15 @@ module.exports = function({ $_parentThis_localCounter, $globalCounter }) {
       }
     },
     "aws_iam_role_policy_attachment": {
-      "MyResource_cloudTopic-OnMessage-f10eb240_IamRolePolicyAttachment_B5D99AB1": {
+      "MyResource_cloudTopic_cloudTopic-OnMessage-f10eb240_IamRolePolicyAttachment_36407B93": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/MyResource/cloud.Topic-OnMessage-f10eb240/IamRolePolicyAttachment",
-            "uniqueId": "MyResource_cloudTopic-OnMessage-f10eb240_IamRolePolicyAttachment_B5D99AB1"
+            "path": "root/Default/Default/MyResource/cloud.Topic/cloud.Topic-OnMessage-f10eb240/IamRolePolicyAttachment",
+            "uniqueId": "MyResource_cloudTopic_cloudTopic-OnMessage-f10eb240_IamRolePolicyAttachment_36407B93"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.MyResource_cloudTopic-OnMessage-f10eb240_IamRole_C06EFF5D.name}"
+        "role": "${aws_iam_role.MyResource_cloudTopic_cloudTopic-OnMessage-f10eb240_IamRole_84188E64.name}"
       },
       "testaccesscloudresourcethroughstaticmethodsonly_Handler_IamRolePolicyAttachment_842C871D": {
         "//": {
@@ -276,28 +276,28 @@ module.exports = function({ $_parentThis_localCounter, $globalCounter }) {
       }
     },
     "aws_lambda_function": {
-      "MyResource_cloudTopic-OnMessage-f10eb240_23BCEE41": {
+      "MyResource_cloudTopic_cloudTopic-OnMessage-f10eb240_19E8C07A": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/MyResource/cloud.Topic-OnMessage-f10eb240/Default",
-            "uniqueId": "MyResource_cloudTopic-OnMessage-f10eb240_23BCEE41"
+            "path": "root/Default/Default/MyResource/cloud.Topic/cloud.Topic-OnMessage-f10eb240/Default",
+            "uniqueId": "MyResource_cloudTopic_cloudTopic-OnMessage-f10eb240_19E8C07A"
           }
         },
         "environment": {
           "variables": {
             "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.cloudCounter.name}",
             "DYNAMODB_TABLE_NAME_5afed199": "${aws_dynamodb_table.MyResource_cloudCounter_0782991D.name}",
-            "WING_FUNCTION_NAME": "cloud-Topic-OnMessage-f10eb240-c8df2c86",
+            "WING_FUNCTION_NAME": "cloud-Topic-OnMessage-f10eb240-c878c226",
             "WING_TARGET": "tf-aws"
           }
         },
-        "function_name": "cloud-Topic-OnMessage-f10eb240-c8df2c86",
+        "function_name": "cloud-Topic-OnMessage-f10eb240-c878c226",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.MyResource_cloudTopic-OnMessage-f10eb240_IamRole_C06EFF5D.arn}",
+        "role": "${aws_iam_role.MyResource_cloudTopic_cloudTopic-OnMessage-f10eb240_IamRole_84188E64.arn}",
         "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",
-        "s3_key": "${aws_s3_object.MyResource_cloudTopic-OnMessage-f10eb240_S3Object_B244E1DD.key}",
+        "s3_key": "${aws_s3_object.MyResource_cloudTopic_cloudTopic-OnMessage-f10eb240_S3Object_52676703.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -363,15 +363,15 @@ module.exports = function({ $_parentThis_localCounter, $globalCounter }) {
       }
     },
     "aws_lambda_permission": {
-      "MyResource_cloudTopic-OnMessage-f10eb240_InvokePermission-c8f2c43e88c72aa87b4192974983c81bf653de52bf_CFD3D6F2": {
+      "MyResource_cloudTopic_cloudTopic-OnMessage-f10eb240_InvokePermission-c8f2c43e88c72aa87b4192974983c81bf653de52bf_B923BF6B": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/MyResource/cloud.Topic-OnMessage-f10eb240/InvokePermission-c8f2c43e88c72aa87b4192974983c81bf653de52bf",
-            "uniqueId": "MyResource_cloudTopic-OnMessage-f10eb240_InvokePermission-c8f2c43e88c72aa87b4192974983c81bf653de52bf_CFD3D6F2"
+            "path": "root/Default/Default/MyResource/cloud.Topic/cloud.Topic-OnMessage-f10eb240/InvokePermission-c8f2c43e88c72aa87b4192974983c81bf653de52bf",
+            "uniqueId": "MyResource_cloudTopic_cloudTopic-OnMessage-f10eb240_InvokePermission-c8f2c43e88c72aa87b4192974983c81bf653de52bf_B923BF6B"
           }
         },
         "action": "lambda:InvokeFunction",
-        "function_name": "${aws_lambda_function.MyResource_cloudTopic-OnMessage-f10eb240_23BCEE41.function_name}",
+        "function_name": "${aws_lambda_function.MyResource_cloudTopic_cloudTopic-OnMessage-f10eb240_19E8C07A.function_name}",
         "principal": "sns.amazonaws.com",
         "source_arn": "${aws_sns_topic.MyResource_cloudTopic_1F3310C3.arn}"
       }
@@ -470,11 +470,11 @@ module.exports = function({ $_parentThis_localCounter, $globalCounter }) {
       }
     },
     "aws_s3_object": {
-      "MyResource_cloudTopic-OnMessage-f10eb240_S3Object_B244E1DD": {
+      "MyResource_cloudTopic_cloudTopic-OnMessage-f10eb240_S3Object_52676703": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/MyResource/cloud.Topic-OnMessage-f10eb240/S3Object",
-            "uniqueId": "MyResource_cloudTopic-OnMessage-f10eb240_S3Object_B244E1DD"
+            "path": "root/Default/Default/MyResource/cloud.Topic/cloud.Topic-OnMessage-f10eb240/S3Object",
+            "uniqueId": "MyResource_cloudTopic_cloudTopic-OnMessage-f10eb240_S3Object_52676703"
           }
         },
         "bucket": "${aws_s3_bucket.Code.bucket}",
@@ -523,7 +523,7 @@ module.exports = function({ $_parentThis_localCounter, $globalCounter }) {
             "uniqueId": "MyResource_cloudTopic_cloudTopic-TopicSubscription-f10eb240_5B88092E"
           }
         },
-        "endpoint": "${aws_lambda_function.MyResource_cloudTopic-OnMessage-f10eb240_23BCEE41.arn}",
+        "endpoint": "${aws_lambda_function.MyResource_cloudTopic_cloudTopic-OnMessage-f10eb240_19E8C07A.arn}",
         "protocol": "lambda",
         "topic_arn": "${aws_sns_topic.MyResource_cloudTopic_1F3310C3.arn}"
       }
