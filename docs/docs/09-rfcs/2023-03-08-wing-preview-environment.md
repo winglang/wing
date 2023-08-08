@@ -148,6 +148,7 @@ In our docs we have the following information:
 ## NON Requirements
 1. Preview environments will require authentication to view.
 2. Assign users to Teams.
+3. enable preview environments viewers to add comments in the environment itself
 
 ## Technical Design
 
