@@ -29,7 +29,7 @@ export class Service extends cloud.Service implements ISimulatorResource {
     Resource.addConnection({
       from: this,
       to: onStartFunction,
-      relationship: "on_start",
+      relationship: "onStart()",
     });
 
     // On Stop Handler
@@ -43,7 +43,7 @@ export class Service extends cloud.Service implements ISimulatorResource {
       Resource.addConnection({
         from: this,
         to: onStopFunction,
-        relationship: "on_stop",
+        relationship: "onStop()",
       });
     }
   }

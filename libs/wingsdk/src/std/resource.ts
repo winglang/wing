@@ -312,7 +312,7 @@ export abstract class Resource extends Construct implements IResource {
         Resource.addConnection({
           from: host,
           to: this,
-          relationship: op,
+          relationship: op.endsWith("()") ? op : `${op}()`,
         });
       }
     }
