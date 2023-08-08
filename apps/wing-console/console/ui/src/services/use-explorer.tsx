@@ -1,7 +1,8 @@
 import { ResourceIcon } from "@wingconsole/design-system";
 import { ExplorerItem } from "@wingconsole/server";
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useContext } from "react";
 
+import { TestsContext } from "../tests-context.js";
 import { TreeMenuItem, useTreeMenuItems } from "../ui/use-tree-menu-items.js";
 
 import { trpc } from "./trpc.js";
@@ -40,7 +41,11 @@ export const useExplorer = () => {
     selectedItemIds: ["root"],
   });
 
-  const tree = trpc["app.explorerTree"].useQuery();
+  const { showTests } = useContext(TestsContext);
+
+  const tree = trpc["app.explorerTree"].useQuery({
+    showTests,
+  });
 
   const setSelectedNode = trpc["app.selectNode"].useMutation();
   const selectedNode = trpc["app.selectedNode"].useQuery();
