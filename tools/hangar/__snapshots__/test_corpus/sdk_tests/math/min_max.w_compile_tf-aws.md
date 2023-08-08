@@ -144,9 +144,9 @@ module.exports = function({ $math_Util, $myArray }) {
 ```js
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
-const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
-const math = require('@winglang/sdk').math;
+const std = $stdlib.std;
+const math = $stdlib.math;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
@@ -182,7 +182,7 @@ class $Root extends $stdlib.std.Resource {
         super._registerBind(host, ops);
       }
     }
-    const myArray = Object.freeze([1, 2, 3, 4, 5]);
+    const myArray = [1, 2, 3, 4, 5];
     {((cond) => {if (!cond) throw new Error("assertion failed: math.min(myArray) == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.min(myArray)),1)))};
     {((cond) => {if (!cond) throw new Error("assertion failed: math.max(myArray) == 5")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((math.Util.max(myArray)),5)))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:inflight min/max",new $Closure1(this,"$Closure1"));

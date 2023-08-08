@@ -142,13 +142,13 @@ exports[`function with a table binding 3`] = `
                     {
                       "direction": "outbound",
                       "implicit": false,
-                      "relationship": "insert",
+                      "relationship": "insert()",
                       "resource": "root/Default/Table",
                     },
                     {
                       "direction": "outbound",
                       "implicit": false,
-                      "relationship": "$inflight_init",
+                      "relationship": "$inflight_init()",
                       "resource": "root/Default/Table",
                     },
                   ],
@@ -236,13 +236,13 @@ exports[`function with a table binding 3`] = `
                     {
                       "direction": "inbound",
                       "implicit": false,
-                      "relationship": "insert",
+                      "relationship": "insert()",
                       "resource": "root/Default/Function",
                     },
                     {
                       "direction": "inbound",
                       "implicit": false,
-                      "relationship": "$inflight_init",
+                      "relationship": "$inflight_init()",
                       "resource": "root/Default/Function",
                     },
                   ],

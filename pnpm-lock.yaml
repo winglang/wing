@@ -264,6 +264,9 @@ importers:
       which:
         specifier: ^1.3.1
         version: 1.3.1
+      winglang:
+        specifier: workspace:^
+        version: link:../wing
       ws:
         specifier: ^8.13.0
         version: 8.13.0
@@ -12464,7 +12467,7 @@ packages:
     dependencies:
       semver: 7.5.3
       shelljs: 0.8.5
-      typescript: 5.2.0-dev.20230803
+      typescript: 5.2.0-dev.20230807
     dev: true
 
   /dset@3.1.2:
@@ -21383,8 +21386,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  /typescript@5.2.0-dev.20230803:
-    resolution: {integrity: sha512-DwCyutWHyT7Il7xpJCxtx4/S5F4qjAo2SE6QDRSLhEUtBFGwGHTHCvuyfm9KNrdwn67jGitdlw4gpbSTVVjoww==}
+  /typescript@5.2.0-dev.20230807:
+    resolution: {integrity: sha512-sF8sZl3r/mpAdKAxASaWaoU+mNPF3g8OrZ601HraU2l4WEwAf6nO7sq0Bzl+Y3FV7sWjy+gb6kdM1CtLjVne/g==}
     engines: {node: '>=14.17'}
     hasBin: true
     dev: true

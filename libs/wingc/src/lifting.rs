@@ -2,22 +2,21 @@ use crate::{
 	ast::{Class, Expr, ExprKind, FunctionBody, FunctionDefinition, Phase, Reference, Scope, Stmt, UserDefinedType},
 	comp_ctx::{CompilationContext, CompilationPhase},
 	diagnostic::{report_diagnostic, Diagnostic, WingSpan},
-	files::Files,
-	fold::{self, Fold},
 	jsify::{JSifier, JSifyContext},
 	type_check::{
 		lifts::Lifts, resolve_user_defined_type, symbol_env::LookupResult, TypeRef, CLOSURE_CLASS_HANDLE_METHOD,
 	},
+	visit::{self, Visit},
 	visit_context::VisitContext,
 };
 
-pub struct LiftTransform<'a> {
+pub struct LiftVisitor<'a> {
 	ctx: VisitContext,
 	jsify: &'a JSifier<'a>,
 	lifts_stack: Vec<Lifts>,
 }
 
-impl<'a> LiftTransform<'a> {
+impl<'a> LiftVisitor<'a> {
 	pub fn new(jsifier: &'a JSifier<'a>) -> Self {
 		Self {
 			jsify: jsifier,
@@ -132,7 +131,6 @@ impl<'a> LiftTransform<'a> {
 		let res = self.jsify.jsify_expression(
 			&node,
 			&mut JSifyContext {
-				files: &mut Files::default(),
 				lifts: None,
 				visit_ctx: &mut self.ctx,
 			},
@@ -142,39 +140,24 @@ impl<'a> LiftTransform<'a> {
 	}
 }
 
-impl<'a> Fold for LiftTransform<'a> {
-	fn fold_reference(&mut self, node: Reference) -> Reference {
+impl<'a> Visit<'a> for LiftVisitor<'a> {
+	fn visit_reference(&mut self, node: &'a Reference) {
 		match node {
-			Reference::InstanceMember {
-				object,
-				property,
-				optional_accessor,
-			} => {
+			Reference::InstanceMember { property, .. } => {
 				self.ctx.push_property(property.name.clone());
-				let result = Reference::InstanceMember {
-					object: Box::new(self.fold_expr(*object)),
-					property: self.fold_symbol(property),
-					optional_accessor,
-				};
+				visit::visit_reference(self, &node);
 				self.ctx.pop_property();
-				return result;
 			}
-			Reference::TypeMember { typeobject, property } => {
+			Reference::TypeMember { property, .. } => {
 				self.ctx.push_property(property.name.clone());
-				let result = Reference::TypeMember {
-					typeobject: Box::new(self.fold_expr(*typeobject)),
-					property: self.fold_symbol(property),
-				};
+				visit::visit_reference(self, &node);
 				self.ctx.pop_property();
-				return result;
 			}
-			_ => {}
+			_ => visit::visit_reference(self, &node),
 		}
-
-		fold::fold_reference(self, node)
 	}
 
-	fn fold_expr(&mut self, node: Expr) -> Expr {
+	fn visit_expr(&mut self, node: &'a Expr) {
 		CompilationContext::set(CompilationPhase::Lifting, &node.span);
 
 		let expr_phase = self.jsify.types.get_expr_phase(&node).unwrap();
@@ -182,13 +165,15 @@ impl<'a> Fold for LiftTransform<'a> {
 
 		// this whole thing only applies to inflight expressions
 		if self.ctx.current_phase() == Phase::Preflight {
-			return fold::fold_expr(self, node);
+			visit::visit_expr(self, node);
+			return;
 		}
 
 		// if this expression represents the current class, no need to capture it (it is by definition
 		// available in the current scope)
 		if self.is_self_type_reference(&node) {
-			return fold::fold_expr(self, node);
+			visit::visit_expr(self, node);
+			return;
 		}
 
 		//---------------
@@ -218,19 +203,19 @@ impl<'a> Fold for LiftTransform<'a> {
 					span: Some(node.span.clone()),
 				});
 
-				return node;
+				return;
 			}
 
 			// if this is an inflight property, no need to lift it
 			if is_inflight_field(&node, expr_type, &property) {
-				return node;
+				return;
 			}
 
 			let mut lifts = self.lifts_stack.pop().unwrap();
 			lifts.lift(node.id, self.ctx.current_method(), property, &code);
 			self.lifts_stack.push(lifts);
 
-			return node;
+			return;
 		}
 
 		//---------------
@@ -244,16 +229,16 @@ impl<'a> Fold for LiftTransform<'a> {
 			lifts.capture(&node.id, &code);
 			self.lifts_stack.push(lifts);
 
-			return node;
+			return;
 		}
 
-		fold::fold_expr(self, node)
+		visit::visit_expr(self, node);
 	}
 
 	// State Tracking
 
-	fn fold_function_definition(&mut self, node: FunctionDefinition) -> FunctionDefinition {
-		match node.body {
+	fn visit_function_definition(&mut self, node: &'a FunctionDefinition) {
+		match &node.body {
 			FunctionBody::Statements(scope) => {
 				self.ctx.push_function_definition(
 					&node.name,
@@ -261,49 +246,34 @@ impl<'a> Fold for LiftTransform<'a> {
 					scope.env.borrow().as_ref().unwrap().get_ref(),
 				);
 
-				let result = FunctionDefinition {
-					name: node.name.clone().map(|f| f.clone()),
-					body: FunctionBody::Statements(self.fold_scope(scope)),
-					signature: self.fold_function_signature(node.signature.clone()),
-					is_static: node.is_static,
-					span: node.span.clone(),
-				};
-
+				visit::visit_function_definition(self, node);
 				self.ctx.pop_function_definition();
-
-				return result;
 			}
-			FunctionBody::External(_) => {}
+			FunctionBody::External(_) => visit::visit_function_definition(self, node),
 		}
-
-		fold::fold_function_definition(self, node)
 	}
 
-	fn fold_class(&mut self, node: Class) -> Class {
+	fn visit_class(&mut self, node: &'a Class) {
 		// nothing to do if we are emitting an inflight class from within an inflight scope
 		if self.ctx.current_phase() == Phase::Inflight && node.phase == Phase::Inflight {
-			return Class {
-				name: self.fold_symbol(node.name),
-				fields: node
-					.fields
-					.into_iter()
-					.map(|field| self.fold_class_field(field))
-					.collect(),
-				methods: node
-					.methods
-					.into_iter()
-					.map(|(name, def)| (self.fold_symbol(name), fold::fold_function_definition(self, def)))
-					.collect(),
-				initializer: fold::fold_function_definition(self, node.initializer),
-				parent: node.parent.map(|parent| self.fold_expr(parent)),
-				implements: node
-					.implements
-					.into_iter()
-					.map(|interface| self.fold_user_defined_type(interface))
-					.collect(),
-				phase: node.phase,
-				inflight_initializer: fold::fold_function_definition(self, node.inflight_initializer),
-			};
+			self.visit_symbol(&node.name);
+			for field in node.fields.iter() {
+				self.visit_symbol(&field.name);
+				self.visit_type_annotation(&field.member_type);
+			}
+			for (name, def) in node.methods.iter() {
+				self.visit_symbol(&name);
+				visit::visit_function_definition(self, &def);
+			}
+			visit::visit_function_definition(self, &node.initializer);
+			if let Some(parent) = &node.parent {
+				self.visit_expr(&parent);
+			}
+			for interface in node.implements.iter() {
+				self.visit_user_defined_type(&interface);
+			}
+			visit::visit_function_definition(self, &node.inflight_initializer);
+			return;
 		}
 
 		// extract the "env" from the class initializer and push it to the context
@@ -341,37 +311,32 @@ impl<'a> Fold for LiftTransform<'a> {
 			self.lifts_stack.push(lifts);
 		}
 
-		let result = fold::fold_class(self, node);
+		visit::visit_class(self, node);
 
 		self.ctx.pop_class();
 
 		let lifts = self.lifts_stack.pop().expect("Unable to pop class tokens");
 
-		if let Some(env) = &self.ctx.current_env() {
+		if let Some(env) = self.ctx.current_env() {
 			if let Some(mut t) = resolve_user_defined_type(&udt, env, 0).ok() {
 				let mut_class = t.as_class_mut().unwrap();
 				mut_class.set_lifts(lifts);
 			}
 		}
-
-		result
 	}
 
-	fn fold_scope(&mut self, node: Scope) -> Scope {
+	fn visit_scope(&mut self, node: &'a Scope) {
 		self.ctx.push_env(node.env.borrow().as_ref().unwrap().get_ref());
-		let result = fold::fold_scope(self, node);
+		visit::visit_scope(self, node);
 		self.ctx.pop_env();
-		result
 	}
 
-	fn fold_stmt(&mut self, node: Stmt) -> Stmt {
+	fn visit_stmt(&mut self, node: &'a Stmt) {
 		CompilationContext::set(CompilationPhase::Lifting, &node.span);
 
 		self.ctx.push_stmt(node.idx);
-		let result = fold::fold_stmt(self, node);
+		visit::visit_stmt(self, node);
 		self.ctx.pop_stmt();
-
-		result
 	}
 }
 

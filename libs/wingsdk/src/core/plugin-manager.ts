@@ -8,16 +8,16 @@ import { IConstruct } from "constructs";
  */
 export interface ICompilationHook {
   /**
-   *  name of plugin can be set by plugin as export
+   *  Name of plugin can be set by plugin as export
    *
    * @default - absolute path to plugin file
    */
   name: string;
-  /** preSynth hook */
+  /** PreSynth hook */
   preSynth?(app: IConstruct): void;
-  /** postSynth hook */
+  /** PostSynth hook */
   postSynth?(config: any): any;
-  /** validate hook */
+  /** Validate hook */
   validate?(config: any): void;
 }
 

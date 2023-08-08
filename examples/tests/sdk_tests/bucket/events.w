@@ -29,19 +29,19 @@ let logHistory = inflight (key: str, operation: str, source: Source) => {
 
 
 b.onDelete(inflight (key: str) => {
-  logHistory(key, "DELETE", Source.anyEvent);
+  logHistory(key, "onDelete()", Source.anyEvent);
 });
 
 b.onUpdate(inflight (key: str) => {
-  logHistory(key, "UPDATE", Source.anyEvent);
+  logHistory(key, "onUpdate()", Source.anyEvent);
 });
 
 b.onCreate(inflight (key: str) => {
-  logHistory(key, "CREATE", Source.anyEvent);
+  logHistory(key, "onCreate()", Source.anyEvent);
 });
 
 b.onEvent(inflight (key: str, event: cloud.BucketEventType) => { 
-  logHistory(key, "${event}", Source.onEvent);
+  logHistory(key, "${event}()", Source.onEvent);
 });
 
 let wait = inflight (pred: inflight (): bool): bool => {
@@ -92,19 +92,19 @@ new std.Test(inflight () => {
 // https://github.com/winglang/wing/issues/2724
   if (util.env("WING_TARGET") != "tf-aws") {
     // assert that onCreate events about the "a", "b", and "c" objects were each produced exactly 1 time
-    assert(wait(checkHitCount(key: "a", type: "CREATE", source: Source.anyEvent, count: 1)));
-    assert(wait(checkHitCount(key: "b", type: "CREATE", source: Source.anyEvent, count: 1)));
-    assert(wait(checkHitCount(key: "c", type: "CREATE", source: Source.anyEvent, count: 1)));
+    assert(wait(checkHitCount(key: "a", type: "onCreate()", source: Source.anyEvent, count: 1)));
+    assert(wait(checkHitCount(key: "b", type: "onCreate()", source: Source.anyEvent, count: 1)));
+    assert(wait(checkHitCount(key: "c", type: "onCreate()", source: Source.anyEvent, count: 1)));
 
-    assert(wait(checkHitCount(key: "a", type: "CREATE", source: Source.onEvent, count: 1)));
-    assert(wait(checkHitCount(key: "b", type: "CREATE", source:  Source.onEvent, count: 1)));
-    assert(wait(checkHitCount(key: "c", type: "CREATE", source:  Source.onEvent, count: 1)));
+    assert(wait(checkHitCount(key: "a", type: "onCreate()", source: Source.onEvent, count: 1)));
+    assert(wait(checkHitCount(key: "b", type: "onCreate()", source:  Source.onEvent, count: 1)));
+    assert(wait(checkHitCount(key: "c", type: "onCreate()", source:  Source.onEvent, count: 1)));
 
-    assert(wait(checkHitCount(key: "b", type: "UPDATE", source: Source.anyEvent, count: 1)));
-    assert(wait(checkHitCount(key: "c", type: "DELETE", source: Source.anyEvent, count: 1)));
+    assert(wait(checkHitCount(key: "b", type: "onUpdate()", source: Source.anyEvent, count: 1)));
+    assert(wait(checkHitCount(key: "c", type: "onDelete()", source: Source.anyEvent, count: 1)));
 
-    assert(wait(checkHitCount(key: "b", type: "UPDATE", source: Source.onEvent, count: 1)));
-    assert(wait(checkHitCount(key: "c", type: "DELETE", source: Source.onEvent, count: 1)));
+    assert(wait(checkHitCount(key: "b", type: "onUpdate()", source: Source.onEvent, count: 1)));
+    assert(wait(checkHitCount(key: "c", type: "onDelete()", source: Source.onEvent, count: 1)));
   }
 
 }, timeout: 8m) as "hitCount is incremented according to the bucket event";

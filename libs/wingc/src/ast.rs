@@ -422,14 +422,17 @@ pub struct Interface {
 }
 
 #[derive(Debug)]
+pub enum BringSource {
+	BuiltinModule(Symbol),
+	JsiiModule(Symbol),
+	WingFile(Symbol),
+}
+
+#[derive(Debug)]
 pub enum StmtKind {
 	Bring {
-		module_name: Symbol, // Reference?
+		source: BringSource,
 		identifier: Option<Symbol>,
-	},
-	Module {
-		name: Symbol,
-		statements: Scope,
 	},
 	SuperConstructor {
 		arg_list: ArgList,
@@ -466,7 +469,7 @@ pub enum StmtKind {
 	Return(Option<Expr>),
 	Expression(Expr),
 	Assignment {
-		variable: Expr,
+		variable: Reference,
 		value: Expr,
 	},
 	Scope(Scope),
@@ -675,6 +678,11 @@ impl Scope {
 		assert!((*env).is_none());
 		*env = Some(new_env);
 	}
+
+	pub fn reset_env(&self) {
+		let mut env = self.env.borrow_mut();
+		*env = None;
+	}
 }
 
 #[derive(Debug)]
@@ -718,6 +726,21 @@ pub enum Reference {
 	TypeReference(UserDefinedType),
 	/// A reference to a member inside a type: `MyType.x` or `MyEnum.A`
 	TypeMember { typeobject: Box<Expr>, property: Symbol },
+}
+
+impl Spanned for Reference {
+	fn span(&self) -> WingSpan {
+		match self {
+			Reference::Identifier(symb) => symb.span(),
+			Reference::InstanceMember {
+				object,
+				property,
+				optional_accessor: _,
+			} => object.span().merge(&property.span()),
+			Reference::TypeReference(type_) => type_.span(),
+			Reference::TypeMember { typeobject, property } => typeobject.span().merge(&property.span()),
+		}
+	}
 }
 
 impl Display for Reference {

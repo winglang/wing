@@ -10,8 +10,8 @@ module.exports = function({ $b, $std_Json }) {
       return $obj;
     }
     async handle() {
-      const jsonObj1 = Object.freeze({"key1":"value1"});
-      const jsonObj2 = Object.freeze({"key2":"value2"});
+      const jsonObj1 = ({"key1": "value1"});
+      const jsonObj2 = ({"key2": "value2"});
       (await $b.putJson("file1.json",jsonObj1));
       {((cond) => {if (!cond) throw new Error("assertion failed: Json.stringify(b.tryGetJson(\"file1.json\")) == Json.stringify(jsonObj1)")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((args) => { return JSON.stringify(args[0], null, args[1]) })([(await $b.tryGetJson("file1.json"))]),((args) => { return JSON.stringify(args[0], null, args[1]) })([jsonObj1]))))};
       {((cond) => {if (!cond) throw new Error("assertion failed: b.tryGetJson(\"file2.json\") == nil")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $b.tryGetJson("file2.json")),undefined)))};
@@ -197,9 +197,9 @@ module.exports = function({ $b, $std_Json }) {
 ```js
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
-const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
-const cloud = require('@winglang/sdk').cloud;
+const std = $stdlib.std;
+const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);

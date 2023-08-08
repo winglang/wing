@@ -10,7 +10,7 @@ module.exports = function({  }) {
       return $obj;
     }
     async handle() {
-      const x = {"a":1};
+      const x = ({"a": 1});
       ((obj, args) => { obj[args[0]] = args[1]; })(x, ["b",2]);
       const y = (x)["b"];
       {((cond) => {if (!cond) throw new Error("assertion failed: y == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(y,2)))};
@@ -31,8 +31,8 @@ module.exports = function({  }) {
       return $obj;
     }
     async handle() {
-      const x = {"a":1};
-      const a = {"c":3};
+      const x = ({"a": 1});
+      const a = ({"c": 3});
       ((obj, args) => { obj[args[0]] = args[1]; })(x, [2,a]);
       const d = (x)[2];
       {((cond) => {if (!cond) throw new Error("assertion failed: d.get(\"c\") == 3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((d)["c"],3)))};
@@ -234,9 +234,9 @@ module.exports = function({  }) {
 ```js
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
-const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
-const cloud = require('@winglang/sdk').cloud;
+const std = $stdlib.std;
+const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
@@ -288,13 +288,13 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
     }
-    const a = {"a":1};
-    const b = {"b":2};
+    const a = ({"a": 1});
+    const b = ({"b": 2});
     ((obj, args) => { obj[args[0]] = args[1]; })(a, ["c",b]);
     const c = (a)["c"];
     {((cond) => {if (!cond) throw new Error("assertion failed: c.get(\"b\") == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((c)["b"],2)))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:set()",new $Closure1(this,"$Closure1"));
-    const d = {"d":3};
+    const d = ({"d": 3});
     ((obj, args) => { obj[args[0]] = args[1]; })(a, [2,d]);
     const e = (a)[2];
     {((cond) => {if (!cond) throw new Error("assertion failed: e.get(\"d\") == 3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((e)["d"],3)))};

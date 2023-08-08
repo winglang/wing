@@ -45,6 +45,7 @@ impl Files {
 		Self { data: HashMap::new() }
 	}
 
+	/// Add a file, returning an error if a file with the same name already exists.
 	pub fn add_file<S: Into<PathBuf>>(&mut self, path: S, content: String) -> Result<(), FilesError> {
 		let path = path.into();
 		if self.data.contains_key(&path) {
@@ -54,10 +55,23 @@ impl Files {
 		Ok(())
 	}
 
+	/// Update a file, overwriting the previous contents if it already exists.
+	pub fn update_file<S: Into<PathBuf>>(&mut self, path: S, content: String) {
+		let path = path.into();
+		self.data.insert(path, content);
+	}
+
+	/// Get a file's contents, if it exists.
 	pub fn get_file<S: AsRef<Path>>(&self, path: S) -> Option<&String> {
 		self.data.get(path.as_ref())
 	}
 
+	/// Check if a file exists.
+	pub fn contains_file<S: AsRef<Path>>(&self, path: S) -> bool {
+		self.data.contains_key(path.as_ref())
+	}
+
+	/// Write all files to the given directory.
 	pub fn emit_files(&self, out_dir: &Path) -> Result<(), FilesError> {
 		for (path, content) in &self.data {
 			let full_path = out_dir.join(path);
@@ -86,6 +100,20 @@ mod tests {
 		assert!(files.add_file("file2", "content2".to_owned()).is_ok());
 		// Adding a file with the same name should return an error
 		assert!(files.add_file("file1", "content3".to_owned()).is_err());
+	}
+
+	#[test]
+	fn test_contains_file() {
+		let mut files = Files::new();
+		files
+			.add_file("file1", "content1".to_owned())
+			.expect("Failed to add file");
+		files
+			.add_file("file2", "content2".to_owned())
+			.expect("Failed to add file");
+		assert!(files.contains_file("file1"));
+		assert!(files.contains_file("file2"));
+		assert!(!files.contains_file("file3"));
 	}
 
 	#[test]

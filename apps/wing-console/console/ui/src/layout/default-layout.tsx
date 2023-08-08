@@ -14,6 +14,7 @@ import { ConsoleLogs } from "../features/console-logs.js";
 import { MapView } from "../features/map-view.js";
 import { TestsTreeView } from "../features/tests-tree-view.js";
 import { BlueScreenOfDeath } from "../ui/blue-screen-of-death.js";
+import { EdgeMetadata } from "../ui/edge-metadata.js";
 import { Explorer } from "../ui/explorer.js";
 import { ResourceMetadata } from "../ui/resource-metadata.js";
 
@@ -79,6 +80,9 @@ export const DefaultLayout = ({
     errorMessage,
     loading,
     metadata,
+    selectedEdgeId,
+    setSelectedEdgeId,
+    edgeMetadata,
     setSearchText,
     selectedLogTypeFilters,
     setSelectedLogTypeFilters,
@@ -296,6 +300,8 @@ export const DefaultLayout = ({
                       onSelectedNodeIdChange={(nodeId) =>
                         setSelectedItems(nodeId ? [nodeId] : [])
                       }
+                      selectedEdgeId={selectedEdgeId}
+                      onSelectedEdgeIdChange={setSelectedEdgeId}
                     />
                   </div>
 
@@ -311,6 +317,17 @@ export const DefaultLayout = ({
                         node={metadata.data.node}
                         inbound={metadata.data.inbound}
                         outbound={metadata.data.outbound}
+                        onConnectionNodeClick={(path) => {
+                          expand(path);
+                          setSelectedItems([path]);
+                        }}
+                      />
+                    )}
+                    {selectedEdgeId && edgeMetadata.data && (
+                      <EdgeMetadata
+                        source={edgeMetadata.data.source}
+                        target={edgeMetadata.data.target}
+                        inflights={edgeMetadata.data.inflights}
                         onConnectionNodeClick={(path) => {
                           expand(path);
                           setSelectedItems([path]);

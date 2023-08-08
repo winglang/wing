@@ -45,20 +45,6 @@ error: Unknown symbol \\"this\\"
 
 
 error: Unknown symbol \\"this\\"
-  --> ../../../examples/tests/invalid/access_static_from_instance.w:7:5
-  |
-7 |     this.instanceField = 1; // Can't access instance fields from static methods
-  |     ^^^^ Unknown symbol \\"this\\"
-
-
-error: Unknown symbol \\"this\\"
-  --> ../../../examples/tests/invalid/access_static_from_instance.w:8:5
-  |
-8 |     this.f = 1; // Can't access static fields through \`this\`
-  |     ^^^^ Unknown symbol \\"this\\"
-
-
-error: Unknown symbol \\"this\\"
   --> ../../../examples/tests/invalid/access_static_from_instance.w:8:5
   |
 8 |     this.f = 1; // Can't access static fields through \`this\`
@@ -131,6 +117,13 @@ exports[`bring_local_self.w 1`] = `
   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Cannot bring a module into itself
 
 
+error: Cannot find module \\"../../../examples/tests/invalid/non-existent.w\\"
+  --> ../../../examples/tests/invalid/bring_local_self.w:4:1
+  |
+4 | bring \\"./non-existent.w\\" as bar;
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Cannot find module \\"../../../examples/tests/invalid/non-existent.w\\"
+
+
  
  
 Tests 1 failed (1)
@@ -139,14 +132,25 @@ Duration <DURATION>"
 `;
 
 exports[`bring_local_variables.w 1`] = `
-"error: Cannot bring \\"\\"./file_with_variables.w\\"\\" - modules with statements besides classes, interfaces, enums, and structs cannot be brought
+"error: Preflight field \\"x\\" is not initialized
+   --> ../../../examples/tests/invalid/file_with_variables.w:10:3
+   |
+10 |   x: num;
+   |   ^ Preflight field \\"x\\" is not initialized
 
 
-error: Unknown symbol \\"Bar\\"
+error: Cannot bring \\"../../../examples/tests/invalid/file_with_variables.w\\" - modules with statements besides classes, interfaces, enums, and structs cannot be brought
+  --> ../../../examples/tests/invalid/bring_local_variables.w:1:1
+  |
+1 | bring \\"./file_with_variables.w\\" as stuff;
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Cannot bring \\"../../../examples/tests/invalid/file_with_variables.w\\" - modules with statements besides classes, interfaces, enums, and structs cannot be brought
+
+
+error: Unknown symbol \\"stuff\\"
   --> ../../../examples/tests/invalid/bring_local_variables.w:3:5
   |
 3 | new stuff.Bar();
-  |     ^^^^^^^^^ Unknown symbol \\"Bar\\"
+  |     ^^^^^^^^^ Unknown symbol \\"stuff\\"
 
 
  
@@ -587,6 +591,90 @@ error: Expected type to be \\"Array<str>\\", but got \\"MutArray<str>\\" instead
    |
 23 | let a: Array<str> = MutArray<str>[];
    |                     ^^^^^^^^^^^^^^^ Expected type to be \\"Array<str>\\", but got \\"MutArray<str>\\" instead
+
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
+
+exports[`cyclic_bring1.w 1`] = `
+"error: Could not compile \\"../../../examples/tests/invalid/cyclic_bring1.w\\" due to cyclic bring statements:
+- ../../../examples/tests/invalid/cyclic_bring3.w
+- ../../../examples/tests/invalid/cyclic_bring2.w
+- ../../../examples/tests/invalid/cyclic_bring1.w
+
+
+error: Could not type check \\"../../../examples/tests/invalid/cyclic_bring2.w\\" due to cyclic bring statements
+  --> ../../../examples/tests/invalid/cyclic_bring1.w:1:1
+  |
+1 | bring \\"./cyclic_bring2.w\\" as foo;
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Could not type check \\"../../../examples/tests/invalid/cyclic_bring2.w\\" due to cyclic bring statements
+
+
+error: Could not type check \\"../../../examples/tests/invalid/cyclic_bring3.w\\" due to cyclic bring statements
+  --> ../../../examples/tests/invalid/cyclic_bring2.w:1:1
+  |
+1 | bring \\"./cyclic_bring3.w\\" as foo;
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Could not type check \\"../../../examples/tests/invalid/cyclic_bring3.w\\" due to cyclic bring statements
+
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
+
+exports[`cyclic_bring2.w 1`] = `
+"error: Could not compile \\"../../../examples/tests/invalid/cyclic_bring2.w\\" due to cyclic bring statements:
+- ../../../examples/tests/invalid/cyclic_bring1.w
+- ../../../examples/tests/invalid/cyclic_bring3.w
+- ../../../examples/tests/invalid/cyclic_bring2.w
+
+
+error: Could not type check \\"../../../examples/tests/invalid/cyclic_bring3.w\\" due to cyclic bring statements
+  --> ../../../examples/tests/invalid/cyclic_bring2.w:1:1
+  |
+1 | bring \\"./cyclic_bring3.w\\" as foo;
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Could not type check \\"../../../examples/tests/invalid/cyclic_bring3.w\\" due to cyclic bring statements
+
+
+error: Could not type check \\"../../../examples/tests/invalid/cyclic_bring1.w\\" due to cyclic bring statements
+  --> ../../../examples/tests/invalid/cyclic_bring3.w:1:1
+  |
+1 | bring \\"./cyclic_bring1.w\\" as foo;
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Could not type check \\"../../../examples/tests/invalid/cyclic_bring1.w\\" due to cyclic bring statements
+
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
+
+exports[`cyclic_bring3.w 1`] = `
+"error: Could not compile \\"../../../examples/tests/invalid/cyclic_bring3.w\\" due to cyclic bring statements:
+- ../../../examples/tests/invalid/cyclic_bring2.w
+- ../../../examples/tests/invalid/cyclic_bring1.w
+- ../../../examples/tests/invalid/cyclic_bring3.w
+
+
+error: Could not type check \\"../../../examples/tests/invalid/cyclic_bring1.w\\" due to cyclic bring statements
+  --> ../../../examples/tests/invalid/cyclic_bring3.w:1:1
+  |
+1 | bring \\"./cyclic_bring1.w\\" as foo;
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Could not type check \\"../../../examples/tests/invalid/cyclic_bring1.w\\" due to cyclic bring statements
+
+
+error: Could not type check \\"../../../examples/tests/invalid/cyclic_bring2.w\\" due to cyclic bring statements
+  --> ../../../examples/tests/invalid/cyclic_bring1.w:1:1
+  |
+1 | bring \\"./cyclic_bring2.w\\" as foo;
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Could not type check \\"../../../examples/tests/invalid/cyclic_bring2.w\\" due to cyclic bring statements
 
 
  
@@ -1567,86 +1655,93 @@ Duration <DURATION>"
 
 exports[`optionals.w 1`] = `
 "error: Expected type to be \\"num\\", but got \\"num?\\" instead
-  --> ../../../examples/tests/invalid/optionals.w:7:3
-  |
-7 | f(x);
-  |   ^ Expected type to be \\"num\\", but got \\"num?\\" instead
+   --> ../../../examples/tests/invalid/optionals.w:11:3
+   |
+11 | f(x);
+   |   ^ Expected type to be \\"num\\", but got \\"num?\\" instead
+
+
+error: Expected type to be \\"num?\\", but got \\"str\\" instead
+   --> ../../../examples/tests/invalid/optionals.w:14:11
+   |
+14 | fOptional(\\"\\");
+   |           ^^ Expected type to be \\"num?\\", but got \\"str\\" instead
 
 
 error: Expected optional type, found \\"bool\\"
-   --> ../../../examples/tests/invalid/optionals.w:11:4
+   --> ../../../examples/tests/invalid/optionals.w:18:4
    |
-11 | if y? {
+18 | if y? {
    |    ^ Expected optional type, found \\"bool\\"
 
 
 error: Expected optional type, found \\"bool\\"
-   --> ../../../examples/tests/invalid/optionals.w:15:9
+   --> ../../../examples/tests/invalid/optionals.w:22:9
    |
-15 | let z = y ?? 1;
+22 | let z = y ?? 1;
    |         ^ Expected optional type, found \\"bool\\"
 
 
 error: Expected type to be \\"str\\", but got \\"num\\" instead
-   --> ../../../examples/tests/invalid/optionals.w:18:14
+   --> ../../../examples/tests/invalid/optionals.w:25:14
    |
-18 | let w: str = x ?? 3;
+25 | let w: str = x ?? 3;
    |              ^^^^^^ Expected type to be \\"str\\", but got \\"num\\" instead
 
 
 error: Expected type to be \\"num\\", but got \\"str\\" instead
-   --> ../../../examples/tests/invalid/optionals.w:21:6
+   --> ../../../examples/tests/invalid/optionals.w:28:6
    |
-21 | x ?? \\"hello\\";
+28 | x ?? \\"hello\\";
    |      ^^^^^^^ Expected type to be \\"num\\", but got \\"str\\" instead
 
 
 error: Expected type to be \\"Sub1\\", but got \\"Sub2\\" instead
-   --> ../../../examples/tests/invalid/optionals.w:32:17
+   --> ../../../examples/tests/invalid/optionals.w:39:17
    |
-32 | optionalSub1 ?? new Sub2();
+39 | optionalSub1 ?? new Sub2();
    |                 ^^^^^^^^^^ Expected type to be \\"Sub1\\", but got \\"Sub2\\" instead
 
 
 error: Expected type to be \\"Sub1\\", but got \\"Super\\" instead
-   --> ../../../examples/tests/invalid/optionals.w:34:17
+   --> ../../../examples/tests/invalid/optionals.w:41:17
    |
-34 | optionalSub1 ?? new Super();
+41 | optionalSub1 ?? new Super();
    |                 ^^^^^^^^^^^ Expected type to be \\"Sub1\\", but got \\"Super\\" instead
 
 
 error: Expected type to be optional, but got \\"bool\\" instead
-   --> ../../../examples/tests/invalid/optionals.w:38:12
+   --> ../../../examples/tests/invalid/optionals.w:45:12
    |
-38 | if let x = true {
+45 | if let x = true {
    |            ^^^^ Expected type to be optional, but got \\"bool\\" instead
 
 
 error: Property access on optional type \\"A?\\" requires optional accessor: \\"?.\\"
-   --> ../../../examples/tests/invalid/optionals.w:61:9
+   --> ../../../examples/tests/invalid/optionals.w:68:9
    |
-61 | let c = b.a.val;
+68 | let c = b.a.val;
    |         ^^^ Property access on optional type \\"A?\\" requires optional accessor: \\"?.\\"
 
 
 error: Expected type to be \\"str\\", but got \\"str?\\" instead
-   --> ../../../examples/tests/invalid/optionals.w:84:16
+   --> ../../../examples/tests/invalid/optionals.w:91:16
    |
-84 | let val: str = baz?.bar?.foo?.val;
+91 | let val: str = baz?.bar?.foo?.val;
    |                ^^^^^^^^^^^^^^^^^^ Expected type to be \\"str\\", but got \\"str?\\" instead
 
 
 error: Cannot call an optional function
-   --> ../../../examples/tests/invalid/optionals.w:88:1
+   --> ../../../examples/tests/invalid/optionals.w:95:1
    |
-88 | optionalFunction();
+95 | optionalFunction();
    | ^^^^^^^^^^^^^^^^ Cannot call an optional function
 
 
 error: Variable is not reassignable
-   --> ../../../examples/tests/invalid/optionals.w:46:3
+   --> ../../../examples/tests/invalid/optionals.w:53:3
    |
-46 |   hi = \\"bye\\";
+53 |   hi = \\"bye\\";
    |   ^^ Variable is not reassignable
 
 
@@ -1928,6 +2023,13 @@ error: Inflight classes cannot have a scope
    |                          ^^ Inflight classes cannot have a scope
 
 
+error: Cannot qualify access to a lifted object of type \\"PreflightClass\\" (see https://github.com/winglang/wing/issues/76 for more details)
+   --> ../../../examples/tests/invalid/scope_and_id.w:17:26
+   |
+17 |   new InflightClass() in pc;
+   |                          ^^ Cannot qualify access to a lifted object of type \\"PreflightClass\\" (see https://github.com/winglang/wing/issues/76 for more details)
+
+
  
  
 Tests 1 failed (1)
@@ -2071,6 +2173,13 @@ error: Expected between 0 and 1 arguments but got 2
   |
 7 | let bucket2 = new cloud.Bucket(2, public: true);
   |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected between 0 and 1 arguments but got 2
+
+
+error: Expected type to be \\"BucketProps?\\", but got \\"num\\" instead
+  --> ../../../examples/tests/invalid/struct_expansion.w:7:32
+  |
+7 | let bucket2 = new cloud.Bucket(2, public: true);
+  |                                ^ Expected type to be \\"BucketProps?\\", but got \\"num\\" instead
 
 
 error: \\"status\\" is not initialized
@@ -2263,32 +2372,32 @@ Duration <DURATION>"
 `;
 
 exports[`unimplemented_grammar.w 1`] = `
-"error: builtin \\"any\\" is not supported yet see https://github.com/winglang/wing/issues/434
+"error: builtin \\"any\\" is not supported yet - see https://github.com/winglang/wing/issues/434
   --> ../../../examples/tests/invalid/unimplemented_grammar.w:1:8
   |
 1 | let b: any = 0;
-  |        ^^^ builtin \\"any\\" is not supported yet see https://github.com/winglang/wing/issues/434
+  |        ^^^ builtin \\"any\\" is not supported yet - see https://github.com/winglang/wing/issues/434
 
 
-error: builtin container type \\"Promise\\" is not supported yet see https://github.com/winglang/wing/issues/529
+error: builtin container type \\"Promise\\" is not supported yet - see https://github.com/winglang/wing/issues/529
   --> ../../../examples/tests/invalid/unimplemented_grammar.w:2:19
   |
 2 | let somePromise = Promise<str>{};
-  |                   ^^^^^^^^^^^^ builtin container type \\"Promise\\" is not supported yet see https://github.com/winglang/wing/issues/529
+  |                   ^^^^^^^^^^^^ builtin container type \\"Promise\\" is not supported yet - see https://github.com/winglang/wing/issues/529
 
 
-error: expression \\"defer_expression\\" is not supported yet see https://github.com/winglang/wing/issues/116
+error: expression \\"defer_expression\\" is not supported yet - see https://github.com/winglang/wing/issues/116
   --> ../../../examples/tests/invalid/unimplemented_grammar.w:3:9
   |
 3 | let c = defer somePromise();
-  |         ^^^^^^^^^^^^^^^^^^^ expression \\"defer_expression\\" is not supported yet see https://github.com/winglang/wing/issues/116
+  |         ^^^^^^^^^^^^^^^^^^^ expression \\"defer_expression\\" is not supported yet - see https://github.com/winglang/wing/issues/116
 
 
-error: expression \\"await_expression\\" is not supported yet see https://github.com/winglang/wing/issues/116
+error: expression \\"await_expression\\" is not supported yet - see https://github.com/winglang/wing/issues/116
   --> ../../../examples/tests/invalid/unimplemented_grammar.w:4:9
   |
 4 | let d = await c;
-  |         ^^^^^^^ expression \\"await_expression\\" is not supported yet see https://github.com/winglang/wing/issues/116
+  |         ^^^^^^^ expression \\"await_expression\\" is not supported yet - see https://github.com/winglang/wing/issues/116
 
 
 error: Unable to infer type
@@ -2369,13 +2478,6 @@ error: Unknown symbol \\"B\\"
    |
 28 | class A extends B {
    |                 ^ Unknown symbol \\"B\\"
-
-
-error: Unknown symbol \\"unknown\\"
-   --> ../../../examples/tests/invalid/unknown_symbol.w:32:1
-   |
-32 | unknown = 1;
-   | ^^^^^^^ Unknown symbol \\"unknown\\"
 
 
 error: Unknown symbol \\"unknown\\"

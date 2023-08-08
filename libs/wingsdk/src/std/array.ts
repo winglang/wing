@@ -173,7 +173,7 @@ export class MutArray {
   /**
    * Create an immutable shallow copy of this array
    *
-   * @macro Object.freeze([...($self$)])
+   * @macro [...($self$)]
    *
    * @returns an ImmutableArray with the same values as this array
    */

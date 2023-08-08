@@ -123,6 +123,8 @@ export interface ElkMapProps<T> {
   node: FC<NodeItemProps<T>>;
   selectedNodeId?: string;
   onSelectedNodeIdChange?: (id: string) => void;
+  selectedEdgeId?: string;
+  onSelectedEdgeIdChange?: (id: string) => void;
 }
 
 export const ElkMap = <T extends unknown = undefined>({
@@ -131,6 +133,8 @@ export const ElkMap = <T extends unknown = undefined>({
   node: NodeItem,
   selectedNodeId,
   onSelectedNodeIdChange,
+  selectedEdgeId,
+  onSelectedEdgeIdChange,
 }: ElkMapProps<T>) => {
   const { nodeRecord } = useNodeStaticData({
     nodes,
@@ -248,7 +252,10 @@ export const ElkMap = <T extends unknown = undefined>({
             height: node.height ?? 0,
             offset,
             depth,
-            edges: edges ?? [],
+            edges:
+              edges?.filter(
+                (edge) => edge.source === node.id || edge.target === node.id,
+              ) ?? [],
             data,
           });
         }
@@ -458,21 +465,33 @@ export const ElkMap = <T extends unknown = undefined>({
                     const isNodeHighlighted =
                       isHighlighted(edge.sources[0]!) ||
                       isHighlighted(edge.targets[0]!);
-                    const isSelected =
+                    const isEdgeHighlighted =
                       edge.sources[0] === selectedNodeId ||
                       edge.targets[0] === selectedNodeId;
                     const visible = !highlighted || isNodeHighlighted;
+                    const selected = edge.id === selectedEdgeId;
+
                     return (
                       <EdgeItem
                         key={edge.id}
                         edge={edge}
                         offset={offsets?.get((edge as any).container)}
-                        highlighted={isSelected}
+                        highlighted={isEdgeHighlighted}
+                        selected={selected}
                         fade={!visible}
-                        markerStart={isSelected ? "tee-selected" : "tee"}
-                        markerEnd={
-                          isSelected ? "arrow-head-selected" : "arrow-head"
+                        markerStart={
+                          isEdgeHighlighted || selected ? "tee-selected" : "tee"
                         }
+                        markerEnd={
+                          isEdgeHighlighted || selected
+                            ? "arrow-head-selected"
+                            : "arrow-head"
+                        }
+                        onMouseEnter={() => {
+                          setHighlighted(edge.sources[0] ?? edge.targets[0]);
+                        }}
+                        onMouseLeave={() => setHighlighted(undefined)}
+                        onClick={onSelectedEdgeIdChange}
                       />
                     );
                   })}

@@ -1,6 +1,5 @@
 bring cloud;
 bring ex;
-// bring redis;
 
 let bucket = new cloud.Bucket();
 let queue = new cloud.Queue();
@@ -46,7 +45,7 @@ topic.onMessage(inflight (message: str): str => {
   return message;
 });
 
-// let r = new redis.Redis();
+// let r = new ex.Redis();
 // new cloud.Function(inflight (message :str) :str => {
 //   log("${r.url()}");
 //   r.set("wing", message);

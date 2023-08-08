@@ -151,9 +151,9 @@ module.exports = function({ $Object_keys_myMap__length, $__bang__in___arrOfMap_a
 ```js
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
-const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
-const cloud = require('@winglang/sdk').cloud;
+const std = $stdlib.std;
+const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
@@ -204,11 +204,11 @@ class $Root extends $stdlib.std.Resource {
         super._registerBind(host, ops);
       }
     }
-    const arr = Object.freeze(["hello", "world"]);
-    const mySet = Object.freeze(new Set(["my", "my", "set"]));
-    const myMap = Object.freeze({"hello":123,"world":999});
-    const arrOfMap = Object.freeze([Object.freeze({"bang":123})]);
-    const j = Object.freeze({"a":"hello","b":"world"});
+    const arr = ["hello", "world"];
+    const mySet = new Set(["my", "my", "set"]);
+    const myMap = ({"hello": 123,"world": 999});
+    const arrOfMap = [({"bang": 123})];
+    const j = ({"a": "hello","b": "world"});
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:capture_containers",new $Closure1(this,"$Closure1"));
   }
 }
