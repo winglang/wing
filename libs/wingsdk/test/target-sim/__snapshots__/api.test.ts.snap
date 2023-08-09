@@ -180,6 +180,7 @@ return class Handler {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
+                "name": "get()",
                 "title": "Function",
                 "type": "compiler-named",
               },
@@ -392,6 +393,7 @@ return class Handler {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
+                "name": "get()",
                 "title": "Function",
                 "type": "compiler-named",
               },
@@ -604,6 +606,7 @@ return class Handler {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
+                "name": "get()",
                 "title": "Function",
                 "type": "compiler-named",
               },
@@ -816,6 +819,7 @@ return class Handler {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
+                "name": "get()",
                 "title": "Function",
                 "type": "compiler-named",
               },
@@ -1028,6 +1032,7 @@ return class Handler {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
+                "name": "get()",
                 "title": "Function",
                 "type": "compiler-named",
               },
@@ -1414,6 +1419,7 @@ return class Handler {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
+                "name": "get()",
                 "title": "Function",
                 "type": "compiler-named",
               },
@@ -1624,6 +1630,7 @@ return class Handler {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
+                "name": "get()",
                 "title": "Function",
                 "type": "compiler-named",
               },
@@ -1933,6 +1940,7 @@ return class Handler {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
+                "name": "get()",
                 "title": "Function",
                 "type": "compiler-named",
               },
@@ -1956,6 +1964,7 @@ return class Handler {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
+                "name": "post()",
                 "title": "Function",
                 "type": "compiler-named",
               },
@@ -2267,6 +2276,7 @@ return class Handler {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
+                "name": "get()",
                 "title": "Function",
                 "type": "compiler-named",
               },
@@ -2290,6 +2300,7 @@ return class Handler {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
+                "name": "get()",
                 "title": "Function",
                 "type": "compiler-named",
               },
@@ -2502,6 +2513,7 @@ return class Handler {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
+                "name": "get()",
                 "title": "Function",
                 "type": "compiler-named",
               },
@@ -2723,6 +2735,7 @@ return class Handler {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
+                "name": "get()",
                 "title": "Function",
                 "type": "compiler-named",
               },
@@ -2935,6 +2948,7 @@ return class Handler {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
+                "name": "post()",
                 "title": "Function",
                 "type": "compiler-named",
               },

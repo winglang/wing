@@ -278,6 +278,7 @@ async handle(message) {
           },
           "display": {
             "description": "A cloud function (FaaS)",
+            "name": "setConsumer()",
             "title": "Function",
             "type": "compiler-named",
           },
@@ -516,6 +517,7 @@ async handle(message) {
           },
           "display": {
             "description": "A cloud function (FaaS)",
+            "name": "setConsumer()",
             "title": "Function",
             "type": "compiler-named",
           },
@@ -758,6 +760,7 @@ async handle(message) {
           },
           "display": {
             "description": "A cloud function (FaaS)",
+            "name": "setConsumer()",
             "title": "Function",
             "type": "compiler-named",
           },
@@ -1088,6 +1091,7 @@ async handle(message) {
           },
           "display": {
             "description": "A cloud function (FaaS)",
+            "name": "setConsumer()",
             "title": "Function",
             "type": "compiler-named",
           },
@@ -1325,6 +1329,7 @@ async handle(message) {
           },
           "display": {
             "description": "A cloud function (FaaS)",
+            "name": "setConsumer()",
             "title": "Function",
             "type": "compiler-named",
           },

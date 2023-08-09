@@ -169,6 +169,7 @@ async handle(message) {
           },
           "display": {
             "description": "A cloud function (FaaS)",
+            "name": "onStart()",
             "title": "Function",
             "type": "compiler-named",
           },

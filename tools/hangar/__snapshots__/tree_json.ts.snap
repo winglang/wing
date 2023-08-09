@@ -503,7 +503,7 @@ exports[`tree.json for an app with many resources 1`] = `
                             "display": {
                               "description": "A cloud function (FaaS)",
                               "title": "Function",
-                              "type": "compiler-named",
+                              "type": "user-named",
                             },
                             "id": "b2-oncreate-OnMessage-9a6e41f8",
                             "path": "root/Default/Default/BigPublisher/b2/b2-oncreate-OnMessage-9a6e41f8",
@@ -800,7 +800,7 @@ exports[`tree.json for an app with many resources 1`] = `
                         "display": {
                           "description": "A cloud function (FaaS)",
                           "title": "Function",
-                          "type": "compiler-named",
+                          "type": "user-named",
                         },
                         "id": "cloud.Queue-SetConsumer-c50bc9ef",
                         "path": "root/Default/Default/BigPublisher/cloud.Queue-SetConsumer-c50bc9ef",
@@ -973,7 +973,7 @@ exports[`tree.json for an app with many resources 1`] = `
                         "display": {
                           "description": "A cloud function (FaaS)",
                           "title": "Function",
-                          "type": "compiler-named",
+                          "type": "user-named",
                         },
                         "id": "cloud.Topic-OnMessage-113c9059",
                         "path": "root/Default/Default/BigPublisher/cloud.Topic-OnMessage-113c9059",

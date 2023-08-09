@@ -258,7 +258,7 @@ exports[`schedule behavior with cron 2`] = `
                 "display": {
                   "description": "A cloud function (FaaS)",
                   "title": "Function",
-                  "type": "compiler-named",
+                  "type": "user-named",
                 },
                 "id": "Schedule-OnTick-c5395e41",
                 "path": "root/Default/Schedule-OnTick-c5395e41",
@@ -607,7 +607,7 @@ exports[`schedule behavior with rate 2`] = `
                 "display": {
                   "description": "A cloud function (FaaS)",
                   "title": "Function",
-                  "type": "compiler-named",
+                  "type": "user-named",
                 },
                 "id": "Schedule-OnTick-c5395e41",
                 "path": "root/Default/Schedule-OnTick-c5395e41",
@@ -1046,7 +1046,7 @@ exports[`schedule with two functions 2`] = `
                 "display": {
                   "description": "A cloud function (FaaS)",
                   "title": "Function",
-                  "type": "compiler-named",
+                  "type": "user-named",
                 },
                 "id": "Schedule-OnTick-0a615500",
                 "path": "root/Default/Schedule-OnTick-0a615500",
@@ -1139,7 +1139,7 @@ exports[`schedule with two functions 2`] = `
                 "display": {
                   "description": "A cloud function (FaaS)",
                   "title": "Function",
-                  "type": "compiler-named",
+                  "type": "user-named",
                 },
                 "id": "Schedule-OnTick-7b33bcba",
                 "path": "root/Default/Schedule-OnTick-7b33bcba",

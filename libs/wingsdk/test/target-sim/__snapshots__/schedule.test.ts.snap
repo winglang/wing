@@ -252,6 +252,7 @@ console.log(\\"Hello from schedule!\\");
           },
           "display": {
             "description": "A cloud function (FaaS)",
+            "name": "onTick()",
             "title": "Function",
             "type": "compiler-named",
           },
@@ -466,6 +467,7 @@ console.log(\\"Hello from schedule!\\");
           },
           "display": {
             "description": "A cloud function (FaaS)",
+            "name": "onTick()",
             "title": "Function",
             "type": "compiler-named",
           },
@@ -680,6 +682,7 @@ console.log(\\"Hello from schedule!\\");
           },
           "display": {
             "description": "A cloud function (FaaS)",
+            "name": "onTick()",
             "title": "Function",
             "type": "compiler-named",
           },

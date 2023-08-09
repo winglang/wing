@@ -286,6 +286,7 @@ bucket: (function(env) {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
+                "name": "setConsumer()",
                 "title": "Function",
                 "type": "compiler-named",
               },

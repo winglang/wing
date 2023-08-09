@@ -924,7 +924,7 @@ exports[`bucket with onCreate method 2`] = `
                     "display": {
                       "description": "A cloud function (FaaS)",
                       "title": "Function",
-                      "type": "compiler-named",
+                      "type": "user-named",
                     },
                     "id": "my_bucket-oncreate-OnMessage-1000fbe7",
                     "path": "root/Default/my_bucket/my_bucket-oncreate-OnMessage-1000fbe7",
@@ -1448,7 +1448,7 @@ exports[`bucket with onDelete method 2`] = `
                     "display": {
                       "description": "A cloud function (FaaS)",
                       "title": "Function",
-                      "type": "compiler-named",
+                      "type": "user-named",
                     },
                     "id": "my_bucket-ondelete-OnMessage-107fa7e8",
                     "path": "root/Default/my_bucket/my_bucket-ondelete-OnMessage-107fa7e8",
@@ -2130,7 +2130,7 @@ exports[`bucket with onEvent method 2`] = `
                     "display": {
                       "description": "A cloud function (FaaS)",
                       "title": "Function",
-                      "type": "compiler-named",
+                      "type": "user-named",
                     },
                     "id": "my_bucket-oncreate-OnMessage-1000fbe7",
                     "path": "root/Default/my_bucket/my_bucket-oncreate-OnMessage-1000fbe7",
@@ -2305,7 +2305,7 @@ exports[`bucket with onEvent method 2`] = `
                     "display": {
                       "description": "A cloud function (FaaS)",
                       "title": "Function",
-                      "type": "compiler-named",
+                      "type": "user-named",
                     },
                     "id": "my_bucket-ondelete-OnMessage-107fa7e8",
                     "path": "root/Default/my_bucket/my_bucket-ondelete-OnMessage-107fa7e8",
@@ -2480,7 +2480,7 @@ exports[`bucket with onEvent method 2`] = `
                     "display": {
                       "description": "A cloud function (FaaS)",
                       "title": "Function",
-                      "type": "compiler-named",
+                      "type": "user-named",
                     },
                     "id": "my_bucket-onupdate-OnMessage-02f87005",
                     "path": "root/Default/my_bucket/my_bucket-onupdate-OnMessage-02f87005",
@@ -3060,7 +3060,7 @@ exports[`bucket with onUpdate method 2`] = `
                     "display": {
                       "description": "A cloud function (FaaS)",
                       "title": "Function",
-                      "type": "compiler-named",
+                      "type": "user-named",
                     },
                     "id": "my_bucket-onupdate-OnMessage-02f87005",
                     "path": "root/Default/my_bucket/my_bucket-onupdate-OnMessage-02f87005",
