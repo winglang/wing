@@ -24,15 +24,11 @@ Automatically run tests on the preview environment once created and provide a UI
 Allow developers to collaborate with their teammates using a shared environment.
 Seamlessly integrating with GitHub.
 
-### Sign Up to Wing Cloud
-
-1. Goto https://wing.cloud and click on sign up.
-2. sign up to Wing Cloud using GitHub authentication.
-
 ### Sign In to Wing Cloud
 
 1. Goto https://wing.cloud and click on sign in.
 2. If a developer was already signed in before, he will be automatically signed in to Wing Cloud.
+3. If a developer was not signed in before, he will be redirected to GitHub authentication and then redirected back to Wing Cloud.
 
 ### Authentication and Authorization
 
