@@ -1252,6 +1252,7 @@ struct ResolvedExpression {
 /// File-unique identifier for each expression. This is an index of the Types.expr_types vec.
 /// After type checking, each expression will have a type in that vec.
 pub type ExprId = usize;
+
 /// File-unique identifier for each necessary inference while type checking. This is an index of the Types.inferences vec.
 /// There will always be an entry for each InferenceId.
 pub type InferenceId = usize;
@@ -2598,7 +2599,11 @@ impl<'a> TypeChecker<'a> {
 			return self.types.error();
 		}
 
-		expected_type
+		if expected_type.is_json() {
+			expected_type
+		} else {
+			actual_type
+		}
 	}
 
 	/// Validate that the given type is a subtype (or same) as the expected type. If not, add an error

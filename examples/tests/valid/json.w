@@ -200,8 +200,13 @@ assert(notSpecified.get("foo") == "bar");
 let empty = {};
 assert(Json.has(empty, "something") == false);
 
+struct LastOne {
+  hi: num;
+}
+
 struct InnerStructyJson  {
   good: bool;
+  inner_stuff: Array<LastOne>;
 }
 
 struct StructyJson {
@@ -214,10 +219,12 @@ let notJsonMissingField: StructyJson = {
   foo: "bar",
   stuff: [],
 };
+
 let notJson: StructyJson = {
   foo: "bar",
   stuff: [1, 2, 3],
   maybe: {
     good: true,
+    inner_stuff: [{ hi: 1 }]
   }
 };

@@ -173,8 +173,6 @@ impl<'a> crate::visit_types::VisitType<'_> for InferenceVisitor<'a> {
 
 		self.expected_type = expected_function_sig.map(|f| &f.return_type);
 		self.visit_typeref(&node.return_type);
-
-		self.expected_type = None;
 	}
 
 	fn visit_inference(&mut self, node: &'_ InferenceId) {
