@@ -173,8 +173,8 @@ In our docs we have the following information:
 - A Flyio account to deploy the preview environments
 - A Cloud.Table to store different data:
   - The registered users
-  - The Wing Cloud projects and their config
-  - The related Flyio projects
+  - The connected GitHub repositories
+  - The related Flyio projects and environments
 
 #### Process: Sign Up and Sign In
 
