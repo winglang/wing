@@ -76,6 +76,8 @@ This method allows various HTTP methods based on the provided options.
 
 The target URL for the request.
 
+Sends an HTTP call if no protocol defined
+
 ---
 
 ###### `options`<sup>Optional</sup> <a name="options" id="@winglang/sdk.http.Util.fetch.parameter.options"></a>
