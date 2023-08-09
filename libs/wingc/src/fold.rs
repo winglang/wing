@@ -70,9 +70,9 @@ where
 	F: Fold + ?Sized,
 {
 	Scope {
+		id: node.id,
 		statements: node.statements.into_iter().map(|stmt| f.fold_stmt(stmt)).collect(),
 		span: node.span,
-		env: node.env,
 	}
 }
 

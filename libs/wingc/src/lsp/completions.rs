@@ -46,8 +46,7 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 			let file_id = file.to_str().expect("File path must be valid utf8");
 			let root_ts_node = project_data.trees.get(&file).expect("tree not found").root_node();
 			let root_scope = project_data.asts.get(&file).expect("ast not found");
-			let root_env = root_scope.env.borrow();
-			let root_env = root_env.as_ref().expect("The root scope must have an environment");
+			let root_env = types.get_scope_env(root_scope);
 			let contents = project_data.files.get_file(&file).expect("file not found");
 
 			// get all character from file_data.contents up to the current position
@@ -102,8 +101,7 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 			);
 			scope_visitor.visit();
 
-			let found_env = scope_visitor.found_scope.env.borrow();
-			let found_env = found_env.as_ref().unwrap();
+			let found_env = types.get_scope_env(&scope_visitor.found_scope);
 
 			// references have a complicated hierarchy, so it's useful to know the nearest non-reference parent
 			let mut nearest_non_reference_parent = node_to_complete.parent();
@@ -198,7 +196,7 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 
 				if let Some(nearest_type_annotation) = scope_visitor.nearest_type_annotation {
 					if let TypeAnnotationKind::UserDefined(udt) = &nearest_type_annotation.kind {
-						let type_lookup = resolve_user_defined_type(udt, found_env, scope_visitor.found_stmt_index.unwrap_or(0));
+						let type_lookup = resolve_user_defined_type(udt, &found_env, scope_visitor.found_stmt_index.unwrap_or(0));
 
 						let completions = if let Ok(type_lookup) = type_lookup {
 							get_completions_from_type(&type_lookup, &types, Some(found_env.phase), false)
@@ -306,7 +304,7 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 						match callee {
 							CalleeKind::Expr(expr) => types.get_expr_type(expr),
 							CalleeKind::SuperCall(method) => {
-								resolve_super_method(method, found_env, &types).map_or(types.error(), |(t, _)| t)
+								resolve_super_method(method, &found_env, &types).map_or(types.error(), |(t, _)| t)
 							}
 						},
 						arg_list,
@@ -314,7 +312,8 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 					ExprKind::New(new_expr) => Some((types.get_expr_type(&new_expr.class), &new_expr.arg_list)),
 					_ => None,
 				}) {
-					let mut completions = get_current_scope_completions(&scope_visitor, &node_to_complete, &preceding_text);
+					let mut completions =
+						get_current_scope_completions(&types, &scope_visitor, &node_to_complete, &preceding_text);
 
 					let arg_list_strings = &callish_expr
 						.1
@@ -366,7 +365,7 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 			}
 
 			// fallback: no special completions, just get stuff from the current scope
-			get_current_scope_completions(&scope_visitor, &node_to_complete, &preceding_text)
+			get_current_scope_completions(&types, &scope_visitor, &node_to_complete, &preceding_text)
 		});
 
 		final_completions = final_completions
@@ -384,6 +383,7 @@ pub fn on_completion(params: lsp_types::CompletionParams) -> CompletionResponse 
 
 /// Get symbols in the current scope as completion items
 fn get_current_scope_completions(
+	types: &Types,
 	scope_visitor: &ScopeVisitor,
 	node_to_complete: &Node,
 	preceding_text: &String,
@@ -499,8 +499,7 @@ fn get_current_scope_completions(
 	}
 
 	let found_stmt_index = scope_visitor.found_stmt_index.unwrap_or_default();
-	let found_env = scope_visitor.found_scope.env.borrow();
-	let found_env = found_env.as_ref().unwrap();
+	let found_env = types.get_scope_env(&scope_visitor.found_scope);
 
 	for symbol_data in found_env.symbol_map.iter().filter(|s| {
 		if let StatementIdx::Index(i) = s.1 .0 {

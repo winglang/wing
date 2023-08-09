@@ -10,7 +10,7 @@ use crate::lsp::sync::PROJECT_DATA;
 use crate::lsp::sync::WING_TYPES;
 
 use crate::type_check::symbol_env::SymbolEnvRef;
-use crate::type_check::{resolve_super_method, resolve_user_defined_type, CLASS_INIT_NAME};
+use crate::type_check::{resolve_super_method, resolve_user_defined_type, Types, CLASS_INIT_NAME};
 use crate::visit::{visit_expr, visit_scope, Visit};
 use crate::wasm_util::{ptr_to_string, string_to_combined_ptr, WASM_RETURN_ERROR};
 
@@ -37,7 +37,7 @@ pub fn on_signature_help(params: lsp_types::SignatureHelpParams) -> Option<Signa
 			let file = uri.to_file_path().ok().expect("LSP only works on real filesystems");
 			let root_scope = &project_data.asts.get(&file).unwrap();
 
-			let mut scope_visitor = ScopeVisitor::new(params.text_document_position_params.position);
+			let mut scope_visitor = ScopeVisitor::new(&types, params.text_document_position_params.position);
 			scope_visitor.visit_scope(root_scope);
 			let expr = scope_visitor.call_expr?;
 			let env = scope_visitor.call_env?;
@@ -52,7 +52,7 @@ pub fn on_signature_help(params: lsp_types::SignatureHelpParams) -> Option<Signa
 						return None;
 					};
 
-					let Some(t) = resolve_user_defined_type(&udt, root_scope.env.borrow().as_ref()?, 0).ok() else {
+					let Some(t) = resolve_user_defined_type(&udt, &types.get_scope_env(&root_scope), 0).ok() else {
 						return None;
 					};
 
@@ -181,6 +181,7 @@ pub fn on_signature_help(params: lsp_types::SignatureHelpParams) -> Option<Signa
 /// This visitor is used to find the scope
 /// and relevant expression that contains a given location.
 pub struct ScopeVisitor<'a> {
+	types: &'a Types,
 	/// The target location we're looking for
 	pub location: Position,
 	/// The nearest expression before (or containing) the target location
@@ -192,8 +193,9 @@ pub struct ScopeVisitor<'a> {
 }
 
 impl<'a> ScopeVisitor<'a> {
-	pub fn new(location: Position) -> Self {
+	pub fn new(types: &'a Types, location: Position) -> Self {
 		Self {
+			types,
 			location,
 			call_expr: None,
 			call_env: None,
@@ -222,7 +224,8 @@ impl<'a> Visit<'a> for ScopeVisitor<'a> {
 	}
 
 	fn visit_scope(&mut self, node: &'a crate::ast::Scope) {
-		self.curr_env.push(node.env.borrow().as_ref().unwrap().get_ref());
+		let env = self.types.get_scope_env(node);
+		self.curr_env.push(env);
 		visit_scope(self, node);
 		self.curr_env.pop();
 	}
