@@ -159,7 +159,7 @@ In our docs we have the following information:
 
 ### Technology
 
-- https://wing.cloud for the infrastructure (although it may prove a challenge due to time constrains)
+- https://winglang.io for the infrastructure (although it may prove a challenge due to time constrains)
 - AWS for the infrastructure
 - Node.js 18 for the backend
 - https://github.com/probot/probot for the GitHub integration
