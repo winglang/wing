@@ -215,6 +215,7 @@ export const DefaultLayout = ({
       collapseAll,
       setSelectedItems,
       setExpandedItems,
+      showTests,
     ],
   );
 
