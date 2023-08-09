@@ -154,7 +154,7 @@ pub unsafe extern "C" fn wingc_compile(ptr: u32, len: u32) -> u64 {
 
 	if !source_file.exists() {
 		report_diagnostic(Diagnostic {
-			message: format!("Source file \"{}\" could not be found", source_file.display()),
+			message: format!("Source file cannot be found: {}", source_file.display()),
 			span: None,
 		});
 		return WASM_RETURN_ERROR;
