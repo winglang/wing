@@ -156,10 +156,7 @@ export const ContainerNode = ({
                 "leading-tight",
                 "truncate",
                 "transition-all",
-                compilerNamed && [
-                  "font-mono text-2xs",
-                  "text-slate-600 dark:text-slate-350",
-                ],
+                compilerNamed && ["text-slate-600 dark:text-slate-350"],
                 !compilerNamed && ["text-xs", theme.text1],
               )}
             >
