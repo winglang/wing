@@ -10,7 +10,7 @@ module.exports = function({ $NIL, $q }) {
       return $obj;
     }
     async handle() {
-      const msgs = Object.freeze(["Foo", "Bar"]);
+      const msgs = ["Foo", "Bar"];
       for (const msg of msgs) {
         (await $q.push(msg));
       }
@@ -164,9 +164,9 @@ module.exports = function({ $NIL, $q }) {
 ```js
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
-const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
-const cloud = require('@winglang/sdk').cloud;
+const std = $stdlib.std;
+const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);

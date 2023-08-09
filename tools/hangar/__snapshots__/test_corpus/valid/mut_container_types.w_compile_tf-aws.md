@@ -161,9 +161,9 @@
 ```js
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
-const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
-const cloud = require('@winglang/sdk').cloud;
+const std = $stdlib.std;
+const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
@@ -189,19 +189,19 @@ class $Root extends $stdlib.std.Resource {
     {((cond) => {if (!cond) throw new Error("assertion failed: s2.has(\"bye\")")})((s2.has("bye")))};
     {((cond) => {if (!cond) throw new Error("assertion failed: s2.has(\"hello\")")})((s2.has("hello")))};
     {((cond) => {if (!cond) throw new Error("assertion failed: s3.has(bucket2)")})((s3.has(bucket2)))};
-    const m1 = {"hello":"world"};
-    const m2 = {"hello":123};
-    const m3 = {"b1":bucket1,"b2":bucket2};
+    const m1 = ({"hello": "world"});
+    const m2 = ({"hello": 123});
+    const m3 = ({"b1": bucket1,"b2": bucket2});
     const m4 = m1;
-    const m5 = {"goodbye":"world"};
-    const m6 = {"a":m1,"b":m5};
+    const m5 = ({"goodbye": "world"});
+    const m6 = ({"a": m1,"b": m5});
     {((cond) => {if (!cond) throw new Error("assertion failed: m1.has(\"hello\")")})(("hello" in (m1)))};
     {((cond) => {if (!cond) throw new Error("assertion failed: m2.size() == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(Object.keys(m2).length,1)))};
     {((cond) => {if (!cond) throw new Error("assertion failed: m3.get(\"b1\") == bucket1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((m3)["b1"],bucket1)))};
     {((cond) => {if (!cond) throw new Error("assertion failed: m4.size() == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(Object.keys(m4).length,1)))};
     {((cond) => {if (!cond) throw new Error("assertion failed: m6.get(\"a\").get(\"hello\") == \"world\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((m6)["a"])["hello"],"world")))};
     ((obj, args) => { obj[args[0]] = args[1]; })(m1, ["hello","goodbye"]);
-    ((obj, args) => { obj[args[0]] = args[1]; })(m6, ["a",{"foo":"bar"}]);
+    ((obj, args) => { obj[args[0]] = args[1]; })(m6, ["a",({"foo": "bar"})]);
     ((map) => { for(const k in map){delete map[k]}; })(m2);
     {((cond) => {if (!cond) throw new Error("assertion failed: m2.size() == 0")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(Object.keys(m2).length,0)))};
     {((cond) => {if (!cond) throw new Error("assertion failed: m1.get(\"hello\") == \"goodbye\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((m1)["hello"],"goodbye")))};

@@ -31,18 +31,18 @@ const FUNCTION_NAME_OPTS: NameOptions = {
  * that should be used when a function is deployed within a VPC.
  */
 export interface FunctionNetworkConfig {
-  /** list of subnets to attach on function */
+  /** List of subnets to attach on function */
   readonly subnetIds: string[];
-  /** list of security groups to place function in */
+  /** List of security groups to place function in */
   readonly securityGroupIds: string[];
 }
 
 /**
- * options for granting invoke permissions to the current function
+ * Options for granting invoke permissions to the current function
  */
 export interface FunctionPermissionsOptions {
   /**
-   * used for keeping function's versioning.
+   * Used for keeping function's versioning.
    */
   readonly qualifier?: string;
 }

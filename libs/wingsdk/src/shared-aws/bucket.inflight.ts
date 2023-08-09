@@ -214,7 +214,7 @@ export class BucketClient implements IBucketClient {
     return list;
   }
   /**
-   * checks if the bucket is public
+   * Checks if the bucket is public
    * @returns true if the bucket is public and false otherwise
    */
   private async checkIfPublic(): Promise<boolean> {

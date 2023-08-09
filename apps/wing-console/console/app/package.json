@@ -14,7 +14,7 @@
     "dev": "tsx watch scripts/dev.mjs",
     "compile": "tsup",
     "eslint": "eslint --ext .js,.cjs,.ts,.cts,.mts,.tsx --no-error-on-unmatched-pattern . --fix",
-    "test": "playwright test --update-snapshots",
+    "test:playwright": "playwright test --update-snapshots",
     "package": "bump-pack -b"
   },
   "dependencies": {

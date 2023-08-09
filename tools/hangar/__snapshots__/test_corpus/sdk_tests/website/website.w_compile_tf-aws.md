@@ -380,10 +380,10 @@ module.exports = function({  }) {
 ```js
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
-const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
-const cloud = require('@winglang/sdk').cloud;
-const http = require('@winglang/sdk').http;
+const std = $stdlib.std;
+const cloud = $stdlib.cloud;
+const http = $stdlib.http;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
@@ -453,7 +453,7 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     const w = this.node.root.newAbstract("@winglang/sdk.cloud.Website",this,"cloud.Website",{ path: "./website" });
-    const config = Object.freeze({"json":1});
+    const config = ({"json": 1});
     const indexFile = (Util.readFile("./website/website/index.html"));
     const otherFile = (Util.readFile("./website/website/inner-folder/other.html"));
     (w.addJson("config.json",config));

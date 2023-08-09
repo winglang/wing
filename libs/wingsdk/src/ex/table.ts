@@ -12,15 +12,15 @@ export const TABLE_FQN = fqnForType("ex.Table");
  * Table column types
  */
 export enum ColumnType {
-  /** string type */
+  /** String type */
   STRING,
-  /** number type */
+  /** Number type */
   NUMBER,
-  /** bool type */
+  /** Bool type */
   BOOLEAN,
-  /** date type */
+  /** Date type */
   DATE,
-  /** json type */
+  /** Json type */
   JSON,
 }
 

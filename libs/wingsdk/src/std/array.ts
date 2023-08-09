@@ -39,6 +39,19 @@ export class Array {
   }
 
   /**
+   * Get the value at the given index, returning nil if the index is out of bounds.
+   *
+   * @macro ($self$.at($args$))
+   *
+   * @param index index of the value to get
+   * @returns the value at the given index, or undefined if the index is out of bounds
+   */
+  public tryAt(index: number): T1 | undefined {
+    index;
+    throw new Error("Macro");
+  }
+
+  /**
    * Merge arr to the end of this array
    * @param arr array to merge
    *
@@ -173,7 +186,7 @@ export class MutArray {
   /**
    * Create an immutable shallow copy of this array
    *
-   * @macro Object.freeze([...($self$)])
+   * @macro [...($self$)]
    *
    * @returns an ImmutableArray with the same values as this array
    */

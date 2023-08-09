@@ -1714,34 +1714,29 @@ to compile your code to JavaScript and then use `extern` against the JavaScript 
 
 ### 5.2.2 Type model
 
-The table below shows the mapping between Wing types and JavaScript types, represented with TypeScript syntax.
-When calling **extern** function, the arguments are checked against these declared types and the return type is **assumed** to be satisfied by the called function.
+The table below shows the mapping between Wing types and JavaScript values, shown with TypeScript types.
+When calling **extern** function, the parameter and return types are **assumed** to be satisfied by the called function.
 
-If [frozen](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/freeze#description), the value is expected to be immutable and will throw an error if any attempt is made to modify it.
 
-| Built-In Wing Type     | JavaScript Type                                                       | Frozen? |
-|------------------------|-----------------------------------------------------------------------|---------|
-| `void`                 | `undefined`                                                           |         |
-| `nil`                  | `null`                                                                |         |
-| `any`                  | `any`                                                                 |         |
-| `num`                  | `number`                                                              |         |
-| `str`                  | `string`                                                              |         |
-| `bool`                 | `boolean`                                                             |         |
-| `Set<T>`               | `Set<T>`                                                              | Yes     |
-| `Map<T>`               | `{ [key: string]: T }`                                                | Yes     |
-| `Array<T>`             | `T[]`                                                                 | Yes     |
-| `MutSet<T>`            | `Set<T>`                                                              |         |
-| `MutMap<T>`            | `{ [key: string]: T }`                                                |         |
-| `MutArray<T>`          | `T[]`                                                                 |         |
-| `Json`                 | `string ⏐ number ⏐ boolean ⏐ null ⏐ json[] ⏐ { [key: string]: json }` | Yes     |
-| `MutJson`              | `string ⏐ number ⏐ boolean ⏐ null ⏐ json[] ⏐ { [key: string]: json }` |         |
+| Built-in Wing type        | TypeScript type                                                       |
+|---------------------------|-----------------------------------------------------------------------|
+| `void`                    | `undefined`                                                           |
+| `nil`                     | `null`                                                                |
+| `any`                     | `any`                                                                 |
+| `num`                     | `number`                                                              |
+| `str`                     | `string`                                                              |
+| `bool`                    | `boolean`                                                             |
+| `Set<T>`, `MutSet<T>`     | `Set<T>`                                                              |
+| `Map<T>`, `MutMap<T>`     | `{ [key: string]: T }`                                                |
+| `Array<T>`, `MutArray<T>` | `Array<T>`                                                            |
+| `Json`, `MutJson`         | `string ⏐ number ⏐ boolean ⏐ null ⏐ Json[] ⏐ { [key: string]: Json }` |
 
-| User-Defined Wing Types | JavaScript Type                                                                        | Frozen? |
-|-------------------------|----------------------------------------------------------------------------------------|---------|
-| `class`                 | `class`, only with members whose phase is compatible with the function signature       |         |
-| `interface`             | `interface`, only with members whose phase is compatible with the function signature   |         |
-| `struct`                | `interface`                                                                            | Yes     |
-| `enum`                  | `string`-based enum-like `Object`                                                      | Yes     |
+| User-defined Wing type  | TypeScript type                                                                        |
+|-------------------------|----------------------------------------------------------------------------------------|
+| `class`                 | `class`, only with members whose phase is compatible with the function signature       |
+| `interface`             | `interface`, only with members whose phase is compatible with the function signature   |
+| `struct`                | `interface`                                                                            |
+| `enum`                  | `string`-based enum-like `Object`                                                      |
 
 [`▲ top`][top]
 

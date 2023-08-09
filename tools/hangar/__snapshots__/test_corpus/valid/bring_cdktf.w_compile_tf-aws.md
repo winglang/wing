@@ -65,8 +65,8 @@ module.exports = function({  }) {
 ```js
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
-const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
+const std = $stdlib.std;
 const aws = require("@cdktf/provider-aws");
 const cdktf = require("cdktf");
 class $Root extends $stdlib.std.Resource {
@@ -76,10 +76,7 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("$inflight_init");
-        this.node.root.new("cdktf.S3Backend",cdktf.S3Backend,this,{
-        "bucket": "foo",
-        "key": "bar",}
-        );
+        this.node.root.new("cdktf.S3Backend",cdktf.S3Backend,this,({"bucket": "foo","key": "bar"}));
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
@@ -99,10 +96,7 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
     }
-    this.node.root.new("@cdktf/provider-aws.s3Bucket.S3Bucket",aws.s3Bucket.S3Bucket,this,"Bucket",{ bucketPrefix: "hello", versioning: {
-    "enabled": true,
-    "mfaDelete": true,}
-     });
+    this.node.root.new("@cdktf/provider-aws.s3Bucket.S3Bucket",aws.s3Bucket.S3Bucket,this,"Bucket",{ bucketPrefix: "hello", versioning: ({"enabled": true,"mfaDelete": true}) });
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);

@@ -31,6 +31,19 @@
         "test/**"
       ]
     },
+    "test:playwright": {
+      "dependsOn": ["compile"],
+      "inputs": [
+        "*.ts",
+        "*.js",
+        "*.cjs",
+        "*.json",
+        "*.toml",
+        "*.lock",
+        "src/**",
+        "test/**"
+      ]
+    },
     "post-compile": {
       "dependsOn": ["compile"]
     },

@@ -135,7 +135,7 @@ export class MutMap {
   /**
    * Create an immutable shallow copy of this map
    *
-   * @macro Object.freeze({...($self$)})
+   * @macro ({...($self$)})
    *
    * @returns an ImmutableMap with the same values as this map
    */

@@ -10,7 +10,7 @@ module.exports = function({ $b }) {
       return $obj;
     }
     async handle() {
-      const jsonObj2 = Object.freeze({"key2":"value2"});
+      const jsonObj2 = ({"key2": "value2"});
       (await $b.put("file1.txt","Foo"));
       {((cond) => {if (!cond) throw new Error("assertion failed: b.tryDelete(\"file1.txt\") == true")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $b.tryDelete("file1.txt")),true)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: b.tryDelete(\"file1.txt\") == false")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $b.tryDelete("file1.txt")),false)))};
@@ -197,9 +197,9 @@ module.exports = function({ $b }) {
 ```js
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
-const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
-const cloud = require('@winglang/sdk').cloud;
+const std = $stdlib.std;
+const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);

@@ -10,11 +10,7 @@ module.exports = function({ $std_Json }) {
       return $obj;
     }
     async handle(req) {
-      return {
-      "body": ((args) => { return JSON.stringify(args[0], null, args[1]) })([Object.freeze({"user":(req.vars)["name"]})]),
-      "headers": Object.freeze({"content-type":"application/json"}),
-      "status": 200,}
-      ;
+      return ({"body": ((args) => { return JSON.stringify(args[0], null, args[1]) })([({"user": (req.vars)["name"]})]),"headers": ({"content-type": "application/json"}),"status": 200});
     }
   }
   return $Closure1;
@@ -304,10 +300,10 @@ module.exports = function({ $api_url, $http_Util, $std_Json }) {
 ```js
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
-const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
-const cloud = require('@winglang/sdk').cloud;
-const http = require('@winglang/sdk').http;
+const std = $stdlib.std;
+const cloud = $stdlib.cloud;
+const http = $stdlib.http;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);

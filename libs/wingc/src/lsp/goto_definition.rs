@@ -1,4 +1,4 @@
-use crate::lsp::sync::FILES;
+use crate::lsp::sync::PROJECT_DATA;
 use crate::wasm_util::{ptr_to_string, string_to_combined_ptr, WASM_RETURN_ERROR};
 use tree_sitter::Point;
 
@@ -16,18 +16,20 @@ pub unsafe extern "C" fn wingc_on_goto_definition(ptr: u32, len: u32) -> u64 {
 }
 
 pub fn on_goto_definition(params: lsp_types::GotoDefinitionParams) -> Vec<lsp_types::LocationLink> {
-	FILES.with(|files| {
-		let files = files.borrow();
+	PROJECT_DATA.with(|project_data| {
+		let project_data = project_data.borrow();
 		let uri = params.text_document_position_params.text_document.uri;
-		let result = files.get(&uri).expect("File must be open to get completions");
-		let wing_source = result.contents.as_bytes();
+		let file = uri.to_file_path().ok().expect("LSP only works on real filesystems");
+		let wing_source = project_data.files.get_file(&file).unwrap().as_bytes();
 
 		let point = Point::new(
 			params.text_document_position_params.position.line as usize,
 			params.text_document_position_params.position.character as usize,
 		);
-		let node = result
-			.tree
+		let node = project_data
+			.trees
+			.get(&file)
+			.unwrap()
 			.root_node()
 			.descendant_for_point_range(point, point)
 			.expect("There is always at-least one tree-sitter node");
