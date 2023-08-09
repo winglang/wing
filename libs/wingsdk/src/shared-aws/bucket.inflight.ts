@@ -135,19 +135,8 @@ export class BucketClient implements IBucketClient {
    * @returns Json content of the object
    */
   public async getJson(key: string): Promise<Json> {
-    const objectContent = await this.getObjectContent(key);
-    if (objectContent) {
-      try {
-        return JSON.parse(await consumers.text(objectContent));
-      } catch (e) {
-        throw new Error(
-          `Object contents could not be read as text (key=${key}): ${
-            (e as Error).stack
-          })}`
-        );
-      }
-    }
-    throw new Error(`Object does not exist (key=${key}).`);
+    const objectContent = await this.get(key);
+    return JSON.parse(objectContent);
   }
 
   /**
@@ -157,19 +146,12 @@ export class BucketClient implements IBucketClient {
    * @returns Json content of the object
    */
   public async tryGetJson(key: string): Promise<Json | undefined> {
-    const objectContent = await this.getObjectContent(key);
-    if (objectContent) {
-      try {
-        return JSON.parse(await consumers.text(objectContent));
-      } catch (e) {
-        throw new Error(
-          `Object content could not be read as text (key=${key}): ${
-            (e as Error).stack
-          })}`
-        );
-      }
+    const objectContent = await this.tryGet(key);
+    if (objectContent !== undefined) {
+      return JSON.parse(objectContent);
+    } else {
+      return undefined;
     }
-    return undefined;
   }
 
   /**
