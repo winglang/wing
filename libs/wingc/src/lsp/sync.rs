@@ -14,7 +14,6 @@ use crate::fold::Fold;
 use crate::jsify::JSifier;
 use crate::lifting::LiftVisitor;
 use crate::parser::parse_wing_project;
-use crate::reset::ScopeResetter;
 use crate::type_check;
 use crate::type_check::jsii_importer::JsiiImportSpec;
 use crate::type_check_assert::TypeCheckAssert;
@@ -155,10 +154,7 @@ fn partial_compile(
 
 	// Reset all type information
 	types.reset_expr_types();
-	let mut scope_resetter = ScopeResetter::new();
-	for scope in project_data.asts.values() {
-		scope_resetter.reset_scopes(scope);
-	}
+	types.reset_scope_envs();
 
 	// -- TYPECHECKING PHASE --
 	let mut jsii_imports = vec![];
@@ -167,7 +163,6 @@ fn partial_compile(
 	// Wing files, then move on to files that depend on those, etc.)
 	for file in &topo_sorted_files {
 		let mut scope = project_data.asts.get_mut(file).expect("matching AST not found");
-		scope.env.borrow_mut().take();
 		type_check(&mut scope, &mut types, &file, jsii_types, &mut jsii_imports);
 
 		// Validate the type checker didn't miss anything - see `TypeCheckAssert` for details

@@ -2,7 +2,6 @@ import { Readable } from "stream";
 import * as consumers from "stream/consumers";
 import {
   HeadObjectCommand,
-  HeadObjectCommandOutput,
   DeleteObjectCommand,
   GetObjectCommand,
   ListObjectsV2Command,
@@ -34,8 +33,15 @@ export class BucketClient implements IBucketClient {
       Key: key,
     });
 
-    const resp: HeadObjectCommandOutput = await this.s3Client.send(command);
-    return !!resp?.ContentLength;
+    try {
+      await this.s3Client.send(command);
+      return true;
+    } catch (error) {
+      if ((error as Error).name === "NotFound") {
+        return false;
+      }
+      throw error;
+    }
   }
 
   /**

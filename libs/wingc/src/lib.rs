@@ -53,7 +53,6 @@ pub mod jsify;
 mod lifting;
 pub mod lsp;
 pub mod parser;
-mod reset;
 pub mod type_check;
 mod type_check_assert;
 pub mod visit;
@@ -197,9 +196,8 @@ pub fn type_check(
 	jsii_types: &mut TypeSystem,
 	jsii_imports: &mut Vec<JsiiImportSpec>,
 ) {
-	assert!(scope.env.borrow().is_none(), "Scope should not have an env yet");
 	let env = types.add_symbol_env(SymbolEnv::new(None, types.void(), false, false, Phase::Preflight, 0));
-	scope.set_env(env);
+	types.set_scope_env(scope, env);
 
 	// note: Globals are emitted here and wrapped in "{ ... }" blocks. Wrapping makes these emissions, actual
 	// statements and not expressions. this makes the runtime panic if these are used in place of expressions.
@@ -278,8 +276,15 @@ pub fn type_check(
 		types,
 	);
 
+	let mut scope_env = types.get_scope_env(&scope);
 	let mut tc = TypeChecker::new(types, file_path, jsii_types, jsii_imports);
-	tc.add_globals(scope);
+	tc.add_module_to_env(
+		&mut scope_env,
+		WINGSDK_ASSEMBLY_NAME.to_string(),
+		vec![WINGSDK_STD_MODULE.to_string()],
+		&Symbol::global(WINGSDK_STD_MODULE),
+		None,
+	);
 
 	tc.type_check_file(file_path, scope);
 }
@@ -287,11 +292,8 @@ pub fn type_check(
 // TODO: refactor this (why is scope needed?) (move to separate module?)
 fn add_builtin(name: &str, typ: Type, scope: &mut Scope, types: &mut Types) {
 	let sym = Symbol::global(name);
-	scope
-		.env
-		.borrow_mut()
-		.as_mut()
-		.unwrap()
+	let mut scope_env = types.get_scope_env(&scope);
+	scope_env
 		.define(
 			&sym,
 			SymbolKind::make_free_variable(sym.clone(), types.add_type(typ), false, Phase::Independent),

@@ -43,8 +43,7 @@ impl<'a> HoverVisitor<'a> {
 	/// Try to look up a full path of a symbol in the current scope and if found, render the docs
 	/// associated with the symbol kind. Returns `None` if not found.
 	fn lookup_docs(&mut self, nested_str: &str, property: Option<&Symbol>) -> Option<String> {
-		let current_env = self.current_scope.env.borrow();
-		let current_env = current_env.as_ref()?;
+		let current_env = self.types.get_scope_env(self.current_scope);
 
 		let result = current_env.lookup_nested_str(nested_str, None);
 
@@ -242,12 +241,11 @@ impl<'a> Visit<'a> for HoverVisitor<'a> {
 			ExprKind::Call { arg_list, callee } => {
 				let x = arg_list.named_args.iter().find(|a| a.0.span.contains(&self.position));
 				if let Some((arg_name, ..)) = x {
-					let curr_env = self.current_scope.env.borrow();
-					let env = curr_env.as_ref().expect("an env");
+					let env = self.types.get_scope_env(self.current_scope);
 					// we need to get the struct type from the callee
 					let callee_type = match callee {
 						CalleeKind::Expr(expr) => self.types.get_expr_type(expr),
-						CalleeKind::SuperCall(method) => resolve_super_method(method, env, &self.types)
+						CalleeKind::SuperCall(method) => resolve_super_method(method, &env, &self.types)
 							.ok()
 							.map_or(self.types.error(), |t| t.0),
 					};
