@@ -4,9 +4,6 @@ on:
     types:
       - published
   workflow_dispatch: {}
-  push:
-    branches:
-      - tsuf/sdk-sepc-tests-parallel-gh-action
 
 env:
   AWS_REGION: "us-east-1"
