@@ -239,7 +239,7 @@ module.exports = function({  }) {
             "uniqueId": "cloudWebsite_CloudfrontOac_C956968B"
           }
         },
-        "name": "cloudfront-oac",
+        "name": "cloud-We-c8e58765-cloudfront-oac",
         "origin_access_control_origin_type": "s3",
         "signing_behavior": "always",
         "signing_protocol": "sigv4"

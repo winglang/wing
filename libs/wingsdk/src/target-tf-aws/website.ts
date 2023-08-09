@@ -13,8 +13,8 @@ import { S3BucketPolicy } from "../.gen/providers/aws/s3-bucket-policy";
 import { S3BucketWebsiteConfiguration } from "../.gen/providers/aws/s3-bucket-website-configuration";
 import { S3Object } from "../.gen/providers/aws/s3-object";
 import * as cloud from "../cloud";
-import { Json } from "../std";
 import { NameOptions, ResourceNames } from "../shared/resource-names";
+import { Json } from "../std";
 
 const INDEX_FILE = "index.html";
 
