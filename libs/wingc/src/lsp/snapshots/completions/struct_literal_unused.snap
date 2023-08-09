@@ -8,7 +8,7 @@ source: libs/wingc/src/lsp/completions.rs
     kind: markdown
     value: "```wing\ny: num\n```"
   sortText: "ab|y:"
-  insertText: "y: $1,"
+  insertText: "y: $1"
   insertTextFormat: 2
   command:
     title: triggerCompletion
