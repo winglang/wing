@@ -123,19 +123,17 @@ impl<'a> crate::visit_types::VisitType<'_> for InferenceVisitor<'a> {
 	}
 
 	fn visit_json(&mut self, node: &'_ JsonData) {
-		let original_expected_type = self.expected_type;
 		match &node.kind {
 			JsonDataKind::Type(_) => {
 				visit_json(self, node);
 			}
 			JsonDataKind::Fields(fields) => {
+				let expected_struct = self.expected_type.and_then(|t| t.as_struct());
 				for field in fields {
 					self.expected_type = None;
-					if let Some(expected) = original_expected_type {
-						if let Some(expected) = expected.as_struct() {
-							if let Some(expected_field) = expected.env.lookup(field.0, None) {
-								self.expected_type = Some(&expected_field.as_variable().unwrap().type_);
-							}
+					if let Some(expected) = expected_struct {
+						if let Some(expected_field) = expected.env.lookup(field.0, None) {
+							self.expected_type = Some(&expected_field.as_variable().unwrap().type_);
 						}
 					}
 					self.visit_typeref(&field.1.type_);
@@ -147,7 +145,6 @@ impl<'a> crate::visit_types::VisitType<'_> for InferenceVisitor<'a> {
 				}
 			}
 		}
-		self.expected_type = original_expected_type;
 	}
 
 	// structs and interfaces cannot have inferences
