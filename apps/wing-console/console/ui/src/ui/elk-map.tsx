@@ -23,7 +23,7 @@ const layoutOptions: LayoutOptions = {
   "elk.layered.cycleBreaking.strategy": "INTERACTIVE",
   "elk.layered.nodePlacement.strategy": "INTERACTIVE",
   "elk.nodeSize.constraints": "USE_MINIMUM_SIZE",
-  "elk.layered.spacing.baseValue": "25",
+  "elk.layered.spacing.baseValue": "32",
   "elk.edgeRouting": "ORTHOGONAL",
   "elk.padding": "[top=52,left=20,bottom=20,right=20]",
 };
