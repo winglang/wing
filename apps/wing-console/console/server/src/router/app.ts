@@ -528,7 +528,7 @@ function createExplorerItemFromConstructTreeNode(
 ): ExplorerItem {
   return {
     id: node.path,
-    label: node.id,
+    label: node.display?.name || node.id,
     type: getResourceType(node, simulator),
     display: node.display,
     childItems: node.children
