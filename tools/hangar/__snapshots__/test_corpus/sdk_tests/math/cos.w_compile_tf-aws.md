@@ -34,7 +34,7 @@ module.exports = function({ $math_Util }) {
     },
     "outputs": {
       "root": {
-        "undefined": {
+        "Default": {
           "cloud.TestRunner": {
             "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS"
           }
@@ -44,7 +44,7 @@ module.exports = function({ $math_Util }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/undefined/Default/test:inflight cosine\",\"${aws_lambda_function.undefined_testinflightcosine_Handler_B624117E.arn}\"]]"
+      "value": "[[\"root/Default/Default/test:inflight cosine\",\"${aws_lambda_function.testinflightcosine_Handler_8C1A066C.arn}\"]]"
     }
   },
   "provider": {
@@ -54,61 +54,61 @@ module.exports = function({ $math_Util }) {
   },
   "resource": {
     "aws_iam_role": {
-      "undefined_testinflightcosine_Handler_IamRole_761C0F01": {
+      "testinflightcosine_Handler_IamRole_3CB91B01": {
         "//": {
           "metadata": {
-            "path": "root/undefined/Default/test:inflight cosine/Handler/IamRole",
-            "uniqueId": "undefined_testinflightcosine_Handler_IamRole_761C0F01"
+            "path": "root/Default/Default/test:inflight cosine/Handler/IamRole",
+            "uniqueId": "testinflightcosine_Handler_IamRole_3CB91B01"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
-      "undefined_testinflightcosine_Handler_IamRolePolicy_528E83D4": {
+      "testinflightcosine_Handler_IamRolePolicy_DEC09071": {
         "//": {
           "metadata": {
-            "path": "root/undefined/Default/test:inflight cosine/Handler/IamRolePolicy",
-            "uniqueId": "undefined_testinflightcosine_Handler_IamRolePolicy_528E83D4"
+            "path": "root/Default/Default/test:inflight cosine/Handler/IamRolePolicy",
+            "uniqueId": "testinflightcosine_Handler_IamRolePolicy_DEC09071"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
-        "role": "${aws_iam_role.undefined_testinflightcosine_Handler_IamRole_761C0F01.name}"
+        "role": "${aws_iam_role.testinflightcosine_Handler_IamRole_3CB91B01.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
-      "undefined_testinflightcosine_Handler_IamRolePolicyAttachment_93F8255E": {
+      "testinflightcosine_Handler_IamRolePolicyAttachment_30BBA33F": {
         "//": {
           "metadata": {
-            "path": "root/undefined/Default/test:inflight cosine/Handler/IamRolePolicyAttachment",
-            "uniqueId": "undefined_testinflightcosine_Handler_IamRolePolicyAttachment_93F8255E"
+            "path": "root/Default/Default/test:inflight cosine/Handler/IamRolePolicyAttachment",
+            "uniqueId": "testinflightcosine_Handler_IamRolePolicyAttachment_30BBA33F"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.undefined_testinflightcosine_Handler_IamRole_761C0F01.name}"
+        "role": "${aws_iam_role.testinflightcosine_Handler_IamRole_3CB91B01.name}"
       }
     },
     "aws_lambda_function": {
-      "undefined_testinflightcosine_Handler_B624117E": {
+      "testinflightcosine_Handler_8C1A066C": {
         "//": {
           "metadata": {
-            "path": "root/undefined/Default/test:inflight cosine/Handler/Default",
-            "uniqueId": "undefined_testinflightcosine_Handler_B624117E"
+            "path": "root/Default/Default/test:inflight cosine/Handler/Default",
+            "uniqueId": "testinflightcosine_Handler_8C1A066C"
           }
         },
         "environment": {
           "variables": {
-            "WING_FUNCTION_NAME": "Handler-c810cfb2",
+            "WING_FUNCTION_NAME": "Handler-c81ebe2a",
             "WING_TARGET": "tf-aws"
           }
         },
-        "function_name": "Handler-c810cfb2",
+        "function_name": "Handler-c81ebe2a",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.undefined_testinflightcosine_Handler_IamRole_761C0F01.arn}",
+        "role": "${aws_iam_role.testinflightcosine_Handler_IamRole_3CB91B01.arn}",
         "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.undefined_Code_6226BB4A.bucket}",
-        "s3_key": "${aws_s3_object.undefined_testinflightcosine_Handler_S3Object_6E04AD52.key}",
+        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
+        "s3_key": "${aws_s3_object.testinflightcosine_Handler_S3Object_20AE5FC3.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -117,25 +117,25 @@ module.exports = function({ $math_Util }) {
       }
     },
     "aws_s3_bucket": {
-      "undefined_Code_6226BB4A": {
+      "Code": {
         "//": {
           "metadata": {
-            "path": "root/undefined/Code",
-            "uniqueId": "undefined_Code_6226BB4A"
+            "path": "root/Default/Code",
+            "uniqueId": "Code"
           }
         },
-        "bucket_prefix": "code-c818e3de-"
+        "bucket_prefix": "code-c84a50b1-"
       }
     },
     "aws_s3_object": {
-      "undefined_testinflightcosine_Handler_S3Object_6E04AD52": {
+      "testinflightcosine_Handler_S3Object_20AE5FC3": {
         "//": {
           "metadata": {
-            "path": "root/undefined/Default/test:inflight cosine/Handler/S3Object",
-            "uniqueId": "undefined_testinflightcosine_Handler_S3Object_6E04AD52"
+            "path": "root/Default/Default/test:inflight cosine/Handler/S3Object",
+            "uniqueId": "testinflightcosine_Handler_S3Object_20AE5FC3"
           }
         },
-        "bucket": "${aws_s3_bucket.undefined_Code_6226BB4A.bucket}",
+        "bucket": "${aws_s3_bucket.Code.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       }

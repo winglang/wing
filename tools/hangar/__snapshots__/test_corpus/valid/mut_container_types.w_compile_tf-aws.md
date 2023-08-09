@@ -11,7 +11,7 @@
     },
     "outputs": {
       "root": {
-        "undefined": {
+        "Default": {
           "cloud.TestRunner": {
             "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS"
           }
@@ -31,87 +31,87 @@
   },
   "resource": {
     "aws_s3_bucket": {
-      "undefined_bucket1_BEFE10C3": {
+      "bucket1": {
         "//": {
           "metadata": {
-            "path": "root/undefined/Default/bucket1/Default",
-            "uniqueId": "undefined_bucket1_BEFE10C3"
+            "path": "root/Default/Default/bucket1/Default",
+            "uniqueId": "bucket1"
           }
         },
-        "bucket_prefix": "bucket1-c88bc235-",
+        "bucket_prefix": "bucket1-c81ed215-",
         "force_destroy": false
       },
-      "undefined_bucket2_6F36B73C": {
+      "bucket2": {
         "//": {
           "metadata": {
-            "path": "root/undefined/Default/bucket2/Default",
-            "uniqueId": "undefined_bucket2_6F36B73C"
+            "path": "root/Default/Default/bucket2/Default",
+            "uniqueId": "bucket2"
           }
         },
-        "bucket_prefix": "bucket2-c843d2f2-",
+        "bucket_prefix": "bucket2-c83a0be6-",
         "force_destroy": false
       },
-      "undefined_bucket3_9DB61EF8": {
+      "bucket3": {
         "//": {
           "metadata": {
-            "path": "root/undefined/Default/bucket3/Default",
-            "uniqueId": "undefined_bucket3_9DB61EF8"
+            "path": "root/Default/Default/bucket3/Default",
+            "uniqueId": "bucket3"
           }
         },
-        "bucket_prefix": "bucket3-c81f2c68-",
+        "bucket_prefix": "bucket3-c8b6c706-",
         "force_destroy": false
       }
     },
     "aws_s3_bucket_public_access_block": {
-      "undefined_bucket1_PublicAccessBlock_ACB0BF0B": {
+      "bucket1_PublicAccessBlock_01FA69AD": {
         "//": {
           "metadata": {
-            "path": "root/undefined/Default/bucket1/PublicAccessBlock",
-            "uniqueId": "undefined_bucket1_PublicAccessBlock_ACB0BF0B"
+            "path": "root/Default/Default/bucket1/PublicAccessBlock",
+            "uniqueId": "bucket1_PublicAccessBlock_01FA69AD"
           }
         },
         "block_public_acls": true,
         "block_public_policy": true,
-        "bucket": "${aws_s3_bucket.undefined_bucket1_BEFE10C3.bucket}",
+        "bucket": "${aws_s3_bucket.bucket1.bucket}",
         "ignore_public_acls": true,
         "restrict_public_buckets": true
       },
-      "undefined_bucket2_PublicAccessBlock_9EFF5D49": {
+      "bucket2_PublicAccessBlock_063D91B9": {
         "//": {
           "metadata": {
-            "path": "root/undefined/Default/bucket2/PublicAccessBlock",
-            "uniqueId": "undefined_bucket2_PublicAccessBlock_9EFF5D49"
+            "path": "root/Default/Default/bucket2/PublicAccessBlock",
+            "uniqueId": "bucket2_PublicAccessBlock_063D91B9"
           }
         },
         "block_public_acls": true,
         "block_public_policy": true,
-        "bucket": "${aws_s3_bucket.undefined_bucket2_6F36B73C.bucket}",
+        "bucket": "${aws_s3_bucket.bucket2.bucket}",
         "ignore_public_acls": true,
         "restrict_public_buckets": true
       },
-      "undefined_bucket3_PublicAccessBlock_EB4E720F": {
+      "bucket3_PublicAccessBlock_D66B79BF": {
         "//": {
           "metadata": {
-            "path": "root/undefined/Default/bucket3/PublicAccessBlock",
-            "uniqueId": "undefined_bucket3_PublicAccessBlock_EB4E720F"
+            "path": "root/Default/Default/bucket3/PublicAccessBlock",
+            "uniqueId": "bucket3_PublicAccessBlock_D66B79BF"
           }
         },
         "block_public_acls": true,
         "block_public_policy": true,
-        "bucket": "${aws_s3_bucket.undefined_bucket3_9DB61EF8.bucket}",
+        "bucket": "${aws_s3_bucket.bucket3.bucket}",
         "ignore_public_acls": true,
         "restrict_public_buckets": true
       }
     },
     "aws_s3_bucket_server_side_encryption_configuration": {
-      "undefined_bucket1_Encryption_A6E33FB0": {
+      "bucket1_Encryption_4417F366": {
         "//": {
           "metadata": {
-            "path": "root/undefined/Default/bucket1/Encryption",
-            "uniqueId": "undefined_bucket1_Encryption_A6E33FB0"
+            "path": "root/Default/Default/bucket1/Encryption",
+            "uniqueId": "bucket1_Encryption_4417F366"
           }
         },
-        "bucket": "${aws_s3_bucket.undefined_bucket1_BEFE10C3.bucket}",
+        "bucket": "${aws_s3_bucket.bucket1.bucket}",
         "rule": [
           {
             "apply_server_side_encryption_by_default": {
@@ -120,14 +120,14 @@
           }
         ]
       },
-      "undefined_bucket2_Encryption_E7705D05": {
+      "bucket2_Encryption_6F02F3D7": {
         "//": {
           "metadata": {
-            "path": "root/undefined/Default/bucket2/Encryption",
-            "uniqueId": "undefined_bucket2_Encryption_E7705D05"
+            "path": "root/Default/Default/bucket2/Encryption",
+            "uniqueId": "bucket2_Encryption_6F02F3D7"
           }
         },
-        "bucket": "${aws_s3_bucket.undefined_bucket2_6F36B73C.bucket}",
+        "bucket": "${aws_s3_bucket.bucket2.bucket}",
         "rule": [
           {
             "apply_server_side_encryption_by_default": {
@@ -136,14 +136,14 @@
           }
         ]
       },
-      "undefined_bucket3_Encryption_43689D31": {
+      "bucket3_Encryption_43A64F29": {
         "//": {
           "metadata": {
-            "path": "root/undefined/Default/bucket3/Encryption",
-            "uniqueId": "undefined_bucket3_Encryption_43689D31"
+            "path": "root/Default/Default/bucket3/Encryption",
+            "uniqueId": "bucket3_Encryption_43A64F29"
           }
         },
-        "bucket": "${aws_s3_bucket.undefined_bucket3_9DB61EF8.bucket}",
+        "bucket": "${aws_s3_bucket.bucket3.bucket}",
         "rule": [
           {
             "apply_server_side_encryption_by_default": {

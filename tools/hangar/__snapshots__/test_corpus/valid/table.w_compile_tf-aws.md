@@ -11,7 +11,7 @@
     },
     "outputs": {
       "root": {
-        "undefined": {
+        "Default": {
           "cloud.TestRunner": {
             "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS"
           }
@@ -31,11 +31,11 @@
   },
   "resource": {
     "aws_dynamodb_table": {
-      "undefined_exTable_DEFCFB8E": {
+      "exTable": {
         "//": {
           "metadata": {
-            "path": "root/undefined/Default/ex.Table/Default",
-            "uniqueId": "undefined_exTable_DEFCFB8E"
+            "path": "root/Default/Default/ex.Table/Default",
+            "uniqueId": "exTable"
           }
         },
         "attribute": [
@@ -46,7 +46,7 @@
         ],
         "billing_mode": "PAY_PER_REQUEST",
         "hash_key": "id",
-        "name": "simple-tableex.Table-c8865529"
+        "name": "simple-tableex.Table-c840a49c"
       }
     }
   }

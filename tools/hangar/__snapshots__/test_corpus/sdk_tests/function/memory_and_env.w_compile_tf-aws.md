@@ -70,7 +70,7 @@ module.exports = function({ $c, $f1, $f2 }) {
     },
     "outputs": {
       "root": {
-        "undefined": {
+        "Default": {
           "cloud.TestRunner": {
             "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS"
           }
@@ -80,7 +80,7 @@ module.exports = function({ $c, $f1, $f2 }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/undefined/Default/test:function with memory and function with env can be invoked\",\"${aws_lambda_function.undefined_testfunctionwithmemoryandfunctionwithenvcanbeinvoked_Handler_A3F5B048.arn}\"]]"
+      "value": "[[\"root/Default/Default/test:function with memory and function with env can be invoked\",\"${aws_lambda_function.testfunctionwithmemoryandfunctionwithenvcanbeinvoked_Handler_BE0A518F.arn}\"]]"
     }
   },
   "provider": {
@@ -90,11 +90,11 @@ module.exports = function({ $c, $f1, $f2 }) {
   },
   "resource": {
     "aws_dynamodb_table": {
-      "undefined_cloudCounter_4B4E77ED": {
+      "cloudCounter": {
         "//": {
           "metadata": {
-            "path": "root/undefined/Default/cloud.Counter/Default",
-            "uniqueId": "undefined_cloudCounter_4B4E77ED"
+            "path": "root/Default/Default/cloud.Counter/Default",
+            "uniqueId": "cloudCounter"
           }
         },
         "attribute": [
@@ -105,183 +105,183 @@ module.exports = function({ $c, $f1, $f2 }) {
         ],
         "billing_mode": "PAY_PER_REQUEST",
         "hash_key": "id",
-        "name": "wing-counter-cloud.Counter-c86bae23"
+        "name": "wing-counter-cloud.Counter-c866f225"
       }
     },
     "aws_iam_role": {
-      "undefined_envfn_IamRole_BF6C310C": {
+      "envfn_IamRole_88E952E6": {
         "//": {
           "metadata": {
-            "path": "root/undefined/Default/env fn/IamRole",
-            "uniqueId": "undefined_envfn_IamRole_BF6C310C"
+            "path": "root/Default/Default/env fn/IamRole",
+            "uniqueId": "envfn_IamRole_88E952E6"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       },
-      "undefined_memoryfn_IamRole_D62273AC": {
+      "memoryfn_IamRole_87751238": {
         "//": {
           "metadata": {
-            "path": "root/undefined/Default/memory fn/IamRole",
-            "uniqueId": "undefined_memoryfn_IamRole_D62273AC"
+            "path": "root/Default/Default/memory fn/IamRole",
+            "uniqueId": "memoryfn_IamRole_87751238"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       },
-      "undefined_testfunctionwithmemoryandfunctionwithenvcanbeinvoked_Handler_IamRole_8E633184": {
+      "testfunctionwithmemoryandfunctionwithenvcanbeinvoked_Handler_IamRole_8471F020": {
         "//": {
           "metadata": {
-            "path": "root/undefined/Default/test:function with memory and function with env can be invoked/Handler/IamRole",
-            "uniqueId": "undefined_testfunctionwithmemoryandfunctionwithenvcanbeinvoked_Handler_IamRole_8E633184"
+            "path": "root/Default/Default/test:function with memory and function with env can be invoked/Handler/IamRole",
+            "uniqueId": "testfunctionwithmemoryandfunctionwithenvcanbeinvoked_Handler_IamRole_8471F020"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
-      "undefined_envfn_IamRolePolicy_9DFCBADE": {
+      "envfn_IamRolePolicy_63955289": {
         "//": {
           "metadata": {
-            "path": "root/undefined/Default/env fn/IamRolePolicy",
-            "uniqueId": "undefined_envfn_IamRolePolicy_9DFCBADE"
+            "path": "root/Default/Default/env fn/IamRolePolicy",
+            "uniqueId": "envfn_IamRolePolicy_63955289"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.undefined_cloudCounter_4B4E77ED.arn}\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.undefined_envfn_IamRole_BF6C310C.name}"
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.cloudCounter.arn}\"],\"Effect\":\"Allow\"}]}",
+        "role": "${aws_iam_role.envfn_IamRole_88E952E6.name}"
       },
-      "undefined_memoryfn_IamRolePolicy_E4B1B8E4": {
+      "memoryfn_IamRolePolicy_5DA20EF5": {
         "//": {
           "metadata": {
-            "path": "root/undefined/Default/memory fn/IamRolePolicy",
-            "uniqueId": "undefined_memoryfn_IamRolePolicy_E4B1B8E4"
+            "path": "root/Default/Default/memory fn/IamRolePolicy",
+            "uniqueId": "memoryfn_IamRolePolicy_5DA20EF5"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.undefined_cloudCounter_4B4E77ED.arn}\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.undefined_memoryfn_IamRole_D62273AC.name}"
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:UpdateItem\"],\"Resource\":[\"${aws_dynamodb_table.cloudCounter.arn}\"],\"Effect\":\"Allow\"}]}",
+        "role": "${aws_iam_role.memoryfn_IamRole_87751238.name}"
       },
-      "undefined_testfunctionwithmemoryandfunctionwithenvcanbeinvoked_Handler_IamRolePolicy_ADD8C256": {
+      "testfunctionwithmemoryandfunctionwithenvcanbeinvoked_Handler_IamRolePolicy_8C973050": {
         "//": {
           "metadata": {
-            "path": "root/undefined/Default/test:function with memory and function with env can be invoked/Handler/IamRolePolicy",
-            "uniqueId": "undefined_testfunctionwithmemoryandfunctionwithenvcanbeinvoked_Handler_IamRolePolicy_ADD8C256"
+            "path": "root/Default/Default/test:function with memory and function with env can be invoked/Handler/IamRolePolicy",
+            "uniqueId": "testfunctionwithmemoryandfunctionwithenvcanbeinvoked_Handler_IamRolePolicy_8C973050"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:GetItem\"],\"Resource\":[\"${aws_dynamodb_table.undefined_cloudCounter_4B4E77ED.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"lambda:InvokeFunction\"],\"Resource\":[\"${aws_lambda_function.undefined_memoryfn_9BE38592.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"lambda:InvokeFunction\"],\"Resource\":[\"${aws_lambda_function.undefined_envfn_066EBDD3.arn}\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.undefined_testfunctionwithmemoryandfunctionwithenvcanbeinvoked_Handler_IamRole_8E633184.name}"
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:GetItem\"],\"Resource\":[\"${aws_dynamodb_table.cloudCounter.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"lambda:InvokeFunction\"],\"Resource\":[\"${aws_lambda_function.memoryfn.arn}\"],\"Effect\":\"Allow\"},{\"Action\":[\"lambda:InvokeFunction\"],\"Resource\":[\"${aws_lambda_function.envfn.arn}\"],\"Effect\":\"Allow\"}]}",
+        "role": "${aws_iam_role.testfunctionwithmemoryandfunctionwithenvcanbeinvoked_Handler_IamRole_8471F020.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
-      "undefined_envfn_IamRolePolicyAttachment_6DAF4B75": {
+      "envfn_IamRolePolicyAttachment_FF624FBC": {
         "//": {
           "metadata": {
-            "path": "root/undefined/Default/env fn/IamRolePolicyAttachment",
-            "uniqueId": "undefined_envfn_IamRolePolicyAttachment_6DAF4B75"
+            "path": "root/Default/Default/env fn/IamRolePolicyAttachment",
+            "uniqueId": "envfn_IamRolePolicyAttachment_FF624FBC"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.undefined_envfn_IamRole_BF6C310C.name}"
+        "role": "${aws_iam_role.envfn_IamRole_88E952E6.name}"
       },
-      "undefined_memoryfn_IamRolePolicyAttachment_F2C37D62": {
+      "memoryfn_IamRolePolicyAttachment_97CAD739": {
         "//": {
           "metadata": {
-            "path": "root/undefined/Default/memory fn/IamRolePolicyAttachment",
-            "uniqueId": "undefined_memoryfn_IamRolePolicyAttachment_F2C37D62"
+            "path": "root/Default/Default/memory fn/IamRolePolicyAttachment",
+            "uniqueId": "memoryfn_IamRolePolicyAttachment_97CAD739"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.undefined_memoryfn_IamRole_D62273AC.name}"
+        "role": "${aws_iam_role.memoryfn_IamRole_87751238.name}"
       },
-      "undefined_testfunctionwithmemoryandfunctionwithenvcanbeinvoked_Handler_IamRolePolicyAttachment_53C2028B": {
+      "testfunctionwithmemoryandfunctionwithenvcanbeinvoked_Handler_IamRolePolicyAttachment_82EEF7BB": {
         "//": {
           "metadata": {
-            "path": "root/undefined/Default/test:function with memory and function with env can be invoked/Handler/IamRolePolicyAttachment",
-            "uniqueId": "undefined_testfunctionwithmemoryandfunctionwithenvcanbeinvoked_Handler_IamRolePolicyAttachment_53C2028B"
+            "path": "root/Default/Default/test:function with memory and function with env can be invoked/Handler/IamRolePolicyAttachment",
+            "uniqueId": "testfunctionwithmemoryandfunctionwithenvcanbeinvoked_Handler_IamRolePolicyAttachment_82EEF7BB"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.undefined_testfunctionwithmemoryandfunctionwithenvcanbeinvoked_Handler_IamRole_8E633184.name}"
+        "role": "${aws_iam_role.testfunctionwithmemoryandfunctionwithenvcanbeinvoked_Handler_IamRole_8471F020.name}"
       }
     },
     "aws_lambda_function": {
-      "undefined_envfn_066EBDD3": {
+      "envfn": {
         "//": {
           "metadata": {
-            "path": "root/undefined/Default/env fn/Default",
-            "uniqueId": "undefined_envfn_066EBDD3"
+            "path": "root/Default/Default/env fn/Default",
+            "uniqueId": "envfn"
           }
         },
         "environment": {
           "variables": {
-            "DYNAMODB_TABLE_NAME_9b52e7ab": "${aws_dynamodb_table.undefined_cloudCounter_4B4E77ED.name}",
-            "WING_FUNCTION_NAME": "env-fn-c871296a",
+            "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.cloudCounter.name}",
+            "WING_FUNCTION_NAME": "env-fn-c8a226dd",
             "WING_TARGET": "tf-aws",
             "catAge": "2",
             "catName": "Tion"
           }
         },
-        "function_name": "env-fn-c871296a",
+        "function_name": "env-fn-c8a226dd",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.undefined_envfn_IamRole_BF6C310C.arn}",
+        "role": "${aws_iam_role.envfn_IamRole_88E952E6.arn}",
         "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.undefined_Code_6226BB4A.bucket}",
-        "s3_key": "${aws_s3_object.undefined_envfn_S3Object_8BF73F43.key}",
+        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
+        "s3_key": "${aws_s3_object.envfn_S3Object_0080F00E.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
           "subnet_ids": []
         }
       },
-      "undefined_memoryfn_9BE38592": {
+      "memoryfn": {
         "//": {
           "metadata": {
-            "path": "root/undefined/Default/memory fn/Default",
-            "uniqueId": "undefined_memoryfn_9BE38592"
+            "path": "root/Default/Default/memory fn/Default",
+            "uniqueId": "memoryfn"
           }
         },
         "environment": {
           "variables": {
-            "DYNAMODB_TABLE_NAME_9b52e7ab": "${aws_dynamodb_table.undefined_cloudCounter_4B4E77ED.name}",
-            "WING_FUNCTION_NAME": "memory-fn-c864a6ec",
+            "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.cloudCounter.name}",
+            "WING_FUNCTION_NAME": "memory-fn-c844bdf7",
             "WING_TARGET": "tf-aws"
           }
         },
-        "function_name": "memory-fn-c864a6ec",
+        "function_name": "memory-fn-c844bdf7",
         "handler": "index.handler",
         "memory_size": 128,
         "publish": true,
-        "role": "${aws_iam_role.undefined_memoryfn_IamRole_D62273AC.arn}",
+        "role": "${aws_iam_role.memoryfn_IamRole_87751238.arn}",
         "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.undefined_Code_6226BB4A.bucket}",
-        "s3_key": "${aws_s3_object.undefined_memoryfn_S3Object_AE713371.key}",
+        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
+        "s3_key": "${aws_s3_object.memoryfn_S3Object_3B51C445.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
           "subnet_ids": []
         }
       },
-      "undefined_testfunctionwithmemoryandfunctionwithenvcanbeinvoked_Handler_A3F5B048": {
+      "testfunctionwithmemoryandfunctionwithenvcanbeinvoked_Handler_BE0A518F": {
         "//": {
           "metadata": {
-            "path": "root/undefined/Default/test:function with memory and function with env can be invoked/Handler/Default",
-            "uniqueId": "undefined_testfunctionwithmemoryandfunctionwithenvcanbeinvoked_Handler_A3F5B048"
+            "path": "root/Default/Default/test:function with memory and function with env can be invoked/Handler/Default",
+            "uniqueId": "testfunctionwithmemoryandfunctionwithenvcanbeinvoked_Handler_BE0A518F"
           }
         },
         "environment": {
           "variables": {
-            "DYNAMODB_TABLE_NAME_9b52e7ab": "${aws_dynamodb_table.undefined_cloudCounter_4B4E77ED.name}",
-            "FUNCTION_NAME_2c924b41": "${aws_lambda_function.undefined_envfn_066EBDD3.arn}",
-            "FUNCTION_NAME_5f73ba98": "${aws_lambda_function.undefined_memoryfn_9BE38592.arn}",
-            "WING_FUNCTION_NAME": "Handler-c8d2a1b3",
+            "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.cloudCounter.name}",
+            "FUNCTION_NAME_2d5b932f": "${aws_lambda_function.memoryfn.arn}",
+            "FUNCTION_NAME_d7a1b8c8": "${aws_lambda_function.envfn.arn}",
+            "WING_FUNCTION_NAME": "Handler-c8bf8232",
             "WING_TARGET": "tf-aws"
           }
         },
-        "function_name": "Handler-c8d2a1b3",
+        "function_name": "Handler-c8bf8232",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.undefined_testfunctionwithmemoryandfunctionwithenvcanbeinvoked_Handler_IamRole_8E633184.arn}",
+        "role": "${aws_iam_role.testfunctionwithmemoryandfunctionwithenvcanbeinvoked_Handler_IamRole_8471F020.arn}",
         "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.undefined_Code_6226BB4A.bucket}",
-        "s3_key": "${aws_s3_object.undefined_testfunctionwithmemoryandfunctionwithenvcanbeinvoked_Handler_S3Object_882026ED.key}",
+        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
+        "s3_key": "${aws_s3_object.testfunctionwithmemoryandfunctionwithenvcanbeinvoked_Handler_S3Object_8A751E03.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -290,50 +290,50 @@ module.exports = function({ $c, $f1, $f2 }) {
       }
     },
     "aws_s3_bucket": {
-      "undefined_Code_6226BB4A": {
+      "Code": {
         "//": {
           "metadata": {
-            "path": "root/undefined/Code",
-            "uniqueId": "undefined_Code_6226BB4A"
+            "path": "root/Default/Code",
+            "uniqueId": "Code"
           }
         },
-        "bucket_prefix": "code-c818e3de-"
+        "bucket_prefix": "code-c84a50b1-"
       },
-      "undefined_cloudBucket_7A0DE585": {
+      "cloudBucket": {
         "//": {
           "metadata": {
-            "path": "root/undefined/Default/cloud.Bucket/Default",
-            "uniqueId": "undefined_cloudBucket_7A0DE585"
+            "path": "root/Default/Default/cloud.Bucket/Default",
+            "uniqueId": "cloudBucket"
           }
         },
-        "bucket_prefix": "cloud-bucket-c8802ab1-",
+        "bucket_prefix": "cloud-bucket-c87175e7-",
         "force_destroy": false
       }
     },
     "aws_s3_bucket_public_access_block": {
-      "undefined_cloudBucket_PublicAccessBlock_A3FBADF2": {
+      "cloudBucket_PublicAccessBlock_5946CCE8": {
         "//": {
           "metadata": {
-            "path": "root/undefined/Default/cloud.Bucket/PublicAccessBlock",
-            "uniqueId": "undefined_cloudBucket_PublicAccessBlock_A3FBADF2"
+            "path": "root/Default/Default/cloud.Bucket/PublicAccessBlock",
+            "uniqueId": "cloudBucket_PublicAccessBlock_5946CCE8"
           }
         },
         "block_public_acls": true,
         "block_public_policy": true,
-        "bucket": "${aws_s3_bucket.undefined_cloudBucket_7A0DE585.bucket}",
+        "bucket": "${aws_s3_bucket.cloudBucket.bucket}",
         "ignore_public_acls": true,
         "restrict_public_buckets": true
       }
     },
     "aws_s3_bucket_server_side_encryption_configuration": {
-      "undefined_cloudBucket_Encryption_80E33E4D": {
+      "cloudBucket_Encryption_77B6AEEF": {
         "//": {
           "metadata": {
-            "path": "root/undefined/Default/cloud.Bucket/Encryption",
-            "uniqueId": "undefined_cloudBucket_Encryption_80E33E4D"
+            "path": "root/Default/Default/cloud.Bucket/Encryption",
+            "uniqueId": "cloudBucket_Encryption_77B6AEEF"
           }
         },
-        "bucket": "${aws_s3_bucket.undefined_cloudBucket_7A0DE585.bucket}",
+        "bucket": "${aws_s3_bucket.cloudBucket.bucket}",
         "rule": [
           {
             "apply_server_side_encryption_by_default": {
@@ -344,36 +344,36 @@ module.exports = function({ $c, $f1, $f2 }) {
       }
     },
     "aws_s3_object": {
-      "undefined_envfn_S3Object_8BF73F43": {
+      "envfn_S3Object_0080F00E": {
         "//": {
           "metadata": {
-            "path": "root/undefined/Default/env fn/S3Object",
-            "uniqueId": "undefined_envfn_S3Object_8BF73F43"
+            "path": "root/Default/Default/env fn/S3Object",
+            "uniqueId": "envfn_S3Object_0080F00E"
           }
         },
-        "bucket": "${aws_s3_bucket.undefined_Code_6226BB4A.bucket}",
+        "bucket": "${aws_s3_bucket.Code.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       },
-      "undefined_memoryfn_S3Object_AE713371": {
+      "memoryfn_S3Object_3B51C445": {
         "//": {
           "metadata": {
-            "path": "root/undefined/Default/memory fn/S3Object",
-            "uniqueId": "undefined_memoryfn_S3Object_AE713371"
+            "path": "root/Default/Default/memory fn/S3Object",
+            "uniqueId": "memoryfn_S3Object_3B51C445"
           }
         },
-        "bucket": "${aws_s3_bucket.undefined_Code_6226BB4A.bucket}",
+        "bucket": "${aws_s3_bucket.Code.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       },
-      "undefined_testfunctionwithmemoryandfunctionwithenvcanbeinvoked_Handler_S3Object_882026ED": {
+      "testfunctionwithmemoryandfunctionwithenvcanbeinvoked_Handler_S3Object_8A751E03": {
         "//": {
           "metadata": {
-            "path": "root/undefined/Default/test:function with memory and function with env can be invoked/Handler/S3Object",
-            "uniqueId": "undefined_testfunctionwithmemoryandfunctionwithenvcanbeinvoked_Handler_S3Object_882026ED"
+            "path": "root/Default/Default/test:function with memory and function with env can be invoked/Handler/S3Object",
+            "uniqueId": "testfunctionwithmemoryandfunctionwithenvcanbeinvoked_Handler_S3Object_8A751E03"
           }
         },
-        "bucket": "${aws_s3_bucket.undefined_Code_6226BB4A.bucket}",
+        "bucket": "${aws_s3_bucket.Code.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       }

@@ -44,7 +44,7 @@ module.exports = function({ $globalCounter }) {
     },
     "outputs": {
       "root": {
-        "undefined": {
+        "Default": {
           "cloud.TestRunner": {
             "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS"
           }
@@ -54,7 +54,7 @@ module.exports = function({ $globalCounter }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/undefined/Default/test:access cloud resource through static methods only\",\"${aws_lambda_function.undefined_testaccesscloudresourcethroughstaticmethodsonly_Handler_9962AA1B.arn}\"]]"
+      "value": "[[\"root/Default/Default/test:access cloud resource through static methods only\",\"${aws_lambda_function.testaccesscloudresourcethroughstaticmethodsonly_Handler_BC0E7705.arn}\"]]"
     }
   },
   "provider": {
@@ -64,11 +64,11 @@ module.exports = function({ $globalCounter }) {
   },
   "resource": {
     "aws_dynamodb_table": {
-      "undefined_cloudCounter_4B4E77ED": {
+      "cloudCounter": {
         "//": {
           "metadata": {
-            "path": "root/undefined/Default/cloud.Counter/Default",
-            "uniqueId": "undefined_cloudCounter_4B4E77ED"
+            "path": "root/Default/Default/cloud.Counter/Default",
+            "uniqueId": "cloudCounter"
           }
         },
         "attribute": [
@@ -79,66 +79,66 @@ module.exports = function({ $globalCounter }) {
         ],
         "billing_mode": "PAY_PER_REQUEST",
         "hash_key": "id",
-        "name": "wing-counter-cloud.Counter-c86bae23"
+        "name": "wing-counter-cloud.Counter-c866f225"
       }
     },
     "aws_iam_role": {
-      "undefined_testaccesscloudresourcethroughstaticmethodsonly_Handler_IamRole_7F3F0BFC": {
+      "testaccesscloudresourcethroughstaticmethodsonly_Handler_IamRole_1B04D5D0": {
         "//": {
           "metadata": {
-            "path": "root/undefined/Default/test:access cloud resource through static methods only/Handler/IamRole",
-            "uniqueId": "undefined_testaccesscloudresourcethroughstaticmethodsonly_Handler_IamRole_7F3F0BFC"
+            "path": "root/Default/Default/test:access cloud resource through static methods only/Handler/IamRole",
+            "uniqueId": "testaccesscloudresourcethroughstaticmethodsonly_Handler_IamRole_1B04D5D0"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
-      "undefined_testaccesscloudresourcethroughstaticmethodsonly_Handler_IamRolePolicy_D454F747": {
+      "testaccesscloudresourcethroughstaticmethodsonly_Handler_IamRolePolicy_A6861688": {
         "//": {
           "metadata": {
-            "path": "root/undefined/Default/test:access cloud resource through static methods only/Handler/IamRolePolicy",
-            "uniqueId": "undefined_testaccesscloudresourcethroughstaticmethodsonly_Handler_IamRolePolicy_D454F747"
+            "path": "root/Default/Default/test:access cloud resource through static methods only/Handler/IamRolePolicy",
+            "uniqueId": "testaccesscloudresourcethroughstaticmethodsonly_Handler_IamRolePolicy_A6861688"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:GetItem\"],\"Resource\":[\"${aws_dynamodb_table.undefined_cloudCounter_4B4E77ED.arn}\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.undefined_testaccesscloudresourcethroughstaticmethodsonly_Handler_IamRole_7F3F0BFC.name}"
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"dynamodb:GetItem\"],\"Resource\":[\"${aws_dynamodb_table.cloudCounter.arn}\"],\"Effect\":\"Allow\"}]}",
+        "role": "${aws_iam_role.testaccesscloudresourcethroughstaticmethodsonly_Handler_IamRole_1B04D5D0.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
-      "undefined_testaccesscloudresourcethroughstaticmethodsonly_Handler_IamRolePolicyAttachment_B4C3C44B": {
+      "testaccesscloudresourcethroughstaticmethodsonly_Handler_IamRolePolicyAttachment_842C871D": {
         "//": {
           "metadata": {
-            "path": "root/undefined/Default/test:access cloud resource through static methods only/Handler/IamRolePolicyAttachment",
-            "uniqueId": "undefined_testaccesscloudresourcethroughstaticmethodsonly_Handler_IamRolePolicyAttachment_B4C3C44B"
+            "path": "root/Default/Default/test:access cloud resource through static methods only/Handler/IamRolePolicyAttachment",
+            "uniqueId": "testaccesscloudresourcethroughstaticmethodsonly_Handler_IamRolePolicyAttachment_842C871D"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.undefined_testaccesscloudresourcethroughstaticmethodsonly_Handler_IamRole_7F3F0BFC.name}"
+        "role": "${aws_iam_role.testaccesscloudresourcethroughstaticmethodsonly_Handler_IamRole_1B04D5D0.name}"
       }
     },
     "aws_lambda_function": {
-      "undefined_testaccesscloudresourcethroughstaticmethodsonly_Handler_9962AA1B": {
+      "testaccesscloudresourcethroughstaticmethodsonly_Handler_BC0E7705": {
         "//": {
           "metadata": {
-            "path": "root/undefined/Default/test:access cloud resource through static methods only/Handler/Default",
-            "uniqueId": "undefined_testaccesscloudresourcethroughstaticmethodsonly_Handler_9962AA1B"
+            "path": "root/Default/Default/test:access cloud resource through static methods only/Handler/Default",
+            "uniqueId": "testaccesscloudresourcethroughstaticmethodsonly_Handler_BC0E7705"
           }
         },
         "environment": {
           "variables": {
-            "DYNAMODB_TABLE_NAME_9b52e7ab": "${aws_dynamodb_table.undefined_cloudCounter_4B4E77ED.name}",
-            "WING_FUNCTION_NAME": "Handler-c8879a05",
+            "DYNAMODB_TABLE_NAME_49baa65c": "${aws_dynamodb_table.cloudCounter.name}",
+            "WING_FUNCTION_NAME": "Handler-c8de1ef1",
             "WING_TARGET": "tf-aws"
           }
         },
-        "function_name": "Handler-c8879a05",
+        "function_name": "Handler-c8de1ef1",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.undefined_testaccesscloudresourcethroughstaticmethodsonly_Handler_IamRole_7F3F0BFC.arn}",
+        "role": "${aws_iam_role.testaccesscloudresourcethroughstaticmethodsonly_Handler_IamRole_1B04D5D0.arn}",
         "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.undefined_Code_6226BB4A.bucket}",
-        "s3_key": "${aws_s3_object.undefined_testaccesscloudresourcethroughstaticmethodsonly_Handler_S3Object_D05B9F96.key}",
+        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
+        "s3_key": "${aws_s3_object.testaccesscloudresourcethroughstaticmethodsonly_Handler_S3Object_57D98226.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -147,25 +147,25 @@ module.exports = function({ $globalCounter }) {
       }
     },
     "aws_s3_bucket": {
-      "undefined_Code_6226BB4A": {
+      "Code": {
         "//": {
           "metadata": {
-            "path": "root/undefined/Code",
-            "uniqueId": "undefined_Code_6226BB4A"
+            "path": "root/Default/Code",
+            "uniqueId": "Code"
           }
         },
-        "bucket_prefix": "code-c818e3de-"
+        "bucket_prefix": "code-c84a50b1-"
       }
     },
     "aws_s3_object": {
-      "undefined_testaccesscloudresourcethroughstaticmethodsonly_Handler_S3Object_D05B9F96": {
+      "testaccesscloudresourcethroughstaticmethodsonly_Handler_S3Object_57D98226": {
         "//": {
           "metadata": {
-            "path": "root/undefined/Default/test:access cloud resource through static methods only/Handler/S3Object",
-            "uniqueId": "undefined_testaccesscloudresourcethroughstaticmethodsonly_Handler_S3Object_D05B9F96"
+            "path": "root/Default/Default/test:access cloud resource through static methods only/Handler/S3Object",
+            "uniqueId": "testaccesscloudresourcethroughstaticmethodsonly_Handler_S3Object_57D98226"
           }
         },
-        "bucket": "${aws_s3_bucket.undefined_Code_6226BB4A.bucket}",
+        "bucket": "${aws_s3_bucket.Code.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       }

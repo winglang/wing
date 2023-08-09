@@ -23,7 +23,7 @@ module.exports = function({  }) {
     },
     "outputs": {
       "root": {
-        "undefined": {
+        "Default": {
           "cloud.TestRunner": {
             "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS"
           }
@@ -43,11 +43,11 @@ module.exports = function({  }) {
   },
   "resource": {
     "aws_s3_bucket": {
-      "undefined_Bucket_4BEC1B4F": {
+      "Bucket": {
         "//": {
           "metadata": {
-            "path": "root/undefined/Default/Bucket",
-            "uniqueId": "undefined_Bucket_4BEC1B4F"
+            "path": "root/Default/Default/Bucket",
+            "uniqueId": "Bucket"
           }
         },
         "bucket_prefix": "hello",

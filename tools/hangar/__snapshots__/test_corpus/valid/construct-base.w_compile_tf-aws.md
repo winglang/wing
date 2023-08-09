@@ -23,7 +23,7 @@ module.exports = function({  }) {
     },
     "outputs": {
       "root": {
-        "undefined": {
+        "Default": {
           "cloud.TestRunner": {
             "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS"
           }
@@ -43,11 +43,11 @@ module.exports = function({  }) {
   },
   "resource": {
     "aws_sqs_queue": {
-      "undefined_awssqsQueueSqsQueue_8E085439": {
+      "awssqsQueueSqsQueue": {
         "//": {
           "metadata": {
-            "path": "root/undefined/Default/aws.sqsQueue.SqsQueue",
-            "uniqueId": "undefined_awssqsQueueSqsQueue_8E085439"
+            "path": "root/Default/Default/aws.sqsQueue.SqsQueue",
+            "uniqueId": "awssqsQueueSqsQueue"
           }
         }
       }

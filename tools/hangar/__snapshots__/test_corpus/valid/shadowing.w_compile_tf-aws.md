@@ -59,7 +59,7 @@ module.exports = function({ $fn }) {
     },
     "outputs": {
       "root": {
-        "undefined": {
+        "Default": {
           "cloud.TestRunner": {
             "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS"
           }
@@ -69,7 +69,7 @@ module.exports = function({ $fn }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/undefined/Default/test:capture shadow interaction\",\"${aws_lambda_function.undefined_testcaptureshadowinteraction_Handler_6CD086E7.arn}\"]]"
+      "value": "[[\"root/Default/Default/test:capture shadow interaction\",\"${aws_lambda_function.testcaptureshadowinteraction_Handler_9B768E38.arn}\"]]"
     }
   },
   "provider": {
@@ -79,61 +79,61 @@ module.exports = function({ $fn }) {
   },
   "resource": {
     "aws_iam_role": {
-      "undefined_testcaptureshadowinteraction_Handler_IamRole_09122A0B": {
+      "testcaptureshadowinteraction_Handler_IamRole_7A8AB102": {
         "//": {
           "metadata": {
-            "path": "root/undefined/Default/test:capture shadow interaction/Handler/IamRole",
-            "uniqueId": "undefined_testcaptureshadowinteraction_Handler_IamRole_09122A0B"
+            "path": "root/Default/Default/test:capture shadow interaction/Handler/IamRole",
+            "uniqueId": "testcaptureshadowinteraction_Handler_IamRole_7A8AB102"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
-      "undefined_testcaptureshadowinteraction_Handler_IamRolePolicy_F1F16B3B": {
+      "testcaptureshadowinteraction_Handler_IamRolePolicy_E2199BB8": {
         "//": {
           "metadata": {
-            "path": "root/undefined/Default/test:capture shadow interaction/Handler/IamRolePolicy",
-            "uniqueId": "undefined_testcaptureshadowinteraction_Handler_IamRolePolicy_F1F16B3B"
+            "path": "root/Default/Default/test:capture shadow interaction/Handler/IamRolePolicy",
+            "uniqueId": "testcaptureshadowinteraction_Handler_IamRolePolicy_E2199BB8"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
-        "role": "${aws_iam_role.undefined_testcaptureshadowinteraction_Handler_IamRole_09122A0B.name}"
+        "role": "${aws_iam_role.testcaptureshadowinteraction_Handler_IamRole_7A8AB102.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
-      "undefined_testcaptureshadowinteraction_Handler_IamRolePolicyAttachment_B1FC7AF4": {
+      "testcaptureshadowinteraction_Handler_IamRolePolicyAttachment_51CBDE42": {
         "//": {
           "metadata": {
-            "path": "root/undefined/Default/test:capture shadow interaction/Handler/IamRolePolicyAttachment",
-            "uniqueId": "undefined_testcaptureshadowinteraction_Handler_IamRolePolicyAttachment_B1FC7AF4"
+            "path": "root/Default/Default/test:capture shadow interaction/Handler/IamRolePolicyAttachment",
+            "uniqueId": "testcaptureshadowinteraction_Handler_IamRolePolicyAttachment_51CBDE42"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.undefined_testcaptureshadowinteraction_Handler_IamRole_09122A0B.name}"
+        "role": "${aws_iam_role.testcaptureshadowinteraction_Handler_IamRole_7A8AB102.name}"
       }
     },
     "aws_lambda_function": {
-      "undefined_testcaptureshadowinteraction_Handler_6CD086E7": {
+      "testcaptureshadowinteraction_Handler_9B768E38": {
         "//": {
           "metadata": {
-            "path": "root/undefined/Default/test:capture shadow interaction/Handler/Default",
-            "uniqueId": "undefined_testcaptureshadowinteraction_Handler_6CD086E7"
+            "path": "root/Default/Default/test:capture shadow interaction/Handler/Default",
+            "uniqueId": "testcaptureshadowinteraction_Handler_9B768E38"
           }
         },
         "environment": {
           "variables": {
-            "WING_FUNCTION_NAME": "Handler-c86ed1e8",
+            "WING_FUNCTION_NAME": "Handler-c8807c1f",
             "WING_TARGET": "tf-aws"
           }
         },
-        "function_name": "Handler-c86ed1e8",
+        "function_name": "Handler-c8807c1f",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.undefined_testcaptureshadowinteraction_Handler_IamRole_09122A0B.arn}",
+        "role": "${aws_iam_role.testcaptureshadowinteraction_Handler_IamRole_7A8AB102.arn}",
         "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.undefined_Code_6226BB4A.bucket}",
-        "s3_key": "${aws_s3_object.undefined_testcaptureshadowinteraction_Handler_S3Object_68C49EED.key}",
+        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
+        "s3_key": "${aws_s3_object.testcaptureshadowinteraction_Handler_S3Object_ACDDE567.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -142,25 +142,25 @@ module.exports = function({ $fn }) {
       }
     },
     "aws_s3_bucket": {
-      "undefined_Code_6226BB4A": {
+      "Code": {
         "//": {
           "metadata": {
-            "path": "root/undefined/Code",
-            "uniqueId": "undefined_Code_6226BB4A"
+            "path": "root/Default/Code",
+            "uniqueId": "Code"
           }
         },
-        "bucket_prefix": "code-c818e3de-"
+        "bucket_prefix": "code-c84a50b1-"
       }
     },
     "aws_s3_object": {
-      "undefined_testcaptureshadowinteraction_Handler_S3Object_68C49EED": {
+      "testcaptureshadowinteraction_Handler_S3Object_ACDDE567": {
         "//": {
           "metadata": {
-            "path": "root/undefined/Default/test:capture shadow interaction/Handler/S3Object",
-            "uniqueId": "undefined_testcaptureshadowinteraction_Handler_S3Object_68C49EED"
+            "path": "root/Default/Default/test:capture shadow interaction/Handler/S3Object",
+            "uniqueId": "testcaptureshadowinteraction_Handler_S3Object_ACDDE567"
           }
         },
-        "bucket": "${aws_s3_bucket.undefined_Code_6226BB4A.bucket}",
+        "bucket": "${aws_s3_bucket.Code.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       }

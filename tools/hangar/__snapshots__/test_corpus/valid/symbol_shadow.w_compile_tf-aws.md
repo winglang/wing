@@ -96,7 +96,7 @@ module.exports = function({  }) {
     },
     "outputs": {
       "root": {
-        "undefined": {
+        "Default": {
           "cloud.TestRunner": {
             "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS"
           }
@@ -106,7 +106,7 @@ module.exports = function({  }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/undefined/Default/test:inflight nested should not capture the shadowed var\",\"${aws_lambda_function.undefined_testinflightnestedshouldnotcapturetheshadowedvar_Handler_74A220C8.arn}\"],[\"root/undefined/Default/A/test:inflight in resource should capture the right scoped var\",\"${aws_lambda_function.undefined_A_testinflightinresourceshouldcapturetherightscopedvar_Handler_0BD6632A.arn}\"],[\"root/undefined/Default/test:inflight on top should capture top\",\"${aws_lambda_function.undefined_testinflightontopshouldcapturetop_Handler_F377C00C.arn}\"],[\"root/undefined/Default/test:insideInflight should capture the right scope\",\"${aws_lambda_function.undefined_testinsideInflightshouldcapturetherightscope_Handler_D935AC19.arn}\"]]"
+      "value": "[[\"root/Default/Default/test:inflight nested should not capture the shadowed var\",\"${aws_lambda_function.testinflightnestedshouldnotcapturetheshadowedvar_Handler_B6B64A92.arn}\"],[\"root/Default/Default/A/test:inflight in resource should capture the right scoped var\",\"${aws_lambda_function.A_testinflightinresourceshouldcapturetherightscopedvar_Handler_B24941AC.arn}\"],[\"root/Default/Default/test:inflight on top should capture top\",\"${aws_lambda_function.testinflightontopshouldcapturetop_Handler_2FA69946.arn}\"],[\"root/Default/Default/test:insideInflight should capture the right scope\",\"${aws_lambda_function.testinsideInflightshouldcapturetherightscope_Handler_B6CD7A27.arn}\"]]"
     }
   },
   "provider": {
@@ -116,226 +116,226 @@ module.exports = function({  }) {
   },
   "resource": {
     "aws_iam_role": {
-      "undefined_A_testinflightinresourceshouldcapturetherightscopedvar_Handler_IamRole_DFC14280": {
+      "A_testinflightinresourceshouldcapturetherightscopedvar_Handler_IamRole_1B8C5D92": {
         "//": {
           "metadata": {
-            "path": "root/undefined/Default/A/test:inflight in resource should capture the right scoped var/Handler/IamRole",
-            "uniqueId": "undefined_A_testinflightinresourceshouldcapturetherightscopedvar_Handler_IamRole_DFC14280"
+            "path": "root/Default/Default/A/test:inflight in resource should capture the right scoped var/Handler/IamRole",
+            "uniqueId": "A_testinflightinresourceshouldcapturetherightscopedvar_Handler_IamRole_1B8C5D92"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       },
-      "undefined_testinflightnestedshouldnotcapturetheshadowedvar_Handler_IamRole_216E7FF8": {
+      "testinflightnestedshouldnotcapturetheshadowedvar_Handler_IamRole_4E805AD6": {
         "//": {
           "metadata": {
-            "path": "root/undefined/Default/test:inflight nested should not capture the shadowed var/Handler/IamRole",
-            "uniqueId": "undefined_testinflightnestedshouldnotcapturetheshadowedvar_Handler_IamRole_216E7FF8"
+            "path": "root/Default/Default/test:inflight nested should not capture the shadowed var/Handler/IamRole",
+            "uniqueId": "testinflightnestedshouldnotcapturetheshadowedvar_Handler_IamRole_4E805AD6"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       },
-      "undefined_testinflightontopshouldcapturetop_Handler_IamRole_1B6C1256": {
+      "testinflightontopshouldcapturetop_Handler_IamRole_3F6ED89E": {
         "//": {
           "metadata": {
-            "path": "root/undefined/Default/test:inflight on top should capture top/Handler/IamRole",
-            "uniqueId": "undefined_testinflightontopshouldcapturetop_Handler_IamRole_1B6C1256"
+            "path": "root/Default/Default/test:inflight on top should capture top/Handler/IamRole",
+            "uniqueId": "testinflightontopshouldcapturetop_Handler_IamRole_3F6ED89E"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       },
-      "undefined_testinsideInflightshouldcapturetherightscope_Handler_IamRole_30B4EC8F": {
+      "testinsideInflightshouldcapturetherightscope_Handler_IamRole_68806A2A": {
         "//": {
           "metadata": {
-            "path": "root/undefined/Default/test:insideInflight should capture the right scope/Handler/IamRole",
-            "uniqueId": "undefined_testinsideInflightshouldcapturetherightscope_Handler_IamRole_30B4EC8F"
+            "path": "root/Default/Default/test:insideInflight should capture the right scope/Handler/IamRole",
+            "uniqueId": "testinsideInflightshouldcapturetherightscope_Handler_IamRole_68806A2A"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
-      "undefined_A_testinflightinresourceshouldcapturetherightscopedvar_Handler_IamRolePolicy_A75F3EBC": {
+      "A_testinflightinresourceshouldcapturetherightscopedvar_Handler_IamRolePolicy_7ED77FBA": {
         "//": {
           "metadata": {
-            "path": "root/undefined/Default/A/test:inflight in resource should capture the right scoped var/Handler/IamRolePolicy",
-            "uniqueId": "undefined_A_testinflightinresourceshouldcapturetherightscopedvar_Handler_IamRolePolicy_A75F3EBC"
+            "path": "root/Default/Default/A/test:inflight in resource should capture the right scoped var/Handler/IamRolePolicy",
+            "uniqueId": "A_testinflightinresourceshouldcapturetherightscopedvar_Handler_IamRolePolicy_7ED77FBA"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
-        "role": "${aws_iam_role.undefined_A_testinflightinresourceshouldcapturetherightscopedvar_Handler_IamRole_DFC14280.name}"
+        "role": "${aws_iam_role.A_testinflightinresourceshouldcapturetherightscopedvar_Handler_IamRole_1B8C5D92.name}"
       },
-      "undefined_testinflightnestedshouldnotcapturetheshadowedvar_Handler_IamRolePolicy_84DA136A": {
+      "testinflightnestedshouldnotcapturetheshadowedvar_Handler_IamRolePolicy_D1F0410E": {
         "//": {
           "metadata": {
-            "path": "root/undefined/Default/test:inflight nested should not capture the shadowed var/Handler/IamRolePolicy",
-            "uniqueId": "undefined_testinflightnestedshouldnotcapturetheshadowedvar_Handler_IamRolePolicy_84DA136A"
+            "path": "root/Default/Default/test:inflight nested should not capture the shadowed var/Handler/IamRolePolicy",
+            "uniqueId": "testinflightnestedshouldnotcapturetheshadowedvar_Handler_IamRolePolicy_D1F0410E"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
-        "role": "${aws_iam_role.undefined_testinflightnestedshouldnotcapturetheshadowedvar_Handler_IamRole_216E7FF8.name}"
+        "role": "${aws_iam_role.testinflightnestedshouldnotcapturetheshadowedvar_Handler_IamRole_4E805AD6.name}"
       },
-      "undefined_testinflightontopshouldcapturetop_Handler_IamRolePolicy_46052027": {
+      "testinflightontopshouldcapturetop_Handler_IamRolePolicy_CE46FF27": {
         "//": {
           "metadata": {
-            "path": "root/undefined/Default/test:inflight on top should capture top/Handler/IamRolePolicy",
-            "uniqueId": "undefined_testinflightontopshouldcapturetop_Handler_IamRolePolicy_46052027"
+            "path": "root/Default/Default/test:inflight on top should capture top/Handler/IamRolePolicy",
+            "uniqueId": "testinflightontopshouldcapturetop_Handler_IamRolePolicy_CE46FF27"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
-        "role": "${aws_iam_role.undefined_testinflightontopshouldcapturetop_Handler_IamRole_1B6C1256.name}"
+        "role": "${aws_iam_role.testinflightontopshouldcapturetop_Handler_IamRole_3F6ED89E.name}"
       },
-      "undefined_testinsideInflightshouldcapturetherightscope_Handler_IamRolePolicy_FC59C4BC": {
+      "testinsideInflightshouldcapturetherightscope_Handler_IamRolePolicy_8063B708": {
         "//": {
           "metadata": {
-            "path": "root/undefined/Default/test:insideInflight should capture the right scope/Handler/IamRolePolicy",
-            "uniqueId": "undefined_testinsideInflightshouldcapturetherightscope_Handler_IamRolePolicy_FC59C4BC"
+            "path": "root/Default/Default/test:insideInflight should capture the right scope/Handler/IamRolePolicy",
+            "uniqueId": "testinsideInflightshouldcapturetherightscope_Handler_IamRolePolicy_8063B708"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
-        "role": "${aws_iam_role.undefined_testinsideInflightshouldcapturetherightscope_Handler_IamRole_30B4EC8F.name}"
+        "role": "${aws_iam_role.testinsideInflightshouldcapturetherightscope_Handler_IamRole_68806A2A.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
-      "undefined_A_testinflightinresourceshouldcapturetherightscopedvar_Handler_IamRolePolicyAttachment_7E22F4E2": {
+      "A_testinflightinresourceshouldcapturetherightscopedvar_Handler_IamRolePolicyAttachment_88515E85": {
         "//": {
           "metadata": {
-            "path": "root/undefined/Default/A/test:inflight in resource should capture the right scoped var/Handler/IamRolePolicyAttachment",
-            "uniqueId": "undefined_A_testinflightinresourceshouldcapturetherightscopedvar_Handler_IamRolePolicyAttachment_7E22F4E2"
+            "path": "root/Default/Default/A/test:inflight in resource should capture the right scoped var/Handler/IamRolePolicyAttachment",
+            "uniqueId": "A_testinflightinresourceshouldcapturetherightscopedvar_Handler_IamRolePolicyAttachment_88515E85"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.undefined_A_testinflightinresourceshouldcapturetherightscopedvar_Handler_IamRole_DFC14280.name}"
+        "role": "${aws_iam_role.A_testinflightinresourceshouldcapturetherightscopedvar_Handler_IamRole_1B8C5D92.name}"
       },
-      "undefined_testinflightnestedshouldnotcapturetheshadowedvar_Handler_IamRolePolicyAttachment_EDC20D3F": {
+      "testinflightnestedshouldnotcapturetheshadowedvar_Handler_IamRolePolicyAttachment_275CF4CA": {
         "//": {
           "metadata": {
-            "path": "root/undefined/Default/test:inflight nested should not capture the shadowed var/Handler/IamRolePolicyAttachment",
-            "uniqueId": "undefined_testinflightnestedshouldnotcapturetheshadowedvar_Handler_IamRolePolicyAttachment_EDC20D3F"
+            "path": "root/Default/Default/test:inflight nested should not capture the shadowed var/Handler/IamRolePolicyAttachment",
+            "uniqueId": "testinflightnestedshouldnotcapturetheshadowedvar_Handler_IamRolePolicyAttachment_275CF4CA"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.undefined_testinflightnestedshouldnotcapturetheshadowedvar_Handler_IamRole_216E7FF8.name}"
+        "role": "${aws_iam_role.testinflightnestedshouldnotcapturetheshadowedvar_Handler_IamRole_4E805AD6.name}"
       },
-      "undefined_testinflightontopshouldcapturetop_Handler_IamRolePolicyAttachment_AF057782": {
+      "testinflightontopshouldcapturetop_Handler_IamRolePolicyAttachment_06A23599": {
         "//": {
           "metadata": {
-            "path": "root/undefined/Default/test:inflight on top should capture top/Handler/IamRolePolicyAttachment",
-            "uniqueId": "undefined_testinflightontopshouldcapturetop_Handler_IamRolePolicyAttachment_AF057782"
+            "path": "root/Default/Default/test:inflight on top should capture top/Handler/IamRolePolicyAttachment",
+            "uniqueId": "testinflightontopshouldcapturetop_Handler_IamRolePolicyAttachment_06A23599"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.undefined_testinflightontopshouldcapturetop_Handler_IamRole_1B6C1256.name}"
+        "role": "${aws_iam_role.testinflightontopshouldcapturetop_Handler_IamRole_3F6ED89E.name}"
       },
-      "undefined_testinsideInflightshouldcapturetherightscope_Handler_IamRolePolicyAttachment_B53CD3F8": {
+      "testinsideInflightshouldcapturetherightscope_Handler_IamRolePolicyAttachment_BC3E6BBC": {
         "//": {
           "metadata": {
-            "path": "root/undefined/Default/test:insideInflight should capture the right scope/Handler/IamRolePolicyAttachment",
-            "uniqueId": "undefined_testinsideInflightshouldcapturetherightscope_Handler_IamRolePolicyAttachment_B53CD3F8"
+            "path": "root/Default/Default/test:insideInflight should capture the right scope/Handler/IamRolePolicyAttachment",
+            "uniqueId": "testinsideInflightshouldcapturetherightscope_Handler_IamRolePolicyAttachment_BC3E6BBC"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.undefined_testinsideInflightshouldcapturetherightscope_Handler_IamRole_30B4EC8F.name}"
+        "role": "${aws_iam_role.testinsideInflightshouldcapturetherightscope_Handler_IamRole_68806A2A.name}"
       }
     },
     "aws_lambda_function": {
-      "undefined_A_testinflightinresourceshouldcapturetherightscopedvar_Handler_0BD6632A": {
+      "A_testinflightinresourceshouldcapturetherightscopedvar_Handler_B24941AC": {
         "//": {
           "metadata": {
-            "path": "root/undefined/Default/A/test:inflight in resource should capture the right scoped var/Handler/Default",
-            "uniqueId": "undefined_A_testinflightinresourceshouldcapturetherightscopedvar_Handler_0BD6632A"
+            "path": "root/Default/Default/A/test:inflight in resource should capture the right scoped var/Handler/Default",
+            "uniqueId": "A_testinflightinresourceshouldcapturetherightscopedvar_Handler_B24941AC"
           }
         },
         "environment": {
           "variables": {
-            "WING_FUNCTION_NAME": "Handler-c8a67d98",
+            "WING_FUNCTION_NAME": "Handler-c83cf74f",
             "WING_TARGET": "tf-aws"
           }
         },
-        "function_name": "Handler-c8a67d98",
+        "function_name": "Handler-c83cf74f",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.undefined_A_testinflightinresourceshouldcapturetherightscopedvar_Handler_IamRole_DFC14280.arn}",
+        "role": "${aws_iam_role.A_testinflightinresourceshouldcapturetherightscopedvar_Handler_IamRole_1B8C5D92.arn}",
         "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.undefined_Code_6226BB4A.bucket}",
-        "s3_key": "${aws_s3_object.undefined_A_testinflightinresourceshouldcapturetherightscopedvar_Handler_S3Object_9D91AA04.key}",
+        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
+        "s3_key": "${aws_s3_object.A_testinflightinresourceshouldcapturetherightscopedvar_Handler_S3Object_4A934D35.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
           "subnet_ids": []
         }
       },
-      "undefined_testinflightnestedshouldnotcapturetheshadowedvar_Handler_74A220C8": {
+      "testinflightnestedshouldnotcapturetheshadowedvar_Handler_B6B64A92": {
         "//": {
           "metadata": {
-            "path": "root/undefined/Default/test:inflight nested should not capture the shadowed var/Handler/Default",
-            "uniqueId": "undefined_testinflightnestedshouldnotcapturetheshadowedvar_Handler_74A220C8"
+            "path": "root/Default/Default/test:inflight nested should not capture the shadowed var/Handler/Default",
+            "uniqueId": "testinflightnestedshouldnotcapturetheshadowedvar_Handler_B6B64A92"
           }
         },
         "environment": {
           "variables": {
-            "WING_FUNCTION_NAME": "Handler-c8576ffd",
+            "WING_FUNCTION_NAME": "Handler-c85de384",
             "WING_TARGET": "tf-aws"
           }
         },
-        "function_name": "Handler-c8576ffd",
+        "function_name": "Handler-c85de384",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.undefined_testinflightnestedshouldnotcapturetheshadowedvar_Handler_IamRole_216E7FF8.arn}",
+        "role": "${aws_iam_role.testinflightnestedshouldnotcapturetheshadowedvar_Handler_IamRole_4E805AD6.arn}",
         "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.undefined_Code_6226BB4A.bucket}",
-        "s3_key": "${aws_s3_object.undefined_testinflightnestedshouldnotcapturetheshadowedvar_Handler_S3Object_B703941D.key}",
+        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
+        "s3_key": "${aws_s3_object.testinflightnestedshouldnotcapturetheshadowedvar_Handler_S3Object_0B718409.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
           "subnet_ids": []
         }
       },
-      "undefined_testinflightontopshouldcapturetop_Handler_F377C00C": {
+      "testinflightontopshouldcapturetop_Handler_2FA69946": {
         "//": {
           "metadata": {
-            "path": "root/undefined/Default/test:inflight on top should capture top/Handler/Default",
-            "uniqueId": "undefined_testinflightontopshouldcapturetop_Handler_F377C00C"
+            "path": "root/Default/Default/test:inflight on top should capture top/Handler/Default",
+            "uniqueId": "testinflightontopshouldcapturetop_Handler_2FA69946"
           }
         },
         "environment": {
           "variables": {
-            "WING_FUNCTION_NAME": "Handler-c82d306a",
+            "WING_FUNCTION_NAME": "Handler-c859340a",
             "WING_TARGET": "tf-aws"
           }
         },
-        "function_name": "Handler-c82d306a",
+        "function_name": "Handler-c859340a",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.undefined_testinflightontopshouldcapturetop_Handler_IamRole_1B6C1256.arn}",
+        "role": "${aws_iam_role.testinflightontopshouldcapturetop_Handler_IamRole_3F6ED89E.arn}",
         "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.undefined_Code_6226BB4A.bucket}",
-        "s3_key": "${aws_s3_object.undefined_testinflightontopshouldcapturetop_Handler_S3Object_D06FBAA3.key}",
+        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
+        "s3_key": "${aws_s3_object.testinflightontopshouldcapturetop_Handler_S3Object_BEFBAAC0.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
           "subnet_ids": []
         }
       },
-      "undefined_testinsideInflightshouldcapturetherightscope_Handler_D935AC19": {
+      "testinsideInflightshouldcapturetherightscope_Handler_B6CD7A27": {
         "//": {
           "metadata": {
-            "path": "root/undefined/Default/test:insideInflight should capture the right scope/Handler/Default",
-            "uniqueId": "undefined_testinsideInflightshouldcapturetherightscope_Handler_D935AC19"
+            "path": "root/Default/Default/test:insideInflight should capture the right scope/Handler/Default",
+            "uniqueId": "testinsideInflightshouldcapturetherightscope_Handler_B6CD7A27"
           }
         },
         "environment": {
           "variables": {
-            "WING_FUNCTION_NAME": "Handler-c8132fd4",
+            "WING_FUNCTION_NAME": "Handler-c83ad462",
             "WING_TARGET": "tf-aws"
           }
         },
-        "function_name": "Handler-c8132fd4",
+        "function_name": "Handler-c83ad462",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.undefined_testinsideInflightshouldcapturetherightscope_Handler_IamRole_30B4EC8F.arn}",
+        "role": "${aws_iam_role.testinsideInflightshouldcapturetherightscope_Handler_IamRole_68806A2A.arn}",
         "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.undefined_Code_6226BB4A.bucket}",
-        "s3_key": "${aws_s3_object.undefined_testinsideInflightshouldcapturetherightscope_Handler_S3Object_19313F90.key}",
+        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
+        "s3_key": "${aws_s3_object.testinsideInflightshouldcapturetherightscope_Handler_S3Object_C92529CD.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -344,58 +344,58 @@ module.exports = function({  }) {
       }
     },
     "aws_s3_bucket": {
-      "undefined_Code_6226BB4A": {
+      "Code": {
         "//": {
           "metadata": {
-            "path": "root/undefined/Code",
-            "uniqueId": "undefined_Code_6226BB4A"
+            "path": "root/Default/Code",
+            "uniqueId": "Code"
           }
         },
-        "bucket_prefix": "code-c818e3de-"
+        "bucket_prefix": "code-c84a50b1-"
       }
     },
     "aws_s3_object": {
-      "undefined_A_testinflightinresourceshouldcapturetherightscopedvar_Handler_S3Object_9D91AA04": {
+      "A_testinflightinresourceshouldcapturetherightscopedvar_Handler_S3Object_4A934D35": {
         "//": {
           "metadata": {
-            "path": "root/undefined/Default/A/test:inflight in resource should capture the right scoped var/Handler/S3Object",
-            "uniqueId": "undefined_A_testinflightinresourceshouldcapturetherightscopedvar_Handler_S3Object_9D91AA04"
+            "path": "root/Default/Default/A/test:inflight in resource should capture the right scoped var/Handler/S3Object",
+            "uniqueId": "A_testinflightinresourceshouldcapturetherightscopedvar_Handler_S3Object_4A934D35"
           }
         },
-        "bucket": "${aws_s3_bucket.undefined_Code_6226BB4A.bucket}",
+        "bucket": "${aws_s3_bucket.Code.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       },
-      "undefined_testinflightnestedshouldnotcapturetheshadowedvar_Handler_S3Object_B703941D": {
+      "testinflightnestedshouldnotcapturetheshadowedvar_Handler_S3Object_0B718409": {
         "//": {
           "metadata": {
-            "path": "root/undefined/Default/test:inflight nested should not capture the shadowed var/Handler/S3Object",
-            "uniqueId": "undefined_testinflightnestedshouldnotcapturetheshadowedvar_Handler_S3Object_B703941D"
+            "path": "root/Default/Default/test:inflight nested should not capture the shadowed var/Handler/S3Object",
+            "uniqueId": "testinflightnestedshouldnotcapturetheshadowedvar_Handler_S3Object_0B718409"
           }
         },
-        "bucket": "${aws_s3_bucket.undefined_Code_6226BB4A.bucket}",
+        "bucket": "${aws_s3_bucket.Code.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       },
-      "undefined_testinflightontopshouldcapturetop_Handler_S3Object_D06FBAA3": {
+      "testinflightontopshouldcapturetop_Handler_S3Object_BEFBAAC0": {
         "//": {
           "metadata": {
-            "path": "root/undefined/Default/test:inflight on top should capture top/Handler/S3Object",
-            "uniqueId": "undefined_testinflightontopshouldcapturetop_Handler_S3Object_D06FBAA3"
+            "path": "root/Default/Default/test:inflight on top should capture top/Handler/S3Object",
+            "uniqueId": "testinflightontopshouldcapturetop_Handler_S3Object_BEFBAAC0"
           }
         },
-        "bucket": "${aws_s3_bucket.undefined_Code_6226BB4A.bucket}",
+        "bucket": "${aws_s3_bucket.Code.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       },
-      "undefined_testinsideInflightshouldcapturetherightscope_Handler_S3Object_19313F90": {
+      "testinsideInflightshouldcapturetherightscope_Handler_S3Object_C92529CD": {
         "//": {
           "metadata": {
-            "path": "root/undefined/Default/test:insideInflight should capture the right scope/Handler/S3Object",
-            "uniqueId": "undefined_testinsideInflightshouldcapturetherightscope_Handler_S3Object_19313F90"
+            "path": "root/Default/Default/test:insideInflight should capture the right scope/Handler/S3Object",
+            "uniqueId": "testinsideInflightshouldcapturetherightscope_Handler_S3Object_C92529CD"
           }
         },
-        "bucket": "${aws_s3_bucket.undefined_Code_6226BB4A.bucket}",
+        "bucket": "${aws_s3_bucket.Code.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       }

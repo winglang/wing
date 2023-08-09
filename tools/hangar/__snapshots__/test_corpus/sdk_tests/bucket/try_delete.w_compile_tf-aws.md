@@ -39,7 +39,7 @@ module.exports = function({ $b }) {
     },
     "outputs": {
       "root": {
-        "undefined": {
+        "Default": {
           "cloud.TestRunner": {
             "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS"
           }
@@ -49,7 +49,7 @@ module.exports = function({ $b }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/undefined/Default/test:tryDelete\",\"${aws_lambda_function.undefined_testtryDelete_Handler_6ECD42C7.arn}\"]]"
+      "value": "[[\"root/Default/Default/test:tryDelete\",\"${aws_lambda_function.testtryDelete_Handler_C4052A94.arn}\"]]"
     }
   },
   "provider": {
@@ -59,62 +59,62 @@ module.exports = function({ $b }) {
   },
   "resource": {
     "aws_iam_role": {
-      "undefined_testtryDelete_Handler_IamRole_D6199FDF": {
+      "testtryDelete_Handler_IamRole_9139123D": {
         "//": {
           "metadata": {
-            "path": "root/undefined/Default/test:tryDelete/Handler/IamRole",
-            "uniqueId": "undefined_testtryDelete_Handler_IamRole_D6199FDF"
+            "path": "root/Default/Default/test:tryDelete/Handler/IamRole",
+            "uniqueId": "testtryDelete_Handler_IamRole_9139123D"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
-      "undefined_testtryDelete_Handler_IamRolePolicy_87EF7729": {
+      "testtryDelete_Handler_IamRolePolicy_1DEE72C3": {
         "//": {
           "metadata": {
-            "path": "root/undefined/Default/test:tryDelete/Handler/IamRolePolicy",
-            "uniqueId": "undefined_testtryDelete_Handler_IamRolePolicy_87EF7729"
+            "path": "root/Default/Default/test:tryDelete/Handler/IamRolePolicy",
+            "uniqueId": "testtryDelete_Handler_IamRolePolicy_1DEE72C3"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:List*\",\"s3:PutObject*\",\"s3:Abort*\",\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:DeleteObject*\",\"s3:DeleteObjectVersion*\",\"s3:PutLifecycleConfiguration*\"],\"Resource\":[\"${aws_s3_bucket.undefined_cloudBucket_7A0DE585.arn}\",\"${aws_s3_bucket.undefined_cloudBucket_7A0DE585.arn}/*\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.undefined_testtryDelete_Handler_IamRole_D6199FDF.name}"
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:List*\",\"s3:PutObject*\",\"s3:Abort*\",\"s3:GetObject*\",\"s3:GetBucket*\",\"s3:DeleteObject*\",\"s3:DeleteObjectVersion*\",\"s3:PutLifecycleConfiguration*\"],\"Resource\":[\"${aws_s3_bucket.cloudBucket.arn}\",\"${aws_s3_bucket.cloudBucket.arn}/*\"],\"Effect\":\"Allow\"}]}",
+        "role": "${aws_iam_role.testtryDelete_Handler_IamRole_9139123D.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
-      "undefined_testtryDelete_Handler_IamRolePolicyAttachment_AD99C062": {
+      "testtryDelete_Handler_IamRolePolicyAttachment_A43F0399": {
         "//": {
           "metadata": {
-            "path": "root/undefined/Default/test:tryDelete/Handler/IamRolePolicyAttachment",
-            "uniqueId": "undefined_testtryDelete_Handler_IamRolePolicyAttachment_AD99C062"
+            "path": "root/Default/Default/test:tryDelete/Handler/IamRolePolicyAttachment",
+            "uniqueId": "testtryDelete_Handler_IamRolePolicyAttachment_A43F0399"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.undefined_testtryDelete_Handler_IamRole_D6199FDF.name}"
+        "role": "${aws_iam_role.testtryDelete_Handler_IamRole_9139123D.name}"
       }
     },
     "aws_lambda_function": {
-      "undefined_testtryDelete_Handler_6ECD42C7": {
+      "testtryDelete_Handler_C4052A94": {
         "//": {
           "metadata": {
-            "path": "root/undefined/Default/test:tryDelete/Handler/Default",
-            "uniqueId": "undefined_testtryDelete_Handler_6ECD42C7"
+            "path": "root/Default/Default/test:tryDelete/Handler/Default",
+            "uniqueId": "testtryDelete_Handler_C4052A94"
           }
         },
         "environment": {
           "variables": {
-            "BUCKET_NAME_7c20b234": "${aws_s3_bucket.undefined_cloudBucket_7A0DE585.bucket}",
-            "WING_FUNCTION_NAME": "Handler-c8f47a96",
+            "BUCKET_NAME_d755b447": "${aws_s3_bucket.cloudBucket.bucket}",
+            "WING_FUNCTION_NAME": "Handler-c85151e8",
             "WING_TARGET": "tf-aws"
           }
         },
-        "function_name": "Handler-c8f47a96",
+        "function_name": "Handler-c85151e8",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.undefined_testtryDelete_Handler_IamRole_D6199FDF.arn}",
+        "role": "${aws_iam_role.testtryDelete_Handler_IamRole_9139123D.arn}",
         "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.undefined_Code_6226BB4A.bucket}",
-        "s3_key": "${aws_s3_object.undefined_testtryDelete_Handler_S3Object_EEBE6933.key}",
+        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
+        "s3_key": "${aws_s3_object.testtryDelete_Handler_S3Object_DD0AB5F1.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -123,50 +123,50 @@ module.exports = function({ $b }) {
       }
     },
     "aws_s3_bucket": {
-      "undefined_Code_6226BB4A": {
+      "Code": {
         "//": {
           "metadata": {
-            "path": "root/undefined/Code",
-            "uniqueId": "undefined_Code_6226BB4A"
+            "path": "root/Default/Code",
+            "uniqueId": "Code"
           }
         },
-        "bucket_prefix": "code-c818e3de-"
+        "bucket_prefix": "code-c84a50b1-"
       },
-      "undefined_cloudBucket_7A0DE585": {
+      "cloudBucket": {
         "//": {
           "metadata": {
-            "path": "root/undefined/Default/cloud.Bucket/Default",
-            "uniqueId": "undefined_cloudBucket_7A0DE585"
+            "path": "root/Default/Default/cloud.Bucket/Default",
+            "uniqueId": "cloudBucket"
           }
         },
-        "bucket_prefix": "cloud-bucket-c8802ab1-",
+        "bucket_prefix": "cloud-bucket-c87175e7-",
         "force_destroy": false
       }
     },
     "aws_s3_bucket_public_access_block": {
-      "undefined_cloudBucket_PublicAccessBlock_A3FBADF2": {
+      "cloudBucket_PublicAccessBlock_5946CCE8": {
         "//": {
           "metadata": {
-            "path": "root/undefined/Default/cloud.Bucket/PublicAccessBlock",
-            "uniqueId": "undefined_cloudBucket_PublicAccessBlock_A3FBADF2"
+            "path": "root/Default/Default/cloud.Bucket/PublicAccessBlock",
+            "uniqueId": "cloudBucket_PublicAccessBlock_5946CCE8"
           }
         },
         "block_public_acls": true,
         "block_public_policy": true,
-        "bucket": "${aws_s3_bucket.undefined_cloudBucket_7A0DE585.bucket}",
+        "bucket": "${aws_s3_bucket.cloudBucket.bucket}",
         "ignore_public_acls": true,
         "restrict_public_buckets": true
       }
     },
     "aws_s3_bucket_server_side_encryption_configuration": {
-      "undefined_cloudBucket_Encryption_80E33E4D": {
+      "cloudBucket_Encryption_77B6AEEF": {
         "//": {
           "metadata": {
-            "path": "root/undefined/Default/cloud.Bucket/Encryption",
-            "uniqueId": "undefined_cloudBucket_Encryption_80E33E4D"
+            "path": "root/Default/Default/cloud.Bucket/Encryption",
+            "uniqueId": "cloudBucket_Encryption_77B6AEEF"
           }
         },
-        "bucket": "${aws_s3_bucket.undefined_cloudBucket_7A0DE585.bucket}",
+        "bucket": "${aws_s3_bucket.cloudBucket.bucket}",
         "rule": [
           {
             "apply_server_side_encryption_by_default": {
@@ -177,14 +177,14 @@ module.exports = function({ $b }) {
       }
     },
     "aws_s3_object": {
-      "undefined_testtryDelete_Handler_S3Object_EEBE6933": {
+      "testtryDelete_Handler_S3Object_DD0AB5F1": {
         "//": {
           "metadata": {
-            "path": "root/undefined/Default/test:tryDelete/Handler/S3Object",
-            "uniqueId": "undefined_testtryDelete_Handler_S3Object_EEBE6933"
+            "path": "root/Default/Default/test:tryDelete/Handler/S3Object",
+            "uniqueId": "testtryDelete_Handler_S3Object_DD0AB5F1"
           }
         },
-        "bucket": "${aws_s3_bucket.undefined_Code_6226BB4A.bucket}",
+        "bucket": "${aws_s3_bucket.Code.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       }
