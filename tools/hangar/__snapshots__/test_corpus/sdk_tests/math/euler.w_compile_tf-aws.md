@@ -1,6 +1,6 @@
 # [euler.w](../../../../../../examples/tests/sdk_tests/math/euler.w) | compile | tf-aws
 
-## inflight.$Closure1-da112a8f.js
+## inflight.$Closure1-8cdf9a56.js
 ```js
 module.exports = function({ $math_Util }) {
   class $Closure1 {
@@ -18,7 +18,7 @@ module.exports = function({ $math_Util }) {
 
 ```
 
-## inflight.$Closure2-da112a8f.js
+## inflight.$Closure2-8cdf9a56.js
 ```js
 module.exports = function({ $compoundOneYear, $interest, $math_Util, $value }) {
   class $Closure2 {
@@ -175,7 +175,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1-da112a8f.js")({
+          require("./inflight.$Closure1-8cdf9a56.js")({
             $math_Util: ${context._lift(math.Util)},
           })
         `);
@@ -200,7 +200,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure2-da112a8f.js")({
+          require("./inflight.$Closure2-8cdf9a56.js")({
             $compoundOneYear: ${context._lift(compoundOneYear)},
             $interest: ${context._lift(interest)},
             $math_Util: ${context._lift(math.Util)},

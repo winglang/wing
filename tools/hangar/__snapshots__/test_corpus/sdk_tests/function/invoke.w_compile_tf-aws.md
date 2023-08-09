@@ -1,6 +1,6 @@
 # [invoke.w](../../../../../../examples/tests/sdk_tests/function/invoke.w) | compile | tf-aws
 
-## inflight.$Closure1-de711b60.js
+## inflight.$Closure1-2badb726.js
 ```js
 module.exports = function({ $util_Util }) {
   class $Closure1 {
@@ -21,7 +21,7 @@ module.exports = function({ $util_Util }) {
 
 ```
 
-## inflight.$Closure2-de711b60.js
+## inflight.$Closure2-2badb726.js
 ```js
 module.exports = function({ $f }) {
   class $Closure2 {
@@ -248,7 +248,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1-de711b60.js")({
+          require("./inflight.$Closure1-2badb726.js")({
             $util_Util: ${context._lift(util.Util)},
           })
         `);
@@ -273,7 +273,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure2-de711b60.js")({
+          require("./inflight.$Closure2-2badb726.js")({
             $f: ${context._lift(f)},
           })
         `);

@@ -1,6 +1,6 @@
 # [capture_mutables.w](../../../../../examples/tests/valid/capture_mutables.w) | compile | tf-aws
 
-## inflight.$Closure1-40b03a59.js
+## inflight.$Closure1-40aaac02.js
 ```js
 module.exports = function({ $Object_keys_m__length, $aCloned_length, $a_length, $s_size }) {
   class $Closure1 {
@@ -21,7 +21,7 @@ module.exports = function({ $Object_keys_m__length, $aCloned_length, $a_length, 
 
 ```
 
-## inflight.$Closure2-40b03a59.js
+## inflight.$Closure2-40aaac02.js
 ```js
 module.exports = function({ $handler }) {
   class $Closure2 {
@@ -177,7 +177,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1-40b03a59.js")({
+          require("./inflight.$Closure1-40aaac02.js")({
             $Object_keys_m__length: ${context._lift(Object.keys(m).length)},
             $aCloned_length: ${context._lift(aCloned.length)},
             $a_length: ${context._lift(a.length)},
@@ -214,7 +214,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure2-40b03a59.js")({
+          require("./inflight.$Closure2-40aaac02.js")({
             $handler: ${context._lift(handler)},
           })
         `);

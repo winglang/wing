@@ -1,6 +1,6 @@
 # [statements_if.w](../../../../../examples/tests/valid/statements_if.w) | compile | tf-aws
 
-## inflight.$Closure1-2c098492.js
+## inflight.$Closure1-23793447.js
 ```js
 module.exports = function({  }) {
   class $Closure1 {
@@ -176,7 +176,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1-2c098492.js")({
+          require("./inflight.$Closure1-23793447.js")({
           })
         `);
       }

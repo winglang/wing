@@ -1,6 +1,6 @@
 # [inflight_concat.w](../../../../../examples/tests/valid/inflight_concat.w) | compile | tf-aws
 
-## inflight.R-8bbb300b.js
+## inflight.R-b171e455.js
 ```js
 module.exports = function({  }) {
   class R {
@@ -66,7 +66,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.R-8bbb300b.js")({
+          require("./inflight.R-b171e455.js")({
           })
         `);
       }

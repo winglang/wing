@@ -1,6 +1,6 @@
 # [file_counter.w](../../../../../examples/tests/valid/file_counter.w) | compile | tf-aws
 
-## inflight.$Closure1-843a9f01.js
+## inflight.$Closure1-0f624120.js
 ```js
 module.exports = function({ $bucket, $counter }) {
   class $Closure1 {
@@ -248,7 +248,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1-843a9f01.js")({
+          require("./inflight.$Closure1-0f624120.js")({
             $bucket: ${context._lift(bucket)},
             $counter: ${context._lift(counter)},
           })

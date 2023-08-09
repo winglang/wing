@@ -1,6 +1,6 @@
 # [combinations.w](../../../../../../examples/tests/sdk_tests/math/combinations.w) | compile | tf-aws
 
-## inflight.$Closure1-072aad42.js
+## inflight.$Closure1-a658114c.js
 ```js
 module.exports = function({ $math_Util, $population, $subset }) {
   class $Closure1 {
@@ -157,7 +157,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1-072aad42.js")({
+          require("./inflight.$Closure1-a658114c.js")({
             $math_Util: ${context._lift(math.Util)},
             $population: ${context._lift(population)},
             $subset: ${context._lift(subset)},

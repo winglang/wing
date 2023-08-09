@@ -1,6 +1,6 @@
 # [lift_via_closure.w](../../../../../examples/tests/valid/lift_via_closure.w) | compile | tf-aws
 
-## inflight.$Closure1-437a91ea.js
+## inflight.$Closure1-fa7d21aa.js
 ```js
 module.exports = function({ $bucket2 }) {
   class $Closure1 {
@@ -18,7 +18,7 @@ module.exports = function({ $bucket2 }) {
 
 ```
 
-## inflight.$Closure2-437a91ea.js
+## inflight.$Closure2-fa7d21aa.js
 ```js
 module.exports = function({ $fn }) {
   class $Closure2 {
@@ -36,7 +36,7 @@ module.exports = function({ $fn }) {
 
 ```
 
-## inflight.$Closure3-437a91ea.js
+## inflight.$Closure3-fa7d21aa.js
 ```js
 module.exports = function({ $bucket2, $fn2, $fn2_bucket }) {
   class $Closure3 {
@@ -57,7 +57,7 @@ module.exports = function({ $bucket2, $fn2, $fn2_bucket }) {
 
 ```
 
-## inflight.MyClosure-437a91ea.js
+## inflight.MyClosure-fa7d21aa.js
 ```js
 module.exports = function({ $bucket2 }) {
   class MyClosure {
@@ -375,7 +375,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1-437a91ea.js")({
+          require("./inflight.$Closure1-fa7d21aa.js")({
             $bucket2: ${context._lift(bucket2)},
           })
         `);
@@ -406,7 +406,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.MyClosure-437a91ea.js")({
+          require("./inflight.MyClosure-fa7d21aa.js")({
             $bucket2: ${context._lift(bucket2)},
           })
         `);
@@ -448,7 +448,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure2-437a91ea.js")({
+          require("./inflight.$Closure2-fa7d21aa.js")({
             $fn: ${context._lift(fn)},
           })
         `);
@@ -479,7 +479,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure3-437a91ea.js")({
+          require("./inflight.$Closure3-fa7d21aa.js")({
             $bucket2: ${context._lift(bucket2)},
             $fn2: ${context._lift(fn2)},
             $fn2_bucket: ${context._lift(fn2.bucket)},

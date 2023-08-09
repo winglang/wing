@@ -1,6 +1,6 @@
 # [memory_and_env.w](../../../../../../examples/tests/sdk_tests/function/memory_and_env.w) | compile | tf-aws
 
-## inflight.$Closure1-775c8373.js
+## inflight.$Closure1-b1dfb0d8.js
 ```js
 module.exports = function({ $c }) {
   class $Closure1 {
@@ -18,7 +18,7 @@ module.exports = function({ $c }) {
 
 ```
 
-## inflight.$Closure2-775c8373.js
+## inflight.$Closure2-b1dfb0d8.js
 ```js
 module.exports = function({ $c, $util_Util }) {
   class $Closure2 {
@@ -37,7 +37,7 @@ module.exports = function({ $c, $util_Util }) {
 
 ```
 
-## inflight.$Closure3-775c8373.js
+## inflight.$Closure3-b1dfb0d8.js
 ```js
 module.exports = function({ $c, $f1, $f2 }) {
   class $Closure3 {
@@ -401,7 +401,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1-775c8373.js")({
+          require("./inflight.$Closure1-b1dfb0d8.js")({
             $c: ${context._lift(c)},
           })
         `);
@@ -432,7 +432,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure2-775c8373.js")({
+          require("./inflight.$Closure2-b1dfb0d8.js")({
             $c: ${context._lift(c)},
             $util_Util: ${context._lift(util.Util)},
           })
@@ -464,7 +464,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure3-775c8373.js")({
+          require("./inflight.$Closure3-b1dfb0d8.js")({
             $c: ${context._lift(c)},
             $f1: ${context._lift(f1)},
             $f2: ${context._lift(f2)},
