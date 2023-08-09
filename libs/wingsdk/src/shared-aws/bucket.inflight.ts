@@ -65,34 +65,45 @@ export class BucketClient implements IBucketClient {
   }
 
   /**
+   * See https://github.com/aws/aws-sdk-js-v3/issues/1877
+   */
+  private async getObjectContent(key: string): Promise<Readable | undefined> {
+    const command = new GetObjectCommand({
+      Bucket: this.bucketName,
+      Key: key,
+    });
+
+    try {
+      const resp: GetObjectOutput = await this.s3Client.send(command);
+      return resp.Body as Readable;
+    } catch (e) {
+      if (e instanceof NoSuchKey) {
+        return undefined;
+      }
+      throw new Error((e as Error).stack);
+    }
+  }
+
+  /**
    * Get an object from the bucket
    *
    * @param key Key of the object
    * @returns content of the object
    */
   public async get(key: string): Promise<string> {
-    // See https://github.com/aws/aws-sdk-js-v3/issues/1877
-    const command = new GetObjectCommand({
-      Bucket: this.bucketName,
-      Key: key,
-    });
-    let resp: GetObjectOutput;
-    try {
-      resp = await this.s3Client.send(command);
-    } catch (e) {
-      throw new Error(
-        `Object does not exist (key=${key}): ${(e as Error).stack}`
-      );
+    const objectContent = await this.getObjectContent(key);
+    if (objectContent) {
+      try {
+        return await consumers.text(objectContent);
+      } catch (e) {
+        throw new Error(
+          `Object content could not be read as text (key=${key}): ${
+            (e as Error).stack
+          })}`
+        );
+      }
     }
-    try {
-      return await consumers.text(resp.Body as Readable);
-    } catch (e) {
-      throw new Error(
-        `Object contents could not be read as text (key=${key}): ${
-          (e as Error).stack
-        })}`
-      );
-    }
+    throw new Error(`Object does not exist (key=${key}).`);
   }
 
   /**
@@ -102,28 +113,19 @@ export class BucketClient implements IBucketClient {
    * @returns content of the object
    */
   public async tryGet(key: string): Promise<string | undefined> {
-    const command = new GetObjectCommand({
-      Bucket: this.bucketName,
-      Key: key,
-    });
-    let resp: GetObjectOutput;
-    try {
-      resp = await this.s3Client.send(command);
-    } catch (e) {
-      if (e instanceof NoSuchKey) {
-        return undefined;
+    const objectContent = await this.getObjectContent(key);
+    if (objectContent) {
+      try {
+        return await consumers.text(objectContent);
+      } catch (e) {
+        throw new Error(
+          `Object content could not be read as text (key=${key}): ${
+            (e as Error).stack
+          })}`
+        );
       }
-      throw new Error((e as Error).stack);
     }
-    try {
-      return await consumers.text(resp.Body as Readable);
-    } catch (e) {
-      throw new Error(
-        `Object contents could not be read as text (key=${key}): ${
-          (e as Error).stack
-        })}`
-      );
-    }
+    return undefined;
   }
 
   /**
@@ -133,7 +135,19 @@ export class BucketClient implements IBucketClient {
    * @returns Json content of the object
    */
   public async getJson(key: string): Promise<Json> {
-    return JSON.parse(await this.get(key));
+    const objectContent = await this.getObjectContent(key);
+    if (objectContent) {
+      try {
+        return JSON.parse(await consumers.text(objectContent));
+      } catch (e) {
+        throw new Error(
+          `Object contents could not be read as text (key=${key}): ${
+            (e as Error).stack
+          })}`
+        );
+      }
+    }
+    throw new Error(`Object does not exist (key=${key}).`);
   }
 
   /**
@@ -143,28 +157,19 @@ export class BucketClient implements IBucketClient {
    * @returns Json content of the object
    */
   public async tryGetJson(key: string): Promise<Json | undefined> {
-    const command = new GetObjectCommand({
-      Bucket: this.bucketName,
-      Key: key,
-    });
-    let resp: GetObjectOutput;
-    try {
-      resp = await this.s3Client.send(command);
-    } catch (e) {
-      if (e instanceof NoSuchKey) {
-        return undefined;
+    const objectContent = await this.getObjectContent(key);
+    if (objectContent) {
+      try {
+        return JSON.parse(await consumers.text(objectContent));
+      } catch (e) {
+        throw new Error(
+          `Object content could not be read as text (key=${key}): ${
+            (e as Error).stack
+          })}`
+        );
       }
-      throw new Error((e as Error).stack);
     }
-    try {
-      return JSON.parse(await consumers.text(resp.Body as Readable));
-    } catch (e) {
-      throw new Error(
-        `Object contents could not be read as text (key=${key}): ${
-          (e as Error).stack
-        })}`
-      );
-    }
+    return undefined;
   }
 
   /**
