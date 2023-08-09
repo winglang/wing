@@ -2,8 +2,7 @@ bring cloud;
 
 // Assignment to native types
 let j = Json "Hello";
-let s: str = j;
-//           ^ This actually works
+
 let n: num = j;
 //           ^ Expected type to be "num", but got "Json" instead
 let b: bool = j;

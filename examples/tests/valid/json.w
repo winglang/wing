@@ -200,7 +200,11 @@ assert(notSpecified.get("foo") == "bar");
 let empty = {};
 assert(Json.has(empty, "something") == false);
 
-struct LastOne {
+struct Base {
+  base: str;
+}
+
+struct LastOne extends Base {
   hi: num;
 }
 
@@ -225,6 +229,6 @@ let notJson: StructyJson = {
   stuff: [1, 2, 3],
   maybe: {
     good: true,
-    inner_stuff: [{ hi: 1 }]
+    inner_stuff: [{ hi: 1, base: "base" }]
   }
 };

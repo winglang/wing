@@ -1331,125 +1331,125 @@ Duration <DURATION>"
 
 exports[`json.w 1`] = `
 "error: Json literal must have an element
-   --> ../../../examples/tests/invalid/json.w:30:26
+   --> ../../../examples/tests/invalid/json.w:29:26
    |
-30 | let jsonIncomplete = Json;
+29 | let jsonIncomplete = Json;
    |                          ^ Json literal must have an element
 
 
 error: Expected type to be \\"num\\", but got \\"str\\" instead
-  --> ../../../examples/tests/invalid/json.w:7:14
+  --> ../../../examples/tests/invalid/json.w:6:14
   |
-7 | let n: num = j;
+6 | let n: num = j;
   |              ^ Expected type to be \\"num\\", but got \\"str\\" instead
 
 
 error: Expected type to be \\"bool\\", but got \\"str\\" instead
-  --> ../../../examples/tests/invalid/json.w:9:15
+  --> ../../../examples/tests/invalid/json.w:8:15
   |
-9 | let b: bool = j;
+8 | let b: bool = j;
   |               ^ Expected type to be \\"bool\\", but got \\"str\\" instead
 
 
 error: Expected type to be \\"Map<str>\\", but got \\"str\\" instead
-   --> ../../../examples/tests/invalid/json.w:11:19
+   --> ../../../examples/tests/invalid/json.w:10:19
    |
-11 | let m: Map<str> = j;
+10 | let m: Map<str> = j;
    |                   ^ Expected type to be \\"Map<str>\\", but got \\"str\\" instead
 
 
 error: Expected type to be \\"Set<str>\\", but got \\"str\\" instead
-   --> ../../../examples/tests/invalid/json.w:13:20
+   --> ../../../examples/tests/invalid/json.w:12:20
    |
-13 | let s2: Set<str> = j;
+12 | let s2: Set<str> = j;
    |                    ^ Expected type to be \\"Set<str>\\", but got \\"str\\" instead
 
 
 error: Expected type to be \\"Array<str>\\", but got \\"str\\" instead
-   --> ../../../examples/tests/invalid/json.w:15:21
+   --> ../../../examples/tests/invalid/json.w:14:21
    |
-15 | let a: Array<str> = j;
+14 | let a: Array<str> = j;
    |                     ^ Expected type to be \\"Array<str>\\", but got \\"str\\" instead
 
 
 error: Unknown symbol \\"set\\"
-   --> ../../../examples/tests/invalid/json.w:20:13
+   --> ../../../examples/tests/invalid/json.w:19:13
    |
-20 | foreverJson.set(\\"a\\", \\"world!\\");
+19 | foreverJson.set(\\"a\\", \\"world!\\");
    |             ^^^ Unknown symbol \\"set\\"
 
 
 error: Expected type to be \\"num?\\", but got \\"str?\\" instead
-   --> ../../../examples/tests/invalid/json.w:33:20
+   --> ../../../examples/tests/invalid/json.w:32:20
    |
-33 | let tryNum: num? = j.tryAsStr();
+32 | let tryNum: num? = j.tryAsStr();
    |                    ^^^^^^^^^^^^ Expected type to be \\"num?\\", but got \\"str?\\" instead
 
 
 error: Expected type to be \\"str?\\", but got \\"bool?\\" instead
-   --> ../../../examples/tests/invalid/json.w:36:20
+   --> ../../../examples/tests/invalid/json.w:35:20
    |
-36 | let tryStr: str? = j.tryAsBool();
+35 | let tryStr: str? = j.tryAsBool();
    |                    ^^^^^^^^^^^^^ Expected type to be \\"str?\\", but got \\"bool?\\" instead
 
 
 error: Expected type to be \\"bool?\\", but got \\"num?\\" instead
-   --> ../../../examples/tests/invalid/json.w:39:22
+   --> ../../../examples/tests/invalid/json.w:38:22
    |
-39 | let tryBool: bool? = j.tryAsNum();
+38 | let tryBool: bool? = j.tryAsNum();
    |                      ^^^^^^^^^^^^ Expected type to be \\"bool?\\", but got \\"num?\\" instead
 
 
 error: Missing required field \\"maybe\\" from \\"StructyJson\\"
-   --> ../../../examples/tests/invalid/json.w:56:40
+   --> ../../../examples/tests/invalid/json.w:55:40
    |  
-56 |   let notJsonMissingField: StructyJson = {
+55 |   let notJsonMissingField: StructyJson = {
    | /----------------------------------------^
-57 | |   foo: \\"bar\\",
-58 | |   stuff: [],
-59 | | };
+56 | |   foo: \\"bar\\",
+57 | |   stuff: [],
+58 | | };
    | \\\\-^ Missing required field \\"maybe\\" from \\"StructyJson\\"
 
 
 error: Expected type to be \\"bool\\", but got \\"num\\" instead
-   --> ../../../examples/tests/invalid/json.w:66:11
+   --> ../../../examples/tests/invalid/json.w:65:11
    |
-66 |     good: 2,
+65 |     good: 2,
    |           ^ Expected type to be \\"bool\\", but got \\"num\\" instead
 
 
 error: Expected type to be \\"num\\", but got \\"str\\" instead
-   --> ../../../examples/tests/invalid/json.w:73:14
+   --> ../../../examples/tests/invalid/json.w:72:14
    |
-73 |   stuff: [1, \\"hi\\", 3],
+72 |   stuff: [1, \\"hi\\", 3],
    |              ^^^^ Expected type to be \\"num\\", but got \\"str\\" instead
 
 
 error: Expected type to be \\"num\\", but got \\"str\\" instead
-   --> ../../../examples/tests/invalid/json.w:84:8
+   --> ../../../examples/tests/invalid/json.w:83:8
    |
-84 |     b: \\"\\",
+83 |     b: \\"\\",
    |        ^^ Expected type to be \\"num\\", but got \\"str\\" instead
 
 
 error: \\"[Bucket]\\" is not a legal JSON value
-   --> ../../../examples/tests/invalid/json.w:24:17
+   --> ../../../examples/tests/invalid/json.w:23:17
    |
-24 | let jArr = Json [bkt];
+23 | let jArr = Json [bkt];
    |                 ^^^^^ \\"[Bucket]\\" is not a legal JSON value
 
 
 error: \\"Bucket\\" is not a legal JSON value
-   --> ../../../examples/tests/invalid/json.w:27:28
+   --> ../../../examples/tests/invalid/json.w:26:28
    |
-27 | let jsonObj = Json { boom: bkt };
+26 | let jsonObj = Json { boom: bkt };
    |                            ^^^ \\"Bucket\\" is not a legal JSON value
 
 
 error: \\"Bucket\\" is not a legal JSON value
-   --> ../../../examples/tests/invalid/json.w:27:28
+   --> ../../../examples/tests/invalid/json.w:26:28
    |
-27 | let jsonObj = Json { boom: bkt };
+26 | let jsonObj = Json { boom: bkt };
    |                            ^^^ \\"Bucket\\" is not a legal JSON value
 
 
