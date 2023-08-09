@@ -1544,9 +1544,10 @@ f(1, 2, field1: 3, field2: 4);
 ```
 
 #### 3.6.3 Variadic Arguments
-If the last argument of a function type is the `...args` keyword followed by an
-`Array` type, then the function accepts typed variadic arguments. The container of variadic
-arguments is accessible with the `args` key like a normal array instance.
+When a function signature's final parameter is denoted by `...` and annotated as an `Array` type,
+then the function accepts typed variadic arguments. 
+Inside the function, these arguments can be accessed using the designated variable name, 
+just as you would with a regular array instance.
 ```TS
 let f = (x: num, ...args: Array<num>) => {
   log("${x + args.length}");
