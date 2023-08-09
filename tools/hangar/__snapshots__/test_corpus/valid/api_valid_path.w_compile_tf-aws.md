@@ -1,6 +1,6 @@
 # [api_valid_path.w](../../../../../examples/tests/valid/api_valid_path.w) | compile | tf-aws
 
-## inflight.$Closure1-83f4200d.js
+## inflight.$Closure1-055654ca.js
 ```js
 module.exports = function({  }) {
   class $Closure1 {
@@ -278,7 +278,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1-83f4200d.js")({
+          require("./inflight.$Closure1-055654ca.js")({
           })
         `);
       }

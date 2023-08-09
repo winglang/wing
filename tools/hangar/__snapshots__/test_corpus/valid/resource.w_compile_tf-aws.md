@@ -1,6 +1,6 @@
 # [resource.w](../../../../../examples/tests/valid/resource.w) | compile | tf-aws
 
-## inflight.$Closure1-2f25f912.js
+## inflight.$Closure1-1080d41c.js
 ```js
 module.exports = function({ $bucket, $res, $res_foo }) {
   class $Closure1 {
@@ -23,7 +23,7 @@ module.exports = function({ $bucket, $res, $res_foo }) {
 
 ```
 
-## inflight.$Closure2-2f25f912.js
+## inflight.$Closure2-1080d41c.js
 ```js
 module.exports = function({ $__parent_this_2_b }) {
   class $Closure2 {
@@ -41,7 +41,7 @@ module.exports = function({ $__parent_this_2_b }) {
 
 ```
 
-## inflight.$Closure3-2f25f912.js
+## inflight.$Closure3-1080d41c.js
 ```js
 module.exports = function({ $__parent_this_3_b }) {
   class $Closure3 {
@@ -59,7 +59,7 @@ module.exports = function({ $__parent_this_3_b }) {
 
 ```
 
-## inflight.$Closure4-2f25f912.js
+## inflight.$Closure4-1080d41c.js
 ```js
 module.exports = function({ $__parent_this_4_q }) {
   class $Closure4 {
@@ -77,7 +77,7 @@ module.exports = function({ $__parent_this_4_q }) {
 
 ```
 
-## inflight.$Closure5-2f25f912.js
+## inflight.$Closure5-1080d41c.js
 ```js
 module.exports = function({ $bigOlPublisher }) {
   class $Closure5 {
@@ -96,7 +96,7 @@ module.exports = function({ $bigOlPublisher }) {
 
 ```
 
-## inflight.Bar-2f25f912.js
+## inflight.Bar-1080d41c.js
 ```js
 module.exports = function({ $Foo, $MyEnum }) {
   class Bar {
@@ -127,7 +127,7 @@ module.exports = function({ $Foo, $MyEnum }) {
 
 ```
 
-## inflight.BigPublisher-2f25f912.js
+## inflight.BigPublisher-1080d41c.js
 ```js
 module.exports = function({  }) {
   class BigPublisher {
@@ -151,7 +151,7 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.Dummy-2f25f912.js
+## inflight.Dummy-1080d41c.js
 ```js
 module.exports = function({  }) {
   class Dummy {
@@ -163,7 +163,7 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.Foo-2f25f912.js
+## inflight.Foo-1080d41c.js
 ```js
 module.exports = function({  }) {
   class Foo {
@@ -190,7 +190,7 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.ScopeAndIdTestClass-2f25f912.js
+## inflight.ScopeAndIdTestClass-1080d41c.js
 ```js
 module.exports = function({  }) {
   class ScopeAndIdTestClass {
@@ -883,7 +883,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.Foo-2f25f912.js")({
+          require("./inflight.Foo-1080d41c.js")({
           })
         `);
       }
@@ -923,7 +923,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.Bar-2f25f912.js")({
+          require("./inflight.Bar-1080d41c.js")({
             $Foo: ${context._lift(Foo)},
             $MyEnum: ${context._lift(MyEnum)},
           })
@@ -969,7 +969,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1-2f25f912.js")({
+          require("./inflight.$Closure1-1080d41c.js")({
             $bucket: ${context._lift(bucket)},
             $res: ${context._lift(res)},
             $res_foo: ${context._lift(res.foo)},
@@ -1013,7 +1013,7 @@ class $Root extends $stdlib.std.Resource {
           }
           static _toInflightType(context) {
             return $stdlib.core.NodeJsCode.fromInline(`
-              require("./inflight.$Closure2-2f25f912.js")({
+              require("./inflight.$Closure2-1080d41c.js")({
                 $__parent_this_2_b: ${context._lift(__parent_this_2.b)},
               })
             `);
@@ -1046,7 +1046,7 @@ class $Root extends $stdlib.std.Resource {
           }
           static _toInflightType(context) {
             return $stdlib.core.NodeJsCode.fromInline(`
-              require("./inflight.$Closure3-2f25f912.js")({
+              require("./inflight.$Closure3-1080d41c.js")({
                 $__parent_this_3_b: ${context._lift(__parent_this_3.b)},
               })
             `);
@@ -1079,7 +1079,7 @@ class $Root extends $stdlib.std.Resource {
           }
           static _toInflightType(context) {
             return $stdlib.core.NodeJsCode.fromInline(`
-              require("./inflight.$Closure4-2f25f912.js")({
+              require("./inflight.$Closure4-1080d41c.js")({
                 $__parent_this_4_q: ${context._lift(__parent_this_4.q)},
               })
             `);
@@ -1106,7 +1106,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.BigPublisher-2f25f912.js")({
+          require("./inflight.BigPublisher-1080d41c.js")({
           })
         `);
       }
@@ -1151,7 +1151,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure5-2f25f912.js")({
+          require("./inflight.$Closure5-1080d41c.js")({
             $bigOlPublisher: ${context._lift(bigOlPublisher)},
           })
         `);
@@ -1181,7 +1181,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.Dummy-2f25f912.js")({
+          require("./inflight.Dummy-1080d41c.js")({
           })
         `);
       }
@@ -1213,7 +1213,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.ScopeAndIdTestClass-2f25f912.js")({
+          require("./inflight.ScopeAndIdTestClass-1080d41c.js")({
           })
         `);
       }

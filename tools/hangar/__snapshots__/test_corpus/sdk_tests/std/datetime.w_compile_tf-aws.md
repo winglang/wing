@@ -1,6 +1,6 @@
 # [datetime.w](../../../../../../examples/tests/sdk_tests/std/datetime.w) | compile | tf-aws
 
-## inflight.$Closure1-bddd785f.js
+## inflight.$Closure1-84bbc79c.js
 ```js
 module.exports = function({ $_d4_toUtc____hours, $d4_hours, $d4_timezone, $math_Util, $std_Datetime, $std_Duration, $util_Util }) {
   class $Closure1 {
@@ -180,7 +180,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1-bddd785f.js")({
+          require("./inflight.$Closure1-84bbc79c.js")({
             $_d4_toUtc____hours: ${context._lift((d4.toUtc()).hours)},
             $d4_hours: ${context._lift(d4.hours)},
             $d4_timezone: ${context._lift(d4.timezone)},

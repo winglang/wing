@@ -1,6 +1,6 @@
 # [on_message.w](../../../../../../examples/tests/sdk_tests/topic/on_message.w) | compile | tf-aws
 
-## inflight.$Closure1-c08a26fc.js
+## inflight.$Closure1-63270894.js
 ```js
 module.exports = function({ $c }) {
   class $Closure1 {
@@ -18,7 +18,7 @@ module.exports = function({ $c }) {
 
 ```
 
-## inflight.$Closure2-c08a26fc.js
+## inflight.$Closure2-63270894.js
 ```js
 module.exports = function({ $c }) {
   class $Closure2 {
@@ -36,7 +36,7 @@ module.exports = function({ $c }) {
 
 ```
 
-## inflight.$Closure3-c08a26fc.js
+## inflight.$Closure3-63270894.js
 ```js
 module.exports = function({ $predicate, $std_Duration, $t, $util_Util }) {
   class $Closure3 {
@@ -66,7 +66,7 @@ module.exports = function({ $predicate, $std_Duration, $t, $util_Util }) {
 
 ```
 
-## inflight.Predicate-c08a26fc.js
+## inflight.Predicate-63270894.js
 ```js
 module.exports = function({  }) {
   class Predicate {
@@ -438,7 +438,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.Predicate-c08a26fc.js")({
+          require("./inflight.Predicate-63270894.js")({
           })
         `);
       }
@@ -472,7 +472,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1-c08a26fc.js")({
+          require("./inflight.$Closure1-63270894.js")({
             $c: ${context._lift(c)},
           })
         `);
@@ -503,7 +503,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure2-c08a26fc.js")({
+          require("./inflight.$Closure2-63270894.js")({
             $c: ${context._lift(c)},
           })
         `);
@@ -534,7 +534,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure3-c08a26fc.js")({
+          require("./inflight.$Closure3-63270894.js")({
             $predicate: ${context._lift(predicate)},
             $std_Duration: ${context._lift(std.Duration)},
             $t: ${context._lift(t)},
