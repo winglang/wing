@@ -43,7 +43,7 @@ module.exports = function({ $myBool, $myDur_hours, $myDur_minutes, $myDur_second
     },
     "outputs": {
       "root": {
-        "Default": {
+        "undefined": {
           "cloud.TestRunner": {
             "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS"
           }
@@ -63,61 +63,61 @@ module.exports = function({ $myBool, $myDur_hours, $myDur_minutes, $myDur_second
   },
   "resource": {
     "aws_iam_role": {
-      "cloudFunction_IamRole_5A4430DC": {
+      "undefined_cloudFunction_IamRole_092E88B6": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Function/IamRole",
-            "uniqueId": "cloudFunction_IamRole_5A4430DC"
+            "path": "root/undefined/Default/cloud.Function/IamRole",
+            "uniqueId": "undefined_cloudFunction_IamRole_092E88B6"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
-      "cloudFunction_IamRolePolicy_618BF987": {
+      "undefined_cloudFunction_IamRolePolicy_F10C459A": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Function/IamRolePolicy",
-            "uniqueId": "cloudFunction_IamRolePolicy_618BF987"
+            "path": "root/undefined/Default/cloud.Function/IamRolePolicy",
+            "uniqueId": "undefined_cloudFunction_IamRolePolicy_F10C459A"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
-        "role": "${aws_iam_role.cloudFunction_IamRole_5A4430DC.name}"
+        "role": "${aws_iam_role.undefined_cloudFunction_IamRole_092E88B6.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
-      "cloudFunction_IamRolePolicyAttachment_288B9653": {
+      "undefined_cloudFunction_IamRolePolicyAttachment_00616B66": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Function/IamRolePolicyAttachment",
-            "uniqueId": "cloudFunction_IamRolePolicyAttachment_288B9653"
+            "path": "root/undefined/Default/cloud.Function/IamRolePolicyAttachment",
+            "uniqueId": "undefined_cloudFunction_IamRolePolicyAttachment_00616B66"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.cloudFunction_IamRole_5A4430DC.name}"
+        "role": "${aws_iam_role.undefined_cloudFunction_IamRole_092E88B6.name}"
       }
     },
     "aws_lambda_function": {
-      "cloudFunction": {
+      "undefined_cloudFunction_D952FD36": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Function/Default",
-            "uniqueId": "cloudFunction"
+            "path": "root/undefined/Default/cloud.Function/Default",
+            "uniqueId": "undefined_cloudFunction_D952FD36"
           }
         },
         "environment": {
           "variables": {
-            "WING_FUNCTION_NAME": "cloud-Function-c8d2eca1",
+            "WING_FUNCTION_NAME": "cloud-Function-c82dc107",
             "WING_TARGET": "tf-aws"
           }
         },
-        "function_name": "cloud-Function-c8d2eca1",
+        "function_name": "cloud-Function-c82dc107",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.cloudFunction_IamRole_5A4430DC.arn}",
+        "role": "${aws_iam_role.undefined_cloudFunction_IamRole_092E88B6.arn}",
         "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
-        "s3_key": "${aws_s3_object.cloudFunction_S3Object_71908BAD.key}",
+        "s3_bucket": "${aws_s3_bucket.undefined_Code_6226BB4A.bucket}",
+        "s3_key": "${aws_s3_object.undefined_cloudFunction_S3Object_8BF8149A.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -126,25 +126,25 @@ module.exports = function({ $myBool, $myDur_hours, $myDur_minutes, $myDur_second
       }
     },
     "aws_s3_bucket": {
-      "Code": {
+      "undefined_Code_6226BB4A": {
         "//": {
           "metadata": {
-            "path": "root/Default/Code",
-            "uniqueId": "Code"
+            "path": "root/undefined/Code",
+            "uniqueId": "undefined_Code_6226BB4A"
           }
         },
-        "bucket_prefix": "code-c84a50b1-"
+        "bucket_prefix": "code-c818e3de-"
       }
     },
     "aws_s3_object": {
-      "cloudFunction_S3Object_71908BAD": {
+      "undefined_cloudFunction_S3Object_8BF8149A": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Function/S3Object",
-            "uniqueId": "cloudFunction_S3Object_71908BAD"
+            "path": "root/undefined/Default/cloud.Function/S3Object",
+            "uniqueId": "undefined_cloudFunction_S3Object_8BF8149A"
           }
         },
-        "bucket": "${aws_s3_bucket.Code.bucket}",
+        "bucket": "${aws_s3_bucket.undefined_Code_6226BB4A.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       }
@@ -216,7 +216,7 @@ class $Root extends $stdlib.std.Resource {
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
-new $App({ outdir: $outdir, name: "capture_primitives", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, sourceDir: process.env['WING_SOURCE_DIR'] }).synth();
+new $App({ outdir: $outdir, name: "capture_primitives", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
 
 ```
 

@@ -40,7 +40,7 @@ module.exports = function({  }) {
     },
     "outputs": {
       "root": {
-        "Default": {
+        "undefined": {
           "cloud.TestRunner": {
             "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS"
           }
@@ -50,7 +50,7 @@ module.exports = function({  }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:inner inflight class capture immutable\",\"${aws_lambda_function.testinnerinflightclasscaptureimmutable_Handler_8A6A0444.arn}\"]]"
+      "value": "[[\"root/undefined/Default/test:inner inflight class capture immutable\",\"${aws_lambda_function.undefined_testinnerinflightclasscaptureimmutable_Handler_A7E11902.arn}\"]]"
     }
   },
   "provider": {
@@ -60,61 +60,61 @@ module.exports = function({  }) {
   },
   "resource": {
     "aws_iam_role": {
-      "testinnerinflightclasscaptureimmutable_Handler_IamRole_A23BAF06": {
+      "undefined_testinnerinflightclasscaptureimmutable_Handler_IamRole_8E9E31C4": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:inner inflight class capture immutable/Handler/IamRole",
-            "uniqueId": "testinnerinflightclasscaptureimmutable_Handler_IamRole_A23BAF06"
+            "path": "root/undefined/Default/test:inner inflight class capture immutable/Handler/IamRole",
+            "uniqueId": "undefined_testinnerinflightclasscaptureimmutable_Handler_IamRole_8E9E31C4"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
-      "testinnerinflightclasscaptureimmutable_Handler_IamRolePolicy_64E9740C": {
+      "undefined_testinnerinflightclasscaptureimmutable_Handler_IamRolePolicy_149C4203": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:inner inflight class capture immutable/Handler/IamRolePolicy",
-            "uniqueId": "testinnerinflightclasscaptureimmutable_Handler_IamRolePolicy_64E9740C"
+            "path": "root/undefined/Default/test:inner inflight class capture immutable/Handler/IamRolePolicy",
+            "uniqueId": "undefined_testinnerinflightclasscaptureimmutable_Handler_IamRolePolicy_149C4203"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
-        "role": "${aws_iam_role.testinnerinflightclasscaptureimmutable_Handler_IamRole_A23BAF06.name}"
+        "role": "${aws_iam_role.undefined_testinnerinflightclasscaptureimmutable_Handler_IamRole_8E9E31C4.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
-      "testinnerinflightclasscaptureimmutable_Handler_IamRolePolicyAttachment_333DB9F1": {
+      "undefined_testinnerinflightclasscaptureimmutable_Handler_IamRolePolicyAttachment_B1E8AD42": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:inner inflight class capture immutable/Handler/IamRolePolicyAttachment",
-            "uniqueId": "testinnerinflightclasscaptureimmutable_Handler_IamRolePolicyAttachment_333DB9F1"
+            "path": "root/undefined/Default/test:inner inflight class capture immutable/Handler/IamRolePolicyAttachment",
+            "uniqueId": "undefined_testinnerinflightclasscaptureimmutable_Handler_IamRolePolicyAttachment_B1E8AD42"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.testinnerinflightclasscaptureimmutable_Handler_IamRole_A23BAF06.name}"
+        "role": "${aws_iam_role.undefined_testinnerinflightclasscaptureimmutable_Handler_IamRole_8E9E31C4.name}"
       }
     },
     "aws_lambda_function": {
-      "testinnerinflightclasscaptureimmutable_Handler_8A6A0444": {
+      "undefined_testinnerinflightclasscaptureimmutable_Handler_A7E11902": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:inner inflight class capture immutable/Handler/Default",
-            "uniqueId": "testinnerinflightclasscaptureimmutable_Handler_8A6A0444"
+            "path": "root/undefined/Default/test:inner inflight class capture immutable/Handler/Default",
+            "uniqueId": "undefined_testinnerinflightclasscaptureimmutable_Handler_A7E11902"
           }
         },
         "environment": {
           "variables": {
-            "WING_FUNCTION_NAME": "Handler-c88a8b71",
+            "WING_FUNCTION_NAME": "Handler-c817238b",
             "WING_TARGET": "tf-aws"
           }
         },
-        "function_name": "Handler-c88a8b71",
+        "function_name": "Handler-c817238b",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.testinnerinflightclasscaptureimmutable_Handler_IamRole_A23BAF06.arn}",
+        "role": "${aws_iam_role.undefined_testinnerinflightclasscaptureimmutable_Handler_IamRole_8E9E31C4.arn}",
         "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
-        "s3_key": "${aws_s3_object.testinnerinflightclasscaptureimmutable_Handler_S3Object_9B7C45EF.key}",
+        "s3_bucket": "${aws_s3_bucket.undefined_Code_6226BB4A.bucket}",
+        "s3_key": "${aws_s3_object.undefined_testinnerinflightclasscaptureimmutable_Handler_S3Object_173DD36E.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -123,25 +123,25 @@ module.exports = function({  }) {
       }
     },
     "aws_s3_bucket": {
-      "Code": {
+      "undefined_Code_6226BB4A": {
         "//": {
           "metadata": {
-            "path": "root/Default/Code",
-            "uniqueId": "Code"
+            "path": "root/undefined/Code",
+            "uniqueId": "undefined_Code_6226BB4A"
           }
         },
-        "bucket_prefix": "code-c84a50b1-"
+        "bucket_prefix": "code-c818e3de-"
       }
     },
     "aws_s3_object": {
-      "testinnerinflightclasscaptureimmutable_Handler_S3Object_9B7C45EF": {
+      "undefined_testinnerinflightclasscaptureimmutable_Handler_S3Object_173DD36E": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:inner inflight class capture immutable/Handler/S3Object",
-            "uniqueId": "testinnerinflightclasscaptureimmutable_Handler_S3Object_9B7C45EF"
+            "path": "root/undefined/Default/test:inner inflight class capture immutable/Handler/S3Object",
+            "uniqueId": "undefined_testinnerinflightclasscaptureimmutable_Handler_S3Object_173DD36E"
           }
         },
-        "bucket": "${aws_s3_bucket.Code.bucket}",
+        "bucket": "${aws_s3_bucket.undefined_Code_6226BB4A.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       }
@@ -188,7 +188,7 @@ class $Root extends $stdlib.std.Resource {
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
-new $App({ outdir: $outdir, name: "inflight_class_inner_capture_mutable", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, sourceDir: process.env['WING_SOURCE_DIR'] }).synth();
+new $App({ outdir: $outdir, name: "inflight_class_inner_capture_mutable", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
 
 ```
 

@@ -11,7 +11,7 @@
     },
     "outputs": {
       "root": {
-        "Default": {
+        "undefined": {
           "cloud.TestRunner": {
             "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS"
           }
@@ -31,64 +31,64 @@
   },
   "resource": {
     "aws_s3_bucket": {
-      "bucket1": {
+      "undefined_bucket1_BEFE10C3": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/bucket1/Default",
-            "uniqueId": "bucket1"
+            "path": "root/undefined/Default/bucket1/Default",
+            "uniqueId": "undefined_bucket1_BEFE10C3"
           }
         },
-        "bucket_prefix": "bucket1-c81ed215-",
+        "bucket_prefix": "bucket1-c88bc235-",
         "force_destroy": false
       },
-      "bucket2": {
+      "undefined_bucket2_6F36B73C": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/bucket2/Default",
-            "uniqueId": "bucket2"
+            "path": "root/undefined/Default/bucket2/Default",
+            "uniqueId": "undefined_bucket2_6F36B73C"
           }
         },
-        "bucket_prefix": "bucket2-c83a0be6-",
+        "bucket_prefix": "bucket2-c843d2f2-",
         "force_destroy": false
       }
     },
     "aws_s3_bucket_public_access_block": {
-      "bucket1_PublicAccessBlock_01FA69AD": {
+      "undefined_bucket1_PublicAccessBlock_ACB0BF0B": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/bucket1/PublicAccessBlock",
-            "uniqueId": "bucket1_PublicAccessBlock_01FA69AD"
+            "path": "root/undefined/Default/bucket1/PublicAccessBlock",
+            "uniqueId": "undefined_bucket1_PublicAccessBlock_ACB0BF0B"
           }
         },
         "block_public_acls": true,
         "block_public_policy": true,
-        "bucket": "${aws_s3_bucket.bucket1.bucket}",
+        "bucket": "${aws_s3_bucket.undefined_bucket1_BEFE10C3.bucket}",
         "ignore_public_acls": true,
         "restrict_public_buckets": true
       },
-      "bucket2_PublicAccessBlock_063D91B9": {
+      "undefined_bucket2_PublicAccessBlock_9EFF5D49": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/bucket2/PublicAccessBlock",
-            "uniqueId": "bucket2_PublicAccessBlock_063D91B9"
+            "path": "root/undefined/Default/bucket2/PublicAccessBlock",
+            "uniqueId": "undefined_bucket2_PublicAccessBlock_9EFF5D49"
           }
         },
         "block_public_acls": true,
         "block_public_policy": true,
-        "bucket": "${aws_s3_bucket.bucket2.bucket}",
+        "bucket": "${aws_s3_bucket.undefined_bucket2_6F36B73C.bucket}",
         "ignore_public_acls": true,
         "restrict_public_buckets": true
       }
     },
     "aws_s3_bucket_server_side_encryption_configuration": {
-      "bucket1_Encryption_4417F366": {
+      "undefined_bucket1_Encryption_A6E33FB0": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/bucket1/Encryption",
-            "uniqueId": "bucket1_Encryption_4417F366"
+            "path": "root/undefined/Default/bucket1/Encryption",
+            "uniqueId": "undefined_bucket1_Encryption_A6E33FB0"
           }
         },
-        "bucket": "${aws_s3_bucket.bucket1.bucket}",
+        "bucket": "${aws_s3_bucket.undefined_bucket1_BEFE10C3.bucket}",
         "rule": [
           {
             "apply_server_side_encryption_by_default": {
@@ -97,14 +97,14 @@
           }
         ]
       },
-      "bucket2_Encryption_6F02F3D7": {
+      "undefined_bucket2_Encryption_E7705D05": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/bucket2/Encryption",
-            "uniqueId": "bucket2_Encryption_6F02F3D7"
+            "path": "root/undefined/Default/bucket2/Encryption",
+            "uniqueId": "undefined_bucket2_Encryption_E7705D05"
           }
         },
-        "bucket": "${aws_s3_bucket.bucket2.bucket}",
+        "bucket": "${aws_s3_bucket.undefined_bucket2_6F36B73C.bucket}",
         "rule": [
           {
             "apply_server_side_encryption_by_default": {
@@ -158,7 +158,7 @@ class $Root extends $stdlib.std.Resource {
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
-new $App({ outdir: $outdir, name: "function_variadic_arguments", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, sourceDir: process.env['WING_SOURCE_DIR'] }).synth();
+new $App({ outdir: $outdir, name: "function_variadic_arguments", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
 
 ```
 

@@ -88,7 +88,7 @@ module.exports = function({  }) {
     },
     "outputs": {
       "root": {
-        "Default": {
+        "undefined": {
           "cloud.TestRunner": {
             "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS"
           }
@@ -98,7 +98,7 @@ module.exports = function({  }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:calling different types of inflights\",\"${aws_lambda_function.testcallingdifferenttypesofinflights_Handler_F0BAE661.arn}\"]]"
+      "value": "[[\"root/undefined/Default/test:calling different types of inflights\",\"${aws_lambda_function.undefined_testcallingdifferenttypesofinflights_Handler_81CDCD79.arn}\"]]"
     }
   },
   "provider": {
@@ -108,61 +108,61 @@ module.exports = function({  }) {
   },
   "resource": {
     "aws_iam_role": {
-      "testcallingdifferenttypesofinflights_Handler_IamRole_3D2D3E24": {
+      "undefined_testcallingdifferenttypesofinflights_Handler_IamRole_6C4D32FB": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:calling different types of inflights/Handler/IamRole",
-            "uniqueId": "testcallingdifferenttypesofinflights_Handler_IamRole_3D2D3E24"
+            "path": "root/undefined/Default/test:calling different types of inflights/Handler/IamRole",
+            "uniqueId": "undefined_testcallingdifferenttypesofinflights_Handler_IamRole_6C4D32FB"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
-      "testcallingdifferenttypesofinflights_Handler_IamRolePolicy_150C3E36": {
+      "undefined_testcallingdifferenttypesofinflights_Handler_IamRolePolicy_19DFF32D": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:calling different types of inflights/Handler/IamRolePolicy",
-            "uniqueId": "testcallingdifferenttypesofinflights_Handler_IamRolePolicy_150C3E36"
+            "path": "root/undefined/Default/test:calling different types of inflights/Handler/IamRolePolicy",
+            "uniqueId": "undefined_testcallingdifferenttypesofinflights_Handler_IamRolePolicy_19DFF32D"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
-        "role": "${aws_iam_role.testcallingdifferenttypesofinflights_Handler_IamRole_3D2D3E24.name}"
+        "role": "${aws_iam_role.undefined_testcallingdifferenttypesofinflights_Handler_IamRole_6C4D32FB.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
-      "testcallingdifferenttypesofinflights_Handler_IamRolePolicyAttachment_6F365B35": {
+      "undefined_testcallingdifferenttypesofinflights_Handler_IamRolePolicyAttachment_E3234CE7": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:calling different types of inflights/Handler/IamRolePolicyAttachment",
-            "uniqueId": "testcallingdifferenttypesofinflights_Handler_IamRolePolicyAttachment_6F365B35"
+            "path": "root/undefined/Default/test:calling different types of inflights/Handler/IamRolePolicyAttachment",
+            "uniqueId": "undefined_testcallingdifferenttypesofinflights_Handler_IamRolePolicyAttachment_E3234CE7"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.testcallingdifferenttypesofinflights_Handler_IamRole_3D2D3E24.name}"
+        "role": "${aws_iam_role.undefined_testcallingdifferenttypesofinflights_Handler_IamRole_6C4D32FB.name}"
       }
     },
     "aws_lambda_function": {
-      "testcallingdifferenttypesofinflights_Handler_F0BAE661": {
+      "undefined_testcallingdifferenttypesofinflights_Handler_81CDCD79": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:calling different types of inflights/Handler/Default",
-            "uniqueId": "testcallingdifferenttypesofinflights_Handler_F0BAE661"
+            "path": "root/undefined/Default/test:calling different types of inflights/Handler/Default",
+            "uniqueId": "undefined_testcallingdifferenttypesofinflights_Handler_81CDCD79"
           }
         },
         "environment": {
           "variables": {
-            "WING_FUNCTION_NAME": "Handler-c8f324e0",
+            "WING_FUNCTION_NAME": "Handler-c8f4b25e",
             "WING_TARGET": "tf-aws"
           }
         },
-        "function_name": "Handler-c8f324e0",
+        "function_name": "Handler-c8f4b25e",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.testcallingdifferenttypesofinflights_Handler_IamRole_3D2D3E24.arn}",
+        "role": "${aws_iam_role.undefined_testcallingdifferenttypesofinflights_Handler_IamRole_6C4D32FB.arn}",
         "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
-        "s3_key": "${aws_s3_object.testcallingdifferenttypesofinflights_Handler_S3Object_A64779ED.key}",
+        "s3_bucket": "${aws_s3_bucket.undefined_Code_6226BB4A.bucket}",
+        "s3_key": "${aws_s3_object.undefined_testcallingdifferenttypesofinflights_Handler_S3Object_03C708B6.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -171,25 +171,25 @@ module.exports = function({  }) {
       }
     },
     "aws_s3_bucket": {
-      "Code": {
+      "undefined_Code_6226BB4A": {
         "//": {
           "metadata": {
-            "path": "root/Default/Code",
-            "uniqueId": "Code"
+            "path": "root/undefined/Code",
+            "uniqueId": "undefined_Code_6226BB4A"
           }
         },
-        "bucket_prefix": "code-c84a50b1-"
+        "bucket_prefix": "code-c818e3de-"
       }
     },
     "aws_s3_object": {
-      "testcallingdifferenttypesofinflights_Handler_S3Object_A64779ED": {
+      "undefined_testcallingdifferenttypesofinflights_Handler_S3Object_03C708B6": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:calling different types of inflights/Handler/S3Object",
-            "uniqueId": "testcallingdifferenttypesofinflights_Handler_S3Object_A64779ED"
+            "path": "root/undefined/Default/test:calling different types of inflights/Handler/S3Object",
+            "uniqueId": "undefined_testcallingdifferenttypesofinflights_Handler_S3Object_03C708B6"
           }
         },
-        "bucket": "${aws_s3_bucket.Code.bucket}",
+        "bucket": "${aws_s3_bucket.undefined_Code_6226BB4A.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       }
@@ -311,7 +311,7 @@ class $Root extends $stdlib.std.Resource {
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
-new $App({ outdir: $outdir, name: "calling_inflight_variants", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, sourceDir: process.env['WING_SOURCE_DIR'] }).synth();
+new $App({ outdir: $outdir, name: "calling_inflight_variants", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
 
 ```
 

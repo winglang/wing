@@ -39,7 +39,7 @@ module.exports = function({ $math_Util }) {
     },
     "outputs": {
       "root": {
-        "Default": {
+        "undefined": {
           "cloud.TestRunner": {
             "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS"
           }
@@ -49,7 +49,7 @@ module.exports = function({ $math_Util }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:inflight fibonacci\",\"${aws_lambda_function.testinflightfibonacci_Handler_5DF5857A.arn}\"]]"
+      "value": "[[\"root/undefined/Default/test:inflight fibonacci\",\"${aws_lambda_function.undefined_testinflightfibonacci_Handler_49BD4F6B.arn}\"]]"
     }
   },
   "provider": {
@@ -59,61 +59,61 @@ module.exports = function({ $math_Util }) {
   },
   "resource": {
     "aws_iam_role": {
-      "testinflightfibonacci_Handler_IamRole_654132EC": {
+      "undefined_testinflightfibonacci_Handler_IamRole_67091E1F": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:inflight fibonacci/Handler/IamRole",
-            "uniqueId": "testinflightfibonacci_Handler_IamRole_654132EC"
+            "path": "root/undefined/Default/test:inflight fibonacci/Handler/IamRole",
+            "uniqueId": "undefined_testinflightfibonacci_Handler_IamRole_67091E1F"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
-      "testinflightfibonacci_Handler_IamRolePolicy_00ECCCC9": {
+      "undefined_testinflightfibonacci_Handler_IamRolePolicy_2227FF8E": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:inflight fibonacci/Handler/IamRolePolicy",
-            "uniqueId": "testinflightfibonacci_Handler_IamRolePolicy_00ECCCC9"
+            "path": "root/undefined/Default/test:inflight fibonacci/Handler/IamRolePolicy",
+            "uniqueId": "undefined_testinflightfibonacci_Handler_IamRolePolicy_2227FF8E"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
-        "role": "${aws_iam_role.testinflightfibonacci_Handler_IamRole_654132EC.name}"
+        "role": "${aws_iam_role.undefined_testinflightfibonacci_Handler_IamRole_67091E1F.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
-      "testinflightfibonacci_Handler_IamRolePolicyAttachment_BA853587": {
+      "undefined_testinflightfibonacci_Handler_IamRolePolicyAttachment_94387ADA": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:inflight fibonacci/Handler/IamRolePolicyAttachment",
-            "uniqueId": "testinflightfibonacci_Handler_IamRolePolicyAttachment_BA853587"
+            "path": "root/undefined/Default/test:inflight fibonacci/Handler/IamRolePolicyAttachment",
+            "uniqueId": "undefined_testinflightfibonacci_Handler_IamRolePolicyAttachment_94387ADA"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.testinflightfibonacci_Handler_IamRole_654132EC.name}"
+        "role": "${aws_iam_role.undefined_testinflightfibonacci_Handler_IamRole_67091E1F.name}"
       }
     },
     "aws_lambda_function": {
-      "testinflightfibonacci_Handler_5DF5857A": {
+      "undefined_testinflightfibonacci_Handler_49BD4F6B": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:inflight fibonacci/Handler/Default",
-            "uniqueId": "testinflightfibonacci_Handler_5DF5857A"
+            "path": "root/undefined/Default/test:inflight fibonacci/Handler/Default",
+            "uniqueId": "undefined_testinflightfibonacci_Handler_49BD4F6B"
           }
         },
         "environment": {
           "variables": {
-            "WING_FUNCTION_NAME": "Handler-c87dfd42",
+            "WING_FUNCTION_NAME": "Handler-c8e9e783",
             "WING_TARGET": "tf-aws"
           }
         },
-        "function_name": "Handler-c87dfd42",
+        "function_name": "Handler-c8e9e783",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.testinflightfibonacci_Handler_IamRole_654132EC.arn}",
+        "role": "${aws_iam_role.undefined_testinflightfibonacci_Handler_IamRole_67091E1F.arn}",
         "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
-        "s3_key": "${aws_s3_object.testinflightfibonacci_Handler_S3Object_60E100A8.key}",
+        "s3_bucket": "${aws_s3_bucket.undefined_Code_6226BB4A.bucket}",
+        "s3_key": "${aws_s3_object.undefined_testinflightfibonacci_Handler_S3Object_E3AAD68E.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -122,25 +122,25 @@ module.exports = function({ $math_Util }) {
       }
     },
     "aws_s3_bucket": {
-      "Code": {
+      "undefined_Code_6226BB4A": {
         "//": {
           "metadata": {
-            "path": "root/Default/Code",
-            "uniqueId": "Code"
+            "path": "root/undefined/Code",
+            "uniqueId": "undefined_Code_6226BB4A"
           }
         },
-        "bucket_prefix": "code-c84a50b1-"
+        "bucket_prefix": "code-c818e3de-"
       }
     },
     "aws_s3_object": {
-      "testinflightfibonacci_Handler_S3Object_60E100A8": {
+      "undefined_testinflightfibonacci_Handler_S3Object_E3AAD68E": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:inflight fibonacci/Handler/S3Object",
-            "uniqueId": "testinflightfibonacci_Handler_S3Object_60E100A8"
+            "path": "root/undefined/Default/test:inflight fibonacci/Handler/S3Object",
+            "uniqueId": "undefined_testinflightfibonacci_Handler_S3Object_E3AAD68E"
           }
         },
-        "bucket": "${aws_s3_bucket.Code.bucket}",
+        "bucket": "${aws_s3_bucket.undefined_Code_6226BB4A.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       }
@@ -199,7 +199,7 @@ class $Root extends $stdlib.std.Resource {
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
-new $App({ outdir: $outdir, name: "fibonacci", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, sourceDir: process.env['WING_SOURCE_DIR'] }).synth();
+new $App({ outdir: $outdir, name: "fibonacci", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
 
 ```
 

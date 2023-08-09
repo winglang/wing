@@ -23,7 +23,7 @@ module.exports = function({  }) {
     },
     "outputs": {
       "root": {
-        "Default": {
+        "undefined": {
           "cloud.TestRunner": {
             "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS"
           }
@@ -43,11 +43,11 @@ module.exports = function({  }) {
   },
   "resource": {
     "aws_s3_bucket": {
-      "Bucket": {
+      "undefined_Bucket_4BEC1B4F": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/Bucket",
-            "uniqueId": "Bucket"
+            "path": "root/undefined/Default/Bucket",
+            "uniqueId": "undefined_Bucket_4BEC1B4F"
           }
         },
         "bucket_prefix": "hello",
@@ -100,7 +100,7 @@ class $Root extends $stdlib.std.Resource {
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
-new $App({ outdir: $outdir, name: "bring_cdktf", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, sourceDir: process.env['WING_SOURCE_DIR'] }).synth();
+new $App({ outdir: $outdir, name: "bring_cdktf", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
 
 ```
 

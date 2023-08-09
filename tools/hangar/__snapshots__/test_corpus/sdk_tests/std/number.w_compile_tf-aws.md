@@ -47,7 +47,7 @@ module.exports = function({ $std_Number }) {
     },
     "outputs": {
       "root": {
-        "Default": {
+        "undefined": {
           "cloud.TestRunner": {
             "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS"
           }
@@ -57,7 +57,7 @@ module.exports = function({ $std_Number }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:fromJson\",\"${aws_lambda_function.testfromJson_Handler_CA86BEEA.arn}\"],[\"root/Default/Default/test:fromStr\",\"${aws_lambda_function.testfromStr_Handler_03ACB5A8.arn}\"]]"
+      "value": "[[\"root/undefined/Default/test:fromJson\",\"${aws_lambda_function.undefined_testfromJson_Handler_0599F64C.arn}\"],[\"root/undefined/Default/test:fromStr\",\"${aws_lambda_function.undefined_testfromStr_Handler_A6082DDE.arn}\"]]"
     }
   },
   "provider": {
@@ -67,116 +67,116 @@ module.exports = function({ $std_Number }) {
   },
   "resource": {
     "aws_iam_role": {
-      "testfromJson_Handler_IamRole_1C3963E1": {
+      "undefined_testfromJson_Handler_IamRole_FEC9BF71": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:fromJson/Handler/IamRole",
-            "uniqueId": "testfromJson_Handler_IamRole_1C3963E1"
+            "path": "root/undefined/Default/test:fromJson/Handler/IamRole",
+            "uniqueId": "undefined_testfromJson_Handler_IamRole_FEC9BF71"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       },
-      "testfromStr_Handler_IamRole_2F6D7B32": {
+      "undefined_testfromStr_Handler_IamRole_B4A67530": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:fromStr/Handler/IamRole",
-            "uniqueId": "testfromStr_Handler_IamRole_2F6D7B32"
+            "path": "root/undefined/Default/test:fromStr/Handler/IamRole",
+            "uniqueId": "undefined_testfromStr_Handler_IamRole_B4A67530"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
-      "testfromJson_Handler_IamRolePolicy_431D7515": {
+      "undefined_testfromJson_Handler_IamRolePolicy_A2BDE852": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:fromJson/Handler/IamRolePolicy",
-            "uniqueId": "testfromJson_Handler_IamRolePolicy_431D7515"
+            "path": "root/undefined/Default/test:fromJson/Handler/IamRolePolicy",
+            "uniqueId": "undefined_testfromJson_Handler_IamRolePolicy_A2BDE852"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
-        "role": "${aws_iam_role.testfromJson_Handler_IamRole_1C3963E1.name}"
+        "role": "${aws_iam_role.undefined_testfromJson_Handler_IamRole_FEC9BF71.name}"
       },
-      "testfromStr_Handler_IamRolePolicy_1E219800": {
+      "undefined_testfromStr_Handler_IamRolePolicy_84CFB2BB": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:fromStr/Handler/IamRolePolicy",
-            "uniqueId": "testfromStr_Handler_IamRolePolicy_1E219800"
+            "path": "root/undefined/Default/test:fromStr/Handler/IamRolePolicy",
+            "uniqueId": "undefined_testfromStr_Handler_IamRolePolicy_84CFB2BB"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
-        "role": "${aws_iam_role.testfromStr_Handler_IamRole_2F6D7B32.name}"
+        "role": "${aws_iam_role.undefined_testfromStr_Handler_IamRole_B4A67530.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
-      "testfromJson_Handler_IamRolePolicyAttachment_71E8933E": {
+      "undefined_testfromJson_Handler_IamRolePolicyAttachment_1876B173": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:fromJson/Handler/IamRolePolicyAttachment",
-            "uniqueId": "testfromJson_Handler_IamRolePolicyAttachment_71E8933E"
+            "path": "root/undefined/Default/test:fromJson/Handler/IamRolePolicyAttachment",
+            "uniqueId": "undefined_testfromJson_Handler_IamRolePolicyAttachment_1876B173"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.testfromJson_Handler_IamRole_1C3963E1.name}"
+        "role": "${aws_iam_role.undefined_testfromJson_Handler_IamRole_FEC9BF71.name}"
       },
-      "testfromStr_Handler_IamRolePolicyAttachment_3E19DAAF": {
+      "undefined_testfromStr_Handler_IamRolePolicyAttachment_48C8ABB7": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:fromStr/Handler/IamRolePolicyAttachment",
-            "uniqueId": "testfromStr_Handler_IamRolePolicyAttachment_3E19DAAF"
+            "path": "root/undefined/Default/test:fromStr/Handler/IamRolePolicyAttachment",
+            "uniqueId": "undefined_testfromStr_Handler_IamRolePolicyAttachment_48C8ABB7"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.testfromStr_Handler_IamRole_2F6D7B32.name}"
+        "role": "${aws_iam_role.undefined_testfromStr_Handler_IamRole_B4A67530.name}"
       }
     },
     "aws_lambda_function": {
-      "testfromJson_Handler_CA86BEEA": {
+      "undefined_testfromJson_Handler_0599F64C": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:fromJson/Handler/Default",
-            "uniqueId": "testfromJson_Handler_CA86BEEA"
+            "path": "root/undefined/Default/test:fromJson/Handler/Default",
+            "uniqueId": "undefined_testfromJson_Handler_0599F64C"
           }
         },
         "environment": {
           "variables": {
-            "WING_FUNCTION_NAME": "Handler-c89f3277",
+            "WING_FUNCTION_NAME": "Handler-c8dbc36b",
             "WING_TARGET": "tf-aws"
           }
         },
-        "function_name": "Handler-c89f3277",
+        "function_name": "Handler-c8dbc36b",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.testfromJson_Handler_IamRole_1C3963E1.arn}",
+        "role": "${aws_iam_role.undefined_testfromJson_Handler_IamRole_FEC9BF71.arn}",
         "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
-        "s3_key": "${aws_s3_object.testfromJson_Handler_S3Object_90641F99.key}",
+        "s3_bucket": "${aws_s3_bucket.undefined_Code_6226BB4A.bucket}",
+        "s3_key": "${aws_s3_object.undefined_testfromJson_Handler_S3Object_D2AC2543.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
           "subnet_ids": []
         }
       },
-      "testfromStr_Handler_03ACB5A8": {
+      "undefined_testfromStr_Handler_A6082DDE": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:fromStr/Handler/Default",
-            "uniqueId": "testfromStr_Handler_03ACB5A8"
+            "path": "root/undefined/Default/test:fromStr/Handler/Default",
+            "uniqueId": "undefined_testfromStr_Handler_A6082DDE"
           }
         },
         "environment": {
           "variables": {
-            "WING_FUNCTION_NAME": "Handler-c8fdb1d1",
+            "WING_FUNCTION_NAME": "Handler-c8040422",
             "WING_TARGET": "tf-aws"
           }
         },
-        "function_name": "Handler-c8fdb1d1",
+        "function_name": "Handler-c8040422",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.testfromStr_Handler_IamRole_2F6D7B32.arn}",
+        "role": "${aws_iam_role.undefined_testfromStr_Handler_IamRole_B4A67530.arn}",
         "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
-        "s3_key": "${aws_s3_object.testfromStr_Handler_S3Object_9922A9EF.key}",
+        "s3_bucket": "${aws_s3_bucket.undefined_Code_6226BB4A.bucket}",
+        "s3_key": "${aws_s3_object.undefined_testfromStr_Handler_S3Object_7F1CA424.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -185,36 +185,36 @@ module.exports = function({ $std_Number }) {
       }
     },
     "aws_s3_bucket": {
-      "Code": {
+      "undefined_Code_6226BB4A": {
         "//": {
           "metadata": {
-            "path": "root/Default/Code",
-            "uniqueId": "Code"
+            "path": "root/undefined/Code",
+            "uniqueId": "undefined_Code_6226BB4A"
           }
         },
-        "bucket_prefix": "code-c84a50b1-"
+        "bucket_prefix": "code-c818e3de-"
       }
     },
     "aws_s3_object": {
-      "testfromJson_Handler_S3Object_90641F99": {
+      "undefined_testfromJson_Handler_S3Object_D2AC2543": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:fromJson/Handler/S3Object",
-            "uniqueId": "testfromJson_Handler_S3Object_90641F99"
+            "path": "root/undefined/Default/test:fromJson/Handler/S3Object",
+            "uniqueId": "undefined_testfromJson_Handler_S3Object_D2AC2543"
           }
         },
-        "bucket": "${aws_s3_bucket.Code.bucket}",
+        "bucket": "${aws_s3_bucket.undefined_Code_6226BB4A.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       },
-      "testfromStr_Handler_S3Object_9922A9EF": {
+      "undefined_testfromStr_Handler_S3Object_7F1CA424": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:fromStr/Handler/S3Object",
-            "uniqueId": "testfromStr_Handler_S3Object_9922A9EF"
+            "path": "root/undefined/Default/test:fromStr/Handler/S3Object",
+            "uniqueId": "undefined_testfromStr_Handler_S3Object_7F1CA424"
           }
         },
-        "bucket": "${aws_s3_bucket.Code.bucket}",
+        "bucket": "${aws_s3_bucket.undefined_Code_6226BB4A.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       }
@@ -289,7 +289,7 @@ class $Root extends $stdlib.std.Resource {
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
-new $App({ outdir: $outdir, name: "number", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, sourceDir: process.env['WING_SOURCE_DIR'] }).synth();
+new $App({ outdir: $outdir, name: "number", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
 
 ```
 

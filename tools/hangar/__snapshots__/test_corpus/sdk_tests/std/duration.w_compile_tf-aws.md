@@ -48,7 +48,7 @@ module.exports = function({ $std_Duration }) {
     },
     "outputs": {
       "root": {
-        "Default": {
+        "undefined": {
           "cloud.TestRunner": {
             "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS"
           }
@@ -58,7 +58,7 @@ module.exports = function({ $std_Duration }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:duration\",\"${aws_lambda_function.testduration_Handler_50E6E252.arn}\"]]"
+      "value": "[[\"root/undefined/Default/test:duration\",\"${aws_lambda_function.undefined_testduration_Handler_A99D79B6.arn}\"]]"
     }
   },
   "provider": {
@@ -68,61 +68,61 @@ module.exports = function({ $std_Duration }) {
   },
   "resource": {
     "aws_iam_role": {
-      "testduration_Handler_IamRole_E8904CA2": {
+      "undefined_testduration_Handler_IamRole_B8EBC3FD": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:duration/Handler/IamRole",
-            "uniqueId": "testduration_Handler_IamRole_E8904CA2"
+            "path": "root/undefined/Default/test:duration/Handler/IamRole",
+            "uniqueId": "undefined_testduration_Handler_IamRole_B8EBC3FD"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
-      "testduration_Handler_IamRolePolicy_0F7DF922": {
+      "undefined_testduration_Handler_IamRolePolicy_06D9D543": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:duration/Handler/IamRolePolicy",
-            "uniqueId": "testduration_Handler_IamRolePolicy_0F7DF922"
+            "path": "root/undefined/Default/test:duration/Handler/IamRolePolicy",
+            "uniqueId": "undefined_testduration_Handler_IamRolePolicy_06D9D543"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
-        "role": "${aws_iam_role.testduration_Handler_IamRole_E8904CA2.name}"
+        "role": "${aws_iam_role.undefined_testduration_Handler_IamRole_B8EBC3FD.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
-      "testduration_Handler_IamRolePolicyAttachment_80DA5D49": {
+      "undefined_testduration_Handler_IamRolePolicyAttachment_5B09F88A": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:duration/Handler/IamRolePolicyAttachment",
-            "uniqueId": "testduration_Handler_IamRolePolicyAttachment_80DA5D49"
+            "path": "root/undefined/Default/test:duration/Handler/IamRolePolicyAttachment",
+            "uniqueId": "undefined_testduration_Handler_IamRolePolicyAttachment_5B09F88A"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.testduration_Handler_IamRole_E8904CA2.name}"
+        "role": "${aws_iam_role.undefined_testduration_Handler_IamRole_B8EBC3FD.name}"
       }
     },
     "aws_lambda_function": {
-      "testduration_Handler_50E6E252": {
+      "undefined_testduration_Handler_A99D79B6": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:duration/Handler/Default",
-            "uniqueId": "testduration_Handler_50E6E252"
+            "path": "root/undefined/Default/test:duration/Handler/Default",
+            "uniqueId": "undefined_testduration_Handler_A99D79B6"
           }
         },
         "environment": {
           "variables": {
-            "WING_FUNCTION_NAME": "Handler-c8eae108",
+            "WING_FUNCTION_NAME": "Handler-c8eaca69",
             "WING_TARGET": "tf-aws"
           }
         },
-        "function_name": "Handler-c8eae108",
+        "function_name": "Handler-c8eaca69",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.testduration_Handler_IamRole_E8904CA2.arn}",
+        "role": "${aws_iam_role.undefined_testduration_Handler_IamRole_B8EBC3FD.arn}",
         "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
-        "s3_key": "${aws_s3_object.testduration_Handler_S3Object_0D531EBE.key}",
+        "s3_bucket": "${aws_s3_bucket.undefined_Code_6226BB4A.bucket}",
+        "s3_key": "${aws_s3_object.undefined_testduration_Handler_S3Object_DC2AC016.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -131,25 +131,25 @@ module.exports = function({ $std_Duration }) {
       }
     },
     "aws_s3_bucket": {
-      "Code": {
+      "undefined_Code_6226BB4A": {
         "//": {
           "metadata": {
-            "path": "root/Default/Code",
-            "uniqueId": "Code"
+            "path": "root/undefined/Code",
+            "uniqueId": "undefined_Code_6226BB4A"
           }
         },
-        "bucket_prefix": "code-c84a50b1-"
+        "bucket_prefix": "code-c818e3de-"
       }
     },
     "aws_s3_object": {
-      "testduration_Handler_S3Object_0D531EBE": {
+      "undefined_testduration_Handler_S3Object_DC2AC016": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:duration/Handler/S3Object",
-            "uniqueId": "testduration_Handler_S3Object_0D531EBE"
+            "path": "root/undefined/Default/test:duration/Handler/S3Object",
+            "uniqueId": "undefined_testduration_Handler_S3Object_DC2AC016"
           }
         },
-        "bucket": "${aws_s3_bucket.Code.bucket}",
+        "bucket": "${aws_s3_bucket.undefined_Code_6226BB4A.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       }
@@ -216,7 +216,7 @@ class $Root extends $stdlib.std.Resource {
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
-new $App({ outdir: $outdir, name: "duration", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, sourceDir: process.env['WING_SOURCE_DIR'] }).synth();
+new $App({ outdir: $outdir, name: "duration", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
 
 ```
 

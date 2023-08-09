@@ -53,7 +53,7 @@ module.exports = function({  }) {
     },
     "outputs": {
       "root": {
-        "Default": {
+        "undefined": {
           "cloud.TestRunner": {
             "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS"
           }
@@ -63,7 +63,7 @@ module.exports = function({  }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:structure interface types for 'handle'\",\"${aws_lambda_function.teststructureinterfacetypesforhandle_Handler_2DA6D9F8.arn}\"]]"
+      "value": "[[\"root/undefined/Default/test:structure interface types for 'handle'\",\"${aws_lambda_function.undefined_teststructureinterfacetypesforhandle_Handler_C1B32C1B.arn}\"]]"
     }
   },
   "provider": {
@@ -73,61 +73,61 @@ module.exports = function({  }) {
   },
   "resource": {
     "aws_iam_role": {
-      "teststructureinterfacetypesforhandle_Handler_IamRole_12602AE7": {
+      "undefined_teststructureinterfacetypesforhandle_Handler_IamRole_683E1C81": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:structure interface types for 'handle'/Handler/IamRole",
-            "uniqueId": "teststructureinterfacetypesforhandle_Handler_IamRole_12602AE7"
+            "path": "root/undefined/Default/test:structure interface types for 'handle'/Handler/IamRole",
+            "uniqueId": "undefined_teststructureinterfacetypesforhandle_Handler_IamRole_683E1C81"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
-      "teststructureinterfacetypesforhandle_Handler_IamRolePolicy_AD8B964E": {
+      "undefined_teststructureinterfacetypesforhandle_Handler_IamRolePolicy_03E90BD4": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:structure interface types for 'handle'/Handler/IamRolePolicy",
-            "uniqueId": "teststructureinterfacetypesforhandle_Handler_IamRolePolicy_AD8B964E"
+            "path": "root/undefined/Default/test:structure interface types for 'handle'/Handler/IamRolePolicy",
+            "uniqueId": "undefined_teststructureinterfacetypesforhandle_Handler_IamRolePolicy_03E90BD4"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
-        "role": "${aws_iam_role.teststructureinterfacetypesforhandle_Handler_IamRole_12602AE7.name}"
+        "role": "${aws_iam_role.undefined_teststructureinterfacetypesforhandle_Handler_IamRole_683E1C81.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
-      "teststructureinterfacetypesforhandle_Handler_IamRolePolicyAttachment_B1D53B86": {
+      "undefined_teststructureinterfacetypesforhandle_Handler_IamRolePolicyAttachment_72430F40": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:structure interface types for 'handle'/Handler/IamRolePolicyAttachment",
-            "uniqueId": "teststructureinterfacetypesforhandle_Handler_IamRolePolicyAttachment_B1D53B86"
+            "path": "root/undefined/Default/test:structure interface types for 'handle'/Handler/IamRolePolicyAttachment",
+            "uniqueId": "undefined_teststructureinterfacetypesforhandle_Handler_IamRolePolicyAttachment_72430F40"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.teststructureinterfacetypesforhandle_Handler_IamRole_12602AE7.name}"
+        "role": "${aws_iam_role.undefined_teststructureinterfacetypesforhandle_Handler_IamRole_683E1C81.name}"
       }
     },
     "aws_lambda_function": {
-      "teststructureinterfacetypesforhandle_Handler_2DA6D9F8": {
+      "undefined_teststructureinterfacetypesforhandle_Handler_C1B32C1B": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:structure interface types for 'handle'/Handler/Default",
-            "uniqueId": "teststructureinterfacetypesforhandle_Handler_2DA6D9F8"
+            "path": "root/undefined/Default/test:structure interface types for 'handle'/Handler/Default",
+            "uniqueId": "undefined_teststructureinterfacetypesforhandle_Handler_C1B32C1B"
           }
         },
         "environment": {
           "variables": {
-            "WING_FUNCTION_NAME": "Handler-c83718d0",
+            "WING_FUNCTION_NAME": "Handler-c888ba84",
             "WING_TARGET": "tf-aws"
           }
         },
-        "function_name": "Handler-c83718d0",
+        "function_name": "Handler-c888ba84",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.teststructureinterfacetypesforhandle_Handler_IamRole_12602AE7.arn}",
+        "role": "${aws_iam_role.undefined_teststructureinterfacetypesforhandle_Handler_IamRole_683E1C81.arn}",
         "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
-        "s3_key": "${aws_s3_object.teststructureinterfacetypesforhandle_Handler_S3Object_9308866C.key}",
+        "s3_bucket": "${aws_s3_bucket.undefined_Code_6226BB4A.bucket}",
+        "s3_key": "${aws_s3_object.undefined_teststructureinterfacetypesforhandle_Handler_S3Object_A4C91161.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -136,25 +136,25 @@ module.exports = function({  }) {
       }
     },
     "aws_s3_bucket": {
-      "Code": {
+      "undefined_Code_6226BB4A": {
         "//": {
           "metadata": {
-            "path": "root/Default/Code",
-            "uniqueId": "Code"
+            "path": "root/undefined/Code",
+            "uniqueId": "undefined_Code_6226BB4A"
           }
         },
-        "bucket_prefix": "code-c84a50b1-"
+        "bucket_prefix": "code-c818e3de-"
       }
     },
     "aws_s3_object": {
-      "teststructureinterfacetypesforhandle_Handler_S3Object_9308866C": {
+      "undefined_teststructureinterfacetypesforhandle_Handler_S3Object_A4C91161": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:structure interface types for 'handle'/Handler/S3Object",
-            "uniqueId": "teststructureinterfacetypesforhandle_Handler_S3Object_9308866C"
+            "path": "root/undefined/Default/test:structure interface types for 'handle'/Handler/S3Object",
+            "uniqueId": "undefined_teststructureinterfacetypesforhandle_Handler_S3Object_A4C91161"
           }
         },
-        "bucket": "${aws_s3_bucket.Code.bucket}",
+        "bucket": "${aws_s3_bucket.undefined_Code_6226BB4A.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       }
@@ -225,7 +225,7 @@ class $Root extends $stdlib.std.Resource {
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
-new $App({ outdir: $outdir, name: "inflight_class_structural_interace_handler", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, sourceDir: process.env['WING_SOURCE_DIR'] }).synth();
+new $App({ outdir: $outdir, name: "inflight_class_structural_interace_handler", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
 
 ```
 

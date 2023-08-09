@@ -37,7 +37,7 @@ module.exports = function({ $Object_keys_myMap__length, $__bang__in___arrOfMap_a
     },
     "outputs": {
       "root": {
-        "Default": {
+        "undefined": {
           "cloud.TestRunner": {
             "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS"
           }
@@ -47,7 +47,7 @@ module.exports = function({ $Object_keys_myMap__length, $__bang__in___arrOfMap_a
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:capture_containers\",\"${aws_lambda_function.testcapture_containers_Handler_C1B42BA9.arn}\"]]"
+      "value": "[[\"root/undefined/Default/test:capture_containers\",\"${aws_lambda_function.undefined_testcapture_containers_Handler_64ECB32B.arn}\"]]"
     }
   },
   "provider": {
@@ -57,61 +57,61 @@ module.exports = function({ $Object_keys_myMap__length, $__bang__in___arrOfMap_a
   },
   "resource": {
     "aws_iam_role": {
-      "testcapture_containers_Handler_IamRole_F3F5FC11": {
+      "undefined_testcapture_containers_Handler_IamRole_B6527BE6": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:capture_containers/Handler/IamRole",
-            "uniqueId": "testcapture_containers_Handler_IamRole_F3F5FC11"
+            "path": "root/undefined/Default/test:capture_containers/Handler/IamRole",
+            "uniqueId": "undefined_testcapture_containers_Handler_IamRole_B6527BE6"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
-      "testcapture_containers_Handler_IamRolePolicy_631AF9E4": {
+      "undefined_testcapture_containers_Handler_IamRolePolicy_8699B47C": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:capture_containers/Handler/IamRolePolicy",
-            "uniqueId": "testcapture_containers_Handler_IamRolePolicy_631AF9E4"
+            "path": "root/undefined/Default/test:capture_containers/Handler/IamRolePolicy",
+            "uniqueId": "undefined_testcapture_containers_Handler_IamRolePolicy_8699B47C"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
-        "role": "${aws_iam_role.testcapture_containers_Handler_IamRole_F3F5FC11.name}"
+        "role": "${aws_iam_role.undefined_testcapture_containers_Handler_IamRole_B6527BE6.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
-      "testcapture_containers_Handler_IamRolePolicyAttachment_8C9C0779": {
+      "undefined_testcapture_containers_Handler_IamRolePolicyAttachment_96E0FA90": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:capture_containers/Handler/IamRolePolicyAttachment",
-            "uniqueId": "testcapture_containers_Handler_IamRolePolicyAttachment_8C9C0779"
+            "path": "root/undefined/Default/test:capture_containers/Handler/IamRolePolicyAttachment",
+            "uniqueId": "undefined_testcapture_containers_Handler_IamRolePolicyAttachment_96E0FA90"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.testcapture_containers_Handler_IamRole_F3F5FC11.name}"
+        "role": "${aws_iam_role.undefined_testcapture_containers_Handler_IamRole_B6527BE6.name}"
       }
     },
     "aws_lambda_function": {
-      "testcapture_containers_Handler_C1B42BA9": {
+      "undefined_testcapture_containers_Handler_64ECB32B": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:capture_containers/Handler/Default",
-            "uniqueId": "testcapture_containers_Handler_C1B42BA9"
+            "path": "root/undefined/Default/test:capture_containers/Handler/Default",
+            "uniqueId": "undefined_testcapture_containers_Handler_64ECB32B"
           }
         },
         "environment": {
           "variables": {
-            "WING_FUNCTION_NAME": "Handler-c876b763",
+            "WING_FUNCTION_NAME": "Handler-c826f126",
             "WING_TARGET": "tf-aws"
           }
         },
-        "function_name": "Handler-c876b763",
+        "function_name": "Handler-c826f126",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.testcapture_containers_Handler_IamRole_F3F5FC11.arn}",
+        "role": "${aws_iam_role.undefined_testcapture_containers_Handler_IamRole_B6527BE6.arn}",
         "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
-        "s3_key": "${aws_s3_object.testcapture_containers_Handler_S3Object_4CA88332.key}",
+        "s3_bucket": "${aws_s3_bucket.undefined_Code_6226BB4A.bucket}",
+        "s3_key": "${aws_s3_object.undefined_testcapture_containers_Handler_S3Object_A278B481.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -120,25 +120,25 @@ module.exports = function({ $Object_keys_myMap__length, $__bang__in___arrOfMap_a
       }
     },
     "aws_s3_bucket": {
-      "Code": {
+      "undefined_Code_6226BB4A": {
         "//": {
           "metadata": {
-            "path": "root/Default/Code",
-            "uniqueId": "Code"
+            "path": "root/undefined/Code",
+            "uniqueId": "undefined_Code_6226BB4A"
           }
         },
-        "bucket_prefix": "code-c84a50b1-"
+        "bucket_prefix": "code-c818e3de-"
       }
     },
     "aws_s3_object": {
-      "testcapture_containers_Handler_S3Object_4CA88332": {
+      "undefined_testcapture_containers_Handler_S3Object_A278B481": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:capture_containers/Handler/S3Object",
-            "uniqueId": "testcapture_containers_Handler_S3Object_4CA88332"
+            "path": "root/undefined/Default/test:capture_containers/Handler/S3Object",
+            "uniqueId": "undefined_testcapture_containers_Handler_S3Object_A278B481"
           }
         },
-        "bucket": "${aws_s3_bucket.Code.bucket}",
+        "bucket": "${aws_s3_bucket.undefined_Code_6226BB4A.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       }
@@ -213,7 +213,7 @@ class $Root extends $stdlib.std.Resource {
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
-new $App({ outdir: $outdir, name: "capture_containers", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, sourceDir: process.env['WING_SOURCE_DIR'] }).synth();
+new $App({ outdir: $outdir, name: "capture_containers", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
 
 ```
 

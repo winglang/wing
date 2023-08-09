@@ -43,7 +43,7 @@ module.exports = function({ $myConst }) {
     },
     "outputs": {
       "root": {
-        "Default": {
+        "undefined": {
           "cloud.TestRunner": {
             "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS"
           }
@@ -53,7 +53,7 @@ module.exports = function({ $myConst }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:inflight class captures const\",\"${aws_lambda_function.testinflightclasscapturesconst_Handler_17207FA8.arn}\"]]"
+      "value": "[[\"root/undefined/Default/test:inflight class captures const\",\"${aws_lambda_function.undefined_testinflightclasscapturesconst_Handler_B68F947E.arn}\"]]"
     }
   },
   "provider": {
@@ -63,61 +63,61 @@ module.exports = function({ $myConst }) {
   },
   "resource": {
     "aws_iam_role": {
-      "testinflightclasscapturesconst_Handler_IamRole_1218DA8A": {
+      "undefined_testinflightclasscapturesconst_Handler_IamRole_BD26B5DC": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:inflight class captures const/Handler/IamRole",
-            "uniqueId": "testinflightclasscapturesconst_Handler_IamRole_1218DA8A"
+            "path": "root/undefined/Default/test:inflight class captures const/Handler/IamRole",
+            "uniqueId": "undefined_testinflightclasscapturesconst_Handler_IamRole_BD26B5DC"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
-      "testinflightclasscapturesconst_Handler_IamRolePolicy_7A96DC9C": {
+      "undefined_testinflightclasscapturesconst_Handler_IamRolePolicy_7F631414": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:inflight class captures const/Handler/IamRolePolicy",
-            "uniqueId": "testinflightclasscapturesconst_Handler_IamRolePolicy_7A96DC9C"
+            "path": "root/undefined/Default/test:inflight class captures const/Handler/IamRolePolicy",
+            "uniqueId": "undefined_testinflightclasscapturesconst_Handler_IamRolePolicy_7F631414"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
-        "role": "${aws_iam_role.testinflightclasscapturesconst_Handler_IamRole_1218DA8A.name}"
+        "role": "${aws_iam_role.undefined_testinflightclasscapturesconst_Handler_IamRole_BD26B5DC.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
-      "testinflightclasscapturesconst_Handler_IamRolePolicyAttachment_C7CD4A0F": {
+      "undefined_testinflightclasscapturesconst_Handler_IamRolePolicyAttachment_DDA6AFB2": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:inflight class captures const/Handler/IamRolePolicyAttachment",
-            "uniqueId": "testinflightclasscapturesconst_Handler_IamRolePolicyAttachment_C7CD4A0F"
+            "path": "root/undefined/Default/test:inflight class captures const/Handler/IamRolePolicyAttachment",
+            "uniqueId": "undefined_testinflightclasscapturesconst_Handler_IamRolePolicyAttachment_DDA6AFB2"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.testinflightclasscapturesconst_Handler_IamRole_1218DA8A.name}"
+        "role": "${aws_iam_role.undefined_testinflightclasscapturesconst_Handler_IamRole_BD26B5DC.name}"
       }
     },
     "aws_lambda_function": {
-      "testinflightclasscapturesconst_Handler_17207FA8": {
+      "undefined_testinflightclasscapturesconst_Handler_B68F947E": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:inflight class captures const/Handler/Default",
-            "uniqueId": "testinflightclasscapturesconst_Handler_17207FA8"
+            "path": "root/undefined/Default/test:inflight class captures const/Handler/Default",
+            "uniqueId": "undefined_testinflightclasscapturesconst_Handler_B68F947E"
           }
         },
         "environment": {
           "variables": {
-            "WING_FUNCTION_NAME": "Handler-c8e53a58",
+            "WING_FUNCTION_NAME": "Handler-c81b468c",
             "WING_TARGET": "tf-aws"
           }
         },
-        "function_name": "Handler-c8e53a58",
+        "function_name": "Handler-c81b468c",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.testinflightclasscapturesconst_Handler_IamRole_1218DA8A.arn}",
+        "role": "${aws_iam_role.undefined_testinflightclasscapturesconst_Handler_IamRole_BD26B5DC.arn}",
         "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
-        "s3_key": "${aws_s3_object.testinflightclasscapturesconst_Handler_S3Object_30E91D8B.key}",
+        "s3_bucket": "${aws_s3_bucket.undefined_Code_6226BB4A.bucket}",
+        "s3_key": "${aws_s3_object.undefined_testinflightclasscapturesconst_Handler_S3Object_DBB5BC23.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -126,25 +126,25 @@ module.exports = function({ $myConst }) {
       }
     },
     "aws_s3_bucket": {
-      "Code": {
+      "undefined_Code_6226BB4A": {
         "//": {
           "metadata": {
-            "path": "root/Default/Code",
-            "uniqueId": "Code"
+            "path": "root/undefined/Code",
+            "uniqueId": "undefined_Code_6226BB4A"
           }
         },
-        "bucket_prefix": "code-c84a50b1-"
+        "bucket_prefix": "code-c818e3de-"
       }
     },
     "aws_s3_object": {
-      "testinflightclasscapturesconst_Handler_S3Object_30E91D8B": {
+      "undefined_testinflightclasscapturesconst_Handler_S3Object_DBB5BC23": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:inflight class captures const/Handler/S3Object",
-            "uniqueId": "testinflightclasscapturesconst_Handler_S3Object_30E91D8B"
+            "path": "root/undefined/Default/test:inflight class captures const/Handler/S3Object",
+            "uniqueId": "undefined_testinflightclasscapturesconst_Handler_S3Object_DBB5BC23"
           }
         },
-        "bucket": "${aws_s3_bucket.Code.bucket}",
+        "bucket": "${aws_s3_bucket.undefined_Code_6226BB4A.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       }
@@ -230,7 +230,7 @@ class $Root extends $stdlib.std.Resource {
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
-new $App({ outdir: $outdir, name: "inflight_class_capture_const", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, sourceDir: process.env['WING_SOURCE_DIR'] }).synth();
+new $App({ outdir: $outdir, name: "inflight_class_capture_const", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
 
 ```
 

@@ -46,7 +46,7 @@ module.exports = function({  }) {
     },
     "outputs": {
       "root": {
-        "Default": {
+        "undefined": {
           "cloud.TestRunner": {
             "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS"
           }
@@ -56,7 +56,7 @@ module.exports = function({  }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:struct definitions are phase independant\",\"${aws_lambda_function.teststructdefinitionsarephaseindependant_Handler_F8CACE9E.arn}\"]]"
+      "value": "[[\"root/undefined/Default/test:struct definitions are phase independant\",\"${aws_lambda_function.undefined_teststructdefinitionsarephaseindependant_Handler_1D7583EE.arn}\"]]"
     }
   },
   "provider": {
@@ -66,61 +66,61 @@ module.exports = function({  }) {
   },
   "resource": {
     "aws_iam_role": {
-      "teststructdefinitionsarephaseindependant_Handler_IamRole_4609E5D7": {
+      "undefined_teststructdefinitionsarephaseindependant_Handler_IamRole_9EC60036": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:struct definitions are phase independant/Handler/IamRole",
-            "uniqueId": "teststructdefinitionsarephaseindependant_Handler_IamRole_4609E5D7"
+            "path": "root/undefined/Default/test:struct definitions are phase independant/Handler/IamRole",
+            "uniqueId": "undefined_teststructdefinitionsarephaseindependant_Handler_IamRole_9EC60036"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
-      "teststructdefinitionsarephaseindependant_Handler_IamRolePolicy_25856004": {
+      "undefined_teststructdefinitionsarephaseindependant_Handler_IamRolePolicy_88AED0B1": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:struct definitions are phase independant/Handler/IamRolePolicy",
-            "uniqueId": "teststructdefinitionsarephaseindependant_Handler_IamRolePolicy_25856004"
+            "path": "root/undefined/Default/test:struct definitions are phase independant/Handler/IamRolePolicy",
+            "uniqueId": "undefined_teststructdefinitionsarephaseindependant_Handler_IamRolePolicy_88AED0B1"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
-        "role": "${aws_iam_role.teststructdefinitionsarephaseindependant_Handler_IamRole_4609E5D7.name}"
+        "role": "${aws_iam_role.undefined_teststructdefinitionsarephaseindependant_Handler_IamRole_9EC60036.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
-      "teststructdefinitionsarephaseindependant_Handler_IamRolePolicyAttachment_E9A6A66B": {
+      "undefined_teststructdefinitionsarephaseindependant_Handler_IamRolePolicyAttachment_92C7E241": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:struct definitions are phase independant/Handler/IamRolePolicyAttachment",
-            "uniqueId": "teststructdefinitionsarephaseindependant_Handler_IamRolePolicyAttachment_E9A6A66B"
+            "path": "root/undefined/Default/test:struct definitions are phase independant/Handler/IamRolePolicyAttachment",
+            "uniqueId": "undefined_teststructdefinitionsarephaseindependant_Handler_IamRolePolicyAttachment_92C7E241"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.teststructdefinitionsarephaseindependant_Handler_IamRole_4609E5D7.name}"
+        "role": "${aws_iam_role.undefined_teststructdefinitionsarephaseindependant_Handler_IamRole_9EC60036.name}"
       }
     },
     "aws_lambda_function": {
-      "teststructdefinitionsarephaseindependant_Handler_F8CACE9E": {
+      "undefined_teststructdefinitionsarephaseindependant_Handler_1D7583EE": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:struct definitions are phase independant/Handler/Default",
-            "uniqueId": "teststructdefinitionsarephaseindependant_Handler_F8CACE9E"
+            "path": "root/undefined/Default/test:struct definitions are phase independant/Handler/Default",
+            "uniqueId": "undefined_teststructdefinitionsarephaseindependant_Handler_1D7583EE"
           }
         },
         "environment": {
           "variables": {
-            "WING_FUNCTION_NAME": "Handler-c8158c42",
+            "WING_FUNCTION_NAME": "Handler-c8e8cd18",
             "WING_TARGET": "tf-aws"
           }
         },
-        "function_name": "Handler-c8158c42",
+        "function_name": "Handler-c8e8cd18",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.teststructdefinitionsarephaseindependant_Handler_IamRole_4609E5D7.arn}",
+        "role": "${aws_iam_role.undefined_teststructdefinitionsarephaseindependant_Handler_IamRole_9EC60036.arn}",
         "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
-        "s3_key": "${aws_s3_object.teststructdefinitionsarephaseindependant_Handler_S3Object_9394B2A7.key}",
+        "s3_bucket": "${aws_s3_bucket.undefined_Code_6226BB4A.bucket}",
+        "s3_key": "${aws_s3_object.undefined_teststructdefinitionsarephaseindependant_Handler_S3Object_DE704B67.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -129,25 +129,25 @@ module.exports = function({  }) {
       }
     },
     "aws_s3_bucket": {
-      "Code": {
+      "undefined_Code_6226BB4A": {
         "//": {
           "metadata": {
-            "path": "root/Default/Code",
-            "uniqueId": "Code"
+            "path": "root/undefined/Code",
+            "uniqueId": "undefined_Code_6226BB4A"
           }
         },
-        "bucket_prefix": "code-c84a50b1-"
+        "bucket_prefix": "code-c818e3de-"
       }
     },
     "aws_s3_object": {
-      "teststructdefinitionsarephaseindependant_Handler_S3Object_9394B2A7": {
+      "undefined_teststructdefinitionsarephaseindependant_Handler_S3Object_DE704B67": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:struct definitions are phase independant/Handler/S3Object",
-            "uniqueId": "teststructdefinitionsarephaseindependant_Handler_S3Object_9394B2A7"
+            "path": "root/undefined/Default/test:struct definitions are phase independant/Handler/S3Object",
+            "uniqueId": "undefined_teststructdefinitionsarephaseindependant_Handler_S3Object_DE704B67"
           }
         },
-        "bucket": "${aws_s3_bucket.Code.bucket}",
+        "bucket": "${aws_s3_bucket.undefined_Code_6226BB4A.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       }
@@ -233,7 +233,7 @@ class $Root extends $stdlib.std.Resource {
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
-new $App({ outdir: $outdir, name: "structs", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, sourceDir: process.env['WING_SOURCE_DIR'] }).synth();
+new $App({ outdir: $outdir, name: "structs", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
 
 ```
 

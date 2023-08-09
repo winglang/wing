@@ -82,7 +82,7 @@ module.exports = function({  }) {
     },
     "outputs": {
       "root": {
-        "Default": {
+        "undefined": {
           "cloud.TestRunner": {
             "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS"
           }
@@ -92,7 +92,7 @@ module.exports = function({  }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:t\",\"${aws_lambda_function.testt_Handler_FF112F5E.arn}\"]]"
+      "value": "[[\"root/undefined/Default/test:t\",\"${aws_lambda_function.undefined_testt_Handler_E4A0C63D.arn}\"]]"
     }
   },
   "provider": {
@@ -102,62 +102,62 @@ module.exports = function({  }) {
   },
   "resource": {
     "aws_iam_role": {
-      "testt_Handler_IamRole_BF49E95A": {
+      "undefined_testt_Handler_IamRole_DB7CE5BF": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:t/Handler/IamRole",
-            "uniqueId": "testt_Handler_IamRole_BF49E95A"
+            "path": "root/undefined/Default/test:t/Handler/IamRole",
+            "uniqueId": "undefined_testt_Handler_IamRole_DB7CE5BF"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
-      "testt_Handler_IamRolePolicy_F429CB90": {
+      "undefined_testt_Handler_IamRolePolicy_0168F369": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:t/Handler/IamRolePolicy",
-            "uniqueId": "testt_Handler_IamRolePolicy_F429CB90"
+            "path": "root/undefined/Default/test:t/Handler/IamRolePolicy",
+            "uniqueId": "undefined_testt_Handler_IamRolePolicy_0168F369"
           }
         },
-        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.orangebucket.arn}\",\"${aws_s3_bucket.orangebucket.arn}/*\"],\"Effect\":\"Allow\"}]}",
-        "role": "${aws_iam_role.testt_Handler_IamRole_BF49E95A.name}"
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.undefined_orangebucket_D9927068.arn}\",\"${aws_s3_bucket.undefined_orangebucket_D9927068.arn}/*\"],\"Effect\":\"Allow\"}]}",
+        "role": "${aws_iam_role.undefined_testt_Handler_IamRole_DB7CE5BF.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
-      "testt_Handler_IamRolePolicyAttachment_16BB0DB0": {
+      "undefined_testt_Handler_IamRolePolicyAttachment_33951D01": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:t/Handler/IamRolePolicyAttachment",
-            "uniqueId": "testt_Handler_IamRolePolicyAttachment_16BB0DB0"
+            "path": "root/undefined/Default/test:t/Handler/IamRolePolicyAttachment",
+            "uniqueId": "undefined_testt_Handler_IamRolePolicyAttachment_33951D01"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.testt_Handler_IamRole_BF49E95A.name}"
+        "role": "${aws_iam_role.undefined_testt_Handler_IamRole_DB7CE5BF.name}"
       }
     },
     "aws_lambda_function": {
-      "testt_Handler_FF112F5E": {
+      "undefined_testt_Handler_E4A0C63D": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:t/Handler/Default",
-            "uniqueId": "testt_Handler_FF112F5E"
+            "path": "root/undefined/Default/test:t/Handler/Default",
+            "uniqueId": "undefined_testt_Handler_E4A0C63D"
           }
         },
         "environment": {
           "variables": {
-            "BUCKET_NAME_c1491ba5": "${aws_s3_bucket.orangebucket.bucket}",
-            "WING_FUNCTION_NAME": "Handler-c83c24f9",
+            "BUCKET_NAME_36c50130": "${aws_s3_bucket.undefined_orangebucket_D9927068.bucket}",
+            "WING_FUNCTION_NAME": "Handler-c8d476e4",
             "WING_TARGET": "tf-aws"
           }
         },
-        "function_name": "Handler-c83c24f9",
+        "function_name": "Handler-c8d476e4",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.testt_Handler_IamRole_BF49E95A.arn}",
+        "role": "${aws_iam_role.undefined_testt_Handler_IamRole_DB7CE5BF.arn}",
         "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
-        "s3_key": "${aws_s3_object.testt_Handler_S3Object_572CA425.key}",
+        "s3_bucket": "${aws_s3_bucket.undefined_Code_6226BB4A.bucket}",
+        "s3_key": "${aws_s3_object.undefined_testt_Handler_S3Object_0FDD24C3.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -166,50 +166,50 @@ module.exports = function({  }) {
       }
     },
     "aws_s3_bucket": {
-      "Code": {
+      "undefined_Code_6226BB4A": {
         "//": {
           "metadata": {
-            "path": "root/Default/Code",
-            "uniqueId": "Code"
+            "path": "root/undefined/Code",
+            "uniqueId": "undefined_Code_6226BB4A"
           }
         },
-        "bucket_prefix": "code-c84a50b1-"
+        "bucket_prefix": "code-c818e3de-"
       },
-      "orangebucket": {
+      "undefined_orangebucket_D9927068": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/orange bucket/Default",
-            "uniqueId": "orangebucket"
+            "path": "root/undefined/Default/orange bucket/Default",
+            "uniqueId": "undefined_orangebucket_D9927068"
           }
         },
-        "bucket_prefix": "orange-bucket-c8ecc927-",
+        "bucket_prefix": "orange-bucket-c8d01f0f-",
         "force_destroy": false
       }
     },
     "aws_s3_bucket_public_access_block": {
-      "orangebucket_PublicAccessBlock_E0BEAC90": {
+      "undefined_orangebucket_PublicAccessBlock_B0F7D0DA": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/orange bucket/PublicAccessBlock",
-            "uniqueId": "orangebucket_PublicAccessBlock_E0BEAC90"
+            "path": "root/undefined/Default/orange bucket/PublicAccessBlock",
+            "uniqueId": "undefined_orangebucket_PublicAccessBlock_B0F7D0DA"
           }
         },
         "block_public_acls": true,
         "block_public_policy": true,
-        "bucket": "${aws_s3_bucket.orangebucket.bucket}",
+        "bucket": "${aws_s3_bucket.undefined_orangebucket_D9927068.bucket}",
         "ignore_public_acls": true,
         "restrict_public_buckets": true
       }
     },
     "aws_s3_bucket_server_side_encryption_configuration": {
-      "orangebucket_Encryption_F338E6D4": {
+      "undefined_orangebucket_Encryption_8D0EAD76": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/orange bucket/Encryption",
-            "uniqueId": "orangebucket_Encryption_F338E6D4"
+            "path": "root/undefined/Default/orange bucket/Encryption",
+            "uniqueId": "undefined_orangebucket_Encryption_8D0EAD76"
           }
         },
-        "bucket": "${aws_s3_bucket.orangebucket.bucket}",
+        "bucket": "${aws_s3_bucket.undefined_orangebucket_D9927068.bucket}",
         "rule": [
           {
             "apply_server_side_encryption_by_default": {
@@ -220,14 +220,14 @@ module.exports = function({  }) {
       }
     },
     "aws_s3_object": {
-      "testt_Handler_S3Object_572CA425": {
+      "undefined_testt_Handler_S3Object_0FDD24C3": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:t/Handler/S3Object",
-            "uniqueId": "testt_Handler_S3Object_572CA425"
+            "path": "root/undefined/Default/test:t/Handler/S3Object",
+            "uniqueId": "undefined_testt_Handler_S3Object_0FDD24C3"
           }
         },
-        "bucket": "${aws_s3_bucket.Code.bucket}",
+        "bucket": "${aws_s3_bucket.undefined_Code_6226BB4A.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       }
@@ -509,7 +509,7 @@ class $Root extends $stdlib.std.Resource {
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
-new $App({ outdir: $outdir, name: "optionals", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, sourceDir: process.env['WING_SOURCE_DIR'] }).synth();
+new $App({ outdir: $outdir, name: "optionals", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
 
 ```
 

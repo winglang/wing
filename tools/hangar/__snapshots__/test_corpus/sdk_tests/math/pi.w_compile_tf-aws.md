@@ -47,7 +47,7 @@ module.exports = function({ $circumference, $math_Util, $r }) {
     },
     "outputs": {
       "root": {
-        "Default": {
+        "undefined": {
           "cloud.TestRunner": {
             "TestFunctionArns": "WING_TEST_RUNNER_FUNCTION_ARNS"
           }
@@ -57,7 +57,7 @@ module.exports = function({ $circumference, $math_Util, $r }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:PI\",\"${aws_lambda_function.testPI_Handler_129F22B0.arn}\"]]"
+      "value": "[[\"root/undefined/Default/test:PI\",\"${aws_lambda_function.undefined_testPI_Handler_33D7FA21.arn}\"]]"
     }
   },
   "provider": {
@@ -67,61 +67,61 @@ module.exports = function({ $circumference, $math_Util, $r }) {
   },
   "resource": {
     "aws_iam_role": {
-      "testPI_Handler_IamRole_F2FA3740": {
+      "undefined_testPI_Handler_IamRole_A853DAE1": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:PI/Handler/IamRole",
-            "uniqueId": "testPI_Handler_IamRole_F2FA3740"
+            "path": "root/undefined/Default/test:PI/Handler/IamRole",
+            "uniqueId": "undefined_testPI_Handler_IamRole_A853DAE1"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
-      "testPI_Handler_IamRolePolicy_95F2AAC2": {
+      "undefined_testPI_Handler_IamRolePolicy_E6D773D9": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:PI/Handler/IamRolePolicy",
-            "uniqueId": "testPI_Handler_IamRolePolicy_95F2AAC2"
+            "path": "root/undefined/Default/test:PI/Handler/IamRolePolicy",
+            "uniqueId": "undefined_testPI_Handler_IamRolePolicy_E6D773D9"
           }
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
-        "role": "${aws_iam_role.testPI_Handler_IamRole_F2FA3740.name}"
+        "role": "${aws_iam_role.undefined_testPI_Handler_IamRole_A853DAE1.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
-      "testPI_Handler_IamRolePolicyAttachment_85BE5FFB": {
+      "undefined_testPI_Handler_IamRolePolicyAttachment_014F39CB": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:PI/Handler/IamRolePolicyAttachment",
-            "uniqueId": "testPI_Handler_IamRolePolicyAttachment_85BE5FFB"
+            "path": "root/undefined/Default/test:PI/Handler/IamRolePolicyAttachment",
+            "uniqueId": "undefined_testPI_Handler_IamRolePolicyAttachment_014F39CB"
           }
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "${aws_iam_role.testPI_Handler_IamRole_F2FA3740.name}"
+        "role": "${aws_iam_role.undefined_testPI_Handler_IamRole_A853DAE1.name}"
       }
     },
     "aws_lambda_function": {
-      "testPI_Handler_129F22B0": {
+      "undefined_testPI_Handler_33D7FA21": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:PI/Handler/Default",
-            "uniqueId": "testPI_Handler_129F22B0"
+            "path": "root/undefined/Default/test:PI/Handler/Default",
+            "uniqueId": "undefined_testPI_Handler_33D7FA21"
           }
         },
         "environment": {
           "variables": {
-            "WING_FUNCTION_NAME": "Handler-c8f48054",
+            "WING_FUNCTION_NAME": "Handler-c89c5f51",
             "WING_TARGET": "tf-aws"
           }
         },
-        "function_name": "Handler-c8f48054",
+        "function_name": "Handler-c89c5f51",
         "handler": "index.handler",
         "publish": true,
-        "role": "${aws_iam_role.testPI_Handler_IamRole_F2FA3740.arn}",
+        "role": "${aws_iam_role.undefined_testPI_Handler_IamRole_A853DAE1.arn}",
         "runtime": "nodejs18.x",
-        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
-        "s3_key": "${aws_s3_object.testPI_Handler_S3Object_85C16122.key}",
+        "s3_bucket": "${aws_s3_bucket.undefined_Code_6226BB4A.bucket}",
+        "s3_key": "${aws_s3_object.undefined_testPI_Handler_S3Object_12D487F1.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -130,25 +130,25 @@ module.exports = function({ $circumference, $math_Util, $r }) {
       }
     },
     "aws_s3_bucket": {
-      "Code": {
+      "undefined_Code_6226BB4A": {
         "//": {
           "metadata": {
-            "path": "root/Default/Code",
-            "uniqueId": "Code"
+            "path": "root/undefined/Code",
+            "uniqueId": "undefined_Code_6226BB4A"
           }
         },
-        "bucket_prefix": "code-c84a50b1-"
+        "bucket_prefix": "code-c818e3de-"
       }
     },
     "aws_s3_object": {
-      "testPI_Handler_S3Object_85C16122": {
+      "undefined_testPI_Handler_S3Object_12D487F1": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/test:PI/Handler/S3Object",
-            "uniqueId": "testPI_Handler_S3Object_85C16122"
+            "path": "root/undefined/Default/test:PI/Handler/S3Object",
+            "uniqueId": "undefined_testPI_Handler_S3Object_12D487F1"
           }
         },
-        "bucket": "${aws_s3_bucket.Code.bucket}",
+        "bucket": "${aws_s3_bucket.undefined_Code_6226BB4A.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
       }
@@ -233,7 +233,7 @@ class $Root extends $stdlib.std.Resource {
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
-new $App({ outdir: $outdir, name: "pi", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, sourceDir: process.env['WING_SOURCE_DIR'] }).synth();
+new $App({ outdir: $outdir, name: "pi", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
 
 ```
 
