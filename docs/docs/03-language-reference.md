@@ -2,6 +2,7 @@
 title: Wing Programming Language Reference
 id: language-reference
 description: The Wing Language Reference
+sidebar_label: Language Reference
 keywords: [Wing reference, Wing language, language, Wing language spec, Wing programming language]
 ---
 
