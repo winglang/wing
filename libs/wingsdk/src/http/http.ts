@@ -172,7 +172,7 @@ export class Util {
    * Executes a HTTP request to a specified URL and provides a formatted response.
    * This method allows various HTTP methods based on the provided options.
    * @throws Only throws if there is a networking error
-   * @param url The target URL for the request.
+   * @param url The target URL for the request. Sends an HTTP call if no protocol defined
    * @param options Optional parameters for customizing the HTTP request.
    * @inflight
    * @returns the formatted response of the call
@@ -181,7 +181,11 @@ export class Util {
     url: string,
     options?: RequestOptions
   ): Promise<Response> {
-    const res = await fetch(url, { ...defaultOptions, ...options });
+    const hasProtocol = url.match(/^(.*):\/\/(.*)/);
+    const res = await fetch(hasProtocol ? url : `http://${url}`, {
+      ...defaultOptions,
+      ...options,
+    });
     return this._formatResponse(res);
   }
   /**
