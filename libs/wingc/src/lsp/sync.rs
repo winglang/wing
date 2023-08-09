@@ -136,7 +136,7 @@ fn partial_compile(
 
 	let topo_sorted_files = parse_wing_project(
 		&source_path,
-		Some(source_text),
+		source_text,
 		&mut project_data.files,
 		&mut project_data.file_graph,
 		&mut project_data.trees,
