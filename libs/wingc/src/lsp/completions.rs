@@ -624,9 +624,9 @@ fn get_inner_struct_completions(struct_: &Struct, existing_fields: &Vec<String>)
 			if let Some(mut base_completion) = format_symbol_kind_as_completion(&field_data.0, &field_data.1) {
 				let v = field_data.1.as_variable().unwrap();
 				if v.type_.maybe_unwrap_option().is_struct() {
-					base_completion.insert_text = Some(format!("{}: {{\n$1\n}},", field_data.0));
+					base_completion.insert_text = Some(format!("{}: {{\n$1\n}}", field_data.0));
 				} else {
-					base_completion.insert_text = Some(format!("{}: $1,", field_data.0));
+					base_completion.insert_text = Some(format!("{}: $1", field_data.0));
 				}
 
 				base_completion.label = format!("{}:", base_completion.label);
@@ -977,6 +977,7 @@ impl<'a> Visit<'a> for ScopeVisitor<'a> {
 		// (we will still visit sibling expressions, just in case)
 		if set_node {
 			self.nearest_expr = Some(node);
+			// special case, we still want to visit the children of a json literal
 			if matches!(
 				node.kind,
 				ExprKind::JsonLiteral { .. } | ExprKind::JsonMapLiteral { .. }
