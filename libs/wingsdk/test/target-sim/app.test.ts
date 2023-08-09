@@ -11,7 +11,7 @@ test("app name can be customized", async () => {
 
   // WHEN
   const outdir = join(mkdtemp(), `${APP_NAME}.wsim`);
-  const app = new sim.App({ outdir, name: APP_NAME });
+  const app = new sim.App({ outdir, name: APP_NAME, entrypointDir: __dirname });
   Bucket._newBucket(app, "my_bucket");
   const simfile = app.synth();
 
