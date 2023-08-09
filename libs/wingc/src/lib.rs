@@ -152,6 +152,25 @@ pub unsafe extern "C" fn wingc_compile(ptr: u32, len: u32) -> u64 {
 	let output_dir = split.get(1).map(|s| Path::new(s));
 	let absolute_project_dir = split.get(2).map(|s| Path::new(s));
 
+	if !source_file.exists() {
+		report_diagnostic(Diagnostic {
+			message: format!("Source file \"{}\" could not be found", source_file.display()),
+			span: None,
+		});
+		return WASM_RETURN_ERROR;
+	}
+
+	if source_file.is_dir() {
+		report_diagnostic(Diagnostic {
+			message: format!(
+				"Source path must be a file (not a directory): {}",
+				source_file.display()
+			),
+			span: None,
+		});
+		return WASM_RETURN_ERROR;
+	}
+
 	let source_text = match fs::read_to_string(&source_file) {
 		Ok(text) => text,
 		Err(e) => {
@@ -159,7 +178,7 @@ pub unsafe extern "C" fn wingc_compile(ptr: u32, len: u32) -> u64 {
 				message: format!("Could not read file \"{}\": {}", source_file.display(), e),
 				span: None,
 			});
-			String::new()
+			return WASM_RETURN_ERROR;
 		}
 	};
 
