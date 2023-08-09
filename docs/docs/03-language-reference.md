@@ -1543,11 +1543,18 @@ f(1, 2, field1: 3, field2: 4);
 // f(1, 2, field1: 3); // can't do this, partial expansion is not allowed
 ```
 
-#### 3.6.3 Roadmap
-
-The following features are not yet implemented, but we are planning to add them in the future:
-
-* Variadic arguments (`...args`) - see https://github.com/winglang/wing/issues/125 to track.
+#### 3.6.3 Variadic Arguments
+When a function signature's final parameter is denoted by `...` and annotated as an `Array` type,
+then the function accepts typed variadic arguments. 
+Inside the function, these arguments can be accessed using the designated variable name, 
+just as you would with a regular array instance.
+```TS
+let f = (x: num, ...args: Array<num>) => {
+  log("${x + args.length}");
+};
+// last arguments are expanded into their array
+f(4, 8, 15, 16, 23, 42); // logs 9
+```
 
 [`▲ top`][top]
 
