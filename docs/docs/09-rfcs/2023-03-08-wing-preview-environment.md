@@ -244,7 +244,7 @@ New subdomains will be created for each preview environment:
 - `<gh-repository>-<nanoid>.wingcloud.app`
 - `<gh-repository>-<gh-branch>-<entry-point>.wingcloud.app`, as an alias of the above, if available. Otherwise, a random ID could be added somewhere, such as in `<gh-repository>-<gh-branch>-<nanoid>-<entry-point>.wingcloud.app`
 
-During this process, we will also create new entries in the Cloud.Table to store the Flyio project ID, the GitHub PR ID, the entry points and whatever unique IDs we generate for every environment. This data is necessary to later resolve the subdomains to the Flyio projects.
+During this process, we will also create new entries in the Cloud.Table to store the Flyio project ID, the GitHub PR ID, the entry points and whatever unique IDs we generate for every environment. This data is necessary to later resolve the subdomains to the Flyio projects, to update them later, and to delete them.
 
 The technical details on how the subdomain resolution will work at DNS level are still to be determined.
 
