@@ -156,8 +156,9 @@ export const ContainerNode = ({
                 "leading-tight",
                 "truncate",
                 "transition-all",
+                "text-xs",
                 compilerNamed && ["text-slate-600 dark:text-slate-350"],
-                !compilerNamed && ["text-xs", theme.text1],
+                !compilerNamed && [theme.text1],
               )}
             >
               {display?.name || props.name}
