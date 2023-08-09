@@ -14,6 +14,7 @@ import { S3BucketWebsiteConfiguration } from "../.gen/providers/aws/s3-bucket-we
 import { S3Object } from "../.gen/providers/aws/s3-object";
 import * as cloud from "../cloud";
 import { Json } from "../std";
+import { NameOptions, ResourceNames } from "../shared/resource-names";
 
 const INDEX_FILE = "index.html";
 
@@ -39,11 +40,17 @@ export class Website extends cloud.Website {
     this.uploadFiles(this.path);
 
     // create a cloudfront oac
+    const OAC_NAME_OPTIONS: NameOptions = {
+      maxLen: 32,
+      disallowedRegex: /[^a-zA-Z0-9-]/,
+      suffix: "-cloudfront-oac",
+    };
+
     const cloudfrontOac = new CloudfrontOriginAccessControl(
       this,
       "CloudfrontOac",
       {
-        name: "cloudfront-oac",
+        name: ResourceNames.generateName(this, OAC_NAME_OPTIONS),
         originAccessControlOriginType: "s3",
         signingBehavior: "always",
         signingProtocol: "sigv4",
