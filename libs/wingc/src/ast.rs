@@ -6,7 +6,7 @@ use indexmap::{Equivalent, IndexMap, IndexSet};
 use itertools::Itertools;
 
 use crate::diagnostic::WingSpan;
-use crate::type_check::symbol_env::SymbolEnvRef;
+
 use crate::type_check::{ExprId, CLOSURE_CLASS_HANDLE_METHOD};
 
 static EXPR_COUNTER: AtomicUsize = AtomicUsize::new(0);
