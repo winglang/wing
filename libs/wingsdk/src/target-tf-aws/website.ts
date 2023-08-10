@@ -1,6 +1,7 @@
 import { readdirSync } from "fs";
 import { extname, join, posix, resolve, sep } from "path";
 
+import { Fn } from "cdktf";
 import { Construct } from "constructs";
 import mime from "mime-types";
 import { createEncryptedBucket } from "./bucket";
@@ -15,7 +16,6 @@ import { S3Object } from "../.gen/providers/aws/s3-object";
 import * as cloud from "../cloud";
 import { NameOptions, ResourceNames } from "../shared/resource-names";
 import { Json } from "../std";
-import { Fn } from "cdktf";
 
 const INDEX_FILE = "index.html";
 
