@@ -1,6 +1,6 @@
 # [put_json.w](../../../../../../examples/tests/sdk_tests/bucket/put_json.w) | compile | tf-aws
 
-## inflight.$Closure1-dca0cc93.js
+## inflight.$Closure1-e4a0acde.js
 ```js
 module.exports = function({ $b }) {
   class $Closure1 {
@@ -216,7 +216,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1-dca0cc93.js")({
+          require("./inflight.$Closure1-e4a0acde.js")({
             $b: ${context._lift(b)},
           })
         `);

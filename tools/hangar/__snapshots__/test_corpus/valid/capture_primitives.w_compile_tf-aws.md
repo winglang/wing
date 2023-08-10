@@ -1,6 +1,6 @@
 # [capture_primitives.w](../../../../../examples/tests/valid/capture_primitives.w) | compile | tf-aws
 
-## inflight.$Closure1-8f21bd7b.js
+## inflight.$Closure1-97dc65b1.js
 ```js
 module.exports = function({ $myBool, $myDur_hours, $myDur_minutes, $myDur_seconds, $myNum, $mySecondBool, $myStr }) {
   class $Closure1 {
@@ -171,7 +171,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1-8f21bd7b.js")({
+          require("./inflight.$Closure1-97dc65b1.js")({
             $myBool: ${context._lift(myBool)},
             $myDur_hours: ${context._lift(myDur.hours)},
             $myDur_minutes: ${context._lift(myDur.minutes)},

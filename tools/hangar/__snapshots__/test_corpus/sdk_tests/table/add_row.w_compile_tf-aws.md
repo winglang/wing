@@ -1,6 +1,6 @@
 # [add_row.w](../../../../../../examples/tests/sdk_tests/table/add_row.w) | compile | tf-aws
 
-## inflight.$Closure1-5e774279.js
+## inflight.$Closure1-082294db.js
 ```js
 module.exports = function({ $_marioInfo___gender__, $_marioInfo___role__, $_peachInfo___gender__, $_peachInfo___role__, $table }) {
   class $Closure1 {
@@ -209,7 +209,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1-5e774279.js")({
+          require("./inflight.$Closure1-082294db.js")({
             $_marioInfo___gender__: ${context._lift((marioInfo)["gender"])},
             $_marioInfo___role__: ${context._lift((marioInfo)["role"])},
             $_peachInfo___gender__: ${context._lift((peachInfo)["gender"])},

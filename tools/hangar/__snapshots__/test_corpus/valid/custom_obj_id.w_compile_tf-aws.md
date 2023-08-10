@@ -1,6 +1,6 @@
 # [custom_obj_id.w](../../../../../examples/tests/valid/custom_obj_id.w) | compile | tf-aws
 
-## inflight.Foo-5b07d1c2.js
+## inflight.Foo-359d998f.js
 ```js
 module.exports = function({  }) {
   class Foo {
@@ -60,7 +60,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.Foo-5b07d1c2.js")({
+          require("./inflight.Foo-359d998f.js")({
           })
         `);
       }

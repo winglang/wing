@@ -1,6 +1,6 @@
 # [capture_reassigable_class_field.w](../../../../../examples/tests/valid/capture_reassigable_class_field.w) | compile | tf-aws
 
-## inflight.$Closure1-ee28be52.js
+## inflight.$Closure1-60624ed0.js
 ```js
 module.exports = function({  }) {
   class $Closure1 {
@@ -17,7 +17,7 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.$Closure2-ee28be52.js
+## inflight.$Closure2-60624ed0.js
 ```js
 module.exports = function({ $counter }) {
   class $Closure2 {
@@ -35,7 +35,7 @@ module.exports = function({ $counter }) {
 
 ```
 
-## inflight.$Closure3-ee28be52.js
+## inflight.$Closure3-60624ed0.js
 ```js
 module.exports = function({ $counter, $kv, $util_Util }) {
   class $Closure3 {
@@ -65,7 +65,7 @@ module.exports = function({ $counter, $kv, $util_Util }) {
 
 ```
 
-## inflight.KeyValueStore-ee28be52.js
+## inflight.KeyValueStore-60624ed0.js
 ```js
 module.exports = function({  }) {
   class KeyValueStore {
@@ -296,7 +296,7 @@ class $Root extends $stdlib.std.Resource {
           }
           static _toInflightType(context) {
             return $stdlib.core.NodeJsCode.fromInline(`
-              require("./inflight.$Closure1-ee28be52.js")({
+              require("./inflight.$Closure1-60624ed0.js")({
               })
             `);
           }
@@ -319,7 +319,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.KeyValueStore-ee28be52.js")({
+          require("./inflight.KeyValueStore-60624ed0.js")({
           })
         `);
       }
@@ -359,7 +359,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure2-ee28be52.js")({
+          require("./inflight.$Closure2-60624ed0.js")({
             $counter: ${context._lift(counter)},
           })
         `);
@@ -390,7 +390,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure3-ee28be52.js")({
+          require("./inflight.$Closure3-60624ed0.js")({
             $counter: ${context._lift(counter)},
             $kv: ${context._lift(kv)},
             $util_Util: ${context._lift(util.Util)},

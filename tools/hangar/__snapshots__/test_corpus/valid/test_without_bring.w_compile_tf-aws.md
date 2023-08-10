@@ -1,6 +1,6 @@
 # [test_without_bring.w](../../../../../examples/tests/valid/test_without_bring.w) | compile | tf-aws
 
-## inflight.$Closure1-a742bf1a.js
+## inflight.$Closure1-3b3a0a2a.js
 ```js
 module.exports = function({  }) {
   class $Closure1 {
@@ -156,7 +156,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1-a742bf1a.js")({
+          require("./inflight.$Closure1-3b3a0a2a.js")({
           })
         `);
       }

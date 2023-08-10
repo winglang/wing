@@ -1,6 +1,6 @@
 # [super_call.w](../../../../../examples/tests/valid/super_call.w) | compile | tf-aws
 
-## inflight.$Closure1-a6615781.js
+## inflight.$Closure1-9ebec15f.js
 ```js
 module.exports = function({ $InflightB }) {
   class $Closure1 {
@@ -19,7 +19,7 @@ module.exports = function({ $InflightB }) {
 
 ```
 
-## inflight.$Closure2-a6615781.js
+## inflight.$Closure2-9ebec15f.js
 ```js
 module.exports = function({ $extended }) {
   class $Closure2 {
@@ -37,7 +37,7 @@ module.exports = function({ $extended }) {
 
 ```
 
-## inflight.A-a6615781.js
+## inflight.A-9ebec15f.js
 ```js
 module.exports = function({  }) {
   class A {
@@ -49,7 +49,7 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.B-a6615781.js
+## inflight.B-9ebec15f.js
 ```js
 module.exports = function({ $A }) {
   class B extends $A {
@@ -62,7 +62,7 @@ module.exports = function({ $A }) {
 
 ```
 
-## inflight.BaseClass-a6615781.js
+## inflight.BaseClass-9ebec15f.js
 ```js
 module.exports = function({ $b }) {
   class BaseClass {
@@ -77,7 +77,7 @@ module.exports = function({ $b }) {
 
 ```
 
-## inflight.C-a6615781.js
+## inflight.C-9ebec15f.js
 ```js
 module.exports = function({ $B }) {
   class C extends $B {
@@ -90,7 +90,7 @@ module.exports = function({ $B }) {
 
 ```
 
-## inflight.D-a6615781.js
+## inflight.D-9ebec15f.js
 ```js
 module.exports = function({ $C }) {
   class D extends $C {
@@ -103,7 +103,7 @@ module.exports = function({ $C }) {
 
 ```
 
-## inflight.E-a6615781.js
+## inflight.E-9ebec15f.js
 ```js
 module.exports = function({ $D }) {
   class E extends $D {
@@ -116,7 +116,7 @@ module.exports = function({ $D }) {
 
 ```
 
-## inflight.ExtendedClass-a6615781.js
+## inflight.ExtendedClass-9ebec15f.js
 ```js
 module.exports = function({ $BaseClass, $b }) {
   class ExtendedClass extends $BaseClass {
@@ -133,7 +133,7 @@ module.exports = function({ $BaseClass, $b }) {
 
 ```
 
-## inflight.InflightA-a6615781.js
+## inflight.InflightA-9ebec15f.js
 ```js
 module.exports = function({  }) {
   class InflightA {
@@ -146,7 +146,7 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.InflightB-a6615781.js
+## inflight.InflightB-9ebec15f.js
 ```js
 module.exports = function({ $InflightA }) {
   class InflightB extends $InflightA {
@@ -408,7 +408,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.A-a6615781.js")({
+          require("./inflight.A-9ebec15f.js")({
           })
         `);
       }
@@ -434,7 +434,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.B-a6615781.js")({
+          require("./inflight.B-9ebec15f.js")({
             $A: ${context._lift(A)},
           })
         `);
@@ -461,7 +461,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.C-a6615781.js")({
+          require("./inflight.C-9ebec15f.js")({
             $B: ${context._lift(B)},
           })
         `);
@@ -485,7 +485,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.D-a6615781.js")({
+          require("./inflight.D-9ebec15f.js")({
             $C: ${context._lift(C)},
           })
         `);
@@ -512,7 +512,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.E-a6615781.js")({
+          require("./inflight.E-9ebec15f.js")({
             $D: ${context._lift(D)},
           })
         `);
@@ -536,7 +536,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.InflightA-a6615781.js")({
+          require("./inflight.InflightA-9ebec15f.js")({
           })
         `);
       }
@@ -559,7 +559,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.InflightB-a6615781.js")({
+          require("./inflight.InflightB-9ebec15f.js")({
             $InflightA: ${context._lift(InflightA)},
           })
         `);
@@ -584,7 +584,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1-a6615781.js")({
+          require("./inflight.$Closure1-9ebec15f.js")({
             $InflightB: ${context._lift(InflightB)},
           })
         `);
@@ -608,7 +608,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.BaseClass-a6615781.js")({
+          require("./inflight.BaseClass-9ebec15f.js")({
             $b: ${context._lift(b)},
           })
         `);
@@ -638,7 +638,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.ExtendedClass-a6615781.js")({
+          require("./inflight.ExtendedClass-9ebec15f.js")({
             $BaseClass: ${context._lift(BaseClass)},
             $b: ${context._lift(b)},
           })
@@ -670,7 +670,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure2-a6615781.js")({
+          require("./inflight.$Closure2-9ebec15f.js")({
             $extended: ${context._lift(extended)},
           })
         `);
