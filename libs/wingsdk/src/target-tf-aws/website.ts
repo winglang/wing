@@ -15,6 +15,7 @@ import { S3Object } from "../.gen/providers/aws/s3-object";
 import * as cloud from "../cloud";
 import { NameOptions, ResourceNames } from "../shared/resource-names";
 import { Json } from "../std";
+import { Fn } from "cdktf";
 
 const INDEX_FILE = "index.html";
 
@@ -159,6 +160,7 @@ export class Website extends cloud.Website {
       key: this.formatPath(filePath.replace(this.path, "")),
       bucket: this.bucket.bucket,
       source: resolve(filePath),
+      sourceHash: Fn.filemd5(resolve(filePath)),
       contentType: mime.contentType(extname(filePath)) || undefined,
     });
   }
