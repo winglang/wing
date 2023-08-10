@@ -296,8 +296,8 @@ module.exports = function({ $http_Util, $w1_url, $w2_url }) {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c8683851",
             "WING_TARGET": "tf-aws",
-            "WING_TOKEN_TFTOKEN_TOKEN_14": "${jsonencode(aws_cloudfront_distribution.cloudWebsite_Distribution_083B5AF9.domain_name)}",
-            "WING_TOKEN_TFTOKEN_TOKEN_28": "${jsonencode(aws_cloudfront_distribution.website-2_Distribution_F1FA4680.domain_name)}"
+            "WING_TOKEN_HTTPS_TFTOKEN_TOKEN_14": "${jsonencode(\"https://${aws_cloudfront_distribution.cloudWebsite_Distribution_083B5AF9.domain_name}\")}",
+            "WING_TOKEN_HTTPS_TFTOKEN_TOKEN_28": "${jsonencode(\"https://${aws_cloudfront_distribution.website-2_Distribution_F1FA4680.domain_name}\")}"
           }
         },
         "function_name": "Handler-c8683851",
