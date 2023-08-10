@@ -110,6 +110,11 @@ for val in m9.values() {
 let m10 = Map<num>{"a" => 1, "b" => 2, "c" => 3};
 assertThrows("no value found for key 'd'", () => m10.get("d"));
 assert(m10.tryGet("d") == nil);
+if let n = m10.tryGet("a") {
+  assert(n == 1);
+} else {
+  assert(false); // Should not happen
+}
 
 //Set tests
 let emptySet = Set<num>{};
