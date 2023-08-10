@@ -37,7 +37,6 @@ exports[`create a schedule 1`] = `
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
-            "sourceModule": "@winglang/sdk",
             "title": "TestRunner",
           },
           "id": "cloud.TestRunner",
@@ -53,7 +52,6 @@ exports[`create a schedule 1`] = `
           },
           "display": {
             "description": "A cloud schedule to trigger events at regular intervals",
-            "sourceModule": "@winglang/sdk",
             "title": "Schedule",
           },
           "id": "my_schedule",
@@ -160,7 +158,6 @@ console.log(\\"Hello from schedule!\\");
           "display": {
             "description": "An inflight resource",
             "hidden": true,
-            "sourceModule": "@winglang/sdk",
             "title": "Inflight",
           },
           "id": "Handler",
@@ -177,7 +174,6 @@ console.log(\\"Hello from schedule!\\");
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
-            "sourceModule": "@winglang/sdk",
             "title": "TestRunner",
           },
           "id": "cloud.TestRunner",
@@ -240,7 +236,6 @@ console.log(\\"Hello from schedule!\\");
               },
               "display": {
                 "hidden": true,
-                "sourceModule": "@winglang/sdk",
               },
               "id": "my_schedule-OnTickMapping-e645076f",
               "path": "root/my_schedule/my_schedule-OnTickMapping-e645076f",
@@ -255,7 +250,6 @@ console.log(\\"Hello from schedule!\\");
               },
               "display": {
                 "hidden": true,
-                "sourceModule": "@winglang/sdk",
               },
               "id": "my_scheduleOnTickHandlere645076f",
               "path": "root/my_schedule/my_scheduleOnTickHandlere645076f",
@@ -267,7 +261,6 @@ console.log(\\"Hello from schedule!\\");
           },
           "display": {
             "description": "A cloud schedule to trigger events at regular intervals",
-            "sourceModule": "@winglang/sdk",
             "title": "Schedule",
           },
           "id": "my_schedule",
@@ -374,7 +367,6 @@ console.log(\\"Hello from schedule!\\");
           "display": {
             "description": "An inflight resource",
             "hidden": true,
-            "sourceModule": "@winglang/sdk",
             "title": "Inflight",
           },
           "id": "Handler",
@@ -391,7 +383,6 @@ console.log(\\"Hello from schedule!\\");
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
-            "sourceModule": "@winglang/sdk",
             "title": "TestRunner",
           },
           "id": "cloud.TestRunner",
@@ -454,7 +445,6 @@ console.log(\\"Hello from schedule!\\");
               },
               "display": {
                 "hidden": true,
-                "sourceModule": "@winglang/sdk",
               },
               "id": "my_schedule-OnTickMapping-e645076f",
               "path": "root/my_schedule/my_schedule-OnTickMapping-e645076f",
@@ -469,7 +459,6 @@ console.log(\\"Hello from schedule!\\");
               },
               "display": {
                 "hidden": true,
-                "sourceModule": "@winglang/sdk",
               },
               "id": "my_scheduleOnTickHandlere645076f",
               "path": "root/my_schedule/my_scheduleOnTickHandlere645076f",
@@ -481,7 +470,6 @@ console.log(\\"Hello from schedule!\\");
           },
           "display": {
             "description": "A cloud schedule to trigger events at regular intervals",
-            "sourceModule": "@winglang/sdk",
             "title": "Schedule",
           },
           "id": "my_schedule",
@@ -588,7 +576,6 @@ console.log(\\"Hello from schedule!\\");
           "display": {
             "description": "An inflight resource",
             "hidden": true,
-            "sourceModule": "@winglang/sdk",
             "title": "Inflight",
           },
           "id": "Handler",
@@ -605,7 +592,6 @@ console.log(\\"Hello from schedule!\\");
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
-            "sourceModule": "@winglang/sdk",
             "title": "TestRunner",
           },
           "id": "cloud.TestRunner",
@@ -668,7 +654,6 @@ console.log(\\"Hello from schedule!\\");
               },
               "display": {
                 "hidden": true,
-                "sourceModule": "@winglang/sdk",
               },
               "id": "my_schedule-OnTickMapping-e645076f",
               "path": "root/my_schedule/my_schedule-OnTickMapping-e645076f",
@@ -683,7 +668,6 @@ console.log(\\"Hello from schedule!\\");
               },
               "display": {
                 "hidden": true,
-                "sourceModule": "@winglang/sdk",
               },
               "id": "my_scheduleOnTickHandlere645076f",
               "path": "root/my_schedule/my_scheduleOnTickHandlere645076f",
@@ -695,7 +679,6 @@ console.log(\\"Hello from schedule!\\");
           },
           "display": {
             "description": "A cloud schedule to trigger events at regular intervals",
-            "sourceModule": "@winglang/sdk",
             "title": "Schedule",
           },
           "id": "my_schedule",

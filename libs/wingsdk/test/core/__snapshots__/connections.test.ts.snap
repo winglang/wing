@@ -64,7 +64,6 @@ return class Handler {
           "display": {
             "description": "An inflight resource",
             "hidden": true,
-            "sourceModule": "@winglang/sdk",
             "title": "Inflight",
           },
           "id": "Handler",
@@ -81,7 +80,6 @@ return class Handler {
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
-            "sourceModule": "@winglang/sdk",
             "title": "TestRunner",
           },
           "id": "cloud.TestRunner",
@@ -104,7 +102,6 @@ return class Handler {
           },
           "display": {
             "description": "A cloud object store",
-            "sourceModule": "@winglang/sdk",
             "title": "Bucket",
           },
           "id": "my_bucket",
@@ -127,7 +124,6 @@ return class Handler {
           },
           "display": {
             "description": "A cloud function (FaaS)",
-            "sourceModule": "@winglang/sdk",
             "title": "Function",
           },
           "id": "my_function",

@@ -123,7 +123,6 @@ exports[`schedule behavior with cron 2`] = `
                 "display": {
                   "description": "An inflight resource",
                   "hidden": true,
-                  "sourceModule": "@winglang/sdk",
                   "title": "Inflight",
                 },
                 "id": "Handler",
@@ -164,7 +163,6 @@ exports[`schedule behavior with cron 2`] = `
                 },
                 "display": {
                   "description": "A cloud schedule to trigger events at regular intervals",
-                  "sourceModule": "@winglang/sdk",
                   "title": "Schedule",
                 },
                 "id": "Schedule",
@@ -257,7 +255,6 @@ exports[`schedule behavior with cron 2`] = `
                 },
                 "display": {
                   "description": "A cloud function (FaaS)",
-                  "sourceModule": "@winglang/sdk",
                   "title": "Function",
                 },
                 "id": "Schedule-OnTick-c5395e41",
@@ -273,7 +270,6 @@ exports[`schedule behavior with cron 2`] = `
                 },
                 "display": {
                   "hidden": true,
-                  "sourceModule": "@winglang/sdk",
                 },
                 "id": "Schedule-OnTickHandler-c5395e41",
                 "path": "root/Default/Schedule-OnTickHandler-c5395e41",
@@ -307,7 +303,6 @@ exports[`schedule behavior with cron 2`] = `
                 "display": {
                   "description": "A suite of APIs for running tests and collecting results.",
                   "hidden": true,
-                  "sourceModule": "@winglang/sdk",
                   "title": "TestRunner",
                 },
                 "id": "cloud.TestRunner",
@@ -472,7 +467,6 @@ exports[`schedule behavior with rate 2`] = `
                 "display": {
                   "description": "An inflight resource",
                   "hidden": true,
-                  "sourceModule": "@winglang/sdk",
                   "title": "Inflight",
                 },
                 "id": "Handler",
@@ -513,7 +507,6 @@ exports[`schedule behavior with rate 2`] = `
                 },
                 "display": {
                   "description": "A cloud schedule to trigger events at regular intervals",
-                  "sourceModule": "@winglang/sdk",
                   "title": "Schedule",
                 },
                 "id": "Schedule",
@@ -606,7 +599,6 @@ exports[`schedule behavior with rate 2`] = `
                 },
                 "display": {
                   "description": "A cloud function (FaaS)",
-                  "sourceModule": "@winglang/sdk",
                   "title": "Function",
                 },
                 "id": "Schedule-OnTick-c5395e41",
@@ -622,7 +614,6 @@ exports[`schedule behavior with rate 2`] = `
                 },
                 "display": {
                   "hidden": true,
-                  "sourceModule": "@winglang/sdk",
                 },
                 "id": "Schedule-OnTickHandler-c5395e41",
                 "path": "root/Default/Schedule-OnTickHandler-c5395e41",
@@ -656,7 +647,6 @@ exports[`schedule behavior with rate 2`] = `
                 "display": {
                   "description": "A suite of APIs for running tests and collecting results.",
                   "hidden": true,
-                  "sourceModule": "@winglang/sdk",
                   "title": "TestRunner",
                 },
                 "id": "cloud.TestRunner",
@@ -867,7 +857,6 @@ exports[`schedule with two functions 2`] = `
                 "display": {
                   "description": "An inflight resource",
                   "hidden": true,
-                  "sourceModule": "@winglang/sdk",
                   "title": "Inflight",
                 },
                 "id": "Handler1",
@@ -897,7 +886,6 @@ exports[`schedule with two functions 2`] = `
                 "display": {
                   "description": "An inflight resource",
                   "hidden": true,
-                  "sourceModule": "@winglang/sdk",
                   "title": "Inflight",
                 },
                 "id": "Handler2",
@@ -952,7 +940,6 @@ exports[`schedule with two functions 2`] = `
                 },
                 "display": {
                   "description": "A cloud schedule to trigger events at regular intervals",
-                  "sourceModule": "@winglang/sdk",
                   "title": "Schedule",
                 },
                 "id": "Schedule",
@@ -1045,7 +1032,6 @@ exports[`schedule with two functions 2`] = `
                 },
                 "display": {
                   "description": "A cloud function (FaaS)",
-                  "sourceModule": "@winglang/sdk",
                   "title": "Function",
                 },
                 "id": "Schedule-OnTick-0a615500",
@@ -1138,7 +1124,6 @@ exports[`schedule with two functions 2`] = `
                 },
                 "display": {
                   "description": "A cloud function (FaaS)",
-                  "sourceModule": "@winglang/sdk",
                   "title": "Function",
                 },
                 "id": "Schedule-OnTick-7b33bcba",
@@ -1154,7 +1139,6 @@ exports[`schedule with two functions 2`] = `
                 },
                 "display": {
                   "hidden": true,
-                  "sourceModule": "@winglang/sdk",
                 },
                 "id": "Schedule-OnTickHandler-0a615500",
                 "path": "root/Default/Schedule-OnTickHandler-0a615500",
@@ -1169,7 +1153,6 @@ exports[`schedule with two functions 2`] = `
                 },
                 "display": {
                   "hidden": true,
-                  "sourceModule": "@winglang/sdk",
                 },
                 "id": "Schedule-OnTickHandler-7b33bcba",
                 "path": "root/Default/Schedule-OnTickHandler-7b33bcba",
@@ -1203,7 +1186,6 @@ exports[`schedule with two functions 2`] = `
                 "display": {
                   "description": "A suite of APIs for running tests and collecting results.",
                   "hidden": true,
-                  "sourceModule": "@winglang/sdk",
                   "title": "TestRunner",
                 },
                 "id": "cloud.TestRunner",

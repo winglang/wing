@@ -4,7 +4,7 @@ import { simulatorHandleToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
 import * as core from "../core";
-import { IInflightHost } from "../std";
+import { Display, IInflightHost } from "../std";
 import { BaseResourceSchema } from "../testing";
 
 export class OnDeploy extends cloud.OnDeploy {
@@ -18,7 +18,7 @@ export class OnDeploy extends cloud.OnDeploy {
     super(scope, id, handler, props);
 
     this.fn = cloud.Function._newFunction(this, "Function", handler, props);
-    this.fn.display.sourceModule = "@winglang/sdk";
+    this.fn.display.sourceModule = Display.SDK_SOURCE_MODULE;
 
     this.node.addDependency(this.fn);
 

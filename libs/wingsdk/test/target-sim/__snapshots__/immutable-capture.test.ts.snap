@@ -58,7 +58,6 @@ my_capture: [\\"hello\\",\\"dude\\"]
           },
           "display": {
             "description": "A cloud function (FaaS)",
-            "sourceModule": "@winglang/sdk",
             "title": "Function",
           },
           "id": "Function",
@@ -75,7 +74,6 @@ my_capture: [\\"hello\\",\\"dude\\"]
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
-            "sourceModule": "@winglang/sdk",
             "title": "TestRunner",
           },
           "id": "cloud.TestRunner",
@@ -92,7 +90,6 @@ my_capture: [\\"hello\\",\\"dude\\"]
           "display": {
             "description": "An inflight resource",
             "hidden": true,
-            "sourceModule": "@winglang/sdk",
             "title": "Inflight",
           },
           "id": "foo",
@@ -214,7 +211,6 @@ my_buckets: [(function(env) {
           },
           "display": {
             "description": "A cloud object store",
-            "sourceModule": "@winglang/sdk",
             "title": "Bucket",
           },
           "id": "B1",
@@ -237,7 +233,6 @@ my_buckets: [(function(env) {
           },
           "display": {
             "description": "A cloud object store",
-            "sourceModule": "@winglang/sdk",
             "title": "Bucket",
           },
           "id": "B2",
@@ -266,7 +261,6 @@ my_buckets: [(function(env) {
           },
           "display": {
             "description": "A cloud function (FaaS)",
-            "sourceModule": "@winglang/sdk",
             "title": "Function",
           },
           "id": "Function",
@@ -283,7 +277,6 @@ my_buckets: [(function(env) {
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
-            "sourceModule": "@winglang/sdk",
             "title": "TestRunner",
           },
           "id": "cloud.TestRunner",
@@ -300,7 +293,6 @@ my_buckets: [(function(env) {
           "display": {
             "description": "An inflight resource",
             "hidden": true,
-            "sourceModule": "@winglang/sdk",
             "title": "Inflight",
           },
           "id": "foo",
@@ -377,7 +369,6 @@ my_array: [{seconds: 600,minutes: 10,hours: 0.16666666666666666,},{seconds: 1200
           },
           "display": {
             "description": "A cloud function (FaaS)",
-            "sourceModule": "@winglang/sdk",
             "title": "Function",
           },
           "id": "Function",
@@ -394,7 +385,6 @@ my_array: [{seconds: 600,minutes: 10,hours: 0.16666666666666666,},{seconds: 1200
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
-            "sourceModule": "@winglang/sdk",
             "title": "TestRunner",
           },
           "id": "cloud.TestRunner",
@@ -411,7 +401,6 @@ my_array: [{seconds: 600,minutes: 10,hours: 0.16666666666666666,},{seconds: 1200
           "display": {
             "description": "An inflight resource",
             "hidden": true,
-            "sourceModule": "@winglang/sdk",
             "title": "Inflight",
           },
           "id": "foo",
@@ -487,7 +476,6 @@ my_array: [new Map([[\\"foo\\",1],[\\"bar\\",2]]),new Map([[\\"foo\\",3],[\\"bar
           },
           "display": {
             "description": "A cloud function (FaaS)",
-            "sourceModule": "@winglang/sdk",
             "title": "Function",
           },
           "id": "Function",
@@ -504,7 +492,6 @@ my_array: [new Map([[\\"foo\\",1],[\\"bar\\",2]]),new Map([[\\"foo\\",3],[\\"bar
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
-            "sourceModule": "@winglang/sdk",
             "title": "TestRunner",
           },
           "id": "cloud.TestRunner",
@@ -521,7 +508,6 @@ my_array: [new Map([[\\"foo\\",1],[\\"bar\\",2]]),new Map([[\\"foo\\",3],[\\"bar
           "display": {
             "description": "An inflight resource",
             "hidden": true,
-            "sourceModule": "@winglang/sdk",
             "title": "Inflight",
           },
           "id": "foo",
@@ -596,7 +582,6 @@ my_capture: false
           },
           "display": {
             "description": "A cloud function (FaaS)",
-            "sourceModule": "@winglang/sdk",
             "title": "Function",
           },
           "id": "Function",
@@ -613,7 +598,6 @@ my_capture: false
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
-            "sourceModule": "@winglang/sdk",
             "title": "TestRunner",
           },
           "id": "cloud.TestRunner",
@@ -630,7 +614,6 @@ my_capture: false
           "display": {
             "description": "An inflight resource",
             "hidden": true,
-            "sourceModule": "@winglang/sdk",
             "title": "Inflight",
           },
           "id": "foo",
@@ -707,7 +690,6 @@ my_capture: {seconds: 7200,minutes: 120,hours: 2,}
           },
           "display": {
             "description": "A cloud function (FaaS)",
-            "sourceModule": "@winglang/sdk",
             "title": "Function",
           },
           "id": "Function",
@@ -724,7 +706,6 @@ my_capture: {seconds: 7200,minutes: 120,hours: 2,}
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
-            "sourceModule": "@winglang/sdk",
             "title": "TestRunner",
           },
           "id": "cloud.TestRunner",
@@ -741,7 +722,6 @@ my_capture: {seconds: 7200,minutes: 120,hours: 2,}
           "display": {
             "description": "An inflight resource",
             "hidden": true,
-            "sourceModule": "@winglang/sdk",
             "title": "Inflight",
           },
           "id": "foo",
@@ -820,7 +800,6 @@ my_capture: new Map([[\\"foo\\",123],[\\"bar\\",456]])
           },
           "display": {
             "description": "A cloud function (FaaS)",
-            "sourceModule": "@winglang/sdk",
             "title": "Function",
           },
           "id": "Function",
@@ -837,7 +816,6 @@ my_capture: new Map([[\\"foo\\",123],[\\"bar\\",456]])
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
-            "sourceModule": "@winglang/sdk",
             "title": "TestRunner",
           },
           "id": "cloud.TestRunner",
@@ -854,7 +832,6 @@ my_capture: new Map([[\\"foo\\",123],[\\"bar\\",456]])
           "display": {
             "description": "An inflight resource",
             "hidden": true,
-            "sourceModule": "@winglang/sdk",
             "title": "Inflight",
           },
           "id": "foo",
@@ -935,7 +912,6 @@ my_map: new Map([[\\"foo\\",[1,2]],[\\"bar\\",[3,4]]])
           },
           "display": {
             "description": "A cloud function (FaaS)",
-            "sourceModule": "@winglang/sdk",
             "title": "Function",
           },
           "id": "Function",
@@ -952,7 +928,6 @@ my_map: new Map([[\\"foo\\",[1,2]],[\\"bar\\",[3,4]]])
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
-            "sourceModule": "@winglang/sdk",
             "title": "TestRunner",
           },
           "id": "cloud.TestRunner",
@@ -969,7 +944,6 @@ my_map: new Map([[\\"foo\\",[1,2]],[\\"bar\\",[3,4]]])
           "display": {
             "description": "An inflight resource",
             "hidden": true,
-            "sourceModule": "@winglang/sdk",
             "title": "Inflight",
           },
           "id": "foo",
@@ -1047,7 +1021,6 @@ my_map: new Map([[\\"foo\\",[{seconds: 600,minutes: 10,hours: 0.1666666666666666
           },
           "display": {
             "description": "A cloud function (FaaS)",
-            "sourceModule": "@winglang/sdk",
             "title": "Function",
           },
           "id": "Function",
@@ -1064,7 +1037,6 @@ my_map: new Map([[\\"foo\\",[{seconds: 600,minutes: 10,hours: 0.1666666666666666
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
-            "sourceModule": "@winglang/sdk",
             "title": "TestRunner",
           },
           "id": "cloud.TestRunner",
@@ -1081,7 +1053,6 @@ my_map: new Map([[\\"foo\\",[{seconds: 600,minutes: 10,hours: 0.1666666666666666
           "display": {
             "description": "An inflight resource",
             "hidden": true,
-            "sourceModule": "@winglang/sdk",
             "title": "Inflight",
           },
           "id": "foo",
@@ -1200,7 +1171,6 @@ my_map: new Map([[\\"foo\\",(function(env) {
           },
           "display": {
             "description": "A cloud object store",
-            "sourceModule": "@winglang/sdk",
             "title": "Bucket",
           },
           "id": "B1",
@@ -1223,7 +1193,6 @@ my_map: new Map([[\\"foo\\",(function(env) {
           },
           "display": {
             "description": "A cloud object store",
-            "sourceModule": "@winglang/sdk",
             "title": "Bucket",
           },
           "id": "B2",
@@ -1252,7 +1221,6 @@ my_map: new Map([[\\"foo\\",(function(env) {
           },
           "display": {
             "description": "A cloud function (FaaS)",
-            "sourceModule": "@winglang/sdk",
             "title": "Function",
           },
           "id": "Function",
@@ -1269,7 +1237,6 @@ my_map: new Map([[\\"foo\\",(function(env) {
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
-            "sourceModule": "@winglang/sdk",
             "title": "TestRunner",
           },
           "id": "cloud.TestRunner",
@@ -1286,7 +1253,6 @@ my_map: new Map([[\\"foo\\",(function(env) {
           "display": {
             "description": "An inflight resource",
             "hidden": true,
-            "sourceModule": "@winglang/sdk",
             "title": "Inflight",
           },
           "id": "foo",
@@ -1361,7 +1327,6 @@ my_capture: 123
           },
           "display": {
             "description": "A cloud function (FaaS)",
-            "sourceModule": "@winglang/sdk",
             "title": "Function",
           },
           "id": "Function",
@@ -1378,7 +1343,6 @@ my_capture: 123
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
-            "sourceModule": "@winglang/sdk",
             "title": "TestRunner",
           },
           "id": "cloud.TestRunner",
@@ -1395,7 +1359,6 @@ my_capture: 123
           "display": {
             "description": "An inflight resource",
             "hidden": true,
-            "sourceModule": "@winglang/sdk",
             "title": "Inflight",
           },
           "id": "foo",
@@ -1473,7 +1436,6 @@ my_capture: new Set([\\"boom\\",\\"bam\\",\\"bang\\"])
           },
           "display": {
             "description": "A cloud function (FaaS)",
-            "sourceModule": "@winglang/sdk",
             "title": "Function",
           },
           "id": "Function",
@@ -1490,7 +1452,6 @@ my_capture: new Set([\\"boom\\",\\"bam\\",\\"bang\\"])
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
-            "sourceModule": "@winglang/sdk",
             "title": "TestRunner",
           },
           "id": "cloud.TestRunner",
@@ -1507,7 +1468,6 @@ my_capture: new Set([\\"boom\\",\\"bam\\",\\"bang\\"])
           "display": {
             "description": "An inflight resource",
             "hidden": true,
-            "sourceModule": "@winglang/sdk",
             "title": "Inflight",
           },
           "id": "foo",
@@ -1584,7 +1544,6 @@ my_set: new Set([{seconds: 600,minutes: 10,hours: 0.16666666666666666,},{seconds
           },
           "display": {
             "description": "A cloud function (FaaS)",
-            "sourceModule": "@winglang/sdk",
             "title": "Function",
           },
           "id": "Function",
@@ -1601,7 +1560,6 @@ my_set: new Set([{seconds: 600,minutes: 10,hours: 0.16666666666666666,},{seconds
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
-            "sourceModule": "@winglang/sdk",
             "title": "TestRunner",
           },
           "id": "cloud.TestRunner",
@@ -1618,7 +1576,6 @@ my_set: new Set([{seconds: 600,minutes: 10,hours: 0.16666666666666666,},{seconds
           "display": {
             "description": "An inflight resource",
             "hidden": true,
-            "sourceModule": "@winglang/sdk",
             "title": "Inflight",
           },
           "id": "foo",
@@ -1694,7 +1651,6 @@ my_capture: \\"bam bam bam\\"
           },
           "display": {
             "description": "A cloud function (FaaS)",
-            "sourceModule": "@winglang/sdk",
             "title": "Function",
           },
           "id": "Function",
@@ -1711,7 +1667,6 @@ my_capture: \\"bam bam bam\\"
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
-            "sourceModule": "@winglang/sdk",
             "title": "TestRunner",
           },
           "id": "cloud.TestRunner",
@@ -1728,7 +1683,6 @@ my_capture: \\"bam bam bam\\"
           "display": {
             "description": "An inflight resource",
             "hidden": true,
-            "sourceModule": "@winglang/sdk",
             "title": "Inflight",
           },
           "id": "foo",
@@ -1806,7 +1760,6 @@ my_capture: {hello: \\"dude\\",world: \\"cup\\",foo: \\"bar\\",}
           },
           "display": {
             "description": "A cloud function (FaaS)",
-            "sourceModule": "@winglang/sdk",
             "title": "Function",
           },
           "id": "Function",
@@ -1823,7 +1776,6 @@ my_capture: {hello: \\"dude\\",world: \\"cup\\",foo: \\"bar\\",}
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
-            "sourceModule": "@winglang/sdk",
             "title": "TestRunner",
           },
           "id": "cloud.TestRunner",
@@ -1840,7 +1792,6 @@ my_capture: {hello: \\"dude\\",world: \\"cup\\",foo: \\"bar\\",}
           "display": {
             "description": "An inflight resource",
             "hidden": true,
-            "sourceModule": "@winglang/sdk",
             "title": "Inflight",
           },
           "id": "foo",
@@ -1918,7 +1869,6 @@ my_struct: {foo: new Map([[\\"foo\\",1],[\\"bar\\",2]]),bar: new Map([[\\"foo\\"
           },
           "display": {
             "description": "A cloud function (FaaS)",
-            "sourceModule": "@winglang/sdk",
             "title": "Function",
           },
           "id": "Function",
@@ -1935,7 +1885,6 @@ my_struct: {foo: new Map([[\\"foo\\",1],[\\"bar\\",2]]),bar: new Map([[\\"foo\\"
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
-            "sourceModule": "@winglang/sdk",
             "title": "TestRunner",
           },
           "id": "cloud.TestRunner",
@@ -1952,7 +1901,6 @@ my_struct: {foo: new Map([[\\"foo\\",1],[\\"bar\\",2]]),bar: new Map([[\\"foo\\"
           "display": {
             "description": "An inflight resource",
             "hidden": true,
-            "sourceModule": "@winglang/sdk",
             "title": "Inflight",
           },
           "id": "foo",
@@ -2127,7 +2075,6 @@ my_struct: {bucky: (function(env) {
           },
           "display": {
             "description": "A cloud object store",
-            "sourceModule": "@winglang/sdk",
             "title": "Bucket",
           },
           "id": "B1",
@@ -2150,7 +2097,6 @@ my_struct: {bucky: (function(env) {
           },
           "display": {
             "description": "A cloud object store",
-            "sourceModule": "@winglang/sdk",
             "title": "Bucket",
           },
           "id": "B2",
@@ -2173,7 +2119,6 @@ my_struct: {bucky: (function(env) {
           },
           "display": {
             "description": "A cloud object store",
-            "sourceModule": "@winglang/sdk",
             "title": "Bucket",
           },
           "id": "B3",
@@ -2196,7 +2141,6 @@ my_struct: {bucky: (function(env) {
           },
           "display": {
             "description": "A cloud object store",
-            "sourceModule": "@winglang/sdk",
             "title": "Bucket",
           },
           "id": "B4",
@@ -2219,7 +2163,6 @@ my_struct: {bucky: (function(env) {
           },
           "display": {
             "description": "A cloud object store",
-            "sourceModule": "@winglang/sdk",
             "title": "Bucket",
           },
           "id": "B5",
@@ -2266,7 +2209,6 @@ my_struct: {bucky: (function(env) {
           },
           "display": {
             "description": "A cloud function (FaaS)",
-            "sourceModule": "@winglang/sdk",
             "title": "Function",
           },
           "id": "Function",
@@ -2283,7 +2225,6 @@ my_struct: {bucky: (function(env) {
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
-            "sourceModule": "@winglang/sdk",
             "title": "TestRunner",
           },
           "id": "cloud.TestRunner",
@@ -2300,7 +2241,6 @@ my_struct: {bucky: (function(env) {
           "display": {
             "description": "An inflight resource",
             "hidden": true,
-            "sourceModule": "@winglang/sdk",
             "title": "Inflight",
           },
           "id": "foo",

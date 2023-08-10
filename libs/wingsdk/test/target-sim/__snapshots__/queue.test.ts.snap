@@ -39,7 +39,6 @@ exports[`create a queue 1`] = `
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
-            "sourceModule": "@winglang/sdk",
             "title": "TestRunner",
           },
           "id": "cloud.TestRunner",
@@ -55,7 +54,6 @@ exports[`create a queue 1`] = `
           },
           "display": {
             "description": "A distributed message queue",
-            "sourceModule": "@winglang/sdk",
             "title": "Queue",
           },
           "id": "my_queue",
@@ -186,7 +184,6 @@ async handle(message) {
           "display": {
             "description": "An inflight resource",
             "hidden": true,
-            "sourceModule": "@winglang/sdk",
             "title": "Inflight",
           },
           "id": "Handler",
@@ -203,7 +200,6 @@ async handle(message) {
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
-            "sourceModule": "@winglang/sdk",
             "title": "TestRunner",
           },
           "id": "cloud.TestRunner",
@@ -231,7 +227,6 @@ async handle(message) {
               },
               "display": {
                 "hidden": true,
-                "sourceModule": "@winglang/sdk",
               },
               "id": "my_queue-QueueEventMapping-e645076f",
               "path": "root/my_queue/my_queue-QueueEventMapping-e645076f",
@@ -281,7 +276,6 @@ async handle(message) {
               },
               "display": {
                 "hidden": true,
-                "sourceModule": "@winglang/sdk",
               },
               "id": "my_queue-SetConsumerHandler-e645076f",
               "path": "root/my_queue/my_queue-SetConsumerHandler-e645076f",
@@ -293,7 +287,6 @@ async handle(message) {
           },
           "display": {
             "description": "A distributed message queue",
-            "sourceModule": "@winglang/sdk",
             "title": "Queue",
           },
           "id": "my_queue",
@@ -424,7 +417,6 @@ async handle(message) {
           "display": {
             "description": "An inflight resource",
             "hidden": true,
-            "sourceModule": "@winglang/sdk",
             "title": "Inflight",
           },
           "id": "Handler",
@@ -441,7 +433,6 @@ async handle(message) {
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
-            "sourceModule": "@winglang/sdk",
             "title": "TestRunner",
           },
           "id": "cloud.TestRunner",
@@ -469,7 +460,6 @@ async handle(message) {
               },
               "display": {
                 "hidden": true,
-                "sourceModule": "@winglang/sdk",
               },
               "id": "my_queue-QueueEventMapping-e645076f",
               "path": "root/my_queue/my_queue-QueueEventMapping-e645076f",
@@ -519,7 +509,6 @@ async handle(message) {
               },
               "display": {
                 "hidden": true,
-                "sourceModule": "@winglang/sdk",
               },
               "id": "my_queue-SetConsumerHandler-e645076f",
               "path": "root/my_queue/my_queue-SetConsumerHandler-e645076f",
@@ -531,7 +520,6 @@ async handle(message) {
           },
           "display": {
             "description": "A distributed message queue",
-            "sourceModule": "@winglang/sdk",
             "title": "Queue",
           },
           "id": "my_queue",
@@ -666,7 +654,6 @@ async handle(message) {
           "display": {
             "description": "An inflight resource",
             "hidden": true,
-            "sourceModule": "@winglang/sdk",
             "title": "Inflight",
           },
           "id": "Handler",
@@ -683,7 +670,6 @@ async handle(message) {
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
-            "sourceModule": "@winglang/sdk",
             "title": "TestRunner",
           },
           "id": "cloud.TestRunner",
@@ -711,7 +697,6 @@ async handle(message) {
               },
               "display": {
                 "hidden": true,
-                "sourceModule": "@winglang/sdk",
               },
               "id": "my_queue-QueueEventMapping-e645076f",
               "path": "root/my_queue/my_queue-QueueEventMapping-e645076f",
@@ -761,7 +746,6 @@ async handle(message) {
               },
               "display": {
                 "hidden": true,
-                "sourceModule": "@winglang/sdk",
               },
               "id": "my_queue-SetConsumerHandler-e645076f",
               "path": "root/my_queue/my_queue-SetConsumerHandler-e645076f",
@@ -773,7 +757,6 @@ async handle(message) {
           },
           "display": {
             "description": "A distributed message queue",
-            "sourceModule": "@winglang/sdk",
             "title": "Queue",
           },
           "id": "my_queue",
@@ -845,7 +828,6 @@ exports[`queue batch size of 2, purge the queue 2`] = `
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
-            "sourceModule": "@winglang/sdk",
             "title": "TestRunner",
           },
           "id": "cloud.TestRunner",
@@ -861,7 +843,6 @@ exports[`queue batch size of 2, purge the queue 2`] = `
           },
           "display": {
             "description": "A distributed message queue",
-            "sourceModule": "@winglang/sdk",
             "title": "Queue",
           },
           "id": "my_queue",
@@ -996,7 +977,6 @@ async handle(message) {
           "display": {
             "description": "An inflight resource",
             "hidden": true,
-            "sourceModule": "@winglang/sdk",
             "title": "Inflight",
           },
           "id": "Handler",
@@ -1013,7 +993,6 @@ async handle(message) {
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
-            "sourceModule": "@winglang/sdk",
             "title": "TestRunner",
           },
           "id": "cloud.TestRunner",
@@ -1041,7 +1020,6 @@ async handle(message) {
               },
               "display": {
                 "hidden": true,
-                "sourceModule": "@winglang/sdk",
               },
               "id": "my_queue-QueueEventMapping-e645076f",
               "path": "root/my_queue/my_queue-QueueEventMapping-e645076f",
@@ -1091,7 +1069,6 @@ async handle(message) {
               },
               "display": {
                 "hidden": true,
-                "sourceModule": "@winglang/sdk",
               },
               "id": "my_queue-SetConsumerHandler-e645076f",
               "path": "root/my_queue/my_queue-SetConsumerHandler-e645076f",
@@ -1103,7 +1080,6 @@ async handle(message) {
           },
           "display": {
             "description": "A distributed message queue",
-            "sourceModule": "@winglang/sdk",
             "title": "Queue",
           },
           "id": "my_queue",
@@ -1233,7 +1209,6 @@ async handle(message) {
           "display": {
             "description": "An inflight resource",
             "hidden": true,
-            "sourceModule": "@winglang/sdk",
             "title": "Inflight",
           },
           "id": "Handler",
@@ -1250,7 +1225,6 @@ async handle(message) {
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
-            "sourceModule": "@winglang/sdk",
             "title": "TestRunner",
           },
           "id": "cloud.TestRunner",
@@ -1278,7 +1252,6 @@ async handle(message) {
               },
               "display": {
                 "hidden": true,
-                "sourceModule": "@winglang/sdk",
               },
               "id": "my_queue-QueueEventMapping-e645076f",
               "path": "root/my_queue/my_queue-QueueEventMapping-e645076f",
@@ -1328,7 +1301,6 @@ async handle(message) {
               },
               "display": {
                 "hidden": true,
-                "sourceModule": "@winglang/sdk",
               },
               "id": "my_queue-SetConsumerHandler-e645076f",
               "path": "root/my_queue/my_queue-SetConsumerHandler-e645076f",
@@ -1340,7 +1312,6 @@ async handle(message) {
           },
           "display": {
             "description": "A distributed message queue",
-            "sourceModule": "@winglang/sdk",
             "title": "Queue",
           },
           "id": "my_queue",

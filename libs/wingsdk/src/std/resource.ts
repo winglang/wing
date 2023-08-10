@@ -503,6 +503,11 @@ export interface DisplayProps {
  */
 export class Display {
   /**
+   * The source module for the SDK.
+   */
+  public static readonly SDK_SOURCE_MODULE = "@winglang/sdk";
+
+  /**
    * Title of the resource.
    */
   public title?: string;

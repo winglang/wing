@@ -69,7 +69,6 @@ async handle(event) {
           "display": {
             "description": "An inflight resource",
             "hidden": true,
-            "sourceModule": "@winglang/sdk",
             "title": "Inflight",
           },
           "id": "Handler",
@@ -86,7 +85,6 @@ async handle(event) {
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
-            "sourceModule": "@winglang/sdk",
             "title": "TestRunner",
           },
           "id": "cloud.TestRunner",
@@ -102,7 +100,6 @@ async handle(event) {
           },
           "display": {
             "description": "A cloud function (FaaS)",
-            "sourceModule": "@winglang/sdk",
             "title": "Function",
           },
           "id": "my_function",
@@ -198,7 +195,6 @@ async handle(event) {
           "display": {
             "description": "An inflight resource",
             "hidden": true,
-            "sourceModule": "@winglang/sdk",
             "title": "Inflight",
           },
           "id": "Handler",
@@ -215,7 +211,6 @@ async handle(event) {
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
-            "sourceModule": "@winglang/sdk",
             "title": "TestRunner",
           },
           "id": "cloud.TestRunner",
@@ -231,7 +226,6 @@ async handle(event) {
           },
           "display": {
             "description": "A cloud function (FaaS)",
-            "sourceModule": "@winglang/sdk",
             "title": "Function",
           },
           "id": "my_function",
@@ -327,7 +321,6 @@ async handle(event) {
           "display": {
             "description": "An inflight resource",
             "hidden": true,
-            "sourceModule": "@winglang/sdk",
             "title": "Inflight",
           },
           "id": "Handler",
@@ -344,7 +337,6 @@ async handle(event) {
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
-            "sourceModule": "@winglang/sdk",
             "title": "TestRunner",
           },
           "id": "cloud.TestRunner",
@@ -360,7 +352,6 @@ async handle(event) {
           },
           "display": {
             "description": "A cloud function (FaaS)",
-            "sourceModule": "@winglang/sdk",
             "title": "Function",
           },
           "id": "my_function",
@@ -458,7 +449,6 @@ async handle(event) {
           "display": {
             "description": "An inflight resource",
             "hidden": true,
-            "sourceModule": "@winglang/sdk",
             "title": "Inflight",
           },
           "id": "Handler",
@@ -475,7 +465,6 @@ async handle(event) {
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
-            "sourceModule": "@winglang/sdk",
             "title": "TestRunner",
           },
           "id": "cloud.TestRunner",
@@ -491,7 +480,6 @@ async handle(event) {
           },
           "display": {
             "description": "A cloud function (FaaS)",
-            "sourceModule": "@winglang/sdk",
             "title": "Function",
           },
           "id": "my_function",
@@ -577,7 +565,6 @@ async handle() {
           "display": {
             "description": "An inflight resource",
             "hidden": true,
-            "sourceModule": "@winglang/sdk",
             "title": "Inflight",
           },
           "id": "Handler",
@@ -594,7 +581,6 @@ async handle() {
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
-            "sourceModule": "@winglang/sdk",
             "title": "TestRunner",
           },
           "id": "cloud.TestRunner",
@@ -610,7 +596,6 @@ async handle() {
           },
           "display": {
             "description": "A cloud function (FaaS)",
-            "sourceModule": "@winglang/sdk",
             "title": "Function",
           },
           "id": "my_function",
@@ -777,7 +762,6 @@ return class Handler {
           },
           "display": {
             "description": "A cloud function (FaaS)",
-            "sourceModule": "@winglang/sdk",
             "title": "Function",
           },
           "id": "Function.0",
@@ -794,7 +778,6 @@ return class Handler {
           "display": {
             "description": "An inflight resource",
             "hidden": true,
-            "sourceModule": "@winglang/sdk",
             "title": "Inflight",
           },
           "id": "Function.0.handler",
@@ -810,7 +793,6 @@ return class Handler {
           },
           "display": {
             "description": "A cloud function (FaaS)",
-            "sourceModule": "@winglang/sdk",
             "title": "Function",
           },
           "id": "Function.1",
@@ -827,7 +809,6 @@ return class Handler {
           "display": {
             "description": "An inflight resource",
             "hidden": true,
-            "sourceModule": "@winglang/sdk",
             "title": "Inflight",
           },
           "id": "Function.1.handler",
@@ -843,7 +824,6 @@ return class Handler {
           },
           "display": {
             "description": "A cloud function (FaaS)",
-            "sourceModule": "@winglang/sdk",
             "title": "Function",
           },
           "id": "Function.2",
@@ -860,7 +840,6 @@ return class Handler {
           "display": {
             "description": "An inflight resource",
             "hidden": true,
-            "sourceModule": "@winglang/sdk",
             "title": "Inflight",
           },
           "id": "Function.2.handler",
@@ -876,7 +855,6 @@ return class Handler {
           },
           "display": {
             "description": "A cloud function (FaaS)",
-            "sourceModule": "@winglang/sdk",
             "title": "Function",
           },
           "id": "Function.3",
@@ -893,7 +871,6 @@ return class Handler {
           "display": {
             "description": "An inflight resource",
             "hidden": true,
-            "sourceModule": "@winglang/sdk",
             "title": "Inflight",
           },
           "id": "Function.3.handler",
@@ -910,7 +887,6 @@ return class Handler {
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
-            "sourceModule": "@winglang/sdk",
             "title": "TestRunner",
           },
           "id": "cloud.TestRunner",

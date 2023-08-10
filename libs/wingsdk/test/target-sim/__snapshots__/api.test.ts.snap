@@ -113,7 +113,6 @@ return class Handler {
           "display": {
             "description": "An inflight resource",
             "hidden": true,
-            "sourceModule": "@winglang/sdk",
             "title": "Inflight",
           },
           "id": "Handler",
@@ -130,7 +129,6 @@ return class Handler {
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
-            "sourceModule": "@winglang/sdk",
             "title": "TestRunner",
           },
           "id": "cloud.TestRunner",
@@ -158,7 +156,6 @@ return class Handler {
               },
               "display": {
                 "hidden": true,
-                "sourceModule": "@winglang/sdk",
               },
               "id": "ApiEventMapping-e645076f",
               "path": "root/my_api/ApiEventMapping-e645076f",
@@ -193,7 +190,6 @@ return class Handler {
           },
           "display": {
             "description": "A REST API endpoint",
-            "sourceModule": "@winglang/sdk",
             "title": "Api",
           },
           "id": "my_api",
@@ -325,7 +321,6 @@ return class Handler {
           "display": {
             "description": "An inflight resource",
             "hidden": true,
-            "sourceModule": "@winglang/sdk",
             "title": "Inflight",
           },
           "id": "Handler",
@@ -342,7 +337,6 @@ return class Handler {
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
-            "sourceModule": "@winglang/sdk",
             "title": "TestRunner",
           },
           "id": "cloud.TestRunner",
@@ -370,7 +364,6 @@ return class Handler {
               },
               "display": {
                 "hidden": true,
-                "sourceModule": "@winglang/sdk",
               },
               "id": "ApiEventMapping-e645076f",
               "path": "root/my_api/ApiEventMapping-e645076f",
@@ -405,7 +398,6 @@ return class Handler {
           },
           "display": {
             "description": "A REST API endpoint",
-            "sourceModule": "@winglang/sdk",
             "title": "Api",
           },
           "id": "my_api",
@@ -537,7 +529,6 @@ return class Handler {
           "display": {
             "description": "An inflight resource",
             "hidden": true,
-            "sourceModule": "@winglang/sdk",
             "title": "Inflight",
           },
           "id": "Handler",
@@ -554,7 +545,6 @@ return class Handler {
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
-            "sourceModule": "@winglang/sdk",
             "title": "TestRunner",
           },
           "id": "cloud.TestRunner",
@@ -582,7 +572,6 @@ return class Handler {
               },
               "display": {
                 "hidden": true,
-                "sourceModule": "@winglang/sdk",
               },
               "id": "ApiEventMapping-e645076f",
               "path": "root/my_api/ApiEventMapping-e645076f",
@@ -617,7 +606,6 @@ return class Handler {
           },
           "display": {
             "description": "A REST API endpoint",
-            "sourceModule": "@winglang/sdk",
             "title": "Api",
           },
           "id": "my_api",
@@ -749,7 +737,6 @@ return class Handler {
           "display": {
             "description": "An inflight resource",
             "hidden": true,
-            "sourceModule": "@winglang/sdk",
             "title": "Inflight",
           },
           "id": "Handler",
@@ -766,7 +753,6 @@ return class Handler {
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
-            "sourceModule": "@winglang/sdk",
             "title": "TestRunner",
           },
           "id": "cloud.TestRunner",
@@ -794,7 +780,6 @@ return class Handler {
               },
               "display": {
                 "hidden": true,
-                "sourceModule": "@winglang/sdk",
               },
               "id": "ApiEventMapping-e645076f",
               "path": "root/my_api/ApiEventMapping-e645076f",
@@ -829,7 +814,6 @@ return class Handler {
           },
           "display": {
             "description": "A REST API endpoint",
-            "sourceModule": "@winglang/sdk",
             "title": "Api",
           },
           "id": "my_api",
@@ -961,7 +945,6 @@ return class Handler {
           "display": {
             "description": "An inflight resource",
             "hidden": true,
-            "sourceModule": "@winglang/sdk",
             "title": "Inflight",
           },
           "id": "Handler",
@@ -978,7 +961,6 @@ return class Handler {
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
-            "sourceModule": "@winglang/sdk",
             "title": "TestRunner",
           },
           "id": "cloud.TestRunner",
@@ -1006,7 +988,6 @@ return class Handler {
               },
               "display": {
                 "hidden": true,
-                "sourceModule": "@winglang/sdk",
               },
               "id": "ApiEventMapping-e645076f",
               "path": "root/my_api/ApiEventMapping-e645076f",
@@ -1041,7 +1022,6 @@ return class Handler {
           },
           "display": {
             "description": "A REST API endpoint",
-            "sourceModule": "@winglang/sdk",
             "title": "Api",
           },
           "id": "my_api",
@@ -1275,7 +1255,6 @@ return class Handler {
           "display": {
             "description": "An inflight resource",
             "hidden": true,
-            "sourceModule": "@winglang/sdk",
             "title": "Inflight",
           },
           "id": "Handler",
@@ -1292,7 +1271,6 @@ return class Handler {
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
-            "sourceModule": "@winglang/sdk",
             "title": "TestRunner",
           },
           "id": "cloud.TestRunner",
@@ -1356,7 +1334,6 @@ return class Handler {
               },
               "display": {
                 "hidden": true,
-                "sourceModule": "@winglang/sdk",
               },
               "id": "ApiEventMapping-e645076f",
               "path": "root/my_api/ApiEventMapping-e645076f",
@@ -1427,7 +1404,6 @@ return class Handler {
           },
           "display": {
             "description": "A REST API endpoint",
-            "sourceModule": "@winglang/sdk",
             "title": "Api",
           },
           "id": "my_api",
@@ -1557,7 +1533,6 @@ return class Handler {
           "display": {
             "description": "An inflight resource",
             "hidden": true,
-            "sourceModule": "@winglang/sdk",
             "title": "Inflight",
           },
           "id": "Handler",
@@ -1574,7 +1549,6 @@ return class Handler {
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
-            "sourceModule": "@winglang/sdk",
             "title": "TestRunner",
           },
           "id": "cloud.TestRunner",
@@ -1602,7 +1576,6 @@ return class Handler {
               },
               "display": {
                 "hidden": true,
-                "sourceModule": "@winglang/sdk",
               },
               "id": "ApiEventMapping-e645076f",
               "path": "root/my_api/ApiEventMapping-e645076f",
@@ -1637,7 +1610,6 @@ return class Handler {
           },
           "display": {
             "description": "A REST API endpoint",
-            "sourceModule": "@winglang/sdk",
             "title": "Api",
           },
           "id": "my_api",
@@ -1828,7 +1800,6 @@ return class Handler {
           "display": {
             "description": "An inflight resource",
             "hidden": true,
-            "sourceModule": "@winglang/sdk",
             "title": "Inflight",
           },
           "id": "Handler1",
@@ -1845,7 +1816,6 @@ return class Handler {
           "display": {
             "description": "An inflight resource",
             "hidden": true,
-            "sourceModule": "@winglang/sdk",
             "title": "Inflight",
           },
           "id": "Handler2",
@@ -1862,7 +1832,6 @@ return class Handler {
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
-            "sourceModule": "@winglang/sdk",
             "title": "TestRunner",
           },
           "id": "cloud.TestRunner",
@@ -1896,7 +1865,6 @@ return class Handler {
               },
               "display": {
                 "hidden": true,
-                "sourceModule": "@winglang/sdk",
               },
               "id": "ApiEventMapping-7c48a9f0",
               "path": "root/my_api/ApiEventMapping-7c48a9f0",
@@ -1911,7 +1879,6 @@ return class Handler {
               },
               "display": {
                 "hidden": true,
-                "sourceModule": "@winglang/sdk",
               },
               "id": "ApiEventMapping-f6d90a7f",
               "path": "root/my_api/ApiEventMapping-f6d90a7f",
@@ -1969,7 +1936,6 @@ return class Handler {
           },
           "display": {
             "description": "A REST API endpoint",
-            "sourceModule": "@winglang/sdk",
             "title": "Api",
           },
           "id": "my_api",
@@ -2162,7 +2128,6 @@ return class Handler {
           "display": {
             "description": "An inflight resource",
             "hidden": true,
-            "sourceModule": "@winglang/sdk",
             "title": "Inflight",
           },
           "id": "Handler1",
@@ -2179,7 +2144,6 @@ return class Handler {
           "display": {
             "description": "An inflight resource",
             "hidden": true,
-            "sourceModule": "@winglang/sdk",
             "title": "Inflight",
           },
           "id": "Handler2",
@@ -2196,7 +2160,6 @@ return class Handler {
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
-            "sourceModule": "@winglang/sdk",
             "title": "TestRunner",
           },
           "id": "cloud.TestRunner",
@@ -2230,7 +2193,6 @@ return class Handler {
               },
               "display": {
                 "hidden": true,
-                "sourceModule": "@winglang/sdk",
               },
               "id": "ApiEventMapping-7c48a9f0",
               "path": "root/my_api/ApiEventMapping-7c48a9f0",
@@ -2245,7 +2207,6 @@ return class Handler {
               },
               "display": {
                 "hidden": true,
-                "sourceModule": "@winglang/sdk",
               },
               "id": "ApiEventMapping-f6d90a7f",
               "path": "root/my_api/ApiEventMapping-f6d90a7f",
@@ -2303,7 +2264,6 @@ return class Handler {
           },
           "display": {
             "description": "A REST API endpoint",
-            "sourceModule": "@winglang/sdk",
             "title": "Api",
           },
           "id": "my_api",
@@ -2435,7 +2395,6 @@ return class Handler {
           "display": {
             "description": "An inflight resource",
             "hidden": true,
-            "sourceModule": "@winglang/sdk",
             "title": "Inflight",
           },
           "id": "Handler",
@@ -2452,7 +2411,6 @@ return class Handler {
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
-            "sourceModule": "@winglang/sdk",
             "title": "TestRunner",
           },
           "id": "cloud.TestRunner",
@@ -2480,7 +2438,6 @@ return class Handler {
               },
               "display": {
                 "hidden": true,
-                "sourceModule": "@winglang/sdk",
               },
               "id": "ApiEventMapping-e645076f",
               "path": "root/my_api/ApiEventMapping-e645076f",
@@ -2515,7 +2472,6 @@ return class Handler {
           },
           "display": {
             "description": "A REST API endpoint",
-            "sourceModule": "@winglang/sdk",
             "title": "Api",
           },
           "id": "my_api",
@@ -2656,7 +2612,6 @@ return class Handler {
           "display": {
             "description": "An inflight resource",
             "hidden": true,
-            "sourceModule": "@winglang/sdk",
             "title": "Inflight",
           },
           "id": "Handler",
@@ -2673,7 +2628,6 @@ return class Handler {
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
-            "sourceModule": "@winglang/sdk",
             "title": "TestRunner",
           },
           "id": "cloud.TestRunner",
@@ -2701,7 +2655,6 @@ return class Handler {
               },
               "display": {
                 "hidden": true,
-                "sourceModule": "@winglang/sdk",
               },
               "id": "ApiEventMapping-e645076f",
               "path": "root/my_api/ApiEventMapping-e645076f",
@@ -2736,7 +2689,6 @@ return class Handler {
           },
           "display": {
             "description": "A REST API endpoint",
-            "sourceModule": "@winglang/sdk",
             "title": "Api",
           },
           "id": "my_api",
@@ -2868,7 +2820,6 @@ return class Handler {
           "display": {
             "description": "An inflight resource",
             "hidden": true,
-            "sourceModule": "@winglang/sdk",
             "title": "Inflight",
           },
           "id": "Handler",
@@ -2885,7 +2836,6 @@ return class Handler {
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
-            "sourceModule": "@winglang/sdk",
             "title": "TestRunner",
           },
           "id": "cloud.TestRunner",
@@ -2913,7 +2863,6 @@ return class Handler {
               },
               "display": {
                 "hidden": true,
-                "sourceModule": "@winglang/sdk",
               },
               "id": "ApiEventMapping-e645076f",
               "path": "root/my_api/ApiEventMapping-e645076f",
@@ -2948,7 +2897,6 @@ return class Handler {
           },
           "display": {
             "description": "A REST API endpoint",
-            "sourceModule": "@winglang/sdk",
             "title": "Api",
           },
           "id": "my_api",
@@ -3007,7 +2955,6 @@ exports[`create an api 1`] = `
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
-            "sourceModule": "@winglang/sdk",
             "title": "TestRunner",
           },
           "id": "cloud.TestRunner",
@@ -3023,7 +2970,6 @@ exports[`create an api 1`] = `
           },
           "display": {
             "description": "A REST API endpoint",
-            "sourceModule": "@winglang/sdk",
             "title": "Api",
           },
           "id": "my_api",

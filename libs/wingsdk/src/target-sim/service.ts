@@ -8,7 +8,7 @@ import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
 import * as core from "../core";
 import { convertBetweenHandlers } from "../shared/convert";
-import { IInflightHost, Resource } from "../std";
+import { Display, IInflightHost, Resource } from "../std";
 import { BaseResourceSchema } from "../testing";
 
 export class Service extends cloud.Service implements ISimulatorResource {
@@ -69,7 +69,7 @@ export class Service extends cloud.Service implements ISimulatorResource {
       onStartFunctionHandler,
       {}
     );
-    fn.display.sourceModule = "@winglang/sdk";
+    fn.display.sourceModule = Display.SDK_SOURCE_MODULE;
     fn.display.title = "onStart()";
 
     this.node.addDependency(fn);

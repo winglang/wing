@@ -35,7 +35,6 @@ exports[`create a Redis resource 1`] = `
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
-            "sourceModule": "@winglang/sdk",
             "title": "TestRunner",
           },
           "id": "cloud.TestRunner",
@@ -51,7 +50,6 @@ exports[`create a Redis resource 1`] = `
           },
           "display": {
             "description": "A Redis server",
-            "sourceModule": "@winglang/sdk",
             "title": "Redis",
           },
           "id": "my_redis",

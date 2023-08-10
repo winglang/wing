@@ -128,7 +128,6 @@ bucket: (function(env) {
               },
               "display": {
                 "description": "A cloud object store",
-                "sourceModule": "@winglang/sdk",
                 "title": "Bucket",
               },
               "id": "Bucket",
@@ -157,7 +156,6 @@ bucket: (function(env) {
               },
               "display": {
                 "description": "A distributed atomic counter",
-                "sourceModule": "@winglang/sdk",
                 "title": "Counter",
               },
               "id": "Counter",
@@ -187,7 +185,6 @@ bucket: (function(env) {
               "display": {
                 "description": "An inflight resource",
                 "hidden": true,
-                "sourceModule": "@winglang/sdk",
                 "title": "Inflight",
               },
               "id": "Processor",
@@ -215,7 +212,6 @@ bucket: (function(env) {
                   },
                   "display": {
                     "hidden": true,
-                    "sourceModule": "@winglang/sdk",
                   },
                   "id": "Queue-QueueEventMapping-401ee792",
                   "path": "root/HelloWorld/Queue/Queue-QueueEventMapping-401ee792",
@@ -289,7 +285,6 @@ bucket: (function(env) {
                   },
                   "display": {
                     "hidden": true,
-                    "sourceModule": "@winglang/sdk",
                   },
                   "id": "Queue-SetConsumerHandler-401ee792",
                   "path": "root/HelloWorld/Queue/Queue-SetConsumerHandler-401ee792",
@@ -301,7 +296,6 @@ bucket: (function(env) {
               },
               "display": {
                 "description": "A distributed message queue",
-                "sourceModule": "@winglang/sdk",
                 "title": "Queue",
               },
               "id": "Queue",
@@ -326,7 +320,6 @@ bucket: (function(env) {
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
-            "sourceModule": "@winglang/sdk",
             "title": "TestRunner",
           },
           "id": "cloud.TestRunner",

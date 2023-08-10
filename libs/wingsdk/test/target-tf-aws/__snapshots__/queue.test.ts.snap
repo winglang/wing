@@ -45,7 +45,6 @@ exports[`default queue behavior 2`] = `
                 },
                 "display": {
                   "description": "A distributed message queue",
-                  "sourceModule": "@winglang/sdk",
                   "title": "Queue",
                 },
                 "id": "Queue",
@@ -80,7 +79,6 @@ exports[`default queue behavior 2`] = `
                 "display": {
                   "description": "A suite of APIs for running tests and collecting results.",
                   "hidden": true,
-                  "sourceModule": "@winglang/sdk",
                   "title": "TestRunner",
                 },
                 "id": "cloud.TestRunner",
@@ -167,7 +165,6 @@ exports[`queue name valid 2`] = `
                 },
                 "display": {
                   "description": "A distributed message queue",
-                  "sourceModule": "@winglang/sdk",
                   "title": "Queue",
                 },
                 "id": "The-Incredible_Queue-01",
@@ -202,7 +199,6 @@ exports[`queue name valid 2`] = `
                 "display": {
                   "description": "A suite of APIs for running tests and collecting results.",
                   "hidden": true,
-                  "sourceModule": "@winglang/sdk",
                   "title": "TestRunner",
                 },
                 "id": "cloud.TestRunner",
@@ -361,7 +357,6 @@ exports[`queue with a consumer function 3`] = `
                 "display": {
                   "description": "An inflight resource",
                   "hidden": true,
-                  "sourceModule": "@winglang/sdk",
                   "title": "Inflight",
                 },
                 "id": "Handler",
@@ -402,7 +397,6 @@ exports[`queue with a consumer function 3`] = `
                 },
                 "display": {
                   "description": "A distributed message queue",
-                  "sourceModule": "@winglang/sdk",
                   "title": "Queue",
                 },
                 "id": "Queue",
@@ -487,7 +481,6 @@ exports[`queue with a consumer function 3`] = `
                 },
                 "display": {
                   "description": "A cloud function (FaaS)",
-                  "sourceModule": "@winglang/sdk",
                   "title": "Function",
                 },
                 "id": "Queue-SetConsumer-c5395e41",
@@ -503,7 +496,6 @@ exports[`queue with a consumer function 3`] = `
                 },
                 "display": {
                   "hidden": true,
-                  "sourceModule": "@winglang/sdk",
                 },
                 "id": "Queue-SetConsumerHandler-c5395e41",
                 "path": "root/Default/Queue-SetConsumerHandler-c5395e41",
@@ -537,7 +529,6 @@ exports[`queue with a consumer function 3`] = `
                 "display": {
                   "description": "A suite of APIs for running tests and collecting results.",
                   "hidden": true,
-                  "sourceModule": "@winglang/sdk",
                   "title": "TestRunner",
                 },
                 "id": "cloud.TestRunner",
@@ -625,7 +616,6 @@ exports[`queue with custom retention 2`] = `
                 },
                 "display": {
                   "description": "A distributed message queue",
-                  "sourceModule": "@winglang/sdk",
                   "title": "Queue",
                 },
                 "id": "Queue",
@@ -660,7 +650,6 @@ exports[`queue with custom retention 2`] = `
                 "display": {
                   "description": "A suite of APIs for running tests and collecting results.",
                   "hidden": true,
-                  "sourceModule": "@winglang/sdk",
                   "title": "TestRunner",
                 },
                 "id": "cloud.TestRunner",
@@ -748,7 +737,6 @@ exports[`queue with custom timeout 2`] = `
                 },
                 "display": {
                   "description": "A distributed message queue",
-                  "sourceModule": "@winglang/sdk",
                   "title": "Queue",
                 },
                 "id": "Queue",
@@ -783,7 +771,6 @@ exports[`queue with custom timeout 2`] = `
                 "display": {
                   "description": "A suite of APIs for running tests and collecting results.",
                   "hidden": true,
-                  "sourceModule": "@winglang/sdk",
                   "title": "TestRunner",
                 },
                 "id": "cloud.TestRunner",
@@ -870,7 +857,6 @@ exports[`replace invalid character from queue name 2`] = `
                 },
                 "display": {
                   "description": "A distributed message queue",
-                  "sourceModule": "@winglang/sdk",
                   "title": "Queue",
                 },
                 "id": "The*Incredible$Queue",
@@ -905,7 +891,6 @@ exports[`replace invalid character from queue name 2`] = `
                 "display": {
                   "description": "A suite of APIs for running tests and collecting results.",
                   "hidden": true,
-                  "sourceModule": "@winglang/sdk",
                   "title": "TestRunner",
                 },
                 "id": "cloud.TestRunner",

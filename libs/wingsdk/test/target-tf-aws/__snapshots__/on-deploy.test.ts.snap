@@ -98,7 +98,6 @@ exports[`create an OnDeploy 2`] = `
                 "display": {
                   "description": "An inflight resource",
                   "hidden": true,
-                  "sourceModule": "@winglang/sdk",
                   "title": "Inflight",
                 },
                 "id": "Handler",
@@ -133,7 +132,6 @@ exports[`create an OnDeploy 2`] = `
                 "display": {
                   "description": "A suite of APIs for running tests and collecting results.",
                   "hidden": true,
-                  "sourceModule": "@winglang/sdk",
                   "title": "TestRunner",
                 },
                 "id": "cloud.TestRunner",
@@ -204,7 +202,6 @@ exports[`create an OnDeploy 2`] = `
                     },
                     "display": {
                       "description": "A cloud function (FaaS)",
-                      "sourceModule": "@winglang/sdk",
                       "title": "Function",
                     },
                     "id": "Function",
@@ -225,7 +222,6 @@ exports[`create an OnDeploy 2`] = `
                 },
                 "display": {
                   "description": "Run code during the app's deployment.",
-                  "sourceModule": "@winglang/sdk",
                   "title": "OnDeploy",
                 },
                 "id": "my_on_deploy",
@@ -394,7 +390,6 @@ exports[`execute OnDeploy after other resources 2`] = `
                 "display": {
                   "description": "An inflight resource",
                   "hidden": true,
-                  "sourceModule": "@winglang/sdk",
                   "title": "Inflight",
                 },
                 "id": "Handler",
@@ -429,7 +424,6 @@ exports[`execute OnDeploy after other resources 2`] = `
                 "display": {
                   "description": "A suite of APIs for running tests and collecting results.",
                   "hidden": true,
-                  "sourceModule": "@winglang/sdk",
                   "title": "TestRunner",
                 },
                 "id": "cloud.TestRunner",
@@ -471,7 +465,6 @@ exports[`execute OnDeploy after other resources 2`] = `
                 },
                 "display": {
                   "description": "A cloud object store",
-                  "sourceModule": "@winglang/sdk",
                   "title": "Bucket",
                 },
                 "id": "my_bucket",
@@ -542,7 +535,6 @@ exports[`execute OnDeploy after other resources 2`] = `
                     },
                     "display": {
                       "description": "A cloud function (FaaS)",
-                      "sourceModule": "@winglang/sdk",
                       "title": "Function",
                     },
                     "id": "Function",
@@ -563,7 +555,6 @@ exports[`execute OnDeploy after other resources 2`] = `
                 },
                 "display": {
                   "description": "Run code during the app's deployment.",
-                  "sourceModule": "@winglang/sdk",
                   "title": "OnDeploy",
                 },
                 "id": "my_on_deploy",
@@ -737,7 +728,6 @@ exports[`execute OnDeploy before other resources 2`] = `
                 "display": {
                   "description": "An inflight resource",
                   "hidden": true,
-                  "sourceModule": "@winglang/sdk",
                   "title": "Inflight",
                 },
                 "id": "Handler",
@@ -772,7 +762,6 @@ exports[`execute OnDeploy before other resources 2`] = `
                 "display": {
                   "description": "A suite of APIs for running tests and collecting results.",
                   "hidden": true,
-                  "sourceModule": "@winglang/sdk",
                   "title": "TestRunner",
                 },
                 "id": "cloud.TestRunner",
@@ -814,7 +803,6 @@ exports[`execute OnDeploy before other resources 2`] = `
                 },
                 "display": {
                   "description": "A cloud object store",
-                  "sourceModule": "@winglang/sdk",
                   "title": "Bucket",
                 },
                 "id": "my_bucket",
@@ -885,7 +873,6 @@ exports[`execute OnDeploy before other resources 2`] = `
                     },
                     "display": {
                       "description": "A cloud function (FaaS)",
-                      "sourceModule": "@winglang/sdk",
                       "title": "Function",
                     },
                     "id": "Function",
@@ -906,7 +893,6 @@ exports[`execute OnDeploy before other resources 2`] = `
                 },
                 "display": {
                   "description": "Run code during the app's deployment.",
-                  "sourceModule": "@winglang/sdk",
                   "title": "OnDeploy",
                 },
                 "id": "my_on_deploy",

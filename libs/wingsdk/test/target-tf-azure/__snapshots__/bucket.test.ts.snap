@@ -81,7 +81,6 @@ exports[`bucket is public 2`] = `
                 },
                 "display": {
                   "description": "A cloud object store",
-                  "sourceModule": "@winglang/sdk",
                   "title": "Bucket",
                 },
                 "id": "my_bucket",
@@ -196,7 +195,6 @@ exports[`bucket name valid 2`] = `
                 },
                 "display": {
                   "description": "A cloud object store",
-                  "sourceModule": "@winglang/sdk",
                   "title": "Bucket",
                 },
                 "id": "The-Uncanny-Bucket",
@@ -359,7 +357,6 @@ exports[`bucket with two preflight objects 2`] = `
                 },
                 "display": {
                   "description": "A cloud object store",
-                  "sourceModule": "@winglang/sdk",
                   "title": "Bucket",
                 },
                 "id": "my_bucket",
@@ -482,7 +479,6 @@ exports[`create a bucket 2`] = `
                 },
                 "display": {
                   "description": "A cloud object store",
-                  "sourceModule": "@winglang/sdk",
                   "title": "Bucket",
                 },
                 "id": "my_bucket",
@@ -610,7 +606,6 @@ exports[`create multiple buckets 2`] = `
                 },
                 "display": {
                   "description": "A cloud object store",
-                  "sourceModule": "@winglang/sdk",
                   "title": "Bucket",
                 },
                 "id": "my_bucket",
@@ -636,7 +631,6 @@ exports[`create multiple buckets 2`] = `
                 },
                 "display": {
                   "description": "A cloud object store",
-                  "sourceModule": "@winglang/sdk",
                   "title": "Bucket",
                 },
                 "id": "my_bucket2",

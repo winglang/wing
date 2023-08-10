@@ -101,7 +101,6 @@ exports[`can add object in preflight 2`] = `
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
-            "sourceModule": "@winglang/sdk",
             "title": "TestRunner",
           },
           "id": "cloud.TestRunner",
@@ -117,7 +116,6 @@ exports[`can add object in preflight 2`] = `
           },
           "display": {
             "description": "A cloud object store",
-            "sourceModule": "@winglang/sdk",
             "title": "Bucket",
           },
           "id": "my_bucket",
@@ -175,7 +173,6 @@ exports[`create a bucket 1`] = `
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
-            "sourceModule": "@winglang/sdk",
             "title": "TestRunner",
           },
           "id": "cloud.TestRunner",
@@ -191,7 +188,6 @@ exports[`create a bucket 1`] = `
           },
           "display": {
             "description": "A cloud object store",
-            "sourceModule": "@winglang/sdk",
             "title": "Bucket",
           },
           "id": "my_bucket",
@@ -259,7 +255,6 @@ exports[`get invalid object throws an error 2`] = `
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
-            "sourceModule": "@winglang/sdk",
             "title": "TestRunner",
           },
           "id": "cloud.TestRunner",
@@ -275,7 +270,6 @@ exports[`get invalid object throws an error 2`] = `
           },
           "display": {
             "description": "A cloud object store",
-            "sourceModule": "@winglang/sdk",
             "title": "Bucket",
           },
           "id": "my_bucket",
@@ -379,7 +373,6 @@ exports[`put and get Json object from bucket 2`] = `
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
-            "sourceModule": "@winglang/sdk",
             "title": "TestRunner",
           },
           "id": "cloud.TestRunner",
@@ -395,7 +388,6 @@ exports[`put and get Json object from bucket 2`] = `
           },
           "display": {
             "description": "A cloud object store",
-            "sourceModule": "@winglang/sdk",
             "title": "Bucket",
           },
           "id": "my_bucket",

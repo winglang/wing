@@ -59,7 +59,6 @@ async handle(event) {
           "display": {
             "description": "An inflight resource",
             "hidden": true,
-            "sourceModule": "@winglang/sdk",
             "title": "Inflight",
           },
           "id": "Handler",
@@ -76,7 +75,6 @@ async handle(event) {
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
-            "sourceModule": "@winglang/sdk",
             "title": "TestRunner",
           },
           "id": "cloud.TestRunner",
@@ -97,7 +95,6 @@ async handle(event) {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
-                "sourceModule": "@winglang/sdk",
                 "title": "Function",
               },
               "id": "Handler",
@@ -110,7 +107,6 @@ async handle(event) {
           },
           "display": {
             "description": "A cloud unit test.",
-            "sourceModule": "@winglang/sdk",
             "title": "Test",
           },
           "id": "test:my_test",

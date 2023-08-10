@@ -12,7 +12,7 @@ import {
 import * as cloud from "../cloud";
 import { Code } from "../core";
 import { convertBetweenHandlers } from "../shared/convert";
-import { IInflightHost, Resource } from "../std";
+import { Display, IInflightHost, Resource } from "../std";
 import { BaseResourceSchema } from "../testing";
 
 /**
@@ -49,7 +49,7 @@ export class Schedule extends cloud.Schedule implements ISimulatorResource {
       functionHandler,
       props
     );
-    fn.display.sourceModule = "@winglang/sdk";
+    fn.display.sourceModule = Display.SDK_SOURCE_MODULE;
     fn.display.title = "onTick()";
 
     new EventMapping(this, `${this.node.id}-OnTickMapping-${hash}`, {
