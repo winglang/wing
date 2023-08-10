@@ -1,6 +1,6 @@
 # [inference.w](../../../../../examples/tests/valid/inference.w) | compile | tf-aws
 
-## inflight.$Closure1-f249137d.js
+## inflight.$Closure1-8edd5de5.js
 ```js
 module.exports = function({  }) {
   class $Closure1 {
@@ -226,7 +226,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1-f249137d.js")({
+          require("./inflight.$Closure1-8edd5de5.js")({
           })
         `);
       }

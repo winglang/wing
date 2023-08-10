@@ -1,6 +1,6 @@
 # [public_url.w](../../../../../../examples/tests/sdk_tests/bucket/public_url.w) | compile | tf-aws
 
-## inflight.$Closure1-df86b73d.js
+## inflight.$Closure1-81db1138.js
 ```js
 module.exports = function({ $http_Util, $privateBucket, $publicBucket, $util_Util }) {
   class $Closure1 {
@@ -273,7 +273,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1-df86b73d.js")({
+          require("./inflight.$Closure1-81db1138.js")({
             $http_Util: ${context._lift(http.Util)},
             $privateBucket: ${context._lift(privateBucket)},
             $publicBucket: ${context._lift(publicBucket)},

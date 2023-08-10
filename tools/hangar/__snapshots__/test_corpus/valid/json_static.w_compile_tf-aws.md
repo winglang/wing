@@ -1,6 +1,6 @@
 # [json_static.w](../../../../../examples/tests/valid/json_static.w) | compile | tf-aws
 
-## inflight.$Closure1-7de15668.js
+## inflight.$Closure1-3a546762.js
 ```js
 module.exports = function({ $jj, $std_Json }) {
   class $Closure1 {
@@ -19,7 +19,7 @@ module.exports = function({ $jj, $std_Json }) {
 
 ```
 
-## inflight.$Closure2-7de15668.js
+## inflight.$Closure2-3a546762.js
 ```js
 module.exports = function({ $std_Json }) {
   class $Closure2 {
@@ -244,7 +244,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1-7de15668.js")({
+          require("./inflight.$Closure1-3a546762.js")({
             $jj: ${context._lift(jj)},
             $std_Json: ${context._lift(std.Json)},
           })
@@ -276,7 +276,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure2-7de15668.js")({
+          require("./inflight.$Closure2-3a546762.js")({
             $std_Json: ${context._lift(std.Json)},
           })
         `);

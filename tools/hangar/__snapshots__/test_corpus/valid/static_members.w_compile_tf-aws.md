@@ -1,6 +1,6 @@
 # [static_members.w](../../../../../examples/tests/valid/static_members.w) | compile | tf-aws
 
-## inflight.$Closure1-4e327a2d.js
+## inflight.$Closure1-d1562dfd.js
 ```js
 module.exports = function({  }) {
   class $Closure1 {
@@ -28,7 +28,7 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.Foo-4e327a2d.js
+## inflight.Foo-d1562dfd.js
 ```js
 module.exports = function({  }) {
   class Foo {
@@ -185,7 +185,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.Foo-4e327a2d.js")({
+          require("./inflight.Foo-d1562dfd.js")({
           })
         `);
       }
@@ -209,7 +209,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1-4e327a2d.js")({
+          require("./inflight.$Closure1-d1562dfd.js")({
           })
         `);
       }

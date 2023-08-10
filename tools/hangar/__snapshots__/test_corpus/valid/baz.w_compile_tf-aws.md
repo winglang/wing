@@ -1,6 +1,6 @@
 # [baz.w](../../../../../examples/tests/valid/baz.w) | compile | tf-aws
 
-## inflight.Baz-5dfb7457.js
+## inflight.Baz-dfaa2e21.js
 ```js
 module.exports = function({  }) {
   class Baz {
@@ -63,7 +63,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.Baz-5dfb7457.js")({
+          require("./inflight.Baz-dfaa2e21.js")({
           })
         `);
       }

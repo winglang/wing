@@ -1,6 +1,6 @@
 # [sleep.w](../../../../../../examples/tests/sdk_tests/util/sleep.w) | compile | tf-aws
 
-## inflight.$Closure1-1cfed39d.js
+## inflight.$Closure1-5affcbac.js
 ```js
 module.exports = function({ $JSHelper, $oneHundredMiliseconds, $util_Util }) {
   class $Closure1 {
@@ -22,7 +22,7 @@ module.exports = function({ $JSHelper, $oneHundredMiliseconds, $util_Util }) {
 
 ```
 
-## inflight.JSHelper-1cfed39d.js
+## inflight.JSHelper-5affcbac.js
 ```js
 module.exports = function({  }) {
   class JSHelper {
@@ -175,7 +175,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.JSHelper-1cfed39d.js")({
+          require("./inflight.JSHelper-5affcbac.js")({
           })
         `);
       }
@@ -199,7 +199,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1-1cfed39d.js")({
+          require("./inflight.$Closure1-5affcbac.js")({
             $JSHelper: ${context._lift(JSHelper)},
             $oneHundredMiliseconds: ${context._lift(oneHundredMiliseconds)},
             $util_Util: ${context._lift(util.Util)},

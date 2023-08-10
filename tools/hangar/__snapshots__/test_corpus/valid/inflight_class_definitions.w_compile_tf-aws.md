@@ -1,6 +1,6 @@
 # [inflight_class_definitions.w](../../../../../examples/tests/valid/inflight_class_definitions.w) | compile | tf-aws
 
-## inflight.$Closure1-3edfd2de.js
+## inflight.$Closure1-826d2540.js
 ```js
 module.exports = function({  }) {
   class $Closure1 {
@@ -24,7 +24,7 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.$Closure2-3edfd2de.js
+## inflight.$Closure2-826d2540.js
 ```js
 module.exports = function({ $F }) {
   class $Closure2 {
@@ -42,7 +42,7 @@ module.exports = function({ $F }) {
 
 ```
 
-## inflight.$Closure3-3edfd2de.js
+## inflight.$Closure3-826d2540.js
 ```js
 module.exports = function({ $B, $a, $d, $fn, $innerD }) {
   class $Closure3 {
@@ -65,7 +65,7 @@ module.exports = function({ $B, $a, $d, $fn, $innerD }) {
 
 ```
 
-## inflight.A-3edfd2de.js
+## inflight.A-826d2540.js
 ```js
 module.exports = function({  }) {
   class A {
@@ -80,7 +80,7 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.B-3edfd2de.js
+## inflight.B-826d2540.js
 ```js
 module.exports = function({  }) {
   class B {
@@ -93,7 +93,7 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.D-3edfd2de.js
+## inflight.D-826d2540.js
 ```js
 module.exports = function({  }) {
   class D {
@@ -109,7 +109,7 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.E-3edfd2de.js
+## inflight.E-826d2540.js
 ```js
 module.exports = function({  }) {
   class E {
@@ -121,7 +121,7 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.F-3edfd2de.js
+## inflight.F-826d2540.js
 ```js
 module.exports = function({  }) {
   class F {
@@ -274,7 +274,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.A-3edfd2de.js")({
+          require("./inflight.A-826d2540.js")({
           })
         `);
       }
@@ -297,7 +297,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.B-3edfd2de.js")({
+          require("./inflight.B-826d2540.js")({
           })
         `);
       }
@@ -321,7 +321,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1-3edfd2de.js")({
+          require("./inflight.$Closure1-826d2540.js")({
           })
         `);
       }
@@ -351,7 +351,7 @@ class $Root extends $stdlib.std.Resource {
           }
           static _toInflightType(context) {
             return $stdlib.core.NodeJsCode.fromInline(`
-              require("./inflight.E-3edfd2de.js")({
+              require("./inflight.E-826d2540.js")({
               })
             `);
           }
@@ -376,7 +376,7 @@ class $Root extends $stdlib.std.Resource {
           }
           static _toInflightType(context) {
             return $stdlib.core.NodeJsCode.fromInline(`
-              require("./inflight.F-3edfd2de.js")({
+              require("./inflight.F-826d2540.js")({
               })
             `);
           }
@@ -401,7 +401,7 @@ class $Root extends $stdlib.std.Resource {
           }
           static _toInflightType(context) {
             return $stdlib.core.NodeJsCode.fromInline(`
-              require("./inflight.$Closure2-3edfd2de.js")({
+              require("./inflight.$Closure2-826d2540.js")({
                 $F: ${context._lift(F)},
               })
             `);
@@ -425,7 +425,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.D-3edfd2de.js")({
+          require("./inflight.D-826d2540.js")({
           })
         `);
       }
@@ -459,7 +459,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure3-3edfd2de.js")({
+          require("./inflight.$Closure3-826d2540.js")({
             $B: ${context._lift(B)},
             $a: ${context._lift(a)},
             $d: ${context._lift(d)},

@@ -1,6 +1,6 @@
 # [two_websites.w](../../../../../../examples/tests/sdk_tests/website/two_websites.w) | compile | tf-aws
 
-## inflight.$Closure1-a326613a.js
+## inflight.$Closure1-fb6bc58d.js
 ```js
 module.exports = function({ $http_Util, $w1_url, $w2_url }) {
   class $Closure1 {
@@ -559,7 +559,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1-a326613a.js")({
+          require("./inflight.$Closure1-fb6bc58d.js")({
             $http_Util: ${context._lift(http.Util)},
             $w1_url: ${context._lift(w1.url)},
             $w2_url: ${context._lift(w2.url)},
