@@ -11,11 +11,7 @@ module.exports = function({ $std_Json }) {
     }
     async handle(req) {
       const issues = (JSON.parse("[{\"foo\": \"bar\"}, {\"foo\": \"baz\"}, {\"foo\": \"qux\"}]"));
-      return {
-      "status": 200,
-      "headers": Object.freeze({"Content-Type":"application/json"}),
-      "body": ((args) => { return JSON.stringify(args[0], null, args[1]) })([issues]),}
-      ;
+      return ({"status": 200,"headers": ({"Content-Type": "application/json"}),"body": ((args) => { return JSON.stringify(args[0], null, args[1]) })([issues])});
     }
   }
   return $Closure1;
@@ -305,10 +301,10 @@ module.exports = function({ $api_url, $http_Util, $std_Json }) {
 ```js
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
-const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
-const cloud = require('@winglang/sdk').cloud;
-const http = require('@winglang/sdk').http;
+const std = $stdlib.std;
+const cloud = $stdlib.cloud;
+const http = $stdlib.http;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
@@ -376,7 +372,7 @@ class $Root extends $stdlib.std.Resource {
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
-new $App({ outdir: $outdir, name: "issue_2889", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test }).synth();
+new $App({ outdir: $outdir, name: "issue_2889", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
 
 ```
 

@@ -29,7 +29,7 @@ module.exports = function({  }) {
     constructor({  }) {
     }
     async hello() {
-      for (const p of Object.freeze(["hello"])) {
+      for (const p of ["hello"]) {
         {console.log(p)};
       }
     }
@@ -164,9 +164,9 @@ module.exports = function({  }) {
 ```js
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
-const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
-const cloud = require('@winglang/sdk').cloud;
+const std = $stdlib.std;
+const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
@@ -217,8 +217,8 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
     }
-    const words = Object.freeze(["wing", "lang", "dang"]);
-    const uniqueNumbers = Object.freeze(new Set([1, 2, 3]));
+    const words = ["wing", "lang", "dang"];
+    const uniqueNumbers = new Set([1, 2, 3]);
     for (const word of words) {
       for (const number of uniqueNumbers) {
         {((cond) => {if (!cond) throw new Error("assertion failed: number > 0")})((number > 0))};
@@ -360,7 +360,7 @@ class $Root extends $stdlib.std.Resource {
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
-new $App({ outdir: $outdir, name: "for_loop", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test }).synth();
+new $App({ outdir: $outdir, name: "for_loop", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
 
 ```
 

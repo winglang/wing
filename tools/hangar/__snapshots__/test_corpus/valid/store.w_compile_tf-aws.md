@@ -48,13 +48,24 @@ module.exports = function({  }) {
 }
 ```
 
+## preflight.empty-1.js
+```js
+module.exports = function({ $stdlib }) {
+  const std = $stdlib.std;
+  return {  };
+};
+
+```
+
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
-const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
-const cloud = require('@winglang/sdk').cloud;
+const std = $stdlib.std;
+const file3 = require("./preflight.empty-1.js")({ $stdlib });
+const math = $stdlib.math;
+const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
@@ -92,18 +103,18 @@ class $Root extends $stdlib.std.Resource {
         super._registerBind(host, ops);
       }
     }
-    const Color = 
-      Object.freeze((function (tmp) {
+    const Color =
+      (function (tmp) {
         tmp[tmp["RED"] = 0] = "RED";
         tmp[tmp["GREEN"] = 1] = "GREEN";
         tmp[tmp["BLUE"] = 2] = "BLUE";
         return tmp;
-      })({}))
+      })({})
     ;
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
-new $App({ outdir: $outdir, name: "store", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test }).synth();
+new $App({ outdir: $outdir, name: "store", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
 
 ```
 

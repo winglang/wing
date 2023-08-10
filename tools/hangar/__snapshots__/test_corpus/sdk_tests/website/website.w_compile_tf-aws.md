@@ -164,7 +164,7 @@ module.exports = function({  }) {
             "uniqueId": "cloudWebsite_CloudfrontOac_C956968B"
           }
         },
-        "name": "cloudfront-oac",
+        "name": "cloud-We-c8e58765-cloudfront-oac",
         "origin_access_control_origin_type": "s3",
         "signing_behavior": "always",
         "signing_protocol": "sigv4"
@@ -380,10 +380,10 @@ module.exports = function({  }) {
 ```js
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
-const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
-const cloud = require('@winglang/sdk').cloud;
-const http = require('@winglang/sdk').http;
+const std = $stdlib.std;
+const cloud = $stdlib.cloud;
+const http = $stdlib.http;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
@@ -453,7 +453,7 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     const w = this.node.root.newAbstract("@winglang/sdk.cloud.Website",this,"cloud.Website",{ path: "./website" });
-    const config = Object.freeze({"json":1});
+    const config = ({"json": 1});
     const indexFile = (Util.readFile("./website/website/index.html"));
     const otherFile = (Util.readFile("./website/website/inner-folder/other.html"));
     (w.addJson("config.json",config));
@@ -462,7 +462,7 @@ class $Root extends $stdlib.std.Resource {
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
-new $App({ outdir: $outdir, name: "website", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test }).synth();
+new $App({ outdir: $outdir, name: "website", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
 
 ```
 

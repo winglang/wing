@@ -134,7 +134,7 @@ module.exports = function({ $jsonA, $jsonC }) {
 
 ## inflight.$Closure5.js
 ```js
-module.exports = function({ $Object_freeze_new_Set_setB__, $setA }) {
+module.exports = function({ $new_Set_setB_, $setA }) {
   class $Closure5 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -143,7 +143,7 @@ module.exports = function({ $Object_freeze_new_Set_setB__, $setA }) {
     }
     async handle() {
       {((cond) => {if (!cond) throw new Error("assertion failed: setA == setA")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($setA,$setA)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: setA == setB.copy()")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($setA,$Object_freeze_new_Set_setB__)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: setA == setB.copy()")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($setA,$new_Set_setB_)))};
     }
   }
   return $Closure5;
@@ -171,7 +171,7 @@ module.exports = function({ $setA, $setC }) {
 
 ## inflight.$Closure7.js
 ```js
-module.exports = function({ $Object_freeze______mapB___, $mapA }) {
+module.exports = function({ $______mapB___, $mapA }) {
   class $Closure7 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -180,7 +180,7 @@ module.exports = function({ $Object_freeze______mapB___, $mapA }) {
     }
     async handle() {
       {((cond) => {if (!cond) throw new Error("assertion failed: mapA == mapA")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($mapA,$mapA)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: mapA == mapB.copy()")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($mapA,$Object_freeze______mapB___)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: mapA == mapB.copy()")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($mapA,$______mapB___)))};
     }
   }
   return $Closure7;
@@ -208,7 +208,7 @@ module.exports = function({ $mapA, $mapC }) {
 
 ## inflight.$Closure9.js
 ```js
-module.exports = function({ $Object_freeze______arrayB___, $arrayA }) {
+module.exports = function({ $_____arrayB__, $arrayA }) {
   class $Closure9 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -217,7 +217,7 @@ module.exports = function({ $Object_freeze______arrayB___, $arrayA }) {
     }
     async handle() {
       {((cond) => {if (!cond) throw new Error("assertion failed: arrayA == arrayA")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($arrayA,$arrayA)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: arrayA == arrayB.copy()")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($arrayA,$Object_freeze______arrayB___)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: arrayA == arrayB.copy()")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })($arrayA,$_____arrayB__)))};
     }
   }
   return $Closure9;
@@ -1076,8 +1076,8 @@ module.exports = function({ $Object_freeze______arrayB___, $arrayA }) {
 ```js
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
-const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
+const std = $stdlib.std;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
@@ -1230,7 +1230,7 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure5.js")({
-            $Object_freeze_new_Set_setB__: ${context._lift(Object.freeze(new Set(setB)))},
+            $new_Set_setB_: ${context._lift(new Set(setB))},
             $setA: ${context._lift(setA)},
           })
         `);
@@ -1248,7 +1248,7 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure5._registerBindObject(Object.freeze(new Set(setB)), host, []);
+          $Closure5._registerBindObject(new Set(setB), host, []);
           $Closure5._registerBindObject(setA, host, []);
         }
         super._registerBind(host, ops);
@@ -1296,7 +1296,7 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure7.js")({
-            $Object_freeze______mapB___: ${context._lift(Object.freeze({...(mapB)}))},
+            $______mapB___: ${context._lift(({...(mapB)}))},
             $mapA: ${context._lift(mapA)},
           })
         `);
@@ -1314,7 +1314,7 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure7._registerBindObject(Object.freeze({...(mapB)}), host, []);
+          $Closure7._registerBindObject(({...(mapB)}), host, []);
           $Closure7._registerBindObject(mapA, host, []);
         }
         super._registerBind(host, ops);
@@ -1362,7 +1362,7 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure9.js")({
-            $Object_freeze______arrayB___: ${context._lift(Object.freeze([...(arrayB)]))},
+            $_____arrayB__: ${context._lift([...(arrayB)])},
             $arrayA: ${context._lift(arrayA)},
           })
         `);
@@ -1380,7 +1380,7 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure9._registerBindObject(Object.freeze([...(arrayB)]), host, []);
+          $Closure9._registerBindObject([...(arrayB)], host, []);
           $Closure9._registerBindObject(arrayA, host, []);
         }
         super._registerBind(host, ops);
@@ -1493,44 +1493,35 @@ class $Root extends $stdlib.std.Resource {
     const strC = "wingnuts";
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:Primitive types with the same value",new $Closure1(this,"$Closure1"));
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:Primitive types with different values",new $Closure2(this,"$Closure2"));
-    const jsonA = Object.freeze({"a":1});
-    const jsonB = {"a":1};
+    const jsonA = ({"a": 1});
+    const jsonB = ({"a": 1});
     const jsonC = [1, 2, 3];
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:Json with the same value",new $Closure3(this,"$Closure3"));
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:Json with different values",new $Closure4(this,"$Closure4"));
-    const setA = Object.freeze(new Set([1, 2, 3]));
+    const setA = new Set([1, 2, 3]);
     const setB = new Set([1, 2, 3]);
-    const setC = Object.freeze(new Set([4, 5, 6]));
+    const setC = new Set([4, 5, 6]);
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:Set types with the same value",new $Closure5(this,"$Closure5"));
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:Set types with different values",new $Closure6(this,"$Closure6"));
-    const mapA = Object.freeze({"a":1,"b":2});
-    const mapB = {"a":1,"b":2};
-    const mapC = Object.freeze({"c":10,"b":2});
+    const mapA = ({"a": 1,"b": 2});
+    const mapB = ({"a": 1,"b": 2});
+    const mapC = ({"c": 10,"b": 2});
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:Map with the same value",new $Closure7(this,"$Closure7"));
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:Map with different values",new $Closure8(this,"$Closure8"));
-    const arrayA = Object.freeze([1, 2, 3]);
+    const arrayA = [1, 2, 3];
     const arrayB = [1, 2, 3];
-    const arrayC = Object.freeze([4, 5, 6]);
+    const arrayC = [4, 5, 6];
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:Array with the same value",new $Closure9(this,"$Closure9"));
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:Array with different values",new $Closure10(this,"$Closure10"));
-    const cat1 = {
-    "name": "Mittens",
-    "age": 3,}
-    ;
-    const cat2 = {
-    "name": "Mittens",
-    "age": 3,}
-    ;
-    const cat3 = {
-    "name": "Simba",
-    "age": 5,}
-    ;
+    const cat1 = ({"name": "Mittens","age": 3});
+    const cat2 = ({"name": "Mittens","age": 3});
+    const cat3 = ({"name": "Simba","age": 5});
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:Struct with the same value",new $Closure11(this,"$Closure11"));
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:Struct with different values",new $Closure12(this,"$Closure12"));
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
-new $App({ outdir: $outdir, name: "deep_equality", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test }).synth();
+new $App({ outdir: $outdir, name: "deep_equality", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
 
 ```
 

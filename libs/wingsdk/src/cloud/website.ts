@@ -59,10 +59,10 @@ export abstract class Website extends Resource {
     if (isAbsolute(props.path)) {
       this._path = props.path;
     } else {
-      if (!process.env.WING_SOURCE_DIR) {
+      if (!App.of(scope).entrypointDir) {
         throw new Error("Missing environment variable: WING_SOURCE_DIR");
       }
-      this._path = resolve(process.env.WING_SOURCE_DIR, props.path);
+      this._path = resolve(App.of(scope).entrypointDir, props.path);
     }
 
     this._domain = props.domain;

@@ -2,7 +2,6 @@ import { mkdirSync, writeFileSync } from "fs";
 import { join } from "path";
 import { Construct } from "constructs";
 import { fqnForType } from "../constants";
-import { Code } from "../core";
 import { App } from "../core/app";
 import { CaseConventions, ResourceNames } from "../shared/resource-names";
 import { Duration } from "../std/duration";
@@ -84,7 +83,11 @@ export abstract class Function extends Resource implements IInflightHost {
     handler._registerBind(this, ["handle", "$inflight_init"]);
 
     const inflightClient = handler._toInflight();
-    const lines = this._generateLines(inflightClient);
+    const lines = new Array<string>();
+
+    lines.push("exports.handler = async function(event) {");
+    lines.push(`  return await (${inflightClient.text}).handle(event);`);
+    lines.push("};");
 
     const assetName = ResourceNames.generateName(this, {
       // Avoid characters that may cause path issues
@@ -105,22 +108,6 @@ export abstract class Function extends Resource implements IInflightHost {
     if (process.env.WING_TARGET) {
       this.addEnvironment("WING_TARGET", process.env.WING_TARGET);
     }
-  }
-
-  /**
-   * Generates the code lines for the cloud function, can be overridden by the targets
-   * @param inflightClient inflight client code
-   * @returns cloud function code string
-   * @internal
-   */
-  protected _generateLines(inflightClient: Code): string[] {
-    const lines = new Array<string>();
-
-    lines.push("exports.handler = async function(event) {");
-    lines.push(`  return await (${inflightClient.text}).handle(event);`);
-    lines.push("};");
-
-    return lines;
   }
 
   /**

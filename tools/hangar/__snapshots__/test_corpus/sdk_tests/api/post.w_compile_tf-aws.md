@@ -14,10 +14,7 @@ module.exports = function({ $api_POST, $body, $std_Json }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: req.path == \"/path\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(req.path,"/path")))};
       {((cond) => {if (!cond) throw new Error("assertion failed: req.body == Json.stringify(body)")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(req.body,((args) => { return JSON.stringify(args[0], null, args[1]) })([$body]))))};
       {((cond) => {if (!cond) throw new Error("assertion failed: req.headers?.get(\"content-type\") == \"application/json\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((req.headers)["content-type"],"application/json")))};
-      return {
-      "status": 200,
-      "body": req.body,}
-      ;
+      return ({"status": 200,"body": req.body});
     }
   }
   return $Closure1;
@@ -36,8 +33,8 @@ module.exports = function({ $api_url, $body, $http_POST, $http_Util, $std_Json }
     }
     async handle() {
       const url = ($api_url + "/path");
-      const response = (await $http_Util.post(url,{ headers: Object.freeze({"content-type":"application/json"}), body: ((args) => { return JSON.stringify(args[0], null, args[1]) })([$body]) }));
-      const fetchResponse = (await $http_Util.post(url,{ method: $http_POST, headers: Object.freeze({"content-type":"application/json"}), body: ((args) => { return JSON.stringify(args[0], null, args[1]) })([$body]) }));
+      const response = (await $http_Util.post(url,{ headers: ({"content-type": "application/json"}), body: ((args) => { return JSON.stringify(args[0], null, args[1]) })([$body]) }));
+      const fetchResponse = (await $http_Util.post(url,{ method: $http_POST, headers: ({"content-type": "application/json"}), body: ((args) => { return JSON.stringify(args[0], null, args[1]) })([$body]) }));
       {((cond) => {if (!cond) throw new Error("assertion failed: response.body == Json.stringify(body)")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(response.body,((args) => { return JSON.stringify(args[0], null, args[1]) })([$body]))))};
       {((cond) => {if (!cond) throw new Error("assertion failed: response.status == 200")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(response.status,200)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: response.url == url")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(response.url,url)))};
@@ -245,11 +242,11 @@ module.exports = function({ $api_url, $body, $http_POST, $http_Util, $std_Json }
 ```js
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
-const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
-const cloud = require('@winglang/sdk').cloud;
-const http = require('@winglang/sdk').http;
-const util = require('@winglang/sdk').util;
+const std = $stdlib.std;
+const cloud = $stdlib.cloud;
+const http = $stdlib.http;
+const util = $stdlib.util;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
@@ -290,7 +287,7 @@ class $Root extends $stdlib.std.Resource {
     const http_POST = http.HttpMethod.POST;
     const api_POST = cloud.HttpMethod.POST;
     const api = this.node.root.newAbstract("@winglang/sdk.cloud.Api",this,"cloud.Api");
-    const body = Object.freeze({"cat":"Tion"});
+    const body = ({"cat": "Tion"});
     (api.post("/path",new $Closure1(this,"$Closure1")));
     if (((util.Util.env("WING_TARGET")) !== "tf-aws")) {
       class $Closure2 extends $stdlib.std.Resource {
@@ -335,7 +332,7 @@ class $Root extends $stdlib.std.Resource {
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
-new $App({ outdir: $outdir, name: "post", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test }).synth();
+new $App({ outdir: $outdir, name: "post", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
 
 ```
 

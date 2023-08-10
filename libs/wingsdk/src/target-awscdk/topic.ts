@@ -23,7 +23,7 @@ export class Topic extends cloud.Topic {
   }
 
   /**
-   * topic's arn
+   * Topic's arn
    */
   public get arn(): string {
     return this.topic.topicArn;
@@ -63,7 +63,7 @@ export class Topic extends cloud.Topic {
     Resource.addConnection({
       from: this,
       to: fn,
-      relationship: "on_message",
+      relationship: "onMessage()",
     });
 
     return fn;

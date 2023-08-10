@@ -13,10 +13,7 @@ module.exports = function({ $api_GET, $body }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: req.method == api_GET")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(req.method,$api_GET)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: req.path == \"/path\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(req.path,"/path")))};
       {((cond) => {if (!cond) throw new Error("assertion failed: req.headers?.get(\"content-type\") == \"application/json\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((req.headers)["content-type"],"application/json")))};
-      return {
-      "status": 200,
-      "body": $body,}
-      ;
+      return ({"status": 200,"body": $body});
     }
   }
   return $Closure1;
@@ -35,9 +32,9 @@ module.exports = function({ $api_url, $body, $http_GET, $http_Util }) {
     }
     async handle() {
       const url = ($api_url + "/path");
-      const getResponse = (await $http_Util.get(url,{ headers: Object.freeze({"content-type":"application/json"}) }));
-      const fetchResponse = (await $http_Util.fetch(url,{ method: $http_GET, headers: Object.freeze({"content-type":"application/json"}) }));
-      const fetchResponseNoMethod = (await $http_Util.fetch(url,{ headers: Object.freeze({"content-type":"application/json"}) }));
+      const getResponse = (await $http_Util.get(url,{ headers: ({"content-type": "application/json"}) }));
+      const fetchResponse = (await $http_Util.fetch(url,{ method: $http_GET, headers: ({"content-type": "application/json"}) }));
+      const fetchResponseNoMethod = (await $http_Util.fetch(url,{ headers: ({"content-type": "application/json"}) }));
       {((cond) => {if (!cond) throw new Error("assertion failed: getResponse.body == body")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(getResponse.body,$body)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: getResponse.status == 200")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(getResponse.status,200)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: getResponse.url == url")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(getResponse.url,url)))};
@@ -248,11 +245,11 @@ module.exports = function({ $api_url, $body, $http_GET, $http_Util }) {
 ```js
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
-const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
-const cloud = require('@winglang/sdk').cloud;
-const http = require('@winglang/sdk').http;
-const util = require('@winglang/sdk').util;
+const std = $stdlib.std;
+const cloud = $stdlib.cloud;
+const http = $stdlib.http;
+const util = $stdlib.util;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
@@ -336,7 +333,7 @@ class $Root extends $stdlib.std.Resource {
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
-new $App({ outdir: $outdir, name: "get", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test }).synth();
+new $App({ outdir: $outdir, name: "get", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
 
 ```
 

@@ -187,8 +187,9 @@ test("delete non-existent object from the bucket with mustExist option", async (
   s3Mock
     .on(DeleteObjectCommand, { Bucket: BUCKET_NAME, Key: KEY })
     .resolves({});
-  s3Mock.on(HeadObjectCommand, { Bucket: BUCKET_NAME, Key: KEY }).resolves({});
-
+  s3Mock
+    .on(HeadObjectCommand, { Bucket: BUCKET_NAME, Key: KEY })
+    .rejects({ name: "NotFound" });
   // WHEN
   const client = new BucketClient(BUCKET_NAME);
 
@@ -212,6 +213,8 @@ test("Given a non public bucket when reaching to a key public url it should thro
       IgnorePublicAcls: true,
     },
   });
+  s3Mock.on(HeadObjectCommand).rejects({ name: "NotFound" });
+
   // WHEN
   const client = new BucketClient(BUCKET_NAME);
 
@@ -243,7 +246,9 @@ test("Given a public bucket when reaching to a non existent key, public url it s
   s3Mock
     .on(GetBucketLocationCommand, { Bucket: BUCKET_NAME })
     .resolves({ LocationConstraint: "us-east-2" });
-  s3Mock.on(HeadObjectCommand, { Bucket: BUCKET_NAME, Key: KEY }).resolves({});
+  s3Mock
+    .on(HeadObjectCommand, { Bucket: BUCKET_NAME, Key: KEY })
+    .rejects({ name: "NotFound" });
 
   //WHEN
   const client = new BucketClient(BUCKET_NAME);
@@ -323,7 +328,9 @@ test("check that an object doesn't exist in the bucket", async () => {
   const BUCKET_NAME = "BUCKET_NAME";
   const KEY = "KEY";
 
-  s3Mock.on(HeadObjectCommand, { Bucket: BUCKET_NAME, Key: KEY }).resolves({});
+  s3Mock
+    .on(HeadObjectCommand, { Bucket: BUCKET_NAME, Key: KEY })
+    .rejects({ name: "NotFound" });
 
   // WHEN
   const client = new BucketClient(BUCKET_NAME);
@@ -367,7 +374,9 @@ test("tryGet a non-existent object from the bucket", async () => {
   s3Mock
     .on(GetObjectCommand, { Bucket: BUCKET_NAME, Key: KEY })
     .rejects(new NoSuchKey({ message: "NoSuchKey error", $metadata: {} }));
-  s3Mock.on(HeadObjectCommand, { Bucket: BUCKET_NAME, Key: KEY }).resolves({});
+  s3Mock
+    .on(HeadObjectCommand, { Bucket: BUCKET_NAME, Key: KEY })
+    .rejects({ name: "NotFound" });
 
   // WHEN
   const client = new BucketClient(BUCKET_NAME);
@@ -428,7 +437,9 @@ test("tryGetJson a non-existent object from the bucket", async () => {
   s3Mock
     .on(GetObjectCommand, { Bucket: BUCKET_NAME, Key: KEY })
     .rejects(new NoSuchKey({ message: "NoSuchKey error", $metadata: {} }));
-  s3Mock.on(HeadObjectCommand, { Bucket: BUCKET_NAME, Key: KEY }).resolves({});
+  s3Mock
+    .on(HeadObjectCommand, { Bucket: BUCKET_NAME, Key: KEY })
+    .rejects({ name: "NotFound" });
 
   // WHEN
   const client = new BucketClient(BUCKET_NAME);
@@ -513,7 +524,9 @@ test("tryDelete a non-existent object from the bucket", async () => {
   s3Mock
     .on(DeleteObjectCommand, { Bucket: BUCKET_NAME, Key: KEY })
     .resolves({});
-  s3Mock.on(HeadObjectCommand, { Bucket: BUCKET_NAME, Key: KEY }).resolves({});
+  s3Mock
+    .on(HeadObjectCommand, { Bucket: BUCKET_NAME, Key: KEY })
+    .rejects({ name: "NotFound" });
 
   // WHEN
   const client = new BucketClient(BUCKET_NAME);

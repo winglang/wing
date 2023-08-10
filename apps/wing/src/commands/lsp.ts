@@ -15,18 +15,17 @@ export async function lsp() {
   let wingc = await wingCompiler.load({
     imports: {
       env: {
-        send_diagnostic
+        send_diagnostic,
       },
     },
   });
   let badState = false;
 
+  const seenFiles = new Set<DocumentUri>();
+
   const raw_diagnostics: wingCompiler.WingDiagnostic[] = [];
 
-  function send_diagnostic(
-    data_ptr: number,
-    data_len: number
-  ) {
+  function send_diagnostic(data_ptr: number, data_len: number) {
     const data_buf = Buffer.from(
       (wingc.exports.memory as WebAssembly.Memory).buffer,
       data_ptr,
@@ -99,7 +98,11 @@ export async function lsp() {
     return result;
   });
 
-  async function handle_event_and_update_diagnostics(wingc_handler_name: wingCompiler.WingCompilerFunction, params: any, uri: DocumentUri) {
+  async function handle_event_and_update_diagnostics(
+    wingc_handler_name: wingCompiler.WingCompilerFunction,
+    params: any,
+    _uri: DocumentUri
+  ) {
     if (badState) {
       wingc = await wingCompiler.load({
         imports: {
@@ -114,24 +117,52 @@ export async function lsp() {
     raw_diagnostics.length = 0;
     // Call wingc handler
     callWing(wingc_handler_name, params);
-    // purposely not awaiting this, notifications are fire-and-forget
-    connection.sendDiagnostics({
-      uri,
-      diagnostics: raw_diagnostics.map((rd) => {
-        if(rd.span) {
-          return Diagnostic.create(Range.create(rd.span.start.line, rd.span.start.col, rd.span.end.line, rd.span.end.col), rd.message)
-        } else {
-          return Diagnostic.create(Range.create(0, 0, 0, 0), rd.message)
+
+    const allDiagnostics = new Map<DocumentUri, Diagnostic[]>();
+
+    // set empty list of diagnostics for files that have been seen before
+    // this way even if we don't get a diagnostic for a file, we clear out the old ones
+    for (const uri of seenFiles) {
+      allDiagnostics.set(uri, []);
+    }
+
+    for (const rd of raw_diagnostics) {
+      if (rd.span) {
+        const diagnosticUri = "file://" + rd.span.file_id;
+        const diag = Diagnostic.create(
+          Range.create(rd.span.start.line, rd.span.start.col, rd.span.end.line, rd.span.end.col),
+          rd.message
+        );
+
+        if (!allDiagnostics.has(diagnosticUri)) {
+          allDiagnostics.set(diagnosticUri, []);
+          seenFiles.add(diagnosticUri);
         }
-      })
-    });
+        allDiagnostics.get(diagnosticUri)!.push(diag);
+      } else {
+        // skip if diagnostic is not associated with any file
+      }
+    }
+
+    // purposely not awaiting these calls, notifications are fire-and-forget
+    for (const [uri, diagnostics] of allDiagnostics.entries()) {
+      connection.sendDiagnostics({ uri, diagnostics });
+    }
   }
 
   connection.onDidOpenTextDocument(async (params) => {
-    handle_event_and_update_diagnostics("wingc_on_did_open_text_document", params, params.textDocument.uri);
+    handle_event_and_update_diagnostics(
+      "wingc_on_did_open_text_document",
+      params,
+      params.textDocument.uri
+    );
   });
   connection.onDidChangeTextDocument(async (params) => {
-    handle_event_and_update_diagnostics("wingc_on_did_change_text_document", params, params.textDocument.uri);
+    handle_event_and_update_diagnostics(
+      "wingc_on_did_change_text_document",
+      params,
+      params.textDocument.uri
+    );
   });
   connection.onCompletion(async (params) => {
     return callWing("wingc_on_completion", params);

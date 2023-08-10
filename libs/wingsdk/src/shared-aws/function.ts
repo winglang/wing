@@ -1,7 +1,5 @@
 import { PolicyStatement } from "./types";
-import { Code } from "../core";
-import { IInflightHost, TraceType } from "../std";
-import { FUNCTION_TYPE } from "../target-sim/schema-resources";
+import { IInflightHost } from "../std";
 import { Function as TfAwsFunction } from "../target-tf-aws";
 
 /**
@@ -38,42 +36,4 @@ export class Function {
 
     return undefined;
   }
-}
-
-/**
- * Generates the code lines for the cloud function,
- * overridden by the aws targets to have the function context too,
- * as well as collecting the logs as Traces and keeping them in context.logs for later use.
- * Eventually, this enables us displaying user defined logs, called in aws lambdas,
- * in the user's terminal while testing.
- * @param inflightClient inflight client code
- * @returns cloud function code string
- * @internal
- */
-export function _generateAwsFunctionLines(inflightClient: Code): string[] {
-  const lines = new Array<string>();
-
-  lines.push("exports.handler = async function(event, context) {");
-  lines.push(`
-const $originalLog = console.log.bind({});
-
-console.log = (...args) => {
-const logs = args.map(item => ({
-  data: { message: item },
-  sourceType: "${FUNCTION_TYPE}",
-  sourcePath: context?.clientContext?.constructPath,
-  type: "${TraceType.LOG}",
-  timestamp: new Date().toISOString()
-}));
-!context.logs ? context.logs = [...logs] : context.logs.push(...logs);
-
-$originalLog(args);
-};`);
-
-  lines.push(
-    `  return { payload: (await (${inflightClient.text}).handle(event)) ?? "", context };`
-  );
-  lines.push("};");
-
-  return lines;
 }

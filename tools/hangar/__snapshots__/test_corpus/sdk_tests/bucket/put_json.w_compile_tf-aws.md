@@ -10,15 +10,15 @@ module.exports = function({ $b }) {
       return $obj;
     }
     async handle() {
-      const jsonObj1 = Object.freeze({"test":"test1"});
-      const jsonObj2 = Object.freeze({"test":"test2"});
+      const jsonObj1 = ({"test": "test1"});
+      const jsonObj2 = ({"test": "test2"});
       (await $b.putJson("test1.txt",jsonObj1));
       (await $b.putJson("test2.txt",jsonObj2));
       const testJson1 = (await $b.getJson("test1.txt"));
       const testJson2 = (await $b.getJson("test2.txt"));
       {((cond) => {if (!cond) throw new Error("assertion failed: testJson1.get(\"test\") == jsonObj1.get(\"test\")")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((testJson1)["test"],(jsonObj1)["test"])))};
       {((cond) => {if (!cond) throw new Error("assertion failed: testJson2.get(\"test\") == jsonObj2.get(\"test\")")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((testJson2)["test"],(jsonObj2)["test"])))};
-      const jsonObj3 = Object.freeze({"test":"test3"});
+      const jsonObj3 = ({"test": "test3"});
       (await $b.putJson("test3.txt",jsonObj3));
       const testJson3 = (await $b.getJson("test3.txt"));
       {((cond) => {if (!cond) throw new Error("assertion failed: testJson3.get(\"test\") == jsonObj3.get(\"test\")")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((testJson3)["test"],(jsonObj3)["test"])))};
@@ -202,9 +202,9 @@ module.exports = function({ $b }) {
 ```js
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
-const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
-const cloud = require('@winglang/sdk').cloud;
+const std = $stdlib.std;
+const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
@@ -244,7 +244,7 @@ class $Root extends $stdlib.std.Resource {
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
-new $App({ outdir: $outdir, name: "put_json", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test }).synth();
+new $App({ outdir: $outdir, name: "put_json", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
 
 ```
 

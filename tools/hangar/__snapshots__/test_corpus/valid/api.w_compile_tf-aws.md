@@ -11,12 +11,8 @@ module.exports = function({ $counter, $std_Json }) {
     }
     async handle(request) {
       const count = (await $counter.inc());
-      const bodyResponse = Object.freeze({"count":count});
-      const resp = {
-      "body": ((args) => { return JSON.stringify(args[0], null, args[1]) })([bodyResponse]),
-      "headers": Object.freeze({"content-type":"application/json"}),
-      "status": 200,}
-      ;
+      const bodyResponse = ({"count": count});
+      const resp = ({"body": ((args) => { return JSON.stringify(args[0], null, args[1]) })([bodyResponse]),"headers": ({"content-type": "application/json"}),"status": 200});
       return resp;
     }
   }
@@ -55,10 +51,7 @@ module.exports = function({ $__parent_this_3_api_url }) {
     }
     async handle(req) {
       const text = String.raw({ raw: ["", "/endpoint2"] }, $__parent_this_3_api_url);
-      return {
-      "status": 200,
-      "body": text,}
-      ;
+      return ({"status": 200,"body": text});
     }
   }
   return $Closure3;
@@ -475,9 +468,9 @@ module.exports = function({  }) {
 ```js
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
-const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
-const cloud = require('@winglang/sdk').cloud;
+const std = $stdlib.std;
+const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
@@ -610,7 +603,7 @@ class $Root extends $stdlib.std.Resource {
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
-new $App({ outdir: $outdir, name: "api", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test }).synth();
+new $App({ outdir: $outdir, name: "api", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
 
 ```
 

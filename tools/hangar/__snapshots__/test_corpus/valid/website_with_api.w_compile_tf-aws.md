@@ -10,10 +10,7 @@ module.exports = function({ $std_Json, $usersTable }) {
       return $obj;
     }
     async handle(req) {
-      return {
-      "body": ((args) => { return JSON.stringify(args[0], null, args[1]) })([Object.freeze({"users":(await $usersTable.list())})]),
-      "status": 200,}
-      ;
+      return ({"body": ((args) => { return JSON.stringify(args[0], null, args[1]) })([({"users": (await $usersTable.list())})]),"status": 200});
     }
   }
   return $Closure1;
@@ -31,18 +28,12 @@ module.exports = function({ $std_Json, $usersTable }) {
       return $obj;
     }
     async handle(req) {
-      const body = (JSON.parse((req.body ?? ((args) => { return JSON.stringify(args[0], null, args[1]) })([Object.freeze({"name":"","age":"","id":""})]))));
+      const body = (JSON.parse((req.body ?? ((args) => { return JSON.stringify(args[0], null, args[1]) })([({"name": "","age": "","id": ""})]))));
       if ((((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((body)["name"],"")) || (((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((body)["age"],""))) || (((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((body)["id"],"")))) {
-        return {
-        "body": ((args) => { return JSON.stringify(args[0], null, args[1]) })([Object.freeze({"error":"incomplete details"})]),
-        "status": 400,}
-        ;
+        return ({"body": ((args) => { return JSON.stringify(args[0], null, args[1]) })([({"error": "incomplete details"})]),"status": 400});
       }
       (await $usersTable.insert(((args) => { return JSON.stringify(args[0], null, args[1]) })([(body)["id"]]),body));
-      return {
-      "body": ((args) => { return JSON.stringify(args[0], null, args[1]) })([Object.freeze({"user":(body)["id"]})]),
-      "status": 201,}
-      ;
+      return ({"body": ((args) => { return JSON.stringify(args[0], null, args[1]) })([({"user": (body)["id"]})]),"status": 201});
     }
   }
   return $Closure2;
@@ -60,10 +51,7 @@ module.exports = function({  }) {
       return $obj;
     }
     async handle(req) {
-      return {
-      "headers": Object.freeze({"Access-Control-Allow-Headers":"Content-Type","Access-Control-Allow-Origin":"*","Access-Control-Allow-Methods":"OPTIONS,POST,GET"}),
-      "status": 204,}
-      ;
+      return ({"headers": ({"Access-Control-Allow-Headers": "Content-Type","Access-Control-Allow-Origin": "*","Access-Control-Allow-Methods": "OPTIONS,POST,GET"}),"status": 204});
     }
   }
   return $Closure3;
@@ -251,7 +239,7 @@ module.exports = function({  }) {
             "uniqueId": "cloudWebsite_CloudfrontOac_C956968B"
           }
         },
-        "name": "cloudfront-oac",
+        "name": "cloud-We-c8e58765-cloudfront-oac",
         "origin_access_control_origin_type": "s3",
         "signing_behavior": "always",
         "signing_protocol": "sigv4"
@@ -649,10 +637,10 @@ module.exports = function({  }) {
 ```js
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
-const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
-const cloud = require('@winglang/sdk').cloud;
-const ex = require('@winglang/sdk').ex;
+const std = $stdlib.std;
+const cloud = $stdlib.cloud;
+const ex = $stdlib.ex;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
@@ -746,18 +734,18 @@ class $Root extends $stdlib.std.Resource {
     }
     const api = this.node.root.newAbstract("@winglang/sdk.cloud.Api",this,"cloud.Api");
     const website = this.node.root.newAbstract("@winglang/sdk.cloud.Website",this,"cloud.Website",{ path: "./website_with_api" });
-    const usersTable = this.node.root.newAbstract("@winglang/sdk.ex.Table",this,"ex.Table",{ name: "users-table", primaryKey: "id", columns: Object.freeze({"id":ex.ColumnType.STRING,"name":ex.ColumnType.STRING,"age":ex.ColumnType.NUMBER}) });
+    const usersTable = this.node.root.newAbstract("@winglang/sdk.ex.Table",this,"ex.Table",{ name: "users-table", primaryKey: "id", columns: ({"id": ex.ColumnType.STRING,"name": ex.ColumnType.STRING,"age": ex.ColumnType.NUMBER}) });
     const getHandler = new $Closure1(this,"$Closure1");
     const postHandler = new $Closure2(this,"$Closure2");
     const optionsHandler = new $Closure3(this,"$Closure3");
     (api.get("/users",getHandler));
     (api.post("/users",postHandler));
     (api.options("/users",optionsHandler));
-    (website.addJson("config.json",Object.freeze({"apiUrl":api.url})));
+    (website.addJson("config.json",({"apiUrl": api.url})));
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
-new $App({ outdir: $outdir, name: "website_with_api", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test }).synth();
+new $App({ outdir: $outdir, name: "website_with_api", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
 
 ```
 

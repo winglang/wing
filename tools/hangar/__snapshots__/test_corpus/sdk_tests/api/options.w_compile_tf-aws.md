@@ -12,9 +12,7 @@ module.exports = function({ $api_OPTIONS, $path }) {
     async handle(req) {
       {((cond) => {if (!cond) throw new Error("assertion failed: req.method == api_OPTIONS")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(req.method,$api_OPTIONS)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: req.path == path")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(req.path,$path)))};
-      return {
-      "status": 204,}
-      ;
+      return ({"status": 204});
     }
   }
   return $Closure1;
@@ -34,9 +32,7 @@ module.exports = function({ $api_HEAD, $path }) {
     async handle(req) {
       {((cond) => {if (!cond) throw new Error("assertion failed: req.method == api_HEAD")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(req.method,$api_HEAD)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: req.path == path")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(req.path,$path)))};
-      return {
-      "status": 204,}
-      ;
+      return ({"status": 204});
     }
   }
   return $Closure2;
@@ -54,9 +50,7 @@ module.exports = function({  }) {
       return $obj;
     }
     async handle(req) {
-      return {
-      "status": 204,}
-      ;
+      return ({"status": 204});
     }
   }
   return $Closure3;
@@ -438,11 +432,11 @@ module.exports = function({ $api_url, $http_HEAD, $http_OPTIONS, $http_Util, $pa
 ```js
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
-const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
-const cloud = require('@winglang/sdk').cloud;
-const http = require('@winglang/sdk').http;
-const util = require('@winglang/sdk').util;
+const std = $stdlib.std;
+const cloud = $stdlib.cloud;
+const http = $stdlib.http;
+const util = $stdlib.util;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
@@ -590,7 +584,7 @@ class $Root extends $stdlib.std.Resource {
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
-new $App({ outdir: $outdir, name: "options", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test }).synth();
+new $App({ outdir: $outdir, name: "options", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
 
 ```
 

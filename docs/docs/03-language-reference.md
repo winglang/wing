@@ -1,7 +1,8 @@
 ---
-title: Language Reference
+title: Wing Programming Language Reference
 id: language-reference
 description: The Wing Language Reference
+sidebar_label: Language Reference
 keywords: [Wing reference, Wing language, language, Wing language spec, Wing programming language]
 ---
 
@@ -1543,11 +1544,18 @@ f(1, 2, field1: 3, field2: 4);
 // f(1, 2, field1: 3); // can't do this, partial expansion is not allowed
 ```
 
-#### 3.6.3 Roadmap
-
-The following features are not yet implemented, but we are planning to add them in the future:
-
-* Variadic arguments (`...args`) - see https://github.com/winglang/wing/issues/125 to track.
+#### 3.6.3 Variadic Arguments
+When a function signature's final parameter is denoted by `...` and annotated as an `Array` type,
+then the function accepts typed variadic arguments. 
+Inside the function, these arguments can be accessed using the designated variable name, 
+just as you would with a regular array instance.
+```TS
+let f = (x: num, ...args: Array<num>) => {
+  log("${x + args.length}");
+};
+// last arguments are expanded into their array
+f(4, 8, 15, 16, 23, 42); // logs 9
+```
 
 [`▲ top`][top]
 
@@ -1714,34 +1722,29 @@ to compile your code to JavaScript and then use `extern` against the JavaScript 
 
 ### 5.2.2 Type model
 
-The table below shows the mapping between Wing types and JavaScript types, represented with TypeScript syntax.
-When calling **extern** function, the arguments are checked against these declared types and the return type is **assumed** to be satisfied by the called function.
+The table below shows the mapping between Wing types and JavaScript values, shown with TypeScript types.
+When calling **extern** function, the parameter and return types are **assumed** to be satisfied by the called function.
 
-If [frozen](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/freeze#description), the value is expected to be immutable and will throw an error if any attempt is made to modify it.
 
-| Built-In Wing Type     | JavaScript Type                                                       | Frozen? |
-|------------------------|-----------------------------------------------------------------------|---------|
-| `void`                 | `undefined`                                                           |         |
-| `nil`                  | `null`                                                                |         |
-| `any`                  | `any`                                                                 |         |
-| `num`                  | `number`                                                              |         |
-| `str`                  | `string`                                                              |         |
-| `bool`                 | `boolean`                                                             |         |
-| `Set<T>`               | `Set<T>`                                                              | Yes     |
-| `Map<T>`               | `{ [key: string]: T }`                                                | Yes     |
-| `Array<T>`             | `T[]`                                                                 | Yes     |
-| `MutSet<T>`            | `Set<T>`                                                              |         |
-| `MutMap<T>`            | `{ [key: string]: T }`                                                |         |
-| `MutArray<T>`          | `T[]`                                                                 |         |
-| `Json`                 | `string ⏐ number ⏐ boolean ⏐ null ⏐ json[] ⏐ { [key: string]: json }` | Yes     |
-| `MutJson`              | `string ⏐ number ⏐ boolean ⏐ null ⏐ json[] ⏐ { [key: string]: json }` |         |
+| Built-in Wing type        | TypeScript type                                                       |
+|---------------------------|-----------------------------------------------------------------------|
+| `void`                    | `undefined`                                                           |
+| `nil`                     | `null`                                                                |
+| `any`                     | `any`                                                                 |
+| `num`                     | `number`                                                              |
+| `str`                     | `string`                                                              |
+| `bool`                    | `boolean`                                                             |
+| `Set<T>`, `MutSet<T>`     | `Set<T>`                                                              |
+| `Map<T>`, `MutMap<T>`     | `{ [key: string]: T }`                                                |
+| `Array<T>`, `MutArray<T>` | `Array<T>`                                                            |
+| `Json`, `MutJson`         | `string ⏐ number ⏐ boolean ⏐ null ⏐ Json[] ⏐ { [key: string]: Json }` |
 
-| User-Defined Wing Types | JavaScript Type                                                                        | Frozen? |
-|-------------------------|----------------------------------------------------------------------------------------|---------|
-| `class`                 | `class`, only with members whose phase is compatible with the function signature       |         |
-| `interface`             | `interface`, only with members whose phase is compatible with the function signature   |         |
-| `struct`                | `interface`                                                                            | Yes     |
-| `enum`                  | `string`-based enum-like `Object`                                                      | Yes     |
+| User-defined Wing type  | TypeScript type                                                                        |
+|-------------------------|----------------------------------------------------------------------------------------|
+| `class`                 | `class`, only with members whose phase is compatible with the function signature       |
+| `interface`             | `interface`, only with members whose phase is compatible with the function signature   |
+| `struct`                | `interface`                                                                            |
+| `enum`                  | `string`-based enum-like `Object`                                                      |
 
 [`▲ top`][top]
 
