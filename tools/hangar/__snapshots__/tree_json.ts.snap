@@ -31,7 +31,6 @@ exports[`tree.json for an app with many resources 1`] = `
                     },
                     "display": {
                       "hidden": true,
-                      "sourceModule": "@winglang/sdk",
                     },
                     "id": "$Closure1",
                     "path": "root/Default/Default/$Closure1",
@@ -46,7 +45,6 @@ exports[`tree.json for an app with many resources 1`] = `
                     },
                     "display": {
                       "hidden": true,
-                      "sourceModule": "@winglang/sdk",
                     },
                     "id": "$Closure5",
                     "path": "root/Default/Default/$Closure5",
@@ -150,7 +148,6 @@ exports[`tree.json for an app with many resources 1`] = `
                             },
                             "display": {
                               "description": "A distributed atomic counter",
-                              "sourceModule": "@winglang/sdk",
                               "title": "Counter",
                             },
                             "id": "cloud.Counter",
@@ -219,7 +216,6 @@ exports[`tree.json for an app with many resources 1`] = `
                         },
                         "display": {
                           "hidden": true,
-                          "sourceModule": "@winglang/sdk",
                         },
                         "id": "$Closure2",
                         "path": "root/Default/Default/BigPublisher/$Closure2",
@@ -247,7 +243,6 @@ exports[`tree.json for an app with many resources 1`] = `
                         },
                         "display": {
                           "hidden": true,
-                          "sourceModule": "@winglang/sdk",
                         },
                         "id": "$Closure3",
                         "path": "root/Default/Default/BigPublisher/$Closure3",
@@ -275,7 +270,6 @@ exports[`tree.json for an app with many resources 1`] = `
                         },
                         "display": {
                           "hidden": true,
-                          "sourceModule": "@winglang/sdk",
                         },
                         "id": "$Closure4",
                         "path": "root/Default/Default/BigPublisher/$Closure4",
@@ -385,7 +379,6 @@ exports[`tree.json for an app with many resources 1`] = `
                             },
                             "display": {
                               "description": "A pub/sub notification topic",
-                              "sourceModule": "@winglang/sdk",
                               "title": "Topic",
                             },
                             "id": "b2-oncreate",
@@ -502,7 +495,6 @@ exports[`tree.json for an app with many resources 1`] = `
                             },
                             "display": {
                               "description": "A cloud function (FaaS)",
-                              "sourceModule": "@winglang/sdk",
                               "title": "Function",
                             },
                             "id": "b2-oncreate-OnMessage-59543b60",
@@ -518,7 +510,6 @@ exports[`tree.json for an app with many resources 1`] = `
                             },
                             "display": {
                               "hidden": true,
-                              "sourceModule": "@winglang/sdk",
                             },
                             "id": "b2-oncreate-OnMessageHandler-59543b60",
                             "path": "root/Default/Default/BigPublisher/b2/b2-oncreate-OnMessageHandler-59543b60",
@@ -546,7 +537,6 @@ exports[`tree.json for an app with many resources 1`] = `
                             },
                             "display": {
                               "hidden": true,
-                              "sourceModule": "@winglang/sdk",
                             },
                             "id": "b2-oncreate-eventHandler-fe70cb1e",
                             "path": "root/Default/Default/BigPublisher/b2/b2-oncreate-eventHandler-fe70cb1e",
@@ -558,7 +548,6 @@ exports[`tree.json for an app with many resources 1`] = `
                         },
                         "display": {
                           "description": "A cloud object store",
-                          "sourceModule": "@winglang/sdk",
                           "title": "Bucket",
                         },
                         "id": "b2",
@@ -637,7 +626,6 @@ exports[`tree.json for an app with many resources 1`] = `
                         },
                         "display": {
                           "description": "A cloud object store",
-                          "sourceModule": "@winglang/sdk",
                           "title": "Bucket",
                         },
                         "id": "cloud.Bucket",
@@ -702,7 +690,6 @@ exports[`tree.json for an app with many resources 1`] = `
                         },
                         "display": {
                           "description": "A distributed message queue",
-                          "sourceModule": "@winglang/sdk",
                           "title": "Queue",
                         },
                         "id": "cloud.Queue",
@@ -799,7 +786,6 @@ exports[`tree.json for an app with many resources 1`] = `
                         },
                         "display": {
                           "description": "A cloud function (FaaS)",
-                          "sourceModule": "@winglang/sdk",
                           "title": "Function",
                         },
                         "id": "cloud.Queue-SetConsumer-c50bc9ef",
@@ -815,7 +801,6 @@ exports[`tree.json for an app with many resources 1`] = `
                         },
                         "display": {
                           "hidden": true,
-                          "sourceModule": "@winglang/sdk",
                         },
                         "id": "cloud.Queue-SetConsumerHandler-c50bc9ef",
                         "path": "root/Default/Default/BigPublisher/cloud.Queue-SetConsumerHandler-c50bc9ef",
@@ -867,7 +852,6 @@ exports[`tree.json for an app with many resources 1`] = `
                         },
                         "display": {
                           "description": "A pub/sub notification topic",
-                          "sourceModule": "@winglang/sdk",
                           "title": "Topic",
                         },
                         "id": "cloud.Topic",
@@ -972,7 +956,6 @@ exports[`tree.json for an app with many resources 1`] = `
                         },
                         "display": {
                           "description": "A cloud function (FaaS)",
-                          "sourceModule": "@winglang/sdk",
                           "title": "Function",
                         },
                         "id": "cloud.Topic-OnMessage-113c9059",
@@ -988,7 +971,6 @@ exports[`tree.json for an app with many resources 1`] = `
                         },
                         "display": {
                           "hidden": true,
-                          "sourceModule": "@winglang/sdk",
                         },
                         "id": "cloud.Topic-OnMessageHandler-113c9059",
                         "path": "root/Default/Default/BigPublisher/cloud.Topic-OnMessageHandler-113c9059",
@@ -1132,7 +1114,6 @@ exports[`tree.json for an app with many resources 1`] = `
                     },
                     "display": {
                       "description": "A cloud object store",
-                      "sourceModule": "@winglang/sdk",
                       "title": "Bucket",
                     },
                     "id": "cloud.Bucket",
@@ -1270,7 +1251,6 @@ exports[`tree.json for an app with many resources 1`] = `
                         },
                         "display": {
                           "description": "A cloud function (FaaS)",
-                          "sourceModule": "@winglang/sdk",
                           "title": "Function",
                         },
                         "id": "Handler",
@@ -1283,7 +1263,6 @@ exports[`tree.json for an app with many resources 1`] = `
                     },
                     "display": {
                       "description": "A cloud unit test.",
-                      "sourceModule": "@winglang/sdk",
                       "title": "Test",
                     },
                     "id": "test:dependency cycles",
@@ -1445,7 +1424,6 @@ exports[`tree.json for an app with many resources 1`] = `
                         },
                         "display": {
                           "description": "A cloud function (FaaS)",
-                          "sourceModule": "@winglang/sdk",
                           "title": "Function",
                         },
                         "id": "Handler",
@@ -1458,7 +1436,6 @@ exports[`tree.json for an app with many resources 1`] = `
                     },
                     "display": {
                       "description": "A cloud unit test.",
-                      "sourceModule": "@winglang/sdk",
                       "title": "Test",
                     },
                     "id": "test:test",
@@ -1501,7 +1478,6 @@ exports[`tree.json for an app with many resources 1`] = `
                 "display": {
                   "description": "A suite of APIs for running tests and collecting results.",
                   "hidden": true,
-                  "sourceModule": "@winglang/sdk",
                   "title": "TestRunner",
                 },
                 "id": "cloud.TestRunner",
