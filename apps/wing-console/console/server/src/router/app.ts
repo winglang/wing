@@ -526,12 +526,14 @@ function createExplorerItemFromConstructTreeNode(
   simulator: Simulator,
   showTests = false,
 ): ExplorerItem {
+  const label =
+    node.display?.sourceModule === "@winglang/sdk" && node.display?.title
+      ? node.display?.title
+      : node.id;
+
   return {
     id: node.path,
-    label:
-      node.display?.sourceModule === "@winglang/sdk" && node.display?.title
-        ? node.display?.title
-        : node.id,
+    label,
     type: getResourceType(node, simulator),
     display: node.display,
     childItems: node.children
