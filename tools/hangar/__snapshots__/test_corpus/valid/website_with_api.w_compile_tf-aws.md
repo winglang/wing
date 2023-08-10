@@ -612,7 +612,7 @@ module.exports = function({  }) {
         ],
         "key": "/index.html",
         "source": "<SOURCE>",
-        "source_hash": "${filemd5(\"/home/runner/work/wing/wing/examples/tests/valid/website_with_api/index.html\")}"
+        "source_hash": "${filemd5(<SOURCE>)}"
       },
       "cloudWebsite_File-configjson_591A81BA": {
         "//": {

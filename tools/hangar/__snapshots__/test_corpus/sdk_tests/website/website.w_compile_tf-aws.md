@@ -329,7 +329,7 @@ module.exports = function({  }) {
         ],
         "key": "/index.html",
         "source": "<SOURCE>",
-        "source_hash": "${filemd5(\"/home/runner/work/wing/wing/examples/tests/sdk_tests/website/website/index.html\")}"
+        "source_hash": "${filemd5(<SOURCE>)}"
       },
       "cloudWebsite_File--inner-folder--otherhtml_72DA631C": {
         "//": {
@@ -345,7 +345,7 @@ module.exports = function({  }) {
         ],
         "key": "/inner-folder/other.html",
         "source": "<SOURCE>",
-        "source_hash": "${filemd5(\"/home/runner/work/wing/wing/examples/tests/sdk_tests/website/website/inner-folder/other.html\")}"
+        "source_hash": "${filemd5(<SOURCE>)}"
       },
       "cloudWebsite_File-configjson_591A81BA": {
         "//": {

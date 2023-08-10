@@ -478,7 +478,7 @@ module.exports = function({ $http_Util, $w1_url, $w2_url }) {
         ],
         "key": "/index.html",
         "source": "<SOURCE>",
-        "source_hash": "${filemd5(\"/home/runner/work/wing/wing/examples/tests/sdk_tests/website/website/index.html\")}"
+        "source_hash": "${filemd5(<SOURCE>)}"
       },
       "cloudWebsite_File--inner-folder--otherhtml_72DA631C": {
         "//": {
@@ -494,7 +494,7 @@ module.exports = function({ $http_Util, $w1_url, $w2_url }) {
         ],
         "key": "/inner-folder/other.html",
         "source": "<SOURCE>",
-        "source_hash": "${filemd5(\"/home/runner/work/wing/wing/examples/tests/sdk_tests/website/website/inner-folder/other.html\")}"
+        "source_hash": "${filemd5(<SOURCE>)}"
       },
       "testdeployingtwowebsites_Handler_S3Object_E54888BB": {
         "//": {
@@ -521,7 +521,7 @@ module.exports = function({ $http_Util, $w1_url, $w2_url }) {
         ],
         "key": "/index.html",
         "source": "<SOURCE>",
-        "source_hash": "${filemd5(\"/home/runner/work/wing/wing/examples/tests/sdk_tests/website/website/index.html\")}"
+        "source_hash": "${filemd5(<SOURCE>)}"
       },
       "website-2_File--inner-folder--otherhtml_2D74B50A": {
         "//": {
@@ -537,7 +537,7 @@ module.exports = function({ $http_Util, $w1_url, $w2_url }) {
         ],
         "key": "/inner-folder/other.html",
         "source": "<SOURCE>",
-        "source_hash": "${filemd5(\"/home/runner/work/wing/wing/examples/tests/sdk_tests/website/website/inner-folder/other.html\")}"
+        "source_hash": "${filemd5(<SOURCE>)}"
       }
     }
   }
