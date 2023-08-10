@@ -526,7 +526,7 @@ export class Display {
     this.title = props?.title;
     this.description = props?.description;
     this.hidden = props?.hidden;
-    this.sourceModule = props?.sourceModule || "@winglang/sdk";
+    this.sourceModule = props?.sourceModule;
   }
 }
 
