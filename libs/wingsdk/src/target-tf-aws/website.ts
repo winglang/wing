@@ -126,7 +126,9 @@ export class Website extends cloud.Website {
       policy: allowDistributionReadOnly.json,
     });
 
-    this._url = distribution.domainName;
+    const url = distribution.domainName;
+
+    this._url = url.match(/^(.*):\/\/(.*)/) ? url : `https://${url}`;
   }
 
   public get url(): string {
