@@ -93,14 +93,14 @@ export class Website extends cloud.Website {
       viewerCertificate: { cloudfrontDefaultCertificate: true },
     });
 
-    // allow cloudfront distribution to read from private s3 bucket
-    const allowDistributionReadOnly = new DataAwsIamPolicyDocument(
+    // allow cloudfront distribution to read/write on private s3 bucket
+    const allowDistributionReadWrite = new DataAwsIamPolicyDocument(
       this,
-      "AllowDistributionReadOnly",
+      "AllowDistributionReadWrite",
       {
         statement: [
           {
-            actions: ["s3:GetObject"],
+            actions: ["s3:GetObject", "s3:PutObject"],
             condition: [
               {
                 test: "StringEquals",
@@ -123,7 +123,7 @@ export class Website extends cloud.Website {
     // attach policy to s3 bucket
     new S3BucketPolicy(this, "DistributionS3BucketPolicy", {
       bucket: this.bucket.id,
-      policy: allowDistributionReadOnly.json,
+      policy: allowDistributionReadWrite.json,
     });
 
     this._url = distribution.domainName;
