@@ -273,8 +273,7 @@ bucket: (function(env) {
                   },
                   "display": {
                     "description": "A cloud function (FaaS)",
-                    "name": "setConsumer()",
-                    "title": "Function",
+                    "title": "setConsumer()",
                     "type": "compiler-named",
                   },
                   "id": "Queue-SetConsumer-401ee792",

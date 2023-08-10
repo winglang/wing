@@ -265,8 +265,7 @@ async handle(message) {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
-                "name": "setConsumer()",
-                "title": "Function",
+                "title": "setConsumer()",
                 "type": "compiler-named",
               },
               "id": "my_queue-SetConsumer-e645076f",
@@ -504,8 +503,7 @@ async handle(message) {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
-                "name": "setConsumer()",
-                "title": "Function",
+                "title": "setConsumer()",
                 "type": "compiler-named",
               },
               "id": "my_queue-SetConsumer-e645076f",
@@ -747,8 +745,7 @@ async handle(message) {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
-                "name": "setConsumer()",
-                "title": "Function",
+                "title": "setConsumer()",
                 "type": "compiler-named",
               },
               "id": "my_queue-SetConsumer-e645076f",
@@ -1078,8 +1075,7 @@ async handle(message) {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
-                "name": "setConsumer()",
-                "title": "Function",
+                "title": "setConsumer()",
                 "type": "compiler-named",
               },
               "id": "my_queue-SetConsumer-e645076f",
@@ -1316,8 +1312,7 @@ async handle(message) {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
-                "name": "setConsumer()",
-                "title": "Function",
+                "title": "setConsumer()",
                 "type": "compiler-named",
               },
               "id": "my_queue-SetConsumer-e645076f",

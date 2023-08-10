@@ -78,7 +78,7 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
       props
     );
     fn.display.type = "compiler-named";
-    fn.display.name = "setConsumer()";
+    fn.display.title = "setConsumer()";
 
     new EventMapping(this, `${this.node.id}-QueueEventMapping-${hash}`, {
       subscriber: fn,

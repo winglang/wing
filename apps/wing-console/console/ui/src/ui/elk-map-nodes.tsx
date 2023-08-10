@@ -73,7 +73,10 @@ export const ContainerNode = ({
   const borderColor = getResourceBorderColor(resourceType);
 
   const compilerNamed = useMemo(() => {
-    return display?.type === "compiler-named" && display?.name;
+    if (!display) {
+      return false;
+    }
+    return display.type === "compiler-named" && display.title;
   }, [display]);
 
   return (
@@ -161,7 +164,7 @@ export const ContainerNode = ({
                 !compilerNamed && [theme.text1],
               )}
             >
-              {display?.name || props.name}
+              {compilerNamed ? display?.title : props.name}
             </div>
           </div>
         </div>
