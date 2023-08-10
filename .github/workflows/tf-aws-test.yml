@@ -51,6 +51,7 @@ jobs:
         with:
           max_attempts: 3
           retry_on: error
+          timeout_minutes: 5
           command: npm install -g winglang
       - name: Installing external js modules
         run: |
@@ -70,6 +71,7 @@ jobs:
         with:
           max_attempts: 3
           retry_on: error
+          timeout_minutes: 20
           command: wing test -t tf-aws ${{ matrix.test.directory }}/*.w
       - name: Output Terraform log
         if: failure()
