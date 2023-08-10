@@ -176,7 +176,7 @@ export class MutMap {
    * If the value that is associated to the provided key is an object, then you will get a reference
    * to that object and any change made to that object will effectively modify it inside the map.
    *
-   * @macro ($self$)[$args$]
+   * @macro ((map, key) => { return map[key] ?? throw new Error("no value found for key '" + key + "'"); })($self$, $args$)
    *
    * @param key The key of the element to return.
    * @returns The element associated with the specified key
