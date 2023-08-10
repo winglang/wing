@@ -28,7 +28,6 @@ test("create a queue", async () => {
     },
     path: "root/my_queue",
     props: {
-      initialMessages: [],
       timeout: 10,
       retentionPeriod: 3600,
     },
@@ -97,9 +96,28 @@ test("queue with one subscriber, batch size of 5", async () => {
   // GIVEN
   const app = new SimApp();
   const handler = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
-  const queue = cloud.Queue._newQueue(app, "my_queue", {
-    initialMessages: ["A", "B", "C", "D", "E", "F"],
-  });
+
+  // initialize the queue with some messages
+  const queue = cloud.Queue._newQueue(app, "my_queue");
+  const onDeployHandler = Testing.makeHandler(
+    app,
+    "OnDeployHandler",
+    `async handle() {
+  await this.queue.push("A");
+  await this.queue.push("B");
+  await this.queue.push("C");
+  await this.queue.push("D");
+  await this.queue.push("E");
+  await this.queue.push("F");
+}`,
+    {
+      queue: {
+        obj: queue,
+        ops: [cloud.QueueInflightMethods.PUSH],
+      },
+    }
+  );
+  cloud.OnDeploy._newOnDeploy(app, "my_queue_messages", onDeployHandler);
   queue.setConsumer(handler, { batchSize: 5 });
   const s = await app.startSimulator();
 
@@ -276,13 +294,30 @@ test("queue has display title and description properties", async () => {
   });
 });
 
-test("queue pops messages", async () => {
+test("can pop messages from queue", async () => {
   // GIVEN
   const app = new SimApp();
   const messages = ["A", "B", "C", "D", "E", "F"];
-  cloud.Queue._newQueue(app, "my_queue", {
-    initialMessages: messages,
-  });
+  const queue = cloud.Queue._newQueue(app, "my_queue");
+  const onDeployHandler = Testing.makeHandler(
+    app,
+    "OnDeployHandler",
+    `async handle() {
+  await this.queue.push("A");
+  await this.queue.push("B");
+  await this.queue.push("C");
+  await this.queue.push("D");
+  await this.queue.push("E");
+  await this.queue.push("F");
+}`,
+    {
+      queue: {
+        obj: queue,
+        ops: [cloud.QueueInflightMethods.PUSH],
+      },
+    }
+  );
+  cloud.OnDeploy._newOnDeploy(app, "my_queue_messages", onDeployHandler);
 
   // WHEN
   const s = await app.startSimulator();
@@ -299,7 +334,7 @@ test("queue pops messages", async () => {
   expect(poppedOnEmptyQueue).toBeUndefined();
 });
 
-test("empty queue pops nothing", async () => {
+test("pop from empty queue returns nothing", async () => {
   // GIVEN
   const app = new SimApp();
   cloud.Queue._newQueue(app, "my_queue");

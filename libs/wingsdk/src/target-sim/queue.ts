@@ -19,7 +19,6 @@ import { BaseResourceSchema } from "../testing/simulator";
 export class Queue extends cloud.Queue implements ISimulatorResource {
   private readonly timeout: Duration;
   private readonly retentionPeriod: Duration;
-  private readonly initialMessages: string[] = [];
   constructor(scope: Construct, id: string, props: cloud.QueueProps = {}) {
     super(scope, id, props);
 
@@ -31,8 +30,6 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
         "Retention period must be greater than or equal to timeout"
       );
     }
-
-    this.initialMessages.push(...(props.initialMessages ?? []));
   }
 
   public setConsumer(
@@ -104,7 +101,6 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
       props: {
         timeout: this.timeout.seconds,
         retentionPeriod: this.retentionPeriod.seconds,
-        initialMessages: this.initialMessages,
       },
       attrs: {} as any,
     };

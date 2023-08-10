@@ -16,7 +16,6 @@ exports[`create a queue 1`] = `
         "attrs": {},
         "path": "root/my_queue",
         "props": {
-          "initialMessages": [],
           "retentionPeriod": 3600,
           "timeout": 10,
         },
@@ -136,7 +135,6 @@ async handle(message) {
         "attrs": {},
         "path": "root/my_queue",
         "props": {
-          "initialMessages": [],
           "retentionPeriod": 1,
           "timeout": 2,
         },
@@ -369,7 +367,6 @@ async handle(message) {
         "attrs": {},
         "path": "root/my_queue",
         "props": {
-          "initialMessages": [],
           "retentionPeriod": 3600,
           "timeout": 1,
         },
@@ -606,7 +603,6 @@ async handle(message) {
         "attrs": {},
         "path": "root/my_queue",
         "props": {
-          "initialMessages": [],
           "retentionPeriod": 3600,
           "timeout": 1,
         },
@@ -805,7 +801,6 @@ exports[`queue batch size of 2, purge the queue 2`] = `
         "attrs": {},
         "path": "root/my_queue",
         "props": {
-          "initialMessages": [],
           "retentionPeriod": 3600,
           "timeout": 10,
         },
@@ -867,8 +862,20 @@ exports[`queue with one subscriber, batch size of 5 1`] = `
   "wingsdk.cloud.Function created.",
   "wingsdk.cloud.Queue created.",
   "wingsdk.sim.EventMapping created.",
+  "wingsdk.cloud.Function created.",
+  "Push (message=A).",
+  "Push (message=B).",
+  "Push (message=C).",
+  "Push (message=D).",
+  "Push (message=E).",
+  "Push (message=F).",
+  "Invoke (payload=\\"\\").",
+  "OnDeploy invoked.",
+  "wingsdk.cloud.OnDeploy created.",
   "Sending messages (messages=[\\"A\\",\\"B\\",\\"C\\",\\"D\\",\\"E\\"], subscriber=sim-1).",
   "Sending messages (messages=[\\"F\\"], subscriber=sim-1).",
+  "wingsdk.cloud.OnDeploy deleted.",
+  "wingsdk.cloud.Function deleted.",
   "wingsdk.sim.EventMapping deleted.",
   "wingsdk.cloud.Queue deleted.",
   "wingsdk.cloud.Function deleted.",
@@ -878,6 +885,33 @@ exports[`queue with one subscriber, batch size of 5 1`] = `
 
 exports[`queue with one subscriber, batch size of 5 2`] = `
 {
+  ".wing/function_c8ab799f.js": "exports.handler = async function(event) {
+  return await (new ((function(){
+return class Handler {
+  constructor(clients) {
+    for (const [name, client] of Object.entries(clients)) {
+      this[name] = client;
+    }
+  }
+  async handle() {
+  await this.queue.push(\\"A\\");
+  await this.queue.push(\\"B\\");
+  await this.queue.push(\\"C\\");
+  await this.queue.push(\\"D\\");
+  await this.queue.push(\\"E\\");
+  await this.queue.push(\\"F\\");
+}
+};
+})())({
+queue: (function(env) {
+        let handle = process.env[env];
+        if (!handle) {
+          throw new Error(\\"Missing environment variable: \\" + env);
+        }
+        return $simulator.findInstance(handle);
+      })(\\"QUEUE_HANDLE_54fcf4cd\\")
+})).handle(event);
+};",
   ".wing/my_queue-setconsumer-e645076f_c8ddc1ce.js": "exports.handler = async function(event) {
   return await (new (require(\\"[REDACTED]/wingsdk/src/target-sim/queue.setconsumer.inflight.js\\")).QueueSetConsumerHandlerClient({ handler: new ((function(){
 return class Handler {
@@ -922,14 +956,6 @@ async handle(message) {
         "attrs": {},
         "path": "root/my_queue",
         "props": {
-          "initialMessages": [
-            "A",
-            "B",
-            "C",
-            "D",
-            "E",
-            "F",
-          ],
           "retentionPeriod": 3600,
           "timeout": 10,
         },
@@ -946,6 +972,27 @@ async handle(message) {
           },
         },
         "type": "wingsdk.sim.EventMapping",
+      },
+      {
+        "attrs": {},
+        "path": "root/my_queue_messages/Function",
+        "props": {
+          "environmentVariables": {
+            "QUEUE_HANDLE_54fcf4cd": "\${root/my_queue#attrs.handle}",
+          },
+          "sourceCodeFile": ".wing/function_c8ab799f.js",
+          "sourceCodeLanguage": "javascript",
+          "timeout": 60000,
+        },
+        "type": "wingsdk.cloud.Function",
+      },
+      {
+        "attrs": {},
+        "path": "root/my_queue_messages",
+        "props": {
+          "functionHandle": "\${root/my_queue_messages/Function#attrs.handle}",
+        },
+        "type": "wingsdk.cloud.OnDeploy",
       },
     ],
     "sdkVersion": "0.0.0",
@@ -982,6 +1029,22 @@ async handle(message) {
           "id": "Handler",
           "path": "root/Handler",
         },
+        "OnDeployHandler": {
+          "attributes": {
+            "wing:resource:connections": [],
+          },
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.1.314",
+          },
+          "display": {
+            "description": "An inflight resource",
+            "hidden": true,
+            "title": "Inflight",
+          },
+          "id": "OnDeployHandler",
+          "path": "root/OnDeployHandler",
+        },
         "cloud.TestRunner": {
           "attributes": {
             "wing:resource:connections": [],
@@ -1001,6 +1064,18 @@ async handle(message) {
         "my_queue": {
           "attributes": {
             "wing:resource:connections": [
+              {
+                "direction": "inbound",
+                "implicit": false,
+                "relationship": "push()",
+                "resource": "root/my_queue_messages/Function",
+              },
+              {
+                "direction": "inbound",
+                "implicit": false,
+                "relationship": "$inflight_init()",
+                "resource": "root/my_queue_messages/Function",
+              },
               {
                 "direction": "outbound",
                 "implicit": false,
@@ -1085,6 +1160,52 @@ async handle(message) {
           "id": "my_queue",
           "path": "root/my_queue",
         },
+        "my_queue_messages": {
+          "attributes": {
+            "wing:resource:connections": [],
+          },
+          "children": {
+            "Function": {
+              "attributes": {
+                "wing:resource:connections": [
+                  {
+                    "direction": "outbound",
+                    "implicit": false,
+                    "relationship": "push()",
+                    "resource": "root/my_queue",
+                  },
+                  {
+                    "direction": "outbound",
+                    "implicit": false,
+                    "relationship": "$inflight_init()",
+                    "resource": "root/my_queue",
+                  },
+                ],
+              },
+              "constructInfo": {
+                "fqn": "constructs.Construct",
+                "version": "10.1.314",
+              },
+              "display": {
+                "description": "A cloud function (FaaS)",
+                "sourceModule": "@winglang/sdk",
+                "title": "Function",
+              },
+              "id": "Function",
+              "path": "root/my_queue_messages/Function",
+            },
+          },
+          "constructInfo": {
+            "fqn": "constructs.Construct",
+            "version": "10.1.314",
+          },
+          "display": {
+            "description": "Run code during the app's deployment.",
+            "title": "OnDeploy",
+          },
+          "id": "my_queue_messages",
+          "path": "root/my_queue_messages",
+        },
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
@@ -1161,7 +1282,6 @@ async handle(message) {
         "attrs": {},
         "path": "root/my_queue",
         "props": {
-          "initialMessages": [],
           "retentionPeriod": 3600,
           "timeout": 10,
         },
