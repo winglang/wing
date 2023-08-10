@@ -28,7 +28,7 @@ Seamlessly integrating with GitHub.
 
 1. Goto https://wing.cloud and click on sign in.
 2. If a developer was already signed in before, they will be automatically signed in to Wing Cloud.
-3. If a developer was not signed in before, he will they redirected to GitHub authentication and then redirected back to Wing Cloud.
+3. If a developer was not signed in before, they will be redirected to GitHub authentication and then redirected back to Wing Cloud.
 
 ### Authentication and Authorization
 
