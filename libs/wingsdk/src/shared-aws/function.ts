@@ -29,7 +29,7 @@ export class Function {
    * @param host The inflight host.
    */
   public static from(host: IInflightHost): IAwsFunction | undefined {
-    if (this.checkIAwsFunctionImplementation(host)) {
+    if (this.isAwsFunction(host)) {
       return host;
     }
     return undefined;
