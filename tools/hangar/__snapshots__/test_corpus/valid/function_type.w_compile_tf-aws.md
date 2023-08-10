@@ -1,6 +1,6 @@
 # [function_type.w](../../../../../examples/tests/valid/function_type.w) | compile | tf-aws
 
-## inflight.$Closure1.js
+## inflight.$Closure1-66090bc9.js
 ```js
 module.exports = function({  }) {
   class $Closure1 {
@@ -17,7 +17,7 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.$Closure2.js
+## inflight.$Closure2-66090bc9.js
 ```js
 module.exports = function({  }) {
   class $Closure2 {
@@ -34,7 +34,7 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.C.js
+## inflight.C-66090bc9.js
 ```js
 module.exports = function({  }) {
   class C {
@@ -99,7 +99,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1.js")({
+          require("./inflight.$Closure1-66090bc9.js")({
           })
         `);
       }
@@ -123,7 +123,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure2.js")({
+          require("./inflight.$Closure2-66090bc9.js")({
           })
         `);
       }
@@ -150,7 +150,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.C.js")({
+          require("./inflight.C-66090bc9.js")({
           })
         `);
       }

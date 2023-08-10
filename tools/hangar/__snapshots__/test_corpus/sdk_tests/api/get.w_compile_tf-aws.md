@@ -1,58 +1,243 @@
 # [get.w](../../../../../../examples/tests/sdk_tests/api/get.w) | compile | tf-aws
 
-## inflight.$Closure1.js
+## inflight.$Closure1-831a9f01.js
+
 ```js
-module.exports = function({ $body, $cloud_HttpMethod }) {
+module.exports = function ({ $body, $cloud_HttpMethod }) {
   class $Closure1 {
-    constructor({  }) {
+    constructor({}) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
     async handle(req) {
-      {((cond) => {if (!cond) throw new Error("assertion failed: req.method == cloud.HttpMethod.GET")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(req.method,$cloud_HttpMethod.GET)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: req.path == \"/path\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(req.path,"/path")))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: req.body?.length == 0")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(req.body?.length,0)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: req.headers?.get(\"content-type\") == \"application/json\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((req.headers)["content-type"],"application/json")))};
-      return ({"status": 200,"body": $body});
+      {
+        ((cond) => {
+          if (!cond)
+            throw new Error(
+              "assertion failed: req.method == cloud.HttpMethod.GET"
+            );
+        })(
+          ((a, b) => {
+            try {
+              return require("assert").deepStrictEqual(a, b) === undefined;
+            } catch {
+              return false;
+            }
+          })(req.method, $cloud_HttpMethod.GET)
+        );
+      }
+      {
+        ((cond) => {
+          if (!cond) throw new Error('assertion failed: req.path == "/path"');
+        })(
+          ((a, b) => {
+            try {
+              return require("assert").deepStrictEqual(a, b) === undefined;
+            } catch {
+              return false;
+            }
+          })(req.path, "/path")
+        );
+      }
+      {
+        ((cond) => {
+          if (!cond) throw new Error("assertion failed: req.body?.length == 0");
+        })(
+          ((a, b) => {
+            try {
+              return require("assert").deepStrictEqual(a, b) === undefined;
+            } catch {
+              return false;
+            }
+          })(req.body?.length, 0)
+        );
+      }
+      {
+        ((cond) => {
+          if (!cond)
+            throw new Error(
+              'assertion failed: req.headers?.get("content-type") == "application/json"'
+            );
+        })(
+          ((a, b) => {
+            try {
+              return require("assert").deepStrictEqual(a, b) === undefined;
+            } catch {
+              return false;
+            }
+          })(req.headers["content-type"], "application/json")
+        );
+      }
+      return { status: 200, body: $body };
     }
   }
   return $Closure1;
-}
-
+};
 ```
 
-## inflight.$Closure2.js
+## inflight.$Closure2-831a9f01.js
+
 ```js
-module.exports = function({ $api_url, $body, $http_HttpMethod, $http_Util }) {
+module.exports = function ({ $api_url, $body, $http_HttpMethod, $http_Util }) {
   class $Closure2 {
-    constructor({  }) {
+    constructor({}) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
     async handle() {
-      const url = ($api_url + "/path");
-      const getResponse = (await $http_Util.get(url,{ headers: ({"content-type": "application/json"}) }));
-      const fetchResponse = (await $http_Util.fetch(url,{ method: $http_HttpMethod.GET, headers: ({"content-type": "application/json"}) }));
-      const fetchResponseNoMethod = (await $http_Util.fetch(url,{ headers: ({"content-type": "application/json"}) }));
-      {((cond) => {if (!cond) throw new Error("assertion failed: getResponse.body == body")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(getResponse.body,$body)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: getResponse.status == 200")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(getResponse.status,200)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: getResponse.url == url")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(getResponse.url,url)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: fetchResponse.body == body")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(fetchResponse.body,$body)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: fetchResponse.status == 200")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(fetchResponse.status,200)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: fetchResponse.url == url")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(fetchResponse.url,url)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: fetchResponseNoMethod.body == body")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(fetchResponseNoMethod.body,$body)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: fetchResponseNoMethod.status == 200")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(fetchResponseNoMethod.status,200)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: fetchResponseNoMethod.url == url")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(fetchResponseNoMethod.url,url)))};
+      const url = $api_url + "/path";
+      const getResponse = await $http_Util.get(url, {
+        headers: { "content-type": "application/json" },
+      });
+      const fetchResponse = await $http_Util.fetch(url, {
+        method: $http_HttpMethod.GET,
+        headers: { "content-type": "application/json" },
+      });
+      const fetchResponseNoMethod = await $http_Util.fetch(url, {
+        headers: { "content-type": "application/json" },
+      });
+      {
+        ((cond) => {
+          if (!cond)
+            throw new Error("assertion failed: getResponse.body == body");
+        })(
+          ((a, b) => {
+            try {
+              return require("assert").deepStrictEqual(a, b) === undefined;
+            } catch {
+              return false;
+            }
+          })(getResponse.body, $body)
+        );
+      }
+      {
+        ((cond) => {
+          if (!cond)
+            throw new Error("assertion failed: getResponse.status == 200");
+        })(
+          ((a, b) => {
+            try {
+              return require("assert").deepStrictEqual(a, b) === undefined;
+            } catch {
+              return false;
+            }
+          })(getResponse.status, 200)
+        );
+      }
+      {
+        ((cond) => {
+          if (!cond)
+            throw new Error("assertion failed: getResponse.url == url");
+        })(
+          ((a, b) => {
+            try {
+              return require("assert").deepStrictEqual(a, b) === undefined;
+            } catch {
+              return false;
+            }
+          })(getResponse.url, url)
+        );
+      }
+      {
+        ((cond) => {
+          if (!cond)
+            throw new Error("assertion failed: fetchResponse.body == body");
+        })(
+          ((a, b) => {
+            try {
+              return require("assert").deepStrictEqual(a, b) === undefined;
+            } catch {
+              return false;
+            }
+          })(fetchResponse.body, $body)
+        );
+      }
+      {
+        ((cond) => {
+          if (!cond)
+            throw new Error("assertion failed: fetchResponse.status == 200");
+        })(
+          ((a, b) => {
+            try {
+              return require("assert").deepStrictEqual(a, b) === undefined;
+            } catch {
+              return false;
+            }
+          })(fetchResponse.status, 200)
+        );
+      }
+      {
+        ((cond) => {
+          if (!cond)
+            throw new Error("assertion failed: fetchResponse.url == url");
+        })(
+          ((a, b) => {
+            try {
+              return require("assert").deepStrictEqual(a, b) === undefined;
+            } catch {
+              return false;
+            }
+          })(fetchResponse.url, url)
+        );
+      }
+      {
+        ((cond) => {
+          if (!cond)
+            throw new Error(
+              "assertion failed: fetchResponseNoMethod.body == body"
+            );
+        })(
+          ((a, b) => {
+            try {
+              return require("assert").deepStrictEqual(a, b) === undefined;
+            } catch {
+              return false;
+            }
+          })(fetchResponseNoMethod.body, $body)
+        );
+      }
+      {
+        ((cond) => {
+          if (!cond)
+            throw new Error(
+              "assertion failed: fetchResponseNoMethod.status == 200"
+            );
+        })(
+          ((a, b) => {
+            try {
+              return require("assert").deepStrictEqual(a, b) === undefined;
+            } catch {
+              return false;
+            }
+          })(fetchResponseNoMethod.status, 200)
+        );
+      }
+      {
+        ((cond) => {
+          if (!cond)
+            throw new Error(
+              "assertion failed: fetchResponseNoMethod.url == url"
+            );
+        })(
+          ((a, b) => {
+            try {
+              return require("assert").deepStrictEqual(a, b) === undefined;
+            } catch {
+              return false;
+            }
+          })(fetchResponseNoMethod.url, url)
+        );
+      }
     }
   }
   return $Closure2;
-}
-
+};
 ```
 
 ## main.tf.json
+
 ```json
 {
   "//": {
@@ -89,9 +274,7 @@ module.exports = function({ $api_url, $body, $http_HttpMethod, $http_Util }) {
     }
   },
   "provider": {
-    "aws": [
-      {}
-    ]
+    "aws": [{}]
   },
   "resource": {
     "aws_api_gateway_deployment": {
@@ -310,8 +493,9 @@ module.exports = function({ $api_url, $body, $http_HttpMethod, $http_Util }) {
 ```
 
 ## preflight.js
+
 ```js
-const $stdlib = require('@winglang/sdk');
+const $stdlib = require("@winglang/sdk");
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
@@ -322,14 +506,15 @@ class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
     class $Closure1 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
+      constructor(scope, id) {
         super(scope, id);
         this._addInflightOps("handle", "$inflight_init");
         this.display.hidden = true;
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1.js")({
+          require("./inflight.$Closure1-831a9f01.js")({
+            $api_GET: ${context._lift(api_GET)},
             $body: ${context._lift(body)},
             $cloud_HttpMethod: ${context._lift(cloud.HttpMethod)},
           })
@@ -354,7 +539,7 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure2 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
+      constructor(scope, id) {
         super(scope, id);
         this._addInflightOps("handle", "$inflight_init");
         this.display.hidden = true;
@@ -388,14 +573,68 @@ class $Root extends $stdlib.std.Resource {
         super._registerBind(host, ops);
       }
     }
-    const api = this.node.root.newAbstract("@winglang/sdk.cloud.Api",this,"cloud.Api");
+    const api = this.node.root.newAbstract(
+      "@winglang/sdk.cloud.Api",
+      this,
+      "cloud.Api"
+    );
     const body = "ok!";
-    (api.get("/path",new $Closure1(this,"$Closure1")));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:http.get and http.fetch can preform a call to an api",new $Closure2(this,"$Closure2"));
+    api.get("/path", new $Closure1(this, "$Closure1"));
+    if (util.Util.env("WING_TARGET") !== "tf-aws") {
+      class $Closure2 extends $stdlib.std.Resource {
+        constructor(scope, id) {
+          super(scope, id);
+          this._addInflightOps("handle", "$inflight_init");
+          this.display.hidden = true;
+        }
+        static _toInflightType(context) {
+          return $stdlib.core.NodeJsCode.fromInline(`
+            require("./inflight.$Closure2-831a9f01.js")({
+              $api_url: ${context._lift(api.url)},
+              $body: ${context._lift(body)},
+              $http_GET: ${context._lift(http_GET)},
+              $http_Util: ${context._lift(http.Util)},
+            })
+          `);
+        }
+        _toInflight() {
+          return $stdlib.core.NodeJsCode.fromInline(`
+            (await (async () => {
+              const $Closure2Client = ${$Closure2._toInflightType(this).text};
+              const client = new $Closure2Client({
+              });
+              if (client.$inflight_init) { await client.$inflight_init(); }
+              return client;
+            })())
+          `);
+        }
+        _registerBind(host, ops) {
+          if (ops.includes("handle")) {
+            $Closure2._registerBindObject(api.url, host, []);
+            $Closure2._registerBindObject(body, host, []);
+            $Closure2._registerBindObject(http_GET, host, []);
+          }
+          super._registerBind(host, ops);
+        }
+      }
+      this.node.root.new(
+        "@winglang/sdk.std.Test",
+        std.Test,
+        this,
+        "test:http.get and http.fetch can preform a call to an api",
+        new $Closure2(this, "$Closure2")
+      );
+    }
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
-new $App({ outdir: $outdir, name: "get", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
-
+new $App({
+  outdir: $outdir,
+  name: "get",
+  rootConstruct: $Root,
+  plugins: $plugins,
+  isTestEnvironment: $wing_is_test,
+  entrypointDir: process.env["WING_SOURCE_DIR"],
+  rootId: process.env["WING_ROOT_ID"],
+}).synth();
 ```
-

@@ -1,6 +1,6 @@
 # [env.w](../../../../../../examples/tests/sdk_tests/util/env.w) | compile | tf-aws
 
-## inflight.$Closure1.js
+## inflight.$Closure1-3f319a77.js
 ```js
 module.exports = function({ $NIL, $RANDOM, $util_Util }) {
   class $Closure1 {
@@ -159,7 +159,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1.js")({
+          require("./inflight.$Closure1-3f319a77.js")({
             $NIL: ${context._lift(NIL)},
             $RANDOM: ${context._lift(RANDOM)},
             $util_Util: ${context._lift(util.Util)},

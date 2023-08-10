@@ -1,54 +1,188 @@
 # [delete.w](../../../../../../examples/tests/sdk_tests/api/delete.w) | compile | tf-aws
 
-## inflight.$Closure1.js
+## inflight.$Closure1-a341dc30.js
+
 ```js
-module.exports = function({ $cloud_HttpMethod }) {
+module.exports = function ({ $cloud_HttpMethod }) {
   class $Closure1 {
-    constructor({  }) {
+    constructor({}) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
     async handle(req) {
-      {((cond) => {if (!cond) throw new Error("assertion failed: req.method == cloud.HttpMethod.DELETE")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(req.method,$cloud_HttpMethod.DELETE)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: req.query?.get(\"all\") == \"true\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((req.query)["all"],"true")))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: req.query?.get(\"page\") == \"6\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((req.query)["page"],"6")))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: req.path == \"/path\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(req.path,"/path")))};
-      return ({"status": 200,"body": (req.query)["page"]});
+      {
+        ((cond) => {
+          if (!cond)
+            throw new Error(
+              "assertion failed: req.method == cloud.HttpMethod.DELETE"
+            );
+        })(
+          ((a, b) => {
+            try {
+              return require("assert").deepStrictEqual(a, b) === undefined;
+            } catch {
+              return false;
+            }
+          })(req.method, $cloud_HttpMethod.DELETE)
+        );
+      }
+      {
+        ((cond) => {
+          if (!cond)
+            throw new Error(
+              'assertion failed: req.query?.get("all") == "true"'
+            );
+        })(
+          ((a, b) => {
+            try {
+              return require("assert").deepStrictEqual(a, b) === undefined;
+            } catch {
+              return false;
+            }
+          })(req.query["all"], "true")
+        );
+      }
+      {
+        ((cond) => {
+          if (!cond)
+            throw new Error('assertion failed: req.query?.get("page") == "6"');
+        })(
+          ((a, b) => {
+            try {
+              return require("assert").deepStrictEqual(a, b) === undefined;
+            } catch {
+              return false;
+            }
+          })(req.query["page"], "6")
+        );
+      }
+      {
+        ((cond) => {
+          if (!cond) throw new Error('assertion failed: req.path == "/path"');
+        })(
+          ((a, b) => {
+            try {
+              return require("assert").deepStrictEqual(a, b) === undefined;
+            } catch {
+              return false;
+            }
+          })(req.path, "/path")
+        );
+      }
+      return { status: 200, body: req.query["page"] };
     }
   }
   return $Closure1;
-}
-
+};
 ```
 
-## inflight.$Closure2.js
+## inflight.$Closure2-a341dc30.js
+
 ```js
-module.exports = function({ $api_url, $http_HttpMethod, $http_Util }) {
+module.exports = function ({ $api_url, $http_HttpMethod, $http_Util }) {
   class $Closure2 {
-    constructor({  }) {
+    constructor({}) {
       const $obj = (...args) => this.handle(...args);
       Object.setPrototypeOf($obj, this);
       return $obj;
     }
     async handle() {
       const url = String.raw({ raw: ["", "/path?all=true&page=6"] }, $api_url);
-      const response = (await $http_Util.delete(url));
-      const fetchResponse = (await $http_Util.fetch(url,{ method: $http_HttpMethod.DELETE }));
-      {((cond) => {if (!cond) throw new Error("assertion failed: response.body == \"6\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(response.body,"6")))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: response.status == 200")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(response.status,200)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: response.url == url")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(response.url,url)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: fetchResponse.body == \"6\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(fetchResponse.body,"6")))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: fetchResponse.status == 200")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(fetchResponse.status,200)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: fetchResponse.url == url")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(fetchResponse.url,url)))};
+      const response = await $http_Util.delete(url);
+      const fetchResponse = await $http_Util.fetch(url, {
+        method: $http_HttpMethod.DELETE,
+      });
+      {
+        ((cond) => {
+          if (!cond) throw new Error('assertion failed: response.body == "6"');
+        })(
+          ((a, b) => {
+            try {
+              return require("assert").deepStrictEqual(a, b) === undefined;
+            } catch {
+              return false;
+            }
+          })(response.body, "6")
+        );
+      }
+      {
+        ((cond) => {
+          if (!cond)
+            throw new Error("assertion failed: response.status == 200");
+        })(
+          ((a, b) => {
+            try {
+              return require("assert").deepStrictEqual(a, b) === undefined;
+            } catch {
+              return false;
+            }
+          })(response.status, 200)
+        );
+      }
+      {
+        ((cond) => {
+          if (!cond) throw new Error("assertion failed: response.url == url");
+        })(
+          ((a, b) => {
+            try {
+              return require("assert").deepStrictEqual(a, b) === undefined;
+            } catch {
+              return false;
+            }
+          })(response.url, url)
+        );
+      }
+      {
+        ((cond) => {
+          if (!cond)
+            throw new Error('assertion failed: fetchResponse.body == "6"');
+        })(
+          ((a, b) => {
+            try {
+              return require("assert").deepStrictEqual(a, b) === undefined;
+            } catch {
+              return false;
+            }
+          })(fetchResponse.body, "6")
+        );
+      }
+      {
+        ((cond) => {
+          if (!cond)
+            throw new Error("assertion failed: fetchResponse.status == 200");
+        })(
+          ((a, b) => {
+            try {
+              return require("assert").deepStrictEqual(a, b) === undefined;
+            } catch {
+              return false;
+            }
+          })(fetchResponse.status, 200)
+        );
+      }
+      {
+        ((cond) => {
+          if (!cond)
+            throw new Error("assertion failed: fetchResponse.url == url");
+        })(
+          ((a, b) => {
+            try {
+              return require("assert").deepStrictEqual(a, b) === undefined;
+            } catch {
+              return false;
+            }
+          })(fetchResponse.url, url)
+        );
+      }
     }
   }
   return $Closure2;
-}
-
+};
 ```
 
 ## main.tf.json
+
 ```json
 {
   "//": {
@@ -85,9 +219,7 @@ module.exports = function({ $api_url, $http_HttpMethod, $http_Util }) {
     }
   },
   "provider": {
-    "aws": [
-      {}
-    ]
+    "aws": [{}]
   },
   "resource": {
     "aws_api_gateway_deployment": {
@@ -306,8 +438,9 @@ module.exports = function({ $api_url, $http_HttpMethod, $http_Util }) {
 ```
 
 ## preflight.js
+
 ```js
-const $stdlib = require('@winglang/sdk');
+const $stdlib = require("@winglang/sdk");
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
@@ -318,15 +451,15 @@ class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
     class $Closure1 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
+      constructor(scope, id) {
         super(scope, id);
         this._addInflightOps("handle", "$inflight_init");
         this.display.hidden = true;
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1.js")({
-            $cloud_HttpMethod: ${context._lift(cloud.HttpMethod)},
+          require("./inflight.$Closure1-a341dc30.js")({
+            $api_DELETE: ${context._lift(api_DELETE)},
           })
         `);
       }
@@ -343,7 +476,7 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     class $Closure2 extends $stdlib.std.Resource {
-      constructor(scope, id, ) {
+      constructor(scope, id) {
         super(scope, id);
         this._addInflightOps("handle", "$inflight_init");
         this.display.hidden = true;
@@ -375,13 +508,65 @@ class $Root extends $stdlib.std.Resource {
         super._registerBind(host, ops);
       }
     }
-    const api = this.node.root.newAbstract("@winglang/sdk.cloud.Api",this,"cloud.Api");
-    (api.delete("/path",new $Closure1(this,"$Closure1")));
-    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:http.delete and http.fetch can preform a call to an api",new $Closure2(this,"$Closure2"));
+    const api = this.node.root.newAbstract(
+      "@winglang/sdk.cloud.Api",
+      this,
+      "cloud.Api"
+    );
+    api.delete("/path", new $Closure1(this, "$Closure1"));
+    if (util.Util.env("WING_TARGET") !== "tf-aws") {
+      class $Closure2 extends $stdlib.std.Resource {
+        constructor(scope, id) {
+          super(scope, id);
+          this._addInflightOps("handle", "$inflight_init");
+          this.display.hidden = true;
+        }
+        static _toInflightType(context) {
+          return $stdlib.core.NodeJsCode.fromInline(`
+            require("./inflight.$Closure2-a341dc30.js")({
+              $api_url: ${context._lift(api.url)},
+              $http_DELETE: ${context._lift(http_DELETE)},
+              $http_Util: ${context._lift(http.Util)},
+            })
+          `);
+        }
+        _toInflight() {
+          return $stdlib.core.NodeJsCode.fromInline(`
+            (await (async () => {
+              const $Closure2Client = ${$Closure2._toInflightType(this).text};
+              const client = new $Closure2Client({
+              });
+              if (client.$inflight_init) { await client.$inflight_init(); }
+              return client;
+            })())
+          `);
+        }
+        _registerBind(host, ops) {
+          if (ops.includes("handle")) {
+            $Closure2._registerBindObject(api.url, host, []);
+            $Closure2._registerBindObject(http_DELETE, host, []);
+          }
+          super._registerBind(host, ops);
+        }
+      }
+      this.node.root.new(
+        "@winglang/sdk.std.Test",
+        std.Test,
+        this,
+        "test:http.delete and http.fetch can preform a call to an api",
+        new $Closure2(this, "$Closure2")
+      );
+    }
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
-new $App({ outdir: $outdir, name: "delete", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
-
+new $App({
+  outdir: $outdir,
+  name: "delete",
+  rootConstruct: $Root,
+  plugins: $plugins,
+  isTestEnvironment: $wing_is_test,
+  entrypointDir: process.env["WING_SOURCE_DIR"],
+  rootId: process.env["WING_ROOT_ID"],
+}).synth();
 ```
-

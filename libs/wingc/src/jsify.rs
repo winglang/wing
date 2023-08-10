@@ -4,6 +4,7 @@ use aho_corasick::AhoCorasick;
 use const_format::formatcp;
 use indexmap::{IndexMap, IndexSet};
 use itertools::Itertools;
+use sha1::{Digest, Sha1};
 
 use std::{
 	borrow::Borrow,
@@ -1325,7 +1326,10 @@ fn get_public_symbols(scope: &Scope) -> Vec<Symbol> {
 }
 
 fn inflight_filename(class: &AstClass) -> String {
-	format!("./inflight.{}.js", class.name.name)
+	let mut hasher = Sha1::new();
+	hasher.update(&class.name.span.file_id);
+	let hash = format!("{:x}", hasher.finalize()); // convert to hex
+	format!("./inflight.{}-{}.js", class.name.name, &hash[hash.len() - 8..])
 }
 
 fn lookup_span(span: &WingSpan, files: &Files) -> String {

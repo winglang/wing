@@ -1,6 +1,6 @@
 # [resource_captures_globals.w](../../../../../examples/tests/valid/resource_captures_globals.w) | compile | tf-aws
 
-## inflight.$Closure1.js
+## inflight.$Closure1-b77e1245.js
 ```js
 module.exports = function({ $res }) {
   class $Closure1 {
@@ -18,7 +18,7 @@ module.exports = function({ $res }) {
 
 ```
 
-## inflight.$Closure2.js
+## inflight.$Closure2-b77e1245.js
 ```js
 module.exports = function({ $Another }) {
   class $Closure2 {
@@ -36,7 +36,7 @@ module.exports = function({ $Another }) {
 
 ```
 
-## inflight.Another.js
+## inflight.Another-b77e1245.js
 ```js
 module.exports = function({ $globalCounter }) {
   class Another {
@@ -58,7 +58,7 @@ module.exports = function({ $globalCounter }) {
 
 ```
 
-## inflight.First.js
+## inflight.First-b77e1245.js
 ```js
 module.exports = function({  }) {
   class First {
@@ -70,7 +70,7 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.MyResource.js
+## inflight.MyResource-b77e1245.js
 ```js
 module.exports = function({ $Another, $_globalArrayOfStr_at_0__, $_globalMapOfNum___a__, $_globalSetOfStr_has__a___, $globalAnother, $globalAnother_first_myResource, $globalAnother_myField, $globalBool, $globalBucket, $globalNum, $globalStr }) {
   class MyResource {
@@ -97,7 +97,7 @@ module.exports = function({ $Another, $_globalArrayOfStr_at_0__, $_globalMapOfNu
 
 ```
 
-## inflight.R.js
+## inflight.R-b77e1245.js
 ```js
 module.exports = function({ $_parentThis_localCounter, $globalCounter }) {
   class R {
@@ -550,7 +550,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.First.js")({
+          require("./inflight.First-b77e1245.js")({
           })
         `);
       }
@@ -575,7 +575,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.Another.js")({
+          require("./inflight.Another-b77e1245.js")({
             $globalCounter: ${context._lift(globalCounter)},
           })
         `);
@@ -621,7 +621,7 @@ class $Root extends $stdlib.std.Resource {
           }
           static _toInflightType(context) {
             return $stdlib.core.NodeJsCode.fromInline(`
-              require("./inflight.R.js")({
+              require("./inflight.R-b77e1245.js")({
                 $_parentThis_localCounter: ${context._lift($parentThis.localCounter)},
                 $globalCounter: ${context._lift(globalCounter)},
               })
@@ -650,7 +650,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.MyResource.js")({
+          require("./inflight.MyResource-b77e1245.js")({
             $Another: ${context._lift(Another)},
             $_globalArrayOfStr_at_0__: ${context._lift((globalArrayOfStr.at(0)))},
             $_globalMapOfNum___a__: ${context._lift((globalMapOfNum)["a"])},
@@ -706,7 +706,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1.js")({
+          require("./inflight.$Closure1-b77e1245.js")({
             $res: ${context._lift(res)},
           })
         `);
@@ -737,7 +737,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure2.js")({
+          require("./inflight.$Closure2-b77e1245.js")({
             $Another: ${context._lift(Another)},
           })
         `);
