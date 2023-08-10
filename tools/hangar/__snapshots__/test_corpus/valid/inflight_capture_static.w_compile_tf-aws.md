@@ -1,6 +1,6 @@
 # [inflight_capture_static.w](../../../../../examples/tests/valid/inflight_capture_static.w) | compile | tf-aws
 
-## inflight.$Closure1.js
+## inflight.$Closure1-caeda159.js
 ```js
 module.exports = function({ $Preflight }) {
   class $Closure1 {
@@ -18,7 +18,7 @@ module.exports = function({ $Preflight }) {
 
 ```
 
-## inflight.$Closure2.js
+## inflight.$Closure2-caeda159.js
 ```js
 module.exports = function({ $OuterInflight }) {
   class $Closure2 {
@@ -36,7 +36,7 @@ module.exports = function({ $OuterInflight }) {
 
 ```
 
-## inflight.$Closure3.js
+## inflight.$Closure3-caeda159.js
 ```js
 module.exports = function({  }) {
   class $Closure3 {
@@ -59,7 +59,7 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.$Closure4.js
+## inflight.$Closure4-caeda159.js
 ```js
 module.exports = function({ $util_Util }) {
   class $Closure4 {
@@ -86,7 +86,7 @@ module.exports = function({ $util_Util }) {
 
 ```
 
-## inflight.OuterInflight.js
+## inflight.OuterInflight-caeda159.js
 ```js
 module.exports = function({  }) {
   class OuterInflight {
@@ -99,7 +99,7 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.Preflight.js
+## inflight.Preflight-caeda159.js
 ```js
 module.exports = function({  }) {
   class Preflight {
@@ -450,7 +450,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.Preflight.js")({
+          require("./inflight.Preflight-caeda159.js")({
           })
         `);
       }
@@ -473,7 +473,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.OuterInflight.js")({
+          require("./inflight.OuterInflight-caeda159.js")({
           })
         `);
       }
@@ -497,7 +497,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1.js")({
+          require("./inflight.$Closure1-caeda159.js")({
             $Preflight: ${context._lift(Preflight)},
           })
         `);
@@ -528,7 +528,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure2.js")({
+          require("./inflight.$Closure2-caeda159.js")({
             $OuterInflight: ${context._lift(OuterInflight)},
           })
         `);
@@ -553,7 +553,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure3.js")({
+          require("./inflight.$Closure3-caeda159.js")({
           })
         `);
       }
@@ -577,7 +577,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure4.js")({
+          require("./inflight.$Closure4-caeda159.js")({
             $util_Util: ${context._lift(util.Util)},
           })
         `);

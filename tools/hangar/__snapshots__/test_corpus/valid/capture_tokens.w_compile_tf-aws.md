@@ -1,6 +1,6 @@
 # [capture_tokens.w](../../../../../examples/tests/valid/capture_tokens.w) | compile | tf-aws
 
-## inflight.$Closure1.js
+## inflight.$Closure1-eac9abad.js
 ```js
 module.exports = function({ $r }) {
   class $Closure1 {
@@ -18,7 +18,7 @@ module.exports = function({ $r }) {
 
 ```
 
-## inflight.$Closure2.js
+## inflight.$Closure2-eac9abad.js
 ```js
 module.exports = function({ $MyResource, $api_url, $url }) {
   class $Closure2 {
@@ -37,7 +37,7 @@ module.exports = function({ $MyResource, $api_url, $url }) {
 
 ```
 
-## inflight.MyResource.js
+## inflight.MyResource-eac9abad.js
 ```js
 module.exports = function({  }) {
   class MyResource {
@@ -359,7 +359,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.MyResource.js")({
+          require("./inflight.MyResource-eac9abad.js")({
           })
         `);
       }
@@ -396,7 +396,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1.js")({
+          require("./inflight.$Closure1-eac9abad.js")({
             $r: ${context._lift(r)},
           })
         `);
@@ -427,7 +427,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure2.js")({
+          require("./inflight.$Closure2-eac9abad.js")({
             $MyResource: ${context._lift(MyResource)},
             $api_url: ${context._lift(api.url)},
             $url: ${context._lift(url)},

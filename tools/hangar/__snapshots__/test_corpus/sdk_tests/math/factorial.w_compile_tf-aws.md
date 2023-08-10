@@ -1,6 +1,6 @@
 # [factorial.w](../../../../../../examples/tests/sdk_tests/math/factorial.w) | compile | tf-aws
 
-## inflight.$Closure1.js
+## inflight.$Closure1-98e573ad.js
 ```js
 module.exports = function({ $math_Util }) {
   class $Closure1 {
@@ -162,7 +162,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1.js")({
+          require("./inflight.$Closure1-98e573ad.js")({
             $math_Util: ${context._lift(math.Util)},
           })
         `);

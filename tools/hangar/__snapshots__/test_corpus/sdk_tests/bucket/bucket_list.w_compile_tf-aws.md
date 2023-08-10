@@ -1,6 +1,6 @@
 # [bucket_list.w](../../../../../../examples/tests/sdk_tests/bucket/bucket_list.w) | compile | tf-aws
 
-## inflight.$Closure1.js
+## inflight.$Closure1-c8a7ac21.js
 ```js
 module.exports = function({ $b }) {
   class $Closure1 {
@@ -228,7 +228,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1.js")({
+          require("./inflight.$Closure1-c8a7ac21.js")({
             $b: ${context._lift(b)},
           })
         `);
