@@ -1,5 +1,17 @@
 bring cloud;
 
+let assertThrows = (expected: str, block: (): void) => {
+  let var error = false;
+  try {
+    block();
+  } catch actual {
+    assert(actual == expected);
+    error = true;
+  }
+
+  assert(error);
+};
+
 let bucket1 = new cloud.Bucket() as "bucket1";
 let bucket2 = new cloud.Bucket() as "bucket2";
 let bucket3 = new cloud.Bucket() as "bucket3";
@@ -95,6 +107,9 @@ for val in m9.keys() {
 for val in m9.values() {
   assert(val.endsWith("1"));
 }
+let m10 = Map<num>{"a" => 1, "b" => 2, "c" => 3};
+assertThrows("no value found for key 'd'", () => m10.get("d"));
+assert(m10.tryGet("d") == nil);
 
 //Set tests
 let emptySet = Set<num>{};
