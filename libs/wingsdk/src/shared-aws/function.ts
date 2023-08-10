@@ -35,9 +35,7 @@ export class Function {
     return undefined;
   }
 
-  private static isAwsFunction(
-    obj: any
-  ): obj is IAwsFunction {
+  private static isAwsFunction(obj: any): obj is IAwsFunction {
     return (
       typeof obj.addPolicyStatements === "function" &&
       typeof obj.addEnvironment === "function"
