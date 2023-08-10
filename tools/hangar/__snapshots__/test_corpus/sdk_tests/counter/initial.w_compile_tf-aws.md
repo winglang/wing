@@ -1,6 +1,6 @@
 # [initial.w](../../../../../../examples/tests/sdk_tests/counter/initial.w) | compile | tf-aws
 
-## inflight.$Closure1-c0b8b902.js
+## inflight.$Closure1-1.js
 ```js
 module.exports = function({ $counterA }) {
   class $Closure1 {
@@ -18,7 +18,7 @@ module.exports = function({ $counterA }) {
 
 ```
 
-## inflight.$Closure2-c0b8b902.js
+## inflight.$Closure2-1.js
 ```js
 module.exports = function({ $counterB }) {
   class $Closure2 {
@@ -36,7 +36,7 @@ module.exports = function({ $counterB }) {
 
 ```
 
-## inflight.$Closure3-c0b8b902.js
+## inflight.$Closure3-1.js
 ```js
 module.exports = function({ $counterC }) {
   class $Closure3 {
@@ -381,7 +381,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1-c0b8b902.js")({
+          require("./inflight.$Closure1-1.js")({
             $counterA: ${context._lift(counterA)},
           })
         `);
@@ -412,7 +412,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure2-c0b8b902.js")({
+          require("./inflight.$Closure2-1.js")({
             $counterB: ${context._lift(counterB)},
           })
         `);
@@ -443,7 +443,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure3-c0b8b902.js")({
+          require("./inflight.$Closure3-1.js")({
             $counterC: ${context._lift(counterC)},
           })
         `);

@@ -1,6 +1,6 @@
 # [abs.w](../../../../../../examples/tests/sdk_tests/math/abs.w) | compile | tf-aws
 
-## inflight.$Closure1-931e59f7.js
+## inflight.$Closure1-1.js
 ```js
 module.exports = function({ $math_Util, $x, $y }) {
   class $Closure1 {
@@ -158,7 +158,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1-931e59f7.js")({
+          require("./inflight.$Closure1-1.js")({
             $math_Util: ${context._lift(math.Util)},
             $x: ${context._lift(x)},
             $y: ${context._lift(y)},

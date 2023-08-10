@@ -1,6 +1,6 @@
 # [optionals.w](../../../../../examples/tests/valid/optionals.w) | compile | tf-aws
 
-## inflight.$Closure1-574184ca.js
+## inflight.$Closure1-1.js
 ```js
 module.exports = function({ $__payloadWithBucket_c_____null_, $__payloadWithoutOptions_b_____null_, $payloadWithBucket_c }) {
   class $Closure1 {
@@ -21,7 +21,7 @@ module.exports = function({ $__payloadWithBucket_c_____null_, $__payloadWithoutO
 
 ```
 
-## inflight.Node-574184ca.js
+## inflight.Node-1.js
 ```js
 module.exports = function({  }) {
   class Node {
@@ -33,7 +33,7 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.Sub-574184ca.js
+## inflight.Sub-1.js
 ```js
 module.exports = function({ $Super }) {
   class Sub extends $Super {
@@ -46,7 +46,7 @@ module.exports = function({ $Super }) {
 
 ```
 
-## inflight.Sub1-574184ca.js
+## inflight.Sub1-1.js
 ```js
 module.exports = function({ $Super }) {
   class Sub1 extends $Super {
@@ -59,7 +59,7 @@ module.exports = function({ $Super }) {
 
 ```
 
-## inflight.Super-574184ca.js
+## inflight.Super-1.js
 ```js
 module.exports = function({  }) {
   class Super {
@@ -254,7 +254,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.Super-574184ca.js")({
+          require("./inflight.Super-1.js")({
           })
         `);
       }
@@ -278,7 +278,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.Sub-574184ca.js")({
+          require("./inflight.Sub-1.js")({
             $Super: ${context._lift(Super)},
           })
         `);
@@ -303,7 +303,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.Sub1-574184ca.js")({
+          require("./inflight.Sub1-1.js")({
             $Super: ${context._lift(Super)},
           })
         `);
@@ -330,7 +330,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.Node-574184ca.js")({
+          require("./inflight.Node-1.js")({
           })
         `);
       }
@@ -354,7 +354,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1-574184ca.js")({
+          require("./inflight.$Closure1-1.js")({
             $__payloadWithBucket_c_____null_: ${context._lift(((payloadWithBucket.c) != null))},
             $__payloadWithoutOptions_b_____null_: ${context._lift(((payloadWithoutOptions.b) != null))},
             $payloadWithBucket_c: ${context._lift(payloadWithBucket.c)},

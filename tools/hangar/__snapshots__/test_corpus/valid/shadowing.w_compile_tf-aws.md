@@ -1,6 +1,6 @@
 # [shadowing.w](../../../../../examples/tests/valid/shadowing.w) | compile | tf-aws
 
-## inflight.$Closure1-a62cc855.js
+## inflight.$Closure1-1.js
 ```js
 module.exports = function({ $bar }) {
   class $Closure1 {
@@ -26,7 +26,7 @@ module.exports = function({ $bar }) {
 
 ```
 
-## inflight.$Closure2-a62cc855.js
+## inflight.$Closure2-1.js
 ```js
 module.exports = function({ $fn }) {
   class $Closure2 {
@@ -187,7 +187,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1-a62cc855.js")({
+          require("./inflight.$Closure1-1.js")({
             $bar: ${context._lift(bar)},
           })
         `);
@@ -218,7 +218,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure2-a62cc855.js")({
+          require("./inflight.$Closure2-1.js")({
             $fn: ${context._lift(fn)},
           })
         `);

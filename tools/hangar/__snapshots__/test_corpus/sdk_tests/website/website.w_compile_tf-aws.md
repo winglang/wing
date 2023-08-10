@@ -1,6 +1,6 @@
 # [website.w](../../../../../../examples/tests/sdk_tests/website/website.w) | compile | tf-aws
 
-## inflight.$Closure1-7671e25c.js
+## inflight.$Closure1-1.js
 ```js
 module.exports = function({ $config, $http_Util, $indexFile, $otherFile, $std_Json, $w_url }) {
   class $Closure1 {
@@ -24,7 +24,7 @@ module.exports = function({ $config, $http_Util, $indexFile, $otherFile, $std_Js
 
 ```
 
-## inflight.Util-7671e25c.js
+## inflight.Util-1.js
 ```js
 module.exports = function({  }) {
   class Util {
@@ -397,7 +397,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.Util-7671e25c.js")({
+          require("./inflight.Util-1.js")({
           })
         `);
       }
@@ -421,7 +421,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1-7671e25c.js")({
+          require("./inflight.$Closure1-1.js")({
             $config: ${context._lift(config)},
             $http_Util: ${context._lift(http.Util)},
             $indexFile: ${context._lift(indexFile)},
