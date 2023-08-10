@@ -1,6 +1,6 @@
 # [forward_decl.w](../../../../../examples/tests/valid/forward_decl.w) | compile | tf-aws
 
-## inflight.R-93206851.js
+## inflight.R-f4ac3af3.js
 ```js
 module.exports = function({  }) {
   class R {
@@ -68,7 +68,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.R-93206851.js")({
+          require("./inflight.R-f4ac3af3.js")({
           })
         `);
       }

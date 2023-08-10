@@ -1,6 +1,6 @@
 # [bring_cdktf.w](../../../../../examples/tests/valid/bring_cdktf.w) | compile | tf-aws
 
-## inflight.Foo-4f858610.js
+## inflight.Foo-81955910.js
 ```js
 module.exports = function({  }) {
   class Foo {
@@ -80,7 +80,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.Foo-4f858610.js")({
+          require("./inflight.Foo-81955910.js")({
           })
         `);
       }

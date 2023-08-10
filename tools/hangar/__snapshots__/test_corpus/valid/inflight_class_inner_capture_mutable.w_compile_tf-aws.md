@@ -1,6 +1,6 @@
 # [inflight_class_inner_capture_mutable.w](../../../../../examples/tests/valid/inflight_class_inner_capture_mutable.w) | compile | tf-aws
 
-## inflight.$Closure1-99ced718.js
+## inflight.$Closure1-dc50657f.js
 ```js
 module.exports = function({  }) {
   class $Closure1 {
@@ -168,7 +168,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1-99ced718.js")({
+          require("./inflight.$Closure1-dc50657f.js")({
           })
         `);
       }

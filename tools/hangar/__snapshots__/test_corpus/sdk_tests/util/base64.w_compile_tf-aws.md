@@ -1,6 +1,6 @@
 # [base64.w](../../../../../../examples/tests/sdk_tests/util/base64.w) | compile | tf-aws
 
-## inflight.$Closure1-c5f5b633.js
+## inflight.$Closure1-a20e31be.js
 ```js
 module.exports = function({ $util_Util }) {
   class $Closure1 {
@@ -165,7 +165,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1-c5f5b633.js")({
+          require("./inflight.$Closure1-a20e31be.js")({
             $util_Util: ${context._lift(util.Util)},
           })
         `);

@@ -1,6 +1,6 @@
 # [delete.w](../../../../../../examples/tests/sdk_tests/api/delete.w) | compile | tf-aws
 
-## inflight.$Closure1-6f559268.js
+## inflight.$Closure1-a341dc30.js
 ```js
 module.exports = function({ $api_DELETE }) {
   class $Closure1 {
@@ -22,7 +22,7 @@ module.exports = function({ $api_DELETE }) {
 
 ```
 
-## inflight.$Closure2-6f559268.js
+## inflight.$Closure2-a341dc30.js
 ```js
 module.exports = function({ $api_url, $http_DELETE, $http_Util }) {
   class $Closure2 {
@@ -258,7 +258,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1-6f559268.js")({
+          require("./inflight.$Closure1-a341dc30.js")({
             $api_DELETE: ${context._lift(api_DELETE)},
           })
         `);
@@ -294,7 +294,7 @@ class $Root extends $stdlib.std.Resource {
         }
         static _toInflightType(context) {
           return $stdlib.core.NodeJsCode.fromInline(`
-            require("./inflight.$Closure2-6f559268.js")({
+            require("./inflight.$Closure2-a341dc30.js")({
               $api_url: ${context._lift(api.url)},
               $http_DELETE: ${context._lift(http_DELETE)},
               $http_Util: ${context._lift(http.Util)},
