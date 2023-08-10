@@ -298,30 +298,18 @@ test("can pop messages from queue", async () => {
   // GIVEN
   const app = new SimApp();
   const messages = ["A", "B", "C", "D", "E", "F"];
-  const queue = cloud.Queue._newQueue(app, "my_queue");
-  const onDeployHandler = Testing.makeHandler(
-    app,
-    "OnDeployHandler",
-    `async handle() {
-  await this.queue.push("A");
-  await this.queue.push("B");
-  await this.queue.push("C");
-  await this.queue.push("D");
-  await this.queue.push("E");
-  await this.queue.push("F");
-}`,
-    {
-      queue: {
-        obj: queue,
-        ops: [cloud.QueueInflightMethods.PUSH],
-      },
-    }
-  );
-  cloud.OnDeploy._newOnDeploy(app, "my_queue_messages", onDeployHandler);
+  cloud.Queue._newQueue(app, "my_queue");
 
   // WHEN
   const s = await app.startSimulator();
   const queueClient = s.getResource("/my_queue") as cloud.IQueueClient;
+
+  // initialize the messages
+  for (const message of messages) {
+    await queueClient.push(message);
+  }
+
+  // try popping them
   const poppedMessages: Array<string | undefined> = [];
   for (let i = 0; i < messages.length; i++) {
     poppedMessages.push(await queueClient.pop());
