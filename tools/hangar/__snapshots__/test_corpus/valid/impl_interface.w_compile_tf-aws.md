@@ -1,6 +1,6 @@
 # [impl_interface.w](../../../../../examples/tests/valid/impl_interface.w) | compile | tf-aws
 
-## inflight.$Closure1-7c38e052.js
+## inflight.$Closure1-fcf8e945.js
 ```js
 module.exports = function({ $x }) {
   class $Closure1 {
@@ -18,7 +18,7 @@ module.exports = function({ $x }) {
 
 ```
 
-## inflight.A-7c38e052.js
+## inflight.A-fcf8e945.js
 ```js
 module.exports = function({  }) {
   class A {
@@ -36,7 +36,7 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.Dog-7c38e052.js
+## inflight.Dog-fcf8e945.js
 ```js
 module.exports = function({  }) {
   class Dog {
@@ -51,7 +51,7 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.Terrier-7c38e052.js
+## inflight.Terrier-fcf8e945.js
 ```js
 module.exports = function({ $Dog }) {
   class Terrier extends $Dog {
@@ -67,7 +67,7 @@ module.exports = function({ $Dog }) {
 
 ```
 
-## inflight.r-7c38e052.js
+## inflight.r-fcf8e945.js
 ```js
 module.exports = function({  }) {
   class r {
@@ -131,7 +131,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.A-7c38e052.js")({
+          require("./inflight.A-fcf8e945.js")({
           })
         `);
       }
@@ -155,7 +155,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1-7c38e052.js")({
+          require("./inflight.$Closure1-fcf8e945.js")({
             $x: ${context._lift(x)},
           })
         `);
@@ -191,7 +191,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.r-7c38e052.js")({
+          require("./inflight.r-fcf8e945.js")({
           })
         `);
       }
@@ -214,7 +214,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.Dog-7c38e052.js")({
+          require("./inflight.Dog-fcf8e945.js")({
           })
         `);
       }
@@ -237,7 +237,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.Terrier-7c38e052.js")({
+          require("./inflight.Terrier-fcf8e945.js")({
             $Dog: ${context._lift(Dog)},
           })
         `);

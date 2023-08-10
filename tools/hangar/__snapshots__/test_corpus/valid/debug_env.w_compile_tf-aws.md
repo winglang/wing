@@ -1,6 +1,6 @@
 # [debug_env.w](../../../../../examples/tests/valid/debug_env.w) | compile | tf-aws
 
-## inflight.A-a3c93f14.js
+## inflight.A-061bb784.js
 ```js
 module.exports = function({  }) {
   class A {
@@ -62,7 +62,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.A-a3c93f14.js")({
+          require("./inflight.A-061bb784.js")({
           })
         `);
       }

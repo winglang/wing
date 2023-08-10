@@ -101,6 +101,7 @@ new cloud.Function(handler: IFunctionHandler, props?: FunctionProps);
 
 | **Name** | **Description** |
 | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.Function.bind">bind</a></code> | Binds the resource to the host so that it can be used by inflight code. |
 | <code><a href="#@winglang/sdk.cloud.Function.addEnvironment">addEnvironment</a></code> | Add an environment variable to the function. |
 
 ##### Inflight Methods
@@ -108,6 +109,31 @@ new cloud.Function(handler: IFunctionHandler, props?: FunctionProps);
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.IFunctionClient.invoke">invoke</a></code> | Invoke the function asynchronously with a given payload. |
+
+---
+
+##### `bind` <a name="bind" id="@winglang/sdk.cloud.Function.bind"></a>
+
+```wing
+bind(host: IInflightHost, ops: MutArray<str>): void
+```
+
+Binds the resource to the host so that it can be used by inflight code.
+
+You can override this method to perform additional logic like granting
+IAM permissions to the host based on what methods are being called. But
+you must call `super.bind(host, ops)` to ensure that the resource is
+actually bound.
+
+###### `host`<sup>Required</sup> <a name="host" id="@winglang/sdk.cloud.Function.bind.parameter.host"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.IInflightHost">IInflightHost</a>
+
+---
+
+###### `ops`<sup>Required</sup> <a name="ops" id="@winglang/sdk.cloud.Function.bind.parameter.ops"></a>
+
+- *Type:* MutArray&lt;str&gt;
 
 ---
 

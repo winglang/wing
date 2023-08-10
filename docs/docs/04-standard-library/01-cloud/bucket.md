@@ -150,6 +150,7 @@ new cloud.Bucket(props?: BucketProps);
 
 | **Name** | **Description** |
 | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.Bucket.bind">bind</a></code> | Binds the resource to the host so that it can be used by inflight code. |
 | <code><a href="#@winglang/sdk.cloud.Bucket.addObject">addObject</a></code> | Add a file to the bucket that is uploaded when the app is deployed. |
 | <code><a href="#@winglang/sdk.cloud.Bucket.onCreate">onCreate</a></code> | Run an inflight whenever a file is uploaded to the bucket. |
 | <code><a href="#@winglang/sdk.cloud.Bucket.onDelete">onDelete</a></code> | Run an inflight whenever a file is deleted from the bucket. |
@@ -171,6 +172,31 @@ new cloud.Bucket(props?: BucketProps);
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.tryDelete">tryDelete</a></code> | Delete an object from the bucket if it exists. |
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.tryGet">tryGet</a></code> | Get an object from the bucket if it exists. |
 | <code><a href="#@winglang/sdk.cloud.IBucketClient.tryGetJson">tryGetJson</a></code> | Gets an object from the bucket if it exists, parsing it as Json. |
+
+---
+
+##### `bind` <a name="bind" id="@winglang/sdk.cloud.Bucket.bind"></a>
+
+```wing
+bind(host: IInflightHost, ops: MutArray<str>): void
+```
+
+Binds the resource to the host so that it can be used by inflight code.
+
+You can override this method to perform additional logic like granting
+IAM permissions to the host based on what methods are being called. But
+you must call `super.bind(host, ops)` to ensure that the resource is
+actually bound.
+
+###### `host`<sup>Required</sup> <a name="host" id="@winglang/sdk.cloud.Bucket.bind.parameter.host"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.IInflightHost">IInflightHost</a>
+
+---
+
+###### `ops`<sup>Required</sup> <a name="ops" id="@winglang/sdk.cloud.Bucket.bind.parameter.ops"></a>
+
+- *Type:* MutArray&lt;str&gt;
 
 ---
 

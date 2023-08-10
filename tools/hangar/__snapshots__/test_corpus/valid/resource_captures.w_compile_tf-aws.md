@@ -1,6 +1,6 @@
 # [resource_captures.w](../../../../../examples/tests/valid/resource_captures.w) | compile | tf-aws
 
-## inflight.$Closure1-65dd83bd.js
+## inflight.$Closure1-a9d51fce.js
 ```js
 module.exports = function({ $r }) {
   class $Closure1 {
@@ -28,7 +28,7 @@ module.exports = function({ $r }) {
 
 ```
 
-## inflight.Another-65dd83bd.js
+## inflight.Another-a9d51fce.js
 ```js
 module.exports = function({  }) {
   class Another {
@@ -46,7 +46,7 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.First-65dd83bd.js
+## inflight.First-a9d51fce.js
 ```js
 module.exports = function({  }) {
   class First {
@@ -58,7 +58,7 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.MyResource-65dd83bd.js
+## inflight.MyResource-a9d51fce.js
 ```js
 module.exports = function({  }) {
   class MyResource {
@@ -437,7 +437,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.First-65dd83bd.js")({
+          require("./inflight.First-a9d51fce.js")({
           })
         `);
       }
@@ -462,7 +462,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.Another-65dd83bd.js")({
+          require("./inflight.Another-a9d51fce.js")({
           })
         `);
       }
@@ -501,7 +501,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.MyResource-65dd83bd.js")({
+          require("./inflight.MyResource-a9d51fce.js")({
           })
         `);
       }
@@ -607,7 +607,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1-65dd83bd.js")({
+          require("./inflight.$Closure1-a9d51fce.js")({
             $r: ${context._lift(r)},
           })
         `);

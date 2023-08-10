@@ -1,6 +1,6 @@
 # [events.w](../../../../../../examples/tests/sdk_tests/bucket/events.w) | compile | tf-aws
 
-## inflight.$Closure1-39c56500.js
+## inflight.$Closure1-c40d329a.js
 ```js
 module.exports = function({ $idsCounter, $table }) {
   class $Closure1 {
@@ -18,7 +18,7 @@ module.exports = function({ $idsCounter, $table }) {
 
 ```
 
-## inflight.$Closure2-39c56500.js
+## inflight.$Closure2-c40d329a.js
 ```js
 module.exports = function({ $Source, $logHistory }) {
   class $Closure2 {
@@ -36,7 +36,7 @@ module.exports = function({ $Source, $logHistory }) {
 
 ```
 
-## inflight.$Closure3-39c56500.js
+## inflight.$Closure3-c40d329a.js
 ```js
 module.exports = function({ $Source, $logHistory }) {
   class $Closure3 {
@@ -54,7 +54,7 @@ module.exports = function({ $Source, $logHistory }) {
 
 ```
 
-## inflight.$Closure4-39c56500.js
+## inflight.$Closure4-c40d329a.js
 ```js
 module.exports = function({ $Source, $logHistory }) {
   class $Closure4 {
@@ -72,7 +72,7 @@ module.exports = function({ $Source, $logHistory }) {
 
 ```
 
-## inflight.$Closure5-39c56500.js
+## inflight.$Closure5-c40d329a.js
 ```js
 module.exports = function({ $Source, $logHistory }) {
   class $Closure5 {
@@ -90,7 +90,7 @@ module.exports = function({ $Source, $logHistory }) {
 
 ```
 
-## inflight.$Closure6-39c56500.js
+## inflight.$Closure6-c40d329a.js
 ```js
 module.exports = function({ $std_Duration, $util_Util }) {
   class $Closure6 {
@@ -116,7 +116,7 @@ module.exports = function({ $std_Duration, $util_Util }) {
 
 ```
 
-## inflight.$Closure7-39c56500.js
+## inflight.$Closure7-c40d329a.js
 ```js
 module.exports = function({ $table }) {
   class $Closure7 {
@@ -143,7 +143,7 @@ module.exports = function({ $table }) {
 
 ```
 
-## inflight.$Closure8-39c56500.js
+## inflight.$Closure8-c40d329a.js
 ```js
 module.exports = function({ $Source, $b, $checkHitCount, $util_Util, $wait }) {
   class $Closure8 {
@@ -1063,7 +1063,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1-39c56500.js")({
+          require("./inflight.$Closure1-c40d329a.js")({
             $idsCounter: ${context._lift(idsCounter)},
             $table: ${context._lift(table)},
           })
@@ -1096,7 +1096,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure2-39c56500.js")({
+          require("./inflight.$Closure2-c40d329a.js")({
             $Source: ${context._lift(Source)},
             $logHistory: ${context._lift(logHistory)},
           })
@@ -1128,7 +1128,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure3-39c56500.js")({
+          require("./inflight.$Closure3-c40d329a.js")({
             $Source: ${context._lift(Source)},
             $logHistory: ${context._lift(logHistory)},
           })
@@ -1160,7 +1160,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure4-39c56500.js")({
+          require("./inflight.$Closure4-c40d329a.js")({
             $Source: ${context._lift(Source)},
             $logHistory: ${context._lift(logHistory)},
           })
@@ -1192,7 +1192,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure5-39c56500.js")({
+          require("./inflight.$Closure5-c40d329a.js")({
             $Source: ${context._lift(Source)},
             $logHistory: ${context._lift(logHistory)},
           })
@@ -1224,7 +1224,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure6-39c56500.js")({
+          require("./inflight.$Closure6-c40d329a.js")({
             $std_Duration: ${context._lift(std.Duration)},
             $util_Util: ${context._lift(util.Util)},
           })
@@ -1250,7 +1250,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure7-39c56500.js")({
+          require("./inflight.$Closure7-c40d329a.js")({
             $table: ${context._lift(table)},
           })
         `);
@@ -1281,7 +1281,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure8-39c56500.js")({
+          require("./inflight.$Closure8-c40d329a.js")({
             $Source: ${context._lift(Source)},
             $b: ${context._lift(b)},
             $checkHitCount: ${context._lift(checkHitCount)},

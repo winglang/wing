@@ -1,6 +1,6 @@
 # [list.w](../../../../../../examples/tests/sdk_tests/table/list.w) | compile | tf-aws
 
-## inflight.$Closure1-7d618190.js
+## inflight.$Closure1-5dff5e19.js
 ```js
 module.exports = function({ $std_String, $table }) {
   class $Closure1 {
@@ -191,7 +191,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1-7d618190.js")({
+          require("./inflight.$Closure1-5dff5e19.js")({
             $std_String: ${context._lift(std.String)},
             $table: ${context._lift(table)},
           })

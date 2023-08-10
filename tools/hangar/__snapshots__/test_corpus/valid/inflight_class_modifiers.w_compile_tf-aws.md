@@ -1,6 +1,6 @@
 # [inflight_class_modifiers.w](../../../../../examples/tests/valid/inflight_class_modifiers.w) | compile | tf-aws
 
-## inflight.C-5fe48c55.js
+## inflight.C-3173f076.js
 ```js
 module.exports = function({  }) {
   class C {
@@ -63,7 +63,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.C-5fe48c55.js")({
+          require("./inflight.C-3173f076.js")({
           })
         `);
       }

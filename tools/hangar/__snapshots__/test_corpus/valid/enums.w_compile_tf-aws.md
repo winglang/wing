@@ -1,6 +1,6 @@
 # [enums.w](../../../../../examples/tests/valid/enums.w) | compile | tf-aws
 
-## inflight.$Closure1-4bebe83f.js
+## inflight.$Closure1-cb0fcfe8.js
 ```js
 module.exports = function({ $SomeEnum, $one, $two }) {
   class $Closure1 {
@@ -157,7 +157,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1-4bebe83f.js")({
+          require("./inflight.$Closure1-cb0fcfe8.js")({
             $SomeEnum: ${context._lift(SomeEnum)},
             $one: ${context._lift(one)},
             $two: ${context._lift(two)},

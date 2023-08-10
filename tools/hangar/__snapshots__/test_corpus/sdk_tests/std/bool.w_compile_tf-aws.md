@@ -1,6 +1,6 @@
 # [bool.w](../../../../../../examples/tests/sdk_tests/std/bool.w) | compile | tf-aws
 
-## inflight.$Closure1-7166a183.js
+## inflight.$Closure1-4c8f88fd.js
 ```js
 module.exports = function({ $PARSE_ERROR, $std_Boolean, $std_Json }) {
   class $Closure1 {
@@ -166,7 +166,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1-7166a183.js")({
+          require("./inflight.$Closure1-4c8f88fd.js")({
             $PARSE_ERROR: ${context._lift(PARSE_ERROR)},
             $std_Boolean: ${context._lift(std.Boolean)},
             $std_Json: ${context._lift(std.Json)},

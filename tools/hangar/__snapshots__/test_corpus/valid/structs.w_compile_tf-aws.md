@@ -1,6 +1,6 @@
 # [structs.w](../../../../../examples/tests/valid/structs.w) | compile | tf-aws
 
-## inflight.$Closure1-7ff6d6fc.js
+## inflight.$Closure1-a1487c0a.js
 ```js
 module.exports = function({  }) {
   class $Closure1 {
@@ -19,7 +19,7 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.Foo-7ff6d6fc.js
+## inflight.Foo-a1487c0a.js
 ```js
 module.exports = function({  }) {
   class Foo {
@@ -173,7 +173,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.Foo-7ff6d6fc.js")({
+          require("./inflight.Foo-a1487c0a.js")({
           })
         `);
       }
@@ -207,7 +207,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1-7ff6d6fc.js")({
+          require("./inflight.$Closure1-a1487c0a.js")({
           })
         `);
       }

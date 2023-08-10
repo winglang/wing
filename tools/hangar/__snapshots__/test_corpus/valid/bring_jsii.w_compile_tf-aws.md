@@ -1,6 +1,6 @@
 # [bring_jsii.w](../../../../../examples/tests/valid/bring_jsii.w) | compile | tf-aws
 
-## inflight.$Closure1-67bc8a8d.js
+## inflight.$Closure1-0c43540b.js
 ```js
 module.exports = function({ $greeting }) {
   class $Closure1 {
@@ -158,7 +158,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1-67bc8a8d.js")({
+          require("./inflight.$Closure1-0c43540b.js")({
             $greeting: ${context._lift(greeting)},
           })
         `);
