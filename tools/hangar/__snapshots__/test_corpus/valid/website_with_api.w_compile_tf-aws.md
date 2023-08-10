@@ -151,7 +151,7 @@ module.exports = function({  }) {
         },
         "rest_api_id": "${aws_api_gateway_rest_api.cloudApi_api_2B334D75.id}",
         "triggers": {
-          "redeployment": "cdd4e9e04bfdff956629a1812b4cef862849e475"
+          "redeployment": "53d34a77ebc006529cbee88240e663619396c753"
         }
       }
     },

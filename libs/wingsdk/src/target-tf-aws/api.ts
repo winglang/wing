@@ -47,7 +47,7 @@ export class Api extends cloud.Api {
   }
 
   public get url(): string {
-    return this.api.stage.invokeUrl;
+    return this.api.url;
   }
 
   /**
@@ -367,6 +367,7 @@ export class Api extends cloud.Api {
  * Encapsulates the API Gateway REST API as a abstraction for Terraform.
  */
 class WingRestApi extends Construct {
+  public readonly url: string;
   public readonly api: ApiGatewayRestApi;
   public readonly stage: ApiGatewayStage;
   private readonly deployment: ApiGatewayDeployment;
@@ -414,6 +415,9 @@ class WingRestApi extends Construct {
       stageName: STAGE_NAME,
       deploymentId: this.deployment.id,
     });
+
+    //should be exported from here, otherwise won't be mapped to the right token
+    this.url = this.stage.invokeUrl;
   }
 
   /**

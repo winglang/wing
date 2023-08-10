@@ -449,8 +449,9 @@ test("api response returns default Content-Type header", async () => {
   await s.stop();
 
   expect(response.status).toEqual(200);
+  // the default for no body requests
   expect(response.headers.get("Content-Type")).toEqual(
-    "application/json; charset=utf-8"
+    "text/html; charset=utf-8"
   );
 
   expect(listMessages(s)).toMatchSnapshot();

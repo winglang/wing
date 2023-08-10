@@ -2,7 +2,7 @@
 
 ## inflight.$Closure1.js
 ```js
-module.exports = function({ $_id, $api_PATCH, $body, $std_Json }) {
+module.exports = function({ $_id, $body, $cloud_HttpMethod, $std_Json }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -10,7 +10,7 @@ module.exports = function({ $_id, $api_PATCH, $body, $std_Json }) {
       return $obj;
     }
     async handle(req) {
-      {((cond) => {if (!cond) throw new Error("assertion failed: req.method == api_PATCH")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(req.method,$api_PATCH)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: req.method == cloud.HttpMethod.PATCH")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(req.method,$cloud_HttpMethod.PATCH)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: req.vars?.get(\"id\") == _id")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((req.vars)["id"],$_id)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: req.path == \"/path/\"+ _id")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(req.path,("/path/" + $_id))))};
       {((cond) => {if (!cond) throw new Error("assertion failed: req.body == Json.stringify(body)")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(req.body,((args) => { return JSON.stringify(args[0], null, args[1]) })([$body]))))};
@@ -25,7 +25,7 @@ module.exports = function({ $_id, $api_PATCH, $body, $std_Json }) {
 
 ## inflight.$Closure2.js
 ```js
-module.exports = function({ $_id, $api_url, $body, $http_PATCH, $http_Util, $std_Json }) {
+module.exports = function({ $_id, $api_url, $body, $http_HttpMethod, $http_Util, $std_Json }) {
   class $Closure2 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -35,7 +35,7 @@ module.exports = function({ $_id, $api_url, $body, $http_PATCH, $http_Util, $std
     async handle() {
       const url = String.raw({ raw: ["", "/path/", ""] }, $api_url, $_id);
       const response = (await $http_Util.patch(url,{ headers: ({"content-type": "application/json"}), body: ((args) => { return JSON.stringify(args[0], null, args[1]) })([$body]) }));
-      const fetchResponse = (await $http_Util.patch(url,{ method: $http_PATCH, headers: ({"content-type": "application/json"}), body: ((args) => { return JSON.stringify(args[0], null, args[1]) })([$body]) }));
+      const fetchResponse = (await $http_Util.patch(url,{ method: $http_HttpMethod.PATCH, headers: ({"content-type": "application/json"}), body: ((args) => { return JSON.stringify(args[0], null, args[1]) })([$body]) }));
       {((cond) => {if (!cond) throw new Error("assertion failed: response.body == _id")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(response.body,$_id)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: response.status == 200")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(response.status,200)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: response.url == url")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(response.url,url)))};
@@ -82,7 +82,7 @@ module.exports = function({ $_id, $api_url, $body, $http_PATCH, $http_Util, $std
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[]"
+      "value": "[[\"root/Default/Default/test:http.patch and http.fetch can preform a call to an api\",\"${aws_lambda_function.testhttppatchandhttpfetchcanpreformacalltoanapi_Handler_185CBA02.arn}\"]]"
     }
   },
   "provider": {
@@ -104,7 +104,7 @@ module.exports = function({ $_id, $api_url, $body, $http_PATCH, $http_Util, $std
         },
         "rest_api_id": "${aws_api_gateway_rest_api.cloudApi_api_2B334D75.id}",
         "triggers": {
-          "redeployment": "fea7e9f182aa5daf0c90efdf632bb2737c4ef5c4"
+          "redeployment": "2afd05beaf27bcecd099e20f65c2990011bdae48"
         }
       }
     },
@@ -142,6 +142,15 @@ module.exports = function({ $_id, $api_url, $body, $http_PATCH, $http_Util, $std
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
+      },
+      "testhttppatchandhttpfetchcanpreformacalltoanapi_Handler_IamRole_C2F43DF0": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:http.patch and http.fetch can preform a call to an api/Handler/IamRole",
+            "uniqueId": "testhttppatchandhttpfetchcanpreformacalltoanapi_Handler_IamRole_C2F43DF0"
+          }
+        },
+        "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
@@ -154,6 +163,16 @@ module.exports = function({ $_id, $api_url, $body, $http_PATCH, $http_Util, $std
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
         "role": "${aws_iam_role.cloudApi_cloudApi-OnRequest-cdafee6e_IamRole_4382C442.name}"
+      },
+      "testhttppatchandhttpfetchcanpreformacalltoanapi_Handler_IamRolePolicy_6D4DBF6C": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:http.patch and http.fetch can preform a call to an api/Handler/IamRolePolicy",
+            "uniqueId": "testhttppatchandhttpfetchcanpreformacalltoanapi_Handler_IamRolePolicy_6D4DBF6C"
+          }
+        },
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
+        "role": "${aws_iam_role.testhttppatchandhttpfetchcanpreformacalltoanapi_Handler_IamRole_C2F43DF0.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
@@ -166,6 +185,16 @@ module.exports = function({ $_id, $api_url, $body, $http_PATCH, $http_Util, $std
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
         "role": "${aws_iam_role.cloudApi_cloudApi-OnRequest-cdafee6e_IamRole_4382C442.name}"
+      },
+      "testhttppatchandhttpfetchcanpreformacalltoanapi_Handler_IamRolePolicyAttachment_FDA4E9BA": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:http.patch and http.fetch can preform a call to an api/Handler/IamRolePolicyAttachment",
+            "uniqueId": "testhttppatchandhttpfetchcanpreformacalltoanapi_Handler_IamRolePolicyAttachment_FDA4E9BA"
+          }
+        },
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "${aws_iam_role.testhttppatchandhttpfetchcanpreformacalltoanapi_Handler_IamRole_C2F43DF0.name}"
       }
     },
     "aws_lambda_function": {
@@ -189,6 +218,33 @@ module.exports = function({ $_id, $api_url, $body, $http_PATCH, $http_Util, $std
         "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",
         "s3_key": "${aws_s3_object.cloudApi_cloudApi-OnRequest-cdafee6e_S3Object_5DAAA0EF.key}",
+        "timeout": 30,
+        "vpc_config": {
+          "security_group_ids": [],
+          "subnet_ids": []
+        }
+      },
+      "testhttppatchandhttpfetchcanpreformacalltoanapi_Handler_185CBA02": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:http.patch and http.fetch can preform a call to an api/Handler/Default",
+            "uniqueId": "testhttppatchandhttpfetchcanpreformacalltoanapi_Handler_185CBA02"
+          }
+        },
+        "environment": {
+          "variables": {
+            "WING_FUNCTION_NAME": "Handler-c89df580",
+            "WING_TARGET": "tf-aws",
+            "WING_TOKEN_TFTOKEN_TOKEN_7": "${jsonencode(aws_api_gateway_stage.cloudApi_api_stage_BBB283E4.invoke_url)}"
+          }
+        },
+        "function_name": "Handler-c89df580",
+        "handler": "index.handler",
+        "publish": true,
+        "role": "${aws_iam_role.testhttppatchandhttpfetchcanpreformacalltoanapi_Handler_IamRole_C2F43DF0.arn}",
+        "runtime": "nodejs18.x",
+        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
+        "s3_key": "${aws_s3_object.testhttppatchandhttpfetchcanpreformacalltoanapi_Handler_S3Object_2CE72DAC.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -233,6 +289,17 @@ module.exports = function({ $_id, $api_url, $body, $http_PATCH, $http_Util, $std
         "bucket": "${aws_s3_bucket.Code.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
+      },
+      "testhttppatchandhttpfetchcanpreformacalltoanapi_Handler_S3Object_2CE72DAC": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:http.patch and http.fetch can preform a call to an api/Handler/S3Object",
+            "uniqueId": "testhttppatchandhttpfetchcanpreformacalltoanapi_Handler_S3Object_2CE72DAC"
+          }
+        },
+        "bucket": "${aws_s3_bucket.Code.bucket}",
+        "key": "<ASSET_KEY>",
+        "source": "<ASSET_SOURCE>"
       }
     }
   }
@@ -261,8 +328,8 @@ class $Root extends $stdlib.std.Resource {
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure1.js")({
             $_id: ${context._lift(_id)},
-            $api_PATCH: ${context._lift(api_PATCH)},
             $body: ${context._lift(body)},
+            $cloud_HttpMethod: ${context._lift(cloud.HttpMethod)},
             $std_Json: ${context._lift(std.Json)},
           })
         `);
@@ -281,60 +348,54 @@ class $Root extends $stdlib.std.Resource {
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
           $Closure1._registerBindObject(_id, host, []);
-          $Closure1._registerBindObject(api_PATCH, host, []);
           $Closure1._registerBindObject(body, host, []);
         }
         super._registerBind(host, ops);
       }
     }
-    const http_PATCH = http.HttpMethod.PATCH;
-    const api_PATCH = cloud.HttpMethod.PATCH;
+    class $Closure2 extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        this._addInflightOps("handle", "$inflight_init");
+        this.display.hidden = true;
+      }
+      static _toInflightType(context) {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("./inflight.$Closure2.js")({
+            $_id: ${context._lift(_id)},
+            $api_url: ${context._lift(api.url)},
+            $body: ${context._lift(body)},
+            $http_HttpMethod: ${context._lift(http.HttpMethod)},
+            $http_Util: ${context._lift(http.Util)},
+            $std_Json: ${context._lift(std.Json)},
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const $Closure2Client = ${$Closure2._toInflightType(this).text};
+            const client = new $Closure2Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("handle")) {
+          $Closure2._registerBindObject(_id, host, []);
+          $Closure2._registerBindObject(api.url, host, []);
+          $Closure2._registerBindObject(body, host, []);
+        }
+        super._registerBind(host, ops);
+      }
+    }
     const api = this.node.root.newAbstract("@winglang/sdk.cloud.Api",this,"cloud.Api");
     const body = ({"cat": "Tion"});
     const _id = "12345";
     (api.patch("/path/{id}",new $Closure1(this,"$Closure1")));
-    if (((util.Util.env("WING_TARGET")) !== "tf-aws")) {
-      class $Closure2 extends $stdlib.std.Resource {
-        constructor(scope, id, ) {
-          super(scope, id);
-          this._addInflightOps("handle", "$inflight_init");
-          this.display.hidden = true;
-        }
-        static _toInflightType(context) {
-          return $stdlib.core.NodeJsCode.fromInline(`
-            require("./inflight.$Closure2.js")({
-              $_id: ${context._lift(_id)},
-              $api_url: ${context._lift(api.url)},
-              $body: ${context._lift(body)},
-              $http_PATCH: ${context._lift(http_PATCH)},
-              $http_Util: ${context._lift(http.Util)},
-              $std_Json: ${context._lift(std.Json)},
-            })
-          `);
-        }
-        _toInflight() {
-          return $stdlib.core.NodeJsCode.fromInline(`
-            (await (async () => {
-              const $Closure2Client = ${$Closure2._toInflightType(this).text};
-              const client = new $Closure2Client({
-              });
-              if (client.$inflight_init) { await client.$inflight_init(); }
-              return client;
-            })())
-          `);
-        }
-        _registerBind(host, ops) {
-          if (ops.includes("handle")) {
-            $Closure2._registerBindObject(_id, host, []);
-            $Closure2._registerBindObject(api.url, host, []);
-            $Closure2._registerBindObject(body, host, []);
-            $Closure2._registerBindObject(http_PATCH, host, []);
-          }
-          super._registerBind(host, ops);
-        }
-      }
-      this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:http.patch and http.fetch can preform a call to an api",new $Closure2(this,"$Closure2"));
-    }
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:http.patch and http.fetch can preform a call to an api",new $Closure2(this,"$Closure2"));
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
