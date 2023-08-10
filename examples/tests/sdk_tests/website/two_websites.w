@@ -7,6 +7,15 @@ let w2 = new cloud.Website(path: "./website") as "website-2";
 
 
 test "deploying two websites" {
-    assert(http.get(w1.url).ok);
-    assert(http.get(w2.url).ok);
+    let var url1 = w1.url;
+    if (!url1.startsWith("http")) {
+      url1 = "http://" + url1;
+    }
+    let var url2 = w2.url;
+    if (!url2.startsWith("http")) {
+      url2 = "http://" + url2;
+    }
+    
+    assert(http.get(url1).ok);
+    assert(http.get(url2).ok);
 } 

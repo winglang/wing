@@ -10,9 +10,13 @@ module.exports = function({ $config, $http_Util, $indexFile, $otherFile, $std_Js
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: http.get(w.url).body == indexFile")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $http_Util.get($w_url)).body,$indexFile)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: http.get(w.url + \"/inner-folder/other.html\").body == otherFile")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $http_Util.get(($w_url + "/inner-folder/other.html"))).body,$otherFile)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: http.get(w.url + \"/config.json\").body == Json.stringify(config)")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $http_Util.get(($w_url + "/config.json"))).body,((args) => { return JSON.stringify(args[0], null, args[1]) })([$config]))))};
+      let url = $w_url;
+      if ((!url.startsWith("http"))) {
+        url = ("http://" + url);
+      }
+      {((cond) => {if (!cond) throw new Error("assertion failed: http.get(url).body == indexFile")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $http_Util.get(url)).body,$indexFile)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: http.get(url + \"/inner-folder/other.html\").body == otherFile")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $http_Util.get((url + "/inner-folder/other.html"))).body,$otherFile)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: http.get(url + \"/config.json\").body == Json.stringify(config)")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $http_Util.get((url + "/config.json"))).body,((args) => { return JSON.stringify(args[0], null, args[1]) })([$config]))))};
     }
   }
   return $Closure1;
@@ -443,7 +447,7 @@ class $Root extends $stdlib.std.Resource {
           $Closure1._registerBindObject(config, host, []);
           $Closure1._registerBindObject(indexFile, host, []);
           $Closure1._registerBindObject(otherFile, host, []);
-          $Closure1._registerBindObject(w.url, host, ["body"]);
+          $Closure1._registerBindObject(w.url, host, []);
         }
         super._registerBind(host, ops);
       }
