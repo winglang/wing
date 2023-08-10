@@ -40,7 +40,7 @@ export class Topic extends cloud.Topic implements ISimulatorResource {
       functionHandler,
       props
     );
-    fn.display.type = "compiler-named";
+    fn.display.sourceModule = "@winglang/sdk";
     fn.display.title = "onMessage()";
 
     new EventMapping(this, `${this.node.id}-TopicEventMapping-${hash}`, {

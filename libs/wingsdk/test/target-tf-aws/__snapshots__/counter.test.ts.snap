@@ -53,8 +53,8 @@ exports[`counter name valid 2`] = `
                 },
                 "display": {
                   "description": "A distributed atomic counter",
+                  "sourceModule": "@winglang/sdk",
                   "title": "Counter",
-                  "type": "user-named",
                 },
                 "id": "The.Amazing-Counter_01",
                 "path": "root/Default/The.Amazing-Counter_01",
@@ -88,8 +88,8 @@ exports[`counter name valid 2`] = `
                 "display": {
                   "description": "A suite of APIs for running tests and collecting results.",
                   "hidden": true,
+                  "sourceModule": "@winglang/sdk",
                   "title": "TestRunner",
-                  "type": "user-named",
                 },
                 "id": "cloud.TestRunner",
                 "path": "root/Default/cloud.TestRunner",
@@ -183,8 +183,8 @@ exports[`counter with initial value 2`] = `
                 },
                 "display": {
                   "description": "A distributed atomic counter",
+                  "sourceModule": "@winglang/sdk",
                   "title": "Counter",
-                  "type": "user-named",
                 },
                 "id": "Counter",
                 "path": "root/Default/Counter",
@@ -218,8 +218,8 @@ exports[`counter with initial value 2`] = `
                 "display": {
                   "description": "A suite of APIs for running tests and collecting results.",
                   "hidden": true,
+                  "sourceModule": "@winglang/sdk",
                   "title": "TestRunner",
-                  "type": "user-named",
                 },
                 "id": "cloud.TestRunner",
                 "path": "root/Default/cloud.TestRunner",
@@ -385,8 +385,8 @@ exports[`dec() policy statement 2`] = `
                 },
                 "display": {
                   "description": "A distributed atomic counter",
+                  "sourceModule": "@winglang/sdk",
                   "title": "Counter",
-                  "type": "user-named",
                 },
                 "id": "Counter",
                 "path": "root/Default/Counter",
@@ -464,8 +464,8 @@ exports[`dec() policy statement 2`] = `
                 },
                 "display": {
                   "description": "A cloud function (FaaS)",
+                  "sourceModule": "@winglang/sdk",
                   "title": "Function",
-                  "type": "user-named",
                 },
                 "id": "Function",
                 "path": "root/Default/Function",
@@ -481,8 +481,8 @@ exports[`dec() policy statement 2`] = `
                 "display": {
                   "description": "An inflight resource",
                   "hidden": true,
+                  "sourceModule": "@winglang/sdk",
                   "title": "Inflight",
-                  "type": "user-named",
                 },
                 "id": "Handler",
                 "path": "root/Default/Handler",
@@ -516,8 +516,8 @@ exports[`dec() policy statement 2`] = `
                 "display": {
                   "description": "A suite of APIs for running tests and collecting results.",
                   "hidden": true,
+                  "sourceModule": "@winglang/sdk",
                   "title": "TestRunner",
-                  "type": "user-named",
                 },
                 "id": "cloud.TestRunner",
                 "path": "root/Default/cloud.TestRunner",
@@ -726,8 +726,8 @@ exports[`function with a counter binding 3`] = `
                 },
                 "display": {
                   "description": "A distributed atomic counter",
+                  "sourceModule": "@winglang/sdk",
                   "title": "Counter",
-                  "type": "user-named",
                 },
                 "id": "Counter",
                 "path": "root/Default/Counter",
@@ -805,8 +805,8 @@ exports[`function with a counter binding 3`] = `
                 },
                 "display": {
                   "description": "A cloud function (FaaS)",
+                  "sourceModule": "@winglang/sdk",
                   "title": "Function",
-                  "type": "user-named",
                 },
                 "id": "Function",
                 "path": "root/Default/Function",
@@ -822,8 +822,8 @@ exports[`function with a counter binding 3`] = `
                 "display": {
                   "description": "An inflight resource",
                   "hidden": true,
+                  "sourceModule": "@winglang/sdk",
                   "title": "Inflight",
-                  "type": "user-named",
                 },
                 "id": "Handler",
                 "path": "root/Default/Handler",
@@ -857,8 +857,8 @@ exports[`function with a counter binding 3`] = `
                 "display": {
                   "description": "A suite of APIs for running tests and collecting results.",
                   "hidden": true,
+                  "sourceModule": "@winglang/sdk",
                   "title": "TestRunner",
-                  "type": "user-named",
                 },
                 "id": "cloud.TestRunner",
                 "path": "root/Default/cloud.TestRunner",
@@ -1024,8 +1024,8 @@ exports[`inc() policy statement 2`] = `
                 },
                 "display": {
                   "description": "A distributed atomic counter",
+                  "sourceModule": "@winglang/sdk",
                   "title": "Counter",
-                  "type": "user-named",
                 },
                 "id": "Counter",
                 "path": "root/Default/Counter",
@@ -1103,8 +1103,8 @@ exports[`inc() policy statement 2`] = `
                 },
                 "display": {
                   "description": "A cloud function (FaaS)",
+                  "sourceModule": "@winglang/sdk",
                   "title": "Function",
-                  "type": "user-named",
                 },
                 "id": "Function",
                 "path": "root/Default/Function",
@@ -1120,8 +1120,8 @@ exports[`inc() policy statement 2`] = `
                 "display": {
                   "description": "An inflight resource",
                   "hidden": true,
+                  "sourceModule": "@winglang/sdk",
                   "title": "Inflight",
-                  "type": "user-named",
                 },
                 "id": "Handler",
                 "path": "root/Default/Handler",
@@ -1155,8 +1155,8 @@ exports[`inc() policy statement 2`] = `
                 "display": {
                   "description": "A suite of APIs for running tests and collecting results.",
                   "hidden": true,
+                  "sourceModule": "@winglang/sdk",
                   "title": "TestRunner",
-                  "type": "user-named",
                 },
                 "id": "cloud.TestRunner",
                 "path": "root/Default/cloud.TestRunner",
@@ -1322,8 +1322,8 @@ exports[`peek() policy statement 2`] = `
                 },
                 "display": {
                   "description": "A distributed atomic counter",
+                  "sourceModule": "@winglang/sdk",
                   "title": "Counter",
-                  "type": "user-named",
                 },
                 "id": "Counter",
                 "path": "root/Default/Counter",
@@ -1401,8 +1401,8 @@ exports[`peek() policy statement 2`] = `
                 },
                 "display": {
                   "description": "A cloud function (FaaS)",
+                  "sourceModule": "@winglang/sdk",
                   "title": "Function",
-                  "type": "user-named",
                 },
                 "id": "Function",
                 "path": "root/Default/Function",
@@ -1418,8 +1418,8 @@ exports[`peek() policy statement 2`] = `
                 "display": {
                   "description": "An inflight resource",
                   "hidden": true,
+                  "sourceModule": "@winglang/sdk",
                   "title": "Inflight",
-                  "type": "user-named",
                 },
                 "id": "Handler",
                 "path": "root/Default/Handler",
@@ -1453,8 +1453,8 @@ exports[`peek() policy statement 2`] = `
                 "display": {
                   "description": "A suite of APIs for running tests and collecting results.",
                   "hidden": true,
+                  "sourceModule": "@winglang/sdk",
                   "title": "TestRunner",
-                  "type": "user-named",
                 },
                 "id": "cloud.TestRunner",
                 "path": "root/Default/cloud.TestRunner",
@@ -1548,8 +1548,8 @@ exports[`replace invalid character from counter name 2`] = `
                 },
                 "display": {
                   "description": "A distributed atomic counter",
+                  "sourceModule": "@winglang/sdk",
                   "title": "Counter",
-                  "type": "user-named",
                 },
                 "id": "The*Amazing%Counter@01",
                 "path": "root/Default/The*Amazing%Counter@01",
@@ -1583,8 +1583,8 @@ exports[`replace invalid character from counter name 2`] = `
                 "display": {
                   "description": "A suite of APIs for running tests and collecting results.",
                   "hidden": true,
+                  "sourceModule": "@winglang/sdk",
                   "title": "TestRunner",
-                  "type": "user-named",
                 },
                 "id": "cloud.TestRunner",
                 "path": "root/Default/cloud.TestRunner",
@@ -1750,8 +1750,8 @@ exports[`set() policy statement 2`] = `
                 },
                 "display": {
                   "description": "A distributed atomic counter",
+                  "sourceModule": "@winglang/sdk",
                   "title": "Counter",
-                  "type": "user-named",
                 },
                 "id": "Counter",
                 "path": "root/Default/Counter",
@@ -1829,8 +1829,8 @@ exports[`set() policy statement 2`] = `
                 },
                 "display": {
                   "description": "A cloud function (FaaS)",
+                  "sourceModule": "@winglang/sdk",
                   "title": "Function",
-                  "type": "user-named",
                 },
                 "id": "Function",
                 "path": "root/Default/Function",
@@ -1846,8 +1846,8 @@ exports[`set() policy statement 2`] = `
                 "display": {
                   "description": "An inflight resource",
                   "hidden": true,
+                  "sourceModule": "@winglang/sdk",
                   "title": "Inflight",
-                  "type": "user-named",
                 },
                 "id": "Handler",
                 "path": "root/Default/Handler",
@@ -1881,8 +1881,8 @@ exports[`set() policy statement 2`] = `
                 "display": {
                   "description": "A suite of APIs for running tests and collecting results.",
                   "hidden": true,
+                  "sourceModule": "@winglang/sdk",
                   "title": "TestRunner",
-                  "type": "user-named",
                 },
                 "id": "cloud.TestRunner",
                 "path": "root/Default/cloud.TestRunner",

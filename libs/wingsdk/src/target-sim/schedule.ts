@@ -49,7 +49,7 @@ export class Schedule extends cloud.Schedule implements ISimulatorResource {
       functionHandler,
       props
     );
-    fn.display.type = "compiler-named";
+    fn.display.sourceModule = "@winglang/sdk";
     fn.display.title = "onTick()";
 
     new EventMapping(this, `${this.node.id}-OnTickMapping-${hash}`, {

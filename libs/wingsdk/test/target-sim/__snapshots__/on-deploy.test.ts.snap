@@ -62,8 +62,8 @@ return class Handler {
           "display": {
             "description": "An inflight resource",
             "hidden": true,
+            "sourceModule": "@winglang/sdk",
             "title": "Inflight",
-            "type": "user-named",
           },
           "id": "Handler",
           "path": "root/Handler",
@@ -79,8 +79,8 @@ return class Handler {
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
+            "sourceModule": "@winglang/sdk",
             "title": "TestRunner",
-            "type": "user-named",
           },
           "id": "cloud.TestRunner",
           "path": "root/cloud.TestRunner",
@@ -100,8 +100,8 @@ return class Handler {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
+                "sourceModule": "@winglang/sdk",
                 "title": "Function",
-                "type": "compiler-named",
               },
               "id": "Function",
               "path": "root/my_on_deploy/Function",
@@ -113,8 +113,8 @@ return class Handler {
           },
           "display": {
             "description": "Run code during the app's deployment.",
+            "sourceModule": "@winglang/sdk",
             "title": "OnDeploy",
-            "type": "user-named",
           },
           "id": "my_on_deploy",
           "path": "root/my_on_deploy",

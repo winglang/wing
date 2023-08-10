@@ -69,8 +69,8 @@ async handle(event) {
           "display": {
             "description": "An inflight resource",
             "hidden": true,
+            "sourceModule": "@winglang/sdk",
             "title": "Inflight",
-            "type": "user-named",
           },
           "id": "Handler",
           "path": "root/Handler",
@@ -86,8 +86,8 @@ async handle(event) {
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
+            "sourceModule": "@winglang/sdk",
             "title": "TestRunner",
-            "type": "user-named",
           },
           "id": "cloud.TestRunner",
           "path": "root/cloud.TestRunner",
@@ -102,8 +102,8 @@ async handle(event) {
           },
           "display": {
             "description": "A cloud function (FaaS)",
+            "sourceModule": "@winglang/sdk",
             "title": "Function",
-            "type": "user-named",
           },
           "id": "my_function",
           "path": "root/my_function",
@@ -198,8 +198,8 @@ async handle(event) {
           "display": {
             "description": "An inflight resource",
             "hidden": true,
+            "sourceModule": "@winglang/sdk",
             "title": "Inflight",
-            "type": "user-named",
           },
           "id": "Handler",
           "path": "root/Handler",
@@ -215,8 +215,8 @@ async handle(event) {
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
+            "sourceModule": "@winglang/sdk",
             "title": "TestRunner",
-            "type": "user-named",
           },
           "id": "cloud.TestRunner",
           "path": "root/cloud.TestRunner",
@@ -231,8 +231,8 @@ async handle(event) {
           },
           "display": {
             "description": "A cloud function (FaaS)",
+            "sourceModule": "@winglang/sdk",
             "title": "Function",
-            "type": "user-named",
           },
           "id": "my_function",
           "path": "root/my_function",
@@ -327,8 +327,8 @@ async handle(event) {
           "display": {
             "description": "An inflight resource",
             "hidden": true,
+            "sourceModule": "@winglang/sdk",
             "title": "Inflight",
-            "type": "user-named",
           },
           "id": "Handler",
           "path": "root/Handler",
@@ -344,8 +344,8 @@ async handle(event) {
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
+            "sourceModule": "@winglang/sdk",
             "title": "TestRunner",
-            "type": "user-named",
           },
           "id": "cloud.TestRunner",
           "path": "root/cloud.TestRunner",
@@ -360,8 +360,8 @@ async handle(event) {
           },
           "display": {
             "description": "A cloud function (FaaS)",
+            "sourceModule": "@winglang/sdk",
             "title": "Function",
-            "type": "user-named",
           },
           "id": "my_function",
           "path": "root/my_function",
@@ -458,8 +458,8 @@ async handle(event) {
           "display": {
             "description": "An inflight resource",
             "hidden": true,
+            "sourceModule": "@winglang/sdk",
             "title": "Inflight",
-            "type": "user-named",
           },
           "id": "Handler",
           "path": "root/Handler",
@@ -475,8 +475,8 @@ async handle(event) {
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
+            "sourceModule": "@winglang/sdk",
             "title": "TestRunner",
-            "type": "user-named",
           },
           "id": "cloud.TestRunner",
           "path": "root/cloud.TestRunner",
@@ -491,8 +491,8 @@ async handle(event) {
           },
           "display": {
             "description": "A cloud function (FaaS)",
+            "sourceModule": "@winglang/sdk",
             "title": "Function",
-            "type": "user-named",
           },
           "id": "my_function",
           "path": "root/my_function",
@@ -577,8 +577,8 @@ async handle() {
           "display": {
             "description": "An inflight resource",
             "hidden": true,
+            "sourceModule": "@winglang/sdk",
             "title": "Inflight",
-            "type": "user-named",
           },
           "id": "Handler",
           "path": "root/Handler",
@@ -594,8 +594,8 @@ async handle() {
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
+            "sourceModule": "@winglang/sdk",
             "title": "TestRunner",
-            "type": "user-named",
           },
           "id": "cloud.TestRunner",
           "path": "root/cloud.TestRunner",
@@ -610,8 +610,8 @@ async handle() {
           },
           "display": {
             "description": "A cloud function (FaaS)",
+            "sourceModule": "@winglang/sdk",
             "title": "Function",
-            "type": "user-named",
           },
           "id": "my_function",
           "path": "root/my_function",
@@ -777,8 +777,8 @@ return class Handler {
           },
           "display": {
             "description": "A cloud function (FaaS)",
+            "sourceModule": "@winglang/sdk",
             "title": "Function",
-            "type": "user-named",
           },
           "id": "Function.0",
           "path": "root/Function.0",
@@ -794,8 +794,8 @@ return class Handler {
           "display": {
             "description": "An inflight resource",
             "hidden": true,
+            "sourceModule": "@winglang/sdk",
             "title": "Inflight",
-            "type": "user-named",
           },
           "id": "Function.0.handler",
           "path": "root/Function.0.handler",
@@ -810,8 +810,8 @@ return class Handler {
           },
           "display": {
             "description": "A cloud function (FaaS)",
+            "sourceModule": "@winglang/sdk",
             "title": "Function",
-            "type": "user-named",
           },
           "id": "Function.1",
           "path": "root/Function.1",
@@ -827,8 +827,8 @@ return class Handler {
           "display": {
             "description": "An inflight resource",
             "hidden": true,
+            "sourceModule": "@winglang/sdk",
             "title": "Inflight",
-            "type": "user-named",
           },
           "id": "Function.1.handler",
           "path": "root/Function.1.handler",
@@ -843,8 +843,8 @@ return class Handler {
           },
           "display": {
             "description": "A cloud function (FaaS)",
+            "sourceModule": "@winglang/sdk",
             "title": "Function",
-            "type": "user-named",
           },
           "id": "Function.2",
           "path": "root/Function.2",
@@ -860,8 +860,8 @@ return class Handler {
           "display": {
             "description": "An inflight resource",
             "hidden": true,
+            "sourceModule": "@winglang/sdk",
             "title": "Inflight",
-            "type": "user-named",
           },
           "id": "Function.2.handler",
           "path": "root/Function.2.handler",
@@ -876,8 +876,8 @@ return class Handler {
           },
           "display": {
             "description": "A cloud function (FaaS)",
+            "sourceModule": "@winglang/sdk",
             "title": "Function",
-            "type": "user-named",
           },
           "id": "Function.3",
           "path": "root/Function.3",
@@ -893,8 +893,8 @@ return class Handler {
           "display": {
             "description": "An inflight resource",
             "hidden": true,
+            "sourceModule": "@winglang/sdk",
             "title": "Inflight",
-            "type": "user-named",
           },
           "id": "Function.3.handler",
           "path": "root/Function.3.handler",
@@ -910,8 +910,8 @@ return class Handler {
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
+            "sourceModule": "@winglang/sdk",
             "title": "TestRunner",
-            "type": "user-named",
           },
           "id": "cloud.TestRunner",
           "path": "root/cloud.TestRunner",

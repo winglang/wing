@@ -77,7 +77,7 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
       functionHandler,
       props
     );
-    fn.display.type = "compiler-named";
+    fn.display.sourceModule = "@winglang/sdk";
     fn.display.title = "setConsumer()";
 
     new EventMapping(this, `${this.node.id}-QueueEventMapping-${hash}`, {

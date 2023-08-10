@@ -37,8 +37,8 @@ exports[`create a counter 1`] = `
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
+            "sourceModule": "@winglang/sdk",
             "title": "TestRunner",
-            "type": "user-named",
           },
           "id": "cloud.TestRunner",
           "path": "root/cloud.TestRunner",
@@ -53,8 +53,8 @@ exports[`create a counter 1`] = `
           },
           "display": {
             "description": "A distributed atomic counter",
+            "sourceModule": "@winglang/sdk",
             "title": "Counter",
-            "type": "user-named",
           },
           "id": "my_counter",
           "path": "root/my_counter",
@@ -122,8 +122,8 @@ exports[`dec 2`] = `
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
+            "sourceModule": "@winglang/sdk",
             "title": "TestRunner",
-            "type": "user-named",
           },
           "id": "cloud.TestRunner",
           "path": "root/cloud.TestRunner",
@@ -138,8 +138,8 @@ exports[`dec 2`] = `
           },
           "display": {
             "description": "A distributed atomic counter",
+            "sourceModule": "@winglang/sdk",
             "title": "Counter",
-            "type": "user-named",
           },
           "id": "my_counter",
           "path": "root/my_counter",
@@ -207,8 +207,8 @@ exports[`inc 2`] = `
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
+            "sourceModule": "@winglang/sdk",
             "title": "TestRunner",
-            "type": "user-named",
           },
           "id": "cloud.TestRunner",
           "path": "root/cloud.TestRunner",
@@ -223,8 +223,8 @@ exports[`inc 2`] = `
           },
           "display": {
             "description": "A distributed atomic counter",
+            "sourceModule": "@winglang/sdk",
             "title": "Counter",
-            "type": "user-named",
           },
           "id": "my_counter",
           "path": "root/my_counter",
@@ -292,8 +292,8 @@ exports[`key dec 2`] = `
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
+            "sourceModule": "@winglang/sdk",
             "title": "TestRunner",
-            "type": "user-named",
           },
           "id": "cloud.TestRunner",
           "path": "root/cloud.TestRunner",
@@ -308,8 +308,8 @@ exports[`key dec 2`] = `
           },
           "display": {
             "description": "A distributed atomic counter",
+            "sourceModule": "@winglang/sdk",
             "title": "Counter",
-            "type": "user-named",
           },
           "id": "my_counter",
           "path": "root/my_counter",
@@ -377,8 +377,8 @@ exports[`key inc 2`] = `
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
+            "sourceModule": "@winglang/sdk",
             "title": "TestRunner",
-            "type": "user-named",
           },
           "id": "cloud.TestRunner",
           "path": "root/cloud.TestRunner",
@@ -393,8 +393,8 @@ exports[`key inc 2`] = `
           },
           "display": {
             "description": "A distributed atomic counter",
+            "sourceModule": "@winglang/sdk",
             "title": "Counter",
-            "type": "user-named",
           },
           "id": "my_counter",
           "path": "root/my_counter",
@@ -460,8 +460,8 @@ exports[`key set to new value 2`] = `
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
+            "sourceModule": "@winglang/sdk",
             "title": "TestRunner",
-            "type": "user-named",
           },
           "id": "cloud.TestRunner",
           "path": "root/cloud.TestRunner",
@@ -476,8 +476,8 @@ exports[`key set to new value 2`] = `
           },
           "display": {
             "description": "A distributed atomic counter",
+            "sourceModule": "@winglang/sdk",
             "title": "Counter",
-            "type": "user-named",
           },
           "id": "my_counter",
           "path": "root/my_counter",
@@ -543,8 +543,8 @@ exports[`set to new value 2`] = `
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
+            "sourceModule": "@winglang/sdk",
             "title": "TestRunner",
-            "type": "user-named",
           },
           "id": "cloud.TestRunner",
           "path": "root/cloud.TestRunner",
@@ -559,8 +559,8 @@ exports[`set to new value 2`] = `
           },
           "display": {
             "description": "A distributed atomic counter",
+            "sourceModule": "@winglang/sdk",
             "title": "Counter",
-            "type": "user-named",
           },
           "id": "my_counter",
           "path": "root/my_counter",

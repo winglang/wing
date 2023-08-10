@@ -76,7 +76,7 @@ export const ContainerNode = ({
     if (!display) {
       return false;
     }
-    return display.type === "compiler-named" && display.title;
+    return display.sourceModule === "@winglang/sdk" && display.title;
   }, [display]);
 
   return (

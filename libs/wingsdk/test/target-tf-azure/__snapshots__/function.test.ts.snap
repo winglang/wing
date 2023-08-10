@@ -134,8 +134,8 @@ exports[`basic function 2`] = `
                     },
                     "display": {
                       "description": "A cloud object store",
+                      "sourceModule": "@winglang/sdk",
                       "title": "Bucket",
-                      "type": "user-named",
                     },
                     "id": "FunctionBucket",
                     "path": "root/Default/Function/FunctionBucket",
@@ -155,8 +155,8 @@ exports[`basic function 2`] = `
                 },
                 "display": {
                   "description": "A cloud function (FaaS)",
+                  "sourceModule": "@winglang/sdk",
                   "title": "Function",
-                  "type": "user-named",
                 },
                 "id": "Function",
                 "path": "root/Default/Function",
@@ -172,8 +172,8 @@ exports[`basic function 2`] = `
                 "display": {
                   "description": "An inflight resource",
                   "hidden": true,
+                  "sourceModule": "@winglang/sdk",
                   "title": "Inflight",
-                  "type": "user-named",
                 },
                 "id": "Handler",
                 "path": "root/Default/Handler",
@@ -382,8 +382,8 @@ exports[`basic function with environment variables 2`] = `
                     },
                     "display": {
                       "description": "A cloud object store",
+                      "sourceModule": "@winglang/sdk",
                       "title": "Bucket",
-                      "type": "user-named",
                     },
                     "id": "FunctionBucket",
                     "path": "root/Default/Function/FunctionBucket",
@@ -403,8 +403,8 @@ exports[`basic function with environment variables 2`] = `
                 },
                 "display": {
                   "description": "A cloud function (FaaS)",
+                  "sourceModule": "@winglang/sdk",
                   "title": "Function",
-                  "type": "user-named",
                 },
                 "id": "Function",
                 "path": "root/Default/Function",
@@ -420,8 +420,8 @@ exports[`basic function with environment variables 2`] = `
                 "display": {
                   "description": "An inflight resource",
                   "hidden": true,
+                  "sourceModule": "@winglang/sdk",
                   "title": "Inflight",
-                  "type": "user-named",
                 },
                 "id": "Handler",
                 "path": "root/Default/Handler",
@@ -590,8 +590,8 @@ exports[`replace invalid character from function name 2`] = `
                 "display": {
                   "description": "An inflight resource",
                   "hidden": true,
+                  "sourceModule": "@winglang/sdk",
                   "title": "Inflight",
-                  "type": "user-named",
                 },
                 "id": "Handler",
                 "path": "root/Default/Handler",
@@ -677,8 +677,8 @@ exports[`replace invalid character from function name 2`] = `
                     },
                     "display": {
                       "description": "A cloud object store",
+                      "sourceModule": "@winglang/sdk",
                       "title": "Bucket",
-                      "type": "user-named",
                     },
                     "id": "FunctionBucket",
                     "path": "root/Default/someFunction01/FunctionBucket",
@@ -698,8 +698,8 @@ exports[`replace invalid character from function name 2`] = `
                 },
                 "display": {
                   "description": "A cloud function (FaaS)",
+                  "sourceModule": "@winglang/sdk",
                   "title": "Function",
-                  "type": "user-named",
                 },
                 "id": "someFunction01",
                 "path": "root/Default/someFunction01",

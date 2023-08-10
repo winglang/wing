@@ -485,10 +485,10 @@ export interface DisplayProps {
   readonly description?: string;
 
   /**
-   * Whether the resource is user-named or compiler-named.
-   * @default - "user-named".
+   * The source file or library where the resource was defined.
+   * @default - No source module.
    */
-  readonly type?: "user-named" | "compiler-named";
+  readonly sourceModule?: string;
 
   /**
    * Whether the resource should be hidden from the UI.
@@ -513,9 +513,9 @@ export class Display {
   public description?: string;
 
   /**
-   * Whether the resource is user-named or compiler-named.
+   * The source file or library where the resource was defined.
    */
-  public type?: "user-named" | "compiler-named";
+  public sourceModule?: string;
 
   /**
    * Whether the resource should be hidden from the UI.
@@ -526,7 +526,7 @@ export class Display {
     this.title = props?.title;
     this.description = props?.description;
     this.hidden = props?.hidden;
-    this.type = props?.type ?? "user-named";
+    this.sourceModule = props?.sourceModule || "@winglang/sdk";
   }
 }
 

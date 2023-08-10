@@ -138,8 +138,8 @@ exports[`basic function 2`] = `
                 },
                 "display": {
                   "description": "A cloud function (FaaS)",
+                  "sourceModule": "@winglang/sdk",
                   "title": "Function",
-                  "type": "user-named",
                 },
                 "id": "Function",
                 "path": "root/Default/Function",
@@ -155,8 +155,8 @@ exports[`basic function 2`] = `
                 "display": {
                   "description": "An inflight resource",
                   "hidden": true,
+                  "sourceModule": "@winglang/sdk",
                   "title": "Inflight",
-                  "type": "user-named",
                 },
                 "id": "Handler",
                 "path": "root/Default/Handler",
@@ -190,8 +190,8 @@ exports[`basic function 2`] = `
                 "display": {
                   "description": "A suite of APIs for running tests and collecting results.",
                   "hidden": true,
+                  "sourceModule": "@winglang/sdk",
                   "title": "TestRunner",
-                  "type": "user-named",
                 },
                 "id": "cloud.TestRunner",
                 "path": "root/Default/cloud.TestRunner",
@@ -372,8 +372,8 @@ exports[`basic function with environment variables 2`] = `
                 },
                 "display": {
                   "description": "A cloud function (FaaS)",
+                  "sourceModule": "@winglang/sdk",
                   "title": "Function",
-                  "type": "user-named",
                 },
                 "id": "Function",
                 "path": "root/Default/Function",
@@ -389,8 +389,8 @@ exports[`basic function with environment variables 2`] = `
                 "display": {
                   "description": "An inflight resource",
                   "hidden": true,
+                  "sourceModule": "@winglang/sdk",
                   "title": "Inflight",
-                  "type": "user-named",
                 },
                 "id": "Handler",
                 "path": "root/Default/Handler",
@@ -424,8 +424,8 @@ exports[`basic function with environment variables 2`] = `
                 "display": {
                   "description": "A suite of APIs for running tests and collecting results.",
                   "hidden": true,
+                  "sourceModule": "@winglang/sdk",
                   "title": "TestRunner",
-                  "type": "user-named",
                 },
                 "id": "cloud.TestRunner",
                 "path": "root/Default/cloud.TestRunner",
@@ -605,8 +605,8 @@ exports[`basic function with memory size specified 2`] = `
                 },
                 "display": {
                   "description": "A cloud function (FaaS)",
+                  "sourceModule": "@winglang/sdk",
                   "title": "Function",
-                  "type": "user-named",
                 },
                 "id": "Function",
                 "path": "root/Default/Function",
@@ -622,8 +622,8 @@ exports[`basic function with memory size specified 2`] = `
                 "display": {
                   "description": "An inflight resource",
                   "hidden": true,
+                  "sourceModule": "@winglang/sdk",
                   "title": "Inflight",
-                  "type": "user-named",
                 },
                 "id": "Handler",
                 "path": "root/Default/Handler",
@@ -657,8 +657,8 @@ exports[`basic function with memory size specified 2`] = `
                 "display": {
                   "description": "A suite of APIs for running tests and collecting results.",
                   "hidden": true,
+                  "sourceModule": "@winglang/sdk",
                   "title": "TestRunner",
-                  "type": "user-named",
                 },
                 "id": "cloud.TestRunner",
                 "path": "root/Default/cloud.TestRunner",
@@ -837,8 +837,8 @@ exports[`basic function with timeout explicitly set 2`] = `
                 },
                 "display": {
                   "description": "A cloud function (FaaS)",
+                  "sourceModule": "@winglang/sdk",
                   "title": "Function",
-                  "type": "user-named",
                 },
                 "id": "Function",
                 "path": "root/Default/Function",
@@ -854,8 +854,8 @@ exports[`basic function with timeout explicitly set 2`] = `
                 "display": {
                   "description": "An inflight resource",
                   "hidden": true,
+                  "sourceModule": "@winglang/sdk",
                   "title": "Inflight",
-                  "type": "user-named",
                 },
                 "id": "Handler",
                 "path": "root/Default/Handler",
@@ -889,8 +889,8 @@ exports[`basic function with timeout explicitly set 2`] = `
                 "display": {
                   "description": "A suite of APIs for running tests and collecting results.",
                   "hidden": true,
+                  "sourceModule": "@winglang/sdk",
                   "title": "TestRunner",
-                  "type": "user-named",
                 },
                 "id": "cloud.TestRunner",
                 "path": "root/Default/cloud.TestRunner",
@@ -1020,8 +1020,8 @@ exports[`function name valid 2`] = `
                 "display": {
                   "description": "An inflight resource",
                   "hidden": true,
+                  "sourceModule": "@winglang/sdk",
                   "title": "Inflight",
-                  "type": "user-named",
                 },
                 "id": "Handler",
                 "path": "root/Default/Handler",
@@ -1086,8 +1086,8 @@ exports[`function name valid 2`] = `
                 },
                 "display": {
                   "description": "A cloud function (FaaS)",
+                  "sourceModule": "@winglang/sdk",
                   "title": "Function",
-                  "type": "user-named",
                 },
                 "id": "The-Mighty_Function-01",
                 "path": "root/Default/The-Mighty_Function-01",
@@ -1121,8 +1121,8 @@ exports[`function name valid 2`] = `
                 "display": {
                   "description": "A suite of APIs for running tests and collecting results.",
                   "hidden": true,
+                  "sourceModule": "@winglang/sdk",
                   "title": "TestRunner",
-                  "type": "user-named",
                 },
                 "id": "cloud.TestRunner",
                 "path": "root/Default/cloud.TestRunner",
@@ -1252,8 +1252,8 @@ exports[`replace invalid character from function name 2`] = `
                 "display": {
                   "description": "An inflight resource",
                   "hidden": true,
+                  "sourceModule": "@winglang/sdk",
                   "title": "Inflight",
-                  "type": "user-named",
                 },
                 "id": "Handler",
                 "path": "root/Default/Handler",
@@ -1318,8 +1318,8 @@ exports[`replace invalid character from function name 2`] = `
                 },
                 "display": {
                   "description": "A cloud function (FaaS)",
+                  "sourceModule": "@winglang/sdk",
                   "title": "Function",
-                  "type": "user-named",
                 },
                 "id": "The%Mighty$Function",
                 "path": "root/Default/The%Mighty$Function",
@@ -1353,8 +1353,8 @@ exports[`replace invalid character from function name 2`] = `
                 "display": {
                   "description": "A suite of APIs for running tests and collecting results.",
                   "hidden": true,
+                  "sourceModule": "@winglang/sdk",
                   "title": "TestRunner",
-                  "type": "user-named",
                 },
                 "id": "cloud.TestRunner",
                 "path": "root/Default/cloud.TestRunner",

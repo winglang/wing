@@ -18,7 +18,7 @@ export class OnDeploy extends cloud.OnDeploy {
     super(scope, id, handler, props);
 
     this.fn = cloud.Function._newFunction(this, "Function", handler, props);
-    this.fn.display.type = "compiler-named";
+    this.fn.display.sourceModule = "@winglang/sdk";
 
     this.node.addDependency(this.fn);
 

@@ -45,8 +45,8 @@ exports[`default topic behavior 2`] = `
                 },
                 "display": {
                   "description": "A pub/sub notification topic",
+                  "sourceModule": "@winglang/sdk",
                   "title": "Topic",
-                  "type": "user-named",
                 },
                 "id": "Topic",
                 "path": "root/Default/Topic",
@@ -80,8 +80,8 @@ exports[`default topic behavior 2`] = `
                 "display": {
                   "description": "A suite of APIs for running tests and collecting results.",
                   "hidden": true,
+                  "sourceModule": "@winglang/sdk",
                   "title": "TestRunner",
-                  "type": "user-named",
                 },
                 "id": "cloud.TestRunner",
                 "path": "root/Default/cloud.TestRunner",
@@ -167,8 +167,8 @@ exports[`replace invalid character from queue name 2`] = `
                 },
                 "display": {
                   "description": "A pub/sub notification topic",
+                  "sourceModule": "@winglang/sdk",
                   "title": "Topic",
-                  "type": "user-named",
                 },
                 "id": "The%Spectacular@Topic",
                 "path": "root/Default/The%Spectacular@Topic",
@@ -202,8 +202,8 @@ exports[`replace invalid character from queue name 2`] = `
                 "display": {
                   "description": "A suite of APIs for running tests and collecting results.",
                   "hidden": true,
+                  "sourceModule": "@winglang/sdk",
                   "title": "TestRunner",
-                  "type": "user-named",
                 },
                 "id": "cloud.TestRunner",
                 "path": "root/Default/cloud.TestRunner",
@@ -289,8 +289,8 @@ exports[`topic name valid 2`] = `
                 },
                 "display": {
                   "description": "A pub/sub notification topic",
+                  "sourceModule": "@winglang/sdk",
                   "title": "Topic",
-                  "type": "user-named",
                 },
                 "id": "The-Spectacular_Topic-01",
                 "path": "root/Default/The-Spectacular_Topic-01",
@@ -324,8 +324,8 @@ exports[`topic name valid 2`] = `
                 "display": {
                   "description": "A suite of APIs for running tests and collecting results.",
                   "hidden": true,
+                  "sourceModule": "@winglang/sdk",
                   "title": "TestRunner",
-                  "type": "user-named",
                 },
                 "id": "cloud.TestRunner",
                 "path": "root/Default/cloud.TestRunner",
@@ -503,8 +503,8 @@ exports[`topic with subscriber function 3`] = `
                 "display": {
                   "description": "An inflight resource",
                   "hidden": true,
+                  "sourceModule": "@winglang/sdk",
                   "title": "Inflight",
-                  "type": "user-named",
                 },
                 "id": "Handler",
                 "path": "root/Default/Handler",
@@ -544,8 +544,8 @@ exports[`topic with subscriber function 3`] = `
                 },
                 "display": {
                   "description": "A pub/sub notification topic",
+                  "sourceModule": "@winglang/sdk",
                   "title": "Topic",
-                  "type": "user-named",
                 },
                 "id": "Topic",
                 "path": "root/Default/Topic",
@@ -637,8 +637,8 @@ exports[`topic with subscriber function 3`] = `
                 },
                 "display": {
                   "description": "A cloud function (FaaS)",
+                  "sourceModule": "@winglang/sdk",
                   "title": "Function",
-                  "type": "user-named",
                 },
                 "id": "Topic-OnMessage-c5395e41",
                 "path": "root/Default/Topic-OnMessage-c5395e41",
@@ -653,7 +653,7 @@ exports[`topic with subscriber function 3`] = `
                 },
                 "display": {
                   "hidden": true,
-                  "type": "user-named",
+                  "sourceModule": "@winglang/sdk",
                 },
                 "id": "Topic-OnMessageHandler-c5395e41",
                 "path": "root/Default/Topic-OnMessageHandler-c5395e41",
@@ -687,8 +687,8 @@ exports[`topic with subscriber function 3`] = `
                 "display": {
                   "description": "A suite of APIs for running tests and collecting results.",
                   "hidden": true,
+                  "sourceModule": "@winglang/sdk",
                   "title": "TestRunner",
-                  "type": "user-named",
                 },
                 "id": "cloud.TestRunner",
                 "path": "root/Default/cloud.TestRunner",

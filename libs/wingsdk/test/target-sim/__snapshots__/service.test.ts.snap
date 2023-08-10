@@ -79,8 +79,8 @@ async handle(message) {
           "display": {
             "description": "An inflight resource",
             "hidden": true,
+            "sourceModule": "@winglang/sdk",
             "title": "Inflight",
-            "type": "user-named",
           },
           "id": "OnStartHandler",
           "path": "root/OnStartHandler",
@@ -96,8 +96,8 @@ async handle(message) {
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
+            "sourceModule": "@winglang/sdk",
             "title": "TestRunner",
-            "type": "user-named",
           },
           "id": "cloud.TestRunner",
           "path": "root/cloud.TestRunner",
@@ -124,7 +124,7 @@ async handle(message) {
               },
               "display": {
                 "hidden": true,
-                "type": "user-named",
+                "sourceModule": "@winglang/sdk",
               },
               "id": "my_service-ServiceOnStart-ef2b13b9",
               "path": "root/my_service/my_service-ServiceOnStart-ef2b13b9",
@@ -158,8 +158,8 @@ async handle(message) {
               },
               "display": {
                 "description": "A cloud function (FaaS)",
+                "sourceModule": "@winglang/sdk",
                 "title": "onStart()",
-                "type": "compiler-named",
               },
               "id": "my_service-ServiceOnStartef2b13b9",
               "path": "root/my_service/my_service-ServiceOnStartef2b13b9",
@@ -171,8 +171,8 @@ async handle(message) {
           },
           "display": {
             "description": "A cloud service",
+            "sourceModule": "@winglang/sdk",
             "title": "Service",
-            "type": "user-named",
           },
           "id": "my_service",
           "path": "root/my_service",

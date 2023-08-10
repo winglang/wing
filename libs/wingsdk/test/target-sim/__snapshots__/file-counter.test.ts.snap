@@ -128,8 +128,8 @@ bucket: (function(env) {
               },
               "display": {
                 "description": "A cloud object store",
+                "sourceModule": "@winglang/sdk",
                 "title": "Bucket",
-                "type": "user-named",
               },
               "id": "Bucket",
               "path": "root/HelloWorld/Bucket",
@@ -157,8 +157,8 @@ bucket: (function(env) {
               },
               "display": {
                 "description": "A distributed atomic counter",
+                "sourceModule": "@winglang/sdk",
                 "title": "Counter",
-                "type": "user-named",
               },
               "id": "Counter",
               "path": "root/HelloWorld/Counter",
@@ -187,8 +187,8 @@ bucket: (function(env) {
               "display": {
                 "description": "An inflight resource",
                 "hidden": true,
+                "sourceModule": "@winglang/sdk",
                 "title": "Inflight",
-                "type": "user-named",
               },
               "id": "Processor",
               "path": "root/HelloWorld/Processor",
@@ -215,7 +215,7 @@ bucket: (function(env) {
                   },
                   "display": {
                     "hidden": true,
-                    "type": "user-named",
+                    "sourceModule": "@winglang/sdk",
                   },
                   "id": "Queue-QueueEventMapping-401ee792",
                   "path": "root/HelloWorld/Queue/Queue-QueueEventMapping-401ee792",
@@ -273,8 +273,8 @@ bucket: (function(env) {
                   },
                   "display": {
                     "description": "A cloud function (FaaS)",
+                    "sourceModule": "@winglang/sdk",
                     "title": "setConsumer()",
-                    "type": "compiler-named",
                   },
                   "id": "Queue-SetConsumer-401ee792",
                   "path": "root/HelloWorld/Queue/Queue-SetConsumer-401ee792",
@@ -289,7 +289,7 @@ bucket: (function(env) {
                   },
                   "display": {
                     "hidden": true,
-                    "type": "user-named",
+                    "sourceModule": "@winglang/sdk",
                   },
                   "id": "Queue-SetConsumerHandler-401ee792",
                   "path": "root/HelloWorld/Queue/Queue-SetConsumerHandler-401ee792",
@@ -301,8 +301,8 @@ bucket: (function(env) {
               },
               "display": {
                 "description": "A distributed message queue",
+                "sourceModule": "@winglang/sdk",
                 "title": "Queue",
-                "type": "user-named",
               },
               "id": "Queue",
               "path": "root/HelloWorld/Queue",
@@ -326,8 +326,8 @@ bucket: (function(env) {
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
             "hidden": true,
+            "sourceModule": "@winglang/sdk",
             "title": "TestRunner",
-            "type": "user-named",
           },
           "id": "cloud.TestRunner",
           "path": "root/cloud.TestRunner",

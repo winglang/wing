@@ -259,8 +259,8 @@ exports[`default website behavior 2`] = `
                 },
                 "display": {
                   "description": "A static website",
+                  "sourceModule": "@winglang/sdk",
                   "title": "Website",
-                  "type": "user-named",
                 },
                 "id": "Website",
                 "path": "root/Default/Website",
@@ -294,8 +294,8 @@ exports[`default website behavior 2`] = `
                 "display": {
                   "description": "A suite of APIs for running tests and collecting results.",
                   "hidden": true,
+                  "sourceModule": "@winglang/sdk",
                   "title": "TestRunner",
-                  "type": "user-named",
                 },
                 "id": "cloud.TestRunner",
                 "path": "root/Default/cloud.TestRunner",
@@ -612,8 +612,8 @@ exports[`website with add_json 2`] = `
                 },
                 "display": {
                   "description": "A static website",
+                  "sourceModule": "@winglang/sdk",
                   "title": "Website",
-                  "type": "user-named",
                 },
                 "id": "Website",
                 "path": "root/Default/Website",
@@ -647,8 +647,8 @@ exports[`website with add_json 2`] = `
                 "display": {
                   "description": "A suite of APIs for running tests and collecting results.",
                   "hidden": true,
+                  "sourceModule": "@winglang/sdk",
                   "title": "TestRunner",
-                  "type": "user-named",
                 },
                 "id": "cloud.TestRunner",
                 "path": "root/Default/cloud.TestRunner",

@@ -69,7 +69,7 @@ export class Service extends cloud.Service implements ISimulatorResource {
       onStartFunctionHandler,
       {}
     );
-    fn.display.type = "compiler-named";
+    fn.display.sourceModule = "@winglang/sdk";
     fn.display.title = "onStart()";
 
     this.node.addDependency(fn);
