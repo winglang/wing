@@ -35,7 +35,7 @@ export class Function {
     return undefined;
   }
 
-  private static checkIAwsFunctionImplementation(
+  private static isAwsFunction(
     obj: any
   ): obj is IAwsFunction {
     return (
