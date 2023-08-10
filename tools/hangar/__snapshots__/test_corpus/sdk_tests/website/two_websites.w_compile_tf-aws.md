@@ -48,17 +48,18 @@ module.exports = function({ $http_Util, $w1_url, $w2_url }) {
   },
   "data": {
     "aws_iam_policy_document": {
-      "cloudWebsite_AllowDistributionReadOnly_89DC4FD0": {
+      "cloudWebsite_AllowDistributionReadWrite_AEBB3F73": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Website/AllowDistributionReadOnly",
-            "uniqueId": "cloudWebsite_AllowDistributionReadOnly_89DC4FD0"
+            "path": "root/Default/Default/cloud.Website/AllowDistributionReadWrite",
+            "uniqueId": "cloudWebsite_AllowDistributionReadWrite_AEBB3F73"
           }
         },
         "statement": [
           {
             "actions": [
-              "s3:GetObject"
+              "s3:GetObject",
+              "s3:PutObject"
             ],
             "condition": [
               {
@@ -83,17 +84,18 @@ module.exports = function({ $http_Util, $w1_url, $w2_url }) {
           }
         ]
       },
-      "website-2_AllowDistributionReadOnly_994269D9": {
+      "website-2_AllowDistributionReadWrite_C405F986": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/website-2/AllowDistributionReadOnly",
-            "uniqueId": "website-2_AllowDistributionReadOnly_994269D9"
+            "path": "root/Default/Default/website-2/AllowDistributionReadWrite",
+            "uniqueId": "website-2_AllowDistributionReadWrite_C405F986"
           }
         },
         "statement": [
           {
             "actions": [
-              "s3:GetObject"
+              "s3:GetObject",
+              "s3:PutObject"
             ],
             "condition": [
               {
@@ -362,7 +364,7 @@ module.exports = function({ $http_Util, $w1_url, $w2_url }) {
           }
         },
         "bucket": "${aws_s3_bucket.cloudWebsite_WebsiteBucket_EB03D355.id}",
-        "policy": "${data.aws_iam_policy_document.cloudWebsite_AllowDistributionReadOnly_89DC4FD0.json}"
+        "policy": "${data.aws_iam_policy_document.cloudWebsite_AllowDistributionReadWrite_AEBB3F73.json}"
       },
       "website-2_DistributionS3BucketPolicy_C89BC83B": {
         "//": {
@@ -372,7 +374,7 @@ module.exports = function({ $http_Util, $w1_url, $w2_url }) {
           }
         },
         "bucket": "${aws_s3_bucket.website-2_WebsiteBucket_59576A0C.id}",
-        "policy": "${data.aws_iam_policy_document.website-2_AllowDistributionReadOnly_994269D9.json}"
+        "policy": "${data.aws_iam_policy_document.website-2_AllowDistributionReadWrite_C405F986.json}"
       }
     },
     "aws_s3_bucket_public_access_block": {

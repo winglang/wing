@@ -80,17 +80,18 @@ module.exports = function({  }) {
   },
   "data": {
     "aws_iam_policy_document": {
-      "cloudWebsite_AllowDistributionReadOnly_89DC4FD0": {
+      "cloudWebsite_AllowDistributionReadWrite_AEBB3F73": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Website/AllowDistributionReadOnly",
-            "uniqueId": "cloudWebsite_AllowDistributionReadOnly_89DC4FD0"
+            "path": "root/Default/Default/cloud.Website/AllowDistributionReadWrite",
+            "uniqueId": "cloudWebsite_AllowDistributionReadWrite_AEBB3F73"
           }
         },
         "statement": [
           {
             "actions": [
-              "s3:GetObject"
+              "s3:GetObject",
+              "s3:PutObject"
             ],
             "condition": [
               {
@@ -514,7 +515,7 @@ module.exports = function({  }) {
           }
         },
         "bucket": "${aws_s3_bucket.cloudWebsite_WebsiteBucket_EB03D355.id}",
-        "policy": "${data.aws_iam_policy_document.cloudWebsite_AllowDistributionReadOnly_89DC4FD0.json}"
+        "policy": "${data.aws_iam_policy_document.cloudWebsite_AllowDistributionReadWrite_AEBB3F73.json}"
       }
     },
     "aws_s3_bucket_public_access_block": {

@@ -4,11 +4,12 @@ exports[`default website behavior 1`] = `
 "{
   \\"data\\": {
     \\"aws_iam_policy_document\\": {
-      \\"Website_AllowDistributionReadOnly_24CFF6C0\\": {
+      \\"Website_AllowDistributionReadWrite_36B4A72A\\": {
         \\"statement\\": [
           {
             \\"actions\\": [
-              \\"s3:GetObject\\"
+              \\"s3:GetObject\\",
+              \\"s3:PutObject\\"
             ],
             \\"condition\\": [
               {
@@ -103,7 +104,7 @@ exports[`default website behavior 1`] = `
     \\"aws_s3_bucket_policy\\": {
       \\"Website_DistributionS3BucketPolicy_09AE0BCA\\": {
         \\"bucket\\": \\"\${aws_s3_bucket.Website_WebsiteBucket_3C0321F0.id}\\",
-        \\"policy\\": \\"\${data.aws_iam_policy_document.Website_AllowDistributionReadOnly_24CFF6C0.json}\\"
+        \\"policy\\": \\"\${data.aws_iam_policy_document.Website_AllowDistributionReadWrite_36B4A72A.json}\\"
       }
     },
     \\"aws_s3_bucket_public_access_block\\": {
@@ -172,13 +173,13 @@ exports[`default website behavior 2`] = `
                   "wing:resource:connections": [],
                 },
                 "children": {
-                  "AllowDistributionReadOnly": {
+                  "AllowDistributionReadWrite": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformDataSource",
                       "version": "0.17.0",
                     },
-                    "id": "AllowDistributionReadOnly",
-                    "path": "root/Default/Website/AllowDistributionReadOnly",
+                    "id": "AllowDistributionReadWrite",
+                    "path": "root/Default/Website/AllowDistributionReadWrite",
                   },
                   "BucketWebsiteConfiguration": {
                     "constructInfo": {
@@ -338,11 +339,12 @@ exports[`website with add_json 1`] = `
 "{
   \\"data\\": {
     \\"aws_iam_policy_document\\": {
-      \\"Website_AllowDistributionReadOnly_24CFF6C0\\": {
+      \\"Website_AllowDistributionReadWrite_36B4A72A\\": {
         \\"statement\\": [
           {
             \\"actions\\": [
-              \\"s3:GetObject\\"
+              \\"s3:GetObject\\",
+              \\"s3:PutObject\\"
             ],
             \\"condition\\": [
               {
@@ -437,7 +439,7 @@ exports[`website with add_json 1`] = `
     \\"aws_s3_bucket_policy\\": {
       \\"Website_DistributionS3BucketPolicy_09AE0BCA\\": {
         \\"bucket\\": \\"\${aws_s3_bucket.Website_WebsiteBucket_3C0321F0.id}\\",
-        \\"policy\\": \\"\${data.aws_iam_policy_document.Website_AllowDistributionReadOnly_24CFF6C0.json}\\"
+        \\"policy\\": \\"\${data.aws_iam_policy_document.Website_AllowDistributionReadWrite_36B4A72A.json}\\"
       }
     },
     \\"aws_s3_bucket_public_access_block\\": {
@@ -515,13 +517,13 @@ exports[`website with add_json 2`] = `
                   "wing:resource:connections": [],
                 },
                 "children": {
-                  "AllowDistributionReadOnly": {
+                  "AllowDistributionReadWrite": {
                     "constructInfo": {
                       "fqn": "cdktf.TerraformDataSource",
                       "version": "0.17.0",
                     },
-                    "id": "AllowDistributionReadOnly",
-                    "path": "root/Default/Website/AllowDistributionReadOnly",
+                    "id": "AllowDistributionReadWrite",
+                    "path": "root/Default/Website/AllowDistributionReadWrite",
                   },
                   "BucketWebsiteConfiguration": {
                     "constructInfo": {
