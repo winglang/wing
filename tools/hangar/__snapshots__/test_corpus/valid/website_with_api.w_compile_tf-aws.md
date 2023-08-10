@@ -151,7 +151,7 @@ module.exports = function({  }) {
         },
         "rest_api_id": "${aws_api_gateway_rest_api.cloudApi_api_2B334D75.id}",
         "triggers": {
-          "redeployment": "cdd4e9e04bfdff956629a1812b4cef862849e475"
+          "redeployment": "53d34a77ebc006529cbee88240e663619396c753"
         }
       }
     },
@@ -611,7 +611,8 @@ module.exports = function({  }) {
           "aws_s3_bucket.cloudWebsite_WebsiteBucket_EB03D355"
         ],
         "key": "/index.html",
-        "source": "<SOURCE>"
+        "source": "<SOURCE>",
+        "source_hash": "${filemd5(<SOURCE>)}"
       },
       "cloudWebsite_File-configjson_591A81BA": {
         "//": {
