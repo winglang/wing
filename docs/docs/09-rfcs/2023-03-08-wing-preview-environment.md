@@ -39,7 +39,7 @@ Seamlessly integrating with GitHub.
 
 ### Wing Cloud Preview Environments Developer Experience
 
-A developer using winglang has the capability to integrate Wing Cloud Preview Environments with their repository.
+A developer using winglang has the capability to integrate Wing Cloud Preview Environments with their (github) repository.
 
 #### Installation
 
