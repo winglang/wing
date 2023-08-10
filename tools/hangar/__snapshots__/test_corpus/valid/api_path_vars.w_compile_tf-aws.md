@@ -1,6 +1,6 @@
 # [api_path_vars.w](../../../../../examples/tests/valid/api_path_vars.w) | compile | tf-aws
 
-## inflight.$Closure1-b06597fe.js
+## inflight.$Closure1-1.js
 ```js
 module.exports = function({ $std_Json }) {
   class $Closure1 {
@@ -18,7 +18,7 @@ module.exports = function({ $std_Json }) {
 
 ```
 
-## inflight.$Closure2-b06597fe.js
+## inflight.$Closure2-1.js
 ```js
 module.exports = function({ $api_url, $http_Util, $std_Json }) {
   class $Closure2 {
@@ -315,7 +315,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1-b06597fe.js")({
+          require("./inflight.$Closure1-1.js")({
             $std_Json: ${context._lift(std.Json)},
           })
         `);
@@ -340,7 +340,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure2-b06597fe.js")({
+          require("./inflight.$Closure2-1.js")({
             $api_url: ${context._lift(api.url)},
             $http_Util: ${context._lift(http.Util)},
             $std_Json: ${context._lift(std.Json)},

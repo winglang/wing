@@ -1,6 +1,6 @@
 # [uuidv4.w](../../../../../../examples/tests/sdk_tests/util/uuidv4.w) | compile | tf-aws
 
-## inflight.$Closure1-2073181a.js
+## inflight.$Closure1-1.js
 ```js
 module.exports = function({ $JSHelperInflight, $util_Util }) {
   class $Closure1 {
@@ -19,7 +19,7 @@ module.exports = function({ $JSHelperInflight, $util_Util }) {
 
 ```
 
-## inflight.JSHelper-2073181a.js
+## inflight.JSHelper-1.js
 ```js
 module.exports = function({  }) {
   class JSHelper {
@@ -31,7 +31,7 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.JSHelperInflight-2073181a.js
+## inflight.JSHelperInflight-1.js
 ```js
 module.exports = function({  }) {
   class JSHelperInflight {
@@ -187,7 +187,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.JSHelper-2073181a.js")({
+          require("./inflight.JSHelper-1.js")({
           })
         `);
       }
@@ -210,7 +210,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.JSHelperInflight-2073181a.js")({
+          require("./inflight.JSHelperInflight-1.js")({
           })
         `);
       }
@@ -234,7 +234,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1-2073181a.js")({
+          require("./inflight.$Closure1-1.js")({
             $JSHelperInflight: ${context._lift(JSHelperInflight)},
             $util_Util: ${context._lift(util.Util)},
           })

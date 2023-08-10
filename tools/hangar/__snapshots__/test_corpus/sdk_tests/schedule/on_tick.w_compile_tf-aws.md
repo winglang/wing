@@ -1,6 +1,6 @@
 # [on_tick.w](../../../../../../examples/tests/sdk_tests/schedule/on_tick.w) | compile | tf-aws
 
-## inflight.$Closure1-fa1bf34b.js
+## inflight.$Closure1-1.js
 ```js
 module.exports = function({ $c1 }) {
   class $Closure1 {
@@ -18,7 +18,7 @@ module.exports = function({ $c1 }) {
 
 ```
 
-## inflight.$Closure2-fa1bf34b.js
+## inflight.$Closure2-1.js
 ```js
 module.exports = function({ $c2 }) {
   class $Closure2 {
@@ -36,7 +36,7 @@ module.exports = function({ $c2 }) {
 
 ```
 
-## inflight.$Closure3-fa1bf34b.js
+## inflight.$Closure3-1.js
 ```js
 module.exports = function({ $c1, $c2, $std_Duration, $util_Util }) {
   class $Closure3 {
@@ -442,7 +442,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1-fa1bf34b.js")({
+          require("./inflight.$Closure1-1.js")({
             $c1: ${context._lift(c1)},
           })
         `);
@@ -473,7 +473,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure2-fa1bf34b.js")({
+          require("./inflight.$Closure2-1.js")({
             $c2: ${context._lift(c2)},
           })
         `);
@@ -504,7 +504,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure3-fa1bf34b.js")({
+          require("./inflight.$Closure3-1.js")({
             $c1: ${context._lift(c1)},
             $c2: ${context._lift(c2)},
             $std_Duration: ${context._lift(std.Duration)},
