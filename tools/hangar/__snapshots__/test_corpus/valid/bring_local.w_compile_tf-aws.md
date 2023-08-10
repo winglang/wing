@@ -1,6 +1,24 @@
 # [bring_local.w](../../../../../examples/tests/valid/bring_local.w) | compile | tf-aws
 
-## inflight.$Closure1.js
+## inflight.$Closure1-1.js
+```js
+module.exports = function({ $__parent_this_1_b }) {
+  class $Closure1 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async handle() {
+      (await $__parent_this_1_b.put("data.txt","<empty>"));
+    }
+  }
+  return $Closure1;
+}
+
+```
+
+## inflight.$Closure1-3.js
 ```js
 module.exports = function({ $store }) {
   class $Closure1 {
@@ -18,7 +36,7 @@ module.exports = function({ $store }) {
 
 ```
 
-## inflight.Q.js
+## inflight.Q-2.js
 ```js
 module.exports = function({  }) {
   class Q {
@@ -30,7 +48,7 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.Store.js
+## inflight.Store-1.js
 ```js
 module.exports = function({  }) {
   class Store {
@@ -46,7 +64,7 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.Triangle.js
+## inflight.Triangle-3.js
 ```js
 module.exports = function({  }) {
   class Triangle {
@@ -54,6 +72,30 @@ module.exports = function({  }) {
     }
   }
   return Triangle;
+}
+
+```
+
+## inflight.Util-1.js
+```js
+module.exports = function({  }) {
+  class Util {
+    constructor({  }) {
+    }
+  }
+  return Util;
+}
+
+```
+
+## inflight.Util-3.js
+```js
+module.exports = function({  }) {
+  class Util {
+    constructor({  }) {
+    }
+  }
+  return Util;
 }
 
 ```
@@ -77,6 +119,21 @@ module.exports = function({  }) {
       }
     }
   },
+  "data": {
+    "aws_lambda_invocation": {
+      "file1Store_cloudOnDeploy_Invocation_0E6A2A64": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/file1.Store/cloud.OnDeploy/Invocation",
+            "uniqueId": "file1Store_cloudOnDeploy_Invocation_0E6A2A64"
+          }
+        },
+        "depends_on": [],
+        "function_name": "${aws_lambda_function.file1Store_cloudOnDeploy_Function_9539541F.function_name}",
+        "input": "{}"
+      }
+    }
+  },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
       "value": "[[\"root/Default/Default/test:add data to store\",\"${aws_lambda_function.testadddatatostore_Handler_19066842.arn}\"]]"
@@ -89,6 +146,15 @@ module.exports = function({  }) {
   },
   "resource": {
     "aws_iam_role": {
+      "file1Store_cloudOnDeploy_Function_IamRole_233573CC": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/file1.Store/cloud.OnDeploy/Function/IamRole",
+            "uniqueId": "file1Store_cloudOnDeploy_Function_IamRole_233573CC"
+          }
+        },
+        "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
+      },
       "testadddatatostore_Handler_IamRole_D112FE1A": {
         "//": {
           "metadata": {
@@ -100,6 +166,16 @@ module.exports = function({  }) {
       }
     },
     "aws_iam_role_policy": {
+      "file1Store_cloudOnDeploy_Function_IamRolePolicy_8C128884": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/file1.Store/cloud.OnDeploy/Function/IamRolePolicy",
+            "uniqueId": "file1Store_cloudOnDeploy_Function_IamRolePolicy_8C128884"
+          }
+        },
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":[\"s3:PutObject*\",\"s3:Abort*\"],\"Resource\":[\"${aws_s3_bucket.file1Store_cloudBucket_86CE87B1.arn}\",\"${aws_s3_bucket.file1Store_cloudBucket_86CE87B1.arn}/*\"],\"Effect\":\"Allow\"}]}",
+        "role": "${aws_iam_role.file1Store_cloudOnDeploy_Function_IamRole_233573CC.name}"
+      },
       "testadddatatostore_Handler_IamRolePolicy_2759864D": {
         "//": {
           "metadata": {
@@ -112,6 +188,16 @@ module.exports = function({  }) {
       }
     },
     "aws_iam_role_policy_attachment": {
+      "file1Store_cloudOnDeploy_Function_IamRolePolicyAttachment_20F1BD40": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/file1.Store/cloud.OnDeploy/Function/IamRolePolicyAttachment",
+            "uniqueId": "file1Store_cloudOnDeploy_Function_IamRolePolicyAttachment_20F1BD40"
+          }
+        },
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "${aws_iam_role.file1Store_cloudOnDeploy_Function_IamRole_233573CC.name}"
+      },
       "testadddatatostore_Handler_IamRolePolicyAttachment_1100277D": {
         "//": {
           "metadata": {
@@ -124,6 +210,33 @@ module.exports = function({  }) {
       }
     },
     "aws_lambda_function": {
+      "file1Store_cloudOnDeploy_Function_9539541F": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/file1.Store/cloud.OnDeploy/Function/Default",
+            "uniqueId": "file1Store_cloudOnDeploy_Function_9539541F"
+          }
+        },
+        "environment": {
+          "variables": {
+            "BUCKET_NAME_94dc4b3e": "${aws_s3_bucket.file1Store_cloudBucket_86CE87B1.bucket}",
+            "WING_FUNCTION_NAME": "Function-c8b7b48c",
+            "WING_TARGET": "tf-aws"
+          }
+        },
+        "function_name": "Function-c8b7b48c",
+        "handler": "index.handler",
+        "publish": true,
+        "role": "${aws_iam_role.file1Store_cloudOnDeploy_Function_IamRole_233573CC.arn}",
+        "runtime": "nodejs18.x",
+        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
+        "s3_key": "${aws_s3_object.file1Store_cloudOnDeploy_Function_S3Object_CBBF816B.key}",
+        "timeout": 30,
+        "vpc_config": {
+          "security_group_ids": [],
+          "subnet_ids": []
+        }
+      },
       "testadddatatostore_Handler_19066842": {
         "//": {
           "metadata": {
@@ -207,6 +320,17 @@ module.exports = function({  }) {
       }
     },
     "aws_s3_object": {
+      "file1Store_cloudOnDeploy_Function_S3Object_CBBF816B": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/file1.Store/cloud.OnDeploy/Function/S3Object",
+            "uniqueId": "file1Store_cloudOnDeploy_Function_S3Object_CBBF816B"
+          }
+        },
+        "bucket": "${aws_s3_bucket.Code.bucket}",
+        "key": "<ASSET_KEY>",
+        "source": "<ASSET_SOURCE>"
+      },
       "testadddatatostore_Handler_S3Object_6CF2BC7E": {
         "//": {
           "metadata": {
@@ -253,7 +377,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1.js")({
+          require("./inflight.$Closure1-3.js")({
             $store: ${context._lift(store)},
           })
         `);
@@ -286,7 +410,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.Triangle.js")({
+          require("./inflight.Triangle-3.js")({
           })
         `);
       }
@@ -295,6 +419,29 @@ class $Root extends $stdlib.std.Resource {
           (await (async () => {
             const TriangleClient = ${Triangle._toInflightType(this).text};
             const client = new TriangleClient({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+    }
+    class Util extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        this._addInflightOps("$inflight_init");
+      }
+      static _toInflightType(context) {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("./inflight.Util-3.js")({
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const UtilClient = ${Util._toInflightType(this).text};
+            const client = new UtilClient({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -323,15 +470,71 @@ module.exports = function({ $stdlib }) {
   const file3 = require("./preflight.empty-1.js")({ $stdlib });
   const math = $stdlib.math;
   const cloud = $stdlib.cloud;
+  class Util extends $stdlib.std.Resource {
+    constructor(scope, id, ) {
+      super(scope, id);
+      this._addInflightOps("$inflight_init");
+    }
+    static _toInflightType(context) {
+      return $stdlib.core.NodeJsCode.fromInline(`
+        require("./inflight.Util-1.js")({
+        })
+      `);
+    }
+    _toInflight() {
+      return $stdlib.core.NodeJsCode.fromInline(`
+        (await (async () => {
+          const UtilClient = ${Util._toInflightType(this).text};
+          const client = new UtilClient({
+          });
+          if (client.$inflight_init) { await client.$inflight_init(); }
+          return client;
+        })())
+      `);
+    }
+  }
   class Store extends $stdlib.std.Resource {
     constructor(scope, id, ) {
       super(scope, id);
       this._addInflightOps("store", "$inflight_init");
       this.b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
+      const __parent_this_1 = this;
+      class $Closure1 extends $stdlib.std.Resource {
+        constructor(scope, id, ) {
+          super(scope, id);
+          this._addInflightOps("handle", "$inflight_init");
+          this.display.hidden = true;
+        }
+        static _toInflightType(context) {
+          return $stdlib.core.NodeJsCode.fromInline(`
+            require("./inflight.$Closure1-1.js")({
+              $__parent_this_1_b: ${context._lift(__parent_this_1.b)},
+            })
+          `);
+        }
+        _toInflight() {
+          return $stdlib.core.NodeJsCode.fromInline(`
+            (await (async () => {
+              const $Closure1Client = ${$Closure1._toInflightType(this).text};
+              const client = new $Closure1Client({
+              });
+              if (client.$inflight_init) { await client.$inflight_init(); }
+              return client;
+            })())
+          `);
+        }
+        _registerBind(host, ops) {
+          if (ops.includes("handle")) {
+            $Closure1._registerBindObject(__parent_this_1.b, host, ["put"]);
+          }
+          super._registerBind(host, ops);
+        }
+      }
+      const prefill = this.node.root.newAbstract("@winglang/sdk.cloud.OnDeploy",this,"cloud.OnDeploy",new $Closure1(this,"$Closure1"));
     }
     static _toInflightType(context) {
       return $stdlib.core.NodeJsCode.fromInline(`
-        require("./inflight.Store.js")({
+        require("./inflight.Store-1.js")({
         })
       `);
     }
@@ -365,7 +568,7 @@ module.exports = function({ $stdlib }) {
       return tmp;
     })({})
   ;
-  return { Store, Color };
+  return { Util, Store, Color };
 };
 
 ```
@@ -382,7 +585,7 @@ module.exports = function({ $stdlib }) {
     }
     static _toInflightType(context) {
       return $stdlib.core.NodeJsCode.fromInline(`
-        require("./inflight.Q.js")({
+        require("./inflight.Q-2.js")({
         })
       `);
     }

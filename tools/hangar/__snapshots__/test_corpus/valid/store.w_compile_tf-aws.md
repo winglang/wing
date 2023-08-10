@@ -1,6 +1,24 @@
 # [store.w](../../../../../examples/tests/valid/store.w) | compile | tf-aws
 
-## inflight.Store.js
+## inflight.$Closure1-1.js
+```js
+module.exports = function({ $__parent_this_1_b }) {
+  class $Closure1 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async handle() {
+      (await $__parent_this_1_b.put("data.txt","<empty>"));
+    }
+  }
+  return $Closure1;
+}
+
+```
+
+## inflight.Store-1.js
 ```js
 module.exports = function({  }) {
   class Store {
@@ -12,6 +30,18 @@ module.exports = function({  }) {
     }
   }
   return Store;
+}
+
+```
+
+## inflight.Util-1.js
+```js
+module.exports = function({  }) {
+  class Util {
+    constructor({  }) {
+    }
+  }
+  return Util;
 }
 
 ```
@@ -69,15 +99,71 @@ const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
+    class Util extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        this._addInflightOps("$inflight_init");
+      }
+      static _toInflightType(context) {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("./inflight.Util-1.js")({
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const UtilClient = ${Util._toInflightType(this).text};
+            const client = new UtilClient({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+    }
     class Store extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("store", "$inflight_init");
         this.b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
+        const __parent_this_1 = this;
+        class $Closure1 extends $stdlib.std.Resource {
+          constructor(scope, id, ) {
+            super(scope, id);
+            this._addInflightOps("handle", "$inflight_init");
+            this.display.hidden = true;
+          }
+          static _toInflightType(context) {
+            return $stdlib.core.NodeJsCode.fromInline(`
+              require("./inflight.$Closure1-1.js")({
+                $__parent_this_1_b: ${context._lift(__parent_this_1.b)},
+              })
+            `);
+          }
+          _toInflight() {
+            return $stdlib.core.NodeJsCode.fromInline(`
+              (await (async () => {
+                const $Closure1Client = ${$Closure1._toInflightType(this).text};
+                const client = new $Closure1Client({
+                });
+                if (client.$inflight_init) { await client.$inflight_init(); }
+                return client;
+              })())
+            `);
+          }
+          _registerBind(host, ops) {
+            if (ops.includes("handle")) {
+              $Closure1._registerBindObject(__parent_this_1.b, host, ["put"]);
+            }
+            super._registerBind(host, ops);
+          }
+        }
+        const prefill = this.node.root.newAbstract("@winglang/sdk.cloud.OnDeploy",this,"cloud.OnDeploy",new $Closure1(this,"$Closure1"));
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.Store.js")({
+          require("./inflight.Store-1.js")({
           })
         `);
       }

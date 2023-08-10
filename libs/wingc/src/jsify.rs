@@ -58,6 +58,12 @@ pub struct JSifier<'a> {
 	pub output_files: RefCell<Files>,
 	/// Counter for generating unique preflight file names.
 	preflight_file_counter: RefCell<usize>,
+
+	/// Counter for generating unique inflight file names.
+	inflight_file_counter: RefCell<usize>,
+	/// Map from source file IDs to safe counters.
+	inflight_file_map: RefCell<IndexMap<String, usize>>,
+
 	/// Map from source file paths to the JS file names they are emitted to.
 	/// e.g. "bucket.w" -> "preflight.bucket-1.js"
 	preflight_file_map: RefCell<IndexMap<PathBuf, String>>,
@@ -89,6 +95,8 @@ impl<'a> JSifier<'a> {
 			source_files,
 			entrypoint_file_path,
 			absolute_project_root,
+			inflight_file_counter: RefCell::new(0),
+			inflight_file_map: RefCell::new(IndexMap::new()),
 			preflight_file_counter: RefCell::new(0),
 			preflight_file_map: RefCell::new(IndexMap::new()),
 			output_files: RefCell::new(output_files),
@@ -1050,7 +1058,7 @@ impl<'a> JSifier<'a> {
 	}
 
 	fn jsify_to_inflight_type_method(&self, class: &AstClass, ctx: &JSifyContext) -> CodeMaker {
-		let client_path = inflight_filename(class);
+		let client_path = self.inflight_filename(class);
 
 		let mut code = CodeMaker::default();
 
@@ -1169,7 +1177,7 @@ impl<'a> JSifier<'a> {
 		match self
 			.output_files
 			.borrow_mut()
-			.add_file(inflight_filename(class), code.to_string())
+			.add_file(self.inflight_filename(class), code.to_string())
 		{
 			Ok(()) => {}
 			Err(err) => report_diagnostic(err.into()),
@@ -1286,6 +1294,19 @@ impl<'a> JSifier<'a> {
 		bind_method.close("}");
 		bind_method
 	}
+
+	fn inflight_filename(&self, class: &AstClass) -> String {
+		let mut file_map = self.inflight_file_map.borrow_mut();
+		let id: usize = if file_map.contains_key(&class.name.span.file_id) {
+			file_map[&class.name.span.file_id]
+		} else {
+			let mut id = self.inflight_file_counter.borrow_mut();
+			*id += 1;
+			file_map.insert(class.name.span.file_id.clone(), *id);
+			*id
+		};
+		format!("./inflight.{}-{}.js", class.name.name, id)
+	}
 }
 
 fn get_public_symbols(scope: &Scope) -> Vec<Symbol> {
@@ -1322,10 +1343,6 @@ fn get_public_symbols(scope: &Scope) -> Vec<Symbol> {
 	}
 
 	symbols
-}
-
-fn inflight_filename(class: &AstClass) -> String {
-	format!("./inflight.{}.js", class.name.name)
 }
 
 fn lookup_span(span: &WingSpan, files: &Files) -> String {

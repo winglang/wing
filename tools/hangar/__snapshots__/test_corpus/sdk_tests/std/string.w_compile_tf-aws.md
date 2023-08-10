@@ -1,6 +1,6 @@
 # [string.w](../../../../../../examples/tests/sdk_tests/std/string.w) | compile | tf-aws
 
-## inflight.$Closure1.js
+## inflight.$Closure1-1.js
 ```js
 module.exports = function({ $PARSE_ERROR, $std_String }) {
   class $Closure1 {
@@ -25,7 +25,7 @@ module.exports = function({ $PARSE_ERROR, $std_String }) {
 
 ```
 
-## inflight.$Closure10.js
+## inflight.$Closure10-1.js
 ```js
 module.exports = function({  }) {
   class $Closure10 {
@@ -45,7 +45,7 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.$Closure11.js
+## inflight.$Closure11-1.js
 ```js
 module.exports = function({  }) {
   class $Closure11 {
@@ -64,7 +64,7 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.$Closure12.js
+## inflight.$Closure12-1.js
 ```js
 module.exports = function({  }) {
   class $Closure12 {
@@ -85,7 +85,7 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.$Closure13.js
+## inflight.$Closure13-1.js
 ```js
 module.exports = function({  }) {
   class $Closure13 {
@@ -105,7 +105,7 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.$Closure14.js
+## inflight.$Closure14-1.js
 ```js
 module.exports = function({  }) {
   class $Closure14 {
@@ -127,7 +127,7 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.$Closure2.js
+## inflight.$Closure2-1.js
 ```js
 module.exports = function({  }) {
   class $Closure2 {
@@ -146,7 +146,7 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.$Closure3.js
+## inflight.$Closure3-1.js
 ```js
 module.exports = function({ $INDEX_OUT_OF_BOUNDS_ERROR }) {
   class $Closure3 {
@@ -180,7 +180,7 @@ module.exports = function({ $INDEX_OUT_OF_BOUNDS_ERROR }) {
 
 ```
 
-## inflight.$Closure4.js
+## inflight.$Closure4-1.js
 ```js
 module.exports = function({  }) {
   class $Closure4 {
@@ -198,7 +198,7 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.$Closure5.js
+## inflight.$Closure5-1.js
 ```js
 module.exports = function({  }) {
   class $Closure5 {
@@ -217,7 +217,7 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.$Closure6.js
+## inflight.$Closure6-1.js
 ```js
 module.exports = function({  }) {
   class $Closure6 {
@@ -236,7 +236,7 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.$Closure7.js
+## inflight.$Closure7-1.js
 ```js
 module.exports = function({  }) {
   class $Closure7 {
@@ -257,7 +257,7 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.$Closure8.js
+## inflight.$Closure8-1.js
 ```js
 module.exports = function({  }) {
   class $Closure8 {
@@ -278,7 +278,7 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.$Closure9.js
+## inflight.$Closure9-1.js
 ```js
 module.exports = function({  }) {
   class $Closure9 {
@@ -1298,7 +1298,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1.js")({
+          require("./inflight.$Closure1-1.js")({
             $PARSE_ERROR: ${context._lift(PARSE_ERROR)},
             $std_String: ${context._lift(std.String)},
           })
@@ -1330,7 +1330,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure2.js")({
+          require("./inflight.$Closure2-1.js")({
           })
         `);
       }
@@ -1354,7 +1354,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure3.js")({
+          require("./inflight.$Closure3-1.js")({
             $INDEX_OUT_OF_BOUNDS_ERROR: ${context._lift(INDEX_OUT_OF_BOUNDS_ERROR)},
           })
         `);
@@ -1385,7 +1385,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure4.js")({
+          require("./inflight.$Closure4-1.js")({
           })
         `);
       }
@@ -1409,7 +1409,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure5.js")({
+          require("./inflight.$Closure5-1.js")({
           })
         `);
       }
@@ -1433,7 +1433,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure6.js")({
+          require("./inflight.$Closure6-1.js")({
           })
         `);
       }
@@ -1457,7 +1457,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure7.js")({
+          require("./inflight.$Closure7-1.js")({
           })
         `);
       }
@@ -1481,7 +1481,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure8.js")({
+          require("./inflight.$Closure8-1.js")({
           })
         `);
       }
@@ -1505,7 +1505,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure9.js")({
+          require("./inflight.$Closure9-1.js")({
           })
         `);
       }
@@ -1529,7 +1529,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure10.js")({
+          require("./inflight.$Closure10-1.js")({
           })
         `);
       }
@@ -1553,7 +1553,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure11.js")({
+          require("./inflight.$Closure11-1.js")({
           })
         `);
       }
@@ -1577,7 +1577,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure12.js")({
+          require("./inflight.$Closure12-1.js")({
           })
         `);
       }
@@ -1601,7 +1601,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure13.js")({
+          require("./inflight.$Closure13-1.js")({
           })
         `);
       }
@@ -1625,7 +1625,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure14.js")({
+          require("./inflight.$Closure14-1.js")({
           })
         `);
       }
