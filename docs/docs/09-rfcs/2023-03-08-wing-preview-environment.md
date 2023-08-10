@@ -171,6 +171,8 @@ In our docs we have the following information:
   - The registered users
   - The connected GitHub repositories
   - The related Flyio projects and environments
+- A Cloud.Bucket to store the preview environments logs
+- A Cloud.Scheduler to run the self-cleaning mechanism
 
 #### Process: Sign Up and Sign In
 
