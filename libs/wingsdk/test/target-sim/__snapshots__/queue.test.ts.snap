@@ -1065,6 +1065,12 @@ async handle(message) {
           "attributes": {
             "wing:resource:connections": [
               {
+                "direction": "outbound",
+                "implicit": false,
+                "relationship": "setConsumer()",
+                "resource": "root/my_queue/my_queue-SetConsumer-e645076f",
+              },
+              {
                 "direction": "inbound",
                 "implicit": false,
                 "relationship": "push()",
@@ -1075,12 +1081,6 @@ async handle(message) {
                 "implicit": false,
                 "relationship": "$inflight_init()",
                 "resource": "root/my_queue_messages/Function",
-              },
-              {
-                "direction": "outbound",
-                "implicit": false,
-                "relationship": "setConsumer()",
-                "resource": "root/my_queue/my_queue-SetConsumer-e645076f",
               },
             ],
           },

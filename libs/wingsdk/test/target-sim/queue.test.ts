@@ -95,10 +95,12 @@ test("queue batch size of 2, purge the queue", async () => {
 test("queue with one subscriber, batch size of 5", async () => {
   // GIVEN
   const app = new SimApp();
+
+  const queue = cloud.Queue._newQueue(app, "my_queue");
   const handler = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
+  queue.setConsumer(handler, { batchSize: 5 });
 
   // initialize the queue with some messages
-  const queue = cloud.Queue._newQueue(app, "my_queue");
   const onDeployHandler = Testing.makeHandler(
     app,
     "OnDeployHandler",
@@ -118,7 +120,7 @@ test("queue with one subscriber, batch size of 5", async () => {
     }
   );
   cloud.OnDeploy._newOnDeploy(app, "my_queue_messages", onDeployHandler);
-  queue.setConsumer(handler, { batchSize: 5 });
+
   const s = await app.startSimulator();
 
   // WHEN
