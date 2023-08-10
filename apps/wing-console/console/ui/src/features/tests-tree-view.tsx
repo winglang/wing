@@ -1,6 +1,15 @@
 import { useTests } from "../services/use-tests.js";
 import { TestTree } from "../ui/test-tree.js";
-export const TestsTreeView = () => {
+
+export interface TestsTreeViewProps {
+  onSelectedItemsChange?: (items: string[]) => void;
+  selectedItems?: string[];
+}
+
+export const TestsTreeView = ({
+  onSelectedItemsChange,
+  selectedItems,
+}: TestsTreeViewProps) => {
   const { testList, runAllTests, runTest } = useTests();
 
   return (
@@ -8,6 +17,8 @@ export const TestsTreeView = () => {
       testList={testList}
       handleRunAllTests={runAllTests}
       handleRunTest={runTest}
+      onSelectedItemsChange={onSelectedItemsChange}
+      selectedItems={selectedItems}
     />
   );
 };

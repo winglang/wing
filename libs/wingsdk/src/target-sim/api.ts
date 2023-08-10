@@ -6,7 +6,7 @@ import { simulatorAttrToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
 import * as core from "../core";
-import { IInflightHost, Resource } from "../std";
+import { Display, IInflightHost, Resource } from "../std";
 import { BaseResourceSchema } from "../testing/simulator";
 
 /**
@@ -47,6 +47,8 @@ export class Api extends cloud.Api implements ISimulatorResource {
     }
 
     const fn = Function._newFunction(this, fnPath, inflight, props) as Function;
+    fn.display.sourceModule = Display.SDK_SOURCE_MODULE;
+    fn.display.title = `${method.toLowerCase()}()`;
 
     const eventMapping = new EventMapping(this, eventId, {
       publisher: this,
