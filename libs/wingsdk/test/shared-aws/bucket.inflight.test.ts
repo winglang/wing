@@ -94,7 +94,7 @@ test("get a non-existent object from the bucket", async () => {
   const VALUE = "VALUE";
   s3Mock
     .on(GetObjectCommand, { Bucket: BUCKET_NAME, Key: KEY })
-    .rejects(new Error("fake error"));
+    .rejects(new Error("Object does not exist"));
 
   // WHEN
   const client = new BucketClient(BUCKET_NAME);
