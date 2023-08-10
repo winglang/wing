@@ -14,13 +14,15 @@ export class QueueClient implements IQueueClient {
   ) {}
 
   public async push(...messages: string[]): Promise<void> {
-    messages.forEach(async (message) => {
+    const messagePromises = messages.map(async (message) => {
       const command = new SendMessageCommand({
         QueueUrl: this.queueUrl,
         MessageBody: message,
       });
       await this.client.send(command);
     });
+
+    await Promise.all(messagePromises);
   }
 
   public async purge(): Promise<void> {
