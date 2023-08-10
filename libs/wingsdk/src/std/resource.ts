@@ -485,6 +485,12 @@ export interface DisplayProps {
   readonly description?: string;
 
   /**
+   * The source file or library where the resource was defined.
+   * @default - No source module.
+   */
+  readonly sourceModule?: string;
+
+  /**
    * Whether the resource should be hidden from the UI.
    * @default - Undefined
    */
@@ -497,6 +503,11 @@ export interface DisplayProps {
  */
 export class Display {
   /**
+   * The source module for the SDK.
+   */
+  public static readonly SDK_SOURCE_MODULE = "@winglang/sdk";
+
+  /**
    * Title of the resource.
    */
   public title?: string;
@@ -507,6 +518,11 @@ export class Display {
   public description?: string;
 
   /**
+   * The source file or library where the resource was defined.
+   */
+  public sourceModule?: string;
+
+  /**
    * Whether the resource should be hidden from the UI.
    */
   public hidden?: boolean;
@@ -515,6 +531,7 @@ export class Display {
     this.title = props?.title;
     this.description = props?.description;
     this.hidden = props?.hidden;
+    this.sourceModule = props?.sourceModule;
   }
 }
 

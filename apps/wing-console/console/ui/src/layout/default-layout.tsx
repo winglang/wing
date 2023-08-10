@@ -145,7 +145,18 @@ export const DefaultLayout = ({
           );
         }
         case "tests": {
-          return <TestsTreeView key={component.type} />;
+          return (
+            <TestsTreeView
+              key={component.type}
+              onSelectedItemsChange={(items) => {
+                if (!showTests) {
+                  return;
+                }
+                setSelectedItems(items);
+              }}
+              selectedItems={showTests ? selectedItems : []}
+            />
+          );
         }
         case "logs": {
           return (
@@ -204,6 +215,7 @@ export const DefaultLayout = ({
       collapseAll,
       setSelectedItems,
       setExpandedItems,
+      showTests,
     ],
   );
 

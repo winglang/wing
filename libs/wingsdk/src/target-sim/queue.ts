@@ -8,7 +8,7 @@ import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
 import * as core from "../core";
 import { convertBetweenHandlers } from "../shared/convert";
-import { Duration, IInflightHost, Resource } from "../std";
+import { Display, Duration, IInflightHost, Resource } from "../std";
 import { BaseResourceSchema } from "../testing/simulator";
 
 /**
@@ -64,7 +64,7 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
      * wrapper code directly?
      */
     const functionHandler = convertBetweenHandlers(
-      this.node.scope!, // ok since we're not a tree root
+      this,
       `${this.node.id}-SetConsumerHandler-${hash}`,
       inflight,
       join(__dirname, "queue.setconsumer.inflight.js"),
@@ -72,11 +72,13 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
     );
 
     const fn = Function._newFunction(
-      this.node.scope!, // ok since we're not a tree root
+      this,
       `${this.node.id}-SetConsumer-${hash}`,
       functionHandler,
       props
     );
+    fn.display.sourceModule = Display.SDK_SOURCE_MODULE;
+    fn.display.title = "setConsumer()";
 
     new EventMapping(this, `${this.node.id}-QueueEventMapping-${hash}`, {
       subscriber: fn,
