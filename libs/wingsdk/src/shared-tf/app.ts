@@ -40,7 +40,7 @@ export abstract class CdktfApp extends App {
     const cdktfApp = new cdktf.App({ outdir: cdktfOutdir });
     const cdktfStack = new cdktf.TerraformStack(cdktfApp, TERRAFORM_STACK_NAME);
 
-    super(cdktfStack, "Default");
+    super(cdktfStack, props.rootId ?? "Default", props);
 
     // TODO: allow the user to specify custom backends
     // https://github.com/winglang/wing/issues/2003

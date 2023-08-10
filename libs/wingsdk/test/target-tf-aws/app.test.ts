@@ -7,7 +7,7 @@ import { mkdtemp } from "../util";
 
 test("artifacts are located in app root level outdir", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp() });
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   const inflight = Testing.makeHandler(app, "Handler", "async handle() {}");
   Function._newFunction(app, "Function", inflight);
   Function._newFunction(app, "Function2", inflight);
@@ -26,7 +26,7 @@ test("artifacts are located in app root level outdir", () => {
 
 test("no assets folder exists if app does synthesize asset producing resources", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp() });
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   new tfaws.Bucket(app, "Bucket", {});
   const expectedCdktfJson = `${app.outdir}/main.tf.json`;
   const expectedAssetsDir = `${app.outdir}/assets`;

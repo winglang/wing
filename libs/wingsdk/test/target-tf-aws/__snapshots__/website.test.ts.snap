@@ -88,7 +88,7 @@ exports[`default website behavior 1`] = `
     },
     \\"aws_cloudfront_origin_access_control\\": {
       \\"Website_CloudfrontOac_756836A4\\": {
-        \\"name\\": \\"cloudfront-oac\\",
+        \\"name\\": \\"Website-c80d509a-cloudfront-oac\\",
         \\"origin_access_control_origin_type\\": \\"s3\\",
         \\"signing_behavior\\": \\"always\\",
         \\"signing_protocol\\": \\"sigv4\\"
@@ -422,7 +422,7 @@ exports[`website with add_json 1`] = `
     },
     \\"aws_cloudfront_origin_access_control\\": {
       \\"Website_CloudfrontOac_756836A4\\": {
-        \\"name\\": \\"cloudfront-oac\\",
+        \\"name\\": \\"Website-c80d509a-cloudfront-oac\\",
         \\"origin_access_control_origin_type\\": \\"s3\\",
         \\"signing_behavior\\": \\"always\\",
         \\"signing_protocol\\": \\"sigv4\\"

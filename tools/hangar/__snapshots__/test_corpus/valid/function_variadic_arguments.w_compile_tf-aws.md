@@ -50,6 +50,16 @@
         },
         "bucket_prefix": "bucket2-c83a0be6-",
         "force_destroy": false
+      },
+      "bucket3": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/bucket3/Default",
+            "uniqueId": "bucket3"
+          }
+        },
+        "bucket_prefix": "bucket3-c8b6c706-",
+        "force_destroy": false
       }
     },
     "aws_s3_bucket_public_access_block": {
@@ -76,6 +86,19 @@
         "block_public_acls": true,
         "block_public_policy": true,
         "bucket": "${aws_s3_bucket.bucket2.bucket}",
+        "ignore_public_acls": true,
+        "restrict_public_buckets": true
+      },
+      "bucket3_PublicAccessBlock_D66B79BF": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/bucket3/PublicAccessBlock",
+            "uniqueId": "bucket3_PublicAccessBlock_D66B79BF"
+          }
+        },
+        "block_public_acls": true,
+        "block_public_policy": true,
+        "bucket": "${aws_s3_bucket.bucket3.bucket}",
         "ignore_public_acls": true,
         "restrict_public_buckets": true
       }
@@ -112,6 +135,22 @@
             }
           }
         ]
+      },
+      "bucket3_Encryption_43A64F29": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/bucket3/Encryption",
+            "uniqueId": "bucket3_Encryption_43A64F29"
+          }
+        },
+        "bucket": "${aws_s3_bucket.bucket3.bucket}",
+        "rule": [
+          {
+            "apply_server_side_encryption_by_default": {
+              "sse_algorithm": "AES256"
+            }
+          }
+        ]
       }
     }
   }
@@ -130,6 +169,8 @@ class $Root extends $stdlib.std.Resource {
     super(scope, id);
     const bucket1 = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"bucket1");
     const bucket2 = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"bucket2");
+    const bucket3 = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"bucket3");
+    (bucket3.node.addDependency(bucket1,bucket2));
     const funcBucket = ((...buckets) => {
       {((cond) => {if (!cond) throw new Error("assertion failed: buckets.length == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(buckets.length,2)))};
     });
@@ -158,7 +199,7 @@ class $Root extends $stdlib.std.Resource {
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
-new $App({ outdir: $outdir, name: "function_variadic_arguments", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test }).synth();
+new $App({ outdir: $outdir, name: "function_variadic_arguments", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
 
 ```
 
