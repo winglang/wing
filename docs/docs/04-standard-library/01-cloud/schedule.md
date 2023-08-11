@@ -92,7 +92,33 @@ new cloud.Schedule(props?: ScheduleProps);
 
 | **Name** | **Description** |
 | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.Schedule.bind">bind</a></code> | Binds the resource to the host so that it can be used by inflight code. |
 | <code><a href="#@winglang/sdk.cloud.Schedule.onTick">onTick</a></code> | Create a function that runs when receiving the scheduled event. |
+
+---
+
+##### `bind` <a name="bind" id="@winglang/sdk.cloud.Schedule.bind"></a>
+
+```wing
+bind(host: IInflightHost, ops: MutArray<str>): void
+```
+
+Binds the resource to the host so that it can be used by inflight code.
+
+You can override this method to perform additional logic like granting
+IAM permissions to the host based on what methods are being called. But
+you must call `super.bind(host, ops)` to ensure that the resource is
+actually bound.
+
+###### `host`<sup>Required</sup> <a name="host" id="@winglang/sdk.cloud.Schedule.bind.parameter.host"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.IInflightHost">IInflightHost</a>
+
+---
+
+###### `ops`<sup>Required</sup> <a name="ops" id="@winglang/sdk.cloud.Schedule.bind.parameter.ops"></a>
+
+- *Type:* MutArray&lt;str&gt;
 
 ---
 
