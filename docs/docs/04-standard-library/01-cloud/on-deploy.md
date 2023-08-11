@@ -98,40 +98,6 @@ new cloud.OnDeploy(handler: IOnDeployHandler, props?: OnDeployProps);
 
 ---
 
-#### Methods <a name="Methods" id="Methods"></a>
-
-##### Preflight Methods
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@winglang/sdk.cloud.OnDeploy.bind">bind</a></code> | Binds the resource to the host so that it can be used by inflight code. |
-
----
-
-##### `bind` <a name="bind" id="@winglang/sdk.cloud.OnDeploy.bind"></a>
-
-```wing
-bind(host: IInflightHost, ops: MutArray<str>): void
-```
-
-Binds the resource to the host so that it can be used by inflight code.
-
-You can override this method to perform additional logic like granting
-IAM permissions to the host based on what methods are being called. But
-you must call `super.bind(host, ops)` to ensure that the resource is
-actually bound.
-
-###### `host`<sup>Required</sup> <a name="host" id="@winglang/sdk.cloud.OnDeploy.bind.parameter.host"></a>
-
-- *Type:* <a href="#@winglang/sdk.std.IInflightHost">IInflightHost</a>
-
----
-
-###### `ops`<sup>Required</sup> <a name="ops" id="@winglang/sdk.cloud.OnDeploy.bind.parameter.ops"></a>
-
-- *Type:* MutArray&lt;str&gt;
-
----
 
 
 #### Properties <a name="Properties" id="Properties"></a>

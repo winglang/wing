@@ -100,12 +100,6 @@ new cloud.Counter(props?: CounterProps);
 
 #### Methods <a name="Methods" id="Methods"></a>
 
-##### Preflight Methods
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@winglang/sdk.cloud.Counter.bind">bind</a></code> | Binds the resource to the host so that it can be used by inflight code. |
-
 ##### Inflight Methods
 
 | **Name** | **Description** |
@@ -114,31 +108,6 @@ new cloud.Counter(props?: CounterProps);
 | <code><a href="#@winglang/sdk.cloud.ICounterClient.inc">inc</a></code> | Increments the counter atomically by a certain amount and returns the previous value. |
 | <code><a href="#@winglang/sdk.cloud.ICounterClient.peek">peek</a></code> | Get the current value of the counter. |
 | <code><a href="#@winglang/sdk.cloud.ICounterClient.set">set</a></code> | Set a counter to a given value. |
-
----
-
-##### `bind` <a name="bind" id="@winglang/sdk.cloud.Counter.bind"></a>
-
-```wing
-bind(host: IInflightHost, ops: MutArray<str>): void
-```
-
-Binds the resource to the host so that it can be used by inflight code.
-
-You can override this method to perform additional logic like granting
-IAM permissions to the host based on what methods are being called. But
-you must call `super.bind(host, ops)` to ensure that the resource is
-actually bound.
-
-###### `host`<sup>Required</sup> <a name="host" id="@winglang/sdk.cloud.Counter.bind.parameter.host"></a>
-
-- *Type:* <a href="#@winglang/sdk.std.IInflightHost">IInflightHost</a>
-
----
-
-###### `ops`<sup>Required</sup> <a name="ops" id="@winglang/sdk.cloud.Counter.bind.parameter.ops"></a>
-
-- *Type:* MutArray&lt;str&gt;
 
 ---
 
