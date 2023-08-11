@@ -36,7 +36,7 @@ jobs:
       last-version: ${{ fromJson(steps.changelog.outputs.data).lastVersion }}
       changelog: ${{ fromJson(steps.changelog.outputs.data).changelog }}
       release-vscode: ${{ fromJson(steps.turbo-diff.outputs.data)['vscode-wing#compile'].changes }}
-      skip-hangar: ${{ !fromJson(steps.turbo-diff.outputs.data)['hangar#test'].changes }}
+      run-hangar: ${{ fromJson(steps.turbo-diff.outputs.data)['hangar#test'].changes }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -193,7 +193,7 @@ jobs:
     runs-on: "${{ matrix.runner }}-latest"
     needs:
       - build
-    if: needs.build.outputs.run-hangar == 'true'
+    if: needs.build.outputs.run-hangar == 'true' || contains(github.event.pull_request.labels.*.name, '🧪 pr/e2e-full')
     strategy:
       fail-fast: true
       matrix:
