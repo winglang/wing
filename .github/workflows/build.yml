@@ -92,7 +92,7 @@ jobs:
 
       - name: Turbo diff
         id: turbo-diff
-        run: scripts/turbo-diff.mjs --startRef ${{ steps.setSHAs.outputs.base }} --endRef ${{ steps.setSHAs.outputs.head }}
+        run: scripts/turbo_diff.mjs --startRef ${{ steps.setSHAs.outputs.base }} --endRef ${{ steps.setSHAs.outputs.head }}
 
   test:
     name: Test
