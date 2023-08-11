@@ -11,7 +11,7 @@ import { Construct } from "constructs";
 import * as cloud from "../cloud";
 import * as core from "../core";
 import { createBundle } from "../shared/bundling";
-import { PolicyStatement } from "../shared-aws";
+import { IAwsFunction, PolicyStatement } from "../shared-aws";
 import { IInflightHost } from "../std";
 
 /**
@@ -19,7 +19,7 @@ import { IInflightHost } from "../std";
  *
  * @inflight `@winglang/sdk.cloud.IFunctionClient`
  */
-export class Function extends cloud.Function {
+export class Function extends cloud.Function implements IAwsFunction {
   private readonly function: CdkFunction;
   /** Function ARN */
   public readonly arn: string;
