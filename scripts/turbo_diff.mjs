@@ -80,6 +80,8 @@ for (const task of result.tasks) {
   };
 }
 
+// TODO check global dependencies
+
 for (const task of result.tasks) {
   let dependencies = task.dependencies;
   if (task.package === "hangar") {

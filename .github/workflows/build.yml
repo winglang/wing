@@ -35,8 +35,8 @@ jobs:
       version: ${{ fromJson(steps.changelog.outputs.data).newVersion }}
       last-version: ${{ fromJson(steps.changelog.outputs.data).lastVersion }}
       changelog: ${{ fromJson(steps.changelog.outputs.data).changelog }}
-      release-vscode: ${{ fromJson(steps.turbo-diff.outputs.data)['vscode-wing#compile'].changed }}
-      run-hangar: ${{ fromJson(steps.turbo-diff.outputs.data)['hangar#test'].changed }}
+      release-vscode: ${{ fromJson(steps.turbo-diff.outputs.data)['vscode-wing#compile'].changes }}
+      skip-hangar: ${{ !fromJson(steps.turbo-diff.outputs.data)['hangar#test'].changes }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -54,6 +54,23 @@ jobs:
           cache: "pnpm"
           node-version: ${{ env.NODE_VERSION }}
 
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Derive appropriate SHAs for base and head
+        id: setSHAs
+        uses: nrwl/nx-set-shas@v3
+
+      - name: Turbo diff
+        id: turbo-diff
+        run: scripts/turbo_diff.mjs --startRef ${{ steps.setSHAs.outputs.base }} --endRef ${{ steps.setSHAs.outputs.head }}
+
+      - name: Changelog Generation
+        id: changelog
+        env:
+          GENERATE_VERSION: ${{ github.event_name != 'push' || github.repository != 'winglang/wing' }}
+        run: pnpm changelog
+
       - name: Install Rust
         uses: dtolnay/rust-toolchain@master
         with:
@@ -66,15 +83,6 @@ jobs:
       - name: Setup Cargo Cache
         uses: Swatinem/rust-cache@v2
 
-      - name: Install Dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Changelog Generation
-        id: changelog
-        env:
-          GENERATE_VERSION: ${{ github.event_name != 'push' || github.repository != 'winglang/wing' }}
-        run: pnpm changelog
-
       - name: Build and Package
         run: pnpm package:ci
         env:
@@ -85,14 +93,6 @@ jobs:
         with:
           name: dist
           path: dist/*
-
-      - name: Derive appropriate SHAs for base and head
-        id: setSHAs
-        uses: nrwl/nx-set-shas@v3
-
-      - name: Turbo diff
-        id: turbo-diff
-        run: scripts/turbo_diff.mjs --startRef ${{ steps.setSHAs.outputs.base }} --endRef ${{ steps.setSHAs.outputs.head }}
 
   test:
     name: Test
