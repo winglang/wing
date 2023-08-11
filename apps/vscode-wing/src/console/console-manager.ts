@@ -219,7 +219,7 @@ export const createConsoleManager = (
       
           document.addEventListener('DOMContentLoaded', () => {
             const iframe = document.querySelector('iframe');
-            const iframeSrc = \`\${instanceUrl}?layout=\${layout}&theme=\${theme}&themeColor=\${themeColor}\`;
+            const iframeSrc = \`http://\${instanceUrl}?layout=\${layout}&theme=\${theme}&themeColor=\${themeColor}\`;
             iframe.src = iframeSrc;
           });
       </script>
