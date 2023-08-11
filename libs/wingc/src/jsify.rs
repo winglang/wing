@@ -337,7 +337,7 @@ impl<'a> JSifier<'a> {
 				format!("type: \"{}\"", self.jsify_type(typ).unwrap())
 			}
 			TypeAnnotationKind::UserDefined(udt) => {
-				format!("\"$ref\": \"/{}\"", udt.root.name)
+				format!("\"$ref\": \"#/$defs/{}\"", udt.root.name)
 			}
 			TypeAnnotationKind::Json => "type: \"object\"".to_string(),
 			TypeAnnotationKind::Map(t) => {
@@ -670,7 +670,29 @@ impl<'a> JSifier<'a> {
 		}
 	}
 
-	pub fn jsify_struct(&self, name: &Symbol, fields: &Vec<StructField>, extends: &Vec<UserDefinedType>) -> CodeMaker {
+  pub fn jsify_struct_properties(&self, fields: &Vec<StructField>, extends: &Vec<UserDefinedType>) -> CodeMaker {
+    let mut code = CodeMaker::default();
+    
+    // Any parents we need to get their properties
+    for e in extends {
+      code.line(format!(
+        "...require(\"{}\")().getSchema().properties,",
+        struct_filename(&e.root.name)
+      ))
+		}
+
+    for field in fields {
+			code.line(format!(
+				"{}: {{ {} }},",
+				field.name.name,
+				self.jsify_struct_field_to_json_schema_type(&field.member_type.kind)
+			));
+		}
+
+    code
+  }
+
+	pub fn jsify_struct(&self, name: &Symbol, fields: &Vec<StructField>, extends: &Vec<UserDefinedType>, env: &SymbolEnv) -> CodeMaker {
 		// To allow for struct validation at runtime this will generate a JS class that has a static
 		// getValidator method that will create a json schema validator.
 		let mut code = CodeMaker::default();
@@ -682,18 +704,14 @@ impl<'a> JSifier<'a> {
 		let mut required: Vec<String> = vec![]; // fields that are required
 		let mut dependencies: Vec<String> = vec![]; // schemas that need added to validator
 
-		code.open("static _schema = {".to_string());
+		code.open("static getSchema() {".to_string());
+    code.open("return {");
 		code.line(format!("id: \"/{}\",", name));
 		code.line("type: \"object\",".to_string());
 
 		code.open("properties: {");
-		// get parent fields
-		for e in extends {
-			code.line(format!(
-				"...require(\"{}\")()._schema.properties,",
-				struct_filename(&e.root.name)
-			));
-		}
+
+    code.add_code(self.jsify_struct_properties(fields, extends));
 
 		// determine which fields are required, and which schemas need to be added to validator
 		for field in fields {
@@ -704,11 +722,6 @@ impl<'a> JSifier<'a> {
 			if let Some(dep) = dep.1 {
 				dependencies.push(dep);
 			}
-			code.line(format!(
-				"{}: {{ {} }},",
-				field.name.name,
-				self.jsify_struct_field_to_json_schema_type(&field.member_type.kind)
-			));
 		}
 		code.close("},");
 
@@ -721,41 +734,37 @@ impl<'a> JSifier<'a> {
 		// pull in all required fields from parent structs
 		for e in extends {
 			code.line(format!(
-				"...require(\"{}\")()._schema.required,",
+				"...require(\"{}\")().getSchema().required,",
 				struct_filename(&e.root.name)
 			));
 		}
 
-		code.close("]");
+		code.close("],");
+
+    // create definitions for sub schemas
+    code.open("$defs: {");
+    for dep in &dependencies {
+      code.line(format!(
+        "\"{}\": {{ type: \"object\", \"properties\": require(\"{}\")().getSchema().properties }},",
+        dep,
+        struct_filename(&dep)
+      ));
+    }
+    for e in extends {
+      code.line(format!(
+        "...require(\"{}\")().getSchema().$defs,",
+        struct_filename(&e.root.name)
+      ));
+    }
+    code.close("}");
+
+    code.close("}");
 		code.close("}");
 
-		// create a function to retrieve all dependant schemas
-		code.open("static _getDependencies() {");
-		code.open("return {");
-		for dep in &dependencies {
-			// Add dependency
-			code.line(format!(
-				"\"/{}\": require(\"{}\")()._schema,",
-				dep,
-				struct_filename(&dep)
-			));
-			// Add dependency's dependencies
-			code.line(format!(
-				"...require(\"{}\")()._getDependencies(),",
-				struct_filename(&dep)
-			));
-		}
-		code.close("}");
-		code.close("}");
 
 		// create _validate() function
-		code.open("static _validate(obj) {");
-		code.line("const validator = stdStruct._getValidator(this._getDependencies());");
-		code.line("const errors = validator.validate(obj, this._schema).errors;");
-		code.open("if (errors.length > 0) {");
-		code.line("throw new Error(`unable to parse ${this.name}:\\n ${errors.join(\"\\n- \")}`);");
-		code.close("}");
-		code.line("return obj;");
+		code.open("static fromJson(obj) {");
+		code.line("return stdStruct._validate(obj, this.getSchema())");
 		code.close("}");
 
 		// create _toInflightType function that just requires the generated struct file
@@ -950,7 +959,7 @@ impl<'a> JSifier<'a> {
 				CodeMaker::default()
 			}
 			StmtKind::Struct { name, fields, extends } => {
-				let mut code = self.jsify_struct(name, fields, extends);
+				let mut code = self.jsify_struct(name, fields, extends, env);
 				// Emits struct class file
 				self.emit_struct_file(name, code, ctx);
 

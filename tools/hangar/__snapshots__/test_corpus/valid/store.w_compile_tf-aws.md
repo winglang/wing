@@ -1,5 +1,37 @@
 # [store.w](../../../../../examples/tests/valid/store.w) | compile | tf-aws
 
+## Point.Struct.js
+```js
+module.exports = function(stdStruct, fromInline) {
+  class Point {
+    static getSchema() {
+      return {
+        id: "/Point",
+        type: "object",
+        properties: {
+          x: { type: "number" },
+          y: { type: "number" },
+        },
+        required: [
+          "x",
+          "y",
+        ],
+        $defs: {
+        }
+      }
+    }
+    static fromJson(obj) {
+      return stdStruct._validate(obj, this.getSchema())
+    }
+    static _toInflightType(context) {
+      return fromInline(`require("./Point.Struct.js")(${ context._lift(stdStruct) })`);
+    }
+  }
+  return Point;
+};
+
+```
+
 ## inflight.$Closure1-1.js
 ```js
 module.exports = function({ $__parent_this_1_b }) {

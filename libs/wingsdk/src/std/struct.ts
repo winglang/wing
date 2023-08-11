@@ -21,24 +21,34 @@ export class Struct {
    *
    * This macro takes a Json object and the Struct definition file name then calls the validate method
    *
-   * @macro ((j, s) => {return s._validate(j)})($args$, $self$)
+   * @macro ($self$.fromJson($args$))
    */
   public static fromJson(json: Json): T1 {
     json;
     throw new Error("Macro");
   }
 
-  /** @internal */
-  public static _getValidator(deps?: { [key: string]: any }): Validator {
+  /**
+   * Validates a Json object against a schema
+   *
+   * The expected schema format: https://json-schema.org/
+   *
+   * @param obj Json object to validate
+   * @param schema schema to validate against
+   *
+   * @internal
+   */
+  public static _validate(obj: Json, schema: any): Json {
     const validator = new Validator();
-
-    if (deps !== undefined) {
-      for (const [key, value] of Object.entries(deps)) {
-        validator.addSchema(value, key);
-      }
+    const result = validator.validate(obj, schema);
+    if (result.errors.length > 0) {
+      throw new Error(
+        `unable to parse ${schema.id.replace("/", "")}:\n ${result.errors.join(
+          "\n- "
+        )}`
+      );
     }
-
-    return validator;
+    return obj;
   }
 
   private constructor() {}

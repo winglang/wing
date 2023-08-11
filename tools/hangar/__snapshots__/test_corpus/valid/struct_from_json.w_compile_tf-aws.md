@@ -4,29 +4,25 @@
 ```js
 module.exports = function(stdStruct, fromInline) {
   class Advisor {
-    static _schema = {
-      id: "/Advisor",
-      type: "object",
-      properties: {
-        ...require("./Person.Struct.js")()._schema.properties,
-        employeeID: { type: "string" },
-      },
-      required: [
-        "employeeID",
-        ...require("./Person.Struct.js")()._schema.required,
-      ]
-    }
-    static _getDependencies() {
+    static getSchema() {
       return {
+        id: "/Advisor",
+        type: "object",
+        properties: {
+          ...require("./Person.Struct.js")().getSchema().properties,
+          employeeID: { type: "string" },
+        },
+        required: [
+          "employeeID",
+          ...require("./Person.Struct.js")().getSchema().required,
+        ],
+        $defs: {
+          ...require("./Person.Struct.js")().getSchema().$defs,
+        }
       }
     }
-    static _validate(obj) {
-      const validator = stdStruct._getValidator(this._getDependencies());
-      const errors = validator.validate(obj, this._schema).errors;
-      if (errors.length > 0) {
-        throw new Error(`unable to parse ${this.name}:\n ${errors.join("\n- ")}`);
-      }
-      return obj;
+    static fromJson(obj) {
+      return stdStruct._validate(obj, this.getSchema())
     }
     static _toInflightType(context) {
       return fromInline(`require("./Advisor.Struct.js")(${ context._lift(stdStruct) })`);
@@ -41,29 +37,25 @@ module.exports = function(stdStruct, fromInline) {
 ```js
 module.exports = function(stdStruct, fromInline) {
   class Bar {
-    static _schema = {
-      id: "/Bar",
-      type: "object",
-      properties: {
-        ...require("./Foo.Struct.js")()._schema.properties,
-        b: { type: "number" },
-      },
-      required: [
-        "b",
-        ...require("./Foo.Struct.js")()._schema.required,
-      ]
-    }
-    static _getDependencies() {
+    static getSchema() {
       return {
+        id: "/Bar",
+        type: "object",
+        properties: {
+          ...require("./Foo.Struct.js")().getSchema().properties,
+          b: { type: "number" },
+        },
+        required: [
+          "b",
+          ...require("./Foo.Struct.js")().getSchema().required,
+        ],
+        $defs: {
+          ...require("./Foo.Struct.js")().getSchema().$defs,
+        }
       }
     }
-    static _validate(obj) {
-      const validator = stdStruct._getValidator(this._getDependencies());
-      const errors = validator.validate(obj, this._schema).errors;
-      if (errors.length > 0) {
-        throw new Error(`unable to parse ${this.name}:\n ${errors.join("\n- ")}`);
-      }
-      return obj;
+    static fromJson(obj) {
+      return stdStruct._validate(obj, this.getSchema())
     }
     static _toInflightType(context) {
       return fromInline(`require("./Bar.Struct.js")(${ context._lift(stdStruct) })`);
@@ -78,29 +70,24 @@ module.exports = function(stdStruct, fromInline) {
 ```js
 module.exports = function(stdStruct, fromInline) {
   class Course {
-    static _schema = {
-      id: "/Course",
-      type: "object",
-      properties: {
-        name: { type: "string" },
-        credits: { type: "number" },
-      },
-      required: [
-        "name",
-        "credits",
-      ]
-    }
-    static _getDependencies() {
+    static getSchema() {
       return {
+        id: "/Course",
+        type: "object",
+        properties: {
+          name: { type: "string" },
+          credits: { type: "number" },
+        },
+        required: [
+          "name",
+          "credits",
+        ],
+        $defs: {
+        }
       }
     }
-    static _validate(obj) {
-      const validator = stdStruct._getValidator(this._getDependencies());
-      const errors = validator.validate(obj, this._schema).errors;
-      if (errors.length > 0) {
-        throw new Error(`unable to parse ${this.name}:\n ${errors.join("\n- ")}`);
-      }
-      return obj;
+    static fromJson(obj) {
+      return stdStruct._validate(obj, this.getSchema())
     }
     static _toInflightType(context) {
       return fromInline(`require("./Course.Struct.js")(${ context._lift(stdStruct) })`);
@@ -115,35 +102,28 @@ module.exports = function(stdStruct, fromInline) {
 ```js
 module.exports = function(stdStruct, fromInline) {
   class CourseResults {
-    static _schema = {
-      id: "/CourseResults",
-      type: "object",
-      properties: {
-        course: { "$ref": "/Course" },
-        grade: { type: "string" },
-        dateTaken: { "$ref": "/Date" },
-      },
-      required: [
-        "course",
-        "grade",
-        "dateTaken",
-      ]
-    }
-    static _getDependencies() {
+    static getSchema() {
       return {
-        "/Course": require("./Course.Struct.js")()._schema,
-        ...require("./Course.Struct.js")()._getDependencies(),
-        "/Date": require("./Date.Struct.js")()._schema,
-        ...require("./Date.Struct.js")()._getDependencies(),
+        id: "/CourseResults",
+        type: "object",
+        properties: {
+          course: { "$ref": "#/$defs/Course" },
+          grade: { type: "string" },
+          dateTaken: { "$ref": "#/$defs/Date" },
+        },
+        required: [
+          "course",
+          "grade",
+          "dateTaken",
+        ],
+        $defs: {
+          "Course": { type: "object", "properties": require("./Course.Struct.js")().getSchema().properties },
+          "Date": { type: "object", "properties": require("./Date.Struct.js")().getSchema().properties },
+        }
       }
     }
-    static _validate(obj) {
-      const validator = stdStruct._getValidator(this._getDependencies());
-      const errors = validator.validate(obj, this._schema).errors;
-      if (errors.length > 0) {
-        throw new Error(`unable to parse ${this.name}:\n ${errors.join("\n- ")}`);
-      }
-      return obj;
+    static fromJson(obj) {
+      return stdStruct._validate(obj, this.getSchema())
     }
     static _toInflightType(context) {
       return fromInline(`require("./CourseResults.Struct.js")(${ context._lift(stdStruct) })`);
@@ -158,31 +138,26 @@ module.exports = function(stdStruct, fromInline) {
 ```js
 module.exports = function(stdStruct, fromInline) {
   class Date {
-    static _schema = {
-      id: "/Date",
-      type: "object",
-      properties: {
-        month: { type: "number" },
-        day: { type: "number" },
-        year: { type: "number" },
-      },
-      required: [
-        "month",
-        "day",
-        "year",
-      ]
-    }
-    static _getDependencies() {
+    static getSchema() {
       return {
+        id: "/Date",
+        type: "object",
+        properties: {
+          month: { type: "number" },
+          day: { type: "number" },
+          year: { type: "number" },
+        },
+        required: [
+          "month",
+          "day",
+          "year",
+        ],
+        $defs: {
+        }
       }
     }
-    static _validate(obj) {
-      const validator = stdStruct._getValidator(this._getDependencies());
-      const errors = validator.validate(obj, this._schema).errors;
-      if (errors.length > 0) {
-        throw new Error(`unable to parse ${this.name}:\n ${errors.join("\n- ")}`);
-      }
-      return obj;
+    static fromJson(obj) {
+      return stdStruct._validate(obj, this.getSchema())
     }
     static _toInflightType(context) {
       return fromInline(`require("./Date.Struct.js")(${ context._lift(stdStruct) })`);
@@ -197,27 +172,22 @@ module.exports = function(stdStruct, fromInline) {
 ```js
 module.exports = function(stdStruct, fromInline) {
   class Foo {
-    static _schema = {
-      id: "/Foo",
-      type: "object",
-      properties: {
-        f: { type: "string" },
-      },
-      required: [
-        "f",
-      ]
-    }
-    static _getDependencies() {
+    static getSchema() {
       return {
+        id: "/Foo",
+        type: "object",
+        properties: {
+          f: { type: "string" },
+        },
+        required: [
+          "f",
+        ],
+        $defs: {
+        }
       }
     }
-    static _validate(obj) {
-      const validator = stdStruct._getValidator(this._getDependencies());
-      const errors = validator.validate(obj, this._schema).errors;
-      if (errors.length > 0) {
-        throw new Error(`unable to parse ${this.name}:\n ${errors.join("\n- ")}`);
-      }
-      return obj;
+    static fromJson(obj) {
+      return stdStruct._validate(obj, this.getSchema())
     }
     static _toInflightType(context) {
       return fromInline(`require("./Foo.Struct.js")(${ context._lift(stdStruct) })`);
@@ -232,26 +202,21 @@ module.exports = function(stdStruct, fromInline) {
 ```js
 module.exports = function(stdStruct, fromInline) {
   class Foosible {
-    static _schema = {
-      id: "/Foosible",
-      type: "object",
-      properties: {
-        f: { type: "string" },
-      },
-      required: [
-      ]
-    }
-    static _getDependencies() {
+    static getSchema() {
       return {
+        id: "/Foosible",
+        type: "object",
+        properties: {
+          f: { type: "string" },
+        },
+        required: [
+        ],
+        $defs: {
+        }
       }
     }
-    static _validate(obj) {
-      const validator = stdStruct._getValidator(this._getDependencies());
-      const errors = validator.validate(obj, this._schema).errors;
-      if (errors.length > 0) {
-        throw new Error(`unable to parse ${this.name}:\n ${errors.join("\n- ")}`);
-      }
-      return obj;
+    static fromJson(obj) {
+      return stdStruct._validate(obj, this.getSchema())
     }
     static _toInflightType(context) {
       return fromInline(`require("./Foosible.Struct.js")(${ context._lift(stdStruct) })`);
@@ -266,33 +231,27 @@ module.exports = function(stdStruct, fromInline) {
 ```js
 module.exports = function(stdStruct, fromInline) {
   class Person {
-    static _schema = {
-      id: "/Person",
-      type: "object",
-      properties: {
-        firstName: { type: "string" },
-        lastName: { type: "string" },
-        dob: { "$ref": "/Date" },
-      },
-      required: [
-        "firstName",
-        "lastName",
-        "dob",
-      ]
-    }
-    static _getDependencies() {
+    static getSchema() {
       return {
-        "/Date": require("./Date.Struct.js")()._schema,
-        ...require("./Date.Struct.js")()._getDependencies(),
+        id: "/Person",
+        type: "object",
+        properties: {
+          firstName: { type: "string" },
+          lastName: { type: "string" },
+          dob: { "$ref": "#/$defs/Date" },
+        },
+        required: [
+          "firstName",
+          "lastName",
+          "dob",
+        ],
+        $defs: {
+          "Date": { type: "object", "properties": require("./Date.Struct.js")().getSchema().properties },
+        }
       }
     }
-    static _validate(obj) {
-      const validator = stdStruct._getValidator(this._getDependencies());
-      const errors = validator.validate(obj, this._schema).errors;
-      if (errors.length > 0) {
-        throw new Error(`unable to parse ${this.name}:\n ${errors.join("\n- ")}`);
-      }
-      return obj;
+    static fromJson(obj) {
+      return stdStruct._validate(obj, this.getSchema())
     }
     static _toInflightType(context) {
       return fromInline(`require("./Person.Struct.js")(${ context._lift(stdStruct) })`);
@@ -307,41 +266,34 @@ module.exports = function(stdStruct, fromInline) {
 ```js
 module.exports = function(stdStruct, fromInline) {
   class Student {
-    static _schema = {
-      id: "/Student",
-      type: "object",
-      properties: {
-        ...require("./Person.Struct.js")()._schema.properties,
-        enrolled: { type: "boolean" },
-        schoolId: { type: "string" },
-        advisor: { "$ref": "/Advisor" },
-        enrolledCourses: { type: "array", uniqueItems: true, items: { "$ref": "/Course" } },
-        coursesTaken: { type: "array",  items: { "$ref": "/CourseResults" } },
-        additionalData: { type: "object" },
-      },
-      required: [
-        "enrolled",
-        "schoolId",
-        ...require("./Person.Struct.js")()._schema.required,
-      ]
-    }
-    static _getDependencies() {
+    static getSchema() {
       return {
-        "/Advisor": require("./Advisor.Struct.js")()._schema,
-        ...require("./Advisor.Struct.js")()._getDependencies(),
-        "/Course": require("./Course.Struct.js")()._schema,
-        ...require("./Course.Struct.js")()._getDependencies(),
-        "/CourseResults": require("./CourseResults.Struct.js")()._schema,
-        ...require("./CourseResults.Struct.js")()._getDependencies(),
+        id: "/Student",
+        type: "object",
+        properties: {
+          ...require("./Person.Struct.js")().getSchema().properties,
+          enrolled: { type: "boolean" },
+          schoolId: { type: "string" },
+          advisor: { "$ref": "#/$defs/Advisor" },
+          enrolledCourses: { type: "array", uniqueItems: true, items: { "$ref": "#/$defs/Course" } },
+          coursesTaken: { type: "array",  items: { "$ref": "#/$defs/CourseResults" } },
+          additionalData: { type: "object" },
+        },
+        required: [
+          "enrolled",
+          "schoolId",
+          ...require("./Person.Struct.js")().getSchema().required,
+        ],
+        $defs: {
+          "Advisor": { type: "object", "properties": require("./Advisor.Struct.js")().getSchema().properties },
+          "Course": { type: "object", "properties": require("./Course.Struct.js")().getSchema().properties },
+          "CourseResults": { type: "object", "properties": require("./CourseResults.Struct.js")().getSchema().properties },
+          ...require("./Person.Struct.js")().getSchema().$defs,
+        }
       }
     }
-    static _validate(obj) {
-      const validator = stdStruct._getValidator(this._getDependencies());
-      const errors = validator.validate(obj, this._schema).errors;
-      if (errors.length > 0) {
-        throw new Error(`unable to parse ${this.name}:\n ${errors.join("\n- ")}`);
-      }
-      return obj;
+    static fromJson(obj) {
+      return stdStruct._validate(obj, this.getSchema())
     }
     static _toInflightType(context) {
       return fromInline(`require("./Student.Struct.js")(${ context._lift(stdStruct) })`);
@@ -352,7 +304,7 @@ module.exports = function(stdStruct, fromInline) {
 
 ```
 
-## inflight.$Closure1.js
+## inflight.$Closure1-1.js
 ```js
 module.exports = function({ $Student }) {
   class $Closure1 {
@@ -362,8 +314,8 @@ module.exports = function({ $Student }) {
       return $obj;
     }
     async handle() {
-      const jStudent3 = Object.freeze({"firstName":"struct","lastName":"greatest","enrolled":true,"schoolId":"s3-inflight","dob":Object.freeze({"month":4,"day":1,"year":1999}),"coursesTaken":[Object.freeze({"grade":"B","dateTaken":Object.freeze({"month":5,"day":10,"year":2021}),"course":Object.freeze({"name":"COMP 101","credits":2})}), Object.freeze({"grade":"A","dateTaken":Object.freeze({"month":5,"day":10,"year":2021}),"course":Object.freeze({"name":"COMP 121","credits":4})})]});
-      const studentInflight1 = ((j, s) => {return s._validate(j)})(jStudent3, $Student);
+      const jStudent3 = ({"firstName": "struct","lastName": "greatest","enrolled": true,"schoolId": "s3-inflight","dob": ({"month": 4,"day": 1,"year": 1999}),"coursesTaken": [({"grade": "B","dateTaken": ({"month": 5,"day": 10,"year": 2021}),"course": ({"name": "COMP 101","credits": 2})}), ({"grade": "A","dateTaken": ({"month": 5,"day": 10,"year": 2021}),"course": ({"name": "COMP 121","credits": 4})})]});
+      const studentInflight1 = ($Student.fromJson(jStudent3));
       {((cond) => {if (!cond) throw new Error("assertion failed: studentInflight1.firstName == \"struct\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(studentInflight1.firstName,"struct")))};
       {((cond) => {if (!cond) throw new Error("assertion failed: studentInflight1.lastName == \"greatest\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(studentInflight1.lastName,"greatest")))};
       {((cond) => {if (!cond) throw new Error("assertion failed: studentInflight1.enrolled")})(studentInflight1.enrolled)};
@@ -391,7 +343,7 @@ module.exports = function({ $Student }) {
 
 ```
 
-## inflight.$Closure2.js
+## inflight.$Closure2-1.js
 ```js
 module.exports = function({ $Student, $jStudent1 }) {
   class $Closure2 {
@@ -401,7 +353,7 @@ module.exports = function({ $Student, $jStudent1 }) {
       return $obj;
     }
     async handle() {
-      const studentInflight1 = ((j, s) => {return s._validate(j)})($jStudent1, $Student);
+      const studentInflight1 = ($Student.fromJson($jStudent1));
       {((cond) => {if (!cond) throw new Error("assertion failed: studentInflight1.firstName == \"John\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(studentInflight1.firstName,"John")))};
       {((cond) => {if (!cond) throw new Error("assertion failed: studentInflight1.lastName == \"Smith\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(studentInflight1.lastName,"Smith")))};
       {((cond) => {if (!cond) throw new Error("assertion failed: studentInflight1.enrolled")})(studentInflight1.enrolled)};
@@ -620,7 +572,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1.js")({
+          require("./inflight.$Closure1-1.js")({
             $Student: ${context._lift(Student)},
           })
         `);
@@ -645,7 +597,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure2.js")({
+          require("./inflight.$Closure2-1.js")({
             $Student: ${context._lift(Student)},
             $jStudent1: ${context._lift(jStudent1)},
           })
@@ -670,20 +622,20 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     const Foo = require("./Foo.Struct.js")($stdlib.std.Struct, $stdlib.core.NodeJsCode.fromInline);
-    const jFoo = Object.freeze({"f":"bar"});
-    {((cond) => {if (!cond) throw new Error("assertion failed: Foo.fromJson(jFoo).f == \"bar\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((j, s) => {return s._validate(j)})(jFoo, Foo).f,"bar")))};
+    const jFoo = ({"f": "bar"});
+    {((cond) => {if (!cond) throw new Error("assertion failed: Foo.fromJson(jFoo).f == \"bar\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((Foo.fromJson(jFoo)).f,"bar")))};
     const Foosible = require("./Foosible.Struct.js")($stdlib.std.Struct, $stdlib.core.NodeJsCode.fromInline);
-    const jFoosible = Object.freeze({});
-    const jFoosible2 = Object.freeze({"f":"bar"});
+    const jFoosible = ({});
+    const jFoosible2 = ({"f": "bar"});
     {
-      const $IF_LET_VALUE = ((j, s) => {return s._validate(j)})(jFoosible, Foosible).f;
+      const $IF_LET_VALUE = (Foosible.fromJson(jFoosible)).f;
       if ($IF_LET_VALUE != undefined) {
         const f = $IF_LET_VALUE;
         {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
       }
     }
     {
-      const $IF_LET_VALUE = ((j, s) => {return s._validate(j)})(jFoosible2, Foosible).f;
+      const $IF_LET_VALUE = (Foosible.fromJson(jFoosible2)).f;
       if ($IF_LET_VALUE != undefined) {
         const f = $IF_LET_VALUE;
         {((cond) => {if (!cond) throw new Error("assertion failed: f == \"bar\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(f,"bar")))};
@@ -693,8 +645,8 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     const Bar = require("./Bar.Struct.js")($stdlib.std.Struct, $stdlib.core.NodeJsCode.fromInline);
-    const jBar = Object.freeze({"f":"bar","b":10});
-    const b = ((j, s) => {return s._validate(j)})(jBar, Bar);
+    const jBar = ({"f": "bar","b": 10});
+    const b = (Bar.fromJson(jBar));
     {((cond) => {if (!cond) throw new Error("assertion failed: b.f == \"bar\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(b.f,"bar")))};
     {((cond) => {if (!cond) throw new Error("assertion failed: b.b == 10")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(b.b,10)))};
     const Date = require("./Date.Struct.js")($stdlib.std.Struct, $stdlib.core.NodeJsCode.fromInline);
@@ -703,8 +655,8 @@ class $Root extends $stdlib.std.Resource {
     const Course = require("./Course.Struct.js")($stdlib.std.Struct, $stdlib.core.NodeJsCode.fromInline);
     const CourseResults = require("./CourseResults.Struct.js")($stdlib.std.Struct, $stdlib.core.NodeJsCode.fromInline);
     const Student = require("./Student.Struct.js")($stdlib.std.Struct, $stdlib.core.NodeJsCode.fromInline);
-    const jStudent1 = Object.freeze({"firstName":"John","lastName":"Smith","enrolled":true,"schoolId":"s1-xyz","dob":Object.freeze({"month":10,"day":10,"year":2005}),"enrolledCourses":[]});
-    const student1 = ((j, s) => {return s._validate(j)})(jStudent1, Student);
+    const jStudent1 = ({"firstName": "John","lastName": "Smith","enrolled": true,"schoolId": "s1-xyz","dob": ({"month": 10,"day": 10,"year": 2005}),"enrolledCourses": []});
+    const student1 = (Student.fromJson(jStudent1));
     {((cond) => {if (!cond) throw new Error("assertion failed: student1.firstName == \"John\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(student1.firstName,"John")))};
     {((cond) => {if (!cond) throw new Error("assertion failed: student1.lastName == \"Smith\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(student1.lastName,"Smith")))};
     {((cond) => {if (!cond) throw new Error("assertion failed: student1.enrolled")})(student1.enrolled)};
@@ -712,8 +664,8 @@ class $Root extends $stdlib.std.Resource {
     {((cond) => {if (!cond) throw new Error("assertion failed: student1.dob.month == 10")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(student1.dob.month,10)))};
     {((cond) => {if (!cond) throw new Error("assertion failed: student1.dob.day == 10")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(student1.dob.day,10)))};
     {((cond) => {if (!cond) throw new Error("assertion failed: student1.dob.year == 2005")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(student1.dob.year,2005)))};
-    const jStudent2 = Object.freeze({"advisor":Object.freeze({"firstName":"Tom","lastName":"Baker","dob":Object.freeze({"month":1,"day":1,"year":1983}),"employeeID":"emp123"}),"firstName":"Sally","lastName":"Reynolds","enrolled":false,"schoolId":"s2-xyz","dob":Object.freeze({"month":5,"day":31,"year":1987}),"enrolledCourses":[Object.freeze({"name":"COMP 101","credits":2}), Object.freeze({"name":"COMP 121","credits":4})],"coursesTaken":[Object.freeze({"grade":"F","dateTaken":Object.freeze({"month":5,"day":10,"year":2021}),"course":Object.freeze({"name":"COMP 101","credits":2})}), Object.freeze({"grade":"D","dateTaken":Object.freeze({"month":5,"day":10,"year":2021}),"course":Object.freeze({"name":"COMP 121","credits":4})})]});
-    const student2 = ((j, s) => {return s._validate(j)})(jStudent2, Student);
+    const jStudent2 = ({"advisor": ({"firstName": "Tom","lastName": "Baker","dob": ({"month": 1,"day": 1,"year": 1983}),"employeeID": "emp123"}),"firstName": "Sally","lastName": "Reynolds","enrolled": false,"schoolId": "s2-xyz","dob": ({"month": 5,"day": 31,"year": 1987}),"enrolledCourses": [({"name": "COMP 101","credits": 2}), ({"name": "COMP 121","credits": 4})],"coursesTaken": [({"grade": "F","dateTaken": ({"month": 5,"day": 10,"year": 2021}),"course": ({"name": "COMP 101","credits": 2})}), ({"grade": "D","dateTaken": ({"month": 5,"day": 10,"year": 2021}),"course": ({"name": "COMP 121","credits": 4})})]});
+    const student2 = (Student.fromJson(jStudent2));
     {((cond) => {if (!cond) throw new Error("assertion failed: student2.firstName == \"Sally\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(student2.firstName,"Sally")))};
     {((cond) => {if (!cond) throw new Error("assertion failed: student2.lastName == \"Reynolds\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(student2.lastName,"Reynolds")))};
     {((cond) => {if (!cond) throw new Error("assertion failed: !student2.enrolled")})((!student2.enrolled))};
@@ -725,7 +677,7 @@ class $Root extends $stdlib.std.Resource {
       const $IF_LET_VALUE = student2.enrolledCourses;
       if ($IF_LET_VALUE != undefined) {
         const enrolledCourses = $IF_LET_VALUE;
-        const courses = Object.freeze([...(enrolledCourses)]);
+        const courses = [...(enrolledCourses)];
         const s2Course1 = (courses.at(0));
         const s2Course2 = (courses.at(1));
         {((cond) => {if (!cond) throw new Error("assertion failed: s2Course1.name == \"COMP 101\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(s2Course1.name,"COMP 101")))};
@@ -737,8 +689,8 @@ class $Root extends $stdlib.std.Resource {
         {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
       }
     }
-    const jStudent3 = Object.freeze({"enrolled":false,"schoolId":"w/e","firstName":student2.firstName,"lastName":student2.lastName,"dob":Object.freeze({"month":1,"day":1,"year":1959}),"additionalData":Object.freeze({"notes":"wow such notes","legacy":false,"emergencyContactsNumbers":["123-345-9928"]})});
-    const student3 = ((j, s) => {return s._validate(j)})(jStudent3, Student);
+    const jStudent3 = ({"enrolled": false,"schoolId": "w/e","firstName": student2.firstName,"lastName": student2.lastName,"dob": ({"month": 1,"day": 1,"year": 1959}),"additionalData": ({"notes": "wow such notes","legacy": false,"emergencyContactsNumbers": ["123-345-9928"]})});
+    const student3 = (Student.fromJson(jStudent3));
     {
       const $IF_LET_VALUE = student3.additionalData;
       if ($IF_LET_VALUE != undefined) {
@@ -755,7 +707,7 @@ class $Root extends $stdlib.std.Resource {
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
-new $App({ outdir: $outdir, name: "struct_from_json", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test }).synth();
+new $App({ outdir: $outdir, name: "struct_from_json", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
 
 ```
 

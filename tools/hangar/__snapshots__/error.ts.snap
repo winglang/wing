@@ -120,8 +120,8 @@ exports[`struct_from_json_1.w 1`] = `
 
 ../../../examples/tests/error/target/test/struct_from_json_1.wsim.[REDACTED].tmp/.wing/preflight.js:9
        const Person = require(\\"./Person.Struct.js\\")($stdlib.std.Struct, $stdlib.core.NodeJsCode.fromInline);
-       const j = Object.freeze({\\"name\\":\\"cool\\",\\"age\\":\\"not a number\\"});
->>     ((j, s) => {return s._validate(j)})(j, Person);
+       const j = ({\\"name\\": \\"cool\\",\\"age\\": \\"not a number\\"});
+>>     (Person.fromJson(j));
      }
    }
 
@@ -139,8 +139,8 @@ exports[`struct_from_json_2.w 1`] = `
 
 ../../../examples/tests/error/target/test/struct_from_json_2.wsim.[REDACTED].tmp/.wing/preflight.js:11
        const Student = require(\\"./Student.Struct.js\\")($stdlib.std.Struct, $stdlib.core.NodeJsCode.fromInline);
-       const missingAdvisor = Object.freeze({\\"name\\":\\"cool\\",\\"age\\":\\"not a number\\"});
->>     ((j, s) => {return s._validate(j)})(missingAdvisor, Student);
+       const missingAdvisor = ({\\"name\\": \\"cool\\",\\"age\\": \\"not a number\\"});
+>>     (Student.fromJson(missingAdvisor));
      }
    }
 
@@ -158,8 +158,8 @@ exports[`struct_from_json_3.w 1`] = `
 
 ../../../examples/tests/error/target/test/struct_from_json_3.wsim.[REDACTED].tmp/.wing/preflight.js:11
        const Student = require(\\"./Student.Struct.js\\")($stdlib.std.Struct, $stdlib.core.NodeJsCode.fromInline);
-       const invalidAdvisorInArray = Object.freeze({\\"name\\":\\"cool\\",\\"age\\":\\"not a number\\",\\"advisors\\":[Object.freeze({\\"id\\":\\"advisor1\\",\\"name\\":\\"Bob\\",\\"age\\":34}), Object.freeze({\\"id\\":10,\\"name\\":\\"Jacob\\",\\"age\\":45})]});
->>     ((j, s) => {return s._validate(j)})(invalidAdvisorInArray, Student);
+       const invalidAdvisorInArray = ({\\"name\\": \\"cool\\",\\"age\\": \\"not a number\\",\\"advisors\\": [({\\"id\\": \\"advisor1\\",\\"name\\": \\"Bob\\",\\"age\\": 34}), ({\\"id\\": 10,\\"name\\": \\"Jacob\\",\\"age\\": 45})]});
+>>     (Student.fromJson(invalidAdvisorInArray));
      }
    }
 
@@ -176,8 +176,8 @@ exports[`struct_from_json_4.w 1`] = `
 
 ../../../examples/tests/error/target/test/struct_from_json_4.wsim.[REDACTED].tmp/.wing/preflight.js:11
        const Student = require(\\"./Student.Struct.js\\")($stdlib.std.Struct, $stdlib.core.NodeJsCode.fromInline);
-       const invalidAdvisorInArray = Object.freeze({\\"name\\":\\"cool\\",\\"age\\":22,\\"advisors\\":[Object.freeze({\\"id\\":\\"advisor1\\",\\"name\\":\\"Bob\\",\\"age\\":34}), Object.freeze({\\"id\\":\\"advisor1\\",\\"name\\":\\"Bob\\",\\"age\\":34})]});
->>     ((j, s) => {return s._validate(j)})(invalidAdvisorInArray, Student);
+       const invalidAdvisorInArray = ({\\"name\\": \\"cool\\",\\"age\\": 22,\\"advisors\\": [({\\"id\\": \\"advisor1\\",\\"name\\": \\"Bob\\",\\"age\\": 34}), ({\\"id\\": \\"advisor1\\",\\"name\\": \\"Bob\\",\\"age\\": 34})]});
+>>     (Student.fromJson(invalidAdvisorInArray));
      }
    }
 
@@ -194,8 +194,8 @@ exports[`struct_from_json_5.w 1`] = `
 
 ../../../examples/tests/error/target/test/struct_from_json_5.wsim.[REDACTED].tmp/.wing/preflight.js:9
        const Foo = require(\\"./Foo.Struct.js\\")($stdlib.std.Struct, $stdlib.core.NodeJsCode.fromInline);
-       const jFoo = Object.freeze({\\"names\\":Object.freeze({\\"a\\":\\"Amanda\\",\\"b\\":\\"Barry\\",\\"c\\":10})});
->>     ((j, s) => {return s._validate(j)})(jFoo, Foo);
+       const jFoo = ({\\"names\\": ({\\"a\\": \\"Amanda\\",\\"b\\": \\"Barry\\",\\"c\\": 10})});
+>>     (Foo.fromJson(jFoo));
      }
    }
 

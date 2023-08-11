@@ -1,5 +1,36 @@
 # [inflight_class_as_struct_members.w](../../../../../examples/tests/valid/inflight_class_as_struct_members.w) | compile | tf-aws
 
+## Bar.Struct.js
+```js
+module.exports = function(stdStruct, fromInline) {
+  class Bar {
+    static getSchema() {
+      return {
+        id: "/Bar",
+        type: "object",
+        properties: {
+          foo: { "$ref": "#/$defs/Foo" },
+        },
+        required: [
+          "foo",
+        ],
+        $defs: {
+          "Foo": { type: "object", "properties": require("./Foo.Struct.js")().getSchema().properties },
+        }
+      }
+    }
+    static fromJson(obj) {
+      return stdStruct._validate(obj, this.getSchema())
+    }
+    static _toInflightType(context) {
+      return fromInline(`require("./Bar.Struct.js")(${ context._lift(stdStruct) })`);
+    }
+  }
+  return Bar;
+};
+
+```
+
 ## inflight.$Closure1-1.js
 ```js
 module.exports = function({ $Foo }) {

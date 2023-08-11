@@ -1,5 +1,42 @@
 # [events.w](../../../../../../examples/tests/sdk_tests/bucket/events.w) | compile | tf-aws
 
+## CheckHitCountOptions.Struct.js
+```js
+module.exports = function(stdStruct, fromInline) {
+  class CheckHitCountOptions {
+    static getSchema() {
+      return {
+        id: "/CheckHitCountOptions",
+        type: "object",
+        properties: {
+          key: { type: "string" },
+          type: { type: "string" },
+          source: { "$ref": "#/$defs/Source" },
+          count: { type: "number" },
+        },
+        required: [
+          "key",
+          "type",
+          "source",
+          "count",
+        ],
+        $defs: {
+          "Source": { type: "object", "properties": require("./Source.Struct.js")().getSchema().properties },
+        }
+      }
+    }
+    static fromJson(obj) {
+      return stdStruct._validate(obj, this.getSchema())
+    }
+    static _toInflightType(context) {
+      return fromInline(`require("./CheckHitCountOptions.Struct.js")(${ context._lift(stdStruct) })`);
+    }
+  }
+  return CheckHitCountOptions;
+};
+
+```
+
 ## inflight.$Closure1-1.js
 ```js
 module.exports = function({ $idsCounter, $table }) {
