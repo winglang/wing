@@ -7,7 +7,7 @@ RUN apt-get update && \
     wget \
     git \
     gnupg \
-    emscripten \
+    # emscripten \
     software-properties-common
 
 RUN curl -fsSL https://deb.nodesource.com/setup_current.x | bash - && \
@@ -24,6 +24,7 @@ RUN apt update
 RUN apt-get install terraform
 
 RUN CARGO_GIT_FETCH_WITH_CLI=true cargo install cargo-wasi
+RUN curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
 
 WORKDIR /app
 
