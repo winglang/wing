@@ -29,12 +29,6 @@ export class Queue extends cloud.Queue {
         ? Duration.seconds(props.retentionPeriod?.seconds)
         : undefined,
     });
-
-    if ((props.initialMessages ?? []).length) {
-      throw new Error(
-        "initialMessages not supported yet for AWS target - https://github.com/winglang/wing/issues/281"
-      );
-    }
   }
 
   public setConsumer(
