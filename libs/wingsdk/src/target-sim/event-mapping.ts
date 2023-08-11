@@ -75,9 +75,9 @@ export class EventMapping extends Resource implements ISimulatorResource {
     return schema;
   }
 
-  public _bind(host: IInflightHost, ops: string[]): void {
+  public bind(host: IInflightHost, ops: string[]): void {
     bindSimulatorResource(__filename, this, host);
-    super._bind(host, ops);
+    super.bind(host, ops);
   }
 
   public _toInflight(): Code {

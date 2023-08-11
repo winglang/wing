@@ -92,9 +92,9 @@ export class Service extends cloud.Service implements ISimulatorResource {
     return schema;
   }
 
-  public _bind(host: IInflightHost, ops: string[]): void {
+  public bind(host: IInflightHost, ops: string[]): void {
     bindSimulatorResource(__filename, this, host);
-    super._bind(host, ops);
+    super.bind(host, ops);
   }
 
   public _toInflight(): core.Code {

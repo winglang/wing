@@ -49,8 +49,7 @@ export class Function extends cloud.Function {
     this.arn = this.function.functionArn;
   }
 
-  /** @internal */
-  public _bind(host: IInflightHost, ops: string[]): void {
+  public bind(host: IInflightHost, ops: string[]): void {
     if (!(host instanceof Function)) {
       throw new Error("functions can only be bound by awscdk.Function for now");
     }
@@ -68,7 +67,7 @@ export class Function extends cloud.Function {
     // it may not be resolved until deployment time.
     host.addEnvironment(this.envName(), this.function.functionArn);
 
-    super._bind(host, ops);
+    super.bind(host, ops);
   }
 
   /** @internal */
