@@ -164,6 +164,32 @@ if let additionalData = student3.additionalData {
 }
 
 
+// Create student missing required field
+let invalidStudent = {
+  firstName: "I dont have",
+  lastName: "Any other info"
+};
+
+if let student = Student.tryFromJson(invalidStudent) {
+  assert(false); // should not have been able to create student
+} else {
+  assert(true);
+}
+
+// Use tryFromJson on a valid student
+
+if let student = Student.tryFromJson(jStudent2) {
+  assert(student.firstName == "Sally");
+  assert(student.lastName == "Reynolds");
+  assert(!student.enrolled);
+  assert(student.schoolId == "s2-xyz");
+  assert(student.dob.month == 5);
+  assert(student.dob.day == 31);
+  assert(student.dob.year == 1987);
+} else {
+  assert(false); // Should not happen
+}
+
 test "flight school student :)" {
   let jStudent3 = {
     firstName: "struct",

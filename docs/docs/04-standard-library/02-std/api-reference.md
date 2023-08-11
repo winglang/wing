@@ -2078,6 +2078,7 @@ Shared behavior for all structs.
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/sdk.std.Struct.fromJson">fromJson</a></code> | Converts a Json to a Struct. |
+| <code><a href="#@winglang/sdk.std.Struct.tryFromJson">tryFromJson</a></code> | Converts a Json to a Struct, returning nil if the Json is not valid. |
 
 ---
 
@@ -2092,6 +2093,20 @@ Converts a Json to a Struct.
 This macro takes a Json object and the Struct definition file name then calls the validate method
 
 ###### `json`<sup>Required</sup> <a name="json" id="@winglang/sdk.std.Struct.fromJson.parameter.json"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
+
+---
+
+##### `tryFromJson` <a name="tryFromJson" id="@winglang/sdk.std.Struct.tryFromJson"></a>
+
+```wing
+Struct.tryFromJson(json: Json);
+```
+
+Converts a Json to a Struct, returning nil if the Json is not valid.
+
+###### `json`<sup>Required</sup> <a name="json" id="@winglang/sdk.std.Struct.tryFromJson.parameter.json"></a>
 
 - *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
 

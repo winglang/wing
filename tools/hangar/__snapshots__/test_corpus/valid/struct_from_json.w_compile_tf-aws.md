@@ -702,6 +702,33 @@ class $Root extends $stdlib.std.Resource {
         {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
       }
     }
+    const invalidStudent = ({"firstName": "I dont have","lastName": "Any other info"});
+    {
+      const $IF_LET_VALUE = (() => { try { return Student.fromJson(invalidStudent); } catch { return undefined; }})();;
+      if ($IF_LET_VALUE != undefined) {
+        const student = $IF_LET_VALUE;
+        {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
+      }
+      else {
+        {((cond) => {if (!cond) throw new Error("assertion failed: true")})(true)};
+      }
+    }
+    {
+      const $IF_LET_VALUE = (() => { try { return Student.fromJson(jStudent2); } catch { return undefined; }})();;
+      if ($IF_LET_VALUE != undefined) {
+        const student = $IF_LET_VALUE;
+        {((cond) => {if (!cond) throw new Error("assertion failed: student.firstName == \"Sally\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(student.firstName,"Sally")))};
+        {((cond) => {if (!cond) throw new Error("assertion failed: student.lastName == \"Reynolds\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(student.lastName,"Reynolds")))};
+        {((cond) => {if (!cond) throw new Error("assertion failed: !student.enrolled")})((!student.enrolled))};
+        {((cond) => {if (!cond) throw new Error("assertion failed: student.schoolId == \"s2-xyz\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(student.schoolId,"s2-xyz")))};
+        {((cond) => {if (!cond) throw new Error("assertion failed: student.dob.month == 5")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(student.dob.month,5)))};
+        {((cond) => {if (!cond) throw new Error("assertion failed: student.dob.day == 31")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(student.dob.day,31)))};
+        {((cond) => {if (!cond) throw new Error("assertion failed: student.dob.year == 1987")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(student.dob.year,1987)))};
+      }
+      else {
+        {((cond) => {if (!cond) throw new Error("assertion failed: false")})(false)};
+      }
+    }
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:flight school student :)",new $Closure1(this,"$Closure1"));
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:lifting a student",new $Closure2(this,"$Closure2"));
   }

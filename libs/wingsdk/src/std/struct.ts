@@ -29,6 +29,16 @@ export class Struct {
   }
 
   /**
+   * Converts a Json to a Struct, returning nil if the Json is not valid
+   *
+   * @macro (() => { try { return $self$.fromJson($args$); } catch { return undefined; }})();
+   */
+  public static tryFromJson(json: Json): T1 | undefined {
+    json;
+    throw new Error("Macro");
+  }
+
+  /**
    * Validates a Json object against a schema
    *
    * The expected schema format: https://json-schema.org/
