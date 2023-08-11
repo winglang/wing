@@ -4,7 +4,7 @@
 ```js
 module.exports = function(stdStruct, fromInline) {
   class CheckHitCountOptions {
-    static getSchema() {
+    static jsonSchema() {
       return {
         id: "/CheckHitCountOptions",
         type: "object",
@@ -21,12 +21,12 @@ module.exports = function(stdStruct, fromInline) {
           "count",
         ],
         $defs: {
-          "Source": { type: "object", "properties": require("./Source.Struct.js")().getSchema().properties },
+          "Source": { type: "object", "properties": require("./Source.Struct.js")().jsonSchema().properties },
         }
       }
     }
     static fromJson(obj) {
-      return stdStruct._validate(obj, this.getSchema())
+      return stdStruct._validate(obj, this.jsonSchema())
     }
     static _toInflightType(context) {
       return fromInline(`require("./CheckHitCountOptions.Struct.js")(${ context._lift(stdStruct) })`);

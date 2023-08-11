@@ -4,7 +4,7 @@
 ```js
 module.exports = function(stdStruct, fromInline) {
   class Bar {
-    static getSchema() {
+    static jsonSchema() {
       return {
         id: "/Bar",
         type: "object",
@@ -15,12 +15,12 @@ module.exports = function(stdStruct, fromInline) {
           "foo",
         ],
         $defs: {
-          "Foo": { type: "object", "properties": require("./Foo.Struct.js")().getSchema().properties },
+          "Foo": { type: "object", "properties": require("./Foo.Struct.js")().jsonSchema().properties },
         }
       }
     }
     static fromJson(obj) {
-      return stdStruct._validate(obj, this.getSchema())
+      return stdStruct._validate(obj, this.jsonSchema())
     }
     static _toInflightType(context) {
       return fromInline(`require("./Bar.Struct.js")(${ context._lift(stdStruct) })`);

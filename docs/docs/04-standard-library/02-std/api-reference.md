@@ -2090,8 +2090,6 @@ Struct.fromJson(json: Json);
 
 Converts a Json to a Struct.
 
-This macro takes a Json object and the Struct definition file name then calls the validate method
-
 ###### `json`<sup>Required</sup> <a name="json" id="@winglang/sdk.std.Struct.fromJson.parameter.json"></a>
 
 - *Type:* <a href="#@winglang/sdk.std.Json">Json</a>

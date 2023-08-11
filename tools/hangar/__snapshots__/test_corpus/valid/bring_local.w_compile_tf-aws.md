@@ -4,7 +4,7 @@
 ```js
 module.exports = function(stdStruct, fromInline) {
   class Point {
-    static getSchema() {
+    static jsonSchema() {
       return {
         id: "/Point",
         type: "object",
@@ -21,7 +21,7 @@ module.exports = function(stdStruct, fromInline) {
       }
     }
     static fromJson(obj) {
-      return stdStruct._validate(obj, this.getSchema())
+      return stdStruct._validate(obj, this.jsonSchema())
     }
     static _toInflightType(context) {
       return fromInline(`require("./Point.Struct.js")(${ context._lift(stdStruct) })`);

@@ -4,7 +4,7 @@
 ```js
 module.exports = function(stdStruct, fromInline) {
   class A {
-    static getSchema() {
+    static jsonSchema() {
       return {
         id: "/A",
         type: "object",
@@ -19,7 +19,7 @@ module.exports = function(stdStruct, fromInline) {
       }
     }
     static fromJson(obj) {
-      return stdStruct._validate(obj, this.getSchema())
+      return stdStruct._validate(obj, this.jsonSchema())
     }
     static _toInflightType(context) {
       return fromInline(`require("./A.Struct.js")(${ context._lift(stdStruct) })`);
@@ -34,12 +34,12 @@ module.exports = function(stdStruct, fromInline) {
 ```js
 module.exports = function(stdStruct, fromInline) {
   class B {
-    static getSchema() {
+    static jsonSchema() {
       return {
         id: "/B",
         type: "object",
         properties: {
-          ...require("./A.Struct.js")().getSchema().properties,
+          ...require("./A.Struct.js")().jsonSchema().properties,
           field1: { type: "number" },
           field2: { type: "string" },
           field3: { "$ref": "#/$defs/A" },
@@ -48,16 +48,16 @@ module.exports = function(stdStruct, fromInline) {
           "field1",
           "field2",
           "field3",
-          ...require("./A.Struct.js")().getSchema().required,
+          ...require("./A.Struct.js")().jsonSchema().required,
         ],
         $defs: {
-          "A": { type: "object", "properties": require("./A.Struct.js")().getSchema().properties },
-          ...require("./A.Struct.js")().getSchema().$defs,
+          "A": { type: "object", "properties": require("./A.Struct.js")().jsonSchema().properties },
+          ...require("./A.Struct.js")().jsonSchema().$defs,
         }
       }
     }
     static fromJson(obj) {
-      return stdStruct._validate(obj, this.getSchema())
+      return stdStruct._validate(obj, this.jsonSchema())
     }
     static _toInflightType(context) {
       return fromInline(`require("./B.Struct.js")(${ context._lift(stdStruct) })`);
@@ -72,7 +72,7 @@ module.exports = function(stdStruct, fromInline) {
 ```js
 module.exports = function(stdStruct, fromInline) {
   class Dazzle {
-    static getSchema() {
+    static jsonSchema() {
       return {
         id: "/Dazzle",
         type: "object",
@@ -87,7 +87,7 @@ module.exports = function(stdStruct, fromInline) {
       }
     }
     static fromJson(obj) {
-      return stdStruct._validate(obj, this.getSchema())
+      return stdStruct._validate(obj, this.jsonSchema())
     }
     static _toInflightType(context) {
       return fromInline(`require("./Dazzle.Struct.js")(${ context._lift(stdStruct) })`);
@@ -102,7 +102,7 @@ module.exports = function(stdStruct, fromInline) {
 ```js
 module.exports = function(stdStruct, fromInline) {
   class Razzle {
-    static getSchema() {
+    static jsonSchema() {
       return {
         id: "/Razzle",
         type: "object",
@@ -117,7 +117,7 @@ module.exports = function(stdStruct, fromInline) {
       }
     }
     static fromJson(obj) {
-      return stdStruct._validate(obj, this.getSchema())
+      return stdStruct._validate(obj, this.jsonSchema())
     }
     static _toInflightType(context) {
       return fromInline(`require("./Razzle.Struct.js")(${ context._lift(stdStruct) })`);
@@ -132,26 +132,26 @@ module.exports = function(stdStruct, fromInline) {
 ```js
 module.exports = function(stdStruct, fromInline) {
   class Showtime {
-    static getSchema() {
+    static jsonSchema() {
       return {
         id: "/Showtime",
         type: "object",
         properties: {
-          ...require("./Razzle.Struct.js")().getSchema().properties,
-          ...require("./Dazzle.Struct.js")().getSchema().properties,
+          ...require("./Razzle.Struct.js")().jsonSchema().properties,
+          ...require("./Dazzle.Struct.js")().jsonSchema().properties,
         },
         required: [
-          ...require("./Razzle.Struct.js")().getSchema().required,
-          ...require("./Dazzle.Struct.js")().getSchema().required,
+          ...require("./Razzle.Struct.js")().jsonSchema().required,
+          ...require("./Dazzle.Struct.js")().jsonSchema().required,
         ],
         $defs: {
-          ...require("./Razzle.Struct.js")().getSchema().$defs,
-          ...require("./Dazzle.Struct.js")().getSchema().$defs,
+          ...require("./Razzle.Struct.js")().jsonSchema().$defs,
+          ...require("./Dazzle.Struct.js")().jsonSchema().$defs,
         }
       }
     }
     static fromJson(obj) {
-      return stdStruct._validate(obj, this.getSchema())
+      return stdStruct._validate(obj, this.jsonSchema())
     }
     static _toInflightType(context) {
       return fromInline(`require("./Showtime.Struct.js")(${ context._lift(stdStruct) })`);
@@ -201,7 +201,7 @@ module.exports = function({  }) {
 ```js
 module.exports = function(stdStruct, fromInline) {
   class lotsOfTypes {
-    static getSchema() {
+    static jsonSchema() {
       return {
         id: "/lotsOfTypes",
         type: "object",
@@ -229,7 +229,7 @@ module.exports = function(stdStruct, fromInline) {
       }
     }
     static fromJson(obj) {
-      return stdStruct._validate(obj, this.getSchema())
+      return stdStruct._validate(obj, this.jsonSchema())
     }
     static _toInflightType(context) {
       return fromInline(`require("./lotsOfTypes.Struct.js")(${ context._lift(stdStruct) })`);

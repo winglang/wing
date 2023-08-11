@@ -676,7 +676,7 @@ impl<'a> JSifier<'a> {
 		// Any parents we need to get their properties
 		for e in extends {
 			code.line(format!(
-				"...require(\"{}\")().getSchema().properties,",
+				"...require(\"{}\")().jsonSchema().properties,",
 				struct_filename(&e.root.name)
 			))
 		}
@@ -710,7 +710,7 @@ impl<'a> JSifier<'a> {
 		let mut required: Vec<String> = vec![]; // fields that are required
 		let mut dependencies: Vec<String> = vec![]; // schemas that need added to validator
 
-		code.open("static getSchema() {".to_string());
+		code.open("static jsonSchema() {".to_string());
 		code.open("return {");
 		code.line(format!("id: \"/{}\",", name));
 		code.line("type: \"object\",".to_string());
@@ -740,7 +740,7 @@ impl<'a> JSifier<'a> {
 		// pull in all required fields from parent structs
 		for e in extends {
 			code.line(format!(
-				"...require(\"{}\")().getSchema().required,",
+				"...require(\"{}\")().jsonSchema().required,",
 				struct_filename(&e.root.name)
 			));
 		}
@@ -751,14 +751,14 @@ impl<'a> JSifier<'a> {
 		code.open("$defs: {");
 		for dep in &dependencies {
 			code.line(format!(
-				"\"{}\": {{ type: \"object\", \"properties\": require(\"{}\")().getSchema().properties }},",
+				"\"{}\": {{ type: \"object\", \"properties\": require(\"{}\")().jsonSchema().properties }},",
 				dep,
 				struct_filename(&dep)
 			));
 		}
 		for e in extends {
 			code.line(format!(
-				"...require(\"{}\")().getSchema().$defs,",
+				"...require(\"{}\")().jsonSchema().$defs,",
 				struct_filename(&e.root.name)
 			));
 		}
@@ -769,7 +769,7 @@ impl<'a> JSifier<'a> {
 
 		// create _validate() function
 		code.open("static fromJson(obj) {");
-		code.line("return stdStruct._validate(obj, this.getSchema())");
+		code.line("return stdStruct._validate(obj, this.jsonSchema())");
 		code.close("}");
 
 		// create _toInflightType function that just requires the generated struct file

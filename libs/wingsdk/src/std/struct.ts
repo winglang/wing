@@ -19,8 +19,6 @@ export class Struct {
   /**
    * Converts a Json to a Struct
    *
-   * This macro takes a Json object and the Struct definition file name then calls the validate method
-   *
    * @macro ($self$.fromJson($args$))
    */
   public static fromJson(json: Json): T1 {

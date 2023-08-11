@@ -4,25 +4,25 @@
 ```js
 module.exports = function(stdStruct, fromInline) {
   class Advisor {
-    static getSchema() {
+    static jsonSchema() {
       return {
         id: "/Advisor",
         type: "object",
         properties: {
-          ...require("./Person.Struct.js")().getSchema().properties,
+          ...require("./Person.Struct.js")().jsonSchema().properties,
           employeeID: { type: "string" },
         },
         required: [
           "employeeID",
-          ...require("./Person.Struct.js")().getSchema().required,
+          ...require("./Person.Struct.js")().jsonSchema().required,
         ],
         $defs: {
-          ...require("./Person.Struct.js")().getSchema().$defs,
+          ...require("./Person.Struct.js")().jsonSchema().$defs,
         }
       }
     }
     static fromJson(obj) {
-      return stdStruct._validate(obj, this.getSchema())
+      return stdStruct._validate(obj, this.jsonSchema())
     }
     static _toInflightType(context) {
       return fromInline(`require("./Advisor.Struct.js")(${ context._lift(stdStruct) })`);
@@ -37,25 +37,25 @@ module.exports = function(stdStruct, fromInline) {
 ```js
 module.exports = function(stdStruct, fromInline) {
   class Bar {
-    static getSchema() {
+    static jsonSchema() {
       return {
         id: "/Bar",
         type: "object",
         properties: {
-          ...require("./Foo.Struct.js")().getSchema().properties,
+          ...require("./Foo.Struct.js")().jsonSchema().properties,
           b: { type: "number" },
         },
         required: [
           "b",
-          ...require("./Foo.Struct.js")().getSchema().required,
+          ...require("./Foo.Struct.js")().jsonSchema().required,
         ],
         $defs: {
-          ...require("./Foo.Struct.js")().getSchema().$defs,
+          ...require("./Foo.Struct.js")().jsonSchema().$defs,
         }
       }
     }
     static fromJson(obj) {
-      return stdStruct._validate(obj, this.getSchema())
+      return stdStruct._validate(obj, this.jsonSchema())
     }
     static _toInflightType(context) {
       return fromInline(`require("./Bar.Struct.js")(${ context._lift(stdStruct) })`);
@@ -70,7 +70,7 @@ module.exports = function(stdStruct, fromInline) {
 ```js
 module.exports = function(stdStruct, fromInline) {
   class Course {
-    static getSchema() {
+    static jsonSchema() {
       return {
         id: "/Course",
         type: "object",
@@ -87,7 +87,7 @@ module.exports = function(stdStruct, fromInline) {
       }
     }
     static fromJson(obj) {
-      return stdStruct._validate(obj, this.getSchema())
+      return stdStruct._validate(obj, this.jsonSchema())
     }
     static _toInflightType(context) {
       return fromInline(`require("./Course.Struct.js")(${ context._lift(stdStruct) })`);
@@ -102,7 +102,7 @@ module.exports = function(stdStruct, fromInline) {
 ```js
 module.exports = function(stdStruct, fromInline) {
   class CourseResults {
-    static getSchema() {
+    static jsonSchema() {
       return {
         id: "/CourseResults",
         type: "object",
@@ -117,13 +117,13 @@ module.exports = function(stdStruct, fromInline) {
           "dateTaken",
         ],
         $defs: {
-          "Course": { type: "object", "properties": require("./Course.Struct.js")().getSchema().properties },
-          "Date": { type: "object", "properties": require("./Date.Struct.js")().getSchema().properties },
+          "Course": { type: "object", "properties": require("./Course.Struct.js")().jsonSchema().properties },
+          "Date": { type: "object", "properties": require("./Date.Struct.js")().jsonSchema().properties },
         }
       }
     }
     static fromJson(obj) {
-      return stdStruct._validate(obj, this.getSchema())
+      return stdStruct._validate(obj, this.jsonSchema())
     }
     static _toInflightType(context) {
       return fromInline(`require("./CourseResults.Struct.js")(${ context._lift(stdStruct) })`);
@@ -138,7 +138,7 @@ module.exports = function(stdStruct, fromInline) {
 ```js
 module.exports = function(stdStruct, fromInline) {
   class Date {
-    static getSchema() {
+    static jsonSchema() {
       return {
         id: "/Date",
         type: "object",
@@ -157,7 +157,7 @@ module.exports = function(stdStruct, fromInline) {
       }
     }
     static fromJson(obj) {
-      return stdStruct._validate(obj, this.getSchema())
+      return stdStruct._validate(obj, this.jsonSchema())
     }
     static _toInflightType(context) {
       return fromInline(`require("./Date.Struct.js")(${ context._lift(stdStruct) })`);
@@ -172,7 +172,7 @@ module.exports = function(stdStruct, fromInline) {
 ```js
 module.exports = function(stdStruct, fromInline) {
   class Foo {
-    static getSchema() {
+    static jsonSchema() {
       return {
         id: "/Foo",
         type: "object",
@@ -187,7 +187,7 @@ module.exports = function(stdStruct, fromInline) {
       }
     }
     static fromJson(obj) {
-      return stdStruct._validate(obj, this.getSchema())
+      return stdStruct._validate(obj, this.jsonSchema())
     }
     static _toInflightType(context) {
       return fromInline(`require("./Foo.Struct.js")(${ context._lift(stdStruct) })`);
@@ -202,7 +202,7 @@ module.exports = function(stdStruct, fromInline) {
 ```js
 module.exports = function(stdStruct, fromInline) {
   class Foosible {
-    static getSchema() {
+    static jsonSchema() {
       return {
         id: "/Foosible",
         type: "object",
@@ -216,7 +216,7 @@ module.exports = function(stdStruct, fromInline) {
       }
     }
     static fromJson(obj) {
-      return stdStruct._validate(obj, this.getSchema())
+      return stdStruct._validate(obj, this.jsonSchema())
     }
     static _toInflightType(context) {
       return fromInline(`require("./Foosible.Struct.js")(${ context._lift(stdStruct) })`);
@@ -231,7 +231,7 @@ module.exports = function(stdStruct, fromInline) {
 ```js
 module.exports = function(stdStruct, fromInline) {
   class Person {
-    static getSchema() {
+    static jsonSchema() {
       return {
         id: "/Person",
         type: "object",
@@ -246,12 +246,12 @@ module.exports = function(stdStruct, fromInline) {
           "dob",
         ],
         $defs: {
-          "Date": { type: "object", "properties": require("./Date.Struct.js")().getSchema().properties },
+          "Date": { type: "object", "properties": require("./Date.Struct.js")().jsonSchema().properties },
         }
       }
     }
     static fromJson(obj) {
-      return stdStruct._validate(obj, this.getSchema())
+      return stdStruct._validate(obj, this.jsonSchema())
     }
     static _toInflightType(context) {
       return fromInline(`require("./Person.Struct.js")(${ context._lift(stdStruct) })`);
@@ -266,12 +266,12 @@ module.exports = function(stdStruct, fromInline) {
 ```js
 module.exports = function(stdStruct, fromInline) {
   class Student {
-    static getSchema() {
+    static jsonSchema() {
       return {
         id: "/Student",
         type: "object",
         properties: {
-          ...require("./Person.Struct.js")().getSchema().properties,
+          ...require("./Person.Struct.js")().jsonSchema().properties,
           enrolled: { type: "boolean" },
           schoolId: { type: "string" },
           advisor: { "$ref": "#/$defs/Advisor" },
@@ -282,18 +282,18 @@ module.exports = function(stdStruct, fromInline) {
         required: [
           "enrolled",
           "schoolId",
-          ...require("./Person.Struct.js")().getSchema().required,
+          ...require("./Person.Struct.js")().jsonSchema().required,
         ],
         $defs: {
-          "Advisor": { type: "object", "properties": require("./Advisor.Struct.js")().getSchema().properties },
-          "Course": { type: "object", "properties": require("./Course.Struct.js")().getSchema().properties },
-          "CourseResults": { type: "object", "properties": require("./CourseResults.Struct.js")().getSchema().properties },
-          ...require("./Person.Struct.js")().getSchema().$defs,
+          "Advisor": { type: "object", "properties": require("./Advisor.Struct.js")().jsonSchema().properties },
+          "Course": { type: "object", "properties": require("./Course.Struct.js")().jsonSchema().properties },
+          "CourseResults": { type: "object", "properties": require("./CourseResults.Struct.js")().jsonSchema().properties },
+          ...require("./Person.Struct.js")().jsonSchema().$defs,
         }
       }
     }
     static fromJson(obj) {
-      return stdStruct._validate(obj, this.getSchema())
+      return stdStruct._validate(obj, this.jsonSchema())
     }
     static _toInflightType(context) {
       return fromInline(`require("./Student.Struct.js")(${ context._lift(stdStruct) })`);
