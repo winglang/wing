@@ -217,7 +217,7 @@ module.exports = function({  }) {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c867c4e0",
             "WING_TARGET": "tf-aws",
-            "WING_TOKEN_TFTOKEN_TOKEN_14": "${jsonencode(aws_cloudfront_distribution.cloudWebsite_Distribution_083B5AF9.domain_name)}"
+            "WING_TOKEN_TFTOKEN_TOKEN_16": "${jsonencode(aws_cloudfront_distribution.cloudWebsite_Distribution_083B5AF9.domain_name)}"
           }
         },
         "function_name": "Handler-c867c4e0",
@@ -328,7 +328,8 @@ module.exports = function({  }) {
           "aws_s3_bucket.cloudWebsite_WebsiteBucket_EB03D355"
         ],
         "key": "/index.html",
-        "source": "<SOURCE>"
+        "source": "<SOURCE>",
+        "source_hash": "${filemd5(<SOURCE>)}"
       },
       "cloudWebsite_File--inner-folder--otherhtml_72DA631C": {
         "//": {
@@ -343,7 +344,8 @@ module.exports = function({  }) {
           "aws_s3_bucket.cloudWebsite_WebsiteBucket_EB03D355"
         ],
         "key": "/inner-folder/other.html",
-        "source": "<SOURCE>"
+        "source": "<SOURCE>",
+        "source_hash": "${filemd5(<SOURCE>)}"
       },
       "cloudWebsite_File-configjson_591A81BA": {
         "//": {
