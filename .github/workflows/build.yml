@@ -22,22 +22,21 @@ env:
   RUST_VERSION: "1.67.1"
   NODE_VERSION: "18.16.0"
   PNPM_VERSION: "8.6.3"
+  CARGO_TERM_COLOR: always
+  TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+  TURBO_TEAM: ${{ vars.TURBO_TEAM }}
 
 jobs:
   build:
     name: "Build"
     timeout-minutes: 30
     runs-on: ubuntu-latest
-    env:
-      CARGO_TERM_COLOR: always
-      TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
-      TURBO_TEAM: ${{ vars.TURBO_TEAM }}
     outputs:
       version: ${{ fromJson(steps.changelog.outputs.data).newVersion }}
       last-version: ${{ fromJson(steps.changelog.outputs.data).lastVersion }}
       changelog: ${{ fromJson(steps.changelog.outputs.data).changelog }}
-      vscode-wing-changed: ${{ steps.git-diff-vscode-wing.outputs.diff }}
-
+      release-vscode: ${{ fromJson(steps.turbo-diff.outputs.data)['vscode-wing#compile'].changed }}
+      run-hangar: ${{ fromJson(steps.turbo-diff.outputs.data)['hangar#test'].changed }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -85,56 +84,23 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: dist
-          path: dist/*.tgz
-
-      - name: Upload WingC WASM
-        uses: actions/upload-artifact@v3
-        with:
-          name: wingc
-          path: libs/wingcompiler/wingc.wasm
+          path: dist/*
 
       - name: Derive appropriate SHAs for base and head
         id: setSHAs
         uses: nrwl/nx-set-shas@v3
 
-      - name: Check git diff of VSCode Extension
-        id: git-diff-vscode-wing
-        run: |
-          if git diff --quiet ${{ steps.setSHAs.outputs.base }} ${{ github.sha }} -- apps/vscode-wing; then
-            echo "diff=false" >> "$GITHUB_OUTPUT"
-          else
-            echo "diff=true" >> "$GITHUB_OUTPUT"
-          fi
-
-      - name: Upload Extension
-        uses: actions/upload-artifact@v3
-        with:
-          name: vscode-wing
-          path: apps/vscode-wing/vscode-wing.vsix
-
-      - name: Compress Docs
-        run: tar -czvf docs.tgz docs/*
-
-      - name: Upload Docs
-        uses: actions/upload-artifact@v3
-        with:
-          name: docs
-          path: docs.tgz
+      - name: Turbo diff
+        id: turbo-diff
+        run: scripts/turbo-diff.mjs --startRef ${{ steps.setSHAs.outputs.base }} --endRef ${{ steps.setSHAs.outputs.head }}
 
   test:
     name: Test
     timeout-minutes: 30
     runs-on: ubuntu-latest
-    env:
-      CARGO_TERM_COLOR: always
-      TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
-      TURBO_TEAM: ${{ vars.TURBO_TEAM }}
-
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-        with:
-          fetch-depth: 1
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v2.2.4
@@ -171,14 +137,7 @@ jobs:
 
       - name: Create git patch
         id: diff
-        run: |
-          git add --all
-          git diff --staged --binary --patch > build.diff
-          if [ -s build.diff ]; then
-            echo "Diff found, creating a patch to apply later"
-            cat build.diff
-            echo "diff=true" >> $GITHUB_OUTPUT
-          fi
+        run: scripts/create_patch.sh build.diff
 
       - name: Upload patch
         if: steps.diff.outputs.diff == 'true'
@@ -227,13 +186,14 @@ jobs:
           path: tools/hangar/results/report.json
 
       - name: Create Markdown report
-        run: node scripts/benchmark_json_to_table.mjs
+        run: scripts/benchmark_json_to_table.mjs
 
   e2e-test:
     name: "E2E / ${{ matrix.runner }} + Node${{ matrix.node }} [${{ matrix.shard }}]"
     runs-on: "${{ matrix.runner }}-latest"
     needs:
       - build
+    if: needs.build.outputs.run-hangar == 'true'
     strategy:
       fail-fast: true
       matrix:
@@ -254,8 +214,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-        with:
-          fetch-depth: 1
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v2.2.4
@@ -291,13 +249,7 @@ jobs:
           RAW_SHARD: ${{ matrix.shard }}
         run: |
           SHARD=$(echo $RAW_SHARD | sed 's/\//of/g')
-          DIFF_NAME="e2e-$SHARD.diff"
-          git add --all
-          git diff --staged --binary --patch > $DIFF_NAME
-          if [ -s $DIFF_NAME ]; then
-            echo "diff=true" >> $GITHUB_OUTPUT
-            echo "diff_name=$DIFF_NAME" >> $GITHUB_OUTPUT
-          fi
+          scripts/create_patch.sh "e2e-$SHARD.diff"
 
       - name: Upload mutation
         if: matrix.runner == 'ubuntu' && matrix.node == '18' && steps.diff.outputs.diff == 'true'
@@ -350,7 +302,7 @@ jobs:
           tag: "v${{ needs.build.outputs.version }}"
 
       - name: Publish Extension to Visual Studio Marketplace
-        if: needs.build.outputs.vscode-wing-changed == 'true'
+        if: needs.build.outputs.release-vscode == 'true'
         uses: "HaaLeo/publish-vscode-extension@v1"
         with:
           pat: ${{ secrets.VS_MARKETPLACE_TOKEN }}
@@ -377,9 +329,6 @@ jobs:
 
       - name: Compute Checksums
         run: |
-          mv ./docs/*.tgz ./dist
-          mv ./*/*.vsix ./dist
-          mv ./*/*.wasm ./dist
           mv ./benchmarks/* ./dist
           cd dist
 

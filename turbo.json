@@ -1,6 +1,14 @@
 {
   "$schema": "https://turborepo.org/schema.json",
-  "globalDependencies": ["*.json", "*.toml", ".node-version", "insta.yaml"],
+  "globalDependencies": [
+    "*.json",
+    "*.toml",
+    ".node-version",
+    "insta.yaml",
+    ".github/workflows/build.yml",
+    "scripts/*",
+    "patches/*"
+  ],
   "pipeline": {
     "default": {
       "inputs": ["*.json", ".projenrc.ts"]
@@ -15,7 +23,9 @@
         "*.json",
         "*.toml",
         "*.lock",
-        "src/**"
+        "src/**/*.rs",
+        "!src/**/*.test.ts",
+        "src/**/*.ts"
       ]
     },
     "test": {
@@ -27,7 +37,9 @@
         "*.json",
         "*.toml",
         "*.lock",
-        "src/**",
+        "src/**/*.rs",
+        "src/**/*.ts",
+        "src/**/*.test.ts",
         "test/**"
       ]
     },
@@ -55,7 +67,8 @@
         "*.json",
         "*.toml",
         "*.lock",
-        "src/**",
+        "src/**/*.rs",
+        "src/**/*.ts",
         "test/**"
       ]
     },
@@ -67,15 +80,21 @@
         "*.json",
         "*.toml",
         "*.lock",
-        "src/**",
+        "src/**/*.rs",
+        "src/**/*.ts",
         "test/**"
       ]
     },
     "package": {
       "dependsOn": ["compile", "post-compile"],
-      "env": ["PROJEN_BUMP_VERSION"]
+      "env": ["PROJEN_BUMP_VERSION"],
+      "inputs": ["package.json"]
+    },
+    "hangar": {
+      "dependsOn": ["hangar#test"]
     },
     "topo": {
+      "inputs": [],
       "dependsOn": ["^topo"]
     },
     "examples-tests": {
@@ -85,6 +104,10 @@
         "!examples/tests/valid/**/node_modules/**",
         "!examples/tests/valid/**/target/**"
       ]
+    },
+    "test:generate": {
+      "dependsOn": ["topo"],
+      "inputs": []
     }
   }
 }
