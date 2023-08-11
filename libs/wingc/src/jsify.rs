@@ -670,18 +670,18 @@ impl<'a> JSifier<'a> {
 		}
 	}
 
-  pub fn jsify_struct_properties(&self, fields: &Vec<StructField>, extends: &Vec<UserDefinedType>) -> CodeMaker {
-    let mut code = CodeMaker::default();
-    
-    // Any parents we need to get their properties
-    for e in extends {
-      code.line(format!(
-        "...require(\"{}\")().getSchema().properties,",
-        struct_filename(&e.root.name)
-      ))
+	pub fn jsify_struct_properties(&self, fields: &Vec<StructField>, extends: &Vec<UserDefinedType>) -> CodeMaker {
+		let mut code = CodeMaker::default();
+
+		// Any parents we need to get their properties
+		for e in extends {
+			code.line(format!(
+				"...require(\"{}\")().getSchema().properties,",
+				struct_filename(&e.root.name)
+			))
 		}
 
-    for field in fields {
+		for field in fields {
 			code.line(format!(
 				"{}: {{ {} }},",
 				field.name.name,
@@ -689,10 +689,16 @@ impl<'a> JSifier<'a> {
 			));
 		}
 
-    code
-  }
+		code
+	}
 
-	pub fn jsify_struct(&self, name: &Symbol, fields: &Vec<StructField>, extends: &Vec<UserDefinedType>, env: &SymbolEnv) -> CodeMaker {
+	pub fn jsify_struct(
+		&self,
+		name: &Symbol,
+		fields: &Vec<StructField>,
+		extends: &Vec<UserDefinedType>,
+		_env: &SymbolEnv,
+	) -> CodeMaker {
 		// To allow for struct validation at runtime this will generate a JS class that has a static
 		// getValidator method that will create a json schema validator.
 		let mut code = CodeMaker::default();
@@ -705,13 +711,13 @@ impl<'a> JSifier<'a> {
 		let mut dependencies: Vec<String> = vec![]; // schemas that need added to validator
 
 		code.open("static getSchema() {".to_string());
-    code.open("return {");
+		code.open("return {");
 		code.line(format!("id: \"/{}\",", name));
 		code.line("type: \"object\",".to_string());
 
 		code.open("properties: {");
 
-    code.add_code(self.jsify_struct_properties(fields, extends));
+		code.add_code(self.jsify_struct_properties(fields, extends));
 
 		// determine which fields are required, and which schemas need to be added to validator
 		for field in fields {
@@ -741,26 +747,25 @@ impl<'a> JSifier<'a> {
 
 		code.close("],");
 
-    // create definitions for sub schemas
-    code.open("$defs: {");
-    for dep in &dependencies {
-      code.line(format!(
-        "\"{}\": {{ type: \"object\", \"properties\": require(\"{}\")().getSchema().properties }},",
-        dep,
-        struct_filename(&dep)
-      ));
-    }
-    for e in extends {
-      code.line(format!(
-        "...require(\"{}\")().getSchema().$defs,",
-        struct_filename(&e.root.name)
-      ));
-    }
-    code.close("}");
-
-    code.close("}");
+		// create definitions for sub schemas
+		code.open("$defs: {");
+		for dep in &dependencies {
+			code.line(format!(
+				"\"{}\": {{ type: \"object\", \"properties\": require(\"{}\")().getSchema().properties }},",
+				dep,
+				struct_filename(&dep)
+			));
+		}
+		for e in extends {
+			code.line(format!(
+				"...require(\"{}\")().getSchema().$defs,",
+				struct_filename(&e.root.name)
+			));
+		}
 		code.close("}");
 
+		code.close("}");
+		code.close("}");
 
 		// create _validate() function
 		code.open("static fromJson(obj) {");
