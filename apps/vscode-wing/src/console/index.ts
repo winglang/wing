@@ -6,7 +6,13 @@ const globalAny = global as any;
 globalAny.fetch = fetch;
 globalAny.WebSocket = ws;
 
-import { ExtensionContext, window, workspace, OutputChannel } from "vscode";
+import {
+  ExtensionContext,
+  window,
+  workspace,
+  OutputChannel,
+  ThemeColor,
+} from "vscode";
 import ws from "ws";
 import { type ConsoleManager, createConsoleManager } from "./console-manager";
 import { createClient } from "./services/client";
@@ -49,9 +55,6 @@ export class WingConsoleManager {
   }
 
   public async openConsole() {
-    const color = new ThemeColor("badge.background");
-    this.logger.appendLine(`color: ${color.id}`);
-
     // get the current active file
     const editor = window.activeTextEditor;
     if (!editor) {

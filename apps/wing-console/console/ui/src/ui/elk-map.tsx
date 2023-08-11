@@ -18,7 +18,7 @@ const layoutOptions: LayoutOptions = {
   "elk.direction": "RIGHT",
   "elk.alignment": "CENTER",
   "elk.algorithm": "org.eclipse.elk.layered",
-  "elk.layered.layering.strategy": "MIN_WIDTH",
+  "elk.layered.layering.strategy": "INTERACTIVE",
   "elk.layered.layering.nodePromotion.strategy": "DUMMYNODE_PERCENTAGE",
   "elk.layered.nodePlacement.strategy": "INTERACTIVE",
   "elk.layered.crossingMinimization.strategy": "LAYER_SWEEP",

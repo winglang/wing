@@ -219,14 +219,8 @@ export const DefaultLayout = ({
     ],
   );
 
-  // get env var --vscode-editor-background
-  // if it is not set, use the default
-  const color =
-    process.env.VSCODE_EDITOR_BACKGROUND || "var(--vscode-editor-background)";
-
   return (
     <>
-      <div>vscode-color: {color}</div>
       {showTerms && (
         <TermsAndConditionsModal
           visible={true}

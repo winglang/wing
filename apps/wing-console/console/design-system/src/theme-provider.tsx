@@ -74,6 +74,7 @@ export interface ThemeProviderProps {
   mode: Mode;
   setThemeMode?: (mode: Mode) => void;
   mediaTheme?: Mode;
+  themeColor?: string;
 }
 
 const setModeInLocalStorage = (mode: Mode) => {
@@ -131,6 +132,7 @@ const ThemeContext = createContext<ThemeProviderProps>({
 export const ThemeProvider = ({
   theme,
   mode,
+  themeColor,
   children,
 }: PropsWithChildren<ThemeProviderProps>) => {
   const [currentMode, setCurrentMode] = useState<Mode>(mode ?? getThemeMode());
@@ -162,10 +164,12 @@ export const ThemeProvider = ({
       value={{
         theme: theme ?? DefaultTheme,
         mode: currentMode,
+        themeColor,
         mediaTheme: getMediaThemeMode(),
         setThemeMode: onSetThemeMode,
       }}
     >
+      <div className="bg-white dark:bg-slate-800">{themeColor}</div>
       {children}
     </ThemeContext.Provider>
   );

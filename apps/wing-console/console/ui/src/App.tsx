@@ -13,10 +13,11 @@ import { TestsContextProvider } from "./tests-context.js";
 export interface AppProps {
   layout?: LayoutType;
   theme?: Mode;
+  themeColor?: string;
   onTrace?: (trace: Trace) => void;
 }
 
-export const App = ({ layout, theme, onTrace }: AppProps) => {
+export const App = ({ layout, theme, themeColor, onTrace }: AppProps) => {
   const trpcContext = trpc.useContext();
 
   trpc["app.invalidateQuery"].useSubscription(undefined, {
@@ -43,7 +44,11 @@ export const App = ({ layout, theme, onTrace }: AppProps) => {
   const themeMode = trpc["config.getThemeMode"].useQuery();
 
   return (
-    <ThemeProvider mode={theme || themeMode?.data?.mode} theme={DefaultTheme}>
+    <ThemeProvider
+      mode={theme || themeMode?.data?.mode}
+      theme={DefaultTheme}
+      themeColor={themeColor}
+    >
       <NotificationsProvider>
         <TestsContextProvider>
           <LayoutProvider
