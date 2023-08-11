@@ -49,6 +49,9 @@ export class WingConsoleManager {
   }
 
   public async openConsole() {
+    const color = new ThemeColor("badge.background");
+    this.logger.appendLine(`color: ${color.id}`);
+
     // get the current active file
     const editor = window.activeTextEditor;
     if (!editor) {
