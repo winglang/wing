@@ -60,6 +60,8 @@ jobs:
       - name: Derive appropriate SHAs for base and head
         id: setSHAs
         uses: nrwl/nx-set-shas@v3
+        with:
+          last-successful-event: ${{ github.event_name }}
 
       - name: Turbo diff
         id: turbo-diff
