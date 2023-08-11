@@ -4290,8 +4290,8 @@ impl<'a> TypeChecker<'a> {
 						}
 					}
 					Type::Struct(ref s) => {
-            let from_json = "fromJson";
-            let try_from_json = "tryFromJson";
+						let from_json = "fromJson";
+						let try_from_json = "tryFromJson";
 
 						if property.name == from_json || property.name == try_from_json {
 							// we need to validate that only structs with all valid json fields can have a fromJson method
