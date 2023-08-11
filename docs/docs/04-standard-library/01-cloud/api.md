@@ -149,7 +149,6 @@ new cloud.Api(props?: ApiProps);
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.Api.bind">bind</a></code> | Binds the resource to the host so that it can be used by inflight code. |
 | <code><a href="#@winglang/sdk.cloud.Api.connect">connect</a></code> | Add a inflight handler to the api for CONNECT requests on the given path. |
 | <code><a href="#@winglang/sdk.cloud.Api.delete">delete</a></code> | Add a inflight handler to the api for DELETE requests on the given path. |
 | <code><a href="#@winglang/sdk.cloud.Api.get">get</a></code> | Add a inflight handler to the api for GET requests on the given path. |
@@ -158,31 +157,6 @@ new cloud.Api(props?: ApiProps);
 | <code><a href="#@winglang/sdk.cloud.Api.patch">patch</a></code> | Add a inflight handler to the api for PATCH requests on the given path. |
 | <code><a href="#@winglang/sdk.cloud.Api.post">post</a></code> | Add a inflight handler to the api for POST requests on the given path. |
 | <code><a href="#@winglang/sdk.cloud.Api.put">put</a></code> | Add a inflight handler to the api for PUT requests on the given path. |
-
----
-
-##### `bind` <a name="bind" id="@winglang/sdk.cloud.Api.bind"></a>
-
-```wing
-bind(host: IInflightHost, ops: MutArray<str>): void
-```
-
-Binds the resource to the host so that it can be used by inflight code.
-
-You can override this method to perform additional logic like granting
-IAM permissions to the host based on what methods are being called. But
-you must call `super.bind(host, ops)` to ensure that the resource is
-actually bound.
-
-###### `host`<sup>Required</sup> <a name="host" id="@winglang/sdk.cloud.Api.bind.parameter.host"></a>
-
-- *Type:* <a href="#@winglang/sdk.std.IInflightHost">IInflightHost</a>
-
----
-
-###### `ops`<sup>Required</sup> <a name="ops" id="@winglang/sdk.cloud.Api.bind.parameter.ops"></a>
-
-- *Type:* MutArray&lt;str&gt;
 
 ---
 
