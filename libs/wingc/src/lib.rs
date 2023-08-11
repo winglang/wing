@@ -29,8 +29,8 @@ use wingii::type_system::TypeSystem;
 use crate::docs::Docs;
 use std::alloc::{alloc, dealloc, Layout};
 
-use std::mem;
 use std::path::{Path, PathBuf};
+use std::{fs, mem};
 
 use crate::ast::Phase;
 use crate::type_check::symbol_env::SymbolEnv;
@@ -151,7 +151,37 @@ pub unsafe extern "C" fn wingc_compile(ptr: u32, len: u32) -> u64 {
 	let output_dir = split.get(1).map(|s| Path::new(s));
 	let absolute_project_dir = split.get(2).map(|s| Path::new(s));
 
-	let results = compile(source_file, output_dir, absolute_project_dir);
+	if !source_file.exists() {
+		report_diagnostic(Diagnostic {
+			message: format!("Source file cannot be found: {}", source_file.display()),
+			span: None,
+		});
+		return WASM_RETURN_ERROR;
+	}
+
+	if source_file.is_dir() {
+		report_diagnostic(Diagnostic {
+			message: format!(
+				"Source path must be a file (not a directory): {}",
+				source_file.display()
+			),
+			span: None,
+		});
+		return WASM_RETURN_ERROR;
+	}
+
+	let source_text = match fs::read_to_string(&source_file) {
+		Ok(text) => text,
+		Err(e) => {
+			report_diagnostic(Diagnostic {
+				message: format!("Could not read file \"{}\": {}", source_file.display(), e),
+				span: None,
+			});
+			return WASM_RETURN_ERROR;
+		}
+	};
+
+	let results = compile(source_file, source_text, output_dir, absolute_project_dir);
 	if results.is_err() {
 		WASM_RETURN_ERROR
 	} else {
@@ -274,28 +304,10 @@ fn add_builtin(name: &str, typ: Type, scope: &mut Scope, types: &mut Types) {
 
 pub fn compile(
 	source_path: &Path,
+	source_text: String,
 	out_dir: Option<&Path>,
 	absolute_project_root: Option<&Path>,
 ) -> Result<CompilerOutput, ()> {
-	if !source_path.exists() {
-		report_diagnostic(Diagnostic {
-			message: format!("Source file cannot be found: {}", source_path.display()),
-			span: None,
-		});
-		return Err(());
-	}
-
-	if !source_path.is_file() {
-		report_diagnostic(Diagnostic {
-			message: format!(
-				"Source path must be a file (not a directory or symlink): {}",
-				source_path.display()
-			),
-			span: None,
-		});
-		return Err(());
-	}
-
 	let file_name = source_path.file_name().unwrap().to_str().unwrap();
 	let default_out_dir = PathBuf::from(format!("{}.out", file_name));
 	let out_dir = out_dir.unwrap_or(default_out_dir.as_ref());
@@ -307,7 +319,7 @@ pub fn compile(
 	let mut asts = IndexMap::new();
 	let topo_sorted_files = parse_wing_project(
 		&source_path,
-		None,
+		source_text,
 		&mut files,
 		&mut file_graph,
 		&mut tree_sitter_trees,
@@ -445,8 +457,11 @@ mod sanity {
 				fs::remove_dir_all(&out_dir).expect("remove out dir");
 			}
 
+			let test_text = fs::read_to_string(&test_file).expect("read test file");
+
 			let result = compile(
 				&test_file,
+				test_text,
 				Some(&out_dir),
 				Some(test_file.canonicalize().unwrap().parent().unwrap()),
 			);

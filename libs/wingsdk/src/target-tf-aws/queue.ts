@@ -99,8 +99,7 @@ export class Queue extends cloud.Queue {
     return fn;
   }
 
-  /** @internal */
-  public _bind(host: IInflightHost, ops: string[]): void {
+  public bind(host: IInflightHost, ops: string[]): void {
     if (!(host instanceof Function)) {
       throw new Error("queues can only be bound by tfaws.Function for now");
     }
@@ -113,7 +112,7 @@ export class Queue extends cloud.Queue {
     // it may not be resolved until deployment time.
     host.addEnvironment(env, this.queue.url);
 
-    super._bind(host, ops);
+    super.bind(host, ops);
   }
 
   /** @internal */

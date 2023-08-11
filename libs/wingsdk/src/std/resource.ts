@@ -34,14 +34,12 @@ export interface IResource extends IInspectable, IConstruct {
    *
    * If `ops` contains any operations not supported by the resource, it should throw an
    * error.
-   *
-   * @internal
    */
-  _bind(host: IInflightHost, ops: string[]): void;
+  bind(host: IInflightHost, ops: string[]): void;
 
   /**
    * Register that the resource needs to be bound to the host for the given
-   * operations. This means that the resource's `_bind` method will be called
+   * operations. This means that the resource's `bind` method will be called
    * during pre-synthesis.
    *
    * @internal
@@ -139,7 +137,7 @@ export abstract class Resource extends Construct implements IResource {
    *
    * - Primitives and Duration objects are ignored.
    * - Arrays, sets and maps and structs (Objects) are recursively bound.
-   * - Resources are bound to the host by calling their _bind() method.
+   * - Resources are bound to the host by calling their bind() method.
    *
    * @param obj The object to bind.
    * @param host The host to bind to
@@ -188,7 +186,7 @@ export abstract class Resource extends Construct implements IResource {
           return;
         }
 
-        // if the object is a resource (i.e. has a "_bind" method"), register a binding between it and the host.
+        // if the object is a resource (i.e. has a "bind" method"), register a binding between it and the host.
         if (isResource(obj)) {
           // Explicitly register the resource's `$inflight_init` op, which is a special op that can be used to makes sure
           // the host can instantiate a client for this resource.
@@ -251,12 +249,10 @@ export abstract class Resource extends Construct implements IResource {
    *
    * You can override this method to perform additional logic like granting
    * IAM permissions to the host based on what methods are being called. But
-   * you must call `super._bind(host, ops)` to ensure that the resource is
+   * you must call `super.bind(host, ops)` to ensure that the resource is
    * actually bound.
-   *
-   * @internal
    */
-  public _bind(host: IInflightHost, ops: string[]): void {
+  public bind(host: IInflightHost, ops: string[]): void {
     // Do nothing by default
     host;
     ops;
@@ -264,7 +260,7 @@ export abstract class Resource extends Construct implements IResource {
 
   /**
    * Register that the resource needs to be bound to the host for the given
-   * operations. This means that the resource's `_bind` method will be called
+   * operations. This means that the resource's `bind` method will be called
    * during pre-synthesis.
    *
    * @internal
@@ -331,7 +327,7 @@ export abstract class Resource extends Construct implements IResource {
     // By aggregating the binding operations, we can avoid performing
     // multiple bindings for the same resource-host pairs.
     for (const [host, ops] of this.bindMap.entries()) {
-      this._bind(host, Array.from(ops));
+      this.bind(host, Array.from(ops));
     }
   }
 
@@ -485,6 +481,12 @@ export interface DisplayProps {
   readonly description?: string;
 
   /**
+   * The source file or library where the resource was defined.
+   * @default - No source module.
+   */
+  readonly sourceModule?: string;
+
+  /**
    * Whether the resource should be hidden from the UI.
    * @default - Undefined
    */
@@ -497,6 +499,11 @@ export interface DisplayProps {
  */
 export class Display {
   /**
+   * The source module for the SDK.
+   */
+  public static readonly SDK_SOURCE_MODULE = "@winglang/sdk";
+
+  /**
    * Title of the resource.
    */
   public title?: string;
@@ -507,6 +514,11 @@ export class Display {
   public description?: string;
 
   /**
+   * The source file or library where the resource was defined.
+   */
+  public sourceModule?: string;
+
+  /**
    * Whether the resource should be hidden from the UI.
    */
   public hidden?: boolean;
@@ -515,6 +527,7 @@ export class Display {
     this.title = props?.title;
     this.description = props?.description;
     this.hidden = props?.hidden;
+    this.sourceModule = props?.sourceModule;
   }
 }
 
@@ -526,7 +539,7 @@ function isIResourceType(t: any): t is new (...args: any[]) => IResource {
   return (
     t instanceof Function &&
     "prototype" in t &&
-    typeof t.prototype._bind === "function" &&
+    typeof t.prototype.bind === "function" &&
     typeof t.prototype._registerBind === "function"
   );
 }
