@@ -79,7 +79,6 @@ bucket: (function(env) {
         "attrs": {},
         "path": "root/HelloWorld/Queue",
         "props": {
-          "initialMessages": [],
           "retentionPeriod": 3600,
           "timeout": 10,
         },
