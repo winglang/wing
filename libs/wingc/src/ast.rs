@@ -7,7 +7,7 @@ use itertools::Itertools;
 
 use crate::diagnostic::WingSpan;
 
-use crate::type_check::{ExprId, CLOSURE_CLASS_HANDLE_METHOD};
+use crate::type_check::CLOSURE_CLASS_HANDLE_METHOD;
 
 static EXPR_COUNTER: AtomicUsize = AtomicUsize::new(0);
 static SCOPE_COUNTER: AtomicUsize = AtomicUsize::new(0);
@@ -582,6 +582,10 @@ impl Spanned for CalleeKind {
 		}
 	}
 }
+
+/// File-unique identifier for each expression. This is an index of the Types.expr_types vec.
+/// After type checking, each expression will have a type in that vec.
+pub type ExprId = usize;
 
 // do not derive Default, we want to be explicit about generating ids
 #[derive(Debug)]

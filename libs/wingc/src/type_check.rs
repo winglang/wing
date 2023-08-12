@@ -4,7 +4,7 @@ pub(crate) mod jsii_importer;
 pub mod lifts;
 pub mod symbol_env;
 
-use crate::ast::{self, BringSource, CalleeKind, ClassField, FunctionDefinition, NewExpr, TypeAnnotationKind};
+use crate::ast::{self, BringSource, CalleeKind, ClassField, ExprId, FunctionDefinition, NewExpr, TypeAnnotationKind};
 use crate::ast::{
 	ArgList, BinaryOperator, Class as AstClass, Expr, ExprKind, FunctionBody, FunctionParameter as AstFunctionParameter,
 	Interface as AstInterface, InterpolatedStringPart, Literal, Phase, Reference, Scope, Spanned, Stmt, StmtKind, Symbol,
@@ -1248,10 +1248,6 @@ struct ResolvedExpression {
 	type_: TypeRef,
 	phase: Phase,
 }
-
-/// File-unique identifier for each expression. This is an index of the Types.expr_types vec.
-/// After type checking, each expression will have a type in that vec.
-pub type ExprId = usize;
 
 /// File-unique identifier for each necessary inference while type checking. This is an index of the Types.inferences vec.
 /// There will always be an entry for each InferenceId.
