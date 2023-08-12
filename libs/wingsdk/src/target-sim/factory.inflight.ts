@@ -15,6 +15,7 @@ import {
   SCHEDULE_TYPE,
   SERVICE_TYPE,
   ON_DEPLOY_TYPE,
+  SHARED_STATE_TYPE,
 } from "./schema-resources";
 import type {
   ISimulatorFactory,
@@ -82,6 +83,9 @@ export class DefaultSimulatorFactory implements ISimulatorFactory {
       case ON_DEPLOY_TYPE:
         const OnDeploy = require("./on-deploy.inflight").OnDeploy;
         return new OnDeploy(props, context);
+      case SHARED_STATE_TYPE:
+        const SharedState = require("./shared-state.inflight").SharedState;
+        return new SharedState(props, context);
       default:
         throw new Error(`Type ${type} not implemented by the simulator.`);
     }

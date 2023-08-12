@@ -23,6 +23,8 @@ export const SECRET_TYPE = "wingsdk.cloud.Secret";
 export const SERVICE_TYPE = "wingsdk.cloud.Service";
 export const ON_DEPLOY_TYPE = "wingsdk.cloud.OnDeploy";
 
+export const SHARED_STATE_TYPE = "wingsdk.std.SharedState";
+
 export type FunctionHandle = string;
 export type PublisherHandle = string;
 
@@ -265,3 +267,15 @@ export interface OnDeploySchema extends BaseResourceSchema {
 
 /** Runtime attributes for cloud.OnDeploy */
 export interface OnDeployAttributes {}
+
+/** Schema for std.SharedState */
+export interface SharedStateSchema extends BaseResourceSchema {
+  readonly type: typeof SHARED_STATE_TYPE;
+  readonly props: {
+    /** The initial value. */
+    readonly initialValue: any;
+  };
+}
+
+/** Runtime attributes for std.SharedState */
+export interface SharedStateAttributes {}

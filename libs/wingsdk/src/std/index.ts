@@ -9,6 +9,7 @@ export * from "./number";
 export * from "./range";
 export * from "./resource";
 export * from "./set";
+export * from "./shared-state";
 export * from "./string";
 export * from "./test";
 export * from "./test-runner";

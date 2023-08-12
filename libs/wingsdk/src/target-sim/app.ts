@@ -12,6 +12,7 @@ import { isSimulatorResource } from "./resource";
 import { Schedule } from "./schedule";
 import { Secret } from "./secret";
 import { Service } from "./service";
+import { SharedState } from "./shared-state";
 import { Table } from "./table";
 import { TestRunner } from "./test-runner";
 import { SimTokens } from "./tokens";
@@ -34,7 +35,7 @@ import { SDK_VERSION } from "../constants";
 import * as core from "../core";
 import { preSynthesizeAllConstructs } from "../core/app";
 import { TABLE_FQN, REDIS_FQN } from "../ex";
-import { TEST_RUNNER_FQN } from "../std";
+import { SHARED_STATE_FQN, TEST_RUNNER_FQN } from "../std";
 import { WingSimulatorSchema } from "../testing/simulator";
 
 /**
@@ -118,6 +119,9 @@ export class App extends core.App {
 
       case ON_DEPLOY_FQN:
         return new OnDeploy(scope, id, args[0], args[1]);
+
+      case SHARED_STATE_FQN:
+        return new SharedState(scope, id, args[0]);
     }
 
     return undefined;

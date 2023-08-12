@@ -138,6 +138,14 @@ export class Simulator {
     this._handles = new HandleManager();
     this._traces = new Array();
     this._traceSubscribers = new Array();
+
+    if (process.env.DEBUG) {
+      this._traceSubscribers.push({
+        callback: (event: Trace) => {
+          console.error("[simulator]", event);
+        },
+      });
+    }
   }
 
   private _loadApp(simdir: string): {
