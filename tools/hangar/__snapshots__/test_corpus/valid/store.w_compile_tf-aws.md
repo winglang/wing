@@ -1,5 +1,37 @@
 # [store.w](../../../../../examples/tests/valid/store.w) | compile | tf-aws
 
+## Point.Struct.js
+```js
+module.exports = function(stdStruct, fromInline) {
+  class Point {
+    static jsonSchema() {
+      return {
+        id: "/Point",
+        type: "object",
+        properties: {
+          x: { type: "number" },
+          y: { type: "number" },
+        },
+        required: [
+          "x",
+          "y",
+        ],
+        $defs: {
+        }
+      }
+    }
+    static fromJson(obj) {
+      return stdStruct._validate(obj, this.jsonSchema())
+    }
+    static _toInflightType(context) {
+      return fromInline(`require("./Point.Struct.js")(${ context._lift(stdStruct) })`);
+    }
+  }
+  return Point;
+};
+
+```
+
 ## inflight.$Closure1-1.js
 ```js
 module.exports = function({ $__parent_this_1_b }) {
@@ -197,6 +229,7 @@ class $Root extends $stdlib.std.Resource {
         return tmp;
       })({})
     ;
+    const Point = require("./Point.Struct.js")($stdlib.std.Struct, $stdlib.core.NodeJsCode.fromInline);
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
