@@ -38,11 +38,11 @@ export async function compileTest(
 
   // which files to include from the .wing directory
   const dotWing = join(targetDir, ".wing");
-  const include = ["preflight.", "inflight.", "extern/", "proc"];
+  const include = ["preflight.", "inflight.", "extern/", "proc", ".Struct.js"];
 
   for await (const dotFile of walkdir(dotWing)) {
     const subpath = relative(dotWing, dotFile).replace(/\\/g, "/");
-    if (!include.find((f) => subpath.startsWith(f))) {
+    if (!include.find((f) => subpath.includes(f))) {
       continue;
     }
     let fileContents = await fs.readFile(dotFile, "utf8");

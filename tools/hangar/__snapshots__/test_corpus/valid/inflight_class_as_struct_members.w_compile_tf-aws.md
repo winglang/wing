@@ -1,5 +1,36 @@
 # [inflight_class_as_struct_members.w](../../../../../examples/tests/valid/inflight_class_as_struct_members.w) | compile | tf-aws
 
+## Bar.Struct.js
+```js
+module.exports = function(stdStruct, fromInline) {
+  class Bar {
+    static jsonSchema() {
+      return {
+        id: "/Bar",
+        type: "object",
+        properties: {
+          foo: { "$ref": "#/$defs/Foo" },
+        },
+        required: [
+          "foo",
+        ],
+        $defs: {
+          "Foo": { type: "object", "properties": require("./Foo.Struct.js")().jsonSchema().properties },
+        }
+      }
+    }
+    static fromJson(obj) {
+      return stdStruct._validate(obj, this.jsonSchema())
+    }
+    static _toInflightType(context) {
+      return fromInline(`require("./Bar.Struct.js")(${ context._lift(stdStruct) })`);
+    }
+  }
+  return Bar;
+};
+
+```
+
 ## inflight.$Closure1-1.js
 ```js
 module.exports = function({ $Foo }) {
@@ -259,6 +290,7 @@ class $Root extends $stdlib.std.Resource {
         super._registerBind(host, ops);
       }
     }
+    const Bar = require("./Bar.Struct.js")($stdlib.std.Struct, $stdlib.core.NodeJsCode.fromInline);
     const getBar = new $Closure1(this,"$Closure1");
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:test",new $Closure2(this,"$Closure2"));
   }
