@@ -61,7 +61,7 @@ jobs:
         id: shas
         env:
           ACTIONS_STEP_DEBUG: "true"
-        uses: MarkMcCulloh/nx-set-shas@d8916cdddc14d930a0bd8ed6c3b7e3d4c3f26874
+        uses: MarkMcCulloh/nx-set-shas@main
 
       - name: Turbo diff
         id: turbo-diff
