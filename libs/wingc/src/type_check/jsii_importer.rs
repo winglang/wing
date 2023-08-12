@@ -10,7 +10,6 @@ use crate::{
 		TypeRef, Types, CLASS_INIT_NAME,
 	},
 	CONSTRUCT_BASE_CLASS, WINGSDK_ASSEMBLY_NAME, WINGSDK_DURATION, WINGSDK_JSON, WINGSDK_MUT_JSON, WINGSDK_RESOURCE,
-	WINGSDK_STRUCT,
 };
 use colored::Colorize;
 use wingii::{
@@ -103,8 +102,6 @@ impl<'a> JsiiImporter<'a> {
 					self.wing_types.json()
 				} else if type_fqn == &format!("{}.{}", WINGSDK_ASSEMBLY_NAME, WINGSDK_MUT_JSON) {
 					self.wing_types.mut_json()
-				} else if type_fqn == &format!("{}.{}", WINGSDK_ASSEMBLY_NAME, WINGSDK_STRUCT) {
-					self.wing_types.anything()
 				} else {
 					self.lookup_or_create_type(&FQN::from(type_fqn.as_str()))
 				}
