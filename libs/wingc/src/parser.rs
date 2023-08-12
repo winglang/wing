@@ -145,31 +145,19 @@ static RESERVED_WORDS: phf::Set<&'static str> = phf_set! {
 /// files that come before it in the ordering.
 pub fn parse_wing_project(
 	init_path: &Path,
-	init_text: Option<String>,
+	init_text: String,
 	files: &mut Files,
 	file_graph: &mut FileGraph,
 	tree_sitter_trees: &mut IndexMap<PathBuf, tree_sitter::Tree>,
 	asts: &mut IndexMap<PathBuf, Scope>,
 ) -> Vec<PathBuf> {
-	// Fetch the initial file's text from disk if it wasn't passed in directly
-	let source_text = init_text.unwrap_or_else(|| match fs::read_to_string(&init_path) {
-		Ok(text) => text,
-		Err(e) => {
-			report_diagnostic(Diagnostic {
-				message: format!("Could not read file \"{}\": {}", init_path.display(), e),
-				span: None,
-			});
-			String::new()
-		}
-	});
-
 	// Parse the initial file (even if we have already seen it before)
-	let (tree_sitter_tree, ast, dependent_wing_files) = parse_wing_file(init_path, &source_text);
+	let (tree_sitter_tree, ast, dependent_wing_files) = parse_wing_file(init_path, &init_text);
 
 	// Update our files collection with the new source text. For a fresh compilation,
 	// this will be the first time we've seen this file. In the LSP we might already have
 	// text from a previous compilation, so we'll replace the contents.
-	files.update_file(&init_path, source_text);
+	files.update_file(&init_path, init_text);
 
 	// Update our collections of trees and ASTs and our file graph
 	tree_sitter_trees.insert(init_path.to_owned(), tree_sitter_tree);
