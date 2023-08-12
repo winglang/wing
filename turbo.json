@@ -57,6 +57,7 @@
       ]
     },
     "post-compile": {
+      "inputs": [""],
       "dependsOn": ["compile"]
     },
     "lint": {
@@ -88,13 +89,12 @@
     "package": {
       "dependsOn": ["compile", "post-compile"],
       "env": ["PROJEN_BUMP_VERSION"],
-      "inputs": ["package.json"]
+      "inputs": [""]
     },
     "hangar": {
       "dependsOn": ["hangar#test"]
     },
     "topo": {
-      "inputs": [],
       "dependsOn": ["^topo"]
     },
     "examples-tests": {
@@ -107,7 +107,6 @@
     },
     "test:generate": {
       "dependsOn": ["topo"],
-      "inputs": []
     }
   }
 }
