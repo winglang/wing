@@ -148,5 +148,3 @@ Contributions are made under our [contribution license](./CONTRIBUTION_LICENSE.m
 Happy coding, and remember: the sky's the limit with Wing (yes, another pun)! 🌤️🚀
 
 [wing slack]: https://t.winglang.io/slack
-
-<!-- Test -->
