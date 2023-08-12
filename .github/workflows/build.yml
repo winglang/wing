@@ -54,25 +54,6 @@ jobs:
           cache: "pnpm"
           node-version: ${{ env.NODE_VERSION }}
 
-      - name: Install Dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Derive appropriate SHAs for base and head
-        id: shas
-        env:
-          ACTIONS_STEP_DEBUG: "true"
-        uses: MarkMcCulloh/nx-set-shas@main
-
-      - name: Turbo diff
-        id: turbo-diff
-        run: scripts/turbo_diff.mjs --startRef ${{ steps.shas.outputs.base }} --endRef ${{ steps.shas.outputs.head }}
-
-      - name: Changelog Generation
-        id: changelog
-        env:
-          GENERATE_VERSION: ${{ github.event_name != 'push' || github.repository != 'winglang/wing' }}
-        run: pnpm changelog
-
       - name: Install Rust
         uses: dtolnay/rust-toolchain@master
         with:
@@ -84,6 +65,26 @@ jobs:
 
       - name: Setup Cargo Cache
         uses: Swatinem/rust-cache@v2
+        with:
+          # Don't save cache here, to avoid thrashing with test job
+          save-if: "false"
+
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Derive appropriate SHAs for base and head
+        id: shas
+        uses: MarkMcCulloh/nx-set-shas@main
+
+      - name: Turbo diff
+        id: turbo-diff
+        run: scripts/turbo_diff.mjs --startRef ${{ steps.shas.outputs.base }} --endRef ${{ steps.shas.outputs.head }}
+
+      - name: Changelog Generation
+        id: changelog
+        env:
+          GENERATE_VERSION: ${{ github.event_name != 'push' || github.repository != 'winglang/wing' }}
+        run: pnpm changelog
 
       - name: Build and Package
         run: pnpm package:ci
