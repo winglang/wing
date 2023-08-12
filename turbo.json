@@ -106,7 +106,7 @@
       ]
     },
     "test:generate": {
-      "dependsOn": ["topo"],
+      "dependsOn": ["topo"]
     }
   }
 }
