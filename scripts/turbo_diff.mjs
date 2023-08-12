@@ -58,13 +58,11 @@ const turboArgs = [
   "--dry-run=json",
 ];
 
-const result = JSON.parse(myExec(turboArgs.join(" ")));
+const turboOutput = JSON.parse(myExec(turboArgs.join(" ")));
 
-const data = {};
+const taskData = {};
 
-for (const task of result.tasks) {
-  data[task.taskId] = task.cache.status !== "HIT";
-
+for (const task of turboOutput.tasks) {
   // double check that all the changes files based on git are actually included in all these tasks
   const absoluteTaskRoot = join(rootDir, task.directory);
   const relativeChanges = changedFiles
@@ -74,15 +72,27 @@ for (const task of result.tasks) {
   const anyChanges = relativeChanges.some((file) =>
     Object.keys(task.inputs).includes(file)
   );
-  data[task.taskId] = {
+  taskData[task.taskId] = {
     cached: task.cache.status === "HIT",
     changes: anyChanges,
   };
 }
 
-// TODO check global dependencies
+const globalDeps = Object.keys(turboOutput.globalCacheInputs);
+for (const changedFile in changedFiles) {
+  if (globalDeps.includes(changedFile)) {
+    for (const taskId in taskData) {
+      taskData[taskId].changes = true;
+    }
+    break;
+  }
+}
 
-for (const task of result.tasks) {
+for (const task of turboOutput.tasks) {
+  const dataEntry = taskData[task.taskId];
+  if (dataEntry.changes) {
+    continue;
+  }
   let dependencies = task.dependencies;
   if (task.package === "hangar") {
     // ignore the wing console
@@ -92,12 +102,11 @@ for (const task of result.tasks) {
     );
   }
   for (const dependency of dependencies) {
-    data[task.taskId].changes =
-      data[task.taskId].changes || data[dependency].changes;
+    dataEntry.changes = dataEntry.changes || taskData[dependency].changes;
   }
 }
 
-console.log(data);
+console.log(taskData);
 
 if (!!process.env.GITHUB_ACTIONS) {
   // we are running in a github action and we should output some useful stuff
@@ -106,5 +115,5 @@ if (!!process.env.GITHUB_ACTIONS) {
     throw new Error("Missing github action environment variables");
   }
 
-  appendFileSync(githubOutputFile, `data=${JSON.stringify(data)}\n`);
+  appendFileSync(githubOutputFile, `data=${JSON.stringify(taskData)}\n`);
 }
