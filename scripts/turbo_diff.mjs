@@ -32,7 +32,7 @@ const args = parseArgs({
   },
 });
 
-let changedFiles = myExec(
+let relativeChangedFiles = myExec(
   `git diff --name-only ${args.values.startRef} ${args.values.endRef}`
 ).split("\n");
 
@@ -42,11 +42,13 @@ if (args.values.endRef === "") {
     "\n"
   );
 
-  changedFiles = changedFiles.concat(OtherChangedFiles);
+  relativeChangedFiles = relativeChangedFiles.concat(OtherChangedFiles);
 }
 
 // resolve to absolute paths
-changedFiles = changedFiles.map((file) => join(rootDir, file));
+const absoluteChangedFiles = relativeChangedFiles.map((file) =>
+  join(rootDir, file)
+);
 
 const turboArgs = [
   "pnpm",
@@ -65,11 +67,11 @@ const taskData = {};
 for (const task of turboOutput.tasks) {
   // double check that all the changes files based on git are actually included in all these tasks
   const absoluteTaskRoot = join(rootDir, task.directory);
-  const relativeChanges = changedFiles
+  const changesRelativeToTask = absoluteChangedFiles
     .map((file) => file.replace(absoluteTaskRoot + "/", ""))
     .filter((file) => !file.startsWith("/"));
 
-  const anyChanges = relativeChanges.some((file) =>
+  const anyChanges = changesRelativeToTask.some((file) =>
     Object.keys(task.inputs).includes(file)
   );
   taskData[task.taskId] = {
@@ -78,8 +80,8 @@ for (const task of turboOutput.tasks) {
   };
 }
 
-const globalDeps = Object.keys(turboOutput.globalCacheInputs);
-for (const changedFile in changedFiles) {
+const globalDeps = Object.keys(turboOutput.globalCacheInputs.files);
+for (const changedFile of relativeChangedFiles) {
   if (globalDeps.includes(changedFile)) {
     for (const taskId in taskData) {
       taskData[taskId].changes = true;
