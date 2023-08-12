@@ -6,5 +6,3 @@ describe("env", () => {
     expect(Util.env("NODE_ENV")).toBe("test");
   });
 });
-
-// test change
