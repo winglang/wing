@@ -61,7 +61,7 @@ jobs:
         id: setSHAs
         uses: nrwl/nx-set-shas@v3
         with:
-          last-successful-event: ${{ github.event_name }}
+          set-environment-variables-for-job: false
 
       - name: Turbo diff
         id: turbo-diff
