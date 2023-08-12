@@ -58,14 +58,14 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Derive appropriate SHAs for base and head
-        id: setSHAs
-        uses: nrwl/nx-set-shas@v3
-        with:
-          set-environment-variables-for-job: false
+        id: shas
+        env:
+          ACTIONS_STEP_DEBUG: "true"
+        uses: MarkMcCulloh/nx-set-shas@d8916cdddc14d930a0bd8ed6c3b7e3d4c3f26874
 
       - name: Turbo diff
         id: turbo-diff
-        run: scripts/turbo_diff.mjs --startRef ${{ steps.setSHAs.outputs.base }} --endRef ${{ steps.setSHAs.outputs.head }}
+        run: scripts/turbo_diff.mjs --startRef ${{ steps.shas.outputs.base }} --endRef ${{ steps.shas.outputs.head }}
 
       - name: Changelog Generation
         id: changelog
