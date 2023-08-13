@@ -8,12 +8,17 @@ RUN apt-get update && \
     git \
     gnupg \
     # emscripten \
-    clang-15 \
+    xz-utils \
+    libncurses5 \
     software-properties-common
 
 RUN curl -fsSL https://deb.nodesource.com/setup_current.x | bash - && \
     apt-get install -y nodejs \
     build-essential
+
+RUN curl -SL https://github.com/llvm/llvm-project/releases/download/llvmorg-15.0.0/clang+llvm-15.0.0-x86_64-linux-gnu-rhel-8.4.tar.xz \
+ | tar -xJC . && \
+    mv clang+llvm-15.0.0-x86_64-linux-gnu-rhel-8.4 clang_15
 
 RUN wget -O- https://apt.releases.hashicorp.com/gpg | \
     gpg --dearmor | \
@@ -42,7 +47,8 @@ COPY . .
 RUN mkdir .cargo
 RUN CARGO_GIT_FETCH_WITH_CLI=true pnpm install --no-frozen-lockfile
 
-ENV PATH "$PATH:/emsdk:/emsdk/upstream/emscripten"
+ENV PATH "$PATH:/emsdk:/emsdk/upstream/emscripten:/clang_15/bin"
+ENV LD_LIBRARY_PATH "$LD_LIBRARY_PATH:/clang_15/lib"
 
 RUN CARGO_GIT_FETCH_WITH_CLI=true pnpm turbo compile --filter @wingconsole/app --concurrency=1
 
