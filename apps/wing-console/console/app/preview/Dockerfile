@@ -55,7 +55,7 @@ ENV PATH "$PATH:/emsdk:/emsdk/upstream/emscripten:/app/.cargo/wasi-sdk-19.0/bin"
 # ENV C_INCLUDE_PATH "/app/.cargo/wasi-sdk-19.0/share:$C_INCLUDE_PATH"
 ENV WASI_SDK "/app/.cargo/wasi-sdk-19.0"
 ENV CC_wasm32_wasi "/app/.cargo/wasi-sdk-19.0/bin/clang"
-ENV AR_wasm32_wasi "/app.cargo/wasi-sdk-19.0/bin/ar"
+ENV AR_wasm32_wasi "/app/.cargo/wasi-sdk-19.0/bin/ar"
 
 RUN CARGO_GIT_FETCH_WITH_CLI=true pnpm turbo compile --filter @wingconsole/app --concurrency=1
 
