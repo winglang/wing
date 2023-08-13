@@ -12,6 +12,7 @@ RUN apt-get update && \
     libncurses5 \
     libc6-dev \
     libstdc++-9-dev \
+    musl-dev \
     software-properties-common
 
 RUN curl -fsSL https://deb.nodesource.com/setup_current.x | bash - && \
@@ -50,7 +51,7 @@ RUN mkdir .cargo
 RUN CARGO_GIT_FETCH_WITH_CLI=true pnpm install --no-frozen-lockfile
 
 ENV PATH "$PATH:/emsdk:/emsdk/upstream/emscripten:/clang_15/bin"
-ENV LD_LIBRARY_PATH "$LD_LIBRARY_PATH:/clang_15/lib"
+ENV LD_LIBRARY_PATH "/clang_15/lib:$LD_LIBRARY_PATH"
 
 RUN CARGO_GIT_FETCH_WITH_CLI=true pnpm turbo compile --filter @wingconsole/app --concurrency=1
 
