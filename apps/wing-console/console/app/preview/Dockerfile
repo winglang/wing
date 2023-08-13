@@ -50,9 +50,9 @@ COPY . .
 RUN mkdir .cargo
 RUN CARGO_GIT_FETCH_WITH_CLI=true pnpm install --no-frozen-lockfile
 
-ENV PATH "$PATH:/emsdk:/emsdk/upstream/emscripten:/clang_15/bin"
-ENV LD_LIBRARY_PATH "/clang_15/lib:$LD_LIBRARY_PATH"
-ENV C_INCLUDE_PATH "/clang_15/include:$C_INCLUDE_PATH"
+ENV PATH "$PATH:/emsdk:/emsdk/upstream/emscripten:/app/.cargo/wasi-sdk-19.0/bin"
+ENV LD_LIBRARY_PATH "/app/.cargo/wasi-sdk-19.0/lib:$LD_LIBRARY_PATH"
+ENV C_INCLUDE_PATH "/app/.cargo/wasi-sdk-19.0/share:$C_INCLUDE_PATH"
 
 RUN CARGO_GIT_FETCH_WITH_CLI=true pnpm turbo compile --filter @wingconsole/app --concurrency=1
 
