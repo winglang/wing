@@ -1,4 +1,4 @@
-FROM rust:1.71
+FROM rust:1.71 as base
 
 RUN apt-get update && \
     apt-get install -yq --no-install-recommends \
@@ -60,6 +60,15 @@ ENV AR_wasm32_wasi "/app/.cargo/wasi-sdk-19.0/bin/ar"
 RUN CARGO_GIT_FETCH_WITH_CLI=true pnpm turbo compile --filter @wingconsole/app --concurrency=1
 RUN pnpm --filter @wingconsole/app deploy --prod pruned
 
+FROM node:20-alpine
+
+WORKDIR /app
+
+COPY --from=base /app/pruned/dist dist
+COPY --from=base /app/wing/apps/wing-console/console/app/preview preview
+COPY --from=base /app/pruned/node_modules node_modules
+
+ENTRYPOINT ["node", "preview/index.mjs"]
 
 # RUN apt-get install -y gcc python3 make
 
