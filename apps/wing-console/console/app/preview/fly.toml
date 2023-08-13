@@ -1,0 +1,22 @@
+[build]
+  dockerfile = "Dockerfile"
+  ignorefile = ".dockerignore"
+
+[[services]]
+  protocol = "tcp"
+  internal_port = 3000
+  auto_stop_machines = false
+  auto_start_machines = false
+  min_machines_running = 1
+
+  [[services.ports]]
+    port = 80
+    handlers = ["http"]
+
+  [[services.ports]]
+    port = 443
+    handlers = ["tls", "http"]
+
+[metrics]
+  port = 3000
+  path = "/metrics"
