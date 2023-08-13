@@ -28,7 +28,6 @@ test("create a queue", async () => {
     },
     path: "root/my_queue",
     props: {
-      initialMessages: [],
       timeout: 10,
       retentionPeriod: 3600,
     },
@@ -96,11 +95,32 @@ test("queue batch size of 2, purge the queue", async () => {
 test("queue with one subscriber, batch size of 5", async () => {
   // GIVEN
   const app = new SimApp();
+
+  const queue = cloud.Queue._newQueue(app, "my_queue");
   const handler = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
-  const queue = cloud.Queue._newQueue(app, "my_queue", {
-    initialMessages: ["A", "B", "C", "D", "E", "F"],
-  });
   queue.setConsumer(handler, { batchSize: 5 });
+
+  // initialize the queue with some messages
+  const onDeployHandler = Testing.makeHandler(
+    app,
+    "OnDeployHandler",
+    `async handle() {
+  await this.queue.push("A");
+  await this.queue.push("B");
+  await this.queue.push("C");
+  await this.queue.push("D");
+  await this.queue.push("E");
+  await this.queue.push("F");
+}`,
+    {
+      queue: {
+        obj: queue,
+        ops: [cloud.QueueInflightMethods.PUSH],
+      },
+    }
+  );
+  cloud.OnDeploy._newOnDeploy(app, "my_queue_messages", onDeployHandler);
+
   const s = await app.startSimulator();
 
   // WHEN
@@ -125,7 +145,7 @@ test("messages are requeued if the function fails after timeout", async () => {
 
   // warm up the function so timing is more predictable
   const fn = s.getResource(
-    "root/my_queue-SetConsumer-e645076f"
+    "root/my_queue/my_queue-SetConsumer-e645076f"
   ) as cloud.IFunctionClient;
   await fn.invoke(JSON.stringify({ messages: [] }));
 
@@ -161,7 +181,7 @@ test("messages are not requeued if the function fails before timeout", async () 
 
   // warm up the function so timing is more predictable
   const fn = s.getResource(
-    "root/my_queue-SetConsumer-e645076f"
+    "root/my_queue/my_queue-SetConsumer-e645076f"
   ) as cloud.IFunctionClient;
   await fn.invoke(JSON.stringify({ messages: [] }));
 
@@ -204,7 +224,7 @@ test("messages are not requeued if the function fails after retention timeout", 
 
   // warm up the function so timing is more predictable
   const fn = s.getResource(
-    "root/my_queue-SetConsumer-e645076f"
+    "root/my_queue/my_queue-SetConsumer-e645076f"
   ) as cloud.IFunctionClient;
   await fn.invoke(JSON.stringify({ messages: [] }));
 
@@ -276,17 +296,22 @@ test("queue has display title and description properties", async () => {
   });
 });
 
-test("queue pops messages", async () => {
+test("can pop messages from queue", async () => {
   // GIVEN
   const app = new SimApp();
   const messages = ["A", "B", "C", "D", "E", "F"];
-  cloud.Queue._newQueue(app, "my_queue", {
-    initialMessages: messages,
-  });
+  cloud.Queue._newQueue(app, "my_queue");
 
   // WHEN
   const s = await app.startSimulator();
   const queueClient = s.getResource("/my_queue") as cloud.IQueueClient;
+
+  // initialize the messages
+  for (const message of messages) {
+    await queueClient.push(message);
+  }
+
+  // try popping them
   const poppedMessages: Array<string | undefined> = [];
   for (let i = 0; i < messages.length; i++) {
     poppedMessages.push(await queueClient.pop());
@@ -299,7 +324,7 @@ test("queue pops messages", async () => {
   expect(poppedOnEmptyQueue).toBeUndefined();
 });
 
-test("empty queue pops nothing", async () => {
+test("pop from empty queue returns nothing", async () => {
   // GIVEN
   const app = new SimApp();
   cloud.Queue._newQueue(app, "my_queue");

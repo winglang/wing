@@ -1,6 +1,6 @@
 # [options.w](../../../../../../examples/tests/sdk_tests/api/options.w) | compile | tf-aws
 
-## inflight.$Closure1-430ae1b7.js
+## inflight.$Closure1-1.js
 ```js
 module.exports = function({ $cloud_HttpMethod, $path }) {
   class $Closure1 {
@@ -21,7 +21,7 @@ module.exports = function({ $cloud_HttpMethod, $path }) {
 
 ```
 
-## inflight.$Closure2-430ae1b7.js
+## inflight.$Closure2-1.js
 ```js
 module.exports = function({ $cloud_HttpMethod, $path }) {
   class $Closure2 {
@@ -42,7 +42,7 @@ module.exports = function({ $cloud_HttpMethod, $path }) {
 
 ```
 
-## inflight.$Closure3-430ae1b7.js
+## inflight.$Closure3-1.js
 ```js
 module.exports = function({  }) {
   class $Closure3 {
@@ -60,7 +60,7 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.$Closure4-430ae1b7.js
+## inflight.$Closure4-1.js
 ```js
 module.exports = function({ $api_url, $http_HttpMethod, $http_Util, $path }) {
   class $Closure4 {
@@ -517,7 +517,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1-430ae1b7.js")({
+          require("./inflight.$Closure1-1.js")({
             $cloud_HttpMethod: ${context._lift(cloud.HttpMethod)},
             $path: ${context._lift(path)},
           })
@@ -549,7 +549,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure2-430ae1b7.js")({
+          require("./inflight.$Closure2-1.js")({
             $cloud_HttpMethod: ${context._lift(cloud.HttpMethod)},
             $path: ${context._lift(path)},
           })
@@ -581,7 +581,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure3-430ae1b7.js")({
+          require("./inflight.$Closure3-1.js")({
           })
         `);
       }
@@ -605,7 +605,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure4-430ae1b7.js")({
+          require("./inflight.$Closure4-1.js")({
             $api_url: ${context._lift(api.url)},
             $http_HttpMethod: ${context._lift(http.HttpMethod)},
             $http_Util: ${context._lift(http.Util)},

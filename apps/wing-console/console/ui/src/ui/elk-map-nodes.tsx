@@ -1,7 +1,7 @@
 import { useTheme, IconComponent } from "@wingconsole/design-system";
-import { BaseResourceSchema } from "@wingconsole/server";
+import { BaseResourceSchema, NodeDisplay } from "@wingconsole/server";
 import classNames from "classnames";
-import { PropsWithChildren } from "react";
+import { PropsWithChildren, useMemo } from "react";
 
 const getResourceBorderColor = (
   resourceType: BaseResourceSchema["type"] | undefined,
@@ -46,6 +46,7 @@ const getResourceBorderColor = (
 export interface ContainerNodeProps {
   nodeId: string;
   name: string | undefined;
+  display?: NodeDisplay;
   icon?: IconComponent;
   open?: boolean;
   hideBottomBar?: boolean;
@@ -65,10 +66,19 @@ export const ContainerNode = ({
   onMouseEnter,
   resourceType,
   depth,
+  display,
   ...props
 }: PropsWithChildren<ContainerNodeProps>) => {
   const { theme } = useTheme();
   const borderColor = getResourceBorderColor(resourceType);
+
+  const compilerNamed = useMemo(() => {
+    if (!display) {
+      return false;
+    }
+    return display.sourceModule === "@winglang/sdk" && display.title;
+  }, [display]);
+
   return (
     // TODO: Fix a11y
     // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
@@ -147,13 +157,14 @@ export const ContainerNode = ({
             <div
               className={classNames(
                 "leading-tight",
-                "text-xs",
                 "truncate",
                 "transition-all",
-                theme.text1,
+                "text-xs",
+                compilerNamed && ["text-slate-600 dark:text-slate-350"],
+                !compilerNamed && [theme.text1],
               )}
             >
-              {props.name}
+              {compilerNamed ? display?.title : props.name}
             </div>
           </div>
         </div>

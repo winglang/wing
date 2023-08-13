@@ -32,10 +32,9 @@ export class Counter extends cloud.Counter implements ISimulatorResource {
     return schema;
   }
 
-  /** @internal */
-  public _bind(host: IInflightHost, ops: string[]): void {
+  public bind(host: IInflightHost, ops: string[]): void {
     bindSimulatorResource(__filename, this, host);
-    super._bind(host, ops);
+    super.bind(host, ops);
   }
 
   /** @internal */

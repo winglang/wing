@@ -1,6 +1,6 @@
 # [get.w](../../../../../../examples/tests/sdk_tests/api/get.w) | compile | tf-aws
 
-## inflight.$Closure1-831a9f01.js
+## inflight.$Closure1-1.js
 ```js
 module.exports = function({ $body, $cloud_HttpMethod }) {
   class $Closure1 {
@@ -22,7 +22,7 @@ module.exports = function({ $body, $cloud_HttpMethod }) {
 
 ```
 
-## inflight.$Closure2-831a9f01.js
+## inflight.$Closure2-1.js
 ```js
 module.exports = function({ $api_url, $body, $http_HttpMethod, $http_Util }) {
   class $Closure2 {
@@ -329,7 +329,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1-831a9f01.js")({
+          require("./inflight.$Closure1-1.js")({
             $body: ${context._lift(body)},
             $cloud_HttpMethod: ${context._lift(cloud.HttpMethod)},
           })
@@ -361,7 +361,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure2-831a9f01.js")({
+          require("./inflight.$Closure2-1.js")({
             $api_url: ${context._lift(api.url)},
             $body: ${context._lift(body)},
             $http_HttpMethod: ${context._lift(http.HttpMethod)},

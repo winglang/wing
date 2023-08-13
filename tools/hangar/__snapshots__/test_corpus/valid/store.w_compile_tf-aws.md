@@ -1,6 +1,38 @@
 # [store.w](../../../../../examples/tests/valid/store.w) | compile | tf-aws
 
-## inflight.$Closure1-dd1a0085.js
+## Point.Struct.js
+```js
+module.exports = function(stdStruct, fromInline) {
+  class Point {
+    static jsonSchema() {
+      return {
+        id: "/Point",
+        type: "object",
+        properties: {
+          x: { type: "number" },
+          y: { type: "number" },
+        },
+        required: [
+          "x",
+          "y",
+        ],
+        $defs: {
+        }
+      }
+    }
+    static fromJson(obj) {
+      return stdStruct._validate(obj, this.jsonSchema())
+    }
+    static _toInflightType(context) {
+      return fromInline(`require("./Point.Struct.js")(${ context._lift(stdStruct) })`);
+    }
+  }
+  return Point;
+};
+
+```
+
+## inflight.$Closure1-1.js
 ```js
 module.exports = function({ $__parent_this_1_b }) {
   class $Closure1 {
@@ -18,7 +50,7 @@ module.exports = function({ $__parent_this_1_b }) {
 
 ```
 
-## inflight.Store-dd1a0085.js
+## inflight.Store-1.js
 ```js
 module.exports = function({  }) {
   class Store {
@@ -34,7 +66,7 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.Util-dd1a0085.js
+## inflight.Util-1.js
 ```js
 module.exports = function({  }) {
   class Util {
@@ -106,7 +138,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.Util-dd1a0085.js")({
+          require("./inflight.Util-1.js")({
           })
         `);
       }
@@ -136,7 +168,7 @@ class $Root extends $stdlib.std.Resource {
           }
           static _toInflightType(context) {
             return $stdlib.core.NodeJsCode.fromInline(`
-              require("./inflight.$Closure1-dd1a0085.js")({
+              require("./inflight.$Closure1-1.js")({
                 $__parent_this_1_b: ${context._lift(__parent_this_1.b)},
               })
             `);
@@ -163,7 +195,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.Store-dd1a0085.js")({
+          require("./inflight.Store-1.js")({
           })
         `);
       }
@@ -197,6 +229,7 @@ class $Root extends $stdlib.std.Resource {
         return tmp;
       })({})
     ;
+    const Point = require("./Point.Struct.js")($stdlib.std.Struct, $stdlib.core.NodeJsCode.fromInline);
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);

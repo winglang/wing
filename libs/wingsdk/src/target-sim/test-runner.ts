@@ -31,10 +31,9 @@ export class TestRunner extends std.TestRunner implements ISimulatorResource {
     return schema;
   }
 
-  /** @internal */
-  public _bind(host: IInflightHost, ops: string[]): void {
+  public bind(host: IInflightHost, ops: string[]): void {
     bindSimulatorResource("test-runner", this, host);
-    super._bind(host, ops);
+    super.bind(host, ops);
   }
 
   /** @internal */

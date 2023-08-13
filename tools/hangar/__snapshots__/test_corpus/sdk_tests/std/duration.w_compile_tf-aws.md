@@ -1,6 +1,6 @@
 # [duration.w](../../../../../../examples/tests/sdk_tests/std/duration.w) | compile | tf-aws
 
-## inflight.$Closure1-d7689ded.js
+## inflight.$Closure1-1.js
 ```js
 module.exports = function({ $std_Duration }) {
   class $Closure1 {
@@ -175,7 +175,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1-d7689ded.js")({
+          require("./inflight.$Closure1-1.js")({
             $std_Duration: ${context._lift(std.Duration)},
           })
         `);

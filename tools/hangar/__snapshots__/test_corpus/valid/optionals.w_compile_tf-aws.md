@@ -1,6 +1,70 @@
 # [optionals.w](../../../../../examples/tests/valid/optionals.w) | compile | tf-aws
 
-## inflight.$Closure1-574184ca.js
+## Name.Struct.js
+```js
+module.exports = function(stdStruct, fromInline) {
+  class Name {
+    static jsonSchema() {
+      return {
+        id: "/Name",
+        type: "object",
+        properties: {
+          first: { type: "string" },
+          last: { type: "string" },
+        },
+        required: [
+          "first",
+        ],
+        $defs: {
+        }
+      }
+    }
+    static fromJson(obj) {
+      return stdStruct._validate(obj, this.jsonSchema())
+    }
+    static _toInflightType(context) {
+      return fromInline(`require("./Name.Struct.js")(${ context._lift(stdStruct) })`);
+    }
+  }
+  return Name;
+};
+
+```
+
+## Payload.Struct.js
+```js
+module.exports = function(stdStruct, fromInline) {
+  class Payload {
+    static jsonSchema() {
+      return {
+        id: "/Payload",
+        type: "object",
+        properties: {
+          a: { type: "string" },
+          b: { type: "object", patternProperties: { ".*": { type: "string" } } },
+          c: { "$ref": "#/$defs/cloud" },
+        },
+        required: [
+          "a",
+        ],
+        $defs: {
+          "cloud": { type: "object", "properties": require("./cloud.Struct.js")().jsonSchema().properties },
+        }
+      }
+    }
+    static fromJson(obj) {
+      return stdStruct._validate(obj, this.jsonSchema())
+    }
+    static _toInflightType(context) {
+      return fromInline(`require("./Payload.Struct.js")(${ context._lift(stdStruct) })`);
+    }
+  }
+  return Payload;
+};
+
+```
+
+## inflight.$Closure1-1.js
 ```js
 module.exports = function({ $__payloadWithBucket_c_____null_, $__payloadWithoutOptions_b_____null_, $payloadWithBucket_c }) {
   class $Closure1 {
@@ -21,7 +85,7 @@ module.exports = function({ $__payloadWithBucket_c_____null_, $__payloadWithoutO
 
 ```
 
-## inflight.Node-574184ca.js
+## inflight.Node-1.js
 ```js
 module.exports = function({  }) {
   class Node {
@@ -33,7 +97,7 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.Sub-574184ca.js
+## inflight.Sub-1.js
 ```js
 module.exports = function({ $Super }) {
   class Sub extends $Super {
@@ -46,7 +110,7 @@ module.exports = function({ $Super }) {
 
 ```
 
-## inflight.Sub1-574184ca.js
+## inflight.Sub1-1.js
 ```js
 module.exports = function({ $Super }) {
   class Sub1 extends $Super {
@@ -59,7 +123,7 @@ module.exports = function({ $Super }) {
 
 ```
 
-## inflight.Super-574184ca.js
+## inflight.Super-1.js
 ```js
 module.exports = function({  }) {
   class Super {
@@ -254,7 +318,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.Super-574184ca.js")({
+          require("./inflight.Super-1.js")({
           })
         `);
       }
@@ -278,7 +342,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.Sub-574184ca.js")({
+          require("./inflight.Sub-1.js")({
             $Super: ${context._lift(Super)},
           })
         `);
@@ -303,7 +367,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.Sub1-574184ca.js")({
+          require("./inflight.Sub1-1.js")({
             $Super: ${context._lift(Super)},
           })
         `);
@@ -330,7 +394,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.Node-574184ca.js")({
+          require("./inflight.Node-1.js")({
           })
         `);
       }
@@ -354,7 +418,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1-574184ca.js")({
+          require("./inflight.$Closure1-1.js")({
             $__payloadWithBucket_c_____null_: ${context._lift(((payloadWithBucket.c) != null))},
             $__payloadWithoutOptions_b_____null_: ${context._lift(((payloadWithoutOptions.b) != null))},
             $payloadWithBucket_c: ${context._lift(payloadWithBucket.c)},
@@ -390,6 +454,7 @@ class $Root extends $stdlib.std.Resource {
     const optionalSup = new Super(this,"Super");
     const s = (optionalSup ?? new Sub(this,"Sub"));
     {((cond) => {if (!cond) throw new Error("assertion failed: s.name == \"Super\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(s.name,"Super")))};
+    const Name = require("./Name.Struct.js")($stdlib.std.Struct, $stdlib.core.NodeJsCode.fromInline);
     let name = ({"first": "John","last": "Doe"});
     {
       const $IF_LET_VALUE = name;
@@ -503,6 +568,7 @@ class $Root extends $stdlib.std.Resource {
         {((cond) => {if (!cond) throw new Error("assertion failed: o.value == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(o.value,1)))};
       }
     }
+    const Payload = require("./Payload.Struct.js")($stdlib.std.Struct, $stdlib.core.NodeJsCode.fromInline);
     const payloadWithoutOptions = ({"a": "a"});
     const payloadWithBucket = ({"a": "a","c": this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"orange bucket")});
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:t",new $Closure1(this,"$Closure1"));

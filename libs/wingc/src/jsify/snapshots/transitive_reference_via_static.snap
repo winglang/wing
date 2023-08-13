@@ -28,7 +28,7 @@ source: libs/wingc/src/jsify/tests.rs
     
 ```
 
-## inflight.$Closure1-220cc4cd.js
+## inflight.$Closure1-1.js
 
 ```js
 module.exports = function({ $t }) {
@@ -46,7 +46,7 @@ module.exports = function({ $t }) {
 }
 ```
 
-## inflight.MyType-220cc4cd.js
+## inflight.MyType-1.js
 
 ```js
 module.exports = function({ $b }) {
@@ -61,7 +61,7 @@ module.exports = function({ $b }) {
 }
 ```
 
-## inflight.YourType-220cc4cd.js
+## inflight.YourType-1.js
 
 ```js
 module.exports = function({ $MyType }) {
@@ -94,7 +94,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.MyType-220cc4cd.js")({
+          require("./inflight.MyType-1.js")({
             $b: ${context._lift(b)},
           })
         `);
@@ -124,7 +124,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.YourType-220cc4cd.js")({
+          require("./inflight.YourType-1.js")({
             $MyType: ${context._lift(MyType)},
           })
         `);
@@ -155,7 +155,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1-220cc4cd.js")({
+          require("./inflight.$Closure1-1.js")({
             $t: ${context._lift(t)},
           })
         `);

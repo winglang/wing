@@ -2200,6 +2200,35 @@ Test Files 1 failed (1)
 Duration <DURATION>"
 `;
 
+exports[`struct_json_conversion.w 1`] = `
+"error: Struct \\"A\\" contains field \\"b\\" which cannot be represented in Json
+  --> ../../../examples/tests/invalid/struct_json_conversion.w:8:3
+  |
+8 | A.fromJson({});
+  |   ^^^^^^^^ Struct \\"A\\" contains field \\"b\\" which cannot be represented in Json
+
+
+error: Struct \\"B\\" contains field \\"a\\" which cannot be represented in Json
+   --> ../../../examples/tests/invalid/struct_json_conversion.w:15:3
+   |
+15 | B.fromJson({});
+   |   ^^^^^^^^ Struct \\"B\\" contains field \\"a\\" which cannot be represented in Json
+
+
+error: Struct \\"C\\" contains field \\"b\\" which cannot be represented in Json
+   --> ../../../examples/tests/invalid/struct_json_conversion.w:22:3
+   |
+22 | C.fromJson({});
+   |   ^^^^^^^^ Struct \\"C\\" contains field \\"b\\" which cannot be represented in Json
+
+
+ 
+ 
+Tests 1 failed (1)
+Test Files 1 failed (1)
+Duration <DURATION>"
+`;
+
 exports[`structs.w 1`] = `
 "error: Struct \\"C\\" extends \\"B\\" which introduces a conflicting member \\"x\\" (str != str)
    --> ../../../examples/tests/invalid/structs.w:11:8

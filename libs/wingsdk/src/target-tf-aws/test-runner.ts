@@ -29,8 +29,7 @@ export class TestRunner extends std.TestRunner {
     output.overrideLogicalId(OUTPUT_TEST_RUNNER_FUNCTION_ARNS);
   }
 
-  /** @internal */
-  public _bind(host: std.IInflightHost, ops: string[]): void {
+  public bind(host: std.IInflightHost, ops: string[]): void {
     if (!(host instanceof AwsFunction)) {
       throw new Error("TestRunner can only be bound by tfaws.Function for now");
     }
@@ -50,7 +49,7 @@ export class TestRunner extends std.TestRunner {
       JSON.stringify([...testFunctions.entries()])
     );
 
-    super._bind(host, ops);
+    super.bind(host, ops);
   }
 
   /** @internal */

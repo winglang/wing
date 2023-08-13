@@ -1,24 +1,38 @@
 # [bring_local.w](../../../../../examples/tests/valid/bring_local.w) | compile | tf-aws
 
-## inflight.$Closure1-19981082.js
+## Point.Struct.js
 ```js
-module.exports = function({ $store }) {
-  class $Closure1 {
-    constructor({  }) {
-      const $obj = (...args) => this.handle(...args);
-      Object.setPrototypeOf($obj, this);
-      return $obj;
+module.exports = function(stdStruct, fromInline) {
+  class Point {
+    static jsonSchema() {
+      return {
+        id: "/Point",
+        type: "object",
+        properties: {
+          x: { type: "number" },
+          y: { type: "number" },
+        },
+        required: [
+          "x",
+          "y",
+        ],
+        $defs: {
+        }
+      }
     }
-    async handle() {
-      (await $store.store("foo"));
+    static fromJson(obj) {
+      return stdStruct._validate(obj, this.jsonSchema())
+    }
+    static _toInflightType(context) {
+      return fromInline(`require("./Point.Struct.js")(${ context._lift(stdStruct) })`);
     }
   }
-  return $Closure1;
-}
+  return Point;
+};
 
 ```
 
-## inflight.$Closure1-dd1a0085.js
+## inflight.$Closure1-1.js
 ```js
 module.exports = function({ $__parent_this_1_b }) {
   class $Closure1 {
@@ -36,7 +50,25 @@ module.exports = function({ $__parent_this_1_b }) {
 
 ```
 
-## inflight.Q-40b852c3.js
+## inflight.$Closure1-3.js
+```js
+module.exports = function({ $store }) {
+  class $Closure1 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async handle() {
+      (await $store.store("foo"));
+    }
+  }
+  return $Closure1;
+}
+
+```
+
+## inflight.Q-2.js
 ```js
 module.exports = function({  }) {
   class Q {
@@ -48,7 +80,7 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.Store-dd1a0085.js
+## inflight.Store-1.js
 ```js
 module.exports = function({  }) {
   class Store {
@@ -64,7 +96,7 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.Triangle-19981082.js
+## inflight.Triangle-3.js
 ```js
 module.exports = function({  }) {
   class Triangle {
@@ -76,7 +108,7 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.Util-19981082.js
+## inflight.Util-1.js
 ```js
 module.exports = function({  }) {
   class Util {
@@ -88,7 +120,7 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.Util-dd1a0085.js
+## inflight.Util-3.js
 ```js
 module.exports = function({  }) {
   class Util {
@@ -377,7 +409,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1-19981082.js")({
+          require("./inflight.$Closure1-3.js")({
             $store: ${context._lift(store)},
           })
         `);
@@ -410,7 +442,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.Triangle-19981082.js")({
+          require("./inflight.Triangle-3.js")({
           })
         `);
       }
@@ -433,7 +465,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.Util-19981082.js")({
+          require("./inflight.Util-3.js")({
           })
         `);
       }
@@ -477,7 +509,7 @@ module.exports = function({ $stdlib }) {
     }
     static _toInflightType(context) {
       return $stdlib.core.NodeJsCode.fromInline(`
-        require("./inflight.Util-dd1a0085.js")({
+        require("./inflight.Util-1.js")({
         })
       `);
     }
@@ -507,7 +539,7 @@ module.exports = function({ $stdlib }) {
         }
         static _toInflightType(context) {
           return $stdlib.core.NodeJsCode.fromInline(`
-            require("./inflight.$Closure1-dd1a0085.js")({
+            require("./inflight.$Closure1-1.js")({
               $__parent_this_1_b: ${context._lift(__parent_this_1.b)},
             })
           `);
@@ -534,7 +566,7 @@ module.exports = function({ $stdlib }) {
     }
     static _toInflightType(context) {
       return $stdlib.core.NodeJsCode.fromInline(`
-        require("./inflight.Store-dd1a0085.js")({
+        require("./inflight.Store-1.js")({
         })
       `);
     }
@@ -568,6 +600,7 @@ module.exports = function({ $stdlib }) {
       return tmp;
     })({})
   ;
+  const Point = require("./Point.Struct.js")($stdlib.std.Struct, $stdlib.core.NodeJsCode.fromInline);
   return { Util, Store, Color };
 };
 
@@ -585,7 +618,7 @@ module.exports = function({ $stdlib }) {
     }
     static _toInflightType(context) {
       return $stdlib.core.NodeJsCode.fromInline(`
-        require("./inflight.Q-40b852c3.js")({
+        require("./inflight.Q-2.js")({
         })
       `);
     }

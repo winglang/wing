@@ -51,13 +51,16 @@ export function sanitize_json_paths(path: string) {
   const assetKeyRegex = /"asset\..+?"/g;
   const assetSourceRegex = /"assets\/.+?"/g;
   const sourceRegex = /(?<=\"source\"\:)\"([A-Z]:|\/|\\)[\/\\\-\w\.]+\"/g;
+  const sourceHashRegex =
+    /(?<=\"source_hash\"\:)\"\${filemd5\(\\\"([A-Z]:|\/|\\)[\/\\\-\w\.]+\\\"\)}\"/g;
   const json = JSON.parse(fs.readFileSync(path, "utf-8"));
 
   const jsonText = JSON.stringify(json);
   const sanitizedJsonText = jsonText
     .replace(assetKeyRegex, '"<ASSET_KEY>"')
     .replace(assetSourceRegex, '"<ASSET_SOURCE>"')
-    .replace(sourceRegex, '"<SOURCE>"');
+    .replace(sourceRegex, '"<SOURCE>"')
+    .replace(sourceHashRegex, '"${filemd5(<SOURCE>)}"');
   const finalObj = JSON.parse(sanitizedJsonText);
   delete finalObj.terraform;
 

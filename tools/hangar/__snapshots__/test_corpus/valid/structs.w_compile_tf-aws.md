@@ -1,6 +1,168 @@
 # [structs.w](../../../../../examples/tests/valid/structs.w) | compile | tf-aws
 
-## inflight.$Closure1-7ff6d6fc.js
+## A.Struct.js
+```js
+module.exports = function(stdStruct, fromInline) {
+  class A {
+    static jsonSchema() {
+      return {
+        id: "/A",
+        type: "object",
+        properties: {
+          field0: { type: "string" },
+        },
+        required: [
+          "field0",
+        ],
+        $defs: {
+        }
+      }
+    }
+    static fromJson(obj) {
+      return stdStruct._validate(obj, this.jsonSchema())
+    }
+    static _toInflightType(context) {
+      return fromInline(`require("./A.Struct.js")(${ context._lift(stdStruct) })`);
+    }
+  }
+  return A;
+};
+
+```
+
+## B.Struct.js
+```js
+module.exports = function(stdStruct, fromInline) {
+  class B {
+    static jsonSchema() {
+      return {
+        id: "/B",
+        type: "object",
+        properties: {
+          ...require("./A.Struct.js")().jsonSchema().properties,
+          field1: { type: "number" },
+          field2: { type: "string" },
+          field3: { "$ref": "#/$defs/A" },
+        },
+        required: [
+          "field1",
+          "field2",
+          "field3",
+          ...require("./A.Struct.js")().jsonSchema().required,
+        ],
+        $defs: {
+          "A": { type: "object", "properties": require("./A.Struct.js")().jsonSchema().properties },
+          ...require("./A.Struct.js")().jsonSchema().$defs,
+        }
+      }
+    }
+    static fromJson(obj) {
+      return stdStruct._validate(obj, this.jsonSchema())
+    }
+    static _toInflightType(context) {
+      return fromInline(`require("./B.Struct.js")(${ context._lift(stdStruct) })`);
+    }
+  }
+  return B;
+};
+
+```
+
+## Dazzle.Struct.js
+```js
+module.exports = function(stdStruct, fromInline) {
+  class Dazzle {
+    static jsonSchema() {
+      return {
+        id: "/Dazzle",
+        type: "object",
+        properties: {
+          a: { type: "string" },
+        },
+        required: [
+          "a",
+        ],
+        $defs: {
+        }
+      }
+    }
+    static fromJson(obj) {
+      return stdStruct._validate(obj, this.jsonSchema())
+    }
+    static _toInflightType(context) {
+      return fromInline(`require("./Dazzle.Struct.js")(${ context._lift(stdStruct) })`);
+    }
+  }
+  return Dazzle;
+};
+
+```
+
+## Razzle.Struct.js
+```js
+module.exports = function(stdStruct, fromInline) {
+  class Razzle {
+    static jsonSchema() {
+      return {
+        id: "/Razzle",
+        type: "object",
+        properties: {
+          a: { type: "string" },
+        },
+        required: [
+          "a",
+        ],
+        $defs: {
+        }
+      }
+    }
+    static fromJson(obj) {
+      return stdStruct._validate(obj, this.jsonSchema())
+    }
+    static _toInflightType(context) {
+      return fromInline(`require("./Razzle.Struct.js")(${ context._lift(stdStruct) })`);
+    }
+  }
+  return Razzle;
+};
+
+```
+
+## Showtime.Struct.js
+```js
+module.exports = function(stdStruct, fromInline) {
+  class Showtime {
+    static jsonSchema() {
+      return {
+        id: "/Showtime",
+        type: "object",
+        properties: {
+          ...require("./Razzle.Struct.js")().jsonSchema().properties,
+          ...require("./Dazzle.Struct.js")().jsonSchema().properties,
+        },
+        required: [
+          ...require("./Razzle.Struct.js")().jsonSchema().required,
+          ...require("./Dazzle.Struct.js")().jsonSchema().required,
+        ],
+        $defs: {
+          ...require("./Razzle.Struct.js")().jsonSchema().$defs,
+          ...require("./Dazzle.Struct.js")().jsonSchema().$defs,
+        }
+      }
+    }
+    static fromJson(obj) {
+      return stdStruct._validate(obj, this.jsonSchema())
+    }
+    static _toInflightType(context) {
+      return fromInline(`require("./Showtime.Struct.js")(${ context._lift(stdStruct) })`);
+    }
+  }
+  return Showtime;
+};
+
+```
+
+## inflight.$Closure1-1.js
 ```js
 module.exports = function({  }) {
   class $Closure1 {
@@ -19,7 +181,7 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.Foo-7ff6d6fc.js
+## inflight.Foo-1.js
 ```js
 module.exports = function({  }) {
   class Foo {
@@ -32,6 +194,49 @@ module.exports = function({  }) {
   }
   return Foo;
 }
+
+```
+
+## lotsOfTypes.Struct.js
+```js
+module.exports = function(stdStruct, fromInline) {
+  class lotsOfTypes {
+    static jsonSchema() {
+      return {
+        id: "/lotsOfTypes",
+        type: "object",
+        properties: {
+          a: { type: "string" },
+          b: { type: "number" },
+          c: { type: "array",  items: { type: "string" } },
+          d: { type: "object", patternProperties: { ".*": { type: "string" } } },
+          e: { type: "object" },
+          f: { type: "boolean" },
+          g: { type: "string" },
+          h: { type: "array",  items: { type: "object", patternProperties: { ".*": { type: "number" } } } },
+        },
+        required: [
+          "a",
+          "b",
+          "c",
+          "d",
+          "e",
+          "f",
+          "h",
+        ],
+        $defs: {
+        }
+      }
+    }
+    static fromJson(obj) {
+      return stdStruct._validate(obj, this.jsonSchema())
+    }
+    static _toInflightType(context) {
+      return fromInline(`require("./lotsOfTypes.Struct.js")(${ context._lift(stdStruct) })`);
+    }
+  }
+  return lotsOfTypes;
+};
 
 ```
 
@@ -173,7 +378,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.Foo-7ff6d6fc.js")({
+          require("./inflight.Foo-1.js")({
           })
         `);
       }
@@ -207,7 +412,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1-7ff6d6fc.js")({
+          require("./inflight.$Closure1-1.js")({
           })
         `);
       }
@@ -223,11 +428,17 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
     }
+    const A = require("./A.Struct.js")($stdlib.std.Struct, $stdlib.core.NodeJsCode.fromInline);
+    const B = require("./B.Struct.js")($stdlib.std.Struct, $stdlib.core.NodeJsCode.fromInline);
     const x = ({"field0": "Sup"});
     const y = ({"field0": "hello","field1": 1,"field2": "world","field3": ({"field0": "foo"})});
     {((cond) => {if (!cond) throw new Error("assertion failed: x.field0 == \"Sup\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(x.field0,"Sup")))};
     {((cond) => {if (!cond) throw new Error("assertion failed: y.field1 == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(y.field1,1)))};
     {((cond) => {if (!cond) throw new Error("assertion failed: y.field3.field0 == \"foo\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(y.field3.field0,"foo")))};
+    const lotsOfTypes = require("./lotsOfTypes.Struct.js")($stdlib.std.Struct, $stdlib.core.NodeJsCode.fromInline);
+    const Razzle = require("./Razzle.Struct.js")($stdlib.std.Struct, $stdlib.core.NodeJsCode.fromInline);
+    const Dazzle = require("./Dazzle.Struct.js")($stdlib.std.Struct, $stdlib.core.NodeJsCode.fromInline);
+    const Showtime = require("./Showtime.Struct.js")($stdlib.std.Struct, $stdlib.core.NodeJsCode.fromInline);
     const s = ({"a": "Boom baby"});
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:struct definitions are phase independant",new $Closure1(this,"$Closure1"));
   }
