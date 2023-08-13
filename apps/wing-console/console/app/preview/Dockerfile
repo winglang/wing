@@ -52,6 +52,7 @@ RUN CARGO_GIT_FETCH_WITH_CLI=true pnpm install --no-frozen-lockfile
 
 ENV PATH "$PATH:/emsdk:/emsdk/upstream/emscripten:/clang_15/bin"
 ENV LD_LIBRARY_PATH "/clang_15/lib:$LD_LIBRARY_PATH"
+ENV C_INCLUDE_PATH "/clang_15/include:$C_INCLUDE_PATH"
 
 RUN CARGO_GIT_FETCH_WITH_CLI=true pnpm turbo compile --filter @wingconsole/app --concurrency=1
 
