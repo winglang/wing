@@ -83,6 +83,26 @@ test("bucket with two preflight objects", () => {
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
 });
 
+test("bucket with two preflight files", () => {
+  // GIVEN
+  const app = new tfazure.App({ outdir: mkdtemp(), location: "East US" });
+  const bucket = Bucket._newBucket(app, "my_bucket", { public: true });
+  bucket.addFile("file1.txt", "test/testFiles/test1.txt");
+  bucket.addFile("file2.txt", "test/testFiles/test2.txt");
+  const output = app.synth();
+
+  // THEN
+  expect(tfResourcesOf(output)).toEqual([
+    "azurerm_resource_group",
+    "azurerm_storage_account",
+    "azurerm_storage_blob",
+    "azurerm_storage_container",
+  ]);
+  expect(tfResourcesOfCount(output, "azurerm_storage_blob")).toEqual(2);
+  expect(tfSanitize(output)).toMatchSnapshot();
+  expect(treeJsonOf(app.outdir)).toMatchSnapshot();
+});
+
 test("bucket name valid", () => {
   // GIVEN
   const app = new tfazure.App({ outdir: mkdtemp(), location: "East US" });

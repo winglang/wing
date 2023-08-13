@@ -75,3 +75,22 @@ test("bucket with two preflight objects", () => {
   expect(tfSanitize(output)).toMatchSnapshot();
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
 });
+
+test("bucket with two preflight files", () => {
+  // GIVEN
+  const app = new tfgcp.App({ outdir: mkdtemp(), ...GCP_APP_OPTS });
+  const bucket = Bucket._newBucket(app, "my_bucket");
+  bucket.addFile("file1.txt", "test/testFiles/test1.txt");
+  bucket.addFile("file2.txt", "test/testFiles/test2.txt");
+  const output = app.synth();
+
+  // THEN
+  expect(tfResourcesOf(output)).toEqual([
+    "google_storage_bucket",
+    "google_storage_bucket_object",
+    "random_id",
+  ]);
+  expect(tfResourcesOfCount(output, "google_storage_bucket_object")).toEqual(2);
+  expect(tfSanitize(output)).toMatchSnapshot();
+  expect(treeJsonOf(app.outdir)).toMatchSnapshot();
+});

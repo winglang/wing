@@ -57,6 +57,20 @@ test("bucket with two preflight objects", () => {
   expect(template.toJSON()).toMatchSnapshot();
 });
 
+test("bucket with two preflight files", () => {
+  // GIVEN
+  const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });
+  const bucket = Bucket._newBucket(app, "my_bucket", { public: true });
+  bucket.addFile("file1.txt", "test/testFiles/test1.txt");
+  bucket.addFile("file2.txt", "test/testFiles/test2.txt");
+  const output = app.synth();
+
+  // THEN
+  const template = Template.fromJSON(JSON.parse(output));
+  template.resourceCountIs("Custom::CDKBucketDeployment", 2);
+  expect(template.toJSON()).toMatchSnapshot();
+});
+
 test("bucket with onCreate method", () => {
   // GIVEN
   const app = new awscdk.App({ outdir: mkdtemp(), ...CDK_APP_OPTS });

@@ -1,3 +1,5 @@
+import * as fs from "fs";
+import { isAbsolute, resolve } from "path";
 import { Construct } from "constructs";
 import { App } from "./app";
 import { StorageBucket } from "../.gen/providers/google/storage-bucket";
@@ -80,6 +82,15 @@ export class Bucket extends cloud.Bucket {
       name: key,
       content: body,
     });
+  }
+
+  public addFile(fileName: string, path: string): void {
+    path = isAbsolute(path)
+      ? path
+      : resolve(process.env.WING_SOURCE_DIR ?? "", path);
+    const data = fs.readFileSync(path, File.getFileEncoding(path));
+
+    this.addObject(fileName, data);
   }
 
   public bind(_inflightHost: IInflightHost, _ops: string[]): void {

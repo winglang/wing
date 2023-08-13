@@ -1,3 +1,5 @@
+import * as fs from "fs";
+import { isAbsolute, resolve } from "path";
 import { Construct } from "constructs";
 import { App } from "./app";
 import { Function } from "./function";
@@ -95,6 +97,15 @@ export class Bucket extends cloud.Bucket {
       type: "Block",
       sourceContent: body,
     });
+  }
+
+  public addFile(fileName: string, path: string): void {
+    path = isAbsolute(path)
+      ? path
+      : resolve(process.env.WING_SOURCE_DIR ?? "", path);
+    const data = fs.readFileSync(path, File.getFileEncoding(path));
+
+    this.addObject(fileName, data);
   }
 
   public bind(host: IInflightHost, ops: string[]): void {

@@ -1,4 +1,5 @@
-import { join } from "path";
+import * as fs from "fs";
+import { isAbsolute, resolve, join } from "path";
 import { Construct } from "constructs";
 import { ISimulatorResource } from "./resource";
 import { BucketSchema, BUCKET_TYPE } from "./schema-resources";
@@ -39,6 +40,15 @@ export class Bucket extends cloud.Bucket implements ISimulatorResource {
 
   public addObject(key: string, body: string): void {
     this.initialObjects[key] = body;
+  }
+
+  public addFile(fileName: string, path: string): void {
+    path = isAbsolute(path)
+      ? path
+      : resolve(process.env.WING_SOURCE_DIR ?? "", path);
+    const data = fs.readFileSync(path, File.getFileEncoding(path));
+
+    this.addObject(fileName, data);
   }
 
   protected eventHandlerLocation(): string {

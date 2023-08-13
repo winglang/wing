@@ -74,6 +74,12 @@ export abstract class Bucket extends Resource {
   public abstract addObject(key: string, body: string): void;
 
   /**
+ * Add a file to the bucket from system folder
+ */
+
+  public abstract addFile(fileName: string, path: string): void;
+
+  /**
    * Creates a topic for subscribing to notification events
    * @param actionType
    * @returns the created topi

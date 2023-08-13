@@ -2,6 +2,7 @@ export * from "./array";
 export * from "./bool";
 export * from "./datetime";
 export * from "./duration";
+export * from "./file";
 export * from "./generics";
 export * from "./json";
 export * from "./map";
