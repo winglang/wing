@@ -31,7 +31,7 @@ RUN cd emsdk
 RUN chmod +x ./emsdk
 RUN sh -x ./emsdk install latest
 RUN sh -x ./emsdk activate latest
-RUN source ./emsdk_env.sh
+RUN . ./emsdk_env.sh
 
 WORKDIR /app
 
