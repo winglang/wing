@@ -8,6 +8,7 @@ RUN apt-get update && \
     git \
     gnupg \
     # emscripten \
+    clang-15 \
     software-properties-common
 
 RUN curl -fsSL https://deb.nodesource.com/setup_current.x | bash - && \
