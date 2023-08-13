@@ -11,12 +11,12 @@ export class File {
     return InflightClient.forType(__filename, this.name);
   }
 
-  public static getExtension(path: string): string {
-    return pathext.extname(path).toLowerCase();
+  public static getExtension(fileName: string): string {
+    return pathext.extname(fileName).toLowerCase();
   }
 
-  public static getFileEncoding(path: string): "base64" | "utf8" {
-    const type = this.getExtension(path);
+  public static getFileEncoding(fileName: string): "base64" | "utf8" {
+    const type = this.getExtension(fileName);
     switch (type) {
       case ".txt":
       case ".json":
