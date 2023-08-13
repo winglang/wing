@@ -19,9 +19,9 @@ RUN curl -fsSL https://deb.nodesource.com/setup_current.x | bash - && \
     apt-get install -y nodejs \
     build-essential
 
-RUN curl -SL https://github.com/llvm/llvm-project/releases/download/llvmorg-15.0.0/clang+llvm-15.0.0-x86_64-linux-gnu-rhel-8.4.tar.xz \
- | tar -xJC . && \
-    mv clang+llvm-15.0.0-x86_64-linux-gnu-rhel-8.4 clang_15
+# RUN curl -SL https://github.com/llvm/llvm-project/releases/download/llvmorg-15.0.0/clang+llvm-15.0.0-x86_64-linux-gnu-rhel-8.4.tar.xz \
+#  | tar -xJC . && \
+#     mv clang+llvm-15.0.0-x86_64-linux-gnu-rhel-8.4 clang_15
 
 RUN wget -O- https://apt.releases.hashicorp.com/gpg | \
     gpg --dearmor | \
