@@ -72,7 +72,7 @@ jobs:
         run: |
           app=wing-pr-${{github.event.number}}-playground 
           if ! flyctl status --app "$app"; then
-            pushd ./apps/wing-console/console/app/preview/fly.toml
+            pushd ./apps/wing-console/console/app/preview
             flyctl launch --no-deploy --copy-config --name "$app" --image-label latest
             popd
           fi
