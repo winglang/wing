@@ -77,6 +77,8 @@ jobs:
             popd
           fi
           flyctl deploy . --config ./apps/wing-console/console/app/preview/fly.toml --app "$app" --image-label latest --vm-memory 512 --strategy immediate
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
       - name: build image
         run: docker build -t backend:latest -f ./apps/wing-console/console/app/preview/Dockerfile . --platform=linux/amd64
 
