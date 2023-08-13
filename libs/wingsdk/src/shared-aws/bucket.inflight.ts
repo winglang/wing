@@ -73,7 +73,7 @@ export class BucketClient implements IBucketClient {
   /**
    * See https://github.com/aws/aws-sdk-js-v3/issues/1877
    */
-  private async getObjectContent(key: string): Promise<Readable | undefined> {
+  private async getObjectContent(key: string): Promise<string | undefined> {
     const command = new GetObjectCommand({
       Bucket: this.bucketName,
       Key: key,
@@ -81,7 +81,16 @@ export class BucketClient implements IBucketClient {
 
     try {
       const resp: GetObjectOutput = await this.s3Client.send(command);
-      return resp.Body as Readable;
+      const objectContent = resp.Body as Readable;
+      try {
+        return await consumers.text(objectContent);
+      } catch (e) {
+        throw new Error(
+          `Object content could not be read as text (key=${key}): ${
+            (e as Error).stack
+          })}`
+        );
+      }
     } catch (e) {
       if (e instanceof NoSuchKey) {
         return undefined;
@@ -98,16 +107,8 @@ export class BucketClient implements IBucketClient {
    */
   public async get(key: string): Promise<string> {
     const objectContent = await this.getObjectContent(key);
-    if (objectContent) {
-      try {
-        return await consumers.text(objectContent);
-      } catch (e) {
-        throw new Error(
-          `Object content could not be read as text (key=${key}): ${
-            (e as Error).stack
-          })}`
-        );
-      }
+    if (objectContent !== undefined) {
+      return objectContent;
     }
     throw new Error(`Object does not exist (key=${key}).`);
   }
@@ -119,19 +120,7 @@ export class BucketClient implements IBucketClient {
    * @returns content of the object
    */
   public async tryGet(key: string): Promise<string | undefined> {
-    const objectContent = await this.getObjectContent(key);
-    if (objectContent) {
-      try {
-        return await consumers.text(objectContent);
-      } catch (e) {
-        throw new Error(
-          `Object content could not be read as text (key=${key}): ${
-            (e as Error).stack
-          })}`
-        );
-      }
-    }
-    return undefined;
+    return await this.getObjectContent(key);
   }
 
   /**
@@ -141,8 +130,7 @@ export class BucketClient implements IBucketClient {
    * @returns Json content of the object
    */
   public async getJson(key: string): Promise<Json> {
-    const objectContent = await this.get(key);
-    return JSON.parse(objectContent);
+    return JSON.parse(await this.get(key));
   }
 
   /**
