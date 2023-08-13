@@ -95,7 +95,7 @@ module.exports = function({ $api_url, $http_Util, $std_Json }) {
         },
         "rest_api_id": "${aws_api_gateway_rest_api.cloudApi_api_2B334D75.id}",
         "triggers": {
-          "redeployment": "388c90ec9e86835eaf113a3e1c432f4758bfa061"
+          "redeployment": "ca2771f24c2978f810a5a1a5c3373f4ac9d7d88c"
         }
       }
     },
@@ -226,7 +226,7 @@ module.exports = function({ $api_url, $http_Util, $std_Json }) {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c88c3aa2",
             "WING_TARGET": "tf-aws",
-            "WING_TOKEN_TFTOKEN_TOKEN_21": "${jsonencode(aws_api_gateway_stage.cloudApi_api_stage_BBB283E4.invoke_url)}"
+            "WING_TOKEN_TFTOKEN_TOKEN_7": "${jsonencode(aws_api_gateway_stage.cloudApi_api_stage_BBB283E4.invoke_url)}"
           }
         },
         "function_name": "Handler-c88c3aa2",

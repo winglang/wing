@@ -2,17 +2,13 @@ bring cloud;
 bring http;
 bring util;
 
-// https://github.com/winglang/wing/issues/3049
-let http_PATCH = http.HttpMethod.PATCH;
-let api_PATCH = cloud.HttpMethod.PATCH;
-
 let api = new cloud.Api();
 
 let body = Json {"cat": "Tion"};
 let _id = "12345";
 
 api.patch("/path/{id}", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
-  assert(req.method == api_PATCH);
+  assert(req.method == cloud.HttpMethod.PATCH);
 
   assert(req.vars?.get("id") == _id);
   assert(req.path == "/path/"+ _id);
@@ -25,12 +21,11 @@ api.patch("/path/{id}", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
   };
 });
 
-/// https://github.com/winglang/wing/issues/3342
-if (util.env("WING_TARGET") != "tf-aws") {
-  test "http.patch and http.fetch can preform a call to an api" {
+
+test "http.patch and http.fetch can preform a call to an api" {
     let url = "${api.url}/path/${_id}";
     let response: http.Response = http.patch(url,  headers: { "content-type" => "application/json" }, body: Json.stringify(body));
-    let fetchResponse: http.Response = http.patch(url, method: http_PATCH, headers: { "content-type" => "application/json" }, body: Json.stringify(body));
+    let fetchResponse: http.Response = http.patch(url, method: http.HttpMethod.PATCH, headers: { "content-type" => "application/json" }, body: Json.stringify(body));
 
     assert(response.body == _id);
     assert(response.status == 200);
@@ -39,6 +34,4 @@ if (util.env("WING_TARGET") != "tf-aws") {
     assert(fetchResponse.body == _id);
     assert(fetchResponse.status == 200);
     assert(fetchResponse.url == url);
-
-  }
 }
