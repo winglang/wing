@@ -30,7 +30,7 @@ RUN git clone https://github.com/emscripten-core/emsdk.git
 RUN cd emsdk
 RUN chmod +x ./emsdk
 RUN sh -x ./emsdk install latest
-RUN ./emsdk activate latest
+RUN sh -x ./emsdk activate latest
 RUN source ./emsdk_env.sh
 
 WORKDIR /app
