@@ -40,6 +40,9 @@ RUN npm install --global pnpm
 COPY . .
 RUN mkdir .cargo
 RUN CARGO_GIT_FETCH_WITH_CLI=true pnpm install --no-frozen-lockfile
+
+ENV PATH "$PATH:/emsdk:/emsdk/upstream/emscripten"
+
 RUN CARGO_GIT_FETCH_WITH_CLI=true pnpm turbo compile --filter @wingconsole/app --concurrency=1
 
 # RUN apt-get install -y gcc python3 make
