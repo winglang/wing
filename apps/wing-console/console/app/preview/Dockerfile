@@ -58,6 +58,8 @@ ENV CC_wasm32_wasi "/app/.cargo/wasi-sdk-19.0/bin/clang"
 ENV AR_wasm32_wasi "/app/.cargo/wasi-sdk-19.0/bin/ar"
 
 RUN CARGO_GIT_FETCH_WITH_CLI=true pnpm turbo compile --filter @wingconsole/app --concurrency=1
+RUN pnpm --filter @wingconsole/app deploy --prod pruned
+
 
 # RUN apt-get install -y gcc python3 make
 
