@@ -128,7 +128,7 @@ export class Website extends cloud.Website {
 
     const url = distribution.domainName;
 
-    this._url = url.match(/^(.*):\/\/(.*)/) ? url : `https://${url}`;
+    this._url = `https://${url}`;
   }
 
   public get url(): string {
