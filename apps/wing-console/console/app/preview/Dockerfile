@@ -28,6 +28,7 @@ RUN curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
 
 RUN git clone https://github.com/emscripten-core/emsdk.git
 RUN cd emsdk
+RUN chmod +x ./emsdk
 RUN ./emsdk install latest
 RUN ./emsdk activate latest
 RUN source ./emsdk_env.sh
