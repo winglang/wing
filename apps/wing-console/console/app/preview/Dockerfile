@@ -11,6 +11,7 @@ RUN apt-get update && \
     xz-utils \
     libncurses5 \
     libc6-dev \
+    libstdc++-9-dev \
     software-properties-common
 
 RUN curl -fsSL https://deb.nodesource.com/setup_current.x | bash - && \
