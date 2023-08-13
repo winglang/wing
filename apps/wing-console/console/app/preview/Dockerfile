@@ -26,10 +26,10 @@ RUN apt-get install terraform
 RUN CARGO_GIT_FETCH_WITH_CLI=true cargo install cargo-wasi
 RUN curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
 
-RUN git clone https://github.com/emscripten-core/emsdk.git \
-    cd emsdk \
-    ./emsdk install latest \
-    sh -x ./emsdk activate latest \
+RUN git clone https://github.com/emscripten-core/emsdk.git && \
+    cd emsdk && \
+    ./emsdk install latest && \
+    sh -x ./emsdk activate latest && \
     . ./emsdk_env.sh
 
 WORKDIR /app
