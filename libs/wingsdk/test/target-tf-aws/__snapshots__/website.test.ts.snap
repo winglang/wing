@@ -144,7 +144,7 @@ exports[`default website behavior 1`] = `
         ],
         \\"key\\": \\"/b.html\\",
         \\"source\\": \\"<source>\\",
-        \\"source_hash\\": \\"\${filemd5(\\\\\\"/Users/tsuf/Documents/wing/libs/wingsdk/test/target-tf-aws/website/b.html\\\\\\")}\\"
+        \\"source_hash\\": \\"\${filemd5(\\\\\\"/home/runner/work/wing/wing/libs/wingsdk/test/target-tf-aws/website/b.html\\\\\\")}\\"
       },
       \\"Website_File--inner-folder--ahtml_7D20A7EF\\": {
         \\"bucket\\": \\"\${aws_s3_bucket.Website_WebsiteBucket_3C0321F0.bucket}\\",
@@ -154,7 +154,7 @@ exports[`default website behavior 1`] = `
         ],
         \\"key\\": \\"/inner-folder/a.html\\",
         \\"source\\": \\"<source>\\",
-        \\"source_hash\\": \\"\${filemd5(\\\\\\"/Users/tsuf/Documents/wing/libs/wingsdk/test/target-tf-aws/website/inner-folder/a.html\\\\\\")}\\"
+        \\"source_hash\\": \\"\${filemd5(\\\\\\"/home/runner/work/wing/wing/libs/wingsdk/test/target-tf-aws/website/inner-folder/a.html\\\\\\")}\\"
       }
     }
   }
@@ -480,7 +480,7 @@ exports[`website with add_json 1`] = `
         ],
         \\"key\\": \\"/b.html\\",
         \\"source\\": \\"<source>\\",
-        \\"source_hash\\": \\"\${filemd5(\\\\\\"/Users/tsuf/Documents/wing/libs/wingsdk/test/target-tf-aws/website/b.html\\\\\\")}\\"
+        \\"source_hash\\": \\"\${filemd5(\\\\\\"/home/runner/work/wing/wing/libs/wingsdk/test/target-tf-aws/website/b.html\\\\\\")}\\"
       },
       \\"Website_File--inner-folder--ahtml_7D20A7EF\\": {
         \\"bucket\\": \\"\${aws_s3_bucket.Website_WebsiteBucket_3C0321F0.bucket}\\",
@@ -490,7 +490,7 @@ exports[`website with add_json 1`] = `
         ],
         \\"key\\": \\"/inner-folder/a.html\\",
         \\"source\\": \\"<source>\\",
-        \\"source_hash\\": \\"\${filemd5(\\\\\\"/Users/tsuf/Documents/wing/libs/wingsdk/test/target-tf-aws/website/inner-folder/a.html\\\\\\")}\\"
+        \\"source_hash\\": \\"\${filemd5(\\\\\\"/home/runner/work/wing/wing/libs/wingsdk/test/target-tf-aws/website/inner-folder/a.html\\\\\\")}\\"
       },
       \\"Website_File-configjson_1F1498B9\\": {
         \\"bucket\\": \\"\${aws_s3_bucket.Website_WebsiteBucket_3C0321F0.bucket}\\",
