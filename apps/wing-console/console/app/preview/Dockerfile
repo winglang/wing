@@ -51,8 +51,8 @@ RUN mkdir .cargo
 RUN CARGO_GIT_FETCH_WITH_CLI=true pnpm install --no-frozen-lockfile
 
 ENV PATH "$PATH:/emsdk:/emsdk/upstream/emscripten:/app/.cargo/wasi-sdk-19.0/bin"
-ENV LD_LIBRARY_PATH "/app/.cargo/wasi-sdk-19.0/lib:$LD_LIBRARY_PATH"
-ENV C_INCLUDE_PATH "/app/.cargo/wasi-sdk-19.0/share:$C_INCLUDE_PATH"
+# ENV LD_LIBRARY_PATH "/app/.cargo/wasi-sdk-19.0/lib:$LD_LIBRARY_PATH"
+# ENV C_INCLUDE_PATH "/app/.cargo/wasi-sdk-19.0/share:$C_INCLUDE_PATH"
 ENV WASI_SDK "/app/.cargo/wasi-sdk-19.0"
 ENV CC_wasm32_wasi "/app/.cargo/wasi-sdk-19.0/bin/clang"
 ENV AR_wasm32_wasi "/app.cargo/wasi-sdk-19.0/bin/ar"
