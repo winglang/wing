@@ -171,6 +171,9 @@ In our docs we have the following information:
 - A Flyio account to deploy the preview environments
 - A Cloud.Table to store different data:
   - The registered users
+    - GH project
+    - GH repository
+    - User ID
   - The connected GitHub repositories
   - The related Flyio projects and environments
 - A Cloud.Bucket to store the preview environments logs
