@@ -1,6 +1,7 @@
 import { readdirSync } from "fs";
 import { extname, join, posix, resolve, sep } from "path";
 
+import { Fn } from "cdktf";
 import { Construct } from "constructs";
 import mime from "mime-types";
 import { createEncryptedBucket } from "./bucket";
@@ -126,9 +127,7 @@ export class Website extends cloud.Website {
       policy: allowDistributionReadOnly.json,
     });
 
-    const url = distribution.domainName;
-
-    this._url = `https://${url}`;
+    this._url = `https://${distribution.domainName}`;
   }
 
   public get url(): string {
@@ -161,6 +160,7 @@ export class Website extends cloud.Website {
       key: this.formatPath(filePath.replace(this.path, "")),
       bucket: this.bucket.bucket,
       source: resolve(filePath),
+      sourceHash: Fn.filemd5(resolve(filePath)),
       contentType: mime.contentType(extname(filePath)) || undefined,
     });
   }

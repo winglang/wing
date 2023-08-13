@@ -134,8 +134,7 @@ export class Topic extends cloud.Topic {
     );
   }
 
-  /** @internal */
-  public _bind(host: IInflightHost, ops: string[]): void {
+  public bind(host: IInflightHost, ops: string[]): void {
     if (!(host instanceof Function)) {
       throw new Error("topics can only be bound by tfaws.Function for now");
     }
@@ -144,7 +143,7 @@ export class Topic extends cloud.Topic {
 
     host.addEnvironment(this.envName(), this.topic.arn);
 
-    super._bind(host, ops);
+    super.bind(host, ops);
   }
 
   /** @internal */

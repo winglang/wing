@@ -1,6 +1,6 @@
 # [two_websites.w](../../../../../../examples/tests/sdk_tests/website/two_websites.w) | compile | tf-aws
 
-## inflight.$Closure1.js
+## inflight.$Closure1-1.js
 ```js
 module.exports = function({ $http_Util, $w1_url, $w2_url }) {
   class $Closure1 {
@@ -296,8 +296,8 @@ module.exports = function({ $http_Util, $w1_url, $w2_url }) {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c8683851",
             "WING_TARGET": "tf-aws",
-            "WING_TOKEN_HTTPS_TFTOKEN_TOKEN_14": "${jsonencode(\"https://${aws_cloudfront_distribution.cloudWebsite_Distribution_083B5AF9.domain_name}\")}",
-            "WING_TOKEN_HTTPS_TFTOKEN_TOKEN_28": "${jsonencode(\"https://${aws_cloudfront_distribution.website-2_Distribution_F1FA4680.domain_name}\")}"
+            "WING_TOKEN_HTTPS_TFTOKEN_TOKEN_16": "${jsonencode(\"https://${aws_cloudfront_distribution.cloudWebsite_Distribution_083B5AF9.domain_name}\")}",
+            "WING_TOKEN_HTTPS_TFTOKEN_TOKEN_32": "${jsonencode(\"https://${aws_cloudfront_distribution.website-2_Distribution_F1FA4680.domain_name}\")}"
           }
         },
         "function_name": "Handler-c8683851",
@@ -469,7 +469,8 @@ module.exports = function({ $http_Util, $w1_url, $w2_url }) {
           "aws_s3_bucket.cloudWebsite_WebsiteBucket_EB03D355"
         ],
         "key": "/index.html",
-        "source": "<SOURCE>"
+        "source": "<SOURCE>",
+        "source_hash": "${filemd5(<SOURCE>)}"
       },
       "cloudWebsite_File--inner-folder--otherhtml_72DA631C": {
         "//": {
@@ -484,7 +485,8 @@ module.exports = function({ $http_Util, $w1_url, $w2_url }) {
           "aws_s3_bucket.cloudWebsite_WebsiteBucket_EB03D355"
         ],
         "key": "/inner-folder/other.html",
-        "source": "<SOURCE>"
+        "source": "<SOURCE>",
+        "source_hash": "${filemd5(<SOURCE>)}"
       },
       "testdeployingtwowebsites_Handler_S3Object_E54888BB": {
         "//": {
@@ -510,7 +512,8 @@ module.exports = function({ $http_Util, $w1_url, $w2_url }) {
           "aws_s3_bucket.website-2_WebsiteBucket_59576A0C"
         ],
         "key": "/index.html",
-        "source": "<SOURCE>"
+        "source": "<SOURCE>",
+        "source_hash": "${filemd5(<SOURCE>)}"
       },
       "website-2_File--inner-folder--otherhtml_2D74B50A": {
         "//": {
@@ -525,7 +528,8 @@ module.exports = function({ $http_Util, $w1_url, $w2_url }) {
           "aws_s3_bucket.website-2_WebsiteBucket_59576A0C"
         ],
         "key": "/inner-folder/other.html",
-        "source": "<SOURCE>"
+        "source": "<SOURCE>",
+        "source_hash": "${filemd5(<SOURCE>)}"
       }
     }
   }
@@ -551,7 +555,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1.js")({
+          require("./inflight.$Closure1-1.js")({
             $http_Util: ${context._lift(http.Util)},
             $w1_url: ${context._lift(w1.url)},
             $w2_url: ${context._lift(w2.url)},

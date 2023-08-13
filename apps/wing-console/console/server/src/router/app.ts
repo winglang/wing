@@ -526,9 +526,14 @@ function createExplorerItemFromConstructTreeNode(
   simulator: Simulator,
   showTests = false,
 ): ExplorerItem {
+  const label =
+    node.display?.sourceModule === "@winglang/sdk" && node.display?.title
+      ? node.display?.title
+      : node.id;
+
   return {
     id: node.path,
-    label: node.id,
+    label,
     type: getResourceType(node, simulator),
     display: node.display,
     childItems: node.children
@@ -550,6 +555,7 @@ export interface MapNode {
   data: {
     label?: string;
     type?: string;
+    path?: string;
     display?: NodeDisplay;
   };
   children?: MapNode[];
@@ -565,6 +571,7 @@ function createMapNodeFromConstructTreeNode(
     data: {
       label: node.id,
       type: getResourceType(node, simulator),
+      path: node.path,
       display: node.display,
     },
     children: node.children

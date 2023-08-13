@@ -1,7 +1,8 @@
 ---
-title: Language Reference
+title: Wing Programming Language Reference
 id: language-reference
 description: The Wing Language Reference
+sidebar_label: Language Reference
 keywords: [Wing reference, Wing language, language, Wing language spec, Wing programming language]
 ---
 
@@ -285,6 +286,12 @@ str.fromJson(jsonNumber);      // RUNTIME ERROR: unable to parse number `123` as
 num.fromJson(Json "\"hello\""); // RUNTIME ERROR: unable to parse string "hello" as a number
 ```
 
+For each `fromJson()`, there is a `tryFromJson()` method which returns an optional `T?` which
+indicates if parsing was successful or not:
+```js
+let s = str.tryFromJson(myJson) ?? "invalid string";
+``````
+
 ##### 1.1.4.6 Mutability
 
 To define a mutable JSON container, use the `MutJson` type:
@@ -334,7 +341,31 @@ Json.delete(immutObj, "hello");
 //          ^^^^^^^^^ expected `JsonMut`
 ```
 
-##### 1.1.4.7 Serialization
+##### 1.1.4.7 Assignment to user-defined structs
+All [structs](#31-structs) also have a `fromJson()` method that can be used to parse `Json` into a
+struct:
+```js
+struct Contact {
+  first: str;
+  last: str;
+  phone: str?;
+}
+
+let j = Json { first: "Wing", last: "Lyly" };
+let myContact = Contact.fromJson(j);
+assert(myContact.first == "Wing");
+```
+When a `Json` is parsed into a struct, the schema will be validated to ensure the result is
+type-safe:
+```js
+let p = Json { first: "Wing", phone: 1234 };
+Contact.fromJson(p);
+// RUNTIME ERROR: unable to parse Contact:
+// - field "last" is required and missing
+// - field "phone" is expected to be a string, got number.
+```
+
+##### 1.1.4.8 Serialization
 
 The `Json.stringify(j: Json): str` static method can be used to serialize a `Json` as a string
 ([JSON.stringify](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify)):
@@ -359,7 +390,7 @@ let boom = num.fromJson(j.get("boom"));
 let o = Json.tryParse("xxx") ?? Json [1,2,3];
 ```
 
-##### 1.1.4.8 Logging
+##### 1.1.4.9 Logging
 
 A `Json` value can be logged using `log()`, in which case it will be pretty-formatted:
 
@@ -377,13 +408,12 @@ my object is: {
 }
 ```
 
-#### 1.1.4.9 Roadmap
+#### 1.1.4.10 Roadmap
 
 The following features are not yet implemented, but we are planning to add them in the future:
 
 * Array/Set/Map.fromJson() - see https://github.com/winglang/wing/issues/1796 to track.
 * Json.entries() - see https://github.com/winglang/wing/issues/3142 to track.
-* Schema validation and assignment to struct - see https://github.com/winglang/wing/issues/3139 to track.
 * Equality, diff and patch - see https://github.com/winglang/wing/issues/3140 to track.
 
 [`▲ top`][top]
@@ -1543,11 +1573,18 @@ f(1, 2, field1: 3, field2: 4);
 // f(1, 2, field1: 3); // can't do this, partial expansion is not allowed
 ```
 
-#### 3.6.3 Roadmap
-
-The following features are not yet implemented, but we are planning to add them in the future:
-
-* Variadic arguments (`...args`) - see https://github.com/winglang/wing/issues/125 to track.
+#### 3.6.3 Variadic Arguments
+When a function signature's final parameter is denoted by `...` and annotated as an `Array` type,
+then the function accepts typed variadic arguments. 
+Inside the function, these arguments can be accessed using the designated variable name, 
+just as you would with a regular array instance.
+```TS
+let f = (x: num, ...args: Array<num>) => {
+  log("${x + args.length}");
+};
+// last arguments are expanded into their array
+f(4, 8, 15, 16, 23, 42); // logs 9
+```
 
 [`▲ top`][top]
 

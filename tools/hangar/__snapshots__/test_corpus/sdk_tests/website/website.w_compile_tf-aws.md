@@ -1,6 +1,6 @@
 # [website.w](../../../../../../examples/tests/sdk_tests/website/website.w) | compile | tf-aws
 
-## inflight.$Closure1.js
+## inflight.$Closure1-1.js
 ```js
 module.exports = function({ $config, $http_Util, $indexFile, $otherFile, $std_Json, $w_url }) {
   class $Closure1 {
@@ -20,7 +20,7 @@ module.exports = function({ $config, $http_Util, $indexFile, $otherFile, $std_Js
 
 ```
 
-## inflight.Util.js
+## inflight.Util-1.js
 ```js
 module.exports = function({  }) {
   class Util {
@@ -213,7 +213,7 @@ module.exports = function({  }) {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c867c4e0",
             "WING_TARGET": "tf-aws",
-            "WING_TOKEN_HTTPS_TFTOKEN_TOKEN_14": "${jsonencode(\"https://${aws_cloudfront_distribution.cloudWebsite_Distribution_083B5AF9.domain_name}\")}"
+            "WING_TOKEN_HTTPS_TFTOKEN_TOKEN_16": "${jsonencode(\"https://${aws_cloudfront_distribution.cloudWebsite_Distribution_083B5AF9.domain_name}\")}"
           }
         },
         "function_name": "Handler-c867c4e0",
@@ -324,7 +324,8 @@ module.exports = function({  }) {
           "aws_s3_bucket.cloudWebsite_WebsiteBucket_EB03D355"
         ],
         "key": "/index.html",
-        "source": "<SOURCE>"
+        "source": "<SOURCE>",
+        "source_hash": "${filemd5(<SOURCE>)}"
       },
       "cloudWebsite_File--inner-folder--otherhtml_72DA631C": {
         "//": {
@@ -339,7 +340,8 @@ module.exports = function({  }) {
           "aws_s3_bucket.cloudWebsite_WebsiteBucket_EB03D355"
         ],
         "key": "/inner-folder/other.html",
-        "source": "<SOURCE>"
+        "source": "<SOURCE>",
+        "source_hash": "${filemd5(<SOURCE>)}"
       },
       "cloudWebsite_File-configjson_591A81BA": {
         "//": {
@@ -393,7 +395,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.Util.js")({
+          require("./inflight.Util-1.js")({
           })
         `);
       }
@@ -417,7 +419,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1.js")({
+          require("./inflight.$Closure1-1.js")({
             $config: ${context._lift(config)},
             $http_Util: ${context._lift(http.Util)},
             $indexFile: ${context._lift(indexFile)},

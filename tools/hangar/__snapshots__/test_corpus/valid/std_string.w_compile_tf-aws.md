@@ -1,6 +1,6 @@
 # [std_string.w](../../../../../examples/tests/valid/std_string.w) | compile | tf-aws
 
-## inflight.$Closure1.js
+## inflight.$Closure1-1.js
 ```js
 module.exports = function({ $__s1_split_______at_1__, $_s1_concat_s2__, $s1_indexOf__s__ }) {
   class $Closure1 {
@@ -158,7 +158,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1.js")({
+          require("./inflight.$Closure1-1.js")({
             $__s1_split_______at_1__: ${context._lift(((s1.split(" ")).at(1)))},
             $_s1_concat_s2__: ${context._lift((s1.concat(s2)))},
             $s1_indexOf__s__: ${context._lift(s1.indexOf("s"))},

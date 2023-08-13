@@ -2,7 +2,7 @@
 
 exports[`can create sequential files in a bucket 1`] = `
 {
-  ".wing/queue-setconsumer-401ee792_c866f68e.js": "exports.handler = async function(event) {
+  ".wing/queue-setconsumer-401ee792_c8c63697.js": "exports.handler = async function(event) {
   return await (new (require(\\"[REDACTED]/wingsdk/src/target-sim/queue.setconsumer.inflight.js\\")).QueueSetConsumerHandlerClient({ handler: new ((function(){
 return class Handler {
   constructor(clients) {
@@ -63,13 +63,13 @@ bucket: (function(env) {
       },
       {
         "attrs": {},
-        "path": "root/HelloWorld/Queue-SetConsumer-401ee792",
+        "path": "root/HelloWorld/Queue/Queue-SetConsumer-401ee792",
         "props": {
           "environmentVariables": {
             "BUCKET_HANDLE_5f2a41c8": "\${root/HelloWorld/Bucket#attrs.handle}",
             "COUNTER_HANDLE_4ecd8d46": "\${root/HelloWorld/Counter#attrs.handle}",
           },
-          "sourceCodeFile": ".wing/queue-setconsumer-401ee792_c866f68e.js",
+          "sourceCodeFile": ".wing/queue-setconsumer-401ee792_c8c63697.js",
           "sourceCodeLanguage": "javascript",
           "timeout": 60000,
         },
@@ -79,7 +79,6 @@ bucket: (function(env) {
         "attrs": {},
         "path": "root/HelloWorld/Queue",
         "props": {
-          "initialMessages": [],
           "retentionPeriod": 3600,
           "timeout": 10,
         },
@@ -90,7 +89,7 @@ bucket: (function(env) {
         "path": "root/HelloWorld/Queue/Queue-QueueEventMapping-401ee792",
         "props": {
           "publisher": "\${root/HelloWorld/Queue#attrs.handle}",
-          "subscriber": "\${root/HelloWorld/Queue-SetConsumer-401ee792#attrs.handle}",
+          "subscriber": "\${root/HelloWorld/Queue/Queue-SetConsumer-401ee792#attrs.handle}",
           "subscriptionProps": {
             "batchSize": 1,
           },
@@ -112,13 +111,13 @@ bucket: (function(env) {
                     "direction": "inbound",
                     "implicit": false,
                     "relationship": "put()",
-                    "resource": "root/HelloWorld/Queue-SetConsumer-401ee792",
+                    "resource": "root/HelloWorld/Queue/Queue-SetConsumer-401ee792",
                   },
                   {
                     "direction": "inbound",
                     "implicit": false,
                     "relationship": "$inflight_init()",
-                    "resource": "root/HelloWorld/Queue-SetConsumer-401ee792",
+                    "resource": "root/HelloWorld/Queue/Queue-SetConsumer-401ee792",
                   },
                 ],
               },
@@ -140,13 +139,13 @@ bucket: (function(env) {
                     "direction": "inbound",
                     "implicit": false,
                     "relationship": "inc()",
-                    "resource": "root/HelloWorld/Queue-SetConsumer-401ee792",
+                    "resource": "root/HelloWorld/Queue/Queue-SetConsumer-401ee792",
                   },
                   {
                     "direction": "inbound",
                     "implicit": false,
                     "relationship": "$inflight_init()",
-                    "resource": "root/HelloWorld/Queue-SetConsumer-401ee792",
+                    "resource": "root/HelloWorld/Queue/Queue-SetConsumer-401ee792",
                   },
                 ],
               },
@@ -168,13 +167,13 @@ bucket: (function(env) {
                     "direction": "inbound",
                     "implicit": false,
                     "relationship": "handle()",
-                    "resource": "root/HelloWorld/Queue-SetConsumer-401ee792",
+                    "resource": "root/HelloWorld/Queue/Queue-SetConsumer-401ee792",
                   },
                   {
                     "direction": "inbound",
                     "implicit": false,
                     "relationship": "$inflight_init()",
-                    "resource": "root/HelloWorld/Queue-SetConsumer-401ee792",
+                    "resource": "root/HelloWorld/Queue/Queue-SetConsumer-401ee792",
                   },
                 ],
               },
@@ -197,7 +196,7 @@ bucket: (function(env) {
                     "direction": "outbound",
                     "implicit": false,
                     "relationship": "setConsumer()",
-                    "resource": "root/HelloWorld/Queue-SetConsumer-401ee792",
+                    "resource": "root/HelloWorld/Queue/Queue-SetConsumer-401ee792",
                   },
                 ],
               },
@@ -216,6 +215,79 @@ bucket: (function(env) {
                   "id": "Queue-QueueEventMapping-401ee792",
                   "path": "root/HelloWorld/Queue/Queue-QueueEventMapping-401ee792",
                 },
+                "Queue-SetConsumer-401ee792": {
+                  "attributes": {
+                    "wing:resource:connections": [
+                      {
+                        "direction": "outbound",
+                        "implicit": false,
+                        "relationship": "inc()",
+                        "resource": "root/HelloWorld/Counter",
+                      },
+                      {
+                        "direction": "outbound",
+                        "implicit": false,
+                        "relationship": "$inflight_init()",
+                        "resource": "root/HelloWorld/Counter",
+                      },
+                      {
+                        "direction": "outbound",
+                        "implicit": false,
+                        "relationship": "put()",
+                        "resource": "root/HelloWorld/Bucket",
+                      },
+                      {
+                        "direction": "outbound",
+                        "implicit": false,
+                        "relationship": "$inflight_init()",
+                        "resource": "root/HelloWorld/Bucket",
+                      },
+                      {
+                        "direction": "outbound",
+                        "implicit": false,
+                        "relationship": "handle()",
+                        "resource": "root/HelloWorld/Processor",
+                      },
+                      {
+                        "direction": "outbound",
+                        "implicit": false,
+                        "relationship": "$inflight_init()",
+                        "resource": "root/HelloWorld/Processor",
+                      },
+                      {
+                        "direction": "inbound",
+                        "implicit": false,
+                        "relationship": "setConsumer()",
+                        "resource": "root/HelloWorld/Queue",
+                      },
+                    ],
+                  },
+                  "constructInfo": {
+                    "fqn": "constructs.Construct",
+                    "version": "10.1.314",
+                  },
+                  "display": {
+                    "description": "A cloud function (FaaS)",
+                    "sourceModule": "@winglang/sdk",
+                    "title": "setConsumer()",
+                  },
+                  "id": "Queue-SetConsumer-401ee792",
+                  "path": "root/HelloWorld/Queue/Queue-SetConsumer-401ee792",
+                },
+                "Queue-SetConsumerHandler-401ee792": {
+                  "attributes": {
+                    "wing:resource:connections": [],
+                  },
+                  "constructInfo": {
+                    "fqn": "constructs.Construct",
+                    "version": "10.1.314",
+                  },
+                  "display": {
+                    "hidden": true,
+                  },
+                  "id": "Queue-SetConsumerHandler-401ee792",
+                  "path": "root/HelloWorld/Queue/Queue-SetConsumerHandler-401ee792",
+                },
               },
               "constructInfo": {
                 "fqn": "constructs.Construct",
@@ -227,78 +299,6 @@ bucket: (function(env) {
               },
               "id": "Queue",
               "path": "root/HelloWorld/Queue",
-            },
-            "Queue-SetConsumer-401ee792": {
-              "attributes": {
-                "wing:resource:connections": [
-                  {
-                    "direction": "outbound",
-                    "implicit": false,
-                    "relationship": "inc()",
-                    "resource": "root/HelloWorld/Counter",
-                  },
-                  {
-                    "direction": "outbound",
-                    "implicit": false,
-                    "relationship": "$inflight_init()",
-                    "resource": "root/HelloWorld/Counter",
-                  },
-                  {
-                    "direction": "outbound",
-                    "implicit": false,
-                    "relationship": "put()",
-                    "resource": "root/HelloWorld/Bucket",
-                  },
-                  {
-                    "direction": "outbound",
-                    "implicit": false,
-                    "relationship": "$inflight_init()",
-                    "resource": "root/HelloWorld/Bucket",
-                  },
-                  {
-                    "direction": "outbound",
-                    "implicit": false,
-                    "relationship": "handle()",
-                    "resource": "root/HelloWorld/Processor",
-                  },
-                  {
-                    "direction": "outbound",
-                    "implicit": false,
-                    "relationship": "$inflight_init()",
-                    "resource": "root/HelloWorld/Processor",
-                  },
-                  {
-                    "direction": "inbound",
-                    "implicit": false,
-                    "relationship": "setConsumer()",
-                    "resource": "root/HelloWorld/Queue",
-                  },
-                ],
-              },
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.1.314",
-              },
-              "display": {
-                "description": "A cloud function (FaaS)",
-                "title": "Function",
-              },
-              "id": "Queue-SetConsumer-401ee792",
-              "path": "root/HelloWorld/Queue-SetConsumer-401ee792",
-            },
-            "Queue-SetConsumerHandler-401ee792": {
-              "attributes": {
-                "wing:resource:connections": [],
-              },
-              "constructInfo": {
-                "fqn": "constructs.Construct",
-                "version": "10.1.314",
-              },
-              "display": {
-                "hidden": true,
-              },
-              "id": "Queue-SetConsumerHandler-401ee792",
-              "path": "root/HelloWorld/Queue-SetConsumerHandler-401ee792",
             },
           },
           "constructInfo": {
