@@ -65,9 +65,10 @@ Upon each creation of a pull request an automatic comment will be added to the P
 provide a streamlined process for updating a pull request preview environment, each PR code changes will redeploy the preview environment and also will:
 
 1. provide a real-time build and deployment status updates
-2. each entry point will have a seperated preview environment
-3. ensure a consistent and unique url for each preview environment. The url structure: `https://<gh-repository>-<gh-branch>-<entry-point>-<pr-number>.wingcloud.app`
-4. provide the ability to download the preview environment deployment logs for debugging purposes in case of failure, logs urls structure is: `https://wing.cloud/gh-account/gh-repo/gh-branch/entry-file/logs/`
+2. while preview environment is being updated, the user that is currently using the environment will be notified and will be able to refresh the page to get the latest changes.
+3. each entry point will have a seperated preview environment
+4. ensure a consistent and unique url for each preview environment. The url structure: `https://<gh-repository>-<gh-branch>-<entry-point>-<pr-number>.wingcloud.app`
+5. provide the ability to download the preview environment deployment logs for debugging purposes in case of failure, logs urls structure is: `https://wing.cloud/gh-account/gh-repo/gh-branch/entry-file/logs/`
 
 PR comment example:
 
