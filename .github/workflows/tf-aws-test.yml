@@ -44,7 +44,12 @@ jobs:
         with:
           node-version: 18
       - name: Install winglang globally
-        run: npm install -g winglang
+        uses: nick-fields/retry@v2
+        with:
+          max_attempts: 3
+          retry_on: error
+          timeout_minutes: 5
+          command: npm install -g winglang
       - name: Installing external js modules
         run: |
           cd examples/tests/sdk_tests
@@ -56,10 +61,15 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
       - name: Execute wing test in matrix directory
+        uses: nick-fields/retry@v2
         env:
           TF_LOG: info
           TF_LOG_PATH: ${{ runner.workspace }}/terraform.log
-        run: wing test -t tf-aws ${{ matrix.test.directory }}/*.w
+        with:
+          max_attempts: 3
+          retry_on: error
+          timeout_minutes: 20
+          command: wing test -t tf-aws ${{ matrix.test.directory }}/*.w
       - name: Output Terraform log
         if: failure()
         run: cat ${{ runner.workspace }}/terraform.log
