@@ -4,7 +4,7 @@ import {
   RightResizableWidget,
   ScrollableArea,
   TopResizableWidget,
-  CUSTOMIZABLE_THEME,
+  CUSTOMIZABLE_COLOR,
 } from "@wingconsole/design-system";
 import type { State, LayoutConfig, LayoutComponent } from "@wingconsole/server";
 import classNames from "classnames";
@@ -192,7 +192,7 @@ export const DefaultLayout = ({
                       "pb-1.5",
                       theme.bg3,
                       theme.text2,
-                      CUSTOMIZABLE_THEME,
+                      CUSTOMIZABLE_COLOR,
                     )}
                   >
                     <ConsoleLogs
@@ -247,7 +247,7 @@ export const DefaultLayout = ({
         )}
       >
         {!layout.header?.hide && (
-          <div className={classNames(CUSTOMIZABLE_THEME)}>
+          <div className={classNames(CUSTOMIZABLE_COLOR)}>
             <Header
               title={wingfile.data ?? ""}
               showThemeToggle={layout.header?.showThemeToggle}
@@ -287,7 +287,7 @@ export const DefaultLayout = ({
                 layout.leftPanel?.components?.length && (
                   <RightResizableWidget
                     className={classNames(
-                      CUSTOMIZABLE_THEME,
+                      CUSTOMIZABLE_COLOR,
                       theme.border3,
                       "h-full flex flex-col w-80 min-w-[10rem] min-h-[10rem] border-r",
                     )}
@@ -331,7 +331,7 @@ export const DefaultLayout = ({
 
                   <LeftResizableWidget
                     className={classNames(
-                      CUSTOMIZABLE_THEME,
+                      CUSTOMIZABLE_COLOR,
                       theme.border3,
                       "flex-shrink w-80 min-w-[10rem] border-l z-10",
                       theme.bg4,
@@ -367,7 +367,7 @@ export const DefaultLayout = ({
             {!layout.bottomPanel?.hide && (
               <TopResizableWidget
                 className={classNames(
-                  CUSTOMIZABLE_THEME,
+                  CUSTOMIZABLE_COLOR,
                   theme.border3,
                   "border-t relative flex",
                   theme.bg3,
@@ -432,7 +432,7 @@ export const DefaultLayout = ({
         )}
 
         {!layout.statusBar?.hide && (
-          <div className={classNames(CUSTOMIZABLE_THEME)}>
+          <div className={classNames(CUSTOMIZABLE_COLOR)}>
             <StatusBar
               wingVersion={wingVersion}
               cloudAppState={cloudAppState}

@@ -38,7 +38,7 @@ export type Mode = "dark" | "light" | "auto";
 
 const localStorageThemeKey = "console-theme";
 
-export const CUSTOMIZABLE_THEME = "custom-color";
+export const CUSTOMIZABLE_COLOR = "customizable-color";
 
 export const DefaultTheme: Theme = {
   bg1: "bg-slate-300 dark:bg-slate-800",
@@ -71,7 +71,7 @@ export const DefaultTheme: Theme = {
     "scrollbar hover:scrollbar-bg-slate-500/10 hover:scrollbar-thumb-slate-700/30 scrollbar-thumb-hover-slate-700/40 scrollbar-thumb-active-slate-700/60 dark:hover:scrollbar-bg-slate-400/10 dark:hover:scrollbar-thumb-slate-400/30 dark:scrollbar-thumb-hover-slate-400/40 dark:scrollbar-thumb-active-slate-400/60",
 };
 
-export const computeColor = (color: string, level: number = 1): string => {
+const computeColor = (color: string, level: number = 1): string => {
   if (level === 1) {
     return `#${color}`;
   }
@@ -98,7 +98,6 @@ const applyThemeCss = (newTheme: Theme) => {
 
   let styles = {};
   Object.keys(newTheme).map((key) => {
-    // key in the tailwindcss format
     const colorClasses = newTheme[key as keyof Theme];
     if (colorClasses === DefaultTheme[key as keyof Theme]) {
       return;
@@ -112,7 +111,7 @@ const applyThemeCss = (newTheme: Theme) => {
 
     styles = {
       ...styles,
-      [`.${CUSTOMIZABLE_THEME} .${lightKey}`]: `{ background-color: ${lightColor} !important;}`,
+      [`.${CUSTOMIZABLE_COLOR} .${lightKey}`]: `{ background-color: ${lightColor} !important;}`,
     };
 
     if (!darkClass) {
@@ -122,7 +121,7 @@ const applyThemeCss = (newTheme: Theme) => {
     const darkKey = darkClass.replaceAll(keyRegex, "\\$&");
     styles = {
       ...styles,
-      [`.dark .${CUSTOMIZABLE_THEME} .${darkKey}`]: `{ background-color: ${darkColor} !important;}`,
+      [`.dark .${CUSTOMIZABLE_COLOR} .${darkKey}`]: `{ background-color: ${darkColor} !important;}`,
     };
   });
 
