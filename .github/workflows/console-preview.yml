@@ -6,6 +6,9 @@ on:
       - opened
       - synchronize
       - closed
+    paths-ignore:
+      - "docs/**"
+      - "logo/**"
 
 env:
   FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
