@@ -1,6 +1,5 @@
 import { PolicyStatement } from "./types";
 import { IInflightHost } from "../std";
-import { Function as TfAwsFunction } from "../target-tf-aws";
 
 /**
  * A shared interface for AWS functions.
@@ -30,10 +29,16 @@ export class Function {
    * @param host The inflight host.
    */
   public static from(host: IInflightHost): IAwsFunction | undefined {
-    if (host instanceof TfAwsFunction) {
+    if (this.isAwsFunction(host)) {
       return host;
     }
-
     return undefined;
+  }
+
+  private static isAwsFunction(obj: any): obj is IAwsFunction {
+    return (
+      typeof obj.addPolicyStatements === "function" &&
+      typeof obj.addEnvironment === "function"
+    );
   }
 }
