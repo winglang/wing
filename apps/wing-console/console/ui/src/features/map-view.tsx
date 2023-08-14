@@ -1,4 +1,8 @@
-import { useTheme, ResourceIcon } from "@wingconsole/design-system";
+import {
+  useTheme,
+  ResourceIcon,
+  CUSTOMIZABLE_THEME,
+} from "@wingconsole/design-system";
 import classNames from "classnames";
 
 import { useMap } from "../services/use-map.js";
@@ -30,7 +34,11 @@ export const MapView = ({
   return (
     <ZoomPaneProvider>
       <div className="h-full flex flex-col">
-        {showMapControls && <MapControls />}
+        {showMapControls && (
+          <div className={classNames(CUSTOMIZABLE_THEME)}>
+            <MapControls />
+          </div>
+        )}
         <div
           className={classNames(
             "grow relative border-t",

@@ -1,4 +1,4 @@
-import { useTheme } from "@wingconsole/design-system";
+import { CUSTOMIZABLE_THEME, useTheme } from "@wingconsole/design-system";
 import classNames from "classnames";
 
 import { ThemeToggle } from "./theme-toggle.js";

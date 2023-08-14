@@ -38,6 +38,8 @@ export type Mode = "dark" | "light" | "auto";
 
 const localStorageThemeKey = "console-theme";
 
+export const CUSTOMIZABLE_THEME = "customizable";
+
 export const DefaultTheme: Theme = {
   bg1: "bg-slate-300 dark:bg-slate-800",
   bg2: "bg-slate-200 dark:bg-slate-800",
@@ -108,7 +110,7 @@ const applyThemeCss = (newTheme: Theme) => {
 
     styles = {
       ...styles,
-      [`.${colorKey}`]: `{ background-color: #${color};}`,
+      [`.${CUSTOMIZABLE_THEME} .${colorKey}`]: `{ background-color: #${color} !important;}`,
     };
   });
 
@@ -126,19 +128,29 @@ export const buildTheme = (color?: string): Theme => {
   if (!color) {
     return DefaultTheme;
   }
-  let theme: Theme = { ...DefaultTheme };
   const currentMode = getThemeMode();
-
-  theme.bg1 = `bg-${computeColor(color, currentMode === "dark" ? 0.8 : 1.1)}`;
-  theme.bg2 = `bg-${computeColor(color, currentMode === "dark" ? 0.9 : 1.1)}`;
-  theme.bg3 = `bg-${computeColor(color)}`;
-  theme.bgInput = `bg-${computeColor(
-    color,
-    currentMode === "dark" ? 1.2 : 0.8,
-  )}`;
+  const theme: Theme = {
+    ...DefaultTheme,
+    bg1: `bg-${computeColor(color, currentMode === "dark" ? 0.8 : 1.1)}`,
+    bg2: `bg-${computeColor(color, currentMode === "dark" ? 0.9 : 1.1)}`,
+    bg3: `bg-${computeColor(color)}`,
+    bgInput: `bg-${computeColor(color, currentMode === "dark" ? 1.2 : 0.8)}`,
+  };
 
   applyThemeCss(theme);
-  return theme;
+
+  let mergedTheme: Theme = DefaultTheme;
+  Object.keys(DefaultTheme).map((value) => {
+    const keyTheme = value as keyof Theme;
+
+    const changed = theme[keyTheme] !== DefaultTheme[keyTheme];
+    mergedTheme = {
+      ...mergedTheme,
+      [keyTheme]: `${DefaultTheme[keyTheme]} ${changed && theme[keyTheme]}`,
+    };
+  });
+
+  return mergedTheme;
 };
 
 export interface ThemeProviderProps {

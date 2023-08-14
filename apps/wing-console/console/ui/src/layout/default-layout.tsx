@@ -4,6 +4,7 @@ import {
   RightResizableWidget,
   ScrollableArea,
   TopResizableWidget,
+  CUSTOMIZABLE_THEME,
 } from "@wingconsole/design-system";
 import type { State, LayoutConfig, LayoutComponent } from "@wingconsole/server";
 import classNames from "classnames";
@@ -162,7 +163,10 @@ export const DefaultLayout = ({
           return (
             <div
               key={component.type}
-              className={classNames("flex-1 flex flex-col min-w-[10rem]")}
+              className={classNames(
+                "flex-1 flex flex-col min-w-[10rem]",
+                theme.bg3,
+              )}
             >
               <div className="relative h-full flex flex-col gap-2">
                 {loading && (
@@ -184,7 +188,12 @@ export const DefaultLayout = ({
                   <ScrollableArea
                     ref={logsRef}
                     overflowY
-                    className={classNames("pb-1.5", theme.bg3, theme.text2)}
+                    className={classNames(
+                      "pb-1.5",
+                      theme.bg3,
+                      theme.text2,
+                      CUSTOMIZABLE_THEME,
+                    )}
                   >
                     <ConsoleLogs
                       logs={logs.data ?? []}
@@ -238,10 +247,12 @@ export const DefaultLayout = ({
         )}
       >
         {!layout.header?.hide && (
-          <Header
-            title={wingfile.data ?? ""}
-            showThemeToggle={layout.header?.showThemeToggle}
-          />
+          <div className={classNames(CUSTOMIZABLE_THEME)}>
+            <Header
+              title={wingfile.data ?? ""}
+              showThemeToggle={layout.header?.showThemeToggle}
+            />
+          </div>
         )}
 
         {cloudAppState === "error" &&
@@ -276,6 +287,7 @@ export const DefaultLayout = ({
                 layout.leftPanel?.components?.length && (
                   <RightResizableWidget
                     className={classNames(
+                      CUSTOMIZABLE_THEME,
                       theme.border3,
                       "h-full flex flex-col w-80 min-w-[10rem] min-h-[10rem] border-r",
                     )}
@@ -319,6 +331,7 @@ export const DefaultLayout = ({
 
                   <LeftResizableWidget
                     className={classNames(
+                      CUSTOMIZABLE_THEME,
                       theme.border3,
                       "flex-shrink w-80 min-w-[10rem] border-l z-10",
                       theme.bg4,
@@ -354,6 +367,7 @@ export const DefaultLayout = ({
             {!layout.bottomPanel?.hide && (
               <TopResizableWidget
                 className={classNames(
+                  CUSTOMIZABLE_THEME,
                   theme.border3,
                   "border-t relative flex",
                   theme.bg3,
@@ -418,12 +432,14 @@ export const DefaultLayout = ({
         )}
 
         {!layout.statusBar?.hide && (
-          <StatusBar
-            wingVersion={wingVersion}
-            cloudAppState={cloudAppState}
-            isError={cloudAppState === "error"}
-            showThemeToggle={layout.statusBar?.showThemeToggle}
-          />
+          <div className={classNames(CUSTOMIZABLE_THEME)}>
+            <StatusBar
+              wingVersion={wingVersion}
+              cloudAppState={cloudAppState}
+              isError={cloudAppState === "error"}
+              showThemeToggle={layout.statusBar?.showThemeToggle}
+            />
+          </div>
         )}
       </div>
     </>
