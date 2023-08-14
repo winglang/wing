@@ -10,7 +10,12 @@ import * as core from "../core";
  * @inflight `@winglang/sdk.cloud.IOnDeployClient`
  */
 export class OnDeploy extends cloud.OnDeploy {
-  constructor(scope: Construct, id: string, handler: cloud.IOnDeployHandler, props: cloud.OnDeployProps = {}) {
+  constructor(
+    scope: Construct,
+    id: string,
+    handler: cloud.IOnDeployHandler,
+    props: cloud.OnDeployProps = {}
+  ) {
     super(scope, id, handler, props);
 
     let fn = cloud.Function._newFunction(this, "Function", handler, props);
@@ -20,8 +25,8 @@ export class OnDeploy extends cloud.OnDeploy {
       handler: awsFn._function,
     });
 
-    trigger.executeAfter(...props.executeAfter ?? []);
-    trigger.executeBefore(...props.executeBefore ?? []);
+    trigger.executeAfter(...(props.executeAfter ?? []));
+    trigger.executeBefore(...(props.executeBefore ?? []));
   }
 
   /** @internal */
