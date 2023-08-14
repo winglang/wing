@@ -33,7 +33,6 @@ test "testing Redis" {
   queue.push("world!");
 
   util.waitUntil((): bool => {
-    log("Checking if redis key exists");
     return r.get("hello") != nil;
   });
 
