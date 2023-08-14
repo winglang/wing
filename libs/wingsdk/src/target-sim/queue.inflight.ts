@@ -60,13 +60,14 @@ export class Queue
 
   // TODO: enforce maximum queue message size?
   public async push(...messages: string[]): Promise<void> {
-    messages.forEach(async (message) => {
-      await this.context.withTrace({
-        message: `Push (message=${message}).`,
-        activity: async () => {
+    return this.context.withTrace({
+      message: `Push (messages=${messages}).`,
+      activity: async () => {
+        for (const message of messages) {
           this.messages.push(new QueueMessage(this.retentionPeriod, message));
-        },
-      });
+        }
+      },
+    });
     });
   }
 
