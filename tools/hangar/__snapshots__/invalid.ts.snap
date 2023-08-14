@@ -988,6 +988,17 @@ error: Expected type to be \\"inflight (str): void\\", but got \\"inflight (arg1
    |                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected type to be \\"inflight (str): void\\", but got \\"inflight (arg1: num): unknown\\" instead
 
 
+error: Inferred type Array<str> conflicts with already inferred type Array<num>
+   --> ../../../examples/tests/invalid/inference.w:92:33
+   |  
+92 |     let jsonDoubleInference: SS = {
+   | /---------------------------------^
+93 | |     a: a,
+94 | |     b: a,
+95 | |   };
+   | \\\\---^ Inferred type Array<str> conflicts with already inferred type Array<num>
+
+
 error: Unexpected return value from void function. Return type annotations are required for methods.
    --> ../../../examples/tests/invalid/inference.w:75:5
    |
@@ -1432,11 +1443,18 @@ error: Expected type to be \\"num\\", but got \\"str\\" instead
    |        ^^ Expected type to be \\"num\\", but got \\"str\\" instead
 
 
-error: \\"[Bucket]\\" is not a legal JSON value
+error: Expected type to be \\"StructyJson\\", but got \\"Json\\" instead
+   --> ../../../examples/tests/invalid/json.w:96:38
+   |
+96 | let mutableJsonStruct: StructyJson = mutableJson;
+   |                                      ^^^^^^^^^^^ Expected type to be \\"StructyJson\\", but got \\"Json\\" instead
+
+
+error: \\"Array<Json>\\" is not a legal JSON value
    --> ../../../examples/tests/invalid/json.w:23:17
    |
 23 | let jArr = Json [bkt];
-   |                 ^^^^^ \\"[Bucket]\\" is not a legal JSON value
+   |                 ^^^^^ \\"Array<Json>\\" is not a legal JSON value
 
 
 error: \\"Bucket\\" is not a legal JSON value

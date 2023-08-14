@@ -1,5 +1,135 @@
 # [json.w](../../../../../examples/tests/valid/json.w) | compile | tf-aws
 
+## Base.Struct.js
+```js
+module.exports = function(stdStruct, fromInline) {
+  class Base {
+    static jsonSchema() {
+      return {
+        id: "/Base",
+        type: "object",
+        properties: {
+          base: { type: "string" },
+        },
+        required: [
+          "base",
+        ],
+        $defs: {
+        }
+      }
+    }
+    static fromJson(obj) {
+      return stdStruct._validate(obj, this.jsonSchema())
+    }
+    static _toInflightType(context) {
+      return fromInline(`require("./Base.Struct.js")(${ context._lift(stdStruct) })`);
+    }
+  }
+  return Base;
+};
+
+```
+
+## InnerStructyJson.Struct.js
+```js
+module.exports = function(stdStruct, fromInline) {
+  class InnerStructyJson {
+    static jsonSchema() {
+      return {
+        id: "/InnerStructyJson",
+        type: "object",
+        properties: {
+          good: { type: "boolean" },
+          inner_stuff: { type: "array",  items: { "$ref": "#/$defs/LastOne" } },
+        },
+        required: [
+          "good",
+          "inner_stuff",
+        ],
+        $defs: {
+          "LastOne": { type: "object", "properties": require("./LastOne.Struct.js")().jsonSchema().properties },
+        }
+      }
+    }
+    static fromJson(obj) {
+      return stdStruct._validate(obj, this.jsonSchema())
+    }
+    static _toInflightType(context) {
+      return fromInline(`require("./InnerStructyJson.Struct.js")(${ context._lift(stdStruct) })`);
+    }
+  }
+  return InnerStructyJson;
+};
+
+```
+
+## LastOne.Struct.js
+```js
+module.exports = function(stdStruct, fromInline) {
+  class LastOne {
+    static jsonSchema() {
+      return {
+        id: "/LastOne",
+        type: "object",
+        properties: {
+          ...require("./Base.Struct.js")().jsonSchema().properties,
+          hi: { type: "number" },
+        },
+        required: [
+          "hi",
+          ...require("./Base.Struct.js")().jsonSchema().required,
+        ],
+        $defs: {
+          ...require("./Base.Struct.js")().jsonSchema().$defs,
+        }
+      }
+    }
+    static fromJson(obj) {
+      return stdStruct._validate(obj, this.jsonSchema())
+    }
+    static _toInflightType(context) {
+      return fromInline(`require("./LastOne.Struct.js")(${ context._lift(stdStruct) })`);
+    }
+  }
+  return LastOne;
+};
+
+```
+
+## StructyJson.Struct.js
+```js
+module.exports = function(stdStruct, fromInline) {
+  class StructyJson {
+    static jsonSchema() {
+      return {
+        id: "/StructyJson",
+        type: "object",
+        properties: {
+          foo: { type: "string" },
+          stuff: { type: "array",  items: { type: "number" } },
+          maybe: { "$ref": "#/$defs/InnerStructyJson" },
+        },
+        required: [
+          "foo",
+          "stuff",
+        ],
+        $defs: {
+          "InnerStructyJson": { type: "object", "properties": require("./InnerStructyJson.Struct.js")().jsonSchema().properties },
+        }
+      }
+    }
+    static fromJson(obj) {
+      return stdStruct._validate(obj, this.jsonSchema())
+    }
+    static _toInflightType(context) {
+      return fromInline(`require("./StructyJson.Struct.js")(${ context._lift(stdStruct) })`);
+    }
+  }
+  return StructyJson;
+};
+
+```
+
 ## inflight.Foo-1.js
 ```js
 module.exports = function({  }) {
@@ -194,6 +324,10 @@ class $Root extends $stdlib.std.Resource {
     {((cond) => {if (!cond) throw new Error("assertion failed: notSpecified.get(\"foo\") == \"bar\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((notSpecified)["foo"],"bar")))};
     const empty = ({});
     {((cond) => {if (!cond) throw new Error("assertion failed: Json.has(empty, \"something\") == false")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((args) => { return args[0].hasOwnProperty(args[1]); })([empty,"something"]),false)))};
+    const Base = require("./Base.Struct.js")($stdlib.std.Struct, $stdlib.core.NodeJsCode.fromInline);
+    const LastOne = require("./LastOne.Struct.js")($stdlib.std.Struct, $stdlib.core.NodeJsCode.fromInline);
+    const InnerStructyJson = require("./InnerStructyJson.Struct.js")($stdlib.std.Struct, $stdlib.core.NodeJsCode.fromInline);
+    const StructyJson = require("./StructyJson.Struct.js")($stdlib.std.Struct, $stdlib.core.NodeJsCode.fromInline);
     const notJsonMissingField = ({"foo": "bar","stuff": []});
     const notJson = ({"foo": "bar","stuff": [1, 2, 3],"maybe": ({"good": true,"inner_stuff": [({"hi": 1,"base": "base"})]})});
   }
