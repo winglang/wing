@@ -4,7 +4,7 @@ import { IConstruct } from "constructs";
 import { App } from "./app";
 import { IResource, Resource } from "../std/resource";
 
-const TREE_FILE_PATH = "tree.json";
+export const TREE_FILE_PATH = "tree.json";
 
 /**
  * A node in the construct tree.

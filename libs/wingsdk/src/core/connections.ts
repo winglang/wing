@@ -4,7 +4,7 @@ import { IConstruct } from "constructs";
 
 const CONNECTIONS_SYMBOL = Symbol.for("@winglang/sdk.core.Connections");
 
-const CONNECTIONS_FILE_PATH = "connections.json";
+export const CONNECTIONS_FILE_PATH = "connections.json";
 
 /**
  * Connections are a way to track relationships between constructs.
@@ -53,10 +53,6 @@ export class Connections {
     }
 
     this._connections.push(connection);
-  }
-
-  public get connections(): Connection[] {
-    return this._connections;
   }
 
   /**
