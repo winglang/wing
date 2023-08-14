@@ -1,6 +1,4 @@
-.cargo
-node_modules
 **/node_modules
-**/.cargo
+**/wasi-sdk-*
 **/dist
 **/target

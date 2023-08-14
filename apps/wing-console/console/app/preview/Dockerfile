@@ -8,11 +8,11 @@ RUN apt-get update && \
     git \
     gnupg \
     # emscripten \
-    xz-utils \
-    libncurses5 \
-    libc6-dev \
-    libstdc++-9-dev \
-    musl-dev \
+    # xz-utils \
+    # libncurses5 \
+    # libc6-dev \
+    # libstdc++-9-dev \
+    # musl-dev \
     software-properties-common
 
 RUN curl -fsSL https://deb.nodesource.com/setup_current.x | bash - && \
@@ -53,9 +53,9 @@ RUN CARGO_GIT_FETCH_WITH_CLI=true pnpm install --no-frozen-lockfile
 ENV PATH "$PATH:/emsdk:/emsdk/upstream/emscripten:/app/.cargo/wasi-sdk-19.0/bin"
 # ENV LD_LIBRARY_PATH "/app/.cargo/wasi-sdk-19.0/lib:$LD_LIBRARY_PATH"
 # ENV C_INCLUDE_PATH "/app/.cargo/wasi-sdk-19.0/share:$C_INCLUDE_PATH"
-ENV WASI_SDK "/app/.cargo/wasi-sdk-19.0"
-ENV CC_wasm32_wasi "/app/.cargo/wasi-sdk-19.0/bin/clang"
-ENV AR_wasm32_wasi "/app/.cargo/wasi-sdk-19.0/bin/ar"
+# ENV WASI_SDK "/app/.cargo/wasi-sdk-19.0"
+# ENV CC_wasm32_wasi "/app/.cargo/wasi-sdk-19.0/bin/clang"
+# ENV AR_wasm32_wasi "/app/.cargo/wasi-sdk-19.0/bin/ar"
 
 RUN CARGO_GIT_FETCH_WITH_CLI=true pnpm turbo compile --filter @wingconsole/app --concurrency=1
 RUN pnpm --filter @wingconsole/app deploy --prod pruned
@@ -70,46 +70,3 @@ COPY --from=base /app/apps/wing-console/console/app/demo demo
 COPY --from=base /app/pruned/node_modules node_modules
 
 ENTRYPOINT ["node", "preview/index.mjs"]
-
-# RUN apt-get install -y gcc python3 make
-
-# FROM node:20
-
-# RUN apt-get update
-
-# # Get Ubuntu packages
-# RUN apt-get install -y \
-#     build-essential \
-#     curl \
-#     emscripten \
-#     gnupg software-properties-common
-
-# # Update new packages
-# RUN apt-get update
-
-# # Get Rust
-# RUN curl https://sh.rustup.rs -sSf | bash -s -- --default-toolchain nightly -y
-
-# ENV PATH="/root/.cargo/bin:${PATH}"
-
-# RUN CARGO_GIT_FETCH_WITH_CLI=true cargo install cargo-wasi
-# # RUN apt-get install emscripten -y
-# # RUN apt-get update && apt-get install -y gnupg software-properties-common
-# # RUN echo 'source $HOME/.cargo/env' >> $HOME/.bashrc
-
-# # RUN apt install curl gcc python3 make
-# # RUN curl https://sh.rustup.rs -sSf | sh -s -- --default-toolchain nightly -y
-# # RUN . $HOME/.cargo/env
-
-# WORKDIR /app
-
-
-# RUN npm install --global pnpm
-# COPY --from=base . .
-# RUN mkdir .cargo
-# RUN CARGO_GIT_FETCH_WITH_CLI=true pnpm install --no-frozen-lockfile
-
-# CMD ["echo", "1"]
-# #RUN cd libs/wingii
-# #RUN CARGO_GIT_FETCH_WITH_CLI=true cargo wasi build --release -v
-# #RUN pnpm turbo compile --filter @wingconsole/app --concurrency=1

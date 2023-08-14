@@ -26,7 +26,6 @@ export const createCompiler = (wingfile: string): Compiler => {
   let isCompiling = false;
   let shouldCompileAgain = false;
   const recompile = async () => {
-    console.log(3434343434)
     if (isCompiling) {
       shouldCompileAgain = true;
       return;
@@ -35,18 +34,17 @@ export const createCompiler = (wingfile: string): Compiler => {
     try {
       isCompiling = true;
       await events.emit("compiling");
-      console.log(11121212)
       const simfile = await wing.compile(wingfile, {
         target: wing.Target.SIM,
       });
-      console.log(2323232323)
+
       await events.emit("compiled", { simfile });
     } catch (error) {
       // There's no point in showing errors if we're going to recompile anyway.
       if (shouldCompileAgain) {
         return;
       }
-      console.log(3434343434, error.toString());
+
       await events.emit(
         "error",
         new Error(`Failed to compile.\n\n${await formatWingError(error)}`, {
