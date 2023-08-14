@@ -38,7 +38,7 @@ export type Mode = "dark" | "light" | "auto";
 
 const localStorageThemeKey = "console-theme";
 
-export const CUSTOMIZABLE_THEME = "customizable";
+export const CUSTOMIZABLE_THEME = "customizable-theme";
 
 export const DefaultTheme: Theme = {
   bg1: "bg-slate-300 dark:bg-slate-800",
@@ -131,9 +131,10 @@ export const buildTheme = (color?: string): Theme => {
   const currentMode = getThemeMode();
   const theme: Theme = {
     ...DefaultTheme,
-    bg1: `bg-${computeColor(color, currentMode === "dark" ? 0.8 : 1.1)}`,
+    bg1: `bg-${computeColor(color, currentMode === "dark" ? 0.8 : 1.2)}`,
     bg2: `bg-${computeColor(color, currentMode === "dark" ? 0.9 : 1.1)}`,
     bg3: `bg-${computeColor(color)}`,
+    bg4: `bg-${computeColor(color, currentMode === "dark" ? 1.1 : 0.9)}`,
     bgInput: `bg-${computeColor(color, currentMode === "dark" ? 1.2 : 0.8)}`,
   };
 

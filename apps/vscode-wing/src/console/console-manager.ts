@@ -216,7 +216,7 @@ export const createConsoleManager = (
           const layout = 4;
           const theme = "${getTheme()}";
           const t = "${Date.now()}";
-          const themeColor = getComputedStyle(document.documentElement).getPropertyValue('--vscode-editor-background').replace("#", "");
+          const themeColor = getComputedStyle(document.documentElement).getPropertyValue('--vscode-menu-background').replace("#", "");
           document.addEventListener('DOMContentLoaded', () => {
             const iframe = document.querySelector('iframe');
             const iframeSrc = \`http://\${instanceUrl}?layout=\${layout}&theme=\${theme}&themeColor=\${themeColor}\`;
