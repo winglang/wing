@@ -3,6 +3,8 @@ import {
   ThemeProvider,
   NotificationsProvider,
   type Mode,
+  Theme,
+  buildTheme,
 } from "@wingconsole/design-system";
 import type { Trace } from "@wingconsole/server";
 
@@ -43,10 +45,12 @@ export const App = ({ layout, theme, themeColor, onTrace }: AppProps) => {
   const appState = trpc["app.state"].useQuery();
   const themeMode = trpc["config.getThemeMode"].useQuery();
 
+  const customTheme: Theme = buildTheme(themeColor);
+
   return (
     <ThemeProvider
       mode={theme || themeMode?.data?.mode}
-      theme={DefaultTheme}
+      theme={customTheme}
       themeColor={themeColor}
     >
       <NotificationsProvider>

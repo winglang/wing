@@ -69,12 +69,83 @@ export const DefaultTheme: Theme = {
     "scrollbar hover:scrollbar-bg-slate-500/10 hover:scrollbar-thumb-slate-700/30 scrollbar-thumb-hover-slate-700/40 scrollbar-thumb-active-slate-700/60 dark:hover:scrollbar-bg-slate-400/10 dark:hover:scrollbar-thumb-slate-400/30 dark:scrollbar-thumb-hover-slate-400/40 dark:scrollbar-thumb-active-slate-400/60",
 };
 
+export const computeColor = (color: string, level: number = 1): string => {
+  if (level === 1) {
+    return color;
+  }
+
+  const hex = color.replace("#", "");
+  const r = Number.parseInt(hex.slice(0, 2), 16);
+  const g = Number.parseInt(hex.slice(2, 4), 16);
+  const b = Number.parseInt(hex.slice(4, 6), 16);
+
+  const newR = Math.min(Math.max(Math.round(r * level), 0), 255);
+  const newG = Math.min(Math.max(Math.round(g * level), 0), 255);
+  const newB = Math.min(Math.max(Math.round(b * level), 0), 255);
+
+  const newColor = `${newR.toString(16).padStart(2, "0")}${newG
+    .toString(16)
+    .padStart(2, "0")}${newB.toString(16).padStart(2, "0")}`;
+
+  return `${newColor}`;
+};
+
+const applyThemeCss = (newTheme: Theme) => {
+  let styleElement = document.querySelector("#style-theme");
+  if (styleElement) {
+    styleElement.remove();
+  }
+  styleElement = document.createElement("style");
+  styleElement.setAttribute("id", "style-theme");
+
+  let styles = {};
+  Object.keys(newTheme).map((key) => {
+    const colorKey = newTheme[key as keyof Theme];
+    if (colorKey === DefaultTheme[key as keyof Theme]) {
+      return;
+    }
+    const color = colorKey.replace("bg-", "");
+
+    styles = {
+      ...styles,
+      [`.${colorKey}`]: `{ background-color: #${color};}`,
+    };
+  });
+
+  let stylesText = "";
+
+  Object.keys(styles).map((key) => {
+    stylesText += `${key} ${styles[key as keyof typeof styles]}\n`;
+  });
+
+  styleElement.innerHTML = stylesText;
+  document.head.append(styleElement);
+};
+
+export const buildTheme = (color?: string): Theme => {
+  if (!color) {
+    return DefaultTheme;
+  }
+  let theme: Theme = { ...DefaultTheme };
+  const currentMode = getThemeMode();
+
+  theme.bg1 = `bg-${computeColor(color, currentMode === "dark" ? 0.8 : 1.1)}`;
+  theme.bg2 = `bg-${computeColor(color, currentMode === "dark" ? 0.9 : 1.1)}`;
+  theme.bg3 = `bg-${computeColor(color)}`;
+  theme.bgInput = `bg-${computeColor(
+    color,
+    currentMode === "dark" ? 1.2 : 0.8,
+  )}`;
+
+  applyThemeCss(theme);
+  return theme;
+};
+
 export interface ThemeProviderProps {
   theme: Theme;
   mode: Mode;
   setThemeMode?: (mode: Mode) => void;
   mediaTheme?: Mode;
-  themeColor?: string;
 }
 
 const setModeInLocalStorage = (mode: Mode) => {
@@ -132,7 +203,6 @@ const ThemeContext = createContext<ThemeProviderProps>({
 export const ThemeProvider = ({
   theme,
   mode,
-  themeColor,
   children,
 }: PropsWithChildren<ThemeProviderProps>) => {
   const [currentMode, setCurrentMode] = useState<Mode>(mode ?? getThemeMode());
@@ -164,12 +234,10 @@ export const ThemeProvider = ({
       value={{
         theme: theme ?? DefaultTheme,
         mode: currentMode,
-        themeColor,
         mediaTheme: getMediaThemeMode(),
         setThemeMode: onSetThemeMode,
       }}
     >
-      <div className="bg-white dark:bg-slate-800">{themeColor}</div>
       {children}
     </ThemeContext.Provider>
   );
