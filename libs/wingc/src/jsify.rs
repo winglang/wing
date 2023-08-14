@@ -1562,10 +1562,6 @@ fn get_public_symbols(scope: &Scope) -> Vec<Symbol> {
 	symbols
 }
 
-fn inflight_filename(class: &AstClass) -> String {
-	format!("./inflight.{}.js", class.name.name)
-}
-
 fn struct_filename(s: &String) -> String {
 	format!("./{}.Struct.js", s)
 }

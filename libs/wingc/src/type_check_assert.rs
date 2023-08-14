@@ -1,7 +1,6 @@
 use crate::{
 	ast::{Expr, Scope},
-	diagnostic::{report_diagnostic, Diagnostic},
-	type_check::{JsonData, JsonDataKind, Type, Types},
+	type_check::Types,
 	visit::{self, Visit},
 };
 

@@ -203,6 +203,7 @@ pub enum Type {
 	Duration,
 	Boolean,
 	Void,
+	/// Immutable Json literals may store extra information about their known data
 	Json(Option<JsonData>),
 	MutJson,
 	Nil,
@@ -248,51 +249,9 @@ pub struct SpannedTypeInfo {
 	pub span: WingSpan,
 }
 
-impl Display for JsonData {
-	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-		write!(f, "{}", self.kind)
-	}
-}
-
 impl Display for SpannedTypeInfo {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		write!(f, "{}", self.type_)
-	}
-}
-
-impl Display for JsonDataKind {
-	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-		match self {
-			JsonDataKind::Type(t) => write!(f, "{}", t),
-			JsonDataKind::Fields(fields) => {
-				if fields.len() == 0 {
-					write!(f, "{{}}")
-				} else {
-					write!(f, "{{ ")?;
-					for (i, (name, type_)) in fields.iter().enumerate() {
-						if i > 0 {
-							write!(f, ", ")?;
-						}
-						write!(f, "{}: {}", name.name, type_)?;
-					}
-					write!(f, " }}")
-				}
-			}
-			JsonDataKind::List(types) => {
-				if types.len() == 0 {
-					write!(f, "[]")
-				} else {
-					write!(f, "[")?;
-					for (i, type_) in types.iter().enumerate() {
-						if i > 0 {
-							write!(f, ", ")?;
-						}
-						write!(f, "{}", type_)?;
-					}
-					write!(f, "]")
-				}
-			}
-		}
 	}
 }
 
@@ -861,13 +820,7 @@ impl Display for Type {
 			Type::Duration => write!(f, "duration"),
 			Type::Boolean => write!(f, "bool"),
 			Type::Void => write!(f, "void"),
-			Type::Json(t) => {
-				if let Some(t) = t {
-					write!(f, "Json {}", t)
-				} else {
-					write!(f, "Json")
-				}
-			}
+			Type::Json(_) => write!(f, "Json"),
 			Type::MutJson => write!(f, "MutJson"),
 			Type::Nil => write!(f, "nil"),
 			Type::Unresolved => write!(f, "unresolved"),
@@ -878,14 +831,7 @@ impl Display for Type {
 
 			Type::Interface(iface) => write!(f, "{}", iface),
 			Type::Struct(s) => write!(f, "{}", s.name.name),
-			Type::Array(v) => {
-				// special case: json array with known data
-				if let Type::Json(Some(data)) = &**v {
-					write!(f, "{data}")
-				} else {
-					write!(f, "Array<{v}>")
-				}
-			}
+			Type::Array(v) => write!(f, "Array<{v}>"),
 			Type::MutArray(v) => write!(f, "MutArray<{}>", v),
 			Type::Map(v) => write!(f, "Map<{}>", v),
 			Type::MutMap(v) => write!(f, "MutMap<{}>", v),
@@ -1810,7 +1756,12 @@ impl<'a> TypeChecker<'a> {
 									exp,
 									format!(
 										"Binary operator '+' cannot be applied to operands of type '{}' and '{}'; only ({}, {}) and ({}, {}) are supported",
-										ltype, rtype, self.types.number(), self.types.number(), self.types.string(), self.types.string(),
+										ltype,
+										rtype,
+										self.types.number(),
+										self.types.number(),
+										self.types.string(),
+										self.types.string(),
 									),
 								);
 							}
@@ -1898,13 +1849,13 @@ impl<'a> TypeChecker<'a> {
 
 				let ExprKind::Reference(ref r) = class.kind else {
 					self.spanned_error(exp,"Must be a reference to a class");
-					return (self.types.error(), Phase::Independent);
-				};
+						return (self.types.error(), Phase::Independent);
+					};
 
 				let Reference::TypeReference(_) = r else {
-					self.spanned_error(exp,"Must be a type reference to a class");
-					return (self.types.error(), Phase::Independent);
-				};
+						self.spanned_error(exp,"Must be a type reference to a class");
+						return (self.types.error(), Phase::Independent);
+					};
 
 				// Lookup the class's type in the env
 				let (class_env, class_symbol) = match *class_type {
@@ -1929,7 +1880,10 @@ impl<'a> TypeChecker<'a> {
 					Type::Struct(_) => {
 						self.spanned_error(
 							class,
-							format!("Cannot instantiate type \"{}\" because it is a struct and not a class. Use struct instantiation instead.", class_type),
+							format!(
+								"Cannot instantiate type \"{}\" because it is a struct and not a class. Use struct instantiation instead.",
+								class_type
+							),
 						);
 						return self.resolved_error();
 					}
@@ -2270,15 +2224,20 @@ impl<'a> TypeChecker<'a> {
 				let mut known_types = IndexMap::new();
 				fields.iter().for_each(|(name, v)| {
 					let (known_type, _) = self.type_check_exp(v, env);
-					known_types.insert(name.clone(), SpannedTypeInfo { type_: known_type, span: v.span() });
+					known_types.insert(
+						name.clone(),
+						SpannedTypeInfo {
+							type_: known_type,
+							span: v.span(),
+						},
+					);
 					// Ensure we don't allow MutJson to Json or vice versa
 					match *known_type {
 						Type::Json(_) => {
 							if self.is_in_mut_json {
 								self.spanned_error(
 									v,
-									"Cannot assign type: \"Json\" to a \"MutJson\" field (hint: try using Json.deepMutCopy())"
-										.to_string(),
+									"\"MutJson\" fields cannot be \"Json\" (hint: try using Json.deepMutCopy())",
 								)
 							}
 						}
@@ -2286,21 +2245,21 @@ impl<'a> TypeChecker<'a> {
 							if !self.is_in_mut_json {
 								self.spanned_error(
 									v,
-									"Cannot assign type: \"MutJson\" to a \"Json\" field (hint: try using Json.deepCopy())".to_string(),
+									"\"Json\" fields cannot be \"MutJson\" (hint: try using Json.deepCopy())",
 								)
 							}
 						}
 						_ => {}
 					};
 
-          if self.is_in_mut_json && !known_type.is_json_legal_value() {
-            self.spanned_error(
-              v,
-              format!(
-                "Expected \"Json\" elements to be Json values (https://www.json.org/json-en.html), but got \"{}\" which is not a Json value",
-                known_type
-              ),
-            );
+					if self.is_in_mut_json && !known_type.is_json_legal_value() {
+						self.spanned_error(
+							v,
+							format!(
+								"Expected a valid Json value (https://www.json.org/json-en.html), but got \"{}\"",
+								known_type
+							),
+						);
 					}
 				});
 
@@ -2607,7 +2566,7 @@ impl<'a> TypeChecker<'a> {
 			self.spanned_error(
 				exp,
 				format!(
-					"Expected \"Json\" elements to be Json values (https://www.json.org/json-en.html), but got \"{}\" which is not a Json value",
+					"Expected a valid Json value (https://www.json.org/json-en.html), but got \"{}\"",
 					actual_type
 				),
 			);
@@ -3236,7 +3195,13 @@ impl<'a> TypeChecker<'a> {
 							}
 						};
 						if !is_bringable {
-							self.spanned_error(stmt, format!("Cannot bring \"{}\" - modules with statements besides classes, interfaces, enums, and structs cannot be brought", name));
+							self.spanned_error(
+								stmt,
+								format!(
+									"Cannot bring \"{}\" - modules with statements besides classes, interfaces, enums, and structs cannot be brought",
+									name
+								),
+							);
 							return;
 						}
 						let ns = self.types.add_namespace(Namespace {
@@ -3296,6 +3261,13 @@ impl<'a> TypeChecker<'a> {
 					}
 				} else {
 					self.validate_type(self.types.void(), env.return_type, stmt);
+				}
+
+				if let Type::Json(d) = &mut *env.return_type {
+					// We do not have the required analysis to know the type of the Json data after return
+					if d.is_some() {
+						d.take();
+					}
 				}
 			}
 			StmtKind::Class(AstClass {
