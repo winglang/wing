@@ -68,7 +68,6 @@ export class Queue
         }
       },
     });
-    });
   }
 
   public async purge(): Promise<void> {

@@ -50,8 +50,7 @@ test("queue with one subscriber, default batch size of 1", async () => {
   const queueClient = s.getResource("/my_queue") as cloud.IQueueClient;
 
   // WHEN
-  await queueClient.push("A");
-  await queueClient.push("B");
+  await queueClient.push("A", "B");
 
   // TODO: queueClient.awaitMessages(2) or queueClient.untilEmpty() or something
   await sleep(200);
