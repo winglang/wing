@@ -47,7 +47,7 @@ WORKDIR /app
 RUN npm install --global pnpm
 # COPY --from=base . .
 COPY . .
-RUN mkdir .cargo
+# RUN mkdir .cargo
 RUN CARGO_GIT_FETCH_WITH_CLI=true pnpm install --no-frozen-lockfile
 
 ENV PATH "$PATH:/emsdk:/emsdk/upstream/emscripten:/app/.cargo/wasi-sdk-19.0/bin"
