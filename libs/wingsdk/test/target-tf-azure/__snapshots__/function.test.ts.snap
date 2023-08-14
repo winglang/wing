@@ -86,9 +86,6 @@ exports[`basic function 2`] = `
           "Default": {
             "children": {
               "Function": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "Asset": {
                     "constructInfo": {
@@ -115,9 +112,6 @@ exports[`basic function 2`] = `
                     "path": "root/Default/Function/Function",
                   },
                   "FunctionBucket": {
-                    "attributes": {
-                      "wing:resource:connections": [],
-                    },
                     "children": {
                       "Bucket": {
                         "constructInfo": {
@@ -160,9 +154,6 @@ exports[`basic function 2`] = `
                 "path": "root/Default/Function",
               },
               "Handler": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
                   "version": "10.1.314",
@@ -331,9 +322,6 @@ exports[`basic function with environment variables 2`] = `
           "Default": {
             "children": {
               "Function": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "Asset": {
                     "constructInfo": {
@@ -360,9 +348,6 @@ exports[`basic function with environment variables 2`] = `
                     "path": "root/Default/Function/Function",
                   },
                   "FunctionBucket": {
-                    "attributes": {
-                      "wing:resource:connections": [],
-                    },
                     "children": {
                       "Bucket": {
                         "constructInfo": {
@@ -405,9 +390,6 @@ exports[`basic function with environment variables 2`] = `
                 "path": "root/Default/Function",
               },
               "Handler": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
                   "version": "10.1.314",
@@ -574,9 +556,6 @@ exports[`replace invalid character from function name 2`] = `
           "Default": {
             "children": {
               "Handler": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
                   "version": "10.1.314",
@@ -622,9 +601,6 @@ exports[`replace invalid character from function name 2`] = `
                 "path": "root/Default/azure",
               },
               "someFunction01": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "Asset": {
                     "constructInfo": {
@@ -651,9 +627,6 @@ exports[`replace invalid character from function name 2`] = `
                     "path": "root/Default/someFunction01/Function",
                   },
                   "FunctionBucket": {
-                    "attributes": {
-                      "wing:resource:connections": [],
-                    },
                     "children": {
                       "Bucket": {
                         "constructInfo": {

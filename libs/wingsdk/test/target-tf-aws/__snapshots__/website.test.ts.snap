@@ -170,9 +170,6 @@ exports[`default website behavior 2`] = `
           "Default": {
             "children": {
               "Website": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "AllowDistributionReadOnly": {
                     "constructInfo": {
@@ -275,9 +272,6 @@ exports[`default website behavior 2`] = `
                 "path": "root/Default/aws",
               },
               "cloud.TestRunner": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "TestFunctionArns": {
                     "constructInfo": {
@@ -515,9 +509,6 @@ exports[`website with add_json 2`] = `
           "Default": {
             "children": {
               "Website": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "AllowDistributionReadOnly": {
                     "constructInfo": {
@@ -628,9 +619,6 @@ exports[`website with add_json 2`] = `
                 "path": "root/Default/aws",
               },
               "cloud.TestRunner": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "TestFunctionArns": {
                     "constructInfo": {

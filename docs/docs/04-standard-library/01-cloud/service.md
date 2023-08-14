@@ -144,12 +144,43 @@ new cloud.Service(props: ServiceProps);
 
 #### Methods <a name="Methods" id="Methods"></a>
 
+##### Preflight Methods
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.cloud.Service.bind">bind</a></code> | Binds the resource to the host so that it can be used by inflight code. |
+
 ##### Inflight Methods
 
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.IServiceClient.start">start</a></code> | Start the service. |
 | <code><a href="#@winglang/sdk.cloud.IServiceClient.stop">stop</a></code> | Stop the service. |
+
+---
+
+##### `bind` <a name="bind" id="@winglang/sdk.cloud.Service.bind"></a>
+
+```wing
+bind(host: IInflightHost, ops: MutArray<str>): void
+```
+
+Binds the resource to the host so that it can be used by inflight code.
+
+You can override this method to perform additional logic like granting
+IAM permissions to the host based on what methods are being called. But
+you must call `super.bind(host, ops)` to ensure that the resource is
+actually bound.
+
+###### `host`<sup>Required</sup> <a name="host" id="@winglang/sdk.cloud.Service.bind.parameter.host"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.IInflightHost">IInflightHost</a>
+
+---
+
+###### `ops`<sup>Required</sup> <a name="ops" id="@winglang/sdk.cloud.Service.bind.parameter.ops"></a>
+
+- *Type:* MutArray&lt;str&gt;
 
 ---
 

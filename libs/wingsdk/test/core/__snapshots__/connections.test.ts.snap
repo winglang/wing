@@ -16,6 +16,17 @@ return class Handler {
 
 })).handle(event);
 };",
+  "connections.json": {
+    "connections": [
+      {
+        "implicit": false,
+        "name": "relationship",
+        "source": "root/my_bucket",
+        "target": "root/my_function",
+      },
+    ],
+    "version": "connections-0.1",
+  },
   "simulator.json": {
     "resources": [
       {
@@ -54,9 +65,6 @@ return class Handler {
     "tree": {
       "children": {
         "Handler": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -70,9 +78,6 @@ return class Handler {
           "path": "root/Handler",
         },
         "cloud.TestRunner": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -86,16 +91,6 @@ return class Handler {
           "path": "root/cloud.TestRunner",
         },
         "my_bucket": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "outbound",
-                "implicit": false,
-                "relationship": "relationship",
-                "resource": "root/my_function",
-              },
-            ],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -108,16 +103,6 @@ return class Handler {
           "path": "root/my_bucket",
         },
         "my_function": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "inbound",
-                "implicit": false,
-                "relationship": "relationship",
-                "resource": "root/my_bucket",
-              },
-            ],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",

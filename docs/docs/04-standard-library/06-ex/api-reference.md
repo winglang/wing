@@ -32,6 +32,12 @@ new ex.Redis();
 
 #### Methods <a name="Methods" id="Methods"></a>
 
+##### Preflight Methods
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.ex.Redis.bind">bind</a></code> | Binds the resource to the host so that it can be used by inflight code. |
+
 ##### Inflight Methods
 
 | **Name** | **Description** |
@@ -45,6 +51,31 @@ new ex.Redis();
 | <code><a href="#@winglang/sdk.ex.IRedisClient.set">set</a></code> | Set key value pair. |
 | <code><a href="#@winglang/sdk.ex.IRedisClient.smembers">smembers</a></code> | Returns all the members of the set value stored at key. |
 | <code><a href="#@winglang/sdk.ex.IRedisClient.url">url</a></code> | Get url of redis server. |
+
+---
+
+##### `bind` <a name="bind" id="@winglang/sdk.ex.Redis.bind"></a>
+
+```wing
+bind(host: IInflightHost, ops: MutArray<str>): void
+```
+
+Binds the resource to the host so that it can be used by inflight code.
+
+You can override this method to perform additional logic like granting
+IAM permissions to the host based on what methods are being called. But
+you must call `super.bind(host, ops)` to ensure that the resource is
+actually bound.
+
+###### `host`<sup>Required</sup> <a name="host" id="@winglang/sdk.ex.Redis.bind.parameter.host"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.IInflightHost">IInflightHost</a>
+
+---
+
+###### `ops`<sup>Required</sup> <a name="ops" id="@winglang/sdk.ex.Redis.bind.parameter.ops"></a>
+
+- *Type:* MutArray&lt;str&gt;
 
 ---
 
@@ -281,6 +312,7 @@ new ex.Table(props: TableProps);
 
 | **Name** | **Description** |
 | --- | --- |
+| <code><a href="#@winglang/sdk.ex.Table.bind">bind</a></code> | Binds the resource to the host so that it can be used by inflight code. |
 | <code><a href="#@winglang/sdk.ex.Table.addRow">addRow</a></code> | Add a row to the table that is created when the app is deployed. |
 
 ##### Inflight Methods
@@ -292,6 +324,31 @@ new ex.Table(props: TableProps);
 | <code><a href="#@winglang/sdk.ex.ITableClient.insert">insert</a></code> | Insert a row into the table. |
 | <code><a href="#@winglang/sdk.ex.ITableClient.list">list</a></code> | List all rows in the table. |
 | <code><a href="#@winglang/sdk.ex.ITableClient.update">update</a></code> | Update a row in the table. |
+
+---
+
+##### `bind` <a name="bind" id="@winglang/sdk.ex.Table.bind"></a>
+
+```wing
+bind(host: IInflightHost, ops: MutArray<str>): void
+```
+
+Binds the resource to the host so that it can be used by inflight code.
+
+You can override this method to perform additional logic like granting
+IAM permissions to the host based on what methods are being called. But
+you must call `super.bind(host, ops)` to ensure that the resource is
+actually bound.
+
+###### `host`<sup>Required</sup> <a name="host" id="@winglang/sdk.ex.Table.bind.parameter.host"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.IInflightHost">IInflightHost</a>
+
+---
+
+###### `ops`<sup>Required</sup> <a name="ops" id="@winglang/sdk.ex.Table.bind.parameter.ops"></a>
+
+- *Type:* MutArray&lt;str&gt;
 
 ---
 

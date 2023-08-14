@@ -2,6 +2,10 @@
 
 exports[`create a queue 1`] = `
 {
+  "connections.json": {
+    "connections": [],
+    "version": "connections-0.1",
+  },
   "simulator.json": {
     "resources": [
       {
@@ -28,9 +32,6 @@ exports[`create a queue 1`] = `
     "tree": {
       "children": {
         "cloud.TestRunner": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -44,9 +45,6 @@ exports[`create a queue 1`] = `
           "path": "root/cloud.TestRunner",
         },
         "my_queue": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -110,6 +108,29 @@ async handle(message) {
 
 }), args: {} })).handle(event);
 };",
+  "connections.json": {
+    "connections": [
+      {
+        "implicit": false,
+        "name": "handle()",
+        "source": "root/my_queue/my_queue-SetConsumer-e645076f",
+        "target": "root/Handler",
+      },
+      {
+        "implicit": false,
+        "name": "$inflight_init()",
+        "source": "root/my_queue/my_queue-SetConsumer-e645076f",
+        "target": "root/Handler",
+      },
+      {
+        "implicit": false,
+        "name": "setConsumer()",
+        "source": "root/my_queue",
+        "target": "root/my_queue/my_queue-SetConsumer-e645076f",
+      },
+    ],
+    "version": "connections-0.1",
+  },
   "simulator.json": {
     "resources": [
       {
@@ -159,22 +180,6 @@ async handle(message) {
     "tree": {
       "children": {
         "Handler": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "inbound",
-                "implicit": false,
-                "relationship": "handle()",
-                "resource": "root/my_queue/my_queue-SetConsumer-e645076f",
-              },
-              {
-                "direction": "inbound",
-                "implicit": false,
-                "relationship": "$inflight_init()",
-                "resource": "root/my_queue/my_queue-SetConsumer-e645076f",
-              },
-            ],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -188,9 +193,6 @@ async handle(message) {
           "path": "root/Handler",
         },
         "cloud.TestRunner": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -204,21 +206,8 @@ async handle(message) {
           "path": "root/cloud.TestRunner",
         },
         "my_queue": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "outbound",
-                "implicit": false,
-                "relationship": "setConsumer()",
-                "resource": "root/my_queue/my_queue-SetConsumer-e645076f",
-              },
-            ],
-          },
           "children": {
             "my_queue-QueueEventMapping-e645076f": {
-              "attributes": {
-                "wing:resource:connections": [],
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.1.314",
@@ -230,28 +219,6 @@ async handle(message) {
               "path": "root/my_queue/my_queue-QueueEventMapping-e645076f",
             },
             "my_queue-SetConsumer-e645076f": {
-              "attributes": {
-                "wing:resource:connections": [
-                  {
-                    "direction": "outbound",
-                    "implicit": false,
-                    "relationship": "handle()",
-                    "resource": "root/Handler",
-                  },
-                  {
-                    "direction": "outbound",
-                    "implicit": false,
-                    "relationship": "$inflight_init()",
-                    "resource": "root/Handler",
-                  },
-                  {
-                    "direction": "inbound",
-                    "implicit": false,
-                    "relationship": "setConsumer()",
-                    "resource": "root/my_queue",
-                  },
-                ],
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.1.314",
@@ -265,9 +232,6 @@ async handle(message) {
               "path": "root/my_queue/my_queue-SetConsumer-e645076f",
             },
             "my_queue-SetConsumerHandler-e645076f": {
-              "attributes": {
-                "wing:resource:connections": [],
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.1.314",
@@ -342,6 +306,29 @@ async handle(message) {
 
 }), args: {} })).handle(event);
 };",
+  "connections.json": {
+    "connections": [
+      {
+        "implicit": false,
+        "name": "handle()",
+        "source": "root/my_queue/my_queue-SetConsumer-e645076f",
+        "target": "root/Handler",
+      },
+      {
+        "implicit": false,
+        "name": "$inflight_init()",
+        "source": "root/my_queue/my_queue-SetConsumer-e645076f",
+        "target": "root/Handler",
+      },
+      {
+        "implicit": false,
+        "name": "setConsumer()",
+        "source": "root/my_queue",
+        "target": "root/my_queue/my_queue-SetConsumer-e645076f",
+      },
+    ],
+    "version": "connections-0.1",
+  },
   "simulator.json": {
     "resources": [
       {
@@ -391,22 +378,6 @@ async handle(message) {
     "tree": {
       "children": {
         "Handler": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "inbound",
-                "implicit": false,
-                "relationship": "handle()",
-                "resource": "root/my_queue/my_queue-SetConsumer-e645076f",
-              },
-              {
-                "direction": "inbound",
-                "implicit": false,
-                "relationship": "$inflight_init()",
-                "resource": "root/my_queue/my_queue-SetConsumer-e645076f",
-              },
-            ],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -420,9 +391,6 @@ async handle(message) {
           "path": "root/Handler",
         },
         "cloud.TestRunner": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -436,21 +404,8 @@ async handle(message) {
           "path": "root/cloud.TestRunner",
         },
         "my_queue": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "outbound",
-                "implicit": false,
-                "relationship": "setConsumer()",
-                "resource": "root/my_queue/my_queue-SetConsumer-e645076f",
-              },
-            ],
-          },
           "children": {
             "my_queue-QueueEventMapping-e645076f": {
-              "attributes": {
-                "wing:resource:connections": [],
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.1.314",
@@ -462,28 +417,6 @@ async handle(message) {
               "path": "root/my_queue/my_queue-QueueEventMapping-e645076f",
             },
             "my_queue-SetConsumer-e645076f": {
-              "attributes": {
-                "wing:resource:connections": [
-                  {
-                    "direction": "outbound",
-                    "implicit": false,
-                    "relationship": "handle()",
-                    "resource": "root/Handler",
-                  },
-                  {
-                    "direction": "outbound",
-                    "implicit": false,
-                    "relationship": "$inflight_init()",
-                    "resource": "root/Handler",
-                  },
-                  {
-                    "direction": "inbound",
-                    "implicit": false,
-                    "relationship": "setConsumer()",
-                    "resource": "root/my_queue",
-                  },
-                ],
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.1.314",
@@ -497,9 +430,6 @@ async handle(message) {
               "path": "root/my_queue/my_queue-SetConsumer-e645076f",
             },
             "my_queue-SetConsumerHandler-e645076f": {
-              "attributes": {
-                "wing:resource:connections": [],
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.1.314",
@@ -578,6 +508,29 @@ async handle(message) {
 
 }), args: {} })).handle(event);
 };",
+  "connections.json": {
+    "connections": [
+      {
+        "implicit": false,
+        "name": "handle()",
+        "source": "root/my_queue/my_queue-SetConsumer-e645076f",
+        "target": "root/Handler",
+      },
+      {
+        "implicit": false,
+        "name": "$inflight_init()",
+        "source": "root/my_queue/my_queue-SetConsumer-e645076f",
+        "target": "root/Handler",
+      },
+      {
+        "implicit": false,
+        "name": "setConsumer()",
+        "source": "root/my_queue",
+        "target": "root/my_queue/my_queue-SetConsumer-e645076f",
+      },
+    ],
+    "version": "connections-0.1",
+  },
   "simulator.json": {
     "resources": [
       {
@@ -627,22 +580,6 @@ async handle(message) {
     "tree": {
       "children": {
         "Handler": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "inbound",
-                "implicit": false,
-                "relationship": "handle()",
-                "resource": "root/my_queue/my_queue-SetConsumer-e645076f",
-              },
-              {
-                "direction": "inbound",
-                "implicit": false,
-                "relationship": "$inflight_init()",
-                "resource": "root/my_queue/my_queue-SetConsumer-e645076f",
-              },
-            ],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -656,9 +593,6 @@ async handle(message) {
           "path": "root/Handler",
         },
         "cloud.TestRunner": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -672,21 +606,8 @@ async handle(message) {
           "path": "root/cloud.TestRunner",
         },
         "my_queue": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "outbound",
-                "implicit": false,
-                "relationship": "setConsumer()",
-                "resource": "root/my_queue/my_queue-SetConsumer-e645076f",
-              },
-            ],
-          },
           "children": {
             "my_queue-QueueEventMapping-e645076f": {
-              "attributes": {
-                "wing:resource:connections": [],
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.1.314",
@@ -698,28 +619,6 @@ async handle(message) {
               "path": "root/my_queue/my_queue-QueueEventMapping-e645076f",
             },
             "my_queue-SetConsumer-e645076f": {
-              "attributes": {
-                "wing:resource:connections": [
-                  {
-                    "direction": "outbound",
-                    "implicit": false,
-                    "relationship": "handle()",
-                    "resource": "root/Handler",
-                  },
-                  {
-                    "direction": "outbound",
-                    "implicit": false,
-                    "relationship": "$inflight_init()",
-                    "resource": "root/Handler",
-                  },
-                  {
-                    "direction": "inbound",
-                    "implicit": false,
-                    "relationship": "setConsumer()",
-                    "resource": "root/my_queue",
-                  },
-                ],
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.1.314",
@@ -733,9 +632,6 @@ async handle(message) {
               "path": "root/my_queue/my_queue-SetConsumer-e645076f",
             },
             "my_queue-SetConsumerHandler-e645076f": {
-              "attributes": {
-                "wing:resource:connections": [],
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.1.314",
@@ -787,6 +683,10 @@ exports[`queue batch size of 2, purge the queue 1`] = `
 
 exports[`queue batch size of 2, purge the queue 2`] = `
 {
+  "connections.json": {
+    "connections": [],
+    "version": "connections-0.1",
+  },
   "simulator.json": {
     "resources": [
       {
@@ -813,9 +713,6 @@ exports[`queue batch size of 2, purge the queue 2`] = `
     "tree": {
       "children": {
         "cloud.TestRunner": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -829,9 +726,6 @@ exports[`queue batch size of 2, purge the queue 2`] = `
           "path": "root/cloud.TestRunner",
         },
         "my_queue": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -931,6 +825,41 @@ async handle(message) {
 
 }), args: {} })).handle(event);
 };",
+  "connections.json": {
+    "connections": [
+      {
+        "implicit": false,
+        "name": "handle()",
+        "source": "root/my_queue/my_queue-SetConsumer-e645076f",
+        "target": "root/Handler",
+      },
+      {
+        "implicit": false,
+        "name": "$inflight_init()",
+        "source": "root/my_queue/my_queue-SetConsumer-e645076f",
+        "target": "root/Handler",
+      },
+      {
+        "implicit": false,
+        "name": "setConsumer()",
+        "source": "root/my_queue",
+        "target": "root/my_queue/my_queue-SetConsumer-e645076f",
+      },
+      {
+        "implicit": false,
+        "name": "push()",
+        "source": "root/my_queue_messages/Function",
+        "target": "root/my_queue",
+      },
+      {
+        "implicit": false,
+        "name": "$inflight_init()",
+        "source": "root/my_queue_messages/Function",
+        "target": "root/my_queue",
+      },
+    ],
+    "version": "connections-0.1",
+  },
   "simulator.json": {
     "resources": [
       {
@@ -1001,22 +930,6 @@ async handle(message) {
     "tree": {
       "children": {
         "Handler": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "inbound",
-                "implicit": false,
-                "relationship": "handle()",
-                "resource": "root/my_queue/my_queue-SetConsumer-e645076f",
-              },
-              {
-                "direction": "inbound",
-                "implicit": false,
-                "relationship": "$inflight_init()",
-                "resource": "root/my_queue/my_queue-SetConsumer-e645076f",
-              },
-            ],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -1030,9 +943,6 @@ async handle(message) {
           "path": "root/Handler",
         },
         "OnDeployHandler": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -1046,9 +956,6 @@ async handle(message) {
           "path": "root/OnDeployHandler",
         },
         "cloud.TestRunner": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -1062,33 +969,8 @@ async handle(message) {
           "path": "root/cloud.TestRunner",
         },
         "my_queue": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "outbound",
-                "implicit": false,
-                "relationship": "setConsumer()",
-                "resource": "root/my_queue/my_queue-SetConsumer-e645076f",
-              },
-              {
-                "direction": "inbound",
-                "implicit": false,
-                "relationship": "push()",
-                "resource": "root/my_queue_messages/Function",
-              },
-              {
-                "direction": "inbound",
-                "implicit": false,
-                "relationship": "$inflight_init()",
-                "resource": "root/my_queue_messages/Function",
-              },
-            ],
-          },
           "children": {
             "my_queue-QueueEventMapping-e645076f": {
-              "attributes": {
-                "wing:resource:connections": [],
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.1.314",
@@ -1100,28 +982,6 @@ async handle(message) {
               "path": "root/my_queue/my_queue-QueueEventMapping-e645076f",
             },
             "my_queue-SetConsumer-e645076f": {
-              "attributes": {
-                "wing:resource:connections": [
-                  {
-                    "direction": "outbound",
-                    "implicit": false,
-                    "relationship": "handle()",
-                    "resource": "root/Handler",
-                  },
-                  {
-                    "direction": "outbound",
-                    "implicit": false,
-                    "relationship": "$inflight_init()",
-                    "resource": "root/Handler",
-                  },
-                  {
-                    "direction": "inbound",
-                    "implicit": false,
-                    "relationship": "setConsumer()",
-                    "resource": "root/my_queue",
-                  },
-                ],
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.1.314",
@@ -1135,9 +995,6 @@ async handle(message) {
               "path": "root/my_queue/my_queue-SetConsumer-e645076f",
             },
             "my_queue-SetConsumerHandler-e645076f": {
-              "attributes": {
-                "wing:resource:connections": [],
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.1.314",
@@ -1161,27 +1018,8 @@ async handle(message) {
           "path": "root/my_queue",
         },
         "my_queue_messages": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "children": {
             "Function": {
-              "attributes": {
-                "wing:resource:connections": [
-                  {
-                    "direction": "outbound",
-                    "implicit": false,
-                    "relationship": "push()",
-                    "resource": "root/my_queue",
-                  },
-                  {
-                    "direction": "outbound",
-                    "implicit": false,
-                    "relationship": "$inflight_init()",
-                    "resource": "root/my_queue",
-                  },
-                ],
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.1.314",
@@ -1257,6 +1095,29 @@ async handle(message) {
 
 }), args: {} })).handle(event);
 };",
+  "connections.json": {
+    "connections": [
+      {
+        "implicit": false,
+        "name": "handle()",
+        "source": "root/my_queue/my_queue-SetConsumer-e645076f",
+        "target": "root/Handler",
+      },
+      {
+        "implicit": false,
+        "name": "$inflight_init()",
+        "source": "root/my_queue/my_queue-SetConsumer-e645076f",
+        "target": "root/Handler",
+      },
+      {
+        "implicit": false,
+        "name": "setConsumer()",
+        "source": "root/my_queue",
+        "target": "root/my_queue/my_queue-SetConsumer-e645076f",
+      },
+    ],
+    "version": "connections-0.1",
+  },
   "simulator.json": {
     "resources": [
       {
@@ -1306,22 +1167,6 @@ async handle(message) {
     "tree": {
       "children": {
         "Handler": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "inbound",
-                "implicit": false,
-                "relationship": "handle()",
-                "resource": "root/my_queue/my_queue-SetConsumer-e645076f",
-              },
-              {
-                "direction": "inbound",
-                "implicit": false,
-                "relationship": "$inflight_init()",
-                "resource": "root/my_queue/my_queue-SetConsumer-e645076f",
-              },
-            ],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -1335,9 +1180,6 @@ async handle(message) {
           "path": "root/Handler",
         },
         "cloud.TestRunner": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -1351,21 +1193,8 @@ async handle(message) {
           "path": "root/cloud.TestRunner",
         },
         "my_queue": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "outbound",
-                "implicit": false,
-                "relationship": "setConsumer()",
-                "resource": "root/my_queue/my_queue-SetConsumer-e645076f",
-              },
-            ],
-          },
           "children": {
             "my_queue-QueueEventMapping-e645076f": {
-              "attributes": {
-                "wing:resource:connections": [],
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.1.314",
@@ -1377,28 +1206,6 @@ async handle(message) {
               "path": "root/my_queue/my_queue-QueueEventMapping-e645076f",
             },
             "my_queue-SetConsumer-e645076f": {
-              "attributes": {
-                "wing:resource:connections": [
-                  {
-                    "direction": "outbound",
-                    "implicit": false,
-                    "relationship": "handle()",
-                    "resource": "root/Handler",
-                  },
-                  {
-                    "direction": "outbound",
-                    "implicit": false,
-                    "relationship": "$inflight_init()",
-                    "resource": "root/Handler",
-                  },
-                  {
-                    "direction": "inbound",
-                    "implicit": false,
-                    "relationship": "setConsumer()",
-                    "resource": "root/my_queue",
-                  },
-                ],
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.1.314",
@@ -1412,9 +1219,6 @@ async handle(message) {
               "path": "root/my_queue/my_queue-SetConsumer-e645076f",
             },
             "my_queue-SetConsumerHandler-e645076f": {
-              "attributes": {
-                "wing:resource:connections": [],
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.1.314",

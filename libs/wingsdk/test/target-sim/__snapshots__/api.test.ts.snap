@@ -34,6 +34,17 @@ return class Handler {
 
 })).handle(event);
 };",
+  "connections.json": {
+    "connections": [
+      {
+        "implicit": false,
+        "name": "get()",
+        "source": "root/my_api",
+        "target": "root/my_api/OnRequestHandler-e645076f",
+      },
+    ],
+    "version": "connections-0.1",
+  },
   "simulator.json": {
     "resources": [
       {
@@ -103,9 +114,6 @@ return class Handler {
     "tree": {
       "children": {
         "Handler": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -119,9 +127,6 @@ return class Handler {
           "path": "root/Handler",
         },
         "cloud.TestRunner": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -135,21 +140,8 @@ return class Handler {
           "path": "root/cloud.TestRunner",
         },
         "my_api": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "outbound",
-                "implicit": false,
-                "relationship": "get()",
-                "resource": "root/my_api/OnRequestHandler-e645076f",
-              },
-            ],
-          },
           "children": {
             "ApiEventMapping-e645076f": {
-              "attributes": {
-                "wing:resource:connections": [],
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.1.314",
@@ -161,16 +153,6 @@ return class Handler {
               "path": "root/my_api/ApiEventMapping-e645076f",
             },
             "OnRequestHandler-e645076f": {
-              "attributes": {
-                "wing:resource:connections": [
-                  {
-                    "direction": "inbound",
-                    "implicit": false,
-                    "relationship": "get()",
-                    "resource": "root/my_api",
-                  },
-                ],
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.1.314",
@@ -242,6 +224,17 @@ return class Handler {
 
 })).handle(event);
 };",
+  "connections.json": {
+    "connections": [
+      {
+        "implicit": false,
+        "name": "get()",
+        "source": "root/my_api",
+        "target": "root/my_api/OnRequestHandler-e645076f",
+      },
+    ],
+    "version": "connections-0.1",
+  },
   "simulator.json": {
     "resources": [
       {
@@ -311,9 +304,6 @@ return class Handler {
     "tree": {
       "children": {
         "Handler": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -327,9 +317,6 @@ return class Handler {
           "path": "root/Handler",
         },
         "cloud.TestRunner": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -343,21 +330,8 @@ return class Handler {
           "path": "root/cloud.TestRunner",
         },
         "my_api": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "outbound",
-                "implicit": false,
-                "relationship": "get()",
-                "resource": "root/my_api/OnRequestHandler-e645076f",
-              },
-            ],
-          },
           "children": {
             "ApiEventMapping-e645076f": {
-              "attributes": {
-                "wing:resource:connections": [],
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.1.314",
@@ -369,16 +343,6 @@ return class Handler {
               "path": "root/my_api/ApiEventMapping-e645076f",
             },
             "OnRequestHandler-e645076f": {
-              "attributes": {
-                "wing:resource:connections": [
-                  {
-                    "direction": "inbound",
-                    "implicit": false,
-                    "relationship": "get()",
-                    "resource": "root/my_api",
-                  },
-                ],
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.1.314",
@@ -450,6 +414,17 @@ return class Handler {
 
 })).handle(event);
 };",
+  "connections.json": {
+    "connections": [
+      {
+        "implicit": false,
+        "name": "get()",
+        "source": "root/my_api",
+        "target": "root/my_api/OnRequestHandler-e645076f",
+      },
+    ],
+    "version": "connections-0.1",
+  },
   "simulator.json": {
     "resources": [
       {
@@ -519,9 +494,6 @@ return class Handler {
     "tree": {
       "children": {
         "Handler": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -535,9 +507,6 @@ return class Handler {
           "path": "root/Handler",
         },
         "cloud.TestRunner": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -551,21 +520,8 @@ return class Handler {
           "path": "root/cloud.TestRunner",
         },
         "my_api": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "outbound",
-                "implicit": false,
-                "relationship": "get()",
-                "resource": "root/my_api/OnRequestHandler-e645076f",
-              },
-            ],
-          },
           "children": {
             "ApiEventMapping-e645076f": {
-              "attributes": {
-                "wing:resource:connections": [],
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.1.314",
@@ -577,16 +533,6 @@ return class Handler {
               "path": "root/my_api/ApiEventMapping-e645076f",
             },
             "OnRequestHandler-e645076f": {
-              "attributes": {
-                "wing:resource:connections": [
-                  {
-                    "direction": "inbound",
-                    "implicit": false,
-                    "relationship": "get()",
-                    "resource": "root/my_api",
-                  },
-                ],
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.1.314",
@@ -658,6 +604,17 @@ return class Handler {
 
 })).handle(event);
 };",
+  "connections.json": {
+    "connections": [
+      {
+        "implicit": false,
+        "name": "get()",
+        "source": "root/my_api",
+        "target": "root/my_api/OnRequestHandler-e645076f",
+      },
+    ],
+    "version": "connections-0.1",
+  },
   "simulator.json": {
     "resources": [
       {
@@ -727,9 +684,6 @@ return class Handler {
     "tree": {
       "children": {
         "Handler": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -743,9 +697,6 @@ return class Handler {
           "path": "root/Handler",
         },
         "cloud.TestRunner": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -759,21 +710,8 @@ return class Handler {
           "path": "root/cloud.TestRunner",
         },
         "my_api": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "outbound",
-                "implicit": false,
-                "relationship": "get()",
-                "resource": "root/my_api/OnRequestHandler-e645076f",
-              },
-            ],
-          },
           "children": {
             "ApiEventMapping-e645076f": {
-              "attributes": {
-                "wing:resource:connections": [],
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.1.314",
@@ -785,16 +723,6 @@ return class Handler {
               "path": "root/my_api/ApiEventMapping-e645076f",
             },
             "OnRequestHandler-e645076f": {
-              "attributes": {
-                "wing:resource:connections": [
-                  {
-                    "direction": "inbound",
-                    "implicit": false,
-                    "relationship": "get()",
-                    "resource": "root/my_api",
-                  },
-                ],
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.1.314",
@@ -866,6 +794,17 @@ return class Handler {
 
 })).handle(event);
 };",
+  "connections.json": {
+    "connections": [
+      {
+        "implicit": false,
+        "name": "get()",
+        "source": "root/my_api",
+        "target": "root/my_api/OnRequestHandler-e645076f",
+      },
+    ],
+    "version": "connections-0.1",
+  },
   "simulator.json": {
     "resources": [
       {
@@ -935,9 +874,6 @@ return class Handler {
     "tree": {
       "children": {
         "Handler": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -951,9 +887,6 @@ return class Handler {
           "path": "root/Handler",
         },
         "cloud.TestRunner": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -967,21 +900,8 @@ return class Handler {
           "path": "root/cloud.TestRunner",
         },
         "my_api": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "outbound",
-                "implicit": false,
-                "relationship": "get()",
-                "resource": "root/my_api/OnRequestHandler-e645076f",
-              },
-            ],
-          },
           "children": {
             "ApiEventMapping-e645076f": {
-              "attributes": {
-                "wing:resource:connections": [],
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.1.314",
@@ -993,16 +913,6 @@ return class Handler {
               "path": "root/my_api/ApiEventMapping-e645076f",
             },
             "OnRequestHandler-e645076f": {
-              "attributes": {
-                "wing:resource:connections": [
-                  {
-                    "direction": "inbound",
-                    "implicit": false,
-                    "relationship": "get()",
-                    "resource": "root/my_api",
-                  },
-                ],
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.1.314",
@@ -1092,6 +1002,53 @@ return class Handler {
 
 })).handle(event);
 };",
+  "connections.json": {
+    "connections": [
+      {
+        "implicit": false,
+        "name": "get()",
+        "source": "root/my_api",
+        "target": "root/my_api/OnRequestHandler-e645076f",
+      },
+      {
+        "implicit": false,
+        "name": "post()",
+        "source": "root/my_api",
+        "target": "root/my_api/OnRequestHandler-e645076f",
+      },
+      {
+        "implicit": false,
+        "name": "put()",
+        "source": "root/my_api",
+        "target": "root/my_api/OnRequestHandler-e645076f",
+      },
+      {
+        "implicit": false,
+        "name": "delete()",
+        "source": "root/my_api",
+        "target": "root/my_api/OnRequestHandler-e645076f",
+      },
+      {
+        "implicit": false,
+        "name": "head()",
+        "source": "root/my_api",
+        "target": "root/my_api/OnRequestHandler-e645076f",
+      },
+      {
+        "implicit": false,
+        "name": "options()",
+        "source": "root/my_api",
+        "target": "root/my_api/OnRequestHandler-e645076f",
+      },
+      {
+        "implicit": false,
+        "name": "patch()",
+        "source": "root/my_api",
+        "target": "root/my_api/OnRequestHandler-e645076f",
+      },
+    ],
+    "version": "connections-0.1",
+  },
   "simulator.json": {
     "resources": [
       {
@@ -1245,9 +1202,6 @@ return class Handler {
     "tree": {
       "children": {
         "Handler": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -1261,9 +1215,6 @@ return class Handler {
           "path": "root/Handler",
         },
         "cloud.TestRunner": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -1277,57 +1228,8 @@ return class Handler {
           "path": "root/cloud.TestRunner",
         },
         "my_api": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "outbound",
-                "implicit": false,
-                "relationship": "get()",
-                "resource": "root/my_api/OnRequestHandler-e645076f",
-              },
-              {
-                "direction": "outbound",
-                "implicit": false,
-                "relationship": "post()",
-                "resource": "root/my_api/OnRequestHandler-e645076f",
-              },
-              {
-                "direction": "outbound",
-                "implicit": false,
-                "relationship": "put()",
-                "resource": "root/my_api/OnRequestHandler-e645076f",
-              },
-              {
-                "direction": "outbound",
-                "implicit": false,
-                "relationship": "delete()",
-                "resource": "root/my_api/OnRequestHandler-e645076f",
-              },
-              {
-                "direction": "outbound",
-                "implicit": false,
-                "relationship": "head()",
-                "resource": "root/my_api/OnRequestHandler-e645076f",
-              },
-              {
-                "direction": "outbound",
-                "implicit": false,
-                "relationship": "options()",
-                "resource": "root/my_api/OnRequestHandler-e645076f",
-              },
-              {
-                "direction": "outbound",
-                "implicit": false,
-                "relationship": "patch()",
-                "resource": "root/my_api/OnRequestHandler-e645076f",
-              },
-            ],
-          },
           "children": {
             "ApiEventMapping-e645076f": {
-              "attributes": {
-                "wing:resource:connections": [],
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.1.314",
@@ -1339,52 +1241,6 @@ return class Handler {
               "path": "root/my_api/ApiEventMapping-e645076f",
             },
             "OnRequestHandler-e645076f": {
-              "attributes": {
-                "wing:resource:connections": [
-                  {
-                    "direction": "inbound",
-                    "implicit": false,
-                    "relationship": "get()",
-                    "resource": "root/my_api",
-                  },
-                  {
-                    "direction": "inbound",
-                    "implicit": false,
-                    "relationship": "post()",
-                    "resource": "root/my_api",
-                  },
-                  {
-                    "direction": "inbound",
-                    "implicit": false,
-                    "relationship": "put()",
-                    "resource": "root/my_api",
-                  },
-                  {
-                    "direction": "inbound",
-                    "implicit": false,
-                    "relationship": "delete()",
-                    "resource": "root/my_api",
-                  },
-                  {
-                    "direction": "inbound",
-                    "implicit": false,
-                    "relationship": "head()",
-                    "resource": "root/my_api",
-                  },
-                  {
-                    "direction": "inbound",
-                    "implicit": false,
-                    "relationship": "options()",
-                    "resource": "root/my_api",
-                  },
-                  {
-                    "direction": "inbound",
-                    "implicit": false,
-                    "relationship": "patch()",
-                    "resource": "root/my_api",
-                  },
-                ],
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.1.314",
@@ -1438,6 +1294,17 @@ return class Handler {
 
 })).handle(event);
 };",
+  "connections.json": {
+    "connections": [
+      {
+        "implicit": false,
+        "name": "get()",
+        "source": "root/my_api",
+        "target": "root/my_api/OnRequestHandler-e645076f",
+      },
+    ],
+    "version": "connections-0.1",
+  },
   "simulator.json": {
     "resources": [
       {
@@ -1523,9 +1390,6 @@ return class Handler {
     "tree": {
       "children": {
         "Handler": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -1539,9 +1403,6 @@ return class Handler {
           "path": "root/Handler",
         },
         "cloud.TestRunner": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -1555,21 +1416,8 @@ return class Handler {
           "path": "root/cloud.TestRunner",
         },
         "my_api": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "outbound",
-                "implicit": false,
-                "relationship": "get()",
-                "resource": "root/my_api/OnRequestHandler-e645076f",
-              },
-            ],
-          },
           "children": {
             "ApiEventMapping-e645076f": {
-              "attributes": {
-                "wing:resource:connections": [],
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.1.314",
@@ -1581,16 +1429,6 @@ return class Handler {
               "path": "root/my_api/ApiEventMapping-e645076f",
             },
             "OnRequestHandler-e645076f": {
-              "attributes": {
-                "wing:resource:connections": [
-                  {
-                    "direction": "inbound",
-                    "implicit": false,
-                    "relationship": "get()",
-                    "resource": "root/my_api",
-                  },
-                ],
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.1.314",
@@ -1683,6 +1521,23 @@ return class Handler {
 
 })).handle(event);
 };",
+  "connections.json": {
+    "connections": [
+      {
+        "implicit": false,
+        "name": "get()",
+        "source": "root/my_api",
+        "target": "root/my_api/OnRequestHandler-7c48a9f0",
+      },
+      {
+        "implicit": false,
+        "name": "post()",
+        "source": "root/my_api",
+        "target": "root/my_api/OnRequestHandler-f6d90a7f",
+      },
+    ],
+    "version": "connections-0.1",
+  },
   "simulator.json": {
     "resources": [
       {
@@ -1790,9 +1645,6 @@ return class Handler {
     "tree": {
       "children": {
         "Handler1": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -1806,9 +1658,6 @@ return class Handler {
           "path": "root/Handler1",
         },
         "Handler2": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -1822,9 +1671,6 @@ return class Handler {
           "path": "root/Handler2",
         },
         "cloud.TestRunner": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -1838,27 +1684,8 @@ return class Handler {
           "path": "root/cloud.TestRunner",
         },
         "my_api": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "outbound",
-                "implicit": false,
-                "relationship": "get()",
-                "resource": "root/my_api/OnRequestHandler-7c48a9f0",
-              },
-              {
-                "direction": "outbound",
-                "implicit": false,
-                "relationship": "post()",
-                "resource": "root/my_api/OnRequestHandler-f6d90a7f",
-              },
-            ],
-          },
           "children": {
             "ApiEventMapping-7c48a9f0": {
-              "attributes": {
-                "wing:resource:connections": [],
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.1.314",
@@ -1870,9 +1697,6 @@ return class Handler {
               "path": "root/my_api/ApiEventMapping-7c48a9f0",
             },
             "ApiEventMapping-f6d90a7f": {
-              "attributes": {
-                "wing:resource:connections": [],
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.1.314",
@@ -1884,16 +1708,6 @@ return class Handler {
               "path": "root/my_api/ApiEventMapping-f6d90a7f",
             },
             "OnRequestHandler-7c48a9f0": {
-              "attributes": {
-                "wing:resource:connections": [
-                  {
-                    "direction": "inbound",
-                    "implicit": false,
-                    "relationship": "get()",
-                    "resource": "root/my_api",
-                  },
-                ],
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.1.314",
@@ -1907,16 +1721,6 @@ return class Handler {
               "path": "root/my_api/OnRequestHandler-7c48a9f0",
             },
             "OnRequestHandler-f6d90a7f": {
-              "attributes": {
-                "wing:resource:connections": [
-                  {
-                    "direction": "inbound",
-                    "implicit": false,
-                    "relationship": "post()",
-                    "resource": "root/my_api",
-                  },
-                ],
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.1.314",
@@ -2009,6 +1813,23 @@ return class Handler {
 
 })).handle(event);
 };",
+  "connections.json": {
+    "connections": [
+      {
+        "implicit": false,
+        "name": "get()",
+        "source": "root/my_api",
+        "target": "root/my_api/OnRequestHandler-7c48a9f0",
+      },
+      {
+        "implicit": false,
+        "name": "get()",
+        "source": "root/my_api",
+        "target": "root/my_api/OnRequestHandler-f6d90a7f",
+      },
+    ],
+    "version": "connections-0.1",
+  },
   "simulator.json": {
     "resources": [
       {
@@ -2118,9 +1939,6 @@ return class Handler {
     "tree": {
       "children": {
         "Handler1": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -2134,9 +1952,6 @@ return class Handler {
           "path": "root/Handler1",
         },
         "Handler2": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -2150,9 +1965,6 @@ return class Handler {
           "path": "root/Handler2",
         },
         "cloud.TestRunner": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -2166,27 +1978,8 @@ return class Handler {
           "path": "root/cloud.TestRunner",
         },
         "my_api": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "outbound",
-                "implicit": false,
-                "relationship": "get()",
-                "resource": "root/my_api/OnRequestHandler-7c48a9f0",
-              },
-              {
-                "direction": "outbound",
-                "implicit": false,
-                "relationship": "get()",
-                "resource": "root/my_api/OnRequestHandler-f6d90a7f",
-              },
-            ],
-          },
           "children": {
             "ApiEventMapping-7c48a9f0": {
-              "attributes": {
-                "wing:resource:connections": [],
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.1.314",
@@ -2198,9 +1991,6 @@ return class Handler {
               "path": "root/my_api/ApiEventMapping-7c48a9f0",
             },
             "ApiEventMapping-f6d90a7f": {
-              "attributes": {
-                "wing:resource:connections": [],
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.1.314",
@@ -2212,16 +2002,6 @@ return class Handler {
               "path": "root/my_api/ApiEventMapping-f6d90a7f",
             },
             "OnRequestHandler-7c48a9f0": {
-              "attributes": {
-                "wing:resource:connections": [
-                  {
-                    "direction": "inbound",
-                    "implicit": false,
-                    "relationship": "get()",
-                    "resource": "root/my_api",
-                  },
-                ],
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.1.314",
@@ -2235,16 +2015,6 @@ return class Handler {
               "path": "root/my_api/OnRequestHandler-7c48a9f0",
             },
             "OnRequestHandler-f6d90a7f": {
-              "attributes": {
-                "wing:resource:connections": [
-                  {
-                    "direction": "inbound",
-                    "implicit": false,
-                    "relationship": "get()",
-                    "resource": "root/my_api",
-                  },
-                ],
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.1.314",
@@ -2316,6 +2086,17 @@ return class Handler {
 
 })).handle(event);
 };",
+  "connections.json": {
+    "connections": [
+      {
+        "implicit": false,
+        "name": "get()",
+        "source": "root/my_api",
+        "target": "root/my_api/OnRequestHandler-e645076f",
+      },
+    ],
+    "version": "connections-0.1",
+  },
   "simulator.json": {
     "resources": [
       {
@@ -2385,9 +2166,6 @@ return class Handler {
     "tree": {
       "children": {
         "Handler": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -2401,9 +2179,6 @@ return class Handler {
           "path": "root/Handler",
         },
         "cloud.TestRunner": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -2417,21 +2192,8 @@ return class Handler {
           "path": "root/cloud.TestRunner",
         },
         "my_api": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "outbound",
-                "implicit": false,
-                "relationship": "get()",
-                "resource": "root/my_api/OnRequestHandler-e645076f",
-              },
-            ],
-          },
           "children": {
             "ApiEventMapping-e645076f": {
-              "attributes": {
-                "wing:resource:connections": [],
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.1.314",
@@ -2443,16 +2205,6 @@ return class Handler {
               "path": "root/my_api/ApiEventMapping-e645076f",
             },
             "OnRequestHandler-e645076f": {
-              "attributes": {
-                "wing:resource:connections": [
-                  {
-                    "direction": "inbound",
-                    "implicit": false,
-                    "relationship": "get()",
-                    "resource": "root/my_api",
-                  },
-                ],
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.1.314",
@@ -2524,6 +2276,17 @@ return class Handler {
 
 })).handle(event);
 };",
+  "connections.json": {
+    "connections": [
+      {
+        "implicit": false,
+        "name": "get()",
+        "source": "root/my_api",
+        "target": "root/my_api/OnRequestHandler-e645076f",
+      },
+    ],
+    "version": "connections-0.1",
+  },
   "simulator.json": {
     "resources": [
       {
@@ -2602,9 +2365,6 @@ return class Handler {
     "tree": {
       "children": {
         "Handler": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -2618,9 +2378,6 @@ return class Handler {
           "path": "root/Handler",
         },
         "cloud.TestRunner": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -2634,21 +2391,8 @@ return class Handler {
           "path": "root/cloud.TestRunner",
         },
         "my_api": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "outbound",
-                "implicit": false,
-                "relationship": "get()",
-                "resource": "root/my_api/OnRequestHandler-e645076f",
-              },
-            ],
-          },
           "children": {
             "ApiEventMapping-e645076f": {
-              "attributes": {
-                "wing:resource:connections": [],
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.1.314",
@@ -2660,16 +2404,6 @@ return class Handler {
               "path": "root/my_api/ApiEventMapping-e645076f",
             },
             "OnRequestHandler-e645076f": {
-              "attributes": {
-                "wing:resource:connections": [
-                  {
-                    "direction": "inbound",
-                    "implicit": false,
-                    "relationship": "get()",
-                    "resource": "root/my_api",
-                  },
-                ],
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.1.314",
@@ -2741,6 +2475,17 @@ return class Handler {
 
 })).handle(event);
 };",
+  "connections.json": {
+    "connections": [
+      {
+        "implicit": false,
+        "name": "post()",
+        "source": "root/my_api",
+        "target": "root/my_api/OnRequestHandler-e645076f",
+      },
+    ],
+    "version": "connections-0.1",
+  },
   "simulator.json": {
     "resources": [
       {
@@ -2810,9 +2555,6 @@ return class Handler {
     "tree": {
       "children": {
         "Handler": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -2826,9 +2568,6 @@ return class Handler {
           "path": "root/Handler",
         },
         "cloud.TestRunner": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -2842,21 +2581,8 @@ return class Handler {
           "path": "root/cloud.TestRunner",
         },
         "my_api": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "outbound",
-                "implicit": false,
-                "relationship": "post()",
-                "resource": "root/my_api/OnRequestHandler-e645076f",
-              },
-            ],
-          },
           "children": {
             "ApiEventMapping-e645076f": {
-              "attributes": {
-                "wing:resource:connections": [],
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.1.314",
@@ -2868,16 +2594,6 @@ return class Handler {
               "path": "root/my_api/ApiEventMapping-e645076f",
             },
             "OnRequestHandler-e645076f": {
-              "attributes": {
-                "wing:resource:connections": [
-                  {
-                    "direction": "inbound",
-                    "implicit": false,
-                    "relationship": "post()",
-                    "resource": "root/my_api",
-                  },
-                ],
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.1.314",
@@ -2917,6 +2633,10 @@ return class Handler {
 
 exports[`create an api 1`] = `
 {
+  "connections.json": {
+    "connections": [],
+    "version": "connections-0.1",
+  },
   "simulator.json": {
     "resources": [
       {
@@ -2945,9 +2665,6 @@ exports[`create an api 1`] = `
     "tree": {
       "children": {
         "cloud.TestRunner": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -2961,9 +2678,6 @@ exports[`create an api 1`] = `
           "path": "root/cloud.TestRunner",
         },
         "my_api": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",

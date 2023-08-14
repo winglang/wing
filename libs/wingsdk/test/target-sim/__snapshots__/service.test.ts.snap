@@ -19,6 +19,29 @@ async handle(message) {
 
 }), args: {} })).handle(event);
 };",
+  "connections.json": {
+    "connections": [
+      {
+        "implicit": false,
+        "name": "handle()",
+        "source": "root/my_service/my_service-ServiceOnStartef2b13b9",
+        "target": "root/OnStartHandler",
+      },
+      {
+        "implicit": false,
+        "name": "$inflight_init()",
+        "source": "root/my_service/my_service-ServiceOnStartef2b13b9",
+        "target": "root/OnStartHandler",
+      },
+      {
+        "implicit": false,
+        "name": "onStart()",
+        "source": "root/my_service",
+        "target": "root/my_service/my_service-ServiceOnStartef2b13b9",
+      },
+    ],
+    "version": "connections-0.1",
+  },
   "simulator.json": {
     "resources": [
       {
@@ -56,22 +79,6 @@ async handle(message) {
     "tree": {
       "children": {
         "OnStartHandler": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "inbound",
-                "implicit": false,
-                "relationship": "handle()",
-                "resource": "root/my_service/my_service-ServiceOnStartef2b13b9",
-              },
-              {
-                "direction": "inbound",
-                "implicit": false,
-                "relationship": "$inflight_init()",
-                "resource": "root/my_service/my_service-ServiceOnStartef2b13b9",
-              },
-            ],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -85,9 +92,6 @@ async handle(message) {
           "path": "root/OnStartHandler",
         },
         "cloud.TestRunner": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -101,21 +105,8 @@ async handle(message) {
           "path": "root/cloud.TestRunner",
         },
         "my_service": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "outbound",
-                "implicit": false,
-                "relationship": "onStart()",
-                "resource": "root/my_service/my_service-ServiceOnStartef2b13b9",
-              },
-            ],
-          },
           "children": {
             "my_service-ServiceOnStart-ef2b13b9": {
-              "attributes": {
-                "wing:resource:connections": [],
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.1.314",
@@ -127,28 +118,6 @@ async handle(message) {
               "path": "root/my_service/my_service-ServiceOnStart-ef2b13b9",
             },
             "my_service-ServiceOnStartef2b13b9": {
-              "attributes": {
-                "wing:resource:connections": [
-                  {
-                    "direction": "outbound",
-                    "implicit": false,
-                    "relationship": "handle()",
-                    "resource": "root/OnStartHandler",
-                  },
-                  {
-                    "direction": "outbound",
-                    "implicit": false,
-                    "relationship": "$inflight_init()",
-                    "resource": "root/OnStartHandler",
-                  },
-                  {
-                    "direction": "inbound",
-                    "implicit": false,
-                    "relationship": "onStart()",
-                    "resource": "root/my_service",
-                  },
-                ],
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.1.314",

@@ -88,9 +88,6 @@ exports[`create an OnDeploy 2`] = `
                 "path": "root/Default/Code",
               },
               "Handler": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
                   "version": "10.1.314",
@@ -112,9 +109,6 @@ exports[`create an OnDeploy 2`] = `
                 "path": "root/Default/aws",
               },
               "cloud.TestRunner": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "TestFunctionArns": {
                     "constructInfo": {
@@ -138,14 +132,8 @@ exports[`create an OnDeploy 2`] = `
                 "path": "root/Default/cloud.TestRunner",
               },
               "my_on_deploy": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "Function": {
-                    "attributes": {
-                      "wing:resource:connections": [],
-                    },
                     "children": {
                       "Asset": {
                         "constructInfo": {
@@ -380,9 +368,6 @@ exports[`execute OnDeploy after other resources 2`] = `
                 "path": "root/Default/Code",
               },
               "Handler": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
                   "version": "10.1.314",
@@ -404,9 +389,6 @@ exports[`execute OnDeploy after other resources 2`] = `
                 "path": "root/Default/aws",
               },
               "cloud.TestRunner": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "TestFunctionArns": {
                     "constructInfo": {
@@ -430,9 +412,6 @@ exports[`execute OnDeploy after other resources 2`] = `
                 "path": "root/Default/cloud.TestRunner",
               },
               "my_bucket": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "Default": {
                     "constructInfo": {
@@ -471,14 +450,8 @@ exports[`execute OnDeploy after other resources 2`] = `
                 "path": "root/Default/my_bucket",
               },
               "my_on_deploy": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "Function": {
-                    "attributes": {
-                      "wing:resource:connections": [],
-                    },
                     "children": {
                       "Asset": {
                         "constructInfo": {
@@ -718,9 +691,6 @@ exports[`execute OnDeploy before other resources 2`] = `
                 "path": "root/Default/Code",
               },
               "Handler": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
                   "version": "10.1.314",
@@ -742,9 +712,6 @@ exports[`execute OnDeploy before other resources 2`] = `
                 "path": "root/Default/aws",
               },
               "cloud.TestRunner": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "TestFunctionArns": {
                     "constructInfo": {
@@ -768,9 +735,6 @@ exports[`execute OnDeploy before other resources 2`] = `
                 "path": "root/Default/cloud.TestRunner",
               },
               "my_bucket": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "Default": {
                     "constructInfo": {
@@ -809,14 +773,8 @@ exports[`execute OnDeploy before other resources 2`] = `
                 "path": "root/Default/my_bucket",
               },
               "my_on_deploy": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "Function": {
-                    "attributes": {
-                      "wing:resource:connections": [],
-                    },
                     "children": {
                       "Asset": {
                         "constructInfo": {

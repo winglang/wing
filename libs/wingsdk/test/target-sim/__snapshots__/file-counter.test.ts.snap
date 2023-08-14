@@ -33,6 +33,53 @@ bucket: (function(env) {
       })(\\"BUCKET_HANDLE_5f2a41c8\\")
 }), args: {} })).handle(event);
 };",
+  "connections.json": {
+    "connections": [
+      {
+        "implicit": false,
+        "name": "inc()",
+        "source": "root/HelloWorld/Queue/Queue-SetConsumer-401ee792",
+        "target": "root/HelloWorld/Counter",
+      },
+      {
+        "implicit": false,
+        "name": "$inflight_init()",
+        "source": "root/HelloWorld/Queue/Queue-SetConsumer-401ee792",
+        "target": "root/HelloWorld/Counter",
+      },
+      {
+        "implicit": false,
+        "name": "put()",
+        "source": "root/HelloWorld/Queue/Queue-SetConsumer-401ee792",
+        "target": "root/HelloWorld/Bucket",
+      },
+      {
+        "implicit": false,
+        "name": "$inflight_init()",
+        "source": "root/HelloWorld/Queue/Queue-SetConsumer-401ee792",
+        "target": "root/HelloWorld/Bucket",
+      },
+      {
+        "implicit": false,
+        "name": "handle()",
+        "source": "root/HelloWorld/Queue/Queue-SetConsumer-401ee792",
+        "target": "root/HelloWorld/Processor",
+      },
+      {
+        "implicit": false,
+        "name": "$inflight_init()",
+        "source": "root/HelloWorld/Queue/Queue-SetConsumer-401ee792",
+        "target": "root/HelloWorld/Processor",
+      },
+      {
+        "implicit": false,
+        "name": "setConsumer()",
+        "source": "root/HelloWorld/Queue",
+        "target": "root/HelloWorld/Queue/Queue-SetConsumer-401ee792",
+      },
+    ],
+    "version": "connections-0.1",
+  },
   "simulator.json": {
     "resources": [
       {
@@ -105,22 +152,6 @@ bucket: (function(env) {
         "HelloWorld": {
           "children": {
             "Bucket": {
-              "attributes": {
-                "wing:resource:connections": [
-                  {
-                    "direction": "inbound",
-                    "implicit": false,
-                    "relationship": "put()",
-                    "resource": "root/HelloWorld/Queue/Queue-SetConsumer-401ee792",
-                  },
-                  {
-                    "direction": "inbound",
-                    "implicit": false,
-                    "relationship": "$inflight_init()",
-                    "resource": "root/HelloWorld/Queue/Queue-SetConsumer-401ee792",
-                  },
-                ],
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.1.314",
@@ -133,22 +164,6 @@ bucket: (function(env) {
               "path": "root/HelloWorld/Bucket",
             },
             "Counter": {
-              "attributes": {
-                "wing:resource:connections": [
-                  {
-                    "direction": "inbound",
-                    "implicit": false,
-                    "relationship": "inc()",
-                    "resource": "root/HelloWorld/Queue/Queue-SetConsumer-401ee792",
-                  },
-                  {
-                    "direction": "inbound",
-                    "implicit": false,
-                    "relationship": "$inflight_init()",
-                    "resource": "root/HelloWorld/Queue/Queue-SetConsumer-401ee792",
-                  },
-                ],
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.1.314",
@@ -161,22 +176,6 @@ bucket: (function(env) {
               "path": "root/HelloWorld/Counter",
             },
             "Processor": {
-              "attributes": {
-                "wing:resource:connections": [
-                  {
-                    "direction": "inbound",
-                    "implicit": false,
-                    "relationship": "handle()",
-                    "resource": "root/HelloWorld/Queue/Queue-SetConsumer-401ee792",
-                  },
-                  {
-                    "direction": "inbound",
-                    "implicit": false,
-                    "relationship": "$inflight_init()",
-                    "resource": "root/HelloWorld/Queue/Queue-SetConsumer-401ee792",
-                  },
-                ],
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.1.314",
@@ -190,21 +189,8 @@ bucket: (function(env) {
               "path": "root/HelloWorld/Processor",
             },
             "Queue": {
-              "attributes": {
-                "wing:resource:connections": [
-                  {
-                    "direction": "outbound",
-                    "implicit": false,
-                    "relationship": "setConsumer()",
-                    "resource": "root/HelloWorld/Queue/Queue-SetConsumer-401ee792",
-                  },
-                ],
-              },
               "children": {
                 "Queue-QueueEventMapping-401ee792": {
-                  "attributes": {
-                    "wing:resource:connections": [],
-                  },
                   "constructInfo": {
                     "fqn": "constructs.Construct",
                     "version": "10.1.314",
@@ -216,52 +202,6 @@ bucket: (function(env) {
                   "path": "root/HelloWorld/Queue/Queue-QueueEventMapping-401ee792",
                 },
                 "Queue-SetConsumer-401ee792": {
-                  "attributes": {
-                    "wing:resource:connections": [
-                      {
-                        "direction": "outbound",
-                        "implicit": false,
-                        "relationship": "inc()",
-                        "resource": "root/HelloWorld/Counter",
-                      },
-                      {
-                        "direction": "outbound",
-                        "implicit": false,
-                        "relationship": "$inflight_init()",
-                        "resource": "root/HelloWorld/Counter",
-                      },
-                      {
-                        "direction": "outbound",
-                        "implicit": false,
-                        "relationship": "put()",
-                        "resource": "root/HelloWorld/Bucket",
-                      },
-                      {
-                        "direction": "outbound",
-                        "implicit": false,
-                        "relationship": "$inflight_init()",
-                        "resource": "root/HelloWorld/Bucket",
-                      },
-                      {
-                        "direction": "outbound",
-                        "implicit": false,
-                        "relationship": "handle()",
-                        "resource": "root/HelloWorld/Processor",
-                      },
-                      {
-                        "direction": "outbound",
-                        "implicit": false,
-                        "relationship": "$inflight_init()",
-                        "resource": "root/HelloWorld/Processor",
-                      },
-                      {
-                        "direction": "inbound",
-                        "implicit": false,
-                        "relationship": "setConsumer()",
-                        "resource": "root/HelloWorld/Queue",
-                      },
-                    ],
-                  },
                   "constructInfo": {
                     "fqn": "constructs.Construct",
                     "version": "10.1.314",
@@ -275,9 +215,6 @@ bucket: (function(env) {
                   "path": "root/HelloWorld/Queue/Queue-SetConsumer-401ee792",
                 },
                 "Queue-SetConsumerHandler-401ee792": {
-                  "attributes": {
-                    "wing:resource:connections": [],
-                  },
                   "constructInfo": {
                     "fqn": "constructs.Construct",
                     "version": "10.1.314",
@@ -309,9 +246,6 @@ bucket: (function(env) {
           "path": "root/HelloWorld",
         },
         "cloud.TestRunner": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",

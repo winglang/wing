@@ -100,22 +100,6 @@ exports[`schedule behavior with cron 2`] = `
                 "path": "root/Default/Code",
               },
               "Handler": {
-                "attributes": {
-                  "wing:resource:connections": [
-                    {
-                      "direction": "inbound",
-                      "implicit": false,
-                      "relationship": "handle()",
-                      "resource": "root/Default/Schedule-OnTick-c5395e41",
-                    },
-                    {
-                      "direction": "inbound",
-                      "implicit": false,
-                      "relationship": "$inflight_init()",
-                      "resource": "root/Default/Schedule-OnTick-c5395e41",
-                    },
-                  ],
-                },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
                   "version": "10.1.314",
@@ -129,16 +113,6 @@ exports[`schedule behavior with cron 2`] = `
                 "path": "root/Default/Handler",
               },
               "Schedule": {
-                "attributes": {
-                  "wing:resource:connections": [
-                    {
-                      "direction": "outbound",
-                      "implicit": false,
-                      "relationship": "onTick()",
-                      "resource": "root/Default/Schedule-OnTick-c5395e41",
-                    },
-                  ],
-                },
                 "children": {
                   "Schedule": {
                     "constructInfo": {
@@ -169,28 +143,6 @@ exports[`schedule behavior with cron 2`] = `
                 "path": "root/Default/Schedule",
               },
               "Schedule-OnTick-c5395e41": {
-                "attributes": {
-                  "wing:resource:connections": [
-                    {
-                      "direction": "outbound",
-                      "implicit": false,
-                      "relationship": "handle()",
-                      "resource": "root/Default/Handler",
-                    },
-                    {
-                      "direction": "outbound",
-                      "implicit": false,
-                      "relationship": "$inflight_init()",
-                      "resource": "root/Default/Handler",
-                    },
-                    {
-                      "direction": "inbound",
-                      "implicit": false,
-                      "relationship": "onTick()",
-                      "resource": "root/Default/Schedule",
-                    },
-                  ],
-                },
                 "children": {
                   "Asset": {
                     "constructInfo": {
@@ -261,9 +213,6 @@ exports[`schedule behavior with cron 2`] = `
                 "path": "root/Default/Schedule-OnTick-c5395e41",
               },
               "Schedule-OnTickHandler-c5395e41": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
                   "version": "10.1.314",
@@ -283,9 +232,6 @@ exports[`schedule behavior with cron 2`] = `
                 "path": "root/Default/aws",
               },
               "cloud.TestRunner": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "TestFunctionArns": {
                     "constructInfo": {
@@ -444,22 +390,6 @@ exports[`schedule behavior with rate 2`] = `
                 "path": "root/Default/Code",
               },
               "Handler": {
-                "attributes": {
-                  "wing:resource:connections": [
-                    {
-                      "direction": "inbound",
-                      "implicit": false,
-                      "relationship": "handle()",
-                      "resource": "root/Default/Schedule-OnTick-c5395e41",
-                    },
-                    {
-                      "direction": "inbound",
-                      "implicit": false,
-                      "relationship": "$inflight_init()",
-                      "resource": "root/Default/Schedule-OnTick-c5395e41",
-                    },
-                  ],
-                },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
                   "version": "10.1.314",
@@ -473,16 +403,6 @@ exports[`schedule behavior with rate 2`] = `
                 "path": "root/Default/Handler",
               },
               "Schedule": {
-                "attributes": {
-                  "wing:resource:connections": [
-                    {
-                      "direction": "outbound",
-                      "implicit": false,
-                      "relationship": "onTick()",
-                      "resource": "root/Default/Schedule-OnTick-c5395e41",
-                    },
-                  ],
-                },
                 "children": {
                   "Schedule": {
                     "constructInfo": {
@@ -513,28 +433,6 @@ exports[`schedule behavior with rate 2`] = `
                 "path": "root/Default/Schedule",
               },
               "Schedule-OnTick-c5395e41": {
-                "attributes": {
-                  "wing:resource:connections": [
-                    {
-                      "direction": "outbound",
-                      "implicit": false,
-                      "relationship": "handle()",
-                      "resource": "root/Default/Handler",
-                    },
-                    {
-                      "direction": "outbound",
-                      "implicit": false,
-                      "relationship": "$inflight_init()",
-                      "resource": "root/Default/Handler",
-                    },
-                    {
-                      "direction": "inbound",
-                      "implicit": false,
-                      "relationship": "onTick()",
-                      "resource": "root/Default/Schedule",
-                    },
-                  ],
-                },
                 "children": {
                   "Asset": {
                     "constructInfo": {
@@ -605,9 +503,6 @@ exports[`schedule behavior with rate 2`] = `
                 "path": "root/Default/Schedule-OnTick-c5395e41",
               },
               "Schedule-OnTickHandler-c5395e41": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
                   "version": "10.1.314",
@@ -627,9 +522,6 @@ exports[`schedule behavior with rate 2`] = `
                 "path": "root/Default/aws",
               },
               "cloud.TestRunner": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "TestFunctionArns": {
                     "constructInfo": {
@@ -834,22 +726,6 @@ exports[`schedule with two functions 2`] = `
                 "path": "root/Default/Code",
               },
               "Handler1": {
-                "attributes": {
-                  "wing:resource:connections": [
-                    {
-                      "direction": "inbound",
-                      "implicit": false,
-                      "relationship": "handle()",
-                      "resource": "root/Default/Schedule-OnTick-7b33bcba",
-                    },
-                    {
-                      "direction": "inbound",
-                      "implicit": false,
-                      "relationship": "$inflight_init()",
-                      "resource": "root/Default/Schedule-OnTick-7b33bcba",
-                    },
-                  ],
-                },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
                   "version": "10.1.314",
@@ -863,22 +739,6 @@ exports[`schedule with two functions 2`] = `
                 "path": "root/Default/Handler1",
               },
               "Handler2": {
-                "attributes": {
-                  "wing:resource:connections": [
-                    {
-                      "direction": "inbound",
-                      "implicit": false,
-                      "relationship": "handle()",
-                      "resource": "root/Default/Schedule-OnTick-0a615500",
-                    },
-                    {
-                      "direction": "inbound",
-                      "implicit": false,
-                      "relationship": "$inflight_init()",
-                      "resource": "root/Default/Schedule-OnTick-0a615500",
-                    },
-                  ],
-                },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
                   "version": "10.1.314",
@@ -892,22 +752,6 @@ exports[`schedule with two functions 2`] = `
                 "path": "root/Default/Handler2",
               },
               "Schedule": {
-                "attributes": {
-                  "wing:resource:connections": [
-                    {
-                      "direction": "outbound",
-                      "implicit": false,
-                      "relationship": "onTick()",
-                      "resource": "root/Default/Schedule-OnTick-7b33bcba",
-                    },
-                    {
-                      "direction": "outbound",
-                      "implicit": false,
-                      "relationship": "onTick()",
-                      "resource": "root/Default/Schedule-OnTick-0a615500",
-                    },
-                  ],
-                },
                 "children": {
                   "Schedule": {
                     "constructInfo": {
@@ -946,28 +790,6 @@ exports[`schedule with two functions 2`] = `
                 "path": "root/Default/Schedule",
               },
               "Schedule-OnTick-0a615500": {
-                "attributes": {
-                  "wing:resource:connections": [
-                    {
-                      "direction": "outbound",
-                      "implicit": false,
-                      "relationship": "handle()",
-                      "resource": "root/Default/Handler2",
-                    },
-                    {
-                      "direction": "outbound",
-                      "implicit": false,
-                      "relationship": "$inflight_init()",
-                      "resource": "root/Default/Handler2",
-                    },
-                    {
-                      "direction": "inbound",
-                      "implicit": false,
-                      "relationship": "onTick()",
-                      "resource": "root/Default/Schedule",
-                    },
-                  ],
-                },
                 "children": {
                   "Asset": {
                     "constructInfo": {
@@ -1038,28 +860,6 @@ exports[`schedule with two functions 2`] = `
                 "path": "root/Default/Schedule-OnTick-0a615500",
               },
               "Schedule-OnTick-7b33bcba": {
-                "attributes": {
-                  "wing:resource:connections": [
-                    {
-                      "direction": "outbound",
-                      "implicit": false,
-                      "relationship": "handle()",
-                      "resource": "root/Default/Handler1",
-                    },
-                    {
-                      "direction": "outbound",
-                      "implicit": false,
-                      "relationship": "$inflight_init()",
-                      "resource": "root/Default/Handler1",
-                    },
-                    {
-                      "direction": "inbound",
-                      "implicit": false,
-                      "relationship": "onTick()",
-                      "resource": "root/Default/Schedule",
-                    },
-                  ],
-                },
                 "children": {
                   "Asset": {
                     "constructInfo": {
@@ -1130,9 +930,6 @@ exports[`schedule with two functions 2`] = `
                 "path": "root/Default/Schedule-OnTick-7b33bcba",
               },
               "Schedule-OnTickHandler-0a615500": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
                   "version": "10.1.314",
@@ -1144,9 +941,6 @@ exports[`schedule with two functions 2`] = `
                 "path": "root/Default/Schedule-OnTickHandler-0a615500",
               },
               "Schedule-OnTickHandler-7b33bcba": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
                   "version": "10.1.314",
@@ -1166,9 +960,6 @@ exports[`schedule with two functions 2`] = `
                 "path": "root/Default/aws",
               },
               "cloud.TestRunner": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "TestFunctionArns": {
                     "constructInfo": {
