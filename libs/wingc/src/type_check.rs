@@ -1016,6 +1016,10 @@ impl TypeRef {
 		matches!(**self, Type::Struct(_))
 	}
 
+	pub fn is_map(&self) -> bool {
+		matches!(**self, Type::Map(_))
+	}
+
 	pub fn is_void(&self) -> bool {
 		matches!(**self, Type::Void)
 	}
@@ -2672,7 +2676,7 @@ impl<'a> TypeChecker<'a> {
 			if let Type::Json(Some(data)) = &**json_type.maybe_unwrap_option() {
 				if expected_type_unwrapped.is_json_legal_value()
 					|| expected_type_unwrapped.is_struct()
-					|| matches!(**expected_type_unwrapped, Type::Map(_))
+					|| expected_type_unwrapped.is_map()
 				{
 					// we don't need to check the json-ability of this expr later because we know it's legal or it's being used as a struct/map
 					self.types.json_literal_casts.insert(data.expression_id, expected_type);
