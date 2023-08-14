@@ -38,7 +38,7 @@ export type Mode = "dark" | "light" | "auto";
 
 const localStorageThemeKey = "console-theme";
 
-export const CUSTOMIZABLE_THEME = "customizable-theme";
+export const CUSTOMIZABLE_THEME = "custom-color";
 
 export const DefaultTheme: Theme = {
   bg1: "bg-slate-300 dark:bg-slate-800",
@@ -73,7 +73,7 @@ export const DefaultTheme: Theme = {
 
 export const computeColor = (color: string, level: number = 1): string => {
   if (level === 1) {
-    return color;
+    return `#${color}`;
   }
 
   const hex = color.replace("#", "");
@@ -89,37 +89,54 @@ export const computeColor = (color: string, level: number = 1): string => {
     .toString(16)
     .padStart(2, "0")}${newB.toString(16).padStart(2, "0")}`;
 
-  return `${newColor}`;
+  return `#${newColor}`;
 };
 
 const applyThemeCss = (newTheme: Theme) => {
+  const colorRegex = /bg-|\[|]|dark:/g;
+  const keyRegex = /[#:[\\\]]/g;
+
+  let styles = {};
+  Object.keys(newTheme).map((key) => {
+    // key in the tailwindcss format
+    const colorClasses = newTheme[key as keyof Theme];
+    if (colorClasses === DefaultTheme[key as keyof Theme]) {
+      return;
+    }
+    const [lightClass, darkClass] = colorClasses.split(" ");
+    if (!lightClass) {
+      return;
+    }
+    const lightColor = lightClass.replaceAll(colorRegex, "");
+    const lightKey = lightClass.replaceAll(keyRegex, "\\$&");
+
+    styles = {
+      ...styles,
+      [`.${CUSTOMIZABLE_THEME} .${lightKey}`]: `{ background-color: ${lightColor} !important;}`,
+    };
+
+    if (!darkClass) {
+      return;
+    }
+    const darkColor = darkClass.replaceAll(colorRegex, "");
+    const darkKey = darkClass.replaceAll(keyRegex, "\\$&");
+    styles = {
+      ...styles,
+      [`.dark .${CUSTOMIZABLE_THEME} .${darkKey}`]: `{ background-color: ${darkColor} !important;}`,
+    };
+  });
+
+  let stylesText = "";
+  Object.keys(styles).map((key) => {
+    stylesText += `${key} ${styles[key as keyof typeof styles]}\n`;
+  });
+
   let styleElement = document.querySelector("#style-theme");
   if (styleElement) {
     styleElement.remove();
   }
   styleElement = document.createElement("style");
   styleElement.setAttribute("id", "style-theme");
-
-  let styles = {};
-  Object.keys(newTheme).map((key) => {
-    const colorKey = newTheme[key as keyof Theme];
-    if (colorKey === DefaultTheme[key as keyof Theme]) {
-      return;
-    }
-    const color = colorKey.replace("bg-", "");
-
-    styles = {
-      ...styles,
-      [`.${CUSTOMIZABLE_THEME} .${colorKey}`]: `{ background-color: #${color} !important;}`,
-    };
-  });
-
-  let stylesText = "";
-
-  Object.keys(styles).map((key) => {
-    stylesText += `${key} ${styles[key as keyof typeof styles]}\n`;
-  });
-
   styleElement.innerHTML = stylesText;
   document.head.append(styleElement);
 };
@@ -128,16 +145,28 @@ export const buildTheme = (color?: string): Theme => {
   if (!color) {
     return DefaultTheme;
   }
-  const currentMode = getThemeMode();
   const theme: Theme = {
     ...DefaultTheme,
-    bg1: `bg-${computeColor(color, currentMode === "dark" ? 0.8 : 1.2)}`,
-    bg2: `bg-${computeColor(color, currentMode === "dark" ? 0.9 : 1.1)}`,
-    bg3: `bg-${computeColor(color)}`,
-    bg4: `bg-${computeColor(color, currentMode === "dark" ? 1.1 : 0.9)}`,
-    bgInput: `bg-${computeColor(color, currentMode === "dark" ? 1.2 : 0.8)}`,
+    bg1: `bg-[${computeColor(color, 1.2)}] dark:bg-[${computeColor(
+      color,
+      0.8,
+    )}]`,
+    bg2: `bg-[${computeColor(color, 1.1)}] dark:bg-[${computeColor(
+      color,
+      0.9,
+    )}]`,
+    bg3: `bg-[${computeColor(color)}] dark:bg-[${computeColor(color, 1.1)}]`,
+    bg4: `bg-[${computeColor(color, 0.9)}] dark:bg-[${computeColor(
+      color,
+      1.1,
+    )}]`,
+    bgInput: `bg-[${computeColor(color, 0.8)}] dark:bg-[${computeColor(
+      color,
+      1.2,
+    )}]`,
   };
 
+  // TODO: tailwindcss doesn't support dynamic color in the config
   applyThemeCss(theme);
 
   let mergedTheme: Theme = DefaultTheme;
