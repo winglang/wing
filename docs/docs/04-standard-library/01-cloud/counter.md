@@ -1,7 +1,6 @@
 ---
-title: Distributed Counter
+title: Counter
 id: counter
-sidebar_label: Counter
 description: A built-in resource for representing an container for numbers in the cloud.
 keywords:
   [
