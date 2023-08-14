@@ -10,6 +10,10 @@ on:
       - "docs/**"
       - "logo/**"
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.head.ref || github.ref }}
+  cancel-in-progress: true
+
 env:
   FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
   APP_NAME: wing-console-pr-${{github.event.number}}
