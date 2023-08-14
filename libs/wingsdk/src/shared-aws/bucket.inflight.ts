@@ -120,7 +120,7 @@ export class BucketClient implements IBucketClient {
    * @returns content of the object
    */
   public async tryGet(key: string): Promise<string | undefined> {
-    return await this.getObjectContent(key);
+    return this.getObjectContent(key);
   }
 
   /**
