@@ -11,7 +11,7 @@ ReactDOM.createRoot(document.querySelector("#root")!).render(
       wsUrl={`ws://${location.host}/trpc`}
       layout={Number(query.get("layout")) || 1} // default to 1 = vscode (2 = playground, 3 = tutorial)
       theme={query.get("theme") as any}
-      themeColor={query.get("themeColor") as any}
+      color={query.get("color") as any}
       onTrace={(trace) => {
         // Playground and Learn need to be able to listen to all traces.
         window.parent.postMessage({ trace }, "*");
