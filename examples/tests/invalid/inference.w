@@ -83,3 +83,16 @@ class NeedAnnotations {
 
 let badFunc: inflight (str): void = inflight (arg1: num) => {};
 //                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected type to be "inflight (str): void", but got "inflight (arg1: num): unknown" instead
+
+(a) => {
+  struct SS {
+    a: Array<num>;
+    b: Array<str>;
+  }
+  let jsonDoubleInference: SS = {
+    a: a,
+    b: a,
+  };
+// ^ Inferred type Array<str> conflicts with already inferred type Array<num>
+};
+

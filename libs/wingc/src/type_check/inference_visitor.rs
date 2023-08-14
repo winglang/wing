@@ -1,6 +1,7 @@
 use crate::{
 	ast::Symbol,
 	closure_transform::CLOSURE_CLASS_PREFIX,
+	diagnostic::WingSpan,
 	type_check::{
 		Class, FunctionSignature, InferenceId, Interface, JsonData, JsonDataKind, Struct, Type, TypeRef, Types,
 		CLOSURE_CLASS_HANDLE_METHOD,
@@ -17,6 +18,8 @@ pub struct InferenceVisitor<'a> {
 	pub expected_type: Option<&'a TypeRef>,
 	/// Whether or not we found an inference during the entire visit
 	pub found_inference: bool,
+	/// The span of interest for the given type
+	pub span: &'a WingSpan,
 }
 
 impl<'a> crate::visit_types::VisitTypeMut<'_> for InferenceVisitor<'a> {
@@ -179,7 +182,7 @@ impl<'a> crate::visit_types::VisitType<'_> for InferenceVisitor<'a> {
 		self.found_inference = true;
 
 		if let Some(expected) = self.expected_type {
-			self.types.update_inferred_type(*node, *expected);
+			self.types.update_inferred_type(*node, *expected, self.span);
 		}
 	}
 }

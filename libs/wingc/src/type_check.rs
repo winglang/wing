@@ -1370,7 +1370,7 @@ impl Types {
 		None
 	}
 
-	pub fn update_inferred_type(&mut self, id: InferenceId, t: TypeRef) {
+	pub fn update_inferred_type(&mut self, id: InferenceId, t: TypeRef, span: &WingSpan) {
 		let mut new_type = t;
 		if let Type::Inferred(n) = &*new_type {
 			if *n != id {
@@ -1378,23 +1378,26 @@ impl Types {
 			}
 		}
 
-		let existing_type = self.inferences.get_mut(id).expect("Inference id out of bounds");
+		let error = self.error();
+		let existing_type_option = self.inferences.get_mut(id).expect("Inference id out of bounds");
 
-		if let Some(existing_type) = existing_type {
+		if let Some(existing_type) = existing_type_option {
 			// if the types are the same, ok, otherwise error
-			if std::ptr::eq(&**existing_type, &*new_type) {
+			if existing_type.is_same_type_as(&new_type) || existing_type.is_unresolved() {
 				// this can happen when we have a type that can have multiple references to the same inference inside it
 				// e.g. function, json
 				return;
 			} else {
 				report_diagnostic(Diagnostic {
 					message: format!("Inferred type {new_type} conflicts with already inferred type {existing_type}"),
-					span: None,
+					span: Some(span.clone()),
 				});
+				existing_type_option.replace(error);
+				return;
 			}
 		}
 
-		existing_type.replace(new_type);
+		existing_type_option.replace(new_type);
 	}
 
 	pub fn make_inference(&mut self) -> TypeRef {
@@ -1614,11 +1617,12 @@ impl<'a> TypeChecker<'a> {
 	/// Recursively check if a type is or contains a type inference.
 	///
 	/// Returns true if any inferences were found.
-	fn check_for_inferences(&mut self, node: &TypeRef) -> bool {
+	fn check_for_inferences(&mut self, node: &TypeRef, span: &WingSpan) -> bool {
 		let mut visitor = InferenceVisitor {
 			types: self.types,
 			found_inference: false,
 			expected_type: None,
+			span,
 		};
 
 		visitor.visit_typeref(node);
@@ -1630,11 +1634,12 @@ impl<'a> TypeChecker<'a> {
 	/// If it does, use the expected type to update the list of known inferences.
 	///
 	/// Returns true if any inferences were found.
-	fn add_new_inference(&mut self, node: &TypeRef, expected_type: &TypeRef) -> bool {
+	fn add_new_inference(&mut self, node: &TypeRef, expected_type: &TypeRef, span: &WingSpan) -> bool {
 		let mut visitor = InferenceVisitor {
 			types: self.types,
 			found_inference: false,
 			expected_type: Some(expected_type),
+			span,
 		};
 
 		visitor.visit_typeref(node);
@@ -1645,11 +1650,12 @@ impl<'a> TypeChecker<'a> {
 	/// Recursively replaces any inferences in the given type with it's known type, if any.
 	///
 	/// Returns true if any inferences were found.
-	fn update_known_inferences(&mut self, node: &mut TypeRef) -> bool {
+	fn update_known_inferences(&mut self, node: &mut TypeRef, span: &WingSpan) -> bool {
 		let mut visitor = InferenceVisitor {
 			types: self.types,
 			found_inference: false,
 			expected_type: None,
+			span,
 		};
 
 		visitor.visit_typeref_mut(node);
@@ -1708,7 +1714,7 @@ impl<'a> TypeChecker<'a> {
 		self.types.assign_type_to_expr(exp, t, phase);
 
 		// In case any type inferences were updated during this check, ensure all related inferences are updated
-		self.update_known_inferences(&mut t);
+		self.update_known_inferences(&mut t, &exp.span);
 
 		(t, phase)
 	}
@@ -2594,16 +2600,17 @@ impl<'a> TypeChecker<'a> {
 	fn validate_type_in(&mut self, actual_type: TypeRef, expected_types: &[TypeRef], span: &impl Spanned) -> TypeRef {
 		assert!(expected_types.len() > 0);
 		let mut return_type = actual_type;
+		let span = span.span();
 
 		// To avoid ambiguity, only do inference if there is one expected type
 		if expected_types.len() == 1 {
 			// First check if the actual type is an inference that can be replaced with the expected type
-			if self.add_new_inference(&actual_type, &expected_types[0]) {
+			if self.add_new_inference(&actual_type, &expected_types[0], &span) {
 				// Update the type we validate and return
 				return_type = self.types.maybe_unwrap_inference(return_type);
 			} else {
 				// otherwise, check if the expected type is an inference that can be replaced with the actual type
-				self.add_new_inference(&expected_types[0], &actual_type);
+				self.add_new_inference(&expected_types[0], &actual_type, &span);
 			}
 		}
 
@@ -2672,12 +2679,12 @@ impl<'a> TypeChecker<'a> {
 				}
 				match &data.kind {
 					JsonDataKind::Type(t) => {
-						self.validate_type(t.type_, expected_type, span);
+						self.validate_type(t.type_, expected_type, &span);
 						return return_type;
 					}
 					JsonDataKind::Fields(fields) => {
 						if expected_type_unwrapped.is_struct() {
-							self.validate_structural_type(fields, expected_type_unwrapped, span);
+							self.validate_structural_type(fields, expected_type_unwrapped, &span);
 							return return_type;
 						} else if let Type::Map(expected_map) = &**expected_type_unwrapped {
 							for field_info in fields.values() {
@@ -2760,9 +2767,9 @@ impl<'a> TypeChecker<'a> {
 			if let Type::Inferred(n) = &*env.return_type {
 				if self.types.get_inference_by_id(*n).is_none() {
 					// If function types don't return anything then we should set the return type to void
-					self.types.update_inferred_type(*n, self.types.void());
+					self.types.update_inferred_type(*n, self.types.void(), &scope.span);
 				}
-				self.update_known_inferences(&mut env.return_type);
+				self.update_known_inferences(&mut env.return_type, &scope.span);
 			}
 		}
 
@@ -2770,11 +2777,11 @@ impl<'a> TypeChecker<'a> {
 			if let SymbolKind::Variable(ref mut var_info) = symbol_data.1 {
 				// Update any possible inferred types in this variable.
 				// This must be called before checking for un-inferred types because some variable were not used in this scope so they did not get a chance to get updated.
-				self.update_known_inferences(&mut var_info.type_);
+				self.update_known_inferences(&mut var_info.type_, &var_info.name.span);
 
 				// If we found a variable with an inferred type, this is an error because it means we failed to infer its type
 				// Ignores any transient (no file_id) variables e.g. `this`. Those failed inferences are cascading errors and not useful to the user
-				if self.check_for_inferences(&var_info.type_) && !var_info.name.span.file_id.is_empty() {
+				if self.check_for_inferences(&var_info.type_, &var_info.name.span) && !var_info.name.span.file_id.is_empty() {
 					self.spanned_error(&var_info.name, "Unable to infer type".to_string());
 				}
 			}
@@ -3242,7 +3249,7 @@ impl<'a> TypeChecker<'a> {
 				self.inner_scopes.push(scope)
 			}
 			StmtKind::Return(exp) => {
-				let return_type_inferred = self.update_known_inferences(&mut env.return_type);
+				let return_type_inferred = self.update_known_inferences(&mut env.return_type, &stmt.span);
 				if let Some(return_expression) = exp {
 					let (return_type, _) = self.type_check_exp(return_expression, env);
 					if !env.return_type.is_void() {
@@ -4369,7 +4376,7 @@ impl<'a> TypeChecker<'a> {
 				if let LookupResultMut::Found(var, _) = lookup_res {
 					if let Some(var) = var.as_variable_mut() {
 						let phase = var.phase;
-						self.update_known_inferences(&mut var.type_);
+						self.update_known_inferences(&mut var.type_, &var.name.span);
 						(var.clone(), phase)
 					} else {
 						self.spanned_error_with_var(
