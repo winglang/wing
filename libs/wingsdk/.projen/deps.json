@@ -244,7 +244,7 @@
     },
     {
       "name": "aws-cdk-lib",
-      "version": "^2.64.0",
+      "version": "^2.91.0",
       "type": "bundled"
     },
     {
