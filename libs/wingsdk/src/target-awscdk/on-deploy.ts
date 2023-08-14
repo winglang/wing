@@ -3,7 +3,6 @@ import { Construct } from "constructs";
 import { Function as AwsFunction } from "./function";
 import * as cloud from "../cloud";
 import * as core from "../core";
-import { InvocationType } from "@aws-sdk/client-lambda";
 
 /**
  * AWS implementation of `cloud.OnDeploy`.
@@ -17,12 +16,12 @@ export class OnDeploy extends cloud.OnDeploy {
     let fn = cloud.Function._newFunction(this, "Function", handler, props);
     const awsFn = fn as AwsFunction;
 
-    new Trigger(this, "Trigger", {
+    let trigger = new Trigger(this, "Trigger", {
       handler: awsFn._function,
-      executeBefore: props.executeBefore,
-      executeAfter: props.executeAfter,
-      invocationType: InvocationType.RequestResponse,
     });
+
+    trigger.executeAfter(...props.executeAfter ?? []);
+    trigger.executeBefore(...props.executeBefore ?? []);
   }
 
   /** @internal */
