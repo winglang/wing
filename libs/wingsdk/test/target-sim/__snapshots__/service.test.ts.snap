@@ -22,19 +22,16 @@ async handle(message) {
   "connections.json": {
     "connections": [
       {
-        "implicit": false,
         "name": "handle()",
         "source": "root/my_service/my_service-ServiceOnStartef2b13b9",
         "target": "root/OnStartHandler",
       },
       {
-        "implicit": false,
         "name": "$inflight_init()",
         "source": "root/my_service/my_service-ServiceOnStartef2b13b9",
         "target": "root/OnStartHandler",
       },
       {
-        "implicit": false,
         "name": "onStart()",
         "source": "root/my_service",
         "target": "root/my_service/my_service-ServiceOnStartef2b13b9",

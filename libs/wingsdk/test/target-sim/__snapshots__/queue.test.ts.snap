@@ -111,19 +111,16 @@ async handle(message) {
   "connections.json": {
     "connections": [
       {
-        "implicit": false,
         "name": "handle()",
         "source": "root/my_queue/my_queue-SetConsumer-e645076f",
         "target": "root/Handler",
       },
       {
-        "implicit": false,
         "name": "$inflight_init()",
         "source": "root/my_queue/my_queue-SetConsumer-e645076f",
         "target": "root/Handler",
       },
       {
-        "implicit": false,
         "name": "setConsumer()",
         "source": "root/my_queue",
         "target": "root/my_queue/my_queue-SetConsumer-e645076f",
@@ -309,19 +306,16 @@ async handle(message) {
   "connections.json": {
     "connections": [
       {
-        "implicit": false,
         "name": "handle()",
         "source": "root/my_queue/my_queue-SetConsumer-e645076f",
         "target": "root/Handler",
       },
       {
-        "implicit": false,
         "name": "$inflight_init()",
         "source": "root/my_queue/my_queue-SetConsumer-e645076f",
         "target": "root/Handler",
       },
       {
-        "implicit": false,
         "name": "setConsumer()",
         "source": "root/my_queue",
         "target": "root/my_queue/my_queue-SetConsumer-e645076f",
@@ -511,19 +505,16 @@ async handle(message) {
   "connections.json": {
     "connections": [
       {
-        "implicit": false,
         "name": "handle()",
         "source": "root/my_queue/my_queue-SetConsumer-e645076f",
         "target": "root/Handler",
       },
       {
-        "implicit": false,
         "name": "$inflight_init()",
         "source": "root/my_queue/my_queue-SetConsumer-e645076f",
         "target": "root/Handler",
       },
       {
-        "implicit": false,
         "name": "setConsumer()",
         "source": "root/my_queue",
         "target": "root/my_queue/my_queue-SetConsumer-e645076f",
@@ -828,31 +819,26 @@ async handle(message) {
   "connections.json": {
     "connections": [
       {
-        "implicit": false,
         "name": "handle()",
         "source": "root/my_queue/my_queue-SetConsumer-e645076f",
         "target": "root/Handler",
       },
       {
-        "implicit": false,
         "name": "$inflight_init()",
         "source": "root/my_queue/my_queue-SetConsumer-e645076f",
         "target": "root/Handler",
       },
       {
-        "implicit": false,
         "name": "setConsumer()",
         "source": "root/my_queue",
         "target": "root/my_queue/my_queue-SetConsumer-e645076f",
       },
       {
-        "implicit": false,
         "name": "push()",
         "source": "root/my_queue_messages/Function",
         "target": "root/my_queue",
       },
       {
-        "implicit": false,
         "name": "$inflight_init()",
         "source": "root/my_queue_messages/Function",
         "target": "root/my_queue",
@@ -1098,19 +1084,16 @@ async handle(message) {
   "connections.json": {
     "connections": [
       {
-        "implicit": false,
         "name": "handle()",
         "source": "root/my_queue/my_queue-SetConsumer-e645076f",
         "target": "root/Handler",
       },
       {
-        "implicit": false,
         "name": "$inflight_init()",
         "source": "root/my_queue/my_queue-SetConsumer-e645076f",
         "target": "root/Handler",
       },
       {
-        "implicit": false,
         "name": "setConsumer()",
         "source": "root/my_queue",
         "target": "root/my_queue/my_queue-SetConsumer-e645076f",

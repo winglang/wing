@@ -36,43 +36,36 @@ bucket: (function(env) {
   "connections.json": {
     "connections": [
       {
-        "implicit": false,
         "name": "inc()",
         "source": "root/HelloWorld/Queue/Queue-SetConsumer-401ee792",
         "target": "root/HelloWorld/Counter",
       },
       {
-        "implicit": false,
         "name": "$inflight_init()",
         "source": "root/HelloWorld/Queue/Queue-SetConsumer-401ee792",
         "target": "root/HelloWorld/Counter",
       },
       {
-        "implicit": false,
         "name": "put()",
         "source": "root/HelloWorld/Queue/Queue-SetConsumer-401ee792",
         "target": "root/HelloWorld/Bucket",
       },
       {
-        "implicit": false,
         "name": "$inflight_init()",
         "source": "root/HelloWorld/Queue/Queue-SetConsumer-401ee792",
         "target": "root/HelloWorld/Bucket",
       },
       {
-        "implicit": false,
         "name": "handle()",
         "source": "root/HelloWorld/Queue/Queue-SetConsumer-401ee792",
         "target": "root/HelloWorld/Processor",
       },
       {
-        "implicit": false,
         "name": "$inflight_init()",
         "source": "root/HelloWorld/Queue/Queue-SetConsumer-401ee792",
         "target": "root/HelloWorld/Processor",
       },
       {
-        "implicit": false,
         "name": "setConsumer()",
         "source": "root/HelloWorld/Queue",
         "target": "root/HelloWorld/Queue/Queue-SetConsumer-401ee792",

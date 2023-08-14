@@ -642,12 +642,10 @@ export interface BaseResourceAttributes {
 
 /** Schema for `.connections` in connections.json */
 export interface ConnectionData {
-  /** The construct path of the source of the connection. */
+  /** The path of the source construct. */
   readonly source: string;
-  /** The construct path of the target of the connection. */
+  /** The path of the target construct. */
   readonly target: string;
   /** A name for the connection. */
   readonly name: string;
-  /** Whether the connection is implicit, i.e. it is not explicitly defined by the user. */
-  readonly implicit: boolean;
 }

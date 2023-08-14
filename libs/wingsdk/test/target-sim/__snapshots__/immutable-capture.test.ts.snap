@@ -142,13 +142,11 @@ my_buckets: [(function(env) {
   "connections.json": {
     "connections": [
       {
-        "implicit": false,
         "name": "$inflight_init()",
         "source": "root/Function",
         "target": "root/B1",
       },
       {
-        "implicit": false,
         "name": "$inflight_init()",
         "source": "root/Function",
         "target": "root/B2",
@@ -1042,13 +1040,11 @@ my_map: new Map([[\\"foo\\",(function(env) {
   "connections.json": {
     "connections": [
       {
-        "implicit": false,
         "name": "$inflight_init()",
         "source": "root/Function",
         "target": "root/B1",
       },
       {
-        "implicit": false,
         "name": "$inflight_init()",
         "source": "root/Function",
         "target": "root/B2",
@@ -1858,31 +1854,26 @@ my_struct: {bucky: (function(env) {
   "connections.json": {
     "connections": [
       {
-        "implicit": false,
         "name": "$inflight_init()",
         "source": "root/Function",
         "target": "root/B1",
       },
       {
-        "implicit": false,
         "name": "$inflight_init()",
         "source": "root/Function",
         "target": "root/B2",
       },
       {
-        "implicit": false,
         "name": "$inflight_init()",
         "source": "root/Function",
         "target": "root/B3",
       },
       {
-        "implicit": false,
         "name": "$inflight_init()",
         "source": "root/Function",
         "target": "root/B4",
       },
       {
-        "implicit": false,
         "name": "$inflight_init()",
         "source": "root/Function",
         "target": "root/B5",

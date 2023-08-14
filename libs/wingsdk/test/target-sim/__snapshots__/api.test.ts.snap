@@ -37,7 +37,6 @@ return class Handler {
   "connections.json": {
     "connections": [
       {
-        "implicit": false,
         "name": "get()",
         "source": "root/my_api",
         "target": "root/my_api/OnRequestHandler-e645076f",
@@ -227,7 +226,6 @@ return class Handler {
   "connections.json": {
     "connections": [
       {
-        "implicit": false,
         "name": "get()",
         "source": "root/my_api",
         "target": "root/my_api/OnRequestHandler-e645076f",
@@ -417,7 +415,6 @@ return class Handler {
   "connections.json": {
     "connections": [
       {
-        "implicit": false,
         "name": "get()",
         "source": "root/my_api",
         "target": "root/my_api/OnRequestHandler-e645076f",
@@ -607,7 +604,6 @@ return class Handler {
   "connections.json": {
     "connections": [
       {
-        "implicit": false,
         "name": "get()",
         "source": "root/my_api",
         "target": "root/my_api/OnRequestHandler-e645076f",
@@ -797,7 +793,6 @@ return class Handler {
   "connections.json": {
     "connections": [
       {
-        "implicit": false,
         "name": "get()",
         "source": "root/my_api",
         "target": "root/my_api/OnRequestHandler-e645076f",
@@ -1005,43 +1000,36 @@ return class Handler {
   "connections.json": {
     "connections": [
       {
-        "implicit": false,
         "name": "get()",
         "source": "root/my_api",
         "target": "root/my_api/OnRequestHandler-e645076f",
       },
       {
-        "implicit": false,
         "name": "post()",
         "source": "root/my_api",
         "target": "root/my_api/OnRequestHandler-e645076f",
       },
       {
-        "implicit": false,
         "name": "put()",
         "source": "root/my_api",
         "target": "root/my_api/OnRequestHandler-e645076f",
       },
       {
-        "implicit": false,
         "name": "delete()",
         "source": "root/my_api",
         "target": "root/my_api/OnRequestHandler-e645076f",
       },
       {
-        "implicit": false,
         "name": "head()",
         "source": "root/my_api",
         "target": "root/my_api/OnRequestHandler-e645076f",
       },
       {
-        "implicit": false,
         "name": "options()",
         "source": "root/my_api",
         "target": "root/my_api/OnRequestHandler-e645076f",
       },
       {
-        "implicit": false,
         "name": "patch()",
         "source": "root/my_api",
         "target": "root/my_api/OnRequestHandler-e645076f",
@@ -1297,7 +1285,6 @@ return class Handler {
   "connections.json": {
     "connections": [
       {
-        "implicit": false,
         "name": "get()",
         "source": "root/my_api",
         "target": "root/my_api/OnRequestHandler-e645076f",
@@ -1524,13 +1511,11 @@ return class Handler {
   "connections.json": {
     "connections": [
       {
-        "implicit": false,
         "name": "get()",
         "source": "root/my_api",
         "target": "root/my_api/OnRequestHandler-7c48a9f0",
       },
       {
-        "implicit": false,
         "name": "post()",
         "source": "root/my_api",
         "target": "root/my_api/OnRequestHandler-f6d90a7f",
@@ -1816,13 +1801,11 @@ return class Handler {
   "connections.json": {
     "connections": [
       {
-        "implicit": false,
         "name": "get()",
         "source": "root/my_api",
         "target": "root/my_api/OnRequestHandler-7c48a9f0",
       },
       {
-        "implicit": false,
         "name": "get()",
         "source": "root/my_api",
         "target": "root/my_api/OnRequestHandler-f6d90a7f",
@@ -2089,7 +2072,6 @@ return class Handler {
   "connections.json": {
     "connections": [
       {
-        "implicit": false,
         "name": "get()",
         "source": "root/my_api",
         "target": "root/my_api/OnRequestHandler-e645076f",
@@ -2279,7 +2261,6 @@ return class Handler {
   "connections.json": {
     "connections": [
       {
-        "implicit": false,
         "name": "get()",
         "source": "root/my_api",
         "target": "root/my_api/OnRequestHandler-e645076f",
@@ -2478,7 +2459,6 @@ return class Handler {
   "connections.json": {
     "connections": [
       {
-        "implicit": false,
         "name": "post()",
         "source": "root/my_api",
         "target": "root/my_api/OnRequestHandler-e645076f",

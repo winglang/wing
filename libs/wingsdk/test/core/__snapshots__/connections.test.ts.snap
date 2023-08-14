@@ -19,7 +19,6 @@ return class Handler {
   "connections.json": {
     "connections": [
       {
-        "implicit": false,
         "name": "relationship",
         "source": "root/my_bucket",
         "target": "root/my_function",

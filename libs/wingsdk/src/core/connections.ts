@@ -36,7 +36,6 @@ export class Connections {
       source: props.source,
       target: props.target,
       name: props.name,
-      implicit: props.implicit ?? false,
     };
 
     // avoid duplicate connections
@@ -45,8 +44,7 @@ export class Connections {
         (c) =>
           c.source === connection.source &&
           c.target === connection.target &&
-          c.name === connection.name &&
-          c.implicit === connection.implicit
+          c.name === connection.name
       )
     ) {
       return;
@@ -63,7 +61,6 @@ export class Connections {
       source: c.source.node.path,
       target: c.target.node.path,
       name: c.name,
-      implicit: c.implicit,
     }));
 
     const tree = {
@@ -97,13 +94,6 @@ export interface AddConnectionProps {
    * A name for the connection.
    */
   readonly name: string;
-
-  /**
-   * Whether the connection is implicit, i.e. it is not explicitly
-   * defined by the user.
-   * @default false
-   */
-  readonly implicit?: boolean;
 }
 
 /**
@@ -124,10 +114,4 @@ export interface Connection {
    * A name for the connection.
    */
   readonly name: string;
-
-  /**
-   * Whether the relationship is implicit, i.e. it is not explicitly
-   * defined by the user.
-   */
-  readonly implicit: boolean;
 }

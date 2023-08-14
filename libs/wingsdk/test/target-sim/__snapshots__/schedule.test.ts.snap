@@ -90,19 +90,16 @@ console.log(\\"Hello from schedule!\\");
   "connections.json": {
     "connections": [
       {
-        "implicit": false,
         "name": "handle()",
         "source": "root/my_schedule/my_schedule-OnTick-e645076f",
         "target": "root/Handler",
       },
       {
-        "implicit": false,
         "name": "$inflight_init()",
         "source": "root/my_schedule/my_schedule-OnTick-e645076f",
         "target": "root/Handler",
       },
       {
-        "implicit": false,
         "name": "onTick()",
         "source": "root/my_schedule",
         "target": "root/my_schedule/my_schedule-OnTick-e645076f",
@@ -265,19 +262,16 @@ console.log(\\"Hello from schedule!\\");
   "connections.json": {
     "connections": [
       {
-        "implicit": false,
         "name": "handle()",
         "source": "root/my_schedule/my_schedule-OnTick-e645076f",
         "target": "root/Handler",
       },
       {
-        "implicit": false,
         "name": "$inflight_init()",
         "source": "root/my_schedule/my_schedule-OnTick-e645076f",
         "target": "root/Handler",
       },
       {
-        "implicit": false,
         "name": "onTick()",
         "source": "root/my_schedule",
         "target": "root/my_schedule/my_schedule-OnTick-e645076f",
@@ -440,19 +434,16 @@ console.log(\\"Hello from schedule!\\");
   "connections.json": {
     "connections": [
       {
-        "implicit": false,
         "name": "handle()",
         "source": "root/my_schedule/my_schedule-OnTick-e645076f",
         "target": "root/Handler",
       },
       {
-        "implicit": false,
         "name": "$inflight_init()",
         "source": "root/my_schedule/my_schedule-OnTick-e645076f",
         "target": "root/Handler",
       },
       {
-        "implicit": false,
         "name": "onTick()",
         "source": "root/my_schedule",
         "target": "root/my_schedule/my_schedule-OnTick-e645076f",
