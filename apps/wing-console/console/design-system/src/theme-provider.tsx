@@ -125,10 +125,9 @@ const applyThemeCss = (newTheme: Theme) => {
     };
   });
 
-  let stylesText = "";
-  Object.keys(styles).map((key) => {
-    stylesText += `${key} ${styles[key as keyof typeof styles]}\n`;
-  });
+  const stylesText = Object.keys(styles)
+    .map((property) => `${property} ${styles[property as keyof typeof styles]}`)
+    .join("\n");
 
   let styleElement = document.querySelector("#style-theme");
   if (styleElement) {
@@ -169,13 +168,18 @@ export const buildTheme = (color?: string): Theme => {
   applyThemeCss(theme);
 
   let mergedTheme: Theme = DefaultTheme;
-  Object.keys(DefaultTheme).map((value) => {
-    const keyTheme = value as keyof Theme;
+  Object.keys(DefaultTheme).map((key) => {
+    const themeProperty = key as keyof Theme;
 
-    const changed = theme[keyTheme] !== DefaultTheme[keyTheme];
+    const changed = theme[themeProperty] !== DefaultTheme[themeProperty];
+    if (!changed) {
+      return;
+    }
     mergedTheme = {
       ...mergedTheme,
-      [keyTheme]: `${DefaultTheme[keyTheme]} ${changed && theme[keyTheme]}`,
+      // theme will not be applied if there is no CUSTOMIZABLE_COLOR class on the element
+      // so we add the class of the default theme
+      [themeProperty]: `${DefaultTheme[themeProperty]} ${theme[themeProperty]}`,
     };
   });
 
