@@ -67,8 +67,9 @@ jobs:
       - name: Setup Cargo Cache
         uses: Swatinem/rust-cache@v2
 
-      - uses: superfly/flyctl-actions/setup-flyctl@master
-      - name: Fly
+      - name: Install flyctl
+        uses: superfly/flyctl-actions/setup-flyctl@master
+      - name: Deploy to Fly.io
         run: |
           app=wing-pr-${{github.event.number}}-playground 
           if ! flyctl status --app "$app"; then
@@ -77,6 +78,7 @@ jobs:
             popd
           fi
           flyctl deploy . --config ./apps/wing-console/console/app/preview/fly.toml --app "$app" --image-label latest --vm-memory 512 --strategy immediate
+          flyctl scale count 1 --yes --app "$app"
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
       - name: build image
