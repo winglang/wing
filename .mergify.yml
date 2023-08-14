@@ -31,9 +31,9 @@ pull_request_rules:
       - -merged
       - -closed
       - branch-protection-review-decision=APPROVED
-      - approved-reviews-by>=1
-      - changes-requested-reviews-by=0
-      - review-threads-unresolved=0
+      - "#approved-reviews-by>=1"
+      - "#changes-requested-reviews-by=0"
+      - "#review-threads-unresolved=0"
       - -approved-reviews-by~=author
       - check-success=Validate PR title
       - base=main
@@ -51,9 +51,9 @@ pull_request_rules:
       - -label~=(🚧 pr/do-not-merge|⚠️ pr/review-mutation|⚠️ mergify/review-config)
       - -merged
       - -closed
-      - approved-reviews-by>=1
-      - changes-requested-reviews-by=0
-      - review-threads-unresolved=0
+      - "#approved-reviews-by>=1"
+      - "#changes-requested-reviews-by=0"
+      - "#review-threads-unresolved=0"
       - -approved-reviews-by~=author
       - check-success=Validate PR title
       - check-success=Quality Gate
