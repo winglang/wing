@@ -216,10 +216,10 @@ export const createConsoleManager = (
           const layout = 4;
           const theme = "${getTheme()}";
           const t = "${Date.now()}";
-          const themeColor = getComputedStyle(document.documentElement).getPropertyValue('--vscode-menu-background').replace("#", "");
+          const color = getComputedStyle(document.documentElement).getPropertyValue('--vscode-menu-background').replace("#", "");
           document.addEventListener('DOMContentLoaded', () => {
             const iframe = document.querySelector('iframe');
-            const iframeSrc = \`http://\${instanceUrl}?layout=\${layout}&theme=\${theme}&themeColor=\${themeColor}\`;
+            const iframeSrc = \`http://\${instanceUrl}?layout=\${layout}&theme=\${theme}&color=\${color}\`;
             iframe.src = iframeSrc;
           });
       </script>

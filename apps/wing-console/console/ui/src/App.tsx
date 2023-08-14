@@ -1,5 +1,4 @@
 import {
-  DefaultTheme,
   ThemeProvider,
   NotificationsProvider,
   type Mode,
@@ -15,11 +14,11 @@ import { TestsContextProvider } from "./tests-context.js";
 export interface AppProps {
   layout?: LayoutType;
   theme?: Mode;
-  themeColor?: string;
+  color?: string;
   onTrace?: (trace: Trace) => void;
 }
 
-export const App = ({ layout, theme, themeColor, onTrace }: AppProps) => {
+export const App = ({ layout, theme, color, onTrace }: AppProps) => {
   const trpcContext = trpc.useContext();
 
   trpc["app.invalidateQuery"].useSubscription(undefined, {
@@ -45,13 +44,10 @@ export const App = ({ layout, theme, themeColor, onTrace }: AppProps) => {
   const appState = trpc["app.state"].useQuery();
   const themeMode = trpc["config.getThemeMode"].useQuery();
 
-  const customTheme: Theme = buildTheme(themeColor);
-
   return (
     <ThemeProvider
       mode={theme || themeMode?.data?.mode}
-      theme={customTheme}
-      themeColor={themeColor}
+      theme={buildTheme(color)}
     >
       <NotificationsProvider>
         <TestsContextProvider>
