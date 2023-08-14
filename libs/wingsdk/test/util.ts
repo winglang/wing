@@ -107,6 +107,13 @@ export function tfSanitize(templateStr: string): string {
       ) {
         return "<source>";
       }
+      if (
+        key === "source_hash" &&
+        typeof value === "string" &&
+        value.startsWith("${filemd5")
+      ) {
+        return "${filemd5(<source>)}";
+      }
       return value;
     },
     2
