@@ -1320,18 +1320,6 @@ importers:
       cdktf:
         specifier: ^0.17.0
         version: 0.17.0(constructs@10.2.51)
-      examples-error:
-        specifier: workspace:^
-        version: link:../../examples/tests/error
-      examples-invalid:
-        specifier: workspace:^
-        version: link:../../examples/tests/invalid
-      examples-sdk:
-        specifier: workspace:^
-        version: link:../../examples/tests/sdk_tests
-      examples-valid:
-        specifier: workspace:^
-        version: link:../../examples/tests/valid
       execa:
         specifier: ^7.1.1
         version: 7.1.1
@@ -12482,7 +12470,7 @@ packages:
     dependencies:
       semver: 7.5.3
       shelljs: 0.8.5
-      typescript: 5.3.0-dev.20230811
+      typescript: 5.3.0-dev.20230814
     dev: true
 
   /dset@3.1.2:
@@ -21401,8 +21389,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  /typescript@5.3.0-dev.20230811:
-    resolution: {integrity: sha512-C4bwx7ZpBwX7bKxrrNl+M1j8yNGmwQ5M58X0mT4VYI1+FHqRvb/uJ4F1uJsVJ+X7iy22iXSICR/Vxnpc1gNk7w==}
+  /typescript@5.3.0-dev.20230814:
+    resolution: {integrity: sha512-ztAo8S7pDTqodkSIPPdh4mL5T7+//1xfOP17O2yFW3dx3u/87MG4qsiZ5HIOoV0L9Kkr/fFw5bqGXHcDT/Nclg==}
     engines: {node: '>=14.17'}
     hasBin: true
     dev: true

@@ -19,7 +19,7 @@
     },
     "test": {
       "dependsOn": ["^package", "test:generate"],
-      "inputs": ["src/**", "!../../apps/wing-console/**"]
+      "inputs": ["src/**"]
     },
     "bench": {
       "dependsOn": ["^package", "examples-valid#topo"],
