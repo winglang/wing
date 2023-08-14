@@ -40,6 +40,11 @@ jobs:
           fi
           flyctl deploy . --config ./apps/wing-console/console/app/preview/fly.toml --app "$APP_NAME" --image-label latest --vm-memory 512 --strategy immediate
           flyctl scale count 1 --yes --app "$APP_NAME"
+      - name: Create a preview comment
+        uses: thollander/actions-comment-pull-request@v2
+        with:
+          message: |
+            A console preview environment is available at https://${{env.APP_NAME}}.fly.dev :rocket:
   destroy:
     name: "Destroy"
     runs-on: ubuntu-latest
