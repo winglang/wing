@@ -67,23 +67,6 @@ jobs:
       - name: Setup Cargo Cache
         uses: Swatinem/rust-cache@v2
 
-      - name: Install flyctl
-        uses: superfly/flyctl-actions/setup-flyctl@master
-      - name: Deploy to Fly.io
-        run: |
-          app=wing-pr-${{github.event.number}}-playground 
-          if ! flyctl status --app "$app"; then
-            pushd ./apps/wing-console/console/app/preview
-            flyctl launch --no-deploy --copy-config --name "$app" --image-label latest
-            popd
-          fi
-          flyctl deploy . --config ./apps/wing-console/console/app/preview/fly.toml --app "$app" --image-label latest --vm-memory 512 --strategy immediate
-          flyctl scale count 1 --yes --app "$app"
-        env:
-          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
-      - name: build image
-        run: docker build -t backend:latest -f ./apps/wing-console/console/app/preview/Dockerfile . --platform=linux/amd64
-
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
 
@@ -138,71 +121,71 @@ jobs:
           name: docs
           path: docs.tgz
 
-  # test:
-  #   name: Test
-  #   timeout-minutes: 30
-  #   runs-on: ubuntu-latest
-  #   env:
-  #     CARGO_TERM_COLOR: always
-  #     TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
-  #     TURBO_TEAM: ${{ vars.TURBO_TEAM }}
+  test:
+    name: Test
+    timeout-minutes: 30
+    runs-on: ubuntu-latest
+    env:
+      CARGO_TERM_COLOR: always
+      TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+      TURBO_TEAM: ${{ vars.TURBO_TEAM }}
 
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v3
-  #       with:
-  #         fetch-depth: 1
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 1
 
-  #     - name: Setup pnpm
-  #       uses: pnpm/action-setup@v2.2.4
-  #       with:
-  #         version: ${{ env.PNPM_VERSION }}
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2.2.4
+        with:
+          version: ${{ env.PNPM_VERSION }}
 
-  #     - name: Setup Node
-  #       uses: actions/setup-node@v3
-  #       with:
-  #         cache: "pnpm"
-  #         node-version: ${{ env.NODE_VERSION }}
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          cache: "pnpm"
+          node-version: ${{ env.NODE_VERSION }}
 
-  #     - name: Install Rust
-  #       uses: dtolnay/rust-toolchain@master
-  #       with:
-  #         toolchain: ${{ env.RUST_VERSION }}
-  #         targets: |
-  #           x86_64-unknown-linux-gnu
-  #           wasm32-wasi
-  #         components: rustfmt,clippy,rust-std
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: ${{ env.RUST_VERSION }}
+          targets: |
+            x86_64-unknown-linux-gnu
+            wasm32-wasi
+          components: rustfmt,clippy,rust-std
 
-  #     - name: Setup Cargo Cache
-  #       uses: Swatinem/rust-cache@v2
+      - name: Setup Cargo Cache
+        uses: Swatinem/rust-cache@v2
 
-  #     - name: Install Dependencies
-  #       run: pnpm install --frozen-lockfile
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile
 
-  #     - name: Install Playwright
-  #       working-directory: apps/wing-console/console/app
-  #       run: pnpm exec playwright install --with-deps
+      - name: Install Playwright
+        working-directory: apps/wing-console/console/app
+        run: pnpm exec playwright install --with-deps
 
-  #     - name: Test
-  #       run: pnpm test:ci
+      - name: Test
+        run: pnpm test:ci
 
-  #     - name: Create git patch
-  #       id: diff
-  #       run: |
-  #         git add --all
-  #         git diff --staged --binary --patch > build.diff
-  #         if [ -s build.diff ]; then
-  #           echo "Diff found, creating a patch to apply later"
-  #           cat build.diff
-  #           echo "diff=true" >> $GITHUB_OUTPUT
-  #         fi
+      - name: Create git patch
+        id: diff
+        run: |
+          git add --all
+          git diff --staged --binary --patch > build.diff
+          if [ -s build.diff ]; then
+            echo "Diff found, creating a patch to apply later"
+            cat build.diff
+            echo "diff=true" >> $GITHUB_OUTPUT
+          fi
 
-  #     - name: Upload patch
-  #       if: steps.diff.outputs.diff == 'true'
-  #       uses: actions/upload-artifact@v3
-  #       with:
-  #         name: build.diff
-  #         path: build.diff
+      - name: Upload patch
+        if: steps.diff.outputs.diff == 'true'
+        uses: actions/upload-artifact@v3
+        with:
+          name: build.diff
+          path: build.diff
 
   benchmark:
     name: Benchmark
@@ -330,7 +313,7 @@ jobs:
       - build
       - e2e-test
       - benchmark
-      # - test
+      - test
     steps:
       - name: Download patches
         uses: actions/download-artifact@v3
