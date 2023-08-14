@@ -85,3 +85,13 @@ let notJsonMap: StructyJsonMap = {
     c: 3,
   },
 };
+
+let var mutableJson = {
+  foo: "bar",
+  stuff: [1, 2, 3],
+  maybe: {
+    good: true,
+  }
+};
+let mutableJsonStruct: StructyJson = mutableJson;
+//                                   ^^^^^^^^^^^ Expected type to be "StructyJson", but got "Json" instead
