@@ -37,7 +37,6 @@ export const createCompiler = (wingfile: string): Compiler => {
       const simfile = await wing.compile(wingfile, {
         target: wing.Target.SIM,
       });
-
       await events.emit("compiled", { simfile });
     } catch (error) {
       // There's no point in showing errors if we're going to recompile anyway.
