@@ -66,6 +66,7 @@ WORKDIR /app
 
 COPY --from=base /app/pruned/dist dist
 COPY --from=base /app/apps/wing-console/console/app/preview preview
+COPY --from=base /app/apps/wing-console/console/app/demo demo
 COPY --from=base /app/pruned/node_modules node_modules
 
 ENTRYPOINT ["node", "preview/index.mjs"]
