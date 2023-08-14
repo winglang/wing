@@ -1,4 +1,4 @@
-import { CUSTOMIZABLE_COLOR, useTheme } from "@wingconsole/design-system";
+import { useTheme } from "@wingconsole/design-system";
 import classNames from "classnames";
 
 import { ThemeToggle } from "./theme-toggle.js";
