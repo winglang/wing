@@ -1,5 +1,4 @@
-import * as fs from "fs";
-import { isAbsolute, resolve, join } from "path";
+import { join } from "path";
 import { RemovalPolicy } from "aws-cdk-lib";
 import {
   BlockPublicAccess,
@@ -54,15 +53,6 @@ export class Bucket extends cloud.Bucket {
       destinationBucket: this.bucket,
       sources: [Source.data(key, body)],
     });
-  }
-
-  public addFile(fileName: string, path: string): void {
-    path = isAbsolute(path)
-      ? path
-      : resolve(process.env.WING_SOURCE_DIR ?? "", path);
-    const data = fs.readFileSync(path, File.getFileEncoding(path));
-
-    this.addObject(fileName, data);
   }
 
   protected eventHandlerLocation(): string {

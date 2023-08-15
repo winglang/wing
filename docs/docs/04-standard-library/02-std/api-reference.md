@@ -667,51 +667,6 @@ Return the total number of years in this Duration.
 
 ---
 
-### File <a name="File" id="@winglang/sdk.std.File"></a>
-
-File Handler.
-
-#### Static Functions <a name="Static Functions" id="Static Functions"></a>
-
-| **Name**                                                                           | **Description**                |
-| ---------------------------------------------------------------------------------- | ------------------------------ |
-| <code><a href="#@winglang/sdk.std.File.getExtension">getExtension</a></code>       | get the extention fo the file. |
-| <code><a href="#@winglang/sdk.std.File.getFileEncoding">getFileEncoding</a></code> | get the encoding fo the file.  |
-
----
-
-##### `getExtension` <a name="getExtension" id="@winglang/sdk.std.File.getExtension"></a>
-
-```wing
-file.getExtension(fileName: string);
-```
-
-get the extention of the file.
-
-###### `fileName`<sup>Required</sup> <a name="fileName" id="@winglang/sdk.std.File.getExtension.parameter.fileName"></a>
-
-- _Type:_ <a href="#@winglang/sdk.std.File">string</a>
-
-Returns file extension
-
----
-
-##### `getFileEncoding` <a name="getFileEncoding" id="@winglang/sdk.std.File.getFileEncoding"></a>
-
-```wing
-file.getFileEncoding(fileName: string);
-```
-
-get the encoding type of the file.
-
-###### `fileName`<sup>Required</sup> <a name="fileName" id="@winglang/sdk.std.File.getFileEncoding.parameter.fileName"></a>
-
-- _Type:_ <a href="#@winglang/sdk.std.File">string</a>
-
-Returns file encoding
-
----
-
 ### Json <a name="Json" id="@winglang/sdk.std.Json"></a>
 
 Immutable Json.

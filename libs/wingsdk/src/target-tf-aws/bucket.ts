@@ -1,5 +1,4 @@
-import * as fs from "fs";
-import { isAbsolute, resolve, join } from "path";
+import { join } from "path";
 import { ITerraformDependable } from "cdktf";
 import { Construct } from "constructs";
 import { App } from "./app";
@@ -72,15 +71,6 @@ export class Bucket extends cloud.Bucket {
       key,
       content: body,
     });
-  }
-
-  public addFile(fileName: string, path: string): void {
-    path = isAbsolute(path)
-      ? path
-      : resolve(process.env.WING_SOURCE_DIR ?? "", path);
-    const data = fs.readFileSync(path, File.getFileEncoding(path));
-
-    this.addObject(fileName, data);
   }
 
   protected eventHandlerLocation(): string {

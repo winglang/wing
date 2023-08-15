@@ -4,6 +4,9 @@ import { fqnForType } from "../constants";
 import { App } from "../core";
 import { convertBetweenHandlers } from "../shared/convert";
 import { Json, IResource, Resource } from "../std";
+import { isAbsolute, resolve } from "path"
+import * as fs from "fs";
+
 
 /**
  * Global identifier for `Bucket`.
@@ -41,12 +44,14 @@ export abstract class Bucket extends Resource {
 
   /** @internal */
   protected readonly _topics = new Map<BucketEventType, Topic>();
+  private scope: Construct
 
   constructor(scope: Construct, id: string, props: BucketProps = {}) {
     super(scope, id);
 
     this.display.title = "Bucket";
     this.display.description = "A cloud object store";
+    this.scope = scope;
 
     this._addInflightOps(
       BucketInflightMethods.DELETE,
@@ -77,7 +82,20 @@ export abstract class Bucket extends Resource {
  * Add a file to the bucket from system folder
  */
 
-  public abstract addFile(fileName: string, path: string): void;
+  public addFile(key: string, path: string, encoding: BufferEncoding = "utf-8"): void {
+    
+    if (isAbsolute(path)) {
+      path = path;
+    } else {
+      if (!App.of(this.scope).entrypointDir) {
+        throw new Error("Missing environment variable: WING_SOURCE_DIR");
+      }
+      path = resolve(App.of(this.scope).entrypointDir, path);
+    }
+    const data = fs.readFileSync(path, { encoding: encoding });
+
+    this.addObject(key, data);
+  }
 
   /**
    * Creates a topic for subscribing to notification events

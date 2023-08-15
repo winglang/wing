@@ -202,18 +202,24 @@ referencing a file from the local filesystem.
 ##### `addFile` <a name="addFile" id="@winglang/sdk.cloud.Bucket.addFile"></a>
 
 ```wing
-addFile(fileName: str, path: str): void
+addFile(key: str, path: str, encoding: str): void
 ```
 
 Add a file from absolute path to the bucket that is uploaded when the app is deployed.
 
-###### `fileName`<sup>Required</sup> <a name="fileName" id="@winglang/sdk.cloud.Bucket.addFile.parameter.path"></a>
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.cloud.Bucket.addFile.parameter.key"></a>
 
 - _Type:_ str
 
 ---
 
-###### `path`<sup>Required</sup> <a name="fileName" id="@winglang/sdk.cloud.Bucket.addFile.parameter.path"></a>
+###### `path`<sup>Required</sup> <a name="path" id="@winglang/sdk.cloud.Bucket.addFile.parameter.path"></a>
+
+- _Type:_ str
+
+---
+
+###### `encoding`<sup>Required</sup> <a name="encoding" id="@winglang/sdk.cloud.Bucket.addFile.parameter.encoding"></a>
 
 - _Type:_ str
 
