@@ -72,18 +72,19 @@ export const DefaultTheme: Theme = {
 };
 
 const computeColor = (color: string, level: number = 1): string => {
+  const hexColor = color.replace("#", "");
+
   if (level === 1) {
-    return `#${color}`;
+    return `#${hexColor}`;
   }
 
-  const hex = color.replace("#", "");
-  const r = Number.parseInt(hex.slice(0, 2), 16);
-  const g = Number.parseInt(hex.slice(2, 4), 16);
-  const b = Number.parseInt(hex.slice(4, 6), 16);
+  const oldR = Number.parseInt(hexColor.slice(0, 2), 16);
+  const oldG = Number.parseInt(hexColor.slice(2, 4), 16);
+  const oldB = Number.parseInt(hexColor.slice(4, 6), 16);
 
-  const newR = Math.min(Math.max(Math.round(r * level), 0), 255);
-  const newG = Math.min(Math.max(Math.round(g * level), 0), 255);
-  const newB = Math.min(Math.max(Math.round(b * level), 0), 255);
+  const newR = Math.min(Math.max(Math.round(oldR * level), 0), 255);
+  const newG = Math.min(Math.max(Math.round(oldG * level), 0), 255);
+  const newB = Math.min(Math.max(Math.round(oldB * level), 0), 255);
 
   const newColor = `${newR.toString(16).padStart(2, "0")}${newG
     .toString(16)
@@ -164,7 +165,6 @@ export const buildTheme = (color?: string): Theme => {
     )}]`,
   };
 
-  // TODO: tailwindcss doesn't support dynamic color in the config
   applyThemeCss(theme);
 
   let mergedTheme: Theme = DefaultTheme;
@@ -177,8 +177,6 @@ export const buildTheme = (color?: string): Theme => {
     }
     mergedTheme = {
       ...mergedTheme,
-      // theme will not be applied if there is no CUSTOMIZABLE_COLOR class on the element
-      // so we add the class of the default theme
       [themeProperty]: `${DefaultTheme[themeProperty]} ${theme[themeProperty]}`,
     };
   });
