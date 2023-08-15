@@ -221,7 +221,7 @@ Add a file from absolute path to the bucket that is uploaded when the app is dep
 
 ###### `encoding`<sup>Required</sup> <a name="encoding" id="@winglang/sdk.cloud.Bucket.addFile.parameter.encoding"></a>
 
-- _Type:_ str
+- _Type:_ BufferEncoding
 
 ---
 
