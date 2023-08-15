@@ -30,7 +30,7 @@ const isTest = /(\/test$|\/test:([^/\\])+$)/;
 const isTestHandler = /(\/test$|\/test:.*\/Handler$)/;
 
 const matchTest = (path: string) => {
-  return isTest.test(path) || isTestHandler.test(path);
+  return isTest.test(path);
 };
 
 export const getResourceIconComponent = (

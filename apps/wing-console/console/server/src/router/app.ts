@@ -62,6 +62,11 @@ export const createAppRouter = () => {
     "app.acceptTerms": createProcedure.mutation(() => {
       acceptTerms(true);
     }),
+    "app.layoutConfig": createProcedure.query(async ({ ctx }) => {
+      return {
+        config: ctx.layoutConfig,
+      };
+    }),
     "app.logs": createProcedure
       .input(
         z.object({
@@ -109,6 +114,18 @@ export const createAppRouter = () => {
           input?.showTests,
         );
       }),
+    "app.selectNode": createProcedure
+      .input(
+        z.object({
+          resourcePath: z.string().optional(),
+        }),
+      )
+      .mutation(async ({ ctx, input }) => {
+        ctx.setSelectedNode(input.resourcePath ?? "");
+      }),
+    "app.selectedNode": createProcedure.query(async ({ ctx }) => {
+      return ctx.getSelectedNode();
+    }),
     "app.childRelationships": createProcedure
       .input(
         z.object({
@@ -363,6 +380,79 @@ export const createAppRouter = () => {
             }),
         };
       }),
+    "app.edgeMetadata": createProcedure
+      .input(
+        z.object({
+          edgeId: z.string(),
+          showTests: z.boolean().optional(),
+        }),
+      )
+      .query(async ({ ctx, input }) => {
+        const { edgeId, showTests } = input;
+        const simulator = await ctx.simulator();
+
+        const { tree } = simulator.tree().rawData();
+        const nodeMap = buildConstructTreeNodeMap(shakeTree(tree));
+
+        const sourcePath = edgeId.split("->")[0]?.trim();
+        const targetPath = edgeId.split("->")[1]?.trim();
+        const sourceNode = nodeMap.get(sourcePath);
+        if (!sourceNode) {
+          throw new TRPCError({
+            code: "NOT_FOUND",
+            message: "Node was not found.",
+          });
+        }
+        const connections =
+          sourceNode?.attributes?.["wing:resource:connections"];
+
+        const targetResource = connections?.find(
+          (connection) => connection.resource === targetPath,
+        );
+        const targetNode = nodeMap.get(targetResource?.resource);
+
+        const inflights = sourceNode.display?.hidden
+          ? []
+          : connections
+              ?.filter(({ direction, resource, relationship }) => {
+                if (direction !== "outbound") {
+                  return false;
+                }
+
+                if (resource !== targetPath) {
+                  return false;
+                }
+
+                if (relationship === "$inflight_init()") {
+                  return false;
+                }
+
+                if (!showTests && matchTest(sourceNode.path)) {
+                  return false;
+                }
+
+                return true;
+              })
+              .map((connection) => {
+                return {
+                  name: connection.relationship,
+                };
+              }) ?? [];
+
+        return {
+          source: {
+            id: sourceNode.id,
+            path: sourceNode.path,
+            type: getResourceType(sourceNode, simulator),
+          },
+          target: {
+            id: targetNode?.id ?? "",
+            path: targetNode?.path ?? "",
+            type: (targetNode && getResourceType(targetNode, simulator)) ?? "",
+          },
+          inflights,
+        };
+      }),
     "app.invalidateQuery": createProcedure.subscription(({ ctx }) => {
       return observable<string | undefined>((emit) => {
         ctx.emitter.on("invalidateQuery", emit.next);
@@ -436,9 +526,14 @@ function createExplorerItemFromConstructTreeNode(
   simulator: Simulator,
   showTests = false,
 ): ExplorerItem {
+  const label =
+    node.display?.sourceModule === "@winglang/sdk" && node.display?.title
+      ? node.display?.title
+      : node.id;
+
   return {
     id: node.path,
-    label: node.id,
+    label,
     type: getResourceType(node, simulator),
     display: node.display,
     childItems: node.children
@@ -460,6 +555,7 @@ export interface MapNode {
   data: {
     label?: string;
     type?: string;
+    path?: string;
     display?: NodeDisplay;
   };
   children?: MapNode[];
@@ -475,6 +571,7 @@ function createMapNodeFromConstructTreeNode(
     data: {
       label: node.id,
       type: getResourceType(node, simulator),
+      path: node.path,
       display: node.display,
     },
     children: node.children

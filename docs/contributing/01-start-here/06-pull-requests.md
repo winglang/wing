@@ -16,6 +16,7 @@ To help maintainers review them and get them merged in a speedy fashion, please 
 * [ ] A description of your changes are included, and a reference to a corresponding issue. (This is also a great place to shout-out anyone who helped with the changes!)
 * [ ] Tests are added for all changes.
 * [ ] Any handwritten documentation in `docs/` or READMEs are updated where appropriate when features are being added or removed (API docs will be automatically generated for you!).
+Please make sure to start docstrings with a capital letter.
 * [ ] Your fork is in sync with the upstream repository.
 * [ ] All build checks on GitHub are passing.
 

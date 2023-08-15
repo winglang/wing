@@ -1,6 +1,6 @@
 # [capture_mutables.w](../../../../../examples/tests/valid/capture_mutables.w) | compile | tf-aws
 
-## inflight.$Closure1.js
+## inflight.$Closure1-1.js
 ```js
 module.exports = function({ $Object_keys_m__length, $aCloned_length, $a_length, $s_size }) {
   class $Closure1 {
@@ -21,7 +21,7 @@ module.exports = function({ $Object_keys_m__length, $aCloned_length, $a_length, 
 
 ```
 
-## inflight.$Closure2.js
+## inflight.$Closure2-1.js
 ```js
 module.exports = function({ $handler }) {
   class $Closure2 {
@@ -164,8 +164,8 @@ module.exports = function({ $handler }) {
 ```js
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
-const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
+const std = $stdlib.std;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
@@ -177,7 +177,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1.js")({
+          require("./inflight.$Closure1-1.js")({
             $Object_keys_m__length: ${context._lift(Object.keys(m).length)},
             $aCloned_length: ${context._lift(aCloned.length)},
             $a_length: ${context._lift(a.length)},
@@ -214,7 +214,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure2.js")({
+          require("./inflight.$Closure2-1.js")({
             $handler: ${context._lift(handler)},
           })
         `);
@@ -239,14 +239,14 @@ class $Root extends $stdlib.std.Resource {
     }
     const a = ["hello"];
     const s = new Set([12]);
-    const m = {"hello":true};
-    const aCloned = [...(Object.freeze(["hello"]))];
+    const m = ({"hello": true});
+    const aCloned = [...(["hello"])];
     const handler = new $Closure1(this,"$Closure1");
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:main",new $Closure2(this,"$Closure2"));
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
-new $App({ outdir: $outdir, name: "capture_mutables", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test }).synth();
+new $App({ outdir: $outdir, name: "capture_mutables", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
 
 ```
 

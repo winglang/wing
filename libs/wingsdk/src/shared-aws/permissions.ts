@@ -108,7 +108,7 @@ export function calculateBucketPermissions(
     ops.includes(cloud.BucketInflightMethods.PUT) ||
     ops.includes(cloud.BucketInflightMethods.PUT_JSON)
   ) {
-    actions.push(...["s3:PutObject*", "s3:Abort*"]);
+    actions.push("s3:PutObject*", "s3:Abort*");
   }
 
   // getting an object
@@ -118,14 +118,16 @@ export function calculateBucketPermissions(
     ops.includes(cloud.BucketInflightMethods.LIST) ||
     ops.includes(cloud.BucketInflightMethods.TRY_GET) ||
     ops.includes(cloud.BucketInflightMethods.TRY_GET_JSON) ||
-    ops.includes(cloud.BucketInflightMethods.PUBLIC_URL)
+    ops.includes(cloud.BucketInflightMethods.TRY_DELETE) ||
+    ops.includes(cloud.BucketInflightMethods.PUBLIC_URL) ||
+    ops.includes(cloud.BucketInflightMethods.EXISTS)
   ) {
-    actions.push(...["s3:GetObject*", "s3:GetBucket*"]);
+    actions.push("s3:GetObject*", "s3:GetBucket*");
   }
 
   // accessing the publicAccessBlock
   if (ops.includes(cloud.BucketInflightMethods.PUBLIC_URL)) {
-    actions.push(...["s3:GetBucketPublicAccessBlock"]);
+    actions.push("s3:GetBucketPublicAccessBlock");
   }
 
   // deleting an object
@@ -134,11 +136,9 @@ export function calculateBucketPermissions(
     ops.includes(cloud.BucketInflightMethods.DELETE)
   ) {
     actions.push(
-      ...[
-        "s3:DeleteObject*",
-        "s3:DeleteObjectVersion*",
-        "s3:PutLifecycleConfiguration*",
-      ]
+      "s3:DeleteObject*",
+      "s3:DeleteObjectVersion*",
+      "s3:PutLifecycleConfiguration*"
     );
   }
 

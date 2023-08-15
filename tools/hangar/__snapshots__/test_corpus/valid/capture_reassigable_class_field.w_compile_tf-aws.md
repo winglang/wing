@@ -1,6 +1,6 @@
 # [capture_reassigable_class_field.w](../../../../../examples/tests/valid/capture_reassigable_class_field.w) | compile | tf-aws
 
-## inflight.$Closure1.js
+## inflight.$Closure1-1.js
 ```js
 module.exports = function({  }) {
   class $Closure1 {
@@ -17,7 +17,7 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.$Closure2.js
+## inflight.$Closure2-1.js
 ```js
 module.exports = function({ $counter }) {
   class $Closure2 {
@@ -35,7 +35,7 @@ module.exports = function({ $counter }) {
 
 ```
 
-## inflight.$Closure3.js
+## inflight.$Closure3-1.js
 ```js
 module.exports = function({ $counter, $kv, $util_Util }) {
   class $Closure3 {
@@ -45,8 +45,8 @@ module.exports = function({ $counter, $kv, $util_Util }) {
       return $obj;
     }
     async handle() {
-      (await $kv.set("k",Object.freeze({"value":"v"})));
-      (await $kv.set("k2",Object.freeze({"value":"v"})));
+      (await $kv.set("k",({"value": "v"})));
+      (await $kv.set("k2",({"value": "v"})));
       (await $kv.get("k"));
       (await $kv.get("k"));
       (await $kv.get("k2"));
@@ -65,7 +65,7 @@ module.exports = function({ $counter, $kv, $util_Util }) {
 
 ```
 
-## inflight.KeyValueStore.js
+## inflight.KeyValueStore-1.js
 ```js
 module.exports = function({  }) {
   class KeyValueStore {
@@ -275,10 +275,10 @@ module.exports = function({  }) {
 ```js
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
-const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
-const cloud = require('@winglang/sdk').cloud;
-const util = require('@winglang/sdk').util;
+const std = $stdlib.std;
+const cloud = $stdlib.cloud;
+const util = $stdlib.util;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
@@ -296,7 +296,7 @@ class $Root extends $stdlib.std.Resource {
           }
           static _toInflightType(context) {
             return $stdlib.core.NodeJsCode.fromInline(`
-              require("./inflight.$Closure1.js")({
+              require("./inflight.$Closure1-1.js")({
               })
             `);
           }
@@ -319,7 +319,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.KeyValueStore.js")({
+          require("./inflight.KeyValueStore-1.js")({
           })
         `);
       }
@@ -359,7 +359,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure2.js")({
+          require("./inflight.$Closure2-1.js")({
             $counter: ${context._lift(counter)},
           })
         `);
@@ -390,7 +390,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure3.js")({
+          require("./inflight.$Closure3-1.js")({
             $counter: ${context._lift(counter)},
             $kv: ${context._lift(kv)},
             $util_Util: ${context._lift(util.Util)},
@@ -423,7 +423,7 @@ class $Root extends $stdlib.std.Resource {
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
-new $App({ outdir: $outdir, name: "capture_reassigable_class_field", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test }).synth();
+new $App({ outdir: $outdir, name: "capture_reassigable_class_field", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
 
 ```
 

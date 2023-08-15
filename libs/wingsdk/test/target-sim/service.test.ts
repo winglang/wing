@@ -1,5 +1,3 @@
-import { describe } from "node:test";
-import { c } from "tar";
 import { test, expect } from "vitest";
 import * as cloud from "../../src/cloud";
 import { SERVICE_TYPE } from "../../src/target-sim/schema-resources";

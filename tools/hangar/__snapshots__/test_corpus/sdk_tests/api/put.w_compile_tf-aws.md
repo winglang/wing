@@ -1,8 +1,8 @@
 # [put.w](../../../../../../examples/tests/sdk_tests/api/put.w) | compile | tf-aws
 
-## inflight.$Closure1.js
+## inflight.$Closure1-1.js
 ```js
-module.exports = function({ $_id, $api_PUT, $body, $std_Json, $user }) {
+module.exports = function({ $_id, $body, $cloud_HttpMethod, $std_Json, $user }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -11,17 +11,13 @@ module.exports = function({ $_id, $api_PUT, $body, $std_Json, $user }) {
     }
     async handle(req) {
       const path = String.raw({ raw: ["/path/", "/nn/", ""] }, $_id, $user);
-      {((cond) => {if (!cond) throw new Error("assertion failed: req.method == api_PUT")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(req.method,$api_PUT)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: req.method == cloud.HttpMethod.PUT")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(req.method,$cloud_HttpMethod.PUT)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: req.vars?.get(\"id\") == _id")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((req.vars)["id"],$_id)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: req.vars?.get(\"user\") == user")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((req.vars)["user"],$user)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: req.path == path")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(req.path,path)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: req.body == Json.stringify(body)")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(req.body,((args) => { return JSON.stringify(args[0], null, args[1]) })([$body]))))};
       {((cond) => {if (!cond) throw new Error("assertion failed: req.headers?.get(\"content-type\") == \"application/json\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((req.headers)["content-type"],"application/json")))};
-      return {
-      "status": 200,
-      "headers": Object.freeze({"content-type":"application/json; charset=utf-8"}),
-      "body": (req.vars)["id"],}
-      ;
+      return ({"status": 200,"headers": ({"content-type": "application/json; charset=utf-8"}),"body": (req.vars)["id"]});
     }
   }
   return $Closure1;
@@ -29,9 +25,9 @@ module.exports = function({ $_id, $api_PUT, $body, $std_Json, $user }) {
 
 ```
 
-## inflight.$Closure2.js
+## inflight.$Closure2-1.js
 ```js
-module.exports = function({ $_id, $api_url, $body, $http_PUT, $http_Util, $std_Json, $user }) {
+module.exports = function({ $_id, $api_url, $body, $http_HttpMethod, $http_Util, $std_Json, $user }) {
   class $Closure2 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -40,8 +36,8 @@ module.exports = function({ $_id, $api_url, $body, $http_PUT, $http_Util, $std_J
     }
     async handle() {
       const url = String.raw({ raw: ["", "/path/", "/nn/", ""] }, $api_url, $_id, $user);
-      const response = (await $http_Util.put(url,{ headers: Object.freeze({"content-type":"application/json"}), body: ((args) => { return JSON.stringify(args[0], null, args[1]) })([$body]) }));
-      const fetchResponse = (await $http_Util.put(url,{ method: $http_PUT, headers: Object.freeze({"content-type":"application/json"}), body: ((args) => { return JSON.stringify(args[0], null, args[1]) })([$body]) }));
+      const response = (await $http_Util.put(url,{ headers: ({"content-type": "application/json"}), body: ((args) => { return JSON.stringify(args[0], null, args[1]) })([$body]) }));
+      const fetchResponse = (await $http_Util.put(url,{ method: $http_HttpMethod.PUT, headers: ({"content-type": "application/json"}), body: ((args) => { return JSON.stringify(args[0], null, args[1]) })([$body]) }));
       {((cond) => {if (!cond) throw new Error("assertion failed: response.headers.get(\"content-type\") == \"application/json; charset=utf-8\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((response.headers)["content-type"],"application/json; charset=utf-8")))};
       {((cond) => {if (!cond) throw new Error("assertion failed: response.body == _id")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(response.body,$_id)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: response.status == 200")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(response.status,200)))};
@@ -90,7 +86,7 @@ module.exports = function({ $_id, $api_url, $body, $http_PUT, $http_Util, $std_J
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[]"
+      "value": "[[\"root/Default/Default/test:http.put and http.fetch can preform a call to an api\",\"${aws_lambda_function.testhttpputandhttpfetchcanpreformacalltoanapi_Handler_2B7157C1.arn}\"]]"
     }
   },
   "provider": {
@@ -112,7 +108,7 @@ module.exports = function({ $_id, $api_url, $body, $http_PUT, $http_Util, $std_J
         },
         "rest_api_id": "${aws_api_gateway_rest_api.cloudApi_api_2B334D75.id}",
         "triggers": {
-          "redeployment": "a67fe6988218a80a1321d2cf04424fe744273dd4"
+          "redeployment": "4c47cf4383648e8878b273255efa16fb8e65ec18"
         }
       }
     },
@@ -150,6 +146,15 @@ module.exports = function({ $_id, $api_url, $body, $http_PUT, $http_Util, $std_J
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
+      },
+      "testhttpputandhttpfetchcanpreformacalltoanapi_Handler_IamRole_4C35EBED": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:http.put and http.fetch can preform a call to an api/Handler/IamRole",
+            "uniqueId": "testhttpputandhttpfetchcanpreformacalltoanapi_Handler_IamRole_4C35EBED"
+          }
+        },
+        "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
       }
     },
     "aws_iam_role_policy": {
@@ -162,6 +167,16 @@ module.exports = function({ $_id, $api_url, $body, $http_PUT, $http_Util, $std_J
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
         "role": "${aws_iam_role.cloudApi_cloudApi-OnRequest-cdafee6e_IamRole_4382C442.name}"
+      },
+      "testhttpputandhttpfetchcanpreformacalltoanapi_Handler_IamRolePolicy_D35A09FD": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:http.put and http.fetch can preform a call to an api/Handler/IamRolePolicy",
+            "uniqueId": "testhttpputandhttpfetchcanpreformacalltoanapi_Handler_IamRolePolicy_D35A09FD"
+          }
+        },
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
+        "role": "${aws_iam_role.testhttpputandhttpfetchcanpreformacalltoanapi_Handler_IamRole_4C35EBED.name}"
       }
     },
     "aws_iam_role_policy_attachment": {
@@ -174,6 +189,16 @@ module.exports = function({ $_id, $api_url, $body, $http_PUT, $http_Util, $std_J
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
         "role": "${aws_iam_role.cloudApi_cloudApi-OnRequest-cdafee6e_IamRole_4382C442.name}"
+      },
+      "testhttpputandhttpfetchcanpreformacalltoanapi_Handler_IamRolePolicyAttachment_DEDD4EEB": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:http.put and http.fetch can preform a call to an api/Handler/IamRolePolicyAttachment",
+            "uniqueId": "testhttpputandhttpfetchcanpreformacalltoanapi_Handler_IamRolePolicyAttachment_DEDD4EEB"
+          }
+        },
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "${aws_iam_role.testhttpputandhttpfetchcanpreformacalltoanapi_Handler_IamRole_4C35EBED.name}"
       }
     },
     "aws_lambda_function": {
@@ -197,6 +222,33 @@ module.exports = function({ $_id, $api_url, $body, $http_PUT, $http_Util, $std_J
         "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",
         "s3_key": "${aws_s3_object.cloudApi_cloudApi-OnRequest-cdafee6e_S3Object_5DAAA0EF.key}",
+        "timeout": 30,
+        "vpc_config": {
+          "security_group_ids": [],
+          "subnet_ids": []
+        }
+      },
+      "testhttpputandhttpfetchcanpreformacalltoanapi_Handler_2B7157C1": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:http.put and http.fetch can preform a call to an api/Handler/Default",
+            "uniqueId": "testhttpputandhttpfetchcanpreformacalltoanapi_Handler_2B7157C1"
+          }
+        },
+        "environment": {
+          "variables": {
+            "WING_FUNCTION_NAME": "Handler-c8e4b12f",
+            "WING_TARGET": "tf-aws",
+            "WING_TOKEN_TFTOKEN_TOKEN_7": "${jsonencode(aws_api_gateway_stage.cloudApi_api_stage_BBB283E4.invoke_url)}"
+          }
+        },
+        "function_name": "Handler-c8e4b12f",
+        "handler": "index.handler",
+        "publish": true,
+        "role": "${aws_iam_role.testhttpputandhttpfetchcanpreformacalltoanapi_Handler_IamRole_4C35EBED.arn}",
+        "runtime": "nodejs18.x",
+        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
+        "s3_key": "${aws_s3_object.testhttpputandhttpfetchcanpreformacalltoanapi_Handler_S3Object_8E1D5390.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -241,6 +293,17 @@ module.exports = function({ $_id, $api_url, $body, $http_PUT, $http_Util, $std_J
         "bucket": "${aws_s3_bucket.Code.bucket}",
         "key": "<ASSET_KEY>",
         "source": "<ASSET_SOURCE>"
+      },
+      "testhttpputandhttpfetchcanpreformacalltoanapi_Handler_S3Object_8E1D5390": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:http.put and http.fetch can preform a call to an api/Handler/S3Object",
+            "uniqueId": "testhttpputandhttpfetchcanpreformacalltoanapi_Handler_S3Object_8E1D5390"
+          }
+        },
+        "bucket": "${aws_s3_bucket.Code.bucket}",
+        "key": "<ASSET_KEY>",
+        "source": "<ASSET_SOURCE>"
       }
     }
   }
@@ -251,11 +314,11 @@ module.exports = function({ $_id, $api_url, $body, $http_PUT, $http_Util, $std_J
 ```js
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
-const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
-const cloud = require('@winglang/sdk').cloud;
-const http = require('@winglang/sdk').http;
-const util = require('@winglang/sdk').util;
+const std = $stdlib.std;
+const cloud = $stdlib.cloud;
+const http = $stdlib.http;
+const util = $stdlib.util;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
@@ -267,10 +330,10 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1.js")({
+          require("./inflight.$Closure1-1.js")({
             $_id: ${context._lift(_id)},
-            $api_PUT: ${context._lift(api_PUT)},
             $body: ${context._lift(body)},
+            $cloud_HttpMethod: ${context._lift(cloud.HttpMethod)},
             $std_Json: ${context._lift(std.Json)},
             $user: ${context._lift(user)},
           })
@@ -290,68 +353,62 @@ class $Root extends $stdlib.std.Resource {
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
           $Closure1._registerBindObject(_id, host, []);
-          $Closure1._registerBindObject(api_PUT, host, []);
           $Closure1._registerBindObject(body, host, []);
           $Closure1._registerBindObject(user, host, []);
         }
         super._registerBind(host, ops);
       }
     }
-    const http_PUT = http.HttpMethod.PUT;
-    const api_PUT = cloud.HttpMethod.PUT;
+    class $Closure2 extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        this._addInflightOps("handle", "$inflight_init");
+        this.display.hidden = true;
+      }
+      static _toInflightType(context) {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("./inflight.$Closure2-1.js")({
+            $_id: ${context._lift(_id)},
+            $api_url: ${context._lift(api.url)},
+            $body: ${context._lift(body)},
+            $http_HttpMethod: ${context._lift(http.HttpMethod)},
+            $http_Util: ${context._lift(http.Util)},
+            $std_Json: ${context._lift(std.Json)},
+            $user: ${context._lift(user)},
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const $Closure2Client = ${$Closure2._toInflightType(this).text};
+            const client = new $Closure2Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+      _registerBind(host, ops) {
+        if (ops.includes("handle")) {
+          $Closure2._registerBindObject(_id, host, []);
+          $Closure2._registerBindObject(api.url, host, []);
+          $Closure2._registerBindObject(body, host, []);
+          $Closure2._registerBindObject(user, host, []);
+        }
+        super._registerBind(host, ops);
+      }
+    }
     const api = this.node.root.newAbstract("@winglang/sdk.cloud.Api",this,"cloud.Api");
-    const body = Object.freeze({"cat":"Tion"});
+    const body = ({"cat": "Tion"});
     const user = "guy";
     const _id = "12345";
     (api.put("/path/{id}/nn/{user}",new $Closure1(this,"$Closure1")));
-    if (((util.Util.env("WING_TARGET")) !== "tf-aws")) {
-      class $Closure2 extends $stdlib.std.Resource {
-        constructor(scope, id, ) {
-          super(scope, id);
-          this._addInflightOps("handle", "$inflight_init");
-          this.display.hidden = true;
-        }
-        static _toInflightType(context) {
-          return $stdlib.core.NodeJsCode.fromInline(`
-            require("./inflight.$Closure2.js")({
-              $_id: ${context._lift(_id)},
-              $api_url: ${context._lift(api.url)},
-              $body: ${context._lift(body)},
-              $http_PUT: ${context._lift(http_PUT)},
-              $http_Util: ${context._lift(http.Util)},
-              $std_Json: ${context._lift(std.Json)},
-              $user: ${context._lift(user)},
-            })
-          `);
-        }
-        _toInflight() {
-          return $stdlib.core.NodeJsCode.fromInline(`
-            (await (async () => {
-              const $Closure2Client = ${$Closure2._toInflightType(this).text};
-              const client = new $Closure2Client({
-              });
-              if (client.$inflight_init) { await client.$inflight_init(); }
-              return client;
-            })())
-          `);
-        }
-        _registerBind(host, ops) {
-          if (ops.includes("handle")) {
-            $Closure2._registerBindObject(_id, host, []);
-            $Closure2._registerBindObject(api.url, host, []);
-            $Closure2._registerBindObject(body, host, []);
-            $Closure2._registerBindObject(http_PUT, host, []);
-            $Closure2._registerBindObject(user, host, []);
-          }
-          super._registerBind(host, ops);
-        }
-      }
-      this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:http.put and http.fetch can preform a call to an api",new $Closure2(this,"$Closure2"));
-    }
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:http.put and http.fetch can preform a call to an api",new $Closure2(this,"$Closure2"));
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
-new $App({ outdir: $outdir, name: "put", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test }).synth();
+new $App({ outdir: $outdir, name: "put", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
 
 ```
 

@@ -3,15 +3,21 @@
   "version": "0.0.0",
   "description": "wing test suite",
   "scripts": {
-    "test": "vitest run",
+    "test": "vitest run --update",
     "test:generate": "tsx src/generate_tests.ts",
     "test:watch": "vitest watch",
-    "test:update": "vitest run --update",
     "bench": "vitest bench --run"
   },
   "author": "Wing Cloud",
   "license": "Apache-2.0",
   "devDependencies": {
+    "@wingconsole/app": "workspace:^",
+    "@wingconsole/design-system": "workspace:^",
+    "@wingconsole/server": "workspace:^",
+    "@wingconsole/ui": "workspace:^",
+    "@winglang/compiler": "workspace:^",
+    "@winglang/sdk": "workspace:^",
+    "winglang": "workspace:^",
     "cdktf": "^0.17.0",
     "execa": "^7.1.1",
     "npm": "^9.6.4",

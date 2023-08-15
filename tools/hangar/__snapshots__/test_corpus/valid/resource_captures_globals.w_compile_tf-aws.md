@@ -1,6 +1,6 @@
 # [resource_captures_globals.w](../../../../../examples/tests/valid/resource_captures_globals.w) | compile | tf-aws
 
-## inflight.$Closure1.js
+## inflight.$Closure1-1.js
 ```js
 module.exports = function({ $res }) {
   class $Closure1 {
@@ -18,7 +18,7 @@ module.exports = function({ $res }) {
 
 ```
 
-## inflight.$Closure2.js
+## inflight.$Closure2-1.js
 ```js
 module.exports = function({ $Another }) {
   class $Closure2 {
@@ -36,7 +36,7 @@ module.exports = function({ $Another }) {
 
 ```
 
-## inflight.Another.js
+## inflight.Another-1.js
 ```js
 module.exports = function({ $globalCounter }) {
   class Another {
@@ -58,7 +58,7 @@ module.exports = function({ $globalCounter }) {
 
 ```
 
-## inflight.First.js
+## inflight.First-1.js
 ```js
 module.exports = function({  }) {
   class First {
@@ -70,7 +70,7 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.MyResource.js
+## inflight.MyResource-1.js
 ```js
 module.exports = function({ $Another, $_globalArrayOfStr_at_0__, $_globalMapOfNum___a__, $_globalSetOfStr_has__a___, $globalAnother, $globalAnother_first_myResource, $globalAnother_myField, $globalBool, $globalBucket, $globalNum, $globalStr }) {
   class MyResource {
@@ -97,7 +97,7 @@ module.exports = function({ $Another, $_globalArrayOfStr_at_0__, $_globalMapOfNu
 
 ```
 
-## inflight.R.js
+## inflight.R-1.js
 ```js
 module.exports = function({ $_parentThis_localCounter, $globalCounter }) {
   class R {
@@ -536,9 +536,9 @@ module.exports = function({ $_parentThis_localCounter, $globalCounter }) {
 ```js
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
-const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
-const cloud = require('@winglang/sdk').cloud;
+const std = $stdlib.std;
+const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
@@ -550,7 +550,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.First.js")({
+          require("./inflight.First-1.js")({
           })
         `);
       }
@@ -575,7 +575,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.Another.js")({
+          require("./inflight.Another-1.js")({
             $globalCounter: ${context._lift(globalCounter)},
           })
         `);
@@ -621,7 +621,7 @@ class $Root extends $stdlib.std.Resource {
           }
           static _toInflightType(context) {
             return $stdlib.core.NodeJsCode.fromInline(`
-              require("./inflight.R.js")({
+              require("./inflight.R-1.js")({
                 $_parentThis_localCounter: ${context._lift($parentThis.localCounter)},
                 $globalCounter: ${context._lift(globalCounter)},
               })
@@ -650,7 +650,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.MyResource.js")({
+          require("./inflight.MyResource-1.js")({
             $Another: ${context._lift(Another)},
             $_globalArrayOfStr_at_0__: ${context._lift((globalArrayOfStr.at(0)))},
             $_globalMapOfNum___a__: ${context._lift((globalMapOfNum)["a"])},
@@ -706,7 +706,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1.js")({
+          require("./inflight.$Closure1-1.js")({
             $res: ${context._lift(res)},
           })
         `);
@@ -737,7 +737,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure2.js")({
+          require("./inflight.$Closure2-1.js")({
             $Another: ${context._lift(Another)},
           })
         `);
@@ -765,9 +765,9 @@ class $Root extends $stdlib.std.Resource {
     const globalStr = "hello";
     const globalBool = true;
     const globalNum = 42;
-    const globalArrayOfStr = Object.freeze(["hello", "world"]);
-    const globalMapOfNum = Object.freeze({"a":(-5),"b":2});
-    const globalSetOfStr = Object.freeze(new Set(["a", "b"]));
+    const globalArrayOfStr = ["hello", "world"];
+    const globalMapOfNum = ({"a": (-5),"b": 2});
+    const globalSetOfStr = new Set(["a", "b"]);
     const globalAnother = new Another(this,"Another");
     const res = new MyResource(this,"MyResource");
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:test",new $Closure1(this,"$Closure1"));
@@ -775,7 +775,7 @@ class $Root extends $stdlib.std.Resource {
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
-new $App({ outdir: $outdir, name: "resource_captures_globals", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test }).synth();
+new $App({ outdir: $outdir, name: "resource_captures_globals", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
 
 ```
 

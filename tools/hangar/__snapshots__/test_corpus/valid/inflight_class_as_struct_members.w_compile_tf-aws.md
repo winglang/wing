@@ -1,6 +1,37 @@
 # [inflight_class_as_struct_members.w](../../../../../examples/tests/valid/inflight_class_as_struct_members.w) | compile | tf-aws
 
-## inflight.$Closure1.js
+## Bar.Struct.js
+```js
+module.exports = function(stdStruct, fromInline) {
+  class Bar {
+    static jsonSchema() {
+      return {
+        id: "/Bar",
+        type: "object",
+        properties: {
+          foo: { "$ref": "#/$defs/Foo" },
+        },
+        required: [
+          "foo",
+        ],
+        $defs: {
+          "Foo": { type: "object", "properties": require("./Foo.Struct.js")().jsonSchema().properties },
+        }
+      }
+    }
+    static fromJson(obj) {
+      return stdStruct._validate(obj, this.jsonSchema())
+    }
+    static _toInflightType(context) {
+      return fromInline(`require("./Bar.Struct.js")(${ context._lift(stdStruct) })`);
+    }
+  }
+  return Bar;
+};
+
+```
+
+## inflight.$Closure1-1.js
 ```js
 module.exports = function({ $Foo }) {
   class $Closure1 {
@@ -10,9 +41,7 @@ module.exports = function({ $Foo }) {
       return $obj;
     }
     async handle() {
-      return {
-      "foo": new $Foo(),}
-      ;
+      return ({"foo": new $Foo()});
     }
   }
   return $Closure1;
@@ -20,7 +49,7 @@ module.exports = function({ $Foo }) {
 
 ```
 
-## inflight.$Closure2.js
+## inflight.$Closure2-1.js
 ```js
 module.exports = function({ $getBar }) {
   class $Closure2 {
@@ -39,7 +68,7 @@ module.exports = function({ $getBar }) {
 
 ```
 
-## inflight.Foo.js
+## inflight.Foo-1.js
 ```js
 module.exports = function({  }) {
   class Foo {
@@ -177,8 +206,8 @@ module.exports = function({  }) {
 ```js
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
-const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
+const std = $stdlib.std;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
@@ -189,7 +218,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.Foo.js")({
+          require("./inflight.Foo-1.js")({
           })
         `);
       }
@@ -213,7 +242,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1.js")({
+          require("./inflight.$Closure1-1.js")({
             $Foo: ${context._lift(Foo)},
           })
         `);
@@ -238,7 +267,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure2.js")({
+          require("./inflight.$Closure2-1.js")({
             $getBar: ${context._lift(getBar)},
           })
         `);
@@ -261,12 +290,13 @@ class $Root extends $stdlib.std.Resource {
         super._registerBind(host, ops);
       }
     }
+    const Bar = require("./Bar.Struct.js")($stdlib.std.Struct, $stdlib.core.NodeJsCode.fromInline);
     const getBar = new $Closure1(this,"$Closure1");
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:test",new $Closure2(this,"$Closure2"));
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
-new $App({ outdir: $outdir, name: "inflight_class_as_struct_members", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test }).synth();
+new $App({ outdir: $outdir, name: "inflight_class_as_struct_members", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
 
 ```
 

@@ -12,38 +12,19 @@ import { ZoomPane, useZoomPaneContext } from "./zoom-pane.js";
 
 const durationClass = "duration-500";
 
+// For more configuration options, refer to: https://eclipse.dev/elk/reference/options.html
 const layoutOptions: LayoutOptions = {
   "elk.hierarchyHandling": "INCLUDE_CHILDREN",
-  "elk.algorithm": "org.eclipse.elk.layered",
-  "elk.layered.layering.strategy": "INTERACTIVE",
-  "elk.layered.cycleBreaking.strategy": "INTERACTIVE",
-  "elk.edgeRouting": "ORTHOGONAL",
-  // "elk.edgeRouting": "POLYLINE",
-  // "elk.edgeRouting": "SPLINES",
-  // "elk.layered.edgeRouting.splines.mode": "CONSERVATIVE",
-  "elk.layered.nodePlacement.strategy": "INTERACTIVE",
-  "elk.layered.layering.nodePromotion.strategy": "DUMMYNODE_PERCENTAGE",
-  // "elk.layered.nodePlacement.bk.fixedAlignment": "BALANCED",
-  // "elk.layered.unnecessaryBendpoints": "false",
-  // "elk.separateConnectedComponents": "true",
-  // "elk.spacing.componentComponent": "40",
   "elk.direction": "RIGHT",
-  // "elk.direction": "UP",
-  // "elk.direction": "LEFT",
-  // "elk.layered.spacing.baseValue": "40",
+  "elk.alignment": "CENTER",
+  "elk.algorithm": "org.eclipse.elk.layered",
+  "elk.layered.layering.strategy": "MIN_WIDTH",
+  "elk.layered.layering.nodePromotion.strategy": "DUMMYNODE_PERCENTAGE",
+  "elk.layered.nodePlacement.strategy": "INTERACTIVE",
+  "elk.layered.crossingMinimization.strategy": "LAYER_SWEEP",
+  "elk.nodeSize.constraints": "USE_MINIMUM_SIZE",
   "elk.layered.spacing.baseValue": "32",
-  // "elk.portAlignment.basic": "BEGIN",
-  // "elk.spacing.portPort": "40",
-  // "elk.spacing.individual": "40",
-  // "elk.spacing.edgeNode": "40",
-  // "elk.layered.spacing.edgeEdgeBetweenLayers": "40",
-  // "elk.spacing.portsSurrounding": "[top=37.5,left=10,bottom=10,right=10]",
-  // "elk.layered.considerModelOrder.strategy": "NONE",
-  // "elk.layered.considerModelOrder.strategy": "NODES_AND_EDGES",
-  // "elk.layered.mergeEdges": "true",
-  // "elk.spacing.portsSurrounding": "[top=30,left=30,bottom=30,right=30]",
-  // "elk.padding": "[top=50,left=20,bottom=20,right=20]",
-  // "elk.padding": "[top=60,left=30,bottom=30,right=30]",
+  "elk.edgeRouting": "ORTHOGONAL",
   "elk.padding": "[top=52,left=20,bottom=20,right=20]",
 };
 
@@ -123,6 +104,8 @@ export interface ElkMapProps<T> {
   node: FC<NodeItemProps<T>>;
   selectedNodeId?: string;
   onSelectedNodeIdChange?: (id: string) => void;
+  selectedEdgeId?: string;
+  onSelectedEdgeIdChange?: (id: string) => void;
 }
 
 export const ElkMap = <T extends unknown = undefined>({
@@ -131,6 +114,8 @@ export const ElkMap = <T extends unknown = undefined>({
   node: NodeItem,
   selectedNodeId,
   onSelectedNodeIdChange,
+  selectedEdgeId,
+  onSelectedEdgeIdChange,
 }: ElkMapProps<T>) => {
   const { nodeRecord } = useNodeStaticData({
     nodes,
@@ -248,7 +233,10 @@ export const ElkMap = <T extends unknown = undefined>({
             height: node.height ?? 0,
             offset,
             depth,
-            edges: edges ?? [],
+            edges:
+              edges?.filter(
+                (edge) => edge.source === node.id || edge.target === node.id,
+              ) ?? [],
             data,
           });
         }
@@ -458,21 +446,33 @@ export const ElkMap = <T extends unknown = undefined>({
                     const isNodeHighlighted =
                       isHighlighted(edge.sources[0]!) ||
                       isHighlighted(edge.targets[0]!);
-                    const isSelected =
+                    const isEdgeHighlighted =
                       edge.sources[0] === selectedNodeId ||
                       edge.targets[0] === selectedNodeId;
                     const visible = !highlighted || isNodeHighlighted;
+                    const selected = edge.id === selectedEdgeId;
+
                     return (
                       <EdgeItem
                         key={edge.id}
                         edge={edge}
                         offset={offsets?.get((edge as any).container)}
-                        highlighted={isSelected}
+                        highlighted={isEdgeHighlighted}
+                        selected={selected}
                         fade={!visible}
-                        markerStart={isSelected ? "tee-selected" : "tee"}
-                        markerEnd={
-                          isSelected ? "arrow-head-selected" : "arrow-head"
+                        markerStart={
+                          isEdgeHighlighted || selected ? "tee-selected" : "tee"
                         }
+                        markerEnd={
+                          isEdgeHighlighted || selected
+                            ? "arrow-head-selected"
+                            : "arrow-head"
+                        }
+                        onMouseEnter={() => {
+                          setHighlighted(edge.sources[0] ?? edge.targets[0]);
+                        }}
+                        onMouseLeave={() => setHighlighted(undefined)}
+                        onClick={onSelectedEdgeIdChange}
                       />
                     );
                   })}

@@ -13,9 +13,9 @@ test "delete" {
   assert(b.exists("file1.json"));
   assert(b.exists("file2.txt"));
 
-  b.delete("file1.json", { mustExist: true });
+  b.delete("file1.json", mustExist: true);
   try {
-    b.delete("file1.json", { mustExist: true });
+    b.delete("file1.json", mustExist: true);
   } catch e {
     error = e;
   }

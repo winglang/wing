@@ -29,12 +29,6 @@ export class Queue extends cloud.Queue {
         ? Duration.seconds(props.retentionPeriod?.seconds)
         : undefined,
     });
-
-    if ((props.initialMessages ?? []).length) {
-      throw new Error(
-        "initialMessages not supported yet for AWS target - https://github.com/winglang/wing/issues/281"
-      );
-    }
   }
 
   public setConsumer(
@@ -73,14 +67,13 @@ export class Queue extends cloud.Queue {
     Resource.addConnection({
       from: this,
       to: fn,
-      relationship: "consumer",
+      relationship: "setConsumer()",
     });
 
     return fn;
   }
 
-  /** @internal */
-  public _bind(host: IInflightHost, ops: string[]): void {
+  public bind(host: IInflightHost, ops: string[]): void {
     if (!(host instanceof Function)) {
       throw new Error("queues can only be bound by tfaws.Function for now");
     }
@@ -95,7 +88,7 @@ export class Queue extends cloud.Queue {
     // it may not be resolved until deployment time.
     host.addEnvironment(env, this.queue.queueUrl);
 
-    super._bind(host, ops);
+    super.bind(host, ops);
   }
 
   /** @internal */

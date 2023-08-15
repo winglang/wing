@@ -86,6 +86,7 @@ const project = new cdk.JsiiProject({
     "@aws-sdk/types@3.347.0",
     "@aws-sdk/util-stream-node@3.350.0",
     "@aws-sdk/util-utf8-node@3.259.0",
+    "@types/aws-lambda",
     // the following 2 deps are required by @aws-sdk/util-utf8-node
     "@aws-sdk/util-buffer-from@3.208.0",
     "@aws-sdk/is-array-buffer@3.201.0",
@@ -95,7 +96,6 @@ const project = new cdk.JsiiProject({
     "@azure/identity@3.1.3",
     "@azure/core-paging",
     // simulator dependencies
-    "tar",
     "express",
     "uuid",
     // using version 3 because starting from version 4, it no longer works with CommonJS.
@@ -103,15 +103,15 @@ const project = new cdk.JsiiProject({
     "cron-parser",
     // shared client dependencies
     "ioredis",
+    "jsonschema",
   ],
   devDeps: [
     `@cdktf/provider-aws@^15.0.0`, // only for testing Wing plugins
-    "wing-api-checker@workspace:^",
-    "bump-pack@workspace:^",
+    "wing-api-checker",
+    "bump-pack",
     "@types/aws-lambda",
     "@types/fs-extra",
     "@types/mime-types",
-    "@types/tar",
     "@types/express",
     "aws-sdk-client-mock",
     "aws-sdk-client-mock-jest",
@@ -147,7 +147,7 @@ project.eslint?.addOverride({
 
 // use fork of jsii-docgen with wing-ish support
 project.deps.removeDependency("jsii-docgen");
-project.addDevDeps("@winglang/jsii-docgen@workspace:^");
+project.addDevDeps("@winglang/jsii-docgen");
 
 enum Zone {
   PREFLIGHT = "preflight",
@@ -201,6 +201,36 @@ project.eslint!.addRules({
         // preflight code gets compiled with JSII
         disallowImportsRule(Zone.PREFLIGHT, Zone.INFLIGHT),
       ],
+    },
+  ],
+  // Makes sure that all methods and properties are marked with the right member accessibility- public, protected or private
+  "@typescript-eslint/explicit-member-accessibility": [
+    "error",
+    {
+      accessibility: "explicit",
+      overrides: {
+        accessors: "off",
+        constructors: "off",
+        methods: "explicit",
+        properties: "explicit",
+        parameterProperties: "explicit",
+      },
+    },
+  ],
+  // Makes sure comments and doc strings are capitalized
+  "capitalized-comments": [
+    "error",
+    "always",
+    {
+      line: {
+        // ignore everything
+        ignorePattern: ".*",
+      },
+      block: {
+        ignoreConsecutiveComments: true,
+        ignorePattern: "pragma|ignored",
+        ignoreInlineComments: true,
+      },
     },
   ],
 });
@@ -309,5 +339,7 @@ project.preCompileTask.exec("cdktf get");
 
 project.package.file.addDeletionOverride("pnpm");
 project.tryRemoveFile(".npmrc");
+
+project.packageTask.reset("bump-pack -b");
 
 project.synth();

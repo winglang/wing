@@ -1,6 +1,7 @@
 bring "./store.w" as file1;
 bring "./subdir/subfile.w" as file2;
 bring "./subdir/empty.w" as file3;
+bring math;
 
 // classes from other files can be used
 let store = new file1.Store();
@@ -27,3 +28,6 @@ class Triangle impl file1.Shape {
   }
 }
 let t = new Triangle();
+
+// classes can have the same name as classes in other modules
+class Util {}

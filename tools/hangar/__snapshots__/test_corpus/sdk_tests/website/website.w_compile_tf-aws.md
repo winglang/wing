@@ -1,6 +1,6 @@
 # [website.w](../../../../../../examples/tests/sdk_tests/website/website.w) | compile | tf-aws
 
-## inflight.$Closure1.js
+## inflight.$Closure1-1.js
 ```js
 module.exports = function({ $config, $http_Util, $indexFile, $otherFile, $std_Json, $w_url }) {
   class $Closure1 {
@@ -24,7 +24,7 @@ module.exports = function({ $config, $http_Util, $indexFile, $otherFile, $std_Js
 
 ```
 
-## inflight.Util.js
+## inflight.Util-1.js
 ```js
 module.exports = function({  }) {
   class Util {
@@ -164,7 +164,7 @@ module.exports = function({  }) {
             "uniqueId": "cloudWebsite_CloudfrontOac_C956968B"
           }
         },
-        "name": "cloudfront-oac",
+        "name": "cloud-We-c8e58765-cloudfront-oac",
         "origin_access_control_origin_type": "s3",
         "signing_behavior": "always",
         "signing_protocol": "sigv4"
@@ -217,7 +217,7 @@ module.exports = function({  }) {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c867c4e0",
             "WING_TARGET": "tf-aws",
-            "WING_TOKEN_TFTOKEN_TOKEN_14": "${jsonencode(aws_cloudfront_distribution.cloudWebsite_Distribution_083B5AF9.domain_name)}"
+            "WING_TOKEN_TFTOKEN_TOKEN_16": "${jsonencode(aws_cloudfront_distribution.cloudWebsite_Distribution_083B5AF9.domain_name)}"
           }
         },
         "function_name": "Handler-c867c4e0",
@@ -328,7 +328,8 @@ module.exports = function({  }) {
           "aws_s3_bucket.cloudWebsite_WebsiteBucket_EB03D355"
         ],
         "key": "/index.html",
-        "source": "<SOURCE>"
+        "source": "<SOURCE>",
+        "source_hash": "${filemd5(<SOURCE>)}"
       },
       "cloudWebsite_File--inner-folder--otherhtml_72DA631C": {
         "//": {
@@ -343,7 +344,8 @@ module.exports = function({  }) {
           "aws_s3_bucket.cloudWebsite_WebsiteBucket_EB03D355"
         ],
         "key": "/inner-folder/other.html",
-        "source": "<SOURCE>"
+        "source": "<SOURCE>",
+        "source_hash": "${filemd5(<SOURCE>)}"
       },
       "cloudWebsite_File-configjson_591A81BA": {
         "//": {
@@ -380,10 +382,10 @@ module.exports = function({  }) {
 ```js
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
-const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
-const cloud = require('@winglang/sdk').cloud;
-const http = require('@winglang/sdk').http;
+const std = $stdlib.std;
+const cloud = $stdlib.cloud;
+const http = $stdlib.http;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
@@ -397,7 +399,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.Util.js")({
+          require("./inflight.Util-1.js")({
           })
         `);
       }
@@ -421,7 +423,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1.js")({
+          require("./inflight.$Closure1-1.js")({
             $config: ${context._lift(config)},
             $http_Util: ${context._lift(http.Util)},
             $indexFile: ${context._lift(indexFile)},
@@ -453,7 +455,7 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     const w = this.node.root.newAbstract("@winglang/sdk.cloud.Website",this,"cloud.Website",{ path: "./website" });
-    const config = Object.freeze({"json":1});
+    const config = ({"json": 1});
     const indexFile = (Util.readFile("./website/website/index.html"));
     const otherFile = (Util.readFile("./website/website/inner-folder/other.html"));
     (w.addJson("config.json",config));
@@ -462,7 +464,7 @@ class $Root extends $stdlib.std.Resource {
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
-new $App({ outdir: $outdir, name: "website", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test }).synth();
+new $App({ outdir: $outdir, name: "website", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
 
 ```
 

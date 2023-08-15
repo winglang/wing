@@ -25,14 +25,6 @@ export class Queue
   private readonly retentionPeriod: number;
 
   constructor(props: QueueSchema["props"], context: ISimulatorContext) {
-    if (props.initialMessages) {
-      this.messages.push(
-        ...props.initialMessages.map(
-          (message) => new QueueMessage(this.retentionPeriod, message)
-        )
-      );
-    }
-
     this.timeout = props.timeout;
     this.retentionPeriod = props.retentionPeriod;
     this.intervalId = setInterval(() => this.processMessages(), 100); // every 0.1 seconds
@@ -178,8 +170,8 @@ export class Queue
 }
 
 class QueueMessage {
-  retentionTimeout: Date;
-  payload: string;
+  public readonly retentionTimeout: Date;
+  public readonly payload: string;
 
   constructor(retentionPeriod: number, message: string) {
     const currentTime = new Date();
@@ -195,7 +187,7 @@ class RandomArrayIterator<T = any> implements Iterable<T> {
     this.length = this.values.length;
   }
 
-  next(): IteratorResult<T> {
+  public next(): IteratorResult<T> {
     if (this.length === 0) {
       return { done: true, value: undefined };
     }
@@ -210,7 +202,7 @@ class RandomArrayIterator<T = any> implements Iterable<T> {
     return { value };
   }
 
-  [Symbol.iterator]() {
+  public [Symbol.iterator]() {
     return this;
   }
 }

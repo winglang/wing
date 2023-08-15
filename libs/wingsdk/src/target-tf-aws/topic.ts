@@ -28,7 +28,7 @@ const NAME_OPTS: NameOptions = {
 export class Topic extends cloud.Topic {
   private readonly topic: SnsTopic;
   /**
-   * topic's publishing permissions. can be use as a dependency of another resource.
+   * Topic's publishing permissions. can be use as a dependency of another resource.
    * (the one that got the permissions to publish)
    * */
   public permissions!: SnsTopicPolicy;
@@ -42,7 +42,7 @@ export class Topic extends cloud.Topic {
   }
 
   /**
-   * topic's arn
+   * Topic's arn
    */
   public get arn(): string {
     return this.topic.arn;
@@ -91,7 +91,7 @@ export class Topic extends cloud.Topic {
     Resource.addConnection({
       from: this,
       to: fn,
-      relationship: "on_message",
+      relationship: "onMessage()",
     });
 
     return fn;
@@ -134,8 +134,7 @@ export class Topic extends cloud.Topic {
     );
   }
 
-  /** @internal */
-  public _bind(host: IInflightHost, ops: string[]): void {
+  public bind(host: IInflightHost, ops: string[]): void {
     if (!(host instanceof Function)) {
       throw new Error("topics can only be bound by tfaws.Function for now");
     }
@@ -144,7 +143,7 @@ export class Topic extends cloud.Topic {
 
     host.addEnvironment(this.envName(), this.topic.arn);
 
-    super._bind(host, ops);
+    super.bind(host, ops);
   }
 
   /** @internal */

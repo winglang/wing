@@ -98,7 +98,7 @@ export class Bucket extends cloud.Bucket {
     Resource.addConnection({
       from: this,
       to: fn,
-      relationship: cloud.BucketEventType.CREATE,
+      relationship: "onCreate()",
     });
 
     this.bucket.addEventNotification(
@@ -116,7 +116,7 @@ export class Bucket extends cloud.Bucket {
     Resource.addConnection({
       from: this,
       to: fn,
-      relationship: cloud.BucketEventType.DELETE,
+      relationship: "onDelete()",
     });
 
     this.bucket.addEventNotification(
@@ -134,7 +134,7 @@ export class Bucket extends cloud.Bucket {
     Resource.addConnection({
       from: this,
       to: fn,
-      relationship: cloud.BucketEventType.UPDATE,
+      relationship: "onUpdate()",
     });
 
     this.bucket.addEventNotification(
@@ -152,7 +152,7 @@ export class Bucket extends cloud.Bucket {
     Resource.addConnection({
       from: this,
       to: fn,
-      relationship: cloud.BucketEventType.CREATE,
+      relationship: "onCreate()",
     });
     this.bucket.addEventNotification(
       EVENTS[cloud.BucketEventType.CREATE],
@@ -162,7 +162,7 @@ export class Bucket extends cloud.Bucket {
     Resource.addConnection({
       from: this,
       to: fn,
-      relationship: cloud.BucketEventType.DELETE,
+      relationship: "onDelete()",
     });
     this.bucket.addEventNotification(
       EVENTS[cloud.BucketEventType.DELETE],
@@ -172,7 +172,7 @@ export class Bucket extends cloud.Bucket {
     Resource.addConnection({
       from: this,
       to: fn,
-      relationship: cloud.BucketEventType.UPDATE,
+      relationship: "onUpdate()",
     });
     this.bucket.addEventNotification(
       EVENTS[cloud.BucketEventType.UPDATE],
@@ -180,8 +180,7 @@ export class Bucket extends cloud.Bucket {
     );
   }
 
-  /** @internal */
-  public _bind(host: IInflightHost, ops: string[]): void {
+  public bind(host: IInflightHost, ops: string[]): void {
     if (!(host instanceof Function)) {
       throw new Error("buckets can only be bound by tfaws.Function for now");
     }
@@ -194,7 +193,7 @@ export class Bucket extends cloud.Bucket {
     // it may not be resolved until deployment time.
     host.addEnvironment(this.envName(), this.bucket.bucketName);
 
-    super._bind(host, ops);
+    super.bind(host, ops);
   }
 
   /** @internal */

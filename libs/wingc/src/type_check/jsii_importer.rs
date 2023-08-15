@@ -452,21 +452,12 @@ impl<'a> JsiiImporter<'a> {
 
 				// Define the rest of the arguments and create the method signature
 				if let Some(params) = &m.parameters {
-					if self.has_variadic_parameters(params) {
-						// TODO: support variadic parameters
-						// or TODO: emit compiler warning https://github.com/winglang/wing/issues/1475
-						debug!(
-							"Skipping method {} with variadic parameters (see https://github.com/winglang/wing/issues/397)",
-							m.name
-						);
-						continue;
-					}
-
 					for param in params {
 						fn_params.push(FunctionParameter {
 							name: param.name.clone(),
 							typeref: self.parameter_to_wing_type(&param),
 							docs: Docs::from(&param.docs),
+							variadic: param.variadic.unwrap_or(false),
 						});
 					}
 				}
@@ -726,6 +717,7 @@ impl<'a> JsiiImporter<'a> {
 						name: param.name.clone(),
 						typeref: self.parameter_to_wing_type(&param),
 						docs: Docs::from(&param.docs),
+						variadic: param.variadic.unwrap_or(false),
 					});
 				}
 			}
@@ -802,10 +794,6 @@ impl<'a> JsiiImporter<'a> {
 		} else {
 			base_type
 		}
-	}
-
-	fn has_variadic_parameters(&self, parameters: &Vec<jsii::Parameter>) -> bool {
-		parameters.iter().any(|p| p.variadic.unwrap_or(false))
 	}
 
 	fn parameter_to_wing_type(&mut self, parameter: &jsii::Parameter) -> TypeRef {

@@ -12,7 +12,7 @@ import {
 import * as cloud from "../cloud";
 import { Code } from "../core";
 import { convertBetweenHandlers } from "../shared/convert";
-import { IInflightHost, Resource } from "../std";
+import { Display, IInflightHost, Resource } from "../std";
 import { BaseResourceSchema } from "../testing";
 
 /**
@@ -36,7 +36,7 @@ export class Schedule extends cloud.Schedule implements ISimulatorResource {
   ): cloud.Function {
     const hash = inflight.node.addr.slice(-8);
     const functionHandler = convertBetweenHandlers(
-      this.node.scope!,
+      this,
       `${this.node.id}OnTickHandler${hash}`,
       inflight,
       join(__dirname, "schedule.ontick.inflight.js"),
@@ -44,11 +44,13 @@ export class Schedule extends cloud.Schedule implements ISimulatorResource {
     );
 
     const fn = Function._newFunction(
-      this.node.scope!,
+      this,
       `${this.node.id}-OnTick-${hash}`,
       functionHandler,
       props
     );
+    fn.display.sourceModule = Display.SDK_SOURCE_MODULE;
+    fn.display.title = "onTick()";
 
     new EventMapping(this, `${this.node.id}-OnTickMapping-${hash}`, {
       subscriber: fn,
@@ -59,7 +61,7 @@ export class Schedule extends cloud.Schedule implements ISimulatorResource {
     Resource.addConnection({
       from: this,
       to: fn,
-      relationship: "on_tick",
+      relationship: "onTick()",
     });
 
     return fn;
@@ -82,9 +84,8 @@ export class Schedule extends cloud.Schedule implements ISimulatorResource {
     return makeSimulatorJsClient(__filename, this);
   }
 
-  /** @internal */
-  public _bind(host: IInflightHost, ops: string[]): void {
+  public bind(host: IInflightHost, ops: string[]): void {
     bindSimulatorResource(__filename, this, host);
-    super._bind(host, ops);
+    super.bind(host, ops);
   }
 }

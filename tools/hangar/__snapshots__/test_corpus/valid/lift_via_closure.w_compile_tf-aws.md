@@ -1,6 +1,6 @@
 # [lift_via_closure.w](../../../../../examples/tests/valid/lift_via_closure.w) | compile | tf-aws
 
-## inflight.$Closure1.js
+## inflight.$Closure1-1.js
 ```js
 module.exports = function({ $bucket2 }) {
   class $Closure1 {
@@ -18,7 +18,7 @@ module.exports = function({ $bucket2 }) {
 
 ```
 
-## inflight.$Closure2.js
+## inflight.$Closure2-1.js
 ```js
 module.exports = function({ $fn }) {
   class $Closure2 {
@@ -36,7 +36,7 @@ module.exports = function({ $fn }) {
 
 ```
 
-## inflight.$Closure3.js
+## inflight.$Closure3-1.js
 ```js
 module.exports = function({ $bucket2, $fn2, $fn2_bucket }) {
   class $Closure3 {
@@ -57,7 +57,7 @@ module.exports = function({ $bucket2, $fn2, $fn2_bucket }) {
 
 ```
 
-## inflight.MyClosure.js
+## inflight.MyClosure-1.js
 ```js
 module.exports = function({ $bucket2 }) {
   class MyClosure {
@@ -361,9 +361,9 @@ module.exports = function({ $bucket2 }) {
 ```js
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
-const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
-const cloud = require('@winglang/sdk').cloud;
+const std = $stdlib.std;
+const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
@@ -375,7 +375,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1.js")({
+          require("./inflight.$Closure1-1.js")({
             $bucket2: ${context._lift(bucket2)},
           })
         `);
@@ -406,7 +406,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.MyClosure.js")({
+          require("./inflight.MyClosure-1.js")({
             $bucket2: ${context._lift(bucket2)},
           })
         `);
@@ -448,7 +448,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure2.js")({
+          require("./inflight.$Closure2-1.js")({
             $fn: ${context._lift(fn)},
           })
         `);
@@ -479,7 +479,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure3.js")({
+          require("./inflight.$Closure3-1.js")({
             $bucket2: ${context._lift(bucket2)},
             $fn2: ${context._lift(fn2)},
             $fn2_bucket: ${context._lift(fn2.bucket)},
@@ -514,7 +514,7 @@ class $Root extends $stdlib.std.Resource {
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
-new $App({ outdir: $outdir, name: "lift_via_closure", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test }).synth();
+new $App({ outdir: $outdir, name: "lift_via_closure", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
 
 ```
 

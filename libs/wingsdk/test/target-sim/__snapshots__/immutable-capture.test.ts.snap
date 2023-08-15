@@ -200,7 +200,7 @@ my_buckets: [(function(env) {
               {
                 "direction": "inbound",
                 "implicit": false,
-                "relationship": "$inflight_init",
+                "relationship": "$inflight_init()",
                 "resource": "root/Function",
               },
             ],
@@ -222,7 +222,7 @@ my_buckets: [(function(env) {
               {
                 "direction": "inbound",
                 "implicit": false,
-                "relationship": "$inflight_init",
+                "relationship": "$inflight_init()",
                 "resource": "root/Function",
               },
             ],
@@ -244,13 +244,13 @@ my_buckets: [(function(env) {
               {
                 "direction": "outbound",
                 "implicit": false,
-                "relationship": "$inflight_init",
+                "relationship": "$inflight_init()",
                 "resource": "root/B1",
               },
               {
                 "direction": "outbound",
                 "implicit": false,
-                "relationship": "$inflight_init",
+                "relationship": "$inflight_init()",
                 "resource": "root/B2",
               },
             ],
@@ -1160,7 +1160,7 @@ my_map: new Map([[\\"foo\\",(function(env) {
               {
                 "direction": "inbound",
                 "implicit": false,
-                "relationship": "$inflight_init",
+                "relationship": "$inflight_init()",
                 "resource": "root/Function",
               },
             ],
@@ -1182,7 +1182,7 @@ my_map: new Map([[\\"foo\\",(function(env) {
               {
                 "direction": "inbound",
                 "implicit": false,
-                "relationship": "$inflight_init",
+                "relationship": "$inflight_init()",
                 "resource": "root/Function",
               },
             ],
@@ -1204,13 +1204,13 @@ my_map: new Map([[\\"foo\\",(function(env) {
               {
                 "direction": "outbound",
                 "implicit": false,
-                "relationship": "$inflight_init",
+                "relationship": "$inflight_init()",
                 "resource": "root/B1",
               },
               {
                 "direction": "outbound",
                 "implicit": false,
-                "relationship": "$inflight_init",
+                "relationship": "$inflight_init()",
                 "resource": "root/B2",
               },
             ],
@@ -2064,7 +2064,7 @@ my_struct: {bucky: (function(env) {
               {
                 "direction": "inbound",
                 "implicit": false,
-                "relationship": "$inflight_init",
+                "relationship": "$inflight_init()",
                 "resource": "root/Function",
               },
             ],
@@ -2086,7 +2086,7 @@ my_struct: {bucky: (function(env) {
               {
                 "direction": "inbound",
                 "implicit": false,
-                "relationship": "$inflight_init",
+                "relationship": "$inflight_init()",
                 "resource": "root/Function",
               },
             ],
@@ -2108,7 +2108,7 @@ my_struct: {bucky: (function(env) {
               {
                 "direction": "inbound",
                 "implicit": false,
-                "relationship": "$inflight_init",
+                "relationship": "$inflight_init()",
                 "resource": "root/Function",
               },
             ],
@@ -2130,7 +2130,7 @@ my_struct: {bucky: (function(env) {
               {
                 "direction": "inbound",
                 "implicit": false,
-                "relationship": "$inflight_init",
+                "relationship": "$inflight_init()",
                 "resource": "root/Function",
               },
             ],
@@ -2152,7 +2152,7 @@ my_struct: {bucky: (function(env) {
               {
                 "direction": "inbound",
                 "implicit": false,
-                "relationship": "$inflight_init",
+                "relationship": "$inflight_init()",
                 "resource": "root/Function",
               },
             ],
@@ -2174,31 +2174,31 @@ my_struct: {bucky: (function(env) {
               {
                 "direction": "outbound",
                 "implicit": false,
-                "relationship": "$inflight_init",
+                "relationship": "$inflight_init()",
                 "resource": "root/B1",
               },
               {
                 "direction": "outbound",
                 "implicit": false,
-                "relationship": "$inflight_init",
+                "relationship": "$inflight_init()",
                 "resource": "root/B2",
               },
               {
                 "direction": "outbound",
                 "implicit": false,
-                "relationship": "$inflight_init",
+                "relationship": "$inflight_init()",
                 "resource": "root/B3",
               },
               {
                 "direction": "outbound",
                 "implicit": false,
-                "relationship": "$inflight_init",
+                "relationship": "$inflight_init()",
                 "resource": "root/B4",
               },
               {
                 "direction": "outbound",
                 "implicit": false,
-                "relationship": "$inflight_init",
+                "relationship": "$inflight_init()",
                 "resource": "root/B5",
               },
             ],

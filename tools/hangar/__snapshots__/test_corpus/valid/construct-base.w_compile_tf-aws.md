@@ -1,6 +1,6 @@
 # [construct-base.w](../../../../../examples/tests/valid/construct-base.w) | compile | tf-aws
 
-## inflight.WingResource.js
+## inflight.WingResource-1.js
 ```js
 module.exports = function({  }) {
   class WingResource {
@@ -60,9 +60,9 @@ module.exports = function({  }) {
 ```js
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
-const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
-const cloud = require('@winglang/sdk').cloud;
+const std = $stdlib.std;
+const cloud = $stdlib.cloud;
 const cx = require("constructs");
 const aws = require("@cdktf/provider-aws");
 class $Root extends $stdlib.std.Resource {
@@ -76,7 +76,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.WingResource.js")({
+          require("./inflight.WingResource-1.js")({
           })
         `);
       }
@@ -108,7 +108,7 @@ class $Root extends $stdlib.std.Resource {
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
-new $App({ outdir: $outdir, name: "construct-base", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test }).synth();
+new $App({ outdir: $outdir, name: "construct-base", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
 
 ```
 

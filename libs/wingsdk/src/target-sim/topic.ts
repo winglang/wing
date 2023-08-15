@@ -8,7 +8,7 @@ import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
 import * as core from "../core";
 import { convertBetweenHandlers } from "../shared/convert";
-import { IInflightHost, Resource } from "../std";
+import { Display, IInflightHost, Resource } from "../std";
 import { BaseResourceSchema } from "../testing/simulator";
 
 /**
@@ -27,7 +27,7 @@ export class Topic extends cloud.Topic implements ISimulatorResource {
   ): cloud.Function {
     const hash = inflight.node.addr.slice(-8);
     const functionHandler = convertBetweenHandlers(
-      this.node.scope!, // ok since we're not a tree root
+      this,
       `${this.node.id}-OnMessageHandler-${hash}`,
       inflight,
       join(__dirname, "topic.onmessage.inflight.js"),
@@ -35,11 +35,13 @@ export class Topic extends cloud.Topic implements ISimulatorResource {
     );
 
     const fn = Function._newFunction(
-      this.node.scope!, // ok since we're not a tree root
+      this,
       `${this.node.id}-OnMessage-${hash}`,
       functionHandler,
       props
     );
+    fn.display.sourceModule = Display.SDK_SOURCE_MODULE;
+    fn.display.title = "onMessage()";
 
     new EventMapping(this, `${this.node.id}-TopicEventMapping-${hash}`, {
       subscriber: fn,
@@ -50,16 +52,15 @@ export class Topic extends cloud.Topic implements ISimulatorResource {
     Resource.addConnection({
       from: this,
       to: fn,
-      relationship: "on_message",
+      relationship: "onMessage()",
     });
 
     return fn;
   }
 
-  /** @internal */
-  public _bind(host: IInflightHost, ops: string[]): void {
+  public bind(host: IInflightHost, ops: string[]): void {
     bindSimulatorResource(__filename, this, host);
-    super._bind(host, ops);
+    super.bind(host, ops);
   }
 
   /** @internal */

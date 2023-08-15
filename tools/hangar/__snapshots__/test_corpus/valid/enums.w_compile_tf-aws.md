@@ -1,6 +1,6 @@
 # [enums.w](../../../../../examples/tests/valid/enums.w) | compile | tf-aws
 
-## inflight.$Closure1.js
+## inflight.$Closure1-1.js
 ```js
 module.exports = function({ $SomeEnum, $one, $two }) {
   class $Closure1 {
@@ -144,8 +144,8 @@ module.exports = function({ $SomeEnum, $one, $two }) {
 ```js
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
-const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
+const std = $stdlib.std;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
@@ -157,7 +157,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1.js")({
+          require("./inflight.$Closure1-1.js")({
             $SomeEnum: ${context._lift(SomeEnum)},
             $one: ${context._lift(one)},
             $two: ${context._lift(two)},
@@ -183,13 +183,13 @@ class $Root extends $stdlib.std.Resource {
         super._registerBind(host, ops);
       }
     }
-    const SomeEnum = 
-      Object.freeze((function (tmp) {
+    const SomeEnum =
+      (function (tmp) {
         tmp[tmp["ONE"] = 0] = "ONE";
         tmp[tmp["TWO"] = 1] = "TWO";
         tmp[tmp["THREE"] = 2] = "THREE";
         return tmp;
-      })({}))
+      })({})
     ;
     const one = SomeEnum.ONE;
     const two = SomeEnum.TWO;
@@ -197,7 +197,7 @@ class $Root extends $stdlib.std.Resource {
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
-new $App({ outdir: $outdir, name: "enums", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test }).synth();
+new $App({ outdir: $outdir, name: "enums", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
 
 ```
 

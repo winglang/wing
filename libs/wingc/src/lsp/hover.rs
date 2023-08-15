@@ -4,13 +4,15 @@ use crate::ast::{
 };
 use crate::diagnostic::WingSpan;
 use crate::docs::Documented;
-use crate::lsp::sync::FILES;
+use crate::lsp::sync::PROJECT_DATA;
 use crate::type_check::symbol_env::LookupResult;
 use crate::type_check::{resolve_super_method, ClassLike, Type, Types, CLASS_INFLIGHT_INIT_NAME, CLASS_INIT_NAME};
 use crate::visit::{self, Visit};
 use crate::wasm_util::WASM_RETURN_ERROR;
 use crate::wasm_util::{ptr_to_string, string_to_combined_ptr};
 use lsp_types::{Hover, HoverContents, MarkupContent, MarkupKind, Position};
+
+use super::sync::WING_TYPES;
 
 pub struct HoverVisitor<'a> {
 	position: Position,
@@ -41,8 +43,7 @@ impl<'a> HoverVisitor<'a> {
 	/// Try to look up a full path of a symbol in the current scope and if found, render the docs
 	/// associated with the symbol kind. Returns `None` if not found.
 	fn lookup_docs(&mut self, nested_str: &str, property: Option<&Symbol>) -> Option<String> {
-		let current_env = self.current_scope.env.borrow();
-		let current_env = current_env.as_ref()?;
+		let current_env = self.types.get_scope_env(self.current_scope);
 
 		let result = current_env.lookup_nested_str(nested_str, None);
 
@@ -82,7 +83,7 @@ impl<'a> HoverVisitor<'a> {
 		if property.span.contains(&self.position) {
 			let new_span = self.current_expr.unwrap().span.clone();
 			match &**obj_type.maybe_unwrap_option() {
-				Type::Optional(_) | Type::Anything | Type::Void | Type::Nil | Type::Unresolved => {}
+				Type::Optional(_) | Type::Anything | Type::Void | Type::Nil | Type::Unresolved | Type::Inferred(_) => {}
 
 				Type::Array(_)
 				| Type::MutArray(_)
@@ -240,12 +241,11 @@ impl<'a> Visit<'a> for HoverVisitor<'a> {
 			ExprKind::Call { arg_list, callee } => {
 				let x = arg_list.named_args.iter().find(|a| a.0.span.contains(&self.position));
 				if let Some((arg_name, ..)) = x {
-					let curr_env = self.current_scope.env.borrow();
-					let env = curr_env.as_ref().expect("an env");
+					let env = self.types.get_scope_env(self.current_scope);
 					// we need to get the struct type from the callee
 					let callee_type = match callee {
 						CalleeKind::Expr(expr) => self.types.get_expr_type(expr),
-						CalleeKind::SuperCall(method) => resolve_super_method(method, env, &self.types)
+						CalleeKind::SuperCall(method) => resolve_super_method(method, &env, &self.types)
 							.ok()
 							.map_or(self.types.error(), |t| t.0),
 					};
@@ -382,35 +382,28 @@ pub unsafe extern "C" fn wingc_on_hover(ptr: u32, len: u32) -> u64 {
 	}
 }
 pub fn on_hover(params: lsp_types::HoverParams) -> Option<Hover> {
-	FILES.with(|files| {
-		let files = files.borrow();
-		let file_data = files.get(&params.text_document_position_params.text_document.uri.clone());
-		let file_data = file_data.expect(
-			format!(
-				"Compiled data not found for \"{}\"",
-				params.text_document_position_params.text_document.uri
-			)
-			.as_str(),
-		);
+	WING_TYPES.with(|types| {
+		let types = types.borrow_mut();
+		PROJECT_DATA.with(|project_data| {
+			let project_data = project_data.borrow();
+			let uri = params.text_document_position_params.text_document.uri.clone();
+			let file = uri.to_file_path().ok().expect("LSP only works on real filesystems");
 
-		let root_scope = &file_data.scope;
+			let root_scope = &project_data.asts.get(&file).unwrap();
 
-		let mut hover_visitor = HoverVisitor::new(
-			params.text_document_position_params.position,
-			&root_scope,
-			&file_data.types,
-		);
-		if let Some((span, Some(docs))) = hover_visitor.visit() {
-			Some(Hover {
-				contents: HoverContents::Markup(MarkupContent {
-					kind: MarkupKind::Markdown,
-					value: docs,
-				}),
-				range: Some(span.clone().into()),
-			})
-		} else {
-			None
-		}
+			let mut hover_visitor = HoverVisitor::new(params.text_document_position_params.position, &root_scope, &types);
+			if let Some((span, Some(docs))) = hover_visitor.visit() {
+				Some(Hover {
+					contents: HoverContents::Markup(MarkupContent {
+						kind: MarkupKind::Markdown,
+						value: docs,
+					}),
+					range: Some(span.clone().into()),
+				})
+			} else {
+				None
+			}
+		})
 	})
 }
 

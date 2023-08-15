@@ -23,10 +23,9 @@ export class Secret extends cloud.Secret implements ISimulatorResource {
       ResourceNames.generateName(this, { disallowedRegex: /[^\w]/g });
   }
 
-  /** @internal */
-  public _bind(host: IInflightHost, ops: string[]): void {
+  public bind(host: IInflightHost, ops: string[]): void {
     bindSimulatorResource(__filename, this, host);
-    super._bind(host, ops);
+    super.bind(host, ops);
   }
 
   /** @internal */

@@ -1,6 +1,6 @@
 # [execute_after.w](../../../../../../examples/tests/sdk_tests/on_deploy/execute_after.w) | compile | tf-aws
 
-## inflight.$Closure1.js
+## inflight.$Closure1-1.js
 ```js
 module.exports = function({ $counter }) {
   class $Closure1 {
@@ -18,7 +18,7 @@ module.exports = function({ $counter }) {
 
 ```
 
-## inflight.$Closure2.js
+## inflight.$Closure2-1.js
 ```js
 module.exports = function({ $counter }) {
   class $Closure2 {
@@ -36,7 +36,7 @@ module.exports = function({ $counter }) {
 
 ```
 
-## inflight.$Closure3.js
+## inflight.$Closure3-1.js
 ```js
 module.exports = function({ $counter }) {
   class $Closure3 {
@@ -366,9 +366,9 @@ module.exports = function({ $counter }) {
 ```js
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
-const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
-const cloud = require('@winglang/sdk').cloud;
+const std = $stdlib.std;
+const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
@@ -380,7 +380,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1.js")({
+          require("./inflight.$Closure1-1.js")({
             $counter: ${context._lift(counter)},
           })
         `);
@@ -411,7 +411,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure2.js")({
+          require("./inflight.$Closure2-1.js")({
             $counter: ${context._lift(counter)},
           })
         `);
@@ -442,7 +442,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure3.js")({
+          require("./inflight.$Closure3-1.js")({
             $counter: ${context._lift(counter)},
           })
         `);
@@ -467,12 +467,12 @@ class $Root extends $stdlib.std.Resource {
     }
     const counter = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"cloud.Counter");
     const init1 = this.node.root.newAbstract("@winglang/sdk.cloud.OnDeploy",this,"init1",new $Closure1(this,"$Closure1"));
-    const init2 = this.node.root.newAbstract("@winglang/sdk.cloud.OnDeploy",this,"init2",new $Closure2(this,"$Closure2"),{ executeAfter: Object.freeze([init1]) });
+    const init2 = this.node.root.newAbstract("@winglang/sdk.cloud.OnDeploy",this,"init2",new $Closure2(this,"$Closure2"),{ executeAfter: [init1] });
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:counter",new $Closure3(this,"$Closure3"));
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
-new $App({ outdir: $outdir, name: "execute_after", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test }).synth();
+new $App({ outdir: $outdir, name: "execute_after", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
 
 ```
 

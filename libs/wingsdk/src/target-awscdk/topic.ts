@@ -23,7 +23,7 @@ export class Topic extends cloud.Topic {
   }
 
   /**
-   * topic's arn
+   * Topic's arn
    */
   public get arn(): string {
     return this.topic.topicArn;
@@ -63,14 +63,13 @@ export class Topic extends cloud.Topic {
     Resource.addConnection({
       from: this,
       to: fn,
-      relationship: "on_message",
+      relationship: "onMessage()",
     });
 
     return fn;
   }
 
-  /** @internal */
-  public _bind(host: IInflightHost, ops: string[]): void {
+  public bind(host: IInflightHost, ops: string[]): void {
     if (!(host instanceof Function)) {
       throw new Error("topics can only be bound by awscdk.Function for now");
     }
@@ -81,7 +80,7 @@ export class Topic extends cloud.Topic {
 
     host.addEnvironment(this.envName(), this.topic.topicArn);
 
-    super._bind(host, ops);
+    super.bind(host, ops);
   }
 
   /** @internal */

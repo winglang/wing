@@ -1,6 +1,6 @@
 # [inflight_capture_static.w](../../../../../examples/tests/valid/inflight_capture_static.w) | compile | tf-aws
 
-## inflight.$Closure1.js
+## inflight.$Closure1-1.js
 ```js
 module.exports = function({ $Preflight }) {
   class $Closure1 {
@@ -18,7 +18,7 @@ module.exports = function({ $Preflight }) {
 
 ```
 
-## inflight.$Closure2.js
+## inflight.$Closure2-1.js
 ```js
 module.exports = function({ $OuterInflight }) {
   class $Closure2 {
@@ -36,7 +36,7 @@ module.exports = function({ $OuterInflight }) {
 
 ```
 
-## inflight.$Closure3.js
+## inflight.$Closure3-1.js
 ```js
 module.exports = function({  }) {
   class $Closure3 {
@@ -59,7 +59,7 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.$Closure4.js
+## inflight.$Closure4-1.js
 ```js
 module.exports = function({ $util_Util }) {
   class $Closure4 {
@@ -86,7 +86,7 @@ module.exports = function({ $util_Util }) {
 
 ```
 
-## inflight.OuterInflight.js
+## inflight.OuterInflight-1.js
 ```js
 module.exports = function({  }) {
   class OuterInflight {
@@ -99,7 +99,7 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.Preflight.js
+## inflight.Preflight-1.js
 ```js
 module.exports = function({  }) {
   class Preflight {
@@ -437,9 +437,9 @@ module.exports = function({  }) {
 ```js
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
-const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
-const util = require('@winglang/sdk').util;
+const std = $stdlib.std;
+const util = $stdlib.util;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
@@ -450,7 +450,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.Preflight.js")({
+          require("./inflight.Preflight-1.js")({
           })
         `);
       }
@@ -473,7 +473,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.OuterInflight.js")({
+          require("./inflight.OuterInflight-1.js")({
           })
         `);
       }
@@ -497,7 +497,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1.js")({
+          require("./inflight.$Closure1-1.js")({
             $Preflight: ${context._lift(Preflight)},
           })
         `);
@@ -528,7 +528,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure2.js")({
+          require("./inflight.$Closure2-1.js")({
             $OuterInflight: ${context._lift(OuterInflight)},
           })
         `);
@@ -553,7 +553,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure3.js")({
+          require("./inflight.$Closure3-1.js")({
           })
         `);
       }
@@ -577,7 +577,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure4.js")({
+          require("./inflight.$Closure4-1.js")({
             $util_Util: ${context._lift(util.Util)},
           })
         `);
@@ -601,7 +601,7 @@ class $Root extends $stdlib.std.Resource {
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
-new $App({ outdir: $outdir, name: "inflight_capture_static", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test }).synth();
+new $App({ outdir: $outdir, name: "inflight_capture_static", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
 
 ```
 

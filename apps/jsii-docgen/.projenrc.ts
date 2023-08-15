@@ -33,11 +33,12 @@ const project = new typescript.TypeScriptProject({
     "semver",
     "yargs@^16",
   ],
-  releaseToNpm: true,
   packageManager: javascript.NodePackageManager.PNPM,
   github: false,
   projenrcTs: true,
   prettier: true,
+  release: false,
+  package: false,
 });
 
 const libraryFixtures = ["construct-library"];

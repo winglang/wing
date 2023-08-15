@@ -1,6 +1,6 @@
 # [api.w](../../../../../examples/tests/valid/api.w) | compile | tf-aws
 
-## inflight.$Closure1.js
+## inflight.$Closure1-1.js
 ```js
 module.exports = function({ $counter, $std_Json }) {
   class $Closure1 {
@@ -11,12 +11,8 @@ module.exports = function({ $counter, $std_Json }) {
     }
     async handle(request) {
       const count = (await $counter.inc());
-      const bodyResponse = Object.freeze({"count":count});
-      const resp = {
-      "body": ((args) => { return JSON.stringify(args[0], null, args[1]) })([bodyResponse]),
-      "headers": Object.freeze({"content-type":"application/json"}),
-      "status": 200,}
-      ;
+      const bodyResponse = ({"count": count});
+      const resp = ({"body": ((args) => { return JSON.stringify(args[0], null, args[1]) })([bodyResponse]),"headers": ({"content-type": "application/json"}),"status": 200});
       return resp;
     }
   }
@@ -25,7 +21,7 @@ module.exports = function({ $counter, $std_Json }) {
 
 ```
 
-## inflight.$Closure2.js
+## inflight.$Closure2-1.js
 ```js
 module.exports = function({ $api_url }) {
   class $Closure2 {
@@ -44,7 +40,7 @@ module.exports = function({ $api_url }) {
 
 ```
 
-## inflight.$Closure3.js
+## inflight.$Closure3-1.js
 ```js
 module.exports = function({ $__parent_this_3_api_url }) {
   class $Closure3 {
@@ -55,10 +51,7 @@ module.exports = function({ $__parent_this_3_api_url }) {
     }
     async handle(req) {
       const text = String.raw({ raw: ["", "/endpoint2"] }, $__parent_this_3_api_url);
-      return {
-      "status": 200,
-      "body": text,}
-      ;
+      return ({"status": 200,"body": text});
     }
   }
   return $Closure3;
@@ -66,7 +59,7 @@ module.exports = function({ $__parent_this_3_api_url }) {
 
 ```
 
-## inflight.A.js
+## inflight.A-1.js
 ```js
 module.exports = function({  }) {
   class A {
@@ -133,7 +126,7 @@ module.exports = function({  }) {
         },
         "rest_api_id": "${aws_api_gateway_rest_api.A_cloudApi_api_37FCEF91.id}",
         "triggers": {
-          "redeployment": "ee737a93987c97858ba9524a5b87b2ff1b0e62e4"
+          "redeployment": "66f9e4b69146527e1951e6308dc9128a3ca41abb"
         }
       },
       "cloudApi_api_deployment_545514BF": {
@@ -148,7 +141,7 @@ module.exports = function({  }) {
         },
         "rest_api_id": "${aws_api_gateway_rest_api.cloudApi_api_2B334D75.id}",
         "triggers": {
-          "redeployment": "06d5d79d88a464ffe5666fff8744c6bcc926732c"
+          "redeployment": "d4a66f49086c55ef3890317ca607c501380327bb"
         }
       }
     },
@@ -322,7 +315,7 @@ module.exports = function({  }) {
           "variables": {
             "WING_FUNCTION_NAME": "cloud-Api-OnRequest-73c5308f-c85168bb",
             "WING_TARGET": "tf-aws",
-            "WING_TOKEN_TFTOKEN_TOKEN_42": "${jsonencode(aws_api_gateway_stage.A_cloudApi_api_stage_6D822CCE.invoke_url)}"
+            "WING_TOKEN_TFTOKEN_TOKEN_41": "${jsonencode(aws_api_gateway_stage.A_cloudApi_api_stage_6D822CCE.invoke_url)}"
           }
         },
         "function_name": "cloud-Api-OnRequest-73c5308f-c85168bb",
@@ -376,7 +369,7 @@ module.exports = function({  }) {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c8315524",
             "WING_TARGET": "tf-aws",
-            "WING_TOKEN_TFTOKEN_TOKEN_21": "${jsonencode(aws_api_gateway_stage.cloudApi_api_stage_BBB283E4.invoke_url)}"
+            "WING_TOKEN_TFTOKEN_TOKEN_7": "${jsonencode(aws_api_gateway_stage.cloudApi_api_stage_BBB283E4.invoke_url)}"
           }
         },
         "function_name": "Handler-c8315524",
@@ -475,9 +468,9 @@ module.exports = function({  }) {
 ```js
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
-const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
-const cloud = require('@winglang/sdk').cloud;
+const std = $stdlib.std;
+const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
@@ -489,7 +482,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1.js")({
+          require("./inflight.$Closure1-1.js")({
             $counter: ${context._lift(counter)},
             $std_Json: ${context._lift(std.Json)},
           })
@@ -521,7 +514,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure2.js")({
+          require("./inflight.$Closure2-1.js")({
             $api_url: ${context._lift(api.url)},
           })
         `);
@@ -558,7 +551,7 @@ class $Root extends $stdlib.std.Resource {
           }
           static _toInflightType(context) {
             return $stdlib.core.NodeJsCode.fromInline(`
-              require("./inflight.$Closure3.js")({
+              require("./inflight.$Closure3-1.js")({
                 $__parent_this_3_api_url: ${context._lift(__parent_this_3.api.url)},
               })
             `);
@@ -585,7 +578,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.A.js")({
+          require("./inflight.A-1.js")({
           })
         `);
       }
@@ -610,7 +603,7 @@ class $Root extends $stdlib.std.Resource {
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
-new $App({ outdir: $outdir, name: "api", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test }).synth();
+new $App({ outdir: $outdir, name: "api", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
 
 ```
 

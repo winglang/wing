@@ -143,31 +143,31 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct BucketEvent\n```\n---\non_event notification payload- will be in use after solving issue: https://github.com/winglang/wing/issues/1927.\n### Fields\n- `key` — the bucket key that triggered the event.\n- `type` — type of event."
+    value: "```wing\nstruct BucketEvent\n```\n---\nOn_event notification payload- will be in use after solving issue: https://github.com/winglang/wing/issues/1927.\n### Fields\n- `key` — The bucket key that triggered the event.\n- `type` — Type of event."
   sortText: hh|BucketEvent
 - label: BucketOnCreateProps
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct BucketOnCreateProps\n```\n---\non create event options."
+    value: "```wing\nstruct BucketOnCreateProps\n```\n---\n`onCreate` event options."
   sortText: hh|BucketOnCreateProps
 - label: BucketOnDeleteProps
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct BucketOnDeleteProps\n```\n---\non delete event options."
+    value: "```wing\nstruct BucketOnDeleteProps\n```\n---\n`onDelete` event options."
   sortText: hh|BucketOnDeleteProps
 - label: BucketOnEventProps
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct BucketOnEventProps\n```\n---\non any event options."
+    value: "```wing\nstruct BucketOnEventProps\n```\n---\n`onEvent` options."
   sortText: hh|BucketOnEventProps
 - label: BucketOnUpdateProps
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct BucketOnUpdateProps\n```\n---\non update event options."
+    value: "```wing\nstruct BucketOnUpdateProps\n```\n---\n`onUpdate` event options."
   sortText: hh|BucketOnUpdateProps
 - label: BucketProps
   kind: 22
@@ -203,7 +203,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct QueueProps\n```\n---\nOptions for `Queue`.\n### Fields\n- `initialMessages?` — Initialize the queue with a set of messages.\n- `retentionPeriod?` — How long a queue retains a message.\n- `timeout?` — How long a queue's consumers have to process a message."
+    value: "```wing\nstruct QueueProps\n```\n---\nOptions for `Queue`.\n### Fields\n- `retentionPeriod?` — How long a queue retains a message.\n- `timeout?` — How long a queue's consumers have to process a message."
   sortText: hh|QueueProps
 - label: QueueSetConsumerProps
   kind: 22
@@ -425,7 +425,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 13
   documentation:
     kind: markdown
-    value: "```wing\nenum BucketEventType\n```\n---\nbucket events to subscribe to.\n- `CREATE`\n- `DELETE`\n- `UPDATE`"
+    value: "```wing\nenum BucketEventType\n```\n---\nBucket events to subscribe to.\n- `CREATE`\n- `DELETE`\n- `UPDATE`"
   sortText: jj|BucketEventType
 - label: HttpMethod
   kind: 13

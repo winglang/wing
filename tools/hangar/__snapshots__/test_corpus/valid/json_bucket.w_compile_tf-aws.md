@@ -1,6 +1,6 @@
 # [json_bucket.w](../../../../../examples/tests/valid/json_bucket.w) | compile | tf-aws
 
-## inflight.$Closure1.js
+## inflight.$Closure1-1.js
 ```js
 module.exports = function({ $b, $fileName }) {
   class $Closure1 {
@@ -19,7 +19,7 @@ module.exports = function({ $b, $fileName }) {
 
 ```
 
-## inflight.$Closure2.js
+## inflight.$Closure2-1.js
 ```js
 module.exports = function({ $b, $fileName, $getJson, $j }) {
   class $Closure2 {
@@ -275,9 +275,9 @@ module.exports = function({ $b, $fileName, $getJson, $j }) {
 ```js
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
-const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
-const cloud = require('@winglang/sdk').cloud;
+const std = $stdlib.std;
+const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
@@ -289,7 +289,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1.js")({
+          require("./inflight.$Closure1-1.js")({
             $b: ${context._lift(b)},
             $fileName: ${context._lift(fileName)},
           })
@@ -322,7 +322,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure2.js")({
+          require("./inflight.$Closure2-1.js")({
             $b: ${context._lift(b)},
             $fileName: ${context._lift(fileName)},
             $getJson: ${context._lift(getJson)},
@@ -353,13 +353,13 @@ class $Root extends $stdlib.std.Resource {
     }
     const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
     const fileName = "file.json";
-    const j = Object.freeze({"persons":[Object.freeze({"age":30,"name":"hasan","fears":["heights", "failure"]})]});
+    const j = ({"persons": [({"age": 30,"name": "hasan","fears": ["heights", "failure"]})]});
     const getJson = this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"cloud.Function",new $Closure1(this,"$Closure1"));
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:put",new $Closure2(this,"$Closure2"));
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
-new $App({ outdir: $outdir, name: "json_bucket", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test }).synth();
+new $App({ outdir: $outdir, name: "json_bucket", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
 
 ```
 

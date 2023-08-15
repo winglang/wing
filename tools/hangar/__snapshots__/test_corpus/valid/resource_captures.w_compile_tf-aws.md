@@ -1,6 +1,6 @@
 # [resource_captures.w](../../../../../examples/tests/valid/resource_captures.w) | compile | tf-aws
 
-## inflight.$Closure1.js
+## inflight.$Closure1-1.js
 ```js
 module.exports = function({ $r }) {
   class $Closure1 {
@@ -28,7 +28,7 @@ module.exports = function({ $r }) {
 
 ```
 
-## inflight.Another.js
+## inflight.Another-1.js
 ```js
 module.exports = function({  }) {
   class Another {
@@ -46,7 +46,7 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.First.js
+## inflight.First-1.js
 ```js
 module.exports = function({  }) {
   class First {
@@ -58,7 +58,7 @@ module.exports = function({  }) {
 
 ```
 
-## inflight.MyResource.js
+## inflight.MyResource-1.js
 ```js
 module.exports = function({  }) {
   class MyResource {
@@ -84,7 +84,7 @@ module.exports = function({  }) {
       this.$this_myStr = $this_myStr;
     }
     async testNoCapture() {
-      const arr = Object.freeze([1, 2, 3]);
+      const arr = [1, 2, 3];
       {((cond) => {if (!cond) throw new Error("assertion failed: arr.length == 3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(arr.length,3)))};
       {console.log(String.raw({ raw: ["array.len=", ""] }, arr.length))};
     }
@@ -423,9 +423,9 @@ module.exports = function({  }) {
 ```js
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
-const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
-const cloud = require('@winglang/sdk').cloud;
+const std = $stdlib.std;
+const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
@@ -437,7 +437,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.First.js")({
+          require("./inflight.First-1.js")({
           })
         `);
       }
@@ -462,7 +462,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.Another.js")({
+          require("./inflight.Another-1.js")({
           })
         `);
       }
@@ -487,9 +487,9 @@ class $Root extends $stdlib.std.Resource {
         this.myNum = 42;
         this.myBool = true;
         this.myOptStr = "myOptString";
-        this.arrayOfStr = Object.freeze(["s1", "s2"]);
-        this.mapOfNum = Object.freeze({"k1":11,"k2":22});
-        this.setOfStr = Object.freeze(new Set(["s1", "s2", "s1"]));
+        this.arrayOfStr = ["s1", "s2"];
+        this.mapOfNum = ({"k1": 11,"k2": 22});
+        this.setOfStr = new Set(["s1", "s2", "s1"]);
         this.another = new Another(this,"Another");
         this.myQueue = this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this,"cloud.Queue");
         this.extBucket = externalBucket;
@@ -501,7 +501,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.MyResource.js")({
+          require("./inflight.MyResource-1.js")({
           })
         `);
       }
@@ -607,7 +607,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1.js")({
+          require("./inflight.$Closure1-1.js")({
             $r: ${context._lift(r)},
           })
         `);
@@ -636,7 +636,7 @@ class $Root extends $stdlib.std.Resource {
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
-new $App({ outdir: $outdir, name: "resource_captures", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test }).synth();
+new $App({ outdir: $outdir, name: "resource_captures", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
 
 ```
 

@@ -1,6 +1,6 @@
 # [invoke.w](../../../../../../examples/tests/sdk_tests/function/invoke.w) | compile | tf-aws
 
-## inflight.$Closure1.js
+## inflight.$Closure1-1.js
 ```js
 module.exports = function({ $util_Util }) {
   class $Closure1 {
@@ -10,6 +10,7 @@ module.exports = function({ $util_Util }) {
       return $obj;
     }
     async handle(input) {
+      {console.log("log inside function\ncontains 2 lines")};
       const target = (await $util_Util.tryEnv("WING_TARGET"));
       {((cond) => {if (!cond) throw new Error("assertion failed: target?")})(((target) != null))};
       return String.raw({ raw: ["", "-response"] }, input);
@@ -20,7 +21,7 @@ module.exports = function({ $util_Util }) {
 
 ```
 
-## inflight.$Closure2.js
+## inflight.$Closure2-1.js
 ```js
 module.exports = function({ $f }) {
   class $Closure2 {
@@ -30,6 +31,7 @@ module.exports = function({ $f }) {
       return $obj;
     }
     async handle() {
+      {console.log("log inside test")};
       const x = (await $f.invoke("hello"));
       {((cond) => {if (!cond) throw new Error("assertion failed: x == \"hello-response\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(x,"hello-response")))};
     }
@@ -231,10 +233,10 @@ module.exports = function({ $f }) {
 ```js
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
-const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
-const cloud = require('@winglang/sdk').cloud;
-const util = require('@winglang/sdk').util;
+const std = $stdlib.std;
+const cloud = $stdlib.cloud;
+const util = $stdlib.util;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
@@ -246,7 +248,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1.js")({
+          require("./inflight.$Closure1-1.js")({
             $util_Util: ${context._lift(util.Util)},
           })
         `);
@@ -271,7 +273,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure2.js")({
+          require("./inflight.$Closure2-1.js")({
             $f: ${context._lift(f)},
           })
         `);
@@ -295,12 +297,13 @@ class $Root extends $stdlib.std.Resource {
       }
     }
     const payload = "hello";
+    {console.log("log preflight")};
     const f = this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"cloud.Function",new $Closure1(this,"$Closure1"));
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:invoke",new $Closure2(this,"$Closure2"));
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
-new $App({ outdir: $outdir, name: "invoke", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test }).synth();
+new $App({ outdir: $outdir, name: "invoke", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
 
 ```
 

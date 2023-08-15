@@ -1,7 +1,7 @@
 // Compiles a source file and prints any errors to stderr.
 // This should only be used for testing wingc directly.
 
-use std::{env, path::Path, process};
+use std::{env, fs, path::Path, process};
 use wingc::{compile, diagnostic::get_diagnostics};
 
 pub fn main() {
@@ -13,9 +13,11 @@ pub fn main() {
 
 	let source_path = &args[1];
 	let source_path = Path::new(source_path);
+	let source_text = fs::read_to_string(source_path).unwrap();
 
 	let results = compile(
 		source_path,
+		source_text,
 		Some(env::current_dir().unwrap().join("target").as_path()),
 		Some(source_path.canonicalize().unwrap().parent().unwrap()),
 	);

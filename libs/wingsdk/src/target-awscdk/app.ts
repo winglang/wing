@@ -74,7 +74,7 @@ export class App extends CoreApp {
     const cdkApp = new cdk.App({ outdir: cdkOutdir });
     const cdkStack = new cdk.Stack(cdkApp, stackName);
 
-    super(cdkStack, "Default");
+    super(cdkStack, props.rootId ?? "Default", props);
 
     // HACK: monkey patch the `new` method on the cdk app (which is the root of the tree) so that
     // we can intercept the creation of resources and replace them with our own.
@@ -112,7 +112,7 @@ export class App extends CoreApp {
    * This method returns a cleaned snapshot of the resulting CDK template
    * for unit testing.
    */
-  synth(): string {
+  public synth(): string {
     if (this.synthed) {
       return this.synthedOutput!;
     }

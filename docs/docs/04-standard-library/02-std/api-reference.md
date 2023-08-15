@@ -29,6 +29,7 @@ Immutable Array.
 | <code><a href="#@winglang/sdk.std.Array.indexOf">indexOf</a></code> | Returns the index of the first occurrence of searchElement found. |
 | <code><a href="#@winglang/sdk.std.Array.join">join</a></code> | Returns a new string containing the concatenated values in this array, separated by commas or a specified separator string. |
 | <code><a href="#@winglang/sdk.std.Array.lastIndexOf">lastIndexOf</a></code> | Returns the index of the last occurrence of searchElement found. |
+| <code><a href="#@winglang/sdk.std.Array.tryAt">tryAt</a></code> | Get the value at the given index, returning nil if the index is out of bounds. |
 
 ---
 
@@ -134,6 +135,22 @@ Returns the index of the last occurrence of searchElement found.
 - *Type:* <a href="#@winglang/sdk.std.T1">&lt;T&gt;</a>
 
 to search for.
+
+---
+
+##### `tryAt` <a name="tryAt" id="@winglang/sdk.std.Array.tryAt"></a>
+
+```wing
+tryAt(index: num): <T>
+```
+
+Get the value at the given index, returning nil if the index is out of bounds.
+
+###### `index`<sup>Required</sup> <a name="index" id="@winglang/sdk.std.Array.tryAt.parameter.index"></a>
+
+- *Type:* num
+
+index of the value to get.
 
 ---
 
@@ -291,7 +308,7 @@ Create a Datetime from UTC timezone.
 | <code><a href="#@winglang/sdk.std.Datetime.property.sec">sec</a></code> | <code>num</code> | Returns the seconds of the local machine time or in utc. |
 | <code><a href="#@winglang/sdk.std.Datetime.property.timestamp">timestamp</a></code> | <code>num</code> | Return a timestamp of non-leap year seconds since epoch. |
 | <code><a href="#@winglang/sdk.std.Datetime.property.timestampMs">timestampMs</a></code> | <code>num</code> | Return a timestamp of non-leap year milliseconds since epoch. |
-| <code><a href="#@winglang/sdk.std.Datetime.property.timezone">timezone</a></code> | <code>num</code> | returns the offset in minutes from UTC. |
+| <code><a href="#@winglang/sdk.std.Datetime.property.timezone">timezone</a></code> | <code>num</code> | Returns the offset in minutes from UTC. |
 | <code><a href="#@winglang/sdk.std.Datetime.property.year">year</a></code> | <code>num</code> | Returns the year of the local machine time or in utc. |
 
 ---
@@ -412,7 +429,7 @@ timezone: num;
 
 - *Type:* num
 
-returns the offset in minutes from UTC.
+Returns the offset in minutes from UTC.
 
 ---
 
@@ -2051,11 +2068,55 @@ The length of the string.
 ---
 
 
+### Struct <a name="Struct" id="@winglang/sdk.std.Struct"></a>
+
+Shared behavior for all structs.
+
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.std.Struct.fromJson">fromJson</a></code> | Converts a Json to a Struct. |
+| <code><a href="#@winglang/sdk.std.Struct.tryFromJson">tryFromJson</a></code> | Converts a Json to a Struct, returning nil if the Json is not valid. |
+
+---
+
+##### `fromJson` <a name="fromJson" id="@winglang/sdk.std.Struct.fromJson"></a>
+
+```wing
+Struct.fromJson(json: Json);
+```
+
+Converts a Json to a Struct.
+
+###### `json`<sup>Required</sup> <a name="json" id="@winglang/sdk.std.Struct.fromJson.parameter.json"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
+
+---
+
+##### `tryFromJson` <a name="tryFromJson" id="@winglang/sdk.std.Struct.tryFromJson"></a>
+
+```wing
+Struct.tryFromJson(json: Json);
+```
+
+Converts a Json to a Struct, returning nil if the Json is not valid.
+
+###### `json`<sup>Required</sup> <a name="json" id="@winglang/sdk.std.Struct.tryFromJson.parameter.json"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
+
+---
+
+
+
 ## Structs <a name="Structs" id="Structs"></a>
 
 ### DatetimeComponents <a name="DatetimeComponents" id="@winglang/sdk.std.DatetimeComponents"></a>
 
-interface that is used for setting Datetime date.
+Interface that is used for setting Datetime date.
 
 #### Initializer <a name="Initializer" id="@winglang/sdk.std.DatetimeComponents.Initializer"></a>
 
@@ -2067,14 +2128,14 @@ let DatetimeComponents = DatetimeComponents{ ... };
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.std.DatetimeComponents.property.day">day</a></code> | <code>num</code> | day. |
-| <code><a href="#@winglang/sdk.std.DatetimeComponents.property.hour">hour</a></code> | <code>num</code> | hours. |
-| <code><a href="#@winglang/sdk.std.DatetimeComponents.property.min">min</a></code> | <code>num</code> | minutes. |
-| <code><a href="#@winglang/sdk.std.DatetimeComponents.property.month">month</a></code> | <code>num</code> | month. |
-| <code><a href="#@winglang/sdk.std.DatetimeComponents.property.ms">ms</a></code> | <code>num</code> | milliseconds. |
-| <code><a href="#@winglang/sdk.std.DatetimeComponents.property.sec">sec</a></code> | <code>num</code> | seconds. |
-| <code><a href="#@winglang/sdk.std.DatetimeComponents.property.tz">tz</a></code> | <code>num</code> | timezone offset in minutes from UTC. |
-| <code><a href="#@winglang/sdk.std.DatetimeComponents.property.year">year</a></code> | <code>num</code> | year. |
+| <code><a href="#@winglang/sdk.std.DatetimeComponents.property.day">day</a></code> | <code>num</code> | Day. |
+| <code><a href="#@winglang/sdk.std.DatetimeComponents.property.hour">hour</a></code> | <code>num</code> | Hours. |
+| <code><a href="#@winglang/sdk.std.DatetimeComponents.property.min">min</a></code> | <code>num</code> | Minutes. |
+| <code><a href="#@winglang/sdk.std.DatetimeComponents.property.month">month</a></code> | <code>num</code> | Month. |
+| <code><a href="#@winglang/sdk.std.DatetimeComponents.property.ms">ms</a></code> | <code>num</code> | Milliseconds. |
+| <code><a href="#@winglang/sdk.std.DatetimeComponents.property.sec">sec</a></code> | <code>num</code> | Seconds. |
+| <code><a href="#@winglang/sdk.std.DatetimeComponents.property.tz">tz</a></code> | <code>num</code> | Timezone offset in minutes from UTC. |
+| <code><a href="#@winglang/sdk.std.DatetimeComponents.property.year">year</a></code> | <code>num</code> | Year. |
 
 ---
 
@@ -2086,7 +2147,7 @@ day: num;
 
 - *Type:* num
 
-day.
+Day.
 
 ---
 
@@ -2098,7 +2159,7 @@ hour: num;
 
 - *Type:* num
 
-hours.
+Hours.
 
 ---
 
@@ -2110,7 +2171,7 @@ min: num;
 
 - *Type:* num
 
-minutes.
+Minutes.
 
 ---
 
@@ -2122,7 +2183,7 @@ month: num;
 
 - *Type:* num
 
-month.
+Month.
 
 ---
 
@@ -2134,7 +2195,7 @@ ms: num;
 
 - *Type:* num
 
-milliseconds.
+Milliseconds.
 
 ---
 
@@ -2146,7 +2207,7 @@ sec: num;
 
 - *Type:* num
 
-seconds.
+Seconds.
 
 ---
 
@@ -2158,7 +2219,7 @@ tz: num;
 
 - *Type:* num
 
-timezone offset in minutes from UTC.
+Timezone offset in minutes from UTC.
 
 ---
 
@@ -2170,7 +2231,7 @@ year: num;
 
 - *Type:* num
 
-year.
+Year.
 
 ---
 

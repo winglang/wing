@@ -1,6 +1,7 @@
 import { Readable } from "stream";
 import * as consumers from "stream/consumers";
 import {
+  HeadObjectCommand,
   DeleteObjectCommand,
   GetObjectCommand,
   ListObjectsV2Command,
@@ -27,13 +28,20 @@ export class BucketClient implements IBucketClient {
    * @param key Key of the object
    */
   public async exists(key: string): Promise<boolean> {
-    const command = new ListObjectsV2Command({
+    const command = new HeadObjectCommand({
       Bucket: this.bucketName,
-      Prefix: key,
-      MaxKeys: 1,
+      Key: key,
     });
-    const resp: ListObjectsV2CommandOutput = await this.s3Client.send(command);
-    return !!resp.Contents && resp.Contents.length > 0;
+
+    try {
+      await this.s3Client.send(command);
+      return true;
+    } catch (error) {
+      if ((error as Error).name === "NotFound") {
+        return false;
+      }
+      throw error;
+    }
   }
 
   /**
@@ -206,7 +214,7 @@ export class BucketClient implements IBucketClient {
     return list;
   }
   /**
-   * checks if the bucket is public
+   * Checks if the bucket is public
    * @returns true if the bucket is public and false otherwise
    */
   private async checkIfPublic(): Promise<boolean> {
@@ -235,7 +243,7 @@ export class BucketClient implements IBucketClient {
 
     if (!(await this.exists(key))) {
       throw new Error(
-        `Cannot provide public url for an non-existent key (key=${key})`
+        `Cannot provide public url for a non-existent key (key=${key})`
       );
     }
 

@@ -27,7 +27,7 @@ source: libs/wingc/src/jsify/tests.rs
     
 ```
 
-## inflight.$Closure1.js
+## inflight.$Closure1-1.js
 
 ```js
 module.exports = function({ $t_y_b }) {
@@ -45,7 +45,7 @@ module.exports = function({ $t_y_b }) {
 }
 ```
 
-## inflight.MyType.js
+## inflight.MyType-1.js
 
 ```js
 module.exports = function({  }) {
@@ -57,7 +57,7 @@ module.exports = function({  }) {
 }
 ```
 
-## inflight.YourType.js
+## inflight.YourType-1.js
 
 ```js
 module.exports = function({  }) {
@@ -74,9 +74,9 @@ module.exports = function({  }) {
 ```js
 const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
-const std = $stdlib.std;
 const $wing_is_test = process.env.WING_IS_TEST === "true";
-const cloud = require('@winglang/sdk').cloud;
+const std = $stdlib.std;
+const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
@@ -88,7 +88,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.YourType.js")({
+          require("./inflight.YourType-1.js")({
           })
         `);
       }
@@ -112,7 +112,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.MyType.js")({
+          require("./inflight.MyType-1.js")({
           })
         `);
       }
@@ -136,7 +136,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1.js")({
+          require("./inflight.$Closure1-1.js")({
             $t_y_b: ${context._lift(t.y.b)},
           })
         `);
@@ -164,6 +164,6 @@ class $Root extends $stdlib.std.Resource {
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
-new $App({ outdir: $outdir, name: "main", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test }).synth();
+new $App({ outdir: $outdir, name: "main", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
 ```
 

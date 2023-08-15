@@ -5,9 +5,9 @@ import { Enums } from "./enums";
 import { Interfaces } from "./interfaces";
 import { Structs } from "./structs";
 import { VISIBLE_SUBMODULES } from "./wing-filters";
+import { MarkdownDocument } from "../render/markdown-doc";
 import { ApiReferenceSchema, getInflight, isSkipped } from "../schema";
 import { Transpile } from "../transpile/transpile";
-import { MarkdownDocument } from "../render/markdown-doc";
 
 /**
  * Render an API reference based on the jsii assembly.
