@@ -5,12 +5,15 @@ import * as cloud from "../cloud";
  */
 export interface AwsWebsiteProps extends cloud.WebsiteProps {
   /**
-   * AWS Certificate Manager certificate arn
+   * AWS Certificate Manager (ACM) certificate arn
    */
   readonly acmCertificateArn?: string;
   /**
-   * IAM certificate identifier of the custom viewer certificate
+   * IAM certificate identifier
    */
   readonly iamCertificate?: string;
+  /**
+   * Id of the Route 53 hosted zone
+   */
   readonly hostedZoneId?: string;
 }
