@@ -1,5 +1,5 @@
 ---
-title: What are the main differences between Wing and CDKTF?
+title: CDKTF vs Wing [Main differences]
 sidebar_label: CDKTF
 id: differences-from-cdktf
 keywords: [faq, winglang, Wing programming language, Wing language, CDKTF, IAC]
