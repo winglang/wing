@@ -67,9 +67,6 @@ jobs:
       - name: Setup Cargo Cache
         uses: Swatinem/rust-cache@v2
 
-      - name: build image
-        run: docker build -t backend:latest -f ./apps/wing-console/console/app/preview/Dockerfile . --platform=linux/amd64
-
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
 
