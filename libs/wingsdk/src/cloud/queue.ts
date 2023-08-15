@@ -24,12 +24,6 @@ export interface QueueProps {
    * @default undefined
    */
   readonly retentionPeriod?: Duration;
-
-  /**
-   * Initialize the queue with a set of messages.
-   * @default []
-   */
-  readonly initialMessages?: string[];
 }
 
 /**

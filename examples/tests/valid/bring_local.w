@@ -28,3 +28,6 @@ class Triangle impl file1.Shape {
   }
 }
 let t = new Triangle();
+
+// classes can have the same name as classes in other modules
+class Util {}

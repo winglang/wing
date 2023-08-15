@@ -1,6 +1,6 @@
 # [inflight_class_outside_inflight_closure.w](../../../../../examples/tests/valid/inflight_class_outside_inflight_closure.w) | compile | tf-aws
 
-## inflight.$Closure1.js
+## inflight.$Closure1-1.js
 ```js
 module.exports = function({ $BinaryOperation }) {
   class $Closure1 {
@@ -19,7 +19,7 @@ module.exports = function({ $BinaryOperation }) {
 
 ```
 
-## inflight.BinaryOperation.js
+## inflight.BinaryOperation-1.js
 ```js
 module.exports = function({  }) {
   class BinaryOperation {
@@ -174,7 +174,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.BinaryOperation.js")({
+          require("./inflight.BinaryOperation-1.js")({
           })
         `);
       }
@@ -207,7 +207,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1.js")({
+          require("./inflight.$Closure1-1.js")({
             $BinaryOperation: ${context._lift(BinaryOperation)},
           })
         `);

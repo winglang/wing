@@ -203,7 +203,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 22
   documentation:
     kind: markdown
-    value: "```wing\nstruct QueueProps\n```\n---\nOptions for `Queue`.\n### Fields\n- `initialMessages?` — Initialize the queue with a set of messages.\n- `retentionPeriod?` — How long a queue retains a message.\n- `timeout?` — How long a queue's consumers have to process a message."
+    value: "```wing\nstruct QueueProps\n```\n---\nOptions for `Queue`.\n### Fields\n- `retentionPeriod?` — How long a queue retains a message.\n- `timeout?` — How long a queue's consumers have to process a message."
   sortText: hh|QueueProps
 - label: QueueSetConsumerProps
   kind: 22

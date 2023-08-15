@@ -1,6 +1,6 @@
 # [issue_2889.w](../../../../../examples/tests/valid/issue_2889.w) | compile | tf-aws
 
-## inflight.$Closure1.js
+## inflight.$Closure1-1.js
 ```js
 module.exports = function({ $std_Json }) {
   class $Closure1 {
@@ -19,7 +19,7 @@ module.exports = function({ $std_Json }) {
 
 ```
 
-## inflight.$Closure2.js
+## inflight.$Closure2-1.js
 ```js
 module.exports = function({ $api_url, $http_Util, $std_Json }) {
   class $Closure2 {
@@ -95,7 +95,7 @@ module.exports = function({ $api_url, $http_Util, $std_Json }) {
         },
         "rest_api_id": "${aws_api_gateway_rest_api.cloudApi_api_2B334D75.id}",
         "triggers": {
-          "redeployment": "388c90ec9e86835eaf113a3e1c432f4758bfa061"
+          "redeployment": "ca2771f24c2978f810a5a1a5c3373f4ac9d7d88c"
         }
       }
     },
@@ -226,7 +226,7 @@ module.exports = function({ $api_url, $http_Util, $std_Json }) {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c88c3aa2",
             "WING_TARGET": "tf-aws",
-            "WING_TOKEN_TFTOKEN_TOKEN_21": "${jsonencode(aws_api_gateway_stage.cloudApi_api_stage_BBB283E4.invoke_url)}"
+            "WING_TOKEN_TFTOKEN_TOKEN_7": "${jsonencode(aws_api_gateway_stage.cloudApi_api_stage_BBB283E4.invoke_url)}"
           }
         },
         "function_name": "Handler-c88c3aa2",
@@ -316,7 +316,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1.js")({
+          require("./inflight.$Closure1-1.js")({
             $std_Json: ${context._lift(std.Json)},
           })
         `);
@@ -341,7 +341,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure2.js")({
+          require("./inflight.$Closure2-1.js")({
             $api_url: ${context._lift(api.url)},
             $http_Util: ${context._lift(http.Util)},
             $std_Json: ${context._lift(std.Json)},

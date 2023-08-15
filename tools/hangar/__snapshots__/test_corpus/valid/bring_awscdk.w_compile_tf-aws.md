@@ -1,6 +1,6 @@
 # [bring_awscdk.w](../../../../../examples/tests/valid/bring_awscdk.w) | compile | tf-aws
 
-## inflight.CdkDockerImageFunction.js
+## inflight.CdkDockerImageFunction-1.js
 ```js
 module.exports = function({  }) {
   class CdkDockerImageFunction {
@@ -62,7 +62,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.CdkDockerImageFunction.js")({
+          require("./inflight.CdkDockerImageFunction-1.js")({
           })
         `);
       }

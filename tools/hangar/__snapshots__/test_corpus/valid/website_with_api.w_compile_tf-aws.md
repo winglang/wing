@@ -1,6 +1,6 @@
 # [website_with_api.w](../../../../../examples/tests/valid/website_with_api.w) | compile | tf-aws
 
-## inflight.$Closure1.js
+## inflight.$Closure1-1.js
 ```js
 module.exports = function({ $std_Json, $usersTable }) {
   class $Closure1 {
@@ -18,7 +18,7 @@ module.exports = function({ $std_Json, $usersTable }) {
 
 ```
 
-## inflight.$Closure2.js
+## inflight.$Closure2-1.js
 ```js
 module.exports = function({ $std_Json, $usersTable }) {
   class $Closure2 {
@@ -41,7 +41,7 @@ module.exports = function({ $std_Json, $usersTable }) {
 
 ```
 
-## inflight.$Closure3.js
+## inflight.$Closure3-1.js
 ```js
 module.exports = function({  }) {
   class $Closure3 {
@@ -151,7 +151,7 @@ module.exports = function({  }) {
         },
         "rest_api_id": "${aws_api_gateway_rest_api.cloudApi_api_2B334D75.id}",
         "triggers": {
-          "redeployment": "cdd4e9e04bfdff956629a1812b4cef862849e475"
+          "redeployment": "968b3a7209054cfcc312829735646935481807e4"
         }
       }
     },
@@ -611,7 +611,8 @@ module.exports = function({  }) {
           "aws_s3_bucket.cloudWebsite_WebsiteBucket_EB03D355"
         ],
         "key": "/index.html",
-        "source": "<SOURCE>"
+        "source": "<SOURCE>",
+        "source_hash": "${filemd5(<SOURCE>)}"
       },
       "cloudWebsite_File-configjson_591A81BA": {
         "//": {
@@ -652,7 +653,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure1.js")({
+          require("./inflight.$Closure1-1.js")({
             $std_Json: ${context._lift(std.Json)},
             $usersTable: ${context._lift(usersTable)},
           })
@@ -684,7 +685,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure2.js")({
+          require("./inflight.$Closure2-1.js")({
             $std_Json: ${context._lift(std.Json)},
             $usersTable: ${context._lift(usersTable)},
           })
@@ -716,7 +717,7 @@ class $Root extends $stdlib.std.Resource {
       }
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
-          require("./inflight.$Closure3.js")({
+          require("./inflight.$Closure3-1.js")({
           })
         `);
       }

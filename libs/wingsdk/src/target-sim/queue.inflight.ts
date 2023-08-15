@@ -25,14 +25,6 @@ export class Queue
   private readonly retentionPeriod: number;
 
   constructor(props: QueueSchema["props"], context: ISimulatorContext) {
-    if (props.initialMessages) {
-      this.messages.push(
-        ...props.initialMessages.map(
-          (message) => new QueueMessage(this.retentionPeriod, message)
-        )
-      );
-    }
-
     this.timeout = props.timeout;
     this.retentionPeriod = props.retentionPeriod;
     this.intervalId = setInterval(() => this.processMessages(), 100); // every 0.1 seconds

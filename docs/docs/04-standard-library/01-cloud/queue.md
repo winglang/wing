@@ -239,22 +239,8 @@ let QueueProps = cloud.QueueProps{ ... };
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/sdk.cloud.QueueProps.property.initialMessages">initialMessages</a></code> | <code>MutArray&lt;str&gt;</code> | Initialize the queue with a set of messages. |
 | <code><a href="#@winglang/sdk.cloud.QueueProps.property.retentionPeriod">retentionPeriod</a></code> | <code><a href="#@winglang/sdk.std.Duration">duration</a></code> | How long a queue retains a message. |
 | <code><a href="#@winglang/sdk.cloud.QueueProps.property.timeout">timeout</a></code> | <code><a href="#@winglang/sdk.std.Duration">duration</a></code> | How long a queue's consumers have to process a message. |
-
----
-
-##### `initialMessages`<sup>Optional</sup> <a name="initialMessages" id="@winglang/sdk.cloud.QueueProps.property.initialMessages"></a>
-
-```wing
-initialMessages: MutArray<str>;
-```
-
-- *Type:* MutArray&lt;str&gt;
-- *Default:* []
-
-Initialize the queue with a set of messages.
 
 ---
 

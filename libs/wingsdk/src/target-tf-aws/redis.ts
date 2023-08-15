@@ -94,8 +94,7 @@ export class Redis extends ex.Redis {
     this.clusterArn = cluster.arn;
   }
 
-  /** @internal */
-  public _bind(host: IInflightHost, ops: string[]): void {
+  public bind(host: IInflightHost, ops: string[]): void {
     if (!(host instanceof Function)) {
       throw new Error("redis can only be bound by tfaws.Function for now");
     }
@@ -117,7 +116,7 @@ export class Redis extends ex.Redis {
       subnetIds: [this.subnet.id],
     });
 
-    super._bind(host, ops);
+    super.bind(host, ops);
   }
 
   /** @internal */

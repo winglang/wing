@@ -599,7 +599,7 @@ impl Expr {
 		Self { id, kind, span }
 	}
 
-	/// Returns true if the expression is a reference to a type.
+	/// Returns the user defined type if the expression is a reference to a type.
 	pub fn as_type_reference(&self) -> Option<&UserDefinedType> {
 		match &self.kind {
 			ExprKind::Reference(Reference::TypeReference(t)) => Some(t),
