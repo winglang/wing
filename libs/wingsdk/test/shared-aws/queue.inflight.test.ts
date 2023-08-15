@@ -36,7 +36,7 @@ test("push - happy path", async () => {
   expect(response).toEqual(undefined);
 });
 
-test("push - sad path", async () => {
+test("push - sad path invalid message", async () => {
   // GIVEN
   const QUEUE_URL = "QUEUE_URL";
   const MESSAGE = "INVALID_MESSAGE";
@@ -56,6 +56,24 @@ test("push - sad path", async () => {
   // THEN
   await expect(() => client.push(MESSAGE)).rejects.toThrowError(
     /The message contains characters outside the allowed set/
+  );
+});
+
+test("push - sad path unknown error", async () => {
+  // GIVEN
+  const QUEUE_URL = "QUEUE_URL";
+  const MESSAGE = "MESSAGE";
+
+  sqsMock
+    .on(SendMessageCommand, { QueueUrl: QUEUE_URL, MessageBody: MESSAGE })
+    .rejects(new Error("unknown error"));
+
+  // WHEN
+  const client = new QueueClient(QUEUE_URL);
+
+  // THEN
+  await expect(() => client.push(MESSAGE)).rejects.toThrowError(
+    /unknown error/
   );
 });
 
