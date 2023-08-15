@@ -93,7 +93,7 @@ const computeColor = (color: string, level: number = 1): string => {
   return `#${newColor}`;
 };
 
-const applyThemeCss = (newTheme: Theme) => {
+const applyThemeStyle = (newTheme: Theme) => {
   const colorRegex = /bg-|\[|]|dark:/g;
   const keyRegex = /[#:[\\\]]/g;
 
@@ -165,7 +165,7 @@ export const buildTheme = (color?: string): Theme => {
     )}]`,
   };
 
-  applyThemeCss(theme);
+  applyThemeStyle(theme);
 
   let mergedTheme: Theme = DefaultTheme;
   Object.keys(DefaultTheme).map((key) => {
