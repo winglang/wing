@@ -9,11 +9,11 @@ import { core } from "..";
 import { CloudfrontDistribution } from "../.gen/providers/aws/cloudfront-distribution";
 import { CloudfrontOriginAccessControl } from "../.gen/providers/aws/cloudfront-origin-access-control";
 import { DataAwsIamPolicyDocument } from "../.gen/providers/aws/data-aws-iam-policy-document";
+import { Route53Record } from "../.gen/providers/aws/route53-record";
 import { S3Bucket } from "../.gen/providers/aws/s3-bucket";
 import { S3BucketPolicy } from "../.gen/providers/aws/s3-bucket-policy";
 import { S3BucketWebsiteConfiguration } from "../.gen/providers/aws/s3-bucket-website-configuration";
 import { S3Object } from "../.gen/providers/aws/s3-object";
-import { Route53Record } from "../.gen/providers/aws/route53-record";
 import * as cloud from "../cloud";
 import { NameOptions, ResourceNames } from "../shared/resource-names";
 import { AwsWebsiteProps } from "../shared-aws/website";
@@ -99,7 +99,7 @@ export class Website extends cloud.Website {
           acmCertificateArn: props.acmCertificateArn,
           iamCertificateId: props.iamCertificate,
           sslSupportMethod: "sni-only",
-        })
+        }),
       },
     });
 
@@ -144,8 +144,8 @@ export class Website extends cloud.Website {
         alias: {
           name: distribution.domainName,
           zoneId: distribution.hostedZoneId,
-          evaluateTargetHealth: false
-        }
+          evaluateTargetHealth: false,
+        },
       });
     }
 
