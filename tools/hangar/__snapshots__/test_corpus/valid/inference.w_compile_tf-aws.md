@@ -268,6 +268,11 @@ class $Root extends $stdlib.std.Resource {
     if (true) {
       (api.get("/hello/world",func));
     }
+    const returnsString = (() => {
+      return "hi";
+    });
+    const shouldBeString = (returnsString());
+    const stringArray = [shouldBeString];
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);

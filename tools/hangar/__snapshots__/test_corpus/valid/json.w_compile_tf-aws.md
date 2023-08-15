@@ -30,6 +30,68 @@ module.exports = function(stdStruct, fromInline) {
 
 ```
 
+## HasBucket.Struct.js
+```js
+module.exports = function(stdStruct, fromInline) {
+  class HasBucket {
+    static jsonSchema() {
+      return {
+        id: "/HasBucket",
+        type: "object",
+        properties: {
+          a: { "$ref": "#/$defs/cloud" },
+        },
+        required: [
+          "a",
+        ],
+        $defs: {
+          "cloud": { type: "object", "properties": require("./cloud.Struct.js")().jsonSchema().properties },
+        }
+      }
+    }
+    static fromJson(obj) {
+      return stdStruct._validate(obj, this.jsonSchema())
+    }
+    static _toInflightType(context) {
+      return fromInline(`require("./HasBucket.Struct.js")(${ context._lift(stdStruct) })`);
+    }
+  }
+  return HasBucket;
+};
+
+```
+
+## HasInnerBucket.Struct.js
+```js
+module.exports = function(stdStruct, fromInline) {
+  class HasInnerBucket {
+    static jsonSchema() {
+      return {
+        id: "/HasInnerBucket",
+        type: "object",
+        properties: {
+          a: { "$ref": "#/$defs/HasBucket" },
+        },
+        required: [
+          "a",
+        ],
+        $defs: {
+          "HasBucket": { type: "object", "properties": require("./HasBucket.Struct.js")().jsonSchema().properties },
+        }
+      }
+    }
+    static fromJson(obj) {
+      return stdStruct._validate(obj, this.jsonSchema())
+    }
+    static _toInflightType(context) {
+      return fromInline(`require("./HasInnerBucket.Struct.js")(${ context._lift(stdStruct) })`);
+    }
+  }
+  return HasInnerBucket;
+};
+
+```
+
 ## InnerStructyJson.Struct.js
 ```js
 module.exports = function(stdStruct, fromInline) {
@@ -170,6 +232,53 @@ module.exports = function({  }) {
     "aws": [
       {}
     ]
+  },
+  "resource": {
+    "aws_s3_bucket": {
+      "cloudBucket": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/cloud.Bucket/Default",
+            "uniqueId": "cloudBucket"
+          }
+        },
+        "bucket_prefix": "cloud-bucket-c87175e7-",
+        "force_destroy": false
+      }
+    },
+    "aws_s3_bucket_public_access_block": {
+      "cloudBucket_PublicAccessBlock_5946CCE8": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/cloud.Bucket/PublicAccessBlock",
+            "uniqueId": "cloudBucket_PublicAccessBlock_5946CCE8"
+          }
+        },
+        "block_public_acls": true,
+        "block_public_policy": true,
+        "bucket": "${aws_s3_bucket.cloudBucket.bucket}",
+        "ignore_public_acls": true,
+        "restrict_public_buckets": true
+      }
+    },
+    "aws_s3_bucket_server_side_encryption_configuration": {
+      "cloudBucket_Encryption_77B6AEEF": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/cloud.Bucket/Encryption",
+            "uniqueId": "cloudBucket_Encryption_77B6AEEF"
+          }
+        },
+        "bucket": "${aws_s3_bucket.cloudBucket.bucket}",
+        "rule": [
+          {
+            "apply_server_side_encryption_by_default": {
+              "sse_algorithm": "AES256"
+            }
+          }
+        ]
+      }
+    }
   }
 }
 ```
@@ -180,6 +289,7 @@ const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
+const cloud = $stdlib.cloud;
 class $Root extends $stdlib.std.Resource {
   constructor(scope, id) {
     super(scope, id);
@@ -330,6 +440,10 @@ class $Root extends $stdlib.std.Resource {
     const StructyJson = require("./StructyJson.Struct.js")($stdlib.std.Struct, $stdlib.core.NodeJsCode.fromInline);
     const notJsonMissingField = ({"foo": "bar","stuff": []});
     const notJson = ({"foo": "bar","stuff": [1, 2, 3],"maybe": ({"good": true,"inner_stuff": [({"hi": 1,"base": "base"})]})});
+    let mutableJson = ({"foo": "bar","stuff": [1, 2, 3],"maybe": ({"good": true,"inner_stuff": [({"hi": 1,"base": "base"})]})});
+    const HasBucket = require("./HasBucket.Struct.js")($stdlib.std.Struct, $stdlib.core.NodeJsCode.fromInline);
+    const HasInnerBucket = require("./HasInnerBucket.Struct.js")($stdlib.std.Struct, $stdlib.core.NodeJsCode.fromInline);
+    const hasBucket = ({"a": ({"a": this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket")})});
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);

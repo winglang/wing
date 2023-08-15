@@ -2670,7 +2670,7 @@ impl<'a> TypeChecker<'a> {
 		}
 
 		// if the actual type is a Json with known data, we can attempt to structurally type check
-		if expected_types.len() == 1 {
+		if expected_types.len() == 1 && json_type.is_json() {
 			let expected_type = self.types.maybe_unwrap_inference(expected_types[0]);
 			let expected_type_unwrapped = expected_type.maybe_unwrap_option();
 			if expected_type_unwrapped.is_json() {

@@ -1465,10 +1465,17 @@ error: \\"Bucket\\" is not a legal JSON value
 
 
 error: \\"Bucket\\" is not a legal JSON value
-   --> ../../../examples/tests/invalid/json.w:26:28
-   |
-26 | let jsonObj = Json { boom: bkt };
-   |                            ^^^ \\"Bucket\\" is not a legal JSON value
+    --> ../../../examples/tests/invalid/json.w:100:6
+    |
+100 |   b: new cloud.Bucket()
+    |      ^^^^^^^^^^^^^^^^^^ \\"Bucket\\" is not a legal JSON value
+
+
+error: \\"Bucket\\" is not a legal JSON value
+    --> ../../../examples/tests/invalid/json.w:104:21
+    |
+104 | let isBucket = Json new cloud.Bucket();
+    |                     ^^^^^^^^^^^^^^^^^^ \\"Bucket\\" is not a legal JSON value
 
 
  
