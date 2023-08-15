@@ -34,3 +34,10 @@ let func = inflight (request) => {
 if true {
   api.get("/hello/world", func);
 }
+
+let returnsString = () => {
+  return "hi";
+};
+let shouldBeString = returnsString();
+
+let stringArray = [shouldBeString];

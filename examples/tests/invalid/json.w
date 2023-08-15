@@ -95,3 +95,11 @@ let var mutableJson = {
 };
 let mutableJsonStruct: StructyJson = mutableJson;
 //                                   ^^^^^^^^^^^ Expected type to be "StructyJson", but got "Json" instead
+
+let notAStruct = {
+  b: new cloud.Bucket()
+//   ^^^^^^^^^^^^^^^^^^ "Bucket" is not a legal JSON value
+};
+
+let isBucket = Json new cloud.Bucket();
+//                  ^^^^^^^^^^^^^^^^^^ "Bucket" is not a legal JSON value

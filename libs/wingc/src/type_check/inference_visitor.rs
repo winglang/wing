@@ -113,12 +113,8 @@ impl<'a> crate::visit_types::VisitType<'_> for InferenceVisitor<'a> {
 				| Type::Class(_)
 				| Type::Struct(_)
 				| Type::Interface(_)
-				| Type::Enum(_) => {}
-
-				Type::Inferred(_) => {
-					// Inferences are not a useful expected type
-					self.expected_type = None;
-				}
+				| Type::Enum(_)
+				| Type::Inferred(_) => {}
 			}
 		}
 

@@ -1,3 +1,5 @@
+bring cloud;
+
 let jsonNumber  = Json 123;
 let jsonBool    = Json true;
 let jsonArray   = Json [ 1, 2, 3 ];
@@ -230,5 +232,27 @@ let notJson: StructyJson = {
   maybe: {
     good: true,
     inner_stuff: [{ hi: 1, base: "base" }]
+  }
+};
+
+let var mutableJson: StructyJson = {
+  foo: "bar",
+  stuff: [1, 2, 3],
+  maybe: {
+    good: true,
+    inner_stuff: [{ hi: 1, base: "base" }]
+  }
+};
+
+struct HasBucket {
+  a: cloud.Bucket;
+}
+struct HasInnerBucket {
+  a: HasBucket;
+}
+
+let hasBucket: HasInnerBucket = {
+  a: {
+    a: new cloud.Bucket()
   }
 };

@@ -1374,11 +1374,11 @@ impl Types {
 		None
 	}
 
-	pub fn update_inferred_type(&mut self, id: InferenceId, t: TypeRef, span: &WingSpan) {
-		let mut new_type = t;
+	pub fn update_inferred_type(&mut self, id: InferenceId, new_type: TypeRef, span: &WingSpan) {
 		if let Type::Inferred(n) = &*new_type {
-			if *n != id {
-				new_type = self.maybe_unwrap_inference(new_type);
+			if *n == id {
+				// setting an inference to be itself is a no-op
+				return;
 			}
 		}
 
@@ -2673,6 +2673,9 @@ impl<'a> TypeChecker<'a> {
 		if expected_types.len() == 1 {
 			let expected_type = self.types.maybe_unwrap_inference(expected_types[0]);
 			let expected_type_unwrapped = expected_type.maybe_unwrap_option();
+			if expected_type_unwrapped.is_json() {
+				return actual_type;
+			}
 			if let Type::Json(Some(data)) = &**json_type.maybe_unwrap_option() {
 				if expected_type_unwrapped.is_json_legal_value()
 					|| expected_type_unwrapped.is_struct()
@@ -2940,15 +2943,9 @@ impl<'a> TypeChecker<'a> {
 						"Cannot assign nil value to variables without explicit optional type",
 					);
 				}
-				if *reassignable && inferred_type.is_json() {
-					if let Type::Json(ref mut data) = *inferred_type {
-						// We do not have the required analysis to know the type of the Json data after reassignment
-						data.take();
-					}
-				}
 				if let Some(explicit_type) = explicit_type {
 					self.validate_type(inferred_type, explicit_type, initial_value);
-					let final_type = if explicit_type.is_json() && inferred_type.is_json() {
+					let final_type = if !*reassignable && explicit_type.is_json() && inferred_type.is_json() {
 						// If both types are Json, use the inferred type in case it has more information
 						inferred_type
 					} else {
@@ -2965,6 +2962,12 @@ impl<'a> TypeChecker<'a> {
 						_ => {}
 					};
 				} else {
+					if *reassignable && inferred_type.is_json() {
+						if let Type::Json(Some(_)) = *inferred_type {
+							// We do not have the required analysis to know the type of the Json data after reassignment
+							inferred_type = self.types.json();
+						}
+					}
 					match env.define(
 						var_name,
 						SymbolKind::make_free_variable(var_name.clone(), inferred_type, *reassignable, env.phase),
