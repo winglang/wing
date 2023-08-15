@@ -13,8 +13,10 @@ import { S3Bucket } from "../.gen/providers/aws/s3-bucket";
 import { S3BucketPolicy } from "../.gen/providers/aws/s3-bucket-policy";
 import { S3BucketWebsiteConfiguration } from "../.gen/providers/aws/s3-bucket-website-configuration";
 import { S3Object } from "../.gen/providers/aws/s3-object";
+import { Route53Record } from "../.gen/providers/aws/route53-record";
 import * as cloud from "../cloud";
 import { NameOptions, ResourceNames } from "../shared/resource-names";
+import { AwsWebsiteProps } from "../shared-aws/website";
 import { Json } from "../std";
 
 const INDEX_FILE = "index.html";
@@ -28,7 +30,7 @@ export class Website extends cloud.Website {
   private readonly bucket: S3Bucket;
   private readonly _url: string;
 
-  constructor(scope: Construct, id: string, props: cloud.WebsiteProps) {
+  constructor(scope: Construct, id: string, props: AwsWebsiteProps) {
     super(scope, id, props);
 
     this.bucket = createEncryptedBucket(this, false, "WebsiteBucket");
@@ -91,7 +93,12 @@ export class Website extends cloud.Website {
         },
       },
       priceClass: "PriceClass_100",
-      viewerCertificate: { cloudfrontDefaultCertificate: true },
+      viewerCertificate: {
+        cloudfrontDefaultCertificate: true,
+        acmCertificateArn: props.acmCertificateArn,
+        iamCertificateId: props.iamCertificate,
+        sslSupportMethod: "sni-only",
+      },
     });
 
     // allow cloudfront distribution to read from private s3 bucket
@@ -126,6 +133,19 @@ export class Website extends cloud.Website {
       bucket: this.bucket.id,
       policy: allowDistributionReadOnly.json,
     });
+
+    if (props.hostedZoneId && this._domain) {
+      new Route53Record(this, "Route53Record", {
+        zoneId: props.hostedZoneId,
+        type: "A",
+        name: this._domain,
+        alias: {
+          name: distribution.domainName,
+          zoneId: distribution.hostedZoneId,
+          evaluateTargetHealth: false
+        }
+      });
+    }
 
     this._url = distribution.domainName;
   }
