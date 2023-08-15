@@ -183,7 +183,7 @@ test("messages are not requeued if the function fails before timeout", async () 
       .map((trace) => trace.data.message)
   ).toEqual([
     "wingsdk.cloud.Queue created.",
-    "Push (message=BAD MESSAGE).",
+    "Push (messages=BAD MESSAGE).",
     'Sending messages (messages=["BAD MESSAGE"], subscriber=sim-1).',
     "Subscriber error - returning 1 messages to queue: ERROR",
     "wingsdk.cloud.Queue deleted.",
@@ -226,7 +226,7 @@ test("messages are not requeued if the function fails after retention timeout", 
       .map((trace) => trace.data.message)
   ).toEqual([
     "wingsdk.cloud.Queue created.",
-    "Push (message=BAD MESSAGE).",
+    "Push (messages=BAD MESSAGE).",
     'Sending messages (messages=["BAD MESSAGE"], subscriber=sim-1).',
     "Subscriber error - returning 1 messages to queue: ERROR",
     "wingsdk.cloud.Queue deleted.",
