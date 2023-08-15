@@ -95,9 +95,11 @@ export class Website extends cloud.Website {
       priceClass: "PriceClass_100",
       viewerCertificate: {
         cloudfrontDefaultCertificate: true,
-        acmCertificateArn: props.acmCertificateArn,
-        iamCertificateId: props.iamCertificate,
-        sslSupportMethod: "sni-only",
+        ...(this._domain && {
+          acmCertificateArn: props.acmCertificateArn,
+          iamCertificateId: props.iamCertificate,
+          sslSupportMethod: "sni-only",
+        })
       },
     });
 
@@ -134,7 +136,7 @@ export class Website extends cloud.Website {
       policy: allowDistributionReadOnly.json,
     });
 
-    if (props.hostedZoneId && this._domain) {
+    if (this._domain && props.hostedZoneId) {
       new Route53Record(this, "Route53Record", {
         zoneId: props.hostedZoneId,
         type: "A",

@@ -9,7 +9,7 @@ export interface AwsWebsiteProps extends cloud.WebsiteProps {
    */
   readonly acmCertificateArn?: string;
   /**
-   * IIAM certificate identifier of the custom viewer certificate
+   * IAM certificate identifier of the custom viewer certificate
    */
   readonly iamCertificate?: string;
   readonly hostedZoneId?: string;
