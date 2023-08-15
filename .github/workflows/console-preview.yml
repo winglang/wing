@@ -48,6 +48,7 @@ jobs:
         with:
           message: |
             Console preview environment is available at https://${{env.APP_NAME}}.fly.dev :rocket:
+          comment_tag: Console preview environment
   destroy:
     name: "Destroy"
     runs-on: ubuntu-latest
