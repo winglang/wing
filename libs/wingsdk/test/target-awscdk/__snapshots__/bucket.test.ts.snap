@@ -371,7 +371,7 @@ def submit_response(event: dict, context, response_status: str, error_message: s
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "b9deba0f7dc17e61cf9f7e0fa901af6e57ec811a13882b7048ee9aa75797378d.zip",
+          "S3Key": "<S3Key>",
         },
         "Handler": "index.handler",
         "Role": {
@@ -722,7 +722,7 @@ def submit_response(event: dict, context, response_status: str, error_message: s
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "b9deba0f7dc17e61cf9f7e0fa901af6e57ec811a13882b7048ee9aa75797378d.zip",
+          "S3Key": "<S3Key>",
         },
         "Handler": "index.handler",
         "Role": {
@@ -1095,7 +1095,7 @@ def submit_response(event: dict, context, response_status: str, error_message: s
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "b9deba0f7dc17e61cf9f7e0fa901af6e57ec811a13882b7048ee9aa75797378d.zip",
+          "S3Key": "<S3Key>",
         },
         "Handler": "index.handler",
         "Role": {
@@ -1446,7 +1446,7 @@ def submit_response(event: dict, context, response_status: str, error_message: s
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "b9deba0f7dc17e61cf9f7e0fa901af6e57ec811a13882b7048ee9aa75797378d.zip",
+          "S3Key": "<S3Key>",
         },
         "Handler": "index.handler",
         "Role": {
@@ -1547,7 +1547,7 @@ exports[`bucket with two preflight objects 1`] = `
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "2bc265c5e0569aeb24a6349c15bd54e76e845892376515e036627ab0cc70bb64.zip",
+          "S3Key": "<S3Key>",
         },
         "Handler": "index.handler",
         "Layers": [
@@ -1757,7 +1757,7 @@ exports[`bucket with two preflight objects 1`] = `
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "f8e422c63159c82c409e8254300a3134e020892c27382902d4c8c0a5b35d0a06.zip",
+          "S3Key": "<S3Key>",
         },
         "Description": "/opt/awscli/aws",
       },
@@ -1797,7 +1797,7 @@ exports[`bucket with two preflight objects 1`] = `
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "f8e422c63159c82c409e8254300a3134e020892c27382902d4c8c0a5b35d0a06.zip",
+          "S3Key": "<S3Key>",
         },
         "Description": "/opt/awscli/aws",
       },
