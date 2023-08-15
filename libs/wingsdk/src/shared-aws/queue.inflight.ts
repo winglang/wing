@@ -4,6 +4,7 @@ import {
   PurgeQueueCommand,
   GetQueueAttributesCommand,
   ReceiveMessageCommand,
+  InvalidMessageContents,
 } from "@aws-sdk/client-sqs";
 import { IQueueClient } from "../cloud";
 
@@ -15,11 +16,22 @@ export class QueueClient implements IQueueClient {
 
   public async push(...messages: string[]): Promise<void> {
     const messagePromises = messages.map(async (message) => {
-      const command = new SendMessageCommand({
-        QueueUrl: this.queueUrl,
-        MessageBody: message,
-      });
-      await this.client.send(command);
+      try {
+        const command = new SendMessageCommand({
+          QueueUrl: this.queueUrl,
+          MessageBody: message,
+        });
+        await this.client.send(command);
+      } catch (e) {
+        if (e instanceof InvalidMessageContents) {
+          throw new Error(
+            `The message contains characters outside the allowed set (message=${message}): ${
+              (e as Error).stack
+            })}`
+          );
+        }
+        throw new Error((e as Error).stack);
+      }
     });
 
     await Promise.all(messagePromises);
