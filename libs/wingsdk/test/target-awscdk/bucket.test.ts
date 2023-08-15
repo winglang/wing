@@ -3,10 +3,11 @@ import { test, expect } from "vitest";
 import { Bucket } from "../../src/cloud";
 import * as awscdk from "../../src/target-awscdk";
 import { Testing } from "../../src/testing";
-import { mkdtemp } from "../util";
+import { mkdtemp, awscdkSanitize } from "../util";
 
 const CDK_APP_OPTS = {
   stackName: "my-project",
+  entrypointDir: __dirname,
 };
 
 test("create a bucket", async () => {
@@ -28,7 +29,7 @@ test("create a bucket", async () => {
       },
     })
   );
-  expect(template.toJSON()).toMatchSnapshot();
+  expect(awscdkSanitize(template)).toMatchSnapshot();
 });
 
 test("bucket is public", () => {
@@ -40,7 +41,7 @@ test("bucket is public", () => {
   // THEN
   const template = Template.fromJSON(JSON.parse(output));
   template.resourceCountIs("AWS::S3::Bucket", 1);
-  expect(template.toJSON()).toMatchSnapshot();
+  expect(awscdkSanitize(template)).toMatchSnapshot();
 });
 
 test("bucket with two preflight objects", () => {
@@ -54,7 +55,7 @@ test("bucket with two preflight objects", () => {
   // THEN
   const template = Template.fromJSON(JSON.parse(output));
   template.resourceCountIs("Custom::CDKBucketDeployment", 2);
-  expect(template.toJSON()).toMatchSnapshot();
+  expect(awscdkSanitize(template)).toMatchSnapshot();
 });
 
 test("bucket with onCreate method", () => {
@@ -86,7 +87,7 @@ async handle(event) {
       },
     })
   );
-  expect(template.toJSON()).toMatchSnapshot();
+  expect(awscdkSanitize(template)).toMatchSnapshot();
 });
 
 test("bucket with onDelete method", () => {
@@ -118,7 +119,7 @@ async handle(event) {
       },
     })
   );
-  expect(template.toJSON()).toMatchSnapshot();
+  expect(awscdkSanitize(template)).toMatchSnapshot();
 });
 
 test("bucket with onUpdate method", () => {
@@ -150,7 +151,7 @@ async handle(event) {
       },
     })
   );
-  expect(template.toJSON()).toMatchSnapshot();
+  expect(awscdkSanitize(template)).toMatchSnapshot();
 });
 
 test("bucket with onEvent method", () => {
@@ -182,5 +183,5 @@ async handle(event) {
       },
     })
   );
-  expect(template.toJSON()).toMatchSnapshot();
+  expect(awscdkSanitize(template)).toMatchSnapshot();
 });

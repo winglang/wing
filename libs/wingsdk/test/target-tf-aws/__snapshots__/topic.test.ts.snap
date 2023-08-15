@@ -1,20 +1,20 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`default topic behavior 1`] = `
-"{
-  \\"output\\": {
-    \\"WING_TEST_RUNNER_FUNCTION_ARNS\\": {
-      \\"value\\": \\"[]\\"
-    }
+{
+  "output": {
+    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+      "value": "[]",
+    },
   },
-  \\"resource\\": {
-    \\"aws_sns_topic\\": {
-      \\"Topic\\": {
-        \\"name\\": \\"Topic-c8228fb7\\"
-      }
-    }
-  }
-}"
+  "resource": {
+    "aws_sns_topic": {
+      "Topic": {
+        "name": "Topic-c8228fb7",
+      },
+    },
+  },
+}
 `;
 
 exports[`default topic behavior 2`] = `
@@ -121,20 +121,20 @@ exports[`default topic behavior 2`] = `
 `;
 
 exports[`replace invalid character from queue name 1`] = `
-"{
-  \\"output\\": {
-    \\"WING_TEST_RUNNER_FUNCTION_ARNS\\": {
-      \\"value\\": \\"[]\\"
-    }
+{
+  "output": {
+    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+      "value": "[]",
+    },
   },
-  \\"resource\\": {
-    \\"aws_sns_topic\\": {
-      \\"TheSpectacularTopic\\": {
-        \\"name\\": \\"The-Spectacular-Topic-c8252318\\"
-      }
-    }
-  }
-}"
+  "resource": {
+    "aws_sns_topic": {
+      "TheSpectacularTopic": {
+        "name": "The-Spectacular-Topic-c8252318",
+      },
+    },
+  },
+}
 `;
 
 exports[`replace invalid character from queue name 2`] = `
@@ -241,20 +241,20 @@ exports[`replace invalid character from queue name 2`] = `
 `;
 
 exports[`topic name valid 1`] = `
-"{
-  \\"output\\": {
-    \\"WING_TEST_RUNNER_FUNCTION_ARNS\\": {
-      \\"value\\": \\"[]\\"
-    }
+{
+  "output": {
+    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+      "value": "[]",
+    },
   },
-  \\"resource\\": {
-    \\"aws_sns_topic\\": {
-      \\"The-Spectacular_Topic-01\\": {
-        \\"name\\": \\"The-Spectacular_Topic-01-c828760a\\"
-      }
-    }
-  }
-}"
+  "resource": {
+    "aws_sns_topic": {
+      "The-Spectacular_Topic-01": {
+        "name": "The-Spectacular_Topic-01-c828760a",
+      },
+    },
+  },
+}
 `;
 
 exports[`topic name valid 2`] = `
@@ -376,85 +376,85 @@ return class Handler {
 `;
 
 exports[`topic with subscriber function 2`] = `
-"{
-  \\"output\\": {
-    \\"WING_TEST_RUNNER_FUNCTION_ARNS\\": {
-      \\"value\\": \\"[]\\"
-    }
+{
+  "output": {
+    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+      "value": "[]",
+    },
   },
-  \\"resource\\": {
-    \\"aws_iam_role\\": {
-      \\"Topic-OnMessage-c5395e41_IamRole_6C4D2D29\\": {
-        \\"assume_role_policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":\\\\\\"sts:AssumeRole\\\\\\",\\\\\\"Principal\\\\\\":{\\\\\\"Service\\\\\\":\\\\\\"lambda.amazonaws.com\\\\\\"},\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\"
-      }
+  "resource": {
+    "aws_iam_role": {
+      "Topic-OnMessage-c5395e41_IamRole_6C4D2D29": {
+        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
+      },
     },
-    \\"aws_iam_role_policy\\": {
-      \\"Topic-OnMessage-c5395e41_IamRolePolicy_E008396D\\": {
-        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Action\\\\\\":\\\\\\"none:null\\\\\\",\\\\\\"Resource\\\\\\":\\\\\\"*\\\\\\"}]}\\",
-        \\"role\\": \\"\${aws_iam_role.Topic-OnMessage-c5395e41_IamRole_6C4D2D29.name}\\"
-      }
+    "aws_iam_role_policy": {
+      "Topic-OnMessage-c5395e41_IamRolePolicy_E008396D": {
+        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Effect\\":\\"Allow\\",\\"Action\\":\\"none:null\\",\\"Resource\\":\\"*\\"}]}",
+        "role": "\${aws_iam_role.Topic-OnMessage-c5395e41_IamRole_6C4D2D29.name}",
+      },
     },
-    \\"aws_iam_role_policy_attachment\\": {
-      \\"Topic-OnMessage-c5395e41_IamRolePolicyAttachment_936AE21F\\": {
-        \\"policy_arn\\": \\"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole\\",
-        \\"role\\": \\"\${aws_iam_role.Topic-OnMessage-c5395e41_IamRole_6C4D2D29.name}\\"
-      }
+    "aws_iam_role_policy_attachment": {
+      "Topic-OnMessage-c5395e41_IamRolePolicyAttachment_936AE21F": {
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "\${aws_iam_role.Topic-OnMessage-c5395e41_IamRole_6C4D2D29.name}",
+      },
     },
-    \\"aws_lambda_function\\": {
-      \\"Topic-OnMessage-c5395e41\\": {
-        \\"environment\\": {
-          \\"variables\\": {
-            \\"WING_FUNCTION_NAME\\": \\"Topic-OnMessage-c5395e41-c8eb4431\\"
-          }
+    "aws_lambda_function": {
+      "Topic-OnMessage-c5395e41": {
+        "environment": {
+          "variables": {
+            "WING_FUNCTION_NAME": "Topic-OnMessage-c5395e41-c8eb4431",
+          },
         },
-        \\"function_name\\": \\"Topic-OnMessage-c5395e41-c8eb4431\\",
-        \\"handler\\": \\"index.handler\\",
-        \\"publish\\": true,
-        \\"role\\": \\"\${aws_iam_role.Topic-OnMessage-c5395e41_IamRole_6C4D2D29.arn}\\",
-        \\"runtime\\": \\"nodejs18.x\\",
-        \\"s3_bucket\\": \\"\${aws_s3_bucket.Code.bucket}\\",
-        \\"s3_key\\": \\"\${aws_s3_object.Topic-OnMessage-c5395e41_S3Object_7A3438DE.key}\\",
-        \\"timeout\\": 30,
-        \\"vpc_config\\": {
-          \\"security_group_ids\\": [],
-          \\"subnet_ids\\": []
-        }
-      }
+        "function_name": "Topic-OnMessage-c5395e41-c8eb4431",
+        "handler": "index.handler",
+        "publish": true,
+        "role": "\${aws_iam_role.Topic-OnMessage-c5395e41_IamRole_6C4D2D29.arn}",
+        "runtime": "nodejs18.x",
+        "s3_bucket": "\${aws_s3_bucket.Code.bucket}",
+        "s3_key": "\${aws_s3_object.Topic-OnMessage-c5395e41_S3Object_7A3438DE.key}",
+        "timeout": 30,
+        "vpc_config": {
+          "security_group_ids": [],
+          "subnet_ids": [],
+        },
+      },
     },
-    \\"aws_lambda_permission\\": {
-      \\"Topic-OnMessage-c5395e41_InvokePermission-c8228fb70d825c2a5610c610e5246d5313ea6bd1a2_DC3A27DA\\": {
-        \\"action\\": \\"lambda:InvokeFunction\\",
-        \\"function_name\\": \\"\${aws_lambda_function.Topic-OnMessage-c5395e41.function_name}\\",
-        \\"principal\\": \\"sns.amazonaws.com\\",
-        \\"source_arn\\": \\"\${aws_sns_topic.Topic.arn}\\"
-      }
+    "aws_lambda_permission": {
+      "Topic-OnMessage-c5395e41_InvokePermission-c8228fb70d825c2a5610c610e5246d5313ea6bd1a2_DC3A27DA": {
+        "action": "lambda:InvokeFunction",
+        "function_name": "\${aws_lambda_function.Topic-OnMessage-c5395e41.function_name}",
+        "principal": "sns.amazonaws.com",
+        "source_arn": "\${aws_sns_topic.Topic.arn}",
+      },
     },
-    \\"aws_s3_bucket\\": {
-      \\"Code\\": {
-        \\"bucket_prefix\\": \\"code-c84a50b1-\\"
-      }
+    "aws_s3_bucket": {
+      "Code": {
+        "bucket_prefix": "code-c84a50b1-",
+      },
     },
-    \\"aws_s3_object\\": {
-      \\"Topic-OnMessage-c5395e41_S3Object_7A3438DE\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.Code.bucket}\\",
-        \\"key\\": \\"<key>\\",
-        \\"source\\": \\"<source>\\"
-      }
+    "aws_s3_object": {
+      "Topic-OnMessage-c5395e41_S3Object_7A3438DE": {
+        "bucket": "\${aws_s3_bucket.Code.bucket}",
+        "key": "<key>",
+        "source": "<source>",
+      },
     },
-    \\"aws_sns_topic\\": {
-      \\"Topic\\": {
-        \\"name\\": \\"Topic-c8228fb7\\"
-      }
+    "aws_sns_topic": {
+      "Topic": {
+        "name": "Topic-c8228fb7",
+      },
     },
-    \\"aws_sns_topic_subscription\\": {
-      \\"Topic_Topic-TopicSubscription-c5395e41_5CA277EA\\": {
-        \\"endpoint\\": \\"\${aws_lambda_function.Topic-OnMessage-c5395e41.arn}\\",
-        \\"protocol\\": \\"lambda\\",
-        \\"topic_arn\\": \\"\${aws_sns_topic.Topic.arn}\\"
-      }
-    }
-  }
-}"
+    "aws_sns_topic_subscription": {
+      "Topic_Topic-TopicSubscription-c5395e41_5CA277EA": {
+        "endpoint": "\${aws_lambda_function.Topic-OnMessage-c5395e41.arn}",
+        "protocol": "lambda",
+        "topic_arn": "\${aws_sns_topic.Topic.arn}",
+      },
+    },
+  },
+}
 `;
 
 exports[`topic with subscriber function 3`] = `
