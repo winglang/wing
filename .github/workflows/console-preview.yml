@@ -43,7 +43,7 @@ jobs:
           fi
           flyctl deploy . --config ./apps/wing-console/console/app/preview/fly.toml --app "$APP_NAME" --image-label latest --vm-memory 512 --strategy immediate
           flyctl scale count 1 --yes --app "$APP_NAME"
-      - name: Create a preview comment
+      - name: Post preview comment
         uses: thollander/actions-comment-pull-request@v2
         with:
           message: |
@@ -61,6 +61,6 @@ jobs:
 
       - name: Install flyctl
         uses: superfly/flyctl-actions/setup-flyctl@master
-      - name: Deploy to Fly.io
+      - name: Delete preview environment
         run: |
           flyctl apps destroy "$APP_NAME" -y
