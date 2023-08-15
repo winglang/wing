@@ -100,12 +100,18 @@ export const createConsoleServer = async ({
   });
 
   const compiler = createCompiler(wingfile);
+  let isStarting = false;
+  let isStopping = false;
+
   const simulator = createSimulator();
   if (onTrace) {
     simulator.on("trace", onTrace);
   }
   compiler.on("compiled", ({ simfile }) => {
-    simulator.start(simfile);
+    if (!isStarting) {
+      simulator.start(simfile);
+      isStarting = true;
+    }
   });
 
   let lastErrorMessage = "";
@@ -151,6 +157,7 @@ export const createConsoleServer = async ({
   simulator.on("started", () => {
     appState = "success";
     invalidateQuery(undefined);
+    isStarting = false;
   });
   simulator.on("error", (error) => {
     lastErrorMessage = error.message;
@@ -229,8 +236,12 @@ export const createConsoleServer = async ({
     testsStateManager,
   });
 
-  const close = async () => {
+  const close = async (callback?: () => void) => {
+    if (isStopping) {
+      return;
+    }
     try {
+      isStopping = true;
       updater?.removeEventListener("status-change", invalidateUpdaterStatus);
       config?.removeEventListener("config-change", invalidateConfig);
       await Promise.allSettled([
@@ -240,8 +251,12 @@ export const createConsoleServer = async ({
       ]);
     } catch (error) {
       log.error(error);
+    } finally {
+      if (typeof callback === "function") callback();
     }
   };
+
+  process.on("SIGINT", () => close(() => process.exit(0)));
 
   return {
     port,
