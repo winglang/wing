@@ -47,7 +47,7 @@ jobs:
         uses: thollander/actions-comment-pull-request@v2
         with:
           message: |
-            A console preview environment is available at https://${{env.APP_NAME}}.fly.dev :rocket:
+            Console preview environment is available at https://${{env.APP_NAME}}.fly.dev :rocket:
   destroy:
     name: "Destroy"
     runs-on: ubuntu-latest
