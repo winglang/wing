@@ -2,6 +2,3 @@
 WASI_SDK = { value = ".cargo/wasi-sdk-19.0", relative = true }
 CC_wasm32_wasi = { value = ".cargo/wasi-sdk-19.0/bin/clang", relative = true }
 AR_wasm32_wasi = { value = ".cargo/wasi-sdk-19.0/bin/ar", relative = true }
-
-[net]
-git-fetch-with-cli = true 

@@ -63,4 +63,6 @@ jobs:
         uses: superfly/flyctl-actions/setup-flyctl@master
       - name: Delete preview environment
         run: |
-          flyctl apps destroy "$APP_NAME" -y
+          if flyctl status --app "$APP_NAME"; then
+            flyctl apps destroy "$APP_NAME" -y
+          fi
