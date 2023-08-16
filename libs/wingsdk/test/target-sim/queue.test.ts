@@ -1,12 +1,15 @@
 import { test, expect } from "vitest";
-import { listMessages, treeJsonOf } from "./util";
+import {
+  listMessages,
+  treeJsonOf,
+  waitUntilResourcesDone,
+  waitUntilTrace,
+} from "./util";
 import * as cloud from "../../src/cloud";
 import { Duration } from "../../src/std";
 import { QUEUE_TYPE } from "../../src/target-sim/schema-resources";
 import { Testing } from "../../src/testing";
 import { SimApp } from "../sim-app";
-
-const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 const INFLIGHT_CODE = `
 async handle(message) {
@@ -49,11 +52,10 @@ test("queue with one subscriber, default batch size of 1", async () => {
   const queueClient = s.getResource("/my_queue") as cloud.IQueueClient;
 
   // WHEN
-  await queueClient.push("A");
-  await queueClient.push("B");
-
-  // TODO: queueClient.awaitMessages(2) or queueClient.untilEmpty() or something
-  await sleep(200);
+  void queueClient.push("A");
+  await waitUntilResourcesDone(s, handler);
+  void queueClient.push("B");
+  await waitUntilResourcesDone(s, handler);
 
   // THEN
   await s.stop();
@@ -104,7 +106,8 @@ test("queue with one subscriber, batch size of 5", async () => {
   const onDeployHandler = Testing.makeHandler(
     app,
     "OnDeployHandler",
-    `async handle() {
+    `\
+async handle() {
   await this.queue.push("A");
   await this.queue.push("B");
   await this.queue.push("C");
@@ -124,7 +127,7 @@ test("queue with one subscriber, batch size of 5", async () => {
   const s = await app.startSimulator();
 
   // WHEN
-  await sleep(200);
+  await waitUntilResourcesDone(s, handler);
 
   // THEN
   await s.stop();
@@ -143,17 +146,15 @@ test("messages are requeued if the function fails after timeout", async () => {
   queue.setConsumer(handler);
   const s = await app.startSimulator();
 
-  // warm up the function so timing is more predictable
-  const fn = s.getResource(
-    "root/my_queue/my_queue-SetConsumer-e645076f"
-  ) as cloud.IFunctionClient;
-  await fn.invoke(JSON.stringify({ messages: [] }));
-
   // WHEN
   const queueClient = s.getResource("/my_queue") as cloud.IQueueClient;
-  await queueClient.push("BAD MESSAGE");
-
-  await sleep(1300);
+  void queueClient.push("BAD MESSAGE");
+  await waitUntilTrace(
+    s,
+    (trace) =>
+      trace.data.message ==
+      "1 messages pushed back to queue after visibility timeout."
+  );
 
   // THEN
   await s.stop();
@@ -174,22 +175,20 @@ test("messages are not requeued if the function fails before timeout", async () 
   const app = new SimApp();
   const handler = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
   const queue = cloud.Queue._newQueue(app, "my_queue", {
-    timeout: Duration.fromSeconds(1),
+    timeout: Duration.fromSeconds(30),
   });
   queue.setConsumer(handler);
   const s = await app.startSimulator();
 
-  // warm up the function so timing is more predictable
-  const fn = s.getResource(
-    "root/my_queue/my_queue-SetConsumer-e645076f"
-  ) as cloud.IFunctionClient;
-  await fn.invoke(JSON.stringify({ messages: [] }));
-
   // WHEN
   const queueClient = s.getResource("/my_queue") as cloud.IQueueClient;
-  await queueClient.push("BAD MESSAGE");
-
-  await sleep(300);
+  void queueClient.push("BAD MESSAGE");
+  await waitUntilTrace(
+    s,
+    (trace) =>
+      trace.data.message ==
+      "Subscriber error - returning 1 messages to queue: ERROR"
+  );
 
   // THEN
   await s.stop();
@@ -216,23 +215,20 @@ test("messages are not requeued if the function fails after retention timeout", 
   const app = new SimApp();
   const handler = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
   const queue = cloud.Queue._newQueue(app, "my_queue", {
-    timeout: Duration.fromSeconds(2),
     retentionPeriod: Duration.fromSeconds(1),
   });
   queue.setConsumer(handler);
   const s = await app.startSimulator();
 
-  // warm up the function so timing is more predictable
-  const fn = s.getResource(
-    "root/my_queue/my_queue-SetConsumer-e645076f"
-  ) as cloud.IFunctionClient;
-  await fn.invoke(JSON.stringify({ messages: [] }));
-
   // WHEN
   const queueClient = s.getResource("/my_queue") as cloud.IQueueClient;
-  await queueClient.push("BAD MESSAGE");
-
-  await sleep(300);
+  void queueClient.push("BAD MESSAGE");
+  await waitUntilTrace(
+    s,
+    (trace) =>
+      trace.data.message ==
+      "Subscriber error - returning 1 messages to queue: ERROR"
+  );
 
   // THEN
   await s.stop();

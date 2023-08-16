@@ -1,14 +1,16 @@
 import { Construct } from "constructs";
 import { test, expect } from "vitest";
+import { waitUntilQueueEmpty, waitUntilResourcesDone } from "./util";
 import * as cloud from "../../src/cloud";
+import { IResource } from "../../src/std";
 import { Testing } from "../../src/testing";
 import { SimApp } from "../sim-app";
-
-const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 test("can create sequential files in a bucket", async () => {
   // GIVEN
   class HelloWorld extends Construct {
+    public readonly processor: IResource;
+
     constructor(scope: Construct, id: string) {
       super(scope, id);
 
@@ -17,7 +19,7 @@ test("can create sequential files in a bucket", async () => {
       });
       const bucket = cloud.Bucket._newBucket(this, "Bucket");
       const queue = cloud.Queue._newQueue(this, "Queue");
-      const processor = Testing.makeHandler(
+      this.processor = Testing.makeHandler(
         this,
         "Processor",
         `async handle(event) {
@@ -36,12 +38,12 @@ test("can create sequential files in a bucket", async () => {
           },
         }
       );
-      queue.setConsumer(processor);
+      queue.setConsumer(this.processor);
     }
   }
 
   const app = new SimApp();
-  new HelloWorld(app, "HelloWorld");
+  const helloWorld = new HelloWorld(app, "HelloWorld");
 
   const s = await app.startSimulator();
 
@@ -49,9 +51,9 @@ test("can create sequential files in a bucket", async () => {
 
   // WHEN
   await pusher.push("kachow!");
-  await sleep(500);
+  await waitUntilQueueEmpty(pusher);
   await pusher.push("zoom!");
-  await sleep(500);
+  await waitUntilResourcesDone(s, helloWorld.processor);
 
   // THEN
   const bucket = s.getResource("/HelloWorld/Bucket") as cloud.IBucketClient;
