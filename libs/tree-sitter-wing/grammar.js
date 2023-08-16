@@ -276,6 +276,7 @@ module.exports = grammar({
       seq(
         // TODO: support "if let var"
         "if let",
+        optional(field("reassignable", $.reassignable)),
         field("name", $.identifier),
         "=",
         field("value", $.expression),
