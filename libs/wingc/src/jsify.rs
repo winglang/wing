@@ -26,7 +26,7 @@ use crate::{
 	files::Files,
 	type_check::{
 		lifts::{Liftable, Lifts},
-		resolve_super_method,
+		resolve_super_method, resolve_user_defined_type,
 		symbol_env::SymbolEnv,
 		ClassLike, Type, TypeRef, Types, VariableKind, CLASS_INFLIGHT_INIT_NAME,
 	},
@@ -240,9 +240,9 @@ impl<'a> JSifier<'a> {
 				property,
 				optional_accessor,
 			} => self.jsify_expression(object, ctx) + (if *optional_accessor { "?." } else { "." }) + &property.to_string(),
-			Reference::TypeReference(udt) => self.jsify_user_defined_type(&udt),
-			Reference::TypeMember { typeobject, property } => {
-				let typename = self.jsify_expression(typeobject, ctx);
+			// Reference::TypeReference(udt) => self.jsify_user_defined_type(&udt),
+			Reference::TypeMember { type_name, property } => {
+				let typename = self.jsify_user_defined_type(type_name);
 				typename + "." + &property.to_string()
 			}
 		}
@@ -365,7 +365,8 @@ impl<'a> JSifier<'a> {
 		}
 	}
 
-	fn jsify_user_defined_type(&self, udt: &UserDefinedType) -> String {
+	pub fn jsify_user_defined_type(&self, udt: &UserDefinedType) -> String {
+		// TODO: lookup in ctx.lifts.token_for_liftable(&Liftable::Type(udt)) and see if we need to replace the type with a lifted token (see jsify_expression)
 		udt.full_path_str()
 	}
 
@@ -420,7 +421,7 @@ impl<'a> JSifier<'a> {
 				// user-defined types), we simply instantiate the type directly (maybe in the future we will
 				// allow customizations of user-defined types as well, but for now we don't).
 
-				let ctor = self.jsify_expression(class, ctx);
+				let ctor = self.jsify_user_defined_type(class);
 
 				let scope = if is_preflight_class && class_type.std_construct_args {
 					if let Some(scope) = obj_scope {
@@ -790,7 +791,8 @@ impl<'a> JSifier<'a> {
 
 	fn jsify_statement(&self, env: &SymbolEnv, statement: &Stmt, ctx: &mut JSifyContext) -> CodeMaker {
 		CompilationContext::set(CompilationPhase::Jsifying, &statement.span);
-		match &statement.kind {
+		ctx.visit_ctx.push_stmt(statement.idx);
+		let code = match &statement.kind {
 			StmtKind::Bring { source, identifier } => match source {
 				BringSource::BuiltinModule(name) => CodeMaker::one_line(format!("const {} = {}.{};", name, STDLIB, name)),
 				BringSource::JsiiModule(name) => CodeMaker::one_line(format!(
@@ -825,11 +827,11 @@ impl<'a> JSifier<'a> {
 				type_: _,
 			} => {
 				let initial_value = self.jsify_expression(initial_value, ctx);
-				return if *reassignable {
+				if *reassignable {
 					CodeMaker::one_line(format!("let {var_name} = {initial_value};"))
 				} else {
 					CodeMaker::one_line(format!("const {var_name} = {initial_value};"))
-				};
+				}
 			}
 			StmtKind::ForLoop {
 				iterator,
@@ -1022,7 +1024,9 @@ impl<'a> JSifier<'a> {
 				code
 			}
 			StmtKind::CompilerDebugEnv => CodeMaker::default(),
-		}
+		};
+		ctx.visit_ctx.pop_stmt();
+		code
 	}
 
 	fn jsify_enum(&self, values: &IndexSet<Symbol>) -> CodeMaker {
@@ -1171,9 +1175,9 @@ impl<'a> JSifier<'a> {
 
 		// default base class for preflight classes is `core.Resource`
 		let extends = if let Some(parent) = &class.parent {
-			let base = parent.as_type_reference().expect("resolve parent type");
+			//let base = parent.as_type_reference().expect("resolve parent type");
 
-			format!(" extends {}", base)
+			format!(" extends {}", self.jsify_user_defined_type(parent))
 		} else {
 			format!(" extends {}", STDLIB_CORE_RESOURCE)
 		};
@@ -1337,7 +1341,7 @@ impl<'a> JSifier<'a> {
 		class_code.open(format!(
 			"class {name}{} {{",
 			if let Some(parent) = &class.parent {
-				format!(" extends {}", self.jsify_expression(&parent, &mut ctx))
+				format!(" extends {}", self.jsify_user_defined_type(&parent))
 			} else {
 				"".to_string()
 			}
@@ -1413,7 +1417,12 @@ impl<'a> JSifier<'a> {
 		};
 
 		let parent_fields = if let Some(parent) = &class.parent {
-			let parent_type = self.types.get_expr_type(parent);
+			let parent_type = resolve_user_defined_type(
+				parent,
+				ctx.visit_ctx.current_env().expect("an env"),
+				ctx.visit_ctx.current_stmt_idx(),
+			)
+			.expect("resolved type");
 			if let Some(parent_lifts) = &parent_type.as_class().unwrap().lifts {
 				parent_lifts.lifted_fields().keys().map(|f| f.clone()).collect_vec()
 			} else {

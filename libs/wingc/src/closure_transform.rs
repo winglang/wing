@@ -287,7 +287,7 @@ impl Fold for ClosureTransformer {
 				// ```
 				let new_class_instance = Expr::new(
 					ExprKind::New(NewExpr {
-						class: Box::new(class_udt.to_expression()),
+						class: class_udt,
 						arg_list: ArgList {
 							named_args: IndexMap::new(),
 							pos_args: vec![],
@@ -348,9 +348,7 @@ impl<'a> Fold for RenameThisTransformer<'a> {
 					Reference::Identifier(ident)
 				}
 			}
-			Reference::InstanceMember { .. } | Reference::TypeMember { .. } | Reference::TypeReference(_) => {
-				fold::fold_reference(self, node)
-			}
+			Reference::InstanceMember { .. } | Reference::TypeMember { .. } => fold::fold_reference(self, node),
 		}
 	}
 }

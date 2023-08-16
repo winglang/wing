@@ -6,7 +6,10 @@ use crate::diagnostic::WingSpan;
 use crate::docs::Documented;
 use crate::lsp::sync::PROJECT_DATA;
 use crate::type_check::symbol_env::LookupResult;
-use crate::type_check::{resolve_super_method, ClassLike, Type, Types, CLASS_INFLIGHT_INIT_NAME, CLASS_INIT_NAME};
+use crate::type_check::{
+	resolve_super_method, resolve_user_defined_type, ClassLike, Type, TypeRef, Types, CLASS_INFLIGHT_INIT_NAME,
+	CLASS_INIT_NAME,
+};
 use crate::visit::{self, Visit};
 use crate::wasm_util::WASM_RETURN_ERROR;
 use crate::wasm_util::{ptr_to_string, string_to_combined_ptr};
@@ -74,12 +77,7 @@ impl<'a> HoverVisitor<'a> {
 		}
 	}
 
-	fn visit_reference_with_member(&mut self, object: &'a Expr, property: &'a Symbol) {
-		if object.span.contains(&self.position) {
-			self.visit_expr(object);
-			return;
-		}
-		let obj_type = self.types.get_expr_type(object);
+	fn visit_type_with_member(&mut self, obj_type: TypeRef, property: &'a Symbol) {
 		if property.span.contains(&self.position) {
 			let new_span = self.current_expr.unwrap().span.clone();
 			match &**obj_type.maybe_unwrap_option() {
@@ -344,21 +342,36 @@ impl<'a> Visit<'a> for HoverVisitor<'a> {
 					self.found = Some((sym.span.clone(), self.lookup_docs(&sym.name, None)));
 				}
 			}
-			Reference::TypeReference(t) => {
-				if t.span.contains(&self.position) {
-					// Only lookup string up to the position
-					let mut partial_path = vec![];
-					t.full_path().iter().for_each(|p| {
-						if p.span.start <= self.position.into() {
-							partial_path.push(p.name.clone());
-						}
-					});
-					let lookup_str = partial_path.join(".");
-					self.found = Some((t.span.clone(), self.lookup_docs(&lookup_str, None)));
+			// TODO: add a visit_user_defined_type
+			// Reference::TypeReference(t) => {
+			// 	if t.span.contains(&self.position) {
+			// 		// Only lookup string up to the position
+			// 		let mut partial_path = vec![];
+			// 		t.full_path().iter().for_each(|p| {
+			// 			if p.span.start <= self.position.into() {
+			// 				partial_path.push(p.name.clone());
+			// 			}
+			// 		});
+			// 		let lookup_str = partial_path.join(".");
+			// 		self.found = Some((t.span.clone(), self.lookup_docs(&lookup_str, None)));
+			// 	}
+			// }
+			Reference::InstanceMember { object, property, .. } => {
+				if object.span.contains(&self.position) {
+					self.visit_expr(object)
+				} else {
+					self.visit_type_with_member(self.types.get_expr_type(object), property)
 				}
 			}
-			Reference::InstanceMember { object, property, .. } => self.visit_reference_with_member(object, property),
-			Reference::TypeMember { typeobject, property } => self.visit_reference_with_member(&typeobject, property),
+			Reference::TypeMember { type_name, property } => self.visit_type_with_member(
+				resolve_user_defined_type(
+					type_name,
+					&self.types.get_scope_env(self.current_scope),
+					self.current_statement_index,
+				)
+				.unwrap_or(self.types.error()),
+				property,
+			),
 		}
 
 		visit::visit_reference(self, node);

@@ -91,9 +91,8 @@ pub enum VariableKind {
 	/// a class member (or an enum member)
 	StaticMember,
 
-	/// a type (e.g. `std.Json`)
-	Type,
-
+	// /// a type (e.g. `std.Json`)
+	// Type,
 	/// an error placeholder
 	Error,
 }
@@ -1755,20 +1754,22 @@ impl<'a> TypeChecker<'a> {
 					obj_scope,
 				} = new_expr;
 				// Type check everything
-				let class_type = self.type_check_exp(&class, env).0;
+				let class_type = self
+					.resolve_user_defined_type(class, env, self.statement_idx)
+					.unwrap_or_else(|e| self.type_error(e));
 				let obj_scope_type = obj_scope.as_ref().map(|x| self.type_check_exp(x, env).0);
 				let obj_id_type = obj_id.as_ref().map(|x| self.type_check_exp(x, env).0);
 				let arg_list_types = self.type_check_arg_list(arg_list, env);
 
-				let ExprKind::Reference(ref r) = class.kind else {
-					self.spanned_error(exp,"Must be a reference to a class");
-					return (self.types.error(), Phase::Independent);
-				};
+				// let ExprKind::Reference(ref r) = class.kind else {
+				// 	self.spanned_error(exp,"Must be a reference to a class");
+				// 	return (self.types.error(), Phase::Independent);
+				// };
 
-				let Reference::TypeReference(_) = r else {
-					self.spanned_error(exp,"Must be a type reference to a class");
-					return (self.types.error(), Phase::Independent);
-				};
+				// let Reference::TypeReference(_) = r else {
+				// 	self.spanned_error(exp,"Must be a type reference to a class");
+				// 	return (self.types.error(), Phase::Independent);
+				// };
 
 				// Lookup the class's type in the env
 				let (class_env, class_symbol) = match *class_type {
@@ -4056,15 +4057,14 @@ impl<'a> TypeChecker<'a> {
 						_ => return None,
 					}
 				}
-				Reference::TypeReference(type_) => {
-					return Some(type_.clone());
-				}
-				Reference::TypeMember { typeobject, property } => {
+				// Reference::TypeReference(type_) => {
+				// 	return Some(type_.clone());
+				// }
+				Reference::TypeMember { type_name, property } => {
 					path.push(property.clone());
-					current_reference = match &typeobject.kind {
-						ExprKind::Reference(r) => r,
-						_ => return None,
-					}
+					type_name.fields.iter().rev().for_each(|f| path.push(f.clone()));
+					path.push(type_name.root.clone());
+					break;
 				}
 			}
 		}
@@ -4161,7 +4161,7 @@ impl<'a> TypeChecker<'a> {
 					// We can't get here twice, we can safely assume that if we're here the `object` part of the reference doesn't have and evaluated type yet.
 					// Create a type reference out of this nested reference and call ourselves again
 					let new_ref = Reference::TypeMember {
-						typeobject: Box::new(user_type_annotation.to_expression()),
+						type_name: user_type_annotation,
 						property: property.clone(),
 					};
 					// Replace the reference with the new one, this is unsafe because `reference` isn't mutable and theoretically someone may
@@ -4229,41 +4229,43 @@ impl<'a> TypeChecker<'a> {
 
 				(property_variable, property_phase)
 			}
-			Reference::TypeReference(udt) => {
-				let result = self.resolve_user_defined_type(udt, env, self.statement_idx);
-				let t = match result {
-					Err(e) => return self.spanned_error_with_var(udt, e.message),
-					Ok(t) => t,
-				};
+			// Reference::TypeReference(udt) => {
+			// 	let result = self.resolve_user_defined_type(udt, env, self.statement_idx);
+			// 	let t = match result {
+			// 		Err(e) => return self.spanned_error_with_var(udt, e.message),
+			// 		Ok(t) => t,
+			// 	};
 
-				let phase = if let Some(c) = t.as_class() {
-					c.phase
-				} else {
-					Phase::Independent
-				};
+			// 	let phase = if let Some(c) = t.as_class() {
+			// 		c.phase
+			// 	} else {
+			// 		Phase::Independent
+			// 	};
 
-				(
-					VariableInfo {
-						name: Symbol::global(udt.full_path_str()),
-						type_: t,
-						reassignable: false,
-						phase,
-						kind: VariableKind::Type,
-						docs: None,
-					},
-					phase,
-				)
-			}
-			Reference::TypeMember { typeobject, property } => {
-				let (type_, _) = self.type_check_exp(typeobject, env);
+			// 	(
+			// 		VariableInfo {
+			// 			name: Symbol::global(udt.full_path_str()),
+			// 			type_: t,
+			// 			reassignable: false,
+			// 			phase,
+			// 			kind: VariableKind::Type,
+			// 			docs: None,
+			// 		},
+			// 		phase,
+			// 	)
+			// }
+			Reference::TypeMember { type_name, property } => {
+				let type_ = self
+					.resolve_user_defined_type(type_name, env, self.statement_idx)
+					.unwrap_or_else(|e| self.type_error(e));
 
-				let ExprKind::Reference(typeref) = &typeobject.kind else {
-					return self.spanned_error_with_var(typeobject, "Expecting a reference");
-				};
+				// let ExprKind::Reference(typeref) = &typeobject.kind else {
+				// 	return self.spanned_error_with_var(typeobject, "Expecting a reference");
+				// };
 
-				let Reference::TypeReference(_) = typeref else {
-					return self.spanned_error_with_var(typeobject, "Expecting a reference to a type");
-				};
+				// let Reference::TypeReference(_) = typeref else {
+				// 	return self.spanned_error_with_var(typeobject, "Expecting a reference to a type");
+				// };
 
 				match *type_ {
 					Type::Enum(ref e) => {
@@ -4494,12 +4496,12 @@ impl<'a> TypeChecker<'a> {
 
 	fn extract_parent_class(
 		&mut self,
-		parent_expr: Option<&Expr>,
+		parent: Option<&UserDefinedType>,
 		phase: Phase,
 		name: &Symbol,
 		env: &mut SymbolEnv,
 	) -> (Option<TypeRef>, Option<SymbolEnvRef>) {
-		let Some(parent_expr) = parent_expr else  {
+		let Some(parent) = parent else  {
 			if phase == Phase::Preflight {
 				// if this is a preflight and we don't have a parent, then we implicitly set it to `std.Resource`
 				let t = self.types.resource_base_type();
@@ -4510,19 +4512,20 @@ impl<'a> TypeChecker<'a> {
 			}
 		};
 
-		let (parent_type, _) = self.type_check_exp(&parent_expr, env);
+		let parent_type = self
+			.resolve_user_defined_type(parent, env, self.statement_idx)
+			.unwrap_or_else(|e| {
+				self.type_error(e);
+				self.types.error()
+			});
 
 		// bail out if we could not resolve the parent type
 		if parent_type.is_unresolved() {
 			return (None, None);
 		}
 
-		// Safety: we return from the function above so parent_udt cannot be None
-		let parent_udt = parent_expr.as_type_reference().unwrap();
-
-		if &parent_udt.root == name && parent_udt.fields.is_empty() {
-			self.spanned_error(parent_udt, "Class cannot extend itself".to_string());
-			self.types.assign_type_to_expr(parent_expr, self.types.error(), phase);
+		if &parent.root == name && parent.fields.is_empty() {
+			self.spanned_error(parent, "Class cannot extend itself".to_string());
 			return (None, None);
 		}
 
@@ -4535,17 +4538,15 @@ impl<'a> TypeChecker<'a> {
 						"Class \"{}\" is an {} class and cannot extend {} class \"{}\"",
 						name, phase, parent_class.phase, parent_class.name
 					),
-					span: Some(parent_expr.span.clone()),
+					span: Some(parent.span.clone()),
 				});
-				self.types.assign_type_to_expr(parent_expr, self.types.error(), phase);
 				(None, None)
 			}
 		} else {
 			report_diagnostic(Diagnostic {
-				message: format!("Expected \"{}\" to be a class", parent_udt),
-				span: Some(parent_expr.span.clone()),
+				message: format!("Expected \"{}\" to be a class", parent),
+				span: Some(parent.span.clone()),
 			});
-			self.types.assign_type_to_expr(parent_expr, self.types.error(), phase);
 			(None, None)
 		}
 	}

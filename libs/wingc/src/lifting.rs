@@ -28,17 +28,17 @@ impl<'a> LiftVisitor<'a> {
 		}
 	}
 
-	fn is_self_type_reference(&self, node: &Expr) -> bool {
-		let Some(current_class_udt) = self.ctx.current_class() else {
-			return false;
-		};
+	// fn is_self_type_reference(&self, node: &Expr) -> bool {
+	// 	let Some(current_class_udt) = self.ctx.current_class() else {
+	// 		return false;
+	// 	};
 
-		let Some(udt) = node.as_type_reference() else {
-			return false;
-		};
+	// 	let Some(udt) = node.as_type_reference() else {
+	// 		return false;
+	// 	};
 
-		udt.full_path_str() == current_class_udt.full_path_str()
-	}
+	// 	udt.full_path_str() == current_class_udt.full_path_str()
+	// }
 
 	fn is_defined_in_current_env(&self, fullname: &str, span: &WingSpan) -> bool {
 		// if the symbol is defined later in the current environment, it means we can't capture a
@@ -77,7 +77,7 @@ impl<'a> LiftVisitor<'a> {
 
 		let (fullname, span) = match r {
 			Reference::Identifier(ref symb) => (symb.name.clone(), symb.span.clone()),
-			Reference::TypeReference(ref t) => (t.full_path_str(), t.span.clone()),
+			//Reference::TypeReference(ref t) => (t.full_path_str(), t.span.clone()),
 			_ => return false,
 		};
 
@@ -174,10 +174,10 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 
 		// if this expression represents the current class, no need to capture it (it is by definition
 		// available in the current scope)
-		if self.is_self_type_reference(&node) {
-			visit::visit_expr(self, node);
-			return;
-		}
+		// if self.is_self_type_reference(&node) {
+		// 	visit::visit_expr(self, node);
+		// 	return;
+		// }
 
 		//---------------
 		// LIFT
@@ -238,6 +238,8 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 		visit::visit_expr(self, node);
 	}
 
+	// TODO: implement visit_user_defined_type and capture the type if it needs to be captured (see `should_capture_expr` and TypeReference logic)
+
 	// State Tracking
 
 	fn visit_function_definition(&mut self, node: &'a FunctionDefinition) {
@@ -270,7 +272,7 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 			}
 			visit::visit_function_definition(self, &node.initializer);
 			if let Some(parent) = &node.parent {
-				self.visit_expr(&parent);
+				self.visit_user_defined_type(&parent);
 			}
 			for interface in node.implements.iter() {
 				self.visit_user_defined_type(&interface);
@@ -300,7 +302,10 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 
 		if let Some(parent) = &node.parent {
 			let mut lifts = self.lifts_stack.pop().unwrap();
-			lifts.capture(&Liftable::Expr(parent.id), &self.jsify_expr(&parent, Phase::Inflight));
+			lifts.capture(
+				&Liftable::Type(parent.clone()),
+				&self.jsify.jsify_user_defined_type(&parent),
+			);
 			self.lifts_stack.push(lifts);
 		}
 
