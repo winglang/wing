@@ -150,25 +150,22 @@ export const buildTheme = (color?: string): Theme => {
   }
   const theme: Theme = {
     ...DefaultTheme,
-    bg1: `bg-[${computeColor(color, 1.2)}] dark:bg-[${computeColor(
+    bg1: `bg-[${computeColor(color, 1.4)}] dark:bg-[${computeColor(
+      color,
+      1.4,
+    )}]`,
+    bg2: `bg-[${computeColor(color, 1.2)}] dark:bg-[${computeColor(
       color,
       1.2,
     )}]`,
-
-    bg2: `bg-[${computeColor(color, 1.1)}] dark:bg-[${computeColor(
-      color,
-      1.1,
-    )}]`,
-
     bg3: `bg-[${computeColor(color)}] dark:bg-[${computeColor(color)}]`,
-
     bg4: `bg-[${computeColor(color, 0.8)}] dark:bg-[${computeColor(
       color,
       0.8,
     )}]`,
-    bgInput: `bg-[${computeColor(color, 0.9)}] dark:bg-[${computeColor(
+    bgInput: `bg-[${computeColor(color, 0.8)}] dark:bg-[${computeColor(
       color,
-      1.1,
+      1.2,
     )}]`,
   };
 
