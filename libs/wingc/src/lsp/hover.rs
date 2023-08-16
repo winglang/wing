@@ -1,6 +1,6 @@
 use crate::ast::{
 	CalleeKind, Class, Expr, ExprKind, FunctionBody, FunctionDefinition, Phase, Reference, Scope, Stmt, StmtKind, Symbol,
-	TypeAnnotation, TypeAnnotationKind, UserDefinedType,
+	UserDefinedType,
 };
 use crate::diagnostic::WingSpan;
 use crate::docs::Documented;

@@ -1,7 +1,5 @@
 use crate::{
-	ast::{
-		Class, Expr, ExprKind, FunctionBody, FunctionDefinition, Phase, Reference, Scope, Stmt, Symbol, UserDefinedType,
-	},
+	ast::{Class, Expr, ExprKind, FunctionBody, FunctionDefinition, Phase, Reference, Scope, Stmt, UserDefinedType},
 	comp_ctx::{CompilationContext, CompilationPhase},
 	diagnostic::{report_diagnostic, Diagnostic, WingSpan},
 	jsify::{JSifier, JSifyContext},
@@ -9,7 +7,7 @@ use crate::{
 		lifts::{Liftable, Lifts},
 		resolve_user_defined_type,
 		symbol_env::LookupResult,
-		ClassLike, TypeRef, CLOSURE_CLASS_HANDLE_METHOD,
+		TypeRef, CLOSURE_CLASS_HANDLE_METHOD,
 	},
 	visit::{self, Visit},
 	visit_context::VisitContext,
