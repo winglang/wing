@@ -1,32 +1,32 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`bucket is public 1`] = `
-"{
-  \\"resource\\": {
-    \\"azurerm_resource_group\\": {
-      \\"ResourceGroup\\": {
-        \\"location\\": \\"East US\\",
-        \\"name\\": \\"Default-c82bf964\\"
-      }
+{
+  "resource": {
+    "azurerm_resource_group": {
+      "ResourceGroup": {
+        "location": "East US",
+        "name": "Default-c82bf964",
+      },
     },
-    \\"azurerm_storage_account\\": {
-      \\"StorageAccount\\": {
-        \\"account_replication_type\\": \\"LRS\\",
-        \\"account_tier\\": \\"Standard\\",
-        \\"location\\": \\"\${azurerm_resource_group.ResourceGroup.location}\\",
-        \\"name\\": \\"defaultc82bf964\\",
-        \\"resource_group_name\\": \\"\${azurerm_resource_group.ResourceGroup.name}\\"
-      }
+    "azurerm_storage_account": {
+      "StorageAccount": {
+        "account_replication_type": "LRS",
+        "account_tier": "Standard",
+        "location": "\${azurerm_resource_group.ResourceGroup.location}",
+        "name": "defaultc82bf964",
+        "resource_group_name": "\${azurerm_resource_group.ResourceGroup.name}",
+      },
     },
-    \\"azurerm_storage_container\\": {
-      \\"my_bucket_Bucket_50609D70\\": {
-        \\"container_access_type\\": \\"public\\",
-        \\"name\\": \\"my-bucket-c8045fcc\\",
-        \\"storage_account_name\\": \\"\${azurerm_storage_account.StorageAccount.name}\\"
-      }
-    }
-  }
-}"
+    "azurerm_storage_container": {
+      "my_bucket_Bucket_50609D70": {
+        "container_access_type": "public",
+        "name": "my-bucket-c8045fcc",
+        "storage_account_name": "\${azurerm_storage_account.StorageAccount.name}",
+      },
+    },
+  },
+}
 `;
 
 exports[`bucket is public 2`] = `
@@ -123,32 +123,32 @@ exports[`bucket is public 2`] = `
 `;
 
 exports[`bucket name valid 1`] = `
-"{
-  \\"resource\\": {
-    \\"azurerm_resource_group\\": {
-      \\"ResourceGroup\\": {
-        \\"location\\": \\"East US\\",
-        \\"name\\": \\"Default-c82bf964\\"
-      }
+{
+  "resource": {
+    "azurerm_resource_group": {
+      "ResourceGroup": {
+        "location": "East US",
+        "name": "Default-c82bf964",
+      },
     },
-    \\"azurerm_storage_account\\": {
-      \\"StorageAccount\\": {
-        \\"account_replication_type\\": \\"LRS\\",
-        \\"account_tier\\": \\"Standard\\",
-        \\"location\\": \\"\${azurerm_resource_group.ResourceGroup.location}\\",
-        \\"name\\": \\"defaultc82bf964\\",
-        \\"resource_group_name\\": \\"\${azurerm_resource_group.ResourceGroup.name}\\"
-      }
+    "azurerm_storage_account": {
+      "StorageAccount": {
+        "account_replication_type": "LRS",
+        "account_tier": "Standard",
+        "location": "\${azurerm_resource_group.ResourceGroup.location}",
+        "name": "defaultc82bf964",
+        "resource_group_name": "\${azurerm_resource_group.ResourceGroup.name}",
+      },
     },
-    \\"azurerm_storage_container\\": {
-      \\"The-Uncanny-Bucket_61E10229\\": {
-        \\"container_access_type\\": \\"private\\",
-        \\"name\\": \\"the-uncanny-bucket-c8ac4720\\",
-        \\"storage_account_name\\": \\"\${azurerm_storage_account.StorageAccount.name}\\"
-      }
-    }
-  }
-}"
+    "azurerm_storage_container": {
+      "The-Uncanny-Bucket_61E10229": {
+        "container_access_type": "private",
+        "name": "the-uncanny-bucket-c8ac4720",
+        "storage_account_name": "\${azurerm_storage_account.StorageAccount.name}",
+      },
+    },
+  },
+}
 `;
 
 exports[`bucket name valid 2`] = `
@@ -245,48 +245,48 @@ exports[`bucket name valid 2`] = `
 `;
 
 exports[`bucket with two preflight objects 1`] = `
-"{
-  \\"resource\\": {
-    \\"azurerm_resource_group\\": {
-      \\"ResourceGroup\\": {
-        \\"location\\": \\"East US\\",
-        \\"name\\": \\"Default-c82bf964\\"
-      }
-    },
-    \\"azurerm_storage_account\\": {
-      \\"StorageAccount\\": {
-        \\"account_replication_type\\": \\"LRS\\",
-        \\"account_tier\\": \\"Standard\\",
-        \\"location\\": \\"\${azurerm_resource_group.ResourceGroup.location}\\",
-        \\"name\\": \\"defaultc82bf964\\",
-        \\"resource_group_name\\": \\"\${azurerm_resource_group.ResourceGroup.name}\\"
-      }
-    },
-    \\"azurerm_storage_blob\\": {
-      \\"my_bucket_Blob-file1txt_2FA447D8\\": {
-        \\"name\\": \\"file1.txt\\",
-        \\"source_content\\": \\"hello world\\",
-        \\"storage_account_name\\": \\"\${azurerm_storage_account.StorageAccount.name}\\",
-        \\"storage_container_name\\": \\"\${azurerm_storage_container.my_bucket_Bucket_50609D70.name}\\",
-        \\"type\\": \\"Block\\"
+{
+  "resource": {
+    "azurerm_resource_group": {
+      "ResourceGroup": {
+        "location": "East US",
+        "name": "Default-c82bf964",
       },
-      \\"my_bucket_Blob-file2txt_8F904E31\\": {
-        \\"name\\": \\"file2.txt\\",
-        \\"source_content\\": \\"boom bam\\",
-        \\"storage_account_name\\": \\"\${azurerm_storage_account.StorageAccount.name}\\",
-        \\"storage_container_name\\": \\"\${azurerm_storage_container.my_bucket_Bucket_50609D70.name}\\",
-        \\"type\\": \\"Block\\"
-      }
     },
-    \\"azurerm_storage_container\\": {
-      \\"my_bucket_Bucket_50609D70\\": {
-        \\"container_access_type\\": \\"public\\",
-        \\"name\\": \\"my-bucket-c8045fcc\\",
-        \\"storage_account_name\\": \\"\${azurerm_storage_account.StorageAccount.name}\\"
-      }
-    }
-  }
-}"
+    "azurerm_storage_account": {
+      "StorageAccount": {
+        "account_replication_type": "LRS",
+        "account_tier": "Standard",
+        "location": "\${azurerm_resource_group.ResourceGroup.location}",
+        "name": "defaultc82bf964",
+        "resource_group_name": "\${azurerm_resource_group.ResourceGroup.name}",
+      },
+    },
+    "azurerm_storage_blob": {
+      "my_bucket_Blob-file1txt_2FA447D8": {
+        "name": "file1.txt",
+        "source_content": "hello world",
+        "storage_account_name": "\${azurerm_storage_account.StorageAccount.name}",
+        "storage_container_name": "\${azurerm_storage_container.my_bucket_Bucket_50609D70.name}",
+        "type": "Block",
+      },
+      "my_bucket_Blob-file2txt_8F904E31": {
+        "name": "file2.txt",
+        "source_content": "boom bam",
+        "storage_account_name": "\${azurerm_storage_account.StorageAccount.name}",
+        "storage_container_name": "\${azurerm_storage_container.my_bucket_Bucket_50609D70.name}",
+        "type": "Block",
+      },
+    },
+    "azurerm_storage_container": {
+      "my_bucket_Bucket_50609D70": {
+        "container_access_type": "public",
+        "name": "my-bucket-c8045fcc",
+        "storage_account_name": "\${azurerm_storage_account.StorageAccount.name}",
+      },
+    },
+  },
+}
 `;
 
 exports[`bucket with two preflight objects 2`] = `
@@ -399,32 +399,32 @@ exports[`bucket with two preflight objects 2`] = `
 `;
 
 exports[`create a bucket 1`] = `
-"{
-  \\"resource\\": {
-    \\"azurerm_resource_group\\": {
-      \\"ResourceGroup\\": {
-        \\"location\\": \\"East US\\",
-        \\"name\\": \\"Default-c82bf964\\"
-      }
+{
+  "resource": {
+    "azurerm_resource_group": {
+      "ResourceGroup": {
+        "location": "East US",
+        "name": "Default-c82bf964",
+      },
     },
-    \\"azurerm_storage_account\\": {
-      \\"StorageAccount\\": {
-        \\"account_replication_type\\": \\"LRS\\",
-        \\"account_tier\\": \\"Standard\\",
-        \\"location\\": \\"\${azurerm_resource_group.ResourceGroup.location}\\",
-        \\"name\\": \\"defaultc82bf964\\",
-        \\"resource_group_name\\": \\"\${azurerm_resource_group.ResourceGroup.name}\\"
-      }
+    "azurerm_storage_account": {
+      "StorageAccount": {
+        "account_replication_type": "LRS",
+        "account_tier": "Standard",
+        "location": "\${azurerm_resource_group.ResourceGroup.location}",
+        "name": "defaultc82bf964",
+        "resource_group_name": "\${azurerm_resource_group.ResourceGroup.name}",
+      },
     },
-    \\"azurerm_storage_container\\": {
-      \\"my_bucket_Bucket_50609D70\\": {
-        \\"container_access_type\\": \\"private\\",
-        \\"name\\": \\"my-bucket-c8045fcc\\",
-        \\"storage_account_name\\": \\"\${azurerm_storage_account.StorageAccount.name}\\"
-      }
-    }
-  }
-}"
+    "azurerm_storage_container": {
+      "my_bucket_Bucket_50609D70": {
+        "container_access_type": "private",
+        "name": "my-bucket-c8045fcc",
+        "storage_account_name": "\${azurerm_storage_account.StorageAccount.name}",
+      },
+    },
+  },
+}
 `;
 
 exports[`create a bucket 2`] = `
@@ -521,37 +521,37 @@ exports[`create a bucket 2`] = `
 `;
 
 exports[`create multiple buckets 1`] = `
-"{
-  \\"resource\\": {
-    \\"azurerm_resource_group\\": {
-      \\"ResourceGroup\\": {
-        \\"location\\": \\"East US\\",
-        \\"name\\": \\"Default-c82bf964\\"
-      }
-    },
-    \\"azurerm_storage_account\\": {
-      \\"StorageAccount\\": {
-        \\"account_replication_type\\": \\"LRS\\",
-        \\"account_tier\\": \\"Standard\\",
-        \\"location\\": \\"\${azurerm_resource_group.ResourceGroup.location}\\",
-        \\"name\\": \\"defaultc82bf964\\",
-        \\"resource_group_name\\": \\"\${azurerm_resource_group.ResourceGroup.name}\\"
-      }
-    },
-    \\"azurerm_storage_container\\": {
-      \\"my_bucket2_Bucket_9E34665C\\": {
-        \\"container_access_type\\": \\"private\\",
-        \\"name\\": \\"my-bucket2-c87f4817\\",
-        \\"storage_account_name\\": \\"\${azurerm_storage_account.StorageAccount.name}\\"
+{
+  "resource": {
+    "azurerm_resource_group": {
+      "ResourceGroup": {
+        "location": "East US",
+        "name": "Default-c82bf964",
       },
-      \\"my_bucket_Bucket_50609D70\\": {
-        \\"container_access_type\\": \\"private\\",
-        \\"name\\": \\"my-bucket-c8045fcc\\",
-        \\"storage_account_name\\": \\"\${azurerm_storage_account.StorageAccount.name}\\"
-      }
-    }
-  }
-}"
+    },
+    "azurerm_storage_account": {
+      "StorageAccount": {
+        "account_replication_type": "LRS",
+        "account_tier": "Standard",
+        "location": "\${azurerm_resource_group.ResourceGroup.location}",
+        "name": "defaultc82bf964",
+        "resource_group_name": "\${azurerm_resource_group.ResourceGroup.name}",
+      },
+    },
+    "azurerm_storage_container": {
+      "my_bucket2_Bucket_9E34665C": {
+        "container_access_type": "private",
+        "name": "my-bucket2-c87f4817",
+        "storage_account_name": "\${azurerm_storage_account.StorageAccount.name}",
+      },
+      "my_bucket_Bucket_50609D70": {
+        "container_access_type": "private",
+        "name": "my-bucket-c8045fcc",
+        "storage_account_name": "\${azurerm_storage_account.StorageAccount.name}",
+      },
+    },
+  },
+}
 `;
 
 exports[`create multiple buckets 2`] = `
