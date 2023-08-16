@@ -71,16 +71,16 @@ export const DefaultTheme: Theme = {
     "scrollbar hover:scrollbar-bg-slate-500/10 hover:scrollbar-thumb-slate-700/30 scrollbar-thumb-hover-slate-700/40 scrollbar-thumb-active-slate-700/60 dark:hover:scrollbar-bg-slate-400/10 dark:hover:scrollbar-thumb-slate-400/30 dark:scrollbar-thumb-hover-slate-400/40 dark:scrollbar-thumb-active-slate-400/60",
 };
 
+const adjustChannel = (value: number, factor: number): number => {
+  return Math.max(Math.round(value + (255 - value) * (1 - factor)), 0);
+};
+
 const computeColor = (color: string, level: number = 1): string => {
   const hexColor = color.replace("#", "");
 
   if (level === 1) {
     return `#${hexColor}`;
   }
-
-  const adjustChannel = (value: number, factor: number): number => {
-    return Math.max(Math.round(value + (255 - value) * (1 - factor)), 0);
-  };
 
   const oldR = Number.parseInt(hexColor.slice(0, 2), 16);
   const oldG = Number.parseInt(hexColor.slice(2, 4), 16);
