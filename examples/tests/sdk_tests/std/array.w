@@ -236,3 +236,13 @@ test "lastIndexOf()" {
 
   assert(s.lastIndexOf("something") == -1);
 }
+
+//-----------------------------------------------------------------------------
+// set()
+
+test "set()" {
+  let mutArr = MutArray<num>[1, 3, 5, 7, 9];
+  assert(mutArr.at(0) == 1);
+  mutArr.set(0, 2);
+  assert(mutArr.at(0) == 2);
+}
