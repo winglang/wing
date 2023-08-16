@@ -50,9 +50,9 @@ test("can create sequential files in a bucket", async () => {
   const pusher = s.getResource("/HelloWorld/Queue") as cloud.IQueueClient;
 
   // WHEN
-  await pusher.push("kachow!");
-  await waitUntilQueueEmpty(pusher);
-  await pusher.push("zoom!");
+  void pusher.push("kachow!");
+  await waitUntilResourcesDone(s, helloWorld.processor);
+  void pusher.push("zoom!");
   await waitUntilResourcesDone(s, helloWorld.processor);
 
   // THEN

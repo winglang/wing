@@ -57,6 +57,25 @@ export async function waitUntilTrace(
   sim: Simulator,
   fn: (trace: Trace) => boolean
 ) {
+  let tracesChecked = 0;
+  const start = Date.now();
+
+  while (Date.now() - start < DEFAULT_WAIT_TIMEOUT) {
+    const traces = sim.listTraces();
+    for (const trace of traces.slice(tracesChecked)) {
+      if (fn(trace)) {
+        return;
+      }
+    }
+    tracesChecked = traces.length;
+    await sleep(50);
+  }
+}
+
+export async function waitUntilNextTrace(
+  sim: Simulator,
+  fn: (trace: Trace) => boolean
+) {
   let tracesChecked = sim.listTraces().length;
   const start = Date.now();
 
@@ -84,12 +103,29 @@ export async function waitUntilResourcesDone(
 ): Promise<void> {
   await Promise.all(
     resources.map(async (f) => {
-      await waitUntilTrace(
+      await waitUntilNextTrace(
         sim,
         (trace) =>
           trace.sourcePath === f.node.path &&
           (trace.data.status === "success" || trace.data.status === "failure")
       );
+    })
+  );
+}
+
+/**
+ * Wait until all resources are "start".
+ * "start" means that the resource has emitted any trace
+ * @param sim
+ * @param resources
+ */
+export async function waitUntilResourcesStart(
+  sim: Simulator,
+  ...resources: IConstruct[]
+): Promise<void> {
+  await Promise.all(
+    resources.map(async (f) => {
+      await waitUntilTrace(sim, (trace) => trace.sourcePath === f.node.path);
     })
   );
 }

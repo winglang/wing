@@ -3,6 +3,7 @@ import {
   listMessages,
   treeJsonOf,
   waitUntilResourcesDone,
+  waitUntilResourcesStart,
   waitUntilTrace,
 } from "./util";
 import * as cloud from "../../src/cloud";
@@ -149,15 +150,18 @@ test("messages are requeued if the function fails after timeout", async () => {
   // WHEN
   const queueClient = s.getResource("/my_queue") as cloud.IQueueClient;
   void queueClient.push("BAD MESSAGE");
-  await waitUntilTrace(
-    s,
-    (trace) =>
-      trace.data.message ==
-      "1 messages pushed back to queue after visibility timeout."
+  await waitUntilTrace(s, (trace) =>
+    trace.data.message.startsWith("Sending messages")
   );
 
   // THEN
   await s.stop();
+
+  await waitUntilTrace(s, (trace) =>
+    trace.data.message.startsWith(
+      "1 messages pushed back to queue after visibility timeout."
+    )
+  );
 
   expect(listMessages(s)).toMatchSnapshot();
   expect(app.snapshot()).toMatchSnapshot();
