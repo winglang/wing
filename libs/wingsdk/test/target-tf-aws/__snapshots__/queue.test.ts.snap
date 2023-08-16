@@ -26,9 +26,6 @@ exports[`default queue behavior 2`] = `
           "Default": {
             "children": {
               "Queue": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "Default": {
                     "constructInfo": {
@@ -59,9 +56,6 @@ exports[`default queue behavior 2`] = `
                 "path": "root/Default/aws",
               },
               "cloud.TestRunner": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "TestFunctionArns": {
                     "constructInfo": {
@@ -146,9 +140,6 @@ exports[`queue name valid 2`] = `
           "Default": {
             "children": {
               "The-Incredible_Queue-01": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "Default": {
                     "constructInfo": {
@@ -179,9 +170,6 @@ exports[`queue name valid 2`] = `
                 "path": "root/Default/aws",
               },
               "cloud.TestRunner": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "TestFunctionArns": {
                     "constructInfo": {
@@ -334,22 +322,6 @@ exports[`queue with a consumer function 3`] = `
                 "path": "root/Default/Code",
               },
               "Handler": {
-                "attributes": {
-                  "wing:resource:connections": [
-                    {
-                      "direction": "inbound",
-                      "implicit": false,
-                      "relationship": "handle()",
-                      "resource": "root/Default/Queue-SetConsumer-c5395e41",
-                    },
-                    {
-                      "direction": "inbound",
-                      "implicit": false,
-                      "relationship": "$inflight_init()",
-                      "resource": "root/Default/Queue-SetConsumer-c5395e41",
-                    },
-                  ],
-                },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
                   "version": "10.1.314",
@@ -363,16 +335,6 @@ exports[`queue with a consumer function 3`] = `
                 "path": "root/Default/Handler",
               },
               "Queue": {
-                "attributes": {
-                  "wing:resource:connections": [
-                    {
-                      "direction": "outbound",
-                      "implicit": false,
-                      "relationship": "setConsumer()",
-                      "resource": "root/Default/Queue-SetConsumer-c5395e41",
-                    },
-                  ],
-                },
                 "children": {
                   "Default": {
                     "constructInfo": {
@@ -403,28 +365,6 @@ exports[`queue with a consumer function 3`] = `
                 "path": "root/Default/Queue",
               },
               "Queue-SetConsumer-c5395e41": {
-                "attributes": {
-                  "wing:resource:connections": [
-                    {
-                      "direction": "outbound",
-                      "implicit": false,
-                      "relationship": "handle()",
-                      "resource": "root/Default/Handler",
-                    },
-                    {
-                      "direction": "outbound",
-                      "implicit": false,
-                      "relationship": "$inflight_init()",
-                      "resource": "root/Default/Handler",
-                    },
-                    {
-                      "direction": "inbound",
-                      "implicit": false,
-                      "relationship": "setConsumer()",
-                      "resource": "root/Default/Queue",
-                    },
-                  ],
-                },
                 "children": {
                   "Asset": {
                     "constructInfo": {
@@ -487,9 +427,6 @@ exports[`queue with a consumer function 3`] = `
                 "path": "root/Default/Queue-SetConsumer-c5395e41",
               },
               "Queue-SetConsumerHandler-c5395e41": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
                   "version": "10.1.314",
@@ -509,9 +446,6 @@ exports[`queue with a consumer function 3`] = `
                 "path": "root/Default/aws",
               },
               "cloud.TestRunner": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "TestFunctionArns": {
                     "constructInfo": {
@@ -597,9 +531,6 @@ exports[`queue with custom retention 2`] = `
           "Default": {
             "children": {
               "Queue": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "Default": {
                     "constructInfo": {
@@ -630,9 +561,6 @@ exports[`queue with custom retention 2`] = `
                 "path": "root/Default/aws",
               },
               "cloud.TestRunner": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "TestFunctionArns": {
                     "constructInfo": {
@@ -718,9 +646,6 @@ exports[`queue with custom timeout 2`] = `
           "Default": {
             "children": {
               "Queue": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "Default": {
                     "constructInfo": {
@@ -751,9 +676,6 @@ exports[`queue with custom timeout 2`] = `
                 "path": "root/Default/aws",
               },
               "cloud.TestRunner": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "TestFunctionArns": {
                     "constructInfo": {
@@ -838,9 +760,6 @@ exports[`replace invalid character from queue name 2`] = `
           "Default": {
             "children": {
               "The*Incredible$Queue": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "Default": {
                     "constructInfo": {
@@ -871,9 +790,6 @@ exports[`replace invalid character from queue name 2`] = `
                 "path": "root/Default/aws",
               },
               "cloud.TestRunner": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "TestFunctionArns": {
                     "constructInfo": {
