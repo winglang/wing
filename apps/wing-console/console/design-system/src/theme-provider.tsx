@@ -79,7 +79,7 @@ const computeColor = (color: string, level: number = 1): string => {
   }
 
   const adjustChannel = (value: number, factor: number): number => {
-    return Math.round(value + (255 - value) * (1 - factor));
+    return Math.max(Math.round(value + (255 - value) * (1 - factor)), 0);
   };
 
   const oldR = Number.parseInt(hexColor.slice(0, 2), 16);
@@ -119,7 +119,7 @@ const applyThemeStyle = (newTheme: Theme) => {
     styles = {
       ...styles,
       [`.${CUSTOMIZABLE_COLOR} .${lightKey}${
-        hover && ":hover"
+        hover ? ":hover" : ""
       }`]: `{ background-color: ${lightColor} !important;}`,
     };
 
@@ -131,7 +131,7 @@ const applyThemeStyle = (newTheme: Theme) => {
     styles = {
       ...styles,
       [`.dark .${CUSTOMIZABLE_COLOR} .${darkKey}${
-        hover && ":hover"
+        hover ? ":hover" : ""
       }`]: `{ background-color: ${darkColor} !important;}`,
     };
   });
@@ -156,34 +156,37 @@ export const buildTheme = (color?: string): Theme => {
   }
   const theme: Theme = {
     ...DefaultTheme,
-    bg1: `bg-[${computeColor(color, 1.4)}] dark:bg-[${computeColor(
+    bg1: `bg-[${computeColor(color, 1.2)}] dark:bg-[${computeColor(
       color,
-      1.4,
+      1.2,
     )}]`,
-    bg2: `bg-[${computeColor(color, 1.2)}] dark:bg-[${computeColor(
+
+    bg2: `bg-[${computeColor(color, 1.1)}] dark:bg-[${computeColor(
       color,
-      1.25,
+      1.1,
     )}]`,
-    bg2Hover: `hover:bg-[${computeColor(
-      color,
-      1.15,
-    )}] dark:hover:bg-[${computeColor(color, 1.2)}]`,
     bg3: `bg-[${computeColor(color)}] dark:bg-[${computeColor(color)}]`,
-    bg3Hover: `hover:bg-[${computeColor(
-      color,
-      0.95,
-    )}] dark:hover:bg-[${computeColor(color, 1.05)}]`,
     bg4: `bg-[${computeColor(color, 0.8)}] dark:bg-[${computeColor(
       color,
       0.8,
     )}]`,
+    bg3Hover: `hover:bg-[${computeColor(
+      color,
+      1.02,
+    )}] dark:hover:bg-[${computeColor(color, 0.98)}]`,
+    bg2Hover: `hover:bg-[${computeColor(
+      color,
+      1.12,
+    )}] dark:hover:bg-[${computeColor(color, 1.08)}]`,
+
     bg4Hover: `hover:bg-[${computeColor(
       color,
-      0.85,
-    )}] dark:hover:bg-[${computeColor(color, 0.9)}]`,
+      0.82,
+    )}] dark:hover:bg-[${computeColor(color, 0.78)}]`,
+
     bgInput: `bg-[${computeColor(color, 0.8)}] dark:bg-[${computeColor(
       color,
-      1.2,
+      1.13,
     )}]`,
   };
 

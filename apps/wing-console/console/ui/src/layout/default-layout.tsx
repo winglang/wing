@@ -317,7 +317,13 @@ export const DefaultLayout = ({
 
               <div className="flex-1 flex flex-col">
                 <div className="flex-1 flex">
-                  <div className="flex-1 flex flex-col" data-testid="map-view">
+                  <div
+                    className={classNames(
+                      "flex-1 flex flex-col",
+                      CUSTOMIZABLE_COLOR,
+                    )}
+                    data-testid="map-view"
+                  >
                     <MapView
                       showTests={showTests}
                       selectedNodeId={selectedItems[0]}
