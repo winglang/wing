@@ -128,7 +128,7 @@ async handle() {
   const s = await app.startSimulator();
 
   // WHEN
-  await waitUntilResourcesDone(s, handler);
+  await waitUntilResourcesDone(s, onDeployHandler);
 
   // THEN
   await s.stop();
