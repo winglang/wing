@@ -1,5 +1,10 @@
 import { Code, InflightClient } from "../core";
 
+interface JsonStringifyOptions {
+  json: Json | MutJson;
+  indent?: number;
+}
+
 /**
  * Immutable Json
  */
@@ -43,12 +48,12 @@ export class Json {
    *
    * (JSON.stringify($args$))
    *
-   * @macro ((args) => { return JSON.stringify(args[0], null, args[1]) })([$args$])
+   * @macro ((json, indent) => { return `JSON.stringify(${json}, null, ${indent})` })($json$, $indent$)
    *
    * @param json to format as string
    * @returns string representation of the Json
    */
-  public static stringify(json: Json | MutJson, indent?: number): string {
+  public static stringify({ json, indent }: JsonStringifyOptions): string {
     json;
     indent;
     throw new Error("Macro");
