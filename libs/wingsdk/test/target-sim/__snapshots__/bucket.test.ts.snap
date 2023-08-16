@@ -62,6 +62,10 @@ exports[`can add object in preflight 1`] = `
 
 exports[`can add object in preflight 2`] = `
 {
+  "connections.json": {
+    "connections": [],
+    "version": "connections-0.1",
+  },
   "simulator.json": {
     "resources": [
       {
@@ -91,9 +95,6 @@ exports[`can add object in preflight 2`] = `
     "tree": {
       "children": {
         "cloud.TestRunner": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -107,9 +108,6 @@ exports[`can add object in preflight 2`] = `
           "path": "root/cloud.TestRunner",
         },
         "my_bucket": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -136,6 +134,10 @@ exports[`can add object in preflight 2`] = `
 
 exports[`create a bucket 1`] = `
 {
+  "connections.json": {
+    "connections": [],
+    "version": "connections-0.1",
+  },
   "simulator.json": {
     "resources": [
       {
@@ -163,9 +165,6 @@ exports[`create a bucket 1`] = `
     "tree": {
       "children": {
         "cloud.TestRunner": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -179,9 +178,6 @@ exports[`create a bucket 1`] = `
           "path": "root/cloud.TestRunner",
         },
         "my_bucket": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -218,6 +214,10 @@ exports[`get invalid object throws an error 1`] = `
 
 exports[`get invalid object throws an error 2`] = `
 {
+  "connections.json": {
+    "connections": [],
+    "version": "connections-0.1",
+  },
   "simulator.json": {
     "resources": [
       {
@@ -245,9 +245,6 @@ exports[`get invalid object throws an error 2`] = `
     "tree": {
       "children": {
         "cloud.TestRunner": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -261,9 +258,6 @@ exports[`get invalid object throws an error 2`] = `
           "path": "root/cloud.TestRunner",
         },
         "my_bucket": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -336,6 +330,10 @@ exports[`put and get Json object from bucket 1`] = `
 
 exports[`put and get Json object from bucket 2`] = `
 {
+  "connections.json": {
+    "connections": [],
+    "version": "connections-0.1",
+  },
   "simulator.json": {
     "resources": [
       {
@@ -363,9 +361,6 @@ exports[`put and get Json object from bucket 2`] = `
     "tree": {
       "children": {
         "cloud.TestRunner": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -379,9 +374,6 @@ exports[`put and get Json object from bucket 2`] = `
           "path": "root/cloud.TestRunner",
         },
         "my_bucket": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
