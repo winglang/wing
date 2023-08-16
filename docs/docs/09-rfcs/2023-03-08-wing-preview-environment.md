@@ -1,6 +1,6 @@
 ---
 title: Wing Cloud Preview Environments
-description: This document describes the Wing Cloud Preview Environments feature.
+description: This document describes an MVP for the first Wing Cloud product - Wing Cloud Preview Environments.
 ---
 
 # #3696 - Wing Cloud Preview Environments
@@ -10,99 +10,112 @@ description: This document describes the Wing Cloud Preview Environments feature
 - **Stage**: Proposal
 - **Stage Date**: 2023-08-03
 
-This document describes the Wing Cloud Preview Environments feature.
+This document describes an MVP for the first Wing Cloud product - Wing Cloud Preview Environments.
 
 ## Introduction
 
-The **Wing Cloud Preview Environments** project is designed to achieve two key objectives. Firstly, it aims to offer a preview environment solution for those interested in using winglang.
-Secondly, it seeks to enhance the winglang ecosystem and its toolchain by building a production application using the language.
+The **Wing Cloud Preview Environments** is the first Wing Cloud product.
+Wing Cloud Preview Environments will also be the first production grade product written in Wing language.
 
 ## Requirements
 
 Wing Cloud users can build and deploy Wing applications to an ephemeral (simulated) environment and use the Wing Console UI to interact with it.
-Automatically run tests on the preview environment once created and provide a UI for viewing the test results.
-Allow developers to collaborate with their teammates using a shared environment.
-Seamlessly integrating with GitHub.
+Once a preview environment is created, tests will be executed automatically and the results will be available in the preview environment dedicated comment in GitHub.
+Each preview environment will have a unique url which enable developers to work together on a shared environment.
+Wing Cloud Preview Environments will be integrated with GitHub and will be available as a GitHub application.
 
-### Sign In to Wing Cloud
+### Developer Experience
 
-1. Goto https://wing.cloud and click on sign in.
-2. If a developer was already signed in before, they will be automatically signed in to Wing Cloud.
-3. If a developer was not signed in before, they will be redirected to GitHub authentication and then redirected back to Wing Cloud.
+#### Sign In to Wing Cloud
 
-### Authentication and Authorization
+1. On https://wing.cloud website click on sign in.
+2. Authenticate using your GitHub account.
+3. If you where already signed in you will be redirected to the wing cloud dashboard page automatically.
 
-1. Wing Cloud Preview Environments will use GitHub for authentication and authorization.
-2. Developers will be able to install Wing Cloud Preview Environments on a repository only if they have the GitHub permissions.
-3. Developers will be able to create a PR with a preview environment only if they have the necessary GitHub permissions to the repository **and** their GitHub user is signed up to Wing Cloud.
-4. Everyone can view a preview environment if they have the url.
+#### Redirect to Sign In process from a Preview Environment url
 
-### Wing Cloud Preview Environments Developer Experience
+1. If you try to access a preview environment url while you are not signed in to Wing Cloud (from the PR comment for example), you will be temporarily redirected to the Wing Cloud sign in page.
+2. Once singed in, you will be redirected to the preview environment url.
 
-A developer using winglang has the capability to integrate Wing Cloud Preview Environments with their (github) repository.
+#### Authentication and Authorization
 
-#### Installation
+1. Wing Cloud will use GitHub for authentication and authorization.
+2. Developers will be able to install Wing Cloud application in a GitHub repository only if they have the needed GitHub permissions.
+3. Preview environments will be created automatically for all developers that can create a PR in a repository.
+4. Only developers that are **signed-in to Wing Cloud** and **have access to the preview environment's repository** can view preview environment created for that repository.
+5. If an unsigned user attempts to access a preview environment, they will be directed to the Wing Cloud sign-in page in order to complete the sign-in process before proceeding.
+6. If a Wing Cloud singed-in user that doesn't have access to the preview environment's repository attempts to access a preview environment, they will be directed to the Wing Cloud dashboard page and will be notified that they don't have access to the preview environment's repository.
 
-In order to use Wing Cloud Preview Environments, you should sign in to Wing Cloud.
+#### Wing Cloud Dashboard
+
+1. Once signed in, you will be redirected to the Wing Cloud dashboard page.
+2. From Wing Cloud dashboard you can install Wing Cloud application on any of your repositories.
+3. Wing Cloud dashboard page display a list of all the repositories that you have installed Wing Cloud application on.
+4. For each repository, there is a list of all the preview environments.
+5. In order to see a preview environment, click on the preview environment url.
+
+#### Installation of Wing Cloud application
+
+In order to use Wing Cloud Preview Environments, you should sign in to Wing Cloud and install Wing Cloud application in your GitHub account and repository.
 The installation process is straightforward using GitHub application:
 
-1. Goto https://wing.cloud and log in
-2. Goto https://wing.cloud/preview and Click on "Deploy with Wing Cloud"
-3. Complete GitHub application authentication.
-4. Grant repository access permission.
-5. You are now ready to use Wing Cloud Preview Environments.
-6. A welcome email will be sent to you with additional information and links to documentation.
+1. Goto https://wing.cloud and sign in
+2. If you are already signed in, you will be redirected to the Wing Cloud dashboard page https://wing.cloud/dashboard
+3. In https://wing.cloud/dashboard, Click on "Deploy with Wing Cloud"
+4. Complete GitHub application authentication.
+5. Grant the repositories you want to have preview environments for, access permission.
+6. You are now ready to use Wing Cloud Preview Environments.
+7. A welcome email will be sent to you with additional information and links to documentation.
 
 #### Preview Environment for production branch
 
-For the production branch, there is a single preview environment that will constantly be up-to-date with the latest code committed.
+For the repository production branch, there is a single preview environment that will constantly be up-to-date with the latest code committed.
 A link to the preview environment is available in the repository main page ("About" section).
 Production branch environment url structure is: `https://<gh-repository>-<gh-branch>-<entry-point>.wingcloud.app`
+Once the installation of the Wing Cloud application is completed, an initial preview environment will be created and will be available in the repository main page.
 
 #### Preview Environments for Pull Requests
 
 Upon each creation of a pull request an automatic comment will be added to the PR and will guide the developer to dedicated preview environments.
-provide a streamlined process for updating a pull request preview environment, each PR code changes will redeploy the preview environment and also will:
+provide a streamlined process for updating a pull request preview environment, each PR code changes will redeploy the preview environment and will also:
 
-1. provide a real-time build and deployment status updates
-2. while preview environment is being updated, the user that is currently using the environment will be notified and will be able to refresh the page to get the latest changes.
-3. each entry point will have a seperated preview environment
-4. ensure a consistent and unique url for each preview environment. The url structure: `https://<gh-repository>-<gh-branch>-<entry-point>-<pr-number>.wingcloud.app`
-5. provide the ability to download the preview environment deployment logs for debugging purposes in case of failure, logs urls structure is: `https://wing.cloud/gh-account/gh-repo/gh-branch/entry-file/logs/`
+1. Provide a real-time build and deployment status updates
+2. While preview environment is being updated, the user that is currently using the environment will be notified and will be able to refresh the page to get the latest changes.
+3. Each entry point will have a seperated preview environment
+4. Ensure a consistent and unique url for each preview environment. The url structure: `https://<gh-repository>-<gh-branch>-<entry-point>.wingcloud.app`
+5. Provide the ability to download the preview environment deployment logs for debugging purposes in case of failure, logs urls structure is: `https://<gh-repository>-<gh-branch>-<entry-point>.wingcloud.app/logs/`
 
 PR comment example:
 
-| Entry Point     | Status                                                                                   | Preview                                                                          | Updated (UTC)        |
-| --------------- | ---------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- | -------------------- |
-| main.w          | ✅ Ready ([logs](https://wing.cloud/gh-account/gh-repo/gh-branch/main/logs/))            | [Visit Preview](https:/gh-repository-gh-branch-3312-main.wing.cloud.app)         | Jul 31, 2023 8:01am  |
-| another.main.w  | ✅ Ready ([logs](https://wing.cloud/gh-account/gh-repo/gh-branch/another-main/logs/))    | [Visit Preview](https:/gh-repository-gh-branch-3312-another-main.wing.cloud.app) | Jul 30, 2023 10:01am |
-| failed.main.w   | ❌ Failed ([logs](https://wing.cloud/gh-account/gh-repo/gh-branch/entry-file/logs/))     |                                                                                  | Jul 31, 2023 8:01am  |
-| building.main.w | 🔄 Building ([logs](https://wing.cloud/gh-account/gh-repo/gh-branch/entry-file/logs/))   |                                                                                  | Jul 31, 2023 8:01am  |
-| stale.main.w    | ⏸️ Stale ([lean more](https://wing.cloud/gh-account/gh-repo/gh-branch/entry-file/logs/)) |                                                                                  | Jul 31, 2023 8:01am  |
+| Entry Point     | Status                                                                                           | Preview                                                                     | Tests                                                                                                                                                                                    | Updated (UTC)        |
+| --------------- |--------------------------------------------------------------------------------------------------| --------------------------------------------------------------------------- |------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------|
+| main.w          | ✅ Ready ([logs](https://<gh-repository>-<gh-branch>-main.wingcloud.app/logs/build))              | [Visit Preview](https:/gh-repository-gh-branch-main.wing.cloud.app)         | ✅  [sanity](https://<gh-repository>-<gh-branch>-main.wingcloud.app/logs/tests/sanity) <br> ✅ [E2E](https://<gh-repository>-<gh-branch>-main.wingcloud.app/logs/tests/E2E)                | Jul 31, 2023 8:01am  |
+| another.main.w  | ✅ Ready ([logs](https://<gh-repository>-<gh-branch>-another-main.wingcloud.app/logs/build))      | [Visit Preview](https:/gh-repository-gh-branch-another-main.wing.cloud.app) | ✅ [sanity](https://<gh-repository>-<gh-branch>-another-main.wingcloud.app/logs/tests/sanity) <br> ❌ [E2E](https://<gh-repository>-<gh-branch>-another-main.wingcloud.app/logs/tests/E2E) | Jul 30, 2023 10:01am |
+| failed.main.w   | ❌ Failed ([logs](https://<gh-repository>-<gh-branch>-failed-main.wingcloud.app/logs/build))      |                                                                             |                                                                                                                                                                                          | Jul 31, 2023 8:01am  |
+| building.main.w | 🔄 Building ([logs](https://<gh-repository>-<gh-branch>-building-main.wingcloud.app/logs/build)) |                                                                             |                                                                                                                                                                                          | Jul 31, 2023 8:01am  |
+| stale.main.w    | ⏸️ Stale ([lean more](https://<gh-repository>-<gh-branch>-stale-main.wingcloud.app/logs/build))  |                                                                             |                                                                                                                                                                                          | Jul 31, 2023 8:01am  |
 
-TBD - tests results per entry point
+#### Preview Environment Environment Variables (Secrets)
 
-**Disclaimer**: Developers that have write access and can create PRs but didn't signed-up to Wing Cloud will not be able to create preview environments.
-In this case the above comment will contain a direct link for signing up to Wing Cloud.
-After signing up, the developer will be able to create a preview environment for the PR and one will be created automatically after the next code change.
+Wing Cloud Preview Environments support environment variables (secrets) that can be used in the code.
+Environment variables are being set at the repository level and are available for all preview environments.
+Adding, updating and removing environment variables can be done from the Wing Cloud CLI:
 
-#### Multiple Entry Points
+`wingcloud -repository <my-repo> env add <key> <value>`
 
-A developer can configure multiple entry points in a single PR.
+#### PR With Multiple Entry Points
+
+There is a support for multiple entry points in a single PR.
 Every `*.main.w` file in the repository will be considered as an entry point and will have a dedicated preview environment.
 All preview environments will be available in the PR comment and will be updated upon code changes.
 
-#### Populate Environment with Initial Data
-
-Out of scope for this project.
-
-#### Automatically Running Tests
+#### Run Tests Automatically Upon PR Creation and Code Changes
 
 Upon PR creation and code changes, Wing Cloud Preview Environments will automatically run all tests defined for each entry point.
 For each test run, a new simulator will be created and will be destroyed upon test completion.
-The test results will be available in the PR comment for each entry point.
+The test results will be available in the PR comment for each entry point with links to the tests logs (`https://<gh-repository>-<gh-branch>-<entry-point>.wingcloud.app/logs/tests/<test-name>`)
 
-#### Running Tests Manually
+#### Running Tests Manually From Wing Console
 
 Running tests on your environment is easy using the Wing Console tests UI.
 Each test will reload the simulator to create a clean environment.
@@ -143,17 +156,25 @@ In our docs we have the following information:
 
 ### Security
 
-1. The preview environments shouldn’t be able to access files from other preview environments
-2. Only Wing Cloud signed up developers with write access to the repository can create preview environments
+1. Preview environments shouldn’t be able to access files from other preview environments.
+2. Only Wing Cloud signed up developers with access to the repository can view preview environments created for this repository.
 
-## NON Requirements
+## Non-Requirements
+1. password protected preview environments.
+2. wing configuration file support. (for stating a specific wing version, entry points, etc.)
+3. update PR comment with tests results triggered from the console.
+4. User management
+    - each singed in user has an account in wing cloud
+    - each account can create a team and invite other users (accounts) to the team
+    - each account can have multiple repositories
+    - each team can have multiple repositories
+    - each account in a team has access to all the team repositories
+    - dashboard and user management ui
+5. enable preview environments viewers to add comments in the environment.
+6. populate Environment with Initial Data
+7. Allow users to define specific environment machine type / configuration (cpu, memory, etc.)
 
-1. Preview environments will require authentication to view.
-2. Assign users to Teams.
-3. enable preview environments viewers to add comments in the environment itself
-4. update the PR comment with the latest test results
-
-## Technical Design
+## Technical Details
 
 ### Technology
 
@@ -164,22 +185,35 @@ In our docs we have the following information:
 - https://fly.io for the preview environments
 - https://react.dev/ for the frontend
 
-### Architecture
+### High Level Architecture
 
 - A GitHub app
 - A Cloud.Function that will be triggered by GitHub events, such as `pull_request.synchronize` or `pull_request.closed`
 - A Flyio account to deploy the preview environments
 - A Cloud.Table to store different data:
-  - The registered users
-    - GH project
-    - GH repository
-    - User ID
-  - The connected GitHub repositories
-  - The related Flyio projects and environments
-- A Cloud.Bucket to store the preview environments logs
+    - The registered users
+        - GH access token
+        - User ID
+    - The related Flyio projects and environments
+- Deployment and tests logs can be saved in the preview environment server and can be served
 - A Cloud.Scheduler to run the self-cleaning mechanism
 
-#### Process: Sign Up and Sign In
+### Authentication and Authorization
+
+1. When a user sign in we will save their GitHub account details in the database.
+2. Each preview environment will have to authenticate the user using GitHub before allowing access.
+   - check if the user is signed in to Wing Cloud (cookie, jwt)
+   - if not, redirect to Wing Cloud login page and then redirect back to the preview environment
+   - check if the signed-in user has access to the repository of the preview environment
+   - if not, redirect to Wing Cloud dashboard and show an informative message
+
+The website https://wing.cloud will use a secure HTTP-only cookie that safely encodes a JWT containing the Wing Cloud user ID. We could use the GitHub user ID, but we may want to support other authentication providers in the future.
+
+Every possible interaction with the Wing Cloud will be through an API. Any request to the API will be authenticated using this cookie. The API will then use the user ID to check if the user has the necessary permissions to perform the action.
+
+We can use the GitHub API and the user permissions to the repository as the authorization mechanism. Beware the GitHub API has a [rate limit](https://docs.github.com/en/apps/creating-github-apps/registering-a-github-app/rate-limits-for-github-apps#installation-access-tokens-on-githubcom), so we may want to cache the permissions for a while if we foresee hitting these limits. Also, see the [List collaborators endpoint](https://docs.github.com/en/free-pro-team@latest/rest/collaborators/collaborators?apiVersion=2022-11-28#list-repository-collaborators) for more information on authorization.
+
+### Sign Up and Sign In
 
 We can use the GitHub app as an OAuth provider for Wing Cloud. A set of pages will be needed:
 
@@ -193,17 +227,17 @@ sequenceDiagram
     wing.cloud/login/callback-)wing.cloud: Redirect (now with the authenticated cookie)
 ```
 
-> **Important Note:** Since we don't ask for information during the sign up process, both the sign up and sign in flows are the same.
+> **Important Note:** Since we don't ask for information during the sign-up process, both the sign-up and sign in flows are the same.
 
-#### Process: Authentication and Authorization
+### Wing Cloud Dashboard
 
-The website https://wing.cloud will use a secure HTTP-only cookie that safely encodes a JWT containing the Wing Cloud user ID. We could use the Github user ID, but we may want to support other authentication providers in the future.
+1. get user repositories from GitHub by using the GitHub API and the user's access token we have in our DB
+2. filter repositories that have Wing Cloud application installed.
+3. for each repository, get all preview environments.
+4. there is no need to store user -> repositories mapping in our DB, we can get it from GitHub API.
+5. also there is no need to store repository -> preview environments mapping in our DB, we can get it from GitHub API.
 
-Every possible interaction with the Wing Cloud will be through an API. Any request to the API will be authenticated using this cookie. The API will then use the user ID to check if the user has the necessary permissions to perform the action.
-
-Since we want to go minimal, we can use the GitHub API and the user permissions to the repository as the authorization mechanism. Beware the GitHub API has a [rate limit](https://docs.github.com/en/apps/creating-github-apps/registering-a-github-app/rate-limits-for-github-apps#installation-access-tokens-on-githubcom), so we may want to cache the permissions for a while if we foresee hitting these limits. Also, see the [List collaborators endpoint](https://docs.github.com/en/free-pro-team@latest/rest/collaborators/collaborators?apiVersion=2022-11-28#list-repository-collaborators) for more information on authorization.
-
-#### Process: Processing GitHub Events
+### Processing GitHub Events
 
 A Cloud.Function will listen to GitHub events and will process them. Based on the event, the function will create, update or delete preview environments on Flyio.
 
@@ -238,10 +272,10 @@ graph LR
 
 The probot npm package will take care of ensuring the events received are legitimate.
 
-#### Process: Creating Preview Environments
+### Creating Preview Environments
 
 When a GitHub event `pull_request.opened` is received, we will look for `*.main.w` files and create a preview environment for each of them. We will use the Flyio API to create a new project(s) and deploy the code to it (the Flyio specifics may change).
-
+Before building the project we will have to inject environment variables set by the user (need to be taken from our DB).
 New subdomains will be created for each preview environment:
 
 - `<gh-repository>-<nanoid>.wingcloud.app`
@@ -253,7 +287,11 @@ The technical details on how the subdomain resolution will work at DNS level are
 
 A special comment will be added to the PR with the list of preview environments and their status. The comment will be updated as the preview environments are created.
 
-#### Process: Updating Preview Environments
+### Preview Environment Environment Variables (Secrets)
+
+wingcloud CLI - TBD
+
+### Updating Preview Environments
 
 When a GitHub event `pull_request.synchronize` is received, we will look again for `*.main.w` files. We will then update the Flyio project(s) with the new code.
 
@@ -265,13 +303,13 @@ The entries in the Cloud.Table will be updated to update the last time the previ
 
 The special comment in the PR will be updated accordingly.
 
-#### Process: Deleting Preview Environments
+### Deleting Preview Environments
 
 When a GitHub event `pull_request.closed` is received, we will stop every Flyio project associated with the PR. We will also update the entries in the Cloud.Table to reflect this status.
 
 The special comment in the PR will be updated accordingly.
 
-#### Process: Deleting Stale Environments
+### Deleting Stale Environments
 
 A scheduler will run periodically and will delete stale environments (in a process similar to the one above).
 
