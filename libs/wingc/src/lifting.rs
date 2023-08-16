@@ -1,5 +1,7 @@
 use crate::{
-	ast::{Class, Expr, ExprKind, FunctionBody, FunctionDefinition, Phase, Reference, Scope, Stmt, UserDefinedType},
+	ast::{
+		Class, Expr, ExprKind, FunctionBody, FunctionDefinition, Phase, Reference, Scope, Stmt, Symbol, UserDefinedType,
+	},
 	comp_ctx::{CompilationContext, CompilationPhase},
 	diagnostic::{report_diagnostic, Diagnostic, WingSpan},
 	jsify::{JSifier, JSifyContext},
@@ -7,7 +9,7 @@ use crate::{
 		lifts::{Liftable, Lifts},
 		resolve_user_defined_type,
 		symbol_env::LookupResult,
-		TypeRef, CLOSURE_CLASS_HANDLE_METHOD,
+		ClassLike, TypeRef, CLOSURE_CLASS_HANDLE_METHOD,
 	},
 	visit::{self, Visit},
 	visit_context::VisitContext,
@@ -28,17 +30,13 @@ impl<'a> LiftVisitor<'a> {
 		}
 	}
 
-	// fn is_self_type_reference(&self, node: &Expr) -> bool {
-	// 	let Some(current_class_udt) = self.ctx.current_class() else {
-	// 		return false;
-	// 	};
+	fn is_self_type_reference(&self, udt: &UserDefinedType) -> bool {
+		let Some(current_class_udt) = self.ctx.current_class() else {
+			return false;
+		};
 
-	// 	let Some(udt) = node.as_type_reference() else {
-	// 		return false;
-	// 	};
-
-	// 	udt.full_path_str() == current_class_udt.full_path_str()
-	// }
+		udt.full_path_str() == current_class_udt.full_path_str()
+	}
 
 	fn is_defined_in_current_env(&self, fullname: &str, span: &WingSpan) -> bool {
 		// if the symbol is defined later in the current environment, it means we can't capture a
@@ -68,6 +66,62 @@ impl<'a> LiftVisitor<'a> {
 		}
 
 		return false;
+	}
+
+	// TODO: merge with should_capture_expr
+	fn should_capture_type(&self, node: &UserDefinedType) -> bool {
+		// let (fullname, span) = match r {
+		// 	Reference::Identifier(ref symb) => (symb.name.clone(), symb.span.clone()),
+		// 	//Reference::TypeReference(ref t) => (t.full_path_str(), t.span.clone()),
+		// 	_ => return false,
+		// };
+
+		let fullname = node.full_path_str();
+
+		// skip "This" (which is the type of "this")
+		if self.is_self_type_reference(node) {
+			return false;
+		}
+
+		// if the symbol is defined in the *current* environment (which could also be a nested scope
+		// inside the current method), we don't need to capture it
+		if self.is_defined_in_current_env(&fullname, &node.span) {
+			return false;
+		}
+
+		let Some(method_env) = self.ctx.current_method_env() else {
+			return false;
+		};
+
+		let lookup = method_env.lookup_nested_str(&fullname, Some(self.ctx.current_stmt_idx()));
+
+		// any other lookup failure is likely a an invalid reference so we can skip it
+		let LookupResult::Found(vi, symbol_info) = lookup else {
+			return false;
+		};
+
+		// now, we need to determine if the environment this symbol is defined in is a parent of the
+		// method's environment. if it is, we need to capture it.
+		if symbol_info.env.is_same(&method_env) || symbol_info.env.is_child_of(&method_env) {
+			return false;
+		}
+
+		// the symbol is defined in a parent environment, but it's still an inflight environment
+		// which means we don't need to capture.
+		if symbol_info.phase == Phase::Inflight && symbol_info.env.phase == Phase::Inflight {
+			return false;
+		}
+
+		// skip macros
+		if let Some(x) = vi.as_variable() {
+			if let Some(f) = x.type_.as_function_sig() {
+				if f.js_override.is_some() {
+					return false;
+				}
+			}
+		}
+
+		return true;
 	}
 
 	fn should_capture_expr(&self, node: &Expr) -> bool {
@@ -141,6 +195,17 @@ impl<'a> LiftVisitor<'a> {
 		self.ctx.pop_phase();
 		res
 	}
+
+	fn jsify_udt(&mut self, node: &UserDefinedType) -> String {
+		let res = self.jsify.jsify_user_defined_type(
+			&node,
+			&mut JSifyContext {
+				lifts: None,
+				visit_ctx: &mut self.ctx,
+			},
+		);
+		res
+	}
 }
 
 impl<'a> Visit<'a> for LiftVisitor<'a> {
@@ -166,7 +231,7 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 		let expr_phase = self.jsify.types.get_expr_phase(&node).unwrap();
 		let expr_type = self.jsify.types.get_expr_type(&node);
 
-		// this whole thing only applies to inflight expressions
+		// this whole thing only applies to inflight code
 		if self.ctx.current_phase() == Phase::Preflight {
 			visit::visit_expr(self, node);
 			return;
@@ -209,7 +274,7 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 				return;
 			}
 
-			// if this is an inflight property, no need to lift it
+			// if this is an inflight property (of "this") no need to lift it
 			if is_inflight_field(&node, expr_type, &property) {
 				return;
 			}
@@ -239,6 +304,92 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 	}
 
 	// TODO: implement visit_user_defined_type and capture the type if it needs to be captured (see `should_capture_expr` and TypeReference logic)
+	fn visit_user_defined_type(&mut self, node: &'a UserDefinedType) {
+		// this whole thing only applies to inflight code
+		if self.ctx.current_phase() == Phase::Preflight {
+			visit::visit_user_defined_type(self, node);
+			return;
+		}
+
+		// if type represents the current class, no need to capture it (it is by definition
+		// available in the current scope)
+		if self.is_self_type_reference(node) {
+			visit::visit_user_defined_type(self, node);
+			return;
+		}
+
+		// Get the type of the udt
+		let udt_type = resolve_user_defined_type(
+			node,
+			self.ctx.current_env().expect("an env"),
+			self.ctx.current_stmt_idx(),
+		)
+		.expect("resolved type");
+
+		//---------------
+		// LIFT
+		if udt_type.is_preflight_class() {
+			// jsify the expression so we can get the preflight code
+			let code = self.jsify_udt(&node);
+
+			let property = if let Some(property) = self.ctx.current_property() {
+				Some(property)
+			} else if udt_type.is_closure() {
+				// this is the case where we are lifting a "closure class" (e.g. a class that has a "handle"
+				// method) the reason we might not have "property" set is because closure classes might be
+				// syntheticaly generated by the compiler from closures.
+				Some(CLOSURE_CLASS_HANDLE_METHOD.to_string())
+			} else {
+				None
+			};
+
+			// check that we can qualify the lift (e.g. determine which property is being accessed)
+			if property.is_none() && udt_type.as_preflight_class().is_some() {
+				report_diagnostic(Diagnostic {
+					message: format!(
+						"Cannot qualify access to a lifted type \"{udt_type}\" (see https://github.com/winglang/wing/issues/76 for more details)"),
+					span: Some(node.span.clone()),
+				});
+
+				return;
+			}
+
+			// The following is not relevant because if we're in "This" we don't need to lift for the current class
+			// if this is an inflight property, no need to lift it
+			// if let Some(property) = &property {
+			// 	if is_inflight_field(udt_type, property) {
+			// 		return;
+			// 	}
+			// }
+
+			let mut lifts = self.lifts_stack.pop().unwrap();
+			lifts.lift(
+				&Liftable::Type(node.clone()),
+				self.ctx.current_method(),
+				property,
+				&code,
+			);
+			self.lifts_stack.push(lifts);
+
+			return;
+		}
+
+		//---------------
+		// CAPTURE
+
+		if self.should_capture_type(&node) {
+			// jsify the type so we can get the preflight code
+			let code = self.jsify_udt(&node);
+
+			let mut lifts = self.lifts_stack.pop().unwrap();
+			lifts.capture(&Liftable::Type(node.clone()), &code);
+			self.lifts_stack.push(lifts);
+
+			return;
+		}
+
+		visit::visit_user_defined_type(self, node);
+	}
 
 	// State Tracking
 
@@ -302,10 +453,7 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 
 		if let Some(parent) = &node.parent {
 			let mut lifts = self.lifts_stack.pop().unwrap();
-			lifts.capture(
-				&Liftable::Type(parent.clone()),
-				&self.jsify.jsify_user_defined_type(&parent),
-			);
+			lifts.capture(&Liftable::Type(parent.clone()), &self.jsify_udt(&parent));
 			self.lifts_stack.push(lifts);
 		}
 
@@ -346,6 +494,7 @@ fn is_inflight_field(expr: &Expr, expr_type: TypeRef, property: &Option<String>)
 			if let (Some(cls), Some(property)) = (expr_type.as_preflight_class(), property) {
 				if let LookupResult::Found(kind, _) = cls.env.lookup_nested_str(&property, None) {
 					if let Some(var) = kind.as_variable() {
+						// TODO: ?? why is this here
 						if !var.type_.is_closure() {
 							if var.phase != Phase::Preflight {
 								return true;
@@ -359,3 +508,17 @@ fn is_inflight_field(expr: &Expr, expr_type: TypeRef, property: &Option<String>)
 
 	return false;
 }
+// fn is_inflight_field(type_: TypeRef, property: &str) -> bool {
+// 	if let Some(cls) = type_.as_class() {
+// 		if let Some(vi) = cls.get_field(&Symbol::global(property)) {
+// 			// TODO: ?? why is this here
+// 			if !vi.type_.is_closure() {
+// 				if vi.phase != Phase::Preflight {
+// 					return true;
+// 				}
+// 			}
+// 		}
+// 	}
+
+// 	return false;
+// }

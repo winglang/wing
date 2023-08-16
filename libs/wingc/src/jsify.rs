@@ -242,7 +242,7 @@ impl<'a> JSifier<'a> {
 			} => self.jsify_expression(object, ctx) + (if *optional_accessor { "?." } else { "." }) + &property.to_string(),
 			// Reference::TypeReference(udt) => self.jsify_user_defined_type(&udt),
 			Reference::TypeMember { type_name, property } => {
-				let typename = self.jsify_user_defined_type(type_name);
+				let typename = self.jsify_user_defined_type(type_name, ctx);
 				typename + "." + &property.to_string()
 			}
 		}
@@ -285,21 +285,21 @@ impl<'a> JSifier<'a> {
 		}
 	}
 
-	fn jsify_type(&self, typ: &TypeAnnotationKind) -> Option<String> {
+	fn jsify_type(&self, typ: &TypeAnnotationKind, ctx: &mut JSifyContext) -> Option<String> {
 		match typ {
-			TypeAnnotationKind::UserDefined(t) => Some(self.jsify_user_defined_type(&t)),
+			TypeAnnotationKind::UserDefined(t) => Some(self.jsify_user_defined_type(&t, ctx)),
 			TypeAnnotationKind::String => Some("string".to_string()),
 			TypeAnnotationKind::Number => Some("number".to_string()),
 			TypeAnnotationKind::Bool => Some("boolean".to_string()),
 			TypeAnnotationKind::Array(t) => {
-				if let Some(inner) = self.jsify_type(&t.kind) {
+				if let Some(inner) = self.jsify_type(&t.kind, ctx) {
 					Some(format!("{}[]", inner))
 				} else {
 					None
 				}
 			}
 			TypeAnnotationKind::Optional(t) => {
-				if let Some(inner) = self.jsify_type(&t.kind) {
+				if let Some(inner) = self.jsify_type(&t.kind, ctx) {
 					Some(format!("{}?", inner))
 				} else {
 					None
@@ -333,17 +333,17 @@ impl<'a> JSifier<'a> {
 		}
 	}
 
-	fn jsify_struct_field_to_json_schema_type(&self, typ: &TypeAnnotationKind) -> String {
+	fn jsify_struct_field_to_json_schema_type(&self, typ: &TypeAnnotationKind, ctx: &mut JSifyContext) -> String {
 		match typ {
 			TypeAnnotationKind::Bool | TypeAnnotationKind::Number | TypeAnnotationKind::String => {
-				format!("type: \"{}\"", self.jsify_type(typ).unwrap())
+				format!("type: \"{}\"", self.jsify_type(typ, ctx).unwrap())
 			}
 			TypeAnnotationKind::UserDefined(udt) => {
 				format!("\"$ref\": \"#/$defs/{}\"", udt.root.name)
 			}
 			TypeAnnotationKind::Json => "type: \"object\"".to_string(),
 			TypeAnnotationKind::Map(t) => {
-				let map_type = self.jsify_type(&t.kind);
+				let map_type = self.jsify_type(&t.kind, ctx);
 				// Ensure all keys are of some type
 				format!(
 					"type: \"object\", patternProperties: {{ \".*\": {{ type: \"{}\" }} }}",
@@ -357,16 +357,22 @@ impl<'a> JSifier<'a> {
 						TypeAnnotationKind::Set(_) => "uniqueItems: true,".to_string(),
 						_ => "".to_string(),
 					},
-					self.jsify_struct_field_to_json_schema_type(&t.kind)
+					self.jsify_struct_field_to_json_schema_type(&t.kind, ctx)
 				)
 			}
-			TypeAnnotationKind::Optional(t) => self.jsify_struct_field_to_json_schema_type(&t.kind),
+			TypeAnnotationKind::Optional(t) => self.jsify_struct_field_to_json_schema_type(&t.kind, ctx),
 			_ => "type: \"null\"".to_string(),
 		}
 	}
 
-	pub fn jsify_user_defined_type(&self, udt: &UserDefinedType) -> String {
-		// TODO: lookup in ctx.lifts.token_for_liftable(&Liftable::Type(udt)) and see if we need to replace the type with a lifted token (see jsify_expression)
+	pub fn jsify_user_defined_type(&self, udt: &UserDefinedType, ctx: &mut JSifyContext) -> String {
+		if ctx.visit_ctx.current_phase() == Phase::Inflight {
+			if let Some(lifts) = &ctx.lifts {
+				if let Some(t) = lifts.token_for_liftable(&Liftable::Type(udt.clone())) {
+					return t.clone();
+				}
+			}
+		}
 		udt.full_path_str()
 	}
 
@@ -421,7 +427,7 @@ impl<'a> JSifier<'a> {
 				// user-defined types), we simply instantiate the type directly (maybe in the future we will
 				// allow customizations of user-defined types as well, but for now we don't).
 
-				let ctor = self.jsify_user_defined_type(class);
+				let ctor = self.jsify_user_defined_type(class, ctx);
 
 				let scope = if is_preflight_class && class_type.std_construct_args {
 					if let Some(scope) = obj_scope {
@@ -673,7 +679,12 @@ impl<'a> JSifier<'a> {
 		}
 	}
 
-	pub fn jsify_struct_properties(&self, fields: &Vec<StructField>, extends: &Vec<UserDefinedType>) -> CodeMaker {
+	pub fn jsify_struct_properties(
+		&self,
+		fields: &Vec<StructField>,
+		extends: &Vec<UserDefinedType>,
+		ctx: &mut JSifyContext,
+	) -> CodeMaker {
 		let mut code = CodeMaker::default();
 
 		// Any parents we need to get their properties
@@ -688,7 +699,7 @@ impl<'a> JSifier<'a> {
 			code.line(format!(
 				"{}: {{ {} }},",
 				field.name.name,
-				self.jsify_struct_field_to_json_schema_type(&field.member_type.kind)
+				self.jsify_struct_field_to_json_schema_type(&field.member_type.kind, ctx)
 			));
 		}
 
@@ -701,6 +712,7 @@ impl<'a> JSifier<'a> {
 		fields: &Vec<StructField>,
 		extends: &Vec<UserDefinedType>,
 		_env: &SymbolEnv,
+		ctx: &mut JSifyContext,
 	) -> CodeMaker {
 		// To allow for struct validation at runtime this will generate a JS class that has a static
 		// getValidator method that will create a json schema validator.
@@ -720,7 +732,7 @@ impl<'a> JSifier<'a> {
 
 		code.open("properties: {");
 
-		code.add_code(self.jsify_struct_properties(fields, extends));
+		code.add_code(self.jsify_struct_properties(fields, extends, ctx));
 
 		// determine which fields are required, and which schemas need to be added to validator
 		for field in fields {
@@ -968,7 +980,7 @@ impl<'a> JSifier<'a> {
 				CodeMaker::default()
 			}
 			StmtKind::Struct { name, fields, extends } => {
-				let mut code = self.jsify_struct(name, fields, extends, env);
+				let mut code = self.jsify_struct(name, fields, extends, env, ctx);
 				// Emits struct class file
 				self.emit_struct_file(name, code, ctx);
 
@@ -1153,6 +1165,8 @@ impl<'a> JSifier<'a> {
 			ctx.lifts
 		};
 
+		//println!("LIFTS: {:#?}", lifts);
+
 		let ctx = &mut JSifyContext {
 			lifts,
 			visit_ctx: &mut ctx.visit_ctx,
@@ -1171,13 +1185,14 @@ impl<'a> JSifier<'a> {
 		self.emit_inflight_file(&class, inflight_class_code, ctx);
 
 		// lets write the code for the preflight side of the class
+		// TODO: why would we want to do this for inflight classes?? maybe return here in that case?
 		let mut code = CodeMaker::default();
 
 		// default base class for preflight classes is `core.Resource`
 		let extends = if let Some(parent) = &class.parent {
 			//let base = parent.as_type_reference().expect("resolve parent type");
 
-			format!(" extends {}", self.jsify_user_defined_type(parent))
+			format!(" extends {}", self.jsify_user_defined_type(parent, ctx))
 		} else {
 			format!(" extends {}", STDLIB_CORE_RESOURCE)
 		};
@@ -1341,7 +1356,7 @@ impl<'a> JSifier<'a> {
 		class_code.open(format!(
 			"class {name}{} {{",
 			if let Some(parent) = &class.parent {
-				format!(" extends {}", self.jsify_user_defined_type(&parent))
+				format!(" extends {}", self.jsify_user_defined_type(&parent, ctx))
 			} else {
 				"".to_string()
 			}

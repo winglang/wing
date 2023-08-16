@@ -1,6 +1,6 @@
 use crate::ast::{
 	CalleeKind, Class, Expr, ExprKind, FunctionBody, FunctionDefinition, Phase, Reference, Scope, Stmt, StmtKind, Symbol,
-	TypeAnnotation, TypeAnnotationKind,
+	TypeAnnotation, TypeAnnotationKind, UserDefinedType,
 };
 use crate::diagnostic::WingSpan;
 use crate::docs::Documented;
@@ -178,20 +178,6 @@ impl<'a> Visit<'a> for HoverVisitor<'a> {
 		});
 	}
 
-	fn visit_type_annotation(&mut self, node: &'a TypeAnnotation) {
-		if self.found.is_some() {
-			return;
-		}
-
-		if let TypeAnnotationKind::UserDefined(t) = &node.kind {
-			if t.span.contains(&self.position) {
-				self.found = Some((t.span.clone(), self.lookup_docs(&t.full_path_str(), None)));
-			}
-		}
-
-		visit::visit_type_annotation(self, node);
-	}
-
 	fn visit_symbol(&mut self, node: &'a Symbol) {
 		if self.found.is_some() {
 			return;
@@ -331,6 +317,26 @@ impl<'a> Visit<'a> for HoverVisitor<'a> {
 		}
 	}
 
+	fn visit_user_defined_type(&mut self, node: &'a UserDefinedType) {
+		if self.found.is_some() {
+			return;
+		}
+
+		if node.span.contains(&self.position) {
+			// Only lookup string up to the position
+			let mut partial_path = vec![];
+			node.full_path().iter().for_each(|p| {
+				if p.span.start <= self.position.into() {
+					partial_path.push(p.name.clone());
+				}
+			});
+			let lookup_str = partial_path.join(".");
+			self.found = Some((node.span.clone(), self.lookup_docs(&lookup_str, None)));
+		}
+
+		visit::visit_user_defined_type(self, node);
+	}
+
 	fn visit_reference(&mut self, node: &'a Reference) {
 		if self.found.is_some() {
 			return;
@@ -342,20 +348,6 @@ impl<'a> Visit<'a> for HoverVisitor<'a> {
 					self.found = Some((sym.span.clone(), self.lookup_docs(&sym.name, None)));
 				}
 			}
-			// TODO: add a visit_user_defined_type
-			// Reference::TypeReference(t) => {
-			// 	if t.span.contains(&self.position) {
-			// 		// Only lookup string up to the position
-			// 		let mut partial_path = vec![];
-			// 		t.full_path().iter().for_each(|p| {
-			// 			if p.span.start <= self.position.into() {
-			// 				partial_path.push(p.name.clone());
-			// 			}
-			// 		});
-			// 		let lookup_str = partial_path.join(".");
-			// 		self.found = Some((t.span.clone(), self.lookup_docs(&lookup_str, None)));
-			// 	}
-			// }
 			Reference::InstanceMember { object, property, .. } => {
 				if object.span.contains(&self.position) {
 					self.visit_expr(object)
@@ -363,17 +355,22 @@ impl<'a> Visit<'a> for HoverVisitor<'a> {
 					self.visit_type_with_member(self.types.get_expr_type(object), property)
 				}
 			}
-			Reference::TypeMember { type_name, property } => self.visit_type_with_member(
-				resolve_user_defined_type(
-					type_name,
-					&self.types.get_scope_env(self.current_scope),
-					self.current_statement_index,
-				)
-				.unwrap_or(self.types.error()),
-				property,
-			),
+			Reference::TypeMember { type_name, property } => {
+				if type_name.span.contains(&self.position) {
+					self.visit_user_defined_type(type_name)
+				} else {
+					self.visit_type_with_member(
+						resolve_user_defined_type(
+							type_name,
+							&self.types.get_scope_env(self.current_scope),
+							self.current_statement_index,
+						)
+						.unwrap_or(self.types.error()),
+						property,
+					)
+				}
+			}
 		}
-
 		visit::visit_reference(self, node);
 	}
 }
@@ -577,8 +574,39 @@ new cloud.Bucket();
 	test_hover_list!(
 		user_defined_types,
 		r#"
-class Foo { };
+class Foo { }
      //^
+"#
+	);
+
+	test_hover_list!(
+		user_defined_type_annotation,
+		r#"
+class Foo { }
+let a: Foo = new Foo();
+      //^
+"#
+	);
+
+	test_hover_list!(
+		user_defined_type_reference_property,
+		r#"
+class Foo { 
+	static static_method() { }
+}
+Foo.static_method();
+   //^
+"#
+	);
+
+	test_hover_list!(
+		user_defined_type_reference_type,
+		r#"
+class Foo { 
+	static static_method() { }
+}
+Foo.static_method();
+//^
 "#
 	);
 

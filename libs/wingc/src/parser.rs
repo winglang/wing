@@ -1389,8 +1389,8 @@ impl<'s> Parser<'s> {
 		let object_expr = self.get_child_field(nested_node, "object")?;
 
 		if let Some(property) = nested_node.child_by_field_name("property") {
-			let object_expr = if object_expr.kind() == "json_container_type" {
-				Expr::new(
+			if object_expr.kind() == "json_container_type" {
+				Ok(Expr::new(
 					ExprKind::Reference(Reference::TypeMember {
 						type_name: UserDefinedType {
 							root: Symbol::global(WINGSDK_STD_MODULE),
@@ -1400,23 +1400,23 @@ impl<'s> Parser<'s> {
 						property: self.node_symbol(&property)?,
 					}),
 					self.node_span(&object_expr),
-				)
+				))
 			} else {
-				self.build_expression(&object_expr, phase)?
-			};
-			let accessor_sym = self.node_symbol(&self.get_child_field(nested_node, "accessor_type")?)?;
-			let optional_accessor = match accessor_sym.name.as_str() {
-				"?." => true,
-				_ => false,
-			};
-			Ok(Expr::new(
-				ExprKind::Reference(Reference::InstanceMember {
-					object: Box::new(object_expr),
-					property: self.node_symbol(&property)?,
-					optional_accessor,
-				}),
-				self.node_span(&nested_node),
-			))
+				let object_expr = self.build_expression(&object_expr, phase)?;
+				let accessor_sym = self.node_symbol(&self.get_child_field(nested_node, "accessor_type")?)?;
+				let optional_accessor = match accessor_sym.name.as_str() {
+					"?." => true,
+					_ => false,
+				};
+				Ok(Expr::new(
+					ExprKind::Reference(Reference::InstanceMember {
+						object: Box::new(object_expr),
+						property: self.node_symbol(&property)?,
+						optional_accessor,
+					}),
+					self.node_span(&nested_node),
+				))
+			}
 		} else {
 			// we are missing the last property, but we can still parse the rest of the expression
 			self.add_error(

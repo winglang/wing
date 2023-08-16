@@ -478,12 +478,7 @@ where
 			}
 			v.visit_type_annotation(&f.return_type);
 		}
-		TypeAnnotationKind::UserDefined(t) => {
-			v.visit_symbol(&t.root);
-			for field in &t.fields {
-				v.visit_symbol(field);
-			}
-		}
+		TypeAnnotationKind::UserDefined(t) => v.visit_user_defined_type(t),
 	}
 }
 
