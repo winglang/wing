@@ -1,4 +1,4 @@
-Copyright (c) 2023 Monada
+Copyright (c) 2023 Wing Cloud, Inc.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
