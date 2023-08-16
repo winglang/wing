@@ -324,7 +324,7 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 			self.ctx.current_env().expect("an env"),
 			self.ctx.current_stmt_idx(),
 		)
-		.expect("resolved type");
+		.unwrap_or(self.jsify.types.error());
 
 		//---------------
 		// LIFT
