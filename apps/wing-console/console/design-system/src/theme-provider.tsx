@@ -98,7 +98,7 @@ const computeColor = (color: string, level: number = 1): string => {
 };
 
 const applyThemeStyle = (newTheme: Theme) => {
-  const colorRegex = /bg-|\[|]|dark:/g;
+  const colorRegex = /bg-|\[|]|dark:|hover:/g;
   const keyRegex = /[#:[\\\]]/g;
 
   let styles = {};
@@ -114,9 +114,13 @@ const applyThemeStyle = (newTheme: Theme) => {
     const lightColor = lightClass.replaceAll(colorRegex, "");
     const lightKey = lightClass.replaceAll(keyRegex, "\\$&");
 
+    const hover = lightClass.includes("hover:");
+
     styles = {
       ...styles,
-      [`.${CUSTOMIZABLE_COLOR} .${lightKey}`]: `{ background-color: ${lightColor} !important;}`,
+      [`.${CUSTOMIZABLE_COLOR} .${lightKey}${
+        hover && ":hover"
+      }`]: `{ background-color: ${lightColor} !important;}`,
     };
 
     if (!darkClass) {
@@ -126,7 +130,9 @@ const applyThemeStyle = (newTheme: Theme) => {
     const darkKey = darkClass.replaceAll(keyRegex, "\\$&");
     styles = {
       ...styles,
-      [`.dark .${CUSTOMIZABLE_COLOR} .${darkKey}`]: `{ background-color: ${darkColor} !important;}`,
+      [`.dark .${CUSTOMIZABLE_COLOR} .${darkKey}${
+        hover && ":hover"
+      }`]: `{ background-color: ${darkColor} !important;}`,
     };
   });
 
@@ -156,13 +162,25 @@ export const buildTheme = (color?: string): Theme => {
     )}]`,
     bg2: `bg-[${computeColor(color, 1.2)}] dark:bg-[${computeColor(
       color,
-      1.2,
+      1.25,
     )}]`,
+    bg2Hover: `hover:bg-[${computeColor(
+      color,
+      1.15,
+    )}] dark:hover:bg-[${computeColor(color, 1.2)}]`,
     bg3: `bg-[${computeColor(color)}] dark:bg-[${computeColor(color)}]`,
+    bg3Hover: `hover:bg-[${computeColor(
+      color,
+      0.95,
+    )}] dark:hover:bg-[${computeColor(color, 1.05)}]`,
     bg4: `bg-[${computeColor(color, 0.8)}] dark:bg-[${computeColor(
       color,
       0.8,
     )}]`,
+    bg4Hover: `hover:bg-[${computeColor(
+      color,
+      0.85,
+    )}] dark:hover:bg-[${computeColor(color, 0.9)}]`,
     bgInput: `bg-[${computeColor(color, 0.8)}] dark:bg-[${computeColor(
       color,
       1.2,
