@@ -4,6 +4,7 @@ import {
   GetQueueAttributesCommand,
   SQSClient,
   ReceiveMessageCommand,
+  InvalidMessageContents,
 } from "@aws-sdk/client-sqs";
 import { mockClient } from "aws-sdk-client-mock";
 import { test, expect, beforeEach } from "vitest";
@@ -33,6 +34,47 @@ test("push - happy path", async () => {
 
   // THEN
   expect(response).toEqual(undefined);
+});
+
+test("push - sad path invalid message", async () => {
+  // GIVEN
+  const QUEUE_URL = "QUEUE_URL";
+  const MESSAGE = "INVALID_MESSAGE";
+
+  sqsMock
+    .on(SendMessageCommand, { QueueUrl: QUEUE_URL, MessageBody: MESSAGE })
+    .rejects(
+      new InvalidMessageContents({
+        message: "InvalidMessageContents error",
+        $metadata: {},
+      })
+    );
+
+  // WHEN
+  const client = new QueueClient(QUEUE_URL);
+
+  // THEN
+  await expect(() => client.push(MESSAGE)).rejects.toThrowError(
+    /The message contains characters outside the allowed set/
+  );
+});
+
+test("push - sad path unknown error", async () => {
+  // GIVEN
+  const QUEUE_URL = "QUEUE_URL";
+  const MESSAGE = "MESSAGE";
+
+  sqsMock
+    .on(SendMessageCommand, { QueueUrl: QUEUE_URL, MessageBody: MESSAGE })
+    .rejects(new Error("unknown error"));
+
+  // WHEN
+  const client = new QueueClient(QUEUE_URL);
+
+  // THEN
+  await expect(() => client.push(MESSAGE)).rejects.toThrowError(
+    /unknown error/
+  );
 });
 
 test("purge - happy path", async () => {

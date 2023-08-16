@@ -248,8 +248,12 @@ export class Simulator {
           `Resource ${resourceConfig.path} could not be cleaned up, no handle for it was found.`
         );
       }
-      const resource = this._handles.deallocate(resourceConfig.attrs!.handle);
-      await resource.cleanup();
+      try {
+        const resource = this._handles.deallocate(resourceConfig.attrs!.handle);
+        await resource.cleanup();
+      } catch (err) {
+        console.warn(err);
+      }
 
       let event: Trace = {
         type: TraceType.RESOURCE,
