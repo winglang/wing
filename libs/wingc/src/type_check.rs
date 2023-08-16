@@ -94,9 +94,6 @@ pub enum VariableKind {
 	/// a type (e.g. `std.Json`)
 	Type,
 
-	/// a namespace (e.g. `cloud`)
-	Namespace,
-
 	/// an error placeholder
 	Error,
 }

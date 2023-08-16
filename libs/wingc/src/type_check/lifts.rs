@@ -1,8 +1,8 @@
-use std::collections::{BTreeMap, BTreeSet};
+use std::collections::{BTreeMap, BTreeSet, HashMap};
 
 use itertools::Itertools;
 
-use crate::ast::Symbol;
+use crate::ast::{Symbol, UserDefinedType};
 
 use super::CLASS_INFLIGHT_INIT_NAME;
 
@@ -18,8 +18,15 @@ pub struct Lifts {
 	/// Map from token to lift
 	lift_by_token: BTreeMap<String, Lift>,
 
-	/// Map between expression id and a lift token.
-	token_by_expr_id: BTreeMap<usize, String>,
+	/// Map between liftable AST element and a lift token.
+	token_for_liftable: HashMap<Liftable, String>,
+}
+
+/// Ast elements that may be lifted
+#[derive(Debug, PartialEq, Eq, Hash, Clone)]
+pub enum Liftable {
+	Expr(usize),
+	Type(UserDefinedType),
 }
 
 /// A record that describes a capture.
@@ -70,7 +77,7 @@ impl Lifts {
 			lifts: BTreeMap::new(),
 			lift_by_token: BTreeMap::new(),
 			captures: BTreeMap::new(),
-			token_by_expr_id: BTreeMap::new(),
+			token_for_liftable: HashMap::new(),
 		}
 	}
 
@@ -88,12 +95,15 @@ impl Lifts {
 	}
 
 	/// Adds a lift for an expression.
-	pub fn lift(&mut self, expr_id: usize, method: Option<Symbol>, property: Option<String>, code: &str) {
+	pub fn lift(&mut self, lifted_thing: &Liftable, method: Option<Symbol>, property: Option<String>, code: &str) {
 		let is_field = code.contains("this.");
 
 		let token = self.render_token(code);
 
-		self.token_by_expr_id.entry(expr_id).or_insert(token.clone());
+		self
+			.token_for_liftable
+			.entry(lifted_thing.clone())
+			.or_insert(token.clone());
 
 		self.lift_by_token.entry(token.clone()).or_insert(Lift {
 			token: token.clone(),
@@ -109,7 +119,7 @@ impl Lifts {
 		if is_field {
 			self.add_lift(CLASS_INFLIGHT_INIT_NAME.to_string(), token, code, None, true);
 		} else {
-			self.capture(&expr_id, code);
+			self.capture(&lifted_thing, code);
 		}
 	}
 
@@ -128,9 +138,9 @@ impl Lifts {
 		}
 	}
 
-	/// Returns the token for an expression. Called by the jsifier when emitting inflight code.
-	pub fn token_for_expr(&self, expr_id: &usize) -> Option<String> {
-		let Some(token) = self.token_by_expr_id.get(expr_id) else {
+	/// Returns the token for a liftable. Called by the jsifier when emitting inflight code.
+	pub fn token_for_liftable(&self, lifted_thing: &Liftable) -> Option<String> {
+		let Some(token) = self.token_for_liftable.get(lifted_thing) else {
 			return None;
 		};
 
@@ -148,7 +158,7 @@ impl Lifts {
 	}
 
 	/// Captures an expression.
-	pub fn capture(&mut self, expr_id: &usize, code: &str) {
+	pub fn capture(&mut self, lifted_thing: &Liftable, code: &str) {
 		// no need to capture this (it's already in scope)
 		if code == "this" {
 			return;
@@ -156,7 +166,10 @@ impl Lifts {
 
 		let token = self.render_token(code);
 
-		self.token_by_expr_id.entry(*expr_id).or_insert(token.clone());
+		self
+			.token_for_liftable
+			.entry(lifted_thing.clone())
+			.or_insert(token.clone());
 
 		self.captures.entry(token.clone()).or_insert(Capture {
 			token: token.to_string(),

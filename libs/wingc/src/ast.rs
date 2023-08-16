@@ -147,11 +147,24 @@ pub enum TypeAnnotationKind {
 
 // In the future this may be an enum for type-alias, class, etc. For now its just a nested name.
 // Also this root,fields thing isn't really useful, should just turn in to a Vec<Symbol>.
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Eq)]
 pub struct UserDefinedType {
 	pub root: Symbol,
 	pub fields: Vec<Symbol>,
 	pub span: WingSpan,
+}
+
+impl Hash for UserDefinedType {
+	fn hash<H: Hasher>(&self, state: &mut H) {
+		self.root.hash(state);
+		self.fields.hash(state);
+	}
+}
+
+impl PartialEq for UserDefinedType {
+	fn eq(&self, other: &Self) -> bool {
+		self.root == other.root && self.fields == other.fields
+	}
 }
 
 impl UserDefinedType {

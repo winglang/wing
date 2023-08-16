@@ -4,7 +4,10 @@ use crate::{
 	diagnostic::{report_diagnostic, Diagnostic, WingSpan},
 	jsify::{JSifier, JSifyContext},
 	type_check::{
-		lifts::Lifts, resolve_user_defined_type, symbol_env::LookupResult, TypeRef, CLOSURE_CLASS_HANDLE_METHOD,
+		lifts::{Liftable, Lifts},
+		resolve_user_defined_type,
+		symbol_env::LookupResult,
+		TypeRef, CLOSURE_CLASS_HANDLE_METHOD,
 	},
 	visit::{self, Visit},
 	visit_context::VisitContext,
@@ -212,7 +215,7 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 			}
 
 			let mut lifts = self.lifts_stack.pop().unwrap();
-			lifts.lift(node.id, self.ctx.current_method(), property, &code);
+			lifts.lift(&Liftable::Expr(node.id), self.ctx.current_method(), property, &code);
 			self.lifts_stack.push(lifts);
 
 			return;
@@ -226,7 +229,7 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 			let code = self.jsify_expr(&node, Phase::Inflight);
 
 			let mut lifts = self.lifts_stack.pop().unwrap();
-			lifts.capture(&node.id, &code);
+			lifts.capture(&Liftable::Expr(node.id), &code);
 			self.lifts_stack.push(lifts);
 
 			return;
@@ -297,7 +300,7 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 
 		if let Some(parent) = &node.parent {
 			let mut lifts = self.lifts_stack.pop().unwrap();
-			lifts.capture(&parent.id, &self.jsify_expr(&parent, Phase::Inflight));
+			lifts.capture(&Liftable::Expr(parent.id), &self.jsify_expr(&parent, Phase::Inflight));
 			self.lifts_stack.push(lifts);
 		}
 

@@ -25,8 +25,10 @@ use crate::{
 	diagnostic::{report_diagnostic, Diagnostic, WingSpan},
 	files::Files,
 	type_check::{
-		lifts::Lifts, resolve_super_method, symbol_env::SymbolEnv, ClassLike, Type, TypeRef, Types, VariableKind,
-		CLASS_INFLIGHT_INIT_NAME,
+		lifts::{Liftable, Lifts},
+		resolve_super_method,
+		symbol_env::SymbolEnv,
+		ClassLike, Type, TypeRef, Types, VariableKind, CLASS_INFLIGHT_INIT_NAME,
 	},
 	visit_context::VisitContext,
 	MACRO_REPLACE_ARGS, MACRO_REPLACE_ARGS_TEXT, MACRO_REPLACE_SELF, WINGSDK_ASSEMBLY_NAME, WINGSDK_RESOURCE,
@@ -374,7 +376,7 @@ impl<'a> JSifier<'a> {
 		// then emit the token instead of the expression.
 		if ctx.visit_ctx.current_phase() == Phase::Inflight {
 			if let Some(lifts) = &ctx.lifts {
-				if let Some(t) = lifts.token_for_expr(&expression.id) {
+				if let Some(t) = lifts.token_for_liftable(&Liftable::Expr(expression.id)) {
 					return t.clone();
 				}
 			}
@@ -1560,10 +1562,6 @@ fn get_public_symbols(scope: &Scope) -> Vec<Symbol> {
 	}
 
 	symbols
-}
-
-fn inflight_filename(class: &AstClass) -> String {
-	format!("./inflight.{}.js", class.name.name)
 }
 
 fn struct_filename(s: &String) -> String {
