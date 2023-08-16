@@ -25,7 +25,13 @@ import {
   TOPIC_FQN,
   SCHEDULE_FQN,
 } from "../cloud";
-import { App as CoreApp, AppProps, preSynthesizeAllConstructs } from "../core";
+import {
+  App as CoreApp,
+  AppProps,
+  preSynthesizeAllConstructs,
+  Connections,
+  synthesizeTree,
+} from "../core";
 import { PluginManager } from "../core/plugin-manager";
 import { TEST_RUNNER_FQN } from "../std";
 
@@ -125,6 +131,12 @@ export class App extends CoreApp {
     // synthesize cdk.Stack files in `outdir/cdk.out`
     this.pluginManager.preSynth(this);
     this.cdkApp.synth();
+
+    // write `outdir/tree.json`
+    synthesizeTree(this, this.outdir);
+
+    // write `outdir/connections.json`
+    Connections.of(this).synth(this.outdir);
 
     const template = Template.fromStack(this.cdkStack);
 

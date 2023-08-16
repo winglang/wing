@@ -4,7 +4,12 @@ import * as cdktf from "cdktf";
 import { Construct } from "constructs";
 import stringify from "safe-stable-stringify";
 import { CdkTfTokens } from "./tokens";
-import { App, AppProps, preSynthesizeAllConstructs } from "../core";
+import {
+  App,
+  AppProps,
+  Connections,
+  preSynthesizeAllConstructs,
+} from "../core";
 import { PluginManager } from "../core/plugin-manager";
 import { Tokens } from "../core/tokens";
 import { synthesizeTree } from "../core/tree";
@@ -110,6 +115,9 @@ export abstract class CdktfApp extends App {
 
     // write `outdir/tree.json`
     synthesizeTree(this, this.outdir);
+
+    // write `outdir/connections.json`
+    Connections.of(this).synth(this.outdir);
 
     // return a cleaned snapshot of the resulting Terraform manifest for unit testing
     const tfConfig = this.cdktfStack.toTerraform();

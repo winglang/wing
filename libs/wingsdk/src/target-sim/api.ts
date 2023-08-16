@@ -6,7 +6,8 @@ import { simulatorAttrToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
 import * as core from "../core";
-import { Display, IInflightHost, Resource } from "../std";
+import { Connections } from "../core";
+import { Display, IInflightHost } from "../std";
 import { BaseResourceSchema } from "../testing/simulator";
 
 /**
@@ -78,10 +79,10 @@ export class Api extends cloud.Api implements ISimulatorResource {
     this._addToSpec(path, method, undefined);
 
     const fn = this.createOrGetFunction(inflight, props, path, method);
-    Resource.addConnection({
-      from: this,
-      to: fn,
-      relationship: `${method.toLowerCase()}()`,
+    Connections.of(this).add({
+      source: this,
+      target: fn,
+      name: `${method.toLowerCase()}()`,
     });
   }
 

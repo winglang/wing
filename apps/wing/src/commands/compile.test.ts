@@ -23,6 +23,7 @@ describe(
       expect(files.length).toBeGreaterThan(0);
       expect(files).toContain("main.tf.json");
       expect(files).toContain("tree.json");
+      expect(files).toContain("connections.json");
     });
 
     test("should be able to compile the SDK capture test to sim", async () => {
@@ -35,7 +36,7 @@ describe(
       expect(stats.isDirectory()).toBeTruthy();
       const files = (await readdir(outDir)).sort();
       expect(files.length).toBeGreaterThan(0);
-      expect(files).toEqual([".wing", "simulator.json", "tree.json"]);
+      expect(files).toEqual([".wing", "connections.json", "simulator.json", "tree.json"]);
     });
 
     test("should error if a nonexistent file is compiled", async () => {
@@ -61,7 +62,7 @@ describe(
         expect(stats.isDirectory()).toBeTruthy();
         const files = (await readdir(outDir)).sort();
         expect(files.length).toBeGreaterThan(0);
-        expect(files).toEqual([".wing", "simulator.json", "tree.json"]);
+        expect(files).toEqual([".wing", "connections.json", "simulator.json", "tree.json"]);
       } finally {
         process.chdir(oldCwd);
       }
@@ -75,6 +76,7 @@ describe(
       expect(files.length).toBeGreaterThan(0);
       expect(files).toContain("main.tf.json");
       expect(files).toContain("tree.json");
+      expect(files).toContain("connections.json");
       expect(files).not.toContain("terraform.tfstate");
 
       // create a file in the output directory
@@ -89,6 +91,7 @@ describe(
       expect(files2.length).toBeGreaterThan(0);
       expect(files2).toContain("main.tf.json");
       expect(files2).toContain("tree.json");
+      expect(files2).toContain("connections.json");
       expect(files2).toContain("terraform.tfstate"); // file was not deleted
     });
   },

@@ -10,9 +10,9 @@ import {
   convertDurationToCronExpression,
 } from "./util";
 import * as cloud from "../cloud";
-import { Code } from "../core";
+import { Code, Connections } from "../core";
 import { convertBetweenHandlers } from "../shared/convert";
-import { Display, IInflightHost, Resource } from "../std";
+import { Display, IInflightHost } from "../std";
 import { BaseResourceSchema } from "../testing";
 
 /**
@@ -58,10 +58,10 @@ export class Schedule extends cloud.Schedule implements ISimulatorResource {
       subscriptionProps: {},
     });
 
-    Resource.addConnection({
-      from: this,
-      to: fn,
-      relationship: "onTick()",
+    Connections.of(this).add({
+      source: this,
+      target: fn,
+      name: "onTick()",
     });
 
     return fn;
