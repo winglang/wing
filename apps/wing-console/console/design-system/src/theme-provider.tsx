@@ -78,13 +78,17 @@ const computeColor = (color: string, level: number = 1): string => {
     return `#${hexColor}`;
   }
 
+  const adjustChannel = (value: number, factor: number): number => {
+    return Math.round(value + (255 - value) * (1 - factor));
+  };
+
   const oldR = Number.parseInt(hexColor.slice(0, 2), 16);
   const oldG = Number.parseInt(hexColor.slice(2, 4), 16);
   const oldB = Number.parseInt(hexColor.slice(4, 6), 16);
 
-  const newR = Math.min(Math.max(Math.round(oldR * level), 0), 255);
-  const newG = Math.min(Math.max(Math.round(oldG * level), 0), 255);
-  const newB = Math.min(Math.max(Math.round(oldB * level), 0), 255);
+  const newR = adjustChannel(oldR, level);
+  const newG = adjustChannel(oldG, level);
+  const newB = adjustChannel(oldB, level);
 
   const newColor = `${newR.toString(16).padStart(2, "0")}${newG
     .toString(16)
@@ -148,20 +152,23 @@ export const buildTheme = (color?: string): Theme => {
     ...DefaultTheme,
     bg1: `bg-[${computeColor(color, 1.2)}] dark:bg-[${computeColor(
       color,
-      0.8,
+      1.2,
     )}]`,
+
     bg2: `bg-[${computeColor(color, 1.1)}] dark:bg-[${computeColor(
-      color,
-      0.9,
-    )}]`,
-    bg3: `bg-[${computeColor(color)}] dark:bg-[${computeColor(color, 1.1)}]`,
-    bg4: `bg-[${computeColor(color, 0.9)}] dark:bg-[${computeColor(
       color,
       1.1,
     )}]`,
-    bgInput: `bg-[${computeColor(color, 0.8)}] dark:bg-[${computeColor(
+
+    bg3: `bg-[${computeColor(color)}] dark:bg-[${computeColor(color)}]`,
+
+    bg4: `bg-[${computeColor(color, 0.8)}] dark:bg-[${computeColor(
       color,
-      1.2,
+      0.8,
+    )}]`,
+    bgInput: `bg-[${computeColor(color, 0.9)}] dark:bg-[${computeColor(
+      color,
+      1.1,
     )}]`,
   };
 

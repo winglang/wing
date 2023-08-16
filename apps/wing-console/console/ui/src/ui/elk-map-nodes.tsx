@@ -1,4 +1,8 @@
-import { useTheme, IconComponent } from "@wingconsole/design-system";
+import {
+  useTheme,
+  IconComponent,
+  CUSTOMIZABLE_COLOR,
+} from "@wingconsole/design-system";
 import { BaseResourceSchema, NodeDisplay } from "@wingconsole/server";
 import classNames from "classnames";
 import { PropsWithChildren, useMemo } from "react";
@@ -89,6 +93,7 @@ export const ContainerNode = ({
         "transition-all",
         "rounded",
         "cursor-default",
+        CUSTOMIZABLE_COLOR,
         !open && "shadow-sm",
         {
           "outline-4": selected,
@@ -144,7 +149,6 @@ export const ContainerNode = ({
             !borderColor && "rounded-tr",
             "group-focus:border-sky-300 dark:group-focus:border-sky-500",
             "transition-all",
-            theme.bg3,
             {
               "border-sky-300 dark:border-sky-500": selected,
               "rounded-br-none": open,
