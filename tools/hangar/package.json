@@ -8,7 +8,7 @@
     "test:watch": "vitest watch",
     "bench": "vitest bench --run"
   },
-  "author": "Monada",
+  "author": "Wing Cloud",
   "license": "Apache-2.0",
   "devDependencies": {
     "@wingconsole/app": "workspace:^",
