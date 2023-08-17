@@ -198,6 +198,12 @@ In our docs we have the following information:
 - Deployment and tests logs can be saved in the preview environment server and can be served
 - A Cloud.Scheduler to run the self-cleaning mechanism
 
+### Wing Cloud website
+
+https://wing.cloud website should still be a webflow site.
+https://wing.cloud/dashboard site should be a react app.
+need to use a reverse proxy as we have in our playground/learn/docs sites.
+
 ### Authentication and Authorization
 
 1. When a user sign in we will save their GitHub account details in the database.
