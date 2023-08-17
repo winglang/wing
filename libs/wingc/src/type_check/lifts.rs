@@ -64,9 +64,6 @@ pub struct Lift {
 	/// Lifting token (the symbol used in inflight code)
 	pub token: String,
 
-	/// The javascript code to lift (preflight)
-	pub code: String,
-
 	/// Whether this is a field lift (`this.foo`)
 	pub is_field: bool,
 }
@@ -108,7 +105,6 @@ impl Lifts {
 		self.lift_by_token.entry(token.clone()).or_insert(Lift {
 			token: token.clone(),
 			is_field,
-			code: code.to_string(),
 		});
 
 		let method = method.map(|m| m.name).unwrap_or(Default::default());
