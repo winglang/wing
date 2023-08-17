@@ -62,21 +62,21 @@ class $Root extends $stdlib.std.Resource {
         return "baz";
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           require("./inflight.Baz-1.js")({
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const BazClient = ${Baz._toInflightType(this).text};
+            const BazClient = ${Baz._toInflightType(this)};
             const client = new BazClient({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
       }
     }
   }

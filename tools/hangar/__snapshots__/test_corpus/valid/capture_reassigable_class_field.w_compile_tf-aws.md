@@ -292,24 +292,24 @@ class $Root extends $stdlib.std.Resource {
           constructor(scope, id, ) {
             super(scope, id);
             this._addInflightOps("handle", "$inflight_init");
-            this.display.hidden = true;
+            (std.Display.of(this)).hidden = true;
           }
           static _toInflightType(context) {
-            return $stdlib.core.NodeJsCode.fromInline(`
+            return `
               require("./inflight.$Closure1-1.js")({
               })
-            `);
+            `;
           }
           _toInflight() {
-            return $stdlib.core.NodeJsCode.fromInline(`
+            return `
               (await (async () => {
-                const $Closure1Client = ${$Closure1._toInflightType(this).text};
+                const $Closure1Client = ${$Closure1._toInflightType(this)};
                 const client = new $Closure1Client({
                 });
                 if (client.$inflight_init) { await client.$inflight_init(); }
                 return client;
               })())
-            `);
+            `;
           }
         }
         this.onUpdateCallback = new $Closure1(this,"$Closure1");
@@ -318,15 +318,15 @@ class $Root extends $stdlib.std.Resource {
         this.onUpdateCallback = fn;
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           require("./inflight.KeyValueStore-1.js")({
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const KeyValueStoreClient = ${KeyValueStore._toInflightType(this).text};
+            const KeyValueStoreClient = ${KeyValueStore._toInflightType(this)};
             const client = new KeyValueStoreClient({
               $this_bucket: ${this._lift(this.bucket)},
               $this_onUpdateCallback: ${this._lift(this.onUpdateCallback)},
@@ -334,7 +334,7 @@ class $Root extends $stdlib.std.Resource {
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
@@ -355,25 +355,25 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("handle", "$inflight_init");
-        this.display.hidden = true;
+        (std.Display.of(this)).hidden = true;
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           require("./inflight.$Closure2-1.js")({
             $counter: ${context._lift(counter)},
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const $Closure2Client = ${$Closure2._toInflightType(this).text};
+            const $Closure2Client = ${$Closure2._toInflightType(this)};
             const client = new $Closure2Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
@@ -386,27 +386,27 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("handle", "$inflight_init");
-        this.display.hidden = true;
+        (std.Display.of(this)).hidden = true;
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           require("./inflight.$Closure3-1.js")({
             $counter: ${context._lift(counter)},
             $kv: ${context._lift(kv)},
             $util_Util: ${context._lift(util.Util)},
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const $Closure3Client = ${$Closure3._toInflightType(this).text};
+            const $Closure3Client = ${$Closure3._toInflightType(this)};
             const client = new $Closure3Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {

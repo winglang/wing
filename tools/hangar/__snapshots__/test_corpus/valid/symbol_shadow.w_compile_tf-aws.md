@@ -425,25 +425,25 @@ class $Root extends $stdlib.std.Resource {
           constructor(scope, id, ) {
             super(scope, id);
             this._addInflightOps("handle", "$inflight_init");
-            this.display.hidden = true;
+            (std.Display.of(this)).hidden = true;
           }
           static _toInflightType(context) {
-            return $stdlib.core.NodeJsCode.fromInline(`
+            return `
               require("./inflight.$Closure2-1.js")({
                 $s: ${context._lift(s)},
               })
-            `);
+            `;
           }
           _toInflight() {
-            return $stdlib.core.NodeJsCode.fromInline(`
+            return `
               (await (async () => {
-                const $Closure2Client = ${$Closure2._toInflightType(this).text};
+                const $Closure2Client = ${$Closure2._toInflightType(this)};
                 const client = new $Closure2Client({
                 });
                 if (client.$inflight_init) { await client.$inflight_init(); }
                 return client;
               })())
-            `);
+            `;
           }
           _registerBind(host, ops) {
             if (ops.includes("handle")) {
@@ -455,46 +455,46 @@ class $Root extends $stdlib.std.Resource {
         this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:inflight in resource should capture the right scoped var",new $Closure2(this,"$Closure2"));
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           require("./inflight.A-1.js")({
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const AClient = ${A._toInflightType(this).text};
+            const AClient = ${A._toInflightType(this)};
             const client = new AClient({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
       }
     }
     class $Closure3 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("handle", "$inflight_init");
-        this.display.hidden = true;
+        (std.Display.of(this)).hidden = true;
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           require("./inflight.$Closure3-1.js")({
             $s: ${context._lift(s)},
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const $Closure3Client = ${$Closure3._toInflightType(this).text};
+            const $Closure3Client = ${$Closure3._toInflightType(this)};
             const client = new $Closure3Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
@@ -507,24 +507,24 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("handle", "$inflight_init");
-        this.display.hidden = true;
+        (std.Display.of(this)).hidden = true;
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           require("./inflight.$Closure4-1.js")({
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const $Closure4Client = ${$Closure4._toInflightType(this).text};
+            const $Closure4Client = ${$Closure4._toInflightType(this)};
             const client = new $Closure4Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
       }
     }
     const s = "top";
@@ -535,25 +535,25 @@ class $Root extends $stdlib.std.Resource {
         constructor(scope, id, ) {
           super(scope, id);
           this._addInflightOps("handle", "$inflight_init");
-          this.display.hidden = true;
+          (std.Display.of(this)).hidden = true;
         }
         static _toInflightType(context) {
-          return $stdlib.core.NodeJsCode.fromInline(`
+          return `
             require("./inflight.$Closure1-1.js")({
               $s: ${context._lift(s)},
             })
-          `);
+          `;
         }
         _toInflight() {
-          return $stdlib.core.NodeJsCode.fromInline(`
+          return `
             (await (async () => {
-              const $Closure1Client = ${$Closure1._toInflightType(this).text};
+              const $Closure1Client = ${$Closure1._toInflightType(this)};
               const client = new $Closure1Client({
               });
               if (client.$inflight_init) { await client.$inflight_init(); }
               return client;
             })())
-          `);
+          `;
         }
         _registerBind(host, ops) {
           if (ops.includes("handle")) {

@@ -549,21 +549,21 @@ class $Root extends $stdlib.std.Resource {
         this.myResource = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           require("./inflight.First-1.js")({
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const FirstClient = ${First._toInflightType(this).text};
+            const FirstClient = ${First._toInflightType(this)};
             const client = new FirstClient({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
       }
     }
     class Another extends $stdlib.std.Resource {
@@ -574,22 +574,22 @@ class $Root extends $stdlib.std.Resource {
         this.first = new First(this,"First");
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           require("./inflight.Another-1.js")({
             $globalCounter: ${context._lift(globalCounter)},
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const AnotherClient = ${Another._toInflightType(this).text};
+            const AnotherClient = ${Another._toInflightType(this)};
             const client = new AnotherClient({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
@@ -620,23 +620,23 @@ class $Root extends $stdlib.std.Resource {
             this._addInflightOps("handle", "$inflight_init");
           }
           static _toInflightType(context) {
-            return $stdlib.core.NodeJsCode.fromInline(`
+            return `
               require("./inflight.R-1.js")({
                 $_parentThis_localCounter: ${context._lift($parentThis.localCounter)},
                 $globalCounter: ${context._lift(globalCounter)},
               })
-            `);
+            `;
           }
           _toInflight() {
-            return $stdlib.core.NodeJsCode.fromInline(`
+            return `
               (await (async () => {
-                const RClient = ${R._toInflightType(this).text};
+                const RClient = ${R._toInflightType(this)};
                 const client = new RClient({
                 });
                 if (client.$inflight_init) { await client.$inflight_init(); }
                 return client;
               })())
-            `);
+            `;
           }
           _registerBind(host, ops) {
             if (ops.includes("handle")) {
@@ -649,7 +649,7 @@ class $Root extends $stdlib.std.Resource {
         (this.localTopic.onMessage(new R(this,"R")));
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           require("./inflight.MyResource-1.js")({
             $Another: ${context._lift(Another)},
             $_globalArrayOfStr_at_0__: ${context._lift((globalArrayOfStr.at(0)))},
@@ -663,19 +663,19 @@ class $Root extends $stdlib.std.Resource {
             $globalNum: ${context._lift(globalNum)},
             $globalStr: ${context._lift(globalStr)},
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const MyResourceClient = ${MyResource._toInflightType(this).text};
+            const MyResourceClient = ${MyResource._toInflightType(this)};
             const client = new MyResourceClient({
               $this_localTopic: ${this._lift(this.localTopic)},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
@@ -702,25 +702,25 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("handle", "$inflight_init");
-        this.display.hidden = true;
+        (std.Display.of(this)).hidden = true;
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           require("./inflight.$Closure1-1.js")({
             $res: ${context._lift(res)},
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType(this).text};
+            const $Closure1Client = ${$Closure1._toInflightType(this)};
             const client = new $Closure1Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
@@ -733,25 +733,25 @@ class $Root extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
         this._addInflightOps("handle", "$inflight_init");
-        this.display.hidden = true;
+        (std.Display.of(this)).hidden = true;
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           require("./inflight.$Closure2-1.js")({
             $Another: ${context._lift(Another)},
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const $Closure2Client = ${$Closure2._toInflightType(this).text};
+            const $Closure2Client = ${$Closure2._toInflightType(this)};
             const client = new $Closure2Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {

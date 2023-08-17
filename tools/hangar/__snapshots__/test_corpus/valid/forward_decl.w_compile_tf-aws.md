@@ -67,21 +67,21 @@ class $Root extends $stdlib.std.Resource {
       method1() {
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           require("./inflight.R-1.js")({
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const RClient = ${R._toInflightType(this).text};
+            const RClient = ${R._toInflightType(this)};
             const client = new RClient({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
       }
     }
     const x = "hi";

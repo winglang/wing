@@ -703,7 +703,7 @@ impl<'a> JSifier<'a> {
 		// getValidator method that will create a json schema validator.
 		let mut code = CodeMaker::default();
 
-		code.open("module.exports = function(stdStruct, fromInline) {".to_string());
+		code.open("module.exports = function(stdStruct) {".to_string());
 		code.open(format!("class {} {{", name));
 
 		// create schema
@@ -775,7 +775,7 @@ impl<'a> JSifier<'a> {
 		// create _toInflightType function that just requires the generated struct file
 		code.open("static _toInflightType(context) {".to_string());
 		code.line(format!(
-			"return fromInline(`require(\"{}\")(${{ context._lift(stdStruct) }})`);",
+			"return `require(\"{}\")(${{ context._lift(stdStruct) }})`;",
 			struct_filename(&name.name)
 		));
 		code.close("}");
@@ -976,10 +976,9 @@ impl<'a> JSifier<'a> {
 				// Reset the code maker for code to be inserted in preflight.js
 				code = CodeMaker::default();
 				code.line(format!(
-					"const {} = require(\"{}\")({}.std.Struct, {}.core.NodeJsCode.fromInline);",
+					"const {} = require(\"{}\")({}.std.Struct);",
 					name,
 					struct_filename(&name.name),
-					STDLIB,
 					STDLIB
 				));
 				code
@@ -1273,7 +1272,7 @@ impl<'a> JSifier<'a> {
 
 		code.open("static _toInflightType(context) {"); // TODO: consider removing the context and making _lift a static method
 
-		code.open(format!("return {STDLIB}.core.NodeJsCode.fromInline(`"));
+		code.open("return `");
 
 		code.open(format!("require(\"{client_path}\")({{"));
 
@@ -1287,7 +1286,7 @@ impl<'a> JSifier<'a> {
 
 		code.close("})");
 
-		code.close("`);");
+		code.close("`;");
 
 		code.close("}");
 		code

@@ -61,21 +61,21 @@ class $Root extends $stdlib.std.Resource {
         this.function = this.node.root.new("aws-cdk-lib.aws_lambda.DockerImageFunction",awscdk.aws_lambda.DockerImageFunction,this,"DockerImageFunction",({"code": (awscdk.aws_lambda.DockerImageCode.fromImageAsset("./test.ts"))}));
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           require("./inflight.CdkDockerImageFunction-1.js")({
           })
-        `);
+        `;
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const CdkDockerImageFunctionClient = ${CdkDockerImageFunction._toInflightType(this).text};
+            const CdkDockerImageFunctionClient = ${CdkDockerImageFunction._toInflightType(this)};
             const client = new CdkDockerImageFunctionClient({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
       }
     }
     this.node.root.new("aws-cdk-lib.App",awscdk.App,);

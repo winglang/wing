@@ -17,7 +17,7 @@ export function liftObject(scope: IConstruct, obj: any): string {
   // if the object is a type, and it has a "_toInflightType" method, we use it to serialize
   // fyi, typeof(obj) in this case is a "function".
   if (typeof obj?._toInflightType === "function") {
-    return obj._toInflightType(scope).text;
+    return obj._toInflightType(scope);
   }
 
   switch (typeof obj) {
