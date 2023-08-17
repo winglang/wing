@@ -114,10 +114,32 @@ module.exports = function({  }) {
       return $obj;
     }
     async handle() {
+      const assertThrows = async (expected, block) => {
+        let error = false;
+        try {
+          (await block());
+        }
+        catch ($error_actual) {
+          const actual = $error_actual.message;
+          {((cond) => {if (!cond) throw new Error("assertion failed: actual == expected")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(actual,expected)))};
+          error = true;
+        }
+        {((cond) => {if (!cond) throw new Error("assertion failed: error")})(error)};
+      }
+      ;
+      const INDEX_OUT_OF_BOUNDS_ERROR = "Index out of bounds";
       const mutArr = [1, 3, 5, 7, 9];
       {((cond) => {if (!cond) throw new Error("assertion failed: mutArr.at(0) == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await mutArr.at(0)),1)))};
       ((obj, args) => { if (args[0] < 0 || args[0] >= mutArr.length) throw new Error("Index out of bounds"); obj[args[0]] = args[1]; })(mutArr, [0,2]);
       {((cond) => {if (!cond) throw new Error("assertion failed: mutArr.at(0) == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await mutArr.at(0)),2)))};
+      (await assertThrows(INDEX_OUT_OF_BOUNDS_ERROR,async () => {
+        ((obj, args) => { if (args[0] < 0 || args[0] >= mutArr.length) throw new Error("Index out of bounds"); obj[args[0]] = args[1]; })(mutArr, [(-1),1]);
+      }
+      ));
+      (await assertThrows(INDEX_OUT_OF_BOUNDS_ERROR,async () => {
+        ((obj, args) => { if (args[0] < 0 || args[0] >= mutArr.length) throw new Error("Index out of bounds"); obj[args[0]] = args[1]; })(mutArr, [5,11]);
+      }
+      ));
     }
   }
   return $Closure14;
