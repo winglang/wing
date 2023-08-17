@@ -79,9 +79,6 @@ exports[`basic function 2`] = `
                 "path": "root/Default/Code",
               },
               "Function": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "Asset": {
                     "constructInfo": {
@@ -144,9 +141,6 @@ exports[`basic function 2`] = `
                 "path": "root/Default/Function",
               },
               "Handler": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
                   "version": "10.1.314",
@@ -168,9 +162,6 @@ exports[`basic function 2`] = `
                 "path": "root/Default/aws",
               },
               "cloud.TestRunner": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "TestFunctionArns": {
                     "constructInfo": {
@@ -310,9 +301,6 @@ exports[`basic function with environment variables 2`] = `
                 "path": "root/Default/Code",
               },
               "Function": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "Asset": {
                     "constructInfo": {
@@ -375,9 +363,6 @@ exports[`basic function with environment variables 2`] = `
                 "path": "root/Default/Function",
               },
               "Handler": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
                   "version": "10.1.314",
@@ -399,9 +384,6 @@ exports[`basic function with environment variables 2`] = `
                 "path": "root/Default/aws",
               },
               "cloud.TestRunner": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "TestFunctionArns": {
                     "constructInfo": {
@@ -540,9 +522,6 @@ exports[`basic function with memory size specified 2`] = `
                 "path": "root/Default/Code",
               },
               "Function": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "Asset": {
                     "constructInfo": {
@@ -605,9 +584,6 @@ exports[`basic function with memory size specified 2`] = `
                 "path": "root/Default/Function",
               },
               "Handler": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
                   "version": "10.1.314",
@@ -629,9 +605,6 @@ exports[`basic function with memory size specified 2`] = `
                 "path": "root/Default/aws",
               },
               "cloud.TestRunner": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "TestFunctionArns": {
                     "constructInfo": {
@@ -769,9 +742,6 @@ exports[`basic function with timeout explicitly set 2`] = `
                 "path": "root/Default/Code",
               },
               "Function": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "Asset": {
                     "constructInfo": {
@@ -834,9 +804,6 @@ exports[`basic function with timeout explicitly set 2`] = `
                 "path": "root/Default/Function",
               },
               "Handler": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
                   "version": "10.1.314",
@@ -858,9 +825,6 @@ exports[`basic function with timeout explicitly set 2`] = `
                 "path": "root/Default/aws",
               },
               "cloud.TestRunner": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "TestFunctionArns": {
                     "constructInfo": {
@@ -998,9 +962,6 @@ exports[`function name valid 2`] = `
                 "path": "root/Default/Code",
               },
               "Handler": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
                   "version": "10.1.314",
@@ -1014,9 +975,6 @@ exports[`function name valid 2`] = `
                 "path": "root/Default/Handler",
               },
               "The-Mighty_Function-01": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "Asset": {
                     "constructInfo": {
@@ -1087,9 +1045,6 @@ exports[`function name valid 2`] = `
                 "path": "root/Default/aws",
               },
               "cloud.TestRunner": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "TestFunctionArns": {
                     "constructInfo": {
@@ -1227,9 +1182,6 @@ exports[`replace invalid character from function name 2`] = `
                 "path": "root/Default/Code",
               },
               "Handler": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
                   "version": "10.1.314",
@@ -1243,9 +1195,6 @@ exports[`replace invalid character from function name 2`] = `
                 "path": "root/Default/Handler",
               },
               "The%Mighty$Function": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "Asset": {
                     "constructInfo": {
@@ -1316,9 +1265,6 @@ exports[`replace invalid character from function name 2`] = `
                 "path": "root/Default/aws",
               },
               "cloud.TestRunner": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "TestFunctionArns": {
                     "constructInfo": {

@@ -4,10 +4,10 @@ const project = new typescript.TypeScriptProject({
   name: "@winglang/jsii-docgen",
   description: "Generates API docs for Wing libraries",
   repository: "https://github.com/winglang/wing",
-  authorName: "Monada",
+  authorName: "Wing Cloud",
   authorEmail: "ping@monada.co",
   authorOrganization: true,
-  authorUrl: "https://monada.co",
+  authorUrl: "https://wing.cloud",
   defaultReleaseBranch: "main",
   projenCommand: "pnpm exec projen",
 

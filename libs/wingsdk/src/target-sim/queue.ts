@@ -7,8 +7,9 @@ import { QueueSchema, QUEUE_TYPE } from "./schema-resources";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
 import * as core from "../core";
+import { Connections } from "../core";
 import { convertBetweenHandlers } from "../shared/convert";
-import { Display, Duration, IInflightHost, Resource } from "../std";
+import { Display, Duration, IInflightHost } from "../std";
 import { BaseResourceSchema } from "../testing/simulator";
 
 /**
@@ -85,10 +86,10 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
       },
     });
 
-    Resource.addConnection({
-      from: this,
-      to: fn,
-      relationship: "setConsumer()",
+    Connections.of(this).add({
+      source: this,
+      target: fn,
+      name: "setConsumer()",
     });
 
     return fn;

@@ -9,8 +9,8 @@ import { Construct } from "constructs";
 import { Function } from "./function";
 import * as cloud from "../cloud";
 import * as core from "../core";
+import { Connections } from "../core";
 import { convertBetweenHandlers } from "../shared/convert";
-import { Resource } from "../std";
 
 /**
  * AWS implementation of `cloud.Schedule`.
@@ -94,10 +94,10 @@ export class Schedule extends cloud.Schedule {
     this.rule.addTarget(new LambdaFunction(fn._function));
     addLambdaPermission(this.rule, fn._function);
 
-    Resource.addConnection({
-      from: this,
-      to: fn,
-      relationship: "onTick()",
+    Connections.of(this).add({
+      source: this,
+      target: fn,
+      name: "onTick()",
     });
 
     return fn;

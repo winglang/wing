@@ -65,9 +65,6 @@ exports[`bucket is public 2`] = `
                 "path": "root/Default/aws",
               },
               "cloud.TestRunner": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "TestFunctionArns": {
                     "constructInfo": {
@@ -91,9 +88,6 @@ exports[`bucket is public 2`] = `
                 "path": "root/Default/cloud.TestRunner",
               },
               "my_bucket": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "Default": {
                     "constructInfo": {
@@ -223,9 +217,6 @@ exports[`bucket prefix must be lowercase 2`] = `
           "Default": {
             "children": {
               "The-Uncanny.Bucket": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "Default": {
                     "constructInfo": {
@@ -272,9 +263,6 @@ exports[`bucket prefix must be lowercase 2`] = `
                 "path": "root/Default/aws",
               },
               "cloud.TestRunner": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "TestFunctionArns": {
                     "constructInfo": {
@@ -389,9 +377,6 @@ exports[`bucket prefix valid 2`] = `
                 "path": "root/Default/aws",
               },
               "cloud.TestRunner": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "TestFunctionArns": {
                     "constructInfo": {
@@ -415,9 +400,6 @@ exports[`bucket prefix valid 2`] = `
                 "path": "root/Default/cloud.TestRunner",
               },
               "the-uncanny.bucket": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "Default": {
                     "constructInfo": {
@@ -655,9 +637,6 @@ exports[`bucket with onCreate method 2`] = `
                 "path": "root/Default/aws",
               },
               "cloud.TestRunner": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "TestFunctionArns": {
                     "constructInfo": {
@@ -681,22 +660,6 @@ exports[`bucket with onCreate method 2`] = `
                 "path": "root/Default/cloud.TestRunner",
               },
               "inflight": {
-                "attributes": {
-                  "wing:resource:connections": [
-                    {
-                      "direction": "inbound",
-                      "implicit": false,
-                      "relationship": "handle()",
-                      "resource": "root/Default/my_bucket/my_bucket-oncreate-OnMessage-7b961f4d",
-                    },
-                    {
-                      "direction": "inbound",
-                      "implicit": false,
-                      "relationship": "$inflight_init()",
-                      "resource": "root/Default/my_bucket/my_bucket-oncreate-OnMessage-7b961f4d",
-                    },
-                  ],
-                },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
                   "version": "10.1.314",
@@ -710,16 +673,6 @@ exports[`bucket with onCreate method 2`] = `
                 "path": "root/Default/inflight",
               },
               "my_bucket": {
-                "attributes": {
-                  "wing:resource:connections": [
-                    {
-                      "direction": "outbound",
-                      "implicit": false,
-                      "relationship": "onCreate()",
-                      "resource": "root/Default/my_bucket/my_bucket-oncreate",
-                    },
-                  ],
-                },
                 "children": {
                   "Default": {
                     "constructInfo": {
@@ -762,22 +715,6 @@ exports[`bucket with onCreate method 2`] = `
                     "path": "root/Default/my_bucket/S3BucketNotification",
                   },
                   "my_bucket-oncreate": {
-                    "attributes": {
-                      "wing:resource:connections": [
-                        {
-                          "direction": "inbound",
-                          "implicit": false,
-                          "relationship": "onCreate()",
-                          "resource": "root/Default/my_bucket",
-                        },
-                        {
-                          "direction": "outbound",
-                          "implicit": false,
-                          "relationship": "onMessage()",
-                          "resource": "root/Default/my_bucket/my_bucket-oncreate-OnMessage-7b961f4d",
-                        },
-                      ],
-                    },
                     "children": {
                       "Default": {
                         "constructInfo": {
@@ -816,40 +753,6 @@ exports[`bucket with onCreate method 2`] = `
                     "path": "root/Default/my_bucket/my_bucket-oncreate",
                   },
                   "my_bucket-oncreate-OnMessage-7b961f4d": {
-                    "attributes": {
-                      "wing:resource:connections": [
-                        {
-                          "direction": "outbound",
-                          "implicit": false,
-                          "relationship": "handle()",
-                          "resource": "root/Default/inflight",
-                        },
-                        {
-                          "direction": "outbound",
-                          "implicit": false,
-                          "relationship": "$inflight_init()",
-                          "resource": "root/Default/inflight",
-                        },
-                        {
-                          "direction": "outbound",
-                          "implicit": false,
-                          "relationship": "handle()",
-                          "resource": "root/Default/my_bucket/my_bucket-oncreate-eventHandler-9eade8f6",
-                        },
-                        {
-                          "direction": "outbound",
-                          "implicit": false,
-                          "relationship": "$inflight_init()",
-                          "resource": "root/Default/my_bucket/my_bucket-oncreate-eventHandler-9eade8f6",
-                        },
-                        {
-                          "direction": "inbound",
-                          "implicit": false,
-                          "relationship": "onMessage()",
-                          "resource": "root/Default/my_bucket/my_bucket-oncreate",
-                        },
-                      ],
-                    },
                     "children": {
                       "Asset": {
                         "constructInfo": {
@@ -920,9 +823,6 @@ exports[`bucket with onCreate method 2`] = `
                     "path": "root/Default/my_bucket/my_bucket-oncreate-OnMessage-7b961f4d",
                   },
                   "my_bucket-oncreate-OnMessageHandler-7b961f4d": {
-                    "attributes": {
-                      "wing:resource:connections": [],
-                    },
                     "constructInfo": {
                       "fqn": "constructs.Construct",
                       "version": "10.1.314",
@@ -934,22 +834,6 @@ exports[`bucket with onCreate method 2`] = `
                     "path": "root/Default/my_bucket/my_bucket-oncreate-OnMessageHandler-7b961f4d",
                   },
                   "my_bucket-oncreate-eventHandler-9eade8f6": {
-                    "attributes": {
-                      "wing:resource:connections": [
-                        {
-                          "direction": "inbound",
-                          "implicit": false,
-                          "relationship": "handle()",
-                          "resource": "root/Default/my_bucket/my_bucket-oncreate-OnMessage-7b961f4d",
-                        },
-                        {
-                          "direction": "inbound",
-                          "implicit": false,
-                          "relationship": "$inflight_init()",
-                          "resource": "root/Default/my_bucket/my_bucket-oncreate-OnMessage-7b961f4d",
-                        },
-                      ],
-                    },
                     "constructInfo": {
                       "fqn": "constructs.Construct",
                       "version": "10.1.314",
@@ -1172,9 +1056,6 @@ exports[`bucket with onDelete method 2`] = `
                 "path": "root/Default/aws",
               },
               "cloud.TestRunner": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "TestFunctionArns": {
                     "constructInfo": {
@@ -1198,22 +1079,6 @@ exports[`bucket with onDelete method 2`] = `
                 "path": "root/Default/cloud.TestRunner",
               },
               "inflight": {
-                "attributes": {
-                  "wing:resource:connections": [
-                    {
-                      "direction": "inbound",
-                      "implicit": false,
-                      "relationship": "handle()",
-                      "resource": "root/Default/my_bucket/my_bucket-ondelete-OnMessage-1de1a361",
-                    },
-                    {
-                      "direction": "inbound",
-                      "implicit": false,
-                      "relationship": "$inflight_init()",
-                      "resource": "root/Default/my_bucket/my_bucket-ondelete-OnMessage-1de1a361",
-                    },
-                  ],
-                },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
                   "version": "10.1.314",
@@ -1227,16 +1092,6 @@ exports[`bucket with onDelete method 2`] = `
                 "path": "root/Default/inflight",
               },
               "my_bucket": {
-                "attributes": {
-                  "wing:resource:connections": [
-                    {
-                      "direction": "outbound",
-                      "implicit": false,
-                      "relationship": "onDelete()",
-                      "resource": "root/Default/my_bucket/my_bucket-ondelete",
-                    },
-                  ],
-                },
                 "children": {
                   "Default": {
                     "constructInfo": {
@@ -1279,22 +1134,6 @@ exports[`bucket with onDelete method 2`] = `
                     "path": "root/Default/my_bucket/S3BucketNotification",
                   },
                   "my_bucket-ondelete": {
-                    "attributes": {
-                      "wing:resource:connections": [
-                        {
-                          "direction": "inbound",
-                          "implicit": false,
-                          "relationship": "onDelete()",
-                          "resource": "root/Default/my_bucket",
-                        },
-                        {
-                          "direction": "outbound",
-                          "implicit": false,
-                          "relationship": "onMessage()",
-                          "resource": "root/Default/my_bucket/my_bucket-ondelete-OnMessage-1de1a361",
-                        },
-                      ],
-                    },
                     "children": {
                       "Default": {
                         "constructInfo": {
@@ -1333,40 +1172,6 @@ exports[`bucket with onDelete method 2`] = `
                     "path": "root/Default/my_bucket/my_bucket-ondelete",
                   },
                   "my_bucket-ondelete-OnMessage-1de1a361": {
-                    "attributes": {
-                      "wing:resource:connections": [
-                        {
-                          "direction": "outbound",
-                          "implicit": false,
-                          "relationship": "handle()",
-                          "resource": "root/Default/inflight",
-                        },
-                        {
-                          "direction": "outbound",
-                          "implicit": false,
-                          "relationship": "$inflight_init()",
-                          "resource": "root/Default/inflight",
-                        },
-                        {
-                          "direction": "outbound",
-                          "implicit": false,
-                          "relationship": "handle()",
-                          "resource": "root/Default/my_bucket/my_bucket-ondelete-eventHandler-9eade8f6",
-                        },
-                        {
-                          "direction": "outbound",
-                          "implicit": false,
-                          "relationship": "$inflight_init()",
-                          "resource": "root/Default/my_bucket/my_bucket-ondelete-eventHandler-9eade8f6",
-                        },
-                        {
-                          "direction": "inbound",
-                          "implicit": false,
-                          "relationship": "onMessage()",
-                          "resource": "root/Default/my_bucket/my_bucket-ondelete",
-                        },
-                      ],
-                    },
                     "children": {
                       "Asset": {
                         "constructInfo": {
@@ -1437,9 +1242,6 @@ exports[`bucket with onDelete method 2`] = `
                     "path": "root/Default/my_bucket/my_bucket-ondelete-OnMessage-1de1a361",
                   },
                   "my_bucket-ondelete-OnMessageHandler-1de1a361": {
-                    "attributes": {
-                      "wing:resource:connections": [],
-                    },
                     "constructInfo": {
                       "fqn": "constructs.Construct",
                       "version": "10.1.314",
@@ -1451,22 +1253,6 @@ exports[`bucket with onDelete method 2`] = `
                     "path": "root/Default/my_bucket/my_bucket-ondelete-OnMessageHandler-1de1a361",
                   },
                   "my_bucket-ondelete-eventHandler-9eade8f6": {
-                    "attributes": {
-                      "wing:resource:connections": [
-                        {
-                          "direction": "inbound",
-                          "implicit": false,
-                          "relationship": "handle()",
-                          "resource": "root/Default/my_bucket/my_bucket-ondelete-OnMessage-1de1a361",
-                        },
-                        {
-                          "direction": "inbound",
-                          "implicit": false,
-                          "relationship": "$inflight_init()",
-                          "resource": "root/Default/my_bucket/my_bucket-ondelete-OnMessage-1de1a361",
-                        },
-                      ],
-                    },
                     "constructInfo": {
                       "fqn": "constructs.Construct",
                       "version": "10.1.314",
@@ -1811,9 +1597,6 @@ exports[`bucket with onEvent method 2`] = `
                 "path": "root/Default/aws",
               },
               "cloud.TestRunner": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "TestFunctionArns": {
                     "constructInfo": {
@@ -1837,46 +1620,6 @@ exports[`bucket with onEvent method 2`] = `
                 "path": "root/Default/cloud.TestRunner",
               },
               "inflight": {
-                "attributes": {
-                  "wing:resource:connections": [
-                    {
-                      "direction": "inbound",
-                      "implicit": false,
-                      "relationship": "handle()",
-                      "resource": "root/Default/my_bucket/my_bucket-oncreate-OnMessage-7b961f4d",
-                    },
-                    {
-                      "direction": "inbound",
-                      "implicit": false,
-                      "relationship": "$inflight_init()",
-                      "resource": "root/Default/my_bucket/my_bucket-oncreate-OnMessage-7b961f4d",
-                    },
-                    {
-                      "direction": "inbound",
-                      "implicit": false,
-                      "relationship": "handle()",
-                      "resource": "root/Default/my_bucket/my_bucket-onupdate-OnMessage-46c07356",
-                    },
-                    {
-                      "direction": "inbound",
-                      "implicit": false,
-                      "relationship": "$inflight_init()",
-                      "resource": "root/Default/my_bucket/my_bucket-onupdate-OnMessage-46c07356",
-                    },
-                    {
-                      "direction": "inbound",
-                      "implicit": false,
-                      "relationship": "handle()",
-                      "resource": "root/Default/my_bucket/my_bucket-ondelete-OnMessage-1de1a361",
-                    },
-                    {
-                      "direction": "inbound",
-                      "implicit": false,
-                      "relationship": "$inflight_init()",
-                      "resource": "root/Default/my_bucket/my_bucket-ondelete-OnMessage-1de1a361",
-                    },
-                  ],
-                },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
                   "version": "10.1.314",
@@ -1890,28 +1633,6 @@ exports[`bucket with onEvent method 2`] = `
                 "path": "root/Default/inflight",
               },
               "my_bucket": {
-                "attributes": {
-                  "wing:resource:connections": [
-                    {
-                      "direction": "outbound",
-                      "implicit": false,
-                      "relationship": "onCreate()",
-                      "resource": "root/Default/my_bucket/my_bucket-oncreate",
-                    },
-                    {
-                      "direction": "outbound",
-                      "implicit": false,
-                      "relationship": "onUpdate()",
-                      "resource": "root/Default/my_bucket/my_bucket-onupdate",
-                    },
-                    {
-                      "direction": "outbound",
-                      "implicit": false,
-                      "relationship": "onDelete()",
-                      "resource": "root/Default/my_bucket/my_bucket-ondelete",
-                    },
-                  ],
-                },
                 "children": {
                   "Default": {
                     "constructInfo": {
@@ -1954,22 +1675,6 @@ exports[`bucket with onEvent method 2`] = `
                     "path": "root/Default/my_bucket/S3BucketNotification",
                   },
                   "my_bucket-oncreate": {
-                    "attributes": {
-                      "wing:resource:connections": [
-                        {
-                          "direction": "inbound",
-                          "implicit": false,
-                          "relationship": "onCreate()",
-                          "resource": "root/Default/my_bucket",
-                        },
-                        {
-                          "direction": "outbound",
-                          "implicit": false,
-                          "relationship": "onMessage()",
-                          "resource": "root/Default/my_bucket/my_bucket-oncreate-OnMessage-7b961f4d",
-                        },
-                      ],
-                    },
                     "children": {
                       "Default": {
                         "constructInfo": {
@@ -2008,40 +1713,6 @@ exports[`bucket with onEvent method 2`] = `
                     "path": "root/Default/my_bucket/my_bucket-oncreate",
                   },
                   "my_bucket-oncreate-OnMessage-7b961f4d": {
-                    "attributes": {
-                      "wing:resource:connections": [
-                        {
-                          "direction": "outbound",
-                          "implicit": false,
-                          "relationship": "handle()",
-                          "resource": "root/Default/inflight",
-                        },
-                        {
-                          "direction": "outbound",
-                          "implicit": false,
-                          "relationship": "$inflight_init()",
-                          "resource": "root/Default/inflight",
-                        },
-                        {
-                          "direction": "outbound",
-                          "implicit": false,
-                          "relationship": "handle()",
-                          "resource": "root/Default/my_bucket/my_bucket-oncreate-eventHandler-9eade8f6",
-                        },
-                        {
-                          "direction": "outbound",
-                          "implicit": false,
-                          "relationship": "$inflight_init()",
-                          "resource": "root/Default/my_bucket/my_bucket-oncreate-eventHandler-9eade8f6",
-                        },
-                        {
-                          "direction": "inbound",
-                          "implicit": false,
-                          "relationship": "onMessage()",
-                          "resource": "root/Default/my_bucket/my_bucket-oncreate",
-                        },
-                      ],
-                    },
                     "children": {
                       "Asset": {
                         "constructInfo": {
@@ -2112,9 +1783,6 @@ exports[`bucket with onEvent method 2`] = `
                     "path": "root/Default/my_bucket/my_bucket-oncreate-OnMessage-7b961f4d",
                   },
                   "my_bucket-oncreate-OnMessageHandler-7b961f4d": {
-                    "attributes": {
-                      "wing:resource:connections": [],
-                    },
                     "constructInfo": {
                       "fqn": "constructs.Construct",
                       "version": "10.1.314",
@@ -2126,22 +1794,6 @@ exports[`bucket with onEvent method 2`] = `
                     "path": "root/Default/my_bucket/my_bucket-oncreate-OnMessageHandler-7b961f4d",
                   },
                   "my_bucket-oncreate-eventHandler-9eade8f6": {
-                    "attributes": {
-                      "wing:resource:connections": [
-                        {
-                          "direction": "inbound",
-                          "implicit": false,
-                          "relationship": "handle()",
-                          "resource": "root/Default/my_bucket/my_bucket-oncreate-OnMessage-7b961f4d",
-                        },
-                        {
-                          "direction": "inbound",
-                          "implicit": false,
-                          "relationship": "$inflight_init()",
-                          "resource": "root/Default/my_bucket/my_bucket-oncreate-OnMessage-7b961f4d",
-                        },
-                      ],
-                    },
                     "constructInfo": {
                       "fqn": "constructs.Construct",
                       "version": "10.1.314",
@@ -2153,22 +1805,6 @@ exports[`bucket with onEvent method 2`] = `
                     "path": "root/Default/my_bucket/my_bucket-oncreate-eventHandler-9eade8f6",
                   },
                   "my_bucket-ondelete": {
-                    "attributes": {
-                      "wing:resource:connections": [
-                        {
-                          "direction": "inbound",
-                          "implicit": false,
-                          "relationship": "onDelete()",
-                          "resource": "root/Default/my_bucket",
-                        },
-                        {
-                          "direction": "outbound",
-                          "implicit": false,
-                          "relationship": "onMessage()",
-                          "resource": "root/Default/my_bucket/my_bucket-ondelete-OnMessage-1de1a361",
-                        },
-                      ],
-                    },
                     "children": {
                       "Default": {
                         "constructInfo": {
@@ -2207,40 +1843,6 @@ exports[`bucket with onEvent method 2`] = `
                     "path": "root/Default/my_bucket/my_bucket-ondelete",
                   },
                   "my_bucket-ondelete-OnMessage-1de1a361": {
-                    "attributes": {
-                      "wing:resource:connections": [
-                        {
-                          "direction": "outbound",
-                          "implicit": false,
-                          "relationship": "handle()",
-                          "resource": "root/Default/inflight",
-                        },
-                        {
-                          "direction": "outbound",
-                          "implicit": false,
-                          "relationship": "$inflight_init()",
-                          "resource": "root/Default/inflight",
-                        },
-                        {
-                          "direction": "outbound",
-                          "implicit": false,
-                          "relationship": "handle()",
-                          "resource": "root/Default/my_bucket/my_bucket-ondelete-eventHandler-9eade8f6",
-                        },
-                        {
-                          "direction": "outbound",
-                          "implicit": false,
-                          "relationship": "$inflight_init()",
-                          "resource": "root/Default/my_bucket/my_bucket-ondelete-eventHandler-9eade8f6",
-                        },
-                        {
-                          "direction": "inbound",
-                          "implicit": false,
-                          "relationship": "onMessage()",
-                          "resource": "root/Default/my_bucket/my_bucket-ondelete",
-                        },
-                      ],
-                    },
                     "children": {
                       "Asset": {
                         "constructInfo": {
@@ -2311,9 +1913,6 @@ exports[`bucket with onEvent method 2`] = `
                     "path": "root/Default/my_bucket/my_bucket-ondelete-OnMessage-1de1a361",
                   },
                   "my_bucket-ondelete-OnMessageHandler-1de1a361": {
-                    "attributes": {
-                      "wing:resource:connections": [],
-                    },
                     "constructInfo": {
                       "fqn": "constructs.Construct",
                       "version": "10.1.314",
@@ -2325,22 +1924,6 @@ exports[`bucket with onEvent method 2`] = `
                     "path": "root/Default/my_bucket/my_bucket-ondelete-OnMessageHandler-1de1a361",
                   },
                   "my_bucket-ondelete-eventHandler-9eade8f6": {
-                    "attributes": {
-                      "wing:resource:connections": [
-                        {
-                          "direction": "inbound",
-                          "implicit": false,
-                          "relationship": "handle()",
-                          "resource": "root/Default/my_bucket/my_bucket-ondelete-OnMessage-1de1a361",
-                        },
-                        {
-                          "direction": "inbound",
-                          "implicit": false,
-                          "relationship": "$inflight_init()",
-                          "resource": "root/Default/my_bucket/my_bucket-ondelete-OnMessage-1de1a361",
-                        },
-                      ],
-                    },
                     "constructInfo": {
                       "fqn": "constructs.Construct",
                       "version": "10.1.314",
@@ -2352,22 +1935,6 @@ exports[`bucket with onEvent method 2`] = `
                     "path": "root/Default/my_bucket/my_bucket-ondelete-eventHandler-9eade8f6",
                   },
                   "my_bucket-onupdate": {
-                    "attributes": {
-                      "wing:resource:connections": [
-                        {
-                          "direction": "inbound",
-                          "implicit": false,
-                          "relationship": "onUpdate()",
-                          "resource": "root/Default/my_bucket",
-                        },
-                        {
-                          "direction": "outbound",
-                          "implicit": false,
-                          "relationship": "onMessage()",
-                          "resource": "root/Default/my_bucket/my_bucket-onupdate-OnMessage-46c07356",
-                        },
-                      ],
-                    },
                     "children": {
                       "Default": {
                         "constructInfo": {
@@ -2406,40 +1973,6 @@ exports[`bucket with onEvent method 2`] = `
                     "path": "root/Default/my_bucket/my_bucket-onupdate",
                   },
                   "my_bucket-onupdate-OnMessage-46c07356": {
-                    "attributes": {
-                      "wing:resource:connections": [
-                        {
-                          "direction": "outbound",
-                          "implicit": false,
-                          "relationship": "handle()",
-                          "resource": "root/Default/inflight",
-                        },
-                        {
-                          "direction": "outbound",
-                          "implicit": false,
-                          "relationship": "$inflight_init()",
-                          "resource": "root/Default/inflight",
-                        },
-                        {
-                          "direction": "outbound",
-                          "implicit": false,
-                          "relationship": "handle()",
-                          "resource": "root/Default/my_bucket/my_bucket-onupdate-eventHandler-9eade8f6",
-                        },
-                        {
-                          "direction": "outbound",
-                          "implicit": false,
-                          "relationship": "$inflight_init()",
-                          "resource": "root/Default/my_bucket/my_bucket-onupdate-eventHandler-9eade8f6",
-                        },
-                        {
-                          "direction": "inbound",
-                          "implicit": false,
-                          "relationship": "onMessage()",
-                          "resource": "root/Default/my_bucket/my_bucket-onupdate",
-                        },
-                      ],
-                    },
                     "children": {
                       "Asset": {
                         "constructInfo": {
@@ -2510,9 +2043,6 @@ exports[`bucket with onEvent method 2`] = `
                     "path": "root/Default/my_bucket/my_bucket-onupdate-OnMessage-46c07356",
                   },
                   "my_bucket-onupdate-OnMessageHandler-46c07356": {
-                    "attributes": {
-                      "wing:resource:connections": [],
-                    },
                     "constructInfo": {
                       "fqn": "constructs.Construct",
                       "version": "10.1.314",
@@ -2524,22 +2054,6 @@ exports[`bucket with onEvent method 2`] = `
                     "path": "root/Default/my_bucket/my_bucket-onupdate-OnMessageHandler-46c07356",
                   },
                   "my_bucket-onupdate-eventHandler-9eade8f6": {
-                    "attributes": {
-                      "wing:resource:connections": [
-                        {
-                          "direction": "inbound",
-                          "implicit": false,
-                          "relationship": "handle()",
-                          "resource": "root/Default/my_bucket/my_bucket-onupdate-OnMessage-46c07356",
-                        },
-                        {
-                          "direction": "inbound",
-                          "implicit": false,
-                          "relationship": "$inflight_init()",
-                          "resource": "root/Default/my_bucket/my_bucket-onupdate-OnMessage-46c07356",
-                        },
-                      ],
-                    },
                     "constructInfo": {
                       "fqn": "constructs.Construct",
                       "version": "10.1.314",
@@ -2762,9 +2276,6 @@ exports[`bucket with onUpdate method 2`] = `
                 "path": "root/Default/aws",
               },
               "cloud.TestRunner": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "TestFunctionArns": {
                     "constructInfo": {
@@ -2788,22 +2299,6 @@ exports[`bucket with onUpdate method 2`] = `
                 "path": "root/Default/cloud.TestRunner",
               },
               "inflight": {
-                "attributes": {
-                  "wing:resource:connections": [
-                    {
-                      "direction": "inbound",
-                      "implicit": false,
-                      "relationship": "handle()",
-                      "resource": "root/Default/my_bucket/my_bucket-onupdate-OnMessage-46c07356",
-                    },
-                    {
-                      "direction": "inbound",
-                      "implicit": false,
-                      "relationship": "$inflight_init()",
-                      "resource": "root/Default/my_bucket/my_bucket-onupdate-OnMessage-46c07356",
-                    },
-                  ],
-                },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
                   "version": "10.1.314",
@@ -2817,16 +2312,6 @@ exports[`bucket with onUpdate method 2`] = `
                 "path": "root/Default/inflight",
               },
               "my_bucket": {
-                "attributes": {
-                  "wing:resource:connections": [
-                    {
-                      "direction": "outbound",
-                      "implicit": false,
-                      "relationship": "onUpdate()",
-                      "resource": "root/Default/my_bucket/my_bucket-onupdate",
-                    },
-                  ],
-                },
                 "children": {
                   "Default": {
                     "constructInfo": {
@@ -2869,22 +2354,6 @@ exports[`bucket with onUpdate method 2`] = `
                     "path": "root/Default/my_bucket/S3BucketNotification",
                   },
                   "my_bucket-onupdate": {
-                    "attributes": {
-                      "wing:resource:connections": [
-                        {
-                          "direction": "inbound",
-                          "implicit": false,
-                          "relationship": "onUpdate()",
-                          "resource": "root/Default/my_bucket",
-                        },
-                        {
-                          "direction": "outbound",
-                          "implicit": false,
-                          "relationship": "onMessage()",
-                          "resource": "root/Default/my_bucket/my_bucket-onupdate-OnMessage-46c07356",
-                        },
-                      ],
-                    },
                     "children": {
                       "Default": {
                         "constructInfo": {
@@ -2923,40 +2392,6 @@ exports[`bucket with onUpdate method 2`] = `
                     "path": "root/Default/my_bucket/my_bucket-onupdate",
                   },
                   "my_bucket-onupdate-OnMessage-46c07356": {
-                    "attributes": {
-                      "wing:resource:connections": [
-                        {
-                          "direction": "outbound",
-                          "implicit": false,
-                          "relationship": "handle()",
-                          "resource": "root/Default/inflight",
-                        },
-                        {
-                          "direction": "outbound",
-                          "implicit": false,
-                          "relationship": "$inflight_init()",
-                          "resource": "root/Default/inflight",
-                        },
-                        {
-                          "direction": "outbound",
-                          "implicit": false,
-                          "relationship": "handle()",
-                          "resource": "root/Default/my_bucket/my_bucket-onupdate-eventHandler-9eade8f6",
-                        },
-                        {
-                          "direction": "outbound",
-                          "implicit": false,
-                          "relationship": "$inflight_init()",
-                          "resource": "root/Default/my_bucket/my_bucket-onupdate-eventHandler-9eade8f6",
-                        },
-                        {
-                          "direction": "inbound",
-                          "implicit": false,
-                          "relationship": "onMessage()",
-                          "resource": "root/Default/my_bucket/my_bucket-onupdate",
-                        },
-                      ],
-                    },
                     "children": {
                       "Asset": {
                         "constructInfo": {
@@ -3027,9 +2462,6 @@ exports[`bucket with onUpdate method 2`] = `
                     "path": "root/Default/my_bucket/my_bucket-onupdate-OnMessage-46c07356",
                   },
                   "my_bucket-onupdate-OnMessageHandler-46c07356": {
-                    "attributes": {
-                      "wing:resource:connections": [],
-                    },
                     "constructInfo": {
                       "fqn": "constructs.Construct",
                       "version": "10.1.314",
@@ -3041,22 +2473,6 @@ exports[`bucket with onUpdate method 2`] = `
                     "path": "root/Default/my_bucket/my_bucket-onupdate-OnMessageHandler-46c07356",
                   },
                   "my_bucket-onupdate-eventHandler-9eade8f6": {
-                    "attributes": {
-                      "wing:resource:connections": [
-                        {
-                          "direction": "inbound",
-                          "implicit": false,
-                          "relationship": "handle()",
-                          "resource": "root/Default/my_bucket/my_bucket-onupdate-OnMessage-46c07356",
-                        },
-                        {
-                          "direction": "inbound",
-                          "implicit": false,
-                          "relationship": "$inflight_init()",
-                          "resource": "root/Default/my_bucket/my_bucket-onupdate-OnMessage-46c07356",
-                        },
-                      ],
-                    },
                     "constructInfo": {
                       "fqn": "constructs.Construct",
                       "version": "10.1.314",
@@ -3192,9 +2608,6 @@ exports[`bucket with two preflight objects 2`] = `
                 "path": "root/Default/aws",
               },
               "cloud.TestRunner": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "TestFunctionArns": {
                     "constructInfo": {
@@ -3218,9 +2631,6 @@ exports[`bucket with two preflight objects 2`] = `
                 "path": "root/Default/cloud.TestRunner",
               },
               "my_bucket": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "Default": {
                     "constructInfo": {
@@ -3374,9 +2784,6 @@ exports[`create a bucket 2`] = `
                 "path": "root/Default/aws",
               },
               "cloud.TestRunner": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "TestFunctionArns": {
                     "constructInfo": {
@@ -3400,9 +2807,6 @@ exports[`create a bucket 2`] = `
                 "path": "root/Default/cloud.TestRunner",
               },
               "my_bucket": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "Default": {
                     "constructInfo": {
