@@ -273,6 +273,15 @@ class $Root extends $stdlib.std.Resource {
     });
     const shouldBeString = (returnsString());
     const stringArray = [shouldBeString];
+    const closureWithUnwrapping = ((optionalString) => {
+      {
+        const $IF_LET_VALUE = optionalString;
+        if ($IF_LET_VALUE != undefined) {
+          const justString = $IF_LET_VALUE;
+          {console.log(justString)};
+        }
+      }
+    });
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);

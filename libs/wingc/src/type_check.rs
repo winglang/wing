@@ -3046,7 +3046,17 @@ impl<'a> TypeChecker<'a> {
 				var_name,
 				else_statements,
 			} => {
-				let (cond_type, _) = self.type_check_exp(value, env);
+				let (mut cond_type, _) = self.type_check_exp(value, env);
+
+				if let Type::Inferred(n) = *cond_type {
+					// If the type is inferred, we must make sure that the type is also optional
+					// So let's make a new inference, but this time optional
+					if self.types.get_inference_by_id(n).is_none() {
+						let new_inference = self.types.make_inference();
+						cond_type = self.types.make_option(new_inference);
+						self.types.update_inferred_type(n, cond_type, &value.span);
+					}
+				}
 
 				if !cond_type.is_option() {
 					report_diagnostic(Diagnostic {

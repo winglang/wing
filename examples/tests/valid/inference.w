@@ -41,3 +41,9 @@ let returnsString = () => {
 let shouldBeString = returnsString();
 
 let stringArray = [shouldBeString];
+
+let closureWithUnwrapping = (optionalString) => {
+  if let justString = optionalString {
+    log(justString);
+  }
+};

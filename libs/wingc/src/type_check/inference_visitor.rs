@@ -24,8 +24,13 @@ pub struct InferenceVisitor<'a> {
 
 impl<'a> crate::visit_types::VisitTypeMut<'_> for InferenceVisitor<'a> {
 	fn visit_typeref_mut(&mut self, node: &'_ mut TypeRef) {
-		if matches!(**node, Type::Inferred(_)) {
+		if node.is_inferred() {
 			*node = self.types.maybe_unwrap_inference(*node);
+
+			// we unwrapped a known inference, we should try again to continue this process if needed
+			if !node.is_inferred() {
+				self.visit_typeref_mut(node)
+			}
 		} else {
 			crate::visit_types::visit_typeref_mut(self, node);
 		}
