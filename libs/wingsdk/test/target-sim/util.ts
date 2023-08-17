@@ -39,7 +39,8 @@ export async function sleep(ms: number) {
   return new Promise((r) => setTimeout(r, ms));
 }
 
-const DEFAULT_WAIT_TIMEOUT = 3000;
+const DEFAULT_WAIT_TIMEOUT = 10000;
+const DEFAULT_WAIT_INTERVAL = 150;
 
 /**
  * Wait until the given function returns true or throw an error if the timeout is reached.
@@ -48,12 +49,15 @@ export async function waitUntil(
   fn: () => Promise<boolean>,
   timeout = DEFAULT_WAIT_TIMEOUT
 ) {
+  // wait for a tiny amount of time because you likely want at least 1 event loop tick to pass
+  await sleep(1);
+
   const start = Date.now();
   while (Date.now() - start < timeout) {
     if (await fn()) {
       return;
     }
-    await sleep(50);
+    await sleep(DEFAULT_WAIT_INTERVAL);
   }
 
   throw new Error(
@@ -69,6 +73,9 @@ export async function waitUntilTrace(
   fn: (trace: Trace) => boolean,
   timeout = DEFAULT_WAIT_TIMEOUT
 ) {
+  // wait for a tiny amount of time because you likely want at least 1 event loop tick to pass
+  await sleep(1);
+
   let tracesChecked = 0;
   const start = Date.now();
 
@@ -80,7 +87,7 @@ export async function waitUntilTrace(
       }
     }
     tracesChecked = traces.length;
-    await sleep(50);
+    await sleep(DEFAULT_WAIT_INTERVAL);
   }
 
   throw new Error(
@@ -99,12 +106,15 @@ export async function waitUntilTraceCount(
   fn: (trace: Trace) => boolean,
   timeout = DEFAULT_WAIT_TIMEOUT
 ) {
+  // wait for a tiny amount of time because you likely want at least 1 event loop tick to pass
+  await sleep(1);
+
   const start = Date.now();
   while (Date.now() - start < timeout) {
     if (sim.listTraces().filter(fn).length >= count) {
       return;
     }
-    await sleep(50);
+    await sleep(DEFAULT_WAIT_INTERVAL);
   }
 
   throw new Error(
@@ -118,6 +128,9 @@ export async function waitUntilNextTrace(
   sim: Simulator,
   fn: (trace: Trace) => boolean
 ) {
+  // wait for a tiny amount of time because you likely want at least 1 event loop tick to pass
+  await sleep(1);
+
   let tracesChecked = sim.listTraces().length;
   const start = Date.now();
 
@@ -129,7 +142,7 @@ export async function waitUntilNextTrace(
       }
     }
     tracesChecked = traces.length;
-    await sleep(50);
+    await sleep(DEFAULT_WAIT_INTERVAL);
   }
 
   throw new Error(
