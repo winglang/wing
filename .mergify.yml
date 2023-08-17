@@ -16,8 +16,7 @@ pull_request_rules:
     actions:
       comment:
         message: |
-          Thank you for contributing! If this branch is up-to-date, it will be merged automatically.
-          If not, a new PR will be created with this latest merged into your changes to verify. This PR will be merged after that check is successful.
+          Thank you for contributing! This PR will now be added to the [merge queue](https://mergify.com/merge-queue), or immediately merged to main if up-to-date and the queue is empty.
       queue:
         name: default
         method: squash
