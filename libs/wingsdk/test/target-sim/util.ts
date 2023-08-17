@@ -43,29 +43,6 @@ const DEFAULT_WAIT_TIMEOUT = 10000;
 const DEFAULT_WAIT_INTERVAL = 150;
 
 /**
- * Wait until the given function returns true or throw an error if the timeout is reached.
- */
-export async function waitUntil(
-  fn: () => Promise<boolean>,
-  timeout = DEFAULT_WAIT_TIMEOUT
-) {
-  // wait for a tiny amount of time because you likely want at least 1 event loop tick to pass
-  await sleep(1);
-
-  const start = Date.now();
-  while (Date.now() - start < timeout) {
-    if (await fn()) {
-      return;
-    }
-    await sleep(DEFAULT_WAIT_INTERVAL);
-  }
-
-  throw new Error(
-    `Timeout after ${timeout}ms waiting for \`${fn.toString()}\``
-  );
-}
-
-/**
  * Wait until the given trace is found in the simulator or throw an error if the timeout is reached.
  */
 export async function waitUntilTrace(
@@ -73,28 +50,7 @@ export async function waitUntilTrace(
   fn: (trace: Trace) => boolean,
   timeout = DEFAULT_WAIT_TIMEOUT
 ) {
-  // wait for a tiny amount of time because you likely want at least 1 event loop tick to pass
-  await sleep(1);
-
-  let tracesChecked = 0;
-  const start = Date.now();
-
-  while (Date.now() - start < timeout) {
-    const traces = sim.listTraces();
-    for (const trace of traces.slice(tracesChecked)) {
-      if (fn(trace)) {
-        return;
-      }
-    }
-    tracesChecked = traces.length;
-    await sleep(DEFAULT_WAIT_INTERVAL);
-  }
-
-  throw new Error(
-    `Timeout after ${timeout}ms waiting for \`${fn.toString()}\`\nSim Traces: ${JSON.stringify(
-      sim.listTraces()
-    )}`
-  );
+  return waitUntilTraceCount(sim, 1, fn, timeout);
 }
 
 /**
@@ -118,35 +74,7 @@ export async function waitUntilTraceCount(
   }
 
   throw new Error(
-    `Timeout after ${timeout}ms waiting for \`${fn.toString()}\`\nSim Traces: ${JSON.stringify(
-      sim.listTraces()
-    )}`
-  );
-}
-
-export async function waitUntilNextTrace(
-  sim: Simulator,
-  fn: (trace: Trace) => boolean
-) {
-  // wait for a tiny amount of time because you likely want at least 1 event loop tick to pass
-  await sleep(1);
-
-  let tracesChecked = sim.listTraces().length;
-  const start = Date.now();
-
-  while (Date.now() - start < DEFAULT_WAIT_TIMEOUT) {
-    const traces = sim.listTraces();
-    for (const trace of traces.slice(tracesChecked)) {
-      if (fn(trace)) {
-        return;
-      }
-    }
-    tracesChecked = traces.length;
-    await sleep(DEFAULT_WAIT_INTERVAL);
-  }
-
-  throw new Error(
-    `Timeout after ${DEFAULT_WAIT_TIMEOUT}ms: ${fn.toString()}\n${JSON.stringify(
+    `Timeout after ${timeout}ms waiting for ${count} traces that match \`${fn.toString()}\`\nSim Traces: ${JSON.stringify(
       sim.listTraces()
     )}`
   );
