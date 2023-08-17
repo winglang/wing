@@ -5,14 +5,18 @@ queue_rules:
     conditions:
       - -files=.mergify.yml
       - or:
-        - status-success=Quality Gate
-        - -files~=^(?!docs/|logo/)
+          - status-success=Quality Gate
+          - and:
+              - -files~=^(?!docs/|logo/)
+              # These files must be generated via wingsdk build
+              - -files~=^docs/docs/04-standard-library/[^/]+/[^/]+\.md$
 
 pull_request_rules:
   - name: automatic merge
     actions:
       comment:
-        message: Thank you for contributing! Your pull request will be updated from {{ base }} and then merged automatically (do not update manually, and be sure to [allow changes to be pushed to your fork](https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/allowing-changes-to-a-pull-request-branch-created-from-a-fork)).
+        message: |
+          Thanks for contributing, @{{author}}! This PR will now be added to the [merge queue](https://mergify.com/merge-queue), or immediately merged if @{{head}} is up-to-date with @{{base}} and the queue is empty.
       queue:
         name: default
         method: squash
@@ -25,6 +29,7 @@ pull_request_rules:
       - -label~=(🚧 pr/do-not-merge|⚠️ pr/review-mutation)
       - -merged
       - -closed
+      - branch-protection-review-decision=APPROVED
       - "#approved-reviews-by>=1"
       - "#changes-requested-reviews-by=0"
       - "#review-threads-unresolved=0"
@@ -32,8 +37,11 @@ pull_request_rules:
       - check-success=Validate PR title
       - base=main
       - or:
-        - check-success=Quality Gate
-        - -files~=^(?!docs/|logo/)
+          - check-success=Quality Gate
+          - and:
+              - -files~=^(?!docs/|logo/)
+              # These files must be generated via wingsdk build
+              - -files~=^docs/docs/04-standard-library/[^/]+/[^/]+\.md$
 
   - name: requires manual merge
     conditions:
