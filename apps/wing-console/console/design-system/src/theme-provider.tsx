@@ -38,7 +38,7 @@ export type Mode = "dark" | "light" | "auto";
 
 const localStorageThemeKey = "console-theme";
 
-export const CUSTOMIZABLE_COLOR = "customizable-color";
+export const USE_CUSTOM_COLOR = "use-custom-color";
 
 export const DefaultTheme: Theme = {
   bg1: "bg-slate-300 dark:bg-slate-800",
@@ -118,7 +118,7 @@ const applyThemeStyle = (newTheme: Theme) => {
 
     styles = {
       ...styles,
-      [`.${CUSTOMIZABLE_COLOR} .${lightKey}${
+      [`.${USE_CUSTOM_COLOR} .${lightKey}${
         hover ? ":hover" : ""
       }`]: `{ background-color: ${lightColor} !important;}`,
     };
@@ -130,7 +130,7 @@ const applyThemeStyle = (newTheme: Theme) => {
     const darkKey = darkClass.replaceAll(keyRegex, "\\$&");
     styles = {
       ...styles,
-      [`.dark .${CUSTOMIZABLE_COLOR} .${darkKey}${
+      [`.dark .${USE_CUSTOM_COLOR} .${darkKey}${
         hover ? ":hover" : ""
       }`]: `{ background-color: ${darkColor} !important;}`,
     };

@@ -215,7 +215,10 @@ export const createConsoleManager = (
           const instanceUrl = "${instance.url}";
           const layout = 4;
           const theme = "${getTheme()}";
-          const t = "${Date.now()}";
+
+          // Used to force reload the iframe
+          const time = "${Date.now()}";
+
           const color = getComputedStyle(document.documentElement).getPropertyValue('--vscode-menu-background').replace("#", "");
           document.addEventListener('DOMContentLoaded', () => {
             const iframe = document.querySelector('iframe');
