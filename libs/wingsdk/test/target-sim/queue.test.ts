@@ -159,6 +159,7 @@ test("messages are requeued if the function fails after timeout", async () => {
   const queueClient = s.getResource("/my_queue") as cloud.IQueueClient;
   void queueClient.push("BAD MESSAGE");
   await waitUntilTrace(s, (trace) => trace.data.message.startsWith("Invoke"));
+  // stopping early to avoid the next queue message from being processed
   await s.stop();
 
   // THEN
