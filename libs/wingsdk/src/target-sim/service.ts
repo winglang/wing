@@ -7,8 +7,9 @@ import { simulatorHandleToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
 import * as core from "../core";
+import { Connections } from "../core";
 import { convertBetweenHandlers } from "../shared/convert";
-import { Display, IInflightHost, Resource } from "../std";
+import { Display, IInflightHost } from "../std";
 import { BaseResourceSchema } from "../testing";
 
 export class Service extends cloud.Service implements ISimulatorResource {
@@ -26,10 +27,10 @@ export class Service extends cloud.Service implements ISimulatorResource {
     );
     this.onStartHandlerToken = simulatorHandleToken(onStartFunction);
 
-    Resource.addConnection({
-      from: this,
-      to: onStartFunction,
-      relationship: "onStart()",
+    Connections.of(this).add({
+      source: this,
+      target: onStartFunction,
+      name: "onStart()",
     });
 
     // On Stop Handler
@@ -40,10 +41,10 @@ export class Service extends cloud.Service implements ISimulatorResource {
       );
       this.onStopHandlerToken = simulatorHandleToken(onStopFunction);
 
-      Resource.addConnection({
-        from: this,
-        to: onStopFunction,
-        relationship: "onStop()",
+      Connections.of(this).add({
+        source: this,
+        target: onStopFunction,
+        name: "onStop()",
       });
     }
   }

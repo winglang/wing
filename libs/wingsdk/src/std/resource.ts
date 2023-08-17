@@ -1,10 +1,8 @@
 import { Construct, IConstruct } from "constructs";
 import { Duration } from "./duration";
-import { App } from "../core";
-import { WING_ATTRIBUTE_RESOURCE_CONNECTIONS } from "../core/attributes";
+import { App, Connections } from "../core";
 import { Code } from "../core/inflight";
 import { liftObject } from "../core/internal";
-import { IInspectable, TreeInspector } from "../core/tree";
 import { log } from "../shared/log";
 
 /**
@@ -17,13 +15,7 @@ export interface IInflightHost extends IResource {}
  * Abstract interface for `Resource`.
  * @skipDocs
  */
-export interface IResource extends IInspectable, IConstruct {
-  /**
-   * List of inbound and outbound connections to other resources.
-   * @internal
-   */
-  _connections: Connection[];
-
+export interface IResource extends IConstruct {
   /**
    * Information on how to display a resource in the UI.
    */
@@ -70,55 +62,6 @@ export interface IResource extends IInspectable, IConstruct {
  * @skipDocs
  */
 export abstract class Resource extends Construct implements IResource {
-  /**
-   * Adds a connection between two resources. A connection is a piece of
-   * metadata describing how one resource is related to another resource. This
-   * metadata is recorded in the tree.json file.
-   *
-   * @experimental
-   */
-  public static addConnection(props: AddConnectionProps) {
-    const from = props.from;
-    const to = props.to;
-    const implicit = props.implicit ?? false;
-
-    const fromConnection = {
-      resource: to,
-      relationship: props.relationship,
-      direction: Direction.OUTBOUND,
-      implicit,
-    };
-    if (
-      !from._connections.some(
-        (c) =>
-          c.resource === fromConnection.resource &&
-          c.relationship === fromConnection.relationship &&
-          c.direction === fromConnection.direction &&
-          c.implicit === fromConnection.implicit
-      )
-    ) {
-      from._connections.push(fromConnection);
-    }
-
-    const toConnection = {
-      resource: from,
-      relationship: props.relationship,
-      direction: Direction.INBOUND,
-      implicit,
-    };
-    if (
-      !to._connections.some(
-        (c) =>
-          c.resource === toConnection.resource &&
-          c.relationship === toConnection.relationship &&
-          c.direction === toConnection.direction &&
-          c.implicit === toConnection.implicit
-      )
-    ) {
-      to._connections.push(toConnection);
-    }
-  }
-
   /**
    * Register that the resource type needs to be bound to the host for the given
    * operations. A type being bound to a host means that that type's static members
@@ -219,9 +162,6 @@ export abstract class Resource extends Construct implements IResource {
 
   private readonly bindMap: Map<IInflightHost, Set<string>> = new Map();
 
-  /** @internal */
-  public readonly _connections: Connection[] = [];
-
   /**
    * A list of all inflight operations that are supported by this resource.
    */
@@ -305,10 +245,10 @@ export abstract class Resource extends Construct implements IResource {
         this._registerBind(host, [op]);
 
         // add connection metadata
-        Resource.addConnection({
-          from: host,
-          to: this,
-          relationship: op.endsWith("()") ? op : `${op}()`,
+        Connections.of(this).add({
+          source: host,
+          target: this,
+          name: op.endsWith("()") ? op : `${op}()`,
         });
       }
     }
@@ -342,21 +282,6 @@ export abstract class Resource extends Construct implements IResource {
   public abstract _toInflight(): Code;
 
   /**
-   * @internal
-   */
-  public _inspect(inspector: TreeInspector): void {
-    inspector.addAttribute(
-      WING_ATTRIBUTE_RESOURCE_CONNECTIONS,
-      this._connections.map((conn) => ({
-        direction: conn.direction,
-        relationship: conn.relationship,
-        resource: conn.resource.node.path,
-        implicit: conn.implicit,
-      }))
-    );
-  }
-
-  /**
    * "Lifts" a value into an inflight context. If the value is a resource (i.e. has a `_toInflight`
    * method), this method will be called and the result will be returned. Otherwise, the value is
    * returned as-is.
@@ -368,82 +293,6 @@ export abstract class Resource extends Construct implements IResource {
   protected _lift(value: any): string {
     return liftObject(this, value);
   }
-}
-
-/**
- * The direction of a connection.
- *
- * Visually speaking, if a resource A has an outbound connection with resource B,
- * the arrow would point from A to B, and vice versa for inbound connections.
- * @skipDocs
- */
-export enum Direction {
-  /**
-   * Indicates that this resource calls, triggers, or references
-   * the resource it is connected to.
-   */
-  OUTBOUND = "outbound",
-
-  /**
-   * Indicates that this resource is called, triggered, or referenced by
-   * the resource it is connected to.
-   */
-  INBOUND = "inbound",
-}
-
-/**
- * Props for `Resource.addConnection`.
- * @skipDocs
- */
-export interface AddConnectionProps {
-  /**
-   * The resource creating the connection to `to`.
-   */
-  readonly from: IResource;
-
-  /**
-   * The resource `from` is connecting to.
-   */
-  readonly to: IResource;
-
-  /**
-   * The type of relationship between the resources.
-   */
-  readonly relationship: string;
-
-  /**
-   * Whether the relationship is implicit, i.e. it is not explicitly
-   * defined by the user.
-   * @default false
-   */
-  readonly implicit?: boolean;
-}
-
-/**
- * A connection between two resources.
- * @skipDocs
- */
-export interface Connection {
-  /**
-   * The resource this connection is to.
-   */
-  readonly resource: IResource;
-
-  /**
-   * The type of relationship with the resource.
-   */
-  readonly relationship: string;
-
-  /**
-   * The direction of the connection.
-   */
-  readonly direction: Direction;
-
-  /**
-   * Whether the relationship is implicit, i.e. it is not explicitly
-   * defined by the user.
-   */
-  readonly implicit: boolean;
 }
 
 /**

@@ -13,6 +13,10 @@ exports[`can add row in preflight 1`] = `
 
 exports[`can add row in preflight 2`] = `
 {
+  "connections.json": {
+    "connections": [],
+    "version": "connections-0.1",
+  },
   "simulator.json": {
     "resources": [
       {
@@ -50,9 +54,6 @@ exports[`can add row in preflight 2`] = `
     "tree": {
       "children": {
         "cloud.TestRunner": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -66,9 +67,6 @@ exports[`can add row in preflight 2`] = `
           "path": "root/cloud.TestRunner",
         },
         "my_table": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -95,6 +93,10 @@ exports[`can add row in preflight 2`] = `
 
 exports[`create a table 1`] = `
 {
+  "connections.json": {
+    "connections": [],
+    "version": "connections-0.1",
+  },
   "simulator.json": {
     "resources": [
       {
@@ -126,9 +128,6 @@ exports[`create a table 1`] = `
     "tree": {
       "children": {
         "cloud.TestRunner": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -142,9 +141,6 @@ exports[`create a table 1`] = `
           "path": "root/cloud.TestRunner",
         },
         "my_table": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -183,6 +179,10 @@ exports[`get row 1`] = `
 
 exports[`get row 2`] = `
 {
+  "connections.json": {
+    "connections": [],
+    "version": "connections-0.1",
+  },
   "simulator.json": {
     "resources": [
       {
@@ -214,9 +214,6 @@ exports[`get row 2`] = `
     "tree": {
       "children": {
         "cloud.TestRunner": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -230,9 +227,6 @@ exports[`get row 2`] = `
           "path": "root/cloud.TestRunner",
         },
         "my_table": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -270,6 +264,10 @@ exports[`insert row 1`] = `
 
 exports[`insert row 2`] = `
 {
+  "connections.json": {
+    "connections": [],
+    "version": "connections-0.1",
+  },
   "simulator.json": {
     "resources": [
       {
@@ -301,9 +299,6 @@ exports[`insert row 2`] = `
     "tree": {
       "children": {
         "cloud.TestRunner": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -317,9 +312,6 @@ exports[`insert row 2`] = `
           "path": "root/cloud.TestRunner",
         },
         "my_table": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -360,6 +352,10 @@ exports[`list table 1`] = `
 
 exports[`list table 2`] = `
 {
+  "connections.json": {
+    "connections": [],
+    "version": "connections-0.1",
+  },
   "simulator.json": {
     "resources": [
       {
@@ -391,9 +387,6 @@ exports[`list table 2`] = `
     "tree": {
       "children": {
         "cloud.TestRunner": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -407,9 +400,6 @@ exports[`list table 2`] = `
           "path": "root/cloud.TestRunner",
         },
         "my_table": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -451,6 +441,10 @@ exports[`update row 1`] = `
 
 exports[`update row 2`] = `
 {
+  "connections.json": {
+    "connections": [],
+    "version": "connections-0.1",
+  },
   "simulator.json": {
     "resources": [
       {
@@ -482,9 +476,6 @@ exports[`update row 2`] = `
     "tree": {
       "children": {
         "cloud.TestRunner": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -498,9 +489,6 @@ exports[`update row 2`] = `
           "path": "root/cloud.TestRunner",
         },
         "my_table": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
