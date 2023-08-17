@@ -110,9 +110,5 @@ test "Struct with the same value" {
 
 test "Struct with different values" {
   assert(cat1 != cat3);
-  try {
-    assert(cat1 != cat2);
-  } catch {
-    assert(true);
-  }
+  assert(!(cat1 != cat2));
 }
