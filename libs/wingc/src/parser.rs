@@ -568,6 +568,7 @@ impl<'s> Parser<'s> {
 
 	fn build_if_let_statement(&self, statement_node: &Node, phase: Phase) -> DiagnosticResult<StmtKind> {
 		let if_block = self.build_scope(&statement_node.child_by_field_name("block").unwrap(), phase);
+		let reassignable = statement_node.child_by_field_name("reassignable").is_some();
 		let value = self.build_expression(&statement_node.child_by_field_name("value").unwrap(), phase)?;
 		let name = self.check_reserved_symbol(&statement_node.child_by_field_name("name").unwrap())?;
 		let else_block = if let Some(else_block) = statement_node.child_by_field_name("else_block") {
@@ -577,6 +578,7 @@ impl<'s> Parser<'s> {
 		};
 		Ok(StmtKind::IfLet {
 			var_name: name,
+			reassignable,
 			value,
 			statements: if_block,
 			else_statements: else_block,

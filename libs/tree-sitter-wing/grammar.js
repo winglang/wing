@@ -274,8 +274,8 @@ module.exports = grammar({
 
     if_let_statement: ($) =>
       seq(
-        // TODO: support "if let var"
         "if let",
+        optional(field("reassignable", $.reassignable)),
         field("name", $.identifier),
         "=",
         field("value", $.expression),

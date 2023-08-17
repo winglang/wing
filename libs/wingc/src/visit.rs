@@ -134,6 +134,7 @@ where
 		StmtKind::IfLet {
 			value,
 			statements,
+			reassignable: _,
 			var_name,
 			else_statements,
 		} => {

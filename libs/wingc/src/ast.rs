@@ -452,6 +452,7 @@ pub enum StmtKind {
 		statements: Scope,
 	},
 	IfLet {
+		reassignable: bool,
 		var_name: Symbol,
 		value: Expr,
 		statements: Scope,

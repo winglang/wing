@@ -853,6 +853,7 @@ impl<'a> JSifier<'a> {
 			StmtKind::Break => CodeMaker::one_line("break;"),
 			StmtKind::Continue => CodeMaker::one_line("continue;"),
 			StmtKind::IfLet {
+				reassignable,
 				value,
 				statements,
 				var_name,
@@ -894,7 +895,11 @@ impl<'a> JSifier<'a> {
 					self.jsify_expression(value, ctx)
 				));
 				code.open(format!("if ({if_let_value} != undefined) {{"));
-				code.line(format!("const {} = {};", var_name, if_let_value));
+				if *reassignable {
+					code.line(format!("let {} = {};", var_name, if_let_value));
+				} else {
+					code.line(format!("const {} = {};", var_name, if_let_value));
+				}
 				code.add_code(self.jsify_scope_body(statements, ctx));
 				code.close("}");
 

@@ -481,6 +481,16 @@ class $Root extends $stdlib.std.Resource {
       }
       return ({"first": (parts.at(0)),"last": (parts.at(1))});
     });
+    const a = 1;
+    {
+      const $IF_LET_VALUE = a;
+      if ($IF_LET_VALUE != undefined) {
+        let z = $IF_LET_VALUE;
+        {((cond) => {if (!cond) throw new Error("assertion failed: z == 1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(z,1)))};
+        z = 2;
+        {((cond) => {if (!cond) throw new Error("assertion failed: z == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(z,2)))};
+      }
+    }
     {
       const $IF_LET_VALUE = (tryParseName("Good Name"));
       if ($IF_LET_VALUE != undefined) {
