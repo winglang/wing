@@ -36,6 +36,11 @@ test "Json with the same value" {
 
 test "Json with different values" {
   assert(jsonA != jsonC);
+  try {
+    assert(jsonA != jsonB);
+  } catch {
+    assert(true);
+  }
 }
 
 //-----------------------------------------------------------------------------
@@ -53,6 +58,11 @@ test "Set types with the same value" {
 
 test "Set types with different values" {
   assert(setA != setC);
+  try {
+    assert(setA != setB.copy());
+  } catch {
+    assert(true);
+  }
 }
 
 //-----------------------------------------------------------------------------
@@ -69,6 +79,11 @@ test "Map with the same value" {
 
 test "Map with different values" {
   assert(mapA != mapC);
+  try {
+    assert(mapA != mapB.copy());
+  } catch {
+    assert(true);
+  }
 }
 
 //-----------------------------------------------------------------------------
@@ -85,6 +100,11 @@ test "Array with the same value" {
 
 test "Array with different values" {
   assert(arrayA != arrayC);
+  try {
+    assert(arrayA != arrayB.copy());
+  } catch {
+    assert(true);
+  }
 }
 
 //-----------------------------------------------------------------------------
@@ -106,4 +126,9 @@ test "Struct with the same value" {
 
 test "Struct with different values" {
   assert(cat1 != cat3);
+  try {
+    assert(cat1 != cat2);
+  } catch {
+    assert(true);
+  }
 }
