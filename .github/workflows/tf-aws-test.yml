@@ -85,6 +85,7 @@ jobs:
           timeout_minutes: 5
           command: npm install -g winglang
       - name: Installing external js modules
+        if: ${{github.event_name != 'push'}}
         run: |
           cd examples/tests/sdk_tests
           npm install
