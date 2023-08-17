@@ -234,8 +234,8 @@ sequenceDiagram
 1. get user repositories from GitHub by using the GitHub API and the user's access token we have in our DB
 2. filter repositories that have Wing Cloud application installed.
 3. for each repository, get all preview environments.
-4. there is no need to store user -> repositories mapping in our DB, we can get it from GitHub API.
-5. also there is no need to store repository -> preview environments mapping in our DB, we can get it from GitHub API.
+4. there might be need to store repository -> preview environments mapping in our DB.
+5. there is no need to store user -> repositories mapping in our DB, we can get it from GitHub API.
 
 ### Processing GitHub Events
 
