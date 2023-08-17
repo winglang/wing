@@ -3,10 +3,17 @@ on:
   release:
     types:
       - published
+  push:
+    branches:
+      - main
+      - tsuf/sdk-spec-tests-prior-to-build
   workflow_dispatch: {}
 
 env:
   AWS_REGION: "us-east-1"
+  RUST_VERSION: "1.67.1"
+  NODE_VERSION: "18.16.0"
+  PNPM_VERSION: "8.6.3"
 
 jobs:
   setup:
@@ -42,7 +49,33 @@ jobs:
       - name: Setup Node.js v18
         uses: actions/setup-node@v3
         with:
-          node-version: 18
+          node-version: ${{ env.NODE_VERSION }}
+      ########################### install a local wing version ###############
+      - name: Setup pnpm
+        if: ${{github.event_name == 'push'}}
+        uses: pnpm/action-setup@v2.2.4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Install Rust
+        if: ${{github.event_name == 'push'}}
+        uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: ${{ env.RUST_VERSION }}
+          targets: |
+            x86_64-unknown-linux-gnu
+            wasm32-wasi
+          components: rustfmt,clippy,rust-std
+
+      - name: Setup Cargo Cache
+        if: ${{github.event_name == 'push'}}
+        uses: Swatinem/rust-cache@v2
+
+      - name: Install Dependencies
+        if: ${{github.event_name == 'push'}}
+        run: pnpm install --frozen-lockfile
+
+      ########################################################################
       - name: Install winglang globally
         uses: nick-fields/retry@v2
         with:
@@ -69,7 +102,14 @@ jobs:
           max_attempts: 3
           retry_on: error
           timeout_minutes: 20
-          command: wing test -t tf-aws ${{ matrix.test.directory }}/*.w
+          command: |
+            if ${{github.event_name == 'push'}}
+            then
+              pnpm wing test -t tf-aws ${{ matrix.test.directory }}/*.w
+            else
+              wing test -t tf-aws ${{ matrix.test.directory }}/*.w
+            fi
+
       - name: Output Terraform log
         if: failure()
         run: cat ${{ runner.workspace }}/terraform.log
