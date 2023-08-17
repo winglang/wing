@@ -8,9 +8,9 @@ export interface NodeDisplay {
 }
 
 export interface NodeConnection {
-  direction: "inbound" | "outbound";
-  relationship: string;
-  resource: string;
+  source: string;
+  target: string;
+  name: string;
 }
 
 export interface Node {
@@ -18,12 +18,7 @@ export interface Node {
   path: string;
   parent: string | undefined;
   constructInfo: ConstructInfo | undefined;
-  attributes:
-    | ({
-        "wing:resource:connections"?: NodeConnection[];
-        "wing:resource:stateful"?: boolean;
-      } & Record<string, any>)
-    | undefined;
+  attributes: Record<string, any> | undefined;
   children: string[];
   display?: NodeDisplay;
 }

@@ -136,6 +136,7 @@ export const createAppRouter = () => {
       .query(async ({ ctx, input }) => {
         const simulator = await ctx.simulator();
         const { tree } = simulator.tree().rawData();
+        const connections = simulator.connections();
         const nodeMap = buildConstructTreeNodeMap(shakeTree(tree));
 
         const node = nodeMap.get(input.path);
@@ -161,33 +162,46 @@ export const createAppRouter = () => {
               display: node.display,
             },
             inbound:
-              node.attributes?.["wing:resource:connections"]
-                ?.filter(({ direction, resource }) => {
-                  if (direction !== "inbound") {
+              connections
+                ?.filter(({ source, target }) => {
+                  if (target !== node.path) {
                     return false;
                   }
 
-                  const node = nodeMap.get(resource);
-                  if (!node) {
+                  const sourceNode = nodeMap.get(source);
+                  if (!sourceNode) {
                     throw new Error(
-                      `Could not find node for resource ${resource}`,
+                      `Could not find node for resource ${source}`,
                     );
                   }
 
-                  if (node.display?.hidden) {
+                  const targetNode = nodeMap.get(target);
+                  if (!targetNode) {
+                    throw new Error(
+                      `Could not find node for resource ${target}`,
+                    );
+                  }
+
+                  if (
+                    sourceNode.display?.hidden ||
+                    targetNode.display?.hidden
+                  ) {
                     return false;
                   }
 
-                  if (!input.showTests && matchTest(node.path)) {
+                  if (
+                    !input.showTests &&
+                    (matchTest(sourceNode.path) || matchTest(targetNode.path))
+                  ) {
                     return false;
                   }
 
                   return true;
                 })
                 .map((connection) => {
-                  const node = nodeMap.get(connection.resource)!;
+                  const node = nodeMap.get(connection.source)!;
                   return {
-                    relationshipType: connection.relationship,
+                    relationshipType: connection.name,
                     node: {
                       id: node.id,
                       path: node.path,
@@ -196,32 +210,46 @@ export const createAppRouter = () => {
                   };
                 }) ?? [],
             outbound:
-              node.attributes?.["wing:resource:connections"]
-                ?.filter(({ direction, resource }) => {
-                  if (direction !== "outbound") {
+              connections
+                ?.filter(({ source, target }) => {
+                  if (source !== node.path) {
                     return false;
                   }
 
-                  const node = nodeMap.get(resource);
-                  if (!node) {
+                  const sourceNode = nodeMap.get(source);
+                  if (!sourceNode) {
                     throw new Error(
-                      `Could not find node for resource ${resource}`,
+                      `Could not find node for resource ${source}`,
                     );
                   }
 
-                  if (node.display?.hidden) {
+                  const targetNode = nodeMap.get(target);
+                  if (!targetNode) {
+                    throw new Error(
+                      `Could not find node for resource ${target}`,
+                    );
+                  }
+
+                  if (
+                    sourceNode.display?.hidden ||
+                    targetNode.display?.hidden
+                  ) {
                     return false;
                   }
-                  if (!input.showTests && matchTest(node.path)) {
+
+                  if (
+                    !input.showTests &&
+                    (matchTest(sourceNode.path) || matchTest(targetNode.path))
+                  ) {
                     return false;
                   }
 
                   return true;
                 })
                 .map((connection) => {
-                  const node = nodeMap.get(connection.resource)!;
+                  const node = nodeMap.get(connection.target)!;
                   return {
-                    relationshipType: connection.relationship,
+                    relationshipType: connection.name,
                     node: {
                       id: node.id,
                       path: node.path,
@@ -320,24 +348,31 @@ export const createAppRouter = () => {
         // we keep only one connection per resource and direction (because the SDK currently has
         // no way to distinguish between multiple connections to the same resource).
         // Also, we need to filter out connections to hidden nodes.
-        const connections = uniqby(
-          node.attributes?.["wing:resource:connections"] ?? [],
-          (connection) => {
-            return `${connection.direction}-${connection.resource}`;
-          },
-        ).filter((connection) => {
-          const node = nodeMap.get(connection.resource);
-          if (!node) {
+        const connections = uniqby(simulator.connections(), (connection) => {
+          return `${connection.source}-${connection.target}`;
+        }).filter((connection) => {
+          const sourceNode = nodeMap.get(connection.source);
+          if (!sourceNode) {
             throw new Error(
-              `Could not find node for resource ${connection.resource}`,
+              `Could not find node for resource ${connection.source}`,
             );
           }
 
-          if (node.display?.hidden) {
+          const targetNode = nodeMap.get(connection.target);
+          if (!targetNode) {
+            throw new Error(
+              `Could not find node for resource ${connection.target}`,
+            );
+          }
+
+          if (sourceNode.display?.hidden || targetNode.display?.hidden) {
             return false;
           }
 
-          if (!showTests && matchTest(node.path)) {
+          if (
+            !showTests &&
+            (matchTest(sourceNode.path) || matchTest(targetNode.path))
+          ) {
             return false;
           }
 
@@ -355,11 +390,11 @@ export const createAppRouter = () => {
             attributes: config?.attrs,
           },
           inbound: connections
-            .filter(({ direction }) => {
-              return direction === "inbound";
+            .filter(({ target }) => {
+              return target === node.path;
             })
             .map((connection) => {
-              const node = nodeMap.get(connection.resource)!;
+              const node = nodeMap.get(connection.source)!;
               return {
                 id: node.id,
                 path: node.path,
@@ -367,11 +402,11 @@ export const createAppRouter = () => {
               };
             }),
           outbound: connections
-            .filter(({ direction }) => {
-              return direction === "outbound";
+            .filter(({ source }) => {
+              return source === node.path;
             })
             .map((connection) => {
-              const node = nodeMap.get(connection.resource)!;
+              const node = nodeMap.get(connection.target)!;
               return {
                 id: node.id,
                 path: node.path,
@@ -403,31 +438,40 @@ export const createAppRouter = () => {
             message: "Node was not found.",
           });
         }
-        const connections =
-          sourceNode?.attributes?.["wing:resource:connections"];
+        const connections = simulator.connections();
 
-        const targetResource = connections?.find(
-          (connection) => connection.resource === targetPath,
+        const connection = connections?.find(
+          (connection) =>
+            sourceNode.path === connection.source &&
+            connection.target === targetPath,
         );
-        const targetNode = nodeMap.get(targetResource?.resource);
+        const targetNode = nodeMap.get(connection?.target);
+        if (!targetNode) {
+          throw new Error(
+            `Could not find node for resource ${connection?.target}`,
+          );
+        }
 
         const inflights = sourceNode.display?.hidden
           ? []
           : connections
-              ?.filter(({ direction, resource, relationship }) => {
-                if (direction !== "outbound") {
+              ?.filter(({ source, target, name }) => {
+                if (source !== sourcePath) {
                   return false;
                 }
 
-                if (resource !== targetPath) {
+                if (target !== targetPath) {
                   return false;
                 }
 
-                if (relationship === "$inflight_init()") {
+                if (name === "$inflight_init()") {
                   return false;
                 }
 
-                if (!showTests && matchTest(sourceNode.path)) {
+                if (
+                  !showTests &&
+                  (matchTest(sourceNode.path) || matchTest(targetNode.path))
+                ) {
                   return false;
                 }
 
@@ -435,7 +479,7 @@ export const createAppRouter = () => {
               })
               .map((connection) => {
                 return {
-                  name: connection.relationship,
+                  name: connection.name,
                 };
               }) ?? [];
 
@@ -481,6 +525,7 @@ export const createAppRouter = () => {
         const simulator = await ctx.simulator();
 
         const { tree } = simulator.tree().rawData();
+        const connections = simulator.connections();
         const shakedTree = shakeTree(tree);
         const nodeMap = buildConstructTreeNodeMap(shakedTree);
         const nodes = [
@@ -491,9 +536,9 @@ export const createAppRouter = () => {
           ),
         ];
         const edges = uniqby(
-          createMapEdgeFromConstructTreeNode(
-            shakedTree,
+          createMapEdgesFromConnectionData(
             nodeMap,
+            connections,
             input?.showTests,
           ),
           (edge) => edge.id,
@@ -600,39 +645,44 @@ export interface MapEdge {
   target: string;
 }
 
-function createMapEdgeFromConstructTreeNode(
-  node: ConstructTreeNode,
+function createMapEdgesFromConnectionData(
   nodeMap: ConstructTreeNodeMap,
+  connections: NodeConnection[],
   showTests = false,
 ): MapEdge[] {
-  if (node.display?.hidden || (!showTests && matchTest(node.path))) {
-    return [];
-  }
-
   return [
-    ...(node.attributes?.["wing:resource:connections"]
-      ?.filter(({ direction, resource }: NodeConnection) => {
-        const node = nodeMap.get(resource);
-        if (!node) {
-          throw new Error(`Could not find node for resource ${resource}`);
+    ...connections
+      .filter(({ source, target }) => {
+        const sourceNode = nodeMap.get(source);
+        if (!sourceNode) {
+          throw new Error(`Could not find node for resource ${source}`);
         }
 
-        const shouldRemove =
-          node.display?.hidden || (!showTests && matchTest(node.path));
-        if (direction === "inbound" && !shouldRemove) {
-          return true;
+        const targetNode = nodeMap.get(target);
+        if (!targetNode) {
+          throw new Error(`Could not find node for resource ${target}`);
         }
+
+        if (sourceNode.display?.hidden || targetNode.display?.hidden) {
+          return false;
+        }
+
+        if (
+          !showTests &&
+          (matchTest(sourceNode.path) || matchTest(targetNode.path))
+        ) {
+          return false;
+        }
+
+        return true;
       })
       ?.map((connection: NodeConnection) => {
         return {
-          id: `${connection.resource} -> ${node.path}`,
-          source: connection.resource,
-          target: node.path,
+          id: `${connection.source} -> ${connection.target}`,
+          source: connection.source,
+          target: connection.target,
         };
-      }) ?? []),
-    ...(Object.values(node.children ?? {})?.map((child) =>
-      createMapEdgeFromConstructTreeNode(child, nodeMap, showTests),
-    ) ?? []),
+      }),
   ].flat();
 }
 

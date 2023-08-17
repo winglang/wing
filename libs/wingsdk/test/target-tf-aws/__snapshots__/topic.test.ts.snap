@@ -26,9 +26,6 @@ exports[`default topic behavior 2`] = `
           "Default": {
             "children": {
               "Topic": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "Default": {
                     "constructInfo": {
@@ -59,9 +56,6 @@ exports[`default topic behavior 2`] = `
                 "path": "root/Default/aws",
               },
               "cloud.TestRunner": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "TestFunctionArns": {
                     "constructInfo": {
@@ -146,9 +140,6 @@ exports[`replace invalid character from queue name 2`] = `
           "Default": {
             "children": {
               "The%Spectacular@Topic": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "Default": {
                     "constructInfo": {
@@ -179,9 +170,6 @@ exports[`replace invalid character from queue name 2`] = `
                 "path": "root/Default/aws",
               },
               "cloud.TestRunner": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "TestFunctionArns": {
                     "constructInfo": {
@@ -266,9 +254,6 @@ exports[`topic name valid 2`] = `
           "Default": {
             "children": {
               "The-Spectacular_Topic-01": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "Default": {
                     "constructInfo": {
@@ -299,9 +284,6 @@ exports[`topic name valid 2`] = `
                 "path": "root/Default/aws",
               },
               "cloud.TestRunner": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "TestFunctionArns": {
                     "constructInfo": {
@@ -474,22 +456,6 @@ exports[`topic with subscriber function 3`] = `
                 "path": "root/Default/Code",
               },
               "Handler": {
-                "attributes": {
-                  "wing:resource:connections": [
-                    {
-                      "direction": "inbound",
-                      "implicit": false,
-                      "relationship": "handle()",
-                      "resource": "root/Default/Topic-OnMessage-c5395e41",
-                    },
-                    {
-                      "direction": "inbound",
-                      "implicit": false,
-                      "relationship": "$inflight_init()",
-                      "resource": "root/Default/Topic-OnMessage-c5395e41",
-                    },
-                  ],
-                },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
                   "version": "10.1.314",
@@ -503,16 +469,6 @@ exports[`topic with subscriber function 3`] = `
                 "path": "root/Default/Handler",
               },
               "Topic": {
-                "attributes": {
-                  "wing:resource:connections": [
-                    {
-                      "direction": "outbound",
-                      "implicit": false,
-                      "relationship": "onMessage()",
-                      "resource": "root/Default/Topic-OnMessage-c5395e41",
-                    },
-                  ],
-                },
                 "children": {
                   "Default": {
                     "constructInfo": {
@@ -543,28 +499,6 @@ exports[`topic with subscriber function 3`] = `
                 "path": "root/Default/Topic",
               },
               "Topic-OnMessage-c5395e41": {
-                "attributes": {
-                  "wing:resource:connections": [
-                    {
-                      "direction": "outbound",
-                      "implicit": false,
-                      "relationship": "handle()",
-                      "resource": "root/Default/Handler",
-                    },
-                    {
-                      "direction": "outbound",
-                      "implicit": false,
-                      "relationship": "$inflight_init()",
-                      "resource": "root/Default/Handler",
-                    },
-                    {
-                      "direction": "inbound",
-                      "implicit": false,
-                      "relationship": "onMessage()",
-                      "resource": "root/Default/Topic",
-                    },
-                  ],
-                },
                 "children": {
                   "Asset": {
                     "constructInfo": {
@@ -635,9 +569,6 @@ exports[`topic with subscriber function 3`] = `
                 "path": "root/Default/Topic-OnMessage-c5395e41",
               },
               "Topic-OnMessageHandler-c5395e41": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
                   "version": "10.1.314",
@@ -657,9 +588,6 @@ exports[`topic with subscriber function 3`] = `
                 "path": "root/Default/aws",
               },
               "cloud.TestRunner": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "TestFunctionArns": {
                     "constructInfo": {
