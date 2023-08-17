@@ -64,12 +64,7 @@ module.exports = function({ $_____arrayB__, $arrayA, $arrayC }) {
     }
     async handle() {
       {((cond) => {if (!cond) throw new Error("assertion failed: arrayA != arrayC")})((((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })($arrayA,$arrayC)))};
-      try {
-        {((cond) => {if (!cond) throw new Error("assertion failed: arrayA != arrayB.copy()")})((((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })($arrayA,$_____arrayB__)))};
-      }
-      catch {
-        {((cond) => {if (!cond) throw new Error("assertion failed: true")})(true)};
-      }
+      {((cond) => {if (!cond) throw new Error("assertion failed: !(arrayA != arrayB.copy())")})((!(((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })($arrayA,$_____arrayB__))))};
     }
   }
   return $Closure10;
@@ -107,12 +102,7 @@ module.exports = function({ $cat1, $cat2, $cat3 }) {
     }
     async handle() {
       {((cond) => {if (!cond) throw new Error("assertion failed: cat1 != cat3")})((((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })($cat1,$cat3)))};
-      try {
-        {((cond) => {if (!cond) throw new Error("assertion failed: cat1 != cat2")})((((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })($cat1,$cat2)))};
-      }
-      catch {
-        {((cond) => {if (!cond) throw new Error("assertion failed: true")})(true)};
-      }
+      {((cond) => {if (!cond) throw new Error("assertion failed: !(cat1 != cat2)")})((!(((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })($cat1,$cat2))))};
     }
   }
   return $Closure12;
@@ -169,12 +159,7 @@ module.exports = function({ $jsonA, $jsonB, $jsonC }) {
     }
     async handle() {
       {((cond) => {if (!cond) throw new Error("assertion failed: jsonA != jsonC")})((((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })($jsonA,$jsonC)))};
-      try {
-        {((cond) => {if (!cond) throw new Error("assertion failed: jsonA != jsonB")})((((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })($jsonA,$jsonB)))};
-      }
-      catch {
-        {((cond) => {if (!cond) throw new Error("assertion failed: true")})(true)};
-      }
+      {((cond) => {if (!cond) throw new Error("assertion failed: !(jsonA != jsonB)")})((!(((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })($jsonA,$jsonB))))};
     }
   }
   return $Closure4;
@@ -212,12 +197,7 @@ module.exports = function({ $new_Set_setB_, $setA, $setC }) {
     }
     async handle() {
       {((cond) => {if (!cond) throw new Error("assertion failed: setA != setC")})((((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })($setA,$setC)))};
-      try {
-        {((cond) => {if (!cond) throw new Error("assertion failed: setA != setB.copy()")})((((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })($setA,$new_Set_setB_)))};
-      }
-      catch {
-        {((cond) => {if (!cond) throw new Error("assertion failed: true")})(true)};
-      }
+      {((cond) => {if (!cond) throw new Error("assertion failed: !(setA != setB.copy())")})((!(((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })($setA,$new_Set_setB_))))};
     }
   }
   return $Closure6;
@@ -255,12 +235,7 @@ module.exports = function({ $______mapB___, $mapA, $mapC }) {
     }
     async handle() {
       {((cond) => {if (!cond) throw new Error("assertion failed: mapA != mapC")})((((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })($mapA,$mapC)))};
-      try {
-        {((cond) => {if (!cond) throw new Error("assertion failed: mapA != mapB.copy()")})((((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })($mapA,$______mapB___)))};
-      }
-      catch {
-        {((cond) => {if (!cond) throw new Error("assertion failed: true")})(true)};
-      }
+      {((cond) => {if (!cond) throw new Error("assertion failed: !(mapA != mapB.copy())")})((!(((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })($mapA,$______mapB___))))};
     }
   }
   return $Closure8;
