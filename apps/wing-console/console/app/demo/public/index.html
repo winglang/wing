@@ -1,0 +1,49 @@
+<html>
+  <head>
+    <title>Wing Preview Environment</title>
+  </head>
+  <script>
+    let api = "";
+    let list = [];
+
+    const fetchPreviewEnvrionments = () => {
+      fetch(`${api}/api/preview-environments`)
+        .then((response) => response.json())
+        .then((previewEnvironments) => {
+          list = previewEnvironments;
+          const previews = document.getElementById("previews");
+          previews.innerHTML = "";
+          list.forEach((preview) => {
+            const previewDiv = document.createElement("div");
+            previewDiv.innerHTML = preview;
+            previews.appendChild(previewDiv);
+          });
+        })
+        .catch((error) => {
+          console.error("Error fetching preview environments:", error);
+        });
+    };
+
+    fetch("config.json")
+      .then((response) => response.json())
+      .then((configData) => {
+        api = configData.apiUrl;
+        fetchPreviewEnvrionments();
+      })
+      .catch((error) => {
+        console.error("Error fetching config.json:", error);
+      });
+  </script>
+  <body>
+    <h1>Wing Preview Environments</h1>
+    <div>
+      <div>
+        <label>Previews</label>
+        <div
+          id="previews"
+          style="display: flex; flex-direction: column; gap: 1rem"
+        />
+      </div>
+    </div>
+  </body>
+</html>

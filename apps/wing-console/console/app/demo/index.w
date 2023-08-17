@@ -1,112 +1,126 @@
 bring cloud;
 bring ex;
+bring util;
 
-let bucket = new cloud.Bucket();
-let queue = new cloud.Queue();
-let api = new cloud.Api();
+bring "./cloud2.w" as cloud2;
+bring "./extern2.w" as ex2;
+bring "./utils.w" as util2;
 
-api.get("/test-get", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
-  return cloud.ApiResponse {
-    status: 200,
-    body: Json.stringify({
-      query: Json (Json req).get("query"),
-    })
-  };
-});
-api.post("/test-post", inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
-  return cloud.ApiResponse {
-    status: 200,
-    body: "Hello, POST!"
-  };
-});
-
-let handler = inflight (message: str): str => {
-  bucket.put("hello.txt", "Hello, ${message}!");
-  log("Hello, ${message}!");
-  return message;
+let getFiles = (repo:str, sha:str) => {
+  let files = Array<Json> [{filename: "index.html"}, {filename: "index.main.w"}];
+  return files;
 };
 
-queue.setConsumer(handler);
+class Dashboard {
+  api: cloud.Api;
+  dns: cloud2.DNS;
+  flyIo: ex2.FlyIO;
+  
+  init() {
+    this.api = new cloud.Api() as "API";
+    this.dns = new cloud2.DNS() as "DNS";
+    this.flyIo = new ex2.FlyIO() as "FlyIO";
+    
+    this.api.get("/api/preview-environments", inflight (request: cloud.ApiRequest): cloud.ApiResponse => {
+      let response = cloud.ApiResponse {
+        body: Json.stringify(this.flyIo.bucket.list()),
+        headers: {
+          "Access-Control-Allow-Headers" => "Content-Type",
+          "Access-Control-Allow-Origin" => "*",
+          "Access-Control-Allow-Methods" => "OPTIONS,POST,GET",
+          "content-type" => "application/json"
+        },
+        status: 200,
+      };
+      return response;
+    });
+  }
+  
+  inflight createPreview(
+    cloneUrl: str,
+    sha: str,
+    repoName: str,
+    branchName: str,
+    entryPoint: str,
+  ) {
+    let id = "${repoName}-${branchName}-${util.nanoid()}-${entryPoint}";
+    let url = this.flyIo.create(id, cloneUrl, sha, entryPoint);
+    let domain = "${id}.wingcloud.app";
+    this.dns.add(domain, url);
+  }
+}
 
-let counter = new cloud.Counter(initial: 0);
-new cloud.Function(inflight (message: str): str => {
-  counter.inc();
-  log("Counter is now ${counter.inc(0)}");
-  return message;
-}) as "IncrementCounter";
-
-let topic = new cloud.Topic() as "Topic";
-topic.onMessage(inflight (message: str): str => {
-  log("Topic subscriber #1: ${message}");
-  return message;
-});
-
-// let r = new ex.Redis();
-// new cloud.Function(inflight (message :str) :str => {
-//   log("${r.url()}");
-//   r.set("wing", message);
-//   let value = r.get("wing");
-//   log("${value}");
-//   return r.url();
-// }) as "Redis interaction";
-
-let table = new ex.Table(
-  name: "simple-table",
-  primaryKey: "id",
-  columns: {
-    "id" => ex.ColumnType.STRING,
-    "name" => ex.ColumnType.STRING,
-    "date" => ex.ColumnType.DATE,
-    "active" => ex.ColumnType.BOOLEAN,
-  },
+let dashboard = new Dashboard();
+let website = new cloud.Website(path: "public") as "wing.cloud.dashboard";
+website.addJson(
+  "config.json",
+  {
+    apiUrl: dashboard.api.url,
+  }
 );
 
-let rateSchedule = new cloud.Schedule(cloud.ScheduleProps{
-  rate: 5m
-}) as "Rate Schedule";
-
-rateSchedule.onTick(inflight () => {
-  log("Rate schedule ticked!");
+let processEventsFn = new cloud.Function(inflight (event:str) => {
+  let pr = Json.tryParse(event);
+  
+  let headData = pr?.get("head");
+  let repoData = headData?.get("repo");
+  
+  let cloneUrl = repoData?.get("clone_url")?.asStr() ?? "";
+  let sha = headData?.get("sha")?.asStr() ?? "";
+  let repoName = repoData?.get("name")?.asStr() ?? "";
+  let branchName = headData?.get("ref")?.asStr() ?? "";
+  
+  
+   // TODO:  https://github.com/winglang/wing/issues/1796
+  // let files = Array<Json>.fromJson(pr?.get("head.repo.files"));
+  let files = util2.jsonToArray(repoData?.get("files"));
+  
+  let entryPoints = MutArray<str> [];
+  for file in files {
+    let filename = file.get("filename").asStr();
+    if (filename.endsWith("main.w")) {
+      entryPoints.push(filename);
+    }
+  }
+  for entryPoint in entryPoints {
+    dashboard.createPreview(cloneUrl, sha, repoName, branchName, entryPoint);
+  }
 });
 
-let cronSchedule = new cloud.Schedule(cloud.ScheduleProps{
-  cron: "* * * * ?"
-}) as "Cron Schedule";
-
-// cronSchedule.onTick(inflight () => {
-//   log("Cron schedule ticked!");
-// });
-
-test "Increment counter" {
-  let previous = counter.inc();
-  log("Assertion should fail: ${previous} === ${counter.peek()}");
-  assert(previous == 1);
-}
-
-test "Push message to the queue" {
- queue.push("hey");
-}
-
-test "Print"{
-  log("Hello World!");
-  assert(true);
-}
-
-test "without assertions nor prints" {
-}
-
-test "Add fixtures" {
-  let arr = [1, 2, 3, 4, 5];
-
-  log("Adding ${arr.length} files in the bucket..");
-  for item in arr {
-    bucket.put("fixture_${item}.txt", "Content for the fixture_${item}!");
+class Github {
+  events: cloud.Schedule;
+  login: cloud.Api;
+  
+  init() {
+    this.events = new cloud.Schedule(cron: "* * * * ?") as "github-events";
+    this.login = new cloud.Api() as "github-login";
+    
+    this.events.onTick(inflight () => {
+      let event = {
+        "head": {
+          "sha": "123",
+          "ref": "refs/heads/main",
+          "repo": {
+            "name": "wing",
+            "clone_url": "https://api.github.com/repos/winglang/wing",
+            "files": [
+              {
+                "filename": "main.w"
+              }
+            ]
+          }
+        }
+      };
+      processEventsFn.invoke("${event}");
+    });
   }
-
-  log("Publishing to the topic..");
-  topic.publish("Hello, topic!");
-
-  log("Setting up counter..");
-  counter.set(0);
-  counter.inc(100);
 }
+
+let github = new Github();
+
+// TODO: how are we going to connect github event to a cloud.Function?
+// TODO: Json Array to Array https://github.com/winglang/wing/issues/1796
+// TODO: DNS resource
+// TODO: FlyIO ext resource
+// TODO: Github ext resource ?
+// TODO: Tsuf is working on adding React app compatibility to the website resource
