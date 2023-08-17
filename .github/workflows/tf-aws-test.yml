@@ -6,7 +6,6 @@ on:
   push:
     branches:
       - main
-      - tsuf/sdk-spec-tests-prior-to-build
   workflow_dispatch: {}
 
 env:
@@ -103,7 +102,7 @@ jobs:
         with:
           max_attempts: 3
           retry_on: error
-          timeout_minutes: 20
+          timeout_minutes: 30
           command: |
             if ${{github.event_name == 'push'}}
             then
