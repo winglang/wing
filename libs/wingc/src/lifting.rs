@@ -223,6 +223,12 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 		}
 	}
 
+	fn visit_type_annotation(&mut self, node: &'a crate::ast::TypeAnnotation) {
+		self.ctx.push_type_annotation();
+		visit::visit_type_annotation(self, node);
+		self.ctx.pop_type_annotation();
+	}
+
 	fn visit_expr(&mut self, node: &'a Expr) {
 		CompilationContext::set(CompilationPhase::Lifting, &node.span);
 
@@ -303,6 +309,13 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 
 	// TODO: implement visit_user_defined_type and capture the type if it needs to be captured (see `should_capture_expr` and TypeReference logic)
 	fn visit_user_defined_type(&mut self, node: &'a UserDefinedType) {
+		// If we're inside a type annotation we currently don't lift the type since our target compilation
+		// is typeless (javascript). For typed targes we may need to also lift the types used in annotations.
+		if self.ctx.in_type_annotation() {
+			visit::visit_user_defined_type(self, node);
+			return;
+		}
+
 		// this whole thing only applies to inflight code
 		if self.ctx.current_phase() == Phase::Preflight {
 			visit::visit_user_defined_type(self, node);

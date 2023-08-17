@@ -12,6 +12,9 @@ pub struct VisitContext {
 	class: Vec<UserDefinedType>,
 	statement: Vec<usize>,
 	in_json: Vec<bool>,
+	// We don't need a stack for figuring out if we're in a type annotation because type annotations aren't recursive
+	// if that changes we'll need to update this
+	in_type_annotation: bool,
 }
 
 impl VisitContext {
@@ -25,11 +28,28 @@ impl VisitContext {
 			statement: vec![],
 			method: vec![],
 			in_json: vec![],
+			in_type_annotation: false,
 		}
 	}
 }
 
 impl VisitContext {
+	pub fn push_type_annotation(&mut self) {
+		assert!(!self.in_type_annotation);
+		self.in_type_annotation = true;
+	}
+
+	pub fn pop_type_annotation(&mut self) {
+		assert!(self.in_type_annotation);
+		self.in_type_annotation = false;
+	}
+
+	pub fn in_type_annotation(&self) -> bool {
+		self.in_type_annotation
+	}
+
+	// --
+
 	pub fn push_stmt(&mut self, stmt: usize) {
 		self.statement.push(stmt);
 	}
