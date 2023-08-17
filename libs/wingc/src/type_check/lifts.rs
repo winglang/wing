@@ -51,9 +51,6 @@ pub struct MethodLift {
 /// A record that describes a lift from a class.
 #[derive(Debug)]
 pub struct Lift {
-	/// Lifting token (the symbol used in inflight code)
-	pub token: String,
-
 	/// Whether this is a field lift (`this.foo`)
 	pub is_field: bool,
 }
@@ -92,10 +89,7 @@ impl Lifts {
 			.entry(lifted_thing.clone())
 			.or_insert(token.clone());
 
-		self.lift_by_token.entry(token.clone()).or_insert(Lift {
-			token: token.clone(),
-			is_field,
-		});
+		self.lift_by_token.entry(token.clone()).or_insert(Lift { is_field });
 
 		let method = method.map(|m| m.name).unwrap_or(Default::default());
 
