@@ -2808,6 +2808,7 @@ impl<'a> TypeChecker<'a> {
 			StmtKind::IfLet {
 				value,
 				statements,
+				reassignable,
 				var_name,
 				else_statements,
 			} => {
@@ -2838,7 +2839,7 @@ impl<'a> TypeChecker<'a> {
 				// Add the variable to if block scope
 				match stmt_env.define(
 					var_name,
-					SymbolKind::make_free_variable(var_name.clone(), var_type, false, env.phase),
+					SymbolKind::make_free_variable(var_name.clone(), var_type, *reassignable, env.phase),
 					StatementIdx::Top,
 				) {
 					Err(type_error) => {
