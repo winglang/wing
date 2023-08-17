@@ -88,11 +88,7 @@ test "Array with the same value" {
 
 test "Array with different values" {
   assert(arrayA != arrayC);
-  try {
-    assert(arrayA != arrayB.copy());
-  } catch {
-    assert(true);
-  }
+  assert(!(arrayA != arrayB.copy()));
 }
 
 //-----------------------------------------------------------------------------
