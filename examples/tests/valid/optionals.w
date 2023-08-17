@@ -58,6 +58,13 @@ let tryParseName = (fullName: str): Name? => {
   };
 };
 
+// if lets reassignable
+let a: num? = 1;
+if let var z = a {
+  assert(z == 1);
+  z = 2;
+  assert(z == 2);
+}
 
 // Nested if lets
 if let parsedName = tryParseName("Good Name") {
