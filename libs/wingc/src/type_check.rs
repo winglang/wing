@@ -2603,18 +2603,19 @@ impl<'a> TypeChecker<'a> {
 	/// Returns the given type on success, otherwise returns one of the expected types.
 	fn validate_type_in(&mut self, actual_type: TypeRef, expected_types: &[TypeRef], span: &impl Spanned) -> TypeRef {
 		assert!(expected_types.len() > 0);
+		let first_expected_type = expected_types[0];
 		let mut return_type = actual_type;
 		let span = span.span();
 
 		// To avoid ambiguity, only do inference if there is one expected type
 		if expected_types.len() == 1 {
 			// First check if the actual type is an inference that can be replaced with the expected type
-			if self.add_new_inference(&actual_type, &expected_types[0], &span) {
+			if self.add_new_inference(&actual_type, &first_expected_type, &span) {
 				// Update the type we validate and return
 				return_type = self.types.maybe_unwrap_inference(return_type);
 			} else {
 				// otherwise, check if the expected type is an inference that can be replaced with the actual type
-				self.add_new_inference(&expected_types[0], &actual_type, &span);
+				self.add_new_inference(&first_expected_type, &actual_type, &span);
 			}
 		}
 
@@ -2671,7 +2672,7 @@ impl<'a> TypeChecker<'a> {
 
 		// if the actual type is a Json with known data, we can attempt to structurally type check
 		if expected_types.len() == 1 && json_type.is_json() {
-			let expected_type = self.types.maybe_unwrap_inference(expected_types[0]);
+			let expected_type = self.types.maybe_unwrap_inference(first_expected_type);
 			let expected_type_unwrapped = expected_type.maybe_unwrap_option();
 			if expected_type_unwrapped.is_json() {
 				return actual_type;
@@ -2679,7 +2680,7 @@ impl<'a> TypeChecker<'a> {
 			if let Type::Json(Some(data)) = &**json_type.maybe_unwrap_option() {
 				if expected_type_unwrapped.is_json_legal_value()
 					|| expected_type_unwrapped.is_struct()
-					|| expected_type_unwrapped.is_map()
+					|| expected_type_unwrapped.is_immutable_collection()
 				{
 					// we don't need to check the json-ability of this expr later because we know it's legal or it's being used as a struct/map
 					self.types.json_literal_casts.insert(data.expression_id, expected_type);
@@ -2720,18 +2721,16 @@ impl<'a> TypeChecker<'a> {
 				.join(",");
 			format!("one of \"{}\"", expected_types_list)
 		} else {
-			format!("\"{}\"", expected_types[0])
+			format!("\"{}\"", first_expected_type)
 		};
 
-		let mut message = format!(
-			"Expected type to be {}, but got \"{}\" instead",
-			expected_type_str, return_type
-		);
+		let mut message = format!("Expected type to be {expected_type_str}, but got \"{return_type}\" instead");
 		if return_type.is_nil() && expected_types.len() == 1 {
-			message = format!(
-				"{} (hint: to allow \"nil\" assignment use optional type: \"{}?\")",
-				message, expected_types[0]
-			);
+			message = format!("{message} (hint: to allow \"nil\" assignment use optional type: \"{first_expected_type}?\")");
+		}
+		if json_type.maybe_unwrap_option().is_json() {
+			// known json data is statically known
+			message = format!("{message} (hint: use {first_expected_type}.fromJson() to convert dynamic Json)");
 		}
 		report_diagnostic(Diagnostic {
 			message,
@@ -2739,7 +2738,7 @@ impl<'a> TypeChecker<'a> {
 		});
 
 		// Evaluate to one of the expected types
-		expected_types[0]
+		first_expected_type
 	}
 
 	pub fn type_check_file(&mut self, source_path: &Path, scope: &Scope) {

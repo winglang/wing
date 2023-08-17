@@ -1443,11 +1443,11 @@ error: Expected type to be \\"num\\", but got \\"str\\" instead
    |        ^^ Expected type to be \\"num\\", but got \\"str\\" instead
 
 
-error: Expected type to be \\"StructyJson\\", but got \\"Json\\" instead
+error: Expected type to be \\"StructyJson\\", but got \\"Json\\" instead (hint: use StructyJson.fromJson() to convert dynamic Json)
    --> ../../../examples/tests/invalid/json.w:96:38
    |
 96 | let mutableJsonStruct: StructyJson = mutableJson;
-   |                                      ^^^^^^^^^^^ Expected type to be \\"StructyJson\\", but got \\"Json\\" instead
+   |                                      ^^^^^^^^^^^ Expected type to be \\"StructyJson\\", but got \\"Json\\" instead (hint: use StructyJson.fromJson() to convert dynamic Json)
 
 
 error: \\"Array<Json>\\" is not a legal JSON value
