@@ -1341,7 +1341,9 @@ impl Types {
 	}
 
 	/// If the type is inferred and the real type is known, return it.
-	/// Otherwise return the type itself.
+	///
+	/// Otherwise, return the type itself.
+	/// If a chain of inferences is found, return the last type in the chain (which may itself be an inference).
 	///
 	/// Note: This function is recursive, so it will unwrap nested inferred types.
 	pub fn maybe_unwrap_inference(&self, t: TypeRef) -> TypeRef {
@@ -1374,6 +1376,8 @@ impl Types {
 		None
 	}
 
+	/// Update an unlinked inference with a given type.
+	/// If the inference is already linked, add diagnostic unless the type is the same.
 	pub fn update_inferred_type(&mut self, id: InferenceId, new_type: TypeRef, span: &WingSpan) {
 		if let Type::Inferred(n) = &*new_type {
 			if *n == id {
