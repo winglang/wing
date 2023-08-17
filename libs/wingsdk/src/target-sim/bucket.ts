@@ -17,11 +17,9 @@ import { BaseResourceSchema } from "../testing/simulator";
 export class Bucket extends cloud.Bucket implements ISimulatorResource {
   private readonly public: boolean;
   private readonly initialObjects: Record<string, string> = {};
-  private scope: Construct
+
   constructor(scope: Construct, id: string, props: cloud.BucketProps = {}) {
     super(scope, id, props);
-    this.scope = scope
-
     this.public = props.public ?? false;
   }
 
