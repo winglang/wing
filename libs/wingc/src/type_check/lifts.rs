@@ -12,8 +12,8 @@ pub struct Lifts {
 	/// All the lifts. The key is "<method>/<token>"
 	lifts: BTreeMap<String, MethodLift>,
 
-	/// All the captures. The key is token.
-	captures: BTreeMap<String, Capture>,
+	/// All the captures. The key is token the value is the preflight code.
+	pub captures: BTreeMap<String, String>,
 
 	/// Map from token to lift
 	lift_by_token: BTreeMap<String, Lift>,
@@ -27,16 +27,6 @@ pub struct Lifts {
 pub enum Liftable {
 	Expr(usize),
 	Type(UserDefinedType),
-}
-
-/// A record that describes a capture.
-#[derive(Debug, Clone)]
-pub struct Capture {
-	/// Lifting token (the symbol used in inflight code)
-	pub token: String,
-
-	/// The javascript code to capture
-	pub code: String,
 }
 
 /// A record that describes a single lift from a method.
@@ -167,15 +157,7 @@ impl Lifts {
 			.entry(lifted_thing.clone())
 			.or_insert(token.clone());
 
-		self.captures.entry(token.clone()).or_insert(Capture {
-			token: token.to_string(),
-			code: code.to_string(),
-		});
-	}
-
-	/// The list of captures.
-	pub fn captures(&self) -> Vec<&Capture> {
-		self.captures.values().collect_vec()
+		self.captures.entry(token.clone()).or_insert(code.to_string());
 	}
 
 	/// List of all lifted fields in the class.

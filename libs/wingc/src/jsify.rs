@@ -1294,10 +1294,10 @@ impl<'a> JSifier<'a> {
 		code.open(format!("require(\"{client_path}\")({{"));
 
 		if let Some(lifts) = &ctx.lifts {
-			for capture in lifts.captures() {
-				let preflight = capture.code.clone();
+			for (token, captured_code) in lifts.captures.iter() {
+				let preflight = captured_code.clone();
 				let lift_type = format!("context._lift({})", preflight);
-				code.line(format!("{}: ${{{}}},", capture.token, lift_type));
+				code.line(format!("{}: ${{{}}},", token, lift_type));
 			}
 		}
 
@@ -1401,7 +1401,7 @@ impl<'a> JSifier<'a> {
 		let mut code = CodeMaker::default();
 
 		let inputs = if let Some(lifts) = &ctx.lifts {
-			lifts.captures().iter().map(|c| c.token.clone()).join(", ")
+			lifts.captures.keys().join(", ")
 		} else {
 			Default::default()
 		};
