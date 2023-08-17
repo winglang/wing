@@ -2,9 +2,8 @@ import { test, expect } from "vitest";
 import {
   listMessages,
   treeJsonOf,
-  waitUntilResourcesDone,
-  waitUntilResourcesStart,
   waitUntilTrace,
+  waitUntilTraceCount,
 } from "./util";
 import * as cloud from "../../src/cloud";
 import { Duration } from "../../src/std";
@@ -54,7 +53,9 @@ test("queue with one subscriber, default batch size of 1", async () => {
 
   // WHEN
   await queueClient.push("A", "B");
-  await waitUntilResourcesDone(s, handler);
+  await waitUntilTraceCount(s, 2, (trace) =>
+    trace.data.message.startsWith("Invoke")
+  );
 
   // THEN
   await s.stop();
@@ -99,7 +100,7 @@ test("queue with one subscriber, batch size of 5", async () => {
 
   const queue = cloud.Queue._newQueue(app, "my_queue");
   const handler = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
-  queue.setConsumer(handler, { batchSize: 5 });
+  const consumer = queue.setConsumer(handler, { batchSize: 5 });
 
   // initialize the queue with some messages
   const onDeployHandler = Testing.makeHandler(
@@ -126,7 +127,12 @@ async handle() {
   const s = await app.startSimulator();
 
   // WHEN
-  await waitUntilResourcesDone(s, onDeployHandler);
+  await waitUntilTraceCount(
+    s,
+    2,
+    (trace) =>
+      trace.sourcePath === consumer.node.path && trace.data.status === "success"
+  );
 
   // THEN
   await s.stop();

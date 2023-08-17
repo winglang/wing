@@ -1,8 +1,7 @@
 import { existsSync, readFileSync } from "fs";
 import { join } from "path";
-import { Construct, IConstruct } from "constructs";
-import { IQueueClient } from "../../src/cloud";
-import { IResource, Trace } from "../../src/std";
+import { Construct } from "constructs";
+import { Trace } from "../../src/std";
 import { Simulator } from "../../src/testing";
 
 export function readJsonSync(file: string) {
@@ -42,7 +41,13 @@ export async function sleep(ms: number) {
 
 const DEFAULT_WAIT_TIMEOUT = 3000;
 
-export async function waitUntil(timeout: number, fn: () => Promise<boolean>) {
+/**
+ * Wait until the given function returns true or throw an error if the timeout is reached.
+ */
+export async function waitUntil(
+  fn: () => Promise<boolean>,
+  timeout = DEFAULT_WAIT_TIMEOUT
+) {
   const start = Date.now();
   while (Date.now() - start < timeout) {
     if (await fn()) {
@@ -50,17 +55,24 @@ export async function waitUntil(timeout: number, fn: () => Promise<boolean>) {
     }
     await sleep(50);
   }
-  throw new Error(`Timeout after ${timeout}ms: ${fn.toString()}`);
+
+  throw new Error(
+    `Timeout after ${timeout}ms waiting for \`${fn.toString()}\``
+  );
 }
 
+/**
+ * Wait until the given trace is found in the simulator or throw an error if the timeout is reached.
+ */
 export async function waitUntilTrace(
   sim: Simulator,
-  fn: (trace: Trace) => boolean
+  fn: (trace: Trace) => boolean,
+  timeout = DEFAULT_WAIT_TIMEOUT
 ) {
   let tracesChecked = 0;
   const start = Date.now();
 
-  while (Date.now() - start < DEFAULT_WAIT_TIMEOUT) {
+  while (Date.now() - start < timeout) {
     const traces = sim.listTraces();
     for (const trace of traces.slice(tracesChecked)) {
       if (fn(trace)) {
@@ -70,6 +82,36 @@ export async function waitUntilTrace(
     tracesChecked = traces.length;
     await sleep(50);
   }
+
+  throw new Error(
+    `Timeout after ${timeout}ms waiting for \`${fn.toString()}\`\nSim Traces: ${JSON.stringify(
+      sim.listTraces()
+    )}`
+  );
+}
+
+/**
+ * Wait until the given trace is found `count` times in the simulator or throw an error if the timeout is reached.
+ */
+export async function waitUntilTraceCount(
+  sim: Simulator,
+  count: number,
+  fn: (trace: Trace) => boolean,
+  timeout = DEFAULT_WAIT_TIMEOUT
+) {
+  const start = Date.now();
+  while (Date.now() - start < timeout) {
+    if (sim.listTraces().filter(fn).length >= count) {
+      return;
+    }
+    await sleep(50);
+  }
+
+  throw new Error(
+    `Timeout after ${timeout}ms waiting for \`${fn.toString()}\`\nSim Traces: ${JSON.stringify(
+      sim.listTraces()
+    )}`
+  );
 }
 
 export async function waitUntilNextTrace(
@@ -89,50 +131,10 @@ export async function waitUntilNextTrace(
     tracesChecked = traces.length;
     await sleep(50);
   }
-}
 
-/**
- * Wait until all resources are "done".
- * "done" means that action wrapped with `withTrace`.
- * @param sim
- * @param resources
- */
-export async function waitUntilResourcesDone(
-  sim: Simulator,
-  ...resources: IConstruct[]
-): Promise<void> {
-  await Promise.all(
-    resources.map(async (f) => {
-      await waitUntilNextTrace(
-        sim,
-        (trace) =>
-          trace.sourcePath === f.node.path &&
-          (trace.data.status === "success" || trace.data.status === "failure")
-      );
-    })
-  );
-}
-
-/**
- * Wait until all resources are "start".
- * "start" means that the resource has emitted any trace
- * @param sim
- * @param resources
- */
-export async function waitUntilResourcesStart(
-  sim: Simulator,
-  ...resources: IConstruct[]
-): Promise<void> {
-  await Promise.all(
-    resources.map(async (f) => {
-      await waitUntilTrace(sim, (trace) => trace.sourcePath === f.node.path);
-    })
-  );
-}
-
-export async function waitUntilQueueEmpty(queue: IQueueClient) {
-  await waitUntil(
-    DEFAULT_WAIT_TIMEOUT,
-    async () => (await queue.approxSize()) == 0
+  throw new Error(
+    `Timeout after ${DEFAULT_WAIT_TIMEOUT}ms: ${fn.toString()}\n${JSON.stringify(
+      sim.listTraces()
+    )}`
   );
 }

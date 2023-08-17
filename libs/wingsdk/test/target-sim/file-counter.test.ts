@@ -1,8 +1,8 @@
 import { Construct } from "constructs";
 import { test, expect } from "vitest";
-import { waitUntilQueueEmpty, waitUntilResourcesDone } from "./util";
+import { waitUntilTraceCount } from "./util";
 import * as cloud from "../../src/cloud";
-import { IResource } from "../../src/std";
+import { IResource, Trace } from "../../src/std";
 import { Testing } from "../../src/testing";
 import { SimApp } from "../sim-app";
 
@@ -19,7 +19,7 @@ test("can create sequential files in a bucket", async () => {
       });
       const bucket = cloud.Bucket._newBucket(this, "Bucket");
       const queue = cloud.Queue._newQueue(this, "Queue");
-      this.processor = Testing.makeHandler(
+      const processor = Testing.makeHandler(
         this,
         "Processor",
         `async handle(event) {
@@ -38,7 +38,7 @@ test("can create sequential files in a bucket", async () => {
           },
         }
       );
-      queue.setConsumer(this.processor);
+      this.processor = queue.setConsumer(processor);
     }
   }
 
@@ -50,10 +50,14 @@ test("can create sequential files in a bucket", async () => {
   const pusher = s.getResource("/HelloWorld/Queue") as cloud.IQueueClient;
 
   // WHEN
-  void pusher.push("kachow!");
-  await waitUntilResourcesDone(s, helloWorld.processor);
-  void pusher.push("zoom!");
-  await waitUntilResourcesDone(s, helloWorld.processor);
+  const traceCheck = (trace: Trace) =>
+    trace.sourcePath === helloWorld.processor.node.path &&
+    trace.data.status === "success";
+
+  await pusher.push("kachow!");
+  await waitUntilTraceCount(s, 1, traceCheck);
+  await pusher.push("zoom!");
+  await waitUntilTraceCount(s, 2, traceCheck);
 
   // THEN
   const bucket = s.getResource("/HelloWorld/Bucket") as cloud.IBucketClient;
