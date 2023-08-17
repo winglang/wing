@@ -16,7 +16,7 @@ pull_request_rules:
     actions:
       comment:
         message: |
-          Thank you for contributing! This PR will now be added to the [merge queue](https://mergify.com/merge-queue), or immediately merged to main if up-to-date and the queue is empty.
+          Thanks for contributing, @{{author}}! This PR will now be added to the [merge queue](https://mergify.com/merge-queue), or immediately merged if @{{head}} is up-to-date with @{{base}} and the queue is empty.
       queue:
         name: default
         method: squash
