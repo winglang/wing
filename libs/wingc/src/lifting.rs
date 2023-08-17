@@ -274,7 +274,7 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 			};
 
 			// check that we can qualify the lift (e.g. determine which property is being accessed)
-			if property.is_none() && expr_type.as_preflight_class().is_some() {
+			if property.is_none() && expr_type.is_preflight_class() {
 				report_diagnostic(Diagnostic {
 					message: format!(
 						"Cannot qualify access to a lifted object of type \"{}\" (see https://github.com/winglang/wing/issues/76 for more details)",
@@ -355,7 +355,7 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 			};
 
 			// check that we can qualify the lift (e.g. determine which property is being accessed)
-			if property.is_none() && udt_type.as_preflight_class().is_some() {
+			if property.is_none() {
 				report_diagnostic(Diagnostic {
 					message: format!(
 						"Cannot qualify access to a lifted type \"{udt_type}\" (see https://github.com/winglang/wing/issues/76 for more details)"),
@@ -364,14 +364,6 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 
 				return;
 			}
-
-			// The following is not relevant because if we're in "This" we don't need to lift for the current class
-			// if this is an inflight property, no need to lift it
-			// if let Some(property) = &property {
-			// 	if is_inflight_field(udt_type, property) {
-			// 		return;
-			// 	}
-			// }
 
 			let mut lifts = self.lifts_stack.pop().unwrap();
 			lifts.lift(
