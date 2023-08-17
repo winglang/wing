@@ -9,8 +9,7 @@ import {
 import { simulatorHandleToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import { fqnForType } from "../constants";
-import { Code, Display } from "../core";
-import { Resource, IInflightHost, IResource } from "../std";
+import { Display, IInflightHost, IResource, Resource } from "../std";
 import {
   BaseResourceSchema,
   ISimulatorResourceInstance,
@@ -80,7 +79,7 @@ export class EventMapping extends Resource implements ISimulatorResource {
     super.bind(host, ops);
   }
 
-  public _toInflight(): Code {
+  public _toInflight(): string {
     return makeSimulatorJsClient(__filename, this);
   }
 }

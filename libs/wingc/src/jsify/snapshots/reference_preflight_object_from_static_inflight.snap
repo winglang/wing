@@ -56,15 +56,15 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const MyTypeClient = ${MyType._toInflightType(this).text};
+            const MyTypeClient = ${MyType._toInflightType(this)};
             const client = new MyTypeClient({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
       }
       static _registerTypeBind(host, ops) {
         if (ops.includes("addToQueue")) {

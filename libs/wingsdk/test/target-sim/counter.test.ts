@@ -2,7 +2,7 @@ import { test, expect } from "vitest";
 import { listMessages, treeJsonOf } from "./util";
 import * as cloud from "../../src/cloud";
 import { ICounterClient } from "../../src/cloud";
-import { Display } from "../../src/core";
+import { Display } from "../../src/std";
 import { SimApp } from "../sim-app";
 
 test("create a counter", async () => {

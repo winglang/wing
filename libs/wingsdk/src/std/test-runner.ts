@@ -1,8 +1,9 @@
 import { Construct } from "constructs";
+import { Display } from "./display";
 import { Resource } from "./resource";
 import { Test } from "./test";
 import { fqnForType } from "../constants";
-import { App, Display } from "../core";
+import { App } from "../core";
 
 /**
  * Global identifier for `TestRunner`.

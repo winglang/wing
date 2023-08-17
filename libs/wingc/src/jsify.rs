@@ -1298,12 +1298,12 @@ impl<'a> JSifier<'a> {
 
 		code.open("_toInflight() {");
 
-		code.open(format!("return {STDLIB}.core.NodeJsCode.fromInline(`"));
+		code.open("return `");
 
 		code.open("(await (async () => {");
 
 		code.line(format!(
-			"const {}Client = ${{{}._toInflightType(this).text}};",
+			"const {}Client = ${{{}._toInflightType(this)}};",
 			resource_name.name, resource_name.name,
 		));
 
@@ -1324,7 +1324,7 @@ impl<'a> JSifier<'a> {
 
 		code.close("})())");
 
-		code.close("`);");
+		code.close("`;");
 
 		code.close("}");
 		code
@@ -1565,10 +1565,6 @@ fn get_public_symbols(scope: &Scope) -> Vec<Symbol> {
 	}
 
 	symbols
-}
-
-fn inflight_filename(class: &AstClass) -> String {
-	format!("./inflight.{}.js", class.name.name)
 }
 
 fn struct_filename(s: &String) -> String {

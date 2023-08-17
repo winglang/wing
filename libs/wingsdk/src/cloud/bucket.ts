@@ -1,9 +1,9 @@
 import { Construct } from "constructs";
 import { Topic } from "./topic";
 import { fqnForType } from "../constants";
-import { App, Connections, Display } from "../core";
+import { App, Connections } from "../core";
 import { convertBetweenHandlers } from "../shared/convert";
-import { Json, IResource, Resource } from "../std";
+import { Json, IResource, Resource, Display } from "../std";
 
 /**
  * Global identifier for `Bucket`.

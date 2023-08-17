@@ -1,6 +1,6 @@
 import { test, expect } from "vitest";
 import { Bucket } from "../../src/cloud";
-import { Display } from "../../src/core";
+import { Display } from "../../src/std";
 import * as sim from "../../src/target-sim";
 import * as testing from "../../src/testing";
 import { mkdtemp } from "../util";

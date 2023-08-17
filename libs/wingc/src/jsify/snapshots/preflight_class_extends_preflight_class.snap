@@ -57,15 +57,15 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const BaseClient = ${Base._toInflightType(this).text};
+            const BaseClient = ${Base._toInflightType(this)};
             const client = new BaseClient({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
       }
     }
     class Derived extends Base {
@@ -81,15 +81,15 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const DerivedClient = ${Derived._toInflightType(this).text};
+            const DerivedClient = ${Derived._toInflightType(this)};
             const client = new DerivedClient({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
       }
     }
   }

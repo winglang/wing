@@ -33,7 +33,7 @@ function makeTest(module: any, moduleName: string, className: string) {
       `${p} is missing _toInflightType()`
     );
 
-    const code = module[className]._toInflightType().text;
+    const code = module[className]._toInflightType();
     let v = vm.runInNewContext(code, {
       require: (name: string) => {
         // eslint-disable-next-line @typescript-eslint/no-require-imports

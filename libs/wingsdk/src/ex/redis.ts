@@ -1,7 +1,7 @@
 import { Construct } from "constructs";
 import { fqnForType } from "../constants";
-import { App, Display } from "../core";
-import { Resource } from "../std";
+import { App } from "../core";
+import { Display, Resource } from "../std";
 
 /**
  * Global identifier for `Bucket`.

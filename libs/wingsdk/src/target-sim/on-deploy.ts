@@ -3,8 +3,7 @@ import { ON_DEPLOY_TYPE, OnDeploySchema } from "./schema-resources";
 import { simulatorHandleToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
-import { Code, Display } from "../core";
-import { IInflightHost } from "../std";
+import { Display, IInflightHost } from "../std";
 import { BaseResourceSchema } from "../testing";
 
 export class OnDeploy extends cloud.OnDeploy {
@@ -49,7 +48,7 @@ export class OnDeploy extends cloud.OnDeploy {
   }
 
   /** @internal */
-  public _toInflight(): Code {
+  public _toInflight(): string {
     return makeSimulatorJsClient(__filename, this);
   }
 }

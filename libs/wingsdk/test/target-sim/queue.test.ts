@@ -6,8 +6,7 @@ import {
   waitUntilTraceCount,
 } from "./util";
 import * as cloud from "../../src/cloud";
-import { Display } from "../../src/core";
-import { Duration } from "../../src/std";
+import { Display, Duration } from "../../src/std";
 import { QUEUE_TYPE } from "../../src/target-sim/schema-resources";
 import { Testing } from "../../src/testing";
 import { SimApp } from "../sim-app";

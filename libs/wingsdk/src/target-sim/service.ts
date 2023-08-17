@@ -6,10 +6,9 @@ import { SERVICE_TYPE, ServiceSchema } from "./schema-resources";
 import { simulatorHandleToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
-import * as core from "../core";
-import { Connections, Display } from "../core";
+import { Connections } from "../core";
 import { convertBetweenHandlers } from "../shared/convert";
-import { IInflightHost } from "../std";
+import { Display, IInflightHost } from "../std";
 import { BaseResourceSchema } from "../testing";
 
 export class Service extends cloud.Service implements ISimulatorResource {
@@ -98,7 +97,7 @@ export class Service extends cloud.Service implements ISimulatorResource {
     super.bind(host, ops);
   }
 
-  public _toInflight(): core.Code {
+  public _toInflight(): string {
     return makeSimulatorJsClient(__filename, this);
   }
 }

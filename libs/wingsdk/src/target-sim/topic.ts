@@ -6,9 +6,9 @@ import { ISimulatorResource } from "./resource";
 import { TopicSchema, TOPIC_TYPE } from "./schema-resources";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
-import { Code, Connections, Display } from "../core";
+import { Connections } from "../core";
 import { convertBetweenHandlers } from "../shared/convert";
-import { IInflightHost } from "../std";
+import { Display, IInflightHost } from "../std";
 import { BaseResourceSchema } from "../testing/simulator";
 
 /**
@@ -64,7 +64,7 @@ export class Topic extends cloud.Topic implements ISimulatorResource {
   }
 
   /** @internal */
-  public _toInflight(): Code {
+  public _toInflight(): string {
     return makeSimulatorJsClient(__filename, this);
   }
 

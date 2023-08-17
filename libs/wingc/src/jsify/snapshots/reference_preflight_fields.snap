@@ -76,9 +76,9 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
       _toInflight() {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           (await (async () => {
-            const MyTypeClient = ${MyType._toInflightType(this).text};
+            const MyTypeClient = ${MyType._toInflightType(this)};
             const client = new MyTypeClient({
               $this_b: ${this._lift(this.b)},
               $this_s_length: ${this._lift(this.s.length)},
@@ -86,7 +86,7 @@ class $Root extends $stdlib.std.Resource {
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `);
+        `;
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {

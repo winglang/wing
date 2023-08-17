@@ -1,8 +1,9 @@
 import { Construct } from "constructs";
+import { Display } from "./display";
 import { IInflightHost, IResource, Resource } from "./resource";
 import { Function, FUNCTION_FQN, FunctionProps } from "../cloud/function";
 import { fqnForType } from "../constants";
-import { App, Code, Display } from "../core";
+import { App } from "../core";
 
 /**
  * Global identifier for `Test`.
@@ -61,7 +62,7 @@ export class Test extends Resource implements IInflightHost {
   }
 
   /** @internal */
-  public _toInflight(): Code {
+  public _toInflight(): string {
     throw new Error("unimplemented");
   }
 }

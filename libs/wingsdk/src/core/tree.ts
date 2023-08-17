@@ -2,7 +2,7 @@ import * as fs from "fs";
 import * as path from "path";
 import { IConstruct } from "constructs";
 import { App } from "./app";
-import { Display } from "./display";
+import { Display } from "../std/display";
 import { IResource, Resource } from "../std/resource";
 
 export const TREE_FILE_PATH = "tree.json";

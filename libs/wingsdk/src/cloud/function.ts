@@ -2,10 +2,9 @@ import { mkdirSync, writeFileSync } from "fs";
 import { join } from "path";
 import { Construct } from "constructs";
 import { fqnForType } from "../constants";
-import { App, Display } from "../core";
+import { App } from "../core";
 import { CaseConventions, ResourceNames } from "../shared/resource-names";
-import { Duration } from "../std/duration";
-import { IInflightHost, IResource, Resource } from "../std/resource";
+import { Display, Duration, IInflightHost, IResource, Resource } from "../std";
 
 /**
  * Global identifier for `Function`.
@@ -86,7 +85,7 @@ export abstract class Function extends Resource implements IInflightHost {
     const lines = new Array<string>();
 
     lines.push("exports.handler = async function(event) {");
-    lines.push(`  return await (${inflightClient.text}).handle(event);`);
+    lines.push(`  return await (${inflightClient}).handle(event);`);
     lines.push("};");
 
     const assetName = ResourceNames.generateName(this, {

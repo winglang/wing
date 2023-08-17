@@ -4,7 +4,6 @@ import { ISimulatorResource } from "./resource";
 import { FunctionSchema, FUNCTION_TYPE } from "./schema-resources";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
-import * as core from "../core";
 import { App } from "../core";
 import { IInflightHost } from "../std";
 import { Duration } from "../std/duration";
@@ -56,7 +55,7 @@ export class Function extends cloud.Function implements ISimulatorResource {
   }
 
   /** @internal */
-  public _toInflight(): core.Code {
+  public _toInflight(): string {
     return makeSimulatorJsClient(__filename, this);
   }
 }

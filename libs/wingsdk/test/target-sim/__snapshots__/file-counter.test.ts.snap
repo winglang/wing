@@ -18,19 +18,19 @@ return class Handler {
 };
 })())({
 counter: (function(env) {
-        let handle = process.env[env];
-        if (!handle) {
-          throw new Error(\\"Missing environment variable: \\" + env);
-        }
-        return $simulator.findInstance(handle);
-      })(\\"COUNTER_HANDLE_4ecd8d46\\"),
+  let handle = process.env[env];
+  if (!handle) {
+    throw new Error(\\"Missing environment variable: \\" + env);
+  }
+  return $simulator.findInstance(handle);
+})(\\"COUNTER_HANDLE_4ecd8d46\\"),
 bucket: (function(env) {
-        let handle = process.env[env];
-        if (!handle) {
-          throw new Error(\\"Missing environment variable: \\" + env);
-        }
-        return $simulator.findInstance(handle);
-      })(\\"BUCKET_HANDLE_5f2a41c8\\")
+  let handle = process.env[env];
+  if (!handle) {
+    throw new Error(\\"Missing environment variable: \\" + env);
+  }
+  return $simulator.findInstance(handle);
+})(\\"BUCKET_HANDLE_5f2a41c8\\")
 }), args: {} })).handle(event);
 };",
   "connections.json": {

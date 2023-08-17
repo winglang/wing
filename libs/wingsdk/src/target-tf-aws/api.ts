@@ -13,7 +13,6 @@ import { LambdaPermission } from "../.gen/providers/aws/lambda-permission";
 import * as cloud from "../cloud";
 import { OpenApiSpec } from "../cloud";
 import { Connections } from "../core";
-import { Code } from "../core/inflight";
 import { convertBetweenHandlers } from "../shared/convert";
 import {
   CaseConventions,
@@ -346,7 +345,7 @@ export class Api extends cloud.Api {
   }
 
   /** @internal */
-  public _toInflight(): Code {
+  public _toInflight(): string {
     return core.InflightClient.for(
       __dirname.replace("target-tf-aws", "shared-aws"),
       __filename,

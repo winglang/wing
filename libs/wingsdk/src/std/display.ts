@@ -1,36 +1,6 @@
 import { IConstruct } from "constructs";
 
-const DISPLAY_SYMBOL = Symbol.for("@winglang/sdk.core.Display");
-
-/**
- * Properties for the Display class.
- * @skipDocs
- */
-export interface DisplayProps {
-  /**
-   * Title of the resource.
-   * @default - No title.
-   */
-  readonly title?: string;
-
-  /**
-   * Description of the resource.
-   * @default - No description.
-   */
-  readonly description?: string;
-
-  /**
-   * The source file or library where the resource was defined.
-   * @default - No source module.
-   */
-  readonly sourceModule?: string;
-
-  /**
-   * Whether the resource should be hidden from the UI.
-   * @default - Undefined
-   */
-  readonly hidden?: boolean;
-}
+const DISPLAY_SYMBOL = Symbol.for("@winglang/sdk.std.Display");
 
 /**
  * Information on how to display a construct in a user interface

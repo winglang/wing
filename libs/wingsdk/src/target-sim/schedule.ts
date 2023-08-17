@@ -10,9 +10,9 @@ import {
   convertDurationToCronExpression,
 } from "./util";
 import * as cloud from "../cloud";
-import { Code, Connections, Display } from "../core";
+import { Connections } from "../core";
 import { convertBetweenHandlers } from "../shared/convert";
-import { IInflightHost } from "../std";
+import { Display, IInflightHost } from "../std";
 import { BaseResourceSchema } from "../testing";
 
 /**
@@ -80,7 +80,7 @@ export class Schedule extends cloud.Schedule implements ISimulatorResource {
   }
 
   /** @internal */
-  public _toInflight(): Code {
+  public _toInflight(): string {
     return makeSimulatorJsClient(__filename, this);
   }
 

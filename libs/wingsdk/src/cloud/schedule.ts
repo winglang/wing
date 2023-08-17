@@ -1,8 +1,8 @@
 import { Construct } from "constructs";
 import { Function, FunctionProps } from "./function";
 import { fqnForType } from "../constants";
-import { App, Display } from "../core";
-import { Duration, IResource, Resource } from "../std";
+import { App } from "../core";
+import { Display, Duration, IResource, Resource } from "../std";
 
 /**
  * Global identifier for `Schedule`.

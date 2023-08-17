@@ -6,10 +6,9 @@ import { ISimulatorResource } from "./resource";
 import { QueueSchema, QUEUE_TYPE } from "./schema-resources";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
-import * as core from "../core";
 import { Connections } from "../core";
 import { convertBetweenHandlers } from "../shared/convert";
-import { Duration, IInflightHost } from "../std";
+import { Display, Duration, IInflightHost } from "../std";
 import { BaseResourceSchema } from "../testing/simulator";
 
 /**
@@ -75,8 +74,8 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
       functionHandler,
       props
     );
-    core.Display.of(fn).sourceModule = core.Display.SDK_SOURCE_MODULE;
-    core.Display.of(fn).title = "setConsumer()";
+    Display.of(fn).sourceModule = Display.SDK_SOURCE_MODULE;
+    Display.of(fn).title = "setConsumer()";
 
     new EventMapping(this, `${this.node.id}-QueueEventMapping-${hash}`, {
       subscriber: fn,
@@ -114,7 +113,7 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
   }
 
   /** @internal */
-  public _toInflight(): core.Code {
+  public _toInflight(): string {
     return makeSimulatorJsClient(__filename, this);
   }
 }

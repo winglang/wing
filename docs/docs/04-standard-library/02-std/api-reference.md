@@ -446,6 +446,91 @@ Returns the year of the local machine time or in utc.
 ---
 
 
+### Display <a name="Display" id="@winglang/sdk.std.Display"></a>
+
+Information on how to display a construct in a user interface such as the Wing Console.
+
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.std.Display.property.description">description</a></code> | <code>str</code> | Description of the construct. |
+| <code><a href="#@winglang/sdk.std.Display.property.hidden">hidden</a></code> | <code>bool</code> | Whether the construct should be hidden by default in the user interface. |
+| <code><a href="#@winglang/sdk.std.Display.property.sourceModule">sourceModule</a></code> | <code>str</code> | The source file or library where the construct was defined. |
+| <code><a href="#@winglang/sdk.std.Display.property.title">title</a></code> | <code>str</code> | Title of the construct. |
+
+---
+
+##### `description`<sup>Optional</sup> <a name="description" id="@winglang/sdk.std.Display.property.description"></a>
+
+```wing
+description: str;
+```
+
+- *Type:* str
+
+Description of the construct.
+
+---
+
+##### `hidden`<sup>Optional</sup> <a name="hidden" id="@winglang/sdk.std.Display.property.hidden"></a>
+
+```wing
+hidden: bool;
+```
+
+- *Type:* bool
+
+Whether the construct should be hidden by default in the user interface.
+
+---
+
+##### `sourceModule`<sup>Optional</sup> <a name="sourceModule" id="@winglang/sdk.std.Display.property.sourceModule"></a>
+
+```wing
+sourceModule: str;
+```
+
+- *Type:* str
+
+The source file or library where the construct was defined.
+
+---
+
+##### `title`<sup>Optional</sup> <a name="title" id="@winglang/sdk.std.Display.property.title"></a>
+
+```wing
+title: str;
+```
+
+- *Type:* str
+
+Title of the construct.
+
+---
+
+#### Constants <a name="Constants" id="Constants"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.std.Display.property.SDK_SOURCE_MODULE">SDK_SOURCE_MODULE</a></code> | <code>str</code> | The source module for the SDK. |
+
+---
+
+##### `SDK_SOURCE_MODULE`<sup>Required</sup> <a name="SDK_SOURCE_MODULE" id="@winglang/sdk.std.Display.property.SDK_SOURCE_MODULE"></a>
+
+```wing
+SDK_SOURCE_MODULE: str;
+```
+
+- *Type:* str
+
+The source module for the SDK.
+
+---
+
 ### Duration <a name="Duration" id="@winglang/sdk.std.Duration"></a>
 
 Represents a length of time.

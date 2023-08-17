@@ -1,7 +1,6 @@
 import { Construct, IConstruct } from "constructs";
 import { Duration } from "./duration";
 import { App, Connections } from "../core";
-import { Code } from "../core/inflight";
 import { liftObject } from "../core/internal";
 import { log } from "../shared/log";
 
@@ -35,11 +34,13 @@ export interface IResource extends IConstruct {
 
   /**
    * Return a code snippet that can be used to reference this resource inflight.
+   *
    * Note this code snippet may by async code, so it's unsafe to run it in a
    * constructor or other sync context.
+   *
    * @internal
    */
-  _toInflight(): Code;
+  _toInflight(): string;
 
   /**
    * A hook for performing operations after the tree of resources has been
@@ -264,12 +265,9 @@ export abstract class Resource extends Construct implements IResource {
   /**
    * Return a code snippet that can be used to reference this resource inflight.
    *
-   * TODO: support passing an InflightRuntime enum to indicate which language
-   * runtime we're targeting.
-   *
    * @internal
    */
-  public abstract _toInflight(): Code;
+  public abstract _toInflight(): string;
 
   /**
    * "Lifts" a value into an inflight context. If the value is a resource (i.e. has a `_toInflight`

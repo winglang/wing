@@ -5,7 +5,6 @@ import { ElasticacheCluster } from "../.gen/providers/aws/elasticache-cluster";
 import { ElasticacheSubnetGroup } from "../.gen/providers/aws/elasticache-subnet-group";
 import { SecurityGroup } from "../.gen/providers/aws/security-group";
 import { Subnet } from "../.gen/providers/aws/subnet";
-import { Code } from "../core";
 import * as core from "../core";
 import * as ex from "../ex";
 import {
@@ -120,7 +119,7 @@ export class Redis extends ex.Redis {
   }
 
   /** @internal */
-  public _toInflight(): Code {
+  public _toInflight(): string {
     return core.InflightClient.for(__dirname, __filename, "RedisClient", [
       `process.env["${this.envName()}"]`,
     ]);

@@ -1,8 +1,8 @@
 import { isAbsolute, resolve } from "path";
 import { Construct } from "constructs";
 import { fqnForType } from "../constants";
-import { App, Display } from "../core";
-import { Json, Resource } from "../std";
+import { App } from "../core";
+import { Display, Json, Resource } from "../std";
 
 /**
  * Global identifier for `Website`.
