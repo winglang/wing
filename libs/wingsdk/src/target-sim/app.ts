@@ -32,6 +32,7 @@ import {
 } from "../cloud";
 import { SDK_VERSION } from "../constants";
 import * as core from "../core";
+import { Connections } from "../core";
 import { preSynthesizeAllConstructs } from "../core/app";
 import { TABLE_FQN, REDIS_FQN } from "../ex";
 import { TEST_RUNNER_FQN } from "../std";
@@ -142,6 +143,9 @@ export class App extends core.App {
 
     // write tree.json file into workdir
     core.synthesizeTree(this, this.outdir);
+
+    // write `outdir/connections.json`
+    Connections.of(this).synth(this.outdir);
 
     this.synthed = true;
 

@@ -1,6 +1,7 @@
 import { mkdtempSync, readFileSync, readdirSync, statSync } from "fs";
 import { tmpdir } from "os";
 import { extname, isAbsolute, join } from "path";
+import { Template } from "aws-cdk-lib/assertions";
 import { App, Code } from "../src/core";
 
 export function treeJsonOf(outdir: string): any {
@@ -85,32 +86,46 @@ export function getTfDataSource(
   return dataSources[key];
 }
 
-export function tfSanitize(templateStr: string): string {
-  const template = JSON.parse(templateStr);
+export function awscdkSanitize(template: Template): any {
+  let json = template.toJSON();
 
-  // remove names of assets whose hashes are sensitive to changes based
-  // on the file system layout
-  return JSON.stringify(
-    template,
-    (key, value) => {
-      if (
-        key === "key" &&
-        typeof value === "string" &&
-        value.match(/^asset\..*\.zip$/)
-      ) {
-        return "<key>";
-      }
-      if (
-        key === "source" &&
-        typeof value === "string" &&
-        (value.match(/^assets\/.*\/archive.zip$/) || isAbsolute(value))
-      ) {
-        return "<source>";
+  return JSON.parse(
+    JSON.stringify(json, (key, value) => {
+      if (key === "S3Key" && value.endsWith(".zip")) {
+        return "<S3Key>";
       }
       return value;
-    },
-    2
+    })
   );
+}
+
+export function tfSanitize(templateStr: string): any {
+  // remove names of assets whose hashes are sensitive to changes based
+  // on the file system layout
+  return JSON.parse(templateStr, (key, value) => {
+    if (
+      key === "key" &&
+      typeof value === "string" &&
+      value.match(/^asset\..*\.zip$/)
+    ) {
+      return "<key>";
+    }
+    if (
+      key === "source" &&
+      typeof value === "string" &&
+      (value.match(/^assets\/.*\/archive.zip$/) || isAbsolute(value))
+    ) {
+      return "<source>";
+    }
+    if (
+      key === "source_hash" &&
+      typeof value === "string" &&
+      value.startsWith("${filemd5")
+    ) {
+      return "${filemd5(<source>)}";
+    }
+    return value;
+  });
 }
 
 export function appSnapshot(app: App): Record<string, any> {

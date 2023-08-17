@@ -1,7 +1,7 @@
 import { Construct } from "constructs";
 import { Topic } from "./topic";
 import { fqnForType } from "../constants";
-import { App } from "../core";
+import { App, Connections } from "../core";
 import { convertBetweenHandlers } from "../shared/convert";
 import { Json, IResource, Resource } from "../std";
 import { isAbsolute, resolve } from "path"
@@ -110,10 +110,10 @@ export abstract class Bucket extends Resource {
 
     this.node.addDependency(topic);
 
-    Resource.addConnection({
-      from: this,
-      to: topic,
-      relationship: `${actionType}()`,
+    Connections.of(this).add({
+      source: this,
+      target: topic,
+      name: `${actionType}()`,
     });
 
     return topic;

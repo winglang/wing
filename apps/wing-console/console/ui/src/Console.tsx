@@ -14,6 +14,7 @@ export const Console = ({
   layout = LayoutType.Default,
   title,
   theme,
+  color,
   onTrace,
 }: {
   trpcUrl: string;
@@ -21,6 +22,7 @@ export const Console = ({
   title?: string;
   layout?: LayoutType;
   theme?: Mode;
+  color?: string;
   onTrace?: (trace: Trace) => void;
 }) => {
   const queryClient = new QueryClient({
@@ -61,7 +63,7 @@ export const Console = ({
     <AppContext.Provider value={{ appMode, title: windowTitle }}>
       <trpc.Provider client={trpcClient} queryClient={queryClient}>
         <QueryClientProvider client={queryClient}>
-          <App layout={layout} theme={theme} onTrace={onTrace} />
+          <App layout={layout} theme={theme} color={color} onTrace={onTrace} />
         </QueryClientProvider>
       </trpc.Provider>
     </AppContext.Provider>

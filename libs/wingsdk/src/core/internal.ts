@@ -58,7 +58,7 @@ export function liftObject(scope: IConstruct, obj: any): string {
         const lines = [];
         lines.push("{");
         for (const [k, v] of Object.entries(obj)) {
-          lines.push(`${k}: ${liftObject(scope, v)},`);
+          lines.push(`\"${k.replace(/"/g, '\\"')}\": ${liftObject(scope, v)},`);
         }
         lines.push("}");
         return lines.join("");

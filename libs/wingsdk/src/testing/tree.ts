@@ -11,6 +11,6 @@ export class Tree {
    * Returns the raw tree data.
    */
   public rawData(): ConstructTree {
-    return this.data;
+    return structuredClone(this.data);
   }
 }

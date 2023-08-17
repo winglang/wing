@@ -16,6 +16,10 @@ return class Handler {
 
 })).handle(event);
 };",
+  "connections.json": {
+    "connections": [],
+    "version": "connections-0.1",
+  },
   "simulator.json": {
     "resources": [
       {
@@ -52,9 +56,6 @@ return class Handler {
     "tree": {
       "children": {
         "Handler": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -68,9 +69,6 @@ return class Handler {
           "path": "root/Handler",
         },
         "cloud.TestRunner": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -84,14 +82,8 @@ return class Handler {
           "path": "root/cloud.TestRunner",
         },
         "my_on_deploy": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "children": {
             "Function": {
-              "attributes": {
-                "wing:resource:connections": [],
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.1.314",
