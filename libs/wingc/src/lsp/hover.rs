@@ -168,6 +168,7 @@ impl<'a> Visit<'a> for HoverVisitor<'a> {
 				var_name,
 				value,
 				statements,
+				reassignable: _,
 				else_statements,
 			} => {
 				self.with_scope(statements, |v| {
