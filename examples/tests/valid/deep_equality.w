@@ -54,11 +54,7 @@ test "Set types with the same value" {
 
 test "Set types with different values" {
   assert(setA != setC);
-  try {
-    assert(setA != setB.copy());
-  } catch {
-    assert(true);
-  }
+  assert(!(setA != setB.copy()));
 }
 
 //-----------------------------------------------------------------------------
