@@ -10,8 +10,6 @@ async handle(message) {
 console.log("Hello from schedule!");
 }`;
 
-const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
-
 test("create a schedule", async () => {
   // GIVEN
   const app = new SimApp();
