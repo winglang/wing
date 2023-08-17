@@ -2560,7 +2560,6 @@ impl<'a> TypeChecker<'a> {
 			format!("\"{}\"", expected_types[0])
 		};
 
-		println!("aqui");
 		let mut message = format!(
 			"Expected type to be {}, but got \"{}\" instead",
 			expected_type_str, return_type

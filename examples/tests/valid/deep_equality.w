@@ -47,7 +47,6 @@ let setC = { 4,5,6 };
 
 test "Set types with the same value" {
   assert(setA == setA);
-  // TODO https://github.com/winglang/wing/issues/2867
   assert(setA == setB);
 }
 
