@@ -479,7 +479,7 @@ impl<'a> JSifier<'a> {
 						.filter_map(|p| match p {
 							InterpolatedStringPart::Static(_) => None,
 							InterpolatedStringPart::Expr(e) => Some(match *self.types.get_expr_type(e) {
-								Type::Json | Type::MutJson => {
+								Type::Json(_) | Type::MutJson => {
 									format!("((e) => typeof e === 'string' ? e : JSON.stringify(e, null, 2))({})", self.jsify_expression(e, ctx))
 								}
 								_ => self.jsify_expression(e, ctx),
@@ -1565,10 +1565,6 @@ fn get_public_symbols(scope: &Scope) -> Vec<Symbol> {
 	}
 
 	symbols
-}
-
-fn inflight_filename(class: &AstClass) -> String {
-	format!("./inflight.{}.js", class.name.name)
 }
 
 fn struct_filename(s: &String) -> String {
