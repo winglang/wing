@@ -13,9 +13,10 @@ import { App } from "./app";
 import { Function } from "./function";
 import * as cloud from "../cloud";
 import * as core from "../core";
+import { Connections } from "../core";
 import { convertBetweenHandlers } from "../shared/convert";
 import { calculateBucketPermissions } from "../shared-aws/permissions";
-import { IInflightHost, Resource } from "../std";
+import { IInflightHost } from "../std";
 
 const EVENTS = {
   [cloud.BucketEventType.DELETE]: EventType.OBJECT_REMOVED,
@@ -95,10 +96,10 @@ export class Bucket extends cloud.Bucket {
   ): void {
     const fn = this.onEventFunction("OnCreate", inflight, opts);
 
-    Resource.addConnection({
-      from: this,
-      to: fn,
-      relationship: "onCreate()",
+    Connections.of(this).add({
+      source: this,
+      target: fn,
+      name: "onCreate()",
     });
 
     this.bucket.addEventNotification(
@@ -113,10 +114,10 @@ export class Bucket extends cloud.Bucket {
   ): void {
     const fn = this.onEventFunction("OnDelete", inflight, opts);
 
-    Resource.addConnection({
-      from: this,
-      to: fn,
-      relationship: "onDelete()",
+    Connections.of(this).add({
+      source: this,
+      target: fn,
+      name: "onDelete()",
     });
 
     this.bucket.addEventNotification(
@@ -131,10 +132,10 @@ export class Bucket extends cloud.Bucket {
   ): void {
     const fn = this.onEventFunction("OnUpdate", inflight, opts);
 
-    Resource.addConnection({
-      from: this,
-      to: fn,
-      relationship: "onUpdate()",
+    Connections.of(this).add({
+      source: this,
+      target: fn,
+      name: "onUpdate()",
     });
 
     this.bucket.addEventNotification(
@@ -149,30 +150,30 @@ export class Bucket extends cloud.Bucket {
   ) {
     const fn = this.onEventFunction("OnEvent", inflight, opts);
 
-    Resource.addConnection({
-      from: this,
-      to: fn,
-      relationship: "onCreate()",
+    Connections.of(this).add({
+      source: this,
+      target: fn,
+      name: "onCreate()",
     });
     this.bucket.addEventNotification(
       EVENTS[cloud.BucketEventType.CREATE],
       new LambdaDestination(fn._function)
     );
 
-    Resource.addConnection({
-      from: this,
-      to: fn,
-      relationship: "onDelete()",
+    Connections.of(this).add({
+      source: this,
+      target: fn,
+      name: "onDelete()",
     });
     this.bucket.addEventNotification(
       EVENTS[cloud.BucketEventType.DELETE],
       new LambdaDestination(fn._function)
     );
 
-    Resource.addConnection({
-      from: this,
-      to: fn,
-      relationship: "onUpdate()",
+    Connections.of(this).add({
+      source: this,
+      target: fn,
+      name: "onUpdate()",
     });
     this.bucket.addEventNotification(
       EVENTS[cloud.BucketEventType.UPDATE],

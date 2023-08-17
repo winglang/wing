@@ -5,9 +5,10 @@ import { Construct } from "constructs";
 import { Function } from "./function";
 import * as cloud from "../cloud";
 import * as core from "../core";
+import { Connections } from "../core";
 import { convertBetweenHandlers } from "../shared/convert";
 import { calculateTopicPermissions } from "../shared-aws/permissions";
-import { IInflightHost, Resource } from "../std";
+import { IInflightHost } from "../std";
 
 /**
  * AWS Implementation of `cloud.Topic`.
@@ -60,10 +61,10 @@ export class Topic extends cloud.Topic {
     const subscription = new LambdaSubscription(fn._function);
     this.topic.addSubscription(subscription);
 
-    Resource.addConnection({
-      from: this,
-      to: fn,
-      relationship: "onMessage()",
+    Connections.of(this).add({
+      source: this,
+      target: fn,
+      name: "onMessage()",
     });
 
     return fn;

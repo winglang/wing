@@ -6,6 +6,7 @@ import { SnsTopicPolicy } from "../.gen/providers/aws/sns-topic-policy";
 import { SnsTopicSubscription } from "../.gen/providers/aws/sns-topic-subscription";
 import * as cloud from "../cloud";
 import * as core from "../core";
+import { Connections } from "../core";
 import { convertBetweenHandlers } from "../shared/convert";
 import { NameOptions, ResourceNames } from "../shared/resource-names";
 import { calculateTopicPermissions } from "../shared-aws/permissions";
@@ -88,10 +89,10 @@ export class Topic extends cloud.Topic {
 
     fn.addPermissionToInvoke(this, "sns.amazonaws.com", this.topic.arn, {});
 
-    Resource.addConnection({
-      from: this,
-      to: fn,
-      relationship: "onMessage()",
+    Connections.of(this).add({
+      source: this,
+      target: fn,
+      name: "onMessage()",
     });
 
     return fn;

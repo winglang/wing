@@ -5,9 +5,6 @@ exports[`provides raw tree data 1`] = `
   "tree": {
     "children": {
       "cloud.TestRunner": {
-        "attributes": {
-          "wing:resource:connections": [],
-        },
         "constructInfo": {
           "fqn": "constructs.Construct",
           "version": "10.1.314",
@@ -21,14 +18,8 @@ exports[`provides raw tree data 1`] = `
         "path": "root/cloud.TestRunner",
       },
       "test": {
-        "attributes": {
-          "wing:resource:connections": [],
-        },
         "children": {
           "Handler": {
-            "attributes": {
-              "wing:resource:connections": [],
-            },
             "constructInfo": {
               "fqn": "constructs.Construct",
               "version": "10.1.314",
@@ -53,9 +44,6 @@ exports[`provides raw tree data 1`] = `
         "path": "root/test",
       },
       "test.handler": {
-        "attributes": {
-          "wing:resource:connections": [],
-        },
         "constructInfo": {
           "fqn": "constructs.Construct",
           "version": "10.1.314",

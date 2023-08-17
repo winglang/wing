@@ -2,6 +2,10 @@
 
 exports[`create a counter 1`] = `
 {
+  "connections.json": {
+    "connections": [],
+    "version": "connections-0.1",
+  },
   "simulator.json": {
     "resources": [
       {
@@ -27,9 +31,6 @@ exports[`create a counter 1`] = `
     "tree": {
       "children": {
         "cloud.TestRunner": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -43,9 +44,6 @@ exports[`create a counter 1`] = `
           "path": "root/cloud.TestRunner",
         },
         "my_counter": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -85,6 +83,10 @@ exports[`dec 1`] = `
 
 exports[`dec 2`] = `
 {
+  "connections.json": {
+    "connections": [],
+    "version": "connections-0.1",
+  },
   "simulator.json": {
     "resources": [
       {
@@ -110,9 +112,6 @@ exports[`dec 2`] = `
     "tree": {
       "children": {
         "cloud.TestRunner": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -126,9 +125,6 @@ exports[`dec 2`] = `
           "path": "root/cloud.TestRunner",
         },
         "my_counter": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -168,6 +164,10 @@ exports[`inc 1`] = `
 
 exports[`inc 2`] = `
 {
+  "connections.json": {
+    "connections": [],
+    "version": "connections-0.1",
+  },
   "simulator.json": {
     "resources": [
       {
@@ -193,9 +193,6 @@ exports[`inc 2`] = `
     "tree": {
       "children": {
         "cloud.TestRunner": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -209,9 +206,6 @@ exports[`inc 2`] = `
           "path": "root/cloud.TestRunner",
         },
         "my_counter": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -251,6 +245,10 @@ exports[`key dec 1`] = `
 
 exports[`key dec 2`] = `
 {
+  "connections.json": {
+    "connections": [],
+    "version": "connections-0.1",
+  },
   "simulator.json": {
     "resources": [
       {
@@ -276,9 +274,6 @@ exports[`key dec 2`] = `
     "tree": {
       "children": {
         "cloud.TestRunner": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -292,9 +287,6 @@ exports[`key dec 2`] = `
           "path": "root/cloud.TestRunner",
         },
         "my_counter": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -334,6 +326,10 @@ exports[`key inc 1`] = `
 
 exports[`key inc 2`] = `
 {
+  "connections.json": {
+    "connections": [],
+    "version": "connections-0.1",
+  },
   "simulator.json": {
     "resources": [
       {
@@ -359,9 +355,6 @@ exports[`key inc 2`] = `
     "tree": {
       "children": {
         "cloud.TestRunner": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -375,9 +368,6 @@ exports[`key inc 2`] = `
           "path": "root/cloud.TestRunner",
         },
         "my_counter": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -415,6 +405,10 @@ exports[`key set to new value 1`] = `
 
 exports[`key set to new value 2`] = `
 {
+  "connections.json": {
+    "connections": [],
+    "version": "connections-0.1",
+  },
   "simulator.json": {
     "resources": [
       {
@@ -440,9 +434,6 @@ exports[`key set to new value 2`] = `
     "tree": {
       "children": {
         "cloud.TestRunner": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -456,9 +447,6 @@ exports[`key set to new value 2`] = `
           "path": "root/cloud.TestRunner",
         },
         "my_counter": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -496,6 +484,10 @@ exports[`set to new value 1`] = `
 
 exports[`set to new value 2`] = `
 {
+  "connections.json": {
+    "connections": [],
+    "version": "connections-0.1",
+  },
   "simulator.json": {
     "resources": [
       {
@@ -521,9 +513,6 @@ exports[`set to new value 2`] = `
     "tree": {
       "children": {
         "cloud.TestRunner": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -537,9 +526,6 @@ exports[`set to new value 2`] = `
           "path": "root/cloud.TestRunner",
         },
         "my_counter": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",

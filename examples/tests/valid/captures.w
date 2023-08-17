@@ -39,3 +39,17 @@ new cloud.Function(
   handler, 
   env: emptyEnv
 ) as "AnotherFunction";
+
+
+let headers = {
+  "my-fancy-header" => "my-fancy-value",
+  "not-even-real\"" => "wow` !",
+};
+let api = new cloud.Api();
+api.get("/hello", inflight (req) => {
+  return cloud.ApiResponse {
+    status: 200,
+    headers: headers,
+    body: "Hello, world!"
+  };
+});

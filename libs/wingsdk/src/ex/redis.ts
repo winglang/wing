@@ -157,7 +157,7 @@ export abstract class RedisClientBase implements IRedisClient {
 
   public async get(key: string): Promise<string | undefined> {
     let redis = await this.rawClient();
-    let result = await redis.get(key);
+    let result = (await redis.get(key)) ?? undefined; // for wing to return nil
     return result;
   }
 

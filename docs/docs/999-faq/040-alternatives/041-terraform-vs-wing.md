@@ -1,5 +1,5 @@
 ---
-title: What are the main differences between Wing and Terraform?
+title: Terraform vs. Wing [Main differences]
 sidebar_label: Terraform
 id: differences-from-terraform
 keywords: [faq, winglang, Wing programming language, Wing language, TF, Terraform, IAC]
