@@ -91,8 +91,6 @@ pub enum VariableKind {
 	/// a class member (or an enum member)
 	StaticMember,
 
-	// /// a type (e.g. `std.Json`)
-	// Type,
 	/// an error placeholder
 	Error,
 }
@@ -358,7 +356,7 @@ pub trait ClassLike {
 			.0
 			.as_variable()
 			.expect("class env should only contain variables");
-		if v.type_.as_function_sig().is_some() {
+		if v.type_.is_closure() {
 			Some(v)
 		} else {
 			None
@@ -366,7 +364,18 @@ pub trait ClassLike {
 	}
 
 	fn get_field(&self, name: &Symbol) -> Option<&VariableInfo> {
-		self.get_env().lookup_ext(name, None).ok()?.0.as_variable()
+		let v = self
+			.get_env()
+			.lookup_ext(name, None)
+			.ok()?
+			.0
+			.as_variable()
+			.expect("class env should only contain variables");
+		if !v.type_.is_closure() {
+			Some(v)
+		} else {
+			None
+		}
 	}
 }
 
@@ -2210,7 +2219,7 @@ impl<'a> TypeChecker<'a> {
 		}
 	}
 
-	fn resolved_error(&mut self) -> (UnsafeRef<Type>, Phase) {
+	fn resolved_error(&mut self) -> (TypeRef, Phase) {
 		(self.types.error(), Phase::Independent)
 	}
 
@@ -2220,7 +2229,7 @@ impl<'a> TypeChecker<'a> {
 		func_sig: &FunctionSignature,
 		exp: &impl Spanned,
 		arg_list_types: ArgListTypes,
-	) -> Option<UnsafeRef<Type>> {
+	) -> Option<TypeRef> {
 		// Verify arity
 		let pos_args_count = arg_list.pos_args.len();
 		let min_args = func_sig.min_parameters();
@@ -2330,7 +2339,7 @@ impl<'a> TypeChecker<'a> {
 		None
 	}
 
-	fn type_check_closure(&mut self, func_def: &ast::FunctionDefinition, env: &SymbolEnv) -> (UnsafeRef<Type>, Phase) {
+	fn type_check_closure(&mut self, func_def: &ast::FunctionDefinition, env: &SymbolEnv) -> (TypeRef, Phase) {
 		// TODO: make sure this function returns on all control paths when there's a return type (can be done by recursively traversing the statements and making sure there's a "return" statements in all control paths)
 		// https://github.com/winglang/wing/issues/457
 		// Create a type_checker function signature from the AST function definition
@@ -3466,7 +3475,7 @@ impl<'a> TypeChecker<'a> {
 	fn type_check_super_constructor_against_parent_initializer(
 		&mut self,
 		scope: &Scope,
-		class_type: UnsafeRef<Type>,
+		class_type: TypeRef,
 		class_env: &mut SymbolEnv,
 		init_name: &str,
 	) {
@@ -4341,7 +4350,7 @@ impl<'a> TypeChecker<'a> {
 
 	fn resolve_variable_from_instance_type(
 		&mut self,
-		instance_type: UnsafeRef<Type>,
+		instance_type: TypeRef,
 		property: &Symbol,
 		env: &SymbolEnv,
 		// only used for recursion

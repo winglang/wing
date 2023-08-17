@@ -7,7 +7,7 @@ pub struct VisitContext {
 	phase: Vec<Phase>,
 	env: Vec<SymbolEnvRef>,
 	method_env: Vec<Option<SymbolEnvRef>>,
-	property: Vec<String>,
+	property: Vec<Symbol>,
 	method: Vec<Option<Symbol>>,
 	class: Vec<UserDefinedType>,
 	statement: Vec<usize>,
@@ -109,15 +109,15 @@ impl VisitContext {
 
 	// --
 
-	pub fn push_property(&mut self, property: String) {
-		self.property.push(property);
+	pub fn push_property(&mut self, property: &Symbol) {
+		self.property.push(property.clone());
 	}
 
 	pub fn pop_property(&mut self) {
 		self.property.pop();
 	}
 
-	pub fn current_property(&self) -> Option<String> {
+	pub fn current_property(&self) -> Option<Symbol> {
 		self.property.last().cloned()
 	}
 

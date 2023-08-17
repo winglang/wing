@@ -95,7 +95,7 @@ impl Lifts {
 	}
 
 	/// Adds a lift for an expression.
-	pub fn lift(&mut self, lifted_thing: &Liftable, method: Option<Symbol>, property: Option<String>, code: &str) {
+	pub fn lift(&mut self, lifted_thing: &Liftable, method: Option<Symbol>, property: Option<Symbol>, code: &str) {
 		let is_field = code.contains("this.");
 
 		let token = self.render_token(code);
@@ -113,7 +113,7 @@ impl Lifts {
 
 		let method = method.map(|m| m.name).unwrap_or(Default::default());
 
-		self.add_lift(method, token.clone(), code, property, is_field);
+		self.add_lift(method, token.clone(), code, property.map(|s| s.name.clone()), is_field);
 
 		// add a lift to the inflight initializer or capture it if its not a field
 		if is_field {

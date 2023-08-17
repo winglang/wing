@@ -16,7 +16,7 @@ use crate::lsp::sync::{JSII_TYPES, PROJECT_DATA, WING_TYPES};
 use crate::type_check::symbol_env::{LookupResult, StatementIdx};
 use crate::type_check::{
 	fully_qualify_std_type, import_udt_from_jsii, resolve_super_method, resolve_user_defined_type, ClassLike, Namespace,
-	Struct, SymbolKind, Type, Types, UnsafeRef, VariableKind, CLASS_INFLIGHT_INIT_NAME, CLASS_INIT_NAME,
+	Struct, SymbolKind, Type, TypeRef, Types, UnsafeRef, VariableKind, CLASS_INFLIGHT_INIT_NAME, CLASS_INIT_NAME,
 };
 use crate::visit::{visit_expr, visit_type_annotation, Visit};
 use crate::wasm_util::{ptr_to_string, string_to_combined_ptr, WASM_RETURN_ERROR};
@@ -602,7 +602,7 @@ fn get_inner_struct_completions(struct_: &Struct, existing_fields: &Vec<String>)
 
 /// Gets accessible properties on a type as a list of CompletionItems
 fn get_completions_from_type(
-	type_: &UnsafeRef<Type>,
+	type_: &TypeRef,
 	types: &Types,
 	current_phase: Option<Phase>,
 	is_instance: bool,
