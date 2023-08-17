@@ -137,7 +137,7 @@ impl Lifts {
 		}
 	}
 
-	/// Captures an expression.
+	/// Captures a liftable piece of code.
 	pub fn capture(&mut self, lifted_thing: &Liftable, code: &str) {
 		// no need to capture this (it's already in scope)
 		if code == "this" {

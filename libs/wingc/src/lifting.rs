@@ -237,6 +237,12 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 		let expr_phase = self.jsify.types.get_expr_phase(&node).unwrap();
 		let expr_type = self.jsify.types.get_expr_type(&node);
 
+		// Skip expressions of an unresoved type (type errors)
+		if expr_type.is_unresolved() {
+			visit::visit_expr(self, node);
+			return;
+		}
+
 		// this whole thing only applies to inflight code
 		if self.ctx.current_phase() == Phase::Preflight {
 			visit::visit_expr(self, node);
@@ -280,7 +286,7 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 				return;
 			}
 
-			// if this is an inflight property (of "this") no need to lift it
+			// if this is an inflight field of "this" no need to lift it
 			if is_inflight_field(&node, expr_type, &property) {
 				return;
 			}
@@ -292,27 +298,13 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 			return;
 		}
 
-		//---------------
-		// CAPTURE
-
-		if self.should_capture_expr(&node) {
-			// jsify the expression so we can get the preflight code
-			let code = self.jsify_expr(&node, Phase::Inflight);
-
-			let mut lifts = self.lifts_stack.pop().unwrap();
-			lifts.capture(&Liftable::Expr(node.id), &code);
-			self.lifts_stack.push(lifts);
-
-			return;
-		}
-
 		visit::visit_expr(self, node);
 	}
 
 	// TODO: implement visit_user_defined_type and capture the type if it needs to be captured (see `should_capture_expr` and TypeReference logic)
 	fn visit_user_defined_type(&mut self, node: &'a UserDefinedType) {
-		// If we're inside a type annotation we currently don't lift the type since our target compilation
-		// is typeless (javascript). For typed targes we may need to also lift the types used in annotations.
+		// If we're inside a type annotation we currently don't need to capture type since our target compilation
+		// is typeless (javascript). For typed targes we may need to also capture the types used in annotations.
 		if self.ctx.in_type_annotation() {
 			visit::visit_user_defined_type(self, node);
 			return;
@@ -338,6 +330,12 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 			self.ctx.current_stmt_idx(),
 		)
 		.unwrap_or(self.jsify.types.error());
+
+		// Since our target languages is isn't statically typed, we don't need to capture interfaces
+		if udt_type.as_interface().is_some() {
+			visit::visit_user_defined_type(self, node);
+			return;
+		}
 
 		//---------------
 		// LIFT
