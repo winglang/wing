@@ -9,7 +9,7 @@ import * as cloud from "../cloud";
 import * as core from "../core";
 import { Connections } from "../core";
 import { convertBetweenHandlers } from "../shared/convert";
-import { Display, Duration, IInflightHost } from "../std";
+import { Duration, IInflightHost } from "../std";
 import { BaseResourceSchema } from "../testing/simulator";
 
 /**
@@ -75,8 +75,8 @@ export class Queue extends cloud.Queue implements ISimulatorResource {
       functionHandler,
       props
     );
-    fn.display.sourceModule = Display.SDK_SOURCE_MODULE;
-    fn.display.title = "setConsumer()";
+    core.Display.of(fn).sourceModule = core.Display.SDK_SOURCE_MODULE;
+    core.Display.of(fn).title = "setConsumer()";
 
     new EventMapping(this, `${this.node.id}-QueueEventMapping-${hash}`, {
       subscriber: fn,

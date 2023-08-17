@@ -2,7 +2,7 @@ import { Construct } from "constructs";
 import { Resource } from "./resource";
 import { Test } from "./test";
 import { fqnForType } from "../constants";
-import { App } from "../core/app";
+import { App, Display } from "../core";
 
 /**
  * Global identifier for `TestRunner`.
@@ -37,9 +37,9 @@ export abstract class TestRunner extends Resource {
   constructor(scope: Construct, id: string, props: TestRunnerProps = {}) {
     super(scope, id);
 
-    this.display.hidden = true;
-    this.display.title = "TestRunner";
-    this.display.description =
+    Display.of(this).hidden = true;
+    Display.of(this).title = "TestRunner";
+    Display.of(this).description =
       "A suite of APIs for running tests and collecting results.";
 
     props;

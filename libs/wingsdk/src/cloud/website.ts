@@ -1,7 +1,7 @@
 import { isAbsolute, resolve } from "path";
 import { Construct } from "constructs";
 import { fqnForType } from "../constants";
-import { App } from "../core";
+import { App, Display } from "../core";
 import { Json, Resource } from "../std";
 
 /**
@@ -53,8 +53,8 @@ export abstract class Website extends Resource {
   constructor(scope: Construct, id: string, props: WebsiteProps) {
     super(scope, id);
 
-    this.display.title = "Website";
-    this.display.description = "A static website";
+    Display.of(this).title = "Website";
+    Display.of(this).description = "A static website";
 
     if (isAbsolute(props.path)) {
       this._path = props.path;

@@ -1,7 +1,7 @@
 import { Construct } from "constructs";
 import { Function, FunctionProps } from "./function";
 import { fqnForType } from "../constants";
-import { App } from "../core";
+import { App, Display } from "../core";
 import { Duration, IResource, Resource } from "../std";
 
 /**
@@ -47,8 +47,8 @@ export abstract class Queue extends Resource {
   constructor(scope: Construct, id: string, props: QueueProps = {}) {
     super(scope, id);
 
-    this.display.title = "Queue";
-    this.display.description = "A distributed message queue";
+    Display.of(this).title = "Queue";
+    Display.of(this).description = "A distributed message queue";
 
     this._addInflightOps(
       QueueInflightMethods.PUSH,

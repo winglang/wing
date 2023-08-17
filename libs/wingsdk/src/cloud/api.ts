@@ -1,6 +1,6 @@
 import { Construct } from "constructs";
 import { fqnForType } from "../constants";
-import { App } from "../core";
+import { App, Display } from "../core";
 import { IResource, Resource } from "../std/resource";
 
 /**
@@ -60,8 +60,8 @@ export abstract class Api extends Resource {
 
     props;
 
-    this.display.title = "Api";
-    this.display.description = "A REST API endpoint";
+    Display.of(this).title = "Api";
+    Display.of(this).description = "A REST API endpoint";
   }
   /**
    * Add a inflight handler to the api for GET requests on the given path.

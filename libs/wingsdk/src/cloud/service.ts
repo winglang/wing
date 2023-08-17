@@ -1,7 +1,7 @@
 import { Construct } from "constructs";
 import { FunctionProps } from "./function";
 import { fqnForType } from "../constants";
-import { App } from "../core";
+import { App, Display } from "../core";
 import { IResource, Resource } from "../std";
 
 /**
@@ -50,8 +50,8 @@ export abstract class Service extends Resource {
   constructor(scope: Construct, id: string, props: ServiceProps) {
     super(scope, id);
 
-    this.display.title = "Service";
-    this.display.description = "A cloud service";
+    Display.of(this).title = "Service";
+    Display.of(this).description = "A cloud service";
 
     this._addInflightOps(
       ServiceInflightMethods.START,

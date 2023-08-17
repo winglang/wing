@@ -1,5 +1,5 @@
 import { IConstruct } from "constructs";
-import { InflightBindings, NodeJsCode } from "../core";
+import { Display, InflightBindings, NodeJsCode } from "../core";
 import { liftObject } from "../core/internal";
 import { IInflightHost, IResource, Resource } from "../std";
 
@@ -43,9 +43,9 @@ export class Testing {
           (this as any)[field] = value.obj;
         }
 
-        this.display.title = "Inflight";
-        this.display.description = "An inflight resource";
-        this.display.hidden = true;
+        Display.of(this).title = "Inflight";
+        Display.of(this).description = "An inflight resource";
+        Display.of(this).hidden = true;
 
         this._addInflightOps("handle");
       }

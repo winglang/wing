@@ -1,6 +1,6 @@
 import { Construct } from "constructs";
 import { fqnForType } from "../constants";
-import { App } from "../core";
+import { App, Display } from "../core";
 import { Resource } from "../std";
 
 /**
@@ -44,8 +44,8 @@ export abstract class Counter extends Resource {
   constructor(scope: Construct, id: string, props: CounterProps = {}) {
     super(scope, id);
 
-    this.display.title = "Counter";
-    this.display.description = "A distributed atomic counter";
+    Display.of(this).title = "Counter";
+    Display.of(this).description = "A distributed atomic counter";
 
     this._addInflightOps(
       CounterInflightMethods.INC,

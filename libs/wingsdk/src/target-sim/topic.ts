@@ -6,10 +6,9 @@ import { ISimulatorResource } from "./resource";
 import { TopicSchema, TOPIC_TYPE } from "./schema-resources";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
-import * as core from "../core";
-import { Connections } from "../core";
+import { Code, Connections, Display } from "../core";
 import { convertBetweenHandlers } from "../shared/convert";
-import { Display, IInflightHost } from "../std";
+import { IInflightHost } from "../std";
 import { BaseResourceSchema } from "../testing/simulator";
 
 /**
@@ -41,8 +40,8 @@ export class Topic extends cloud.Topic implements ISimulatorResource {
       functionHandler,
       props
     );
-    fn.display.sourceModule = Display.SDK_SOURCE_MODULE;
-    fn.display.title = "onMessage()";
+    Display.of(fn).sourceModule = Display.SDK_SOURCE_MODULE;
+    Display.of(fn).title = "onMessage()";
 
     new EventMapping(this, `${this.node.id}-TopicEventMapping-${hash}`, {
       subscriber: fn,
@@ -65,7 +64,7 @@ export class Topic extends cloud.Topic implements ISimulatorResource {
   }
 
   /** @internal */
-  public _toInflight(): core.Code {
+  public _toInflight(): Code {
     return makeSimulatorJsClient(__filename, this);
   }
 

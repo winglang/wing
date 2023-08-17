@@ -7,9 +7,9 @@ import { simulatorHandleToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
 import * as core from "../core";
-import { Connections } from "../core";
+import { Connections, Display } from "../core";
 import { convertBetweenHandlers } from "../shared/convert";
-import { Display, IInflightHost } from "../std";
+import { IInflightHost } from "../std";
 import { BaseResourceSchema } from "../testing";
 
 export class Service extends cloud.Service implements ISimulatorResource {
@@ -70,8 +70,8 @@ export class Service extends cloud.Service implements ISimulatorResource {
       onStartFunctionHandler,
       {}
     );
-    fn.display.sourceModule = Display.SDK_SOURCE_MODULE;
-    fn.display.title = "onStart()";
+    Display.of(fn).sourceModule = Display.SDK_SOURCE_MODULE;
+    Display.of(fn).title = "onStart()";
 
     this.node.addDependency(fn);
     return fn;

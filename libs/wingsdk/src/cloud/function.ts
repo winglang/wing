@@ -2,7 +2,7 @@ import { mkdirSync, writeFileSync } from "fs";
 import { join } from "path";
 import { Construct } from "constructs";
 import { fqnForType } from "../constants";
-import { App } from "../core/app";
+import { App, Display } from "../core";
 import { CaseConventions, ResourceNames } from "../shared/resource-names";
 import { Duration } from "../std/duration";
 import { IInflightHost, IResource, Resource } from "../std/resource";
@@ -69,8 +69,8 @@ export abstract class Function extends Resource implements IInflightHost {
   ) {
     super(scope, id);
 
-    this.display.title = "Function";
-    this.display.description = "A cloud function (FaaS)";
+    Display.of(this).title = "Function";
+    Display.of(this).description = "A cloud function (FaaS)";
 
     this._addInflightOps(FunctionInflightMethods.INVOKE);
 

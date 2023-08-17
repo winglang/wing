@@ -1,6 +1,6 @@
 import { Construct } from "constructs";
 import { normalPath } from "./misc";
-import { NodeJsCode } from "../core";
+import { Display, NodeJsCode } from "../core";
 import { IInflightHost, IResource, Resource } from "../std";
 
 /**
@@ -26,7 +26,7 @@ export function convertBetweenHandlers(
     constructor(theScope: Construct, theId: string, handler: IResource) {
       super(theScope, theId);
       this.handler = handler;
-      this.display.hidden = true;
+      Display.of(this).hidden = true;
       this._addInflightOps("handle");
       this.args = args;
     }

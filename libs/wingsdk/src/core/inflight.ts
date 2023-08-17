@@ -1,4 +1,3 @@
-import { createHash } from "crypto";
 import { readFileSync } from "fs";
 import { basename } from "path";
 import { normalPath } from "../shared/misc";
@@ -16,13 +15,6 @@ export abstract class Code {
    * The code.
    */
   public abstract readonly text: string;
-
-  /**
-   * Generate a hash of the code contents.
-   */
-  public get hash(): string {
-    return createHash("sha512").update(this.text).digest("hex");
-  }
 }
 
 /**

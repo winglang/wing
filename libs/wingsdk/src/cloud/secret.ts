@@ -1,6 +1,6 @@
 import { Construct } from "constructs";
 import { fqnForType } from "../constants";
-import { App } from "../core";
+import { App, Display } from "../core";
 import { Json, Resource } from "../std";
 
 /**
@@ -45,8 +45,8 @@ export abstract class Secret extends Resource {
   constructor(scope: Construct, id: string, props: SecretProps = {}) {
     super(scope, id);
 
-    this.display.title = "Secret";
-    this.display.description = "A cloud secret";
+    Display.of(this).title = "Secret";
+    Display.of(this).description = "A cloud secret";
 
     this._addInflightOps(
       SecretInflightMethods.VALUE,

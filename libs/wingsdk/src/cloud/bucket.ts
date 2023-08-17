@@ -1,7 +1,7 @@
 import { Construct } from "constructs";
 import { Topic } from "./topic";
 import { fqnForType } from "../constants";
-import { App, Connections } from "../core";
+import { App, Connections, Display } from "../core";
 import { convertBetweenHandlers } from "../shared/convert";
 import { Json, IResource, Resource } from "../std";
 
@@ -45,8 +45,8 @@ export abstract class Bucket extends Resource {
   constructor(scope: Construct, id: string, props: BucketProps = {}) {
     super(scope, id);
 
-    this.display.title = "Bucket";
-    this.display.description = "A cloud object store";
+    Display.of(this).title = "Bucket";
+    Display.of(this).description = "A cloud object store";
 
     this._addInflightOps(
       BucketInflightMethods.DELETE,

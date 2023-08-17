@@ -2,6 +2,7 @@ import * as fs from "fs";
 import * as path from "path";
 import { IConstruct } from "constructs";
 import { App } from "./app";
+import { Display } from "./display";
 import { IResource, Resource } from "../std/resource";
 
 export const TREE_FILE_PATH = "tree.json";
@@ -153,7 +154,7 @@ function synthDisplay(construct: IConstruct): DisplayInfo | undefined {
   if (!isIResource(construct)) {
     return;
   }
-  const { display } = construct;
+  const display = Display.of(construct);
   if (display.description || display.title || display.hidden) {
     return display;
   }

@@ -1,7 +1,7 @@
 import { Construct } from "constructs";
 import { FunctionProps } from "./function";
 import { fqnForType } from "../constants";
-import { App } from "../core";
+import { App, Display } from "../core";
 import { IResource, Resource } from "../std";
 
 /**
@@ -53,8 +53,8 @@ export abstract class OnDeploy extends Resource {
   ) {
     super(scope, id);
 
-    this.display.title = "OnDeploy";
-    this.display.description = "Run code during the app's deployment.";
+    Display.of(this).title = "OnDeploy";
+    Display.of(this).description = "Run code during the app's deployment.";
 
     handler;
     props;

@@ -3,8 +3,8 @@ import { ON_DEPLOY_TYPE, OnDeploySchema } from "./schema-resources";
 import { simulatorHandleToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
-import * as core from "../core";
-import { Display, IInflightHost } from "../std";
+import { Code, Display } from "../core";
+import { IInflightHost } from "../std";
 import { BaseResourceSchema } from "../testing";
 
 export class OnDeploy extends cloud.OnDeploy {
@@ -18,7 +18,7 @@ export class OnDeploy extends cloud.OnDeploy {
     super(scope, id, handler, props);
 
     this.fn = cloud.Function._newFunction(this, "Function", handler, props);
-    this.fn.display.sourceModule = Display.SDK_SOURCE_MODULE;
+    Display.of(this.fn).sourceModule = Display.SDK_SOURCE_MODULE;
 
     this.node.addDependency(this.fn);
 
@@ -49,7 +49,7 @@ export class OnDeploy extends cloud.OnDeploy {
   }
 
   /** @internal */
-  public _toInflight(): core.Code {
+  public _toInflight(): Code {
     return makeSimulatorJsClient(__filename, this);
   }
 }

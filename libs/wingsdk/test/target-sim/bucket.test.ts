@@ -3,6 +3,7 @@ import { vi, test, expect } from "vitest";
 import { listMessages, treeJsonOf } from "./util";
 import * as cloud from "../../src/cloud";
 import { BucketEventType } from "../../src/cloud";
+import { Display } from "../../src/core";
 import { Testing } from "../../src/testing";
 import { SimApp } from "../sim-app";
 
@@ -440,7 +441,7 @@ test("bucket has no display hidden property", async () => {
   const bucket = app.node.tryFindChild("my_bucket") as cloud.Bucket;
 
   // THEN
-  expect(bucket.display.hidden).toBeUndefined();
+  expect(Display.of(bucket).hidden).toBeUndefined();
   expect(treeJson.tree.children).toBeDefined();
   expect(treeJson.tree.children).not.toMatchObject({
     my_bucket: {
@@ -461,8 +462,8 @@ test("bucket has display title and description properties", async () => {
   const bucket = app.node.tryFindChild("my_bucket") as cloud.Bucket;
 
   // THEN
-  expect(bucket.display.title).toBeDefined();
-  expect(bucket.display.description).toBeDefined();
+  expect(Display.of(bucket).title).toBeDefined();
+  expect(Display.of(bucket).description).toBeDefined();
   expect(treeJson.tree.children).toMatchObject({
     my_bucket: {
       display: {

@@ -2,6 +2,7 @@ import { test, expect } from "vitest";
 import { listMessages, treeJsonOf } from "./util";
 import * as cloud from "../../src/cloud";
 import { ICounterClient } from "../../src/cloud";
+import { Display } from "../../src/core";
 import { SimApp } from "../sim-app";
 
 test("create a counter", async () => {
@@ -241,7 +242,7 @@ test("counter has no display hidden property", async () => {
   const counter = app.node.tryFindChild("my_counter") as cloud.Counter;
 
   // THEN
-  expect(counter.display.hidden).toBeUndefined();
+  expect(Display.of(counter).hidden).toBeUndefined();
   expect(treeJson.tree.children).toBeDefined();
   expect(treeJson.tree.children).not.toMatchObject({
     my_counter: {
@@ -262,8 +263,8 @@ test("counter has display title and description properties", async () => {
   const counter = app.node.tryFindChild("my_counter") as cloud.Counter;
 
   // THEN
-  expect(counter.display.title).toBeDefined();
-  expect(counter.display.description).toBeDefined();
+  expect(Display.of(counter).title).toBeDefined();
+  expect(Display.of(counter).description).toBeDefined();
   expect(treeJson.tree.children).toMatchObject({
     my_counter: {
       display: {

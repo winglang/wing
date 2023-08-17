@@ -1,6 +1,6 @@
 import { Construct } from "constructs";
 import { fqnForType } from "../constants";
-import { App } from "../core";
+import { App, Display } from "../core";
 import { Resource } from "../std";
 
 /**
@@ -25,8 +25,8 @@ export abstract class Redis extends Resource {
   constructor(scope: Construct, id: string) {
     super(scope, id);
 
-    this.display.title = "Redis";
-    this.display.description = "A Redis server";
+    Display.of(this).title = "Redis";
+    Display.of(this).description = "A Redis server";
 
     this._addInflightOps(
       RedisInflightMethods.RAW_CLIENT,

@@ -9,7 +9,7 @@ import {
 import { simulatorHandleToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import { fqnForType } from "../constants";
-import { Code } from "../core";
+import { Code, Display } from "../core";
 import { Resource, IInflightHost, IResource } from "../std";
 import {
   BaseResourceSchema,
@@ -50,7 +50,7 @@ export class EventMapping extends Resource implements ISimulatorResource {
   constructor(scope: Construct, id: string, props: EventMappingProps) {
     super(scope, id);
     this._eventProps = props;
-    this.display.hidden = true;
+    Display.of(this).hidden = true;
 
     // Add dependencies to the publisher and subscriber
     this.node.addDependency(props.subscriber);

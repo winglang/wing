@@ -17,11 +17,6 @@ export interface IInflightHost extends IResource {}
  */
 export interface IResource extends IConstruct {
   /**
-   * Information on how to display a resource in the UI.
-   */
-  readonly display: Display;
-
-  /**
    * Binds the resource to the host so that it can be used by inflight code.
    *
    * If `ops` contains any operations not supported by the resource, it should throw an
@@ -168,11 +163,6 @@ export abstract class Resource extends Construct implements IResource {
   private readonly inflightOps: string[] = ["$inflight_init"];
 
   /**
-   * Information on how to display a resource in the UI.
-   */
-  public readonly display = new Display();
-
-  /**
    * Record that this resource supports the given inflight operation.
    *
    * This is used to give better error messages if the compiler attempts to bind
@@ -310,74 +300,6 @@ export interface OperationAnnotation {
   [resource: string]: {
     ops: string[];
   };
-}
-
-/**
- * Properties for the Display class.
- * @skipDocs
- */
-export interface DisplayProps {
-  /**
-   * Title of the resource.
-   * @default - No title.
-   */
-  readonly title?: string;
-
-  /**
-   * Description of the resource.
-   * @default - No description.
-   */
-  readonly description?: string;
-
-  /**
-   * The source file or library where the resource was defined.
-   * @default - No source module.
-   */
-  readonly sourceModule?: string;
-
-  /**
-   * Whether the resource should be hidden from the UI.
-   * @default - Undefined
-   */
-  readonly hidden?: boolean;
-}
-
-/**
- * Information on how to display a resource in the UI.
- * @skipDocs
- */
-export class Display {
-  /**
-   * The source module for the SDK.
-   */
-  public static readonly SDK_SOURCE_MODULE = "@winglang/sdk";
-
-  /**
-   * Title of the resource.
-   */
-  public title?: string;
-
-  /**
-   * Description of the resource.
-   */
-  public description?: string;
-
-  /**
-   * The source file or library where the resource was defined.
-   */
-  public sourceModule?: string;
-
-  /**
-   * Whether the resource should be hidden from the UI.
-   */
-  public hidden?: boolean;
-
-  public constructor(props?: DisplayProps) {
-    this.title = props?.title;
-    this.description = props?.description;
-    this.hidden = props?.hidden;
-    this.sourceModule = props?.sourceModule;
-  }
 }
 
 function isResource(obj: any): obj is Resource {
