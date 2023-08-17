@@ -48,7 +48,7 @@ let setC = { 4,5,6 };
 test "Set types with the same value" {
   assert(setA == setA);
   // TODO https://github.com/winglang/wing/issues/2867
-  assert(setA == setB.copy());
+  assert(setA == setB);
 }
 
 test "Set types with different values" {
@@ -64,7 +64,7 @@ let mapC = { "c" => 10, "b" => 2 };
 
 test "Map with the same value" {
   assert(mapA == mapA);
-  assert(mapA == mapB.copy());
+  assert(mapA == mapB);
 }
 
 test "Map with different values" {
@@ -80,7 +80,7 @@ let arrayC: Array<num> = [4,5,6];
 
 test "Array with the same value" {
   assert(arrayA == arrayA);
-  assert(arrayA == arrayB.copy());
+  assert(arrayA == arrayB);
 }
 
 test "Array with different values" {

@@ -1002,6 +1002,18 @@ impl TypeRef {
 		matches!(**self, Type::Array(_) | Type::Map(_) | Type::Set(_))
 	}
 
+	pub fn is_array_type(&self) -> bool {
+		matches!(**self, Type::Array(_) | Type::MutArray(_))
+	}
+
+	pub fn is_map_type(&self) -> bool {
+		matches!(**self, Type::Map(_) | Type::MutMap(_))
+	}
+
+	pub fn is_set_type(&self) -> bool {
+		matches!(**self, Type::Set(_) | Type::MutSet(_))
+	}
+
 	pub fn is_inflight_function(&self) -> bool {
 		if let Type::Function(ref sig) = **self {
 			sig.phase == Phase::Inflight
@@ -1695,7 +1707,7 @@ impl<'a> TypeChecker<'a> {
 						(self.types.number(), Phase::Independent)
 					}
 					BinaryOperator::Equal | BinaryOperator::NotEqual => {
-						self.validate_type(rtype, ltype, exp);
+						self.validate_type_binary_operator(rtype, ltype, exp);
 						(self.types.bool(), Phase::Independent)
 					}
 					BinaryOperator::Less
@@ -2443,6 +2455,49 @@ impl<'a> TypeChecker<'a> {
 		actual_type
 	}
 
+	/// Validate that the given type is a subtype (or same) as the expected type, disregarding whether
+	/// the object is mutable or immutable. If not, add an error to the diagnostics.
+	///
+	/// Returns the given type on success, otherwise returns the expected type.
+	fn validate_type_binary_operator(
+		&mut self,
+		actual_type: TypeRef,
+		expected_type: TypeRef,
+		span: &impl Spanned,
+	) -> TypeRef {
+		if actual_type.is_array_type()
+			&& expected_type.is_array_type()
+			&& actual_type
+				.collection_item_type()
+				.unwrap()
+				.is_same_type_as(&expected_type.collection_item_type().unwrap())
+		{
+			return actual_type;
+		}
+
+		if actual_type.is_map_type()
+			&& expected_type.is_map_type()
+			&& actual_type
+				.collection_item_type()
+				.unwrap()
+				.is_same_type_as(&expected_type.collection_item_type().unwrap())
+		{
+			return actual_type;
+		}
+
+		if actual_type.is_set_type()
+			&& expected_type.is_set_type()
+			&& actual_type
+				.collection_item_type()
+				.unwrap()
+				.is_same_type_as(&expected_type.collection_item_type().unwrap())
+		{
+			return actual_type;
+		}
+
+		self.validate_type_in(actual_type, &[expected_type], span)
+	}
+
 	/// Validate that the given type is a subtype (or same) as the expected type. If not, add an error
 	/// to the diagnostics.
 	///
@@ -2505,6 +2560,7 @@ impl<'a> TypeChecker<'a> {
 			format!("\"{}\"", expected_types[0])
 		};
 
+		println!("aqui");
 		let mut message = format!(
 			"Expected type to be {}, but got \"{}\" instead",
 			expected_type_str, return_type
