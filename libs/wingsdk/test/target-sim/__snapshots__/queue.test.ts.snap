@@ -75,12 +75,7 @@ exports[`messages are not requeued if the function fails after retention timeout
   "wingsdk.cloud.Function created.",
   "wingsdk.cloud.Queue created.",
   "wingsdk.sim.EventMapping created.",
-<<<<<<< HEAD
-  "Push (message=BAD MESSAGE).",
-=======
-  "Invoke (payload=\\"{\\\\\\"messages\\\\\\":[]}\\").",
   "Push (messages=BAD MESSAGE).",
->>>>>>> 7c9bfe43ab0d1af7807cdfd6d1ab7822cc294b4c
   "Sending messages (messages=[\\"BAD MESSAGE\\"], subscriber=sim-1).",
   "Invoke (payload=\\"{\\\\\\"messages\\\\\\":[\\\\\\"BAD MESSAGE\\\\\\"]}\\").",
   "Subscriber error - returning 1 messages to queue: ERROR",
@@ -274,12 +269,7 @@ exports[`messages are not requeued if the function fails before timeout 1`] = `
   "wingsdk.cloud.Function created.",
   "wingsdk.cloud.Queue created.",
   "wingsdk.sim.EventMapping created.",
-<<<<<<< HEAD
-  "Push (message=BAD MESSAGE).",
-=======
-  "Invoke (payload=\\"{\\\\\\"messages\\\\\\":[]}\\").",
   "Push (messages=BAD MESSAGE).",
->>>>>>> 7c9bfe43ab0d1af7807cdfd6d1ab7822cc294b4c
   "Sending messages (messages=[\\"BAD MESSAGE\\"], subscriber=sim-1).",
   "Invoke (payload=\\"{\\\\\\"messages\\\\\\":[\\\\\\"BAD MESSAGE\\\\\\"]}\\").",
   "Subscriber error - returning 1 messages to queue: ERROR",
@@ -473,12 +463,7 @@ exports[`messages are requeued if the function fails after timeout 1`] = `
   "wingsdk.cloud.Function created.",
   "wingsdk.cloud.Queue created.",
   "wingsdk.sim.EventMapping created.",
-<<<<<<< HEAD
-  "Push (message=BAD MESSAGE).",
-=======
-  "Invoke (payload=\\"{\\\\\\"messages\\\\\\":[]}\\").",
   "Push (messages=BAD MESSAGE).",
->>>>>>> 7c9bfe43ab0d1af7807cdfd6d1ab7822cc294b4c
   "Sending messages (messages=[\\"BAD MESSAGE\\"], subscriber=sim-1).",
   "wingsdk.sim.EventMapping deleted.",
   "wingsdk.cloud.Queue deleted.",
@@ -1060,15 +1045,10 @@ exports[`queue with one subscriber, default batch size of 1 1`] = `
   "wingsdk.cloud.Function created.",
   "wingsdk.cloud.Queue created.",
   "wingsdk.sim.EventMapping created.",
-<<<<<<< HEAD
-  "Push (message=A).",
-=======
   "Push (messages=A,B).",
->>>>>>> 7c9bfe43ab0d1af7807cdfd6d1ab7822cc294b4c
   "Sending messages (messages=[\\"A\\"], subscriber=sim-1).",
-  "Invoke (payload=\\"{\\\\\\"messages\\\\\\":[\\\\\\"A\\\\\\"]}\\").",
-  "Push (message=B).",
   "Sending messages (messages=[\\"B\\"], subscriber=sim-1).",
+  "Invoke (payload=\\"{\\\\\\"messages\\\\\\":[\\\\\\"A\\\\\\"]}\\").",
   "Invoke (payload=\\"{\\\\\\"messages\\\\\\":[\\\\\\"B\\\\\\"]}\\").",
   "wingsdk.sim.EventMapping deleted.",
   "wingsdk.cloud.Queue deleted.",
