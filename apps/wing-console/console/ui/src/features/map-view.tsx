@@ -1,7 +1,7 @@
 import {
   useTheme,
   ResourceIcon,
-  USE_CUSTOM_COLOR,
+  USE_EXTERNAL_THEME_COLOR,
 } from "@wingconsole/design-system";
 import classNames from "classnames";
 
@@ -35,7 +35,7 @@ export const MapView = ({
     <ZoomPaneProvider>
       <div className="h-full flex flex-col">
         {showMapControls && (
-          <div className={classNames(USE_CUSTOM_COLOR)}>
+          <div className={classNames(USE_EXTERNAL_THEME_COLOR)}>
             <MapControls />
           </div>
         )}

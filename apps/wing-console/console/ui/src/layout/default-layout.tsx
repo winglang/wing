@@ -4,7 +4,7 @@ import {
   RightResizableWidget,
   ScrollableArea,
   TopResizableWidget,
-  USE_CUSTOM_COLOR,
+  USE_EXTERNAL_THEME_COLOR,
 } from "@wingconsole/design-system";
 import type { State, LayoutConfig, LayoutComponent } from "@wingconsole/server";
 import classNames from "classnames";
@@ -192,7 +192,7 @@ export const DefaultLayout = ({
                       "pb-1.5",
                       theme.bg3,
                       theme.text2,
-                      USE_CUSTOM_COLOR,
+                      USE_EXTERNAL_THEME_COLOR,
                     )}
                   >
                     <ConsoleLogs
@@ -247,7 +247,7 @@ export const DefaultLayout = ({
         )}
       >
         {!layout.header?.hide && (
-          <div className={classNames(USE_CUSTOM_COLOR)}>
+          <div className={classNames(USE_EXTERNAL_THEME_COLOR)}>
             <Header
               title={wingfile.data ?? ""}
               showThemeToggle={layout.header?.showThemeToggle}
@@ -287,7 +287,7 @@ export const DefaultLayout = ({
                 layout.leftPanel?.components?.length && (
                   <RightResizableWidget
                     className={classNames(
-                      USE_CUSTOM_COLOR,
+                      USE_EXTERNAL_THEME_COLOR,
                       theme.border3,
                       "h-full flex flex-col w-80 min-w-[10rem] min-h-[10rem] border-r",
                     )}
@@ -320,7 +320,7 @@ export const DefaultLayout = ({
                   <div
                     className={classNames(
                       "flex-1 flex flex-col",
-                      USE_CUSTOM_COLOR,
+                      USE_EXTERNAL_THEME_COLOR,
                     )}
                     data-testid="map-view"
                   >
@@ -337,7 +337,7 @@ export const DefaultLayout = ({
 
                   <LeftResizableWidget
                     className={classNames(
-                      USE_CUSTOM_COLOR,
+                      USE_EXTERNAL_THEME_COLOR,
                       theme.border3,
                       "flex-shrink w-80 min-w-[10rem] border-l z-10",
                       theme.bg4,
@@ -373,7 +373,7 @@ export const DefaultLayout = ({
             {!layout.bottomPanel?.hide && (
               <TopResizableWidget
                 className={classNames(
-                  USE_CUSTOM_COLOR,
+                  USE_EXTERNAL_THEME_COLOR,
                   theme.border3,
                   "border-t relative flex",
                   theme.bg3,
@@ -438,7 +438,7 @@ export const DefaultLayout = ({
         )}
 
         {!layout.statusBar?.hide && (
-          <div className={classNames(USE_CUSTOM_COLOR)}>
+          <div className={classNames(USE_EXTERNAL_THEME_COLOR)}>
             <StatusBar
               wingVersion={wingVersion}
               cloudAppState={cloudAppState}
