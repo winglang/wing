@@ -75,11 +75,7 @@ test "Map with the same value" {
 
 test "Map with different values" {
   assert(mapA != mapC);
-  try {
-    assert(mapA != mapB.copy());
-  } catch {
-    assert(true);
-  }
+  assert(!(mapA != mapB.copy()));
 }
 
 //-----------------------------------------------------------------------------
