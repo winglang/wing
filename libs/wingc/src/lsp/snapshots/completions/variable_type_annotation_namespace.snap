@@ -341,7 +341,7 @@ source: libs/wingc/src/lsp/completions.rs
   kind: 8
   documentation:
     kind: markdown
-    value: "```wing\ninterface IQueueClient\n```\n---\nInflight interface for `Queue`.\n### Methods\n- `approxSize` — Retrieve the approximate number of messages in the queue.\n- `pop` — Pop a message from the queue.\n- `purge` — Purge all of the messages in the queue.\n- `push` — Push a message to the queue."
+    value: "```wing\ninterface IQueueClient\n```\n---\nInflight interface for `Queue`.\n### Methods\n- `approxSize` — Retrieve the approximate number of messages in the queue.\n- `pop` — Pop a message from the queue.\n- `purge` — Purge all of the messages in the queue.\n- `push` — Push one or more messages to the queue."
   sortText: ii|IQueueClient
 - label: IQueueSetConsumerHandler
   kind: 8
