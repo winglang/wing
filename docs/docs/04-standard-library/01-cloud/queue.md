@@ -121,7 +121,7 @@ new cloud.Queue(props?: QueueProps);
 | <code><a href="#@winglang/sdk.cloud.IQueueClient.approxSize">approxSize</a></code> | Retrieve the approximate number of messages in the queue. |
 | <code><a href="#@winglang/sdk.cloud.IQueueClient.pop">pop</a></code> | Pop a message from the queue. |
 | <code><a href="#@winglang/sdk.cloud.IQueueClient.purge">purge</a></code> | Purge all of the messages in the queue. |
-| <code><a href="#@winglang/sdk.cloud.IQueueClient.push">push</a></code> | Push a message to the queue. |
+| <code><a href="#@winglang/sdk.cloud.IQueueClient.push">push</a></code> | Push one or more messages to the queue. |
 
 ---
 
@@ -172,12 +172,12 @@ Purge all of the messages in the queue.
 ##### `push` <a name="push" id="@winglang/sdk.cloud.IQueueClient.push"></a>
 
 ```wing
-inflight push(message: str): void
+inflight push(messages: str): void
 ```
 
-Push a message to the queue.
+Push one or more messages to the queue.
 
-###### `message`<sup>Required</sup> <a name="message" id="@winglang/sdk.cloud.IQueueClient.push.parameter.message"></a>
+###### `messages`<sup>Required</sup> <a name="messages" id="@winglang/sdk.cloud.IQueueClient.push.parameter.messages"></a>
 
 - *Type:* str
 
