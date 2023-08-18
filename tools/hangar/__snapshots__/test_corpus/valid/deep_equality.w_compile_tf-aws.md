@@ -55,7 +55,7 @@ module.exports = function({ $numA, $numB, $strA, $strB }) {
 
 ## inflight.$Closure10-1.js
 ```js
-module.exports = function({ $arrayA, $arrayC }) {
+module.exports = function({ $_____arrayB__, $arrayA, $arrayC }) {
   class $Closure10 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -63,7 +63,8 @@ module.exports = function({ $arrayA, $arrayC }) {
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: arrayA != arrayC")})(($arrayA !== $arrayC))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: arrayA != arrayC")})((((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })($arrayA,$arrayC)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: !(arrayA != arrayB.copy())")})((!(((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })($arrayA,$_____arrayB__))))};
     }
   }
   return $Closure10;
@@ -92,7 +93,7 @@ module.exports = function({ $cat1, $cat2 }) {
 
 ## inflight.$Closure12-1.js
 ```js
-module.exports = function({ $cat1, $cat3 }) {
+module.exports = function({ $cat1, $cat2, $cat3 }) {
   class $Closure12 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -100,7 +101,8 @@ module.exports = function({ $cat1, $cat3 }) {
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: cat1 != cat3")})(($cat1 !== $cat3))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: cat1 != cat3")})((((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })($cat1,$cat3)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: !(cat1 != cat2)")})((!(((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })($cat1,$cat2))))};
     }
   }
   return $Closure12;
@@ -118,8 +120,8 @@ module.exports = function({ $numA, $numC, $strA, $strC }) {
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: numA != numC")})(($numA !== $numC))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: strA != strC")})(($strA !== $strC))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: numA != numC")})((((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })($numA,$numC)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: strA != strC")})((((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })($strA,$strC)))};
     }
   }
   return $Closure2;
@@ -148,7 +150,7 @@ module.exports = function({ $jsonA, $jsonB }) {
 
 ## inflight.$Closure4-1.js
 ```js
-module.exports = function({ $jsonA, $jsonC }) {
+module.exports = function({ $jsonA, $jsonB, $jsonC }) {
   class $Closure4 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -156,7 +158,8 @@ module.exports = function({ $jsonA, $jsonC }) {
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: jsonA != jsonC")})(($jsonA !== $jsonC))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: jsonA != jsonC")})((((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })($jsonA,$jsonC)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: !(jsonA != jsonB)")})((!(((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })($jsonA,$jsonB))))};
     }
   }
   return $Closure4;
@@ -185,7 +188,7 @@ module.exports = function({ $new_Set_setB_, $setA }) {
 
 ## inflight.$Closure6-1.js
 ```js
-module.exports = function({ $setA, $setC }) {
+module.exports = function({ $new_Set_setB_, $setA, $setC }) {
   class $Closure6 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -193,7 +196,8 @@ module.exports = function({ $setA, $setC }) {
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: setA != setC")})(($setA !== $setC))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: setA != setC")})((((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })($setA,$setC)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: !(setA != setB.copy())")})((!(((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })($setA,$new_Set_setB_))))};
     }
   }
   return $Closure6;
@@ -222,7 +226,7 @@ module.exports = function({ $______mapB___, $mapA }) {
 
 ## inflight.$Closure8-1.js
 ```js
-module.exports = function({ $mapA, $mapC }) {
+module.exports = function({ $______mapB___, $mapA, $mapC }) {
   class $Closure8 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -230,7 +234,8 @@ module.exports = function({ $mapA, $mapC }) {
       return $obj;
     }
     async handle() {
-      {((cond) => {if (!cond) throw new Error("assertion failed: mapA != mapC")})(($mapA !== $mapC))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: mapA != mapC")})((((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })($mapA,$mapC)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: !(mapA != mapB.copy())")})((!(((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })($mapA,$______mapB___))))};
     }
   }
   return $Closure8;
@@ -1230,6 +1235,7 @@ class $Root extends $stdlib.std.Resource {
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure4-1.js")({
             $jsonA: ${context._lift(jsonA)},
+            $jsonB: ${context._lift(jsonB)},
             $jsonC: ${context._lift(jsonC)},
           })
         `);
@@ -1248,6 +1254,7 @@ class $Root extends $stdlib.std.Resource {
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
           $Closure4._registerBindObject(jsonA, host, []);
+          $Closure4._registerBindObject(jsonB, host, []);
           $Closure4._registerBindObject(jsonC, host, []);
         }
         super._registerBind(host, ops);
@@ -1295,6 +1302,7 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure6-1.js")({
+            $new_Set_setB_: ${context._lift(new Set(setB))},
             $setA: ${context._lift(setA)},
             $setC: ${context._lift(setC)},
           })
@@ -1313,6 +1321,7 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
+          $Closure6._registerBindObject(new Set(setB), host, []);
           $Closure6._registerBindObject(setA, host, []);
           $Closure6._registerBindObject(setC, host, []);
         }
@@ -1361,6 +1370,7 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure8-1.js")({
+            $______mapB___: ${context._lift(({...(mapB)}))},
             $mapA: ${context._lift(mapA)},
             $mapC: ${context._lift(mapC)},
           })
@@ -1379,6 +1389,7 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
+          $Closure8._registerBindObject(({...(mapB)}), host, []);
           $Closure8._registerBindObject(mapA, host, []);
           $Closure8._registerBindObject(mapC, host, []);
         }
@@ -1427,6 +1438,7 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure10-1.js")({
+            $_____arrayB__: ${context._lift([...(arrayB)])},
             $arrayA: ${context._lift(arrayA)},
             $arrayC: ${context._lift(arrayC)},
           })
@@ -1445,6 +1457,7 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
+          $Closure10._registerBindObject([...(arrayB)], host, []);
           $Closure10._registerBindObject(arrayA, host, []);
           $Closure10._registerBindObject(arrayC, host, []);
         }
@@ -1494,6 +1507,7 @@ class $Root extends $stdlib.std.Resource {
         return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure12-1.js")({
             $cat1: ${context._lift(cat1)},
+            $cat2: ${context._lift(cat2)},
             $cat3: ${context._lift(cat3)},
           })
         `);
@@ -1512,6 +1526,7 @@ class $Root extends $stdlib.std.Resource {
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
           $Closure12._registerBindObject(cat1, host, []);
+          $Closure12._registerBindObject(cat2, host, []);
           $Closure12._registerBindObject(cat3, host, []);
         }
         super._registerBind(host, ops);
