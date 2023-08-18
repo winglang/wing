@@ -190,7 +190,10 @@ class $Root extends $stdlib.std.Resource {
     {((cond) => {if (!cond) throw new Error("assertion failed: sMap.size() == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(Object.keys(sMap).length,2)))};
     {((cond) => {if (!cond) throw new Error("assertion failed: immutMap.size() == 3")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(Object.keys(immutMap).length,3)))};
     {((cond) => {if (!cond) throw new Error("assertion failed: nestedMap.get(\"a\").get(\"b\").get(\"c\") == \"hello\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((((nestedMap)["a"])["b"])["c"],"hello")))};
-    const heterogeneousArray = [new Cat(this,"Cat"), new Dog(this,"Dog")];
+    const heterogeneousArray = [new Cat(this,"C1"), new Dog(this,"D1")];
+    const heterogeneousDoubleArray = [[new Cat(this,"C2")], [new Cat(this,"C3"), new Dog(this,"D2")], [new Animal(this,"A1")]];
+    const heterogeneousSet = new Set([new Cat(this,"C4"), new Dog(this,"D3")]);
+    const heterogeneousMap = ({"cat": new Cat(this,"C5"),"dog": new Dog(this,"D4")});
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);

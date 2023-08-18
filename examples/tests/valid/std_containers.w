@@ -47,19 +47,19 @@ class Cat extends Animal {}
 class Dog extends Animal {}
 
 let heterogeneousArray = Array<Animal>[
-  new Cat(),
-  new Dog(),
+  new Cat() as "C1",
+  new Dog() as "D1",
 ];
 let heterogeneousDoubleArray = Array<Array<Animal>>[
-  [new Cat()],
-  Array<Animal>[new Cat(), new Dog()],
-  [new Animal()],
+  [new Cat() as "C2"],
+  Array<Animal>[new Cat() as "C3", new Dog() as "D2"],
+  [new Animal() as "A1"],
 ];
 let heterogeneousSet = Set<Animal>{
-  new Cat(),
-  new Dog(),
+  new Cat() as "C4",
+  new Dog() as "D3",
 };
 let heterogeneousMap = Map<Animal>{
-  "cat" => new Cat(),
-  "dog" => new Dog(),
+  "cat" => new Cat() as "C5",
+  "dog" => new Dog() as "D4",
 };
