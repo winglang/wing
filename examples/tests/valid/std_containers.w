@@ -52,7 +52,7 @@ let heterogeneousArray = Array<Animal>[
 ];
 let heterogeneousDoubleArray = Array<Array<Animal>>[
   [new Cat()],
-  [new Cat(), new Dog()],
+  Array<Animal>[new Cat(), new Dog()],
   [new Animal()],
 ];
 let heterogeneousSet = Set<Animal>{
