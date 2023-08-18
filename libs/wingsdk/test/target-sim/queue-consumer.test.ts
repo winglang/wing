@@ -1,11 +1,10 @@
 import { Construct } from "constructs";
 import { test, expect } from "vitest";
+import { waitUntilTrace } from "./util";
 import * as cloud from "../../src/cloud";
 import { TraceType } from "../../src/std";
 import { Testing } from "../../src/testing";
 import { SimApp } from "../sim-app";
-
-const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 test("pushing messages through a queue", async () => {
   // GIVEN
@@ -56,7 +55,7 @@ test("pushing messages through a queue", async () => {
 
   // WHEN
   await pusher.invoke("foo");
-  await sleep(200);
+  await waitUntilTrace(s, (t) => t.data.message === "Received foo");
 
   // THEN
   await s.stop();

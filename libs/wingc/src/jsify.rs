@@ -479,7 +479,7 @@ impl<'a> JSifier<'a> {
 						.filter_map(|p| match p {
 							InterpolatedStringPart::Static(_) => None,
 							InterpolatedStringPart::Expr(e) => Some(match *self.types.get_expr_type(e) {
-								Type::Json | Type::MutJson => {
+								Type::Json(_) | Type::MutJson => {
 									format!("((e) => typeof e === 'string' ? e : JSON.stringify(e, null, 2))({})", self.jsify_expression(e, ctx))
 								}
 								_ => self.jsify_expression(e, ctx),
@@ -601,7 +601,9 @@ impl<'a> JSifier<'a> {
 					BinaryOperator::Equal => {
 						return format!("(((a,b) => {{ try {{ return require('assert').deepStrictEqual(a,b) === undefined; }} catch {{ return false; }} }})({},{}))", js_left, js_right)
 					},
-					BinaryOperator::NotEqual => "!==",
+					BinaryOperator::NotEqual => {
+						return format!("(((a,b) => {{ try {{ return require('assert').notDeepStrictEqual(a,b) === undefined; }} catch {{ return false; }} }})({},{}))", js_left, js_right)
+					},
 					BinaryOperator::LogicalAnd => "&&",
 					BinaryOperator::LogicalOr => "||",
 					BinaryOperator::UnwrapOr => {
@@ -853,6 +855,7 @@ impl<'a> JSifier<'a> {
 			StmtKind::Break => CodeMaker::one_line("break;"),
 			StmtKind::Continue => CodeMaker::one_line("continue;"),
 			StmtKind::IfLet {
+				reassignable,
 				value,
 				statements,
 				var_name,
@@ -894,7 +897,11 @@ impl<'a> JSifier<'a> {
 					self.jsify_expression(value, ctx)
 				));
 				code.open(format!("if ({if_let_value} != undefined) {{"));
-				code.line(format!("const {} = {};", var_name, if_let_value));
+				if *reassignable {
+					code.line(format!("let {} = {};", var_name, if_let_value));
+				} else {
+					code.line(format!("const {} = {};", var_name, if_let_value));
+				}
 				code.add_code(self.jsify_scope_body(statements, ctx));
 				code.close("}");
 
@@ -1560,10 +1567,6 @@ fn get_public_symbols(scope: &Scope) -> Vec<Symbol> {
 	}
 
 	symbols
-}
-
-fn inflight_filename(class: &AstClass) -> String {
-	format!("./inflight.{}.js", class.name.name)
 }
 
 fn struct_filename(s: &String) -> String {

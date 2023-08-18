@@ -249,4 +249,19 @@ export class MutArray {
   public pop(): T1 {
     throw new Error("Abstract");
   }
+
+  /**
+   * Sets a new value at the given index of an array
+   *
+   * @macro ((obj, args) => { if (args[0] < 0 || args[0] >= $self$.length) throw new Error("Index out of bounds"); obj[args[0]] = args[1]; })($self$, [$args$])
+   *
+   * @param index the index to set the value at
+   * @param value the value to set at the given index
+   * @throws index out of bounds error if the given index does not exist for the array
+   */
+  public set(index: number, value: T1): void {
+    index;
+    value;
+    throw new Error("Macro");
+  }
 }
