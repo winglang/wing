@@ -95,14 +95,14 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _getInflightOps() {
-        return ["put", "$inflight_init"]
+        return ["put", "$inflight_init"];
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          Base._registerBindObject(this.b, host, []);
+          $stdlib.std.Resource._registerBindObject(this.b, host, []);
         }
         if (ops.includes("put")) {
-          Base._registerBindObject(this.b, host, ["list", "put"]);
+          $stdlib.std.Resource._registerBindObject(this.b, host, ["list", "put"]);
         }
         super._registerBind(host, ops);
       }
@@ -130,11 +130,11 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _getInflightOps() {
-        return ["foo", "$inflight_init"]
+        return ["foo", "$inflight_init"];
       }
       _registerBind(host, ops) {
         if (ops.includes("foo")) {
-          Derived._registerBindObject(this, host, ["put"]);
+          $stdlib.std.Resource._registerBindObject(this, host, ["put"]);
         }
         super._registerBind(host, ops);
       }

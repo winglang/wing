@@ -120,6 +120,7 @@ export interface RequestOptions {
    */
   readonly referrer?: string;
 }
+
 /**
  * The response to a HTTP request.
  */
@@ -168,6 +169,7 @@ export class Util {
   public static _toInflightType(): string {
     return InflightClient.forType(__filename, this.name);
   }
+
   /**
    * Executes a HTTP request to a specified URL and provides a formatted response.
    * This method allows various HTTP methods based on the provided options.
@@ -184,6 +186,7 @@ export class Util {
     const res = await fetch(url, { ...defaultOptions, ...options });
     return this._formatResponse(res);
   }
+
   /**
    * Executes a GET request to a specified URL and provides a formatted response.
    * @param url The target URL for the GET request.
@@ -201,6 +204,7 @@ export class Util {
       method: HttpMethod.GET,
     });
   }
+
   /**
    * Executes a POST request to a specified URL and provides a formatted response.
    * @param url The target URL for the POST request.
@@ -218,6 +222,7 @@ export class Util {
       method: HttpMethod.POST,
     });
   }
+
   /**
    * Executes a PUT request to a specified URL and provides a formatted response.
    * @param url The target URL for the PUT request.
@@ -235,6 +240,7 @@ export class Util {
       method: HttpMethod.PUT,
     });
   }
+
   /**
    * Executes a PATCH request to a specified URL and provides a formatted response.
    * @param url The target URL for the PATCH request.
@@ -288,5 +294,6 @@ export class Util {
       body: await response.text(),
     };
   }
+
   private constructor() {}
 }

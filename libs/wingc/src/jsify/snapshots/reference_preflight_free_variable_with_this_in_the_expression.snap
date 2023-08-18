@@ -74,15 +74,15 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _getInflightOps() {
-        return ["method", "$inflight_init"]
+        return ["method", "$inflight_init"];
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          Foo._registerBindObject(this.name, host, []);
+          $stdlib.std.Resource._registerBindObject(this.name, host, []);
         }
         if (ops.includes("method")) {
-          Foo._registerBindObject(b, host, ["put"]);
-          Foo._registerBindObject(this.name, host, []);
+          $stdlib.std.Resource._registerBindObject(b, host, ["put"]);
+          $stdlib.std.Resource._registerBindObject(this.name, host, []);
         }
         super._registerBind(host, ops);
       }

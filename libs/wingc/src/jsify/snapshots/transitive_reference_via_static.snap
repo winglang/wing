@@ -110,11 +110,11 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _getInflightOps() {
-        return ["putInBucket", "$inflight_init"]
+        return ["putInBucket", "$inflight_init"];
       }
       static _registerTypeBind(host, ops) {
         if (ops.includes("putInBucket")) {
-          MyType._registerBindObject(b, host, ["put"]);
+          $stdlib.std.Resource._registerBindObject(b, host, ["put"]);
         }
         super._registerTypeBind(host, ops);
       }
@@ -142,11 +142,11 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _getInflightOps() {
-        return ["putIndirect", "$inflight_init"]
+        return ["putIndirect", "$inflight_init"];
       }
       _registerBind(host, ops) {
         if (ops.includes("putIndirect")) {
-          YourType._registerBindObject(MyType, host, ["putInBucket"]);
+          $stdlib.std.Resource._registerBindObject(MyType, host, ["putInBucket"]);
         }
         super._registerBind(host, ops);
       }
@@ -175,11 +175,11 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _getInflightOps() {
-        return ["handle", "$inflight_init"]
+        return ["handle", "$inflight_init"];
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(t, host, ["putIndirect"]);
+          $stdlib.std.Resource._registerBindObject(t, host, ["putIndirect"]);
         }
         super._registerBind(host, ops);
       }

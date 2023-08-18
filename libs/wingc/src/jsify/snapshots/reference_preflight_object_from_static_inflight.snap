@@ -66,11 +66,11 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _getInflightOps() {
-        return ["addToQueue", "$inflight_init"]
+        return ["addToQueue", "$inflight_init"];
       }
       static _registerTypeBind(host, ops) {
         if (ops.includes("addToQueue")) {
-          MyType._registerBindObject(q, host, ["push"]);
+          $stdlib.std.Resource._registerBindObject(q, host, ["push"]);
         }
         super._registerTypeBind(host, ops);
       }

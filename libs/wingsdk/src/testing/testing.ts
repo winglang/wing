@@ -1,7 +1,21 @@
 import { IConstruct } from "constructs";
-import { InflightBindings } from "../core";
 import { liftObject } from "../core/internal";
 import { Display, IInflightHost, IResource, Resource } from "../std";
+
+/**
+ * An inflight binding.
+ */
+export interface InflightBinding {
+  /**
+   * The resource or capturable value.
+   */
+  readonly obj: any;
+
+  /**
+   * The list of operations used on the resource.
+   */
+  readonly ops?: string[];
+}
 
 /**
  * Test utilities.
@@ -25,7 +39,7 @@ export class Testing {
     scope: IConstruct,
     id: string,
     code: string,
-    bindings: InflightBindings = {}
+    bindings: Record<string, InflightBinding> = {}
   ): IResource {
     const clients: Record<string, string> = {};
 
@@ -71,7 +85,7 @@ ${Object.entries(clients)
 
       public _registerBind(host: IInflightHost, ops: string[]): void {
         for (const v of Object.values(bindings)) {
-          Handler._registerBindObject(v.obj, host, v.ops);
+          Resource._registerBindObject(v.obj, host, v.ops);
         }
         super._registerBind(host, ops);
       }

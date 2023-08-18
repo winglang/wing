@@ -77,7 +77,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _getInflightOps() {
-        return ["foo", "$inflight_init"]
+        return ["foo", "$inflight_init"];
       }
     }
     class B extends $stdlib.std.Resource {
@@ -103,11 +103,11 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _getInflightOps() {
-        return ["bar", "$inflight_init"]
+        return ["bar", "$inflight_init"];
       }
       static _registerTypeBind(host, ops) {
         if (ops.includes("bar")) {
-          B._registerBindObject(A, host, ["foo"]);
+          $stdlib.std.Resource._registerBindObject(A, host, ["foo"]);
         }
         super._registerTypeBind(host, ops);
       }

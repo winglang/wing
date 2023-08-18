@@ -85,7 +85,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _getInflightOps() {
-        return ["$inflight_init"]
+        return ["$inflight_init"];
       }
     }
     class Derived extends Base {
@@ -112,14 +112,14 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _getInflightOps() {
-        return ["foo", "$inflight_init"]
+        return ["foo", "$inflight_init"];
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          Derived._registerBindObject(this.b, host, []);
+          $stdlib.std.Resource._registerBindObject(this.b, host, []);
         }
         if (ops.includes("foo")) {
-          Derived._registerBindObject(this.b, host, ["put"]);
+          $stdlib.std.Resource._registerBindObject(this.b, host, ["put"]);
         }
         super._registerBind(host, ops);
       }

@@ -1,8 +1,7 @@
 import { Construct, IConstruct } from "constructs";
 import { Duration } from "./duration";
-import { App, Connections } from "../core";
+import { App, Bindings, Connections } from "../core";
 import { liftObject } from "../core/internal";
-import { log } from "../shared/log";
 
 /**
  * A resource that can run inflight code.
@@ -113,7 +112,7 @@ export abstract class Resource extends Construct implements IResource {
 
       case "object":
         if (Array.isArray(obj)) {
-          obj.forEach((item) => this._registerBindObject(item, host));
+          obj.forEach((item) => Resource._registerBindObject(item, host));
           return;
         }
 
@@ -123,13 +122,13 @@ export abstract class Resource extends Construct implements IResource {
 
         if (obj instanceof Set) {
           return Array.from(obj).forEach((item) =>
-            this._registerBindObject(item, host)
+            Resource._registerBindObject(item, host)
           );
         }
 
         if (obj instanceof Map) {
           Array.from(obj.values()).forEach((item) =>
-            this._registerBindObject(item, host)
+            Resource._registerBindObject(item, host)
           );
           return;
         }
@@ -145,7 +144,7 @@ export abstract class Resource extends Construct implements IResource {
         // structs are just plain objects
         if (obj.constructor.name === "Object") {
           Object.values(obj).forEach((item) =>
-            this._registerBindObject(item, host, ops)
+            Resource._registerBindObject(item, host, ops)
           );
           return;
         }
@@ -164,8 +163,6 @@ export abstract class Resource extends Construct implements IResource {
       `unable to serialize immutable data object of type ${obj.constructor?.name}`
     );
   }
-
-  private readonly bindMap: Map<IInflightHost, Set<string>> = new Map();
 
   /** @internal */
   public abstract _getInflightOps(): string[];
@@ -202,18 +199,8 @@ export abstract class Resource extends Construct implements IResource {
    * @returns `true` if a new bind was added or `false` if there was already a bind
    */
   private _addBind(host: IInflightHost, ops: string[]) {
-    log(
-      `Registering a binding for a resource (${this.node.path}) to a host (${
-        host.node.path
-      }) with ops: ${JSON.stringify(ops)}`
-    );
-
     // Register the binding between this resource and the host
-    if (!this.bindMap.has(host)) {
-      this.bindMap.set(host, new Set());
-    }
-
-    const opsForHost = this.bindMap.get(host)!;
+    const bindings = Bindings.of(this);
 
     // For each operation, check if the host supports it. If it does, register the binding.
     const supportedOps = [...(this._getInflightOps() ?? []), "$inflight_init"];
@@ -224,20 +211,23 @@ export abstract class Resource extends Construct implements IResource {
         );
       }
 
-      if (!opsForHost.has(op)) {
-        // first add the operation to the set of operations for the host so that we can avoid
-        // infinite recursion.
-        opsForHost.add(op);
-
-        this._registerBind(host, [op]);
-
-        // add connection metadata
-        Connections.of(this).add({
-          source: host,
-          target: this,
-          name: op.endsWith("()") ? op : `${op}()`,
-        });
+      if (bindings.has(host, op)) {
+        // this resource is already bound to the host for this operation
+        continue;
       }
+
+      // add the operation to the set of operations for the host so that we can avoid
+      // infinite recursion.
+      bindings.add(host, op);
+
+      this._registerBind(host, [op]);
+
+      // add connection metadata
+      Connections.of(this).add({
+        source: host,
+        target: this,
+        name: op.endsWith("()") ? op : `${op}()`,
+      });
     }
   }
 
@@ -253,8 +243,10 @@ export abstract class Resource extends Construct implements IResource {
     // Perform the live bindings betweeen resources and hosts
     // By aggregating the binding operations, we can avoid performing
     // multiple bindings for the same resource-host pairs.
-    for (const [host, ops] of this.bindMap.entries()) {
-      this.bind(host, Array.from(ops));
+    const bindings = Bindings.of(this);
+    for (const host of bindings.list()) {
+      const ops = bindings.get(host);
+      this.bind(host, ops);
     }
   }
 
@@ -277,23 +269,6 @@ export abstract class Resource extends Construct implements IResource {
   protected _lift(value: any): string {
     return liftObject(this, value);
   }
-}
-
-/**
- * Annotations about what resources an inflight operation may access.
- *
- * The following example says that the operation may call "put" on a resource
- * at "this.inner", or it may call "get" on a resource passed as an argument named
- * "other".
- * @example
- * { "this.inner": { ops: ["put"] }, "other": { ops: ["get"] } }
- *
- * @internal
- */
-export interface OperationAnnotation {
-  [resource: string]: {
-    ops: string[];
-  };
 }
 
 function isResource(obj: any): obj is Resource {

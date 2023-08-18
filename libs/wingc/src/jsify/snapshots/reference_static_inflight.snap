@@ -79,7 +79,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _getInflightOps() {
-        return ["myStaticMethod", "$inflight_init"]
+        return ["myStaticMethod", "$inflight_init"];
       }
     }
     class $Closure1 extends $stdlib.std.Resource {
@@ -106,11 +106,11 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _getInflightOps() {
-        return ["handle", "$inflight_init"]
+        return ["handle", "$inflight_init"];
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(MyType, host, ["myStaticMethod"]);
+          $stdlib.std.Resource._registerBindObject(MyType, host, ["myStaticMethod"]);
         }
         super._registerBind(host, ops);
       }

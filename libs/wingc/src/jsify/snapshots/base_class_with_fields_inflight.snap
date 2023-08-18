@@ -93,7 +93,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _getInflightOps() {
-        return ["f", "$inflight_init"]
+        return ["f", "$inflight_init"];
       }
     }
     class Derived extends Base {
@@ -119,7 +119,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _getInflightOps() {
-        return ["g", "foo", "$inflight_init"]
+        return ["g", "foo", "$inflight_init"];
       }
     }
   }

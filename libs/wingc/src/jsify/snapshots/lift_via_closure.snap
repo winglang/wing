@@ -90,11 +90,11 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _getInflightOps() {
-        return ["handle", "$inflight_init"]
+        return ["handle", "$inflight_init"];
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(bucket, host, ["put"]);
+          $stdlib.std.Resource._registerBindObject(bucket, host, ["put"]);
         }
         super._registerBind(host, ops);
       }
@@ -123,11 +123,11 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _getInflightOps() {
-        return ["handle", "$inflight_init"]
+        return ["handle", "$inflight_init"];
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure2._registerBindObject(fn, host, ["handle"]);
+          $stdlib.std.Resource._registerBindObject(fn, host, ["handle"]);
         }
         super._registerBind(host, ops);
       }

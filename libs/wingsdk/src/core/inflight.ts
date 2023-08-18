@@ -1,23 +1,6 @@
 import { basename } from "path";
 import { normalPath } from "../shared/misc";
 
-export type InflightBindings = Record<string, InflightBinding>;
-
-/**
- * An inflight binding.
- */
-export interface InflightBinding {
-  /**
-   * The resource or capturable value.
-   */
-  readonly obj: any;
-
-  /**
-   * The list of operations used on the resource.
-   */
-  readonly ops?: string[];
-}
-
 /**
  * Utility class with functions about inflight clients.
  */

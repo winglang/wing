@@ -1482,7 +1482,7 @@ impl<'a> JSifier<'a> {
 				let field = lift.code.clone();
 
 				bind_method.line(format!(
-					"{class_name}._registerBindObject({field}, host, [{ops_strings}]);",
+					"{STDLIB}.std.Resource._registerBindObject({field}, host, [{ops_strings}]);",
 				));
 			}
 			bind_method.close("}");

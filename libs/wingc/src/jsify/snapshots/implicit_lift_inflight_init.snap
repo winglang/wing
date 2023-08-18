@@ -87,14 +87,14 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _getInflightOps() {
-        return ["myField2", "incCounter", "dontTouchCounter", "$inflight_init"]
+        return ["myField2", "incCounter", "dontTouchCounter", "$inflight_init"];
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          Foo._registerBindObject(this.c, host, []);
+          $stdlib.std.Resource._registerBindObject(this.c, host, []);
         }
         if (ops.includes("incCounter")) {
-          Foo._registerBindObject(this.c, host, ["inc"]);
+          $stdlib.std.Resource._registerBindObject(this.c, host, ["inc"]);
         }
         super._registerBind(host, ops);
       }

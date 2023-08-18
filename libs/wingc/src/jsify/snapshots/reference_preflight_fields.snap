@@ -88,19 +88,19 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _getInflightOps() {
-        return ["boom", "bam", "$inflight_init"]
+        return ["boom", "bam", "$inflight_init"];
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          MyType._registerBindObject(this.b, host, []);
-          MyType._registerBindObject(this.s.length, host, []);
+          $stdlib.std.Resource._registerBindObject(this.b, host, []);
+          $stdlib.std.Resource._registerBindObject(this.s.length, host, []);
         }
         if (ops.includes("bam")) {
-          MyType._registerBindObject(this.b, host, ["get", "put"]);
+          $stdlib.std.Resource._registerBindObject(this.b, host, ["get", "put"]);
         }
         if (ops.includes("boom")) {
-          MyType._registerBindObject(this.b, host, ["list"]);
-          MyType._registerBindObject(this.s.length, host, []);
+          $stdlib.std.Resource._registerBindObject(this.b, host, ["list"]);
+          $stdlib.std.Resource._registerBindObject(this.s.length, host, []);
         }
         super._registerBind(host, ops);
       }
