@@ -7,8 +7,8 @@
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { execSync } from "node:child_process";
-import { appendFileSync } from "node:fs";
 import { parseArgs } from "node:util";
+import { setOutput } from '@actions/core';
 
 const currentDir = fileURLToPath(import.meta.url);
 const rootDir = join(currentDir, "..", "..");
@@ -112,10 +112,6 @@ console.log(taskData);
 
 if (!!process.env.GITHUB_ACTIONS) {
   // we are running in a github action and we should output some useful stuff
-  const githubOutputFile = process.env.GITHUB_OUTPUT;
-  if (!githubOutputFile) {
-    throw new Error("Missing github action environment variables");
-  }
 
-  appendFileSync(githubOutputFile, `data=${JSON.stringify(taskData)}\n`);
+  setOutput("data", taskData)
 }

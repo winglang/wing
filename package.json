@@ -5,7 +5,9 @@
     "bump-pack": "workspace:^",
     "changelogen": "^0.5.3",
     "semver": "^7.3.8",
-    "turbo": "^1.10.12"
+    "turbo": "^1.10.12",
+    "@actions/core": "^1.10.0",
+    "@actions/github": "^5.1.1"
   },
   "scripts": {
     "build": "turbo compile post-compile lint eslint test package",
