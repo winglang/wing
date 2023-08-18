@@ -11,19 +11,39 @@ let getFiles = (repo:str, sha:str) => {
   return files;
 };
 
+let dns = new cloud2.DNS() as "DNS";
+let flyIo = new ex2.FlyIO() as "FlyIO";
+
 class Dashboard {
   api: cloud.Api;
-  dns: cloud2.DNS;
-  flyIo: ex2.FlyIO;
+  users: ex.Table;
+  previews: ex.Table;
+  website: cloud.Website;
   
   init() {
     this.api = new cloud.Api() as "API";
-    this.dns = new cloud2.DNS() as "DNS";
-    this.flyIo = new ex2.FlyIO() as "FlyIO";
+    this.users = new ex.Table(ex.TableProps{
+      name: "users",
+      primaryKey: "userId",
+      columns: {
+        "userId" => ex.ColumnType.STRING,
+        "ghToken" => ex.ColumnType.STRING,
+      },
+    }) as "Users";
+
+    this.previews = new ex.Table(ex.TableProps{
+      name: "previews",
+      primaryKey: "id",
+      columns: {
+        "id" => ex.ColumnType.STRING,
+        "url" => ex.ColumnType.STRING,
+        "environment" => ex.ColumnType.STRING,
+      },
+    }) as "Previews";
     
     this.api.get("/api/preview-environments", inflight (request: cloud.ApiRequest): cloud.ApiResponse => {
       let response = cloud.ApiResponse {
-        body: Json.stringify(this.flyIo.bucket.list()),
+        body: Json.stringify(this.previews.list()),
         headers: {
           "Access-Control-Allow-Headers" => "Content-Type",
           "Access-Control-Allow-Origin" => "*",
@@ -34,6 +54,14 @@ class Dashboard {
       };
       return response;
     });
+    
+    this.website = new cloud.Website(path: "public") as "wing.cloud.dashboard";
+    this.website.addJson(
+      "config.json",
+      {
+        apiUrl: this.api.url,
+      }
+    );
   }
   
   inflight createPreview(
@@ -43,21 +71,33 @@ class Dashboard {
     branchName: str,
     entryPoint: str,
   ) {
-    let id = "${repoName}-${branchName}-${util.nanoid()}-${entryPoint}";
-    let url = this.flyIo.create(id, cloneUrl, sha, entryPoint);
+    let id = "${entryPoint}-${branchName}-${repoName}";
+    let url = flyIo.create(id, cloneUrl, sha, entryPoint);
     let domain = "${id}.wingcloud.app";
-    this.dns.add(domain, url);
+    dns.add(domain, url);
+    
+    let preview: Json? = this.previews.get(id);
+        
+    if preview? {
+      this.previews.update(id, {
+        url: url,
+        environment: "",
+      });
+    }
+    else {
+      this.previews.insert(id, {
+        url: url,
+        environment: "",
+      });
+    }
+  }
+  
+  inflight listPreviews(): Array<Json> {
+    return this.previews.list();
   }
 }
 
 let dashboard = new Dashboard();
-let website = new cloud.Website(path: "public") as "wing.cloud.dashboard";
-website.addJson(
-  "config.json",
-  {
-    apiUrl: dashboard.api.url,
-  }
-);
 
 let processEventsFn = new cloud.Function(inflight (event:str) => {
   let pr = Json.tryParse(event);
@@ -99,7 +139,7 @@ class Github {
       let event = {
         "head": {
           "sha": "123",
-          "ref": "refs/heads/main",
+          "ref": "feat-new-feature",
           "repo": {
             "name": "wing",
             "clone_url": "https://api.github.com/repos/winglang/wing",

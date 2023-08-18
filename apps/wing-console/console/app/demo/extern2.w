@@ -1,22 +1,32 @@
 
 bring cloud;
+bring ex;
 
 class FlyIO {
-  bucket: cloud.Bucket;
+  instances: ex.Table;
   
   init() {
-    this.bucket = new cloud.Bucket();
+    this.instances = new ex.Table(ex.TableProps{
+      name: "instances",
+      primaryKey: "id",
+      columns: {
+        "id" => ex.ColumnType.STRING,
+        "cloneUrl" => ex.ColumnType.STRING,
+        "sha" => ex.ColumnType.STRING,
+        "entrypoint" => ex.ColumnType.STRING,
+      },
+    }
+    ) as "flyio";
   }
   
   inflight create(id:str, cloneUrl: str, sha: str, entrypoint: str): str {
-    this.bucket.putJson(id, {
-      id: id,
-      cloneUrl: cloneUrl,
-      sha: sha,
-      entrypoint: entrypoint
+    let internalId = this.instances.list().length;
+    this.instances.insert("${internalId}", {
+      "id": id,
+      "cloneUrl": cloneUrl,
+      "sha": sha,
+      "entrypoint": entrypoint,
     });
-    // flyio url 
-    
     return "https://${id}.fly.io";
   }
 }

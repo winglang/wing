@@ -1,15 +1,25 @@
 
-bring cloud;
+bring ex;
 
 class DNS {
-  bucket: cloud.Bucket;
+  relations: ex.Table;
   
   init() {
-    this.bucket = new cloud.Bucket();
+    this.relations = new ex.Table(ex.TableProps{
+      name: "relations",
+      primaryKey: "id",
+      columns: {
+        "origin" => ex.ColumnType.STRING,
+        "destination" => ex.ColumnType.STRING,
+      },
+    }
+      
+    ) as "dns";
   }
   
   inflight add(origin: str, destination: str): void {
-    this.bucket.putJson(origin, {
+    let id = this.relations.list().length;
+    this.relations.insert("${id}", {
       origin: origin,
       destination: destination,
     });
