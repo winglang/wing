@@ -20,7 +20,18 @@ async handle(event) {
 })).handle(event);
 };",
   "connections.json": {
-    "connections": [],
+    "connections": [
+      {
+        "name": "handle()",
+        "source": "root/test:my_test/Handler",
+        "target": "root/Handler",
+      },
+      {
+        "name": "$inflight_init()",
+        "source": "root/test:my_test/Handler",
+        "target": "root/Handler",
+      },
+    ],
     "version": "connections-0.1",
   },
   "simulator.json": {

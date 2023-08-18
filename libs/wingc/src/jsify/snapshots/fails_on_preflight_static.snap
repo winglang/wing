@@ -3,3 +3,4 @@ source: libs/wingc/src/jsify/tests.rs
 ---
 ## Errors
 Cannot call into preflight phase while inflight 6:10
+Expected type to be "IConstruct", but got "inflight (): void" instead 0:0

@@ -100,6 +100,16 @@ console.log(\\"Hello from schedule!\\");
         "target": "root/Handler",
       },
       {
+        "name": "handle()",
+        "source": "root/my_schedule/my_schedule-OnTick-e645076f",
+        "target": "root/my_schedule/my_scheduleOnTickHandlere645076f",
+      },
+      {
+        "name": "$inflight_init()",
+        "source": "root/my_schedule/my_schedule-OnTick-e645076f",
+        "target": "root/my_schedule/my_scheduleOnTickHandlere645076f",
+      },
+      {
         "name": "onTick()",
         "source": "root/my_schedule",
         "target": "root/my_schedule/my_schedule-OnTick-e645076f",
@@ -272,6 +282,16 @@ console.log(\\"Hello from schedule!\\");
         "target": "root/Handler",
       },
       {
+        "name": "handle()",
+        "source": "root/my_schedule/my_schedule-OnTick-e645076f",
+        "target": "root/my_schedule/my_scheduleOnTickHandlere645076f",
+      },
+      {
+        "name": "$inflight_init()",
+        "source": "root/my_schedule/my_schedule-OnTick-e645076f",
+        "target": "root/my_schedule/my_scheduleOnTickHandlere645076f",
+      },
+      {
         "name": "onTick()",
         "source": "root/my_schedule",
         "target": "root/my_schedule/my_schedule-OnTick-e645076f",
@@ -442,6 +462,16 @@ console.log(\\"Hello from schedule!\\");
         "name": "$inflight_init()",
         "source": "root/my_schedule/my_schedule-OnTick-e645076f",
         "target": "root/Handler",
+      },
+      {
+        "name": "handle()",
+        "source": "root/my_schedule/my_schedule-OnTick-e645076f",
+        "target": "root/my_schedule/my_scheduleOnTickHandlere645076f",
+      },
+      {
+        "name": "$inflight_init()",
+        "source": "root/my_schedule/my_schedule-OnTick-e645076f",
+        "target": "root/my_schedule/my_scheduleOnTickHandlere645076f",
       },
       {
         "name": "onTick()",

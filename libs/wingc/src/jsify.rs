@@ -753,8 +753,9 @@ impl<'a> JSifier<'a> {
 		// create _toInflightType function that just requires the generated struct file
 		code.open("static _toInflightType(context) {".to_string());
 		code.line(format!(
-			"return `require(\"{}\")(${{ context._lift(stdStruct) }})`;",
-			struct_filename(&name.name)
+			"return `require(\"{}\")(${{ {}.std.Lifting.lift(context, stdStruct) }})`;",
+			struct_filename(&name.name),
+			STDLIB,
 		));
 		code.close("}");
 		code.close("}");
@@ -1255,7 +1256,7 @@ impl<'a> JSifier<'a> {
 		if let Some(lifts) = &ctx.lifts {
 			for capture in lifts.captures() {
 				let preflight = capture.code.clone();
-				let lift_type = format!("context._lift({})", preflight);
+				let lift_type = format!("{}.std.Lifting.lift(context, {})", STDLIB, preflight);
 				code.line(format!("{}: ${{{}}},", capture.token, lift_type));
 			}
 		}

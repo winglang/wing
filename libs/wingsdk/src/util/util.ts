@@ -1,8 +1,9 @@
 import { createHash } from "crypto";
+import { IConstruct } from "constructs";
 import { nanoid, customAlphabet } from "nanoid";
 import { v4 } from "uuid";
 import { InflightClient } from "../core";
-import { Duration, IResource } from "../std";
+import { Duration } from "../std";
 
 /**
  * Properties for `util.waitUntil`.
@@ -25,7 +26,7 @@ export interface WaitUntilProps {
  * `util.busyWait`.
  * @inflight `@winglang/sdk.util.IPredicateHandlerClient`
  */
-export interface IPredicateHandler extends IResource {}
+export interface IPredicateHandler extends IConstruct {}
 
 /**
  * Inflight client for `IPredicateHandler`.

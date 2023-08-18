@@ -37,6 +37,16 @@ return class Handler {
   "connections.json": {
     "connections": [
       {
+        "name": "handle()",
+        "source": "root/my_api/OnRequestHandler-e645076f",
+        "target": "root/Handler",
+      },
+      {
+        "name": "$inflight_init()",
+        "source": "root/my_api/OnRequestHandler-e645076f",
+        "target": "root/Handler",
+      },
+      {
         "name": "get()",
         "source": "root/my_api",
         "target": "root/my_api/OnRequestHandler-e645076f",
@@ -225,6 +235,16 @@ return class Handler {
 };",
   "connections.json": {
     "connections": [
+      {
+        "name": "handle()",
+        "source": "root/my_api/OnRequestHandler-e645076f",
+        "target": "root/Handler",
+      },
+      {
+        "name": "$inflight_init()",
+        "source": "root/my_api/OnRequestHandler-e645076f",
+        "target": "root/Handler",
+      },
       {
         "name": "get()",
         "source": "root/my_api",
@@ -415,6 +435,16 @@ return class Handler {
   "connections.json": {
     "connections": [
       {
+        "name": "handle()",
+        "source": "root/my_api/OnRequestHandler-e645076f",
+        "target": "root/Handler",
+      },
+      {
+        "name": "$inflight_init()",
+        "source": "root/my_api/OnRequestHandler-e645076f",
+        "target": "root/Handler",
+      },
+      {
         "name": "get()",
         "source": "root/my_api",
         "target": "root/my_api/OnRequestHandler-e645076f",
@@ -604,6 +634,16 @@ return class Handler {
   "connections.json": {
     "connections": [
       {
+        "name": "handle()",
+        "source": "root/my_api/OnRequestHandler-e645076f",
+        "target": "root/Handler",
+      },
+      {
+        "name": "$inflight_init()",
+        "source": "root/my_api/OnRequestHandler-e645076f",
+        "target": "root/Handler",
+      },
+      {
         "name": "get()",
         "source": "root/my_api",
         "target": "root/my_api/OnRequestHandler-e645076f",
@@ -792,6 +832,16 @@ return class Handler {
 };",
   "connections.json": {
     "connections": [
+      {
+        "name": "handle()",
+        "source": "root/my_api/OnRequestHandler-e645076f",
+        "target": "root/Handler",
+      },
+      {
+        "name": "$inflight_init()",
+        "source": "root/my_api/OnRequestHandler-e645076f",
+        "target": "root/Handler",
+      },
       {
         "name": "get()",
         "source": "root/my_api",
@@ -999,6 +1049,16 @@ return class Handler {
 };",
   "connections.json": {
     "connections": [
+      {
+        "name": "handle()",
+        "source": "root/my_api/OnRequestHandler-e645076f",
+        "target": "root/Handler",
+      },
+      {
+        "name": "$inflight_init()",
+        "source": "root/my_api/OnRequestHandler-e645076f",
+        "target": "root/Handler",
+      },
       {
         "name": "get()",
         "source": "root/my_api",
@@ -1285,6 +1345,16 @@ return class Handler {
   "connections.json": {
     "connections": [
       {
+        "name": "handle()",
+        "source": "root/my_api/OnRequestHandler-e645076f",
+        "target": "root/Handler",
+      },
+      {
+        "name": "$inflight_init()",
+        "source": "root/my_api/OnRequestHandler-e645076f",
+        "target": "root/Handler",
+      },
+      {
         "name": "get()",
         "source": "root/my_api",
         "target": "root/my_api/OnRequestHandler-e645076f",
@@ -1511,9 +1581,29 @@ return class Handler {
   "connections.json": {
     "connections": [
       {
+        "name": "handle()",
+        "source": "root/my_api/OnRequestHandler-7c48a9f0",
+        "target": "root/Handler1",
+      },
+      {
+        "name": "$inflight_init()",
+        "source": "root/my_api/OnRequestHandler-7c48a9f0",
+        "target": "root/Handler1",
+      },
+      {
         "name": "get()",
         "source": "root/my_api",
         "target": "root/my_api/OnRequestHandler-7c48a9f0",
+      },
+      {
+        "name": "handle()",
+        "source": "root/my_api/OnRequestHandler-f6d90a7f",
+        "target": "root/Handler2",
+      },
+      {
+        "name": "$inflight_init()",
+        "source": "root/my_api/OnRequestHandler-f6d90a7f",
+        "target": "root/Handler2",
       },
       {
         "name": "post()",
@@ -1801,9 +1891,29 @@ return class Handler {
   "connections.json": {
     "connections": [
       {
+        "name": "handle()",
+        "source": "root/my_api/OnRequestHandler-7c48a9f0",
+        "target": "root/Handler1",
+      },
+      {
+        "name": "$inflight_init()",
+        "source": "root/my_api/OnRequestHandler-7c48a9f0",
+        "target": "root/Handler1",
+      },
+      {
         "name": "get()",
         "source": "root/my_api",
         "target": "root/my_api/OnRequestHandler-7c48a9f0",
+      },
+      {
+        "name": "handle()",
+        "source": "root/my_api/OnRequestHandler-f6d90a7f",
+        "target": "root/Handler2",
+      },
+      {
+        "name": "$inflight_init()",
+        "source": "root/my_api/OnRequestHandler-f6d90a7f",
+        "target": "root/Handler2",
       },
       {
         "name": "get()",
@@ -2072,6 +2182,16 @@ return class Handler {
   "connections.json": {
     "connections": [
       {
+        "name": "handle()",
+        "source": "root/my_api/OnRequestHandler-e645076f",
+        "target": "root/Handler",
+      },
+      {
+        "name": "$inflight_init()",
+        "source": "root/my_api/OnRequestHandler-e645076f",
+        "target": "root/Handler",
+      },
+      {
         "name": "get()",
         "source": "root/my_api",
         "target": "root/my_api/OnRequestHandler-e645076f",
@@ -2260,6 +2380,16 @@ return class Handler {
 };",
   "connections.json": {
     "connections": [
+      {
+        "name": "handle()",
+        "source": "root/my_api/OnRequestHandler-e645076f",
+        "target": "root/Handler",
+      },
+      {
+        "name": "$inflight_init()",
+        "source": "root/my_api/OnRequestHandler-e645076f",
+        "target": "root/Handler",
+      },
       {
         "name": "get()",
         "source": "root/my_api",
@@ -2458,6 +2588,16 @@ return class Handler {
 };",
   "connections.json": {
     "connections": [
+      {
+        "name": "handle()",
+        "source": "root/my_api/OnRequestHandler-e645076f",
+        "target": "root/Handler",
+      },
+      {
+        "name": "$inflight_init()",
+        "source": "root/my_api/OnRequestHandler-e645076f",
+        "target": "root/Handler",
+      },
       {
         "name": "post()",
         "source": "root/my_api",

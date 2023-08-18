@@ -1,6 +1,6 @@
-import { IConstruct } from "constructs";
+import { Construct, IConstruct } from "constructs";
 import { liftObject } from "../core/internal";
-import { Display, IInflightHost, IResource, Resource } from "../std";
+import { Display, IInflightConstruct, IInflightHost, Resource } from "../std";
 
 /**
  * An inflight binding.
@@ -40,7 +40,7 @@ export class Testing {
     id: string,
     code: string,
     bindings: Record<string, InflightBinding> = {}
-  ): IResource {
+  ): IInflightConstruct {
     const clients: Record<string, string> = {};
 
     for (const [k, v] of Object.entries(bindings)) {
@@ -48,7 +48,7 @@ export class Testing {
     }
 
     // implements IFunctionHandler
-    class Handler extends Resource {
+    class Handler extends Construct {
       constructor() {
         super(scope, id);
 
@@ -87,7 +87,7 @@ ${Object.entries(clients)
         for (const v of Object.values(bindings)) {
           Resource._registerBindObject(v.obj, host, v.ops);
         }
-        super._registerBind(host, ops);
+        ops;
       }
     }
 

@@ -1,7 +1,7 @@
 import { IConstruct } from "constructs";
 import { App } from "./app";
 import { Duration } from "../std/duration";
-import { IResource } from "../std/resource";
+import { IInflightConstruct } from "../std/resource";
 
 export function liftObject(scope: IConstruct, obj: any): string {
   // since typeof(null) is "object", we cover all nullity cases (undefined and null) apriori.
@@ -49,8 +49,8 @@ export function liftObject(scope: IConstruct, obj: any): string {
 
       // if the object is a resource (i.e. has a "_toInflight" method"), we use it to serialize
       // itself.
-      if (typeof (obj as IResource)._toInflight === "function") {
-        return (obj as IResource)._toInflight();
+      if (typeof (obj as IInflightConstruct)._toInflight === "function") {
+        return (obj as IInflightConstruct)._toInflight();
       }
 
       // structs are just plain objects

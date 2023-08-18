@@ -32,6 +32,16 @@ async handle(message) {
         "target": "root/OnStartHandler",
       },
       {
+        "name": "handle()",
+        "source": "root/my_service/my_service-ServiceOnStartef2b13b9",
+        "target": "root/my_service/my_service-ServiceOnStart-ef2b13b9",
+      },
+      {
+        "name": "$inflight_init()",
+        "source": "root/my_service/my_service-ServiceOnStartef2b13b9",
+        "target": "root/my_service/my_service-ServiceOnStart-ef2b13b9",
+      },
+      {
         "name": "onStart()",
         "source": "root/my_service",
         "target": "root/my_service/my_service-ServiceOnStartef2b13b9",

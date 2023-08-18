@@ -1,6 +1,6 @@
 import { Construct } from "constructs";
 import { normalPath } from "./misc";
-import { Display, IInflightHost, IResource, Resource } from "../std";
+import { Display, IInflightHost, IInflightConstruct, Resource } from "../std";
 
 /**
  * Convert a resource with a single method into a resource with a different
@@ -13,16 +13,20 @@ import { Display, IInflightHost, IResource, Resource } from "../std";
 export function convertBetweenHandlers(
   scope: Construct,
   id: string,
-  baseHandler: IResource,
+  baseHandler: IInflightConstruct,
   newHandlerClientPath: string,
   newHandlerClientClassName: string,
   args: Record<string, unknown> = {}
-): IResource {
-  class NewHandler extends Resource {
-    private readonly handler: IResource;
+): IInflightConstruct {
+  class NewHandler extends Construct {
+    private readonly handler: IInflightConstruct;
     private readonly args: Record<string, unknown> = {};
 
-    constructor(theScope: Construct, theId: string, handler: IResource) {
+    constructor(
+      theScope: Construct,
+      theId: string,
+      handler: IInflightConstruct
+    ) {
       super(theScope, theId);
       this.handler = handler;
       Display.of(this).hidden = true;
@@ -42,9 +46,8 @@ export function convertBetweenHandlers(
       )} })`;
     }
 
-    public _registerBind(host: IInflightHost, ops: string[]): void {
+    public _registerBind(host: IInflightHost, _ops: string[]): void {
       Resource._registerBindObject(this.handler, host, ["handle"]);
-      super._registerBind(host, ops);
     }
   }
 

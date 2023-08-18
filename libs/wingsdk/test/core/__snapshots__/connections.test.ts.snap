@@ -19,6 +19,16 @@ return class Handler {
   "connections.json": {
     "connections": [
       {
+        "name": "handle()",
+        "source": "root/my_function",
+        "target": "root/Handler",
+      },
+      {
+        "name": "$inflight_init()",
+        "source": "root/my_function",
+        "target": "root/Handler",
+      },
+      {
         "name": "relationship",
         "source": "root/my_bucket",
         "target": "root/my_function",

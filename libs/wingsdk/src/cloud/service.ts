@@ -2,7 +2,7 @@ import { Construct } from "constructs";
 import { FunctionProps } from "./function";
 import { fqnForType } from "../constants";
 import { App } from "../core";
-import { Display, IResource } from "../std";
+import { Display, IInflightConstruct } from "../std";
 
 /**
  * Global identifier for `Service`.
@@ -89,7 +89,7 @@ export interface IServiceClient {
  *
  * @inflight `@winglang/sdk.cloud.IServiceOnEventClient`
  */
-export interface IServiceOnEventHandler extends IResource {}
+export interface IServiceOnEventHandler extends IInflightConstruct {}
 
 /**
  * Inflight client for `IServiceOnEventHandler`.

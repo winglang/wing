@@ -2,4 +2,5 @@
 source: libs/wingc/src/jsify/tests.rs
 ---
 ## Errors
+Expected type to be "IConstruct", but got "inflight (): void" instead 0:0
 Cannot qualify access to a lifted object of type "Bucket" (see https://github.com/winglang/wing/issues/76 for more details) 5:6

@@ -336,7 +336,7 @@ The maximum number of messages to send to subscribers at once.
 
 ### IQueueSetConsumerHandler <a name="IQueueSetConsumerHandler" id="@winglang/sdk.cloud.IQueueSetConsumerHandler"></a>
 
-- *Extends:* <a href="#@winglang/sdk.std.IResource">IResource</a>
+- *Extends:* <a href="#@winglang/sdk.std.IInflightConstruct">IInflightConstruct</a>
 
 - *Implemented By:* <a href="#@winglang/sdk.cloud.IQueueSetConsumerHandler">IQueueSetConsumerHandler</a>
 

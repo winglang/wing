@@ -30,7 +30,18 @@ async handle(event) {
 })).handle(event);
 };",
   "connections.json": {
-    "connections": [],
+    "connections": [
+      {
+        "name": "handle()",
+        "source": "root/my_function",
+        "target": "root/Handler",
+      },
+      {
+        "name": "$inflight_init()",
+        "source": "root/my_function",
+        "target": "root/Handler",
+      },
+    ],
     "version": "connections-0.1",
   },
   "simulator.json": {
@@ -153,7 +164,18 @@ async handle(event) {
 })).handle(event);
 };",
   "connections.json": {
-    "connections": [],
+    "connections": [
+      {
+        "name": "handle()",
+        "source": "root/my_function",
+        "target": "root/Handler",
+      },
+      {
+        "name": "$inflight_init()",
+        "source": "root/my_function",
+        "target": "root/Handler",
+      },
+    ],
     "version": "connections-0.1",
   },
   "simulator.json": {
@@ -274,7 +296,18 @@ async handle(event) {
 })).handle(event);
 };",
   "connections.json": {
-    "connections": [],
+    "connections": [
+      {
+        "name": "handle()",
+        "source": "root/my_function",
+        "target": "root/Handler",
+      },
+      {
+        "name": "$inflight_init()",
+        "source": "root/my_function",
+        "target": "root/Handler",
+      },
+    ],
     "version": "connections-0.1",
   },
   "simulator.json": {
@@ -395,7 +428,18 @@ async handle(event) {
 })).handle(event);
 };",
   "connections.json": {
-    "connections": [],
+    "connections": [
+      {
+        "name": "handle()",
+        "source": "root/my_function",
+        "target": "root/Handler",
+      },
+      {
+        "name": "$inflight_init()",
+        "source": "root/my_function",
+        "target": "root/Handler",
+      },
+    ],
     "version": "connections-0.1",
   },
   "simulator.json": {
@@ -508,7 +552,18 @@ async handle() {
 })).handle(event);
 };",
   "connections.json": {
-    "connections": [],
+    "connections": [
+      {
+        "name": "handle()",
+        "source": "root/my_function",
+        "target": "root/Handler",
+      },
+      {
+        "name": "$inflight_init()",
+        "source": "root/my_function",
+        "target": "root/Handler",
+      },
+    ],
     "version": "connections-0.1",
   },
   "simulator.json": {
@@ -668,7 +723,48 @@ return class Handler {
 })).handle(event);
 };",
   "connections.json": {
-    "connections": [],
+    "connections": [
+      {
+        "name": "handle()",
+        "source": "root/Function.0",
+        "target": "root/Function.0.handler",
+      },
+      {
+        "name": "$inflight_init()",
+        "source": "root/Function.0",
+        "target": "root/Function.0.handler",
+      },
+      {
+        "name": "handle()",
+        "source": "root/Function.1",
+        "target": "root/Function.1.handler",
+      },
+      {
+        "name": "$inflight_init()",
+        "source": "root/Function.1",
+        "target": "root/Function.1.handler",
+      },
+      {
+        "name": "handle()",
+        "source": "root/Function.2",
+        "target": "root/Function.2.handler",
+      },
+      {
+        "name": "$inflight_init()",
+        "source": "root/Function.2",
+        "target": "root/Function.2.handler",
+      },
+      {
+        "name": "handle()",
+        "source": "root/Function.3",
+        "target": "root/Function.3.handler",
+      },
+      {
+        "name": "$inflight_init()",
+        "source": "root/Function.3",
+        "target": "root/Function.3.handler",
+      },
+    ],
     "version": "connections-0.1",
   },
   "simulator.json": {

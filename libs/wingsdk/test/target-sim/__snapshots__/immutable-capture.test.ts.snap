@@ -22,7 +22,18 @@ my_capture: [\\"hello\\",\\"dude\\"]
 })).handle(event);
 };",
   "connections.json": {
-    "connections": [],
+    "connections": [
+      {
+        "name": "handle()",
+        "source": "root/Function",
+        "target": "root/foo",
+      },
+      {
+        "name": "$inflight_init()",
+        "source": "root/Function",
+        "target": "root/foo",
+      },
+    ],
     "version": "connections-0.1",
   },
   "simulator.json": {
@@ -150,6 +161,16 @@ my_buckets: [(function(env) {
         "name": "$inflight_init()",
         "source": "root/Function",
         "target": "root/B2",
+      },
+      {
+        "name": "handle()",
+        "source": "root/Function",
+        "target": "root/foo",
+      },
+      {
+        "name": "$inflight_init()",
+        "source": "root/Function",
+        "target": "root/foo",
       },
     ],
     "version": "connections-0.1",
@@ -301,7 +322,18 @@ my_array: [{\\"seconds\\": 600,\\"minutes\\": 10,\\"hours\\": 0.1666666666666666
 })).handle(event);
 };",
   "connections.json": {
-    "connections": [],
+    "connections": [
+      {
+        "name": "handle()",
+        "source": "root/Function",
+        "target": "root/foo",
+      },
+      {
+        "name": "$inflight_init()",
+        "source": "root/Function",
+        "target": "root/foo",
+      },
+    ],
     "version": "connections-0.1",
   },
   "simulator.json": {
@@ -403,7 +435,18 @@ my_array: [new Map([[\\"foo\\",1],[\\"bar\\",2]]),new Map([[\\"foo\\",3],[\\"bar
 })).handle(event);
 };",
   "connections.json": {
-    "connections": [],
+    "connections": [
+      {
+        "name": "handle()",
+        "source": "root/Function",
+        "target": "root/foo",
+      },
+      {
+        "name": "$inflight_init()",
+        "source": "root/Function",
+        "target": "root/foo",
+      },
+    ],
     "version": "connections-0.1",
   },
   "simulator.json": {
@@ -504,7 +547,18 @@ my_capture: false
 })).handle(event);
 };",
   "connections.json": {
-    "connections": [],
+    "connections": [
+      {
+        "name": "handle()",
+        "source": "root/Function",
+        "target": "root/foo",
+      },
+      {
+        "name": "$inflight_init()",
+        "source": "root/Function",
+        "target": "root/foo",
+      },
+    ],
     "version": "connections-0.1",
   },
   "simulator.json": {
@@ -607,7 +661,18 @@ my_capture: {\\"seconds\\": 7200,\\"minutes\\": 120,\\"hours\\": 2,}
 })).handle(event);
 };",
   "connections.json": {
-    "connections": [],
+    "connections": [
+      {
+        "name": "handle()",
+        "source": "root/Function",
+        "target": "root/foo",
+      },
+      {
+        "name": "$inflight_init()",
+        "source": "root/Function",
+        "target": "root/foo",
+      },
+    ],
     "version": "connections-0.1",
   },
   "simulator.json": {
@@ -712,7 +777,18 @@ my_capture: new Map([[\\"foo\\",123],[\\"bar\\",456]])
 })).handle(event);
 };",
   "connections.json": {
-    "connections": [],
+    "connections": [
+      {
+        "name": "handle()",
+        "source": "root/Function",
+        "target": "root/foo",
+      },
+      {
+        "name": "$inflight_init()",
+        "source": "root/Function",
+        "target": "root/foo",
+      },
+    ],
     "version": "connections-0.1",
   },
   "simulator.json": {
@@ -819,7 +895,18 @@ my_map: new Map([[\\"foo\\",[1,2]],[\\"bar\\",[3,4]]])
 })).handle(event);
 };",
   "connections.json": {
-    "connections": [],
+    "connections": [
+      {
+        "name": "handle()",
+        "source": "root/Function",
+        "target": "root/foo",
+      },
+      {
+        "name": "$inflight_init()",
+        "source": "root/Function",
+        "target": "root/foo",
+      },
+    ],
     "version": "connections-0.1",
   },
   "simulator.json": {
@@ -923,7 +1010,18 @@ my_map: new Map([[\\"foo\\",[{\\"seconds\\": 600,\\"minutes\\": 10,\\"hours\\": 
 })).handle(event);
 };",
   "connections.json": {
-    "connections": [],
+    "connections": [
+      {
+        "name": "handle()",
+        "source": "root/Function",
+        "target": "root/foo",
+      },
+      {
+        "name": "$inflight_init()",
+        "source": "root/Function",
+        "target": "root/foo",
+      },
+    ],
     "version": "connections-0.1",
   },
   "simulator.json": {
@@ -1048,6 +1146,16 @@ my_map: new Map([[\\"foo\\",(function(env) {
         "name": "$inflight_init()",
         "source": "root/Function",
         "target": "root/B2",
+      },
+      {
+        "name": "handle()",
+        "source": "root/Function",
+        "target": "root/foo",
+      },
+      {
+        "name": "$inflight_init()",
+        "source": "root/Function",
+        "target": "root/foo",
       },
     ],
     "version": "connections-0.1",
@@ -1197,7 +1305,18 @@ my_capture: 123
 })).handle(event);
 };",
   "connections.json": {
-    "connections": [],
+    "connections": [
+      {
+        "name": "handle()",
+        "source": "root/Function",
+        "target": "root/foo",
+      },
+      {
+        "name": "$inflight_init()",
+        "source": "root/Function",
+        "target": "root/foo",
+      },
+    ],
     "version": "connections-0.1",
   },
   "simulator.json": {
@@ -1301,7 +1420,18 @@ my_capture: new Set([\\"boom\\",\\"bam\\",\\"bang\\"])
 })).handle(event);
 };",
   "connections.json": {
-    "connections": [],
+    "connections": [
+      {
+        "name": "handle()",
+        "source": "root/Function",
+        "target": "root/foo",
+      },
+      {
+        "name": "$inflight_init()",
+        "source": "root/Function",
+        "target": "root/foo",
+      },
+    ],
     "version": "connections-0.1",
   },
   "simulator.json": {
@@ -1404,7 +1534,18 @@ my_set: new Set([{\\"seconds\\": 600,\\"minutes\\": 10,\\"hours\\": 0.1666666666
 })).handle(event);
 };",
   "connections.json": {
-    "connections": [],
+    "connections": [
+      {
+        "name": "handle()",
+        "source": "root/Function",
+        "target": "root/foo",
+      },
+      {
+        "name": "$inflight_init()",
+        "source": "root/Function",
+        "target": "root/foo",
+      },
+    ],
     "version": "connections-0.1",
   },
   "simulator.json": {
@@ -1506,7 +1647,18 @@ my_capture: \\"bam bam bam\\"
 })).handle(event);
 };",
   "connections.json": {
-    "connections": [],
+    "connections": [
+      {
+        "name": "handle()",
+        "source": "root/Function",
+        "target": "root/foo",
+      },
+      {
+        "name": "$inflight_init()",
+        "source": "root/Function",
+        "target": "root/foo",
+      },
+    ],
     "version": "connections-0.1",
   },
   "simulator.json": {
@@ -1610,7 +1762,18 @@ my_capture: {\\"hello\\": \\"dude\\",\\"world\\": \\"cup\\",\\"foo\\": \\"bar\\"
 })).handle(event);
 };",
   "connections.json": {
-    "connections": [],
+    "connections": [
+      {
+        "name": "handle()",
+        "source": "root/Function",
+        "target": "root/foo",
+      },
+      {
+        "name": "$inflight_init()",
+        "source": "root/Function",
+        "target": "root/foo",
+      },
+    ],
     "version": "connections-0.1",
   },
   "simulator.json": {
@@ -1714,7 +1877,18 @@ my_struct: {\\"foo\\": new Map([[\\"foo\\",1],[\\"bar\\",2]]),\\"bar\\": new Map
 })).handle(event);
 };",
   "connections.json": {
-    "connections": [],
+    "connections": [
+      {
+        "name": "handle()",
+        "source": "root/Function",
+        "target": "root/foo",
+      },
+      {
+        "name": "$inflight_init()",
+        "source": "root/Function",
+        "target": "root/foo",
+      },
+    ],
     "version": "connections-0.1",
   },
   "simulator.json": {
@@ -1877,6 +2051,16 @@ my_struct: {\\"bucky\\": (function(env) {
         "name": "$inflight_init()",
         "source": "root/Function",
         "target": "root/B5",
+      },
+      {
+        "name": "handle()",
+        "source": "root/Function",
+        "target": "root/foo",
+      },
+      {
+        "name": "$inflight_init()",
+        "source": "root/Function",
+        "target": "root/foo",
       },
     ],
     "version": "connections-0.1",

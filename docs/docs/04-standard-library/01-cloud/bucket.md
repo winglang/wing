@@ -667,7 +667,7 @@ Whether the bucket's objects should be publicly accessible.
 
 ### IBucketEventHandler <a name="IBucketEventHandler" id="@winglang/sdk.cloud.IBucketEventHandler"></a>
 
-- *Extends:* <a href="#@winglang/sdk.std.IResource">IResource</a>
+- *Extends:* <a href="#@winglang/sdk.std.IInflightConstruct">IInflightConstruct</a>
 
 - *Implemented By:* <a href="#@winglang/sdk.cloud.IBucketEventHandler">IBucketEventHandler</a>
 

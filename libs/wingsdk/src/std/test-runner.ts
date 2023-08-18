@@ -1,6 +1,5 @@
 import { Construct } from "constructs";
 import { Display } from "./display";
-import { Resource } from "./resource";
 import { Test } from "./test";
 import { fqnForType } from "../constants";
 import { App } from "../core";
@@ -22,7 +21,7 @@ export interface TestRunnerProps {}
  * @inflight `@winglang/sdk.std.ITestRunnerClient`
  * @skipDocs
  */
-export abstract class TestRunner extends Resource {
+export abstract class TestRunner extends Construct {
   /**
    * Create a new test engine.
    * @internal

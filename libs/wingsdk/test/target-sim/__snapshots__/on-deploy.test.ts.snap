@@ -17,7 +17,18 @@ return class Handler {
 })).handle(event);
 };",
   "connections.json": {
-    "connections": [],
+    "connections": [
+      {
+        "name": "handle()",
+        "source": "root/my_on_deploy/Function",
+        "target": "root/Handler",
+      },
+      {
+        "name": "$inflight_init()",
+        "source": "root/my_on_deploy/Function",
+        "target": "root/Handler",
+      },
+    ],
     "version": "connections-0.1",
   },
   "simulator.json": {

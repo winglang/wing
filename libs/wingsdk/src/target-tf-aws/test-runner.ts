@@ -48,8 +48,7 @@ export class TestRunner extends std.TestRunner {
       this.envTestFunctionArns(),
       JSON.stringify([...testFunctions.entries()])
     );
-
-    super.bind(host, ops);
+    ops;
   }
 
   /** @internal */

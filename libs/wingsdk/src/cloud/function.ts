@@ -4,7 +4,13 @@ import { Construct } from "constructs";
 import { fqnForType } from "../constants";
 import { App } from "../core";
 import { CaseConventions, ResourceNames } from "../shared/resource-names";
-import { Display, Duration, IInflightHost, IResource } from "../std";
+import {
+  Display,
+  Duration,
+  IInflightConstruct,
+  IInflightHost,
+  Resource,
+} from "../std";
 
 /**
  * Global identifier for `Function`.
@@ -77,7 +83,7 @@ export abstract class Function extends Construct implements IInflightHost {
 
     // indicates that we are calling the inflight constructor and the
     // inflight "handle" method on the handler resource.
-    handler._registerBind(this, ["handle", "$inflight_init"]);
+    Resource._registerBindObject(handler, this, ["handle", "$inflight_init"]);
 
     const inflightClient = handler._toInflight();
     const lines = new Array<string>();
@@ -147,7 +153,7 @@ export interface IFunctionClient {
  *
  * @inflight `@winglang/sdk.cloud.IFunctionHandlerClient`
  */
-export interface IFunctionHandler extends IResource {}
+export interface IFunctionHandler extends IInflightConstruct {}
 
 /**
  * Inflight client for `IFunctionHandler`.

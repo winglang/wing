@@ -66,6 +66,16 @@ bucket: (function(env) {
         "target": "root/HelloWorld/Processor",
       },
       {
+        "name": "handle()",
+        "source": "root/HelloWorld/Queue/Queue-SetConsumer-401ee792",
+        "target": "root/HelloWorld/Queue/Queue-SetConsumerHandler-401ee792",
+      },
+      {
+        "name": "$inflight_init()",
+        "source": "root/HelloWorld/Queue/Queue-SetConsumer-401ee792",
+        "target": "root/HelloWorld/Queue/Queue-SetConsumerHandler-401ee792",
+      },
+      {
         "name": "setConsumer()",
         "source": "root/HelloWorld/Queue",
         "target": "root/HelloWorld/Queue/Queue-SetConsumer-401ee792",

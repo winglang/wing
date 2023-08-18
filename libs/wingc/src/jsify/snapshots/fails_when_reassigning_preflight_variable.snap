@@ -3,3 +3,4 @@ source: libs/wingc/src/jsify/tests.rs
 ---
 ## Errors
 Variable cannot be reassigned from inflight 3:6
+Expected type to be "IConstruct", but got "inflight (): void" instead 0:0

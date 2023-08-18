@@ -2345,4 +2345,34 @@ Year.
 
 ---
 
+## Protocols <a name="Protocols" id="Protocols"></a>
+
+### IInflightConstruct <a name="IInflightConstruct" id="@winglang/sdk.std.IInflightConstruct"></a>
+
+- *Extends:* constructs.IConstruct
+
+- *Implemented By:* <a href="#@winglang/sdk.cloud.IApiEndpointHandler">IApiEndpointHandler</a>, <a href="#@winglang/sdk.cloud.IBucketEventHandler">IBucketEventHandler</a>, <a href="#@winglang/sdk.cloud.IFunctionHandler">IFunctionHandler</a>, <a href="#@winglang/sdk.cloud.IOnDeployHandler">IOnDeployHandler</a>, <a href="#@winglang/sdk.cloud.IQueueSetConsumerHandler">IQueueSetConsumerHandler</a>, <a href="#@winglang/sdk.cloud.IScheduleOnTickHandler">IScheduleOnTickHandler</a>, <a href="#@winglang/sdk.cloud.IServiceOnEventHandler">IServiceOnEventHandler</a>, <a href="#@winglang/sdk.cloud.ITopicOnMessageHandler">ITopicOnMessageHandler</a>, <a href="#@winglang/sdk.std.IInflightConstruct">IInflightConstruct</a>
+
+A resource with inflight operations.
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.std.IInflightConstruct.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+
+---
+
+##### `node`<sup>Required</sup> <a name="node" id="@winglang/sdk.std.IInflightConstruct.property.node"></a>
+
+```wing
+node: Node;
+```
+
+- *Type:* constructs.Node
+
+The tree node.
+
+---
 

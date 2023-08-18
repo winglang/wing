@@ -49,5 +49,7 @@ function makeTest(module: any, moduleName: string, className: string) {
   });
 }
 
+// TODO: check for toInflight and bind methods
+
 Object.keys(std).forEach((className) => makeTest(std, "std", className));
 Object.keys(util).forEach((className) => makeTest(util, "util", className));

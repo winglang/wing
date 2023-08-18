@@ -283,7 +283,7 @@ let TopicProps = cloud.TopicProps{ ... };
 
 ### ITopicOnMessageHandler <a name="ITopicOnMessageHandler" id="@winglang/sdk.cloud.ITopicOnMessageHandler"></a>
 
-- *Extends:* <a href="#@winglang/sdk.std.IResource">IResource</a>
+- *Extends:* <a href="#@winglang/sdk.std.IInflightConstruct">IInflightConstruct</a>
 
 - *Implemented By:* <a href="#@winglang/sdk.cloud.ITopicOnMessageHandler">ITopicOnMessageHandler</a>
 

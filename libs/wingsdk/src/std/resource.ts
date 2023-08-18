@@ -1,7 +1,6 @@
 import { Construct, IConstruct } from "constructs";
 import { Duration } from "./duration";
 import { App, Bindings, Connections } from "../core";
-import { liftObject } from "../core/internal";
 
 /**
  * A resource that can run inflight code.
@@ -10,27 +9,9 @@ import { liftObject } from "../core/internal";
 export interface IInflightHost extends IConstruct {}
 
 /**
- * Abstract interface for `Resource`.
- * @skipDocs
+ * A resource with inflight operations.
  */
-export interface IResource extends IConstruct {
-  /**
-   * Binds the resource to the host so that it can be used by inflight code.
-   *
-   * If `ops` contains any operations not supported by the resource, it should throw an
-   * error.
-   */
-  bind(host: IInflightHost, ops: string[]): void;
-
-  /**
-   * Register that the resource needs to be bound to the host for the given
-   * operations. This means that the resource's `bind` method will be called
-   * during pre-synthesis.
-   *
-   * @internal
-   */
-  _registerBind(host: IInflightHost, ops: string[]): void;
-
+export interface IInflightConstruct extends IConstruct {
   /**
    * Return a code snippet that can be used to reference this resource inflight.
    *
@@ -40,41 +21,82 @@ export interface IResource extends IConstruct {
    * @internal
    */
   _toInflight(): string;
-
-  /**
-   * Return a list of all inflight operations that are supported by this resource.
-   *
-   * If this method doesn't exist, the resource is assumed to not support any inflight operations.
-   *
-   * @internal
-   */
-  _getInflightOps(): string[];
 }
+
+// interface IInflightConstruct extends IConstruct {
+//   bind: ((host: IInflightHost, ops: string[]) => void) | undefined;
+//   _registerBind: ((host: IInflightHost, ops: string[]) => void) | undefined;
+//   _getInflightOps: (() => string[]) | undefined;
+//   _toInflight(): (() => string) | undefined;
+// }
+
+// /**
+//  * Abstract interface for `Resource`.
+//  * @skipDocs
+//  */
+// export interface IInflightConstruct extends IConstruct {
+//   /**
+//    * Binds the resource to the host so that it can be used by inflight code.
+//    *
+//    * If `ops` contains any operations not supported by the resource, it should throw an
+//    * error.
+//    */
+//   bind(host: IInflightHost, ops: string[]): void;
+
+//   /**
+//    * Register that the resource needs to be bound to the host for the given
+//    * operations. This means that the resource's `bind` method will be called
+//    * during pre-synthesis.
+//    *
+//    * @internal
+//    */
+//   _registerBind(host: IInflightHost, ops: string[]): void;
+
+//   /**
+//    * Return a code snippet that can be used to reference this resource inflight.
+//    *
+//    * Note this code snippet may by async code, so it's unsafe to run it in a
+//    * constructor or other sync context.
+//    *
+//    * @internal
+//    */
+//   _toInflight(): string;
+
+//   /**
+//    * Return a list of all inflight operations that are supported by this resource.
+//    *
+//    * If this method doesn't exist, the resource is assumed to not support any inflight operations.
+//    *
+//    * @internal
+//    */
+//   _getInflightOps(): string[];
+// }
 
 /**
  * Shared behavior between all Wing SDK resources.
  * @skipDocs
  */
-export abstract class Resource extends Construct implements IResource {
-  /**
-   * Register that the resource type needs to be bound to the host for the given
-   * operations. A type being bound to a host means that that type's static members
-   * will be bound to the host.
-   *
-   * @internal
-   */
-  public static _registerTypeBind(host: IInflightHost, ops: string[]): void {
-    // Do nothing by default
-    host;
-    ops;
-  }
+export class Resource {
+  // /**
+  //  * Register that the resource type needs to be bound to the host for the given
+  //  * operations. A type being bound to a host means that that type's static members
+  //  * will be bound to the host.
+  //  *
+  //  * @internal
+  //  */
+  // public static _registerTypeBind(host: IInflightHost, ops: string[]): void {
+  //   // Do nothing by default
+  //   host;
+  //   ops;
+  // }
 
   /**
-   * Register a binding between an object (either data or resource) and a host.
+   * Register a binding between an object (either data or class or instance) and a host.
    *
    * - Primitives and Duration objects are ignored.
    * - Arrays, sets and maps and structs (Objects) are recursively bound.
-   * - Resources are bound to the host by calling their bind() method.
+   * - Class instances are bound to the host by calling their bind() method.
+   * - (TODO) Classes are bound to their host by calling their bindType() method.
    *
    * @param obj The object to bind.
    * @param host The host to bind to
@@ -83,7 +105,7 @@ export abstract class Resource extends Construct implements IResource {
    *
    * @internal
    */
-  protected static _registerBindObject(
+  public static _registerBindObject(
     obj: any,
     host: IInflightHost,
     ops: string[] = []
@@ -134,7 +156,7 @@ export abstract class Resource extends Construct implements IResource {
 
           // For each operation, check if the host supports it. If it does, register the binding.
           const supportedOps = [
-            ...((obj as IResource)._getInflightOps?.() ?? []),
+            ...((obj as any)._getInflightOps?.() ?? []),
             "$inflight_init",
           ];
 
@@ -154,8 +176,8 @@ export abstract class Resource extends Construct implements IResource {
             // infinite recursion.
             bindings.add(host, op);
 
-            if (typeof (obj as IResource)._registerBind === "function") {
-              (obj as IResource)._registerBind(host, [op]);
+            if (typeof (obj as any)._registerBind === "function") {
+              (obj as any)._registerBind?.(host, [op]);
             }
 
             // add connection metadata
@@ -179,7 +201,7 @@ export abstract class Resource extends Construct implements IResource {
 
       case "function":
         // If the object is actually a resource type, call the type's _registerTypeBind static method
-        if (isResourceType(obj)) {
+        if (typeof (obj as any)._registerTypeBind === "function") {
           obj._registerTypeBind(host, ops);
           return;
         }
@@ -191,69 +213,28 @@ export abstract class Resource extends Construct implements IResource {
     );
   }
 
-  /** @internal */
-  public abstract _getInflightOps(): string[];
+  // /**
+  //  * Binds the resource to the host so that it can be used by inflight code.
+  //  *
+  //  * You can override this method to perform additional logic like granting
+  //  * IAM permissions to the host based on what methods are being called. But
+  //  * you must call `super.bind(host, ops)` to ensure that the resource is
+  //  * actually bound.
+  //  */
+  // public bind(host: IInflightHost, ops: string[]): void {
+  //   // Do nothing by default
+  //   host;
+  //   ops;
+  // }
 
-  /**
-   * Binds the resource to the host so that it can be used by inflight code.
-   *
-   * You can override this method to perform additional logic like granting
-   * IAM permissions to the host based on what methods are being called. But
-   * you must call `super.bind(host, ops)` to ensure that the resource is
-   * actually bound.
-   */
-  public bind(host: IInflightHost, ops: string[]): void {
-    // Do nothing by default
-    host;
-    ops;
-  }
-
-  /**
-   * Register that the resource needs to be bound to the host for the given
-   * operations. This means that the resource's `bind` method will be called
-   * during pre-synthesis.
-   *
-   * @internal
-   */
-  public _registerBind(_host: IInflightHost, _ops: string[]) {
-    return;
-  }
-
-  /**
-   * Return a code snippet that can be used to reference this resource inflight.
-   *
-   * @internal
-   */
-  public abstract _toInflight(): string;
-
-  /**
-   * "Lifts" a value into an inflight context. If the value is a resource (i.e. has a `_toInflight`
-   * method), this method will be called and the result will be returned. Otherwise, the value is
-   * returned as-is.
-   *
-   * @param value The value to lift.
-   * @returns a string representation of the value in an inflight context.
-   * @internal
-   */
-  protected _lift(value: any): string {
-    return liftObject(this, value);
-  }
-}
-
-// function isResource(obj: any): obj is Resource {
-//   return isIResourceType(obj.constructor);
-// }
-
-function isIResourceType(t: any): t is new (...args: any[]) => IResource {
-  return (
-    t instanceof Function &&
-    "prototype" in t &&
-    typeof t.prototype.bind === "function" &&
-    typeof t.prototype._registerBind === "function" &&
-    typeof t.prototype._getInflightOps === "function"
-  );
-}
-
-function isResourceType(t: any): t is typeof Resource {
-  return typeof t._registerTypeBind === "function" && isIResourceType(t);
+  // /**
+  //  * Register that the resource needs to be bound to the host for the given
+  //  * operations. This means that the resource's `bind` method will be called
+  //  * during pre-synthesis.
+  //  *
+  //  * @internal
+  //  */
+  // public _registerBind(_host: IInflightHost, _ops: string[]) {
+  //   return;
+  // }
 }

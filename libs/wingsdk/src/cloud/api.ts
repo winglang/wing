@@ -1,7 +1,7 @@
 import { Construct } from "constructs";
 import { fqnForType } from "../constants";
 import { App } from "../core";
-import { Display, IResource } from "../std";
+import { Display, IInflightConstruct } from "../std";
 
 /**
  * Global identifier for `Api`.
@@ -345,7 +345,7 @@ export interface ApiResponse {
  *
  * @inflight `@winglang/sdk.cloud.IApiEndpointHandlerClient`
  */
-export interface IApiEndpointHandler extends IResource {}
+export interface IApiEndpointHandler extends IInflightConstruct {}
 
 /**
  * Inflight client for `IApiEndpointHandler`.

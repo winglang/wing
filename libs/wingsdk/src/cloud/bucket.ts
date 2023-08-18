@@ -3,7 +3,7 @@ import { Topic } from "./topic";
 import { fqnForType } from "../constants";
 import { App, Connections } from "../core";
 import { convertBetweenHandlers } from "../shared/convert";
-import { Json, IResource, Display } from "../std";
+import { Json, Display, IInflightConstruct } from "../std";
 
 /**
  * Global identifier for `Bucket`.
@@ -128,7 +128,7 @@ export abstract class Bucket extends Construct {
   private createInflightHandler(
     eventType: BucketEventType,
     inflight: IBucketEventHandler
-  ): IResource {
+  ): IInflightConstruct {
     const hash = inflight.node.addr.slice(-8);
     return convertBetweenHandlers(
       this,
@@ -344,7 +344,7 @@ export interface BucketOnEventProps {}
  *
  * @inflight  `@winglang/sdk.cloud.IBucketEventHandlerClient`
  */
-export interface IBucketEventHandler extends IResource {}
+export interface IBucketEventHandler extends IInflightConstruct {}
 
 /**
  * A resource with an inflight "handle" method that can be passed to

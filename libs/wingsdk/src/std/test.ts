@@ -1,6 +1,6 @@
-import { Construct } from "constructs";
+import { Construct, IConstruct } from "constructs";
 import { Display } from "./display";
-import { IInflightHost, IResource, Resource } from "./resource";
+import { IInflightHost } from "./resource";
 import { Function, FUNCTION_FQN, FunctionProps } from "../cloud/function";
 import { fqnForType } from "../constants";
 import { App } from "../core";
@@ -24,7 +24,7 @@ export interface TestProps extends FunctionProps {}
  * @inflight `@winglang/sdk.cloud.ITestClient`
  * @skipDocs
  */
-export class Test extends Resource implements IInflightHost {
+export class Test extends Construct implements IInflightHost {
   /**
    * Creates a new std.Test instance through the app.
    * @internal
@@ -79,7 +79,7 @@ export class Test extends Resource implements IInflightHost {
  * @inflight `@winglang/sdk.std.ITestHandlerClient`
  * @skipDocs
  */
-export interface ITestHandler extends IResource {}
+export interface ITestHandler extends IConstruct {}
 
 /**
  * Inflight client for `ITestHandler`.

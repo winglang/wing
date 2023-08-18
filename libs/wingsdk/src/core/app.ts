@@ -254,17 +254,18 @@ export function bindAllConstructsToInflightHosts(app: App): void {
     const bindings = Bindings.of(c);
     for (const host of bindings.list()) {
       const ops = bindings.get(host);
-      if (!isBindable(c)) {
-        throw new Error(
-          `Resource ${c.node.path} does not support binding (requested by ${host.node.path})`
-        );
+      if (hasBindMethod(c)) {
+        c.bind(host, ops);
       }
-      c.bind(host, ops);
     }
   }
 }
 
-function isBindable(t: any): t is IBind {
+/**
+ * Check if the construct has a `bind` method. If it doesn't, it just means
+ * there's no permissions or environment variables that need to be added to the host.
+ */
+function hasBindMethod(t: any): t is IBind {
   return typeof t.bind === "function";
 }
 

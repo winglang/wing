@@ -9,7 +9,7 @@ import {
 import { simulatorHandleToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import { fqnForType } from "../constants";
-import { Display, IInflightHost, Resource } from "../std";
+import { Display, IInflightHost } from "../std";
 import {
   BaseResourceSchema,
   ISimulatorResourceInstance,
@@ -43,7 +43,7 @@ export interface EventMappingProps {
  *
  * @inflight `@winglang/sdk.sim.EventMapping`
  */
-export class EventMapping extends Resource implements ISimulatorResource {
+export class EventMapping extends Construct implements ISimulatorResource {
   private readonly _eventProps: EventMappingProps;
 
   constructor(scope: Construct, id: string, props: EventMappingProps) {
@@ -81,7 +81,7 @@ export class EventMapping extends Resource implements ISimulatorResource {
 
   public bind(host: IInflightHost, ops: string[]): void {
     bindSimulatorResource(__filename, this, host);
-    super.bind(host, ops);
+    ops;
   }
 
   public _toInflight(): string {

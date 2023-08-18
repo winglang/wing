@@ -342,7 +342,7 @@ Function that will be called for service events.
 
 ### IServiceOnEventHandler <a name="IServiceOnEventHandler" id="@winglang/sdk.cloud.IServiceOnEventHandler"></a>
 
-- *Extends:* <a href="#@winglang/sdk.std.IResource">IResource</a>
+- *Extends:* <a href="#@winglang/sdk.std.IInflightConstruct">IInflightConstruct</a>
 
 - *Implemented By:* <a href="#@winglang/sdk.cloud.IServiceOnEventHandler">IServiceOnEventHandler</a>
 
