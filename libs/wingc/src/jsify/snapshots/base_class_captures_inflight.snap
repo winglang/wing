@@ -65,14 +65,13 @@ class $Root extends $stdlib.std.Resource {
     class Base extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("bar", "$inflight_init");
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           require("./inflight.Base-1.js")({
             $x: ${context._lift(x)},
           })
-        `);
+        `;
       }
       _toInflight() {
         return `
@@ -85,6 +84,9 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
+      _getInflightOps() {
+        return ["bar", "$inflight_init"]
+      }
       _registerBind(host, ops) {
         if (ops.includes("bar")) {
           Base._registerBindObject(x, host, []);
@@ -95,14 +97,13 @@ class $Root extends $stdlib.std.Resource {
     class Derived extends Base {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("foo", "$inflight_init");
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           require("./inflight.Derived-1.js")({
             $Base: ${context._lift(Base)},
           })
-        `);
+        `;
       }
       _toInflight() {
         return `
@@ -114,6 +115,9 @@ class $Root extends $stdlib.std.Resource {
             return client;
           })())
         `;
+      }
+      _getInflightOps() {
+        return ["foo", "$inflight_init"]
       }
       _registerBind(host, ops) {
         if (ops.includes("foo")) {

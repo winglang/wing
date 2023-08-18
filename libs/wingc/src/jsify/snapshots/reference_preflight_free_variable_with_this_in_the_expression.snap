@@ -52,15 +52,14 @@ class $Root extends $stdlib.std.Resource {
     class Foo extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("method", "$inflight_init");
         this.name = "my_object";
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           require("./inflight.Foo-1.js")({
             $b: ${context._lift(b)},
           })
-        `);
+        `;
       }
       _toInflight() {
         return `
@@ -73,6 +72,9 @@ class $Root extends $stdlib.std.Resource {
             return client;
           })())
         `;
+      }
+      _getInflightOps() {
+        return ["method", "$inflight_init"]
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {

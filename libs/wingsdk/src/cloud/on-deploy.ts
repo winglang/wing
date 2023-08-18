@@ -59,6 +59,11 @@ export abstract class OnDeploy extends Resource {
     handler;
     props;
   }
+
+  /** @internal */
+  public _getInflightOps(): string[] {
+    return [];
+  }
 }
 
 /**

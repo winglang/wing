@@ -46,6 +46,14 @@ export abstract class TestRunner extends Resource {
     props;
   }
 
+  /** @internal */
+  public _getInflightOps(): string[] {
+    return [
+      TestRunnerInflightMethods.LIST_TESTS,
+      TestRunnerInflightMethods.RUN_TEST,
+    ];
+  }
+
   /**
    * Find all tests in the construct tree.
    * @returns A list of tests.

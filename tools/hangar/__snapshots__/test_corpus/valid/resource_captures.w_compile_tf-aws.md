@@ -432,7 +432,6 @@ class $Root extends $stdlib.std.Resource {
     class First extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("$inflight_init");
         this.myResource = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
       }
       static _toInflightType(context) {
@@ -452,11 +451,13 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
+      _getInflightOps() {
+        return ["$inflight_init"]
+      }
     }
     class Another extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("meaningOfLife", "anotherFunc", "$inflight_init");
         this.myField = "hello!";
         this.first = new First(this,"First");
       }
@@ -477,11 +478,13 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
+      _getInflightOps() {
+        return ["meaningOfLife", "anotherFunc", "$inflight_init"]
+      }
     }
     class MyResource extends $stdlib.std.Resource {
       constructor(scope, id, externalBucket, externalNum) {
         super(scope, id);
-        this._addInflightOps("testNoCapture", "testCaptureCollectionsOfData", "testCapturePrimitives", "testCaptureOptional", "testCaptureResource", "testNestedInflightField", "testNestedResource", "testExpressionRecursive", "testExternal", "testUserDefinedResource", "testInflightField", "$inflight_init", "inflightField");
         this.myResource = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
         this.myStr = "myString";
         this.myNum = 42;
@@ -534,6 +537,9 @@ class $Root extends $stdlib.std.Resource {
             return client;
           })())
         `;
+      }
+      _getInflightOps() {
+        return ["inflightField", "testNoCapture", "testCaptureCollectionsOfData", "testCapturePrimitives", "testCaptureOptional", "testCaptureResource", "testNestedInflightField", "testNestedResource", "testExpressionRecursive", "testExternal", "testUserDefinedResource", "testInflightField", "$inflight_init"]
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
@@ -602,7 +608,6 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle", "$inflight_init");
         (std.Display.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -622,6 +627,9 @@ class $Root extends $stdlib.std.Resource {
             return client;
           })())
         `;
+      }
+      _getInflightOps() {
+        return ["handle", "$inflight_init"]
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {

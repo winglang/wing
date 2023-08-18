@@ -75,7 +75,6 @@ class $Root extends $stdlib.std.Resource {
     class Foo extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("$inflight_init");
         this.node.root.new("cdktf.S3Backend",cdktf.S3Backend,this,({"bucket": "foo","key": "bar"}));
       }
       static _toInflightType(context) {
@@ -94,6 +93,9 @@ class $Root extends $stdlib.std.Resource {
             return client;
           })())
         `;
+      }
+      _getInflightOps() {
+        return ["$inflight_init"]
       }
     }
     this.node.root.new("@cdktf/provider-aws.s3Bucket.S3Bucket",aws.s3Bucket.S3Bucket,this,"Bucket",{ bucketPrefix: "hello", versioning: ({"enabled": true,"mfaDelete": true}) });

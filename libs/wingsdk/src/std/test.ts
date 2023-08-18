@@ -62,6 +62,11 @@ export class Test extends Resource implements IInflightHost {
   }
 
   /** @internal */
+  public _getInflightOps(): string[] {
+    return [];
+  }
+
+  /** @internal */
   public _toInflight(): string {
     throw new Error("unimplemented");
   }

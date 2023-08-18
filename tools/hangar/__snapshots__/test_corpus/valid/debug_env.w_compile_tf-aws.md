@@ -57,7 +57,6 @@ class $Root extends $stdlib.std.Resource {
     class A extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("$inflight_init");
         this.b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
       }
       static _toInflightType(context) {
@@ -76,6 +75,9 @@ class $Root extends $stdlib.std.Resource {
             return client;
           })())
         `;
+      }
+      _getInflightOps() {
+        return ["$inflight_init"]
       }
     }
   }

@@ -298,7 +298,6 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle", "$inflight_init");
         (std.Display.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -318,11 +317,13 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
+      _getInflightOps() {
+        return ["handle", "$inflight_init"]
+      }
     }
     class $Closure2 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle", "$inflight_init");
         (std.Display.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -341,6 +342,9 @@ class $Root extends $stdlib.std.Resource {
             return client;
           })())
         `;
+      }
+      _getInflightOps() {
+        return ["handle", "$inflight_init"]
       }
     }
     (this.node.root.newAbstract("@winglang/sdk.cloud.Topic",this,"cloud.Topic").onMessage(new $Closure1(this,"$Closure1"),{ timeout: (std.Duration.fromSeconds(180)) }));

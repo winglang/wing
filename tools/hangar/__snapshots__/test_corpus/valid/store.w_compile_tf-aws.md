@@ -134,7 +134,6 @@ class $Root extends $stdlib.std.Resource {
     class Util extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("$inflight_init");
       }
       static _toInflightType(context) {
         return `
@@ -153,17 +152,18 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
+      _getInflightOps() {
+        return ["$inflight_init"]
+      }
     }
     class Store extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("store", "$inflight_init");
         this.b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
         const __parent_this_1 = this;
         class $Closure1 extends $stdlib.std.Resource {
           constructor(scope, id, ) {
             super(scope, id);
-            this._addInflightOps("handle", "$inflight_init");
             (std.Display.of(this)).hidden = true;
           }
           static _toInflightType(context) {
@@ -183,6 +183,9 @@ class $Root extends $stdlib.std.Resource {
                 return client;
               })())
             `;
+          }
+          _getInflightOps() {
+            return ["handle", "$inflight_init"]
           }
           _registerBind(host, ops) {
             if (ops.includes("handle")) {
@@ -210,6 +213,9 @@ class $Root extends $stdlib.std.Resource {
             return client;
           })())
         `;
+      }
+      _getInflightOps() {
+        return ["store", "$inflight_init"]
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {

@@ -176,7 +176,6 @@ class $Root extends $stdlib.std.Resource {
     class NotGoo extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
         return `
@@ -195,11 +194,13 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
+      _getInflightOps() {
+        return ["handle", "$inflight_init"]
+      }
     }
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle", "$inflight_init");
         (std.Display.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -219,6 +220,9 @@ class $Root extends $stdlib.std.Resource {
             return client;
           })())
         `;
+      }
+      _getInflightOps() {
+        return ["handle", "$inflight_init"]
       }
     }
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:structure interface types for 'handle'",new $Closure1(this,"$Closure1"));

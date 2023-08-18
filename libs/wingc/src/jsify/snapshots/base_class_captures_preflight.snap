@@ -59,16 +59,15 @@ class $Root extends $stdlib.std.Resource {
     class Base extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("$inflight_init");
       }
       bar() {
         {console.log(x)};
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           require("./inflight.Base-1.js")({
           })
-        `);
+        `;
       }
       _toInflight() {
         return `
@@ -81,21 +80,23 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
+      _getInflightOps() {
+        return ["$inflight_init"]
+      }
     }
     class Derived extends Base {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("$inflight_init");
       }
       foo() {
         (this.bar());
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           require("./inflight.Derived-1.js")({
             $Base: ${context._lift(Base)},
           })
-        `);
+        `;
       }
       _toInflight() {
         return `
@@ -107,6 +108,9 @@ class $Root extends $stdlib.std.Resource {
             return client;
           })())
         `;
+      }
+      _getInflightOps() {
+        return ["$inflight_init"]
       }
     }
     const x = "hello";

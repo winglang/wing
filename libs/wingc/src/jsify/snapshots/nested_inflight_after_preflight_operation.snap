@@ -68,13 +68,12 @@ class $Root extends $stdlib.std.Resource {
     class YourType extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("$inflight_init", "b");
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           require("./inflight.YourType-1.js")({
           })
-        `);
+        `;
       }
       _toInflight() {
         return `
@@ -87,19 +86,21 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
+      _getInflightOps() {
+        return ["b", "$inflight_init"]
+      }
     }
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle", "$inflight_init");
         (std.Display.of(this)).hidden = true;
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           require("./inflight.$Closure1-1.js")({
             $y: ${context._lift(y)},
           })
-        `);
+        `;
       }
       _toInflight() {
         return `
@@ -111,6 +112,9 @@ class $Root extends $stdlib.std.Resource {
             return client;
           })())
         `;
+      }
+      _getInflightOps() {
+        return ["handle", "$inflight_init"]
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {

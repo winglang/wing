@@ -48,7 +48,12 @@ export abstract class Bucket extends Resource {
     Display.of(this).title = "Bucket";
     Display.of(this).description = "A cloud object store";
 
-    this._addInflightOps(
+    props;
+  }
+
+  /** @internal */
+  public _getInflightOps(): string[] {
+    return [
       BucketInflightMethods.DELETE,
       BucketInflightMethods.GET,
       BucketInflightMethods.GET_JSON,
@@ -59,10 +64,8 @@ export abstract class Bucket extends Resource {
       BucketInflightMethods.EXISTS,
       BucketInflightMethods.TRY_GET,
       BucketInflightMethods.TRY_GET_JSON,
-      BucketInflightMethods.TRY_DELETE
-    );
-
-    props;
+      BucketInflightMethods.TRY_DELETE,
+    ];
   }
 
   /**
@@ -318,30 +321,22 @@ export interface IBucketClient {
 /**
  * `onCreate` event options
  */
-export interface BucketOnCreateProps {
-  /* Elided */
-}
+export interface BucketOnCreateProps {}
 
 /**
  * `onDelete` event options
  */
-export interface BucketOnDeleteProps {
-  /* Elided */
-}
+export interface BucketOnDeleteProps {}
 
 /**
  * `onUpdate` event options
  */
-export interface BucketOnUpdateProps {
-  /* Elided */
-}
+export interface BucketOnUpdateProps {}
 
 /**
  * `onEvent` options
  */
-export interface BucketOnEventProps {
-  /* Elided */
-}
+export interface BucketOnEventProps {}
 
 /**
  * A resource with an inflight "handle" method that can be passed to

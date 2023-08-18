@@ -77,6 +77,11 @@ export abstract class Schedule extends Resource {
     }
   }
 
+  /** @internal */
+  public _getInflightOps(): string[] {
+    return [];
+  }
+
   /**
    * Create a function that runs when receiving the scheduled event.
    */

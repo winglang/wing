@@ -477,7 +477,6 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle", "$inflight_init");
         (std.Display.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -499,6 +498,9 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
+      _getInflightOps() {
+        return ["handle", "$inflight_init"]
+      }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
           $Closure1._registerBindObject(counter, host, ["inc"]);
@@ -509,7 +511,6 @@ class $Root extends $stdlib.std.Resource {
     class $Closure2 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle", "$inflight_init");
         (std.Display.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -530,6 +531,9 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
+      _getInflightOps() {
+        return ["handle", "$inflight_init"]
+      }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
           $Closure2._registerBindObject(api.url, host, []);
@@ -540,13 +544,11 @@ class $Root extends $stdlib.std.Resource {
     class A extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("$inflight_init");
         this.api = this.node.root.newAbstract("@winglang/sdk.cloud.Api",this,"cloud.Api");
         const __parent_this_3 = this;
         class $Closure3 extends $stdlib.std.Resource {
           constructor(scope, id, ) {
             super(scope, id);
-            this._addInflightOps("handle", "$inflight_init");
             (std.Display.of(this)).hidden = true;
           }
           static _toInflightType(context) {
@@ -566,6 +568,9 @@ class $Root extends $stdlib.std.Resource {
                 return client;
               })())
             `;
+          }
+          _getInflightOps() {
+            return ["handle", "$inflight_init"]
           }
           _registerBind(host, ops) {
             if (ops.includes("handle")) {
@@ -592,6 +597,9 @@ class $Root extends $stdlib.std.Resource {
             return client;
           })())
         `;
+      }
+      _getInflightOps() {
+        return ["$inflight_init"]
       }
     }
     const api = this.node.root.newAbstract("@winglang/sdk.cloud.Api",this,"cloud.Api");

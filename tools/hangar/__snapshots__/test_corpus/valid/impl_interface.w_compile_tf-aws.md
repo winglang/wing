@@ -127,7 +127,6 @@ class $Root extends $stdlib.std.Resource {
     class A extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle", "$inflight_init");
       }
       static _toInflightType(context) {
         return `
@@ -146,11 +145,13 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
+      _getInflightOps() {
+        return ["handle", "$inflight_init"]
+      }
     }
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle", "$inflight_init");
         (std.Display.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -171,6 +172,9 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
+      _getInflightOps() {
+        return ["handle", "$inflight_init"]
+      }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
           $Closure1._registerBindObject(x, host, ["handle"]);
@@ -181,7 +185,6 @@ class $Root extends $stdlib.std.Resource {
     class r extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("method2", "$inflight_init");
       }
       method1(x) {
         return x;
@@ -206,11 +209,13 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
+      _getInflightOps() {
+        return ["method2", "$inflight_init"]
+      }
     }
     class Dog extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("eat", "$inflight_init");
       }
       static _toInflightType(context) {
         return `
@@ -229,11 +234,13 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
+      _getInflightOps() {
+        return ["eat", "$inflight_init"]
+      }
     }
     class Terrier extends Dog {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("eat", "$inflight_init");
       }
       static _toInflightType(context) {
         return `
@@ -252,6 +259,9 @@ class $Root extends $stdlib.std.Resource {
             return client;
           })())
         `;
+      }
+      _getInflightOps() {
+        return ["eat", "$inflight_init"]
       }
     }
     const x = new A(this,"A");

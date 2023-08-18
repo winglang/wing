@@ -71,7 +71,6 @@ class $Root extends $stdlib.std.Resource {
     class WingResource extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("$inflight_init");
         {console.log(String.raw({ raw: ["my id is ", ""] }, this.node.id))};
       }
       static _toInflightType(context) {
@@ -90,6 +89,9 @@ class $Root extends $stdlib.std.Resource {
             return client;
           })())
         `;
+      }
+      _getInflightOps() {
+        return ["$inflight_init"]
       }
     }
     const getPath = ((c) => {

@@ -66,22 +66,20 @@ class $Root extends $stdlib.std.Resource {
     class Foo extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("$inflight_init");
         this.b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
         this.q = this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this,"cloud.Queue");
         const __parent_this_1 = this;
         class $Closure1 extends $stdlib.std.Resource {
           constructor(scope, id, ) {
             super(scope, id);
-            this._addInflightOps("handle", "$inflight_init");
             (std.Display.of(this)).hidden = true;
           }
           static _toInflightType(context) {
-            return $stdlib.core.NodeJsCode.fromInline(`
+            return `
               require("./inflight.$Closure1-1.js")({
                 $__parent_this_1_b: ${context._lift(__parent_this_1.b)},
               })
-            `);
+            `;
           }
           _toInflight() {
             return `
@@ -94,6 +92,9 @@ class $Root extends $stdlib.std.Resource {
               })())
             `;
           }
+          _getInflightOps() {
+            return ["handle", "$inflight_init"]
+          }
           _registerBind(host, ops) {
             if (ops.includes("handle")) {
               $Closure1._registerBindObject(__parent_this_1.b, host, ["put"]);
@@ -104,10 +105,10 @@ class $Root extends $stdlib.std.Resource {
         (this.q.setConsumer(new $Closure1(this,"$Closure1")));
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           require("./inflight.Foo-1.js")({
           })
-        `);
+        `;
       }
       _toInflight() {
         return `
@@ -119,6 +120,9 @@ class $Root extends $stdlib.std.Resource {
             return client;
           })())
         `;
+      }
+      _getInflightOps() {
+        return ["$inflight_init"]
       }
     }
   }

@@ -70,15 +70,14 @@ class $Root extends $stdlib.std.Resource {
     class MyType extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("$inflight_init");
         this.name = "hello";
         this.last = "world";
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           require("./inflight.MyType-1.js")({
           })
-        `);
+        `;
       }
       _toInflight() {
         return `
@@ -91,21 +90,23 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
+      _getInflightOps() {
+        return ["$inflight_init"]
+      }
     }
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle", "$inflight_init");
         (std.Display.of(this)).hidden = true;
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           require("./inflight.$Closure1-1.js")({
             $t_last: ${context._lift(t.last)},
             $t_name: ${context._lift(t.name)},
             $t_name_length: ${context._lift(t.name.length)},
           })
-        `);
+        `;
       }
       _toInflight() {
         return `
@@ -117,6 +118,9 @@ class $Root extends $stdlib.std.Resource {
             return client;
           })())
         `;
+      }
+      _getInflightOps() {
+        return ["handle", "$inflight_init"]
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {

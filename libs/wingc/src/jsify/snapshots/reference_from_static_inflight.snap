@@ -43,14 +43,13 @@ class $Root extends $stdlib.std.Resource {
     class MyType extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("staticMethod", "$inflight_init");
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           require("./inflight.MyType-1.js")({
             $s: ${context._lift(s)},
           })
-        `);
+        `;
       }
       _toInflight() {
         return `
@@ -62,6 +61,9 @@ class $Root extends $stdlib.std.Resource {
             return client;
           })())
         `;
+      }
+      _getInflightOps() {
+        return ["staticMethod", "$inflight_init"]
       }
       static _registerTypeBind(host, ops) {
         if (ops.includes("staticMethod")) {

@@ -66,14 +66,13 @@ class $Root extends $stdlib.std.Resource {
     class Foo extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("incCounter", "dontTouchCounter", "$inflight_init", "myField2");
         this.c = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"cloud.Counter");
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           require("./inflight.Foo-1.js")({
           })
-        `);
+        `;
       }
       _toInflight() {
         return `
@@ -86,6 +85,9 @@ class $Root extends $stdlib.std.Resource {
             return client;
           })())
         `;
+      }
+      _getInflightOps() {
+        return ["myField2", "incCounter", "dontTouchCounter", "$inflight_init"]
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {

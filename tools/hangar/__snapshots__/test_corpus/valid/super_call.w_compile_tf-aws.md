@@ -403,7 +403,6 @@ class $Root extends $stdlib.std.Resource {
     class A extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("$inflight_init");
         this.message = "A message from your ancestor";
       }
       static _toInflightType(context) {
@@ -423,11 +422,13 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
+      _getInflightOps() {
+        return ["$inflight_init"]
+      }
     }
     class B extends A {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("$inflight_init");
       }
       description() {
         return "B";
@@ -450,11 +451,13 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
+      _getInflightOps() {
+        return ["$inflight_init"]
+      }
     }
     class C extends B {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("$inflight_init");
       }
       description() {
         return String.raw({ raw: ["C extends ", ""] }, (super.description()));
@@ -477,11 +480,13 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
+      _getInflightOps() {
+        return ["$inflight_init"]
+      }
     }
     class D extends C {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("$inflight_init");
       }
       static _toInflightType(context) {
         return `
@@ -501,11 +506,13 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
+      _getInflightOps() {
+        return ["$inflight_init"]
+      }
     }
     class E extends D {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("$inflight_init");
       }
       description() {
         return String.raw({ raw: ["E extends ", ""] }, (super.description()));
@@ -528,11 +535,13 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
+      _getInflightOps() {
+        return ["$inflight_init"]
+      }
     }
     class InflightA extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("description", "$inflight_init");
       }
       static _toInflightType(context) {
         return `
@@ -551,11 +560,13 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
+      _getInflightOps() {
+        return ["description", "$inflight_init"]
+      }
     }
     class InflightB extends InflightA {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("description", "$inflight_init");
       }
       static _toInflightType(context) {
         return `
@@ -575,11 +586,13 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
+      _getInflightOps() {
+        return ["description", "$inflight_init"]
+      }
     }
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle", "$inflight_init");
         (std.Display.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -600,11 +613,13 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
+      _getInflightOps() {
+        return ["handle", "$inflight_init"]
+      }
     }
     class BaseClass extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("do", "$inflight_init");
       }
       static _toInflightType(context) {
         return `
@@ -624,6 +639,9 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
+      _getInflightOps() {
+        return ["do", "$inflight_init"]
+      }
       _registerBind(host, ops) {
         if (ops.includes("do")) {
           BaseClass._registerBindObject(b, host, ["get"]);
@@ -634,7 +652,6 @@ class $Root extends $stdlib.std.Resource {
     class ExtendedClass extends BaseClass {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("do", "$inflight_init");
       }
       static _toInflightType(context) {
         return `
@@ -655,6 +672,9 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
+      _getInflightOps() {
+        return ["do", "$inflight_init"]
+      }
       _registerBind(host, ops) {
         if (ops.includes("do")) {
           ExtendedClass._registerBindObject(b, host, ["put"]);
@@ -665,7 +685,6 @@ class $Root extends $stdlib.std.Resource {
     class $Closure2 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle", "$inflight_init");
         (std.Display.of(this)).hidden = true;
       }
       static _toInflightType(context) {
@@ -685,6 +704,9 @@ class $Root extends $stdlib.std.Resource {
             return client;
           })())
         `;
+      }
+      _getInflightOps() {
+        return ["handle", "$inflight_init"]
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {

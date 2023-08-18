@@ -48,12 +48,12 @@ export abstract class Secret extends Resource {
     Display.of(this).title = "Secret";
     Display.of(this).description = "A cloud secret";
 
-    this._addInflightOps(
-      SecretInflightMethods.VALUE,
-      SecretInflightMethods.VALUE_JSON
-    );
-
     props;
+  }
+
+  /** @internal */
+  public _getInflightOps(): string[] {
+    return [SecretInflightMethods.VALUE, SecretInflightMethods.VALUE_JSON];
   }
 }
 

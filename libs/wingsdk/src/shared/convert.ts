@@ -26,8 +26,11 @@ export function convertBetweenHandlers(
       super(theScope, theId);
       this.handler = handler;
       Display.of(this).hidden = true;
-      this._addInflightOps("handle");
       this.args = args;
+    }
+
+    public _getInflightOps(): string[] {
+      return ["handle"];
     }
 
     public _toInflight(): string {

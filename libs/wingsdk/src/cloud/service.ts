@@ -53,12 +53,12 @@ export abstract class Service extends Resource {
     Display.of(this).title = "Service";
     Display.of(this).description = "A cloud service";
 
-    this._addInflightOps(
-      ServiceInflightMethods.START,
-      ServiceInflightMethods.STOP
-    );
-
     props;
+  }
+
+  /** @internal */
+  public _getInflightOps(): string[] {
+    return [ServiceInflightMethods.START, ServiceInflightMethods.STOP];
   }
 }
 

@@ -46,8 +46,10 @@ export class Testing {
         Display.of(this).title = "Inflight";
         Display.of(this).description = "An inflight resource";
         Display.of(this).hidden = true;
+      }
 
-        this._addInflightOps("handle");
+      public _getInflightOps(): string[] {
+        return ["handle"];
       }
 
       public _toInflight(): string {

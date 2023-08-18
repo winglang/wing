@@ -59,7 +59,6 @@ class $Root extends $stdlib.std.Resource {
     class C extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("method", "$inflight_init", "field");
       }
       static _toInflightType(context) {
         return `
@@ -77,6 +76,9 @@ class $Root extends $stdlib.std.Resource {
             return client;
           })())
         `;
+      }
+      _getInflightOps() {
+        return ["field", "method", "$inflight_init"]
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {

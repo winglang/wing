@@ -90,14 +90,13 @@ class $Root extends $stdlib.std.Resource {
     class MyType extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("putInBucket", "$inflight_init");
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           require("./inflight.MyType-1.js")({
             $b: ${context._lift(b)},
           })
-        `);
+        `;
       }
       _toInflight() {
         return `
@@ -110,6 +109,9 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
+      _getInflightOps() {
+        return ["putInBucket", "$inflight_init"]
+      }
       static _registerTypeBind(host, ops) {
         if (ops.includes("putInBucket")) {
           MyType._registerBindObject(b, host, ["put"]);
@@ -120,14 +122,13 @@ class $Root extends $stdlib.std.Resource {
     class YourType extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("putIndirect", "$inflight_init");
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           require("./inflight.YourType-1.js")({
             $MyType: ${context._lift(MyType)},
           })
-        `);
+        `;
       }
       _toInflight() {
         return `
@@ -140,6 +141,9 @@ class $Root extends $stdlib.std.Resource {
           })())
         `;
       }
+      _getInflightOps() {
+        return ["putIndirect", "$inflight_init"]
+      }
       _registerBind(host, ops) {
         if (ops.includes("putIndirect")) {
           YourType._registerBindObject(MyType, host, ["putInBucket"]);
@@ -150,15 +154,14 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        this._addInflightOps("handle", "$inflight_init");
         (std.Display.of(this)).hidden = true;
       }
       static _toInflightType(context) {
-        return $stdlib.core.NodeJsCode.fromInline(`
+        return `
           require("./inflight.$Closure1-1.js")({
             $t: ${context._lift(t)},
           })
-        `);
+        `;
       }
       _toInflight() {
         return `
@@ -170,6 +173,9 @@ class $Root extends $stdlib.std.Resource {
             return client;
           })())
         `;
+      }
+      _getInflightOps() {
+        return ["handle", "$inflight_init"]
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {

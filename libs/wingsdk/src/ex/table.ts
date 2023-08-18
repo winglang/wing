@@ -101,14 +101,17 @@ export abstract class Table extends Resource {
       throw new Error("No column is defined");
     }
     this.columns = props.columns;
+  }
 
-    this._addInflightOps(
+  /** @internal */
+  public _getInflightOps(): string[] {
+    return [
       TableInflightMethods.INSERT,
       TableInflightMethods.UPDATE,
       TableInflightMethods.DELETE,
       TableInflightMethods.GET,
-      TableInflightMethods.LIST
-    );
+      TableInflightMethods.LIST,
+    ];
   }
 
   /**

@@ -43,6 +43,15 @@ export interface IResource extends IConstruct {
   _toInflight(): string;
 
   /**
+   * Return a list of all inflight operations that are supported by this resource.
+   *
+   * If this method doesn't exist, the resource is assumed to not support any inflight operations.
+   *
+   * @internal
+   */
+  _getInflightOps(): string[];
+
+  /**
    * A hook for performing operations after the tree of resources has been
    * created, but before they are synthesized.
    *
@@ -158,22 +167,8 @@ export abstract class Resource extends Construct implements IResource {
 
   private readonly bindMap: Map<IInflightHost, Set<string>> = new Map();
 
-  /**
-   * A list of all inflight operations that are supported by this resource.
-   */
-  private readonly inflightOps: string[] = ["$inflight_init"];
-
-  /**
-   * Record that this resource supports the given inflight operation.
-   *
-   * This is used to give better error messages if the compiler attempts to bind
-   * a resource with an operation that is not supported.
-   *
-   * @internal
-   */
-  public _addInflightOps(...ops: string[]) {
-    this.inflightOps.push(...ops);
-  }
+  /** @internal */
+  public abstract _getInflightOps(): string[];
 
   /**
    * Binds the resource to the host so that it can be used by inflight code.
@@ -220,9 +215,10 @@ export abstract class Resource extends Construct implements IResource {
 
     const opsForHost = this.bindMap.get(host)!;
 
-    // For each operation, re
+    // For each operation, check if the host supports it. If it does, register the binding.
+    const supportedOps = [...(this._getInflightOps() ?? []), "$inflight_init"];
     for (const op of ops) {
-      if (!this.inflightOps.includes(op)) {
+      if (!supportedOps.includes(op)) {
         throw new Error(
           `Resource ${this.node.path} does not support inflight operation ${op} (requested by ${host.node.path})`
         );

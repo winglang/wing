@@ -63,6 +63,12 @@ export abstract class Api extends Resource {
     Display.of(this).title = "Api";
     Display.of(this).description = "A REST API endpoint";
   }
+
+  /** @internal */
+  public _getInflightOps(): string[] {
+    return [];
+  }
+
   /**
    * Add a inflight handler to the api for GET requests on the given path.
    * @param path The path to handle GET requests for.

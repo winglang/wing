@@ -68,6 +68,11 @@ export abstract class Website extends Resource {
     this._domain = props.domain;
   }
 
+  /** @internal */
+  public _getInflightOps(): string[] {
+    return [];
+  }
+
   /**
    * Absolute local path to the website's static files.
    */

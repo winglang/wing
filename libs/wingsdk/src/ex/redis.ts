@@ -27,8 +27,11 @@ export abstract class Redis extends Resource {
 
     Display.of(this).title = "Redis";
     Display.of(this).description = "A Redis server";
+  }
 
-    this._addInflightOps(
+  /** @internal */
+  public _getInflightOps(): string[] {
+    return [
       RedisInflightMethods.RAW_CLIENT,
       RedisInflightMethods.URL,
       RedisInflightMethods.SET,
@@ -37,8 +40,8 @@ export abstract class Redis extends Resource {
       RedisInflightMethods.HGET,
       RedisInflightMethods.SADD,
       RedisInflightMethods.SMEMBERS,
-      RedisInflightMethods.DEL
-    );
+      RedisInflightMethods.DEL,
+    ];
   }
 }
 

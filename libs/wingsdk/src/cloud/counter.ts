@@ -47,14 +47,17 @@ export abstract class Counter extends Resource {
     Display.of(this).title = "Counter";
     Display.of(this).description = "A distributed atomic counter";
 
-    this._addInflightOps(
+    this.initial = props.initial ?? 0;
+  }
+
+  /** @internal */
+  public _getInflightOps(): string[] {
+    return [
       CounterInflightMethods.INC,
       CounterInflightMethods.DEC,
       CounterInflightMethods.PEEK,
-      CounterInflightMethods.SET
-    );
-
-    this.initial = props.initial ?? 0;
+      CounterInflightMethods.SET,
+    ];
   }
 }
 

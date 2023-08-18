@@ -71,8 +71,6 @@ export abstract class Function extends Resource implements IInflightHost {
     Display.of(this).title = "Function";
     Display.of(this).description = "A cloud function (FaaS)";
 
-    this._addInflightOps(FunctionInflightMethods.INVOKE);
-
     for (const [key, value] of Object.entries(props.env ?? {})) {
       this.addEnvironment(key, value);
     }
@@ -107,6 +105,11 @@ export abstract class Function extends Resource implements IInflightHost {
     if (process.env.WING_TARGET) {
       this.addEnvironment("WING_TARGET", process.env.WING_TARGET);
     }
+  }
+
+  /** @internal */
+  public _getInflightOps(): string[] {
+    return [FunctionInflightMethods.INVOKE];
   }
 
   /**

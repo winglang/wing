@@ -75,7 +75,6 @@ module.exports = function({ $stdlib }) {
   class Bar extends $stdlib.std.Resource {
     constructor(scope, id, ) {
       super(scope, id);
-      this._addInflightOps("$inflight_init");
     }
     static bar() {
       return "bar";
@@ -97,6 +96,9 @@ module.exports = function({ $stdlib }) {
         })())
       `;
     }
+    _getInflightOps() {
+      return ["$inflight_init"]
+    }
   }
   return { Bar };
 };
@@ -110,7 +112,6 @@ module.exports = function({ $stdlib }) {
   class Baz extends $stdlib.std.Resource {
     constructor(scope, id, ) {
       super(scope, id);
-      this._addInflightOps("$inflight_init");
     }
     static baz() {
       return "baz";
@@ -132,6 +133,9 @@ module.exports = function({ $stdlib }) {
         })())
       `;
     }
+    _getInflightOps() {
+      return ["$inflight_init"]
+    }
   }
   return { Baz };
 };
@@ -147,7 +151,6 @@ module.exports = function({ $stdlib }) {
   class Foo extends $stdlib.std.Resource {
     constructor(scope, id, ) {
       super(scope, id);
-      this._addInflightOps("$inflight_init");
     }
     static foo() {
       return "foo";
@@ -174,6 +177,9 @@ module.exports = function({ $stdlib }) {
           return client;
         })())
       `;
+    }
+    _getInflightOps() {
+      return ["$inflight_init"]
     }
   }
   return { Foo };

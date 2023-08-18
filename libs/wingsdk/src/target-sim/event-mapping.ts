@@ -56,6 +56,11 @@ export class EventMapping extends Resource implements ISimulatorResource {
     this.node.addDependency(props.publisher);
   }
 
+  /** @internal */
+  public _getInflightOps(): string[] {
+    return [];
+  }
+
   public get eventProps(): EventMappingProps {
     return this._eventProps;
   }

@@ -50,14 +50,17 @@ export abstract class Queue extends Resource {
     Display.of(this).title = "Queue";
     Display.of(this).description = "A distributed message queue";
 
-    this._addInflightOps(
+    props;
+  }
+
+  /** @internal */
+  public _getInflightOps(): string[] {
+    return [
       QueueInflightMethods.PUSH,
       QueueInflightMethods.PURGE,
       QueueInflightMethods.APPROX_SIZE,
-      QueueInflightMethods.POP
-    );
-
-    props;
+      QueueInflightMethods.POP,
+    ];
   }
 
   /**

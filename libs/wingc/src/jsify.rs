@@ -307,30 +307,6 @@ impl<'a> JSifier<'a> {
 		}
 	}
 
-	// This helper determines what requirement and dependency to add to the struct schema based
-	// on the type annotation of the field.
-	// I.E. if a struct has a field named "foo" with a type "OtherStruct", then we want to add
-	// the field "foo" as a required  and the struct "OtherStruct" as a dependency. so the result is
-	// a tuple (required, dependency)
-	fn extract_struct_field_schema_dependency(
-		&self,
-		typ: &TypeAnnotationKind,
-		field_name: &String,
-	) -> (Option<String>, Option<String>) {
-		match typ {
-			TypeAnnotationKind::UserDefined(udt) => (Some(field_name.clone()), Some(udt.root.name.clone())),
-			TypeAnnotationKind::Array(t) | TypeAnnotationKind::Set(t) | TypeAnnotationKind::Map(t) => {
-				self.extract_struct_field_schema_dependency(&t.kind, field_name)
-			}
-			TypeAnnotationKind::Optional(t) => {
-				let deps = self.extract_struct_field_schema_dependency(&t.kind, field_name);
-				// We never want to add an optional to the required block
-				(None, deps.1)
-			}
-			_ => (Some(field_name.clone()), None),
-		}
-	}
-
 	fn jsify_struct_field_to_json_schema_type(&self, typ: &TypeAnnotationKind) -> String {
 		match typ {
 			TypeAnnotationKind::Bool | TypeAnnotationKind::Number | TypeAnnotationKind::String => {
@@ -721,7 +697,7 @@ impl<'a> JSifier<'a> {
 
 		// determine which fields are required, and which schemas need to be added to validator
 		for field in fields {
-			let dep = self.extract_struct_field_schema_dependency(&field.member_type.kind, &field.name.name);
+			let dep = extract_struct_field_schema_dependency(&field.member_type.kind, &field.name.name);
 			if let Some(req) = dep.0 {
 				required.push(req);
 			}
@@ -1194,6 +1170,7 @@ impl<'a> JSifier<'a> {
 		// `_liftType`).
 		code.add_code(self.jsify_to_inflight_type_method(&class, ctx));
 		code.add_code(self.jsify_to_inflight_method(&class.name, ctx));
+		code.add_code(self.jsify_get_inflight_ops_method(&class));
 
 		// emit `_registerBindObject` to register bindings (for type & instance binds)
 		code.add_code(self.jsify_register_bind_method(class, class_type, BindMethod::Instance, ctx));
@@ -1238,29 +1215,26 @@ impl<'a> JSifier<'a> {
 		}
 		body_code.add_code(self.jsify_scope_body(&init_statements, ctx));
 
-		let inflight_fields = class.inflight_fields();
-		let inflight_methods = class.inflight_methods(true);
-
-		if inflight_fields.len() + inflight_methods.len() > 0 {
-			let inflight_method_names = inflight_methods
-				.iter()
-				.filter_map(|m| m.name.clone())
-				.map(|s| s.name)
-				.collect_vec();
-
-			let inflight_field_names = inflight_fields.iter().map(|f| f.name.name.clone()).collect_vec();
-			let inflight_ops_string = inflight_method_names
-				.iter()
-				.chain(inflight_field_names.iter())
-				.map(|name| format!("\"{}\"", name))
-				.join(", ");
-
-			// insert as the first statement after the super() call
-			body_code.insert_line(1, format!("this._addInflightOps({inflight_ops_string});"));
-		}
-
 		code.add_code(body_code);
 
+		code.close("}");
+		code
+	}
+
+	fn jsify_get_inflight_ops_method(&self, class: &AstClass) -> CodeMaker {
+		let mut code = CodeMaker::default();
+
+		code.open("_getInflightOps() {");
+
+		let mut ops = vec![];
+		for field in class.inflight_fields() {
+			ops.push(format!("\"{}\"", field.name.name));
+		}
+		for method in class.inflight_methods(true) {
+			ops.push(format!("\"{}\"", method.name.as_ref().unwrap().name));
+		}
+
+		code.line(format!("return [{}];", ops.join(", ")));
 		code.close("}");
 		code
 	}
@@ -1527,6 +1501,29 @@ impl<'a> JSifier<'a> {
 			*id
 		};
 		format!("./inflight.{}-{}.js", class.name.name, id)
+	}
+}
+
+// This helper determines what requirement and dependency to add to the struct schema based
+// on the type annotation of the field.
+// I.E. if a struct has a field named "foo" with a type "OtherStruct", then we want to add
+// the field "foo" as a required  and the struct "OtherStruct" as a dependency. so the result is
+// a tuple (required, dependency)
+fn extract_struct_field_schema_dependency(
+	typ: &TypeAnnotationKind,
+	field_name: &String,
+) -> (Option<String>, Option<String>) {
+	match typ {
+		TypeAnnotationKind::UserDefined(udt) => (Some(field_name.clone()), Some(udt.root.name.clone())),
+		TypeAnnotationKind::Array(t) | TypeAnnotationKind::Set(t) | TypeAnnotationKind::Map(t) => {
+			extract_struct_field_schema_dependency(&t.kind, field_name)
+		}
+		TypeAnnotationKind::Optional(t) => {
+			let deps = extract_struct_field_schema_dependency(&t.kind, field_name);
+			// We never want to add an optional to the required block
+			(None, deps.1)
+		}
+		_ => (Some(field_name.clone()), None),
 	}
 }
 
