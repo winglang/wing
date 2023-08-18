@@ -80,21 +80,22 @@ module.exports = function({ $MyType }) {
 
 ```js
 const $stdlib = require('@winglang/sdk');
+const $constructs = require('constructs');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const cloud = $stdlib.cloud;
-class $Root extends $stdlib.std.Resource {
+class $Root extends $constructs.Construct {
   constructor(scope, id) {
     super(scope, id);
-    class MyType extends $stdlib.std.Resource {
+    class MyType extends $constructs.Construct {
       constructor(scope, id, ) {
         super(scope, id);
       }
       static _toInflightType(context) {
         return `
           require("./inflight.MyType-1.js")({
-            $b: ${context._lift(b)},
+            $b: ${$stdlib.std.Lifting.lift(context, b)},
           })
         `;
       }
@@ -119,14 +120,14 @@ class $Root extends $stdlib.std.Resource {
         super._registerTypeBind(host, ops);
       }
     }
-    class YourType extends $stdlib.std.Resource {
+    class YourType extends $constructs.Construct {
       constructor(scope, id, ) {
         super(scope, id);
       }
       static _toInflightType(context) {
         return `
           require("./inflight.YourType-1.js")({
-            $MyType: ${context._lift(MyType)},
+            $MyType: ${$stdlib.std.Lifting.lift(context, MyType)},
           })
         `;
       }
@@ -151,7 +152,7 @@ class $Root extends $stdlib.std.Resource {
         super._registerBind(host, ops);
       }
     }
-    class $Closure1 extends $stdlib.std.Resource {
+    class $Closure1 extends $constructs.Construct {
       constructor(scope, id, ) {
         super(scope, id);
         (std.Display.of(this)).hidden = true;
@@ -159,7 +160,7 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         return `
           require("./inflight.$Closure1-1.js")({
-            $t: ${context._lift(t)},
+            $t: ${$stdlib.std.Lifting.lift(context, t)},
           })
         `;
       }

@@ -91,11 +91,12 @@ const WINGSDK_MUT_SET: &'static str = "std.MutSet";
 const WINGSDK_STRING: &'static str = "std.String";
 const WINGSDK_JSON: &'static str = "std.Json";
 const WINGSDK_MUT_JSON: &'static str = "std.MutJson";
-const WINGSDK_RESOURCE: &'static str = "std.Resource";
 const WINGSDK_STRUCT: &'static str = "std.Struct";
 const WINGSDK_TEST_CLASS_NAME: &'static str = "Test";
 
-const CONSTRUCT_BASE_CLASS: &'static str = "constructs.Construct";
+const CONSTRUCTS_ASSEMBLY_NAME: &'static str = "constructs";
+const CONSTRUCTS_BASE_IFACE: &'static str = "IConstruct";
+const CONSTRUCTS_BASE_CLASS: &'static str = "Construct";
 
 const MACRO_REPLACE_SELF: &'static str = "$self$";
 const MACRO_REPLACE_ARGS: &'static str = "$args$";

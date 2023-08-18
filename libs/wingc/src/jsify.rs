@@ -1,7 +1,6 @@
 pub mod codemaker;
 mod tests;
 use aho_corasick::AhoCorasick;
-use const_format::formatcp;
 use indexmap::{IndexMap, IndexSet};
 use itertools::Itertools;
 
@@ -29,8 +28,8 @@ use crate::{
 		CLASS_INFLIGHT_INIT_NAME,
 	},
 	visit_context::VisitContext,
-	MACRO_REPLACE_ARGS, MACRO_REPLACE_ARGS_TEXT, MACRO_REPLACE_SELF, WINGSDK_ASSEMBLY_NAME, WINGSDK_RESOURCE,
-	WINGSDK_STD_MODULE,
+	CONSTRUCTS_ASSEMBLY_NAME, CONSTRUCTS_BASE_CLASS, MACRO_REPLACE_ARGS, MACRO_REPLACE_ARGS_TEXT, MACRO_REPLACE_SELF,
+	WINGSDK_ASSEMBLY_NAME, WINGSDK_STD_MODULE,
 };
 
 use self::codemaker::CodeMaker;
@@ -38,8 +37,7 @@ use self::codemaker::CodeMaker;
 const PREFLIGHT_FILE_NAME: &str = "preflight.js";
 
 const STDLIB: &str = "$stdlib";
-const STDLIB_CORE_RESOURCE: &str = formatcp!("{}.{}", STDLIB, WINGSDK_RESOURCE);
-const STDLIB_MODULE: &str = WINGSDK_ASSEMBLY_NAME;
+const CONSTRUCTS: &str = "$constructs";
 
 const ENV_WING_IS_TEST: &str = "$wing_is_test";
 const OUTDIR_VAR: &str = "$outdir";
@@ -139,7 +137,11 @@ impl<'a> JSifier<'a> {
 		let is_entrypoint_file = source_path == self.entrypoint_file_path;
 
 		if is_entrypoint_file {
-			output.line(format!("const {} = require('{}');", STDLIB, STDLIB_MODULE));
+			output.line(format!("const {} = require('{}');", STDLIB, WINGSDK_ASSEMBLY_NAME));
+			output.line(format!(
+				"const {} = require('{}');",
+				CONSTRUCTS, CONSTRUCTS_ASSEMBLY_NAME
+			));
 			output.line(format!("const {} = process.env.WING_SYNTH_DIR ?? \".\";", OUTDIR_VAR));
 			// "std" is implicitly imported
 			output.line(format!(
@@ -155,7 +157,10 @@ impl<'a> JSifier<'a> {
 
 		if is_entrypoint_file {
 			let mut root_class = CodeMaker::default();
-			root_class.open(format!("class {} extends {} {{", ROOT_CLASS, STDLIB_CORE_RESOURCE));
+			root_class.open(format!(
+				"class {} extends {}.{} {{",
+				ROOT_CLASS, CONSTRUCTS, CONSTRUCTS_BASE_CLASS
+			));
 			root_class.open(format!("{JS_CONSTRUCTOR}(scope, id) {{"));
 			root_class.line("super(scope, id);");
 			root_class.add_code(js);
@@ -1156,7 +1161,7 @@ impl<'a> JSifier<'a> {
 
 			format!(" extends {}", base)
 		} else {
-			format!(" extends {}", STDLIB_CORE_RESOURCE)
+			format!(" extends {}.{}", CONSTRUCTS, CONSTRUCTS_BASE_CLASS)
 		};
 
 		code.open(format!("class {}{extends} {{", class.name));

@@ -15,9 +15,9 @@ use crate::diagnostic::{report_diagnostic, Diagnostic, TypeError, WingSpan};
 use crate::docs::Docs;
 use crate::visit_types::{VisitType, VisitTypeMut};
 use crate::{
-	dbg_panic, debug, WINGSDK_ARRAY, WINGSDK_ASSEMBLY_NAME, WINGSDK_BRINGABLE_MODULES, WINGSDK_DURATION, WINGSDK_JSON,
-	WINGSDK_MAP, WINGSDK_MUT_ARRAY, WINGSDK_MUT_JSON, WINGSDK_MUT_MAP, WINGSDK_MUT_SET, WINGSDK_RESOURCE, WINGSDK_SET,
-	WINGSDK_STD_MODULE, WINGSDK_STRING, WINGSDK_STRUCT,
+	dbg_panic, debug, CONSTRUCTS_ASSEMBLY_NAME, CONSTRUCTS_BASE_CLASS, CONSTRUCTS_BASE_IFACE, WINGSDK_ARRAY,
+	WINGSDK_ASSEMBLY_NAME, WINGSDK_BRINGABLE_MODULES, WINGSDK_DURATION, WINGSDK_JSON, WINGSDK_MAP, WINGSDK_MUT_ARRAY,
+	WINGSDK_MUT_JSON, WINGSDK_MUT_MAP, WINGSDK_MUT_SET, WINGSDK_SET, WINGSDK_STD_MODULE, WINGSDK_STRING, WINGSDK_STRUCT,
 };
 use derivative::Derivative;
 use duplicate::duplicate_item;
@@ -325,16 +325,15 @@ pub struct Interface {
 }
 
 impl Interface {
-	fn is_resource(&self) -> bool {
-		// TODO: This should check that the interface extends `IResource` from
-		// the SDK, not just any interface with the name `IResource`
-		// https://github.com/winglang/wing/issues/2098
-		self.name.name == "IResource"
+	fn is_construct(&self) -> bool {
+		// TODO: This should check that the interface extends `IConstruct` from
+		// `constructs.Construct` specifically
+		self.name.name == CONSTRUCTS_BASE_IFACE
 			|| self.extends.iter().any(|i| {
 				i.as_interface()
 					.expect("Interface extends a type that isn't an interface")
 					.name
-					.name == "IResource"
+					.name == CONSTRUCTS_BASE_IFACE
 			})
 	}
 }
@@ -1077,7 +1076,7 @@ impl TypeRef {
 
 	pub fn is_capturable(&self) -> bool {
 		match &**self {
-			Type::Interface(iface) => iface.is_resource(),
+			Type::Interface(iface) => iface.is_construct(),
 			Type::Enum(_) => true,
 			Type::Number => true,
 			Type::String => true,
@@ -1477,11 +1476,11 @@ impl Types {
 		UnsafeRef::<SymbolEnv>(&**t as *const SymbolEnv)
 	}
 
-	pub fn resource_base_type(&self) -> TypeRef {
-		let resource_fqn = format!("{}.{}", WINGSDK_ASSEMBLY_NAME, WINGSDK_RESOURCE);
+	pub fn constructs_base_type(&self) -> TypeRef {
+		let construct_fqn = format!("{}.{}", CONSTRUCTS_ASSEMBLY_NAME, CONSTRUCTS_BASE_CLASS);
 		self
 			.libraries
-			.lookup_nested_str(&resource_fqn, None)
+			.lookup_nested_str(&construct_fqn, None)
 			.expect("Resouce base class to be loaded")
 			.0
 			.as_type()
@@ -4766,8 +4765,8 @@ impl<'a> TypeChecker<'a> {
 	) -> (Option<TypeRef>, Option<SymbolEnvRef>) {
 		let Some(parent_expr) = parent_expr else  {
 			if phase == Phase::Preflight {
-				// if this is a preflight and we don't have a parent, then we implicitly set it to `std.Resource`
-				let t = self.types.resource_base_type();
+				// if this is a preflight and we don't have a parent, then we implicitly set it to `constructs.Construct`
+				let t = self.types.constructs_base_type();
 				let env = t.as_preflight_class().unwrap().env.get_ref();
 				return (Some(t), Some(env));
 			} else {
@@ -4997,7 +4996,7 @@ pub fn resolve_super_method(method: &Symbol, env: &SymbolEnv, types: &Types) -> 
 			.as_class()
 			.expect("Expected \"this\" to be a class")
 			.parent
-			.filter(|t| !(t.is_preflight_class() && t.is_same_type_as(&types.resource_base_type())));
+			.filter(|t| !(t.is_preflight_class() && t.is_same_type_as(&types.constructs_base_type())));
 		if let Some(parent_type) = parent_type {
 			if let Some(method_info) = parent_type.as_class().unwrap().get_method(method) {
 				Ok((method_info.type_, method_info.phase))

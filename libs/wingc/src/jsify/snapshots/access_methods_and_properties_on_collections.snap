@@ -38,13 +38,14 @@ module.exports = function({ $_y_at_0__, $x_length }) {
 
 ```js
 const $stdlib = require('@winglang/sdk');
+const $constructs = require('constructs');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
-class $Root extends $stdlib.std.Resource {
+class $Root extends $constructs.Construct {
   constructor(scope, id) {
     super(scope, id);
-    class $Closure1 extends $stdlib.std.Resource {
+    class $Closure1 extends $constructs.Construct {
       constructor(scope, id, ) {
         super(scope, id);
         (std.Display.of(this)).hidden = true;
@@ -52,8 +53,8 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         return `
           require("./inflight.$Closure1-1.js")({
-            $_y_at_0__: ${context._lift((y.at(0)))},
-            $x_length: ${context._lift(x.length)},
+            $_y_at_0__: ${$stdlib.std.Lifting.lift(context, (y.at(0)))},
+            $x_length: ${$stdlib.std.Lifting.lift(context, x.length)},
           })
         `;
       }

@@ -9,7 +9,8 @@ use crate::{
 		self, symbol_env::StatementIdx, Class, FunctionParameter, FunctionSignature, Interface, Struct, SymbolKind, Type,
 		TypeRef, Types, CLASS_INIT_NAME,
 	},
-	CONSTRUCT_BASE_CLASS, WINGSDK_ASSEMBLY_NAME, WINGSDK_DURATION, WINGSDK_JSON, WINGSDK_MUT_JSON, WINGSDK_RESOURCE,
+	CONSTRUCTS_ASSEMBLY_NAME, CONSTRUCTS_BASE_CLASS, WINGSDK_ASSEMBLY_NAME, WINGSDK_DURATION, WINGSDK_JSON,
+	WINGSDK_MUT_JSON,
 };
 use colored::Colorize;
 use wingii::{
@@ -994,16 +995,9 @@ fn extract_docstring_tag<'a>(docs: &'a Option<jsii::Docs>, arg: &str) -> Option<
 	})
 }
 
-/// Returns true if the FQN represents a "construct base class".
-///
-/// TODO: this is a temporary hack until we support interfaces.
+/// Returns true if the FQN represents the construct base class.
 pub fn is_construct_base(fqn: &str) -> bool {
-	// We treat both CONSTRUCT_BASE_CLASS and WINGSDK_RESOURCE, as base constructs because in wingsdk we currently have stuff directly derived
-	// from `construct.Construct` and stuff derived `std.Resource` (which itself is derived from `constructs.Construct`).
-	// But since we don't support interfaces yet we can't import `std.Resource` so we just treat it as a base class.
-	// I'm also not sure we should ever import `std.Resource` because we might want to keep its internals hidden to the user:
-	// after all it's an abstract class representing our `resource` primitive. See https://github.com/winglang/wing/issues/261.
-	fqn == &format!("{}.{}", WINGSDK_ASSEMBLY_NAME, WINGSDK_RESOURCE) || fqn == CONSTRUCT_BASE_CLASS
+	fqn == format!("{}.{}", CONSTRUCTS_ASSEMBLY_NAME, CONSTRUCTS_BASE_CLASS)
 }
 
 impl From<&Option<jsii::Docs>> for Docs {
@@ -1025,14 +1019,4 @@ impl From<&Option<jsii::Docs>> for Docs {
 			subclassable: docs.subclassable,
 		}
 	}
-}
-
-#[test]
-fn test_fqn_is_construct_base() {
-	assert_eq!(is_construct_base(CONSTRUCT_BASE_CLASS), true);
-	assert_eq!(
-		is_construct_base(format!("{}.{}", WINGSDK_ASSEMBLY_NAME, WINGSDK_RESOURCE).as_str()),
-		true
-	);
-	assert_eq!(is_construct_base("@winglang/sdk.cloud.Bucket"), false);
 }

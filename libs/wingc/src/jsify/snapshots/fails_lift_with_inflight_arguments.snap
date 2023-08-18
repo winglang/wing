@@ -2,5 +2,4 @@
 source: libs/wingc/src/jsify/tests.rs
 ---
 ## Errors
-Expected type to be "IConstruct", but got "inflight (): void" instead 0:0
 Cannot reference an inflight value from within a preflight expression 5:11
