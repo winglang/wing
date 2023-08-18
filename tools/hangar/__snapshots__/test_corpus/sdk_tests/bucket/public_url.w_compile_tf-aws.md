@@ -14,8 +14,8 @@ module.exports = function({ $http_Util, $privateBucket, $publicBucket, $util_Uti
       (await $publicBucket.put("file1.txt","Foo"));
       (await $privateBucket.put("file2.txt","Bar"));
       const publicUrl = (await $publicBucket.publicUrl("file1.txt"));
-      {((cond) => {if (!cond) throw new Error("assertion failed: publicUrl != \"\"")})((publicUrl !== ""))};
-      if (((await $util_Util.env("WING_TARGET")) !== "sim")) {
+      {((cond) => {if (!cond) throw new Error("assertion failed: publicUrl != \"\"")})((((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })(publicUrl,"")))};
+      if ((((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })((await $util_Util.env("WING_TARGET")),"sim"))) {
         {((cond) => {if (!cond) throw new Error("assertion failed: http.get(publicUrl).body ==  \"Foo\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $http_Util.get(publicUrl)).body,"Foo")))};
       }
       try {

@@ -335,7 +335,8 @@ where
 			}
 		}
 		ExprKind::JsonMapLiteral { fields } => {
-			for val in fields.values() {
+			for (name, val) in fields.iter() {
+				v.visit_symbol(name);
 				v.visit_expr(val);
 			}
 		}
@@ -343,7 +344,8 @@ where
 			if let Some(type_) = type_ {
 				v.visit_type_annotation(type_);
 			}
-			for val in fields.values() {
+			for (name, val) in fields.iter() {
+				v.visit_symbol(name);
 				v.visit_expr(val);
 			}
 		}

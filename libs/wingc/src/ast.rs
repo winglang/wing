@@ -6,6 +6,7 @@ use indexmap::{Equivalent, IndexMap, IndexSet};
 use itertools::Itertools;
 
 use crate::diagnostic::WingSpan;
+
 use crate::type_check::CLOSURE_CLASS_HANDLE_METHOD;
 
 static EXPR_COUNTER: AtomicUsize = AtomicUsize::new(0);
@@ -547,12 +548,12 @@ pub enum ExprKind {
 		fields: IndexMap<Symbol, Expr>,
 	},
 	JsonMapLiteral {
-		fields: IndexMap<String, Expr>,
+		fields: IndexMap<Symbol, Expr>,
 	},
 	MapLiteral {
 		type_: Option<TypeAnnotation>,
 		// We're using a map implementation with reliable iteration to guarantee deterministic compiler output. See discussion: https://github.com/winglang/wing/discussions/887.
-		fields: IndexMap<String, Expr>,
+		fields: IndexMap<Symbol, Expr>,
 	},
 	SetLiteral {
 		type_: Option<TypeAnnotation>,
@@ -583,11 +584,15 @@ impl Spanned for CalleeKind {
 	}
 }
 
+/// File-unique identifier for each expression. This is an index of the Types.expr_types vec.
+/// After type checking, each expression will have a type in that vec.
+pub type ExprId = usize;
+
 // do not derive Default, we want to be explicit about generating ids
 #[derive(Debug)]
 pub struct Expr {
 	/// An identifier that is unique among all expressions in the AST.
-	pub id: usize,
+	pub id: ExprId,
 	/// The kind of expression.
 	pub kind: ExprKind,
 	/// The span of the expression.

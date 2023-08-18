@@ -76,7 +76,7 @@ impl Documented for TypeRef {
 			| Type::Duration
 			| Type::Boolean
 			| Type::Void
-			| Type::Json
+			| Type::Json(_)
 			| Type::MutJson
 			| Type::Nil
 			| Type::Inferred(_)
@@ -118,7 +118,7 @@ impl Documented for VariableInfo {
 
 		let mut markdown = CodeMaker::default();
 		markdown.line("```wing");
-		markdown.line(format!("{name_str}: {}", self.type_.to_string()));
+		markdown.line(format!("{name_str}: {}", self.type_));
 
 		if let Some(d) = &self.docs {
 			markdown.line("```");

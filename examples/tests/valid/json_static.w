@@ -16,7 +16,7 @@ assert(m.get("a") == 321);
 
 // Immutable Deep Copy
 let n = Json.deepCopy(m);
-assert(m != n);
+assert(m == n);
 
 // Deleting keys
 let var k2 = Json.keys(m);
