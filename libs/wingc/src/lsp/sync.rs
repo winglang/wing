@@ -17,6 +17,7 @@ use crate::parser::parse_wing_project;
 use crate::type_check;
 use crate::type_check::jsii_importer::JsiiImportSpec;
 use crate::type_check_assert::TypeCheckAssert;
+use crate::valid_json_visitor::ValidJsonVisitor;
 use crate::visit::Visit;
 use crate::{ast::Scope, type_check::Types, wasm_util::ptr_to_string};
 
@@ -168,6 +169,10 @@ fn partial_compile(
 		// Validate the type checker didn't miss anything - see `TypeCheckAssert` for details
 		let mut tc_assert = TypeCheckAssert::new(&types, found_errors());
 		tc_assert.check(&scope);
+
+		// Validate all Json literals to make sure their values are legal
+		let mut json_checker = ValidJsonVisitor::new(&types);
+		json_checker.check(&scope);
 	}
 
 	// -- LIFTING PHASE --

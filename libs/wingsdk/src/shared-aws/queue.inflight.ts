@@ -14,23 +14,27 @@ export class QueueClient implements IQueueClient {
     private readonly client: SQSClient = new SQSClient({})
   ) {}
 
-  public async push(message: string): Promise<void> {
-    try {
-      const command = new SendMessageCommand({
-        QueueUrl: this.queueUrl,
-        MessageBody: message,
-      });
-      await this.client.send(command);
-    } catch (e) {
-      if (e instanceof InvalidMessageContents) {
-        throw new Error(
-          `The message contains characters outside the allowed set (message=${message}): ${
-            (e as Error).stack
-          })}`
-        );
+  public async push(...messages: string[]): Promise<void> {
+    const messagePromises = messages.map(async (message) => {
+      try {
+        const command = new SendMessageCommand({
+          QueueUrl: this.queueUrl,
+          MessageBody: message,
+        });
+        await this.client.send(command);
+      } catch (e) {
+        if (e instanceof InvalidMessageContents) {
+          throw new Error(
+            `The message contains characters outside the allowed set (message=${message}): ${
+              (e as Error).stack
+            })}`
+          );
+        }
+        throw new Error((e as Error).stack);
       }
-      throw new Error((e as Error).stack);
-    }
+    });
+
+    await Promise.all(messagePromises);
   }
 
   public async purge(): Promise<void> {

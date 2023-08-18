@@ -1,3 +1,5 @@
+bring cloud;
+
 let jsonNumber  = Json 123;
 let jsonBool    = Json true;
 let jsonArray   = Json [ 1, 2, 3 ];
@@ -199,3 +201,58 @@ assert(notSpecified.get("foo") == "bar");
 // Check that empty {} is a Json
 let empty = {};
 assert(Json.has(empty, "something") == false);
+
+struct Base {
+  base: str;
+}
+
+struct LastOne extends Base {
+  hi: num;
+}
+
+struct InnerStructyJson  {
+  good: bool;
+  inner_stuff: Array<LastOne>;
+}
+
+struct StructyJson {
+  foo: str;
+  stuff: Array<num>;
+  maybe: InnerStructyJson?;
+}
+
+let notJsonMissingField: StructyJson = {
+  foo: "bar",
+  stuff: [],
+};
+
+let notJson: StructyJson = {
+  foo: "bar",
+  stuff: [1, 2, 3],
+  maybe: {
+    good: true,
+    inner_stuff: [{ hi: 1, base: "base" }]
+  }
+};
+
+let var mutableJson: StructyJson = {
+  foo: "bar",
+  stuff: [1, 2, 3],
+  maybe: {
+    good: true,
+    inner_stuff: [{ hi: 1, base: "base" }]
+  }
+};
+
+struct HasBucket {
+  a: cloud.Bucket;
+}
+struct HasInnerBucket {
+  a: HasBucket;
+}
+
+let hasBucket: HasInnerBucket = {
+  a: {
+    a: new cloud.Bucket()
+  }
+};

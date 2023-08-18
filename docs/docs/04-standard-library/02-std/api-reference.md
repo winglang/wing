@@ -1101,6 +1101,7 @@ Mutable Array.
 | <code><a href="#@winglang/sdk.std.MutArray.lastIndexOf">lastIndexOf</a></code> | Returns the index of the last occurrence of searchElement found. |
 | <code><a href="#@winglang/sdk.std.MutArray.pop">pop</a></code> | Remove value from end of array. |
 | <code><a href="#@winglang/sdk.std.MutArray.push">push</a></code> | Add value to end of array. |
+| <code><a href="#@winglang/sdk.std.MutArray.set">set</a></code> | Sets a new value at the given index of an array. |
 
 ---
 
@@ -1230,6 +1231,30 @@ Add value to end of array.
 - *Type:* <a href="#@winglang/sdk.std.T1">&lt;T&gt;</a>
 
 value to add.
+
+---
+
+##### `set` <a name="set" id="@winglang/sdk.std.MutArray.set"></a>
+
+```wing
+set(index: num, value: <T>): void
+```
+
+Sets a new value at the given index of an array.
+
+###### `index`<sup>Required</sup> <a name="index" id="@winglang/sdk.std.MutArray.set.parameter.index"></a>
+
+- *Type:* num
+
+the index to set the value at.
+
+---
+
+###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.std.MutArray.set.parameter.value"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.T1">&lt;T&gt;</a>
+
+the value to set at the given index.
 
 ---
 
