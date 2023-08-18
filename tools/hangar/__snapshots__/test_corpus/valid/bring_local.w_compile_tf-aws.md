@@ -492,7 +492,7 @@ class $Root extends $stdlib.std.Resource {
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:add data to store",new $Closure1(this,"$Closure1"));
     const s = ({"x": 1,"y": 2});
     const c = file1.Color.BLUE;
-    {((cond) => {if (!cond) throw new Error("assertion failed: c != file1.Color.RED")})((c !== file1.Color.RED))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: c != file1.Color.RED")})((((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })(c,file1.Color.RED)))};
     const t = new Triangle(this,"Triangle");
   }
 }

@@ -2,7 +2,7 @@
 
 ## inflight.$Closure1-1.js
 ```js
-module.exports = function({ $NIL, $q }) {
+module.exports = function({ $q }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -10,16 +10,13 @@ module.exports = function({ $NIL, $q }) {
       return $obj;
     }
     async handle() {
-      const msgs = ["Foo", "Bar"];
-      for (const msg of msgs) {
-        (await $q.push(msg));
-      }
-      const first = ((await $q.pop()) ?? $NIL);
-      const second = ((await $q.pop()) ?? $NIL);
-      const third = ((await $q.pop()) ?? $NIL);
-      {((cond) => {if (!cond) throw new Error("assertion failed: msgs.contains(first)")})(msgs.includes(first))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: msgs.contains(second)")})(msgs.includes(second))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: third == NIL")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(third,$NIL)))};
+      (await $q.push("Foo","Bar"));
+      const first = (await $q.pop());
+      const second = (await $q.pop());
+      const third = (await $q.pop());
+      {((cond) => {if (!cond) throw new Error("assertion failed: first == \"Foo\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(first,"Foo")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: second == \"Bar\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(second,"Bar")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: third == nil")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(third,undefined)))};
     }
   }
   return $Closure1;
@@ -178,7 +175,6 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         return `
           require("./inflight.$Closure1-1.js")({
-            $NIL: ${context._lift(NIL)},
             $q: ${context._lift(q)},
           })
         `;
@@ -199,13 +195,11 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(NIL, host, []);
           $Closure1._registerBindObject(q, host, ["pop", "push"]);
         }
         super._registerBind(host, ops);
       }
     }
-    const NIL = "<<NIL>>";
     const q = this.node.root.newAbstract("@winglang/sdk.cloud.Queue",this,"cloud.Queue");
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:pop",new $Closure1(this,"$Closure1"));
   }

@@ -139,7 +139,11 @@ async handle() {
   // THEN
   await s.stop();
 
-  expect(listMessages(s)).toMatchSnapshot();
+  const traces = s.listTraces().map((trace) => trace.data.message);
+  expect(traces).toContain(
+    'Invoke (payload="{\\"messages\\":[\\"A\\",\\"B\\",\\"C\\",\\"D\\",\\"E\\"]}").'
+  );
+  expect(traces).toContain('Invoke (payload="{\\"messages\\":[\\"F\\"]}").');
   expect(app.snapshot()).toMatchSnapshot();
 });
 

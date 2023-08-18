@@ -190,7 +190,7 @@ class $Root extends $stdlib.std.Resource {
     const RANDOM = "RANDOM123412121212kjhkjskdjkj";
     const NIL = "<<NIL>>";
     {((cond) => {if (!cond) throw new Error("assertion failed: util.env(\"PATH\").length > 0")})(((util.Util.env("PATH")).length > 0))};
-    if (((util.Util.tryEnv("MY_VAR")) !== undefined)) {
+    if ((((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })((util.Util.tryEnv("MY_VAR")),undefined))) {
       {((cond) => {if (!cond) throw new Error("assertion failed: util.env(\"MY_VAR\") == \"my value\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((util.Util.env("MY_VAR")),"my value")))};
     }
     let failed = false;

@@ -306,7 +306,7 @@ class $Root extends $stdlib.std.Resource {
     ((obj, args) => { obj[args[0]] = args[1]; })(m, ["a",321]);
     {((cond) => {if (!cond) throw new Error("assertion failed: m.get(\"a\") == 321")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((m)["a"],321)))};
     const n = JSON.parse(JSON.stringify(m));
-    {((cond) => {if (!cond) throw new Error("assertion failed: m != n")})((m !== n))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: m == n")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(m,n)))};
     let k2 = (Object.keys(m));
     {((cond) => {if (!cond) throw new Error("assertion failed: k2.length == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(k2.length,2)))};
     ((args) => { delete (args[0])[args[1]]; })([m,"b"]);

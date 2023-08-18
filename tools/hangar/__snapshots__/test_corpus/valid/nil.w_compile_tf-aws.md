@@ -32,7 +32,7 @@ module.exports = function({ $foo }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: foo.getOptionalValue()? == false")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((((await $foo.getOptionalValue())) != null),false)))};
       (await $foo.setOptionalValue("hello"));
       {((cond) => {if (!cond) throw new Error("assertion failed: foo.getOptionalValue()? == true")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((((await $foo.getOptionalValue())) != null),true)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: foo.getOptionalValue() != nil")})(((await $foo.getOptionalValue()) !== undefined))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: foo.getOptionalValue() != nil")})((((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })((await $foo.getOptionalValue()),undefined)))};
       (await $foo.setOptionalValue(undefined));
       {((cond) => {if (!cond) throw new Error("assertion failed: foo.getOptionalValue()? == false")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((((await $foo.getOptionalValue())) != null),false)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: foo.getOptionalValue() == nil")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $foo.getOptionalValue()),undefined)))};
