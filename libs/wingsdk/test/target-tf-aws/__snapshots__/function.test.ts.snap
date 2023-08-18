@@ -1,65 +1,65 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`basic function 1`] = `
-"{
-  \\"output\\": {
-    \\"WING_TEST_RUNNER_FUNCTION_ARNS\\": {
-      \\"value\\": \\"[]\\"
-    }
+{
+  "output": {
+    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+      "value": "[]",
+    },
   },
-  \\"resource\\": {
-    \\"aws_iam_role\\": {
-      \\"Function_IamRole_678BE84C\\": {
-        \\"assume_role_policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":\\\\\\"sts:AssumeRole\\\\\\",\\\\\\"Principal\\\\\\":{\\\\\\"Service\\\\\\":\\\\\\"lambda.amazonaws.com\\\\\\"},\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\"
-      }
+  "resource": {
+    "aws_iam_role": {
+      "Function_IamRole_678BE84C": {
+        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
+      },
     },
-    \\"aws_iam_role_policy\\": {
-      \\"Function_IamRolePolicy_E3B26607\\": {
-        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Action\\\\\\":\\\\\\"none:null\\\\\\",\\\\\\"Resource\\\\\\":\\\\\\"*\\\\\\"}]}\\",
-        \\"role\\": \\"\${aws_iam_role.Function_IamRole_678BE84C.name}\\"
-      }
+    "aws_iam_role_policy": {
+      "Function_IamRolePolicy_E3B26607": {
+        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Effect\\":\\"Allow\\",\\"Action\\":\\"none:null\\",\\"Resource\\":\\"*\\"}]}",
+        "role": "\${aws_iam_role.Function_IamRole_678BE84C.name}",
+      },
     },
-    \\"aws_iam_role_policy_attachment\\": {
-      \\"Function_IamRolePolicyAttachment_CACE1358\\": {
-        \\"policy_arn\\": \\"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole\\",
-        \\"role\\": \\"\${aws_iam_role.Function_IamRole_678BE84C.name}\\"
-      }
+    "aws_iam_role_policy_attachment": {
+      "Function_IamRolePolicyAttachment_CACE1358": {
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "\${aws_iam_role.Function_IamRole_678BE84C.name}",
+      },
     },
-    \\"aws_lambda_function\\": {
-      \\"Function\\": {
-        \\"environment\\": {
-          \\"variables\\": {
-            \\"WING_FUNCTION_NAME\\": \\"Function-c852aba6\\"
-          }
+    "aws_lambda_function": {
+      "Function": {
+        "environment": {
+          "variables": {
+            "WING_FUNCTION_NAME": "Function-c852aba6",
+          },
         },
-        \\"function_name\\": \\"Function-c852aba6\\",
-        \\"handler\\": \\"index.handler\\",
-        \\"publish\\": true,
-        \\"role\\": \\"\${aws_iam_role.Function_IamRole_678BE84C.arn}\\",
-        \\"runtime\\": \\"nodejs18.x\\",
-        \\"s3_bucket\\": \\"\${aws_s3_bucket.Code.bucket}\\",
-        \\"s3_key\\": \\"\${aws_s3_object.Function_S3Object_C62A0C2D.key}\\",
-        \\"timeout\\": 30,
-        \\"vpc_config\\": {
-          \\"security_group_ids\\": [],
-          \\"subnet_ids\\": []
-        }
-      }
+        "function_name": "Function-c852aba6",
+        "handler": "index.handler",
+        "publish": true,
+        "role": "\${aws_iam_role.Function_IamRole_678BE84C.arn}",
+        "runtime": "nodejs18.x",
+        "s3_bucket": "\${aws_s3_bucket.Code.bucket}",
+        "s3_key": "\${aws_s3_object.Function_S3Object_C62A0C2D.key}",
+        "timeout": 30,
+        "vpc_config": {
+          "security_group_ids": [],
+          "subnet_ids": [],
+        },
+      },
     },
-    \\"aws_s3_bucket\\": {
-      \\"Code\\": {
-        \\"bucket_prefix\\": \\"code-c84a50b1-\\"
-      }
+    "aws_s3_bucket": {
+      "Code": {
+        "bucket_prefix": "code-c84a50b1-",
+      },
     },
-    \\"aws_s3_object\\": {
-      \\"Function_S3Object_C62A0C2D\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.Code.bucket}\\",
-        \\"key\\": \\"<key>\\",
-        \\"source\\": \\"<source>\\"
-      }
-    }
-  }
-}"
+    "aws_s3_object": {
+      "Function_S3Object_C62A0C2D": {
+        "bucket": "\${aws_s3_bucket.Code.bucket}",
+        "key": "<key>",
+        "source": "<source>",
+      },
+    },
+  },
+}
 `;
 
 exports[`basic function 2`] = `
@@ -79,9 +79,6 @@ exports[`basic function 2`] = `
                 "path": "root/Default/Code",
               },
               "Function": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "Asset": {
                     "constructInfo": {
@@ -144,9 +141,6 @@ exports[`basic function 2`] = `
                 "path": "root/Default/Function",
               },
               "Handler": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
                   "version": "10.1.314",
@@ -168,9 +162,6 @@ exports[`basic function 2`] = `
                 "path": "root/Default/aws",
               },
               "cloud.TestRunner": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "TestFunctionArns": {
                     "constructInfo": {
@@ -230,67 +221,67 @@ exports[`basic function 2`] = `
 `;
 
 exports[`basic function with environment variables 1`] = `
-"{
-  \\"output\\": {
-    \\"WING_TEST_RUNNER_FUNCTION_ARNS\\": {
-      \\"value\\": \\"[]\\"
-    }
+{
+  "output": {
+    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+      "value": "[]",
+    },
   },
-  \\"resource\\": {
-    \\"aws_iam_role\\": {
-      \\"Function_IamRole_678BE84C\\": {
-        \\"assume_role_policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":\\\\\\"sts:AssumeRole\\\\\\",\\\\\\"Principal\\\\\\":{\\\\\\"Service\\\\\\":\\\\\\"lambda.amazonaws.com\\\\\\"},\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\"
-      }
+  "resource": {
+    "aws_iam_role": {
+      "Function_IamRole_678BE84C": {
+        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
+      },
     },
-    \\"aws_iam_role_policy\\": {
-      \\"Function_IamRolePolicy_E3B26607\\": {
-        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Action\\\\\\":\\\\\\"none:null\\\\\\",\\\\\\"Resource\\\\\\":\\\\\\"*\\\\\\"}]}\\",
-        \\"role\\": \\"\${aws_iam_role.Function_IamRole_678BE84C.name}\\"
-      }
+    "aws_iam_role_policy": {
+      "Function_IamRolePolicy_E3B26607": {
+        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Effect\\":\\"Allow\\",\\"Action\\":\\"none:null\\",\\"Resource\\":\\"*\\"}]}",
+        "role": "\${aws_iam_role.Function_IamRole_678BE84C.name}",
+      },
     },
-    \\"aws_iam_role_policy_attachment\\": {
-      \\"Function_IamRolePolicyAttachment_CACE1358\\": {
-        \\"policy_arn\\": \\"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole\\",
-        \\"role\\": \\"\${aws_iam_role.Function_IamRole_678BE84C.name}\\"
-      }
+    "aws_iam_role_policy_attachment": {
+      "Function_IamRolePolicyAttachment_CACE1358": {
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "\${aws_iam_role.Function_IamRole_678BE84C.name}",
+      },
     },
-    \\"aws_lambda_function\\": {
-      \\"Function\\": {
-        \\"environment\\": {
-          \\"variables\\": {
-            \\"BOOM\\": \\"BAM\\",
-            \\"FOO\\": \\"BAR\\",
-            \\"WING_FUNCTION_NAME\\": \\"Function-c852aba6\\"
-          }
+    "aws_lambda_function": {
+      "Function": {
+        "environment": {
+          "variables": {
+            "BOOM": "BAM",
+            "FOO": "BAR",
+            "WING_FUNCTION_NAME": "Function-c852aba6",
+          },
         },
-        \\"function_name\\": \\"Function-c852aba6\\",
-        \\"handler\\": \\"index.handler\\",
-        \\"publish\\": true,
-        \\"role\\": \\"\${aws_iam_role.Function_IamRole_678BE84C.arn}\\",
-        \\"runtime\\": \\"nodejs18.x\\",
-        \\"s3_bucket\\": \\"\${aws_s3_bucket.Code.bucket}\\",
-        \\"s3_key\\": \\"\${aws_s3_object.Function_S3Object_C62A0C2D.key}\\",
-        \\"timeout\\": 30,
-        \\"vpc_config\\": {
-          \\"security_group_ids\\": [],
-          \\"subnet_ids\\": []
-        }
-      }
+        "function_name": "Function-c852aba6",
+        "handler": "index.handler",
+        "publish": true,
+        "role": "\${aws_iam_role.Function_IamRole_678BE84C.arn}",
+        "runtime": "nodejs18.x",
+        "s3_bucket": "\${aws_s3_bucket.Code.bucket}",
+        "s3_key": "\${aws_s3_object.Function_S3Object_C62A0C2D.key}",
+        "timeout": 30,
+        "vpc_config": {
+          "security_group_ids": [],
+          "subnet_ids": [],
+        },
+      },
     },
-    \\"aws_s3_bucket\\": {
-      \\"Code\\": {
-        \\"bucket_prefix\\": \\"code-c84a50b1-\\"
-      }
+    "aws_s3_bucket": {
+      "Code": {
+        "bucket_prefix": "code-c84a50b1-",
+      },
     },
-    \\"aws_s3_object\\": {
-      \\"Function_S3Object_C62A0C2D\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.Code.bucket}\\",
-        \\"key\\": \\"<key>\\",
-        \\"source\\": \\"<source>\\"
-      }
-    }
-  }
-}"
+    "aws_s3_object": {
+      "Function_S3Object_C62A0C2D": {
+        "bucket": "\${aws_s3_bucket.Code.bucket}",
+        "key": "<key>",
+        "source": "<source>",
+      },
+    },
+  },
+}
 `;
 
 exports[`basic function with environment variables 2`] = `
@@ -310,9 +301,6 @@ exports[`basic function with environment variables 2`] = `
                 "path": "root/Default/Code",
               },
               "Function": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "Asset": {
                     "constructInfo": {
@@ -375,9 +363,6 @@ exports[`basic function with environment variables 2`] = `
                 "path": "root/Default/Function",
               },
               "Handler": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
                   "version": "10.1.314",
@@ -399,9 +384,6 @@ exports[`basic function with environment variables 2`] = `
                 "path": "root/Default/aws",
               },
               "cloud.TestRunner": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "TestFunctionArns": {
                     "constructInfo": {
@@ -461,66 +443,66 @@ exports[`basic function with environment variables 2`] = `
 `;
 
 exports[`basic function with memory size specified 1`] = `
-"{
-  \\"output\\": {
-    \\"WING_TEST_RUNNER_FUNCTION_ARNS\\": {
-      \\"value\\": \\"[]\\"
-    }
+{
+  "output": {
+    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+      "value": "[]",
+    },
   },
-  \\"resource\\": {
-    \\"aws_iam_role\\": {
-      \\"Function_IamRole_678BE84C\\": {
-        \\"assume_role_policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":\\\\\\"sts:AssumeRole\\\\\\",\\\\\\"Principal\\\\\\":{\\\\\\"Service\\\\\\":\\\\\\"lambda.amazonaws.com\\\\\\"},\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\"
-      }
+  "resource": {
+    "aws_iam_role": {
+      "Function_IamRole_678BE84C": {
+        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
+      },
     },
-    \\"aws_iam_role_policy\\": {
-      \\"Function_IamRolePolicy_E3B26607\\": {
-        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Action\\\\\\":\\\\\\"none:null\\\\\\",\\\\\\"Resource\\\\\\":\\\\\\"*\\\\\\"}]}\\",
-        \\"role\\": \\"\${aws_iam_role.Function_IamRole_678BE84C.name}\\"
-      }
+    "aws_iam_role_policy": {
+      "Function_IamRolePolicy_E3B26607": {
+        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Effect\\":\\"Allow\\",\\"Action\\":\\"none:null\\",\\"Resource\\":\\"*\\"}]}",
+        "role": "\${aws_iam_role.Function_IamRole_678BE84C.name}",
+      },
     },
-    \\"aws_iam_role_policy_attachment\\": {
-      \\"Function_IamRolePolicyAttachment_CACE1358\\": {
-        \\"policy_arn\\": \\"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole\\",
-        \\"role\\": \\"\${aws_iam_role.Function_IamRole_678BE84C.name}\\"
-      }
+    "aws_iam_role_policy_attachment": {
+      "Function_IamRolePolicyAttachment_CACE1358": {
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "\${aws_iam_role.Function_IamRole_678BE84C.name}",
+      },
     },
-    \\"aws_lambda_function\\": {
-      \\"Function\\": {
-        \\"environment\\": {
-          \\"variables\\": {
-            \\"WING_FUNCTION_NAME\\": \\"Function-c852aba6\\"
-          }
+    "aws_lambda_function": {
+      "Function": {
+        "environment": {
+          "variables": {
+            "WING_FUNCTION_NAME": "Function-c852aba6",
+          },
         },
-        \\"function_name\\": \\"Function-c852aba6\\",
-        \\"handler\\": \\"index.handler\\",
-        \\"memory_size\\": 512,
-        \\"publish\\": true,
-        \\"role\\": \\"\${aws_iam_role.Function_IamRole_678BE84C.arn}\\",
-        \\"runtime\\": \\"nodejs18.x\\",
-        \\"s3_bucket\\": \\"\${aws_s3_bucket.Code.bucket}\\",
-        \\"s3_key\\": \\"\${aws_s3_object.Function_S3Object_C62A0C2D.key}\\",
-        \\"timeout\\": 30,
-        \\"vpc_config\\": {
-          \\"security_group_ids\\": [],
-          \\"subnet_ids\\": []
-        }
-      }
+        "function_name": "Function-c852aba6",
+        "handler": "index.handler",
+        "memory_size": 512,
+        "publish": true,
+        "role": "\${aws_iam_role.Function_IamRole_678BE84C.arn}",
+        "runtime": "nodejs18.x",
+        "s3_bucket": "\${aws_s3_bucket.Code.bucket}",
+        "s3_key": "\${aws_s3_object.Function_S3Object_C62A0C2D.key}",
+        "timeout": 30,
+        "vpc_config": {
+          "security_group_ids": [],
+          "subnet_ids": [],
+        },
+      },
     },
-    \\"aws_s3_bucket\\": {
-      \\"Code\\": {
-        \\"bucket_prefix\\": \\"code-c84a50b1-\\"
-      }
+    "aws_s3_bucket": {
+      "Code": {
+        "bucket_prefix": "code-c84a50b1-",
+      },
     },
-    \\"aws_s3_object\\": {
-      \\"Function_S3Object_C62A0C2D\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.Code.bucket}\\",
-        \\"key\\": \\"<key>\\",
-        \\"source\\": \\"<source>\\"
-      }
-    }
-  }
-}"
+    "aws_s3_object": {
+      "Function_S3Object_C62A0C2D": {
+        "bucket": "\${aws_s3_bucket.Code.bucket}",
+        "key": "<key>",
+        "source": "<source>",
+      },
+    },
+  },
+}
 `;
 
 exports[`basic function with memory size specified 2`] = `
@@ -540,9 +522,6 @@ exports[`basic function with memory size specified 2`] = `
                 "path": "root/Default/Code",
               },
               "Function": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "Asset": {
                     "constructInfo": {
@@ -605,9 +584,6 @@ exports[`basic function with memory size specified 2`] = `
                 "path": "root/Default/Function",
               },
               "Handler": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
                   "version": "10.1.314",
@@ -629,9 +605,6 @@ exports[`basic function with memory size specified 2`] = `
                 "path": "root/Default/aws",
               },
               "cloud.TestRunner": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "TestFunctionArns": {
                     "constructInfo": {
@@ -691,65 +664,65 @@ exports[`basic function with memory size specified 2`] = `
 `;
 
 exports[`basic function with timeout explicitly set 1`] = `
-"{
-  \\"output\\": {
-    \\"WING_TEST_RUNNER_FUNCTION_ARNS\\": {
-      \\"value\\": \\"[]\\"
-    }
+{
+  "output": {
+    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+      "value": "[]",
+    },
   },
-  \\"resource\\": {
-    \\"aws_iam_role\\": {
-      \\"Function_IamRole_678BE84C\\": {
-        \\"assume_role_policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":\\\\\\"sts:AssumeRole\\\\\\",\\\\\\"Principal\\\\\\":{\\\\\\"Service\\\\\\":\\\\\\"lambda.amazonaws.com\\\\\\"},\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\"
-      }
+  "resource": {
+    "aws_iam_role": {
+      "Function_IamRole_678BE84C": {
+        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
+      },
     },
-    \\"aws_iam_role_policy\\": {
-      \\"Function_IamRolePolicy_E3B26607\\": {
-        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Action\\\\\\":\\\\\\"none:null\\\\\\",\\\\\\"Resource\\\\\\":\\\\\\"*\\\\\\"}]}\\",
-        \\"role\\": \\"\${aws_iam_role.Function_IamRole_678BE84C.name}\\"
-      }
+    "aws_iam_role_policy": {
+      "Function_IamRolePolicy_E3B26607": {
+        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Effect\\":\\"Allow\\",\\"Action\\":\\"none:null\\",\\"Resource\\":\\"*\\"}]}",
+        "role": "\${aws_iam_role.Function_IamRole_678BE84C.name}",
+      },
     },
-    \\"aws_iam_role_policy_attachment\\": {
-      \\"Function_IamRolePolicyAttachment_CACE1358\\": {
-        \\"policy_arn\\": \\"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole\\",
-        \\"role\\": \\"\${aws_iam_role.Function_IamRole_678BE84C.name}\\"
-      }
+    "aws_iam_role_policy_attachment": {
+      "Function_IamRolePolicyAttachment_CACE1358": {
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "\${aws_iam_role.Function_IamRole_678BE84C.name}",
+      },
     },
-    \\"aws_lambda_function\\": {
-      \\"Function\\": {
-        \\"environment\\": {
-          \\"variables\\": {
-            \\"WING_FUNCTION_NAME\\": \\"Function-c852aba6\\"
-          }
+    "aws_lambda_function": {
+      "Function": {
+        "environment": {
+          "variables": {
+            "WING_FUNCTION_NAME": "Function-c852aba6",
+          },
         },
-        \\"function_name\\": \\"Function-c852aba6\\",
-        \\"handler\\": \\"index.handler\\",
-        \\"publish\\": true,
-        \\"role\\": \\"\${aws_iam_role.Function_IamRole_678BE84C.arn}\\",
-        \\"runtime\\": \\"nodejs18.x\\",
-        \\"s3_bucket\\": \\"\${aws_s3_bucket.Code.bucket}\\",
-        \\"s3_key\\": \\"\${aws_s3_object.Function_S3Object_C62A0C2D.key}\\",
-        \\"timeout\\": 30,
-        \\"vpc_config\\": {
-          \\"security_group_ids\\": [],
-          \\"subnet_ids\\": []
-        }
-      }
+        "function_name": "Function-c852aba6",
+        "handler": "index.handler",
+        "publish": true,
+        "role": "\${aws_iam_role.Function_IamRole_678BE84C.arn}",
+        "runtime": "nodejs18.x",
+        "s3_bucket": "\${aws_s3_bucket.Code.bucket}",
+        "s3_key": "\${aws_s3_object.Function_S3Object_C62A0C2D.key}",
+        "timeout": 30,
+        "vpc_config": {
+          "security_group_ids": [],
+          "subnet_ids": [],
+        },
+      },
     },
-    \\"aws_s3_bucket\\": {
-      \\"Code\\": {
-        \\"bucket_prefix\\": \\"code-c84a50b1-\\"
-      }
+    "aws_s3_bucket": {
+      "Code": {
+        "bucket_prefix": "code-c84a50b1-",
+      },
     },
-    \\"aws_s3_object\\": {
-      \\"Function_S3Object_C62A0C2D\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.Code.bucket}\\",
-        \\"key\\": \\"<key>\\",
-        \\"source\\": \\"<source>\\"
-      }
-    }
-  }
-}"
+    "aws_s3_object": {
+      "Function_S3Object_C62A0C2D": {
+        "bucket": "\${aws_s3_bucket.Code.bucket}",
+        "key": "<key>",
+        "source": "<source>",
+      },
+    },
+  },
+}
 `;
 
 exports[`basic function with timeout explicitly set 2`] = `
@@ -769,9 +742,6 @@ exports[`basic function with timeout explicitly set 2`] = `
                 "path": "root/Default/Code",
               },
               "Function": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "Asset": {
                     "constructInfo": {
@@ -834,9 +804,6 @@ exports[`basic function with timeout explicitly set 2`] = `
                 "path": "root/Default/Function",
               },
               "Handler": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
                   "version": "10.1.314",
@@ -858,9 +825,6 @@ exports[`basic function with timeout explicitly set 2`] = `
                 "path": "root/Default/aws",
               },
               "cloud.TestRunner": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "TestFunctionArns": {
                     "constructInfo": {
@@ -920,65 +884,65 @@ exports[`basic function with timeout explicitly set 2`] = `
 `;
 
 exports[`function name valid 1`] = `
-"{
-  \\"output\\": {
-    \\"WING_TEST_RUNNER_FUNCTION_ARNS\\": {
-      \\"value\\": \\"[]\\"
-    }
+{
+  "output": {
+    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+      "value": "[]",
+    },
   },
-  \\"resource\\": {
-    \\"aws_iam_role\\": {
-      \\"The-Mighty_Function-01_IamRole_590EA29B\\": {
-        \\"assume_role_policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":\\\\\\"sts:AssumeRole\\\\\\",\\\\\\"Principal\\\\\\":{\\\\\\"Service\\\\\\":\\\\\\"lambda.amazonaws.com\\\\\\"},\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\"
-      }
+  "resource": {
+    "aws_iam_role": {
+      "The-Mighty_Function-01_IamRole_590EA29B": {
+        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
+      },
     },
-    \\"aws_iam_role_policy\\": {
-      \\"The-Mighty_Function-01_IamRolePolicy_506506FA\\": {
-        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Action\\\\\\":\\\\\\"none:null\\\\\\",\\\\\\"Resource\\\\\\":\\\\\\"*\\\\\\"}]}\\",
-        \\"role\\": \\"\${aws_iam_role.The-Mighty_Function-01_IamRole_590EA29B.name}\\"
-      }
+    "aws_iam_role_policy": {
+      "The-Mighty_Function-01_IamRolePolicy_506506FA": {
+        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Effect\\":\\"Allow\\",\\"Action\\":\\"none:null\\",\\"Resource\\":\\"*\\"}]}",
+        "role": "\${aws_iam_role.The-Mighty_Function-01_IamRole_590EA29B.name}",
+      },
     },
-    \\"aws_iam_role_policy_attachment\\": {
-      \\"The-Mighty_Function-01_IamRolePolicyAttachment_63D2B658\\": {
-        \\"policy_arn\\": \\"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole\\",
-        \\"role\\": \\"\${aws_iam_role.The-Mighty_Function-01_IamRole_590EA29B.name}\\"
-      }
+    "aws_iam_role_policy_attachment": {
+      "The-Mighty_Function-01_IamRolePolicyAttachment_63D2B658": {
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "\${aws_iam_role.The-Mighty_Function-01_IamRole_590EA29B.name}",
+      },
     },
-    \\"aws_lambda_function\\": {
-      \\"The-Mighty_Function-01\\": {
-        \\"environment\\": {
-          \\"variables\\": {
-            \\"WING_FUNCTION_NAME\\": \\"The-Mighty_Function-01-c86057f3\\"
-          }
+    "aws_lambda_function": {
+      "The-Mighty_Function-01": {
+        "environment": {
+          "variables": {
+            "WING_FUNCTION_NAME": "The-Mighty_Function-01-c86057f3",
+          },
         },
-        \\"function_name\\": \\"The-Mighty_Function-01-c86057f3\\",
-        \\"handler\\": \\"index.handler\\",
-        \\"publish\\": true,
-        \\"role\\": \\"\${aws_iam_role.The-Mighty_Function-01_IamRole_590EA29B.arn}\\",
-        \\"runtime\\": \\"nodejs18.x\\",
-        \\"s3_bucket\\": \\"\${aws_s3_bucket.Code.bucket}\\",
-        \\"s3_key\\": \\"\${aws_s3_object.The-Mighty_Function-01_S3Object_4181DCAE.key}\\",
-        \\"timeout\\": 30,
-        \\"vpc_config\\": {
-          \\"security_group_ids\\": [],
-          \\"subnet_ids\\": []
-        }
-      }
+        "function_name": "The-Mighty_Function-01-c86057f3",
+        "handler": "index.handler",
+        "publish": true,
+        "role": "\${aws_iam_role.The-Mighty_Function-01_IamRole_590EA29B.arn}",
+        "runtime": "nodejs18.x",
+        "s3_bucket": "\${aws_s3_bucket.Code.bucket}",
+        "s3_key": "\${aws_s3_object.The-Mighty_Function-01_S3Object_4181DCAE.key}",
+        "timeout": 30,
+        "vpc_config": {
+          "security_group_ids": [],
+          "subnet_ids": [],
+        },
+      },
     },
-    \\"aws_s3_bucket\\": {
-      \\"Code\\": {
-        \\"bucket_prefix\\": \\"code-c84a50b1-\\"
-      }
+    "aws_s3_bucket": {
+      "Code": {
+        "bucket_prefix": "code-c84a50b1-",
+      },
     },
-    \\"aws_s3_object\\": {
-      \\"The-Mighty_Function-01_S3Object_4181DCAE\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.Code.bucket}\\",
-        \\"key\\": \\"<key>\\",
-        \\"source\\": \\"<source>\\"
-      }
-    }
-  }
-}"
+    "aws_s3_object": {
+      "The-Mighty_Function-01_S3Object_4181DCAE": {
+        "bucket": "\${aws_s3_bucket.Code.bucket}",
+        "key": "<key>",
+        "source": "<source>",
+      },
+    },
+  },
+}
 `;
 
 exports[`function name valid 2`] = `
@@ -998,9 +962,6 @@ exports[`function name valid 2`] = `
                 "path": "root/Default/Code",
               },
               "Handler": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
                   "version": "10.1.314",
@@ -1014,9 +975,6 @@ exports[`function name valid 2`] = `
                 "path": "root/Default/Handler",
               },
               "The-Mighty_Function-01": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "Asset": {
                     "constructInfo": {
@@ -1087,9 +1045,6 @@ exports[`function name valid 2`] = `
                 "path": "root/Default/aws",
               },
               "cloud.TestRunner": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "TestFunctionArns": {
                     "constructInfo": {
@@ -1149,65 +1104,65 @@ exports[`function name valid 2`] = `
 `;
 
 exports[`replace invalid character from function name 1`] = `
-"{
-  \\"output\\": {
-    \\"WING_TEST_RUNNER_FUNCTION_ARNS\\": {
-      \\"value\\": \\"[]\\"
-    }
+{
+  "output": {
+    "WING_TEST_RUNNER_FUNCTION_ARNS": {
+      "value": "[]",
+    },
   },
-  \\"resource\\": {
-    \\"aws_iam_role\\": {
-      \\"TheMightyFunction_IamRole_5421E649\\": {
-        \\"assume_role_policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":\\\\\\"sts:AssumeRole\\\\\\",\\\\\\"Principal\\\\\\":{\\\\\\"Service\\\\\\":\\\\\\"lambda.amazonaws.com\\\\\\"},\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\"
-      }
+  "resource": {
+    "aws_iam_role": {
+      "TheMightyFunction_IamRole_5421E649": {
+        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
+      },
     },
-    \\"aws_iam_role_policy\\": {
-      \\"TheMightyFunction_IamRolePolicy_B7246118\\": {
-        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Action\\\\\\":\\\\\\"none:null\\\\\\",\\\\\\"Resource\\\\\\":\\\\\\"*\\\\\\"}]}\\",
-        \\"role\\": \\"\${aws_iam_role.TheMightyFunction_IamRole_5421E649.name}\\"
-      }
+    "aws_iam_role_policy": {
+      "TheMightyFunction_IamRolePolicy_B7246118": {
+        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Effect\\":\\"Allow\\",\\"Action\\":\\"none:null\\",\\"Resource\\":\\"*\\"}]}",
+        "role": "\${aws_iam_role.TheMightyFunction_IamRole_5421E649.name}",
+      },
     },
-    \\"aws_iam_role_policy_attachment\\": {
-      \\"TheMightyFunction_IamRolePolicyAttachment_FD664B8E\\": {
-        \\"policy_arn\\": \\"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole\\",
-        \\"role\\": \\"\${aws_iam_role.TheMightyFunction_IamRole_5421E649.name}\\"
-      }
+    "aws_iam_role_policy_attachment": {
+      "TheMightyFunction_IamRolePolicyAttachment_FD664B8E": {
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "\${aws_iam_role.TheMightyFunction_IamRole_5421E649.name}",
+      },
     },
-    \\"aws_lambda_function\\": {
-      \\"TheMightyFunction\\": {
-        \\"environment\\": {
-          \\"variables\\": {
-            \\"WING_FUNCTION_NAME\\": \\"The-Mighty-Function-c86ccf73\\"
-          }
+    "aws_lambda_function": {
+      "TheMightyFunction": {
+        "environment": {
+          "variables": {
+            "WING_FUNCTION_NAME": "The-Mighty-Function-c86ccf73",
+          },
         },
-        \\"function_name\\": \\"The-Mighty-Function-c86ccf73\\",
-        \\"handler\\": \\"index.handler\\",
-        \\"publish\\": true,
-        \\"role\\": \\"\${aws_iam_role.TheMightyFunction_IamRole_5421E649.arn}\\",
-        \\"runtime\\": \\"nodejs18.x\\",
-        \\"s3_bucket\\": \\"\${aws_s3_bucket.Code.bucket}\\",
-        \\"s3_key\\": \\"\${aws_s3_object.TheMightyFunction_S3Object_51333814.key}\\",
-        \\"timeout\\": 30,
-        \\"vpc_config\\": {
-          \\"security_group_ids\\": [],
-          \\"subnet_ids\\": []
-        }
-      }
+        "function_name": "The-Mighty-Function-c86ccf73",
+        "handler": "index.handler",
+        "publish": true,
+        "role": "\${aws_iam_role.TheMightyFunction_IamRole_5421E649.arn}",
+        "runtime": "nodejs18.x",
+        "s3_bucket": "\${aws_s3_bucket.Code.bucket}",
+        "s3_key": "\${aws_s3_object.TheMightyFunction_S3Object_51333814.key}",
+        "timeout": 30,
+        "vpc_config": {
+          "security_group_ids": [],
+          "subnet_ids": [],
+        },
+      },
     },
-    \\"aws_s3_bucket\\": {
-      \\"Code\\": {
-        \\"bucket_prefix\\": \\"code-c84a50b1-\\"
-      }
+    "aws_s3_bucket": {
+      "Code": {
+        "bucket_prefix": "code-c84a50b1-",
+      },
     },
-    \\"aws_s3_object\\": {
-      \\"TheMightyFunction_S3Object_51333814\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.Code.bucket}\\",
-        \\"key\\": \\"<key>\\",
-        \\"source\\": \\"<source>\\"
-      }
-    }
-  }
-}"
+    "aws_s3_object": {
+      "TheMightyFunction_S3Object_51333814": {
+        "bucket": "\${aws_s3_bucket.Code.bucket}",
+        "key": "<key>",
+        "source": "<source>",
+      },
+    },
+  },
+}
 `;
 
 exports[`replace invalid character from function name 2`] = `
@@ -1227,9 +1182,6 @@ exports[`replace invalid character from function name 2`] = `
                 "path": "root/Default/Code",
               },
               "Handler": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
                   "version": "10.1.314",
@@ -1243,9 +1195,6 @@ exports[`replace invalid character from function name 2`] = `
                 "path": "root/Default/Handler",
               },
               "The%Mighty$Function": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "Asset": {
                     "constructInfo": {
@@ -1316,9 +1265,6 @@ exports[`replace invalid character from function name 2`] = `
                 "path": "root/Default/aws",
               },
               "cloud.TestRunner": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "TestFunctionArns": {
                     "constructInfo": {

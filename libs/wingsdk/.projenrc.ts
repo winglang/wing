@@ -50,7 +50,7 @@ const sideLoad = Object.values(TARGET_DEPS).flat();
 
 const project = new cdk.JsiiProject({
   name: "@winglang/sdk",
-  author: "Monada, Inc.",
+  author: "Wing Cloud",
   authorOrganization: true,
   authorAddress: "ping@monada.co",
   repositoryUrl: "https://github.com/winglang/wing.git",
@@ -103,6 +103,7 @@ const project = new cdk.JsiiProject({
     "cron-parser",
     // shared client dependencies
     "ioredis",
+    "jsonschema",
   ],
   devDeps: [
     `@cdktf/provider-aws@^15.0.0`, // only for testing Wing plugins

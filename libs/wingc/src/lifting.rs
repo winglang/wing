@@ -285,16 +285,6 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 			None
 		};
 
-		if self.ctx.current_phase() == Phase::Inflight {
-			if let Some(parent) = &node.parent {
-				if self.should_capture_expr(parent) {
-					let mut lifts = self.lifts_stack.pop().unwrap();
-					lifts.capture(&parent.id, &self.jsify_expr(&parent, Phase::Inflight));
-					self.lifts_stack.push(lifts);
-				}
-			}
-		}
-
 		let udt = UserDefinedType {
 			root: node.name.clone(),
 			fields: vec![],

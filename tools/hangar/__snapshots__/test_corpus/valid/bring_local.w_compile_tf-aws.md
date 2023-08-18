@@ -1,5 +1,37 @@
 # [bring_local.w](../../../../../examples/tests/valid/bring_local.w) | compile | tf-aws
 
+## Point.Struct.js
+```js
+module.exports = function(stdStruct, fromInline) {
+  class Point {
+    static jsonSchema() {
+      return {
+        id: "/Point",
+        type: "object",
+        properties: {
+          x: { type: "number" },
+          y: { type: "number" },
+        },
+        required: [
+          "x",
+          "y",
+        ],
+        $defs: {
+        }
+      }
+    }
+    static fromJson(obj) {
+      return stdStruct._validate(obj, this.jsonSchema())
+    }
+    static _toInflightType(context) {
+      return fromInline(`require("./Point.Struct.js")(${ context._lift(stdStruct) })`);
+    }
+  }
+  return Point;
+};
+
+```
+
 ## inflight.$Closure1-1.js
 ```js
 module.exports = function({ $__parent_this_1_b }) {
@@ -454,7 +486,7 @@ class $Root extends $stdlib.std.Resource {
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:add data to store",new $Closure1(this,"$Closure1"));
     const s = ({"x": 1,"y": 2});
     const c = file1.Color.BLUE;
-    {((cond) => {if (!cond) throw new Error("assertion failed: c != file1.Color.RED")})((c !== file1.Color.RED))};
+    {((cond) => {if (!cond) throw new Error("assertion failed: c != file1.Color.RED")})((((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })(c,file1.Color.RED)))};
     const t = new Triangle(this,"Triangle");
   }
 }
@@ -568,6 +600,7 @@ module.exports = function({ $stdlib }) {
       return tmp;
     })({})
   ;
+  const Point = require("./Point.Struct.js")($stdlib.std.Struct, $stdlib.core.NodeJsCode.fromInline);
   return { Util, Store, Color };
 };
 

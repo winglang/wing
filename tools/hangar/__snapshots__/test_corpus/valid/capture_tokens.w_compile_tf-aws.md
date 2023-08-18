@@ -254,9 +254,7 @@ module.exports = function({  }) {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c8ed8f29",
             "WING_TARGET": "tf-aws",
-            "WING_TOKEN_TFTOKEN_TOKEN_11": "${jsonencode(aws_api_gateway_stage.MyResource_cloudApi_api_stage_A26656F9.invoke_url)}",
-            "WING_TOKEN_TFTOKEN_TOKEN_7": "${jsonencode(aws_api_gateway_stage.MyResource_cloudApi_api_stage_A26656F9.invoke_url)}",
-            "WING_TOKEN_TFTOKEN_TOKEN_8": "${jsonencode(aws_api_gateway_stage.MyResource_cloudApi_api_stage_A26656F9.invoke_url)}"
+            "WING_TOKEN_TFTOKEN_TOKEN_7": "${jsonencode(aws_api_gateway_stage.MyResource_cloudApi_api_stage_A26656F9.invoke_url)}"
           }
         },
         "function_name": "Handler-c8ed8f29",
@@ -283,8 +281,7 @@ module.exports = function({  }) {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c8ecc6d5",
             "WING_TARGET": "tf-aws",
-            "WING_TOKEN_TFTOKEN_TOKEN_33": "${jsonencode(aws_api_gateway_stage.cloudApi_api_stage_BBB283E4.invoke_url)}",
-            "WING_TOKEN_TFTOKEN_TOKEN_34": "${jsonencode(aws_api_gateway_stage.cloudApi_api_stage_BBB283E4.invoke_url)}"
+            "WING_TOKEN_TFTOKEN_TOKEN_30": "${jsonencode(aws_api_gateway_stage.cloudApi_api_stage_BBB283E4.invoke_url)}"
           }
         },
         "function_name": "Handler-c8ecc6d5",

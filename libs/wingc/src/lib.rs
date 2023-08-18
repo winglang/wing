@@ -22,6 +22,7 @@ use type_check::jsii_importer::JsiiImportSpec;
 use type_check::symbol_env::StatementIdx;
 use type_check::{FunctionSignature, SymbolKind, Type};
 use type_check_assert::TypeCheckAssert;
+use valid_json_visitor::ValidJsonVisitor;
 use visit::Visit;
 use wasm_util::{ptr_to_string, string_to_combined_ptr, WASM_RETURN_ERROR};
 use wingii::type_system::TypeSystem;
@@ -55,6 +56,7 @@ pub mod lsp;
 pub mod parser;
 pub mod type_check;
 mod type_check_assert;
+mod valid_json_visitor;
 pub mod visit;
 mod visit_context;
 mod visit_types;
@@ -90,6 +92,7 @@ const WINGSDK_STRING: &'static str = "std.String";
 const WINGSDK_JSON: &'static str = "std.Json";
 const WINGSDK_MUT_JSON: &'static str = "std.MutJson";
 const WINGSDK_RESOURCE: &'static str = "std.Resource";
+const WINGSDK_STRUCT: &'static str = "std.Struct";
 const WINGSDK_TEST_CLASS_NAME: &'static str = "Test";
 
 const CONSTRUCT_BASE_CLASS: &'static str = "constructs.Construct";
@@ -356,6 +359,10 @@ pub fn compile(
 		// Validate the type checker didn't miss anything - see `TypeCheckAssert` for details
 		let mut tc_assert = TypeCheckAssert::new(&types, found_errors());
 		tc_assert.check(&scope);
+
+		// Validate all Json literals to make sure their values are legal
+		let mut json_checker = ValidJsonVisitor::new(&types);
+		json_checker.check(&scope);
 	}
 
 	let project_dir = absolute_project_root

@@ -8,7 +8,7 @@ exports[`api handler can read the request params 1`] = `
   "wingsdk.cloud.Api created.",
   "wingsdk.sim.EventMapping created.",
   "Processing \\"GET /hello\\" params={}).",
-  "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":{},\\"method\\":\\"GET\\",\\"path\\":\\"/hello\\",\\"query\\":{\\"foo\\":\\"bar\\",\\"bar\\":\\"baz\\"},\\"vars\\":{}}).",
+  "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":\\"\\",\\"method\\":\\"GET\\",\\"path\\":\\"/hello\\",\\"query\\":{\\"foo\\":\\"bar\\",\\"bar\\":\\"baz\\"},\\"vars\\":{}}).",
   "GET /hello - 200.",
   "wingsdk.sim.EventMapping deleted.",
   "Closing server on http://127.0.0.1:<port>",
@@ -34,6 +34,16 @@ return class Handler {
 
 })).handle(event);
 };",
+  "connections.json": {
+    "connections": [
+      {
+        "name": "get()",
+        "source": "root/my_api",
+        "target": "root/my_api/OnRequestHandler-e645076f",
+      },
+    ],
+    "version": "connections-0.1",
+  },
   "simulator.json": {
     "resources": [
       {
@@ -103,9 +113,6 @@ return class Handler {
     "tree": {
       "children": {
         "Handler": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -119,9 +126,6 @@ return class Handler {
           "path": "root/Handler",
         },
         "cloud.TestRunner": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -135,21 +139,8 @@ return class Handler {
           "path": "root/cloud.TestRunner",
         },
         "my_api": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "outbound",
-                "implicit": false,
-                "relationship": "get()",
-                "resource": "root/my_api/OnRequestHandler-e645076f",
-              },
-            ],
-          },
           "children": {
             "ApiEventMapping-e645076f": {
-              "attributes": {
-                "wing:resource:connections": [],
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.1.314",
@@ -161,16 +152,6 @@ return class Handler {
               "path": "root/my_api/ApiEventMapping-e645076f",
             },
             "OnRequestHandler-e645076f": {
-              "attributes": {
-                "wing:resource:connections": [
-                  {
-                    "direction": "inbound",
-                    "implicit": false,
-                    "relationship": "get()",
-                    "resource": "root/my_api",
-                  },
-                ],
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.1.314",
@@ -216,7 +197,7 @@ exports[`api handler can read the request path 1`] = `
   "wingsdk.cloud.Api created.",
   "wingsdk.sim.EventMapping created.",
   "Processing \\"GET /hello\\" params={}).",
-  "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":{},\\"method\\":\\"GET\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}).",
+  "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":\\"\\",\\"method\\":\\"GET\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}).",
   "GET /hello - 200.",
   "wingsdk.sim.EventMapping deleted.",
   "Closing server on http://127.0.0.1:<port>",
@@ -242,6 +223,16 @@ return class Handler {
 
 })).handle(event);
 };",
+  "connections.json": {
+    "connections": [
+      {
+        "name": "get()",
+        "source": "root/my_api",
+        "target": "root/my_api/OnRequestHandler-e645076f",
+      },
+    ],
+    "version": "connections-0.1",
+  },
   "simulator.json": {
     "resources": [
       {
@@ -311,9 +302,6 @@ return class Handler {
     "tree": {
       "children": {
         "Handler": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -327,9 +315,6 @@ return class Handler {
           "path": "root/Handler",
         },
         "cloud.TestRunner": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -343,21 +328,8 @@ return class Handler {
           "path": "root/cloud.TestRunner",
         },
         "my_api": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "outbound",
-                "implicit": false,
-                "relationship": "get()",
-                "resource": "root/my_api/OnRequestHandler-e645076f",
-              },
-            ],
-          },
           "children": {
             "ApiEventMapping-e645076f": {
-              "attributes": {
-                "wing:resource:connections": [],
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.1.314",
@@ -369,16 +341,6 @@ return class Handler {
               "path": "root/my_api/ApiEventMapping-e645076f",
             },
             "OnRequestHandler-e645076f": {
-              "attributes": {
-                "wing:resource:connections": [
-                  {
-                    "direction": "inbound",
-                    "implicit": false,
-                    "relationship": "get()",
-                    "resource": "root/my_api",
-                  },
-                ],
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.1.314",
@@ -424,7 +386,7 @@ exports[`api handler can set response headers 1`] = `
   "wingsdk.cloud.Api created.",
   "wingsdk.sim.EventMapping created.",
   "Processing \\"GET /hello\\" params={}).",
-  "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"foo\\":\\"bar\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":{},\\"method\\":\\"GET\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}).",
+  "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"foo\\":\\"bar\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":\\"\\",\\"method\\":\\"GET\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}).",
   "GET /hello - 200.",
   "wingsdk.sim.EventMapping deleted.",
   "Closing server on http://127.0.0.1:<port>",
@@ -450,6 +412,16 @@ return class Handler {
 
 })).handle(event);
 };",
+  "connections.json": {
+    "connections": [
+      {
+        "name": "get()",
+        "source": "root/my_api",
+        "target": "root/my_api/OnRequestHandler-e645076f",
+      },
+    ],
+    "version": "connections-0.1",
+  },
   "simulator.json": {
     "resources": [
       {
@@ -519,9 +491,6 @@ return class Handler {
     "tree": {
       "children": {
         "Handler": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -535,9 +504,6 @@ return class Handler {
           "path": "root/Handler",
         },
         "cloud.TestRunner": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -551,21 +517,8 @@ return class Handler {
           "path": "root/cloud.TestRunner",
         },
         "my_api": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "outbound",
-                "implicit": false,
-                "relationship": "get()",
-                "resource": "root/my_api/OnRequestHandler-e645076f",
-              },
-            ],
-          },
           "children": {
             "ApiEventMapping-e645076f": {
-              "attributes": {
-                "wing:resource:connections": [],
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.1.314",
@@ -577,16 +530,6 @@ return class Handler {
               "path": "root/my_api/ApiEventMapping-e645076f",
             },
             "OnRequestHandler-e645076f": {
-              "attributes": {
-                "wing:resource:connections": [
-                  {
-                    "direction": "inbound",
-                    "implicit": false,
-                    "relationship": "get()",
-                    "resource": "root/my_api",
-                  },
-                ],
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.1.314",
@@ -632,7 +575,7 @@ exports[`api response returns Content-Type header from inflight 1`] = `
   "wingsdk.cloud.Api created.",
   "wingsdk.sim.EventMapping created.",
   "Processing \\"GET /hello\\" params={}).",
-  "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":{},\\"method\\":\\"GET\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}).",
+  "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":\\"\\",\\"method\\":\\"GET\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}).",
   "GET /hello - 200.",
   "wingsdk.sim.EventMapping deleted.",
   "Closing server on http://127.0.0.1:<port>",
@@ -658,6 +601,16 @@ return class Handler {
 
 })).handle(event);
 };",
+  "connections.json": {
+    "connections": [
+      {
+        "name": "get()",
+        "source": "root/my_api",
+        "target": "root/my_api/OnRequestHandler-e645076f",
+      },
+    ],
+    "version": "connections-0.1",
+  },
   "simulator.json": {
     "resources": [
       {
@@ -727,9 +680,6 @@ return class Handler {
     "tree": {
       "children": {
         "Handler": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -743,9 +693,6 @@ return class Handler {
           "path": "root/Handler",
         },
         "cloud.TestRunner": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -759,21 +706,8 @@ return class Handler {
           "path": "root/cloud.TestRunner",
         },
         "my_api": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "outbound",
-                "implicit": false,
-                "relationship": "get()",
-                "resource": "root/my_api/OnRequestHandler-e645076f",
-              },
-            ],
-          },
           "children": {
             "ApiEventMapping-e645076f": {
-              "attributes": {
-                "wing:resource:connections": [],
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.1.314",
@@ -785,16 +719,6 @@ return class Handler {
               "path": "root/my_api/ApiEventMapping-e645076f",
             },
             "OnRequestHandler-e645076f": {
-              "attributes": {
-                "wing:resource:connections": [
-                  {
-                    "direction": "inbound",
-                    "implicit": false,
-                    "relationship": "get()",
-                    "resource": "root/my_api",
-                  },
-                ],
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.1.314",
@@ -840,7 +764,7 @@ exports[`api response returns default Content-Type header 1`] = `
   "wingsdk.cloud.Api created.",
   "wingsdk.sim.EventMapping created.",
   "Processing \\"GET /hello\\" params={}).",
-  "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":{},\\"method\\":\\"GET\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}).",
+  "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":\\"\\",\\"method\\":\\"GET\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}).",
   "GET /hello - 200.",
   "wingsdk.sim.EventMapping deleted.",
   "Closing server on http://127.0.0.1:<port>",
@@ -866,6 +790,16 @@ return class Handler {
 
 })).handle(event);
 };",
+  "connections.json": {
+    "connections": [
+      {
+        "name": "get()",
+        "source": "root/my_api",
+        "target": "root/my_api/OnRequestHandler-e645076f",
+      },
+    ],
+    "version": "connections-0.1",
+  },
   "simulator.json": {
     "resources": [
       {
@@ -935,9 +869,6 @@ return class Handler {
     "tree": {
       "children": {
         "Handler": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -951,9 +882,6 @@ return class Handler {
           "path": "root/Handler",
         },
         "cloud.TestRunner": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -967,21 +895,8 @@ return class Handler {
           "path": "root/cloud.TestRunner",
         },
         "my_api": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "outbound",
-                "implicit": false,
-                "relationship": "get()",
-                "resource": "root/my_api/OnRequestHandler-e645076f",
-              },
-            ],
-          },
           "children": {
             "ApiEventMapping-e645076f": {
-              "attributes": {
-                "wing:resource:connections": [],
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.1.314",
@@ -993,16 +908,6 @@ return class Handler {
               "path": "root/my_api/ApiEventMapping-e645076f",
             },
             "OnRequestHandler-e645076f": {
-              "attributes": {
-                "wing:resource:connections": [
-                  {
-                    "direction": "inbound",
-                    "implicit": false,
-                    "relationship": "get()",
-                    "resource": "root/my_api",
-                  },
-                ],
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.1.314",
@@ -1048,25 +953,25 @@ exports[`api supports every method type 1`] = `
   "wingsdk.cloud.Api created.",
   "wingsdk.sim.EventMapping created.",
   "Processing \\"GET /hello\\" params={}).",
-  "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":{},\\"method\\":\\"GET\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}).",
+  "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":\\"\\",\\"method\\":\\"GET\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}).",
   "GET /hello - 200.",
   "Processing \\"POST /hello\\" params={}).",
-  "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\",\\"content-length\\":\\"0\\"},\\"body\\":{},\\"method\\":\\"POST\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}).",
+  "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\",\\"content-length\\":\\"0\\"},\\"body\\":\\"\\",\\"method\\":\\"POST\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}).",
   "POST /hello - 200.",
   "Processing \\"PUT /hello\\" params={}).",
-  "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\",\\"content-length\\":\\"0\\"},\\"body\\":{},\\"method\\":\\"PUT\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}).",
+  "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\",\\"content-length\\":\\"0\\"},\\"body\\":\\"\\",\\"method\\":\\"PUT\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}).",
   "PUT /hello - 200.",
   "Processing \\"DELETE /hello\\" params={}).",
-  "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":{},\\"method\\":\\"DELETE\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}).",
+  "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":\\"\\",\\"method\\":\\"DELETE\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}).",
   "DELETE /hello - 200.",
   "Processing \\"GET /hello\\" params={}).",
-  "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"close\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":{},\\"method\\":\\"HEAD\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}).",
+  "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"close\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":\\"\\",\\"method\\":\\"HEAD\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}).",
   "GET /hello - 200.",
   "Processing \\"OPTIONS /hello\\" params={}).",
-  "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":{},\\"method\\":\\"OPTIONS\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}).",
+  "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":\\"\\",\\"method\\":\\"OPTIONS\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}).",
   "OPTIONS /hello - 200.",
   "Processing \\"PATCH /hello\\" params={}).",
-  "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\",\\"content-length\\":\\"0\\"},\\"body\\":{},\\"method\\":\\"PATCH\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}).",
+  "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\",\\"content-length\\":\\"0\\"},\\"body\\":\\"\\",\\"method\\":\\"PATCH\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}).",
   "PATCH /hello - 200.",
   "wingsdk.sim.EventMapping deleted.",
   "Closing server on http://127.0.0.1:<port>",
@@ -1092,6 +997,46 @@ return class Handler {
 
 })).handle(event);
 };",
+  "connections.json": {
+    "connections": [
+      {
+        "name": "get()",
+        "source": "root/my_api",
+        "target": "root/my_api/OnRequestHandler-e645076f",
+      },
+      {
+        "name": "post()",
+        "source": "root/my_api",
+        "target": "root/my_api/OnRequestHandler-e645076f",
+      },
+      {
+        "name": "put()",
+        "source": "root/my_api",
+        "target": "root/my_api/OnRequestHandler-e645076f",
+      },
+      {
+        "name": "delete()",
+        "source": "root/my_api",
+        "target": "root/my_api/OnRequestHandler-e645076f",
+      },
+      {
+        "name": "head()",
+        "source": "root/my_api",
+        "target": "root/my_api/OnRequestHandler-e645076f",
+      },
+      {
+        "name": "options()",
+        "source": "root/my_api",
+        "target": "root/my_api/OnRequestHandler-e645076f",
+      },
+      {
+        "name": "patch()",
+        "source": "root/my_api",
+        "target": "root/my_api/OnRequestHandler-e645076f",
+      },
+    ],
+    "version": "connections-0.1",
+  },
   "simulator.json": {
     "resources": [
       {
@@ -1245,9 +1190,6 @@ return class Handler {
     "tree": {
       "children": {
         "Handler": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -1261,9 +1203,6 @@ return class Handler {
           "path": "root/Handler",
         },
         "cloud.TestRunner": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -1277,57 +1216,8 @@ return class Handler {
           "path": "root/cloud.TestRunner",
         },
         "my_api": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "outbound",
-                "implicit": false,
-                "relationship": "get()",
-                "resource": "root/my_api/OnRequestHandler-e645076f",
-              },
-              {
-                "direction": "outbound",
-                "implicit": false,
-                "relationship": "post()",
-                "resource": "root/my_api/OnRequestHandler-e645076f",
-              },
-              {
-                "direction": "outbound",
-                "implicit": false,
-                "relationship": "put()",
-                "resource": "root/my_api/OnRequestHandler-e645076f",
-              },
-              {
-                "direction": "outbound",
-                "implicit": false,
-                "relationship": "delete()",
-                "resource": "root/my_api/OnRequestHandler-e645076f",
-              },
-              {
-                "direction": "outbound",
-                "implicit": false,
-                "relationship": "head()",
-                "resource": "root/my_api/OnRequestHandler-e645076f",
-              },
-              {
-                "direction": "outbound",
-                "implicit": false,
-                "relationship": "options()",
-                "resource": "root/my_api/OnRequestHandler-e645076f",
-              },
-              {
-                "direction": "outbound",
-                "implicit": false,
-                "relationship": "patch()",
-                "resource": "root/my_api/OnRequestHandler-e645076f",
-              },
-            ],
-          },
           "children": {
             "ApiEventMapping-e645076f": {
-              "attributes": {
-                "wing:resource:connections": [],
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.1.314",
@@ -1339,52 +1229,6 @@ return class Handler {
               "path": "root/my_api/ApiEventMapping-e645076f",
             },
             "OnRequestHandler-e645076f": {
-              "attributes": {
-                "wing:resource:connections": [
-                  {
-                    "direction": "inbound",
-                    "implicit": false,
-                    "relationship": "get()",
-                    "resource": "root/my_api",
-                  },
-                  {
-                    "direction": "inbound",
-                    "implicit": false,
-                    "relationship": "post()",
-                    "resource": "root/my_api",
-                  },
-                  {
-                    "direction": "inbound",
-                    "implicit": false,
-                    "relationship": "put()",
-                    "resource": "root/my_api",
-                  },
-                  {
-                    "direction": "inbound",
-                    "implicit": false,
-                    "relationship": "delete()",
-                    "resource": "root/my_api",
-                  },
-                  {
-                    "direction": "inbound",
-                    "implicit": false,
-                    "relationship": "head()",
-                    "resource": "root/my_api",
-                  },
-                  {
-                    "direction": "inbound",
-                    "implicit": false,
-                    "relationship": "options()",
-                    "resource": "root/my_api",
-                  },
-                  {
-                    "direction": "inbound",
-                    "implicit": false,
-                    "relationship": "patch()",
-                    "resource": "root/my_api",
-                  },
-                ],
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.1.314",
@@ -1438,6 +1282,16 @@ return class Handler {
 
 })).handle(event);
 };",
+  "connections.json": {
+    "connections": [
+      {
+        "name": "get()",
+        "source": "root/my_api",
+        "target": "root/my_api/OnRequestHandler-e645076f",
+      },
+    ],
+    "version": "connections-0.1",
+  },
   "simulator.json": {
     "resources": [
       {
@@ -1523,9 +1377,6 @@ return class Handler {
     "tree": {
       "children": {
         "Handler": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -1539,9 +1390,6 @@ return class Handler {
           "path": "root/Handler",
         },
         "cloud.TestRunner": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -1555,21 +1403,8 @@ return class Handler {
           "path": "root/cloud.TestRunner",
         },
         "my_api": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "outbound",
-                "implicit": false,
-                "relationship": "get()",
-                "resource": "root/my_api/OnRequestHandler-e645076f",
-              },
-            ],
-          },
           "children": {
             "ApiEventMapping-e645076f": {
-              "attributes": {
-                "wing:resource:connections": [],
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.1.314",
@@ -1581,16 +1416,6 @@ return class Handler {
               "path": "root/my_api/ApiEventMapping-e645076f",
             },
             "OnRequestHandler-e645076f": {
-              "attributes": {
-                "wing:resource:connections": [
-                  {
-                    "direction": "inbound",
-                    "implicit": false,
-                    "relationship": "get()",
-                    "resource": "root/my_api",
-                  },
-                ],
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.1.314",
@@ -1638,10 +1463,10 @@ exports[`api with multiple methods on same route 1`] = `
   "wingsdk.cloud.Function created.",
   "wingsdk.sim.EventMapping created.",
   "Processing \\"GET /hello\\" params={}).",
-  "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":{},\\"method\\":\\"GET\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}).",
+  "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":\\"\\",\\"method\\":\\"GET\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}).",
   "GET /hello - 200.",
   "Processing \\"POST /hello\\" params={}).",
-  "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\",\\"content-length\\":\\"0\\"},\\"body\\":{},\\"method\\":\\"POST\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}).",
+  "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\",\\"content-length\\":\\"0\\"},\\"body\\":\\"\\",\\"method\\":\\"POST\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}).",
   "POST /hello - 200.",
   "wingsdk.sim.EventMapping deleted.",
   "wingsdk.cloud.Function deleted.",
@@ -1683,6 +1508,21 @@ return class Handler {
 
 })).handle(event);
 };",
+  "connections.json": {
+    "connections": [
+      {
+        "name": "get()",
+        "source": "root/my_api",
+        "target": "root/my_api/OnRequestHandler-7c48a9f0",
+      },
+      {
+        "name": "post()",
+        "source": "root/my_api",
+        "target": "root/my_api/OnRequestHandler-f6d90a7f",
+      },
+    ],
+    "version": "connections-0.1",
+  },
   "simulator.json": {
     "resources": [
       {
@@ -1790,9 +1630,6 @@ return class Handler {
     "tree": {
       "children": {
         "Handler1": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -1806,9 +1643,6 @@ return class Handler {
           "path": "root/Handler1",
         },
         "Handler2": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -1822,9 +1656,6 @@ return class Handler {
           "path": "root/Handler2",
         },
         "cloud.TestRunner": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -1838,27 +1669,8 @@ return class Handler {
           "path": "root/cloud.TestRunner",
         },
         "my_api": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "outbound",
-                "implicit": false,
-                "relationship": "get()",
-                "resource": "root/my_api/OnRequestHandler-7c48a9f0",
-              },
-              {
-                "direction": "outbound",
-                "implicit": false,
-                "relationship": "post()",
-                "resource": "root/my_api/OnRequestHandler-f6d90a7f",
-              },
-            ],
-          },
           "children": {
             "ApiEventMapping-7c48a9f0": {
-              "attributes": {
-                "wing:resource:connections": [],
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.1.314",
@@ -1870,9 +1682,6 @@ return class Handler {
               "path": "root/my_api/ApiEventMapping-7c48a9f0",
             },
             "ApiEventMapping-f6d90a7f": {
-              "attributes": {
-                "wing:resource:connections": [],
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.1.314",
@@ -1884,16 +1693,6 @@ return class Handler {
               "path": "root/my_api/ApiEventMapping-f6d90a7f",
             },
             "OnRequestHandler-7c48a9f0": {
-              "attributes": {
-                "wing:resource:connections": [
-                  {
-                    "direction": "inbound",
-                    "implicit": false,
-                    "relationship": "get()",
-                    "resource": "root/my_api",
-                  },
-                ],
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.1.314",
@@ -1907,16 +1706,6 @@ return class Handler {
               "path": "root/my_api/OnRequestHandler-7c48a9f0",
             },
             "OnRequestHandler-f6d90a7f": {
-              "attributes": {
-                "wing:resource:connections": [
-                  {
-                    "direction": "inbound",
-                    "implicit": false,
-                    "relationship": "post()",
-                    "resource": "root/my_api",
-                  },
-                ],
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.1.314",
@@ -1964,10 +1753,10 @@ exports[`api with multiple routes 1`] = `
   "wingsdk.cloud.Function created.",
   "wingsdk.sim.EventMapping created.",
   "Processing \\"GET /hello/world\\" params={}).",
-  "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":{},\\"method\\":\\"GET\\",\\"path\\":\\"/hello/world\\",\\"query\\":{},\\"vars\\":{}}).",
+  "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":\\"\\",\\"method\\":\\"GET\\",\\"path\\":\\"/hello/world\\",\\"query\\":{},\\"vars\\":{}}).",
   "GET /hello/world - 200.",
   "Processing \\"GET /hello/wingnuts\\" params={}).",
-  "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":{},\\"method\\":\\"GET\\",\\"path\\":\\"/hello/wingnuts\\",\\"query\\":{},\\"vars\\":{}}).",
+  "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":\\"\\",\\"method\\":\\"GET\\",\\"path\\":\\"/hello/wingnuts\\",\\"query\\":{},\\"vars\\":{}}).",
   "GET /hello/wingnuts - 200.",
   "wingsdk.sim.EventMapping deleted.",
   "wingsdk.cloud.Function deleted.",
@@ -2009,6 +1798,21 @@ return class Handler {
 
 })).handle(event);
 };",
+  "connections.json": {
+    "connections": [
+      {
+        "name": "get()",
+        "source": "root/my_api",
+        "target": "root/my_api/OnRequestHandler-7c48a9f0",
+      },
+      {
+        "name": "get()",
+        "source": "root/my_api",
+        "target": "root/my_api/OnRequestHandler-f6d90a7f",
+      },
+    ],
+    "version": "connections-0.1",
+  },
   "simulator.json": {
     "resources": [
       {
@@ -2118,9 +1922,6 @@ return class Handler {
     "tree": {
       "children": {
         "Handler1": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -2134,9 +1935,6 @@ return class Handler {
           "path": "root/Handler1",
         },
         "Handler2": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -2150,9 +1948,6 @@ return class Handler {
           "path": "root/Handler2",
         },
         "cloud.TestRunner": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -2166,27 +1961,8 @@ return class Handler {
           "path": "root/cloud.TestRunner",
         },
         "my_api": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "outbound",
-                "implicit": false,
-                "relationship": "get()",
-                "resource": "root/my_api/OnRequestHandler-7c48a9f0",
-              },
-              {
-                "direction": "outbound",
-                "implicit": false,
-                "relationship": "get()",
-                "resource": "root/my_api/OnRequestHandler-f6d90a7f",
-              },
-            ],
-          },
           "children": {
             "ApiEventMapping-7c48a9f0": {
-              "attributes": {
-                "wing:resource:connections": [],
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.1.314",
@@ -2198,9 +1974,6 @@ return class Handler {
               "path": "root/my_api/ApiEventMapping-7c48a9f0",
             },
             "ApiEventMapping-f6d90a7f": {
-              "attributes": {
-                "wing:resource:connections": [],
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.1.314",
@@ -2212,16 +1985,6 @@ return class Handler {
               "path": "root/my_api/ApiEventMapping-f6d90a7f",
             },
             "OnRequestHandler-7c48a9f0": {
-              "attributes": {
-                "wing:resource:connections": [
-                  {
-                    "direction": "inbound",
-                    "implicit": false,
-                    "relationship": "get()",
-                    "resource": "root/my_api",
-                  },
-                ],
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.1.314",
@@ -2235,16 +1998,6 @@ return class Handler {
               "path": "root/my_api/OnRequestHandler-7c48a9f0",
             },
             "OnRequestHandler-f6d90a7f": {
-              "attributes": {
-                "wing:resource:connections": [
-                  {
-                    "direction": "inbound",
-                    "implicit": false,
-                    "relationship": "get()",
-                    "resource": "root/my_api",
-                  },
-                ],
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.1.314",
@@ -2290,7 +2043,7 @@ exports[`api with one GET route 1`] = `
   "wingsdk.cloud.Api created.",
   "wingsdk.sim.EventMapping created.",
   "Processing \\"GET /hello\\" params={}).",
-  "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":{},\\"method\\":\\"GET\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}).",
+  "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":\\"\\",\\"method\\":\\"GET\\",\\"path\\":\\"/hello\\",\\"query\\":{},\\"vars\\":{}}).",
   "GET /hello - 200.",
   "wingsdk.sim.EventMapping deleted.",
   "Closing server on http://127.0.0.1:<port>",
@@ -2316,6 +2069,16 @@ return class Handler {
 
 })).handle(event);
 };",
+  "connections.json": {
+    "connections": [
+      {
+        "name": "get()",
+        "source": "root/my_api",
+        "target": "root/my_api/OnRequestHandler-e645076f",
+      },
+    ],
+    "version": "connections-0.1",
+  },
   "simulator.json": {
     "resources": [
       {
@@ -2385,9 +2148,6 @@ return class Handler {
     "tree": {
       "children": {
         "Handler": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -2401,9 +2161,6 @@ return class Handler {
           "path": "root/Handler",
         },
         "cloud.TestRunner": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -2417,21 +2174,8 @@ return class Handler {
           "path": "root/cloud.TestRunner",
         },
         "my_api": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "outbound",
-                "implicit": false,
-                "relationship": "get()",
-                "resource": "root/my_api/OnRequestHandler-e645076f",
-              },
-            ],
-          },
           "children": {
             "ApiEventMapping-e645076f": {
-              "attributes": {
-                "wing:resource:connections": [],
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.1.314",
@@ -2443,16 +2187,6 @@ return class Handler {
               "path": "root/my_api/ApiEventMapping-e645076f",
             },
             "OnRequestHandler-e645076f": {
-              "attributes": {
-                "wing:resource:connections": [
-                  {
-                    "direction": "inbound",
-                    "implicit": false,
-                    "relationship": "get()",
-                    "resource": "root/my_api",
-                  },
-                ],
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.1.314",
@@ -2498,7 +2232,7 @@ exports[`api with one GET route with request params 1`] = `
   "wingsdk.cloud.Api created.",
   "wingsdk.sim.EventMapping created.",
   "Processing \\"GET /users/{name}\\" params={\\"name\\":\\"tsuf\\"}).",
-  "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":{},\\"method\\":\\"GET\\",\\"path\\":\\"/users/tsuf\\",\\"query\\":{},\\"vars\\":{\\"name\\":\\"tsuf\\"}}).",
+  "Invoke (payload={\\"headers\\":{\\"host\\":\\"127.0.0.1:<port>\\",\\"connection\\":\\"keep-alive\\",\\"accept\\":\\"*/*\\",\\"accept-language\\":\\"*\\",\\"sec-fetch-mode\\":\\"cors\\",\\"user-agent\\":\\"undici\\",\\"accept-encoding\\":\\"gzip, deflate\\"},\\"body\\":\\"\\",\\"method\\":\\"GET\\",\\"path\\":\\"/users/tsuf\\",\\"query\\":{},\\"vars\\":{\\"name\\":\\"tsuf\\"}}).",
   "GET /users/{name} - 200.",
   "wingsdk.sim.EventMapping deleted.",
   "Closing server on http://127.0.0.1:<port>",
@@ -2524,6 +2258,16 @@ return class Handler {
 
 })).handle(event);
 };",
+  "connections.json": {
+    "connections": [
+      {
+        "name": "get()",
+        "source": "root/my_api",
+        "target": "root/my_api/OnRequestHandler-e645076f",
+      },
+    ],
+    "version": "connections-0.1",
+  },
   "simulator.json": {
     "resources": [
       {
@@ -2602,9 +2346,6 @@ return class Handler {
     "tree": {
       "children": {
         "Handler": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -2618,9 +2359,6 @@ return class Handler {
           "path": "root/Handler",
         },
         "cloud.TestRunner": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -2634,21 +2372,8 @@ return class Handler {
           "path": "root/cloud.TestRunner",
         },
         "my_api": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "outbound",
-                "implicit": false,
-                "relationship": "get()",
-                "resource": "root/my_api/OnRequestHandler-e645076f",
-              },
-            ],
-          },
           "children": {
             "ApiEventMapping-e645076f": {
-              "attributes": {
-                "wing:resource:connections": [],
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.1.314",
@@ -2660,16 +2385,6 @@ return class Handler {
               "path": "root/my_api/ApiEventMapping-e645076f",
             },
             "OnRequestHandler-e645076f": {
-              "attributes": {
-                "wing:resource:connections": [
-                  {
-                    "direction": "inbound",
-                    "implicit": false,
-                    "relationship": "get()",
-                    "resource": "root/my_api",
-                  },
-                ],
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.1.314",
@@ -2741,6 +2456,16 @@ return class Handler {
 
 })).handle(event);
 };",
+  "connections.json": {
+    "connections": [
+      {
+        "name": "post()",
+        "source": "root/my_api",
+        "target": "root/my_api/OnRequestHandler-e645076f",
+      },
+    ],
+    "version": "connections-0.1",
+  },
   "simulator.json": {
     "resources": [
       {
@@ -2810,9 +2535,6 @@ return class Handler {
     "tree": {
       "children": {
         "Handler": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -2826,9 +2548,6 @@ return class Handler {
           "path": "root/Handler",
         },
         "cloud.TestRunner": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -2842,21 +2561,8 @@ return class Handler {
           "path": "root/cloud.TestRunner",
         },
         "my_api": {
-          "attributes": {
-            "wing:resource:connections": [
-              {
-                "direction": "outbound",
-                "implicit": false,
-                "relationship": "post()",
-                "resource": "root/my_api/OnRequestHandler-e645076f",
-              },
-            ],
-          },
           "children": {
             "ApiEventMapping-e645076f": {
-              "attributes": {
-                "wing:resource:connections": [],
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.1.314",
@@ -2868,16 +2574,6 @@ return class Handler {
               "path": "root/my_api/ApiEventMapping-e645076f",
             },
             "OnRequestHandler-e645076f": {
-              "attributes": {
-                "wing:resource:connections": [
-                  {
-                    "direction": "inbound",
-                    "implicit": false,
-                    "relationship": "post()",
-                    "resource": "root/my_api",
-                  },
-                ],
-              },
               "constructInfo": {
                 "fqn": "constructs.Construct",
                 "version": "10.1.314",
@@ -2917,6 +2613,10 @@ return class Handler {
 
 exports[`create an api 1`] = `
 {
+  "connections.json": {
+    "connections": [],
+    "version": "connections-0.1",
+  },
   "simulator.json": {
     "resources": [
       {
@@ -2945,9 +2645,6 @@ exports[`create an api 1`] = `
     "tree": {
       "children": {
         "cloud.TestRunner": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -2961,9 +2658,6 @@ exports[`create an api 1`] = `
           "path": "root/cloud.TestRunner",
         },
         "my_api": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",

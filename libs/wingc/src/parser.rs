@@ -568,6 +568,7 @@ impl<'s> Parser<'s> {
 
 	fn build_if_let_statement(&self, statement_node: &Node, phase: Phase) -> DiagnosticResult<StmtKind> {
 		let if_block = self.build_scope(&statement_node.child_by_field_name("block").unwrap(), phase);
+		let reassignable = statement_node.child_by_field_name("reassignable").is_some();
 		let value = self.build_expression(&statement_node.child_by_field_name("value").unwrap(), phase)?;
 		let name = self.check_reserved_symbol(&statement_node.child_by_field_name("name").unwrap())?;
 		let else_block = if let Some(else_block) = statement_node.child_by_field_name("else_block") {
@@ -577,6 +578,7 @@ impl<'s> Parser<'s> {
 		};
 		Ok(StmtKind::IfLet {
 			var_name: name,
+			reassignable,
 			value,
 			statements: if_block,
 			else_statements: else_block,
@@ -1805,8 +1807,6 @@ impl<'s> Parser<'s> {
 					self.build_expression(&element_node, phase)?
 				};
 
-				let element = Box::new(exp);
-
 				*self.in_json.borrow_mut() -= 1;
 
 				// Only set mutability back to false if we are no longer parsing nested json
@@ -1814,6 +1814,12 @@ impl<'s> Parser<'s> {
 					*self.is_in_mut_json.borrow_mut() = false;
 				}
 
+				// avoid unnecessary wrapping of json elements
+				if matches!(exp.kind, ExprKind::JsonLiteral { .. }) {
+					return Ok(exp);
+				}
+
+				let element = Box::new(exp);
 				Ok(Expr::new(ExprKind::JsonLiteral { is_mut, element }, expression_span))
 			}
 			"set_literal" => self.build_set_literal(expression_node, phase),
@@ -1860,7 +1866,7 @@ impl<'s> Parser<'s> {
 		}
 	}
 
-	fn build_map_fields(&self, expression_node: &Node<'_>, phase: Phase) -> Result<IndexMap<String, Expr>, ()> {
+	fn build_map_fields(&self, expression_node: &Node<'_>, phase: Phase) -> Result<IndexMap<Symbol, Expr>, ()> {
 		let mut fields = IndexMap::new();
 		let mut cursor = expression_node.walk();
 		for field_node in expression_node.children_by_field_name("member", &mut cursor) {
@@ -1872,9 +1878,10 @@ impl<'s> Parser<'s> {
 				"string" => {
 					let s = self.node_text(&key_node);
 					// Remove quotes, we assume this is a valid key for a map
-					s[1..s.len() - 1].to_string()
+					let s = s[1..s.len() - 1].to_string();
+					Symbol::new(s, self.node_span(&key_node))
 				}
-				"identifier" => self.node_text(&key_node).to_string(),
+				"identifier" => self.node_symbol(&key_node)?,
 				other => panic!("Unexpected map key type {} at {:?}", other, key_node),
 			};
 			let value_node = field_node.named_child(1).unwrap();

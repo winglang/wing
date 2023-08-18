@@ -102,7 +102,7 @@ test("can del a value", async () => {
     const recordsDeleted = await client.del(key);
     const value = await client.get(key);
     expect(recordsDeleted).toEqual(1);
-    expect(value).toEqual(null);
+    expect(value).toBeUndefined();
   });
 });
 
@@ -130,6 +130,6 @@ test("get a value that does not exist", async () => {
   await app._withSimulator(async (s) => {
     const client = s.getResource("/my_redis") as ex.IRedisClient;
     const value = await client.get(key);
-    expect(value).toEqual(null);
+    expect(value).toBeUndefined();
   });
 });

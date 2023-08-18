@@ -11,7 +11,7 @@ const project = new typescript.TypeScriptProject({
   authorName: "Monada",
   authorEmail: "ping@monada.co",
   authorOrganization: true,
-  authorUrl: "https://monada.co",
+  authorUrl: "https://wing.cloud",
   repository: "https://github.com/winglang/wing.git",
   projenCommand: "pnpm exec projen",
   packageManager: javascript.NodePackageManager.PNPM,

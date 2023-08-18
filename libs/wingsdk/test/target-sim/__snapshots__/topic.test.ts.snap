@@ -2,6 +2,10 @@
 
 exports[`create a topic 1`] = `
 {
+  "connections.json": {
+    "connections": [],
+    "version": "connections-0.1",
+  },
   "simulator.json": {
     "resources": [
       {
@@ -25,9 +29,6 @@ exports[`create a topic 1`] = `
     "tree": {
       "children": {
         "cloud.TestRunner": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",
@@ -41,9 +42,6 @@ exports[`create a topic 1`] = `
           "path": "root/cloud.TestRunner",
         },
         "my_topic": {
-          "attributes": {
-            "wing:resource:connections": [],
-          },
           "constructInfo": {
             "fqn": "constructs.Construct",
             "version": "10.1.314",

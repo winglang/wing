@@ -1144,6 +1144,9 @@ importers:
       ioredis:
         specifier: ^5.3.1
         version: 5.3.1
+      jsonschema:
+        specifier: ^1.4.1
+        version: 1.4.1
       mime-types:
         specifier: ^2.1.35
         version: 2.1.35

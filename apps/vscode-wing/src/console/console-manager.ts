@@ -211,9 +211,24 @@ export const createConsoleManager = (
               iframe { display: block; height: 100vh; width: 100vw; border: none; }
             </style>
         </head>
-        <body>
-          <iframe src="http://${instance.url}?layout=4&theme=${getTheme()}"/>
-        </body>
+        <script>
+          const instanceUrl = "${instance.url}";
+          const layout = 4;
+          const theme = "${getTheme()}";
+
+          // Used to force reload the iframe
+          const time = "${Date.now()}";
+
+          const color = getComputedStyle(document.documentElement).getPropertyValue('--vscode-menu-background').replace("#", "");
+          document.addEventListener('DOMContentLoaded', () => {
+            const iframe = document.querySelector('iframe');
+            const iframeSrc = \`http://\${instanceUrl}?layout=\${layout}&theme=\${theme}&color=\${color}\`;
+            iframe.src = iframeSrc;
+          });
+      </script>
+      <body>
+        <iframe src=""/>
+      </body>
       </html>`;
 
     resourcesExplorer.update(await instance.client.listResources());

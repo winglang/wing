@@ -1101,6 +1101,7 @@ Mutable Array.
 | <code><a href="#@winglang/sdk.std.MutArray.lastIndexOf">lastIndexOf</a></code> | Returns the index of the last occurrence of searchElement found. |
 | <code><a href="#@winglang/sdk.std.MutArray.pop">pop</a></code> | Remove value from end of array. |
 | <code><a href="#@winglang/sdk.std.MutArray.push">push</a></code> | Add value to end of array. |
+| <code><a href="#@winglang/sdk.std.MutArray.set">set</a></code> | Sets a new value at the given index of an array. |
 
 ---
 
@@ -1230,6 +1231,30 @@ Add value to end of array.
 - *Type:* <a href="#@winglang/sdk.std.T1">&lt;T&gt;</a>
 
 value to add.
+
+---
+
+##### `set` <a name="set" id="@winglang/sdk.std.MutArray.set"></a>
+
+```wing
+set(index: num, value: <T>): void
+```
+
+Sets a new value at the given index of an array.
+
+###### `index`<sup>Required</sup> <a name="index" id="@winglang/sdk.std.MutArray.set.parameter.index"></a>
+
+- *Type:* num
+
+the index to set the value at.
+
+---
+
+###### `value`<sup>Required</sup> <a name="value" id="@winglang/sdk.std.MutArray.set.parameter.value"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.T1">&lt;T&gt;</a>
+
+the value to set at the given index.
 
 ---
 
@@ -2066,6 +2091,50 @@ length: num;
 The length of the string.
 
 ---
+
+
+### Struct <a name="Struct" id="@winglang/sdk.std.Struct"></a>
+
+Shared behavior for all structs.
+
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.std.Struct.fromJson">fromJson</a></code> | Converts a Json to a Struct. |
+| <code><a href="#@winglang/sdk.std.Struct.tryFromJson">tryFromJson</a></code> | Converts a Json to a Struct, returning nil if the Json is not valid. |
+
+---
+
+##### `fromJson` <a name="fromJson" id="@winglang/sdk.std.Struct.fromJson"></a>
+
+```wing
+Struct.fromJson(json: Json);
+```
+
+Converts a Json to a Struct.
+
+###### `json`<sup>Required</sup> <a name="json" id="@winglang/sdk.std.Struct.fromJson.parameter.json"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
+
+---
+
+##### `tryFromJson` <a name="tryFromJson" id="@winglang/sdk.std.Struct.tryFromJson"></a>
+
+```wing
+Struct.tryFromJson(json: Json);
+```
+
+Converts a Json to a Struct, returning nil if the Json is not valid.
+
+###### `json`<sup>Required</sup> <a name="json" id="@winglang/sdk.std.Struct.tryFromJson.parameter.json"></a>
+
+- *Type:* <a href="#@winglang/sdk.std.Json">Json</a>
+
+---
+
 
 
 ## Structs <a name="Structs" id="Structs"></a>
