@@ -3,7 +3,6 @@ import * as path from "path";
 import { IConstruct } from "constructs";
 import { App } from "./app";
 import { Display } from "../std/display";
-import { IResource, Resource } from "../std/resource";
 
 export const TREE_FILE_PATH = "tree.json";
 
@@ -146,14 +145,7 @@ export function synthesizeTree(app: App, outdir: string) {
   );
 }
 
-function isIResource(construct: IConstruct): construct is IResource {
-  return construct instanceof Resource;
-}
-
 function synthDisplay(construct: IConstruct): DisplayInfo | undefined {
-  if (!isIResource(construct)) {
-    return;
-  }
   const display = Display.of(construct);
   if (display.description || display.title || display.hidden) {
     return display;

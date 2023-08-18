@@ -1,7 +1,7 @@
 import { Construct } from "constructs";
 import { fqnForType } from "../constants";
 import { App } from "../core";
-import { Display, IResource, Resource } from "../std";
+import { Display, IResource } from "../std";
 
 /**
  * Global identifier for `Api`.
@@ -31,7 +31,7 @@ export type OpenApiSpecExtension = any;
  * @inflight  `@winglang/sdk.cloud.IApiClient`
  */
 
-export abstract class Api extends Resource {
+export abstract class Api extends Construct {
   /**
    * Creates a new cloud.Api instance through the app.
    * @internal

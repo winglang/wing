@@ -41,8 +41,6 @@ export class TestRunner extends std.TestRunner implements ISimulatorResource {
     for (const test of this.findTests()) {
       this.node.addDependency(test._fn);
     }
-
-    super._preSynthesize();
   }
 
   private getTestFunctionHandles(): Record<string, string> {

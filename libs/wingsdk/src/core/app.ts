@@ -1,6 +1,7 @@
-import { Construct } from "constructs";
+import { Construct, IConstruct } from "constructs";
+import { Bindings } from "./bindings";
 import { Tokens } from "./tokens";
-import { IResource } from "../std/resource";
+import { IInflightHost } from "../std";
 import { TestRunner } from "../std/test-runner";
 
 /**
@@ -234,8 +235,39 @@ export abstract class App extends Construct {
 
 export function preSynthesizeAllConstructs(app: App): void {
   for (const c of app.node.findAll()) {
-    if (typeof (c as IResource)._preSynthesize === "function") {
-      (c as IResource)._preSynthesize();
+    if (isPresynthesizable(c)) {
+      c._preSynthesize();
     }
   }
+}
+
+function isPresynthesizable(t: any): t is IPresynthesize {
+  return typeof t._preSynthesize === "function";
+}
+
+interface IPresynthesize extends IConstruct {
+  _preSynthesize(): void;
+}
+
+export function bindAllConstructsToInflightHosts(app: App): void {
+  for (const c of app.node.findAll()) {
+    const bindings = Bindings.of(c);
+    for (const host of bindings.list()) {
+      const ops = bindings.get(host);
+      if (!isBindable(c)) {
+        throw new Error(
+          `Resource ${c.node.path} does not support binding (requested by ${host.node.path})`
+        );
+      }
+      c.bind(host, ops);
+    }
+  }
+}
+
+function isBindable(t: any): t is IBind {
+  return typeof t.bind === "function";
+}
+
+interface IBind extends IConstruct {
+  bind(host: IInflightHost, ops: string[]): void;
 }

@@ -2,7 +2,7 @@ import { Construct } from "constructs";
 import { Function, FunctionProps } from "./function";
 import { fqnForType } from "../constants";
 import { App } from "../core";
-import { Display, Duration, IResource, Resource } from "../std";
+import { Display, Duration, IResource } from "../std";
 
 /**
  * Global identifier for `Schedule`.
@@ -34,7 +34,7 @@ export interface ScheduleProps {
  *
  * @inflight `@winglang/sdk.cloud.IScheduleClient`
  */
-export abstract class Schedule extends Resource {
+export abstract class Schedule extends Construct {
   /**
    * Create a new schedule.
    * @internal

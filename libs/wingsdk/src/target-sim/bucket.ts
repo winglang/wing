@@ -60,7 +60,7 @@ export class Bucket extends cloud.Bucket implements ISimulatorResource {
 
   public bind(host: IInflightHost, ops: string[]): void {
     bindSimulatorResource(__filename, this, host);
-    super.bind(host, ops);
+    ops;
   }
 
   /** @internal */

@@ -193,8 +193,6 @@ export class Bucket extends cloud.Bucket {
     // The bucket name needs to be passed through an environment variable since
     // it may not be resolved until deployment time.
     host.addEnvironment(this.envName(), this.bucket.bucketName);
-
-    super.bind(host, ops);
   }
 
   /** @internal */

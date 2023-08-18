@@ -103,8 +103,6 @@ export class Table extends ex.Table {
     host.addEnvironment(this.envName(), this.table.name);
     host.addEnvironment(this.primaryKeyEnvName(), this.primaryKey);
     host.addEnvironment(this.columnsEnvName(), JSON.stringify(this.columns));
-
-    super.bind(host, ops);
   }
 
   /** @internal */

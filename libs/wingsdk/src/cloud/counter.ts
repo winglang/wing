@@ -1,7 +1,7 @@
 import { Construct } from "constructs";
 import { fqnForType } from "../constants";
 import { App } from "../core";
-import { Display, Resource } from "../std";
+import { Display } from "../std";
 
 /**
  * Global identifier for `Counter`.
@@ -23,7 +23,7 @@ export interface CounterProps {
  * A distributed atomic counter.
  * @inflight `@winglang/sdk.cloud.ICounterClient`
  */
-export abstract class Counter extends Resource {
+export abstract class Counter extends Construct {
   /**
    * Create a new counter.
    * @internal

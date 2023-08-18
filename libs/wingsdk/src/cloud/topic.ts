@@ -2,7 +2,7 @@ import { Construct } from "constructs";
 import { Function, FunctionProps } from "./function";
 import { fqnForType } from "../constants";
 import { App } from "../core";
-import { Display, IResource, Resource } from "../std";
+import { Display, IResource } from "../std";
 
 export const TOPIC_FQN = fqnForType("cloud.Topic");
 
@@ -16,7 +16,7 @@ export interface TopicProps {}
  *
  * @inflight `@winglang/sdk.cloud.ITopicClient`
  */
-export abstract class Topic extends Resource {
+export abstract class Topic extends Construct {
   /**
    * Create a new topic.
    * @internal

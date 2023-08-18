@@ -2,7 +2,7 @@ import { isAbsolute, resolve } from "path";
 import { Construct } from "constructs";
 import { fqnForType } from "../constants";
 import { App } from "../core";
-import { Display, Json, Resource } from "../std";
+import { Display, Json } from "../std";
 
 /**
  * Global identifier for `Website`.
@@ -32,7 +32,7 @@ export interface WebsiteProps {
  *
  * @inflight `@winglang/sdk.cloud.IWebsiteClient`
  */
-export abstract class Website extends Resource {
+export abstract class Website extends Construct {
   /**
    * Create a new website.
    * @internal

@@ -8,6 +8,7 @@ import {
   App,
   AppProps,
   Connections,
+  bindAllConstructsToInflightHosts,
   preSynthesizeAllConstructs,
 } from "../core";
 import { PluginManager } from "../core/plugin-manager";
@@ -96,6 +97,8 @@ export abstract class CdktfApp extends App {
 
     // call preSynthesize() on every construct in the tree
     preSynthesizeAllConstructs(this);
+
+    bindAllConstructsToInflightHosts(this);
 
     // synthesize Terraform files in `outdir/.tmp.cdktf.out/stacks/root`
     this.pluginManager.preSynth(this);

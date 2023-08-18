@@ -2,7 +2,7 @@ import { Construct } from "constructs";
 import { FunctionProps } from "./function";
 import { fqnForType } from "../constants";
 import { App } from "../core";
-import { Display, IResource, Resource } from "../std";
+import { Display, IResource } from "../std";
 
 /**
  * Global identifier for `OnDeploy`.
@@ -31,7 +31,7 @@ export interface OnDeployProps extends FunctionProps {
  *
  * @inflight `@winglang/sdk.cloud.IOnDeployClient`
  */
-export abstract class OnDeploy extends Resource {
+export abstract class OnDeploy extends Construct {
   /**
    * Create a new OnDeploy instance.
    * @internal

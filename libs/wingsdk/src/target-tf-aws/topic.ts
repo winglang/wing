@@ -1,5 +1,5 @@
 import { join } from "path";
-import { Construct } from "constructs";
+import { Construct, IConstruct } from "constructs";
 import { Function } from "./function";
 import { SnsTopic } from "../.gen/providers/aws/sns-topic";
 import { SnsTopicPolicy } from "../.gen/providers/aws/sns-topic-policy";
@@ -10,7 +10,7 @@ import { Connections } from "../core";
 import { convertBetweenHandlers } from "../shared/convert";
 import { NameOptions, ResourceNames } from "../shared/resource-names";
 import { calculateTopicPermissions } from "../shared-aws/permissions";
-import { IInflightHost, Resource } from "../std";
+import { IInflightHost } from "../std";
 
 /**
  * Topic names are limited to 256 characters.
@@ -105,7 +105,7 @@ export class Topic extends cloud.Topic {
    * @param sourceArn source arn
    */
   public addPermissionToPublish(
-    source: Resource,
+    source: IConstruct,
     principal: string,
     sourceArn: string
   ): void {
@@ -143,8 +143,6 @@ export class Topic extends cloud.Topic {
     host.addPolicyStatements(calculateTopicPermissions(this.topic.arn, ops));
 
     host.addEnvironment(this.envName(), this.topic.arn);
-
-    super.bind(host, ops);
   }
 
   /** @internal */

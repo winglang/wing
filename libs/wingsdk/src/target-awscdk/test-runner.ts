@@ -58,8 +58,6 @@ export class TestRunner extends std.TestRunner {
     for (const test of this.findTests()) {
       this.node.addDependency(test._fn);
     }
-
-    super._preSynthesize();
   }
 
   private getTestFunctionArns(): Map<string, string> {

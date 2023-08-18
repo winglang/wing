@@ -31,6 +31,7 @@ import {
   preSynthesizeAllConstructs,
   Connections,
   synthesizeTree,
+  bindAllConstructsToInflightHosts,
 } from "../core";
 import { PluginManager } from "../core/plugin-manager";
 import { TEST_RUNNER_FQN } from "../std";
@@ -127,6 +128,8 @@ export class App extends CoreApp {
 
     // call preSynthesize() on every construct in the tree
     preSynthesizeAllConstructs(this);
+
+    bindAllConstructsToInflightHosts(this);
 
     // synthesize cdk.Stack files in `outdir/cdk.out`
     this.pluginManager.preSynth(this);

@@ -1,7 +1,7 @@
 import { Construct } from "constructs";
 import { fqnForType } from "../constants";
 import { App } from "../core";
-import { Display, Json, Resource } from "../std";
+import { Display, Json } from "../std";
 
 /**
  * Global identifier for `Table`.
@@ -55,7 +55,7 @@ export interface TableProps {
  * A NoSQL database table that can be used to store and query data.
  * @inflight `@winglang/sdk.ex.ITableClient`
  */
-export abstract class Table extends Resource {
+export abstract class Table extends Construct {
   /**
    * Create a new `Table` instance.
    * @internal

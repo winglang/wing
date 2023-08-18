@@ -1,13 +1,14 @@
+import { IConstruct } from "constructs";
 import { Function } from "../cloud";
 import { Tokens } from "../core/tokens";
-import { IInflightHost, IResource } from "../std";
+import { IInflightHost } from "../std";
 
 /**
  * Produce a token that will be replaced with the handle of a resource
  * when the simulator is started. This can be inserted to an environment variable
  * so that the real value can be used by an inflight function.
  */
-export function simulatorHandleToken(resource: IResource): string {
+export function simulatorHandleToken(resource: IConstruct): string {
   return simulatorAttrToken(resource, "handle");
 }
 
@@ -16,7 +17,7 @@ export function simulatorHandleToken(resource: IResource): string {
  * when the simulator is started.
  */
 export function simulatorAttrToken(
-  resource: IResource,
+  resource: IConstruct,
   attrName: string
 ): string {
   return `\${${resource.node.path}#attrs.${attrName}}`;

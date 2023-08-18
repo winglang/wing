@@ -51,8 +51,6 @@ export class Secret extends cloud.Secret {
     );
 
     host.addEnvironment(this.envName(), this.secret.secretArn);
-
-    super.bind(host, ops);
   }
 
   /** @internal */

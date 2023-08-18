@@ -86,6 +86,6 @@ export class Schedule extends cloud.Schedule implements ISimulatorResource {
 
   public bind(host: IInflightHost, ops: string[]): void {
     bindSimulatorResource(__filename, this, host);
-    super.bind(host, ops);
+    ops;
   }
 }

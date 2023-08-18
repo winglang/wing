@@ -2,7 +2,7 @@ import { Construct } from "constructs";
 import { Function, FunctionProps } from "./function";
 import { fqnForType } from "../constants";
 import { App } from "../core";
-import { Display, Duration, IResource, Resource } from "../std";
+import { Display, Duration, IResource } from "../std";
 
 /**
  * Global identifier for `Queue`.
@@ -31,7 +31,7 @@ export interface QueueProps {
  *
  * @inflight `@winglang/sdk.cloud.IQueueClient`
  */
-export abstract class Queue extends Resource {
+export abstract class Queue extends Construct {
   /**
    * Create a new `Queue` instance.
    * @internal

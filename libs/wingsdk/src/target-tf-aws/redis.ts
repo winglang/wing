@@ -114,8 +114,7 @@ export class Redis extends ex.Redis {
       securityGroupIds: [this.securityGroup.id],
       subnetIds: [this.subnet.id],
     });
-
-    super.bind(host, ops);
+    ops;
   }
 
   /** @internal */

@@ -44,7 +44,7 @@ export class OnDeploy extends cloud.OnDeploy {
 
   public bind(host: IInflightHost, ops: string[]): void {
     bindSimulatorResource(__filename, this, host);
-    super.bind(host, ops);
+    ops;
   }
 
   /** @internal */

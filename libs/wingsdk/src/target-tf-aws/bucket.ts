@@ -99,7 +99,6 @@ export class Bucket extends cloud.Bucket {
   }
 
   public _preSynthesize() {
-    super._preSynthesize();
     if (this.notificationTopics.length) {
       new S3BucketNotification(this, `S3BucketNotification`, {
         bucket: this.bucket.id,
@@ -119,8 +118,6 @@ export class Bucket extends cloud.Bucket {
     // The bucket name needs to be passed through an environment variable since
     // it may not be resolved until deployment time.
     host.addEnvironment(this.envName(), this.bucket.bucket);
-
-    super.bind(host, ops);
   }
 
   /** @internal */

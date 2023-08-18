@@ -2,7 +2,7 @@ import { Construct } from "constructs";
 import { FunctionProps } from "./function";
 import { fqnForType } from "../constants";
 import { App } from "../core";
-import { Display, IResource, Resource } from "../std";
+import { Display, IResource } from "../std";
 
 /**
  * Global identifier for `Service`.
@@ -34,7 +34,7 @@ export interface ServiceProps {
  *
  * @inflight `@winglang/sdk.cloud.IServiceClient`
  */
-export abstract class Service extends Resource {
+export abstract class Service extends Construct {
   /**
    * Create a new `Service` instance.
    * @internal

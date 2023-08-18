@@ -3,7 +3,7 @@ import { Topic } from "./topic";
 import { fqnForType } from "../constants";
 import { App, Connections } from "../core";
 import { convertBetweenHandlers } from "../shared/convert";
-import { Json, IResource, Resource, Display } from "../std";
+import { Json, IResource, Display } from "../std";
 
 /**
  * Global identifier for `Bucket`.
@@ -26,7 +26,7 @@ export interface BucketProps {
  *
  * @inflight `@winglang/sdk.cloud.IBucketClient`
  */
-export abstract class Bucket extends Resource {
+export abstract class Bucket extends Construct {
   /**
    * Create a new bucket.
    * @internal

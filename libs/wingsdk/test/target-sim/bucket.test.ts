@@ -455,11 +455,10 @@ test("bucket has no display hidden property", async () => {
 test("bucket has display title and description properties", async () => {
   // GIVEN
   const app = new SimApp();
-  cloud.Bucket._newBucket(app, "my_bucket");
+  const bucket = cloud.Bucket._newBucket(app, "my_bucket");
 
   // WHEN
   const treeJson = treeJsonOf(app.synth());
-  const bucket = app.node.tryFindChild("my_bucket") as cloud.Bucket;
 
   // THEN
   expect(Display.of(bucket).title).toBeDefined();

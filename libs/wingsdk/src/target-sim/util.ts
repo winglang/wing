@@ -4,7 +4,7 @@ import { promisify } from "util";
 import { IConstruct } from "constructs";
 import { Function } from "./function";
 import { simulatorHandleToken } from "./tokens";
-import { Duration, IInflightHost, Resource } from "../std";
+import { Duration, IInflightHost } from "../std";
 
 /**
  * Check if a file exists for an specific path
@@ -31,7 +31,7 @@ function makeEnvVarName(type: string, resource: IConstruct): string {
 
 export function bindSimulatorResource(
   filename: string,
-  resource: Resource,
+  resource: IConstruct,
   host: IInflightHost
 ) {
   const type = basename(filename).split(".")[0];
@@ -47,7 +47,7 @@ export function bindSimulatorResource(
   host.node.addDependency(resource);
 }
 
-export function makeSimulatorJsClient(filename: string, resource: Resource) {
+export function makeSimulatorJsClient(filename: string, resource: IConstruct) {
   const type = basename(filename).split(".")[0];
   const env = makeEnvVarName(type, resource);
   return `(function(env) {

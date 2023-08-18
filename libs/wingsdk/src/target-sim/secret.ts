@@ -24,7 +24,7 @@ export class Secret extends cloud.Secret implements ISimulatorResource {
 
   public bind(host: IInflightHost, ops: string[]): void {
     bindSimulatorResource(__filename, this, host);
-    super.bind(host, ops);
+    ops;
   }
 
   /** @internal */

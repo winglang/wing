@@ -100,14 +100,8 @@ export class Queue extends cloud.Queue {
     }
 
     const env = this.envName();
-
-    host.addPolicyStatements(calculateQueuePermissions(this.queue.arn, ops));
-
-    // The queue url needs to be passed through an environment variable since
-    // it may not be resolved until deployment time.
     host.addEnvironment(env, this.queue.url);
-
-    super.bind(host, ops);
+    host.addPolicyStatements(calculateQueuePermissions(this.queue.arn, ops));
   }
 
   /** @internal */

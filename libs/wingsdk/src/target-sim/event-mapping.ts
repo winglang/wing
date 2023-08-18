@@ -1,4 +1,4 @@
-import { Construct } from "constructs";
+import { Construct, IConstruct } from "constructs";
 import { ISimulatorResource } from "./resource";
 import {
   EVENT_MAPPING_TYPE,
@@ -9,7 +9,7 @@ import {
 import { simulatorHandleToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import { fqnForType } from "../constants";
-import { Display, IInflightHost, IResource, Resource } from "../std";
+import { Display, IInflightHost, Resource } from "../std";
 import {
   BaseResourceSchema,
   ISimulatorResourceInstance,
@@ -33,8 +33,8 @@ export interface IEventPublisher extends ISimulatorResourceInstance {
 export const EVENT_MAP_FQN = fqnForType("sim.EventMapping");
 
 export interface EventMappingProps {
-  subscriber: IResource;
-  publisher: IResource;
+  subscriber: IConstruct;
+  publisher: IConstruct;
   subscriptionProps: EventSubscription;
 }
 

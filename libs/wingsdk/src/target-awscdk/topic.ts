@@ -80,8 +80,6 @@ export class Topic extends cloud.Topic {
     );
 
     host.addEnvironment(this.envName(), this.topic.topicArn);
-
-    super.bind(host, ops);
   }
 
   /** @internal */

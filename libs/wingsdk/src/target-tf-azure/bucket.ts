@@ -126,7 +126,6 @@ export class Bucket extends cloud.Bucket {
     host.addEnvironment(this.envName(), this.storageContainer.name);
     host.addEnvironment(this.envStorageAccountName(), this.storageAccount.name);
     host.addEnvironment(this.isPublicEnvName(), `${this.public}`);
-    super.bind(host, ops);
   }
 
   /**

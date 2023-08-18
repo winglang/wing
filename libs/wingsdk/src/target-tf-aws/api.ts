@@ -340,8 +340,7 @@ export class Api extends cloud.Api {
     }
 
     host.addEnvironment(this.urlEnvName(), this.url);
-
-    super.bind(host, ops);
+    ops;
   }
 
   /** @internal */

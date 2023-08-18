@@ -4,7 +4,7 @@ import { Construct } from "constructs";
 import { fqnForType } from "../constants";
 import { App } from "../core";
 import { CaseConventions, ResourceNames } from "../shared/resource-names";
-import { Display, Duration, IInflightHost, IResource, Resource } from "../std";
+import { Display, Duration, IInflightHost, IResource } from "../std";
 
 /**
  * Global identifier for `Function`.
@@ -39,7 +39,7 @@ export interface FunctionProps {
  *
  * @inflight `@winglang/sdk.cloud.IFunctionClient`
  */
-export abstract class Function extends Resource implements IInflightHost {
+export abstract class Function extends Construct implements IInflightHost {
   /**
    * Creates a new cloud.Function instance through the app.
    * @internal

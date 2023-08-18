@@ -1,6 +1,6 @@
 import { resolve } from "path";
 import { AssetType, Lazy, TerraformAsset } from "cdktf";
-import { Construct } from "constructs";
+import { Construct, IConstruct } from "constructs";
 import { App } from "./app";
 import { IamRole } from "../.gen/providers/aws/iam-role";
 import { IamRolePolicy } from "../.gen/providers/aws/iam-role-policy";
@@ -13,7 +13,7 @@ import * as core from "../core";
 import { createBundle } from "../shared/bundling";
 import { NameOptions, ResourceNames } from "../shared/resource-names";
 import { IAwsFunction, PolicyStatement } from "../shared-aws";
-import { IInflightHost, Resource } from "../std";
+import { IInflightHost } from "../std";
 import { Duration } from "../std/duration";
 
 /**
@@ -239,8 +239,6 @@ export class Function extends cloud.Function implements IAwsFunction {
     // The function name needs to be passed through an environment variable since
     // it may not be resolved until deployment time.
     host.addEnvironment(this.envName(), this.function.arn);
-
-    super.bind(host, ops);
   }
 
   /** @internal */
@@ -290,7 +288,7 @@ export class Function extends cloud.Function implements IAwsFunction {
    * @param principal The AWS principal to grant invoke permissions to (e.g. "s3.amazonaws.com", "events.amazonaws.com", "sns.amazonaws.com")
    */
   public addPermissionToInvoke(
-    source: Resource,
+    source: IConstruct,
     principal: string,
     sourceArn: string,
     options: FunctionPermissionsOptions = { qualifier: this.function.version }

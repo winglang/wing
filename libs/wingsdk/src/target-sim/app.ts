@@ -31,9 +31,15 @@ import {
   WEBSITE_FQN,
 } from "../cloud";
 import { SDK_VERSION } from "../constants";
-import * as core from "../core";
-import { Connections } from "../core";
-import { preSynthesizeAllConstructs } from "../core/app";
+import {
+  App as CoreApp,
+  Connections,
+  AppProps,
+  preSynthesizeAllConstructs,
+  bindAllConstructsToInflightHosts,
+  synthesizeTree,
+  DependencyGraph,
+} from "../core";
 import { TABLE_FQN, REDIS_FQN } from "../ex";
 import { TEST_RUNNER_FQN } from "../std";
 import { WingSimulatorSchema } from "../testing/simulator";
@@ -47,7 +53,7 @@ export const SIMULATOR_FILE_PATH = "simulator.json";
  * A construct that knows how to synthesize simulator resources into a
  * Wing simulator (.wsim) file.
  */
-export class App extends core.App {
+export class App extends CoreApp {
   public readonly outdir: string;
   public readonly isTestEnvironment: boolean;
   public readonly _tokens: SimTokens;
@@ -59,7 +65,7 @@ export class App extends core.App {
 
   private synthed = false;
 
-  constructor(props: core.AppProps) {
+  constructor(props: AppProps) {
     // doesn't allow customize the root id- as used hardcoded in the code
     super(undefined as any, "root", props);
     this.outdir = props.outdir ?? ".";
@@ -138,11 +144,13 @@ export class App extends core.App {
     // call preSynthesize() on every construct in the tree
     preSynthesizeAllConstructs(this);
 
+    bindAllConstructsToInflightHosts(this);
+
     // write simulator.json file into workdir
     this.synthSimulatorFile(this.outdir);
 
     // write tree.json file into workdir
-    core.synthesizeTree(this, this.outdir);
+    synthesizeTree(this, this.outdir);
 
     // write `outdir/connections.json`
     Connections.of(this).synth(this.outdir);
@@ -153,7 +161,7 @@ export class App extends core.App {
   }
 
   private synthSimulatorFile(outdir: string) {
-    const resources = new core.DependencyGraph(this.node)
+    const resources = new DependencyGraph(this.node)
       .topology()
       .filter(isSimulatorResource)
       .map((res) => res.toSimulator());

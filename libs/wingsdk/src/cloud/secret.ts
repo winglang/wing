@@ -1,7 +1,7 @@
 import { Construct } from "constructs";
 import { fqnForType } from "../constants";
 import { App } from "../core";
-import { Display, Json, Resource } from "../std";
+import { Display, Json } from "../std";
 
 /**
  * Global identifier for `Secret`.
@@ -29,7 +29,7 @@ export interface SecretProps {
  *
  * @inflight `@winglang/sdk.cloud.ISecretClient`
  */
-export abstract class Secret extends Resource {
+export abstract class Secret extends Construct {
   /**
    * Create a new secert.
    * @internal

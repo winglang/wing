@@ -1,6 +1,6 @@
 import * as fs from "fs";
 import { AssetType, Lazy, TerraformAsset } from "cdktf";
-import { Construct } from "constructs";
+import { Construct, IConstruct } from "constructs";
 import { App } from "./app";
 import { Bucket, StorageAccountPermissions } from "./bucket";
 import { LinuxFunctionApp } from "../.gen/providers/azurerm/linux-function-app";
@@ -16,7 +16,6 @@ import {
   NameOptions,
   ResourceNames,
 } from "../shared/resource-names";
-import { IResource } from "../std";
 
 /**
  * Function names are limited to 32 characters.
@@ -196,7 +195,7 @@ export class Function extends cloud.Function {
    * @param scopedRoleAssignment - The mapping of azure scope to role definition name.
    */
   public addPermission(
-    scopedResource: IResource,
+    scopedResource: IConstruct,
     scopedRoleAssignment: ScopedRoleAssignment
   ) {
     if (!this.permissions) {

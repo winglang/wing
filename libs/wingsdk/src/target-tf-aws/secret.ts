@@ -57,8 +57,6 @@ export class Secret extends cloud.Secret {
     host.addPolicyStatements(calculateSecretPermissions(this.secret.arn, ops));
 
     host.addEnvironment(this.envName(), this.secret.arn);
-
-    super.bind(host, ops);
   }
 
   /** @internal */

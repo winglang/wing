@@ -1,7 +1,7 @@
 import { Construct } from "constructs";
 import { fqnForType } from "../constants";
 import { App } from "../core";
-import { Display, Resource } from "../std";
+import { Display } from "../std";
 
 /**
  * Global identifier for `Bucket`.
@@ -13,7 +13,7 @@ export const REDIS_FQN = fqnForType("ex.Redis");
  *
  * @inflight `@winglang/sdk.ex.IRedisClient`
  */
-export abstract class Redis extends Resource {
+export abstract class Redis extends Construct {
   /**
    * Create a new redis.
    * @internal

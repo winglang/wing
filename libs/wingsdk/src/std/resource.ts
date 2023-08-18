@@ -7,7 +7,7 @@ import { liftObject } from "../core/internal";
  * A resource that can run inflight code.
  * @skipDocs
  */
-export interface IInflightHost extends IResource {}
+export interface IInflightHost extends IConstruct {}
 
 /**
  * Abstract interface for `Resource`.
@@ -49,16 +49,6 @@ export interface IResource extends IConstruct {
    * @internal
    */
   _getInflightOps(): string[];
-
-  /**
-   * A hook for performing operations after the tree of resources has been
-   * created, but before they are synthesized.
-   *
-   * Currently used for binding resources to hosts.
-   *
-   * @internal
-   */
-  _preSynthesize(): void;
 }
 
 /**
@@ -95,7 +85,7 @@ export abstract class Resource extends Construct implements IResource {
    */
   protected static _registerBindObject(
     obj: any,
-    host: IResource,
+    host: IInflightHost,
     ops: string[] = []
   ): void {
     const tokens = App.of(host)._tokens;
@@ -134,10 +124,47 @@ export abstract class Resource extends Construct implements IResource {
         }
 
         // if the object is a resource (i.e. has a "bind" method"), register a binding between it and the host.
-        if (isResource(obj)) {
+        if (Construct.isConstruct(obj)) {
           // Explicitly register the resource's `$inflight_init` op, which is a special op that can be used to makes sure
           // the host can instantiate a client for this resource.
-          obj._addBind(host, [...ops, "$inflight_init"]);
+          let opsWithInit = [...ops, "$inflight_init"];
+
+          // Register the binding between this resource and the host
+          const bindings = Bindings.of(obj);
+
+          // For each operation, check if the host supports it. If it does, register the binding.
+          const supportedOps = [
+            ...((obj as IResource)._getInflightOps?.() ?? []),
+            "$inflight_init",
+          ];
+
+          for (const op of opsWithInit) {
+            if (!supportedOps.includes(op)) {
+              throw new Error(
+                `Resource ${obj.node.path} does not support inflight operation ${op} (requested by ${host.node.path})`
+              );
+            }
+
+            if (bindings.has(host, op)) {
+              // this resource is already bound to the host for this operation
+              continue;
+            }
+
+            // add the operation to the set of operations for the host so that we can avoid
+            // infinite recursion.
+            bindings.add(host, op);
+
+            if (typeof (obj as IResource)._registerBind === "function") {
+              (obj as IResource)._registerBind(host, [op]);
+            }
+
+            // add connection metadata
+            Connections.of(obj).add({
+              source: host,
+              target: obj,
+              name: op.endsWith("()") ? op : `${op}()`,
+            });
+          }
           return;
         }
 
@@ -193,64 +220,6 @@ export abstract class Resource extends Construct implements IResource {
   }
 
   /**
-   * Adds a binding between this resource and the host.
-   * @param host The host to bind to
-   * @param ops The operations that may access this resource
-   * @returns `true` if a new bind was added or `false` if there was already a bind
-   */
-  private _addBind(host: IInflightHost, ops: string[]) {
-    // Register the binding between this resource and the host
-    const bindings = Bindings.of(this);
-
-    // For each operation, check if the host supports it. If it does, register the binding.
-    const supportedOps = [...(this._getInflightOps() ?? []), "$inflight_init"];
-    for (const op of ops) {
-      if (!supportedOps.includes(op)) {
-        throw new Error(
-          `Resource ${this.node.path} does not support inflight operation ${op} (requested by ${host.node.path})`
-        );
-      }
-
-      if (bindings.has(host, op)) {
-        // this resource is already bound to the host for this operation
-        continue;
-      }
-
-      // add the operation to the set of operations for the host so that we can avoid
-      // infinite recursion.
-      bindings.add(host, op);
-
-      this._registerBind(host, [op]);
-
-      // add connection metadata
-      Connections.of(this).add({
-        source: host,
-        target: this,
-        name: op.endsWith("()") ? op : `${op}()`,
-      });
-    }
-  }
-
-  /**
-   * A hook for performing operations after the tree of resources has been
-   * created, but before they are synthesized.
-   *
-   * Currently used for binding resources to hosts.
-   *
-   * @internal
-   */
-  public _preSynthesize(): void {
-    // Perform the live bindings betweeen resources and hosts
-    // By aggregating the binding operations, we can avoid performing
-    // multiple bindings for the same resource-host pairs.
-    const bindings = Bindings.of(this);
-    for (const host of bindings.list()) {
-      const ops = bindings.get(host);
-      this.bind(host, ops);
-    }
-  }
-
-  /**
    * Return a code snippet that can be used to reference this resource inflight.
    *
    * @internal
@@ -271,16 +240,17 @@ export abstract class Resource extends Construct implements IResource {
   }
 }
 
-function isResource(obj: any): obj is Resource {
-  return isIResourceType(obj.constructor);
-}
+// function isResource(obj: any): obj is Resource {
+//   return isIResourceType(obj.constructor);
+// }
 
 function isIResourceType(t: any): t is new (...args: any[]) => IResource {
   return (
     t instanceof Function &&
     "prototype" in t &&
     typeof t.prototype.bind === "function" &&
-    typeof t.prototype._registerBind === "function"
+    typeof t.prototype._registerBind === "function" &&
+    typeof t.prototype._getInflightOps === "function"
   );
 }
 

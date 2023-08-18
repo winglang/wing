@@ -9,7 +9,7 @@ const BINDINGS_SYMBOL = Symbol.for("@winglang/sdk.core.Bindings");
  */
 export class Bindings {
   /**
-   * Return the matching Lifts instance of the given construct.
+   * Return the matching Bindings instance for the given construct.
    */
   public static of(construct: IConstruct): Bindings {
     let bindings = (construct as any)[BINDINGS_SYMBOL];

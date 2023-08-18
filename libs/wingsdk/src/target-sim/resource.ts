@@ -1,11 +1,11 @@
-import { IResource } from "../std";
+import { IConstruct } from "constructs";
 import { BaseResourceSchema } from "../testing/simulator";
 
 /**
  * Interfaces shared by all polycon implementations (preflight classes)
  * targeting the simulator.
  */
-export interface ISimulatorResource extends IResource {
+export interface ISimulatorResource extends IConstruct {
   /**
    * Convert this resource to a resource schema for the simulator.
    */
