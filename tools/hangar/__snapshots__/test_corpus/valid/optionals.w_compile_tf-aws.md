@@ -481,6 +481,27 @@ class $Root extends $stdlib.std.Resource {
       }
       return ({"first": (parts.at(0)),"last": (parts.at(1))});
     });
+    const json_obj = ({"ghost": "spooky"});
+    {
+      const $IF_LET_VALUE = ((arg) => { return (typeof arg === "boolean") ? JSON.parse(JSON.stringify(arg)) : undefined })(json_obj);
+      const $ELIF_LET_VALUE0 = ((arg) => { return (typeof arg === "number") ? JSON.parse(JSON.stringify(arg)) : undefined })(json_obj);
+      const $ELIF_LET_VALUE1 = ((arg) => { return (typeof arg === "string") ? JSON.parse(JSON.stringify(arg)) : undefined })(json_obj);
+      if ($IF_LET_VALUE != undefined) {
+        const y = $IF_LET_VALUE;
+        {console.log("it's a boolean!")};
+      }
+      else if ($ELIF_LET_VALUE0 != undefined) {
+        const y = $ELIF_LET_VALUE0;
+        {console.log("it's a number!")};
+      }
+      else if ($ELIF_LET_VALUE1 != undefined) {
+        const y = $ELIF_LET_VALUE1;
+        {console.log("it's a str!")};
+      }
+      else {
+        {console.log("it's something else!")};
+      }
+    }
     const a = 1;
     {
       const $IF_LET_VALUE = a;

@@ -339,6 +339,14 @@ pub struct ElifBlock {
 }
 
 #[derive(Debug)]
+pub struct ElifLetBlock {
+	pub reassignable: bool,
+	pub var_name: Symbol,
+	pub value: Expr,
+	pub statements: Scope,
+}
+
+#[derive(Debug)]
 pub struct Class {
 	pub name: Symbol,
 	pub fields: Vec<ClassField>,
@@ -456,6 +464,7 @@ pub enum StmtKind {
 		var_name: Symbol,
 		value: Expr,
 		statements: Scope,
+		elif_statements: Vec<ElifLetBlock>,
 		else_statements: Option<Scope>,
 	},
 	If {

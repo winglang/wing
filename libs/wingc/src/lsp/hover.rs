@@ -169,6 +169,7 @@ impl<'a> Visit<'a> for HoverVisitor<'a> {
 				value,
 				statements,
 				reassignable: _,
+				elif_statements,
 				else_statements,
 			} => {
 				self.with_scope(statements, |v| {
@@ -176,6 +177,11 @@ impl<'a> Visit<'a> for HoverVisitor<'a> {
 				});
 				self.visit_expr(value);
 				self.visit_scope(statements);
+				for elif in elif_statements {
+					self.visit_symbol(&elif.var_name);
+					self.visit_expr(&elif.value);
+					self.visit_scope(&elif.statements);
+				}
 				if let Some(else_statements) = else_statements {
 					self.visit_scope(else_statements);
 				}

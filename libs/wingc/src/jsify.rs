@@ -859,6 +859,7 @@ impl<'a> JSifier<'a> {
 				value,
 				statements,
 				var_name,
+				elif_statements,
 				else_statements,
 			} => {
 				let mut code = CodeMaker::default();
@@ -896,6 +897,15 @@ impl<'a> JSifier<'a> {
 					if_let_value,
 					self.jsify_expression(value, ctx)
 				));
+				let elif_let_value = "$ELIF_LET_VALUE";
+				for i in 0..elif_statements.len() {
+					let value = format!("{}{}", elif_let_value, i);
+					code.line(format!(
+						"const {} = {};",
+						value,
+						self.jsify_expression(&elif_statements.get(i).unwrap().value, ctx)
+					));
+				}
 				code.open(format!("if ({if_let_value} != undefined) {{"));
 				if *reassignable {
 					code.line(format!("let {} = {};", var_name, if_let_value));
@@ -904,6 +914,19 @@ impl<'a> JSifier<'a> {
 				}
 				code.add_code(self.jsify_scope_body(statements, ctx));
 				code.close("}");
+
+				for i in 0..elif_statements.len() {
+					let value = format!("{}{}", elif_let_value, i);
+					code.open(format!("else if ({value} != undefined) {{"));
+					let elif_block = elif_statements.get(i).unwrap();
+					if elif_block.reassignable {
+						code.line(format!("let {} = {};", elif_block.var_name, value));
+					} else {
+						code.line(format!("const {} = {};", elif_block.var_name, value));
+					}
+					code.add_code(self.jsify_scope_body(&elif_block.statements, ctx));
+					code.close("}");
+				}
 
 				if let Some(else_scope) = else_statements {
 					code.open("else {");

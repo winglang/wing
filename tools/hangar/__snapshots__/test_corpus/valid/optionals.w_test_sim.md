@@ -2,6 +2,7 @@
 
 ## stdout.log
 ```log
+it's something else!
 pass ─ optionals.wsim » root/env0/test:t
  
  
