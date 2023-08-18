@@ -2111,25 +2111,29 @@ impl<'a> TypeChecker<'a> {
 				// Infer type based on either the explicit type or the value in one of the items
 				let container_type = if let Some(type_) = type_ {
 					self.resolve_type_annotation(type_, env)
+				} else if self.in_json > 0 {
+					let json_data = JsonData {
+						expression_id: exp.id,
+						kind: JsonDataKind::List(vec![]),
+					};
+					let inner_type = self.types.add_type(Type::Json(Some(json_data)));
+					self.types.add_type(Type::Array(inner_type))
 				} else {
-					if self.in_json > 0 {
-						let json_data = JsonData {
-							expression_id: exp.id,
-							kind: JsonDataKind::List(vec![]),
-						};
-						let inner_type = self.types.add_type(Type::Json(Some(json_data)));
-						self.types.add_type(Type::Array(inner_type))
-					} else {
-						let inner_type = self.types.make_inference();
-						self.types.add_type(Type::Array(inner_type))
-					}
+					let inner_type = self.types.make_inference();
+					self.types.add_type(Type::Array(inner_type))
 				};
 
 				let mut element_type = match *container_type {
-					Type::Array(t) => t,
-					Type::MutArray(t) => t,
+					Type::Array(t) | Type::MutArray(t) => t,
 					_ => {
-						self.spanned_error(exp, format!("Expected \"Array\" type, found \"{}\"", container_type));
+						self.spanned_error(
+							&if let Some(type_) = type_ {
+								type_.span()
+							} else {
+								exp.span()
+							},
+							format!("Expected \"Array\" or \"MutArray\", found \"{}\"", container_type),
+						);
 						self.types.error()
 					}
 				};
@@ -2137,6 +2141,8 @@ impl<'a> TypeChecker<'a> {
 				// Verify all types are the same as the inferred type
 				for v in items.iter() {
 					let (t, _) = self.type_check_exp(v, env);
+
+					// Augment the json list data with the new element type
 					if let Type::Json(Some(JsonData { ref mut kind, .. })) = &mut *element_type {
 						if let JsonDataKind::List(ref mut json_list) = kind {
 							json_list.push(SpannedTypeInfo {
@@ -2145,7 +2151,18 @@ impl<'a> TypeChecker<'a> {
 							});
 						}
 					}
-					element_type = self.check_json_serializable_or_validate_type(t, element_type, v);
+
+					if self.in_json == 0 {
+						// If we're not in a Json literal, validate the type of each element
+						self.validate_type(t, element_type, v);
+						element_type = self.types.maybe_unwrap_inference(element_type);
+					} else if self.is_in_mut_json && !t.is_json_legal_value() {
+						// if we're in a MutJson literal, we only need to check that each field is legal json
+						self.spanned_error(
+							v,
+							format!("Expected a valid Json value (https://www.json.org/json-en.html), but got \"{t}\""),
+						);
+					}
 				}
 
 				(container_type, env.phase)
@@ -2562,35 +2579,6 @@ impl<'a> TypeChecker<'a> {
 					),
 				);
 			}
-		}
-	}
-
-	fn check_json_serializable_or_validate_type(
-		&mut self,
-		actual_type: TypeRef,
-		expected_type: TypeRef,
-		exp: &Expr,
-	) -> TypeRef {
-		// Skip validate if in Json
-		if self.in_json == 0 {
-			return self.validate_type(actual_type, expected_type, exp);
-		}
-
-		if self.is_in_mut_json && !actual_type.is_json_legal_value() {
-			self.spanned_error(
-				exp,
-				format!(
-					"Expected a valid Json value (https://www.json.org/json-en.html), but got \"{}\"",
-					actual_type
-				),
-			);
-			return self.types.error();
-		}
-
-		if expected_type.is_json() {
-			expected_type
-		} else {
-			actual_type
 		}
 	}
 

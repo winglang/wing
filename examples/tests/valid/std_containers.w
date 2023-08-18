@@ -41,3 +41,12 @@ assert(sMap.get("one") == 1);
 assert(sMap.size() == 2);
 assert(immutMap.size() == 3);
 assert(nestedMap.get("a").get("b").get("c") == "hello");
+
+class Animal {}
+class Cat extends Animal {}
+class Dog extends Animal {}
+
+let heterogeneousArray = Array<Animal>[
+  new Cat(),
+  new Dog(),
+];
