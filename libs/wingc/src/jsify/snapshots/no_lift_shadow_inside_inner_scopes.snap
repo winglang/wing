@@ -60,7 +60,7 @@ class $Root extends $constructs.Construct {
       static _toInflightType(context) {
         return `
           require("./inflight.$Closure1-1.js")({
-            $i: ${$stdlib.std.Lifting.lift(context, i)},
+            $i: ${$stdlib.core.Lifting.lift(context, i)},
           })
         `;
       }
@@ -82,7 +82,8 @@ class $Root extends $constructs.Construct {
         if (ops.includes("handle")) {
           $stdlib.std.Resource._registerBindObject(i, host, []);
         }
-        super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
       }
     }
     const i = 1;

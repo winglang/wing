@@ -99,7 +99,7 @@ class $Root extends $constructs.Construct {
           (await (async () => {
             const MyTypeClient = ${MyType._toInflightType(this)};
             const client = new MyTypeClient({
-              $this_b: ${this._lift(this.b)},
+              $this_b: ${$stdlib.core.Lifting.lift(this, this.b)},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -119,7 +119,8 @@ class $Root extends $constructs.Construct {
         if (ops.includes("isEmpty")) {
           $stdlib.std.Resource._registerBindObject(this.b, host, ["list"]);
         }
-        super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
       }
     }
     class $Closure1 extends $constructs.Construct {
@@ -130,7 +131,7 @@ class $Root extends $constructs.Construct {
       static _toInflightType(context) {
         return `
           require("./inflight.$Closure1-1.js")({
-            $t: ${$stdlib.std.Lifting.lift(context, t)},
+            $t: ${$stdlib.core.Lifting.lift(context, t)},
           })
         `;
       }
@@ -152,7 +153,8 @@ class $Root extends $constructs.Construct {
         if (ops.includes("handle")) {
           $stdlib.std.Resource._registerBindObject(t, host, ["checkIfEmpty"]);
         }
-        super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
       }
     }
     const t = new MyType(this,"MyType");

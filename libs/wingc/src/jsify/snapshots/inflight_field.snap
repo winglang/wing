@@ -71,6 +71,10 @@ class $Root extends $constructs.Construct {
       _getInflightOps() {
         return ["x", "method", "$inflight_init"];
       }
+      _registerBind(host, ops) {
+      }
+      static _registerTypeBind(host, ops) {
+      }
     }
   }
 }

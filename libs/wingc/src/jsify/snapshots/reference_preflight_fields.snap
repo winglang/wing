@@ -80,8 +80,8 @@ class $Root extends $constructs.Construct {
           (await (async () => {
             const MyTypeClient = ${MyType._toInflightType(this)};
             const client = new MyTypeClient({
-              $this_b: ${this._lift(this.b)},
-              $this_s_length: ${this._lift(this.s.length)},
+              $this_b: ${$stdlib.core.Lifting.lift(this, this.b)},
+              $this_s_length: ${$stdlib.core.Lifting.lift(this, this.s.length)},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -103,7 +103,8 @@ class $Root extends $constructs.Construct {
           $stdlib.std.Resource._registerBindObject(this.b, host, ["list"]);
           $stdlib.std.Resource._registerBindObject(this.s.length, host, []);
         }
-        super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
       }
     }
   }

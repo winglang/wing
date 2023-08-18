@@ -87,6 +87,10 @@ class $Root extends $constructs.Construct {
       _getInflightOps() {
         return ["$inflight_init"];
       }
+      _registerBind(host, ops) {
+      }
+      static _registerTypeBind(host, ops) {
+      }
     }
     class Derived extends Base {
       constructor(scope, id, ) {
@@ -95,7 +99,7 @@ class $Root extends $constructs.Construct {
       static _toInflightType(context) {
         return `
           require("./inflight.Derived-1.js")({
-            $Base: ${$stdlib.std.Lifting.lift(context, Base)},
+            $Base: ${$stdlib.core.Lifting.lift(context, Base)},
           })
         `;
       }
@@ -104,7 +108,7 @@ class $Root extends $constructs.Construct {
           (await (async () => {
             const DerivedClient = ${Derived._toInflightType(this)};
             const client = new DerivedClient({
-              $this_f: ${this._lift(this.f)},
+              $this_f: ${$stdlib.core.Lifting.lift(this, this.f)},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -122,6 +126,9 @@ class $Root extends $constructs.Construct {
           $stdlib.std.Resource._registerBindObject(this.f, host, []);
         }
         super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
+        super._registerTypeBind(host, ops);
       }
     }
     const x = "hello";

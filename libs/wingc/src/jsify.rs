@@ -758,7 +758,7 @@ impl<'a> JSifier<'a> {
 		// create _toInflightType function that just requires the generated struct file
 		code.open("static _toInflightType(context) {".to_string());
 		code.line(format!(
-			"return `require(\"{}\")(${{ {}.std.Lifting.lift(context, stdStruct) }})`;",
+			"return `require(\"{}\")(${{ {}.core.Lifting.lift(context, stdStruct) }})`;",
 			struct_filename(&name.name),
 			STDLIB,
 		));
@@ -1261,7 +1261,7 @@ impl<'a> JSifier<'a> {
 		if let Some(lifts) = &ctx.lifts {
 			for capture in lifts.captures() {
 				let preflight = capture.code.clone();
-				let lift_type = format!("{}.std.Lifting.lift(context, {})", STDLIB, preflight);
+				let lift_type = format!("{}.core.Lifting.lift(context, {})", STDLIB, preflight);
 				code.line(format!("{}: ${{{}}},", capture.token, lift_type));
 			}
 		}
@@ -1292,7 +1292,7 @@ impl<'a> JSifier<'a> {
 
 		if let Some(lifts) = &ctx.lifts {
 			for (token, obj) in lifts.lifted_fields() {
-				code.line(format!("{token}: ${{this._lift({obj})}},"));
+				code.line(format!("{token}: ${{{STDLIB}.core.Lifting.lift(this, {obj})}},"));
 			}
 		}
 
@@ -1475,11 +1475,6 @@ impl<'a> JSifier<'a> {
 			})
 			.collect_vec();
 
-		// Skip jsifying this method if there are no lifts (in this case we'll use super's register bind method)
-		if lifts.is_empty() {
-			return bind_method;
-		}
-
 		bind_method.open(format!("{modifier}{bind_method_name}(host, ops) {{"));
 		for (method_name, method_lifts) in lifts {
 			bind_method.open(format!("if (ops.includes(\"{method_name}\")) {{"));
@@ -1493,7 +1488,9 @@ impl<'a> JSifier<'a> {
 			}
 			bind_method.close("}");
 		}
-		bind_method.line(format!("super.{bind_method_name}(host, ops);"));
+		if class.parent.is_some() {
+			bind_method.line(format!("super.{bind_method_name}(host, ops);"));
+		}
 		bind_method.close("}");
 		bind_method
 	}

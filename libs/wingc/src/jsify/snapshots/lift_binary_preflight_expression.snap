@@ -50,8 +50,8 @@ class $Root extends $constructs.Construct {
       static _toInflightType(context) {
         return `
           require("./inflight.$Closure1-1.js")({
-            $x: ${$stdlib.std.Lifting.lift(context, x)},
-            $y: ${$stdlib.std.Lifting.lift(context, y)},
+            $x: ${$stdlib.core.Lifting.lift(context, x)},
+            $y: ${$stdlib.core.Lifting.lift(context, y)},
           })
         `;
       }
@@ -74,7 +74,8 @@ class $Root extends $constructs.Construct {
           $stdlib.std.Resource._registerBindObject(x, host, []);
           $stdlib.std.Resource._registerBindObject(y, host, []);
         }
-        super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
       }
     }
     const x = 1;

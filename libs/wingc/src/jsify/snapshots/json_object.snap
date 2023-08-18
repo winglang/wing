@@ -50,8 +50,8 @@ class $Root extends $constructs.Construct {
       static _toInflightType(context) {
         return `
           require("./inflight.$Closure1-1.js")({
-            $jsonObj1: ${$stdlib.std.Lifting.lift(context, jsonObj1)},
-            $std_Json: ${$stdlib.std.Lifting.lift(context, std.Json)},
+            $jsonObj1: ${$stdlib.core.Lifting.lift(context, jsonObj1)},
+            $std_Json: ${$stdlib.core.Lifting.lift(context, std.Json)},
           })
         `;
       }
@@ -73,7 +73,8 @@ class $Root extends $constructs.Construct {
         if (ops.includes("handle")) {
           $stdlib.std.Resource._registerBindObject(jsonObj1, host, []);
         }
-        super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
       }
     }
     const jsonObj1 = ({"key1": "value1"});

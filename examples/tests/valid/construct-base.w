@@ -13,13 +13,13 @@ let getPath = (c: cx.Construct): str => {
   return c.node.path;
 };
 
-let getDisplayName = (r: std.Resource): str? => {
-  return std.Display.of(r).title;
+let getDisplayName = (c: cx.Construct): str? => {
+  return std.Display.of(c).title;
 };
 
 let q = new aws.sqsQueue.SqsQueue();
 let wr = new WingResource();
-let another_resource: std.Resource = wr;
+let another_resource: cx.Construct = wr;
 
 log("path of sqs.queue: ${getPath(q)}");
 log("path of wing resource: ${getPath(wr)}");

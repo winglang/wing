@@ -74,7 +74,8 @@ class $Root extends $constructs.Construct {
         if (ops.includes("getField")) {
           $stdlib.std.Resource._registerBindObject(this, host, ["field"]);
         }
-        super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
       }
     }
   }

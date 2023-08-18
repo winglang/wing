@@ -79,6 +79,10 @@ class $Root extends $constructs.Construct {
       _getInflightOps() {
         return ["$inflight_init"];
       }
+      _registerBind(host, ops) {
+      }
+      static _registerTypeBind(host, ops) {
+      }
     }
     class $Closure1 extends $constructs.Construct {
       constructor(scope, id, ) {
@@ -88,7 +92,7 @@ class $Root extends $constructs.Construct {
       static _toInflightType(context) {
         return `
           require("./inflight.$Closure1-1.js")({
-            $Base: ${$stdlib.std.Lifting.lift(context, Base)},
+            $Base: ${$stdlib.core.Lifting.lift(context, Base)},
           })
         `;
       }
@@ -105,6 +109,10 @@ class $Root extends $constructs.Construct {
       }
       _getInflightOps() {
         return ["handle", "$inflight_init"];
+      }
+      _registerBind(host, ops) {
+      }
+      static _registerTypeBind(host, ops) {
       }
     }
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:test",new $Closure1(this,"$Closure1"));

@@ -1,6 +1,9 @@
 import { IConstruct } from "constructs";
 import { liftObject } from "./internal";
 
+/**
+ * Lifting utilities.
+ */
 export class Lifting {
   /**
    * "Lifts" a value into an inflight context. If the value is a resource (i.e. has a `_toInflight`
@@ -9,9 +12,8 @@ export class Lifting {
    *
    * @param value The value to lift.
    * @returns a string representation of the value in an inflight context.
-   * @internal
    */
-  public static _lift(scope: IConstruct, value: any): string {
+  public static lift(scope: IConstruct, value: any): string {
     return liftObject(scope, value);
   }
 }

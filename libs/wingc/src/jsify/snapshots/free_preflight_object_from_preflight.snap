@@ -63,6 +63,10 @@ class $Root extends $constructs.Construct {
       _getInflightOps() {
         return ["$inflight_init"];
       }
+      _registerBind(host, ops) {
+      }
+      static _registerTypeBind(host, ops) {
+      }
     }
     const x = "hello";
   }

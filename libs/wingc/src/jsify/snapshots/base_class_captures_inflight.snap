@@ -70,7 +70,7 @@ class $Root extends $constructs.Construct {
       static _toInflightType(context) {
         return `
           require("./inflight.Base-1.js")({
-            $x: ${$stdlib.std.Lifting.lift(context, x)},
+            $x: ${$stdlib.core.Lifting.lift(context, x)},
           })
         `;
       }
@@ -92,7 +92,8 @@ class $Root extends $constructs.Construct {
         if (ops.includes("bar")) {
           $stdlib.std.Resource._registerBindObject(x, host, []);
         }
-        super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
       }
     }
     class Derived extends Base {
@@ -102,7 +103,7 @@ class $Root extends $constructs.Construct {
       static _toInflightType(context) {
         return `
           require("./inflight.Derived-1.js")({
-            $Base: ${$stdlib.std.Lifting.lift(context, Base)},
+            $Base: ${$stdlib.core.Lifting.lift(context, Base)},
           })
         `;
       }
@@ -125,6 +126,9 @@ class $Root extends $constructs.Construct {
           $stdlib.std.Resource._registerBindObject(this, host, ["bar"]);
         }
         super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
+        super._registerTypeBind(host, ops);
       }
     }
     const x = "hello";

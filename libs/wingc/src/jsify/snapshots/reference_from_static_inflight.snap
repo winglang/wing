@@ -48,7 +48,7 @@ class $Root extends $constructs.Construct {
       static _toInflightType(context) {
         return `
           require("./inflight.MyType-1.js")({
-            $s: ${$stdlib.std.Lifting.lift(context, s)},
+            $s: ${$stdlib.core.Lifting.lift(context, s)},
           })
         `;
       }
@@ -66,11 +66,12 @@ class $Root extends $constructs.Construct {
       _getInflightOps() {
         return ["staticMethod", "$inflight_init"];
       }
+      _registerBind(host, ops) {
+      }
       static _registerTypeBind(host, ops) {
         if (ops.includes("staticMethod")) {
           $stdlib.std.Resource._registerBindObject(s, host, []);
         }
-        super._registerTypeBind(host, ops);
       }
     }
     const s = "hello";

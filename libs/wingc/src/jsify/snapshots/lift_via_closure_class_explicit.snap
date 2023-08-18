@@ -98,7 +98,7 @@ class $Root extends $constructs.Construct {
           (await (async () => {
             const MyClosureClient = ${MyClosure._toInflightType(this)};
             const client = new MyClosureClient({
-              $this_q: ${this._lift(this.q)},
+              $this_q: ${$stdlib.core.Lifting.lift(this, this.q)},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -118,7 +118,8 @@ class $Root extends $constructs.Construct {
         if (ops.includes("handle")) {
           $stdlib.std.Resource._registerBindObject(this, host, ["another"]);
         }
-        super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
       }
     }
     class $Closure1 extends $constructs.Construct {
@@ -129,7 +130,7 @@ class $Root extends $constructs.Construct {
       static _toInflightType(context) {
         return `
           require("./inflight.$Closure1-1.js")({
-            $fn: ${$stdlib.std.Lifting.lift(context, fn)},
+            $fn: ${$stdlib.core.Lifting.lift(context, fn)},
           })
         `;
       }
@@ -151,7 +152,8 @@ class $Root extends $constructs.Construct {
         if (ops.includes("handle")) {
           $stdlib.std.Resource._registerBindObject(fn, host, ["handle"]);
         }
-        super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
       }
     }
     const fn = new MyClosure(this,"MyClosure");

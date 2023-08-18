@@ -53,8 +53,8 @@ class $Root extends $constructs.Construct {
       static _toInflightType(context) {
         return `
           require("./inflight.$Closure1-1.js")({
-            $MyEnum: ${$stdlib.std.Lifting.lift(context, MyEnum)},
-            $x: ${$stdlib.std.Lifting.lift(context, x)},
+            $MyEnum: ${$stdlib.core.Lifting.lift(context, MyEnum)},
+            $x: ${$stdlib.core.Lifting.lift(context, x)},
           })
         `;
       }
@@ -76,7 +76,8 @@ class $Root extends $constructs.Construct {
         if (ops.includes("handle")) {
           $stdlib.std.Resource._registerBindObject(x, host, []);
         }
-        super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
       }
     }
     const MyEnum =

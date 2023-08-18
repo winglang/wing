@@ -87,6 +87,10 @@ class $Root extends $constructs.Construct {
       _getInflightOps() {
         return ["hello", "goodbye", "$inflight_init"];
       }
+      _registerBind(host, ops) {
+      }
+      static _registerTypeBind(host, ops) {
+      }
     }
     class $Closure1 extends $constructs.Construct {
       constructor(scope, id, ) {
@@ -96,7 +100,7 @@ class $Root extends $constructs.Construct {
       static _toInflightType(context) {
         return `
           require("./inflight.$Closure1-1.js")({
-            $pf_obj: ${$stdlib.std.Lifting.lift(context, pf_obj)},
+            $pf_obj: ${$stdlib.core.Lifting.lift(context, pf_obj)},
           })
         `;
       }
@@ -118,7 +122,8 @@ class $Root extends $constructs.Construct {
         if (ops.includes("handle")) {
           $stdlib.std.Resource._registerBindObject(pf_obj, host, ["goodbye", "hello"]);
         }
-        super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
       }
     }
     const pf_obj = new A(this,"A");

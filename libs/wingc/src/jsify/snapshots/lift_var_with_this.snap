@@ -84,6 +84,10 @@ class $Root extends $constructs.Construct {
       _getInflightOps() {
         return ["$inflight_init"];
       }
+      _registerBind(host, ops) {
+      }
+      static _registerTypeBind(host, ops) {
+      }
     }
     class $Closure1 extends $constructs.Construct {
       constructor(scope, id, ) {
@@ -101,7 +105,7 @@ class $Root extends $constructs.Construct {
           (await (async () => {
             const $Closure1Client = ${$Closure1._toInflightType(this)};
             const client = new $Closure1Client({
-              $foo_this_value: ${this._lift(foo_this.value)},
+              $foo_this_value: ${$stdlib.core.Lifting.lift(this, foo_this.value)},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -118,7 +122,8 @@ class $Root extends $constructs.Construct {
         if (ops.includes("handle")) {
           $stdlib.std.Resource._registerBindObject(foo_this.value, host, []);
         }
-        super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
       }
     }
     const foo_this = new Foo(this,"Foo");

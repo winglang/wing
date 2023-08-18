@@ -80,7 +80,7 @@ class $Root extends $constructs.Construct {
           (await (async () => {
             const FooClient = ${Foo._toInflightType(this)};
             const client = new FooClient({
-              $this_c: ${this._lift(this.c)},
+              $this_c: ${$stdlib.core.Lifting.lift(this, this.c)},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -97,7 +97,8 @@ class $Root extends $constructs.Construct {
         if (ops.includes("incCounter")) {
           $stdlib.std.Resource._registerBindObject(this.c, host, ["inc"]);
         }
-        super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
       }
     }
   }

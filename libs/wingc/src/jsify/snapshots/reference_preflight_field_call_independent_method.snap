@@ -62,7 +62,7 @@ class $Root extends $constructs.Construct {
           (await (async () => {
             const FooClient = ${Foo._toInflightType(this)};
             const client = new FooClient({
-              $_this_arr_at_1__: ${this._lift((this.arr.at(1)))},
+              $_this_arr_at_1__: ${$stdlib.core.Lifting.lift(this, (this.arr.at(1)))},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -79,7 +79,8 @@ class $Root extends $constructs.Construct {
         if (ops.includes("method")) {
           $stdlib.std.Resource._registerBindObject((this.arr.at(1)), host, []);
         }
-        super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
       }
     }
   }
