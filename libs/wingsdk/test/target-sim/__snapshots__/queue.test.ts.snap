@@ -736,35 +736,6 @@ exports[`queue batch size of 2, purge the queue 2`] = `
 `;
 
 exports[`queue with one subscriber, batch size of 5 1`] = `
-[
-  "wingsdk.cloud.TestRunner created.",
-  "wingsdk.cloud.Function created.",
-  "wingsdk.cloud.Queue created.",
-  "wingsdk.sim.EventMapping created.",
-  "wingsdk.cloud.Function created.",
-  "Push (messages=A).",
-  "Push (messages=B).",
-  "Push (messages=C).",
-  "Push (messages=D).",
-  "Push (messages=E).",
-  "Push (messages=F).",
-  "Invoke (payload=\\"\\").",
-  "OnDeploy invoked.",
-  "wingsdk.cloud.OnDeploy created.",
-  "Sending messages (messages=[\\"A\\",\\"B\\",\\"C\\",\\"D\\",\\"E\\"], subscriber=sim-1).",
-  "Sending messages (messages=[\\"F\\"], subscriber=sim-1).",
-  "Invoke (payload=\\"{\\\\\\"messages\\\\\\":[\\\\\\"A\\\\\\",\\\\\\"B\\\\\\",\\\\\\"C\\\\\\",\\\\\\"D\\\\\\",\\\\\\"E\\\\\\"]}\\").",
-  "Invoke (payload=\\"{\\\\\\"messages\\\\\\":[\\\\\\"F\\\\\\"]}\\").",
-  "wingsdk.cloud.OnDeploy deleted.",
-  "wingsdk.cloud.Function deleted.",
-  "wingsdk.sim.EventMapping deleted.",
-  "wingsdk.cloud.Queue deleted.",
-  "wingsdk.cloud.Function deleted.",
-  "wingsdk.cloud.TestRunner deleted.",
-]
-`;
-
-exports[`queue with one subscriber, batch size of 5 2`] = `
 {
   ".wing/function_c8ab799f.js": "exports.handler = async function(event) {
   return await (new ((function(){
