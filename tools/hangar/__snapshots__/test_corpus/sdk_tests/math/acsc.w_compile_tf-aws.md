@@ -184,7 +184,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _getInflightOps() {
-        return ["handle", "$inflight_init"]
+        return ["handle", "$inflight_init"];
       }
     }
     try {

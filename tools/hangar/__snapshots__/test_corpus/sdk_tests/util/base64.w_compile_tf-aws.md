@@ -181,7 +181,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _getInflightOps() {
-        return ["handle", "$inflight_init"]
+        return ["handle", "$inflight_init"];
       }
     }
     const string = "https://www.winglang.io/docs";

@@ -444,7 +444,7 @@ class $Root extends $stdlib.std.Resource {
             `;
           }
           _getInflightOps() {
-            return ["handle", "$inflight_init"]
+            return ["handle", "$inflight_init"];
           }
           _registerBind(host, ops) {
             if (ops.includes("handle")) {
@@ -473,7 +473,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _getInflightOps() {
-        return ["$inflight_init"]
+        return ["$inflight_init"];
       }
     }
     class $Closure3 extends $stdlib.std.Resource {
@@ -500,7 +500,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _getInflightOps() {
-        return ["handle", "$inflight_init"]
+        return ["handle", "$inflight_init"];
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
@@ -532,7 +532,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _getInflightOps() {
-        return ["handle", "$inflight_init"]
+        return ["handle", "$inflight_init"];
       }
     }
     const s = "top";
@@ -563,7 +563,7 @@ class $Root extends $stdlib.std.Resource {
           `;
         }
         _getInflightOps() {
-          return ["handle", "$inflight_init"]
+          return ["handle", "$inflight_init"];
         }
         _registerBind(host, ops) {
           if (ops.includes("handle")) {

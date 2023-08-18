@@ -310,7 +310,7 @@ class $Root extends $stdlib.std.Resource {
             `;
           }
           _getInflightOps() {
-            return ["handle", "$inflight_init"]
+            return ["handle", "$inflight_init"];
           }
         }
         this.onUpdateCallback = new $Closure1(this,"$Closure1");
@@ -338,7 +338,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _getInflightOps() {
-        return ["get", "set", "$inflight_init"]
+        return ["get", "set", "$inflight_init"];
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
@@ -379,7 +379,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _getInflightOps() {
-        return ["handle", "$inflight_init"]
+        return ["handle", "$inflight_init"];
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
@@ -414,7 +414,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _getInflightOps() {
-        return ["handle", "$inflight_init"]
+        return ["handle", "$inflight_init"];
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {

@@ -207,7 +207,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _getInflightOps() {
-        return ["myStaticMethod", "$inflight_init"]
+        return ["myStaticMethod", "$inflight_init"];
       }
       static _registerTypeBind(host, ops) {
         if (ops.includes("myStaticMethod")) {
@@ -240,7 +240,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _getInflightOps() {
-        return ["handle", "$inflight_init"]
+        return ["handle", "$inflight_init"];
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {

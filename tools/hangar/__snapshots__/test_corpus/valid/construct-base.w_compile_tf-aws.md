@@ -91,7 +91,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _getInflightOps() {
-        return ["$inflight_init"]
+        return ["$inflight_init"];
       }
     }
     const getPath = ((c) => {

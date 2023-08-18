@@ -234,7 +234,7 @@ class $Root extends $stdlib.std.Resource {
             `;
           }
           _getInflightOps() {
-            return ["handle", "$inflight_init"]
+            return ["handle", "$inflight_init"];
           }
         }
         this.inflight1 = new $Closure1(this,"$Closure1");
@@ -258,7 +258,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _getInflightOps() {
-        return ["inflight2", "makeFn", "callFn", "callFn2", "$inflight_init"]
+        return ["inflight2", "makeFn", "callFn", "callFn2", "$inflight_init"];
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
@@ -303,7 +303,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _getInflightOps() {
-        return ["handle", "$inflight_init"]
+        return ["handle", "$inflight_init"];
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {

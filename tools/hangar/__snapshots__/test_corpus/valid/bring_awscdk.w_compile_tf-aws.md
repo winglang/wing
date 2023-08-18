@@ -77,7 +77,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _getInflightOps() {
-        return ["$inflight_init"]
+        return ["$inflight_init"];
       }
     }
     this.node.root.new("aws-cdk-lib.App",awscdk.App,);

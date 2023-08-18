@@ -2,7 +2,7 @@
 
 ## Base.Struct.js
 ```js
-module.exports = function(stdStruct, fromInline) {
+module.exports = function(stdStruct) {
   class Base {
     static jsonSchema() {
       return {
@@ -22,7 +22,7 @@ module.exports = function(stdStruct, fromInline) {
       return stdStruct._validate(obj, this.jsonSchema())
     }
     static _toInflightType(context) {
-      return fromInline(`require("./Base.Struct.js")(${ context._lift(stdStruct) })`);
+      return `require("./Base.Struct.js")(${ context._lift(stdStruct) })`;
     }
   }
   return Base;
@@ -32,7 +32,7 @@ module.exports = function(stdStruct, fromInline) {
 
 ## HasBucket.Struct.js
 ```js
-module.exports = function(stdStruct, fromInline) {
+module.exports = function(stdStruct) {
   class HasBucket {
     static jsonSchema() {
       return {
@@ -53,7 +53,7 @@ module.exports = function(stdStruct, fromInline) {
       return stdStruct._validate(obj, this.jsonSchema())
     }
     static _toInflightType(context) {
-      return fromInline(`require("./HasBucket.Struct.js")(${ context._lift(stdStruct) })`);
+      return `require("./HasBucket.Struct.js")(${ context._lift(stdStruct) })`;
     }
   }
   return HasBucket;
@@ -63,7 +63,7 @@ module.exports = function(stdStruct, fromInline) {
 
 ## HasInnerBucket.Struct.js
 ```js
-module.exports = function(stdStruct, fromInline) {
+module.exports = function(stdStruct) {
   class HasInnerBucket {
     static jsonSchema() {
       return {
@@ -84,7 +84,7 @@ module.exports = function(stdStruct, fromInline) {
       return stdStruct._validate(obj, this.jsonSchema())
     }
     static _toInflightType(context) {
-      return fromInline(`require("./HasInnerBucket.Struct.js")(${ context._lift(stdStruct) })`);
+      return `require("./HasInnerBucket.Struct.js")(${ context._lift(stdStruct) })`;
     }
   }
   return HasInnerBucket;
@@ -94,7 +94,7 @@ module.exports = function(stdStruct, fromInline) {
 
 ## InnerStructyJson.Struct.js
 ```js
-module.exports = function(stdStruct, fromInline) {
+module.exports = function(stdStruct) {
   class InnerStructyJson {
     static jsonSchema() {
       return {
@@ -117,7 +117,7 @@ module.exports = function(stdStruct, fromInline) {
       return stdStruct._validate(obj, this.jsonSchema())
     }
     static _toInflightType(context) {
-      return fromInline(`require("./InnerStructyJson.Struct.js")(${ context._lift(stdStruct) })`);
+      return `require("./InnerStructyJson.Struct.js")(${ context._lift(stdStruct) })`;
     }
   }
   return InnerStructyJson;
@@ -127,7 +127,7 @@ module.exports = function(stdStruct, fromInline) {
 
 ## LastOne.Struct.js
 ```js
-module.exports = function(stdStruct, fromInline) {
+module.exports = function(stdStruct) {
   class LastOne {
     static jsonSchema() {
       return {
@@ -150,7 +150,7 @@ module.exports = function(stdStruct, fromInline) {
       return stdStruct._validate(obj, this.jsonSchema())
     }
     static _toInflightType(context) {
-      return fromInline(`require("./LastOne.Struct.js")(${ context._lift(stdStruct) })`);
+      return `require("./LastOne.Struct.js")(${ context._lift(stdStruct) })`;
     }
   }
   return LastOne;
@@ -160,7 +160,7 @@ module.exports = function(stdStruct, fromInline) {
 
 ## StructyJson.Struct.js
 ```js
-module.exports = function(stdStruct, fromInline) {
+module.exports = function(stdStruct) {
   class StructyJson {
     static jsonSchema() {
       return {
@@ -184,7 +184,7 @@ module.exports = function(stdStruct, fromInline) {
       return stdStruct._validate(obj, this.jsonSchema())
     }
     static _toInflightType(context) {
-      return fromInline(`require("./StructyJson.Struct.js")(${ context._lift(stdStruct) })`);
+      return `require("./StructyJson.Struct.js")(${ context._lift(stdStruct) })`;
     }
   }
   return StructyJson;
@@ -316,7 +316,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _getInflightOps() {
-        return ["$inflight_init"]
+        return ["$inflight_init"];
       }
     }
     const jsonNumber = 123;
@@ -436,15 +436,15 @@ class $Root extends $stdlib.std.Resource {
     {((cond) => {if (!cond) throw new Error("assertion failed: notSpecified.get(\"foo\") == \"bar\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((notSpecified)["foo"],"bar")))};
     const empty = ({});
     {((cond) => {if (!cond) throw new Error("assertion failed: Json.has(empty, \"something\") == false")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((args) => { return args[0].hasOwnProperty(args[1]); })([empty,"something"]),false)))};
-    const Base = require("./Base.Struct.js")($stdlib.std.Struct, $stdlib.core.NodeJsCode.fromInline);
-    const LastOne = require("./LastOne.Struct.js")($stdlib.std.Struct, $stdlib.core.NodeJsCode.fromInline);
-    const InnerStructyJson = require("./InnerStructyJson.Struct.js")($stdlib.std.Struct, $stdlib.core.NodeJsCode.fromInline);
-    const StructyJson = require("./StructyJson.Struct.js")($stdlib.std.Struct, $stdlib.core.NodeJsCode.fromInline);
+    const Base = require("./Base.Struct.js")($stdlib.std.Struct);
+    const LastOne = require("./LastOne.Struct.js")($stdlib.std.Struct);
+    const InnerStructyJson = require("./InnerStructyJson.Struct.js")($stdlib.std.Struct);
+    const StructyJson = require("./StructyJson.Struct.js")($stdlib.std.Struct);
     const notJsonMissingField = ({"foo": "bar","stuff": []});
     const notJson = ({"foo": "bar","stuff": [1, 2, 3],"maybe": ({"good": true,"inner_stuff": [({"hi": 1,"base": "base"})]})});
     let mutableJson = ({"foo": "bar","stuff": [1, 2, 3],"maybe": ({"good": true,"inner_stuff": [({"hi": 1,"base": "base"})]})});
-    const HasBucket = require("./HasBucket.Struct.js")($stdlib.std.Struct, $stdlib.core.NodeJsCode.fromInline);
-    const HasInnerBucket = require("./HasInnerBucket.Struct.js")($stdlib.std.Struct, $stdlib.core.NodeJsCode.fromInline);
+    const HasBucket = require("./HasBucket.Struct.js")($stdlib.std.Struct);
+    const HasInnerBucket = require("./HasInnerBucket.Struct.js")($stdlib.std.Struct);
     const hasBucket = ({"a": ({"a": this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket")})});
   }
 }

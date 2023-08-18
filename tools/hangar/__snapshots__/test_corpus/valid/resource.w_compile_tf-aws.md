@@ -899,7 +899,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _getInflightOps() {
-        return ["inflightField", "fooInc", "fooGet", "fooStatic", "$inflight_init"]
+        return ["inflightField", "fooInc", "fooGet", "fooStatic", "$inflight_init"];
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
@@ -945,7 +945,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _getInflightOps() {
-        return ["barStatic", "myMethod", "testTypeAccess", "$inflight_init"]
+        return ["barStatic", "myMethod", "testTypeAccess", "$inflight_init"];
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
@@ -991,7 +991,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _getInflightOps() {
-        return ["handle", "$inflight_init"]
+        return ["handle", "$inflight_init"];
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
@@ -1034,7 +1034,7 @@ class $Root extends $stdlib.std.Resource {
             `;
           }
           _getInflightOps() {
-            return ["handle", "$inflight_init"]
+            return ["handle", "$inflight_init"];
           }
           _registerBind(host, ops) {
             if (ops.includes("handle")) {
@@ -1069,7 +1069,7 @@ class $Root extends $stdlib.std.Resource {
             `;
           }
           _getInflightOps() {
-            return ["handle", "$inflight_init"]
+            return ["handle", "$inflight_init"];
           }
           _registerBind(host, ops) {
             if (ops.includes("handle")) {
@@ -1104,7 +1104,7 @@ class $Root extends $stdlib.std.Resource {
             `;
           }
           _getInflightOps() {
-            return ["handle", "$inflight_init"]
+            return ["handle", "$inflight_init"];
           }
           _registerBind(host, ops) {
             if (ops.includes("handle")) {
@@ -1137,7 +1137,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _getInflightOps() {
-        return ["publish", "getObjectCount", "$inflight_init"]
+        return ["publish", "getObjectCount", "$inflight_init"];
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
@@ -1181,7 +1181,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _getInflightOps() {
-        return ["handle", "$inflight_init"]
+        return ["handle", "$inflight_init"];
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
@@ -1212,7 +1212,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _getInflightOps() {
-        return ["$inflight_init"]
+        return ["$inflight_init"];
       }
     }
     class ScopeAndIdTestClass extends $stdlib.std.Resource {
@@ -1246,7 +1246,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _getInflightOps() {
-        return ["$inflight_init"]
+        return ["$inflight_init"];
       }
     }
     const MyEnum =

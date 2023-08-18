@@ -114,7 +114,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _getInflightOps() {
-        return ["handle", "$inflight_init"]
+        return ["handle", "$inflight_init"];
       }
     }
     class $Closure2 extends $stdlib.std.Resource {
@@ -140,7 +140,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _getInflightOps() {
-        return ["handle", "$inflight_init"]
+        return ["handle", "$inflight_init"];
       }
     }
     class C extends $stdlib.std.Resource {
@@ -169,7 +169,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _getInflightOps() {
-        return ["my_method3", "my_method4", "$inflight_init"]
+        return ["my_method3", "my_method4", "$inflight_init"];
       }
     }
     const my_func = ((callback) => {

@@ -289,7 +289,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _getInflightOps() {
-        return ["goo", "$inflight_init"]
+        return ["goo", "$inflight_init"];
       }
     }
     class B extends $stdlib.std.Resource {
@@ -314,7 +314,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _getInflightOps() {
-        return ["foo", "$inflight_init"]
+        return ["foo", "$inflight_init"];
       }
     }
     class $Closure1 extends $stdlib.std.Resource {
@@ -340,7 +340,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _getInflightOps() {
-        return ["handle", "$inflight_init"]
+        return ["handle", "$inflight_init"];
       }
     }
     class D extends $stdlib.std.Resource {
@@ -371,7 +371,7 @@ class $Root extends $stdlib.std.Resource {
             `;
           }
           _getInflightOps() {
-            return ["$inflight_init"]
+            return ["$inflight_init"];
           }
         }
         const pb = new E(this,"E");
@@ -398,7 +398,7 @@ class $Root extends $stdlib.std.Resource {
             `;
           }
           _getInflightOps() {
-            return ["foo", "$inflight_init"]
+            return ["foo", "$inflight_init"];
           }
         }
         const __parent_this_2 = this;
@@ -426,7 +426,7 @@ class $Root extends $stdlib.std.Resource {
             `;
           }
           _getInflightOps() {
-            return ["handle", "$inflight_init"]
+            return ["handle", "$inflight_init"];
           }
         }
         this.inner = new $Closure2(this,"$Closure2");
@@ -453,7 +453,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _getInflightOps() {
-        return ["callInner", "$inflight_init"]
+        return ["callInner", "$inflight_init"];
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
@@ -493,7 +493,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _getInflightOps() {
-        return ["handle", "$inflight_init"]
+        return ["handle", "$inflight_init"];
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {

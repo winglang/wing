@@ -200,7 +200,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _getInflightOps() {
-        return ["get123", "$inflight_init"]
+        return ["get123", "$inflight_init"];
       }
     }
     class $Closure1 extends $stdlib.std.Resource {
@@ -226,7 +226,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _getInflightOps() {
-        return ["handle", "$inflight_init"]
+        return ["handle", "$inflight_init"];
       }
     }
     const foo = new Foo(this,"Foo");
