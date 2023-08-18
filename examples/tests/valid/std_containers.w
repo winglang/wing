@@ -50,3 +50,16 @@ let heterogeneousArray = Array<Animal>[
   new Cat(),
   new Dog(),
 ];
+let heterogeneousDoubleArray = Array<Array<Animal>>[
+  [new Cat()],
+  [new Cat(), new Dog()],
+  [new Animal()],
+];
+let heterogeneousSet = Set<Animal>{
+  new Cat(),
+  new Dog(),
+};
+let heterogeneousMap = Map<Animal>{
+  "cat" => new Cat(),
+  "dog" => new Dog(),
+};
