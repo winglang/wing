@@ -601,7 +601,9 @@ impl<'a> JSifier<'a> {
 					BinaryOperator::Equal => {
 						return format!("(((a,b) => {{ try {{ return require('assert').deepStrictEqual(a,b) === undefined; }} catch {{ return false; }} }})({},{}))", js_left, js_right)
 					},
-					BinaryOperator::NotEqual => "!==",
+					BinaryOperator::NotEqual => {
+						return format!("(((a,b) => {{ try {{ return require('assert').notDeepStrictEqual(a,b) === undefined; }} catch {{ return false; }} }})({},{}))", js_left, js_right)
+					},
 					BinaryOperator::LogicalAnd => "&&",
 					BinaryOperator::LogicalOr => "||",
 					BinaryOperator::UnwrapOr => {
