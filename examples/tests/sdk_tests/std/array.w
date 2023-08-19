@@ -266,3 +266,20 @@ test "set()" {
     mutArr.set(5, 11);
   });
 }
+
+//-----------------------------------------------------------------------------
+// insert()
+
+test "insert()" {
+  let arr = MutArray<num>[5, 10, 20];
+  assert(arr.at(2) == 20);
+
+  arr.insert(2, 15);
+
+  assert(arr.at(2) == 15);
+  assert(arr.at(3) == 20);
+
+  arr.insert(4, 25);
+
+  assert(arr.at(4) == 25);
+}
