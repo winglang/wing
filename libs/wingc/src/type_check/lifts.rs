@@ -124,14 +124,6 @@ impl Lifts {
 	pub fn lifted_fields(&self) -> BTreeMap<String, String> {
 		let mut result: BTreeMap<String, String> = BTreeMap::new();
 
-		// for (token, lift) in self.lifts.iter().flat_map(|(_, lifts)| lifts.iter()) {
-		// 	if !lift.is_field {
-		// 		continue;
-		// 	}
-
-		// 	result.insert(token.clone(), lift.code.clone());
-		// }
-
 		self
 			.captures
 			.iter()

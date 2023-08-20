@@ -330,7 +330,6 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 			for (name, def) in node.methods.iter() {
 				self.visit_symbol(&name);
 				visit::visit_function_definition(self, &def);
-				//self.visit_function_definition(&def);
 			}
 			if let Some(parent) = &node.parent {
 				self.visit_user_defined_type(&parent);
@@ -338,8 +337,6 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 			for interface in node.implements.iter() {
 				self.visit_user_defined_type(&interface);
 			}
-			// return;
-			//visit::visit_class(self, node);
 			return;
 		}
 
