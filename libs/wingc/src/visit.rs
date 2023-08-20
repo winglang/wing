@@ -399,9 +399,6 @@ where
 			v.visit_expr(object);
 			v.visit_symbol(property);
 		}
-		// Reference::TypeReference(type_) => {
-		// 	v.visit_user_defined_type(type_);
-		// }
 		Reference::TypeMember { type_name, property } => {
 			v.visit_user_defined_type(type_name);
 			v.visit_symbol(property);

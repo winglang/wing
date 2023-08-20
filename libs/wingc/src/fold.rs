@@ -374,7 +374,6 @@ where
 			property: f.fold_symbol(property),
 			optional_accessor,
 		},
-		// Reference::TypeReference(udt) => Reference::TypeReference(f.fold_user_defined_type(udt)),
 		Reference::TypeMember { type_name, property } => Reference::TypeMember {
 			type_name: f.fold_user_defined_type(type_name),
 			property: f.fold_symbol(property),

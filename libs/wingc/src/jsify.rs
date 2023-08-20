@@ -9,7 +9,6 @@ use std::{
 	borrow::Borrow,
 	cell::RefCell,
 	cmp::Ordering,
-	collections::BTreeMap,
 	path::{Path, PathBuf},
 	vec,
 };
@@ -25,7 +24,7 @@ use crate::{
 	diagnostic::{report_diagnostic, Diagnostic, WingSpan},
 	files::Files,
 	type_check::{
-		lifts::{Capture, Liftable, Lifts},
+		lifts::{Liftable, Lifts},
 		resolve_super_method, resolve_user_defined_type,
 		symbol_env::SymbolEnv,
 		ClassLike, Type, TypeRef, Types, VariableKind, CLASS_INFLIGHT_INIT_NAME,
@@ -240,7 +239,6 @@ impl<'a> JSifier<'a> {
 				property,
 				optional_accessor,
 			} => self.jsify_expression(object, ctx) + (if *optional_accessor { "?." } else { "." }) + &property.to_string(),
-			// Reference::TypeReference(udt) => self.jsify_user_defined_type(&udt),
 			Reference::TypeMember { type_name, property } => {
 				let typename = self.jsify_user_defined_type(type_name, ctx);
 				typename + "." + &property.to_string()

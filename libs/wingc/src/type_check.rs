@@ -1770,16 +1770,6 @@ impl<'a> TypeChecker<'a> {
 				let obj_id_type = obj_id.as_ref().map(|x| self.type_check_exp(x, env).0);
 				let arg_list_types = self.type_check_arg_list(arg_list, env);
 
-				// let ExprKind::Reference(ref r) = class.kind else {
-				// 	self.spanned_error(exp,"Must be a reference to a class");
-				// 	return (self.types.error(), Phase::Independent);
-				// };
-
-				// let Reference::TypeReference(_) = r else {
-				// 	self.spanned_error(exp,"Must be a type reference to a class");
-				// 	return (self.types.error(), Phase::Independent);
-				// };
-
 				// Lookup the class's type in the env
 				let (class_env, class_symbol) = match *class_type {
 					Type::Class(ref class) => {
@@ -4066,9 +4056,6 @@ impl<'a> TypeChecker<'a> {
 						_ => return None,
 					}
 				}
-				// Reference::TypeReference(type_) => {
-				// 	return Some(type_.clone());
-				// }
 				Reference::TypeMember { type_name, property } => {
 					path.push(property.clone());
 					type_name.fields.iter().rev().for_each(|f| path.push(f.clone()));
@@ -4238,44 +4225,10 @@ impl<'a> TypeChecker<'a> {
 
 				(property_variable, property_phase)
 			}
-			// Reference::TypeReference(udt) => {
-			// 	let result = self.resolve_user_defined_type(udt, env, self.statement_idx);
-			// 	let t = match result {
-			// 		Err(e) => return self.spanned_error_with_var(udt, e.message),
-			// 		Ok(t) => t,
-			// 	};
-
-			// 	let phase = if let Some(c) = t.as_class() {
-			// 		c.phase
-			// 	} else {
-			// 		Phase::Independent
-			// 	};
-
-			// 	(
-			// 		VariableInfo {
-			// 			name: Symbol::global(udt.full_path_str()),
-			// 			type_: t,
-			// 			reassignable: false,
-			// 			phase,
-			// 			kind: VariableKind::Type,
-			// 			docs: None,
-			// 		},
-			// 		phase,
-			// 	)
-			// }
 			Reference::TypeMember { type_name, property } => {
 				let type_ = self
 					.resolve_user_defined_type(type_name, env, self.statement_idx)
 					.unwrap_or_else(|e| self.type_error(e));
-
-				// let ExprKind::Reference(typeref) = &typeobject.kind else {
-				// 	return self.spanned_error_with_var(typeobject, "Expecting a reference");
-				// };
-
-				// let Reference::TypeReference(_) = typeref else {
-				// 	return self.spanned_error_with_var(typeobject, "Expecting a reference to a type");
-				// };
-
 				match *type_ {
 					Type::Enum(ref e) => {
 						if e.values.contains(property) {

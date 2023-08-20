@@ -69,12 +69,6 @@ impl<'a> LiftVisitor<'a> {
 	}
 
 	fn should_capture_type(&self, node: &UserDefinedType) -> bool {
-		// let (fullname, span) = match r {
-		// 	Reference::Identifier(ref symb) => (symb.name.clone(), symb.span.clone()),
-		// 	//Reference::TypeReference(ref t) => (t.full_path_str(), t.span.clone()),
-		// 	_ => return false,
-		// };
-
 		let fullname = node.full_path_str();
 
 		// skip "This" (which is the type of "this")

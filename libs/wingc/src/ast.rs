@@ -185,13 +185,6 @@ impl UserDefinedType {
 	pub fn full_path_str(&self) -> String {
 		self.full_path().iter().join(".")
 	}
-
-	// pub fn to_expression(&self) -> Expr {
-	// 	Expr::new(
-	// 		ExprKind::Reference(Reference::TypeReference(self.clone())),
-	// 		self.span.clone(),
-	// 	)
-	// }
 }
 
 impl Display for UserDefinedType {
@@ -363,15 +356,6 @@ pub struct Class {
 }
 
 impl Class {
-	/// Returns the `UserDefinedType` of the parent class, if any.
-	// pub fn parent_udt(&self) -> Option<&UserDefinedType> {
-	// 	let Some(expr) = &self.parent else {
-	// 		return None;
-	// 	};
-
-	// 	expr.as_type_reference()
-	// }
-
 	/// Returns all methods, including the initializer and inflight initializer.
 	pub fn all_methods(&self, include_initializers: bool) -> Vec<&FunctionDefinition> {
 		let mut methods: Vec<&FunctionDefinition> = vec![];
@@ -611,14 +595,6 @@ impl Expr {
 		let id = EXPR_COUNTER.fetch_add(1, Ordering::SeqCst);
 		Self { id, kind, span }
 	}
-
-	// /// Returns the user defined type if the expression is a reference to a type.
-	// pub fn as_type_reference(&self) -> Option<&UserDefinedType> {
-	// 	match &self.kind {
-	// 		ExprKind::Reference(Reference::TypeReference(t)) => Some(t),
-	// 		_ => None,
-	// 	}
-	// }
 }
 
 #[derive(Debug)]
@@ -729,8 +705,6 @@ pub enum Reference {
 		property: Symbol,
 		optional_accessor: bool,
 	},
-	// /// A reference to a type (e.g. `std.Json` or `MyResource` or `aws.s3.Bucket`)
-	// TypeReference(UserDefinedType),
 	/// A reference to a member inside a type: `MyType.x` or `MyEnum.A`
 	TypeMember {
 		type_name: UserDefinedType,
@@ -747,7 +721,6 @@ impl Spanned for Reference {
 				property,
 				optional_accessor: _,
 			} => object.span().merge(&property.span()),
-			// Reference::TypeReference(type_) => type_.span(),
 			Reference::TypeMember {
 				type_name: typeobject,
 				property,
@@ -771,7 +744,6 @@ impl Display for Reference {
 				};
 				write!(f, "{}.{}", obj_str, property.name)
 			}
-			// Reference::TypeReference(type_) => write!(f, "{}", type_),
 			Reference::TypeMember {
 				type_name: typeobject,
 				property,
