@@ -874,8 +874,8 @@ if myPerson.address == nil {
 
 #### 1.6.3 Unwrapping using `if let`
 
-The `if let` statement can be used to test if an optional is defined and *unwrap* it into a
-non-optional variable defined inside the block:
+The `if let` statement (or `if let var` for a reassignable variable) can be used to test if an 
+optional is defined and *unwrap* it into a non-optional variable defined inside the block:
 
 ```TS
 if let address = myPerson.address {
