@@ -220,11 +220,9 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 
 			let mut lifts = self.lifts_stack.pop().unwrap();
 			let is_field = code.contains("this."); // TODO: starts_with?
-			let lifted_expr = Liftable::Expr(node.id);
 			lifts.lift(self.ctx.current_method(), property, &code, is_field);
-			lifts.capture(&lifted_expr, &code, is_field);
+			lifts.capture(&Liftable::Expr(node.id), &code, is_field);
 			self.lifts_stack.push(lifts);
-
 			return;
 		}
 
