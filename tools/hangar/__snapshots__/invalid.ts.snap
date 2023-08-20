@@ -214,7 +214,7 @@ Duration <DURATION>"
 exports[`capture_redefinition.w 1`] = `
 "ERROR: Cannot access 'x' before initialization
 
-../../../examples/tests/invalid/target/test/capture_redefinition.wsim.112902.tmp/.wing/preflight.js:40
+../../../examples/tests/invalid/target/test/capture_redefinition.wsim.183631.tmp/.wing/preflight.js:40
        const x = \\"hi\\";
        if (true) {
 >>       {console.log(x)};
