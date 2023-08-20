@@ -79,6 +79,10 @@ export abstract class Bucket extends Resource {
 
   /**
    * Add a file to the bucket from system folder
+   * 
+   * @param {string} key - The key or name to associate with the file.
+   * @param {string} path - The path to the file on the local system.
+   * @param {BufferEncoding} encoding - The encoding to use when reading the file. Defaults to "utf-8".
    */
 
   public addFile(
@@ -375,7 +379,7 @@ export interface BucketOnEventProps {
  *
  * @inflight  `@winglang/sdk.cloud.IBucketEventHandlerClient`
  */
-export interface IBucketEventHandler extends IResource {}
+export interface IBucketEventHandler extends IResource { }
 
 /**
  * A resource with an inflight "handle" method that can be passed to
