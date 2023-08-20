@@ -25,7 +25,7 @@ use crate::{
 	diagnostic::{report_diagnostic, Diagnostic, WingSpan},
 	files::Files,
 	type_check::{
-		lifts::{Liftable, Lifts},
+		lifts::{Capture, Liftable, Lifts},
 		resolve_super_method, resolve_user_defined_type,
 		symbol_env::SymbolEnv,
 		ClassLike, Type, TypeRef, Types, VariableKind, CLASS_INFLIGHT_INIT_NAME,
@@ -1294,9 +1294,8 @@ impl<'a> JSifier<'a> {
 		code.open(format!("require(\"{client_path}\")({{"));
 
 		if let Some(lifts) = &ctx.lifts {
-			for (token, captured_code) in lifts.captures.iter() {
-				let preflight = captured_code.clone();
-				let lift_type = format!("context._lift({})", preflight);
+			for (token, capture) in lifts.captures.iter().filter(|(_, cap)| !cap.is_field) {
+				let lift_type = format!("context._lift({})", capture.code);
 				code.line(format!("{}: ${{{}}},", token, lift_type));
 			}
 		}
@@ -1401,7 +1400,11 @@ impl<'a> JSifier<'a> {
 		let mut code = CodeMaker::default();
 
 		let inputs = if let Some(lifts) = &ctx.lifts {
-			lifts.captures.keys().join(", ")
+			lifts
+				.captures
+				.iter()
+				.filter_map(|(token, cap)| if !cap.is_field { Some(token) } else { None })
+				.join(", ")
 		} else {
 			Default::default()
 		};
@@ -1499,7 +1502,7 @@ impl<'a> JSifier<'a> {
 		};
 
 		let lift_qualifications = lifts
-			.lifts
+			.lifts_qualifications
 			.iter()
 			.filter(|(m, _)| {
 				let var_kind = &class_type
@@ -1522,12 +1525,11 @@ impl<'a> JSifier<'a> {
 		bind_method.open(format!("{modifier}{bind_method_name}(host, ops) {{"));
 		for (method_name, method_qual) in lift_qualifications {
 			bind_method.open(format!("if (ops.includes(\"{method_name}\")) {{"));
-			for (token, method_lift_qual) in method_qual {
+			for (code, method_lift_qual) in method_qual {
 				let ops_strings = method_lift_qual.ops.iter().map(|op| format!("\"{}\"", op)).join(", ");
-				let field = &lifts.lift_by_token.get(token).unwrap().code;
 
 				bind_method.line(format!(
-					"{class_name}._registerBindObject({field}, host, [{ops_strings}]);",
+					"{class_name}._registerBindObject({code}, host, [{ops_strings}]);",
 				));
 			}
 			bind_method.close("}");

@@ -227,10 +227,8 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 			let mut lifts = self.lifts_stack.pop().unwrap();
 			let is_field = code.contains("this."); // TODO: starts_with
 			let lifted_expr = Liftable::Expr(node.id);
-			lifts.lift(&lifted_expr, self.ctx.current_method(), property, &code, is_field);
-			if !is_field {
-				lifts.capture(&lifted_expr, &code);
-			}
+			lifts.lift(self.ctx.current_method(), property, &code, is_field);
+			lifts.capture(&lifted_expr, &code, is_field);
 			self.lifts_stack.push(lifts);
 
 			return;
@@ -313,13 +311,7 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 			assert!(var.phase == Phase::Inflight);
 
 			let mut lifts = self.lifts_stack.pop().unwrap();
-			lifts.lift(
-				&Liftable::Type(node.clone()),
-				self.ctx.current_method(),
-				property,
-				&code,
-				false,
-			);
+			lifts.lift(self.ctx.current_method(), property, &code, false);
 			self.lifts_stack.push(lifts);
 		}
 
@@ -331,7 +323,7 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 			let code = self.jsify_udt(&node);
 
 			let mut lifts = self.lifts_stack.pop().unwrap();
-			lifts.capture(&Liftable::Type(node.clone()), &code);
+			lifts.capture(&Liftable::Type(node.clone()), &code, false);
 			self.lifts_stack.push(lifts);
 
 			return;
@@ -407,7 +399,7 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 
 		if let Some(parent) = &node.parent {
 			let mut lifts = self.lifts_stack.pop().unwrap();
-			lifts.capture(&Liftable::Type(parent.clone()), &self.jsify_udt(&parent));
+			lifts.capture(&Liftable::Type(parent.clone()), &self.jsify_udt(&parent), false);
 			self.lifts_stack.push(lifts);
 		}
 

@@ -9,17 +9,16 @@ use super::CLASS_INFLIGHT_INIT_NAME;
 /// A repository of lifts and captures at the class level.
 #[derive(Debug)]
 pub struct Lifts {
-	/// All the lifts. Map from method to a map from token to lift qualifications.
-	pub lifts: BTreeMap<String, BTreeMap<String, LiftQualification>>,
+	// TODO: make all these private and add accessors+helper logic
+	/// All the lifts. Map from method to a map from inflight code to lift qualifications.
+	pub lifts_qualifications: BTreeMap<String, BTreeMap<String, LiftQualification>>,
 
 	/// All the captures. The key is token the value is the preflight code.
-	pub captures: BTreeMap<String, String>,
+	/// Used for preflight setup of inflight captures.
+	pub captures: BTreeMap<String, Capture>,
 
-	/// Map from token to lift
-	pub lift_by_token: BTreeMap<String, Lift>,
-
-	/// Map between liftable AST element and a lift token.
-	token_for_liftable: HashMap<Liftable, String>,
+	/// Map between liftable AST element and a lift token (used for inflight jsification of captures)
+	pub token_for_liftable: HashMap<Liftable, String>,
 }
 
 /// Ast elements that may be lifted
@@ -38,27 +37,21 @@ pub struct LiftQualification {
 
 /// A record that describes a lift from a class.
 #[derive(Debug)]
-pub struct Lift {
-	/// Whether this is a field lift (`this.foo`)
+pub struct Capture {
+	/// Whether this is a field capture (`this.foo`)
 	pub is_field: bool,
 
-	/// The javascript code to lift (preflight)
+	/// The javascript code to capture (preflight)
 	pub code: String,
 }
 
 impl Lifts {
 	pub fn new() -> Self {
 		Self {
-			lifts: BTreeMap::new(),
-			lift_by_token: BTreeMap::new(),
+			lifts_qualifications: BTreeMap::new(),
 			captures: BTreeMap::new(),
 			token_for_liftable: HashMap::new(),
 		}
-	}
-
-	/// Returns the list of all lifts from this class.
-	pub fn lifts(&self) -> Vec<&Lift> {
-		self.lift_by_token.values().collect_vec()
 	}
 
 	fn render_token(&self, code: &str) -> String {
@@ -70,42 +63,23 @@ impl Lifts {
 	}
 
 	/// Adds a lift for an expression.
-	pub fn lift(
-		&mut self,
-		lifted_thing: &Liftable,
-		method: Option<Symbol>,
-		property: Option<Symbol>,
-		code: &str,
-		is_field: bool,
-	) {
-		let token = self.render_token(code);
-
-		self
-			.token_for_liftable
-			.entry(lifted_thing.clone())
-			.or_insert(token.clone());
-
-		self.lift_by_token.entry(token.clone()).or_insert(Lift {
-			is_field,
-			code: code.to_string(),
-		});
-
+	pub fn lift(&mut self, method: Option<Symbol>, property: Option<Symbol>, code: &str, is_field: bool) {
 		let method = method.map(|m| m.name).unwrap_or(Default::default());
 
-		self.add_lift(method, token.clone(), property.as_ref().map(|s| s.name.clone()));
+		self.add_lift(method, code, property.as_ref().map(|s| s.name.clone()));
 
 		// add a lift to the inflight initializer or capture it if its not a field
 		if is_field {
-			self.add_lift(CLASS_INFLIGHT_INIT_NAME.to_string(), token, None);
+			self.add_lift(CLASS_INFLIGHT_INIT_NAME.to_string(), code, None);
 		}
 	}
 
-	fn add_lift(&mut self, method: String, token: String, property: Option<String>) {
+	fn add_lift(&mut self, method: String, code: &str, property: Option<String>) {
 		let lift = self
-			.lifts
+			.lifts_qualifications
 			.entry(method)
 			.or_default()
-			.entry(token)
+			.entry(code.to_string())
 			.or_insert(LiftQualification { ops: BTreeSet::new() });
 
 		if let Some(op) = &property {
@@ -119,7 +93,7 @@ impl Lifts {
 			return None;
 		};
 
-		let is_field = if let Some(lift) = self.lift_by_token.get(token) {
+		let is_field = if let Some(lift) = self.captures.get(token) {
 			lift.is_field
 		} else {
 			false
@@ -133,7 +107,7 @@ impl Lifts {
 	}
 
 	/// Captures a liftable piece of code.
-	pub fn capture(&mut self, lifted_thing: &Liftable, code: &str) {
+	pub fn capture(&mut self, lifted_thing: &Liftable, code: &str, is_field: bool) {
 		// no need to capture this (it's already in scope)
 		if code == "this" {
 			return;
@@ -146,7 +120,10 @@ impl Lifts {
 			.entry(lifted_thing.clone())
 			.or_insert(token.clone());
 
-		self.captures.entry(token.clone()).or_insert(code.to_string());
+		self.captures.entry(token.clone()).or_insert(Capture {
+			is_field,
+			code: code.to_string(),
+		});
 	}
 
 	/// List of all lifted fields in the class. (map from lift token to preflight code)
@@ -162,7 +139,7 @@ impl Lifts {
 		// }
 
 		self
-			.lift_by_token
+			.captures
 			.iter()
 			.filter(|(_, lift)| lift.is_field)
 			.for_each(|(token, lift)| {
