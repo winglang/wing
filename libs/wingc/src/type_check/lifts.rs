@@ -9,8 +9,8 @@ use super::CLASS_INFLIGHT_INIT_NAME;
 /// A repository of lifts and captures at the class level.
 #[derive(Debug)]
 pub struct Lifts {
-	/// All the lifts. The key is "<method>/<token>"
-	lifts: BTreeMap<String, MethodLift>,
+	/// All the lifts. Map from method to a map from token to lift.
+	pub lifts: BTreeMap<String, BTreeMap<String, MethodLift>>, //BTreeMap<String, MethodLift>,
 
 	/// All the captures. The key is token the value is the preflight code.
 	pub captures: BTreeMap<String, String>,
@@ -32,12 +32,6 @@ pub enum Liftable {
 /// A record that describes a single lift from a method.
 #[derive(Debug)]
 pub struct MethodLift {
-	/// The method name
-	pub method: String,
-
-	/// Lifting token (the symbol used in inflight code)
-	pub token: String,
-
 	/// The javascript code to lift (preflight)
 	pub code: String,
 
@@ -80,7 +74,7 @@ impl Lifts {
 
 	/// Adds a lift for an expression.
 	pub fn lift(&mut self, lifted_thing: &Liftable, method: Option<Symbol>, property: Option<Symbol>, code: &str) {
-		let is_field = code.contains("this.");
+		let is_field = code.contains("this."); // TODO: starts_with
 
 		let token = self.render_token(code);
 
@@ -93,7 +87,13 @@ impl Lifts {
 
 		let method = method.map(|m| m.name).unwrap_or(Default::default());
 
-		self.add_lift(method, token.clone(), code, property.map(|s| s.name.clone()), is_field);
+		self.add_lift(
+			method,
+			token.clone(),
+			code,
+			property.as_ref().map(|s| s.name.clone()),
+			is_field,
+		);
 
 		// add a lift to the inflight initializer or capture it if its not a field
 		if is_field {
@@ -104,14 +104,16 @@ impl Lifts {
 	}
 
 	fn add_lift(&mut self, method: String, token: String, code: &str, property: Option<String>, is_field: bool) {
-		let key = format!("{}/{}", method.clone(), token);
-		let lift = self.lifts.entry(key).or_insert(MethodLift {
-			code: code.to_string(),
-			token: token.clone(),
-			method: method.clone(),
-			ops: BTreeSet::new(),
-			is_field,
-		});
+		let lift = self
+			.lifts
+			.entry(method)
+			.or_default()
+			.entry(token)
+			.or_insert(MethodLift {
+				code: code.to_string(),
+				ops: BTreeSet::new(),
+				is_field,
+			});
 
 		if let Some(op) = &property {
 			lift.ops.insert(op.clone());
@@ -154,33 +156,19 @@ impl Lifts {
 		self.captures.entry(token.clone()).or_insert(code.to_string());
 	}
 
-	/// List of all lifted fields in the class.
+	/// List of all lifted fields in the class. (map from lift token to preflight code)
 	pub fn lifted_fields(&self) -> BTreeMap<String, String> {
 		let mut result: BTreeMap<String, String> = BTreeMap::new();
 
-		for (_, lift) in &self.lifts {
+		for (token, lift) in self.lifts.iter().flat_map(|(_, lifts)| lifts.iter()) {
 			if !lift.is_field {
 				continue;
 			}
 
-			result.insert(lift.token.clone(), lift.code.clone());
+			result.insert(token.clone(), lift.code.clone());
 		}
 
 		// self.lifted_fields_by_token.clone()
-		result
-	}
-
-	/// List of all lifts per method. Key is the method name and the value is a list of lifts.
-	pub fn lifts_per_method(&self) -> BTreeMap<String, Vec<&MethodLift>> {
-		let mut result: BTreeMap<String, Vec<&MethodLift>> = BTreeMap::new();
-
-		for (_, method_lift) in &self.lifts {
-			if method_lift.method.is_empty() {
-				continue;
-			}
-			result.entry(method_lift.method.clone()).or_default().push(method_lift);
-		}
-
 		result
 	}
 }

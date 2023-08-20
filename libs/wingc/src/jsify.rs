@@ -1494,13 +1494,12 @@ impl<'a> JSifier<'a> {
 
 		let class_name = class.name.to_string();
 
-		let lifts_per_method = if let Some(lifts) = &ctx.lifts {
-			lifts.lifts_per_method()
-		} else {
-			BTreeMap::default()
+		let Some(lifts) = ctx.lifts else {
+			return bind_method;
 		};
 
-		let lifts = lifts_per_method
+		let lifts = lifts
+			.lifts
 			.iter()
 			.filter(|(m, _)| {
 				let var_kind = &class_type
@@ -1523,7 +1522,7 @@ impl<'a> JSifier<'a> {
 		bind_method.open(format!("{modifier}{bind_method_name}(host, ops) {{"));
 		for (method_name, method_lifts) in lifts {
 			bind_method.open(format!("if (ops.includes(\"{method_name}\")) {{"));
-			for lift in method_lifts {
+			for (_, lift) in method_lifts {
 				let ops_strings = lift.ops.iter().map(|op| format!("\"{}\"", op)).join(", ");
 				let field = lift.code.clone();
 
