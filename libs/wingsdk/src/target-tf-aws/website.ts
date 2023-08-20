@@ -127,7 +127,7 @@ export class Website extends cloud.Website {
       policy: allowDistributionReadOnly.json,
     });
 
-    this._url = distribution.domainName;
+    this._url = `https://${distribution.domainName}`;
   }
 
   public get url(): string {

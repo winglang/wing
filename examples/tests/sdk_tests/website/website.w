@@ -18,12 +18,7 @@ assert(w.path.endsWith("sdk_tests/website/website") || w.path.endsWith("sdk_test
 
 
 test "access files on the website" {
-    let var url = w.url;
-    if (!url.startsWith("http")) {
-      url = "http://" + url;
-    }
-    
-    assert(http.get(url).body == indexFile);
-    assert(http.get(url + "/inner-folder/other.html").body == otherFile);
-    assert(http.get(url + "/config.json").body == Json.stringify(config));
+    assert(http.get(w.url).body == indexFile);
+    assert(http.get(w.url + "/inner-folder/other.html").body == otherFile);
+    assert(http.get(w.url + "/config.json").body == Json.stringify(config));
 }  
