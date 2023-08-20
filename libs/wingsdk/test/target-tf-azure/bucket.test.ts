@@ -11,9 +11,14 @@ import {
   treeJsonOf,
 } from "../util";
 
+const AZURE_APP_OPTS = {
+  location: "East US",
+  entrypointDir: __dirname,
+};
+
 test("create a bucket", () => {
   // GIVEN
-  const app = new tfazure.App({ outdir: mkdtemp(), location: "East US" });
+  const app = new tfazure.App({ outdir: mkdtemp(), ...AZURE_APP_OPTS });
   Bucket._newBucket(app, "my_bucket");
   const output = app.synth();
 
@@ -30,7 +35,7 @@ test("create a bucket", () => {
 
 test("create multiple buckets", () => {
   // GIVEN
-  const app = new tfazure.App({ outdir: mkdtemp(), location: "East US" });
+  const app = new tfazure.App({ outdir: mkdtemp(), ...AZURE_APP_OPTS });
   Bucket._newBucket(app, "my_bucket");
   Bucket._newBucket(app, "my_bucket2");
   const output = app.synth();
@@ -48,7 +53,7 @@ test("create multiple buckets", () => {
 
 test("bucket is public", () => {
   // GIVEN
-  const app = new tfazure.App({ outdir: mkdtemp(), location: "East US" });
+  const app = new tfazure.App({ outdir: mkdtemp(), ...AZURE_APP_OPTS });
   Bucket._newBucket(app, "my_bucket", { public: true });
   const output = app.synth();
 
@@ -65,7 +70,7 @@ test("bucket is public", () => {
 
 test("bucket with two preflight objects", () => {
   // GIVEN
-  const app = new tfazure.App({ outdir: mkdtemp(), location: "East US" });
+  const app = new tfazure.App({ outdir: mkdtemp(), ...AZURE_APP_OPTS });
   const bucket = Bucket._newBucket(app, "my_bucket", { public: true });
   bucket.addObject("file1.txt", "hello world");
   bucket.addObject("file2.txt", "boom bam");
@@ -85,10 +90,10 @@ test("bucket with two preflight objects", () => {
 
 test("bucket with two preflight files", () => {
   // GIVEN
-  const app = new tfazure.App({ outdir: mkdtemp(), location: "East US" });
+  const app = new tfazure.App({ outdir: mkdtemp(), ...AZURE_APP_OPTS });
   const bucket = Bucket._newBucket(app, "my_bucket", { public: true });
-  bucket.addFile("file1.txt", "test/testFiles/test1.txt");
-  bucket.addFile("file2.txt", "test/testFiles/test2.txt");
+  bucket.addFile("file1.txt", "../testFiles/test1.txt");
+  bucket.addFile("file2.txt", "../testFiles/test2.txt");
   const output = app.synth();
 
   // THEN
@@ -105,7 +110,7 @@ test("bucket with two preflight files", () => {
 
 test("bucket name valid", () => {
   // GIVEN
-  const app = new tfazure.App({ outdir: mkdtemp(), location: "East US" });
+  const app = new tfazure.App({ outdir: mkdtemp(), ...AZURE_APP_OPTS });
   const bucket = Bucket._newBucket(app, "The-Uncanny-Bucket");
   const output = app.synth();
 
@@ -147,7 +152,7 @@ test("bucket onEvent is not implemented yet", () => {
   // GIVEN
   let error;
   try {
-    const app = new tfazure.App({ outdir: mkdtemp(), location: "East US" });
+    const app = new tfazure.App({ outdir: mkdtemp(), ...AZURE_APP_OPTS });
     const bucket = Bucket._newBucket(app, "my_bucket", { public: true });
     const testInflight = Testing.makeHandler(app, "bucket-inflight", "null");
     bucket.onEvent(testInflight);

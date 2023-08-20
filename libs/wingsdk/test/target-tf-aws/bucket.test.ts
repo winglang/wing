@@ -84,10 +84,10 @@ test("bucket with two preflight objects", () => {
 
 test("bucket with two preflight files", () => {
   // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp() });
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
   const bucket = Bucket._newBucket(app, "my_bucket", { public: true });
-  bucket.addFile("file1.txt", "test/testFiles/test1.txt");
-  bucket.addFile("file2.txt", "test/testFiles/test2.txt");
+  bucket.addFile("file1.txt", "../testFiles/test1.txt");
+  bucket.addFile("file2.txt", "../testFiles/test2.txt");
   const output = app.synth();
 
   // THEN

@@ -1,12 +1,11 @@
+import * as fs from "fs";
+import { isAbsolute, resolve } from "path";
 import { Construct } from "constructs";
 import { Topic } from "./topic";
 import { fqnForType } from "../constants";
 import { App, Connections } from "../core";
 import { convertBetweenHandlers } from "../shared/convert";
 import { Json, IResource, Resource } from "../std";
-import { isAbsolute, resolve } from "path"
-import * as fs from "fs";
-
 
 /**
  * Global identifier for `Bucket`.
@@ -44,7 +43,7 @@ export abstract class Bucket extends Resource {
 
   /** @internal */
   protected readonly _topics = new Map<BucketEventType, Topic>();
-  private scope: Construct
+  private scope: Construct;
 
   constructor(scope: Construct, id: string, props: BucketProps = {}) {
     super(scope, id);
@@ -79,11 +78,14 @@ export abstract class Bucket extends Resource {
   public abstract addObject(key: string, body: string): void;
 
   /**
- * Add a file to the bucket from system folder
- */
+   * Add a file to the bucket from system folder
+   */
 
-  public addFile(key: string, path: string, encoding: BufferEncoding = "utf-8"): void {
-    
+  public addFile(
+    key: string,
+    path: string,
+    encoding: BufferEncoding = "utf-8"
+  ): void {
     if (isAbsolute(path)) {
       path = path;
     } else {

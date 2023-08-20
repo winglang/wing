@@ -1,4 +1,5 @@
 import * as fs from "fs";
+import { resolve } from "path";
 import * as url from "url";
 import { vi, test, expect } from "vitest";
 import { listMessages, treeJsonOf } from "./util";
@@ -503,7 +504,7 @@ test("can add object in preflight", async () => {
 test("can add file in preflight", async () => {
   // GIVEN
   const FILENAME = "test.txt";
-  const PATH = "test/testFiles/test1.txt";
+  const PATH = resolve(__dirname, "../testFiles/test1.txt");
 
   const app = new SimApp();
   const bucket = cloud.Bucket._newBucket(app, "my_bucket");

@@ -12,6 +12,7 @@ import {
 const GCP_APP_OPTS = {
   projectId: "my-project",
   storageLocation: "US",
+  entrypointDir: __dirname,
 };
 
 test("create a bucket", () => {
@@ -80,8 +81,8 @@ test("bucket with two preflight files", () => {
   // GIVEN
   const app = new tfgcp.App({ outdir: mkdtemp(), ...GCP_APP_OPTS });
   const bucket = Bucket._newBucket(app, "my_bucket");
-  bucket.addFile("file1.txt", "test/testFiles/test1.txt");
-  bucket.addFile("file2.txt", "test/testFiles/test2.txt");
+  bucket.addFile("file1.txt", "../testFiles/test1.txt");
+  bucket.addFile("file2.txt", "../testFiles/test2.txt");
   const output = app.synth();
 
   // THEN
