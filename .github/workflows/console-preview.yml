@@ -25,7 +25,7 @@ jobs:
   create:
     name: "Create"
     runs-on: ubuntu-latest
-    if: ${{ github.event.action != 'closed' }}
+    if: ${{ github.event.pull_request.head.repo.full_name == github.repository && github.event.action != 'closed' }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -52,7 +52,7 @@ jobs:
   destroy:
     name: "Destroy"
     runs-on: ubuntu-latest
-    if: ${{ github.event.action == 'closed' }}
+    if: ${{ github.event.pull_request.head.repo.full_name == github.repository && github.event.action == 'closed' }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
