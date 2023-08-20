@@ -1498,7 +1498,7 @@ impl<'a> JSifier<'a> {
 			return bind_method;
 		};
 
-		let lifts = lifts
+		let lift_qualifications = lifts
 			.lifts
 			.iter()
 			.filter(|(m, _)| {
@@ -1515,16 +1515,16 @@ impl<'a> JSifier<'a> {
 			.collect_vec();
 
 		// Skip jsifying this method if there are no lifts (in this case we'll use super's register bind method)
-		if lifts.is_empty() {
+		if lift_qualifications.is_empty() {
 			return bind_method;
 		}
 
 		bind_method.open(format!("{modifier}{bind_method_name}(host, ops) {{"));
-		for (method_name, method_lifts) in lifts {
+		for (method_name, method_qual) in lift_qualifications {
 			bind_method.open(format!("if (ops.includes(\"{method_name}\")) {{"));
-			for (_, lift) in method_lifts {
-				let ops_strings = lift.ops.iter().map(|op| format!("\"{}\"", op)).join(", ");
-				let field = lift.code.clone();
+			for (token, method_lift_qual) in method_qual {
+				let ops_strings = method_lift_qual.ops.iter().map(|op| format!("\"{}\"", op)).join(", ");
+				let field = &lifts.lift_by_token.get(token).unwrap().code;
 
 				bind_method.line(format!(
 					"{class_name}._registerBindObject({field}, host, [{ops_strings}]);",

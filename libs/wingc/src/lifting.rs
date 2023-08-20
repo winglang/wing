@@ -68,7 +68,6 @@ impl<'a> LiftVisitor<'a> {
 		return false;
 	}
 
-	// TODO: merge with should_capture_expr
 	fn should_capture_type(&self, node: &UserDefinedType) -> bool {
 		// let (fullname, span) = match r {
 		// 	Reference::Identifier(ref symb) => (symb.name.clone(), symb.span.clone()),
@@ -123,65 +122,6 @@ impl<'a> LiftVisitor<'a> {
 
 		return true;
 	}
-
-	// fn should_capture_expr(&self, node: &Expr) -> bool {
-	// 	let ExprKind::Reference(ref r) = node.kind else {
-	// 		return false;
-	// 	};
-
-	// 	let (fullname, span) = match r {
-	// 		Reference::Identifier(ref symb) => (symb.name.clone(), symb.span.clone()),
-	// 		//Reference::TypeReference(ref t) => (t.full_path_str(), t.span.clone()),
-	// 		_ => return false,
-	// 	};
-
-	// 	// skip "This" (which is the type of "this")
-	// 	if let Some(class) = &self.ctx.current_class() {
-	// 		if class.full_path_str() == fullname {
-	// 			return false;
-	// 		}
-	// 	}
-
-	// 	// if the symbol is defined in the *current* environment (which could also be a nested scope
-	// 	// inside the current method), we don't need to capture it
-	// 	if self.is_defined_in_current_env(&fullname, &span) {
-	// 		return false;
-	// 	}
-
-	// 	let Some(method_env) = self.ctx.current_method_env() else {
-	// 		return false;
-	// 	};
-
-	// 	let lookup = method_env.lookup_nested_str(&fullname, Some(self.ctx.current_stmt_idx()));
-
-	// 	// any other lookup failure is likely a an invalid reference so we can skip it
-	// 	let LookupResult::Found(vi, symbol_info) = lookup else {
-	// 		return false;
-	// 	};
-
-	// 	// now, we need to determine if the environment this symbol is defined in is a parent of the
-	// 	// method's environment. if it is, we need to capture it.
-	// 	if symbol_info.env.is_same(&method_env) || symbol_info.env.is_child_of(&method_env) {
-	// 		return false;
-	// 	}
-
-	// 	// the symbol is defined in a parent environment, but it's still an inflight environment
-	// 	// which means we don't need to capture.
-	// 	if symbol_info.phase == Phase::Inflight && symbol_info.env.phase == Phase::Inflight {
-	// 		return false;
-	// 	}
-
-	// 	// skip macros
-	// 	if let Some(x) = vi.as_variable() {
-	// 		if let Some(f) = x.type_.as_function_sig() {
-	// 			if f.js_override.is_some() {
-	// 				return false;
-	// 			}
-	// 		}
-	// 	}
-
-	// 	return true;
-	// }
 
 	fn jsify_expr(&mut self, node: &Expr, phase: Phase) -> String {
 		self.ctx.push_phase(phase);
@@ -249,13 +189,6 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 			return;
 		}
 
-		// if this expression represents the current class, no need to capture it (it is by definition
-		// available in the current scope)
-		// if self.is_self_type_reference(&node) {
-		// 	visit::visit_expr(self, node);
-		// 	return;
-		// }
-
 		//---------------
 		// LIFT
 		if expr_phase == Phase::Preflight {
@@ -292,7 +225,12 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 			}
 
 			let mut lifts = self.lifts_stack.pop().unwrap();
-			lifts.lift(&Liftable::Expr(node.id), self.ctx.current_method(), property, &code);
+			let is_field = code.contains("this."); // TODO: starts_with
+			let lifted_expr = Liftable::Expr(node.id);
+			lifts.lift(&lifted_expr, self.ctx.current_method(), property, &code, is_field);
+			if !is_field {
+				lifts.capture(&lifted_expr, &code);
+			}
 			self.lifts_stack.push(lifts);
 
 			return;
@@ -318,10 +256,10 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 
 		// if type represents the current class, no need to capture it (it is by definition
 		// available in the current scope)
-		if self.is_self_type_reference(node) {
-			visit::visit_user_defined_type(self, node);
-			return;
-		}
+		// if self.is_self_type_reference(node) {
+		// 	visit::visit_user_defined_type(self, node);
+		// 	return;
+		// }
 
 		// Get the type of the udt
 		let udt_type = resolve_user_defined_type(
@@ -368,7 +306,7 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 			}
 
 			// lookup the property in the class and make sure it's inflight (preflight prop acccess is an expression and should have been lifted already)
-				// TODO: remove this check
+			// TODO: remove this check
 			let class = udt_type.as_class().unwrap();
 			let symb_kind = class.get_env().lookup(property.as_ref().unwrap(), None).unwrap();
 			let var = symb_kind.as_variable().unwrap();
@@ -380,10 +318,9 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 				self.ctx.current_method(),
 				property,
 				&code,
+				false,
 			);
 			self.lifts_stack.push(lifts);
-
-			return;
 		}
 
 		//---------------
@@ -425,6 +362,10 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 		// nothing to do if we are emitting an inflight class from within an inflight scope
 		if self.ctx.current_phase() == Phase::Inflight && node.phase == Phase::Inflight {
 			self.visit_symbol(&node.name);
+
+			visit::visit_function_definition(self, &node.initializer);
+			visit::visit_function_definition(self, &node.inflight_initializer);
+
 			for field in node.fields.iter() {
 				self.visit_symbol(&field.name);
 				self.visit_type_annotation(&field.member_type);
@@ -432,15 +373,16 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 			for (name, def) in node.methods.iter() {
 				self.visit_symbol(&name);
 				visit::visit_function_definition(self, &def);
+				//self.visit_function_definition(&def);
 			}
-			visit::visit_function_definition(self, &node.initializer);
 			if let Some(parent) = &node.parent {
 				self.visit_user_defined_type(&parent);
 			}
 			for interface in node.implements.iter() {
 				self.visit_user_defined_type(&interface);
 			}
-			visit::visit_function_definition(self, &node.inflight_initializer);
+			// return;
+			//visit::visit_class(self, node);
 			return;
 		}
 

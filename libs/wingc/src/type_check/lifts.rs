@@ -9,14 +9,14 @@ use super::CLASS_INFLIGHT_INIT_NAME;
 /// A repository of lifts and captures at the class level.
 #[derive(Debug)]
 pub struct Lifts {
-	/// All the lifts. Map from method to a map from token to lift.
-	pub lifts: BTreeMap<String, BTreeMap<String, MethodLift>>, //BTreeMap<String, MethodLift>,
+	/// All the lifts. Map from method to a map from token to lift qualifications.
+	pub lifts: BTreeMap<String, BTreeMap<String, LiftQualification>>,
 
 	/// All the captures. The key is token the value is the preflight code.
 	pub captures: BTreeMap<String, String>,
 
 	/// Map from token to lift
-	lift_by_token: BTreeMap<String, Lift>,
+	pub lift_by_token: BTreeMap<String, Lift>,
 
 	/// Map between liftable AST element and a lift token.
 	token_for_liftable: HashMap<Liftable, String>,
@@ -31,15 +31,9 @@ pub enum Liftable {
 
 /// A record that describes a single lift from a method.
 #[derive(Debug)]
-pub struct MethodLift {
-	/// The javascript code to lift (preflight)
-	pub code: String,
-
+pub struct LiftQualification {
 	/// The operations that qualify the lift (the property names)
 	pub ops: BTreeSet<String>,
-
-	/// Indicates if this is a lift for a field or a free variable
-	pub is_field: bool,
 }
 
 /// A record that describes a lift from a class.
@@ -47,6 +41,9 @@ pub struct MethodLift {
 pub struct Lift {
 	/// Whether this is a field lift (`this.foo`)
 	pub is_field: bool,
+
+	/// The javascript code to lift (preflight)
+	pub code: String,
 }
 
 impl Lifts {
@@ -73,9 +70,14 @@ impl Lifts {
 	}
 
 	/// Adds a lift for an expression.
-	pub fn lift(&mut self, lifted_thing: &Liftable, method: Option<Symbol>, property: Option<Symbol>, code: &str) {
-		let is_field = code.contains("this."); // TODO: starts_with
-
+	pub fn lift(
+		&mut self,
+		lifted_thing: &Liftable,
+		method: Option<Symbol>,
+		property: Option<Symbol>,
+		code: &str,
+		is_field: bool,
+	) {
 		let token = self.render_token(code);
 
 		self
@@ -83,37 +85,28 @@ impl Lifts {
 			.entry(lifted_thing.clone())
 			.or_insert(token.clone());
 
-		self.lift_by_token.entry(token.clone()).or_insert(Lift { is_field });
+		self.lift_by_token.entry(token.clone()).or_insert(Lift {
+			is_field,
+			code: code.to_string(),
+		});
 
 		let method = method.map(|m| m.name).unwrap_or(Default::default());
 
-		self.add_lift(
-			method,
-			token.clone(),
-			code,
-			property.as_ref().map(|s| s.name.clone()),
-			is_field,
-		);
+		self.add_lift(method, token.clone(), property.as_ref().map(|s| s.name.clone()));
 
 		// add a lift to the inflight initializer or capture it if its not a field
 		if is_field {
-			self.add_lift(CLASS_INFLIGHT_INIT_NAME.to_string(), token, code, None, true);
-		} else {
-			self.capture(&lifted_thing, code);
+			self.add_lift(CLASS_INFLIGHT_INIT_NAME.to_string(), token, None);
 		}
 	}
 
-	fn add_lift(&mut self, method: String, token: String, code: &str, property: Option<String>, is_field: bool) {
+	fn add_lift(&mut self, method: String, token: String, property: Option<String>) {
 		let lift = self
 			.lifts
 			.entry(method)
 			.or_default()
 			.entry(token)
-			.or_insert(MethodLift {
-				code: code.to_string(),
-				ops: BTreeSet::new(),
-				is_field,
-			});
+			.or_insert(LiftQualification { ops: BTreeSet::new() });
 
 		if let Some(op) = &property {
 			lift.ops.insert(op.clone());
@@ -160,15 +153,21 @@ impl Lifts {
 	pub fn lifted_fields(&self) -> BTreeMap<String, String> {
 		let mut result: BTreeMap<String, String> = BTreeMap::new();
 
-		for (token, lift) in self.lifts.iter().flat_map(|(_, lifts)| lifts.iter()) {
-			if !lift.is_field {
-				continue;
-			}
+		// for (token, lift) in self.lifts.iter().flat_map(|(_, lifts)| lifts.iter()) {
+		// 	if !lift.is_field {
+		// 		continue;
+		// 	}
 
-			result.insert(token.clone(), lift.code.clone());
-		}
+		// 	result.insert(token.clone(), lift.code.clone());
+		// }
 
-		// self.lifted_fields_by_token.clone()
+		self
+			.lift_by_token
+			.iter()
+			.filter(|(_, lift)| lift.is_field)
+			.for_each(|(token, lift)| {
+				result.insert(token.clone(), lift.code.clone());
+			});
 		result
 	}
 }
