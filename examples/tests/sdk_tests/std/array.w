@@ -272,14 +272,34 @@ test "set()" {
 
 test "insert()" {
   let arr = MutArray<num>[5, 10, 20];
-  assert(arr.at(2) == 20);
+  let var error = "";
 
   arr.insert(2, 15);
 
+  assert(arr.length == 4);
   assert(arr.at(2) == 15);
   assert(arr.at(3) == 20);
 
+  try {
+    arr.insert(-3, 15);
+  }
+  catch e {
+    error = e;
+  }
+  assert(error == "Index out of bounds");
+  assert(arr.length == 4);
+
+  try {
+    arr.insert(7, 15);
+  }
+  catch e {
+    error = e;
+  }
+  assert(error == "Index out of bounds");
+  assert(arr.length == 4);
+
   arr.insert(4, 25);
 
+  assert(arr.length == 5);
   assert(arr.at(4) == 25);
 }
