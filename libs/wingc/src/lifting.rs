@@ -443,17 +443,3 @@ fn is_inflight_field(expr: &Expr, expr_type: TypeRef, property: &Option<Symbol>)
 
 	return false;
 }
-// fn is_inflight_field(type_: TypeRef, property: &str) -> bool {
-// 	if let Some(cls) = type_.as_class() {
-// 		if let Some(vi) = cls.get_field(&Symbol::global(property)) {
-// 			// TODO: ?? why is this here
-// 			if !vi.type_.is_closure() {
-// 				if vi.phase != Phase::Preflight {
-// 					return true;
-// 				}
-// 			}
-// 		}
-// 	}
-
-// 	return false;
-// }

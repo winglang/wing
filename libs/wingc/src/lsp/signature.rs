@@ -48,9 +48,6 @@ pub fn on_signature_help(params: lsp_types::SignatureHelpParams) -> Option<Signa
 			) = match &expr.kind {
 				ExprKind::New(new_expr) => {
 					let NewExpr { class, arg_list, .. } = new_expr;
-					// let Some(udt) = class.as_type_reference() else {
-					// 	return None;
-					// };
 
 					let Some(t) = resolve_user_defined_type(class, &types.get_scope_env(&root_scope), 0).ok() else {
 						return None;
