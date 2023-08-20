@@ -1,7 +1,5 @@
 use std::collections::{BTreeMap, BTreeSet, HashMap};
 
-use itertools::Itertools;
-
 use crate::ast::{Symbol, UserDefinedType};
 
 use super::CLASS_INFLIGHT_INIT_NAME;
@@ -55,10 +53,6 @@ impl Lifts {
 	}
 
 	fn render_token(&self, code: &str) -> String {
-		if code == "this" {
-			return code.to_string();
-		}
-
 		format!("${}", replace_non_alphanumeric(code))
 	}
 
