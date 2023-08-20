@@ -379,7 +379,7 @@ export interface BucketOnEventProps {
  *
  * @inflight  `@winglang/sdk.cloud.IBucketEventHandlerClient`
  */
-export interface IBucketEventHandler extends IResource { }
+export interface IBucketEventHandler extends IResource {}
 
 /**
  * A resource with an inflight "handle" method that can be passed to
