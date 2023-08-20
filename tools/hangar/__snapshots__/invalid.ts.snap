@@ -5,7 +5,7 @@ exports[`access_hidden_namespace.w 1`] = `
   --> ../../../examples/tests/invalid/access_hidden_namespace.w:7:5
   |
 7 | new core.NodeJsCode(\\"/tmp/test.txt\\"); // This should fail even though \`fs.TextFile\` extends \`core.FileBase\` because we didn't bring in \`core\` explicitly.
-  |     ^^^^^^^^^^^^^^^ Unknown symbol \\"core\\"
+  |     ^^^^ Unknown symbol \\"core\\"
 
 
  
@@ -150,7 +150,7 @@ error: Unknown symbol \\"stuff\\"
   --> ../../../examples/tests/invalid/bring_local_variables.w:3:5
   |
 3 | new stuff.Bar();
-  |     ^^^^^^^^^ Unknown symbol \\"stuff\\"
+  |     ^^^^^ Unknown symbol \\"stuff\\"
 
 
  
@@ -212,12 +212,14 @@ Duration <DURATION>"
 `;
 
 exports[`capture_redefinition.w 1`] = `
-"error: Cannot capture symbol \\"y\\" because it is shadowed by another symbol with the same name
-   --> ../../../examples/tests/invalid/capture_redefinition.w:14:9
-   |
-14 |     log(y);
-   |         ^ Cannot capture symbol \\"y\\" because it is shadowed by another symbol with the same name
+"ERROR: Cannot access 'x' before initialization
 
+../../../examples/tests/invalid/target/test/capture_redefinition.wsim.183631.tmp/.wing/preflight.js:40
+       const x = \\"hi\\";
+       if (true) {
+>>       {console.log(x)};
+         const x = \\"world\\";
+       }
 
  
  
@@ -1112,11 +1114,11 @@ error: Cannot create inflight class \\"Foo\\" in preflight phase
   |     ^^^^^^^^^ Cannot create inflight class \\"Foo\\" in preflight phase
 
 
-error: Cannot qualify access to a lifted object of type \\"PreflightClass\\" (see https://github.com/winglang/wing/issues/76 for more details)
-   --> ../../../examples/tests/invalid/inflight_class_created_in_preflight.w:19:3
+error: Cannot qualify access to a lifted type \\"PreflightClass\\" (see https://github.com/winglang/wing/issues/76 for more details)
+   --> ../../../examples/tests/invalid/inflight_class_created_in_preflight.w:19:7
    |
 19 |   new PreflightClass();
-   |   ^^^^^^^^^^^^^^^^^^^^ Cannot qualify access to a lifted object of type \\"PreflightClass\\" (see https://github.com/winglang/wing/issues/76 for more details)
+   |       ^^^^^^^^^^^^^^ Cannot qualify access to a lifted type \\"PreflightClass\\" (see https://github.com/winglang/wing/issues/76 for more details)
 
 
  
@@ -1919,11 +1921,11 @@ exports[`resource_inflight.w 1`] = `
   |   ^^^^^^^^^^^^^^^^^^ Cannot create preflight class \\"Bucket\\" in inflight phase
 
 
-error: Cannot qualify access to a lifted object of type \\"Bucket\\" (see https://github.com/winglang/wing/issues/76 for more details)
-  --> ../../../examples/tests/invalid/resource_inflight.w:4:3
+error: Cannot qualify access to a lifted type \\"Bucket\\" (see https://github.com/winglang/wing/issues/76 for more details)
+  --> ../../../examples/tests/invalid/resource_inflight.w:4:7
   |
 4 |   new cloud.Bucket(); // Should fail because we can't create resources inflight
-  |   ^^^^^^^^^^^^^^^^^^ Cannot qualify access to a lifted object of type \\"Bucket\\" (see https://github.com/winglang/wing/issues/76 for more details)
+  |       ^^^^^^^^^^^^ Cannot qualify access to a lifted type \\"Bucket\\" (see https://github.com/winglang/wing/issues/76 for more details)
 
 
  
@@ -2309,10 +2311,10 @@ error: Struct \\"Showtime\\" extends \\"Dazzle\\" which introduces a conflicting
 
 
 error: Cannot instantiate type \\"BucketProps\\" because it is a struct and not a class. Use struct instantiation instead.
-   --> ../../../examples/tests/invalid/structs.w:47:9
+   --> ../../../examples/tests/invalid/structs.w:47:13
    |
 47 | let x = new cloud.BucketProps(1);
-   |         ^^^^^^^^^^^^^^^^^^^^^^^^ Cannot instantiate type \\"BucketProps\\" because it is a struct and not a class. Use struct instantiation instead.
+   |             ^^^^^^^^^^^^^^^^^ Cannot instantiate type \\"BucketProps\\" because it is a struct and not a class. Use struct instantiation instead.
 
 
  
@@ -2503,14 +2505,14 @@ error: Unknown symbol \\"clod\\"
   --> ../../../examples/tests/invalid/unknown_symbol.w:3:18
   |
 3 | let bucket = new clod.Bucket();
-  |                  ^^^^^^^^^^^ Unknown symbol \\"clod\\"
+  |                  ^^^^ Unknown symbol \\"clod\\"
 
 
 error: Unknown symbol \\"cloudy\\"
   --> ../../../examples/tests/invalid/unknown_symbol.w:6:17
   |
 6 | let funky = new cloudy.Funktion(inflight () => { });
-  |                 ^^^^^^^^^^^^^^^ Unknown symbol \\"cloudy\\"
+  |                 ^^^^^^ Unknown symbol \\"cloudy\\"
 
 
 error: Unknown symbol \\"y\\"
