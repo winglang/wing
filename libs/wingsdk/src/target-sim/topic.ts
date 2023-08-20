@@ -7,8 +7,9 @@ import { TopicSchema, TOPIC_TYPE } from "./schema-resources";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
 import * as core from "../core";
+import { Connections } from "../core";
 import { convertBetweenHandlers } from "../shared/convert";
-import { Display, IInflightHost, Resource } from "../std";
+import { Display, IInflightHost } from "../std";
 import { BaseResourceSchema } from "../testing/simulator";
 
 /**
@@ -49,10 +50,10 @@ export class Topic extends cloud.Topic implements ISimulatorResource {
       subscriptionProps: {},
     });
 
-    Resource.addConnection({
-      from: this,
-      to: fn,
-      relationship: "onMessage()",
+    Connections.of(this).add({
+      source: this,
+      target: fn,
+      name: "onMessage()",
     });
 
     return fn;

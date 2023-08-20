@@ -2,7 +2,7 @@ use std::collections::{BTreeMap, BTreeSet, HashMap};
 
 use crate::ast::{Symbol, UserDefinedType};
 
-use super::CLASS_INFLIGHT_INIT_NAME;
+use super::{ExprId, CLASS_INFLIGHT_INIT_NAME};
 
 /// A repository of lifts and captures at the class level.
 #[derive(Debug)]
@@ -22,7 +22,7 @@ pub struct Lifts {
 /// Ast elements that may be lifted
 #[derive(Debug, PartialEq, Eq, Hash, Clone)]
 pub enum Liftable {
-	Expr(usize),
+	Expr(ExprId),
 	Type(UserDefinedType),
 }
 

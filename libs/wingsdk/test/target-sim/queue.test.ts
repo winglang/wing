@@ -1,12 +1,15 @@
 import { test, expect } from "vitest";
-import { listMessages, treeJsonOf } from "./util";
+import {
+  listMessages,
+  treeJsonOf,
+  waitUntilTrace,
+  waitUntilTraceCount,
+} from "./util";
 import * as cloud from "../../src/cloud";
 import { Duration } from "../../src/std";
 import { QUEUE_TYPE } from "../../src/target-sim/schema-resources";
 import { Testing } from "../../src/testing";
 import { SimApp } from "../sim-app";
-
-const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 const INFLIGHT_CODE = `
 async handle(message) {
@@ -22,18 +25,20 @@ test("create a queue", async () => {
   const s = await app.startSimulator();
 
   // THEN
-  expect(s.getResourceConfig("/my_queue")).toEqual({
-    attrs: {
-      handle: expect.any(String),
-    },
-    path: "root/my_queue",
-    props: {
-      timeout: 10,
-      retentionPeriod: 3600,
-    },
-    type: "wingsdk.cloud.Queue",
-  });
   await s.stop();
+  expect(s.getResourceConfig("/my_queue")).toMatchInlineSnapshot(`
+    {
+      "attrs": {
+        "handle": "sim-1",
+      },
+      "path": "root/my_queue",
+      "props": {
+        "retentionPeriod": 3600,
+        "timeout": 10,
+      },
+      "type": "wingsdk.cloud.Queue",
+    }
+  `);
 
   expect(app.snapshot()).toMatchSnapshot();
 });
@@ -49,11 +54,10 @@ test("queue with one subscriber, default batch size of 1", async () => {
   const queueClient = s.getResource("/my_queue") as cloud.IQueueClient;
 
   // WHEN
-  await queueClient.push("A");
-  await queueClient.push("B");
-
-  // TODO: queueClient.awaitMessages(2) or queueClient.untilEmpty() or something
-  await sleep(200);
+  await queueClient.push("A", "B");
+  await waitUntilTraceCount(s, 2, (trace) =>
+    trace.data.message.startsWith("Sending messages")
+  );
 
   // THEN
   await s.stop();
@@ -98,13 +102,14 @@ test("queue with one subscriber, batch size of 5", async () => {
 
   const queue = cloud.Queue._newQueue(app, "my_queue");
   const handler = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
-  queue.setConsumer(handler, { batchSize: 5 });
+  const consumer = queue.setConsumer(handler, { batchSize: 5 });
 
   // initialize the queue with some messages
   const onDeployHandler = Testing.makeHandler(
     app,
     "OnDeployHandler",
-    `async handle() {
+    `\
+async handle() {
   await this.queue.push("A");
   await this.queue.push("B");
   await this.queue.push("C");
@@ -124,12 +129,21 @@ test("queue with one subscriber, batch size of 5", async () => {
   const s = await app.startSimulator();
 
   // WHEN
-  await sleep(200);
+  await waitUntilTraceCount(
+    s,
+    2,
+    (trace) =>
+      trace.sourcePath === consumer.node.path && trace.data.status === "success"
+  );
 
   // THEN
   await s.stop();
 
-  expect(listMessages(s)).toMatchSnapshot();
+  const traces = s.listTraces().map((trace) => trace.data.message);
+  expect(traces).toContain(
+    'Invoke (payload="{\\"messages\\":[\\"A\\",\\"B\\",\\"C\\",\\"D\\",\\"E\\"]}").'
+  );
+  expect(traces).toContain('Invoke (payload="{\\"messages\\":[\\"F\\"]}").');
   expect(app.snapshot()).toMatchSnapshot();
 });
 
@@ -143,21 +157,19 @@ test("messages are requeued if the function fails after timeout", async () => {
   queue.setConsumer(handler);
   const s = await app.startSimulator();
 
-  // warm up the function so timing is more predictable
-  const fn = s.getResource(
-    "root/my_queue/my_queue-SetConsumer-e645076f"
-  ) as cloud.IFunctionClient;
-  await fn.invoke(JSON.stringify({ messages: [] }));
-
   // WHEN
+  const REQUEUE_MSG =
+    "1 messages pushed back to queue after visibility timeout.";
   const queueClient = s.getResource("/my_queue") as cloud.IQueueClient;
-  await queueClient.push("BAD MESSAGE");
-
-  await sleep(1300);
-
-  // THEN
+  void queueClient.push("BAD MESSAGE");
+  await waitUntilTrace(s, (trace) => trace.data.message.startsWith("Invoke"));
+  // stopping early to avoid the next queue message from being processed
   await s.stop();
 
+  // THEN
+  await waitUntilTrace(s, (trace) =>
+    trace.data.message.startsWith(REQUEUE_MSG)
+  );
   expect(listMessages(s)).toMatchSnapshot();
   expect(app.snapshot()).toMatchSnapshot();
 
@@ -166,7 +178,7 @@ test("messages are requeued if the function fails after timeout", async () => {
       .listTraces()
       .filter((v) => v.sourceType == QUEUE_TYPE)
       .map((trace) => trace.data.message)
-  ).toContain("1 messages pushed back to queue after visibility timeout.");
+  ).toContain(REQUEUE_MSG);
 });
 
 test("messages are not requeued if the function fails before timeout", async () => {
@@ -174,22 +186,20 @@ test("messages are not requeued if the function fails before timeout", async () 
   const app = new SimApp();
   const handler = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
   const queue = cloud.Queue._newQueue(app, "my_queue", {
-    timeout: Duration.fromSeconds(1),
+    timeout: Duration.fromSeconds(30),
   });
   queue.setConsumer(handler);
   const s = await app.startSimulator();
 
-  // warm up the function so timing is more predictable
-  const fn = s.getResource(
-    "root/my_queue/my_queue-SetConsumer-e645076f"
-  ) as cloud.IFunctionClient;
-  await fn.invoke(JSON.stringify({ messages: [] }));
-
   // WHEN
   const queueClient = s.getResource("/my_queue") as cloud.IQueueClient;
-  await queueClient.push("BAD MESSAGE");
-
-  await sleep(300);
+  void queueClient.push("BAD MESSAGE");
+  await waitUntilTrace(
+    s,
+    (trace) =>
+      trace.data.message ==
+      "Subscriber error - returning 1 messages to queue: ERROR"
+  );
 
   // THEN
   await s.stop();
@@ -202,13 +212,15 @@ test("messages are not requeued if the function fails before timeout", async () 
       .listTraces()
       .filter((v) => v.sourceType == QUEUE_TYPE)
       .map((trace) => trace.data.message)
-  ).toEqual([
-    "wingsdk.cloud.Queue created.",
-    "Push (message=BAD MESSAGE).",
-    'Sending messages (messages=["BAD MESSAGE"], subscriber=sim-1).',
-    "Subscriber error - returning 1 messages to queue: ERROR",
-    "wingsdk.cloud.Queue deleted.",
-  ]);
+  ).toMatchInlineSnapshot(`
+    [
+      "wingsdk.cloud.Queue created.",
+      "Push (messages=BAD MESSAGE).",
+      "Sending messages (messages=[\\"BAD MESSAGE\\"], subscriber=sim-1).",
+      "Subscriber error - returning 1 messages to queue: ERROR",
+      "wingsdk.cloud.Queue deleted.",
+    ]
+  `);
 });
 
 test("messages are not requeued if the function fails after retention timeout", async () => {
@@ -216,23 +228,20 @@ test("messages are not requeued if the function fails after retention timeout", 
   const app = new SimApp();
   const handler = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
   const queue = cloud.Queue._newQueue(app, "my_queue", {
-    timeout: Duration.fromSeconds(2),
     retentionPeriod: Duration.fromSeconds(1),
   });
   queue.setConsumer(handler);
   const s = await app.startSimulator();
 
-  // warm up the function so timing is more predictable
-  const fn = s.getResource(
-    "root/my_queue/my_queue-SetConsumer-e645076f"
-  ) as cloud.IFunctionClient;
-  await fn.invoke(JSON.stringify({ messages: [] }));
-
   // WHEN
   const queueClient = s.getResource("/my_queue") as cloud.IQueueClient;
-  await queueClient.push("BAD MESSAGE");
-
-  await sleep(300);
+  void queueClient.push("BAD MESSAGE");
+  await waitUntilTrace(
+    s,
+    (trace) =>
+      trace.data.message ==
+      "Subscriber error - returning 1 messages to queue: ERROR"
+  );
 
   // THEN
   await s.stop();
@@ -245,13 +254,15 @@ test("messages are not requeued if the function fails after retention timeout", 
       .listTraces()
       .filter((v) => v.sourceType == QUEUE_TYPE)
       .map((trace) => trace.data.message)
-  ).toEqual([
-    "wingsdk.cloud.Queue created.",
-    "Push (message=BAD MESSAGE).",
-    'Sending messages (messages=["BAD MESSAGE"], subscriber=sim-1).',
-    "Subscriber error - returning 1 messages to queue: ERROR",
-    "wingsdk.cloud.Queue deleted.",
-  ]);
+  ).toMatchInlineSnapshot(`
+    [
+      "wingsdk.cloud.Queue created.",
+      "Push (messages=BAD MESSAGE).",
+      "Sending messages (messages=[\\"BAD MESSAGE\\"], subscriber=sim-1).",
+      "Subscriber error - returning 1 messages to queue: ERROR",
+      "wingsdk.cloud.Queue deleted.",
+    ]
+  `);
 });
 
 test("queue has no display hidden property", async () => {

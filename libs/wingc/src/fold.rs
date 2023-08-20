@@ -116,11 +116,13 @@ where
 		StmtKind::IfLet {
 			value,
 			statements,
+			reassignable,
 			var_name,
 			else_statements,
 		} => StmtKind::IfLet {
 			value: f.fold_expr(value),
 			statements: f.fold_scope(statements),
+			reassignable,
 			var_name: f.fold_symbol(var_name),
 			else_statements: else_statements.map(|statements| f.fold_scope(statements)),
 		},

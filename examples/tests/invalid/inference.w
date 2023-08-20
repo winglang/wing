@@ -14,12 +14,12 @@ recursiveClosure("");
 //               ^^ Expected num, got str
 
 let emptyArray = [];
-//  ^^^^^^^^^^^ Unable to infer type
+//  ^^^^^^^^^^ Unable to infer type
 let numArray = emptyArray;
-//  ^^^^^^^^^ Unable to infer type
+//  ^^^^^^^^ Unable to infer type
 
 let clonedArray = emptyArray.copyMut();
-//  ^^^^^^^^^^^^ Unable to infer type
+//  ^^^^^^^^^^^ Unable to infer type
 
 
 let stringInterpolationCannotBeInferred = (nice) => {
@@ -67,9 +67,8 @@ let func2 = inflight (request) => {
 };
 
 let anotherEmptyArray = [];
-//  ^^^^^^^^^^^^^^^^^^^ Unable to infer type
+//  ^^^^^^^^^^^^^^^^^ Unable to infer type
 Json { cool: anotherEmptyArray };
-//           ^^^^^^^^^^^^^^^^^^^ Not a valid JSON element
 
 class NeedAnnotations {
   returns() {
@@ -84,3 +83,16 @@ class NeedAnnotations {
 
 let badFunc: inflight (str): void = inflight (arg1: num) => {};
 //                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^ Expected type to be "inflight (str): void", but got "inflight (arg1: num): unknown" instead
+
+(a) => {
+  struct SS {
+    a: Array<num>;
+    b: Array<str>;
+  }
+  let jsonDoubleInference: SS = {
+    a: a,
+    b: a,
+  };
+// ^ Inferred type Array<str> conflicts with already inferred type Array<num>
+};
+
