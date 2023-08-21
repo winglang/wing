@@ -54,7 +54,7 @@ impl<'a> LiftVisitor<'a> {
 				report_diagnostic(Diagnostic {
 					span: Some(symbol.span.clone()),
 					message: format!(
-						"Cannot acceess symbol \"{symbol}\" because it is shadowed by another symbol with the same name"
+						"Cannot access \"{symbol}\" because it is shadowed by another symbol with the same name"
 					),
 				});
 			}
