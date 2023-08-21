@@ -9,7 +9,7 @@ RUN apt-get update && \
     software-properties-common
 
 # install node
-RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
+RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \
     apt-get install -y nodejs \
     build-essential
 
@@ -42,7 +42,7 @@ RUN pnpm install --no-frozen-lockfile
 RUN pnpm turbo compile --filter @wingconsole/app --concurrency=1
 RUN pnpm --filter @wingconsole/app deploy --prod pruned
 
-FROM node:20-alpine
+FROM node:18.16.0-alpine
 
 WORKDIR /app
 

@@ -14,11 +14,9 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.head.ref || github.ref }}
   cancel-in-progress: true
 
-permissions: 
-   pull-requests: write
-
 env:
   FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+  FLY_VERSION: "0.1.80"
   APP_NAME: wing-console-pr-${{github.event.number}}
 
 jobs:
@@ -34,6 +32,8 @@ jobs:
 
       - name: Install flyctl
         uses: superfly/flyctl-actions/setup-flyctl@master
+        with:
+          version: ${{env.FLY_VERSION}}
       - name: Deploy to Fly.io
         run: |
           if ! flyctl status --app "$APP_NAME"; then
@@ -49,6 +49,7 @@ jobs:
           message: |
             Console preview environment is available at https://${{env.APP_NAME}}.fly.dev :rocket:
           comment_tag: Console preview environment
+          GITHUB_TOKEN: ${{secrets.CONSOLE_PREVIEWS_TOKEN}}
   destroy:
     name: "Destroy"
     runs-on: ubuntu-latest
@@ -61,6 +62,8 @@ jobs:
 
       - name: Install flyctl
         uses: superfly/flyctl-actions/setup-flyctl@master
+        with:
+          version: ${{env.FLY_VERSION}}
       - name: Delete preview environment
         run: |
           if flyctl status --app "$APP_NAME"; then
