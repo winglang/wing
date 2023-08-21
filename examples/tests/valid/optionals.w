@@ -59,13 +59,13 @@ let tryParseName = (fullName: str): Name? => {
 };
 
 let json_obj = Json { ghost: "spooky" };
-var let something_else = false;
+let var something_else = false;
 if let y = json_obj.tryAsBool() {
   assert(y == true || y == false);
 } elif let y = json_obj.tryAsNum() {
   assert(y + 0 == y);
 } elif let y = json_obj.tryAsStr() {
-  assert(y.len >= 0);
+  assert(y.length >= 0);
 } else {
   something_else = true;
 }

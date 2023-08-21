@@ -482,26 +482,28 @@ class $Root extends $stdlib.std.Resource {
       return ({"first": (parts.at(0)),"last": (parts.at(1))});
     });
     const json_obj = ({"ghost": "spooky"});
+    let something_else = false;
     {
       const $IF_LET_VALUE = ((arg) => { return (typeof arg === "boolean") ? JSON.parse(JSON.stringify(arg)) : undefined })(json_obj);
       const $ELIF_LET_VALUE0 = ((arg) => { return (typeof arg === "number") ? JSON.parse(JSON.stringify(arg)) : undefined })(json_obj);
       const $ELIF_LET_VALUE1 = ((arg) => { return (typeof arg === "string") ? JSON.parse(JSON.stringify(arg)) : undefined })(json_obj);
       if ($IF_LET_VALUE != undefined) {
         const y = $IF_LET_VALUE;
-        {console.log("it's a boolean!")};
+        {((cond) => {if (!cond) throw new Error("assertion failed: y == true || y == false")})(((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(y,true)) || (((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(y,false))))};
       }
       else if ($ELIF_LET_VALUE0 != undefined) {
         const y = $ELIF_LET_VALUE0;
-        {console.log("it's a number!")};
+        {((cond) => {if (!cond) throw new Error("assertion failed: y + 0 == y")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((y + 0),y)))};
       }
       else if ($ELIF_LET_VALUE1 != undefined) {
         const y = $ELIF_LET_VALUE1;
-        {console.log("it's a str!")};
+        {((cond) => {if (!cond) throw new Error("assertion failed: y.length >= 0")})((y.length >= 0))};
       }
       else {
-        {console.log("it's something else!")};
+        something_else = true;
       }
     }
+    {((cond) => {if (!cond) throw new Error("assertion failed: something_else")})(something_else)};
     const a = 1;
     {
       const $IF_LET_VALUE = a;
