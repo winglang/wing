@@ -93,14 +93,6 @@
     },
     "topo": {
       "dependsOn": ["^topo"]
-    },
-    "examples-tests": {
-      "dependsOn": ["topo"],
-      "inputs": [
-        "examples/tests/**",
-        "!examples/tests/valid/**/node_modules/**",
-        "!examples/tests/valid/**/target/**"
-      ]
     }
   }
 }
