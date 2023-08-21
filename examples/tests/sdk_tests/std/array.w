@@ -242,15 +242,15 @@ test "lastIndexOf()" {
 
 test "set()" {
   let assertThrows = (expected: str, block: (): void) => {
-  let var error = false;
-  try {
-    block();
-  } catch actual {
-    assert(actual == expected);
-    error = true;
-  }
-  assert(error);
-};
+    let var error = false;
+    try {
+      block();
+    } catch actual {
+      assert(actual == expected);
+      error = true;
+    }
+    assert(error);
+  };
 
   let INDEX_OUT_OF_BOUNDS_ERROR = "Index out of bounds";
   let mutArr = MutArray<num>[1, 3, 5, 7, 9];
@@ -265,4 +265,46 @@ test "set()" {
   assertThrows(INDEX_OUT_OF_BOUNDS_ERROR, () => {
     mutArr.set(5, 11);
   });
+}
+
+//-----------------------------------------------------------------------------
+// insert()
+
+test "insert()" {
+  let assertThrows = (expected: str, block: (): void) => {
+    let var error = false;
+    try {
+      block();
+    } catch actual {
+      assert(actual == expected);
+      error = true;
+    }
+    assert(error);
+  };
+
+  let INDEX_OUT_OF_BOUNDS_ERROR = "Index out of bounds";
+  let mutArr = MutArray<num>[5, 10, 20];
+
+  mutArr.insert(2, 15);
+
+  assert(mutArr.length == 4);
+  assert(mutArr.at(2) == 15);
+  assert(mutArr.at(3) == 20);
+
+  assertThrows(INDEX_OUT_OF_BOUNDS_ERROR, () => {
+    mutArr.insert(-3, 15);
+  });
+
+  assert(mutArr.length == 4);
+
+  assertThrows(INDEX_OUT_OF_BOUNDS_ERROR, () => {
+    mutArr.insert(7, 15);
+  });
+
+  assert(mutArr.length == 4);
+
+  mutArr.insert(4, 25);
+
+  assert(mutArr.length == 5);
+  assert(mutArr.at(4) == 25);
 }
