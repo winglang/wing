@@ -751,10 +751,10 @@ impl Display for Reference {
 				write!(f, "{}.{}", obj_str, property.name)
 			}
 			Reference::TypeMember {
-				type_name: typeobject,
+				type_name,
 				property,
 			} => {
-				write!(f, "{}.{}", typeobject, property.name)
+				write!(f, "{}.{}", type_name, property.name)
 			}
 		}
 	}
