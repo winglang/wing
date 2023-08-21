@@ -10,7 +10,20 @@ module.exports = function({ $http_Util, $privateBucket, $publicBucket, $util_Uti
       return $obj;
     }
     async handle() {
-      let error = "";
+      const assertThrows = async (expected, block) => {
+        let error = false;
+        try {
+          (await block());
+        }
+        catch ($error_actual) {
+          const actual = $error_actual.message;
+          {((cond) => {if (!cond) throw new Error("assertion failed: actual == expected")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(actual,expected)))};
+          error = true;
+        }
+        {((cond) => {if (!cond) throw new Error("assertion failed: error")})(error)};
+      }
+      ;
+      const BUCKET_NOT_PUBLIC_ERROR = "Cannot provide public url for a non-public bucket";
       (await $publicBucket.put("file1.txt","Foo"));
       (await $privateBucket.put("file2.txt","Bar"));
       const publicUrl = (await $publicBucket.publicUrl("file1.txt"));
@@ -18,14 +31,10 @@ module.exports = function({ $http_Util, $privateBucket, $publicBucket, $util_Uti
       if ((((a,b) => { try { return require('assert').notDeepStrictEqual(a,b) === undefined; } catch { return false; } })((await $util_Util.env("WING_TARGET")),"sim"))) {
         {((cond) => {if (!cond) throw new Error("assertion failed: http.get(publicUrl).body ==  \"Foo\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $http_Util.get(publicUrl)).body,"Foo")))};
       }
-      try {
+      (await assertThrows(BUCKET_NOT_PUBLIC_ERROR,async () => {
         (await $privateBucket.publicUrl("file2.txt"));
       }
-      catch ($error_e) {
-        const e = $error_e.message;
-        error = e;
-      }
-      {((cond) => {if (!cond) throw new Error("assertion failed: error == \"Cannot provide public url for a non-public bucket\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(error,"Cannot provide public url for a non-public bucket")))};
+      ));
     }
   }
   return $Closure1;
