@@ -727,10 +727,7 @@ impl Spanned for Reference {
 				property,
 				optional_accessor: _,
 			} => object.span().merge(&property.span()),
-			Reference::TypeMember {
-				type_name,
-				property,
-			} => type_name.span().merge(&property.span()),
+			Reference::TypeMember { type_name, property } => type_name.span().merge(&property.span()),
 		}
 	}
 }
@@ -750,10 +747,7 @@ impl Display for Reference {
 				};
 				write!(f, "{}.{}", obj_str, property.name)
 			}
-			Reference::TypeMember {
-				type_name,
-				property,
-			} => {
+			Reference::TypeMember { type_name, property } => {
 				write!(f, "{}.{}", type_name, property.name)
 			}
 		}
