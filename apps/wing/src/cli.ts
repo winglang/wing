@@ -157,6 +157,13 @@ async function main() {
     .action(runSubCommand("test"));
 
   program
+    .command("pack")
+    .description("Package a Wing module as a shareable library")
+    .addOption(new Option("-o --outdir <outdir>", "Output directory").default("dist/"))
+    .hook("preAction", collectAnalyticsHook)
+    .action(runSubCommand("pack"));
+
+  program
     .command("docs")
     .description("Open the Wing documentation")
     .hook("preAction", collectAnalyticsHook)

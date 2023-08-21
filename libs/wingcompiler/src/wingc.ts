@@ -176,7 +176,7 @@ export async function load(options: WingCompilerLoadOptions) {
     wasi_snapshot_preview1: wasi.wasiImport,
     env: {
       // This function is used only by the lsp
-      send_diagnostic: () => { },
+      send_diagnostic: () => {},
     },
     ...(options.imports ?? {}),
   } as any;
