@@ -212,14 +212,26 @@ Duration <DURATION>"
 `;
 
 exports[`capture_redefinition.w 1`] = `
-"ERROR: Cannot access 'x' before initialization
+"error: Cannot acceess symbol \\"y\\" because it is shadowed by another symbol with the same name
+  --> ../../../examples/tests/invalid/capture_redefinition.w:5:7
+  |
+5 |   log(y);
+  |       ^ Cannot acceess symbol \\"y\\" because it is shadowed by another symbol with the same name
 
-../../../examples/tests/invalid/target/test/capture_redefinition.wsim.151055.tmp/.wing/preflight.js:40
-       const x = \\"hi\\";
-       if (true) {
->>       {console.log(x)};
-         const x = \\"world\\";
-       }
+
+error: Cannot acceess symbol \\"y\\" because it is shadowed by another symbol with the same name
+   --> ../../../examples/tests/invalid/capture_redefinition.w:14:9
+   |
+14 |     log(y);
+   |         ^ Cannot acceess symbol \\"y\\" because it is shadowed by another symbol with the same name
+
+
+error: Cannot acceess symbol \\"x\\" because it is shadowed by another symbol with the same name
+   --> ../../../examples/tests/invalid/capture_redefinition.w:22:7
+   |
+22 |   log(x);
+   |       ^ Cannot acceess symbol \\"x\\" because it is shadowed by another symbol with the same name
+
 
  
  
@@ -2577,6 +2589,20 @@ error: Symbol \\"x\\" used before being defined
   |
 5 |   log(\\"\${x}\\");
   |          ^ Symbol \\"x\\" used before being defined
+
+
+error: Cannot acceess symbol \\"y\\" because it is shadowed by another symbol with the same name
+  --> ../../../examples/tests/invalid/use_before_defined.w:1:8
+  |
+1 | log(\\"\${y}\\"); // Access y before it's defined
+  |        ^ Cannot acceess symbol \\"y\\" because it is shadowed by another symbol with the same name
+
+
+error: Cannot acceess symbol \\"x\\" because it is shadowed by another symbol with the same name
+  --> ../../../examples/tests/invalid/use_before_defined.w:5:10
+  |
+5 |   log(\\"\${x}\\");
+  |          ^ Cannot acceess symbol \\"x\\" because it is shadowed by another symbol with the same name
 
 
  
