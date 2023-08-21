@@ -59,15 +59,17 @@ let tryParseName = (fullName: str): Name? => {
 };
 
 let json_obj = Json { ghost: "spooky" };
+var let something_else = false;
 if let y = json_obj.tryAsBool() {
-  log("it's a boolean!");
+  assert(y == true || y == false);
 } elif let y = json_obj.tryAsNum() {
-  log("it's a number!");
+  assert(y + 0 == y);
 } elif let y = json_obj.tryAsStr() {
-  log("it's a str!");
+  assert(y.len >= 0);
 } else {
-  log("it's something else!");
+  something_else = true;
 }
+assert(something_else);
 
 // if lets reassignable
 let a: num? = 1;
