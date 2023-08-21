@@ -728,9 +728,9 @@ impl Spanned for Reference {
 				optional_accessor: _,
 			} => object.span().merge(&property.span()),
 			Reference::TypeMember {
-				type_name: typeobject,
+				type_name,
 				property,
-			} => typeobject.span().merge(&property.span()),
+			} => type_name.span().merge(&property.span()),
 		}
 	}
 }
