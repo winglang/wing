@@ -340,7 +340,7 @@ jobs:
         with:
           pat: ${{ secrets.VS_MARKETPLACE_TOKEN }}
           registryUrl: "https://marketplace.visualstudio.com"
-          extensionFile: "vscode-wing/vscode-wing.vsix"
+          extensionFile: "dist/vscode-wing.vsix"
           dependencies: false
 
       - name: Write Changelog
