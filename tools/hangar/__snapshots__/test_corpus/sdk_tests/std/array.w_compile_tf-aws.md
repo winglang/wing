@@ -147,6 +147,55 @@ module.exports = function({  }) {
 
 ```
 
+## inflight.$Closure15-1.js
+```js
+module.exports = function({  }) {
+  class $Closure15 {
+    constructor({  }) {
+      const $obj = (...args) => this.handle(...args);
+      Object.setPrototypeOf($obj, this);
+      return $obj;
+    }
+    async handle() {
+      const assertThrows = async (expected, block) => {
+        let error = false;
+        try {
+          (await block());
+        }
+        catch ($error_actual) {
+          const actual = $error_actual.message;
+          {((cond) => {if (!cond) throw new Error("assertion failed: actual == expected")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(actual,expected)))};
+          error = true;
+        }
+        {((cond) => {if (!cond) throw new Error("assertion failed: error")})(error)};
+      }
+      ;
+      const INDEX_OUT_OF_BOUNDS_ERROR = "Index out of bounds";
+      const mutArr = [5, 10, 20];
+      ((obj, args) => { if (args[0] < 0 || args[0] > mutArr.length) throw new Error("Index out of bounds"); obj.splice(args[0], 0, args[1]); })(mutArr, [2,15]);
+      {((cond) => {if (!cond) throw new Error("assertion failed: mutArr.length == 4")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(mutArr.length,4)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: mutArr.at(2) == 15")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await mutArr.at(2)),15)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: mutArr.at(3) == 20")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await mutArr.at(3)),20)))};
+      (await assertThrows(INDEX_OUT_OF_BOUNDS_ERROR,async () => {
+        ((obj, args) => { if (args[0] < 0 || args[0] > mutArr.length) throw new Error("Index out of bounds"); obj.splice(args[0], 0, args[1]); })(mutArr, [(-3),15]);
+      }
+      ));
+      {((cond) => {if (!cond) throw new Error("assertion failed: mutArr.length == 4")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(mutArr.length,4)))};
+      (await assertThrows(INDEX_OUT_OF_BOUNDS_ERROR,async () => {
+        ((obj, args) => { if (args[0] < 0 || args[0] > mutArr.length) throw new Error("Index out of bounds"); obj.splice(args[0], 0, args[1]); })(mutArr, [7,15]);
+      }
+      ));
+      {((cond) => {if (!cond) throw new Error("assertion failed: mutArr.length == 4")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(mutArr.length,4)))};
+      ((obj, args) => { if (args[0] < 0 || args[0] > mutArr.length) throw new Error("Index out of bounds"); obj.splice(args[0], 0, args[1]); })(mutArr, [4,25]);
+      {((cond) => {if (!cond) throw new Error("assertion failed: mutArr.length == 5")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(mutArr.length,5)))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: mutArr.at(4) == 25")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await mutArr.at(4)),25)))};
+    }
+  }
+  return $Closure15;
+}
+
+```
+
 ## inflight.$Closure2-1.js
 ```js
 module.exports = function({  }) {
@@ -347,7 +396,7 @@ module.exports = function({  }) {
   },
   "output": {
     "WING_TEST_RUNNER_FUNCTION_ARNS": {
-      "value": "[[\"root/Default/Default/test:length\",\"${aws_lambda_function.testlength_Handler_BFD8933F.arn}\"],[\"root/Default/Default/test:at()\",\"${aws_lambda_function.testat_Handler_E4F013BC.arn}\"],[\"root/Default/Default/test:pushAndPop()\",\"${aws_lambda_function.testpushAndPop_Handler_EAC0C8FF.arn}\"],[\"root/Default/Default/test:concatMutArray()\",\"${aws_lambda_function.testconcatMutArray_Handler_40D88E89.arn}\"],[\"root/Default/Default/test:concatArray()\",\"${aws_lambda_function.testconcatArray_Handler_F66848AE.arn}\"],[\"root/Default/Default/test:contains()\",\"${aws_lambda_function.testcontains_Handler_F60865D9.arn}\"],[\"root/Default/Default/test:indexOf()\",\"${aws_lambda_function.testindexOf_Handler_BD91EA6F.arn}\"],[\"root/Default/Default/test:indexOfArray()\",\"${aws_lambda_function.testindexOfArray_Handler_DB3A81F5.arn}\"],[\"root/Default/Default/test:join()\",\"${aws_lambda_function.testjoin_Handler_6AC62A8E.arn}\"],[\"root/Default/Default/test:joinWithDefaultSeparator()\",\"${aws_lambda_function.testjoinWithDefaultSeparator_Handler_7AE1258D.arn}\"],[\"root/Default/Default/test:copy()\",\"${aws_lambda_function.testcopy_Handler_27A14A0E.arn}\"],[\"root/Default/Default/test:copyMut()\",\"${aws_lambda_function.testcopyMut_Handler_851E24B4.arn}\"],[\"root/Default/Default/test:lastIndexOf()\",\"${aws_lambda_function.testlastIndexOf_Handler_FFB2061F.arn}\"],[\"root/Default/Default/test:set()\",\"${aws_lambda_function.testset_Handler_ADDF1A01.arn}\"]]"
+      "value": "[[\"root/Default/Default/test:length\",\"${aws_lambda_function.testlength_Handler_BFD8933F.arn}\"],[\"root/Default/Default/test:at()\",\"${aws_lambda_function.testat_Handler_E4F013BC.arn}\"],[\"root/Default/Default/test:pushAndPop()\",\"${aws_lambda_function.testpushAndPop_Handler_EAC0C8FF.arn}\"],[\"root/Default/Default/test:concatMutArray()\",\"${aws_lambda_function.testconcatMutArray_Handler_40D88E89.arn}\"],[\"root/Default/Default/test:concatArray()\",\"${aws_lambda_function.testconcatArray_Handler_F66848AE.arn}\"],[\"root/Default/Default/test:contains()\",\"${aws_lambda_function.testcontains_Handler_F60865D9.arn}\"],[\"root/Default/Default/test:indexOf()\",\"${aws_lambda_function.testindexOf_Handler_BD91EA6F.arn}\"],[\"root/Default/Default/test:indexOfArray()\",\"${aws_lambda_function.testindexOfArray_Handler_DB3A81F5.arn}\"],[\"root/Default/Default/test:join()\",\"${aws_lambda_function.testjoin_Handler_6AC62A8E.arn}\"],[\"root/Default/Default/test:joinWithDefaultSeparator()\",\"${aws_lambda_function.testjoinWithDefaultSeparator_Handler_7AE1258D.arn}\"],[\"root/Default/Default/test:copy()\",\"${aws_lambda_function.testcopy_Handler_27A14A0E.arn}\"],[\"root/Default/Default/test:copyMut()\",\"${aws_lambda_function.testcopyMut_Handler_851E24B4.arn}\"],[\"root/Default/Default/test:lastIndexOf()\",\"${aws_lambda_function.testlastIndexOf_Handler_FFB2061F.arn}\"],[\"root/Default/Default/test:set()\",\"${aws_lambda_function.testset_Handler_ADDF1A01.arn}\"],[\"root/Default/Default/test:insert()\",\"${aws_lambda_function.testinsert_Handler_20BB87F8.arn}\"]]"
     }
   },
   "provider": {
@@ -425,6 +474,15 @@ module.exports = function({  }) {
           "metadata": {
             "path": "root/Default/Default/test:indexOf()/Handler/IamRole",
             "uniqueId": "testindexOf_Handler_IamRole_F0D11C74"
+          }
+        },
+        "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
+      },
+      "testinsert_Handler_IamRole_8D4BB8D7": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:insert()/Handler/IamRole",
+            "uniqueId": "testinsert_Handler_IamRole_8D4BB8D7"
           }
         },
         "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Principal\":{\"Service\":\"lambda.amazonaws.com\"},\"Effect\":\"Allow\"}]}"
@@ -564,6 +622,16 @@ module.exports = function({  }) {
         },
         "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
         "role": "${aws_iam_role.testindexOf_Handler_IamRole_F0D11C74.name}"
+      },
+      "testinsert_Handler_IamRolePolicy_2FD3AAA8": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:insert()/Handler/IamRolePolicy",
+            "uniqueId": "testinsert_Handler_IamRolePolicy_2FD3AAA8"
+          }
+        },
+        "policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":\"none:null\",\"Resource\":\"*\"}]}",
+        "role": "${aws_iam_role.testinsert_Handler_IamRole_8D4BB8D7.name}"
       },
       "testjoinWithDefaultSeparator_Handler_IamRolePolicy_BE8C8109": {
         "//": {
@@ -706,6 +774,16 @@ module.exports = function({  }) {
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
         "role": "${aws_iam_role.testindexOf_Handler_IamRole_F0D11C74.name}"
+      },
+      "testinsert_Handler_IamRolePolicyAttachment_D83DEDF1": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:insert()/Handler/IamRolePolicyAttachment",
+            "uniqueId": "testinsert_Handler_IamRolePolicyAttachment_D83DEDF1"
+          }
+        },
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "${aws_iam_role.testinsert_Handler_IamRole_8D4BB8D7.name}"
       },
       "testjoinWithDefaultSeparator_Handler_IamRolePolicyAttachment_CCD2125B": {
         "//": {
@@ -971,6 +1049,32 @@ module.exports = function({  }) {
         "runtime": "nodejs18.x",
         "s3_bucket": "${aws_s3_bucket.Code.bucket}",
         "s3_key": "${aws_s3_object.testindexOf_Handler_S3Object_C2C2987B.key}",
+        "timeout": 30,
+        "vpc_config": {
+          "security_group_ids": [],
+          "subnet_ids": []
+        }
+      },
+      "testinsert_Handler_20BB87F8": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:insert()/Handler/Default",
+            "uniqueId": "testinsert_Handler_20BB87F8"
+          }
+        },
+        "environment": {
+          "variables": {
+            "WING_FUNCTION_NAME": "Handler-c8bd9541",
+            "WING_TARGET": "tf-aws"
+          }
+        },
+        "function_name": "Handler-c8bd9541",
+        "handler": "index.handler",
+        "publish": true,
+        "role": "${aws_iam_role.testinsert_Handler_IamRole_8D4BB8D7.arn}",
+        "runtime": "nodejs18.x",
+        "s3_bucket": "${aws_s3_bucket.Code.bucket}",
+        "s3_key": "${aws_s3_object.testinsert_Handler_S3Object_B3145049.key}",
         "timeout": 30,
         "vpc_config": {
           "security_group_ids": [],
@@ -1349,6 +1453,17 @@ module.exports = function({  }) {
           "metadata": {
             "path": "root/Default/Default/test:indexOf()/Handler/S3Object",
             "uniqueId": "testindexOf_Handler_S3Object_C2C2987B"
+          }
+        },
+        "bucket": "${aws_s3_bucket.Code.bucket}",
+        "key": "<ASSET_KEY>",
+        "source": "<ASSET_SOURCE>"
+      },
+      "testinsert_Handler_S3Object_B3145049": {
+        "//": {
+          "metadata": {
+            "path": "root/Default/Default/test:insert()/Handler/S3Object",
+            "uniqueId": "testinsert_Handler_S3Object_B3145049"
           }
         },
         "bucket": "${aws_s3_bucket.Code.bucket}",
@@ -1772,6 +1887,30 @@ class $Root extends $stdlib.std.Resource {
         `);
       }
     }
+    class $Closure15 extends $stdlib.std.Resource {
+      constructor(scope, id, ) {
+        super(scope, id);
+        this._addInflightOps("handle", "$inflight_init");
+        this.display.hidden = true;
+      }
+      static _toInflightType(context) {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          require("./inflight.$Closure15-1.js")({
+          })
+        `);
+      }
+      _toInflight() {
+        return $stdlib.core.NodeJsCode.fromInline(`
+          (await (async () => {
+            const $Closure15Client = ${$Closure15._toInflightType(this).text};
+            const client = new $Closure15Client({
+            });
+            if (client.$inflight_init) { await client.$inflight_init(); }
+            return client;
+          })())
+        `);
+      }
+    }
     const bucket = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"myBucket");
     const buckets = [bucket];
     const anotherBucket = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"mySecondBucket");
@@ -1867,6 +2006,7 @@ class $Root extends $stdlib.std.Resource {
     {((cond) => {if (!cond) throw new Error("assertion failed: multipleBuckets.lastIndexOf(dummyBucket) == -1")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(multipleBuckets.lastIndexOf(dummyBucket),(-1))))};
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:lastIndexOf()",new $Closure13(this,"$Closure13"));
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:set()",new $Closure14(this,"$Closure14"));
+    this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:insert()",new $Closure15(this,"$Closure15"));
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
