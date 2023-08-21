@@ -101,9 +101,6 @@
         "!examples/tests/valid/**/node_modules/**",
         "!examples/tests/valid/**/target/**"
       ]
-    },
-    "test:generate": {
-      "dependsOn": ["topo"]
     }
   }
 }
