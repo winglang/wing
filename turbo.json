@@ -91,9 +91,6 @@
       "env": ["PROJEN_BUMP_VERSION"],
       "inputs": [""]
     },
-    "hangar": {
-      "dependsOn": ["hangar#test"]
-    },
     "topo": {
       "dependsOn": ["^topo"]
     },
