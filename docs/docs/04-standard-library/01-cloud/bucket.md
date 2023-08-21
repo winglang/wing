@@ -187,17 +187,25 @@ Add a file to the bucket from system folder.
 
 - *Type:* str
 
+The key or name to associate with the file.
+
 ---
 
 ###### `path`<sup>Required</sup> <a name="path" id="@winglang/sdk.cloud.Bucket.addFile.parameter.path"></a>
 
 - *Type:* str
 
+The path to the file on the local system.
+
 ---
 
 ###### `encoding`<sup>Optional</sup> <a name="encoding" id="@winglang/sdk.cloud.Bucket.addFile.parameter.encoding"></a>
 
 - *Type:* str
+
+The encoding to use when reading the file.
+
+Defaults to "utf-8".
 
 ---
 

@@ -79,7 +79,7 @@ export abstract class Bucket extends Resource {
 
   /**
    * Add a file to the bucket from system folder
-   * 
+   *
    * @param {string} key - The key or name to associate with the file.
    * @param {string} path - The path to the file on the local system.
    * @param {BufferEncoding} encoding - The encoding to use when reading the file. Defaults to "utf-8".
