@@ -59,8 +59,9 @@ export async function pack(options: PackageOptions): Promise<string> {
 
   // make tarball
   fs.mkdirSync(options.outdir, { recursive: true });
-  cp.execSync(`npm pack --pack-destination "${options.outdir}"`, { stdio: "inherit" });
-
-  const tarballName = `${pkgJson.name}-${pkgJson.version}.tgz`;
+  const command = `npm pack --json --pack-destination "${options.outdir}"`;
+  const output = cp.execSync(command, { stdio: "pipe" });
+  const parsedOutput = JSON.parse(output.toString());
+  const tarballName = parsedOutput[0].filename;
   return path.join(options.outdir, tarballName);
 }
