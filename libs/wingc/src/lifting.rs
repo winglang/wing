@@ -117,8 +117,8 @@ impl<'a> LiftVisitor<'a> {
 		return true;
 	}
 
-	fn jsify_expr(&mut self, node: &Expr, phase: Phase) -> String {
-		self.ctx.push_phase(phase);
+	fn jsify_expr(&mut self, node: &Expr) -> String {
+		self.ctx.push_phase(Phase::Preflight);
 		let res = self.jsify.jsify_expression(
 			&node,
 			&mut JSifyContext {
@@ -187,7 +187,7 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 		// LIFT
 		if expr_phase == Phase::Preflight {
 			// jsify the expression so we can get the preflight code
-			let code = self.jsify_expr(&node, Phase::Preflight);
+			let code = self.jsify_expr(&node);
 
 			let property = if let Some(property) = self.ctx.current_property() {
 				Some(property)

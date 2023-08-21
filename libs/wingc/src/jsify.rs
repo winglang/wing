@@ -1170,8 +1170,6 @@ impl<'a> JSifier<'a> {
 			ctx.lifts
 		};
 
-		//println!("LIFTS: {:#?}", lifts);
-
 		let ctx = &mut JSifyContext {
 			lifts,
 			visit_ctx: &mut ctx.visit_ctx,
@@ -1195,8 +1193,6 @@ impl<'a> JSifier<'a> {
 
 		// default base class for preflight classes is `core.Resource`
 		let extends = if let Some(parent) = &class.parent {
-			//let base = parent.as_type_reference().expect("resolve parent type");
-
 			format!(" extends {}", self.jsify_user_defined_type(parent, ctx))
 		} else {
 			format!(" extends {}", STDLIB_CORE_RESOURCE)
