@@ -3,7 +3,7 @@ use crate::{
 		Class, Expr, ExprKind, FunctionBody, FunctionDefinition, Phase, Reference, Scope, Stmt, Symbol, UserDefinedType,
 	},
 	comp_ctx::{CompilationContext, CompilationPhase},
-	diagnostic::{report_diagnostic, Diagnostic, WingSpan},
+	diagnostic::{report_diagnostic, Diagnostic},
 	jsify::{JSifier, JSifyContext},
 	type_check::{
 		lifts::{Liftable, Lifts},
@@ -38,34 +38,27 @@ impl<'a> LiftVisitor<'a> {
 		udt.full_path_str() == current_class_udt.full_path_str()
 	}
 
-	fn is_defined_in_current_env(&self, fullname: &str, span: &WingSpan) -> bool {
-		// if the symbol is defined later in the current environment, it means we can't capture a
-		// reference to a symbol with the same name from a parent so bail out.
-		// notice that here we are looking in the current environment and not in the method's environment
+	fn verify_defined_in_current_env(&self, symbol: &Symbol) {
+		// If the symbol is defined later in the current environment, it means we can't reference an identicatl symbol
+		// from and outter scope (and we can't capture it either). In that case we'll report and error.
+		// Note:
+		// In theory this can be supported, but it'll fail later on when running the JS code because of how
+		// JS creates all symbols *before* running the code of the current scope (https://tc39.es/ecma262/#sec-let-and-const-declarations).
+		// Solving this will require renaming the symbols in the current scope to avoid the conflict, so the east way is just to adopt
+		// the JS limitation. Will be good to improve on this in the future.
 		if let Some(env) = self.ctx.current_env() {
-			let lookup = env.lookup_nested_str(&fullname, Some(self.ctx.current_stmt_idx()));
-
-			match lookup {
-				LookupResult::Found(_, e) => {
-					// if we found the symbol in the current environment, it means we don't need to capture it at all
-					if e.env.is_same(env) {
-						return true;
-					}
-				}
-				LookupResult::DefinedLater => {
-					report_diagnostic(Diagnostic {
-						span: Some(span.clone()),
-						message: format!(
-							"Cannot capture symbol \"{fullname}\" because it is shadowed by another symbol with the same name"
-						),
-					});
-					return true;
-				}
-				LookupResult::NotFound(_) | LookupResult::ExpectedNamespace(_) => {}
+			if matches!(
+				env.lookup_ext(symbol, Some(self.ctx.current_stmt_idx())),
+				LookupResult::DefinedLater
+			) {
+				report_diagnostic(Diagnostic {
+					span: Some(symbol.span.clone()),
+					message: format!(
+						"Cannot acceess symbol \"{symbol}\" because it is shadowed by another symbol with the same name"
+					),
+				});
 			}
 		}
-
-		return false;
 	}
 
 	fn should_capture_type(&self, node: &UserDefinedType) -> bool {
@@ -73,12 +66,6 @@ impl<'a> LiftVisitor<'a> {
 
 		// skip "This" (which is the type of "this")
 		if self.is_self_type_reference(node) {
-			return false;
-		}
-
-		// if the symbol is defined in the *current* environment (which could also be a nested scope
-		// inside the current method), we don't need to capture it
-		if self.is_defined_in_current_env(&fullname, &node.span) {
 			return false;
 		}
 
@@ -155,7 +142,10 @@ impl<'a> Visit<'a> for LiftVisitor<'a> {
 				visit::visit_reference(self, &node);
 				self.ctx.pop_property();
 			}
-			_ => visit::visit_reference(self, &node),
+			Reference::Identifier(symb) => {
+				self.verify_defined_in_current_env(symb);
+				visit::visit_reference(self, &node);
+			}
 		}
 	}
 
