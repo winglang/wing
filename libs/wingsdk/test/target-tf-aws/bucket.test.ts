@@ -82,6 +82,27 @@ test("bucket with two preflight objects", () => {
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
 });
 
+test("bucket with two preflight files", () => {
+  // GIVEN
+  const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });
+  const bucket = Bucket._newBucket(app, "my_bucket", { public: true });
+  bucket.addFile("file1.txt", "../testFiles/test1.txt");
+  bucket.addFile("file2.txt", "../testFiles/test2.txt");
+  const output = app.synth();
+
+  // THEN
+  expect(tfResourcesOf(output)).toEqual([
+    "aws_s3_bucket", // main bucket
+    "aws_s3_bucket_policy", // resource policy to grant read access to anyone
+    "aws_s3_bucket_public_access_block", // allow public access to an s3 bucket
+    "aws_s3_bucket_server_side_encryption_configuration", // server side encryption
+    "aws_s3_object", // file1.txt
+  ]);
+  expect(tfResourcesOfCount(output, "aws_s3_object")).toEqual(2);
+  expect(tfSanitize(output)).toMatchSnapshot();
+  expect(treeJsonOf(app.outdir)).toMatchSnapshot();
+});
+
 test("bucket prefix valid", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp(), entrypointDir: __dirname });

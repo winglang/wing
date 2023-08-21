@@ -17,7 +17,7 @@ export class SimApp extends sim.App {
   private functionIndex: number = 0;
 
   constructor() {
-    super({ outdir: mkdtemp() });
+    super({ outdir: mkdtemp(), entrypointDir: __dirname });
 
     // symlink the node_modules so we can test imports and stuffs
     fs.symlinkSync(
