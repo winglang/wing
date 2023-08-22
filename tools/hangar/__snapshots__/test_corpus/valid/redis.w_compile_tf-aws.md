@@ -603,7 +603,7 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        (std.Display.of(this)).hidden = true;
+        (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
         return `
@@ -636,7 +636,7 @@ class $Root extends $stdlib.std.Resource {
     class $Closure2 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        (std.Display.of(this)).hidden = true;
+        (std.Node.of(this)).hidden = true;
       }
       static _toInflightType(context) {
         return `
