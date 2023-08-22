@@ -137,22 +137,6 @@ exports[`function with a table binding 3`] = `
                 "path": "root/Default/Code",
               },
               "Function": {
-                "attributes": {
-                  "wing:resource:connections": [
-                    {
-                      "direction": "outbound",
-                      "implicit": false,
-                      "relationship": "insert()",
-                      "resource": "root/Default/Table",
-                    },
-                    {
-                      "direction": "outbound",
-                      "implicit": false,
-                      "relationship": "$inflight_init()",
-                      "resource": "root/Default/Table",
-                    },
-                  ],
-                },
                 "children": {
                   "Asset": {
                     "constructInfo": {
@@ -215,9 +199,6 @@ exports[`function with a table binding 3`] = `
                 "path": "root/Default/Function",
               },
               "Handler": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
                   "version": "10.1.314",
@@ -231,22 +212,6 @@ exports[`function with a table binding 3`] = `
                 "path": "root/Default/Handler",
               },
               "Table": {
-                "attributes": {
-                  "wing:resource:connections": [
-                    {
-                      "direction": "inbound",
-                      "implicit": false,
-                      "relationship": "insert()",
-                      "resource": "root/Default/Function",
-                    },
-                    {
-                      "direction": "inbound",
-                      "implicit": false,
-                      "relationship": "$inflight_init()",
-                      "resource": "root/Default/Function",
-                    },
-                  ],
-                },
                 "children": {
                   "Default": {
                     "constructInfo": {
@@ -277,9 +242,6 @@ exports[`function with a table binding 3`] = `
                 "path": "root/Default/aws",
               },
               "cloud.TestRunner": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "TestFunctionArns": {
                     "constructInfo": {

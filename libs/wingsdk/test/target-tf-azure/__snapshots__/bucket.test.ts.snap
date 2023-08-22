@@ -62,9 +62,6 @@ exports[`bucket is public 2`] = `
                 "path": "root/Default/azure",
               },
               "my_bucket": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "Bucket": {
                     "constructInfo": {
@@ -176,9 +173,6 @@ exports[`bucket name valid 2`] = `
                 "path": "root/Default/StorageAccount",
               },
               "The-Uncanny-Bucket": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "Bucket": {
                     "constructInfo": {
@@ -207,6 +201,157 @@ exports[`bucket name valid 2`] = `
                 },
                 "id": "azure",
                 "path": "root/Default/azure",
+              },
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.1.314",
+            },
+            "id": "Default",
+            "path": "root/Default",
+          },
+          "backend": {
+            "constructInfo": {
+              "fqn": "cdktf.LocalBackend",
+              "version": "0.17.0",
+            },
+            "id": "backend",
+            "path": "root/backend",
+          },
+        },
+        "constructInfo": {
+          "fqn": "cdktf.TerraformStack",
+          "version": "0.17.0",
+        },
+        "id": "root",
+        "path": "root",
+      },
+    },
+    "constructInfo": {
+      "fqn": "cdktf.App",
+      "version": "0.17.0",
+    },
+    "id": "App",
+    "path": "",
+  },
+  "version": "tree-0.1",
+}
+`;
+
+exports[`bucket with two preflight files 1`] = `
+{
+  "resource": {
+    "azurerm_resource_group": {
+      "ResourceGroup": {
+        "location": "East US",
+        "name": "Default-c82bf964",
+      },
+    },
+    "azurerm_storage_account": {
+      "StorageAccount": {
+        "account_replication_type": "LRS",
+        "account_tier": "Standard",
+        "location": "\${azurerm_resource_group.ResourceGroup.location}",
+        "name": "defaultc82bf964",
+        "resource_group_name": "\${azurerm_resource_group.ResourceGroup.name}",
+      },
+    },
+    "azurerm_storage_blob": {
+      "my_bucket_Blob-file1txt_2FA447D8": {
+        "name": "file1.txt",
+        "source_content": "test1",
+        "storage_account_name": "\${azurerm_storage_account.StorageAccount.name}",
+        "storage_container_name": "\${azurerm_storage_container.my_bucket_Bucket_50609D70.name}",
+        "type": "Block",
+      },
+      "my_bucket_Blob-file2txt_8F904E31": {
+        "name": "file2.txt",
+        "source_content": "test2",
+        "storage_account_name": "\${azurerm_storage_account.StorageAccount.name}",
+        "storage_container_name": "\${azurerm_storage_container.my_bucket_Bucket_50609D70.name}",
+        "type": "Block",
+      },
+    },
+    "azurerm_storage_container": {
+      "my_bucket_Bucket_50609D70": {
+        "container_access_type": "public",
+        "name": "my-bucket-c8045fcc",
+        "storage_account_name": "\${azurerm_storage_account.StorageAccount.name}",
+      },
+    },
+  },
+}
+`;
+
+exports[`bucket with two preflight files 2`] = `
+{
+  "tree": {
+    "children": {
+      "root": {
+        "children": {
+          "Default": {
+            "children": {
+              "ResourceGroup": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformResource",
+                  "version": "0.17.0",
+                },
+                "id": "ResourceGroup",
+                "path": "root/Default/ResourceGroup",
+              },
+              "StorageAccount": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformResource",
+                  "version": "0.17.0",
+                },
+                "id": "StorageAccount",
+                "path": "root/Default/StorageAccount",
+              },
+              "azure": {
+                "constructInfo": {
+                  "fqn": "cdktf.TerraformProvider",
+                  "version": "0.17.0",
+                },
+                "id": "azure",
+                "path": "root/Default/azure",
+              },
+              "my_bucket": {
+                "children": {
+                  "Blob-file1.txt": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.17.0",
+                    },
+                    "id": "Blob-file1.txt",
+                    "path": "root/Default/my_bucket/Blob-file1.txt",
+                  },
+                  "Blob-file2.txt": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.17.0",
+                    },
+                    "id": "Blob-file2.txt",
+                    "path": "root/Default/my_bucket/Blob-file2.txt",
+                  },
+                  "Bucket": {
+                    "constructInfo": {
+                      "fqn": "cdktf.TerraformResource",
+                      "version": "0.17.0",
+                    },
+                    "id": "Bucket",
+                    "path": "root/Default/my_bucket/Bucket",
+                  },
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.1.314",
+                },
+                "display": {
+                  "description": "A cloud object store",
+                  "title": "Bucket",
+                },
+                "id": "my_bucket",
+                "path": "root/Default/my_bucket",
               },
             },
             "constructInfo": {
@@ -322,9 +467,6 @@ exports[`bucket with two preflight objects 2`] = `
                 "path": "root/Default/azure",
               },
               "my_bucket": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "Blob-file1.txt": {
                     "constructInfo": {
@@ -460,9 +602,6 @@ exports[`create a bucket 2`] = `
                 "path": "root/Default/azure",
               },
               "my_bucket": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "Bucket": {
                     "constructInfo": {
@@ -587,9 +726,6 @@ exports[`create multiple buckets 2`] = `
                 "path": "root/Default/azure",
               },
               "my_bucket": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "Bucket": {
                     "constructInfo": {
@@ -612,9 +748,6 @@ exports[`create multiple buckets 2`] = `
                 "path": "root/Default/my_bucket",
               },
               "my_bucket2": {
-                "attributes": {
-                  "wing:resource:connections": [],
-                },
                 "children": {
                   "Bucket": {
                     "constructInfo": {

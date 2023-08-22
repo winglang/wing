@@ -5,10 +5,11 @@ import { LambdaEventSourceMapping } from "../.gen/providers/aws/lambda-event-sou
 import { SqsQueue } from "../.gen/providers/aws/sqs-queue";
 import * as cloud from "../cloud";
 import * as core from "../core";
+import { Connections } from "../core";
 import { convertBetweenHandlers } from "../shared/convert";
 import { NameOptions, ResourceNames } from "../shared/resource-names";
 import { calculateQueuePermissions } from "../shared-aws/permissions";
-import { IInflightHost, Resource } from "../std";
+import { IInflightHost } from "../std";
 
 /**
  * Queue names are limited to 80 characters.
@@ -84,10 +85,10 @@ export class Queue extends cloud.Queue {
       batchSize: props.batchSize ?? 1,
     });
 
-    Resource.addConnection({
-      from: this,
-      to: fn,
-      relationship: "setConsumer()",
+    Connections.of(this).add({
+      source: this,
+      target: fn,
+      name: "setConsumer()",
     });
 
     return fn;

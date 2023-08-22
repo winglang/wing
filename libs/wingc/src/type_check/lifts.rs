@@ -4,7 +4,7 @@ use itertools::Itertools;
 
 use crate::ast::Symbol;
 
-use super::CLASS_INFLIGHT_INIT_NAME;
+use super::{ExprId, CLASS_INFLIGHT_INIT_NAME};
 
 /// A repository of lifts and captures at the class level.
 #[derive(Debug)]
@@ -19,7 +19,7 @@ pub struct Lifts {
 	lift_by_token: BTreeMap<String, Lift>,
 
 	/// Map between expression id and a lift token.
-	token_by_expr_id: BTreeMap<usize, String>,
+	token_by_expr_id: BTreeMap<ExprId, String>,
 }
 
 /// A record that describes a capture.
@@ -88,7 +88,7 @@ impl Lifts {
 	}
 
 	/// Adds a lift for an expression.
-	pub fn lift(&mut self, expr_id: usize, method: Option<Symbol>, property: Option<String>, code: &str) {
+	pub fn lift(&mut self, expr_id: ExprId, method: Option<Symbol>, property: Option<String>, code: &str) {
 		let is_field = code.contains("this.");
 
 		let token = self.render_token(code);
@@ -129,7 +129,7 @@ impl Lifts {
 	}
 
 	/// Returns the token for an expression. Called by the jsifier when emitting inflight code.
-	pub fn token_for_expr(&self, expr_id: &usize) -> Option<String> {
+	pub fn token_for_expr(&self, expr_id: &ExprId) -> Option<String> {
 		let Some(token) = self.token_by_expr_id.get(expr_id) else {
 			return None;
 		};
@@ -148,7 +148,7 @@ impl Lifts {
 	}
 
 	/// Captures an expression.
-	pub fn capture(&mut self, expr_id: &usize, code: &str) {
+	pub fn capture(&mut self, expr_id: &ExprId, code: &str) {
 		// no need to capture this (it's already in scope)
 		if code == "this" {
 			return;

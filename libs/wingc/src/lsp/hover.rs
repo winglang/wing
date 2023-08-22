@@ -91,7 +91,7 @@ impl<'a> HoverVisitor<'a> {
 				| Type::MutMap(_)
 				| Type::Set(_)
 				| Type::MutSet(_)
-				| Type::Json
+				| Type::Json(_)
 				| Type::MutJson
 				| Type::Number
 				| Type::String
@@ -162,6 +162,22 @@ impl<'a> Visit<'a> for HoverVisitor<'a> {
 				}
 				if let Some(finally_statements) = finally_statements {
 					self.visit_scope(finally_statements);
+				}
+			}
+			StmtKind::IfLet {
+				var_name,
+				value,
+				statements,
+				reassignable: _,
+				else_statements,
+			} => {
+				self.with_scope(statements, |v| {
+					v.visit_symbol(var_name);
+				});
+				self.visit_expr(value);
+				self.visit_scope(statements);
+				if let Some(else_statements) = else_statements {
+					self.visit_scope(else_statements);
 				}
 			}
 			_ => crate::visit::visit_stmt(self, node),
@@ -255,14 +271,28 @@ impl<'a> Visit<'a> for HoverVisitor<'a> {
 					}
 				}
 			}
-			ExprKind::StructLiteral { fields, .. } => {
+			ExprKind::MapLiteral { fields, .. }
+			| ExprKind::JsonMapLiteral { fields }
+			| ExprKind::StructLiteral { fields, .. } => {
 				if let Some(f) = fields.iter().find(|f| f.0.span.contains(&self.position)) {
 					let field_name = f.0;
-					let struct_type = self.types.get_expr_type(node);
-					if let Some(structy) = struct_type.maybe_unwrap_option().as_struct() {
+					let type_ = self.types.maybe_unwrap_inference(self.types.get_expr_type(node));
+					let type_ = if let Some(type_) = self.types.get_type_from_json_cast(node.id) {
+						*type_
+					} else {
+						type_
+					};
+					if let Some(structy) = type_.maybe_unwrap_option().as_struct() {
 						self.found = Some((
 							field_name.span.clone(),
 							docs_from_classlike_property(structy, field_name),
+						));
+					} else {
+						// just use the type info
+						let inner_type = self.types.maybe_unwrap_inference(self.types.get_expr_type(f.1));
+						self.found = Some((
+							field_name.span.clone(),
+							Some(format!("```wing\n{}: {inner_type}\n```", field_name.name)),
 						));
 					}
 					return;
@@ -667,6 +697,38 @@ inflight () => {
 let j = Json {};
 j.get("hello").get("world");
  //^
+"#
+	);
+
+	test_hover_list!(
+		map_element,
+		r#"
+{ "hi" => "" }
+ //^
+"#
+	);
+
+	test_hover_list!(
+		json_element,
+		r#"
+{ hi: "cool" }
+ //^
+"#
+	);
+
+	test_hover_list!(
+		json_element_nested_top,
+		r#"
+{ hi: { inner: [1, 2, 3] } }
+ //^
+"#
+	);
+
+	test_hover_list!(
+		json_element_nested_inner,
+		r#"
+{ hi: { inner: [1, 2, 3] } }
+        //^
 "#
 	);
 }
