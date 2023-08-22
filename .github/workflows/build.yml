@@ -12,6 +12,7 @@ on:
     branches:
       - main
       - dev
+      - tsuf/sdk-spec-tests-prior-to-build
   workflow_dispatch: {}
 
 concurrency:
@@ -331,12 +332,18 @@ jobs:
       - name: All good
         run: echo "Builds and tests passed! 🎉🎉🎉"
 
+  sdk-spec-test:
+    if: github.event_name == 'push'
+    uses: ./.github/workflows/tf-aws-test.yml
+    secrets: inherit
+
   publish:
     name: Publish
     if: ${{ github.event_name == 'push' && github.repository == 'winglang/wing' && github.ref == 'refs/heads/main' }}
     needs:
       - quality-gate
       - build
+      - sdk-spec-test
     runs-on: ubuntu-latest
     steps:
       - name: Download Build Artifacts

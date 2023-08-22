@@ -1,5 +1,6 @@
 name: SDK Spec AWS Tests
 on:
+  workflow_call: {}
   release:
     types:
       - published
@@ -51,13 +52,13 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
       ########################### install a local wing version ###############
       - name: Setup pnpm
-        if: ${{github.event_name == 'push'}}
+        if: ${{github.event_name != 'release'}}
         uses: pnpm/action-setup@v2.2.4
         with:
           version: ${{ env.PNPM_VERSION }}
 
       - name: Install Rust
-        if: ${{github.event_name == 'push'}}
+        if: ${{github.event_name != 'release'}}
         uses: dtolnay/rust-toolchain@master
         with:
           toolchain: ${{ env.RUST_VERSION }}
@@ -67,16 +68,16 @@ jobs:
           components: rustfmt,clippy,rust-std
 
       - name: Setup Cargo Cache
-        if: ${{github.event_name == 'push'}}
+        if: ${{github.event_name != 'release'}}
         uses: Swatinem/rust-cache@v2
 
       - name: Install Dependencies
-        if: ${{github.event_name == 'push'}}
+        if: ${{github.event_name != 'release'}}
         run: pnpm install --frozen-lockfile
 
       ########################################################################
       - name: Install winglang globally
-        if: ${{github.event_name != 'push'}}
+        if: ${{github.event_name == 'release'}}
         uses: nick-fields/retry@v2
         with:
           max_attempts: 3
@@ -84,7 +85,7 @@ jobs:
           timeout_minutes: 5
           command: npm install -g winglang
       - name: Installing external js modules
-        if: ${{github.event_name != 'push'}}
+        if: ${{github.event_name == 'release'}}
         run: |
           cd examples/tests/sdk_tests
           npm install
