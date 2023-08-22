@@ -4,6 +4,7 @@ import { Code, InflightClient } from "../core";
  * Options for stringify() method.
  */
 export interface JsonStringifyOptions {
+  /** Indentation spaces number */
   readonly indent: number;
 }
 
