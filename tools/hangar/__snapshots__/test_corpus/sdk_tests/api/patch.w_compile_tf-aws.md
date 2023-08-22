@@ -13,7 +13,7 @@ module.exports = function({ $_id, $body, $cloud_HttpMethod, $std_Json }) {
       {((cond) => {if (!cond) throw new Error("assertion failed: req.method == cloud.HttpMethod.PATCH")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(req.method,$cloud_HttpMethod.PATCH)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: req.vars?.get(\"id\") == _id")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((req.vars)["id"],$_id)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: req.path == \"/path/\"+ _id")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(req.path,("/path/" + $_id))))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: req.body == Json.stringify(body)")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(req.body,((args) => { return JSON.stringify(args[0], null, args[1]) })([$body]))))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: req.body == Json.stringify(body)")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(req.body,((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([$body]))))};
       {((cond) => {if (!cond) throw new Error("assertion failed: req.headers?.get(\"content-type\") == \"application/json\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((req.headers)["content-type"],"application/json")))};
       return ({"status": 200,"body": (req.vars)["id"]});
     }
@@ -34,8 +34,8 @@ module.exports = function({ $_id, $api_url, $body, $http_HttpMethod, $http_Util,
     }
     async handle() {
       const url = String.raw({ raw: ["", "/path/", ""] }, $api_url, $_id);
-      const response = (await $http_Util.patch(url,{ headers: ({"content-type": "application/json"}), body: ((args) => { return JSON.stringify(args[0], null, args[1]) })([$body]) }));
-      const fetchResponse = (await $http_Util.patch(url,{ method: $http_HttpMethod.PATCH, headers: ({"content-type": "application/json"}), body: ((args) => { return JSON.stringify(args[0], null, args[1]) })([$body]) }));
+      const response = (await $http_Util.patch(url,{ headers: ({"content-type": "application/json"}), body: ((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([$body]) }));
+      const fetchResponse = (await $http_Util.patch(url,{ method: $http_HttpMethod.PATCH, headers: ({"content-type": "application/json"}), body: ((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([$body]) }));
       {((cond) => {if (!cond) throw new Error("assertion failed: response.body == _id")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(response.body,$_id)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: response.status == 200")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(response.status,200)))};
       {((cond) => {if (!cond) throw new Error("assertion failed: response.url == url")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(response.url,url)))};

@@ -1,8 +1,8 @@
-# [add_object.w](../../../../../../examples/tests/sdk_tests/bucket/add_object.w) | compile | tf-aws
+# [add_file.w](../../../../../../examples/tests/sdk_tests/bucket/add_file.w) | compile | tf-aws
 
 ## inflight.$Closure1-1.js
 ```js
-module.exports = function({ $b, $jsonObj1, $std_Json }) {
+module.exports = function({ $b }) {
   class $Closure1 {
     constructor({  }) {
       const $obj = (...args) => this.handle(...args);
@@ -11,8 +11,8 @@ module.exports = function({ $b, $jsonObj1, $std_Json }) {
     }
     async handle() {
       {((cond) => {if (!cond) throw new Error("assertion failed: b.list().length == 2")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $b.list()).length,2)))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: Json.stringify(b.getJson(\"file1.json\")) == Json.stringify(jsonObj1)")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })(((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([(await $b.getJson("file1.json"))]),((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([$jsonObj1]))))};
-      {((cond) => {if (!cond) throw new Error("assertion failed: b.get(\"file2.txt\") == \"Bar\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $b.get("file2.txt")),"Bar")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: b.get(\"file1.txt\") == \"test1\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $b.get("file1.txt")),"test1")))};
+      {((cond) => {if (!cond) throw new Error("assertion failed: b.get(\"file2.txt\") == \"test2\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((await $b.get("file2.txt")),"test2")))};
     }
   }
   return $Closure1;
@@ -169,16 +169,16 @@ module.exports = function({ $b, $jsonObj1, $std_Json }) {
       }
     },
     "aws_s3_object": {
-      "cloudBucket_S3Object-file1json_574A6AAF": {
+      "cloudBucket_S3Object-file1txt_2E641337": {
         "//": {
           "metadata": {
-            "path": "root/Default/Default/cloud.Bucket/S3Object-file1.json",
-            "uniqueId": "cloudBucket_S3Object-file1json_574A6AAF"
+            "path": "root/Default/Default/cloud.Bucket/S3Object-file1.txt",
+            "uniqueId": "cloudBucket_S3Object-file1txt_2E641337"
           }
         },
         "bucket": "${aws_s3_bucket.cloudBucket.bucket}",
-        "content": "{\"key1\":\"value1\"}",
-        "key": "file1.json"
+        "content": "test1",
+        "key": "file1.txt"
       },
       "cloudBucket_S3Object-file2txt_C6672D6C": {
         "//": {
@@ -188,7 +188,7 @@ module.exports = function({ $b, $jsonObj1, $std_Json }) {
           }
         },
         "bucket": "${aws_s3_bucket.cloudBucket.bucket}",
-        "content": "Bar",
+        "content": "test2",
         "key": "file2.txt"
       },
       "testaddObject_Handler_S3Object_88DEF745": {
@@ -220,48 +220,42 @@ class $Root extends $stdlib.std.Resource {
     class $Closure1 extends $stdlib.std.Resource {
       constructor(scope, id, ) {
         super(scope, id);
-        (std.Node.of(this)).hidden = true;
+        this._addInflightOps("handle", "$inflight_init");
+        this.display.hidden = true;
       }
       static _toInflightType(context) {
-        return `
+        return $stdlib.core.NodeJsCode.fromInline(`
           require("./inflight.$Closure1-1.js")({
             $b: ${context._lift(b)},
-            $jsonObj1: ${context._lift(jsonObj1)},
-            $std_Json: ${context._lift(std.Json)},
           })
-        `;
+        `);
       }
       _toInflight() {
-        return `
+        return $stdlib.core.NodeJsCode.fromInline(`
           (await (async () => {
-            const $Closure1Client = ${$Closure1._toInflightType(this)};
+            const $Closure1Client = ${$Closure1._toInflightType(this).text};
             const client = new $Closure1Client({
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
           })())
-        `;
-      }
-      _getInflightOps() {
-        return ["handle", "$inflight_init"];
+        `);
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(b, host, ["get", "getJson", "list"]);
-          $Closure1._registerBindObject(jsonObj1, host, []);
+          $Closure1._registerBindObject(b, host, ["get", "list"]);
         }
         super._registerBind(host, ops);
       }
     }
     const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
-    const jsonObj1 = ({"key1": "value1"});
-    (b.addObject("file1.json",((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([jsonObj1])));
-    (b.addObject("file2.txt","Bar"));
+    (b.addFile("file1.txt","testFiles/test1.txt"));
+    (b.addFile("file2.txt","testFiles/test2.txt"));
     this.node.root.new("@winglang/sdk.std.Test",std.Test,this,"test:addObject",new $Closure1(this,"$Closure1"));
   }
 }
 const $App = $stdlib.core.App.for(process.env.WING_TARGET);
-new $App({ outdir: $outdir, name: "add_object", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
+new $App({ outdir: $outdir, name: "add_file", rootConstruct: $Root, plugins: $plugins, isTestEnvironment: $wing_is_test, entrypointDir: process.env['WING_SOURCE_DIR'], rootId: process.env['WING_ROOT_ID'] }).synth();
 
 ```
 

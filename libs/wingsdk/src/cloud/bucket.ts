@@ -1,3 +1,5 @@
+import * as fs from "fs";
+import { isAbsolute, resolve } from "path";
 import { Construct } from "constructs";
 import { Topic } from "./topic";
 import { fqnForType } from "../constants";
@@ -41,12 +43,14 @@ export abstract class Bucket extends Resource {
 
   /** @internal */
   protected readonly _topics = new Map<BucketEventType, Topic>();
+  private scope: Construct;
 
   constructor(scope: Construct, id: string, props: BucketProps = {}) {
     super(scope, id);
 
     Node.of(this).title = "Bucket";
     Node.of(this).description = "A cloud object store";
+    this.scope = scope;
 
     props;
   }
@@ -75,6 +79,32 @@ export abstract class Bucket extends Resource {
    * referencing a file from the local filesystem.
    */
   public abstract addObject(key: string, body: string): void;
+
+  /**
+   * Add a file to the bucket from system folder
+   *
+   * @param {string} key - The key or name to associate with the file.
+   * @param {string} path - The path to the file on the local system.
+   * @param {BufferEncoding} encoding - The encoding to use when reading the file. Defaults to "utf-8".
+   */
+
+  public addFile(
+    key: string,
+    path: string,
+    encoding: BufferEncoding = "utf-8"
+  ): void {
+    if (isAbsolute(path)) {
+      path = path;
+    } else {
+      if (!App.of(this.scope).entrypointDir) {
+        throw new Error("Missing environment variable: WING_SOURCE_DIR");
+      }
+      path = resolve(App.of(this.scope).entrypointDir, path);
+    }
+    const data = fs.readFileSync(path, { encoding: encoding });
+
+    this.addObject(key, data);
+  }
 
   /**
    * Creates a topic for subscribing to notification events

@@ -10,16 +10,8 @@ module.exports = function({ $http_Util, $w1_url, $w2_url }) {
       return $obj;
     }
     async handle() {
-      let url1 = $w1_url;
-      if ((!url1.startsWith("http"))) {
-        url1 = ("http://" + url1);
-      }
-      let url2 = $w2_url;
-      if ((!url2.startsWith("http"))) {
-        url2 = ("http://" + url2);
-      }
-      {((cond) => {if (!cond) throw new Error("assertion failed: http.get(url1).ok")})((await $http_Util.get(url1)).ok)};
-      {((cond) => {if (!cond) throw new Error("assertion failed: http.get(url2).ok")})((await $http_Util.get(url2)).ok)};
+      {((cond) => {if (!cond) throw new Error("assertion failed: http.get(w1.url).ok")})((await $http_Util.get($w1_url)).ok)};
+      {((cond) => {if (!cond) throw new Error("assertion failed: http.get(w2.url).ok")})((await $http_Util.get($w2_url)).ok)};
     }
   }
   return $Closure1;
@@ -304,8 +296,8 @@ module.exports = function({ $http_Util, $w1_url, $w2_url }) {
           "variables": {
             "WING_FUNCTION_NAME": "Handler-c8683851",
             "WING_TARGET": "tf-aws",
-            "WING_TOKEN_TFTOKEN_TOKEN_16": "${jsonencode(aws_cloudfront_distribution.cloudWebsite_Distribution_083B5AF9.domain_name)}",
-            "WING_TOKEN_TFTOKEN_TOKEN_32": "${jsonencode(aws_cloudfront_distribution.website-2_Distribution_F1FA4680.domain_name)}"
+            "WING_TOKEN_HTTPS_TFTOKEN_TOKEN_16": "${jsonencode(\"https://${aws_cloudfront_distribution.cloudWebsite_Distribution_083B5AF9.domain_name}\")}",
+            "WING_TOKEN_HTTPS_TFTOKEN_TOKEN_32": "${jsonencode(\"https://${aws_cloudfront_distribution.website-2_Distribution_F1FA4680.domain_name}\")}"
           }
         },
         "function_name": "Handler-c8683851",
@@ -585,8 +577,8 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(w1.url, host, []);
-          $Closure1._registerBindObject(w2.url, host, []);
+          $Closure1._registerBindObject(w1.url, host, ["ok"]);
+          $Closure1._registerBindObject(w2.url, host, ["ok"]);
         }
         super._registerBind(host, ops);
       }

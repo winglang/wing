@@ -10,7 +10,7 @@ module.exports = function({ $std_Json, $usersTable }) {
       return $obj;
     }
     async handle(req) {
-      return ({"body": ((args) => { return JSON.stringify(args[0], null, args[1]) })([({"users": (await $usersTable.list())})]),"status": 200});
+      return ({"body": ((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([({"users": (await $usersTable.list())})]),"status": 200});
     }
   }
   return $Closure1;
@@ -28,12 +28,12 @@ module.exports = function({ $std_Json, $usersTable }) {
       return $obj;
     }
     async handle(req) {
-      const body = (JSON.parse((req.body ?? ((args) => { return JSON.stringify(args[0], null, args[1]) })([({"name": "","age": "","id": ""})]))));
+      const body = (JSON.parse((req.body ?? ((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([({"name": "","age": "","id": ""})]))));
       if ((((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((body)["name"],"")) || (((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((body)["age"],""))) || (((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((body)["id"],"")))) {
-        return ({"body": ((args) => { return JSON.stringify(args[0], null, args[1]) })([({"error": "incomplete details"})]),"status": 400});
+        return ({"body": ((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([({"error": "incomplete details"})]),"status": 400});
       }
-      (await $usersTable.insert(((args) => { return JSON.stringify(args[0], null, args[1]) })([(body)["id"]]),body));
-      return ({"body": ((args) => { return JSON.stringify(args[0], null, args[1]) })([({"user": (body)["id"]})]),"status": 201});
+      (await $usersTable.insert(((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([(body)["id"]]),body));
+      return ({"body": ((args) => { return JSON.stringify(args[0], null, args[1]?.indent) })([({"user": (body)["id"]})]),"status": 201});
     }
   }
   return $Closure2;
