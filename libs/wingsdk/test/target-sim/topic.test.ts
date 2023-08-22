@@ -1,7 +1,7 @@
 import { test, expect } from "vitest";
 import { listMessages, treeJsonOf } from "./util";
 import * as cloud from "../../src/cloud";
-import { Display } from "../../src/std";
+import { Node } from "../../src/std";
 import { Testing } from "../../src/testing";
 import { SimApp } from "../sim-app";
 
@@ -85,7 +85,7 @@ test("topic has no display hidden property", async () => {
   const topic = app.node.tryFindChild("my_topic") as cloud.Topic;
 
   // THEN
-  expect(Display.of(topic).hidden).toBeUndefined();
+  expect(Node.of(topic).hidden).toBeUndefined();
   expect(treeJson.tree.children).toBeDefined();
   expect(treeJson.tree.children).not.toMatchObject({
     my_topic: {
@@ -106,8 +106,8 @@ test("topic has display title and description properties", async () => {
   const topic = app.node.tryFindChild("my_topic") as cloud.Topic;
 
   // THEN
-  expect(Display.of(topic).title).toBeDefined();
-  expect(Display.of(topic).description).toBeDefined();
+  expect(Node.of(topic).title).toBeDefined();
+  expect(Node.of(topic).description).toBeDefined();
   expect(treeJson.tree.children).toMatchObject({
     my_topic: {
       display: {

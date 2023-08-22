@@ -1,9 +1,9 @@
 import { Construct } from "constructs";
-import { Display } from "./display";
 import { IInflightHost, IResource, Resource } from "./resource";
 import { Function, FUNCTION_FQN, FunctionProps } from "../cloud/function";
 import { fqnForType } from "../constants";
 import { App } from "../core";
+import { Node } from "../std";
 
 /**
  * Global identifier for `Test`.
@@ -49,8 +49,8 @@ export class Test extends Resource implements IInflightHost {
   ) {
     super(scope, id);
 
-    Display.of(this).title = "Test";
-    Display.of(this).description = "A cloud unit test.";
+    Node.of(this).title = "Test";
+    Node.of(this).description = "A cloud unit test.";
 
     this._fn = App.of(scope).newAbstract(
       FUNCTION_FQN,

@@ -2,7 +2,7 @@ import { Construct } from "constructs";
 import { FunctionProps } from "./function";
 import { fqnForType } from "../constants";
 import { App } from "../core";
-import { Display, IResource, Resource } from "../std";
+import { IResource, Node, Resource } from "../std";
 
 /**
  * Global identifier for `Service`.
@@ -50,8 +50,8 @@ export abstract class Service extends Resource {
   constructor(scope: Construct, id: string, props: ServiceProps) {
     super(scope, id);
 
-    Display.of(this).title = "Service";
-    Display.of(this).description = "A cloud service";
+    Node.of(this).title = "Service";
+    Node.of(this).description = "A cloud service";
 
     props;
   }

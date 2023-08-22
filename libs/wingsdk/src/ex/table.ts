@@ -1,7 +1,7 @@
 import { Construct } from "constructs";
 import { fqnForType } from "../constants";
 import { App } from "../core";
-import { Display, Json, Resource } from "../std";
+import { Json, Node, Resource } from "../std";
 
 /**
  * Global identifier for `Table`.
@@ -84,8 +84,8 @@ export abstract class Table extends Resource {
   constructor(scope: Construct, id: string, props: TableProps) {
     super(scope, id);
 
-    Display.of(this).title = "Table";
-    Display.of(this).description =
+    Node.of(this).title = "Table";
+    Node.of(this).description =
       "A cloud NoSQL database table that can be used to store and query data";
 
     if (!props.name) {

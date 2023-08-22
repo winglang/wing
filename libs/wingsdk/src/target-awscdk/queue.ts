@@ -6,10 +6,9 @@ import { Construct } from "constructs";
 import { Function } from "./function";
 import * as cloud from "../cloud";
 import * as core from "../core";
-import { Connections } from "../core";
 import { convertBetweenHandlers } from "../shared/convert";
 import { calculateQueuePermissions } from "../shared-aws/permissions";
-import { IInflightHost } from "../std";
+import { IInflightHost, Node } from "../std";
 
 /**
  * AWS implementation of `cloud.Queue`.
@@ -65,7 +64,7 @@ export class Queue extends cloud.Queue {
     });
     fn._addEventSource(eventSource);
 
-    Connections.of(this).add({
+    Node.of(this).addConnection({
       source: this,
       target: fn,
       name: "setConsumer()",

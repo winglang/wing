@@ -1,7 +1,7 @@
 import { Construct } from "constructs";
 import { fqnForType } from "../constants";
 import { App } from "../core";
-import { Display, IResource, Resource } from "../std";
+import { IResource, Node, Resource } from "../std";
 
 /**
  * Global identifier for `Api`.
@@ -60,8 +60,8 @@ export abstract class Api extends Resource {
 
     props;
 
-    Display.of(this).title = "Api";
-    Display.of(this).description = "A REST API endpoint";
+    Node.of(this).title = "Api";
+    Node.of(this).description = "A REST API endpoint";
   }
 
   /** @internal */

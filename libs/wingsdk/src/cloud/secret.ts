@@ -1,7 +1,7 @@
 import { Construct } from "constructs";
 import { fqnForType } from "../constants";
 import { App } from "../core";
-import { Display, Json, Resource } from "../std";
+import { Json, Node, Resource } from "../std";
 
 /**
  * Global identifier for `Secret`.
@@ -45,8 +45,8 @@ export abstract class Secret extends Resource {
   constructor(scope: Construct, id: string, props: SecretProps = {}) {
     super(scope, id);
 
-    Display.of(this).title = "Secret";
-    Display.of(this).description = "A cloud secret";
+    Node.of(this).title = "Secret";
+    Node.of(this).description = "A cloud secret";
 
     props;
   }

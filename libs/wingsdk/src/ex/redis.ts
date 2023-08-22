@@ -1,7 +1,7 @@
 import { Construct } from "constructs";
 import { fqnForType } from "../constants";
 import { App } from "../core";
-import { Display, Resource } from "../std";
+import { Node, Resource } from "../std";
 
 /**
  * Global identifier for `Bucket`.
@@ -25,8 +25,8 @@ export abstract class Redis extends Resource {
   constructor(scope: Construct, id: string) {
     super(scope, id);
 
-    Display.of(this).title = "Redis";
-    Display.of(this).description = "A Redis server";
+    Node.of(this).title = "Redis";
+    Node.of(this).description = "A Redis server";
   }
 
   /** @internal */

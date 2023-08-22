@@ -4,7 +4,7 @@ import { Construct } from "constructs";
 import { fqnForType } from "../constants";
 import { App } from "../core";
 import { CaseConventions, ResourceNames } from "../shared/resource-names";
-import { Display, Duration, IInflightHost, IResource, Resource } from "../std";
+import { Duration, IInflightHost, IResource, Node, Resource } from "../std";
 
 /**
  * Global identifier for `Function`.
@@ -68,8 +68,8 @@ export abstract class Function extends Resource implements IInflightHost {
   ) {
     super(scope, id);
 
-    Display.of(this).title = "Function";
-    Display.of(this).description = "A cloud function (FaaS)";
+    Node.of(this).title = "Function";
+    Node.of(this).description = "A cloud function (FaaS)";
 
     for (const [key, value] of Object.entries(props.env ?? {})) {
       this.addEnvironment(key, value);

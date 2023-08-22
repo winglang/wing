@@ -1,8 +1,9 @@
 import { Construct, IConstruct } from "constructs";
 import { Duration } from "./duration";
-import { App, Connections } from "../core";
+import { App } from "../core";
 import { liftObject } from "../core/internal";
 import { log } from "../shared/log";
+import { Node } from "../std";
 
 /**
  * A resource that can run inflight code.
@@ -232,7 +233,7 @@ export abstract class Resource extends Construct implements IResource {
         this._registerBind(host, [op]);
 
         // add connection metadata
-        Connections.of(this).add({
+        Node.of(this).addConnection({
           source: host,
           target: this,
           name: op.endsWith("()") ? op : `${op}()`,

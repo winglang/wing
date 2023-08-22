@@ -34,7 +34,7 @@ exports[`create a queue 2`] = `
         "cloud.TestRunner": {
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.69",
           },
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
@@ -47,7 +47,7 @@ exports[`create a queue 2`] = `
         "my_queue": {
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.69",
           },
           "display": {
             "description": "A distributed message queue",
@@ -59,7 +59,7 @@ exports[`create a queue 2`] = `
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.1.314",
+        "version": "10.2.69",
       },
       "id": "root",
       "path": "root",
@@ -178,7 +178,7 @@ async handle(message) {
         "Handler": {
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.69",
           },
           "display": {
             "description": "An inflight resource",
@@ -191,7 +191,7 @@ async handle(message) {
         "cloud.TestRunner": {
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.69",
           },
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
@@ -206,7 +206,7 @@ async handle(message) {
             "my_queue-QueueEventMapping-e645076f": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.1.314",
+                "version": "10.2.69",
               },
               "display": {
                 "hidden": true,
@@ -217,11 +217,10 @@ async handle(message) {
             "my_queue-SetConsumer-e645076f": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.1.314",
+                "version": "10.2.69",
               },
               "display": {
                 "description": "A cloud function (FaaS)",
-                "sourceModule": "@winglang/sdk",
                 "title": "setConsumer()",
               },
               "id": "my_queue-SetConsumer-e645076f",
@@ -230,7 +229,7 @@ async handle(message) {
             "my_queue-SetConsumerHandler-e645076f": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.1.314",
+                "version": "10.2.69",
               },
               "display": {
                 "hidden": true,
@@ -241,7 +240,7 @@ async handle(message) {
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.69",
           },
           "display": {
             "description": "A distributed message queue",
@@ -253,7 +252,7 @@ async handle(message) {
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.1.314",
+        "version": "10.2.69",
       },
       "id": "root",
       "path": "root",
@@ -372,7 +371,7 @@ async handle(message) {
         "Handler": {
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.69",
           },
           "display": {
             "description": "An inflight resource",
@@ -385,7 +384,7 @@ async handle(message) {
         "cloud.TestRunner": {
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.69",
           },
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
@@ -400,7 +399,7 @@ async handle(message) {
             "my_queue-QueueEventMapping-e645076f": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.1.314",
+                "version": "10.2.69",
               },
               "display": {
                 "hidden": true,
@@ -411,11 +410,10 @@ async handle(message) {
             "my_queue-SetConsumer-e645076f": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.1.314",
+                "version": "10.2.69",
               },
               "display": {
                 "description": "A cloud function (FaaS)",
-                "sourceModule": "@winglang/sdk",
                 "title": "setConsumer()",
               },
               "id": "my_queue-SetConsumer-e645076f",
@@ -424,7 +422,7 @@ async handle(message) {
             "my_queue-SetConsumerHandler-e645076f": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.1.314",
+                "version": "10.2.69",
               },
               "display": {
                 "hidden": true,
@@ -435,7 +433,7 @@ async handle(message) {
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.69",
           },
           "display": {
             "description": "A distributed message queue",
@@ -447,7 +445,7 @@ async handle(message) {
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.1.314",
+        "version": "10.2.69",
       },
       "id": "root",
       "path": "root",
@@ -567,7 +565,7 @@ async handle(message) {
         "Handler": {
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.69",
           },
           "display": {
             "description": "An inflight resource",
@@ -580,7 +578,7 @@ async handle(message) {
         "cloud.TestRunner": {
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.69",
           },
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
@@ -595,7 +593,7 @@ async handle(message) {
             "my_queue-QueueEventMapping-e645076f": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.1.314",
+                "version": "10.2.69",
               },
               "display": {
                 "hidden": true,
@@ -606,11 +604,10 @@ async handle(message) {
             "my_queue-SetConsumer-e645076f": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.1.314",
+                "version": "10.2.69",
               },
               "display": {
                 "description": "A cloud function (FaaS)",
-                "sourceModule": "@winglang/sdk",
                 "title": "setConsumer()",
               },
               "id": "my_queue-SetConsumer-e645076f",
@@ -619,7 +616,7 @@ async handle(message) {
             "my_queue-SetConsumerHandler-e645076f": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.1.314",
+                "version": "10.2.69",
               },
               "display": {
                 "hidden": true,
@@ -630,7 +627,7 @@ async handle(message) {
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.69",
           },
           "display": {
             "description": "A distributed message queue",
@@ -642,7 +639,7 @@ async handle(message) {
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.1.314",
+        "version": "10.2.69",
       },
       "id": "root",
       "path": "root",
@@ -700,7 +697,7 @@ exports[`queue batch size of 2, purge the queue 2`] = `
         "cloud.TestRunner": {
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.69",
           },
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
@@ -713,7 +710,7 @@ exports[`queue batch size of 2, purge the queue 2`] = `
         "my_queue": {
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.69",
           },
           "display": {
             "description": "A distributed message queue",
@@ -725,7 +722,7 @@ exports[`queue batch size of 2, purge the queue 2`] = `
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.1.314",
+        "version": "10.2.69",
       },
       "id": "root",
       "path": "root",
@@ -885,7 +882,7 @@ async handle(message) {
         "Handler": {
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.69",
           },
           "display": {
             "description": "An inflight resource",
@@ -898,7 +895,7 @@ async handle(message) {
         "OnDeployHandler": {
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.69",
           },
           "display": {
             "description": "An inflight resource",
@@ -911,7 +908,7 @@ async handle(message) {
         "cloud.TestRunner": {
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.69",
           },
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
@@ -926,7 +923,7 @@ async handle(message) {
             "my_queue-QueueEventMapping-e645076f": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.1.314",
+                "version": "10.2.69",
               },
               "display": {
                 "hidden": true,
@@ -937,11 +934,10 @@ async handle(message) {
             "my_queue-SetConsumer-e645076f": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.1.314",
+                "version": "10.2.69",
               },
               "display": {
                 "description": "A cloud function (FaaS)",
-                "sourceModule": "@winglang/sdk",
                 "title": "setConsumer()",
               },
               "id": "my_queue-SetConsumer-e645076f",
@@ -950,7 +946,7 @@ async handle(message) {
             "my_queue-SetConsumerHandler-e645076f": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.1.314",
+                "version": "10.2.69",
               },
               "display": {
                 "hidden": true,
@@ -961,7 +957,7 @@ async handle(message) {
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.69",
           },
           "display": {
             "description": "A distributed message queue",
@@ -975,11 +971,10 @@ async handle(message) {
             "Function": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.1.314",
+                "version": "10.2.69",
               },
               "display": {
                 "description": "A cloud function (FaaS)",
-                "sourceModule": "@winglang/sdk",
                 "title": "Function",
               },
               "id": "Function",
@@ -988,7 +983,7 @@ async handle(message) {
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.69",
           },
           "display": {
             "description": "Run code during the app's deployment.",
@@ -1000,7 +995,7 @@ async handle(message) {
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.1.314",
+        "version": "10.2.69",
       },
       "id": "root",
       "path": "root",
@@ -1118,7 +1113,7 @@ async handle(message) {
         "Handler": {
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.69",
           },
           "display": {
             "description": "An inflight resource",
@@ -1131,7 +1126,7 @@ async handle(message) {
         "cloud.TestRunner": {
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.69",
           },
           "display": {
             "description": "A suite of APIs for running tests and collecting results.",
@@ -1146,7 +1141,7 @@ async handle(message) {
             "my_queue-QueueEventMapping-e645076f": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.1.314",
+                "version": "10.2.69",
               },
               "display": {
                 "hidden": true,
@@ -1157,11 +1152,10 @@ async handle(message) {
             "my_queue-SetConsumer-e645076f": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.1.314",
+                "version": "10.2.69",
               },
               "display": {
                 "description": "A cloud function (FaaS)",
-                "sourceModule": "@winglang/sdk",
                 "title": "setConsumer()",
               },
               "id": "my_queue-SetConsumer-e645076f",
@@ -1170,7 +1164,7 @@ async handle(message) {
             "my_queue-SetConsumerHandler-e645076f": {
               "constructInfo": {
                 "fqn": "constructs.Construct",
-                "version": "10.1.314",
+                "version": "10.2.69",
               },
               "display": {
                 "hidden": true,
@@ -1181,7 +1175,7 @@ async handle(message) {
           },
           "constructInfo": {
             "fqn": "constructs.Construct",
-            "version": "10.1.314",
+            "version": "10.2.69",
           },
           "display": {
             "description": "A distributed message queue",
@@ -1193,7 +1187,7 @@ async handle(message) {
       },
       "constructInfo": {
         "fqn": "constructs.Construct",
-        "version": "10.1.314",
+        "version": "10.2.69",
       },
       "id": "root",
       "path": "root",

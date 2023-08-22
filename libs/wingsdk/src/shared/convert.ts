@@ -1,6 +1,6 @@
 import { Construct } from "constructs";
 import { normalPath } from "./misc";
-import { Display, IInflightHost, IResource, Resource } from "../std";
+import { IInflightHost, IResource, Node, Resource } from "../std";
 
 /**
  * Convert a resource with a single method into a resource with a different
@@ -25,7 +25,7 @@ export function convertBetweenHandlers(
     constructor(theScope: Construct, theId: string, handler: IResource) {
       super(theScope, theId);
       this.handler = handler;
-      Display.of(this).hidden = true;
+      Node.of(this).hidden = true;
       this.args = args;
     }
 

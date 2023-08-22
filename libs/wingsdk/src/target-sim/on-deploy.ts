@@ -3,7 +3,7 @@ import { ON_DEPLOY_TYPE, OnDeploySchema } from "./schema-resources";
 import { simulatorHandleToken } from "./tokens";
 import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 import * as cloud from "../cloud";
-import { Display, IInflightHost } from "../std";
+import { IInflightHost, Node, SDK_SOURCE_MODULE } from "../std";
 import { BaseResourceSchema } from "../testing";
 
 export class OnDeploy extends cloud.OnDeploy {
@@ -17,7 +17,7 @@ export class OnDeploy extends cloud.OnDeploy {
     super(scope, id, handler, props);
 
     this.fn = cloud.Function._newFunction(this, "Function", handler, props);
-    Display.of(this.fn).sourceModule = Display.SDK_SOURCE_MODULE;
+    Node.of(this.fn).sourceModule = SDK_SOURCE_MODULE;
 
     this.node.addDependency(this.fn);
 

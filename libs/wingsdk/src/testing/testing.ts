@@ -1,7 +1,7 @@
 import { IConstruct } from "constructs";
 import { InflightBindings } from "../core";
 import { liftObject } from "../core/internal";
-import { Display, IInflightHost, IResource, Resource } from "../std";
+import { IInflightHost, IResource, Node, Resource } from "../std";
 
 /**
  * Test utilities.
@@ -43,9 +43,9 @@ export class Testing {
           (this as any)[field] = value.obj;
         }
 
-        Display.of(this).title = "Inflight";
-        Display.of(this).description = "An inflight resource";
-        Display.of(this).hidden = true;
+        Node.of(this).title = "Inflight";
+        Node.of(this).description = "An inflight resource";
+        Node.of(this).hidden = true;
       }
 
       public _getInflightOps(): string[] {

@@ -2,7 +2,7 @@ import { Construct } from "constructs";
 import { Function, FunctionProps } from "./function";
 import { fqnForType } from "../constants";
 import { App } from "../core";
-import { Display, Duration, IResource, Resource } from "../std";
+import { Duration, IResource, Node, Resource } from "../std";
 
 /**
  * Global identifier for `Queue`.
@@ -47,8 +47,8 @@ export abstract class Queue extends Resource {
   constructor(scope: Construct, id: string, props: QueueProps = {}) {
     super(scope, id);
 
-    Display.of(this).title = "Queue";
-    Display.of(this).description = "A distributed message queue";
+    Node.of(this).title = "Queue";
+    Node.of(this).description = "A distributed message queue";
 
     props;
   }

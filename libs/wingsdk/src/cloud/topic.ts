@@ -2,7 +2,7 @@ import { Construct } from "constructs";
 import { Function, FunctionProps } from "./function";
 import { fqnForType } from "../constants";
 import { App } from "../core";
-import { Display, IResource, Resource } from "../std";
+import { IResource, Node, Resource } from "../std";
 
 export const TOPIC_FQN = fqnForType("cloud.Topic");
 
@@ -32,8 +32,8 @@ export abstract class Topic extends Resource {
   constructor(scope: Construct, id: string, props: TopicProps = {}) {
     super(scope, id);
 
-    Display.of(this).title = "Topic";
-    Display.of(this).description = "A pub/sub notification topic";
+    Node.of(this).title = "Topic";
+    Node.of(this).description = "A pub/sub notification topic";
 
     props;
   }

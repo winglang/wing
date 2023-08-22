@@ -2,7 +2,7 @@ import { isAbsolute, resolve } from "path";
 import { Construct } from "constructs";
 import { fqnForType } from "../constants";
 import { App } from "../core";
-import { Display, Json, Resource } from "../std";
+import { Json, Node, Resource } from "../std";
 
 /**
  * Global identifier for `Website`.
@@ -53,8 +53,8 @@ export abstract class Website extends Resource {
   constructor(scope: Construct, id: string, props: WebsiteProps) {
     super(scope, id);
 
-    Display.of(this).title = "Website";
-    Display.of(this).description = "A static website";
+    Node.of(this).title = "Website";
+    Node.of(this).description = "A static website";
 
     if (isAbsolute(props.path)) {
       this._path = props.path;

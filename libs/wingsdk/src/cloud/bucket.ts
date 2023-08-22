@@ -1,9 +1,9 @@
 import { Construct } from "constructs";
 import { Topic } from "./topic";
 import { fqnForType } from "../constants";
-import { App, Connections } from "../core";
+import { App } from "../core";
 import { convertBetweenHandlers } from "../shared/convert";
-import { Json, IResource, Resource, Display } from "../std";
+import { Json, IResource, Node, Resource } from "../std";
 
 /**
  * Global identifier for `Bucket`.
@@ -45,8 +45,8 @@ export abstract class Bucket extends Resource {
   constructor(scope: Construct, id: string, props: BucketProps = {}) {
     super(scope, id);
 
-    Display.of(this).title = "Bucket";
-    Display.of(this).description = "A cloud object store";
+    Node.of(this).title = "Bucket";
+    Node.of(this).description = "A cloud object store";
 
     props;
   }
@@ -89,7 +89,7 @@ export abstract class Bucket extends Resource {
 
     this.node.addDependency(topic);
 
-    Connections.of(this).add({
+    Node.of(this).addConnection({
       source: this,
       target: topic,
       name: `${actionType}()`,
