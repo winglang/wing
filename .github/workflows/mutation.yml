@@ -70,13 +70,20 @@ jobs:
         if: steps.download-artifacts.outputs.found_artifact == 'true'
         name: Apply downloaded pathes
         working-directory: repo
+        env:
+          HEAD_REF: ${{ github.event.workflow_run.head_branch }}
         run: |
+          git config user.name "monada-bot[bot]"
+          git config user.email "monabot@monada.co"
+
           # if ../patches/update.diff/update.diff exists, apply it first
           UPDATE_PATCH_FILE="../patches/update.diff/update.diff"
           if [ -f $UPDATE_PATCH_FILE ]; then
             echo "Updating branch"
             git apply --binary $UPDATE_PATCH_FILE
             if [ $? -eq 0 ]; then
+              git add --all
+              git commit -s -m "chore: self mutation (update)"
               echo "Patch applied successfully"
               rm $UPDATE_PATCH_FILE
             else
@@ -90,6 +97,8 @@ jobs:
             echo "Applying $f"
             git apply --binary $f
             if [ $? -eq 0 ]; then
+              git add --all
+              git commit -s -m "chore: self mutation ($f)"
               echo "Patch applied successfully"
               rm $f
             else
@@ -99,16 +108,6 @@ jobs:
             fi
           done
 
-      - name: Push changes
-        if: steps.download-artifacts.outputs.found_artifact == 'true'
-        working-directory: repo
-        env:
-          HEAD_REF: ${{ github.event.workflow_run.head_branch }}
-        run: |
-          git config user.name "monada-bot[bot]"
-          git config user.email "monabot@monada.co"
-          git add --all
-          git commit -s -m "chore: self mutation"
           git push origin HEAD:$HEAD_REF
 
       - name: Add label to block auto merge
