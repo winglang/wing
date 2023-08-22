@@ -49,7 +49,7 @@ jobs:
           message: |
             Console preview environment is available at https://${{env.APP_NAME}}.fly.dev :rocket:
           comment_tag: Console preview environment
-          GITHUB_TOKEN: ${{secrets.CONSOLE_PREVIEWS_TOKEN}}
+          GITHUB_TOKEN: ${{secrets.PROJEN_GITHUB_TOKEN}}
   destroy:
     name: "Destroy"
     runs-on: ubuntu-latest
