@@ -940,12 +940,10 @@ to parse as Json.
 ##### `stringify` <a name="stringify" id="@winglang/sdk.std.Json.stringify"></a>
 
 ```wing
-Json.stringify(json: any, indent?: num);
+Json.stringify(json: any, options?: JsonStringifyOptions);
 ```
 
 Formats Json as string.
-
-(JSON.stringify($args$))
 
 ###### `json`<sup>Required</sup> <a name="json" id="@winglang/sdk.std.Json.stringify.parameter.json"></a>
 
@@ -955,9 +953,9 @@ to format as string.
 
 ---
 
-###### `indent`<sup>Optional</sup> <a name="indent" id="@winglang/sdk.std.Json.stringify.parameter.indent"></a>
+###### `options`<sup>Optional</sup> <a name="options" id="@winglang/sdk.std.Json.stringify.parameter.options"></a>
 
-- *Type:* num
+- *Type:* <a href="#@winglang/sdk.std.JsonStringifyOptions">JsonStringifyOptions</a>
 
 ---
 
@@ -2282,6 +2280,36 @@ year: num;
 - *Type:* num
 
 Year.
+
+---
+
+### JsonStringifyOptions <a name="JsonStringifyOptions" id="@winglang/sdk.std.JsonStringifyOptions"></a>
+
+Options for stringify() method.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.std.JsonStringifyOptions.Initializer"></a>
+
+```wing
+let JsonStringifyOptions = JsonStringifyOptions{ ... };
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.std.JsonStringifyOptions.property.indent">indent</a></code> | <code>num</code> | Indentation spaces number. |
+
+---
+
+##### `indent`<sup>Required</sup> <a name="indent" id="@winglang/sdk.std.JsonStringifyOptions.property.indent"></a>
+
+```wing
+indent: num;
+```
+
+- *Type:* num
+
+Indentation spaces number.
 
 ---
 
