@@ -12,7 +12,6 @@ on:
     branches:
       - main
       - dev
-      - tsuf/sdk-spec-tests-prior-to-build
   workflow_dispatch: {}
 
 concurrency:
@@ -307,6 +306,11 @@ jobs:
           name: ${{ steps.diff.outputs.diff_name }}
           path: ${{ steps.diff.outputs.diff_name }}
 
+  sdk-spec-test:
+    if: github.event_name == 'push'
+    uses: ./.github/workflows/tf-aws-test.yml
+    secrets: inherit
+
   quality-gate:
     name: Quality Gate
     runs-on: ubuntu-latest
@@ -315,6 +319,7 @@ jobs:
       - e2e-test
       - benchmark
       - test
+      - sdk-spec-test
     steps:
       - name: Download patches
         uses: actions/download-artifact@v3
@@ -332,18 +337,12 @@ jobs:
       - name: All good
         run: echo "Builds and tests passed! 🎉🎉🎉"
 
-  sdk-spec-test:
-    if: github.event_name == 'push'
-    uses: ./.github/workflows/tf-aws-test.yml
-    secrets: inherit
-
   publish:
     name: Publish
     if: ${{ github.event_name == 'push' && github.repository == 'winglang/wing' && github.ref == 'refs/heads/main' }}
     needs:
       - quality-gate
       - build
-      - sdk-spec-test
     runs-on: ubuntu-latest
     steps:
       - name: Download Build Artifacts
