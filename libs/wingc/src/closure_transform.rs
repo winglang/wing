@@ -184,7 +184,7 @@ impl Fold for ClosureTransformer {
 
 				// class_init_body :=
 				// ```
-				// std.Display.of(this).hidden = true;
+				// std.Node.of(this).hidden = true;
 				// ```
 				let std_display_of_this = Expr::new(
 					ExprKind::Call {
