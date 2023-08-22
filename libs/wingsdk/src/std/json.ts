@@ -1,7 +1,7 @@
 import { Code, InflightClient } from "../core";
 
 export interface JsonStringifyOptions {
-  readonly indent?: number;
+  readonly indent: number;
 }
 
 /**
@@ -47,17 +47,17 @@ export class Json {
    *
    * (JSON.stringify($args$))
 
-   * @macro ((args) => { return JSON.stringify(args[0], null, args[1]) })([$args$])
+   * @macro ((args) => { return JSON.stringify(args[0], null, args[1].indent) })([$args$])
    *
    * @param json to format as string
    * @returns string representation of the Json
    */
   public static stringify(
     json: Json | MutJson,
-    { indent }: JsonStringifyOptions
+    options: JsonStringifyOptions = { indent: 0 }
   ): string {
     json;
-    indent;
+    options;
     throw new Error("Macro");
   }
 

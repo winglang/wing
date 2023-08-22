@@ -54,3 +54,13 @@ try {
  assert(error == "");
 }
 */
+
+//-----------------------------------------------------------------------------
+// stringify()
+
+let foo = Json { a: 1, b: 2 };
+// let stringified = Json.stringify(foo);
+let stringifiedIndent = Json.stringify(foo, indent: 2);
+// assert(stringified == "{\"a\":1,\"b\":2}");
+
+log(stringifiedIndent);
