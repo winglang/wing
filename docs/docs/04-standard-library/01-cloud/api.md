@@ -480,6 +480,123 @@ let ApiConnectProps = cloud.ApiConnectProps{ ... };
 ```
 
 
+### ApiCorsProps <a name="ApiCorsProps" id="@winglang/sdk.cloud.ApiCorsProps"></a>
+
+Cors Options for `Api`.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.ApiCorsProps.Initializer"></a>
+
+```wing
+bring cloud;
+
+let ApiCorsProps = cloud.ApiCorsProps{ ... };
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.ApiCorsProps.property.allowCredentials">allowCredentials</a></code> | <code>bool</code> | Whether to allow credentials. |
+| <code><a href="#@winglang/sdk.cloud.ApiCorsProps.property.exposedHeaders">exposedHeaders</a></code> | <code>MutArray&lt;str&gt;</code> | The list of exposed headers. |
+| <code><a href="#@winglang/sdk.cloud.ApiCorsProps.property.headers">headers</a></code> | <code>MutArray&lt;str&gt;</code> | The list of allowed headers. |
+| <code><a href="#@winglang/sdk.cloud.ApiCorsProps.property.methods">methods</a></code> | <code>MutArray&lt;<a href="#@winglang/sdk.cloud.HttpMethod">HttpMethod</a>&gt;</code> | The list of allowed methods. |
+| <code><a href="#@winglang/sdk.cloud.ApiCorsProps.property.origins">origins</a></code> | <code>MutArray&lt;str&gt;</code> | The list of allowed origins. |
+
+---
+
+##### `allowCredentials`<sup>Optional</sup> <a name="allowCredentials" id="@winglang/sdk.cloud.ApiCorsProps.property.allowCredentials"></a>
+
+```wing
+allowCredentials: bool;
+```
+
+- *Type:* bool
+- *Default:* false
+
+Whether to allow credentials.
+
+---
+
+##### `exposedHeaders`<sup>Optional</sup> <a name="exposedHeaders" id="@winglang/sdk.cloud.ApiCorsProps.property.exposedHeaders"></a>
+
+```wing
+exposedHeaders: MutArray<str>;
+```
+
+- *Type:* MutArray&lt;str&gt;
+- *Default:* []
+
+The list of exposed headers.
+
+---
+
+*Example*
+
+```wing
+["Content-Type"]
+```
+
+
+##### `headers`<sup>Optional</sup> <a name="headers" id="@winglang/sdk.cloud.ApiCorsProps.property.headers"></a>
+
+```wing
+headers: MutArray<str>;
+```
+
+- *Type:* MutArray&lt;str&gt;
+- *Default:* ["Content-Type", "Authorization"]
+
+The list of allowed headers.
+
+---
+
+*Example*
+
+```wing
+["Content-Type"]
+```
+
+
+##### `methods`<sup>Optional</sup> <a name="methods" id="@winglang/sdk.cloud.ApiCorsProps.property.methods"></a>
+
+```wing
+methods: MutArray<HttpMethod>;
+```
+
+- *Type:* MutArray&lt;<a href="#@winglang/sdk.cloud.HttpMethod">HttpMethod</a>&gt;
+- *Default:* [HttpMethod.GET, HttpMethod.POST, HttpMethod.PUT, HttpMethod.PATCH, HttpMethod.DELETE, HttpMethod.HEAD, HttpMethod.OPTIONS]
+
+The list of allowed methods.
+
+---
+
+*Example*
+
+```wing
+[HttpMethod.GET, HttpMethod.POST]
+```
+
+
+##### `origins`<sup>Optional</sup> <a name="origins" id="@winglang/sdk.cloud.ApiCorsProps.property.origins"></a>
+
+```wing
+origins: MutArray<str>;
+```
+
+- *Type:* MutArray&lt;str&gt;
+- *Default:* ["*"]
+
+The list of allowed origins.
+
+---
+
+*Example*
+
+```wing
+["https://example.com"]
+```
+
+
 ### ApiDeleteProps <a name="ApiDeleteProps" id="@winglang/sdk.cloud.ApiDeleteProps"></a>
 
 Options for Api put endpoint.
@@ -568,6 +685,36 @@ Options for `Api`.
 bring cloud;
 
 let ApiProps = cloud.ApiProps{ ... };
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.ApiProps.property.cors">cors</a></code> | <code><a href="#@winglang/sdk.cloud.ApiCorsProps">ApiCorsProps</a></code> | Options for configuring the API's CORS behavior across all routes. |
+
+---
+
+##### `cors`<sup>Optional</sup> <a name="cors" id="@winglang/sdk.cloud.ApiProps.property.cors"></a>
+
+```wing
+cors: ApiCorsProps;
+```
+
+- *Type:* <a href="#@winglang/sdk.cloud.ApiCorsProps">ApiCorsProps</a>
+- *Default:* CORS is disabled
+
+Options for configuring the API's CORS behavior across all routes.
+
+Options can also be overridden on a per-route basis. (not yet implemented)
+Can be set to to an empty Struct to enable CORS with default options.
+
+---
+
+*Example*
+
+```wing
+{}
 ```
 
 

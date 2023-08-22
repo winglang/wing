@@ -2,10 +2,12 @@
 
 ## stdout.log
 ```log
-pass ─ website_with_api.wsim (no tests)
+pass ┌ website_with_api.wsim » root/env0/test:GET --users    
+     └ {"access-control-allow-credentials":"false","access-control-allow-origin":"*","access-control-expose-headers":"Content-Type","connection":"keep-alive","content-length":"12","content-type":"text/html; charset=utf-8","date":"Tue, 22 Aug 2023 18:33:36 GMT","etag":"W/\"c-1bl/ybs8pYaLwWPVCd0mBRAdBaY\"","keep-alive":"timeout=5","x-powered-by":"Express"}
+pass ─ website_with_api.wsim » root/env1/test:OPTIONS --users
  
  
-Tests 1 passed (1)
+Tests 2 passed (2)
 Test Files 1 passed (1)
 Duration <DURATION>
 ```
