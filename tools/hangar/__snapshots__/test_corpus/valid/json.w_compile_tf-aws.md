@@ -22,7 +22,7 @@ module.exports = function(stdStruct) {
       return stdStruct._validate(obj, this.jsonSchema())
     }
     static _toInflightType(context) {
-      return `require("./Base.Struct.js")(${ context._lift(stdStruct) })`;
+      return `require("./Base.Struct.js")(${ $stdlib.core.Lifting.lift(context, stdStruct) })`;
     }
   }
   return Base;
@@ -53,7 +53,7 @@ module.exports = function(stdStruct) {
       return stdStruct._validate(obj, this.jsonSchema())
     }
     static _toInflightType(context) {
-      return `require("./HasBucket.Struct.js")(${ context._lift(stdStruct) })`;
+      return `require("./HasBucket.Struct.js")(${ $stdlib.core.Lifting.lift(context, stdStruct) })`;
     }
   }
   return HasBucket;
@@ -84,7 +84,7 @@ module.exports = function(stdStruct) {
       return stdStruct._validate(obj, this.jsonSchema())
     }
     static _toInflightType(context) {
-      return `require("./HasInnerBucket.Struct.js")(${ context._lift(stdStruct) })`;
+      return `require("./HasInnerBucket.Struct.js")(${ $stdlib.core.Lifting.lift(context, stdStruct) })`;
     }
   }
   return HasInnerBucket;
@@ -117,7 +117,7 @@ module.exports = function(stdStruct) {
       return stdStruct._validate(obj, this.jsonSchema())
     }
     static _toInflightType(context) {
-      return `require("./InnerStructyJson.Struct.js")(${ context._lift(stdStruct) })`;
+      return `require("./InnerStructyJson.Struct.js")(${ $stdlib.core.Lifting.lift(context, stdStruct) })`;
     }
   }
   return InnerStructyJson;
@@ -150,7 +150,7 @@ module.exports = function(stdStruct) {
       return stdStruct._validate(obj, this.jsonSchema())
     }
     static _toInflightType(context) {
-      return `require("./LastOne.Struct.js")(${ context._lift(stdStruct) })`;
+      return `require("./LastOne.Struct.js")(${ $stdlib.core.Lifting.lift(context, stdStruct) })`;
     }
   }
   return LastOne;
@@ -184,7 +184,7 @@ module.exports = function(stdStruct) {
       return stdStruct._validate(obj, this.jsonSchema())
     }
     static _toInflightType(context) {
-      return `require("./StructyJson.Struct.js")(${ context._lift(stdStruct) })`;
+      return `require("./StructyJson.Struct.js")(${ $stdlib.core.Lifting.lift(context, stdStruct) })`;
     }
   }
   return StructyJson;
@@ -286,14 +286,15 @@ module.exports = function({  }) {
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
+const $constructs = require('constructs');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const cloud = $stdlib.cloud;
-class $Root extends $stdlib.std.Resource {
+class $Root extends $constructs.Construct {
   constructor(scope, id) {
     super(scope, id);
-    class Foo extends $stdlib.std.Resource {
+    class Foo extends $constructs.Construct {
       constructor(scope, id, ) {
         super(scope, id);
         this.SumStr = "wow!";
@@ -317,6 +318,10 @@ class $Root extends $stdlib.std.Resource {
       }
       _getInflightOps() {
         return ["$inflight_init"];
+      }
+      _registerBind(host, ops) {
+      }
+      static _registerTypeBind(host, ops) {
       }
     }
     const jsonNumber = 123;

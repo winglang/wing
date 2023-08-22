@@ -1,4 +1,5 @@
 import { Construct, IConstruct } from "constructs";
+import { Datetime } from "./datetime";
 import { Duration } from "./duration";
 import { App, Bindings, Connections } from "../core";
 
@@ -23,85 +24,82 @@ export interface IInflightConstruct extends IConstruct {
   _toInflight(): string;
 }
 
-// interface IInflightConstruct extends IConstruct {
-//   bind: ((host: IInflightHost, ops: string[]) => void) | undefined;
-//   _registerBind: ((host: IInflightHost, ops: string[]) => void) | undefined;
-//   _getInflightOps: (() => string[]) | undefined;
-//   _toInflight(): (() => string) | undefined;
-// }
+/**
+ * This interface contains documentation for methods that the Wing compiler generates but may
+ * not be needed by all constructs.
+ */
+// @ts-ignore allow unused declaration
+interface IExtraInflightOperations {
+  /**
+   * Binds the resource to the host so that it can be used by inflight code.
+   *
+   * If a construct implements this method, it will not be called no more than
+   * once with a given `host`.
+   *
+   * If a construct doesn't implement this method, it just means that none of its
+   * inflight operations add any requirements on the host (like IAM permissions or
+   * environment variables).
+   *
+   * This method shouldn't call `bind` on any other constructs besides its parent `super`.
+   */
+  bind(host: IInflightHost, ops: string[]): void;
 
-// /**
-//  * Abstract interface for `Resource`.
-//  * @skipDocs
-//  */
-// export interface IInflightConstruct extends IConstruct {
-//   /**
-//    * Binds the resource to the host so that it can be used by inflight code.
-//    *
-//    * If `ops` contains any operations not supported by the resource, it should throw an
-//    * error.
-//    */
-//   bind(host: IInflightHost, ops: string[]): void;
+  /**
+   * Return a list of supported inflight operations supported by the resource.
+   *
+   * If a construct doesn't implement this method, it's assumed that the construct
+   * doesn't support any inflight operations.
+   */
+  _getInflightOps(): string[];
 
-//   /**
-//    * Register that the resource needs to be bound to the host for the given
-//    * operations. This means that the resource's `bind` method will be called
-//    * during pre-synthesis.
-//    *
-//    * @internal
-//    */
-//   _registerBind(host: IInflightHost, ops: string[]): void;
+  /**
+   * Register any relationships between
+   * the class and any transitively referenced classes. For example, if calling
+   * the inflight method "foo" on a class requires calling the inflight methods
+   * "bar" and "baz" on another class, then the compiler might generate:
+   *
+   * ```
+   * _registerBind(host, ops) {
+   *   if (ops.includes("foo")) {
+   *     this._bar._registerBind(host, ["bar", "baz"]);
+   *   }
+   * }
+   * ```
+   *
+   * The method's implementation shouldn't contain any actual binding logic
+   * (like adding IAM permissions or environment variables to the host).
+   *
+   * If the method isn't implemented, it can be assumed that the class doesn't
+   * reference any other classes.
+   */
+  _registerBind(host: IInflightHost, ops: string[]): void;
 
-//   /**
-//    * Return a code snippet that can be used to reference this resource inflight.
-//    *
-//    * Note this code snippet may by async code, so it's unsafe to run it in a
-//    * constructor or other sync context.
-//    *
-//    * @internal
-//    */
-//   _toInflight(): string;
-
-//   /**
-//    * Return a list of all inflight operations that are supported by this resource.
-//    *
-//    * If this method doesn't exist, the resource is assumed to not support any inflight operations.
-//    *
-//    * @internal
-//    */
-//   _getInflightOps(): string[];
-// }
+  /**
+   * (static method) Register that the resource type needs to be bound to the host for the given
+   * operations. A type being bound to a host means that that type's static members
+   * will be bound to the host.
+   */
+  _registerTypeBind(host: IInflightHost, ops: string[]): void;
+}
 
 /**
  * Shared behavior between all Wing SDK resources.
  * @skipDocs
  */
 export class Resource {
-  // /**
-  //  * Register that the resource type needs to be bound to the host for the given
-  //  * operations. A type being bound to a host means that that type's static members
-  //  * will be bound to the host.
-  //  *
-  //  * @internal
-  //  */
-  // public static _registerTypeBind(host: IInflightHost, ops: string[]): void {
-  //   // Do nothing by default
-  //   host;
-  //   ops;
-  // }
-
   /**
    * Register a binding between an object (either data or class or instance) and a host.
+   * All of the registered bindings will be aggregated, so that when synthesis is
+   * performed, all of the necessary `bind()` calls will be invoked.
    *
-   * - Primitives and Duration objects are ignored.
+   * - Primitives, Duration, and Datetime objects are ignored.
    * - Arrays, sets and maps and structs (Objects) are recursively bound.
    * - Class instances are bound to the host by calling their bind() method.
-   * - (TODO) Classes are bound to their host by calling their bindType() method.
+   * - (TODO) Classes and their static methods are bound to their host by calling their bindType() method.
    *
    * @param obj The object to bind.
    * @param host The host to bind to
-   * @param ops The set of operations that may access the object (use "?" to indicate that we don't
-   * know the operation)
+   * @param ops The set of operations that may access the object
    *
    * @internal
    */
@@ -132,6 +130,10 @@ export class Resource {
           return;
         }
 
+        if (obj instanceof Datetime) {
+          return;
+        }
+
         if (obj instanceof Set) {
           return Array.from(obj).forEach((item) =>
             Resource._registerBindObject(item, host)
@@ -149,9 +151,8 @@ export class Resource {
         if (Construct.isConstruct(obj)) {
           // Explicitly register the resource's `$inflight_init` op, which is a special op that can be used to makes sure
           // the host can instantiate a client for this resource.
-          let opsWithInit = [...ops, "$inflight_init"];
+          let extendedOps = [...ops, "$inflight_init"];
 
-          // Register the binding between this resource and the host
           const bindings = Bindings.of(obj);
 
           // For each operation, check if the host supports it. If it does, register the binding.
@@ -160,7 +161,7 @@ export class Resource {
             "$inflight_init",
           ];
 
-          for (const op of opsWithInit) {
+          for (const op of extendedOps) {
             if (!supportedOps.includes(op)) {
               throw new Error(
                 `Resource ${obj.node.path} does not support inflight operation ${op} (requested by ${host.node.path})`
@@ -212,29 +213,4 @@ export class Resource {
       `unable to serialize immutable data object of type ${obj.constructor?.name}`
     );
   }
-
-  // /**
-  //  * Binds the resource to the host so that it can be used by inflight code.
-  //  *
-  //  * You can override this method to perform additional logic like granting
-  //  * IAM permissions to the host based on what methods are being called. But
-  //  * you must call `super.bind(host, ops)` to ensure that the resource is
-  //  * actually bound.
-  //  */
-  // public bind(host: IInflightHost, ops: string[]): void {
-  //   // Do nothing by default
-  //   host;
-  //   ops;
-  // }
-
-  // /**
-  //  * Register that the resource needs to be bound to the host for the given
-  //  * operations. This means that the resource's `bind` method will be called
-  //  * during pre-synthesis.
-  //  *
-  //  * @internal
-  //  */
-  // public _registerBind(_host: IInflightHost, _ops: string[]) {
-  //   return;
-  // }
 }

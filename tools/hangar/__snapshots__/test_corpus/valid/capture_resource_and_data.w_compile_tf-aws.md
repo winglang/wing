@@ -201,14 +201,15 @@ module.exports = function({ $data_size, $queue, $res }) {
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
+const $constructs = require('constructs');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const cloud = $stdlib.cloud;
-class $Root extends $stdlib.std.Resource {
+class $Root extends $constructs.Construct {
   constructor(scope, id) {
     super(scope, id);
-    class $Closure1 extends $stdlib.std.Resource {
+    class $Closure1 extends $constructs.Construct {
       constructor(scope, id, ) {
         super(scope, id);
         (std.Display.of(this)).hidden = true;
@@ -216,9 +217,9 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         return `
           require("./inflight.$Closure1-1.js")({
-            $data_size: ${context._lift(data.size)},
-            $queue: ${context._lift(queue)},
-            $res: ${context._lift(res)},
+            $data_size: ${$stdlib.core.Lifting.lift(context, data.size)},
+            $queue: ${$stdlib.core.Lifting.lift(context, queue)},
+            $res: ${$stdlib.core.Lifting.lift(context, res)},
           })
         `;
       }
@@ -238,11 +239,12 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(data.size, host, []);
-          $Closure1._registerBindObject(queue, host, ["push"]);
-          $Closure1._registerBindObject(res, host, ["get", "put"]);
+          $stdlib.std.Resource._registerBindObject(data.size, host, []);
+          $stdlib.std.Resource._registerBindObject(queue, host, ["push"]);
+          $stdlib.std.Resource._registerBindObject(res, host, ["get", "put"]);
         }
-        super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
       }
     }
     const data = new Set([1, 2, 3]);

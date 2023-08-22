@@ -412,14 +412,15 @@ module.exports = function({  }) {
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
+const $constructs = require('constructs');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const cloud = $stdlib.cloud;
-class $Root extends $stdlib.std.Resource {
+class $Root extends $constructs.Construct {
   constructor(scope, id) {
     super(scope, id);
-    class $Closure1 extends $stdlib.std.Resource {
+    class $Closure1 extends $constructs.Construct {
       constructor(scope, id, ) {
         super(scope, id);
         (std.Display.of(this)).hidden = true;
@@ -427,7 +428,7 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         return `
           require("./inflight.$Closure1-1.js")({
-            $globalBucket: ${context._lift(globalBucket)},
+            $globalBucket: ${$stdlib.core.Lifting.lift(context, globalBucket)},
           })
         `;
       }
@@ -447,12 +448,13 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(globalBucket, host, ["put"]);
+          $stdlib.std.Resource._registerBindObject(globalBucket, host, ["put"]);
         }
-        super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
       }
     }
-    class $Closure2 extends $stdlib.std.Resource {
+    class $Closure2 extends $constructs.Construct {
       constructor(scope, id, ) {
         super(scope, id);
         (std.Display.of(this)).hidden = true;
@@ -460,7 +462,7 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         return `
           require("./inflight.$Closure2-1.js")({
-            $storeInBucket: ${context._lift(storeInBucket)},
+            $storeInBucket: ${$stdlib.core.Lifting.lift(context, storeInBucket)},
           })
         `;
       }
@@ -480,12 +482,13 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure2._registerBindObject(storeInBucket, host, ["handle"]);
+          $stdlib.std.Resource._registerBindObject(storeInBucket, host, ["handle"]);
         }
-        super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
       }
     }
-    class $Closure3 extends $stdlib.std.Resource {
+    class $Closure3 extends $constructs.Construct {
       constructor(scope, id, ) {
         super(scope, id);
         (std.Display.of(this)).hidden = true;
@@ -493,8 +496,8 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         return `
           require("./inflight.$Closure3-1.js")({
-            $func1: ${context._lift(func1)},
-            $globalBucket: ${context._lift(globalBucket)},
+            $func1: ${$stdlib.core.Lifting.lift(context, func1)},
+            $globalBucket: ${$stdlib.core.Lifting.lift(context, globalBucket)},
           })
         `;
       }
@@ -514,17 +517,18 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure3._registerBindObject(func1, host, ["invoke"]);
-          $Closure3._registerBindObject(globalBucket, host, ["get"]);
+          $stdlib.std.Resource._registerBindObject(func1, host, ["invoke"]);
+          $stdlib.std.Resource._registerBindObject(globalBucket, host, ["get"]);
         }
-        super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
       }
     }
-    class MyResource extends $stdlib.std.Resource {
+    class MyResource extends $constructs.Construct {
       constructor(scope, id, ) {
         super(scope, id);
         const __parent_this_4 = this;
-        class $Closure4 extends $stdlib.std.Resource {
+        class $Closure4 extends $constructs.Construct {
           constructor(scope, id, ) {
             super(scope, id);
             (std.Display.of(this)).hidden = true;
@@ -532,7 +536,7 @@ class $Root extends $stdlib.std.Resource {
           static _toInflightType(context) {
             return `
               require("./inflight.$Closure4-1.js")({
-                $globalBucket: ${context._lift(globalBucket)},
+                $globalBucket: ${$stdlib.core.Lifting.lift(context, globalBucket)},
               })
             `;
           }
@@ -552,9 +556,10 @@ class $Root extends $stdlib.std.Resource {
           }
           _registerBind(host, ops) {
             if (ops.includes("handle")) {
-              $Closure4._registerBindObject(globalBucket, host, ["list"]);
+              $stdlib.std.Resource._registerBindObject(globalBucket, host, ["list"]);
             }
-            super._registerBind(host, ops);
+          }
+          static _registerTypeBind(host, ops) {
           }
         }
         this.closure = new $Closure4(this,"$Closure4");
@@ -570,7 +575,7 @@ class $Root extends $stdlib.std.Resource {
           (await (async () => {
             const MyResourceClient = ${MyResource._toInflightType(this)};
             const client = new MyResourceClient({
-              $this_closure: ${this._lift(this.closure)},
+              $this_closure: ${$stdlib.core.Lifting.lift(this, this.closure)},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -582,15 +587,16 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          MyResource._registerBindObject(this.closure, host, []);
+          $stdlib.std.Resource._registerBindObject(this.closure, host, []);
         }
         if (ops.includes("foo")) {
-          MyResource._registerBindObject(this.closure, host, ["handle"]);
+          $stdlib.std.Resource._registerBindObject(this.closure, host, ["handle"]);
         }
-        super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
       }
     }
-    class $Closure5 extends $stdlib.std.Resource {
+    class $Closure5 extends $constructs.Construct {
       constructor(scope, id, ) {
         super(scope, id);
         (std.Display.of(this)).hidden = true;
@@ -598,7 +604,7 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         return `
           require("./inflight.$Closure5-1.js")({
-            $x: ${context._lift(x)},
+            $x: ${$stdlib.core.Lifting.lift(context, x)},
           })
         `;
       }
@@ -618,9 +624,10 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure5._registerBindObject(x, host, ["foo"]);
+          $stdlib.std.Resource._registerBindObject(x, host, ["foo"]);
         }
-        super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
       }
     }
     const globalBucket = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");

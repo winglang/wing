@@ -318,14 +318,15 @@ module.exports = function({ $math_Util, $mean_arr }) {
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
+const $constructs = require('constructs');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const math = $stdlib.math;
-class $Root extends $stdlib.std.Resource {
+class $Root extends $constructs.Construct {
   constructor(scope, id) {
     super(scope, id);
-    class $Closure1 extends $stdlib.std.Resource {
+    class $Closure1 extends $constructs.Construct {
       constructor(scope, id, ) {
         super(scope, id);
         (std.Display.of(this)).hidden = true;
@@ -333,9 +334,9 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         return `
           require("./inflight.$Closure1-1.js")({
-            $even_arr: ${context._lift(even_arr)},
-            $math_Util: ${context._lift(math.Util)},
-            $odd_arr: ${context._lift(odd_arr)},
+            $even_arr: ${$stdlib.core.Lifting.lift(context, even_arr)},
+            $math_Util: ${$stdlib.core.Lifting.lift(context, math.Util)},
+            $odd_arr: ${$stdlib.core.Lifting.lift(context, odd_arr)},
           })
         `;
       }
@@ -355,13 +356,14 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(even_arr, host, []);
-          $Closure1._registerBindObject(odd_arr, host, []);
+          $stdlib.std.Resource._registerBindObject(even_arr, host, []);
+          $stdlib.std.Resource._registerBindObject(odd_arr, host, []);
         }
-        super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
       }
     }
-    class $Closure2 extends $stdlib.std.Resource {
+    class $Closure2 extends $constructs.Construct {
       constructor(scope, id, ) {
         super(scope, id);
         (std.Display.of(this)).hidden = true;
@@ -369,13 +371,13 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         return `
           require("./inflight.$Closure2-1.js")({
-            $_bimodal_at_0__: ${context._lift((bimodal.at(0)))},
-            $_bimodal_at_1__: ${context._lift((bimodal.at(1)))},
-            $_multimodal_at_0__: ${context._lift((multimodal.at(0)))},
-            $_multimodal_at_1__: ${context._lift((multimodal.at(1)))},
-            $_multimodal_at_2__: ${context._lift((multimodal.at(2)))},
-            $math_Util: ${context._lift(math.Util)},
-            $modal_arr: ${context._lift(modal_arr)},
+            $_bimodal_at_0__: ${$stdlib.core.Lifting.lift(context, (bimodal.at(0)))},
+            $_bimodal_at_1__: ${$stdlib.core.Lifting.lift(context, (bimodal.at(1)))},
+            $_multimodal_at_0__: ${$stdlib.core.Lifting.lift(context, (multimodal.at(0)))},
+            $_multimodal_at_1__: ${$stdlib.core.Lifting.lift(context, (multimodal.at(1)))},
+            $_multimodal_at_2__: ${$stdlib.core.Lifting.lift(context, (multimodal.at(2)))},
+            $math_Util: ${$stdlib.core.Lifting.lift(context, math.Util)},
+            $modal_arr: ${$stdlib.core.Lifting.lift(context, modal_arr)},
           })
         `;
       }
@@ -395,17 +397,18 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure2._registerBindObject((bimodal.at(0)), host, []);
-          $Closure2._registerBindObject((bimodal.at(1)), host, []);
-          $Closure2._registerBindObject((multimodal.at(0)), host, []);
-          $Closure2._registerBindObject((multimodal.at(1)), host, []);
-          $Closure2._registerBindObject((multimodal.at(2)), host, []);
-          $Closure2._registerBindObject(modal_arr, host, ["at"]);
+          $stdlib.std.Resource._registerBindObject((bimodal.at(0)), host, []);
+          $stdlib.std.Resource._registerBindObject((bimodal.at(1)), host, []);
+          $stdlib.std.Resource._registerBindObject((multimodal.at(0)), host, []);
+          $stdlib.std.Resource._registerBindObject((multimodal.at(1)), host, []);
+          $stdlib.std.Resource._registerBindObject((multimodal.at(2)), host, []);
+          $stdlib.std.Resource._registerBindObject(modal_arr, host, ["at"]);
         }
-        super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
       }
     }
-    class $Closure3 extends $stdlib.std.Resource {
+    class $Closure3 extends $constructs.Construct {
       constructor(scope, id, ) {
         super(scope, id);
         (std.Display.of(this)).hidden = true;
@@ -413,8 +416,8 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         return `
           require("./inflight.$Closure3-1.js")({
-            $math_Util: ${context._lift(math.Util)},
-            $mean_arr: ${context._lift(mean_arr)},
+            $math_Util: ${$stdlib.core.Lifting.lift(context, math.Util)},
+            $mean_arr: ${$stdlib.core.Lifting.lift(context, mean_arr)},
           })
         `;
       }
@@ -434,9 +437,10 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure3._registerBindObject(mean_arr, host, []);
+          $stdlib.std.Resource._registerBindObject(mean_arr, host, []);
         }
-        super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
       }
     }
     const odd_arr = [1, 3, 3, 6, 7, 8, 9];

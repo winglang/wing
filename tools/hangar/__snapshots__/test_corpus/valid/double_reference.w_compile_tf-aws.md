@@ -197,21 +197,22 @@ module.exports = function({ $initCount }) {
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
+const $constructs = require('constructs');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const cloud = $stdlib.cloud;
-class $Root extends $stdlib.std.Resource {
+class $Root extends $constructs.Construct {
   constructor(scope, id) {
     super(scope, id);
-    class Foo extends $stdlib.std.Resource {
+    class Foo extends $constructs.Construct {
       constructor(scope, id, ) {
         super(scope, id);
       }
       static _toInflightType(context) {
         return `
           require("./inflight.Foo-1.js")({
-            $initCount: ${context._lift(initCount)},
+            $initCount: ${$stdlib.core.Lifting.lift(context, initCount)},
           })
         `;
       }
@@ -231,12 +232,13 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          Foo._registerBindObject(initCount, host, ["inc"]);
+          $stdlib.std.Resource._registerBindObject(initCount, host, ["inc"]);
         }
-        super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
       }
     }
-    class Bar extends $stdlib.std.Resource {
+    class Bar extends $constructs.Construct {
       constructor(scope, id, ) {
         super(scope, id);
         this.foo = new Foo(this,"Foo");
@@ -252,7 +254,7 @@ class $Root extends $stdlib.std.Resource {
           (await (async () => {
             const BarClient = ${Bar._toInflightType(this)};
             const client = new BarClient({
-              $this_foo: ${this._lift(this.foo)},
+              $this_foo: ${$stdlib.core.Lifting.lift(this, this.foo)},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -264,15 +266,16 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          Bar._registerBindObject(this.foo, host, []);
+          $stdlib.std.Resource._registerBindObject(this.foo, host, []);
         }
         if (ops.includes("callFoo")) {
-          Bar._registerBindObject(this.foo, host, ["method"]);
+          $stdlib.std.Resource._registerBindObject(this.foo, host, ["method"]);
         }
-        super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
       }
     }
-    class $Closure1 extends $stdlib.std.Resource {
+    class $Closure1 extends $constructs.Construct {
       constructor(scope, id, ) {
         super(scope, id);
         (std.Display.of(this)).hidden = true;
@@ -280,9 +283,9 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         return `
           require("./inflight.$Closure1-1.js")({
-            $bar: ${context._lift(bar)},
-            $bar_foo: ${context._lift(bar.foo)},
-            $initCount: ${context._lift(initCount)},
+            $bar: ${$stdlib.core.Lifting.lift(context, bar)},
+            $bar_foo: ${$stdlib.core.Lifting.lift(context, bar.foo)},
+            $initCount: ${$stdlib.core.Lifting.lift(context, initCount)},
           })
         `;
       }
@@ -302,11 +305,12 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(bar, host, ["callFoo"]);
-          $Closure1._registerBindObject(bar.foo, host, ["method"]);
-          $Closure1._registerBindObject(initCount, host, ["peek"]);
+          $stdlib.std.Resource._registerBindObject(bar, host, ["callFoo"]);
+          $stdlib.std.Resource._registerBindObject(bar.foo, host, ["method"]);
+          $stdlib.std.Resource._registerBindObject(initCount, host, ["peek"]);
         }
-        super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
       }
     }
     const initCount = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"cloud.Counter");

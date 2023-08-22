@@ -47,8 +47,7 @@ export function liftObject(scope: IConstruct, obj: any): string {
         return `new Map(${liftObject(scope, Array.from(obj))})`;
       }
 
-      // if the object is a resource (i.e. has a "_toInflight" method"), we use it to serialize
-      // itself.
+      // if the object has a "_toInflight" method", we use it to serialize itself.
       if (typeof (obj as IInflightConstruct)._toInflight === "function") {
         return (obj as IInflightConstruct)._toInflight();
       }

@@ -161,13 +161,14 @@ module.exports = function({ $std_Duration }) {
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
+const $constructs = require('constructs');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
-class $Root extends $stdlib.std.Resource {
+class $Root extends $constructs.Construct {
   constructor(scope, id) {
     super(scope, id);
-    class $Closure1 extends $stdlib.std.Resource {
+    class $Closure1 extends $constructs.Construct {
       constructor(scope, id, ) {
         super(scope, id);
         (std.Display.of(this)).hidden = true;
@@ -175,7 +176,7 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         return `
           require("./inflight.$Closure1-1.js")({
-            $std_Duration: ${context._lift(std.Duration)},
+            $std_Duration: ${$stdlib.core.Lifting.lift(context, std.Duration)},
           })
         `;
       }
@@ -192,6 +193,10 @@ class $Root extends $stdlib.std.Resource {
       }
       _getInflightOps() {
         return ["handle", "$inflight_init"];
+      }
+      _registerBind(host, ops) {
+      }
+      static _registerTypeBind(host, ops) {
       }
     }
     {((cond) => {if (!cond) throw new Error("assertion failed: 12ms.seconds == 12 / 1000")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((std.Duration.fromSeconds(0.012)).seconds,(12 / 1000))))};

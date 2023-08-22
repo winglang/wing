@@ -20,8 +20,8 @@ exports[`tree.json for an app with many resources 1`] = `
                 "children": {
                   "$Closure1": {
                     "constructInfo": {
-                      "fqn": "@winglang/sdk.std.Resource",
-                      "version": "0.0.0",
+                      "fqn": "constructs.Construct",
+                      "version": "10.2.51",
                     },
                     "display": {
                       "hidden": true,
@@ -31,8 +31,8 @@ exports[`tree.json for an app with many resources 1`] = `
                   },
                   "$Closure5": {
                     "constructInfo": {
-                      "fqn": "@winglang/sdk.std.Resource",
-                      "version": "0.0.0",
+                      "fqn": "constructs.Construct",
+                      "version": "10.2.51",
                     },
                     "display": {
                       "hidden": true,
@@ -68,16 +68,16 @@ exports[`tree.json for an app with many resources 1`] = `
                           },
                         },
                         "constructInfo": {
-                          "fqn": "@winglang/sdk.std.Resource",
-                          "version": "0.0.0",
+                          "fqn": "constructs.Construct",
+                          "version": "10.2.51",
                         },
                         "id": "Foo",
                         "path": "root/Default/Default/Bar/Foo",
                       },
                     },
                     "constructInfo": {
-                      "fqn": "@winglang/sdk.std.Resource",
-                      "version": "0.0.0",
+                      "fqn": "constructs.Construct",
+                      "version": "10.2.51",
                     },
                     "id": "Bar",
                     "path": "root/Default/Default/Bar",
@@ -86,8 +86,8 @@ exports[`tree.json for an app with many resources 1`] = `
                     "children": {
                       "$Closure2": {
                         "constructInfo": {
-                          "fqn": "@winglang/sdk.std.Resource",
-                          "version": "0.0.0",
+                          "fqn": "constructs.Construct",
+                          "version": "10.2.51",
                         },
                         "display": {
                           "hidden": true,
@@ -97,8 +97,8 @@ exports[`tree.json for an app with many resources 1`] = `
                       },
                       "$Closure3": {
                         "constructInfo": {
-                          "fqn": "@winglang/sdk.std.Resource",
-                          "version": "0.0.0",
+                          "fqn": "constructs.Construct",
+                          "version": "10.2.51",
                         },
                         "display": {
                           "hidden": true,
@@ -108,8 +108,8 @@ exports[`tree.json for an app with many resources 1`] = `
                       },
                       "$Closure4": {
                         "constructInfo": {
-                          "fqn": "@winglang/sdk.std.Resource",
-                          "version": "0.0.0",
+                          "fqn": "constructs.Construct",
+                          "version": "10.2.51",
                         },
                         "display": {
                           "hidden": true,
@@ -261,8 +261,8 @@ exports[`tree.json for an app with many resources 1`] = `
                           },
                           "b2-oncreate-OnMessageHandler-59543b60": {
                             "constructInfo": {
-                              "fqn": "@winglang/sdk.std.Resource",
-                              "version": "0.0.0",
+                              "fqn": "constructs.Construct",
+                              "version": "10.1.314",
                             },
                             "display": {
                               "hidden": true,
@@ -272,8 +272,8 @@ exports[`tree.json for an app with many resources 1`] = `
                           },
                           "b2-oncreate-eventHandler-fe70cb1e": {
                             "constructInfo": {
-                              "fqn": "@winglang/sdk.std.Resource",
-                              "version": "0.0.0",
+                              "fqn": "constructs.Construct",
+                              "version": "10.1.314",
                             },
                             "display": {
                               "hidden": true,
@@ -425,8 +425,8 @@ exports[`tree.json for an app with many resources 1`] = `
                       },
                       "cloud.Queue-SetConsumerHandler-c50bc9ef": {
                         "constructInfo": {
-                          "fqn": "@winglang/sdk.std.Resource",
-                          "version": "0.0.0",
+                          "fqn": "constructs.Construct",
+                          "version": "10.1.314",
                         },
                         "display": {
                           "hidden": true,
@@ -536,8 +536,8 @@ exports[`tree.json for an app with many resources 1`] = `
                       },
                       "cloud.Topic-OnMessageHandler-113c9059": {
                         "constructInfo": {
-                          "fqn": "@winglang/sdk.std.Resource",
-                          "version": "0.0.0",
+                          "fqn": "constructs.Construct",
+                          "version": "10.1.314",
                         },
                         "display": {
                           "hidden": true,
@@ -547,8 +547,8 @@ exports[`tree.json for an app with many resources 1`] = `
                       },
                     },
                     "constructInfo": {
-                      "fqn": "@winglang/sdk.std.Resource",
-                      "version": "0.0.0",
+                      "fqn": "constructs.Construct",
+                      "version": "10.2.51",
                     },
                     "id": "BigPublisher",
                     "path": "root/Default/Default/BigPublisher",
@@ -559,48 +559,48 @@ exports[`tree.json for an app with many resources 1`] = `
                         "children": {
                           "Dummy": {
                             "constructInfo": {
-                              "fqn": "@winglang/sdk.std.Resource",
-                              "version": "0.0.0",
+                              "fqn": "constructs.Construct",
+                              "version": "10.2.51",
                             },
                             "id": "Dummy",
                             "path": "root/Default/Default/ScopeAndIdTestClass/Dummy/Dummy",
                           },
                         },
                         "constructInfo": {
-                          "fqn": "@winglang/sdk.std.Resource",
-                          "version": "0.0.0",
+                          "fqn": "constructs.Construct",
+                          "version": "10.2.51",
                         },
                         "id": "Dummy",
                         "path": "root/Default/Default/ScopeAndIdTestClass/Dummy",
                       },
                       "tc0": {
                         "constructInfo": {
-                          "fqn": "@winglang/sdk.std.Resource",
-                          "version": "0.0.0",
+                          "fqn": "constructs.Construct",
+                          "version": "10.2.51",
                         },
                         "id": "tc0",
                         "path": "root/Default/Default/ScopeAndIdTestClass/tc0",
                       },
                       "tc1": {
                         "constructInfo": {
-                          "fqn": "@winglang/sdk.std.Resource",
-                          "version": "0.0.0",
+                          "fqn": "constructs.Construct",
+                          "version": "10.2.51",
                         },
                         "id": "tc1",
                         "path": "root/Default/Default/ScopeAndIdTestClass/tc1",
                       },
                       "tc2": {
                         "constructInfo": {
-                          "fqn": "@winglang/sdk.std.Resource",
-                          "version": "0.0.0",
+                          "fqn": "constructs.Construct",
+                          "version": "10.2.51",
                         },
                         "id": "tc2",
                         "path": "root/Default/Default/ScopeAndIdTestClass/tc2",
                       },
                     },
                     "constructInfo": {
-                      "fqn": "@winglang/sdk.std.Resource",
-                      "version": "0.0.0",
+                      "fqn": "constructs.Construct",
+                      "version": "10.2.51",
                     },
                     "id": "ScopeAndIdTestClass",
                     "path": "root/Default/Default/ScopeAndIdTestClass",
@@ -797,8 +797,8 @@ exports[`tree.json for an app with many resources 1`] = `
                   },
                 },
                 "constructInfo": {
-                  "fqn": "@winglang/sdk.std.Resource",
-                  "version": "0.0.0",
+                  "fqn": "constructs.Construct",
+                  "version": "10.2.51",
                 },
                 "id": "Default",
                 "path": "root/Default/Default",

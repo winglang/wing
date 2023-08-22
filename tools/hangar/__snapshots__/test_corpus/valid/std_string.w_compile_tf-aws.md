@@ -144,13 +144,14 @@ module.exports = function({ $__s1_split_______at_1__, $_s1_concat_s2__, $s1_inde
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
+const $constructs = require('constructs');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
-class $Root extends $stdlib.std.Resource {
+class $Root extends $constructs.Construct {
   constructor(scope, id) {
     super(scope, id);
-    class $Closure1 extends $stdlib.std.Resource {
+    class $Closure1 extends $constructs.Construct {
       constructor(scope, id, ) {
         super(scope, id);
         (std.Display.of(this)).hidden = true;
@@ -158,9 +159,9 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         return `
           require("./inflight.$Closure1-1.js")({
-            $__s1_split_______at_1__: ${context._lift(((s1.split(" ")).at(1)))},
-            $_s1_concat_s2__: ${context._lift((s1.concat(s2)))},
-            $s1_indexOf__s__: ${context._lift(s1.indexOf("s"))},
+            $__s1_split_______at_1__: ${$stdlib.core.Lifting.lift(context, ((s1.split(" ")).at(1)))},
+            $_s1_concat_s2__: ${$stdlib.core.Lifting.lift(context, (s1.concat(s2)))},
+            $s1_indexOf__s__: ${$stdlib.core.Lifting.lift(context, s1.indexOf("s"))},
           })
         `;
       }
@@ -180,11 +181,12 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(((s1.split(" ")).at(1)), host, []);
-          $Closure1._registerBindObject((s1.concat(s2)), host, []);
-          $Closure1._registerBindObject(s1.indexOf("s"), host, []);
+          $stdlib.std.Resource._registerBindObject(((s1.split(" ")).at(1)), host, []);
+          $stdlib.std.Resource._registerBindObject((s1.concat(s2)), host, []);
+          $stdlib.std.Resource._registerBindObject(s1.indexOf("s"), host, []);
         }
-        super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
       }
     }
     const s1 = "some string";

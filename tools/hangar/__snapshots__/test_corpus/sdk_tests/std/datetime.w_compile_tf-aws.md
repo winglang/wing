@@ -163,16 +163,17 @@ module.exports = function({ $_d4_toUtc____hours, $d4_hours, $d4_timezone, $math_
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
+const $constructs = require('constructs');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const cloud = $stdlib.cloud;
 const util = $stdlib.util;
 const math = $stdlib.math;
-class $Root extends $stdlib.std.Resource {
+class $Root extends $constructs.Construct {
   constructor(scope, id) {
     super(scope, id);
-    class $Closure1 extends $stdlib.std.Resource {
+    class $Closure1 extends $constructs.Construct {
       constructor(scope, id, ) {
         super(scope, id);
         (std.Display.of(this)).hidden = true;
@@ -180,13 +181,13 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         return `
           require("./inflight.$Closure1-1.js")({
-            $_d4_toUtc____hours: ${context._lift((d4.toUtc()).hours)},
-            $d4_hours: ${context._lift(d4.hours)},
-            $d4_timezone: ${context._lift(d4.timezone)},
-            $math_Util: ${context._lift(math.Util)},
-            $std_Datetime: ${context._lift(std.Datetime)},
-            $std_Duration: ${context._lift(std.Duration)},
-            $util_Util: ${context._lift(util.Util)},
+            $_d4_toUtc____hours: ${$stdlib.core.Lifting.lift(context, (d4.toUtc()).hours)},
+            $d4_hours: ${$stdlib.core.Lifting.lift(context, d4.hours)},
+            $d4_timezone: ${$stdlib.core.Lifting.lift(context, d4.timezone)},
+            $math_Util: ${$stdlib.core.Lifting.lift(context, math.Util)},
+            $std_Datetime: ${$stdlib.core.Lifting.lift(context, std.Datetime)},
+            $std_Duration: ${$stdlib.core.Lifting.lift(context, std.Duration)},
+            $util_Util: ${$stdlib.core.Lifting.lift(context, util.Util)},
           })
         `;
       }
@@ -206,11 +207,12 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject((d4.toUtc()).hours, host, []);
-          $Closure1._registerBindObject(d4.hours, host, []);
-          $Closure1._registerBindObject(d4.timezone, host, []);
+          $stdlib.std.Resource._registerBindObject((d4.toUtc()).hours, host, []);
+          $stdlib.std.Resource._registerBindObject(d4.hours, host, []);
+          $stdlib.std.Resource._registerBindObject(d4.timezone, host, []);
         }
-        super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
       }
     }
     const d1 = (std.Datetime.systemNow());

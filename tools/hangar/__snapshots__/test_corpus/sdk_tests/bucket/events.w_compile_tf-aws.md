@@ -29,7 +29,7 @@ module.exports = function(stdStruct) {
       return stdStruct._validate(obj, this.jsonSchema())
     }
     static _toInflightType(context) {
-      return `require("./CheckHitCountOptions.Struct.js")(${ context._lift(stdStruct) })`;
+      return `require("./CheckHitCountOptions.Struct.js")(${ $stdlib.core.Lifting.lift(context, stdStruct) })`;
     }
   }
   return CheckHitCountOptions;
@@ -1083,16 +1083,17 @@ module.exports = function({ $Source, $b, $checkHitCount, $util_Util, $wait }) {
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
+const $constructs = require('constructs');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const cloud = $stdlib.cloud;
 const ex = $stdlib.ex;
 const util = $stdlib.util;
-class $Root extends $stdlib.std.Resource {
+class $Root extends $constructs.Construct {
   constructor(scope, id) {
     super(scope, id);
-    class $Closure1 extends $stdlib.std.Resource {
+    class $Closure1 extends $constructs.Construct {
       constructor(scope, id, ) {
         super(scope, id);
         (std.Display.of(this)).hidden = true;
@@ -1100,8 +1101,8 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         return `
           require("./inflight.$Closure1-1.js")({
-            $idsCounter: ${context._lift(idsCounter)},
-            $table: ${context._lift(table)},
+            $idsCounter: ${$stdlib.core.Lifting.lift(context, idsCounter)},
+            $table: ${$stdlib.core.Lifting.lift(context, table)},
           })
         `;
       }
@@ -1121,13 +1122,14 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(idsCounter, host, ["inc"]);
-          $Closure1._registerBindObject(table, host, ["insert"]);
+          $stdlib.std.Resource._registerBindObject(idsCounter, host, ["inc"]);
+          $stdlib.std.Resource._registerBindObject(table, host, ["insert"]);
         }
-        super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
       }
     }
-    class $Closure2 extends $stdlib.std.Resource {
+    class $Closure2 extends $constructs.Construct {
       constructor(scope, id, ) {
         super(scope, id);
         (std.Display.of(this)).hidden = true;
@@ -1135,8 +1137,8 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         return `
           require("./inflight.$Closure2-1.js")({
-            $Source: ${context._lift(Source)},
-            $logHistory: ${context._lift(logHistory)},
+            $Source: ${$stdlib.core.Lifting.lift(context, Source)},
+            $logHistory: ${$stdlib.core.Lifting.lift(context, logHistory)},
           })
         `;
       }
@@ -1156,12 +1158,13 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure2._registerBindObject(logHistory, host, ["handle"]);
+          $stdlib.std.Resource._registerBindObject(logHistory, host, ["handle"]);
         }
-        super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
       }
     }
-    class $Closure3 extends $stdlib.std.Resource {
+    class $Closure3 extends $constructs.Construct {
       constructor(scope, id, ) {
         super(scope, id);
         (std.Display.of(this)).hidden = true;
@@ -1169,8 +1172,8 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         return `
           require("./inflight.$Closure3-1.js")({
-            $Source: ${context._lift(Source)},
-            $logHistory: ${context._lift(logHistory)},
+            $Source: ${$stdlib.core.Lifting.lift(context, Source)},
+            $logHistory: ${$stdlib.core.Lifting.lift(context, logHistory)},
           })
         `;
       }
@@ -1190,12 +1193,13 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure3._registerBindObject(logHistory, host, ["handle"]);
+          $stdlib.std.Resource._registerBindObject(logHistory, host, ["handle"]);
         }
-        super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
       }
     }
-    class $Closure4 extends $stdlib.std.Resource {
+    class $Closure4 extends $constructs.Construct {
       constructor(scope, id, ) {
         super(scope, id);
         (std.Display.of(this)).hidden = true;
@@ -1203,8 +1207,8 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         return `
           require("./inflight.$Closure4-1.js")({
-            $Source: ${context._lift(Source)},
-            $logHistory: ${context._lift(logHistory)},
+            $Source: ${$stdlib.core.Lifting.lift(context, Source)},
+            $logHistory: ${$stdlib.core.Lifting.lift(context, logHistory)},
           })
         `;
       }
@@ -1224,12 +1228,13 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure4._registerBindObject(logHistory, host, ["handle"]);
+          $stdlib.std.Resource._registerBindObject(logHistory, host, ["handle"]);
         }
-        super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
       }
     }
-    class $Closure5 extends $stdlib.std.Resource {
+    class $Closure5 extends $constructs.Construct {
       constructor(scope, id, ) {
         super(scope, id);
         (std.Display.of(this)).hidden = true;
@@ -1237,8 +1242,8 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         return `
           require("./inflight.$Closure5-1.js")({
-            $Source: ${context._lift(Source)},
-            $logHistory: ${context._lift(logHistory)},
+            $Source: ${$stdlib.core.Lifting.lift(context, Source)},
+            $logHistory: ${$stdlib.core.Lifting.lift(context, logHistory)},
           })
         `;
       }
@@ -1258,12 +1263,13 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure5._registerBindObject(logHistory, host, ["handle"]);
+          $stdlib.std.Resource._registerBindObject(logHistory, host, ["handle"]);
         }
-        super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
       }
     }
-    class $Closure6 extends $stdlib.std.Resource {
+    class $Closure6 extends $constructs.Construct {
       constructor(scope, id, ) {
         super(scope, id);
         (std.Display.of(this)).hidden = true;
@@ -1271,8 +1277,8 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         return `
           require("./inflight.$Closure6-1.js")({
-            $std_Duration: ${context._lift(std.Duration)},
-            $util_Util: ${context._lift(util.Util)},
+            $std_Duration: ${$stdlib.core.Lifting.lift(context, std.Duration)},
+            $util_Util: ${$stdlib.core.Lifting.lift(context, util.Util)},
           })
         `;
       }
@@ -1290,8 +1296,12 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["handle", "$inflight_init"];
       }
+      _registerBind(host, ops) {
+      }
+      static _registerTypeBind(host, ops) {
+      }
     }
-    class $Closure7 extends $stdlib.std.Resource {
+    class $Closure7 extends $constructs.Construct {
       constructor(scope, id, ) {
         super(scope, id);
         (std.Display.of(this)).hidden = true;
@@ -1299,7 +1309,7 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         return `
           require("./inflight.$Closure7-1.js")({
-            $table: ${context._lift(table)},
+            $table: ${$stdlib.core.Lifting.lift(context, table)},
           })
         `;
       }
@@ -1319,12 +1329,13 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure7._registerBindObject(table, host, ["list"]);
+          $stdlib.std.Resource._registerBindObject(table, host, ["list"]);
         }
-        super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
       }
     }
-    class $Closure8 extends $stdlib.std.Resource {
+    class $Closure8 extends $constructs.Construct {
       constructor(scope, id, ) {
         super(scope, id);
         (std.Display.of(this)).hidden = true;
@@ -1332,11 +1343,11 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         return `
           require("./inflight.$Closure8-1.js")({
-            $Source: ${context._lift(Source)},
-            $b: ${context._lift(b)},
-            $checkHitCount: ${context._lift(checkHitCount)},
-            $util_Util: ${context._lift(util.Util)},
-            $wait: ${context._lift(wait)},
+            $Source: ${$stdlib.core.Lifting.lift(context, Source)},
+            $b: ${$stdlib.core.Lifting.lift(context, b)},
+            $checkHitCount: ${$stdlib.core.Lifting.lift(context, checkHitCount)},
+            $util_Util: ${$stdlib.core.Lifting.lift(context, util.Util)},
+            $wait: ${$stdlib.core.Lifting.lift(context, wait)},
           })
         `;
       }
@@ -1356,11 +1367,12 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure8._registerBindObject(b, host, ["delete", "put"]);
-          $Closure8._registerBindObject(checkHitCount, host, ["handle"]);
-          $Closure8._registerBindObject(wait, host, ["handle"]);
+          $stdlib.std.Resource._registerBindObject(b, host, ["delete", "put"]);
+          $stdlib.std.Resource._registerBindObject(checkHitCount, host, ["handle"]);
+          $stdlib.std.Resource._registerBindObject(wait, host, ["handle"]);
         }
-        super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
       }
     }
     const Source =

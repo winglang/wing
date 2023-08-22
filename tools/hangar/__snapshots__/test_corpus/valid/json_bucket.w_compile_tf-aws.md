@@ -274,14 +274,15 @@ module.exports = function({ $b, $fileName, $getJson, $j }) {
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
+const $constructs = require('constructs');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const cloud = $stdlib.cloud;
-class $Root extends $stdlib.std.Resource {
+class $Root extends $constructs.Construct {
   constructor(scope, id) {
     super(scope, id);
-    class $Closure1 extends $stdlib.std.Resource {
+    class $Closure1 extends $constructs.Construct {
       constructor(scope, id, ) {
         super(scope, id);
         (std.Display.of(this)).hidden = true;
@@ -289,8 +290,8 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         return `
           require("./inflight.$Closure1-1.js")({
-            $b: ${context._lift(b)},
-            $fileName: ${context._lift(fileName)},
+            $b: ${$stdlib.core.Lifting.lift(context, b)},
+            $fileName: ${$stdlib.core.Lifting.lift(context, fileName)},
           })
         `;
       }
@@ -310,13 +311,14 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(b, host, ["getJson"]);
-          $Closure1._registerBindObject(fileName, host, []);
+          $stdlib.std.Resource._registerBindObject(b, host, ["getJson"]);
+          $stdlib.std.Resource._registerBindObject(fileName, host, []);
         }
-        super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
       }
     }
-    class $Closure2 extends $stdlib.std.Resource {
+    class $Closure2 extends $constructs.Construct {
       constructor(scope, id, ) {
         super(scope, id);
         (std.Display.of(this)).hidden = true;
@@ -324,10 +326,10 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         return `
           require("./inflight.$Closure2-1.js")({
-            $b: ${context._lift(b)},
-            $fileName: ${context._lift(fileName)},
-            $getJson: ${context._lift(getJson)},
-            $j: ${context._lift(j)},
+            $b: ${$stdlib.core.Lifting.lift(context, b)},
+            $fileName: ${$stdlib.core.Lifting.lift(context, fileName)},
+            $getJson: ${$stdlib.core.Lifting.lift(context, getJson)},
+            $j: ${$stdlib.core.Lifting.lift(context, j)},
           })
         `;
       }
@@ -347,12 +349,13 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure2._registerBindObject(b, host, ["putJson"]);
-          $Closure2._registerBindObject(fileName, host, []);
-          $Closure2._registerBindObject(getJson, host, ["invoke"]);
-          $Closure2._registerBindObject(j, host, []);
+          $stdlib.std.Resource._registerBindObject(b, host, ["putJson"]);
+          $stdlib.std.Resource._registerBindObject(fileName, host, []);
+          $stdlib.std.Resource._registerBindObject(getJson, host, ["invoke"]);
+          $stdlib.std.Resource._registerBindObject(j, host, []);
         }
-        super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
       }
     }
     const b = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");

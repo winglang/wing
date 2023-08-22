@@ -591,16 +591,17 @@ module.exports = function({ $queue, $r, $r2, $util_Util }) {
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
+const $constructs = require('constructs');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const cloud = $stdlib.cloud;
 const util = $stdlib.util;
 const ex = $stdlib.ex;
-class $Root extends $stdlib.std.Resource {
+class $Root extends $constructs.Construct {
   constructor(scope, id) {
     super(scope, id);
-    class $Closure1 extends $stdlib.std.Resource {
+    class $Closure1 extends $constructs.Construct {
       constructor(scope, id, ) {
         super(scope, id);
         (std.Display.of(this)).hidden = true;
@@ -608,7 +609,7 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         return `
           require("./inflight.$Closure1-1.js")({
-            $r: ${context._lift(r)},
+            $r: ${$stdlib.core.Lifting.lift(context, r)},
           })
         `;
       }
@@ -628,12 +629,13 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(r, host, ["set"]);
+          $stdlib.std.Resource._registerBindObject(r, host, ["set"]);
         }
-        super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
       }
     }
-    class $Closure2 extends $stdlib.std.Resource {
+    class $Closure2 extends $constructs.Construct {
       constructor(scope, id, ) {
         super(scope, id);
         (std.Display.of(this)).hidden = true;
@@ -641,10 +643,10 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         return `
           require("./inflight.$Closure2-1.js")({
-            $queue: ${context._lift(queue)},
-            $r: ${context._lift(r)},
-            $r2: ${context._lift(r2)},
-            $util_Util: ${context._lift(util.Util)},
+            $queue: ${$stdlib.core.Lifting.lift(context, queue)},
+            $r: ${$stdlib.core.Lifting.lift(context, r)},
+            $r2: ${$stdlib.core.Lifting.lift(context, r2)},
+            $util_Util: ${$stdlib.core.Lifting.lift(context, util.Util)},
           })
         `;
       }
@@ -664,11 +666,12 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure2._registerBindObject(queue, host, ["push"]);
-          $Closure2._registerBindObject(r, host, ["get", "rawClient"]);
-          $Closure2._registerBindObject(r2, host, ["get", "set"]);
+          $stdlib.std.Resource._registerBindObject(queue, host, ["push"]);
+          $stdlib.std.Resource._registerBindObject(r, host, ["get", "rawClient"]);
+          $stdlib.std.Resource._registerBindObject(r2, host, ["get", "set"]);
         }
-        super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
       }
     }
     const r = this.node.root.newAbstract("@winglang/sdk.ex.Redis",this,"ex.Redis");

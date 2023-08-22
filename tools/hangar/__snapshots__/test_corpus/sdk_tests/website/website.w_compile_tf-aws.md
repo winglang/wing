@@ -381,15 +381,16 @@ module.exports = function({  }) {
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
+const $constructs = require('constructs');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const cloud = $stdlib.cloud;
 const http = $stdlib.http;
-class $Root extends $stdlib.std.Resource {
+class $Root extends $constructs.Construct {
   constructor(scope, id) {
     super(scope, id);
-    class Util extends $stdlib.std.Resource {
+    class Util extends $constructs.Construct {
       constructor(scope, id, ) {
         super(scope, id);
       }
@@ -416,8 +417,12 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["$inflight_init"];
       }
+      _registerBind(host, ops) {
+      }
+      static _registerTypeBind(host, ops) {
+      }
     }
-    class $Closure1 extends $stdlib.std.Resource {
+    class $Closure1 extends $constructs.Construct {
       constructor(scope, id, ) {
         super(scope, id);
         (std.Display.of(this)).hidden = true;
@@ -425,12 +430,12 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         return `
           require("./inflight.$Closure1-1.js")({
-            $config: ${context._lift(config)},
-            $http_Util: ${context._lift(http.Util)},
-            $indexFile: ${context._lift(indexFile)},
-            $otherFile: ${context._lift(otherFile)},
-            $std_Json: ${context._lift(std.Json)},
-            $w_url: ${context._lift(w.url)},
+            $config: ${$stdlib.core.Lifting.lift(context, config)},
+            $http_Util: ${$stdlib.core.Lifting.lift(context, http.Util)},
+            $indexFile: ${$stdlib.core.Lifting.lift(context, indexFile)},
+            $otherFile: ${$stdlib.core.Lifting.lift(context, otherFile)},
+            $std_Json: ${$stdlib.core.Lifting.lift(context, std.Json)},
+            $w_url: ${$stdlib.core.Lifting.lift(context, w.url)},
           })
         `;
       }
@@ -450,12 +455,13 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(config, host, []);
-          $Closure1._registerBindObject(indexFile, host, []);
-          $Closure1._registerBindObject(otherFile, host, []);
-          $Closure1._registerBindObject(w.url, host, []);
+          $stdlib.std.Resource._registerBindObject(config, host, []);
+          $stdlib.std.Resource._registerBindObject(indexFile, host, []);
+          $stdlib.std.Resource._registerBindObject(otherFile, host, []);
+          $stdlib.std.Resource._registerBindObject(w.url, host, []);
         }
-        super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
       }
     }
     const w = this.node.root.newAbstract("@winglang/sdk.cloud.Website",this,"cloud.Website",{ path: "./website" });

@@ -258,13 +258,14 @@ module.exports = function({  }) {
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
+const $constructs = require('constructs');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
-class $Root extends $stdlib.std.Resource {
+class $Root extends $constructs.Construct {
   constructor(scope, id) {
     super(scope, id);
-    class A extends $stdlib.std.Resource {
+    class A extends $constructs.Construct {
       constructor(scope, id, ) {
         super(scope, id);
       }
@@ -291,8 +292,12 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["goo", "$inflight_init"];
       }
+      _registerBind(host, ops) {
+      }
+      static _registerTypeBind(host, ops) {
+      }
     }
-    class B extends $stdlib.std.Resource {
+    class B extends $constructs.Construct {
       constructor(scope, id, ) {
         super(scope, id);
       }
@@ -316,8 +321,12 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["foo", "$inflight_init"];
       }
+      _registerBind(host, ops) {
+      }
+      static _registerTypeBind(host, ops) {
+      }
     }
-    class $Closure1 extends $stdlib.std.Resource {
+    class $Closure1 extends $constructs.Construct {
       constructor(scope, id, ) {
         super(scope, id);
         (std.Display.of(this)).hidden = true;
@@ -342,11 +351,15 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["handle", "$inflight_init"];
       }
+      _registerBind(host, ops) {
+      }
+      static _registerTypeBind(host, ops) {
+      }
     }
-    class D extends $stdlib.std.Resource {
+    class D extends $constructs.Construct {
       constructor(scope, id, ) {
         super(scope, id);
-        class E extends $stdlib.std.Resource {
+        class E extends $constructs.Construct {
           constructor(scope, id, ) {
             super(scope, id);
           }
@@ -373,10 +386,14 @@ class $Root extends $stdlib.std.Resource {
           _getInflightOps() {
             return ["$inflight_init"];
           }
+          _registerBind(host, ops) {
+          }
+          static _registerTypeBind(host, ops) {
+          }
         }
         const pb = new E(this,"E");
         {((cond) => {if (!cond) throw new Error("assertion failed: pb.foo() == \"e1\"")})((((a,b) => { try { return require('assert').deepStrictEqual(a,b) === undefined; } catch { return false; } })((pb.foo()),"e1")))};
-        class F extends $stdlib.std.Resource {
+        class F extends $constructs.Construct {
           constructor(scope, id, ) {
             super(scope, id);
           }
@@ -400,9 +417,13 @@ class $Root extends $stdlib.std.Resource {
           _getInflightOps() {
             return ["foo", "$inflight_init"];
           }
+          _registerBind(host, ops) {
+          }
+          static _registerTypeBind(host, ops) {
+          }
         }
         const __parent_this_2 = this;
-        class $Closure2 extends $stdlib.std.Resource {
+        class $Closure2 extends $constructs.Construct {
           constructor(scope, id, ) {
             super(scope, id);
             (std.Display.of(this)).hidden = true;
@@ -410,7 +431,7 @@ class $Root extends $stdlib.std.Resource {
           static _toInflightType(context) {
             return `
               require("./inflight.$Closure2-1.js")({
-                $F: ${context._lift(F)},
+                $F: ${$stdlib.core.Lifting.lift(context, F)},
               })
             `;
           }
@@ -427,6 +448,10 @@ class $Root extends $stdlib.std.Resource {
           }
           _getInflightOps() {
             return ["handle", "$inflight_init"];
+          }
+          _registerBind(host, ops) {
+          }
+          static _registerTypeBind(host, ops) {
           }
         }
         this.inner = new $Closure2(this,"$Closure2");
@@ -445,7 +470,7 @@ class $Root extends $stdlib.std.Resource {
           (await (async () => {
             const DClient = ${D._toInflightType(this)};
             const client = new DClient({
-              $this_inner: ${this._lift(this.inner)},
+              $this_inner: ${$stdlib.core.Lifting.lift(this, this.inner)},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -457,15 +482,16 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          D._registerBindObject(this.inner, host, []);
+          $stdlib.std.Resource._registerBindObject(this.inner, host, []);
         }
         if (ops.includes("callInner")) {
-          D._registerBindObject(this.inner, host, ["handle"]);
+          $stdlib.std.Resource._registerBindObject(this.inner, host, ["handle"]);
         }
-        super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
       }
     }
-    class $Closure3 extends $stdlib.std.Resource {
+    class $Closure3 extends $constructs.Construct {
       constructor(scope, id, ) {
         super(scope, id);
         (std.Display.of(this)).hidden = true;
@@ -473,11 +499,11 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         return `
           require("./inflight.$Closure3-1.js")({
-            $B: ${context._lift(B)},
-            $a: ${context._lift(a)},
-            $d: ${context._lift(d)},
-            $fn: ${context._lift(fn)},
-            $innerD: ${context._lift(innerD)},
+            $B: ${$stdlib.core.Lifting.lift(context, B)},
+            $a: ${$stdlib.core.Lifting.lift(context, a)},
+            $d: ${$stdlib.core.Lifting.lift(context, d)},
+            $fn: ${$stdlib.core.Lifting.lift(context, fn)},
+            $innerD: ${$stdlib.core.Lifting.lift(context, innerD)},
           })
         `;
       }
@@ -497,12 +523,13 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure3._registerBindObject(a, host, ["goo"]);
-          $Closure3._registerBindObject(d, host, ["callInner"]);
-          $Closure3._registerBindObject(fn, host, ["handle"]);
-          $Closure3._registerBindObject(innerD, host, ["handle"]);
+          $stdlib.std.Resource._registerBindObject(a, host, ["goo"]);
+          $stdlib.std.Resource._registerBindObject(d, host, ["callInner"]);
+          $stdlib.std.Resource._registerBindObject(fn, host, ["handle"]);
+          $stdlib.std.Resource._registerBindObject(innerD, host, ["handle"]);
         }
-        super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
       }
     }
     const a = new A(this,"A");

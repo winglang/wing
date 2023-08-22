@@ -177,21 +177,22 @@ module.exports = function({ $globalCounter }) {
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
+const $constructs = require('constructs');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const cloud = $stdlib.cloud;
-class $Root extends $stdlib.std.Resource {
+class $Root extends $constructs.Construct {
   constructor(scope, id) {
     super(scope, id);
-    class Another extends $stdlib.std.Resource {
+    class Another extends $constructs.Construct {
       constructor(scope, id, ) {
         super(scope, id);
       }
       static _toInflightType(context) {
         return `
           require("./inflight.Another-1.js")({
-            $globalCounter: ${context._lift(globalCounter)},
+            $globalCounter: ${$stdlib.core.Lifting.lift(context, globalCounter)},
           })
         `;
       }
@@ -209,14 +210,15 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["myStaticMethod", "$inflight_init"];
       }
+      _registerBind(host, ops) {
+      }
       static _registerTypeBind(host, ops) {
         if (ops.includes("myStaticMethod")) {
-          Another._registerBindObject(globalCounter, host, ["peek"]);
+          $stdlib.std.Resource._registerBindObject(globalCounter, host, ["peek"]);
         }
-        super._registerTypeBind(host, ops);
       }
     }
-    class $Closure1 extends $stdlib.std.Resource {
+    class $Closure1 extends $constructs.Construct {
       constructor(scope, id, ) {
         super(scope, id);
         (std.Display.of(this)).hidden = true;
@@ -224,7 +226,7 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         return `
           require("./inflight.$Closure1-1.js")({
-            $Another: ${context._lift(Another)},
+            $Another: ${$stdlib.core.Lifting.lift(context, Another)},
           })
         `;
       }
@@ -244,9 +246,10 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(Another, host, ["myStaticMethod"]);
+          $stdlib.std.Resource._registerBindObject(Another, host, ["myStaticMethod"]);
         }
-        super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
       }
     }
     const globalCounter = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"cloud.Counter");

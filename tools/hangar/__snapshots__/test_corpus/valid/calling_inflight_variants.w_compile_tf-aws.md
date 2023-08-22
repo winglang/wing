@@ -201,17 +201,18 @@ module.exports = function({  }) {
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
+const $constructs = require('constructs');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
-class $Root extends $stdlib.std.Resource {
+class $Root extends $constructs.Construct {
   constructor(scope, id) {
     super(scope, id);
-    class Foo extends $stdlib.std.Resource {
+    class Foo extends $constructs.Construct {
       constructor(scope, id, ) {
         super(scope, id);
         const __parent_this_1 = this;
-        class $Closure1 extends $stdlib.std.Resource {
+        class $Closure1 extends $constructs.Construct {
           constructor(scope, id, ) {
             super(scope, id);
             (std.Display.of(this)).hidden = true;
@@ -236,6 +237,10 @@ class $Root extends $stdlib.std.Resource {
           _getInflightOps() {
             return ["handle", "$inflight_init"];
           }
+          _registerBind(host, ops) {
+          }
+          static _registerTypeBind(host, ops) {
+          }
         }
         this.inflight1 = new $Closure1(this,"$Closure1");
       }
@@ -250,7 +255,7 @@ class $Root extends $stdlib.std.Resource {
           (await (async () => {
             const FooClient = ${Foo._toInflightType(this)};
             const client = new FooClient({
-              $this_inflight1: ${this._lift(this.inflight1)},
+              $this_inflight1: ${$stdlib.core.Lifting.lift(this, this.inflight1)},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -262,24 +267,25 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          Foo._registerBindObject(this.inflight1, host, []);
-          Foo._registerBindObject(this, host, ["inflight2"]);
+          $stdlib.std.Resource._registerBindObject(this.inflight1, host, []);
+          $stdlib.std.Resource._registerBindObject(this, host, ["inflight2"]);
         }
         if (ops.includes("callFn")) {
-          Foo._registerBindObject(this, host, ["makeFn"]);
+          $stdlib.std.Resource._registerBindObject(this, host, ["makeFn"]);
         }
         if (ops.includes("callFn2")) {
-          Foo._registerBindObject(this.inflight1, host, ["handle"]);
-          Foo._registerBindObject(this, host, ["inflight2"]);
+          $stdlib.std.Resource._registerBindObject(this.inflight1, host, ["handle"]);
+          $stdlib.std.Resource._registerBindObject(this, host, ["inflight2"]);
         }
         if (ops.includes("makeFn")) {
-          Foo._registerBindObject(this.inflight1, host, ["handle"]);
-          Foo._registerBindObject(this, host, ["inflight2"]);
+          $stdlib.std.Resource._registerBindObject(this.inflight1, host, ["handle"]);
+          $stdlib.std.Resource._registerBindObject(this, host, ["inflight2"]);
         }
-        super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
       }
     }
-    class $Closure2 extends $stdlib.std.Resource {
+    class $Closure2 extends $constructs.Construct {
       constructor(scope, id, ) {
         super(scope, id);
         (std.Display.of(this)).hidden = true;
@@ -287,7 +293,7 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         return `
           require("./inflight.$Closure2-1.js")({
-            $foo: ${context._lift(foo)},
+            $foo: ${$stdlib.core.Lifting.lift(context, foo)},
           })
         `;
       }
@@ -307,9 +313,10 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure2._registerBindObject(foo, host, ["callFn", "callFn2"]);
+          $stdlib.std.Resource._registerBindObject(foo, host, ["callFn", "callFn2"]);
         }
-        super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
       }
     }
     const foo = new Foo(this,"Foo");

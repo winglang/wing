@@ -535,14 +535,15 @@ module.exports = function({ $_parentThis_localCounter, $globalCounter }) {
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
+const $constructs = require('constructs');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const cloud = $stdlib.cloud;
-class $Root extends $stdlib.std.Resource {
+class $Root extends $constructs.Construct {
   constructor(scope, id) {
     super(scope, id);
-    class First extends $stdlib.std.Resource {
+    class First extends $constructs.Construct {
       constructor(scope, id, ) {
         super(scope, id);
         this.myResource = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");
@@ -567,8 +568,12 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["$inflight_init"];
       }
+      _registerBind(host, ops) {
+      }
+      static _registerTypeBind(host, ops) {
+      }
     }
-    class Another extends $stdlib.std.Resource {
+    class Another extends $constructs.Construct {
       constructor(scope, id, ) {
         super(scope, id);
         this.myField = "hello!";
@@ -577,7 +582,7 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         return `
           require("./inflight.Another-1.js")({
-            $globalCounter: ${context._lift(globalCounter)},
+            $globalCounter: ${$stdlib.core.Lifting.lift(context, globalCounter)},
           })
         `;
       }
@@ -597,35 +602,33 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          Another._registerBindObject(globalCounter, host, ["peek"]);
+          $stdlib.std.Resource._registerBindObject(globalCounter, host, ["peek"]);
         }
         if (ops.includes("myMethod")) {
-          Another._registerBindObject(globalCounter, host, ["inc", "peek"]);
+          $stdlib.std.Resource._registerBindObject(globalCounter, host, ["inc", "peek"]);
         }
-        super._registerBind(host, ops);
       }
       static _registerTypeBind(host, ops) {
         if (ops.includes("myStaticMethod")) {
-          Another._registerBindObject(globalCounter, host, ["peek"]);
+          $stdlib.std.Resource._registerBindObject(globalCounter, host, ["peek"]);
         }
-        super._registerTypeBind(host, ops);
       }
     }
-    class MyResource extends $stdlib.std.Resource {
+    class MyResource extends $constructs.Construct {
       constructor(scope, id, ) {
         super(scope, id);
         this.localTopic = this.node.root.newAbstract("@winglang/sdk.cloud.Topic",this,"cloud.Topic");
         this.localCounter = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"cloud.Counter");
         const $parentThis = this;
-        class R extends $stdlib.std.Resource {
+        class R extends $constructs.Construct {
           constructor(scope, id, ) {
             super(scope, id);
           }
           static _toInflightType(context) {
             return `
               require("./inflight.R-1.js")({
-                $_parentThis_localCounter: ${context._lift($parentThis.localCounter)},
-                $globalCounter: ${context._lift(globalCounter)},
+                $_parentThis_localCounter: ${$stdlib.core.Lifting.lift(context, $parentThis.localCounter)},
+                $globalCounter: ${$stdlib.core.Lifting.lift(context, globalCounter)},
               })
             `;
           }
@@ -645,10 +648,11 @@ class $Root extends $stdlib.std.Resource {
           }
           _registerBind(host, ops) {
             if (ops.includes("handle")) {
-              R._registerBindObject($parentThis.localCounter, host, ["inc"]);
-              R._registerBindObject(globalCounter, host, ["inc"]);
+              $stdlib.std.Resource._registerBindObject($parentThis.localCounter, host, ["inc"]);
+              $stdlib.std.Resource._registerBindObject(globalCounter, host, ["inc"]);
             }
-            super._registerBind(host, ops);
+          }
+          static _registerTypeBind(host, ops) {
           }
         }
         (this.localTopic.onMessage(new R(this,"R")));
@@ -656,17 +660,17 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         return `
           require("./inflight.MyResource-1.js")({
-            $Another: ${context._lift(Another)},
-            $_globalArrayOfStr_at_0__: ${context._lift((globalArrayOfStr.at(0)))},
-            $_globalMapOfNum___a__: ${context._lift((globalMapOfNum)["a"])},
-            $_globalSetOfStr_has__a___: ${context._lift((globalSetOfStr.has("a")))},
-            $globalAnother: ${context._lift(globalAnother)},
-            $globalAnother_first_myResource: ${context._lift(globalAnother.first.myResource)},
-            $globalAnother_myField: ${context._lift(globalAnother.myField)},
-            $globalBool: ${context._lift(globalBool)},
-            $globalBucket: ${context._lift(globalBucket)},
-            $globalNum: ${context._lift(globalNum)},
-            $globalStr: ${context._lift(globalStr)},
+            $Another: ${$stdlib.core.Lifting.lift(context, Another)},
+            $_globalArrayOfStr_at_0__: ${$stdlib.core.Lifting.lift(context, (globalArrayOfStr.at(0)))},
+            $_globalMapOfNum___a__: ${$stdlib.core.Lifting.lift(context, (globalMapOfNum)["a"])},
+            $_globalSetOfStr_has__a___: ${$stdlib.core.Lifting.lift(context, (globalSetOfStr.has("a")))},
+            $globalAnother: ${$stdlib.core.Lifting.lift(context, globalAnother)},
+            $globalAnother_first_myResource: ${$stdlib.core.Lifting.lift(context, globalAnother.first.myResource)},
+            $globalAnother_myField: ${$stdlib.core.Lifting.lift(context, globalAnother.myField)},
+            $globalBool: ${$stdlib.core.Lifting.lift(context, globalBool)},
+            $globalBucket: ${$stdlib.core.Lifting.lift(context, globalBucket)},
+            $globalNum: ${$stdlib.core.Lifting.lift(context, globalNum)},
+            $globalStr: ${$stdlib.core.Lifting.lift(context, globalStr)},
           })
         `;
       }
@@ -675,7 +679,7 @@ class $Root extends $stdlib.std.Resource {
           (await (async () => {
             const MyResourceClient = ${MyResource._toInflightType(this)};
             const client = new MyResourceClient({
-              $this_localTopic: ${this._lift(this.localTopic)},
+              $this_localTopic: ${$stdlib.core.Lifting.lift(this, this.localTopic)},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -687,26 +691,27 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          MyResource._registerBindObject(this.localTopic, host, []);
+          $stdlib.std.Resource._registerBindObject(this.localTopic, host, []);
         }
         if (ops.includes("myPut")) {
-          MyResource._registerBindObject(Another, host, ["myStaticMethod"]);
-          MyResource._registerBindObject((globalArrayOfStr.at(0)), host, []);
-          MyResource._registerBindObject((globalMapOfNum)["a"], host, []);
-          MyResource._registerBindObject((globalSetOfStr.has("a")), host, []);
-          MyResource._registerBindObject(globalAnother, host, ["myMethod"]);
-          MyResource._registerBindObject(globalAnother.first.myResource, host, ["put"]);
-          MyResource._registerBindObject(globalAnother.myField, host, []);
-          MyResource._registerBindObject(globalBool, host, []);
-          MyResource._registerBindObject(globalBucket, host, ["put"]);
-          MyResource._registerBindObject(globalNum, host, []);
-          MyResource._registerBindObject(globalStr, host, []);
-          MyResource._registerBindObject(this.localTopic, host, ["publish"]);
+          $stdlib.std.Resource._registerBindObject(Another, host, ["myStaticMethod"]);
+          $stdlib.std.Resource._registerBindObject((globalArrayOfStr.at(0)), host, []);
+          $stdlib.std.Resource._registerBindObject((globalMapOfNum)["a"], host, []);
+          $stdlib.std.Resource._registerBindObject((globalSetOfStr.has("a")), host, []);
+          $stdlib.std.Resource._registerBindObject(globalAnother, host, ["myMethod"]);
+          $stdlib.std.Resource._registerBindObject(globalAnother.first.myResource, host, ["put"]);
+          $stdlib.std.Resource._registerBindObject(globalAnother.myField, host, []);
+          $stdlib.std.Resource._registerBindObject(globalBool, host, []);
+          $stdlib.std.Resource._registerBindObject(globalBucket, host, ["put"]);
+          $stdlib.std.Resource._registerBindObject(globalNum, host, []);
+          $stdlib.std.Resource._registerBindObject(globalStr, host, []);
+          $stdlib.std.Resource._registerBindObject(this.localTopic, host, ["publish"]);
         }
-        super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
       }
     }
-    class $Closure1 extends $stdlib.std.Resource {
+    class $Closure1 extends $constructs.Construct {
       constructor(scope, id, ) {
         super(scope, id);
         (std.Display.of(this)).hidden = true;
@@ -714,7 +719,7 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         return `
           require("./inflight.$Closure1-1.js")({
-            $res: ${context._lift(res)},
+            $res: ${$stdlib.core.Lifting.lift(context, res)},
           })
         `;
       }
@@ -734,12 +739,13 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(res, host, ["myPut"]);
+          $stdlib.std.Resource._registerBindObject(res, host, ["myPut"]);
         }
-        super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
       }
     }
-    class $Closure2 extends $stdlib.std.Resource {
+    class $Closure2 extends $constructs.Construct {
       constructor(scope, id, ) {
         super(scope, id);
         (std.Display.of(this)).hidden = true;
@@ -747,7 +753,7 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         return `
           require("./inflight.$Closure2-1.js")({
-            $Another: ${context._lift(Another)},
+            $Another: ${$stdlib.core.Lifting.lift(context, Another)},
           })
         `;
       }
@@ -767,9 +773,10 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure2._registerBindObject(Another, host, ["myStaticMethod"]);
+          $stdlib.std.Resource._registerBindObject(Another, host, ["myStaticMethod"]);
         }
-        super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
       }
     }
     const globalBucket = this.node.root.newAbstract("@winglang/sdk.cloud.Bucket",this,"cloud.Bucket");

@@ -150,14 +150,15 @@ module.exports = function({ $Object_keys_myMap__length, $__bang__in___arrOfMap_a
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
+const $constructs = require('constructs');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const cloud = $stdlib.cloud;
-class $Root extends $stdlib.std.Resource {
+class $Root extends $constructs.Construct {
   constructor(scope, id) {
     super(scope, id);
-    class $Closure1 extends $stdlib.std.Resource {
+    class $Closure1 extends $constructs.Construct {
       constructor(scope, id, ) {
         super(scope, id);
         (std.Display.of(this)).hidden = true;
@@ -165,15 +166,15 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         return `
           require("./inflight.$Closure1-1.js")({
-            $Object_keys_myMap__length: ${context._lift(Object.keys(myMap).length)},
-            $__bang__in___arrOfMap_at_0____: ${context._lift(("bang" in ((arrOfMap.at(0)))))},
-            $__world__in__myMap__: ${context._lift(("world" in (myMap)))},
-            $_arr_at_0__: ${context._lift((arr.at(0)))},
-            $_arr_at_1__: ${context._lift((arr.at(1)))},
-            $_j___b__: ${context._lift((j)["b"])},
-            $_mySet_has__my___: ${context._lift((mySet.has("my")))},
-            $arr_length: ${context._lift(arr.length)},
-            $mySet_size: ${context._lift(mySet.size)},
+            $Object_keys_myMap__length: ${$stdlib.core.Lifting.lift(context, Object.keys(myMap).length)},
+            $__bang__in___arrOfMap_at_0____: ${$stdlib.core.Lifting.lift(context, ("bang" in ((arrOfMap.at(0)))))},
+            $__world__in__myMap__: ${$stdlib.core.Lifting.lift(context, ("world" in (myMap)))},
+            $_arr_at_0__: ${$stdlib.core.Lifting.lift(context, (arr.at(0)))},
+            $_arr_at_1__: ${$stdlib.core.Lifting.lift(context, (arr.at(1)))},
+            $_j___b__: ${$stdlib.core.Lifting.lift(context, (j)["b"])},
+            $_mySet_has__my___: ${$stdlib.core.Lifting.lift(context, (mySet.has("my")))},
+            $arr_length: ${$stdlib.core.Lifting.lift(context, arr.length)},
+            $mySet_size: ${$stdlib.core.Lifting.lift(context, mySet.size)},
           })
         `;
       }
@@ -193,17 +194,18 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(Object.keys(myMap).length, host, []);
-          $Closure1._registerBindObject(("bang" in ((arrOfMap.at(0)))), host, []);
-          $Closure1._registerBindObject(("world" in (myMap)), host, []);
-          $Closure1._registerBindObject((arr.at(0)), host, []);
-          $Closure1._registerBindObject((arr.at(1)), host, []);
-          $Closure1._registerBindObject((j)["b"], host, []);
-          $Closure1._registerBindObject((mySet.has("my")), host, []);
-          $Closure1._registerBindObject(arr.length, host, []);
-          $Closure1._registerBindObject(mySet.size, host, []);
+          $stdlib.std.Resource._registerBindObject(Object.keys(myMap).length, host, []);
+          $stdlib.std.Resource._registerBindObject(("bang" in ((arrOfMap.at(0)))), host, []);
+          $stdlib.std.Resource._registerBindObject(("world" in (myMap)), host, []);
+          $stdlib.std.Resource._registerBindObject((arr.at(0)), host, []);
+          $stdlib.std.Resource._registerBindObject((arr.at(1)), host, []);
+          $stdlib.std.Resource._registerBindObject((j)["b"], host, []);
+          $stdlib.std.Resource._registerBindObject((mySet.has("my")), host, []);
+          $stdlib.std.Resource._registerBindObject(arr.length, host, []);
+          $stdlib.std.Resource._registerBindObject(mySet.size, host, []);
         }
-        super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
       }
     }
     const arr = ["hello", "world"];

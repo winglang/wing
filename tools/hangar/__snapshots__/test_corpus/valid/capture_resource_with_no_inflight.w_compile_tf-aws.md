@@ -181,14 +181,15 @@ module.exports = function({  }) {
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
+const $constructs = require('constructs');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const cloud = $stdlib.cloud;
-class $Root extends $stdlib.std.Resource {
+class $Root extends $constructs.Construct {
   constructor(scope, id) {
     super(scope, id);
-    class A extends $stdlib.std.Resource {
+    class A extends $constructs.Construct {
       constructor(scope, id, ) {
         super(scope, id);
         this.field = "hey";
@@ -205,7 +206,7 @@ class $Root extends $stdlib.std.Resource {
           (await (async () => {
             const AClient = ${A._toInflightType(this)};
             const client = new AClient({
-              $this_counter: ${this._lift(this.counter)},
+              $this_counter: ${$stdlib.core.Lifting.lift(this, this.counter)},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -217,15 +218,16 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          A._registerBindObject(this.counter, host, []);
+          $stdlib.std.Resource._registerBindObject(this.counter, host, []);
         }
         if (ops.includes("incCounter")) {
-          A._registerBindObject(this.counter, host, ["inc"]);
+          $stdlib.std.Resource._registerBindObject(this.counter, host, ["inc"]);
         }
-        super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
       }
     }
-    class $Closure1 extends $stdlib.std.Resource {
+    class $Closure1 extends $constructs.Construct {
       constructor(scope, id, ) {
         super(scope, id);
         (std.Display.of(this)).hidden = true;
@@ -233,8 +235,8 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         return `
           require("./inflight.$Closure1-1.js")({
-            $a: ${context._lift(a)},
-            $a_field: ${context._lift(a.field)},
+            $a: ${$stdlib.core.Lifting.lift(context, a)},
+            $a_field: ${$stdlib.core.Lifting.lift(context, a.field)},
           })
         `;
       }
@@ -254,10 +256,11 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(a, host, ["bar"]);
-          $Closure1._registerBindObject(a.field, host, []);
+          $stdlib.std.Resource._registerBindObject(a, host, ["bar"]);
+          $stdlib.std.Resource._registerBindObject(a.field, host, []);
         }
-        super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
       }
     }
     const a = new A(this,"A");

@@ -51,14 +51,15 @@ module.exports = function({  }) {
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
+const $constructs = require('constructs');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const cloud = $stdlib.cloud;
-class $Root extends $stdlib.std.Resource {
+class $Root extends $constructs.Construct {
   constructor(scope, id) {
     super(scope, id);
-    class R extends $stdlib.std.Resource {
+    class R extends $constructs.Construct {
       constructor(scope, id, ) {
         super(scope, id);
         this.s1 = "hello";
@@ -74,7 +75,7 @@ class $Root extends $stdlib.std.Resource {
           (await (async () => {
             const RClient = ${R._toInflightType(this)};
             const client = new RClient({
-              $_this_s1_concat___world___: ${this._lift((this.s1.concat(" world")))},
+              $_this_s1_concat___world___: ${$stdlib.core.Lifting.lift(this, (this.s1.concat(" world")))},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -86,12 +87,13 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          R._registerBindObject((this.s1.concat(" world")), host, []);
+          $stdlib.std.Resource._registerBindObject((this.s1.concat(" world")), host, []);
         }
         if (ops.includes("foo")) {
-          R._registerBindObject((this.s1.concat(" world")), host, []);
+          $stdlib.std.Resource._registerBindObject((this.s1.concat(" world")), host, []);
         }
-        super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
       }
     }
     const r = new R(this,"R");

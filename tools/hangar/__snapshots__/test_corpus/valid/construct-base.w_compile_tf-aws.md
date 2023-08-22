@@ -59,16 +59,17 @@ module.exports = function({  }) {
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
+const $constructs = require('constructs');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const cloud = $stdlib.cloud;
 const cx = require("constructs");
 const aws = require("@cdktf/provider-aws");
-class $Root extends $stdlib.std.Resource {
+class $Root extends $constructs.Construct {
   constructor(scope, id) {
     super(scope, id);
-    class WingResource extends $stdlib.std.Resource {
+    class WingResource extends $constructs.Construct {
       constructor(scope, id, ) {
         super(scope, id);
         {console.log(String.raw({ raw: ["my id is ", ""] }, this.node.id))};
@@ -93,12 +94,16 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["$inflight_init"];
       }
+      _registerBind(host, ops) {
+      }
+      static _registerTypeBind(host, ops) {
+      }
     }
     const getPath = ((c) => {
       return c.node.path;
     });
-    const getDisplayName = ((r) => {
-      return (std.Display.of(r)).title;
+    const getDisplayName = ((c) => {
+      return (std.Display.of(c)).title;
     });
     const q = this.node.root.new("@cdktf/provider-aws.sqsQueue.SqsQueue",aws.sqsQueue.SqsQueue,this,"aws.sqsQueue.SqsQueue");
     const wr = new WingResource(this,"WingResource");

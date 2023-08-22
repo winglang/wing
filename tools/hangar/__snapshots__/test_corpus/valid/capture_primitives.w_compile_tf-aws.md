@@ -156,14 +156,15 @@ module.exports = function({ $myBool, $myDur_hours, $myDur_minutes, $myDur_second
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
+const $constructs = require('constructs');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const cloud = $stdlib.cloud;
-class $Root extends $stdlib.std.Resource {
+class $Root extends $constructs.Construct {
   constructor(scope, id) {
     super(scope, id);
-    class $Closure1 extends $stdlib.std.Resource {
+    class $Closure1 extends $constructs.Construct {
       constructor(scope, id, ) {
         super(scope, id);
         (std.Display.of(this)).hidden = true;
@@ -171,13 +172,13 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         return `
           require("./inflight.$Closure1-1.js")({
-            $myBool: ${context._lift(myBool)},
-            $myDur_hours: ${context._lift(myDur.hours)},
-            $myDur_minutes: ${context._lift(myDur.minutes)},
-            $myDur_seconds: ${context._lift(myDur.seconds)},
-            $myNum: ${context._lift(myNum)},
-            $mySecondBool: ${context._lift(mySecondBool)},
-            $myStr: ${context._lift(myStr)},
+            $myBool: ${$stdlib.core.Lifting.lift(context, myBool)},
+            $myDur_hours: ${$stdlib.core.Lifting.lift(context, myDur.hours)},
+            $myDur_minutes: ${$stdlib.core.Lifting.lift(context, myDur.minutes)},
+            $myDur_seconds: ${$stdlib.core.Lifting.lift(context, myDur.seconds)},
+            $myNum: ${$stdlib.core.Lifting.lift(context, myNum)},
+            $mySecondBool: ${$stdlib.core.Lifting.lift(context, mySecondBool)},
+            $myStr: ${$stdlib.core.Lifting.lift(context, myStr)},
           })
         `;
       }
@@ -197,15 +198,16 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(myBool, host, []);
-          $Closure1._registerBindObject(myDur.hours, host, []);
-          $Closure1._registerBindObject(myDur.minutes, host, []);
-          $Closure1._registerBindObject(myDur.seconds, host, []);
-          $Closure1._registerBindObject(myNum, host, []);
-          $Closure1._registerBindObject(mySecondBool, host, []);
-          $Closure1._registerBindObject(myStr, host, []);
+          $stdlib.std.Resource._registerBindObject(myBool, host, []);
+          $stdlib.std.Resource._registerBindObject(myDur.hours, host, []);
+          $stdlib.std.Resource._registerBindObject(myDur.minutes, host, []);
+          $stdlib.std.Resource._registerBindObject(myDur.seconds, host, []);
+          $stdlib.std.Resource._registerBindObject(myNum, host, []);
+          $stdlib.std.Resource._registerBindObject(mySecondBool, host, []);
+          $stdlib.std.Resource._registerBindObject(myStr, host, []);
         }
-        super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
       }
     }
     const myStr = "hello, string";

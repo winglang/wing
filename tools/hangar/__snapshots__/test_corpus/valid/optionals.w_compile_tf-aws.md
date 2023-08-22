@@ -23,7 +23,7 @@ module.exports = function(stdStruct) {
       return stdStruct._validate(obj, this.jsonSchema())
     }
     static _toInflightType(context) {
-      return `require("./Name.Struct.js")(${ context._lift(stdStruct) })`;
+      return `require("./Name.Struct.js")(${ $stdlib.core.Lifting.lift(context, stdStruct) })`;
     }
   }
   return Name;
@@ -56,7 +56,7 @@ module.exports = function(stdStruct) {
       return stdStruct._validate(obj, this.jsonSchema())
     }
     static _toInflightType(context) {
-      return `require("./Payload.Struct.js")(${ context._lift(stdStruct) })`;
+      return `require("./Payload.Struct.js")(${ $stdlib.core.Lifting.lift(context, stdStruct) })`;
     }
   }
   return Payload;
@@ -303,14 +303,15 @@ module.exports = function({  }) {
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
+const $constructs = require('constructs');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const cloud = $stdlib.cloud;
-class $Root extends $stdlib.std.Resource {
+class $Root extends $constructs.Construct {
   constructor(scope, id) {
     super(scope, id);
-    class Super extends $stdlib.std.Resource {
+    class Super extends $constructs.Construct {
       constructor(scope, id, ) {
         super(scope, id);
         this.name = "Super";
@@ -335,6 +336,10 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["$inflight_init"];
       }
+      _registerBind(host, ops) {
+      }
+      static _registerTypeBind(host, ops) {
+      }
     }
     class Sub extends Super {
       constructor(scope, id, ) {
@@ -344,7 +349,7 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         return `
           require("./inflight.Sub-1.js")({
-            $Super: ${context._lift(Super)},
+            $Super: ${$stdlib.core.Lifting.lift(context, Super)},
           })
         `;
       }
@@ -362,6 +367,12 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["$inflight_init"];
       }
+      _registerBind(host, ops) {
+        super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
+        super._registerTypeBind(host, ops);
+      }
     }
     class Sub1 extends Super {
       constructor(scope, id, ) {
@@ -371,7 +382,7 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         return `
           require("./inflight.Sub1-1.js")({
-            $Super: ${context._lift(Super)},
+            $Super: ${$stdlib.core.Lifting.lift(context, Super)},
           })
         `;
       }
@@ -389,8 +400,14 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["$inflight_init"];
       }
+      _registerBind(host, ops) {
+        super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
+        super._registerTypeBind(host, ops);
+      }
     }
-    class Node extends $stdlib.std.Resource {
+    class Node extends $constructs.Construct {
       constructor(scope, id, value, left, right) {
         super(scope, id);
         this.value = value;
@@ -417,8 +434,12 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["$inflight_init"];
       }
+      _registerBind(host, ops) {
+      }
+      static _registerTypeBind(host, ops) {
+      }
     }
-    class $Closure1 extends $stdlib.std.Resource {
+    class $Closure1 extends $constructs.Construct {
       constructor(scope, id, ) {
         super(scope, id);
         (std.Display.of(this)).hidden = true;
@@ -426,9 +447,9 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         return `
           require("./inflight.$Closure1-1.js")({
-            $__payloadWithBucket_c_____null_: ${context._lift(((payloadWithBucket.c) != null))},
-            $__payloadWithoutOptions_b_____null_: ${context._lift(((payloadWithoutOptions.b) != null))},
-            $payloadWithBucket_c: ${context._lift(payloadWithBucket.c)},
+            $__payloadWithBucket_c_____null_: ${$stdlib.core.Lifting.lift(context, ((payloadWithBucket.c) != null))},
+            $__payloadWithoutOptions_b_____null_: ${$stdlib.core.Lifting.lift(context, ((payloadWithoutOptions.b) != null))},
+            $payloadWithBucket_c: ${$stdlib.core.Lifting.lift(context, payloadWithBucket.c)},
           })
         `;
       }
@@ -448,11 +469,12 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(((payloadWithBucket.c) != null), host, []);
-          $Closure1._registerBindObject(((payloadWithoutOptions.b) != null), host, []);
-          $Closure1._registerBindObject(payloadWithBucket.c, host, ["put"]);
+          $stdlib.std.Resource._registerBindObject(((payloadWithBucket.c) != null), host, []);
+          $stdlib.std.Resource._registerBindObject(((payloadWithoutOptions.b) != null), host, []);
+          $stdlib.std.Resource._registerBindObject(payloadWithBucket.c, host, ["put"]);
         }
-        super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
       }
     }
     const x = 4;

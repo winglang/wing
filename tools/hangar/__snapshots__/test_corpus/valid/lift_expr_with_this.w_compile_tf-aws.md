@@ -155,13 +155,14 @@ module.exports = function({  }) {
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
+const $constructs = require('constructs');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
-class $Root extends $stdlib.std.Resource {
+class $Root extends $constructs.Construct {
   constructor(scope, id) {
     super(scope, id);
-    class Foo extends $stdlib.std.Resource {
+    class Foo extends $constructs.Construct {
       constructor(scope, id, ) {
         super(scope, id);
         this.value = "hello";
@@ -186,8 +187,12 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["$inflight_init"];
       }
+      _registerBind(host, ops) {
+      }
+      static _registerTypeBind(host, ops) {
+      }
     }
-    class $Closure1 extends $stdlib.std.Resource {
+    class $Closure1 extends $constructs.Construct {
       constructor(scope, id, ) {
         super(scope, id);
         (std.Display.of(this)).hidden = true;
@@ -203,7 +208,7 @@ class $Root extends $stdlib.std.Resource {
           (await (async () => {
             const $Closure1Client = ${$Closure1._toInflightType(this)};
             const client = new $Closure1Client({
-              $foo_this_value: ${this._lift(foo_this.value)},
+              $foo_this_value: ${$stdlib.core.Lifting.lift(this, foo_this.value)},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -215,12 +220,13 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          $Closure1._registerBindObject(foo_this.value, host, []);
+          $stdlib.std.Resource._registerBindObject(foo_this.value, host, []);
         }
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(foo_this.value, host, []);
+          $stdlib.std.Resource._registerBindObject(foo_this.value, host, []);
         }
-        super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
       }
     }
     const foo_this = new Foo(this,"Foo");

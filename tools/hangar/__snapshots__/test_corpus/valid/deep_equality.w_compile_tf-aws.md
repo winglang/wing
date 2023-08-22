@@ -24,7 +24,7 @@ module.exports = function(stdStruct) {
       return stdStruct._validate(obj, this.jsonSchema())
     }
     static _toInflightType(context) {
-      return `require("./Cat.Struct.js")(${ context._lift(stdStruct) })`;
+      return `require("./Cat.Struct.js")(${ $stdlib.core.Lifting.lift(context, stdStruct) })`;
     }
   }
   return Cat;
@@ -1112,13 +1112,14 @@ module.exports = function({ $_____arrayB__, $arrayA }) {
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
+const $constructs = require('constructs');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
-class $Root extends $stdlib.std.Resource {
+class $Root extends $constructs.Construct {
   constructor(scope, id) {
     super(scope, id);
-    class $Closure1 extends $stdlib.std.Resource {
+    class $Closure1 extends $constructs.Construct {
       constructor(scope, id, ) {
         super(scope, id);
         (std.Display.of(this)).hidden = true;
@@ -1126,10 +1127,10 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         return `
           require("./inflight.$Closure1-1.js")({
-            $numA: ${context._lift(numA)},
-            $numB: ${context._lift(numB)},
-            $strA: ${context._lift(strA)},
-            $strB: ${context._lift(strB)},
+            $numA: ${$stdlib.core.Lifting.lift(context, numA)},
+            $numB: ${$stdlib.core.Lifting.lift(context, numB)},
+            $strA: ${$stdlib.core.Lifting.lift(context, strA)},
+            $strB: ${$stdlib.core.Lifting.lift(context, strB)},
           })
         `;
       }
@@ -1149,15 +1150,16 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(numA, host, []);
-          $Closure1._registerBindObject(numB, host, []);
-          $Closure1._registerBindObject(strA, host, []);
-          $Closure1._registerBindObject(strB, host, []);
+          $stdlib.std.Resource._registerBindObject(numA, host, []);
+          $stdlib.std.Resource._registerBindObject(numB, host, []);
+          $stdlib.std.Resource._registerBindObject(strA, host, []);
+          $stdlib.std.Resource._registerBindObject(strB, host, []);
         }
-        super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
       }
     }
-    class $Closure2 extends $stdlib.std.Resource {
+    class $Closure2 extends $constructs.Construct {
       constructor(scope, id, ) {
         super(scope, id);
         (std.Display.of(this)).hidden = true;
@@ -1165,10 +1167,10 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         return `
           require("./inflight.$Closure2-1.js")({
-            $numA: ${context._lift(numA)},
-            $numC: ${context._lift(numC)},
-            $strA: ${context._lift(strA)},
-            $strC: ${context._lift(strC)},
+            $numA: ${$stdlib.core.Lifting.lift(context, numA)},
+            $numC: ${$stdlib.core.Lifting.lift(context, numC)},
+            $strA: ${$stdlib.core.Lifting.lift(context, strA)},
+            $strC: ${$stdlib.core.Lifting.lift(context, strC)},
           })
         `;
       }
@@ -1188,15 +1190,16 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure2._registerBindObject(numA, host, []);
-          $Closure2._registerBindObject(numC, host, []);
-          $Closure2._registerBindObject(strA, host, []);
-          $Closure2._registerBindObject(strC, host, []);
+          $stdlib.std.Resource._registerBindObject(numA, host, []);
+          $stdlib.std.Resource._registerBindObject(numC, host, []);
+          $stdlib.std.Resource._registerBindObject(strA, host, []);
+          $stdlib.std.Resource._registerBindObject(strC, host, []);
         }
-        super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
       }
     }
-    class $Closure3 extends $stdlib.std.Resource {
+    class $Closure3 extends $constructs.Construct {
       constructor(scope, id, ) {
         super(scope, id);
         (std.Display.of(this)).hidden = true;
@@ -1204,8 +1207,8 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         return `
           require("./inflight.$Closure3-1.js")({
-            $jsonA: ${context._lift(jsonA)},
-            $jsonB: ${context._lift(jsonB)},
+            $jsonA: ${$stdlib.core.Lifting.lift(context, jsonA)},
+            $jsonB: ${$stdlib.core.Lifting.lift(context, jsonB)},
           })
         `;
       }
@@ -1225,13 +1228,14 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure3._registerBindObject(jsonA, host, []);
-          $Closure3._registerBindObject(jsonB, host, []);
+          $stdlib.std.Resource._registerBindObject(jsonA, host, []);
+          $stdlib.std.Resource._registerBindObject(jsonB, host, []);
         }
-        super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
       }
     }
-    class $Closure4 extends $stdlib.std.Resource {
+    class $Closure4 extends $constructs.Construct {
       constructor(scope, id, ) {
         super(scope, id);
         (std.Display.of(this)).hidden = true;
@@ -1239,9 +1243,9 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         return `
           require("./inflight.$Closure4-1.js")({
-            $jsonA: ${context._lift(jsonA)},
-            $jsonB: ${context._lift(jsonB)},
-            $jsonC: ${context._lift(jsonC)},
+            $jsonA: ${$stdlib.core.Lifting.lift(context, jsonA)},
+            $jsonB: ${$stdlib.core.Lifting.lift(context, jsonB)},
+            $jsonC: ${$stdlib.core.Lifting.lift(context, jsonC)},
           })
         `;
       }
@@ -1261,14 +1265,15 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure4._registerBindObject(jsonA, host, []);
-          $Closure4._registerBindObject(jsonB, host, []);
-          $Closure4._registerBindObject(jsonC, host, []);
+          $stdlib.std.Resource._registerBindObject(jsonA, host, []);
+          $stdlib.std.Resource._registerBindObject(jsonB, host, []);
+          $stdlib.std.Resource._registerBindObject(jsonC, host, []);
         }
-        super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
       }
     }
-    class $Closure5 extends $stdlib.std.Resource {
+    class $Closure5 extends $constructs.Construct {
       constructor(scope, id, ) {
         super(scope, id);
         (std.Display.of(this)).hidden = true;
@@ -1276,8 +1281,8 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         return `
           require("./inflight.$Closure5-1.js")({
-            $new_Set_setB_: ${context._lift(new Set(setB))},
-            $setA: ${context._lift(setA)},
+            $new_Set_setB_: ${$stdlib.core.Lifting.lift(context, new Set(setB))},
+            $setA: ${$stdlib.core.Lifting.lift(context, setA)},
           })
         `;
       }
@@ -1297,13 +1302,14 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure5._registerBindObject(new Set(setB), host, []);
-          $Closure5._registerBindObject(setA, host, []);
+          $stdlib.std.Resource._registerBindObject(new Set(setB), host, []);
+          $stdlib.std.Resource._registerBindObject(setA, host, []);
         }
-        super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
       }
     }
-    class $Closure6 extends $stdlib.std.Resource {
+    class $Closure6 extends $constructs.Construct {
       constructor(scope, id, ) {
         super(scope, id);
         (std.Display.of(this)).hidden = true;
@@ -1311,9 +1317,9 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         return `
           require("./inflight.$Closure6-1.js")({
-            $new_Set_setB_: ${context._lift(new Set(setB))},
-            $setA: ${context._lift(setA)},
-            $setC: ${context._lift(setC)},
+            $new_Set_setB_: ${$stdlib.core.Lifting.lift(context, new Set(setB))},
+            $setA: ${$stdlib.core.Lifting.lift(context, setA)},
+            $setC: ${$stdlib.core.Lifting.lift(context, setC)},
           })
         `;
       }
@@ -1333,14 +1339,15 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure6._registerBindObject(new Set(setB), host, []);
-          $Closure6._registerBindObject(setA, host, []);
-          $Closure6._registerBindObject(setC, host, []);
+          $stdlib.std.Resource._registerBindObject(new Set(setB), host, []);
+          $stdlib.std.Resource._registerBindObject(setA, host, []);
+          $stdlib.std.Resource._registerBindObject(setC, host, []);
         }
-        super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
       }
     }
-    class $Closure7 extends $stdlib.std.Resource {
+    class $Closure7 extends $constructs.Construct {
       constructor(scope, id, ) {
         super(scope, id);
         (std.Display.of(this)).hidden = true;
@@ -1348,8 +1355,8 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         return `
           require("./inflight.$Closure7-1.js")({
-            $______mapB___: ${context._lift(({...(mapB)}))},
-            $mapA: ${context._lift(mapA)},
+            $______mapB___: ${$stdlib.core.Lifting.lift(context, ({...(mapB)}))},
+            $mapA: ${$stdlib.core.Lifting.lift(context, mapA)},
           })
         `;
       }
@@ -1369,13 +1376,14 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure7._registerBindObject(({...(mapB)}), host, []);
-          $Closure7._registerBindObject(mapA, host, []);
+          $stdlib.std.Resource._registerBindObject(({...(mapB)}), host, []);
+          $stdlib.std.Resource._registerBindObject(mapA, host, []);
         }
-        super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
       }
     }
-    class $Closure8 extends $stdlib.std.Resource {
+    class $Closure8 extends $constructs.Construct {
       constructor(scope, id, ) {
         super(scope, id);
         (std.Display.of(this)).hidden = true;
@@ -1383,9 +1391,9 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         return `
           require("./inflight.$Closure8-1.js")({
-            $______mapB___: ${context._lift(({...(mapB)}))},
-            $mapA: ${context._lift(mapA)},
-            $mapC: ${context._lift(mapC)},
+            $______mapB___: ${$stdlib.core.Lifting.lift(context, ({...(mapB)}))},
+            $mapA: ${$stdlib.core.Lifting.lift(context, mapA)},
+            $mapC: ${$stdlib.core.Lifting.lift(context, mapC)},
           })
         `;
       }
@@ -1405,14 +1413,15 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure8._registerBindObject(({...(mapB)}), host, []);
-          $Closure8._registerBindObject(mapA, host, []);
-          $Closure8._registerBindObject(mapC, host, []);
+          $stdlib.std.Resource._registerBindObject(({...(mapB)}), host, []);
+          $stdlib.std.Resource._registerBindObject(mapA, host, []);
+          $stdlib.std.Resource._registerBindObject(mapC, host, []);
         }
-        super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
       }
     }
-    class $Closure9 extends $stdlib.std.Resource {
+    class $Closure9 extends $constructs.Construct {
       constructor(scope, id, ) {
         super(scope, id);
         (std.Display.of(this)).hidden = true;
@@ -1420,8 +1429,8 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         return `
           require("./inflight.$Closure9-1.js")({
-            $_____arrayB__: ${context._lift([...(arrayB)])},
-            $arrayA: ${context._lift(arrayA)},
+            $_____arrayB__: ${$stdlib.core.Lifting.lift(context, [...(arrayB)])},
+            $arrayA: ${$stdlib.core.Lifting.lift(context, arrayA)},
           })
         `;
       }
@@ -1441,13 +1450,14 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure9._registerBindObject([...(arrayB)], host, []);
-          $Closure9._registerBindObject(arrayA, host, []);
+          $stdlib.std.Resource._registerBindObject([...(arrayB)], host, []);
+          $stdlib.std.Resource._registerBindObject(arrayA, host, []);
         }
-        super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
       }
     }
-    class $Closure10 extends $stdlib.std.Resource {
+    class $Closure10 extends $constructs.Construct {
       constructor(scope, id, ) {
         super(scope, id);
         (std.Display.of(this)).hidden = true;
@@ -1455,9 +1465,9 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         return `
           require("./inflight.$Closure10-1.js")({
-            $_____arrayB__: ${context._lift([...(arrayB)])},
-            $arrayA: ${context._lift(arrayA)},
-            $arrayC: ${context._lift(arrayC)},
+            $_____arrayB__: ${$stdlib.core.Lifting.lift(context, [...(arrayB)])},
+            $arrayA: ${$stdlib.core.Lifting.lift(context, arrayA)},
+            $arrayC: ${$stdlib.core.Lifting.lift(context, arrayC)},
           })
         `;
       }
@@ -1477,14 +1487,15 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure10._registerBindObject([...(arrayB)], host, []);
-          $Closure10._registerBindObject(arrayA, host, []);
-          $Closure10._registerBindObject(arrayC, host, []);
+          $stdlib.std.Resource._registerBindObject([...(arrayB)], host, []);
+          $stdlib.std.Resource._registerBindObject(arrayA, host, []);
+          $stdlib.std.Resource._registerBindObject(arrayC, host, []);
         }
-        super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
       }
     }
-    class $Closure11 extends $stdlib.std.Resource {
+    class $Closure11 extends $constructs.Construct {
       constructor(scope, id, ) {
         super(scope, id);
         (std.Display.of(this)).hidden = true;
@@ -1492,8 +1503,8 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         return `
           require("./inflight.$Closure11-1.js")({
-            $cat1: ${context._lift(cat1)},
-            $cat2: ${context._lift(cat2)},
+            $cat1: ${$stdlib.core.Lifting.lift(context, cat1)},
+            $cat2: ${$stdlib.core.Lifting.lift(context, cat2)},
           })
         `;
       }
@@ -1513,13 +1524,14 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure11._registerBindObject(cat1, host, []);
-          $Closure11._registerBindObject(cat2, host, []);
+          $stdlib.std.Resource._registerBindObject(cat1, host, []);
+          $stdlib.std.Resource._registerBindObject(cat2, host, []);
         }
-        super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
       }
     }
-    class $Closure12 extends $stdlib.std.Resource {
+    class $Closure12 extends $constructs.Construct {
       constructor(scope, id, ) {
         super(scope, id);
         (std.Display.of(this)).hidden = true;
@@ -1527,9 +1539,9 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         return `
           require("./inflight.$Closure12-1.js")({
-            $cat1: ${context._lift(cat1)},
-            $cat2: ${context._lift(cat2)},
-            $cat3: ${context._lift(cat3)},
+            $cat1: ${$stdlib.core.Lifting.lift(context, cat1)},
+            $cat2: ${$stdlib.core.Lifting.lift(context, cat2)},
+            $cat3: ${$stdlib.core.Lifting.lift(context, cat3)},
           })
         `;
       }
@@ -1549,11 +1561,12 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure12._registerBindObject(cat1, host, []);
-          $Closure12._registerBindObject(cat2, host, []);
-          $Closure12._registerBindObject(cat3, host, []);
+          $stdlib.std.Resource._registerBindObject(cat1, host, []);
+          $stdlib.std.Resource._registerBindObject(cat2, host, []);
+          $stdlib.std.Resource._registerBindObject(cat3, host, []);
         }
-        super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
       }
     }
     const numA = 1;

@@ -189,13 +189,14 @@ module.exports = function({  }) {
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
+const $constructs = require('constructs');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
-class $Root extends $stdlib.std.Resource {
+class $Root extends $constructs.Construct {
   constructor(scope, id) {
     super(scope, id);
-    class Foo extends $stdlib.std.Resource {
+    class Foo extends $constructs.Construct {
       constructor(scope, id, ) {
         super(scope, id);
       }
@@ -219,8 +220,12 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["foo", "bar", "callThis", "$inflight_init"];
       }
+      _registerBind(host, ops) {
+      }
+      static _registerTypeBind(host, ops) {
+      }
     }
-    class Bar extends $stdlib.std.Resource {
+    class Bar extends $constructs.Construct {
       constructor(scope, id, ) {
         super(scope, id);
       }
@@ -244,8 +249,12 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["bar", "callThis", "$inflight_init"];
       }
+      _registerBind(host, ops) {
+      }
+      static _registerTypeBind(host, ops) {
+      }
     }
-    class $Closure1 extends $stdlib.std.Resource {
+    class $Closure1 extends $constructs.Construct {
       constructor(scope, id, ) {
         super(scope, id);
         (std.Display.of(this)).hidden = true;
@@ -253,9 +262,9 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         return `
           require("./inflight.$Closure1-1.js")({
-            $Bar: ${context._lift(Bar)},
-            $Foo: ${context._lift(Foo)},
-            $foo: ${context._lift(foo)},
+            $Bar: ${$stdlib.core.Lifting.lift(context, Bar)},
+            $Foo: ${$stdlib.core.Lifting.lift(context, Foo)},
+            $foo: ${$stdlib.core.Lifting.lift(context, foo)},
           })
         `;
       }
@@ -275,10 +284,11 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(Foo, host, ["foo"]);
-          $Closure1._registerBindObject(foo, host, ["callThis"]);
+          $stdlib.std.Resource._registerBindObject(Foo, host, ["foo"]);
+          $stdlib.std.Resource._registerBindObject(foo, host, ["callThis"]);
         }
-        super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
       }
     }
     const foo = new Foo(this,"Foo");

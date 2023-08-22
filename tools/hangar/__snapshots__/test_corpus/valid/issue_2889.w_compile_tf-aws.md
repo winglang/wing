@@ -300,15 +300,16 @@ module.exports = function({ $api_url, $http_Util, $std_Json }) {
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
+const $constructs = require('constructs');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const cloud = $stdlib.cloud;
 const http = $stdlib.http;
-class $Root extends $stdlib.std.Resource {
+class $Root extends $constructs.Construct {
   constructor(scope, id) {
     super(scope, id);
-    class $Closure1 extends $stdlib.std.Resource {
+    class $Closure1 extends $constructs.Construct {
       constructor(scope, id, ) {
         super(scope, id);
         (std.Display.of(this)).hidden = true;
@@ -316,7 +317,7 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         return `
           require("./inflight.$Closure1-1.js")({
-            $std_Json: ${context._lift(std.Json)},
+            $std_Json: ${$stdlib.core.Lifting.lift(context, std.Json)},
           })
         `;
       }
@@ -334,8 +335,12 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["handle", "$inflight_init"];
       }
+      _registerBind(host, ops) {
+      }
+      static _registerTypeBind(host, ops) {
+      }
     }
-    class $Closure2 extends $stdlib.std.Resource {
+    class $Closure2 extends $constructs.Construct {
       constructor(scope, id, ) {
         super(scope, id);
         (std.Display.of(this)).hidden = true;
@@ -343,9 +348,9 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         return `
           require("./inflight.$Closure2-1.js")({
-            $api_url: ${context._lift(api.url)},
-            $http_Util: ${context._lift(http.Util)},
-            $std_Json: ${context._lift(std.Json)},
+            $api_url: ${$stdlib.core.Lifting.lift(context, api.url)},
+            $http_Util: ${$stdlib.core.Lifting.lift(context, http.Util)},
+            $std_Json: ${$stdlib.core.Lifting.lift(context, std.Json)},
           })
         `;
       }
@@ -365,9 +370,10 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure2._registerBindObject(api.url, host, []);
+          $stdlib.std.Resource._registerBindObject(api.url, host, []);
         }
-        super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
       }
     }
     const api = this.node.root.newAbstract("@winglang/sdk.cloud.Api",this,"cloud.Api");

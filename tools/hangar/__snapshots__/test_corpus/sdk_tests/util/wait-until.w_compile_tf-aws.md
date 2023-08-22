@@ -567,15 +567,16 @@ module.exports = function({  }) {
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
+const $constructs = require('constructs');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const cloud = $stdlib.cloud;
 const util = $stdlib.util;
-class $Root extends $stdlib.std.Resource {
+class $Root extends $constructs.Construct {
   constructor(scope, id) {
     super(scope, id);
-    class JSHelper extends $stdlib.std.Resource {
+    class JSHelper extends $constructs.Construct {
       constructor(scope, id, ) {
         super(scope, id);
       }
@@ -599,8 +600,12 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["getTime", "$inflight_init"];
       }
+      _registerBind(host, ops) {
+      }
+      static _registerTypeBind(host, ops) {
+      }
     }
-    class $Closure1 extends $stdlib.std.Resource {
+    class $Closure1 extends $constructs.Construct {
       constructor(scope, id, ) {
         super(scope, id);
         (std.Display.of(this)).hidden = true;
@@ -608,8 +613,8 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         return `
           require("./inflight.$Closure1-1.js")({
-            $JSHelper: ${context._lift(JSHelper)},
-            $util_Util: ${context._lift(util.Util)},
+            $JSHelper: ${$stdlib.core.Lifting.lift(context, JSHelper)},
+            $util_Util: ${$stdlib.core.Lifting.lift(context, util.Util)},
           })
         `;
       }
@@ -629,12 +634,13 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(JSHelper, host, ["getTime"]);
+          $stdlib.std.Resource._registerBindObject(JSHelper, host, ["getTime"]);
         }
-        super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
       }
     }
-    class $Closure2 extends $stdlib.std.Resource {
+    class $Closure2 extends $constructs.Construct {
       constructor(scope, id, ) {
         super(scope, id);
         (std.Display.of(this)).hidden = true;
@@ -642,9 +648,9 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         return `
           require("./inflight.$Closure2-1.js")({
-            $JSHelper: ${context._lift(JSHelper)},
-            $oneSecond: ${context._lift(oneSecond)},
-            $util_Util: ${context._lift(util.Util)},
+            $JSHelper: ${$stdlib.core.Lifting.lift(context, JSHelper)},
+            $oneSecond: ${$stdlib.core.Lifting.lift(context, oneSecond)},
+            $util_Util: ${$stdlib.core.Lifting.lift(context, util.Util)},
           })
         `;
       }
@@ -664,13 +670,14 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure2._registerBindObject(JSHelper, host, ["getTime"]);
-          $Closure2._registerBindObject(oneSecond, host, []);
+          $stdlib.std.Resource._registerBindObject(JSHelper, host, ["getTime"]);
+          $stdlib.std.Resource._registerBindObject(oneSecond, host, []);
         }
-        super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
       }
     }
-    class $Closure3 extends $stdlib.std.Resource {
+    class $Closure3 extends $constructs.Construct {
       constructor(scope, id, ) {
         super(scope, id);
         (std.Display.of(this)).hidden = true;
@@ -678,10 +685,10 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         return `
           require("./inflight.$Closure3-1.js")({
-            $JSHelper: ${context._lift(JSHelper)},
-            $invokeCounter: ${context._lift(invokeCounter)},
-            $oneSecond: ${context._lift(oneSecond)},
-            $util_Util: ${context._lift(util.Util)},
+            $JSHelper: ${$stdlib.core.Lifting.lift(context, JSHelper)},
+            $invokeCounter: ${$stdlib.core.Lifting.lift(context, invokeCounter)},
+            $oneSecond: ${$stdlib.core.Lifting.lift(context, oneSecond)},
+            $util_Util: ${$stdlib.core.Lifting.lift(context, util.Util)},
           })
         `;
       }
@@ -701,14 +708,15 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure3._registerBindObject(JSHelper, host, ["getTime"]);
-          $Closure3._registerBindObject(invokeCounter, host, ["inc", "peek"]);
-          $Closure3._registerBindObject(oneSecond, host, []);
+          $stdlib.std.Resource._registerBindObject(JSHelper, host, ["getTime"]);
+          $stdlib.std.Resource._registerBindObject(invokeCounter, host, ["inc", "peek"]);
+          $stdlib.std.Resource._registerBindObject(oneSecond, host, []);
         }
-        super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
       }
     }
-    class $Closure4 extends $stdlib.std.Resource {
+    class $Closure4 extends $constructs.Construct {
       constructor(scope, id, ) {
         super(scope, id);
         (std.Display.of(this)).hidden = true;
@@ -716,11 +724,11 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         return `
           require("./inflight.$Closure4-1.js")({
-            $JSHelper: ${context._lift(JSHelper)},
-            $fiveSeconds: ${context._lift(fiveSeconds)},
-            $invokeCounter: ${context._lift(invokeCounter)},
-            $oneSecond: ${context._lift(oneSecond)},
-            $util_Util: ${context._lift(util.Util)},
+            $JSHelper: ${$stdlib.core.Lifting.lift(context, JSHelper)},
+            $fiveSeconds: ${$stdlib.core.Lifting.lift(context, fiveSeconds)},
+            $invokeCounter: ${$stdlib.core.Lifting.lift(context, invokeCounter)},
+            $oneSecond: ${$stdlib.core.Lifting.lift(context, oneSecond)},
+            $util_Util: ${$stdlib.core.Lifting.lift(context, util.Util)},
           })
         `;
       }
@@ -740,15 +748,16 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure4._registerBindObject(JSHelper, host, ["getTime"]);
-          $Closure4._registerBindObject(fiveSeconds, host, []);
-          $Closure4._registerBindObject(invokeCounter, host, ["inc", "peek"]);
-          $Closure4._registerBindObject(oneSecond, host, []);
+          $stdlib.std.Resource._registerBindObject(JSHelper, host, ["getTime"]);
+          $stdlib.std.Resource._registerBindObject(fiveSeconds, host, []);
+          $stdlib.std.Resource._registerBindObject(invokeCounter, host, ["inc", "peek"]);
+          $stdlib.std.Resource._registerBindObject(oneSecond, host, []);
         }
-        super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
       }
     }
-    class $Closure5 extends $stdlib.std.Resource {
+    class $Closure5 extends $constructs.Construct {
       constructor(scope, id, ) {
         super(scope, id);
         (std.Display.of(this)).hidden = true;
@@ -756,8 +765,8 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         return `
           require("./inflight.$Closure5-1.js")({
-            $invokeCounter: ${context._lift(invokeCounter)},
-            $util_Util: ${context._lift(util.Util)},
+            $invokeCounter: ${$stdlib.core.Lifting.lift(context, invokeCounter)},
+            $util_Util: ${$stdlib.core.Lifting.lift(context, util.Util)},
           })
         `;
       }
@@ -777,9 +786,10 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure5._registerBindObject(invokeCounter, host, ["inc", "peek"]);
+          $stdlib.std.Resource._registerBindObject(invokeCounter, host, ["inc", "peek"]);
         }
-        super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
       }
     }
     const invokeCounter = this.node.root.newAbstract("@winglang/sdk.cloud.Counter",this,"cloud.Counter");

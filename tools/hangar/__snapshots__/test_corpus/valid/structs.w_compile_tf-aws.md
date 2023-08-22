@@ -22,7 +22,7 @@ module.exports = function(stdStruct) {
       return stdStruct._validate(obj, this.jsonSchema())
     }
     static _toInflightType(context) {
-      return `require("./A.Struct.js")(${ context._lift(stdStruct) })`;
+      return `require("./A.Struct.js")(${ $stdlib.core.Lifting.lift(context, stdStruct) })`;
     }
   }
   return A;
@@ -60,7 +60,7 @@ module.exports = function(stdStruct) {
       return stdStruct._validate(obj, this.jsonSchema())
     }
     static _toInflightType(context) {
-      return `require("./B.Struct.js")(${ context._lift(stdStruct) })`;
+      return `require("./B.Struct.js")(${ $stdlib.core.Lifting.lift(context, stdStruct) })`;
     }
   }
   return B;
@@ -90,7 +90,7 @@ module.exports = function(stdStruct) {
       return stdStruct._validate(obj, this.jsonSchema())
     }
     static _toInflightType(context) {
-      return `require("./Dazzle.Struct.js")(${ context._lift(stdStruct) })`;
+      return `require("./Dazzle.Struct.js")(${ $stdlib.core.Lifting.lift(context, stdStruct) })`;
     }
   }
   return Dazzle;
@@ -120,7 +120,7 @@ module.exports = function(stdStruct) {
       return stdStruct._validate(obj, this.jsonSchema())
     }
     static _toInflightType(context) {
-      return `require("./Razzle.Struct.js")(${ context._lift(stdStruct) })`;
+      return `require("./Razzle.Struct.js")(${ $stdlib.core.Lifting.lift(context, stdStruct) })`;
     }
   }
   return Razzle;
@@ -154,7 +154,7 @@ module.exports = function(stdStruct) {
       return stdStruct._validate(obj, this.jsonSchema())
     }
     static _toInflightType(context) {
-      return `require("./Showtime.Struct.js")(${ context._lift(stdStruct) })`;
+      return `require("./Showtime.Struct.js")(${ $stdlib.core.Lifting.lift(context, stdStruct) })`;
     }
   }
   return Showtime;
@@ -232,7 +232,7 @@ module.exports = function(stdStruct) {
       return stdStruct._validate(obj, this.jsonSchema())
     }
     static _toInflightType(context) {
-      return `require("./lotsOfTypes.Struct.js")(${ context._lift(stdStruct) })`;
+      return `require("./lotsOfTypes.Struct.js")(${ $stdlib.core.Lifting.lift(context, stdStruct) })`;
     }
   }
   return lotsOfTypes;
@@ -364,13 +364,14 @@ module.exports = function(stdStruct) {
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
+const $constructs = require('constructs');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
-class $Root extends $stdlib.std.Resource {
+class $Root extends $constructs.Construct {
   constructor(scope, id) {
     super(scope, id);
-    class Foo extends $stdlib.std.Resource {
+    class Foo extends $constructs.Construct {
       constructor(scope, id, b) {
         super(scope, id);
         this.data = b;
@@ -386,7 +387,7 @@ class $Root extends $stdlib.std.Resource {
           (await (async () => {
             const FooClient = ${Foo._toInflightType(this)};
             const client = new FooClient({
-              $this_data_field0: ${this._lift(this.data.field0)},
+              $this_data_field0: ${$stdlib.core.Lifting.lift(this, this.data.field0)},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -398,15 +399,16 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          Foo._registerBindObject(this.data.field0, host, []);
+          $stdlib.std.Resource._registerBindObject(this.data.field0, host, []);
         }
         if (ops.includes("getStuff")) {
-          Foo._registerBindObject(this.data.field0, host, []);
+          $stdlib.std.Resource._registerBindObject(this.data.field0, host, []);
         }
-        super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
       }
     }
-    class $Closure1 extends $stdlib.std.Resource {
+    class $Closure1 extends $constructs.Construct {
       constructor(scope, id, ) {
         super(scope, id);
         (std.Display.of(this)).hidden = true;
@@ -430,6 +432,10 @@ class $Root extends $stdlib.std.Resource {
       }
       _getInflightOps() {
         return ["handle", "$inflight_init"];
+      }
+      _registerBind(host, ops) {
+      }
+      static _registerTypeBind(host, ops) {
       }
     }
     const A = require("./A.Struct.js")($stdlib.std.Struct);

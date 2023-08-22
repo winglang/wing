@@ -296,14 +296,15 @@ module.exports = function({  }) {
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
+const $constructs = require('constructs');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const cloud = $stdlib.cloud;
-class $Root extends $stdlib.std.Resource {
+class $Root extends $constructs.Construct {
   constructor(scope, id) {
     super(scope, id);
-    class Doubler extends $stdlib.std.Resource {
+    class Doubler extends $constructs.Construct {
       constructor(scope, id, func) {
         super(scope, id);
         this.func = func;
@@ -319,7 +320,7 @@ class $Root extends $stdlib.std.Resource {
           (await (async () => {
             const DoublerClient = ${Doubler._toInflightType(this)};
             const client = new DoublerClient({
-              $this_func: ${this._lift(this.func)},
+              $this_func: ${$stdlib.core.Lifting.lift(this, this.func)},
             });
             if (client.$inflight_init) { await client.$inflight_init(); }
             return client;
@@ -331,15 +332,16 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {
-          Doubler._registerBindObject(this.func, host, []);
+          $stdlib.std.Resource._registerBindObject(this.func, host, []);
         }
         if (ops.includes("invoke")) {
-          Doubler._registerBindObject(this.func, host, ["handle"]);
+          $stdlib.std.Resource._registerBindObject(this.func, host, ["handle"]);
         }
-        super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
       }
     }
-    class $Closure1 extends $stdlib.std.Resource {
+    class $Closure1 extends $constructs.Construct {
       constructor(scope, id, ) {
         super(scope, id);
         (std.Display.of(this)).hidden = true;
@@ -364,14 +366,18 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["handle", "$inflight_init"];
       }
+      _registerBind(host, ops) {
+      }
+      static _registerTypeBind(host, ops) {
+      }
     }
-    class Doubler2 extends $stdlib.std.Resource {
+    class Doubler2 extends $constructs.Construct {
       constructor(scope, id, ) {
         super(scope, id);
       }
       makeFunc(handler) {
         const __parent_this_2 = this;
-        class $Closure2 extends $stdlib.std.Resource {
+        class $Closure2 extends $constructs.Construct {
           constructor(scope, id, ) {
             super(scope, id);
             (std.Display.of(this)).hidden = true;
@@ -379,9 +385,9 @@ class $Root extends $stdlib.std.Resource {
           static _toInflightType(context) {
             return `
               require("./inflight.$Closure2-1.js")({
-                $handler: ${context._lift(handler)},
-                $std_Json: ${context._lift(std.Json)},
-                $std_Number: ${context._lift(std.Number)},
+                $handler: ${$stdlib.core.Lifting.lift(context, handler)},
+                $std_Json: ${$stdlib.core.Lifting.lift(context, std.Json)},
+                $std_Number: ${$stdlib.core.Lifting.lift(context, std.Number)},
               })
             `;
           }
@@ -401,9 +407,10 @@ class $Root extends $stdlib.std.Resource {
           }
           _registerBind(host, ops) {
             if (ops.includes("handle")) {
-              $Closure2._registerBindObject(handler, host, ["handle"]);
+              $stdlib.std.Resource._registerBindObject(handler, host, ["handle"]);
             }
-            super._registerBind(host, ops);
+          }
+          static _registerTypeBind(host, ops) {
           }
         }
         return this.node.root.newAbstract("@winglang/sdk.cloud.Function",this,"cloud.Function",new $Closure2(this,"$Closure2"));
@@ -428,8 +435,12 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["$inflight_init"];
       }
+      _registerBind(host, ops) {
+      }
+      static _registerTypeBind(host, ops) {
+      }
     }
-    class $Closure3 extends $stdlib.std.Resource {
+    class $Closure3 extends $constructs.Construct {
       constructor(scope, id, ) {
         super(scope, id);
         (std.Display.of(this)).hidden = true;
@@ -454,8 +465,12 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["handle", "$inflight_init"];
       }
+      _registerBind(host, ops) {
+      }
+      static _registerTypeBind(host, ops) {
+      }
     }
-    class $Closure4 extends $stdlib.std.Resource {
+    class $Closure4 extends $constructs.Construct {
       constructor(scope, id, ) {
         super(scope, id);
         (std.Display.of(this)).hidden = true;
@@ -463,7 +478,7 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         return `
           require("./inflight.$Closure4-1.js")({
-            $f: ${context._lift(f)},
+            $f: ${$stdlib.core.Lifting.lift(context, f)},
           })
         `;
       }
@@ -483,9 +498,10 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure4._registerBindObject(f, host, ["invoke"]);
+          $stdlib.std.Resource._registerBindObject(f, host, ["invoke"]);
         }
-        super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
       }
     }
     const fn = new Doubler(this,"Doubler",new $Closure1(this,"$Closure1"));

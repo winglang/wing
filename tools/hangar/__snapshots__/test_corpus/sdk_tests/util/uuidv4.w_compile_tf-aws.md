@@ -170,14 +170,15 @@ module.exports = function({  }) {
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
+const $constructs = require('constructs');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const util = $stdlib.util;
-class $Root extends $stdlib.std.Resource {
+class $Root extends $constructs.Construct {
   constructor(scope, id) {
     super(scope, id);
-    class JSHelper extends $stdlib.std.Resource {
+    class JSHelper extends $constructs.Construct {
       constructor(scope, id, ) {
         super(scope, id);
       }
@@ -204,8 +205,12 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["$inflight_init"];
       }
+      _registerBind(host, ops) {
+      }
+      static _registerTypeBind(host, ops) {
+      }
     }
-    class JSHelperInflight extends $stdlib.std.Resource {
+    class JSHelperInflight extends $constructs.Construct {
       constructor(scope, id, ) {
         super(scope, id);
       }
@@ -229,8 +234,12 @@ class $Root extends $stdlib.std.Resource {
       _getInflightOps() {
         return ["validateUUIDv4", "$inflight_init"];
       }
+      _registerBind(host, ops) {
+      }
+      static _registerTypeBind(host, ops) {
+      }
     }
-    class $Closure1 extends $stdlib.std.Resource {
+    class $Closure1 extends $constructs.Construct {
       constructor(scope, id, ) {
         super(scope, id);
         (std.Display.of(this)).hidden = true;
@@ -238,8 +247,8 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         return `
           require("./inflight.$Closure1-1.js")({
-            $JSHelperInflight: ${context._lift(JSHelperInflight)},
-            $util_Util: ${context._lift(util.Util)},
+            $JSHelperInflight: ${$stdlib.core.Lifting.lift(context, JSHelperInflight)},
+            $util_Util: ${$stdlib.core.Lifting.lift(context, util.Util)},
           })
         `;
       }
@@ -259,9 +268,10 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject(JSHelperInflight, host, ["validateUUIDv4"]);
+          $stdlib.std.Resource._registerBindObject(JSHelperInflight, host, ["validateUUIDv4"]);
         }
-        super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
       }
     }
     const data = (util.Util.uuidv4());

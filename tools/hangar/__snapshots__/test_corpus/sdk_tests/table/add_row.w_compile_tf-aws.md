@@ -193,15 +193,16 @@ module.exports = function({ $_marioInfo___gender__, $_marioInfo___role__, $_peac
 ## preflight.js
 ```js
 const $stdlib = require('@winglang/sdk');
+const $constructs = require('constructs');
 const $outdir = process.env.WING_SYNTH_DIR ?? ".";
 const $wing_is_test = process.env.WING_IS_TEST === "true";
 const std = $stdlib.std;
 const ex = $stdlib.ex;
 const util = $stdlib.util;
-class $Root extends $stdlib.std.Resource {
+class $Root extends $constructs.Construct {
   constructor(scope, id) {
     super(scope, id);
-    class $Closure1 extends $stdlib.std.Resource {
+    class $Closure1 extends $constructs.Construct {
       constructor(scope, id, ) {
         super(scope, id);
         (std.Display.of(this)).hidden = true;
@@ -209,11 +210,11 @@ class $Root extends $stdlib.std.Resource {
       static _toInflightType(context) {
         return `
           require("./inflight.$Closure1-1.js")({
-            $_marioInfo___gender__: ${context._lift((marioInfo)["gender"])},
-            $_marioInfo___role__: ${context._lift((marioInfo)["role"])},
-            $_peachInfo___gender__: ${context._lift((peachInfo)["gender"])},
-            $_peachInfo___role__: ${context._lift((peachInfo)["role"])},
-            $table: ${context._lift(table)},
+            $_marioInfo___gender__: ${$stdlib.core.Lifting.lift(context, (marioInfo)["gender"])},
+            $_marioInfo___role__: ${$stdlib.core.Lifting.lift(context, (marioInfo)["role"])},
+            $_peachInfo___gender__: ${$stdlib.core.Lifting.lift(context, (peachInfo)["gender"])},
+            $_peachInfo___role__: ${$stdlib.core.Lifting.lift(context, (peachInfo)["role"])},
+            $table: ${$stdlib.core.Lifting.lift(context, table)},
           })
         `;
       }
@@ -233,13 +234,14 @@ class $Root extends $stdlib.std.Resource {
       }
       _registerBind(host, ops) {
         if (ops.includes("handle")) {
-          $Closure1._registerBindObject((marioInfo)["gender"], host, []);
-          $Closure1._registerBindObject((marioInfo)["role"], host, []);
-          $Closure1._registerBindObject((peachInfo)["gender"], host, []);
-          $Closure1._registerBindObject((peachInfo)["role"], host, []);
-          $Closure1._registerBindObject(table, host, ["get"]);
+          $stdlib.std.Resource._registerBindObject((marioInfo)["gender"], host, []);
+          $stdlib.std.Resource._registerBindObject((marioInfo)["role"], host, []);
+          $stdlib.std.Resource._registerBindObject((peachInfo)["gender"], host, []);
+          $stdlib.std.Resource._registerBindObject((peachInfo)["role"], host, []);
+          $stdlib.std.Resource._registerBindObject(table, host, ["get"]);
         }
-        super._registerBind(host, ops);
+      }
+      static _registerTypeBind(host, ops) {
       }
     }
     const table = this.node.root.newAbstract("@winglang/sdk.ex.Table",this,"ex.Table",{ name: "users", primaryKey: "name", columns: ({"gender": ex.ColumnType.STRING,"role": ex.ColumnType.STRING}) });
