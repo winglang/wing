@@ -41,7 +41,8 @@
         "src/**/*.ts",
         "src/**/*.test.ts",
         "test/**"
-      ]
+      ],
+      "outputs": ["**/__snapshots__/**", "**/*.snap"]
     },
     "test:playwright": {
       "dependsOn": ["compile"],
