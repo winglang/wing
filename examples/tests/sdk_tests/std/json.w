@@ -58,9 +58,12 @@ try {
 //-----------------------------------------------------------------------------
 // stringify()
 
-let foo = Json { a: 1, b: 2 };
-// let stringified = Json.stringify(foo);
-let stringifiedIndent = Json.stringify(foo, indent: 2);
-// assert(stringified == "{\"a\":1,\"b\":2}");
+test "stringify()" {
+  let obj = Json { a: 1, b: 2 };
 
-log(stringifiedIndent);
+  let stringified = Json.stringify(obj);
+  let stringifiedIndent = Json.stringify(obj, indent: 2);
+
+  assert(stringified == "{\"a\":1,\"b\":2}");
+  assert(stringifiedIndent == "{\n  \"a\": 1,\n  \"b\": 2\n}");
+}
