@@ -87,7 +87,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _getInflightOps() {
-        return ["myField2", "incCounter", "dontTouchCounter", "$inflight_init"]
+        return ["myField2", "incCounter", "dontTouchCounter", "$inflight_init"];
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {

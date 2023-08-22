@@ -64,7 +64,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _getInflightOps() {
-        return ["field", "getField", "$inflight_init"]
+        return ["field", "getField", "$inflight_init"];
       }
       _registerBind(host, ops) {
         if (ops.includes("$inflight_init")) {

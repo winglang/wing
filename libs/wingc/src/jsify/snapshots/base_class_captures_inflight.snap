@@ -85,7 +85,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _getInflightOps() {
-        return ["bar", "$inflight_init"]
+        return ["bar", "$inflight_init"];
       }
       _registerBind(host, ops) {
         if (ops.includes("bar")) {
@@ -117,7 +117,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _getInflightOps() {
-        return ["foo", "$inflight_init"]
+        return ["foo", "$inflight_init"];
       }
       _registerBind(host, ops) {
         if (ops.includes("foo")) {

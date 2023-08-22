@@ -63,7 +63,7 @@ class $Root extends $stdlib.std.Resource {
         `;
       }
       _getInflightOps() {
-        return ["staticMethod", "$inflight_init"]
+        return ["staticMethod", "$inflight_init"];
       }
       static _registerTypeBind(host, ops) {
         if (ops.includes("staticMethod")) {
