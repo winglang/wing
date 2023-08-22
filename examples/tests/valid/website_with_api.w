@@ -1,9 +1,6 @@
 bring cloud;
 bring ex;
-
-class TestUtils {
-  extern "./website_with_api.js" static inflight fetch(url: str, method: str, headers: Json?, body: str?): Json;
-}
+bring http;
 
 //needs to be written before the website (so the website will be able to use it's url on sim env)
 let api = new cloud.Api(
@@ -27,7 +24,6 @@ let usersTable = new ex.Table(
     "age" => ex.ColumnType.NUMBER,
   }
 );
-
 
 let getHandler = inflight (req: cloud.ApiRequest): cloud.ApiResponse => {
   return cloud.ApiResponse {
@@ -56,24 +52,67 @@ api.post("/users", postHandler);
 
 website.addJson("config.json", { apiUrl: api.url });
 
+inflight class Assert {
+  static equalStr(a: str, b: str): bool {
+    try {
+      assert(a == b);
+    } catch e {
+      throw("expected: ${b} got: ${a}");
+    }
+  }
+
+  static isNil(a: str?): bool {
+    try {
+      assert(a == nil);
+    } catch e {
+      throw("expected ${a} to be nil");
+    }
+  }
+
+  static equalNum(a: num, b: num): bool{
+    try {
+      assert(a == b);
+    } catch e {
+      log(e);
+      throw("expected: ${b} got: ${a}");
+    }
+  }
+}
+
 test "GET /users" {
-  let res = TestUtils.fetch(api.url + "/users", "GET");
-  assert(num.fromJson(res.get("status")) == 200);
+  let response = http.fetch(api.url + "/users", {
+    method: http.HttpMethod.GET,
+    headers: {
+      "Content-Type": "text/json"
+    }
+  });
 
-  assert(res.get("headers").get("access-control-allow-origin") == "*");
-  assert(res.get("headers").get("access-control-expose-headers") == "Content-Type");
-  assert(res.get("headers").get("access-control-allow-credentials") == "false");
+let headers = response.headers;
+  Assert.equalNum(response.status, 200);
 
-  assert(res.get("headers").get("access-control-allow-headers") == nil);
-  assert(res.get("headers").get("access-control-allow-methods") == nil);
+  log(Json.stringify(headers));
+
+  Assert.equalStr(headers.get("access-control-allow-origin"), "*");
+  Assert.equalStr(headers.get("access-control-expose-headers"), "Content-Type");
+  Assert.equalStr(headers.get("access-control-allow-credentials"), "false");
+
+  Assert.isNil(headers.get("access-control-allow-headers"));
+  Assert.isNil(headers.get("access-control-allow-methods"));
 }
 
 test "OPTIONS /users" {
-  let res = TestUtils.fetch(api.url + "/users", "OPTIONS");
-  assert(num.fromJson(res.get("status")) == 204);
-  assert(res.get("headers").get("access-control-allow-origin") == "*");
-  assert(res.get("headers").get("access-control-allow-methods") == "GET,POST,OPTIONS");
-  assert(res.get("headers").get("access-control-allow-headers") == "Content-Type");
-  assert(res.get("headers").get("access-control-expose-headers") == "Content-Type");
-  assert(res.get("headers").get("access-control-allow-credentials") == "false");
+  let response = http.fetch(api.url + "/users", {
+    method: http.HttpMethod.OPTIONS,
+    headers: {
+      "Content-Type": "text/json"
+    }
+  });
+
+  let headers = response.headers;
+  Assert.equalNum(response.status, 204);
+  Assert.equalStr(headers.get("access-control-allow-origin"), "*");
+  Assert.equalStr(headers.get("access-control-allow-methods"), "GET,POST,OPTIONS");
+  Assert.equalStr(headers.get("access-control-allow-headers"), "Content-Type");
+  Assert.equalStr(headers.get("access-control-expose-headers"), "Content-Type");
+  Assert.equalStr(headers.get("access-control-allow-credentials"), "false");
 }
