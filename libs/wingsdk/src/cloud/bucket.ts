@@ -43,14 +43,12 @@ export abstract class Bucket extends Resource {
 
   /** @internal */
   protected readonly _topics = new Map<BucketEventType, Topic>();
-  private scope: Construct;
 
   constructor(scope: Construct, id: string, props: BucketProps = {}) {
     super(scope, id);
 
     Node.of(this).title = "Bucket";
     Node.of(this).description = "A cloud object store";
-    this.scope = scope;
 
     props;
   }
@@ -93,13 +91,14 @@ export abstract class Bucket extends Resource {
     path: string,
     encoding: BufferEncoding = "utf-8"
   ): void {
+    const app = App.of(this);
     if (isAbsolute(path)) {
       path = path;
     } else {
-      if (!App.of(this.scope).entrypointDir) {
+      if (!app.entrypointDir) {
         throw new Error("Missing environment variable: WING_SOURCE_DIR");
       }
-      path = resolve(App.of(this.scope).entrypointDir, path);
+      path = resolve(app.entrypointDir, path);
     }
     const data = fs.readFileSync(path, { encoding: encoding });
 
