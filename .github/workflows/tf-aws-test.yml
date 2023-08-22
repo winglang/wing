@@ -32,7 +32,7 @@ jobs:
       - name: Pass environment variable to output
         id: passenv
         run: |
-          echo "::set-output name=dirs::$DIRS"
+          echo "dirs=$DIRS" >> $GITHUB_OUTPUT
     outputs:
       tests: ${{ steps.passenv.outputs.dirs }}
 
