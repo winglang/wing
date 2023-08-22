@@ -51,20 +51,32 @@ export class Api
     // Set up CORS headers for options requests.
     if (cors) {
       // inspired by https://github.com/expressjs/cors/blob/f038e7722838fd83935674aa8c5bf452766741fb/lib/index.js#L159-L190
-      const { origins, methods, headers, exposedHeaders, allowCredentials } = cors;
+      const {
+        origins = ["*"],
+        methods = ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE"],
+        headers = ["Content-Type", "Authorization"],
+        exposedHeaders = [],
+        allowCredentials = false,
+      } = cors;
       this.app.use((req, res, next) => {
         const responseHeaders: Record<string, string> = {};
         const method = req.method && req.method.toUpperCase && req.method.toUpperCase();
 
-        responseHeaders["Access-Control-Allow-Origin"] = origins.join(",");
-        responseHeaders["Access-Control-Expose-Headers"] = exposedHeaders.join(",");
+        if (origins && origins.length > 0) {
+          responseHeaders["Access-Control-Allow-Origin"] = origins.join(",");
+        }
+        if (exposedHeaders && exposedHeaders.length > 0) {
+          responseHeaders["Access-Control-Expose-Headers"] = exposedHeaders.join(",");
+        }
         responseHeaders["Access-Control-Allow-Credentials"] = allowCredentials ? "true" : "false";
 
         if (method === 'OPTIONS') {
-          if (headers) {
+          if (headers && headers.length > 0) {
             responseHeaders["Access-Control-Allow-Headers"] = headers.join(",");
           }
-          responseHeaders["Access-Control-Allow-Methods"] = methods.join(",");
+          if (methods && methods.length > 0) {
+            responseHeaders["Access-Control-Allow-Methods"] = methods.join(",");
+          }
           for (const key of Object.keys(responseHeaders)) {
             res.setHeader(key, responseHeaders[key]);
           }

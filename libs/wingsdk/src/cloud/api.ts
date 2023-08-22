@@ -16,31 +16,36 @@ export interface ApiCorsProps {
   /**
    * The list of allowed origins.
    * @example ["https://example.com"]
+   * @default - ["*"]
    */
-  readonly origins: Array<string>;
+  readonly origins?: Array<string>;
 
   /**
    * The list of allowed methods.
    * @example [HttpMethod.GET, HttpMethod.POST]
+   * @default - [HttpMethod.GET, HttpMethod.POST, HttpMethod.PUT, HttpMethod.PATCH, HttpMethod.DELETE, HttpMethod.HEAD, HttpMethod.OPTIONS]
    */
-  readonly methods: Array<HttpMethod>;
+  readonly methods?: Array<HttpMethod>;
 
   /**
    * The list of allowed headers.
    * @example ["Content-Type"]
+   * @default - ["Content-Type", "Authorization"]
    */
   readonly headers?: Array<string>;
 
   /**
    * The list of exposed headers.
    * @example ["Content-Type"]
+   * @default - []
    */
-  readonly exposedHeaders: Array<string>;
+  readonly exposedHeaders?: Array<string>;
 
   /**
    * Whether to allow credentials.
+   * @default - false
    */
-  readonly allowCredentials: boolean;
+  readonly allowCredentials?: boolean;
 }
 
 /**
@@ -51,6 +56,9 @@ export interface ApiProps {
   /**
    * Options for configuring the API's CORS behavior across all routes.
    * Options can also be overridden on a per-route basis. (not yet implemented)
+   * Can be set to to an empty Struct to enable CORS with default options.
+   * @example { origins: ["https://example.com"] }
+   * @example {}
    * @default - CORS is disabled
    */
   readonly cors?: ApiCorsProps;

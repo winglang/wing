@@ -1,6 +1,7 @@
 bring cloud;
 bring ex;
 bring http;
+bring "./assertions.w" as t;
 
 //needs to be written before the website (so the website will be able to use it's url on sim env)
 let api = new cloud.Api(
@@ -52,33 +53,6 @@ api.post("/users", postHandler);
 
 website.addJson("config.json", { apiUrl: api.url });
 
-inflight class Assert {
-  static equalStr(a: str, b: str): bool {
-    try {
-      assert(a == b);
-    } catch e {
-      throw("expected: ${b} got: ${a}");
-    }
-  }
-
-  static isNil(a: str?): bool {
-    try {
-      assert(a == nil);
-    } catch e {
-      throw("expected ${a} to be nil");
-    }
-  }
-
-  static equalNum(a: num, b: num): bool{
-    try {
-      assert(a == b);
-    } catch e {
-      log(e);
-      throw("expected: ${b} got: ${a}");
-    }
-  }
-}
-
 test "GET /users" {
   let response = http.fetch(api.url + "/users", {
     method: http.HttpMethod.GET,
@@ -88,16 +62,16 @@ test "GET /users" {
   });
 
 let headers = response.headers;
-  Assert.equalNum(response.status, 200);
+  t.Assert.equalNum(response.status, 200);
 
   log(Json.stringify(headers));
 
-  Assert.equalStr(headers.get("access-control-allow-origin"), "*");
-  Assert.equalStr(headers.get("access-control-expose-headers"), "Content-Type");
-  Assert.equalStr(headers.get("access-control-allow-credentials"), "false");
+  t.Assert.equalStr(headers.get("access-control-allow-origin"), "*");
+  t.Assert.equalStr(headers.get("access-control-expose-headers"), "Content-Type");
+  t.Assert.equalStr(headers.get("access-control-allow-credentials"), "false");
 
-  Assert.isNil(headers.get("access-control-allow-headers"));
-  Assert.isNil(headers.get("access-control-allow-methods"));
+  t.Assert.isNil(headers.get("access-control-allow-headers"));
+  t.Assert.isNil(headers.get("access-control-allow-methods"));
 }
 
 test "OPTIONS /users" {
@@ -109,10 +83,10 @@ test "OPTIONS /users" {
   });
 
   let headers = response.headers;
-  Assert.equalNum(response.status, 204);
-  Assert.equalStr(headers.get("access-control-allow-origin"), "*");
-  Assert.equalStr(headers.get("access-control-allow-methods"), "GET,POST,OPTIONS");
-  Assert.equalStr(headers.get("access-control-allow-headers"), "Content-Type");
-  Assert.equalStr(headers.get("access-control-expose-headers"), "Content-Type");
-  Assert.equalStr(headers.get("access-control-allow-credentials"), "false");
+  t.Assert.equalNum(response.status, 204);
+  t.Assert.equalStr(headers.get("access-control-allow-origin"), "*");
+  t.Assert.equalStr(headers.get("access-control-allow-methods"), "GET,POST,OPTIONS");
+  t.Assert.equalStr(headers.get("access-control-allow-headers"), "Content-Type");
+  t.Assert.equalStr(headers.get("access-control-expose-headers"), "Content-Type");
+  t.Assert.equalStr(headers.get("access-control-allow-credentials"), "false");
 }
